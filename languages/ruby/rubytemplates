@@ -3,11 +3,99 @@
  <Template code="if |
 else
 end" name="ife" description="if else" suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)"/>
- <Template suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;% | %>" name="e" description="embedded ruby code" />
- <Template suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;% | -%>" name="en" description="embedded ruby code with newlines stripped" />
- <Template suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;%= | %>" name="p" description="embedded ruby code that prints a result" />
- <Template suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;%= | -%>" name="pn" description="embedded ruby code that prints a result with newlines stripped" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;% | %>" name="e" description="embedded ruby code" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;% | -%>" name="en" description="embedded ruby code with newlines stripped" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;%- | -%>" name="enn" description="embedded ruby code with newlines stripped" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;%= | %>" name="pp" description="embedded ruby code that prints a result" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;%= | -%>" name="pn" description="embedded ruby code that prints a result with newlines stripped" />
  <Template suffixes="Ruby (rb,rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="class |
 
 end" name="classd" description="class declaration" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;a&gt;|&lt;/a&gt;" name="a" description="a html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;abbr&gt;|&lt;/abbr&gt;" name="abbr" description="abbr html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;acronym&gt;|&lt;/acronym&gt;" name="acronym" description="acronym html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;address&gt;|&lt;/address&gt;" name="address" description="address html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;applet&gt;|&lt;/applet&gt;" name="applet" description="applet html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;area&gt;|&lt;/area&gt;" name="area" description="area html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;b&gt;|&lt;/b&gt;" name="b" description="b html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;base&gt;|&lt;/base&gt;" name="base" description="base html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;basefont&gt;|&lt;/basefont&gt;" name="basefont" description="basefont html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;bdo&gt;|&lt;/bdo&gt;" name="bdo" description="bdo html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;big&gt;|&lt;/big&gt;" name="big" description="big html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;blockquote&gt;|&lt;/blockquote&gt;" name="blockquote" description="blockquote html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;body&gt;|&lt;/body&gt;" name="body" description="body html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;br&gt;|&lt;/br&gt;" name="br" description="br html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;button&gt;|&lt;/button&gt;" name="button" description="button html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;caption&gt;|&lt;/caption&gt;" name="caption" description="caption html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;center&gt;|&lt;/center&gt;" name="center" description="center html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;cite&gt;|&lt;/cite&gt;" name="cite" description="cite html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;code&gt;|&lt;/code&gt;" name="code" description="code html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;col&gt;|&lt;/col&gt;" name="col" description="col html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;colgroup&gt;|&lt;/colgroup&gt;" name="colgroup" description="colgroup html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;dd&gt;|&lt;/dd&gt;" name="dd" description="dd html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;del&gt;|&lt;/del&gt;" name="del" description="del html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;dir&gt;|&lt;/dir&gt;" name="dir" description="dir html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;div&gt;|&lt;/div&gt;" name="div" description="div html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;dfn&gt;|&lt;/dfn&gt;" name="dfn" description="dfn html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;dl&gt;|&lt;/dl&gt;" name="dl" description="dl html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;dt&gt;|&lt;/dt&gt;" name="dt" description="dt html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;em&gt;|&lt;/em&gt;" name="em" description="em html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;fieldset&gt;|&lt;/fieldset&gt;" name="fieldset" description="fieldset html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;font&gt;|&lt;/font&gt;" name="font" description="font html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;form&gt;|&lt;/form&gt;" name="form" description="form html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;frame&gt;|&lt;/frame&gt;" name="frame" description="frame html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;frameset&gt;|&lt;/frameset&gt;" name="frameset" description="frameset html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;h1&gt;|&lt;/h1&gt;" name="h1" description="h1 html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;head&gt;|&lt;/head&gt;" name="head" description="head html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;hr&gt;|&lt;/hr&gt;" name="hr" description="hr html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;html&gt;|&lt;/html&gt;" name="html" description="html html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;i&gt;|&lt;/i&gt;" name="i" description="i html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;iframe&gt;|&lt;/iframe&gt;" name="iframe" description="iframe html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;img&gt;|&lt;/img&gt;" name="img" description="img html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;input&gt;|&lt;/input&gt;" name="input" description="input html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;ins&gt;|&lt;/ins&gt;" name="ins" description="ins html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;isindex&gt;|&lt;/isindex&gt;" name="isindex" description="isindex html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;kbd&gt;|&lt;/kbd&gt;" name="kbd" description="kbd html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;label&gt;|&lt;/label&gt;" name="label" description="label html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;legend&gt;|&lt;/legend&gt;" name="legend" description="legend html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;li&gt;|&lt;/li&gt;" name="li" description="li html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;link&gt;|&lt;/link&gt;" name="link" description="link html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;map&gt;|&lt;/map&gt;" name="map" description="map html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;menu&gt;|&lt;/menu&gt;" name="menu" description="menu html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;meta&gt;|&lt;/meta&gt;" name="meta" description="meta html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;noframes&gt;|&lt;/noframes&gt;" name="noframes" description="noframes html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;noscript&gt;|&lt;/noscript&gt;" name="noscript" description="noscript html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;object&gt;|&lt;/object&gt;" name="object" description="object html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;ol&gt;|&lt;/ol&gt;" name="ol" description="ol html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;optgroup&gt;|&lt;/optgroup&gt;" name="optgroup" description="optgroup html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;option&gt;|&lt;/option&gt;" name="option" description="option html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;p&gt;|&lt;/p&gt;" name="p" description="p html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;param&gt;|&lt;/param&gt;" name="param" description="param html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;pre&gt;|&lt;/pre&gt;" name="pre" description="pre html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;q&gt;|&lt;/q&gt;" name="q" description="q html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;s&gt;|&lt;/s&gt;" name="s" description="s html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;samp&gt;|&lt;/samp&gt;" name="samp" description="samp html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;script&gt;|&lt;/script&gt;" name="script" description="script html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;select&gt;|&lt;/select&gt;" name="select" description="select html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;small&gt;|&lt;/small&gt;" name="small" description="small html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;span&gt;|&lt;/span&gt;" name="span" description="span html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;strike&gt;|&lt;/strike&gt;" name="strike" description="strike html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;strong&gt;|&lt;/strong&gt;" name="strong" description="strong html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;style&gt;|&lt;/style&gt;" name="style" description="style html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;sub&gt;|&lt;/sub&gt;" name="sub" description="sub html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;sup&gt;|&lt;/sup&gt;" name="sup" description="sup html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;table&gt;|&lt;/table&gt;" name="table" description="table html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;tbody&gt;|&lt;/tbody&gt;" name="tbody" description="tbody html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;td&gt;|&lt;/td&gt;" name="td" description="td html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;textarea&gt;|&lt;/textarea&gt;" name="textarea" description="textarea html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;tfoot&gt;|&lt;/tfoot&gt;" name="tfoot" description="tfoot html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;th&gt;|&lt;/th&gt;" name="th" description="th html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;thead&gt;|&lt;/thead&gt;" name="thead" description="thead html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;title&gt;|&lt;/title&gt;" name="title" description="title html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;tr&gt;|&lt;/tr&gt;" name="tr" description="tr html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;tt&gt;|&lt;/tt&gt;" name="tt" description="tt html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;u&gt;|&lt;/u&gt;" name="u" description="u html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;ul&gt;|&lt;/ul&gt;" name="ul" description="ul html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;var&gt;|&lt;/var&gt;" name="var" description="var html tag" />
+ <Template suffixes="Ruby (rhtml,rjs,rxml,html.erb,js.rjs,xml.builder)" code="&lt;xmp&gt;|&lt;/xmp&gt;" name="xmp" description="xmp html tag" />
 </Templates>
