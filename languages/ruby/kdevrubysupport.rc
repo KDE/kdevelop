@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevRubySupport" version="3">
+<kpartgui name="KDevRubySupport" version="4">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_execute" />
+    <Action name="build_execute_test_function" />
     <Action name="build_launch_browser" />
   </Menu>
   <Menu name="tools" >
