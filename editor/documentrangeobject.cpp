@@ -105,10 +105,10 @@ DocumentRangeObject::~ DocumentRangeObject( )
     delete d_ptr;
     }
     //Avoid deadlock by doing this with the mutex unlocked
-    if(deleteLater)
-        EditorIntegrator::releaseRange(deleteLater);
     if(removeWatcher)
         removeWatcher->removeWatcher(this);
+    if(deleteLater)
+        EditorIntegrator::releaseRange(deleteLater);
 }
 
 void DocumentRangeObject::setRangeOwning(RangeOwning ownsRange) {
