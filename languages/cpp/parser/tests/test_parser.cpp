@@ -5,6 +5,7 @@
 #undef private
 
 #include "parser.h"
+#include "rpp/preprocessor.h"
 #include "control.h"
 #include "dumptree.h"
 #include "tokens.h"
@@ -222,6 +223,13 @@ private slots:
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("beforeTest\n(testBehind)"));
   }
 
+  void testStringConcatenation()
+  {
+    rpp::Preprocessor preprocessor;
+    QCOMPARE(preprocessor.processString("Hello##You"), QString("HelloYou"));
+    QCOMPARE(preprocessor.processString("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )"), QString("\nHelloYou YouHello"));
+  }
+  
   /*void testParseFile()
   {
      QFile file(TEST_FILE);

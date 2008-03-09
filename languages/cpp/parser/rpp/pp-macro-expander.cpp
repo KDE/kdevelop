@@ -320,6 +320,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             Stream as(&actualText);
             skip_argument_variadics(actuals, macro, input, as);
           }
+          actualText = actualText.trimmed();
 
           if (input.offset() != before)
           {
@@ -352,6 +353,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               Stream as(&actualText);
               skip_argument_variadics(actuals, macro, input, as);
             }
+            actualText = actualText.trimmed();
 
             pp_actual newActual;
             {
