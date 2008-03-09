@@ -89,19 +89,26 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd)
 DocumentRangeObject::~ DocumentRangeObject( )
 {
     Q_D(DocumentRangeObject);
-
+    SmartRange* deleteLater = 0;
+    SmartRange* removeWatcher = 0;
+    {
     QMutexLocker lock(&m_mutex);
     
     if (d->m_smartRange) {
-        d->m_smartRange->removeWatcher(this);
+        removeWatcher = d->m_smartRange;
         //If a smart-range is deleted, move it's child-ranges into it's parent.
         //That way we do not delete other DocumentRangeObject's smart-ranges, which corrupts the structure integrity.
         if (d->m_ownsRange == DocumentRangeObject::Own)
-            EditorIntegrator::releaseRange(d->m_smartRange);
+            deleteLater = d->m_smartRange;
     }
 
-
     delete d_ptr;
+    }
+    //Avoid deadlock by doing this with the mutex unlocked
+    if(deleteLater)
+        EditorIntegrator::releaseRange(deleteLater);
+    if(removeWatcher)
+        removeWatcher->removeWatcher(this);
 }
 
 void DocumentRangeObject::setRangeOwning(RangeOwning ownsRange) {
@@ -122,24 +129,37 @@ void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOw
 {
     Q_D(DocumentRangeObject);
 
-    QMutexLocker lock(&m_mutex);
-
-    if (d->m_smartRange == range)
-        return;
-
-    if (d->m_smartRange)
+    SmartRange* deleteLater = 0;
+    SmartRange* addWatcher = 0;
+    SmartRange* removeWatcher = 0;
     {
-        d->m_smartRange->removeWatcher(this);
-
-        if (d->m_ownsRange == DocumentRangeObject::Own)
-            EditorIntegrator::releaseRange(d->m_smartRange);
+        QMutexLocker lock(&m_mutex);
+    
+        if (d->m_smartRange == range)
+            return;
+    
+        if (d->m_smartRange)
+        {
+            removeWatcher = d->m_smartRange;
+    
+            if (d->m_ownsRange == DocumentRangeObject::Own)
+                deleteLater = d->m_smartRange;
+        }
+    
+        d->m_smartRange = range;
+        d->m_ownsRange = ownsRange;
+    
+        if(d->m_smartRange)
+            addWatcher = d->m_smartRange;
     }
+    //Avoid deadlock by doing this with the mutex unlocked
+    if(addWatcher)
+        addWatcher->addWatcher(this);
+    if(removeWatcher)
+        removeWatcher->removeWatcher(this);
+    if(deleteLater)
+        EditorIntegrator::releaseRange(deleteLater);
 
-    d->m_smartRange = range;
-    d->m_ownsRange = ownsRange;
-
-    if(d->m_smartRange)
-        d->m_smartRange->addWatcher(this);
 }
 
 SimpleRange DocumentRangeObject::range( ) const
@@ -213,18 +233,21 @@ void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 {
     Q_D(DocumentRangeObject);
-    QMutexLocker lock(&m_mutex);
-    d->syncFromSmart();
-
-    KTextEditor::SmartRange* ret = d->m_smartRange;
-
-    if (d->m_smartRange)
+    KTextEditor::SmartRange* ret;
     {
-        d->m_smartRange->removeWatcher(this);
-
-        d->m_smartRange = 0;
+        QMutexLocker lock(&m_mutex);
+        d->syncFromSmart();
+    
+        ret = d->m_smartRange;
+    
+        if (d->m_smartRange)
+        {
+            d->m_smartRange = 0;
+        }
     }
 
+    ret->removeWatcher(this);
+    
     return ret;
 }
 
@@ -238,4 +261,5 @@ KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 
 }
 
+//This mutex protects the internal data of all document-range objects from simultaneous access
 QMutex KDevelop::DocumentRangeObject::m_mutex(QMutex::Recursive);
