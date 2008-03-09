@@ -449,10 +449,28 @@ void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
     //       2. filesRemovedFromProject
     //       3. filesChangedInProject
 
+    ///@todo Be more clever about getting include-paths for header-files: They are not directly part of the project, but usually they have an assigned source-file, so use the include-path from that file. Then we won't need to do the ordering.
+
     //Since there may be additional information like include-paths available now, reparse all open documents
-    foreach(IDocument* doc, core()->documentController()->openDocuments())
-        if(project->inProject(doc->url()))
-          core()->languageController()->backgroundParser()->addDocument(doc->url());
+    QList<IDocument*> headers;
+    foreach(IDocument* doc, core()->documentController()->openDocuments()) {
+        if(project->inProject(doc->url())) {
+          bool isSource = false;
+          QString path = doc->url().path();
+
+          foreach(QString str, sourceExtensions)
+            if(path.endsWith(str))
+              isSource = true;
+
+          if(isSource) //Add source-files first, because their include-paths may be important for headers
+            core()->languageController()->backgroundParser()->addDocument(doc->url());
+          else
+            headers << doc;
+        }
+    }
+
+    foreach(IDocument* doc, headers)
+      core()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
