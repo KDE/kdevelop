@@ -389,7 +389,7 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
     if(klass) {
       if (klass->internalContext() == dec->context())
         type = LocalClassMemberType; //Using Member of the local class
-      else if (klass->internalContext() && klass->internalContext()->imports(dec->context()))
+      else if (dec->context()->type() == DUContext::Class && klass->internalContext() && klass->internalContext()->imports(dec->context()))
         type = InheritedClassMemberType; //Using Member of an inherited class
     }
   }
