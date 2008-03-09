@@ -33,6 +33,10 @@
 #include <kapplication.h>
 #include <klibloader.h>
 
+#include <ktexteditor/viewcursorinterface.h>
+
+#include <codemodel_utils.h>
+
 typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
 static const KDevPluginInfo data("kdevrubysupport");
 K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( data ) )
@@ -50,6 +54,12 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   action->setToolTip(i18n("Run"));
   action->setWhatsThis(i18n("<b>Run</b><p>Starts an application."));
   action->setIcon("ruby_run.png");
+
+  action = new KAction( i18n("Run Test Under Cursor"), "exec", ALT + Key_F9,
+                        this, SLOT(slotRunTestUnderCursor()),
+                        actionCollection(), "build_execute_test_function" );
+  action->setToolTip(i18n("Run Test Under Cursor"));
+  action->setWhatsThis(i18n("<b>Run Test Under Cursor</b><p>Runs the function under the cursor as test."));
 
   action = new KAction( i18n("Launch Browser"), "network", 0, this, SLOT(slotBrowse()), actionCollection(), "build_launch_browser" );
   action->setToolTip(i18n("Launch Browser"));
@@ -214,7 +224,7 @@ void RubySupportPart::parse(const QString &fileName)
   QTextStream stream(&f);
 
 	QRegExp classre("^\\s*(class|module)\\s+([A-Z][A-Za-z0-9_]+::)*([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
-  QRegExp methodre("^\\s*def\\s+(([A-Z][A-Za-z0-9_:]+|self)\\.)?([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~).*$");
+  QRegExp methodre("^(\\s*)def\\s+(([A-Z][A-Za-z0-9_:]+|self)\\.)?([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~).*$");
   QRegExp accessre("^\\s*(private|protected|public)\\s*((:([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~),?\\s*)*)$");
   QRegExp attr_accessorre("^\\s*(attr_accessor|attr_reader|attr_writer)\\s*((:([A-Za-z0-9_]+),?\\s*)*)$");
   QRegExp symbolre(":([^,]+),?");
@@ -224,12 +234,14 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp begin_commentre("^*=begin");
   QRegExp end_commentre("^*=end");
   QRegExp variablere("(@@?[A-Za-z0-9_]+)\\s*=\\s*((?:([A-Za-z0-9_:.]+)\\.new)|[\\[\"'%:/\\?\\{]|%r|<<|true|false|^\\?|0[0-7]+|[-+]?0b[01]+|[-+]?0x[1-9a-fA-F]+|[-+]?[0-9_\\.e]+|nil)?");
+  QRegExp endre("^(\\s*)end\\s*$");
 
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
 
   ClassDom lastClass;
   FunctionDom lastMethod;
+  QString lastMethodIndentation;
   int lastAccess = CodeModelItem::Public;
   QString rawline;
   QCString line;
@@ -259,17 +271,17 @@ void RubySupportPart::parse(const QString &fileName)
 	  lastAccess = CodeModelItem::Public;
     } else if (methodre.search(line) != -1) {
       FunctionDom methodDecl;
-      if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(3) ) ) {
-        FunctionList methods = lastClass->functionByName( methodre.cap(3) );
+      if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(4) ) ) {
+        FunctionList methods = lastClass->functionByName( methodre.cap(4) );
 	    methodDecl = methods[0];
 	  } else {
         methodDecl = codeModel()->create<FunctionModel>();
         methodDecl->setFileName( fileName );
         methodDecl->setStartPosition( lineNo, 0 );
-        methodDecl->setName(methodre.cap(3));
+        methodDecl->setName(methodre.cap(4));
 	  }
       FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
-      method->setName(methodre.cap(3));
+      method->setName(methodre.cap(4));
       kdDebug() << "Add method: " << method->name() << endl;
       method->setFileName( fileName );
       method->setStartPosition( lineNo, 0 );
@@ -279,10 +291,12 @@ void RubySupportPart::parse(const QString &fileName)
 	  } else {
 	    methodDecl->setAccess( lastAccess );
 	  }
-	  if (methodre.cap(1) != "") {
+	  if (methodre.cap(2) != "") {
 	    // A ruby class/singleton method of the form <classname>.<methodname>
 	  	methodDecl->setStatic( true );
 	  }
+
+    lastMethodIndentation = methodre.cap(1);
 
 	  lastMethod = method;
 
@@ -301,7 +315,18 @@ void RubySupportPart::parse(const QString &fileName)
         m_file->addFunctionDefinition( method );
         lastClass = 0;
       }
-    } else if (accessre.search(line) != -1 && lastClass != 0) {
+    } else if (endre.search(line) != -1 && lastMethod != 0 && endre.cap(1) == lastMethodIndentation ) {
+        int endCol, endLine;
+        lastMethod->getEndPosition(&endCol, &endLine);
+        if (endLine == 0) {
+            //hack to set end position of the previous method to the line
+            //where its corresponding "end" is found
+            //there's an assumption that method's "def" statement will have the same
+            //indentation level as method's "end"
+            lastMethod->setEndPosition(lineNo, 0);
+        }
+    }
+    else if (accessre.search(line) != -1 && lastClass != 0) {
 	  int currentAccess = lastAccess;
 	  if (accessre.cap(1) == "public") {
 	    currentAccess = CodeModelItem::Public;
@@ -845,6 +870,39 @@ void RubySupportPart::slotSwitchToView()
     KDevQuickOpen *qo = extension<KDevQuickOpen>("KDevelop/QuickOpen");
     if (qo)
         qo->quickOpenFile(urls);
+}
+
+void RubySupportPart::slotRunTestUnderCursor()
+{
+    // if we can't save all parts, then the user canceled
+    if ( partController()->saveAllFiles() == false )
+        return;
+
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+    QString prog;
+    if (ro_part != 0) {
+        prog = ro_part->url().path();
+    } else
+        return;
+
+    KTextEditor::ViewCursorInterface* activeViewCursor = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
+    if (!activeViewCursor) return;
+
+    unsigned int line, column;
+    activeViewCursor->cursorPositionReal(&line, &column);
+    CodeModelUtils::CodeModelHelper hlp(codeModel(), codeModel()->fileByName(prog));
+    FunctionDom fun = hlp.functionAt(line, column);
+    if (fun == 0) return;
+
+    QFileInfo program(prog);
+    QString cmd = QString("%1 -K%2 -C\"%3\" -I\"%4\" \"%5\" %6")
+                          .arg(interpreter())
+                          .arg(characterCoding())
+                          .arg(runDirectory())
+                          .arg(program.dirPath())
+                          .arg(program.fileName())
+                          .arg(" -n " + fun->name());
+    startApplication(cmd);
 }
 
 #include "rubysupport_part.moc"

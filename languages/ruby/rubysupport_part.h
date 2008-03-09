@@ -38,6 +38,7 @@ private slots:
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
     void slotRun();
+    void slotRunTestUnderCursor();
     void slotCreateSubclass();
     void contextMenu(QPopupMenu *popup, const Context *context);
     void slotBrowse();
