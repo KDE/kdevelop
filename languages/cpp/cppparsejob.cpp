@@ -272,9 +272,9 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
     }
 }
 
-bool CPPInternalParseJob::needUses() const
+bool CPPParseJob::needUses() const
 {
-  return !parentJob()->wasReadFromDisk();
+  return !wasReadFromDisk();
 }
 
 void CPPInternalParseJob::run()
@@ -433,7 +433,7 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
           return parentJob()->abortJob();
 
-      if (needUses()) {
+      if (parentJob()->needUses()) {
           UseBuilder useBuilder(&editor);
           useBuilder.buildUses(ast);
 

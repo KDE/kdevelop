@@ -322,7 +322,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
                 
-            if(!needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) ) {
+            if(!needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (!parentJob()->masterJob()->needUses() || content->hasUses()) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
 

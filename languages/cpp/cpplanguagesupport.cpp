@@ -426,8 +426,9 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
           codeHighlighting()->highlightDUChain( chain );
       }
     }
-    if( chains.isEmpty() )
-        core()->languageController()->backgroundParser()->addDocument(doc->url());
+
+    //Since there may be additional information like include-paths available, always reparse opened documents
+    core()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 void CppLanguageSupport::documentClosed(KDevelop::IDocument *)
@@ -447,6 +448,11 @@ void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
     //       1. filesAddedToProject
     //       2. filesRemovedFromProject
     //       3. filesChangedInProject
+
+    //Since there may be additional information like include-paths available now, reparse all open documents
+    foreach(IDocument* doc, core()->documentController()->openDocuments())
+        if(project->inProject(doc->url()))
+          core()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 void CppLanguageSupport::projectClosing(KDevelop::IProject *project)

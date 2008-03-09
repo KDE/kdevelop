@@ -141,6 +141,7 @@ public:
     void setWasUpdated(const KDevelop::DUContext* context);
 
     const QSet<const KDevelop::DUContext*>& updated() const;
+    bool needUses() const;
     
 private:
     bool m_needUpdateEverything;
@@ -185,7 +186,6 @@ public:
     virtual void run();
 
 private:
-    bool needUses() const;
     int m_priority;
 };
 
