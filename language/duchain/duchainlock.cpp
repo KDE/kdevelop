@@ -32,6 +32,16 @@
 // Uncomment this to enable checking for long lock times. It adds significant performance cost though.
 //#define DEBUG_LOG_TIMING
 
+// When uncommented, a backtrace will be printed whenever a too long lock-time is discovered
+//#define DEBUG_LOG_BACKTRACE
+
+//If DEBUG_LOG_TIMING is uncommented, and the duchain is locked for more then this count of milliseconds, a message is printed
+#define LOCK_LOG_MILLISECONDS 1000
+
+//Uncomment this to search for Deadlocks. DEBUG_LOG_TIMING must be enabled too, and DEBUG_LOG_BACKTRACE is recommended
+//Warning: this may result in a total spamming of the command-line.
+//#define SEARCH_DEADLOCKS
+
 #include <kdebug.h>
 
 namespace KDevelop
@@ -43,7 +53,6 @@ public:
     m_writer = 0;
     m_writerRecursion = 0;
     m_totalReaderRecursion = 0;
-    
   }
 
   /**
@@ -64,10 +73,21 @@ public:
   }
 
 #ifdef DEBUG_LOG_TIMING
-  void auditTime() const {
+  inline void auditTime() const {
     int ms = m_lockTime.elapsed();
-    if (ms > 100)
-      kWarning(9512) << "Long lock time:" << ms << "miliseconds.";
+    if (ms > LOCK_LOG_MILLISECONDS) {
+#ifndef DEBUG_LOG_BACKTRACE
+      kWarning(9512) << "Long lock time:" << ms << "milliseconds." ;
+#else
+      kWarning(9512) << "Long lock time:" << ms << "milliseconds, locked from:\n" << m_lockBacktrace ;
+#endif
+    }
+  }
+  inline void startLockTiming() {
+    m_lockTime.start();
+#ifdef DEBUG_LOG_BACKTRACE
+    m_lockBacktrace = kBacktrace();
+#endif
   }
 #endif
 
@@ -83,6 +103,9 @@ public:
 
 #ifdef DEBUG_LOG_TIMING
   QTime m_lockTime;
+#ifdef DEBUG_LOG_BACKTRACE
+  QString m_lockBacktrace;
+#endif
 #endif
 };
 
@@ -114,7 +137,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 
   QMutexLocker lock(&d->m_mutex);
 
-  int currentTime = 0;
+  unsigned int currentTime = 0;
   bool locked = false;
 
   unsigned int sleepTime = 10000;
@@ -125,6 +148,9 @@ bool DUChainLock::lockForRead(unsigned int timeout)
     usleep(sleepTime);
     currentTime++;
     lock.relock();
+#ifdef DEBUG_LOG_BACKTRACE
+    d->auditTime(); //Search for deadlocks
+#endif
   }
 
   if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
@@ -139,7 +165,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   if(locked) {
     ++d->m_totalReaderRecursion;
 #ifdef DEBUG_LOCK_TIMING
-    d->m_lockTime.start();
+    d->startLockTiming();
 #endif
   }
 
@@ -194,12 +220,11 @@ bool DUChainLock::lockForWrite()
   kDebug(9505) << "DUChain write lock requested by thread:" << QThread::currentThreadId();
 #endif
 
+  QMutexLocker lock(&d->m_mutex);
   //It is not allowed to acquire a write-lock while holding read-lock 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  QMutexLocker lock(&d->m_mutex);
-
-  int currentTime = 0;
+  unsigned int currentTime = 0;
   bool locked = false;
 
   ///@todo use some wake-up queue instead of sleeping
@@ -210,6 +235,9 @@ bool DUChainLock::lockForWrite()
     usleep(10000);
     currentTime++;
     lock.relock();
+#ifdef DEBUG_LOG_BACKTRACE
+    d->auditTime(); //Search for deadlocks
+#endif
   }
 
   if ( (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) && !d->haveOtherReaders()) {
@@ -217,7 +245,7 @@ bool DUChainLock::lockForWrite()
     ++d->m_writerRecursion;
     locked = true;
 #ifdef DEBUG_LOCK_TIMING
-    d->m_lockTime.start();
+    d->startLockTiming();
 #endif
   }
 
@@ -231,7 +259,6 @@ void DUChainLock::releaseWriteLock()
 #endif
 
   Q_ASSERT(currentThreadHasWriteLock());
-  
   QMutexLocker lock(&d->m_mutex);
   
   --d->m_writerRecursion;
