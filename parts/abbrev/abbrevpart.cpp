@@ -372,7 +372,17 @@ void AbbrevPart::slotExpandAbbrev()
 
         uint line, col;
         cursoriface->cursorPositionReal(&line, &col);
-        editiface->removeText( line, col-word.length(), line, col );
+
+        QString linestr = editIface->textLine(line);
+        int startPos = QMAX( QMIN( (int)col, (int)linestr.length()-1 ), 0 );
+        int endPos = startPos;
+        startPos--;
+        while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
+            startPos--;
+        while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
+            endPos++;
+
+        editiface->removeText( line, startPos+1, line, endPos );
         insertChars(it.data()->code );
     }
 }

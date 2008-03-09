@@ -68,6 +68,7 @@ QString KDevEditorUtil::currentWord( KTextEditor::Document * doc, KTextEditor::V
 
 	int startPos = QMAX( QMIN( (int)col, (int)linestr.length()-1 ), 0 );
 	int endPos = startPos;
+    startPos--;
 	while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
 		startPos--;
 	while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
