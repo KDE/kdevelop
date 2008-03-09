@@ -433,7 +433,7 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
           return parentJob()->abortJob();
 
-      if (parentJob()->needUses()) {
+      if (parentJob()->needUses() || updatingContentContext->hasUses()) {
           UseBuilder useBuilder(&editor);
           useBuilder.buildUses(ast);
 
