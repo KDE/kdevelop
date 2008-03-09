@@ -168,6 +168,9 @@ void GDB::readyReadStandardError()
 
 void GDB::processLine(const QByteArray& line)
 {
+    if(!currentCmd_)
+        return;
+
     FileSymbol file;
     file.contents = line;
 
