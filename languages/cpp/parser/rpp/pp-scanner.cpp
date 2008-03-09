@@ -235,6 +235,7 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
   }
 }
 
+///@todo Can this deal with comments? like /*(*/
 void pp_skip_argument::operator()(Stream& input, Stream& output)
 {
   int depth = 0;

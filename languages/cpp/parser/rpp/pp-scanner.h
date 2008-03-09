@@ -77,6 +77,7 @@ public:
   void operator()(Stream& input, Stream& output);
 };
 
+//Does also skip any whitespace behind the argument
 class pp_skip_argument
 {
 public:
