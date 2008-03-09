@@ -505,15 +505,21 @@ Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
   ENSURE_CAN_READ
   if(declarationIndex < 0) {
     declarationIndex = -(declarationIndex + 1);//Add one, because we have subtracted one in another place
-    Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedLocalDeclarations.size());
-    return d_func()->m_usedLocalDeclarations[declarationIndex];
+    if(declarationIndex >= 0 && declarationIndex < d_func()->m_usedLocalDeclarations.size())
+      return d_func()->m_usedLocalDeclarations[declarationIndex];
+    else
+      return 0;
   }else{
-    Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIds.size());
-    if(d_func()->m_usedDeclarations[declarationIndex])
-      return d_func()->m_usedDeclarations[declarationIndex].data();
+    if(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIds.size())
+    {
+      if(d_func()->m_usedDeclarations[declarationIndex])
+        return d_func()->m_usedDeclarations[declarationIndex].data();
 
-    //If no real declaration is available, we need to search the declaration. This is currently not used, we need to think about whether we need it.
-    return d_func()->m_usedDeclarationIds[declarationIndex].getDeclaration(const_cast<TopDUContext*>(this));
+      //If no real declaration is available, we need to search the declaration. This is currently not used, we need to think about whether we need it.
+      return d_func()->m_usedDeclarationIds[declarationIndex].getDeclaration(const_cast<TopDUContext*>(this));
+    }else{
+      return 0;
+    }
   }
 }
 
