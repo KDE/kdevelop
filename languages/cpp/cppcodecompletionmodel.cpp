@@ -155,6 +155,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
           m_completionItems.clear();
           m_navigationWidgets.clear();
           reset();
+          DUChain::lock()->releaseReadLock();
           return;
         }
     }
