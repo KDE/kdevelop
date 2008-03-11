@@ -315,6 +315,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           actual.clear();
 
           QByteArray actualText;
+          skip_whitespaces(input, devnull());
           KDevelop::SimpleCursor actualStart = input.inputPosition();
           {
             Stream as(&actualText);
@@ -348,6 +349,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
           {
             QByteArray actualText;
+            skip_whitespaces(input, devnull());
             KDevelop::SimpleCursor actualStart = input.inputPosition();
             {
               Stream as(&actualText);
