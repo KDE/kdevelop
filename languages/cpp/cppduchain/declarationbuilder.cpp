@@ -659,9 +659,16 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 
 void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 {
+  //Ugly hack: Since we want the identifier only to have the range of the id(not
+  //the assigned expression), we change the range of the node temporarily
+  size_t oldEndToken = node->end_token;
+  node->end_token = node->id + 1;
+  
   Identifier id(m_editor->parseSession()->token_stream->token(node->id).symbol());
   DeclarationBuilder::openDeclaration(0, node, false, false, true, false, id);
 
+  node->end_token = oldEndToken;
+  
   DeclarationBuilderBase::visitEnumerator(node);
 
   closeDeclaration();
