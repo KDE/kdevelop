@@ -159,10 +159,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case COMMAND:
 #ifdef Q_OS_WIN
                 cmd = CMakeProjectVisitor::findFile(*(it2+1),
-                        CMakeProjectVisitor::envVarDirectories("Path"), CMakeProjectVisitor::Executable);
+                        CMakeProjectVisitor::envVarDirectories("Path"), QStringList(), CMakeProjectVisitor::Executable);
 #else
                 cmd = CMakeProjectVisitor::findFile(*(it2+1),
-                        CMakeProjectVisitor::envVarDirectories("PATH"), CMakeProjectVisitor::Executable);
+                        CMakeProjectVisitor::envVarDirectories("PATH"), QStringList(), CMakeProjectVisitor::Executable);
 #endif
                 last = !cmd.isEmpty();
                 itEnd=it2-1;

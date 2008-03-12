@@ -103,7 +103,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static QStringList envVarDirectories(const QString &varName);
         
         enum FileType { Location, File, Executable, Library };
-        static QString findFile(const QString &file, const QStringList &folders, FileType t=File);
+        static QString findFile(const QString &file, const QStringList &folders, const QStringList& suffixes, FileType t=File);
         
     private:
         int notImplemented(const QString& n) const;

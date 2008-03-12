@@ -93,7 +93,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 #else
     envVars=CMakeProjectVisitor::envVarDirectories("PATH");
 #endif
-    QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", envVars, CMakeProjectVisitor::Executable);
+    QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", envVars, QStringList(), CMakeProjectVisitor::Executable);
     m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
@@ -177,7 +177,7 @@ void CMakeProjectManager::initializeProject(KDevelop::IProject* project, const K
         
     foreach(const QString& script, cmakeInitScripts)
     {
-        includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project]), project);
+        includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()), project);
     }
 }
 

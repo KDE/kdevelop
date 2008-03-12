@@ -228,24 +228,24 @@ QString CMakeBuildDirCreator::buildType() const { return m_creatorUi->buildType-
 
 QString CMakeBuildDirCreator::executeProcess(const QString& execName, const QStringList& args)
 {
-	kDebug(9032) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-
-	KProcess p;
-	p.setOutputChannelMode(KProcess::MergedChannels);
-	p.setProgram(execName, args);
-	p.start();
-
-	if(!p.waitForFinished())
-	{
-		kDebug(9032) << "failed to execute:" << execName;
-	}
-
-	QByteArray b = p.readAllStandardOutput();
-	QString t;
-	t.prepend(b.trimmed());
-	kDebug(9032) << "executed" << execName << "<" << t;
-
-	return t;
+    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+    
+    KProcess p;
+    p.setOutputChannelMode(KProcess::MergedChannels);
+    p.setProgram(execName, args);
+    p.start();
+    
+    if(!p.waitForFinished())
+    {
+        kDebug(9042) << "failed to execute:" << execName;
+    }
+    
+    QByteArray b = p.readAllStandardOutput();
+    QString t;
+    t.prepend(b.trimmed());
+    kDebug(9042) << "executed" << execName << "<" << t;
+    
+    return t;
 }
 
 #include "cmakebuilddircreator.h"

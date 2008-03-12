@@ -226,14 +226,12 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
     return 1;
 }
 
-QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &folders, FileType t)
+QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &folders, const QStringList& suffixes, FileType t)
 {
-    if(file.isEmpty())
-        return file;
-    QString filename;
-    KUrl path;
-    if( QFileInfo(file).isAbsolute() )
+    if( file.isEmpty() || QFileInfo(file).isAbsolute() )
          return file;
+    
+    QString filename;
     switch(t) {
         case Library:
 #ifdef Q_OS_WIN
@@ -244,7 +242,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         case Executable:
 #ifdef Q_OS_WIN
-            kDebug(9042) << "Setting file extension to .exe";
+            kDebug(9042) << "Setting file extension to .exe";   
             filename=file+".exe";
             break;
 #else
@@ -259,16 +257,30 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             filename=file;
             break;
     }
-    foreach(const QString& mpath, folders)
+    
+    QStringList suffixFolders, useSuffixes(suffixes);
+    useSuffixes.prepend(QString());
+    foreach(const QString& apath, folders)
     {
-        QDir direc(mpath);
+        foreach(const QString& suffix, useSuffixes)
+        {
+            suffixFolders.append(apath+"/"+suffix);
+        }
+    }
+    
+    KUrl path;
+    foreach(const QString& mpath, suffixFolders)
+    {
         if(mpath.isEmpty())
             continue;
 
-        kDebug(9042) << "Trying:" << mpath << "." << mpath;
+        KUrl file(mpath);
+        file.addPath(filename);
+        kDebug(9042) << "Trying:" << mpath << "." << filename << file;
 #ifndef Q_OS_WIN
         if(t==Library)
         {
+            QDir direc(mpath);
             QFileInfoList entries=direc.entryInfoList(QStringList(filename) << filename+".*");
             kDebug(9042) << "lib entries" << entries.count() << filename;
             if(!entries.isEmpty())
@@ -280,7 +292,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         }
         else
 #endif
-        if(direc.exists(filename))
+        if(QFile::exists(file.toLocalFile()))
         {
             switch(t) {
                 case Location:
@@ -289,8 +301,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
                 case Executable:    //TODO: Must check if it is an executable.
                 case File:
                 case Library:
-                    path=KUrl(mpath);
-                    path.addPath(filename);
+                    path=file;
                     break;
             }
             break;
@@ -313,7 +324,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     {
         if(!possib.contains('.'))
             possib += ".cmake";
-        path=findFile(possib, modulePath);
+        path=findFile(possib, modulePath, QStringList());
     }
 
     if(!path.isEmpty())
@@ -361,7 +372,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString possib=pack->name();
     if(!possib.endsWith(".cmake"))
         possib += ".cmake";
-    QString path=findFile("Find"+possib, modulePath);
+    QString path=findFile("Find"+possib, modulePath, QStringList());
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
@@ -412,7 +423,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     QStringList paths;
     foreach(const QString& file, fprog->filenames())
     {
-        QString path=findFile(file, modulePath, Executable);
+        QString path=findFile(file, modulePath, fprog->pathSuffixes(), Executable);
         if(!path.isEmpty()) {
             paths+=path;
             break;
@@ -442,7 +453,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files) {
-        QString p1=findFile(p, locationOptions, Location);
+        QString p1=findFile(p, locationOptions, fpath->pathSuffixes(), Location);
         if(p1.isEmpty()) {
             kDebug(9032) << p << "not found";
             error=true;
@@ -478,7 +489,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     }
     
     foreach(const QString& p, files) {
-        QString p1=findFile(p, locationOptions, Library);
+        QString p1=findFile(p, locationOptions, flib->pathSuffixes(), Library);
         if(p1.isEmpty()) {
             kDebug(9042) << p << "not found";
             error=true;
@@ -508,7 +519,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
 
     kDebug(9042) << "Find File:" << ffile->filenames();
     foreach(const QString& p, files) {
-        QString p1=findFile(p, locationOptions, File);
+        QString p1=findFile(p, locationOptions, ffile->pathSuffixes(), File);
         if(p1.isEmpty()) {
             kDebug(9042) << p << "not found";
             error=true;
