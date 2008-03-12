@@ -450,7 +450,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           }
 
         } else if (scope == Declaration::ClassScope) {
-          if (!dynamic_cast<ClassMemberDeclaration*>(dec))
+          if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
             continue;
         }
 
