@@ -33,6 +33,7 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+
 QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
@@ -542,7 +543,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
   return contextCopy;
 }
 
+
 ///@todo Use explicitly declared specializations
+///@todo Implement correct instantiation-cache updating in templatedeclaration.cpp, which includes correct checking for dead forward-declarations and any other dead declarations
 Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const ImportTrace& inclusionTrace )
 {
   if( m_instantiatedFrom )
