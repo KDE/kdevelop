@@ -197,9 +197,12 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 return evaluateCondition(itBegin, it2-1) && last;
             case OR:
                 return evaluateCondition(itBegin, it2-1) || last;
-            case MATCHES: { //Using QRegExp, don't know if it is the ideal situation
+            case MATCHES: {
                 QRegExp rx(*(it2+1));
-                rx.indexIn(*(it2-1));
+                if(m_vars->contains(*(it2-1)))
+                    rx.indexIn(m_vars->value(*(it2-1)).join(""));
+                else
+                    rx.indexIn(*(it2-1));
                 last=rx.matchedLength()>0;
                 itEnd=it2-1;
             }   break;
