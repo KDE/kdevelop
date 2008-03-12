@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,13 +282,13 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         {
             QDir direc(mpath);
             QFileInfoList entries=direc.entryInfoList(QStringList(filename) << filename+".*");
-            kDebug(9042) << "lib entries" << entries.count() << filename;
+            kDebug(9042) << "lib entries" << entries.count() << mpath << filename;
             if(!entries.isEmpty())
             {
                 path=KUrl(mpath);
                 path.addPath(entries.first().fileName());
+                break;
             }
-            break;
         }
         else
 #endif

@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>z
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,6 +18,8 @@
 #include <KDebug>
 #include <QRegExp>
 #include <QFileInfo>
+
+int CMakeCondition::m_priorities[Last];
 
 CMakeCondition::CMakeCondition(const VariableMap* vars) : m_vars(vars)
 {

@@ -39,7 +39,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         bool isTrue(const QString& var) const;
         const VariableMap *m_vars;
         
-        int m_priorities[Last];
+        static int m_priorities[Last];
 //         int m_parameters[Last];
 };
 
