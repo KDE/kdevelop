@@ -364,3 +364,15 @@ void UseBuilder::visitDeclarator(DeclaratorAST* node)
   UseBuilderBase::visitDeclarator(node);
 }
 
+void UseBuilder::visitClassSpecifier(ClassSpecifierAST* node)
+{
+  if(node->name) {
+    UseExpressionVisitor visitor( m_editor->parseSession(), this );
+    if( !node->name->ducontext )
+      node->name->ducontext = currentContext();
+
+    visitor.parseNamePrefix(node->name);
+  }
+
+  UseBuilderBase::visitClassSpecifier(node);
+}
