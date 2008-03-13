@@ -18,6 +18,7 @@
 #include <KDebug>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QDateTime>
 
 int CMakeCondition::m_priorities[Last];
 
@@ -259,6 +260,13 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 last= (strA==strB);
                 itEnd=it2-1;
             }   break;
+            case IS_NEWER_THAN: {
+                QFileInfo pathA(*(it2-1));
+                QFileInfo pathB(*(it2+1));
+//                 kDebug(9042) << "newer" << strA << strB;
+                last= (pathA.lastModified()>pathB.lastModified());
+                itEnd=it2-1;
+            }
             /*default:
                 kDebug(9042) << "no operator:" << *it2;
                 break;*/

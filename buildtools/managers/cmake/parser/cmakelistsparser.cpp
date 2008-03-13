@@ -26,11 +26,39 @@
 #include <QStack>
 #include <KDebug>
 
+QString CMakeFunctionArgument::unescapeValue(const QString& value)
+{
+    QString newValue;
+    for(int i=0; i<value.size(); i++)
+    {
+        if(value[i]=='\\') {
+            i++;
+            switch(value[i].toAscii())
+            {
+                case 'n':
+                    newValue += '\n';
+                    break;
+                case 't':
+                    newValue += '\t';
+                    break;
+                case '\\':
+                    newValue += '\\';
+                    break;
+                default:
+                    newValue += value[i];
+                    break;
+            }
+        } else
+            newValue += value[i];
+    }
+    return newValue;
+}
+
 void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
     if(args.isEmpty())
     {
-        CMakeFunctionArgument cmakeArg("");
+        CMakeFunctionArgument cmakeArg(""); //FIXME why ""?
         arguments.append( cmakeArg );
     }
     else
@@ -55,16 +83,6 @@ QString CMakeFunctionDesc::writeBack() const
     }
     output += ')';
     return output;
-}
-
-CMakeListsParser::CMakeListsParser(QObject *parent)
- : QObject(parent)
-{
-}
-
-
-CMakeListsParser::~CMakeListsParser()
-{
 }
 
 #if 0
@@ -344,4 +362,18 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     }
     return true;
 }
+
+
+/*CMakeFunctionArgument::CMakeFunctionArgument(const CMakeFunctionArgument & r)
+    : value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column)
+{
+    value=unescapeValue(value);
+}*/
+
+CMakeFunctionArgument::CMakeFunctionArgument(const QString & v, bool q, const QString & file, quint32 l, quint32 c)
+    : value(v), quoted(q), filePath(file), line(l), column(c)
+{
+    value=unescapeValue(value);
+}
+
 

@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2007 Aleix Pol Gonzalez <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +30,40 @@
 
 #include <KUrl>
 
+// #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
 #include <cmakeexport.h>
-// #include "cmakemodelitems.h"
 
-class CMakeAst;
-struct CMakeFunctionArgument;
+struct CMakeFunctionArgument
+{
+    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
+    
+    CMakeFunctionArgument(const QString& v, bool q = false,
+                          const QString& file = QString(), quint32 l = 0, quint32 c=0);
+    bool operator == (const CMakeFunctionArgument& r) const
+    {
+        return (this->value == r.value) && (this->quoted == r.quoted);
+    }
+
+    bool operator==( const QString& rhs )
+    {
+        return ( this->value == rhs );
+    }
+
+    bool operator != (const CMakeFunctionArgument& r) const
+    {
+        return !(*this == r);
+    }
+    QString unescapeValue(const QString& value);
+
+    QString value;
+    bool quoted;
+    QString filePath; //FIXME: i don't understand why do i want it here
+    quint32 line;
+    quint32 column;
+};
+Q_DECLARE_METATYPE( CMakeFunctionArgument )
+
 
 struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 {
@@ -55,39 +84,6 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 };
 Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
-struct CMakeFunctionArgument
-{
-    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
-    CMakeFunctionArgument(const CMakeFunctionArgument& r):
-            value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column) {unescapeValue();}
-    CMakeFunctionArgument(const QString& v, bool q = false,
-                          const QString& file = QString(), quint32 l = 0, quint32 c=0)
-        : value(v), quoted(q), filePath(file), line(l), column(c) { unescapeValue(); }
-    bool operator == (const CMakeFunctionArgument& r) const
-    {
-        return (this->value == r.value) && (this->quoted == r.quoted);
-    }
-
-    bool operator==( const QString& rhs )
-    {
-        return ( this->value == rhs );
-    }
-
-    bool operator != (const CMakeFunctionArgument& r) const
-    {
-        return !(*this == r);
-    }
-    
-    void unescapeValue() {value=value.replace("\\\\", "\\");} //FIXME: Should scape all characters
-
-    QString value;
-    bool quoted;
-    QString filePath; //FIXME: i don't understand why do i want it here
-    quint32 line;
-    quint32 column;
-};
-Q_DECLARE_METATYPE( CMakeFunctionArgument )
-
 /**
  * CMake files function descriptor collector
  * @author Matt Rogers <mattr@kde.org>
@@ -99,8 +95,8 @@ typedef QList<CMakeFunctionDesc> CMakeFileContent;
 class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
 {
 public:
-    CMakeListsParser(QObject *parent = 0);
-    ~CMakeListsParser();
+    CMakeListsParser(QObject *parent = 0) : QObject(parent) {}
+    ~CMakeListsParser() {}
     
     static CMakeFileContent readCMakeFile(const QString& fileName);
     

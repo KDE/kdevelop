@@ -1089,6 +1089,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         rx.indexIn(sast->input()[0]);
                         QStringList info = rx.capturedTexts();
                         int idx = sast->replace().right(sast->replace().size()-1).toInt();
+//                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
                         res.append(info[idx]);
                     }
                     else
@@ -1097,9 +1098,12 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         {
                             rx.indexIn(in);
                             QStringList info = rx.capturedTexts();
-                            if(info.count()==1 && info[0].isEmpty()) {
+                            if(info.count()==1 && info[0].isEmpty())
+                            {
                                 res.append(in);
-                            } else {
+                            }
+                            else
+                            {
                                 foreach(QString s, info)
                                 {
                                     res.append(in.replace(s, sast->replace()));
