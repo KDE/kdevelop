@@ -21,6 +21,7 @@ set(kdevquickopen_PART_SRCS
     duchainitemquickopen.cpp
     declarationlistquickopen.cpp
     projectitemquickopen.cpp
+    customlistquickopen.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp

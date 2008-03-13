@@ -42,9 +42,12 @@
 #include <kshortcut.h>
 #include <kdebug.h>
 
+#include <ilanguage.h>
 #include <icore.h>
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
+#include <ilanguagecontroller.h>
+#include <ilanguagesupport.h>
 #include <hashedstring.h>
 #include <duchain/duchainutils.h>
 #include <duchain/duchainlock.h>
@@ -58,6 +61,7 @@
 #include "projectfilequickopen.h"
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
+#include "customlistquickopen.h"
 
 using namespace KDevelop;
 
@@ -513,6 +517,9 @@ bool QuickOpenPlugin::removeProvider( KDevelop::QuickOpenDataProviderBase* provi
 
 void QuickOpenPlugin::quickOpenDeclaration()
 {
+  if(jumpToSpecialObject())
+    return;
+  
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   Declaration* decl = cursorDeclaration();
 
@@ -528,8 +535,56 @@ void QuickOpenPlugin::quickOpenDeclaration()
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
 }
 
+QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
+{
+  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
+    return false;
+
+  KUrl url = ICore::self()->documentController()->activeDocument()->url();
+  
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+
+  foreach( KDevelop::ILanguage* language, languages) {
+    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    if(w)
+      return w;
+  }
+  return 0;
+}
+
+QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
+  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
+    return qMakePair(KUrl(), SimpleCursor());
+
+  KUrl url = ICore::self()->documentController()->activeDocument()->url();
+  
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+
+  foreach( KDevelop::ILanguage* language, languages) {
+    QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    if(pos.second.isValid()) {
+      return pos;
+    }
+  }
+  
+  return qMakePair(KUrl(), SimpleCursor());
+}
+
+bool QuickOpenPlugin::jumpToSpecialObject()
+{
+  QPair<KUrl, SimpleCursor> pos = specialObjectJumpPosition();
+  if(pos.second.isValid()) {
+    ICore::self()->documentController()->openDocument(pos.first, pos.second.textCursor());
+    return true;
+  }
+  return false;
+}
+
 void QuickOpenPlugin::quickOpenDefinition()
 {
+  if(jumpToSpecialObject())
+    return;
+  
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   Declaration* decl = cursorDeclaration();
 
@@ -554,32 +609,53 @@ void QuickOpenPlugin::quickOpenDefinition()
 void QuickOpenPlugin::quickOpenNavigate()
 {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  
+  QWidget* widget = specialObjectNavigationWidget();
   Declaration* decl = cursorDeclaration();
 
+  if(widget || decl) {
+  
+    QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
+
+    d->setAttribute( Qt::WA_DeleteOnClose, true );
+
+    QuickOpenModel* model = new QuickOpenModel( d );
+    model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
+
+    if(widget) {
+      QPair<KUrl, SimpleCursor> jumpPos = specialObjectJumpPosition();
+      
+      CustomItem item;
+      item.m_widget = widget;
+      item.m_executeTargetPosition = jumpPos.second;
+      item.m_executeTargetUrl = jumpPos.first;
+
+      QList<CustomItem> items;
+      items << item;
+    
+      model->registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
+    }else{
+      DUChainItem item;
+      
+      item.m_item = DeclarationPointer(decl);
+      item.m_text = decl->qualifiedIdentifier().toString();
+
+      QList<DUChainItem> items;
+      items << item;
+
+      model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
+    }
+
+    //Change the parent so there are no conflicts in destruction order
+    model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true ));
+
+    model->setExpanded(model->index(0,0, QModelIndex()), true);
+  }
+  
   if(!decl) {
     kDebug() << "Found no declaration for cursor, cannot navigate";
     return;
   }
-
-  QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
-
-  d->setAttribute( Qt::WA_DeleteOnClose, true );
-
-  QuickOpenModel* model = new QuickOpenModel( d );
-  model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
-
-  QList<DUChainItem> items;
-  DUChainItem item;
-  item.m_item = DeclarationPointer(decl);
-  item.m_text = decl->qualifiedIdentifier().toString();
-  items << item;
-
-  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
-
-  //Change the parent so there are no conflicts in destruction order
-  model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true ));
-
-  model->setExpanded(model->index(0,0, QModelIndex()), true);
 }
 
 class DUChainItemFilter {

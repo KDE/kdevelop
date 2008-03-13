@@ -29,6 +29,10 @@
 #include <quickopendataprovider.h>
 #include "ui_quickopen.h"
 
+namespace KDevelop {
+  class SimpleCursor;
+}
+
 class QuickOpenModel;
 
 class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
@@ -73,6 +77,10 @@ public slots:
     void quickOpenNavigateFunctions();
   private:
 
+    QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
+    QWidget* specialObjectNavigationWidget() const;
+    bool jumpToSpecialObject();
+    
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;

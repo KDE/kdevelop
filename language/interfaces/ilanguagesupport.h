@@ -29,6 +29,9 @@ namespace KDevelop {
 class ParseJob;
 class ILanguage;
 class TopDUContext;
+class DocumentRange;
+class SimpleCursor;
+class SimpleRange;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
@@ -55,6 +58,23 @@ public:
      *  @return the standard context used by this language for the given @param url.
       * */
     virtual TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
+
+    /**
+     * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
+     * In C++, they are used to allow highlighting and navigation of macro-uses.
+     * */
+
+    /**Should return the local range within the given url that belongs to the
+      *special language-object that contains @param position, or (KUrl(), SimpleRange:invalid()) */
+    virtual SimpleRange specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position);
+
+    /**Should return the source-range and source-document that the
+      *special language-object that contains @param position refers to, or SimpleRange:invalid(). */
+    virtual QPair<KUrl, SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position);
+    
+    /**Should return a navigation-widget for the
+      *special language-object that contains @param position refers, or 0. */
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position);
 };
 
 }

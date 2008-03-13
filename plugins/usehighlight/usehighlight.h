@@ -80,6 +80,7 @@ class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRa
     QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
     QSet<KTextEditor::View*> m_updateViews;
     QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
+    QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range
 
     KUrl m_mouseHoverDocument;
     SimpleCursor m_mouseHoverCursor;

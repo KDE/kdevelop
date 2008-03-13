@@ -27,6 +27,7 @@
 #include <kpluginloader.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
 #include <kdebug.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
@@ -69,6 +70,12 @@ void UseHighlightPlugin::unload()
 
 void UseHighlightPlugin::rangeDeleted( KTextEditor::SmartRange *range ) {
   m_backups.remove( range );
+  
+  for(QMap<KTextEditor::View*, KTextEditor::SmartRange*>::iterator it = m_highlightedRange.begin(); it != m_highlightedRange.end(); ++it)
+    if(*it == range) {
+      m_highlightedRange.erase(it);
+      return;
+    }
 }
 
 void UseHighlightPlugin::mouseEnteredRange( KTextEditor::SmartRange* range, KTextEditor::View* view ) {
@@ -104,6 +111,16 @@ KTextEditor::Attribute::Ptr highlightedUseAttribute(bool mouseHighlight) {
 }
 
 KTextEditor::Attribute::Ptr highlightedDeclarationAttribute() {
+  static KTextEditor::Attribute::Ptr standardAttribute = KTextEditor::Attribute::Ptr();
+  if( !standardAttribute ) {
+    standardAttribute = KTextEditor::Attribute::Ptr( new KTextEditor::Attribute() );
+    standardAttribute->setBackgroundFillWhitespace(true);
+    standardAttribute->setBackground(Qt::red);
+  }
+  return standardAttribute;
+}
+
+KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute() {
   static KTextEditor::Attribute::Ptr standardAttribute = KTextEditor::Attribute::Ptr();
   if( !standardAttribute ) {
     standardAttribute = KTextEditor::Attribute::Ptr( new KTextEditor::Attribute() );
@@ -167,6 +184,48 @@ void UseHighlightPlugin::updateViews()
 {
   foreach( KTextEditor::View* view, m_updateViews ) {
     SimpleCursor c = SimpleCursor(view->cursorPosition());
+
+    ///First: Check whether there is a special language object
+    ///@todo Maybe make this optional, because it can be slow
+
+
+    KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(view->document());
+
+    if(iface) {
+      if(m_highlightedRange.contains(view)) {
+        QMutexLocker lock(iface ? iface->smartMutex() : 0);
+
+        Q_ASSERT(m_highlightedRange[view]->document() == view->document());
+        
+        delete m_highlightedRange[view];
+        m_highlightedRange.remove(view);
+      }
+      
+      QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(view->document()->url());
+
+      bool highlighted = false;
+      foreach( KDevelop::ILanguage* language, languages) {
+        SimpleRange r = language->languageSupport()->specialLanguageObjectRange(view->document()->url(), c);
+        if(r.isValid()) {
+          //We've got our range. Highlight it and continue.
+
+          m_highlightedRange[view] = iface->newSmartRange( view->document()->documentRange() );
+          ///@todo This is a workaround for a probable bug, the range is not highlighted without a big master-range
+          ///@todo Currently this ihghlighitng does no twork at all!
+          KTextEditor::SmartRange* highlightRange = iface->newSmartRange( r.textRange(), m_highlightedRange[view] );
+          
+          m_highlightedRange[view]->setAttribute( highlightedSpecialObjectAttribute() );
+
+          m_highlightedRange[view]->addWatcher( this );
+          highlighted = true;
+          break;
+        }
+      }
+      if(highlighted)
+        continue;
+    }
+    
+    
     ///Find either a Declaration, or a use, that is in the Range.
 
     bool mouseHighlight = false;

@@ -19,11 +19,24 @@
 
 #include "ilanguagesupport.h"
 #include "duchain.h"
+#include <editor/simplerange.h>
 
 namespace KDevelop {
 
 TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool allowProxyContext) {
   return DUChain::self()->chainForDocument(url);
+}
+
+SimpleRange ILanguageSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position) {
+    return SimpleRange::invalid();
+}
+
+QPair<KUrl, SimpleCursor> ILanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position) {
+    return QPair<KUrl, SimpleCursor>(KUrl(), SimpleCursor::invalid());
+}
+
+QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
+    return 0;
 }
 
 }
