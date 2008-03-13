@@ -1021,6 +1021,8 @@ void TestDUChain::testFunctionDefinition() {
   QCOMPARE(top->childContexts()[1]->childContexts().count(), 3);
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 3);
 
+  QCOMPARE(top->childContexts()[4]->type(), DUContext::Function);
+
   Declaration* atInA = top->childContexts()[1]->localDeclarations()[0];
   
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
@@ -1039,8 +1041,6 @@ void TestDUChain::testFunctionDefinition() {
   QVERIFY(top->localDeclarations()[2]->internalContext());
   QVERIFY(top->localDeclarations()[3]->internalContext());
   QVERIFY(top->localDeclarations()[4]->internalContext());
-  
-  QCOMPARE(top->localDeclarations()[2]->internalContext()->type(), DUContext::Function);
   
   QCOMPARE(top->localDeclarations()[2]->internalContext()->owner(), top->localDeclarations()[2]);
   QCOMPARE(top->localDeclarations()[3]->internalContext()->owner(), top->localDeclarations()[3]);
