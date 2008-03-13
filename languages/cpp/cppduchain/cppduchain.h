@@ -40,6 +40,7 @@ namespace KDevelop {
 }
 
 namespace Cpp {
+  class EnvironmentFile;
 /**
  * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
  * @param topContext should be the top-context from where the search starts. This is needed to resolve template-parameters.
@@ -68,6 +69,12 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop:
  * Not implemented yet.
  * */
 KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::Declaration* declaration);
+
+/**
+ * Preprocesses the given string, taking the environment from the given environment-file.
+ * DUChain does not need to be locked.
+ * */
+KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line );
 }
 
 #endif

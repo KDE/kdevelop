@@ -235,6 +235,7 @@ public:
     Iterator& operator=(const Iterator& rhs) {
       m_rep = rhs.m_rep;
       m_it = rhs.m_it;
+      return *this;
     }
     
     operator bool() const {

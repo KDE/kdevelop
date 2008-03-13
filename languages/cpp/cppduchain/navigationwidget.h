@@ -31,6 +31,10 @@
 class QWidget;
 class QTextBrowser;
 
+namespace rpp {
+  class pp_macro;
+}
+
 namespace Cpp {
   class NavigationContext;
   typedef KSharedPtr<NavigationContext> NavigationContextPointer;
@@ -55,6 +59,14 @@ namespace Cpp {
        * The texts may contain links to files, see above.
        * */
       NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+
+      /**
+       * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
+       * normal text in the navigation-widget.
+       * The texts may contain links to files, see above.
+       * */
+      NavigationWidget(const rpp::pp_macro& macro, const QString& preprocessedBody = QString(), const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+
       ~NavigationWidget();
 
       /**

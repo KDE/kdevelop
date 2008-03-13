@@ -39,6 +39,8 @@
 #include <icore.h>
 #include <idocumentcontroller.h>
 
+#include <rpp/pp-macro.h>
+
 #include "cpplanguagesupport.h"
 #include "cpptypes.h"
 #include "templatedeclaration.h"
@@ -46,6 +48,7 @@
 #include "environmentmanager.h"
 
 using namespace KDevelop;
+using namespace rpp;
 
 namespace Cpp {
 
@@ -80,6 +83,7 @@ struct Colorizer
 
 const Colorizer errorHighlight("990000");
 const Colorizer labelHighlight("000035");
+const Colorizer codeHighlight("005000");
 const Colorizer propertyHighlight("009900");
 const Colorizer navigationHighlight("000099");
 const Colorizer importantHighlight("000000", true);
@@ -798,6 +802,69 @@ private:
   IncludeItem m_item;
 };
 
+class MacroNavigationContext : public NavigationContext {
+public:
+  MacroNavigationContext(const pp_macro& macro, QString preprocessedBody) : NavigationContext(DeclarationPointer(0), TopDUContextPointer(0)), m_macro(macro), m_body(preprocessedBody) {
+  }
+  virtual QString html(bool shorten) {
+    m_currentText  = "<html><body><p><small><small>";
+    m_linkCount = 0;
+    addExternalText(m_prefix);
+
+    QString args;
+    
+    if(!m_macro.formals.isEmpty()) {
+      args = "(";
+
+      bool first = true;
+      foreach(const QByteArray& b, m_macro.formals) {
+        if(!first)
+          args += ", ";
+        first = false;
+        args += QString::fromUtf8(b);
+      }
+
+      args += ")";
+    }
+    
+    m_currentText += (m_macro.function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro.name.str()) + " " + args +  "<br />";
+    
+    KUrl u(m_macro.file.str());
+    NavigationAction action(u, KTextEditor::Cursor(m_macro.sourceLine,0));
+    QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
+
+    if(!shorten) {
+      m_currentText += "<br />";
+
+      if(!m_body.isEmpty()) {
+      m_currentText += labelHighlight(i18n("Preprocessed body:")) + "<br />";
+      m_currentText += codeHighlight(m_body);
+      m_currentText += "<br />";
+      }
+
+      
+      m_currentText += labelHighlight(i18n("Body:")) + "<br />";
+
+      m_currentText += codeHighlight(QString::fromUtf8(m_macro.definition));
+      m_currentText += "<br />";
+    }
+
+    makeLink(u.prettyUrl(), u.prettyUrl(), action);
+    
+    m_currentText += "</small></small></p></body></html>";
+    return m_currentText;
+  }
+
+  virtual QString name() const {
+    return m_macro.name.str();
+  }
+  
+private:
+
+  pp_macro m_macro;
+  QString m_body;
+};
+
 NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_declaration(declaration), m_topContext(topContext)
 {
   initBrowser(400);
@@ -813,6 +880,15 @@ NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::Top
   
 //The first context is registered so it is kept alive by the shared-pointer mechanism
   m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem, m_topContext));
+  m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
+  setContext( m_startContext );
+}
+
+NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& preprocessedBody, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(0) {
+  initBrowser(200);
+  
+//The first context is registered so it is kept alive by the shared-pointer mechanism
+  m_startContext = NavigationContextPointer(new MacroNavigationContext(macro, preprocessedBody));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }

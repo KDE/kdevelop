@@ -20,7 +20,14 @@
 #include <ducontext.h>
 #include <identifier.h>
 #include <declaration.h>
+#include <duchainlock.h>
+#include <duchain.h>
 #include <duchainpointer.h>
+#include "environmentmanager.h"
+#include "parser/rpp/pp-engine.h"
+#include "parser/rpp/preprocessor.h"
+#include "parser/rpp/pp-environment.h"
+#include "parser/rpp/pp-macro.h"
 #include "cppduchainexport.h"
 
 
@@ -126,5 +133,46 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, Declaration* dec
   return true;
 }
 
+/**
+ * Preprocess the given string using the macros from given EnvironmentFile up to the given line
+ * If line is -1, all macros are respected.
+ * This is a quite slow operation, because thousands of macros need to be shuffled around.
+ * 
+ * @todo maybe implement a version of rpp::Environment that directly works on EnvironmentFile,
+ * without needing to copy all macros.
+ * */
+QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) {
+
+  rpp::Preprocessor preprocessor;
+  rpp::pp pp(&preprocessor);
+
+  {
+      DUChainReadLocker lock(DUChain::lock());
+/*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
+    //Copy in all macros from the file
+    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->definedMacros().set().iterator() ); it; ++it ) {
+      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
+        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
+      } else {
+/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
+      }
+    }
+/*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
+    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->usedMacros().set().iterator() ); it; ++it ) {
+      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
+        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
+      } else {
+/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
+      }
+    }
+  }
+
+  QString ret = pp.processFile("anonymous", rpp::pp::Data, text.toUtf8());
+  pp.environment()->cleanup();
+  
+  return ret;
+}
 }
 

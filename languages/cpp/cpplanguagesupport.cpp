@@ -60,6 +60,7 @@
 #include <projectmodel.h>
 #include <backgroundparser.h>
 #include <duchain.h>
+#include <stringhelpers.h>
 #include <duchainlock.h>
 #include <topducontext.h>
 #include <smartconverter.h>
@@ -77,6 +78,8 @@
 #include "cppparsejob.h"
 #include "environmentmanager.h"
 #include "macroset.h"
+#include "navigationwidget.h"
+#include "cppduchain/cppduchain.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -792,6 +795,120 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
   }
 
   return top;
+}
+
+QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier(const KUrl& url, const SimpleCursor& position) const {
+  KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
+  if(!doc || !doc->textDocument() || !doc->textDocument()->activeView())
+    return qMakePair(qMakePair(QString(), SimpleRange::invalid()), QString());
+
+  int lineNumber = position.line;
+  int lineLength = doc->textDocument()->lineLength(lineNumber);
+
+  QString line = doc->textDocument()->text(KTextEditor::Range(lineNumber, 0, lineNumber, lineLength));
+  
+  int start = position.column;
+  int end = position.column;
+
+  while(start > 0 && (line[start].isLetter() || line[start] == '_') && (line[start-1].isLetter() || line[start-1] == '_'))
+    --start;
+
+  while(end <  lineLength && (line[end].isLetter() || line[end] == '_'))
+    ++end;
+
+  SimpleRange wordRange = SimpleRange(SimpleCursor(lineLength, start), SimpleCursor(lineLength, end));
+
+  return qMakePair( qMakePair(line.mid(start, end-start), wordRange), line.mid(end) );
+}
+
+QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const KUrl& url, const SimpleCursor& position) {
+  //Extract the word under the cursor
+
+  QPair<QPair<QString, SimpleRange>, QString> found = cursorIdentifier(url, position);
+  if(!found.first.second.isValid())
+    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+
+  HashedString word(found.first.first);
+  SimpleRange wordRange(found.first.second);
+  
+  DUChainReadLocker lock(DUChain::lock());
+  TopDUContext* ctx = standardContext(url, true);
+  if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
+    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+
+  Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
+  
+  Q_ASSERT(p);
+
+  if(!p->usedMacroNames().contains(word) && !p->definedMacroNames().contains(word))
+    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+
+  //We need to do a flat search through all macros here, which really hurts
+
+  Cpp::MacroRepositoryIterator it = p->usedMacros().iterator();
+  
+  while(it) {
+    if((*it).name == word)
+      return qMakePair(wordRange, *it);
+    ++it;
+  }
+
+  it = p->definedMacros().iterator();
+  while(it) {
+    if((*it).name == word)
+      return qMakePair(wordRange, *it);
+    ++it;
+  }
+  
+  return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+}
+
+SimpleRange CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position) {
+
+  return usedMacroForPosition(url, position).first;
+}
+
+QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position) {
+    QPair<SimpleRange, rpp::pp_macro> m = usedMacroForPosition(url, position);
+
+    if(!m.first.isValid())
+      return qMakePair(KUrl(), SimpleCursor::invalid());
+
+    return qMakePair(KUrl(m.second.file.str()), SimpleCursor(m.second.sourceLine, 0));
+}
+
+QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
+    QPair<SimpleRange, rpp::pp_macro> m = usedMacroForPosition(url, position);
+    if(!m.first.isValid())
+      return 0;
+
+    //Evaluate the preprocessed body
+    QPair<QPair<QString, SimpleRange>, QString> found = cursorIdentifier(url, position);
+
+    QString text = found.first.first;
+    QString preprocessedBody;
+    //Check whether tail contains arguments
+    QString tail = found.second.trimmed(); ///@todo make this better.
+    if(tail.startsWith("(")) {
+      int i = findClose( tail, 0 );
+      if(i != -1) {
+        text += tail.left(i+1);
+      }
+    }
+
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      TopDUContext* ctx = standardContext(url, true);
+      if(ctx) {
+        Cpp::EnvironmentFile* p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
+        if(p) {
+          kDebug() << "preprocessing" << text;
+          preprocessedBody = Cpp::preprocess(text, p, position.line);
+        }
+      }
+    }
+    
+    return new Cpp::NavigationWidget(m.second, preprocessedBody);
 }
 
 

@@ -33,10 +33,6 @@
 #include "safetycounter.h"
 #include "templatedeclaration.h"
 #include "cpplanguagesupport.h"
-#include "parser/rpp/pp-engine.h"
-#include "parser/rpp/preprocessor.h"
-#include "parser/rpp/pp-environment.h"
-#include "parser/rpp/pp-macro.h"
 #include <iproblem.h>
 #include "environmentmanager.h"
 #include "pushvalue.h"
@@ -71,48 +67,6 @@ QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
 }
 
 typedef PushValue<int> IntPusher;
-
-/**
- * Preprocess the given string using the macros from given EnvironmentFile up to the given line
- * If line is -1, all macros are respected.
- * This is a quite slow operation, because thousands of macros need to be shuffled around.
- * 
- * @todo maybe implement a version of rpp::Environment that directly works on EnvironmentFile,
- * without needing to copy all macros.
- * */
-QString preprocess( const QString& text, const Cpp::EnvironmentFilePointer& file, int line ) {
-
-  rpp::Preprocessor preprocessor;
-  rpp::pp pp(&preprocessor);
-
-  {
-    LOCKDUCHAIN;
-/*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
-    //Copy in all macros from the file
-    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->definedMacros().set().iterator() ); it; ++it ) {
-      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
-        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
-/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
-      } else {
-/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
-      }
-    }
-/*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
-    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->usedMacros().set().iterator() ); it; ++it ) {
-      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
-        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
-/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
-      } else {
-/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
-      }
-    }
-  }
-
-  QString ret = pp.processFile("anonymous", rpp::pp::Data, text.toUtf8());
-  pp.environment()->cleanup();
-  
-  return ret;
-}
 
 ///Extracts the last line from the given string
 QString extractLastLine(const QString& str) {
@@ -572,7 +526,7 @@ void CodeCompletionContext::preprocessText( int line ) {
   LOCKDUCHAIN;
   
   if( m_duContext ) {
-  m_text = preprocess( m_text, Cpp::EnvironmentFilePointer( dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()) ), line );
+  m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line );
   }else{
     kWarning() << "error: no ducontext";
   }

@@ -34,7 +34,7 @@ class TranslationUnitAST;
 class IncludeFileDataProvider;
 
 namespace KParts { class Part; }
-namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; }
+namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; }
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
 
@@ -102,6 +102,18 @@ private slots:
     void switchDefinitionDeclaration();
 
 private:
+
+    //Returns the identifier and its range under the cursor as first return-value, and the tail behind at as the second
+    QPair<QPair<QString, KDevelop::SimpleRange>, QString> cursorIdentifier(const KUrl& url, const KDevelop::SimpleCursor& position) const;
+
+    QPair<KDevelop::SimpleRange, rpp::pp_macro> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
+    
+    virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);
+
+    virtual QPair<KUrl, KDevelop::SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const KDevelop::SimpleCursor& position);
+    
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
+  
     KUrl sourceOrHeaderCandidate( const KUrl &url );
     static CppLanguageSupport* m_self;
 
