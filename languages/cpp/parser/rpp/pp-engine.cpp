@@ -348,6 +348,7 @@ void pp::handle_define (Stream& input)
 {
   pp_macro* macro = new pp_macro();
   macro->file = currentFileName();
+  macro->sourceLine = input.originalInputPosition().line;
   QByteArray definition;
 
   skip_blanks (input, devnull());
@@ -1033,6 +1034,7 @@ void pp::handle_undef(Stream& input)
   pp_macro* macro = new pp_macro();
   macro->file = currentFileName();
   macro->name = macro_name;
+  macro->sourceLine = input.originalInputPosition().line;
 
   macro->defined = false;
 
