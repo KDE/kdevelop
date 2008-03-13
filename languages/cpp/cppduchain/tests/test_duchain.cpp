@@ -1040,6 +1040,8 @@ void TestDUChain::testFunctionDefinition() {
   QVERIFY(top->localDeclarations()[3]->internalContext());
   QVERIFY(top->localDeclarations()[4]->internalContext());
   
+  QCOMPARE(top->localDeclarations()[2]->internalContext()->type(), DUContext::Function);
+  
   QCOMPARE(top->localDeclarations()[2]->internalContext()->owner(), top->localDeclarations()[2]);
   QCOMPARE(top->localDeclarations()[3]->internalContext()->owner(), top->localDeclarations()[3]);
   QCOMPARE(top->localDeclarations()[4]->internalContext()->owner(), top->localDeclarations()[4]);
