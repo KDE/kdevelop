@@ -528,7 +528,7 @@ void CPPInternalParseJob::run()
     kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
 
     //Check the import structure
-    if(parentJob()->masterJob() == parentJob()) {
+/*    if(parentJob()->masterJob() == parentJob()) {
       DUChainReadLocker l(DUChain::lock());
       foreach(const DUContext* context, parentJob()->updated()) {
         if(context == contentContext || context == proxyContext)
@@ -540,7 +540,7 @@ void CPPInternalParseJob::run()
 //          Q_ASSERT(contentContext->imports(context, contentContext->range().end));
         }
       }
-    }
+    }*/
 }
 
 
