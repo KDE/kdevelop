@@ -66,6 +66,7 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
   m_inSymbolTable = false;
   m_context = 0;
   m_internalContext = 0;
+  m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
 }
   
