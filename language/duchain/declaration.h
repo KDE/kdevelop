@@ -197,7 +197,7 @@ public:
    * Returns the comment associated to this declaration in the source-code, or an invalid string if there is none.
    * Stored in utf-8 encoding
    * */
-  QByteArray comment() const;
+  virtual QByteArray comment() const;
   /**
    * Sets the comment for this declaration. Should be utf-8 encoded.
    * */
