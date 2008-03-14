@@ -75,7 +75,7 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
   if(node->expression) {
     id = TypeIdentifier(decode(session, node));
     id.setIsExpression(true);
-  }else{
+  }else if(node->type_id) {
     //Parse the pointer operators
     TypeCompiler tc(session);
     tc.run(node->type_id->type_specifier);
@@ -87,7 +87,7 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
       const ListNode<PtrOperatorAST*> *end = it; ///@todo check ordering, eventually walk the list in reversed order
       do
         {
-          if(it->element) {
+          if(it->element && it->element->op) { ///@todo What about ptr-to-member?
             if( session->token_stream->token(it->element->op).symbol().startsWith('&')) {
               //We're handling a 'reference'
               id.setIsReference(true);

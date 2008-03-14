@@ -133,7 +133,7 @@ public:
 
   /**@return the token at position @p index.*/
   inline Token &operator[](int index)
-  { return tokens[index]; }
+  { Q_ASSERT(index >= 0 && index < (int)token_count); return tokens[index]; }
 
   /**@return the token at position @p index.*/
   inline const Token &token(int index) const

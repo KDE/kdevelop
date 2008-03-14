@@ -128,12 +128,16 @@ void Lexer::tokenize(ParseSession* _session)
 
   session->token_stream->resize(1024);
   (*session->token_stream)[0].kind = Token_EOF;
-
+  (*session->token_stream)[0].session = session;
+  (*session->token_stream)[0].position = 0;
+  (*session->token_stream)[0].size = 0;
   index = 1;
 
   cursor = session->contents();
 
   do {
+    size_t previousIndex = index;
+    
     if (index == session->token_stream->size())
       session->token_stream->resize(session->token_stream->size() * 2);
 
@@ -142,12 +146,15 @@ void Lexer::tokenize(ParseSession* _session)
     current_token->position = cursor - session->contents();
     (this->*s_scan_table[((uchar)*cursor)])();
     current_token->size = cursor - session->contents() - current_token->position;
+
+    Q_ASSERT(previousIndex == index-1 || previousIndex == index); //Never parse more than 1 token, because that won't be initialized correctly
   } while (cursor < session->contents() + session->size()-1);
 
     if (index == session->token_stream->size())
       session->token_stream->resize(session->token_stream->size() * 2);
-
+  (*session->token_stream)[index].session = session;
   (*session->token_stream)[index].position = cursor - session->contents();
+  (*session->token_stream)[index].size = 0;
   (*session->token_stream)[index].kind = Token_EOF;
 }
 

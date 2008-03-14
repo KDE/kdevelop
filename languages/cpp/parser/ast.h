@@ -662,7 +662,7 @@ struct PtrOperatorAST: public AST
   DECLARE_AST_NODE(PtrOperator)
 
   const ListNode<std::size_t> *cv;
-  std::size_t op; //Index of the token that describes the operator
+  std::size_t op; //Index of the token that describes the operator. Is zero when mem_ptr is non-zero.
   PtrToMemberAST *mem_ptr;
 };
 
