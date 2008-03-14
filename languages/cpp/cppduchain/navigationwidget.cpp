@@ -865,7 +865,7 @@ private:
   QString m_body;
 };
 
-NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_declaration(declaration), m_topContext(topContext)
+NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext), m_declaration(declaration)
 {
   initBrowser(400);
 
