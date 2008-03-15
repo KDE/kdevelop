@@ -52,6 +52,7 @@ public:
   /// This is potentially expensive, but needs to be done. We need to find better ways of managing the whole imports structure,
   /// maybe using SetRepository.
   void clearImportsCache(TopDUContext* context) {
+    QMutexLocker l(&importSearchMutex);
     if( m_searchingImport )
       return;
 
@@ -71,8 +72,7 @@ public:
   ///importSearchMutex must be locked before using this
   bool imports(const TopDUContext* target, int depth = 0) const
   {
-    if(depth == 0)
-      importSearchMutex.lock();
+    QMutexLocker l(depth == 0 ? &importSearchMutex : 0);
     
     m_searchingImport = true;
 
@@ -82,8 +82,6 @@ public:
       QHash<const TopDUContext*, const TopDUContext*>::const_iterator it = m_importsCache.find(target);
       if(it != m_importsCache.end()) {
       m_searchingImport = false;
-      if(depth == 0)
-        importSearchMutex.unlock();
         
         return *it;
       }
@@ -92,8 +90,6 @@ public:
     if (depth == 100) {
       kWarning() << "Imported context list too deep! Infinite recursion?" ;
       m_searchingImport = false;
-      if(depth == 0)
-        importSearchMutex.unlock();
       return false;
     }
 
@@ -111,8 +107,6 @@ public:
           m_importsCache[target] = top;
         }
         m_searchingImport = false;
-        if(depth == 0)
-          importSearchMutex.unlock();
         return true;
       }
 
@@ -124,16 +118,12 @@ public:
           m_importsCache[target] = top;
         }
         m_searchingImport = false;
-        if(depth == 0)
-          importSearchMutex.unlock();
         return true;
       }
     }
 
     m_importsCache[target] = 0;
     m_searchingImport = false;
-    if(depth == 0)
-      importSearchMutex.unlock();
     return false;
   }
 
@@ -146,7 +136,7 @@ public:
   ParsingEnvironmentFilePointer m_file;
   QList<ProblemPointer> m_problems;
   ///Maps from the target context to the next one in the import trace.
-  ///This can be used to reconstruct the import trace.
+  ///This can be used to reconstruct the import trace. Problem: What when a context is deleted?
   ///@todo make this a simple "QSet<TopDUContext> m_importsCache;" by using the caches of all used top-contexts.
   mutable QHash<const TopDUContext*, const TopDUContext*> m_importsCache;
 
@@ -174,6 +164,7 @@ ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
 
     importSearchMutex.lock();
 
+    Q_ASSERT(d->m_importsCache.contains(target));
     const TopDUContext* nextContext = d->m_importsCache[target];
     if(nextContext) {
       ret << ImportTraceItem(this, DUContext::importPosition(nextContext));
