@@ -100,7 +100,8 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_session( new ParseSession(&cppStringUnifier) ),
         m_readFromDisk( false ),
         m_includePathsComputed( false ),
-        m_keepDuchain( false )
+        m_keepDuchain( false ),
+        m_parsedIncludes( 0 )
 {
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
@@ -127,6 +128,20 @@ void CPPParseJob::setKeepDuchain(bool b) {
 
 bool CPPParseJob::keepDuchain() const {
     return m_keepDuchain;
+}
+
+void CPPParseJob::includedFileParsed() {
+  ++m_parsedIncludes;
+  const int estimateIncludes = 450;
+  float _progress = ((float)m_parsedIncludes) / estimateIncludes;
+  if(_progress > 0.8)
+    _progress = 0.8;
+  
+  emit progress(this, _progress, i18n("Parsing included files"));
+}
+
+void CPPParseJob::setLocalProgress(float _progress, QString text) {
+  emit progress(this, 0.8+_progress*0.2, text);
 }
 
 void CPPParseJob::parseForeground() {
@@ -287,6 +302,8 @@ void CPPInternalParseJob::run()
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
+    parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
+    
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
     TopDUContext* updatingProxyContext = parentJob()->updatingProxyContext().data();
@@ -434,6 +451,8 @@ void CPPInternalParseJob::run()
           return parentJob()->abortJob();
 
       if (parentJob()->needUses() || (updatingContentContext && updatingContentContext->hasUses())) {
+          parentJob()->setLocalProgress(0.5, i18n("Building uses")); ///@todo better text?
+        
           UseBuilder useBuilder(&editor);
           useBuilder.buildUses(ast);
 
@@ -506,10 +525,15 @@ void CPPInternalParseJob::run()
       parentJob()->masterJob()->setWasUpdated(contentContext);
     if(proxyContext)
       parentJob()->masterJob()->setWasUpdated(proxyContext);
-    
-    
+
     parentJob()->setDuChain(proxyContext ? proxyContext : contentContext);
 
+    //Indicate progress
+    parentJob()->setLocalProgress(1, i18n("Ready"));
+    
+    if(parentJob()->masterJob() != parentJob())
+      parentJob()->masterJob()->includedFileParsed();
+    
     // Debug output...
 
     if ( !parentJob()->parentPreprocessor() ) {

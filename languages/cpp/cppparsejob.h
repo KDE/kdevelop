@@ -142,6 +142,12 @@ public:
 
     const QSet<const KDevelop::DUContext*>& updated() const;
     bool needUses() const;
+
+    //Can be called to indicate that an included file was parsed
+    void includedFileParsed();
+
+    //Sets local progress for this exact file
+    void setLocalProgress(float progress, QString text);
     
 private:
     bool m_needUpdateEverything;
@@ -169,6 +175,7 @@ private:
     bool m_keepDuchain;
     QStack<DocumentCursor> m_includeStack;
     QSet<const KDevelop::DUContext*> m_updated;
+    int m_parsedIncludes;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job
