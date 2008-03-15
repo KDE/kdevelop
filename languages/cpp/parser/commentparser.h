@@ -34,15 +34,11 @@ class Comment {
         return m_line;
     }
 
-    bool operator < ( Comment& rhs ) const;
+    bool operator==( const Comment& comment ) const;
+    
+    bool operator < ( const Comment& rhs ) const;
 
-    bool isSame ( const Comment& rhs );
-
-    struct cmp {
-        bool operator () ( const Comment& c1, const Comment& c2 ) const {
-            return c1.line() < c2.line();
-        }
-    };
+    bool isSame ( const Comment& rhs ) const;
 
     size_t token() const {
       return m_token;
@@ -55,7 +51,7 @@ class Comment {
 
 class CommentStore {
     private:
-        typedef std::set< Comment, Comment::cmp > CommentSet;
+        typedef std::set< Comment > CommentSet;
         CommentSet m_comments;
 
     public:

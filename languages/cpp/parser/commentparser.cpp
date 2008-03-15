@@ -16,6 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "commentparser.h"
+// #include <kdebug.h>
 
 Comment::Comment( size_t token, int line ) : m_line(line), m_token( token ) {
 }
@@ -24,11 +25,16 @@ Comment::operator bool() const {
     return m_line != -1 && m_token != 0;
 }
 
-bool Comment::operator < ( Comment& rhs ) const {
-    return m_line < rhs.m_line;
+bool Comment::operator==( const Comment& rhs ) const {
+  return isSame(rhs);
 }
 
-bool Comment::isSame ( const Comment& rhs ) {
+
+bool Comment::operator < ( const Comment& rhs ) const {
+    return m_token < rhs.m_token;
+}
+
+bool Comment::isSame ( const Comment& rhs ) const {
     return m_token == rhs.m_token;
 }
 
@@ -37,6 +43,7 @@ Comment CommentStore::takeComment( int line ) {
     if( it != m_comments.end() ) {
         Comment ret = *it;
         m_comments.erase( it );
+/*        kDebug() << "Took comment in line" << line << "new count:" << m_comments.size();*/
         return ret;
     } else {
         return Comment();
@@ -55,6 +62,7 @@ Comment CommentStore::takeCommentInRange( int end, int start ) {
     if( it != m_comments.end() && (*it).line() >= start && (*it).line() <= end ) {
         Comment ret = *it;
         m_comments.erase( it );
+/*        kDebug() << "Took comment in line" << (*it).line() << "new count:" << m_comments.size();*/
         return ret;
     } else {
         return Comment();
@@ -62,7 +70,6 @@ Comment CommentStore::takeCommentInRange( int end, int start ) {
 }
 
 void CommentStore::addComment( Comment comment ) {
-
     CommentSet::iterator it = m_comments.find( comment );
     if( it != m_comments.end() ) {
         if( comment.isSame( *it ) ) return;
@@ -70,10 +77,12 @@ void CommentStore::addComment( Comment comment ) {
 /*        Comment c = *it;
         c += comment;
         comment = c;*/
-        m_comments.erase( it );
+        //m_comments.erase( it );
     }
 
+/*    kDebug() << "size" << m_comments.size();*/
     m_comments.insert( comment );
+/*    kDebug() << "added comment in line" << comment.line() << "token" << comment.token() << "new count" << m_comments.size();*/
 }
 
 ///Does not delete the comment
@@ -89,6 +98,7 @@ Comment CommentStore::takeFirstComment() {
     if( it == m_comments.end() ) return Comment();
     Comment ret = *it;
     m_comments.erase(it);
+/*    kDebug() << "taken first comment in line" << (*it).line() << "new count:" << m_comments.size();*/
     return ret;
 }
 

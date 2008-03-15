@@ -62,12 +62,24 @@
   } while (0)
 
 void Parser::addComment( CommentAST* ast, const Comment& comment ) {
-  if( comment )
+  if( comment ) {
+/*    kDebug() << "Adding but leaving comment" << session->token_stream->token(comment.token()).symbol();*/
     ast->comments = snoc(ast->comments, comment.token(), session->mempool);
+  }
+}
+
+void Parser::moveComments( CommentAST* ast ) {
+  while( m_commentStore.hasComment() ) {
+    size_t token = m_commentStore.takeFirstComment().token();
+    
+/*    kDebug() << "Moving comment" << session->token_stream->token(token).symbol();*/
+    
+    ast->comments = snoc(ast->comments, token, session->mempool);
+  }
 }
 
 Parser::Parser(Control *c)
-  : control(c), lexer(control), session(0), _M_last_valid_token(0)
+  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0)
 {
   _M_max_problem_count = 5;
   _M_block_errors = false;
@@ -141,13 +153,21 @@ int Parser::lineFromTokenNumber( size_t tokenNumber ) const {
 
 
 void Parser::processComment( int offset, int line ) {
-  const Token& commentToken( (*session->token_stream)[session->token_stream->cursor() + offset] );
+  size_t tokenNumber = session->token_stream->cursor() + offset;
+
+  if(_M_last_parsed_comment >= tokenNumber)
+    return; //The comment was already parsed. May happen because of pre-parsing
+
+  _M_last_parsed_comment = tokenNumber;
+  
+  const Token& commentToken( (*session->token_stream)[tokenNumber] );
   Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
     KDevelop::SimpleCursor position = session->positionAt( commentToken.position );
     line = position.line;
   }
 
+/*  kDebug() << "noticing comment" << commentToken.symbol();*/
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
   
 }
@@ -878,7 +898,6 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   std::size_t start = session->token_stream->cursor();
 
   Comment mcomment = comment();
-  clearComment();
   
   CHECK(Token_typedef);
 
@@ -895,8 +914,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
       //reportError(("Need an identifier to declare"));
       //return false;
     }
-
-    
+  clearComment();
 
   TypedefAST *ast = CreateNode<TypedefAST>(session->mempool);
 
@@ -2216,9 +2234,8 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
-  if( m_commentStore.hasComment() )
-    addComment( node, m_commentStore.takeFirstComment() );
-  
+  moveComments(node);
+
   preparseLineComments( ast->end_token-1 );
 
   if( m_commentStore.hasComment() )

@@ -203,6 +203,8 @@ public:
   bool skip(int l, int r);
 
   void addComment( CommentAST* ast, const Comment& comment );
+  //Moves all currently available comments to the given AST, removing them from the comment-store
+  void moveComments( CommentAST* ast );
   
   void advance(bool skipComment = true);
   void rewind(size_t position);
@@ -233,7 +235,7 @@ private:
   ParseSession* session;
   bool _M_block_errors;
   size_t _M_last_valid_token; //Last encountered token that was not a comment
-
+  size_t _M_last_parsed_comment;
 private:
   Parser(const Parser& source);
   void operator = (const Parser& source);

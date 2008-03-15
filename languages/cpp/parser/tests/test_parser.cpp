@@ -223,6 +223,76 @@ private slots:
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("beforeTest\n(testBehind)"));
   }
 
+  void testComments2()
+  {
+    QByteArray method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    const SimpleDeclarationAST* simpleDecl = static_cast<const SimpleDeclarationAST*>(it->element);
+    QVERIFY(simpleDecl);
+
+    const EnumSpecifierAST* enumSpec = (const EnumSpecifierAST*)simpleDecl->type_specifier;
+    QVERIFY(enumSpec);
+    
+    const ListNode<EnumeratorAST*> *enumerator = enumSpec->enumerators;
+    QVERIFY(enumerator);
+    enumerator = enumerator->next;
+    QVERIFY(enumerator);
+    
+    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator1Comment\n(enumerator1BehindComment)"));
+
+    enumerator = enumerator->next;
+    QVERIFY(enumerator);
+    
+    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator2Comment\n(enumerator2BehindComment)"));
+  }
+
+  void testComments3()
+  {
+    QByteArray method("class Class{\n//Comment\n int val;};");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    const SimpleDeclarationAST* simpleDecl = static_cast<const SimpleDeclarationAST*>(it->element);
+    QVERIFY(simpleDecl);
+
+    const ClassSpecifierAST* classSpec = (const ClassSpecifierAST*)simpleDecl->type_specifier;
+    QVERIFY(classSpec);
+
+    const ListNode<DeclarationAST*> *members = classSpec->member_specs;
+    QVERIFY(members);
+    members = members->next;
+    QVERIFY(members);
+    
+    QCOMPARE(CommentFormatter::formatComment(members->element->comments, lastSession), QString("Comment"));
+  }
+  
+  void testComments4()
+  {
+    QByteArray method("//Comment\ntemplate<class C> class Class{};");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    const TemplateDeclarationAST* templDecl = static_cast<const TemplateDeclarationAST*>(it->element);
+    QVERIFY(templDecl);
+    QVERIFY(templDecl->declaration);
+
+    QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
+  }
+  
   void testStringConcatenation()
   {
     rpp::Preprocessor preprocessor;
