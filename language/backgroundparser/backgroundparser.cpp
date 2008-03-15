@@ -125,8 +125,8 @@ public:
                                      m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
                     QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
                                      m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-                    QObject::connect(job, SIGNAL(progress(float, QString)),
-                                     m_parser, SLOT(parseProgress(float, QString)), Qt::QueuedConnection);
+                    QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
+                                     m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
 
                     m_parseJobs.insert(url, job);
                     jobs.append(job);
@@ -261,9 +261,8 @@ void BackgroundParser::saveSettings(bool projectIsLoaded)
     Q_UNUSED(projectIsLoaded)
 }
 
-void BackgroundParser::parseProgress(float value, QString text)
+void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QString text)
 {
-    KDevelop::ParseJob* job = qobject_cast<KDevelop::ParseJob*>(sender());
     d->m_jobProgress[job] = value;
     updateProgressBar();
 }

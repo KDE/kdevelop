@@ -145,7 +145,7 @@ protected:
 
 protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);
-    void parseProgress(float value, QString text);
+    void parseProgress(KDevelop::ParseJob*, float value, QString text);
 
 private:
     class BackgroundParserPrivate *d;
