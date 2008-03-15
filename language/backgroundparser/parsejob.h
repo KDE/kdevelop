@@ -91,7 +91,11 @@ public:
      * not be added and the method will return false.
      */
     bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
-
+Q_SIGNALS:
+    /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
+     * @param text may be a text that describes the current state of parsing
+     * Do not trigger this too often, for performance reasons. */
+    void progress(float value, QString text);
 protected:
     KDevelop::HashedString m_document;
     QString m_errorMessage;

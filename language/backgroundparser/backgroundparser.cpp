@@ -125,6 +125,8 @@ public:
                                      m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
                     QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
                                      m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+                    QObject::connect(job, SIGNAL(progress(float, QString)),
+                                     m_parser, SLOT(parseProgress(float, QString)), Qt::QueuedConnection);
 
                     m_parseJobs.insert(url, job);
                     jobs.append(job);
@@ -215,6 +217,7 @@ public:
 
     int m_maxParseJobs;
     int m_doneParseJobs;
+    QMap<KDevelop::ParseJob*, float> m_jobProgress;
 };
 
 
@@ -256,6 +259,13 @@ void BackgroundParser::loadSettings(bool projectIsLoaded)
 void BackgroundParser::saveSettings(bool projectIsLoaded)
 {
     Q_UNUSED(projectIsLoaded)
+}
+
+void BackgroundParser::parseProgress(float value, QString text)
+{
+    KDevelop::ParseJob* job = qobject_cast<KDevelop::ParseJob*>(sender());
+    d->m_jobProgress[job] = value;
+    updateProgressBar();
 }
 
 void BackgroundParser::addDocument(const KUrl& url)
@@ -321,6 +331,8 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 
         d->m_parseJobs.remove(parseJob->document().str());
 
+        d->m_jobProgress.remove(parseJob);
+        
         parseJob->setBackgroundParser(0);
 
         // Use a delayed delete to make sure the weaver has finished up.
@@ -328,7 +340,7 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         QTimer::singleShot(100, parseJob, SLOT(deleteLater()));
 
         ++d->m_doneParseJobs;
-        emit showProgress(0, d->m_maxParseJobs, d->m_doneParseJobs);
+        updateProgressBar();
     }
 }
 
@@ -352,9 +364,13 @@ void BackgroundParser::updateProgressBar()
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
         emit hideProgress();
-
     } else {
-        emit showProgress(0, d->m_maxParseJobs, d->m_doneParseJobs);
+
+        float additionalProgress = 0;
+        for(QMap<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.begin(); it != d->m_jobProgress.end(); ++it)
+            additionalProgress += *it;
+        
+        emit showProgress(0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
     }
 }
 
