@@ -29,8 +29,9 @@
 
 #include "ui_vcseventwidget.h"
 
-#include "../vcsjob.h"
 #include <interfaces/iplugin.h>
+
+#include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
 #include "../vcsrevision.h"
 #include "../vcsevent.h"
@@ -39,6 +40,7 @@
 #include "../models/vcsitemeventmodel.h"
 #include "../models/vcseventmodel.h"
 
+#include "vcsdiffwidget.h"
 
 namespace KDevelop
 {
@@ -132,10 +134,13 @@ void VcsEventWidgetPrivate::diffToPrevious()
 
             KDevelop::VcsJob* job = iface->diff( loc, loc, prev, ev.revision() );
 
-
-//             SvnDiffDialog* dlg = new SvnDiffDialog( job );
-//             connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
-//             dlg->show();
+            VcsDiffWidget* widget = new VcsDiffWidget( job );
+            widget->setRevisions( prev, ev.revision() );
+            KDialog* dlg = new KDialog( q );
+            dlg->setCaption( i18n("Difference To Previous") );
+            dlg->setButtons( KDialog::Ok );
+            dlg->setMainWidget( widget );
+            dlg->show();
         }
     }
 }
@@ -154,9 +159,13 @@ void VcsEventWidgetPrivate::diffRevisions()
             KDevelop::VcsLocation loc( m_url );
             KDevelop::VcsJob* job = iface->diff( loc, loc, ev1.revision(), ev2.revision() );
 
-//             SvnDiffDialog* dlg = new SvnDiffDialog( job );
-//             connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
-//             dlg->show();
+            VcsDiffWidget* widget = new VcsDiffWidget( job );
+            widget->setRevisions( ev1.revision(), ev2.revision() );
+            KDialog* dlg = new KDialog( q );
+            dlg->setCaption( i18n("Difference between Revisions") );
+            dlg->setButtons( KDialog::Ok );
+            dlg->setMainWidget( widget );
+            dlg->show();
         }
     }
 }
@@ -166,6 +175,9 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
 {
 
     d->m_job = job;
+    //Don't autodelete this job, its metadata will be used later on
+    d->m_job->setAutoDelete( false );
+    
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
@@ -203,6 +215,7 @@ VcsEventWidget::~VcsEventWidget()
     delete d->m_logModel;
     delete d->m_detailModel;
     delete d->m_ui;
+    d->m_job->deleteLater();
     delete d;
 }
 
