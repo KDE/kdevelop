@@ -360,8 +360,10 @@ void CPPInternalParseJob::run()
               LineContextPair context = contentFromProxy(topContext);
               DUContextPointer ptr(context.context);
               if( !containsContext(importedContentChains, context.context)  && (!updatingContentContext || !updatingContentContext->importedParentContexts().contains(ptr)) ) {
-                  importedContentChains << context;
-                  importedTemporaryChains << context.context;
+                  if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
+                    importedContentChains << context;
+                    importedTemporaryChains << context.context;
+                  }
               }
           }
           if(currentJob->parentPreprocessor())
