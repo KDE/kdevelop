@@ -119,8 +119,6 @@ QString ImportProject::manager() const
         case 1:
             return "KDevQMakeManager";
         case 2:
-            return "KDevAutotoolsImporter";
-        case 3:
             return "KDevCustomMakeManager";
         default:
             return "";
