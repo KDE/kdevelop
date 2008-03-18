@@ -44,10 +44,6 @@ SvnInternalCatJob::SvnInternalCatJob( SvnJobBase* parent )
 
 void SvnInternalCatJob::run()
 {
-    CatJobHelper helper;
-    connect( &helper, SIGNAL( gotContent( const QString& ) ),
-           this, SIGNAL( gotContent( const QString& ) ), Qt::QueuedConnection );
-
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
@@ -72,7 +68,7 @@ void SvnInternalCatJob::run()
         }
         svn::Revision srcRev = createSvnCppRevisionFromVcsRevision( srcRevision() );
         content = QString::fromUtf8( cli.cat( svn::Path( srcba.data() ), srcRev ).c_str() );
-        helper.emitContent( content );
+        emit gotContent( content );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while doing a diff: "

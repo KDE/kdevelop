@@ -52,10 +52,6 @@ SvnInternalDiffJob::SvnInternalDiffJob( SvnJobBase* parent )
 
 void SvnInternalDiffJob::run()
 {
-    DiffJobHelper helper;
-    connect( &helper, SIGNAL( gotDiff( const QString& ) ),
-           this, SIGNAL( gotDiff( const QString& ) ), Qt::QueuedConnection );
-
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
@@ -136,7 +132,7 @@ void SvnInternalDiffJob::run()
                              dstRev, recursive(), ignoreAncestry(),
                              noDiffOnDelete(), ignoreContentType() );
         }
-        helper.emitDiff( diff );
+        emit gotDiff( diff );
 
     }catch( svn::ClientException ce )
     {

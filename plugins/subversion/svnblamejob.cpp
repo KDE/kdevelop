@@ -41,17 +41,11 @@ SvnInternalBlameJob::SvnInternalBlameJob( SvnJobBase* parent )
 
 void SvnInternalBlameJob::run()
 {
-    BlameJobHelper helper;
-    connect( &helper, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ),
-             this, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ),
-             Qt::QueuedConnection );
-
-
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
     connect( &cli, SIGNAL( lineReceived( const KDevelop::VcsAnnotationLine& ) ),
-             &helper, SLOT( emitBlameLine( const KDevelop::VcsAnnotationLine& ) ) );
+             this, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ) );
     try
     {
         QByteArray ba = location().path().toUtf8();
@@ -127,8 +121,7 @@ void SvnBlameJob::start()
     }else
     {
         connect( m_job, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ),
-                 this, SLOT( blameLineReceived( const KDevelop::VcsAnnotationLine& ) ),
-                 Qt::QueuedConnection );
+                 this, SLOT( blameLineReceived( const KDevelop::VcsAnnotationLine& ) ) );
         kDebug(9510) << "blameging url:" << m_job->location();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }

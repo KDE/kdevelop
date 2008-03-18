@@ -42,51 +42,10 @@ extern "C" {
 #include <svncpp/apr.hpp>
 #include <svncpp/revision.hpp>
 
-class JobHelper : public QObject
-{
-    friend class SvnInternalJobBase;
-    Q_OBJECT
-    public:
-        JobHelper()
-        {}
-        void emitNeedLogin( const QString& realm )
-        {
-            std::cerr << "Emitting login" << std::endl;
-            emit needLogin( realm );
-        }
-        void emitNeedCommitMessage()
-        {
-            std::cerr << "Emitting commit" << std::endl;
-            emit needCommitMessage();
-        }
-
-        void emitShowNotification( const QString& path, const QString& msg )
-        {
-            emit showNotification( path, msg );
-        }
-        void emitNeedSslServerTrust( const QStringList& failures, const QString& host, const QString& print,
-                                 const QString& from, const QString& until, const QString& issuer,
-                                 const QString& realm )
-        {
-            std::cerr << "Emitting trust" << std::endl;
-            emit needSslServerTrust( failures, host, print, from, until, issuer, realm );
-        }
-    signals:
-        void needLogin( const QString& );
-        void showNotification( const QString&, const QString& );
-        void needCommitMessage();
-        void needSslServerTrust( const QStringList&, const QString&, const QString&,
-                                 const QString&, const QString&, const QString&,
-                                 const QString& );
-        void needSslClientCert( const QString& );
-        void needSslClientCertPassword( const QString& );
-};
-
-
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
       m_guiSemaphore( 0 ), m_mutex( new QMutex() ),
-      helper(0), m_success( true ), sendFirstDelta( false )
+      m_success( true ), sendFirstDelta( false )
 {
     m_ctxt->setListener(this);
     connect( this, SIGNAL( failed( ThreadWeaver::Job* ) ),
@@ -99,7 +58,6 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
 
 SvnInternalJobBase::~SvnInternalJobBase()
 {
-    delete helper; helper = 0;
 }
 
 bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
@@ -107,9 +65,7 @@ bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
                         bool& maySave )
 {
 
-    std::cerr << "login" << std::endl;
-
-    helper->emitNeedLogin( QString::fromUtf8( realm.c_str() )  );
+    emit needLogin( QString::fromUtf8( realm.c_str() )  );
     m_guiSemaphore.acquire( 1 );
     QMutexLocker l(m_mutex);
     if( m_login_username.isEmpty() || m_login_password.isEmpty() )
@@ -125,9 +81,6 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
                     svn_wc_notify_state_t contentState,
                     svn_wc_notify_state_t propState, svn_revnum_t rev )
 {
-    if( !helper )
-        return;
-    std::cerr << "notify"  << std::endl;
     QString notifyString;
     switch( action ){
         case svn_wc_notify_add:
@@ -233,7 +186,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
             break;
     }
     kDebug(9510) << "showing notification:" << path << notifyString ;
-    helper->emitShowNotification( QString::fromUtf8( path ), notifyString );
+    emit showNotification( QString::fromUtf8( path ), notifyString );
 }
 
 bool SvnInternalJobBase::contextCancel()
@@ -244,8 +197,7 @@ bool SvnInternalJobBase::contextCancel()
 
 bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 {
-    std::cerr << "logmsg" << std::endl;
-    helper->emitNeedCommitMessage();
+    emit needCommitMessage();
     m_guiSemaphore.acquire( 1 );
     QMutexLocker l( m_mutex );
     QByteArray ba = m_commitMessage.toUtf8();
@@ -255,25 +207,6 @@ bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 
 void SvnInternalJobBase::initBeforeRun()
 {
-    helper = new JobHelper();
-
-    connect( helper, SIGNAL( needLogin( const QString& ) ),
-             this, SIGNAL( needLogin( const QString& ) ) );
-    connect( helper, SIGNAL( showNotification( const QString&, const QString& ) ),
-             this, SIGNAL( showNotification( const QString&, const QString& ) ) );
-    connect( helper, SIGNAL( needCommitMessage() ),
-             this, SIGNAL( needCommitMessage() ) );
-    connect( helper, SIGNAL( needSslServerTrust( const QStringList&, const QString&,
-                                 const QString&, const QString&, const QString&,
-                                 const QString&, const QString& ) ),
-             this, SIGNAL( needSslServerTrust( const QStringList&, const QString&,
-                                 const QString&, const QString&, const QString&,
-                                 const QString&, const QString& ) ) );
-    connect( helper, SIGNAL( needSslClientCert( const QString& ) ),
-             this, SIGNAL( needSslClientCert( const QString& ) ) );
-    connect( helper, SIGNAL( needSslClientCertPassword( const QString& ) ),
-             this, SIGNAL( needSslClientCertPassword( const QString& ) ) );
-
     connect( this, SIGNAL( needCommitMessage() ),
              parent(), SLOT( askForCommitMessage() ), Qt::QueuedConnection );
     connect( this, SIGNAL( needLogin( const QString& ) ),
@@ -297,7 +230,6 @@ svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerT
         apr_uint32_t& acceptedFailures )
 {
 
-    std::cerr << "server trust" << std::endl;
     std::string host = data.hostname;
     std::string print = data.fingerprint;
     std::string from = data.validFrom;
@@ -326,7 +258,7 @@ svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerT
     {
         failures << i18n("Other unknown error.");
     }
-    emit helper->emitNeedSslServerTrust( failures,
+    emit needSslServerTrust( failures,
                                      QString::fromUtf8( host.c_str() ),
                                      QString::fromUtf8( print.c_str() ),
                                      QString::fromUtf8( from.c_str() ),
@@ -340,8 +272,7 @@ svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerT
 
 bool SvnInternalJobBase::contextSslClientCertPrompt( std::string& cert )
 {
-    std::cerr << "Client cert" << std::endl;
-    emit helper->needSslClientCert( QString::fromUtf8( cert.c_str() ) );
+    emit needSslClientCert( QString::fromUtf8( cert.c_str() ) );
     m_guiSemaphore.acquire( 1 );
     return true;
 }
@@ -349,8 +280,7 @@ bool SvnInternalJobBase::contextSslClientCertPrompt( std::string& cert )
 bool SvnInternalJobBase::contextSslClientCertPwPrompt( std::string& pw, const std::string& realm,
                                     bool& maySave )
 {
-    std::cerr << "Client cert PW" << std::endl;
-    emit helper->needSslClientCertPassword( QString::fromUtf8( realm.c_str() ) );
+    emit needSslClientCertPassword( QString::fromUtf8( realm.c_str() ) );
     m_guiSemaphore.acquire( 1 );
     return false;
 }
@@ -436,4 +366,3 @@ QString SvnInternalJobBase::errorMessage() const
 
 
 #include "svninternaljobbase.moc"
-#include "moc_svninternaljobbase.cpp"

@@ -24,19 +24,6 @@
 #include "svninternaljobbase.h"
 #include "svninfojob.h"
 
-class SvnInfoJobHelper : public QObject
-{
-    Q_OBJECT
-public:
-    void emitInfo( const SvnInfoHolder & state )
-    {
-        emit gotInfo( state );
-    }
-signals:
-    void gotInfo( const SvnInfoHolder& );
-
-};
-
 class SvnInternalInfoJob : public SvnInternalJobBase
 {
     Q_OBJECT

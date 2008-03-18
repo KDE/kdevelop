@@ -26,18 +26,6 @@
 #include <vcsrevision.h>
 #include <vcsevent.h>
 
-class LogJobHelper : public QObject
-{
-    Q_OBJECT
-public slots:
-    void emitLogEvent( const KDevelop::VcsEvent& ev )
-    {
-        emit logEvent( ev );
-    }
-signals:
-    void logEvent( const KDevelop::VcsEvent& );
-};
-
 class SvnInternalLogJob : public SvnInternalJobBase
 {
     Q_OBJECT

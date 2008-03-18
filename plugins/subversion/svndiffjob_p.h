@@ -25,19 +25,6 @@
 #include <QVariant>
 #include <vcsrevision.h>
 
-class DiffJobHelper : public QObject
-{
-    Q_OBJECT
-public:
-    void emitDiff( const QString& diff )
-    {
-        emit gotDiff( diff );
-    }
-signals:
-    void gotDiff( const QString& );
-};
-
-
 class SvnInternalDiffJob : public SvnInternalJobBase
 {
     Q_OBJECT

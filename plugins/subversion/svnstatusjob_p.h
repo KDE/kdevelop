@@ -28,18 +28,6 @@
 #include <vcsstatusinfo.h>
 #include <kurl.h>
 
-class StatusJobHelper : public QObject
-{
-    Q_OBJECT
-public:
-    void emitNewStatus( const KDevelop::VcsStatusInfo& state )
-    {
-        emit gotNewStatus( state );
-    }
-signals:
-    void gotNewStatus( const KDevelop::VcsStatusInfo& );
-};
-
 class SvnInternalStatusJob : public SvnInternalJobBase
 {
     Q_OBJECT
@@ -57,7 +45,6 @@ protected:
 private:
     KUrl::List m_locations;
     bool m_recursive;
-    StatusJobHelper* m_stathelper;
 };
 
 #endif

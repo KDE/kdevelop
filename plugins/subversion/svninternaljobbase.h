@@ -46,8 +46,6 @@ namespace svn
 class SvnJobBase;
 class QMutex;
 class QSemaphore;
-class JobHelper;
-
 class SvnInternalJobBase : public ThreadWeaver::Job, public svn::ContextListener
 {
     Q_OBJECT
@@ -99,7 +97,6 @@ signals:
 
 protected:
     QMutex* m_mutex;
-    JobHelper* helper;
     bool m_success;
     void setErrorMessage( const QString& );
 private:

@@ -25,19 +25,6 @@
 #include <QVariant>
 #include <vcsrevision.h>
 
-class CatJobHelper : public QObject
-{
-    Q_OBJECT
-public:
-    void emitContent( const QString& diff )
-    {
-        emit gotContent( diff );
-    }
-signals:
-    void gotContent( const QString& );
-};
-
-
 class SvnInternalCatJob : public SvnInternalJobBase
 {
     Q_OBJECT

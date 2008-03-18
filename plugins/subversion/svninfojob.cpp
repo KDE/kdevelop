@@ -40,9 +40,6 @@ SvnInternalInfoJob::SvnInternalInfoJob( SvnJobBase* parent )
 void SvnInternalInfoJob::run()
 {
     initBeforeRun();
-    SvnInfoJobHelper help;
-    connect( &help, SIGNAL( gotInfo( const SvnInfoHolder&) ),
-              this, SIGNAL( gotInfo( const SvnInfoHolder&) ) );
     svn::Client cli(m_ctxt);
     try
     {
@@ -68,7 +65,7 @@ void SvnInternalInfoJob::run()
         h.workingCopyFileConflict = QString::fromUtf8( e.conflictWrk() );
         h.propertyRejectFile = QString::fromUtf8( e.prejfile() );
 
-        help.emitInfo( h );
+        emit gotInfo( h );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while getting info for file: "

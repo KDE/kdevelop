@@ -41,16 +41,11 @@ SvnInternalLogJob::SvnInternalLogJob( SvnJobBase* parent )
 
 void SvnInternalLogJob::run()
 {
-    LogJobHelper helper;
-    connect( &helper, SIGNAL( logEvent( const KDevelop::VcsEvent& ) ),
-           this, SIGNAL( logEvent( const KDevelop::VcsEvent& ) ), Qt::QueuedConnection );
-
-
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
     connect( &cli, SIGNAL( logEventReceived( const KDevelop::VcsEvent& ) ),
-             &helper, SLOT(emitLogEvent( const KDevelop::VcsEvent&) ) );
+             this, SIGNAL(logEvent( const KDevelop::VcsEvent&) ) );
     try
     {
         QByteArray ba = location().path().toUtf8();

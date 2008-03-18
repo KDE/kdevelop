@@ -27,18 +27,6 @@
 #include <vcsrevision.h>
 #include <vcsevent.h>
 
-class BlameJobHelper : public QObject
-{
-    Q_OBJECT
-public slots:
-    void emitBlameLine( const KDevelop::VcsAnnotationLine& line )
-    {
-        emit blameLine( line );
-    }
-signals:
-    void blameLine( const KDevelop::VcsAnnotationLine& );
-};
-
 class SvnInternalBlameJob : public SvnInternalJobBase
 {
     Q_OBJECT

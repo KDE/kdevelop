@@ -100,9 +100,6 @@ bool SvnInternalStatusJob::recursive() const
 void SvnInternalStatusJob::run()
 {
     kDebug(9510) << "Running internal status job with urls:" << m_locations;
-    StatusJobHelper helper;
-    connect( &helper, SIGNAL( gotNewStatus( const KDevelop::VcsStatusInfo& ) ),
-           this, SIGNAL( gotNewStatus( const KDevelop::VcsStatusInfo& ) ), Qt::QueuedConnection );
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
@@ -122,7 +119,7 @@ void SvnInternalStatusJob::run()
                     KDevelop::VcsStatusInfo info;
                     info.setUrl( url );
                     info.setState( getState( *it ) );
-                    helper.emitNewStatus( info );
+                    emit gotNewStatus( info );
                 }
             }else
             {
@@ -132,7 +129,7 @@ void SvnInternalStatusJob::run()
                 KDevelop::VcsStatusInfo info;
                 info.setUrl( url );
                 info.setState( getState( st ) );
-                helper.emitNewStatus( info );
+                emit gotNewStatus( info );
             }
         }catch( svn::ClientException ce )
         {
