@@ -39,7 +39,7 @@ public:
     VcsAnnotationWidget( const KUrl&, VcsJob*, QWidget* parent = 0 );
     virtual ~VcsAnnotationWidget();
 private:
-    Q_PRIVATE_SLOT(d, void addAnnotation(VcsJob*) )
+    Q_PRIVATE_SLOT(d, void addAnnotations(KDevelop::VcsJob*) )
     class VcsAnnotationWidgetPrivate* const d;
 };
 

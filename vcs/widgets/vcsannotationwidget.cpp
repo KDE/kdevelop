@@ -29,6 +29,7 @@
 #include "../models/vcsannotationmodel.h"
 #include "../vcsannotation.h"
 #include "ui_vcsannotationwidget.h"
+#include <kdebug.h>
 
 namespace KDevelop
 {
@@ -38,7 +39,7 @@ public:
     VcsAnnotationModel* m_model;
     KDevelop::VcsJob* m_job;
     Ui::VcsAnnotationWidget* m_ui;
-    void addAnnotation(KDevelop::VcsJob* job)
+    void addAnnotations(KDevelop::VcsJob* job)
     {
         if( job == m_job )
         {
@@ -74,6 +75,7 @@ VcsAnnotationWidget::VcsAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job
 //     annotations->setIndentation(-7);
     connect( d->m_job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ),
              this, SLOT( addAnnotations( KDevelop::VcsJob* ) ) );
+    d->m_job->setAutoDelete(false);
     d->m_job->start();
 }
 
