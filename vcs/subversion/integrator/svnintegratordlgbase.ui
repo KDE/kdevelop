@@ -12,9 +12,6 @@
             <height>429</height>
         </rect>
     </property>
-    <property name="caption">
-        <string></string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -95,6 +92,15 @@ repository and checks it out as a working copy.
 
 NOTE: The repository has to exist.
 eg. been created with 'svnadmin'</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Example for the url (if /home/user/subversion is the subversion repository):
+file:///home/user/subversion/mynewproject</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
