@@ -106,8 +106,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
         addJob(m_parseJob = new CPPInternalParseJob(this));
-        // Higher priority means it will be preferred over other waiting preprocess jobs
-        m_parseJob->setPriority(1);
 
         // Calculate this while still in the main thread
         // Avoids many issues with race conditions
@@ -147,6 +145,12 @@ void CPPParseJob::setLocalProgress(float _progress, QString text) {
 void CPPParseJob::parseForeground() {
     //Create the sub-jobs and directly execute them.
     Q_ASSERT( !m_preprocessJob && !m_parseJob );
+
+    //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
+    //It must be low so the GUI stays fluid.
+    if(QThread::currentThread())
+      QThread::currentThread()->setPriority(QThread::LowestPriority);
+
     m_preprocessJob = new PreprocessJob(this);
     m_parseJob = new CPPInternalParseJob(this);
     m_preprocessJob->run();
