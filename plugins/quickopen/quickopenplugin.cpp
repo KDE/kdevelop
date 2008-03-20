@@ -567,7 +567,7 @@ QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
     }
   }
   
-  return qMakePair(KUrl(), SimpleCursor());
+  return qMakePair(KUrl(), SimpleCursor::invalid());
 }
 
 bool QuickOpenPlugin::jumpToSpecialObject()
