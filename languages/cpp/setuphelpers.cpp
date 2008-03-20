@@ -113,6 +113,15 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
     }
 
     macros.insert( rpp::pp_macro("__extension__") );
+  
+    {
+      //It would be better if the parser could deal with it, for example in class declarations. However it cannot.
+      //If we wouldn't need this, macros could be more transparent.
+      rpp::pp_macro m("__attribute__");
+      m.function_like = true;
+      m.formals << QByteArray("param");
+      macros.insert( m );
+    }
     
     //Get standard macros from gcc
     KProcess proc;
