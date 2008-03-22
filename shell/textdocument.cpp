@@ -163,6 +163,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     if (!view)
         view = d->document->createView(parent);
 
+    if (view)
+        view->setContextMenu( view->defaultContextMenu() );
+    
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
         KConfigGroup group(KGlobal::config(), "Code Completion");
         bool automaticInvocation = group.readEntry( "Automatic Invocation", false );
