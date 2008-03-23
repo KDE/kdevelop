@@ -576,10 +576,15 @@ void Lexer::scan_divide()
       skipComment();
       if( cursor != commentBegin ) {
         ///Store the comment
-        (*session->token_stream)[index++].kind = Token_comment;
-        (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
-        (*session->token_stream)[index-1].position = commentBegin - session->contents();
-        (*session->token_stream)[index-1].session = session;
+        if((*session->token_stream)[index-1].kind != Token_comment) {
+          (*session->token_stream)[index++].kind = Token_comment;
+          (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
+          (*session->token_stream)[index-1].position = commentBegin - session->contents();
+          (*session->token_stream)[index-1].session = session;
+        }else{
+          //Merge with previous comment
+          (*session->token_stream)[index-1].size = (size_t)(cursor - session->contents()) - (*session->token_stream)[index-1].position;
+        }
       }
     }
   else

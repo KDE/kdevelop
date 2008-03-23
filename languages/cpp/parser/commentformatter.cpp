@@ -100,10 +100,6 @@ QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const
 QString CommentFormatter::formatComment( const QString& comment ) {
   QString ret;
   int i = 0;
-  int s = comment.length();
-  while( i < s && comment[i] == '/' ) {
-      i++;
-  }
 
   if( i > 1 ) {
       ret = comment.mid( i );
@@ -113,24 +109,21 @@ QString CommentFormatter::formatComment( const QString& comment ) {
 
       if( lines.isEmpty() ) return ret;
 
-      strip( "/**", lines.front() );
-      rStrip( "/**", lines.back() );
-
       QStringList::iterator it = lines.begin();
-      ++it;
       QStringList::iterator eit = lines.end();
 
       if( it != lines.end() ) {
-          --eit;
-
+ 
           for( ; it != eit; ++it ) {
-              strip( "*", *it );
+              strip( "//", *it );
+              strip( "**", *it );
+              rStrip( "/**", *it );
           }
 
           if( lines.front().trimmed().isEmpty() )
               lines.pop_front();
 
-          if( lines.back().trimmed().isEmpty() )
+          if( !lines.isEmpty() && lines.back().trimmed().isEmpty() )
               lines.pop_back();
       }
 
