@@ -43,10 +43,8 @@ public:
 
     enum BuildFeature
     {
-        Includes, ///< This project supports passing include directives to
-                  ///< the compiler
-        Defines   ///< This project supports passing preprocessor defines to
-                  ///< compiler
+        Includes /**< This project supports passing include directives to the compiler */,
+        Defines  /**< This project supports passing preprocessor defines to compiler */
     };
     Q_DECLARE_FLAGS( BuildFeatures, BuildFeature )
 

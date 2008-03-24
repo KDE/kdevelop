@@ -50,13 +50,13 @@ public:
      */
     enum Action
     {
-        Added            = 1<<0 /**<Item was added.*/,
-        Deleted          = 1<<1 /**<Item was deleted.*/,
-        Modified         = 1<<2 /**<Item was modified, for example by editing.*/,
-        Copied           = 1<<3 /**<Item was copied.*/,
-        Merged           = 1<<4 /**<Item had changes merged into it.*/,
-        ContentsModified = 1<<5 /**<Directory was not changed (only contents changed).*/,
-        Replaced         = 1<<6 /**<Item was replaced.*/
+        Added            = 1<<0 /**< Item was added. */,
+        Deleted          = 1<<1 /**< Item was deleted. */,
+        Modified         = 1<<2 /**< Item was modified, for example by editing. */,
+        Copied           = 1<<3 /**< Item was copied. */,
+        Merged           = 1<<4 /**< Item had changes merged into it. */,
+        ContentsModified = 1<<5 /**< Directory was not changed (only contents changed). */,
+        Replaced         = 1<<6 /**< Item was replaced. */
     };
     Q_DECLARE_FLAGS( Actions, Action )
 

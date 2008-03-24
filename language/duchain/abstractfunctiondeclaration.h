@@ -38,9 +38,9 @@ public:
   virtual ~AbstractFunctionDeclaration();
 
   enum FunctionSpecifier {
-    VirtualSpecifier  = 0x1,
-    InlineSpecifier   = 0x2,
-    ExplicitSpecifier = 0x4
+    VirtualSpecifier  = 0x1 /**< indicates a virtual function */,
+    InlineSpecifier   = 0x2 /**< indicates a inline function */,
+    ExplicitSpecifier = 0x4 /**< indicates a explicit function */
   };
   Q_DECLARE_FLAGS(FunctionSpecifiers, FunctionSpecifier)
 

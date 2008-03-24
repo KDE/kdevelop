@@ -60,26 +60,26 @@ class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 
 public:
   enum Scope {
-    GlobalScope,
-    NamespaceScope,
-    ClassScope,
-    FunctionScope,
-    LocalScope
+    GlobalScope    /**< a global declaration */,
+    NamespaceScope /**< a namespace declaration */,
+    ClassScope     /**< a class declaration */,
+    FunctionScope  /**< a function declaration */,
+    LocalScope     /**< a local declaration */
   };
   enum AccessPolicy {
-    Public,
-    Protected,
-    Private
+    Public    /**< a public declaration */,
+    Protected /**< a protected declaration */,
+    Private   /**< a private declaration */
   };
   enum CVSpec {
-    CVNone = 0,
-    Const = 0x1,
-    Volatile = 0x2
+    CVNone = 0     /**< no CV given */,
+    Const = 0x1    /**< a const declaration */,
+    Volatile = 0x2 /**< a volatile declaration */
   };
 
   enum Kind {
-    Type, //A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};")
-    Instance //An instance of a type is declared("MyClass m;")
+    Type     /**< A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};") */,
+    Instance /**< An instance of a type is declared("MyClass m;") */
   };
 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)

@@ -113,8 +113,8 @@ public:
 
     /**Walker mode to determine the behavior of area walkers.*/
     enum WalkerMode {
-        StopWalker,       ///Stop after processing this area index or toolview
-        ContinueWalker    ///Continue walking
+        StopWalker,       /**< Stop after processing this area index or toolview */
+        ContinueWalker    /**< Continue walking */
     };
 
     /**Walks the tree of area indices and executes the operator. It will always walk the

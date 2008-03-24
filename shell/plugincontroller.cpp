@@ -68,7 +68,12 @@ public:
     // has finished loading the plugins, after which it is set to Running.
     // ShuttingDown and DoneShutdown are used during shutdown by the
     // async unloading of plugins.
-    enum CleanupMode { Running, CleaningUp, CleanupDone };
+    enum CleanupMode
+    {
+        Running     /**< the plugin manager is running */,
+        CleaningUp  /**< the plugin manager is cleaning up for shutdown */,
+        CleanupDone /**< the plugin manager has finished cleaning up */
+    };
     CleanupMode cleanupMode;
 
     QString profile;

@@ -40,7 +40,10 @@ class IdealToolButton: public QToolButton
 {
     Q_OBJECT
 
-    enum { DefaultButtonSize = 20 };
+    enum
+    {
+        DefaultButtonSize = 20 /**< the default size of a toolbutton */
+    };
 
 public:
     IdealToolButton(Qt::DockWidgetArea area, QWidget *parent = 0);

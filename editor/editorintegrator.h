@@ -125,10 +125,9 @@ public:
   KTextEditor::SmartInterface* smart() const;
 
   enum TopRangeType {
-    Highlighting,
-    DefinitionUseChain,
-
-    TopRangeCount
+    Highlighting /**< top range type for highlighting */,
+    DefinitionUseChain /**< top range type for duchain */,
+    TopRangeCount /**< top range type for counting */
   };
 
   /**
@@ -153,8 +152,8 @@ public:
   static void releaseRange(KTextEditor::SmartRange* range);
 
   enum Edge {
-    FrontEdge,
-    BackEdge
+    FrontEdge /**< the front edge of a token */,
+    BackEdge /**< the back edge of a token */
   };
 
   /**
@@ -217,8 +216,8 @@ public:
   KTextEditor::SmartRange* createRange();
 
   enum RangeEdge {
-    InnerEdge,
-    OuterEdge
+    InnerEdge /**< the inner edge of a range */,
+    OuterEdge /**< the outer edge of a range */
   };
 
   /**

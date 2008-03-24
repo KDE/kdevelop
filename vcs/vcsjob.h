@@ -55,26 +55,26 @@ public:
      */
     enum JobType
     {
-        Add = 0,
-        Remove = 1,
-        Copy = 2,
-        Move = 3,
-        Diff = 4,
-        Commit = 5,
-        Update = 6,
-        Merge = 7,
-        Resolve = 8,
-        Import = 9,
-        Checkout = 10,
-        Log = 11,
-        Push = 12,
-        Pull = 13,
-        Annotate = 14,
-        Clone = 15,
-        Status = 16,
-        Revert = 17,
-        Cat = 18,
-	UserType = 1000
+        Add = 0         /**< An add job */,
+        Remove = 1      /**< A remove job */,
+        Copy = 2        /**< A copy job */,
+        Move = 3        /**< A move job */,
+        Diff = 4        /**< A diff job */,
+        Commit = 5      /**< A commit job */,
+        Update = 6      /**< An update job */,
+        Merge = 7       /**< A merge job */,
+        Resolve = 8     /**< A resolve job */,
+        Import = 9      /**< An import job */,
+        Checkout = 10   /**< A checkout job */,
+        Log = 11        /**< A log job */,
+        Push = 12       /**< A push job */,
+        Pull = 13       /**< A pull job */,
+        Annotate = 14   /**< An annotate job */,
+        Clone = 15      /**< A clone job */,
+        Status = 16     /**< A status job */,
+        Revert = 17     /**< A revert job */,
+        Cat = 18        /**< A cat job */,
+        UserType = 1000 /**< A custom job */
     };
 
     /**
@@ -82,11 +82,11 @@ public:
      */
     enum JobStatus
     {
-        JobRunning = 0,
-        JobSucceeded = 1,
-        JobCanceled = 2 ,
-        JobFailed = 3,
-        JobNotStarted = 4
+        JobRunning = 0    /**< The job is running */,
+        JobSucceeded = 1  /**< The job succeeded */,
+        JobCanceled = 2   /**< The job was cancelled */,
+        JobFailed = 3     /**< The job failed */,
+        JobNotStarted = 4 /**< The job is not yet started */
     };
 
     /**

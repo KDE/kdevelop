@@ -158,14 +158,14 @@ public:
   virtual uint hash() const;
 
   enum WhichType {
-    TypeAbstract,
-    TypeIntegral,
-    TypePointer,
-    TypeReference,
-    TypeFunction,
-    TypeStructure,
-    TypeArray,
-    TypeDelayed
+    TypeAbstract  /**< an abstract type */,
+    TypeIntegral  /**< an integral */,
+    TypePointer   /**< a pointer*/,
+    TypeReference /**< a reference */,
+    TypeFunction  /**< a function */,
+    TypeStructure /**< a structure */,
+    TypeArray     /**< an array */,
+    TypeDelayed   /**< a delayed type */
   };
 
   virtual WhichType whichType() const;
@@ -293,9 +293,9 @@ public:
   typedef KSharedPtr<FunctionType> Ptr;
 
   enum SignaturePart {
-    SignatureWhole, //When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned
-    SignatureReturn, //When this is given, only a string that represents the return-type is returned
-    SignatureArguments //When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend
+    SignatureWhole /**< When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned */,
+    SignatureReturn /**< When this is given, only a string that represents the return-type is returned */,
+    SignatureArguments /**< When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend */
   };
 
   FunctionType();
@@ -425,8 +425,8 @@ public:
   typedef KSharedPtr<DelayedType> Ptr;
 
   enum Kind {
-    Delayed, //The type should be resolved later. This is the default.
-    Unresolved //The type could not be resolved
+    Delayed /**< The type should be resolved later. This is the default. */,
+    Unresolved /**< The type could not be resolved */
   };
 
   DelayedType();

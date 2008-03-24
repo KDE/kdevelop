@@ -45,8 +45,8 @@ class KDEVPLATFORMVCS_EXPORT VcsMapping
 public:
     enum MappingFlag
     {
-        Recursive = 1,
-        NonRecursive = 2
+        Recursive = 1    /**< do a recursive mapping */,
+        NonRecursive = 2 /**< do a non-recursive mapping */
     };
 
     VcsMapping();

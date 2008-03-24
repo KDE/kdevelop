@@ -108,7 +108,7 @@ public:
      * any count of imported proxy-contexts imported behind the content-context(This can be used for tracking problems)
      * 
      * Note: This flag does not directly change the behavior of the language-independent du-chain.
-     * */
+     */
     ProxyContextFlag = 1,
     /**
      * Placeholder used in searching-functions, when the flag should simply be ignored.

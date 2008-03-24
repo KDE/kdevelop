@@ -75,21 +75,21 @@ public:
      */
     enum RevisionType
     {
-        Special = 0         /**<One of the special versions in RevisionSpecialType.*/,
-        GlobalNumber = 1    /**<Global repository version when item was last changed.*/,
-        FileNumber = 2      /**<Item's independent version number.*/,
-        Date = 3,           /**<The date of the revision to check out*/
-	Invalid = 4         /**<The type is not set, this is an invalid revision.*/,
-	UserType = 1000     /**<This should be used by subclasses as base for their own types.*/
+        Special = 0         /**< One of the special versions in RevisionSpecialType. */,
+        GlobalNumber = 1    /**< Global repository version when item was last changed. */,
+        FileNumber = 2      /**< Item's independent version number. */,
+        Date = 3,           /**< The date of the revision to check out */
+        Invalid = 4         /**< The type is not set, this is an invalid revision. */,
+        UserType = 1000     /**< This should be used by subclasses as base for their own types. */
     };
     enum RevisionSpecialType
     {
-        Head = 0                   /**<Latest revision in the repository.*/,
-        Working = 1                /**<The local copy (including any changes made).*/,
-        Base = 2                   /**<The repository source of the local copy.*/,
-        Previous = 3               /**<The version prior the other one (only valid in functions that take two revisions).*/,
-	Start = 4,                 /**<The first commit in a repository.*/
-        UserSpecialType = 1000     /**<This should be used by subclasses as base for their own special types.*/
+        Head = 0                   /**< Latest revision in the repository. */,
+        Working = 1                /**< The local copy (including any changes made). */,
+        Base = 2                   /**< The repository source of the local copy. */,
+        Previous = 3               /**< The version prior the other one (only valid in functions that take two revisions). */,
+        Start = 4,                 /**< The first commit in a repository. */
+        UserSpecialType = 1000     /**< This should be used by subclasses as base for their own special types. */
     };
 
     VcsRevision();

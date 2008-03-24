@@ -89,11 +89,11 @@ class IdealMainLayout : public QLayout
 
 public:
     enum Role {
-        Left,
-        Right,
-        Bottom,
-        Top,
-        Central
+        Left    /**< aligning left */,
+        Right   /**< aligning right */,
+        Bottom  /**< aligning bottom */,
+        Top     /**< aligning top */,
+        Central /**< aligning central */
     };
 
     IdealMainLayout(QWidget *parent = 0);

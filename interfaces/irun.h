@@ -159,16 +159,18 @@ public:
      */
     virtual IRun defaultRun() const = 0;
 
-    /// An enumeration of the possible states for the run controller.
+    /**
+     * An enumeration of the possible states for the run controller.
+     */
     enum State {
-        /// No processes are currently running.
-        Idle,
-        /// Processes are currently running.
-        Running
+        Idle     /**< No processes are currently running */,
+        Running  /**< processes are currently running */
     };
 
 Q_SIGNALS:
-    /// Notify that the state of the run controller has changed to \a {state}.
+    /**
+     * Notify that the state of the run controller has changed to \a {state}.
+     */
     void runStateChanged(State state);
 };
 

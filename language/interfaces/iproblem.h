@@ -48,12 +48,12 @@ public:
     virtual ~Problem();
 
     enum Source {
-        Unknown,
-        Disk,
-        Preprocessor,
-        Lexer,
-        Parser,
-        DUChainBuilder
+        Unknown        /**< Unknown problem */,
+        Disk           /**< problem reading from disk */,
+        Preprocessor   /**< problem during pre-processing */,
+        Lexer          /**< problem while lexing the file */,
+        Parser         /**< problem while parsing the file */,
+        DUChainBuilder /**< problem while building the duchain */
     };
 
     Source source() const;

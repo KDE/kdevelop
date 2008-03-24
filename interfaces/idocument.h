@@ -60,8 +60,8 @@ public:
 
     enum DocumentSaveMode
     {
-        Default = 0,
-        Silent = 1
+        Default = 0 /**< standard save mode, gives a warning message if the file was modified outside the editor */,
+        Silent = 1 /**< silent save mode, doesn't warn the user if the file was modified outside the editor */
     };
 
     /**

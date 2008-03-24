@@ -52,42 +52,42 @@ public:
   virtual ~DUChainObserver();
 
   enum Modification {
-    Addition,
-    Removal,
-    Change,
-    Deletion
+    Addition /**< Something was added to the duchain */,
+    Removal  /**< Something was removed to the duchain */,
+    Change   /**< Something was changed in the duchain */,
+    Deletion /**< Something was deleted in the duchain */
   };
 
   enum Relationship {
     // Context
-    ParentContext,
-    ChildContexts,
-    ImportedParentContexts,
-    ImportedChildContexts,
-    LocalDeclarations,
-    LocalDefinitions,
-    UsingNamespaces,
-    ContextType,
+    ParentContext           /**< related object is the parent context */,
+    ChildContexts           /**< related object is a child context  */,
+    ImportedParentContexts  /**< related object is an imported parent context  */,
+    ImportedChildContexts   /**< related object is an imported child context  */,
+    LocalDeclarations       /**< related object is a local declaration */,
+    LocalDefinitions        /**< related object is a local definition */,
+    UsingNamespaces         /**< related object uses namespaces */,
+    ContextType             /**< related object is a context type */,
 
     // Context + Declaration
-    Uses,
-    Identifier,
+    Uses                    /**< related object is a use */,
+    Identifier              /**< related object is an identifier */,
 
     // Declaration
-    DataType,
-    ForwardDeclarations,
+    DataType                /**< the related object is a datatype */,
+    ForwardDeclarations     /**< the related object is a forward declaration */,
 
     // Declaration + Definition + Use
-    Context,
+    Context                 /**< the related object is context */,
 
     // Declaration + Definition
-    DefinitionRelationship,
+    DefinitionRelationship  /**< the related object definition */,
 
     // Use
-    DeclarationRelationship,
+    DeclarationRelationship /**< the related object is a declaration */,
 
     // All
-    NotApplicable
+    NotApplicable           /**< the related object is no applicable */
   };
 
 Q_SIGNALS:

@@ -98,24 +98,24 @@ public:
   virtual ~DUContext();
 
   enum ContextType {
-    Global,
-    Namespace,
-    Class,
-    Function, //A context that declares function-arguments
-    Template, //A context that declares template-parameters
-    Other //Represents executable code, like for example within a compound-statement
+    Global    /**< A context that declares functions, namespaces or classes */,
+    Namespace /**< A context that declares namespace members */,
+    Class     /**< A context that declares class members */,
+    Function  /**< A context that declares function-arguments */,
+    Template  /**< A context that declares template-parameters */,
+    Other     /**< Represents executable code, like for example within a compound-statement */
   };
 
   enum SearchFlag {
-    NoSearchFlags = 0,
-    InImportedParentContext = 1, //Internal, do not use from outside
-    OnlyContainerTypes = 2, //Not implemented yet
-    DontSearchInParent = 4, //IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts)
-    NoUndefinedTemplateParams = 8, //For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved.
-    DirectQualifiedLookup = 16, //When this flag is used, the searched qualified identifier should NOT be split up into it's components and looked up one by one. Currently only plays a role in C++ specific parts.
-    NoFiltering = 32,           //Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default)
-    OnlyFunctions = 64, //When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out.
-    NoImportsCheck = 128 //With this parameter, a global search will return all matching items, from all contexts, not only from imported ones.
+    NoSearchFlags = 0             /**< Searching for everything */,
+    InImportedParentContext = 1   /**< Internal, do not use from outside */,
+    OnlyContainerTypes = 2        /**< Not implemented yet */,
+    DontSearchInParent = 4        /**< IF  this flag is set, findDeclarations(..) will not search for the identifier in parent-contexts(which does not include imported parent-contexts) */,
+    NoUndefinedTemplateParams = 8 /**< For languages that support templates(like C++). If this is set, the search should fail as soon as undefined template-parameters are involved. */,
+    DirectQualifiedLookup = 16    /**< When this flag is used, the searched qualified identifier should NOT be split up into it's components and looked up one by one. Currently only plays a role in C++ specific parts. */,
+    NoFiltering = 32              /**< Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default) */,
+    OnlyFunctions = 64            /**< When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out. */,
+    NoImportsCheck = 128          /**< With this parameter, a global search will return all matching items, from all contexts, not only from imported ones. */
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)

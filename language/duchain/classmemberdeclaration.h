@@ -41,12 +41,12 @@ public:
   void setAccessPolicy(AccessPolicy accessPolicy);
 
   enum StorageSpecifier {
-    StaticSpecifier   = 0x1,
-    AutoSpecifier     = 0x2,
-    FriendSpecifier   = 0x4,
-    ExternSpecifier   = 0x8,
-    RegisterSpecifier = 0x10,
-    MutableSpecifier  = 0x20
+    StaticSpecifier   = 0x1  /**< indicates static member */,
+    AutoSpecifier     = 0x2  /**< indicates automatic determination of member access */,
+    FriendSpecifier   = 0x4  /**< indicates friend member */,
+    ExternSpecifier   = 0x8  /**< indicates external declaration */,
+    RegisterSpecifier = 0x10 /**< indicates register */,
+    MutableSpecifier  = 0x20 /**< indicates a mutable member */
   };
   Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier)
 

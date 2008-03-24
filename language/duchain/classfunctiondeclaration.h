@@ -39,9 +39,9 @@ public:
 
   enum QtFunctionType
   {
-    Normal,
-    Signal,
-    Slot
+    Normal /**< Indicates a normal function */,
+    Signal /**< indicates a Qt slot */,
+    Slot   /**< indicates a Qt signal */
   };
 
   QtFunctionType functionType() const;

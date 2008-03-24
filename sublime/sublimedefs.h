@@ -33,7 +33,14 @@ namespace Sublime {
 
     /**Positions for toolviews in Sublime UI. To combine them, use
     Positions class (QFlags based).*/
-    enum Position { Left = 1, Right = 2, Top = 4, Bottom = 8, AllPositions = Left|Right|Top|Bottom };
+    enum Position
+    {
+        Left = 1   /**< left toolview position */,
+        Right = 2  /**< right toolview position */,
+        Top = 4    /**< top toolview position */,
+        Bottom = 8 /**< bottom toolview position */,
+        AllPositions = Left|Right|Top|Bottom /**< all toolview positions */
+    };
     Q_DECLARE_FLAGS(Positions, Position)
 
     SUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);

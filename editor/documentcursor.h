@@ -44,8 +44,8 @@ public:
     ~DocumentCursor();
 
     enum Position {
-        Start,
-        End
+        Start /**< cursor is at the start of the range */ ,
+        End /**< cursor is at the end of the range */
     };
 
     /// Constructor for information extraction only, does not take ownership of the cursor.

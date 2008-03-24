@@ -52,8 +52,8 @@ public:
 
     enum RecursionMode
     {
-        Recursive,
-        NonRecursive
+        Recursive    /**< run recursively through subdirectories */,
+        NonRecursive /**< don't run recursively through subdirectories */
     };
     virtual ~IBasicVersionControl(){}
 

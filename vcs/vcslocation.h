@@ -40,8 +40,8 @@ class KDEVPLATFORMVCS_EXPORT VcsLocation
 public:
     enum LocationType
     {
-        LocalLocation = 0,
-        RepositoryLocation = 1
+        LocalLocation = 0      /**< this is a local location */,
+        RepositoryLocation = 1 /**< this is a repository location */
     };
 
     VcsLocation();

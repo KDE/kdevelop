@@ -50,7 +50,10 @@ public:
     DocumentRangeObject(const HashedString& document, const SimpleRange& range);
     virtual ~DocumentRangeObject();
 
-    enum RangeOwning{ Own, DontOwn };
+    enum RangeOwning{
+        Own /**< this object owns the range */,
+        DontOwn /**< this object does not own the range */
+    };
     Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
 
     /**

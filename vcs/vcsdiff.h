@@ -42,15 +42,15 @@ public:
      */
     enum Type
     {
-        DiffRaw         /**<Request complete copies of both items.*/,
-        DiffUnified     /**<Request copy of first item with diff.*/,
-        DiffDontCare    /**<Don't care; plugin will return whichever is easiest.*/
+        DiffRaw         /**< Request complete copies of both items. */,
+        DiffUnified     /**< Request copy of first item with diff. */,
+        DiffDontCare    /**< Don't care; plugin will return whichever is easiest. */
     };
 
     enum Content
     {
-        Binary          /** Binary diff, using the full content of both files.*/,
-        Text            /** Textual diff.*/
+        Binary          /**< Binary diff, using the full content of both files.*/,
+        Text            /**< Textual diff.*/
     };
 
     VcsDiff();

@@ -85,14 +85,14 @@ private:
  * */
 enum ParsingEnvironmentType
 {
-  StandardParsingEnvironment,
-  CppParsingEnvironment,
-  PythonParsingEnvironment,
-  CMakeParsingEnvironment,
-  CSharpParsingEnvironment,
-  JavaParsingEnvironment,
-  RubyParsingEnvironment,
-  PhpParsingEnvironment
+  StandardParsingEnvironment /**< a basic standard parsing environment */,
+  CppParsingEnvironment      /**< a C++ parsing environment */,
+  PythonParsingEnvironment   /**< a python parsing environment */,
+  CMakeParsingEnvironment    /**< a CMake parsing environment */,
+  CSharpParsingEnvironment   /**< a CSharp parsing environment */,
+  JavaParsingEnvironment     /**< a JAva parsing environment */,
+  RubyParsingEnvironment     /**< a Ruby parsing environment */,
+  PhpParsingEnvironment      /**< a PHP parsing environment */
 };
 
   ///@WARNING: Access to all the following classes must be serialized through du-chain locking

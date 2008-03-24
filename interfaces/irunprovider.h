@@ -36,9 +36,9 @@ public:
     virtual ~IRunProvider();
 
     enum OutputTypes {
-        StandardOutput,
-        StandardError,
-        RunProvider
+        StandardOutput /**< indicates the process wrote to standard output */,
+        StandardError  /**< indicates the process wrote to standard error */,
+        RunProvider    /**< indicates the run provider produced output */
     };
     
     /**
@@ -63,7 +63,7 @@ Q_SIGNALS:
     void finished(int serial);
 
     /**
-     * Notify that the process with given \a serial has produced the given \a output in the given \a channel.
+     * Notify that the process with given \a serial has produced the given \a output in the given \a type.
      */
     void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 };

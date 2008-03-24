@@ -180,10 +180,10 @@ public:
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
 
   enum MatchTypes {
-    NoMatch,
-    EndsWith, //The current identifier ends with the one given to the match function
-    TargetEndsWith, //The identifier given to the match function ends with the current identifier
-    ExactMatch
+    NoMatch        /**< matches no identifier */,
+    EndsWith       /**< The current identifier ends with the one given to the match function */,
+    TargetEndsWith /**< The identifier given to the match function ends with the current identifier */,
+    ExactMatch     /**< matches if the identifiers match exactly */
   };
 
   MatchTypes match(const Identifier& other) const;

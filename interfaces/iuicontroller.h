@@ -48,7 +48,10 @@ class KDEVPLATFORMINTERFACES_EXPORT IUiController {
 public:
     virtual ~IUiController();
 
-    enum SwitchMode { ThisWindow, NewWindow };
+    enum SwitchMode {
+        ThisWindow /**< indicates that the area switch should be in the this window */,
+        NewWindow  /**< indicates that the area switch should be using a new window */
+    };
 
     virtual void switchToArea(const QString &areaName, SwitchMode switchMode) = 0;
 
