@@ -117,7 +117,7 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream )
 void DumpTree::visit(AST *node)
 {
   QString nodeText;
-  if( m_tokenStream ) {
+  if( m_tokenStream && node ) {
     for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
       nodeText += QByteArray( tok.session->contents()+tok.position, tok.size );
