@@ -140,7 +140,7 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
             if (!buff.isEmpty()) {
                 line = buff;
                 if (line.startsWith("#define ")) {
-                    line = line.right(line.length() - 8);
+                    line = line.right(line.length() - 8).trimmed();
                     int pos = line.indexOf(' ');
                     rpp::pp_macro macro;
                     if (pos != -1) {
