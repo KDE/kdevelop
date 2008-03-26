@@ -35,7 +35,17 @@ DUChainItemData::DUChainItemData( const DUChainItem& file, bool openDefinition )
 }
 
 QString DUChainItemData::text() const {
-  return m_item.m_text;
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  if(!m_item.m_item)
+    return i18n("Not available any more");
+  QString text;
+  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  if( function )
+    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  else
+    text = m_item.m_text;
+  
+  return text;
 }
 
 QString DUChainItemData::htmlDescription() const {
