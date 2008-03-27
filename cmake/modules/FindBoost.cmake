@@ -17,7 +17,8 @@
 # its "date_time" for "libboost_date_time...". Anything else will result in
 # errors
 #
-# Variables used by this module, they can change the default behaviour:
+# Variables used by this module, they can change the default behaviour and need to be set
+# before calling find_package:
 #  Boost_USE_MULTITHREAD         Can be set to OFF to use the non-multithreaded
 #                                boost libraries. Defaults to ON.
 #  Boost_ADDITIONAL_VERSIONS     A list of version numbers to use for searching
@@ -27,16 +28,16 @@
 #                                If you want to look for an older or newer
 #                                version set this variable to a list of
 #                                strings, where each string contains a number, i.e.
-#                                SET(Boost_ADDITIONAL_VERSIONS "0.99.0" "1.35.0")
+#                                SET(Boost_ADDITIONAL_VERSIONS "0.99.0" "1.35.0"
 #  Boost_MINIMUM_VERSION         Can be used to require a specific minimum version of boost.
 #                                Should be set as a plain string in the form "major.minor[.subminor]".
 #                                If this variable is set and find_package is called with the REQUIRED
-#                                Option FindBoost.cmake will fail if it doesn't find a suitable version.
-#  Boost_ROOT                    Preferred installation prefix for searching for Boost,
+#                                option, FindBoost.cmake will fail if it doesn't find a suitable version.
+#  BOOST_ROOT                    Preferred installation prefix for searching for Boost,
 #                                set this if the module has problems finding the proper Boost installation
-#  Boost_INCLUDEDIR              Set this to the include directory of Boost, if the
+#  BOOST_INCLUDEDIR              Set this to the include directory of Boost, if the
 #                                module has problems finding the proper Boost installation
-#  Boost_LIBRARYDIR              Set this to the lib directory of Boost, if the
+#  BOOST_LIBRARYDIR              Set this to the lib directory of Boost, if the
 #                                module has problems finding the proper Boost installation
 #
 #  The last three variables are available also as environment variables
@@ -82,9 +83,10 @@
 
 # MESSAGE(STATUS "Finding Boost libraries.... ")
 
-OPTION(Boost_USE_MULTITHREAD "Use the multithreaded versions of the boost libraries" ON)
+OPTION(Boost_USE_MULTITHREADED "Use the multithreaded versions of the boost libraries" ON)
 
-SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.33" "1.33.0" "1.33.1" "1.34" "1.34.0" "1.34.1" )
+SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
+
 
 ############################################
 #
@@ -131,7 +133,7 @@ MACRO (_Boost_ADJUST_LIB_VARS basename)
     IF (Boost_${basename}_LIBRARY)
       SET(Boost_${basename}_LIBRARY ${Boost_${basename}_LIBRARY} CACHE FILEPATH "The Boost ${basename} library")
       GET_FILENAME_COMPONENT(Boost_LIBRARY_DIRS "${Boost_${basename}_LIBRARY}" PATH)
-      SET(Boost_${basename}_FOUND "1" CACHE STRING "Was the boost ${basename} library found")
+      SET(Boost_${basename}_FOUND ON CACHE BOOL "Was the boost boost ${basename} library found")
     ENDIF (Boost_${basename}_LIBRARY)
 
   ENDIF (Boost_INCLUDE_DIR )
@@ -147,7 +149,6 @@ ENDMACRO (_Boost_ADJUST_LIB_VARS)
 
 
 SET( _boost_IN_CACHE TRUE)
-
 IF(Boost_INCLUDE_DIR)
   FOREACH(COMPONENT ${Boost_FIND_COMPONENTS})
     STRING(TOUPPER ${COMPONENT} COMPONENT)
@@ -172,7 +173,6 @@ IF (_boost_IN_CACHE)
     MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
     MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
   ENDIF(Boost_VERSION AND NOT "${Boost_VERSION}" STREQUAL "0")
-
 ELSE (_boost_IN_CACHE)
   # Need to search for boost
 
@@ -191,47 +191,48 @@ ELSE (_boost_IN_CACHE)
     /sw/local/lib
   )
 
-  IF( NOT $ENV{Boost_ROOT} STREQUAL "" )
-    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{Boost_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
-    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{Boost_ROOT}/lib ${_boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( NOT $ENV{Boost_ROOT} STREQUAL "" )
+  IF( NOT $ENV{BOOST_ROOT} STREQUAL "" )
+    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{BOOST_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
+    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{BOOST_ROOT}/lib ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{BOOST_ROOT} STREQUAL "" )
 
-  IF( NOT $ENV{Boost_INCLUDEDIR} STREQUAL "" )
-    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{Boost_INCLUDEDIR} ${_boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( NOT $ENV{Boost_INCLUDEDIR} STREQUAL "" )
+  IF( NOT $ENV{BOOST_INCLUDEDIR} STREQUAL "" )
+    SET(_boost_INCLUDE_SEARCH_DIRS $ENV{BOOST_INCLUDEDIR} ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{BOOST_INCLUDEDIR} STREQUAL "" )
 
-  IF( NOT $ENV{Boost_LIBRARYDIR} STREQUAL "" )
-    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{Boost_LIBRARYDIR} ${_boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( NOT $ENV{Boost_LIBRARYDIR} STREQUAL "" )
+  IF( NOT $ENV{BOOST_LIBRARYDIR} STREQUAL "" )
+    SET(_boost_LIBRARIES_SEARCH_DIRS $ENV{BOOST_LIBRARYDIR} ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( NOT $ENV{BOOST_LIBRARYDIR} STREQUAL "" )
 
-  IF( Boost_ROOT )
-    SET(_boost_INCLUDE_SEARCH_DIRS ${Boost_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
-    SET(_boost_LIBRARIES_SEARCH_DIRS ${Boost_ROOT}/lib ${_boost_LIBRARIES_SEARCH_DIRS})
-  ENDIF( Boost_ROOT )
+  IF( BOOST_ROOT )
+    SET(_boost_INCLUDE_SEARCH_DIRS ${BOOST_ROOT}/include ${_boost_INCLUDE_SEARCH_DIRS})
+    SET(_boost_LIBRARIES_SEARCH_DIRS ${BOOST_ROOT}/lib ${_boost_LIBRARIES_SEARCH_DIRS})
+  ENDIF( BOOST_ROOT )
 
-  IF( Boost_INCLUDEDIR )
-    SET(_boost_INCLUDE_SEARCH_DIRS ${Boost_INCLUDEDIR}/include ${_boost_INCLUDE_SEARCH_DIRS})
-  ENDIF( Boost_INCLUDEDIR )
+  IF( BOOST_INCLUDEDIR )
+    SET(_boost_INCLUDE_SEARCH_DIRS ${BOOST_INCLUDEDIR}/include ${_boost_INCLUDE_SEARCH_DIRS})
+  ENDIF( BOOST_INCLUDEDIR )
 
-  IF( Boost_LIBRARYDIR )
-    SET(_boost_LIBRARIES_SEARCH_DIRS ${Boost_LIBRARYDIR}/include ${_boost_LIBRARIES_SEARCH_DIRS})
-  ENDIF( Boost_LIBRARYDIR )
+  IF( BOOST_LIBRARYDIR )
+    SET(_boost_LIBRARIES_SEARCH_DIRS ${BOOST_LIBRARYDIR}/include ${_boost_LIBRARIES_SEARCH_DIRS})
+  ENDIF( BOOST_LIBRARYDIR )
 
   IF( Boost_MINIMUM_VERSION )
     IF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" _boost_REQ_MAJ_VER ${Boost_MINIMUM_VERSION})
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" _boost_REQ_MIN_VER ${Boost_MINIMUM_VERSION})
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" _boost_REQ_SMIN_VER ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" Boost_FIND_VERSION_MAJOR ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" Boost_FIND_VERSION_MINOR ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" Boost_FIND_VERSION_PATCH ${Boost_MINIMUM_VERSION})
     ELSEIF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+")
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1" _boost_REQ_MAJ_VER ${Boost_MINIMUM_VERSION})
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\2" _boost_REQ_MIN_VER ${Boost_MINIMUM_VERSION})
-      SET(_boost_REQ_SMIN_VER 0)
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1" Boost_FIND_VERSION_MAJOR ${Boost_MINIMUM_VERSION})
+      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\2" Boost_FIND_VERSION_MINOR ${Boost_MINIMUM_VERSION})
+      SET(Boost_FIND_VERSION_PATCH 0)
     ELSE(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
       MESSAGE(FATAL_ERROR "Wrong format for Boost_MINIMUM_VERSION variable, the format needs to be major.minor[.subminor]")
     ENDIF(Boost_MINIMUM_VERSION MATCHES "[0-9]+\\.[0-9]+\\.[0-9]")
 
-    MATH(EXPR _boost_REQ_VERSION "${_boost_REQ_MAJ_VER} * 100000 + ${_boost_REQ_MIN_VER} * 100 + ${_boost_REQ_SMIN_VER}")
   ENDIF( Boost_MINIMUM_VERSION )
+
+
 
   FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
     IF( NOT Boost_INCLUDE_DIR )
@@ -242,9 +243,22 @@ ELSE (_boost_IN_CACHE)
       SET(_boost_PATH_SUFFIX
         boost-${_boost_VER}
       )
-      STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+
+      IF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+      ELSEIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+")
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+      ENDIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
 
 
+      #Prefer our include search paths
+      FIND_PATH(Boost_INCLUDE_DIR
+          NAMES         boost/config.hpp
+          PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
+          PATH_SUFFIXES ${_boost_PATH_SUFFIX}
+          NO_DEFAULT_PATH
+      )
+      #If nothing is found search again using system default paths
       FIND_PATH(Boost_INCLUDE_DIR
           NAMES         boost/config.hpp
           PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
@@ -269,17 +283,13 @@ ELSE (_boost_IN_CACHE)
           MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
           MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
           MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
-  	  IF(_boost_REQ_VERSION)
-            IF( Boost_VERSION LESS "${_boost_REQ_VERSION}")
-              SET(Boost_INCLUDE_DIR FALSE)
-            ENDIF( Boost_VERSION LESS "${_boost_REQ_VERSION}")
-  	  ENDIF(_boost_REQ_VERSION)
-  
+
         ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
       ENDIF(Boost_INCLUDE_DIR)
 
     ENDIF( NOT Boost_INCLUDE_DIR )
   ENDFOREACH(_boost_VER)
+
   #Setting some more suffixes for the library
   SET (Boost_LIB_PREFIX "")
   IF ( WIN32 )
@@ -394,6 +404,17 @@ ELSE (_boost_IN_CACHE)
   SET(Boost_FOUND FALSE)
   IF(Boost_INCLUDE_DIR)
     SET( Boost_FOUND TRUE )
+    IF( Boost_FIND_VERSION_MAJOR AND Boost_VERSION_MAJOR LESS "${Boost_FIND_VERSION_MAJOR}" )
+      SET( Boost_FOUND FALSE )
+    ELSE( Boost_FIND_VERSION_MAJOR AND Boost_VERSION_MAJOR LESS "${Boost_FIND_VERSION_MAJOR}" )
+      IF( Boost_FIND_VERSION_MINOR AND Boost_VERSION_MINOR LESS "${Boost_FIND_VERSION_MINOR}" )
+        SET( Boost_FOUND FALSE )
+      ELSE( Boost_FIND_VERSION_MINOR AND Boost_VERSION_MINOR LESS "${Boost_FIND_VERSION_MINOR}" )
+        IF( Boost_FIND_VERSION_PATCH AND Boost_VERSION_SUBMINOR LESS "${Boost_FIND_VERSION_PATCH}" )
+          SET( Boost_FOUND FALSE )
+        ENDIF( Boost_FIND_VERSION_PATCH AND Boost_VERSION_SUBMINOR LESS "${Boost_FIND_VERSION_PATCH}" )
+      ENDIF( Boost_FIND_VERSION_MINOR AND Boost_VERSION_MINOR LESS "${Boost_FIND_VERSION_MINOR}" )
+    ENDIF( Boost_FIND_VERSION_MAJOR AND Boost_VERSION_MAJOR LESS "${Boost_FIND_VERSION_MAJOR}" )
     FOREACH(COMPONENT ${Boost_FIND_COMPONENTS})
       STRING(TOUPPER ${COMPONENT} COMPONENT)
       IF(NOT Boost_${COMPONENT}_FOUND)
@@ -418,7 +439,8 @@ ELSE (_boost_IN_CACHE)
       ENDIF(NOT Boost_FIND_QUIETLY)
   ELSE (Boost_FOUND)
       IF (Boost_FIND_REQUIRED)
-	MESSAGE(FATAL_ERROR "Couldn't find the Boost libraries and/or include irectory. Please install the Boost libraries AND development packages")
+        MESSAGE(STATUS "Boost Version required: ${Boost_FIND_VERSION}. Found: ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}")
+        MESSAGE(FATAL_ERROR "Couldn't find the Boost libraries and/or include irectory, or the version found is too old. Please install the Boost libraries AND development packages. You can set BOOST_ROOT, BOOST_INCLUDEDIR and BOOST_LIBRARYDIR to help find Boost.")
       ENDIF(Boost_FIND_REQUIRED)
   ENDIF(Boost_FOUND)
 
