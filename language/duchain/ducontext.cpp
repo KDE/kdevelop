@@ -268,7 +268,7 @@ bool DUContextPrivate::removeChildContext( DUContext* context ) {
 void DUContextPrivate::addImportedChildContext( DUContext * context )
 {
   Q_ASSERT(!m_importedChildContexts.contains(context));
-
+  
   m_importedChildContexts.append(context);
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
@@ -646,12 +646,12 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
-  //We allow loops in the import-structure. It is needed in the case of C++ for simplified environment matching.
-//   if( context->imports(this) ) {
-//     kDebug(9505) << "DUContext::addImportedParentContext: Tried to create circular import-structure by importing " << context << " (" << context->url().str() << ") into " << this << " (" << url().str() << ")";
-//     return;
-//   }
 
+  if(context == this) {
+    kDebug(9007) << "Tried to import self";
+    return;
+  }
+  
   if( position.isValid() )
     d->m_importedParentContextPositions[DUContextPointer(context)] = position;
 
