@@ -100,11 +100,10 @@ bool setupStandardIncludePaths(QStringList& includePaths)
 bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
-    {
-      //Used in several headers like sys/time.h
-      rpp::pp_macro m("__restrict");
-      macros.insert( m );
-    }
+    //Used in several headers like sys/time.h
+    macros.insert( rpp::pp_macro("__restrict") );
+    macros.insert( rpp::pp_macro("__extension__") );
+    
     {
       //Used in several headers like sys/time.h
       rpp::pp_macro m("__const");
@@ -112,8 +111,15 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
       macros.insert( m );
     }
 
-    macros.insert( rpp::pp_macro("__extension__") );
-  
+    {
+      //Used in several gcc headers
+      rpp::pp_macro m("__inline");
+      m.definition = "inline";
+      macros.insert( m );
+      m.name = KDevelop::HashedString("__always_inline");
+      macros.insert( m );
+    }
+
     {
       //It would be better if the parser could deal with it, for example in class declarations. However it cannot.
       //If we wouldn't need this, macros could be more transparent.
