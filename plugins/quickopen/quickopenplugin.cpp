@@ -133,7 +133,7 @@ QString cursorItemText() {
   return decl->qualifiedIdentifier().toString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly ) : QObject( d ), m_dialog(d), m_model(model) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : QObject( d ), m_dialog(d), m_model(model) {
 
   o.setupUi( d );
   o.list->header()->hide();
@@ -182,11 +182,14 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
     scopesLayout->addStretch( 1 );
     o.scopeGroup->setLayout( scopesLayout );
   }else{
-    o.searchLine->hide();
-    o.searchLabel->hide();
     o.list->setFocusPolicy(Qt::StrongFocus);
     o.scopeGroup->hide();
     o.itemsGroup->hide();
+  }
+  
+  if( noSearchField ) {
+    o.searchLine->hide();
+    o.searchLabel->hide();
   }
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
@@ -647,7 +650,7 @@ void QuickOpenPlugin::quickOpenNavigate()
     }
 
     //Change the parent so there are no conflicts in destruction order
-    model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true ));
+    model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true, true ));
 
     model->setExpanded(model->index(0,0, QModelIndex()), true);
   }

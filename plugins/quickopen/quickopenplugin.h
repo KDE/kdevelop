@@ -92,8 +92,10 @@ class QuickOpenWidgetHandler : public QObject {
   /**
    * @param initialItems List of items that should initially be enabled in the quickopen-list. If empty, all are enabled.
    * @param initialScopes List of scopes that should initially be enabled in the quickopen-list. If empty, all are enabled.
+   * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
+   * @param noSearchFied when this is true, no search-line is shown.
    * */
-  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false );
+  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidgetHandler();
   
   private slots:
