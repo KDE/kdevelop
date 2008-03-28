@@ -347,6 +347,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              appFrontend(), SLOT(insertStdoutLine(const QCString&)) );
     connect( procLineMaker, SIGNAL(receivedStderrLine(const QCString&)),
              appFrontend(), SLOT(insertStderrLine(const QCString&)) );
+    
+    connect( procLineMaker, SIGNAL(receivedPartialStdoutLine(const QCString&)),
+             appFrontend(), SLOT(addPartialStdoutLine(const QCString&)));
+    connect( procLineMaker, SIGNAL(receivedPartialStderrLine(const QCString&)),
+             appFrontend(), SLOT(addPartialStderrLine(const QCString&)));
 
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window
