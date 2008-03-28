@@ -26,6 +26,7 @@
 #include <ilanguagesupport.h>
 #include "includeitem.h"
 #include "environmentmanager.h"
+#include <QThread>
 
 class CppHighlighting;
 class CppCodeCompletion;
@@ -37,6 +38,39 @@ namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; }
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
+
+///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
+class UIBlockTester : public QObject {
+        Q_OBJECT
+    class UIBlockTesterThread : public QThread {
+    public:
+      UIBlockTesterThread( UIBlockTester& parent );
+      void run();
+      void stop();
+    private:
+      UIBlockTester& m_parent;
+      bool m_stop;
+    };
+  friend class UIBlockTesterThread;
+public:
+    
+  ///@param milliseconds when the ui locks for .. milliseconds, lockup() is called
+  UIBlockTester( uint milliseconds );
+  ~UIBlockTester();
+        
+private slots:
+  void timer();
+       
+protected:
+   virtual void lockup();
+ 
+ private:
+     UIBlockTesterThread m_thread;
+     QDateTime m_lastTime;
+     QMutex m_timeMutex;
+     QTimer * m_timer;
+     uint m_msecs;
+};
 
 class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -124,6 +158,7 @@ private:
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;
+    UIBlockTester* m_blockTester;
 };
 
 #endif

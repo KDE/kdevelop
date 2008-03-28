@@ -29,6 +29,7 @@
 #include <QSet>
 #include <QApplication>
 #include <QAction>
+#include <QTimer>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <QExtensionFactory>
@@ -84,6 +85,8 @@
 #include "includepathresolver.h"
 #include "setuphelpers.h"
 #include "quickopen.h"
+
+//#define DEBUG_UI_LOCKUP
 
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
@@ -211,6 +214,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
+
+#ifdef DEBUG_UI_LOCKUP
+    m_blockTester = new UIBlockTester(300);
+#endif
 }
 
 KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
@@ -393,6 +400,9 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_standardIncludePaths;
     delete m_environmentManager;
     delete m_includeResolver;
+#ifdef DEBUG_UI_LOCKUP
+    delete m_blockTester;
+#endif
 }
 
 const Cpp::MacroRepository::LazySet& CppLanguageSupport::standardMacros() const {
@@ -499,6 +509,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
     KUrl effectiveBuildDirectory;
     KUrl buildDirectory;
     KUrl projectDirectory;
+    QString projectName;
 
     bool gotPathsFromManager = false;
     
@@ -508,7 +519,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
         if( !files.isEmpty() )
             file = files.first();
         if (!file) {
-                kDebug() << "Didn't find file for url:" << source << "in project" << project->name();
+//                 kDebug() << "Didn't find file for url:" << source << "in project" << project->name();
             continue;
         }
 
@@ -520,6 +531,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
         }
 
         
+        projectName = project->name();
         projectDirectory = project->folder();
         effectiveBuildDirectory = buildDirectory = buildManager->buildDirectory(project->projectItem());
         kDebug(9007) << "Got build-directory from project manager:" << effectiveBuildDirectory;
@@ -553,6 +565,15 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
             ///@todo remote directories?
             m_includeResolver->setOutOfSourceBuildSystem(projectDirectory.path(), effectiveBuildDirectory.path());
         } else {
+            if(!projectDirectory.isEmpty()) {
+                //Report that the build-manager did not return the build-directory, for debugging
+                KDevelop::Problem* newProblem = new Problem;
+                newProblem->setSource(KDevelop::Problem::Preprocessor);
+                newProblem->setDescription(i18n("Build-manager for project %1 did not return a build-directory", projectName));
+                newProblem->setExplanation(i18n("The include-path resolver needs the build-directory to resolve additional include paths. Consider setting up a build-directory in the project manager if you haven't done so yet."));
+                newProblem->setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                (*problems) << KDevelop::ProblemPointer(newProblem);
+            }
             m_includeResolver->resetOutOfSourceBuild();
         }
         CppTools::PathResolutionResult result = m_includeResolver->resolveIncludePath(source.path());
@@ -911,6 +932,50 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     return new Cpp::NavigationWidget(m.second, preprocessedBody);
 }
 
+UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
+}
+
+ void UIBlockTester::UIBlockTesterThread::run() {
+   while(!m_stop) {
+           msleep( m_parent.m_msecs / 10 );
+           m_parent.m_timeMutex.lock();
+           QDateTime t = QDateTime::currentDateTime();
+           uint msecs = m_parent.m_lastTime.time().msecsTo( t.time() );
+           if( msecs > m_parent.m_msecs ) {
+                   m_parent.lockup();
+                   m_parent.m_lastTime = t;
+           }
+           m_parent.m_timeMutex.unlock();
+  }
+ }
+ 
+ void UIBlockTester::UIBlockTesterThread::stop() {
+         m_stop = true;
+ }
+ 
+ UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
+         m_timer = new QTimer( this );
+         m_timer->start( milliseconds/10 );
+         connect( m_timer, SIGNAL(timeout()), this, SLOT(timer()) );
+         timer();
+         m_thread.start();
+ }
+ UIBlockTester::~UIBlockTester() {
+   m_thread.stop();
+  m_thread.wait();
+ }
+ 
+ void UIBlockTester::timer() {
+         m_timeMutex.lock();
+         m_lastTime = QDateTime::currentDateTime();
+         m_timeMutex.unlock();
+ }
+ 
+void UIBlockTester::lockup() {
+    kDebug() << "ui is blocking";
+        //std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
+         int a = 1; ///Place breakpoint here
+ }
 
 #include "cpplanguagesupport.moc"
 
