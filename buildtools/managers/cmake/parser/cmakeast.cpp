@@ -39,10 +39,13 @@ CMAKE_REGISTER_AST( AddLibraryAst, add_library )
 CMAKE_REGISTER_AST( AddSubdirectoryAst, add_subdirectory )
 CMAKE_REGISTER_AST( AddTestAst,  add_test )
 CMAKE_REGISTER_AST( AuxSourceDirectoryAst, aux_source_directory )
+CMAKE_REGISTER_AST( BreakAst, break)
 CMAKE_REGISTER_AST( BuildCommandAst, build_command )
 CMAKE_REGISTER_AST( BuildNameAst, build_name )
 CMAKE_REGISTER_AST( CMakeMinimumRequiredAst, cmake_minimum_required )
+CMAKE_REGISTER_AST( CMakePolicyAst, cmake_policy)
 CMAKE_REGISTER_AST( ConfigureFileAst, configure_file )
+CMAKE_REGISTER_AST( CreateTestSourcelistAst, create_test_sourcelist )
 CMAKE_REGISTER_AST( CustomCommandAst, add_custom_command )
 CMAKE_REGISTER_AST( CustomTargetAst, add_custom_target )
 CMAKE_REGISTER_AST( EnableLanguageAst, enable_language )
@@ -67,6 +70,9 @@ CMAKE_REGISTER_AST( IfAst, if )
 CMAKE_REGISTER_AST( IncludeAst, include )
 CMAKE_REGISTER_AST( IncludeDirectoriesAst, include_directories )
 CMAKE_REGISTER_AST( IncludeRegularExpressionAst, include_regular_expression )
+CMAKE_REGISTER_AST( InstallFilesAst, install_files )
+CMAKE_REGISTER_AST( InstallProgramsAst, install_programs )
+CMAKE_REGISTER_AST( InstallTargetsAst, install_targets )
 CMAKE_REGISTER_AST( LinkDirectoriesAst, link_directories )
 CMAKE_REGISTER_AST( LinkLibrariesAst, link_libraries )
 CMAKE_REGISTER_AST( ListAst, list )
@@ -706,7 +712,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( (func.arguments.size() < 2 && func.arguments.count()>3) || func.arguments.first().value.toUpper()!="VERSION")
         return false;
 
-    QRegExp rx("([0-9]*).([0-9]*).([0-9]*)");
+    QRegExp rx("([0-9]*).([0-9]*).?([0-9]*)");
     rx.indexIn(func.arguments[1].value);
 
     QStringList caps=rx.capturedTexts();
@@ -790,8 +796,33 @@ bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     if ( func.arguments.count() < 3 )
         return false;
+    m_name=func.arguments[0].value;
+    m_driverName=func.arguments[1].value;
+    
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+    it = func.arguments.begin() + 2;
+    enum State { Tests, ExtraInclude, Function};
+    State s=Tests;
 
-    return true;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->value=="EXTRA_INCLUDE") s=ExtraInclude;
+        else if(it->value=="FUNCTION") s=Function;
+        else switch(s) {
+            case Tests:
+                m_tests.append(it->value);
+                break;
+            case ExtraInclude:
+                m_extraIncludes.append(it->value);
+                s=Tests;
+                break;
+            case Function:
+                m_function.append(it->value);
+                s=Tests;
+                break;
+        }
+    }
+    return !m_tests.isEmpty();
 }
 
 EnableLanguageAst::EnableLanguageAst()
@@ -1877,7 +1908,24 @@ void InstallFilesAst::writeBack( QString& ) const
 
 bool InstallFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()=="install_files" || func.arguments.count()<2)
+        return false;
+    m_directory=func.arguments[0].value;
+    if(func.arguments.count()==2)
+    {
+        m_regex=func.arguments[1].value;
+    }
+    else
+    {
+        QList<CMakeFunctionArgument>::const_iterator it, itEnd=func.arguments.constEnd();
+        if(func.arguments[1].value!="FILES")
+        m_extension=func.arguments[1].value;
+        for(it=func.arguments.constBegin()+2; it!=itEnd; ++it)
+        {
+            m_files.append(it->value);
+        }
+    }
+    return !m_files.isEmpty() || !m_regex.isEmpty();
 }
 
 InstallProgramsAst::InstallProgramsAst()
@@ -1894,7 +1942,25 @@ void InstallProgramsAst::writeBack( QString& ) const
 
 bool InstallProgramsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()=="install_programs" ||  func.arguments.count()<2)
+        return false;
+    m_directory=func.arguments[0].value;
+    if(func.arguments.count()==2)
+    {
+        m_regex=func.arguments[1].value;
+    }
+    else
+    {
+        QList<CMakeFunctionArgument>::const_iterator it, itEnd=func.arguments.constEnd();
+        int firstpos=1;
+        if(func.arguments[1].value!="FILES")
+            firstpos++;
+        for(it=func.arguments.constBegin()+firstpos; it!=itEnd; ++it)
+        {
+            m_files.append(it->value);
+        }
+    }
+    return !m_files.isEmpty() || !m_regex.isEmpty();
 }
 
 InstallTargetsAst::InstallTargetsAst()
@@ -1911,7 +1977,23 @@ void InstallTargetsAst::writeBack( QString& ) const
 
 bool InstallTargetsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return false;
+    if(func.name.toLower()=="install_targets" || func.arguments.count()<2)
+        return false;
+    m_directory=func.arguments[0].value;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd=func.arguments.constEnd();
+    int firstpos=1;
+    if(func.arguments[1].value=="RUNTIME_DIRECTORY")
+    {
+        firstpos+=2;
+        if(func.arguments.count()<3)
+                return false;
+        m_runtimeDir=func.arguments[2].value;
+    }
+    for(it=func.arguments.constBegin()+firstpos; it!=itEnd; ++it)
+    {
+        m_targets.append(it->value);
+    }
+    return !m_targets.isEmpty();
 }
 
 LinkDirectoriesAst::LinkDirectoriesAst()
@@ -3391,4 +3473,82 @@ bool CustomInvokationAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
+BreakAst::BreakAst()
+{
+}
+
+BreakAst::~BreakAst()
+{
+}
+
+void BreakAst::writeBack( QString& ) const
+{
+}
+
+bool BreakAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return func.arguments.isEmpty() && func.name.toLower()=="break";
+}
+
+CMakePolicyAst::CMakePolicyAst()
+{
+}
+
+CMakePolicyAst::~CMakePolicyAst()
+{
+}
+
+void CMakePolicyAst::writeBack( QString& ) const
+{
+}
+
+bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="cmake_policy" || func.arguments.isEmpty())
+        return false;
+    const QString &first=func.arguments[0].value;
+    
+    if(first=="VERSION")
+    {
+        QRegExp rx("([0-9]*).([0-9]*).?([0-9]*)");
+        rx.indexIn(func.arguments[1].value);
+
+        QStringList caps=rx.capturedTexts();
+        caps.erase(caps.begin());
+        foreach(QString s, caps)
+        {
+            bool correct;
+            m_version.append(s.toInt(&correct));
+            if(!correct)
+                return false;
+        }
+    }
+    else if(first=="SET" && func.arguments.count()==3)
+    {
+        QRegExp rx("CMP<([1-9]*)>");
+        rx.indexIn(func.arguments[1].value);
+
+        QStringList cmpValue=rx.capturedTexts();
+        if(cmpValue.count()==1)
+        {
+            m_policyNum=cmpValue[1].toInt();
+        }
+        else
+            return false;
+        if(func.arguments[2].value=="OLD")
+            m_isNew=false;
+        else if(func.arguments[2].value=="NEW")
+            m_isNew=true;
+        else
+            return false;
+        return true;
+    } else if(first=="PUSH") {
+        m_action=PUSH;
+        return func.arguments.isEmpty();
+    } else if(first=="POP") {
+        m_action=POP;
+        return func.arguments.isEmpty();
+    }
+    return false;
+}
 

@@ -253,7 +253,11 @@ CMAKE_END_AST_CLASS( ConfigureFileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( CreateTestSourcelistAst )
-//TODO
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, driverName, DriverName )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, tests, Tests )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, extraIncludes, ExtraIncludes)
+CMAKE_ADD_AST_MEMBER( QString, const QString&, function, Function)
 CMAKE_END_AST_CLASS( CreateTestSourcelistAst )
 
 
@@ -491,19 +495,26 @@ CMAKE_END_AST_CLASS( InstallAst )
 
 CMAKE_BEGIN_AST_CLASS( InstallFilesAst )
 CMAKE_MARK_AS_DEPRECATED()
-//TODO
+CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, extension, Extension)
+CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, files, Files)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
 CMAKE_END_AST_CLASS( InstallFilesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallProgramsAst )
 CMAKE_MARK_AS_DEPRECATED()
-//TODO
+CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
+CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, files, Files)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
 CMAKE_END_AST_CLASS( InstallProgramsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallTargetsAst )
 CMAKE_MARK_AS_DEPRECATED()
-//TODO
+CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
+CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, targets, Targets)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, runtimeDir, runtimeDir)
 CMAKE_END_AST_CLASS( InstallTargetsAst )
 
 
@@ -794,6 +805,23 @@ CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, const QList<CMakeFunctionArg
                       arguments, Arguments )
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 
+//CMake 2.6
+CMAKE_BEGIN_AST_CLASS( BreakAst )
+CMAKE_END_AST_CLASS( BreakAst )
+
+CMAKE_BEGIN_AST_CLASS( CMakePolicyAst )
+enum Action { VERSION, SET, PUSH, POP };
+CMAKE_ADD_AST_MEMBER( Action, Action, action, Action )
+        //VERSION
+        CMAKE_ADD_AST_MEMBER( QList<int>, QList<int>, version, Version )
+        
+        //SET
+        CMAKE_ADD_AST_MEMBER( int, int, policyNum, PolicyNum)
+        CMAKE_ADD_AST_MEMBER( bool, bool, isNew, New)
+CMAKE_END_AST_CLASS( CMakePolicyAst )
+
 #endif
+
+
 
 

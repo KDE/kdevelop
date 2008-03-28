@@ -36,7 +36,7 @@
 
 struct CMakeFunctionArgument
 {
-    CMakeFunctionArgument(): value(), quoted(false), filePath(0), line(0), column(0) {}
+    CMakeFunctionArgument(): value(), quoted(false), line(0), column(0) {}
     
     CMakeFunctionArgument(const QString& v, bool q = false,
                           const QString& file = QString(), quint32 l = 0, quint32 c=0);
@@ -58,7 +58,7 @@ struct CMakeFunctionArgument
 
     QString value;
     bool quoted;
-    QString filePath; //FIXME: i don't understand why do i want it here
+//     QString filePath; //Removed because we don't use it
     quint32 line;
     quint32 column;
 };

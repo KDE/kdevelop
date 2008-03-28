@@ -452,12 +452,16 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     }
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
-    foreach(const QString& p, files) {
+    foreach(const QString& p, files)
+    {
         QString p1=findFile(p, locationOptions, fpath->pathSuffixes(), Location);
-        if(p1.isEmpty()) {
-            kDebug(9032) << p << "not found";
+        if(p1.isEmpty())
+        {
+            kDebug(9042) << p << "not found";
             error=true;
-        } else {
+        }
+        else
+        {
             path += p1;
         }
     }
@@ -468,7 +472,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     }
     else
     {
-        kDebug(9032) << "Program not found";
+        kDebug(9042) << "Path not found";
     }
     kDebug(9042) << "Find path: " << fpath->variableName() << m_vars->value(fpath->variableName());
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
@@ -484,24 +488,31 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     QStringList locationOptions = flib->path();
     QStringList path, files=flib->filenames();
 
-    if(!flib->noDefaultPath()) {
+    if(!flib->noDefaultPath())
+    {
         locationOptions += m_defaultPaths;
     }
-    
-    foreach(const QString& p, files) {
+
+    foreach(const QString& p, files)
+    {
         QString p1=findFile(p, locationOptions, flib->pathSuffixes(), Library);
-        if(p1.isEmpty()) {
+        if(p1.isEmpty())
+        {
             kDebug(9042) << p << "not found";
             error=true;
-        } else {
+        }
+        else
+        {
             path += p1;
             break;
         }
     }
 
-    if(!path.isEmpty()) {
+    if(!path.isEmpty())
+    {
         m_vars->insert(flib->variableName(), QStringList(path));
-    } else
+    }
+    else
         kDebug(9032) << "error. Library" << flib->filenames() << "not found";
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     kDebug(9042) << "Find Library:" << flib->filenames() << m_vars->value(flib->variableName());
@@ -518,19 +529,25 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
-    foreach(const QString& p, files) {
+    foreach(const QString& p, files)
+    {
         QString p1=findFile(p, locationOptions, ffile->pathSuffixes(), File);
-        if(p1.isEmpty()) {
+        if(p1.isEmpty())
+        {
             kDebug(9042) << p << "not found";
             error=true;
-        } else {
+        }
+        else
+        {
             path += p1;
         }
     }
 
-    if(!path.isEmpty()) {
+    if(!path.isEmpty())
+    {
         m_vars->insert(ffile->variableName(), QStringList(path));
-    } else
+    }
+    else
         kDebug(9032) << "error. File" << ffile->filenames() << "not found";
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
@@ -804,7 +821,8 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         }
     }
 
-    foreach(KProcess* p, procs) {
+    foreach(KProcess* p, procs)
+    {
         if(!p->waitForFinished())
         {
             kDebug(9042) << "error: failed to execute:" << p;
@@ -884,7 +902,8 @@ int CMakeProjectVisitor::visit(const MathAst *math)
     QScriptEngine eng;
     QScriptValue result = eng.evaluate(math->expression());
 
-    if (result.isError()) {
+    if (result.isError())
+    {
         kDebug(9032) << "error: found an error while calculating" << math->expression();
     }
     kDebug(9042) << "math. " << math->expression() << "=" << result.toString();
@@ -896,7 +915,8 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     QString val, path=filecomp->fileName();
     
-    switch(filecomp->type()) {
+    switch(filecomp->type())
+    {
         case GetFilenameComponentAst::PATH:
             val=path.mid(0, path.lastIndexOf('/'));
             break;
@@ -931,7 +951,8 @@ int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
     kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
     
-    if(!m_vars->contains(opt->variableName())) {
+    if(!m_vars->contains(opt->variableName()))
+    {
         m_vars->insert(opt->variableName(), QStringList(opt->defaultValue()));
     }
     return 1;
@@ -1030,7 +1051,8 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 {
                     depth++;
                 }
-                else if(it->name.toLower()=="endforeach") {
+                else if(it->name.toLower()=="endforeach")
+                {
                     depth--;
                 }
             }
@@ -1075,7 +1097,8 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     foreach(const QString& in, sast->input())
                     {
                         int match=rx.indexIn(in);
-                        if(match>0) {
+                        if(match>0)
+                        {
                             res += in.mid(match, rx.matchedLength());
                         }
                     }
@@ -1090,7 +1113,10 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         QStringList info = rx.capturedTexts();
                         int idx = sast->replace().right(sast->replace().size()-1).toInt();
 //                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
-                        res.append(info[idx]);
+                        if(idx>=info.count())
+                            kDebug(9032) << "error: not matched regex";
+                        else
+                            res.append(info[idx]);
                     }
                     else
                     {
@@ -1209,7 +1235,9 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
 {
     kDebug(9042) << "CustomCommand" << ccast->outputs();
     if(ccast->isForTarget())
-    {}
+    {
+        //TODO: implement me
+    }
     else
     {
         foreach(const QString& out, ccast->outputs())
@@ -1265,10 +1293,10 @@ int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
             kDebug(9042) << "error: definition not matched" << def;
         QStringList captured=rx.capturedTexts();
         
-        QString name, value;
+        QString name;
         name=captured[1];
         m_defs.remove(name);
-        kDebug(9042) << "added definition" << name << "=" << value << " from " << def;
+        kDebug(9042) << "removed definition" << name << " from " << def;
     }
     return 1;
 }
