@@ -68,7 +68,7 @@ class NETWORK_EXPORT BasicServer : protected ost::Thread, public WeakSafeShared 
 
   protected:
 
-    ///this one is called from within another ost::Thread, so it is more useful to override processMessage(...) in the teamwork-server than this one
+    ///this one is called from within another Thread, so it is more useful to override processMessage(...) in the teamwork-server than this one
     virtual bool handleMessage( MessagePointer msg ) throw();
 
     virtual LoggerPrinter err();
@@ -77,14 +77,14 @@ class NETWORK_EXPORT BasicServer : protected ost::Thread, public WeakSafeShared 
 
     virtual void run();
 
-    /**This is called once at the beginning of the ost::Thread*/
+    /**This is called once at the beginning of the Thread*/
     virtual void initial();
 
-    /**Gets called regularly from within the server-ost::Thread
+    /**Gets called regularly from within the server-Thread
     should be overridden, can return whether it needs more cpu-time*/
     virtual bool think();
 
-    /**This is called once at end of the ost::Thread*/
+    /**This is called once at end of the Thread*/
     virtual void final( void );
 
     /**In this function, the derived class should take the ownership of the session. If it refuses the ownership, it can return false.
@@ -92,13 +92,14 @@ class NETWORK_EXPORT BasicServer : protected ost::Thread, public WeakSafeShared 
     Must be ovverridden. */
     virtual bool registerSession( SessionPointer /*session*/ );
 
-    ///After this is called, the object may well be deleted
-    void clearSelfPointer();
-
+    ///Returns a logger object that allows logging to the correct places
     LoggerPointer& logger();
   protected:
     MessageTypeSet& messageTypes_;
   private:
+    ///This object is possible deleted during this call
+    void clearSelfPointer();
+  
     friend class HandlerProxy<BasicServer>;
     ost::BroadcastAddress addr;
     LoggerPointer logger_;
