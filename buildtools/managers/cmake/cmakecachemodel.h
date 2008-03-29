@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,10 @@ class CMakeCacheModel : public QStandardItemModel
         bool isAdvanced(int i) const;
         bool isInternal(int i) const;
         
-        QList<QModelIndex> persistentIndexs() const;
+        QList<QModelIndex> persistentIndices() const;
     private slots:
         void edited() { m_changed=true; }
+        
     private:
         bool writeBack(const KUrl& path) const;
         

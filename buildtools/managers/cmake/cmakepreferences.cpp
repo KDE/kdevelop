@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,12 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->setEnabled(true);
         connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
                 this, SLOT( cacheEdited( QStandardItem * ) ));
+        
+        foreach(const QModelIndex &idx, m_currentModel->persistentIndices())
+        {
+            kDebug() << "lalalala" << m_currentModel->data(idx) << m_currentModel->data(idx.sibling(idx.row(), 0));
+            m_prefsUi->cacheList->openPersistentEditor(idx);
+        }
         
         showInternal(m_prefsUi->showInternal->checkState());
     }

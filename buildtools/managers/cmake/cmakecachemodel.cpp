@@ -219,14 +219,15 @@ bool CMakeCacheModel::isInternal(int i) const
     return isInt;
 }
 
-QList< QModelIndex > CMakeCacheModel::persistentIndexs() const
+QList< QModelIndex > CMakeCacheModel::persistentIndices() const
 {
     QList< QModelIndex > ret;
     for(int i=0; i<rowCount(); i++)
     {
         QStandardItem* type = item(i, 1);
+        QStandardItem* valu = item(i, 2);
         if(type->text()=="BOOL")
-            ret.append(type->index());
+            ret.append(valu->index());
     }
     return ret;
 }

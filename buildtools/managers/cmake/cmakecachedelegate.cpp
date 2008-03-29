@@ -35,7 +35,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="FILEPATH") {
+        if(type=="PATH" || type=="FILEPATH") {
             return new QLineEdit(parent);
         } else if(type=="STRING" || type=="STATIC") {
             return new QLineEdit(parent);
@@ -55,7 +55,7 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
         QString value=index.model()->data(index, Qt::DisplayRole).toString();
-        if(type=="FILEPATH" || type=="STRING" || type=="STATIC")
+        if(type=="FILEPATH" || type=="PATH" || type=="STRING" || type=="STATIC")
         {
             QLineEdit *line=qobject_cast<QLineEdit*>(editor);
             line->setText(value);
@@ -79,7 +79,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=model->data(typeIdx, Qt::DisplayRole).toString();
         QString value;
-        if(type=="FILEPATH" || type=="STRING" || type=="STATIC")
+        if(type=="FILEPATH" || type=="PATH" || type=="STRING" || type=="STATIC")
         {
             QLineEdit *line=qobject_cast<QLineEdit*>(editor);
             value=line->text();
@@ -87,10 +87,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         else if(type=="BOOL")
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
-            if(boolean->isChecked())
-                value="ON";
-            else
-                value="OFF";
+            value = boolean->isChecked() ? "ON" : "OFF";
         }
         else
             kDebug(9032) << "Did not recognize type " << type;
@@ -100,5 +97,16 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         kDebug(9032) << "Error. trying to edit a read-only field";
 }
 
+void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
+    if(index.column()==2)
+    {
+        QModelIndex typeIdx=index.sibling(index.row(), 1);
+        QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
+        if(type=="BOOL")
+            return;
+    }
+    QItemDelegate::paint(painter, option, index);
+}
 
 #include "cmakecachedelegate.moc"
