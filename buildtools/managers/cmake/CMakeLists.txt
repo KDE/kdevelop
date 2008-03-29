@@ -35,6 +35,7 @@ set( cmakemanager_SRCS
 set( cmakesettings_SRCS
   cmakepreferences.cpp
   cmakecachemodel.cpp
+  cmakecachedelegate.cpp
   cmakebuilddircreator.cpp
 )
 

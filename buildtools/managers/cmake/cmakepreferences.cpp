@@ -25,6 +25,7 @@
 #include <kpluginloader.h>
 
 #include "ui_cmakebuildsettings.h"
+#include "cmakecachedelegate.h"
 #include "cmakebuilddircreator.h"
 #include "cmakeconfig.h"
 #include <KUrl>
@@ -47,6 +48,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());
+    m_prefsUi->cacheList->setItemDelegate(new CMakeCacheDelegate(m_prefsUi->cacheList));
     addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
@@ -55,14 +57,11 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
             this, SLOT(listSelectionChanged ( const QModelIndex & )));
     connect(m_prefsUi->showInternal, SIGNAL( stateChanged ( int ) ),
             this, SLOT(showInternal ( int )));
-    connect(m_prefsUi->addBuildDir, SIGNAL(pressed()),
-            this, SLOT(createBuildDir()));
-    connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()),
-            this, SLOT(removeBuildDir()));
+    connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
+    connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
     
     showInternal(m_prefsUi->showInternal->checkState());
-    //TODO: This will break when the kdevelop project file is not inside the source dir
     m_srcFolder=KUrl(args[1].toString());
     m_srcFolder=m_srcFolder.upUrl();
     kDebug(9042) << "Source folder: " << m_srcFolder << args[1].toString();
@@ -147,7 +146,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        kDebug(9032) << "did not exist " << file;
+        kDebug(9032) << "Did not exist " << file;
         if(m_currentModel)
             m_currentModel->clear();
         m_prefsUi->cacheList->setEnabled(false);
@@ -156,7 +155,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
 
 void CMakePreferences::listSelectionChanged(const QModelIndex & index)
 {
-    kDebug(9032) << "item " << index << " selected";
+    kDebug(9042) << "item " << index << " selected";
     QModelIndex idx = index.sibling(index.row(), 3);
     QModelIndex idxType = index.sibling(index.row(), 1);
     QString comment=QString("%1. %2")

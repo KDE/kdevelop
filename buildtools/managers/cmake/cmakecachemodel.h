@@ -45,6 +45,8 @@ class CMakeCacheModel : public QStandardItemModel
         QString value(const QString& name) const;
         bool isAdvanced(int i) const;
         bool isInternal(int i) const;
+        
+        QList<QModelIndex> persistentIndexs() const;
     private slots:
         void edited() { m_changed=true; }
     private:
