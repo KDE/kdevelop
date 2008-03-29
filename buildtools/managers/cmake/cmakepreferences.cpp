@@ -118,6 +118,13 @@ void CMakePreferences::save()
     kDebug(9042) << "doing real save from ProjectKCModule";
     ProjectKCModule<CMakeSettings>::save();
     CMakeSettings::self()->writeConfig();
+    
+    KProcess cmakeproc;
+    cmakeproc << m_currentModel->value("CMAKE_COMMAND") << m_prefsUi->buildDirs->currentText();
+    cmakeproc.start();
+    cmakeproc.waitForFinished();
+    if(cmakeproc.exitCode())
+        kDebug(9032) << "error. didn't generate a correct cache file";
 }
 
 void CMakePreferences::defaults()
@@ -174,12 +181,14 @@ void CMakePreferences::showInternal(int state)
 {
     if(!m_currentModel)
         return;
+
     bool showAdv=(state==Qt::Unchecked);
     for(int i=0; i<m_currentModel->rowCount(); i++)
     {
         bool shown=m_currentModel->isInternal(i);
         if(showAdv && !shown)
             shown=m_currentModel->isAdvanced(i);
+
         m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), shown);
     }
 }
