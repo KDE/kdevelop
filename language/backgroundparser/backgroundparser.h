@@ -96,7 +96,13 @@ public:
     void setDelay(int miliseconds);
 
 Q_SIGNALS:
-    ///Emitted whenever a document parse-job has finished. The job contains the du-chain(if one was created) etc.
+    /** 
+	 * Emitted whenever a document parse-job has finished. 
+	 * The job contains the du-chain(if one was created) etc.
+	 *
+	 * The job is deleted after this signal has been emitted.  Receivers should not hold
+	 * references to it.
+	 */
     void parseJobFinished(KDevelop::ParseJob* job);
 
     // Implementations of IStatus signals
