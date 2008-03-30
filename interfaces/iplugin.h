@@ -180,7 +180,13 @@ public:
         return qt_extension<Extension*>( extensionManager(), this );
     }
 
-    virtual QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+    /**
+     * ask the plugin for a list of actions and a label for a submenu entry.
+     * The actions will get included in the to-be-displayed context menu
+     * @param context the context describing where the context menu was requested
+     * @returns the actions to be used in a submenu
+     */
+    virtual QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* context );
 
 public Q_SLOTS:
     /**
