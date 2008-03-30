@@ -1,6 +1,7 @@
 [Global]
 IconName=kdevelop
 Comment=KDevelop
+Comment[hi]=के-डेवलप
 Comment[x-test]=xxKDevelopxx
 
 [Event/ProcessSuccess]
@@ -13,6 +14,7 @@ Name[eu]=Prozesu zuzena
 Name[fr]=Processus réussi
 Name[ga]=D'éirigh leis an bpróiseas
 Name[gl]=Proceso rematado con éxito
+Name[hi]=प्रक्रिया सफल
 Name[hu]=Sikeres folyamat
 Name[it]=Processo riuscito
 Name[ja]=プロセス成功
@@ -44,6 +46,7 @@ Comment[eu]=Prozesua ongi amaitu da
 Comment[fr]=Le processus s'est terminé avec succès
 Comment[ga]=D'éirigh leis an bpróiseas
 Comment[gl]=O proceso rematou con éxito
+Comment[hi]=प्रक्रिया सफलतापूर्वक पूर्ण
 Comment[hu]=A folyamat sikeresen befejeződött
 Comment[it]=Processo terminato correttamente
 Comment[ja]=プロセスは成功しました。
@@ -78,6 +81,7 @@ Name[eu]=Prozesu errorea
 Name[fr]=Erreur du processus
 Name[ga]=Earráid sa phróiseas
 Name[gl]=Erro do proceso
+Name[hi]=प्रक्रिया त्रुटि
 Name[hu]=Hibás folyamat
 Name[it]=Errore di processo
 Name[ja]=プロセスエラー
@@ -110,6 +114,7 @@ Comment[eu]=Prozesua erroreekin amaitu da
 Comment[fr]=Le processus s'est terminé avec des erreurs
 Comment[ga]=Chríochnaigh an próiseas le hearráidí
 Comment[gl]=O proceso rematou con éxito
+Comment[hi]=प्रक्रिया त्रुटि के साथ पूर्ण
 Comment[hu]=A folyamat hibajelzéssel fejeződött be
 Comment[it]=Processo terminato con errori
 Comment[ja]=プロセスはエラーを起こし、終了しました。
