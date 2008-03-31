@@ -552,7 +552,8 @@ DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::
 DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   DUContext* ret = 0L;
-
+  if(range.start > range.end)
+    kDebug(9007) << "Bad context-range" << range.textRange();
   {
     DUChainReadLocker readLock(DUChain::lock());
 
@@ -589,10 +590,19 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 
+#ifdef DEBUG_CONTEXT_RANGES
+      checkRanges();
+#endif
+      
       ret = new CppDUContext<DUContext>(m_editor->currentUrl(), SimpleRange(range), m_contextStack.isEmpty() ? 0 : currentContext());
       ret->setSmartRange(m_editor->createRange(range.textRange()), DocumentRangeObject::Own);
       ret->setType(type);
 
+#ifdef DEBUG_CONTEXT_RANGES
+      m_contextRanges[ret] = range;
+      checkRanges();
+#endif
+      
       if (!identifier.isEmpty()) {
         ret->setLocalScopeIdentifier(identifier);
 
@@ -618,6 +628,20 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
 
   return ret;
 }
+
+#ifdef DEBUG_CONTEXT_RANGES
+void ContextBuilder::checkRanges()
+{
+  for(QHash<KDevelop::DUContext*, KDevelop::SimpleRange>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
+    if(it.key()->range() != *it) {
+      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it).textRange() << "to" << it.key()->range().textRange() << "at\n" << kBacktrace();
+      it = m_contextRanges.erase(it); //Remove it so we see each change only once
+    }else{
+      ++it;
+    }
+  }
+}
+#endif
 
 void ContextBuilder::openContext(DUContext* newContext)
 {

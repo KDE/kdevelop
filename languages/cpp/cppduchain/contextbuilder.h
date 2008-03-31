@@ -32,6 +32,8 @@
 #include <ksharedptr.h>
 #include "cppduchainexport.h"
 
+//Uncomment this to debug what happens to context ranges when new ones are inserted
+//#define DEBUG_CONTEXT_RANGES
 
 namespace KDevelop
 {
@@ -220,6 +222,10 @@ protected:
 
   inline int& nextContextIndex() { return m_nextContextStack.top(); }
 
+#ifdef DEBUG_CONTEXT_RANGES
+  void checkRanges();
+  QHash<KDevelop::DUContext*, KDevelop::SimpleRange> m_contextRanges;
+#endif
 
   QList<KDevelop::DUContext*> m_importedParentContexts;
 };
