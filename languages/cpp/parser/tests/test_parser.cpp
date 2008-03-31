@@ -206,7 +206,7 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     
-    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QString("TranslationUnitComment"));
+    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QString("TranslationUnitComment")); //The comments were merged
 
     const ListNode<DeclarationAST*>* it = ast->declarations;
     QVERIFY(it);
@@ -216,11 +216,11 @@ private slots:
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello2\n(behind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("between\nHello2\n(behind)"));
     
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("beforeTest\n(testBehind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello3\nbeforeTest\n(testBehind)"));
   }
 
   void testComments2()
@@ -278,7 +278,7 @@ private slots:
   
   void testComments4()
   {
-    QByteArray method("//Comment\ntemplate<class C> class Class{};");
+    QByteArray method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
@@ -290,7 +290,15 @@ private slots:
     QVERIFY(templDecl);
     QVERIFY(templDecl->declaration);
 
-    QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
+    //QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
+  }
+
+  void testPreprocessor() {
+    rpp::Preprocessor preprocessor;
+    QCOMPARE(preprocessor.processString("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
+    QCOMPARE(preprocessor.processString("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
+    QCOMPARE(preprocessor.processString("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
+    
   }
   
   void testStringConcatenation()
