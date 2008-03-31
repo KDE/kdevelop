@@ -851,8 +851,14 @@ QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const
 
   HashedString word(found.first.first);
   SimpleRange wordRange(found.first.second);
+
+  //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
+  DUChainReadLocker lock(DUChain::lock(), 100);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain in time";
+    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+  }
   
-  DUChainReadLocker lock(DUChain::lock());
   TopDUContext* ctx = standardContext(url, true);
   if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
