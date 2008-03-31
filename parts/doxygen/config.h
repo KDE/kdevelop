@@ -49,6 +49,7 @@ class ConfigOption
 
     QCString dependsOn() const { return m_dependency; }
     void addDependency(const char *dep) { m_dependency = dep; }
+    void setEncoding(const QCString &e) { m_encoding = e; }
 
   protected:
     virtual void writeTemplate(QTextStream &t,bool sl,bool upd) = 0;
@@ -66,6 +67,7 @@ class ConfigOption
     QCString m_name;
     QCString m_doc;
     QCString m_dependency;
+    QCString m_encoding;
     OptionType m_kind;
 };
 
@@ -356,6 +358,7 @@ class Config
     static void deleteInstance()
     {
       delete m_instance;
+      m_instance=0;
     }
     
     /*! Returns an iterator that can by used to iterate over the 
