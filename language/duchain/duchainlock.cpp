@@ -116,6 +116,7 @@ public:
   }
   DUChainLock* m_lock;
   bool m_locked;
+  int m_timeout;
 };
 
 
@@ -135,6 +136,9 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   kDebug(9505) << "DUChain read lock requested by thread:" << QThread::currentThreadId();
 #endif
 
+  if(timeout == 0)
+    timeout = 10000;
+  
   QMutexLocker lock(&d->m_mutex);
 
   unsigned int currentTime = 0;
@@ -214,12 +218,15 @@ bool DUChainLock::currentThreadHasReadLock()
     return false;
 }
 
-bool DUChainLock::lockForWrite()
+bool DUChainLock::lockForWrite(uint timeout)
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
   kDebug(9505) << "DUChain write lock requested by thread:" << QThread::currentThreadId();
 #endif
 
+  if(timeout == 0)
+    timeout = 10000;
+  
   QMutexLocker lock(&d->m_mutex);
   //It is not allowed to acquire a write-lock while holding read-lock 
   Q_ASSERT(d->ownReaderRecursion() == 0);
@@ -230,7 +237,7 @@ bool DUChainLock::lockForWrite()
   ///@todo use some wake-up queue instead of sleeping
   // 10 second timeout...
   
-  while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < 10000) {
+  while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < timeout) {
     lock.unlock();
     usleep(10000);
     currentTime++;
@@ -278,15 +285,20 @@ bool DUChainLock::currentThreadHasWriteLock()
 }
 
 
-DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock) : m_locked(false)
+DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout) : m_locked(false), m_timeout(timeout)
 {
   m_lock = duChainLock;
+  m_timeout = timeout;
   lock();
 }
 
 DUChainReadLocker::~DUChainReadLocker()
 {
   unlock();
+}
+
+bool DUChainReadLocker::locked() const {
+  return m_locked;
 }
 
 bool DUChainReadLocker::lock()
@@ -296,8 +308,8 @@ bool DUChainReadLocker::lock()
   
   bool l = false;
   if (m_lock) {
-    l = m_lock->lockForRead();
-    Q_ASSERT(l);
+    l = m_lock->lockForRead(m_timeout);
+    Q_ASSERT(m_timeout || l);
   };
 
   m_locked = l;
@@ -314,9 +326,10 @@ void DUChainReadLocker::unlock()
 }
 
 
-DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock)
+DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock, uint timeout)
   : d(new DUChainWriteLockerPrivate)
 {
+  d->m_timeout = timeout;
   d->m_lock = duChainLock;
   lock();
 }
@@ -333,13 +346,17 @@ bool DUChainWriteLocker::lock()
   
   bool l = false;
   if (d->m_lock) {
-    l = d->m_lock->lockForWrite();
-    Q_ASSERT(l);
+    l = d->m_lock->lockForWrite(d->m_timeout);
+    Q_ASSERT(d->m_timeout || l);
   };
 
   d->m_locked = l;
   
   return l;
+}
+
+bool DUChainWriteLocker::locked() const {
+  return d->m_locked;
 }
 
 void DUChainWriteLocker::unlock()

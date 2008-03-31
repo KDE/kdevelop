@@ -89,7 +89,7 @@ public:
    * there is a write lock.  Read locks are recursive.
    * That means that a thread can acquire a read-lock when it already
    * has an arbitrary count of read- and write-locks acquired.
-   * @param timeout A locking timeout in milliseconds. If it is reached, and the lock could not be acquired, false is returned.
+   * @param timeout A locking timeout in milliseconds. If it is reached, and the lock could not be acquired, false is returned. If null, the default timeout is used.
    */
   bool lockForRead(unsigned int timeout);
 
@@ -121,9 +121,11 @@ public:
    * Write locks are recursive. That means that they can by acquired by threads
    * that already have an arbitrary count of write-locks acquired.
    *
+   * @param timeout A timeout in milliseconds. If zero, the default-timeout is used(Currently 10 seconds).
+   * 
    * WARNING: Write-locks can NOT be acquired by threads that already have a read-lock.
    */
-  bool lockForWrite();
+  bool lockForWrite(uint timeout = 0);
 
   /**
    * Releases a previously acquired write lock.
@@ -142,25 +144,36 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
 public:
-  DUChainReadLocker(DUChainLock* duChainLock);
+  ///@param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+  DUChainReadLocker(DUChainLock* duChainLock, uint timeout = 0);
   ~DUChainReadLocker();
 
+  ///Uses the same timeout given to the constructor
   bool lock();
   void unlock();
 
+  ///Returns true if a lock was requested and the lock succeeded, else false
+  bool locked() const;
+  
 private:
   DUChainLock* m_lock;
   bool m_locked;
+  uint m_timeout;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {
 public:
-  DUChainWriteLocker(DUChainLock* duChainLock);
+  ///@param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+  DUChainWriteLocker(DUChainLock* duChainLock, uint timeout = 0);
   ~DUChainWriteLocker();
 
+  ///Uses the same timeout given to the constructor
   bool lock();
   void unlock();
+
+  ///Returns true if a lock was requested and the lock succeeded, else false
+  bool locked() const;
 
 private:
   class DUChainWriteLockerPrivate* const d;
