@@ -402,6 +402,12 @@ void pp::handle_define (Stream& input)
 
   while (!input.atEnd() && input != '\n')
   {
+    if(input == '/' && (input.peek() == '/' || input.peek() == '*')) {
+      skip_comment_or_divop(input, devnull());
+      if(input != '\n')
+        skip_blanks (input, devnull());
+      continue;
+    }
     if (input == '\\')
     {
       int pos = input.offset();
