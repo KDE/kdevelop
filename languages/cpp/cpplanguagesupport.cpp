@@ -565,7 +565,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
             ///@todo remote directories?
             m_includeResolver->setOutOfSourceBuildSystem(projectDirectory.path(), effectiveBuildDirectory.path());
         } else {
-            if(!projectDirectory.isEmpty()) {
+            if(!projectDirectory.isEmpty() && problems) {
                 //Report that the build-manager did not return the build-directory, for debugging
                 KDevelop::Problem* newProblem = new Problem;
                 newProblem->setSource(KDevelop::Problem::Preprocessor);
