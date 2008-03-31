@@ -119,6 +119,7 @@ void CMakePreferences::save()
     ProjectKCModule<CMakeSettings>::save();
     CMakeSettings::self()->writeConfig();
     
+    //We run cmake on the builddir to generate it 
     KProcess cmakeproc;
     cmakeproc << m_currentModel->value("CMAKE_COMMAND") << m_prefsUi->buildDirs->currentText();
     cmakeproc.start();
@@ -204,7 +205,8 @@ void CMakePreferences::createBuildDir()
 {
     CMakeBuildDirCreator bdCreator(m_srcFolder, this);
     //TODO: if there is information, use it to initialize the dialog
-    if(bdCreator.exec()) {
+    if(bdCreator.exec())
+    {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
@@ -216,7 +218,9 @@ void CMakePreferences::removeBuildDir()
 {
     int curr=m_prefsUi->buildDirs->currentIndex();
     if(curr>=0)
+    {
         m_prefsUi->buildDirs->removeItem(curr);
+    }
     emit changed(true);
 }
 

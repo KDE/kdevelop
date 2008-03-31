@@ -159,7 +159,7 @@ astDef =<<AST_EOF
 {
 }
 
-void #{className}::writeBack( QString& )
+void #{className}::writeBack( QString& ) const
 {
 }
 

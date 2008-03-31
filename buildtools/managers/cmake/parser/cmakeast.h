@@ -813,14 +813,28 @@ CMAKE_BEGIN_AST_CLASS( CMakePolicyAst )
 enum Action { VERSION, SET, PUSH, POP };
 CMAKE_ADD_AST_MEMBER( Action, Action, action, Action )
         //VERSION
-        CMAKE_ADD_AST_MEMBER( QList<int>, QList<int>, version, Version )
+        CMAKE_ADD_AST_MEMBER( QList<int>, const QList<int>&, version, Version )
         
         //SET
         CMAKE_ADD_AST_MEMBER( int, int, policyNum, PolicyNum)
         CMAKE_ADD_AST_MEMBER( bool, bool, isNew, New)
 CMAKE_END_AST_CLASS( CMakePolicyAst )
 
+
+CMAKE_BEGIN_AST_CLASS( ExportAst )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, targets, Targets)
+CMAKE_ADD_AST_MEMBER( QString, const QString &, targetNamespace, TargetNamespace)
+CMAKE_ADD_AST_MEMBER( bool, bool, append, append)
+CMAKE_ADD_AST_MEMBER( QString, const QString &, filename, filename)
+CMAKE_END_AST_CLASS( ExportAst )
+
+
+CMAKE_BEGIN_AST_CLASS( ReturnAst )
+CMAKE_END_AST_CLASS( ReturnAst )
+
 #endif
+
+
 
 
 

@@ -52,6 +52,7 @@ CMAKE_REGISTER_AST( EnableLanguageAst, enable_language )
 CMAKE_REGISTER_AST( EnableTestingAst, enable_testing )
 CMAKE_REGISTER_AST( ExecProgramAst, exec_program )
 CMAKE_REGISTER_AST( ExecuteProcessAst, execute_process )
+CMAKE_REGISTER_AST( ExportAst, export)
 CMAKE_REGISTER_AST( ExportLibraryDepsAst, export_library_dependencies)
 CMAKE_REGISTER_AST( FileAst, file )
 CMAKE_REGISTER_AST( FindFileAst, find_file )
@@ -87,6 +88,7 @@ CMAKE_REGISTER_AST( OptionAst, option )
 CMAKE_REGISTER_AST( OutputRequiredFilesAst, output_required_files )
 CMAKE_REGISTER_AST( ProjectAst, project )
 CMAKE_REGISTER_AST( RemoveAst, remove )
+CMAKE_REGISTER_AST( ReturnAst, return )
 CMAKE_REGISTER_AST( RemoveDefinitionsAst, remove_definitions )
 CMAKE_REGISTER_AST( SetAst, set )
 CMAKE_REGISTER_AST( SetDirectoryPropsAst, set_directory_properties )
@@ -3550,5 +3552,80 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return func.arguments.isEmpty();
     }
     return false;
+}
+
+ExportAst::ExportAst()
+{
+}
+
+ExportAst::~ExportAst()
+{
+}
+
+void ExportAst::writeBack( QString& ) const
+{
+}
+
+bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="export" || func.arguments.count() < 2 || func.arguments[0].value!="TARGETS")
+        return false;
+    
+    enum Option { TARGETS, NAMESPACE, FILE };
+    Option opt=TARGETS;
+    foreach(const CMakeFunctionArgument& arg, func.arguments)
+    {
+        if(arg.value=="TARGETS")
+        {
+            if(opt!=TARGETS)
+                return false;
+        }
+        else if(arg.value=="NAMESPACE")
+        {
+            opt=NAMESPACE;
+        }
+        else if(arg.value=="FILE")
+        {
+            opt=FILE;
+        }
+        else if(arg.value=="APPEND")
+        {
+            m_append=true;
+        }
+        else
+        {
+            switch(opt)
+            {
+                case TARGETS:
+                    m_targets.append(arg.value);
+                    break;
+                case NAMESPACE:
+                    m_targetNamespace=arg.value;
+                    break;
+                case FILE:
+                    m_filename=arg.value;
+                    break;
+            }
+            opt=TARGETS;
+        }
+    }
+    return !m_targets.isEmpty();
+}
+
+ReturnAst::ReturnAst()
+{
+}
+
+ReturnAst::~ReturnAst()
+{
+}
+
+void ReturnAst::writeBack( QString& ) const
+{
+}
+
+bool ReturnAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    return func.arguments.isEmpty() && func.name.toLower()=="return";
 }
 

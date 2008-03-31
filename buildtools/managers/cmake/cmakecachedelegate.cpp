@@ -35,12 +35,13 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="PATH" || type=="FILEPATH") {
-            return new QLineEdit(parent);
-        } else if(type=="STRING" || type=="STATIC") {
-            return new QLineEdit(parent);
-        } else if(type=="BOOL") {
+        if(type=="BOOL")
+        {
             return new QCheckBox(parent);
+        }
+        else
+        {
+            return QItemDelegate::createEditor(parent, option, index);
         }
         
         kDebug(9032) << "Did not recognize type " << type;
@@ -55,18 +56,15 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
         QString value=index.model()->data(index, Qt::DisplayRole).toString();
-        if(type=="FILEPATH" || type=="PATH" || type=="STRING" || type=="STATIC")
-        {
-            QLineEdit *line=qobject_cast<QLineEdit*>(editor);
-            line->setText(value);
-        }
-        else if(type=="BOOL")
+        if(type=="BOOL")
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
             boolean->setCheckState(value=="ON" ? Qt::Checked : Qt::Unchecked);
         }
         else
-            kDebug(9032) << "Did not recognize type " << type;
+        {
+            QItemDelegate::setEditorData(editor, index);
+        }
     }
     else
         kDebug(9032) << "Error. trying to edit a read-only field";
@@ -79,18 +77,16 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=model->data(typeIdx, Qt::DisplayRole).toString();
         QString value;
-        if(type=="FILEPATH" || type=="PATH" || type=="STRING" || type=="STATIC")
-        {
-            QLineEdit *line=qobject_cast<QLineEdit*>(editor);
-            value=line->text();
-        }
-        else if(type=="BOOL")
+        if(type=="BOOL")
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
             value = boolean->isChecked() ? "ON" : "OFF";
         }
         else
-            kDebug(9032) << "Did not recognize type " << type;
+        {
+            QItemDelegate::setModelData(editor, model, index);
+            return;
+        }
         model->setData(index, value, Qt::DisplayRole);
     }
     else
