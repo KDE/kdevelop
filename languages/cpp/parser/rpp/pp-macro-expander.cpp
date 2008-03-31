@@ -332,6 +332,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               as.setOriginalInputPosition(input.originalInputPosition());///@todo What does originalInputPosition mean?
 
               rpp::LocationTable table;
+              table.anchor(0, actualStart);
               Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
               
@@ -365,6 +366,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
               QByteArray actualText;
               rpp::LocationTable table;
+              table.anchor(0, actualStart);
               Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
               
