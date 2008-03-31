@@ -126,7 +126,8 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
 
   KUrl url = view->document()->url();
 
-  if( !KDevelop::DUChain::lock()->lockForRead(400) ) {
+  DUChainReadLocker lock(DUChain::lock(), 400);
+  if( !lock.locked() ) {
     kDebug(9007) << "could not lock du-chain in time";
     return;
   }
@@ -155,18 +156,15 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
           m_completionItems.clear();
           m_navigationWidgets.clear();
           reset();
-          DUChain::lock()->releaseReadLock();
           return;
         }
     }
 
-    DUChain::lock()->releaseReadLock();
+    lock.unlock();
 
     emit completionsNeeded(thisContext, range.start(), view);
-
   } else {
     kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
-    DUChain::lock()->releaseReadLock();
   }
 }
 
