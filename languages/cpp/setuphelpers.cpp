@@ -110,6 +110,11 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
       m.definition = "const";
       macros.insert( m );
     }
+    {
+      rpp::pp_macro m("__null");
+      m.definition = "0";
+      macros.insert( m );
+    }
 
     {
       //Used in several gcc headers
