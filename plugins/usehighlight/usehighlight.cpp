@@ -62,6 +62,7 @@ UseHighlightPlugin::UseHighlightPlugin(QObject *parent, const QVariantList&)
 
 UseHighlightPlugin::~UseHighlightPlugin()
 {
+  ///@todo unregister from all ranges that were registered earlier! Else we may get a crash within kate while destruction.
 }
 
 void UseHighlightPlugin::unload()
