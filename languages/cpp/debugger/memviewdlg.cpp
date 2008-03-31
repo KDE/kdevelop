@@ -418,6 +418,7 @@ namespace GDBDebugger
       m_plugin(plugin),
       controller_(controller)
     {
+//         setWindowIcon(KIcon("math_brace"));
         setWindowIcon(KIcon("debugger"));
         setWindowTitle(i18n("Special debugger views"));
 
