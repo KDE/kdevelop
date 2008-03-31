@@ -437,6 +437,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
              hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ) )
          )
       {
+        if(currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
+          continue;
         if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
           continue;
         } else if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
@@ -459,7 +461,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
         // Update access policy if needed
         if (currentContext()->type() == DUContext::Class) {
-          ClassMemberDeclaration* classDeclaration = static_cast<ClassMemberDeclaration*>(declaration);
+          ClassMemberDeclaration* classDeclaration = dynamic_cast<ClassMemberDeclaration*>(declaration);
+          Q_ASSERT(classDeclaration);
           if (classDeclaration->accessPolicy() != currentAccessPolicy()) {
             classDeclaration->setAccessPolicy(currentAccessPolicy());
           }
