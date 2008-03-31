@@ -231,6 +231,9 @@ private:
   const char *cursor;
   std::size_t index;
 
+  bool m_canMergeComment; //Whether we may append new comments to the last encountered one
+  bool m_firstInLine;   //Whether the next token is the first one in a line
+  
   ///scan table contains pointers to the methods to scan for various token types
   static scan_fun_ptr s_scan_table[];
   static scan_fun_ptr s_scan_keyword_table[];

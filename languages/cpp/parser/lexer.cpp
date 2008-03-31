@@ -126,6 +126,9 @@ void Lexer::tokenize(ParseSession* _session)
   if (!s_initialized)
     initialize_scan_table();
 
+  m_canMergeComment = false;
+  m_firstInLine = true;
+  
   session->token_stream->resize(1024);
   (*session->token_stream)[0].kind = Token_EOF;
   (*session->token_stream)[0].session = session;
@@ -148,6 +151,10 @@ void Lexer::tokenize(ParseSession* _session)
     current_token->size = cursor - session->contents() - current_token->position;
 
     Q_ASSERT(previousIndex == index-1 || previousIndex == index); //Never parse more than 1 token, because that won't be initialized correctly
+
+    if(previousIndex != index)
+    m_firstInLine = false;
+    
   } while (cursor < session->contents() + session->size()-1);
 
     if (index == session->token_stream->size())
@@ -302,6 +309,7 @@ void Lexer::scan_string_constant()
 void Lexer::scan_newline()
 {
   ++cursor;
+  m_firstInLine = true;
 }
 
 void Lexer::scan_white_spaces()
@@ -576,7 +584,15 @@ void Lexer::scan_divide()
       skipComment();
       if( cursor != commentBegin ) {
         ///Store the comment
-        if((*session->token_stream)[index-1].kind != Token_comment) {
+        if(!m_canMergeComment || (*session->token_stream)[index-1].kind != Token_comment) {
+
+          //Only allow appending to comments that are behind a newline, because else they may belong to the item on their left side.
+          //If index is 1, this comment is the first token, which should be the translation-unit comment. So do not merge following comments.
+          if(m_firstInLine && index != 1) 
+            m_canMergeComment = true;
+          else
+            m_canMergeComment = false;
+          
           (*session->token_stream)[index++].kind = Token_comment;
           (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
           (*session->token_stream)[index-1].position = commentBegin - session->contents();
