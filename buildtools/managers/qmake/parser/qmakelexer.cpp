@@ -40,6 +40,7 @@ bool isIdentifierCharacter( QChar* c )
              || c->unicode() == '.'
              || c->unicode() == '-'
              || c->unicode() == '$'
+             || c->unicode() == '*'
            );
 }
 
@@ -60,6 +61,7 @@ bool isEndIdentifierCharacter( QChar* c )
              || c->unicode() == '_'
              || c->unicode() == '.'
              || c->unicode() == '$'
+             || c->unicode() == '*'
            );
 }
 
