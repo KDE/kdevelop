@@ -84,7 +84,8 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
                                QWidget *parent)
 : QWidget(parent)
 {
-    setWindowIcon(KIcon("math_brace"));
+  //setWindowIcon(KIcon("math_brace"));
+    setWindowIcon(KIcon("debugger"));
     setWindowTitle(i18n("Debugger Variables"));
 
     varTree_ = new VariableTree(this, controller);

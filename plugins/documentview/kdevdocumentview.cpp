@@ -56,7 +56,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setObjectName( i18n( "Documents" ) );
 
-    setWindowIcon( SmallIcon( "kmultiple" ) );
+    setWindowIcon( SmallIcon( "document-multiple" ) );
     setWindowTitle( i18n( "Documents" ) );
     setWhatsThis( i18n( "Document View" ) );
 

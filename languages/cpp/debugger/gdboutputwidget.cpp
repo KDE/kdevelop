@@ -58,7 +58,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     showInternalCommands_(false),
     maxLines_(5000)
 {
-    setWindowIcon(KIcon("inline_image"));
+    setWindowIcon(KIcon("debugger"));
     setWindowTitle(i18n("GDB Output"));
     setToolTip(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
