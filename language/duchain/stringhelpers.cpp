@@ -88,6 +88,16 @@ int findClose( const QString& str , int pos )
       }
       continue;
       break;
+    case '\'':
+      last = str[a];
+      a++;
+      while( a < (int)str.length() && (str[a] != '\'' || last == '\\'))
+      {
+        last = str[a];
+        a++;
+      }
+      continue;
+      break;
     }
 
     last = str[a];
