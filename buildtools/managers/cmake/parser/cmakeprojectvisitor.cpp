@@ -48,6 +48,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
         if(iEnv.startsWith(start))
         {
             env=iEnv;
+            break;
         }
     }
 //     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
@@ -1272,8 +1273,8 @@ QPair<QString, QString> definition(const QString& param)
     if(!param.startsWith("-D"))
         return ret;
     int eq=param.indexOf('=', 2);
-    ret.first=param.mid(2, eq-1);
-    if(eq>=param.length())
+    ret.first=param.mid(2, eq-2);
+    if(eq>0)
         ret.second=param.mid(eq+1);
     return ret;
 }
