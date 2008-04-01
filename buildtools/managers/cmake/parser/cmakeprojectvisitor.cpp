@@ -41,25 +41,32 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 {
-    QStringList env = QProcess::systemEnvironment().filter(QRegExp('^'+varName+"=*"));
+    QString env;
+    QString start=QString("%1=").arg(varName);
+    foreach(const QString& iEnv, QProcess::systemEnvironment())
+    {
+        if(iEnv.startsWith(start))
+        {
+            env=iEnv;
+        }
+    }
 //     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
-    QChar separator;
     if(!env.isEmpty())
     {
+        QChar separator;
 #ifdef Q_OS_WIN
         separator = ';';
 #else
         separator = ':';
 #endif
-        env=env[0].split('=')[1].split(separator);
+        kDebug(9042) << "resolving env:" << varName << "=" << env;
+        return env.split('=')[1].split(separator);
     }
     else
     {
         kDebug(9032) << "error:" << varName << " not found";
         return QStringList();
     }
-    kDebug(9042) << "resolving env:" << varName << "=" << env;
-    return env;
 }
 
 QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type)
@@ -1259,44 +1266,47 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
+QPair<QString, QString> definition(const QString& param)
+{
+    QPair<QString, QString> ret;
+    if(!param.startsWith("-D"))
+        return ret;
+    int eq=param.indexOf('=', 2);
+    ret.first=param.mid(2, eq-1);
+    if(eq>=param.length())
+        ret.second=param.mid(eq+1);
+    return ret;
+}
+
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
 //     kDebug(9042) << "Adding defs: " << addDef->definitions();
-    QString regex="-D([A-Za-z0-9_]+)=?([A-Za-z0-9_]*)";
-    QRegExp rx(regex);
     foreach(const QString& def, addDef->definitions())
     {
-        if(def.isEmpty()) continue;
-        if(rx.indexIn(def)<0)
+        if(def.isEmpty())
+            continue;
+        QPair<QString, QString> definePair=definition(def);
+        if(definePair.first.isEmpty())
             kDebug(9042) << "error: definition not matched" << def;
-        QStringList captured=rx.capturedTexts();
         
-        QString name, value;
-        name=captured[1];
-        if(captured.count()==3)
-            value=captured[2];
-        m_defs[name]=value;
-        kDebug(9042) << "added definition" << name << "=" << value << " from " << def;
+        m_defs[definePair.first]=definePair.second;
+        kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;
     }
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
 {
-    QString regex="-D([A-Za-z0-9_]+)=?([A-Za-z0-9_]*)";
-    QRegExp rx(regex);
     foreach(const QString& def, remDef->definitions())
     {
         if(def.isEmpty())
             continue;
-        if(rx.indexIn(def)<0)
+        QPair<QString, QString> definePair=definition(def);
+        if(definePair.first.isEmpty())
             kDebug(9042) << "error: definition not matched" << def;
-        QStringList captured=rx.capturedTexts();
-        
-        QString name;
-        name=captured[1];
-        m_defs.remove(name);
-        kDebug(9042) << "removed definition" << name << " from " << def;
+
+        m_defs.remove(definePair.first);
+        kDebug(9042) << "removed definition" << definePair.first << " from " << def;
     }
     return 1;
 }
