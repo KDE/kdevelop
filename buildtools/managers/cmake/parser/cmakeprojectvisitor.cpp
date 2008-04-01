@@ -79,9 +79,10 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     int prev=-1;
     for(int i=0; i<count && !done; i++)
     {
-        if(exp[i]=='{')
+        const QChar& expi=exp[i];
+        if(expi=='{')
             prev=i;
-        if(exp[i]=='}' && i>0 && prev>0) {
+        if(expi=='}' && i>0 && prev>0) {
             if(exp[prev-1]=='$') {
                 name = exp.mid(prev+1, i-prev-1);
                 type=CMake;
@@ -288,13 +289,15 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 #ifndef Q_OS_WIN
         if(t==Library)
         {
+//             if(QFile::exists(file.toLocalFile()))
+//                 path=file;
             QDir direc(mpath);
-            QFileInfoList entries=direc.entryInfoList(QStringList(filename) << filename+".*");
+            QStringList entries=direc.entryList(QStringList(filename+"*"));
             kDebug(9042) << "lib entries" << entries.count() << mpath << filename;
             if(!entries.isEmpty())
             {
                 path=KUrl(mpath);
-                path.addPath(entries.first().fileName());
+                path.addPath(entries.first());
                 break;
             }
         }
@@ -822,7 +825,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         p->start();
         procs.append(p);
         kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-        
+
         if(prev)
         {
             prev->setStandardOutputProcess(p);
@@ -1323,7 +1326,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     CMakeFunctionDesc ret=exp;
     ret.arguments.clear();
     
-    foreach(CMakeFunctionArgument arg, exp.arguments)
+    foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
         VariableType t;
         variableName(arg.value, t);

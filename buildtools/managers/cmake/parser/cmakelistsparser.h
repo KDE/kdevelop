@@ -40,9 +40,14 @@ struct CMakeFunctionArgument
     
     CMakeFunctionArgument(const QString& v, bool q = false,
                           const QString& file = QString(), quint32 l = 0, quint32 c=0);
-    bool operator == (const CMakeFunctionArgument& r) const
+    inline bool operator == (const CMakeFunctionArgument& r) const
     {
         return (this->value == r.value) && (this->quoted == r.quoted);
+    }
+
+    inline bool operator != (const CMakeFunctionArgument& r) const
+    {
+        return (this->value != r.value) || (this->quoted != r.quoted);
     }
 
     bool operator==( const QString& rhs )
@@ -50,10 +55,6 @@ struct CMakeFunctionArgument
         return ( this->value == rhs );
     }
 
-    bool operator != (const CMakeFunctionArgument& r) const
-    {
-        return !(*this == r);
-    }
     QString unescapeValue(const QString& value);
 
     QString value;
