@@ -261,7 +261,6 @@ ELSE (_boost_IN_CACHE)
       #If nothing is found search again using system default paths
       FIND_PATH(Boost_INCLUDE_DIR
           NAMES         boost/config.hpp
-          PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
           PATH_SUFFIXES ${_boost_PATH_SUFFIX}
       )
  
