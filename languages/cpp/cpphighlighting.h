@@ -43,6 +43,8 @@ class Declaration;
 
 ///@todo make the colorized highlighting work while smart-conversion
 
+///The kate smart-mutex must be locked when this class is used. @todo Lock the smart-mutex selectively within CppHighlighting, to reduce GUI-Lockups
+
 typedef QVector<KDevelop::Declaration*> ColorMap;
 
 class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
@@ -92,7 +94,6 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     CppHighlighting(QObject* parent);
     virtual ~CppHighlighting();
 
-    void highlightTree(KTextEditor::SmartRange* topRange) const;
     void highlightDUChain(KDevelop::TopDUContext* context) const;
 
     void deleteHighlighting(KDevelop::DUContext* context) const;
@@ -111,6 +112,7 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
+  KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
     /**
      * @param context Should be the context from where the declaration is used, if a use is highlighted.
      * */
@@ -122,12 +124,16 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
 
     mutable QList<KTextEditor::Attribute::Ptr> m_depthAttributes;
 
+    //A temporary hash for speedup
+    mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
+  
     //Here the colors of function context are stored until they are merged into the function body
     mutable QMap<KDevelop::DUContextPointer, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
     mutable QMap<KDevelop::DUContextPointer, ColorMap> m_functionDeclarationsForColors;
 
   //Should be used to enable/disable the colorization of local variables and their uses
   bool m_localColorization;
+  mutable bool m_useClassCache;
 };
 
 #endif

@@ -41,7 +41,7 @@ uint colors[] = {0x421919/* gray red */, 0x422f19 /* gray orange */,0x2a4219 /* 
 const uint numColors = 9;
 
 CppHighlighting::CppHighlighting( QObject * parent )
-  : QObject(parent), m_localColorization(true)
+  : QObject(parent), m_localColorization(true), m_useClassCache(false)
 {
 }
 
@@ -204,14 +204,6 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
   return a;
 }
 
-void CppHighlighting::highlightTree( KTextEditor::SmartRange * range ) const
-{
-  int depth = range->depth();
-  range->setAttribute(m_depthAttributes[depth]);
-  foreach (KTextEditor::SmartRange* child, range->childRanges())
-    highlightTree(child);
-}
-
 void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 {
   kDebug( 9007 ) << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();
@@ -230,6 +222,10 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
   kDebug( 9007 ) << "highighting du chain";
   
   DUChainReadLocker lock(DUChain::lock());
+
+  m_contextClasses.clear();
+  m_useClassCache = true;
+  
   TopDUContext* standardCtx = CppLanguageSupport::self()->standardContext(KUrl(context->url().str()), false);
 
   //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
@@ -249,6 +245,9 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
     m_functionColorsForDeclarations.clear();
     m_functionDeclarationsForColors.clear();
   }
+  
+  m_useClassCache = false;
+  m_contextClasses.clear();
 }
 
 void CppHighlighting::highlightDUChainSimple(DUContext* context) const
@@ -368,6 +367,49 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForDepth(int depth) const
   return m_depthAttributes[depth];
 }
 
+KDevelop::Declaration* CppHighlighting::localClassFromCodeContext(KDevelop::DUContext* context) const
+{
+  if(!context)
+    return 0;
+
+  if(m_contextClasses.contains(context))
+    return m_contextClasses[context];
+  
+  DUContext* startContext = context;
+  
+  while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
+  { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+    context = context->parentContext();
+  }
+
+  ///Step 1: Find the function-declaration for the function we are in
+  Declaration* functionDeclaration = 0;
+
+  if( context->owner() && context->owner()->isDefinition() ) {
+
+    if(m_contextClasses.contains(context))
+      return m_contextClasses[context];
+    
+    functionDeclaration = context->owner()->declaration(startContext->topContext());
+  }
+
+  if( !functionDeclaration && context->owner() )
+    functionDeclaration = context->owner();
+
+  if(!functionDeclaration) {
+    if(m_useClassCache)
+      m_contextClasses[context] = 0;
+    return 0;
+  }
+
+  Declaration* decl  = functionDeclaration->context()->owner();
+
+  if(m_useClassCache)
+    m_contextClasses[context] = decl;
+  
+  return decl;
+}
+
 CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DUContext* context) const
 {
   /**
@@ -385,7 +427,7 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
   if (context) {
     //It is a use.
     //Determine the class we're in
-    Declaration* klass = Cpp::localClassFromCodeContext(context);
+    Declaration* klass = localClassFromCodeContext(context);
     if(klass) {
       if (klass->internalContext() == dec->context())
         type = LocalClassMemberType; //Using Member of the local class
