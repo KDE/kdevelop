@@ -484,8 +484,8 @@ void CPPInternalParseJob::run()
 
     //Remove include-files we imported temporarily
     if( !importedTemporaryChains.isEmpty() ) {
-        DUChainWriteLocker l(DUChain::lock());
         foreach ( DUContext* context, importedTemporaryChains ) {
+            DUChainWriteLocker l(DUChain::lock());
             contentContext->removeImportedParentContext(context);
             removeContext(importedContentChains, dynamic_cast<TopDUContext*>(context));
         }
