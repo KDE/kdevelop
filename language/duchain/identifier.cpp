@@ -563,7 +563,7 @@ bool QualifiedIdentifier::isQualified() const
 }
 
 QString Identifier::mangled() const
-{
+{ ///@todo work this over
   static QRegExp simpleIdentifier("[a-zA-Z0-9_]*");
   if (simpleIdentifier.exactMatch(d->m_identifier.str()))
     return QString("%1%2").arg(d->m_identifier.str().length()).arg(d->m_identifier.str());
