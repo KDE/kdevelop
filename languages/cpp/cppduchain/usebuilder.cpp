@@ -120,9 +120,9 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   int declarationIndex = currentContext()->topContext()->indexForUsedDeclaration(declaration);
 
   if (recompiling()) {
-    const QVector<Use>& uses = currentContext()->uses();
 
     QMutexLocker smartLock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
+    const QVector<Use>& uses = currentContext()->uses();
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
     SimpleRange translated = newRange;
     if (m_editor->smart())
