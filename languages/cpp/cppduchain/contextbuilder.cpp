@@ -655,7 +655,8 @@ void ContextBuilder::closeContext()
     DUChainWriteLocker lock(DUChain::lock());
 
     //Remove all slaves that were not encountered while parsing
-    currentContext()->cleanIfNotEncountered(m_encountered, m_compilingContexts);
+    if(m_compilingContexts)
+      currentContext()->cleanIfNotEncountered(m_encountered);
     setEncountered( currentContext() );
   }
   m_lastContext = currentContext();
