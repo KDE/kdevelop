@@ -380,7 +380,7 @@ bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::P
     return true;
   else if( !from || !to )
     return false;
-  return from->mangled() == to->mangled(); ///@todo do this more efficiently
+  return from->equals(to.data());
 }
 
 void TypeConversion::problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString& desc ) {
