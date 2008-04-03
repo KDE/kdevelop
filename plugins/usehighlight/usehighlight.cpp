@@ -236,7 +236,12 @@ void UseHighlightPlugin::updateViews()
       mouseHighlight = true;
     }
 
-    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
+    if(!lock.locked()) {
+      kDebug() << "Failed to lock du-chain in time";
+      continue;
+    }
+    
     Declaration* foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
 
     if( m_highlightedDeclarations.contains(view) ) {
