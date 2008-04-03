@@ -364,7 +364,7 @@ public:
   /**
    * Delete and remove all slaves(uses, declarations, definitions, contexts) that are not in the given set
    */
-  void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass);
+  void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered);
 
   /**
    * Used exclusively by Declaration, do not use this.
@@ -388,6 +388,8 @@ public:
   
   /**
    * Return a list of all uses which occur in this context.
+   * When the uses have smart-ranges attached, those are synced in the moment that uses() is called, so you should
+   * call this immediately before using the returned ranges.
    * To get the actual declarations, use TopDUContext::usedDeclarationForIndex(..) with the declarationIndex.
    */
   const QVector<Use>& uses() const;

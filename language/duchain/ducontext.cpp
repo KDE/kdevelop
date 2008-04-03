@@ -86,7 +86,7 @@ bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
 
 void DUContextPrivate::synchronizeUsesFromSmart() const
 {
-  if(m_rangesForUses.isEmpty() || !m_rangesChanged)
+  if(m_rangesForUses.isEmpty() /*|| !m_rangesChanged*/) ///@todo find out why m_rangesChanged sometimes isn't filled correctly
     return;
   
   Q_ASSERT(m_rangesForUses.count() == m_uses.count());
@@ -1229,19 +1229,17 @@ void DUContext::clearImportedParentContexts()
   Q_ASSERT(d->m_importedParentContexts.isEmpty());
 }
 
-void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered, bool firstPass)
+void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
 {
   ENSURE_CAN_WRITE
 
-  if (firstPass) {
-    foreach (DUContext* childContext, childContexts())
-      if (!encountered.contains(childContext))
-        delete childContext;
+  foreach (DUContext* childContext, childContexts())
+    if (!encountered.contains(childContext))
+      delete childContext;
 
-    foreach (Declaration* dec, localDeclarations())
-      if (!encountered.contains(dec))
-        delete dec;
-  }
+  foreach (Declaration* dec, localDeclarations())
+    if (!encountered.contains(dec))
+      delete dec;
 }
 
 TopDUContext* DUContext::topContext() const
