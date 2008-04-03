@@ -232,20 +232,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
         SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
 
         
-        if(id.count() > 1) {
-          //Merge the scope of the declaration. Add dollar-signs instead of the ::.
-          //Else the declarations could be confused with global functions.
-          //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
-
-          Identifier identifier = currentDeclaration()->identifier();
-          QString newId = identifier.identifier();
-          for(int a = id.count()-2; a >= 0; --a)
-            newId = id.at(a).identifier() + "$$" + newId;
-
-          identifier.setIdentifier(newId);
-          currentDeclaration()->setIdentifier(identifier);
-        }
-        
         // TODO: potentially excessive locking
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
@@ -407,10 +393,22 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     id = QualifiedIdentifier(customName);
   }
 
-  Identifier lastId;
-  if( !id.isEmpty() )
-    lastId = id.last();
+  Identifier localId;
+  
+  if(id.count() > 1) {
+    //Merge the scope of the declaration. Add dollar-signs instead of the ::.
+    //Else the declarations could be confused with global functions.
+    //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
 
+    QString newId = id.last().identifier();
+    for(int a = id.count()-2; a >= 0; --a)
+      newId = id.at(a).identifier() + ";;" + newId;
+
+    localId.setIdentifier(newId);
+  }else if(!id.isEmpty()) {
+    localId = id.last();
+  }
+  
   Declaration* declaration = 0;
 
   if (recompiling()) {
@@ -422,7 +420,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     if (m_editor->smart())
       translated = SimpleRange(m_editor->smart()->translateFromRevision(translated.textRange()));
 
-    foreach( Declaration* dec, currentContext()->allLocalDeclarations(lastId) ) {
+    foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
 
       if( wasEncountered(dec) )
         continue;
@@ -430,7 +428,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
           dec->scope() == scope &&
-          ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && lastId == dec->identifier())) &&
+          ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())) &&
            dec->isDefinition() == isDefinition &&
           dec->isTypeAlias() == m_inTypedef &&
           ( ((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
@@ -475,7 +473,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   if (!declaration) {
 /*    if( recompiling() )
-      kDebug(9007) << "creating new declaration while recompiling: " << lastId << "(" << newRange << ")";*/
+      kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
     SmartRange* prior = m_editor->currentRange();
     SmartRange* range = m_editor->createRange(newRange.textRange());
     
@@ -512,7 +510,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
 /*      if(id.isEmpty())
         kWarning() << "empty id";*/
-      declaration->setIdentifier(id.last());
+      declaration->setIdentifier(localId);
     }
     
     declaration->setDeclarationIsDefinition(isDefinition);
@@ -536,13 +534,13 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   if( m_inTypedef )
     declaration->setIsTypeAlias(true);
 
-  if( !lastId.templateIdentifiers().isEmpty() ) {
+  if( !localId.templateIdentifiers().isEmpty() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
     if( declaration && templateDecl ) {
       ///This is a template-specialization. Find the class it is specialized from.
-      lastId.clearTemplateIdentifiers();
+      localId.clearTemplateIdentifiers();
       id.pop();
-      id.push(lastId);
+      id.push(localId);
 
       ///@todo Make sure the searched class is in the same namespace
       QList<Declaration*> decls = currentContext()->findDeclarations(id, m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
