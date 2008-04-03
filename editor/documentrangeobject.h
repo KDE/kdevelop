@@ -65,7 +65,7 @@ public:
     void setRangeOwning(RangeOwning ownsRange);
 
     void setRange(const SimpleRange& range);
-    ///Returns the text-range. Needs to be a reference for performance-reasons.
+    ///Returns the text-range.
     SimpleRange range() const;
     ///If this document's range is a SmartRange, returns it. Else 0.
     KTextEditor::SmartRange* smartRange() const;
