@@ -130,6 +130,7 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 void FileListWidget::refreshFileList( )
 {
 	QStringList selections = storeSelections();
+    int scrollbarPos = verticalScrollBar()->value();
 
 	KListView::clear();
 
@@ -148,6 +149,8 @@ void FileListWidget::refreshFileList( )
 	{
 		firstChild()->setSelected( true );
 	}
+
+    verticalScrollBar()->setValue( scrollbarPos );
 
 	activePartChanged( _part->partController()->activePart() );
 }
