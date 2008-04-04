@@ -70,7 +70,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
     }
 }
 
-QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type)
+QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type, int &before, int &after)
 {
     QString name;
     type=NoVar;
@@ -82,15 +82,20 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
         const QChar& expi=exp[i];
         if(expi=='{')
             prev=i;
-        if(expi=='}' && i>0 && prev>0) {
-            if(exp[prev-1]=='$') {
-                name = exp.mid(prev+1, i-prev-1);
+        else if(i>0 && prev>0 && expi=='}')
+        {
+            done=true;
+            name = exp.mid(prev+1, i-prev-1);
+            after=i;
+            if(exp[prev-1]=='$')
+            {
+                before=prev-1;
                 type=CMake;
-                done=true;
-            } else if(exp.mid(prev-4,4)=="$ENV") {
-                name = exp.mid(prev+1, i-prev-1);
+            }
+            else if(exp.mid(prev-4,4)=="$ENV")
+            {
+                before=prev-4;
                 type=ENV;
-                done=true;
             }
         }
     }
@@ -100,38 +105,32 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
 QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const VariableMap *values)
 {
     VariableType type;
-    QString var = variableName(exp, type);
+    int before, after;
+    QString var = variableName(exp, type, before, after);
     
     if(type)
     {
-        QStringList ret;
-        if(type==ENV)
+        QStringList vars;
+        if(type==CMake)
         {
-            foreach(const QString& s, envVarDirectories(var))
-            {
-                QString res=exp;
-                ret += res.replace(QString("$ENV{%1}").arg(var), s);
-            }
+            vars = values->value(var);
         }
         else
         {
-            if(values->contains(var))
-            {
-                foreach(const QString& s, values->value(var))
-                {
-                    QString res=exp;
-                    ret += resolveVariable(res.replace(QString("${%1}").arg(var), s), values);
-//                     kDebug(9042) << "Resolving" << var << "=" << s;
-                }
-            }
-            else
-            {
-                kDebug(9042) << "warning: Variable" << var << "not defined";
-                QString res=exp;
-                ret += resolveVariable(res.replace(QString("${%1}").arg(var), QString()), values);
-            }
+            vars=envVarDirectories(var);
         }
-//         kDebug(9042) << "lol!" << exp << "=" << ret;
+        QString pre=exp.left(before), post=exp.right(exp.length()-after-1);
+        if(vars.isEmpty())
+            return QStringList(pre+post);
+        vars.first().prepend(pre);
+        vars.last().append(post);
+        QStringList::iterator it=vars.begin(), itEnd=vars.end();
+        QStringList ret;
+        
+        for(; it!=itEnd; ++it)
+        {
+            ret += resolveVariable(*it, values);
+        }
         return ret;
     }
     return QStringList(exp);
@@ -286,11 +285,10 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         KUrl file(mpath);
         file.addPath(filename);
         kDebug(9042) << "Trying:" << mpath << "." << filename << file;
-#ifndef Q_OS_WIN
+#if 0
+// #ifndef Q_OS_WIN
         if(t==Library)
         {
-//             if(QFile::exists(file.toLocalFile()))
-//                 path=file;
             QDir direc(mpath);
             QStringList entries=direc.entryList(QStringList(filename+"*"));
             kDebug(9042) << "lib entries" << entries.count() << mpath << filename;
@@ -392,7 +390,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             kDebug(9042) << "================== Found" << path.trimmed() << "===============";
             walk(package, 0);
-        } else {
+        }
+        else
+        {
             //FIXME: Put here the error.
             kDebug(9032) << "error: find_package. Parsing error." << path;
         }
@@ -866,7 +866,10 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         case FileAst::READ:
         {
             KUrl filename=file->path();
-            kDebug(9042) << "FileAst: reading " << filename;
+            QFileInfo ifile(filename.toLocalFile());
+            kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
+            if(!ifile.isFile())
+                return 1;
             QFile f(filename.toLocalFile());
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
                 return 1;
@@ -876,6 +879,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 output += line;
             }
             m_vars->insert(file->variable(), QStringList(output));
+            kDebug(9042) << "FileAst: read ";
         }
             break;
 //         case FileAst::GLOB:
@@ -961,7 +965,6 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
     kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
-    
     if(!m_vars->contains(opt->variableName()))
     {
         m_vars->insert(opt->variableName(), QStringList(opt->defaultValue()));
@@ -1328,8 +1331,9 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
+        int bef, aft;
         VariableType t;
-        variableName(arg.value, t);
+        variableName(arg.value, t, bef, aft);
         if(t)
         {
             ret.addArguments(resolveVariable(arg.value, vars));
