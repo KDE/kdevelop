@@ -225,8 +225,7 @@ void UseBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationSt
 
 void UseBuilder::visitCondition(ConditionAST *node)
 {
-  ///@todo Until we find out how to correctly handle this type-specifier(It is created wrongly in test_duchain.cpp testDeclareFor) ignore it.
-  //visit(node->type_specifier);
+  visit(node->type_specifier);
   visit(node->declarator);
   visit(node->expression);
 }
