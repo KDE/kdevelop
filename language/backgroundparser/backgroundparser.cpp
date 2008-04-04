@@ -154,6 +154,10 @@ public:
         }
 
         m_parser->updateProgressBar();
+
+        //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
+        if(m_doneParseJobs == m_maxParseJobs)
+            emit m_parser->hideProgress();
     }
 
     void loadSettings()
@@ -369,9 +373,7 @@ void BackgroundParser::updateProgressBar()
     if (d->m_doneParseJobs == d->m_maxParseJobs) {
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
-        emit hideProgress();
     } else {
-
         float additionalProgress = 0;
         for(QMap<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.begin(); it != d->m_jobProgress.end(); ++it)
             additionalProgress += *it;

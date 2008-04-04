@@ -154,6 +154,7 @@ protected Q_SLOTS:
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
 
 private:
+    friend class BackgroundParserPrivate;
     class BackgroundParserPrivate *d;
 };
 
