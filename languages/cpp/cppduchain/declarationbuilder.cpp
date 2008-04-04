@@ -400,6 +400,9 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     //Else the declarations could be confused with global functions.
     //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
 
+    localId = id.last(); //This copies the template-arguments
+    ///@todo what about the template-arguments of earlier parts of the scope?
+    
     QString newId = id.last().identifier();
     for(int a = id.count()-2; a >= 0; --a)
       newId = id.at(a).identifier() + ";;" + newId;
