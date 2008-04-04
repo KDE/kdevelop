@@ -393,7 +393,11 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
 
 void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
 {
-  DUChainReadLocker lock(DUChain::lock());
+  DUChainReadLocker lock(DUChain::lock(), 3000);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
+    return;
+  }
   
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element || !element->asItem() )
@@ -459,7 +463,12 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   if( !element )
     return QVariant();
 
-  DUChainReadLocker lock(DUChain::lock());
+  DUChainReadLocker lock(DUChain::lock(), 500);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain in time";
+    return QVariant();
+  }
+
 
   const CompletionTreeElement& treeElement(*element);
 
