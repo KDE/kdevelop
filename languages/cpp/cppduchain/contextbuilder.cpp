@@ -560,11 +560,15 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
     if (recompiling()) {
       const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
-      QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
       SimpleRange translated = range;
-      if (m_editor->smart())
+      
+      if (m_editor->smart()) {
+        readLock.unlock();
+        QMutexLocker smartLock(m_editor->smart()->smartMutex());
         translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
+        readLock.lock();
+      }
 
       
       for (; nextContextIndex() < childContexts.count(); ++nextContextIndex()) {

@@ -413,12 +413,16 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   if (recompiling()) {
     // Seek a matching declaration
-    QMutexLocker lock(m_editor->smart() ? m_editor->smart()->smartMutex() : 0);
 
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
     SimpleRange translated = newRange;
-    if (m_editor->smart())
-      translated = SimpleRange(m_editor->smart()->translateFromRevision(translated.textRange()));
+    
+    if (m_editor->smart()) {
+      lock.unlock();
+      QMutexLocker smartLock(m_editor->smart()->smartMutex());
+      translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
+      lock.lock();
+    }
 
     foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
 
