@@ -129,7 +129,7 @@ MACRO (_Boost_ADJUST_LIB_VARS basename)
       SET(Boost_${basename}_LIBRARY         ${Boost_${basename}_LIBRARY_DEBUG})
       SET(Boost_${basename}_LIBRARIES       ${Boost_${basename}_LIBRARY_DEBUG})
     ENDIF (Boost_${basename}_LIBRARY_DEBUG AND NOT Boost_${basename}_LIBRARY_RELEASE)
-    
+
     IF (Boost_${basename}_LIBRARY)
       SET(Boost_${basename}_LIBRARY ${Boost_${basename}_LIBRARY} CACHE FILEPATH "The Boost ${basename} library")
       GET_FILENAME_COMPONENT(Boost_LIBRARY_DIRS "${Boost_${basename}_LIBRARY}" PATH)
@@ -234,9 +234,9 @@ ELSE (_boost_IN_CACHE)
   ENDIF( Boost_MINIMUM_VERSION )
 
 
-
+  # Try first in our own include search paths (e.g. BOOST_ROOT)
   FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
-    IF( NOT Boost_INCLUDE_DIR )
+    IF(NOT Boost_INCLUDE_DIR)
 
       # Add in a path suffix, based on the required version, ideally we could
       # read this from version.hpp, but for that to work we'd need to know the include
@@ -251,44 +251,61 @@ ELSE (_boost_IN_CACHE)
           STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
       ENDIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
 
-
-      #Prefer our include search paths
       FIND_PATH(Boost_INCLUDE_DIR
           NAMES         boost/config.hpp
           PATHS         ${_boost_INCLUDE_SEARCH_DIRS}
           PATH_SUFFIXES ${_boost_PATH_SUFFIX}
           NO_DEFAULT_PATH
       )
-      #If nothing is found search again using system default paths
-      FIND_PATH(Boost_INCLUDE_DIR
-          NAMES         boost/config.hpp
-          PATH_SUFFIXES ${_boost_PATH_SUFFIX}
-      )
- 
-      IF(Boost_INCLUDE_DIR)
-        # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
-        # Read the whole file:
-        #
-        SET(BOOST_VERSION 0)
-        SET(BOOST_LIB_VERSION "")
-        FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
-  
-        STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION "${_boost_VERSION_HPP_CONTENTS}")
-        STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION "${_boost_VERSION_HPP_CONTENTS}")
-  
-        SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
-        SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
-        
-        IF(NOT "${Boost_VERSION}" STREQUAL "0")
-          MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
-          MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
-          MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
 
-        ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
-      ENDIF(Boost_INCLUDE_DIR)
-
-    ENDIF( NOT Boost_INCLUDE_DIR )
+    ENDIF(NOT Boost_INCLUDE_DIR)
   ENDFOREACH(_boost_VER)
+
+  # If nothing is found search again using system default paths
+  FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
+    IF(NOT Boost_INCLUDE_DIR)
+
+        # Add in a path suffix, based on the required version, ideally we could
+        # read this from version.hpp, but for that to work we'd need to know the include
+        # dir already
+        SET(_boost_PATH_SUFFIX
+          boost-${_boost_VER}
+        )
+
+        IF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
+            STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+        ELSEIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+")
+            STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+        ENDIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
+
+        FIND_PATH(Boost_INCLUDE_DIR
+            NAMES         boost/config.hpp
+            PATH_SUFFIXES ${_boost_PATH_SUFFIX}
+        )
+
+    ENDIF(NOT Boost_INCLUDE_DIR)
+  ENDFOREACH(_boost_VER)
+
+  IF(Boost_INCLUDE_DIR)
+    # Extract Boost_VERSION and Boost_LIB_VERSION from version.hpp
+    # Read the whole file:
+    #
+    SET(BOOST_VERSION 0)
+    SET(BOOST_LIB_VERSION "")
+    FILE(READ "${Boost_INCLUDE_DIR}/boost/version.hpp" _boost_VERSION_HPP_CONTENTS)
+
+    STRING(REGEX REPLACE ".*#define BOOST_VERSION ([0-9]+).*" "\\1" Boost_VERSION "${_boost_VERSION_HPP_CONTENTS}")
+    STRING(REGEX REPLACE ".*#define BOOST_LIB_VERSION \"([0-9_]+)\".*" "\\1" Boost_LIB_VERSION "${_boost_VERSION_HPP_CONTENTS}")
+
+    SET(Boost_LIB_VERSION ${Boost_LIB_VERSION} CACHE STRING "The library version string for boost libraries")
+    SET(Boost_VERSION ${Boost_VERSION} CACHE STRING "The version number for boost libraries")
+
+    IF(NOT "${Boost_VERSION}" STREQUAL "0")
+      MATH(EXPR Boost_MAJOR_VERSION "${Boost_VERSION} / 100000")
+      MATH(EXPR Boost_MINOR_VERSION "${Boost_VERSION} / 100 % 1000")
+      MATH(EXPR Boost_SUBMINOR_VERSION "${Boost_VERSION} % 100")
+    ENDIF(NOT "${Boost_VERSION}" STREQUAL "0")
+  ENDIF(Boost_INCLUDE_DIR)
 
   #Setting some more suffixes for the library
   SET (Boost_LIB_PREFIX "")
