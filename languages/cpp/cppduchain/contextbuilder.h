@@ -64,6 +64,8 @@ typedef QList<LineContextPair> IncludeFileList;
 
 ///@return Whether @param context is contained as a context in @param lineContexts
 bool KDEVCPPDUCHAIN_EXPORT containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context );
+///@return Whether a context in @param lineContexts imports the context @param context
+bool KDEVCPPDUCHAIN_EXPORT importsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context );
 
 ///Removes @param context from the list
 void KDEVCPPDUCHAIN_EXPORT removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context );

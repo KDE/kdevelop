@@ -52,6 +52,13 @@ bool containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* 
   return false;
 }
 
+bool importsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context ) {
+  foreach( const LineContextPair& ctx, lineContexts )
+    if( ctx.context && ctx.context->imports(context, KDevelop::SimpleCursor()) )
+      return true;
+  return false;
+}
+
 void removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context ) {
   for( QList<LineContextPair>::iterator it = lineContexts.begin(); it != lineContexts.end(); ++it )
     if( (*it).context == context ) {

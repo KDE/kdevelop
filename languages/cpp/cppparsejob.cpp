@@ -58,6 +58,13 @@
 
 using namespace KDevelop;
 
+bool importsContext(const QVector<DUContextPointer>& contexts, const DUContext* context) {
+  foreach(DUContextPointer listCtx, contexts)
+    if(listCtx && listCtx->imports(context))
+      return true;
+  return false;
+}
+
 QList<HashedString> convertFromUrls(const QList<KUrl>& urlList) {
   QList<HashedString> ret;
   foreach(const KUrl& url, urlList)
@@ -363,7 +370,7 @@ void CPPInternalParseJob::run()
               //As above, we work with the content-contexts.
               LineContextPair context = contentFromProxy(topContext);
               DUContextPointer ptr(context.context);
-              if( !containsContext(importedContentChains, context.context)  && (!updatingContentContext || !updatingContentContext->importedParentContexts().contains(ptr)) ) {
+              if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
                   if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
                     importedContentChains << context;
                     importedTemporaryChains << context.context;
@@ -486,7 +493,7 @@ void CPPInternalParseJob::run()
     if( !importedTemporaryChains.isEmpty() ) {
         foreach ( DUContext* context, importedTemporaryChains ) {
             DUChainWriteLocker l(DUChain::lock());
-            contentContext->removeImportedParentContext(context);
+            contentContext->removeImportedParentContext(context); ///@todo don't import temporary chains this way, it's too expensive. Achieve the effect of visibility in other ways.
             removeContext(importedContentChains, dynamic_cast<TopDUContext*>(context));
         }
     }
