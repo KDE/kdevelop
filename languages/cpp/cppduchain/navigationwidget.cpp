@@ -262,7 +262,7 @@ class NavigationContext : public KShared {
           comment += "...";
         }
         comment.replace('\n', ' ');
-        m_currentText += commentHighlight(comment) + "   ";
+        m_currentText += commentHighlight(Qt::escape(comment)) + "   ";
       }
       
       
@@ -358,7 +358,7 @@ class NavigationContext : public KShared {
             if( type && function ) {
               if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
                 eventuallyMakeTypeLinks( type->returnType().data() );
-                m_currentText += ' ' + m_declaration->identifier().toString();
+                m_currentText += ' ' + Qt::escape(m_declaration->identifier().toString());
               }
 
               if( type->arguments().count() == 0 )
@@ -381,7 +381,7 @@ class NavigationContext : public KShared {
                   eventuallyMakeTypeLinks( argType.data() );
 
                   if( currentArgNum >= firstDefaultParam )
-                    m_currentText += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ];
+                    m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ]);
 
                   ++currentArgNum;
                 }
@@ -404,7 +404,7 @@ class NavigationContext : public KShared {
 
             eventuallyMakeTypeLinks( m_declaration->abstractType().data() );
 
-            m_currentText += ' ' + declarationName(m_declaration.data()) + "<br>";
+            m_currentText += ' ' + Qt::escape(declarationName(m_declaration.data())) + "<br>";
           }else{
             CppClassType* klass = dynamic_cast<CppClassType*>(m_declaration->abstractType().data());
             if( m_declaration->kind() == Declaration::Type && klass ) {
@@ -420,7 +420,7 @@ class NavigationContext : public KShared {
 
             if(m_declaration->type<CppEnumerationType>()) {
               CppEnumerationType::Ptr enumeration = m_declaration->type<CppEnumerationType>();
-              m_currentText += i18n("enumeration") + " " + m_declaration->identifier().toString() + "<br>";
+              m_currentText += i18n("enumeration") + " " + Qt::escape(m_declaration->identifier().toString()) + "<br>";
             }
 
             if(m_declaration->isForwardDeclaration()) {
@@ -450,12 +450,12 @@ class NavigationContext : public KShared {
           } else {
             QualifiedIdentifier parent = identifier;
             parent.pop();
-            m_currentText += labelHighlight(i18n("Scope: ")) + parent.toString() + " ";
+            m_currentText += labelHighlight(i18n("Scope: ")) + Qt::escape(parent.toString()) + " ";
           }
         }
 
         if( !access.isEmpty() )
-          m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(access) + " ";
+          m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
         
         
         ///@todo Enumerations
@@ -474,11 +474,11 @@ class NavigationContext : public KShared {
 
         if( !kind.isEmpty() ) {
           if( !detailsString.isEmpty() )
-            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(kind) + " " + detailsString + " ";
+            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + Qt::escape(detailsString) + " ";
           else
-            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(kind) + " ";
+            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
         } else if( !detailsString.isEmpty() ) {
-          m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(kind) + " ";
+          m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
         }
       }
 
@@ -487,7 +487,7 @@ class NavigationContext : public KShared {
       if( !shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
         comment.replace("\n", "<br />");
-        m_currentText += commentHighlight(comment);
+        m_currentText += commentHighlight(Qt::escape(comment));
         m_currentText += "<br />";
       }
 
@@ -515,7 +515,7 @@ class NavigationContext : public KShared {
         if(!uses.isEmpty()) {
           m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
           for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
-            m_currentText += " " + KUrl(it.key().str()).fileName() + "<br />";
+            m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
             foreach(const SimpleRange& range, *it) {
               m_currentText += "  ";
               makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
@@ -541,7 +541,7 @@ class NavigationContext : public KShared {
       int pos = 0;
       QString fileMark = "KDEV_FILE_LINK{";
       while( pos < text.length() && (pos = text.indexOf( fileMark, pos)) != -1 ) {
-        m_currentText += text.mid(lastPos, pos-lastPos);
+        m_currentText += Qt::escape(text.mid(lastPos, pos-lastPos));
 
         pos += fileMark.length();
 
@@ -557,7 +557,7 @@ class NavigationContext : public KShared {
         lastPos = pos;
       }
       
-      m_currentText += text.mid(lastPos, text.length()-lastPos);
+      m_currentText += Qt::escape(text.mid(lastPos, text.length()-lastPos));
     }
   
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
@@ -599,7 +599,7 @@ class NavigationContext : public KShared {
                 if( result.type ) {
                   eventuallyMakeTypeLinks(result.type.data());
                 }else{
-                  m_currentText += result.toShortString();
+                  m_currentText += Qt::escape(result.toShortString());
                 }
               }
               
@@ -607,7 +607,7 @@ class NavigationContext : public KShared {
             }
           }
         }else if( type ) {
-          m_currentText += type->toString();
+          m_currentText += Qt::escape(type->toString());
         }
     }
     
@@ -780,11 +780,11 @@ private:
         if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty()) {
           //Show the declaration
           if(!first)
-            m_currentText += ", ";
+            m_currentText += Qt::escape(", ");
           else
             first = false;
           
-          m_currentText += indent + declarationKind(*declarationIterator) + " ";
+          m_currentText += Qt::escape(indent + declarationKind(*declarationIterator) + " ");
           makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
         }
         ++declarationIterator;
@@ -838,14 +838,14 @@ public:
 
       if(!m_body.isEmpty()) {
       m_currentText += labelHighlight(i18n("Preprocessed body:")) + "<br />";
-      m_currentText += codeHighlight(m_body);
+      m_currentText += codeHighlight(Qt::escape(m_body));
       m_currentText += "<br />";
       }
 
       
       m_currentText += labelHighlight(i18n("Body:")) + "<br />";
 
-      m_currentText += codeHighlight(QString::fromUtf8(m_macro.definition));
+      m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(m_macro.definition)));
       m_currentText += "<br />";
     }
 
