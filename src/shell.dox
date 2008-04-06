@@ -1,0 +1,118 @@
+/**
+@page The KDevelop Generic Shell
+
+This library contains the Shell - a profile-based implementation of KDevelop plugin architecture.
+
+<b>Link with</b>: -lkdevshell
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/shell
+
+\section creatingapp Creating an application using generic shell
+KDevelop platform applications can use generic shell as a ready to use implementation
+of KDevelop plugin architecture.
+
+This is done by creating application %main.cpp file and @ref ShellExtension subclass.
+Example:
+- %main.cpp for "myapp" application:
+    @code
+    #include <config.h>
+    
+    #include <kaboutdata.h>
+    #include <kapplication.h>
+    #include <kcmdlineargs.h>
+    #include <klocale.h>
+    #include <dcopclient.h>
+    
+    #include <splashscreen.h>
+    #include <toplevel.h>
+    #include <plugincontroller.h>
+    #include <partcontroller.h>
+    #include <core.h>
+    #include <projectmanager.h>
+    #include <newmainwindow.h>
+    
+    #include "myappextension.h"
+    
+    static KCmdLineOptions options[] =
+    {
+        { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
+        { 0,0,0 }
+    };
+    
+    int main(int argc, char *argv[])
+    {
+        static const char description[] = I18N_NOOP("My Application");
+        KAboutData aboutData("myapp", I18N_NOOP("My Application"),
+                        VERSION, description, KAboutData::License_GPL,
+                        I18N_NOOP("(c) 1999-2004, MyApp developers"),
+                        "", "http://www.myapp.org");
+        aboutData.addAuthor("Me", I18N_NOOP("Creator"), "me@myapp.org");
+    
+        KCmdLineArgs::init(argc, argv, &aboutData);
+        KCmdLineArgs::addCmdLineOptions( options );
+    
+        KApplication app;
+
+        MyAppExtension::init();
+    
+        QPixmap pm;
+        pm.load(locate("data", "myapp/pics/myapp-splash.png"));
+        SplashScreen * splash = new SplashScreen( pm );
+        splash->show();
+    
+        app.processEvents();
+    
+        QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
+            splash, SLOT(showMessage(const QString &)));
+    
+        splash->message( i18n( "Loading Settings" ) );
+        TopLevel::getInstance()->loadSettings();
+    
+        PluginController::getInstance()->loadInitialPlugins();
+    
+        splash->message( i18n( "Starting GUI" ) );
+        NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
+        if (mw)
+            mw->enableShow();
+        TopLevel::getInstance()->main()->show();
+    
+        Core::getInstance()->doEmitCoreInitialized();
+    
+        delete splash;
+    
+        kapp->dcopClient()->registerAs("myapp");
+    
+        return app.exec();
+    }
+    @endcode
+    
+- Shell extension for "myapp" application:
+    @code
+    class MyAppExtension: public ShellExtension {
+    public:
+        static void init()
+        {
+            s_instance = new MyAppExtension();
+        }
+
+        virtual void createGlobalSettingsPage(KDialogBase *dlg) {};
+        virtual void acceptGlobalSettingsPage(KDialogBase *dlg) {};
+    
+        virtual QString xmlFile()
+        {
+            return "myappui.rc";
+        }
+        
+        virtual QString defaultProfile()
+        {
+            return "MyApp";
+        }
+            
+    protected:
+        KDevAssistantExtension();
+    
+    };
+    @endcode
+
+*/
+
