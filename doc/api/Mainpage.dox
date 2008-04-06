@@ -3,20 +3,50 @@
 */
 
 /**
-\mainpage The KDevelop API Documentation
+\mainpage The KDevelop Source Code Documentation
 
 %KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications
-under Unix, MacOS and Windows.
+under Unix, MacOS, Windows, Solaris and BSD.
 \n \n
-%KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
+%KDevelop itself is written in C++. To simplify its code it uses several libraries as can be seen in the diagram bellow.
+<i>%KDevelop Platform</i> is a set of libraries and tools that are used to build IDEs (Integrated Development Environments),
 applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
 and/or IDE plugins for all possible purposes.
 
-Platform provides:
+<i>%KDevelop Platform</i> provides:
 - the plugin architecture (interfaces);
 - the common support libraries;
 - the generic shell with plugin profiles support.
 .
+
+<i>%KDevelop Platform</i>, %KDE and %KDevelop itself all use the Qt C++ framework.
+This framework can be used on top of many operative systems.
+This makes %KDevelop a trully multiplatform application.
+
+<table width="400" border="0" align="center">
+  <tr>
+    <td bgcolor="#EFF7E3" align="center"><b>%KDevelop</b><br><a href="http://www.kdevelop.org/HEAD/doc/api/html/">source code documentation</a></td>
+  </tr>
+  <tr>
+    <td bgcolor="#BCD49A" align="center"><b>%KDevelop Platform Libraries</b> &gt;= 4.0<br><a href="http://api.kde.org/4.x-api/kdevplatform-apidocs/">API Reference</a></td>
+  </tr>
+  <tr>
+    <td bgcolor="#548CDD" align="center"><b>%KDE Library</b> &gt;= 4.1<br><a href="http://api.kde.org/4.x-api/kdelibs-apidocs/">API Reference</a></td>
+  </tr>
+  <tr>
+    <td bgcolor="#A2C511" align="center"><b>Qt C++ Framework</b> &gt;= 4.4<br><a href="http://doc.trolltech.com/4.4beta/index.html">Reference documentation</a></td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFA1FA" align="center"><b>Operative system</b><br>
+    Any of:<ul>
+    <li><a href="http://www.linux.org/">Linux</a></li>
+    <li><a href="http://http://www.apple.com/macosx/">Mac OS X</a></li>
+    <li><a href="http://www.windows.com/">Microsoft Windows</a></li>
+    <li><a href="http://www.sun.com/software/solaris/">Sun Solaris</a></li>
+    <li><a href="http://www.freebsd.org/">Free BSD/open BSD</a></li>
+    </ul>
+  </tr>
+</table>
 
 
 \section Introduction Introduction
