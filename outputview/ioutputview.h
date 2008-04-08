@@ -21,7 +21,7 @@
 #ifndef KDEVIOUTPUTVIEW_H
 #define KDEVIOUTPUTVIEW_H
 
-#include <iextension.h>
+#include <interfaces/iextension.h>
 
 #include <QFlags>
 
