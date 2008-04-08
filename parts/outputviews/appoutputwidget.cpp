@@ -61,6 +61,11 @@ AppOutputWidget::~AppOutputWidget()
 
 void AppOutputWidget::childFinished(bool normal, int status)
 {
+    if( !stdoutbuf.isEmpty() )
+        insertStdoutLine("");
+    if( !stderrbuf.isEmpty() )
+        insertStderrLine("");
+
     ProcessWidget::childFinished(normal, status);
 }
 

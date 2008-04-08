@@ -172,6 +172,10 @@ bool ProcessWidget::isRunning()
 void ProcessWidget::slotProcessExited(KProcess *)
 {
     procLineMaker->flush();
+    if( !stdoutbuf.isEmpty() ) 
+        insertStdoutLine("");
+    if( !stderrbuf.isEmpty() ) 
+        insertStderrLine("");
     childFinished(childproc->normalExit(), childproc->exitStatus());
     maybeScrollToBottom();
     emit processExited(childproc);
