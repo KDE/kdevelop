@@ -253,7 +253,7 @@ class NavigationContext : public KShared {
       m_linkCount = 0;
       m_currentText  = "<html><body><p><small><small>";
 
-      addExternalText(m_prefix);
+      addExternalHtml(m_prefix);
       
       if( shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
@@ -460,24 +460,24 @@ class NavigationContext : public KShared {
         
         ///@todo Enumerations
         
-        QString detailsString;
+        QString detailsHtml;
 
         if( !details.isEmpty() ) {
           bool first = true;
           foreach( QString str, details ) {
             if( !first )
-              detailsString += ", ";
+              detailsHtml += ", ";
             first = false;
-            detailsString += propertyHighlight(str);
+            detailsHtml += propertyHighlight(str);
           }
         }
 
         if( !kind.isEmpty() ) {
-          if( !detailsString.isEmpty() )
-            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + Qt::escape(detailsString) + " ";
+          if( !detailsHtml.isEmpty() )
+            m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + detailsHtml + " ";
           else
             m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
-        } else if( !detailsString.isEmpty() ) {
+        } else if( !detailsHtml.isEmpty() ) {
           m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
         }
       }
@@ -525,7 +525,7 @@ class NavigationContext : public KShared {
       }
       //m_currentText += "<br />";
 
-      addExternalText(m_suffix);
+      addExternalHtml(m_suffix);
       
       m_currentText += "</small></small></p></body></html>";
 
@@ -536,12 +536,12 @@ class NavigationContext : public KShared {
 
     NavigationContextPointer execute(NavigationAction& action);
 
-    void addExternalText( const QString& text ) {
+    void addExternalHtml( const QString& text ) {
       int lastPos = 0;
       int pos = 0;
       QString fileMark = "KDEV_FILE_LINK{";
       while( pos < text.length() && (pos = text.indexOf( fileMark, pos)) != -1 ) {
-        m_currentText += Qt::escape(text.mid(lastPos, pos-lastPos));
+        m_currentText += text.mid(lastPos, pos-lastPos);
 
         pos += fileMark.length();
 
@@ -557,7 +557,7 @@ class NavigationContext : public KShared {
         lastPos = pos;
       }
       
-      m_currentText += Qt::escape(text.mid(lastPos, text.length()-lastPos));
+      m_currentText += text.mid(lastPos, text.length()-lastPos);
     }
   
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
@@ -711,7 +711,7 @@ public:
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
-    addExternalText(m_prefix);
+    addExternalHtml(m_prefix);
 
     KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
@@ -747,7 +747,7 @@ public:
       m_currentText += i18n("not parsed yet");
     }
 
-    addExternalText(m_suffix);
+    addExternalHtml(m_suffix);
     
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;
@@ -809,7 +809,7 @@ public:
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
-    addExternalText(m_prefix);
+    addExternalHtml(m_prefix);
 
     QString args;
     
