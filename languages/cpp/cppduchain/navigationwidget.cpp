@@ -262,6 +262,8 @@ class NavigationContext : public KShared {
           comment += "...";
         }
         comment.replace('\n', ' ');
+        comment.replace("<br />", " ");
+        comment.replace("<br/>", " ");
         m_currentText += commentHighlight(Qt::escape(comment)) + "   ";
       }
       
@@ -486,8 +488,11 @@ class NavigationContext : public KShared {
 
       if( !shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
-        comment.replace("\n", "<br />");
-        m_currentText += commentHighlight(Qt::escape(comment));
+        comment.replace("<br />", "\n"); //do not escape html newlines within the comment
+        comment.replace("<br/>", "\n");
+        comment = Qt::escape(comment);
+        comment.replace("\n", "<br />"); //Replicate newlines in html
+        m_currentText += commentHighlight(comment);
         m_currentText += "<br />";
       }
 
@@ -712,7 +717,7 @@ public:
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
     addExternalHtml(m_prefix);
-
+  
     KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
     makeLink(u.prettyUrl(), u.prettyUrl(), action);
