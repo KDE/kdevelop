@@ -317,7 +317,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         }
     }
     kDebug(9042) << "find file" << filename << "into:" << folders << "found at:" << path;
-    return path.toLocalFile();
+    return path.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
@@ -1136,9 +1136,9 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     {
                         foreach(QString in, sast->input())
                         {
-                            rx.indexIn(in);
+                            int idx = rx.indexIn(in);
                             QStringList info = rx.capturedTexts();
-                            if(info.count()==1 && info[0].isEmpty())
+                            if(idx<0)
                             {
                                 res.append(in);
                             }

@@ -134,7 +134,6 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 
 CMakeProjectManager::~CMakeProjectManager()
 {
-    //delete m_rootItem;
 }
 
 KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
@@ -316,7 +315,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             folderList.append( a );
         }
 
-        QStringList directories;
+        QStringList directories(folder->url().toLocalFile(KUrl::RemoveTrailingSlash));
         foreach(QString s, v.includeDirectories())
         {
             if(!s.startsWith('/') && !s.startsWith("#["))
