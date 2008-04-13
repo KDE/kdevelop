@@ -485,21 +485,29 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 
 void QuickOpenPlugin::quickOpen()
 {
+  if(!modelIsFree())
+    return;
   showQuickOpen( All );
 }
 
 void QuickOpenPlugin::quickOpenFile()
 {
+  if(!modelIsFree())
+    return;
   showQuickOpen( Files );
 }
 
 void QuickOpenPlugin::quickOpenFunction()
 {
+  if(!modelIsFree())
+    return;
   showQuickOpen( Functions );
 }
 
 void QuickOpenPlugin::quickOpenClass()
 {
+  if(!modelIsFree())
+    return;
   showQuickOpen( Classes );
 }
 
@@ -520,6 +528,9 @@ bool QuickOpenPlugin::removeProvider( KDevelop::QuickOpenDataProviderBase* provi
 
 void QuickOpenPlugin::quickOpenDeclaration()
 {
+  if(!modelIsFree())
+    return;
+
   if(jumpToSpecialObject())
     return;
   
@@ -585,6 +596,9 @@ bool QuickOpenPlugin::jumpToSpecialObject()
 
 void QuickOpenPlugin::quickOpenDefinition()
 {
+  if(!modelIsFree())
+    return;
+
   if(jumpToSpecialObject())
     return;
   
@@ -611,6 +625,8 @@ void QuickOpenPlugin::quickOpenDefinition()
 
 void QuickOpenPlugin::quickOpenNavigate()
 {
+  if(!modelIsFree())
+    return;
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   
   QWidget* widget = specialObjectNavigationWidget();
@@ -728,8 +744,22 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
   }
 }
 
+bool QuickOpenPlugin::modelIsFree() const
+{
+  if(m_model->treeView()) {
+    //We cannot allow more than 1 quickopen widget at a time, because the model is coupled to the view.
+    kDebug() << "Only one quickopen-widget at a time is allowed";
+    return false;
+  }else{
+    return true;
+  }
+}
+
 void QuickOpenPlugin::quickOpenNavigateFunctions()
 {
+  if(!modelIsFree())
+    return;
+
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(!doc) {
     kDebug() << "No active document";

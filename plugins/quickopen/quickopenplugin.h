@@ -76,6 +76,8 @@ public slots:
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
   private:
+    //Whether the model is free for use. Else we cannot create a quickopen-widget.
+    bool modelIsFree() const;
 
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
