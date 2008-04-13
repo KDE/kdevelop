@@ -272,7 +272,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     {
         foreach(const QString& suffix, useSuffixes)
         {
-            suffixFolders.append(apath+"/"+suffix);
+            suffixFolders.append(apath+'/'+suffix);
         }
     }
     
@@ -284,7 +284,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
         KUrl file(mpath);
         file.addPath(filename);
-        kDebug(9042) << "Trying:" << mpath << "." << filename << file;
+        kDebug(9042) << "Trying:" << mpath << '.' << filename << file;
 #if 0
 // #ifndef Q_OS_WIN
         if(t==Library)
@@ -393,11 +393,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         }
         else
         {
-            //FIXME: Put here the error.
             kDebug(9032) << "error: find_package. Parsing error." << path;
         }
         m_vars->take("CMAKE_CURRENT_LIST_FILE");
-        //delete include; //FIXME
     }
     else if(pack->isRequired())
     {

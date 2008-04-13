@@ -95,8 +95,8 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 #endif
     QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", envVars, QStringList(), CMakeProjectVisitor::Executable);
     m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
-    m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]/"));
-    m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]/"));
+    m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
+    m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
 #ifdef Q_OS_WIN
     cmakeInitScripts << "CMakeMinGWFindMake.cmake";
@@ -151,7 +151,7 @@ void CMakeProjectManager::initializeProject(KDevelop::IProject* project, const K
 {
     m_macrosPerProject[project].clear();
     m_varsPerProject[project]=m_varsDef;
-    m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile()));
+    m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
         
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -273,7 +273,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
         vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
         vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
-        vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile()));
+        vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
     
         kDebug(9042) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
     
@@ -282,7 +282,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
     #endif
         
-        CMakeProjectVisitor v(folder->url().toLocalFile());
+        CMakeProjectVisitor v(folder->url().toLocalFile(KUrl::RemoveTrailingSlash));
         v.setVariableMap(vm);
         v.setMacroMap(mm);
         v.setModulePath(m_modulePathPerProject[item->project()]);
@@ -315,28 +315,33 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             folderList.append( a );
         }
 
-        QStringList directories(folder->url().toLocalFile(KUrl::RemoveTrailingSlash));
-        foreach(QString s, v.includeDirectories())
+        QString folderUrl= folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
+        QStringList directories;
+        directories += folderUrl;
+        directories += vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir;
+        
+        foreach(const QString& s, v.includeDirectories())
         {
+            QString dir(s);
             if(!s.startsWith('/') && !s.startsWith("#["))
             {
                 KUrl path=folder->url();
                 path.addPath(s);
-                s=path.toLocalFile();
+                dir=path.toLocalFile();
             }
-            directories.append(s);
+            directories.append(dir);
         }
         folder->setIncludeDirectories(directories);
         folder->setDefinitions(v.definitions());
     
-        foreach ( QString t, v.targets())
+        foreach ( const QString& t, v.targets())
         {
             QStringList dependencies=v.targetDependencies(t);
             if(!dependencies.isEmpty()) //Just to remove verbosity
             {
                 CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
     
-                foreach( QString sFile, dependencies )
+                foreach( const QString & sFile, dependencies )
                 {
                     if(sFile.isEmpty())
                         continue;
@@ -361,7 +366,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         }
     }
     
-    foreach( QString entry, entries )
+    foreach( const QString& entry, entries )
     {
         KUrl folderurl = item->url();
         folderurl.addPath( entry );
@@ -456,7 +461,7 @@ QString CMakeProjectManager::guessCMakeShare(const QString& cmakeBin)
     KUrl bin(cmakeBin);
     bin=bin.upUrl();
     bin=bin.upUrl();
-    return bin.toLocalFile();
+    return bin.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
 QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
@@ -469,20 +474,20 @@ QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
     rx.indexIn(version);
     QString versionNumber = rx.capturedTexts()[1];
 
-    bin.cd(QString("share/cmake-%1/").arg(versionNumber));
+    bin.cd(QString("share/cmake-%1").arg(versionNumber));
 
-    ret=bin.toLocalFile();
+    ret=bin.toLocalFile(KUrl::RemoveTrailingSlash);
     QDir d(ret);
     if(!d.exists(ret))
     {
         KUrl std(bin);
         std = std.upUrl();
         std.cd("cmake/");
-        ret=std.toLocalFile();
+        ret=std.toLocalFile(KUrl::RemoveTrailingSlash);
         bin = std;
     }
 
-    kDebug(9042) << "guessing: " << bin.toLocalFile();
+    kDebug(9042) << "guessing: " << bin.toLocalFile(KUrl::RemoveTrailingSlash);
     return ret;
 }
 
@@ -510,8 +515,8 @@ void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url
     
     QString currentBinDir=KUrl::relativeUrl(project->projectFileUrl().upUrl(), url);
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
-    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
-    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile()));
+    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
+    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     CMakeProjectVisitor v(url.toLocalFile());
     v.setVariableMap(vm);
     v.setMacroMap(mm);

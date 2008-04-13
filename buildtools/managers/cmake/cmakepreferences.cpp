@@ -152,7 +152,6 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         
         foreach(const QModelIndex &idx, m_currentModel->persistentIndices())
         {
-            kDebug() << "lalalala" << m_currentModel->data(idx) << m_currentModel->data(idx.sibling(idx.row(), 0));
             m_prefsUi->cacheList->openPersistentEditor(idx);
         }
         
