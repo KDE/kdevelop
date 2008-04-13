@@ -155,9 +155,9 @@ void CMakeBuildDirCreator::updated()
         return;
     }
 
-    QString srcDir;
     bool dirEmpty=!m_creatorUi->buildFolder->url().isEmpty();
     bool alreadyCreated=false, correctProject=false;
+    QString srcDir;
     if(dirEmpty)
     {
         QDir d(m_creatorUi->buildFolder->url().toLocalFile());
@@ -167,9 +167,7 @@ void CMakeBuildDirCreator::updated()
             alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(alreadyCreated)
             {
-                QString srcfold=m_srcFolder.toLocalFile();
-                if(srcfold.endsWith("/"))
-                    srcfold.chop(1);
+                QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
                 
                 srcDir=buildDirProject(m_creatorUi->buildFolder->url());
                 correctProject= (srcDir==srcfold);
@@ -179,8 +177,18 @@ void CMakeBuildDirCreator::updated()
 
     kDebug(9042) << "already" << alreadyCreated
                  << "correct" << correctProject;
+    bool alreadyBuildDir=m_alreadyUsed.contains(srcDir);
 //     m_creatorUi->buildFolder->setEnabled(true);
-    if(alreadyCreated && correctProject)
+    if(alreadyBuildDir)
+    {
+        m_creatorUi->installPrefix->setEnabled(false);
+        m_creatorUi->buildType->setEnabled(false);
+//         m_creatorUi->generator->setEnabled(dirEmpty);
+        m_creatorUi->run->setEnabled(false);
+        m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        m_creatorUi->status->setText(i18n("Already used build directory"));
+    }
+    else if(alreadyCreated && correctProject)
     {
         m_creatorUi->installPrefix->setEnabled(false);
         m_creatorUi->buildType->setEnabled(false);
@@ -249,4 +257,10 @@ QString CMakeBuildDirCreator::executeProcess(const QString& execName, const QStr
     return t;
 }
 
+void CMakeBuildDirCreator::setAlreadyUsed(const QStringList &used)
+{
+    m_alreadyUsed=used;
+}
+
 #include "cmakebuilddircreator.h"
+

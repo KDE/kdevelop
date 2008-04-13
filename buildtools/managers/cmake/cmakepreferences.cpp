@@ -82,8 +82,9 @@ void CMakePreferences::load()
 {
     ProjectKCModule<CMakeSettings>::load();
     CMakeSettings::self()->readConfig();
-    kDebug(9042) << "********loading";
 
+    kDebug(9042) << "********loading";
+    m_prefsUi->buildDirs->clear();
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
 
@@ -203,12 +204,21 @@ void CMakePreferences::buildDirChanged(const QString &str)
 void CMakePreferences::createBuildDir()
 {
     CMakeBuildDirCreator bdCreator(m_srcFolder, this);
+    
+    QStringList used;
+    for(int i=0; i<m_prefsUi->buildDirs->count(); i++)
+    {
+        used += m_prefsUi->buildDirs->itemText(i);
+    }
+    
+    bdCreator.setAlreadyUsed(used);
     //TODO: if there is information, use it to initialize the dialog
     if(bdCreator.exec())
     {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
+        m_prefsUi->removeBuildDir->setEnabled(true);
     }
     //TODO: Save it for next runs
 }
@@ -220,6 +230,8 @@ void CMakePreferences::removeBuildDir()
     {
         m_prefsUi->buildDirs->removeItem(curr);
     }
+    if(m_prefsUi->buildDirs->count()==0)
+        m_prefsUi->removeBuildDir->setEnabled(false);
     emit changed(true);
 }
 

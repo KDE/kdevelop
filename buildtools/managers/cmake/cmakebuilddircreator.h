@@ -45,6 +45,7 @@ class CMakeBuildDirCreator : public QDialog
         void setInstallPrefix(const KUrl&);
         void setBuildFolder(const KUrl&);
         void setBuildType(const QString&);
+        void setAlreadyUsed(const QStringList&);
 
     private slots:
         void runBegin();
@@ -59,6 +60,7 @@ class CMakeBuildDirCreator : public QDialog
         static QString buildDirProject(const KUrl& buildDir);
 
         static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
+        QStringList m_alreadyUsed;
         Ui::CMakeBuildDirCreator* m_creatorUi;
         KProcess m_proc;
         KUrl m_srcFolder;

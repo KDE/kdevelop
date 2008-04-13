@@ -158,7 +158,7 @@ void CMakeProjectManager::initializeProject(KDevelop::IProject* project, const K
     if(group.hasKey("CMakeDir"))
     {
         QStringList l;
-        foreach(QString path, group.readEntry("CMakeDir", QStringList()) )
+        foreach(const QString &path, group.readEntry("CMakeDir", QStringList()) )
         {
             if( QFileInfo(path).exists() )
             {
@@ -297,7 +297,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             folder->setText(v.projectName());
         }
 
-        foreach ( QString subf, v.subdirectories() )
+        foreach (const QString& subf, v.subdirectories() )
         {
             if( entries.contains( subf ) )
             {
