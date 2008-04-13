@@ -29,7 +29,8 @@ CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, 
 	m_creatorUi = new Ui::CMakeBuildDirCreator;
 	m_creatorUi->setupUi( this );
 	m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-	
+	m_creatorUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
+
 	QString cmakeBin=executeProcess("which", QStringList("cmake"));
 	setCMakeBinary(KUrl(cmakeBin));
 	
