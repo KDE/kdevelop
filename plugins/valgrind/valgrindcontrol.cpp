@@ -49,7 +49,7 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     m_model->setDevice(m_process);
 
     connect(m_applicationOutput, SIGNAL(receivedStdoutLines(QStringList)), SLOT(applicationOutput(QStringList)));
-
+    connect(m_applicationOutput, SIGNAL(receivedStderrLines(QStringList)), SLOT(applicationOutputStdErr(QStringList)));
     connect(m_process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
     connect(m_process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
@@ -62,31 +62,29 @@ bool ValgrindControl::run(const KDevelop::IRun& run, int serial)
 
     Q_ASSERT(m_process->state() != QProcess::Running);
 
-    /*int port = 38462;
     if (!m_server) {
         m_server = new QTcpServer(this);
-        connect(m_server, SIGNAL(newConnection()), SLOT(readFromValgrind()));
-
-        // Try an arbitrary port range for now
-        while (!m_server->listen(QHostAddress::LocalHost, port) && port < 38482)
-            ++port;
-
-        if (!m_server->isListening())
-            kWarning() << "Could not open TCP socket for communication with Valgrind." ;
-        else
-            kDebug() << "Opened TCP socket" << port << "for communication with Valgrind.";
-    }*/
+        connect(m_server, SIGNAL(newConnection()), SLOT(newValgrindConnection()));
+        if (!m_server->listen()) {
+            kWarning() << "Could not open TCP socket for communication with Valgrind: "
+                       << m_server->errorString();
+            delete m_server;
+            m_server = 0;
+        }
+    }
 
     QStringList arguments;
     arguments << QString("--tool=%1").arg(run.instrumentor());
     arguments << run.instrumentorArguments();
     arguments << "--xml=yes";
-    //arguments << QString("--log-socket=localhost:%1").arg(port);
+    if (m_server && m_server->serverPort() != 0)
+        arguments << QString("--log-socket=127.0.0.1:%1").arg(m_server->serverPort());
     arguments << run.executable().path();
     arguments << run.arguments();
 
     m_process->setReadChannel(QProcess::StandardError);
     m_process->setProgram(plugin()->valgrindExecutable().path(), arguments);
+
     m_process->start();
 
     return true;
@@ -101,18 +99,30 @@ void ValgrindControl::readFromValgrind( )
 {
 }
 
-/*void ValgrindControl::newValgrindConnection( )
+void ValgrindControl::newValgrindConnection()
 {
+    Q_ASSERT(m_server);
+
+
     QTcpSocket* sock = m_server->nextPendingConnection();
-    kDebug() << sock;
-    if (sock && !m_connection) {
+    if (!sock)
+        return;
+
+    if (m_connection) {
+        kWarning() << "Got a new valgrind connection while old one was still alive!";
+        delete sock; // discard new connection
+    } else {
         m_connection = sock;
-        delete m_inputSource;
-        m_inputSource = new QXmlInputSource(sock);
-        m_xmlReader->parse(m_inputSource, true);
-        connect(sock, SIGNAL(readyRead()), SLOT(slotReadFromValgrind()));
+        m_model->setDevice(m_connection);
+        connect(m_connection, SIGNAL(readyRead()), m_model, SLOT(parse()));
+        connect(m_connection, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(socketError(QAbstractSocket::SocketError)));
     }
-}*/
+}
+
+void ValgrindControl::socketError(QAbstractSocket::SocketError)
+{
+    KMessageBox::error(qApp->activeWindow(), i18n("Socket error while communicating with valgrind: \"%1\"").arg(m_connection->errorString()), i18n("Valgrind communication error"));
+}
 
 ValgrindPlugin * ValgrindControl::plugin() const
 {
@@ -145,13 +155,15 @@ void ValgrindControl::processErrored(QProcess::ProcessError e)
 
 void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug() << "Process Error " << exitCode << exitStatus;
+    kDebug() << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
     //core()->running( this, false );
 
-    m_server->close();
     delete m_connection;
-    m_connection = 0L;
+    m_connection = 0;
+
+    delete m_server;
+    m_server = 0;
 
     /*if (kcInfo.runKc)
     {
@@ -165,6 +177,11 @@ void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitSta
 
 void ValgrindControl::readyReadStandardError()
 {
+    if (m_connection) {
+        m_applicationOutput->slotReceivedStderr(m_process->readAllStandardError());
+        return;
+    }
+
     m_model->parse();
 }
 
@@ -177,6 +194,15 @@ void ValgrindControl::applicationOutput(const QStringList & lines)
 {
     foreach (const QString& line, lines)
         emit plugin()->output(m_serial, line, KDevelop::IRunProvider::StandardOutput);
+}
+
+void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
+{
+    if (!m_connection)
+        return;
+
+    foreach (const QString &line, lines)
+        emit plugin()->output(m_serial, line, KDevelop::IRunProvider::StandardError);
 }
 
 ValgrindModel * ValgrindControl::model() const

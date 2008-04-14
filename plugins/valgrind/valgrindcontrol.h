@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QProcess>
+#include <QTcpSocket>
 
 #include <irun.h>
 
@@ -52,7 +53,8 @@ public:
     void stop();
 
 private slots:
-    //void newValgrindConnection();
+    void newValgrindConnection();
+    void socketError(QAbstractSocket::SocketError err);
     void readFromValgrind();
 
     void readyReadStandardOutput();
@@ -61,6 +63,7 @@ private slots:
     void processErrored(QProcess::ProcessError);
 
     void applicationOutput(const QStringList& lines);
+    void applicationOutputStdErr(const QStringList &lines);
 
 private:
     KProcess* m_process;

@@ -76,12 +76,14 @@ public:
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 
     // XML parsing
-    void parse();
     bool endElement();
     bool startElement();
 
     // Manipulation
     void clear();
+
+public slots:
+    void parse();
 
 private:
     enum State {
