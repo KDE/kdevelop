@@ -40,7 +40,7 @@ class BaseContextBuilder
 public:
   BaseContextBuilder();
   BaseContextBuilder( EditorIntegrator* editor );
-  ~BaseContextBuilder();
+  virtual ~BaseContextBuilder();
 
   TopDUContext buildContexts( const KUrl& url, T* ast,
                                         const TopDUContextPointer&
@@ -58,7 +58,6 @@ protected:
   KDevelop::DUContext* buildSubContexts( const KUrl& url, T *node,
                                          KDevelop::DUContext* parent );
   void deleteContextOnNode( T* );
-  void smartenContext( TopDUContext* topLevelContext );
   void openContext( DUContext* newContext );
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, T* identifier );
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier );
@@ -66,7 +65,6 @@ protected:
   void closeContext();
   void setEncountered( DUChainBase* item );
   bool wasEncountered( DUChainBase* item );
-  void smartenContext( TopDUContext* topLevelContext );
 
   void setIdentifier( const QString& id );
   QualifiedIdentifier qualifiedIdentifier();
