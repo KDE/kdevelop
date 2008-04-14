@@ -33,7 +33,7 @@
 #include "svn_client.h"
 
 // svncpp
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 
 namespace svn

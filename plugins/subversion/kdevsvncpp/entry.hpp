@@ -29,7 +29,7 @@
 #include "svn_wc.h"
 
 // svncpp
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 
 namespace svn

@@ -30,7 +30,7 @@
 #include <vector>
 
 // svncpp
-#include "svncpp/status.hpp"
+#include "kdevsvncpp/status.hpp"
 
 
 namespace svn

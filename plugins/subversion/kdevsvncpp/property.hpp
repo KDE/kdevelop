@@ -43,8 +43,8 @@
 #include <string>
 
 // svncpp
-#include "svncpp/context.hpp"
-#include "svncpp/path.hpp"
+#include "kdevsvncpp/context.hpp"
+#include "kdevsvncpp/path.hpp"
 
 namespace svn
 {

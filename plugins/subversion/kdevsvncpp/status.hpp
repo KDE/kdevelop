@@ -29,8 +29,8 @@
 #include "svn_wc.h"
 
 // svncpp
-#include "svncpp/entry.hpp"
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/entry.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 namespace svn
 {
