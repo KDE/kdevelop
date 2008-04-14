@@ -64,9 +64,11 @@ Container::~Container()
 void Container::widgetActivated(int idx)
 {
     d->stack->setCurrentIndex(idx);
-    d->stack->widget(idx)->setFocus();
-    if(d->viewForWidget.contains(d->stack->widget(idx)))
-      emit activateView(d->viewForWidget[d->stack->widget(idx)]);
+    if (QWidget* widget = d->stack->widget(idx)) {
+        widget->setFocus();
+        if(d->viewForWidget.contains(widget))
+            emit activateView(d->viewForWidget[widget]);
+    }
 }
 
 void Container::addWidget(View *view)
