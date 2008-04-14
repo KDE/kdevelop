@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="45" name="kdevelop" >
+<kpartgui version="47" name="kdevelop" >
 <MenuBar noMerge="1">
   <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -71,6 +71,7 @@
     <Action name="project_options"/>
     <Separator/>
     <Action name="project_close"/>
+    <Action name="project_close_all"/>
     <Separator />
     <Merge  />
   </Menu>
@@ -78,6 +79,7 @@
     <text>Bu&amp;ild</text>
     <Merge/>
     <Separator/>
+    <Action name="run_execute"/>
     <Action name="stop_processes"/>
   </Menu>
 <!--
