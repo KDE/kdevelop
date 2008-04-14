@@ -78,7 +78,7 @@ MainWindow::~ MainWindow()
 {
     if (memberList().count() == 1)
         // We're closing down...
-        Core::self()->deinitialize();
+        Core::self()->cleanup();
 
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);

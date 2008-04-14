@@ -46,7 +46,7 @@ namespace KDevelop {
 Core *Core::m_self = 0;
 
 struct CorePrivate {
-    CorePrivate(Core *core): m_core(core)
+    CorePrivate(Core *core): m_core(core), m_cleanedUp(false)
     {
     }
     void initialize()
@@ -65,6 +65,7 @@ struct CorePrivate {
         uiController->initialize();
         languageController->initialize();
         projectController->initialize();
+        documentController->initialize();
 
 	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
@@ -73,10 +74,6 @@ struct CorePrivate {
         uiController->showArea(defaultArea, uiController->defaultMainWindow());
 
         uiController->defaultMainWindow()->show();
-    }
-    void deinitialize()
-    {
-        documentController->deinitialize();
     }
     ~CorePrivate()
     {
@@ -98,6 +95,7 @@ struct CorePrivate {
     QPointer<RunController> runController;
 
     Core *m_core;
+    bool m_cleanedUp;
 };
 
 void Core::initialize()
@@ -107,11 +105,6 @@ void Core::initialize()
 
     m_self = new Core();
     m_self->d->initialize();
-}
-
-void KDevelop::Core::deinitialize()
-{
-    d->deinitialize();
 }
 
 Core *KDevelop::Core::self()
@@ -129,16 +122,20 @@ Core::Core(QObject *parent)
 Core::~Core()
 {
     kDebug(9501) ;
-    cleanup();
+    //Cleanup already called before mass destruction of GUI
     delete d;
 }
 
 void Core::cleanup()
 {
-    /* Must be called before projectController->cleanup(). */
-    d->documentController->cleanup();
-    d->projectController->cleanup();
-    d->pluginController->cleanup();
+    if (!d->m_cleanedUp) {
+        /* Must be called before projectController->cleanup(). */
+        d->documentController->cleanup();
+        d->projectController->cleanup();
+        d->pluginController->cleanup();
+    }
+
+    d->m_cleanedUp = true;
 }
 
 IUiController *Core::uiController()

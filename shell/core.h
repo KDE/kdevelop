@@ -84,9 +84,6 @@ public:
     /** @return run controller */
     RunController *runControllerInternal();
 
-    void deinitialize();
-
-protected:
     void cleanup();
 
 private:

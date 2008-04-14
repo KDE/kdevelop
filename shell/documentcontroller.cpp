@@ -53,7 +53,7 @@ namespace KDevelop
 
 struct DocumentControllerPrivate {
     DocumentControllerPrivate(DocumentController* c)
-    : controller(c), cleaningUp(false)
+    : controller(c)
     {
     }
 
@@ -101,7 +101,6 @@ struct DocumentControllerPrivate {
     QPointer<KAction> closeAll;
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
-    bool cleaningUp;
 
 /*    HistoryEntry createHistoryEntry();
     void addHistoryEntry();
@@ -119,9 +118,17 @@ DocumentController::DocumentController( QObject *parent )
     setupActions();
 }
 
-void DocumentController::deinitialize()
+void KDevelop::DocumentController::initialize()
+{
+    Core::self()->uiControllerInternal()->loadAllAreas(KGlobal::config());
+}
+
+void DocumentController::cleanup()
 {
     d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+
+    // Save the areas to the kdevelop main configuration
+    Core::self()->uiControllerInternal()->saveAllAreas(KGlobal::config());
 }
 
 DocumentController::~DocumentController()
@@ -465,14 +472,6 @@ void DocumentController::registerDocumentForMimetype( const QString& mimetype,
         d->factories[mimetype] = factory;
 }
 
-void DocumentController::cleanup()
-{
-    /* From now on, we don't save document list, so that
-       we don't make it empty as documents are closed
-       during shut-down.  */
-    d->cleaningUp = true;
-}
-
 QStringList DocumentController::documentTypes() const
 {
     return QStringList() << "Text";
@@ -493,106 +492,6 @@ Sublime::Document* DocumentController::createDocument(const QString & type, cons
     }
 
     return 0;
-}
-
-void DocumentController::saveArea(Sublime::Area * area, KConfigGroup & group)
-{
-    saveArea(area->rootIndex(), group);
-}
-
-void DocumentController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
-{
-    if (area->isSplitted()) {
-        group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
-
-        if (area->first()) {
-            KConfigGroup subgroup(&group, "0");
-            subgroup.deleteGroup();
-            saveArea(area->first(), subgroup);
-        }
-
-        if (area->second()) {
-            KConfigGroup subgroup(&group, "1");
-            subgroup.deleteGroup();
-            saveArea(area->second(), subgroup);
-        }
-    } else {
-        group.writeEntry("View Count", area->viewCount());
-
-        int index = 0;
-        foreach (Sublime::View* view, area->views()) {
-            group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-            group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-            QString state = view->viewState();
-            if (!state.isEmpty())
-                group.writeEntry(QString("View %1 State").arg(index), state);
-
-            ++index;
-        }
-    }
-}
-
-void DocumentController::loadArea(Sublime::Area * area, const KConfigGroup & group)
-{
-    loadArea(area->rootIndex(), group);
-}
-
-void DocumentController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & group)
-{
-    if (group.hasKey("Orientation")) {
-        QStringList subgroups = group.groupList();
-
-        if (subgroups.contains("0")) {
-            if (!area->isSplitted())
-                area->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
-
-            KConfigGroup subgroup(&group, "0");
-            loadArea(area->first(), subgroup);
-
-            if (subgroups.contains("1")) {
-                Q_ASSERT(area->isSplitted());
-                KConfigGroup subgroup(&group, "1");
-                loadArea(area->second(), subgroup);
-            }
-        }
-
-    } else {
-        while (area->isSplitted()) {
-            area = area->first();
-            Q_ASSERT(area);// Split area index did not contain a first child area index if this fails
-        }
-
-        int viewCount = group.readEntry("View Count", 0);
-        for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
-
-            bool viewExists = false;
-            foreach (Sublime::View* view, area->views()) {
-                if (view->document()->documentSpecifier() == specifier) {
-                    viewExists = true;
-                    break;
-                }
-            }
-
-            if (viewExists)
-                continue;
-
-            Sublime::Document* document = createDocument(type, specifier);
-            if (document) {
-                Sublime::View* view = document->createView();
-
-                QString state = group.readEntry(QString("View %1 State").arg(i), "");
-                if (!state.isEmpty())
-                    view->setState(state);
-
-                area->add(view);
-
-            } else {
-                kWarning() << "Unable to create view of type " << type;
-            }
-        }
-    }
 }
 
 }

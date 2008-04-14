@@ -316,34 +316,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
     }
 
     // Load area configurations from project file
-    KConfigGroup uiConfig(project->projectConfiguration(), "User Interface");
-    int areaCount = uiConfig.readEntry("Area Count", 0);
-
-    QList<Sublime::Area*> changedAreas;
-
-    for (int areaIndex = 0; areaIndex < areaCount; ++areaIndex) {
-        KConfigGroup group(project->projectConfiguration(), QString("Area %1").arg(areaIndex));
-
-        QString savedTitle = group.readEntry("Area Title", "");
-        Sublime::Area* existingArea = 0;
-        foreach (Sublime::Area* area, d->m_core->uiControllerInternal()->areas()) {
-            if (area->title() == savedTitle) {
-                existingArea = area;
-                break;
-            }
-        }
-
-        if (!existingArea)
-            existingArea = new Sublime::Area(d->m_core->uiControllerInternal(), savedTitle);
-
-        changedAreas << existingArea;
-
-        d->m_core->documentControllerInternal()->loadArea(existingArea, group);
-    }
-
-    foreach (Sublime::MainWindow* mw, d->m_core->uiControllerInternal()->mainWindows())
-        if (changedAreas.contains(mw->area()))
-            d->m_core->uiControllerInternal()->showArea(mw->area(), mw);
+    d->m_core->uiControllerInternal()->loadAllAreas(project->projectConfiguration());
 
     d->m_closeAllProjects->setEnabled(true);
 
@@ -410,17 +383,7 @@ bool ProjectController::closeProject( IProject* proj )
 
     //The project file is being closed.
     // Save area configurations to project file
-    KConfigGroup uiConfig(proj->projectConfiguration(), "User Interface");
-    uiConfig.writeEntry("Area Count", d->m_core->uiControllerInternal()->areas().count());
-
-    int areaIndex = 0;
-    foreach (Sublime::Area* area, d->m_core->uiControllerInternal()->areas()) {
-        KConfigGroup group(proj->projectConfiguration(), QString("Area %1").arg(areaIndex));
-        group.deleteGroup();
-        group.writeEntry("Area Title", area->title());
-        d->m_core->documentControllerInternal()->saveArea(area, group);
-        areaIndex++;
-    }
+    d->m_core->uiControllerInternal()->saveAllAreas(proj->projectConfiguration());
 
     //Now we can save settings for all of the Core objects including this one!!
 //     Core::self()->saveSettings();

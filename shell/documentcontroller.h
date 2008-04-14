@@ -84,21 +84,13 @@ public:
 
     void notifyDocumentClosed(IDocument* doc);
 
-    void deinitialize();
-
+    void initialize();
     void cleanup();
 
     virtual QStringList documentTypes() const;
 
     QString documentType(Sublime::Document* document) const;
     Sublime::Document* createDocument(const QString& type, const QString& specifier);
-
-    void saveArea(Sublime::Area* area, KConfigGroup & group);
-    void loadArea(Sublime::Area* area, const KConfigGroup & group);
-
-private:
-    void saveArea(Sublime::AreaIndex* area, KConfigGroup & group);
-    void loadArea(Sublime::AreaIndex* area, const KConfigGroup & group);
 
 public Q_SLOTS:
     /**Opens a new or existing document.

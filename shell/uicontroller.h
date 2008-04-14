@@ -24,6 +24,12 @@
 #include <iuicontroller.h>
 #include <sublime/controller.h>
 
+#include <ksharedconfig.h>
+
+namespace Sublime {
+    class AreaIndex;
+}
+
 namespace KDevelop {
 
 class Core;
@@ -65,6 +71,16 @@ public:
     Sublime::Controller* controller();
 
     void mainWindowDeleted(MainWindow* mw);
+
+    void saveAllAreas(KSharedConfig::Ptr config);
+    void saveArea(Sublime::Area* area, KConfigGroup & group);
+    void loadAllAreas(KSharedConfig::Ptr config);
+    void loadArea(Sublime::Area* area, const KConfigGroup & group);
+
+private:
+    void saveArea(Sublime::AreaIndex* area, KConfigGroup & group);
+    void loadArea(Sublime::AreaIndex* area, const KConfigGroup & group);
+
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);

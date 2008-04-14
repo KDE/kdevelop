@@ -234,9 +234,8 @@ void MainWindowPrivate::viewAddNewToolView()
 
 void MainWindowPrivate::quitAll()
 {
-    Core::self()->deinitialize();
+    Core::self()->cleanup();
     KApplication::kApplication()->exit();
-
 }
 
 }
