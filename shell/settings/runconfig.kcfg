@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
-  <kcfgfile name="kdeveloprc"/>
+  <kcfgfile arg="true"/>
   <group name="Run Options">
     <entry name="executable" key="Executable" type="Url"/>
     <entry name="environment" key="Environment" type="String"/>

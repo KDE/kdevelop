@@ -1,7 +1,7 @@
 /* KDevelop Project Settings
  *
  * Copyright 2006  Matt Rogers <mattr@kde.org>
- * Copyright 2007  Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,13 @@
 #ifndef KDEVRUNPREFERENCES_H
 #define KDEVRUNPREFERENCES_H
 
-#include <kcmodule.h>
+#include <projectkcmodule.h>
 
 #include <kurl.h>
 #include <kstandarddirs.h>
+
+class KConfigDialogManager;
+class RunSettings;
 
 namespace Ui
 {
@@ -35,7 +38,7 @@ class RunSettings;
 namespace KDevelop
 {
 
-class RunPreferences : public KCModule
+class RunPreferences : public ProjectKCModule<RunSettings>
 {
     Q_OBJECT
 public:
@@ -43,6 +46,7 @@ public:
     virtual ~RunPreferences();
 
     virtual void save();
+    virtual void load();
 
     virtual KUrl localNonShareableFile() const
     {
@@ -50,8 +54,21 @@ public:
                    KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
     }
 
+private Q_SLOTS:
+    void newRunConfig();
+    void deleteRunConfig();
+    void runConfigSelected(int index);
+    void runConfigRenamed(const QString& newName);
+
 private:
+    bool configNameValid(const QString& name);
+
     Ui::RunSettings *preferencesDialog;
+    KConfigDialogManager* m_manager;
+    int m_currentRunTarget;
+    QString m_currentRunTargetName;
+    bool m_deletingCurrentRunTarget;
+    QStringList m_runTargets;
 };
 
 }
