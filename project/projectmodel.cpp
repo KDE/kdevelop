@@ -374,5 +374,10 @@ ProjectTargetItem *ProjectTargetItem::target() const
     return const_cast<ProjectTargetItem*>( this );
 }
 
+void ProjectTargetItem::setIcon()
+{
+    QStandardItem::setIcon( KIcon("system-run") );
+}
+
 }
 #include "projectmodel.moc"

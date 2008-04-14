@@ -62,10 +62,10 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         enum ProjectItemType
         {
-            Folder = QStandardItem::UserType /** item is a folder */,
-            File                             /** item is a file */,
-            Target                           /** item is a target */,
-            BuildFolder                      /** item is a buildable folder */
+            BuildFolder = QStandardItem::UserType   /** item is a buildable folder */,
+            Target                                  /** item is a target */,
+            File                                    /** item is a file */,
+            Folder                                  /** item is a folder */
         };
 
         /** @returns Returns the project that the item belongs to.  */
@@ -172,6 +172,7 @@ public:
     virtual int type() const;
 
     virtual ProjectTargetItem *target() const;
+    virtual void setIcon();
 protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:

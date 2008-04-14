@@ -24,6 +24,7 @@
 #include "context.h"
 #include "iplugincontroller.h"
 #include <QtGui/QHeaderView>
+#include <QtGui/QAbstractProxyModel>
 
 #include <icore.h>
 #include <kxmlguiwindow.h>
@@ -88,15 +89,16 @@ ProjectFolderItem *ProjectTreeView::currentFolderItem() const
 {
     Q_ASSERT( projectModel() != 0 );
 
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     QItemSelectionModel *selection = selectionModel();
-    QModelIndex current = selection->currentIndex();
+    QModelIndex current = proxy->mapToSource(selection->currentIndex());
 
     while ( current.isValid() )
     {
         if ( ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>( projectModel()->item( current ) ) )
             return folderItem;
 
-        current = projectModel()->parent( current );
+        current = proxy->mapFromSource(projectModel()->parent( current ));
     }
 
     return 0;
@@ -107,15 +109,16 @@ ProjectFileItem *ProjectTreeView::currentFileItem() const
 {
     Q_ASSERT( projectModel() != 0 );
 
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     QItemSelectionModel *selection = selectionModel();
-    QModelIndex current = selection->currentIndex();
+    QModelIndex current = proxy->mapToSource(selection->currentIndex());
 
     while ( current.isValid() )
     {
         if ( ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>( projectModel()->item( current ) ) )
             return fileItem;
 
-        current = projectModel()->parent( current );
+        current = proxy->mapFromSource(projectModel()->parent( current ));
     }
 
     return 0;
@@ -141,15 +144,20 @@ ProjectTargetItem *ProjectTreeView::currentTargetItem() const
 }
 
 KDevelop::ProjectModel *ProjectTreeView::projectModel() const
-
 {
-    return qobject_cast<KDevelop::ProjectModel*>( model() );
+    KDevelop::ProjectModel *ret;
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+    ret=qobject_cast<KDevelop::ProjectModel*>( proxy->sourceModel() );
+    
+//     ret=qobject_cast<KDevelop::ProjectModel*>( model() );
+    Q_ASSERT(ret);
+    return ret;
 }
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
-
 {
-    KDevelop::ProjectBaseItem *item = projectModel()->item( index );
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+    KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );
 
     if ( item && item->file() )
     {
@@ -158,15 +166,15 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 }
 
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
-
 {
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
 //     QModelIndex index = indexAt( pos );
     QModelIndexList indexes = selectionModel()->selectedRows();
     QList<KDevelop::ProjectBaseItem*> itemlist;
 
     foreach( QModelIndex index, indexes )
     {
-        if ( KDevelop::ProjectBaseItem *item = projectModel()->item( index ) )
+        if ( KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
             itemlist << item;
     }
 
@@ -183,8 +191,9 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
 void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
 {
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     kDebug(9511) << "Changed model index";
-    if ( ProjectBaseItem *item = projectModel()->item( index ) )
+    if ( ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
     {
         emit currentChanged( item );
     }

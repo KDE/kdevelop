@@ -20,8 +20,8 @@
 
 #include "projectmanagerview.h"
 
-#include <QtGui/QHeaderView>
 #include <QtCore/QDebug>
+#include <QtGui/QHeaderView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QStandardItem>
@@ -46,6 +46,7 @@
 #include "ibuildsystemmanager.h"
 #include "iprojectbuilder.h"
 #include "projectmodel.h"
+#include "projectproxymodel.h"
 
 #include "projectbuildsetwidget.h"
 #include "projectmanagerviewplugin.h"
@@ -61,9 +62,11 @@ public:
     ProjectTreeView *m_projectOverview;
     ProjectBuildSetWidget* m_buildView;
     KComboBox* m_detailSwitcher;
+//     KLineEdit* m_filters;
     QStackedWidget* m_detailStack;
     QStringList m_cachedFileList;
     QToolButton* hideDetailsButton;
+    ProjectProxyModel* m_modelFilter;
 
     void fileDirty( const QString &fileName )
     {
@@ -82,6 +85,11 @@ public:
     {
         mplugin->core()->documentController()->openDocument( url );
     }
+    
+    /*void filtersChanged()
+    {
+        m_modelFilter->setFilterWildcard(m_filters->text());
+    }*/
 };
 
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent )
@@ -103,7 +111,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
 //     connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
 //              this, SLOT(currentItemChanged( KDevelop::ProjectBaseItem* ) ) );
-
+    
+//     d->m_filters = new KLineEdit(this);
+//     d->m_filters->setClearButtonShown(true);
+//     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
+//     vbox->addWidget( d->m_filters );
+    
     QHBoxLayout* hbox = new QHBoxLayout();
     vbox->addLayout( hbox );
 
@@ -128,10 +141,13 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_buildView->setWhatsThis( i18n( "Build Items:" ) );
     d->m_detailStack->insertWidget( 0, d->m_buildView );
 
-    QAbstractItemModel *overviewModel = d->mplugin->core()->projectController()->projectModel();
-
-    d->m_projectOverview->setModel( overviewModel );
-
+    QStandardItemModel *overviewModel = d->mplugin->core()->projectController()->projectModel();
+    d->m_modelFilter = new ProjectProxyModel( this );
+    d->m_modelFilter->setSourceModel(overviewModel);
+    d->m_modelFilter->setDynamicSortFilter(true);
+    d->m_projectOverview->setSortingEnabled(true);
+    d->m_projectOverview->setModel( d->m_modelFilter );
+//     d->m_projectOverview->setModel( overviewModel );
     d->m_projectOverview->setSelectionModel(
             new QItemSelectionModel( overviewModel, d->m_projectOverview ) );
 
@@ -168,7 +184,8 @@ void ProjectManagerView::switchDetailView()
     {
         d->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
         d->m_detailStack->show();
-    }else
+    }
+    else
     {
         d->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
         d->m_detailStack->hide();
