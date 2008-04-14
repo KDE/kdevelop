@@ -94,16 +94,17 @@ IF (NOT WIN32)
             ENDIF(${_ARG} MATCHES "^-L")
             IF(${_ARG} MATCHES "^-l")
                STRING(REGEX REPLACE "^-l" "" _ARG ${_ARG})
-               FIND_LIBRARY(_LIB_FROM_ARG NAMES ${_ARG}
+               FIND_LIBRARY(_APR_LIB_FROM_ARG NAMES ${_ARG}
                     PATHS
                     ${_APR_LIB_PATHS}
                )
-               IF(_LIB_FROM_ARG)
-                  SET(APR_LIBRARY ${APR_LIBRARY} ${_LIB_FROM_ARG})
-               ENDIF(_LIB_FROM_ARG)
+               IF(_APR_LIB_FROM_ARG)
+                  SET(APR_LIBRARY ${APR_LIBRARY} ${_APR_LIB_FROM_ARG})
+               ENDIF(_APR_LIB_FROM_ARG)
             ENDIF(${_ARG} MATCHES "^-l")
          ENDFOREACH(_ARG)
     ENDIF(NOT APR_CONFIG)
+    
     IF(NOT APU_CONFIG)
         MESSAGE(STATUS "no apu-config found, subversion support will be disabled")
         SET(SUBVERSION_FOUND false)
@@ -112,6 +113,7 @@ IF (NOT WIN32)
         STRING(REPLACE "-I" "" APU_INCLUDE_DIR ${APU_INCLUDE_DIR})
         EXEC_PROGRAM(${APU_CONFIG} ARGS "--link-ld" OUTPUT_VARIABLE _LINK_LD_ARGS)
         STRING( REPLACE " " ";" _LINK_LD_ARGS ${_LINK_LD_ARGS} )
+        SET(_APU_LIB_PATHS "")
         FOREACH( _ARG ${_LINK_LD_ARGS} )
             IF(${_ARG} MATCHES "^-L")
                 STRING(REGEX REPLACE "^-L" "" _ARG ${_ARG})
@@ -119,13 +121,13 @@ IF (NOT WIN32)
             ENDIF(${_ARG} MATCHES "^-L")
             IF(${_ARG} MATCHES "^-l")
                STRING(REGEX REPLACE "^-l" "" _ARG ${_ARG})
-               FIND_LIBRARY(_LIB_FROM_ARG NAMES ${_ARG}
+               FIND_LIBRARY(_APU_LIB_FROM_ARG NAMES aprutil-1
                     PATHS
                     ${_APU_LIB_PATHS}
                )
-               IF(_LIB_FROM_ARG)
-                  SET(APU_LIBRARY ${APU_LIBRARY} ${_LIB_FROM_ARG})
-               ENDIF(_LIB_FROM_ARG)
+               IF(_APU_LIB_FROM_ARG)
+                  SET(APU_LIBRARY ${APU_LIBRARY} ${_APU_LIB_FROM_ARG})
+               ENDIF(_APU_LIB_FROM_ARG)
             ENDIF(${_ARG} MATCHES "^-l")
         ENDFOREACH(_ARG)
     ENDIF(NOT APU_CONFIG)
