@@ -54,6 +54,8 @@ public:
 
     virtual KTextEditor::Document* textDocument() const;
 
+    virtual QString documentType() const;
+
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);
 

@@ -150,7 +150,7 @@ public:
     struct MyOperator {
         WalkerMode operator()(View *view, Sublime::Position position) {
             std::cerr << view << " at position " << position << std::endl;
-            return Area::ContiueWalker;
+            return Area::ContinueWalker;
         }
     };
     ...
@@ -160,9 +160,6 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
-
-    ///Saves area layout + information to the given configuration \a {group}.
-    virtual void saveSettings(KConfigGroup& group);
 
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/

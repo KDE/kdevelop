@@ -139,12 +139,12 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
         mainWindow, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
 }
 
-QList<Area*> &Controller::areas() const
+const QList<Area*> &Controller::areas() const
 {
     return d->areas;
 }
 
-QList<Document*> &Controller::documents() const
+const QList<Document*> &Controller::documents() const
 {
     return d->documents;
 }
@@ -254,7 +254,11 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     return false;
 }
 
+const QList< MainWindow * > & Controller::mainWindows() const
+{
+    return d->controlledWindows;
+}
+
 }
 
 #include "controller.moc"
-

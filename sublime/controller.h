@@ -53,9 +53,11 @@ public:
 
     /**@return the list of areas available for use in this controller.
     This list does not include area clones.*/
-    QList<Area*> &areas() const;
+    const QList<Area*> &areas() const;
     /**@return the list of documents created in this controller.*/
-    QList<Document*> &documents() const;
+    const QList<Document*> &documents() const;
+
+    const QList<MainWindow*> &mainWindows() const;
 
 public Q_SLOTS:
     //@todo adymo: this should not be a part of public API

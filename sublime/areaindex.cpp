@@ -113,7 +113,7 @@ void AreaIndex::remove(View *view)
         d->parent->unsplit(this);
 }
 
-void AreaIndex::split(View *newView, Qt::Orientation orientation)
+void Sublime::AreaIndex::split(Qt::Orientation orientation)
 {
     //we can not split areas that have already been splitted
     if (d->isSplitted())
@@ -125,6 +125,11 @@ void AreaIndex::split(View *newView, Qt::Orientation orientation)
 
     //assign current views to the first part of splitter
     copyTo(d->first);
+}
+
+void AreaIndex::split(View *newView, Qt::Orientation orientation)
+{
+    split(orientation);
 
     //make new view as second widget in splitter
     d->second->add(newView);
@@ -215,34 +220,9 @@ bool Sublime::AreaIndex::isSplitted() const
     return d->isSplitted();
 }
 
-void AreaIndex::saveSettings(KConfigGroup & group)
+void Sublime::AreaIndex::setOrientation(Qt::Orientation orientation) const
 {
-    group.deleteGroup();
-
-    group.writeEntry("View Count", d->views.count());
-
-    int index = 0;
-    foreach (View* view, d->views) {
-        group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-        group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-        QString state = view->viewState();
-        if (!state.isEmpty())
-            group.writeEntry(QString("View %1 State").arg(index), state);
-
-        ++index;
-    }
-
-    group.writeEntry("Orientation", d->orientation == Qt::Horizontal ? "Horizontal" : "Vertical");
-
-    if (d->first) {
-        KConfigGroup subgroup(&group, "0");
-        d->first->saveSettings(subgroup);
-    }
-
-    if (d->second) {
-        KConfigGroup subgroup(&group, "1");
-        d->second->saveSettings(subgroup);
-    }
+    d->orientation = orientation;
 }
 
 // class RootAreaIndex

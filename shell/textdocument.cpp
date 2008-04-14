@@ -63,7 +63,7 @@ struct TextDocumentPrivate {
         Q_UNUSED(document);
         m_textDocument->notifyContentChanged();
     }
-    
+
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
         KTextEditor::ModificationInterface::ModifiedOnDiskReason reason)
     {
@@ -147,7 +147,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
         connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)),
                  this, SLOT(textChanged(KTextEditor::Document*)));
-        
+
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)
         {
@@ -165,7 +165,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (view)
         view->setContextMenu( view->defaultContextMenu() );
-    
+
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
         KConfigGroup group(KGlobal::config(), "Code Completion");
         bool automaticInvocation = group.readEntry( "Automatic Invocation", false );
@@ -348,8 +348,13 @@ QString KDevelop::TextView::viewState() const
 void KDevelop::TextView::setState(const QString & state)
 {
     static QRegExp re("Cursor=([\\d]+),([\\d]+)");
-    if (re.exactMatch(state))
+    if (d->m_view && re.exactMatch(state))
         d->m_view->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+}
+
+QString KDevelop::TextDocument::documentType() const
+{
+    return "Text";
 }
 
 #include "textdocument.moc"

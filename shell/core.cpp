@@ -73,8 +73,6 @@ struct CorePrivate {
         uiController->showArea(defaultArea, uiController->defaultMainWindow());
 
         uiController->defaultMainWindow()->show();
-
-        documentController->restoreDocumentList();
     }
     void deinitialize()
     {

@@ -102,7 +102,7 @@ struct DocumentControllerPrivate {
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     bool cleaningUp;
-    
+
 /*    HistoryEntry createHistoryEntry();
     void addHistoryEntry();
     void jumpTo( const HistoryEntry & );*/
@@ -240,8 +240,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
                                        i18n( "Open File" ) );
     }
-    
-    
+
+
     bool emitLoaded = false;
 
     //get a part document
@@ -352,8 +352,6 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     d->closeAll->setEnabled(true);
     d->closeAllOthers->setEnabled(true);
 
-    saveDocumentList();
-
     return doc;
 }
 
@@ -372,8 +370,6 @@ void DocumentController::closeDocument( const KUrl &url )
     //document will be self-destructed and removeDocument() slot will catch that
     //and clean up internal data structures
     d->documents[url]->close();
-
-    saveDocumentList();
 }
 
 void DocumentController::notifyDocumentClosed(IDocument* doc)
@@ -394,8 +390,6 @@ void DocumentController::notifyDocumentClosed(IDocument* doc)
     }
 
     emit documentClosed(doc);
-
-    saveDocumentList();
 }
 
 IDocument * DocumentController::documentForUrl( const KUrl & url ) const
@@ -511,7 +505,104 @@ void DocumentController::cleanup()
     d->cleaningUp = true;
 }
 
+QStringList DocumentController::documentTypes() const
+{
+    return QStringList() << "Text";
+}
+
+Sublime::Document* DocumentController::createDocument(const QString & type, const QString & specifier)
+{
+    if (type == "Text")
+        return new TextDocument(KUrl(specifier), Core::self());
+
+    return 0;
+}
+
+void DocumentController::saveArea(Sublime::Area * area, KConfigGroup & group)
+{
+    saveArea(area->rootIndex(), group);
+}
+
+void DocumentController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
+{
+    group.writeEntry("View Count", area->viewCount());
+
+    int index = 0;
+    foreach (Sublime::View* view, area->views()) {
+        group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
+        group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
+        QString state = view->viewState();
+        if (!state.isEmpty())
+            group.writeEntry(QString("View %1 State").arg(index), state);
+
+        ++index;
+    }
+
+    group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
+
+    if (area->first()) {
+        KConfigGroup subgroup(&group, "0");
+        subgroup.deleteGroup();
+        saveArea(area->first(), subgroup);
+    }
+
+    if (area->second()) {
+        KConfigGroup subgroup(&group, "1");
+        subgroup.deleteGroup();
+        saveArea(area->second(), subgroup);
+    }
+}
+
+void DocumentController::loadArea(Sublime::Area * area, const KConfigGroup & group)
+{
+    loadArea(area->rootIndex(), group);
+}
+
+void DocumentController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & group)
+{
+    int viewCount = group.readEntry("View Count", 0);
+    for (int i = 0; i < viewCount; ++i) {
+        QString type = group.readEntry(QString("View %1 Type").arg(i), "");
+
+        QString specifier = group.readEntry(QString("View %1").arg(i), "");
+        Sublime::Document* document = createDocument(type, specifier);
+        if (document) {
+            Sublime::View* view = document->createView();
+
+            QString state = group.readEntry(QString("View %1 State").arg(i), "");
+            if (!state.isEmpty())
+                view->setState(state);
+
+            area->add(view);
+
+        } else {
+            kWarning() << "Unable to create view of type " << type;
+        }
+    }
+
+    if (group.readEntry("Orientation", "Horizontal") == "Vertical")
+        area->setOrientation(Qt::Vertical);
+    else
+        area->setOrientation(Qt::Horizontal);
+
+    QStringList subgroups = group.groupList();
+
+    if (subgroups.contains("0")) {
+        if (!area->isSplitted())
+            // Will load when the subgroup is iterated
+            area->split(Qt::Horizontal);
+
+        KConfigGroup subgroup(&group, "0");
+        loadArea(area->first(), subgroup);
+    }
+
+    if (subgroups.contains("1")) {
+        Q_ASSERT(area->isSplitted());
+        KConfigGroup subgroup(&group, "1");
+        loadArea(area->second(), subgroup);
+    }
+}
+
 }
 
 #include "documentcontroller.moc"
-

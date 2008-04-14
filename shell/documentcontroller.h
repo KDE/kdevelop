@@ -35,6 +35,8 @@ Boston, MA 02110-1301, USA.
 
 namespace Sublime {
     class Document;
+    class Area;
+    class AreaIndex;
 }
 
 namespace KDevelop {
@@ -83,12 +85,24 @@ public:
     void notifyDocumentClosed(IDocument* doc);
 
     void deinitialize();
-    
+
     /** Read the list of previously opened documents from KGlobal::config()
         and open them.  */
     void restoreDocumentList();
 
     void cleanup();
+
+    virtual QStringList documentTypes() const;
+
+    QString documentType(Sublime::Document* document) const;
+    Sublime::Document* createDocument(const QString& type, const QString& specifier);
+
+    void saveArea(Sublime::Area* area, KConfigGroup & group);
+    void loadArea(Sublime::Area* area, const KConfigGroup & group);
+
+private:
+    void saveArea(Sublime::AreaIndex* area, KConfigGroup & group);
+    void loadArea(Sublime::AreaIndex* area, const KConfigGroup & group);
 
 public Q_SLOTS:
     /**Opens a new or existing document.
@@ -100,7 +114,7 @@ public Q_SLOTS:
             DocumentActivation activate = IDocumentController::ActivateOnOpen );
 
     virtual Q_SCRIPTABLE void openDocumentFromText( const QString& data );
-    
+
     virtual void closeDocument( const KUrl &url );
     void fileClose();
     void slotSaveAllDocuments();
@@ -113,13 +127,12 @@ private Q_SLOTS:
 
 private:
     void setupActions();
-    /**Save the list of currently opened document URLs into 
+    /**Save the list of currently opened document URLs into
        KGlobal::config().  */
     void saveDocumentList();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
     Q_PRIVATE_SLOT(d, void chooseDocument())
 
-        
 
     struct DocumentControllerPrivate *d;
 };

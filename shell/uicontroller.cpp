@@ -72,6 +72,7 @@ public:
     KSettings::Dialog* cfgDlg;
 
     Sublime::MainWindow* activeSublimeWindow;
+    QList<Sublime::MainWindow*> sublimeWindows;
 
 private:
     UiController *m_controller;

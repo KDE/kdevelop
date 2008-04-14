@@ -119,6 +119,8 @@ public:
     bool isSplitted() const;
     /**@return the orientation of the splitter for this index.*/
     Qt::Orientation orientation() const;
+    /**Set the orientation of the splitter for this index.*/
+    void setOrientation(Qt::Orientation orientation) const;
 
     /**Adds view to the list of views in this position.
     Does nothing if the view is already splitted.
@@ -132,6 +134,9 @@ public:
     and adds the @p newView into the splitter.
     Does nothing if the view is already splitted.*/
     void split(View *newView, Qt::Orientation orientation);
+    /**Splits the view in this position by given @p orientation.
+    Does nothing if the view is already splitted.*/
+    void split(Qt::Orientation orientation);
 
     /**@return the stacked view in @p position,
     returns 0 for splitter's indices and when there's no view at the @p position.*/
@@ -142,9 +147,6 @@ public:
     bool hasView(View *view) const;
     /**@return the list of views at this index.*/
     QList<View*> &views() const;
-
-    ///Saves area layout + information to the given configuration \a {group}.
-    void saveSettings(KConfigGroup& group);
 
 protected:
     /**Constructor for Root index.*/
