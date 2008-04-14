@@ -1117,40 +1117,46 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     break;
                 case StringAst::REGEX_REPLACE:
                 {
-                    QRegExp rx(sast->regex());
-                    kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
-                    if(sast->replace().startsWith('\\'))
+                    if( !sast->input().isEmpty() )
                     {
-                        rx.indexIn(sast->input()[0]);
-                        QStringList info = rx.capturedTexts();
-                        int idx = sast->replace().right(sast->replace().size()-1).toInt();
-//                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
-                        if(idx>=info.count())
-                            kDebug(9032) << "error: not matched regex";
-                        else
-                            res.append(info[idx]);
-                    }
-                    else
-                    {
-                        foreach(QString in, sast->input())
+
+                        QRegExp rx(sast->regex());
+                        kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
+                        if(sast->replace().startsWith('\\'))
                         {
-                            int idx = rx.indexIn(in);
+                            rx.indexIn(sast->input()[0]);
                             QStringList info = rx.capturedTexts();
-                            if(idx<0)
-                            {
-                                res.append(in);
-                            }
+                            int idx = sast->replace().right(sast->replace().size()-1).toInt();
+    //                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
+                            if(idx>=info.count())
+                                kDebug(9032) << "error: not matched regex";
                             else
+                                res.append(info[idx]);
+                        }
+                        else
+                        {
+                            foreach(QString in, sast->input())
                             {
-                                foreach(QString s, info)
+                                int idx = rx.indexIn(in);
+                                QStringList info = rx.capturedTexts();
+                                if(idx<0)
                                 {
-                                    res.append(in.replace(s, sast->replace()));
+                                    res.append(in);
+                                }
+                                else
+                                {
+                                    foreach(QString s, info)
+                                    {
+                                        res.append(in.replace(s, sast->replace()));
+                                    }
                                 }
                             }
                         }
+                        kDebug(9042) << "ret: " << res << " << string(regex replace "
+                                << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
                     }
-                    kDebug(9042) << "ret: " << res << " << string(regex replace "
-                            << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
+                    else
+                        kWarning() << "Got a StringAST with empty input!";
                 }
                     break;
                 default:
@@ -1172,26 +1178,31 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         }   break;
         case StringAst::COMPARE:
         {
-            QString res;
-            switch(sast->cmdType()){
-                case StringAst::EQUAL:
-                case StringAst::NOTEQUAL:
-                    if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
-                        res = "TRUE";
-                    else
-                        res = "FALSE";
-                    break;
-                case StringAst::LESS:
-                case StringAst::GREATER:
-                    if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
-                        res = "TRUE";
-                    else
-                        res = "FALSE";
-                    break;
-                default:
-                    kDebug(9042) << "String: Not a compare. " << sast->cmdType();
+            if( !sast->input().isEmpty() )
+            {
+                QString res;
+                switch(sast->cmdType()){
+                    case StringAst::EQUAL:
+                    case StringAst::NOTEQUAL:
+                        if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
+                            res = "TRUE";
+                        else
+                            res = "FALSE";
+                        break;
+                    case StringAst::LESS:
+                    case StringAst::GREATER:
+                        if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
+                            res = "TRUE";
+                        else
+                            res = "FALSE";
+                        break;
+                    default:
+                        kDebug(9042) << "String: Not a compare. " << sast->cmdType();
+                }
+                m_vars->insert(sast->outputVariable(), QStringList(res));
             }
-            m_vars->insert(sast->outputVariable(), QStringList(res));
+            else
+                kWarning() << "Got a StringAST with empty input!";
         }
             break;
         case StringAst::ASCII:
@@ -1199,19 +1210,33 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             kDebug(9032) << "Error! String feature not supported!";
             break;
         case StringAst::TOUPPER:
-            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
+            if( !sast->input().isEmpty() )
+                m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
+            else
+                kWarning() << "Got a StringAST with empty input!";
             break;
         case StringAst::TOLOWER:
-            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
+            if( !sast->input().isEmpty() )
+                m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
+             else
+                kWarning() << "Got a StringAST with empty input!";
             break;
         case StringAst::LENGTH:
-            m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
-            break;
+            if( !sast->input().isEmpty() )
+                m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
+              else
+                kWarning() << "Got a StringAST with empty input!";
+           break;
         case StringAst::SUBSTRING:
         {
-            QString res=sast->input()[0];
-            res=res.mid(sast->begin(), sast->length());
-            m_vars->insert(sast->outputVariable(), QStringList(res));
+            if( !sast->input().isEmpty() )
+            {
+                QString res=sast->input()[0];
+                res=res.mid(sast->begin(), sast->length());
+                m_vars->insert(sast->outputVariable(), QStringList(res));
+            }
+              else
+                kWarning() << "Got a StringAST with empty input!";
         }
             break;
     }
