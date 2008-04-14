@@ -97,7 +97,7 @@ public:
   bool parseAssignmentExpression(ExpressionAST *&node);
   bool parseBaseClause(BaseClauseAST *&node);
   bool parseBaseSpecifier(BaseSpecifierAST *&node);
-  bool parseBlockDeclaration(DeclarationAST *&node, bool onlyOneDeclarator = false);
+  bool parseBlockDeclaration(DeclarationAST *&node);
   bool parseCastExpression(ExpressionAST *&node);
   bool parseClassSpecifier(TypeSpecifierAST *&node);
   bool parseCommaExpression(ExpressionAST *&node);
@@ -109,7 +109,7 @@ public:
   bool parseCvQualify(const ListNode<std::size_t> *&node);
   bool parseDeclaration(DeclarationAST *&node);
   bool parseDeclarationInternal(DeclarationAST *&node);
-  bool parseDeclarationStatement(StatementAST *&node, bool onlyOneDeclarator = false);
+  bool parseDeclarationStatement(StatementAST *&node);
   bool parseDeclarator(DeclaratorAST *&node);
   bool parseDeleteExpression(ExpressionAST *&node);
   bool parseDoStatement(StatementAST *&node);
@@ -124,16 +124,15 @@ public:
   bool parseExpression(ExpressionAST *&node);
   bool parseExpressionOrDeclarationStatement(StatementAST *&node);
   bool parseExpressionStatement(StatementAST *&node);
-  bool parseForInitStatement(StatementAST *&node, bool isForeach);
+  bool parseForInitStatement(StatementAST *&node);
   bool parseForStatement(StatementAST *&node);
-  bool parseForeachStatement(StatementAST *&node);
   bool parseFunctionBody(StatementAST *&node);
   bool parseFunctionSpecifier(const ListNode<std::size_t> *&node);
   bool parseIfStatement(StatementAST *&node);
   bool parseInclusiveOrExpression(ExpressionAST *&node,
 				  bool templArgs = false);
   bool parseInitDeclarator(InitDeclaratorAST *&node);
-  bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node, bool onlyOneDeclarator = false);
+  bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node);
   bool parseInitializer(InitializerAST *&node);
   bool parseInitializerClause(InitializerClauseAST *&node);
   bool parseLabeledStatement(StatementAST *&node);
