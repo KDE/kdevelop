@@ -799,6 +799,22 @@ IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 
 void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
 {
+    // If the dock is shown but not focused, first focus it, a second press of the shortcut will hide it
+    if (QDockWidget* widget = mainLayout()->lastDockWidget(role)) {
+        if (widget->isVisible() && !widget->hasFocus()) {
+            widget->setFocus(Qt::ShortcutFocusReason);
+
+            // re-sync action state given we may have asked for the dock to be hidden
+            KAction* action = actionForRole(role);
+            if (!action->isChecked()) {
+                action->blockSignals(true);
+                action->setChecked(true);
+                action->blockSignals(false);
+            }
+            return;
+        }
+    }
+
     if (show) {
         if (QDockWidget* widget = m_mainLayout->lastDockWidget(role))
             if (QAction *action = m_dockwidget_to_action.value(widget))
