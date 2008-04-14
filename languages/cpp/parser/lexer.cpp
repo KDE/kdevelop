@@ -1702,7 +1702,21 @@ void Lexer::scanKeyword10()
 	  return;
 	}
       break;
-
+    case '_':
+    if (*(cursor + 1) == '_' && //The gcc __typeof__ keyword
+    *(cursor + 2) == 't' &&
+    *(cursor + 3) == 'y' &&
+    *(cursor + 4) == 'p' &&
+    *(cursor + 5) == 'e' &&
+    *(cursor + 6) == 'o' &&
+    *(cursor + 7) == 'f' && 
+    *(cursor + 8) == '_' &&
+    *(cursor + 9) == '_' )
+  {
+    (*session->token_stream)[index++].kind = Token___typeof;
+    return;
+  }
+    break;
     }
   (*session->token_stream)[index++].kind = Token_identifier;
 }
@@ -1727,23 +1741,6 @@ void Lexer::scanKeyword11()
 	  return;
 	}
     break;
-    case '_':
-    if (*(cursor + 1) == '_' && //The gcc __typeof__ keyword
-    *(cursor + 2) == '_' &&
-    *(cursor + 3) == 't' &&
-    *(cursor + 4) == 'y' &&
-    *(cursor + 5) == 'p' &&
-    *(cursor + 6) == 'e' &&
-    *(cursor + 7) == 'o' &&
-    *(cursor + 8) == 'f' && 
-    *(cursor + 9) == '_' &&
-    *(cursor + 10) == '_' )
-  {
-    (*session->token_stream)[index++].kind = Token___typeof;
-    return;
-  }
-    break;
-
     }
   (*session->token_stream)[index++].kind = Token_identifier;
 }
