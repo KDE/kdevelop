@@ -145,6 +145,7 @@ void DocumentController::setupActions()
 
     action = ac->addAction( "file_open" );
     action->setIcon(KIcon("file_open"));
+    action->setShortcut( Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open File..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
     action->setToolTip( i18n( "Open file" ) );
