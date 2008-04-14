@@ -35,7 +35,7 @@ class DUChainBase;
 class QualifiedIdentifier;
 
 template<typename T>
-class BaseContextBuilder
+class KDEVPLATFORMLANGUAGE_EXPORT BaseContextBuilder
 {
 public:
   BaseContextBuilder();
