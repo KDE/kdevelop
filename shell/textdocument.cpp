@@ -356,4 +356,9 @@ QString KDevelop::TextDocument::documentType() const
     return "Text";
 }
 
+bool KDevelop::TextView::hasWidget() const
+{
+    return d->m_view;
+}
+
 #include "textdocument.moc"

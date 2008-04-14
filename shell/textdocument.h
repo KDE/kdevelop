@@ -75,6 +75,7 @@ public:
     virtual ~TextView();
 
     virtual QWidget *widget(QWidget *parent = 0);
+    virtual bool hasWidget() const;
 
     virtual QString viewState() const;
     virtual void setState(const QString& state);
