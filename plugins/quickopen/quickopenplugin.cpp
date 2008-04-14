@@ -306,13 +306,12 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_PageUp:
       case Qt::Key_PageDown:
-      case Qt::Key_End:
-      case Qt::Key_Home:
         if(watched == o.list )
           return false;
         QApplication::sendEvent( o.list, event );
       //callRowSelected();
         return true;
+        
       case Qt::Key_Left: {
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::ShiftModifier ) {
