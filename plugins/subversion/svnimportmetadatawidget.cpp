@@ -11,8 +11,8 @@
 
 #include "svnimportmetadatawidget.h"
 #include "ui_importmetadatawidget.h"
-#include <vcsmapping.h>
-#include <vcslocation.h>
+#include <vcs/vcsmapping.h>
+#include <vcs/vcslocation.h>
 
 SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     : VcsImportMetadataWidget( parent ), m_ui(new Ui::SvnImportMetadataWidget)

@@ -30,9 +30,9 @@
 
 #include <vector>
 
-#include <svncpp/client.hpp>
-#include <svncpp/path.hpp>
-#include <svncpp/targets.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/path.hpp>
+#include <kdevsvncpp/targets.hpp>
 
 #include <iostream>
 
@@ -108,7 +108,7 @@ void SvnInternalCommitJob::run()
     QByteArray ba = commitMessage().toUtf8();
     try
     {
-        svn_revnum_t rev = cli.commit( svn::Targets(targets), ba.data(), recursive(), keepLock() );
+        cli.commit( svn::Targets(targets), ba.data(), recursive(), keepLock() );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Couldn't commit:" << QString::fromUtf8( ce.message() );

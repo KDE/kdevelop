@@ -23,8 +23,8 @@
 
 #include "svninternaljobbase.h"
 
-#include <vcsrevision.h>
-#include <vcsevent.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/vcsevent.h>
 
 class SvnInternalLogJob : public SvnInternalJobBase
 {

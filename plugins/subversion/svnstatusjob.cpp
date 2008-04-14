@@ -36,8 +36,8 @@ extern "C"
 
 #include <iostream>
 
-#include <svncpp/client.hpp>
-#include <svncpp/status.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/status.hpp>
 
 KDevelop::VcsStatusInfo::State getState( svn::Status st )
 {
@@ -109,26 +109,13 @@ void SvnInternalStatusJob::run()
         kDebug(9510) << "Fetching status info for:" << url;
         try
         {
-            QFileInfo fi( url.path() );
-            if( fi.isDir() )
+            QByteArray ba = url.path().toUtf8();
+            svn::StatusEntries se = cli.status( ba.data(), recursive() );
+            for( svn::StatusEntries::const_iterator it = se.begin(); it != se.end() ; ++it )
             {
-                QByteArray ba = url.path().toUtf8();
-                svn::StatusEntries se = cli.status( ba.data(), recursive() );
-                for( svn::StatusEntries::const_iterator it = se.begin(); it != se.end() ; ++it )
-                {
-                    KDevelop::VcsStatusInfo info;
-                    info.setUrl( url );
-                    info.setState( getState( *it ) );
-                    emit gotNewStatus( info );
-                }
-            }else
-            {
-                QByteArray ba = url.path().toUtf8();
-                svn::Status st = cli.singleStatus( ba.data() );
-                kDebug(9510) << "Got single info:" << st.textStatus() << getState( st ) ;
                 KDevelop::VcsStatusInfo info;
                 info.setUrl( url );
-                info.setState( getState( st ) );
+                info.setState( getState( *it ) );
                 emit gotNewStatus( info );
             }
         }catch( svn::ClientException ce )

@@ -28,25 +28,25 @@
 #include <ktemporaryfile.h>
 #include <kmessagebox.h>
 
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
-#include <iplugincontroller.h>
-#include <icore.h>
-#include <ioutputview.h>
-#include <projectmodel.h>
-#include <context.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <outputview/ioutputview.h>
+#include <project/projectmodel.h>
+#include <interfaces/context.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsmapping.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsannotation.h>
-#include "vcs/widgets/vcsannotationwidget.h"
-#include "vcs/widgets/vcseventwidget.h"
-#include "vcs/widgets/vcsdiffwidget.h"
+#include <vcs/widgets/vcsannotationwidget.h>
+#include <vcs/widgets/vcseventwidget.h>
+#include <vcs/widgets/vcsdiffwidget.h>
 
-#include <svncpp/apr.hpp>
+#include <kdevsvncpp/apr.hpp>
 
 #include "svncommitjob.h"
 #include "svnstatusjob.h"

@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 
-#include <vcsdiff.h>
+#include <vcs/vcsdiff.h>
 
 namespace KDevelop
 {

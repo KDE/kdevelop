@@ -35,12 +35,12 @@ extern "C" {
 #include <svn_auth.h>
 }
 
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
 #include <svnjobbase.h>
-#include <svncpp/context.hpp>
-#include <svncpp/apr.hpp>
-#include <svncpp/revision.hpp>
+#include <kdevsvncpp/context.hpp>
+#include <kdevsvncpp/apr.hpp>
+#include <kdevsvncpp/revision.hpp>
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
@@ -280,6 +280,8 @@ bool SvnInternalJobBase::contextSslClientCertPrompt( std::string& cert )
 bool SvnInternalJobBase::contextSslClientCertPwPrompt( std::string& pw, const std::string& realm,
                                     bool& maySave )
 {
+    Q_UNUSED(pw);
+    Q_UNUSED(maySave);
     emit needSslClientCertPassword( QString::fromUtf8( realm.c_str() ) );
     m_guiSemaphore.acquire( 1 );
     return false;

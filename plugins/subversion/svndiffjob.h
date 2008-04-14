@@ -24,11 +24,11 @@
 
 #include "svnjobbase.h"
 
-#include <vcslocation.h>
+#include <vcs/vcslocation.h>
 
 #include <kurl.h>
 
-#include <vcsdiff.h>
+#include <vcs/vcsdiff.h>
 
 class SvnCatJob;
 

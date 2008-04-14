@@ -23,7 +23,7 @@
 
 #include "svnjobbase.h"
 
-#include <vcsstatusinfo.h>
+#include <vcs/vcsstatusinfo.h>
 #include <kurl.h>
 
 class SvnInternalStatusJob;

@@ -16,8 +16,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <vcsjob.h>
-#include <vcsstatusinfo.h>
+#include <vcs/vcsjob.h>
+#include <vcs/vcsstatusinfo.h>
 
 SvnCommitDialog::SvnCommitDialog( KDevSvnPlugin *part, QWidget *parent )
     : KDialog( parent )

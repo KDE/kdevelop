@@ -25,7 +25,7 @@
 
 #include <QObject>
 
-#include <vcsstatusinfo.h>
+#include <vcs/vcsstatusinfo.h>
 #include <kurl.h>
 
 class SvnInternalStatusJob : public SvnInternalJobBase

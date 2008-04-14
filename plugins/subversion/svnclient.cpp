@@ -32,13 +32,13 @@ extern "C" {
 #include <svn_client.h>
 #include <svn_io.h>
 }
-#include <svncpp/targets.hpp>
-#include <svncpp/pool.hpp>
+#include <kdevsvncpp/targets.hpp>
+#include <kdevsvncpp/pool.hpp>
 
 #include <kstandarddirs.h>
 
-#include <vcsrevision.h>
-#include <vcsannotation.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/vcsannotation.h>
 
 void fail (apr_pool_t *pool, apr_status_t status, const char *fmt, ...)
 {
@@ -340,6 +340,7 @@ kdev_annotateReceiver ( void *baton,
                     const char *line,
                     apr_pool_t *pool )
 {
+    Q_UNUSED(pool);
     SvnClient* client = reinterpret_cast<SvnClient*>(baton);
 
     KDevelop::VcsAnnotationLine vcsline;

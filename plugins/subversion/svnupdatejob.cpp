@@ -29,9 +29,9 @@
 
 #include <ThreadWeaver.h>
 
-#include <svncpp/client.hpp>
-#include <svncpp/path.hpp>
-#include <svncpp/targets.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/path.hpp>
+#include <kdevsvncpp/targets.hpp>
 
 SvnInternalUpdateJob::SvnInternalUpdateJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -58,7 +58,7 @@ void SvnInternalUpdateJob::run()
             m_success = false;
             return;
         }
-        cli.update2( svn::Targets( targets ), rev, recursive(), ignoreExternals() );
+        cli.update( svn::Targets( targets ), rev, recursive(), ignoreExternals() );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while updating files: "

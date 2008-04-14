@@ -10,8 +10,8 @@
 
 #include "svnoutputmodel.h"
 #include "kdevsvnplugin.h"
-#include "icore.h"
-#include "idocumentcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <QModelIndex>
 #include <QStringList>

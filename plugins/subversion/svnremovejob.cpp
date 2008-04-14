@@ -28,9 +28,9 @@
 
 #include <ThreadWeaver.h>
 
-#include <svncpp/client.hpp>
-#include <svncpp/path.hpp>
-#include <svncpp/targets.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/path.hpp>
+#include <kdevsvncpp/targets.hpp>
 
 SvnInternalRemoveJob::SvnInternalRemoveJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )

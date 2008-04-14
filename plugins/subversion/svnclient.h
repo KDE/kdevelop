@@ -24,11 +24,11 @@
 #include <QString>
 #include <QObject>
 
-#include <svncpp/path.hpp>
-#include <svncpp/revision.hpp>
-#include <svncpp/client.hpp>
+#include <kdevsvncpp/path.hpp>
+#include <kdevsvncpp/revision.hpp>
+#include <kdevsvncpp/client.hpp>
 
-#include <vcsevent.h>
+#include <vcs/vcsevent.h>
 namespace KDevelop
 {
 class VcsAnnotationLine;

@@ -11,10 +11,10 @@
 #ifndef KDEVSVNPLUGIN_H
 #define KDEVSVNPLUGIN_H
 
-#include <ibasicversioncontrol.h>
-#include <vcsdiff.h>
-#include <vcslocation.h>
-#include <iplugin.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcsdiff.h>
+#include <vcs/vcslocation.h>
+#include <interfaces/iplugin.h>
 
 
 class QMenu;

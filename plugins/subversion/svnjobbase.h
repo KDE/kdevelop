@@ -11,9 +11,9 @@
 #ifndef SVNJOBBASE_H
 #define SVNJOBBASE_H
 
-#include <vcsjob.h>
+#include <vcs/vcsjob.h>
 
-#include <svncpp/context_listener.hpp>
+#include <kdevsvncpp/context_listener.hpp>
 
 extern "C"
 {

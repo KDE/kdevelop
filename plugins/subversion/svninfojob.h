@@ -28,7 +28,7 @@
 
 #include <kurl.h>
 
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
 class SvnInternalInfoJob;
 

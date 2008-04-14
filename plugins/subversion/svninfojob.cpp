@@ -29,8 +29,8 @@
 
 #include <ThreadWeaver.h>
 
-#include <svncpp/client.hpp>
-#include <svncpp/entry.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/info.hpp>
 
 SvnInternalInfoJob::SvnInternalInfoJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -44,26 +44,27 @@ void SvnInternalInfoJob::run()
     try
     {
         QByteArray ba = location().path().toUtf8();
-        svn::Entry e = cli.info( ba.data() );
+        svn::InfoVector v = cli.info( ba.data() );
+        svn::Info i = v.at(0);
         SvnInfoHolder h;
-        h.name = QString::fromUtf8( e.name() );
-        h.url = KUrl( QString::fromUtf8( e.url() ) );
-        h.rev = qlonglong( e.revision() );
-        h.kind = e.kind();
-        h.repoUrl = KUrl( QString::fromUtf8( e.repos() ) );
-        h.repouuid = QString::fromUtf8( e.uuid() );
-        h.lastChangedRev = qlonglong( e.cmtRev() );
-        h.lastChangedDate = QDateTime::fromTime_t( e.cmtDate() );
-        h.lastChangedAuthor = QString::fromUtf8( e.cmtAuthor() );
-        h.scheduled = e.schedule();
-        h.copyFromUrl = KUrl( QString::fromUtf8( e.copyfromUrl() ) );
-        h.copyFromRevision = qlonglong( e.copyfromRev() );
-        h.textTime = QDateTime::fromTime_t( e.textTime() );
-        h.propertyTime = QDateTime::fromTime_t( e.propTime() );
-        h.oldFileConflict = QString::fromUtf8( e.conflictOld() );
-        h.newFileConflict = QString::fromUtf8( e.conflictNew() );
-        h.workingCopyFileConflict = QString::fromUtf8( e.conflictWrk() );
-        h.propertyRejectFile = QString::fromUtf8( e.prejfile() );
+        h.name = QString::fromUtf8( i.path().path().c_str() );
+        h.url = KUrl( QString::fromUtf8( i.url() ) );
+        h.rev = qlonglong( i.revision() );
+        h.kind = i.kind();
+        h.repoUrl = KUrl( QString::fromUtf8( i.repos() ) );
+        h.repouuid = QString::fromUtf8( i.uuid() );
+        h.lastChangedRev = qlonglong( i.lastChangedRevision() );
+        h.lastChangedDate = QDateTime::fromTime_t( i.lastChangedDate() );
+        h.lastChangedAuthor = QString::fromUtf8( i.lastChangedAuthor() );
+        h.scheduled = i.schedule();
+        h.copyFromUrl = KUrl( QString::fromUtf8( i.copyFromUrl() ) );
+        h.copyFromRevision = qlonglong( i.copyFromRevision() );
+        h.textTime = QDateTime::fromTime_t( i.textTime() );
+        h.propertyTime = QDateTime::fromTime_t( i.propertyTime() );
+        h.oldFileConflict = QString::fromUtf8( i.oldConflictFile() );
+        h.newFileConflict = QString::fromUtf8( i.newConflictFile() );
+        h.workingCopyFileConflict = QString::fromUtf8( i.workingConflictFile() );
+        h.propertyRejectFile = QString::fromUtf8( i.propertyRejectFile() );
 
         emit gotInfo( h );
     }catch( svn::ClientException ce )

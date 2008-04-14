@@ -27,8 +27,8 @@
 #include <kdebug.h>
 #include <ThreadWeaver.h>
 
-#include <svncpp/client.hpp>
-#include <svncpp/path.hpp>
+#include <kdevsvncpp/client.hpp>
+#include <kdevsvncpp/path.hpp>
 
 SvnInternalCopyJob::SvnInternalCopyJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )

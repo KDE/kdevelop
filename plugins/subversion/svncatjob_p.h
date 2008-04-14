@@ -23,7 +23,7 @@
 
 #include "svninternaljobbase.h"
 #include <QVariant>
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
 class SvnInternalCatJob : public SvnInternalJobBase
 {

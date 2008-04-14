@@ -13,7 +13,7 @@
 
 #include <QAbstractItemModel>
 #include <kurl.h>
-#include <ioutputviewmodel.h>
+#include <outputview/ioutputviewmodel.h>
 #include <QStandardItemModel>
 
 /**

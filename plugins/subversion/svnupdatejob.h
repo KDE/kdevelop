@@ -24,7 +24,7 @@
 #include "svnjobbase.h"
 
 #include <QVariant>
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 #include <kurl.h>
 
 class SvnInternalUpdateJob;

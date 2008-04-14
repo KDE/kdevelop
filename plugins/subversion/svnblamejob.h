@@ -28,8 +28,8 @@
 
 #include <kurl.h>
 
-#include <vcsrevision.h>
-#include <vcsannotation.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/vcsannotation.h>
 
 class SvnInternalBlameJob;
 

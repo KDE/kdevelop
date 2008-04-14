@@ -43,18 +43,12 @@ endif(COMMONCPP2_FOUND AND Boost_FOUND)
 macro_log_feature( COMMONCPP2_FOUND "Common C++2" "Support for Teamwork plugin integration" "http://ftp.gnu.org/pub/gnu/commoncpp/" FALSE "1.5.9" "The commoncpp2 libraries are needed for the Teamwork plugin" )
 macro_log_feature( Boost_FOUND "Boost" "Support for Teamwork plugin integration" "http://www.boost.org/" FALSE "1.34.0" "The boost C++ libraries are needed for the Teamwork plugin" )
 
-macro_optional_find_package(SvnCpp)
 macro_optional_find_package(SubversionLibrary)
-macro_log_feature( SVNCPP_FOUND "SvnCpp" "Support for Subversion integration" "http://rapidsvn.tigris.org" FALSE "0.9.4" "The rapidsvn C++ library is needed for the Subversion support, only version 0.9.4 is supported.")
 macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
 
-if(SUBVERSION_FOUND AND SVNCPP_FOUND AND SVNCPP_VERSION LESS 0x000906)
+if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
-else(SUBVERSION_FOUND AND SVNCPP_FOUND AND SVNCPP_VERSION LESS 0x000906)
-    if(SVNCPP_VERSION GREATER 0x000906 OR SVNCPP_VERSION EQUAL 0x000906)
-        message( STATUS "SvnCpp library needs to be 0.9.4, found 0.9.6 or newer. Disabling Subversion support")
-    endif(SVNCPP_VERSION GREATER 0x000906 OR SVNCPP_VERSION EQUAL 0x000906)
-endif(SUBVERSION_FOUND AND SVNCPP_FOUND AND SVNCPP_VERSION LESS 0x000906)
+endif(SUBVERSION_FOUND)
 
 macro_display_feature_log()
 

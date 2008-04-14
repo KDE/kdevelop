@@ -27,10 +27,10 @@
 #include <klocale.h>
 #include <ThreadWeaver.h>
 
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
-#include <svncpp/path.hpp>
-#include <svncpp/revision.hpp>
+#include <kdevsvncpp/path.hpp>
+#include <kdevsvncpp/revision.hpp>
 
 #include "svnclient.h"
 
