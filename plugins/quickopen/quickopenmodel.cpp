@@ -27,7 +27,7 @@
 
 using namespace KDevelop;
 
-QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_expandingWidgetHeightIncrease(0)
+QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(0), m_expandingWidgetHeightIncrease(0)
 {
 }
 
