@@ -1738,7 +1738,23 @@ void Lexer::scanKeyword11()
 	  (*session->token_stream)[index++].kind = Token_static_cast;
 	  return;
 	}
-      break;
+    break;
+    case '_':
+    if (*(cursor + 1) == '_' && //The gcc __typeof__ keyword
+    *(cursor + 2) == '_' &&
+    *(cursor + 3) == 't' &&
+    *(cursor + 4) == 'y' &&
+    *(cursor + 5) == 'p' &&
+    *(cursor + 6) == 'e' &&
+    *(cursor + 7) == 'o' &&
+    *(cursor + 8) == 'f' && 
+    *(cursor + 9) == '_' &&
+    *(cursor + 10) == '_' )
+  {
+    (*session->token_stream)[index++].kind = Token___typeof;
+    return;
+  }
+    break;
 
     }
   (*session->token_stream)[index++].kind = Token_identifier;
