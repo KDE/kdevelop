@@ -74,7 +74,7 @@ public:
     ProjectModel* model;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
 
-    QAction* m_closeAllProjects;
+    QPointer<QAction> m_closeAllProjects;
 
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
@@ -501,7 +501,8 @@ bool ProjectController::closeProject( IProject* proj )
     {
         connect( proj, SIGNAL(destroyed(QObject*) ), this, SLOT(unloadAllProjectPlugins()) );
 
-        d->m_closeAllProjects->setEnabled(false);
+        if (d->m_closeAllProjects)
+            d->m_closeAllProjects->setEnabled(false);
     }
 
 
