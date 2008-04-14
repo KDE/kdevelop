@@ -240,17 +240,26 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     m_watchers[project]->addFile(file);
 }
 
+QStringList removeMatches(const QString& exp, const QStringList& orig)
+{
+    QStringList ret;
+    QRegExp rx(exp);
+    foreach(const QString& str, orig)
+    {
+        if(rx.indexIn(str)<0)
+            ret.append(str);
+    }
+    return ret;
+}
+
 QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
-    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::Hidden | QDir::System );
-    
-    entries.removeAll(".");
-    entries.removeAll("..");
-    
-    if ( folder )
+    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    entries = removeMatches("\\w*~$|\\w*\\.bak$", entries);
+    if ( folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
         m_folderPerUrl[item->url()]=folder;
         
@@ -375,7 +384,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             continue;
         if( QFileInfo( folderurl.toLocalFile() ).isDir() )
         {
-            new KDevelop::ProjectFolderItem( item->project(), folderurl, item );
+            folderList.append(new KDevelop::ProjectFolderItem( item->project(), folderurl, item ));
         }
         else
         {
