@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2008 Aleix Pol <aleixpol@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -50,7 +51,6 @@
 
 #include "projectbuildsetwidget.h"
 #include "projectmanagerviewplugin.h"
-#include "projectmanagerdelegate.h"
 #include "projecttreeview.h"
 
 using namespace KDevelop;
@@ -102,10 +102,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );
 
-    ProjectManagerDelegate *delegate = new ProjectManagerDelegate( this );
-
     d->m_projectOverview = new ProjectTreeView( plugin, this );
-    d->m_projectOverview->setItemDelegate( delegate );
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
@@ -169,11 +166,14 @@ ProjectManagerViewPlugin *ProjectManagerView::plugin() const
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 {
     QList<KDevelop::ProjectBaseItem*> items;
-    foreach( QModelIndex idx, d->m_projectOverview->selectionModel()->selectedIndexes() )
+    foreach( const QModelIndex &idx, d->m_projectOverview->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item = d->mplugin->core()->projectController()->projectModel()->item( idx );
+        KDevelop::ProjectBaseItem* item =
+                d->mplugin->core()->projectController()->projectModel()->item( d->m_modelFilter->mapToSource(idx) );
         if( item )
             items << item;
+        else
+            kDebug(9511) << "adding an unknown item";
     }
     return items;
 }

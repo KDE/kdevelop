@@ -15,7 +15,6 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projectmanagerview.cpp
     projecttreeview.cpp
     projectbuildsetwidget.cpp
-    projectmanagerdelegate.cpp
     projectbuildsetmodel.cpp
     projectproxymodel.cpp
 )
