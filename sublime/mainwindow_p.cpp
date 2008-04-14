@@ -160,6 +160,7 @@ void MainWindowPrivate::recreateCentralWidget()
     idealMainWidget->setCentralWidget(centralWidget);
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+    layout->setMargin(0);
     centralWidget->setLayout(layout);
 }
 
