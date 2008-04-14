@@ -480,8 +480,17 @@ QStringList DocumentController::documentTypes() const
 
 Sublime::Document* DocumentController::createDocument(const QString & type, const QString & specifier)
 {
-    if (type == "Text")
-        return new TextDocument(KUrl(specifier), Core::self());
+    if (type == "Text") {
+        // TODO merge with ::openDocument for a nice common path? or use ::openDocument?
+        KUrl url = KUrl(specifier);
+        Sublime::Document* doc = new TextDocument(url, Core::self());
+        Q_ASSERT(dynamic_cast<IDocument*>(doc));
+        d->documents[url] = dynamic_cast<IDocument*>(doc);
+        connect(doc, SIGNAL(aboutToDelete(Sublime::Document*)), this, SLOT(removeDocument(Sublime::Document*)));
+        emit documentLoadedPrepare( d->documents[url] );
+        emit documentLoaded( d->documents[url] );
+        return doc;
+    }
 
     return 0;
 }

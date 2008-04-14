@@ -450,7 +450,6 @@ bool ProjectController::closeProject( IProject* proj )
     // close all opened files.
     Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
     {
-        kDebug() << "close file" << fileItem->url();
         Core::self()->documentControllerInternal()->closeDocument( fileItem->url() );
     }
 
