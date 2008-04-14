@@ -65,7 +65,8 @@ void MainWindowPrivate::gotoPreviousArea()
             ui->showArea(a, ui->activeSublimeWindow());
 }
 
-void MainWindowPrivate::gotoNextWindow()
+// merge the gotoNext and gotoPrev code, to prevent copy/paste errors
+static void gotoPrevNextWindow(bool next)
 {
     UiController* ui = Core::self()->uiControllerInternal();
 
@@ -83,38 +84,25 @@ void MainWindowPrivate::gotoNextWindow()
         return;
 
     int viewIndex = index->views().indexOf(activeView);
-    ++viewIndex;
-    if (viewIndex >= index->views().count())
+    viewIndex = next ? viewIndex + 1 : viewIndex -1;
+
+    if (viewIndex < 0)
+        viewIndex = index->views().count() - 1;
+    else if (viewIndex >= index->views().count())
         viewIndex = 0;
 
-    if (viewIndex < index->views().count())
+    if (viewIndex >= 0 && viewIndex < index->views().count())
         ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
+}
+
+void MainWindowPrivate::gotoNextWindow()
+{
+    gotoPrevNextWindow(true);
 }
 
 void MainWindowPrivate::gotoPreviousWindow()
 {
-    UiController* ui = Core::self()->uiControllerInternal();
-
-    if( !ui->activeSublimeWindow() )
-        return;
-
-    Sublime::Area* activeArea = ui->activeArea();
-    if (!activeArea)
-        return;
-
-    Sublime::View* activeView = ui->activeSublimeWindow()->activeView();
-
-    Sublime::AreaIndex* index = activeArea->indexOf(activeView);
-    if (!index)
-        return;
-
-    int viewIndex = index->views().indexOf(activeView);
-    --viewIndex;
-    if (viewIndex < 0)
-        viewIndex = index->views().count() - 1;
-
-    if (viewIndex >= 0)
-        ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
+    gotoPrevNextWindow(false);
 }
 
 void MainWindowPrivate::gotoFirstWindow()
