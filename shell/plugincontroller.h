@@ -138,7 +138,7 @@ public:
 
     QStringList allPluginNames();
 
-    void buildContextMenu( KDevelop::Context*, KMenu* );
+    QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
 
     QStringList projectPlugins();
 

@@ -22,7 +22,9 @@
 
 #include <QtGui/QSortFilterProxyModel>
 
-namespace KDevelop { class ProjectModel; };
+namespace KDevelop {
+class ProjectModel; 
+}
 
 class ProjectProxyModel : public QSortFilterProxyModel
 {

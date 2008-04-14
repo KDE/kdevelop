@@ -36,6 +36,7 @@ class ProjectFolderItem;
 class ProjectTargetItem;
 class IProjectBuilder;
 class IProject;
+class ContextMenuExtension;
 }
 
 class ProjectManagerView;
@@ -52,7 +53,7 @@ public:
     // Plugin methods
     virtual void unload();
 
-    QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
     ProjectBuildSetModel* buildSet();
     void storeBuildset();

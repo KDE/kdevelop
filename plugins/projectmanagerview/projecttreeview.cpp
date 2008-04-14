@@ -23,6 +23,9 @@
 #include "projectmodel.h"
 #include "context.h"
 #include "iplugincontroller.h"
+
+#include <interfaces/contextmenuextension.h>
+
 #include <QtGui/QHeaderView>
 #include <QtGui/QAbstractProxyModel>
 
@@ -183,7 +186,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KMenu menu( this );
 
         KDevelop::ProjectItemContext context(itemlist);
-        d->mplugin->core()->pluginController()->buildContextMenu(&context, &menu);
+        QList<ContextMenuExtension> extensions = d->mplugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
 
         menu.exec( mapToGlobal( pos ) );
     }

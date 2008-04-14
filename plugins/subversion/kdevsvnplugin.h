@@ -25,6 +25,11 @@ class SvnOutputDelegate;
 class SvnOutputModel;
 class SvnCommitDialog;
 
+namespace KDevelop
+{
+class ContextMenuExtension;
+}
+
 class KDevSvnPlugin: public KDevelop::IPlugin, public KDevelop::IBasicVersionControl
 {
     Q_OBJECT
@@ -114,7 +119,7 @@ public:
 
     SvnOutputModel* outputModel() const;
 
-    QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
 public Q_SLOTS:
 

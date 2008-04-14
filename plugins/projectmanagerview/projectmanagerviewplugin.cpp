@@ -49,6 +49,7 @@
 #include "iprojectcontroller.h"
 #include "importprojectjob.h"
 #include "context.h"
+#include <interfaces/contextmenuextension.h>
 
 #include "projectmanagerview.h"
 #include "projectbuildsetmodel.h"
@@ -130,18 +131,18 @@ void ProjectManagerViewPlugin::unload()
     core()->uiController()->removeToolView(d->factory);
 }
 
-QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuActions( KDevelop::Context* context )
+ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::Context* context )
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
-        return IPlugin::requestContextMenuActions( context );
+        return IPlugin::contextMenuExtension( context );
 
-    QList<QAction*> actions;
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     QList<KDevelop::ProjectBaseItem*> items = ctx->items();
 
     if( items.isEmpty() )
-        return IPlugin::requestContextMenuActions( context );
+        return IPlugin::contextMenuExtension( context );
 
+    ContextMenuExtension menuExt;
     bool closeProjectsAdded = false;
     bool buildItemsAdded = false;
     foreach( ProjectBaseItem* item, items )
@@ -152,23 +153,23 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuAct
         {
             KAction* close = new KAction( i18n( "Close projects" ), this );
             connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
-            actions << close;
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
             closeProjectsAdded = true;
         }
         if ( !buildItemsAdded && ( item->folder() || item->target() || item->folder() ) )
         {
             KAction* action = new KAction( i18n( "Build items(s)" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
-            actions << action;
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             action = new KAction( i18n( "Install item(s)" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
-            actions << action;
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             action = new KAction( i18n( "Clean item(s)" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
-            actions << action;
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             action = new KAction( i18n( "Add item(s) to buildset" ), this );
             connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
-            actions << action;
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             buildItemsAdded = true;
         }
     }
@@ -176,10 +177,10 @@ QPair<QString, QList<QAction*> > ProjectManagerViewPlugin::requestContextMenuAct
     {
         KAction* action = new KAction( i18n( "Project Configuration" ), this );
         connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
-        actions << action;
+        menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
     
-    return qMakePair(QString("Project Management"), actions);
+    return menuExt;
 }
 
 

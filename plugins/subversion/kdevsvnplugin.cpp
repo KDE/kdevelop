@@ -23,6 +23,7 @@
 #include <kpluginloader.h>
 #include <klocale.h>
 #include <kurlrequester.h>
+#include <kaction.h>
 #include <kurlrequesterdialog.h>
 #include <kfile.h>
 #include <ktemporaryfile.h>
@@ -36,6 +37,7 @@
 #include <outputview/ioutputview.h>
 #include <project/projectmodel.h>
 #include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
 #include <vcs/vcsrevision.h>
@@ -338,7 +340,7 @@ const KUrl KDevSvnPlugin::urlFocusedDocument()
     return KUrl();
 }
 
-QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevelop::Context* context )
+KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Context* context )
 {
     if( context->type() == KDevelop::Context::ProjectItemContext )
     {
@@ -378,7 +380,7 @@ QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevel
             }
 
             if( ctxUrlList.isEmpty() )
-                return KDevelop::IPlugin::requestContextMenuActions( context );
+                return KDevelop::IPlugin::contextMenuExtension( context );
 
             m_ctxUrlList = ctxUrlList;
         }
@@ -392,59 +394,61 @@ QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevel
         m_ctxUrlList += itemCtx->urls();
     }
     QList<QAction*> actions;
-    QAction *action;
+    KAction *action;
 
-    action = new QAction(i18n("Commit..."), this);
+    KDevelop::ContextMenuExtension menuExt;
+
+    action = new KAction(i18n("Commit..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Add to Repository"), this);
+    action = new KAction(i18n("Add to Repository"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Remove from Repository"), this);
+    action = new KAction(i18n("Remove from Repository"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Update to Head"), this);
+    action = new KAction(i18n("Update to Head"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Revert"), this);
+    action = new KAction(i18n("Revert"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Diff to Head"), this);
+    action = new KAction(i18n("Diff to Head"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Diff to Base"), this);
+    action = new KAction(i18n("Diff to Base"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Copy..."), this);
+    action = new KAction(i18n("Copy..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Move..."), this);
+    action = new KAction(i18n("Move..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("History..."), this);
+    action = new KAction(i18n("History..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxHistory()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Annotation..."), this);
+    action = new KAction(i18n("Annotation..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Import..."), this);
+    action = new KAction(i18n("Import..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new QAction(i18n("Checkout..."), this);
+    action = new KAction(i18n("Checkout..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
 //         action = new QAction(i18n("Blame/Annotate..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
@@ -469,10 +473,10 @@ QPair<QString,QList<QAction*> > KDevSvnPlugin::requestContextMenuActions( KDevel
 
     if( !m_ctxUrlList.isEmpty() )
     {
-        return qMakePair( QString("Subversion"), actions );
+        return menuExt;
     }
 
-    return KDevelop::IPlugin::requestContextMenuActions( context );
+    return KDevelop::IPlugin::contextMenuExtension( context );
 }
 
 void KDevSvnPlugin::ctxHistory()

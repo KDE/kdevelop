@@ -31,6 +31,7 @@
 #include <context.h>
 #include <vcsmapping.h>
 
+#include<interfaces/contextmenuextension.h>
 
 #include "cvsmainview.h"
 #include "cvsproxy.h"
@@ -162,7 +163,7 @@ void CvsPlugin::slotStatus()
 
 
 
-QPair<QString,QList<QAction*> > CvsPlugin::requestContextMenuActions(KDevelop::Context* context)
+KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     // First we need to convert the data from the context* into something we can work with
     // This means we have to pull the KUrls out of the given list of items.
@@ -186,65 +187,67 @@ QPair<QString,QList<QAction*> > CvsPlugin::requestContextMenuActions(KDevelop::C
         }
     } else {
         // Unsupported context type
-        return KDevelop::IPlugin::requestContextMenuActions( context );
+        return KDevelop::IPlugin::contextMenuExtension( context );
     }
 
     if( ctxUrlList.isEmpty() )
-        return KDevelop::IPlugin::requestContextMenuActions( context );
+        return KDevelop::IPlugin::contextMenuExtension( context );
 
     // OK. If we made it until here, the requested context type is supported and at least one item
     // was given. Now let's store the items in d->m_ctxUrlList and create the menu.
 
     d->m_ctxUrlList = ctxUrlList;
 
+    KDevelop::ContextMenuExtension menuExt;
+
     QList<QAction*> actions;
     KAction *action;
 
     action = new KAction(i18n("Commit..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Add"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Remove"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Edit"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Unedit"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Show Editors"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Update.."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Log View"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Annotate"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction(i18n("Revert"), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
     action = new KAction("Diff...", this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-    actions << action;
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    return qMakePair( QString("CVS"), actions );
+    return menuExt;
 }
 
 

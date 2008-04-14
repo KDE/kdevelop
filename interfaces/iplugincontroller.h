@@ -153,7 +153,7 @@ public:
 
     virtual QExtensionManager* extensionManager() = 0;
 
-    virtual void buildContextMenu( KDevelop::Context*, KMenu* ) = 0;
+    virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
 
 Q_SIGNALS:
     void loadingPlugin( const QString& );

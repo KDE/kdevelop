@@ -20,7 +20,10 @@
 #include <qobject.h>
 
 class CvsProxy;
-
+namespace KDevelop
+{
+class ContextMenuExtension;
+}
 /**
  * This is the main class of KDevelop's CVS plugin.
  *
@@ -43,7 +46,7 @@ public:
     virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent );
 
     // From KDevelop::IPlugin
-    QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
     // Begin:  KDevelop::IBasicVersionControl
     virtual bool isVersionControlled( const KUrl& localLocation );

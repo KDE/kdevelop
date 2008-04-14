@@ -18,6 +18,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     istatus.cpp
     irun.cpp
     irunprovider.cpp
+    contextmenuextension.cpp
 )
 
 
@@ -43,6 +44,7 @@ install(FILES
     istatus.h
     irun.h
     irunprovider.h
+    contextmenuextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces
 )
 

@@ -27,7 +27,6 @@
  Boston, MA 02110-1301, USA.
 */
 #include "iplugin.h"
-#include <kaction.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
@@ -35,6 +34,7 @@
 #include <kdebug.h>
 #include "icore.h"
 #include "iplugincontroller.h"
+#include "contextmenuextension.h"
 #include <QtDesigner/QExtensionFactory>
 #include <QtDesigner/QExtensionManager>
 
@@ -180,10 +180,10 @@ void KDevelop::IPlugin::addExtension( const QString& ext )
     d->m_extensions << ext;
 }
 
-QPair<QString,QList<QAction*> > KDevelop::IPlugin::requestContextMenuActions(
+KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
         KDevelop::Context* )
 {
-    return qMakePair(QString(),QList<QAction*>());
+    return KDevelop::ContextMenuExtension();
 }
 
 #include "iplugin.moc"

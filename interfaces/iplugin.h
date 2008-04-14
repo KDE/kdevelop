@@ -54,6 +54,7 @@ namespace KDevelop
 
 class ICore;
 class Context;
+class ContextMenuExtension;
 
 /**
  * The base class for all KDevelop plugins.
@@ -181,12 +182,12 @@ public:
     }
 
     /**
-     * ask the plugin for a list of actions and a label for a submenu entry.
-     * The actions will get included in the to-be-displayed context menu
+     * ask the plugin for a ContextActionContainer, which contains actions
+     * that will be merged into the context menu.
      * @param context the context describing where the context menu was requested
-     * @returns the actions to be used in a submenu
+     * @returns a container descriping which actions to merge into which context menu part
      */
-    virtual QPair<QString,QList<QAction*> > requestContextMenuActions( KDevelop::Context* context );
+    virtual ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
 public Q_SLOTS:
     /**
