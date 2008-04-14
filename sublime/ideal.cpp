@@ -44,11 +44,6 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    if (orientation() == Qt::Vertical)
-        setFixedWidth(DefaultButtonSize);
-    else
-        setFixedHeight(DefaultButtonSize);
 }
 
 Qt::Orientation IdealToolButton::orientation() const
@@ -61,14 +56,26 @@ Qt::Orientation IdealToolButton::orientation() const
 
 QSize IdealToolButton::sizeHint() const
 {
+    ensurePolished();
+
     QStyleOptionToolButton opt;
     initStyleOption(&opt);
+
     QFontMetrics fm = fontMetrics();
-    int w = fm.width(text()) + (10 + fm.width(QLatin1Char('x'))) * 2;
-    w += opt.iconSize.width();
+
+    const int charWidth = fm.width(QLatin1Char('x'));
+
+    QSize textSize = fm.size(Qt::TextShowMnemonic, opt.text);
+    textSize.rwidth() += 2 * charWidth;
+
+    const int spacing = 2; // ### FIXME
+    int width = 4 + textSize.width() + opt.iconSize.width() + spacing;
+    int height = 4 + qMax(textSize.height(), opt.iconSize.height());
+
     if (orientation() == Qt::Vertical)
-        return QSize(width(), w);
-    return QSize(w, height());
+        return QSize(height, width);
+
+    return QSize(width, height);
 }
 
 void IdealToolButton::paintEvent(QPaintEvent *event)
@@ -81,9 +88,9 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
 	opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
 
         QPixmap pix(opt.rect.width(), opt.rect.height());
-        QPainter painter(&pix);
-        painter.fillRect(pix.rect(), opt.palette.brush(QPalette::Button));
-        style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &painter, this);
+	QStylePainter painter(&pix, this);
+        painter.fillRect(pix.rect(), opt.palette.background());
+        painter.drawComplexControl(QStyle::CC_ToolButton, opt);
         painter.end();
 
         QPainter p(this);
