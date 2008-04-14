@@ -626,7 +626,7 @@ TemplateDeclaration::InstantiationsHash TemplateDeclaration::instantiations() co
 }
 
 template<>
-KDEVCPPDUCHAIN_EXPORT Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const {
+Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const {
   if( instantiatedFrom() ) {
     SpecialTemplateDeclaration<ForwardDeclaration>* instantiatedFrom = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>*>(this->instantiatedFrom());
     if( instantiatedFrom ) {

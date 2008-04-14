@@ -27,6 +27,7 @@ namespace KDevelop
     class ProjectFileItem;
     class ProjectTargetItem;
     class IProjectBuilder;
+    class ContextMenuExtension;
 }
 
 class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
@@ -176,7 +177,7 @@ public:
                               const KUrl& newFolder );
 
     // IPlugin interface
-    QPair<QString, QList<QAction*> > requestContextMenuActions( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
     /**
      * Initialize targets by reading Makefile in @arg dir

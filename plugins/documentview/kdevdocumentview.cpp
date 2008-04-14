@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentselection.h"
 #include "kdevdocumentviewdelegate.h"
 
+#include <interfaces/contextmenuextension.h>
 #include <icore.h>
 //#include <kdevcontext.h>
 //#include <kdevmainwindow.h>
@@ -115,7 +116,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
     KMenu menu( this );
     KDevelop::FileContext context( list ); //FIXME change filecontext to documentcontext
-    m_plugin->core()->pluginController()->buildContextMenu( &context, &menu );
+    QList<KDevelop::ContextMenuExtension> extensions = m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
     menu.exec( event->globalPos() );
 
     QTreeView::contextMenuEvent( event );

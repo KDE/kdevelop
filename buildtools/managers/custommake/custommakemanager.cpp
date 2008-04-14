@@ -20,6 +20,7 @@
 #include <kpluginloader.h>
 #include <projectmodel.h>
 #include <context.h>
+#include <interfaces/contextmenuextension.h>
 
 #include <QQueue>
 #include <QDir>
@@ -277,32 +278,32 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
     return false;
 }
 
-QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( KDevelop::Context* context )
+KDevelop::ContextMenuExtension CustomMakeManager::contextMenuExtension( KDevelop::Context* context )
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
     {
-        return IPlugin::requestContextMenuActions( context );
+        return IPlugin::contextMenuExtension( context );
     }
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     QList<KDevelop::ProjectBaseItem*> baseitemList = ctx->items();
     if( baseitemList.count() != 1 )
-        return IPlugin::requestContextMenuActions( context );
+        return IPlugin::contextMenuExtension( context );
 
     KDevelop::ProjectBaseItem *baseitem = baseitemList.first();
     IPlugin *manager = baseitem->project()->managerPlugin();
     if( manager != this )
     {
         // This project is not managed by me. No context menu.
-        return IPlugin::requestContextMenuActions( context );
+        return IPlugin::contextMenuExtension( context );
     }
 
-    QList<QAction*> actions;
+    KDevelop::ContextMenuExtension menuExt;
     if( KDevelop::ProjectFolderItem *prjItem = dynamic_cast<KDevelop::ProjectFolderItem*>( baseitem ) )
     {
         KAction* prjBldAction = new KAction( i18n( "Build this project" ), this );
         d->m_ctxItem = prjItem;
         connect( prjBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        actions << prjBldAction;
+        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, prjBldAction );
     }
     else if( KDevelop::ProjectTargetItem *targetItem = baseitem->target() )
     {
@@ -313,17 +314,17 @@ QPair<QString, QList<QAction*> > CustomMakeManager::requestContextMenuActions( K
 //         connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
         d->m_ctxItem = targetItem;
         connect( targetBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        actions << targetBldAction;
+        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, targetBldAction );
     }
     else if( baseitem->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
         KAction *bldFolderAction = new KAction( i18n( "Build this directory" ), this );
         d->m_ctxItem = baseitem;
         connect( bldFolderAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        actions << bldFolderAction;
+        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, bldFolderAction );
     }
 
-    return qMakePair(QString("Custom Make Manager"), actions);
+    return menuExt;
 }
 
 /////////////////////////////////////////////////////////////////////////////
