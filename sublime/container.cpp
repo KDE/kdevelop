@@ -18,6 +18,7 @@
  ***************************************************************************/
 #include "container.h"
 
+#include <QMap>
 #include <QLayout>
 #include <QStackedLayout>
 #include <QTabWidget>
@@ -31,7 +32,6 @@ namespace Sublime {
 // struct ContainerPrivate
 
 struct ContainerPrivate {
-
     Switcher *switcher;
     QStackedLayout *stack;
     QMap<QWidget*, View*> viewForWidget;
@@ -50,7 +50,7 @@ Container::Container(QWidget *parent)
     l->setSpacing(0);
 
     d->switcher = new Switcher(this);
-    connect(d->switcher, SIGNAL(activated(int)), this, SLOT(widgetActivated(int)));
+    connect(d->switcher, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
     l->addWidget(d->switcher);
 
     d->stack = new QStackedLayout(l);
@@ -73,14 +73,14 @@ void Container::addWidget(View *view)
 {
     QWidget *w = view->widget();
     int idx = d->stack->addWidget(w);
-    d->switcher->insertItem(idx, view->document()->title());
+    d->switcher->insertTab(idx, view->document()->title());
     d->viewForWidget[w] = view;
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
     if (w) {
-        d->switcher->removeItem(d->stack->indexOf(w));
+        d->switcher->removeTab(d->stack->indexOf(w));
         d->stack->removeWidget(w);
         d->viewForWidget.remove(w);
     }

@@ -19,7 +19,7 @@
 #ifndef SUBLIMESWITCHER_H
 #define SUBLIMESWITCHER_H
 
-#include <QtGui/QComboBox>
+#include <QtGui/QTabBar>
 
 #include "sublimeexport.h"
 
@@ -28,7 +28,7 @@ namespace Sublime {
 /**
 @short Switcher for views inside the one container.
 */
-class SUBLIME_EXPORT Switcher: public QComboBox {
+class SUBLIME_EXPORT Switcher: public QTabBar {
 Q_OBJECT
 public:
     Switcher(QWidget *parent = 0);
