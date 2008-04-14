@@ -465,38 +465,6 @@ void DocumentController::registerDocumentForMimetype( const QString& mimetype,
         d->factories[mimetype] = factory;
 }
 
-void DocumentController::saveDocumentList()
-{
-    if (!d || d->cleaningUp)
-        return;
-
-    KConfigGroup cg = KGlobal::config()->group("Documents");
-    QList<QString> urls;
-    QHash< KUrl, IDocument* >::iterator i, e;
-    for (i = d->documents.begin(), e = d->documents.end(); i != e; ++i)
-        /* prettyUrl strips passwords from URL, which is probably
-           good idea, assuming we don't want passwords to be
-           stored in plain text in random config files. */
-        urls.push_back(i.key().prettyUrl());
-    cg.writeEntry("urls", urls);
-    cg.sync();
-}
-
-void DocumentController::restoreDocumentList()
-{
-    KConfigGroup cg = KGlobal::config()->group("Documents");
-    QList<QString> urls = cg.readEntry("urls", QList<QString>());
-    /* Presently, if an URL was shown in several Sublime::Area
-       instances, we won't properly restore that. The
-       openDocument and Area should coordinate such details
-       in future -- this function only cares about having
-       the right list of URLs opened, not where they are shown. */
-    foreach (const QString& s, urls)
-    {
-        openDocument(KUrl(s));
-    }
-}
-
 void DocumentController::cleanup()
 {
     /* From now on, we don't save document list, so that

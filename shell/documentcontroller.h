@@ -86,10 +86,6 @@ public:
 
     void deinitialize();
 
-    /** Read the list of previously opened documents from KGlobal::config()
-        and open them.  */
-    void restoreDocumentList();
-
     void cleanup();
 
     virtual QStringList documentTypes() const;
@@ -127,9 +123,6 @@ private Q_SLOTS:
 
 private:
     void setupActions();
-    /**Save the list of currently opened document URLs into
-       KGlobal::config().  */
-    void saveDocumentList();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
     Q_PRIVATE_SLOT(d, void chooseDocument())
 
