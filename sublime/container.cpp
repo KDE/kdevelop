@@ -63,6 +63,8 @@ Container::~Container()
 
 void Container::widgetActivated(int idx)
 {
+    if (idx < 0)
+        return;
     d->stack->setCurrentIndex(idx);
     if (QWidget* widget = d->stack->widget(idx)) {
         widget->setFocus();
