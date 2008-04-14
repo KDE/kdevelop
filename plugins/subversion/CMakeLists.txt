@@ -89,10 +89,10 @@ target_link_libraries(kdevsubversion
                     ${KDE4_KDEUI_LIBS}
                     ${KDE4_KIO_LIBS}
                     ${KDE4_KTEXTEDITOR_LIBS}
-                    ${KDEVPLATFORM_INTERFACES_LIBRARY}
-                    ${KDEVPLATFORM_VCS_LIBRARY}
-                    ${KDEVPLATFORM_PROJECT_LIBRARY}
-                    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+                    interfaces
+                    vcs
+                    project
+                    outputview
                     ${KDE4_THREADWEAVER_LIBRARIES}
                     )
 
