@@ -67,8 +67,11 @@ protected:
   void setEncountered( DUChainBase* item );
   bool wasEncountered( DUChainBase* item );
   void smartenContext( TopDUContext* topLevelContext );
+
+  void setIdentifier( const QString& id );
+  QualifiedIdentifier qualifiedIdentifier();
   
-  EditorIntegrator* editor();
+  template <typename E> E* editor();
 private:
   class BaseContextBuilderPrivate* const d;
 };

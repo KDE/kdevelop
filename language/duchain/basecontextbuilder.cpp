@@ -63,7 +63,8 @@ public:
   QList<DUContext*> m_importedParentContexts;
   QSet<KDevelop::DUChainBase*> m_encountered;
   QStack<KDevelop::DUContext*> m_contextStack;
-
+  Identifier m_identifier;
+  QualifiedIdentifier m_qIdentifier;
 
   bool recompiling()
   {
@@ -248,12 +249,6 @@ TopDUContext BaseContextBuilder<T>::buildContexts( const KUrl& url, T* node,
 }
 
 template <typename T>
-EditorIntegrator* BaseContextBuilder<T>::editor()
-{
-  return d->m_editor;
-}
-
-template <typename T>
 DUContext* BaseContextBuilder<T>::buildSubContexts( const KUrl& url, T *node, DUContext* parent )
 {
 //     m_compilingContexts = true;
@@ -387,6 +382,29 @@ template <typename T>
 bool BaseContextBuilder<T>::wasEncountered( DUChainBase* item )
 {
   return d->m_encountered.contains( item );
+}
+
+template <typename T>
+void BaseContextBuilder<T>::setIdentifier( const QString & id )
+{
+  d->m_identifier = new Identifier( id );
+  d->m_qIdentifier.clear();
+  d->m_qIdentifier.push( d->m_identifier );
+}
+
+template <typename T>
+QualifiedIdentifier BaseContextBuilder<T>::qualifiedIdentifier( )
+{
+  return d->m_qIdentifier;
+}
+template <typename T>
+template <typename E>
+E* BaseContextBuilder<T>::editor()
+{
+  E* editor = dynamic_cast<E*>( d->m_editor );
+  if( !editor )
+    Q_ASSERT_X(false, "editor cast", "Couldn't cast editor to proper return type");
+  return editor;
 }
 
 }

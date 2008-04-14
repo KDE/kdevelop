@@ -102,5 +102,6 @@ install(FILES
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
+    duchain/basecontextbuilder.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
