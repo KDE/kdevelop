@@ -43,6 +43,12 @@ using namespace GDBDebugger;
 GDB::GDB() 
 : sawPrompt_(false), currentCmd_(0)
 {
+    KConfigGroup config(KGlobal::config(), "GDB Debugger");
+    // FIXME: verify that default value leads to something sensible
+    KUrl gdbUrl(config.readEntry("GDB Path", ""));   
+    // FIXME: verify its' a local path.
+    gdbBinary_ = gdbUrl.toLocalFile(KUrl::RemoveTrailingSlash);
+
     process_ = new KProcess(this);
     process_->setOutputChannelMode( KProcess::SeparateChannels ); 
     connect(process_, SIGNAL(readyReadStandardOutput()), 
@@ -55,8 +61,6 @@ GDB::GDB()
     connect(process_, SIGNAL(error(QProcess::ProcessError)),
             SLOT(processErrored(QProcess::ProcessError)));
 
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");    
-    QString gdb = config.readEntry("GDB Path", "gdb");
 
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
@@ -64,6 +68,7 @@ GDB::GDB()
     QString shell = config.readEntry("Debugger Shell");
     if( !shell.isEmpty() )
     {
+        kDebug(9012) << "have shell\n";
         shell = shell.simplified();
         QString shell_without_args = shell.split(QChar(' ')).first();
 
@@ -83,18 +88,19 @@ GDB::GDB()
             return;
         }
 
-        arguments.insert(0, gdb );
+        arguments.insert(0, gdbBinary_);
         arguments.insert(0, shell);
         process_->setShellCommand( KShell::joinArgs( arguments ) );
     }
     else
     {
-        process_->setProgram( gdb, arguments );
+        process_->setProgram( gdbBinary_, arguments );
     }
 
     process_->start();
 
-    emit userCommandOutput(shell + " " + gdb
+    kDebug(9012) << "STARTING GDB\n";
+    emit userCommandOutput(shell + " " + gdbBinary_
                            + " --interpreter=mi2 -quiet\n" );
 }
 
@@ -168,6 +174,7 @@ void GDB::readyReadStandardError()
 
 void GDB::processLine(const QByteArray& line)
 {
+    kDebug(9012) << "GDB output: " << line << "\n";
     if(!currentCmd_)
         return;
 
@@ -276,6 +283,8 @@ void GDB::processLine(const QByteArray& line)
                 
                break;
            }
+           case GDBMI::Record::Prompt:
+               break;
            }
        }
        catch(const std::exception& e)
@@ -308,11 +317,10 @@ void GDB::processLine(const QByteArray& line)
 
 void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    // FIXME: revive
-#if 0
+    kDebug(9012) << "GDB FINISHED\n";
+/* FIXME: revive. Need to arrange for controller to delete us. 
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
-    delete m_process;
-    m_process = 0;
+    deleteLater();
     delete tty_;
     tty_ = 0;
 
@@ -326,36 +334,33 @@ void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     emit showMessage(i18n("Process exited"), 3000);
 
     emit gdbUserCommandStdout("(gdb) Process exited\n");
-#endif
+*/
 }
 
 void GDB::processErrored(QProcess::ProcessError error)
 {
-    // FIXME: revive
-#if 0
+    kDebug(9012) << "GDB ERRORED\n";
     if( error == QProcess::FailedToStart )
     {
         KMessageBox::information(
             qApp->activeWindow(),
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
-                 "Make sure that the path name is specified correctly."
-                , m_process->program()[0]),
-            i18n("Could not start debugger"));
-        delete m_process;
-        m_process = 0;
-        delete tty_;
-        tty_ = 0;
+                 "Make sure that the path name is specified correctly.",
+                 gdbBinary_,
+                 i18n("Could not start debugger")));
 
-        emit debuggerAbnormalExit();
+        /* FIXME: make sure the controller gets rids of GDB instance
+        emit debuggerAbnormalExit(); 
 
-        raiseEvent(debugger_exited);
+        raiseEvent(debugger_exited); */
 
+        /* Used to be before, GDB controller might want to do
+           the same.
         destroyCmds();
         setState(s_dbgNotStarted|s_appNotStarted|s_programExited);
         emit showMessage(i18n("Process didn't start"), 3000);
-
-        emit gdbUserCommandStdout("(gdb) didn't start\n");
+        */
+        emit userCommandOutput("(gdb) didn't start\n");
     }
-#endif
 }

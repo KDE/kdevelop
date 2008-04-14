@@ -3,6 +3,7 @@
  *
  * Copyright 1999 John Birch <jbb@kdevelop.org>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -29,19 +30,160 @@
 #include "gdbparser.h"
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
-#include "threaditem.h"
-#include "framestackitem.h"
 
-//#include "modeltest.h"
+#include "util/treeitem.h"
+#include "util/treemodel.h"
 
 using namespace GDBMI;
 using namespace GDBDebugger;
 
-StackManager::StackManager(GDBController* controller)
-    : QAbstractItemModel(controller)
-    , m_ignoreOneFetch(false)
+namespace GDBDebugger {
+
+QString get_function_or_address(const GDBMI::Value &frame)
 {
-    //new ModelTest(this);
+    if (frame.hasField("func"))
+        return frame["func"].literal();
+    else
+        return frame["addr"].literal();
+}
+
+QString get_source(const GDBMI::Value &frame)
+{
+    if (frame.hasField("file"))
+        return frame["file"].literal() + ":" +  frame["line"].literal();
+    else if (frame.hasField("from"))
+        return frame["from"].literal();
+    else
+        return "";
+}
+
+class Frame : public TreeItem
+{
+public:
+    Frame(TreeModel* model, TreeItem* parent, const GDBMI::Value& frame)
+    : TreeItem(model, parent)
+    {
+        setData(QVector<QString>() 
+                << ("#" + frame["level"].literal())
+                << get_function_or_address(frame)
+                << get_source(frame));
+    }
+
+    void fetchMoreChildren() {}
+};
+
+
+class Thread : public TreeItem
+{
+public:
+    Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
+           const GDBMI::Value& thread)
+    : TreeItem(model, parent), controller_(controller)
+    {
+        id_ = thread["id"].toInt();
+        const GDBMI::Value& frame = thread["frame"];
+        setData(QVector<QString>()
+                << ("Thread " + thread["id"].literal())
+                << get_function_or_address(frame)
+                << get_source(frame));
+
+        setHasMoreInitial(true);
+    }
+
+    void fetchMoreChildren() 
+    {
+        /* Note that the children are frames starting from the #1,
+           with data for #0 shown in the thread item itself.  */
+        int now = childItems.size() + 1;
+        int next = now + step + 1;
+        QString arg = QString("%1 %2").arg(now).arg(next);
+
+        GDBCommand *c = new GDBCommand(StackListFrames, arg,
+                                       this,
+                                       &Thread::handleFrameList);
+        c->setThread(id_);
+        controller_->addCommand(c);
+    }
+
+    void handleFrameList(const GDBMI::ResultRecord& r)
+    {
+        const GDBMI::Value& stack = r["stack"];
+        if (stack[0]["level"].toInt() != childItems.size() + 1)
+        {
+            kDebug(9012) << "Got wrong frames\n";
+            return;
+        }
+        for (int i = 0; i < step && i < stack.size(); ++i)
+        {
+            appendChild(new Frame(model(), this, stack[i]));
+        }
+
+        setHasMore(stack.size() > step);
+    }
+
+    GDBController* controller_;
+    int id_;
+
+    static const int step = 5;
+};
+
+
+class DebugUniverse : public TreeItem
+{
+public:
+    DebugUniverse(TreeModel* model, GDBController *controller)
+    : TreeItem(model), controller_(controller)
+    {}
+
+    void update()
+    {
+        clear();
+        controller_->addCommand(
+            new GDBCommand(ThreadInfo, "",
+                           this,
+                           &DebugUniverse::handleThreadInfo));        
+    }
+
+    void fetchMoreChildren() {}
+    
+    using TreeItem::clear;
+
+private:
+
+    void handleThreadInfo(const GDBMI::ResultRecord& r)
+    {
+        const GDBMI::Value& threads = r["threads"];
+        int current_id = r["current-thread-id"].toInt();
+        int current_index;
+
+        for (unsigned i = 0; i < threads.size(); ++i)
+        {
+            if (threads[i]["id"].toInt() == current_id)
+                current_index = i;
+            appendChild(new Thread(model(), this,
+                                   controller_, threads[i]));
+        }
+
+        //static_cast<Thread*>(child(current_index))->fetchMoreChildren();
+    }
+
+    GDBController* controller_;    
+};
+}
+
+StackManager::StackManager(GDBController* controller)
+: controller_(controller)
+{
+    QVector<QString> header;
+    header.push_back("ID");
+    header.push_back("Function");
+    header.push_back("Source");
+
+    model_ = new TreeModel (header, this);
+    universe_ = new DebugUniverse(model_, controller);
+    model_->setRootItem(universe_);
+
+    // new ModelTest(model_, this);
     
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
@@ -53,11 +195,27 @@ StackManager::~StackManager()
 {
 }
 
-void StackManager::clear()
+GDBController* StackManager::controller() const
 {
-    qDeleteAll(m_threads);
-    m_threads.clear();
-    reset();
+    return controller_;
+}
+
+TreeModel *StackManager::model()
+{
+    return model_;
+}
+
+void StackManager::setAutoUpdate(bool b)
+{
+    if (!autoUpdate_ && b)
+        universe_->update();
+    autoUpdate_ = b;
+}
+
+void StackManager::updateThreads()
+{   
+    if (autoUpdate_)
+        universe_->update();
 }
 
 void StackManager::slotEvent(event_t e)
@@ -65,14 +223,10 @@ void StackManager::slotEvent(event_t e)
     switch(e)
     {
         case program_state_changed:
-
-            kDebug(9012) << "Clearning framestack";
-            clear();
-
-            controller()->addCommand(
-                new GDBCommand(ThreadListIds, "",
-                               this, &StackManager::handleThreadList));
-
+            
+            if (autoUpdate_)
+                updateThreads();
+            
             break;
 
          case thread_or_frame_changed:
@@ -80,7 +234,7 @@ void StackManager::slotEvent(event_t e)
 
         case program_exited:
         case debugger_exited: 
-            clear();
+            universe_->clear();
             break;
 
         case debugger_busy:
@@ -89,293 +243,6 @@ void StackManager::slotEvent(event_t e)
         case connected_to_program:
             break;
     }
-}
-
-void StackManager::handleThreadList(const GDBMI::ResultRecord& r)
-{
-    // Gdb reply is: 
-    //  ^done,thread-ids={thread-id="3",thread-id="2",thread-id="1"},
-    // which syntactically is a tuple, but one has to access it
-    // by index anyway.
-    const GDBMI::TupleValue& ids = 
-        dynamic_cast<const GDBMI::TupleValue&>(r["thread-ids"]);
-
-    if (ids.results.size())
-    {
-        // Need to iterate over all threads to figure out where each one stands.
-        // Note that this sequence of command will be executed in strict
-        // sequences, so no other view can add its command in between and
-        // get state for a wrong thread.
-
-        // Really threaded program.
-        for(int i = 0, e = ids.results.size(); i != e; ++i)
-        {
-            int threadId = ids.results[i]->value->literal().toInt();
-
-            ThreadItem* thread = createThread(threadId);
-            thread->setDirty();
-
-            controller()->addCommand(
-                new GDBCommand(ThreadSelect, threadId,
-                               thread, &ThreadItem::parseThread));
-        }
-    }
-}
-
-ThreadItem* StackManager::createThread(int threadId)
-{
-    foreach (ThreadItem* thread, m_threads)
-        if (thread->thread() == threadId)
-            return thread;
-
-    ThreadItem* thread = new ThreadItem(this, threadId);
-
-    int index = 0;
-    for (; index < m_threads.count(); ++index) {
-        if (m_threads.at(index)->thread() > threadId)
-            goto found;
-    }
-
-    index = m_threads.count();
-
-    found:
-
-    beginInsertRows(QModelIndex(), index, index);
-
-    m_threads.insert(index, thread);
-
-    endInsertRows();
-
-    return thread;
-}
-
-GDBController* StackManager::controller() const
-{
-    return static_cast<GDBController*>(const_cast<QObject*>(QObject::parent()));
-}
-
-int StackManager::columnCount(const QModelIndex & parent) const
-{
-    Q_UNUSED(parent);
-    return ColumnLast + 1;
-}
-
-int StackManager::rowCount(const QModelIndex & parent) const
-{
-    if (!parent.isValid())
-        return m_threads.count();
-
-    if (!parent.internalPointer()) {
-        if (parent.row() < 0 || parent.row() >= m_threads.count() || parent.column() != 0)
-            return 0;
-
-        return m_threads.at(parent.row())->frames().count();
-    }
-
-    return 0;
-}
-
-QModelIndex StackManager::index(int row, int column, const QModelIndex & parent) const
-{
-    if (row < 0 || column < 0 || column > ColumnLast)
-        return QModelIndex();
-
-    if (!parent.isValid()) {
-        if (row >= m_threads.count())
-            return QModelIndex();
-
-        return createIndex(row, column, 0);
-    }
-
-    if (parent.column() != 0)
-        return QModelIndex();
-
-    if (parent.internalPointer())
-        return QModelIndex();
-
-    if (parent.row() >= m_threads.count())
-        return QModelIndex();
-
-    ThreadItem* thread = m_threads.at(parent.row());
-    if (row < thread->frames().count());
-        return createIndex(row, column, thread);
-
-    return QModelIndex();
-}
-
-QModelIndex StackManager::indexForThread(ThreadItem * thread, int column) const
-{
-    Q_ASSERT(m_threads.contains(thread));
-    return createIndex(m_threads.indexOf(thread), column, 0);
-}
-
-QModelIndex StackManager::indexForFrame(FrameStackItem * frame, int column) const
-{
-    return createIndex(frame->frame(), column, frame->thread());
-}
-
-QModelIndex StackManager::parent(const QModelIndex & index) const
-{
-    if (!index.isValid())
-        return QModelIndex();
-
-    if (!index.internalPointer())
-        return QModelIndex();
-
-    ThreadItem* thread = static_cast<ThreadItem*>(index.internalPointer());
-    int row = m_threads.indexOf(thread);
-    Q_ASSERT(row != -1);
-    if (row == -1)
-        return QModelIndex();
-
-    return createIndex(row, 0, 0);
-}
-
-QVariant StackManager::data(const QModelIndex & index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-
-    if (index.internalPointer()) {
-        ThreadItem* thread = static_cast<ThreadItem*>(index.internalPointer());
-        Q_ASSERT(thread->frames().count() > index.row());
-        FrameStackItem* frame = thread->frames().at(index.row());
-
-        // Refresh if dirty, it will tell us when to emit dataChanged
-        if (frame->isDirty())
-            frame->refresh();
-
-        /*if (index.row() == thread->frames().count() - 1) {
-            //kDebug() << index.row() << role;
-            //if (thread->moreFramesAvailable() && index.row() < 40)
-                thread->fetchMoreFrames();
-        }*/
-
-        switch (role) {
-            case Qt::DisplayRole:
-                switch (index.column()) {
-                    case 0:
-                        return frame->frame();
-                    case 1:
-                        return frame->function();
-                    case 2:
-                        return frame->sourceString();
-                }
-        }
-
-        return QVariant();
-    }
-
-    Q_ASSERT(m_threads.count() > index.row());
-    ThreadItem* thread = m_threads.at(index.row());
-    switch (role) {
-        case Qt::DisplayRole:
-            switch (index.column()) {
-                case 0:
-                    return i18n("Thread %1", thread->thread());
-                case 1:
-                    if (!thread->frames().isEmpty())
-                        return thread->frames().first()->function();
-                    break;
-                case 2:
-                    if (!thread->frames().isEmpty())
-                        return thread->frames().first()->sourceString();
-            }
-    }
-
-    return QVariant();
-}
-
-QVariant StackManager::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    Q_UNUSED(orientation);
-
-    switch (role) {
-        case Qt::DisplayRole:
-            switch (section) {
-                case 0:
-                    return i18n("ID");
-                case 1:
-                    return i18n("Function");
-                case 2:
-                    return i18n("Source");
-            }
-    }
-
-    return QVariant();
-}
-
-bool StackManager::canFetchMore(const QModelIndex & parent) const
-{
-    if (!parent.isValid())
-        return false;
-
-    if (parent.internalPointer())
-        return false;
-
-    if (m_ignoreOneFetch) {
-        m_ignoreOneFetch = false;
-        return false;
-    }
-
-    Q_ASSERT(parent.row() < m_threads.count());
-    ThreadItem* thread = m_threads.at(parent.row());
-    if (thread->moreFramesAvailable())
-        return true;
-
-    return false;
-}
-
-void StackManager::fetchMore(const QModelIndex & parent)
-{
-    if (!parent.isValid() || parent.internalPointer() || parent.row() >= m_threads.count())
-        return;
-
-    ThreadItem* thread = m_threads.at(parent.row());
-    thread->fetchMoreFrames();
-}
-
-void StackManager::prepareInsertFrames(ThreadItem* thread, int index, int endIndex)
-{
-    beginInsertRows(indexForThread(thread), index, endIndex);
-}
-
-void StackManager::completeInsertFrames()
-{
-    m_ignoreOneFetch = true;
-    endInsertRows();
-}
-
-void StackManager::dataChanged(FrameStackItem * frame)
-{
-    emit QAbstractItemModel::dataChanged(indexForFrame(frame, ColumnContext), indexForFrame(frame, ColumnLast));
-}
-
-QObject * StackManager::objectForIndex(const QModelIndex & index) const
-{
-    if (!index.isValid())
-        return 0;
-
-    if (index.internalPointer()) {
-        ThreadItem* thread = static_cast<ThreadItem*>(index.internalPointer());
-        Q_ASSERT(index.row() < thread->frames().count());
-        return thread->frames().at(index.row());
-    }
-
-    Q_ASSERT(m_threads.count() > index.row());
-    return m_threads.at(index.row());
-}
-
-ThreadItem* GDBDebugger::StackManager::threadForIndex(const QModelIndex & index) const
-{
-    if (!index.isValid())
-        return 0;
-
-    if (index.internalPointer())
-        return static_cast<ThreadItem*>(index.internalPointer());
-
-    Q_ASSERT(m_threads.count() > index.row());
-    return m_threads.at(index.row());
 }
 
 #include "stackmanager.moc"

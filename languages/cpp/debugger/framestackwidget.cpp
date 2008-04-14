@@ -31,18 +31,18 @@
 #include <kglobalsettings.h>
 #include <KIcon>
 
-#include "threaditem.h"
-#include "framestackitem.h"
 #include "gdbcontroller.h"
 #include "stackmanager.h"
+
+#include <QHeaderView>
 
 using namespace GDBMI;
 using namespace GDBDebugger;
 
 FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* controller,
                                    QWidget *parent)
-        : QTreeView(parent),
-          controller_(controller)
+: AsyncTreeView(controller->stackManager()->model(), parent),
+  controller_(controller), firstShow_(true)
 {
     setToolTip(i18n("<b>Frame stack</b><p>"
                     "Often referred to as the \"call stack\", "
@@ -55,7 +55,12 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
     setWindowIcon(KIcon("view-list-text"));
     setRootIsDecorated(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setModel(controller->stackManager());
+    
+
+//    header()->hide();
+
+//    setModel(controller->stackManager());
+    controller->stackManager()->setAutoUpdate(isVisible());
 
     connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(slotSelectionChanged(QItemSelection, QItemSelection)));
@@ -69,6 +74,8 @@ FramestackWidget::~FramestackWidget()
 
 void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
 {
+    // FIXME: revive
+#if 0
     Q_UNUSED(deselected);
     if (selected.isEmpty())
         return;
@@ -94,14 +101,27 @@ void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, con
             controller_->selectFrame(frame->frame(), frame->thread()->thread());
         }
     }
+#endif
 }
 
 void FramestackWidget::showEvent(QShowEvent * event)
 {
-    Q_UNUSED(event)
+    kDebug(9012) << "framestack shown\n";
+    controller_->stackManager()->setAutoUpdate(true);
 
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
+    if (firstShow_)
+    {
+        int id_width = QFontMetrics(font()).width("MMThread 99");
+        header()->resizeSection(0, QFontMetrics(font()).width("MMThread 99"));
+        header()->resizeSection(1, (header()->width()-id_width)/2);
+        firstShow_ = false;
+    }
+}
+
+void FramestackWidget::hideEvent(QHideEvent * event)
+{
+    kDebug(9012) << "framestack hidden\n";
+    controller_->stackManager()->setAutoUpdate(false);
 }
 
 #include "framestackwidget.moc"

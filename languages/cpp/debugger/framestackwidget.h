@@ -27,6 +27,7 @@
 
 #include "gdbcontroller.h"
 #include "mi/miparser.h"
+#include "util/treeview.h"
 
 namespace GDBDebugger
 {
@@ -38,7 +39,7 @@ class FrameStackItem;
 /**
  * @author John Birch
  */
-class FramestackWidget : public QTreeView
+class FramestackWidget : public AsyncTreeView
 {
     Q_OBJECT
 
@@ -55,9 +56,11 @@ public Q_SLOTS:
 
 protected:
     virtual void showEvent(QShowEvent* event);
+    virtual void hideEvent(QHideEvent * event);
 
 private:
     GDBController* controller_;
+    bool firstShow_;
 };
 
 }

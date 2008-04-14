@@ -56,15 +56,16 @@ set(kdevcppdebugger_PART_SRCS
     gdboutputwidget.cpp
     debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    threaditem.cpp
-    framestackitem.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
     qt4/qstringvariableitem.cpp
     qt4/qlistvariableitem.cpp
-#modeltest.cpp
+    util/treeitem.cpp
+    util/treemodel.cpp
+    util/treeview.cpp
+    #modeltest.cpp
 )
 
 set(kdevcppdebugger_PART_UI

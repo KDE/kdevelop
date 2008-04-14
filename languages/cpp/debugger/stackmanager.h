@@ -34,8 +34,10 @@ namespace GDBDebugger
 class ThreadItem;
 class FrameStackItem;
 class GDBController;
+class TreeItem;
+class TreeModel;
 
-class StackManager : public QAbstractItemModel
+class StackManager : public QObject
 {
     Q_OBJECT
 
@@ -43,18 +45,29 @@ class StackManager : public QAbstractItemModel
     friend class FrameStackItem;
 
 public:
+#if 0
     enum StackColumns {
         ColumnID,
         ColumnContext,
         ColumnSource,
         ColumnLast = ColumnSource
     };
+#endif
 
     StackManager(GDBController* controller);
     virtual ~StackManager();
 
+    void setAutoUpdate(bool);
+
     GDBController* controller() const;
 
+    TreeModel *model();
+
+private:
+
+    void updateThreads();
+
+#if 0
     // Item model reimplementations
     virtual bool canFetchMore ( const QModelIndex & parent ) const;
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
@@ -76,10 +89,13 @@ protected:
 
 private:
     void handleThreadList(const GDBMI::ResultRecord&);
+#endif
+
 
 public Q_SLOTS:
     void slotEvent(event_t e);
 
+#if 0
 private:
     void clear();
     ThreadItem* createThread(int threadId);
@@ -90,6 +106,12 @@ private:
 private:
     QList<ThreadItem*> m_threads;
     mutable bool m_ignoreOneFetch;
+#endif
+private:
+    GDBController* controller_;
+    bool autoUpdate_;
+    TreeModel* model_;
+    class DebugUniverse *universe_;
 };
 
 }

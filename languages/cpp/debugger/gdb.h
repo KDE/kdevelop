@@ -115,6 +115,7 @@ private:
     void processLine(const QByteArray& line);
 
 private:
+    QString gdbBinary_;
     KProcess* process_;
     bool sawPrompt_;
 

@@ -143,6 +143,7 @@ void GDBOutputWidget::slotInternalCommandStdout(const QString& line)
 
 void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 {
+    kdDebug(9012) << "User command stdout: " << line << "\n";
     newStdoutLine(line, false);
 }
 
