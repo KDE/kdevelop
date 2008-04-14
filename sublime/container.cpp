@@ -21,7 +21,6 @@
 #include <QMap>
 #include <QLayout>
 #include <QStackedLayout>
-#include <QTabWidget>
 
 #include "view.h"
 #include "document.h"

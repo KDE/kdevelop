@@ -649,7 +649,7 @@ void EditPatch::showEditDialog() {
   connect( m_editPatch.applyCommand, SIGNAL( textEdited( const QString& ) ), this, SLOT( updateByType() ) );
   connect( m_editPatch.unapplyCommand, SIGNAL( textEdited( const QString& ) ), this, SLOT( updateByType() ) );
 
-  blockSignals( true );
+  bool blocked = blockSignals( true );
   m_editPatch.accessRights->insertItem( 0, ~LocalPatchSource::accessToString( Public ) );
   m_editPatch.accessRights->insertItem( 1, ~LocalPatchSource::accessToString( ConnectedOnly ) );
   m_editPatch.accessRights->insertItem( 2, ~LocalPatchSource::accessToString( Ask ) );
@@ -665,7 +665,7 @@ void EditPatch::showEditDialog() {
   m_editPatch.type->setText( "text/x-diff" );
 
   m_editDlg->show();
-  blockSignals( false );
+  blockSignals( blocked );
 }
 
 void EditPatch::hideEditDialog() {

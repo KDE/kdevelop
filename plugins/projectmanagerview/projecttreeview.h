@@ -56,6 +56,8 @@ class ProjectTreeView: public QTreeView
 
         virtual void reset();
 
+        using QTreeView::currentChanged;
+
     Q_SIGNALS:
         void activateUrl( const KUrl &url );
         void currentChanged( KDevelop::ProjectBaseItem *item );

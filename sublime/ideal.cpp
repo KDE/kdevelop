@@ -21,7 +21,8 @@
 
 #include "ideal.h"
 
-#include <Qt>
+#include <QCleanlooksStyle>
+#include <QStylePainter>
 #include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
@@ -77,12 +78,11 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
     } else {
         QStyleOptionToolButton opt;
         initStyleOption(&opt);
-        opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
+	opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
         
         QPixmap pix(opt.rect.width(), opt.rect.height());
-        
         QPainter painter(&pix);
-        painter.fillRect(pix.rect(), opt.palette.color(backgroundRole()));
+        painter.fillRect(pix.rect(), opt.palette.brush(QPalette::Button));
         style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &painter, this);
         painter.end();    
         
@@ -163,7 +163,7 @@ void IdealButtonBarWidget::showWidget(bool checked)
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
-    QDockWidget *widget = _widgets[action];
+    QDockWidget *widget = _widgets.value(action);
     Q_ASSERT(widget);
 
     parentWidget()->showDockWidget(widget, checked);
@@ -225,7 +225,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
       if (IdealToolButton *button = _buttons.value(action)) {
             button->setText(action->text());
             button->setIcon(action->icon());
-            Q_ASSERT(_widgets[action]);
+            Q_ASSERT(_widgets.contains(action));
             _widgets[action]->setWindowTitle(action->text());
         }
     } break;
@@ -240,12 +240,12 @@ void IdealButtonBarWidget::actionToggled(bool state)
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
-    IdealToolButton* button = _buttons[action];
+    IdealToolButton* button = _buttons.value(action);
     Q_ASSERT(button);
 
-    button->blockSignals(true);
+    bool blocked = button->blockSignals(true);
     button->setChecked(state);
-    button->blockSignals(false);
+    button->blockSignals(blocked);
 }
 
 IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, 
@@ -258,56 +258,78 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     , m_view(view)
     , m_docking_area(docking_area)
 {
-    QBoxLayout* layout = 0;
-    switch (m_orientation) {
-        case Qt::Vertical:
-            layout = new QBoxLayout(QBoxLayout::BottomToTop, this);
-            break;
-        case Qt::Horizontal:
-            layout = new QHBoxLayout(this);
-            break;
-    }
+    QBoxLayout *box;
+    if (m_orientation == Qt::Vertical)
+	box = new QBoxLayout(QBoxLayout::BottomToTop, this);
+    else
+	box = new QBoxLayout(QBoxLayout::LeftToRight, this);
 
-    setLayout(layout);
+    box->setMargin(0);
+    box->setSpacing(2); // ### fixme, it should be hardcoded.
 
-    QLabel* title = new IdealLabel(orientation, parent->windowTitle(), this);
-    layout->addWidget(title);
-
-    layout->addStretch();
-
-    m_anchor = new QToolButton(this);
-    m_anchor->setFocusPolicy(Qt::NoFocus);
-    m_anchor->setIcon(KIcon("object-unlocked"));
+    m_anchor = new IdealDockWidgetButton();
+    m_anchor->setIcon(style()->standardIcon(QStyle::SP_TitleBarShadeButton));
     m_anchor->setCheckable(true);
-    m_anchor->setToolTip("Lock the tool");
+    m_anchor->setToolTip(i18n("Lock the tool"));
     m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
 			   "will be automatically hidden when you click outside it. "
 			   "A locked tool will remain visible until you explicitly "
 			   "hide it, or switch to a different tool."));
     connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
-    layout->addWidget(m_anchor);
 
-    m_maximize = new QToolButton(this);
-    m_maximize->setFocusPolicy(Qt::NoFocus);
-    m_maximize->setIcon(KIcon("view-fullscreen"));
+    m_maximize = new IdealDockWidgetButton();
+    m_maximize->setIcon(style()->standardIcon(QStyle::SP_TitleBarMaxButton));
     m_maximize->setCheckable(true);
-    m_maximize->setToolTip("Maximize the tool");
+    m_maximize->setToolTip(i18n("Maximize the tool"));
     connect(m_maximize, SIGNAL(toggled(bool)), SLOT(slotMaximize(bool)));
-    layout->addWidget(m_maximize);
 
-    QToolButton* close = new QToolButton(this);
-    close->setFocusPolicy(Qt::NoFocus);
-    close->setIcon(KIcon("dialog-close"));
-    close->setToolTip("Remove the tool");
+    QToolButton* close = new IdealDockWidgetButton();
+    close->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+    close->setToolTip(i18n("Remove the tool"));
     close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
 		        "You can add the tool again by using the "
 			"<tt>View->Add Tool View</tt> command."));
     connect(close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
-    layout->addWidget(close);
+
+    box->addStretch();
+    box->addWidget(m_anchor);
+    box->addWidget(m_maximize);
+    box->addWidget(close);
 }
 
-IdealDockWidgetTitle::~ IdealDockWidgetTitle()
+IdealDockWidgetTitle::~IdealDockWidgetTitle()
 {
+}
+
+QSize IdealDockWidgetTitle::sizeHint() const
+{
+    return QWidget::sizeHint();
+}
+
+QSize IdealDockWidgetTitle::minimumSizeHint() const
+{ return QWidget::minimumSizeHint(); }
+
+void IdealDockWidgetTitle::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    event->accept();
+    // ### maximize here
+}
+
+bool IdealDockWidgetTitle::isMaximized() const
+{
+    return m_maximize->isChecked();
+}
+
+void IdealDockWidgetTitle::paintEvent(QPaintEvent *)
+{
+    QStylePainter painter(this);
+    QStyleOptionDockWidgetV2 options;
+    options.initFrom(this);
+    options.rect.adjust(0, 0, -1, -1);
+    options.state |= QStyle::State_Active;
+    options.title = parentWidget()->windowTitle();
+    options.verticalTitleBar = m_orientation == Qt::Vertical;
+    painter.drawControl(QStyle::CE_DockWidgetTitle, options);    
 }
 
 bool IdealDockWidgetTitle::isAnchored() const
@@ -316,27 +338,27 @@ bool IdealDockWidgetTitle::isAnchored() const
 }
 
 void IdealDockWidgetTitle::setAnchored(bool anchored, bool emitSignals)
-{
+{    
+    bool blocked = false;
+
     if (!emitSignals)
-        m_anchor->blockSignals(true);
+        blocked = m_anchor->blockSignals(true);
 
     m_anchor->setChecked(anchored);
-    if (anchored)
-        m_anchor->setIcon(KIcon("object-locked"));
-    else
-        m_anchor->setIcon(KIcon("object-unlocked"));
+
+    m_anchor->setIcon(style()->standardIcon(anchored
+					    ? QStyle::SP_TitleBarShadeButton
+					    : QStyle::SP_TitleBarUnshadeButton));
 
     if (!emitSignals)
-        m_anchor->blockSignals(false);
+        m_anchor->blockSignals(blocked);
 }
 
 void IdealDockWidgetTitle::slotAnchor(bool anchored)
 {
-    if (anchored)
-        m_anchor->setIcon(KIcon("object-locked"));
-    else
-        m_anchor->setIcon(KIcon("object-unlocked"));
-
+    m_anchor->setIcon(style()->standardIcon(anchored
+					    ? QStyle::SP_TitleBarShadeButton
+					    : QStyle::SP_TitleBarUnshadeButton));
     emit anchor(anchored);
 }
 
@@ -347,10 +369,14 @@ void IdealDockWidgetTitle::setMaximized(bool maximized)
 
 void IdealDockWidgetTitle::slotMaximize(bool maximized)
 {
+    QStyle::StandardPixmap pix;
+
     if (maximized)
-        m_maximize->setIcon(KIcon("view-restore"));
+        pix = QStyle::SP_TitleBarNormalButton;
     else
-        m_maximize->setIcon(KIcon("view-fullscreen"));
+        pix = QStyle::SP_TitleBarMaxButton;
+
+    m_maximize->setIcon(style()->standardPixmap(pix));
 
     emit maximize(maximized);
 }
@@ -567,7 +593,7 @@ void IdealMainWidget::hideAllDocks()
 
 void IdealMainWidget::raiseView(View * view)
 {
-    QAction* action = m_view_to_action[view];
+    QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 
     action->setChecked(true);
@@ -577,7 +603,7 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
 {
     Q_ASSERT(m_view_to_action.contains(view));
 
-    QAction* action = m_view_to_action[view];
+    QAction* action = m_view_to_action.value(view);
 
     QDockWidget* dock = qobject_cast<QDockWidget*>(view->widget()->parentWidget());
     Q_ASSERT(dock);
@@ -588,7 +614,7 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
        method asserts immediately.  */
     action->setChecked(false);
 
-    if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks[dock])))
+    if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks.value(dock))))
         bar->removeAction(action);
 
     m_view_to_action.remove(view);
@@ -656,14 +682,14 @@ void IdealMainWidget::anchorDockWidget(QDockWidget * dock, bool anchor)
 {
     Q_ASSERT(docks.contains(dock));
 
-    m_mainLayout->anchorWidget(anchor, roleForArea(docks[dock]));
+    m_mainLayout->anchorWidget(anchor, roleForArea(docks.value(dock)));
 }
 
 void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
 {
     Q_ASSERT(docks.contains(dock));
 
-    IdealMainLayout::Role role = roleForArea(docks[dock]);
+    IdealMainLayout::Role role = roleForArea(docks.value(dock));
 
     static_cast<IdealDockWidgetTitle*>(dock->titleBarWidget())->setAnchored(m_mainLayout->isAreaAnchored(role), false);
 
@@ -695,20 +721,6 @@ IdealCentralWidget::~ IdealCentralWidget()
 {
 }
 
-void IdealCentralWidget::paintEvent(QPaintEvent * event)
-{
-    return;
-    
-    Q_UNUSED(event);
-    
-    QPainter p(this);
-    //p.fillRect(event->rect(), Qt::red);
-
-    if (false && layout())
-        for (int i = 0; i < layout()->count(); ++i)
-            p.fillRect(layout()->itemAt(i)->geometry(), Qt::red);
-}
-
 IdealMainLayout * IdealCentralWidget::idealLayout() const
 {
     return static_cast<IdealMainLayout*>(layout());
@@ -724,33 +736,22 @@ IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* p
     setMouseTracking(true);
 }
 
-void IdealSplitterHandle::paintEvent(QPaintEvent * event)
+void IdealSplitterHandle::paintEvent(QPaintEvent *)
 {
-    Q_UNUSED(event)
+    QStylePainter painter(this);
+    QStyleOption options;
+    options.initFrom(this);
 
-    QPainter p(this);
+    if (m_orientation == Qt::Vertical)
+	options.state |= QStyle::State_Horizontal;
 
-    p.fillRect(event->rect(), palette().color(backgroundRole()));
+    options.state |= QStyle::State_Enabled;
 
-    QStyleOption so(0);
-    so.rect = rect();
-    so.palette = palette();
-    so.state = (m_orientation == Qt::Horizontal ? QStyle::State_None : QStyle::State_Horizontal);
-    if (m_hover)
-        so.state |= QStyle::State_MouseOver;
-    so.state |= QStyle::State_Enabled;
-
-    style()->drawControl(QStyle::CE_Splitter, &so, &p, this);
+    painter.drawControl(QStyle::CE_Splitter, options);
 }
 
 void IdealSplitterHandle::mouseMoveEvent(QMouseEvent * event)
 {
-    bool hover = rect().contains(event->pos());
-    if (m_hover != hover) {
-        m_hover = hover;
-        update();
-    }
-
     if (!(event->buttons() & Qt::LeftButton))
         return;
 
@@ -795,8 +796,8 @@ void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
 {
     if (show) {
         if (QDockWidget* widget = m_mainLayout->lastDockWidget(role))
-            if (m_dockwidget_to_action.contains(widget))
-                return m_dockwidget_to_action[widget]->setChecked(show);
+            if (QAction *action = m_dockwidget_to_action.value(widget))
+                return action->setChecked(show);
 
         if (barForRole(role)->actions().count())
             barForRole(role)->actions().first()->setChecked(show);
@@ -876,98 +877,25 @@ IdealMainLayout::Role IdealMainWidget::roleForBar(IdealButtonBarWidget* bar) con
 
 QAction * IdealMainWidget::actionForView(View * view) const
 {
-    if (m_view_to_action.contains(view))
-        return m_view_to_action[view];
-
-    return 0;
+    return m_view_to_action.value(view);
 }
 
 void IdealMainWidget::setAnchorActionStatus(bool checked)
 {
-    m_anchorCurrentDock->blockSignals(true);
+    bool blocked = m_anchorCurrentDock->blockSignals(true);
     m_anchorCurrentDock->setChecked(checked);
-    m_anchorCurrentDock->blockSignals(false);
-}
-
-bool IdealDockWidgetTitle::isMaximized() const
-{
-    return m_maximize->isChecked();
+    m_anchorCurrentDock->blockSignals(blocked);
 }
 
 void IdealMainWidget::setMaximizeActionStatus(bool checked)
 {
-    m_maximizeCurrentDock->blockSignals(true);
+    bool blocked = m_maximizeCurrentDock->blockSignals(true);
     m_maximizeCurrentDock->setChecked(checked);
-    m_maximizeCurrentDock->blockSignals(false);
+    m_maximizeCurrentDock->blockSignals(blocked);
 }
 
-IdealLabel::IdealLabel(Qt::Orientation orientation, const QString & text, QWidget * parent)
-    : QLabel(text, parent)
-    , m_orientation(orientation)
-{
-}
-
-void IdealLabel::paintEvent(QPaintEvent * event)
-{
-    if (m_orientation == Qt::Horizontal)
-        return QLabel::paintEvent(event);
-
-    QRect rect = geometry();
-    int width = rect.width();
-    rect.setWidth(rect.height());
-    rect.setHeight(width);
-
-    QPixmap pix(rect.size());
-
-    QPainter painter(&pix);
-    painter.fillRect(pix.rect(), palette().color(backgroundRole()));
-
-    int align = QStyle::visualAlignment(layoutDirection(), alignment());
-
-    style()->drawItemText(&painter, pix.rect(), align, palette(), isEnabled(), text(), foregroundRole());
-    painter.end();
-
-    QPainter p(this);
-
-    p.translate(0, height());
-    p.rotate(-90);
-
-    p.drawPixmap(0, 0, pix);
-}
-
-QSize IdealLabel::sizeHint() const
-{
-    QSize s = QLabel::sizeHint();
-
-    if (m_orientation == Qt::Vertical)
-        return QSize(s.height(), s.width());
-
-    return s;
-}
-
-QSize IdealLabel::minimumSizeHint() const
-{
-    QSize s = QLabel::minimumSizeHint();
-
-    if (m_orientation == Qt::Vertical)
-        return QSize(s.height(), s.width());
-
-    return s;
-}
-
-int IdealLabel::heightForWidth(int w) const
-{
-    Q_UNUSED(w)
-    return -1;
-}
-
-QDockWidget * IdealButtonBarWidget::widgetForAction(QAction * action) const
-{
-    if (_widgets.contains(action))
-        return _widgets[action];
-
-    return 0;
-}
+QDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
+{ return _widgets.value(action); }
 
 void IdealMainWidget::selectNextDock()
 {
@@ -976,7 +904,7 @@ void IdealMainWidget::selectNextDock()
 
     IdealButtonBarWidget* bar = barForRole(role);
 
-    int index = bar->actions().indexOf(m_dockwidget_to_action[dock]);
+    int index = bar->actions().indexOf(m_dockwidget_to_action.value(dock));
 
     if (index == -1 || index == bar->actions().count() - 1)
         index = 0;
@@ -996,7 +924,7 @@ void IdealMainWidget::selectPreviousDock()
 
     IdealButtonBarWidget* bar = barForRole(role);
 
-    int index = bar->actions().indexOf(m_dockwidget_to_action[dock]);
+    int index = bar->actions().indexOf(m_dockwidget_to_action.value(dock));
 
     if (index < 1)
         index = bar->actions().count() - 1;
@@ -1019,10 +947,85 @@ void Sublime::IdealMainWidget::setShowDockStatus(IdealMainLayout::Role role, boo
 {
     KAction* action = actionForRole(role);
     if (action->isChecked() != checked) {
-        action->blockSignals(true);
+        bool blocked = action->blockSignals(true);
         action->setChecked(checked);
-        action->blockSignals(false);
+        action->blockSignals(blocked);
     }
+}
+
+IdealDockWidgetButton::IdealDockWidgetButton(QWidget *parent)
+    : QToolButton(parent)
+{
+    setFocusPolicy(Qt::NoFocus);
+}
+
+IdealDockWidgetButton::~IdealDockWidgetButton()
+{
+}
+
+QSize IdealDockWidgetButton::sizeHint() const
+{
+    ensurePolished();
+
+    int size = 0;
+
+    if (! icon().isNull()) {
+	const QPixmap pix =
+	    icon().pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+
+	size += qMax(pix.width(), pix.height());
+    }
+
+    const int titleBarButtonMargin =
+	style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin);
+
+    size += titleBarButtonMargin * 2;
+
+    return QSize(size, size);
+}
+
+QSize IdealDockWidgetButton::minimumSizeHint() const
+{ return sizeHint(); }
+
+void IdealDockWidgetButton::enterEvent(QEvent *event)
+{
+    if (isEnabled())
+	update();
+
+    QToolButton::enterEvent(event);
+}
+
+void IdealDockWidgetButton::leaveEvent(QEvent *event)
+{
+    if (isEnabled())
+	update();
+
+    QToolButton::leaveEvent(event);
+}
+
+void IdealDockWidgetButton::paintEvent(QPaintEvent *)
+{
+    QStylePainter painter(this);
+
+    QStyleOptionToolButton options;
+    options.init(this);
+    options.state |= QStyle::State_AutoRaise;
+
+    if (isEnabled() && underMouse() && ! isChecked() && ! isDown())
+	options.state |= QStyle::State_Raised;
+    if (isChecked())
+	options.state |= QStyle::State_On;
+    if (isDown())
+	options.state |= QStyle::State_Sunken;
+
+    options.subControls = QStyle::SC_None;
+    options.activeSubControls = QStyle::SC_None;
+    options.icon = icon();
+    options.arrowType = Qt::NoArrow;
+    options.features = QStyleOptionToolButton::None;
+    const int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
+    options.iconSize = QSize(size, size);
+    painter.drawComplexControl(QStyle::CC_ToolButton, options);
 }
 
 #include "ideal.moc"

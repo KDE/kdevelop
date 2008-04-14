@@ -89,7 +89,7 @@ void EnvironmentWidget::loadSettings( KConfig* config )
     ui.activeCombo->clear();
     ui.variableTable->clearContents();
 
-    ui.activeCombo->blockSignals( true );
+    bool blocked = ui.activeCombo->blockSignals( true );
     QList<QString> groupList = m_groups.groups();
     ui.activeCombo->addItems( m_groups.groups() );
     if( !groupList.contains( m_groups.defaultGroup() ) )
@@ -97,11 +97,11 @@ void EnvironmentWidget::loadSettings( KConfig* config )
         ui.activeCombo->addItem( m_groups.defaultGroup() );
     }
     int idx = ui.activeCombo->findText( m_groups.defaultGroup() );
-    ui.activeCombo->blockSignals( false );
+    ui.activeCombo->blockSignals( blocked );
     ui.activeCombo->setCurrentIndex( idx );
 
     QMap<QString,QString> variables = m_groups.variables( m_groups.defaultGroup() );
-    ui.variableTable->blockSignals( true );
+    blocked = ui.variableTable->blockSignals( true );
     foreach( QString varname, variables.keys() )
     {
         //Add it at the top?
@@ -120,7 +120,7 @@ void EnvironmentWidget::loadSettings( KConfig* config )
         //Make sure it is visible
         ui.variableTable->scrollToItem( name );
     }
-    ui.variableTable->blockSignals( false );
+    ui.variableTable->blockSignals( blocked );
     ui.deleteButton->setEnabled( ui.variableTable->rowCount() > 0 );
 }
 
@@ -182,7 +182,7 @@ void EnvironmentWidget::newButtonClicked()
         QString currentGroup = ui.activeCombo->currentText();
         m_groups.variables( currentGroup ).insert( _name, _value );
 
-        ui.variableTable->blockSignals( true );
+        bool blocked = ui.variableTable->blockSignals( true );
 
         // Add it at the top?
         int row = ui.variableTable->rowCount();
@@ -200,7 +200,7 @@ void EnvironmentWidget::newButtonClicked()
         //Make sure it is visible
         ui.variableTable->scrollToItem( name );
 
-        ui.variableTable->blockSignals( false );
+        ui.variableTable->blockSignals( blocked );
 
         ui.variableTable->setCurrentItem( name );
 
@@ -350,7 +350,7 @@ void EnvironmentWidget::activeGroupChanged( int idx )
     ui.variableTable->clearContents();
 
     m_groups.setDefaultGroup( ui.activeCombo->currentText() );
-    ui.variableTable->blockSignals(true);
+    bool blocked = ui.variableTable->blockSignals(true);
 
     QString group = m_groups.defaultGroup();
 
@@ -372,7 +372,7 @@ void EnvironmentWidget::activeGroupChanged( int idx )
         //Make sure it is visible
         ui.variableTable->scrollToItem( name );
     }
-    ui.variableTable->blockSignals(false);
+    ui.variableTable->blockSignals(blocked);
 
     if( ui.variableTable->rowCount() > 0 )
         ui.deleteButton->setEnabled( true );

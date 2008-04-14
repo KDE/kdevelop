@@ -144,6 +144,8 @@ public Q_SLOTS:
     void loadSettings();
 
 protected:
+    using QLayout::layout;
+
     void doLayout(QRect rect) const;
     void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;

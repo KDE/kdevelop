@@ -202,7 +202,8 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
       
       if (DUContext* d = dynamic_cast<DUContext*>(base->data())) {
         dec = d->owner();
-      } else if (dec = dynamic_cast<Declaration*>(base->data())) {
+      } else if (0 != (dec = dynamic_cast<Declaration*>(base->data()))) {
+	// ### do something here
       }
 
       if(!dec || dec->definition() || dec->declaration())

@@ -541,7 +541,7 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
     DockArea* area = m_items[role];
 
     foreach (QLayoutItem* item, area->items()) {
-        int hintDimension;
+        int hintDimension = 0;
         if (m_items[role]->width != -1) {
             hintDimension = m_items[role]->width;
 
@@ -629,13 +629,17 @@ IdealSplitterHandle* IdealMainLayout::createSplitter(Role role, bool reverse)
 {
     IdealSplitterHandle* splitter = 0;
 
-    Qt::Orientation direction = ((role == Left || role == Right) ^ reverse) ? Qt::Vertical : Qt::Horizontal;
+    Qt::Orientation direction = ((role == Left || role == Right) ^ reverse)
+      ? Qt::Vertical
+      : Qt::Horizontal;
 
     splitter = new IdealSplitterHandle(direction, parentWidget(), role);
     addChildWidget(splitter);
 
-    connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)), SLOT(resizeWidget(int, IdealMainLayout::Role)));
+    connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)),
+	    SLOT(resizeWidget(int, IdealMainLayout::Role)));
 
+    splitter->hide();
     return splitter;
 }
 
@@ -645,7 +649,7 @@ void IdealMainLayout::createArea(Role role)
     m_items.insert(role, area);
 
     if (role != Central)
-        area->setMainSplitter(createSplitter(role));
+      area->setMainSplitter(createSplitter(role));
 }
 
 void IdealMainLayout::addWidget(QWidget * widget, Role role)
@@ -874,9 +878,6 @@ void IdealMainLayout::DockArea::addWidget(QWidget * widget)
 {
     m_items.append(new QWidgetItem(widget));
     m_heights.append(-1);
-
-    if (m_items.count() > 1)
-        m_subSplitters.append(new QWidgetItem(m_layout->createSplitter(m_role, true)));
 }
 
 void IdealMainLayout::DockArea::removeWidget(QWidget * widget)

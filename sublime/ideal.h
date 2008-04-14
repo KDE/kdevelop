@@ -59,22 +59,21 @@ private:
     Qt::DockWidgetArea _area;
 };
 
-class IdealLabel : public QLabel
+class IdealDockWidgetButton: public QToolButton
 {
     Q_OBJECT
 
 public:
-    IdealLabel(Qt::Orientation orientation, const QString& text, QWidget* parent);
+    IdealDockWidgetButton(QWidget *parent = 0);
+    virtual ~IdealDockWidgetButton();
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-    virtual int heightForWidth(int w) const;
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
 protected:
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
     virtual void paintEvent(QPaintEvent *event);
-
-private:
-    Qt::Orientation m_orientation;
 };
 
 class IdealButtonBarWidget: public QWidget
@@ -130,8 +129,13 @@ public:
     bool isMaximized() const;
     void setMaximized(bool maximized);
 
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+
 protected: // QWidget overrides
     virtual void contextMenuEvent(QContextMenuEvent *);
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
 Q_SIGNALS:
     void anchor(bool anchor);
@@ -161,9 +165,6 @@ public:
     virtual ~IdealCentralWidget();
 
     IdealMainLayout* idealLayout() const;
-
-protected:
-    virtual void paintEvent(QPaintEvent* event);
 };
 
 class View;
