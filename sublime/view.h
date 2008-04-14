@@ -45,7 +45,7 @@ public:
     /**@return widget for this view (creates it if it's not yet created).*/
     virtual QWidget *widget(QWidget *parent = 0);
     /**@return true if this view has an initialized widget.*/
-    bool hasWidget() const;
+    virtual bool hasWidget() const;
 
     /// Retrieve view state for saving into configuration.
     virtual QString viewState() const;

@@ -55,7 +55,7 @@ Qt::Orientation IdealToolButton::orientation() const
 {
     if (_area == Qt::LeftDockWidgetArea || _area == Qt::RightDockWidgetArea)
         return Qt::Vertical;
-    
+
     return Qt::Horizontal;
 }
 
@@ -79,15 +79,15 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         QStyleOptionToolButton opt;
         initStyleOption(&opt);
 	opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
-        
+
         QPixmap pix(opt.rect.width(), opt.rect.height());
         QPainter painter(&pix);
         painter.fillRect(pix.rect(), opt.palette.brush(QPalette::Button));
         style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &painter, this);
-        painter.end();    
-        
+        painter.end();
+
         QPainter p(this);
-    
+
         if (_area == Qt::LeftDockWidgetArea) {
             p.translate(0, height());
             p.rotate(-90);
@@ -95,8 +95,8 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
             p.translate(width(), 0);
             p.rotate(90);
         }
-    
-        p.drawPixmap(0, 0, pix);    
+
+        p.drawPixmap(0, 0, pix);
     }
 }
 
@@ -123,9 +123,9 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, QDockWidget *dock
         dock->setFeatures( dock->features() | QDockWidget::DockWidgetVerticalTitleBar );
 
     if (!dock->titleBarWidget()) {
-        IdealDockWidgetTitle* title = 
+        IdealDockWidgetTitle* title =
             new IdealDockWidgetTitle(
-                orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, 
+                orientation() == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal,
                 dock, area, view, _area);
         dock->setTitleBarWidget(title);
         connect(title, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
@@ -196,7 +196,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
         if (! _buttons.contains(action)) {
             IdealToolButton *button = new IdealToolButton(_area);
             _buttons.insert(action, button);
-        
+
             button->setText(action->text());
             button->setIcon(action->icon());
             button->setChecked(action->isChecked());
@@ -248,8 +248,8 @@ void IdealButtonBarWidget::actionToggled(bool state)
     button->blockSignals(blocked);
 }
 
-IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation, 
-                                           QDockWidget * parent, 
+IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
+                                           QDockWidget * parent,
                                            Area *area, View *view,
                                            Qt::DockWidgetArea docking_area)
     : QWidget(parent)
@@ -329,7 +329,7 @@ void IdealDockWidgetTitle::paintEvent(QPaintEvent *)
     options.state |= QStyle::State_Active;
     options.title = parentWidget()->windowTitle();
     options.verticalTitleBar = m_orientation == Qt::Vertical;
-    painter.drawControl(QStyle::CE_DockWidgetTitle, options);    
+    painter.drawControl(QStyle::CE_DockWidgetTitle, options);
 }
 
 bool IdealDockWidgetTitle::isAnchored() const
@@ -338,7 +338,7 @@ bool IdealDockWidgetTitle::isAnchored() const
 }
 
 void IdealDockWidgetTitle::setAnchored(bool anchored, bool emitSignals)
-{    
+{
     bool blocked = false;
 
     if (!emitSignals)
@@ -411,7 +411,7 @@ void IdealDockWidgetTitle::contextMenuEvent(QContextMenuEvent *event)
         bottom->setChecked(true);
     else if (m_docking_area == Qt::LeftDockWidgetArea)
         left->setChecked(true);
-    else 
+    else
         right->setChecked(true);
 
     QAction* triggered = menu.exec(event->globalPos());
@@ -497,6 +497,11 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_H);
     connect(action, SIGNAL(triggered(bool)), SLOT(hideAllDocks()));
     ac->addAction("hide_all_docks", action);
+
+    action = new KAction(i18n("Focus Editor"), this);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_C);
+    connect(action, SIGNAL(triggered(bool)), SLOT(focusEditor()));
+    ac->addAction("focus_editor", action);
 
     m_anchorCurrentDock = action = new KAction(i18n("Anchor Current Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_A);
@@ -610,7 +615,7 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
 
     /* Hide the view, first.  This is a workaround -- if we
        try to remove QDockWidget without this, then eventually
-       a call to IdealMainLayout::takeAt will be made, which 
+       a call to IdealMainLayout::takeAt will be made, which
        method asserts immediately.  */
     action->setChecked(false);
 
@@ -951,6 +956,13 @@ void Sublime::IdealMainWidget::setShowDockStatus(IdealMainLayout::Role role, boo
         action->setChecked(checked);
         action->blockSignals(blocked);
     }
+}
+
+void Sublime::IdealMainWidget::focusEditor()
+{
+    if (View* view = static_cast<MainWindow*>(parent())->activeView())
+        if (view->hasWidget())
+            view->widget()->setFocus(Qt::ShortcutFocusReason);
 }
 
 IdealDockWidgetButton::IdealDockWidgetButton(QWidget *parent)

@@ -83,7 +83,7 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    KAction *addWidget(const QString& title, QDockWidget *widget, 
+    KAction *addWidget(const QString& title, QDockWidget *widget,
                        Area* area, View *view);
     void showWidget(QDockWidget* widget);
     void removeAction(QAction* action);
@@ -118,8 +118,8 @@ class IdealDockWidgetTitle : public QWidget
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent, 
-                         Area* area, View *view, 
+    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent,
+                         Area* area, View *view,
                          Qt::DockWidgetArea docking_area);
     virtual ~IdealDockWidgetTitle();
 
@@ -219,6 +219,7 @@ public Q_SLOTS:
     void showBottomDock(bool show);
     void showTopDock(bool show);
     void hideAllDocks();
+    void focusEditor();
     void anchorCurrentDock(bool anchor);
     void maximizeCurrentDock(bool maximized);
     void selectNextDock();
@@ -260,7 +261,7 @@ public:
 
 Q_SIGNALS:
     void resize(int thickness, IdealMainLayout::Role resizeRole);
-    
+
 protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void mouseMoveEvent(QMouseEvent* event);
