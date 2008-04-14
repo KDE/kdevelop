@@ -241,8 +241,18 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     {
         KSharedConfig * config = KGlobal::config().data();
         KConfigGroup group = config->group( "General Options" );
-        QString dir = group.readEntry( "DefaultProjectsDirectory",
+        QString dir;
+        if( group.hasKey( "DefaultProjectsDirectory" ) )
+        {
+            dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
+        }else if( activeDocument() ) 
+        {
+            dir = activeDocument()->url().directory();
+        }else
+        {
+            dir = QDir::homePath();
+        }
 
         url = KFileDialog::getOpenUrl( dir, i18n( "*.*|Text File\n" ),
                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
