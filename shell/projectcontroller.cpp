@@ -74,6 +74,8 @@ public:
     ProjectModel* model;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
 
+    QAction* m_closeAllProjects;
+
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
 
@@ -167,6 +169,13 @@ void ProjectController::setupActions()
 //    action->setToolTip( i18n( "Close project" ) );
 //    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
 //    action->setEnabled( false );
+
+    d->m_closeAllProjects = action = ac->addAction( "project_close_all" );
+    action->setText( i18n( "Close All Projects" ) );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllProjects() ) );
+    action->setToolTip( i18n( "Close all currently open projects" ) );
+    action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects." ) );
+    action->setEnabled( false );
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
@@ -336,6 +345,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
         if (changedAreas.contains(mw->area()))
             d->m_core->uiControllerInternal()->showArea(mw->area(), mw);
 
+    d->m_closeAllProjects->setEnabled(true);
+
     return true;
 }
 
@@ -489,6 +500,8 @@ bool ProjectController::closeProject( IProject* proj )
     if( d->m_projects.isEmpty() )
     {
         connect( proj, SIGNAL(destroyed(QObject*) ), this, SLOT(unloadAllProjectPlugins()) );
+
+        d->m_closeAllProjects->setEnabled(false);
     }
 
 
@@ -558,6 +571,13 @@ bool ProjectController::configureProject( IProject* project )
 }
 
 }
+
+void KDevelop::ProjectController::closeAllProjects()
+{
+    foreach (IProject* project, projects())
+        closeProject(project);
+}
+
 #include "projectcontroller.moc"
 
 

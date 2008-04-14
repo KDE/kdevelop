@@ -30,7 +30,7 @@ namespace KDevelop {
 void MainWindowPrivate::gotoNextArea()
 {
     UiController* ui = Core::self()->uiControllerInternal();
-    
+
     int i = 0;
 
     if (Sublime::Area* a = ui->activeArea())
@@ -218,6 +218,7 @@ void MainWindowPrivate::split(Qt::Orientation orientation)
 
     Sublime::View *newView = view->document()->createView();
     m_mainWindow->area()->addView(newView, view, orientation);
+
     m_mainWindow->activateView(newView);
 }
 

@@ -525,31 +525,33 @@ void DocumentController::saveArea(Sublime::Area * area, KConfigGroup & group)
 
 void DocumentController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
 {
-    group.writeEntry("View Count", area->viewCount());
+    if (area->isSplitted()) {
+        group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
-    int index = 0;
-    foreach (Sublime::View* view, area->views()) {
-        group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-        group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-        QString state = view->viewState();
-        if (!state.isEmpty())
-            group.writeEntry(QString("View %1 State").arg(index), state);
+        if (area->first()) {
+            KConfigGroup subgroup(&group, "0");
+            subgroup.deleteGroup();
+            saveArea(area->first(), subgroup);
+        }
 
-        ++index;
-    }
+        if (area->second()) {
+            KConfigGroup subgroup(&group, "1");
+            subgroup.deleteGroup();
+            saveArea(area->second(), subgroup);
+        }
+    } else {
+        group.writeEntry("View Count", area->viewCount());
 
-    group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
+        int index = 0;
+        foreach (Sublime::View* view, area->views()) {
+            group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
+            group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
+            QString state = view->viewState();
+            if (!state.isEmpty())
+                group.writeEntry(QString("View %1 State").arg(index), state);
 
-    if (area->first()) {
-        KConfigGroup subgroup(&group, "0");
-        subgroup.deleteGroup();
-        saveArea(area->first(), subgroup);
-    }
-
-    if (area->second()) {
-        KConfigGroup subgroup(&group, "1");
-        subgroup.deleteGroup();
-        saveArea(area->second(), subgroup);
+            ++index;
+        }
     }
 }
 
@@ -560,46 +562,59 @@ void DocumentController::loadArea(Sublime::Area * area, const KConfigGroup & gro
 
 void DocumentController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & group)
 {
-    int viewCount = group.readEntry("View Count", 0);
-    for (int i = 0; i < viewCount; ++i) {
-        QString type = group.readEntry(QString("View %1 Type").arg(i), "");
+    if (group.hasKey("Orientation")) {
+        QStringList subgroups = group.groupList();
 
-        QString specifier = group.readEntry(QString("View %1").arg(i), "");
-        Sublime::Document* document = createDocument(type, specifier);
-        if (document) {
-            Sublime::View* view = document->createView();
+        if (subgroups.contains("0")) {
+            if (!area->isSplitted())
+                area->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
 
-            QString state = group.readEntry(QString("View %1 State").arg(i), "");
-            if (!state.isEmpty())
-                view->setState(state);
+            KConfigGroup subgroup(&group, "0");
+            loadArea(area->first(), subgroup);
 
-            area->add(view);
-
-        } else {
-            kWarning() << "Unable to create view of type " << type;
+            if (subgroups.contains("1")) {
+                Q_ASSERT(area->isSplitted());
+                KConfigGroup subgroup(&group, "1");
+                loadArea(area->second(), subgroup);
+            }
         }
-    }
 
-    if (group.readEntry("Orientation", "Horizontal") == "Vertical")
-        area->setOrientation(Qt::Vertical);
-    else
-        area->setOrientation(Qt::Horizontal);
+    } else {
+        while (area->isSplitted()) {
+            area = area->first();
+            Q_ASSERT(area);// Split area index did not contain a first child area index if this fails
+        }
 
-    QStringList subgroups = group.groupList();
+        int viewCount = group.readEntry("View Count", 0);
+        for (int i = 0; i < viewCount; ++i) {
+            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
+            QString specifier = group.readEntry(QString("View %1").arg(i), "");
 
-    if (subgroups.contains("0")) {
-        if (!area->isSplitted())
-            // Will load when the subgroup is iterated
-            area->split(Qt::Horizontal);
+            bool viewExists = false;
+            foreach (Sublime::View* view, area->views()) {
+                if (view->document()->documentSpecifier() == specifier) {
+                    viewExists = true;
+                    break;
+                }
+            }
 
-        KConfigGroup subgroup(&group, "0");
-        loadArea(area->first(), subgroup);
-    }
+            if (viewExists)
+                continue;
 
-    if (subgroups.contains("1")) {
-        Q_ASSERT(area->isSplitted());
-        KConfigGroup subgroup(&group, "1");
-        loadArea(area->second(), subgroup);
+            Sublime::Document* document = createDocument(type, specifier);
+            if (document) {
+                Sublime::View* view = document->createView();
+
+                QString state = group.readEntry(QString("View %1 State").arg(i), "");
+                if (!state.isEmpty())
+                    view->setState(state);
+
+                area->add(view);
+
+            } else {
+                kWarning() << "Unable to create view of type " << type;
+            }
+        }
     }
 }
 
