@@ -242,6 +242,7 @@ void QuickOpenWidgetHandler::updateProviders() {
     }
   }
 
+  emit scopesChanged( checkedScopes );
   m_model->enableProviders( checkedItems, checkedScopes );
 }
 
@@ -479,9 +480,15 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if( modes & Classes )
     initialItems << i18n("Classes");
   
-  new QuickOpenWidgetHandler( d, m_model, initialItems, QStringList() );
+  QuickOpenWidgetHandler* handler = new QuickOpenWidgetHandler( d, m_model, initialItems, lastUsedScopes );
+  connect( handler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
 }
 
+
+void QuickOpenPlugin::storeScopes( const QStringList& scopes )
+{
+  lastUsedScopes = scopes;
+}
 
 void QuickOpenPlugin::quickOpen()
 {

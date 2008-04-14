@@ -75,6 +75,8 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
+private slots:
+    void storeScopes( const QStringList& );
   private:
     //Whether the model is free for use. Else we cannot create a quickopen-widget.
     bool modelIsFree() const;
@@ -86,6 +88,7 @@ public slots:
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;
+    QStringList lastUsedScopes;
 };
 
 class QuickOpenWidgetHandler : public QObject {
@@ -99,7 +102,10 @@ class QuickOpenWidgetHandler : public QObject {
    * */
   QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidgetHandler();
-  
+
+  signals:
+  void scopesChanged( const QStringList& scopes );
+
   private slots:
   void currentChanged( const QModelIndex& current, const QModelIndex& previous );
   void accept();
