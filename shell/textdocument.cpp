@@ -326,7 +326,6 @@ QWidget * KDevelop::TextView::widget(QWidget * parent)
 {
     if (!d->m_view) {
         d->m_view = static_cast<KTextEditor::View*>(static_cast<TextDocument*>(document())->createViewWidget(parent));
-        connect( d->m_view, SIGNAL( destroyed( QObject* ) ), this, SLOT( viewDestroyed( QObject* ) ) );
     }
 
     return d->m_view;
