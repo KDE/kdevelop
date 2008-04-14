@@ -95,6 +95,7 @@ class KDEVCPPRPP_EXPORT Stream
     KDevelop::SimpleCursor inputPosition() const;
     void setInputPosition(const KDevelop::SimpleCursor& position);
 
+    ///Input-position that marks the start of the topmost currently expanding macro in the original document
     KDevelop::SimpleCursor originalInputPosition() const;
     void setOriginalInputPosition(const KDevelop::SimpleCursor& position);
 
