@@ -303,7 +303,7 @@ KDevelop::ContextMenuExtension CustomMakeManager::contextMenuExtension( KDevelop
         KAction* prjBldAction = new KAction( i18n( "Build this project" ), this );
         d->m_ctxItem = prjItem;
         connect( prjBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, prjBldAction );
+        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, prjBldAction );
     }
     else if( KDevelop::ProjectTargetItem *targetItem = baseitem->target() )
     {
@@ -314,14 +314,14 @@ KDevelop::ContextMenuExtension CustomMakeManager::contextMenuExtension( KDevelop
 //         connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
         d->m_ctxItem = targetItem;
         connect( targetBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, targetBldAction );
+        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, targetBldAction );
     }
     else if( baseitem->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
         KAction *bldFolderAction = new KAction( i18n( "Build this directory" ), this );
         d->m_ctxItem = baseitem;
         connect( bldFolderAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.add( KDevelop::ContextMenuExtension::BuildGroup, bldFolderAction );
+        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, bldFolderAction );
     }
 
     return menuExt;
