@@ -185,6 +185,7 @@ void ViewActivationTest::testActivationAfterRemovalSimplestCase()
     View *v2 = doc2->createView();
     area->addView(v1);
     area->addView(v2, v1);
+    controller->showArea(area, &mw);
     mw.activateView(v2);
 
     //delete active view and check that previous is activated
