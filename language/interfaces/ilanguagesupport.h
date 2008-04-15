@@ -32,6 +32,7 @@ class TopDUContext;
 class DocumentRange;
 class SimpleCursor;
 class SimpleRange;
+class ICodeHighlighting;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
@@ -58,6 +59,11 @@ public:
      *  @return the standard context used by this language for the given @param url.
       * */
     virtual TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
+
+    /**
+      * Should return a code-highlighting instance for this language, or zero.
+      */
+    virtual ICodeHighlighting* codeHighlighting() const;
 
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
