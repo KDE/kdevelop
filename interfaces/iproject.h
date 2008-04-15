@@ -86,6 +86,8 @@ public:
      */
     virtual IPlugin* managerPlugin() const = 0;
 
+    virtual IPlugin* versionControlPlugin() const = 0;
+
     /**
      * With this the top-level project item can be retrieved
      */

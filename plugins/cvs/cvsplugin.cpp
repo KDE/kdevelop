@@ -25,6 +25,7 @@
 #include <KAction>
 
 
+#include <interfaces/iproject.h>
 #include <projectmodel.h>
 #include <iuicontroller.h>
 #include <icore.h>
@@ -176,13 +177,15 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
         QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
 
         foreach( KDevelop::ProjectBaseItem* _item, baseItemList ) {
-            if( _item->folder() ){
-                KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(_item);
-                ctxUrlList << folderItem->url();
-            }
-            else if( _item->file() ){
-                KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(_item);
-                ctxUrlList << fileItem->url();
+            if( _item->project()->versionControlPlugin() == this ) {
+                if( _item->folder() ){
+                    KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(_item);
+                    ctxUrlList << folderItem->url();
+                }
+                else if( _item->file() ){
+                    KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(_item);
+                    ctxUrlList << fileItem->url();
+                }
             }
         }
     } else {

@@ -116,6 +116,8 @@ public Q_SLOTS:
      */
     IBuildSystemManager* buildSystemManager() const;
 
+    IPlugin* versionControlPlugin() const;
+
     /**
      * Get the plugin that manages the project
      * This can be used to get other interfaces like IBuildSystemManager

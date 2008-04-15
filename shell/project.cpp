@@ -68,7 +68,7 @@ public:
     QString projectTempFile;
     KTemporaryFile* tmp;
     IPlugin* manager;
-//     IPersistentHash persistentHash;
+    IPlugin* vcsPlugin;
     ProjectFolderItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
@@ -154,6 +154,7 @@ Project::Project( QObject *parent )
     d->manager = 0;
     d->topItem = 0;
     d->tmp = 0;
+    d->vcsPlugin = 0;
 }
 
 Project::~Project()
@@ -296,6 +297,8 @@ bool Project::open( const KUrl& projectFileUrl_ )
         d->topItem = iface->import( this );
         if( !d->topItem )
         {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                i18n("Couldn't open project") );
             return false;
         }
 //         model->insertRow( model->rowCount(), d->topItem );
@@ -374,6 +377,7 @@ QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
 {
     // TODO: This is moderately efficient, but could be much faster with a
     // QHash<QString, ProjectFolderItem> member. Would it be worth it?
+   
 
     KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
@@ -442,6 +446,11 @@ KUrl Project::developerFileUrl() const
 ProjectFolderItem* Project::projectItem() const
 {
     return d->topItem;
+}
+
+IPlugin* Project::versionControlPlugin() const
+{
+    return d->vcsPlugin;
 }
 
 }

@@ -349,22 +349,6 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
         {
             QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
 
-            // hook special case -- just one item was requested for folder context menu.
-    //         if( baseItemList.count() == 1 && baseItemList.first()->folder() ){
-    //             KDevelop::ProjectFolderItem *folderItem =
-    //                     dynamic_cast<KDevelop::ProjectFolderItem*>( baseItemList.first()->folder() );
-    //
-    //             if( !isVersionControlled( folderItem->url() ) ){
-    //                 // checkout only can be done under the non-vcs dir.
-    //                 m_ctxUrlList << folderItem->url();
-    //                 QList<QAction*> actions;
-    //                 QAction *action = new QAction(i18n("Checkout.."), this);
-    //                 connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-    //                 actions << action;
-    //                 return qMakePair( QString("Subversion"), actions );
-    //             }
-    //         }
-
             // now general case
             KUrl::List ctxUrlList;
             foreach( KDevelop::ProjectBaseItem* _item, baseItemList )
@@ -393,6 +377,18 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
         KDevelop::FileContext *itemCtx = dynamic_cast<KDevelop::FileContext*>(context);
         m_ctxUrlList += itemCtx->urls();
     }
+    
+    foreach( KUrl url, m_ctxUrlList )
+    {
+        if( !isVersionControlled( url ) )
+        {
+            m_ctxUrlList.removeAll( url );
+        }
+    }
+
+    if( m_ctxUrlList.isEmpty() )
+        return IPlugin::contextMenuExtension( context );
+
     QList<QAction*> actions;
     KAction *action;
 
