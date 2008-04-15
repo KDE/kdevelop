@@ -260,7 +260,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             pp_macro_expander expand_macro(m_engine);
             Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
-            kDebug() << "using macro" << macro->definition;
             ms.setOriginalInputPosition(input.originalInputPosition());
             QByteArray expanded;
             {
