@@ -119,6 +119,7 @@ Declaration* cursorContextDeclaration() {
   return DUChainUtils::declarationForDefinition(subCtx->owner());
 }
 
+//Returns only the name, no template-parameters or scope
 QString cursorItemText() {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
@@ -130,7 +131,10 @@ QString cursorItemText() {
   if( idType && idType->declaration() )
     decl = idType->declaration();
 
-  return decl->qualifiedIdentifier().toString();
+  if(!decl->qualifiedIdentifier().isEmpty())
+    return decl->qualifiedIdentifier().last().identifier();
+
+  return QString();
 }
 
 QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : QObject( d ), m_dialog(d), m_model(model) {
@@ -209,8 +213,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   o.list->setColumnWidth( 0, 20 );
 
-  if(!listOnly)
-    o.searchLine->setText(cursorItemText());
+//   if(!listOnly)
+//     o.searchLine->setText(cursorItemText());
   d->show();
 
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
