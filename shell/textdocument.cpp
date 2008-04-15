@@ -157,6 +157,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         }
 
         view = qobject_cast<KTextEditor::View*>(d->document->widget());
+        //kate view is created without no parents and appears on the screen
+        //as a toplevel window which is not what we need
+        view->setVisible(false);
         Q_ASSERT(view);
     }
 
