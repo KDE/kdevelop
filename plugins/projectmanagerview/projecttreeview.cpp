@@ -24,19 +24,22 @@
 #include "context.h"
 #include "iplugincontroller.h"
 
-#include <interfaces/contextmenuextension.h>
 
 #include <QtGui/QHeaderView>
 #include <QtGui/QAbstractProxyModel>
+#include <QtCore/QDebug>
 
 #include <icore.h>
 #include <kxmlguiwindow.h>
+#include <kaction.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 
-#include <QtCore/qdebug.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 using namespace KDevelop;
 
@@ -48,7 +51,7 @@ class ProjectTreeViewPrivate
 };
 
 ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent )
-        : QTreeView( parent ), d( new ProjectTreeViewPrivate )
+        : QTreeView( parent ), d( new ProjectTreeViewPrivate ), m_ctxProject( 0 )
 {
     d->mplugin = plugin;
     header()->hide();
@@ -183,12 +186,61 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if( !itemlist.isEmpty() )
     {
+        m_ctxProject = itemlist.at(0)->project();
         KMenu menu( this );
 
         KDevelop::ProjectItemContext context(itemlist);
         QList<ContextMenuExtension> extensions = d->mplugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
 
+        foreach( const ContextMenuExtension ext, extensions )
+        {
+            foreach( KAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
+            {
+                menu.addAction( act );
+            }
+        }
+
+        menu.addSeparator();
+
+        QMenu* buildmenu = menu.addMenu( "Build" );
+        foreach( const ContextMenuExtension ext, extensions )
+        {
+            foreach( KAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
+            {
+                buildmenu->addAction( act );
+            }
+        }
+
+        menu.addSeparator();
+
+        QMenu* vcsmenu = menu.addMenu( "Version Control ");
+        foreach( const ContextMenuExtension ext, extensions )
+        {
+            foreach( KAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
+            {
+                vcsmenu->addAction( act );
+            }
+        }
+
+        menu.addSeparator();
+
+        KAction* projectConfig = new KAction(i18n("Project Options"), this);
+        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
+        menu.addAction( projectConfig );
+
         menu.exec( mapToGlobal( pos ) );
+    } else
+    {
+        m_ctxProject = 0;
+    }
+}
+
+void ProjectTreeView::openProjectConfig()
+{
+    if( m_ctxProject )
+    {
+        IProjectController* ip = d->mplugin->core()->projectController();
+        ip->configureProject( m_ctxProject );
     }
 }
 

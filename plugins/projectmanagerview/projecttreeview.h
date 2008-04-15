@@ -31,6 +31,7 @@ class QItemSelectionModel;
 class ProjectManagerViewPlugin;
 namespace KDevelop
 {
+class IProject;
 class ProjectModel;
 class ProjectFolderItem;
 class ProjectFileItem;
@@ -66,8 +67,10 @@ class ProjectTreeView: public QTreeView
         void slotActivated( const QModelIndex &index );
         void slotCurrentChanged( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );
+        void openProjectConfig();
 
     private:
+        KDevelop::IProject* m_ctxProject;
         class ProjectTreeViewPrivate* const d;
 };
 
