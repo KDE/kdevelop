@@ -225,19 +225,16 @@ void DocumentController::openDocumentFromText( const QString& data )
        to restore a document having no URL.  */
 }
 
-
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Cursor& cursor,
-        DocumentActivation activate )
+        DocumentActivationParams activationParams)
 {
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::Area *area = uiController->activeArea();
-    if (!area)
-        return 0;
 
     KUrl url = inputUrl;
 
-    if ( url.isEmpty() )
+    if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
     {
         KSharedConfig * config = KGlobal::config().data();
         KConfigGroup group = config->group( "General Options" );
@@ -258,7 +255,9 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
                                        i18n( "Open File" ) );
     }
-
+    if ( url.isEmpty() )
+        //still no url
+        return 0;
 
     bool emitLoaded = false;
 
@@ -326,34 +325,36 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     //react on document deletion - we need to cleanup controller structures
     connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), this, SLOT(removeDocument(Sublime::Document*)));
 
-    //find a view if there's one already opened in this area
-    Sublime::View *partView = 0;
-    foreach (Sublime::View *view, sdoc->views())
+    if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
     {
-        if (area->views().contains(view))
+        //find a view if there's one already opened in this area
+        Sublime::View *partView = 0;
+        foreach (Sublime::View *view, sdoc->views())
         {
-            partView = view;
-            break;
+            if (area->views().contains(view))
+            {
+                partView = view;
+                break;
+            }
         }
-    }
-    if (!partView)
-    {
-        //no view currently shown for this url
-        partView = sdoc->createView();
+        if (!partView)
+        {
+            //no view currently shown for this url
+            partView = sdoc->createView();
 
-        //add view to the area
-        area->addView(partView, uiController->activeSublimeWindow()->activeView());
-    }
-    if (activate == IDocumentController::ActivateOnOpen)
-    {
-        uiController->activeSublimeWindow()->activateView(partView);
+            //add view to the area
+            area->addView(partView, uiController->activeSublimeWindow()->activeView());
+        }
+        if (!activationParams.testFlag(IDocumentController::DoNotActivate))
+        {
+            uiController->activeSublimeWindow()->activateView(partView);
+        }
+        d->fileOpenRecent->addUrl( url );
     }
     if( cursor.isValid() )
     {
         doc->setCursorPosition( cursor );
     }
-
-    d->fileOpenRecent->addUrl( url );
 
     // Deferred signals, wait until it's all ready first
     if( emitLoaded ) {
@@ -361,7 +362,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         emit documentLoaded( d->documents[url] );
     }
 
-    if (activate == IDocumentController::ActivateOnOpen)
+    if (!activationParams.testFlag(IDocumentController::DoNotActivate))
         emit documentActivated( doc );
 
     d->saveAll->setEnabled(true);
@@ -500,23 +501,6 @@ void DocumentController::registerDocumentForMimetype( const QString& mimetype,
 QStringList DocumentController::documentTypes() const
 {
     return QStringList() << "Text";
-}
-
-Sublime::Document* DocumentController::createDocument(const QString & type, const QString & specifier)
-{
-    if (type == "Text") {
-        // TODO merge with ::openDocument for a nice common path? or use ::openDocument?
-        KUrl url = KUrl(specifier);
-        Sublime::Document* doc = new TextDocument(url, Core::self());
-        Q_ASSERT(dynamic_cast<IDocument*>(doc));
-        d->documents[url] = dynamic_cast<IDocument*>(doc);
-        connect(doc, SIGNAL(aboutToDelete(Sublime::Document*)), this, SLOT(removeDocument(Sublime::Document*)));
-        emit documentLoadedPrepare( d->documents[url] );
-        emit documentLoaded( d->documents[url] );
-        return doc;
-    }
-
-    return 0;
 }
 
 }

@@ -44,9 +44,12 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentController: public QObject {
 public:
     enum DocumentActivation
     {
-        ActivateOnOpen,        /**Activate Document on Opening.*/
-        DontActivate           /**Don't activate the Document.*/
+        DefaultMode = 0,            /**Activate document and create a view if no other flags passed.*/
+        DoNotActivate = 1,          /**Don't activate the Document.*/
+        DoNotCreateView = 2         /**Don't create and show the view for the Document.*/
     };
+    Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation);
+
     IDocumentController(QObject *parent);
 
     /**Call this before a call to @ref editDocument to set the encoding of the
@@ -74,7 +77,7 @@ public:
     virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Default) = 0;
 
     virtual void openDocumentFromText( const QString& data ) = 0;
-    
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
@@ -82,7 +85,7 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
-            DocumentActivation activate = ActivateOnOpen ) = 0;
+            DocumentActivationParams activationParams = 0 ) = 0;
 
     virtual void closeAllDocuments() = 0;
 
@@ -114,6 +117,8 @@ Q_SIGNALS:
 
     friend class IDocument;
 };
+
+ Q_DECLARE_OPERATORS_FOR_FLAGS(IDocumentController::DocumentActivationParams);
 
 }
 

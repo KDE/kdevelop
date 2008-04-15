@@ -53,6 +53,7 @@ class KDEVPLATFORMSHELL_EXPORT DocumentController: public IDocumentController {
     Q_OBJECT
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.DocumentController" )
 public:
+
     /**Constructor.
     @param parent The parent object.*/
     DocumentController( QObject *parent = 0 );
@@ -90,7 +91,6 @@ public:
     virtual QStringList documentTypes() const;
 
     QString documentType(Sublime::Document* document) const;
-    Sublime::Document* createDocument(const QString& type, const QString& specifier);
 
 public Q_SLOTS:
     /**Opens a new or existing document.
@@ -99,7 +99,7 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
-            DocumentActivation activate = IDocumentController::ActivateOnOpen );
+            DocumentActivationParams activationParams = 0);
 
     virtual Q_SCRIPTABLE void openDocumentFromText( const QString& data );
 

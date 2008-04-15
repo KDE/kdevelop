@@ -465,7 +465,7 @@ int PatchesManager::receiveMessage( PatchMessage* msg ) {
 //           }
 //         }
 
-        if( !KDevTeamworkPlugin::staticDocumentController()->openDocument( filePath, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen ) ) {
+        if( !KDevTeamworkPlugin::staticDocumentController()->openDocument( filePath, KTextEditor::Cursor()) ) {
           log( QString( "could not open %1 with the document-controller" ).arg( filePath.prettyUrl() ), Warning );
 
           auto_ptr<KOpenWithDialog> d( new KOpenWithDialog( ~patchInfo->type, "" ) );

@@ -967,7 +967,7 @@ void EditPatch::highlightFile() {
       IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->documentForUrl( file );
 
       if ( !doc ) {
-        doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+        doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor() );
         seekHunk( true, m_isSource, file.toLocalFile() );
       }
       removeHighlighting( file.toLocalFile() );
@@ -1004,7 +1004,7 @@ void EditPatch::fileDoubleClicked( const QModelIndex& i ) {
 
     out( Logger::Debug ) << "opening" << file.toLocalFile();
 
-    KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+    KDevTeamworkPlugin::staticDocumentController() ->openDocument( file, KTextEditor::Cursor() );
 
     seekHunk( true, m_isSource, file.toLocalFile() );
   } catch ( const QString & str ) {

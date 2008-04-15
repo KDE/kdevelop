@@ -176,7 +176,7 @@ void DocumentWrapper::toggleEnabled() {
 void DocumentWrapper::saveAsBufferFile() {
   KUrl u = TeamworkFolderManager::workspaceAbsolute( m_fileName );
 
-  IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( u, KTextEditor::Cursor(), KDevelop::IDocumentController::ActivateOnOpen );
+  IDocument* doc = KDevTeamworkPlugin::staticDocumentController() ->openDocument( u, KTextEditor::Cursor() );
 
   if ( doc && doc->textDocument() ) {
     if ( doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified ) {
@@ -498,7 +498,7 @@ void DocumentWrapper::openDocument( bool toForeground ) {
 
     out( Logger::Debug ) << "temporary file for" << fileName() << "is" << m_tempFile;
 
-    m_document = KDevTeamworkPlugin::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::ActivateOnOpen : KDevelop::IDocumentController::DontActivate );
+    m_document = KDevTeamworkPlugin::staticDocumentController() ->openDocument( m_tempFile, KTextEditor::Cursor(), toForeground == true ? KDevelop::IDocumentController::DefaultMode : KDevelop::IDocumentController::DoNotActivate );
 
     if ( m_document ) {
       KTextEditor::Document * doc = m_document->textDocument();

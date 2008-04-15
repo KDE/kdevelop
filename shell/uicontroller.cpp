@@ -353,7 +353,10 @@ void UiController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & grou
             if (viewExists)
                 continue;
 
-            Sublime::Document* document = Core::self()->documentControllerInternal()->createDocument(type, specifier);
+
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
+                KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+            Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
                 Sublime::View* view = document->createView();
 
