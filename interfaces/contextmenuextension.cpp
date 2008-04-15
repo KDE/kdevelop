@@ -68,7 +68,7 @@ ContextMenuExtension& ContextMenuExtension::operator=( const ContextMenuExtensio
     return *this;
 }
 
-QList<KAction*> ContextMenuExtension::actions( const QString& group )
+QList<KAction*> ContextMenuExtension::actions( const QString& group ) const
 {
     if( d->extensions.contains( group ) )
         return d->extensions.value( group );
@@ -78,7 +78,7 @@ QList<KAction*> ContextMenuExtension::actions( const QString& group )
 
 void ContextMenuExtension::addAction( const QString& group, KAction* action )
 {
-    if( d->extensions.contains( group ) )
+    if( !d->extensions.contains( group ) )
     {
         d->extensions.insert( group, QList<KAction*>() << action );
     } else

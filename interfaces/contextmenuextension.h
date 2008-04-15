@@ -72,7 +72,7 @@ public:
      * @param group the menu group from which to get the actions
      * @returns a list of actions for that menu group
      */
-    QList<KAction*> actions( const QString& group );
+    QList<KAction*> actions( const QString& group ) const;
 
 private:
     class ContextMenuExtensionPrivate* const d;
