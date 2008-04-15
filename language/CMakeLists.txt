@@ -39,6 +39,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/declarationid.cpp
     duchain/definitions.cpp
     duchain/uses.cpp
+    duchain/dumpchain.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
