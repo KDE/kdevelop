@@ -22,6 +22,8 @@
 #ifndef QUICKOPEN_FILTER_H
 #define QUICKOPEN_FILTER_H
 
+#include <QRegExp>
+
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.
  * You should use it when possible, because that way additional features(like regexp filtering) can
@@ -83,12 +85,14 @@ class Filter {
       if( !text.startsWith( m_oldFilterText ) )
         filterBase = m_items; //Start filtering based on the whole data
 
+      QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
+
       ///@todo Use regexps, and the other additional filter-logic from kdevelop-3.4
 
       m_filtered.clear();
 
       foreach( const Item& data, filterBase )
-        if( itemText( data ).contains( text ) )
+        if( itemText( data ).contains(exp) )
           m_filtered << data;
       
       m_oldFilterText = text;
