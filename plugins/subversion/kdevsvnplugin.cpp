@@ -342,6 +342,7 @@ const KUrl KDevSvnPlugin::urlFocusedDocument()
 
 KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Context* context )
 {
+    KUrl::List ctxUrlList;
     if( context->type() == KDevelop::Context::ProjectItemContext )
     {
         KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
@@ -350,7 +351,6 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
             QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
 
             // now general case
-            KUrl::List ctxUrlList;
             foreach( KDevelop::ProjectBaseItem* _item, baseItemList )
             {
                 if( _item->folder() ){
@@ -362,37 +362,35 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
                     ctxUrlList << fileItem->url();
                 }
             }
-
-            if( ctxUrlList.isEmpty() )
-                return KDevelop::IPlugin::contextMenuExtension( context );
-
-            m_ctxUrlList = ctxUrlList;
         }
     }else if( context->type() == KDevelop::Context::EditorContext )
     {
         KDevelop::EditorContext *itemCtx = dynamic_cast<KDevelop::EditorContext*>(context);
-        m_ctxUrlList << itemCtx->url();
+        ctxUrlList << itemCtx->url();
     }else if( context->type() == KDevelop::Context::FileContext )
     {
         KDevelop::FileContext *itemCtx = dynamic_cast<KDevelop::FileContext*>(context);
-        m_ctxUrlList += itemCtx->urls();
+        ctxUrlList += itemCtx->urls();
     }
-    
-    foreach( KUrl url, m_ctxUrlList )
+
+
+    KDevelop::ContextMenuExtension menuExt;
+
+    foreach( KUrl url, ctxUrlList )
     {
         if( !isVersionControlled( url ) )
         {
-            m_ctxUrlList.removeAll( url );
+            ctxUrlList.removeAll( url );
         }
     }
-
-    if( m_ctxUrlList.isEmpty() )
+    if( ctxUrlList.isEmpty() )
         return IPlugin::contextMenuExtension( context );
 
+
+    m_ctxUrlList = ctxUrlList;
     QList<QAction*> actions;
     KAction *action;
 
-    KDevelop::ContextMenuExtension menuExt;
 
     action = new KAction(i18n("Commit..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
@@ -442,9 +440,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
     connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
     menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Checkout..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
 
 //         action = new QAction(i18n("Blame/Annotate..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
