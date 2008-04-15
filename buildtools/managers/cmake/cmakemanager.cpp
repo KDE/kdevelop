@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +34,15 @@
 #include <icore.h>
 #include <iproject.h>
 #include <iplugincontroller.h>
+#include <ilanguagecontroller.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <projectmodel.h>
+
+#include <duchain.h>
+#include <dumpchain.h>
+#include <topducontext.h>
+#include <duchainlock.h>
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
@@ -80,6 +86,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
     Q_ASSERT(i);
     if( i )
@@ -300,6 +307,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         vm->remove("CMAKE_CURRENT_LIST_FILE");
         vm->remove("CMAKE_CURRENT_SOURCE_DIR");
         vm->remove("CMAKE_CURRENT_BINARY_DIR");
+
+        {
+        kDebug() << "dumpiiiiiing" << folder->url();
+        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+        KDevelop::DumpChain dump;
+        dump.dump( v.context(), false);
+        }
 
         if(folder->text()=="/" && !v.projectName().isEmpty())
         {
@@ -595,6 +609,21 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
 QList< KDevelop::ProjectTargetItem * > CMakeProjectManager::targets(KDevelop::ProjectFolderItem * folder) const
 {
     return folder->targetList();
+}
+
+QString CMakeProjectManager::name() const
+{
+    return "CMake";
+}
+
+KDevelop::ParseJob * CMakeProjectManager::createParseJob(const KUrl & url)
+{
+    return 0;
+}
+
+KDevelop::ILanguage * CMakeProjectManager::language()
+{
+    return core()->languageController()->language(name());
 }
 
 #include "cmakemanager.moc"

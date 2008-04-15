@@ -66,14 +66,19 @@ public:
     virtual bool isDeprecated() const { return false; }
 
     virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
+
     
     int line() const { return m_line; }
     const CMakeFileContent & content() const { return m_content; }
     void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
-    
+    const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
     private:
         CMakeAst( const CMakeAst&  ) /*: m_children( ast.m_children )*/ {}
+        
+        QList<CMakeFunctionArgument> m_outputArguments;
     protected:
+        void addOutputArgument(const CMakeFunctionArgument& arg) { m_outputArguments.append(arg); }
+
         CMakeFileContent m_content;
         int m_line;
 
@@ -146,7 +151,8 @@ private:
                                                              \
         virtual void writeBack( QString& buffer ) const;           \
         virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
-        virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& ); \
+        QList<CMakeFunctionArgument> outputArguments;
 
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
     public:                                                         \
@@ -532,7 +538,7 @@ CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ListAst )
-    enum ListType { LENGTH, GET, APPEND, INSERT, REMOVE_ITEM, REMOVE_AT, SORT, REVERSE };
+    enum ListType { LENGTH, GET, APPEND, FIND, INSERT, REMOVE_ITEM, REMOVE_AT, SORT, REVERSE };
     CMAKE_ADD_AST_MEMBER( ListType, ListType, type, type)
     CMAKE_ADD_AST_MEMBER( QString, const QString&, list, List)
     CMAKE_ADD_AST_MEMBER( QString, const QString&, output, Output)

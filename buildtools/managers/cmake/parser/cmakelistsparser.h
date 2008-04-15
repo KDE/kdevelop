@@ -55,11 +55,12 @@ struct CMakeFunctionArgument
         return ( this->value == rhs );
     }
 
+    bool isCorrect() const { return column>0; }
+
     QString unescapeValue(const QString& value);
 
     QString value;
     bool quoted;
-//     QString filePath; //Removed because we don't use it
     quint32 line;
     quint32 column;
 };

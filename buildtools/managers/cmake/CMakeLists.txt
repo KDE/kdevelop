@@ -5,6 +5,10 @@ include_directories(
  ${KDEVPLATFORM_INCLUDE_DIR}/projectmanager/interfaces
  ${KDEVPLATFORM_INCLUDE_DIR}/project
  ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
+ ${KDEVPLATFORM_INCLUDE_DIR}/language
+ ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
+ ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
+ ${KDEVPLATFORM_INCLUDE_DIR}/editor
  ${KDEVPLATFORM_INCLUDE_DIR}/util
  ${CMAKE_CURRENT_SOURCE_DIR}/parser
  ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
@@ -52,7 +56,8 @@ remove_definitions( -DQT_NO_STL )
 kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBRARY}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
+                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+		       ${KDEVPLATFORM_EDITOR_LIBRARY})
 #QtScript is used for the MathAst
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )

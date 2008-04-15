@@ -2,6 +2,9 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake
     ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake/parser
+    ${KDEVPLATFORM_INCLUDE_DIR}/language
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
     )
 
 #set( folderxmltest_SRCS folderxmltest.cpp )
@@ -738,4 +741,11 @@ target_link_libraries( cmake-cmakecondition
 	${QT_QTTEST_LIBRARY}
 	${KDE_KDECORE_LIBS}
 	kdev4cmakecommon )
+
+set ( cmakeduchaintest_SRCS cmakeduchaintest.cpp )
+kde4_add_unit_test( cmakeduchaintest  ${cmakeduchaintest_SRCS} )
+target_link_libraries( cmakeduchaintest 
+        ${QT_QTTEST_LIBRARY}
+        ${KDE_KDECORE_LIBS}
+        kdev4cmakecommon )
 

@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * Some parts of this code are based on CMake
  * Copyright 2002 Kitware, Inc. Insight Consortium <kitware@kitware.com>
@@ -392,7 +392,7 @@ bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.isEmpty() )
         return false;
 
-    foreach( CMakeFunctionArgument arg, func.arguments )
+    foreach( const CMakeFunctionArgument& arg, func.arguments )
     {
         m_definitions << arg.value;
     }
@@ -642,6 +642,7 @@ bool AuxSourceDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_dirName = func.arguments[0].value;
     m_variableName = func.arguments[1].value;
 
+    addOutputArgument(func.arguments[1].value);
     return true;
 }
 
@@ -692,6 +693,7 @@ bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     m_buildName = func.arguments[0].value;
 
+    addOutputArgument(func.arguments[0].value);
     return true;
 }
 
@@ -719,7 +721,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     QStringList caps=rx.capturedTexts();
     caps.erase(caps.begin());
-    foreach(QString s, caps)
+    foreach(const QString& s, caps)
     {
         bool correct;
         m_version.append(s.toInt(&correct));
@@ -798,6 +800,8 @@ bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     if ( func.arguments.count() < 3 )
         return false;
+
+    addOutputArgument(func.arguments[0]);
     m_name=func.arguments[0].value;
     m_driverName=func.arguments[1].value;
     
@@ -894,20 +898,31 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(it->value.toUpper()=="OUTPUT_VARIABLE") {
             ++it;
             if(it!=itEnd)
+            {
+                addOutputArgument(*it);
                 m_outputVariable = it->value;
+            }
             else
                 return false;
         } else if(it->value.toUpper()=="RETURN_VALUE") {
             ++it;
             if(it!=itEnd)
+            {
+                addOutputArgument(*it);
                 m_returnValue = it->value;
+            }
             else
                 return false;
-        } else if(it->value.toUpper()=="ARGS") {
+        }
+        else if(it->value.toUpper()=="ARGS")
+        {
             args=true;
-        } else if(args) {
+        }
+        else if(args)
+        {
             m_arguments += it->value;
-        } else
+        }
+        else
             m_workingDirectory = it->value;
     }
     return true;
@@ -945,7 +960,7 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         ErrorFile
     };
     Action act=None;
-    foreach(CMakeFunctionArgument a, func.arguments) {
+    foreach(const CMakeFunctionArgument &a, func.arguments) {
         QString val=a.value.toLower();
         Action actAnt=act;
         if(val=="command") {
@@ -1004,12 +1019,15 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 m_timeout=val.toFloat();
                 break;
             case ResultVar:
+                addOutputArgument(a);
                 m_resultVariable=a.value;
                 break;
             case OutputVar:
+                addOutputArgument(a);
                 m_outputVariable=a.value;
                 break;
             case ErrorVar:
+                addOutputArgument(a);
                 m_errorVariable=a.value;
                 break;
             case InputFile:
@@ -1126,9 +1144,11 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case READ:
             m_path=func.arguments[1].value;
             m_variable = func.arguments[2].value;
+            addOutputArgument(func.arguments[2]);
             break;
         case GLOB:
         case GLOB_RECURSE:
+            addOutputArgument(func.arguments[1]);
             m_variable = func.arguments[1].value;
             it=func.arguments.constBegin()+2;
             itEnd=func.arguments.constEnd();
@@ -1154,12 +1174,14 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 m_directories << it->value;
             break;
         case RELATIVE_PATH:
+            addOutputArgument(func.arguments[1]);
             m_variable = func.arguments[1].value;
             m_directory = func.arguments[2].value;
             m_path = func.arguments[3].value;
             break;
         case TO_CMAKE_PATH:
         case TO_NATIVE_PATH:
+            addOutputArgument(func.arguments[1]);
             m_path = func.arguments[1].value;
             m_variable = func.arguments[2].value;
             break;
@@ -1186,6 +1208,7 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     bool definedNames=false;
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
@@ -1251,7 +1274,7 @@ bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     m_name = func.name.toLower();
 
-    foreach(CMakeFunctionArgument fa, func.arguments)
+    foreach(const CMakeFunctionArgument& fa, func.arguments)
     {
         m_arguments += fa.value;
     }
@@ -1277,6 +1300,7 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     bool definedNames=false;
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
@@ -1348,8 +1372,12 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     m_name = func.arguments[0].value;
 
-    foreach( CMakeFunctionArgument arg, func.arguments ) {
-        if(arg.value[0].isNumber()) {
+    foreach( const CMakeFunctionArgument& arg, func.arguments )
+    {
+        if(arg.value.isEmpty())
+        {}
+        else if(arg.value[0].isNumber())
+        {
             bool correctmin, correctmaj;
             QStringList version = func.arguments[1].value.split('.');
             m_minorVersion = version[0].toInt(&correctmin);
@@ -1390,6 +1418,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     //FIXME: FIND_PATH(KDE4_DATA_DIR cmake/modules/FindKDE4Internal.cmake ${_data_DIR})
     bool definedNames=false;
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
@@ -1455,6 +1484,7 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="find_program" || func.arguments.count()<2)
         return false;
     
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
@@ -1533,6 +1563,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="foreach" || func.arguments.count()<2)
         return false;
+    addOutputArgument(func.arguments.first());
     m_loopVar=func.arguments.first().value;
     if(func.arguments[1].value=="RANGE") {
         bool correctStart = true, correctStop = true, correctRange = true;
@@ -1580,6 +1611,7 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_cmake_property" || func.arguments.count()!=2)
         return false;
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     
     QString type=func.arguments[1].value.toUpper();
@@ -1629,6 +1661,7 @@ bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_filename_component" || func.arguments.count()<3)
         return false;
+    addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     m_fileName = func.arguments[1].value;
     QString t = func.arguments[2].value;
@@ -1688,6 +1721,7 @@ bool GetTargetPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_target_property" || func.arguments.count()!=3)
         return false;
+    addOutputArgument(func.arguments[0]);
     m_variableName=func.arguments[0].value;
     m_target=func.arguments[1].value;
     m_property=func.arguments[2].value;
@@ -1710,6 +1744,7 @@ bool GetTestPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_target_property" || func.arguments.count()!=3)
         return false;
+    addOutputArgument(func.arguments[1]);
     m_test=func.arguments[0].value;
     m_variableName=func.arguments[1].value;
     m_property=func.arguments[2].value;
@@ -1737,8 +1772,8 @@ bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
 
     m_kind = func.name;
-    m_condition = QStringList();
-    foreach(CMakeFunctionArgument fa, func.arguments)
+    m_condition.clear();
+    foreach(const CMakeFunctionArgument& fa, func.arguments)
     {
         m_condition += fa.value;
     }
@@ -2083,6 +2118,8 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type=GET;
     else if(argName=="APPEND")
         m_type = APPEND;
+    else if(argName=="FIND")
+        m_type = FIND;
     else if(argName=="INSERT")
         m_type = INSERT;
     else if(argName=="REMOVE_ITEM")
@@ -2103,18 +2140,21 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()!=3)
                 return false;
             m_output = func.arguments[2].value;
+            addOutputArgument(func.arguments[2]);
             break;
         case GET: {
             if(func.arguments.count()<3)
                 return false;
             
+            addOutputArgument(func.arguments[1]);
             bool correct;
+            addOutputArgument(func.arguments.last());
             m_output = func.arguments.last().value;
             m_index.append(func.arguments[2].value.toInt(&correct));
             if(!correct)
                 return false;
             int i=0;
-            foreach(CMakeFunctionArgument arg, func.arguments)
+            foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
                 if(i>2 && i<func.arguments.count())
                     m_elements.append(arg.value);
@@ -2124,23 +2164,34 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case APPEND: {
             if(func.arguments.count()<3)
                 return false;
+            
+            addOutputArgument(func.arguments[1]);
             int i=0;
-            foreach(CMakeFunctionArgument arg, func.arguments)
+            foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
                 if(i>1)
                     m_elements.append(arg.value);
                 i++;
             }
         } break;
+        case FIND: {
+            if(func.arguments.count()!=4)
+                return false;
+            m_elements.append(func.arguments[2].value);
+            m_output=func.arguments[2].value;
+            addOutputArgument(func.arguments[1]);
+            addOutputArgument(func.arguments[3]);
+        } break;
         case INSERT: {
             bool correct;
             if(func.arguments.count()<4)
                 return false;
             int i=0;
-            m_index.append(func.arguments[1].value.toInt(&correct));
+            addOutputArgument(func.arguments[1]);
+            m_index.append(func.arguments[2].value.toInt(&correct));
             if(!correct)
                 return false;
-            foreach(CMakeFunctionArgument arg, func.arguments)
+            foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
                 if(i>2)
                     m_elements.append(arg.value);
@@ -2151,7 +2202,8 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()<4)
                 return false;
             int i=0;
-            foreach(CMakeFunctionArgument arg, func.arguments)
+            addOutputArgument(func.arguments[1]);
+            foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
                 if(i>2)
                     m_elements.append(arg.value);
@@ -2161,8 +2213,9 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case REMOVE_AT: {
             if(func.arguments.count()<3)
                 return false;
+            addOutputArgument(func.arguments[1]);
             int i=0;
-            foreach(CMakeFunctionArgument arg, func.arguments)
+            foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
                 if(i>1)
                 {
@@ -2176,6 +2229,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         } break;
         case SORT:
         case REVERSE:
+            addOutputArgument(func.arguments[1]);
             if(func.arguments.count()>2)
                 return false;
             break;
@@ -2255,7 +2309,7 @@ void LoadCommandAst::writeBack( QString& ) const
 
 bool LoadCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "load_cache" || func.arguments.count()<4)
+    if ( func.name.toLower() != "load_command" || func.arguments.count()<4)
         return false;
     m_cmdName=func.arguments[0].value;
     
@@ -2339,7 +2393,7 @@ bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     itEnd = func.arguments.end();
 
     if(m_isClear || m_isForce)
-	it++;
+    it++;
 
     for ( ; it != itEnd; ++it )
     {
@@ -2366,6 +2420,7 @@ bool MathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="math" || func.arguments.count()!=3 || func.arguments.first().value!="EXPR")
         return false;
     
+    addOutputArgument(func.arguments[1]);
     m_outputVariable = func.arguments[1].value;
     m_expression = func.arguments.last().value;
     return true;
@@ -2588,6 +2643,7 @@ bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.name.toLower() != "separate_arguments" || func.arguments.count()==1)
         return false;
 
+    addOutputArgument(func.arguments.first());
     m_variableName=func.arguments.first().value;
     return true;
 }
@@ -2612,7 +2668,8 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 1 )
         return false;
 
-    m_variableName = func.arguments[0].value;
+    m_variableName = func.arguments.first().value;
+    addOutputArgument(func.arguments.first());
 
     int argSize = func.arguments.size();
 
@@ -2846,6 +2903,7 @@ bool SiteNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="site_name" || func.arguments.count()!=1)
         return false;
+    addOutputArgument(func.arguments.first());
     m_variableName = func.arguments.first().value;
     return true;
 }
@@ -2926,6 +2984,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         }
 
         m_regex = func.arguments[2].value;
+        addOutputArgument(func.arguments[outpos]);
         m_outputVariable = func.arguments[outpos].value;
         
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+outpos+1;
@@ -2941,6 +3000,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_regex = func.arguments[1].value;
         m_replace=func.arguments[2].value;
         m_outputVariable = func.arguments[3].value;
+        addOutputArgument(func.arguments[3]);
         
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4;
         QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
@@ -2963,6 +3023,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_input.append(func.arguments[2].value);
         m_input.append(func.arguments[3].value);
         m_outputVariable = func.arguments[4].value;
+        addOutputArgument(func.arguments[4]);
     }
     else if(stringType=="ASCII")
     {
@@ -2975,12 +3036,14 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         }
         m_input.pop_back(); //We remove the output var
         m_outputVariable = func.arguments.last().value;
+        addOutputArgument(func.arguments.last());
     }
     else if(stringType=="CONFIGURE")
     {
         m_type=CONFIGURE;
         m_input += func.arguments[1].value;
         m_outputVariable=func.arguments[2].value;
+        addOutputArgument(func.arguments[2]);
         
         int i=3;
         m_only = func.arguments[i].value.toUpper()=="@ONLY";
@@ -2998,12 +3061,15 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type=TOLOWER;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
+        addOutputArgument(func.arguments[2]);
     }
     else if(stringType=="LENGTH")
     {
         m_type=LENGTH;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
+        
+        addOutputArgument(func.arguments[2]);
     }
     else if(stringType=="SUBSTRING")
     {
@@ -3015,6 +3081,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_begin = func.arguments[2].value.toInt(&correctBegin);
         m_length = func.arguments[3].value.toInt(&correctLength);
         m_outputVariable = func.arguments[4].value;
+        addOutputArgument(func.arguments[4]);
         if(!correctBegin || !correctLength)
             return false;
     }
@@ -3062,7 +3129,7 @@ bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     bool excludeFromAll=false;
-    foreach(CMakeFunctionArgument arg, func.arguments)
+    foreach(const CMakeFunctionArgument& arg, func.arguments)
     {
         if(arg.value.toLower()=="exclude_from_all")
             excludeFromAll=true;
@@ -3158,7 +3225,7 @@ bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     it = func.arguments.begin() + 3;
     itEnd = func.arguments.end();
 
-    //FIXME:Maybe could look for errors
+    //FIXME: Should look for errors
     for ( ; it != itEnd; ++it )
     {
         if(it->value=="CMAKE_FLAGS") current=CMakeFlags;
@@ -3182,6 +3249,7 @@ bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case OutputVariable:
                 m_outputName=it->value;
+                addOutputArgument(*it);
                 current=None;
                 break;
             case CopyFile:
@@ -3214,7 +3282,7 @@ bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     enum Actions { None, CMakeFlags, CompileDefs, OutputVariable, Args };
     Actions act;
     unsigned int i=0;
-    foreach(CMakeFunctionArgument arg, func.arguments) {
+    foreach(const CMakeFunctionArgument& arg, func.arguments) {
         QString val=arg.value.toLower();
         if(i<4)
             act=None;
@@ -3222,7 +3290,10 @@ bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(i==0)
             m_runResultVar=arg.value;
         else if(i==1)
+        {
+            addOutputArgument(arg);
             m_compileResultVar=arg.value;
+        }
         else if(i==2)
             m_binDir=arg.value;
         else if(i==3)
@@ -3293,7 +3364,7 @@ bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="utility_source" || func.arguments.count()<3)
         return false;
     unsigned int i=0;
-    foreach(CMakeFunctionArgument arg, func.arguments) {
+    foreach(const CMakeFunctionArgument& arg, func.arguments) {
         if(i==0)
             m_cacheEntry=arg.value;
         else if(i==1)
@@ -3323,11 +3394,14 @@ bool VariableRequiresAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="variable_requires" || func.arguments.count()<2)
         return false;
     unsigned int i=0;
-    foreach(CMakeFunctionArgument arg, func.arguments) {
+    foreach(const CMakeFunctionArgument& arg, func.arguments) {
         if(i==0)
             m_testVariable=arg.value;
         else if(i==1)
+        {
+            addOutputArgument(arg);
             m_resultVariable=arg.value;
+        }
         else
             m_requiredVariables.append(arg.value);
         i++;
@@ -3419,7 +3493,7 @@ bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="while" || func.arguments.isEmpty())
         return false;
-    foreach(CMakeFunctionArgument arg, func.arguments)
+    foreach(const CMakeFunctionArgument& arg, func.arguments)
     {
         m_condition.append(arg.value);
     }
@@ -3517,7 +3591,7 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
         QStringList caps=rx.capturedTexts();
         caps.erase(caps.begin());
-        foreach(QString s, caps)
+        foreach(const QString& s, caps)
         {
             bool correct;
             m_version.append(s.toInt(&correct));
@@ -3546,10 +3620,10 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return true;
     } else if(first=="PUSH") {
         m_action=PUSH;
-        return func.arguments.isEmpty();
+        return func.arguments.count()==1;
     } else if(first=="POP") {
         m_action=POP;
-        return func.arguments.isEmpty();
+        return func.arguments.count()==1;
     }
     return false;
 }

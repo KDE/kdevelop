@@ -23,6 +23,12 @@
 #include "cmakecondition.h"
 #include "astfactory.h"
 
+#include <simplerange.h>
+#include <topducontext.h>
+#include <duchain.h>
+#include <duchainlock.h>
+#include <parsingenvironment.h>
+
 #include <KProcess>
 #include <KDebug>
 #include <QHash>
@@ -35,9 +41,12 @@
 #include <QScriptEngine>
 #include <QScriptValue>
 
+using namespace KDevelop;
+
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
-    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include")
-{}
+    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_topctx(0)
+{
+}
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 {
@@ -144,21 +153,7 @@ int CMakeProjectVisitor::notImplemented(const QString &name) const
 
 int CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
-//     kDebug(9042) << "Pipiripipi" << ast->children().count();
     kDebug(9042) << "error! function not implemented" << ast->content()[ast->line()].name;
-#if 0
-    if(ast->children().isEmpty())
-        kDebug(9032) << "warning: visiting an element without children.";
-    QList<CMakeAst*> children = ast->children();
-    QList<CMakeAst*>::const_iterator it = children.begin();
-    for(; it!=children.end(); it++)
-    {
-        if(*it)
-            (*it)->accept(this);
-        else
-            kWarning(9040) << "Oops!!! found a null object in the AST!" ;
-    }
-#endif
     return 1;
 }
 
@@ -342,8 +337,27 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
+            TopDUContext *aux=m_topctx;
+            if(m_topctx)
+            {
+                DUChainWriteLocker lock(DUChain::lock());
+                m_topctx=DUChain::self()->chainForDocument(KUrl(include.first().filePath));
+                if(m_topctx==0)
+                {
+                    m_topctx=new TopDUContext(HashedString(KUrl(include.first().filePath).prettyUrl()),
+                            SimpleRange(0,0, include.last().endColumn, include.last().endLine));
+                    DUChain::self()->addDocumentChain(
+                        IdentifiedFile(HashedString(KUrl(include.first().filePath).prettyUrl())), m_topctx);
+                    
+                    Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
+                    
+                    kDebug() << "oooooo" << m_topctx->url().str();
+                }
+                aux->addImportedParentContext(m_topctx);
+            }
             kDebug(9042) << "including:" << path;
             walk(include, 0);
+            m_topctx=aux;
         }
         else
         {
@@ -388,8 +402,24 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
+            path=KUrl(path).prettyUrl();
             kDebug(9042) << "================== Found" << path.trimmed() << "===============";
+            TopDUContext *aux=m_topctx;
+            DUChainWriteLocker lock(DUChain::lock());
+            m_topctx=DUChain::self()->chainForDocument(KUrl(path));
+            if(m_topctx==0)
+            {
+                m_topctx=new TopDUContext(HashedString(path),
+                        SimpleRange(0,0, package.last().endColumn, package.last().endLine));
+                DUChain::self()->addDocumentChain(
+                    IdentifiedFile(HashedString(path)), m_topctx);
+                
+                Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
+                aux->addImportedParentContext(m_topctx);
+                kDebug() << "ppppppp" << m_topctx->url().str();
+            }
             walk(package, 0);
+            m_topctx=aux;
         }
         else
         {
@@ -649,9 +679,13 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
     
             //Executing
+            TopDUContext *auxctx=m_topctx;
+            m_topctx=0;
             int len = walk(code.code, 1);
-            kDebug(9042) << "visited!" << call->name()  << m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
-    
+            kDebug(9042) << "visited!" << call->name()  <<
+                m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
+            m_topctx=auxctx;
+            
             //Restoring
             i=1;
             foreach(const QString& name, code.knownArgs)
@@ -990,6 +1024,9 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             theList += list->elements();
             m_vars->insert(list->list(), theList);
             break;
+        case ListAst::FIND:
+#warning Implement me
+            break;
         case ListAst::INSERT: {
             int p=list->index().first();
             foreach(const QString& elem, list->elements())
@@ -1117,46 +1154,40 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     break;
                 case StringAst::REGEX_REPLACE:
                 {
-                    if( !sast->input().isEmpty() )
+                    QRegExp rx(sast->regex());
+                    kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
+                    if(sast->replace().startsWith('\\'))
                     {
-
-                        QRegExp rx(sast->regex());
-                        kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
-                        if(sast->replace().startsWith('\\'))
-                        {
-                            rx.indexIn(sast->input()[0]);
-                            QStringList info = rx.capturedTexts();
-                            int idx = sast->replace().right(sast->replace().size()-1).toInt();
-    //                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
-                            if(idx>=info.count())
-                                kDebug(9032) << "error: not matched regex";
-                            else
-                                res.append(info[idx]);
-                        }
+                        rx.indexIn(sast->input()[0]);
+                        QStringList info = rx.capturedTexts();
+                        int idx = sast->replace().right(sast->replace().size()-1).toInt();
+//                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
+                        if(idx>=info.count())
+                            kDebug(9032) << "error: not matched regex";
                         else
+                            res.append(info[idx]);
+                    }
+                    else
+                    {
+                        foreach(QString in, sast->input())
                         {
-                            foreach(QString in, sast->input())
+                            int idx = rx.indexIn(in);
+                            QStringList info = rx.capturedTexts();
+                            if(idx<0)
                             {
-                                int idx = rx.indexIn(in);
-                                QStringList info = rx.capturedTexts();
-                                if(idx<0)
+                                res.append(in);
+                            }
+                            else
+                            {
+                                foreach(QString s, info)
                                 {
-                                    res.append(in);
-                                }
-                                else
-                                {
-                                    foreach(QString s, info)
-                                    {
-                                        res.append(in.replace(s, sast->replace()));
-                                    }
+                                    res.append(in.replace(s, sast->replace()));
                                 }
                             }
                         }
-                        kDebug(9042) << "ret: " << res << " << string(regex replace "
-                                << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
                     }
-                    else
-                        kWarning() << "Got a StringAST with empty input!";
+                    kDebug(9042) << "ret: " << res << " << string(regex replace "
+                            << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
                 }
                     break;
                 default:
@@ -1178,31 +1209,26 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         }   break;
         case StringAst::COMPARE:
         {
-            if( !sast->input().isEmpty() )
-            {
-                QString res;
-                switch(sast->cmdType()){
-                    case StringAst::EQUAL:
-                    case StringAst::NOTEQUAL:
-                        if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
-                            res = "TRUE";
-                        else
-                            res = "FALSE";
-                        break;
-                    case StringAst::LESS:
-                    case StringAst::GREATER:
-                        if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
-                            res = "TRUE";
-                        else
-                            res = "FALSE";
-                        break;
-                    default:
-                        kDebug(9042) << "String: Not a compare. " << sast->cmdType();
-                }
-                m_vars->insert(sast->outputVariable(), QStringList(res));
+            QString res;
+            switch(sast->cmdType()){
+                case StringAst::EQUAL:
+                case StringAst::NOTEQUAL:
+                    if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
+                        res = "TRUE";
+                    else
+                        res = "FALSE";
+                    break;
+                case StringAst::LESS:
+                case StringAst::GREATER:
+                    if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
+                        res = "TRUE";
+                    else
+                        res = "FALSE";
+                    break;
+                default:
+                    kDebug(9042) << "String: Not a compare. " << sast->cmdType();
             }
-            else
-                kWarning() << "Got a StringAST with empty input!";
+            m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
         case StringAst::ASCII:
@@ -1210,33 +1236,19 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             kDebug(9032) << "Error! String feature not supported!";
             break;
         case StringAst::TOUPPER:
-            if( !sast->input().isEmpty() )
-                m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
-            else
-                kWarning() << "Got a StringAST with empty input!";
+            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
             break;
         case StringAst::TOLOWER:
-            if( !sast->input().isEmpty() )
-                m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
-             else
-                kWarning() << "Got a StringAST with empty input!";
+            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
             break;
         case StringAst::LENGTH:
-            if( !sast->input().isEmpty() )
-                m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
-              else
-                kWarning() << "Got a StringAST with empty input!";
-           break;
+            m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
+            break;
         case StringAst::SUBSTRING:
         {
-            if( !sast->input().isEmpty() )
-            {
-                QString res=sast->input()[0];
-                res=res.mid(sast->begin(), sast->length());
-                m_vars->insert(sast->outputVariable(), QStringList(res));
-            }
-              else
-                kWarning() << "Got a StringAST with empty input!";
+            QString res=sast->input()[0];
+            res=res.mid(sast->begin(), sast->length());
+            m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
     }
@@ -1386,13 +1398,18 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 {
-    //delete me
-    /*int i=0;
-    CMakeFileContent::const_iterator it2=fc.constBegin()+line, itEnd2=fc.constEnd();
-    for(; it2!=itEnd2; ++it2)
+    if(m_topctx==0)
     {
-        kDebug(9032) << i++ << ":" << it2->writeBack();
-    }*/
+        DUChainWriteLocker lock(DUChain::lock());
+        m_topctx=DUChain::self()->chainForDocument(KUrl(fc[0].filePath));
+        if(m_topctx==0)
+        {
+            m_topctx=new TopDUContext(HashedString(KUrl(fc[0].filePath).prettyUrl()),
+                    SimpleRange(0,0, fc.last().endColumn, fc.last().endLine));
+            DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).prettyUrl())), m_topctx);
+            Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
+        }
+    }
     
     CMakeFileContent::const_iterator it=fc.constBegin()+line, itEnd=fc.constEnd();
     for(; it!=itEnd; )
@@ -1400,9 +1417,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         Q_ASSERT( line<fc.count() );
         Q_ASSERT( line>=0 );
 //         kDebug(9042) << "@" << line;
-//         kDebug(9042) << it->writeBack() << "==" << fc[line].writeBack();
+//         kDebug(9042) <return core()->languageController()->language(name());
+        
         Q_ASSERT( *it == fc[line] );
-//         kDebug(9042) << "At line" << line << "/" << fc.count();
+//         kDebug(9042) <lw< "At line" << line << "/" << fc.count();
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         if(!element)
@@ -1419,7 +1437,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl <<
                     " at" << func.filePath << ":" << func.line << endl;
-            //FIXME: Should avoid to run
+            //FIXME: Should avoid to run?
         }
         
         RecursivityType r = recursivity(funcName);
@@ -1432,6 +1450,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         if(element->isDeprecated())
             kDebug(9042) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
         element->setContent(fc, line);
+        
+        createDefinitions(element);
 
         m_vars->insert("CMAKE_CURRENT_LIST_LINE", QStringList(QString::number(it->line)));
         int lines=element->accept(this);
@@ -1443,12 +1463,27 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
     return line;
 }
 
+void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
+{
+    if(m_topctx==0)
+        return;
+    DUChainWriteLocker lock(DUChain::lock());
+    foreach(const CMakeFunctionArgument &arg, ast->outputArguments())
+    {
+        if(!arg.isCorrect())
+            continue;
+        Declaration *d = new Declaration(m_topctx->url(), SimpleRange(arg.line, arg.column,
+                arg.line, arg.column+arg.value.length()), Declaration::GlobalScope, m_topctx);
+        d->setIdentifier( Identifier(arg.value) );
+    }
+}
+
 void CMakeProjectVisitor::setVariableMap(VariableMap * vars)
 {
     m_vars=vars;
 }
 
-bool generated(const QString& name)
+bool isGenerated(const QString& name)
 {
     return name.indexOf("#[")>=0;
 }
@@ -1458,7 +1493,7 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     QStringList ret;
     foreach(const QString& s, m_filesPerTarget[target])
     {
-        if(generated(s))
+        if(isGenerated(s))
         {
             kDebug(9042) << "Generated:" << s;
             ret += m_generatedFiles[s];
@@ -1470,6 +1505,3 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
     }
     return ret;
 }
-
-
-

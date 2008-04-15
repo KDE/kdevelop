@@ -25,11 +25,17 @@
 #include <QStringList>
 #include <QMap>
 #include <QHash>
+
 #include "cmakeastvisitor.h"
 #include "cmakelistsparser.h"
 #include "cmaketypes.h"
 
 class CMakeFunctionDesc;
+
+namespace KDevelop
+{
+    class TopDUContext;
+};
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
@@ -105,9 +111,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         enum FileType { Location, File, Executable, Library };
         static QString findFile(const QString &file, const QStringList &folders, const QStringList& suffixes, FileType t=File);
         
+        KDevelop::TopDUContext* context() const { return m_topctx; }
     private:
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
+        void createDefinitions(const CMakeAst*);
         
         QStringList m_modulePath;
         QString m_projectName;
@@ -121,6 +129,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         MacroMap *m_macros;
         Definitions m_defs;
         QStringList m_filesRead;
+        KDevelop::TopDUContext* m_topctx;
 };
 
 #endif

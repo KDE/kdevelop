@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <KDirWatch>
 
 #include <ibuildsystemmanager.h>
+#include <ilanguagesupport.h>
 #include <iplugin.h>
 
 #include "cmakelistsparser.h"
@@ -40,21 +41,24 @@ class QObject;
 namespace KDevelop
 {
     class IProject;
+    class IProjectBuilder;
+    class ILanguage;
     class ProjectFolderItem;
     class ProjectBaseItem;
     class ProjectFileItem;
     class ProjectTargetItem;
-    class IProjectBuilder;
+    class ParseJob;
 }
 
 class CMakeFolderItem;
 class ICMakeBuilder;
 
-class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager, public KDevelop::ILanguageSupport
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
+Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
     explicit CMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
@@ -95,18 +99,24 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
+    static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
+    
+    //LanguageSupport
+    virtual QString name() const;
+    
+    virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
+    
+    virtual KDevelop::ILanguage *language();
 public slots:
     void dirtyFile(const QString& file);
 
 private:
+    static QString guessCMakeShare(const QString& cmakeBin);
+    static QString guessCMakeRoot(const QString& cmakeBin);
     void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
     
     void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
-    
-    static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
-    static QString guessCMakeShare(const QString& cmakeBin);
-    static QString guessCMakeRoot(const QString& cmakeBin);
     
     void includeScript(const QString& File, KDevelop::IProject * project);
     
