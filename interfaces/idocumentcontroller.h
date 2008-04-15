@@ -48,7 +48,7 @@ public:
         DoNotActivate = 1,          /**Don't activate the Document.*/
         DoNotCreateView = 2         /**Don't create and show the view for the Document.*/
     };
-    Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation);
+    Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation)
 
     IDocumentController(QObject *parent);
 
@@ -118,7 +118,7 @@ Q_SIGNALS:
     friend class IDocument;
 };
 
- Q_DECLARE_OPERATORS_FOR_FLAGS(IDocumentController::DocumentActivationParams);
+Q_DECLARE_OPERATORS_FOR_FLAGS(IDocumentController::DocumentActivationParams)
 
 }
 
