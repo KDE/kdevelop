@@ -216,7 +216,10 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   foreach( KDevelop::ILanguage* language, languages)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(url);
-  
+
+  if(!chosen)
+    return DUChain::self()->chainForDocument(HashedString(url.prettyUrl()));
+
   return chosen;
 }
 
