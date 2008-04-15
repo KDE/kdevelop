@@ -659,17 +659,20 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
     if( !nodes )
       return;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    
+
+    bool onlyFunctionCalls = false;
+
     if( !m_lastType ) {
        problem( node, "primary expression returned no type" );
-       return;
+       onlyFunctionCalls = true; //We want to visit function-calls even when the function was not resolved, so we get uses for the arguments
     }
     const ListNode<ExpressionAST*> *it = nodes->toFront(), *end = it;
 
     int num = 0;
     do
       {
-        visit(it->element);
+        if( !onlyFunctionCalls || (it->element && it->element->kind == AST::Kind_FunctionCall) )
+          visit(it->element);
         
         if( !m_lastType ) {
           problem( node, QString("while parsing post-fix-expression: sub-expression %1 returned no type").arg(num) );
@@ -1632,11 +1635,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
     }
     
-    if( m_lastDeclarations.isEmpty() && !constructedType ) {
-      problem( node, "function-call: no matching declarations found" );
-      return;
-    }
-    
     /**
      * Step 1: Evaluate the function-argument types. Those are represented a little strangely:
      * node->arguments contains them, using recursive binary expressions
@@ -1659,6 +1657,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_parameters << OverloadResolver::Parameter( m_lastType.data(), isLValue( m_lastType, m_lastInstance ) );
       //LOCKDUCHAIN;
       //kDebug(9007) << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
+    }
+
+    if( declarations.isEmpty() && !constructedType ) {
+      problem( node, "function-call: no matching declarations found" );
+      return;
     }
     
     //Check if all parameters could be evaluated
