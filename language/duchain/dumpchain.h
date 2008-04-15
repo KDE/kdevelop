@@ -33,7 +33,8 @@ public:
   DumpChain();
   virtual ~DumpChain();
 
-  ///@warning Do not call this on top-contexts that have loops in their import structure.
+  ///@param context The context to dump
+  ///@param imported Whether imported contexts should be followed @warning Do not call this with this option enabled on top-contexts that have loops in their import structure.
   void dump(KDevelop::DUContext* context, bool imported = false);
 
 private:
