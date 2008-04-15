@@ -35,7 +35,7 @@ class CMakeFunctionDesc;
 namespace KDevelop
 {
     class TopDUContext;
-};
+}
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
