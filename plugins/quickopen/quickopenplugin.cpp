@@ -436,6 +436,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenNavigateFunctions->setText( i18n("Navigate Function Definitions") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
+    KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
+    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << "Project" << "Includes" << "Include Path" << "Includers" );
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
@@ -487,6 +489,8 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 void QuickOpenPlugin::storeScopes( const QStringList& scopes )
 {
   lastUsedScopes = scopes;
+  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  grp.writeEntry( "SelectedScopes", scopes );
 }
 
 void QuickOpenPlugin::quickOpen()
