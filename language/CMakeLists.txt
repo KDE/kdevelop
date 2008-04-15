@@ -103,5 +103,6 @@ install(FILES
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
     duchain/basecontextbuilder.h
+    duchain/dumpchain.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
