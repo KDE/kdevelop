@@ -1,7 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui version="47" name="kdevelop" >
-<MenuBar noMerge="1">
-  <Menu name="file"><text>&amp;File</text>
+<MenuBar>
+  <Menu name="file" noMerge="1">
+    <text context="@title:menu">File</text>
     <Action name="file_new"/>
     <DefineGroup name="new_merge"/>
     <Separator/>
@@ -25,7 +26,9 @@
     <Separator/>
     <Action name="file_quit"/>
   </Menu>
-  <Menu name="edit"><text>&amp;Edit</text>
+
+  <Menu name="edit" noMerge="1">
+    <text context="@title:menu">Edit</text>
     <DefineGroup name="edit_undo_merge"/>
     <Separator/>
     <DefineGroup name="edit_paste_merge"/>
@@ -39,8 +42,15 @@
     <Separator/>
     <Merge/>
   </Menu>
-  <Menu name="view">
-    <text>&amp;View</text>
+
+  <DefineGroup name="search_menu_merge" />
+
+<!--
+  <Action name="bookmarks" group="search_menu_merge" />
+-->
+
+  <Menu name="view" noMerge="1">
+    <text context="@title:menu">View</text>
     <Action name="add_toolview"/>
     <Action name="remove_view"/>
     <Action name="user_interface"/>
@@ -57,53 +67,86 @@
     <Separator/>
     <DefineGroup name="view_operations"/>
   </Menu>
-  <Menu name="project">
-    <text>&amp;Project</text>
+
+  <Menu name="project" noMerge="1">
+    <text context="@title:meu">Project</text>
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
-<!-- <Action name="project_active_language"/> -->
-    <DefineGroup name="project_import"/>
-    <Separator/>
-    <DefineGroup name="project_classes"/>
-    <Merge/>
-    <DefineGroup name="designer_project"/>
-    <Action name="project_options"/>
     <Separator/>
     <Action name="project_close"/>
     <Action name="project_close_all"/>
-    <Separator />
-    <Merge  />
-  </Menu>
-  <Menu name="build">
-    <text>Bu&amp;ild</text>
-    <Merge/>
     <Separator/>
-    <Action name="run_execute"/>
-    <Action name="stop_processes"/>
+    <DefineGroup name="project_import"/>
+    <Separator />
+    <Merge />
+    <Separator />
+    <Action name="project_options"/>
   </Menu>
+
+  <Menu name="run" noMerge="1">
+    <text name="@title:menu">Run</text>
+
+    <Action name="run_execute" /> <!-- ### remove me -->
+
+    <DefineGroup name="run_operations" />
+
 <!--
-  <Menu name="debug">
-    <text>&amp;Debug</text>
-    <DefineGroup name="debug"/>
-    <DefineGroup name="profile"/>
-  </Menu>
+    <Action name="stop_processes"
+	    group="stop_operations"/>
 -->
-  <Merge/>
-  <Menu name="tools">
-    <text>&amp;Tools</text>
+
+    <Separator />
+    <DefineGroup name="debug" /> <!-- ### remove me -->
+
+    <Separator />
+    <Merge />
+  </Menu>
+
+  <Menu name="tools" noMerge="1">
+    <text context="@title:menu">Tools</text>
+
     <DefineGroup name="tools_operations"/>
     <Separator/>
+
     <DefineGroup name="tools_file_operations"/>
     <Separator/>
+
     <DefineGroup name="tools_language_operations"/>
     <Separator/>
+
     <DefineGroup name="tools_project_operations"/>
     <Separator/>
-    <Merge/>
   </Menu>
-  <Menu name="window">
-    <text>&amp;Window</text>
+
+  <Merge/>
+
+  <Menu name="settings" noMerge="1">
+    <text context="@title:menu">Settings</text>
+    <Action name="settings_show_menubar" />
+    <Action name="settings_show_statusbar" />
+    <Merge name="StandardToolBarMenuHandler" />
+    <Action name="settings_main_toolbar"/>
+    <Action name="settings_build_toolbar"/>
+    <Action name="settings_view_toolbar"/>
+    <Action name="settings_browser_toolbar"/>
+    <DefineGroup name="show_toolbar_merge" />
+    <Action name="settings_viewbar"/>
+    <Action name="settings_statusbar"/>
+    <DefineGroup name="show_merge" />
+    <Separator />
+    <Action name="options_configure_keybinding" />
+    <Action name="set_configure_toolbars" />
+    <Action name="settings_configure_notifications" />
+    <Action name="settings_configure_editors" />
+    <Action name="settings_configure" />
+    <DefineGroup name="configure_merge" />
+    <Separator />
+    <Action name="project_config_menu" />
+  </Menu>
+
+  <Menu name="window" noMerge="1">
+    <text context="@title:menu">Window</text>
     <Action name="new_window"/>
     <Separator/>
     <Action name="view_next_window"/>
@@ -126,35 +169,15 @@
     <Separator/>
     <Merge/>
   </Menu>
-  <Menu name="settings" noMerge="1" >
-    <text>&amp;Settings</text>
-    <Action name="settings_show_menubar" />
-    <Action name="settings_show_statusbar" />
-    <Merge name="StandardToolBarMenuHandler" />
-    <Action name="settings_main_toolbar"/>
-    <Action name="settings_build_toolbar"/>
-    <Action name="settings_view_toolbar"/>
-    <Action name="settings_browser_toolbar"/>
-    <DefineGroup name="show_toolbar_merge" />
-    <Action name="settings_viewbar"/>
-    <Action name="settings_statusbar"/>
-    <DefineGroup name="show_merge" />
-    <Separator />
-    <Action name="options_configure_keybinding" />
-    <Action name="set_configure_toolbars" />
-    <Action name="settings_configure_notifications" />
-    <Action name="settings_configure_editors" />
-    <Action name="settings_configure" />
-    <DefineGroup name="configure_merge" />
-    <Separator />
-    <Action name="project_config_menu" />
-  </Menu>
-  <Menu name="help" append="about_merge">
-    <text>&amp;Help</text>
+
+  <Menu name="help">
+    <text context="@title:menu">Help</text>
     <Merge/>
   </Menu>
+
 </MenuBar>
 
+<!--
 <ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="true" newline="true" >
   <text>Main Toolbar</text>
   <Action name="project_open" />
@@ -173,6 +196,7 @@
   <DefineGroup name="debug_operations"/>
   <Action name="stop_processes"/>
 </ToolBar>
+-->
 
 <Menu name="rb_popup">
   <Separator/>

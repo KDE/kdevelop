@@ -1,30 +1,38 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kdevcppdebugger" library="kdevcppdebugger" version="51">
 <MenuBar>
- <Menu name="debug">
-  <text>&amp;Debug</text>
-  <Action name="debug_run" group="debug"/>
+ <Menu name="run">
+  <text context="@title:menu">Run</text>
+
+  <Action name="debug_run" group="run_operations"/>
+  <Action name="debug_attach" group="run_operations"/>
+  <Action name="debug_runtocursor" group="run_operations"/>
+
+  <Separator group="debug"/>
+  <Action name="debug_restart" group="run_operations"/>
+
+  <Separator group="debug"/>
   <Action name="debug_stop" group="debug"/>
   <Action name="debug_pause" group="debug"/>
-  <Action name="debug_runtocursor" group="debug"/>
-  <Action name="debug_jumptocursor" group="debug"/>
+
   <Separator group="debug"/>
   <Action name="debug_stepover" group="debug"/>
   <Action name="debug_stepoverinst" group="debug"/>
   <Action name="debug_stepinto" group="debug"/>
   <Action name="debug_stepintoinst" group="debug"/>
   <Action name="debug_stepout" group="debug"/>
-  <Action name="debug_restart" group="debug"/>
+
   <Separator group="debug"/>
+  <Action name="debug_jumptocursor" group="debug"/>
   <Action name="debug_toggle_breakpoint" group="debug"/>
   <Action name="debug_disable_breakpoint" group="debug"/>
+
   <Separator group="debug"/>
   <Action name="debug_memview" group="debug"/>
   <Action name="debug_core" group="debug"/>
-  <Action name="debug_attach" group="debug"/>
-  <Separator group="debug"/>
  </Menu>
 </MenuBar>
+
 <ToolBar name="debugToolBar">
   <text>Debugger Toolbar</text>
   <Action name="debug_run"/>
@@ -36,6 +44,7 @@
   <Action name="debug_memview"/>
   <WeakSeparator/>
 </ToolBar>
+
 <State name="stopped">
   <enable>
     <Action name="debug_run"/>

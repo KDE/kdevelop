@@ -120,7 +120,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void setupDcop();
-    void guiClientAdded(KXMLGUIClient*);
     void contextMenu(QMenu *popup, const KDevelop::Context *context);
     void toggleBreakpoint();
     void contextEvaluate();
@@ -154,6 +153,9 @@ Q_SIGNALS:
     void coreFile(const QString& core);
     void runUntil(const KUrl& url, int line);
     void jumpTo(const KUrl& url, int line);
+
+protected:
+    virtual void guiClientAdded(KXMLGUIClient *);
 
 private:
     KConfigGroup config() const;

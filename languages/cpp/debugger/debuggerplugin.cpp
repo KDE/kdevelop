@@ -159,10 +159,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 //              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
 
     setupController();
-
-    foreach (KMainWindow* mw, KMainWindow::memberList())
-        if (KXmlGuiWindow* xw = qobject_cast<KXmlGuiWindow*>(mw))
-            connect(xw->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)), this, SLOT(guiClientAdded(KXMLGUIClient*)));
 }
 
 void CppDebuggerPlugin::setupActions()
