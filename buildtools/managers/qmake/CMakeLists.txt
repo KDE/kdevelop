@@ -13,6 +13,7 @@ include_directories(${KDEVPLATFORM_INCLUDE_DIR}
     )
 
 add_subdirectory(parser)
+add_subdirectory(duchain)
 
 include_directories(${QMakeManager_SOURCE_DIR}/parser)
 
