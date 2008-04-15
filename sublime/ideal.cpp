@@ -41,6 +41,7 @@ using namespace Sublime;
 IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
 {
+    setFocusPolicy(Qt::NoFocus);
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
