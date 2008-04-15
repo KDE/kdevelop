@@ -104,12 +104,21 @@ public:
                 << get_source(frame));
         if (!initial)
             reportChange();
-    }
 
-    void updateChildren()
-    {
         if (isExpanded())
             fetchMoreChildren_1(true);
+        else if (!initial) {
+            /* We actually don't know if there are children or not.
+               I don't really want to emit -stack-list-frames for each 
+               thread, and -thread-info does not say if thread has more
+               that one frame.
+               So, mark this item as having children.  If there are none,
+               which happens inside main, user will see the frames disappear
+               when opening item.  It's better than showing the item as
+               having no children, as otherwise user won't be able to
+               expand it.  */
+            setHasMore(true);        
+        }
     }
 
     void fetchMoreChildren()
@@ -119,14 +128,23 @@ public:
 
     void fetchMoreChildren_1(bool clear) 
     {
-        /* Note that the children are frames starting from the #1,
-           with data for #0 shown in the thread item itself.  */
+        /* We always ask GDB for:
+           - the last frame we already have
+           - 'step' more frames
+           - one more frame
+
+           We ask for the last present frame so that GDB does not give fits
+           if the last frame we have is exactly the last frame target has.
+           We ask for one more frame so that we know if there are more
+           frames.  */
         int now;
         if (clear)
-            now = 1;
+            now = 0;
         else 
-            now = childItems.size() + 1;
+            now = childItems.size();
         int next = now + step + 1;
+        if (clear)
+            now = 0;
         QString arg = QString("%1 %2").arg(now).arg(next);
 
         GDBCommand *c = new GDBCommand(StackListFrames, arg,
@@ -140,24 +158,28 @@ public:
     {
         const GDBMI::Value& stack = r["stack"];
         int first = stack[0]["level"].toInt();
-        if (first == 1)
+        if (first == 0)
         {
             /* For smooth update, after stepping we update first
                block of frames without previously clearing the
-               existing ones. */
+               existing ones. 
+               Also note that we ignore the first stack frame
+               here.  */
             int i;
-            for (i = 0; i < step && i < stack.size(); ++i)
+            for (i = 0; i < step && (i+1) < stack.size(); ++i)
             {
                 if (i < childItems.count())
                 {
                     Frame *f = static_cast<Frame *>(child(i));
-                    f->updateSelf(stack[i]);
+                    f->updateSelf(stack[i+1]);
                 }
                 else
-                    appendChild(new Frame(model(), this, stack[i]));
+                    appendChild(new Frame(model(), this, stack[i+1]));
             }
             while (i < childItems.count())
                 removeChild(i);
+
+            setHasMore(stack.size() > step+1);
         }
         else
         {
@@ -170,9 +192,8 @@ public:
             {
                 appendChild(new Frame(model(), this, stack[i]));
             }
+            setHasMore(stack.size() > step);
         }
-
-        setHasMore(stack.size() > step);
     }
 
     GDBController* controller_;
@@ -252,17 +273,6 @@ private:
         for (; gidx >= 0; --gidx)
             appendChild(new Thread(model(), this,
                                    controller_, threads[gidx]));
-
-        /* Update the frames of the current thread.  */
-        for (int i = 0; i < childItems.size(); ++i)
-        {
-            Thread* t = static_cast<Thread *>(child(i));
-            if (t->id() == current_id)
-            {
-                t->updateChildren();
-                break;
-            }
-        }
     }
 
     GDBController* controller_;    
@@ -270,7 +280,7 @@ private:
 }
 
 StackManager::StackManager(GDBController* controller)
-: controller_(controller)
+  : controller_(controller), autoUpdate_(false)
 {
     QVector<QString> header;
     header.push_back("ID");
