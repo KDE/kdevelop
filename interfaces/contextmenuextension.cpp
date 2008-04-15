@@ -28,10 +28,19 @@
 namespace KDevelop
 {
 
+const QString ContextMenuExtension::FileGroup     = "FileGroup";
+const QString ContextMenuExtension::RefactorGroup = "RefactorGroup";
+const QString ContextMenuExtension::BuildGroup    = "BuildGroup";
+const QString ContextMenuExtension::RunGroup      = "RunGroup";
+const QString ContextMenuExtension::DebugGroup    = "DebugGroup";
+const QString ContextMenuExtension::EditGroup     = "EditGroup";
+const QString ContextMenuExtension::VcsGroup      = "VcsGroup";
+const QString ContextMenuExtension::ProjectGroup  = "ProjectGroup";
+
 class ContextMenuExtensionPrivate
 {
 public:
-    QMap<ContextMenuExtension::Group,QList<KAction*> > extensions;
+    QMap<QString,QList<KAction*> > extensions;
 };
 
 ContextMenuExtension::ContextMenuExtension()
@@ -47,10 +56,7 @@ ContextMenuExtension::~ContextMenuExtension()
 ContextMenuExtension::ContextMenuExtension( const ContextMenuExtension& rhs )
     : d( new ContextMenuExtensionPrivate )
 {
-    Q_FOREACH( ContextMenuExtension::Group group, rhs.d->extensions.keys() )
-    {
-        d->extensions[group] = rhs.d->extensions[group];
-    }
+    d->extensions = rhs.d->extensions;
 }
 
 ContextMenuExtension& ContextMenuExtension::operator=( const ContextMenuExtension& rhs )
@@ -58,14 +64,11 @@ ContextMenuExtension& ContextMenuExtension::operator=( const ContextMenuExtensio
     if( this == &rhs )
         return *this;
 
-    Q_FOREACH( ContextMenuExtension::Group group, rhs.d->extensions.keys() )
-    {
-        d->extensions[group] = rhs.d->extensions[group];
-    }
+    d->extensions = rhs.d->extensions;
     return *this;
 }
 
-QList<KAction*> ContextMenuExtension::actions( ContextMenuExtension::Group group )
+QList<KAction*> ContextMenuExtension::actions( const QString& group )
 {
     if( d->extensions.contains( group ) )
         return d->extensions.value( group );
@@ -73,7 +76,7 @@ QList<KAction*> ContextMenuExtension::actions( ContextMenuExtension::Group group
         return QList<KAction*>();
 }
 
-void ContextMenuExtension::addAction( ContextMenuExtension::Group group, KAction* action )
+void ContextMenuExtension::addAction( const QString& group, KAction* action )
 {
     if( d->extensions.contains( group ) )
     {

@@ -21,6 +21,8 @@
 #ifndef CONTEXTMENUEXTENSION_H
 #define CONTEXTMENUEXTENSION_H
 
+#include <QtCore/QString>
+
 #include "interfacesexport.h"
 
 class KAction;
@@ -31,17 +33,23 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT ContextMenuExtension
 {
 public:
-    enum Group {
-        FileGroup = 0     /**< The menu group containing file actions */,
-        RefactorGroup = 1 /**< menu group containing refactoring actions */,
-        BuildGroup = 2    /**< menu group to contain build support actions */,
-        RunGroup = 3      /**< menu group to contain run actions */,
-        DebugGroup = 4    /**< menu group to contain debug actions */,
-        EditGroup = 5     /**< menu group to contain editing actions */,
-        VcsGroup = 6      /**< menu group to contain Vcs actions */,
-        ProjectGroup = 7  /**< menu group to contain project actions */,
-        UserGroup = 1000  /**< starting point for plugins to define their own groups */
-    };
+    
+    /** The menu group containing file actions */
+    static const QString FileGroup;
+    /** menu group containing refactoring actions */
+    static const QString RefactorGroup;
+    /** menu group to contain build support actions */
+    static const QString BuildGroup;
+    /** menu group to contain run actions */
+    static const QString RunGroup;
+    /** menu group to contain debug actions */
+    static const QString DebugGroup;
+    /** menu group to contain editing actions */
+    static const QString EditGroup;
+    /** menu group to contain editing actions */
+    static const QString VcsGroup;
+    /** menu group to contain project actions */
+    static const QString ProjectGroup;
 
     /**
      * create new context menu extension object
@@ -57,14 +65,14 @@ public:
      * @param group the menu group to which the action should be added
      * @param action the action to add to the menu group
      */
-    void addAction( Group group, KAction* action );
+    void addAction( const QString& group, KAction* action );
 
     /**
      * return all actions that are in the menu group
      * @param group the menu group from which to get the actions
      * @returns a list of actions for that menu group
      */
-    QList<KAction*> actions( Group group );
+    QList<KAction*> actions( const QString& group );
 
 private:
     class ContextMenuExtensionPrivate* const d;
