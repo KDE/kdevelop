@@ -42,6 +42,7 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
 {
     setFocusPolicy(Qt::NoFocus);
+    KAcceleratorManager::setNoAccel(this);
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -207,6 +208,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 
             button->setText(action->text());
             button->setIcon(action->icon());
+	    button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
@@ -230,11 +232,12 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     } break;
 
     case QEvent::ActionChanged: {
-      if (IdealToolButton *button = _buttons.value(action)) {
-            button->setText(action->text());
-            button->setIcon(action->icon());
-            Q_ASSERT(_widgets.contains(action));
-            _widgets[action]->setWindowTitle(action->text());
+	if (IdealToolButton *button = _buttons.value(action)) {
+	    button->setText(action->text());
+	    button->setIcon(action->icon());
+	    button->setShortcut(QKeySequence());
+	    Q_ASSERT(_widgets.contains(action));
+	    _widgets[action]->setWindowTitle(action->text());
         }
     } break;
 
