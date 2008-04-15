@@ -30,15 +30,14 @@
 #include <kio/job.h>
 #include <kprocess.h>
 #include <kdebug.h>
-
-#include <icore.h>
-#include <iplugincontroller.h>
-#include <iproject.h>
-#include "iqmakebuilder.h"
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <kdebug.h>
-#include <projectmodel.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
+#include <qmake/iqmakebuilder.h>
+#include <project/projectmodel.h>
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectfile.h"

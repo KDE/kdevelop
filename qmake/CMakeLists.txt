@@ -1,20 +1,19 @@
 project(QMakeManager)
 
+find_package(KDE4 REQUIRED)
+find_package(KDevPlatform REQUIRED)
+find_package(KDevelop REQUIRED)
 
 find_package(KDevelop-PG-Qt QUIET)
-include_directories(${QMakeManager_SOURCE_DIR} ${QMakeManager_BINARY_DIR} ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder/
-)
-
-include_directories(${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
-    )
+include_directories(
+        ${QMakeManager_SOURCE_DIR} 
+        ${QMakeManager_BINARY_DIR} 
+        ${KDE4_INCLUDES}
+        ${KDEVPLATFORM_INCLUDE_DIR}
+        ${KDEVELOP_INCLUDE_DIR}
+        )
 
 add_subdirectory(parser)
-
-include_directories(${QMakeManager_SOURCE_DIR}/parser)
 
 ########### next target ###############
 

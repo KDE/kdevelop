@@ -1,4 +1,6 @@
 
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+
 set(parser_STAT_SRCS
     qmakeast.cpp
     qmakeastassignment.cpp

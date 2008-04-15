@@ -21,7 +21,7 @@
 #ifndef QMAKEFILE_H
 #define QMAKEFILE_H
 
-#include "qmakeastdefaultvisitor.h"
+#include "parser/qmakeastdefaultvisitor.h"
 #include <QtCore/QStack>
 #include <kurl.h>
 
