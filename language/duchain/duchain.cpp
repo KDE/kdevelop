@@ -31,12 +31,17 @@
 #include "parsingenvironment.h"
 #include "declaration.h"
 #include "definitions.h"
+#include "duchainutils.h"
 #include "use.h"
 #include "uses.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
 #include <idocumentcontroller.h>
 #include <icore.h>
+#include <ilanguage.h>
+#include <ilanguagecontroller.h>
+#include <ilanguagesupport.h>
+#include <icodehighlighting.h>
 
 namespace KDevelop
 {
@@ -385,6 +390,15 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
     foreach (TopDUContext* chain, chains)
         sc.convertDUChain(chain);
+
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+
+  TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
+  if(standardContext) {
+    foreach( KDevelop::ILanguage* language, languages)
+      if(language->languageSupport() && language->languageSupport()->codeHighlighting())
+        language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+  }
 }
 
 Uses* DUChain::uses()
