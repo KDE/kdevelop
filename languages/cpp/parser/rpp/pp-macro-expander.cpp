@@ -135,6 +135,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         Anchor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
         QByteArray formal = resolve_formal(identifier, input).mergeText();
+        formal = formal.replace( "\"", "\\\"" ); //Escape so we don't break on '"'
 
         if (!formal.isEmpty()) {
           Stream is(&formal, inputPosition);
