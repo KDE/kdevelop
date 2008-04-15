@@ -1,6 +1,8 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2006 Matt Rogers <mattr@kde.org>                            *
+ *   Copyright 2004 Jaroslaw Staniek <js@iidea.pl>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,42 +20,21 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "contextbuilder.h"
-#include "qmakeeditorintegrator.h"
+#ifndef QMAKEDUCHAINEXPORT_H
+#define QMAKEDUCHAINEXPORT_H
 
-ContextBuilder::ContextBuilder()
-    : QMake::ASTVisitor(), KDevelop::BaseContextBuilder<QMake::AST>( new QMakeEditorIntegrator() )
-{
-}
+/* needed for KDE_EXPORT macros */
+#include <kdemacros.h>
 
-ContextBuilder::~ContextBuilder()
-{
-}
 
-void ContextBuilder::supportBuild( QMake::AST* node )
-{
-}
+#ifndef KDEVQMAKEDUCHAIN_EXPORT
+# ifdef MAKE_KDEV4QMAKEDUCHAIN_LIB
+#  define KDEVQMAKEDUCHAIN_EXPORT KDE_EXPORT
+# else
+#  define KDEVQMAKEDUCHAIN_EXPORT KDE_IMPORT
+# endif
+#endif
 
-void ContextBuilder::setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx )
-{
-    node->context = ctx;
-}
+#endif
 
-KDevelop::DUContext* ContextBuilder::contextFromNode( QMake::AST* node )
-{
-    return node->context;
-}
-
-KTextEditor::Range ContextBuilder::editorFindRange( QMake::AST* fromRange, QMake::AST* toRange )
-{
-    QMakeEditorIntegrator* ed = editor<QMakeEditorIntegrator>();
-    return ed->findRange(fromRange, toRange);
-}
-
-const KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode( QMake::AST* node )
-{
-    QMake::ValueAST* val = static_cast<QMake::ValueAST*>( node );
-    setIdentifier( val->value() );
-    return qualifiedIdentifier();
-}
-
+//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

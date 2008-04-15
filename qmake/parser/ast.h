@@ -26,6 +26,11 @@
 
 #include "parserexport.h"
 
+namespace KDevelop
+{
+class DUContext;
+}
+
 namespace QMake
 {
     class ValueAST;
@@ -53,6 +58,7 @@ namespace QMake
             void setLine( int );
             virtual int column() const;
             virtual int line() const;
+            KDevelop::DUContext* context;
         private:
             int m_line;
             int m_column;
