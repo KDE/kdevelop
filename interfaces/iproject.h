@@ -86,6 +86,11 @@ public:
      */
     virtual IPlugin* managerPlugin() const = 0;
 
+    /**
+     * Get the version control plugin for this project
+     * This may return 0 if the project is not under version control
+     * or version control has been disabled for this project
+     */
     virtual IPlugin* versionControlPlugin() const = 0;
 
     /**
