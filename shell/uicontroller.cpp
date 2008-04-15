@@ -29,6 +29,8 @@
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
+#include <kxmlguifactory.h>
+#include <kxmlguiclient.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -132,6 +134,8 @@ void UiController::mainWindowDeleted(MainWindow* mw)
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );
+    KParts::MainWindow *oldMain = activeMainWindow();
+
     MainWindow *main = new MainWindow(this);
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     main, SLOT( loadSettings() ) );
@@ -139,6 +143,12 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
                                     main, SLOT( loadSettings() ) );
     showArea(area(areaName), main);
     main->initialize();
+
+    //we need to add all existing guiclients to the new mainwindow
+    //@todo adymo: add only ones that belong to the area (when the area code is there)
+    foreach (KXMLGUIClient *client, oldMain->guiFactory()->clients())
+        main->guiFactory()->addClient(client);
+
     main->show();
 }
 
