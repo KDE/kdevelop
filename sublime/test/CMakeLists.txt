@@ -38,3 +38,8 @@ set( aggregatemodeltest_SRCS aggregatemodeltest.cpp ${CMAKE_SOURCE_DIR}/test/com
 kde4_add_unit_test(sublime-aggregatemodeltest TESTNAME sublime-sublime-aggregatemodeltest  ${aggregatemodeltest_SRCS})
 target_link_libraries(sublime-aggregatemodeltest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
 
+set( idealcentrallayouttest_SRCS idealcentrallayouttest.cpp )
+kde4_add_unit_test(sublime-centrallayouttest TESTNAME sublime-sublime-centrallayouttest  ${idealcentrallayouttest_SRCS})
+target_link_libraries(sublime-centrallayouttest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} sublime )
+
+
