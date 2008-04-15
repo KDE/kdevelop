@@ -44,13 +44,14 @@ ParseSession::~ParseSession()
   delete macros;
 }
 
-KDevelop::SimpleCursor ParseSession::positionAt(std::size_t offset) const
+rpp::Anchor ParseSession::positionAt(std::size_t offset) const
 {
   Q_ASSERT(m_locationTable);
 
   // FIXME shouldn't just add the column offset...??
 
-  return m_locationTable->positionForOffset(offset) + m_contentOffset;
+  rpp::Anchor ret = m_locationTable->positionForOffset(offset);
+  return rpp::Anchor(ret + m_contentOffset, ret.collapsed);
 }
 
 QString ParseSession::unify(const QString& str) const

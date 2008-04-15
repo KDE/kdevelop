@@ -20,6 +20,8 @@
 
 #include "pp-stream.h"
 
+///@todo Better splitting of input and output functionality
+
 #include <kdebug.h>
 
 #include "pp-location.h"
@@ -33,6 +35,7 @@ Stream::Stream()
   : m_string(new QByteArray())
   , m_isNull(true)
   , m_skippedToEnd(false)
+  , m_inputPositionLocked(false)
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -41,16 +44,19 @@ Stream::Stream()
 {
 }
 
-Stream::Stream( QByteArray * string, const KDevelop::SimpleCursor& offset, LocationTable* table )
+Stream::Stream( QByteArray * string, const Anchor& offset, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_skippedToEnd(false)
+  , m_inputPositionLocked(false)
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
   , m_locationTable(table)
   , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
+  if(offset.collapsed)
+    m_inputPositionLocked = true;
   c = m_string->constData();
   end = m_string->constData() + m_string->length();
 }
@@ -59,6 +65,7 @@ Stream::Stream( QByteArray * string, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_skippedToEnd(false)
+  , m_inputPositionLocked(false)
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -83,12 +90,20 @@ Stream& Stream::operator--()
   --c;
   --m_pos;
 
+  if(m_inputPositionLocked)
+    --m_inputLineStartedAt;
+
   return *this;
 }
 
 void Stream::rewind(int offset)
 {
   c -= offset;
+  m_pos -= offset;
+
+  if(m_inputPositionLocked)
+    m_inputLineStartedAt -= offset;
+
   if (c < m_string->constData())
     c = m_string->constData();
 }
@@ -124,6 +139,9 @@ int Stream::offset( ) const
 
 void Stream::seek(int offset)
 {
+  if(m_inputPositionLocked)
+    m_inputLineStartedAt = offset + (m_inputLineStartedAt - m_pos);
+  
   c = m_string->constData() + offset;
   m_pos = offset;
   if (c > end) {
@@ -140,7 +158,7 @@ Stream & Stream::operator<< ( const char& c )
 
     if (c == newline) {
       ++m_inputLine;
-      m_inputLineStartedAt = m_pos;
+      m_inputLineStartedAt = m_pos; ///@todo remove
     }
 
     m_string->append(c);
@@ -158,8 +176,8 @@ Stream& Stream::operator<< ( const Stream& input )
 
     if (c == newline) {
       ++m_inputLine;
-      m_inputLineStartedAt = m_pos;
-      mark(KDevelop::SimpleCursor(input.inputPosition().line + 1, 0));
+      m_inputLineStartedAt = m_pos; ///@todo remove
+      mark(Anchor(input.inputPosition().line + 1, 0));
     }
 
     m_string->append(c);
@@ -167,24 +185,25 @@ Stream& Stream::operator<< ( const Stream& input )
   return *this;
 }
 
-Stream& Stream::appendString( const KDevelop::SimpleCursor& position, const QByteArray & string )
-{
+Stream& Stream::appendString( const Anchor& inputPosition, const QByteArray & string )
+{///FIXME Locking stuff!
   if (!isNull()) {
-    mark(position);
+    mark(inputPosition);
 
     int extraLines = 0;
     for (int i = 0; i < string.length(); ++i) {
       if (string.at(i) == newline) {
-        m_pos += i + 1;
-        mark(KDevelop::SimpleCursor(position.line + ++extraLines, 0));
+        m_pos += i + 1; //Move the current offset to that position, so the marker is set correctly
+        if(!inputPosition.collapsed)
+          mark(Anchor(inputPosition.line + ++extraLines, 0));
         m_pos -= i + 1;
       }
     }
 
     m_pos += string.length();
 
-    // TODO check correctness
-    m_inputLineStartedAt = m_pos - (string.length() - string.lastIndexOf(newline));
+    // TODO check correctness Probably remove
+    m_inputLineStartedAt = m_pos - (string.length() - string.lastIndexOf(newline)); ///@todo remove
     m_string->append(string);
   }
   return *this;
@@ -195,18 +214,19 @@ bool Stream::isNull() const
   return m_isNull;
 }
 
-KDevelop::SimpleCursor Stream::inputPosition() const
+Anchor Stream::inputPosition() const
 {
-  return KDevelop::SimpleCursor(m_inputLine, m_pos - m_inputLineStartedAt);
+  return Anchor(m_inputLine, m_pos - m_inputLineStartedAt, m_inputPositionLocked);
 }
 
-void Stream::setInputPosition(const KDevelop::SimpleCursor& position)
+void Stream::setInputPosition(const Anchor& position)
 {
   m_inputLine = position.line;
   m_inputLineStartedAt = m_pos - position.column;
+  m_inputPositionLocked = position.collapsed;
 }
 
-void Stream::mark(const KDevelop::SimpleCursor& position)
+void Stream::mark(const Anchor& position)
 {
   if (m_locationTable)
     m_locationTable->anchor(m_pos, position);
@@ -216,6 +236,7 @@ void Stream::reset( )
 {
   c = m_string->constData();
   m_inputLineStartedAt = m_inputLine = m_pos = 0;
+  m_inputPositionLocked = false;
 }
 
 QByteArray rpp::Stream::stringFrom(int offset) const

@@ -46,7 +46,7 @@ QString joinByteArray(const QList<QByteArray>& arrays, QString between) {
   return ret;
 }
 
-using namespace rpp;
+using namespace rpp;              
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
   : expandingMacro(__expandingMacro)
@@ -132,7 +132,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         QByteArray identifier = skip_identifier(input);
 
-        KDevelop::SimpleCursor inputPosition = input.inputPosition();
+        Anchor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
         QByteArray formal = resolve_formal(identifier, input).mergeText();
 
@@ -196,7 +196,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       {
         check_header_section
         
-        KDevelop::SimpleCursor inputPosition = input.inputPosition();
+        Anchor inputPosition = input.inputPosition();
         QByteArray name = skip_identifier (input);
 
         // search for the paste token
@@ -214,15 +214,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           input.seek(blankStart);
         }
 
-        //Q_ASSERT(name.length() >= 0 && name.length() < 512);
-
-        KDevelop::SimpleCursor inputPosition2 = input.inputPosition();
+        Anchor inputPosition2 = input.inputPosition();
         pp_actual actual = resolve_formal(name, input);
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
           
           QList<QByteArray>::const_iterator textIt = actual.text.begin();
-          QList<KDevelop::SimpleCursor>::const_iterator cursorIt = actual.inputPosition.begin();
+          QList<Anchor>::const_iterator cursorIt = actual.inputPosition.begin();
 
           for( ; textIt != actual.text.end(); ++textIt, ++cursorIt )
           {
@@ -260,7 +258,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             macro->hidden = true;
 
             pp_macro_expander expand_macro(m_engine);
-            Stream ms(&macro->definition, input.inputPosition());
+            Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
+            kDebug() << "using macro" << macro->definition;
             ms.setOriginalInputPosition(input.originalInputPosition());
             QByteArray expanded;
             {
@@ -270,7 +269,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
             if (!expanded.isEmpty())
             {
-              Stream es(&expanded, input.inputPosition());
+              Stream es(&expanded, Anchor(input.inputPosition(), true));
               es.setOriginalInputPosition(input.originalInputPosition());
               skip_whitespaces(es, devnull());
               QByteArray identifier = skip_identifier(es);
@@ -279,7 +278,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
                 m = m2;
               } else {
-                output.appendString(inputPosition, expanded);
+                output.appendString(Anchor(input.inputPosition(), true), expanded);
               }
             }
 
@@ -296,7 +295,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         //In case expansion fails, we can skip back to this position
         int openingPosition = input.offset();
-        KDevelop::SimpleCursor openingPositionCursor = input.inputPosition();
+        Anchor openingPositionCursor = input.inputPosition();
         
         // function like macro
         if (input.atEnd() || input != '(')
@@ -316,7 +315,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
           QByteArray actualText;
           skip_whitespaces(input, devnull());
-          KDevelop::SimpleCursor actualStart = input.inputPosition();
+          Anchor actualStart = input.inputPosition();
           {
             Stream as(&actualText);
             skip_argument_variadics(actuals, macro, input, as);
@@ -329,7 +328,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             {
               QByteArray newActualText;
               Stream as(&actualText, actualStart);
-              as.setOriginalInputPosition(input.originalInputPosition());///@todo What does originalInputPosition mean?
+              as.setOriginalInputPosition(input.originalInputPosition());
 
               rpp::LocationTable table;
               table.anchor(0, actualStart);
@@ -351,7 +350,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           {
             QByteArray actualText;
             skip_whitespaces(input, devnull());
-            KDevelop::SimpleCursor actualStart = input.inputPosition();
+            Anchor actualStart = input.inputPosition();
             {
               Stream as(&actualText);
               skip_argument_variadics(actuals, macro, input, as);
@@ -397,11 +396,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_frame frame(macro, actuals);
         pp_macro_expander expand_macro(m_engine, &frame);
         macro->hidden = true;
-        Stream ms(&macro->definition, input.inputPosition());
+        Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
         ms.setOriginalInputPosition(input.originalInputPosition());
         expand_macro(ms, output);
         macro->hidden = false;
-
       } else {
         output << input;
         ++input;

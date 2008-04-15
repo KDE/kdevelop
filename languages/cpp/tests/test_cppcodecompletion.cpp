@@ -630,6 +630,38 @@ QStringList toStringList( const Utils::Set& set ) {
   return ret;
 }
 
+void TestCppCodeCompletion::testMacroExpansionRanges() {
+{
+  QString test("#define TEST(X) int allabamma; \nTEST(C)\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+  kDebug() << ctx->localDeclarations()[0]->range().textRange();
+  //kDebug() << ctx->localDeclarations()[1]->range().textRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+//  QCOMPARE(ctx->localDeclarations()[1]->range().textRange(), KTextEditor::Range(1, 10, 1, 11));
+  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().textRange();
+}
+{
+  QString test("#define A(X) bbbbbb\nint A(0);\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+  kDebug() << ctx->localDeclarations()[0]->range().textRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+}
+{
+  QString test("#define TEST namespace NS{int a;int b;int c;int d;int q;} class A{}; \nTEST; int a; int b; int c; int d;int e;int f;int g;int h;\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 9);
+  kDebug() << ctx->localDeclarations()[0]->range().textRange();
+  kDebug() << ctx->localDeclarations()[1]->range().textRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  QCOMPARE(ctx->localDeclarations()[1]->range().textRange(), KTextEditor::Range(1, 10, 1, 11));
+}
+}
+
 void TestCppCodeCompletion::testEnvironmentMatching() {
     Cpp::EnvironmentManager* environmentManager = new Cpp::EnvironmentManager;
     {

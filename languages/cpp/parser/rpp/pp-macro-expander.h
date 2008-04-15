@@ -29,6 +29,7 @@
 #include "pp-macro.h"
 #include "pp-stream.h"
 #include "pp-scanner.h"
+#include "anchor.h"
 #include <simplecursor.h>
 
 namespace rpp {
@@ -39,7 +40,7 @@ class pp;
 class pp_actual {
 public:
   QList<QByteArray> text;
-  QList<KDevelop::SimpleCursor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
+  QList<Anchor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
 
   bool isValid() const {
     return !text.isEmpty();

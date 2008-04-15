@@ -26,6 +26,7 @@
 #include <QtCore/QIODevice>
 
 #include <editor/simplecursor.h>
+#include "anchor.h"
 
 namespace rpp {
 
@@ -42,7 +43,8 @@ class KDEVCPPRPP_EXPORT Stream
 
   public:
     Stream();
-    explicit Stream( QByteArray * string, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0), LocationTable* table = 0 );
+    //If the given offset anchor has the member "collapsed" set to true, the position will be locked.
+    explicit Stream( QByteArray * string, const Anchor& offset = Anchor(0,0), LocationTable* table = 0 );
     explicit Stream( QByteArray * string, LocationTable* table );
     virtual ~Stream();
 
@@ -72,6 +74,9 @@ class KDEVCPPRPP_EXPORT Stream
     /// Start from the beginning again
     void reset();
 
+    /// Lock/unlock the input position. If the input position is locked, it will not be moved forwards.
+    void lockInputPosition(bool lock);
+
     inline const char& current() const { return *c; } //krazy:exclude=inline
     inline operator const char&() const { return *c; } //krazy:exclude=inline
     inline Stream& operator++() //krazy:exclude=inline
@@ -79,7 +84,9 @@ class KDEVCPPRPP_EXPORT Stream
       if (c == end)
         return *this;
 
-      if (*c == newline) {
+      if(m_inputPositionLocked)
+        ++m_inputLineStartedAt;
+      else if (*c == newline) {
         ++m_inputLine;
         m_inputLineStartedAt = m_pos + 1;
       }
@@ -90,20 +97,24 @@ class KDEVCPPRPP_EXPORT Stream
       return *this;
     }
 
+    ///@warning Doesn't handle newlines correctly!
     Stream& operator--();
 
-    KDevelop::SimpleCursor inputPosition() const;
-    void setInputPosition(const KDevelop::SimpleCursor& position);
+    ///Returns the cursor that points to the current input position.
+    Anchor inputPosition() const;
+    ///If the input position is collapsed, the input position will be locked from now on. It will stay the same until a new one is set.
+    void setInputPosition(const Anchor& position);
 
     ///Input-position that marks the start of the topmost currently expanding macro in the original document
     KDevelop::SimpleCursor originalInputPosition() const;
     void setOriginalInputPosition(const KDevelop::SimpleCursor& position);
 
-    void mark(const KDevelop::SimpleCursor& position);
+    ///Used for output streams to mark stream positions with input position
+    void mark(const Anchor& position);
 
     Stream & operator<< ( const char& c );
     Stream & operator<< ( const Stream& input );
-    Stream& appendString( const KDevelop::SimpleCursor& position, const QByteArray & string );
+    Stream& appendString( const Anchor& inputPosition, const QByteArray & string );
 
   private:
     Q_DISABLE_COPY(Stream)
@@ -111,7 +122,7 @@ class KDEVCPPRPP_EXPORT Stream
     QByteArray* m_string;
     const char* c;
     const char* end;
-    bool m_isNull, m_skippedToEnd;
+    bool m_isNull, m_skippedToEnd, m_inputPositionLocked;
     int m_pos;
     int m_inputLine;
     int m_inputLineStartedAt;

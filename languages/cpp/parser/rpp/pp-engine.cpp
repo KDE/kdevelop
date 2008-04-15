@@ -238,7 +238,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     skip_blanks(input, devnull());
     RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
 
-    Stream newInput(&includeString, inputPosition);
+    Stream newInput(&includeString, Anchor(inputPosition));
     newInput.setOriginalInputPosition(originalInputPosition);
     handle_include(skip_current_path, newInput, output);
     return;
@@ -316,7 +316,7 @@ void pp::operator () (Stream& input, Stream& output)
         skip (input, ss);
       }
 
-      Stream ss(&skipped, inputPosition);
+      Stream ss(&skipped, Anchor(inputPosition));
       ss.setOriginalInputPosition(originalInputPosition);
       handle_directive(directive, ss, output);
 
@@ -886,7 +886,7 @@ void pp::handle_if (Stream& input)
 
     environment()->enterBlock(input.inputPosition().line, condition);
 
-    Stream cs(&condition, inputPosition);
+    Stream cs(&condition, Anchor(inputPosition));
     cs.setOriginalInputPosition(originalInputPosition);
     Value result = eval_expression(cs);
 
@@ -962,7 +962,7 @@ void pp::handle_elif(Stream& input)
 
     if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
     {
-      Stream cs(&condition, inputPosition);
+      Stream cs(&condition, Anchor(inputPosition));
       Value result = eval_expression(cs);
       _M_true_test[iflevel] = !result.is_zero();
       _M_skipping[iflevel] = result.is_zero();

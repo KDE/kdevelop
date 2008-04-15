@@ -29,6 +29,7 @@
 #include <cppparserexport.h>
 #include <ksharedptr.h>
 #include <kurl.h>
+#include "rpp/anchor.h"
 
 #include <hashedstring.h>
 
@@ -53,10 +54,10 @@ public:
 
   /**
    * Return the position of the preprocessed source \a offset in the original source
-   *
+   * If the "collapsed" member of the returned anchor is true, the position is within a collapsed range.
    * \note the return line starts from 0, not 1.
    */
-  KDevelop::SimpleCursor positionAt(std::size_t offset) const;
+  rpp::Anchor positionAt(std::size_t offset) const;
 
   void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
 

@@ -41,7 +41,7 @@ SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) c
   if(token == 0) {
     kDebug() << "Searching position of invalid token";
     return SimpleCursor();
-  }
+    }
   
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
@@ -49,10 +49,14 @@ SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) c
 
 SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
-  if(edge == BackEdge)
-    return m_session->positionAt(token.position) + SimpleCursor(0, token.size);
-  else
-    return m_session->positionAt(token.position);
+  rpp::Anchor position = m_session->positionAt(token.position);
+  if(edge == BackEdge) {
+    if(position.collapsed)
+      return position;
+    else
+      return position + SimpleCursor(0, token.size);
+  } else
+    return position;
 }
 
 SimpleRange CppEditorIntegrator::findRange( AST * node, RangeEdge edge )

@@ -74,6 +74,7 @@ private slots:
   void testAcrossHeaderTemplateReferences();
   void testEnvironmentMatching();
   void testUsesThroughMacros();
+  void testMacroExpansionRanges();
 
 public:
   enum DumpArea {

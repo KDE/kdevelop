@@ -26,36 +26,36 @@ using namespace rpp;
 
 LocationTable::LocationTable()
 {
-  anchor(0, KDevelop::SimpleCursor(0,0));
+  anchor(0, Anchor(0,0));
 }
 
 LocationTable::LocationTable(const QByteArray& contents)
 {
-  anchor(0, KDevelop::SimpleCursor(0,0));
+  anchor(0, Anchor(0,0));
 
   const char newline = '\n';
   int line = 0;
 
   for (std::size_t i = 0; i < (std::size_t)contents.size(); ++i)
     if (contents.at(i) == newline)
-      anchor(i + 1, KDevelop::SimpleCursor(++line, 0));
+      anchor(i + 1, Anchor(++line, 0));
 }
 
-void LocationTable::anchor(std::size_t offset, KDevelop::SimpleCursor cursor)
+void LocationTable::anchor(std::size_t offset, Anchor anchor)
 {
-  if (cursor.column) {
+  if (anchor.column) {
     // Check to see if it's different to what we already know
-    if (positionForOffset(offset) == cursor)
+    if (positionForOffset(offset) == anchor && !anchor.collapsed)
       return;
   }
   
-  m_currentOffset = m_offsetTable.insert(offset, cursor);
+  m_currentOffset = m_offsetTable.insert(offset, anchor);
 }
 
-KDevelop::SimpleCursor LocationTable::positionForOffset(std::size_t offset) const
+Anchor LocationTable::positionForOffset(std::size_t offset) const
 {
   // Look nearby for a match first
-  QMap<std::size_t, KDevelop::SimpleCursor>::ConstIterator constEnd = m_offsetTable.constEnd();
+  QMap<std::size_t, Anchor>::ConstIterator constEnd = m_offsetTable.constEnd();
 
   if (m_currentOffset != constEnd) {
     std::size_t current = m_currentOffset.key();
@@ -107,12 +107,17 @@ KDevelop::SimpleCursor LocationTable::positionForOffset(std::size_t offset) cons
 
   done:
   Q_ASSERT(m_currentOffset != constEnd);
-  return m_currentOffset.value() + KDevelop::SimpleCursor(0, offset - m_currentOffset.key());
+  Anchor ret = m_currentOffset.value();
+  if(ret.collapsed)
+    return ret;
+  else {
+    return Anchor(ret+ KDevelop::SimpleCursor(0, offset - m_currentOffset.key()), ret.collapsed);
+  }
 }
 
 void LocationTable::dump() const
 {
-  QMapIterator<std::size_t, KDevelop::SimpleCursor> it = m_offsetTable;
+  QMapIterator<std::size_t, Anchor> it = m_offsetTable;
   kDebug(9007) << "Location Table:";
   while (it.hasNext()) {
     it.next();
@@ -120,33 +125,33 @@ void LocationTable::dump() const
   }
 }
 
-void LocationTable::splitByAnchors(const QByteArray& text, const KDevelop::SimpleCursor& textStartPosition, QList<QByteArray>& strings, QList<KDevelop::SimpleCursor>& anchors) const {
+void LocationTable::splitByAnchors(const QByteArray& text, const Anchor& textStartPosition, QList<QByteArray>& strings, QList<Anchor>& anchors) const {
 
-  KDevelop::SimpleCursor currentCursor = textStartPosition;
+  Anchor currentAnchor = Anchor(textStartPosition);
   size_t currentOffset = 0;
   
-  QMapIterator<std::size_t, KDevelop::SimpleCursor> it = m_offsetTable;
+  QMapIterator<std::size_t, Anchor> it = m_offsetTable;
 
   while (currentOffset < (size_t)text.length())
   {
-    KDevelop::SimpleCursor nextCursor;
+    Anchor nextAnchor(KDevelop::SimpleCursor::invalid());
     size_t nextOffset;
     
     if(it.hasNext()) {
       it.next();
       nextOffset = it.key();
-      nextCursor = it.value();
+      nextAnchor = it.value();
     }else{
       nextOffset = text.length();
-      nextCursor = KDevelop::SimpleCursor::invalid();
+      nextAnchor = Anchor(KDevelop::SimpleCursor::invalid());
     }
 
     if( nextOffset-currentOffset > 0 ) {
       strings.append(text.mid(currentOffset, nextOffset-currentOffset));
-      anchors.append(currentCursor);
+      anchors.append(currentAnchor);
     }
     
     currentOffset = nextOffset;
-    currentCursor = nextCursor;
+    currentAnchor = nextAnchor;
   }
 }
