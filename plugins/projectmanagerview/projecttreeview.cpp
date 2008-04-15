@@ -194,7 +194,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
         foreach( const ContextMenuExtension ext, extensions )
         {
-            foreach( KAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
+            foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
             {
                 menu.addAction( act );
             }
@@ -202,27 +202,56 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
         menu.addSeparator();
 
-        QMenu* buildmenu = menu.addMenu( "Build" );
+        QList<QAction*> buildActions;
+        QList<QAction*> vcsActions;
+        QList<QAction*> extActions;
         foreach( const ContextMenuExtension ext, extensions )
         {
-            foreach( KAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
+            foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
             {
-                buildmenu->addAction( act );
+                buildActions << act;
             }
+            foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
+            {
+                vcsActions << act;
+            }
+
+            foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
+            {
+                extActions << act;
+            }
+
+        }
+        QMenu* buildmenu = &menu;
+        if( buildActions.count() > 1 ) {
+            buildmenu = menu.addMenu("Build");
+        }
+        foreach( QAction* act, buildActions )
+        {
+            buildmenu->addAction(act);
         }
 
         menu.addSeparator();
 
-        QMenu* vcsmenu = menu.addMenu( "Version Control ");
-        foreach( const ContextMenuExtension ext, extensions )
+        QMenu* vcsmenu = &menu;
+        if( vcsActions.count() > 1 )
         {
-            foreach( KAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
-            {
-                vcsmenu->addAction( act );
-            }
+            vcsmenu = menu.addMenu( "Version Control ");
+        }
+        foreach( QAction* act, vcsActions )
+        {
+            vcsmenu->addAction( act );
         }
 
         menu.addSeparator();
+        foreach( QAction* act, extActions )
+        {
+            menu.addAction( act );
+        }
+        
+
+        menu.addSeparator();
+
 
         KAction* projectConfig = new KAction(i18n("Project Options"), this);
         connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
