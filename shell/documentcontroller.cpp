@@ -375,8 +375,22 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
 void DocumentController::fileClose()
 {
-    if (activeDocument())
-        activeDocument()->close();
+    IDocument *activeDoc = activeDocument();
+    if (activeDoc)
+    {
+        UiController *uiController = Core::self()->uiControllerInternal();
+        Sublime::View *activeView = uiController->activeSublimeWindow()->activeView();
+        if (activeView->document()->views().count() > 1)
+        {
+            //close only one active view
+            uiController->activeArea()->removeView(activeView);
+        }
+        else
+        {
+            //close the document instead
+            activeDoc->close();
+        }
+    }
 }
 
 void DocumentController::closeDocument( const KUrl &url )
