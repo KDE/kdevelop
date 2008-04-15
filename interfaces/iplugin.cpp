@@ -97,12 +97,12 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
     setComponentData( instance );
 
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
-	KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
-	if (! guiWindow)
-	    continue;
+        KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
+        if (! guiWindow)
+            continue;
 
-	connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient *)),
-		this, SLOT(guiClientAdded(KXMLGUIClient *)));
+        connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient *)),
+            this, SLOT(guiClientAdded(KXMLGUIClient *)));
     }
 }
 
