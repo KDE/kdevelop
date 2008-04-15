@@ -36,7 +36,6 @@ class QDockWidget;
 namespace Sublime {
 
 class View;
-class Container;
 class Controller;
 class AreaIndex;
 class IdealMainWidget;
@@ -55,6 +54,7 @@ public:
         MainWindowPrivate *d;
     };
 
+#if 0
     /**Use this to create views for an area.*/
     class ViewCreator {
     public:
@@ -63,11 +63,11 @@ public:
     private:
         MainWindowPrivate *d;
     };
+#endif
 
     /**Reconstructs the mainwindow according to the current area.*/
     void reconstruct();
-    /**Clears the area leaving mainwindow empty.*/
-    void clearArea();
+
     QMenu *areaSwitcherMenu();
 
     void activateFirstVisibleView();
@@ -78,7 +78,6 @@ public:
     Controller *controller;
     Area *area;
     QList<View*> docks;
-    QMap<View*, Container*> viewContainers;
 
     View *activeView;
     View *activeToolView;
@@ -88,9 +87,7 @@ public:
     IdealMainWidget *idealMainWidget;
 
 public slots:
-    void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
     void raiseToolView(Sublime::View* view);
-    void aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view);
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
     void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
@@ -101,10 +98,9 @@ private slots:
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);
-    
+
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
-    void recreateCentralWidget();
 
     MainWindow *m_mainWindow;
     QMap<AreaIndex*, QSplitter*> m_indexSplitters;

@@ -37,8 +37,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 {
     d->controller = controller;
 
-    connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
-    connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
+    connect(this, SIGNAL(destroyed()), controller, SLOT(releaseArea()));
 }
 
 MainWindow::~MainWindow()
@@ -49,22 +48,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::setArea(Area *area)
 {
-    if (d->area)
-        clearArea();
     d->area = area;
     d->reconstruct();
     d->activateFirstVisibleView();
     emit areaChanged(area);
 
     loadSettings();
-}
-
-void MainWindow::clearArea()
-{
-    emit areaCleared(d->area);
-    d->clearArea();
-
-    saveSettings();
 }
 
 QMenu *MainWindow::areaSwitcherMenu()
@@ -99,17 +88,13 @@ View *MainWindow::activeToolView()
 
 void MainWindow::activateView(View *view)
 {
-    if (!d->viewContainers.contains(view))
-        return;
-    d->viewContainers[view]->setCurrentWidget(view->widget());
+    // TODO redundant?
     setActiveView(view);
 }
 
 void MainWindow::setActiveView(View *view)
 {
     d->activeView = view;
-    if (view && !view->widget()->hasFocus())
-        view->widget()->setFocus();
     emit activeViewChanged(view);
 }
 

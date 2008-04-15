@@ -116,6 +116,9 @@ Controller::~Controller()
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
+    if (mainWindow->area())
+        releaseArea(area, mainWindow);
+
     Area *areaToShow = 0;
     //if the area is already shown in another mainwindow then we need to clone it
     if (d->shownAreas.contains(area) && (mainWindow != d->shownAreas[area]))
@@ -125,12 +128,8 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
     d->controlledWindows << mainWindow;
     d->shownAreas[areaToShow] = mainWindow;
     MainWindowOperator::setArea(mainWindow, areaToShow);
-    connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
     connect(areaToShow, SIGNAL(requestToolViewRaise(Sublime::View*)),
         mainWindow, SLOT(raiseToolView(Sublime::View*)));
-    connect(areaToShow, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        mainWindow, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
     connect(areaToShow, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
     connect(areaToShow, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
@@ -160,23 +159,24 @@ void Controller::addDocument(Document *document)
     d->documents.append(document);
 }
 
-void Controller::areaReleased()
+void Controller::releaseArea()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
     kDebug(9504) << "marking areas as mainwindow-free";
     foreach (Area *area, d->shownAreas.keys(w))
     {
         kDebug(9504) << "" << area->objectName();
-        areaReleased(area);
-        disconnect(area, 0, w, 0);
+        releaseArea(area, w);
     }
 }
 
-void Controller::areaReleased(Sublime::Area *area)
+void Controller::releaseArea(Sublime::Area *area, Sublime::MainWindow* mw)
 {
     d->controlledWindows.removeAll(d->shownAreas[area]);
     d->shownAreas.remove(area);
     d->namedAreas.remove(area->objectName());
+
+    disconnect(area, 0, mw, 0);
 }
 
 Area *Controller::area(const QString &areaName)

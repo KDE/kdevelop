@@ -21,6 +21,8 @@
 
 #include "viewwidgetcreator.h"
 
+#include <QPointer>
+
 class QWidget;
 
 namespace Sublime {
@@ -40,7 +42,7 @@ public:
     void unsetWidget();
 
 private:
-    View *view;
+    QPointer<View> view;
 
 };
 

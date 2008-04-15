@@ -21,6 +21,7 @@
 
 #include <QtCore/Qt>
 #include <QtCore/QList>
+#include <QtCore/QObject>
 
 #include <KConfigGroup>
 
@@ -29,6 +30,7 @@
 namespace Sublime {
 
 class View;
+class Area;
 
 /**
 @short Index denotes the position of the view in the splitted area.
@@ -103,8 +105,12 @@ is visible at the time.
         root_index (view1, view2, view3, view4)
 @endcode
 */
-class SUBLIME_EXPORT AreaIndex {
+class SUBLIME_EXPORT AreaIndex : public QObject
+{
+    Q_OBJECT
+
 public:
+    AreaIndex();
     ~AreaIndex();
     AreaIndex(const AreaIndex &index);
 
@@ -128,7 +134,8 @@ public:
     @param view the view to be added.*/
     void add(View *view, View *after = 0);
     /**Removes view and unsplits the parent index when no views
-    are left at the current index.*/
+    are left at the current index.
+    Returns the new current AreaIndex, as this one may be deleted*/
     void remove(View *view);
     /**Splits the view in this position by given @p orientation
     and adds the @p newView into the splitter.
@@ -148,9 +155,19 @@ public:
     /**@return the list of views at this index.*/
     QList<View*> &views() const;
 
+Q_SIGNALS:
+    /**Emitted when a new view is added to the area.*/
+    void viewAdded(Sublime::AreaIndex*, Sublime::View*);
+    /**Emitted when a view is going to be removed from the area.*/
+    void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
+    /**Emitted when child area indexes have been removed and it is safe to reparse*/
+    void childAreaIndexesRemoved(Sublime::AreaIndex* index);
+    /**Emitted when an area index is about to be removed*/
+    void aboutToRemoveAreaIndex(Sublime::AreaIndex*);
+
 protected:
     /**Constructor for Root index.*/
-    AreaIndex();
+    AreaIndex(Area* parent);
 
 private:
     /**Constructor for indices other than root.*/

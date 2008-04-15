@@ -35,6 +35,7 @@ namespace Sublime {
 class Area;
 class View;
 class MainWindow;
+class IdealCentralWidget;
 
 class IdealToolButton: public QToolButton
 {
@@ -155,17 +156,6 @@ private:
     Qt::DockWidgetArea m_docking_area;
 };
 
-class IdealCentralWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    IdealCentralWidget(IdealMainWidget* parent);
-    virtual ~IdealCentralWidget();
-
-    IdealMainLayout* idealLayout() const;
-};
-
 class View;
 
 class IdealMainWidget : public QWidget
@@ -176,7 +166,7 @@ public:
     IdealMainWidget(MainWindow* parent, KActionCollection* ac);
 
     // Public api
-    void setCentralWidget(QWidget* widget);
+    //void setCentralWidget(QWidget* widget);
     QAction* actionForView(View* view) const;
     void addView(Qt::DockWidgetArea area, View* View);
     void raiseView(View* view);
@@ -196,6 +186,7 @@ public:
 
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
+    MainWindow* mainWindow() const;
     IdealMainLayout* mainLayout() const;
     IdealCentralWidget* internalCentralWidget() const;
 
@@ -239,7 +230,8 @@ private:
     KAction* m_maximizeCurrentDock;
     KActionMenu* m_docks;
 
-    IdealCentralWidget* mainWidget;
+    QWidget* mainWidget;
+    IdealCentralWidget* centralWidget;
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
@@ -256,10 +248,10 @@ class IdealSplitterHandle : public QWidget
     Q_OBJECT
 
 public:
-    IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole);
+    IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, QVariant data);
 
 Q_SIGNALS:
-    void resize(int thickness, IdealMainLayout::Role resizeRole);
+    void resize(int thickness, int width, QVariant data);
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
@@ -272,7 +264,7 @@ private:
     Qt::Orientation m_orientation;
     bool m_hover;
     int m_dragStart;
-    IdealMainLayout::Role m_resizeRole;
+    QVariant m_data;
 };
 
 }

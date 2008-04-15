@@ -73,7 +73,7 @@ AreaIndex::AreaIndex(AreaIndex *parent) : d(new AreaIndexPrivate)
     d->parent = parent;
 }
 
-AreaIndex::AreaIndex(const AreaIndex &index)  : d(new AreaIndexPrivate( *(index.d) ) )
+AreaIndex::AreaIndex(const AreaIndex &index)  : QObject(), d(new AreaIndexPrivate( *(index.d) ) )
 {
     kDebug(9504) << "copying area index";
     if (d->first)
@@ -101,12 +101,17 @@ void AreaIndex::add(View *view, View *after)
         d->views.insert(d->views.indexOf(after), view);
     else
         d->views.append(view);
+
+    emit viewAdded(this, view);
 }
 
 void AreaIndex::remove(View *view)
 {
+    Q_ASSERT(!d->isSplitted());
     if (d->isSplitted())
         return;
+
+    emit aboutToRemoveView(this, view);
 
     d->views.removeAll(view);
     if (d->parent && (d->views.count() == 0))
@@ -141,6 +146,10 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
         return;
 
     AreaIndex *other = d->first == childToRemove ? d->second : d->first;
+
+    aboutToRemoveAreaIndex(childToRemove);
+    aboutToRemoveAreaIndex(other);
+
     other->copyTo(this);
     d->orientation = other->orientation();
     d->first = 0;
@@ -149,6 +158,10 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
 
     delete other;
     delete childToRemove;
+
+    // TODO check if this needs to be unsplit as well
+
+    emit childAreaIndexesRemoved(this);
 }
 
 void AreaIndex::copyChildrenTo(AreaIndex *target)
@@ -233,3 +246,5 @@ RootAreaIndex::RootAreaIndex()
 }
 
 }
+
+#include "areaindex.moc"

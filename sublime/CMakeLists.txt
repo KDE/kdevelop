@@ -8,7 +8,6 @@ add_subdirectory(test)
 set(sublime_LIB_SRCS
     area.cpp
     areaindex.cpp
-    container.cpp
     controller.cpp
     document.cpp
     mainwindow.cpp
@@ -24,6 +23,8 @@ set(sublime_LIB_SRCS
     aggregatemodel.cpp
     ideal.cpp
     ideallayout.cpp
+    idealcentralwidget.cpp
+    idealcentrallayout.cpp
 )
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
@@ -38,7 +39,6 @@ install(FILES
     area.h
     areaindex.h
     areawalkers.h
-    container.h
     controller.h
     document.h
     mainwindow.h

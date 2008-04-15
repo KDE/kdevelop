@@ -222,7 +222,7 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
             x = rect.x() + margin();
             currentLineHeight = 0;
         }
-    
+
         if (updateGeometry)
             item->setGeometry(QRect(x, y, itemSizeHint.width(), itemSizeHint.height()));
 
@@ -633,11 +633,11 @@ IdealSplitterHandle* IdealMainLayout::createSplitter(Role role, bool reverse)
       ? Qt::Vertical
       : Qt::Horizontal;
 
-    splitter = new IdealSplitterHandle(direction, parentWidget(), role);
+    splitter = new IdealSplitterHandle(direction, parentWidget(), qVariantFromValue(role));
     addChildWidget(splitter);
 
-    connect(splitter, SIGNAL(resize(int, IdealMainLayout::Role)),
-	    SLOT(resizeWidget(int, IdealMainLayout::Role)));
+    connect(splitter, SIGNAL(resize(int, int, QVariant)),
+	    SLOT(resizeWidget(int, int, QVariant)));
 
     splitter->hide();
     return splitter;
@@ -660,7 +660,7 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
     if (QDockWidget* dock = qobject_cast<QDockWidget*>(widget))
         if (dock->isFloating())
             dock->setFloating(false);
-    
+
     if (widget->parent() != parentWidget()) {
         widget->setParent(parentWidget());
         addChildWidget(widget);
@@ -729,9 +729,14 @@ int IdealMainLayout::splitterWidth() const
     return m_splitterWidth;
 }
 
-void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
+void IdealMainLayout::resizeWidget(int thickness, int width, QVariant data)
 {
-    m_items[role]->width = thickness;
+    IdealMainLayout::Role role = qvariant_cast<IdealMainLayout::Role>(data);
+
+     if  (role == IdealMainLayout::Right || role == IdealMainLayout::Bottom)
+         m_items[role]->width = width - thickness;
+     else
+        m_items[role]->width = thickness;
 
     invalidate();
 }
@@ -780,7 +785,7 @@ void IdealMainLayout::loadSettings()
     KConfigGroup cg(KGlobal::config(), "UiSettings");
 
     bool invalid = false;
-    
+
     int topOwnsTopLeft = cg.readEntry("TopLeftCornerOwner", 0);
     if (m_topOwnsTopLeft != topOwnsTopLeft) {
         m_topOwnsTopLeft = topOwnsTopLeft;

@@ -35,6 +35,7 @@ View::View(Document *doc)
 
 View::~View()
 {
+    delete d->widget;
     delete d;
 }
 

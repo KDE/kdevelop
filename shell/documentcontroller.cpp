@@ -243,7 +243,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         {
             dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
-        }else if( activeDocument() ) 
+        }else if( activeDocument() )
         {
             dir = activeDocument()->url().directory();
         }else
@@ -385,6 +385,7 @@ void DocumentController::fileClose()
         {
             //close only one active view
             uiController->activeArea()->removeView(activeView);
+            activeView->deleteLater();
         }
         else
         {

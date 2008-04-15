@@ -35,8 +35,6 @@ class SUBLIME_EXPORT MainWindowOperator {
 protected:
     /**Sets the area of main window and fills it with views.*/
     void setArea(MainWindow *w, Area *area);
-    /**Unsets the area clearing main window.*/
-    void clearArea(MainWindow *w);
 
     /**Sets the active view for the mainwindow and focuses it.*/
     void setActiveView(MainWindow *w, View *view);

@@ -29,7 +29,6 @@
 #include <sublime/area.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
-#include <sublime/container.h>
 #include <sublime/tooldocument.h>
 
 #include "kdevtest.h"

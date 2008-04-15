@@ -25,14 +25,24 @@
 
 namespace Sublime {
 
+class AreaIndex;
+class View;
+
 /**
 @short Switcher for views inside the one container.
 */
 class SUBLIME_EXPORT Switcher: public QTabBar {
 Q_OBJECT
 public:
-    Switcher(QWidget *parent = 0);
+    Switcher(AreaIndex* areaIndex, QWidget *parent = 0);
     ~Switcher();
+
+    AreaIndex* areaIndex() const;
+
+public Q_SLOTS:
+    void viewAdded(Sublime::AreaIndex*, Sublime::View*);
+    void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
+
 private:
     class SwitcherPrivate* const d;
 };

@@ -23,6 +23,8 @@
 
 #include <QCleanlooksStyle>
 #include <QStylePainter>
+#include <QMetaType>
+
 #include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
@@ -35,6 +37,7 @@
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
+#include "idealcentralwidget.h"
 
 using namespace Sublime;
 
@@ -485,7 +488,7 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea);
     topBarWidget->hide();
 
-    mainWidget = new IdealCentralWidget(this);
+    mainWidget = new QWidget(this);
 
     m_mainLayout = new IdealMainLayout(mainWidget);
     mainWidget->setLayout(m_mainLayout);
@@ -501,6 +504,9 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     grid->addWidget(bottomBarWidget, 2, 0, 1, 3);
     grid->addWidget(topBarWidget, 0, 0, 1, 3);
     setLayout(grid);
+
+    centralWidget = new IdealCentralWidget(this);
+    m_mainLayout->addWidget(centralWidget, IdealMainLayout::Central);
 
     KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_L);
@@ -670,10 +676,10 @@ void IdealMainWidget::moveView(View *view, Qt::DockWidgetArea area)
     addView(area, view);
 }
 
-void IdealMainWidget::setCentralWidget(QWidget * widget)
+/*void IdealMainWidget::setCentralWidget(QWidget * widget)
 {
     m_mainLayout->addWidget(widget, IdealMainLayout::Central);
-}
+}*/
 
 void IdealMainWidget::anchorCurrentDock(bool anchor)
 {
@@ -750,26 +756,13 @@ void IdealMainWidget::showDockWidget(QDockWidget * dock, bool show)
     setShowDockStatus(role, show);
 }
 
-IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
-    : QWidget(parent)
-{
-}
-
-IdealCentralWidget::~ IdealCentralWidget()
-{
-}
-
-IdealMainLayout * IdealCentralWidget::idealLayout() const
-{
-    return static_cast<IdealMainLayout*>(layout());
-}
-
-IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)
+IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, QVariant data)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_hover(false)
-    , m_resizeRole(resizeRole)
+    , m_data(data)
 {
+    qRegisterMetaType<IdealMainLayout::Role>("IdealMainLayout::Role");
     setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
     setMouseTracking(true);
 }
@@ -785,6 +778,7 @@ void IdealSplitterHandle::paintEvent(QPaintEvent *)
 
     options.state |= QStyle::State_Enabled;
 
+    //painter.fillRect(options.rect, options.palette.background());
     painter.drawControl(QStyle::CE_Splitter, options);
 }
 
@@ -795,18 +789,19 @@ void IdealSplitterHandle::mouseMoveEvent(QMouseEvent * event)
 
     int thickness = convert(parentWidget()->mapFromGlobal(event->globalPos())) - m_dragStart;
 
-    switch (m_resizeRole) {
-        case IdealMainLayout::Right:
-            thickness = parentWidget()->size().width() - thickness;
+    int width = 0;
+    switch (m_orientation) {
+        case Qt::Vertical:
+            width = parentWidget()->size().width();
             break;
-        case IdealMainLayout::Bottom:
-            thickness = parentWidget()->size().height() - thickness;
+        case Qt::Horizontal:
+            width = parentWidget()->size().height();
             break;
         default:
             break;
     }
 
-    emit resize(thickness, m_resizeRole);
+    emit resize(thickness, width, m_data);
 }
 
 void IdealSplitterHandle::mousePressEvent(QMouseEvent * event)
@@ -827,7 +822,7 @@ IdealMainLayout * IdealMainWidget::mainLayout() const
 
 IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 {
-    return mainWidget;
+    return centralWidget;
 }
 
 void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
@@ -1087,6 +1082,12 @@ void IdealDockWidgetButton::paintEvent(QPaintEvent *)
     const int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
     options.iconSize = QSize(size, size);
     painter.drawComplexControl(QStyle::CC_ToolButton, options);
+}
+
+MainWindow * Sublime::IdealMainWidget::mainWindow() const
+{
+    Q_ASSERT(qobject_cast<MainWindow*>(QWidget::parent()));
+    return static_cast<MainWindow*>(QWidget::parent());
 }
 
 #include "ideal.moc"
