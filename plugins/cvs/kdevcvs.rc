@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevCvs" version="1">
-<MenuBar>
-  <Menu name="CVS"><Text>&amp;CVS</Text>
+
+  <Menu name="cvs_popup">
+    <text context="@title:menu">CVS</text>
     <Action name="cvs_import" />
     <Action name="cvs_checkout" />
     <Action name="cvs_status" />
   </Menu>
-</MenuBar>
+
 </kpartgui>

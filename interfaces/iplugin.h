@@ -195,6 +195,12 @@ public Q_SLOTS:
      */
     void newIconLoader() const;
 
+protected Q_SLOTS:
+    /**
+     * A new GUI client has been loaded.
+     */
+    virtual void guiClientAdded(KXMLGUIClient *client);
+
 protected:
     void addExtension( const QString& );
 

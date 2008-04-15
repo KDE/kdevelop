@@ -31,6 +31,9 @@
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kiconloader.h>
+#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
+#include <kxmlguifactory.h>
 #include <kdebug.h>
 #include "icore.h"
 #include "iplugincontroller.h"
@@ -92,11 +95,24 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
     // creation so plugins have access to ICore during their creation.
     d->core = static_cast<KDevelop::ICore*>(parent);
     setComponentData( instance );
+
+    foreach (KMainWindow* mw, KMainWindow::memberList()) {
+	KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
+	if (! guiWindow)
+	    continue;
+
+	connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient *)),
+		this, SLOT(guiClientAdded(KXMLGUIClient *)));
+    }
 }
 
 IPlugin::~IPlugin()
 {
     delete d;
+}
+
+void IPlugin::guiClientAdded(KXMLGUIClient *)
+{
 }
 
 Qt::DockWidgetArea IPlugin::dockWidgetAreaHint() const
