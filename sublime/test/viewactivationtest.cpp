@@ -176,6 +176,22 @@ void ViewActivationTest::testActivationAfterViewRemoval()
     QCOMPARE(mw.activeView(), view221);
 }
 
+void ViewActivationTest::testActivationAfterRemovalSimplestCase()
+{
+    //we don't have split views - just two views in one area index
+    MainWindow mw(controller);
+    Area *area = new Area(controller, "Area");
+    View *v1 = doc1->createView();
+    View *v2 = doc2->createView();
+    area->addView(v1);
+    area->addView(v2, v1);
+    mw.activateView(v2);
+
+    //delete active view and check that previous is activated
+    delete area->removeView(v2);
+    kDebug() << "ACTIVE VIEW:" << mw.activeView();
+    QCOMPARE(mw.activeView(), v1);
+}
+
 KDEVTEST_MAIN(ViewActivationTest)
 #include "viewactivationtest.moc"
-
