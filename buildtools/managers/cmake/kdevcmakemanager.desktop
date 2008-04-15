@@ -57,4 +57,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDevelop-FileManager=CMake
 X-KDevelop-Version=4
 X-KDevelop-Category=Project
-X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,org.kdevelop.ILanguageSupport
+X-KDevelop-Language=CMake
+X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,ILanguageSupport
+X-KDevelop-SupportedMimeTypes=text/x-cmake
+

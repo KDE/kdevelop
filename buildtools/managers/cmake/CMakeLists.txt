@@ -34,6 +34,7 @@ set( cmakecommon_SRCS
 
 set( cmakemanager_SRCS
   cmakemanager.cpp
+  cmakehighlighting.cpp
 )
 
 set( cmakesettings_SRCS
@@ -56,13 +57,15 @@ remove_definitions( -DQT_NO_STL )
 kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBRARY}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
-		       ${KDEVPLATFORM_EDITOR_LIBRARY})
-#QtScript is used for the MathAst
+                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY}
+                        ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+                        ${KDEVPLATFORM_EDITOR_LIBRARY})
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon ${KDEVPLATFORM_PROJECT_LIBRARY} )
+                        ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon
+                        ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+                        ${KDE4_KTEXTEDITOR_LIBS})
 
 
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )

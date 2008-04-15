@@ -37,12 +37,14 @@
 
 class QDir;
 class QObject;
+class CMakeHighlighting;
 
 namespace KDevelop
 {
     class IProject;
     class IProjectBuilder;
     class ILanguage;
+    class ICodeHighlighting;
     class ProjectFolderItem;
     class ProjectBaseItem;
     class ProjectFileItem;
@@ -53,7 +55,8 @@ namespace KDevelop
 class CMakeFolderItem;
 class ICMakeBuilder;
 
-class CMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager, public KDevelop::ILanguageSupport
+class CMakeProjectManager
+    : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager, public KDevelop::ILanguageSupport
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
@@ -107,6 +110,9 @@ public:
     virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
     
     virtual KDevelop::ILanguage *language();
+
+    const KDevelop::ICodeHighlighting* codeHighlighting() const;
+
 public slots:
     void dirtyFile(const QString& file);
 
@@ -131,6 +137,7 @@ private:
 
     QStringList cmakeInitScripts;
     ICMakeBuilder* m_builder;
+    CMakeHighlighting *m_highlight;
     QList<KDevelop::ProjectTargetItem*> m_targets;
 };
 

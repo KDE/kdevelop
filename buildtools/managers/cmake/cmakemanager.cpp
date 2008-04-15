@@ -38,6 +38,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <projectmodel.h>
+#include <cmakehighlighting.h>
 
 #include <duchain.h>
 #include <dumpchain.h>
@@ -93,7 +94,8 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     {
         m_builder = i->extension<ICMakeBuilder>();
     }
-    
+
+    m_highlight = new CMakeHighlighting(this);
     QStringList envVars;
 #ifdef Q_OS_WIN
     envVars=CMakeProjectVisitor::envVarDirectories("Path");
@@ -624,6 +626,11 @@ KDevelop::ParseJob * CMakeProjectManager::createParseJob(const KUrl & url)
 KDevelop::ILanguage * CMakeProjectManager::language()
 {
     return core()->languageController()->language(name());
+}
+
+const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
+{
+    return m_highlight;
 }
 
 #include "cmakemanager.moc"

@@ -1472,8 +1472,8 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        Declaration *d = new Declaration(m_topctx->url(), SimpleRange(arg.line, arg.column,
-                arg.line, arg.column+arg.value.length()), Declaration::GlobalScope, m_topctx);
+        Declaration *d = new Declaration(m_topctx->url(), SimpleRange(arg.line-1, arg.column-1,
+                arg.line-1, arg.column+arg.value.length()-1), Declaration::GlobalScope, m_topctx);
         d->setIdentifier( Identifier(arg.value) );
     }
 }
