@@ -178,7 +178,8 @@ void MainWindow::documentStateChanged( IDocument* document )
 void MainWindow::documentClosed( IDocument* document )
 {
     Q_UNUSED(document);
-    setCaption(QString(), false);
+    if (Core::self()->documentController()->openDocuments().count() == 0)
+        setCaption(QString(), false);
 }
 
 }
