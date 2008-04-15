@@ -14,6 +14,7 @@ include_directories(
         )
 
 add_subdirectory(parser)
+add_subdirectory(duchain)
 
 ########### next target ###############
 
