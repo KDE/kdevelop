@@ -36,11 +36,13 @@ const QString ContextMenuExtension::DebugGroup    = "DebugGroup";
 const QString ContextMenuExtension::EditGroup     = "EditGroup";
 const QString ContextMenuExtension::VcsGroup      = "VcsGroup";
 const QString ContextMenuExtension::ProjectGroup  = "ProjectGroup";
+const QString ContextMenuExtension::ExtensionGroup  = "ExtensionGroup";
+
 
 class ContextMenuExtensionPrivate
 {
 public:
-    QMap<QString,QList<KAction*> > extensions;
+    QMap<QString,QList<QAction*> > extensions;
 };
 
 ContextMenuExtension::ContextMenuExtension()
@@ -68,19 +70,19 @@ ContextMenuExtension& ContextMenuExtension::operator=( const ContextMenuExtensio
     return *this;
 }
 
-QList<KAction*> ContextMenuExtension::actions( const QString& group ) const
+QList<QAction*> ContextMenuExtension::actions( const QString& group ) const
 {
     if( d->extensions.contains( group ) )
         return d->extensions.value( group );
     else
-        return QList<KAction*>();
+        return QList<QAction*>();
 }
 
-void ContextMenuExtension::addAction( const QString& group, KAction* action )
+void ContextMenuExtension::addAction( const QString& group, QAction* action )
 {
     if( !d->extensions.contains( group ) )
     {
-        d->extensions.insert( group, QList<KAction*>() << action );
+        d->extensions.insert( group, QList<QAction*>() << action );
     } else
     {
         d->extensions[group].append( action );

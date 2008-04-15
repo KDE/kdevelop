@@ -25,7 +25,7 @@
 
 #include "interfacesexport.h"
 
-class KAction;
+class QAction;
 template <typename T> class QList;
 namespace KDevelop
 {
@@ -51,6 +51,13 @@ public:
     /** menu group to contain project actions */
     static const QString ProjectGroup;
 
+    /** menu group that can contain any extension menu,
+      * actions for this extension will always be at the end
+      * of the menu and plugins using that should think about
+      * providing a menu-action so it doesn't get cluttered
+      */
+    static const QString ExtensionGroup;
+
     /**
      * create new context menu extension object
      */
@@ -65,14 +72,14 @@ public:
      * @param group the menu group to which the action should be added
      * @param action the action to add to the menu group
      */
-    void addAction( const QString& group, KAction* action );
+    void addAction( const QString& group, QAction* action );
 
     /**
      * return all actions that are in the menu group
      * @param group the menu group from which to get the actions
      * @returns a list of actions for that menu group
      */
-    QList<KAction*> actions( const QString& group ) const;
+    QList<QAction*> actions( const QString& group ) const;
 
 private:
     class ContextMenuExtensionPrivate* const d;
