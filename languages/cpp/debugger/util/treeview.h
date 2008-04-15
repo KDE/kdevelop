@@ -16,6 +16,7 @@ namespace GDBDebugger
 
     private slots:
         void slotExpanded(const QModelIndex &index);
+        void slotCollapsed(const QModelIndex &index);
         void slotClicked(const QModelIndex &index);
     };
 

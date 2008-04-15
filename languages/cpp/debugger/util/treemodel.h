@@ -21,6 +21,7 @@ public:
     ~TreeModel();
 
     void expanded(const QModelIndex &index);
+    void collapsed(const QModelIndex &index);
     void clicked(const QModelIndex &index);
 
 public: // QAbstractItemModel overrides
@@ -42,6 +43,7 @@ public:
     using QAbstractItemModel::endInsertRows;
     using QAbstractItemModel::beginRemoveRows;
     using QAbstractItemModel::endRemoveRows;
+    using QAbstractItemModel::dataChanged;
 
 private:
     QVector<QString> headers_;

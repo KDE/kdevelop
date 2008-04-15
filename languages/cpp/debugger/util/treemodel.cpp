@@ -137,8 +137,15 @@ QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
 void TreeModel::expanded(const QModelIndex &index)
 {
     TreeItem* item = itemForIndex(index);
-    if (item->hasMore())
+    if (item->hasMore() && item->childCount() == 1)
         item->fetchMoreChildren();
+    item->setExpanded(true);
+}
+
+void TreeModel::collapsed(const QModelIndex &index)
+{
+    TreeItem* item = itemForIndex(index);
+    item->setExpanded(false);
 }
 
 void TreeModel::clicked(const QModelIndex &index)

@@ -31,6 +31,7 @@ void TreeItem::setData(const QVector<QString> &data)
 void TreeItem::appendChild(TreeItem *item)
 {
     QModelIndex index = model_->indexForItem(this, 0);
+    QModelIndex index2 = model_->indexForItem(this, itemData.size()-1);
 
     if (more_)
     {
@@ -38,6 +39,7 @@ void TreeItem::appendChild(TreeItem *item)
            essentially replacing "..." with this new
            item.  */
         childItems.append(item);
+        emit model_->dataChanged(index, index2);
         more_ = false;
     }
     else
@@ -48,6 +50,22 @@ void TreeItem::appendChild(TreeItem *item)
     }
 }
 
+void TreeItem::reportChange()
+{
+    QModelIndex index = model_->indexForItem(this, 0);
+    QModelIndex index2 = model_->indexForItem(this, itemData.size()-1);
+    emit model_->dataChanged(index, index2);
+}
+
+void TreeItem::removeChild(int index)
+{
+    QModelIndex modelIndex = model_->indexForItem(this, 0);
+
+    model_->beginRemoveRows(modelIndex, index, index);
+    childItems.erase(childItems.begin() + index);
+    model_->endRemoveRows();
+}
+
 void TreeItem::clear()
 {
     if (childItems.size() || more_)
@@ -55,11 +73,11 @@ void TreeItem::clear()
         QModelIndex index = model_->indexForItem(this, 0);
         model_->beginRemoveRows(index, 0, childItems.size()-1+more_);
         childItems.clear();
+        more_ = false;
+        delete ellipsis_;
+        ellipsis_ = 0;
         model_->endRemoveRows();
     }
-
-    more_ = false;
-    delete ellipsis_;
 }
 
 TreeItem *TreeItem::child(int row)

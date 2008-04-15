@@ -42,6 +42,11 @@ protected: // Interface for derived classes
         Clears the "hasMore" flag.  */
     void appendChild(TreeItem *child);
 
+    void removeChild(int index);
+
+    /** Report change in data of this item.  */
+    void reportChange();
+
     /** Clears all children.  */
     void clear();
 
@@ -53,6 +58,8 @@ protected: // Interface for derived classes
 
     TreeModel* model() { return model_; }
 
+    bool isExpanded() const { return expanded_; }
+
 protected: // Backend implementation of Model/View
     friend class TreeModel;
 
@@ -63,16 +70,18 @@ protected: // Backend implementation of Model/View
     int row() const;
     TreeItem *parent();
     bool hasMore() const { return more_; }
+    void setExpanded(bool b) { expanded_ = b; }
 
     virtual void clicked() {}
 
 protected:
-    QList<TreeItem*> childItems;
+    QVector<TreeItem*> childItems;
     QVector<QVariant> itemData;
     TreeItem *parentItem;
     TreeModel *model_;
     bool more_;
     TreeItem *ellipsis_;
+    bool expanded_;
 };
 
 }

@@ -34,6 +34,8 @@
 #include "util/treeitem.h"
 #include "util/treemodel.h"
 
+// #include "modeltest.h"
+
 using namespace GDBMI;
 using namespace GDBDebugger;
 
@@ -63,6 +65,11 @@ public:
     Frame(TreeModel* model, TreeItem* parent, const GDBMI::Value& frame)
     : TreeItem(model, parent)
     {
+        updateSelf(frame);
+    }
+
+    void updateSelf(const GDBMI::Value& frame)
+    {
         setData(QVector<QString>() 
                 << ("#" + frame["level"].literal())
                 << get_function_or_address(frame)
@@ -81,20 +88,44 @@ public:
     : TreeItem(model, parent), controller_(controller)
     {
         id_ = thread["id"].toInt();
+
+        updateSelf(thread, true);
+        setHasMoreInitial(true);
+    }
+
+    int id() const { return id_; }
+
+    void updateSelf(const GDBMI::Value& thread, bool initial = false)
+    {
         const GDBMI::Value& frame = thread["frame"];
         setData(QVector<QString>()
                 << ("Thread " + thread["id"].literal())
                 << get_function_or_address(frame)
                 << get_source(frame));
-
-        setHasMoreInitial(true);
+        if (!initial)
+            reportChange();
     }
 
-    void fetchMoreChildren() 
+    void updateChildren()
+    {
+        if (isExpanded())
+            fetchMoreChildren_1(true);
+    }
+
+    void fetchMoreChildren()
+    {
+        fetchMoreChildren_1(false);
+    }
+
+    void fetchMoreChildren_1(bool clear) 
     {
         /* Note that the children are frames starting from the #1,
            with data for #0 shown in the thread item itself.  */
-        int now = childItems.size() + 1;
+        int now;
+        if (clear)
+            now = 1;
+        else 
+            now = childItems.size() + 1;
         int next = now + step + 1;
         QString arg = QString("%1 %2").arg(now).arg(next);
 
@@ -108,14 +139,37 @@ public:
     void handleFrameList(const GDBMI::ResultRecord& r)
     {
         const GDBMI::Value& stack = r["stack"];
-        if (stack[0]["level"].toInt() != childItems.size() + 1)
+        int first = stack[0]["level"].toInt();
+        if (first == 1)
         {
-            kDebug(9012) << "Got wrong frames\n";
-            return;
+            /* For smooth update, after stepping we update first
+               block of frames without previously clearing the
+               existing ones. */
+            int i;
+            for (i = 0; i < step && i < stack.size(); ++i)
+            {
+                if (i < childItems.count())
+                {
+                    Frame *f = static_cast<Frame *>(child(i));
+                    f->updateSelf(stack[i]);
+                }
+                else
+                    appendChild(new Frame(model(), this, stack[i]));
+            }
+            while (i < childItems.count())
+                removeChild(i);
         }
-        for (int i = 0; i < step && i < stack.size(); ++i)
+        else
         {
-            appendChild(new Frame(model(), this, stack[i]));
+            if (first  != childItems.size() + 1)
+            {
+                kDebug(9012) << "Got wrong frames\n";
+                return;
+            }
+            for (int i = 0; i < step && i < stack.size(); ++i)
+            {
+                appendChild(new Frame(model(), this, stack[i]));
+            }
         }
 
         setHasMore(stack.size() > step);
@@ -137,7 +191,6 @@ public:
 
     void update()
     {
-        clear();
         controller_->addCommand(
             new GDBCommand(ThreadInfo, "",
                            this,
@@ -154,17 +207,62 @@ private:
     {
         const GDBMI::Value& threads = r["threads"];
         int current_id = r["current-thread-id"].toInt();
-        int current_index;
 
+        // Collect the set of ids that are present in
+        // target now.
+        QSet<int> present;
         for (unsigned i = 0; i < threads.size(); ++i)
+            present.insert(threads[i]["id"].toInt());
+
+        // Remove threads that are no longer present
+        for (int i = 0; i < childItems.size(); ++i)
         {
-            if (threads[i]["id"].toInt() == current_id)
-                current_index = i;
-            appendChild(new Thread(model(), this,
-                                   controller_, threads[i]));
+            Thread* t = static_cast<Thread *>(child(i));
+            if (!present.contains(t->id()))
+                removeChild(i);
         }
 
-        //static_cast<Thread*>(child(current_index))->fetchMoreChildren();
+        int gidx, kidx;
+        // Traverse GDB threads in backward order -- since GDB
+        // reports them in backward order. We want UI to
+        // show thread IDs in the natural order.
+        // FIXME: make the code independent of whatever craziness
+        // gdb might have tomorrow.
+
+        gidx = threads.size()-1;
+        kidx = 0;
+
+        for (; gidx >= 0; --gidx)
+        {
+            bool updated = false;
+            if (kidx < childItems.size())
+            {
+                Thread* t = static_cast<Thread *>(child(kidx));
+                if (threads[gidx]["id"].toInt() == t->id())
+                {
+                    t->updateSelf(threads[gidx]);
+                    updated = true;
+                    ++kidx;
+                }                
+            }
+            if (!updated)
+                break;
+        }
+         
+        for (; gidx >= 0; --gidx)
+            appendChild(new Thread(model(), this,
+                                   controller_, threads[gidx]));
+
+        /* Update the frames of the current thread.  */
+        for (int i = 0; i < childItems.size(); ++i)
+        {
+            Thread* t = static_cast<Thread *>(child(i));
+            if (t->id() == current_id)
+            {
+                t->updateChildren();
+                break;
+            }
+        }
     }
 
     GDBController* controller_;    
