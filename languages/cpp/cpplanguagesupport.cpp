@@ -99,6 +99,11 @@ QString addDot(QString ext) {
     return "." + ext;
 }
 
+KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c) {
+  c.setColumn(0);
+  return c;
+}
+
 //#define DEBUG
 
 //When this is enabled, the include-path-resolver will always be issued,
@@ -131,8 +136,8 @@ Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* 
   return 0;
 }
 
-///Tries to find a definition for the given cursor-position and document-url. DUChain must be locked.
-Declaration* definitionForCursor(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
+///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
+Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
   QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
   foreach(TopDUContext* ctx, topContexts) {
     Declaration* decl = declarationInLine(cursor, ctx);
@@ -328,42 +333,64 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   
   TopDUContext* standardCtx = standardContext(doc->url());
   if(standardCtx) {
-    DUContext* ctx = standardCtx->findContext(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
+    Declaration* definition = 0;
+    SimpleCursor cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition());
+
+    DUContext* ctx = standardCtx->findContext(cursor);
+    if(!ctx)
+      ctx = standardCtx;
+
+    if(ctx)
+      kDebug() << "found context" << ctx->scopeIdentifier();
+    else
+      kDebug() << "found no context";
+
     while(ctx && ctx->parentContext() && ctx->parentContext()->type() == DUContext::Other)
       ctx = ctx->parentContext();
 
-    if(ctx && ctx->owner() && ctx->type() == DUContext::Other) {
-      if(ctx->owner()->isDefinition()) {
-        Declaration* decl = ctx->owner()->declaration();
-
-        if(decl) {
-          KTextEditor::Cursor c = decl->range().textRange().start();
-          lock.unlock();
-          core()->documentController()->openDocument(KUrl(decl->url().str()), c);
-          return;
-        }else{
-          kDebug(9007) << "Definition has no assigned declaration";
-        }
-      }
+    if(ctx && ctx->owner() && ctx->type() == DUContext::Other && ctx->owner()->isDefinition()) {
+      definition = ctx->owner();
+      kDebug() << "found definition while traversing:" << definition->toString();
     }
+
+    if(!definition && ctx) {
+      definition = declarationInLine(cursor, ctx);
+      if(definition)
+        kDebug() << "found definition using declarationInLine:" << definition->toString();
+      else
+        kDebug() << "not found definition using declarationInLine";
+    }
+
+    if(definition && definition->isDefinition() && definition->declaration()) {
+      Declaration* declaration = definition->declaration();
+      KTextEditor::Cursor c = declaration->range().textRange().start();
+      KUrl url(declaration->url().str());
+      kDebug() << "found definition that has declaration: " << definition->toString() << "cursor" << c << "url" << url;
+      lock.unlock();
+      core()->documentController()->openDocument(url, normalizeCursor(c));
+      return;
+    }else{
+      kDebug(9007) << "Definition has no assigned declaration";
+    }
+
     kDebug(9007) << "Could not get definition/declaration from context";
   }else{
     kDebug(9007) << "Got no context for the current document";
   }
 
-  Declaration* def = definitionForCursor(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
+  Declaration* def = definitionForCursorDeclaration(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
 
   if(def) {
     ///@todo If the cursor is already in the target context, do not move it.
     if(def->internalContext()) {
       KTextEditor::Cursor c = def->internalContext()->range().textRange().start();
       lock.unlock();
-      core()->documentController()->openDocument(KUrl(def->url().str()), c);
+      core()->documentController()->openDocument(KUrl(def->url().str()), normalizeCursor(c));
     }else{
       kWarning(9007) << "Declaration does not have internal context";
       KTextEditor::Cursor c = def->range().textRange().start();
       lock.unlock();
-      core()->documentController()->openDocument(KUrl(def->url().str()), c);
+      core()->documentController()->openDocument(KUrl(def->url().str()), normalizeCursor(c));
     }
     return;
   }else{
@@ -980,7 +1007,6 @@ UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent )
 void UIBlockTester::lockup() {
     kDebug() << "ui is blocking";
         //std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
-         int a = 1; ///Place breakpoint here
  }
 
 #include "cpplanguagesupport.moc"
