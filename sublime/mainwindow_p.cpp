@@ -150,14 +150,6 @@ void MainWindowPrivate::activateFirstVisibleView()
         m_mainWindow->activateView(area->views().first());
 }
 
-bool MainWindowPrivate::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::FocusIn)
-        idealMainWidget->centralWidgetFocused();
-
-    return false;
-}
-
 }
 
 #include "mainwindow_p.moc"

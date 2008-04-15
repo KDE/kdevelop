@@ -242,6 +242,8 @@ private:
     /** Map from QDockWidget  to an action that shows/hides
         that QDockWidget.  */
     QMap<QDockWidget*, QAction*> m_dockwidget_to_action;
+
+    bool m_centralWidgetFocusing;
 };
 
 class IdealSplitterHandle : public QWidget

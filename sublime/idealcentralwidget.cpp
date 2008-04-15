@@ -28,6 +28,7 @@ using namespace Sublime;
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
     : QWidget(parent)
+    , m_mainWidget(parent)
 {
     setLayout(new IdealCentralLayout(parent->mainWindow(), this));
 }
@@ -62,6 +63,19 @@ void IdealCentralWidget::viewAdded(Sublime::AreaIndex * index, Sublime::View * v
 void IdealCentralWidget::aboutToRemoveView(Sublime::AreaIndex* index, Sublime::View* view)
 {
     centralLayout()->removeView(index, view);
+}
+
+bool IdealCentralWidget::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn)
+        mainWidget()->centralWidgetFocused();
+
+    return false;
+}
+
+IdealMainWidget * Sublime::IdealCentralWidget::mainWidget() const
+{
+    return m_mainWidget;
 }
 
 #include "idealcentralwidget.moc"

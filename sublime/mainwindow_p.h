@@ -96,9 +96,6 @@ private slots:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
 
-protected:
-    virtual bool eventFilter(QObject *, QEvent *event);
-
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
 

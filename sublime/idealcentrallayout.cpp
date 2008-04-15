@@ -607,6 +607,9 @@ void IdealCentralLayout::createViewItem(AreaLayout* layout, View* view)
         QWidgetItem* viewItem = new QWidgetItem(view->widget(parentWidget()));
         addChildWidget(view->widget());
         layout->viewItems[view] = viewItem;
+        view->widget()->installEventFilter(parentWidget());
+        foreach (QWidget* widget, view->widget()->findChildren<QWidget*>())
+            widget->installEventFilter(parentWidget());
     }
 }
 
