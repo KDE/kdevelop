@@ -315,6 +315,12 @@ bool Project::open( const KUrl& projectFileUrl_ )
         return false;
     }
 
+    QString vcsPlugin = projectGroup.readEntry("VersionControlSupport", "");
+    if( !vcsPlugin.isEmpty() )
+    {
+        d->vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPlugin );
+    }
+
     return true;
 }
 
