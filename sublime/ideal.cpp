@@ -291,18 +291,18 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     m_maximize->setToolTip(i18n("Maximize the tool"));
     connect(m_maximize, SIGNAL(toggled(bool)), SLOT(slotMaximize(bool)));
 
-    QToolButton* close = new IdealDockWidgetButton();
-    close->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
-    close->setToolTip(i18n("Remove the tool"));
-    close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
+    m_close = new IdealDockWidgetButton();
+    m_close->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+    m_close->setToolTip(i18n("Remove the tool"));
+    m_close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
 		        "You can add the tool again by using the "
 			"<tt>View->Add Tool View</tt> command."));
-    connect(close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
+    connect(m_close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
 
     box->addStretch();
     box->addWidget(m_anchor);
     box->addWidget(m_maximize);
-    box->addWidget(close);
+    box->addWidget(m_close);
 }
 
 IdealDockWidgetTitle::~IdealDockWidgetTitle()
@@ -315,7 +315,9 @@ QSize IdealDockWidgetTitle::sizeHint() const
 }
 
 QSize IdealDockWidgetTitle::minimumSizeHint() const
-{ return QWidget::minimumSizeHint(); }
+{
+    return QWidget::minimumSizeHint();
+}
 
 void IdealDockWidgetTitle::mouseDoubleClickEvent(QMouseEvent *event)
 {
@@ -328,11 +330,31 @@ bool IdealDockWidgetTitle::isMaximized() const
     return m_maximize->isChecked();
 }
 
+QRect IdealDockWidgetTitle::titleArea(const QRect &origin)
+{
+    QRect r = origin;
+    if (m_orientation == Qt::Vertical)
+        r.adjust(0, buttonsArea().height(), 0, 0);
+    else
+        r.adjust(0, 0, -buttonsArea().width(), 0);
+    return r;
+}
+
+QSize IdealDockWidgetTitle::buttonsArea()
+{
+    QSize s;
+    s += m_anchor->size();
+    s += m_maximize->size();
+    s += m_close->size();
+    return s;
+}
+
 void IdealDockWidgetTitle::paintEvent(QPaintEvent *)
 {
     QStylePainter painter(this);
     QStyleOptionDockWidgetV2 options;
     options.initFrom(this);
+    options.rect = titleArea(options.rect);
     options.rect.adjust(0, 0, -1, -1);
     options.state |= QStyle::State_Active;
     options.title = parentWidget()->windowTitle();

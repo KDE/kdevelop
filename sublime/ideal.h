@@ -143,9 +143,13 @@ private Q_SLOTS:
     void slotRemove();
 
 private:
+    QRect titleArea(const QRect &origin);
+    QSize buttonsArea();
+
     Qt::Orientation m_orientation;
     QToolButton* m_anchor;
     QToolButton* m_maximize;
+    QToolButton* m_close;
     Area *m_area;
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
