@@ -572,6 +572,9 @@ public:
 
 void IdealCentralLayout::activateView(View* view)
 {
+    if (!m_topArea)
+        return;
+
     ViewFinder f(view);
     m_topArea->walkLayout(f);
 
@@ -728,6 +731,11 @@ void Sublime::IdealCentralLayout::aboutToRemoveAreaIndex(Sublime::AreaIndex * in
     parent->clearChildren();
 
     invalidate();
+}
+
+AreaLayout * Sublime::IdealCentralLayout::topLayout() const
+{
+    return m_topArea;
 }
 
 #include "idealcentrallayout.moc"

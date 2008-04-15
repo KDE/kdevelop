@@ -23,6 +23,8 @@
 
 #include <QWidget>
 
+#include "sublimeexport.h"
+
 namespace Sublime {
 
 class Area;
@@ -31,7 +33,7 @@ class View;
 class IdealMainWidget;
 class IdealCentralLayout;
 
-class IdealCentralWidget : public QWidget
+class SUBLIME_EXPORT IdealCentralWidget : public QWidget
 {
     Q_OBJECT
 

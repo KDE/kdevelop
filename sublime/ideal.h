@@ -25,6 +25,7 @@
 #include <QtGui>
 
 #include "ideallayout.h"
+#include "sublimeexport.h"
 
 class KAction;
 class KActionMenu;
@@ -158,7 +159,7 @@ private:
 
 class View;
 
-class IdealMainWidget : public QWidget
+class SUBLIME_EXPORT IdealMainWidget : public QWidget
 {
     Q_OBJECT
 
