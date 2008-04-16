@@ -94,8 +94,6 @@ void DUContextPrivate::synchronizeUsesFromSmart() const
   for(int a = 0; a < m_uses.count(); a++)
     if(m_rangesForUses[a])
       m_uses[a].m_range = SimpleRange(*m_rangesForUses[a]);
-    else
-      kDebug() << "bad smart-range";
 
   m_rangesChanged = false;
 }
