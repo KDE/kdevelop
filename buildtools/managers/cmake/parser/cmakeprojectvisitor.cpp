@@ -1482,7 +1482,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
         }
         else
         {
-            qDebug() << "nnnnnnn" << arg.value;
+//             qDebug() << "nnnnnnn" << arg.value;
             Declaration *d = new Declaration(m_topctx->url(), range, Declaration::GlobalScope, m_topctx);
             d->setIdentifier( Identifier(arg.value) );
         }
@@ -1507,7 +1507,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         {
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var), SimpleCursor(1000,0));
             
-            qDebug() << "oooooooo" << var << decls.isEmpty();
+//             qDebug() << "oooooooo" << var << decls.isEmpty();
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
