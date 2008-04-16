@@ -1,7 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="kdevstandardoutputview" version="4">
 <MenuBar>
-  <Menu name="view"><Text>&amp;View</Text>
+  <Menu name="view">
+    <Text context="@title:menu">View</Text>
     <Action name="next_error" />
     <Action name="prev_error" />
   </Menu>
