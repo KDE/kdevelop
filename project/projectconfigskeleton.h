@@ -43,6 +43,7 @@ public:
 
     virtual ~ProjectConfigSkeleton();
 
+    void setDeveloperTempFile( const QString& );
     void setProjectTempFile( const QString& );
     void setProjectFileUrl( const QString& );
     void setDeveloperFileUrl( const QString& );

@@ -47,6 +47,12 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
 {
 }
 
+void ProjectConfigSkeleton::setDeveloperTempFile( const QString& cfg )
+{
+    d->m_developerTempFile = cfg;
+    setSharedConfig( KSharedConfig::openConfig( cfg ) );
+}
+
 void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 {
     d->m_projectTempFile = cfg;
