@@ -26,6 +26,7 @@
 #include <simplerange.h>
 #include <topducontext.h>
 #include <duchain.h>
+#include <dumpchain.h>
 #include <duchainlock.h>
 #include <parsingenvironment.h>
 
@@ -86,6 +87,7 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     const int count=exp.count();
     bool done=false;
     int prev=-1;
+    before=0; //TODO: remove me
     
     for(int i=before; i<count && !done; i++)
     {
@@ -1419,7 +1421,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         if(m_topctx==0)
         {
             m_topctx=new TopDUContext(HashedString(KUrl(fc[0].filePath).prettyUrl()),
-                    SimpleRange(0,0, fc.last().endColumn, fc.last().endLine));
+                    SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
+            
             DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).prettyUrl())), m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
         }
@@ -1496,7 +1499,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-          QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value), SimpleCursor(1000,0));
+        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
         if(!decls.isEmpty())
         {
             int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
@@ -1519,20 +1522,26 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
     foreach(const CMakeFunctionArgument &arg, desc.arguments)
     {
         if(!arg.isCorrect())
+        {
             continue;
+        }
         
         int after;
         VariableType type;
         QString var = variableName(arg.value, type, before, after);
         if(type)
         {
-            QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var), SimpleCursor(1000,0));
+            QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
             
-//             qDebug() << "oooooooo" << var << decls.isEmpty();
+//             qDebug() << "uuuuuuse" << decls.isEmpty();
+            
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
-                m_topctx->createUse(idx, SimpleRange(arg.line-1, before, arg.line-1, after), 0);
+                m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column+before, arg.line-1, arg.column+after), 0);
+                
+//                 DumpChain d;
+//                 d.dump(m_topctx);
             }
         }
         before+=2;

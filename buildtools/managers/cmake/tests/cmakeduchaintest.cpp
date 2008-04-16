@@ -135,7 +135,7 @@ void CMakeDUChainTest::testUses()
 {
     QString input("project(simpletest)\n"
             "set(var a b c)\n"
-	    "set(var2 ${var})\n");
+            "set(var2 ${var})\n");
 
     QFile file("cmake_duchain_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
@@ -166,7 +166,13 @@ void CMakeDUChainTest::testUses()
     QVERIFY(declarations[0]->inSymbolTable());
     QVERIFY(declarations[1]->inSymbolTable());
     QCOMPARE(ctx->uses().size(), 1);
-    QCOMPARE(ctx->range().end.line, 4);
+    
+    if(ctx->uses().first().m_range.textRange() != SimpleRange(2,4,2,7).textRange())
+        kDebug() << ctx->uses().first().m_range.textRange();
+    QCOMPARE(ctx->uses().first().m_range.textRange(), SimpleRange(2,4,2,7).textRange());
+
+    QCOMPARE(ctx->range().end.column, 15);
+    QCOMPARE(ctx->range().end.line, 2);
     
     DUChain::self()->clear();
 }
