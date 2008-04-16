@@ -63,7 +63,7 @@ public:
     /**
       * Should return a code-highlighting instance for this language, or zero.
       */
-    virtual ICodeHighlighting* codeHighlighting() const;
+    virtual const ICodeHighlighting* codeHighlighting() const;
 
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
