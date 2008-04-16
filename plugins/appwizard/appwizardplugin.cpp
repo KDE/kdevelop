@@ -74,7 +74,7 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
                                "application from a set of templates.</p>") );
 
     action = actionCollection()->addAction( "project_import" );
-    action->setIcon(KIcon("project-import"));
+    action->setIcon(KIcon("document-import"));
     action->setText(i18n( "&Import Existing Project..." ));
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotImportProject() ) );
     action->setToolTip( i18n( "Import existing project" ) );

@@ -605,7 +605,7 @@ BreakpointController::headerData(int section, Qt::Orientation orientation,
 { 
     if (orientation == Qt::Horizontal && role == Qt::DecorationRole
         && section == 0)
-        return KIcon("ok");
+        return KIcon("dialog-ok-apply");
     else if (orientation == Qt::Horizontal && role == Qt::DecorationRole
              && section == 1)
         return KIcon("system-switch-user");
