@@ -2785,25 +2785,7 @@ void Config::check()
   QCString &dotPath = Config_getString("DOT_PATH");
   if (!dotPath.isEmpty())
   {
-    if (dotPath.find('\\')!=-1)
-    {
-      if (dotPath.at(dotPath.length()-1)!='\\')
-      {
-	dotPath+='\\';
-      } 
-    } 
-    else if (dotPath.find('/')!=-1)
-    {
-      if (dotPath.at(dotPath.length()-1)!='/')
-      {
-	dotPath+='/';
-      } 
-    } 
-#if defined(_WIN32)
-    QFileInfo dp(dotPath+"dot.exe");
-#else
-    QFileInfo dp(dotPath+"dot");
-#endif
+    QFileInfo dp(dotPath+"/dot"+portable_commandExtension());
     if (!dp.exists() || !dp.isFile())
     {
       config_err("Warning: the dot tool could not be found at %s\n",dotPath.data());
@@ -2823,7 +2805,6 @@ void Config::check()
     dotPath="";
   }
 
-  
   // check mscgen path
   QCString &mscgenPath = Config_getString("MSCGEN_PATH");
   if (!mscgenPath.isEmpty())
@@ -2847,6 +2828,7 @@ void Config::check()
   {
     mscgenPath="";
   }
+
   
   // check input
   QStrList &inputSources=Config_getList("INPUT");
@@ -2904,7 +2886,8 @@ void Config::check()
     filePatternList.append("*.f");
     filePatternList.append("*.vhd");
     filePatternList.append("*.vhdl");
-#if !defined(_WIN32)
+    if (portable_fileSystemIsCaseSensitive())
+    {
       // unix => case sensitive match => also include useful uppercase versions
       filePatternList.append("*.C");
       filePatternList.append("*.CC"); 
@@ -2924,7 +2907,7 @@ void Config::check()
       filePatternList.append("*.F");
       filePatternList.append("*.VHD");
       filePatternList.append("*.VHDL");
-#endif
+    }
   }
 
   // add default pattern if needed
@@ -2958,18 +2941,19 @@ void Config::check()
     PUTENV(buf);
   }
 
-  int &depth = Config_getInt("MAX_DOT_GRAPH_DEPTH");
-  if (depth==0)
-  {
-    depth=1000;
-  }
-  
   if (Config_getBool("OPTIMIZE_OUTPUT_JAVA") && Config_getBool("INLINE_INFO"))
   {
     // don't show inline info for Java output, since Java has no inline 
     // concept.
     Config_getBool("INLINE_INFO")=FALSE;
   }
+
+  int &depth = Config_getInt("MAX_DOT_GRAPH_DEPTH");
+  if (depth==0)
+  {
+    depth=1000;
+  }
+
   
   // add default words if needed
   QStrList &annotationFromBrief = Config_getList("ABBREVIATE_BRIEF");
