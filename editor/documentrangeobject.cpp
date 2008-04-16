@@ -41,6 +41,10 @@ void DocumentRangeObjectPrivate::syncFromSmart() const {
     if(!m_smartRange)
         return;
     
+    KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+    Q_ASSERT(iface);
+    QMutexLocker l(iface->smartMutex());
+
     m_range = SimpleRange( *m_smartRange );
 }
 
