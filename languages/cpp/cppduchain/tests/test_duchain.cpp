@@ -50,6 +50,8 @@
 
 #include "rpp/preprocessor.h"
 
+#include <typeinfo>
+
 //Uncomment the following line to get additional output from the string-repository test
 //#define DEBUG_STRINGREPOSITORY
 
