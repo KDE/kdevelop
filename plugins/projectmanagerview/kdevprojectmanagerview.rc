@@ -3,10 +3,10 @@
 <MenuBar>
  <Menu name="project">
   <Text context="@title:menu">Run</Text>
-  <Action name="project_buildall"
+  <Action name="project_configure"
 	  group="build_operations"/>
 
-  <Action name="project_configure"
+  <Action name="project_buildall"
 	  group="build_operations"/>
 
   <Action name="project_build"
