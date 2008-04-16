@@ -628,7 +628,7 @@ KDevelop::ILanguage * CMakeProjectManager::language()
     return core()->languageController()->language(name());
 }
 
-const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
+KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
 {
     return m_highlight;
 }

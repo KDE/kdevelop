@@ -111,7 +111,7 @@ public:
     
     virtual KDevelop::ILanguage *language();
 
-    const KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
 
 public slots:
     void dirtyFile(const QString& file);
