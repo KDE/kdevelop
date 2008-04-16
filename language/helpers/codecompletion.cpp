@@ -24,6 +24,7 @@
 #include <kparts/partmanager.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <icore.h>
