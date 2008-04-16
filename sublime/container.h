@@ -52,6 +52,8 @@ public:
 
     virtual void paintEvent(QPaintEvent *ev);
 
+    void setTabBarHidden(bool hide);
+
 protected:
     using KTabWidget::addTab;
     using KTabWidget::insertTab;

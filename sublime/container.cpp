@@ -23,6 +23,11 @@
 #include <QTabBar>
 #include <QStackedLayout>
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <kglobal.h>
+
 #include "view.h"
 #include "document.h"
 
@@ -41,7 +46,8 @@ struct ContainerPrivate {
 Container::Container(QWidget *parent)
     :KTabWidget(parent), d(new ContainerPrivate())
 {
-    setTabBarHidden(true);
+    KConfigGroup group = KGlobal::config()->group("UiSettings");
+    setTabBarHidden(group.readEntry("TabBar Visibility", "Shown") == "Hidden");
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
@@ -92,6 +98,19 @@ void Container::paintEvent(QPaintEvent *ev)
     if (tabBar()->isVisible())
         KTabWidget::paintEvent(ev);
     //otherwise don't paint anything (especially the border around the widget)
+}
+
+void Container::setTabBarHidden(bool hide)
+{
+    KTabWidget::setTabBarHidden(hide);
+    if (hide)
+        setStyleSheet("\
+            QTabWidget::pane {\
+                border: none;\
+            }\
+        ");
+    else
+        setStyleSheet("");
 }
 
 }
