@@ -73,12 +73,15 @@
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
+    <DefineGroup name="project_import"/>
+
     <Separator/>
     <Action name="project_close"/>
     <Action name="project_close_all"/>
+
     <Separator/>
-    <DefineGroup name="project_import"/>
-    <Separator />
+    <DefineGroup name="run_operations" />
+
     <Merge />
     <Separator />
     <Action name="project_config_menu" />
