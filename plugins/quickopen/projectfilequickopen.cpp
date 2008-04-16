@@ -120,7 +120,7 @@ uint ProjectFileDataProvider::itemCount() const {
 QSet<HashedString> ProjectFileDataProvider::files() const {
   QSet<HashedString> ret;
   foreach( const ProjectFile& file, items() ) {
-    ret.insert(file.m_url.prettyUrl());
+    ret.insert(file.m_url.url());
   }
   return ret;
 }
@@ -140,6 +140,5 @@ QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start,
 }
 
 QString ProjectFileDataProvider::itemText( const ProjectFile& data ) const {
-  return data.m_url.prettyUrl();
+  return data.m_url.url();
 }
-
