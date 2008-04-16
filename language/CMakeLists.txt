@@ -46,6 +46,7 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
+    helpers/codecompletion.cpp
 )
 
 
@@ -105,5 +106,6 @@ install(FILES
     duchain/duchainutils.h
     duchain/basecontextbuilder.h
     duchain/dumpchain.h
+    helpers/codecompletion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
