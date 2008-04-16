@@ -109,3 +109,8 @@ install(FILES
     helpers/codecompletion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
+
+install(FILES
+    helpers/codecompletion.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/helpers
+)
