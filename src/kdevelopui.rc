@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="47" name="kdevelop" >
+<kpartgui version="48" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1">
     <text context="@title:menu">File</text>
@@ -81,7 +81,7 @@
     <Separator />
     <Merge />
     <Separator />
-    <Action name="project_options"/>
+    <Action name="project_config_menu" />
   </Menu>
 
   <Menu name="run" noMerge="1">
@@ -141,8 +141,6 @@
     <Action name="settings_configure_editors" />
     <Action name="settings_configure" />
     <DefineGroup name="configure_merge" />
-    <Separator />
-    <Action name="project_config_menu" />
   </Menu>
 
   <Menu name="window" noMerge="1">
