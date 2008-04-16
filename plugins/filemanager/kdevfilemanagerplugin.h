@@ -31,7 +31,6 @@ public:
     ~KDevFileManagerPlugin();
 
     virtual void unload();
-
 private slots:
     void init();
 

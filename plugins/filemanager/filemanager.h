@@ -31,7 +31,6 @@ class FileManager: public QWidget {
     Q_OBJECT
 public:
     FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
-
 private:
     void setupActions();
 

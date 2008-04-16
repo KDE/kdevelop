@@ -53,7 +53,7 @@ public:
     KDevDirModel *m_model;
     FileSortFilterProxyModel* m_proxyModel;
     DrillDownView *m_view;
-    QWidget *m_toolBar;
+//     QWidget *m_toolBar;
     KUrlComboBox *m_urlBox;
     KDevFileManagerPlugin *m_plugin;
 
@@ -156,11 +156,11 @@ public:
 
     void addToolButton(QAction *action)
     {
-        QToolButton *t = new QToolButton(m_toolBar);
-        t->setAutoRaise(true);
-        t->setDefaultAction(action);
-        m_toolBar->setMinimumHeight(t->sizeHint().height());
-        m_toolBar->layout()->addWidget(t);
+//         QToolButton *t = new QToolButton(m_toolBar);
+//         t->setAutoRaise(true);
+//         t->setDefaultAction(action);
+//         m_toolBar->setMinimumHeight(t->sizeHint().height());
+//         m_toolBar->layout()->addWidget(t);
     }
 
     void syncCurrentDocumentDirectory()
@@ -207,11 +207,11 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->setMargin(0);
     l->setSpacing(0);
 
-    d->m_toolBar = new QWidget(this);
-    QHBoxLayout *toolBarLayout = new QHBoxLayout(d->m_toolBar);
-    toolBarLayout->setMargin(0);
-    toolBarLayout->setSpacing(0);
-    l->addWidget(d->m_toolBar);
+//     d->m_toolBar = new QWidget(this);
+//     QHBoxLayout *toolBarLayout = new QHBoxLayout(d->m_toolBar);
+//     toolBarLayout->setMargin(0);
+//     toolBarLayout->setSpacing(0);
+//     l->addWidget(d->m_toolBar);
 
     d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);
     KUrlCompletion *cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
@@ -248,7 +248,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
         this, SLOT(urlChanged(const QModelIndex&)));
 
     setupActions();
-    toolBarLayout->addStretch();
+//     toolBarLayout->addStretch();
 
     QTimer::singleShot(0, this, SLOT(init()));
 }
@@ -256,29 +256,30 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
-    action->setShortcutContext(Qt::WidgetShortcut);
-    d->addToolButton(action);
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//     d->addToolButton(action);
     addAction(action);
 
     action = KStandardAction::home(this, SLOT(goHome()), this);
-    action->setShortcutContext(Qt::WidgetShortcut);
-    d->addToolButton(action);
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//     d->addToolButton(action);
     addAction(action);
 
     action = new KAction(this);
-    action->setShortcutContext(Qt::WidgetShortcut);
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setIcon(KIcon("folder-new"));
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
-    d->addToolButton(action);
+//     d->addToolButton(action);
     addAction(action);
 
     action = new KAction(this);
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(KIcon("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
-    d->addToolButton(action);
+//     d->addToolButton(action);
 }
 
 #include "filemanager.moc"
