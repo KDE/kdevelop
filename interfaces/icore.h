@@ -68,25 +68,25 @@ public:
     static ICore *self();
 
     /** @return ui controller */
-    virtual IUiController *uiController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IUiController *uiController() = 0;
 
     /** @return plugin controller */
-    virtual IPluginController *pluginController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IPluginController *pluginController() = 0;
 
     /** @return project controller */
-    virtual IProjectController *projectController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IProjectController *projectController() = 0;
 
     /** @return language controller */
-    virtual ILanguageController *languageController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::ILanguageController *languageController() = 0;
 
     /** @return part manager */
-    virtual KParts::PartManager *partManager() = 0;
+    Q_SCRIPTABLE virtual KParts::PartManager *partManager() = 0;
 
     /** @return document controller */
-    virtual IDocumentController *documentController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IDocumentController *documentController() = 0;
 
     /** @return run controller */
-    virtual IRunController *runController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IRunController *runController() = 0;
 
 protected:
     ICore(QObject *parent = 0);

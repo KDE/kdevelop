@@ -129,6 +129,7 @@ protected:
     void notifyContentChanged();
 
 private:
+    friend class IDocumentPrivate;
     class IDocumentPrivate* const d;
 };
 

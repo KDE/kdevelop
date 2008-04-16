@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2008 Harald Fernengel <harry@kdevelop.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,73 +16,26 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "idocument.h"
 
-#include "icore.h"
+#include "scripttools.h"
+#include "idocument.h"
 #include "idocumentcontroller.h"
 
-namespace KDevelop {
-
-class IDocumentPrivate
+namespace KDevelop
 {
-public:
-    inline IDocumentPrivate(KDevelop::ICore *core)
-        : m_core(core), scriptWrapper(0)
-    {}
 
-    KDevelop::ICore* m_core;
-    QObject *scriptWrapper;
-
-    /* Internal access to the wrapper script object */
-    static inline QObject *&getWrapper(IDocument *doc)
-    {
-        return doc->d->scriptWrapper;
-    }
-};
-
-/* This allows the scripting backend to register the scripting
-   wrapper. Not beautiful, but makes sure it doesn't expand to much code.
-*/
-QObject *&getWrapper(IDocument *doc)
+ScriptTools::ScriptTools()
 {
-    return IDocumentPrivate::getWrapper(doc);
+    qRegisterMetaType<IDocument *>();
+    qRegisterMetaType<IDocumentController *>();
 }
 
-IDocument::IDocument( KDevelop::ICore* core )
-  : d(new IDocumentPrivate(core))
+QObject *ScriptTools::toDocumentController(const QVariant &variant)
 {
-}
-
-IDocument::~IDocument()
-{
-    delete d->scriptWrapper;
-    delete d;
-}
-
-KDevelop::ICore* IDocument::core()
-{
-    return d->m_core;
-}
-
-void IDocument::notifySaved()
-{
-    emit core()->documentController()->documentSaved(this);
-}
-
-void IDocument::notifyStateChanged()
-{
-    emit core()->documentController()->documentStateChanged(this);
-}
-
-void IDocument::notifyActivated()
-{
-    emit core()->documentController()->documentActivated(this);
-}
-
-void IDocument::notifyContentChanged()
-{
-    emit core()->documentController()->documentContentChanged(this);
+    return qvariant_cast<IDocumentController *>(variant);
 }
 
 }
+
+#include "scripttools.moc"
 

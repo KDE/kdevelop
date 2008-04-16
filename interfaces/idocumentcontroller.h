@@ -55,35 +55,35 @@ public:
     /**Call this before a call to @ref editDocument to set the encoding of the
     document to be opened.
     @param encoding The encoding to open as.*/
-    virtual void setEncoding( const QString &encoding ) = 0;
-    virtual QString encoding() const = 0;
+    Q_SCRIPTABLE virtual void setEncoding( const QString &encoding ) = 0;
+    Q_SCRIPTABLE virtual QString encoding() const = 0;
 
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
-    virtual IDocument* documentForUrl( const KUrl & url ) const = 0;
+    Q_SCRIPTABLE virtual KDevelop::IDocument* documentForUrl( const KUrl & url ) const = 0;
 
     /**@return The list of open documents*/
-    virtual QList<IDocument*> openDocuments() const = 0;
+    Q_SCRIPTABLE virtual QList<KDevelop::IDocument*> openDocuments() const = 0;
 
     /**Refers to the document currently active or focused.
     @return The active document.*/
-    virtual IDocument* activeDocument() const = 0;
+    Q_SCRIPTABLE virtual KDevelop::IDocument* activeDocument() const = 0;
 
-    virtual void activateDocument( IDocument * document ) = 0;
+    Q_SCRIPTABLE virtual void activateDocument( KDevelop::IDocument * document ) = 0;
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
-    virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Default) = 0;
+    Q_SCRIPTABLE virtual void saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
 
-    virtual void openDocumentFromText( const QString& data ) = 0;
+    Q_SCRIPTABLE virtual void openDocumentFromText( const QString& data ) = 0;
 
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
-    virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
+    virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
             DocumentActivationParams activationParams = 0 ) = 0;
 

@@ -19,6 +19,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "icore.h"
+#include "scripting/scriptingmanager.h"
 
 namespace KDevelop {
 
@@ -29,6 +30,7 @@ ICore::ICore(QObject *parent)
 {
     Q_ASSERT(m_self == 0);
     m_self = this;
+    ScriptingManager::self()->registerCore(this);
 }
 
 ICore::~ICore()
