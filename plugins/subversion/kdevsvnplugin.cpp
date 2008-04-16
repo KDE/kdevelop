@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QVariant>
 #include <QTextStream>
+#include <QMenu>
 
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
@@ -376,11 +377,13 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 
     KDevelop::ContextMenuExtension menuExt;
 
+    bool hasVersionControlledEntries = false;
     foreach( KUrl url, ctxUrlList )
     {
-        if( !isVersionControlled( url ) )
+        if( isVersionControlled( url ) )
         {
-            ctxUrlList.removeAll( url );
+            hasVersionControlledEntries = true;
+            break;
         }
     }
     if( ctxUrlList.isEmpty() )
@@ -390,57 +393,65 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
     m_ctxUrlList = ctxUrlList;
     QList<QAction*> actions;
     KAction *action;
+    kDebug() << "version controlled?" << hasVersionControlledEntries;
+    if( hasVersionControlledEntries )
+    {
+        action = new KAction(i18n("Commit..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Add to Repository"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Remove from Repository"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Update to Head"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Revert"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Diff to Head"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Diff to Base"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Copy..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Move..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("History..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxHistory()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Annotation..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
 
-    action = new KAction(i18n("Commit..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+    }
 
-    action = new KAction(i18n("Add to Repository"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Remove from Repository"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Update to Head"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Revert"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Diff to Head"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffHead()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Diff to Base"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxDiffBase()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Copy..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxCopy()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Move..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("History..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxHistory()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction(i18n("Annotation..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
+    QMenu* menu = new QMenu("Subversion");
     action = new KAction(i18n("Import..."), this);
     connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-
+    menu->addAction( action );
+    action = new KAction(i18n("Checkout..."), this);
+    connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
+    menu->addAction( action );
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
 //         action = new QAction(i18n("Blame/Annotate..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
@@ -463,12 +474,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 //         actions << action;
 
 
-    if( !m_ctxUrlList.isEmpty() )
-    {
-        return menuExt;
-    }
-
-    return KDevelop::IPlugin::contextMenuExtension( context );
+    return menuExt;
 }
 
 void KDevSvnPlugin::ctxHistory()
