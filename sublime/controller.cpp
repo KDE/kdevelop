@@ -111,6 +111,8 @@ void Controller::init()
 
 Controller::~Controller()
 {
+    foreach (MainWindow *w, d->controlledWindows)
+        delete w;
     delete d;
 }
 
