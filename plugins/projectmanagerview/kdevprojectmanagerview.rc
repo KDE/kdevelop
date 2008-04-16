@@ -1,25 +1,25 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="kdevprojectmanagerview" library="libkdevprojectmanagerview" version="5">
 <MenuBar>
- <Menu name="run">
+ <Menu name="project">
   <Text context="@title:menu">Run</Text>
   <Action name="project_buildall"
-	  group="run_operations"/>
+	  group="build_operations"/>
 
   <Action name="project_configure"
-	  group="run_operations"/>
+	  group="build_operations"/>
 
   <Action name="project_build"
-	  group="run_operations"/>
+	  group="build_operations"/>
 
   <Action name="project_install"
-	  group="run_operations"/>
+	  group="build_operations"/>
 
   <Action name="project_clean"
-	  group="run_operations"/>
+	  group="build_operations"/>
 
   <Action name="project_prune"
-	  group="run_operations"/>
+	  group="build_operations"/>
  </Menu>
 </MenuBar>
 </kpartplugin>
