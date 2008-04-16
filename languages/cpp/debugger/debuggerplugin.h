@@ -155,7 +155,7 @@ Q_SIGNALS:
     void jumpTo(const KUrl& url, int line);
 
 protected:
-    virtual void guiClientAdded(KXMLGUIClient *);
+    virtual void initializeGuiState();
 
 private:
     KConfigGroup config() const;

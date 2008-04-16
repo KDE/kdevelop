@@ -370,12 +370,9 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 }
 
 
-void CppDebuggerPlugin::guiClientAdded( KXMLGUIClient* client )
+void CppDebuggerPlugin::initializeGuiState()
 {
-    // Can't change state until after XMLGUI has been loaded...
-
-    if( client == this )
-        stateChanged("stopped");
+    stateChanged("stopped");
 }
 
 void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *context)
