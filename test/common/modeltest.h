@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright 2007 Trolltech ASA. All rights reserved.
+** Copyright (C) 2007 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the Qt Concurrent project on Trolltech Labs.
 **
@@ -33,7 +33,7 @@ class ModelTest : public QObject
     Q_OBJECT
 
 public:
-    explicit ModelTest(QAbstractItemModel *model, QObject *parent = 0);
+    ModelTest(QAbstractItemModel *model, QObject *parent = 0);
 
 private Q_SLOTS:
     void nonDestructiveBasicTest();
@@ -46,6 +46,8 @@ private Q_SLOTS:
 
 protected Q_SLOTS:
     void runAllTests();
+    void layoutAboutToBeChanged();
+    void layoutChanged();
     void rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
     void rowsInserted(const QModelIndex & parent, int start, int end);
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
@@ -65,6 +67,10 @@ private:
     };
     QStack<Changing> insert;
     QStack<Changing> remove;
+
+    bool fetchingMore;
+
+    QList<QPersistentModelIndex> changing;
 };
 
 #endif

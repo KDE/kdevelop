@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright 2007 Trolltech ASA. All rights reserved.
+** Copyright (C) 2007 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the Qt Concurrent project on Trolltech Labs.
 **
@@ -21,16 +21,16 @@
 **
 ****************************************************************************/
 
-#include "modeltest.h"
-
 #include <QtGui/QtGui>
+
+#include "modeltest.h"
 
 Q_DECLARE_METATYPE(QModelIndex)
 
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.
 */
-ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(parent), model(_model)
+ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(parent), model(_model), fetchingMore(false)
 {
     Q_ASSERT(model);
 
@@ -59,6 +59,11 @@ ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(pare
             this, SLOT(runAllTests()));
 
     // Special checks for inserting/removing
+    connect(model, SIGNAL(layoutAboutToBeChanged()),
+            this, SLOT(layoutAboutToBeChanged()));
+    connect(model, SIGNAL(layoutChanged()),
+            this, SLOT(layoutChanged()));
+
     connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)),
             this, SLOT(rowsAboutToBeInserted(const QModelIndex &, int, int)));
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
@@ -73,6 +78,8 @@ ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(pare
 
 void ModelTest::runAllTests()
 {
+    if (fetchingMore)
+        return;
     nonDestructiveBasicTest();
     rowCount();
     columnCount();
@@ -92,7 +99,9 @@ void ModelTest::nonDestructiveBasicTest()
     model->canFetchMore(QModelIndex());
     Q_ASSERT(model->columnCount(QModelIndex()) >= 0);
     Q_ASSERT(model->data(QModelIndex()) == QVariant());
+    fetchingMore = true;
     model->fetchMore(QModelIndex());
+    fetchingMore = false;
     Qt::ItemFlags flags = model->flags(QModelIndex());
     Q_ASSERT(flags == Qt::ItemIsDropEnabled || flags == 0);
     model->hasChildren(QModelIndex());
@@ -280,8 +289,11 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
         p = p.parent();
 
     // For models that are dynamically populated
-    if (model->canFetchMore(parent))
+    if (model->canFetchMore(parent)) {
+        fetchingMore = true;
         model->fetchMore(parent);
+        fetchingMore = false;
+    }
 
     int rows = model->rowCount(parent);
     int columns = model->columnCount(parent);
@@ -300,8 +312,11 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
 
     Q_ASSERT(model->hasIndex(rows + 1, 0, parent) == false);
     for (int r = 0; r < rows; ++r) {
-        if (model->canFetchMore(parent))
+        if (model->canFetchMore(parent)) {
+            fetchingMore = true;
             model->fetchMore(parent);
+            fetchingMore = false;
+        }
         Q_ASSERT(model->hasIndex(r, columns + 1, parent) == false);
         for (int c = 0; c < columns; ++c) {
             Q_ASSERT(model->hasIndex(r, c, parent) == true);
@@ -327,6 +342,7 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
             Q_ASSERT(model->data(index, Qt::DisplayRole).isValid() == true);
 
             // If the next test fails here is some somewhat useful debug you play with.
+            /*
             if (model->parent(index) != parent) {
                 qDebug() << r << c << currentDepth << model->data(index).toString()
                          << model->data(parent).toString();
@@ -335,7 +351,7 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
                 //QTreeView view;
                 //view.setModel(model);
                 //view.show();
-            }
+            }*/
 
             // Check that we can get back our real parent.
             Q_ASSERT(model->parent(index) == parent);
@@ -368,7 +384,7 @@ void ModelTest::data()
     Q_ASSERT(model->index(0, 0).isValid());
 
     // shouldn't be able to set data on an invalid index
-    Q_ASSERT(model->setData(QModelIndex(), "foo", Qt::DisplayRole) == false);
+    Q_ASSERT(model->setData(QModelIndex(), QLatin1String("foo"), Qt::DisplayRole) == false);
 
     // General Purpose roles that should return a QString
     QVariant variant = model->data(model->index(0, 0), Qt::ToolTipRole);
@@ -403,7 +419,14 @@ void ModelTest::data()
         Q_ASSERT(alignment == Qt::AlignLeft ||
                  alignment == Qt::AlignRight ||
                  alignment == Qt::AlignHCenter ||
-                 alignment == Qt::AlignJustify);
+                 alignment == Qt::AlignJustify ||
+                 alignment == Qt::AlignTop ||
+                 alignment == Qt::AlignBottom ||
+                 alignment == Qt::AlignVCenter ||
+                 alignment == Qt::AlignCenter ||
+                 alignment == Qt::AlignAbsolute ||
+                 alignment == Qt::AlignLeading ||
+                 alignment == Qt::AlignTrailing);
     }
 
     // General Purpose roles that should return a QColor
@@ -465,6 +488,21 @@ void ModelTest::rowsInserted(const QModelIndex & parent, int start, int end)
     Q_ASSERT(c.next == model->data(model->index(end + 1, 0, c.parent)));
 }
 
+void ModelTest::layoutAboutToBeChanged()
+{
+    for (int i = 0; i < qBound(0, model->rowCount(), 100); ++i)
+        changing.append(QPersistentModelIndex(model->index(i, 0)));
+}
+
+void ModelTest::layoutChanged()
+{
+    for (int i = 0; i < changing.count(); ++i) {
+        QPersistentModelIndex p = changing[i];
+        Q_ASSERT(p == model->index(p.row(), p.column(), p.parent()));
+    }
+    changing.clear();
+}
+
 /*!
     Store what is about to be inserted to make sure it actually happens
 
@@ -494,4 +532,3 @@ void ModelTest::rowsRemoved(const QModelIndex & parent, int start, int end)
     Q_ASSERT(c.next == model->data(model->index(start, 0, c.parent)));
 }
 
-#include "modeltest.moc"
