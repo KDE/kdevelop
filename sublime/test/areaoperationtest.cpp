@@ -27,7 +27,6 @@
 
 #include <kdebug.h>
 #include <kapplication.h>
-#include <ktextedit.h>
 
 #include <sublime/view.h>
 #include <sublime/area.h>
@@ -36,6 +35,7 @@
 #include <sublime/urldocument.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
+#include <sublime/container.h>
 
 #include "kdevtest.h"
 #include "areaprinter.h"
@@ -222,12 +222,18 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
     QVERIFY(central != 0);
     QVERIFY(central->inherits("QWidget"));
 
-    //check that we have 4 views
-    QList<KTextEdit*> container = central->findChildren<KTextEdit*>();
+    QWidget *splitter = central->findChild<QSplitter*>();
+    QVERIFY(splitter);
+    QVERIFY(splitter->inherits("QSplitter"));
 
+    //check that we have a container and 4 views inside
+    Container *container = splitter->findChild<Sublime::Container*>();
+    QVERIFY(container);
     ViewCounter c;
     area->walkViews(c, area->rootIndex());
-    QCOMPARE(container.count(), c.count);
+    QCOMPARE(container->count(), c.count);
+    for (int i = 0; i < container->count(); ++i)
+        QVERIFY(container->widget(i) != 0);
 }
 
 void AreaOperationTest::checkArea2(MainWindow *mw)
@@ -247,7 +253,6 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     QVERIFY(splitter);
     QVERIFY(splitter->inherits("QSplitter"));
 
-#if 0
     //check that we have 4 properly initialized containers
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), 4);
@@ -281,7 +286,6 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     }
     QCOMPARE(verticalSplitterCount, 2);
     QCOMPARE(horizontalSplitterCount, 1);
-#endif
 }
 
 void AreaOperationTest::testAreaCloning()
@@ -505,7 +509,6 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QVERIFY(splitter->inherits("QSplitter"));
 
     //check containers
-#if 0
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), containerCount);
 
@@ -527,7 +530,6 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
     splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), splitterCount);
-#endif
 }
 
 View *AreaOperationTest::findNamedView(Area *area, const QString &name)

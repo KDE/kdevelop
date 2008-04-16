@@ -24,11 +24,12 @@
 #include "ideal.h"
 #include "ideallayout.h"
 
+#include <sublime/mainwindow.h>
+
 using namespace Sublime;
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
     : QWidget(parent)
-    , m_mainWidget(parent)
 {
     setLayout(new IdealCentralLayout(parent->mainWindow(), this));
 }
@@ -59,23 +60,36 @@ void IdealCentralWidget::viewAdded(Sublime::AreaIndex * index, Sublime::View * v
     Q_UNUSED(view);
     centralLayout()->refreshAreaIndex(index);
 }
-
+#include <kdebug.h>
 void IdealCentralWidget::aboutToRemoveView(Sublime::AreaIndex* index, Sublime::View* view)
 {
+    bool wasActive = m_mainWidget->mainWindow()->activeView() == view;
+    int formerIdx = index->views().indexOf(view);
+    Sublime::AreaIndex *formerParent = index->parent();
+
     centralLayout()->removeView(index, view);
-}
+    kDebug() << "ABOUT TO REMOVE";
 
-bool IdealCentralWidget::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::FocusIn)
-        mainWidget()->centralWidgetFocused();
-
-    return false;
-}
-
-IdealMainWidget * Sublime::IdealCentralWidget::mainWidget() const
-{
-    return m_mainWidget;
+    if (wasActive)
+    {
+        //look for the remaining views in the same index
+        if (index->views().count() > 0)
+        {
+            int idx = formerIdx;
+            //look left
+            if (idx-1 > 0)
+                idx -= 1;
+            //else look right (stay at the same index)
+            kDebug() << "ACTIVATING NEW VIEW" << index->views()[idx];
+            m_mainWidget->mainWindow()->activateView(index->views()[idx]);
+        }
+        else
+        {
+            //look up
+            //@fixme 
+//             formerParent->
+        }
+    }
 }
 
 #include "idealcentralwidget.moc"

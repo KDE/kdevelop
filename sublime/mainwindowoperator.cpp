@@ -27,6 +27,11 @@ void MainWindowOperator::setArea(MainWindow *w, Area *area)
     w->setArea(area);
 }
 
+void MainWindowOperator::clearArea(MainWindow *w)
+{
+    w->clearArea();
+}
+
 void MainWindowOperator::setActiveView(MainWindow *w, View *view)
 {
     w->setActiveView(view);

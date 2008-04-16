@@ -71,6 +71,8 @@ public slots:
     void activateView(Sublime::View *view);
 
 Q_SIGNALS:
+    /**Emitted before the area is cleared from this mainwindow.*/
+    void areaCleared(Sublime::Area*);
     /**Emitted after the new area has been shown in this mainwindow.*/
     void areaChanged(Sublime::Area*);
     /**Emitted when the active view is changed.*/
@@ -92,6 +94,8 @@ protected:
     virtual bool queryClose();
 
 private:
+    Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
+    Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position))
     Q_PRIVATE_SLOT(d, void raiseToolView(Sublime::View*))
     Q_PRIVATE_SLOT(d, void aboutToRemoveToolView(Sublime::View*, Sublime::Position))
@@ -100,6 +104,8 @@ private:
     //Inherit MainWindowOperator to access four methods below
     /**Sets the area of main window and fills it with views.*/
     void setArea(Area *area);
+    /**Unsets the area clearing main window.*/
+    void clearArea();
     /**Sets the active view and focuses it.*/
     void setActiveView(Sublime::View *view);
     /**Sets the active toolview and focuses it.*/

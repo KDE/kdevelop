@@ -23,8 +23,6 @@
 
 #include <QWidget>
 
-#include "sublimeexport.h"
-
 namespace Sublime {
 
 class Area;
@@ -33,7 +31,7 @@ class View;
 class IdealMainWidget;
 class IdealCentralLayout;
 
-class SUBLIME_EXPORT IdealCentralWidget : public QWidget
+class IdealCentralWidget : public QWidget
 {
     Q_OBJECT
 
@@ -41,7 +39,6 @@ public:
     IdealCentralWidget(IdealMainWidget* parent);
 
     IdealCentralLayout* centralLayout() const;
-    IdealMainWidget* mainWidget() const;
 
     /**
      * Returns the area which was last setup over this widget.
@@ -59,12 +56,6 @@ public Q_SLOTS:
      */
     void viewAdded(Sublime::AreaIndex* index, Sublime::View* view);
     void aboutToRemoveView(Sublime::AreaIndex* index, Sublime::View* view);
-
-protected:
-    virtual bool eventFilter(QObject *, QEvent *event);
-
-private:
-    IdealMainWidget* m_mainWidget;
 };
 
 }

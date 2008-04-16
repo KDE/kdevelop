@@ -29,6 +29,7 @@
 #include <sublime/area.h>
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
+#include <sublime/container.h>
 #include <sublime/tooldocument.h>
 
 #include "kdevtest.h"
@@ -189,7 +190,7 @@ void ViewActivationTest::testActivationAfterRemovalSimplestCase()
 
     //delete active view and check that previous is activated
     delete area->removeView(v2);
-    kDebug() << "ACTIVE VIEW:" << mw.activeView();
+//     kDebug() << "ACTIVE VIEW:" << mw.activeView();
     QCOMPARE(mw.activeView(), v1);
 }
 

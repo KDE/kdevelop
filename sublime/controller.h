@@ -60,7 +60,11 @@ public:
     const QList<MainWindow*> &mainWindows() const;
 
 public Q_SLOTS:
-    void releaseArea();
+    //@todo adymo: this should not be a part of public API
+    /**Area can connect to this slot to release itself from its mainwindow.*/
+    void areaReleased();
+    /**Releases @p area from its mainwindow.*/
+    void areaReleased(Sublime::Area *area);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
@@ -76,8 +80,6 @@ private:
     /**Adds the document to the controller, used by Document class.
     @todo adymo: refactor*/
     void addDocument(Document *document);
-    /**Releases @p area from its mainwindow.*/
-    void releaseArea(Sublime::Area *area, Sublime::MainWindow* mw);
 
     struct ControllerPrivate *const d;
 

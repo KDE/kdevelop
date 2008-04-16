@@ -18,57 +18,17 @@
  ***************************************************************************/
 #include "switcher.h"
 
-using namespace Sublime;
+namespace Sublime {
 
-#include "view.h"
-#include "document.h"
-#include "areaindex.h"
-
-class Sublime::SwitcherPrivate
+Switcher::Switcher(QWidget *parent)
+    :QTabBar(parent), d(0)
 {
-public:
-    SwitcherPrivate(AreaIndex* ai)
-    : areaIndex(ai)
-    {
-    }
-
-    AreaIndex* areaIndex;
-};
-
-Switcher::Switcher(AreaIndex* areaIndex, QWidget *parent)
-    :QTabBar(parent), d(new SwitcherPrivate(areaIndex))
-{
-    connect(areaIndex, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)), this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(areaIndex, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)), this, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-
-    foreach (View* view, areaIndex->views())
-        addTab(view->document()->title());
 }
 
 Switcher::~Switcher()
 {
-    delete d;
 }
 
-AreaIndex * Sublime::Switcher::areaIndex() const
-{
-    return d->areaIndex;
-}
-
-void Sublime::Switcher::viewAdded(Sublime::AreaIndex* index, Sublime::View* view)
-{
-    int idx = index->views().indexOf(view);
-    Q_ASSERT(idx != -1);
-
-    insertTab(idx, view->document()->title());
-}
-
-void Sublime::Switcher::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
-{
-    int idx = index->views().indexOf(view);
-    Q_ASSERT(idx != -1);
-
-    removeTab(idx);
 }
 
 #include "switcher.moc"

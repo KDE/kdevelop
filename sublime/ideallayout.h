@@ -26,7 +26,6 @@
 #include <QtCore/QPointer>
 #include <QtCore/QMap>
 #include <QtCore/QHash>
-#include <QMetaType>
 
 class QDockWidget;
 
@@ -139,7 +138,7 @@ public:
     class IdealMainWidget* mainWidget() const;
 
 public Q_SLOTS:
-    void resizeWidget(int thickness, int width, QVariant data);
+    void resizeWidget(int thickness, IdealMainLayout::Role role);
     void anchorWidget(bool anchor, IdealMainLayout::Role role);
 
     void loadSettings();
@@ -211,7 +210,5 @@ IdealMainLayout::Role roleForArea(Qt::DockWidgetArea area);
 Qt::DockWidgetArea areaForRole(IdealMainLayout::Role role);
 
 }
-
-Q_DECLARE_METATYPE(Sublime::IdealMainLayout::Role)
 
 #endif

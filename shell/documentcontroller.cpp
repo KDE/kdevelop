@@ -243,7 +243,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         {
             dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
-        }else if( activeDocument() )
+        }else if( activeDocument() ) 
         {
             dir = activeDocument()->url().directory();
         }else
@@ -384,8 +384,8 @@ void DocumentController::fileClose()
         if (activeView->document()->views().count() > 1)
         {
             //close only one active view
-            uiController->activeArea()->removeView(activeView);
-            activeView->deleteLater();
+            Sublime::View *deletedView = uiController->activeArea()->removeView(activeView);
+            deletedView->deleteLater();
         }
         else
         {

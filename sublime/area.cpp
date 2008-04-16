@@ -145,10 +145,7 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 View* Area::removeView(View *view)
 {
     AreaIndex *index = indexOf(view);
-    if (!index) {
-        kWarning() << "Index not found for view " << view;
-        return 0;
-    }
+    Q_ASSERT(index);
 
     emit aboutToRemoveView(index, view);
     index->remove(view);

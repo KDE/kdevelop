@@ -25,7 +25,6 @@
 #include <QtGui>
 
 #include "ideallayout.h"
-#include "sublimeexport.h"
 
 class KAction;
 class KActionMenu;
@@ -36,7 +35,6 @@ namespace Sublime {
 class Area;
 class View;
 class MainWindow;
-class IdealCentralWidget;
 
 class IdealToolButton: public QToolButton
 {
@@ -157,9 +155,20 @@ private:
     Qt::DockWidgetArea m_docking_area;
 };
 
+class IdealCentralWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    IdealCentralWidget(IdealMainWidget* parent);
+    virtual ~IdealCentralWidget();
+
+    IdealMainLayout* idealLayout() const;
+};
+
 class View;
 
-class SUBLIME_EXPORT IdealMainWidget : public QWidget
+class IdealMainWidget : public QWidget
 {
     Q_OBJECT
 
@@ -167,7 +176,7 @@ public:
     IdealMainWidget(MainWindow* parent, KActionCollection* ac);
 
     // Public api
-    //void setCentralWidget(QWidget* widget);
+    void setCentralWidget(QWidget* widget);
     QAction* actionForView(View* view) const;
     void addView(Qt::DockWidgetArea area, View* View);
     void raiseView(View* view);
@@ -187,7 +196,6 @@ public:
 
     void anchorDockWidget(QDockWidget* widget, bool anchor);
 
-    MainWindow* mainWindow() const;
     IdealMainLayout* mainLayout() const;
     IdealCentralWidget* internalCentralWidget() const;
 
@@ -231,8 +239,7 @@ private:
     KAction* m_maximizeCurrentDock;
     KActionMenu* m_docks;
 
-    QWidget* mainWidget;
-    IdealCentralWidget* centralWidget;
+    IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;
 
     QMap<QDockWidget*, Qt::DockWidgetArea> docks;
@@ -242,8 +249,6 @@ private:
     /** Map from QDockWidget  to an action that shows/hides
         that QDockWidget.  */
     QMap<QDockWidget*, QAction*> m_dockwidget_to_action;
-
-    bool m_centralWidgetFocusing;
 };
 
 class IdealSplitterHandle : public QWidget
@@ -251,10 +256,10 @@ class IdealSplitterHandle : public QWidget
     Q_OBJECT
 
 public:
-    IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, QVariant data);
+    IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole);
 
 Q_SIGNALS:
-    void resize(int thickness, int width, QVariant data);
+    void resize(int thickness, IdealMainLayout::Role resizeRole);
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
@@ -267,7 +272,7 @@ private:
     Qt::Orientation m_orientation;
     bool m_hover;
     int m_dragStart;
-    QVariant m_data;
+    IdealMainLayout::Role m_resizeRole;
 };
 
 }

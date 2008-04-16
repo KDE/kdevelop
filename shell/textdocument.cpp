@@ -309,8 +309,6 @@ void TextDocument::close()
 
 Sublime::View* TextDocument::newView(Sublime::Document* doc)
 {
-    Q_UNUSED(doc);
-
     emit viewNumberChanged(this);
     return new TextView(this);
 }
@@ -324,7 +322,6 @@ KDevelop::TextView::TextView(TextDocument * doc)
 
 KDevelop::TextView::~TextView()
 {
-    delete d->m_view;
     delete d;
 }
 

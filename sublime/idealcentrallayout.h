@@ -26,7 +26,6 @@
 #include <QHash>
 
 #include "area.h"
-#include "sublimeexport.h"
 
 class QSplitterHandle;
 
@@ -37,7 +36,7 @@ class IdealSplitterHandle;
 class Switcher;
 class MainWindow;
 
-class SUBLIME_EXPORT AreaLayout
+class AreaLayout
 {
 public:
     AreaLayout(AreaLayout* parent = 0);
@@ -85,7 +84,7 @@ public:
     View* activeView;
 };
 
-class SUBLIME_EXPORT IdealCentralLayout : public QLayout
+class IdealCentralLayout : public QLayout
 {
     Q_OBJECT
 
@@ -98,9 +97,6 @@ public:
     void setArea(Area* area);
     void setupArea(AreaIndex* area, AreaLayout* layout);
     void removeView(AreaIndex* area, View* view);
-
-    // Only for tests
-    AreaLayout* topLayout() const;
 
     // Reimplementations for QLayout
     virtual void addItem ( QLayoutItem * item );
