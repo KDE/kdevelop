@@ -47,7 +47,7 @@ Container::Container(QWidget *parent)
     :KTabWidget(parent), d(new ContainerPrivate())
 {
     KConfigGroup group = KGlobal::config()->group("UiSettings");
-    setTabBarHidden(group.readEntry("TabBar Visibility", "Shown") == "Hidden");
+    setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 

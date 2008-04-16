@@ -136,6 +136,10 @@ void MainWindow::loadSettings()
     KConfigGroup cg = KGlobal::config()->group(group);
     applyMainWindowSettings(cg);
 
+    KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+    foreach (Container *container, findChildren<Container*>())
+        container->setTabBarHidden(uiGroup.readEntry("TabBarVisibility", 1) == 0);
+
     emit settingsLoaded();
 }
 

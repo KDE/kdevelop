@@ -11,5 +11,8 @@
         </entry>
         <entry name="BottomRightCornerOwner" key="BottomRightCornerOwner" type="Int">
         </entry>
+        <entry name="TabBarVisibility" key="TabBarVisibility" type="Int">
+            <default>1</default>
+        </entry>
   </group>
 </kcfg>
