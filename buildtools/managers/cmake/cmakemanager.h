@@ -50,6 +50,8 @@ namespace KDevelop
     class ProjectFileItem;
     class ProjectTargetItem;
     class ParseJob;
+    class ContextMenuExtension;
+    class Context;
 }
 
 class CMakeFolderItem;
@@ -103,6 +105,8 @@ public:
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
     static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
+
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
     
     //LanguageSupport
     virtual QString name() const;
@@ -111,7 +115,7 @@ public:
     
     virtual KDevelop::ILanguage *language();
 
-    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
 
 public slots:
     void dirtyFile(const QString& file);

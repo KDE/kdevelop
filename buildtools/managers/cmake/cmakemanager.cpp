@@ -35,6 +35,7 @@
 #include <iproject.h>
 #include <iplugincontroller.h>
 #include <ilanguagecontroller.h>
+#include "contextmenuextension.h"
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <projectmodel.h>
@@ -643,6 +644,11 @@ KDevelop::ILanguage * CMakeProjectManager::language()
 const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
 {
     return m_highlight;
+}
+
+ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Context* context )
+{
+
 }
 
 #include "cmakemanager.moc"
