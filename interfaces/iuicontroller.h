@@ -24,6 +24,8 @@
 #include <QtCore/QStringList>
 #include <kurl.h>
 
+class QAction;
+
 namespace KParts {
     class MainWindow;
 }
@@ -41,6 +43,13 @@ public:
     virtual ~IToolViewFactory() {}
     virtual QWidget* create(QWidget *parent = 0) = 0;
     virtual Qt::DockWidgetArea defaultPosition(const QString &areaName) = 0;
+    /**
+      * Fetch a list of actions to add to the toolbar of the toolview @p view
+      * @param view the view to which the actions should be added
+      * @returns a list of actions to be added to the toolbar
+      */
+    
+    virtual QList<QAction*> toolBarActions( QWidget* /*viewWidget*/ ) const { return QList<QAction*>(); }
     virtual void viewCreated(Sublime::View* view);
 };
 

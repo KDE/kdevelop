@@ -23,6 +23,8 @@
 
 #include "sublimeexport.h"
 
+class QAction;
+
 namespace Sublime {
 
 class Document;
@@ -39,6 +41,9 @@ class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
     ~View();
+
+    /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
+    QList<QAction*> toolBarActions() const;
 
     /**@return the document for this view.*/
     Document *document() const;

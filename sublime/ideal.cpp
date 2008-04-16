@@ -208,7 +208,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 
             button->setText(action->text());
             button->setIcon(action->icon());
-	    button->setShortcut(QKeySequence());
+            button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
@@ -271,9 +271,12 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
 {
     QBoxLayout *box;
     if (m_orientation == Qt::Vertical)
-	box = new QBoxLayout(QBoxLayout::BottomToTop, this);
-    else
-	box = new QBoxLayout(QBoxLayout::LeftToRight, this);
+    {
+	box = new QBoxLayout(QBoxLayout::BottomToTop, 0);
+    }else
+    {
+	box = new QBoxLayout(QBoxLayout::LeftToRight, 0);
+    }
 
     box->setMargin(0);
     box->setSpacing(2); // ### fixme, it should be hardcoded.
@@ -306,6 +309,32 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     box->addWidget(m_anchor);
     box->addWidget(m_maximize);
     box->addWidget(m_close);
+
+
+    QList<QAction*> toolBarActions = view->toolBarActions();
+    if( !toolBarActions.isEmpty() ) {
+        QBoxLayout* top;
+        if( orientation == Qt::Vertical )
+        {
+            top = new QBoxLayout( QBoxLayout::LeftToRight, this );
+        } else
+        {
+            top = new QBoxLayout( QBoxLayout::TopToBottom, this );
+        }
+        top->addLayout( box );
+        QToolBar* toolBar = new QToolBar();
+        toolBar->setOrientation( orientation );
+        toolBar->setIconSize( QSize( 16, 16 ) );
+        toolBar->setFloatable( false );
+        toolBar->setMovable( false );
+        Q_FOREACH( QAction* act, toolBarActions ) {
+            toolBar->addAction(act);
+        }
+        top->addWidget(toolBar);
+        setLayout( top );
+    }
+
+
 }
 
 IdealDockWidgetTitle::~IdealDockWidgetTitle()
@@ -563,7 +592,6 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     QDockWidget *dock = new QDockWidget(mainWidget);
 
     KAcceleratorManager::setNoAccel(dock);
-
     QWidget *w = view->widget(dock);
     if (w->parent() == 0)
     {

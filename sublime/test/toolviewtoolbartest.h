@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   This file is part of KDevelop                                         *
+ *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,69 +17,40 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include "view.h"
-#include "view_p.h"
 
-#include <QtGui/QWidget>
+#ifndef TOOLVIEWTOOLBARTEST_H
+#define TOOLVIEWTOOLBARTEST_H
 
-#include <kdebug.h>
-
-#include "document.h"
-#include "tooldocument.h"
+#include <QObject>
 
 namespace Sublime {
+class View;
+class Controller;
+class Document;
+class Area;
+}
 
-View::View(Document *doc)
-    :QObject(doc), d(new ViewPrivate(this))
+class ToolViewToolBarTest : public QObject
 {
-    d->doc = doc;
-}
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
 
-View::~View()
-{
-    delete d;
-}
+    void testToolBarExistence();
+    void testToolViewMove();
+public:
+    ToolViewToolBarTest();
+    ~ToolViewToolBarTest();
+private:
+    Sublime::Controller *controller;
 
-Document *View::document() const
-{
-    return d->doc;
-}
+    Sublime::Area *area;
 
-QWidget *View::widget(QWidget *parent)
-{
-    return d->initializeWidget(parent);
-}
+    Sublime::Document *tool1;
+    Sublime::Document *tool2;
+    Sublime::View *viewT11;
+    Sublime::View *viewT21;
+};
 
-bool View::hasWidget() const
-{
-    return d->widget != 0;
-}
-
-void Sublime::View::requestRaise()
-{
-    emit raise(this);
-}
-
-QString Sublime::View::viewState() const
-{
-    return QString();
-}
-
-void Sublime::View::setState(const QString & state)
-{
-    Q_UNUSED(state);
-}
-
-QList<QAction*> Sublime::View::toolBarActions() const
-{
-    ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
-    if( tooldoc )
-    {
-        return tooldoc->factory()->toolBarActions( d->widget );
-    }
-    return QList<QAction*>();
-}
-
-}
-
-#include "view.moc"
+#endif

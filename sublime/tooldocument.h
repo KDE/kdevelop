@@ -23,6 +23,10 @@
 
 #include "sublimeexport.h"
 
+#include <QtCore/QDebug>
+
+class QAction;
+
 namespace Sublime {
 
 class ToolDocument;
@@ -34,6 +38,7 @@ class SUBLIME_EXPORT ToolFactory {
 public:
     virtual ~ToolFactory() {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
+    virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const = 0;
 };
 
 /**
@@ -46,6 +51,7 @@ public:
     {
         return new Widget(parent);
     }
+    virtual QList<QAction*> toolBarActions( QWidget* ) const { return QList<QAction*>(); }
 };
 
 /**
@@ -68,7 +74,8 @@ protected:
 
 private:
     struct ToolDocumentPrivate * const d;
-
+    
+    friend class View;
 };
 
 }

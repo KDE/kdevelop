@@ -19,9 +19,11 @@
 #include "uicontroller.h"
 
 #include <QMap>
+#include <QAction>
 #include <QPointer>
 #include <QApplication>
 #include <QListWidget>
+#include <QToolBar>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -90,6 +92,12 @@ public:
     {
         Q_UNUSED( doc );
         return m_factory->create(parent);
+    }
+
+
+    QList<QAction*> toolBarActions( QWidget* viewWidget ) const
+    {
+        return m_factory->toolBarActions( viewWidget );
     }
 
 private:
