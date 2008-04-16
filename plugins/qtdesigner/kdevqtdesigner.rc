@@ -1,31 +1,37 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <gui name="guibuilder" version="6">
 <MenuBar>
-    <Menu name="file"><text>&amp;File</text>
-        <Action name="file_save" group="save_merge"/>
-    </Menu>
-    <Menu name="edit"><text>&amp;Edit</text>
-        <Action name="designer_undo" group="edit_undo_merge"/>
-        <Action name="designer_redo" group="edit_undo_merge"/>
-        <Action name="designer_cut" group="edit_paste_merge"/>
-        <Action name="designer_copy" group="edit_paste_merge"/>
-        <Action name="designer_paste" group="edit_paste_merge"/>
-    </Menu>
-    <Menu name="layout"><text>F&amp;orm</text>
-        <Action name="layout_horiz"/>
-        <Action name="layout_vertical"/>
-        <Action name="layout_split_horiz"/>
-        <Action name="layout_split_vert"/>
-        <Action name="layout_grid"/>
-        <Action name="break_layout"/>
-        <Separator/>
-        <Action name="adjust_size"/>
-        <Separator/>
-        <Action name="signaleditor"/>
-        <Action name="buddyeditor"/>
-        <Action name="tabordereditor"/>
-    </Menu>
+  <Menu name="file">
+    <text context="@title:menu">File</text>
+    <Action name="file_save" group="save_merge"/>
+  </Menu>
+
+  <Menu name="edit">
+    <text context="@title:menu">Edit</text>
+    <Action name="designer_undo" group="edit_undo_merge"/>
+    <Action name="designer_redo" group="edit_undo_merge"/>
+    <Action name="designer_cut" group="edit_paste_merge"/>
+    <Action name="designer_copy" group="edit_paste_merge"/>
+    <Action name="designer_paste" group="edit_paste_merge"/>
+  </Menu>
+
+  <Menu name="layout">
+    <text context="@title:menu">Form</text>
+    <Action name="layout_horiz"/>
+    <Action name="layout_vertical"/>
+    <Action name="layout_split_horiz"/>
+    <Action name="layout_split_vert"/>
+    <Action name="layout_grid"/>
+    <Action name="break_layout"/>
+    <Separator/>
+    <Action name="adjust_size"/>
+    <Separator/>
+    <Action name="signaleditor"/>
+    <Action name="buddyeditor"/>
+    <Action name="tabordereditor"/>
+  </Menu>
 </MenuBar>
+
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
     <Action name="file_save" group="file_operations"/>
     <Action name="designer_undo" group="edit_operations"/>
@@ -34,6 +40,7 @@
     <Action name="designer_copy" group="edit_operations"/>
     <Action name="designer_paste" group="edit_operations"/>
 </ToolBar>
+
 <ToolBar name="designerToolbar" noMerge="1"><text>Designer Layout Toolbar</text>
     <Action name="layout_horiz"/>
     <Action name="layout_vertical"/>
@@ -44,6 +51,7 @@
     <Separator/>
     <Action name="adjust_size"/>
 </ToolBar>
+
 </gui>
 
 <!-- kate: space-indent on; indent-width 4; replace-tabs on; -->

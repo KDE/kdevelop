@@ -2,6 +2,7 @@
 <kpartgui name="KDevAppWizard" version="2">
 <MenuBar>
   <Menu name="project" >
+    <text context="@title:menu">Project</text>
     <Action name="project_new" group="project_new"/>
     <Action name="project_import" group="project_import"/>
   </Menu>
