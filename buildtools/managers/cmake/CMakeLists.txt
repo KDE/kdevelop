@@ -19,7 +19,7 @@ add_subdirectory(tests)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
-add_definitiosn( -DKDE_DEFAULT_DEBUG_AREA=9032 )
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 
 set( cmakecommon_SRCS
   cmakemodelitems.cpp
