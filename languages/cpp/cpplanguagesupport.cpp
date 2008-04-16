@@ -476,7 +476,7 @@ void CppLanguageSupport::documentClosed(KDevelop::IDocument *)
     kDebug( 9007 ) << "CppLanguageSupport::documentClosed";
 }
 
-KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
+const KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }

@@ -31,7 +31,8 @@
 #include "cmakeast.h"
 
 namespace KDevelop {
-class IProject;
+    class IProject;
+    class TopDUContext;
 }
 
 /**
@@ -40,6 +41,7 @@ class IProject;
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
+
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
     public:
@@ -49,7 +51,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         QStringList includeDirectories() const;
         Definitions definitions() const { return m_defines; }
         void setDefinitions(const Definitions& defs) { m_defines=defs; }
+        
+        void setTopDUContext(KDevelop::TopDUContext* ctx) { m_topcontext=ctx; }
+        KDevelop::TopDUContext* topDUContext() const { return m_topcontext;}
     private:
+        KDevelop::TopDUContext* m_topcontext;
         QStringList m_includeList;
         Definitions m_defines;
 };

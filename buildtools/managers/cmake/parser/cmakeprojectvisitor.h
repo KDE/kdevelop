@@ -40,7 +40,7 @@ namespace KDevelop
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
-        explicit CMakeProjectVisitor(const QString& root);
+        explicit CMakeProjectVisitor(const QString& root, KDevelop::TopDUContext* parent);
         virtual ~CMakeProjectVisitor() {}
         
         virtual int visit( const CustomCommandAst * );
@@ -103,7 +103,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         enum VariableType { NoVar, CMake, ENV };
 //         static VariableType hasVariable(const QString &name);
-        static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
         static QStringList resolveVariable(const QString &exp, const VariableMap *values);
         static CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp, const VariableMap *values);
         static QStringList envVarDirectories(const QString &varName);
@@ -113,9 +112,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
     private:
+        static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
-        void createDefinitions(const CMakeAst*);
+        void createDefinitions(const CMakeAst* ast);
+        void createUses(const CMakeFunctionDesc& ast);
         
         QStringList m_modulePath;
         QString m_projectName;
@@ -130,6 +131,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         Definitions m_defs;
         QStringList m_filesRead;
         KDevelop::TopDUContext* m_topctx;
+        KDevelop::TopDUContext* m_parentCtx;
 };
 
 #endif

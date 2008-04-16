@@ -43,8 +43,8 @@
 
 using namespace KDevelop;
 
-CMakeProjectVisitor::CMakeProjectVisitor(const QString& root)
-    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_topctx(0)
+CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, TopDUContext *parent)
+    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_topctx(0), m_parentCtx(parent)
 {
 }
 
@@ -86,7 +86,8 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     const int count=exp.count();
     bool done=false;
     int prev=-1;
-    for(int i=0; i<count && !done; i++)
+    
+    for(int i=before; i<count && !done; i++)
     {
         const QChar& expi=exp[i];
         if(expi=='{')
@@ -114,7 +115,7 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
 QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const VariableMap *values)
 {
     VariableType type;
-    int before, after;
+    int before=0, after;
     QString var = variableName(exp, type, before, after);
     
     if(type)
@@ -350,8 +351,6 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                         IdentifiedFile(HashedString(KUrl(include.first().filePath).prettyUrl())), m_topctx);
                     
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
-                    
-                    kDebug() << "oooooo" << m_topctx->url().str();
                 }
                 aux->addImportedParentContext(m_topctx);
             }
@@ -1366,7 +1365,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
-        int bef, aft;
+        int bef=0, aft;
         VariableType t;
         variableName(arg.value, t, bef, aft);
         if(t)
@@ -1409,6 +1408,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).prettyUrl())), m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
         }
+        m_topctx->addImportedParentContext(m_parentCtx);
     }
     
     CMakeFileContent::const_iterator it=fc.constBegin()+line, itEnd=fc.constEnd();
@@ -1428,6 +1428,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             element = new MacroCallAst;
         }
         
+        createUses(*it);
 //         kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it, m_vars); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
@@ -1472,9 +1473,48 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        Declaration *d = new Declaration(m_topctx->url(), SimpleRange(arg.line-1, arg.column-1,
-                arg.line-1, arg.column+arg.value.length()-1), Declaration::GlobalScope, m_topctx);
-        d->setIdentifier( Identifier(arg.value) );
+        SimpleRange range(arg.line-1, arg.column-1, arg.line-1, arg.column+arg.value.length()-1);
+        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value), SimpleCursor(1000,0));
+        if(!decls.isEmpty())
+        {
+            int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+            m_topctx->createUse(idx, range, 0);
+        }
+        else
+        {
+            qDebug() << "nnnnnnn" << arg.value;
+            Declaration *d = new Declaration(m_topctx->url(), range, Declaration::GlobalScope, m_topctx);
+            d->setIdentifier( Identifier(arg.value) );
+        }
+    }
+}
+
+void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
+{
+    if(m_topctx==0)
+        return;
+    int before=0;
+    DUChainWriteLocker lock(DUChain::lock());
+    foreach(const CMakeFunctionArgument &arg, desc.arguments)
+    {
+        if(!arg.isCorrect())
+            continue;
+        
+        int after;
+        VariableType type;
+        QString var = variableName(arg.value, type, before, after);
+        if(type)
+        {
+            QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var), SimpleCursor(1000,0));
+            
+            qDebug() << "oooooooo" << var << decls.isEmpty();
+            if(!decls.isEmpty())
+            {
+                int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+                m_topctx->createUse(idx, SimpleRange(arg.line, before, arg.line, after), 0);
+            }
+        }
+        before+=2;
     }
 }
 

@@ -139,6 +139,7 @@ private:
     ICMakeBuilder* m_builder;
     CMakeHighlighting *m_highlight;
     QList<KDevelop::ProjectTargetItem*> m_targets;
+    KDevelop::TopDUContext* m_buildstrapContext;
 };
 
 #endif

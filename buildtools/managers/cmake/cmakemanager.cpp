@@ -39,6 +39,7 @@
 #include <kpluginloader.h>
 #include <projectmodel.h>
 #include <cmakehighlighting.h>
+#include <parsingenvironment.h>
 
 #include <duchain.h>
 #include <dumpchain.h>
@@ -56,6 +57,8 @@
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
 #endif
+
+using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
@@ -96,6 +99,14 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
 
     m_highlight = new CMakeHighlighting(this);
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        m_buildstrapContext=new TopDUContext(HashedString("buildstrap"), SimpleRange(0,0, 0,0));
+        
+        DUChain::self()->addDocumentChain(IdentifiedFile(HashedString("buildstrap")), m_buildstrapContext);
+        Q_ASSERT(DUChain::self()->chainForDocument(KUrl("buildstrap")));
+    }
+    
     QStringList envVars;
 #ifdef Q_OS_WIN
     envVars=CMakeProjectVisitor::envVarDirectories("Path");
@@ -213,6 +224,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         
         m_rootItem = new CMakeFolderItem(project, folderUrl, 0 );
         m_rootItem->setProjectRoot(true);
+        m_rootItem->setTopDUContext(m_buildstrapContext);
         
         m_folderPerUrl[folderUrl]=m_rootItem;
         connect(m_watchers[project], SIGNAL(dirty(const QString&)), this, SLOT(dirtyFile(const QString&)));
@@ -236,7 +248,7 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
 
-    CMakeProjectVisitor v(file);
+    CMakeProjectVisitor v(file, m_buildstrapContext);
     v.setVariableMap(vm);
     v.setMacroMap(mm);
     v.setModulePath(m_modulePathPerProject[project]);
@@ -300,7 +312,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
     #endif
         
-        CMakeProjectVisitor v(folder->url().toLocalFile(KUrl::RemoveTrailingSlash));
+        CMakeProjectVisitor v(folder->url().toLocalFile(KUrl::RemoveTrailingSlash), folder->topDUContext());
         v.setVariableMap(vm);
         v.setMacroMap(mm);
         v.setModulePath(m_modulePathPerProject[item->project()]);
@@ -334,7 +346,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             path.addPath(subf);
 
             CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
-            
+            a->setTopDUContext(v.context());
             a->setUrl(path);
             a->setDefinitions(v.definitions());
             folderList.append( a );
@@ -521,7 +533,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     return QStringList(guessCMakeRoot(cmakeBin)+"/Modules");
 }
 
-void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
+/*void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
 {
     kDebug(9042) << "Looking for" << url << " to regenerate";
 
@@ -542,7 +554,7 @@ void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
-    CMakeProjectVisitor v(url.toLocalFile());
+    CMakeProjectVisitor v(url.toLocalFile(), missingtopcontext);
     v.setVariableMap(vm);
     v.setMacroMap(mm);
     v.setModulePath(m_modulePathPerProject[project]);
@@ -550,7 +562,7 @@ void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url
     vm->remove("CMAKE_CURRENT_LIST_FILE");
     vm->remove("CMAKE_CURRENT_SOURCE_DIR");
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
-}
+}*/
 
 //Copied from ImportJob
 void CMakeProjectManager::reimport(CMakeFolderItem* fi)
@@ -618,7 +630,7 @@ QString CMakeProjectManager::name() const
     return "CMake";
 }
 
-KDevelop::ParseJob * CMakeProjectManager::createParseJob(const KUrl & url)
+KDevelop::ParseJob * CMakeProjectManager::createParseJob(const KUrl &)
 {
     return 0;
 }
@@ -628,7 +640,7 @@ KDevelop::ILanguage * CMakeProjectManager::language()
     return core()->languageController()->language(name());
 }
 
-KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
+const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
 {
     return m_highlight;
 }
