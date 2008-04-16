@@ -26,6 +26,7 @@
 #include <QMetaType>
 #include <QTextFormat>
 #include <QBrush>
+#include <QDir>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -61,6 +62,8 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
+
+const bool indentByDepth = false;
 
 DUContext* getFunctionContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
@@ -371,11 +374,7 @@ QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int ro
           else
             return QVariant("file");
         case Name: {
-/*          QString indentation;
-          for( int a = 0; a < item.pathNumber; a++ )
-            indentation += ' ';*/
-
-          return /*indentation + */item.name;
+          return item.isDirectory ? item.name + QDir::separator() : item.name;
         }
       }
       break;
@@ -585,7 +584,9 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
           int depth = item.inheritanceDepth;
           if( depth >= 1000 )
             depth-=1000;
-          QString indentation(depth, ' ');
+          QString indentation;
+          if(indentByDepth)
+            indentation = QString(depth, ' ');
 
           if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
             if( alias->identifier().isEmpty() ) {

@@ -20,6 +20,8 @@
 #include <QMutex>
 
 class KUrl;
+class QDir;
+class QFile;
 
 namespace CppTools {
   class FileModificationTimeWrapper;
@@ -69,7 +71,13 @@ namespace CppTools {
       QMutex m_cacheMutex;
 
       KUrl mapToBuild(const KUrl& url);
-      
+
+      /**Returns an invalid PathResolutionResult if it failed.
+        *Returns a valid PathResolutionResult with empty directory list if.
+        *Returns a PathResolutionResult with a filled path-list if the path-list could be read from somewhere(@todo Not implemented yet)
+        * */
+      PathResolutionResult validateDirectory(QDir& directory, QFile& file);
+
       ///Executes the command using KProcess
       PathResolutionResult getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const;
       bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;

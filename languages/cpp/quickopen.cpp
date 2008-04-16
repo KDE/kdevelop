@@ -105,7 +105,10 @@ IncludeFileData::IncludeFileData( const IncludeItem& item, const TopDUContextPoi
 
 QString IncludeFileData::text() const
 {
-  return m_item.name;
+  if(m_item.isDirectory)
+    return m_item.name + QDir::separator();
+  else
+    return m_item.name;
 }
 
 bool IncludeFileData::execute( QString& filterText ) {
