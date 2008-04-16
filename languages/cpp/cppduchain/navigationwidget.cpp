@@ -726,7 +726,11 @@ public:
     //Pick the one duchain for this document that has the most child-contexts/declarations.
     //This prevents picking a context that is empty due to header-guards.
     TopDUContext* duchain = 0;
+
     foreach(TopDUContext* ctx, duchains) {
+      if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->type() != KDevelop::CppParsingEnvironment)
+        continue;
+
       if(ctx->childContexts().count() != 0 && (duchain == 0 || ctx->childContexts().count() > duchain->childContexts().count())) {
         duchain = ctx;
       }
