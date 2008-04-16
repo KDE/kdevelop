@@ -120,7 +120,7 @@ public:
 public slots:
     void dirtyFile(const QString& file);
 
-    void jumpToNavigation();
+    void jumpToDeclaration();
 
 private:
     static QString guessCMakeShare(const QString& cmakeBin);

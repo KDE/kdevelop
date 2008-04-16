@@ -22,7 +22,6 @@
 #include "cmakemodelitems.h"
 #include <QString>
 #include <kdebug.h>
-#include <iproject.h>
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
     : KDevelop::ProjectBuildFolderItem( project, name, item )

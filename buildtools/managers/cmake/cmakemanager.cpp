@@ -33,6 +33,7 @@
 #include <kio/job.h>
 
 #include <icore.h>
+#include <idocumentcontroller.h>
 #include <iproject.h>
 #include <iplugincontroller.h>
 #include <ilanguagecontroller.h>
@@ -380,7 +381,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             QStringList dependencies=v.targetDependencies(t);
             if(!dependencies.isEmpty()) //Just to remove verbosity
             {
-                CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder );
+                CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
     
                 foreach( const QString & sFile, dependencies )
                 {
@@ -661,21 +662,25 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
         return IPlugin::contextMenuExtension( context );
 
     ContextMenuExtension menuExt;
-    if(items.count()==1)
+    if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
     {
         m_clickedItem = items.first();
-        KAction* action = new KAction( i18n( "Jump to project definition" ), this );
-        connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
+        KAction* action = new KAction( i18n( "Jump to target definition" ), this );
+        connect( action, SIGNAL( triggered() ), this, SLOT( jumpToDeclaration() ) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
     return menuExt;
 }
 
-void CMakeProjectManager::jumpToNavigation()
+void CMakeProjectManager::jumpToDeclaration()
 {
-    if(m_clickedItem)
+    qDebug() << "navigation" << m_clickedItem;
+    DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItem);
+    if(du)
     {
-        
+        Declaration *decl=du->context();
+        ICore::self()->documentController()->openDocument(KUrl(decl->url().str()), decl->range().start.textCursor());
+        qDebug() << "jumping" << decl->url().str();
     }
 }
 

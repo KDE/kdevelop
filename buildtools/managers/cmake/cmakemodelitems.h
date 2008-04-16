@@ -29,10 +29,12 @@
 #include "cmakeexport.h"
 #include "cmaketypes.h"
 #include "cmakeast.h"
+#include <iproject.h>
 
 namespace KDevelop {
     class IProject;
     class TopDUContext;
+    class Declaration;
 }
 
 /**
@@ -41,6 +43,8 @@ namespace KDevelop {
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
+
+namespace KDevelop { class TopDUContext; }
 
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
@@ -60,6 +64,29 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         Definitions m_defines;
 };
 
-typedef KDevelop::ProjectTargetItem CMakeTargetItem;
+class DUChainAttatched
+{
+    public:
+        DUChainAttatched(KDevelop::Declaration* c) : ctx(c) {}
+        KDevelop::Declaration* context() const { return ctx; }
+    private:
+        KDevelop::Declaration* ctx;
+};
+
+class CMakeTargetItem : public KDevelop::ProjectTargetItem, public DUChainAttatched
+{
+    public:
+        CMakeTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+            : ProjectTargetItem( project, name, parent), DUChainAttatched(c) {}
+};
+
+/*
+class CMakeFileItem : public KDevelop::ProjectFileItem, public DUChainAttatched
+{
+    public:
+        CMakeFileItem( KDevelop::IProject* project, const KUrl& file, QStandardItem *parent, KDevelop::Declaration *c)
+            : ProjectFileItem( project, file, parent), DUChainAttatched(c) {}
+};
+*/
 
 #endif

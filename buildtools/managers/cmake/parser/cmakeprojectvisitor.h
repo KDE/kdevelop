@@ -113,6 +113,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static QString findFile(const QString &file, const QStringList &folders, const QStringList& suffixes, FileType t=File);
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
+        const QMap<QString, KDevelop::Declaration*>& declarationsPerTarget() { return m_declarationsPerTarget; }
     private:
         struct VisitorState
         {

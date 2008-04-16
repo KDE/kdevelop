@@ -191,7 +191,7 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 //     QString name = resolveVariable(exec->executable(), m_vars).join(";");
     VisitorState p=m_backtrace.front();
     DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(m_topctx->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
+    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
     d->setIdentifier( Identifier(exec->executable()) );
     m_declarationsPerTarget.insert(exec->executable(), d);
     kDebug(9042) << "looooooool" << d
@@ -207,7 +207,7 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
     VisitorState p=m_backtrace.front();
     DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(m_topctx->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
+    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
     d->setIdentifier( Identifier(lib->libraryName()) );
     m_declarationsPerTarget.insert(lib->libraryName(), d);
     
@@ -1483,6 +1483,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         line+=lines;
         it+=lines;
         m_backtrace.top().line = line;
+        m_backtrace.top().context = m_topctx;
         delete element;
     }
     m_backtrace.pop();
