@@ -29,7 +29,6 @@
 #include <duchainlock.h>
 #include <declaration.h>
 #include <use.h>
-#include <symboltable.h>
 #include <smartconverter.h>
 
 #include "parsesession.h"
@@ -614,12 +613,10 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
       checkRanges();
 #endif
       
-      if (!identifier.isEmpty()) {
+      if (!identifier.isEmpty())
         ret->setLocalScopeIdentifier(identifier);
 
-        if (type == DUContext::Class || type == DUContext::Namespace)
-          SymbolTable::self()->addContext(ret);
-      }
+      ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global);
 
       if( recompiling() )
         kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";

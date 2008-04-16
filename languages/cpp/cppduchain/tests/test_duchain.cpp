@@ -47,7 +47,6 @@
 
 #include "tokens.h"
 #include "parsesession.h"
-#include <symboltable.h>
 
 #include "rpp/preprocessor.h"
 
@@ -1618,14 +1617,18 @@ void TestDUChain::testForwardDeclaration()
   DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-
+  QVERIFY(top->inSymbolTable());
   QCOMPARE(top->localDeclarations().count(), 4); //Test::SubTest is in a prefix context
   QCOMPARE(top->childContexts().count(), 2); //Test::SubTest is in a prefix context
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1); //Test::SubTest is in a prefix context
 
   QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[0]));
-  
+  QVERIFY(top->localDeclarations()[0]->inSymbolTable());
+  QVERIFY(top->localDeclarations()[1]->inSymbolTable());
+  QVERIFY(top->localDeclarations()[2]->inSymbolTable());
+  QVERIFY(top->localDeclarations()[3]->inSymbolTable());
   ForwardDeclarationType* type1 = top->localDeclarations()[0]->type<ForwardDeclarationType>().data();
+  kDebug() << typeid(*top->localDeclarations()[1]->abstractType()).name();
   ForwardDeclarationType* type2 = top->localDeclarations()[1]->type<ForwardDeclarationType>().data();
   CppClassType* type3 = top->localDeclarations()[2]->type<CppClassType>().data();
   ForwardDeclarationType* type4 = top->localDeclarations()[3]->type<ForwardDeclarationType>().data();
@@ -1927,8 +1930,6 @@ void TestDUChain::testFileParse()
   DUContext* top = parse(preprocessed, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-
-  SymbolTable::self()->dumpStatistics();
 
   release(top);
 }

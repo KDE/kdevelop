@@ -38,7 +38,6 @@
 
 #include "tokens.h"
 #include "parsesession.h"
-#include <symboltable.h>
 
 #include "rpp/preprocessor.h"
 #include "expressionvisitor.h"

@@ -28,7 +28,6 @@
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
 
-#include <symboltable.h>
 #include <forwarddeclaration.h>
 #include <duchain.h>
 #include <duchainlock.h>
@@ -524,16 +523,6 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     if (currentContext()->type() == DUContext::Class) {
       if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
         static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
-    }
-
-    switch (currentContext()->type()) {
-      case DUContext::Global:
-      case DUContext::Namespace:
-      case DUContext::Class:
-        SymbolTable::self()->addDeclaration(declaration);
-        break;
-      default:
-        break;
     }
   }
 
