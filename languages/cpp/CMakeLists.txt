@@ -33,7 +33,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     cppparsejob.cpp
     preprocessjob.cpp
     cpphighlighting.cpp
-    cppcodecompletion.cpp
     cppcodecompletionmodel.cpp
     cppcodecompletionworker.cpp
     codecompletioncontext.cpp

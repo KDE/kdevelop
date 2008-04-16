@@ -46,6 +46,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/smartinterface.h>
+#include <helpers/codecompletion.h>
 
 #include <icore.h>
 #include <iproblem.h>
@@ -71,7 +72,7 @@
 #include "ast.h"
 #include "parsesession.h"
 #include "cpphighlighting.h"
-#include "cppcodecompletion.h"
+#include "cppcodecompletionmodel.h"
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
 #include "typerepository.h"
@@ -161,7 +162,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     setXMLFile( "kdevcppsupport.rc" );
 
     m_highlights = new CppHighlighting( this );
-    m_cc = new CppCodeCompletion( this );
+    m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0) );
     m_standardMacros = new Cpp::MacroRepository::LazySet( &Cpp::EnvironmentManager::m_macroRepository, &Cpp::EnvironmentManager::m_repositoryMutex );
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;

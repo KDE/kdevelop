@@ -35,7 +35,7 @@ class TranslationUnitAST;
 class IncludeFileDataProvider;
 
 namespace KParts { class Part; }
-namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; }
+namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; }
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
 
@@ -152,7 +152,7 @@ private:
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
-    CppCodeCompletion *m_cc;
+    KDevelop::CodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;
     Cpp::MacroRepository::LazySet *m_standardMacros;
     QStringList *m_standardIncludePaths;
