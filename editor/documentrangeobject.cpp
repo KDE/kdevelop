@@ -38,28 +38,44 @@ DocumentRangeObjectPrivate::DocumentRangeObjectPrivate(const DocumentRangeObject
 
 
 void DocumentRangeObjectPrivate::syncFromSmart() const {
-    if(!m_smartRange)
-        return;
-    
-    KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
-    Q_ASSERT(iface);
-    QMutexLocker l(iface->smartMutex());
+    SimpleRange range;
+    KTextEditor::Range* smartRange;
+    {
+        if(!m_smartRange)
+            return;
+        KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+        Q_ASSERT(iface);
+        QMutexLocker l(iface->smartMutex()); //Nested to prevent deadlock in combination with m_mutex
+        
+        smartRange = m_smartRange;
+        
+        range = SimpleRange( *smartRange );
+    }
 
-    m_range = SimpleRange( *m_smartRange );
+    QMutexLocker lock(&DocumentRangeObject::m_mutex);
+    m_range = range;
 }
 
 void DocumentRangeObjectPrivate::syncToSmart() const {
-    if(!m_smartRange)
-        return;
-    
+    SimpleRange range;
+    KTextEditor::SmartRange* smartRange;
     KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
-    Q_ASSERT(iface);
+    {
+        QMutexLocker lock(&DocumentRangeObject::m_mutex);
+        if(!m_smartRange)
+            return;
+    
+        Q_ASSERT(iface);
+        range = m_range;
+        smartRange = m_smartRange;
+    }
+    //Danger window
     QMutexLocker l(iface->smartMutex());
     
-    m_smartRange->start().setLine(m_range.start.line);
-    m_smartRange->start().setColumn(m_range.start.column);
-    m_smartRange->end().setLine(m_range.end.line);
-    m_smartRange->end().setColumn(m_range.end.column);
+    smartRange->start().setLine(range.start.line);
+    smartRange->start().setColumn(range.start.column);
+    smartRange->end().setLine(range.end.line);
+    smartRange->end().setColumn(range.end.column);
 }
 
 DocumentRangeObject::DocumentRangeObject(const HashedString& document, const SimpleRange& range)
@@ -177,8 +193,10 @@ SimpleRange DocumentRangeObject::range( ) const
 void DocumentRangeObject::setRange(const SimpleRange& range)
 {
     Q_D(DocumentRangeObject);
-    QMutexLocker lock(&m_mutex);
-    d->m_range = range;
+    {
+        QMutexLocker lock(&m_mutex);
+        d->m_range = range;
+    }
     d->syncToSmart();
 }
 
@@ -210,8 +228,8 @@ SmartRange* DocumentRangeObject::smartRange() const
 bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
 {
     Q_D(const DocumentRangeObject);
-    QMutexLocker lock(&m_mutex);
     d->syncFromSmart();
+    QMutexLocker lock(&m_mutex);
     return d->m_range.contains(cursor);
 }
 
@@ -239,8 +257,8 @@ KTextEditor::SmartRange* DocumentRangeObject::takeRange()
     Q_D(DocumentRangeObject);
     KTextEditor::SmartRange* ret;
     {
-        QMutexLocker lock(&m_mutex);
         d->syncFromSmart();
+        QMutexLocker lock(&m_mutex);
     
         ret = d->m_smartRange;
     
