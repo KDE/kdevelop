@@ -58,8 +58,7 @@ void UiPreferences::save()
 {
     KCModule::save();
 
-    // TODO: tell all main windows, when api available
-    static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->loadSettings();
+    UiController *uiController = Core::self()->uiControllerInternal();
+    foreach (Sublime::MainWindow *window, uiController->mainWindows())
+        (static_cast<KDevelop::MainWindow*>(window))->loadSettings();
 }
-
-
