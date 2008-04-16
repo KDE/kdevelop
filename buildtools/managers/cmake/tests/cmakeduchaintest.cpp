@@ -26,6 +26,7 @@
 #include <duchainlock.h>
 #include <duchain.h>
 #include <simplerange.h>
+#include <language/duchain/dumpchain.h>
 
 using namespace KDevelop;
 
@@ -35,6 +36,7 @@ Q_DECLARE_METATYPE(QList<SimpleRange>)
 
 CMakeDUChainTest::CMakeDUChainTest()
 {
+	DUChainWriteLocker lock(DUChain::lock());
 	m_fakeContext = new TopDUContext(HashedString("test"), SimpleRange(0,0,0,0));
 }
 
@@ -118,6 +120,46 @@ void CMakeDUChainTest::testDUChainWalk()
             qDebug() << "doesn't exist " << sr.start.column << sr.end.column;
         QVERIFY(found);
     }
+    
+    DUChain::self()->clear();
+}
+
+void CMakeDUChainTest::testUses()
+{
+    QString input("project(simpletest)\n"
+            "set(var a b c)\n"
+	    "set(var2 ${var})\n");
+
+    QFile file("cmake_duchain_test");
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+    
+    QTextStream out(&file);
+    out << input;
+    file.close();
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
+    file.remove();
+    QVERIFY(code.count() != 0);
+    
+    MacroMap mm;
+    VariableMap vm;
+    
+    CMakeProjectVisitor v(file.fileName(), m_fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.walk(code, 0);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    TopDUContext* ctx=v.context();
+    QVERIFY(ctx);
+    KDevelop::DumpChain dump;
+    dump.dump(ctx);
+    QVector<Declaration*> declarations=ctx->localDeclarations();
+    QCOMPARE(ctx->range().start.line, 0);
+    QCOMPARE(declarations.count(), 2);
+    QVERIFY(declarations[0]->inSymbolTable());
+    QVERIFY(declarations[1]->inSymbolTable());
+    QCOMPARE(ctx->uses().size(), 1);
+    QCOMPARE(ctx->range().end.line, 4);
     
     DUChain::self()->clear();
 }

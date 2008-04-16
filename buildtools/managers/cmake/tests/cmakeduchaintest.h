@@ -40,6 +40,7 @@ class CMakeDUChainTest : public QObject
     private slots:
         void testDUChainWalk_data();
         void testDUChainWalk();
+	void testUses();
     private:
     	KDevelop::TopDUContext* m_fakeContext;
 };
