@@ -1,4 +1,6 @@
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
+
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS

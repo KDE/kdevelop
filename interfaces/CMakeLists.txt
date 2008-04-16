@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/interfaces
 )
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
     context.cpp
     iplugin.cpp

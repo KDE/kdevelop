@@ -5,6 +5,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/interfaces
 )
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9503 )
 set(kdevplatformproject_LIB_SRCS
     projectmodel.cpp
     projectconfigskeleton.cpp

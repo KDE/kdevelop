@@ -1,3 +1,5 @@
+
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 
 include_directories(
