@@ -104,7 +104,7 @@ void ClassModel::setFilterByProject(bool filterByProject)
 bool ClassModel::filterObject(DUChainBase* object) const
 {
   ENSURE_CHAIN_READ_LOCKED
-  
+
   KUrl url(object->url().str());
 
   if (m_filterDocument)
@@ -169,7 +169,7 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex & parentInd
   return QModelIndex();
 }
 
-bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
+/*bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
 {
   DUChainReadLocker readLock(DUChain::lock());
 
@@ -197,7 +197,7 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
     return children->count();
   else
     return false;
-}
+}*/
 
 int ClassModel::rowCount(const QModelIndex & parentIndex) const
 {
@@ -287,6 +287,11 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
     foreach (DUContextPointer nsContext, parent->namespaceContexts())
       addTopLevelToList(nsContext.data(), list, parent);
 
+    if (Declaration* declaration = dynamic_cast<Declaration*>(parent->data()))
+      if (declaration->internalContext())
+        if (declaration->internalContext()->type() == DUContext::Class)
+          addTopLevelToList(declaration->internalContext(), list, parent);
+
   } else {
     foreach (TopDUContext* chain, DUChain::self()->allChains())
       addTopLevelToList(chain, list, parent);
@@ -298,6 +303,17 @@ QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
     m_topList = list;
   else
     m_lists.insert(parent, list);
+
+  if (parent) {
+    if (DUContext* parentContext = dynamic_cast<DUContext*>(parent->data()))
+      kDebug() << "Created list of" << list->count() << "child items for context " << parentContext->scopeIdentifier();
+    else if (Declaration* dec = dynamic_cast<Declaration*>(parent->data()))
+      kDebug() << "Created list of" << list->count() << " child items for declaration " << dec->qualifiedIdentifier();
+    else
+      kDebug() << "Created list of" << list->count() << " child items for node " << parent;
+  } else {
+    kDebug() << "Created list of" << list->count() << " child items for top node";
+  }
 
   return list;
 }
@@ -312,8 +328,10 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
 
     switch (child->type()) {
       case DUContext::Class:
-        if (child->owner())
+        /*if (child->owner()) {
+          kDebug() << "Adding class " << child->scopeIdentifier() << " to list";
           list->append(createPointer(child, parent));
+        }*/
         break;
 
       case DUContext::Namespace: {
@@ -331,8 +349,10 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
         // FIXME must emit changes here??
         ns->addNamespaceContext(DUContextPointer(child));
 
-        if (!list->contains(ns))
+        if (!list->contains(ns)) {
           list->append(ns);
+          kDebug() << "Adding namespace " << child->scopeIdentifier() << " to list";
+        }
 
         break;
       }
@@ -343,11 +363,13 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
     }
   }
 
-  if (first) {
+  //if (first) {
     foreach (Declaration* declaration, context->localDeclarations())
-      if (declaration->isForwardDeclaration() && !filterObject(declaration))
+      if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
+        kDebug() << "Adding declaration " << declaration->identifier() << " to list";
         list->append(createPointer(declaration, parent));
-  }
+      }
+  //}
 }
 
 DUContext* ClassModel::trueParent(DUContext* parent) const
@@ -528,7 +550,7 @@ QVariant ClassModel::data(Node* node, int role)
           if (Declaration* declaration = context->owner()) {
             if(context->owner()->isDefinition() && context->owner()->declaration())
               declaration = context->owner()->declaration();
-            
+
             switch (role) {
               case Qt::DisplayRole:
                 return declaration->identifier().toString();
@@ -552,7 +574,7 @@ QVariant ClassModel::data(Node* node, int role)
       case Qt::DisplayRole: {
         if(dec->isDefinition() && dec->declaration())
           dec = dec->declaration();
-        
+
         QString ret = dec->identifier().toString();
         if (FunctionType::Ptr type = dec->type<FunctionType>())
           ret += type->partToString(FunctionType::SignatureArguments);
@@ -584,7 +606,7 @@ Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer)
 
     if(declaration->isDefinition() && declaration->declaration())
       return declaration->declaration();
-    
+
     return declaration;
 
   } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
