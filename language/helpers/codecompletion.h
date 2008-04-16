@@ -27,12 +27,16 @@
 namespace KParts { class Part; }
 namespace KTextEditor { class Document; class View; class CodeCompletionModel;  }
 
+namespace KDevelop
+{
+
 class CodeCompletion : public QObject
 {
   Q_OBJECT
 
   public:
-    CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel*);
+    /** CodeCompletion will be the @p aModel parent. */
+    CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel* aModel);
     virtual ~CodeCompletion();
 
   public Q_SLOTS:
@@ -42,6 +46,8 @@ class CodeCompletion : public QObject
   private:
     KTextEditor::CodeCompletionModel* m_model;
 };
+
+}
 
 #endif
 

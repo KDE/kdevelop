@@ -32,12 +32,14 @@
 #include <topducontext.h>
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel* aModel)
   : QObject(parent), m_model(aModel)
 {
   connect (KDevelop::ICore::self()->partManager(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
+  aModel->setParent(this);
 }
 
 CodeCompletion::~CodeCompletion()
