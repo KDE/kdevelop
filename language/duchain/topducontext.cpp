@@ -314,7 +314,6 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
 bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& /*trace*/, SearchFlags flags) const
 {
   ENSURE_CAN_READ
-  kDebug() << identifiers;
 //  foreach(id, identifiers)
 //      kDebug() << "searching" << id;
 
