@@ -39,8 +39,9 @@ struct ContainerPrivate {
 // class Container
 
 Container::Container(QWidget *parent)
-    :QTabWidget(parent), d(new ContainerPrivate())
+    :KTabWidget(parent), d(new ContainerPrivate())
 {
+    setTabBarHidden(true);
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
@@ -89,7 +90,7 @@ void Container::paintEvent(QPaintEvent *ev)
 {
     //paint ourselves only if tabbar is visible
     if (tabBar()->isVisible())
-        QTabWidget::paintEvent(ev);
+        KTabWidget::paintEvent(ev);
     //otherwise don't paint anything (especially the border around the widget)
 }
 
