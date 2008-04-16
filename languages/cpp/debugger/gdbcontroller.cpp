@@ -86,6 +86,7 @@ GDBController::GDBController(QObject* parent)
         m_breakpointController(new BreakpointController(this))
 {
     configure();
+    kDebug(9012) << "GDB script" << config_configGdbScript_ << "\n";
 
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
@@ -191,6 +192,7 @@ void GDBController::configure()
 
         if (config_configGdbScript_.isValid())
           queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.path()));
+
 
         if (restart)
             queueCmd(new GDBCommand(GDBMI::ExecContinue));
@@ -635,6 +637,9 @@ bool GDBController::startDebugger()
     // make sure output radix is always set to users view.
     queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",  config_outputRadix_)));
 
+    if (config_configGdbScript_.isValid())
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.path()));
+
     return true;
 }
 
@@ -750,6 +755,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
+        kDebug(9012) << "Running gdb script " << config_runGdbScript_.path();
         queueCmd(new GDBCommand(NonMI, "source " + config_runGdbScript_.path()));
 
         // Note: script could contain "run" or "continue"

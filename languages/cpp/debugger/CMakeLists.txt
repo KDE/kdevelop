@@ -48,7 +48,7 @@ set(kdevcppdebugger_PART_SRCS
     frameitem.cpp
     watchitem.cpp
     variablecollection.cpp
-    gdbbreakpointwidget.cpp
+#    gdbbreakpointwidget.cpp
     framestackwidget.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
@@ -65,7 +65,8 @@ set(kdevcppdebugger_PART_SRCS
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
-    #modeltest.cpp
+    breakpointwidget.cpp
+#    modeltest.cpp
 )
 
 set(kdevcppdebugger_PART_UI

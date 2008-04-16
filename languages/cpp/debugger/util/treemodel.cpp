@@ -6,6 +6,8 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
+#include "kdebug.h"
+
 using namespace GDBDebugger;
 
 TreeModel::TreeModel(const QVector<QString>& headers,
@@ -35,11 +37,8 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-    return item->data(index.column());
+    return item->data(index.column(), role);
 }
 
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
@@ -152,4 +151,20 @@ void TreeModel::clicked(const QModelIndex &index)
 {
     TreeItem* item = itemForIndex(index);
     item->clicked();
+}
+
+bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
+                        int role)
+{
+    /* FIXME: CheckStateRole is dirty.  Should we pass the role to
+       the item?  */
+    if (index.isValid() 
+        && (role == Qt::EditRole || role == Qt::CheckStateRole))
+    {
+
+        TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+        item->setColumn(index.column(), value);
+        return true;
+    }
+    return false;
 }

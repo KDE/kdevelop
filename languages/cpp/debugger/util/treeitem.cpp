@@ -8,7 +8,7 @@
 using namespace GDBDebugger;
 
 TreeItem::TreeItem(TreeModel* model, TreeItem *parent)
-  : model_(model), more_(false), ellipsis_(0)
+: model_(model), more_(false), ellipsis_(0), expanded_(false)
 {
     parentItem = parent;
 }
@@ -28,7 +28,7 @@ void TreeItem::setData(const QVector<QString> &data)
     }
 }
 
-void TreeItem::appendChild(TreeItem *item)
+void TreeItem::appendChild(TreeItem *item, bool initial)
 {
     QModelIndex index = model_->indexForItem(this, 0);
     QModelIndex index2 = model_->indexForItem(this, itemData.size()-1);
@@ -44,9 +44,11 @@ void TreeItem::appendChild(TreeItem *item)
     }
     else
     {
-        model_->beginInsertRows(index, childItems.size(), childItems.size());
+        if (!initial)
+            model_->beginInsertRows(index, childItems.size(), childItems.size());
         childItems.append(item);
-        model_->endInsertRows();
+        if (!initial)
+            model_->endInsertRows();
     }
 }
 
@@ -64,6 +66,12 @@ void TreeItem::removeChild(int index)
     model_->beginRemoveRows(modelIndex, index, index);
     childItems.erase(childItems.begin() + index);
     model_->endRemoveRows();
+}
+
+void TreeItem::removeSelf()
+{
+    QModelIndex modelIndex = model_->indexForItem(this, 0);
+    parentItem->removeChild(modelIndex.row());
 }
 
 void TreeItem::clear()
@@ -101,8 +109,11 @@ int TreeItem::columnCount() const
     return itemData.count();
 }
 
-QVariant TreeItem::data(int column) const
+QVariant TreeItem::data(int column, int role) const
 {
+    if (role != Qt::DisplayRole && role != Qt::EditRole)
+        return QVariant();
+
     return itemData.value(column);
 }
 

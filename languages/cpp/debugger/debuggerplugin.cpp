@@ -71,6 +71,7 @@
 #include "debuggerconfigwidget.h"
 #include "gdbglobal.h"
 #include "variablecollection.h"
+#include "breakpointwidget.h"
 
 #include <iostream>
 
@@ -123,7 +124,9 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     controller = new GDBController(this);
 
-    core()->uiController()->addToolView(i18n("Breakpoints"), new DebuggerToolFactory<GDBBreakpointWidget>(this, controller, Qt::BottomDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("Breakpoints"), 
+        new DebuggerToolFactory<BreakpointWidget>(this, controller, Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(i18n("Variables"), new DebuggerToolFactory<VariableWidget>(this, controller, Qt::LeftDockWidgetArea));
 

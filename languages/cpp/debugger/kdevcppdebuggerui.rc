@@ -6,14 +6,12 @@
 
   <Action name="debug_run" group="run_operations"/>
   <Action name="debug_attach" group="run_operations"/>
-
-  <Separator group="debug"/>
-  <Action name="debug_runtocursor" group="debug"/>
-  <Action name="debug_restart" group="debug"/>
+  <Action name="debug_core" group="run_operations"/>
 
   <Separator group="debug"/>
   <Action name="debug_stop" group="debug"/>
   <Action name="debug_pause" group="debug"/>
+  <Action name="debug_restart" group="debug"/>
 
   <Separator group="debug"/>
   <Action name="debug_stepover" group="debug"/>
@@ -21,6 +19,7 @@
   <Action name="debug_stepinto" group="debug"/>
   <Action name="debug_stepintoinst" group="debug"/>
   <Action name="debug_stepout" group="debug"/>
+  <Action name="debug_runtocursor" group="debug"/>
 
   <Separator group="debug"/>
   <Action name="debug_jumptocursor" group="debug"/>
@@ -29,7 +28,6 @@
 
   <Separator group="debug"/>
   <Action name="debug_memview" group="debug"/>
-  <Action name="debug_core" group="debug"/>
  </Menu>
 </MenuBar>
 

@@ -71,8 +71,10 @@ void VariableCollection::deleteItem(AbstractVariableItem * item)
     delete m_items.takeAt(index);
     endRemoveRows();
 
+#if 0
     if (item->isRegisteredWithGdb())
         item->deregisterWithGdb();
+#endif
 }
 
 GDBController * VariableCollection::controller() const
@@ -233,6 +235,7 @@ bool VariableCollection::setData(const QModelIndex & index, const QVariant & val
 
 void VariableCollection::slotEvent(event_t event)
 {
+#if 0
     switch(event)
     {
         case program_exited:
@@ -268,6 +271,7 @@ void VariableCollection::slotEvent(event_t event)
         default:
             break;
     }
+#endif
 }
 
 void VariableCollection::slotAddWatchVariable(const QString &watchVar)

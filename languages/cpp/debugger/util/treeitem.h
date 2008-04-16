@@ -26,6 +26,8 @@ public: // Methods that the derived classes should implement
         The amount of children to fetch is up to the implementation.
         After fetching, should call setHasMore.  */
     virtual void fetchMoreChildren() = 0;
+
+    virtual void setColumn(int index, const QVariant& data) {}
        
 protected: // Interface for derived classes
 
@@ -40,9 +42,11 @@ protected: // Interface for derived classes
 
     /** Adds a new child and notifies the interested parties.  
         Clears the "hasMore" flag.  */
-    void appendChild(TreeItem *child);
+    void appendChild(TreeItem *child, bool initial = false);
 
     void removeChild(int index);
+
+    void removeSelf();
 
     /** Report change in data of this item.  */
     void reportChange();
@@ -66,7 +70,7 @@ protected: // Backend implementation of Model/View
     TreeItem *child(int row);
     int childCount() const;
     int columnCount() const;
-    QVariant data(int column) const;
+    virtual QVariant data(int column, int role) const;
     int row() const;
     TreeItem *parent();
     bool hasMore() const { return more_; }

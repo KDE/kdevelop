@@ -23,13 +23,19 @@
 #define BREAKPOINTCONTROLLER_H
 
 #include <QAbstractItemModel>
+#include <Qt>
+#include <QSet>
 
 #include <KUrl>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <ktexteditor/markinterface.h>
 
 #include "mi/gdbmi.h"
 #include "gdbglobal.h"
+#include "util/treemodel.h"
+#include "util/treeitem.h"
 
 namespace KDevelop { class IDocument; }
 
@@ -40,13 +46,101 @@ class GDBController;
 class Breakpoint;
 class FilePosBreakpoint;
 class Watchpoint;
+class Breakpoints;
+
+class NewBreakpoint : public TreeItem
+{
+public:
+    enum kind_t { code_breakpoint = 0, write_breakpoint, read_breakpoint,
+                  access_breakpoint, last_breakpoint_kind };
+
+    NewBreakpoint(TreeModel *model, TreeItem *parent, GDBController* controller,
+                  kind_t kind);
+    NewBreakpoint(TreeModel *model, TreeItem *parent, GDBController* controller,
+                  const KConfigGroup& config);
+
+
+    int id() const { return id_; }
+    void update(const GDBMI::Value &b);
+    void fetchMoreChildren() {}
+
+    void setColumn(int index, const QVariant& value);
+    void setDeleted();
+
+    void sendToGDBMaybe();
+    int hitCount() const;
+
+    QVariant data(int column, int role) const;
+
+    bool pending() const { return pending_; }
+    bool dirty() const { return !dirty_.empty(); }
+
+    void save(KConfigGroup& config);
+
+    static const int enable_column = 0;
+    static const int state_column = 1;
+    static const int type_column = 2;
+    static const int location_column = 3;
+    static const int condition_column = 4;
+        
+private:
+    void handleDeleted(const GDBMI::ResultRecord &v);
+    void handleInserted(const GDBMI::ResultRecord &r);
+    void handleEnabledOrDisabled(const GDBMI::ResultRecord &r);
+    void handleConditionChanged(const GDBMI::ResultRecord &r);
+    void handleAddressComputed(const GDBMI::ResultRecord &r);
+
+    int id_;
+    bool enabled_;
+    QSet<int> dirty_;
+    QSet<int> errors_;
+    GDBController* controller_;
+    bool deleted_;
+    int hitCount_;
+    kind_t kind_;
+    /* The GDB 'pending' flag.  */
+    bool pending_;
+
+    static const char *string_kinds[last_breakpoint_kind];
+};
+
+class Breakpoints : public TreeItem
+{
+    Q_OBJECT
+public:
+    Breakpoints(TreeModel *model, GDBController *controller);
+
+    void sendToGDB();
+
+    void update();
+
+    void fetchMoreChildren() {}
+
+    NewBreakpoint* addCodeBreakpoint();
+    NewBreakpoint* addWatchpoint();
+    NewBreakpoint* addReadWatchpoint();
+    void remove(const QModelIndex &index);
+
+    NewBreakpoint *breakpointById(int id);
+
+public slots:
+    void save();
+    void load();
+
+private:
+
+    void handleBreakpointList(const GDBMI::ResultRecord &r);
+
+    GDBController *controller_;
+};
+
 
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class BreakpointController : public QAbstractItemModel
+class BreakpointController : public TreeModel
 {
     Q_OBJECT
 
@@ -56,7 +150,14 @@ public:
 
     GDBController* controller() const;
 
+    Breakpoints* breakpointsItem();
+
     const QList<Breakpoint*>& breakpoints() const;
+
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role) const;
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
     /**
     * Displays an icon in the file at the line that the debugger has stoped
@@ -92,20 +193,6 @@ public:
     void removeBreakpoint(Breakpoint *bp);
     void removeAllBreakpoints();
 
-    // Item model reimplementations
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    //virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-
-    Breakpoint* breakpointForIndex(const QModelIndex& index) const;
-    QModelIndex indexForBreakpoint(Breakpoint* breakpoint, int column = 0) const;
-
 signals:
 
     /**
@@ -124,6 +211,8 @@ signals:
     void toggledBreakpointEnabled(const QString &fileName, int lineNum);
 
 private slots:
+    void slotDataChanged(const QModelIndex& index1, const QModelIndex& index2);
+
     /**
     * Whenever a new document is added this slot gets triggered and we then
     * look for a MarkInterfaceExtension part. When it is a
@@ -146,6 +235,9 @@ private slots:
     void slotBreakpointEnabledChanged(Breakpoint* b);
 
 private:
+    Breakpoints* universe_;
+
+
     void handleBreakpointList(const GDBMI::ResultRecord& r);
 
     void adjustMark(Breakpoint* bp, bool add);

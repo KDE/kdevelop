@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
-   Copyright (C) 2006 Vladimir Prus <ghost@cs.msu.su>
+   Copyright (C) 2006, 2008 Vladimir Prus <ghost@cs.msu.su>
    Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 #include "breakpointcontroller.h"
 
 #include <QPixmap>
+#include <KIcon>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,15 +37,545 @@
 #include "gdbcommand.h"
 #include "breakpoint.h"
 
+#include "util/treeitem.h"
+#include "util/treemodel.h"
+
+// #include "modeltest.h"
+
 using namespace KTextEditor;
 using namespace GDBDebugger;
 using namespace GDBMI;
 
 static int m_activeFlag = 0;
 
-BreakpointController::BreakpointController(GDBController* parent)
-    : QAbstractItemModel(parent)
+NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
+                             GDBController* controller, kind_t kind)
+: TreeItem(model, parent), id_(-1), enabled_(true), 
+  controller_(controller), deleted_(false), hitCount_(0), kind_(kind),
+  pending_(false)
 {
+    setData(QVector<QString>() << "" << "" << "" << "" << "");
+}
+
+NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
+                             GDBController* controller,
+                             const KConfigGroup& config)
+: TreeItem(model, parent), id_(-1), enabled_(true), 
+  controller_(controller), deleted_(false), hitCount_(0),
+  pending_(false)
+{
+    QString kindString = config.readEntry("kind", "");
+    int i;
+    for (i = 0; i < last_breakpoint_kind; ++i)
+        if (string_kinds[i] == kindString)
+        {
+            kind_ = (kind_t)i;
+            break;
+        }
+    /* FIXME: maybe, should silently ignore this breakpoint.  */
+    Q_ASSERT(i < last_breakpoint_kind);
+    enabled_ = config.readEntry("enabled", false);
+
+    QString location = config.readEntry("location", "");
+    QString condition = config.readEntry("condition", "");
+
+    dirty_.insert(location_column);
+
+    setData(QVector<QString>() << "" << "" << "" << location << condition);
+}
+
+
+void NewBreakpoint::update(const GDBMI::Value &b)
+{
+    id_ = b["number"].toInt();
+    
+    QString type = b["type"].literal();
+    const char *code_breakpoints[] = {
+        "breakpoint", "hw breakpoint", "until", "finish"};
+
+    QString location = "";
+    if (b.hasField("original-location"))
+        location = b["original-location"].literal();
+    else
+    {
+        location = "Your GDB is too old";
+    }
+    itemData[location_column] = location;
+
+    if (!dirty_.contains(condition_column)
+        && !errors_.contains(condition_column))
+    {
+        if (b.hasField("cond"))
+            itemData[condition_column] = b["cond"].literal();
+    }
+
+    if (b.hasField("addr") && b["addr"].literal() == "<PENDING>")
+        pending_ = true;
+    else 
+        pending_ = false;
+   
+    hitCount_ = b["times"].toInt();
+    reportChange();
+
+#if 0        
+    {bp_watchpoint, "watchpoint"},
+    {bp_hardware_watchpoint, "hw watchpoint"},
+    {bp_read_watchpoint, "read watchpoint"},
+    {bp_access_watchpoint, "acc watchpoint"},
+#endif
+
+#if 0
+    {
+        bp->setHits(b["times"].toInt());
+        if (b.hasField("ignore"))
+            bp->setIgnoreCount(b["ignore"].toInt());
+        else
+            bp->setIgnoreCount(0);
+        if (b.hasField("cond"))
+            bp->setConditional(b["cond"].literal());
+        else
+            bp->setConditional(QString::null);
+        
+        // TODO: make the above functions do this instead
+        bp->notifyModified();
+    }
+    else
+    {
+        // It's a breakpoint added outside, most probably
+        // via gdb console. Add it now.
+        QString type = b["type"].literal();
+
+        if (type == "breakpoint" || type == "hw breakpoint")
+        {
+            if (b.hasField("fullname") && b.hasField("line"))
+            {
+                Breakpoint* bp = new FilePosBreakpoint(this,
+                                                       b["fullname"].literal(),
+                                                       b["line"].literal().toInt());
+
+                bp->setActive(m_activeFlag, id);
+                bp->setActionAdd(false);
+                bp->setPending(false);
+
+                addBreakpoint(bp);
+            }
+        }
+
+    }
+#endif        
+}
+
+void NewBreakpoint::setColumn(int index, const QVariant& value)
+{
+    if (index == enable_column)
+    {
+        enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
+    }
+
+    if (index == location_column || index == condition_column)
+    {
+        itemData[index] = value;
+    }
+
+    dirty_.insert(index);
+    errors_.remove(index);
+    reportChange();
+    sendToGDBMaybe();
+}
+
+QVariant NewBreakpoint::data(int column, int role) const
+{
+    if (column == enable_column)
+    {
+        if (role == Qt::CheckStateRole)
+            return enabled_ ? Qt::Checked : Qt::Unchecked;
+        else if (role == Qt::DisplayRole)
+            return "";
+        else
+            return QVariant();
+    }
+
+    if (column == state_column)
+    {
+        if (role == Qt::DecorationRole)
+        {
+            if (dirty_.empty())
+            {
+                if (pending_)
+                    return KIcon("help-contents");            
+                return KIcon("dialog-apply");
+            }
+            else
+                return KIcon("system-switch-user");
+        }
+        else if (role == Qt::DisplayRole)
+            return "";
+        else
+            return QVariant();
+    }
+
+    if (column == type_column && role == Qt::DisplayRole)
+    {
+        return string_kinds[kind_];
+    }
+
+    if (role == Qt::DecorationRole)
+    {
+        if ((column == location_column && errors_.contains(location_column))
+            || (column == condition_column && errors_.contains(condition_column)))
+        {
+            /* FIXME: does this leak? Is this efficient? */
+            return KIcon("dialog-warning");
+        }
+        return QVariant();
+    }
+    else
+        return TreeItem::data(column, role);
+}
+
+void NewBreakpoint::setDeleted()
+{
+    deleted_ = true;
+}
+
+int NewBreakpoint::hitCount() const
+{
+    return hitCount_;
+}
+
+void NewBreakpoint::sendToGDBMaybe()
+{
+    kDebug(9012) << "sendToGDBMaybe" << this;
+
+    if (controller_->stateIsOn(s_dbgNotStarted))
+        if (deleted_)
+        {
+            /* If user wants to delete this breakpoint, and the
+               debugger is not running, we can just immediately do it.  */
+            removeSelf();
+            return;
+        }
+        else
+            /* In all other cases, have to wait for debugger to start before
+               messing with breakpoints.  */
+            return;
+
+    /** See what is dirty, and send the changes.  For simplicity, send
+        changes one-by-one and call sendToGDB again in the completion
+        handler.  
+        FIXME: should handle and annotate the errors?
+    */
+    if (deleted_)
+    {
+        if (id_ == -1)
+            removeSelf();
+        else
+            controller_->addCommand(
+                new GDBCommand(BreakDelete, QString::number(id_),
+                               this, &NewBreakpoint::handleDeleted));        
+    }
+    else if (dirty_.contains(location_column))
+    {
+        if (id_ != -1)
+        {
+            /* We already have GDB breakpoint for this, so we need to remove
+               this one.  */
+            controller_->addCommand(
+                new GDBCommand(BreakDelete, QString::number(id_),
+                               this, &NewBreakpoint::handleDeleted));           
+        }
+        else
+        {
+            if (kind_ == code_breakpoint)
+                controller_->addCommand(
+                    new GDBCommand(BreakInsert, 
+                                   itemData[location_column].toString(),
+                                   this, &NewBreakpoint::handleInserted, true));
+            else
+                controller_->addCommand(
+                    new GDBCommand(
+                        DataEvaluateExpression,
+                        QString("&(%1)").arg(
+                            itemData[location_column].toString()),
+                        this,
+                        &NewBreakpoint::handleAddressComputed, true));
+        }
+    }
+    else if (dirty_.contains(enable_column))
+    {
+        controller_->addCommand(
+            new GDBCommand(enabled_ ? BreakEnable : BreakDisable,  
+                           QString::number(id_),
+                           this, &NewBreakpoint::handleEnabledOrDisabled, 
+                           true));
+    }
+    else if (dirty_.contains(condition_column))
+    {
+        controller_->addCommand(
+            new GDBCommand(BreakCondition, 
+                           QString::number(id_) + " " + 
+                           itemData[condition_column].toString(),
+                           this, &NewBreakpoint::handleConditionChanged, true));
+    }
+}
+
+void NewBreakpoint::handleDeleted(const GDBMI::ResultRecord &v)
+{
+    // FIXME: if deleting breakpoint for real, should commit suicide.
+    if (deleted_)
+    {
+        removeSelf();
+    }
+    else
+    {
+        id_ = -1;
+        sendToGDBMaybe();
+    }
+}
+
+void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
+{
+    if (r.reason == "error")
+    {
+        errors_.insert(location_column);
+        dirty_.remove(location_column);
+        reportChange();
+    }
+    else
+    {
+        dirty_.remove(location_column);
+        if (r.hasField("bkpt"))
+            update(r["bkpt"]);
+        else
+        {
+            // For watchpoint creation, GDB basically does not say
+            // anything.  Just record id.
+            id_ = r["wpt"]["number"].toInt();
+        }
+        reportChange();
+        sendToGDBMaybe();
+    }
+}
+
+void NewBreakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
+{
+    // FIXME: handle error. Enable error most likely means the
+    // breakpoint itself cannot be inserted in the target.
+    dirty_.remove(enable_column);
+    reportChange();
+    sendToGDBMaybe();
+}
+
+void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
+{
+    if (r.reason == "error")
+    {
+        errors_.insert(condition_column);
+        dirty_.remove(condition_column);
+        reportChange();
+    }
+    else
+    {
+        /* GDB does not print the breakpoint in response to -break-condition.
+           Presumably, it means that the condition is always what we want.  */
+        dirty_.remove(condition_column);
+        reportChange();
+        sendToGDBMaybe();
+    }
+}
+
+void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
+{
+    if (r.reason == "error")
+    {
+        errors_.insert(location_column);
+        dirty_.remove(location_column);
+        reportChange();
+    }
+    else
+    {
+        QString opt;
+        if (kind_ == read_breakpoint)
+            opt = "-r ";
+        else if (kind_ == access_breakpoint)
+            opt = "-a ";
+
+        QString address = r["value"].literal();
+
+        controller_->addCommand(
+            new GDBCommand(
+                BreakWatch,
+                opt + QString("*%1").arg(address),
+                this, &NewBreakpoint::handleInserted, true));
+    }
+}
+
+void NewBreakpoint::save(KConfigGroup& config)
+{
+    config.writeEntry("kind", string_kinds[kind_]);
+    config.writeEntry("enabled", enabled_);
+    config.writeEntry("location", itemData[location_column]);
+    config.writeEntry("condition", itemData[condition_column]);
+}
+
+Breakpoints::Breakpoints(TreeModel *model, GDBController *controller)
+: TreeItem(model), controller_(controller)
+{
+}
+
+void Breakpoints::update()
+{
+    controller_->addCommand(
+        new GDBCommand(BreakList,
+                       "",
+                       this,
+                       &Breakpoints::handleBreakpointList));        
+}
+
+NewBreakpoint* Breakpoints::addCodeBreakpoint()
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
+                                         NewBreakpoint::code_breakpoint);
+    appendChild(n);
+    return n;
+}
+
+NewBreakpoint* Breakpoints::addWatchpoint()
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
+                                         NewBreakpoint::write_breakpoint);
+    appendChild(n);
+    return n;
+}
+
+NewBreakpoint* Breakpoints::addReadWatchpoint()
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
+                                         NewBreakpoint::read_breakpoint);
+    appendChild(n);
+    return n;
+}
+
+void Breakpoints::remove(const QModelIndex &index)
+{
+    NewBreakpoint *b = static_cast<NewBreakpoint *>(
+        model()->itemForIndex(index));
+    b->setDeleted();
+    b->sendToGDBMaybe();
+}
+
+NewBreakpoint *Breakpoints::breakpointById(int id)
+{
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        NewBreakpoint *b = static_cast<NewBreakpoint *>(child(i));
+        if (b->id() == id)
+            return b;
+    }
+    return NULL;
+}
+
+void Breakpoints::handleBreakpointList(const GDBMI::ResultRecord &r)
+{
+    const GDBMI::Value& blist = r["BreakpointTable"]["body"];
+    
+    /* Remove breakpoints that are gone in GDB.  In future, we might
+       want to inform the user that this happened. */
+    QSet<int> present_in_gdb;
+    for (int i = 0, e = blist.size(); i != e; ++i)
+    {
+        present_in_gdb.insert(blist[i]["number"].toInt());
+    }
+    
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        NewBreakpoint *b = static_cast<NewBreakpoint*>(child(i));
+        if (b->id() != -1 && !present_in_gdb.contains(b->id()))
+            removeChild(i);
+    }
+    
+    for(int i = 0, e = blist.size(); i != e; ++i)
+    {
+        const GDBMI::Value& mi_b = blist[i];            
+        int id = mi_b["number"].toInt();
+        
+        NewBreakpoint *b = breakpointById(id);
+        if (!b)
+        {
+            NewBreakpoint::kind_t kind = NewBreakpoint::code_breakpoint;
+            QString type = mi_b["type"].literal();
+            if (type == "watchpoint" || type == "hw watchpoint")
+                kind = NewBreakpoint::write_breakpoint;
+            else if (type == "read watchpoint")
+                kind = NewBreakpoint::read_breakpoint;
+            else if (type == "acc watchpoint")
+                kind = NewBreakpoint::access_breakpoint;
+
+            b = new NewBreakpoint (model(), this, controller_, kind);
+            appendChild(b);
+        }
+        
+        b->update(mi_b);
+    }        
+}
+
+void Breakpoints::sendToGDB()
+{
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        NewBreakpoint *b = dynamic_cast<NewBreakpoint *>(child(i));
+        Q_ASSERT(b);
+        b->sendToGDBMaybe();
+    }
+}
+
+void Breakpoints::save()
+{
+    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    breakpoints.writeEntry("number", childItems.size());
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        NewBreakpoint *b = dynamic_cast<NewBreakpoint *>(child(i));
+        KConfigGroup g = breakpoints.group(QString::number(i));
+        b->save(g);
+    }
+}
+
+void Breakpoints::load()
+{
+    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    int count = breakpoints.readEntry("number", 0);
+    QVector<NewBreakpoint*> loaded;
+    for (int i = 0; i < count; ++i)
+    {
+        NewBreakpoint *b = new NewBreakpoint(
+            model(), this, controller_,
+            breakpoints.group(QString::number(i)));
+        loaded.push_back(b);
+    }
+
+    foreach (NewBreakpoint *b, loaded)
+        appendChild(b, true);
+}
+
+
+BreakpointController::BreakpointController(GDBController* parent)
+: TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition",
+            parent)
+{
+    universe_ = new Breakpoints(this, parent);
+    setRootItem(universe_);
+    universe_->load();
+
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+            universe_, SLOT(save()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+            universe_, SLOT(save()));
+    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+            universe_, SLOT(save()));
+
+    //new ModelTest(this, this);
+
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
              this, SLOT(documentLoaded(KDevelop::IDocument*)) );
 
@@ -52,10 +583,59 @@ BreakpointController::BreakpointController(GDBController* parent)
     // a base class that does this connect.
     connect(parent,     SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
+
+    /* Note that the connection is queued. */
+    connect(this, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)),
+            Qt::QueuedConnection);
 }
 
 BreakpointController::~BreakpointController()
 {
+}
+
+Breakpoints* BreakpointController::breakpointsItem()
+{
+    return universe_;
+}
+
+QVariant 
+BreakpointController::headerData(int section, Qt::Orientation orientation,
+                                 int role) const
+{ 
+    if (orientation == Qt::Horizontal && role == Qt::DecorationRole
+        && section == 0)
+        return KIcon("ok");
+    else if (orientation == Qt::Horizontal && role == Qt::DecorationRole
+             && section == 1)
+        return KIcon("system-switch-user");
+
+    return TreeModel::headerData(section, orientation, role);
+}
+
+Qt::ItemFlags BreakpointController::flags(const QModelIndex &index) const
+{
+    /* FIXME: all this logic must be in item */
+    if (!index.isValid())
+        return 0;
+
+    if (index.column() == 0)
+        return static_cast<Qt::ItemFlags>(
+            Qt::ItemIsEnabled | Qt::ItemIsSelectable 
+            | Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
+
+    if (index.column() == NewBreakpoint::location_column 
+        || index.column() == NewBreakpoint::condition_column)
+        return static_cast<Qt::ItemFlags>(
+            Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+
+    return static_cast<Qt::ItemFlags>(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+}
+
+void BreakpointController::slotDataChanged(
+    const QModelIndex& index1, const QModelIndex& index2)
+{
+    //universe_->sendToGDB();
 }
 
 void BreakpointController::clearExecutionPoint()
@@ -100,6 +680,7 @@ void BreakpointController::markChanged(
     KTextEditor::Mark mark, 
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
+#if 0
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
     if (type != (MarkInterface::MarkTypes)BreakpointMark
@@ -133,6 +714,7 @@ void BreakpointController::markChanged(
         // TODO probably want a different command here
         KDevelop::ICore::self()->documentController()->activateDocument(KDevelop::ICore::self()->documentController()->activeDocument());
     }
+#endif
 }
 
 
@@ -308,6 +890,7 @@ const QPixmap* BreakpointController::executionPointPixmap()
   return &pixmap;
 }
 
+#if 0
 int BreakpointController::columnCount(const QModelIndex & parent) const
 {
     Q_UNUSED(parent);
@@ -538,10 +1121,14 @@ Breakpoint * BreakpointController::breakpointForIndex(const QModelIndex & index)
     return static_cast<Breakpoint*>(index.internalPointer());
 }
 
+#endif
+
 GDBController * BreakpointController::controller() const
 {
     return static_cast<GDBController*>(const_cast<QObject*>(QObject::parent()));
 }
+
+
 
 void BreakpointController::slotEvent(event_t e)
 {
@@ -556,16 +1143,13 @@ void BreakpointController::slotEvent(event_t e)
     {
     case program_state_changed:
         {
-            controller()->addCommand(
-                new GDBCommand(BreakList,
-                               "",
-                               this,
-                               &BreakpointController::handleBreakpointList));
-            break;
+            universe_->update();
         }
 
     case connected_to_program:
         {
+            universe_->sendToGDB();
+            #if 0
             foreach (Breakpoint* bp, breakpoints())
             {
                 if ( (bp->dbgId() == -1 ||  bp->isPending())
@@ -575,14 +1159,17 @@ void BreakpointController::slotEvent(event_t e)
                     bp->sendToGdb();
                 }
             }
+            #endif
             break;
         }
     case program_exited:
         {
+            #if 0
             foreach (Breakpoint* b, breakpoints())
             {
                 b->applicationExited();
             }
+            #endif
         }
 
     default:
@@ -598,6 +1185,7 @@ const QList< Breakpoint * > & BreakpointController::breakpoints() const
 
 void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord& r)
 {
+#if 0
     m_activeFlag++;
 
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
@@ -659,6 +1247,7 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord& r)
             breakpoint->removedInGdb();
         }
     }
+#endif
 }
 
 FilePosBreakpoint * BreakpointController::findBreakpoint(const QString & file, int line) const
@@ -906,6 +1495,7 @@ void BreakpointController::removeBreakpoint(Breakpoint* bp)
     bp->remove();
 }
 
+#if 0
 QModelIndex BreakpointController::indexForBreakpoint(Breakpoint * breakpoint, int column) const
 {
     if (!breakpoint)
@@ -917,6 +1507,7 @@ QModelIndex BreakpointController::indexForBreakpoint(Breakpoint * breakpoint, in
 
     return createIndex(row, column, breakpoint);
 }
+#endif
 
 void BreakpointController::removeAllBreakpoints()
 {
@@ -936,7 +1527,9 @@ void BreakpointController::slotBreakpointModified(Breakpoint* b)
     }
     else
     {
+#if 0
         emit dataChanged(indexForBreakpoint(b, 0), indexForBreakpoint(b, Last));
+#endif
     }
 }
 
@@ -944,5 +1537,19 @@ void BreakpointController::slotBreakpointEnabledChanged(Breakpoint * b)
 {
     adjustMark(b, true);
 }
+
+const int NewBreakpoint::enable_column;
+const int NewBreakpoint::state_column;
+const int NewBreakpoint::type_column;
+const int NewBreakpoint::location_column;
+const int NewBreakpoint::condition_column;
+
+const char *NewBreakpoint::string_kinds[last_breakpoint_kind] = {
+    "Code",
+    "Write",
+    "Read",
+    "Access"
+};
+
 
 #include "breakpointcontroller.moc"

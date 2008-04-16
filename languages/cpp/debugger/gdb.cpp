@@ -176,7 +176,10 @@ void GDB::processLine(const QByteArray& line)
 {
     kDebug(9012) << "GDB output: " << line << "\n";
     if(!currentCmd_)
+    {
+        kDebug(9012) << "No current command\n";
         return;
+    }
 
     FileSymbol file;
     file.contents = line;
@@ -252,10 +255,12 @@ void GDB::processLine(const QByteArray& line)
                }
                else if (result.reason == "error")
                {
+                   kDebug(9012) << "Handling error";
                    // Some commands want to handle errors themself.
                    if (currentCmd_->handlesError() &&
                        currentCmd_->invokeHandler(result))
                    {
+                       kDebug(9012) << "Invoked custom handler\n";
                        // Done, nothing more needed
                    }
                    else
