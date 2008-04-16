@@ -35,13 +35,12 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
     setWindowTitle(i18n("Snippets"));
 
-    tbClear->setIcon(KIcon("clear-left"));
-    tbFilter->setIcon(KIcon("filter"));
+    tbFilter->setIcon(KIcon("view-filter"));
 
+    connect(filterText, SIGNAL(clearButtonClicked()),
+            this, SLOT(slotFilterChanged()));
     connect(snippetTree, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotSnippetClicked(QModelIndex)));
-    connect(tbClear, SIGNAL(clicked()),
-            this, SLOT(slotClearFilter()));
     connect(tbFilter, SIGNAL(clicked()),
             this, SLOT(slotFilterChanged()));
 
@@ -280,12 +279,6 @@ void SnippetView::slotCreateSubRepo()
     if (!subdir.isEmpty()) {
         repo->createSubRepo( subdir );
     }
-}
-
-void SnippetView::slotClearFilter()
-{
-    filterText->clear();
-    slotFilterChanged();
 }
 
 #include "snippetview.moc"

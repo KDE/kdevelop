@@ -14,16 +14,7 @@
    <property name="spacing" >
     <number>2</number>
    </property>
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>0</number>
    </property>
    <item>
@@ -32,7 +23,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="filterText" >
+      <widget class="KLineEdit" name="filterText" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
          <horstretch>0</horstretch>
@@ -45,17 +36,7 @@
        <property name="frame" >
         <bool>false</bool>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="tbClear" >
-       <property name="toolTip" >
-        <string>Clear filter</string>
-       </property>
-       <property name="text" >
-        <string>...</string>
-       </property>
-       <property name="autoRaise" >
+       <property name="showClearButton" stdset="0" >
         <bool>true</bool>
        </property>
       </widget>
@@ -87,9 +68,15 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>filterText</tabstop>
-  <tabstop>tbClear</tabstop>
   <tabstop>tbFilter</tabstop>
   <tabstop>snippetTree</tabstop>
  </tabstops>

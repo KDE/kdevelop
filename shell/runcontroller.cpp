@@ -115,7 +115,7 @@ void RunController::setupActions()
     KAction *action;
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    action = new KAction( KIcon("exec"), i18n("Execute Program"), this);
+    action = new KAction( KIcon("system-run"), i18n("Execute Program"), this);
     action->setShortcut(Qt::SHIFT + Qt::Key_F9);
     action->setToolTip(i18n("Execute program"));
     action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab."));

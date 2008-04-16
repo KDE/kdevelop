@@ -90,7 +90,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
 
     setWhatsThis( i18n( "<b>Konsole</b><p>"
             "This window contains an embedded console.</p>" ) );
-    setWindowIcon( KIcon( "konsole" ) );
+    setWindowIcon( KIcon( "utilities-terminal" ) );
     setWindowTitle( i18n( "Konsole" ) );
 
     d->m_vbox = new QVBoxLayout( this );

@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __SNIPPETVIEW_H__
-#define __SNIPPETVIEW_H__
+#ifndef SNIPPETVIEW_H
+#define SNIPPETVIEW_H
 
 #include "ui_snippetview.h"
 
@@ -80,11 +80,6 @@ public slots:
      * Creates a new subrepository
      */
     void slotCreateSubRepo();
-
-    /**
-     * Clears the filter input field
-     */
-    void slotClearFilter();
 
 signals:
     /**
