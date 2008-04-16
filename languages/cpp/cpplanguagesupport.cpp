@@ -85,7 +85,7 @@
 #include "setuphelpers.h"
 #include "quickopen.h"
 
-//#define DEBUG_UI_LOCKUP
+#define DEBUG_UI_LOCKUP
 
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
@@ -275,7 +275,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
   QStringList::ConstIterator it;
   for ( it = candidates.begin(); it != candidates.end(); ++it )
   {
-    //kDebug( 9007 ) << "Trying " << ( *it ) << endl;
+    kDebug( 9007 ) << "Trying " << ( *it ) << endl;
     if ( QFileInfo( *it ).exists() )
     {
       kDebug( 9007 ) << "using: " << *it << endl;
@@ -713,23 +713,19 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             kDebug(9007) << "include-path " << path << " is not local";
             continue;
         }
-        KUrl searchPath = path;
-        searchPath.addPath(addPath);
-        QDirIterator dirContent(searchPath.path());
+        KUrl searchPathUrl = path;
+        searchPathUrl.addPath(addPath);
+        QString searchPath = searchPathUrl.path();
+        QDirIterator dirContent(searchPath);
 
         while(dirContent.hasNext()) {
-            QString next = dirContent.next();
-            KUrl u(next);
-            if(u.fileName() == ".." || u.fileName() == ".")
-                continue;
-
+             dirContent.next();
             Cpp::IncludeItem item;
-            item.name = u.fileName();
-            item.isDirectory = QFileInfo(u.path()).isDir();
-            u.setFileName(QString());
-            if(item.isDirectory)
-                item.name += '/'; //We rely on having a trailing slash behind directories
-            item.basePath = u;
+            item.name = dirContent.fileName();
+            if(item.name.startsWith('.')) //This filters out ".", "..", and hidden files
+              continue;
+            item.isDirectory = dirContent.fileInfo().isDir();
+            item.basePath = searchPath;
             item.pathNumber = pathNumber;
 
             ret << item;
