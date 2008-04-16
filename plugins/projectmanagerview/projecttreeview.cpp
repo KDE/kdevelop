@@ -205,12 +205,19 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         QList<QAction*> buildActions;
         QList<QAction*> vcsActions;
         QList<QAction*> extActions;
+        QList<QAction*> projectActions;
         foreach( const ContextMenuExtension ext, extensions )
         {
             foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
             {
                 buildActions << act;
             }
+
+            foreach( QAction* act, ext.actions( ContextMenuExtension::ProjectGroup ) )
+            {
+                projectActions << act;
+            }
+
             foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
             {
                 vcsActions << act;
@@ -229,6 +236,17 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         foreach( QAction* act, buildActions )
         {
             buildmenu->addAction(act);
+        }
+
+        menu.addSeparator();
+
+        QMenu* projectmenu = &menu;
+        if( buildActions.count() > 1 ) {
+            projectmenu = menu.addMenu("Project");
+        }
+        foreach( QAction* act, projectActions )
+        {
+            projectmenu->addAction(act);
         }
 
         menu.addSeparator();
