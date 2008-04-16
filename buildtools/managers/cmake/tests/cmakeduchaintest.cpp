@@ -66,6 +66,12 @@ void CMakeDUChainTest::testDUChainWalk_data()
             "project(simpletest)\n"
             "set(var a b c)\n"
 	    "set(var2 ${var})\n"<< sr;
+    
+    sr.clear();
+    sr.append(SimpleRange(1, 15, 1, 18));
+    QTest::newRow("simple 2 with use") <<
+            "project(simpletest)\n"
+            "add_executable(var a b c)\n" << sr;
 }
 
 void CMakeDUChainTest::testDUChainWalk()
@@ -114,7 +120,8 @@ void CMakeDUChainTest::testDUChainWalk()
             if(declarations[i]->range()==sr)
                 found=true;
             else
-                qDebug() << "diff " << declarations[i]->range().start.column << declarations[i]->range().end.column;
+                qDebug() << "diff " << declarations[i]->range().start.column << declarations[i]->range().end.column
+                    << declarations[i]->range().end.line;
         }
         if(!found)
             qDebug() << "doesn't exist " << sr.start.column << sr.end.column;

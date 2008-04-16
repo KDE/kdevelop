@@ -25,6 +25,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QHash>
+#include <QStack>
 
 #include "cmakeastvisitor.h"
 #include "cmakelistsparser.h"
@@ -35,6 +36,7 @@ class CMakeFunctionDesc;
 namespace KDevelop
 {
     class TopDUContext;
+    class Declaration;
 }
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
@@ -112,6 +114,12 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
     private:
+        struct VisitorState
+        {
+            const CMakeFileContent* code;
+            int line;
+            KDevelop::TopDUContext* context;
+        };
         static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
@@ -124,6 +132,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList m_includeDirectories;
         QMap<QString, QStringList> m_filesPerTarget;
         QMap<QString, QStringList> m_generatedFiles;
+        QMap<QString, KDevelop::Declaration*> m_declarationsPerTarget;
+        QStack< VisitorState > m_backtrace;
         QString m_root;
         QStringList m_defaultPaths;
         VariableMap *m_vars;

@@ -187,13 +187,28 @@ int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
 //     QString name = resolveVariable(exec->executable(), m_vars).join(";");
+    VisitorState p=m_backtrace.front();
+    DUChainWriteLocker lock(DUChain::lock());
+    Declaration *d = new Declaration(m_topctx->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
+    d->setIdentifier( Identifier(exec->executable()) );
+    m_declarationsPerTarget.insert(exec->executable(), d);
+    kDebug(9042) << "looooooool" << d
+        << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
+
     m_filesPerTarget.insert(exec->executable(), exec->sourceLists());
-    kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()] << "was" << exec->content()[exec->line()].writeBack();
+    kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
+        << "was" << exec->content()[exec->line()].writeBack();
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
+    VisitorState p=m_backtrace.front();
+    DUChainWriteLocker lock(DUChain::lock());
+    Declaration *d = new Declaration(m_topctx->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
+    d->setIdentifier( Identifier(lib->libraryName()) );
+    m_declarationsPerTarget.insert(lib->libraryName(), d);
+    
     m_filesPerTarget.insert(lib->libraryName(), lib->sourceLists());
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
@@ -676,7 +691,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGV", call->arguments());
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
-    
+            
             //Executing
             TopDUContext *auxctx=m_topctx;
             m_topctx=0;
@@ -1410,6 +1425,12 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         }
         m_topctx->addImportedParentContext(m_parentCtx);
     }
+    VisitorState p;
+    p.code = &fc;
+    p.context = m_topctx;
+    p.line = line;
+    
+    m_backtrace.push(p);
     
     CMakeFileContent::const_iterator it=fc.constBegin()+line, itEnd=fc.constEnd();
     for(; it!=itEnd; )
@@ -1458,8 +1479,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         int lines=element->accept(this);
         line+=lines;
         it+=lines;
+        m_backtrace.top().line = line;
         delete element;
     }
+    m_backtrace.pop();
     kDebug(9042) << "Walk stopped @" << line;
     return line;
 }
@@ -1473,17 +1496,15 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        SimpleRange range(arg.line-1, arg.column-1, arg.line-1, arg.column+arg.value.length()-1);
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value), SimpleCursor(1000,0));
+          QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value), SimpleCursor(1000,0));
         if(!decls.isEmpty())
         {
             int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
-            m_topctx->createUse(idx, range, 0);
+            m_topctx->createUse(idx, arg.range(), 0);
         }
         else
         {
-//             qDebug() << "nnnnnnn" << arg.value;
-            Declaration *d = new Declaration(m_topctx->url(), range, Declaration::GlobalScope, m_topctx);
+            Declaration *d = new Declaration(m_topctx->url(), arg.range(), Declaration::GlobalScope, m_topctx);
             d->setIdentifier( Identifier(arg.value) );
         }
     }
@@ -1511,7 +1532,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
-                m_topctx->createUse(idx, SimpleRange(arg.line, before, arg.line, after), 0);
+                m_topctx->createUse(idx, SimpleRange(arg.line-1, before, arg.line-1, after), 0);
             }
         }
         before+=2;

@@ -120,6 +120,8 @@ public:
 public slots:
     void dirtyFile(const QString& file);
 
+    void jumpToNavigation();
+
 private:
     static QString guessCMakeShare(const QString& cmakeBin);
     static QString guessCMakeRoot(const QString& cmakeBin);
@@ -144,6 +146,8 @@ private:
     CMakeHighlighting *m_highlight;
     QList<KDevelop::ProjectTargetItem*> m_targets;
     KDevelop::TopDUContext* m_buildstrapContext;
+    
+    KDevelop::ProjectBaseItem *m_clickedItem;
 };
 
 #endif

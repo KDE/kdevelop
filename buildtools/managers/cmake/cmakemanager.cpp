@@ -29,18 +29,19 @@
 
 #include <KUrl>
 #include <KProcess>
+#include <KAction>
 #include <kio/job.h>
 
 #include <icore.h>
 #include <iproject.h>
 #include <iplugincontroller.h>
 #include <ilanguagecontroller.h>
-#include "contextmenuextension.h"
+#include <contextmenuextension.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <projectmodel.h>
-#include <cmakehighlighting.h>
 #include <parsingenvironment.h>
+#include <context.h>
 
 #include <duchain.h>
 #include <dumpchain.h>
@@ -49,6 +50,7 @@
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
+#include "cmakehighlighting.h"
 
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
@@ -99,6 +101,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
         m_builder = i->extension<ICMakeBuilder>();
     }
 
+    m_clickedItem=0;
     m_highlight = new CMakeHighlighting(this);
     {
         DUChainWriteLocker lock(DUChain::lock());
@@ -648,7 +651,32 @@ const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
 
 ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Context* context )
 {
+    if( context->type() != KDevelop::Context::ProjectItemContext )
+        return IPlugin::contextMenuExtension( context );
 
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    QList<KDevelop::ProjectBaseItem*> items = ctx->items();
+
+    if( items.isEmpty() )
+        return IPlugin::contextMenuExtension( context );
+
+    ContextMenuExtension menuExt;
+    if(items.count()==1)
+    {
+        m_clickedItem = items.first();
+        KAction* action = new KAction( i18n( "Jump to project definition" ), this );
+        connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
+        menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+    }
+    return menuExt;
+}
+
+void CMakeProjectManager::jumpToNavigation()
+{
+    if(m_clickedItem)
+    {
+        
+    }
 }
 
 #include "cmakemanager.moc"

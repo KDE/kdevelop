@@ -25,6 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+
 #include "cmakeexport.h"
 #include "cmakelistsparser.h"
 #include "cmakeastvisitor.h"
