@@ -23,7 +23,6 @@
 
 #include <identifier.h>
 #include <declaration.h>
-#include <topducontext.h>
 #include <duchainlock.h>
 #include <duchain.h>
 #include <simplerange.h>
@@ -35,7 +34,9 @@ QTEST_MAIN( CMakeDUChainTest )
 Q_DECLARE_METATYPE(QList<SimpleRange>)
 
 CMakeDUChainTest::CMakeDUChainTest()
-{}
+{
+	m_fakeContext = new TopDUContext(HashedString("test"), SimpleRange(0,0,0,0));
+}
 
 CMakeDUChainTest::~CMakeDUChainTest()
 {}
@@ -48,7 +49,7 @@ void CMakeDUChainTest::testDUChainWalk_data()
     QTest::newRow("simple") << "project(simpletest)\n" << QList<SimpleRange>();
     
     QList<SimpleRange> sr;
-    sr.append(SimpleRange(2, 5, 2, 8));
+    sr.append(SimpleRange(1, 4, 1, 7));
     QTest::newRow("simple 2") <<
             "project(simpletest)\n"
             "set(var a b c)\n" << sr;
@@ -56,6 +57,13 @@ void CMakeDUChainTest::testDUChainWalk_data()
     QTest::newRow("simple 3") <<
             "project(simpletest)\n"
             "find_package(KDE4)\n" << QList<SimpleRange>();
+    
+
+    sr.append(SimpleRange(2, 4, 2, 8));
+    QTest::newRow("simple 2 with use") <<
+            "project(simpletest)\n"
+            "set(var a b c)\n"
+	    "set(var2 ${var})\n"<< sr;
 }
 
 void CMakeDUChainTest::testDUChainWalk()
@@ -76,7 +84,7 @@ void CMakeDUChainTest::testDUChainWalk()
     MacroMap mm;
     VariableMap vm;
     
-    CMakeProjectVisitor v(file.fileName());
+    CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
 //     v.setModulePath();

@@ -22,11 +22,14 @@
 #define CMAKEDUCHAINTEST_H
 
 #include <QtTest/QtTest>
+#include <topducontext.h>
 
 /**
  * A test for the CMake DUChain builder.
  * @author Aleix Pol <aleixpol@gmail.com>
  */
+
+
 class CMakeDUChainTest : public QObject
 {
     Q_OBJECT
@@ -37,6 +40,8 @@ class CMakeDUChainTest : public QObject
     private slots:
         void testDUChainWalk_data();
         void testDUChainWalk();
+    private:
+    	KDevelop::TopDUContext* m_fakeContext;
 };
 
 #endif
