@@ -137,9 +137,10 @@ QString cursorItemText() {
   return QString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : QObject( d ), m_dialog(d), m_model(model) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model) {
+  m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
 
-  o.setupUi( d );
+  o.setupUi( m_dialog );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
@@ -200,7 +201,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
   o.buttonBox->installEventFilter( this );
 
   connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
-  connect( d, SIGNAL(accepted()), this, SLOT(accept()) );
+  connect( m_dialog, SIGNAL(accepted()), this, SLOT(accept()) );
 
   connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
   
@@ -213,17 +214,18 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* mode
 
   o.list->setColumnWidth( 0, 20 );
 
-//   if(!listOnly)
-//     o.searchLine->setText(cursorItemText());
-  d->show();
-
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
 }
 
+void QuickOpenWidgetHandler::run() {
+  m_dialog->exec();
+}
+
 QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
-  if( m_model->treeView() == o.list )
-    m_model->setTreeView( 0 );
+  //if( m_model->treeView() == o.list )
+  m_model->setTreeView( 0 );
+  delete m_dialog;
 }
 
 void QuickOpenWidgetHandler::updateProviders() {
@@ -471,10 +473,6 @@ void QuickOpenPlugin::unload()
 
 void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
-  QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
-
-  d->setAttribute( Qt::WA_DeleteOnClose, true );
-
   QStringList initialItems;
   if( modes & Files )
     initialItems << i18n("Files");
@@ -485,8 +483,9 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if( modes & Classes )
     initialItems << i18n("Classes");
   
-  QuickOpenWidgetHandler* handler = new QuickOpenWidgetHandler( d, m_model, initialItems, lastUsedScopes );
-  connect( handler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
+  QuickOpenWidgetHandler handler( m_model, initialItems, lastUsedScopes );
+  connect( &handler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
+  handler.run();
 }
 
 
@@ -542,9 +541,6 @@ bool QuickOpenPlugin::removeProvider( KDevelop::QuickOpenDataProviderBase* provi
 
 void QuickOpenPlugin::quickOpenDeclaration()
 {
-  if(!modelIsFree())
-    return;
-
   if(jumpToSpecialObject())
     return;
   
@@ -558,9 +554,28 @@ void QuickOpenPlugin::quickOpenDeclaration()
 
   HashedString u = decl->url();
   SimpleCursor c = decl->range().start;
-  
+
+  if(u.str().isEmpty()) {
+    kDebug() << "Got empty url for declaration" << decl->toString();
+    return;
+  }
+
   lock.unlock();
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+}
+
+///Returns all languages for that url that have a language support, and prints warnings for other ones.
+QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
+  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+  QList<KDevelop::ILanguage*> ret;
+  foreach( KDevelop::ILanguage* language, languages) {
+    if(language->languageSupport()) {
+      ret << language;
+    }else{
+      kDebug() << "got no language-support for language" << language->name();
+    }
+  }
+  return ret;
 }
 
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
@@ -570,13 +585,12 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
   
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
-
-  foreach( KDevelop::ILanguage* language, languages) {
+  foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
     QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
     if(w)
       return w;
   }
+
   return 0;
 }
 
@@ -586,9 +600,7 @@ QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
   
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
-
-  foreach( KDevelop::ILanguage* language, languages) {
+  foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
     QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
@@ -602,6 +614,11 @@ bool QuickOpenPlugin::jumpToSpecialObject()
 {
   QPair<KUrl, SimpleCursor> pos = specialObjectJumpPosition();
   if(pos.second.isValid()) {
+    if(pos.first.isEmpty()) {
+      kDebug() << "Got empty url for special language object";
+      return false;
+    }
+  
     ICore::self()->documentController()->openDocument(pos.first, pos.second.textCursor());
     return true;
   }
@@ -610,9 +627,6 @@ bool QuickOpenPlugin::jumpToSpecialObject()
 
 void QuickOpenPlugin::quickOpenDefinition()
 {
-  if(!modelIsFree())
-    return;
-
   if(jumpToSpecialObject())
     return;
   
@@ -633,6 +647,11 @@ void QuickOpenPlugin::quickOpenDefinition()
     kDebug() << "Found no definition for declaration";
   }
 
+  if(u.str().isEmpty()) {
+    kDebug() << "Got empty url for declaration" << decl->toString();
+    return;
+  }
+
   lock.unlock();
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
 }
@@ -648,12 +667,8 @@ void QuickOpenPlugin::quickOpenNavigate()
 
   if(widget || decl) {
   
-    QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
-
-    d->setAttribute( Qt::WA_DeleteOnClose, true );
-
-    QuickOpenModel* model = new QuickOpenModel( d );
-    model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
+    QuickOpenModel model(0);
+    model.setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
 
     if(widget) {
       QPair<KUrl, SimpleCursor> jumpPos = specialObjectJumpPosition();
@@ -666,7 +681,7 @@ void QuickOpenPlugin::quickOpenNavigate()
       QList<CustomItem> items;
       items << item;
     
-      model->registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
+      model.registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
     }else{
       DUChainItem item;
       
@@ -676,13 +691,13 @@ void QuickOpenPlugin::quickOpenNavigate()
       QList<DUChainItem> items;
       items << item;
 
-      model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
+      model.registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
     }
 
     //Change the parent so there are no conflicts in destruction order
-    model->setParent(new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true, true ));
-
-    model->setExpanded(model->index(0,0, QModelIndex()), true);
+    QuickOpenWidgetHandler handler( &model, QStringList(), QStringList(), true, true );
+    model.setExpanded(model.index(0,0, QModelIndex()), true);
+    handler.run();
   }
   
   if(!decl) {
@@ -789,11 +804,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
     return;
   }
   
-  QDialog* d = new QDialog( core()->uiController()->activeMainWindow() );
-
-  d->setAttribute( Qt::WA_DeleteOnClose, true );
-
-  QuickOpenModel* model = new QuickOpenModel( d );
+  QuickOpenModel model(0);
 
   QList<DUChainItem> items;
 
@@ -819,21 +830,19 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   if(!cursorDecl)
     cursorDecl = cursorDeclaration();
   
-  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
+  model.registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
-  //Change the parent so there are no conflicts in destruction order
-  QuickOpenWidgetHandler* handler = new QuickOpenWidgetHandler( d, model, QStringList(), QStringList(), true );
-  model->setParent(handler);
-
+  QuickOpenWidgetHandler handler( &model, QStringList(), QStringList(), true );
   //Select the declaration that contains the cursor
   if(cursorDecl) {
     int num = 0;
     foreach(const DUChainItem& item, items) {
       if(item.m_item.data() == cursorDecl)
-        handler->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+        handler.o.list->setCurrentIndex( model.index(num,0,QModelIndex()) );
       ++num;
     }
   }
+  handler.run();
 }
 
 #include "quickopenplugin.moc"

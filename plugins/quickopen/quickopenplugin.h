@@ -91,6 +91,7 @@ private slots:
     QStringList lastUsedScopes;
 };
 
+///You should create QuickOpenWidgetHandler on the stack, so it is automatically deleted.
 class QuickOpenWidgetHandler : public QObject {
   Q_OBJECT
   public:
@@ -100,8 +101,11 @@ class QuickOpenWidgetHandler : public QObject {
    * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
    * @param noSearchFied when this is true, no search-line is shown.
    * */
-  QuickOpenWidgetHandler( QDialog* d, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
+  QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidgetHandler();
+
+  ///Executes the dialog in a modal way.
+  void run();
 
   signals:
   void scopesChanged( const QStringList& scopes );
