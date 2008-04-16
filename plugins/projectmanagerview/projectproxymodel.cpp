@@ -35,19 +35,21 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
     
     int leftType=iLeft->type(), rightType=iRight->type();
+    bool ret;
     if(leftType==rightType)
     {
         QString strLeft=iLeft->text(), strRight=iRight->text();
         int extLeft=strLeft.lastIndexOf('.'), extRight=strRight.lastIndexOf('.');
-        if(strLeft.right(extLeft)==strRight.right(extRight))
-            return strLeft > strRight;
+        if(strLeft.right(strLeft.count()-extLeft)==strRight.right(strRight.count()-extRight))
+            ret = strLeft > strRight;
         else
-            return strLeft.right(extLeft)>strRight.right(extRight);
+            ret = strLeft.right(strLeft.count()-extLeft)>strRight.right(strRight.count()-extRight);
     }
     else
     {
-        return leftType > rightType;
+        ret = leftType > rightType;
     }
+    return ret;
 }
 
 #include "projectproxymodel.moc"
