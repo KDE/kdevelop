@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include "icore.h"
 #include "iplugincontroller.h"
+#include "iprojectcontroller.h"
 #include "contextmenuextension.h"
 #include <QtDesigner/QExtensionFactory>
 #include <QtDesigner/QExtensionManager>
@@ -68,8 +69,8 @@ public:
 class IPluginPrivate
 {
 public:
-    IPluginPrivate()
-        : iconLoader(0), m_factory(0)
+    IPluginPrivate(IPlugin *q)
+        : q(q), iconLoader(0), m_factory(0)
     {}
 
     ~IPluginPrivate()
@@ -77,6 +78,28 @@ public:
         delete iconLoader;
     }
 
+    void _k_guiClientAdded(KXMLGUIClient *client)
+    {
+	if (client != q)
+	    return;
+
+	q->initializeGuiState();
+	_k_updateState();
+    }
+
+    void _k_updateState()
+    {
+	const int projectCount =
+	    ICore::self()->projectController()->projectCount();
+    
+	IPlugin::ReverseStateChange reverse = IPlugin::StateNoReverse;
+	if (! projectCount)
+	    reverse = IPlugin::StateReverse;
+
+	q->stateChanged(QLatin1String("has_project"), reverse);
+    }
+
+    IPlugin *q;
     ICore *core;
     KIconLoader* iconLoader;
     PluginExtensionFactory* m_factory;
@@ -85,7 +108,7 @@ public:
 
 IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
         : QObject( parent ),
-        KXMLGUIClient(), d( new IPluginPrivate )
+	  KXMLGUIClient(), d( new IPluginPrivate(this) )
 {
     // The following cast is safe, there's no component in KDevPlatform that
     // creates plugins except the plugincontroller. The controller passes
@@ -102,17 +125,21 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
             continue;
 
         connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient *)),
-            this, SLOT(guiClientAdded(KXMLGUIClient *)));
+		this, SLOT(_k_guiClientAdded(KXMLGUIClient *)));
     }
+
+    connect(ICore::self()->projectController(),
+	    SIGNAL(projectOpened(KDevelop::IProject *)),
+	    this, SLOT(_k_updateState()));
+
+    connect(ICore::self()->projectController(),
+	    SIGNAL(projectClosed(KDevelop::IProject *)),
+	    this, SLOT(_k_updateState()));
 }
 
 IPlugin::~IPlugin()
 {
     delete d;
-}
-
-void IPlugin::guiClientAdded(KXMLGUIClient *)
-{
 }
 
 Qt::DockWidgetArea IPlugin::dockWidgetAreaHint() const
@@ -201,6 +228,9 @@ KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
 {
     return KDevelop::ContextMenuExtension();
 }
+
+void KDevelop::IPlugin::initializeGuiState()
+{ }
 
 #include "iplugin.moc"
 

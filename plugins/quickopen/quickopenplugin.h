@@ -75,9 +75,11 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
+
 private slots:
     void storeScopes( const QStringList& );
-  private:
+
+private:
     //Whether the model is free for use. Else we cannot create a quickopen-widget.
     bool modelIsFree() const;
 

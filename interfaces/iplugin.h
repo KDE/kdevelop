@@ -195,20 +195,21 @@ public Q_SLOTS:
      */
     void newIconLoader() const;
 
-protected Q_SLOTS:
-    /**
-     * A new GUI client has been loaded.
-     */
-    virtual void guiClientAdded(KXMLGUIClient *client);
-
 protected:
     void addExtension( const QString& );
 
+    /**
+     * Initialize the XML Gui State.
+     */
+    virtual void initializeGuiState();
+
 private:
-    class IPluginPrivate*  const d;
+    Q_PRIVATE_SLOT(d, void _k_guiClientAdded(KXMLGUIClient *))
+    Q_PRIVATE_SLOT(d, void _k_updateState())
+
+    friend class IPluginPrivate;
+    class IPluginPrivate* const d;
     QExtensionManager* extensionManager();
-
-
 };
 
 }

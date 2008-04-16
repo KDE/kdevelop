@@ -21,6 +21,7 @@
 
 #include "quickopenplugin.h"
 
+#include <cassert>
 #include <typeinfo>
 #include <QtGui/QTreeView>
 #include <QtGui/QHeaderView>
@@ -47,6 +48,7 @@
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 #include <ilanguagecontroller.h>
+#include <iprojectcontroller.h>
 #include <ilanguagesupport.h>
 #include <hashedstring.h>
 #include <duchain/duchainutils.h>

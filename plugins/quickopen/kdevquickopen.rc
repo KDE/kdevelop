@@ -30,4 +30,16 @@
 
   </Menu>
 </MenuBar>
+
+<State name="has_project">
+  <enable>
+    <Action name="quick_open_class" />
+    <Action name="quick_open_function" />
+    <Action name="quick_open_navigate" />
+    <Action name="quick_open_navigate_function_definitions" />
+    <Action name="quick_open_jump_declaration" />
+    <Action name="quick_open_jump_definition" />
+  </enable>
+</State>
+
 </kpartgui>
