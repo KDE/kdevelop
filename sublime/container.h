@@ -19,9 +19,11 @@
 #ifndef SUBLIMECONTAINER_H
 #define SUBLIMECONTAINER_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QTabWidget>
 
 #include "sublimeexport.h"
+
+class QPaintEvent;
 
 namespace Sublime {
 
@@ -33,7 +35,7 @@ class View;
 This container is placed inside mainwindow splitters to show widgets
 for views in the area.
 */
-class SUBLIME_EXPORT Container: public QWidget {
+class SUBLIME_EXPORT Container: public QTabWidget {
 Q_OBJECT
 public:
     Container(QWidget *parent = 0);
@@ -48,15 +50,12 @@ public:
 
     View *viewForWidget(QWidget *w) const;
 
-    /**@return the number of widgets in the container.*/
-    int count() const;
-    /**@return the widget at given @p index.*/
-    QWidget *widget(int index) const;
+    virtual void paintEvent(QPaintEvent *ev);
 
-    /**Sets the current widget in the container.*/
-    void setCurrentWidget(QWidget *w);
-    /**@return the current widget in the container.*/
-    QWidget *currentWidget() const;
+protected:
+    using QTabWidget::addTab;
+    using QTabWidget::insertTab;
+    using QTabWidget::removeTab;
 
 Q_SIGNALS:
   void activateView(Sublime::View* view);

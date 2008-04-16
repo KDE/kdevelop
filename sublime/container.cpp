@@ -20,19 +20,17 @@
 
 #include <QMap>
 #include <QLayout>
+#include <QTabBar>
 #include <QStackedLayout>
 
 #include "view.h"
 #include "document.h"
-#include "switcher.h"
 
 namespace Sublime {
 
 // struct ContainerPrivate
 
 struct ContainerPrivate {
-    Switcher *switcher;
-    QStackedLayout *stack;
     QMap<QWidget*, View*> viewForWidget;
 };
 
@@ -41,18 +39,9 @@ struct ContainerPrivate {
 // class Container
 
 Container::Container(QWidget *parent)
-    :QWidget(parent), d(new ContainerPrivate())
+    :QTabWidget(parent), d(new ContainerPrivate())
 {
-
-    QVBoxLayout *l = new QVBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-
-    d->switcher = new Switcher(this);
-    connect(d->switcher, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
-    l->addWidget(d->switcher);
-
-    d->stack = new QStackedLayout(l);
+    connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
 Container::~Container()
@@ -64,62 +53,44 @@ void Container::widgetActivated(int idx)
 {
     if (idx < 0)
         return;
-    d->stack->setCurrentIndex(idx);
-    if (QWidget* widget = d->stack->widget(idx)) {
-        widget->setFocus();
-        if(d->viewForWidget.contains(widget))
-            emit activateView(d->viewForWidget[widget]);
+    if (QWidget* w = widget(idx)) {
+        w->setFocus();
+        if(d->viewForWidget.contains(w))
+            emit activateView(d->viewForWidget[w]);
     }
 }
 
 void Container::addWidget(View *view)
 {
     QWidget *w = view->widget();
-    int idx = d->stack->addWidget(w);
-    d->switcher->insertTab(idx, view->document()->title());
+    addTab(w, view->document()->title());
     d->viewForWidget[w] = view;
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
     if (w) {
-        d->switcher->removeTab(d->stack->indexOf(w));
-        d->stack->removeWidget(w);
+        removeTab(indexOf(w));
         d->viewForWidget.remove(w);
     }
 }
 
-int Container::count() const
-{
-    return d->stack->count();
-}
-
-QWidget *Container::widget(int index) const
-{
-    return d->stack->widget(index);
-}
-
 bool Container::hasWidget(QWidget *w)
 {
-    return d->stack->indexOf(w) != -1;
-}
-
-void Container::setCurrentWidget(QWidget *w)
-{
-    if (!hasWidget(w))
-        return;
-    d->stack->setCurrentWidget(w);
-    d->switcher->setCurrentIndex(d->stack->indexOf(w));
-}
-
-QWidget *Container::currentWidget() const
-{
-    return d->stack->currentWidget();
+    return indexOf(w) != -1;
 }
 
 View *Container::viewForWidget(QWidget *w) const
 {
     return d->viewForWidget[w];
+}
+
+void Container::paintEvent(QPaintEvent *ev)
+{
+    //paint ourselves only if tabbar is visible
+    if (tabBar()->isVisible())
+        QTabWidget::paintEvent(ev);
+    //otherwise don't paint anything (especially the border around the widget)
 }
 
 }
