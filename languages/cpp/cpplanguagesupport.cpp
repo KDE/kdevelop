@@ -65,7 +65,6 @@
 #include <duchainlock.h>
 #include <topducontext.h>
 #include <smartconverter.h>
-#include <symboltable.h>
 
 #include "preprocessjob.h"
 #include "rpp/preprocessor.h"
@@ -202,7 +201,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     // Initialise singletons, to prevent needing a mutex in their self() methods
     TypeRepository::self();
-    SymbolTable::self();
 
     m_quickOpenDataProvider = new IncludeFileDataProvider();
 
