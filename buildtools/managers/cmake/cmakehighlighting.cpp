@@ -27,7 +27,6 @@
 
 #include <topducontext.h>
 #include <declaration.h>
-#include <definition.h>
 #include <use.h>
 #include <duchain.h>
 #include <duchainlock.h>
