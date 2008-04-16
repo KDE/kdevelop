@@ -164,16 +164,14 @@ void Declaration::setIdentifier(const Identifier& identifier)
   Q_D(Declaration);
   bool wasInSymbolTable = d->m_inSymbolTable;
   
-  if(wasInSymbolTable)
-    SymbolTable::self()->removeDeclaration(this);
+  setInSymbolTable(false);
     
   if( d->m_context && !d->m_anonymousInContext )
     d->m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
   
-  if(wasInSymbolTable)
-    SymbolTable::self()->addDeclaration(this);
+  setInSymbolTable(wasInSymbolTable);
   //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
@@ -207,8 +205,10 @@ Declaration::Scope Declaration::scope( ) const
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
   ENSURE_CAN_READ
-
-  QualifiedIdentifier ret = context()->scopeIdentifier(true);
+  
+  QualifiedIdentifier ret;
+  if(context())
+    ret = context()->scopeIdentifier(true);
   ret.push(identifier());
   return ret;
 }
@@ -234,6 +234,9 @@ DUContext * Declaration::context() const
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
   ENSURE_CAN_WRITE
+
+  setInSymbolTable(false);
+
   Q_D(Declaration);
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
@@ -254,6 +257,9 @@ void Declaration::setContext(DUContext* context, bool anonymous)
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
   }
+
+  if(context && context->inSymbolTable() && !anonymous)
+    setInSymbolTable(true);
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
@@ -409,6 +415,13 @@ bool Declaration::inSymbolTable() const
 void Declaration::setInSymbolTable(bool inSymbolTable)
 {
   Q_D(Declaration);
+  if(!d->m_identifier.isEmpty()) {
+    if(!d->m_inSymbolTable && inSymbolTable)
+      SymbolTable::self()->addDeclaration(this);
+  
+    else if(d->m_inSymbolTable && !inSymbolTable)
+      SymbolTable::self()->removeDeclaration(this);
+  }
   d->m_inSymbolTable = inSymbolTable;
 }
 

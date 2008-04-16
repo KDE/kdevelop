@@ -39,7 +39,6 @@
 #include "duchain.h"
 #include "ducontext.h"
 #include "identifier.h"
-#include "symboltable.h"
 #include "parsingenvironment.h"
 
 class KUrl;
@@ -379,8 +378,8 @@ private:
         {
           ret->setLocalScopeIdentifier( identifier );
 
-          if ( type == DUContext::Class )
-            SymbolTable::self()->addContext( ret );
+          if ( type != DUContext::Class && type != DUContext::Global && DUContext::Namespace )
+            ret->setInSymbolTable(false);
         }
       }
     }

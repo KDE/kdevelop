@@ -88,7 +88,6 @@ install(FILES
     duchain/use.h
     duchain/typesystem.h
     duchain/smartconverter.h
-    duchain/symboltable.h
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
     duchain/duchainpointer.h

@@ -34,6 +34,7 @@
 #include "duchainutils.h"
 #include "use.h"
 #include "uses.h"
+#include "symboltable.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
 #include <idocumentcontroller.h>
@@ -88,6 +89,8 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 DUChain::DUChain()
 {
+  SymbolTable::self(); //Initialize singleton
+
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());

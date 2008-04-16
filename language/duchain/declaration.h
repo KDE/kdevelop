@@ -84,7 +84,10 @@ public:
 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
-  Declaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context);
+  /**
+   * If @param parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
+   * */
+  Declaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   virtual ~Declaration();
@@ -160,9 +163,12 @@ public:
    * */
   DUContext* context() const;
   /**
-   * When setContext(..) is called, this declaration is inserted into the given context.
+   * When setContext(..) is called, this declaration is inserted into the given context
    * You only need to be able to write this declaration. You do not need write-privileges for the context, because addDeclaration(..) works separately from that.
    * @param anonymous If this is set, this declaration will be added anonymously into the parent-context. That way it can never be found through any of the context's functions, and will not be deleted when the context is deleted, so it must be deleted from elsewhere.
+   *
+   * If the given context is not in the symbol-table, or if the declaration is inserted anonymously, or if the context is zero, this declaration is removed from the symbol-table.
+   * Else it is added to the symbol table with the new scope. @see TopDUContext for information about the symbol table.
    * */
   void setContext(DUContext* context, bool anonymous = false);
 
@@ -210,6 +216,7 @@ public:
   QString mangledIdentifier() const;
 
   bool inSymbolTable() const;
+  //Adds or removes this declaration to/from the symbol table
   void setInSymbolTable(bool inSymbolTable);
 
   bool operator==(const Declaration& other) const;

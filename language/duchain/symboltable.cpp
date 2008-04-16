@@ -69,8 +69,6 @@ void SymbolTable::addDeclaration(Declaration* declaration)
   ifDebug( kDebug(9505) << "Adding declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
 
   sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier().hash(), declaration);
-
-  declaration->setInSymbolTable(true);
 }
 
 void SymbolTable::removeDeclaration(Declaration* declaration)
@@ -83,7 +81,6 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
     for (; it.key() == id.hash(); ++it)
       if (it.value() == declaration) {
         sdSymbolPrivate->m_declarations.erase(it);
-        declaration->setInSymbolTable(false);
         return;
       }
 
@@ -143,9 +140,9 @@ void SymbolTable::addContext(DUContext * namedContext)
   ENSURE_CHAIN_WRITE_LOCKED
   ifDebug( kDebug(9505) << "Adding context " << namedContext->scopeIdentifier(true).toString() << " with hash " <<  namedContext->scopeIdentifier(true).hash(); )
 
-  sdSymbolPrivate->m_contexts.insert(namedContext->scopeIdentifier(true).hash(), namedContext);
-
-  namedContext->setInSymbolTable(true);
+  QualifiedIdentifier id(namedContext->scopeIdentifier(true));
+  if(!id.isEmpty())
+    sdSymbolPrivate->m_contexts.insert(id.hash(), namedContext);
 }
 
 void SymbolTable::removeContext(DUContext * namedContext)
@@ -158,7 +155,6 @@ void SymbolTable::removeContext(DUContext * namedContext)
     for (; it.key() == id.hash(); ++it)
       if (it.value() == namedContext) {
         sdSymbolPrivate->m_contexts.erase(it);
-        namedContext->setInSymbolTable(false);
         return;
       }
 

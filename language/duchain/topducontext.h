@@ -41,6 +41,9 @@ namespace KDevelop
  *
  * Implements SymbolTable lookups and locking for the chain.
  *
+ * Contexts and Classes can only be found through TopDUContext if they are in the symbol table.
+ * @see DUContext::setInSymbolTable, Declaration::setInSymbolTable 
+ *
  * \todo move the registration with DUChain here
  */
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext

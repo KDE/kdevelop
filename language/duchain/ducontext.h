@@ -86,8 +86,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
 public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
-   * and providing all permutations would be overkill.
+   * 
    * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
+   * 
+   * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
   explicit DUContext(const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
 
@@ -176,7 +178,8 @@ public:
   bool inSymbolTable() const;
 
   /**
-   * Tell this object when it is in the symbol table, so it can deregister itself
+   * Move this object into/out of the symbol table.
+   * You need to have a duchain write lock, unless this is a TopDUContext.
    */
   void setInSymbolTable(bool inSymbolTable);
 

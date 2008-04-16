@@ -110,6 +110,10 @@ void DUContextPrivate::synchronizeUsesToSmart() const
   QMutexLocker l(iface->smartMutex());
 
   for(int a = 0; a < m_uses.count(); a++) {
+    if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
+      l.unlock();
+      l.relock();
+    }
     if(m_rangesForUses[a]) {
       m_rangesForUses[a]->start() = m_uses[a].m_range.start.textCursor();
       m_rangesForUses[a]->end() = m_uses[a].m_range.end.textCursor();
@@ -293,14 +297,18 @@ DUContext::DUContext(const HashedString& url, const SimpleRange& range, DUContex
   Q_D(DUContext);
   d->m_contextType = Other;
   d->m_parentContext = 0;
-  d->m_inSymbolTable = false;
   d->m_anonymousInParent = anonymous;
+  d->m_inSymbolTable = false;
+
   if (parent) {
     if( !anonymous )
       parent->d_func()->addChildContext(this);
     else
       d_func()->m_parentContext = parent;
   }
+
+  if(parent && !anonymous && parent->inSymbolTable())
+    setInSymbolTable(true);
 }
 
 DUContext::DUContext( DUContextPrivate& dd, const HashedString & url, const SimpleRange& range, DUContext * parent, bool anonymous )
@@ -325,8 +333,7 @@ DUContext::~DUContext( )
   if(d->m_owner)
     d->m_owner->setInternalContext(0);
   
-  if (inSymbolTable())
-    SymbolTable::self()->removeContext(this);
+  setInSymbolTable(false);
 
   if (d->m_parentContext)
     d->m_parentContext->d_func()->removeChildContext(this);
@@ -865,9 +872,10 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
 void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 {
   ENSURE_CAN_WRITE
-
+  bool wasInSymbolTable = inSymbolTable();
+  setInSymbolTable(false);
   d_func()->m_scopeIdentifier = identifier;
-
+  setInSymbolTable(wasInSymbolTable);
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
@@ -1204,14 +1212,17 @@ int DUContext::findUseAt(const SimpleCursor & position) const
 
 bool DUContext::inSymbolTable() const
 {
-  // Only one symbol table, no need for a lock
-
   return d_func()->m_inSymbolTable;
 }
 
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
-  // Only one symbol table, no need for a lock
+  if(!d_func()->m_scopeIdentifier.isEmpty()) {
+    if(!d_func()->m_inSymbolTable && inSymbolTable)
+      SymbolTable::self()->addContext(this);
+    else if(d_func()->m_inSymbolTable && !inSymbolTable)
+      SymbolTable::self()->removeContext(this);
+  }
 
   d_func()->m_inSymbolTable = inSymbolTable;
 }
