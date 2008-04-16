@@ -312,26 +312,29 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
 
 
     QList<QAction*> toolBarActions = view->toolBarActions();
-    if( !toolBarActions.isEmpty() ) {
+    if (!toolBarActions.isEmpty()) {
         QBoxLayout* top;
-        if( orientation == Qt::Vertical )
+        if (orientation == Qt::Vertical)
         {
-            top = new QBoxLayout( QBoxLayout::LeftToRight, this );
+            top = new QBoxLayout(QBoxLayout::LeftToRight, 0);
         } else
         {
-            top = new QBoxLayout( QBoxLayout::TopToBottom, this );
+            top = new QBoxLayout(QBoxLayout::TopToBottom, 0);
         }
         top->addLayout( box );
         QToolBar* toolBar = new QToolBar();
-        toolBar->setOrientation( orientation );
-        toolBar->setIconSize( QSize( 16, 16 ) );
-        toolBar->setFloatable( false );
-        toolBar->setMovable( false );
-        Q_FOREACH( QAction* act, toolBarActions ) {
+        toolBar->setOrientation(orientation);
+        toolBar->setIconSize(QSize(16, 16));
+        toolBar->setFloatable(false);
+        toolBar->setMovable(false);
+        Q_FOREACH(QAction* act, toolBarActions) {
             toolBar->addAction(act);
         }
         top->addWidget(toolBar);
-        setLayout( top );
+        setLayout(top);
+    } else
+    {
+        setLayout(box);
     }
 
 
