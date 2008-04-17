@@ -154,15 +154,6 @@ public:
             m_urlBox->setUrl(file.url());
     }
 
-    void addToolButton(QAction *action)
-    {
-//         QToolButton *t = new QToolButton(m_toolBar);
-//         t->setAutoRaise(true);
-//         t->setDefaultAction(action);
-//         m_toolBar->setMinimumHeight(t->sizeHint().height());
-//         m_toolBar->layout()->addWidget(t);
-    }
-
     void syncCurrentDocumentDirectory()
     {
         KDevelop::IDocument *doc = m_plugin->core()->documentController()->activeDocument();
@@ -257,12 +248,10 @@ void FileManager::setupActions()
 {
     KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-//     d->addToolButton(action);
     addAction(action);
 
     action = KStandardAction::home(this, SLOT(goHome()), this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-//     d->addToolButton(action);
     addAction(action);
 
     action = new KAction(this);
@@ -271,7 +260,6 @@ void FileManager::setupActions()
     action->setText(i18n("New Folder..."));
     action->setToolTip(i18n("New Folder"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
-//     d->addToolButton(action);
     addAction(action);
 
     action = new KAction(this);
@@ -279,7 +267,7 @@ void FileManager::setupActions()
     action->setText(i18n("Current Document Directory"));
     action->setIcon(KIcon("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
-//     d->addToolButton(action);
+    addAction(action);
     addAction(action);
 }
 
