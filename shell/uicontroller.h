@@ -79,7 +79,7 @@ public:
 
 private:
     void saveArea(Sublime::AreaIndex* area, KConfigGroup & group);
-    void loadArea(Sublime::Area* area, Sublime::AreaIndex* area, const KConfigGroup & group);
+    void loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup & group);
 
 
 public Q_SLOTS:
