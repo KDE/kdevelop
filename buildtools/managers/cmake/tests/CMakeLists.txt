@@ -747,5 +747,6 @@ kde4_add_unit_test( cmakeduchaintest  ${cmakeduchaintest_SRCS} )
 target_link_libraries( cmakeduchaintest 
         ${QT_QTTEST_LIBRARY}
         ${KDE_KDECORE_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
         kdev4cmakecommon )
 
