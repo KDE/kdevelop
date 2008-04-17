@@ -28,6 +28,8 @@
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <icore.h>
+#include <ilanguage.h>
+#include <ilanguagecontroller.h>
 
 #include <duchain.h>
 #include <topducontext.h>
@@ -35,8 +37,8 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel* aModel)
-  : QObject(parent), m_model(aModel)
+CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel* aModel, const QString& language)
+  : QObject(parent), m_model(aModel), m_language(language)
 {
   connect (KDevelop::ICore::self()->partManager(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
@@ -61,6 +63,18 @@ void CodeCompletion::documentLoaded(KParts::Part* document)
 {
   KTextEditor::Document *textDocument = dynamic_cast<KTextEditor::Document*>(document);
   if (textDocument) {
+    QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
+    
+    bool found=false;
+    foreach(ILanguage* lang, langs) {
+      if(m_language==lang->name()) {
+        found=true;
+        break;
+      }
+    }
+    if(!found && !m_language.isEmpty())
+        return;
+    
     foreach (KTextEditor::View* view, textDocument->views())
       viewCreated(textDocument, view);
 

@@ -30,14 +30,18 @@ namespace KTextEditor { class Document; class View; class CodeCompletionModel;  
 
 namespace KDevelop
 {
+class ILanguage;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
 {
   Q_OBJECT
 
   public:
-    /** CodeCompletion will be the @p aModel parent. */
-    CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel* aModel);
+    /** CodeCompletion will be the @p aModel parent.
+      *  If @p language is empty, the completion model will work for all files,
+      *  otherwise only for ones that contain the selected language.
+    */
+    CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel* aModel, const QString& language);
     virtual ~CodeCompletion();
 
   public Q_SLOTS:
@@ -46,6 +50,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
 
   private:
     KTextEditor::CodeCompletionModel* m_model;
+    QString m_language;
 };
 
 }

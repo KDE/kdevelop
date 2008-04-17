@@ -33,7 +33,9 @@ KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
 bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & right) const
 {
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
+    if(!iLeft || !iRight) return false;
     
+
     int leftType=iLeft->type(), rightType=iRight->type();
     bool ret;
     if(leftType==rightType)
