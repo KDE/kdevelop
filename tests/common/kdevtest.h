@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Harald Fernengel <harry@kdevelop.org>                  *
+ *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,44 +16,27 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+#ifndef KDEVTEST
+#define KDEVTEST
 
-#ifndef AUTOTESTSHELL_H
-#define AUTOTESTSHELL_H
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 
-#include <shellextension.h>
-#include <core.h>
-
-/* This is a dummy shell for unit tests. It basically does nothing :)
-
-   You can initialize it in initTestCase() to get a minimal shell to run
-   your autotests.
-
-   Example of a minimal KDevPlatform app:
-
-   void Mytest::initTestCase()
-   {
-       AutoTestShell::init();
-       KDevelop::Core::initialize();
-   }
-
- */
-
-class AutoTestShell : public KDevelop::ShellExtension
-{
-public:
-    QString xmlFile() { return QString(); }
-    QString defaultProfile() { return "kdevtest"; }
-    KDevelop::AreaParams defaultArea() {
-        KDevelop::AreaParams params;
-        params.name = "test";
-        params.title = "Test";
-        return params;
-    }
-    QString projectFileExtension() { return QString(); }
-    QString projectFileDescription() { return QString(); }
-
-    static void init() { s_instance = new AutoTestShell; }
-};
+#define KDEVTEST_MAIN(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    static const char description[] = "KDevelop Test"; \
+    KAboutData aboutData("kdevtest", 0, ki18n("KDevelop Test"), \
+                         "1.0", ki18n(description), KAboutData::License_LGPL, ki18n(\
+                         "(c) 2007-2008, KDevelop Developers"), KLocalizedString(), "http://www.kdevelop.org" ); \
+ \
+    KCmdLineArgs::init(argc, argv, &aboutData); \
+    KApplication app; \
+ \
+    TestObject tc; \
+    return QTest::qExec(&tc, argc, argv); \
+}
 
 #endif
 

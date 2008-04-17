@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2008 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,27 +16,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVTEST
-#define KDEVTEST
+#include "shelldocumentoperationtest.h"
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <tests/common/kdevtest.h>
+#include <QtTest/QtTest>
 
-#define KDEVTEST_MAIN(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    static const char description[] = "Sublime Library Test"; \
-    KAboutData aboutData("test", 0, ki18n("Test"), \
-                         "1.0", ki18n(description), KAboutData::License_LGPL, ki18n(\
-                         "(c) 2007, KDevelop Developers"), KLocalizedString(), "http://www.kdevelop.org" ); \
- \
-    KCmdLineArgs::init(argc, argv, &aboutData); \
-    KApplication app; \
- \
-    TestObject tc; \
-    return QTest::qExec(&tc, argc, argv); \
+#include "documentcontroller.h"
+
+void ShellDocumentOperationTest::init()
+{
+    AutoTestShell::init();
+    KDevelop::Core::initialize();
 }
 
-#endif
+void ShellDocumentOperationTest::cleanup()
+{
+}
 
+void ShellDocumentOperationTest::testOpenDocumentFromText()
+{
+    //open some docs
+    IDocumentController *documentController = Core::self()->documentController();
+    documentController->openDocumentFromText("Test1");
+    QTest::qWait(10000);
+
+    //test that we have this document in the list, signals are emitted and so on
+    QCOMPARE(documentController->openDocuments().count(), 1);
+}
+
+KDEVTEST_MAIN(ShellDocumentOperationTest)
+#include "shelldocumentoperationtest.moc"

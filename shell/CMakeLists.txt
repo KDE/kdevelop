@@ -1,6 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
+add_subdirectory(tests)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

@@ -28,7 +28,7 @@
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>
 
-#include "kdevtest.h"
+#include <tests/common/kdevtest.h>
 
 using namespace Sublime;
 

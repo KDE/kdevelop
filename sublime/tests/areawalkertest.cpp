@@ -28,7 +28,7 @@
 
 #include <kapplication.h>
 
-#include "kdevtest.h"
+#include <tests/common/kdevtest.h>
 #include "areaprinter.h"
 
 using namespace Sublime;

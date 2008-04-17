@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Harald Fernengel <harry@kdevelop.org>                  *
+ *   Copyright 2008 Alexander Dymo <adymo@kdevelop.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,43 +16,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+#ifndef SHELLDOCUMENTOPERATIONTEST_H
+#define SHELLDOCUMENTOPERATIONTEST_H
 
-#ifndef AUTOTESTSHELL_H
-#define AUTOTESTSHELL_H
+#include <QObject>
+#include <tests/common/autotestshell.h>
 
-#include <shellextension.h>
-#include <core.h>
+using namespace KDevelop;
 
-/* This is a dummy shell for unit tests. It basically does nothing :)
+class ShellDocumentOperationTest: public QObject {
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
 
-   You can initialize it in initTestCase() to get a minimal shell to run
-   your autotests.
+    void testOpenDocumentFromText();
 
-   Example of a minimal KDevPlatform app:
-
-   void Mytest::initTestCase()
-   {
-       AutoTestShell::init();
-       KDevelop::Core::initialize();
-   }
-
- */
-
-class AutoTestShell : public KDevelop::ShellExtension
-{
-public:
-    QString xmlFile() { return QString(); }
-    QString defaultProfile() { return "kdevtest"; }
-    KDevelop::AreaParams defaultArea() {
-        KDevelop::AreaParams params;
-        params.name = "test";
-        params.title = "Test";
-        return params;
-    }
-    QString projectFileExtension() { return QString(); }
-    QString projectFileDescription() { return QString(); }
-
-    static void init() { s_instance = new AutoTestShell; }
 };
 
 #endif

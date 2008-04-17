@@ -30,7 +30,7 @@
 #include <sublime/view.h>
 #include <sublime/area.h>
 
-#include "kdevtest.h"
+#include <tests/common/kdevtest.h>
 
 using namespace Sublime;
 

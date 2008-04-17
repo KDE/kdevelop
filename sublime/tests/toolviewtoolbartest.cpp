@@ -33,7 +33,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/tooldocument.h>
 
-#include "kdevtest.h"
+#include <tests/common/kdevtest.h>
 #include "kdebug.h"
 
 using namespace Sublime;
