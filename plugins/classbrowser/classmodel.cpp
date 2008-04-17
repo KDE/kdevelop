@@ -258,6 +258,34 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
       return false;
 
+    if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
+      if (DUContext* dc = d->internalContext()) {
+        if (DUContext* dc2 = d2->internalContext()) {
+          if (dc2->type() != dc->type()) {
+            if (dc->type() == DUContext::Namespace)
+              return true;
+            if (dc2->type() == DUContext::Namespace)
+              return false;
+            if (dc->type() == DUContext::Class)
+              return true;
+            if (dc2->type() == DUContext::Class)
+              return false;
+          }
+        } else {
+          return true;
+        }
+      } else {
+        if (DUContext* dc2 = d2->internalContext())
+          return true;
+      }
+
+      if (AbstractFunctionDeclaration* a = dynamic_cast<AbstractFunctionDeclaration*>(d)) {
+        if (!dynamic_cast<AbstractFunctionDeclaration*>(d2))
+          return true;
+      } else if (AbstractFunctionDeclaration* a2 = dynamic_cast<AbstractFunctionDeclaration*>(d2)) {
+        return false;
+      }
+    }
   }
 
   QString s1 = ClassModel::data(p1).toString();
