@@ -273,10 +273,10 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     QBoxLayout *box;
     if (m_orientation == Qt::Vertical)
     {
-	box = new QBoxLayout(QBoxLayout::BottomToTop, 0);
+	box = new QBoxLayout(QBoxLayout::BottomToTop, this);
     }else
     {
-	box = new QBoxLayout(QBoxLayout::LeftToRight, 0);
+	box = new QBoxLayout(QBoxLayout::LeftToRight, this);
     }
 
     box->setMargin(0);
