@@ -23,7 +23,7 @@
 #include <QStandardItemModel>
 
 #include <sublime/aggregatemodel.h>
-#include <test/common/modeltest.h>
+#include <tests/common/modeltest.h>
 
 #include "kdevtest.h"
 

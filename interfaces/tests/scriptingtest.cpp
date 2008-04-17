@@ -23,7 +23,7 @@
 #include <kross/core/action.h>
 #include <kross/core/manager.h>
 
-#include "../../test/common/autotestshell.h"
+#include "../../tests/common/autotestshell.h"
 
 /*
     This is a very basic test to check the global objects
