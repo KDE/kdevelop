@@ -22,6 +22,7 @@
 #include "interfacesexport.h"
 
 #include <QtCore/QStringList>
+#include <QtGui/QWidget>
 #include <kurl.h>
 
 class QAction;
@@ -49,7 +50,7 @@ public:
       * @returns a list of actions to be added to the toolbar
       */
     
-    virtual QList<QAction*> toolBarActions( QWidget* /*viewWidget*/ ) const { return QList<QAction*>(); }
+    virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
     virtual void viewCreated(Sublime::View* view);
 };
 
