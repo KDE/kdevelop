@@ -391,13 +391,13 @@ void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node*
     }
   }
 
-  //if (first) {
+  if (first) {
     foreach (Declaration* declaration, context->localDeclarations())
       if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
         kDebug() << "Adding declaration " << declaration->identifier() << " to list";
         list->append(createPointer(declaration, parent));
       }
-  //}
+  }
 }
 
 DUContext* ClassModel::trueParent(DUContext* parent) const
