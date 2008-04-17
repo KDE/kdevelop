@@ -194,8 +194,8 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
     Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
     d->setIdentifier( Identifier(exec->executable()) );
     m_declarationsPerTarget.insert(exec->executable(), d);
-    kDebug(9042) << "looooooool" << d
-        << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
+    //kDebug(9042) << "looooooool" << d
+    //    << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
 
     m_filesPerTarget.insert(exec->executable(), exec->sourceLists());
     kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]

@@ -162,7 +162,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     setXMLFile( "kdevcppsupport.rc" );
 
     m_highlights = new CppHighlighting( this );
-    m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0) );
+    m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
     m_standardMacros = new Cpp::MacroRepository::LazySet( &Cpp::EnvironmentManager::m_macroRepository, &Cpp::EnvironmentManager::m_repositoryMutex );
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;
