@@ -21,7 +21,7 @@
 
 #include "ideal.h"
 
-#include <QCleanlooksStyle>
+#include <QMainWindow>
 #include <QStylePainter>
 #include <KIcon>
 #include <kdebug.h>
@@ -30,6 +30,7 @@
 #include <KActionMenu>
 #include <KAcceleratorManager>
 #include <KMenu>
+#include <KToolBar>
 
 #include "area.h"
 #include "view.h"
@@ -309,35 +310,6 @@ IdealDockWidgetTitle::IdealDockWidgetTitle(Qt::Orientation orientation,
     box->addWidget(m_anchor);
     box->addWidget(m_maximize);
     box->addWidget(m_close);
-
-
-    QList<QAction*> toolBarActions = view->toolBarActions();
-    if (!toolBarActions.isEmpty()) {
-        QBoxLayout* top;
-        if (orientation == Qt::Vertical)
-        {
-            top = new QBoxLayout(QBoxLayout::LeftToRight, 0);
-        } else
-        {
-            top = new QBoxLayout(QBoxLayout::TopToBottom, 0);
-        }
-        top->addLayout( box );
-        QToolBar* toolBar = new QToolBar();
-        toolBar->setOrientation(orientation);
-        toolBar->setIconSize(QSize(16, 16));
-        toolBar->setFloatable(false);
-        toolBar->setMovable(false);
-        Q_FOREACH(QAction* act, toolBarActions) {
-            toolBar->addAction(act);
-        }
-        top->addWidget(toolBar);
-        setLayout(top);
-    } else
-    {
-        setLayout(box);
-    }
-
-
 }
 
 IdealDockWidgetTitle::~IdealDockWidgetTitle()
@@ -603,10 +575,29 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
            In this case, we need to reparent the widget. */
         w->setParent(dock);
     }
-    dock->setWidget(w);
+
+    QList<QAction *> toolBarActions = view->toolBarActions();
+    if (toolBarActions.isEmpty())
+      dock->setWidget(w);
+    else {
+      QMainWindow *toolView = new QMainWindow();
+      KToolBar *toolBar = new KToolBar(toolView);
+      toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+      toolBar->setWindowTitle(i18n("%1 Tool Bar", w->windowTitle()));
+      toolBar->setFloatable(false);
+      toolBar->setMovable(true);
+      foreach (QAction *action, toolBarActions)
+	toolBar->addAction(action);
+      toolView->setCentralWidget(w);
+      toolView->addToolBar(toolBar);
+      dock->setWidget(toolView);
+    }
+
+
     dock->setWindowTitle(view->widget()->windowTitle());
     dock->setAutoFillBackground(true);
     dock->setFocusProxy(dock->widget());
+
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
         KAction* action = bar->addWidget(
