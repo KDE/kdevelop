@@ -58,13 +58,17 @@
 using namespace GDBDebugger;
 
 Variable::Variable(TreeModel* model, TreeItem* parent, 
-                   GDBController* controller, const QString& expression)
+                   GDBController* controller, const QString& expression,
+                   const QString& display)
 : TreeItem(model, parent), controller_(controller), activeCommands_(0)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
-    setData(QVector<QString>() << expression << "");
+    if (display.isEmpty())
+        setData(QVector<QString>() << expression << "");
+    else
+        setData(QVector<QString>() << display << "");
 }
 
 Variable::Variable(TreeModel* model, TreeItem* parent, 
@@ -90,7 +94,16 @@ void Variable::handleCreation(const GDBMI::Value& r)
 Variable::~Variable()
 {
     if (!varobj_.isEmpty())
+    {
+        // Delete only top-level variable objects.
+        if (!dynamic_cast<Variable*>(parentItem)
+            && !controller_->stateIsOn(s_dbgNotStarted))
+        {
+            controller_->addCommand(new GDBCommand(GDBMI::VarDelete, varobj_));
+        }
+        
         allVariables_.remove(varobj_);
+    }
 }
 
 void Variable::createVarobjMaybe()
@@ -114,6 +127,12 @@ void Variable::update(const GDBMI::Value& value)
              || value["type_changed"].literal() == "false");
     itemData[1] = value["value"].literal();
     reportChange();
+}
+
+void Variable::die()
+{
+    removeSelf();
+    deleteLater();
 }
 
 void Variable::fetchMoreChildren()
@@ -195,7 +214,7 @@ int Variable::nextId_ = 0;
 QMap<QString, Variable*> Variable::allVariables_;
 
 Watches::Watches(TreeModel* model, TreeItem* parent)
-: TreeItem(model, parent)
+: TreeItem(model, parent), finishResult_(0)
 {
     setData(QVector<QString>() << "Auto" << "");
 }
@@ -213,6 +232,22 @@ GDBController* Watches::controller()
 {
     return static_cast<VariablesRoot*>(parent())->controller();
 }
+
+Variable *Watches::addFinishResult(const QString& convenienceVarible)
+{
+    finishResult_ = new Variable(model(), this,
+                                 controller(), convenienceVarible, "$ret");
+    appendChild(finishResult_);
+    finishResult_->createVarobjMaybe();
+    return finishResult_;
+}
+
+void Watches::removeFinishResult()
+{
+    if (finishResult_)
+        finishResult_->die();
+}
+
 
 
 QVariant Watches::data(int column, int role) const

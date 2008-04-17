@@ -53,7 +53,8 @@ class Variable : public TreeItem
 public:
     Variable(TreeModel* model, TreeItem* parent, 
              GDBController* controller,
-             const QString& expression);
+             const QString& expression,
+             const QString& display = "");
 
     Variable(TreeModel* model, TreeItem* parent, 
              GDBController* controller,
@@ -67,6 +68,8 @@ public:
 
     /* Should be called with the output of -var-update */
     void update(const GDBMI::Value& value);
+
+    void die();
 
     void fetchMoreChildren();
 
@@ -117,10 +120,15 @@ public:
 
     void reinstall();
 
+    Variable *addFinishResult(const QString& convenienceVarible);
+    void removeFinishResult();
+
 private:
     QVariant data(int column, int role) const;
 
     void fetchMoreChildren() {}
+
+    Variable* finishResult_;
 };
 
 class VariablesRoot : public TreeItem

@@ -487,6 +487,15 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
             emit showMessage("Access watchpoint triggered", 3000);
         }
     }
+
+    if (reason == "function-finished" && r.hasField("gdb-result-var"))
+    {
+        variables()->watches()->addFinishResult(r["gdb-result-var"].literal());
+    }
+    else
+    {
+        variables()->watches()->removeFinishResult();
+    }
 }
 
 
