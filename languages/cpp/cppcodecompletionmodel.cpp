@@ -777,6 +777,9 @@ QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex
 
 QModelIndex CppCodeCompletionModel::parent ( const QModelIndex & index ) const
 {
+  if(rowCount() == 0)
+    return QModelIndex();
+
   if( index.isValid() ) {
     CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
 
