@@ -37,6 +37,7 @@ set( cmakecommon_SRCS
 set( cmakemanager_SRCS
   cmakemanager.cpp
   cmakehighlighting.cpp
+  cmakecodecompletionmodel.cpp
 )
 
 set( cmakesettings_SRCS

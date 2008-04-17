@@ -48,6 +48,7 @@
 #include <dumpchain.h>
 #include <topducontext.h>
 #include <duchainlock.h>
+#include <codecompletion.h>
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
@@ -57,6 +58,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
 #include "icmakebuilder.h"
+#include "cmakecodecompletionmodel.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -101,6 +103,8 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     {
         m_builder = i->extension<ICMakeBuilder>();
     }
+
+    CodeCompletion* c=new CodeCompletion(this, new CMakeCodeCompletionModel());
 
     m_clickedItem=0;
     m_highlight = new CMakeHighlighting(this);

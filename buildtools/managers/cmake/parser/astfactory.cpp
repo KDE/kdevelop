@@ -75,3 +75,8 @@ CMakeAst* AstFactory::createAst( const QString& astId )
     return ( it.value() )();
 
 }
+
+QStringList AstFactory::commands() const
+{
+    return d->callbacks.uniqueKeys();
+}

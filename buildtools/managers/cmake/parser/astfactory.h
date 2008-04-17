@@ -22,9 +22,9 @@
 #define ASTFACTORY_H
 
 #include <QtCore/QMap>
+#include <QtCore/QStringList>
 #include "cmakeexport.h"
 
-class QString;
 class CMakeAst;
 
 class KDEVCMAKECOMMON_EXPORT AstFactory
@@ -47,6 +47,7 @@ public:
     ///Return either a valid AST object or zero.
     CMakeAst* createAst( const QString& astId );
 
+    QStringList commands() const;
 private:
     typedef QMap<QString, CreateAstCallback> CallbackMap;
     AstFactory();
