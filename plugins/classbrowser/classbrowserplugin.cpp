@@ -51,16 +51,6 @@ public:
     return Qt::LeftDockWidgetArea;
   }
 
-  virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
-  { 
-    ClassWidget* widget = qobject_cast<ClassWidget*>( viewWidget );
-    if( widget )
-    {
-      return widget->actions();
-    }
-    return KDevelop::IToolViewFactory::toolBarActions( viewWidget );
-}
-
 private:
   ClassBrowserPlugin *m_plugin;
 };
