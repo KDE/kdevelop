@@ -20,14 +20,11 @@
 */
 
 #include "ideallayout.h"
-
-#include <QDockWidget>
+#include "ideal.h"
 
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KConfig>
-
-#include "ideal.h"
 
 using namespace Sublime;
 
@@ -236,14 +233,14 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
     return y + currentLineHeight + margin();
 }
 
-QDockWidget* IdealMainLayout::lastDockWidget() const
+IdealDockWidget* IdealMainLayout::lastDockWidget() const
 {
-    return qobject_cast<QDockWidget*>(m_lastDockWidget);
+    return qobject_cast<IdealDockWidget*>(m_lastDockWidget);
 }
 
-QDockWidget * IdealMainLayout::lastDockWidget(IdealMainLayout::Role role) const
+IdealDockWidget * IdealMainLayout::lastDockWidget(IdealMainLayout::Role role) const
 {
-    return qobject_cast<QDockWidget*>(m_items[role]->last);
+    return qobject_cast<IdealDockWidget*>(m_items[role]->last);
 }
 
 IdealMainLayout::IdealMainLayout(QWidget * parent)
@@ -657,7 +654,7 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
     if (m_maximizedWidget)
         maximizeWidget(0);
 
-    if (QDockWidget* dock = qobject_cast<QDockWidget*>(widget))
+    if (IdealDockWidget* dock = qobject_cast<IdealDockWidget*>(widget))
         if (dock->isFloating())
             dock->setFloating(false);
     

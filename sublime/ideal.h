@@ -71,6 +71,7 @@ protected:
     virtual void paintEvent(QPaintEvent *event);
 };
 
+
 class IdealButtonBarWidget: public QWidget
 {
     Q_OBJECT
@@ -78,22 +79,21 @@ class IdealButtonBarWidget: public QWidget
 public:
     IdealButtonBarWidget(Qt::DockWidgetArea area, class IdealMainWidget *parent = 0);
 
-    KAction *addWidget(const QString& title, QDockWidget *widget,
+    KAction *addWidget(const QString& title, IdealDockWidget *widget,
                        Area* area, View *view);
-    void showWidget(QDockWidget* widget);
+    void showWidget(IdealDockWidget* widget);
     void removeAction(QAction* action);
 
     IdealMainWidget* parentWidget() const;
 
     Qt::Orientation orientation() const;
 
-    QDockWidget* widgetForAction(QAction* action) const;
+    IdealDockWidget* widgetForAction(QAction* action) const;
 
 private Q_SLOTS:
     void showWidget(bool checked);
     void anchor(bool anchor);
     void maximize(bool maximized);
-
     void actionToggled(bool state);
 
 protected:
@@ -104,19 +104,26 @@ protected:
 private:
     Qt::DockWidgetArea _area;
     QHash<QAction *, IdealToolButton *> _buttons;
-    QHash<QAction *, QDockWidget*> _widgets;
+    QHash<QAction *, IdealDockWidget*> _widgets;
     QActionGroup* _actions;
 };
 
-class IdealDockWidgetTitle : public QWidget
+class IdealDockWidget : public QDockWidget
 {
     Q_OBJECT
 
 public:
-    IdealDockWidgetTitle(Qt::Orientation orientation, QDockWidget* parent,
-                         Area* area, View *view,
-                         Qt::DockWidgetArea docking_area);
-    virtual ~IdealDockWidgetTitle();
+    IdealDockWidget(QWidget *parent);
+    virtual ~IdealDockWidget();
+
+    Area *area() const;
+    void setArea(Area *area);
+
+    View *view() const;
+    void setView(View *view);
+
+    Qt::DockWidgetArea dockWidgetArea() const;
+    void setDockWidgetArea(Qt::DockWidgetArea dockingArea);
 
     bool isAnchored() const;
     void setAnchored(bool anchored, bool emitSignals);
@@ -126,6 +133,8 @@ public:
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
+
+    virtual bool event(QEvent *event);
 
 protected: // QWidget overrides
     virtual void contextMenuEvent(QContextMenuEvent *);
@@ -143,13 +152,9 @@ private Q_SLOTS:
     void slotRemove();
 
 private:
-    QRect titleArea(const QRect &origin);
-    QSize buttonsArea();
-
     Qt::Orientation m_orientation;
-    QToolButton* m_anchor;
-    QToolButton* m_maximize;
-    QToolButton* m_close;
+    QAbstractButton* m_anchor;
+    QAbstractButton* m_close;
     Area *m_area;
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
@@ -191,10 +196,10 @@ public:
     // TODO can move the object filter here with judicious focusProxy?
     void centralWidgetFocused();
 
-    void showDockWidget(QDockWidget* widget, bool show);
+    void showDockWidget(IdealDockWidget* widget, bool show);
     void showDock(IdealMainLayout::Role role, bool show);
 
-    void anchorDockWidget(QDockWidget* widget, bool anchor);
+    void anchorDockWidget(IdealDockWidget* widget, bool anchor);
 
     IdealMainLayout* mainLayout() const;
     IdealCentralWidget* internalCentralWidget() const;
@@ -242,13 +247,13 @@ private:
     IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;
 
-    QMap<QDockWidget*, Qt::DockWidgetArea> docks;
+    QMap<IdealDockWidget*, Qt::DockWidgetArea> docks;
     /** Map from View to an action that shows/hides
-        the QDockWidget containing that view.  */
+        the IdealDockWidget containing that view.  */
     QMap<View*, QAction*> m_view_to_action;
-    /** Map from QDockWidget  to an action that shows/hides
-        that QDockWidget.  */
-    QMap<QDockWidget*, QAction*> m_dockwidget_to_action;
+    /** Map from IdealDockWidget  to an action that shows/hides
+        that IdealDockWidget.  */
+    QMap<IdealDockWidget*, QAction*> m_dockwidget_to_action;
 };
 
 class IdealSplitterHandle : public QWidget

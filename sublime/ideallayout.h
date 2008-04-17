@@ -27,12 +27,12 @@
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
-class QDockWidget;
-
 class KAction;
 class KActionCollection;
 
 namespace Sublime {
+
+class IdealDockWidget;
 
 class IdealButtonBarLayout: public QLayout
 {
@@ -131,8 +131,8 @@ public:
 
     virtual void invalidate();
 
-    QDockWidget* lastDockWidget() const;
-    QDockWidget* lastDockWidget(Role role) const;
+    IdealDockWidget* lastDockWidget() const;
+    IdealDockWidget* lastDockWidget(Role role) const;
     Role lastDockWidgetRole() const;
 
     class IdealMainWidget* mainWidget() const;
