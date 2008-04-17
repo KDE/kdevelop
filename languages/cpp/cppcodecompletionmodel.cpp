@@ -136,6 +136,10 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
   }
 
   TopDUContext* top = CppLanguageSupport::self()->standardContext( url );
+  if(!top->parsingEnvironmentFile()) {
+    kDebug(9007) << "no parsingEnvironmentFile available, probably the context is not a C++ context";
+    return;
+  }
   m_currentTopContext = TopDUContextPointer(top);
 
   if (top) {
