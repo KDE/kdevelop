@@ -203,7 +203,7 @@ ProjectModel::~ProjectModel()
 
 ProjectBaseItem *ProjectModel::item( const QModelIndex &index ) const
 {
-    return reinterpret_cast<ProjectBaseItem*>( itemFromIndex( index ) );
+    return dynamic_cast<ProjectBaseItem*>( itemFromIndex( index ) );
 }
 
 void ProjectModel::resetModel()
