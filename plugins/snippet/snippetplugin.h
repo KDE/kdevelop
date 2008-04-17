@@ -14,6 +14,19 @@
 #include <iplugin.h>
 #include <QtCore/QVariant>
 
+class SnippetCompletionModel;
+
+namespace KTextEditor
+{
+class Document;
+class View;
+}
+
+namespace KParts
+{
+class Part;
+}
+
 /**
  * This is the main class of KDevelop's snippet plugin.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
@@ -35,9 +48,13 @@ public:
 
     // KDevelop::IPlugin methods
     virtual void unload();
+private slots:
+    void viewCreated( KTextEditor::Document*, KTextEditor::View* view );
+    void documentLoaded(KParts::Part*);
 
 private:
     class SnippetViewFactory *m_factory;
+    class SnippetCompletionModel* m_model;
 };
 
 #endif
