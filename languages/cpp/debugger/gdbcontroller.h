@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QSet>
 #include <QDateTime>
+#include <QPointer>
 
 #include <kprocess.h>
 
@@ -344,7 +345,7 @@ private:
 
     bool stateReloadInProgress_;
 
-    GDB* gdb_;
+    QPointer<GDB> gdb_;
 
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;

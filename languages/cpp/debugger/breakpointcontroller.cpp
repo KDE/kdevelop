@@ -24,6 +24,7 @@
 
 #include <QPixmap>
 #include <KIcon>
+#include <KParts/PartManager>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -181,6 +182,13 @@ void NewBreakpoint::setColumn(int index, const QVariant& value)
     errors_.remove(index);
     reportChange();
     sendToGDBMaybe();
+}
+
+void NewBreakpoint::markOut()
+{
+    id_ = -1;
+    dirty_.insert(location_column);
+    dirty_.insert(condition_column);
 }
 
 QVariant NewBreakpoint::data(int column, int role) const
@@ -529,6 +537,16 @@ void Breakpoints::sendToGDB()
     }
 }
 
+void Breakpoints::markOut()
+{
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        NewBreakpoint *b = dynamic_cast<NewBreakpoint *>(child(i));
+        Q_ASSERT(b);
+        b->markOut();
+    }
+}
+
 void Breakpoints::save()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
@@ -576,9 +594,12 @@ BreakpointController::BreakpointController(GDBController* parent)
 
     //new ModelTest(this, this);
 
-    connect( KDevelop::ICore::self()->documentController(), 
-             SIGNAL(documentLoaded(KDevelop::IDocument*)),
-             this, SLOT(documentLoaded(KDevelop::IDocument*)) );
+    foreach(KParts::Part* p, KDevelop::ICore::self()->partManager()->parts())
+        slotPartAdded(p);
+    connect(KDevelop::ICore::self()->partManager(),
+            SIGNAL(partAdded(KParts::Part*)),
+            this,
+            SLOT(slotPartAdded(KParts::Part*)));
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
@@ -589,6 +610,34 @@ BreakpointController::BreakpointController(GDBController* parent)
     connect(this, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)),
             Qt::QueuedConnection);
+}
+
+void BreakpointController::slotPartAdded(KParts::Part* part)
+{
+    if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part))
+    {
+        MarkInterface *iface = dynamic_cast<MarkInterface*>(doc);
+        if( !iface )
+            return;
+        
+        iface->setMarkDescription((MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
+        iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *inactiveBreakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)ActiveBreakpointMark, *activeBreakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
+        iface->setEditableMarks( BookmarkMark | BreakpointMark );
+        
+        // When a file is loaded then we need to tell the editor (display window)
+        // which lines contain a breakpoint.
+        foreach (Breakpoint* breakpoint, breakpoints())
+            adjustMark(breakpoint, true);
+        
+#if 0
+        connect( doc, 
+                 SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
+#endif
+    }
 }
 
 BreakpointController::~BreakpointController()
@@ -633,14 +682,9 @@ Qt::ItemFlags BreakpointController::flags(const QModelIndex &index) const
     return static_cast<Qt::ItemFlags>(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
 
-void BreakpointController::slotDataChanged(
-    const QModelIndex& index1, const QModelIndex& index2)
-{
-    //universe_->sendToGDB();
-}
-
 void BreakpointController::clearExecutionPoint()
 {
+    kDebug(9012) << "clearExecutionPoint";
     foreach (KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments())
     {
         MarkInterface *iface = dynamic_cast<MarkInterface*>(document->textDocument());
@@ -661,7 +705,7 @@ void BreakpointController::clearExecutionPoint()
 void BreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
 {
     clearExecutionPoint();
-
+    kDebug(9012) << "gotoExecutionPoint";
     KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->openDocument(url, KTextEditor::Cursor(lineNum, 0));
 
     if( !document )
@@ -716,29 +760,6 @@ void BreakpointController::markChanged(
         KDevelop::ICore::self()->documentController()->activateDocument(KDevelop::ICore::self()->documentController()->activeDocument());
     }
 #endif
-}
-
-
-void BreakpointController::documentLoaded(KDevelop::IDocument* document)
-{
-    MarkInterface *iface = dynamic_cast<MarkInterface*>(document->textDocument());
-    if( !iface )
-        return;
-
-    iface->setMarkDescription((MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
-    iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *inactiveBreakpointPixmap());
-    iface->setMarkPixmap((MarkInterface::MarkTypes)ActiveBreakpointMark, *activeBreakpointPixmap());
-    iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
-    iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
-    iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
-    iface->setEditableMarks( BookmarkMark | BreakpointMark );
-
-    // When a file is loaded then we need to tell the editor (display window)
-    // which lines contain a breakpoint.
-    foreach (Breakpoint* breakpoint, breakpoints())
-        adjustMark(breakpoint, true);
-
-    connect( document->textDocument(), SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
 }
 
 const QPixmap* BreakpointController::inactiveBreakpointPixmap()
@@ -1149,6 +1170,7 @@ void BreakpointController::slotEvent(event_t e)
 
     case connected_to_program:
         {
+            kDebug(9012) << "connected to program";
             universe_->sendToGDB();
             #if 0
             foreach (Breakpoint* bp, breakpoints())
@@ -1172,7 +1194,9 @@ void BreakpointController::slotEvent(event_t e)
             }
             #endif
         }
-
+    case debugger_exited:
+        universe_->markOut();
+        break;
     default:
         ;
     }

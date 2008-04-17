@@ -342,6 +342,7 @@ void VariableCollection::slotPartAdded(KParts::Part* part)
     if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part))
         foreach (KTextEditor::View* v, doc->views())
             slotViewAdded(v);
+    // FIXME: connect to new view signal
 }
 
 void VariableCollection::slotViewAdded(KTextEditor::View* view)

@@ -34,6 +34,7 @@
 #include <QByteArray>
 #include <QTimer>
 
+
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -452,7 +453,9 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
 
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
-            if (frame.hasField("fullname") && frame.hasField("line") && frame.hasField("addr")) {
+            if (frame.hasField("fullname") 
+                && frame.hasField("line") 
+                && frame.hasField("addr")) {
                 showStepInSource(frame["fullname"].literal(),
                      frame["line"].literal().toInt(),
                      frame["addr"].literal());
@@ -543,10 +546,13 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     tty_ = 0;
 
     gdb_->kill();
-    gdb_ = 0;
     gdb_->deleteLater();
 
+    setStateOn(s_dbgNotStarted);
+
     raiseEvent(program_exited);
+
+    raiseEvent(debugger_exited);
 
     if (msgBox)
         KMessageBox::information(qApp->activeWindow(), i18n("gdb message:\n%1", msg), i18n("Warning"));

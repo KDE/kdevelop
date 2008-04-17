@@ -29,6 +29,7 @@
 #include <KUrl>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KParts/Part>
 
 #include <ktexteditor/markinterface.h>
 
@@ -63,6 +64,10 @@ public:
     int id() const { return id_; }
     void update(const GDBMI::Value &b);
     void fetchMoreChildren() {}
+
+    /* Mark this breakpoint as no longer inserted, due to GDB
+       no longer running.  */
+    void markOut();
 
     void setColumn(int index, const QVariant& value);
     void setDeleted();
@@ -111,6 +116,7 @@ public:
     Breakpoints(TreeModel *model, GDBController *controller);
 
     void sendToGDB();
+    void markOut();
 
     void update();
 
@@ -211,15 +217,8 @@ signals:
     void toggledBreakpointEnabled(const QString &fileName, int lineNum);
 
 private slots:
-    void slotDataChanged(const QModelIndex& index1, const QModelIndex& index2);
 
-    /**
-    * Whenever a new document is added this slot gets triggered and we then
-    * look for a MarkInterfaceExtension part. When it is a
-    * MarkInterfaceExtension part we set the various pixmaps of the
-    * breakpoint icons.
-    */
-    void documentLoaded( KDevelop::IDocument* document );
+    void slotPartAdded(KParts::Part* part);
 
     /**
     * Called by the TextEditor interface when the marks have changed position
