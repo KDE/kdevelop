@@ -96,11 +96,24 @@ void ViewActivationTest::testSignalsOnViewCreationAndDeletion()
     ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>());
     Area *area = new Area(controller, "Area");
 
-    QSignalSpy *spy = new QSignalSpy(controller, SIGNAL(viewAdded(Sublime::View*)));
+    QSignalSpy spy(controller, SIGNAL(viewAdded(Sublime::View*)));
+    View *v = doc1->createView();
+    area->addView(v);
+    QCOMPARE(spy.count(), 1);
 
-    area->addView(doc1->createView());
-    QCOMPARE(spy->count(), 1);
-    delete spy;
+    QSignalSpy spy2(controller, SIGNAL(aboutToRemoveView(Sublime::View*)));
+    area->removeView(v);
+    QCOMPARE(spy2.count(), 1);
+
+    QSignalSpy spy3(controller, SIGNAL(toolViewAdded(Sublime::View*)));
+    v = doc1->createView();
+    area->addToolView(v, Sublime::Bottom);
+    QCOMPARE(spy3.count(), 1);
+
+    QSignalSpy spy4(controller, SIGNAL(aboutToRemoveToolView(Sublime::View*)));
+    area->removeToolView(v);
+    QCOMPARE(spy4.count(), 1);
+
     delete controller;
 }
 
