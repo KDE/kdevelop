@@ -137,39 +137,33 @@ void ViewActivationTest::testViewActivation()
 
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
-    qApp->postEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view212);
 
     //activate toolview and check that both view and toolview are active
-    qApp->postEvent(viewT31->widget(), new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(viewT31->widget(), new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view212);
     QCOMPARE(mw.activeToolView(), viewT31);
 
     //active another view
-    qApp->postEvent(view241->widget(), new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(view241->widget(), new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view241);
     QCOMPARE(mw.activeToolView(), viewT31);
 
     //focus a widget not in the area
-    qApp->postEvent(breaker, new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(breaker, new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view241);
     QCOMPARE(mw.activeToolView(), viewT31);
 
     //focus a dock not in the area
-    qApp->postEvent(toolBreaker, new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(toolBreaker, new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view241);
     QCOMPARE(mw.activeToolView(), viewT31);
 
     //focus inner widget for view221
     QListView *inner = mw.findChild<QListView*>("doc2_inner");
     QVERIFY(inner);
-    qApp->postEvent(inner, new QFocusEvent(QEvent::FocusIn));
-    QTest::qWait(10);
+    qApp->sendEvent(inner, new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw.activeView(), view221);
     QCOMPARE(mw.activeToolView(), viewT31);
 }
