@@ -30,6 +30,7 @@
 #include <QPalette>
 #include <QBrush>
 #include <QColor>
+#include <QFileInfo>
 #include <kdebug.h>
 
 #include "iproject.h"
@@ -66,10 +67,16 @@ class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
 {
 };
 
-class ProjectModelPrivate
+class WorkspaceItemPrivate
 {
 public:
+    QString name;
+    KSharedConfig::Ptr metadataConfig;
+    QString metadataDir;
+};
 
+class ProjectModelPrivate
+{
 };
 
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
@@ -183,6 +190,11 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 ProjectModel::ProjectModel( QObject *parent )
         : QStandardItemModel( parent ), d(0)
 {
+}
+
+WorkspaceItem* ProjectModel::workspace() const
+{
+    return dynamic_cast<WorkspaceItem*>( item(0,0) );
 }
 
 ProjectModel::~ProjectModel()
@@ -377,6 +389,30 @@ ProjectTargetItem *ProjectTargetItem::target() const
 void ProjectTargetItem::setIcon()
 {
     QStandardItem::setIcon( KIcon("system-run") );
+}
+
+WorkspaceItem::WorkspaceItem( const QString& name, const QString& metadataFile )
+    : d( new WorkspaceItemPrivate )
+{
+    setText(name);
+    d->name = name;
+    d->metadataConfig = KSharedConfig::openConfig( metadataFile );
+    d->metadataDir = QFileInfo( metadataFile ).absolutePath();
+}
+
+QString WorkspaceItem::name() const
+{
+    return d->name;
+}
+
+QString WorkspaceItem::metadataDirectory() const
+{
+    return d->metadataDir;
+}
+
+KSharedConfig::Ptr WorkspaceItem::metadataConfiguration() const
+{
+    return d->metadataConfig;
 }
 
 }

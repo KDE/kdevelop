@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
+class QModelIndex;
 
 namespace KDevelop
 {

@@ -26,6 +26,7 @@
 #include <QtGui/QStandardItemModel>
 #include "projectexport.h"
 #include <kurl.h>
+#include <ksharedconfig.h>
 
 template<typename T1,typename T2> class QPair;
 template<typename T> class QList;
@@ -205,6 +206,18 @@ private:
     Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
+class KDEVPLATFORMPROJECT_EXPORT WorkspaceItem : public QStandardItem
+{
+public:
+    WorkspaceItem( const QString& name, const QString& metadataFile );
+
+    QString name() const;
+    QString metadataDirectory() const;
+    KSharedConfig::Ptr metadataConfiguration() const;
+private:
+    class WorkspaceItemPrivate* const d;
+};
+
 /**
  * Class providing some convenience methods for accessing the project model
  * @TODO: maybe switch to QAbstractItemModel, would make the implementation
@@ -217,6 +230,8 @@ public:
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 
+    WorkspaceItem* workspace() const;
+
     using QStandardItemModel::item;
     ProjectBaseItem *item( const QModelIndex &index ) const;
 
@@ -224,7 +239,6 @@ public:
 
     virtual void fetchMore( const QModelIndex &parent );
     virtual bool canFetchMore( const QModelIndex & parent ) const;
-
 private:
     class ProjectModelPrivate* const d;
 };

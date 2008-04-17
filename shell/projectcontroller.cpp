@@ -40,6 +40,7 @@ Boston, MA 02110-1301, USA.
 #include <krecentfilesaction.h>
 #include <kactionmenu.h>
 #include <ksettings/dialog.h>
+#include <kstandarddirs.h>
 
 #include "sublime/area.h"
 
@@ -73,6 +74,8 @@ public:
 //     IProject* m_currentProject;
     ProjectModel* model;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
+
+    WorkspaceItem* workspaceitem;
 
     QPointer<QAction> m_closeAllProjects;
 
@@ -145,6 +148,10 @@ ProjectController::ProjectController( Core* core )
             this, SLOT( projectConfig( QObject* ) ) );
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
+    QString workspacename = KGlobal::config()->group("Workspace").readEntry( "Name", "default" );
+    QString workspaceMetadataFile = KGlobal::dirs()->findResource("data", workspacename+"Workspace/"+workspacename);
+    d->workspaceitem = new WorkspaceItem( workspacename, workspaceMetadataFile );
+    d->model->insertRow( 0, d->workspaceitem );
     setupActions();
 
     loadSettings(false);
@@ -332,7 +339,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
 
     ProjectFolderItem *topItem = project->projectItem();
     ProjectModel *model = projectModel();
-    model->insertRow( model->rowCount(), topItem );
+    d->workspaceitem->insertRow( d->workspaceitem->rowCount(), topItem );
 
     d->m_projects.append( project );
 
