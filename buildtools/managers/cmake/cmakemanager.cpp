@@ -166,7 +166,19 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
     KUrl path = group.readEntry("CurrentBuildDir");
-//     KUrl projectPath = item->project()->folder();
+    KUrl projectPath = item->project()->folder();
+
+    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
+    for(; !fi && item; )
+    {
+        item=dynamic_cast<ProjectBaseItem*>(item->parent());
+        fi=dynamic_cast<ProjectFolderItem*>(item);
+    }
+    if(!fi)
+        return path;
+    
+    QString relative=KUrl::relativeUrl( projectPath, fi->url() );
+    path.addPath(relative);
 
     kDebug(9032) << "Build folder: " << path;
     return path;
@@ -674,13 +686,11 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
 
 void CMakeProjectManager::jumpToDeclaration()
 {
-    qDebug() << "navigation" << m_clickedItem;
     DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItem);
     if(du)
     {
         Declaration *decl=du->context();
         ICore::self()->documentController()->openDocument(KUrl(decl->url().str()), decl->range().start.textCursor());
-        qDebug() << "jumping" << decl->url().str();
     }
 }
 
