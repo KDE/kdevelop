@@ -21,6 +21,7 @@
 
 #include <QtCore/QObject>
 
+#include "sublimedefs.h"
 #include "sublimeexport.h"
 
 #include "mainwindowoperator.h"
@@ -29,6 +30,7 @@
 namespace Sublime {
 
 class Area;
+class AreaIndex;
 class Document;
 class MainWindow;
 
@@ -68,6 +70,18 @@ public Q_SLOTS:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
+
+private Q_SLOTS:
+    void notifyToolViewRemoved(Sublime::View *view, Sublime::Position);
+    void notifyToolViewAdded(Sublime::View *view, Sublime::Position);
+    void notifyViewRemoved(Sublime::AreaIndex*, Sublime::View *view);
+    void notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view);
+
+Q_SIGNALS:
+    void aboutToRemoveToolView(Sublime::View*);
+    void toolViewAdded(Sublime::View*);
+    void aboutToRemoveView(Sublime::View*);
+    void viewAdded(Sublime::View*);
 
 private:
     void init();
