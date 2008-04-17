@@ -60,7 +60,8 @@ using namespace GDBDebugger;
 Variable::Variable(TreeModel* model, TreeItem* parent, 
                    GDBController* controller, const QString& expression,
                    const QString& display)
-: TreeItem(model, parent), controller_(controller), activeCommands_(0)
+  : TreeItem(model, parent), controller_(controller), activeCommands_(0), 
+    inScope_(true)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -74,7 +75,8 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
 Variable::Variable(TreeModel* model, TreeItem* parent, 
                    GDBController* controller,
                    const GDBMI::Value& r)
-: TreeItem(model, parent), controller_(controller), activeCommands_(0)
+: TreeItem(model, parent), controller_(controller), activeCommands_(0),
+  inScope_(true)
 {
     varobj_ = r["name"].literal();
     itemData.push_back(r["exp"].literal());
@@ -125,7 +127,15 @@ void Variable::update(const GDBMI::Value& value)
 {
     Q_ASSERT(!value.hasField("type_changed")
              || value["type_changed"].literal() == "false");
-    itemData[1] = value["value"].literal();
+    if (value.hasField("in_scope") && value["in_scope"].literal() == "false")
+    {
+        inScope_ = false;
+    }
+    else
+    {
+        inScope_ = true;
+        itemData[1] = value["value"].literal();
+    }
     reportChange();
 }
 
@@ -149,6 +159,19 @@ void Variable::fetchMoreChildren()
                            // FIXME: handle error?
                            &Variable::handleChildren, this));
     }
+}
+
+QVariant Variable::data(int column, int role) const
+{
+    if (column == 1 && role == Qt::ForegroundRole 
+        && !inScope_)
+    {
+        // FIXME: returning hardcoded gray is bad,
+        // but we don't have access to any widget, or pallette
+        // thereof, at this point.
+        return QColor(128, 128, 128);
+    }
+    return TreeItem::data(column, role);
 }
 
 void Variable::handleCreated(const GDBMI::ResultRecord &r)

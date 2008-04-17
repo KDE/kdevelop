@@ -80,6 +80,10 @@ public:
 
     static int nextId_;
 
+private: // TreeItem overrides
+
+    QVariant data(int column, int role) const;
+
 private:
     void handleCreated(const GDBMI::ResultRecord &r);
     void handleChildren(const GDBMI::ResultRecord &r);
@@ -88,6 +92,7 @@ private:
     QString expression_;
     QString varobj_;
     int activeCommands_;
+    bool inScope_;
 
     static QMap<QString, Variable*> allVariables_;
 };
