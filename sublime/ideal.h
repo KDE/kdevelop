@@ -131,14 +131,10 @@ public:
     bool isMaximized() const;
     void setMaximized(bool maximized);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-
     virtual bool event(QEvent *event);
 
 protected: // QWidget overrides
     virtual void contextMenuEvent(QContextMenuEvent *);
-    virtual void paintEvent(QPaintEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
 Q_SIGNALS:
@@ -147,7 +143,6 @@ Q_SIGNALS:
     void close();
 
 private Q_SLOTS:
-    void slotAnchor(bool anchored);
     void slotMaximize(bool maximized);
     void slotRemove();
 
@@ -158,6 +153,7 @@ private:
     Area *m_area;
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
+    bool m_maximized;
 };
 
 class IdealCentralWidget : public QWidget

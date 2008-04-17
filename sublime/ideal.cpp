@@ -261,7 +261,8 @@ IdealDockWidget::IdealDockWidget(QWidget *parent)
     : QDockWidget(parent),
       m_area(0),
       m_view(0),
-      m_docking_area(Qt::NoDockWidgetArea)
+      m_docking_area(Qt::NoDockWidgetArea),
+      m_maximized(false)
 {
 
     QAbstractButton *floatButton =
@@ -281,7 +282,7 @@ IdealDockWidget::IdealDockWidget(QWidget *parent)
 				    "will be automatically hidden when you click outside it. "
 				    "A locked tool will remain visible until you explicitly "
 				    "hide it, or switch to a different tool."));
-	connect(m_anchor, SIGNAL(toggled(bool)), SLOT(slotAnchor(bool)));
+	connect(m_anchor, SIGNAL(toggled(bool)), SIGNAL(anchor(bool)));
 
 	m_close = closeButton;
 	m_close->setToolTip(i18n("Remove the tool"));
@@ -314,44 +315,24 @@ Qt::DockWidgetArea IdealDockWidget::dockWidgetArea() const
 void IdealDockWidget::setDockWidgetArea(Qt::DockWidgetArea dockingArea)
 { m_docking_area = dockingArea; }
 
-QSize IdealDockWidget::sizeHint() const
-{
-    return QWidget::sizeHint();
-}
-
-QSize IdealDockWidget::minimumSizeHint() const
-{
-    return QWidget::minimumSizeHint();
-}
-
 void IdealDockWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     event->accept();
-    // ### maximize here
+    setMaximized(!isMaximized());
+    slotMaximize(isMaximized());
 }
 
 bool IdealDockWidget::isMaximized() const
-{
-    return false; // ### fixme
-#if 0
-    return m_maximize->isChecked();
-#endif
-}
+{ return m_maximized; }
+
+void IdealDockWidget::setMaximized(bool maximized)
+{ m_maximized = maximized; }
 
 bool IdealDockWidget::event(QEvent *e)
-{
-    return QWidget::event(e);
-}
-
-void IdealDockWidget::paintEvent(QPaintEvent *event)
-{
-    QDockWidget::paintEvent(event);
-}
+{ return QWidget::event(e); }
 
 bool IdealDockWidget::isAnchored() const
-{
-    return m_anchor->isChecked();
-}
+{ return m_anchor->isChecked(); }
 
 void IdealDockWidget::setAnchored(bool anchored, bool emitSignals)
 {
@@ -366,19 +347,6 @@ void IdealDockWidget::setAnchored(bool anchored, bool emitSignals)
         m_anchor->blockSignals(blocked);
 }
 
-void IdealDockWidget::slotAnchor(bool anchored)
-{
-    emit anchor(anchored);
-}
-
-void IdealDockWidget::setMaximized(bool maximized)
-{
-    return; // ### fixme
-#if 0
-    m_maximize->setChecked(maximized);
-#endif
-}
-
 void IdealDockWidget::slotMaximize(bool maximized)
 {
 #if 0 // ### fixme
@@ -390,9 +358,9 @@ void IdealDockWidget::slotMaximize(bool maximized)
         pix = QStyle::SP_TitleBarMaxButton;
 
     m_maximize->setIcon(style()->standardPixmap(pix));
+#endif
 
     emit maximize(maximized);
-#endif
 }
 
 void IdealDockWidget::slotRemove()
