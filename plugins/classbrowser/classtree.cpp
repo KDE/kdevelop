@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <kicon.h>
+#include <kaction.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -60,16 +61,12 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   setWindowTitle(i18n("Class Browser"));
   setWindowIcon(KIcon("class"));
 
-  QFrame *toolBar = new QFrame( this );
-  toolBar->setFrameShape( QFrame::StyledPanel );
-  toolBar->setFrameShadow( QFrame::Raised );
+  KAction* action = new KAction(i18n( "Scope" ), this);
+  action->setToolTip(i18n("Select how much of the code model to display."));
+  addAction(action);
 
-  QToolButton *mode = new QToolButton( toolBar );
-  mode->setText( i18n( "Mode" ) );
-  mode->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-  mode->setArrowType( Qt::DownArrow );
-  mode->setPopupMode( QToolButton::InstantPopup );
-  QMenu *modeMenu = new QMenu( i18n( "Mode" ) );
+  QMenu *modeMenu = new QMenu(this);
+  action->setMenu(modeMenu);
   QActionGroup* ag = new QActionGroup(modeMenu);
   ag->setExclusive(true);
   QAction *currentdoc = ag->addAction( i18n( "&Current Document" ) );
@@ -80,38 +77,14 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   QAction* all = ag->addAction( i18n( "&All" ) );
   all->setData(ModeAll);
   modeMenu->addActions(ag->actions());
-  mode->setMenu( modeMenu );
 
   connect( ag, SIGNAL( triggered(QAction*) ), this, SLOT( setMode(QAction*) ) );
 
-  QToolButton *filter = new QToolButton( toolBar );
-  filter->setText( i18n( "Filter" ) );
-  filter->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-  filter->setArrowType( Qt::DownArrow );
-  filter->setPopupMode( QToolButton::InstantPopup );
-  QMenu *filterMenu = new QMenu( i18n( "Filter" ) );
-
-  /*QMap<QString, int> kindFilterList = model()->kindFilterList();
-  QMap<QString, int>::ConstIterator kind = kindFilterList.begin();
-  for ( ; kind != kindFilterList.end(); ++kind )
-  {
-      QAction *action = filterMenu->addAction( kind.key() );
-      action->setData( kind.value() );
-      action->setCheckable( true );
-      connect( action, SIGNAL( triggered() ), this, SLOT( filterKind() ) );
-  }*/
-  filter->setMenu( filterMenu );
-
-  QHBoxLayout *hbox = new QHBoxLayout( toolBar );
-  //hbox->setMargin( 2 );
-  hbox->addWidget( mode );
-  hbox->addWidget( filter );
-  hbox->addStretch( 1 );
-
-  toolBar->setLayout( hbox );
+  action = new KAction(i18n( "Filter" ), this);
+  action->setToolTip(i18n("Filter the class browser by item type"));
+  addAction(action);
 
   QVBoxLayout* vbox = new QVBoxLayout(this);
-  vbox->addWidget( toolBar );
   vbox->addWidget( m_tree );
   setLayout( vbox );
 
@@ -206,7 +179,7 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 	// ### do something here
       }
 
-      if(!dec || dec->definition() || dec->declaration())
+      if(!dec || !dec->definition())
         openDef->setEnabled(false);
     }
   }

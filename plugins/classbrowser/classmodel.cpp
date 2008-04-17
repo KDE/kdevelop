@@ -259,31 +259,21 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
       return false;
 
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
-      if (DUContext* dc = d->internalContext()) {
-        if (DUContext* dc2 = d2->internalContext()) {
-          if (dc2->type() != dc->type()) {
-            if (dc->type() == DUContext::Namespace)
+      if (d->abstractType()) {
+        if (d2->abstractType()) {
+          switch (d->abstractType()) {
+            case AbstractType::TypeStructure:
               return true;
-            if (dc2->type() == DUContext::Namespace)
-              return false;
-            if (dc->type() == DUContext::Class)
-              return true;
-            if (dc2->type() == DUContext::Class)
-              return false;
+            case AbstractType::TypeFunction:
+              if (d2->abstractType() == AbstractType::TypeStructure)
+                return false;
+              break;
+            default:
+              if (d2->abstractType() == AbstractType::TypeStructure || d2->abstractType() == AbstractType::TypeFunction)
+                return false;
+              break;
           }
-        } else {
-          return true;
         }
-      } else {
-        if (DUContext* dc2 = d2->internalContext())
-          return true;
-      }
-
-      if (AbstractFunctionDeclaration* a = dynamic_cast<AbstractFunctionDeclaration*>(d)) {
-        if (!dynamic_cast<AbstractFunctionDeclaration*>(d2))
-          return true;
-      } else if (AbstractFunctionDeclaration* a2 = dynamic_cast<AbstractFunctionDeclaration*>(d2)) {
-        return false;
       }
     }
   }
