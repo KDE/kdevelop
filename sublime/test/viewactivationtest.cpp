@@ -64,6 +64,7 @@ void ViewActivationTest::init()
     tool3 = new ToolDocument("tool3", controller, new SimpleToolWidgetFactory<QTextEdit>());
 
     area = new Area(controller, "Area");
+
     view211 = doc1->createView();
     area->addView(view211);
     view212 = doc1->createView();
@@ -86,6 +87,20 @@ void ViewActivationTest::init()
 
 void ViewActivationTest::cleanup()
 {
+    delete controller;
+}
+
+void ViewActivationTest::testSignalsOnViewCreationAndDeletion()
+{
+    Controller *controller = new Controller(this);
+    ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>());
+    Area *area = new Area(controller, "Area");
+
+    QSignalSpy *spy = new QSignalSpy(controller, SIGNAL(viewAdded(Sublime::View*)));
+
+    area->addView(doc1->createView());
+    QCOMPARE(spy->count(), 1);
+    delete spy;
     delete controller;
 }
 
@@ -190,7 +205,6 @@ void ViewActivationTest::testActivationAfterRemovalSimplestCase()
 
     //delete active view and check that previous is activated
     delete area->removeView(v2);
-//     kDebug() << "ACTIVE VIEW:" << mw.activeView();
     QCOMPARE(mw.activeView(), v1);
 }
 

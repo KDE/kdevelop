@@ -129,22 +129,14 @@ void Controller::showArea(Area *area, MainWindow *mainWindow)
     MainWindowOperator::setArea(mainWindow, areaToShow);
     connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
     connect(areaToShow, SIGNAL(requestToolViewRaise(Sublime::View*)),
         mainWindow, SLOT(raiseToolView(Sublime::View*)));
     connect(areaToShow, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-    connect(areaToShow, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
     connect(areaToShow, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
     connect(areaToShow, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
-    connect(areaToShow, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-        this, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(areaToShow, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-        this, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
     connect(areaToShow, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
 }
@@ -163,6 +155,15 @@ void Controller::addArea(Area *area)
 {
     d->areas.append(area);
     d->namedAreas[area->objectName()] = area;
+
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
+        this, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
+        this, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
+        this, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
+        this, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
 }
 
 void Controller::addDocument(Document *document)
