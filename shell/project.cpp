@@ -81,21 +81,21 @@ public:
         {
             QList<ProjectFolderItem*> folder_list = folder->folderList();
             for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
+            {
                 files += recurseFiles( ( *it ) );
+            }
 
             QList<ProjectTargetItem*> target_list = folder->targetList();
-            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
+            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it ) 
+            {
                 files += recurseFiles( ( *it ) );
+            }
 
-            QList<ProjectFileItem*> file_list = folder->fileList();
-            for ( QList<ProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
-                files += recurseFiles( ( *it ) );
+            files += folder->fileList();
         }
         else if ( ProjectTargetItem * target = projectItem->target() )
         {
-            QList<ProjectFileItem*> file_list = target->fileList();
-            for ( QList<ProjectFileItem*>::Iterator it = file_list.begin(); it != file_list.end(); ++it )
-                files += recurseFiles( ( *it ) );
+            files += target->fileList();
         }
         else if ( ProjectFileItem * file = projectItem->file() )
         {
@@ -336,7 +336,7 @@ void Project::close()
     //the manager plugin will be deleted in the plugin controller, so just set
     //the manager to zero.
 //     d->manager = 0;
-    QList<QStandardItem*> itemList = Core::self()->projectController()->projectModel()->takeRow( d->topItem->row() );
+    QList<QStandardItem*> itemList =  d->topItem->parent()->takeRow( d->topItem->row() );
     qDeleteAll( itemList );
 
     if( d->tmp )

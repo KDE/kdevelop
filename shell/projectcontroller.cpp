@@ -456,7 +456,6 @@ bool ProjectController::closeProject( IProject* proj )
         }
     }
 
-
     proj->close();
     proj->deleteLater(); //be safe when deleting
     d->m_projects.removeAll( proj );
@@ -546,7 +545,9 @@ bool ProjectController::configureProject( IProject* project )
 void KDevelop::ProjectController::closeAllProjects()
 {
     foreach (IProject* project, projects())
+    {
         closeProject(project);
+    }
 }
 
 #include "projectcontroller.moc"
