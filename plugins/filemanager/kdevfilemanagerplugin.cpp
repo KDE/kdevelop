@@ -47,15 +47,6 @@ public:
     {
         return Qt::LeftDockWidgetArea;
     }
-    virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
-    {
-        FileManager* manager = qobject_cast<FileManager*>( viewWidget );
-        if( manager )
-        {
-            return manager->actions();
-        }
-        return KDevelop::IToolViewFactory::toolBarActions( viewWidget );
-    }
 private:
     KDevFileManagerPlugin *m_plugin;
 };
