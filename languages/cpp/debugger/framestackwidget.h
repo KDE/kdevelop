@@ -51,8 +51,9 @@ public:
 Q_SIGNALS:
     void requestRaise();
 
-public Q_SLOTS:
+private Q_SLOTS:
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void selectThread(const QModelIndex&);
 
 protected:
     virtual void showEvent(QShowEvent* event);

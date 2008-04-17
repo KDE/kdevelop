@@ -206,8 +206,9 @@ public:
 class DebugUniverse : public TreeItem
 {
 public:
-    DebugUniverse(TreeModel* model, GDBController *controller)
-    : TreeItem(model), controller_(controller)
+    DebugUniverse(TreeModel* model, GDBController *controller, 
+                  StackManager *stackManager)
+    : TreeItem(model), controller_(controller), stackManager_(stackManager)
     {}
 
     void update()
@@ -273,9 +274,21 @@ private:
         for (; gidx >= 0; --gidx)
             appendChild(new Thread(model(), this,
                                    controller_, threads[gidx]));
+
+        for (int i = 0; i < childItems.size(); ++i)
+        {
+            Thread* t = static_cast<Thread *>(child(i));
+            if (t->id() == current_id)
+            {
+                emit stackManager_
+                    ->selectThreadReally(model()->indexForItem(t, 0));
+            }
+        }
+
     }
 
     GDBController* controller_;    
+    StackManager* stackManager_;
 };
 }
 
@@ -288,7 +301,7 @@ StackManager::StackManager(GDBController* controller)
     header.push_back("Source");
 
     model_ = new TreeModel (header, this);
-    universe_ = new DebugUniverse(model_, controller);
+    universe_ = new DebugUniverse(model_, controller, this);
     model_->setRootItem(universe_);
 
     // new ModelTest(model_, this);

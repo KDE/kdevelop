@@ -30,9 +30,6 @@
 
 namespace GDBDebugger
 {
-
-class ThreadItem;
-class FrameStackItem;
 class GDBController;
 class TreeItem;
 class TreeModel;
@@ -41,18 +38,7 @@ class StackManager : public QObject
 {
     Q_OBJECT
 
-    friend class ThreadItem;
-    friend class FrameStackItem;
-
 public:
-#if 0
-    enum StackColumns {
-        ColumnID,
-        ColumnContext,
-        ColumnSource,
-        ColumnLast = ColumnSource
-    };
-#endif
 
     StackManager(GDBController* controller);
     virtual ~StackManager();
@@ -67,46 +53,18 @@ private:
 
     void updateThreads();
 
-#if 0
-    // Item model reimplementations
-    virtual bool canFetchMore ( const QModelIndex & parent ) const;
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-    virtual void fetchMore ( const QModelIndex & parent );
-    //virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
+Q_SIGNALS:
+    void selectThread(const QModelIndex& index);   
 
-    QObject* objectForIndex(const QModelIndex& index) const;
-    ThreadItem* threadForIndex(const QModelIndex& index) const;
-
-protected:
-    void prepareInsertFrames(ThreadItem* thread, int startIndex, int endIndex);
-    void completeInsertFrames();
-    void dataChanged(FrameStackItem* frame);
-
-private:
-    void handleThreadList(const GDBMI::ResultRecord&);
-#endif
-
+public:
+    // FIXME: there should be some other way for model
+    // to make a given thread selected.
+    void selectThreadReally(const QModelIndex& index)
+    { emit selectThread(index); }
 
 public Q_SLOTS:
     void slotEvent(event_t e);
 
-#if 0
-private:
-    void clear();
-    ThreadItem* createThread(int threadId);
-
-    QModelIndex indexForThread(ThreadItem* thread, int column = 0) const;
-    QModelIndex indexForFrame(FrameStackItem* frame, int column = 0) const;
-
-private:
-    QList<ThreadItem*> m_threads;
-    mutable bool m_ignoreOneFetch;
-#endif
 private:
     GDBController* controller_;
     bool autoUpdate_;

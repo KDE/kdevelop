@@ -55,21 +55,37 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
     setWindowIcon(KIcon("view-list-text"));
     setRootIsDecorated(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    
+
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    header()->setHighlightSections(false);
 
 //    header()->hide();
 
 //    setModel(controller->stackManager());
     controller->stackManager()->setAutoUpdate(isVisible());
 
-    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(slotSelectionChanged(QItemSelection, QItemSelection)));
+    //connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+    //        this, SLOT(slotSelectionChanged(QItemSelection, QItemSelection)));
+
+    connect(controller->stackManager(), 
+            SIGNAL(selectThread(const QModelIndex&)),
+            this,
+            SLOT(selectThread(const QModelIndex&)));
 
     connect(plugin, SIGNAL(raiseFramestackViews()), this, SIGNAL(requestRaise()));
 }
 
 FramestackWidget::~FramestackWidget()
 {
+}
+
+void FramestackWidget::selectThread(const QModelIndex& index)
+{
+    selectionModel()->select(
+        index, 
+        QItemSelectionModel::Rows
+        | QItemSelectionModel::ClearAndSelect);
 }
 
 void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
