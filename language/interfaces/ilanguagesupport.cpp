@@ -21,6 +21,9 @@
 #include "duchain.h"
 #include <editor/simplerange.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+
 namespace KDevelop {
 
 TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool allowProxyContext) {
@@ -41,6 +44,10 @@ QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url
 
 const ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
     return 0;
+}
+
+ILanguage* ILanguageSupport::language() {
+    return ICore::self()->languageController()->language(name());
 }
 
 }

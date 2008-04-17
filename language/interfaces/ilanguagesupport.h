@@ -43,7 +43,7 @@ public:
     /** @return the parse job that is used by background parser to parse given @p url.*/
     virtual ParseJob *createParseJob(const KUrl &url) = 0;
     /** @return the language for this support.*/
-    virtual ILanguage *language() = 0;
+    virtual ILanguage *language();
     /**
       * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
