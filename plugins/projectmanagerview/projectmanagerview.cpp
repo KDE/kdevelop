@@ -147,7 +147,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 //     d->m_projectOverview->setModel( overviewModel );
     d->m_projectOverview->setSelectionModel(
             new QItemSelectionModel( overviewModel, d->m_projectOverview ) );
-
+    d->m_projectOverview->setExpanded( d->m_modelFilter->index(0,0,QModelIndex()), true );
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
