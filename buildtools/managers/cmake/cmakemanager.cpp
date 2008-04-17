@@ -104,7 +104,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
         m_builder = i->extension<ICMakeBuilder>();
     }
 
-    CodeCompletion* c=new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
+    new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
 
     m_clickedItem=0;
     m_highlight = new CMakeHighlighting(this);

@@ -2336,7 +2336,7 @@ bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.name.toLower() != "macro" || func.arguments.isEmpty())
         return false;
 
-    m_macroName = func.arguments[0].value.toLower();
+    m_macroName = func.arguments.first().value.toLower();
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
     for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
         m_knownArgs.append( it->value );

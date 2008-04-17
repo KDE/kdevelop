@@ -29,6 +29,7 @@
 #include <dumpchain.h>
 #include <duchainlock.h>
 #include <parsingenvironment.h>
+#include <typesystem.h>
 
 #include <KProcess>
 #include <KDebug>
@@ -650,6 +651,30 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     }
     ++lines; //We do not want to return to endmacro
     m_macros->insert(macro->macroName(), m);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(macro->macroName()));
+    SimpleRange sr=macro->content().first().arguments.first().range();
+    if(!decls.isEmpty())
+    {
+        int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+        m_topctx->createUse(idx, sr, 0);
+    }
+    else
+    {
+        Declaration *d = new Declaration(m_topctx->url(), sr, Declaration::GlobalScope, m_topctx);
+        d->setIdentifier( Identifier(macro->macroName()) );
+        
+        FunctionType* func=new FunctionType();
+        foreach(const QString& arg, macro->knownArgs())
+        {
+            DelayedType *delayed=new DelayedType;
+            delayed->setIdentifier( arg );
+            func->addArgument(AbstractType::Ptr(delayed));
+        }
+        d->setAbstractType( AbstractType::Ptr(func) );
+    }
+
     return lines;
 }
 
@@ -1456,16 +1481,15 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 //         kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it, m_vars); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
-        QString funcName=func.name;
         bool correct = element->parseFunctionInfo(func);
         if(!correct)
         {
-            kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl <<
-                    " at" << func.filePath << ":" << func.line << endl;
+            kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
+                << " at" << func.filePath << ":" << func.line << endl;
             //FIXME: Should avoid to run?
         }
         
-        RecursivityType r = recursivity(funcName);
+        RecursivityType r = recursivity(func.name);
         if(r==End)
         {
 //             kDebug(9042) << "Found an end." << func.writeBack();
@@ -1473,7 +1497,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             return line;
         }
         if(element->isDeprecated())
-            kDebug(9042) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
+            kDebug(9042) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
         element->setContent(fc, line);
         
         createDefinitions(element);

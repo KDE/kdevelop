@@ -58,7 +58,7 @@ CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) cons
     if(row<m_commands.count())
         return Command;
     else
-        return Variable;
+        return VariableMacro;
 }
 
 QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) const
@@ -71,7 +71,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         if(type==Command)
             return m_commands[index.row()];
-        else if(type==Variable)
+        else if(type==VariableMacro)
         {
             int pos=index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
@@ -82,8 +82,37 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         if(type==Command)
             return "Command";
-        else if(type==Variable)
-            return "Variable";
+        else if(type==VariableMacro)
+        {
+            int pos=index.row()-m_commands.count();
+            DUChainReadLocker lock(DUChain::lock());
+            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            if(func)
+                return "Macro";
+            else
+                return "Variable";
+        }
+    }
+    else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Arguments)
+    {
+        if(type==Command)
+            return QString(); //TODO
+        else if(type==VariableMacro)
+        {
+            DUChainReadLocker lock(DUChain::lock());
+            int pos=index.row()-m_commands.count();
+            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            if(func)
+            {
+                QStringList args;
+                foreach(const AbstractType::Ptr& t, func->arguments())
+                {
+                    const DelayedType *delay=dynamic_cast<const DelayedType*>(t.data());
+                    args.append(delay->identifier().toString());
+                }
+                return '('+args.join(", ")+')';
+            }
+        }
     }
     return QVariant();
 }
@@ -95,16 +124,23 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
         case Command:
             document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
             break;
-        case Variable: {
-            Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
-            QString bef=document->text( prefix );
-            qDebug() << "aaaaaaaaaaa" << bef << "word:" << word << "${" << prefix;
-            if(r.start().column()>=2 && bef=="${")
-                r.start().setColumn( r.start().column()-2 );
-            document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
+        case VariableMacro: {
+            int pos=row-m_commands.count();
+            DUChainReadLocker lock(DUChain::lock());
+            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            if(func)
+            {
+                document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+            }
+            else
+            {
+                Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
+                QString bef=document->text(prefix);
+                if(r.start().column()>=2 && bef=="${")
+                    r.start().setColumn( r.start().column()-2 );
+                document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
+            }
         }   break;
-        case Macro:
-            break;
     }
 }
 
