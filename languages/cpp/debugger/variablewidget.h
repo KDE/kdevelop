@@ -22,6 +22,8 @@
 
 #include "gdbcontroller.h"
 #include "mi/gdbmi.h"
+#include "util/treeview.h"
+#include "variablecollection.h"
 
 class KMenu;
 class KLineEdit;
@@ -48,23 +50,20 @@ Q_SIGNALS:
     void evaluateExpression(const QString& indent);
 
 public Q_SLOTS:
-    void slotAddWatchVariable();
-    void slotAddWatchVariable(const QString &ident);
-    void slotEvaluateExpression();
-    void slotEvaluateExpression(const QString &ident);
+    void slotAddWatch(const QString &ident);
 
 private:
-    VariableTree *varTree_;
-//    KLineEdit *watchVarEntry_;
-
+    VariableTree *varTree_;   
+    KLineEdit *watchVarEntry_;
     KHistoryComboBox *watchVarEditor_;
+    VariablesRoot *variablesRoot_;
 };
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-class VariableTree : public QTreeView
+class VariableTree : public AsyncTreeView
 {
     Q_OBJECT
 public:
@@ -74,6 +73,7 @@ public:
     GDBController* controller() const;
     VariableCollection* collection() const;
 
+#if 0
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);
 
@@ -88,12 +88,16 @@ private: // helper functions
     void updateCurrentFrame();
 
     void copyToClipboard(AbstractVariableItem* item);
+#endif
+
 
 private:
     GDBController*  controller_;
 
+#if 0
     KMenu* activePopup_;
     QAction* toggleWatch_;
+#endif
 };
 
 }

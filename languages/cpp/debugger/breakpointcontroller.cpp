@@ -576,7 +576,8 @@ BreakpointController::BreakpointController(GDBController* parent)
 
     //new ModelTest(this, this);
 
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
+    connect( KDevelop::ICore::self()->documentController(), 
+             SIGNAL(documentLoaded(KDevelop::IDocument*)),
              this, SLOT(documentLoaded(KDevelop::IDocument*)) );
 
     // FIXME: maybe, all debugger components should derive from

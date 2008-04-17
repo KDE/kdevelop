@@ -2,6 +2,7 @@
  * GDB Debugger Support
  *
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,10 +23,21 @@
 #ifndef _VARIABLECOLLECTION_H_
 #define _VARIABLECOLLECTION_H_
 
-#include <QAbstractItemModel>
-
 #include "mi/gdbmi.h"
 #include "gdbglobal.h"
+#include "util/treemodel.h"
+#include "util/treeitem.h"
+
+#include "idocument.h"
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
+#include <QAbstractItemModel>
+#include <QMap>
+#include <QPointer>
+
+class VariableToolTip;
 
 namespace GDBDebugger
 {
@@ -36,7 +48,97 @@ class FrameItem;
 class WatchItem;
 class VariableItem;
 
-class VariableCollection : public QAbstractItemModel
+class Variable : public TreeItem
+{
+public:
+    Variable(TreeModel* model, TreeItem* parent, 
+             GDBController* controller,
+             const QString& expression);
+
+    Variable(TreeModel* model, TreeItem* parent, 
+             GDBController* controller,
+             const GDBMI::Value& value);
+
+    void handleCreation(const GDBMI::Value& value);
+
+    ~Variable();
+
+    void createVarobjMaybe();
+
+    /* Should be called with the output of -var-update */
+    void update(const GDBMI::Value& value);
+
+    void fetchMoreChildren();
+
+    static Variable *findByName(const QString& name);
+    /* Called when GDB dies.  Clears the association between varobj names
+       and Variable instances.  */
+    static void markAllDead();
+
+    static int nextId_;
+
+private:
+    void handleCreated(const GDBMI::ResultRecord &r);
+    void handleChildren(const GDBMI::ResultRecord &r);
+
+    GDBController* controller_;
+    QString expression_;
+    QString varobj_;
+    int activeCommands_;
+
+    static QMap<QString, Variable*> allVariables_;
+};
+
+class TooltipRoot : public TreeItem
+{
+public:
+    Variable* var;
+
+    TooltipRoot(TreeModel* model)
+    : TreeItem(model)
+    {}
+
+    void init(GDBController* controller, const QString& expression)
+    {
+        var = new Variable(model(), this, controller, expression);
+        appendChild(var);
+    }
+
+    void fetchMoreChildren() {}
+};
+
+class Watches : public TreeItem
+{
+public:
+    Watches(TreeModel* model, TreeItem* parent);
+    Variable* add(const QString& expression);
+
+    GDBController* controller();
+
+    void reinstall();
+
+private:
+    QVariant data(int column, int role) const;
+
+    void fetchMoreChildren() {}
+};
+
+class VariablesRoot : public TreeItem
+{
+public:
+    VariablesRoot(TreeModel* model);
+
+    GDBController* controller();
+
+    Watches *watches() const { return watches_; }
+
+    void fetchMoreChildren() {}
+
+private:
+    Watches *watches_;
+};
+
+class VariableCollection : public TreeModel
 {
     Q_OBJECT
 
@@ -47,8 +149,14 @@ public:
     VariableCollection(GDBController* parent);
     virtual ~VariableCollection();
 
-    GDBController* controller() const;
+    VariablesRoot* root() const { return universe_; }
+    Watches* watches() const { return universe_->watches(); }
 
+    GDBController* controller();
+
+    void update();
+
+#if 0
     void addItem(AbstractVariableItem* item);
     void deleteItem(AbstractVariableItem* item);
 
@@ -75,6 +183,8 @@ public:
     void removeVariableObject(const QString& variableObject);
 
     VariableItem* createVariableItem(const QString& type, AbstractVariableItem* parent);
+
+
 
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);
@@ -127,10 +237,29 @@ private:
 
     // Root of all recently printed expressions.
     AbstractVariableItem* recentExpressions_;
+#endif
 
+
+private slots:
+    void slotEvent(event_t event);
+    void slotPartAdded(KParts::Part*);
+    void slotViewAdded(KTextEditor::View*);
+    void textHintRequested(const KTextEditor::Cursor&, QString&);
+
+private:
+    void handleVarUpdate(const GDBMI::ResultRecord& r);
+
+private:
+
+    VariablesRoot* universe_;
+    GDBController* controller_;
+    QPointer<VariableToolTip> activeTooltip_;
+
+#if 0
     QMap<QString, AbstractVariableItem*> m_variableObjectMap;
 
     QList<AbstractVariableItem*> m_items;
+#endif
 };
 
 }

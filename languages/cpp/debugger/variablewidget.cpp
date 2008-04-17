@@ -82,7 +82,7 @@ namespace GDBDebugger
 
 VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  controller,
                                QWidget *parent)
-: QWidget(parent)
+: QWidget(parent), variablesRoot_(controller->variables()->root())
 {
   //setWindowIcon(KIcon("math_brace"));
     setWindowIcon(KIcon("debugger"));
@@ -93,32 +93,14 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
     watchVarEditor_ = new KHistoryComboBox( this );
 
-    QHBoxLayout* buttons = new QHBoxLayout();
-
-    buttons->addStretch();
-
-    QPushButton *evalButton = new QPushButton(i18n("&Evaluate"), this );
-    buttons->addWidget(evalButton);
-
-    QPushButton *addButton = new QPushButton(i18n("&Watch"), this );
-    buttons->addWidget(addButton);
-
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(varTree_, 10);
     topLayout->addWidget(watchVarEditor_);
-    topLayout->addItem(buttons);
 
-
-    connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
-    connect( evalButton, SIGNAL(clicked()), SLOT(slotEvaluateExpression()) );
-
-    connect( watchVarEditor_, SIGNAL(returnPressed()),
-             SLOT(slotEvaluateExpression()) );
+    connect(watchVarEditor_, SIGNAL(returnPressed(const QString &)),
+            this, SLOT(slotAddWatch(const QString&)));
 
     connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
-
-    connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
-    connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 
     // Setup help items.
 
@@ -138,52 +120,25 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
 
     watchVarEditor_->setWhatsThis(
                     i18n("<b>Expression entry</b>"
-                         "<p>Type in expression to evaluate."));
+                         "<p>Type in expression to watch."));
 
-    evalButton->setWhatsThis(
-                    i18n("Evaluate the expression."));
-
-    addButton->setWhatsThis(
-                    i18n("Evaluate the expression and "
-                         "auto-update the value when stepping."));
 }
 
-void VariableWidget::slotAddWatchVariable()
+void VariableWidget::slotAddWatch(const QString &expression)
 {
-    QString watchVar(watchVarEditor_->currentText());
-    if (!watchVar.isEmpty())
+    if (!expression.isEmpty())
     {
-        slotAddWatchVariable(watchVar);
-    }
-}
-
-// **************************************************************************
-
-void VariableWidget::slotAddWatchVariable(const QString &ident)
-{
-    if (!ident.isEmpty())
-    {
-        watchVarEditor_->addToHistory(ident);
-        emit addWatchVariable(ident);
-        watchVarEditor_->clearEditText();
-    }
-}
-
-void VariableWidget::slotEvaluateExpression()
-{
-    QString exp(watchVarEditor_->currentText());
-    if (!exp.isEmpty())
-    {
-        slotEvaluateExpression(exp);
-    }
-}
-
-void VariableWidget::slotEvaluateExpression(const QString &ident)
-{
-    if (!ident.isEmpty())
-    {
-        watchVarEditor_->addToHistory(ident);
-        emit evaluateExpression(ident);
+        watchVarEditor_->addToHistory(expression);
+        kDebug(9012) << "Trying to add watch\n";
+        Variable* v = variablesRoot_->watches()->add(expression);
+        QModelIndex index = varTree_->controller()
+            ->variables()->indexForItem(v, 0);
+        /* For watches on structures, we really do want them to be shown
+           expanded.  Except maybe for structure with custom pretty printing,
+           but will handle that later.  
+           FIXME: it does not actually works now.
+        */
+        //varTree_->setExpanded(index, true);
         watchVarEditor_->clearEditText();
     }
 }
@@ -194,15 +149,20 @@ void VariableWidget::slotEvaluateExpression(const QString &ident)
 
 VariableTree::VariableTree(VariableWidget *parent,
                            GDBController*  controller)
-    : QTreeView(parent),
-      controller_(controller),
+: AsyncTreeView(controller->variables(), parent),
+  controller_(controller)
+#if 0
+,
       activePopup_(0),
       toggleWatch_(0)
+#endif
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
 
-    setModel(controller->variables());
+    QModelIndex index = controller->variables()->indexForItem(
+        controller->variables()->watches(), 0);
+    setExpanded(index, true);
 }
 
 // **************************************************************************
@@ -211,8 +171,13 @@ VariableTree::~VariableTree()
 {
 }
 
-// **************************************************************************
+GDBController* VariableTree::controller() const
+{
+    return controller_;
+}
 
+// **************************************************************************
+#if 0
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
@@ -492,6 +457,7 @@ void VariableTree::showEvent(QShowEvent * event)
     for (int i = 0; i < model()->columnCount(); ++i)
         resizeColumnToContents(i);
 }
+#endif
 
 // **************************************************************************
 // **************************************************************************

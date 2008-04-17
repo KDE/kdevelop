@@ -91,7 +91,8 @@ GDBController::GDBController(QObject* parent)
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
 
-    connect(this, SIGNAL(event(event_t)), m_variableCollection, SLOT(slotEvent(event_t)));
+    connect(this, SIGNAL(event(event_t)), 
+            m_variableCollection, SLOT(slotEvent(event_t)));
 
     connect( this, SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this, SLOT(slotShowStep(const QString&, int)));
@@ -532,12 +533,16 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     delete tty_;
     tty_ = 0;
 
+    gdb_->kill();
+    gdb_ = 0;
+    gdb_->deleteLater();
+
     raiseEvent(program_exited);
 
     if (msgBox)
         KMessageBox::information(qApp->activeWindow(), i18n("gdb message:\n%1", msg), i18n("Warning"));
 
-    emit showMessage(msg, 3000);
+    emit showMessage(msg, 0);
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
     emit gdbUserCommandStdout(msg);
@@ -931,7 +936,9 @@ void GDBController::slotKill()
         slotPauseApp();
     }
 
-    queueCmd(new GDBCommand(ExecAbort));
+    // The -exec-abort is not implemented in gdb
+    // queueCmd(new GDBCommand(ExecAbort));
+    queueCmd(new GDBCommand(NonMI, "kill"));
 
     setStateOn(s_appNotStarted);
 }

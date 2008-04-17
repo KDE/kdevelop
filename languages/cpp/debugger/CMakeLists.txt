@@ -43,10 +43,10 @@ set(kdevcppdebugger_PART_SRCS
     stty.cpp
     breakpoint.cpp
     variablewidget.cpp
-    abstractvariableitem.cpp
-    variableitem.cpp
-    frameitem.cpp
-    watchitem.cpp
+#    abstractvariableitem.cpp
+#    variableitem.cpp
+#    frameitem.cpp
+#    watchitem.cpp
     variablecollection.cpp
 #    gdbbreakpointwidget.cpp
     framestackwidget.cpp
@@ -60,13 +60,15 @@ set(kdevcppdebugger_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-    qt4/qstringvariableitem.cpp
-    qt4/qlistvariableitem.cpp
+#    qt4/qstringvariableitem.cpp
+#    qt4/qlistvariableitem.cpp
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
     breakpointwidget.cpp
 #    modeltest.cpp
+    tooltipwidget.cpp
+    ../stringhelpers.cpp
 )
 
 set(kdevcppdebugger_PART_UI
@@ -76,7 +78,7 @@ set(kdevcppdebugger_PART_UI
 
 kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})
 kde4_add_plugin(kdevcppdebugger ${kdevcppdebugger_PART_SRCS})
-target_link_libraries(kdevcppdebugger
+target_link_libraries(kdevcppdebugger sublime
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}

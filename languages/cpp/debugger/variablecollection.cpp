@@ -2,6 +2,7 @@
  * GDB Debugger Support
  *
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,35 +21,452 @@
  */
 
 #include "variablecollection.h"
-
-#include <KLocale>
-#include <KDebug>
+#include "tooltipwidget.h"
 
 #include "gdbcontroller.h"
 #include "variableitem.h"
 #include "frameitem.h"
 #include "watchitem.h"
+#include "tooltipwidget.h"
 
 #include "qt4/qstringvariableitem.h"
 #include "qt4/qlistvariableitem.h"
+
+#include "mi/gdbmi.h"
+#include "gdbcommand.h"
+
+#include "../stringhelpers.h"
+
+#include "icore.h"
+#include "idocumentcontroller.h"
+#include "iuicontroller.h"
+#include "sublime/controller.h"
+#include "sublime/view.h"
+
+#include <KLocale>
+#include <KDebug>
+#include <KTextEditor/TextHintInterface>
+#include <KTextEditor/Document>
+#include <KParts/PartManager>
+
+
+#include <QFont>
+
 
 //#include "modeltest.h"
 
 using namespace GDBDebugger;
 
-VariableCollection::VariableCollection(GDBController* parent)
-    : QAbstractItemModel(parent)
-    , activeFlag_(0)
-    , recentExpressions_(0)
+Variable::Variable(TreeModel* model, TreeItem* parent, 
+                   GDBController* controller, const QString& expression)
+: TreeItem(model, parent), controller_(controller), activeCommands_(0)
 {
-    //new ModelTest(this);
+    expression_ = expression;
+    // FIXME: should not duplicate the data, instead overload 'data'
+    // and return expression_ directly.
+    setData(QVector<QString>() << expression << "");
 }
+
+Variable::Variable(TreeModel* model, TreeItem* parent, 
+                   GDBController* controller,
+                   const GDBMI::Value& r)
+: TreeItem(model, parent), controller_(controller), activeCommands_(0)
+{
+    varobj_ = r["name"].literal();
+    itemData.push_back(r["exp"].literal());
+    itemData.push_back(r["value"].literal());
+    setHasMoreInitial(r["numchild"].toInt());
+    allVariables_[varobj_] = this;
+}
+
+void Variable::handleCreation(const GDBMI::Value& r)
+{
+    varobj_ = r["name"].literal();
+    setHasMore(r["numchild"].toInt());
+    itemData[1] = r["value"].literal();
+    allVariables_[varobj_] = this;
+}
+
+Variable::~Variable()
+{
+    if (!varobj_.isEmpty())
+        allVariables_.remove(varobj_);
+}
+
+void Variable::createVarobjMaybe()
+{
+    if (!varobj_.isEmpty())
+        return;
+
+    if (!controller_->stateIsOn(s_appNotStarted))
+    {
+        controller_->addCommand(
+            new GDBCommand(
+                GDBMI::VarCreate, 
+                QString("var%1 @ %2").arg(nextId_++).arg(expression_),
+                this, &Variable::handleCreated, true));
+    }
+}
+
+void Variable::update(const GDBMI::Value& value)
+{
+    Q_ASSERT(!value.hasField("type_changed")
+             || value["type_changed"].literal() == "false");
+    itemData[1] = value["value"].literal();
+    reportChange();
+}
+
+void Variable::fetchMoreChildren()
+{
+    // FIXME: should not even try this if app is not started.
+    // Probably need to disable open, or something
+    if (!controller_->stateIsOn(s_appNotStarted))
+    {
+        activeCommands_ = 1;
+        controller_->addCommand(
+            new GDBCommand(GDBMI::VarListChildren,
+                           QString("--all-values %1").arg(varobj_),
+                           this,
+                           // FIXME: handle error?
+                           &Variable::handleChildren, this));
+    }
+}
+
+void Variable::handleCreated(const GDBMI::ResultRecord &r)
+{
+    if (r.reason == "error")
+    {
+        /* Probably should mark this disabled, or something.  */        
+    }
+    else
+    {
+        handleCreation(r);
+        reportChange();
+    }
+}
+
+void Variable::handleChildren(const GDBMI::ResultRecord &r)
+{
+    --activeCommands_;
+    const GDBMI::Value& children = r["children"];
+    for (int i = 0; i < children.size(); ++i)
+    {
+        const GDBMI::Value& child = children[i];
+        const QString& exp = child["exp"].literal();
+        if (exp == "public" || exp == "protected" || exp == "private")
+        {
+            ++activeCommands_;
+            controller_->addCommand(
+                new GDBCommand(GDBMI::VarListChildren,
+                               QString("--all-values %1")
+                               .arg(child["name"].literal()),
+                               this,
+                               // FIXME: handle error?
+                               &Variable::handleChildren, this));
+        }
+        else
+        {
+            Variable* var = new Variable(model(), this, controller_,
+                                         child);
+            appendChild(var);
+        }
+    }
+
+    setHasMore(activeCommands_ != 0);
+}
+
+Variable* Variable::findByName(const QString& name)
+{
+    return allVariables_[name];
+}
+
+void Variable::markAllDead()
+{
+    QMap<QString, Variable*>::iterator i, e;
+    for (i = allVariables_.begin(), e = allVariables_.end(); i != e; ++i)
+    {
+        i.value()->varobj_.clear();
+    }
+    allVariables_.clear();
+}
+
+int Variable::nextId_ = 0;
+
+QMap<QString, Variable*> Variable::allVariables_;
+
+Watches::Watches(TreeModel* model, TreeItem* parent)
+: TreeItem(model, parent)
+{
+    setData(QVector<QString>() << "Auto" << "");
+}
+
+Variable* Watches::add(const QString& expression)
+{
+    Variable* v = new Variable(model(), this,
+                               controller(), expression);
+    appendChild(v);
+    v->createVarobjMaybe();
+    return v;
+}
+
+GDBController* Watches::controller()
+{
+    return static_cast<VariablesRoot*>(parent())->controller();
+}
+
+
+QVariant Watches::data(int column, int role) const
+{
+#if 0
+    if (column == 0 && role == Qt::FontRole)
+    {
+        /* FIXME: is creating font again and agian efficient? */
+        QFont f = font();
+        f.setBold(true);
+        return f;
+    }
+#endif
+    return TreeItem::data(column, role);
+}
+
+void Watches::reinstall()
+{
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        Variable* v = static_cast<Variable*>(child(i));
+        v->createVarobjMaybe();
+    }
+}
+
+VariablesRoot::VariablesRoot(TreeModel* model)
+: TreeItem(model)
+{
+    watches_ = new Watches(model, this);
+    appendChild(watches_, true);
+}
+
+GDBController* VariablesRoot::controller()
+{
+    return static_cast<VariableCollection*>(model())->controller();
+}
+
+VariableCollection::VariableCollection(GDBController* parent)
+: TreeModel(QVector<QString>() << "Name" << "Value", parent),
+  controller_(parent)
+{
+    universe_ = new VariablesRoot(this);
+    setRootItem(universe_);
+
+    //new ModelTest(this);
+
+    foreach(KParts::Part* p, KDevelop::ICore::self()->partManager()->parts())
+        slotPartAdded(p);
+    connect(KDevelop::ICore::self()->partManager(),
+            SIGNAL(partAdded(KParts::Part*)),
+            this,
+            SLOT(slotPartAdded(KParts::Part*)));
+}
+
+
+
+GDBController* VariableCollection::controller()
+{
+    return controller_;
+}
+
 
 VariableCollection::~ VariableCollection()
 {
-    qDeleteAll(m_items);
 }
 
+void VariableCollection::slotPartAdded(KParts::Part* part)
+{
+    if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part))
+        foreach (KTextEditor::View* v, doc->views())
+            slotViewAdded(v);
+}
+
+void VariableCollection::slotViewAdded(KTextEditor::View* view)
+{
+    using namespace KTextEditor;
+    TextHintInterface *iface = dynamic_cast<TextHintInterface*>(view);
+    if( !iface )
+        return;
+
+    iface->enableTextHints(500);
+
+    connect(view, 
+            SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)),
+            this, 
+            SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));    
+}
+
+void VariableCollection::
+textHintRequested(const KTextEditor::Cursor& cursor, QString&)
+{
+    // Don't do anything if there's already an open tooltip.
+    if (activeTooltip_)
+        return;
+
+    if (controller_->stateIsOn(s_appNotStarted))
+        return;
+
+    // Figure what is the parent widget and what is the text to show    
+    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>(sender());
+    if (!view)
+        return;
+
+    KTextEditor::Document* doc = view->document();
+    QString line = doc->line(cursor.line());
+    int index = cursor.column();
+    QChar c = line[index];
+    if (!c.isLetterOrNumber() && c != '_')
+        return;
+
+    int start = Utils::expressionAt(line, index);
+    int end = index;
+    for (; end < line.size(); ++end)
+    {
+        QChar c = line[end];
+        if (!(c.isLetterOrNumber() || c == '_'))
+            break;
+    }
+    if (!(start < end))
+        return;
+
+    QString expression(line.mid(start, end-start));
+    expression = expression.trimmed();
+
+    kDebug(9012) << "expression " << expression << "\n";
+    
+
+
+#if 0
+    QChar current = doc->character(c);    
+
+
+    KTextEditor::Cursor c = cursor;
+    bool moved = false;
+    for (;;)
+    {
+        QChar current = doc->character(c);
+        kDebug(9012) << "backward scan " << c;
+        if (current.isLetterOrNumber() || current == '_')
+        {
+            if (c.column() == 0)
+                break;
+            else {
+                c.setColumn(c.column() - 1);
+                moved = true;
+            }
+        }       
+        else {
+            if (moved)
+                c.setColumn(c.column() + 1);
+            break;
+        }
+    }
+    QString identifier;
+    for (;;)
+    {
+        QChar current = doc->character(c);      
+        kDebug(9012) << "forward scan " << c;
+        if (current.isLetterOrNumber() || current == '_')
+        {
+            identifier.append(current);
+            /* We hope that when we run out of the end of the line,
+               Kate will return some sufficiently broken character.  */
+            c.setColumn(c.column() + 1);
+        }
+        else
+            break;
+    }
+
+    kDebug(9012) << "The identifier is: " << identifier;
+#endif
+
+    if (expression.isEmpty())
+        return;
+
+    QPoint local = view->cursorToCoordinate(cursor);
+    QPoint global = view->mapToGlobal(local);
+    QWidget* w = view->childAt(local);
+    if (!w)
+        w = view;
+    
+    activeTooltip_ = new VariableToolTip(w, global, controller_, expression);
+}
+
+void VariableCollection::slotEvent(event_t event)
+{
+    switch(event)
+    {
+        case program_exited:
+        case debugger_exited:
+        {
+            Variable::markAllDead();
+#if 0
+            // Remove all locals.
+            foreach (AbstractVariableItem* item, m_items) {
+                // only remove frame items
+                if (qobject_cast<FrameItem*>(item))
+                {
+                    deleteItem(item);
+                }
+                else
+                {
+                    item->deregisterWithGdb();
+                }
+            }
+#endif
+            break;
+        }
+
+        case connected_to_program:
+            watches()->reinstall();
+            break;
+
+        case program_state_changed:
+
+            // Fall-through intended.
+
+        case thread_or_frame_changed:
+
+            update();
+
+            #if 0
+            {
+                FrameItem *frame = currentFrame();
+
+                frame->setDirty();
+            }
+            #endif
+            break;
+
+        default:
+            break;
+    }
+}
+
+void VariableCollection::update()
+{
+    controller()->addCommand(
+        new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
+                       &VariableCollection::handleVarUpdate));
+}
+
+void VariableCollection::handleVarUpdate(const GDBMI::ResultRecord& r)
+{
+    const GDBMI::Value& changed = r["changelist"];
+    for (int i = 0; i < changed.size(); ++i)
+    {
+        const GDBMI::Value& var = changed[i];
+        Variable* v = Variable::findByName(var["name"].literal());
+        v->update(var);        
+    }
+}
+
+#if 0
 void VariableCollection::addItem(AbstractVariableItem * item)
 {
     item->registerWithGdb();
@@ -232,48 +650,6 @@ bool VariableCollection::setData(const QModelIndex & index, const QVariant & val
     return false;
 }
 
-
-void VariableCollection::slotEvent(event_t event)
-{
-#if 0
-    switch(event)
-    {
-        case program_exited:
-        case debugger_exited:
-        {
-            // Remove all locals.
-            foreach (AbstractVariableItem* item, m_items) {
-                // only remove frame items
-                if (qobject_cast<FrameItem*>(item))
-                {
-                    deleteItem(item);
-                }
-                else
-                {
-                    item->deregisterWithGdb();
-                }
-            }
-            break;
-        }
-
-        case program_state_changed:
-
-            // Fall-through intended.
-
-        case thread_or_frame_changed:
-            {
-                FrameItem *frame = currentFrame();
-
-                frame->setDirty();
-            }
-            break;
-
-        default:
-            break;
-    }
-#endif
-}
-
 void VariableCollection::slotAddWatchVariable(const QString &watchVar)
 {
     // FIXME need thread +/- frame info??
@@ -419,5 +795,7 @@ VariableItem* VariableCollection::createVariableItem(const QString & type, Abstr
 
     return new VariableItem(parent);
 }
+
+#endif
 
 #include "variablecollection.moc"
