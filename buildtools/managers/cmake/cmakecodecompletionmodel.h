@@ -22,6 +22,7 @@
 #define CMAKECODECOMPLETION_H
 
 #include <ktexteditor/codecompletionmodel.h>
+#include <duchainpointer.h>
 #include <QStringList>
 
 namespace KTextEditor { class Document; class Range; }
@@ -31,11 +32,14 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
     public:
         CMakeCodeCompletionModel (QObject *parent=0);
 
-//         void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
+        void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
         QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
         void executeCompletionItem(KTextEditor::Document* document, const KTextEditor::Range& word, int row) const;
     private:
+        enum Type { Command, Variable, Macro };
+        Type indexType(int row) const;
         QStringList m_commands;
+        QList< KDevelop::DeclarationPointer > m_declarations;
 };
 
 #endif

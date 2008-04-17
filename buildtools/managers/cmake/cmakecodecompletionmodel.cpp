@@ -21,28 +21,90 @@
 #include "cmakecodecompletionmodel.h"
 #include <QVariant>
 #include <QModelIndex>
+#include <kurl.h>
+#include <duchain.h>
+#include <duchainlock.h>
+#include <ducontext.h>
 #include <ktexteditor/document.h>
-
+#include <ktexteditor/view.h>
 #include "astfactory.h"
 
 using namespace KTextEditor;
+using namespace KDevelop;
 
 CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject *parent)
     : CodeCompletionModel(parent), m_commands(AstFactory::self()->commands())
 {
-    setRowCount(m_commands.count());
+}
+
+void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
+{
+    int numRows = m_commands.count();
+    m_declarations.clear();
+    DUChainReadLocker lock(DUChain::lock());
+    TopDUContext* ctx = DUChain::self()->chainForDocument( view->document()->url() );
+    if(ctx ) {
+        typedef QPair<Declaration*, int> DeclPair;
+        foreach(const DeclPair& pair, ctx->allDeclarations( SimpleCursor(range.start()), ctx ))
+            m_declarations.append(DeclarationPointer(pair.first));
+        numRows+=m_declarations.count();
+    }
+    setRowCount(numRows);
+    reset();
+}
+
+CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) const
+{
+    if(row<m_commands.count())
+        return Command;
+    else
+        return Variable;
 }
 
 QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) const
 {
-    if(index.isValid() && role==Qt::DisplayRole && index.column()==CodeCompletionModel::Name)
-        return m_commands[index.row()];
-    else
+    if(!index.isValid())
         return QVariant();
+    Type type=indexType(index.row());
+
+    if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Name)
+    {
+        if(type==Command)
+            return m_commands[index.row()];
+        else if(type==Variable)
+        {
+            int pos=index.row()-m_commands.count();
+            DUChainReadLocker lock(DUChain::lock());
+            return m_declarations[pos]->identifier().toString();
+        }
+    }
+    else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Prefix)
+    {
+        if(type==Command)
+            return "Command";
+        else if(type==Variable)
+            return "Variable";
+    }
+    return QVariant();
 }
 
 void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const Range& word, int row) const
 {
-    document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+    switch(indexType(row))
+    {
+        case Command:
+            document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+            break;
+        case Variable: {
+            Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
+            QString bef=document->text( prefix );
+            qDebug() << "aaaaaaaaaaa" << bef << "word:" << word << "${" << prefix;
+            if(r.start().column()>=2 && bef=="${")
+                r.start().setColumn( r.start().column()-2 );
+            document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
+        }   break;
+        case Macro:
+            break;
+    }
 }
 
