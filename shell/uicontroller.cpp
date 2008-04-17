@@ -327,32 +327,32 @@ void UiController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
 
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
-    loadArea(area->rootIndex(), group);
+    loadArea(area, area->rootIndex(), group);
 }
 
-void UiController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & group)
+void UiController::loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup& group)
 {
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 
         if (subgroups.contains("0")) {
-            if (!area->isSplitted())
-                area->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
+            if (!areaIndex->isSplitted())
+                areaIndex->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
 
             KConfigGroup subgroup(&group, "0");
-            loadArea(area->first(), subgroup);
+            loadArea(area, areaIndex->first(), subgroup);
 
             if (subgroups.contains("1")) {
-                Q_ASSERT(area->isSplitted());
+                Q_ASSERT(areaIndex->isSplitted());
                 KConfigGroup subgroup(&group, "1");
-                loadArea(area->second(), subgroup);
+                loadArea(area, areaIndex->second(), subgroup);
             }
         }
 
     } else {
-        while (area->isSplitted()) {
-            area = area->first();
-            Q_ASSERT(area);// Split area index did not contain a first child area index if this fails
+        while (areaIndex->isSplitted()) {
+            areaIndex = areaIndex->first();
+            Q_ASSERT(areaIndex);// Split area index did not contain a first child area index if this fails
         }
 
         int viewCount = group.readEntry("View Count", 0);
@@ -361,7 +361,7 @@ void UiController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & grou
             QString specifier = group.readEntry(QString("View %1").arg(i), "");
 
             bool viewExists = false;
-            foreach (Sublime::View* view, area->views()) {
+            foreach (Sublime::View* view, areaIndex->views()) {
                 if (view->document()->documentSpecifier() == specifier) {
                     viewExists = true;
                     break;
@@ -382,8 +382,7 @@ void UiController::loadArea(Sublime::AreaIndex * area, const KConfigGroup & grou
                 if (!state.isEmpty())
                     view->setState(state);
 
-                area->add(view);
-
+                area->addView(view, areaIndex);
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }

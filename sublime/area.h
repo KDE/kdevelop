@@ -72,6 +72,9 @@ public:
     QString title() const;
     void setTitle(const QString &title);
 
+    /**Adds the @p view to the list of views at the given area index.*/
+    void addView(View *view, AreaIndex *index);
+
     /**Adds the @p view to the list of views at the current area index.*/
     void addView(View *view, View *after = 0);
     /**Adds the @p view to the area splitting the @p viewToSplit using

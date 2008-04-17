@@ -120,6 +120,13 @@ Area::~Area()
     delete d;
 }
 
+void Sublime::Area::addView(View *view, AreaIndex *index)
+{
+    index->add(view);
+    emit viewAdded(index, view);
+    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+}
+
 void Area::addView(View *view, View *after)
 {
     AreaIndex *index = d->currentIndex;
@@ -129,9 +136,7 @@ void Area::addView(View *view, View *after)
         if (i)
             index = i;
     }
-    index->add(view);
-    emit viewAdded(index, view);
-    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+    addView(view, index);
 }
 
 void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
