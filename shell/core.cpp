@@ -70,10 +70,12 @@ struct CorePrivate {
 	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
 
+        uiController->loadAllAreas(KGlobal::config());
+
         Sublime::Area *defaultArea = uiController->defaultArea();
         uiController->showArea(defaultArea, uiController->defaultMainWindow());
-
         uiController->defaultMainWindow()->show();
+
     }
     ~CorePrivate()
     {

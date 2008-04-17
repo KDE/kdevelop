@@ -120,7 +120,6 @@ DocumentController::DocumentController( QObject *parent )
 
 void KDevelop::DocumentController::initialize()
 {
-    Core::self()->uiControllerInternal()->loadAllAreas(KGlobal::config());
 }
 
 void DocumentController::cleanup()
