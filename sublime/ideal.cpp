@@ -528,6 +528,8 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     else {
       QMainWindow *toolView = new QMainWindow();
       KToolBar *toolBar = new KToolBar(toolView);
+      int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
+      toolBar->setIconSize(QSize(iconSize, iconSize));
       toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
       toolBar->setWindowTitle(i18n("%1 Tool Bar", w->windowTitle()));
       toolBar->setFloatable(false);
