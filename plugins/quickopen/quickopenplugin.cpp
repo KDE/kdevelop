@@ -146,6 +146,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
+  connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
 
   o.list->setItemDelegate( new ExpandingDelegate( m_model, o.list ) );
 
