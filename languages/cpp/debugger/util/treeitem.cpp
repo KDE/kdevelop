@@ -5,6 +5,8 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
+#include "kdebug.h"
+
 using namespace GDBDebugger;
 
 TreeItem::TreeItem(TreeModel* model, TreeItem *parent)
@@ -33,23 +35,27 @@ void TreeItem::appendChild(TreeItem *item, bool initial)
     QModelIndex index = model_->indexForItem(this, 0);
     QModelIndex index2 = model_->indexForItem(this, itemData.size()-1);
 
+    // Note that we need emit beginRemoveRows, even if we're replacing
+    // ellipsis item with the real one.  The number of rows does not change
+    // with the result, but the last item is different.  The address of the
+    // item is stored inside QModelIndex, so just replacing the item, and
+    // deleting the old one, will lead to crash.
     if (more_)
     {
-        /* No need to call beginInsertRows, as we're
-           essentially replacing "..." with this new
-           item.  */
-        childItems.append(item);
-        emit model_->dataChanged(index, index2);
+        if (!initial)
+            model_->beginRemoveRows(index, childItems.size(), childItems.size());
         more_ = false;
-    }
-    else
-    {
+        delete ellipsis_;
+        ellipsis_ = 0;
         if (!initial)
-            model_->beginInsertRows(index, childItems.size(), childItems.size());
-        childItems.append(item);
-        if (!initial)
-            model_->endInsertRows();
+            model_->endRemoveRows();
     }
+
+    if (!initial)
+        model_->beginInsertRows(index, childItems.size(), childItems.size());
+    childItems.append(item);
+    if (!initial)
+        model_->endInsertRows();
 }
 
 void TreeItem::reportChange()
@@ -145,6 +151,7 @@ public:
 
     void clicked()
     {
+        kDebug(9012) << "Ellipsis item clicked";
         /* FIXME: restore
            Q_ASSERT (parentItem->hasMore()); */
         parentItem->fetchMoreChildren();
