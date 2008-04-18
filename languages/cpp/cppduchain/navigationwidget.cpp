@@ -525,6 +525,7 @@ class NavigationContext : public KShared {
               m_currentText += "  ";
               makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
             }
+            m_currentText += "<br/>";
           }
         }
       }
