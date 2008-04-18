@@ -74,7 +74,7 @@ void OutputWidget::addOutput( int id )
 void OutputWidget::changeDelegate( int id )
 {
     kDebug(9500) << "delegate changed for id:" << id;
-    if( data->outputdata.contains( id ) )
+    if( data->outputdata.contains( id ) && data->outputdata.value(id)->view )
         data->outputdata.value(id)->view->setItemDelegate(data->outputdata.value(id)->delegate);
     else
         addOutput(id);
@@ -83,7 +83,7 @@ void OutputWidget::changeDelegate( int id )
 void OutputWidget::changeModel( int id )
 {
     kDebug(9500) << "model changed for id:" << id;
-    if( data->outputdata.contains( id ) )
+    if( data->outputdata.contains( id ) && data->outputdata.value(id)->view )
     {
         data->outputdata.value(id)->view->setModel(data->outputdata.value(id)->model);
     }
