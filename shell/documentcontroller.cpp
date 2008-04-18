@@ -226,6 +226,7 @@ void DocumentController::openDocumentFromText( const QString& data )
     KTemporaryFile *temp = new KTemporaryFile();
     temp->open();
     temp->write(data.toUtf8());
+    temp->flush();
     d->tempFiles << temp;
     openDocument(temp->fileName());
 }

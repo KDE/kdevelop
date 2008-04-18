@@ -20,6 +20,7 @@
 
 #include <tests/common/kdevtest.h>
 #include <QtTest/QtTest>
+#include <ktexteditor/document.h>
 
 #include "documentcontroller.h"
 
@@ -41,6 +42,7 @@ void ShellDocumentOperationTest::testOpenDocumentFromText()
 
     //test that we have this document in the list, signals are emitted and so on
     QCOMPARE(documentController->openDocuments().count(), 1);
+    QCOMPARE(documentController->openDocuments()[0]->textDocument()->text(), QString("Test1"));
 }
 
 KDEVTEST_MAIN(ShellDocumentOperationTest)
