@@ -440,8 +440,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         KUrl folderurl = item->url();
         folderurl.addPath( entry );
         
-        kDebug() << "oooooooo" << folderurl;
-        kDebug() << "tttttttt" << item->project()->inProject( folderurl );
         if( item->project()->inProject( folderurl ) )
             continue;
         if( QFileInfo( folderurl.toLocalFile() ).isDir() )
@@ -633,9 +631,8 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
 
     if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
     {
-        KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
-
 #if 0
+        KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
         initializeProject(proj, dir);
         KUrl current=projectBaseUrl;
         QStringList subs=relative.toLocalFile().split("/");
@@ -645,11 +642,8 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
             parseOnly(proj, current);
         }
 #endif
-        
         QStandardItem *parent=it->parent();
-        qDebug() << "removing Row" << parent->rowCount();
         parent->removeRow(it->row());
-        qDebug() << "post-removing Row" << parent->rowCount();
         CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
         fi->setTopDUContext( 0 );
         reimport(fi);
