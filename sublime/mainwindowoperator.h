@@ -23,6 +23,8 @@
 
 #include "sublimeexport.h"
 
+#include <QIcon>
+
 namespace Sublime {
 
 class Area;
@@ -42,6 +44,9 @@ protected:
     void setActiveView(MainWindow *w, View *view);
     /**Sets the active toolview for the mainwindow and focuses it.*/
     void setActiveToolView(MainWindow *w, View *view);
+
+    /**Sets the status icon for the given \a view in the \a mainWindow to \a icon.*/
+    void setStatusIcon(MainWindow* w, View* view, const QIcon& icon);
 };
 
 }

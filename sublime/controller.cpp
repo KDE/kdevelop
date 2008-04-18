@@ -291,6 +291,15 @@ void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
     emit viewAdded(view);
 }
 
+void Controller::setStatusIcon(Document * document, const QIcon & icon)
+{
+    foreach (MainWindow* mw, mainWindows())
+        if (mw->area())
+            foreach (View* view, mw->area()->views())
+                if (view->document() == document)
+                    MainWindowOperator::setStatusIcon(mw, view, icon);
+}
+
 }
 
 #include "controller.moc"

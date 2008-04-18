@@ -110,6 +110,8 @@ private:
     void setActiveView(Sublime::View *view);
     /**Sets the active toolview and focuses it.*/
     void setActiveToolView(View *view);
+    /**Sets the status icon for the given \a view in the \a mainWindow to \a icon.*/
+    void setStatusIcon(View* view, const QIcon& icon);
 
     struct MainWindowPrivate *const d;
     friend class MainWindowOperator;

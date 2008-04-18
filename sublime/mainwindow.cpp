@@ -149,7 +149,11 @@ bool MainWindow::queryClose()
     return KParts::MainWindow::queryClose();
 }
 
+void Sublime::MainWindow::setStatusIcon(View * view, const QIcon & icon)
+{
+    d->setStatusIcon(view, icon);
+}
+
 }
 
 #include "mainwindow.moc"
-

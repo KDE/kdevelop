@@ -61,6 +61,8 @@ public:
 
     const QList<MainWindow*> &mainWindows() const;
 
+    void setStatusIcon(Document* document, const QIcon& icon);
+
 public Q_SLOTS:
     //@todo adymo: this should not be a part of public API
     /**Area can connect to this slot to release itself from its mainwindow.*/

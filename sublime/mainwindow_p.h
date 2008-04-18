@@ -75,6 +75,8 @@ public:
     /**Updates all QDockWidgets to the TitleBarMode that is set*/
     void applyVerticalTitleBarMode();
 
+    void setStatusIcon(View* view, const QIcon& icon);
+
     Controller *controller;
     Area *area;
     QList<View*> docks;
@@ -101,7 +103,7 @@ private slots:
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);
-    
+
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
     void recreateCentralWidget();

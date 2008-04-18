@@ -84,18 +84,26 @@ struct TextDocumentPrivate {
 
     void setStatus(KTextEditor::Document* document, bool dirty)
     {
+        QIcon statusIcon;
+
         if (document->isModified())
-            if (dirty)
+            if (dirty) {
                 state = IDocument::DirtyAndModified;
-            else
+                statusIcon = KIcon("edit-delete");
+            } else {
                 state = IDocument::Modified;
+                statusIcon = KIcon("document-save");
+            }
         else
-            if (dirty)
+            if (dirty) {
                 state = IDocument::Dirty;
-            else
+                statusIcon = KIcon("document-revert");
+            } else {
                 state = IDocument::Clean;
+            }
 
         m_textDocument->notifyStateChanged();
+        Core::self()->uiControllerInternal()->setStatusIcon(m_textDocument, statusIcon);
     }
 
 

@@ -333,6 +333,17 @@ bool MainWindowPrivate::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void Sublime::MainWindowPrivate::setStatusIcon(View * view, const QIcon & icon)
+{
+    if (viewContainers.contains(view)) {
+        Container* c = viewContainers[view];
+        int index = c->indexOf(view->widget());
+        if (index != -1) {
+            c->setTabIcon(index, icon);
+        }
+    }
+}
+
 }
 
 #include "mainwindow_p.moc"
