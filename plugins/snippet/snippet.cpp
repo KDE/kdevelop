@@ -25,7 +25,7 @@ Snippet::Snippet(const QString& filename, SnippetRepository* repo)
     : QStandardItem(filename), repo_(repo), name_(filename)
 {
     // append ourself to the given parent repo
-    repo->appendRow( this );
+    repo->addSnippet( this );
 
     // tell the new snippet to get it's data from the file
     QTimer::singleShot(0, this, SLOT(slotSyncSnippet()));

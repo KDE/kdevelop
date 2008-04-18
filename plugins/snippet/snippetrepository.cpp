@@ -16,6 +16,7 @@
 #include <QRegExp>
 
 #include <kicon.h>
+#include <kdebug.h>
 
 #include "snippetstore.h"
 #include "snippet.h"
@@ -81,9 +82,15 @@ void SnippetRepository::slotSyncRepository()
             SnippetStore::instance()->createNewRepository( this, file, location_+QDir::separator()+file );
         } else {
             // ... or a new snippet
-            snippets_.append( new Snippet(file, this) );
+            new Snippet(file, this);
         }
     }
+}
+
+void SnippetRepository::addSnippet( Snippet* snippet )
+{
+    appendRow( snippet );
+    snippets_.append( snippet );
 }
 
 void SnippetRepository::changeLocation(const QString& newLocation, const QString& newName)

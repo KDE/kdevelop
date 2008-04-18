@@ -40,6 +40,11 @@ public:
     ~SnippetRepository();
 
     /**
+     * adds the snippet to this repository
+     */
+    void addSnippet( Snippet* snippet );
+
+    /**
      * @return The snippets that are currently stored in this repository
      */
     const QList<Snippet*>& getSnippets() { return snippets_; }
