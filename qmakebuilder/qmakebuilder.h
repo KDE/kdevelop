@@ -77,6 +77,7 @@ private:
     QSignalMapper* m_failedMapper;
     QSignalMapper* m_qmakeCompletedMapper;
     KDevelop::IPlugin* m_makeBuilder;
+    int toolviewid;
 };
 
 #endif // QMAKEBUILDER_H

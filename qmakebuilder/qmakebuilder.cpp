@@ -52,7 +52,7 @@ K_EXPORT_PLUGIN(QMakeBuilderFactory("kdevqmakebuilder"))
 QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent),
       m_failedMapper( new QSignalMapper( this ) ),
-      m_qmakeCompletedMapper( new QSignalMapper( this ) ), m_makeBuilder( 0 )
+      m_qmakeCompletedMapper( new QSignalMapper( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
@@ -166,7 +166,8 @@ bool QMakeBuilder::configure( KDevelop::IProject* project )
                     delete m_cmds[id];
             }else
             {
-                id = view->registerView(i18n("QMake: %1", project->name()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+                int tvid = view->registerToolView( i18n("Build"), KDevelop::IOutputView::MultipleView );
+                id = view->registerOutputInToolView( tvid, i18n("QMake: %1", project->name()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
                 m_ids[project->projectItem()] = id;
                 m_models[id] = new KDevelop::OutputModel(this);
                 view->setModel( id, m_models[id] );
