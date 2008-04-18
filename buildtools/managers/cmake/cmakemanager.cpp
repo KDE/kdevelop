@@ -314,6 +314,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         VariableMap *vm=&m_varsPerProject[item->project()];
         MacroMap *mm=&m_macrosPerProject[item->project()];
         CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
+        m_watchers[item->project()]->addFile(cmakeListsPath.toLocalFile());
+
         if(f.isEmpty())
         {
             kDebug(9032) << "There is no" << cmakeListsPath;
@@ -416,7 +418,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     KUrl sourceFile(sFile);
                     if(sourceFile.isRelative()) {
                         sourceFile = folder->url();
-                        sourceFile.adjustPath( KUrl::AddTrailingSlash );
+                        sourceFile.adjustPath( KUrl::RemoveTrailingSlash );
                         sourceFile.addPath( sFile );
                     }
                     
@@ -619,24 +621,18 @@ void CMakeProjectManager::reimport(CMakeFolderItem* fi)
 void CMakeProjectManager::dirtyFile(const QString & dirty)
 {
     KUrl dir(dirty);
-#if 1
     dir=dir.upUrl();
-    dir.adjustPath(KUrl::AddTrailingSlash);
-    CMakeFolderItem *it=m_folderPerUrl[dir];
-    KDevelop::IProject* project=it->project();
-    project->reloadModel();
-#endif
+    dir.adjustPath(KUrl::RemoveTrailingSlash);
 
-    kDebug(9042) << dir << " is dirty";
-    /*if(dir.fileName() == "CMakeLists.txt")
+    CMakeFolderItem *it=0;
+    if(m_folderPerUrl.contains(dir))
+        it=m_folderPerUrl[dir];
+    kDebug(9042) << dirty << " is dirty" << it << m_folderPerUrl;
+    KDevelop::IProject* proj=it->project();
+    KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
+
+    if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
     {
-        dir=dir.upUrl();
-        dir.adjustPath(KUrl::AddTrailingSlash);
-        CMakeFolderItem *it=m_folderPerUrl[dir];
-        KDevelop::IProject* proj=it->project();
-
-        qDebug() << "........." << it->project()->projectFileUrl();
-        KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
         KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
 
 #if 0
@@ -659,12 +655,18 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
         reimport(fi);
         m_folderPerUrl[dir]=fi;
     }
+    else if(m_folderPerUrl.contains(dir))
+    {
+        proj->reloadModel();
+    }
     else
     {
-        kDebug(9042) << "Outside project file modified, should regenerate the whole project";
-        //TODO: Should regenerate the whole project :D
-    }*/
-    
+        foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
+        {
+            if(m_watchers[project]->contains(dirty))
+                project->reloadModel();
+        }
+    }
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeProjectManager::targets(KDevelop::ProjectFolderItem * folder) const
