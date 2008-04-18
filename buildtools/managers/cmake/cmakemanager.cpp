@@ -304,6 +304,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     if ( folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
         m_folderPerUrl[item->url()]=folder;
+        Q_ASSERT(m_folderPerUrl[item->url()]);
         
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
@@ -612,7 +613,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     if(dir.fileName() == "CMakeLists.txt")
     {
         dir=dir.upUrl();
-        dir.adjustPath(KUrl::RemoveTrailingSlash);
+        dir.adjustPath(KUrl::AddTrailingSlash);
         CMakeFolderItem *it=m_folderPerUrl[dir];
         QStandardItem *parent=it->parent();
         KDevelop::IProject* proj=it->project();
