@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="48" name="kdevelop" >
+<kpartgui version="49" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1">
     <text context="@title:menu">File</text>
@@ -161,6 +161,7 @@
     <Action name="show_right_dock"/>
     <Action name="show_top_dock"/>
     <Action name="show_bottom_dock"/>
+    <Action name="focus_editor"/>
     <Action name="hide_all_docks"/>
     <Action name="anchor_current_dock"/>
     <Action name="maximize_current_dock"/>
