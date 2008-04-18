@@ -55,10 +55,10 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   to->setClassType(from->classType());
   to->setDeclaration(from->declaration());
   to->setCV(from->cv());
-  
+
   foreach( const CppClassType::BaseClassInstance& base, from->baseClasses() )
     to->addBaseClass(base);
-  
+
   foreach( const AbstractType::Ptr& element, from->elements() )
     to->addElement(element);
 
@@ -125,7 +125,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     if( ast->type_parameter && ast->type_parameter->type_id ) {
       //Extract default type-parameter
       QualifiedIdentifier defaultParam;
-      
+
       QString str;
       ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
       str += stringFromSessionTokens( m_editor->parseSession(), ast->type_parameter->type_id->start_token, ast->type_parameter->type_id->end_token );
@@ -134,7 +134,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
       decl->setDefaultParameter(defaultParam);
     }
-    
+
     if( ast->parameter_declaration ) {
       //Extract default parameters(not tested)
       QualifiedIdentifier defaultParam;
@@ -201,7 +201,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
   //need to make backup because we may temporarily change it
   ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
-  
+
   ///@todo this should be solved more elegantly within parser and AST
   if (node->parameter_declaration_clause) {
     //Check if all parameter declarations are valid. If not, this is a misunderstood variable declaration.
@@ -222,7 +222,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
   if (node->parameter_declaration_clause) {
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
-        
+
       QualifiedIdentifier id = identifierForName(node->id);
       DUChainWriteLocker lock(DUChain::lock());
       if (id.count() > 1 ||
@@ -309,7 +309,7 @@ Type hasTemplateContext( const QVector<Type>& contexts ) {
   foreach( const Type& context, contexts )
     if( context->type() == KDevelop::DUContext::Template )
       return context;
-  
+
   return Type(0);
 }
 
@@ -354,7 +354,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   if( isFunction && !m_functionDefinedStack.isEmpty() )
         isDefinition |= (bool)m_functionDefinedStack.top();
-  
+
   Declaration::Scope scope = Declaration::GlobalScope;
   switch (currentContext()->type()) {
     case DUContext::Namespace:
@@ -371,11 +371,11 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       break;
   }
 
-  
+
   SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name->unqualified_name) : rangeNode);
-  
+
   if(newRange.start >= newRange.end)
-    kWarning(9007) << "Range collapsed";
+    kDebug(9007) << "Range collapsed";
 
   QualifiedIdentifier id;
 
@@ -391,7 +391,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }
 
   Identifier localId;
-  
+
   //For classes, the scope problem is solved differently: An intermediate scope context is created
   ///@todo Solve this problem uniquely for classes and functions
   if(id.count() > 1 && isFunction) {
@@ -400,7 +400,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
 
     localId = id.last(); //This copies the template-arguments
-    
+
     QString newId = id.last().identifier();
     for(int a = id.count()-2; a >= 0; --a)
       newId = id.at(a).identifier() + ";;" + newId;
@@ -409,7 +409,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }else if(!id.isEmpty()) {
     localId = id.last();
   }
-  
+
   Declaration* declaration = 0;
 
   if (recompiling()) {
@@ -417,7 +417,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
     SimpleRange translated = newRange;
-    
+
     if (m_editor->smart()) {
       lock.unlock();
       QMutexLocker smartLock(m_editor->smart()->smartMutex());
@@ -481,10 +481,10 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
     SmartRange* prior = m_editor->currentRange();
     SmartRange* range = m_editor->createRange(newRange.textRange());
-    
+
     m_editor->exitCurrentRange();
   //Q_ASSERT(range->start() != range->end());
-    
+
     Q_ASSERT(m_editor->currentRange() == prior);
 
     if( isNamespaceAlias ) {
@@ -517,7 +517,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
         kWarning() << "empty id";*/
       declaration->setIdentifier(localId);
     }
-    
+
     declaration->setDeclarationIsDefinition(isDefinition);
 
     if (currentContext()->type() == DUContext::Class) {
@@ -557,7 +557,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     }
 
   }
-  
+
   declaration->setComment(m_lastComment);
   m_lastComment = QString();
 
@@ -587,15 +587,15 @@ void DeclarationBuilder::eventuallyAssignInternalContext()
 
     if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
       Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
-    
+
     if(m_lastContext && (m_lastContext->type() == DUContext::Class || m_lastContext->type() == DUContext::Other || m_lastContext->type() == DUContext::Function || m_lastContext->type() == DUContext::Template ) )
     {
       if( !m_lastContext->owner() || !wasEncountered(m_lastContext->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
-        
+
         if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
           kDebug(9007) << "Warning: Range was invalidated";
-        
+
         m_lastContext = 0;
       }
     }
@@ -659,12 +659,12 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   //the assigned expression), we change the range of the node temporarily
   size_t oldEndToken = node->end_token;
   node->end_token = node->id + 1;
-  
+
   Identifier id(m_editor->parseSession()->token_stream->token(node->id).symbol());
   DeclarationBuilder::openDeclaration(0, node, false, false, true, false, id);
 
   node->end_token = oldEndToken;
-  
+
   DeclarationBuilderBase::visitEnumerator(node);
 
   closeDeclaration();
@@ -686,7 +686,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     ///@todo Make decision: Would it be better to allow giving declarations qualified identifiers? Then we wouldn't need to do this.
     openPrefixContext(node, id);
   }
-  
+
   openDefinition(node->name, node);
 
   int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
@@ -698,7 +698,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   DeclarationBuilderBase::visitClassSpecifier(node);
 
   eventuallyAssignInternalContext();
-  
+
   if( node->name ) {
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
@@ -708,7 +708,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id, pos);
 
     AbstractType::Ptr newLastType;
-    
+
     foreach( Declaration* decl, declarations ) {
       if( decl->abstractType()) {
         ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
@@ -716,20 +716,20 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
           {
             KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
             if( forwardTemplateContext && forwardTemplateContext->type() == DUContext::Template ) {
-              
+
               KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
               if( (bool)forwardTemplateContext != (bool)currentTemplateContext ) {
                 kDebug(9007) << "Template-contexts of forward- and real declaration do not match: " << currentTemplateContext << getTemplateContext(currentDeclaration()) << currentDeclaration()->internalContext() << forwardTemplateContext << currentDeclaration()->internalContext()->importedParentContexts().count();
               } else if( forwardTemplateContext && currentTemplateContext ) {
                 if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
                 } else {
-                  
+
                   const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
                   const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
-                  
+
                   QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
                   QVector<Declaration*>::const_iterator realIt = realList.begin();
-                    
+
                   for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
                     TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
                     TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
@@ -746,12 +746,12 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
           //Update instantiations in case of template forward-declarations
 //           SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
 //           SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
-// 
+//
 //           if( templateForward && currentTemplate )
 //           {
 //             //Change the types of all the forward-template instantiations
 //             TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
-// 
+//
 //             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
 //             {
 //               Declaration* realInstance = currentTemplate->instantiate(it.key().args, ImportTrace());
@@ -759,7 +759,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 //               //Now change the type of forwardInstance so it matches the type of realInstance
 //               CppClassType::Ptr realClass = realInstance->type<CppClassType>();
 //               CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
-// 
+//
 //               if( realClass && forwardClass ) {
 //                 //Copy the class from real into the forward-declaration's instance
 //                 copyCppClass(realClass.data(), forwardClass.data());
@@ -775,7 +775,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     if( newLastType )
       setLastType(newLastType);
   }//node-name
-  
+
   closeDeclaration();
 
   if(node->name)
@@ -816,7 +816,7 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
       return;
     }
   }
-  
+
   if( m_compilingContexts ) {
     openDeclaration(0, node, false, false, false, true, globalImportIdentifier);
     {
@@ -839,7 +839,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
       kDebug(9007) << "Namespace-alias used in non-global scope";
     }
   }
-  
+
   if( m_compilingContexts ) {
     openDeclaration(0, node, false, false, false, true, Identifier(m_editor->parseSession()->token_stream->token(node->namespace_name).symbol()));
     {
@@ -854,17 +854,17 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
   int kind = m_editor->parseSession()->token_stream->kind(node->type);
-  
+
   if( kind == Token_typename ) {
     //typename is completely handled by the type-builder
     DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
     return;
   }
-  
+
   //For now completely ignore friend-class specifiers, because those currently are wrongly parsed as forward-declarations.
   if( !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier) )
     return;
-  
+
   bool openedDeclaration = false;
 
   if (node->name) {
@@ -908,28 +908,28 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
         }
       }
     }
-    
+
     // Create forward declaration
     switch (kind) {
       case Token_class:
       case Token_struct:
       case Token_union:
       case Token_enum:
-      
+
         if(forwardDeclarationGlobal) {
           //Open the global context, so it is currentContext() and we can insert the forward-declaration there
 
           DUContext* globalCtx;
           {
             DUChainReadLocker lock(DUChain::lock());
-            globalCtx = currentContext(); 
+            globalCtx = currentContext();
             while(globalCtx && globalCtx->type() != DUContext::Global && globalCtx->type() != DUContext::Namespace)
               globalCtx = globalCtx->parentContext();
             Q_ASSERT(globalCtx);
           }
           openContext(globalCtx);
         }
-        
+
         openForwardDeclaration(node->name, node);
 
         if(forwardDeclarationGlobal)
@@ -1053,7 +1053,7 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
 void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
   DeclarationBuilderBase::visitParameterDeclaration(node);
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
-  
+
   if( function ) {
     if( node->expression ) {
       //Fill default-parameters
@@ -1106,13 +1106,13 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     if(!clause || !clause->parameter_declarations)
       return true;
     AbstractType::Ptr oldLastType = lastType();
-    
+
     const ListNode<ParameterDeclarationAST*> *start = clause->parameter_declarations->toFront();
-    
+
     const ListNode<ParameterDeclarationAST*> *it = start;
 
     bool ret = false;
-    
+
     do {
       ParameterDeclarationAST* ast = it->element;
       if(ast) {
@@ -1120,7 +1120,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
           ret = true; //If one parameter has a default argument or a parameter name, it is surely a parameter
           break;
         }
-        
+
         visit(ast->type_specifier);
         if( lastType() ) {
           //Break on the first valid thing found
