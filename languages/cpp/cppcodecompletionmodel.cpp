@@ -632,7 +632,10 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
                 return indentation + "<incomplete type>";
 
             } else {
-              return indentation + dec->abstractType()->toString();
+              QString ret = indentation;
+              if(dec->type<CppEnumeratorType>())
+                ret += "enumerator ";
+              return  ret + dec->abstractType()->toString();
             }
           } else {
             return indentation + "<incomplete type>";
