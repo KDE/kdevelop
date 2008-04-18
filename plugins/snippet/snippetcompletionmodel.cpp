@@ -66,4 +66,5 @@ void SnippetCompletionModel::initData()
         }
     }
     reset();
+    setRowCount( m_snippets.count() );
 }
