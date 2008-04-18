@@ -27,12 +27,49 @@
 
 #include "mi/miparser.h"
 #include "gdbglobal.h"
+#include "util/treeitem.h"
 
 namespace GDBDebugger
 {
 class GDBController;
 class TreeItem;
 class TreeModel;
+
+class Thread : public TreeItem
+{
+public:
+    Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
+           const GDBMI::Value& thread);
+
+    int id() const { return id_; }
+
+    void updateSelf(const GDBMI::Value& thread, bool initial = false);
+
+    void fetchMoreChildren();
+    void fetchMoreChildren_1(bool clear);
+    void handleFrameList(const GDBMI::ResultRecord& r);
+
+    GDBController* controller_;
+    int id_;
+
+    static const int step = 5;
+};
+
+class Frame : public TreeItem
+{
+public:
+    Frame(TreeModel* model, Thread* parent, const GDBMI::Value& frame);
+    void updateSelf(const GDBMI::Value& frame);
+
+    Thread* thread() { return static_cast<Thread*>(parentItem); }
+
+    int id() const { return id_; }
+
+    void fetchMoreChildren() {}
+
+private:
+    int id_;
+};
 
 class StackManager : public QObject
 {

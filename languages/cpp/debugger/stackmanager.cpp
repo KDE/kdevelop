@@ -59,149 +59,131 @@ QString get_source(const GDBMI::Value &frame)
         return "";
 }
 
-class Frame : public TreeItem
+Frame::Frame(TreeModel* model, Thread* parent, const GDBMI::Value& frame)
+: TreeItem(model, parent)
 {
-public:
-    Frame(TreeModel* model, TreeItem* parent, const GDBMI::Value& frame)
-    : TreeItem(model, parent)
-    {
-        updateSelf(frame);
-    }
+    updateSelf(frame);
+}
 
-    void updateSelf(const GDBMI::Value& frame)
-    {
-        setData(QVector<QString>() 
-                << ("#" + frame["level"].literal())
-                << get_function_or_address(frame)
-                << get_source(frame));
-    }
-
-    void fetchMoreChildren() {}
-};
-
-
-class Thread : public TreeItem
+void Frame::updateSelf(const GDBMI::Value& frame)
 {
-public:
-    Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
-           const GDBMI::Value& thread)
-    : TreeItem(model, parent), controller_(controller)
-    {
-        id_ = thread["id"].toInt();
+    id_ = frame["level"].toInt();
+    setData(QVector<QString>() 
+            << ("#" + frame["level"].literal())
+            << get_function_or_address(frame)
+            << get_source(frame));
+}
 
-        updateSelf(thread, true);
-        setHasMoreInitial(true);
+Thread::Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
+               const GDBMI::Value& thread)
+: TreeItem(model, parent), controller_(controller)
+{
+    id_ = thread["id"].toInt();
+    
+    updateSelf(thread, true);
+    setHasMoreInitial(true);
+}
+
+void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
+{
+    const GDBMI::Value& frame = thread["frame"];
+    setData(QVector<QString>()
+            << ("Thread " + thread["id"].literal())
+            << get_function_or_address(frame)
+            << get_source(frame));
+    if (!initial)
+        reportChange();
+    
+    if (isExpanded())
+        fetchMoreChildren_1(true);
+    else if (!initial) {
+        /* We actually don't know if there are children or not.
+           I don't really want to emit -stack-list-frames for each 
+           thread, and -thread-info does not say if thread has more
+           that one frame.
+           So, mark this item as having children.  If there are none,
+           which happens inside main, user will see the frames disappear
+           when opening item.  It's better than showing the item as
+           having no children, as otherwise user won't be able to
+           expand it.  */
+        setHasMore(true);        
     }
+}
 
-    int id() const { return id_; }
+void Thread::fetchMoreChildren()
+{
+    fetchMoreChildren_1(false);
+}
 
-    void updateSelf(const GDBMI::Value& thread, bool initial = false)
+void Thread::fetchMoreChildren_1(bool clear) 
+{
+    /* We always ask GDB for:
+       - the last frame we already have
+       - 'step' more frames
+       - one more frame
+       
+       We ask for the last present frame so that GDB does not give fits
+       if the last frame we have is exactly the last frame target has.
+       We ask for one more frame so that we know if there are more
+       frames.  */
+    int now;
+    if (clear)
+        now = 0;
+    else 
+        now = childItems.size();
+    int next = now + step + 1;
+    if (clear)
+        now = 0;
+    QString arg = QString("%1 %2").arg(now).arg(next);
+    
+    GDBCommand *c = new GDBCommand(StackListFrames, arg,
+                                   this,
+                                   &Thread::handleFrameList);
+    c->setThread(id_);
+    controller_->addCommand(c);
+}
+
+void Thread::handleFrameList(const GDBMI::ResultRecord& r)
+{
+    const GDBMI::Value& stack = r["stack"];
+    int first = stack[0]["level"].toInt();
+    if (first == 0)
     {
-        const GDBMI::Value& frame = thread["frame"];
-        setData(QVector<QString>()
-                << ("Thread " + thread["id"].literal())
-                << get_function_or_address(frame)
-                << get_source(frame));
-        if (!initial)
-            reportChange();
-
-        if (isExpanded())
-            fetchMoreChildren_1(true);
-        else if (!initial) {
-            /* We actually don't know if there are children or not.
-               I don't really want to emit -stack-list-frames for each 
-               thread, and -thread-info does not say if thread has more
-               that one frame.
-               So, mark this item as having children.  If there are none,
-               which happens inside main, user will see the frames disappear
-               when opening item.  It's better than showing the item as
-               having no children, as otherwise user won't be able to
-               expand it.  */
-            setHasMore(true);        
-        }
-    }
-
-    void fetchMoreChildren()
-    {
-        fetchMoreChildren_1(false);
-    }
-
-    void fetchMoreChildren_1(bool clear) 
-    {
-        /* We always ask GDB for:
-           - the last frame we already have
-           - 'step' more frames
-           - one more frame
-
-           We ask for the last present frame so that GDB does not give fits
-           if the last frame we have is exactly the last frame target has.
-           We ask for one more frame so that we know if there are more
-           frames.  */
-        int now;
-        if (clear)
-            now = 0;
-        else 
-            now = childItems.size();
-        int next = now + step + 1;
-        if (clear)
-            now = 0;
-        QString arg = QString("%1 %2").arg(now).arg(next);
-
-        GDBCommand *c = new GDBCommand(StackListFrames, arg,
-                                       this,
-                                       &Thread::handleFrameList);
-        c->setThread(id_);
-        controller_->addCommand(c);
-    }
-
-    void handleFrameList(const GDBMI::ResultRecord& r)
-    {
-        const GDBMI::Value& stack = r["stack"];
-        int first = stack[0]["level"].toInt();
-        if (first == 0)
+        /* For smooth update, after stepping we update first
+           block of frames without previously clearing the
+           existing ones. 
+           Also note that we ignore the first stack frame
+           here.  */
+        int i;
+        for (i = 0; i < step && (i+1) < stack.size(); ++i)
         {
-            /* For smooth update, after stepping we update first
-               block of frames without previously clearing the
-               existing ones. 
-               Also note that we ignore the first stack frame
-               here.  */
-            int i;
-            for (i = 0; i < step && (i+1) < stack.size(); ++i)
+            if (i < childItems.count())
             {
-                if (i < childItems.count())
-                {
-                    Frame *f = static_cast<Frame *>(child(i));
-                    f->updateSelf(stack[i+1]);
-                }
-                else
-                    appendChild(new Frame(model(), this, stack[i+1]));
+                Frame *f = static_cast<Frame *>(child(i));
+                f->updateSelf(stack[i+1]);
             }
-            while (i < childItems.count())
-                removeChild(i);
-
-            setHasMore(stack.size() > step+1);
+            else
+                appendChild(new Frame(model(), this, stack[i+1]));
         }
-        else
-        {
-            if (first  != childItems.size() + 1)
-            {
-                kDebug(9012) << "Got wrong frames\n";
-                return;
-            }
-            for (int i = 0; i < step && i < stack.size(); ++i)
-            {
-                appendChild(new Frame(model(), this, stack[i]));
-            }
-            setHasMore(stack.size() > step);
-        }
+        while (i < childItems.count())
+            removeChild(i);
+        
+        setHasMore(stack.size() > step+1);
     }
-
-    GDBController* controller_;
-    int id_;
-
-    static const int step = 5;
-};
-
+    else
+    {
+        if (first  != childItems.size() + 1)
+        {
+            kDebug(9012) << "Got wrong frames\n";
+            return;
+        }
+        for (int i = 0; i < step && i < stack.size(); ++i)
+        {
+            appendChild(new Frame(model(), this, stack[i]));
+        }
+        setHasMore(stack.size() > step);
+    }
+}
 
 class DebugUniverse : public TreeItem
 {

@@ -52,6 +52,7 @@ namespace GDBDebugger
         BreakpointDetails(QWidget *parent) : QWidget(parent)
         {
             QVBoxLayout* layout = new QVBoxLayout(this);
+            layout->setContentsMargins(11, 0, 0, 11);
             
             status_ = new QLabel(this);
             status_->setText("Breakpoint is active");
@@ -61,25 +62,24 @@ namespace GDBDebugger
             QGridLayout* hitsLayout = new QGridLayout();
             layout->addLayout(hitsLayout);
 
-            QLabel *l = new QLabel(i18n("Hit count"), this);
-            hitsLayout->addWidget(l, 0, 0);
-            
-            hits_ = new SmallLineEdit(this);
-            hits_->setReadOnly(true);
-            hitsLayout->addWidget(hits_, 0, 1);
+            hitsLayout->setContentsMargins(0, 0, 0, 0);
 
-#if 0
-            QToolButton *button = new QToolButton(this);
-            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
-            button->setIcon(KIcon("arrow-down"));
-            hitsLayout->addWidget(button, 1, 1);
-#endif     
-       
+            hits_ = new QLabel(i18n("Not hit yet"), this);
+            hitsLayout->addWidget(hits_, 0, 0, 1, 3);
+
+            QFrame* frame = new QFrame(this);
+            frame->setFrameShape(QFrame::HLine);
+            hitsLayout->addWidget(frame, 1, 0, 1, 3);
+            
             QLabel *l2 = new QLabel(i18n("Ignore"), this);
-            hitsLayout->addWidget(l2, 1, 0);
+            hitsLayout->addWidget(l2, 2, 0);
             
             ignore_ = new SmallLineEdit(this);
-            hitsLayout->addWidget(ignore_, 1, 1);
+            hitsLayout->addWidget(ignore_, 2, 1);
+
+            QLabel *l3 = new QLabel(i18n("next hits"), this);
+            hitsLayout->addWidget(l3, 2, 2);
+
             
             layout->addStretch();
         }
@@ -105,7 +105,11 @@ namespace GDBDebugger
             else
                 status_->setText("Breakpoint is active");
 
-            hits_->setText(QString::number(b->hitCount()));
+            if (b->hitCount())
+                // FIXME: i18n
+                hits_->setText(QString("Hit %1 times").arg(b->hitCount()));
+            else
+                hits_->setText(i18n("Not hit yet"));
 
             connect(status_, SIGNAL(linkActivated(const QString&)),
                     this, SLOT(showExplanation(const QString&)));
@@ -140,7 +144,7 @@ namespace GDBDebugger
 
     private:
         QLabel* status_;
-        QLineEdit* hits_;
+        QLabel* hits_;
         QLineEdit* ignore_;
     };
     

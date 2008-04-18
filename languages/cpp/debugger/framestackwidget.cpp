@@ -26,6 +26,8 @@
 #include "gdbcommand.h"
 #include "debuggerplugin.h"
 
+#include "util/treemodel.h"
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -65,8 +67,10 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
 //    setModel(controller->stackManager());
     controller->stackManager()->setAutoUpdate(isVisible());
 
-    //connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-    //        this, SLOT(slotSelectionChanged(QItemSelection, QItemSelection)));
+    connect(selectionModel(), 
+            SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this,
+            SLOT(slotSelectionChanged(QItemSelection, QItemSelection)));
 
     connect(controller->stackManager(), 
             SIGNAL(selectThread(const QModelIndex&)),
@@ -88,10 +92,11 @@ void FramestackWidget::selectThread(const QModelIndex& index)
         | QItemSelectionModel::ClearAndSelect);
 }
 
-void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
+void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, 
+                                            const QItemSelection & deselected)
 {
-    // FIXME: revive
-#if 0
+    kDebug(9012) << "SELECTION CHANGE";
+
     Q_UNUSED(deselected);
     if (selected.isEmpty())
         return;
@@ -100,24 +105,24 @@ void FramestackWidget::slotSelectionChanged(const QItemSelection & selected, con
         kWarning() << "Selection not single as requested";
         return;
     }
-
+   
     // Set current frame
-    QObject* selectedObject = controller_->stackManager()->objectForIndex(selected.first().topLeft());
+    TreeItem *selectedObject = controller_->stackManager()->model()
+        ->itemForIndex(selected.first().topLeft());
 
-    ThreadItem* thread = qobject_cast<ThreadItem*>(selectedObject);
+    Thread* thread = dynamic_cast<Thread*>(selectedObject);
     if (thread)
     {
-        controller_->selectFrame(0, thread->thread());
+        controller_->selectFrame(0, thread->id());
     }
     else
     {
-        FrameStackItem *frame = qobject_cast<FrameStackItem*>(selectedObject);
+        Frame* frame = dynamic_cast<Frame*>(selectedObject);
         if (frame)
         {
-            controller_->selectFrame(frame->frame(), frame->thread()->thread());
+            controller_->selectFrame(frame->id(), frame->thread()->id());
         }
     }
-#endif
 }
 
 void FramestackWidget::showEvent(QShowEvent * event)
