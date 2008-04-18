@@ -224,6 +224,7 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 void DocumentController::openDocumentFromText( const QString& data )
 {
     KTemporaryFile *temp = new KTemporaryFile();
+    temp->setSuffix("kdevtmp");
     temp->open();
     temp->write(data.toUtf8());
     temp->flush();

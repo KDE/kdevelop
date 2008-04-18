@@ -116,6 +116,8 @@ public:
 TextDocument::TextDocument(const KUrl &url, ICore* core)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
+    if (url.url().endsWith("kdevtmp"))
+        setObjectName(i18n("Untitled"));
 }
 
 TextDocument::~TextDocument()
