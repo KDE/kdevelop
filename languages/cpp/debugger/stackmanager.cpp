@@ -172,14 +172,14 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
     }
     else
     {
-        if (first  != childItems.size() + 1)
+        if (first  != childItems.size())
         {
             kDebug(9012) << "Got wrong frames\n";
             return;
         }
-        for (int i = 0; i < step && i < stack.size(); ++i)
+        for (int i = 0; i < step && (i+1) < stack.size(); ++i)
         {
-            appendChild(new Frame(model(), this, stack[i]));
+            appendChild(new Frame(model(), this, stack[i+1]));
         }
         setHasMore(stack.size() > step);
     }
