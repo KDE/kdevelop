@@ -250,6 +250,8 @@ private:
     /** Map from IdealDockWidget  to an action that shows/hides
         that IdealDockWidget.  */
     QMap<IdealDockWidget*, QAction*> m_dockwidget_to_action;
+
+    bool m_centralWidgetFocusing;
 };
 
 class IdealSplitterHandle : public QWidget

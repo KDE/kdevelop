@@ -421,6 +421,7 @@ void IdealDockWidget::contextMenuEvent(QContextMenuEvent *event)
 
 IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
+    , m_centralWidgetFocusing(false)
 {
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea);
     leftBarWidget->hide();
@@ -573,9 +574,13 @@ KAction * Sublime::IdealMainWidget::actionForRole(IdealMainLayout::Role role) co
 
 void IdealMainWidget::centralWidgetFocused()
 {
+    m_centralWidgetFocusing = true;
+
     for (IdealMainLayout::Role role = IdealMainLayout::Left; role <= IdealMainLayout::Top; role = static_cast<IdealMainLayout::Role>(role + 1))
         if (!m_mainLayout->isAreaAnchored(role))
             actionForRole(role)->setChecked(false);
+
+    m_centralWidgetFocusing = false;
 }
 
 void IdealMainWidget::hideAllDocks()
@@ -790,18 +795,20 @@ IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
 void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
 {
     // If the dock is shown but not focused, first focus it, a second press of the shortcut will hide it
-    if (IdealDockWidget* widget = mainLayout()->lastDockWidget(role)) {
-        if (widget->isVisible() && !widget->hasFocus()) {
-            widget->setFocus(Qt::ShortcutFocusReason);
+    if (!m_centralWidgetFocusing) {
+        if (IdealDockWidget* widget = mainLayout()->lastDockWidget(role)) {
+            if (widget->isVisible() && !widget->hasFocus()) {
+                widget->setFocus(Qt::ShortcutFocusReason);
 
-            // re-sync action state given we may have asked for the dock to be hidden
-            KAction* action = actionForRole(role);
-            if (!action->isChecked()) {
-                action->blockSignals(true);
-                action->setChecked(true);
-                action->blockSignals(false);
+                // re-sync action state given we may have asked for the dock to be hidden
+                KAction* action = actionForRole(role);
+                if (!action->isChecked()) {
+                    action->blockSignals(true);
+                    action->setChecked(true);
+                    action->blockSignals(false);
+                }
+                return;
             }
-            return;
         }
     }
 
