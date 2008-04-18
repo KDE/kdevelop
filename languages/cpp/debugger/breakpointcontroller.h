@@ -60,6 +60,10 @@ public:
     NewBreakpoint(TreeModel *model, TreeItem *parent, GDBController* controller,
                   const KConfigGroup& config);
 
+    /* This constructor creates a "please enter location" item, that will
+       turn into real breakpoint when user types something.  */
+    NewBreakpoint(TreeModel *model, TreeItem *parent,
+                  GDBController* controller);
 
     int id() const { return id_; }
     void update(const GDBMI::Value &b);
@@ -105,6 +109,7 @@ private:
     kind_t kind_;
     /* The GDB 'pending' flag.  */
     bool pending_;
+    bool pleaseEnterLocation_;
 
     static const char *string_kinds[last_breakpoint_kind];
 };
@@ -128,6 +133,8 @@ public:
     void remove(const QModelIndex &index);
 
     NewBreakpoint *breakpointById(int id);
+
+    void createHelperBreakpoint();                                     
 
 public slots:
     void save();

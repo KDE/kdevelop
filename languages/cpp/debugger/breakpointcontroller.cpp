@@ -53,7 +53,7 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller, kind_t kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   controller_(controller), deleted_(false), hitCount_(0), kind_(kind),
-  pending_(false)
+  pending_(false), pleaseEnterLocation_(false)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
@@ -85,6 +85,14 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
     setData(QVector<QString>() << "" << "" << "" << location << condition);
 }
 
+NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
+                             GDBController* controller)
+: TreeItem(model, parent), id_(-1), enabled_(true), 
+  controller_(controller), deleted_(false), hitCount_(0), 
+  kind_(code_breakpoint), pending_(false), pleaseEnterLocation_(true)
+{   
+    setData(QVector<QString>() << "" << "" << "" << "" << "");
+}
 
 void NewBreakpoint::update(const GDBMI::Value &b)
 {
@@ -173,9 +181,19 @@ void NewBreakpoint::setColumn(int index, const QVariant& value)
         enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
     }
 
+    /* Helper breakpoint becomes a real breakpoint only if user types
+       some real location.  */
+    if (pleaseEnterLocation_ && value.toString().isEmpty())
+        return;
+
     if (index == location_column || index == condition_column)
     {
         itemData[index] = value;
+        if (pleaseEnterLocation_)
+        {
+            pleaseEnterLocation_ = false;
+            static_cast<Breakpoints*>(parentItem)->createHelperBreakpoint();
+        }
     }
 
     dirty_.insert(index);
@@ -193,6 +211,27 @@ void NewBreakpoint::markOut()
 
 QVariant NewBreakpoint::data(int column, int role) const
 {
+    if (pleaseEnterLocation_)
+    {
+        if (column != location_column)
+        {
+            if (role == Qt::DisplayRole)
+                return QString();
+            else
+                return QVariant();
+        }
+        
+        if (role == Qt::DisplayRole)
+            return i18n("Double-click to create new code breakpoint");
+        if (role == Qt::ForegroundRole)
+            // FIXME: returning hardcoded gray is bad,
+            // but we don't have access to any widget, or pallette
+            // thereof, at this point.
+            return QColor(128, 128, 128);
+        if (role == Qt::EditRole)
+            return QString();
+    }
+
     if (column == enable_column)
     {
         if (role == Qt::CheckStateRole)
@@ -440,6 +479,12 @@ void Breakpoints::update()
                        &Breakpoints::handleBreakpointList));        
 }
 
+void Breakpoints::createHelperBreakpoint()
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_);
+    appendChild(n);
+}
+
 NewBreakpoint* Breakpoints::addCodeBreakpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
@@ -584,6 +629,7 @@ BreakpointController::BreakpointController(GDBController* parent)
     universe_ = new Breakpoints(this, parent);
     setRootItem(universe_);
     universe_->load();
+    universe_->createHelperBreakpoint();
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
             universe_, SLOT(save()));
