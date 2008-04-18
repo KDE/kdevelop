@@ -45,6 +45,7 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
 {
     Snippet* snippet = m_snippets.at( row );
+    //Instead of the name of the snippet we want its text
     doc->replaceText( w, snippet->getSnippetPlainText() );
 }
 
