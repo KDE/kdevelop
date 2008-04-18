@@ -11,6 +11,7 @@ include_directories(
 set(standardoutputview_LIB_SRCS
     standardoutputview.cpp
     outputwidget.cpp
+    toolviewdata.cpp
 )
 
 kde4_add_plugin(kdevstandardoutputview ${standardoutputview_LIB_SRCS})

@@ -36,6 +36,13 @@ class QAbstractItemDelegate;
 @author Andreas Pakulat
 */
 
+namespace Sublime
+{
+class View;
+}
+
+class ToolViewData;
+
 class StandardOutputView : public KDevelop::IPlugin, public KDevelop::IOutputView
 {
 Q_OBJECT
@@ -44,35 +51,49 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~StandardOutputView();
-    int registerView( const QString& title,
-                          KDevelop::IOutputView::Behaviours behaviour );
-    void raiseView( int id );
+    int registerToolView( const QString& title,
+                          KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView );
+
+    int registerOutputInToolView( int toolviewId, const QString& title,
+                                  KDevelop::IOutputView::Behaviours behaviour
+                                        = KDevelop::IOutputView::AllowUserClose );
+
+    void raiseOutput( int id );
     void setModel( int id, QAbstractItemModel* );
 
     void setDelegate( int id, QAbstractItemDelegate* );
 
-    QAbstractItemModel* registeredModel( int ) const;
-    QAbstractItemDelegate* registeredDelegate( int ) const;
-    QString registeredTitle( int id ) const;
-    QList<int> registeredViews() const;
-    KDevelop::IOutputView::Behaviours behaviour( int id ) const;
+
+    virtual void removeToolView( int id );
+    virtual void removeOutput( int id );
+    void removeSublimeView( Sublime::View* );
+
+//     QAbstractItemModel* registeredModel( int ) const;
+//     QAbstractItemDelegate* registeredDelegate( int ) const;
+//     QString registeredTitle( int id ) const;
+    QList<int> registeredToolViews() const;
+    QList<ToolViewData> registeredToolViewData() const;
+//     KDevelop::IOutputView::Behaviours behaviour( int id ) const;
+//     KDevelop::IOutputView::Type type( int id ) const;
 public Q_SLOTS:
-    void removeViewData( int );
+//     void removeViewData( int );
 Q_SIGNALS:
     void activated( const QModelIndex& );
-    void selectNextItem();
-    void selectPrevItem();
-    void modelChanged( int id );
-    void delegateChanged( int id );
-    void viewRemoved( int id );
+//     void selectNextItem();
+//     void selectPrevItem();
+//     void modelChanged( int id );
+//     void delegateChanged( int id );
+    void outputRemoved( int toolviewId, int id );
+    void toolViewRemoved( int toolviewId );
     /**
      * Signal to inform the view to remove one output view
      */
-    void removeView( int id );
-    void requestRaiseView( int id );
+//     void removeOutput( int id );
+//     void requestRaiseOutput( int id );
 
 private:
-    class StandardOutputViewPrivate* const d;
+    QMap<int, ToolViewData*> toolviews;
+    QList<int> ids;
     friend class StandardOutputViewViewFactory;
 };
 

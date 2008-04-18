@@ -33,9 +33,10 @@
 #include <klocale.h>
 #include <kicon.h>
 
+#include "toolviewdata.h"
 
-OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
-    : KTabWidget( parent ), m_outputView(view)
+OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
+    : KTabWidget( parent ), data(tvdata)
 {
     setWindowTitle(i18n("Output View"));
     m_closeButton = new QToolButton( this );
@@ -46,71 +47,67 @@ OutputWidget::OutputWidget(QWidget* parent, StandardOutputView* view)
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
 
-    connect( this, SIGNAL( viewRemoved( int ) ),
-                m_outputView, SIGNAL( viewRemoved( int ) ) );
-    connect( m_outputView, SIGNAL( removeView( int ) ),
-                this, SLOT( removeView( int ) ) );
-    connect( m_outputView, SIGNAL( requestRaiseView( int ) ),
-                this, SLOT( raiseView( int ) ) );
-    connect( this, SIGNAL( viewRemoved( int ) ),
-                m_outputView, SLOT( removeViewData( int ) ) );
-//  connect( this, SIGNAL( activated(const QModelIndex&) ),
-//              m_outputView, SIGNAL(activated(const QModelIndex&)) );
-    connect( m_outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
-    connect( m_outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPrevItem()) );
+    connect( data, SIGNAL(outputAdded(int id)), this, SLOT(addOutput( int id ) ) );
 
-    connect( m_outputView, SIGNAL( modelChanged( int ) ),
-             this, SLOT( changeModel( int ) ) );
-    connect( m_outputView, SIGNAL( delegateChanged( int ) ),
-             this, SLOT( changeDelegate( int ) ) );
+    connect( this, SIGNAL( outputRemoved( int ) ),
+                data->plugin, SIGNAL( outputRemoved( int ) ) );
+//     connect( this, SIGNAL( viewRemoved( int ) ),
+//                 data->plugin, SLOT( removeViewData( int ) ) );
+//     connect( m_outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
+//     connect( m_outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPrevItem()) );
 
-    foreach( int id, m_outputView->registeredViews() )
+    foreach( int id, data->outputdata.keys() )
     {
         changeModel( id );
         changeDelegate( id );
     }
 }
 
+void OutputWidget::addOutput( int id )
+{
+    QListView* listview = createListView(id);
+    setCurrentWidget( listview );
+    connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
+    connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
+}
 
 void OutputWidget::changeDelegate( int id )
 {
     kDebug(9500) << "delegate changed for id:" << id;
-    if( m_listviews.contains( id ) )
-        m_listviews[id]->setItemDelegate(m_outputView->registeredDelegate(id));
+    if( data->outputdata.contains( id ) )
+        data->outputdata.value(id)->view->setItemDelegate(data->outputdata.value(id)->delegate);
     else
-        createListView(id);
+        addOutput(id);
 }
 
 void OutputWidget::changeModel( int id )
 {
     kDebug(9500) << "model changed for id:" << id;
-    if( m_listviews.contains( id ) ) {
-        m_listviews[id]->setModel(m_outputView->registeredModel(id));
+    if( data->outputdata.contains( id ) )
+    {
+        data->outputdata.value(id)->view->setModel(data->outputdata.value(id)->model);
     }
     else
     {
-        QListView* listview = createListView(id);
-        setCurrentWidget( listview );
+        addOutput( id );
     }
 }
 
-void OutputWidget::removeView( int id )
+void OutputWidget::removeOutput( int id )
 {
-    if( m_listviews.contains( id ) )
+    if( data->outputdata.contains( id ) )
     {
-        QWidget* w = m_listviews[id];
+        QListView* w = data->outputdata.value(id)->view;
         int idx = indexOf( w );
         if( idx != -1 )
         {
             removeTab( idx );
-            m_widgetMap.remove( w );
-            m_listviews.remove( id );
             delete w;
-            emit viewRemoved( id );
+            emit outputRemoved( id );
         }
     }
 }
-
+/*
 void OutputWidget::closeActiveView()
 {
     QWidget* widget = currentWidget();
@@ -124,93 +121,93 @@ void OutputWidget::closeActiveView()
             removeView( id );
         }else kDebug(9500) << "OOops, the view is not user closeable";
     }else kDebug(9500) << "OOops, the selected tab is not in our list??";
-}
+}*/
 
-void OutputWidget::selectNextItem()
-{
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
+// void OutputWidget::selectNextItem()
+// {
+//     QWidget* widget = currentWidget();
+//     if( !widget )
+//         return;
+//     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+//     if( !view )
+//         return;
+// 
+//     QAbstractItemModel *absmodel = view->model();
+//     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+//     if( iface )
+//     {
+//         QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
+//         if( index.isValid() )
+//         {
+//             view->setCurrentIndex( index );
+//             iface->activate( index );
+//         }
+//     }
+// }
 
-    QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
-    {
-        QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
-        if( index.isValid() )
-        {
-            view->setCurrentIndex( index );
-            iface->activate( index );
-        }
-    }
-}
+// void OutputWidget::selectPrevItem()
+// {
+//     QWidget* widget = currentWidget();
+//     if( !widget )
+//         return;
+//     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+//     if( !view )
+//         return;
+// 
+//     QAbstractItemModel *absmodel = view->model();
+//     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+//     if( iface )
+//     {
+//         QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
+//         if( index.isValid() )
+//         {
+//             view->setCurrentIndex( index );
+//             iface->activate( index );
+//         }
+//     }
+// }
 
-void OutputWidget::selectPrevItem()
-{
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
-
-    QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
-    {
-        QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
-        if( index.isValid() )
-        {
-            view->setCurrentIndex( index );
-            iface->activate( index );
-        }
-    }
-}
-
-void OutputWidget::activate(const QModelIndex& index)
-{
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
-
-    QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
-    {
-        iface->activate( index );
-    }
-}
+// void OutputWidget::activate(const QModelIndex& index)
+// {
+//     QWidget* widget = currentWidget();
+//     if( !widget )
+//         return;
+//     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+//     if( !view )
+//         return;
+// 
+//     QAbstractItemModel *absmodel = view->model();
+//     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+//     if( iface )
+//     {
+//         iface->activate( index );
+//     }
+// }
 
 QListView* OutputWidget::createListView(int id)
 {
     kDebug(9500) << "creating listview";
     QListView* listview = new QListView(this);
-    listview->setModel( m_outputView->registeredModel(id) );
-    listview->setItemDelegate(m_outputView->registeredDelegate(id));
+    listview->setModel( data->outputdata.value(id)->model );
+    listview->setItemDelegate(data->outputdata.value(id)->delegate);
     listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-    m_listviews[id] = listview;
-    m_widgetMap[listview] = id;
+    data->outputdata.value(id)->view = listview;
+//     m_widgetMap[listview] = id;
 //         connect( listview, SIGNAL(activated(const QModelIndex&)),
 //                  this, SIGNAL(activated(const QModelIndex&)));
-    connect( listview, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(activate(const QModelIndex&)));
-    connect( listview, SIGNAL(activated(const QModelIndex&)),
-            this, SLOT( activate(const QModelIndex&) ) );
+//     connect( listview, SIGNAL(clicked(const QModelIndex&)),
+//             this, SLOT(activate(const QModelIndex&)));
+//     connect( listview, SIGNAL(activated(const QModelIndex&)),
+//             this, SLOT( activate(const QModelIndex&) ) );
 
-    m_sliders[listview->verticalScrollBar()] = (m_outputView->behaviour(id) & KDevelop::IOutputView::AutoScroll) ? 1 : 2;
-    connect( listview->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChanged(int, int)));
-    connect( listview->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+//     m_sliders[listview->verticalScrollBar()] = (m_outputView->behaviour(id) & KDevelop::IOutputView::AutoScroll) ? 1 : 2;
+//     connect( listview->verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChanged(int, int)));
+//     connect( listview->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 
-    addTab( listview, m_outputView->registeredTitle(id) );
+    addTab( listview, data->outputdata.value(id)->title );
     return listview;
 }
-
+/*
 void OutputWidget::valueChanged(int value)
 {
     QScrollBar* slider = qobject_cast<QScrollBar*>(sender());
@@ -231,11 +228,15 @@ void OutputWidget::rangeChanged(int min, int max)
 
     if (m_sliders[slider] == 1)
         slider->setValue(max);
-}
+}*/
 
-void OutputWidget::raiseView(int id)
+void OutputWidget::raiseOutput(int id)
 {
-    setCurrentIndex(id);
+    int idx = indexOf( data->outputdata.value(id)->view );
+    if( idx >= 0 )
+    {
+        setCurrentIndex( idx );
+    }
 }
 
 #include "outputwidget.moc"

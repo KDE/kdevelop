@@ -194,7 +194,8 @@ void KDevelop::RunController::createModel(int serial, const IRun& run)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            int id = view->registerView(i18n("Run: %1", run.executable().path()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+            int tvid = view->registerToolView(i18n("Run: %1", run.executable().path()) );
+            int id = view->registerOutputInToolView( tvid, run.executable().path(), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
             QStandardItemModel* model = new QStandardItemModel(this);
             d->outputModels.insert(serial, qMakePair(id, model));

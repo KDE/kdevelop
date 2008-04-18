@@ -38,50 +38,41 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
-#include "sublime/view.h"
+#include <sublime/view.h>
+#include <sublime/area.h>
+#include <sublime/controller.h>
+
+#include "toolviewdata.h"
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 K_EXPORT_PLUGIN(StandardOutputViewFactory("kdevstandardoutputview"))
 
-class StandardOutputViewPrivate
-{
-public:
-    class StandardOutputViewViewFactory* m_factory;
-    QMap<int, QAbstractItemModel* > m_models;
-    QMap<int, QAbstractItemDelegate* > m_delegates;
-    QMap<int, QString> m_titles;
-    QList<int> m_ids;
-    QMap<int, KDevelop::IOutputView::Behaviours> m_behaviours;
-    QList<Sublime::View*> m_views;
-};
 
-class StandardOutputViewViewFactory : public KDevelop::IToolViewFactory{
+class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
-    StandardOutputViewViewFactory(StandardOutputView *part): m_part(part) {}
+    OutputViewFactory(ToolViewData* data): m_data(data) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
-        return new OutputWidget( parent, m_part);
+        return new OutputWidget( parent, m_data );
     }
     virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
     {
         return Qt::BottomDockWidgetArea;
     }
-
-    virtual void viewCreated(Sublime::View* view)
+    virtual void viewCreated( Sublime::View* view )
     {
-        m_part->d->m_views << view;
+        m_data->views << view;
     }
 private:
-    StandardOutputView *m_part;
+    ToolViewData *m_data;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent),
-      d(new StandardOutputViewPrivate)
+    : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
-    d->m_factory = new StandardOutputViewViewFactory( this );
-    core()->uiController()->addToolView( i18n("Output View"), d->m_factory );
+//     d->m_factory = new StandardOutputViewViewFactory( this );
+//     core()->uiController()->addToolView( i18n("Output View"), d->m_factory );
 
     setXMLFile("kdevstandardoutputview.rc");
     // setup actions
@@ -97,126 +88,165 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
+    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(View*)), this, SLOT(removeSublimeView(View*)));
+
+}
+
+void StandardOutputView::removeSublimeView( Sublime::View* v )
+{
+    foreach( ToolViewData* d, toolviews )
+    {
+        if( d->views.contains(v) && d->views.count() == 1 )
+        {
+            toolviews.remove( d->toolViewId );
+            ids.removeAll( d->toolViewId );
+            delete d;
+        } else
+        {
+            d->views.removeAll(v);
+        }
+    }
 }
 
 StandardOutputView::~StandardOutputView()
 {
-    delete d;
 }
 
-int StandardOutputView::registerView( const QString& title,
-                                          KDevelop::IOutputView::Behaviours behaviour )
+int StandardOutputView::registerToolView( const QString& title,
+                                          KDevelop::IOutputView::ViewType type )
 {
-    int newid;
-    if( d->m_ids.isEmpty() )
+    int newid = -1;
+    if( ids.isEmpty() )
         newid = 0;
     else
-        newid = d->m_ids.last()+1;
-    kDebug(9500) << "Registering view" << title << "with behaviour:" << behaviour;
-    d->m_ids << newid;
-    d->m_titles[newid] = title;
-    d->m_models[newid] = 0;
-    d->m_behaviours[newid] = behaviour;
-
-    foreach (Sublime::View* view, d->m_views)
-        view->requestRaise();
-
+    {
+        foreach( ToolViewData* d, toolviews.values() )
+        {
+            if( d->title == title )
+                return d->toolViewId;
+        }
+        newid = ids.last()+1;
+    }
+    kDebug(9500) << "Registering view" << title << "with type:" << type;
+    ToolViewData* tvdata = new ToolViewData( this );
+    tvdata->toolViewId = newid;
+    tvdata->type = type;
+    tvdata->title = title;
+    tvdata->plugin = this;
+    core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
+    ids << newid;
+    toolviews[newid] = tvdata;
     return newid;
 }
 
-void StandardOutputView::raiseView(int id)
+int StandardOutputView::registerOutputInToolView( int toolViewId,
+                                                  const QString& title,
+                                                  KDevelop::IOutputView::Behaviours behaviour )
 {
-    foreach (Sublime::View* view, d->m_views)
-        view->requestRaise();
-
-    emit requestRaiseView(id);
+    if( !toolviews.contains( toolViewId ) )
+        return -1;
+    int newid;
+    if( ids.isEmpty() )
+    {
+        newid = 0;
+    } else
+    {
+        newid = ids.last()+1;
+    }
+    ids << newid;
+    toolviews.value( toolViewId )->addOutput( newid, title, behaviour );
+    return newid;
 }
 
-KDevelop::IOutputView::Behaviours StandardOutputView::behaviour( int id ) const
+void StandardOutputView::raiseOutput(int id)
 {
-
-    if( d->m_titles.contains( id ) )
+    foreach( int _id, toolviews.keys() )
     {
-        return d->m_behaviours[id];
+        if( toolviews.value( _id )->outputdata.contains( id ) )
+        {
+            Sublime::View* v = toolviews.value( _id )->views.at(0);
+            OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
+            w->raiseOutput( id );
+            v->requestRaise();
+        }
     }
-    return KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll;
 }
 
 void StandardOutputView::setModel( int id, QAbstractItemModel* model )
 {
-    if( d->m_ids.contains( id ) )
+    int tvid = -1;
+    foreach( int _id, toolviews.keys() )
     {
-        d->m_models[id] = model;
-        emit modelChanged( id );
-    }else
+        if( toolviews.value( _id )->outputdata.contains( id ) )
+        {
+            tvid = _id;
+            break;
+        }
+    }
+    if( tvid == -1 )
         kDebug(9500) << "Trying to set model on unknown view-id:" << id;
+    else
+    {
+        toolviews.value( tvid )->outputdata.value( id )->setModel( model );
+    }
 }
 
 void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate )
 {
-    if( d->m_ids.contains( id ) )
+int tvid = -1;
+    foreach( int _id, ids )
     {
-        d->m_delegates[id] = delegate;
-        emit delegateChanged( id );
-    }else
-        kDebug(9500) << "Trying to set delegate on unknown view-id:" << id;
+        if( toolviews.value( _id )->outputdata.contains( id ) )
+        {
+            tvid = _id;
+            break;
+        }
+    }
+    if( tvid == -1 )
+        kDebug(9500) << "Trying to set model on unknown view-id:" << id;
+    else
+    {
+        toolviews.value( tvid )->outputdata.value( id )->setDelegate( delegate );
+    }
 }
 
-QList<int> StandardOutputView::registeredViews() const
+void StandardOutputView::removeToolView( int id )
 {
-    return d->m_ids;
+    if( toolviews.contains(id) )
+    {
+        ToolViewData* td = toolviews.value(id);
+        foreach( Sublime::View* view, td->views )
+        {
+            OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
+            foreach( int outid, td->outputdata.keys() )
+            {
+                widget->removeOutput( outid );
+            }
+            foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->areas() )
+            {
+                area->removeToolView( view );
+            }
+        }
+        delete td;
+        toolviews.remove(id);
+        emit toolViewRemoved(id);
+    }
 }
 
-QAbstractItemModel* StandardOutputView::registeredModel( int id ) const
+void StandardOutputView::removeOutput( int id )
 {
-    if( d->m_models.contains( id ) )
+    foreach( ToolViewData* td, toolviews.values() )
     {
-        return d->m_models[id];
+        if( td->outputdata.contains( id ) )
+        {
+            foreach( Sublime::View* view, td->views )
+            {
+                OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
+                widget->removeOutput( id );
+            }
+            emit outputRemoved( td->toolViewId, id );
+        }
     }
-    return 0;
-}
-
-QAbstractItemDelegate* StandardOutputView::registeredDelegate( int id ) const
-{
-    if( d->m_delegates.contains( id ) )
-    {
-        return d->m_delegates[id];
-    }
-    return 0;
-}
-
-QString StandardOutputView::registeredTitle( int id ) const
-{
-    if( d->m_titles.contains( id ) )
-    {
-        return d->m_titles[id];
-    }
-    return QString();
-}
-
-void StandardOutputView::removeViewData( int id )
-{
-    if( d->m_models.contains( id ) )
-    {
-        d->m_models.remove(id);
-    }
-    if( d->m_delegates.contains( id ) )
-    {
-        d->m_delegates.remove( id );
-    }
-    if( d->m_titles.contains( id ) )
-    {
-        d->m_titles.remove( id );
-    }
-    if( d->m_behaviours.contains( id ) )
-    {
-        d->m_behaviours.remove( id );
-    }
-    if( d->m_ids.contains( id ) )
-    {
-        d->m_ids.removeAll( id );
-    }
-
 }
 
 #include "standardoutputview.moc"

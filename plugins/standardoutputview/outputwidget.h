@@ -32,40 +32,41 @@ class QModelIndex;
 class QListView;
 class QToolButton;
 class QScrollBar;
+class ToolViewData;
 
 class OutputWidget : public KTabWidget
 {
     Q_OBJECT
     public:
-        OutputWidget(QWidget* parent, StandardOutputView* view);
+        OutputWidget(QWidget* parent, ToolViewData* data);
+        void removeOutput( int id );
+        void raiseOutput( int id );
     public Q_SLOTS:
+        void addOutput( int id );
         void changeModel( int id );
         void changeDelegate( int id );
-        void removeView( int id );
-        void raiseView( int id );
-        void closeActiveView();
-        void selectNextItem();
-        void selectPrevItem();
-        void activate(const QModelIndex&);
-        void rangeChanged(int min, int max);
-        void valueChanged(int value);
+//         void raiseView( int id );
+//         void closeActiveView();
+//         void selectNextItem();
+//         void selectPrevItem();
+//         void activate(const QModelIndex&);
+//         void rangeChanged(int min, int max);
+//         void valueChanged(int value);
 
     Q_SIGNALS:
-        void viewRemoved( int );
+        void outputRemoved( int );
 //         void activated( const QModelIndex& );
 
     private:
         QListView* createListView(int id);
-        
-        QMap<int, QListView*> m_listviews;
 
         // 0 == not at end, 1 == at end, 2 == no auto scroll
-        QMap<QScrollBar*, int> m_sliders;
+//         QMap<QScrollBar*, int> m_sliders;
 
-        QMap<QWidget*, int> m_widgetMap;
-        StandardOutputView* m_outputView;
+//         QMap<QWidget*, int> m_widgetMap;
+        ToolViewData* data;
         QToolButton* m_closeButton;
-        bool m_atEndOfUpdatingView;
+//         bool m_atEndOfUpdatingView;
 };
 
 #endif
