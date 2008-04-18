@@ -58,13 +58,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
     kDebug(9504) << "reconstructing views for area index" << index;
     QSplitter *parent = 0;
-    QSplitter *splitter;
-    if (d->m_indexSplitters.contains(index))
-    {
-        //splitter is already there, we just need to alter already constructed area
-        splitter = d->m_indexSplitters[index];
-    }
-    else
+    QSplitter *splitter = d->m_indexSplitters.value(index);
+    if (!splitter)
     {
         //no splitter - we shall create it and populate with views
         if (!index->parent())
@@ -226,16 +221,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
-            QWidget *grandParent = parentSplitter->parentWidget();
-            siblingSplitter->setParent(grandParent);
-            if (grandParent == centralWidget)
-                centralWidget->layout()->addWidget(siblingSplitter);
-            delete parentSplitter;
-
-            m_indexSplitters[parent] = siblingSplitter;
+            siblingSplitter->widget(0)->setParent(parentSplitter);
+            delete siblingSplitter;
 
             //activate the current view in the remaining child
-            Container *siblingContainer = qobject_cast<Container*>(siblingSplitter->widget(0));
+            Container *siblingContainer = qobject_cast<Container*>(parentSplitter->widget(0));
             if (siblingContainer)
                 return m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
         }
