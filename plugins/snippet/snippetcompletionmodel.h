@@ -38,7 +38,7 @@ public:
 
     QVariant data( const QModelIndex& idx, int role = Qt::DisplayRole ) const;
     void completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType);
-    void executeCompletion( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const;
+    void executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const;
 private:
     void initData();
     QList<Snippet*> m_snippets;

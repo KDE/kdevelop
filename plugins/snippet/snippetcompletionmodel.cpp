@@ -42,7 +42,7 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
     return m_snippets.at( idx.row() )->text();
 }
 
-void SnippetCompletionModel::executeCompletion( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
+void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
 {
     Snippet* snippet = m_snippets.at( row );
     doc->replaceText( w, snippet->getSnippetPlainText() );
