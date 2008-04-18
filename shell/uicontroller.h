@@ -63,8 +63,6 @@ public:
 
     void addNewToolView(MainWindow *mw);
 
-    void openEmptyDocument();
-
     void initialize();
 
     void showSettingsDialog();

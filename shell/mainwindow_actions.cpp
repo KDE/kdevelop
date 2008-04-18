@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <KApplication>
 
 #include "core.h"
+#include "documentcontroller.h"
 
 namespace KDevelop {
 
@@ -224,7 +225,7 @@ void MainWindowPrivate::split(Qt::Orientation orientation)
 
 void MainWindowPrivate::fileNew()
 {
-    Core::self()->uiControllerInternal()->openEmptyDocument();
+    Core::self()->documentControllerInternal()->openDocumentFromText("");
 }
 
 void MainWindowPrivate::viewAddNewToolView()

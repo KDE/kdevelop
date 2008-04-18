@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <krecentfilesaction.h>
+#include <ktemporaryfile.h>
 #include <ktexteditor/document.h>
 
 #include <sublime/area.h>
@@ -57,12 +58,20 @@ struct DocumentControllerPrivate {
     {
     }
 
+    ~DocumentControllerPrivate()
+    {
+        //delete temporary files so they are removed from disk
+        foreach (KTemporaryFile *temp, tempFiles)
+            delete temp;
+    }
+
     QString presetEncoding;
 
     // used to map urls to open docs
     QHash< KUrl, IDocument* > documents;
 
     QHash< QString, IDocumentFactory* > factories;
+    QList<KTemporaryFile*> tempFiles;
 
     struct HistoryEntry
     {
@@ -214,14 +223,11 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 
 void DocumentController::openDocumentFromText( const QString& data )
 {
-    TextDocument *doc = new TextDocument(KUrl(), Core::self());
-    Sublime::View *view = doc->createView();
-    Core::self()->uiControllerInternal()->activeArea()->addView(view);
-    Core::self()->uiControllerInternal()->activeSublimeWindow()->activateView(view);
-    doc->textDocument()->setText( data );
-
-    /* Not calling saveDocumentList here, since it's a bit tricky
-       to restore a document having no URL.  */
+    KTemporaryFile *temp = new KTemporaryFile();
+    temp->open();
+    temp->write(data.toUtf8());
+    d->tempFiles << temp;
+    openDocument(temp->fileName());
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,

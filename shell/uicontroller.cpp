@@ -225,14 +225,6 @@ void UiController::initialize()
     defaultMainWindow()->initialize();
 }
 
-void UiController::openEmptyDocument()
-{
-    PartDocument *doc = new PartDocument(KUrl(), Core::self());
-    Sublime::View *view = doc->createView();
-    activeArea()->addView(view);
-    activeSublimeWindow()->activateView(view);
-}
-
 void UiController::addNewToolView(MainWindow *mw)
 {
     if (!mw || !mw->area())

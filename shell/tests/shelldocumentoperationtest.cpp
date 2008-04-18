@@ -38,7 +38,6 @@ void ShellDocumentOperationTest::testOpenDocumentFromText()
     //open some docs
     IDocumentController *documentController = Core::self()->documentController();
     documentController->openDocumentFromText("Test1");
-    QTest::qWait(10000);
 
     //test that we have this document in the list, signals are emitted and so on
     QCOMPARE(documentController->openDocuments().count(), 1);
