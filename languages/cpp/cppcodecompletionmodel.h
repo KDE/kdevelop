@@ -79,7 +79,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
       KSharedPtr<Cpp::CodeCompletionContext> completionContext;
       int inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
       int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
-
+      QString alternativeText; //Text shown when declaration is zero
       //If this is a completion for an include-file, this contains the file.
       Cpp::IncludeItem includeItem;
     };

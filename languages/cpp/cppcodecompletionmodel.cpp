@@ -411,7 +411,7 @@ void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Ra
   bool spaceBetweenEmptyParens = false;
   
   const CompletionItem& item(element->asItem()->item);
-
+  
   if( index.data( CodeCompletionModel::ArgumentHintDepth ).toInt() )
     return; //Do not replace any text when it is an argument-hint
 
@@ -460,6 +460,14 @@ void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Ra
   }
 }
 
+//The name to be viewed in the name column
+QString nameForDeclaration(Declaration* dec) {
+  if (dec->identifier().toString().isEmpty())
+    return "<unknown>";
+  else
+    return dec->identifier().toString();
+}
+
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
@@ -500,18 +508,37 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
 
   const CompletionItem& item(treeElement.asItem()->item);
 
+  bool isArgumentHint = false;
+  if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+    isArgumentHint = true;
+  
+  //Stuff that does not require a declaration:
+  switch (role) {
+    case InheritanceDepth:
+      return item.inheritanceDepth;
+      break;
+    case SetMatchContext:
+      m_currentMatchContext = item;
+      return QVariant(1);
+    case ArgumentHintDepth:
+      if( isArgumentHint )
+        return item.completionContext->depth();
+      else
+        return QVariant();
+  };
+  
   Declaration* dec = const_cast<Declaration*>( item.declaration.data() );
   if (!dec) {
     if(completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
       return getIncludeData(index, role);
 
-    kDebug(9007) <<  "code-completion model: Du-chain item is deleted";
+    if(role == Qt::DisplayRole && index.column() == Name)
+      return item.alternativeText;
+
     return QVariant();
   }
-
-  bool isArgumentHint = false;
-  if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
-    isArgumentHint = true;
+  
+  //Stuff that needs a declaration:
 
   switch (role) {
     case AccessibilityNext:
@@ -538,12 +565,6 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     case BestMatchesCount:
       return QVariant(5);
     break;
-    case InheritanceDepth:
-      return item.inheritanceDepth;
-    break;
-    case SetMatchContext:
-      m_currentMatchContext = item;
-      return QVariant(1);
     case MatchQuality:
     {
       if( m_currentMatchContext.declaration && m_currentMatchContext.completionContext && m_currentMatchContext.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && m_currentMatchContext.listOffset < m_currentMatchContext.completionContext->functions().count() )
@@ -655,10 +676,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
         }
 
         case Name:
-          if (dec->identifier().toString().isEmpty())
-            return "<unknown>";
-          else
-            return dec->identifier().toString();
+          return nameForDeclaration(dec);
 
         case Arguments:
           if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
@@ -678,19 +696,34 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     if( index.column() == Arguments ) {
       if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
         return QVariant(CustomHighlighting);
-      } else {
+      }else{
         return QVariant();
       }
       break;
+    } else if(index.column() == Name) {
+      return QVariant(CustomHighlighting);
     }
+
     break;
 
     case CustomHighlight:
-    if( index.column() == Arguments && index.column() == Arguments && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+    if( index.column() == Arguments && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
       QString ret;
       QList<QVariant> highlight;
       createArgumentList(item, ret, &highlight);
       return QVariant(highlight);
+    }
+    if( index.column() == Name ) {
+      //Bold
+      QTextCharFormat boldFormat;
+      boldFormat.setFontWeight(QFont::Bold);
+
+      QList<QVariant> ret;
+      ret << 0;
+      ret << nameForDeclaration(dec).length();
+      ret << QVariant(boldFormat);
+      
+      return QVariant(ret);
     }
     break;
     case Qt::DecorationRole:

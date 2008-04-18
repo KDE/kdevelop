@@ -160,7 +160,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     }
     m_memberAccessOperation = FunctionCallAccess;
     m_contextType = BinaryOperatorFunctionCall;
-    m_operator = getEndOperatorFunction(m_text);
+    m_operator = getEndFunctionOperator(m_text);
     m_text = m_text.left( m_text.length() - getEndOperator(m_text).length() );
   }
 
@@ -348,6 +348,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 }
 
+CodeCompletionContext::AdditionalContextType CodeCompletionContext::additionalContextType() const {
+  return m_contextType;
+}
+
 void CodeCompletionContext::processFunctionCallAccess() {
   ///Generate a list of all found functions/operators, together with each a list of optional prefixed parameters
 
@@ -366,10 +370,15 @@ void CodeCompletionContext::processFunctionCallAccess() {
     }
 
     helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.data(), m_expressionResult.isLValue()), m_operator);
+    
+    m_functionName = "operator"+m_operator;
   } else {
     ///Simply take all the declarations that were found by the expression-parser
     
     helper.setFunctions(convert(m_expressionResult.allDeclarations));
+    
+    if(!m_expressionResult.allDeclarations.isEmpty())
+      m_functionName = m_expressionResult.allDeclarations[0]->identifier().toString();
   }
 
   OverloadResolver::ParameterList knownParameters;
@@ -423,6 +432,10 @@ void CodeCompletionContext::processIncludeDirective(QString line)
 
 const CodeCompletionContext::FunctionList& CodeCompletionContext::functions() const {
   return m_functions;
+}
+
+QString CodeCompletionContext::functionName() const {
+  return m_functionName;
 }
 
 QList<Cpp::IncludeItem> CodeCompletionContext::includeItems() const {
@@ -504,7 +517,7 @@ QString CodeCompletionContext::getEndOperator( const QString& str ) const {
   return QString();
 }
 
-QString CodeCompletionContext::getEndOperatorFunction( const QString& str ) const {
+QString CodeCompletionContext::getEndFunctionOperator( const QString& str ) const {
   return originalOperator( getEndOperator( str ) );
 }
 

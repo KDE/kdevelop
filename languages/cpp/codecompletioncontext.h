@@ -60,7 +60,7 @@ namespace Cpp {
         ArrowMemberAccess, ///klass->
         StaticMemberChoose, /// Class::
         MemberChoose, /// klass->ParentClass::
-        FunctionCallAccess,  ///"function(". Will never appear is initial access-operation, but as parentContext() access-operation.
+        FunctionCallAccess,  ///"function(". Will never appear as initial access-operation, but as parentContext() access-operation.
         SignalAccess,  ///All signals from MemberAccessContainer should be listed
         SlotAccess,     ///All slots from MemberAccessContainer should be listed
         IncludeListAccess ///A list of include-files should be presented. Get the list through includeItems()
@@ -71,7 +71,7 @@ namespace Cpp {
        * against any parent FunctionCallAccess'es
        * */
 
-      enum SpecificContextType {
+      enum AdditionalContextType {
         Normal,
         FunctionCall,
         BinaryOperatorFunctionCall
@@ -86,6 +86,8 @@ namespace Cpp {
        * */
       CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
       ~CodeCompletionContext();
+
+      AdditionalContextType additionalContextType() const;
 
       ///@return whether this context is valid for code-completion
       bool isValid() const;
@@ -137,6 +139,9 @@ namespace Cpp {
        * */
       const FunctionList& functions() const;
 
+      /// @return of the function name for this context. Also works for operators.
+      QString functionName() const;
+
       /**
        * When memberAccessOperation is IncludeListAccess, then this contains all the files to be listed.
       * */
@@ -165,11 +170,11 @@ namespace Cpp {
       ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
       bool endsWithOperator( const QString& str ) const;
       /**
-       * Returns the function-name operator expressen for the operator the given string ends with
+       * Returns the operator used for an operator function that matches the given string end
        *
-       * Example: For "bla[" it returns "[]"
+       * Example: For "bla[" it returns "[]", for "1 %" it returns "%"
        * */
-      QString getEndOperatorFunction( const QString& str ) const;
+      QString getEndFunctionOperator( const QString& str ) const;
       /**
        * Returns the exact end of the string that is an operator.
        * Example: For "bla[" it returns "["
@@ -184,7 +189,7 @@ namespace Cpp {
 
       QList<Cpp::IncludeItem> m_includeItems;
     
-      QString m_text;
+      QString m_text, m_functionName;
       int m_depth;
 
       //Here known argument-expressions and their types, that may have come from sub-contexts, are stored
@@ -192,7 +197,7 @@ namespace Cpp {
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
       
       KDevelop::DUContextPointer m_duContext;
-      SpecificContextType m_contextType;
+      AdditionalContextType m_contextType;
 
       QList<Function> m_functions;
 

@@ -25,6 +25,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <klocale.h>
 
 #include "cppduchain/cppduchain.h"
 #include "cppduchain/typeutils.h"
@@ -44,6 +45,10 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+//Whether the list of argument-hints should contain all overloaded versions of operators.
+//Disabled for now, because there is usually a huge list of overloaded operators.
+const int maxOverloadedOperatorArgumentHints = 5;
+const int maxOverloadedArgumentHints = 5;
 
 ///Intermediate nodes
 class CompletionTreeNode;
@@ -212,10 +217,20 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       parentContext = parentContext->parentContext();
       if( parentContext ) {
         if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-          int num = 0;
-          foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
-            items << CppCodeCompletionModel::CompletionItem( function.function.declaration(), parentContext, 0, num ), completionContext.data();
-            ++num;
+          //When there is too many overloaded functions, do not show them. They can just be too many.
+          if( ((parentContext->functions().count() == 0 || parentContext->functions().count() > maxOverloadedOperatorArgumentHints) && parentContext->additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall)
+                || parentContext->functions().count() > maxOverloadedArgumentHints) {
+            items << CppCodeCompletionModel::CompletionItem( KDevelop::DeclarationPointer(), parentContext, 0, 0 );
+            if(parentContext->functions().count())
+              items.back().alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
+            else
+              items.back().alternativeText = parentContext->functionName();
+          }else{
+            int num = 0;
+            foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
+              items << CppCodeCompletionModel::CompletionItem( function.function.declaration(), parentContext, 0, num );
+              ++num;
+            }
           }
         } else {
           kDebug(9007) << "parent-context has non function-call access type";
