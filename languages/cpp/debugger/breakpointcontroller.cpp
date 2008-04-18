@@ -595,8 +595,10 @@ void Breakpoints::markOut()
 void Breakpoints::save()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
-    breakpoints.writeEntry("number", childItems.size());
-    for (int i = 0; i < childItems.size(); ++i)
+    // Note that the last item is always "click to create" item, which
+    // we don't want to save.
+    breakpoints.writeEntry("number", childItems.size()-1);
+    for (int i = 0; i < childItems.size()-1; ++i)
     {
         NewBreakpoint *b = dynamic_cast<NewBreakpoint *>(child(i));
         KConfigGroup g = breakpoints.group(QString::number(i));
