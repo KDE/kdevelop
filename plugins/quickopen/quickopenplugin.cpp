@@ -28,6 +28,7 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QScrollBar>
 #include <QCheckBox>
 #include <QMetaObject>
 
