@@ -294,7 +294,7 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
             {
                 id = m_ids[item];
                 m_models[id]->clear();
-                view->raiseView(id);
+                view->raiseOutput(id);
             }else
             {
                 QString target;
@@ -305,7 +305,8 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
                 {
                     item->text();
                 }
-                id = view->registerView(i18n("Make: %1", target), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+                int toolviewid = view->registerToolView(i18n( "Build" ), KDevelop::IOutputView::MultipleView );
+                id = view->registerOutputInToolView(toolviewid, i18n("Make: %1", target), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
                 m_ids[item] = id;
                 m_models[id] = new MakeOutputModel(this, this);
                 m_delegates[id] = new MakeOutputDelegate(this);

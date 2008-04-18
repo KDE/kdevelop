@@ -329,8 +329,8 @@ void GrepViewPlugin::searchActivated()
     if( validProcs.count() > 3 )
         validProcs[2]->setStandardOutputProcess( validProcs[3] );
 
-
-    int id = m_view->registerView( m_grepdlg->patternString(), KDevelop::IOutputView::AllowUserClose );
+    int toolviewid = m_view->registerToolView( i18n("Find in Files"), KDevelop::IOutputView::HistoryView );
+    int id = m_view->registerOutputInToolView( toolviewid, m_grepdlg->patternString() );
 
     models[id] = new GrepOutputModel(this);
     delegates[id] = new GrepOutputDelegate(this);
