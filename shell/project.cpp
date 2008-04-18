@@ -198,6 +198,27 @@ const KUrl& Project::folder() const
     return d->folder;
 }
 
+void Project::reloadModel()
+{
+    QStandardItem* ws = d->topItem->parent();
+    ws->removeRow( d->topItem->row() );
+    IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
+    if( iface )
+    {
+        d->topItem = iface->import( this );
+        if( !d->topItem )
+        {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                i18n("Couldn't open project") );
+            return;
+        }
+        ws->appendRow(d->topItem);
+//         model->insertRow( model->rowCount(), d->topItem );
+        ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+        importJob->start(); //be asynchronous
+     }
+}
+
 bool Project::open( const KUrl& projectFileUrl_ )
 {
     //Canonicalize the project url, because we do the same in many other cases with files,

@@ -75,6 +75,7 @@ public:
     QString projectTempFile() const;
     QString developerTempFile() const;
     KUrl developerFileUrl() const;
+    virtual void reloadModel();
     virtual KUrl projectFileUrl() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 

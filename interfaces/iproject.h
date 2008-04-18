@@ -106,6 +106,8 @@ public:
 
     virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const = 0;
 
+
+    virtual void reloadModel() = 0;
 //     virtual KUrl projectConfigFile() const = 0;
 //     virtual KUrl projectDefaultsConfigFile() const = 0;
     virtual KUrl projectFileUrl() const = 0;
