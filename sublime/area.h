@@ -188,7 +188,7 @@ private:
 
 }
 
-#include <areawalkers.h>
+#include "areawalkers.h"
 
 #endif
 
