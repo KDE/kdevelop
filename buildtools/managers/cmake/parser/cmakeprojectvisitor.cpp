@@ -370,6 +370,11 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                     
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
                 }
+                else
+                {
+                    m_topctx->clearLocalDeclarations();
+                    m_topctx->deleteUses();
+                }
                 aux->addImportedParentContext(m_topctx);
             }
             kDebug(9042) << "including:" << path;
@@ -434,6 +439,11 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
                 Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
                 aux->addImportedParentContext(m_topctx);
                 kDebug() << "ppppppp" << m_topctx->url().str();
+            }
+            else
+            {
+                m_topctx->clearLocalDeclarations();
+                m_topctx->deleteUses();
             }
             walk(package, 0);
             m_topctx=aux;
@@ -1450,6 +1460,11 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             
             DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).prettyUrl())), m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
+        }
+        else
+        {
+            m_topctx->clearLocalDeclarations();
+            m_topctx->deleteUses();
         }
         m_topctx->addImportedParentContext(m_parentCtx);
     }

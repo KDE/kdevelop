@@ -23,6 +23,9 @@
 #include <QString>
 #include <kdebug.h>
 
+#include <duchain.h>
+#include <parsingenvironment.h>
+
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
     : KDevelop::ProjectBuildFolderItem( project, name, item )
 {}
@@ -40,3 +43,6 @@ QStringList CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
+CMakeFolderItem::~CMakeFolderItem()
+{
+}

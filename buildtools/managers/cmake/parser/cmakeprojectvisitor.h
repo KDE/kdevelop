@@ -126,7 +126,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);
-        
+        unsigned int currentIdentity() const;
+
         QStringList m_modulePath;
         QString m_projectName;
         QStringList m_subdirectories;
