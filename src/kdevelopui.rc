@@ -69,7 +69,7 @@
   </Menu>
 
   <Menu name="project" noMerge="1">
-    <text context="@title:meu">Project</text>
+    <text context="@title:menu">Project</text>
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
