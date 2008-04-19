@@ -44,6 +44,8 @@ protected: // Interface for derived classes
         Clears the "hasMore" flag.  */
     void appendChild(TreeItem *child, bool initial = false);
 
+    void insertChild(int position, TreeItem *child, bool initial = false);
+
     void removeChild(int index);
 
     void removeSelf();

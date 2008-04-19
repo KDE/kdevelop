@@ -386,7 +386,9 @@ void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
     {
         errors_.insert(location_column);
         dirty_.remove(location_column);
-        reportChange();
+        reportChange();        
+        emit static_cast<Breakpoints*>(parentItem)
+            ->error(this, r["msg"].literal(), location_column);
     }
     else
     {
@@ -420,6 +422,8 @@ void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
         errors_.insert(condition_column);
         dirty_.remove(condition_column);
         reportChange();
+        emit static_cast<Breakpoints*>(parentItem)
+            ->error(this, r["msg"].literal(), condition_column);
     }
     else
     {
@@ -438,6 +442,8 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
         errors_.insert(location_column);
         dirty_.remove(location_column);
         reportChange();
+        emit static_cast<Breakpoints*>(parentItem)
+            ->error(this, r["msg"].literal(), location_column);
     }
     else
     {
@@ -489,7 +495,7 @@ NewBreakpoint* Breakpoints::addCodeBreakpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::code_breakpoint);
-    appendChild(n);
+    insertChild(childItems.size()-1, n);
     return n;
 }
 
@@ -497,7 +503,7 @@ NewBreakpoint* Breakpoints::addWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::write_breakpoint);
-    appendChild(n);
+    insertChild(childItems.size()-1, n);
     return n;
 }
 
@@ -505,7 +511,8 @@ NewBreakpoint* Breakpoints::addReadWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::read_breakpoint);
-    appendChild(n);
+    insertChild(childItems.size()-1, n);
+
     return n;
 }
 
@@ -653,11 +660,6 @@ BreakpointController::BreakpointController(GDBController* parent)
     // a base class that does this connect.
     connect(parent,     SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
-
-    /* Note that the connection is queued. */
-    connect(this, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)),
-            Qt::QueuedConnection);
 }
 
 void BreakpointController::slotPartAdded(KParts::Part* part)
@@ -754,7 +756,9 @@ void BreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
 {
     clearExecutionPoint();
     kDebug(9012) << "gotoExecutionPoint";
-    KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->openDocument(url, KTextEditor::Cursor(lineNum, 0));
+    KDevelop::IDocument* document = KDevelop::ICore::self()
+        ->documentController()
+        ->openDocument(url, KTextEditor::Cursor(lineNum, 0));
 
     if( !document )
         return;

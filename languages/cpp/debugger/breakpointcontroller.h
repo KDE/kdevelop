@@ -134,7 +134,11 @@ public:
 
     NewBreakpoint *breakpointById(int id);
 
-    void createHelperBreakpoint();                                     
+    void createHelperBreakpoint();
+
+Q_SIGNALS:
+    void error(NewBreakpoint *b, const QString& message, int column);
+    friend class NewBreakpoint;                                                        
 
 public slots:
     void save();

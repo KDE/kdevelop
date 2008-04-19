@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include <KIcon>
+#include <KPassivePopup>
 
 #include "kdebug.h"
 
@@ -196,6 +197,11 @@ namespace GDBDebugger
 
             connect(controller, SIGNAL(breakpointHit(int)),
                     this, SLOT(slotBreakpointHit(int)));
+
+            connect(controller->breakpoints()->breakpointsItem(),
+                    SIGNAL(error(NewBreakpoint *, const QString&, int)),
+                    this,
+                    SLOT(breakpointError(NewBreakpoint *, const QString&, int)));
             
             setupPopupMenu();
         }
@@ -427,6 +433,27 @@ namespace GDBDebugger
             details_->setItem(
                 static_cast<NewBreakpoint*>(
                     controller_->breakpoints()->itemForIndex(index)));            
+        }
+
+        void breakpointError(NewBreakpoint *b, const QString& msg, int column)
+        {
+            // FIXME: we probably should prevent this error notification during 
+            // initial setting of breakpoint, to avoid a cloud of popups.
+            if (!table_->isVisible())
+                return;
+
+            QModelIndex index = controller_->breakpoints()
+                ->indexForItem(b, column);
+            QPoint p = table_->visualRect(index).topLeft();
+            p = table_->mapToGlobal(p);
+            
+            KPassivePopup *pop = new KPassivePopup(table_);
+            pop->setPopupStyle(KPassivePopup::Boxed);
+            pop->setAutoDelete(true);
+            // FIXME: the the icon, too.
+            pop->setView("", msg);            
+            pop->setTimeout(-1);
+            pop->show(p);
         }
 
     private:

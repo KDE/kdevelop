@@ -58,6 +58,17 @@ void TreeItem::appendChild(TreeItem *item, bool initial)
         model_->endInsertRows();
 }
 
+void TreeItem::insertChild(int position, TreeItem *child, bool initial)
+{
+    QModelIndex index = model_->indexForItem(this, 0);
+
+    if (!initial)
+        model_->beginInsertRows(index, position, position);
+    childItems.insert(position, child);
+    if (!initial)
+        model_->endInsertRows();    
+}
+
 void TreeItem::reportChange()
 {
     QModelIndex index = model_->indexForItem(this, 0);
