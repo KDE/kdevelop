@@ -43,6 +43,7 @@ namespace GDBDebugger
         QItemSelectionModel* selection_;
         GDBController* controller_;
         int itemHeight_;
+        AsyncTreeView* view_;
     };
 }
 

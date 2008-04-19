@@ -21,6 +21,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QScrollBar>
+#include <QDesktopWidget>
 #include <KTextEditor/View>
 
 using namespace GDBDebugger;
@@ -45,22 +46,22 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
-    AsyncTreeView* view = new AsyncTreeView(model_, this);
-    view->header()->resizeSection(0, 200);
-    view->header()->resizeSection(1, 90);
-    view->header()->hide();
-    view->setSelectionBehavior(QAbstractItemView::SelectRows);
-    view->setSelectionMode(QAbstractItemView::SingleSelection);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    l->addWidget(view);
+    view_ = new AsyncTreeView(model_, this);
+    view_->header()->resizeSection(0, 200);
+    view_->header()->resizeSection(1, 90);
+    view_->header()->hide();
+    view_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    view_->setSelectionMode(QAbstractItemView::SingleSelection);
+    view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    l->addWidget(view_);
 
-    itemHeight_ = view->indexRowSizeHint(model_->indexForItem(var_, 0));
-    connect(view->verticalScrollBar(),
+    itemHeight_ = view_->indexRowSizeHint(model_->indexForItem(var_, 0));
+    connect(view_->verticalScrollBar(),
             SIGNAL(rangeChanged(int, int)),
             this,
             SLOT(slotRangeChanged(int, int)));
 
-    selection_ = view->selectionModel();
+    selection_ = view_->selectionModel();
     selection_->select(model_->indexForItem(var_, 0), 
                        QItemSelectionModel::Rows
                        | QItemSelectionModel::ClearAndSelect);
@@ -80,7 +81,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
         
     move(position);
-    resize(300, 100);
+    resize(310, 100);
 }
 
 void VariableToolTip::handleCreated(const GDBMI::ResultRecord& r)
@@ -157,7 +158,15 @@ void VariableToolTip::slotLinkActivated(const QString& link)
 void VariableToolTip::slotRangeChanged(int min, int max)
 {
     Q_ASSERT(min == 0);
-    resize(width(), height() + max*itemHeight_);
+    QRect rect = QApplication::desktop()->screenGeometry(this);
+    if (pos().y() + height() + max*itemHeight_ < rect.bottom())
+        resize(width(), height() + max*itemHeight_);    
+    else
+    {
+        // Oh, well, I'm sorry, but here's the scrollbar you was
+        // longing to see
+        view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);        
+    }
 }
 
 #include "tooltipwidget.moc"
