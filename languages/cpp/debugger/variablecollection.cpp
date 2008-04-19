@@ -93,6 +93,11 @@ void Variable::handleCreation(const GDBMI::Value& r)
     allVariables_[varobj_] = this;
 }
 
+QString Variable::varobj() const
+{
+    return varobj_;
+}
+
 Variable::~Variable()
 {
     if (!varobj_.isEmpty())

@@ -83,7 +83,7 @@ public:
 
     bool pending() const { return pending_; }
     bool dirty() const { return !dirty_.empty(); }
-
+    
     void save(KConfigGroup& config);
 
     static const int enable_column = 0;
@@ -98,6 +98,9 @@ private:
     void handleEnabledOrDisabled(const GDBMI::ResultRecord &r);
     void handleConditionChanged(const GDBMI::ResultRecord &r);
     void handleAddressComputed(const GDBMI::ResultRecord &r);
+
+    friend class Breakpoints;
+    void setLocation(const QString& location);
 
     int id_;
     bool enabled_;
@@ -131,6 +134,7 @@ public:
 
     NewBreakpoint* addCodeBreakpoint();
     NewBreakpoint* addWatchpoint();
+    NewBreakpoint* addWatchpoint(const QString& expression);
     NewBreakpoint* addReadWatchpoint();
     void remove(const QModelIndex &index);
 

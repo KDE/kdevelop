@@ -2,79 +2,45 @@
 #ifndef TOOLTIP_H_f2dc78af9cdf452ce712f673b2bbcd00
 #define TOOLTIP_H_f2dc78af9cdf452ce712f673b2bbcd00
 
-#include "variablecollection.h"
-#include "gdbcontroller.h"
-#include "gdbcommand.h"
+#include "util/activetooltip.h"
 #include "mi/gdbmi.h"
 
-#include "util/treeview.h"
-#include "util/treemodel.h"
-#include "util/activetooltip.h"
+#include <QPoint>
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QTreeView>
-#include <QApplication>
-#include <QEvent>
-#include <QStandardItemModel>
-#include <QMouseEvent>
-#include <QHeaderView>
-#include <KTextEditor/View>
+class QItemSelectionModel;
+class QString;
 
-// FIXME:
-using namespace GDBDebugger;
 
-class VariableToolTip : public ActiveToolTip
+namespace GDBDebugger
 {
-    Q_OBJECT
-public:
-    VariableToolTip(QWidget* parent, QPoint position, 
-                    GDBController* controller,
-                    const QString& identifier)
-    : ActiveToolTip(parent, position)
+    class TreeModel;
+    class TreeItem;
+    class GDBController;
+    class Variable;
+
+    class VariableToolTip : public ActiveToolTip
     {
-        TreeModel* model = new TreeModel(QVector<QString>() << "Name" << "Type",
-                                         this);
-        TooltipRoot* tr = new TooltipRoot(model);    
-        model->setRootItem(tr);
-        tr->init(controller, identifier);
-        var_ = tr->var;
+        Q_OBJECT
+        public:
+        VariableToolTip(QWidget* parent, QPoint position, 
+                        GDBController* controller,
+                        const QString& identifier);
 
-        controller->addCommand(
-            new GDBCommand(
-                GDBMI::VarCreate, 
-                QString("var%1 @ %2").arg(Variable::nextId_++).arg(identifier),
-                this, &VariableToolTip::handleCreated, true));
-    
-        QHBoxLayout* l = new QHBoxLayout(this);
-        l->setContentsMargins(0, 0, 0, 0);
-        QTreeView* view = new GDBDebugger::AsyncTreeView(model, this);
-        view->header()->resizeSection(0, 200);
-        view->header()->resizeSection(1, 90);
-        view->header()->hide();
-        l->addWidget(view);
+        void handleCreated(const GDBMI::ResultRecord& r);
 
-        move(position);
-        resize(300, 100);
-    }
+        void addWatch(const GDBMI::ResultRecord& r);
 
-    void handleCreated(const GDBMI::ResultRecord& r)
-    {
-        if (r.reason == "done" && r.hasField("value")
-            && !r["value"].literal().isEmpty())
-        {
-            var_->handleCreation(r);
-            show();
-        }
-        else
-        {
-            close();
-        }
-    }
+        void addWatchpoint(const GDBMI::ResultRecord& r);
 
-private:
-    Variable* var_;
-};
+    private slots:
+        void slotLinkActivated(const QString& link);
 
+    private:
+        TreeModel* model_;
+        Variable* var_;
+        QItemSelectionModel* selection_;
+        GDBController* controller_;
+    };
+}
 
 #endif

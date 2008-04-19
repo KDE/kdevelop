@@ -480,6 +480,14 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
     }
 }
 
+void NewBreakpoint::setLocation(const QString& location)
+{
+    itemData[location_column] = location;
+    dirty_.insert(location_column);
+    reportChange();
+    sendToGDBMaybe();
+}
+
 void NewBreakpoint::save(KConfigGroup& config)
 {
     config.writeEntry("kind", string_kinds[kind_]);
@@ -521,6 +529,15 @@ NewBreakpoint* Breakpoints::addWatchpoint()
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::write_breakpoint);
     insertChild(childItems.size()-1, n);
+    return n;
+}
+
+NewBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
+                                         NewBreakpoint::write_breakpoint);
+    insertChild(childItems.size()-1, n);
+    n->setLocation(expression);
     return n;
 }
 

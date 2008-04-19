@@ -37,11 +37,9 @@
 #include <QMap>
 #include <QPointer>
 
-class VariableToolTip;
-
 namespace GDBDebugger
 {
-
+class VariableToolTip;
 class GDBController;
 class AbstractVariableItem;
 class FrameItem;
@@ -59,6 +57,8 @@ public:
     Variable(TreeModel* model, TreeItem* parent, 
              GDBController* controller,
              const GDBMI::Value& value);
+
+    QString varobj() const;
 
     void handleCreation(const GDBMI::Value& value);
 
