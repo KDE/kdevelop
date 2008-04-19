@@ -109,6 +109,8 @@ private:
     kind_t kind_;
     /* The GDB 'pending' flag.  */
     bool pending_;
+    /* For watchpoints, the address it is set at.  */
+    QString address_;
     bool pleaseEnterLocation_;
 
     static const char *string_kinds[last_breakpoint_kind];

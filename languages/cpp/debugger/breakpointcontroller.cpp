@@ -63,7 +63,7 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              const KConfigGroup& config)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   controller_(controller), deleted_(false), hitCount_(0),
-  pending_(false)
+  pending_(false), pleaseEnterLocation_(false)
 {
     QString kindString = config.readEntry("kind", "");
     int i;
@@ -102,14 +102,26 @@ void NewBreakpoint::update(const GDBMI::Value &b)
     const char *code_breakpoints[] = {
         "breakpoint", "hw breakpoint", "until", "finish"};
 
-    QString location = "";
     if (b.hasField("original-location"))
-        location = b["original-location"].literal();
+    {
+        if (address_.isEmpty())
+        {
+            /* If the address is not empty, it means that the breakpoint
+               is set by KDevelop, not by the user, and that we want to
+               show the original expression, not the address, in the table.
+               TODO: this also means that if used added a watchpoint in gdb
+               like "watch foo", then we'll show it in the breakpoint table
+               just fine, but after KDevelop restart, we'll try to add the
+               breakpoint using basically "watch *&(foo)".  I'm not sure if 
+               that's a problem or not.  */
+            itemData[location_column] = b["original-location"].literal();
+        }
+    }
     else
     {
-        location = "Your GDB is too old";
+        itemData[location_column] = "Your GDB is too old";
     }
-    itemData[location_column] = location;
+    
 
     if (!dirty_.contains(condition_column)
         && !errors_.contains(condition_column))
@@ -276,8 +288,13 @@ QVariant NewBreakpoint::data(int column, int role) const
         }
         return QVariant();
     }
-    else
-        return TreeItem::data(column, role);
+
+    if (column == location_column && role == Qt::DisplayRole
+        && !address_.isEmpty())
+        return QString("%1 (%2)").arg(itemData[location_column].toString())
+            .arg(address_);
+
+    return TreeItem::data(column, role);
 }
 
 void NewBreakpoint::setDeleted()
@@ -447,18 +464,18 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
     }
     else
     {
+        address_ = r["value"].literal();
+
         QString opt;
         if (kind_ == read_breakpoint)
             opt = "-r ";
         else if (kind_ == access_breakpoint)
             opt = "-a ";
 
-        QString address = r["value"].literal();
-
         controller_->addCommand(
             new GDBCommand(
                 BreakWatch,
-                opt + QString("*%1").arg(address),
+                opt + QString("*%1").arg(address_),
                 this, &NewBreakpoint::handleInserted, true));
     }
 }
