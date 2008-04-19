@@ -32,7 +32,6 @@ public:
         setAttribute(Qt::WA_DeleteOnClose);
         setMouseTracking(true);
         rect_ = QRect(position, position);
-        // FIXME: this should be customizable
         rect_.adjust(-10, -10, 10, 10);
         move(position);
 
@@ -55,22 +54,11 @@ public:
         case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
         case QEvent::Wheel:
-        {
             /* If the click is within tooltip, it's fine.
                Clicks outside close it.  */
-            bool ok = false;
-            while (object)
-            {
-                if (object == this)
-                {
-                    ok = true;
-                    break;
-                }
-                object = object->parent();
-            }
-            if (!ok)
-                close();            
-        }
+            if (!insideThis(object))
+                close();
+
         // FIXME: revisit this code later.
 #if 0
         case QEvent::FocusIn:
@@ -79,11 +67,10 @@ public:
             break;
 #endif
         case QEvent::MouseMove:
-            if (object == parent() 
-                && !rect_.isNull() 
-                && !rect_.contains(static_cast<QMouseEvent*>(e)->pos()))
+            if (!rect_.isNull() 
+                && !rect_.contains(static_cast<QMouseEvent*>(e)->globalPos()))
                 // On X, when the cursor leaves the tooltip and enters
-                // the parent, we sotimes get some wrong Y coordinate.
+                // the parent, we sometimes get some wrong Y coordinate.
                 // Don't know why, so wait for two out-of-range mouse
                 // positions before closing.
                 ++mouseOut_;
@@ -97,13 +84,34 @@ public:
         return false;
     }
 
-    void showEvent(QShowEvent *event)
+    bool insideThis(QObject* object)
+    {
+        while (object)
+        {
+            if (object == this)
+            {
+                return true;
+            }
+            object = object->parent();
+        }
+        return false;
+    }
+
+    void showEvent(QShowEvent*)
     {        
-        QRect r = geometry();
+        adjustRect();
+    }
+
+    void resizeEvent(QResizeEvent*)
+    {
+        adjustRect();
+    }
+
+    void adjustRect()
+    {
         // For tooltip widget, geometry() returns global coordinates.
-        // For tracking mouse movement in parent, we need local coordinates.
-        r.moveTo(static_cast<QWidget*>(parent())->mapFromGlobal(r.topLeft()));
-        r.adjust(-10, -10, 0, 0);
+        QRect r = geometry();
+        r.adjust(-10, -10, 10, 10);
         rect_ = r;
     }
 
