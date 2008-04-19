@@ -20,6 +20,7 @@
 #include <QMouseEvent>
 #include <QHeaderView>
 #include <QLabel>
+#include <QScrollBar>
 #include <KTextEditor/View>
 
 using namespace GDBDebugger;
@@ -44,13 +45,20 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
-    QTreeView* view = new GDBDebugger::AsyncTreeView(model_, this);
+    AsyncTreeView* view = new AsyncTreeView(model_, this);
     view->header()->resizeSection(0, 200);
     view->header()->resizeSection(1, 90);
     view->header()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
-    view->setSelectionMode(QAbstractItemView::SingleSelection);    
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     l->addWidget(view);
+
+    itemHeight_ = view->indexRowSizeHint(model_->indexForItem(var_, 0));
+    connect(view->verticalScrollBar(),
+            SIGNAL(rangeChanged(int, int)),
+            this,
+            SLOT(slotRangeChanged(int, int)));
 
     selection_ = view->selectionModel();
     selection_->select(model_->indexForItem(var_, 0), 
@@ -68,7 +76,8 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     connect(label, SIGNAL(linkActivated(const QString&)),
             this, SLOT(slotLinkActivated(const QString&)));
     connect(label2, SIGNAL(linkActivated(const QString&)),
-            this, SLOT(slotLinkActivated(const QString&)));
+            this, SLOT(slotLinkActivated(const QString&)));    
+
         
     move(position);
     resize(300, 100);
@@ -143,6 +152,12 @@ void VariableToolTip::slotLinkActivated(const QString& link)
                            &VariableToolTip::addWatchpoint));
     }
     hide();
+}
+
+void VariableToolTip::slotRangeChanged(int min, int max)
+{
+    Q_ASSERT(min == 0);
+    resize(width(), height() + max*itemHeight_);
 }
 
 #include "tooltipwidget.moc"

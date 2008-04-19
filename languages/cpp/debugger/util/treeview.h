@@ -11,8 +11,11 @@ namespace GDBDebugger
     class AsyncTreeView : public QTreeView
     {
         Q_OBJECT
-        public:
+    public:
         AsyncTreeView(TreeModel* model, QWidget *parent);
+
+        // Well, I really, really, need this.
+        using QTreeView::indexRowSizeHint;
 
     private slots:
         void slotExpanded(const QModelIndex &index);
