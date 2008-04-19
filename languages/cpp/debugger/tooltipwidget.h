@@ -54,30 +54,8 @@ public:
         view->header()->hide();
         l->addWidget(view);
 
-
-
-#if 0
-        QStandardItemModel *m = new QStandardItemModel(this);
-        QStandardItem *parentItem = m->invisibleRootItem();
-        for (int i = 0; i < 4; ++i) {
-            QStandardItem *item = new QStandardItem(QString("item %0").arg(i));
-            parentItem->appendRow(item);
-            parentItem = item;
-        }
-        view->setModel(m);
-#endif
-        
-//        view->setPalette(p);
-
         move(position);
         resize(300, 100);
-#if 0
-        rect = geometry();
-        rect.moveTo(parent->mapFromGlobal(rect.topLeft()));
-        rect.adjust(-10, -10, 0, 0);
-        setMouseTracking(true);
-        mouseOut = 0;
-#endif
     }
 
     void handleCreated(const GDBMI::ResultRecord& r)
@@ -96,82 +74,6 @@ public:
 
 private:
     Variable* var_;
-
-#if 0
-    bool eventFilter(QObject *o, QEvent *e)
-    {
-        switch (e->type()) {
-
-            // Don't need this in our case.
-#if 0
-        case QEvent::Leave:
-            close();
-            break;
-#endif
-
-        case QEvent::WindowActivate:
-        case QEvent::WindowDeactivate:
-            close();
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        {
-            /* If the click is within tooltip, it's fine.
-               Clicks outside close it.  */
-            bool ok = false;
-            while (o)
-            {
-                if (o == this)
-                {
-                    ok = true;
-                    break;
-                }
-                o = o->parent();
-            }
-            if (!ok)
-                close();            
-        }
-        // FIXME: revisit this code later.
-#if 0
-        case QEvent::FocusIn:
-        case QEvent::FocusOut:
-        case QEvent::Wheel:
-            close();
-            break;
-#endif
-        case QEvent::MouseMove:
-            if (o == parent() 
-                && !rect.isNull() 
-                && !rect.contains(static_cast<QMouseEvent*>(e)->pos()))
-                // On X, when the cursor leaves the tooltip and enters
-                // the parent, we sotimes get some wrong Y coordinate.
-                // Don't know why, so wait for two out-of-range mouse
-                // positions before closing.
-                ++mouseOut;
-            else               
-                mouseOut = 0;
-            if (mouseOut == 2)
-                close();
-        default:
-            break;
-        }
-        return false;
-    }
-
-
-
-private slots:
-    void viewFocusOut()
-    {
-        close();
-    }
-#endif
-
-#if 0
-private:
-    QRect rect;
-    int mouseOut;
-#endif
 };
 
 
