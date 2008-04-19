@@ -125,8 +125,13 @@ void Variable::createVarobjMaybe()
 
 void Variable::update(const GDBMI::Value& value)
 {
-    Q_ASSERT(!value.hasField("type_changed")
-             || value["type_changed"].literal() == "false");
+    if (value.hasField("type_changed") 
+        && value["type_changed"].literal() == "true")
+    {
+        clear();
+        setHasMore(value["new_num_children"].toInt() != 0);
+    }
+
     if (value.hasField("in_scope") && value["in_scope"].literal() == "false")
     {
         inScope_ = false;
