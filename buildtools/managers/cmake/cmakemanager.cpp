@@ -339,7 +339,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         TopDUContext* curr;
         if(dynamic_cast<CMakeFolderItem*>(folder->parent()))
         {
-            kDebug() << "looooooool" << folder->parent()->text() << typeid(folder->parent()).name();
             curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext();
         }
         else
