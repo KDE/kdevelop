@@ -45,28 +45,21 @@ class OutputWidget : public KTabWidget
         void addOutput( int id );
         void changeModel( int id );
         void changeDelegate( int id );
-//         void raiseView( int id );
         void closeActiveView();
-//         void selectNextItem();
-//         void selectPrevItem();
-//         void activate(const QModelIndex&);
+        void selectNextItem();
+        void selectPrevItem();
+        void activate(const QModelIndex&);
 //         void rangeChanged(int min, int max);
 //         void valueChanged(int value);
 
     Q_SIGNALS:
         void outputRemoved( int, int );
-//         void activated( const QModelIndex& );
 
     private:
         QListView* createListView(int id);
 
-        // 0 == not at end, 1 == at end, 2 == no auto scroll
-//         QMap<QScrollBar*, int> m_sliders;
-
-//         QMap<QWidget*, int> m_widgetMap;
         ToolViewData* data;
         QToolButton* m_closeButton;
-//         bool m_atEndOfUpdatingView;
 };
 
 #endif

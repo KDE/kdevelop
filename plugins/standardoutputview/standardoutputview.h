@@ -68,28 +68,12 @@ public:
     virtual void removeOutput( int id );
     void removeSublimeView( Sublime::View* );
 
-//     QAbstractItemModel* registeredModel( int ) const;
-//     QAbstractItemDelegate* registeredDelegate( int ) const;
-//     QString registeredTitle( int id ) const;
-    QList<int> registeredToolViews() const;
-    QList<ToolViewData> registeredToolViewData() const;
-//     KDevelop::IOutputView::Behaviours behaviour( int id ) const;
-//     KDevelop::IOutputView::Type type( int id ) const;
-public Q_SLOTS:
-//     void removeViewData( int );
 Q_SIGNALS:
     void activated( const QModelIndex& );
-//     void selectNextItem();
-//     void selectPrevItem();
-//     void modelChanged( int id );
-//     void delegateChanged( int id );
+    void selectNextItem();
+    void selectPrevItem();
     void outputRemoved( int toolviewId, int id );
     void toolViewRemoved( int toolviewId );
-    /**
-     * Signal to inform the view to remove one output view
-     */
-//     void removeOutput( int id );
-//     void requestRaiseOutput( int id );
 
 private:
     QMap<int, ToolViewData*> toolviews;

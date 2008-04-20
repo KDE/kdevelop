@@ -71,8 +71,6 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
-//     d->m_factory = new StandardOutputViewViewFactory( this );
-//     core()->uiController()->addToolView( i18n("Output View"), d->m_factory );
 
     setXMLFile("kdevstandardoutputview.rc");
     // setup actions
