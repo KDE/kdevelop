@@ -46,7 +46,7 @@ class OutputWidget : public KTabWidget
         void changeModel( int id );
         void changeDelegate( int id );
 //         void raiseView( int id );
-//         void closeActiveView();
+        void closeActiveView();
 //         void selectNextItem();
 //         void selectPrevItem();
 //         void activate(const QModelIndex&);
@@ -54,7 +54,7 @@ class OutputWidget : public KTabWidget
 //         void valueChanged(int value);
 
     Q_SIGNALS:
-        void outputRemoved( int );
+        void outputRemoved( int, int );
 //         void activated( const QModelIndex& );
 
     private:

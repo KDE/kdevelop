@@ -52,8 +52,8 @@ public:
     void setModel( QAbstractItemModel* model);
     void setDelegate( QAbstractItemDelegate* delegate);
 signals:
-    void modelChanged( int id );
-    void delegateChanged( int id );
+    void modelChanged( int );
+    void delegateChanged( int );
 };
 
 class ToolViewData : public QObject
@@ -70,7 +70,7 @@ public:
     KDevelop::IOutputView::ViewType type;
     QString title;
 signals:
-    void outputAdded( int id );
+    void outputAdded( int );
 };
 
 #endif

@@ -47,10 +47,11 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     m_closeButton->setToolTip( i18n( "Close the currently active output view") );
     setCornerWidget( m_closeButton, Qt::TopRightCorner );
 
-    connect( data, SIGNAL(outputAdded(int id)), this, SLOT(addOutput( int id ) ) );
+    connect( data, SIGNAL( outputAdded( int ) ), 
+             this, SLOT( addOutput( int ) ) );
 
-    connect( this, SIGNAL( outputRemoved( int ) ),
-                data->plugin, SIGNAL( outputRemoved( int ) ) );
+    connect( this, SIGNAL( outputRemoved( int, int ) ),
+             data->plugin, SIGNAL( outputRemoved( int, int ) ) );
 //     connect( this, SIGNAL( viewRemoved( int ) ),
 //                 data->plugin, SLOT( removeViewData( int ) ) );
 //     connect( m_outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
@@ -103,25 +104,28 @@ void OutputWidget::removeOutput( int id )
         {
             removeTab( idx );
             delete w;
-            emit outputRemoved( id );
+            emit outputRemoved( data->toolViewId, id );
         }
     }
 }
-/*
+
 void OutputWidget::closeActiveView()
 {
     QWidget* widget = currentWidget();
     if( !widget )
         return;
-    if( m_widgetMap.contains( widget ) )
+    foreach( OutputData* data, data->outputdata )
     {
-        int id = m_widgetMap[widget];
-        if( m_outputView->behaviour( id ) & KDevelop::IOutputView::AllowUserClose )
+        if( data->view == widget )
         {
-            removeView( id );
-        }else kDebug(9500) << "OOops, the view is not user closeable";
-    }else kDebug(9500) << "OOops, the selected tab is not in our list??";
-}*/
+            int id = data->id;
+            if( data->behaviour & KDevelop::IOutputView::AllowUserClose )
+            {
+                removeOutput( id );
+            }
+        }
+    }
+}
 
 // void OutputWidget::selectNextItem()
 // {
