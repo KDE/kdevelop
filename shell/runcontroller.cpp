@@ -194,12 +194,12 @@ void KDevelop::RunController::createModel(int serial, const IRun& run)
         KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
-            int tvid = view->registerToolView(i18n("Run: %1", run.executable().path()) );
+            int tvid = view->registerToolView(i18n("Run") );
             int id = view->registerOutputInToolView( tvid, run.executable().path(), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
             QStandardItemModel* model = new QStandardItemModel(this);
             d->outputModels.insert(serial, qMakePair(id, model));
-            connect(i, SIGNAL(viewRemoved(int)), this, SLOT(outputViewRemoved(int)));
+            connect(i, SIGNAL(outputRemoved(int, int)), this, SLOT(outputViewRemoved(int, int)));
 
             view->setModel(id, model);
             view->setDelegate(id, new QItemDelegate(this));
@@ -207,7 +207,7 @@ void KDevelop::RunController::createModel(int serial, const IRun& run)
     }
 }
 
-void KDevelop::RunController::outputViewRemoved(int id)
+void KDevelop::RunController::outputViewRemoved(int /*toolviewId*/, int id)
 {
     QMutableMapIterator<int, QPair<int, QStandardItemModel*> > it = d->outputModels;
     while (it.hasNext()) {

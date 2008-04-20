@@ -45,7 +45,7 @@ private Q_SLOTS:
     void slotFinished(int serial);
     void slotExecute();
     void slotOutput(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
-    void outputViewRemoved(int id);
+    void outputViewRemoved(int, int id);
 
 private:
     void setupActions();
