@@ -193,8 +193,8 @@ void StandardOutputView::setModel( int id, QAbstractItemModel* model )
 
 void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate )
 {
-int tvid = -1;
-    foreach( int _id, ids )
+    int tvid = -1;
+    foreach( int _id, toolviews.keys() )
     {
         if( toolviews.value( _id )->outputdata.contains( id ) )
         {
