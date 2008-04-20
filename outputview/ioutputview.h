@@ -100,14 +100,15 @@ public:
     virtual void setDelegate( int id, QAbstractItemDelegate* model ) = 0;
 
     /**
-     * remove a toolview, don't forget to emit viewRemoved when you implement this
+     * remove a toolview, don't forget to emit toolViewRemoved when you implement this
      *
      * @param id identifies the view to remove
      */
     virtual void removeToolView( int id ) = 0;
 
     /**
-     * remove an output view from a toolview
+     * remove an output view from a toolview. Don't forget to emit outputRemoved
+     * when you implement this.
      * @param toolviewId the id of the toolview containing the output
      * @param id the id of the outputview to remove
      */
