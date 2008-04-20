@@ -44,11 +44,11 @@ public:
     OutputData( ToolViewData* tv );
     QAbstractItemDelegate* delegate;
     QAbstractItemModel* model;
-    int id;
     ToolViewData* toolView;
     KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     QListView* view;
+    int id;
     void setModel( QAbstractItemModel* model);
     void setDelegate( QAbstractItemDelegate* delegate);
 signals:
@@ -62,13 +62,13 @@ Q_OBJECT
 public:
     ToolViewData( QObject* parent );
     ~ToolViewData();
-    int toolViewId;
     OutputData* addOutput( int id, const QString& title, KDevelop::IOutputView::Behaviours behave );
     QList<Sublime::View*> views;
     StandardOutputView* plugin;
     QMap<int, OutputData*> outputdata;
     KDevelop::IOutputView::ViewType type;
     QString title;
+    int toolViewId;
 signals:
     void outputAdded( int );
 };

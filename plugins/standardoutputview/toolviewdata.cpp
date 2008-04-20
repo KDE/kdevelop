@@ -21,7 +21,7 @@
 #include "toolviewdata.h"
 
 OutputData::OutputData( ToolViewData* tv )
-    : QObject( tv ), delegate(0), model(0), toolView(tv)
+    : QObject( tv ), delegate(0), model(0), toolView(tv), view(0), id(-1)
 {
 }
 
@@ -38,7 +38,7 @@ void OutputData::setDelegate( QAbstractItemDelegate* del )
 }
 
 ToolViewData::ToolViewData( QObject* parent )
-    : QObject( parent ), plugin(0)
+    : QObject( parent ), plugin(0), toolViewId(-1)
 {
 }
 
