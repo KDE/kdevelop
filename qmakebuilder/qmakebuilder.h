@@ -68,7 +68,7 @@ private Q_SLOTS:
     void qmakeCompleted( int id );
     void distcleanCompleted( KDevelop::ProjectBaseItem*, const QString& );
     void errored( int id );
-    void cleanupModel( int id );
+    void cleanupModel( int, int id );
 private:
     QMap< KDevelop::ProjectBaseItem*, int > m_ids;
     QMap< int, KDevelop::CommandExecutor* > m_cmds;
