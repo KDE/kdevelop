@@ -49,8 +49,6 @@ class OutputWidget : public KTabWidget
         void selectNextItem();
         void selectPrevItem();
         void activate(const QModelIndex&);
-//         void rangeChanged(int min, int max);
-//         void valueChanged(int value);
 
     Q_SIGNALS:
         void outputRemoved( int, int );
