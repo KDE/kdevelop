@@ -87,7 +87,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     m_view = plugin->extension<KDevelop::IOutputView>();
     Q_ASSERT( m_view );
-    connect( plugin, SIGNAL(viewRemoved(int)), this, SLOT(cleanupForView(int)));
+    connect( plugin, SIGNAL(outputRemoved(int, int)), this, SLOT(cleanupForView(int, int)));
 
 }
 
@@ -330,7 +330,7 @@ void GrepViewPlugin::searchActivated()
         validProcs[2]->setStandardOutputProcess( validProcs[3] );
 
     int toolviewid = m_view->registerToolView( i18n("Find in Files"), KDevelop::IOutputView::HistoryView );
-    int id = m_view->registerOutputInToolView( toolviewid, m_grepdlg->patternString() );
+    int id = m_view->registerOutputInToolView( toolviewid, m_grepdlg->patternString(), ( KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose ) );
 
     models[id] = new GrepOutputModel(this);
     delegates[id] = new GrepOutputDelegate(this);
@@ -453,7 +453,7 @@ void GrepViewPlugin::procFailed( int id )
     }
 }
 
-void GrepViewPlugin::cleanupForView(int id )
+void GrepViewPlugin::cleanupForView(int, int id )
 {
     if( models.contains(id) )
     {

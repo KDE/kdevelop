@@ -66,7 +66,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void completed( int id );
     void errored( int id );
-    void cleanupModel( int id );
+    void cleanupModel( int, int id );
 private:
     QStringList cmakeArguments( KDevelop::IProject* project );
     KUrl buildDir( KDevelop::IProject* project );

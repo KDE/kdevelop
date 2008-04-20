@@ -69,8 +69,8 @@ MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
-        connect( i, SIGNAL( viewRemoved( int ) ),
-                 this, SLOT( cleanupModel( int ) ) );
+        connect( i, SIGNAL( viewRemoved( int, int ) ),
+                 this, SLOT( cleanupModel( int, int ) ) );
     }
 
 }
@@ -79,7 +79,7 @@ MakeBuilder::~MakeBuilder()
 {
 }
 
-void MakeBuilder::cleanupModel( int id )
+void MakeBuilder::cleanupModel( int, int id )
 {
     kDebug(9037) << "view was removed, check wether its one of ours";
     if( m_models.contains( id ) )

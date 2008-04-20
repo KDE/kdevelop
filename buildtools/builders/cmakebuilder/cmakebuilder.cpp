@@ -70,7 +70,7 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
-        connect( i, SIGNAL( viewRemoved( int ) ), this, SLOT( cleanupModel( int ) ) );
+        connect( i, SIGNAL( outputRemoved( int, int ) ), this, SLOT( cleanupModel( int, int ) ) );
     }
     i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
@@ -90,7 +90,7 @@ CMakeBuilder::~CMakeBuilder()
 {
 }
 
-void CMakeBuilder::cleanupModel( int id )
+void CMakeBuilder::cleanupModel( int, int id )
 {
     kDebug(9032) << "view was removed, check wether its one of ours";
     if( m_models.contains( id ) )

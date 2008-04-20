@@ -45,7 +45,7 @@ private Q_SLOTS:
     void searchActivated();
     void procFailed(int);
     void procFinished(int);
-    void cleanupForView(int);
+    void cleanupForView(int,int);
 
 private:
     static QString escape(const QString &str);
