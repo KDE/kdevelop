@@ -43,6 +43,7 @@ class DUChainItemData : public KDevelop::QuickOpenDataBase {
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
+    virtual QList<QVariant> highlighting() const;
 
     bool execute( QString& filterText );
 

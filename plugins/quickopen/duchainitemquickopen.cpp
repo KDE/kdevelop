@@ -48,6 +48,31 @@ QString DUChainItemData::text() const {
   return text;
 }
 
+QList<QVariant> DUChainItemData::highlighting() const {
+
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  if(!function)
+    return QList<QVariant>();
+
+  QTextCharFormat boldFormat;
+  boldFormat.setFontWeight(QFont::Bold);
+  QTextCharFormat normalFormat;
+   
+  int prefixLength = function->partToString( FunctionType::SignatureReturn).length() + 1;
+
+  QList<QVariant> ret;
+  ret << 0;
+  ret << prefixLength;
+  ret << QVariant(normalFormat);
+  ret << prefixLength;
+  ret << m_item.m_item->identifier().toString().length();
+  ret << QVariant(boldFormat);
+    
+  return ret;
+    
+}
+
 QString DUChainItemData::htmlDescription() const {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
