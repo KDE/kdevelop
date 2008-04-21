@@ -46,19 +46,19 @@ void ScopeTest::cleanup()
 }
 
 BEGINTESTFUNCIMPL( ScopeTest, basicScope, 1 )
-    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements().first() );
+    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST();
+    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
     QMake::ValueAST* val = new QMake::ValueAST(tst);
-    val->setValue( "VARIABLE" );
-    tst->setVariable( val );
+    val->value =  "VARIABLE" ;
+    tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue( "=" );
-    tst->setOp( val );
+    val->value =  "=" ;
+    tst->op =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue("FOO");
-    tst->addValue(val);
+    val->value = "FOO";
+    tst->values.append(val);
     testlist.append( tst );
 TESTSCOPEBODY( scope, testlist, 1 )
 ENDTESTFUNCIMPL
@@ -66,19 +66,19 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( ScopeTest, basicScope, "foobar : VARIABLE = FOO\n")
 
 BEGINTESTFUNCIMPL( ScopeTest, basicScopeBrace, 1 )
-    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements().first() );
+    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST();
+    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
     QMake::ValueAST* val = new QMake::ValueAST(tst);
-    val->setValue( "VARIABLE" );
-    tst->setVariable( val );
+    val->value =  "VARIABLE" ;
+    tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue( "=" );
-    tst->setOp( val );
+    val->value =  "=" ;
+    tst->op =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue("FOO");
-    tst->addValue(val);
+    val->value = "FOO";
+    tst->values.append(val);
     testlist.append( tst );
 TESTSCOPEBODY( scope, testlist, 1 )
 ENDTESTFUNCIMPL
@@ -86,27 +86,27 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( ScopeTest, basicScopeBrace, "foobar {\n  VARIABLE = FOO\n}\n")
 
 BEGINTESTFUNCIMPL( ScopeTest, nestedScope, 1 )
-    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements().first() );
+    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::SimpleScopeAST* simple = new QMake::SimpleScopeAST();
+    QMake::SimpleScopeAST* simple = new QMake::SimpleScopeAST(scope->body);
     QMake::ValueAST* val = new QMake::ValueAST(simple);
-    val->setValue( "barfoo" );
-    simple->setScopeName(val);
+    val->value =  "barfoo" ;
+    simple->identifier = val;
     QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST(simple);
     QList<QMake::StatementAST*> sublist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST();
+    QMake::AssignmentAST* tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
-    val->setValue( "VARIABLE" );
-    tst->setVariable( val );
+    val->value =  "VARIABLE" ;
+    tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue( "=" );
-    tst->setOp( val );
+    val->value =  "=" ;
+    tst->op =  val ;
     val = new QMake::ValueAST(tst);
-    val->setValue("FOO");
-    tst->addValue(val);
-    body->addStatement( tst );
-    simple->setScopeBody( body );
+    val->value = "FOO";
+    tst->values.append(val);
+    body->statements.append( tst );
+    simple->body = body;
     testlist.append( simple );
 
 TESTSCOPEBODY( scope, testlist, 1 )
@@ -115,7 +115,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( ScopeTest, nestedScope, "foobar :barfoo : VARIABLE = FOO\n")
 
 BEGINTESTFUNCIMPL( ScopeTest, missingStatement, 1 )
-    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements().first() );
+    QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "eval" )
 ENDTESTFUNCIMPL
 

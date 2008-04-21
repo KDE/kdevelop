@@ -86,7 +86,7 @@ bool Driver::parse( ProjectAST** qmast )
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
         d.visitProject(ast);
-        kDebug(9024) << "Found" << (*qmast)->statements().count() << "Statements";
+        kDebug(9024) << "Found" << (*qmast)->statements.count() << "Statements";
     }else
     {
         ast = 0;

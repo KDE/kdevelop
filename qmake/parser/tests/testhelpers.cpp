@@ -52,27 +52,27 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
                 || ( orop && testorop ) );
             if( call && testcall )
             {
-                TESTFUNCNAME( call, testcall->functionName()->value() )
+                TESTFUNCNAME( call, testcall->identifier->value )
             }else if( simple && testsimple )
             {
 
             }else if( orop && testorop )
             {
-                for(int i = 0; i < orop->scopes().count(); i++ )
+                for(int i = 0; i < orop->scopes.count(); i++ )
                 {
-                    QVERIFY( i < testorop->scopes().count() );
-                    TESTFUNCNAME( orop->scopes().at(i),
-                                testorop->scopes().at(i)->identifier()->value() )
+                    QVERIFY( i < testorop->scopes.count() );
+                    TESTFUNCNAME( orop->scopes.at(i),
+                                testorop->scopes.at(i)->identifier->value )
                 }
             }
-            QVERIFY( ( scope->scopeBody() && testscope->scopeBody() )
-                        || ( !scope->scopeBody() && !testscope->scopeBody() ) );
-            if( scope->scopeBody() && testscope->scopeBody() )
+            QVERIFY( ( scope->body && testscope->body )
+                        || ( !scope->body && !testscope->body ) );
+            if( scope->body && testscope->body )
             {
                 QList<QMake::StatementAST*> bodylist;
                 QList<QMake::StatementAST*> testbodylist;
-                bodylist = scope->scopeBody()->statements();
-                testbodylist = testscope->scopeBody()->statements();
+                bodylist = scope->body->statements;
+                testbodylist = testscope->body->statements;
                 matchScopeBodies( bodylist, testbodylist );
             }
         }
@@ -80,8 +80,8 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
         testassign = dynamic_cast<QMake::AssignmentAST*>( testbody.at( i ) );
         if( assign && testassign )
         {
-            TESTASSIGNMENT( assign, testassign->variable()->value(), testassign->op()->value(),
-                            testassign->values().count() )
+            TESTASSIGNMENT( assign, testassign->identifier->value, testassign->op->value,
+                            testassign->values.count() )
         }
         i++;
     }

@@ -65,29 +65,25 @@ void BuildASTVisitor::visitItem( ItemAst *node )
 {
     if( node->functionArguments )
     {
-        FunctionCallAST* call = new FunctionCallAST( aststack.top() );
-        ValueAST* val = new ValueAST();
-        val->setValue( getTokenString( node->id ) );
-        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->id);
-        val->setLine( line_col.first );
-        val->setColumn( line_col.second );
-        call->setFunctionName( val );
+        FunctionCallAST* call = createAst<FunctionCallAST>( node, aststack.top() );
+        ValueAST* val = createAst<ValueAST>( node, call );
+        val->value = getTokenString( node->id );
+        setPositionForToken( node->id, val );
+        call->identifier = val;
         OrAST* orast = stackTop<OrAST>();
-        orast->addScope( call );
+        orast->scopes.append( call );
         aststack.push( call );
         DefaultVisitor::visitItem( node );
         aststack.pop();
     }else
     {
-        SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
-        ValueAST* val = new ValueAST();
-        val->setValue( getTokenString( node->id ) );
-        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->id);
-        val->setLine( line_col.first );
-        val->setColumn( line_col.second );
-        simple->setScopeName( val );
+        SimpleScopeAST* simple = createAst<SimpleScopeAST>( node, aststack.top() );
+        ValueAST* val = createAst<ValueAST>( node, simple );
+        val->value = getTokenString( node->id );
+        setPositionForToken( node->id, val );
+        simple->identifier = val;
         OrAST* orast = stackTop<OrAST>();
-        orast->addScope( simple );
+        orast->scopes.append( simple );
         DefaultVisitor::visitItem( node );
     }
 }
@@ -96,18 +92,18 @@ void BuildASTVisitor::visitScope( ScopeAst *node )
 {
     if( node->orOperator )
     {
-        OrAST* orast = new OrAST( aststack.top() );
+        OrAST* orast = createAst<OrAST>( node, aststack.top() );
         if( node->functionArguments )
         {
-            FunctionCallAST* ast = new FunctionCallAST( orast );
+            FunctionCallAST* ast = createAst<FunctionCallAST>( node, orast );
             aststack.push( ast );
             visitNode( node->functionArguments );
             aststack.pop();
-            orast->addScope( ast );
+            orast->scopes.append( ast );
         }else
         {
-            SimpleScopeAST* simple = new SimpleScopeAST( orast );
-            orast->addScope( simple );
+            SimpleScopeAST* simple = createAst<SimpleScopeAST>( node, orast );
+            orast->scopes.append( simple );
         }
         aststack.push(orast);
         visitNode( node->orOperator );
@@ -115,20 +111,20 @@ void BuildASTVisitor::visitScope( ScopeAst *node )
     {
         if( node->functionArguments )
         {
-            FunctionCallAST* call = new FunctionCallAST( aststack.top() );
+            FunctionCallAST* call = createAst<FunctionCallAST>( node, aststack.top() );
             aststack.push( call );
             visitNode( node->functionArguments );
         }else
         {
-            SimpleScopeAST* simple = new SimpleScopeAST( aststack.top() );
+            SimpleScopeAST* simple = createAst<SimpleScopeAST>( node, aststack.top() );
             aststack.push( simple );
         }
     }
     if( node->scopeBody )
     {
-        ScopeBodyAST* scopebody = new ScopeBodyAST(aststack.top());
+        ScopeBodyAST* scopebody = createAst<ScopeBodyAST>(node,aststack.top());
         ScopeAST* scope = stackTop<ScopeAST>();
-        scope->setScopeBody( scopebody );
+        scope->body = scopebody;
         aststack.push( scopebody );
         visitNode( node->scopeBody );
         aststack.pop();
@@ -138,12 +134,10 @@ void BuildASTVisitor::visitScope( ScopeAst *node )
 void BuildASTVisitor::visitOp( OpAst *node )
 {
     AssignmentAST* assign = stackTop<AssignmentAST>();
-    ValueAST* val = new ValueAST();
-    val->setValue( getTokenString( node->optoken ) );
-    QPair<qint64,qint64> line_col = getTokenLineAndColumn( node->optoken );
-    val->setLine( line_col.first );
-    val->setColumn( line_col.second );
-    assign->setOp( val );
+    ValueAST* val = createAst<ValueAST>( node, assign );
+    val->value = getTokenString( node->optoken );
+    setPositionForToken( node->optoken, val );
+    assign->op = val;
     DefaultVisitor::visitOp(node);
 }
 
@@ -163,18 +157,16 @@ void BuildASTVisitor::visitStatement( StatementAst *node )
     if( !node->isNewline )
     {
         StatementAST* stmt = stackPop<StatementAST>();
-        ValueAST* val = new ValueAST();
-        val->setValue( getTokenString( node->id ) );
-        QPair<qint64,qint64> line_col = getTokenLineAndColumn( node->id );
-        val->setLine( line_col.first );
-        val->setColumn( line_col.second );
+        ValueAST* val = createAst<ValueAST>(node, stmt);
+        val->value = getTokenString( node->id );
+        setPositionForToken( node->id, val );
         if( node->isExclam )
         {
-            val->setValue( '!'+val->value() );
+            val->value = '!'+val->value;
         }
-        stmt->setIdentifier( val );
+        stmt->identifier = val;
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
-        scope->addStatement(stmt);
+        scope->statements.append(stmt);
     }
 }
 
@@ -183,18 +175,16 @@ void BuildASTVisitor::visitValue( ValueAst *node )
     AssignmentAST* assign = dynamic_cast<AssignmentAST*>( aststack.top() );
     if( assign )
     {
-        ValueAST* value = new ValueAST( assign );
-        value->setValue( getTokenString(node->value) );
-        assign->addValue( value );
+        ValueAST* value = createAst<ValueAST>( node, assign );
+        value->value = getTokenString(node->value);
+        assign->values.append( value );
     }else
     {
         FunctionCallAST* call = stackTop<FunctionCallAST>();
-        ValueAST* value = new ValueAST( call );
-        value->setValue( getTokenString(node->value) );
-        QPair<qint64,qint64> line_col = getTokenLineAndColumn(node->value);
-        value->setLine( line_col.first );
-        value->setColumn( line_col.second );
-        call->addArgument( value );
+        ValueAST* value = createAst<ValueAST>( node, call );
+        value->value = getTokenString(node->value);
+        setPositionForToken( node->value, value );
+        call->args.append( value );
     }
     DefaultVisitor::visitValue(node);
 }
@@ -206,9 +196,20 @@ void BuildASTVisitor::visitValueList( ValueListAst *node )
 
 void BuildASTVisitor::visitVariableAssignment( VariableAssignmentAst *node )
 {
-    AssignmentAST* assign = new AssignmentAST(aststack.top());
+    AssignmentAST* assign = createAst<AssignmentAST>( node, aststack.top() );
     aststack.push(assign);
     DefaultVisitor::visitVariableAssignment(node);
+}
+
+template <typename T> T* BuildASTVisitor::createAst( AstNode* node, AST* parent )
+{
+    if( !node )
+    {
+        return 0;
+    }
+    T* ast = new T( parent );
+    setPositionForAst( node, ast );
+    return ast;
 }
 
 template <typename T> T* BuildASTVisitor::stackTop()
@@ -223,7 +224,7 @@ template <typename T> T* BuildASTVisitor::stackTop()
     if( !ast )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type();
+        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type;
         exit(255);
     }
     return ast;
@@ -242,7 +243,7 @@ template <typename T> T* BuildASTVisitor::stackPop()
     if( !ast )
     {
         kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type();
+        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type;
         exit(255);
     }
     return ast;
@@ -254,16 +255,35 @@ QString BuildASTVisitor::getTokenString(qint64 idx)
     return m_parser->tokenText(token.begin,token.end).replace("\n","\\n");
 }
 
-QPair<qint64,qint64> BuildASTVisitor::getTokenLineAndColumn( qint64 idx )
+void BuildASTVisitor::setPositionForAst( AstNode* node, AST* ast )
 {
-    QPair<qint64,qint64> info;
+    qint64 line,col;
+    m_parser->tokenStream->startPosition( node->startToken, &line, &col );
+    ast->startLine = line;
+    ast->startColumn = col;
+    QMake::Parser::Token tok = m_parser->tokenStream->token( node->startToken );
+    ast->start = tok.begin;
+    m_parser->tokenStream->endPosition( node->endToken, &line, &col );
+    ast->endLine = line;
+    ast->endColumn = col;
+    tok = m_parser->tokenStream->token( node->endToken );
+    ast->end = tok.end;
+}
+
+void BuildASTVisitor::setPositionForToken( qint64 idx, ValueAST* ast )
+{
     qint64 line,col;
     QMake::Parser::Token token = m_parser->tokenStream->token(idx);
     m_parser->tokenStream->startPosition(idx,&line,&col);
-    info.first = line;
-    info.second = col;
-    return info;
+    ast->startLine = line;
+    ast->startColumn = col;
+    ast->start = token.begin;
+    ast->end = token.end;
+    m_parser->tokenStream->endPosition(idx,&line,&col);
+    ast->endLine = line;
+    ast->endColumn = col;
 }
+
 
 }
 
