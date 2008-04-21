@@ -1,13 +1,6 @@
 
 set(parser_STAT_SRCS
     qmakeast.cpp
-    qmakeastassignment.cpp
-    qmakeastbody.cpp
-    qmakeastor.cpp
-    qmakeastproject.cpp
-    qmakeastfunc.cpp
-    qmakeastscope.cpp
-    qmakeastsimple.cpp
     qmakedriver.cpp
     qmakedebugvisitor.cpp
     buildastvisitor.cpp

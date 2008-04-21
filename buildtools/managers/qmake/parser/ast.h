@@ -47,72 +47,47 @@ namespace QMake
                 FunctionCall = 3,
                 SimpleScope = 4,
                 Or = 5,
-                Value = 6
+                Value = 6,
+                Invalid = 7
             };
 
-            explicit AST( AST* parent = 0 );
-            virtual ~AST() = 0;
-            virtual AST::Type type() const = 0;
-            AST* parent() const;
-            void setColumn( int );
-            void setLine( int );
-            virtual int column() const;
-            virtual int line() const;
+            AST( AST* parent, AST::Type type );
+            virtual ~AST();
+            AST::Type type;
+            int startLine;
+            int endLine;
+            int startColumn;
+            int endColumn;
+            int start;
+            int end;
+            AST* parent;
             KDevelop::DUContext* context;
-        private:
-            int m_line;
-            int m_column;
-            AST* m_parent;
     };
 
 
     class KDEVQMAKEPARSER_EXPORT StatementAST : public AST
     {
         public:
-            explicit StatementAST( AST* parent = 0 );
+            StatementAST( AST* parent, AST::Type type );
             ~StatementAST();
-            ValueAST* identifier() const;
-            virtual void setIdentifier( ValueAST* );
-            int line() const;
-            int column() const;
-        private:
-            ValueAST* m_identifier;
+            ValueAST* identifier;
     };
 
 
     class KDEVQMAKEPARSER_EXPORT ScopeBodyAST: public AST
     {
         public:
-            explicit ScopeBodyAST( AST* parent = 0 );
+            ScopeBodyAST( AST* parent, AST::Type type = AST::ScopeBody );
             ~ScopeBodyAST();
-            void insertStatement( int i, StatementAST* );
-            void addStatement( StatementAST* );
-            QList<StatementAST*> statements() const;
-            void removeStatement( int i );
-            AST::Type type() const;
-            int line() const;
-            int column() const;
-        private:
-            QList<StatementAST*> m_statements;
+            QList<StatementAST*> statements;
     };
 
-    /**
-     * Represents a QMake Project file
-     */
     class KDEVQMAKEPARSER_EXPORT ProjectAST : public ScopeBodyAST
     {
         public:
-            explicit ProjectAST( AST* parent = 0 );
+            explicit ProjectAST();
             ~ProjectAST();
-
-            /**
-            * Returns the filename of the project file, or an empty string if the project was parser from a string
-            */
-            QString filename() const;
-            void setFilename( const QString& );
-            AST::Type type() const;
-        private:
-            QString m_filename;
+            QString filename;
 
 
     };
@@ -120,89 +95,51 @@ namespace QMake
     class KDEVQMAKEPARSER_EXPORT AssignmentAST : public StatementAST
     {
         public:
-            explicit AssignmentAST( AST* parent = 0 );
+            explicit AssignmentAST( AST* parent );
             ~AssignmentAST();
 
-            void addValue( ValueAST* );
-            void insertValue( int i, ValueAST* );
-            QList<ValueAST*> values() const;
-            void removeValue( int i );
-            ValueAST* variable() const;
-            void setVariable( ValueAST* );
-            ValueAST* op() const;
-            void setOp( ValueAST* );
-            AST::Type type() const;
-        private:
-            ValueAST* m_op;
-            QList<ValueAST*> m_values;
+            ValueAST* op;
+            QList<ValueAST*> values;
     };
 
 
     class KDEVQMAKEPARSER_EXPORT ScopeAST : public StatementAST
     {
         public:
-            explicit ScopeAST( AST* parent = 0 );
+            explicit ScopeAST( AST* parent, AST::Type type);
             ~ScopeAST();
-            void setScopeBody( ScopeBodyAST* );
-            ScopeBodyAST* scopeBody() const;
-        private:
-            ScopeBodyAST* m_body;
+            ScopeBodyAST* body;
     };
 
     class KDEVQMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
     {
         public:
-            explicit FunctionCallAST( AST* parent = 0 );
+            explicit FunctionCallAST( AST* parent );
             ~FunctionCallAST();
-            QList<ValueAST*> arguments() const;
-            void addArgument( ValueAST* );
-            void insertArgument( int i, ValueAST* );
-            void removeArgument( int i );
-            ValueAST* functionName() const;
-            void setFunctionName( ValueAST* );
-            AST::Type type() const;
-        private:
-            QList<ValueAST*> m_args;
+            QList<ValueAST*> args;
     };
 
 
     class KDEVQMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
     {
         public:
-            explicit SimpleScopeAST( AST* parent = 0);
+            explicit SimpleScopeAST( AST* parent );
             ~SimpleScopeAST();
-            ValueAST* scopeName() const;
-            void setScopeName( ValueAST* );
-            AST::Type type() const;
-        private:
     };
 
     class KDEVQMAKEPARSER_EXPORT OrAST : public ScopeAST
     {
         public:
-            explicit OrAST( AST* parent = 0 );
+            explicit OrAST( AST* parent );
             ~OrAST();
-            void addScope( ScopeAST* );
-            void insertScope( int i, ScopeAST* );
-            void removeScope( int i );
-            QList<ScopeAST*> scopes() const;
-            void setIdentifier( ValueAST* );
-            int line() const;
-            int column() const;
-            AST::Type type() const;
-        private:
-            QList<ScopeAST*> m_scopes;
+            QList<ScopeAST*> scopes;
     };
 
     class KDEVQMAKEPARSER_EXPORT ValueAST : public AST
     {
         public:
-            explicit ValueAST( AST* parent = 0 );
-            void setValue( const QString& );
-            QString value() const;
-            AST::Type type() const;
-        private:
-            QString m_value;
+            explicit ValueAST( AST* parent );
+            QString value;
     };
 
 }

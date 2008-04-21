@@ -25,7 +25,6 @@
 #include <QtCore/QStack>
 
 class QString;
-template <typename T1, typename T2> class QPair;
 
 namespace QMake
 {
@@ -33,6 +32,7 @@ namespace QMake
 class Parser;
 class ProjectAST;
 class AST;
+class ValueAST;
 
 class BuildASTVisitor : public DefaultVisitor
 {
@@ -54,10 +54,12 @@ public:
 
 private:
     QString getTokenString(qint64 idx);
-    QPair<qint64,qint64> getTokenLineAndColumn( qint64 idx );
+    void setPositionForToken( qint64 idx, ValueAST* ast );
+    void setPositionForAst( AstNode* node, AST* ast );
 
     template <typename T> T* stackTop();
     template <typename T> T* stackPop();
+    template <typename T> T* createAst( AstNode* node, AST* ast );
 
     QStack<AST*> aststack;
     Parser* m_parser;

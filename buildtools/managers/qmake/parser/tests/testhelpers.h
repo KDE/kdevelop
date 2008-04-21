@@ -49,7 +49,7 @@ void classname::funcname()\
     d.setContent( project ); \
     bool ret = d.parse( &ast );\
     QVERIFY( ret );\
-    QVERIFY( ast->statements().count() == astcount );
+    QVERIFY( ast->statements.count() == astcount );
 
 #define BEGINTESTFAILFUNCIMPL( classname, funcname, comment ) \
 void classname::funcname()\
@@ -68,29 +68,29 @@ void classname::funcname()\
 
 #define TESTASSIGNMENT( ast, var, opval, valcount ) \
     QVERIFY( ast != 0 );\
-    QVERIFY( ast->variable()->value() == var );\
-    QVERIFY( ast->op()->value() == opval );\
-    QVERIFY( ast->values().count() == valcount );
+    QVERIFY( ast->identifier->value == var );\
+    QVERIFY( ast->op->value == opval );\
+    QVERIFY( ast->values.count() == valcount );
 
 #define TESTFUNCNAME( scopeast, funcname ) \
     QVERIFY( scopeast ); \
-    QVERIFY( scopeast->identifier()->value() == funcname );
+    QVERIFY( scopeast->identifier->value == funcname );
 
 #define TESTSCOPENAME( scopeast, scopename ) \
     QVERIFY( scopeast ); \
-    QVERIFY( scopeast->scopeName()->value() == scopename );
+    QVERIFY( scopeast->identifier->value == scopename );
 
 #define TESTOROP( scopeast, funclist ) \
     for( int i = 0; i < funclist.size(); i++) \
     {\
-        QVERIFY( i < scopeast->scopes().count() );\
-        QVERIFY( scopeast->scopes().at(i)->identifier()->value() == funclist.at(i) );\
+        QVERIFY( i < scopeast->scopes.count() );\
+        QVERIFY( scopeast->scopes.at(i)->identifier->value == funclist.at(i) );\
     }
 
 #define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
-    QVERIFY( scope->scopeBody() != 0 ); \
-    QVERIFY( scope->scopeBody()->statements().count() == stmtcount ); \
-    matchScopeBodies(scope->scopeBody()->statements(), teststmts);
+    QVERIFY( scope->body != 0 ); \
+    QVERIFY( scope->body->statements.count() == stmtcount ); \
+    matchScopeBodies(scope->body->statements, teststmts);
 
 
 void matchScopeBodies( QList<QMake::StatementAST*>,

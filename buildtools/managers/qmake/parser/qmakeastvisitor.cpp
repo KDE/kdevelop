@@ -42,7 +42,7 @@ void ASTVisitor::visitNode( AST* node )
 {
     if( node )
     {
-        (this->*_S_parser_table[node->type()])(node);
+        (this->*_S_parser_table[node->type])(node);
     }
 }
 

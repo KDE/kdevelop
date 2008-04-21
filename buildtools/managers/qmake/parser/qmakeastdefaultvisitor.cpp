@@ -30,7 +30,7 @@ ASTDefaultVisitor::~ASTDefaultVisitor()
 
 void ASTDefaultVisitor::visitProject( ProjectAST* node )
 {
-    foreach( StatementAST* stmt, node->statements() )
+    foreach( StatementAST* stmt, node->statements )
     {
         visitNode(stmt);
     }
@@ -38,9 +38,9 @@ void ASTDefaultVisitor::visitProject( ProjectAST* node )
 
 void ASTDefaultVisitor::visitAssignment( AssignmentAST* node )
 {
-    visitNode(node->variable());
-    visitNode(node->op());
-    foreach( ValueAST* value, node->values() )
+    visitNode(node->identifier);
+    visitNode(node->op);
+    foreach( ValueAST* value, node->values )
     {
         visitNode(value);
     }
@@ -53,17 +53,17 @@ void ASTDefaultVisitor::visitValue( ValueAST* )
 
 void ASTDefaultVisitor::visitFunctionCall( FunctionCallAST* node )
 {
-    visitNode(node->functionName());
-    foreach(ValueAST* value, node->arguments())
+    visitNode(node->identifier);
+    foreach(ValueAST* value, node->args)
     {
         visitNode(value);
     }
-    visitNode(node->scopeBody());
+    visitNode(node->body);
 }
 
 void ASTDefaultVisitor::visitScopeBody( ScopeBodyAST* node )
 {
-    foreach( StatementAST* stmt, node->statements() )
+    foreach( StatementAST* stmt, node->statements )
     {
         visitNode(stmt);
     }
@@ -71,17 +71,17 @@ void ASTDefaultVisitor::visitScopeBody( ScopeBodyAST* node )
 
 void ASTDefaultVisitor::visitOr( OrAST* node )
 {
-    foreach( ScopeAST* scope, node->scopes() )
+    foreach( ScopeAST* scope, node->scopes )
     {
         visitNode(scope);
     }
-    visitNode(node->scopeBody());
+    visitNode(node->body);
 }
 
 void ASTDefaultVisitor::visitSimpleScope( SimpleScopeAST* node )
 {
-    visitNode(node->scopeName());
-    visitNode(node->scopeBody());
+    visitNode(node->identifier);
+    visitNode(node->body);
 }
 
 }

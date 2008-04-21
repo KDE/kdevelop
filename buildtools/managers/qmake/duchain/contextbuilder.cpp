@@ -53,7 +53,7 @@ KTextEditor::Range ContextBuilder::editorFindRange( QMake::AST* fromRange, QMake
 const KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode( QMake::AST* node )
 {
     QMake::ValueAST* val = static_cast<QMake::ValueAST*>( node );
-    setIdentifier( val->value() );
+    setIdentifier( val->value );
     return qualifiedIdentifier();
 }
 

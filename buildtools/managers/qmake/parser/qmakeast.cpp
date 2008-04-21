@@ -22,88 +22,100 @@
 
 namespace QMake
 {
-AST::AST( AST* parent )
-        : m_line(-1), m_column(-1), m_parent( parent )
+
+AST::AST( AST* parent, AST::Type type )
+        : type(type), startLine(-1), 
+          endLine(-1), startColumn(-1), 
+          endColumn(-1), start(-1), end(-1), 
+          parent( parent )
 {}
 
-AST::~AST( )
-{}
-
-AST* AST::parent() const
+AST::~AST()
 {
-    return m_parent;
-}
-
-int AST::line() const
-{
-    return m_line;
-}
-
-void AST::setLine( int line )
-{
-    m_line = line;
-}
-
-int AST::column() const
-{
-    return m_column;
-}
-
-void AST::setColumn( int col )
-{
-    m_column = col;
 }
 
 ValueAST::ValueAST( AST* parent )
-        : AST( parent )
+        : AST( parent, AST::Value )
 {}
 
-void ValueAST::setValue( const QString& value )
-{
-    m_value = value;
-}
-
-QString ValueAST::value() const
-{
-    return m_value;
-}
-
-
-AST::Type ValueAST::type() const
-{
-    return AST::Value;
-}
-
-StatementAST::StatementAST( AST* parent )
-        : AST( parent ), m_identifier(0)
+StatementAST::StatementAST( AST* parent, AST::Type type )
+        : AST( parent, type ), identifier(0)
 {}
 
 StatementAST::~StatementAST( )
 {
-    delete m_identifier;
-    m_identifier = 0;
+    delete identifier;
+    identifier = 0;
 }
 
 
-ValueAST* StatementAST::identifier() const
+AssignmentAST::AssignmentAST( AST* parent )
+        : StatementAST( parent, AST::Assignment )
+{}
+
+AssignmentAST::~AssignmentAST()
 {
-    return m_identifier;
+    qDeleteAll( values );
+    values.clear();
+    delete op;
 }
 
-void StatementAST::setIdentifier( ValueAST* id )
+ScopeBodyAST::ScopeBodyAST( AST* parent, AST::Type type )
+        : AST( parent, type )
+{}
+
+ScopeBodyAST::~ScopeBodyAST()
 {
-    m_identifier = id;
+    qDeleteAll( statements );
+    statements.clear();
 }
 
-int StatementAST::line() const
+
+FunctionCallAST::FunctionCallAST( AST* parent )
+        : ScopeAST( parent, AST::FunctionCall )
+{}
+
+
+FunctionCallAST::~FunctionCallAST()
 {
-    return m_identifier->line();
+    qDeleteAll( args );
+    args.clear();
 }
 
-int StatementAST::column() const
+OrAST::OrAST( AST* parent )
+        : ScopeAST( parent, AST::Or )
+{}
+
+OrAST::~OrAST()
 {
-    return m_identifier->column();
+    qDeleteAll(scopes);
+    scopes.clear();
 }
+
+ProjectAST::ProjectAST()
+        : ScopeBodyAST( 0, AST::Project )
+{}
+
+ProjectAST::~ProjectAST()
+{
+}
+
+ScopeAST::ScopeAST( AST* parent, AST::Type type )
+        : StatementAST( parent, type ), body( 0 )
+{}
+
+ScopeAST::~ScopeAST()
+{
+    delete body;
+    body = 0;
+}
+
+SimpleScopeAST::SimpleScopeAST( AST* parent )
+        : ScopeAST( parent, AST::SimpleScope )
+{}
+
+SimpleScopeAST::~SimpleScopeAST()
+{}
 
 }
 

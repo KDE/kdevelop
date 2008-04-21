@@ -84,7 +84,7 @@ QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list ) const
     QStringList result;
     foreach( QMake::ValueAST* v, list)
     {
-        result += resolveVariables( v->value() );
+        result += resolveVariables( v->value );
     }
     return result;
 }
@@ -126,7 +126,7 @@ bool QMakeFile::read()
         return false;
     }else
     {
-        kDebug(9024) << "found ast:" << m_ast->statements().count() ;
+        kDebug(9024) << "found ast:" << m_ast->statements.count() ;
         visitNode(m_ast);
         kDebug(9024) << "Variables found:" << m_variableValues ;
     }
@@ -156,12 +156,12 @@ QMake::ProjectAST* QMakeFile::ast() const
 
 void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
 {
-    if( node->functionName()->value() == "include" || node->functionName()->value() == "!include" )
+    if( node->identifier->value == "include" || node->identifier->value == "!include" )
     {
-        if( node->arguments().isEmpty() )
+        if( node->args.isEmpty() )
             return;
-        QStringList arguments = getValueList( node->arguments() );
-        kDebug(9024) << "found include" << node->functionName()->value() << arguments;
+        QStringList arguments = getValueList( node->args );
+        kDebug(9024) << "found include" << node->identifier->value << arguments;
         QString argument = arguments.join("").trimmed();
         if( QFileInfo( argument ).isRelative() )
         {
@@ -180,43 +180,43 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
                     m_variableValues[ var ] = includefile.variableValues( var );
                 }
             }
-            if( !node->functionName()->value().startsWith('!') )
+            if( !node->identifier->value.startsWith('!') )
             {
-                visitNode( node->scopeBody() );
+                visitNode( node->body );
             }
-        }else if( node->functionName()->value().startsWith('!') )
+        }else if( node->identifier->value.startsWith('!') )
         {
-            visitNode( node->scopeBody() );
+            visitNode( node->body );
         }
     }else
     {
-        visitNode( node->scopeBody() );
+        visitNode( node->body );
     }
 }
 
 void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
 {
-    QString op = node->op()->value();
-    QStringList values = getValueList(node->values());
+    QString op = node->op->value;
+    QStringList values = getValueList(node->values);
     if( op == "=" )
     {
-        m_variableValues[node->variable()->value()] = values;
+        m_variableValues[node->identifier->value] = values;
     }else if( op == "+=" )
     {
-        m_variableValues[node->variable()->value()] += values;
+        m_variableValues[node->identifier->value] += values;
     }else if( op == "-=" )
     {
         foreach( QString value, values )
         {
-            m_variableValues[node->variable()->value()].removeAll(value);
+            m_variableValues[node->identifier->value].removeAll(value);
         }
     }else if( op == "*=" )
     {
         foreach( QString value, values )
         {
-            if( !m_variableValues[node->variable()->value()].contains(value) )
+            if( !m_variableValues[node->identifier->value].contains(value) )
             {
-                m_variableValues[node->variable()->value()].append(value);
+                m_variableValues[node->identifier->value].append(value);
             }
         }
     }else if( op == "~=" )
@@ -226,9 +226,9 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        QStringList list = m_variableValues[node->variable()->value()];
+        QStringList list = m_variableValues[node->identifier->value];
         list.replaceInStrings( QRegExp(regex), replacement );
-        m_variableValues[node->variable()->value()] = list;
+        m_variableValues[node->identifier->value] = list;
     }
 }
 
