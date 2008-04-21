@@ -42,6 +42,7 @@ Cursor QMakeEditorIntegrator::findPosition( QMake::AST* node , Edge edge ) const
     {
         // Apparently KTE expects a range to go until _after_ the last character that should be included
         // however the parser calculates endCol as the index _before_ the last included character, so adjust here
+        // Maybe this should be solved differently, ask David how C++ support does it or look it up
         return Cursor( node->endLine, node->endColumn+1 );
     }else
     {
