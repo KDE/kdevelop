@@ -68,6 +68,19 @@
 
 using namespace KDevelop;
 
+class QuickOpenDelegate : public ExpandingDelegate {
+public:
+  QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = 0L) : ExpandingDelegate(model, parent) {
+  }
+  virtual QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const {
+    QList<QVariant> highlighting = index.data(KTextEditor::CodeCompletionModel::CustomHighlight).toList();
+    if(!highlighting.isEmpty())
+      return highlightingFromVariantList(highlighting);
+    return ExpandingDelegate::createHighlighting( index, option );
+  }
+  
+};
+
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
 
@@ -149,7 +162,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
   connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
 
-  o.list->setItemDelegate( new ExpandingDelegate( m_model, o.list ) );
+  o.list->setItemDelegate( new QuickOpenDelegate( m_model, o.list ) );
 
   if(!listOnly) {
     QStringList allTypes = m_model->allTypes();

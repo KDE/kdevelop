@@ -234,7 +234,6 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return d->isExpandable();
-
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
       QVariant v;
       QWidget* w =  d->expandingWidget();
@@ -247,16 +246,20 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
   }
 
   if( index.column() == 1 )
-  {
+  { //This column contains the actual content
     switch( role ) {
       case Qt::DecorationRole:
         return d->icon();
 
       case Qt::DisplayRole:
         return d->text();
+      case KTextEditor::CodeCompletionModel::HighlightingMethod:
+        return KTextEditor::CodeCompletionModel::CustomHighlighting;
+      case KTextEditor::CodeCompletionModel::CustomHighlight:
+        return d->highlighting();
     }
   } else if( index.column() == 0 )
-  {
+  { //This column only contains the expanded/not expanded icon
     switch( role ) {
       case Qt::DecorationRole:
       {
