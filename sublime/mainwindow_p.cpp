@@ -98,10 +98,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         container->show();
         foreach (View *view, index->views())
         {
-            if (view->widget() && !container->hasWidget(view->widget()))
+            QWidget *widget = view->widget(container);
+            if (widget && !container->hasWidget(widget))
             {
-                view->widget()->installEventFilter(d);
-                foreach (QWidget* w, view->widget()->findChildren<QWidget*>())
+                widget->installEventFilter(d);
+                foreach (QWidget* w, widget->findChildren<QWidget*>())
                     w->installEventFilter(d);
                 container->addWidget(view);
                 d->viewContainers[view] = container;
@@ -213,8 +214,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             m_indexSplitters.remove(index);
             delete splitter;
 
-            //when we delete splitter we need to remove extra parent splitter
-            //and move the remaining child onto its place
+            //when we delete splitter we need to move views from remaining child to the parent
             AreaIndex *parent = index->parent();
             QSplitter *parentSplitter = m_indexSplitters[parent];
 
@@ -222,6 +222,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
             siblingSplitter->widget(0)->setParent(parentSplitter);
+            m_indexSplitters.remove(sibling);
             delete siblingSplitter;
 
             //activate the current view in the remaining child
