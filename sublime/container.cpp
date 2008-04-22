@@ -69,7 +69,7 @@ void Container::widgetActivated(int idx)
 
 void Container::addWidget(View *view)
 {
-    QWidget *w = view->widget();
+    QWidget *w = view->widget(this);
     addTab(w, view->document()->title());
     d->viewForWidget[w] = view;
 }
