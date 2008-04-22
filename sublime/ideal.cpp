@@ -736,6 +736,7 @@ IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* p
 {
     setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
     setMouseTracking(true);
+    setAutoFillBackground(true);
 }
 
 void IdealSplitterHandle::paintEvent(QPaintEvent *)
