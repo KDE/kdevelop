@@ -221,14 +221,31 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
-            siblingSplitter->widget(0)->setParent(parentSplitter);
+            parentSplitter->setUpdatesEnabled(false);
+            //save sizes and orientation of the sibling splitter
+            parentSplitter->setOrientation(siblingSplitter->orientation());
+            QList<int> sizes = siblingSplitter->sizes();
+
+            //sibling splitter might contain one or more containers
+            while (siblingSplitter->count() > 0)
+            {
+                //reparent contents into parent splitter
+                QWidget *siblingWidget = siblingSplitter->widget(0);
+                siblingWidget->setParent(parentSplitter);
+                parentSplitter->addWidget(siblingWidget);
+            }
+
             m_indexSplitters.remove(sibling);
             delete siblingSplitter;
 
-            //activate the current view in the remaining child
-            Container *siblingContainer = qobject_cast<Container*>(parentSplitter->widget(0));
-            if (siblingContainer)
-                return m_mainWindow->setActiveView(siblingContainer->viewForWidget(siblingContainer->currentWidget()));
+            parentSplitter->setSizes(sizes);
+            parentSplitter->setUpdatesEnabled(true);
+
+            //find the container somewhere to activate
+            Container *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
+            //activate the current view there
+            if (containerToActivate)
+                return m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));
         }
     }
 
