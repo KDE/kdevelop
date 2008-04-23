@@ -52,10 +52,10 @@ class OutputWidget : public KTabWidget
 
     Q_SIGNALS:
         void outputRemoved( int, int );
-
     private:
         QListView* createListView(int id);
 
+        QMap<int, QListView*> views;
         ToolViewData* data;
         QToolButton* m_closeButton;
 };

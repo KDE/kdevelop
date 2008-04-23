@@ -74,8 +74,8 @@ void OutputWidget::addOutput( int id )
 void OutputWidget::changeDelegate( int id )
 {
     kDebug(9500) << "delegate changed for id:" << id;
-    if( data->outputdata.contains( id ) && data->outputdata.value(id)->view )
-        data->outputdata.value(id)->view->setItemDelegate(data->outputdata.value(id)->delegate);
+    if( data->outputdata.contains( id ) && views.contains( id ) )
+        views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
     else
         addOutput(id);
 }
@@ -83,13 +83,15 @@ void OutputWidget::changeDelegate( int id )
 void OutputWidget::changeModel( int id )
 {
     kDebug(9500) << "model changed for id:" << id;
-    if( data->outputdata.contains( id ) && data->outputdata.value(id)->view )
+    if( data->outputdata.contains( id ) && views.contains( id ) )
     {
-        data->outputdata.value(id)->view->setModel(data->outputdata.value(id)->model);
+        OutputData* od = data->outputdata.value(id);
+        kDebug() << "output:" << od << "id of output:" << od->id << "title:" << od->title  << "tv id" << od->toolView->toolViewId << "tv title:" << od->toolView->title;
+        views.value( id )->setModel(data->outputdata.value(id)->model);
         if( data->outputdata.value(id)->behaviour && KDevelop::IOutputView::AutoScroll )
         {
             connect( data->outputdata.value(id)->model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                     data->outputdata.value(id)->view, SLOT(scrollToBottom()) );
+                     views.value(id), SLOT(scrollToBottom()) );
         }
     }
     else
@@ -100,9 +102,9 @@ void OutputWidget::changeModel( int id )
 
 void OutputWidget::removeOutput( int id )
 {
-    if( data->outputdata.contains( id ) )
+    if( data->outputdata.contains( id ) && views.contains( id ) )
     {
-        QListView* w = data->outputdata.value(id)->view;
+        QListView* w = views.value(id);
         int idx = indexOf( w );
         if( idx != -1 )
         {
@@ -118,12 +120,12 @@ void OutputWidget::closeActiveView()
     QWidget* widget = currentWidget();
     if( !widget )
         return;
-    foreach( OutputData* data, data->outputdata )
+    foreach( int id, views.keys() )
     {
-        if( data->view == widget )
+        if( views.value(id) == widget )
         {
-            int id = data->id;
-            if( data->behaviour & KDevelop::IOutputView::AllowUserClose )
+            OutputData* od = data->outputdata.value(id);
+            if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
             {
                 removeOutput( id );
             }
@@ -196,27 +198,36 @@ void OutputWidget::activate(const QModelIndex& index)
 
 QListView* OutputWidget::createListView(int id)
 {
-    kDebug(9500) << "creating listview";
-    QListView* listview = new QListView(this);
-    listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-    data->outputdata.value(id)->view = listview;
-    connect( listview, SIGNAL(activated(const QModelIndex&)),
-             this, SLOT(activate(const QModelIndex&)));
-    connect( listview, SIGNAL(clicked(const QModelIndex&)),
-             this, SLOT(activate(const QModelIndex&)));
-
-    addTab( listview, data->outputdata.value(id)->title );
-    changeModel( id );
-    changeDelegate( id );
-    return listview;
+    if( !views.contains(id) )
+    {
+        kDebug(9500) << "creating listview";
+        QListView* listview = new QListView(this);
+        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+        views[id] = listview;
+        connect( listview, SIGNAL(activated(const QModelIndex&)),
+                 this, SLOT(activate(const QModelIndex&)));
+        connect( listview, SIGNAL(clicked(const QModelIndex&)),
+                 this, SLOT(activate(const QModelIndex&)));
+    
+        addTab( listview, data->outputdata.value(id)->title );
+        changeModel( id );
+        changeDelegate( id );
+        return listview;
+    } else
+    {
+        return views.value(id);
+    }
 }
 
 void OutputWidget::raiseOutput(int id)
 {
-    int idx = indexOf( data->outputdata.value(id)->view );
-    if( idx >= 0 )
+    if( views.contains(id) )
     {
-        setCurrentIndex( idx );
+        int idx = indexOf( views.value(id) );
+        if( idx >= 0 )
+        {
+            setCurrentIndex( idx );
+        }
     }
 }
 

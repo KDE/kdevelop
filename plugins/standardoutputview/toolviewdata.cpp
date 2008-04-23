@@ -20,8 +20,10 @@
 
 #include "toolviewdata.h"
 
+#include <kdebug.h>
+
 OutputData::OutputData( ToolViewData* tv )
-    : QObject( tv ), delegate(0), model(0), toolView(tv), view(0), id(-1)
+    : QObject( tv ), delegate(0), model(0), toolView(tv), id(-1)
 {
 }
 

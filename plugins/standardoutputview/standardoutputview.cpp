@@ -94,14 +94,17 @@ void StandardOutputView::removeSublimeView( Sublime::View* v )
 {
     foreach( ToolViewData* d, toolviews )
     {
-        if( d->views.contains(v) && d->views.count() == 1 )
+        if( d->views.contains(v) )
         {
-            toolviews.remove( d->toolViewId );
-            ids.removeAll( d->toolViewId );
-            delete d;
-        } else
-        {
-            d->views.removeAll(v);
+            if( d->views.count() == 1 )
+            {
+                toolviews.remove( d->toolViewId );
+                ids.removeAll( d->toolViewId );
+                delete d;
+            } else
+            {
+                d->views.removeAll(v);
+            }
         }
     }
 }

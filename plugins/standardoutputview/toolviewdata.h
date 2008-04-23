@@ -47,7 +47,6 @@ public:
     ToolViewData* toolView;
     KDevelop::IOutputView::Behaviours behaviour;
     QString title;
-    QListView* view;
     int id;
     void setModel( QAbstractItemModel* model);
     void setDelegate( QAbstractItemDelegate* delegate);
@@ -63,6 +62,7 @@ public:
     ToolViewData( QObject* parent );
     ~ToolViewData();
     OutputData* addOutput( int id, const QString& title, KDevelop::IOutputView::Behaviours behave );
+    // If we would adhere to model-view-separation strictly, then this member would move into standardoutputview, but its more convenient this way.
     QList<Sublime::View*> views;
     StandardOutputView* plugin;
     QMap<int, OutputData*> outputdata;
