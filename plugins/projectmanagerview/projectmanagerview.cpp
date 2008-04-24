@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kfadewidgeteffect.h>
 #include <kcombobox.h>
 
 #include "icore.h"
@@ -180,6 +181,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 
 void ProjectManagerView::switchDetailView()
 {
+    KFadeWidgetEffect* animation = new KFadeWidgetEffect( this );
     if( d->m_detailStack->isHidden() )
     {
         d->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
@@ -190,6 +192,7 @@ void ProjectManagerView::switchDetailView()
         d->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
         d->m_detailStack->hide();
     }
+    animation->start();
 }
 
 #include "projectmanagerview.moc"
