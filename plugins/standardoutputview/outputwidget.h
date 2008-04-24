@@ -22,42 +22,45 @@
 #ifndef OUTPUTWIDGET_H
 #define OUTPUTWIDGET_H
 
-#include <ktabwidget.h>
+#include <QtGui/QWidget>
 #include <QtCore/QMap>
-class QAbstractItemModel;
 class QString;
 class StandardOutputView;
-class OutputViewCommand;
-class QModelIndex;
+class QStackedWidget;
 class QListView;
 class QToolButton;
-class QScrollBar;
 class ToolViewData;
+class KTabWidget;
+class QModelIndex;
 
-class OutputWidget : public KTabWidget
+class OutputWidget : public QWidget
 {
-    Q_OBJECT
-    public:
-        OutputWidget(QWidget* parent, ToolViewData* data);
-        void removeOutput( int id );
-        void raiseOutput( int id );
-    public Q_SLOTS:
-        void addOutput( int id );
-        void changeModel( int id );
-        void changeDelegate( int id );
-        void closeActiveView();
-        void selectNextItem();
-        void selectPrevItem();
-        void activate(const QModelIndex&);
+Q_OBJECT
+public:
+    OutputWidget(QWidget* parent, ToolViewData* data);
+    void removeOutput( int id );
+    void raiseOutput( int id );
+public Q_SLOTS:
+    void addOutput( int id );
+    void changeModel( int id );
+    void changeDelegate( int id );
+    void closeActiveView();
+    void selectNextItem();
+    void selectPrevItem();
+    void activate(const QModelIndex&);
 
-    Q_SIGNALS:
-        void outputRemoved( int, int );
-    private:
-        QListView* createListView(int id);
+Q_SIGNALS:
+    void outputRemoved( int, int );
+private:
+    QListView* createListView(int id);
+    void setCurrentWidget( QListView* view );
+    QWidget* currentWidget();
 
-        QMap<int, QListView*> views;
-        ToolViewData* data;
-        QToolButton* m_closeButton;
+    QMap<int, QListView*> views;
+    KTabWidget* tabwidget;
+    QStackedWidget* stackwidget;
+    ToolViewData* data;
+    QToolButton* m_closeButton;
 };
 
 #endif
