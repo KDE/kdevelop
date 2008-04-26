@@ -310,7 +310,7 @@ TreeModel *StackManager::model()
 
 void StackManager::setAutoUpdate(bool b)
 {
-    if (!autoUpdate_ && b)
+    if (!autoUpdate_ && b && !controller_->stateIsOn(s_appNotStarted))
         universe_->update();
     autoUpdate_ = b;
 }
