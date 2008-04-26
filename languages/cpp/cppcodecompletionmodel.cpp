@@ -313,8 +313,6 @@ void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QStr
         ++paramNameIt;
     }
     ret += ')';
-    if( functionType->isConstant() )
-      ret += " const";
 
     if( highlighting && ret.length() != textFormatStart ) {
       *highlighting <<  QVariant(textFormatStart);
