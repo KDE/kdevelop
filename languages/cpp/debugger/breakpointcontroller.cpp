@@ -309,7 +309,8 @@ int NewBreakpoint::hitCount() const
 
 void NewBreakpoint::sendToGDBMaybe()
 {
-    kDebug(9012) << "sendToGDBMaybe" << this;
+    if (pleaseEnterLocation_)
+        return;
 
     if (controller_->stateIsOn(s_dbgNotStarted))
         if (deleted_)
