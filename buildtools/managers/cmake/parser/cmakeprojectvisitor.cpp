@@ -1422,6 +1422,33 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
     return 1;
 }
 
+int CMakeProjectVisitor::visit( const WhileAst * whileast)
+{
+    CMakeCondition cond(m_vars);
+    bool result=cond.condition(whileast->condition());
+    
+    kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
+    int ret;
+    if(result)
+    {
+        walk(whileast->content(), whileast->line()+1);
+        walk(whileast->content(), whileast->line());
+    }
+    int inside=0;
+    CMakeFileContent::const_iterator it=whileast->content().constBegin()+whileast->line();
+    CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
+    int lines=0;
+    for(; inside>=0 && it!=itEnd; ++it, lines++)
+    {
+        QString funcName=it->name.toLower();
+        if(funcName=="while")
+            inside++;
+        else if(funcName=="endwhile")
+            inside--;
+    }
+    return lines;
+}
+
 CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp, const VariableMap * vars)
 {
     CMakeFunctionDesc ret=exp;
