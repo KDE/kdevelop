@@ -62,6 +62,7 @@
 #include <projectmodel.h>
 #include <backgroundparser.h>
 #include <duchain.h>
+#include <duchainutils.h>
 #include <stringhelpers.h>
 #include <duchainlock.h>
 #include <topducontext.h>
@@ -122,25 +123,11 @@ QList<KUrl> convertToUrls(const QList<HashedString>& stringList) {
   return ret;
 }
 
-Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* ctx) {
-  foreach(Declaration* decl, ctx->localDeclarations())
-    if(decl->range().start.line == cursor.line)
-      return decl;
-  
-  foreach(DUContext* child, ctx->childContexts()){
-    Declaration* decl = declarationInLine(cursor, child);
-    if(decl)
-      return decl;
-  }
-
-  return 0;
-}
-
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
 Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor, const KUrl& url) {
   QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
   foreach(TopDUContext* ctx, topContexts) {
-    Declaration* decl = declarationInLine(cursor, ctx);
+    Declaration* decl = DUChainUtils::declarationInLine(cursor, ctx);
     if(decl && decl->definition())
       return decl->definition();
   }
@@ -353,7 +340,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     }
 
     if(!definition && ctx) {
-      definition = declarationInLine(cursor, ctx);
+      definition = DUChainUtils::declarationInLine(cursor, ctx);
       if(definition)
         kDebug() << "found definition using declarationInLine:" << definition->toString();
       else
