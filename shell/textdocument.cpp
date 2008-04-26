@@ -151,7 +151,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
            to have several views, disable that behaviour.  */
         d->document->setAutoDeletePart(false);
 
-        Core::self()->partManager()->addPart(d->document, false);
+        Core::self()->partManager()->addPart(d->document);
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
@@ -165,8 +165,11 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
             connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
-        view = d->document->createView(parent);
 
+        view = qobject_cast<KTextEditor::View*>(d->document->widget());
+        //kate view is created without no parents and appears on the screen
+        //as a toplevel window which is not what we need
+        view->setVisible(false);
         Q_ASSERT(view);
     }
 
