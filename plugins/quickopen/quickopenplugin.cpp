@@ -132,7 +132,7 @@ Declaration* cursorContextDeclaration() {
   Declaration* definition = 0;
 
   if(!subCtx || !subCtx->owner())
-    definition = DUChainUtils::declarationInLine(cursor, ctx)->declaration(ctx);
+    definition = DUChainUtils::declarationInLine(cursor, ctx);
   else
     definition = subCtx->owner();
 
