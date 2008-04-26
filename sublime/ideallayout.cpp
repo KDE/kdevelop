@@ -265,6 +265,11 @@ IdealMainLayout::IdealMainLayout(QWidget * parent)
     m_splitterWidth = parent->style()->pixelMetric(QStyle::PM_SplitterWidth, 0, parentWidget());
 
     loadSettings();
+
+    anchorWidget(true, Left);
+    anchorWidget(true, Right);
+    anchorWidget(true, Top);
+    anchorWidget(true, Bottom);
 }
 
 IdealMainLayout::~ IdealMainLayout()
