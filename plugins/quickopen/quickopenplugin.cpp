@@ -129,10 +129,17 @@ Declaration* cursorContextDeclaration() {
   while(subCtx && !subCtx->owner())
     subCtx = subCtx->parentContext();
 
+  Declaration* definition = 0;
+
   if(!subCtx || !subCtx->owner())
+    definition = DUChainUtils::declarationInLine(cursor, ctx)->declaration(ctx);
+  else
+    definition = subCtx->owner();
+
+  if(!definition)
     return 0;
 
-  return DUChainUtils::declarationForDefinition(subCtx->owner());
+  return DUChainUtils::declarationForDefinition(definition);
 }
 
 //Returns only the name, no template-parameters or scope
@@ -844,8 +851,6 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   collectItems( items, context, filter );
 
   Declaration* cursorDecl = cursorContextDeclaration();
-  if(!cursorDecl)
-    cursorDecl = cursorDeclaration();
   
   model.registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
