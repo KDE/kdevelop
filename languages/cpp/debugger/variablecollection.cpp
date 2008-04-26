@@ -406,54 +406,6 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
     QString expression(line.mid(start, end-start));
     expression = expression.trimmed();
 
-    kDebug(9012) << "expression " << expression << "\n";
-    
-
-
-#if 0
-    QChar current = doc->character(c);    
-
-
-    KTextEditor::Cursor c = cursor;
-    bool moved = false;
-    for (;;)
-    {
-        QChar current = doc->character(c);
-        kDebug(9012) << "backward scan " << c;
-        if (current.isLetterOrNumber() || current == '_')
-        {
-            if (c.column() == 0)
-                break;
-            else {
-                c.setColumn(c.column() - 1);
-                moved = true;
-            }
-        }       
-        else {
-            if (moved)
-                c.setColumn(c.column() + 1);
-            break;
-        }
-    }
-    QString identifier;
-    for (;;)
-    {
-        QChar current = doc->character(c);      
-        kDebug(9012) << "forward scan " << c;
-        if (current.isLetterOrNumber() || current == '_')
-        {
-            identifier.append(current);
-            /* We hope that when we run out of the end of the line,
-               Kate will return some sufficiently broken character.  */
-            c.setColumn(c.column() + 1);
-        }
-        else
-            break;
-    }
-
-    kDebug(9012) << "The identifier is: " << identifier;
-#endif
-
     if (expression.isEmpty())
         return;
 
