@@ -52,7 +52,7 @@ public:
     virtual KTextEditor::Document* textDocument() const;
     virtual bool save(DocumentSaveMode mode = Default);
     virtual void reload();
-    virtual void close();
+    virtual void close(DocumentSaveMode mode = Default);
     virtual bool isActive() const;
     virtual DocumentState state() const;
 

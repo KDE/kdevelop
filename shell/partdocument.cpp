@@ -87,7 +87,7 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
     return true;
 }
 
-void PartDocument::close()
+void PartDocument::close(DocumentSaveMode mode)
 {
     //close all views and then delete ourself
     ///@todo test this

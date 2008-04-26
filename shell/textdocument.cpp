@@ -236,6 +236,9 @@ bool TextDocument::save(DocumentSaveMode mode)
     if (!d->document)
         return true;
 
+    if (mode & Discard)
+        return true;
+
     switch (d->state)
     {
         case IDocument::Clean: return true;
@@ -295,8 +298,33 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
         view->setCursorPosition(c);
 }
 
-void TextDocument::close()
+void TextDocument::close(DocumentSaveMode mode)
 {
+    if (!d->document)
+        return;
+
+    if (!(mode & Discard)) {
+        if (mode & Silent) {
+            if (!save(mode))
+                return;
+
+        } else {
+            if (state() == IDocument::Modified) {
+                int code = KMessageBox::warningYesNoCancel(
+                    Core::self()->uiController()->activeMainWindow(),
+                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
+                    i18n("Close Document"));
+                if (code == KMessageBox::Yes)
+                    save(mode);
+                else if (code == KMessageBox::Cancel)
+                    return;
+
+            } else if (state() == IDocument::DirtyAndModified) {
+                save(mode);
+            }
+        }
+    }
+
     //close all views and then delete ourself
     foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
     {

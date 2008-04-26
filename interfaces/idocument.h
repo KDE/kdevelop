@@ -60,8 +60,9 @@ public:
 
     enum DocumentSaveMode
     {
-        Default = 0 /**< standard save mode, gives a warning message if the file was modified outside the editor */,
-        Silent = 1 /**< silent save mode, doesn't warn the user if the file was modified outside the editor */
+        Default = 0x0 /**< standard save mode, gives a warning message if the file was modified outside the editor */,
+        Silent = 0x1 /**< silent save mode, doesn't warn the user if the file was modified outside the editor */,
+        Discard = 0x2 /**< discard mode, don't save any unchanged data */
     };
 
     /**
@@ -98,7 +99,7 @@ public:
     /**
      * Requests that the document be closed.
      */
-    virtual void close() = 0;
+    virtual void close(DocumentSaveMode mode = Default) = 0;
 
     /**
      * Enquires whether this document is currently active in the currently active mainwindow.
