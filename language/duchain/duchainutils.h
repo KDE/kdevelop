@@ -34,6 +34,7 @@ namespace KDevelop {
 
 class Declaration;
 class DUChainBase;
+class DUContext;
 class SimpleCursor;
 class HashedString;
 class TopDUContext;
@@ -51,6 +52,8 @@ namespace DUChainUtils {
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
+  ///Returns the first declaration in the given line. Searches the given context and all sub-contexts.
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, KDevelop::DUContext* ctx);
 }
 
 }

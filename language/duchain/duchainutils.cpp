@@ -264,3 +264,18 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
   
   return definition;
 }
+
+Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* ctx) {
+  foreach(Declaration* decl, ctx->localDeclarations())
+    if(decl->range().start.line == cursor.line)
+      return decl;
+  
+  foreach(DUContext* child, ctx->childContexts()){
+    Declaration* decl = declarationInLine(cursor, child);
+    if(decl)
+      return decl;
+  }
+
+  return 0;
+}
+
