@@ -2222,7 +2222,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                     bool correct;
                     m_index.append(arg.value.toInt(&correct));
                     kDebug(9042) << "???" << arg.value;
-                    Q_ASSERT(correct);
+                    if(!correct) return false;
                 }
                 i++;
             }
@@ -2640,7 +2640,7 @@ void SeparateArgumentsAst::writeBack( QString& ) const
 
 bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "separate_arguments" || func.arguments.count()==1)
+    if ( func.name.toLower() != "separate_arguments" || func.arguments.count()!=1)
         return false;
 
     addOutputArgument(func.arguments.first());

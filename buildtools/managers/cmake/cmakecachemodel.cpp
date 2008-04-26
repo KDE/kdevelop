@@ -37,8 +37,6 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     labels.append(i18n("Advanced"));
     setHorizontalHeaderLabels(labels);
     
-    int currentIdx=0;
-    QStringList currentComment;
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -46,6 +44,8 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
         return;
     }
 
+    int currentIdx=0;
+    QStringList currentComment;
     QTextStream in(&file);
     while (!in.atEnd())
     {
@@ -225,9 +225,11 @@ QList< QModelIndex > CMakeCacheModel::persistentIndices() const
     for(int i=0; i<rowCount(); i++)
     {
         QStandardItem* type = item(i, 1);
-        QStandardItem* valu = item(i, 2);
         if(type->text()=="BOOL")
+        {
+            QStandardItem* valu = item(i, 2);
             ret.append(valu->index());
+        }
     }
     return ret;
 }

@@ -346,28 +346,38 @@ void CMakeAstTest::testBreakGoodParse()
 
 void CMakeAstTest::testBreakGoodParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "break";
+
+    func2.addArguments( QStringList() );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good" ) << func1;
 }
 
 void CMakeAstTest::testBreakBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    BreakAst* ast = new BreakAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void CMakeAstTest::testBreakBadParse_data()
 {
+    CMakeFunctionDesc func1, func2;
+    func1.name = "break";
+    func2.name = "wrong name";
+
+    QStringList argList;
+    argList << "foo1" << "foo2";
+
+    func1.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad with args" ) << func1;
+    QTest::newRow( "bad wrong name" ) << func2;
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testBuildCommandGoodParse()
 {
@@ -476,15 +486,6 @@ void CMakeAstTest::testBuildNameBadParse_data()
     QTest::newRow( "ban wrong name" ) << func2;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -546,15 +547,6 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
     QTest::newRow( "no arguments" ) << func4;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testCMakePolicyGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -565,18 +557,64 @@ void CMakeAstTest::testCMakePolicyGoodParse()
 
 void CMakeAstTest::testCMakePolicyGoodParse_data()
 {
+    CMakeFunctionDesc func[4];
+    func[0].name = "CMAKE_POLICY";
+    func[1].name = func[2].name = func[3].name = func[0].name.toLower();
+    QStringList argList[4];
+
+    argList[0] << "VERSION" << "2.4";
+    argList[1] << "SET CMP3333 NEW";
+    argList[2] << "POP";
+    argList[3] << "PUSH";
+
+    func[0].addArguments( argList[0] );
+    func[1].addArguments( argList[1] );
+    func[2].addArguments( argList[2] );
+    func[3].addArguments( argList[3] );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good version" ) << func[0];
+    QTest::newRow( "good cmpset" ) << func[1];
+    QTest::newRow( "good pop" ) << func[2];
+    QTest::newRow( "good push" ) << func[3];
 }
 
 void CMakeAstTest::testCMakePolicyBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    CMakePolicyAst* ast = new CMakePolicyAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
 
 void CMakeAstTest::testCMakePolicyBadParse_data()
 {
+    CMakeFunctionDesc func[6];
+    func[0].name = "iamwrong";
+    func[1].name = func[2].name = func[3].name = func[4].name = func[5].name = "cmake_policy";
+    QStringList argList[5];
+
+    argList[0] << "VERSION" << "24";
+    argList[1] << "SET NEW";
+    argList[2] << "POP" << "33";
+    argList[3] << "PUSH" << "44";
+    argList[4] << "BUTTERFLY" << "44";
+
+    func[0].addArguments( argList[0] );
+    func[1].addArguments( argList[0] );
+    func[2].addArguments( argList[1] );
+    func[3].addArguments( argList[2] );
+    func[4].addArguments( argList[3] );
+    func[5].addArguments( argList[4] );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad name" ) << func[0];
+    QTest::newRow( "bad version" ) << func[1];
+    QTest::newRow( "bad cmpset" ) << func[2];
+    QTest::newRow( "bad pop" ) << func[3];
+    QTest::newRow( "bad push" ) << func[4];
+    QTest::newRow( "bad parameter" ) << func[4];
+
 }
 
 void CMakeAstTest::testConfigureFileGoodParse()
@@ -932,15 +970,6 @@ void CMakeAstTest::testExecuteProcessBadParse()
 void CMakeAstTest::testExecuteProcessBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testExportGoodParse()
 {

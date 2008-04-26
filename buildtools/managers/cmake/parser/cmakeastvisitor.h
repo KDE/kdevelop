@@ -64,6 +64,7 @@ class StringAst;
 class SubdirsAst;
 class TryCompileAst;
 class TargetLinkLibrariesAst;
+class SeparateArgumentsAst;
 
 class CMakeAstVisitor {
     public: //maybe protected?
@@ -110,6 +111,7 @@ class CMakeAstVisitor {
         virtual int visit( const SubdirsAst * ) = 0;
         virtual int visit( const TryCompileAst * ) = 0;
         virtual int visit( const TargetLinkLibrariesAst * ) = 0;
+        virtual int visit( const SeparateArgumentsAst * ) = 0;
 
         virtual int visit( const CMakeAst * ) = 0;
 };

@@ -425,25 +425,26 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         if ( !package.isEmpty() )
         {
             path=KUrl(path).prettyUrl();
-            kDebug(9042) << "================== Found" << path.trimmed() << "===============";
+            kDebug(9042) << "================== Found" << path << "===============";
             TopDUContext *aux=m_topctx;
-            DUChainWriteLocker lock(DUChain::lock());
-            m_topctx=DUChain::self()->chainForDocument(KUrl(path));
-            if(m_topctx==0)
             {
-                m_topctx=new TopDUContext(HashedString(path),
-                        SimpleRange(0,0, package.last().endColumn, package.last().endLine));
-                DUChain::self()->addDocumentChain(
-                    IdentifiedFile(HashedString(path)), m_topctx);
-                
-                Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
-                aux->addImportedParentContext(m_topctx);
-                kDebug() << "ppppppp" << m_topctx->url().str();
-            }
-            else
-            {
-                m_topctx->clearLocalDeclarations();
-                m_topctx->deleteUses();
+                DUChainWriteLocker lock(DUChain::lock());
+                m_topctx=DUChain::self()->chainForDocument(KUrl(path));
+                if(m_topctx==0)
+                {
+                    m_topctx=new TopDUContext(HashedString(path),
+                            SimpleRange(0,0, package.last().endColumn, package.last().endLine));
+                    DUChain::self()->addDocumentChain(
+                        IdentifiedFile(HashedString(path)), m_topctx);
+                    
+                    Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
+                    aux->addImportedParentContext(m_topctx);
+                }
+                else
+                {
+                    m_topctx->clearLocalDeclarations();
+                    m_topctx->deleteUses();
+                }
             }
             walk(package, 0);
             m_topctx=aux;
@@ -1407,6 +1408,17 @@ int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
 int CMakeProjectVisitor::visit(const MarkAsAdvancedAst *maa)
 {
     kDebug(9042) << "Mark As Advanced" << maa->advancedVars();
+    return 1;
+}
+
+int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
+{
+    QString varName=separgs->variableName();
+    QStringList res;
+    foreach(const QString& value, m_vars->value(varName))
+    {
+        res += value.split(' ');
+    }
     return 1;
 }
 
