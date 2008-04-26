@@ -1071,14 +1071,23 @@ int CMakeProjectVisitor::visit(const ListAst *list)
                 kDebug(9032) << "error! trying to GET an element that doesn't exist!" << list->index().first();
             else
                 m_vars->insert(output, QStringList(theList[list->index().first()]));
+            kDebug(9042) << "List: Get" << theList << list->output() << m_vars->value(list->output());
             break;
         case ListAst::APPEND:
             theList += list->elements();
             m_vars->insert(list->list(), theList);
             break;
-        case ListAst::FIND:
-#warning Implement me
-            break;
+        case ListAst::FIND: {
+            int idx=-1;
+            foreach(const QString& val, theList)
+            {
+                if(val==list->elements().first())
+                    break;
+                idx++;
+            }
+            m_vars->insert(list->output(), QStringList(QString::number(idx)));
+            kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
+        }   break;
         case ListAst::INSERT: {
             int p=list->index().first();
             foreach(const QString& elem, list->elements())
@@ -1089,6 +1098,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::REMOVE_ITEM:
+            kDebug(9042) << "list remove item: " << theList << list->elements();
             foreach(const QString& elem, list->elements())
             {
                 theList.removeAll(elem);
@@ -1096,19 +1106,18 @@ int CMakeProjectVisitor::visit(const ListAst *list)
 
             m_vars->insert(list->list(), theList);
             break;
-            case ListAst::REMOVE_AT: {
-                QList<int> indices=list->index();
-                qSort(indices);
-                QList<int>::const_iterator it=indices.constEnd();
-                kDebug(9042) << "list remove: " << theList << indices;
-                while(it!=indices.constBegin())
-                {
-                    --it;
-                    theList.removeAt(*it);
-                }
-                m_vars->insert(list->list(), theList);
+        case ListAst::REMOVE_AT: {
+            QList<int> indices=list->index();
+            qSort(indices);
+            QList<int>::const_iterator it=indices.constEnd();
+            kDebug(9042) << "list remove: " << theList << indices;
+            while(it!=indices.constBegin())
+            {
+                --it;
+                theList.removeAt(*it);
             }
-            break;
+            m_vars->insert(list->list(), theList);
+        }   break;
         case ListAst::SORT:
             qSort(theList);
             m_vars->insert(list->list(), theList);
@@ -1428,7 +1437,6 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     bool result=cond.condition(whileast->condition());
     
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
-    int ret;
     if(result)
     {
         walk(whileast->content(), whileast->line()+1);

@@ -2111,7 +2111,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2)
         return false;
 
-    QString argName = func.arguments[0].value;
+    QString argName = func.arguments.first().value;
     if(argName=="LENGTH")
         m_type = LENGTH;
     else if(argName=="GET")
@@ -2178,8 +2178,8 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()!=4)
                 return false;
             m_elements.append(func.arguments[2].value);
-            m_output=func.arguments[2].value;
-            addOutputArgument(func.arguments[1]);
+            m_output=func.arguments[3].value;
+
             addOutputArgument(func.arguments[3]);
         } break;
         case INSERT: {
@@ -2199,7 +2199,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
         } break;
         case REMOVE_ITEM: {
-            if(func.arguments.count()<4)
+            if(func.arguments.count()<3)
                 return false;
             int i=0;
             addOutputArgument(func.arguments[1]);
