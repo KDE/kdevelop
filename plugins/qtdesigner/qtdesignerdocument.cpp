@@ -82,7 +82,9 @@ KTextEditor::Document* QtDesignerDocument::textDocument() const
 
 bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 {
-    Q_UNUSED(mode);
+    if (mode & Discard)
+        return true;
+
     kDebug(9038) << "Going to Save";
     if( m_state == KDevelop::IDocument::Clean )
         return false;
@@ -114,8 +116,11 @@ void QtDesignerDocument::reload()
     notifyStateChanged();
 }
 
-void QtDesignerDocument::close()
+void QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
 {
+    if (!save(mode))
+        return;
+
     foreach(QDesignerFormWindowInterface* form, m_forms)
     {
         m_designerPlugin->designer()->formWindowManager()->removeFormWindow(form);

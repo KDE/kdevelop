@@ -48,7 +48,7 @@ public:
     virtual KTextEditor::Document* textDocument() const;
     virtual bool save(KDevelop::IDocument::DocumentSaveMode);
     virtual void reload();
-    virtual void close();
+    virtual void close(KDevelop::IDocument::DocumentSaveMode);
     virtual bool isActive() const;
     virtual DocumentState state() const;
     virtual void setCursorPosition(const KTextEditor::Cursor&);
