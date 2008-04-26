@@ -575,15 +575,7 @@ CppFunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
   return functionType;
 }
 
-void TypeBuilder::visitDeclarator(DeclaratorAST *node)
-{
-  //BEGIN Copied from default visitor
-  visit(node->sub_declarator);
-  visitNodes(this, node->ptr_ops);
-  visit(node->id);
-  visit(node->bit_expression);
-  //END Finished with first part of default visitor
-
+void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {
   // Custom code - create array types
   if (node->array_dimensions) {
     const ListNode<ExpressionAST*> *it = node->array_dimensions->toFront(), *end = it;
@@ -594,27 +586,20 @@ void TypeBuilder::visitDeclarator(DeclaratorAST *node)
     } while (it != end);
   }
 
-  if (node->parameter_declaration_clause) {
+  if (node->parameter_declaration_clause)
     // New function type
     openType(CppFunctionType::Ptr(openFunction(node)), node);
-    m_importedParentContexts.append(openContext(node->parameter_declaration_clause, DUContext::Function, node->id));
-  }
+}
 
-  //BEGIN Copied from default visitor
-  visit(node->parameter_declaration_clause);
-  visit(node->exception_spec);
-  //END Finished with default visitor
-
-  if (node->parameter_declaration_clause) {
+void TypeBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
+  if (node->parameter_declaration_clause)
     closeType();
-    closeContext();
-  }
 
-  if (lastType() && hasCurrentType()) {
+  if (lastType() && hasCurrentType())
     if (StructureType::Ptr structure = currentType<StructureType>())
       structure->addElement(lastType());
-  }
 }
+
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 {

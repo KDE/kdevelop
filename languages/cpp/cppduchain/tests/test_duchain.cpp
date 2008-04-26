@@ -1117,6 +1117,18 @@ void TestDUChain::testFunctionDefinition3() {
 
   release(top);
 }
+
+void TestDUChain::testFunctionDefinition5() {
+  QByteArray text("class Class {typedef Class ClassDef;void test(ClassDef);}; void Class::test(ClassDef i) {}");
+  DUContext* top = parse(text, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1); //Used from 1 file
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2); //Used 2 times
+}
+
 void TestDUChain::testBaseClasses() {
   QByteArray text("class A{int aValue; }; class B{int bValue;}; class C : public A{int cValue;}; class D : public A, B {int dValue;}; template<class Base> class F : public Base { int fValue;};");
 

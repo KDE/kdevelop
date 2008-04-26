@@ -1101,7 +1101,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     {
       DUChainReadLocker lock(DUChain::lock());
       if(currentContext()->type() == DUContext::Other) //Cannot declare a function in a code-context
-        return false;
+        return false; ///@todo create warning/error
     }
     if(!clause || !clause->parameter_declarations)
       return true;

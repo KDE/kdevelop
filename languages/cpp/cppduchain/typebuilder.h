@@ -80,9 +80,10 @@ protected:
   virtual void visitTypedef(TypedefAST*);
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
-  virtual void visitDeclarator(DeclaratorAST*);
   virtual void visitParameterDeclaration(ParameterDeclarationAST*);
   virtual void visitTemplateParameter(TemplateParameterAST *);
+  virtual void createTypeForDeclarator(DeclaratorAST *node);
+  virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
 

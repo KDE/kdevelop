@@ -163,7 +163,6 @@ protected:
   ///has more than 1 element.
   void openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id);
   void closePrefixContext(const QualifiedIdentifier& id);
-  
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
@@ -172,6 +171,7 @@ protected:
   virtual void visitTemplateDeclaration(TemplateDeclarationAST *);
 
   // Normal overridden visitors
+  virtual void visitDeclarator(DeclaratorAST *node);
   virtual void visitNamespace(NamespaceAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
   virtual void visitTypedef(TypedefAST *);
@@ -183,6 +183,9 @@ protected:
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
   virtual void visitForStatement(ForStatementAST*);
   virtual void visitIfStatement(IfStatementAST*);
+  virtual void createTypeForDeclarator(DeclaratorAST *node);
+  virtual void closeTypeForDeclarator(DeclaratorAST *node);
+
 
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);

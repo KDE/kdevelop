@@ -850,6 +850,40 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   m_importedParentContexts.clear();
 }
 
+void ContextBuilder::createTypeForDeclarator(DeclaratorAST *node) {
+}
+
+void ContextBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
+}
+
+void ContextBuilder::visitDeclarator(DeclaratorAST *node)
+{
+  //BEGIN Copied from default visitor
+  visit(node->sub_declarator);
+  visitNodes(this, node->ptr_ops);
+  visit(node->id);
+  visit(node->bit_expression);
+  //END Finished with first part of default visitor
+
+  createTypeForDeclarator(node);
+
+  if (node->parameter_declaration_clause && (m_compilingContexts || node->parameter_declaration_clause->ducontext)) {
+    DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
+    if(m_compilingContexts)
+      m_importedParentContexts.append(ctx);
+  }
+
+  //BEGIN Copied from default visitor
+  visit(node->parameter_declaration_clause);
+  visit(node->exception_spec);
+  //END Finished with default visitor
+
+  closeTypeForDeclarator(node);
+
+  if (node->parameter_declaration_clause && (m_compilingContexts || node->parameter_declaration_clause->ducontext))
+    closeContext();
+}
+
 void ContextBuilder::addImportedContexts()
 {
   if (m_compilingContexts && !m_importedParentContexts.isEmpty()) {

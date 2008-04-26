@@ -482,7 +482,7 @@ class CppDUContext : public BaseContext {
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, trace, flags );
 
         ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.textCursor(); )
-        
+
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
           QList<Declaration*>::iterator it = ret.begin();
