@@ -87,6 +87,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
 
 void Variable::handleCreation(const GDBMI::Value& r)
 {
+    inScope_ = true;
     varobj_ = r["name"].literal();
     setHasMore(r["numchild"].toInt());
     itemData[1] = r["value"].literal();
@@ -238,6 +239,8 @@ void Variable::markAllDead()
     for (i = allVariables_.begin(), e = allVariables_.end(); i != e; ++i)
     {
         i.value()->varobj_.clear();
+        i.value()->inScope_ = false;
+        i.value()->reportChange();
     }
     allVariables_.clear();
 }
@@ -453,6 +456,9 @@ void VariableCollection::slotEvent(event_t event)
 
         case thread_or_frame_changed:
 
+            // FIXME: probably should do this only on the
+            // first stop.
+            watches()->reinstall();
             update();
 
             #if 0
