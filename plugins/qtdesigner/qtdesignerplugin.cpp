@@ -106,7 +106,7 @@ public:
         kDebug(9038) << "Type not found:" << m_type;
         return 0;
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         if( m_type == WidgetBox )
             return Qt::LeftDockWidgetArea;
@@ -118,6 +118,19 @@ public:
             return Qt::RightDockWidgetArea;
         kDebug(9038) << "Type not found:" << m_type;
         return Qt::TopDockWidgetArea;
+    }
+
+    virtual QString id() const
+    {
+        if( m_type == WidgetBox )
+            return "org.kevelop.qtdesigner.WidgetBox";
+        else if( m_type == PropertyEditor )
+            return "org.kevelop.qtdesigner.PropertyEditor";
+        else if( m_type == ActionEditor )
+            return "org.kevelop.qtdesigner.ActionEditor";
+        else if( m_type == ObjectInspector )
+            return "org.kevelop.qtdesigner.ObjectInspector";
+        return QString();
     }
 
 private:

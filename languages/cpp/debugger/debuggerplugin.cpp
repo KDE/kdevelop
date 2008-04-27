@@ -86,14 +86,22 @@ template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
 {
 public:
-  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller, Qt::DockWidgetArea defaultArea): m_plugin(plugin), m_controller(controller), m_defaultArea(defaultArea) {}
+  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller, 
+                      const QString &id, Qt::DockWidgetArea defaultArea)
+  : m_plugin(plugin), m_controller(controller),
+    m_id(id), m_defaultArea(defaultArea) {}
 
   virtual QWidget* create(QWidget *parent = 0)
   {
     return new T(m_plugin, m_controller, parent);
   }
 
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+  virtual QString id() const
+  {
+    return m_id;
+  }
+
+  virtual Qt::DockWidgetArea defaultPosition()
   {
     return m_defaultArea;
   }
@@ -106,6 +114,7 @@ public:
 private:
   CppDebuggerPlugin* m_plugin;
   GDBController* m_controller;
+  QString m_id;
   Qt::DockWidgetArea m_defaultArea;
 };
 
@@ -126,17 +135,39 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     core()->uiController()->addToolView(
         i18n("Breakpoints"), 
-        new DebuggerToolFactory<BreakpointWidget>(this, controller, Qt::BottomDockWidgetArea));
+        new DebuggerToolFactory<BreakpointWidget>(
+            this, controller, "org.kdevelop.debugger.BreakpointsView",
+            Qt::BottomDockWidgetArea));
 
-    core()->uiController()->addToolView(i18n("Variables"), new DebuggerToolFactory<VariableWidget>(this, controller, Qt::LeftDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("Variables"), 
+        new DebuggerToolFactory<VariableWidget>(
+            this, controller, "org.kdevelop.debugger.VariablesView", 
+            Qt::LeftDockWidgetArea));
 
-    core()->uiController()->addToolView(i18n("Frame Stack"), new DebuggerToolFactory<FramestackWidget>(this, controller, Qt::BottomDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("Frame Stack"), 
+        new DebuggerToolFactory<FramestackWidget>(
+            this, controller, "org.kdevelop.debugger.StackView",
+            Qt::BottomDockWidgetArea));
 
-    core()->uiController()->addToolView(i18n("Disassemble"), new DebuggerToolFactory<DisassembleWidget>(this, controller, Qt::BottomDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("Disassemble"), 
+        new DebuggerToolFactory<DisassembleWidget>(
+            this, controller, "org.kdevelop.debugger.DisassemblerView",
+            Qt::BottomDockWidgetArea));
 
-    core()->uiController()->addToolView(i18n("GDB"), new DebuggerToolFactory<GDBOutputWidget>(this, controller, Qt::BottomDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("GDB"), 
+        new DebuggerToolFactory<GDBOutputWidget>(
+            this, controller, "org.kdevelop.debugger.ConsoleView",
+            Qt::BottomDockWidgetArea));
 
-    core()->uiController()->addToolView(i18n("Debug views"), new DebuggerToolFactory<ViewerWidget>(this, controller, Qt::BottomDockWidgetArea));
+    core()->uiController()->addToolView(
+        i18n("Debug views"),
+        new DebuggerToolFactory<ViewerWidget>(
+            this, controller, "org.kdevelop.debugger.VariousViews",
+            Qt::BottomDockWidgetArea));
 
     setupActions();
 
