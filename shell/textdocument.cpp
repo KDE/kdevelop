@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
+#include <kxmlguifactory.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
