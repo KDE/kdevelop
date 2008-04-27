@@ -56,6 +56,8 @@ public:
 
     virtual QString documentType() const;
 
+    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow);
+
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);
 
@@ -70,12 +72,15 @@ private:
 
 class TextView : public Sublime::View
 {
+    Q_OBJECT
 public:
     TextView(TextDocument* doc);
     virtual ~TextView();
 
     virtual QWidget *widget(QWidget *parent = 0);
     virtual bool hasWidget() const;
+
+    KTextEditor::View *textView() const;
 
     virtual QString viewState() const;
     virtual void setState(const QString& state);

@@ -36,6 +36,10 @@ namespace KParts {
 class Part;
 }
 
+namespace KTextEditor {
+class View;
+}
+
 namespace KDevelop {
 
 class IPlugin;
@@ -47,6 +51,7 @@ public:
     MainWindowPrivate(MainWindow *mainWindow);
 
     QPointer<QWidget> centralPlugin;
+    QPointer<KTextEditor::View> currentTextView;
 
     void setupActions();
 

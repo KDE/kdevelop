@@ -26,7 +26,7 @@
 #include "interfacesexport.h"
 #include <ktexteditor/cursor.h>
 
-namespace KParts { class Part; }
+namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor { class Document; }
 namespace Sublime{ class View; }
 
@@ -119,7 +119,7 @@ public:
      * Performs document activation actions if any.
      * This needs to call notifyActivated()
      */
-    virtual void activate(Sublime::View *activeView) = 0;
+    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) = 0;
 
 protected:
     ICore* core();

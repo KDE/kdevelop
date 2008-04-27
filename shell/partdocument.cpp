@@ -121,7 +121,7 @@ IDocument::DocumentState PartDocument::state() const
     return Clean;
 }
 
-void PartDocument::activate(Sublime::View *activeView)
+void PartDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainWindow)
 {
     KParts::Part *part = partForView(activeView->widget());
     if (Core::self()->partManager()->activePart() != part)

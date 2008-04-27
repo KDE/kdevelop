@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <ktexteditor/view.h>
 
 #include "shellextension.h"
 #include "partcontroller.h"
@@ -182,7 +183,16 @@ void MainWindow::documentClosed( IDocument* document )
         setCaption(QString(), false);
 }
 
+void MainWindow::setCurrentTextView(KTextEditor::View *view)
+{
+    d->currentTextView = view;
+}
+
+KTextEditor::View *MainWindow::currentTextView()
+{
+    return d->currentTextView;
+}
+
 }
 
 #include "mainwindow.moc"
-

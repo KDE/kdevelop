@@ -56,7 +56,7 @@ public:
     virtual bool isActive() const;
     virtual DocumentState state() const;
 
-    virtual void activate(Sublime::View *activeView);
+    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow);
 
     virtual KTextEditor::Cursor cursorPosition() const;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);

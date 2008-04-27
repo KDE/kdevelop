@@ -40,6 +40,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/factory.h>
 #include <ktexteditor/smartinterface.h>
 
 #include "core.h"
@@ -53,10 +54,14 @@ namespace KDevelop
 class PartControllerPrivate
 {
 public:
+    PartControllerPrivate(): m_textEditor(0) {}
+
     QString m_editor;
     QStringList m_textTypes;
 
     Core *m_core;
+
+    KTextEditor::Editor *m_textEditor;
 
     KParts::Factory *findPartFactory( const QString &mimeType,
                                       const QString &partType,
@@ -145,13 +150,16 @@ KTextEditor::Document* PartController::createTextPart(
     const QString &encoding,
     bool activate )
 {
-    KTextEditor::Document* doc =
-        qobject_cast<KTextEditor::Document *>( createPart(
-                                                   "text/plain",
-                                                   "KTextEditor/Document",
-                                                   "KTextEditor::Editor",
-                                                   d->m_editor ) );
+    if (!d->m_textEditor)
+    {
+        KTextEditor::Factory * editorFactory = qobject_cast<KTextEditor::Factory*>(d->findPartFactory(
+            "text/plain",
+            "KTextEditor/Document",
+            "KTextEditor::Editor" ));
 
+        d->m_textEditor = editorFactory->editor();
+    }
+    KTextEditor::Document* doc = d->m_textEditor->createDocument(this);
     EditorIntegrator::addDocument( doc );
 
     if ( !encoding.isNull() )

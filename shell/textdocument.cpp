@@ -29,11 +29,11 @@
 #include <ktexteditor/modificationinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include <sublime/mainwindow.h>
 #include <sublime/area.h>
 #include <sublime/view.h>
 
 #include "core.h"
+#include "mainwindow.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
 #include "documentcontroller.h"
@@ -151,7 +151,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
            to have several views, disable that behaviour.  */
         d->document->setAutoDeletePart(false);
 
-        Core::self()->partManager()->addPart(d->document);
+        Core::self()->partManager()->addPart(d->document, false);
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
@@ -166,10 +166,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
 
-        view = qobject_cast<KTextEditor::View*>(d->document->widget());
-        //kate view is created without no parents and appears on the screen
-        //as a toplevel window which is not what we need
-        view->setVisible(false);
+        view = d->document->createView(parent);
         Q_ASSERT(view);
     }
 
@@ -398,6 +395,24 @@ QString KDevelop::TextDocument::documentType() const
 }
 
 bool KDevelop::TextView::hasWidget() const
+{
+    return d->m_view;
+}
+
+void KDevelop::TextDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainWindow)
+{
+    //this is kate view so we need to unplug previous kate view (if there's one) and plug this one
+    MainWindow *m = qobject_cast<KDevelop::MainWindow*>(mainWindow);
+    if (m->currentTextView())
+        m->guiFactory()->removeClient(m->currentTextView());
+    KTextEditor::View *view = qobject_cast<KDevelop::TextView*>(activeView)->textView();
+    m->setCurrentTextView(view);
+    m->guiFactory()->addClient(view);
+
+    PartDocument::activate(activeView, mainWindow);
+}
+
+KTextEditor::View *KDevelop::TextView::textView() const
 {
     return d->m_view;
 }

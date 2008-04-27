@@ -59,7 +59,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-    :m_mainWindow(mainWindow)
+    :currentTextView(0), m_mainWindow(mainWindow)
 {
 }
 
@@ -93,7 +93,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if (doc)
     {
         //activate part if it is not yet activated
-        doc->activate(view);
+        doc->activate(view, m_mainWindow);
     }
     else
     {
