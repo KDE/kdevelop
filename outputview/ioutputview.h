@@ -57,7 +57,8 @@ public:
     enum StandardToolView
     {
         BuildView = 0 /**< the standard outputview for building output */,
-        RunView =   1 /**< the standard outputview for running apps */ 
+        RunView =   1 /**< the standard outputview for running apps */,
+        DebugView = 2 /**< the standard outputview for debugging apps */
     };
 
     virtual ~IOutputView() {}
