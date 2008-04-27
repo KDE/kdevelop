@@ -39,20 +39,36 @@ class IOutputView
 {
 public:
 
-    enum Behaviour {
+    enum Behaviour
+    {
         AllowUserClose = 0x1 /**< allow the user to close the view */,
         AlwaysShowView = 0x2 /**< always show the view */,
         AutoScroll     = 0x4 /**< automatically scroll the view */
     };
     Q_DECLARE_FLAGS(Behaviours, Behaviour)
 
-    enum ViewType {
-        OneView      = 0x1 /**< there's only one outputview, newly registered outputs will replace existing ones */,
-        HistoryView  = 0x2 /**< The toolview will have a history with forward/backward buttons */,
-        MultipleView = 0x4 /**< show multiples outputs in a toolview at the same time */
+    enum ViewType
+    {
+        OneView      = 0 /**< there's only one outputview, newly registered outputs will replace existing ones */,
+        HistoryView  = 1 /**< The toolview will have a history with forward/backward buttons */,
+        MultipleView = 2 /**< show multiples outputs in a toolview at the same time */
+    };
+
+    enum StandardToolView
+    {
+        BuildView = 0 /**< the standard outputview for building output */,
+        RunView =   1 /**< the standard outputview for running apps */ 
     };
 
     virtual ~IOutputView() {}
+
+    /**
+     * fetch the identifier for one of the standard toolviews
+     * This will automatically create the toolview if it doesn't exist yet
+     * @param view the standard toolview to get the identifier for
+     * @returns the identifier for the standard toolview
+     */
+    virtual int standardToolView( StandardToolView view ) = 0;
 
     /**
      * Register a new toolview for output with the given title, behaviour and type
