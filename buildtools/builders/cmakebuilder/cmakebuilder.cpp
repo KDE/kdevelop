@@ -178,7 +178,7 @@ bool CMakeBuilder::configure( KDevelop::IProject* project )
                     delete m_cmds[id];
             }else
             {
-                int tvid = view->registerToolView( i18n("Build"), KDevelop::IOutputView::MultipleView );
+                int tvid = view->standardToolView( KDevelop::IOutputView::BuildView );
                 id = view->registerOutputInToolView( tvid, i18n("CMake: %1", project->name()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
                 m_ids[project->projectItem()] = id;
                 m_models[id] = new KDevelop::OutputModel(this);

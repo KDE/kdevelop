@@ -305,7 +305,7 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
                 {
                     item->text();
                 }
-                int toolviewid = view->registerToolView(i18n( "Build" ), KDevelop::IOutputView::MultipleView );
+                int toolviewid = view->standardToolView(KDevelop::IOutputView::BuildView );
                 id = view->registerOutputInToolView(toolviewid, i18n("Make: %1", target), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
                 m_ids[item] = id;
                 m_models[id] = new MakeOutputModel(this, this);
