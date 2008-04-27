@@ -23,7 +23,7 @@ kde4_add_ui_files(kcm_kdev_cppdebugger_PART_SRCS ${kcm_kdev_cppdebugger_PART_UI}
 kde4_add_kcfg_files( kcm_kdev_cppdebugger_PART_SRCS debuggerconfig.kcfgc )
 kde4_add_plugin(kcm_kdev_cppdebugger ${kcm_kdev_cppdebugger_PART_SRCS})
 target_link_libraries(kcm_kdev_cppdebugger
-    ${KDE4_KUTILS_LIBS}
+    ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS}
 )
 
 install(TARGETS kcm_kdev_cppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
