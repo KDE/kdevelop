@@ -62,9 +62,14 @@ public:
         return view;
     }
 
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::RightDockWidgetArea;
+    }
+
+    virtual QString id() const
+    {
+        return "org.kdevelop.Teamwork";
     }
 
 private:
