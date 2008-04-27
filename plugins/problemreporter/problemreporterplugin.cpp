@@ -49,9 +49,14 @@ public:
     return new ProblemWidget(parent, m_plugin);
   }
 
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+  virtual Qt::DockWidgetArea defaultPosition()
   {
     return Qt::BottomDockWidgetArea;
+  }
+
+  virtual QString id() const
+  {
+    return "org.kdevelop.ProblemReporterView";
   }
 
 private:

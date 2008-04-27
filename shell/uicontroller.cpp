@@ -167,8 +167,9 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
     Sublime::View* view = doc->createView();
-    d->defaultArea->addToolView(view,
-        Sublime::dockAreaToPosition(factory->defaultPosition(d->defaultArea->objectName())));
+    d->defaultArea->addToolView(
+        view,
+        Sublime::dockAreaToPosition(factory->defaultPosition()));
 
     connect(view, SIGNAL(raise(Sublime::View*)), SLOT(raiseToolView(Sublime::View*)));
 
@@ -248,7 +249,7 @@ void UiController::addNewToolView(MainWindow *mw)
         ViewSelectorItem *current = static_cast<ViewSelectorItem*>(list->currentItem());
         Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
         mw->area()->addToolView(doc->createView(),
-            Sublime::dockAreaToPosition(current->factory->defaultPosition(mw->area()->objectName())));
+            Sublime::dockAreaToPosition(current->factory->defaultPosition()));
     }
     delete dia;
 }

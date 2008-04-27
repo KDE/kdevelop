@@ -58,10 +58,15 @@ public:
     {
         return new CvsMainView(m_plugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::BottomDockWidgetArea;
     }
+    virtual QString id() const
+    {
+        return "org.kdevelop.CVSView";
+    }
+
 private:
     CvsPlugin *m_plugin;
 };

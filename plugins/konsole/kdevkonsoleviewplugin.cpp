@@ -41,9 +41,13 @@ public:
     {
         return new KDevKonsoleView(mplugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::BottomDockWidgetArea;
+    }
+    virtual QString id() const
+    {
+        return "org.kdevelop.KonsoleView";
     }
 private:
     KDevKonsoleViewPlugin *mplugin;

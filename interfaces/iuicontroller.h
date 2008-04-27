@@ -43,7 +43,11 @@ class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
     virtual ~IToolViewFactory() {}
     virtual QWidget* create(QWidget *parent = 0) = 0;
-    virtual Qt::DockWidgetArea defaultPosition(const QString &areaName) = 0;
+    /* Return the identifier of this toolview.  The identifier
+       is used to remember which areas the tool view should appear
+       in, and must never change. */
+    virtual QString id() const = 0;
+    virtual Qt::DockWidgetArea defaultPosition() = 0;
     /**
       * Fetch a list of actions to add to the toolbar of the toolview @p view
       * @param view the view to which the actions should be added

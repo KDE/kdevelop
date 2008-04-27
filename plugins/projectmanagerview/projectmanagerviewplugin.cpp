@@ -68,10 +68,15 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return new ProjectManagerView( mplugin, parent );
         }
-        virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+        virtual Qt::DockWidgetArea defaultPosition()
         {
             return Qt::RightDockWidgetArea;
         }
+        virtual QString id() const
+        {
+            return "org.kdevelop.ProjectsView";
+        }
+
     private:
         ProjectManagerViewPlugin *mplugin;
 };

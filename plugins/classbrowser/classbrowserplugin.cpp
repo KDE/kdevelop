@@ -46,9 +46,14 @@ public:
     return new ClassWidget(parent, m_plugin);
   }
 
-  virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+  virtual Qt::DockWidgetArea defaultPosition()
   {
     return Qt::LeftDockWidgetArea;
+  }
+
+  virtual QString id() const
+  {
+    return "org.kdevelop.ClassBrowserView";
   }
 
 private:

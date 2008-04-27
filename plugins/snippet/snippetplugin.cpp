@@ -37,9 +37,14 @@ public:
         return new SnippetView( m_plugin, parent);
     }
 
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::RightDockWidgetArea;
+    }
+
+    virtual QString id() const
+    {
+        return "org.kdevelop.KonsoleView";
     }
 
 private:

@@ -43,10 +43,16 @@ public:
         Q_UNUSED(parent)
         return new FileManager(m_plugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::LeftDockWidgetArea;
     }
+
+    virtual QString id() const
+    {
+        return "org.kdevelop.FileManagerView";
+    }
+
 private:
     KDevFileManagerPlugin *m_plugin;
 };

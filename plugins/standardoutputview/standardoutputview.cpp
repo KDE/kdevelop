@@ -55,13 +55,17 @@ public:
     {
         return new OutputWidget( parent, m_data );
     }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
+    virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::BottomDockWidgetArea;
     }
     virtual void viewCreated( Sublime::View* view )
     {
         m_data->views << view;
+    }
+    virtual QString id() const
+    {
+        return "org.kdevelop.OutputView";
     }
 private:
     ToolViewData *m_data;
