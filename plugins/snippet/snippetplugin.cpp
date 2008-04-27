@@ -44,7 +44,7 @@ public:
 
     virtual QString id() const
     {
-        return "org.kdevelop.KonsoleView";
+        return "org.kdevelop.SnippetView";
     }
 
 private:
