@@ -117,6 +117,27 @@ StandardOutputView::~StandardOutputView()
 {
 }
 
+int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolView view )
+{
+    if( standardViews.contains( view ) )
+    {
+        return standardViews.value( view );
+    }
+    switch( view )
+    {
+        case KDevelop::IOutputView::BuildView:
+        {
+            return registerToolView( i18n("Build"), KDevelop::IOutputView::MultipleView );
+            break;
+        }
+        case KDevelop::IOutputView::RunView:
+        {
+            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView );
+            break;
+        }
+    }
+}
+
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type )
 {

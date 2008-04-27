@@ -51,6 +51,8 @@ Q_INTERFACES( KDevelop::IOutputView )
 public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~StandardOutputView();
+
+    int standardToolView( KDevelop::IOutputView::StandardToolView view );
     int registerToolView( const QString& title,
                           KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView );
 
@@ -78,6 +80,7 @@ Q_SIGNALS:
 private:
     QMap<int, ToolViewData*> toolviews;
     QList<int> ids;
+    QMap<KDevelop::IOutputView::StandardToolView,int> standardViews;
     friend class StandardOutputViewViewFactory;
 };
 
