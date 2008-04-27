@@ -135,6 +135,11 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
             return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView );
             break;
         }
+        case KDevelop::IOutputView::DebugView:
+        {
+            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView );
+            break;
+        }
     }
 }
 
