@@ -100,6 +100,8 @@ public:
         return m_factory->toolBarActions( viewWidget );
     }
 
+    QString id() const { return m_factory->id(); }
+
 private:
     IToolViewFactory *m_factory;
 };
@@ -166,6 +168,10 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     kDebug(9501) ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
+
+    if (!d->defaultArea->wantToolView(factory->id()))
+        return;
+
     Sublime::View* view = doc->createView();
     d->defaultArea->addToolView(
         view,
@@ -283,6 +289,7 @@ KParts::MainWindow *UiController::activeMainWindow()
 
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
+    area->save(group);
     saveArea(area->rootIndex(), group);
 }
 
@@ -320,6 +327,7 @@ void UiController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
 
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
+    area->load(group);
     loadArea(area, area->rootIndex(), group);
 }
 

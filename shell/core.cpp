@@ -67,10 +67,18 @@ struct CorePrivate {
         projectController->initialize();
         documentController->initialize();
 
+        /* This is somewhat messy.  We want to load the areas before
+           loading the plugins, so that when each plugin is loaded we
+           know if an area wants some of the tool view from that plugin.
+           OTOH, loading of areas creates documents, and some documents
+           might require that a plugin is already loaded.
+           Probably, the best approach would be to plugins to just add
+           tool views to a list of available tool view, and then grab
+           those tool views when loading an area.  */
+        uiController->loadAllAreas(KGlobal::config());
+
 	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
-
-        uiController->loadAllAreas(KGlobal::config());
 
         Sublime::Area *defaultArea = uiController->defaultArea();
         uiController->showArea(defaultArea, uiController->defaultMainWindow());

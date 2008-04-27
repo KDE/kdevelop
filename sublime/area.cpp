@@ -83,6 +83,7 @@ struct AreaPrivate {
 
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
+    QStringList desiredToolViewsIds;
 };
 
 
@@ -232,6 +233,27 @@ QString Area::title() const
 void Area::setTitle(const QString &title)
 {
     d->title = title;
+}
+
+void Area::save(KConfigGroup& group) const
+{
+    QStringList desired;
+    foreach (View *v, d->toolViews)
+    {
+        desired << v->document()->documentSpecifier();
+    }
+    group.writeEntry("desired views", desired);
+}
+
+void Area::load(const KConfigGroup& group)
+{
+    d->desiredToolViewsIds = group.readEntry("desired views", QStringList());
+    kDebug(9501) << "Loaded desired views" << d->desiredToolViewsIds;
+}
+
+bool Area::wantToolView(const QString& id)
+{
+    return (d->desiredToolViewsIds.contains(id));
 }
 
 }

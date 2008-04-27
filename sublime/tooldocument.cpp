@@ -67,7 +67,7 @@ QString ToolDocument::documentType() const
 
 QString ToolDocument::documentSpecifier() const
 {
-    return "<unimplemented>";
+    return factory()->id();
 }
 
 }

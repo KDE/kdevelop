@@ -111,6 +111,15 @@ public:
     /**@return the current position of @p toolView in the area.*/
     Position toolViewPosition(View *toolView) const;
 
+    /* Returns true if this area actively desires to show a tool view
+       with id of 'id'.  The area, of course, will show any tool view
+       added with 'addToolView', however, this method can be used
+       to guess a set of tool views that make most sense to be added.  */
+    bool wantToolView(const QString& id);
+
+    void save(KConfigGroup& group) const;
+    void load(const KConfigGroup& group);
+
     /**@return the controller for this area.*/
     Controller *controller() const;
 
