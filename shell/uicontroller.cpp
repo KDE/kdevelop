@@ -241,6 +241,7 @@ void UiController::addNewToolView(MainWindow *mw)
     dia->setButtons(KDialog::Ok | KDialog::Cancel);
     QListWidget *list = new QListWidget(dia);
 
+    list->setSortingEnabled(true);
     for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.begin();
         it != d->factoryDocuments.end(); ++it)
     {
