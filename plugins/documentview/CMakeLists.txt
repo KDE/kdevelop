@@ -20,7 +20,7 @@ set(kdevdocumentview_PART_SRCS
 
 
 kde4_add_plugin(kdevdocumentview ${kdevdocumentview_PART_SRCS})
-target_link_libraries(kdevdocumentview ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDE4_KHTML_LIBS})
+target_link_libraries(kdevdocumentview ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDE4_KHTML_LIBS} ${KDE4_KTEXTEDITOR_LIBS})
 
 install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
