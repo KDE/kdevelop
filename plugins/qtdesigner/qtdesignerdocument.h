@@ -52,7 +52,7 @@ public:
     virtual bool isActive() const;
     virtual DocumentState state() const;
     virtual void setCursorPosition(const KTextEditor::Cursor&);
-    virtual void activate(Sublime::View*);
+    virtual void activate(Sublime::View*, KParts::MainWindow*);
     virtual KTextEditor::Cursor cursorPosition() const;
     void setDesignerPlugin(QtDesignerPlugin*);
 

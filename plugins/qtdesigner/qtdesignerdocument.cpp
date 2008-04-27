@@ -153,7 +153,7 @@ void QtDesignerDocument::setCursorPosition(const KTextEditor::Cursor&)
     return;
 }
 
-void QtDesignerDocument::activate(Sublime::View* view)
+void QtDesignerDocument::activate(Sublime::View* view, KParts::MainWindow*)
 {
     QMdiArea* a = dynamic_cast<QMdiArea*>(view->widget());
     if(a)
