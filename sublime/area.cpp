@@ -83,6 +83,7 @@ struct AreaPrivate {
 
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
+    QMap<QString, Sublime::Position> savedToolViewPositions;
     QStringList desiredToolViewsIds;
 };
 
@@ -174,8 +175,12 @@ void Area::addToolView(View *view, Position defaultPosition)
 {
     ///@fixme adymo: read toolview position from config
     d->toolViews.append(view);
-    d->toolViewPositions[view] = defaultPosition;
-    emit toolViewAdded(view, defaultPosition);
+    QString id = view->document()->documentSpecifier();
+    Position position = defaultPosition;
+    if (d->savedToolViewPositions.contains(id))
+        position = d->savedToolViewPositions[id];
+    d->toolViewPositions[view] = position;
+    emit toolViewAdded(view, position);
 }
 
 void Sublime::Area::raiseToolView(View * toolView)
@@ -240,15 +245,34 @@ void Area::save(KConfigGroup& group) const
     QStringList desired;
     foreach (View *v, d->toolViews)
     {
-        desired << v->document()->documentSpecifier();
+        desired << v->document()->documentSpecifier() + ":"
+            + QString::number(static_cast<int>(d->toolViewPositions[v]));
     }
     group.writeEntry("desired views", desired);
 }
 
 void Area::load(const KConfigGroup& group)
 {
-    d->desiredToolViewsIds = group.readEntry("desired views", QStringList());
-    kDebug(9501) << "Loaded desired views" << d->desiredToolViewsIds;
+    d->desiredToolViewsIds.clear();
+    d->savedToolViewPositions.clear();
+    QStringList desired = group.readEntry("desired views", QStringList());
+    foreach (const QString &s, desired)
+    {
+        int i = s.indexOf(':');
+        if (i == -1)
+            d->desiredToolViewsIds << s;
+        else
+        {
+            QString id = s.left(i);
+            int pos_i = s.mid(i+1).toInt();
+            Sublime::Position pos = static_cast<Sublime::Position>(pos_i);
+            if (pos != Sublime::Left && pos != Sublime::Right
+                && pos != Sublime::Top && pos != Sublime::Bottom)
+                pos = Sublime::Bottom;
+            d->desiredToolViewsIds << id;
+            d->savedToolViewPositions[id] = pos;
+        }
+    }
 }
 
 bool Area::wantToolView(const QString& id)
