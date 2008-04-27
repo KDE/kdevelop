@@ -227,7 +227,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     CMakeFolderItem* m_rootItem;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
-    QString folderUrl(cmakeInfoFile.toLocalFile());
+    QString folderUrl(cmakeInfoFile.toLocalFile(KUrl::RemoveTrailingSlash));
     cmakeInfoFile.addPath("CMakeLists.txt");
     
     kDebug(9042) << "found module path is" << m_modulePathDef;
@@ -624,7 +624,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     CMakeFolderItem *it=0;
     if(m_folderPerUrl.contains(dir))
         it=m_folderPerUrl[dir];
-    kDebug(9042) << dirty << " is dirty" << it << m_folderPerUrl;
+    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
     KDevelop::IProject* proj=it->project();
     KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
 
