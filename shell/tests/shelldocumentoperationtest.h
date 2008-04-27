@@ -31,6 +31,7 @@ private slots:
     void cleanup();
 
     void testOpenDocumentFromText();
+    void testKateDocumentAndViewCreation();
 
 };
 

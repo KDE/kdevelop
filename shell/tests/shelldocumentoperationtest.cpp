@@ -19,10 +19,17 @@
 #include "shelldocumentoperationtest.h"
 
 #include <tests/common/kdevtest.h>
+
 #include <QtTest/QtTest>
+
+#include <kactioncollection.h>
+#include <kxmlguifactory.h>
+#include <kparts/mainwindow.h>
+#include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
 #include "documentcontroller.h"
+#include "uicontroller.h"
 
 void ShellDocumentOperationTest::init()
 {
@@ -43,7 +50,38 @@ void ShellDocumentOperationTest::testOpenDocumentFromText()
     //test that we have this document in the list, signals are emitted and so on
     QCOMPARE(documentController->openDocuments().count(), 1);
     QCOMPARE(documentController->openDocuments()[0]->textDocument()->text(), QString("Test1"));
+    documentController->openDocuments()[0]->close(IDocument::Discard);
+}
+
+void ShellDocumentOperationTest::testKateDocumentAndViewCreation()
+{
+    //create one document
+    IDocumentController *documentController = Core::self()->documentController();
+    documentController->openDocumentFromText("");
+    QCOMPARE(documentController->openDocuments().count(), 1);
+
+    //assure we have only one kate view for the newly created document
+    KTextEditor::Document *doc = documentController->openDocuments()[0]->textDocument();
+    QCOMPARE(doc->views().count(), 1);
+
+    //also assure the view's xmlgui is plugged in
+    KParts::MainWindow *main = Core::self()->uiControllerInternal()->activeMainWindow();
+    QVERIFY(main);
+    QVERIFY(main->guiFactory()->clients().contains(doc->views()[0]));
+
+    //create the new view and activate it (using split action from mainwindow)
+    QAction *splitAction = main->actionCollection()->action("split_vertical");
+    QVERIFY(splitAction);
+    splitAction->trigger();
+    QCOMPARE(doc->views().count(), 2);
+
+    //check that we did switch to the new xmlguiclient
+    QVERIFY(!main->guiFactory()->clients().contains(doc->views()[0]));
+    QVERIFY(main->guiFactory()->clients().contains(doc->views()[1]));
+
+    documentController->openDocuments()[0]->close(IDocument::Discard);
 }
 
 KDEVTEST_MAIN(ShellDocumentOperationTest)
+
 #include "shelldocumentoperationtest.moc"
