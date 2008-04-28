@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
+#include <kxmlguifactory.h>
 
 #include "shellextension.h"
 #include "partcontroller.h"
@@ -73,6 +74,9 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
     d->setupActions();
 
     setXMLFile( ShellExtension::getInstance() ->xmlFile() );
+
+    connect(this->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)), 
+            d, SLOT(fixToolbar()));
 }
 
 MainWindow::~ MainWindow()

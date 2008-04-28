@@ -98,6 +98,8 @@ public Q_SLOTS:
 
     void quitAll();
 
+    void fixToolbar();
+
 private:
     KActionCollection *actionCollection();
 
