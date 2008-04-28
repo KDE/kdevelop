@@ -47,12 +47,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::setArea(Area *area)
 {
+    /* All views will be removed from dock area now.  However, this does
+       not mean those are removed from area, so prevent slotDockShown
+       from recording those views as no longer shown in the area.  */
+    d->ignoreDockShown = true;
     if (d->area)
         clearArea();
     d->area = area;
     d->reconstruct();
     d->activateFirstVisibleView();
     emit areaChanged(area);
+    d->ignoreDockShown = false;
 
     loadSettings();
 }

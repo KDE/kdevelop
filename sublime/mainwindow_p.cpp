@@ -63,7 +63,7 @@ void ComboAction::activateArea(int index)
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 :controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
- m_mainWindow(w), m_areaSwitcherMenu(0)
+ ignoreDockShown(false), m_mainWindow(w), m_areaSwitcherMenu(0) 
 {
     recreateCentralWidget();
 
@@ -146,6 +146,20 @@ void MainWindowPrivate::reconstruct()
 
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, area->rootIndex());
+
+    idealMainWidget->blockSignals(true);
+    kDebug(9504) << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
+    foreach (View *view, area->toolViews())
+    {
+        QString id = view->document()->documentSpecifier();
+        if (!id.isEmpty())
+        {
+            Sublime::Position pos = area->toolViewPosition(view);
+            if (area->shownToolView(pos) == id)
+                idealMainWidget->raiseView(view);
+        }
+    }
+    idealMainWidget->blockSignals(false);
 }
 
 void MainWindowPrivate::clearArea()
@@ -185,6 +199,24 @@ void MainWindowPrivate::recreateCentralWidget()
     QVBoxLayout* layout = new QVBoxLayout(centralWidget);
     layout->setMargin(0);
     centralWidget->setLayout(layout);
+
+    connect(idealMainWidget, 
+            SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
+            this, 
+            SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
+}
+
+void MainWindowPrivate::
+slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
+{
+    if (ignoreDockShown)
+        return;
+
+    QString id;
+    if (shown)
+        id = view->document()->documentSpecifier();
+    kDebug(9504) << "View " << view->document()->documentSpecifier() << " " << shown;
+    area->setShownToolView(pos, id);
 }
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)

@@ -117,6 +117,9 @@ public:
        to guess a set of tool views that make most sense to be added.  */
     bool wantToolView(const QString& id);
 
+    void setShownToolView(Sublime::Position pos, const QString& id);
+    QString shownToolView(Sublime::Position pos) const;
+
     void save(KConfigGroup& group) const;
     void load(const KConfigGroup& group);
 

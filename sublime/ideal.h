@@ -25,6 +25,7 @@
 #include <QtGui>
 
 #include "ideallayout.h"
+#include "sublimedefs.h"
 
 class KAction;
 class KActionMenu;
@@ -212,6 +213,9 @@ public:
     void setAnchorActionStatus(bool checked);
     void setMaximizeActionStatus(bool checked);
     void setShowDockStatus(IdealMainLayout::Role role, bool checked);
+
+Q_SIGNALS:
+    void dockShown(Sublime::View*, Sublime::Position pos, bool shown);
 
 public Q_SLOTS:
     void showLeftDock(bool show);

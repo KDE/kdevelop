@@ -84,6 +84,7 @@ struct AreaPrivate {
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
     QMap<QString, Sublime::Position> desiredToolViews;
+    QMap<Sublime::Position, QString> shownToolView;
 };
 
 
@@ -253,6 +254,10 @@ void Area::save(KConfigGroup& group) const
         desired << i.key() + ":" + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
+    group.writeEntry("view on left", shownToolView(Sublime::Left));
+    group.writeEntry("view on right", shownToolView(Sublime::Right));
+    group.writeEntry("view on top", shownToolView(Sublime::Top));
+    group.writeEntry("view on bottom", shownToolView(Sublime::Bottom));
 }
 
 void Area::load(const KConfigGroup& group)
@@ -274,11 +279,27 @@ void Area::load(const KConfigGroup& group)
             d->desiredToolViews[id] = pos;
         }
     }
+    setShownToolView(Sublime::Left, group.readEntry("view on left", QString()));
+    setShownToolView(Sublime::Right, 
+                     group.readEntry("view on right", QString()));
+    setShownToolView(Sublime::Top, group.readEntry("view on top", QString()));
+    setShownToolView(Sublime::Bottom,
+                     group.readEntry("view on bottom", QString()));
 }
 
 bool Area::wantToolView(const QString& id)
 {
     return (d->desiredToolViews.contains(id));
+}
+
+void Area::setShownToolView(Sublime::Position pos, const QString& id)
+{
+    d->shownToolView[pos] = id;
+}
+
+QString Area::shownToolView(Sublime::Position pos) const
+{
+    return d->shownToolView[pos];
 }
 
 }

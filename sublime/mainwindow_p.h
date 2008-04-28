@@ -88,6 +88,7 @@ public:
     QWidget *centralWidget;
 
     IdealMainWidget *idealMainWidget;
+    int ignoreDockShown;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
@@ -100,6 +101,7 @@ public slots:
 private slots:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
+    void slotDockShown(Sublime::View*, Sublime::Position, bool);
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);

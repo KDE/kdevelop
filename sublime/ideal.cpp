@@ -712,6 +712,20 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
     m_anchorCurrentDock->setEnabled(show);
 
     setShowDockStatus(role, show);
+    Sublime::Position pos;
+    if (role == IdealMainLayout::Left)
+        pos = Sublime::Left;
+    else if (role == IdealMainLayout::Right)
+        pos = Sublime::Right;
+    else if (role == IdealMainLayout::Top)
+        pos = Sublime::Top;
+    else if (role == IdealMainLayout::Bottom)
+        pos = Sublime::Bottom;
+    else
+    {
+        Q_ASSERT (0 && "unexpect position");
+    }
+    emit dockShown(dock->view(), pos, show);
 }
 
 IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
