@@ -75,7 +75,6 @@ struct CorePrivate {
            Probably, the best approach would be to plugins to just add
            tool views to a list of available tool view, and then grab
            those tool views when loading an area.  */
-        uiController->loadAllAreas(KGlobal::config());
 
 	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );

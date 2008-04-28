@@ -234,6 +234,7 @@ Sublime::Area * KDevelop::UiController::defaultArea()
 void UiController::initialize()
 {
     defaultMainWindow()->initialize();
+    loadAllAreas(KGlobal::config());
 }
 
 void UiController::addNewToolView(MainWindow *mw)
