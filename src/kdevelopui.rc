@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="49" name="kdevelop" >
+<kpartgui version="50" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1">
     <text context="@title:menu">File</text>
@@ -179,26 +179,10 @@
 
 </MenuBar>
 
-<!--
-<ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="true" newline="true" >
+<ToolBar name="mainToolBar" position="Left" noMerge="1">
   <text>Main Toolbar</text>
-  <Action name="project_open" />
-  <DefineGroup name="project_operations"/>
-  <Action name="history_back"/>
-  <Action name="history_forward"/>
-  <DefineGroup name="file_operations"/>
-  <DefineGroup name="print_merge"/>
-  <DefineGroup name="edit_operations"/>
-  <DefineGroup name="find_operations"/>
-  <DefineGroup name="view_operations"/>
-  <DefineGroup name="zoom_operations"/>
-  <Merge/>
-  <Separator/>
-  <DefineGroup name="build_operations"/>
-  <DefineGroup name="debug_operations"/>
-  <Action name="stop_processes"/>
+  <Action name="file_new" />
 </ToolBar>
--->
 
 <Menu name="rb_popup">
   <Separator/>
