@@ -322,9 +322,6 @@ bool ProjectController::openProject( const KUrl &projectFile )
         return false;
     }
 
-    // Load area configurations from project file
-    d->m_core->uiControllerInternal()->loadAllAreas(project->projectConfiguration());
-
     d->m_closeAllProjects->setEnabled(true);
 
     return true;
@@ -389,8 +386,6 @@ bool ProjectController::closeProject( IProject* proj )
     emit projectClosing( proj );
 
     //The project file is being closed.
-    // Save area configurations to project file
-    d->m_core->uiControllerInternal()->saveAllAreas(proj->projectConfiguration());
 
     //Now we can save settings for all of the Core objects including this one!!
 //     Core::self()->saveSettings();

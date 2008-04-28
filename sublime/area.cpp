@@ -83,8 +83,7 @@ struct AreaPrivate {
 
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
-    QMap<QString, Sublime::Position> savedToolViewPositions;
-    QStringList desiredToolViewsIds;
+    QMap<QString, Sublime::Position> desiredToolViews;
 };
 
 
@@ -173,12 +172,12 @@ RootAreaIndex *Area::rootIndex() const
 
 void Area::addToolView(View *view, Position defaultPosition)
 {
-    ///@fixme adymo: read toolview position from config
     d->toolViews.append(view);
     QString id = view->document()->documentSpecifier();
     Position position = defaultPosition;
-    if (d->savedToolViewPositions.contains(id))
-        position = d->savedToolViewPositions[id];
+    if (d->desiredToolViews.contains(id))
+        position = d->desiredToolViews[id];
+    d->desiredToolViews[id] = position;
     d->toolViewPositions[view] = position;
     emit toolViewAdded(view, position);
 }
@@ -194,6 +193,9 @@ View* Area::removeToolView(View *view)
         return 0;
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
+    QString id = view->document()->documentSpecifier();
+    kDebug(9504) << "removed tool view " << id;
+    d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
     return view;
@@ -204,6 +206,8 @@ void Area::moveToolView(View *toolView, Position newPosition)
     if (!d->toolViews.contains(toolView))
         return;
 
+    QString id = toolView->document()->documentSpecifier();
+    d->desiredToolViews[id] = newPosition;
     d->toolViewPositions[toolView] = newPosition;
     emit toolViewMoved(toolView, newPosition);
 }
@@ -243,25 +247,23 @@ void Area::setTitle(const QString &title)
 void Area::save(KConfigGroup& group) const
 {
     QStringList desired;
-    foreach (View *v, d->toolViews)
+    QMap<QString, Sublime::Position>::iterator i, e;
+    for (i = d->desiredToolViews.begin(), e = d->desiredToolViews.end(); i != e; ++i)
     {
-        desired << v->document()->documentSpecifier() + ":"
-            + QString::number(static_cast<int>(d->toolViewPositions[v]));
+        desired << i.key() + ":" + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
 }
 
 void Area::load(const KConfigGroup& group)
 {
-    d->desiredToolViewsIds.clear();
-    d->savedToolViewPositions.clear();
+    kDebug(9504) << "loading areas config";
+    d->desiredToolViews.clear();
     QStringList desired = group.readEntry("desired views", QStringList());
     foreach (const QString &s, desired)
     {
         int i = s.indexOf(':');
-        if (i == -1)
-            d->desiredToolViewsIds << s;
-        else
+        if (i != -1)
         {
             QString id = s.left(i);
             int pos_i = s.mid(i+1).toInt();
@@ -269,15 +271,14 @@ void Area::load(const KConfigGroup& group)
             if (pos != Sublime::Left && pos != Sublime::Right
                 && pos != Sublime::Top && pos != Sublime::Bottom)
                 pos = Sublime::Bottom;
-            d->desiredToolViewsIds << id;
-            d->savedToolViewPositions[id] = pos;
+            d->desiredToolViews[id] = pos;
         }
     }
 }
 
 bool Area::wantToolView(const QString& id)
 {
-    return (d->desiredToolViewsIds.contains(id));
+    return (d->desiredToolViews.contains(id));
 }
 
 }
