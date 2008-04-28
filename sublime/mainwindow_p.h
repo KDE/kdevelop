@@ -44,7 +44,7 @@ class IdealMainWidget;
 class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
-    MainWindowPrivate(MainWindow *w);
+    MainWindowPrivate(MainWindow *w, Controller* controller);
 
     /**Use this to create tool views for an area.*/
     class IdealToolViewCreator {
@@ -111,10 +111,29 @@ private:
     MainWindow *m_mainWindow;
     QMap<AreaIndex*, QSplitter*> m_indexSplitters;
     QMenu *m_areaSwitcherMenu;
+    friend class ComboAction;
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
 };
+
+class ComboAction : public QWidgetAction
+{
+Q_OBJECT
+public:
+    ComboAction(MainWindowPrivate *parent, Controller* controller)
+    : QWidgetAction(parent), controller_(controller) {}
+
+    QWidget* createWidget(QWidget* parent);
+
+private Q_SLOTS:
+    void activateArea(int index);
+
+private:
+    Controller* controller_;
+    QVector<Area*> areas_;
+};
+
 
 }
 

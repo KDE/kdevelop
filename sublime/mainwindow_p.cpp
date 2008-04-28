@@ -22,9 +22,12 @@
 #include <QLayout>
 #include <QSplitter>
 #include <QDockWidget>
+#include <QWidgetAction>
+#include <QComboBox>
 
 #include <kdebug.h>
 #include <kacceleratormanager.h>
+#include <kactioncollection.h>
 
 #include "area.h"
 #include "view.h"
@@ -37,11 +40,35 @@
 
 namespace Sublime {
 
-MainWindowPrivate::MainWindowPrivate(MainWindow *w)
-    :controller(0), area(0), activeView(0), activeToolView(0), centralWidget(0),
-    m_mainWindow(w), m_areaSwitcherMenu(0)
+QWidget* ComboAction::createWidget(QWidget* parent)
+{
+    QComboBox* b = new QComboBox(parent);
+    /* FIXME: should arrange for this to be updated in
+       new areas are created.  */
+    foreach (Area *a, controller_->areas())
+    {
+        areas_.push_back(a);
+        b->addItem(a->title());
+    }
+    connect (b, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
+    return b;
+}
+    
+void ComboAction::activateArea(int index)
+{
+    controller_->showArea(
+        areas_[index], 
+        static_cast<MainWindowPrivate*>(parent())->m_mainWindow);
+}
+
+MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
+:controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
+ m_mainWindow(w), m_areaSwitcherMenu(0)
 {
     recreateCentralWidget();
+
+    ComboAction* action = new ComboAction(this, controller);
+    m_mainWindow->actionCollection()->addAction("switch_area", action);
 }
 
 Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view, Sublime::Position position)

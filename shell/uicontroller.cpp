@@ -55,6 +55,7 @@ public:
     {
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
         defaultArea = new Sublime::Area(m_controller, defaultAreaParams.name, defaultAreaParams.title);
+        new Sublime::Area(m_controller, "debug", i18n("Debug"));
         defaultMainWindow = new MainWindow(controller);
         activeSublimeWindow = defaultMainWindow;
     }
@@ -169,17 +170,20 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
 
-    if (!d->defaultArea->wantToolView(factory->id()))
-        return;
-
-    Sublime::View* view = doc->createView();
-    d->defaultArea->addToolView(
-        view,
-        Sublime::dockAreaToPosition(factory->defaultPosition()));
-
-    connect(view, SIGNAL(raise(Sublime::View*)), SLOT(raiseToolView(Sublime::View*)));
-
-    factory->viewCreated(view);
+    foreach (Sublime::Area* area, areas()) {
+        if (!area->wantToolView(factory->id()))
+            continue;
+        
+        Sublime::View* view = doc->createView();
+        area->addToolView(
+            view,
+            Sublime::dockAreaToPosition(factory->defaultPosition()));
+        
+        connect(view, SIGNAL(raise(Sublime::View*)), 
+                SLOT(raiseToolView(Sublime::View*)));
+        
+        factory->viewCreated(view);
+    }
 }
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
