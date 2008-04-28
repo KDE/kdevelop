@@ -69,7 +69,7 @@ MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
     if( i )
     {
-        connect( i, SIGNAL( viewRemoved( int, int ) ),
+        connect( i, SIGNAL( outputRemoved( int, int ) ),
                  this, SLOT( cleanupModel( int, int ) ) );
     }
 
