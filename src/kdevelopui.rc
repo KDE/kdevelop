@@ -179,7 +179,7 @@
 
 </MenuBar>
 
-<ToolBar name="mainToolBar" position="Left" noMerge="1">
+<ToolBar name="mainToolBar" position="Top" noMerge="1">
   <text>Main Toolbar</text>
   <Action name="file_new" />
 </ToolBar>
