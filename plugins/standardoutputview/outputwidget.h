@@ -32,6 +32,7 @@ class QToolButton;
 class ToolViewData;
 class KTabWidget;
 class QModelIndex;
+class KAction;
 
 class OutputWidget : public QWidget
 {
@@ -51,16 +52,23 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void outputRemoved( int, int );
+
+private slots:
+    void nextOutput();
+    void previousOutput();
 private:
     QListView* createListView(int id);
     void setCurrentWidget( QListView* view );
     QWidget* currentWidget();
+    void enableActions();
 
     QMap<int, QListView*> views;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     ToolViewData* data;
     QToolButton* m_closeButton;
+    KAction* nextAction;
+    KAction* previousAction;
 };
 
 #endif

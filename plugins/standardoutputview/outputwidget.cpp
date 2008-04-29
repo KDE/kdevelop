@@ -31,6 +31,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStackedWidget>
 #include <kmenu.h>
+#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -58,6 +59,13 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     {
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
+
+        previousAction = new KAction( KIcon( "go-previous" ), i18n("Previous"), this );
+        connect(previousAction, SIGNAL(triggered()), this, SLOT(previousOutput()));
+        addAction(previousAction);
+        nextAction = new KAction( KIcon( "go-next" ), i18n("Next"), this );
+        connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
+        addAction(nextAction);
     }
 
     connect( data, SIGNAL( outputAdded( int ) ), 
@@ -74,6 +82,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         changeModel( id );
         changeDelegate( id );
     }
+    enableActions();
 }
 
 void OutputWidget::addOutput( int id )
@@ -82,6 +91,7 @@ void OutputWidget::addOutput( int id )
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
+    enableActions();
 }
 
 void OutputWidget::setCurrentWidget( QListView* view )
@@ -150,6 +160,7 @@ void OutputWidget::removeOutput( int id )
         }
         emit outputRemoved( data->toolViewId, id );
     }
+    enableActions();
 }
 
 void OutputWidget::closeActiveView()
@@ -168,6 +179,7 @@ void OutputWidget::closeActiveView()
             }
         }
     }
+    enableActions();
 }
 
 QWidget* OutputWidget::currentWidget()
@@ -252,9 +264,9 @@ void OutputWidget::activate(const QModelIndex& index)
 
 QListView* OutputWidget::createListView(int id)
 {
+    QListView* listview = 0;
     if( !views.contains(id) )
     {
-        QListView* listview = 0;
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             kDebug(9500) << "creating listview";
@@ -293,11 +305,12 @@ QListView* OutputWidget::createListView(int id)
         }
         changeModel( id );
         changeDelegate( id );
-        return listview;
     } else
     {
-        return views.value(id);
+        listview = views.value(id);
     }
+    enableActions();
+    return listview;
 }
 
 void OutputWidget::raiseOutput(int id)
@@ -316,9 +329,40 @@ void OutputWidget::raiseOutput(int id)
             int idx = stackwidget->indexOf( views.value(id) );
             if( idx >= 0 )
             {
-                tabwidget->setCurrentIndex( idx );
+                stackwidget->setCurrentIndex( idx );
             }
         }
+    }
+    enableActions();
+}
+
+void OutputWidget::nextOutput()
+{
+    if( stackwidget && stackwidget->currentIndex() < stackwidget->count()-1 )
+    {
+        stackwidget->setCurrentIndex( stackwidget->currentIndex()+1 );
+    }
+    enableActions();
+}
+
+void OutputWidget::previousOutput()
+{
+    if( stackwidget && stackwidget->currentIndex() > 0 )
+    {
+        stackwidget->setCurrentIndex( stackwidget->currentIndex()-1 );
+    }
+    enableActions();
+}
+
+void OutputWidget::enableActions()
+{
+    if( data->type == KDevelop::IOutputView::HistoryView )
+    {
+        Q_ASSERT(stackwidget);
+        Q_ASSERT(nextAction);
+        Q_ASSERT(previousAction);
+        previousAction->setEnabled( ( stackwidget->currentIndex() > 0 ) );
+        nextAction->setEnabled( ( stackwidget->currentIndex() < stackwidget->count() - 1 ) );
     }
 }
 
