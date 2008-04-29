@@ -24,6 +24,8 @@
 #include <KDebug>
 #include <KLocale>
 
+#include "cmakecachereader.h"
+
 //4 columns: name, type, value, comment
 //name:type=value - comment
 CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
@@ -54,40 +56,44 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
             currentComment += line.right(line.count()-2);
         else if(!line.isEmpty()) //it is a variable
         {
-            QString name="[0-9a-zA-Z_/; \\+'.]";
-            QString val="[0-9a-zA-Z_/; \\+'.\\-]";
-            QRegExp rx(QString("(%1+)-?(%1*):?(%2*)=(%2*)").arg(name).arg(val));
-            if(rx.exactMatch(line))
+            CacheLine c;
+            if(!line.startsWith('#'))
+                c=readLine(line);
+            
+            if(c.isCorrect())
             {
-                QString isInternal;
-                rx.indexIn(line);
-                QStringList info = rx.capturedTexts();
+                QString name=line.left( c.endName ), flag;
+                if(c.dash>0)
+                    flag=line.mid( c.dash+1, c.colon-c.dash-1 );
                 
+                QString type=line.mid(c.colon+1, c.equal-c.colon-1);
+                QString value=line.right(line.size()-c.equal-1);
+
                 QList<QStandardItem*> lineItems;
-                lineItems.append(new QStandardItem(info[1])); //0. Var name
-                lineItems.append(new QStandardItem(info[3])); //2. type
-                lineItems.append(new QStandardItem(info[4])); //3. value
+                lineItems.append(new QStandardItem(name)); //1. Var name
+                lineItems.append(new QStandardItem(type)); //2. type
+                lineItems.append(new QStandardItem(value)); //3. value
                 lineItems.append(new QStandardItem(currentComment.join("\n"))); //4. comment
-                
-                if(info[3]=="INTERNAL")
+
+                if(flag=="INTERNAL")
                 {
-                    m_internal.insert(info[1]);
+                    m_internal.insert(name);
                 }
                 
-                if(info[2]=="ADVANCED")
+                if(flag=="ADVANCED")
                 {
-                    if(m_variablePos.contains(info[1]))
+                    if(m_variablePos.contains(name))
                     {
-                        int pos=m_variablePos[info[1]];
+                        int pos=m_variablePos[name];
                         QStandardItem *p = item(pos, 4);
                         if(!p)
                         {
-                            p=new QStandardItem(info[4]);
+                            p=new QStandardItem(value);
                             setItem(pos, 4, p);
                         }
                         else
                         {
-                            p->setText(info[4]);
+                            p->setText(value);
                         }
                     }
                     else
@@ -96,12 +102,12 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                     }
                 }
                 
-                if(!info[2].isEmpty())
+                if(!flag.isEmpty())
                 {
-                    lineItems[0]->setText(lineItems[0]->text()+"-"+info[2]);
+                    lineItems[0]->setText(lineItems[0]->text()+"-"+flag);
                 }
                 insertRow(currentIdx, lineItems);
-                m_variablePos[info[1]]=currentIdx;
+                m_variablePos[name]=currentIdx;
                 currentIdx++;
                 currentComment.clear();
             }

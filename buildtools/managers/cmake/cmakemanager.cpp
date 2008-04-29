@@ -258,8 +258,6 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject * project)
 {
     kDebug(9042) << "Running cmake script: " << file;
-    VariableMap *vm=&m_varsPerProject[project];
-    MacroMap *mm=&m_macrosPerProject[project];
     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
     if(f.isEmpty())
     {
@@ -267,6 +265,8 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
         return;
     }
 
+    VariableMap *vm=&m_varsPerProject[project];
+    MacroMap *mm=&m_macrosPerProject[project];
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
 

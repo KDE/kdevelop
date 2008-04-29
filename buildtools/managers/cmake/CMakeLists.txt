@@ -23,7 +23,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 
 set( cmakecommon_SRCS
   cmakemodelitems.cpp
-  #cmakexmlparser.cpp
   parser/cmListFileLexer.c
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
@@ -32,6 +31,7 @@ set( cmakecommon_SRCS
   parser/cmakeprojectvisitor.cpp 
   parser/variablemap.cpp
   parser/cmakedebugvisitor.cpp
+  parser/cmakecachereader.cpp
  )
 
 set( cmakemanager_SRCS
