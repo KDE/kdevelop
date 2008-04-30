@@ -90,7 +90,6 @@ void Example1Main::selectArea1()
 {
     Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
     connect(main, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(updateTitle(Sublime::Area*)));
-    main->menuBar()->addMenu(main->areaSwitcherMenu());
     m_controller->showArea(m_area1, main);
     main->show();
 }
@@ -99,7 +98,6 @@ void Example1Main::selectArea2()
 {
     Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
     connect(main, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(updateTitle(Sublime::Area*)));
-    main->menuBar()->addMenu(main->areaSwitcherMenu());
     m_controller->showArea(m_area2, main);
     main->show();
 }

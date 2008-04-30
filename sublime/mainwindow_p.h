@@ -68,7 +68,6 @@ public:
     void reconstruct();
     /**Clears the area leaving mainwindow empty.*/
     void clearArea();
-    QMenu *areaSwitcherMenu();
 
     void activateFirstVisibleView();
 
@@ -112,7 +111,6 @@ private:
 
     MainWindow *m_mainWindow;
     QMap<AreaIndex*, QSplitter*> m_indexSplitters;
-    QMenu *m_areaSwitcherMenu;
     friend class ComboAction;
 
     QMap<Area*, QAction*> m_areaActions;

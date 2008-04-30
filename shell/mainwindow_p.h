@@ -71,9 +71,6 @@ public Q_SLOTS:
     void gotoFirstWindow();
     void gotoLastWindow();
 
-    void gotoNextArea();
-    void gotoPreviousArea();
-
     void viewAddNewToolView();
 
     void newWindow();

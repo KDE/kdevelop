@@ -51,9 +51,6 @@ public:
     explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
     ~MainWindow();
 
-    /**@return the menu to switch areas within this mainwindow.*/
-    QMenu *areaSwitcherMenu();
-
     /**@return the list of dockwidgets that contain area's toolviews.*/
     QList<View*> toolDocks() const;
     /**@return area which mainwindow currently shows or 0 if no area has been set.*/

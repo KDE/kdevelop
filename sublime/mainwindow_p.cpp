@@ -63,7 +63,7 @@ void ComboAction::activateArea(int index)
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 :controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
- ignoreDockShown(false), m_mainWindow(w), m_areaSwitcherMenu(0) 
+ ignoreDockShown(false), m_mainWindow(w)
 {
     recreateCentralWidget();
 
@@ -358,32 +358,6 @@ void MainWindowPrivate::updateAreaSwitcher(Sublime::Area *area)
 {
     if (m_areaActions.contains(area))
         m_areaActions[area]->setChecked(true);
-}
-
-QMenu *MainWindowPrivate::areaSwitcherMenu()
-{
-    if (!m_areaSwitcherMenu)
-    {
-        m_areaSwitcherMenu = new QMenu("Areas", m_mainWindow);
-        QActionGroup *group = new QActionGroup(m_mainWindow);
-        group->setExclusive(true);
-        kDebug(9504) << "preparing area switcher menu";
-        foreach (Area *a, controller->areas())
-        {
-            kDebug(9504) << "creating action for area" << a->objectName();
-            QAction *action = m_areaSwitcherMenu->addAction(a->objectName());
-            action->setCheckable(true);
-            action->setActionGroup(group);
-            if (a == area)
-                action->setChecked(true);
-            m_areaActions[a] = action;
-            m_actionAreas[action] = a;
-        }
-        connect(m_areaSwitcherMenu, SIGNAL(triggered(QAction*)), this, SLOT(switchToArea(QAction*)));
-        connect(this, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(updateAreaSwitcher(Sublime::Area*)));
-    }
-
-    return m_areaSwitcherMenu;
 }
 
 void MainWindowPrivate::activateFirstVisibleView()

@@ -70,11 +70,6 @@ void MainWindow::clearArea()
     saveSettings();
 }
 
-QMenu *MainWindow::areaSwitcherMenu()
-{
-    return d->areaSwitcherMenu();
-}
-
 QList<View*> MainWindow::toolDocks() const
 {
     return d->docks;
