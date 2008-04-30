@@ -193,7 +193,7 @@ void StandardOutputView::raiseOutput(int id)
 {
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( id ) && !toolviews.value( _id )->views.isEmpty())
         {
             Sublime::View* v = toolviews.value( _id )->views.at(0);
             OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
