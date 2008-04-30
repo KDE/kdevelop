@@ -193,6 +193,7 @@ void StandardOutputView::raiseOutput(int id)
 {
     foreach( int _id, toolviews.keys() )
     {
+#warning This fix is wrong, the list of views shouldn't be empty!
         if( toolviews.value( _id )->outputdata.contains( id ) && !toolviews.value( _id )->views.isEmpty())
         {
             Sublime::View* v = toolviews.value( _id )->views.at(0);
