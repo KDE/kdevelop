@@ -80,6 +80,9 @@ CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
 
 CommandExecutor::~CommandExecutor()
 {
+    d->m_process->kill();
+    d->m_process->waitForFinished( 3000 );
+
     delete d->m_lineMaker;
     delete d->m_process;
     delete d;
