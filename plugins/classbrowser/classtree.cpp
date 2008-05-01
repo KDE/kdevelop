@@ -85,6 +85,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   addAction(action);
 
   QVBoxLayout* vbox = new QVBoxLayout(this);
+  vbox->setMargin(0);
   vbox->addWidget( m_tree );
   setLayout( vbox );
 
