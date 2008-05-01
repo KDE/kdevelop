@@ -41,6 +41,7 @@ private slots:
     void cleanupTestCase();
 
     void activeDocument();
+    void save();
 
 private:
     QTemporaryFile tmpFile;
@@ -81,6 +82,29 @@ void Script_Document::activeDocument()
                            "y = KDevTools.toDocument(x.activeDocument());\n"
                            "if (!y) { throw 'unable to get active document!' }\n"
                            "if (y.url() != '%1') { throw 'URL does not match!' }").arg("file://" + tmpFilePath).toLatin1()
+                  );
+
+    action.trigger();
+    QVERIFY2(!action.hadError(), qPrintable(action.errorMessage()));
+}
+
+void Script_Document::save()
+{
+    // make sure our file is active
+    QVERIFY(KDevelop::Core::self()->documentController()->activeDocument());
+    QCOMPARE(KDevelop::Core::self()->documentController()->activeDocument()->url().path(),
+             tmpFilePath);
+
+    Kross::Action action(0, "save");
+    action.setInterpreter("qtscript");
+
+    // this makes sure that the "Silent" and "Default" enum items are recognized
+    // (and do not crash)
+    action.setCode("x = KDevTools.toDocumentController(KDevCore.documentController());\n"
+                   "y = KDevTools.toDocument(x.activeDocument());\n"
+                   "if (!y) { throw 'unable to get active document!' }\n"
+                   "y.save(y.Silent)\n"
+                   "y.save(y.Default)\n"
                   );
 
     action.trigger();
