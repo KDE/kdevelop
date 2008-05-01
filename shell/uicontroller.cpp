@@ -53,10 +53,31 @@ class UiControllerPrivate {
 public:
     UiControllerPrivate(UiController *controller): cfgDlg(0), m_controller(controller)
     {
+        // FIXME: remove this 'defaultArea' thing.
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
-        defaultArea = new Sublime::Area(m_controller, defaultAreaParams.name, defaultAreaParams.title);
-        new Sublime::Area(m_controller, "debug", i18n("Debug"));
+        QMap<QString, Sublime::Position> desired;
+
+        desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
+        desired["org.kdevelop.DocumentsView"] = Sublime::Left;
+        desired["org.kdevelop.ProjectsView"] = Sublime::Left;
+        desired["org.kdevelop.FileManagerView"] = Sublime::Left;
+        desired["org.kdevelop.ProblemReporterView"] = Sublime::Bottom;
+        Sublime::Area* a = 
+            new Sublime::Area(m_controller, "code", i18n("Code"));
+        a->setDesiredToolViews(desired);
+        controller->addArea(a);
+
+        desired.clear();
+        desired["org.kdevelop.debugger.VariablesView"] = Sublime::Left;
+        desired["org.kdevelop.debugger.BreakpointsView"] = Sublime::Bottom;
+        desired["org.kdevelop.debugger.StackView"] = Sublime::Bottom;
+        desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
+        a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
+        a->setDesiredToolViews(desired);
+        controller->addArea(a);
+
         defaultMainWindow = new MainWindow(controller);
+        controller->addMainWindow(defaultMainWindow);
         activeSublimeWindow = defaultMainWindow;
     }
 
@@ -118,10 +139,13 @@ public:
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
+    // FIXME: restore.
+#if 0
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     defaultMainWindow(), SLOT( loadSettings() ) );
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                     defaultMainWindow(), SLOT( loadSettings() ) );
+#endif
     d->core = core;
     connect( QApplication::instance(),
              SIGNAL( focusChanged( QWidget*, QWidget* ) ),
@@ -142,23 +166,34 @@ void UiController::mainWindowDeleted(MainWindow* mw)
         d->activeSublimeWindow = 0L;
 }
 
+// FIXME: currently, this always create new window. Probably,
+// should just rename it.
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );
     KParts::MainWindow *oldMain = activeMainWindow();
 
     MainWindow *main = new MainWindow(this);
+    // FIXME: what this is supposed to do?
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     main, SLOT( loadSettings() ) );
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                     main, SLOT( loadSettings() ) );
-    showArea(area(areaName), main);
+
+    addMainWindow(main);
+    showArea(areaName, main);
     main->initialize();
 
+    // WTF? First, enabling this code causes crashes since we
+    // try to disconnect some already-deleted action, or something.
+    // Second, this code will disconnection the clients from guiFactory
+    // of the previous main window. Ick!
+#if 0
     //we need to add all existing guiclients to the new mainwindow
     //@todo adymo: add only ones that belong to the area (when the area code is there)
     foreach (KXMLGUIClient *client, oldMain->guiFactory()->clients())
         main->guiFactory()->addClient(client);
+#endif
 
     main->show();
 }
@@ -169,21 +204,6 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     kDebug(9501) ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
-
-    foreach (Sublime::Area* area, areas()) {
-        if (!area->wantToolView(factory->id()))
-            continue;
-        
-        Sublime::View* view = doc->createView();
-        area->addToolView(
-            view,
-            Sublime::dockAreaToPosition(factory->defaultPosition()));
-        
-        connect(view, SIGNAL(raise(Sublime::View*)), 
-                SLOT(raiseToolView(Sublime::View*)));
-        
-        factory->viewCreated(view);
-    }
 }
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
@@ -234,7 +254,13 @@ Sublime::Area * KDevelop::UiController::defaultArea()
 void UiController::initialize()
 {
     defaultMainWindow()->initialize();
-    loadAllAreas(KGlobal::config());
+}
+
+void UiController::cleanup()
+{
+    foreach (Sublime::MainWindow* w, mainWindows())
+        w->saveSettings();
+    saveAllAreas(KGlobal::config());
 }
 
 void UiController::addNewToolView(MainWindow *mw)
@@ -400,48 +426,89 @@ void UiController::loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 void UiController::saveAllAreas(KSharedConfig::Ptr config)
 {
     KConfigGroup uiConfig(config, "User Interface");
-    uiConfig.writeEntry("Area Count", areas().count());
+    int wc = mainWindows().size();
+    uiConfig.writeEntry("Main Windows Count", wc);
+    int ac = areas().size();
+    uiConfig.writeEntry("Area Count", ac);
+    for (int w = 0; w < wc; ++w)
+        for (int a = 0; a < ac; ++a)
+        {
+            Sublime::Area* area = areas(w)[a];
+            KConfigGroup areaConfig(
+                &uiConfig, QString("Main Window %1, Area %2").arg(w).arg(a));
 
-    int areaIndex = 0;
-    foreach (Sublime::Area* area, areas()) {
-        KConfigGroup group(config, QString("Area %1").arg(areaIndex));
-        group.deleteGroup();
-        group.writeEntry("Area Title", area->title());
-        saveArea(area, group);
-        areaIndex++;
-    }
+            kDebug(9501) << "Saving area " << area->objectName() << " for mw " << w;
+
+            areaConfig.deleteGroup();            
+            // FIXME: don't use objectName
+            areaConfig.writeEntry("id", area->objectName());
+            saveArea(area, areaConfig);         
+            areaConfig.sync();
+        }
 }
 
 void UiController::loadAllAreas(KSharedConfig::Ptr config)
 {
     KConfigGroup uiConfig(config, "User Interface");
-    int areaCount = uiConfig.readEntry("Area Count", 0);
+    int wc = uiConfig.readEntry("Main Windows Count", 0);
+    int ac = uiConfig.readEntry("Area Count", 0);
+
+    /* It is expected the main windows are restored before
+       restoring areas.  */
+    if (wc > mainWindows().size())
+        wc = mainWindows().size();
 
     QList<Sublime::Area*> changedAreas;
 
-    for (int areaIndex = 0; areaIndex < areaCount; ++areaIndex) {
-        KConfigGroup group(config, QString("Area %1").arg(areaIndex));
+    for (int w = 0; w < wc; ++w)
+        for (int a = 0; a < ac; ++a)
+        {
+            KConfigGroup areaConfig(
+                &uiConfig, QString("Main Window %1, Area %2").arg(w).arg(a));
+            
+            QString id = areaConfig.readEntry("id", QString());
+            if (id.isNull())
+                continue;
 
-        QString savedTitle = group.readEntry("Area Title", "");
-        Sublime::Area* existingArea = 0;
-        foreach (Sublime::Area* area, areas()) {
-            if (area->title() == savedTitle) {
-                existingArea = area;
-                break;
-            }
+            Sublime::Area* area = this->area(w, id);
+            if (!area)
+                // FIXME: probably, should still add it and add
+                // new default one. Alternatively, if deleting
+                // area type should warn the user.
+                continue;
+            
+            loadArea(area, areaConfig);
+
+            changedAreas << area;
         }
 
-        if (!existingArea)
-            existingArea = new Sublime::Area(Core::self()->uiControllerInternal(), savedTitle);
-
-        changedAreas << existingArea;
-
-        loadArea(existingArea, group);
+    QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
+    for (i = d->factoryDocuments.begin(), 
+             e = d->factoryDocuments.end(); i != e; ++i)
+    {   
+        IToolViewFactory* factory = i.key();
+   
+        foreach (Sublime::Area* area, allAreas()) {
+            if (!area->wantToolView(factory->id()))
+                continue;
+            
+            Sublime::View* view = i.value()->createView();
+            area->addToolView(
+                view,
+                Sublime::dockAreaToPosition(factory->defaultPosition()));
+            
+            connect(view, SIGNAL(raise(Sublime::View*)), 
+                    SLOT(raiseToolView(Sublime::View*)));
+            
+            factory->viewCreated(view);
+        }
     }
 
     foreach (Sublime::MainWindow* mw, mainWindows())
         if (changedAreas.contains(mw->area()))
-            showArea(mw->area(), mw);
+            showAreaInternal(mw->area(), mw);
+
+
 }
 
 }

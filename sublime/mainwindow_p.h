@@ -128,10 +128,12 @@ public:
 
 private Q_SLOTS:
     void activateArea(int index);
+    void resetCurrentArea();
 
 private:
     Controller* controller_;
     QVector<Area*> areas_;
+    int resetIndex_;
 };
 
 

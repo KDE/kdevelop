@@ -88,9 +88,12 @@ struct ControllerPrivate {
 
     QList<Document*> documents;
     QList<Area*> areas;
+    QList<Area*> allAreas;
     QMap<QString, Area*> namedAreas;
+    // FIXME: remove this.
     QMap<Area*, MainWindow*> shownAreas;
     QList<MainWindow*> controlledWindows;
+    QVector< QList<Area*> > mainWindowAreas;
 };
 
 
@@ -111,39 +114,102 @@ void Controller::init()
 
 Controller::~Controller()
 {
-    foreach (MainWindow *w, d->controlledWindows)
-        delete w;
+    // FIXME:
+//    foreach (MainWindow *w, d->controlledWindows)
+//        delete w;
     delete d;
 }
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
+    Q_ASSERT(false && "this method shold not be ever called");
     Area *areaToShow = 0;
     //if the area is already shown in another mainwindow then we need to clone it
     if (d->shownAreas.contains(area) && (mainWindow != d->shownAreas[area]))
         areaToShow = new Area(*area);
     else
         areaToShow = area;
-    d->controlledWindows << mainWindow;
     d->shownAreas[areaToShow] = mainWindow;
-    MainWindowOperator::setArea(mainWindow, areaToShow);
-    connect(areaToShow, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
+
+    showAreaInternal(areaToShow, mainWindow);
+}
+
+void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
+{
+    MainWindowOperator::setArea(mainWindow, area);
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(areaToShow, SIGNAL(requestToolViewRaise(Sublime::View*)),
+    connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
         mainWindow, SLOT(raiseToolView(Sublime::View*)));
-    connect(areaToShow, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
+    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-    connect(areaToShow, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(areaToShow, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
+    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
-    connect(areaToShow, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+    connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
         mainWindow, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
+}
+
+void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
+{
+    int index = d->controlledWindows.indexOf(mainWindow);
+    Q_ASSERT(index != -1);
+
+    Area* area = NULL;
+    foreach (Area* a, d->mainWindowAreas[index])
+    {
+        kDebug(9504) << "Object name: " << a->objectName() << " id " 
+                     << areaTypeId;
+        if (a->objectName() == areaTypeId)
+        {
+            area = a;
+            break;
+        }
+    }
+    Q_ASSERT (area);
+
+    showAreaInternal(area, mainWindow);
+}
+
+void Controller::resetCurrentArea(MainWindow *mainWindow)
+{
+    QString id = mainWindow->area()->objectName();
+
+    int areaIndex = 0;
+    Area* def = NULL;
+    foreach (Area* a, d->areas) {
+        if (a->objectName() == id)
+        {
+            def = a;
+            break;
+        }
+        ++areaIndex;
+    }
+    Q_ASSERT(def);
+
+    int index = d->controlledWindows.indexOf(mainWindow);
+    Q_ASSERT(index != -1);
+
+    Area* prev = d->mainWindowAreas[index][areaIndex];
+    d->mainWindowAreas[index][areaIndex] = new Area(*def);
+    showAreaInternal(d->mainWindowAreas[index][areaIndex], mainWindow);
+    delete prev;
 }
 
 const QList<Area*> &Controller::areas() const
 {
     return d->areas;
+}
+
+const QList<Area*> &Controller::areas(int mainWindow) const
+{
+    return d->mainWindowAreas[mainWindow];
+}
+
+const QList<Area*> &Controller::allAreas() const
+{
+    return d->allAreas;
 }
 
 const QList<Document*> &Controller::documents() const
@@ -154,7 +220,13 @@ const QList<Document*> &Controller::documents() const
 void Controller::addArea(Area *area)
 {
     d->areas.append(area);
+    d->allAreas.append(area);
     d->namedAreas[area->objectName()] = area;
+
+    /* In theory, ownership is passed to us, so should not bother detecting
+       deletion outside.  */
+    connect(area, SIGNAL(destroyed(QObject*)),
+            this, SLOT(removeArea(QObject*)));
 
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         this, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
@@ -164,6 +236,24 @@ void Controller::addArea(Area *area)
         this, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
     connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
         this, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
+}
+
+void Controller::addMainWindow(MainWindow* mainWindow)
+{
+    Q_ASSERT (!d->controlledWindows.contains(mainWindow));
+    d->controlledWindows << mainWindow;
+    d->mainWindowAreas.resize(d->controlledWindows.size());
+    int index = d->controlledWindows.size()-1;
+
+    foreach (Area* area, areas()) 
+    {
+        Area *na = new Area(*area);
+        kDebug(9504) << "Areas " << area->wantToolView("org.kdevelop.SnippetView")
+                     << " " << na->wantToolView("org.kdevelop.SnippetView");
+        d->allAreas.append(na);
+        d->mainWindowAreas[index].push_back(na);
+    }
+    showAreaInternal(d->mainWindowAreas[index][0], mainWindow);
 }
 
 void Controller::addDocument(Document *document)
@@ -193,6 +283,16 @@ void Controller::areaReleased(Sublime::Area *area)
 Area *Controller::area(const QString &areaName)
 {
     return d->namedAreas[areaName];
+}
+
+Area *Controller::area(int mainWindow, const QString& areaName)
+{
+    foreach (Area* area, areas(mainWindow))
+    {
+        if (area->objectName() == areaName)
+            return area;
+    }
+    return 0;
 }
 
 /*We need this to catch activation of views and toolviews

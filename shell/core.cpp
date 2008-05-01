@@ -79,10 +79,11 @@ struct CorePrivate {
 	kDebug(9501) << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
 
-        Sublime::Area *defaultArea = uiController->defaultArea();
-        uiController->showArea(defaultArea, uiController->defaultMainWindow());
+        /* Need to do this after everything else is loaded.  It's too
+           hard to restore position of views, and toolbars, and whatever
+           that are not created yet.  */
+        uiController->loadAllAreas(KGlobal::config());
         uiController->defaultMainWindow()->show();
-
     }
     ~CorePrivate()
     {
@@ -140,6 +141,7 @@ void Core::cleanup()
     if (!d->m_cleanedUp) {
         /* Must be called before projectController->cleanup(). */
         d->documentController->cleanup();
+        d->uiController->cleanup();
         d->projectController->cleanup();
         d->pluginController->cleanup();
     }

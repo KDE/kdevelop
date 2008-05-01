@@ -47,15 +47,32 @@ public:
     Controller(QObject *parent = 0);
     ~Controller();
 
+    /**Adds the area to the controller, used by Area class.
+    @todo adymo: refactor*/
+    void addArea(Area *area);
+
     /**Shows an @p area in @p mainWindow.*/
     void showArea(Area *area, MainWindow *mainWindow);
+
+    void showArea(const QString& areaTypeId, MainWindow *mainWindow);
+
+    void resetCurrentArea(MainWindow *mainWindow);
 
     /**Returns the area with given @p areaName.*/
     Area *area(const QString &areaName);
 
+    Area *area(int mainWindow, const QString& areaName);
+
     /**@return the list of areas available for use in this controller.
     This list does not include area clones.*/
     const QList<Area*> &areas() const;
+
+    const QList<Area*> &areas(int mainWindow) const;
+
+    const QList<Area*> &allAreas() const;
+
+    void addMainWindow(MainWindow* mainWindow);
+
     /**@return the list of documents created in this controller.*/
     const QList<Document*> &documents() const;
 
@@ -72,6 +89,7 @@ public Q_SLOTS:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
+    void showAreaInternal(Area* area, MainWindow *mainWindow);
 
 private Q_SLOTS:
     void notifyToolViewRemoved(Sublime::View *view, Sublime::Position);
@@ -90,9 +108,6 @@ private:
     Q_PRIVATE_SLOT(d, void removeArea(QObject*))
     Q_PRIVATE_SLOT(d, void removeDocument(QObject*))
 
-    /**Adds the area to the controller, used by Area class.
-    @todo adymo: refactor*/
-    void addArea(Area *area);
     /**Adds the document to the controller, used by Document class.
     @todo adymo: refactor*/
     void addDocument(Document *document);

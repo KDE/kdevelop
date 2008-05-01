@@ -134,9 +134,6 @@ void KDevelop::DocumentController::initialize()
 void DocumentController::cleanup()
 {
     d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
-
-    // Save the areas to the kdevelop main configuration
-    Core::self()->uiControllerInternal()->saveAllAreas(KGlobal::config());
 }
 
 DocumentController::~DocumentController()

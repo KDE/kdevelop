@@ -24,6 +24,9 @@
 #include <QDockWidget>
 #include <QWidgetAction>
 #include <QComboBox>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <kacceleratormanager.h>
@@ -42,7 +45,23 @@ namespace Sublime {
 
 QWidget* ComboAction::createWidget(QWidget* parent)
 {
+    QWidget* result = new QWidget(parent);
+    QHBoxLayout* layout = new QHBoxLayout(result);
     QComboBox* b = new QComboBox(parent);
+    layout->addWidget(b);
+    QToolButton* button = new QToolButton(result);
+    button->setIcon(KIcon("configure"));
+    button->setPopupMode(QToolButton::InstantPopup);
+    layout->addWidget(button);
+
+    QMenu *menu = new QMenu(button);
+    menu->addAction("Reset Current Area", this,
+                    SLOT(resetCurrentArea()));
+    menu->addAction("New Area");
+    menu->addAction("Delete Area");
+    button->setMenu(menu);
+
+
     /* FIXME: should arrange for this to be updated in
        new areas are created.  */
     foreach (Area *a, controller_->areas())
@@ -51,13 +70,21 @@ QWidget* ComboAction::createWidget(QWidget* parent)
         b->addItem(a->title());
     }
     connect (b, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
-    return b;
+    return result;
+}
+
+void ComboAction::resetCurrentArea()
+{
+    MainWindow* mw = 
+        static_cast<MainWindowPrivate*>(parent())->m_mainWindow;
+    controller_->resetCurrentArea(mw);
 }
     
 void ComboAction::activateArea(int index)
 {
+    kDebug(9504) << "Trying to show area " << areas_[index]->objectName();
     controller_->showArea(
-        areas_[index], 
+        areas_[index]->objectName(), 
         static_cast<MainWindowPrivate*>(parent())->m_mainWindow);
 }
 

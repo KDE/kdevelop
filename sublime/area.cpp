@@ -46,6 +46,9 @@ struct AreaPrivate {
         currentIndex = rootIndex;
         controller = p.controller;
         toolViewPositions.clear();
+        desiredToolViews = p.desiredToolViews;
+        shownToolView = p.shownToolView;
+
         title = p.title;
     }
     ~AreaPrivate()
@@ -94,27 +97,22 @@ struct AreaPrivate {
 Area::Area(Controller *controller, const QString &name, const QString &title)
     :QObject(controller), d( new AreaPrivate() )
 {
+    // FIXME: using objectName seems fishy. Introduce areaType method,
+    // or some such.
     setObjectName(name);
     d->title = title;
     d->controller = controller;
-    d->controller->addArea(this);
-    connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeArea(QObject*)));
 }
 
 Area::Area(const Area &area)
     : QObject(area.controller()), d( new AreaPrivate( *(area.d) ) )
 {
-    static QMap<QString, int> nums;
-    QString areaBaseName = area.objectName().split("(").first();
-    setObjectName(areaBaseName + QString("(copy %1)").arg(nums[areaBaseName]));
-    d->controller->addArea(this);
+    setObjectName(area.objectName());
 
     //clone toolviews
     d->toolViews.clear();
     foreach (View *view, area.toolViews())
         addToolView(view->document()->createView(), area.toolViewPosition(view));
-
-    nums[areaBaseName] += 1;
 }
 
 Area::~Area()
@@ -195,7 +193,7 @@ View* Area::removeToolView(View *view)
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();
-    kDebug(9504) << "removed tool view " << id;
+    kDebug(9504) << this << "removed tool view " << id;
     d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
@@ -254,6 +252,7 @@ void Area::save(KConfigGroup& group) const
         desired << i.key() + ":" + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
+    kDebug(9504) << "save " << this << "wrote" << group.readEntry("desired views", "");
     group.writeEntry("view on left", shownToolView(Sublime::Left));
     group.writeEntry("view on right", shownToolView(Sublime::Right));
     group.writeEntry("view on top", shownToolView(Sublime::Top));
@@ -300,6 +299,12 @@ void Area::setShownToolView(Sublime::Position pos, const QString& id)
 QString Area::shownToolView(Sublime::Position pos) const
 {
     return d->shownToolView[pos];
+}
+
+void Area::setDesiredToolViews(
+    const QMap<QString, Sublime::Position>& desiredToolViews)
+{
+    d->desiredToolViews = desiredToolViews;
 }
 
 }

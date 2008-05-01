@@ -64,6 +64,7 @@ public:
     void addNewToolView(MainWindow *mw);
 
     void initialize();
+    void cleanup();
 
     void showSettingsDialog();
     Sublime::Controller* controller();

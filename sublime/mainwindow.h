@@ -80,6 +80,7 @@ Q_SIGNALS:
     void settingsLoaded();
 
 protected:
+public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
     Reimplement in subclasses to save more and don't forget to call inherited method.*/
     virtual void saveSettings();
@@ -109,6 +110,11 @@ private:
     void setActiveToolView(View *view);
     /**Sets the status icon for the given \a view in the \a mainWindow to \a icon.*/
     void setStatusIcon(View* view, const QIcon& icon);
+
+    void resizeEvent(QResizeEvent* event);
+
+    void saveGeometry(KConfigGroup &config);
+    void loadGeometry(const KConfigGroup &config);
 
     struct MainWindowPrivate *const d;
     friend class MainWindowOperator;
