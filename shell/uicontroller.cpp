@@ -64,7 +64,7 @@ public:
         desired["org.kdevelop.FileManagerView"] = Sublime::Left;
         desired["org.kdevelop.ProblemReporterView"] = Sublime::Bottom;
         desired["org.kdevelop.OutputView"] = Sublime::Bottom;
-        Sublime::Area* a = 
+        Sublime::Area* a =
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
         controller->addArea(a);
@@ -85,10 +85,12 @@ public:
 
     void widgetChanged(QWidget*, QWidget* now)
     {
-        Sublime::MainWindow* win = qobject_cast<Sublime::MainWindow*>(now);
-        if( win )
-        {
-            activeSublimeWindow = win;
+        if (now) {
+            Sublime::MainWindow* win = qobject_cast<Sublime::MainWindow*>(now->window());
+            if( win )
+            {
+                activeSublimeWindow = win;
+            }
         }
     }
 
@@ -447,10 +449,10 @@ void UiController::saveAllAreas(KSharedConfig::Ptr config)
 
             kDebug(9501) << "Saving area " << area->objectName() << " for mw " << w;
 
-            areaConfig.deleteGroup();            
+            areaConfig.deleteGroup();
             // FIXME: don't use objectName
             areaConfig.writeEntry("id", area->objectName());
-            saveArea(area, areaConfig);         
+            saveArea(area, areaConfig);
             areaConfig.sync();
         }
 }
@@ -473,7 +475,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
         {
             KConfigGroup areaConfig(
                 &uiConfig, QString("Main Window %1, Area %2").arg(w).arg(a));
-            
+
             QString id = areaConfig.readEntry("id", QString());
             if (id.isNull())
                 continue;
@@ -484,16 +486,16 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
                 // new default one. Alternatively, if deleting
                 // area type should warn the user.
                 continue;
-            
+
             loadArea(area, areaConfig);
 
             changedAreas << area;
         }
 
     QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
-    for (i = d->factoryDocuments.begin(), 
+    for (i = d->factoryDocuments.begin(),
              e = d->factoryDocuments.end(); i != e; ++i)
-    {   
+    {
         addToolView_2 (i.key(), i.value());
     }
 
@@ -504,21 +506,21 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
-void UiController::addToolView_2(IToolViewFactory* factory, 
+void UiController::addToolView_2(IToolViewFactory* factory,
                                  Sublime::ToolDocument* doc)
-{   
+{
     foreach (Sublime::Area* area, allAreas()) {
         if (!area->wantToolView(factory->id()))
             continue;
-        
+
         Sublime::View* view = doc->createView();
         area->addToolView(
             view,
             Sublime::dockAreaToPosition(factory->defaultPosition()));
-        
-        connect(view, SIGNAL(raise(Sublime::View*)), 
+
+        connect(view, SIGNAL(raise(Sublime::View*)),
                 SLOT(raiseToolView(Sublime::View*)));
-        
+
         factory->viewCreated(view);
     }
 }
