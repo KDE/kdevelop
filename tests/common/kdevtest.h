@@ -19,6 +19,7 @@
 #ifndef KDEVTEST
 #define KDEVTEST
 
+#include <klocale.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -32,6 +33,22 @@ int main(int argc, char *argv[]) \
                          "(c) 2007-2008, KDevelop Developers"), KLocalizedString(), "http://www.kdevelop.org" ); \
  \
     KCmdLineArgs::init(argc, argv, &aboutData); \
+    KCmdLineOptions options; \
+    options.add("+[functionNames]", ki18n("Run only specified test functions")); \
+    options.add("functions", ki18n("Show all test functions available in the test")); \
+    options.add("silent", ki18n("Silent output, only show warnings, failures and minimal status messages")); \
+    options.add("v1", ki18n("Verbose output, show information on entering and exiting test functions")); \
+    options.add("v2", ki18n("Extended verbose output, also show each QCOMPARE() and QVERIFY()")); \
+    options.add("vs", ki18n("Show every signal that gets emitted")); \
+    options.add("xml", ki18n("Output XML formatted results instead of plain text")); \
+    options.add("lightxml", ki18n("Output results as a stream of XML tags")); \
+    options.add("o <file>", ki18n("Write output to the specified file, rather than to standard output")); \
+    options.add("eventdelay <ms>", ki18n("Default delay for keyboard or mouse simulation")); \
+    options.add("keydelay <ms>", ki18n("Like --eventdelay, but only influences keyboard simulation and not mouse simulation")); \
+    options.add("mousedelay <ms>", ki18n("Like --eventdelay, but only influences mouse simulation and not keyboard simulation.")); \
+    options.add("keyevent-verbose", ki18n("Show more verbose output for keyboard simulation")); \
+    options.add("maxwarnings <number>", ki18n("Set the maximum number of warnings to output. 0 for unlimited, defaults to 2000")); \
+    KCmdLineArgs::addCmdLineOptions( options ); \
     KApplication app; \
  \
     TestObject tc; \
