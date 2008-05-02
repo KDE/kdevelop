@@ -126,7 +126,6 @@ Core::Core(QObject *parent)
     : ICore(parent)
 {
     d = new CorePrivate(this);
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(deleteLater()));
 }
 
 Core::~Core()

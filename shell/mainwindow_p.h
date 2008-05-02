@@ -97,10 +97,13 @@ public Q_SLOTS:
 
     void fixToolbar();
 
+    bool applicationQuitRequested() const;
+
 private:
     KActionCollection *actionCollection();
 
     MainWindow *m_mainWindow;
+    static bool s_quitRequested;
 };
 
 }

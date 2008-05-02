@@ -58,6 +58,8 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop {
 
+bool MainWindowPrivate::s_quitRequested = false;
+
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
     :currentTextView(0), m_mainWindow(mainWindow)
 {
@@ -88,6 +90,8 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
     if (!view)
         return;
+
+    kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
@@ -257,15 +261,20 @@ void MainWindowPrivate::fixToolbar()
 {
     QWidget* w = m_mainWindow->guiFactory()->container(
         "mainToolBar", m_mainWindow);
-    foreach (QAction *a, w->actions())
-    {
-        if (m_mainWindow->actionCollection()->action(a->objectName()) != a)
+    if (w)
+        foreach (QAction *a, w->actions())
         {
-            w->removeAction(a);
+            if (m_mainWindow->actionCollection()->action(a->objectName()) != a)
+            {
+                w->removeAction(a);
+            }
         }
-    }
 }
 
+bool MainWindowPrivate::applicationQuitRequested() const
+{
+    return s_quitRequested;
+}
 
 }
 

@@ -89,6 +89,9 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
 
 void PartDocument::close(DocumentSaveMode mode)
 {
+    if (!save(mode))
+        return;
+
     //close all views and then delete ourself
     ///@todo test this
     foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())

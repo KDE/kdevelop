@@ -197,8 +197,12 @@ void MainWindowPrivate::viewAddNewToolView()
 
 void MainWindowPrivate::quitAll()
 {
-    Core::self()->cleanup();
-    KApplication::kApplication()->exit();
+    s_quitRequested = true;
+
+    if (Core::self()->documentController()->saveAllDocuments(IDocument::Default))
+        return qApp->exit();
+
+    s_quitRequested = false;
 }
 
 }

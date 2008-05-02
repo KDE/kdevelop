@@ -41,7 +41,7 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
-#include "idocumentcontroller.h"
+#include "documentcontroller.h"
 #include "statusbar.h"
 
 namespace KDevelop
@@ -75,15 +75,17 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
 
     setXMLFile( ShellExtension::getInstance() ->xmlFile() );
 
-    connect(this->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)), 
+    connect(this->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
             d, SLOT(fixToolbar()));
 }
 
 MainWindow::~ MainWindow()
 {
-    if (memberList().count() == 1)
+    if (memberList().count() == 1) {
         // We're closing down...
         Core::self()->cleanup();
+        Core::self()->deleteLater();
+    }
 
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
@@ -165,7 +167,9 @@ void MainWindow::setVisible( bool visible )
 
 bool MainWindow::queryClose()
 {
-    Core::self()->documentController()->saveAllDocuments();
+    if (!d->applicationQuitRequested())
+        if (!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(this, IDocument::Default))
+            return false;
 
     return Sublime::MainWindow::queryClose();
 }

@@ -74,7 +74,7 @@ public:
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
-    Q_SCRIPTABLE virtual void saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
+    Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
 
     Q_SCRIPTABLE virtual void openDocumentFromText( const QString& data ) = 0;
 

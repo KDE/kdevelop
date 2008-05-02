@@ -36,6 +36,7 @@ set(kdevplatformshell_LIB_SRCS
     language.cpp
     statusbar.cpp
     runcontroller.cpp
+    savedialog.cpp
 )
 
 

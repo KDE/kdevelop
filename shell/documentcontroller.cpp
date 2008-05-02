@@ -2,7 +2,7 @@
 Copyright 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
 Copyright 2002 Bernd Gehrmann <bernd@kdevelop.org>
 Copyright 2003 Roberto Raggi <roberto@kdevelop.org>
-Copyright 2003 Hamish Rodda <rodda@kde.org>
+Copyright 2003-2008 Hamish Rodda <rodda@kde.org>
 Copyright 2003 Harald Fernengel <harry@kdevelop.org>
 Copyright 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
 Copyright 2005 Adam Treat <treat@kde.org>
@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QFileInfo>
 #include <QtDBus/QtDBus>
+#include <QApplication>
 
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
@@ -46,6 +47,7 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "partcontroller.h"
 #include "iplugincontroller.h"
+#include "savedialog.h"
 
 #include <kplugininfo.h>
 
@@ -247,7 +249,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         {
             dir = group.readEntry( "DefaultProjectsDirectory",
                                              QDir::homePath() );
-        }else if( activeDocument() ) 
+        }else if( activeDocument() )
         {
             dir = activeDocument()->url().directory();
         }else
@@ -461,32 +463,163 @@ void DocumentController::activateDocument( IDocument * document )
 
 void DocumentController::slotSaveAllDocuments()
 {
-    saveAllDocuments();
+    saveAllDocuments(IDocument::Silent);
 }
 
-void DocumentController::saveAllDocuments(IDocument::DocumentSaveMode mode)
+bool DocumentController::saveAllDocuments(IDocument::DocumentSaveMode mode)
 {
-    foreach (IDocument* doc, d->documents)
-        doc->save(mode);
+    return saveSomeDocuments(openDocuments(), mode);
+}
+
+bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > & list, IDocument::DocumentSaveMode mode)
+{
+    if (mode & IDocument::Silent) {
+        foreach (IDocument* doc, modifiedDocuments(list)) {
+            bool ret = doc->save(mode);
+            Q_ASSERT(ret);
+            // TODO if (!ret) showErrorDialog() ?
+        }
+
+    } else {
+        // Ask the user which documents to save
+        QList<IDocument*> checkSave = modifiedDocuments(list);
+
+        if (!checkSave.isEmpty()) {
+            KSaveSelectDialog* dialog = new KSaveSelectDialog(checkSave, qApp->activeWindow());
+            if (dialog->exec() == QDialog::Rejected)
+                return false;
+        }
+    }
+
+    return true;
+}
+
+QList< IDocument * > KDevelop::DocumentController::documentsInWindow(MainWindow * mw) const
+{
+    // Gather a list of all documents which do have a view in the given main window
+    QList<IDocument*> list;
+    foreach (IDocument* doc, openDocuments()) {
+        if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
+            foreach (Sublime::View* view, sdoc->views()) {
+                if (view->hasWidget() && view->widget()->window() == mw) {
+                    list.append(doc);
+                    break;
+                }
+            }
+        }
+    }
+    return list;
+}
+
+QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(MainWindow * mw) const
+{
+    // Gather a list of all documents which have views only in the given main window
+    QList<IDocument*> checkSave;
+    foreach (IDocument* doc, openDocuments()) {
+        if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
+            bool inOtherWindow = false;
+
+            foreach (Sublime::View* view, sdoc->views()) {
+                if (view->hasWidget() && view->widget()->window() != mw) {
+                    inOtherWindow = true;
+                    break;
+                }
+            }
+
+            if (!inOtherWindow)
+                checkSave.append(doc);
+        }
+    }
+    return checkSave;
+}
+
+QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList< IDocument * > & list) const
+{
+    QList< IDocument * > ret;
+    foreach (IDocument* doc, list)
+        if (doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified)
+            ret.append(doc);
+    return ret;
+}
+
+bool DocumentController::saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode)
+{
+    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw);
+
+    return saveSomeDocuments(checkSave, mode);
 }
 
 void DocumentController::reloadAllDocuments()
 {
-    foreach (IDocument* doc, d->documents)
-        doc->reload();
+    if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
+        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+
+        if (!saveSomeDocuments(soloViews, IDocument::Default))
+            // User cancelled or other error
+            return;
+
+        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
+            doc->reload();
+    }
 }
 
 void DocumentController::closeAllDocuments()
 {
-    foreach (IDocument* doc, d->documents)
-        doc->close();
+    if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
+        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+
+        if (!saveSomeDocuments(soloViews, IDocument::Default))
+            // User cancelled or other error
+            return;
+
+        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
+            doc->close(IDocument::Discard);
+    }
 }
 
 void DocumentController::closeAllOtherDocuments()
 {
-    foreach (IDocument* doc, d->documents)
-        if (doc != activeDocument())
-            doc->close();
+    if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
+        Sublime::View* activeView = mw->activeView();
+
+        if (!activeView) {
+            kWarning() << "Shouldn't there always be an active view when this function is called?";
+            return;
+        }
+
+        // Deal with saving unsaved solo views
+        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        soloViews.removeAll(dynamic_cast<IDocument*>(activeView->document()));
+
+        if (!saveSomeDocuments(soloViews, IDocument::Default))
+            // User cancelled or other error
+            return;
+
+        foreach (Sublime::View* view, mw->area()->views()) {
+            if (view != activeView) {
+                if (view->document()->views().count() > 1)
+                {
+                    //close only the view in question
+                    mw->area()->removeView(view);
+                    view->deleteLater();
+                }
+                else
+                {
+                    //close the document instead as no views remain
+                    IDocument* doc = dynamic_cast<IDocument*>(view->document());
+                    if (doc) {
+                        doc->close(IDocument::Discard);
+
+                    } else {
+                        // Fallback, ick
+                        kWarning() << "Tried to close non-IDocument sublime document";
+                        mw->area()->removeView(view);
+                        view->deleteLater();
+                    }
+                }
+            }
+        }
+    }
 }
 
 IDocument* DocumentController::activeDocument() const

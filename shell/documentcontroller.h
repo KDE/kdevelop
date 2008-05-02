@@ -41,6 +41,8 @@ namespace Sublime {
 
 namespace KDevelop {
 
+class MainWindow;
+
 /**
  * \short Interface to control open documents.
  * The document controller manages open documents in the IDE.
@@ -81,11 +83,16 @@ public:
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
 
-    virtual void saveAllDocuments(IDocument::DocumentSaveMode mode = IDocument::Silent);
+    /// Request the document controller to save all documents.
+    /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
+    /// Returns false if the user cancels the save dialog.
+    virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode);
+    bool saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode);
 
     void notifyDocumentClosed(IDocument* doc);
 
     void initialize();
+
     void cleanup();
 
     virtual QStringList documentTypes() const;
@@ -114,6 +121,12 @@ private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
 
 private:
+    QList<IDocument*> documentsInWindow(MainWindow* mw) const;
+    QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw) const;
+    QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;
+
+    bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode);
+
     void setupActions();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))
     Q_PRIVATE_SLOT(d, void chooseDocument())
