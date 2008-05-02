@@ -68,6 +68,8 @@ public:
 
     virtual void removeToolView( int id );
     virtual void removeOutput( int id );
+
+public Q_SLOTS:
     void removeSublimeView( Sublime::View* );
 
 Q_SIGNALS:

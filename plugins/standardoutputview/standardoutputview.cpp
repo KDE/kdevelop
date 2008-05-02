@@ -90,7 +90,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
-    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(View*)), this, SLOT(removeSublimeView(View*)));
+    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)), this, SLOT(removeSublimeView(Sublime::View*)));
 
 }
 
@@ -141,6 +141,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
             break;
         }
     }
+
+    return -1;
 }
 
 int StandardOutputView::registerToolView( const QString& title,
