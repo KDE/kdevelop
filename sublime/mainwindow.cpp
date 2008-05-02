@@ -129,15 +129,19 @@ void MainWindow::activateView(View *view)
     if (!d->viewContainers.contains(view))
         return;
     d->viewContainers[view]->setCurrentWidget(view->widget());
-    setActiveView(view);
+
+    // The event filter will capture the focus change and trigger setActiveView
+    //setActiveView(view);
 }
 
 void MainWindow::setActiveView(View *view)
 {
-    d->activeView = view;
-    if (view && !view->widget()->hasFocus())
-        view->widget()->setFocus();
-    emit activeViewChanged(view);
+    if (d->activeView != view) {
+        d->activeView = view;
+        if (view && !view->widget()->hasFocus())
+            view->widget()->setFocus();
+        emit activeViewChanged(view);
+    }
 }
 
 void Sublime::MainWindow::setActiveToolView(View *view)
