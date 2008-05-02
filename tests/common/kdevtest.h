@@ -19,6 +19,7 @@
 #ifndef KDEVTEST
 #define KDEVTEST
 
+#include <stdlib.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -27,6 +28,11 @@
 #define KDEVTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \
 { \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    setenv("XDG_DATA_HOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test/xdg/local" ), 1); \
+    setenv("XDG_CONFIG_HOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test/xdg/config" ), 1); \
+ \
     static const char description[] = "KDevelop Test"; \
     KAboutData aboutData("kdevtest", 0, ki18n("KDevelop Test"), \
                          "1.0", ki18n(description), KAboutData::License_LGPL, ki18n(\
