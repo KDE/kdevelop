@@ -44,6 +44,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 {
     setWindowTitle(i18n("Output View"));
     QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
         tabwidget = new KTabWidget(this);
