@@ -28,6 +28,7 @@
 
 namespace Sublime {
     class AreaIndex;
+    class ToolDocument;
 }
 
 namespace KDevelop {
@@ -77,6 +78,7 @@ public:
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
 private:
+    void addToolView_2(IToolViewFactory* factory, Sublime::ToolDocument* doc);
     void saveArea(Sublime::AreaIndex* area, KConfigGroup & group);
     void loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup & group);
 

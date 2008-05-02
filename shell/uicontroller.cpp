@@ -51,7 +51,8 @@ namespace KDevelop {
 
 class UiControllerPrivate {
 public:
-    UiControllerPrivate(UiController *controller): cfgDlg(0), m_controller(controller)
+    UiControllerPrivate(UiController *controller)
+    : cfgDlg(0), m_controller(controller), areasRestored(false)
     {
         // FIXME: remove this 'defaultArea' thing.
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
@@ -100,6 +101,7 @@ public:
 
     Sublime::MainWindow* activeSublimeWindow;
     QList<Sublime::MainWindow*> sublimeWindows;
+    bool areasRestored;
 
 private:
     UiController *m_controller;
@@ -204,6 +206,11 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     kDebug(9501) ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
+
+    /* Until areas are restored, we don't know which views should be really
+       added, and which not, so we just record view availability.  */
+    if (d->areasRestored)
+        addToolView_2 (factory, doc);
 }
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
@@ -486,29 +493,33 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     for (i = d->factoryDocuments.begin(), 
              e = d->factoryDocuments.end(); i != e; ++i)
     {   
-        IToolViewFactory* factory = i.key();
-   
-        foreach (Sublime::Area* area, allAreas()) {
-            if (!area->wantToolView(factory->id()))
-                continue;
-            
-            Sublime::View* view = i.value()->createView();
-            area->addToolView(
-                view,
-                Sublime::dockAreaToPosition(factory->defaultPosition()));
-            
-            connect(view, SIGNAL(raise(Sublime::View*)), 
-                    SLOT(raiseToolView(Sublime::View*)));
-            
-            factory->viewCreated(view);
-        }
+        addToolView_2 (i.key(), i.value());
     }
 
     foreach (Sublime::MainWindow* mw, mainWindows())
         if (changedAreas.contains(mw->area()))
             showAreaInternal(mw->area(), mw);
 
+    d->areasRestored = true;
+}
 
+void UiController::addToolView_2(IToolViewFactory* factory, 
+                                 Sublime::ToolDocument* doc)
+{   
+    foreach (Sublime::Area* area, allAreas()) {
+        if (!area->wantToolView(factory->id()))
+            continue;
+        
+        Sublime::View* view = doc->createView();
+        area->addToolView(
+            view,
+            Sublime::dockAreaToPosition(factory->defaultPosition()));
+        
+        connect(view, SIGNAL(raise(Sublime::View*)), 
+                SLOT(raiseToolView(Sublime::View*)));
+        
+        factory->viewCreated(view);
+    }
 }
 
 }
