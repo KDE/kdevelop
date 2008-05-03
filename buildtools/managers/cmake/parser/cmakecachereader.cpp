@@ -1,50 +1,68 @@
+/* KDevelop CMake Support
+ *
+ * Copyright 2008 Aleix Pol <aleixpol@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
 #include "cmakecachereader.h"
 
 #include <QString>
-#include <QDebug>
+#include <QFile>
+#include <KDebug>
+#include <KUrl>
 
-CacheLine readLine(const QString& line)
+void CacheLine::readLine(const QString& line)
 {
-    CacheLine c;
+    m_line=line;
     int i;
     for(i=0; i<line.count() && line[i]!='='; i++)
     {
         if(line[i]==':')
         {
-            c.colon=i;
-            if(c.endName<0)
-                c.endName=i;
+            colon=i;
+            if(endName<0)
+                endName=i;
         }
         else if(line[i]=='-')
         {
-            c.dash=i;
-                c.endName=i;
+            dash=i;
+                endName=i;
         }
     }
-    c.equal=i;
-    return c;
+    equal=i;
 }
 
-/*void readCache(const KUrl &path)
-{
-    QFile file(path.toLocalFile());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        kDebug(9032) << "error. Could not find the file";
-        return;
-    }
+QString CacheLine::name() const
+{ return m_line.left( endName ); }
 
-    QHash cacheValues;
-    int currentIdx=0;
-    QStringList currentComment;
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-        QString line = in.readLine().trimmed();
-        else if(!line.isEmpty() && !line.startsWith("//")) //it is a variable
-        {
-            CacheLine c = readLine(line)s
-            QString value = line.right(line.count()-c.equal);
-        }
-    }
-}*/
+QString CacheLine::flag() const
+{
+    if(dash>0)
+        return m_line.mid( dash+1, colon-dash-1 );
+    else
+        return QString();
+}
+
+QString CacheLine::type() const
+{
+    return m_line.mid(colon+1, equal-colon-1);
+}
+
+QString CacheLine::value() const
+{
+    return m_line.right(m_line.size()-equal-1);
+}

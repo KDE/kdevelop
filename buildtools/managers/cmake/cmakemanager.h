@@ -127,6 +127,7 @@ private:
     static QString guessCMakeRoot(const QString& cmakeBin);
     void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
+    CacheValues readCache(const KUrl &path);
     
     void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
@@ -138,6 +139,7 @@ private:
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     
     QMap<KUrl, CMakeFolderItem*> m_folderPerUrl;
 

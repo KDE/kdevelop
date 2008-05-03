@@ -1,6 +1,6 @@
 /* KDevelop CMake Support
  *
- * Copyright 2006 Matt Rogers <mattr@kde.org>
+ * Copyright 2008 Aleix Pol Gonzalez <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +22,24 @@
 #define CMAKECMAKEPROJECTVISITORTEST_H
 
 #include <QtTest/QtTest>
+#include <topducontext.h>
 
 class CMakeProjectVisitorTest : public QObject
 {
     Q_OBJECT
 public:
-    CMakeProjectVisitorTest() {}
+    CMakeProjectVisitorTest();
     virtual ~CMakeProjectVisitorTest() {}
 
 private slots:
-    void testVariables();
-    void testVariables_data();
+//     void testVariables();
+//     void testVariables_data();
 
-    void testGoodParse();
-    void testGoodParse_data();
+    void testRun();
+    void testRun_data();
 
-    void testBadParse();
-    void testBadParse_data();
+private:
+    KDevelop::TopDUContext* m_fakeContext;
 };
 
 #endif

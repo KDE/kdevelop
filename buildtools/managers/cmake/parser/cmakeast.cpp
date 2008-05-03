@@ -1208,19 +1208,19 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     bool definedNames=false;
-    addOutputArgument(func.arguments[0]);
-    m_variableName = func.arguments[0].value;
-    Stage s = NAMES;
+    addOutputArgument(func.arguments.first());
+    m_variableName = func.arguments.first().value;
+    Stage s;
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
     if(it->value=="NAMES") {
-        ++it;
         definedNames = true;
+        s=NAMES;
     } else {
         m_filenames=QStringList(it->value);
-        it++;
         s=PATHS;
         definedNames = false;
     }
+    ++it;
 
     for(; it!=itEnd; ++it) {
         if(it->value=="NO_DEFAULT_PATH")
@@ -1236,21 +1236,21 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_documentation = it->value;
         } else if(it->value=="PATHS")
             s=PATHS;
-            else if(it->value=="PATH_SUFFIXES")
-                s=PATH_SUFFIXES;
-            else switch(s) {
-                case NAMES:
-                    m_filenames << it->value;
-                    if(!definedNames)
-                        s=PATHS;
-                    break;
-                case PATHS:
-                    m_path << it->value;
-                    break;
-                case PATH_SUFFIXES:
-                    m_pathSuffixes << it->value;
-                    break;
-            }
+        else if(it->value=="PATH_SUFFIXES")
+            s=PATH_SUFFIXES;
+        else switch(s) {
+            case NAMES:
+                m_filenames << it->value;
+                if(!definedNames)
+                    s=PATHS;
+                break;
+            case PATHS:
+                m_path << it->value;
+                break;
+            case PATH_SUFFIXES:
+                m_pathSuffixes << it->value;
+                break;
+        }
     }
     return !m_filenames.isEmpty() && !m_path.isEmpty();
 }
@@ -2662,10 +2662,7 @@ void SetAst::writeBack( QString& ) const
 
 bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "set" )
-        return false;
-
-    if ( func.arguments.size() < 1 )
+    if ( func.name.toLower() != "set" || func.arguments.size() < 1 )
         return false;
 
     m_variableName = func.arguments.first().value;

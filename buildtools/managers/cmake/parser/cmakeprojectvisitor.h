@@ -90,6 +90,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const WhileAst * );
         virtual int visit( const CMakeAst * );
         
+        void setCacheValues( CacheValues* cache);
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
@@ -107,8 +108,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         enum VariableType { NoVar, CMake, ENV };
 //         static VariableType hasVariable(const QString &name);
-        static QStringList resolveVariable(const QString &exp, const VariableMap *values);
-        static CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp, const VariableMap *values);
         static QStringList envVarDirectories(const QString &varName);
         
         enum FileType { Location, File, Executable, Library };
@@ -116,7 +115,10 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
         const QMap<QString, KDevelop::Declaration*>& declarationsPerTarget() { return m_declarationsPerTarget; }
+        QStringList resolveVariable(const QString &exp);
     private:
+        CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
+
         struct VisitorState
         {
             const CMakeFileContent* code;
@@ -142,6 +144,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList m_defaultPaths;
         VariableMap *m_vars;
         MacroMap *m_macros;
+        const CacheValues* m_cache;
         Definitions m_defs;
         QStringList m_filesRead;
         KDevelop::TopDUContext* m_topctx;

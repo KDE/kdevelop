@@ -115,7 +115,7 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     return name;
 }
 
-QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const VariableMap *values)
+QStringList CMakeProjectVisitor::resolveVariable(const QString &exp)
 {
     VariableType type;
     int before=0, after;
@@ -126,7 +126,10 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         QStringList vars;
         if(type==CMake)
         {
-            vars = values->value(var);
+            if(m_vars->contains(var))
+              vars = m_vars->value(var);
+            else if(m_cache->contains(var))
+              vars = m_cache->value(var).split(';');
         }
         else
         {
@@ -135,6 +138,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         QString pre=exp.left(before), post=exp.right(exp.length()-after-1);
         if(vars.isEmpty())
             return QStringList(pre+post);
+
         vars.first().prepend(pre);
         vars.last().append(post);
         QStringList::iterator it=vars.begin(), itEnd=vars.end();
@@ -142,11 +146,12 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp, const Varia
         
         for(; it!=itEnd; ++it)
         {
-            ret += resolveVariable(*it, values);
+            ret += resolveVariable(*it);
         }
         return ret;
     }
-    return QStringList(exp);
+    else
+        return QStringList(exp);
 }
 
 int CMakeProjectVisitor::notImplemented(const QString &name) const
@@ -220,7 +225,12 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
-    m_vars->insert(set->variableName(), set->values());
+    QStringList values;
+    if(set->storeInCache() && m_cache->contains(set->variableName()))
+        values = m_cache->value(set->variableName()).split(';');
+    else
+        values = set->values();
+    m_vars->insert(set->variableName(), values);
     kDebug(9042) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "...";
     return 1;
 }
@@ -477,6 +487,12 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
 {
     if(!haveToFind(fprog->variableName()))
         return 1;
+    if(m_cache->contains(fprog->variableName()))
+    {
+        kDebug(9042) << "FindProgram: cache" << fprog->variableName();
+        m_vars->insert(fprog->variableName(), m_cache->value(fprog->variableName()).split(';'));
+        return 1;
+    }
 
     QStringList modulePath = fprog->path();
 #ifdef Q_OS_WIN
@@ -509,6 +525,12 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 {
     if(!haveToFind(fpath->variableName()))
         return 1;
+    if(m_cache->contains(fpath->variableName()))
+    {
+        kDebug() << "FindPath: cache" << fpath->variableName();
+        m_vars->insert(fpath->variableName(), m_cache->value(fpath->variableName()).split(';'));
+        return 1;
+    }
 
     bool error=false;
     QStringList locationOptions = fpath->path();
@@ -550,6 +572,12 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 {
     if(!haveToFind(flib->variableName()))
         return 1;
+    if(m_cache->contains(flib->variableName()))
+    {
+        kDebug(9042) << "FindLibrary: cache" << flib->variableName();
+        m_vars->insert(flib->variableName(), m_cache->value(flib->variableName()).split(';'));
+        return 1;
+    }
 
     bool error=false;
     QStringList locationOptions = flib->path();
@@ -590,6 +618,12 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
 {
     if(!haveToFind(ffile->variableName()))
         return 1;
+    if(m_cache->contains(ffile->variableName()))
+    {
+        kDebug(9042) << "FindFile: cache" << ffile->variableName();
+        m_vars->insert(ffile->variableName(), m_cache->value(ffile->variableName()).split(';'));
+        return 1;
+    }
 
     bool error=false;
     QStringList locationOptions = ffile->path();
@@ -1240,7 +1274,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                             }
                             else
                             {
-                                foreach(QString s, info)
+                                foreach(const QString& s, info)
                                 {
                                     res.append(in.replace(s, sast->replace()));
                                 }
@@ -1457,7 +1491,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     return lines;
 }
 
-CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp, const VariableMap * vars)
+CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp)
 {
     CMakeFunctionDesc ret=exp;
     ret.arguments.clear();
@@ -1469,7 +1503,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
         variableName(arg.value, t, bef, aft);
         if(t)
         {
-            ret.addArguments(resolveVariable(arg.value, vars));
+            ret.addArguments(resolveVariable(arg.value));
         }
         else
         {
@@ -1541,7 +1575,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         
         createUses(*it);
 //         kDebug(9042) << "resolving:" << it->writeBack();
-        CMakeFunctionDesc func = resolveVariables(*it, m_vars); //FIXME not correct in while case
+        CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
         bool correct = element->parseFunctionInfo(func);
         if(!correct)
@@ -1633,6 +1667,11 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         }
         before+=2;
     }
+}
+
+void CMakeProjectVisitor::setCacheValues( CacheValues* cache)
+{
+    m_cache=cache;
 }
 
 void CMakeProjectVisitor::setVariableMap(VariableMap * vars)

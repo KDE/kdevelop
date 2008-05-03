@@ -55,6 +55,7 @@
 #include "cmakemodelitems.h"
 #include "cmakehighlighting.h"
 
+#include "cmakecachereader.h"
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
@@ -249,6 +250,9 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_rootItem->setTopDUContext(0);
         
         m_folderPerUrl[folderUrl]=m_rootItem;
+        KUrl cachefile=buildDirectory(m_rootItem);
+        cachefile.addPath("CMakeCache.txt");
+        m_projectCache[project]=readCache(cachefile);
         connect(m_watchers[project], SIGNAL(dirty(const QString&)), this, SLOT(dirtyFile(const QString&)));
     }
     return m_rootItem;
@@ -271,6 +275,7 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
 
     CMakeProjectVisitor v(file, m_buildstrapContext);
+    v.setCacheValues( &m_projectCache[project] );
     v.setVariableMap(vm);
     v.setMacroMap(mm);
     v.setModulePath(m_modulePathPerProject[project]);
@@ -344,6 +349,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         else
             curr=m_buildstrapContext;
         CMakeProjectVisitor v(folder->url().toLocalFile(KUrl::RemoveTrailingSlash), curr);
+        v.setCacheValues(&m_projectCache[item->project()]);
         v.setVariableMap(vm);
         v.setMacroMap(mm);
         v.setModulePath(m_modulePathPerProject[item->project()]);
@@ -586,6 +592,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     CMakeProjectVisitor v(url.toLocalFile(), missingtopcontext);
+    v.setCacheValues(m_projectCache[project]);
     v.setVariableMap(vm);
     v.setMacroMap(mm);
     v.setModulePath(m_modulePathPerProject[project]);
@@ -718,5 +725,31 @@ void CMakeProjectManager::jumpToDeclaration()
         ICore::self()->documentController()->openDocument(KUrl(decl->url().str()), decl->range().start.textCursor());
     }
 }
+
+CacheValues CMakeProjectManager::readCache(const KUrl &path)
+{
+    QFile file(path.toLocalFile());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        kDebug(9032) << "error. Could not find the file";
+        return CacheValues();
+    }
+
+    CacheValues ret;
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine().trimmed();
+        if(!line.isEmpty() && line[0].isLetter()) //it is a variable
+        {
+            CacheLine c;
+            c.readLine(line);
+            ret[c.name()]=c.value();
+//             kDebug(9042) << "Cache line" << line << c.name();
+        }
+    }
+    return ret;
+}
+
 
 #include "cmakemanager.moc"

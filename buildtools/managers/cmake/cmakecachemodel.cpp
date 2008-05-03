@@ -58,29 +58,25 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
         {
             CacheLine c;
             if(!line.startsWith('#'))
-                c=readLine(line);
+                c.readLine(line);
             
             if(c.isCorrect())
             {
-                QString name=line.left( c.endName ), flag;
-                if(c.dash>0)
-                    flag=line.mid( c.dash+1, c.colon-c.dash-1 );
+                QString name=c.name(), flag=c.flag();
                 
-                QString type=line.mid(c.colon+1, c.equal-c.colon-1);
-                QString value=line.right(line.size()-c.equal-1);
+                QString type=c.type();
+                QString value=c.value();
 
                 QList<QStandardItem*> lineItems;
-                lineItems.append(new QStandardItem(name)); //1. Var name
-                lineItems.append(new QStandardItem(type)); //2. type
-                lineItems.append(new QStandardItem(value)); //3. value
-                lineItems.append(new QStandardItem(currentComment.join("\n"))); //4. comment
+                lineItems.append(new QStandardItem(name));
+                lineItems.append(new QStandardItem(type));
+                lineItems.append(new QStandardItem(value));
+                lineItems.append(new QStandardItem(currentComment.join("\n")));
 
                 if(flag=="INTERNAL")
                 {
                     m_internal.insert(name);
-                }
-                
-                if(flag=="ADVANCED")
+                } else if(flag=="ADVANCED")
                 {
                     if(m_variablePos.contains(name))
                     {

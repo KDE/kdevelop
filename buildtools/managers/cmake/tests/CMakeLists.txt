@@ -48,13 +48,21 @@ target_link_libraries( cmakeast-test
 set ( cmakecondition_SRCS cmake_cmakecondition_test.cpp )
 kde4_add_unit_test(cmake-cmakecondition  ${cmakecondition_SRCS} )
 target_link_libraries( cmake-cmakecondition
-	${QT_QTTEST_LIBRARY}
-	${KDE_KDECORE_LIBS}
-	kdev4cmakecommon )
-
+    ${QT_QTTEST_LIBRARY}
+    ${KDE_KDECORE_LIBS}
+    kdev4cmakecommon )
+  
 set ( cmakeduchaintest_SRCS cmakeduchaintest.cpp )
 kde4_add_unit_test( cmakeduchaintest  ${cmakeduchaintest_SRCS} )
 target_link_libraries( cmakeduchaintest 
+        ${QT_QTTEST_LIBRARY}
+        ${KDE_KDECORE_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
+        kdev4cmakecommon )
+
+set ( cmakeprojectvisitortest_SRCS cmake_cmakeprojectvisitor_test.cpp )
+kde4_add_unit_test( cmakeprojectvisitortest  ${cmakeprojectvisitortest_SRCS} )
+target_link_libraries( cmakeprojectvisitortest 
         ${QT_QTTEST_LIBRARY}
         ${KDE_KDECORE_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}

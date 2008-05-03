@@ -13,4 +13,5 @@ struct Macro
 
 typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> Definitions;
+typedef QHash<QString, QString> CacheValues;
 #endif
