@@ -192,6 +192,20 @@ int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
     return 1;
 }
 
+void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
+{
+    int i=0;
+    kDebug() << "backtrace" << backtrace.count();
+    foreach(const VisitorState& v, backtrace)
+    {
+        if(v.code->count()>v.line)
+          kDebug(9042) << i << ": ";//           << v.code->at(v.line).name;
+        else
+          kDebug(9042) << i << ": ------------------------";
+        i++;
+    }
+}
+
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
 //     QString name = resolveVariable(exec->executable(), m_vars).join(";");
@@ -200,8 +214,9 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
     Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
     d->setIdentifier( Identifier(exec->executable()) );
     m_declarationsPerTarget.insert(exec->executable(), d);
-    //kDebug(9042) << "looooooool" << d
-    //    << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
+    kDebug(9042) << "looooooool" << d
+        << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
+    printBacktrace(m_backtrace);
 
     m_filesPerTarget.insert(exec->executable(), exec->sourceLists());
     kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
@@ -1590,6 +1605,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         {
 //             kDebug(9042) << "Found an end." << func.writeBack();
             delete element;
+            m_backtrace.pop();
             return line;
         }
         if(element->isDeprecated())

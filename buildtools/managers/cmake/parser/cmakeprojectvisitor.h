@@ -131,6 +131,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);
         unsigned int currentIdentity() const;
+        void printBacktrace(const QStack<VisitorState> &backtrace);
 
         QStringList m_modulePath;
         QString m_projectName;
