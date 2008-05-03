@@ -35,7 +35,7 @@ using namespace Sublime;
 void ViewTest::testWidgetDeletion()
 {
     Controller controller;
-    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
 
     View *view = doc->createView();
     //create the widget

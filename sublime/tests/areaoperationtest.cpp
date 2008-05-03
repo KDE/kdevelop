@@ -83,9 +83,9 @@ void AreaOperationTest::init()
     Document *doc4 = new UrlDocument(m_controller, KUrl::fromPath("~/zoo.cpp"));
 
     //documents for toolviews
-    Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>());
-    Document *tool2 = new ToolDocument("tool2", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
-    Document *tool3 = new ToolDocument("tool3", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>("tool1"));
+    Document *tool2 = new ToolDocument("tool2", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool2"));
+    Document *tool3 = new ToolDocument("tool3", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool3"));
 
     //areas (aka perspectives)
     //view object names are in form AreaNumber.DocumentNumber.ViewNumber
@@ -453,7 +453,7 @@ void AreaOperationTest::testToolViewAdditionAndDeletion()
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
-    Document *tool4 = new ToolDocument("tool4", m_controller, new SimpleToolWidgetFactory<QTextEdit>());
+    Document *tool4 = new ToolDocument("tool4", m_controller, new SimpleToolWidgetFactory<QTextEdit>("tool4"));
     View *view = tool4->createView();
     view->setObjectName("toolview1.4.1");
     m_area1->addToolView(view, Sublime::Right);

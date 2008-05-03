@@ -48,9 +48,9 @@ Example1Main::Example1Main()
 
     //documents for toolviews
     Sublime::Document *tool1 = new Sublime::ToolDocument("ListView", m_controller,
-        new Sublime::SimpleToolWidgetFactory<QListView>());
+        new Sublime::SimpleToolWidgetFactory<QListView>("ListView"));
     Sublime::Document *tool2 = new Sublime::ToolDocument("TextEdit", m_controller,
-        new Sublime::SimpleToolWidgetFactory<QTextEdit>());
+        new Sublime::SimpleToolWidgetFactory<QTextEdit>("TextEdit"));
 
     //areas (aka perspectives)
     kDebug(9504) << "constructing area 1";

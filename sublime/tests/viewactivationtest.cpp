@@ -40,6 +40,7 @@ using namespace Sublime;
 template <class Widget>
 class SpecialWidgetFactory: public SimpleToolWidgetFactory<Widget> {
 public:
+    SpecialWidgetFactory(const QString &id): SimpleToolWidgetFactory<Widget>(id) {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0)
     {
         QWidget *w = new QWidget(parent);
@@ -53,15 +54,15 @@ public:
 void ViewActivationTest::init()
 {
     controller = new Controller(this);
-    doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>());
+    doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>("doc1"));
     //this document will create special widgets - QListView nested in QWidget
-    doc2 = new ToolDocument("doc2", controller, new SpecialWidgetFactory<QListView>());
-    doc3 = new ToolDocument("doc3", controller, new SimpleToolWidgetFactory<QListView>());
-    doc4 = new ToolDocument("doc4", controller, new SimpleToolWidgetFactory<QListView>());
+    doc2 = new ToolDocument("doc2", controller, new SpecialWidgetFactory<QListView>("doc2"));
+    doc3 = new ToolDocument("doc3", controller, new SimpleToolWidgetFactory<QListView>("doc3"));
+    doc4 = new ToolDocument("doc4", controller, new SimpleToolWidgetFactory<QListView>("doc4"));
 
-    tool1 = new ToolDocument("tool1", controller, new SimpleToolWidgetFactory<QListView>());
-    tool2 = new ToolDocument("tool2", controller, new SimpleToolWidgetFactory<QTextEdit>());
-    tool3 = new ToolDocument("tool3", controller, new SimpleToolWidgetFactory<QTextEdit>());
+    tool1 = new ToolDocument("tool1", controller, new SimpleToolWidgetFactory<QListView>("tool1"));
+    tool2 = new ToolDocument("tool2", controller, new SimpleToolWidgetFactory<QTextEdit>("tool2"));
+    tool3 = new ToolDocument("tool3", controller, new SimpleToolWidgetFactory<QTextEdit>("tool3"));
 
     area = new Area(controller, "Area");
 
@@ -93,7 +94,7 @@ void ViewActivationTest::cleanup()
 void ViewActivationTest::testSignalsOnViewCreationAndDeletion()
 {
     Controller *controller = new Controller(this);
-    ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>());
+    ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>("doc1"));
     Area *area = new Area(controller, "Area");
 
     QSignalSpy spy(controller, SIGNAL(viewAdded(Sublime::View*)));

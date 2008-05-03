@@ -48,12 +48,15 @@ public:
 template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
+    SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
     virtual QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0)
     {
         return new Widget(parent);
     }
     virtual QList<QAction*> toolBarActions( QWidget* ) const { return QList<QAction*>(); }
-    virtual QString id() const { return QString(); }
+    virtual QString id() const { return m_id; }
+private:
+    QString m_id;
 };
 
 /**

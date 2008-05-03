@@ -40,6 +40,7 @@ using namespace Sublime;
 
 class SpecialWidgetToolBar1Factory : public SimpleToolWidgetFactory<QTextEdit> {
 public:
+    SpecialWidgetToolBar1Factory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     virtual QList<QAction*> toolBarActions( QWidget* ) const
     {
         QList<QAction*> actions;
@@ -57,6 +58,7 @@ public:
 
 class SpecialWidgetToolBar2Factory : public SimpleToolWidgetFactory<QTextEdit> {
 public:
+    SpecialWidgetToolBar2Factory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     virtual QList<QAction*> toolBarActions( QWidget* ) const
     {
         QList<QAction*> actions;
@@ -76,8 +78,8 @@ public:
 void ToolViewToolBarTest::init()
 {
     controller = new Controller(this);
-    tool1 = new ToolDocument( "tool1", controller, new SpecialWidgetToolBar1Factory() );
-    tool2 = new ToolDocument( "tool2", controller, new SpecialWidgetToolBar2Factory() );
+    tool1 = new ToolDocument( "tool1", controller, new SpecialWidgetToolBar1Factory("tool1") );
+    tool2 = new ToolDocument( "tool2", controller, new SpecialWidgetToolBar2Factory("tool2") );
 
     area = new Area( controller, "Area" );
     viewT11 = tool1->createView();
