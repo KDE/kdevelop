@@ -221,11 +221,6 @@ void Controller::addArea(Area *area)
     d->areas.append(area);
     d->allAreas.append(area);
     d->namedAreas[area->objectName()] = area;
-
-    /* In theory, ownership is passed to us, so should not bother detecting
-       deletion outside.  */
-    connect(area, SIGNAL(destroyed(QObject*)),
-            this, SLOT(removeArea(QObject*)));
 }
 
 void Controller::addMainWindow(MainWindow* mainWindow)
