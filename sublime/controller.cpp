@@ -122,7 +122,6 @@ Controller::~Controller()
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
-    Q_ASSERT(false && "this method shold not be ever called");
     Area *areaToShow = 0;
     //if the area is already shown in another mainwindow then we need to clone it
     if (d->shownAreas.contains(area) && (mainWindow != d->shownAreas[area]))
