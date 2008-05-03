@@ -123,7 +123,7 @@ void OutputWidget::changeModel( int id )
         OutputData* od = data->outputdata.value(id);
         kDebug() << "output:" << od << "id of output:" << od->id << "title:" << od->title  << "tv id" << od->toolView->toolViewId << "tv title:" << od->toolView->title;
         views.value( id )->setModel(data->outputdata.value(id)->model);
-        if( data->outputdata.value(id)->behaviour && KDevelop::IOutputView::AutoScroll )
+        if( data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll )
         {
             connect( data->outputdata.value(id)->model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                      views.value(id), SLOT(scrollToBottom()) );
