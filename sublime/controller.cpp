@@ -226,15 +226,6 @@ void Controller::addArea(Area *area)
        deletion outside.  */
     connect(area, SIGNAL(destroyed(QObject*)),
             this, SLOT(removeArea(QObject*)));
-
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-        this, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-        this, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
 }
 
 void Controller::addMainWindow(MainWindow* mainWindow)

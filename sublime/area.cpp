@@ -102,6 +102,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     setObjectName(name);
     d->title = title;
     d->controller = controller;
+    initialize();
 }
 
 Area::Area(const Area &area)
@@ -113,6 +114,19 @@ Area::Area(const Area &area)
     d->toolViews.clear();
     foreach (View *view, area.toolViews())
         addToolView(view->document()->createView(), area.toolViewPosition(view));
+    initialize();
+}
+
+void Area::initialize()
+{
+    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
+            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
+            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
+    connect(this, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
+            d->controller, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
+    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
+            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
 }
 
 Area::~Area()
