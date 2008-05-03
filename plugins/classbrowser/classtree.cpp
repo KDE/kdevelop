@@ -58,7 +58,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   , m_currentMode(ModeProject)
 {
   setObjectName("Class Browser Tree");
-  setWindowTitle(i18n("Class Browser"));
+  setWindowTitle(i18n("Classes"));
   setWindowIcon(KIcon("class"));
 
   KAction* action = new KAction(i18n( "Scope" ), this);

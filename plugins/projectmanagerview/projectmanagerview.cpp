@@ -97,7 +97,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
         : QWidget( parent ),
         d(new ProjectManagerPrivate)
 {
-    setWindowTitle("Project Manager");
+    setWindowTitle(i18n("Projects"));
 
     d->mplugin = plugin;
     QVBoxLayout *vbox = new QVBoxLayout( this );

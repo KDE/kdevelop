@@ -62,11 +62,11 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     , m_plugin(plugin)
 {
     setObjectName("Problem Reporter Tree");
-    setWindowTitle(i18n("Problem Reporter"));
+    setWindowTitle(i18n("Problems"));
     setWindowIcon( KIcon("dialog-information") ); ///@todo Use a proper icon
   //setWindowIcon(KIcon("info"));
     setRootIsDecorated(true);
-    setWhatsThis( i18n( "Problem Reporter" ) );
+    setWhatsThis( i18n( "Problems" ) );
     setModel(new ProblemModel(m_plugin));
 
     //new ModelTest(model());

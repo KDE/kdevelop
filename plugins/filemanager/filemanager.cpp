@@ -191,8 +191,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     d->m_plugin = plugin;
     setObjectName("FileManager");
 //     setWindowIcon(SmallIcon("kdevelop"));
-    setWindowTitle(i18n("File Manager"));
-    setWhatsThis(i18n("File Manager"));
+    setWindowTitle(i18n("Filesystem"));
+    setWhatsThis(i18n("Filesystem Browser"));
 
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);

@@ -67,7 +67,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
     : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent)
     , m_factory(new ProblemReporterFactory(this))
 {
-  core()->uiController()->addToolView(i18n("Problem Reporter"), m_factory);
+  core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
 }
 

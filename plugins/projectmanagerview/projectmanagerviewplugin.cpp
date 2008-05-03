@@ -122,7 +122,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     actionCollection()->addAction( "project_prune", d->m_prune );
     setXMLFile( "kdevprojectmanagerview.rc" );
     d->factory = new KDevProjectManagerViewFactory( this );
-    core()->uiController()->addToolView( i18n("Project Manager"), d->factory );
+    core()->uiController()->addToolView( i18n("Projects"), d->factory );
 
 }
 

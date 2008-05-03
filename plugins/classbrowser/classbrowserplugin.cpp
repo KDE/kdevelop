@@ -65,7 +65,7 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
     , m_factory(new ClassBrowserFactory(this))
     , m_model(new ClassModel(this))
 {
-  core()->uiController()->addToolView(i18n("Class Browser"), m_factory);
+  core()->uiController()->addToolView(i18n("Classes"), m_factory);
   setXMLFile( "kdevclassbrowser.rc" );
 
   //connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
