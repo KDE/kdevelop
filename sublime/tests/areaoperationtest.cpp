@@ -301,8 +301,9 @@ void AreaOperationTest::testAreaCloning()
 
     //two mainwindows have different areas
     QVERIFY(mw1.area() != mw2.area());
-    //the area for the second mainwindow is a clone
-    QVERIFY(mw2.area()->objectName().contains("copy"));
+    //the area for the second mainwindow is a clone of the
+    //original area and should have the same name.
+    QVERIFY(mw2.area()->objectName() == mw1.area()->objectName());
 
     //check mainwindow layouts - original and copy
     checkArea1(&mw1);
