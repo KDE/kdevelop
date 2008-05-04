@@ -3,4 +3,5 @@ add_subdirectory(documentview)
 add_subdirectory(valgrind)
 add_subdirectory(grepview)
 add_subdirectory(qtdesigner)
+#add_subdirectory(xtest)
 

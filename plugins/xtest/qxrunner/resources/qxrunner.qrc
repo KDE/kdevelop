@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/icons" >
+        <file>checkedbox.png</file>
+        <file>collapsed.png</file>
+        <file>columns.png</file>
+        <file>document.png</file>
+        <file>error.png</file>
+        <file>exception.png</file>
+        <file>expanded.png</file>
+        <file>fatal.png</file>
+        <file>group.png</file>
+        <file>info.png</file>
+        <file>info_blue_24x24.png</file>
+        <file>item.png</file>
+        <file>item_run.png</file>
+        <file>play.png</file>
+        <file>properties.png</file>
+        <file>qxrunner_16x16.png</file>
+        <file>qxrunner_24x24.png</file>
+        <file>qxrunner_64x64.png</file>
+        <file>stop.png</file>
+        <file>success.png</file>
+        <file>uncheckedbox.png</file>
+        <file>warning.png</file>
+    </qresource>
+</RCC>

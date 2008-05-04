@@ -1,0 +1,370 @@
+<ui version="4.0" >
+ <class>RunnerWindow</class>
+ <widget class="QMainWindow" name="RunnerWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>630</width>
+    <height>422</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>QxRunner</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset/>
+  </property>
+  <widget class="QWidget" name="centralWidget" >
+   <layout class="QGridLayout" >
+    <property name="leftMargin" >
+     <number>9</number>
+    </property>
+    <property name="topMargin" >
+     <number>9</number>
+    </property>
+    <property name="rightMargin" >
+     <number>9</number>
+    </property>
+    <property name="bottomMargin" >
+     <number>9</number>
+    </property>
+    <property name="horizontalSpacing" >
+     <number>6</number>
+    </property>
+    <property name="verticalSpacing" >
+     <number>6</number>
+    </property>
+    <item row="0" column="0" >
+     <widget class="QTreeView" name="treeRunner" >
+      <property name="alternatingRowColors" >
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode" >
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>630</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuRunner" >
+    <property name="title" >
+     <string>&amp;Runner</string>
+    </property>
+    <addaction name="actionStart" />
+    <addaction name="actionStop" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionMinimalUpdate" />
+    <addaction name="actionResults" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menuRunner" />
+   <addaction name="menuView" />
+  </widget>
+  <widget class="QToolBar" name="runnerToolBar" >
+   <property name="windowTitle" >
+    <string>Ru&amp;nner Toolbar</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionStart" />
+   <addaction name="actionStop" />
+  </widget>
+  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QDockWidget" name="dockResults" >
+   <property name="features" >
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="windowTitle" >
+    <string>Results</string>
+   </property>
+   <attribute name="dockWidgetArea" >
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents" >
+    <layout class="QVBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <property name="leftMargin" >
+      <number>9</number>
+     </property>
+     <property name="topMargin" >
+      <number>9</number>
+     </property>
+     <property name="rightMargin" >
+      <number>9</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>9</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="buttonFatals" >
+         <property name="focusPolicy" >
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="text" >
+          <string>dummy</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonErrors" >
+         <property name="focusPolicy" >
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="text" >
+          <string>dummy</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonWarnings" >
+         <property name="focusPolicy" >
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="text" >
+          <string>dummy</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonInfos" >
+         <property name="focusPolicy" >
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="text" >
+          <string>dummy</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTreeView" name="treeResults" >
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>80</height>
+        </size>
+       </property>
+       <property name="alternatingRowColors" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionStart" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>&amp;Start</string>
+   </property>
+  </action>
+  <action name="actionStop" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>S&amp;top</string>
+   </property>
+  </action>
+  <action name="actionSelectAll" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>Select &amp;All</string>
+   </property>
+  </action>
+  <action name="actionUnselectAll" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>&amp;Unselect All</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
+   <property name="text" >
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="text" >
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionCollapseAll" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>&amp;Collapse All</string>
+   </property>
+  </action>
+  <action name="actionExpandAll" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>&amp;Expand All</string>
+   </property>
+  </action>
+  <action name="actionMinimalUpdate" >
+   <property name="text" >
+    <string>&amp;Minimal Update</string>
+   </property>
+  </action>
+  <action name="actionColumns" >
+   <property name="icon" >
+    <iconset resource="resources/qxrunner.qrc" >:/icons/columns.png</iconset>
+   </property>
+   <property name="text" >
+    <string>C&amp;olumns...</string>
+   </property>
+  </action>
+  <action name="actionResults" >
+   <property name="text" >
+    <string>&amp;Results</string>
+   </property>
+  </action>
+  <action name="actionSettings" >
+   <property name="icon" >
+    <iconset resource="resources/qxrunner.qrc" >:/icons/properties.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Settings...</string>
+   </property>
+  </action>
+  <action name="actionToolbars" >
+   <property name="text" >
+    <string>&amp;Toolbars</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <resources>
+  <include location="resources/qxrunner.qrc" />
+ </resources>
+ <connections/>
+</ui>
