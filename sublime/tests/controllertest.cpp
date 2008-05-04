@@ -69,7 +69,9 @@ void ControllerTest::testNamedAreas()
 {
     Controller controller;
     Area *area1 = new Area(&controller, "1");
+    controller.addArea(area1);
     Area *area2 = new Area(&controller, "2");
+    controller.addArea(area2);
 
     QCOMPARE(controller.area("1"), area1);
     QCOMPARE(controller.area("2"), area2);
