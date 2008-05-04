@@ -63,6 +63,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
 
     KConfigGroup setgrp = KGlobal::config()->group("Buildset");
     m_view->plugin()->buildSet()->readSettings( setgrp, m_view->plugin()->core() );
+    layout()->setMargin(0);
 }
 
 ProjectBuildSetWidget::~ProjectBuildSetWidget()
