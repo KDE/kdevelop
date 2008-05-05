@@ -736,6 +736,8 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
     m_items[role]->width = thickness;
 
     invalidate();
+
+    emit widgetResized(role, thickness);
 }
 
 void IdealMainLayout::anchorWidget(bool anchor, IdealMainLayout::Role role)
@@ -765,6 +767,12 @@ void IdealMainLayout::maximizeWidget(QWidget* widget)
 int IdealMainLayout::widthForRole(Role role) const
 {
     return m_items[role]->width;
+}
+
+void IdealMainLayout::setWidthForRole(Role role, int width)
+{
+    m_items[role]->width = width;
+    invalidate();
 }
 
 bool IdealMainLayout::isAreaAnchored(Role role) const
@@ -951,6 +959,23 @@ void Sublime::IdealMainLayout::DockArea::raise()
 
     if (m_mainSplitter)
         m_mainSplitter->widget()->raise();
+}
+
+Sublime::Position Sublime::IdealMainLayout::positionForRole(Role role)
+{
+    switch (role)
+    {
+    case Left:
+        return Sublime::Left;
+    case Right:
+        return Sublime::Right;
+    case Bottom:
+        return Sublime::Bottom;
+    case Top:
+        return Sublime::Top;
+    case Central:
+        Q_ASSERT (false && "called with center role");
+    }
 }
 
 #include "ideallayout.moc"

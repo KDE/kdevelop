@@ -187,6 +187,12 @@ void MainWindowPrivate::reconstruct()
     area->walkViews(viewCreator, area->rootIndex());
 
     idealMainWidget->blockSignals(true);
+    IdealMainLayout *l = idealMainWidget->mainLayout();
+    l->setWidthForRole(IdealMainLayout::Left, area->thickness(Sublime::Left));
+    l->setWidthForRole(IdealMainLayout::Right, area->thickness(Sublime::Right));
+    l->setWidthForRole(IdealMainLayout::Bottom, 
+                       area->thickness(Sublime::Bottom));
+    l->setWidthForRole(IdealMainLayout::Top, area->thickness(Sublime::Top));
     kDebug(9504) << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
@@ -243,6 +249,12 @@ void MainWindowPrivate::recreateCentralWidget()
             SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
             this, 
             SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
+
+    connect(idealMainWidget->mainLayout(),
+            SIGNAL(widgetResized(IdealMainLayout::Role, int)),
+            this,
+            SLOT(widgetResized(IdealMainLayout::Role, int)));
+            
 }
 
 void MainWindowPrivate::
@@ -422,6 +434,11 @@ void Sublime::MainWindowPrivate::setStatusIcon(View * view, const QIcon & icon)
             c->setTabIcon(index, icon);
         }
     }
+}
+
+void MainWindowPrivate::widgetResized(IdealMainLayout::Role role, int thickness)
+{
+    area->setThickness(IdealMainLayout::positionForRole(role), thickness);
 }
 
 }

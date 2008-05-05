@@ -27,6 +27,8 @@
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
+#include "sublimedefs.h"
+
 class KAction;
 class KActionCollection;
 
@@ -107,6 +109,7 @@ public:
 
     int splitterWidth() const;
     int widthForRole(Role role) const;
+    void setWidthForRole(Role role, int width);
 
     bool isAreaAnchored(Role role) const;
 
@@ -137,11 +140,18 @@ public:
 
     class IdealMainWidget* mainWidget() const;
 
+    static Sublime::Position positionForRole(Role role);
+
 public Q_SLOTS:
     void resizeWidget(int thickness, IdealMainLayout::Role role);
     void anchorWidget(bool anchor, IdealMainLayout::Role role);
 
     void loadSettings();
+
+Q_SIGNALS:
+    /* Reports that a dock widget for role now occupies 'thickness'
+       pixels from the corresponding window edge, if shown.  */
+    void widgetResized(IdealMainLayout::Role role, int thickness);
 
 protected:
     using QLayout::layout;

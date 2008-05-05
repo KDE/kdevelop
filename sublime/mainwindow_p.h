@@ -27,6 +27,7 @@
 #include "sublimedefs.h"
 
 #include "mainwindow.h"
+#include "ideallayout.h"
 
 class QMenu;
 class QAction;
@@ -103,6 +104,7 @@ private slots:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
+    void widgetResized(IdealMainLayout::Role role, int thickness);
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);
