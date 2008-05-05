@@ -120,6 +120,8 @@ QString ImportProject::manager() const
             return "KDevQMakeManager";
         case 2:
             return "KDevCustomMakeManager";
+        case 3:
+            return "KDevGenericManager";
         default:
             return "";
     }
