@@ -77,7 +77,7 @@ Q_SIGNALS:
                      KDevelop::ProjectFileItem* newFile);
 
 private:
-    bool isValid( const QFileInfo &fileName ) const;
+    bool isValid( const QFileInfo &fileName, const QStringList &includes, const QStringList &excludes ) const;
 
 private:
     struct GenericProjectManagerPrivate* const d;

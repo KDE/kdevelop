@@ -27,6 +27,8 @@
 #include <kpluginloader.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <QDir>
 #include <QExtensionFactory>
@@ -39,11 +41,6 @@ K_EXPORT_PLUGIN(GenericSupportFactory("kdevgenericmanager"))
 
 class GenericProjectManagerPrivate
 {
-    public:
-        KDevelop::IProject *m_project;
-
-        QStringList includes;
-        QStringList excludes;
 };
 
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
@@ -51,21 +48,18 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
-    if ( d->includes.isEmpty() )
-        d->includes << "*.h" << "*.cpp" << "*.c" << "*.ui" << "*.cs" << "*.java";   // ### remove me
-
-    d->excludes << ".svn" << "CVS" << "moc_*.cpp"; // ### remove me
 }
 
 GenericProjectManager::~GenericProjectManager()
 {}
 
-bool GenericProjectManager::isValid( const QFileInfo &fileInfo ) const
+bool GenericProjectManager::isValid( const QFileInfo &fileInfo,
+    const QStringList &includes, const QStringList &excludes ) const
 {
     QString fileName = fileInfo.fileName();
 
     bool ok = fileInfo.isDir();
-    for ( QStringList::ConstIterator it = d->includes.begin(); !ok && it != d->includes.end(); ++it )
+    for ( QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it )
     {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( fileName ) )
@@ -77,7 +71,7 @@ bool GenericProjectManager::isValid( const QFileInfo &fileInfo ) const
     if ( !ok )
         return false;
 
-    for ( QStringList::ConstIterator it = d->excludes.begin(); it != d->excludes.end(); ++it )
+    for ( QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it )
     {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( fileName ) )
@@ -96,11 +90,15 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     QList<KDevelop::ProjectFolderItem*> folder_list;
     QFileInfoList entries = dir.entryInfoList();
 
+    KConfigGroup filtersConfig = item->project()->projectConfiguration()->group("Filters");
+    QStringList includes = filtersConfig.readEntry("Includes", QStringList());
+    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList());
+
     for ( int i = 0; i < entries.count(); ++i )
     {
         QFileInfo fileInfo = entries.at( i );
 
-        if ( !isValid( fileInfo ) )
+        if ( !isValid( fileInfo, includes, excludes ) )
         {
             //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath();
         }
