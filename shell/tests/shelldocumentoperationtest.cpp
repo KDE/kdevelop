@@ -28,6 +28,8 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
+#include <sublime/area.h>
+
 #include "documentcontroller.h"
 #include "uicontroller.h"
 
@@ -50,7 +52,14 @@ void ShellDocumentOperationTest::testOpenDocumentFromText()
     //test that we have this document in the list, signals are emitted and so on
     QCOMPARE(documentController->openDocuments().count(), 1);
     QCOMPARE(documentController->openDocuments()[0]->textDocument()->text(), QString("Test1"));
+
+    Sublime::Area *area = Core::self()->uiControllerInternal()->activeArea();
+    QCOMPARE(area->views().count(), 1);
     documentController->openDocuments()[0]->close(IDocument::Discard);
+
+    // We used to have a bug where closing document failed to remove its
+    // views from area, so check it here.
+    QCOMPARE(area->views().count(), 0);    
 }
 
 void ShellDocumentOperationTest::testKateDocumentAndViewCreation()
