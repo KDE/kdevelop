@@ -139,7 +139,8 @@ void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
        main window if an area not visible now is modified.  Further,
        if showAreaInternal is called with the same area as is current
        now, we don't want to connect the same signals twice.  */
-    disconnect(mainWindow->area(), 0, mainWindow, 0);
+    if (mainWindow->area())
+        disconnect(mainWindow->area(), 0, mainWindow, 0);
     MainWindowOperator::setArea(mainWindow, area);
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
@@ -163,7 +164,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     Area* area = NULL;
     foreach (Area* a, d->mainWindowAreas[index])
     {
-        kDebug(9504) << "Object name: " << a->objectName() << " id " 
+        kDebug(9504) << "Object name: " << a->objectName() << " id "
                      << areaTypeId;
         if (a->objectName() == areaTypeId)
         {
@@ -235,7 +236,7 @@ void Controller::addMainWindow(MainWindow* mainWindow)
     d->mainWindowAreas.resize(d->controlledWindows.size());
     int index = d->controlledWindows.size()-1;
 
-    foreach (Area* area, areas()) 
+    foreach (Area* area, areas())
     {
         Area *na = new Area(*area);
         d->allAreas.append(na);
