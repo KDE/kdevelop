@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile arg="true"/>
+  <group name="Filters">
+    <entry name="includes" key="Includes" type="String">
+    </entry>
+    <entry name="excludes" key="Excludes" type="String">
+    </entry>
+  </group>
+</kcfg>

@@ -1,0 +1,8 @@
+File=genericprojectmanagersettings.kcfg
+ClassName=GenericProjectManagerSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles="projectconfigskeleton.h"
