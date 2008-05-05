@@ -94,7 +94,8 @@ void PartDocument::close(DocumentSaveMode mode)
 
     //close all views and then delete ourself
     ///@todo test this
-    foreach (Sublime::Area *area, Core::self()->uiControllerInternal()->areas())
+    foreach (Sublime::Area *area, 
+             Core::self()->uiControllerInternal()->allAreas())
     {
         QList<Sublime::View*> areaViews = area->views();
         foreach (Sublime::View *view, areaViews) {
