@@ -89,6 +89,7 @@ public:
 
     IdealMainWidget *idealMainWidget;
     int ignoreDockShown;
+    bool autoAreaSettingsSave;                       
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);

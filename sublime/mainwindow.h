@@ -63,6 +63,12 @@ public:
     /**@return active toolview inside this mainwindow.*/
     View *activeToolView();
 
+    /**Enable saving of per-area UI settings (like toolbar properties 
+       and position) whenever area is changed.  This should be
+       called after all areas are restored, and main window area is
+       set, to prevent saving a half-broken state.  */
+    void enableAreaSettingsSave();
+
 public slots:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);

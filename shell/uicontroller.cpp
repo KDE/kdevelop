@@ -534,7 +534,9 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
             showArea(currentArea, mw);
         else
             // Force reload of the changes.
-            showAreaInternal(mw->area(), mw);        
+            showAreaInternal(mw->area(), mw);
+
+        mw->enableAreaSettingsSave();
     }
 
     d->areasRestored = true;

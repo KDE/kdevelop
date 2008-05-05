@@ -102,7 +102,7 @@ QWidget* AreaSelectionAction::createWidget(QWidget* parent)
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 :controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
- ignoreDockShown(false), m_mainWindow(w)
+ ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
 {
     recreateCentralWidget();
 

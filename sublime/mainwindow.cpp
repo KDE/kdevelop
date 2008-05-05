@@ -62,7 +62,7 @@ void MainWindow::setArea(Area *area)
        from recording those views as no longer shown in the area.  */
     d->ignoreDockShown = true;
     
-    if (differentArea)
+    if (d->autoAreaSettingsSave && differentArea)
         saveSettings();
 
     if (d->area)
@@ -266,6 +266,11 @@ void MainWindow::loadGeometry(const KConfigGroup &config)
     QRect g = config.readEntry(key, QRect());
     if (!g.isEmpty())
         setGeometry(g);
+}
+
+void MainWindow::enableAreaSettingsSave()
+{
+    d->autoAreaSettingsSave = true;
 }
 
 }
