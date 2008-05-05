@@ -43,13 +43,15 @@
 
 namespace Sublime {
 
-QWidget* ComboAction::createWidget(QWidget* parent)
+AreaSelectorWidget::AreaSelectorWidget(QWidget *parent,
+                                       MainWindow* window,
+                                       Controller* controller)
+: QWidget(parent), window_(window), controller_(controller)
 {
-    QWidget* result = new QWidget(parent);
-    QHBoxLayout* layout = new QHBoxLayout(result);
-    QComboBox* b = new QComboBox(parent);
-    layout->addWidget(b);
-    QToolButton* button = new QToolButton(result);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    combo_ = new QComboBox(this);
+    layout->addWidget(combo_);
+    QToolButton* button = new QToolButton(this);
     button->setIcon(KIcon("configure"));
     button->setPopupMode(QToolButton::InstantPopup);
     layout->addWidget(button);
@@ -61,31 +63,41 @@ QWidget* ComboAction::createWidget(QWidget* parent)
     menu->addAction("Delete Area");
     button->setMenu(menu);
 
-
-    /* FIXME: should arrange for this to be updated in
-       new areas are created.  */
     foreach (Area *a, controller_->areas())
     {
-        areas_.push_back(a);
-        b->addItem(a->title());
-    }
-    connect (b, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
-    return result;
+        areaIds_.push_back(a->objectName());
+        combo_->addItem(a->title());
+        if (a->title() == window->area()->title())
+            combo_->setCurrentIndex(combo_->count()-1);            
+    }   
+    connect (combo_, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
+    connect (window_, SIGNAL(areaChanged(Sublime::Area*)),
+             this, SLOT(areaChanged(Sublime::Area*)));
 }
 
-void ComboAction::resetCurrentArea()
+void AreaSelectorWidget::resetCurrentArea()
 {
-    MainWindow* mw = 
-        static_cast<MainWindowPrivate*>(parent())->m_mainWindow;
-    controller_->resetCurrentArea(mw);
+    controller_->resetCurrentArea(window_);
 }
     
-void ComboAction::activateArea(int index)
+void AreaSelectorWidget::activateArea(int index)
 {
-    kDebug(9504) << "Trying to show area " << areas_[index]->objectName();
-    controller_->showArea(
-        areas_[index]->objectName(), 
-        static_cast<MainWindowPrivate*>(parent())->m_mainWindow);
+    controller_->showArea(areaIds_[index], window_);
+}
+
+void AreaSelectorWidget::areaChanged(Sublime::Area* area)
+{
+    for (int i = 0; i < combo_->count(); ++i)
+        if (combo_->itemText(i) == area->title())
+        {
+            combo_->setCurrentIndex(i);
+            break;
+        }
+}
+
+QWidget* AreaSelectionAction::createWidget(QWidget* parent)
+{
+    return new AreaSelectorWidget(parent, window_, controller_);
 }
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
@@ -94,7 +106,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 {
     recreateCentralWidget();
 
-    ComboAction* action = new ComboAction(this, controller);
+    QAction* action = new AreaSelectionAction(this, controller);
     m_mainWindow->actionCollection()->addAction("switch_area", action);
 }
 

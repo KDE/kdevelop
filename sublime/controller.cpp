@@ -233,8 +233,6 @@ void Controller::addMainWindow(MainWindow* mainWindow)
     foreach (Area* area, areas()) 
     {
         Area *na = new Area(*area);
-        kDebug(9504) << "Areas " << area->wantToolView("org.kdevelop.SnippetView")
-                     << " " << na->wantToolView("org.kdevelop.SnippetView");
         d->allAreas.append(na);
         d->mainWindowAreas[index].push_back(na);
     }

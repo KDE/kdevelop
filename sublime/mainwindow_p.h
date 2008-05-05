@@ -32,6 +32,7 @@ class QMenu;
 class QAction;
 class QSplitter;
 class QDockWidget;
+class QComboBox;
 
 namespace Sublime {
 
@@ -111,29 +112,43 @@ private:
 
     MainWindow *m_mainWindow;
     QMap<AreaIndex*, QSplitter*> m_indexSplitters;
-    friend class ComboAction;
+    friend class AreaSelectionAction;
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
 };
 
-class ComboAction : public QWidgetAction
+class AreaSelectorWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ComboAction(MainWindowPrivate *parent, Controller* controller)
-    : QWidgetAction(parent), controller_(controller) {}
-
-    QWidget* createWidget(QWidget* parent);
-
+    AreaSelectorWidget(QWidget* parent, MainWindow* window, 
+                       Controller* controller);
+        
 private Q_SLOTS:
     void activateArea(int index);
     void resetCurrentArea();
+    void areaChanged(Sublime::Area* area);
 
 private:
+    MainWindow* window_;
     Controller* controller_;
-    QVector<Area*> areas_;
-    int resetIndex_;
+    QComboBox* combo_;
+    QVector<QString> areaIds_;
+};
+
+class AreaSelectionAction : public QWidgetAction
+{
+public:
+    AreaSelectionAction(MainWindowPrivate* parent, Controller* controller)
+    : QWidgetAction(parent), window_(parent->m_mainWindow),
+      controller_(controller) {}
+
+    QWidget* createWidget(QWidget* parent);
+
+private:
+    MainWindow* window_;
+    Controller* controller_;
 };
 
 

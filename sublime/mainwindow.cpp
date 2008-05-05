@@ -61,19 +61,7 @@ void MainWindow::setArea(Area *area)
        not mean those are removed from area, so prevent slotDockShown
        from recording those views as no longer shown in the area.  */
     d->ignoreDockShown = true;
-
-    /* Currently, area restore is three-step process.  
-       1. Create main windows and areas. This calls setArea along the way.
-       2. Load plugins.
-       3. Load area settings and for each changed area, call setArea to
-       rebuild it.
-       During (1), toolbars provided by plugins are not yet present, so
-       their state is not restored.  Absent the check above, the call
-       to setArea in (3) will save current settings that don't include
-       anything for plugin-contributed plugins.  As result, the state
-       of plugin toolbars won't be saved in any way.  
-       Probably, we better introduce separate 'reloadArea' method to be
-       used during area restore, instead of using setArea.  */
+    
     if (differentArea)
         saveSettings();
 
