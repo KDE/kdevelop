@@ -36,11 +36,11 @@
 #include <kurlcombobox.h>
 #include <kurlcompletion.h>
 #include <kio/netaccess.h>
+#include <kdirsortfilterproxymodel.h>
 
 #include "icore.h"
 #include "idocumentcontroller.h"
 
-#include "filesortfilterproxymodel.h"
 #include "kdevfilemanagerplugin.h"
 #include "drilldownview.h"
 #include "kdevdirmodel.h"
@@ -51,7 +51,7 @@ public:
 
     FileManager *m_manager;
     KDevDirModel *m_model;
-    FileSortFilterProxyModel* m_proxyModel;
+    KDirSortFilterProxyModel* m_proxyModel;
     DrillDownView *m_view;
 //     QWidget *m_toolBar;
     KUrlComboBox *m_urlBox;
@@ -221,7 +221,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->addWidget(d->m_view);
 
     d->m_model = new KDevDirModel(d->m_view);
-    d->m_proxyModel = new FileSortFilterProxyModel(this);
+    d->m_proxyModel = new KDirSortFilterProxyModel(this);
     d->m_proxyModel->setSourceModel(d->m_model);
     d->m_proxyModel->sort(0);
     d->m_view->setModel(d->m_proxyModel);
