@@ -51,7 +51,6 @@ public:
     MainWindowPrivate(MainWindow *mainWindow);
 
     QPointer<QWidget> centralPlugin;
-    QPointer<KTextEditor::View> currentTextView;
 
     void setupActions();
 
@@ -103,6 +102,7 @@ private:
     KActionCollection *actionCollection();
 
     MainWindow *m_mainWindow;
+    QPointer<QWidget> lastActiveViewWidget;
     static bool s_quitRequested;
 };
 

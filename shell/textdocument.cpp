@@ -401,19 +401,6 @@ bool KDevelop::TextView::hasWidget() const
     return d->m_view;
 }
 
-void KDevelop::TextDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainWindow)
-{
-    //this is kate view so we need to unplug previous kate view (if there's one) and plug this one
-    MainWindow *m = qobject_cast<KDevelop::MainWindow*>(mainWindow);
-    if (m->currentTextView() && m->guiFactory()->clients().contains(m->currentTextView()))
-        m->guiFactory()->removeClient(m->currentTextView());
-    KTextEditor::View *view = qobject_cast<KDevelop::TextView*>(activeView)->textView();
-    m->setCurrentTextView(view);
-    m->guiFactory()->addClient(view);
-
-    PartDocument::activate(activeView, mainWindow);
-}
-
 KTextEditor::View *KDevelop::TextView::textView() const
 {
     return d->m_view;

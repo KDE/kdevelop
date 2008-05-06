@@ -56,8 +56,6 @@ public:
 
     virtual QString documentType() const;
 
-    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow);
-
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);
 

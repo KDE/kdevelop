@@ -52,9 +52,6 @@ public:
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
 
-    void setCurrentTextView(KTextEditor::View *view);
-    KTextEditor::View *currentTextView();
-
 public Q_SLOTS:
     virtual void setVisible( bool visible );
 

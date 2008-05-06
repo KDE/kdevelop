@@ -61,7 +61,7 @@ namespace KDevelop {
 bool MainWindowPrivate::s_quitRequested = false;
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-    :currentTextView(0), m_mainWindow(mainWindow)
+: m_mainWindow(mainWindow), lastActiveViewWidget(0)
 {
 }
 
@@ -91,6 +91,21 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if (!view)
         return;
 
+    QWidget* w = view->widget();
+    // If the previous view was KXMLGUIClient, remove its actions
+    // In the case that that view was removed, lastActiveView
+    // will auto-reset, and xmlguifactory will disconnect that
+    // client, I think.
+    if (lastActiveViewWidget) // && lastActiveViewWidget != w)
+    {
+        if (KXMLGUIClient* c 
+            = dynamic_cast<KXMLGUIClient*>(lastActiveViewWidget.data()))
+            {
+                kDebug() << "Removing client " << c;
+                m_mainWindow->guiFactory()->removeClient(c);
+            }
+    }
+    
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
@@ -107,6 +122,16 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 //         if (activePart)
 //             guiFactory()->removeClient(activePart);
     }
+
+    // If the new view is KXMLGUIClient, add it.
+    if (w) // && w != lastActiveViewWidget)
+        if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(w))
+        {
+            kDebug() << "Adding client " << c;
+            m_mainWindow->guiFactory()->addClient(c);
+        }
+
+    lastActiveViewWidget = w;
 }
 
 void MainWindowPrivate::setupActions()

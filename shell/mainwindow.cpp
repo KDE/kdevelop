@@ -191,16 +191,6 @@ void MainWindow::documentClosed( IDocument* document )
         setCaption(QString(), false);
 }
 
-void MainWindow::setCurrentTextView(KTextEditor::View *view)
-{
-    d->currentTextView = view;
-}
-
-KTextEditor::View *MainWindow::currentTextView()
-{
-    return d->currentTextView;
-}
-
 }
 
 #include "mainwindow.moc"
