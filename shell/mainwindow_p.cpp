@@ -61,7 +61,7 @@ namespace KDevelop {
 bool MainWindowPrivate::s_quitRequested = false;
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-: m_mainWindow(mainWindow), lastActiveViewWidget(0)
+: m_mainWindow(mainWindow), lastXMLGUIClientView(0)
 {
 }
 
@@ -88,23 +88,24 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
-    if (!view)
-        return;
-
-    QWidget* w = view->widget();
     // If the previous view was KXMLGUIClient, remove its actions
     // In the case that that view was removed, lastActiveView
     // will auto-reset, and xmlguifactory will disconnect that
     // client, I think.
-    if (lastActiveViewWidget) // && lastActiveViewWidget != w)
+    if (lastXMLGUIClientView)
     {
-        if (KXMLGUIClient* c 
-            = dynamic_cast<KXMLGUIClient*>(lastActiveViewWidget.data()))
-            {
-                kDebug() << "Removing client " << c;
-                m_mainWindow->guiFactory()->removeClient(c);
-            }
+        kDebug() << "clearing last XML GUI client" << lastXMLGUIClientView;
+        m_mainWindow->guiFactory()->removeClient(
+            dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
+        disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
+        lastXMLGUIClientView = NULL;
     }
+
+    if (!view)
+        return;
+
+    QWidget* viewWidget = view->widget();
+    Q_ASSERT(viewWidget);
     
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
@@ -124,14 +125,27 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     }
 
     // If the new view is KXMLGUIClient, add it.
-    if (w) // && w != lastActiveViewWidget)
-        if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(w))
-        {
-            kDebug() << "Adding client " << c;
-            m_mainWindow->guiFactory()->addClient(c);
-        }
+    if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
+    {
+        lastXMLGUIClientView = viewWidget;
+        m_mainWindow->guiFactory()->addClient(c);
+        connect(viewWidget, SIGNAL(destroyed(QObject*)), 
+                this, SLOT(xmlguiclientDestroyed(QObject*)));
+    }
+}
 
-    lastActiveViewWidget = w;
+void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
+{
+    /* We're informed the the QWidget for the active view that is also
+       KXMLGUIclient is dying.  KXMLGUIFactory will not like deleted
+       clients, really.  Unfortunately, there's nothing we can do
+       at this point. For example, KateView derives from QWidget and
+       KXMLGUIClient.  The destroyed() signal is emitted by ~QWidget.
+       At this point, event attempt to cross-cast to KXMLGUIClient
+       is undefined behaviour.  We hope to catch view deletion a bit
+       later, but if we fail, we better report it now, rather than
+       get a weird crash a bit later.  */
+       Q_ASSERT(false && "xmlgui clients management is messed up");
 }
 
 void MainWindowPrivate::setupActions()

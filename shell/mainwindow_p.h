@@ -60,7 +60,7 @@ public Q_SLOTS:
 
     void activePartChanged(KParts::Part *part);
     void changeActiveView(Sublime::View *view);
-
+    void xmlguiclientDestroyed(QObject* obj);
 
     //actions
     void fileNew();
@@ -102,7 +102,7 @@ private:
     KActionCollection *actionCollection();
 
     MainWindow *m_mainWindow;
-    QPointer<QWidget> lastActiveViewWidget;
+    QWidget* lastXMLGUIClientView;
     static bool s_quitRequested;
 };
 
