@@ -1,7 +1,4 @@
-/* KDevelop xUnit plugin
- *
- * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
- *
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -18,31 +15,31 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXRUNNER_PROXYMODELCOMMONTEST_H
-#define QXRUNNER_PROXYMODELCOMMONTEST_H
+#ifndef QXTSIGNALWAITER_H
+#define QXTSIGNALWAITER_H
 
-#include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QObject>
+class QTimerEvent;
 
-namespace QxRunner
-{
-class ProxyModelCommon;
-}
-
-class ProxyModelCommonTest : public QObject
+class QxtSignalWaiter : public QObject
 {
     Q_OBJECT
 
-private slots:
-    void init();
-    void cleanup();
+public:
+    QxtSignalWaiter(const QObject* sender, const char* signal);
+    static bool wait(const QObject* sender, const char* signal, int msec = -1);
+    bool wait(int msec = -1);
 
-    void active();
-    void defaultEnabled();
-    void enabledColumns();
+protected:
+    void timerEvent(QTimerEvent* event);
+
+private slots:
+    void signalCaught();
 
 private:
-    QxRunner::ProxyModelCommon* proxy;
+    bool ready;
+    bool timeout;
+    int timerID;
 };
 
-#endif // QXRUNNER_PROXYMODELCOMMONTEST_H
+#endif

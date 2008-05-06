@@ -144,6 +144,13 @@ public: // Operations
      */
     bool isResultsViewVisible() const;
 
+    Ui::RunnerWindow&  ui() { return m_ui; }
+
+    /*!
+     * Returns the status widget.
+     */
+    Ui::StatusWidget* statusWidget() const;
+
 private slots:
 
     /*!
@@ -323,11 +330,6 @@ private: // Operations
     bool isMinimalUpdate() const;
 
     /*!
-     * Returns the status widget.
-     */
-    Ui::StatusWidget* statusWidget() const;
-
-    /*!
      * Returns the runner view controller.
      */
     RunnerViewController* runnerController() const;
@@ -347,9 +349,9 @@ private: // Operations
     RunnerWindow(const RunnerWindow&);
     RunnerWindow& operator=(const RunnerWindow&);
 
-// private: // Attributes
+private: // Attributes
 
-    Ui::RunnerWindow ui;
+    Ui::RunnerWindow m_ui;
 
     StatusWidget* m_statusWidget;
 

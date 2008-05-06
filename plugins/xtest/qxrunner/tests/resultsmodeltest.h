@@ -29,6 +29,8 @@ namespace QxRunner
 class ResultsModel;
 }
 
+class QIcon;
+
 namespace ResultsModelTestNm
 {
 class StubRunnerModel;
@@ -45,10 +47,14 @@ private slots:
     void default_();
     void appendResults();
     void mapIndices();
+    void errorHandling();
+    //void fetchIcon(); <- no equality defined for QIcon
+
 
 private:
     void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
+    //void assertIconAtRow(int row, const QIcon& icon);
     void checkRow(int index);
     void fillRows();
 

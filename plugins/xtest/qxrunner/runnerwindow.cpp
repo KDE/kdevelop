@@ -53,7 +53,7 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 {
     initQxRunnerResource();
 
-    ui.setupUi(this);
+    m_ui.setupUi(this);
 
     // Controllers for the tree views, it's best to create them at the
     // very beginning.
@@ -61,21 +61,21 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     m_resultsViewController = new ResultsViewController(this, resultsView());
 
     // Adjust GUI.
-    ui.actionMinimalUpdate->setCheckable(true);
+    m_ui.actionMinimalUpdate->setCheckable(true);
     resultsView()->header()->setResizeMode(QHeaderView::Stretch);
 
     // Replace results menu item which serves as a placeholder
     // for the action from the dock widget.
-    QAction* actionResults = ui.dockResults->toggleViewAction();
-    actionResults->setText(ui.actionResults->text());
+    QAction* actionResults = m_ui.dockResults->toggleViewAction();
+    actionResults->setText(m_ui.actionResults->text());
 
-    ui.menuView->insertAction(ui.actionResults, actionResults);
-    ui.menuView->removeAction(ui.actionResults);
+    m_ui.menuView->insertAction(m_ui.actionResults, actionResults);
+    m_ui.menuView->removeAction(m_ui.actionResults);
 
-    qSwap(ui.actionResults, actionResults);
+    qSwap(m_ui.actionResults, actionResults);
     delete actionResults;
 
-    connect(ui.actionResults, SIGNAL(toggled(bool)), SLOT(showResults(bool)));
+    connect(m_ui.actionResults, SIGNAL(toggled(bool)), SLOT(showResults(bool)));
 
     // Fine tuning of the focus rect handling because there should
     // always be a focus rect visible in the views.
@@ -108,43 +108,43 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     displayNumExceptions(0);
 
     // Results filter commands.
-    connect(ui.buttonInfos,    SIGNAL(toggled(bool)),
+    connect(m_ui.buttonInfos,    SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
-    connect(ui.buttonWarnings, SIGNAL(toggled(bool)),
+    connect(m_ui.buttonWarnings, SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
-    connect(ui.buttonErrors,   SIGNAL(toggled(bool)),
+    connect(m_ui.buttonErrors,   SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
-    connect(ui.buttonFatals,   SIGNAL(toggled(bool)),
+    connect(m_ui.buttonFatals,   SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
 
     // File commands.
-    connect(ui.actionExit, SIGNAL(triggered(bool)), SLOT(close()));
+    connect(m_ui.actionExit, SIGNAL(triggered(bool)), SLOT(close()));
 
     // Item commands.
-    ui.actionStart->setShortcut(QKeySequence(tr("Ctrl+R")));
-    connect(ui.actionStart, SIGNAL(triggered(bool)), SLOT(runItems()));
+    m_ui.actionStart->setShortcut(QKeySequence(tr("Ctrl+R")));
+    connect(m_ui.actionStart, SIGNAL(triggered(bool)), SLOT(runItems()));
 
-    ui.actionStop->setShortcut(QKeySequence(tr("Ctrl+K")));
-    connect(ui.actionStop, SIGNAL(triggered(bool)), SLOT(stopItems()));
+    m_ui.actionStop->setShortcut(QKeySequence(tr("Ctrl+K")));
+    connect(m_ui.actionStop, SIGNAL(triggered(bool)), SLOT(stopItems()));
 
     // View commands
-    ui.actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
-    connect(ui.actionSelectAll, SIGNAL(triggered(bool)),
+    m_ui.actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
+    connect(m_ui.actionSelectAll, SIGNAL(triggered(bool)),
             runnerController(),
             SLOT(selectAll()));
 
-    ui.actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
-    connect(ui.actionUnselectAll, SIGNAL(triggered(bool)),
+    m_ui.actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
+    connect(m_ui.actionUnselectAll, SIGNAL(triggered(bool)),
             runnerController(),
             SLOT(unselectAll()));
 
-    ui.actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
-    connect(ui.actionExpandAll, SIGNAL(triggered(bool)),
+    m_ui.actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
+    connect(m_ui.actionExpandAll, SIGNAL(triggered(bool)),
             runnerController(),
             SLOT(expandAll()));
 
-    ui.actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
-    connect(ui.actionCollapseAll, SIGNAL(triggered(bool)),
+    m_ui.actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
+    connect(m_ui.actionCollapseAll, SIGNAL(triggered(bool)),
             runnerController(),
             SLOT(collapseAll()));
 
@@ -245,13 +245,13 @@ void RunnerWindow::setModel(RunnerModel* model)
     bool expected;
 
     expected = results & QxRunner::RunInfo;
-    ui.buttonInfos->setVisible(expected);
+    m_ui.buttonInfos->setVisible(expected);
     expected = results & QxRunner::RunWarning;
-    ui.buttonWarnings->setVisible(expected);
+    m_ui.buttonWarnings->setVisible(expected);
     expected = results & QxRunner::RunError;
-    ui.buttonErrors->setVisible(expected);
+    m_ui.buttonErrors->setVisible(expected);
     expected = results & QxRunner::RunFatal;
-    ui.buttonFatals->setVisible(expected);
+    m_ui.buttonFatals->setVisible(expected);
 
     // Proxy models for the views with the source model as their parent
     // to have the proxies deleted when the model gets deleted.
@@ -303,8 +303,8 @@ void RunnerWindow::setModel(RunnerModel* model)
     // Very limited user interaction without data.
     if (model->rowCount() < 1) {
         enableItemActions(false);
-        ui.actionColumns->setEnabled(true);
-        ui.actionSettings->setEnabled(true);
+        m_ui.actionColumns->setEnabled(true);
+        m_ui.actionSettings->setEnabled(true);
         return;
     }
 
@@ -340,7 +340,7 @@ void RunnerWindow::setModel(RunnerModel* model)
     runnerView()->setUpdatesEnabled(true);
 
     // How much data is wanted when running the items.
-    connect(ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
+    connect(m_ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
             model,
             SLOT(setMinimalUpdate(bool)));
 
@@ -360,7 +360,7 @@ void RunnerWindow::setModel(RunnerModel* model)
             SLOT(addResult(const QModelIndex&)));
 
     enableItemActions(true);
-    ui.actionStop->setDisabled(true);
+    m_ui.actionStop->setDisabled(true);
 
     // Set the filter in the results model.
     setResultsFilter();
@@ -372,12 +372,12 @@ void RunnerWindow::setModel(RunnerModel* model)
 
 QTreeView* RunnerWindow::runnerView() const
 {
-    return ui.treeRunner;
+    return m_ui.treeRunner;
 }
 
 QTreeView* RunnerWindow::resultsView() const
 {
-    return ui.treeResults;
+    return m_ui.treeResults;
 }
 
 RunnerModel* RunnerWindow::runnerModel() const
@@ -419,7 +419,7 @@ void RunnerWindow::displayCompleted() const
 
 bool RunnerWindow::isResultsViewVisible() const
 {
-    return ui.actionResults->isChecked();
+    return m_ui.actionResults->isChecked();
 }
 
 void RunnerWindow::displayNumTotal(int numItems) const
@@ -453,10 +453,10 @@ void RunnerWindow::displayNumSuccess(int numItems) const
 void RunnerWindow::displayNumInfos(int numItems) const
 {
     if (numItems != 1) {
-        ui.buttonInfos->setText(QString().setNum(numItems) +
+        m_ui.buttonInfos->setText(QString().setNum(numItems) +
                                 tr(" Infos"));
     } else {
-        ui.buttonInfos->setText(tr("1 Info"));
+        m_ui.buttonInfos->setText(tr("1 Info"));
     }
 
     displayStatusNum(statusWidget()->labelNumInfos,
@@ -466,10 +466,10 @@ void RunnerWindow::displayNumInfos(int numItems) const
 void RunnerWindow::displayNumWarnings(int numItems) const
 {
     if (numItems != 1) {
-        ui.buttonWarnings->setText(QString().setNum(numItems) +
+        m_ui.buttonWarnings->setText(QString().setNum(numItems) +
                                    tr(" Warnings"));
     } else {
-        ui.buttonWarnings->setText(tr("1 Warning"));
+        m_ui.buttonWarnings->setText(tr("1 Warning"));
     }
 
     displayStatusNum(statusWidget()->labelNumWarnings,
@@ -479,10 +479,10 @@ void RunnerWindow::displayNumWarnings(int numItems) const
 void RunnerWindow::displayNumErrors(int numItems) const
 {
     if (numItems != 1) {
-        ui.buttonErrors->setText(QString().setNum(numItems) +
+        m_ui.buttonErrors->setText(QString().setNum(numItems) +
                                  tr(" Errors"));
     } else {
-        ui.buttonErrors->setText(tr("1 Error"));
+        m_ui.buttonErrors->setText(tr("1 Error"));
     }
 
     displayStatusNum(statusWidget()->labelNumErrors,
@@ -492,10 +492,10 @@ void RunnerWindow::displayNumErrors(int numItems) const
 void RunnerWindow::displayNumFatals(int numItems) const
 {
     if (numItems != 1) {
-        ui.buttonFatals->setText(QString().setNum(numItems) +
+        m_ui.buttonFatals->setText(QString().setNum(numItems) +
                                  tr(" Fatals"));
     } else {
-        ui.buttonFatals->setText(tr("1 Fatal"));
+        m_ui.buttonFatals->setText(tr("1 Fatal"));
     }
 
     displayStatusNum(statusWidget()->labelNumFatals,
@@ -536,19 +536,19 @@ void RunnerWindow::setResultsFilter() const
     // Determine filter settings.
     int filter = 0;
 
-    if (ui.buttonInfos->isEnabled() && ui.buttonInfos->isChecked()) {
+    if (m_ui.buttonInfos->isEnabled() && m_ui.buttonInfos->isChecked()) {
         filter = QxRunner::RunInfo;
     }
 
-    if (ui.buttonWarnings->isEnabled() && ui.buttonWarnings->isChecked()) {
+    if (m_ui.buttonWarnings->isEnabled() && m_ui.buttonWarnings->isChecked()) {
         filter = filter | QxRunner::RunWarning;
     }
 
-    if (ui.buttonErrors->isEnabled() && ui.buttonErrors->isChecked()) {
+    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
         filter = filter | QxRunner::RunError;
     }
 
-    if (ui.buttonFatals->isEnabled() && ui.buttonFatals->isChecked()) {
+    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
         filter = filter | QxRunner::RunFatal;
     }
 
@@ -776,11 +776,11 @@ void RunnerWindow::stopItems()
 {
     // Do not interfere with running the items. Could happen because Qt
     // input processing could be faster than executing event handlers.
-    if (!m_sema.tryAcquire()) {
-        return;
-    }
+//     if (!m_sema.tryAcquire()) {
+//         return;
+//     }
 
-    ui.actionStop->setDisabled(true);
+    m_ui.actionStop->setDisabled(true);
     QCoreApplication::processEvents();  // Disable command immediately
 
     // Stopping is done in a dialog which shows itself only when
@@ -796,7 +796,7 @@ void RunnerWindow::stopItems()
     }
 
     // Give a chance for another stop request.
-    ui.actionStop->setEnabled(true);
+    m_ui.actionStop->setEnabled(true);
     m_sema.release();
 }
 
@@ -810,7 +810,7 @@ void RunnerWindow::showResults(bool show)
 
     // An invisible results view means that the dock widget was closed
     // and is shown now. In this case the data is retrieved again.
-    bool visible = ui.treeResults->isVisible();
+    bool visible = m_ui.treeResults->isVisible();
 
     if (show && !visible) {
         // Show data according to current filtering.
@@ -818,7 +818,7 @@ void RunnerWindow::showResults(bool show)
         setResultsFilter();
 
         // Make sure that highlighted row sync works as expected.
-        ui.dockResults->show();
+        m_ui.dockResults->show();
     }
 
     if (!show || runnerModel()->isRunning()) {
@@ -835,7 +835,7 @@ void RunnerWindow::disableControlsBeforeRunning()
     enableItemActions(false);
     resultsController()->enableSorting(false);
 
-    ui.actionStop->setEnabled(true);
+    m_ui.actionStop->setEnabled(true);
     runnerView()->setCursor(QCursor(Qt::BusyCursor));
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::NoSelection);
@@ -894,7 +894,7 @@ void RunnerWindow::enableControlsAfterRunning() const
     // Enable user interaction.
     enableItemActions(true);
 
-    ui.actionStop->setDisabled(true);
+    m_ui.actionStop->setDisabled(true);
     runnerView()->setCursor(QCursor());
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -938,23 +938,23 @@ void RunnerWindow::enableControlsAfterRunning() const
 
 void RunnerWindow::enableItemActions(bool enable) const
 {
-    ui.actionStart->setEnabled(enable);
-    ui.actionStop->setEnabled(enable);
-    ui.actionSelectAll->setEnabled(enable);
-    ui.actionUnselectAll->setEnabled(enable);
-    ui.actionExpandAll->setEnabled(enable);
-    ui.actionCollapseAll->setEnabled(enable);
-    ui.actionMinimalUpdate->setEnabled(enable);
-    ui.actionColumns->setEnabled(enable);
-    ui.actionSettings->setEnabled(enable);
+    m_ui.actionStart->setEnabled(enable);
+    m_ui.actionStop->setEnabled(enable);
+    m_ui.actionSelectAll->setEnabled(enable);
+    m_ui.actionUnselectAll->setEnabled(enable);
+    m_ui.actionExpandAll->setEnabled(enable);
+    m_ui.actionCollapseAll->setEnabled(enable);
+    m_ui.actionMinimalUpdate->setEnabled(enable);
+    m_ui.actionColumns->setEnabled(enable);
+    m_ui.actionSettings->setEnabled(enable);
 }
 
 void RunnerWindow::enableResultsFilter(bool enable) const
 {
-    ui.buttonInfos->setEnabled(enable);
-    ui.buttonWarnings->setEnabled(enable);
-    ui.buttonErrors->setEnabled(enable);
-    ui.buttonFatals->setEnabled(enable);
+    m_ui.buttonInfos->setEnabled(enable);
+    m_ui.buttonWarnings->setEnabled(enable);
+    m_ui.buttonErrors->setEnabled(enable);
+    m_ui.buttonFatals->setEnabled(enable);
 }
 
 void RunnerWindow::enableRunnerItemSync(bool enable) const
@@ -1021,7 +1021,7 @@ void RunnerWindow::adjustMenus() const
         index = index.sibling(index.row() + 1, 0);
     }
 
-    QList<QAction*> viewActions = ui.menuView->actions();
+    QList<QAction*> viewActions = m_ui.menuView->actions();
 
     /*    for (int i = 3; i < 6; i++) {
             viewActions[i]->setVisible(haveChildren);
@@ -1047,7 +1047,7 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
 
 bool RunnerWindow::isMinimalUpdate() const
 {
-    return ui.actionMinimalUpdate->isChecked();
+    return m_ui.actionMinimalUpdate->isChecked();
 }
 
 Ui::StatusWidget* RunnerWindow::statusWidget() const

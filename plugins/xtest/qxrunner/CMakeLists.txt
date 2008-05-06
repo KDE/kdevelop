@@ -24,7 +24,8 @@ set(qxrunner_SRCS
     statuswidget.cpp
     stoppingdialog.cpp
     utils.cpp
-    viewcontrollercommon.cpp)
+    viewcontrollercommon.cpp
+    tests/qxtsignalwaiter.cpp)
 
 kde4_add_ui_files( qxrunner_SRCS
     runnerwindow.ui

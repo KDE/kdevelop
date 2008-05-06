@@ -42,6 +42,7 @@ private slots:
     //void deactivate(); TODO
     void enableColumns();
     void disableColumn();
+    void errorHandling();
 
 private:
     void assertDataAt(int row, int column, const QVariant& expected);

@@ -22,6 +22,7 @@
 #include <runnermodel.h>
 #include <runneritem.h>
 
+#include <QIcon>
 #include <QString>
 #include <QStringList>
 
@@ -42,14 +43,6 @@ public:
             : RunnerItem(data, parent) {}
 
     int run() {
-//         if (child(0)) {
-//             setResult(QxRunner::NoResult);  // Have nothing to do as a parent
-//         } else {
-//             setData(1, QString::number(row()) + QString("_1"));
-//             setData(2, QString::number(row()) + QString("_2"));
-//             setResult(QxRunner::RunSuccess);
-//         }
-//         return result();
         return 0;
     }
 };
@@ -144,6 +137,39 @@ void ResultsModelTest::mapIndices()
     KOMPARE(resultIndex0, model->mapFromRunnerItemIndex(model->mapToRunnerItemIndex(resultIndex0)));
     KOMPARE(runIndex0, model->mapToRunnerItemIndex(model->mapFromRunnerItemIndex(runIndex0)));
 }
+
+// test command
+void ResultsModelTest::errorHandling()
+{
+    fillRows();
+    QVariant illegal; // default constructed variant denotes trouble
+    KOMPARE_MSG(illegal, model->data(model->index(0,0), Qt::CheckStateRole),
+               "Results have no items with checked state");
+    KOMPARE(illegal, model->data(model->index(0,0), Qt::EditRole));
+    KOMPARE(illegal, model->data(model->index(0,1), Qt::DecorationRole));
+
+    KOMPARE(illegal, model->headerData(0, Qt::Vertical, Qt::DisplayRole));
+    KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::EditRole));
+
+    KOMPARE(QxRunner::NoResult, model->result(-1));
+    KOMPARE(QModelIndex(), model->mapToRunnerItemIndex(QModelIndex()));
+    KOMPARE(QModelIndex(), model->mapFromRunnerItemIndex(QModelIndex()));
+}
+
+// test command
+// void ResultsModelTest::fetchIcon()
+// {
+//     fillRows();
+//     assertIconAtRow(0, QIcon(":/icons/success.png"));
+//     assertIconAtRow(1, QIcon(":/icons/fatal.png"));
+// }
+
+// void ResultsModelTest::assertIconAtRow(int row, const QIcon& icon)
+// {
+//     QVariant actual = model->data(model->index(row,0), Qt::DecorationRole);
+//     QIcon actualIcon = qVariantCast<QIcon>(actual);
+//     KOMPARE(icon, actualIcon);
+// }
 
 void ResultsModelTest::assertColumnHeader(const QVariant& expected, int index)
 {

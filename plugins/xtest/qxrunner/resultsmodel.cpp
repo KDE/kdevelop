@@ -46,6 +46,7 @@ ResultsModel::~ResultsModel()
 
 QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
+
     if (!index.isValid()) {
         return QVariant();
     }

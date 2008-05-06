@@ -82,6 +82,9 @@ public:
         return "";
     }
 
+    void decapitate() {
+        setRootItem(0);
+    }
 };
 
 } // end RunnerModelTestNm
@@ -169,12 +172,7 @@ void RunnerModelTest::runItems()
 {
     QMap<QString, QSignalSpy*> spies;
     spies["startedC"] = new QSignalSpy(model, SIGNAL(numStartedChanged(int)));
-    spies["successC"] = new QSignalSpy(model, SIGNAL(numSuccessChanged(int)));
-    spies["infoC"]    = new QSignalSpy(model, SIGNAL(numInfosChanged(int)));
-    spies["warnC"]    = new QSignalSpy(model, SIGNAL(numWarningsChanged(int)));
-    spies["errorC"]   = new QSignalSpy(model, SIGNAL(numErrorsChanged(int)));
-    spies["fatalC"]   = new QSignalSpy(model, SIGNAL(numFatalsChanged(int)));
-    spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
+    setUpResultSpies(spies);
 
     model->runItems();
 
@@ -186,6 +184,61 @@ void RunnerModelTest::runItems()
     }
 
     foreach(QSignalSpy* spy, spies) delete spy;
+}
+
+//test command
+void RunnerModelTest::errorHandling()
+{
+    QVariant illegal;
+    KOMPARE(illegal, model->data(QModelIndex()));
+    KOMPARE(illegal, model->data(model->index(0,1), Qt::CheckStateRole));
+    KOMPARE(illegal, model->data(model->index(0,0), Qt::CheckStateRole));
+
+    KOMPARE(false, model->setData(QModelIndex(), QVariant(), Qt::DisplayRole));
+    KOMPARE(Qt::ItemIsEnabled, model->flags(QModelIndex()));
+
+    KOMPARE(QModelIndex(), model->parent(QModelIndex()));
+
+    // KOMPARE(QVariant(Qt::Unchecked), model->itemCheckState(QModelIndex())); <- private
+
+    model->setItemChecked(QModelIndex(), true); // just exercise, result should be nada
+
+    KOMPARE(illegal, model->headerData(0, Qt::Vertical, Qt::DisplayRole));
+    KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::CheckStateRole));
+    model->decapitate();
+    KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::DisplayRole));
+}
+
+//test command
+void RunnerModelTest::countItems()
+{
+    QMap<QString, QSignalSpy*> spies;
+    spies["totalC"] = new QSignalSpy(model, SIGNAL(numTotalChanged(int)));
+    spies["selectedC"] = new QSignalSpy(model, SIGNAL(numSelectedChanged(int)));
+    setUpResultSpies(spies);
+
+    model->fill();
+    model->countItems();
+
+    // all should be emitted just once
+    foreach(QSignalSpy* spy, spies)
+        KOMPARE(1, spy->size());
+
+    assertSignalValue(spies.take("totalC"), 2);
+    assertSignalValue(spies.take("selectedC"), 2);
+    assertSignalValue(spies.take("successC"), 1);
+    assertSignalValue(spies.take("fatalC"), 1);
+
+    // the others are zero
+    foreach(QSignalSpy* spy, spies)
+        assertSignalValue(spy, 0);
+}
+
+void RunnerModelTest::assertSignalValue(QSignalSpy* spy, int expected)
+{
+    QVariant actual = spy->takeFirst().at(0);
+    KOMPARE(QVariant(expected), actual);
+    delete spy;
 }
 
 void RunnerModelTest::assertColumnHeader(const QVariant& expected, int index)
@@ -213,6 +266,20 @@ void RunnerModelTest::verifyRowContent(int index)
     assertDataAt(rowStr + "1", index, 1);
     assertDataAt(rowStr + "2", index, 2);
     assertItemChecked(index, true);
+
+    KOMPARE(0, model->rowCount(model->index(index,0))); // no children
+    KOMPARE(3, model->columnCount(model->index(index,0)));
+
+}
+
+void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
+{
+    spies["successC"] = new QSignalSpy(model, SIGNAL(numSuccessChanged(int)));
+    spies["infoC"]    = new QSignalSpy(model, SIGNAL(numInfosChanged(int)));
+    spies["warnC"]    = new QSignalSpy(model, SIGNAL(numWarningsChanged(int)));
+    spies["errorC"]   = new QSignalSpy(model, SIGNAL(numErrorsChanged(int)));
+    spies["fatalC"]   = new QSignalSpy(model, SIGNAL(numFatalsChanged(int)));
+    spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
 }
 
 QTEST_MAIN( RunnerModelTest );

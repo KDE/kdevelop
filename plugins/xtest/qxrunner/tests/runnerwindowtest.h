@@ -18,53 +18,43 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXRUNNER_RUNNERMODELTEST_H
-#define QXRUNNER_RUNNERMODELTEST_H
+#ifndef QXRUNNER_RUNNERWINDOWTEST_H
+#define QXRUNNER_RUNNERWINDOWTEST_H
 
-#include <QtCore/QObject>
+#include <QtGui>
 #include <QtTest/QtTest>
+#include <ui_statuswidget.h>
 
 namespace QxRunner
 {
+class RunnerWindow;
 class RunnerModel;
 }
 
-namespace RunnerModelTestNm
+namespace ModelCreation
 {
-class RunnerModelImpl;
+class StubRunnerModel;
 }
 
-class RunnerModelTest : public QObject
+class RunnerWindowTest : public QObject
 {
     Q_OBJECT
 
 private slots:
-    void init();
-    void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
 
-    void default_();
-    void appendResults();
-    void changeItems();
-    void flags();
-    void changeChecked();
-    void runItems();
-    void errorHandling();
-    void countItems();
+    void startItems();
+    void stopPremature();
+    void deselectItems();
 
 private:
-    // custom asserts
-    void assertColumnHeader(const QVariant& expected, int index);
-    void assertDataAt(const QVariant& expected, int row, int column);
-    void assertItemChecked(int row, bool checked=true);
-    void verifyRowContent(int index);
-    void assertSignalValue(QSignalSpy* spy, int expected);
-
-    // fixture helpers
-    void fillRows();
-    void setUpResultSpies(QMap<QString, QSignalSpy*>& spies);
+    void assertRunnerItemEquals(int item, QVariant col0, QVariant col1, QVariant col2, int result);
 
 private:
-    RunnerModelTestNm::RunnerModelImpl* model;
+    QxRunner::RunnerWindow* window;
+    ModelCreation::StubRunnerModel* model;
+    Ui::StatusWidget* status;
 };
 
-#endif // QXRUNNER_RUNNERMODELTEST_H
+#endif // QXRUNNER_RUNNERWINDOWTEST_H

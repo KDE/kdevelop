@@ -92,7 +92,7 @@ public:  // Operations
      * Returns the data stored under the given \a role for the item
      * referred to by \a index.
      */
-    QVariant data(const QModelIndex& index, int role) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
     /*!
      * Sets the \a role data for the item at \a index to \a value.

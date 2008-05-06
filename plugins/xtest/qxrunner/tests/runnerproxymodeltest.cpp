@@ -86,6 +86,11 @@ void RunnerProxyModelTest::disableColumn()
     assertRowContains(1, "10", QVariant(), "12");
 }
 
+void RunnerProxyModelTest::errorHandling()
+{
+    KOMPARE(QVariant(), proxy->data(QModelIndex(), Qt::DisplayRole));
+}
+
 void RunnerProxyModelTest::assertRowFiltered(int row)
 {
     assertRowContains(row, QVariant(), QVariant(), QVariant());

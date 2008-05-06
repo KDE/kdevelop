@@ -47,9 +47,13 @@ public:
             setData(2, QString::number(row()) + QString("_2"));
             setResult(QxRunner::RunSuccess);
         }
+        executedItems.push_back(row());
         return result();
     }
+    static QList<int> executedItems; // store the index of rows that got executed
 };
+
+QList<int> StubRunnerItem::executedItems;
 
 class StubRunnerModel : public RunnerModel
 {
@@ -76,9 +80,13 @@ public:
     QString name() const {
         return "";
     }
+
+    RunnerItem* fetchItem(const QModelIndex& index) {
+        return itemFromIndex(index);
+    }
 };
 
-inline RunnerModel* createRunnerModelStub()
+inline StubRunnerModel* createRunnerModelStub()
 {
     return new StubRunnerModel();
 }

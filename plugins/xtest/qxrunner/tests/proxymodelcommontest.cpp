@@ -47,11 +47,19 @@ void ProxyModelCommonTest::active()
 }
 
 // test command
-void ProxyModelCommonTest::enabledColumns()
+void ProxyModelCommonTest::defaultEnabled()
 {
+    // default evrything disabled
+    QBitArray default_ = proxy->enabledColumns();
+    KOMPARE(0, default_.size());
     KVERIFY(!proxy->isColumnEnabled(0));
     KVERIFY(!proxy->isColumnEnabled(1));
     KVERIFY(!proxy->isColumnEnabled(2));
+}
+
+// test command
+void ProxyModelCommonTest::enabledColumns()
+{
 
     QBitArray cols(3);
     cols.setBit(0);

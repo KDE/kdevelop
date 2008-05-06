@@ -338,7 +338,7 @@ void RunnerModel::countItems()
 
     emit numTotalChanged(numTotal);
     emit numSelectedChanged(m_numSelected);
-    emit numSuccessChanged(m_numInfos);
+    emit numSuccessChanged(m_numSuccess);
     emit numInfosChanged(m_numInfos);
     emit numWarningsChanged(m_numWarnings);
     emit numErrorsChanged(m_numErrors);
@@ -483,7 +483,7 @@ void RunnerModel::setRootItem(RunnerItem* rootItem)
     m_resultsModel = 0;
 
     // Create the results model (anew).
-    resultsModel()->clear();
+    if (m_rootItem) resultsModel()->clear();
 }
 
 void RunnerModel::setExpectedResults(int expectedResults)

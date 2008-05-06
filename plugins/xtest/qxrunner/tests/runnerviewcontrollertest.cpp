@@ -69,7 +69,7 @@ void RunnerViewControllerTest::assertAllItemsChecked(bool checked)
     for (int row=0; row<2; row++)
     {
         for (int col=0; col<3; col++)
-        {    viewController->unselectAll();
+        {
             bool actualCheckState = model->data(model->index(row, col), Qt::CheckStateRole).toBool();
             KVERIFY_MSG(actualCheckState == checked, checked ? "Should be checked" : "Should not be checked");
         }
