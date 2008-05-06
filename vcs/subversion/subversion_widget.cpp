@@ -99,8 +99,8 @@ int SvnIntSortListItem::compare( QListViewItem *item, int col, bool ascending ) 
 	unsigned int myVal = this->text(col).toUInt();
 	unsigned int yourVal = item->text(col).toUInt();
 	if( myVal < yourVal ) return -1;
-	if( myVal == yourVal ) return 0;
 	if( myVal > yourVal ) return 1;
+	return 0;
 }
 
 SvnLogViewItem::SvnLogViewItem( QListView * parent )
