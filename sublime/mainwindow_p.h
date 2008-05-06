@@ -82,6 +82,7 @@ public:
     Area *area;
     QList<View*> docks;
     QMap<View*, Container*> viewContainers;
+    QMap<QWidget*, View*> widgetToView;
 
     View *activeView;
     View *activeToolView;
@@ -105,6 +106,7 @@ private slots:
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
     void widgetResized(IdealMainLayout::Role role, int thickness);
+    void widgetCloseRequest(QWidget* widget);
 
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);

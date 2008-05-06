@@ -157,6 +157,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             //we need to create view container
             container = new Container(splitter);
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
+            connect(container, SIGNAL(closeRequest(QWidget*)),
+                    d, SLOT(widgetCloseRequest(QWidget*)));
             splitter->addWidget(container);
         }
         else
@@ -172,6 +174,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     w->installEventFilter(d);
                 container->addWidget(view);
                 d->viewContainers[view] = container;
+                d->widgetToView[widget] = view;
             }
         }
     }
@@ -301,9 +304,14 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         return;
 
     QSplitter *splitter = m_indexSplitters[index];
+    kDebug(9504) << "index " << index << " root " << area->rootIndex();
+    kDebug(9504) << "splitter " << splitter << " container " << splitter->widget(0);
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
+    if (view->widget())
+        widgetToView.remove(view->widget());
     viewContainers.remove(view);
+    
     if (container->count() > 1)
     {
         bool wasActive = m_mainWindow->activeView() == view;
@@ -317,16 +325,28 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     }
     else
     {
-        //conainer will be empty after widget removal so we need to delete it
+        // We've about to remove the last view of this container.  It will
+        // be empty, so have to delete it, as well.
+
+        // If we have a container, then it should be the only child of
+        // the splitter.
+        Q_ASSERT(splitter->count() == 1);
         container->removeWidget(view->widget());
         view->widget()->setParent(0);
-        delete container;
-        if ((splitter->count() == 0) && (index->parent()))
+        // We can be called from signal handler of container 
+        // (which is tab widget), so defer deleting it.
+        container->deleteLater();
+      
+        /* If we're not at the top level, we get to collapse split views.  */
+        if (index->parent())
         {
+            /* The splitter used to have container as the only child, now it's 
+               time to get rid of it.  Make sure deleting splitter does not
+               delete container -- per above comment, we'll delete it later.  */
+            container->setParent(0);
             m_indexSplitters.remove(index);
             delete splitter;
-
-            //when we delete splitter we need to move views from remaining child to the parent
+            
             AreaIndex *parent = index->parent();
             QSplitter *parentSplitter = m_indexSplitters[parent];
 
@@ -337,8 +357,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //save sizes and orientation of the sibling splitter
             parentSplitter->setOrientation(siblingSplitter->orientation());
             QList<int> sizes = siblingSplitter->sizes();
-
-            //sibling splitter might contain one or more containers
+            
+            /* Parent has two children -- 'index' that we've deleted and
+               'sibling'.  We move all children of 'sibling' into parent,
+               and delete 'sibling'.  sibling either contains a single
+               Container instance, or a bunch of further QSplitters.  */
             while (siblingSplitter->count() > 0)
             {
                 //reparent contents into parent splitter
@@ -352,6 +375,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
             parentSplitter->setSizes(sizes);
             parentSplitter->setUpdatesEnabled(true);
+
+            kDebug(9504) << "after deleation " << parent << " has " 
+                         << parentSplitter->count() << " elements";
 
             //find the container somewhere to activate
             Container *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
@@ -441,6 +467,16 @@ void Sublime::MainWindowPrivate::setStatusIcon(View * view, const QIcon & icon)
 void MainWindowPrivate::widgetResized(IdealMainLayout::Role role, int thickness)
 {
     area->setThickness(IdealMainLayout::positionForRole(role), thickness);
+}
+
+void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
+{
+    if (widgetToView.contains(widget))
+    {
+        View *view = widgetToView[widget];
+        area->removeView(view);
+        delete view;
+    }
 }
 
 }
