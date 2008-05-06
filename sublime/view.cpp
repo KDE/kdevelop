@@ -36,6 +36,8 @@ View::View(Document *doc)
 
 View::~View()
 {
+    if (d->widget)
+        delete d->widget;
     delete d;
 }
 
@@ -46,7 +48,17 @@ Document *View::document() const
 
 QWidget *View::widget(QWidget *parent)
 {
-    return d->initializeWidget(parent);
+    if (!d->widget)
+    {
+        d->widget = createWidget(parent);
+        connect(d->widget, SIGNAL(destroyed()), this, SLOT(unsetWidget()));
+    }
+    return d->widget;
+}
+
+QWidget *View::createWidget(QWidget *parent)
+{
+    return d->createViewWidget(d->doc, parent);
 }
 
 bool View::hasWidget() const

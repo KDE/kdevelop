@@ -32,7 +32,7 @@ class ViewPrivate: public ViewWidgetCreator {
 public:
     ViewPrivate(View *v);
 
-    QWidget *initializeWidget(QWidget *parent);
+    using ViewWidgetCreator::createViewWidget;
 
     Document *doc;
     QWidget *widget;
@@ -41,7 +41,6 @@ public:
 
 private:
     View *view;
-
 };
 
 }

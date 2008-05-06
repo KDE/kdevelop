@@ -101,7 +101,7 @@ void PartDocument::close(DocumentSaveMode mode)
         foreach (Sublime::View *view, areaViews) {
             if (views().contains(view)) {
                 area->removeView(view);
-                view->deleteLater();
+                delete view;
             }
         }
     }

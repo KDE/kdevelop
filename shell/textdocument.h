@@ -75,8 +75,7 @@ public:
     TextView(TextDocument* doc);
     virtual ~TextView();
 
-    virtual QWidget *widget(QWidget *parent = 0);
-    virtual bool hasWidget() const;
+    QWidget *createWidget(QWidget *parent = 0);
 
     KTextEditor::View *textView() const;
 

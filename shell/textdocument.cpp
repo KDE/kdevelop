@@ -331,7 +331,8 @@ void TextDocument::close(DocumentSaveMode mode)
         foreach (Sublime::View *view, areaViews) {
             if (views().contains(view)) {
                 area->removeView(view);
-                view->deleteLater();
+                kDebug(9001) << "deleting view " << view;
+                delete view;
             }
         }
     }
@@ -362,11 +363,10 @@ KDevelop::TextView::~TextView()
     delete d;
 }
 
-QWidget * KDevelop::TextView::widget(QWidget * parent)
+QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
-    if (!d->m_view) {
-        d->m_view = static_cast<KTextEditor::View*>(static_cast<TextDocument*>(document())->createViewWidget(parent));
-    }
+    d->m_view = static_cast<KTextEditor::View*>(
+        static_cast<TextDocument*>(document())->createViewWidget(parent));
 
     return d->m_view;
 }
@@ -394,11 +394,6 @@ void KDevelop::TextView::setState(const QString & state)
 QString KDevelop::TextDocument::documentType() const
 {
     return "Text";
-}
-
-bool KDevelop::TextView::hasWidget() const
-{
-    return d->m_view;
 }
 
 KTextEditor::View *KDevelop::TextView::textView() const

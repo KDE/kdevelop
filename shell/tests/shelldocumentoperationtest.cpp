@@ -29,9 +29,11 @@
 #include <ktexteditor/document.h>
 
 #include <sublime/area.h>
+#include <sublime/view.h>
 
 #include "documentcontroller.h"
 #include "uicontroller.h"
+#include "kdebug.h"
 
 void ShellDocumentOperationTest::init()
 {
@@ -60,6 +62,44 @@ void ShellDocumentOperationTest::testOpenDocumentFromText()
     // We used to have a bug where closing document failed to remove its
     // views from area, so check it here.
     QCOMPARE(area->views().count(), 0);    
+}
+
+void ShellDocumentOperationTest::testClosing()
+{
+    // Test that both the view and the view widget is deleted when closing
+    // document.
+    {
+        IDocumentController *documentController = Core::self()->documentController();
+        documentController->openDocumentFromText("Test1");
+        Sublime::Area *area = Core::self()->uiControllerInternal()->activeArea();
+        QCOMPARE(area->views().count(), 1);    
+        QPointer<Sublime::View> the_view = area->views()[0];
+        QPointer<QWidget> the_widget = the_view->widget();
+        documentController->openDocuments()[0]->close(IDocument::Discard);
+        QCOMPARE(the_view.data(), (Sublime::View*)0);
+        QCOMPARE(the_widget.data(), (QWidget*)0);
+    }
+
+    // Now try the same, where there are two open documents.
+    {
+        IDocumentController *documentController = Core::self()->documentController();
+        // Annoying, the order of documents in 
+        // documentController->openDocuments() depends on how URLs hash. So,
+        // to reliably close the second one, get hold of a pointer.       
+        IDocument* doc1 = documentController->openDocumentFromText("Test1");
+        IDocument* doc2 = documentController->openDocumentFromText("Test2");
+        Sublime::Area *area = Core::self()->uiControllerInternal()->activeArea();
+        QCOMPARE(area->views().count(), 2);    
+
+        QPointer<Sublime::View> the_view = area->views()[1];
+        kDebug(9504) << this << "see views " << area->views()[0] 
+                     << " " << area->views()[1];
+        QPointer<QWidget> the_widget = the_view->widget();
+        doc2->close(IDocument::Discard);
+        QCOMPARE(the_view.data(), (Sublime::View*)0);
+        QCOMPARE(the_widget.data(), (QWidget*)0);
+        doc1->close(IDocument::Discard);
+    }
 }
 
 void ShellDocumentOperationTest::testKateDocumentAndViewCreation()

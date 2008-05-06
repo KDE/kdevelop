@@ -76,7 +76,7 @@ public:
 
     Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
 
-    Q_SCRIPTABLE virtual void openDocumentFromText( const QString& data ) = 0;
+    Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
 
 public Q_SLOTS:
     /**Opens a new or existing document.

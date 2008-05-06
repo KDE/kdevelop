@@ -30,16 +30,6 @@ ViewPrivate::ViewPrivate(View * v)
 {
 }
 
-QWidget *ViewPrivate::initializeWidget(QWidget *parent)
-{
-    if (!widget)
-    {
-        widget = createViewWidget(doc, parent);
-        view->connect(widget, SIGNAL(destroyed()), view, SLOT(unsetWidget()));
-    }
-    return widget;
-}
-
 void ViewPrivate::unsetWidget()
 {
     widget = 0;

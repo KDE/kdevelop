@@ -220,7 +220,7 @@ void DocumentController::slotOpenDocument(const KUrl &url)
     openDocument(url);
 }
 
-void DocumentController::openDocumentFromText( const QString& data )
+IDocument* DocumentController::openDocumentFromText( const QString& data )
 {
     KTemporaryFile *temp = new KTemporaryFile();
     temp->setSuffix("kdevtmp");
@@ -228,7 +228,7 @@ void DocumentController::openDocumentFromText( const QString& data )
     temp->write(data.toUtf8());
     temp->flush();
     d->tempFiles << temp;
-    openDocument(temp->fileName());
+    return openDocument(temp->fileName());
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,

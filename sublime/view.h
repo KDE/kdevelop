@@ -48,9 +48,9 @@ public:
     /**@return the document for this view.*/
     Document *document() const;
     /**@return widget for this view (creates it if it's not yet created).*/
-    virtual QWidget *widget(QWidget *parent = 0);
+    QWidget *widget(QWidget *parent = 0);
     /**@return true if this view has an initialized widget.*/
-    virtual bool hasWidget() const;
+    bool hasWidget() const;
 
     /// Retrieve view state for saving into configuration.
     virtual QString viewState() const;
@@ -68,6 +68,8 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void unsetWidget())
+
+    virtual QWidget *createWidget(QWidget *parent);
 
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
