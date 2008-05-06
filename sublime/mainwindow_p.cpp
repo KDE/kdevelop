@@ -283,9 +283,9 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*vi
         Container *container = qobject_cast<Sublime::Container*>(splitter->widget(0));
         //we need to remove extra container before reconstruction
         //first reparent widgets in container so that they are not deleted
-        for (int i = 0; i < container->count(); ++i)
+        while (container->count())
         {
-            container->widget(i)->setParent(0);
+            container->widget(0)->setParent(0);
         }
         //and then delete the container
         delete container;
