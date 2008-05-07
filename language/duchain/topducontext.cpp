@@ -61,7 +61,7 @@ public:
     addImportedContextRecursion(context, context, 1);
     
     QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->d_func()->m_recursiveImports;
-    for(RecursiveImports::const_iterator it = b.begin(); it != b.end(); ++it)
+    for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it)
       addImportedContextRecursion(context, it.key(), (*it).first+1); //Add contexts that were imported earlier into the given one
 
 /*    QSet<TopDUContext*> closure;
@@ -77,7 +77,7 @@ public:
     removeImportedContextRecursion(context, context, rebuild);
 
     QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->d_func()->m_recursiveImports;
-    for(RecursiveImports::const_iterator it = b.begin(); it != b.end(); ++it) {
+    for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
 //       Q_ASSERT(m_recursiveImports.contains(it.key()));
       if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)
         removeImportedContextRecursion(context, it.key(), rebuild); //Remove all contexts that are imported through the context
@@ -117,8 +117,8 @@ public:
       if(children.contains(m_ctxt))
         return;
       children.insert(m_ctxt);
-      for(QVector<DUContext*>::iterator it = m_importedChildContexts.begin(); it != m_importedChildContexts.end(); ++it) {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(*it);
+      for(QVector<DUContext*>::const_iterator it = m_importedChildContexts.constBegin(); it != m_importedChildContexts.constEnd(); ++it) {
+        TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //We need to do const cast, to avoid senseless detaching
         if(top)
           top->d_func()->childClosure(children);
       }
@@ -149,8 +149,8 @@ public:
       }
     }
     
-    for(QVector<DUContext*>::iterator it = m_importedChildContexts.begin(); it != m_importedChildContexts.end(); ++it) {
-      TopDUContext* top = dynamic_cast<TopDUContext*>(*it);
+    for(QVector<DUContext*>::const_iterator it = m_importedChildContexts.constBegin(); it != m_importedChildContexts.constEnd(); ++it) {
+      TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //Avoid detaching, so use const_cast
       if(top)
         top->d_func()->addImportedContextRecursion(m_ctxt, imported, depth+1);
     }
@@ -175,8 +175,8 @@ public:
         
         rebuild.append(qMakePair(m_ctxt, imported));
         //We MUST do this before finding another trace, because else we would create loops
-        for(QVector<DUContext*>::iterator childIt = m_importedChildContexts.begin(); childIt != m_importedChildContexts.end(); ++childIt) {
-          TopDUContext* top = dynamic_cast<TopDUContext*>(*childIt);
+        for(QVector<DUContext*>::const_iterator childIt = m_importedChildContexts.constBegin(); childIt != m_importedChildContexts.constEnd(); ++childIt) {
+          TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*childIt)); //Avoid detaching, so use const iterator
           if(top)
             top->d_func()->removeImportedContextRecursion(m_ctxt, imported, rebuild); //Don't use 'it' from here on, it may be invalid
         }
@@ -221,8 +221,8 @@ public:
     if(m_ctxt == imported)
       return;
     
-    for(QVector<DUContextPointer>::iterator parentIt = m_importedParentContexts.begin(); parentIt != m_importedParentContexts.end(); ++parentIt) {
-      TopDUContext* top = dynamic_cast<TopDUContext*>(parentIt->data());
+    for(QVector<DUContextPointer>::const_iterator parentIt = m_importedParentContexts.constBegin(); parentIt != m_importedParentContexts.constEnd(); ++parentIt) {
+      TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->data())); //To avoid detaching, use const iterator
       if(top) {
         if(top == imported) {
           addImportedContextRecursion(top, imported, 1);
