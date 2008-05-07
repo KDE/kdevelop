@@ -61,6 +61,7 @@ DrillDownView::DrillDownView(QWidget *parent)
     animation.setDuration(100);
 
     setItemDelegate(new DrillDownItemDelegate(this));
+    setStyleSheet("* { show-decoration-selected: 1 }");
 }
 
 void DrillDownView::paintEvent(QPaintEvent *event)
