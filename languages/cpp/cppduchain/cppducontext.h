@@ -443,8 +443,7 @@ class CppDUContext : public BaseContext {
                 return false;
               }
 
-              if( !res.isValid() )
-                kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString();
+              ifDebug( if( !res.isValid() ) kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString(); )
             }
           
             find.openQualifiedIdentifier( res );
