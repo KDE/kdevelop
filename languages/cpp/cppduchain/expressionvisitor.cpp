@@ -39,7 +39,10 @@
 #include "pushvalue.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
-#define DEBUG_RESOLUTION_PROBLEMS
+//#define DEBUG_RESOLUTION_PROBLEMS
+
+//If this is enabled, all encounterd problems will be dumped to kDebug
+//#define DUMP_PROBLEMS
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -218,11 +221,13 @@ void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {
 }
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
+#ifdef DUMP_PROBLEMS
   kDebug(9007) << "Cpp::ExpressionVisitor problem:" << str;
 
   kDebug(9007) << "Cpp::ExpressionVisitor dumping the node that created the problem";
   DumpChain d;
   d.dump(node, m_session);
+#endif
 }
 
 AbstractType::Ptr ExpressionVisitor::lastType() {
@@ -1111,9 +1116,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( dynamic_cast<CppTemplateParameterType*>(m_lastType.data()) )
         createDelayedType(ast, false);
     } else {
-      //Run the ast-visitor in debug mode
-      problem(ast, "Could not resolve type, running ast-visitor in debug mode");
+      problem(ast, "Could not resolve type");
 #ifdef DEBUG_RESOLUTION_PROBLEMS
+      //Run the ast-visitor in debug mode
       ImportTrace trace;
       {
         LOCKDUCHAIN;
