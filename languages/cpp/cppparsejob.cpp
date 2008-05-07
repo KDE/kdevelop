@@ -306,8 +306,7 @@ bool CPPParseJob::needUses() const
 void CPPInternalParseJob::run()
 {
     kDebug( 9007 ) << "===-- PARSING --===> "
-    << parentJob()->document().str()
-    << endl;
+    << parentJob()->document().str();
 
     
     if (parentJob()->abortRequested())
