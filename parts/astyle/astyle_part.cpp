@@ -35,6 +35,11 @@
 
 static const KDevPluginInfo data("kdevastyle");
 
+namespace {
+    const char* defaultFormatExtensions = "*.cpp *.h *.hpp,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
+}
+
+
 typedef KDevGenericFactory<AStylePart> AStyleFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( data ) )
 
@@ -86,7 +91,7 @@ void AStylePart::loadGlobal()
   KConfig *config = kapp->config();
   config->setGroup("AStyle");
   QString options = config->readEntry("Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,Brackets=Break,BracketsCloseHeaders=0,FStyle=UserDefined,Fill=Tabs,FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,IndentBrackets=0,IndentCases=0,IndentClasses=1,IndentLabels=1,IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=1,KeepBlocks=1,KeepStatements=1,MaxStatement=40,MinConditional=-1,PadOperators=0,PadParenthesesIn=1,PadParenthesesOut=1,PadParenthesesUn=1,");
-  m_globalExtensions=QStringList::split(",",config->readEntry("Extensions","*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm"));
+  m_globalExtensions=QStringList::split(",",config->readEntry("Extensions",defaultFormatExtensions));
 
  QStringList pairs = QStringList::split( ",", options);
  QStringList::Iterator it;
@@ -429,7 +434,7 @@ void AStylePart::restorePartialProjectSession(const QDomElement * el)
 		QDomElement exten = el->namedItem("Extensions").toElement();
 		QString ext = exten.attribute("ext").simplifyWhiteSpace();
 		if ( ext.isEmpty()){
-			ext="*.cpp *.h,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
+            ext=defaultFormatExtensions;
 		}
 		setExtensions(ext.replace(QChar(','), QChar('\n')),false);
 	}
