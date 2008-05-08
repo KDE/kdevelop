@@ -135,9 +135,10 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
                         QString symLink = it.current()->readLink();
                         if ((symLink == path) || (symLink == "./"))
                             continue;
+                    } else if (canAddDirectoryToProject(path)) {
+                        kdDebug(9015) << "Pushing: " << path << endl;
+                        s.push(path);
                     }
-                    kdDebug(9015) << "Pushing: " << path << endl;
-                    s.push(path);
                 }
                 else {
                     if (canAddToProject(path))
@@ -355,9 +356,10 @@ void ScriptProjectPart::rescan()
                         QString symLink = it.current()->readLink();
                         if ((symLink == path) || (symLink == "./"))
                             continue;
+                    } else if (canAddDirectoryToProject(path)) {
+                        kdDebug(9015) << "Pushing: " << path << endl;
+                        s.push(path);
                     }
-                    kdDebug(9015) << "Pushing: " << path << endl;
-                    s.push(path);
                 }
                 else {
                     if (!isProjectFile(path) && canAddToProject(path))
@@ -419,6 +421,24 @@ bool ScriptProjectPart::canAddToProject(const QString & path)
         return true;
     } else {
         kdDebug(9015) << "Ignoring: " << path << endl;
+        return false;
+    }
+}
+
+bool ScriptProjectPart::canAddDirectoryToProject(const QString & path)
+{
+    QDomDocument &dom = *projectDom();
+    QString excludepatterns
+        = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
+    if (excludepatterns.isNull()) {
+        return true;
+    }
+    QStringList excludepatternList = QStringList::split(",", excludepatterns);
+
+    if (!matchesPattern(path, excludepatternList)) {
+        return true;
+    } else {
+        kdDebug(9015) << "Ignoring Directory: " << path << endl;
         return false;
     }
 }

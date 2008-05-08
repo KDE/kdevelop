@@ -51,6 +51,7 @@ protected:
     virtual DomUtil::PairList runEnvironmentVars() const;
 
     bool canAddToProject(const QString &path);
+    bool canAddDirectoryToProject(const QString &path);
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
