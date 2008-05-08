@@ -180,8 +180,10 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 	// ### do something here
       }
 
-      if(!dec || !dec->definition())
+      if(!model()->definitionForObject(*base))
         openDef->setEnabled(false);
+      if(!model()->declarationForObject(*base))
+        openDec->setEnabled(false);
     }
   }
   menu->exec(QCursor::pos());
@@ -198,12 +200,7 @@ void ClassTree::itemActivated(const QModelIndex& index)
 
     readLock.unlock();
 
-    IDocument* doc = m_plugin->core()->documentController()->documentForUrl(url);
-
-    if (!doc)
-      doc = m_plugin->core()->documentController()->openDocument(url, range.start());
-
-    doc->textDocument()->activeView()->setSelection(range);
+    m_plugin->core()->documentController()->openDocument(url, range.start());
   }
 }
 
