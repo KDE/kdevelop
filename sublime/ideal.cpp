@@ -440,22 +440,6 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
 
     connect(parent, SIGNAL(settingsLoaded()), m_mainLayout, SLOT(loadSettings()));
 
-#if 0
-    QGridLayout *grid = new QGridLayout(this);
-    grid->setMargin(0);
-    grid->setSpacing(0);
-#if 0
-    grid->addWidget(leftBarWidget, 1, 0);
-#endif
-    grid->addWidget(mainWidget, 1, 1);
-#if 0
-    grid->addWidget(rightBarWidget, 1, 2);
-    grid->addWidget(bottomBarWidget, 2, 0, 1, 3);
-    grid->addWidget(topBarWidget, 0, 0, 1, 3);
-#endif
-    setLayout(grid);
-#endif
-
     KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
     connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
