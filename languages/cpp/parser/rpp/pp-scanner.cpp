@@ -199,6 +199,7 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
     QUOTE,
     END
   } state (BEGIN);
+  int inner_count = 0;
 
   while (!input.atEnd()) {
     if (state == END)
@@ -212,15 +213,15 @@ void pp_skip_char_literal::operator()(Stream& input, Stream& output)
         break;
 
       case IN_STRING:
-        //Note this fails on ../lexer.cpp for instance :)
-        //Q_ASSERT(input != '\n');
+        if(input == '\n' || inner_count > 3)
+          return; //Probably this isn't a string literal. Example: "#warning What's up"
 
         if (input == '\'')
           state = END;
         else if (input == '\\')
           state = QUOTE;
         break;
-
+        ++inner_count;
       case QUOTE:
         state = IN_STRING;
         break;
