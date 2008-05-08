@@ -158,7 +158,6 @@ protected:
     void doLayout(QRect rect) const;
     void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;
-    void sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
     void minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
 
 private:
@@ -203,8 +202,8 @@ private:
     QMap<Role, DockArea*> m_items;
     QMap<Role, QWidget*> m_buttonBars;
     QMap<Role, QWidgetItem*> m_buttonBarItems;
-    mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
-    mutable QSize m_min, m_hint;
+    mutable bool m_layoutDirty, m_minDirty;
+    mutable QSize m_min;
     int m_splitterWidth;
     QPointer<QWidget> m_lastDockWidget;
     Role m_lastDockWidgetRole;

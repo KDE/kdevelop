@@ -297,7 +297,6 @@ IdealDockWidget * IdealMainLayout::lastDockWidget(IdealMainLayout::Role role) co
 IdealMainLayout::IdealMainLayout(QWidget * parent)
     : QLayout(parent)
     , m_layoutDirty(true)
-    , m_sizeHintDirty(true)
     , m_minDirty(true)
     , m_lastDockWidgetRole(Left)
     , m_topOwnsTopLeft(0)
@@ -461,61 +460,8 @@ void IdealMainLayout::setGeometry(const QRect & rect)
 
 QSize IdealMainLayout::sizeHint() const
 {
-    if (m_sizeHintDirty) {
-        if (m_maximizedWidget) {
-            m_hint = m_maximizedWidget->sizeHint();
-            m_sizeHintDirty = false;
-            return m_hint;
-        }
-
-        int minHeight = 0;
-        int softMinHeight = 0;
-        int minWidth = 0;
-        int softMinWidth = 0;
-
-        sizeHint(Left, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Right, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Top, minWidth, softMinWidth, minHeight, softMinHeight);
-        sizeHint(Bottom, minWidth, softMinWidth, minHeight, softMinHeight);
-
-        if (QLayoutItem* item = m_items[Central]->first()) {
-            const QSize itemSizeHint = item->sizeHint();
-            minHeight += qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-            minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-        }
-
-        m_hint = QSize(minHeight, minWidth);
-        m_sizeHintDirty = false;
-    }
-
-    return m_hint;
+    return QSize();
 }
-
-void IdealMainLayout::sizeHint(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const
-{
-    foreach (QLayoutItem* item, m_items[role]->items()) {
-        const QSize itemSizeHint = item->sizeHint();
-        switch (role) {
-            case Left:
-            case Right:
-                if (m_items[role]->anchored)
-                    minWidth += itemSizeHint.width() + splitterWidth();
-                softMinHeight = qMax(softMinHeight, itemSizeHint.height() + splitterWidth());
-                break;
-
-            case Top:
-            case Bottom:
-                if (m_items[role]->anchored)
-                    minHeight += itemSizeHint.height() + splitterWidth();
-                softMinWidth = qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
-                break;
-
-            default:
-                break;
-        }
-    }
-}
-
 
 QLayoutItem * IdealMainLayout::takeAt(int index)
 {
@@ -830,7 +776,6 @@ void IdealMainLayout::removeUnanchored()
 void IdealMainLayout::invalidate()
 {
     m_layoutDirty = true;
-    m_sizeHintDirty = true;
     m_minDirty = true;
     QLayout::invalidate();
 }
