@@ -124,6 +124,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
 KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
                                          Area *area, View *view)
 {
+    kDebug(9504) << "adding widget";
     KAction *action = new KAction(this);
     action->setCheckable(true);
     action->setText(title);
@@ -166,7 +167,7 @@ Qt::Orientation IdealButtonBarWidget::orientation() const
 void IdealButtonBarWidget::showWidget(bool checked)
 {
     Q_ASSERT(parentWidget() != 0);
-
+    
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
@@ -174,12 +175,6 @@ void IdealButtonBarWidget::showWidget(bool checked)
     Q_ASSERT(widget);
 
     parentWidget()->showDockWidget(widget, checked);
-}
-
-void IdealButtonBarWidget::resizeEvent(QResizeEvent *event)
-{
-    if (layout() != 0 && orientation() == Qt::Vertical)
-        static_cast<IdealButtonBarLayout *>(layout())->setHeight(event->size().height());
 }
 
 void IdealButtonBarWidget::anchor(bool anchor)
@@ -423,34 +418,43 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
     , m_centralWidgetFocusing(false)
 {
-    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea);
+    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this);
     leftBarWidget->hide();
 
-    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea);
+    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this);
     rightBarWidget->hide();
 
-    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea);
+    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this);
     bottomBarWidget->hide();
 
-    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea);
+    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this);
     topBarWidget->hide();
 
-    mainWidget = new IdealCentralWidget(this);
+    m_mainLayout = new IdealMainLayout(this);
+    m_mainLayout->addButtonBar(leftBarWidget, IdealMainLayout::Left);
+    m_mainLayout->addButtonBar(rightBarWidget, IdealMainLayout::Right);
+    m_mainLayout->addButtonBar(topBarWidget, IdealMainLayout::Top);
+    m_mainLayout->addButtonBar(bottomBarWidget, IdealMainLayout::Bottom);
 
-    m_mainLayout = new IdealMainLayout(mainWidget);
-    mainWidget->setLayout(m_mainLayout);
+    setLayout(m_mainLayout);
 
     connect(parent, SIGNAL(settingsLoaded()), m_mainLayout, SLOT(loadSettings()));
 
+#if 0
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(0);
     grid->setSpacing(0);
+#if 0
     grid->addWidget(leftBarWidget, 1, 0);
+#endif
     grid->addWidget(mainWidget, 1, 1);
+#if 0
     grid->addWidget(rightBarWidget, 1, 2);
     grid->addWidget(bottomBarWidget, 2, 0, 1, 3);
     grid->addWidget(topBarWidget, 0, 0, 1, 3);
+#endif
     setLayout(grid);
+#endif
 
     KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
@@ -510,7 +514,7 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
 
 void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
 {
-    IdealDockWidget *dock = new IdealDockWidget(mainWidget);
+    IdealDockWidget *dock = new IdealDockWidget(this);
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
@@ -728,20 +732,6 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
     emit dockShown(dock->view(), pos, show);
 }
 
-IdealCentralWidget::IdealCentralWidget(IdealMainWidget * parent)
-    : QWidget(parent)
-{
-}
-
-IdealCentralWidget::~ IdealCentralWidget()
-{
-}
-
-IdealMainLayout * IdealCentralWidget::idealLayout() const
-{
-    return static_cast<IdealMainLayout*>(layout());
-}
-
 IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)
     : QWidget(parent)
     , m_orientation(orientation)
@@ -802,11 +792,6 @@ IdealMainWidget * IdealButtonBarWidget::parentWidget() const
 IdealMainLayout * IdealMainWidget::mainLayout() const
 {
     return m_mainLayout;
-}
-
-IdealCentralWidget * IdealMainWidget::internalCentralWidget() const
-{
-    return mainWidget;
 }
 
 void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)

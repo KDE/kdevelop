@@ -98,8 +98,6 @@ private Q_SLOTS:
     void actionToggled(bool state);
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
-
     virtual void actionEvent(QActionEvent *event);
 
 private:
@@ -157,17 +155,6 @@ private:
     bool m_maximized;
 };
 
-class IdealCentralWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    IdealCentralWidget(IdealMainWidget* parent);
-    virtual ~IdealCentralWidget();
-
-    IdealMainLayout* idealLayout() const;
-};
-
 class View;
 
 class IdealMainWidget : public QWidget
@@ -199,7 +186,6 @@ public:
     void anchorDockWidget(IdealDockWidget* widget, bool anchor);
 
     IdealMainLayout* mainLayout() const;
-    IdealCentralWidget* internalCentralWidget() const;
 
     void anchorDockWidget(bool checked, IdealButtonBarWidget* bar);
     void maximizeDockWidget(bool checked, IdealButtonBarWidget* bar);
@@ -244,7 +230,6 @@ private:
     KAction* m_maximizeCurrentDock;
     KActionMenu* m_docks;
 
-    IdealCentralWidget* mainWidget;
     class IdealMainLayout* m_mainLayout;
 
     QMap<IdealDockWidget*, Qt::DockWidgetArea> docks;

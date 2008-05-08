@@ -51,10 +51,6 @@ public:
 
     virtual Qt::Orientations expandingDirections() const;
 
-    virtual bool hasHeightForWidth() const;
-
-    virtual int heightForWidth(int width) const;
-
     virtual QSize minimumSize() const;
 
     virtual QSize sizeHint() const;
@@ -81,8 +77,10 @@ private:
     Qt::Orientation _orientation;
     int _height;
     mutable bool m_minSizeDirty : 1;
+    mutable bool m_sizeHintDirty : 1;
     mutable bool m_layoutDirty : 1;
     mutable QSize m_min;
+    mutable QSize m_hint;
 };
 
 class IdealMainLayout : public QLayout
@@ -103,6 +101,7 @@ public:
     virtual ~IdealMainLayout();
 
     void addWidget(QWidget* widget, Role role);
+    void addButtonBar(QWidget* widget, Role role);
     void removeWidgets(Role role);
     void removeWidget(QWidget* widget, Role role);
     void removeUnanchored();
@@ -202,6 +201,8 @@ private:
     };
 
     QMap<Role, DockArea*> m_items;
+    QMap<Role, QWidget*> m_buttonBars;
+    QMap<Role, QWidgetItem*> m_buttonBarItems;
     mutable bool m_layoutDirty, m_sizeHintDirty, m_minDirty;
     mutable QSize m_min, m_hint;
     int m_splitterWidth;
