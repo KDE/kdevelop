@@ -563,7 +563,7 @@ void CMakeAstTest::testCMakePolicyGoodParse_data()
     QStringList argList[4];
 
     argList[0] << "VERSION" << "2.4";
-    argList[1] << "SET CMP3333 NEW";
+    argList[1] << "SET" << "CMP333" << "NEW";
     argList[2] << "POP";
     argList[3] << "PUSH";
 
@@ -594,8 +594,8 @@ void CMakeAstTest::testCMakePolicyBadParse_data()
     func[1].name = func[2].name = func[3].name = func[4].name = func[5].name = "cmake_policy";
     QStringList argList[5];
 
-    argList[0] << "VERSION" << "24";
-    argList[1] << "SET NEW";
+    argList[0] << "VERSION" << "AB";
+    argList[1] << "SET" << "CMP123" << "NOTNEW";
     argList[2] << "POP" << "33";
     argList[3] << "PUSH" << "44";
     argList[4] << "BUTTERFLY" << "44";
