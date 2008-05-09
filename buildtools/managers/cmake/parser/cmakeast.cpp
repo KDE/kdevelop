@@ -713,7 +713,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "cmake_minimum_required" )
         return false;
-    if ( (func.arguments.size() < 2 && func.arguments.count()>3) || func.arguments.first().value.toUpper()!="VERSION")
+    if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value.toUpper() != "VERSION")
         return false;
 
     QRegExp rx("([0-9]*).([0-9]*).?([0-9]*)");
@@ -724,6 +724,8 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     foreach(const QString& s, caps)
     {
         bool correct;
+        if ( s.isEmpty() )
+            continue;
         m_version.append(s.toInt(&correct));
         if(!correct)
             return false;
