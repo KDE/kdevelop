@@ -31,6 +31,7 @@
 
 #include "astfactory.h"
 #include "cmakelistsparser.h"
+#include "cmakeparserutils.h"
 
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
@@ -716,7 +717,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value.toUpper() != "VERSION")
         return false;
 
-    QRegExp rx("([0-9]*).([0-9]*).?([0-9]*)");
+    QRegExp rx("([0-9]+)\\.([0-9]+)\\.?([0-9]+)");
     rx.indexIn(func.arguments[1].value);
 
     QStringList caps=rx.capturedTexts();
@@ -3585,28 +3586,23 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     if(first=="VERSION")
     {
-        QRegExp rx("([0-9]*).([0-9]*).?([0-9]*)");
-        rx.indexIn(func.arguments[1].value);
-
-        QStringList caps=rx.capturedTexts();
-        caps.erase(caps.begin());
-        foreach(const QString& s, caps)
-        {
-            bool correct;
-            m_version.append(s.toInt(&correct));
-            if(!correct)
-                return false;
-        }
+        bool ok = false;
+        m_version = CMakeParserUtils::parseVersion(func.arguments[1].value, &ok);
+        if (!ok)
+            return false;
+	else
+            return true;
     }
     else if(first=="SET" && func.arguments.count()==3)
     {
-        QRegExp rx("CMP<([1-9]*)>");
+        QRegExp rx("CMP([1-9]*)");
         rx.indexIn(func.arguments[1].value);
 
         QStringList cmpValue=rx.capturedTexts();
+        cmpValue.erase(cmpValue.begin());
         if(cmpValue.count()==1)
         {
-            m_policyNum=cmpValue[1].toInt();
+            m_policyNum=cmpValue[0].toInt();
         }
         else
             return false;
