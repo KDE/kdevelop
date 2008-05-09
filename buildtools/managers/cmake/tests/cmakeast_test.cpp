@@ -134,7 +134,7 @@ void CMakeAstTest::testAddLibraryGoodParse_data()
 void CMakeAstTest::testAddLibraryBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    AddLibraryAst* ast = new AddLibraryAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -205,7 +205,7 @@ void CMakeAstTest::testAddSubdirectoryGoodParse_data()
 void CMakeAstTest::testAddSubdirectoryBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    AddSubdirectoryAst* ast = new AddSubdirectoryAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -252,7 +252,7 @@ void CMakeAstTest::testAddTestGoodParse_data()
 void CMakeAstTest::testAddTestBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    AddTestAst* ast = new AddTestAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -315,7 +315,7 @@ void CMakeAstTest::testAuxSourceDirectoryGoodParse_data()
 void CMakeAstTest::testAuxSourceDirectoryBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    AuxSourceDirectoryAst* ast = new AuxSourceDirectoryAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -406,7 +406,7 @@ void CMakeAstTest::testBuildCommandGoodParse_data()
 void CMakeAstTest::testBuildCommandBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    BuildCommandAst* ast = new BuildCommandAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -466,7 +466,7 @@ void CMakeAstTest::testBuildNameGoodParse_data()
 void CMakeAstTest::testBuildNameBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    BuildNameAst* ast = new BuildNameAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -518,7 +518,7 @@ void CMakeAstTest::testCMakeMinimumRequiredGoodParse_data()
 void CMakeAstTest::testCMakeMinimumRequiredBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    CMakeMinimumRequiredAst* ast = new CMakeMinimumRequiredAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -655,7 +655,7 @@ void CMakeAstTest::testConfigureFileGoodParse_data()
 void CMakeAstTest::testConfigureFileBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ConfigureFileAst* ast = new ConfigureFileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -721,7 +721,7 @@ void CMakeAstTest::testCreateTestSourcelistGoodParse_data()
 void CMakeAstTest::testCreateTestSourcelistBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    CreateTestSourcelistAst* ast = new CreateTestSourcelistAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -846,7 +846,7 @@ void CMakeAstTest::testEnableTestingGoodParse_data()
 void CMakeAstTest::testEnableTestingBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    EnableTestingAst* ast = new EnableTestingAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -917,7 +917,7 @@ void CMakeAstTest::testExecProgramGoodParse_data()
 void CMakeAstTest::testExecProgramBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ExecProgramAst* ast = new ExecProgramAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -962,7 +962,7 @@ void CMakeAstTest::testExecuteProcessGoodParse_data()
 void CMakeAstTest::testExecuteProcessBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ExecuteProcessAst* ast = new ExecuteProcessAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -986,7 +986,7 @@ void CMakeAstTest::testExportGoodParse_data()
 void CMakeAstTest::testExportBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ExportAst* ast = new ExportAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1034,7 +1034,7 @@ void CMakeAstTest::testExportLibraryDepsGoodParse_data()
 void CMakeAstTest::testExportLibraryDepsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ExportLibraryDepsAst* ast = new ExportLibraryDepsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1136,7 +1136,7 @@ void CMakeAstTest::testFileGoodParse_data()
 void CMakeAstTest::testFileBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FileAst* ast = new FileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1249,7 +1249,7 @@ void CMakeAstTest::testFindFileGoodParse_data()
 void CMakeAstTest::testFindFileBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FindFileAst* ast = new FindFileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1331,7 +1331,7 @@ void CMakeAstTest::testFindPackageGoodParse_data()
 void CMakeAstTest::testFindPackageBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FindPackageAst* ast = new FindPackageAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1364,7 +1364,7 @@ void CMakeAstTest::testFindPathGoodParse_data()
 void CMakeAstTest::testFindPathBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FindPathAst* ast = new FindPathAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1468,7 +1468,7 @@ void CMakeAstTest::testFltkWrapUiGoodParse_data()
 void CMakeAstTest::testFltkWrapUiBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    FltkWrapUiAst* ast = new FltkWrapUiAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1501,7 +1501,7 @@ void CMakeAstTest::testForeachGoodParse_data()
 void CMakeAstTest::testForeachBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ForeachAst* ast = new ForeachAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1535,7 +1535,7 @@ void CMakeAstTest::testGetCMakePropertyGoodParse_data()
 void CMakeAstTest::testGetCMakePropertyBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetCMakePropertyAst* ast = new GetCMakePropertyAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1568,7 +1568,7 @@ void CMakeAstTest::testGetDirPropertyGoodParse_data()
 void CMakeAstTest::testGetDirPropertyBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetDirPropertyAst* ast = new GetDirPropertyAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1601,7 +1601,7 @@ void CMakeAstTest::testGetFilenameComponentGoodParse_data()
 void CMakeAstTest::testGetFilenameComponentBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetFilenameComponentAst* ast = new GetFilenameComponentAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1634,7 +1634,7 @@ void CMakeAstTest::testGetSourceFilePropGoodParse_data()
 void CMakeAstTest::testGetSourceFilePropBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetSourceFilePropAst* ast = new GetSourceFilePropAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1667,7 +1667,7 @@ void CMakeAstTest::testGetTargetPropGoodParse_data()
 void CMakeAstTest::testGetTargetPropBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetTargetPropAst* ast = new GetTargetPropAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1700,7 +1700,7 @@ void CMakeAstTest::testGetTestPropGoodParse_data()
 void CMakeAstTest::testGetTestPropBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    GetTestPropAst* ast = new GetTestPropAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1782,7 +1782,7 @@ void CMakeAstTest::testIncludeGoodParse_data()
 void CMakeAstTest::testIncludeBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    IncludeAst* ast = new IncludeAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1882,7 +1882,7 @@ void CMakeAstTest::testIncludeExternalMsProjectGoodParse_data()
 void CMakeAstTest::testIncludeExternalMsProjectBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    IncludeExternalMsProjectAst* ast = new IncludeExternalMsProjectAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1915,7 +1915,7 @@ void CMakeAstTest::testIncludeRegularExpressionGoodParse_data()
 void CMakeAstTest::testIncludeRegularExpressionBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    IncludeRegularExpressionAst* ast = new IncludeRegularExpressionAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1948,7 +1948,7 @@ void CMakeAstTest::testInstallGoodParse_data()
 void CMakeAstTest::testInstallBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    InstallAst* ast = new InstallAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -1981,7 +1981,7 @@ void CMakeAstTest::testInstallFilesGoodParse_data()
 void CMakeAstTest::testInstallFilesBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    InstallFilesAst* ast = new InstallFilesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2014,7 +2014,7 @@ void CMakeAstTest::testInstallProgramsGoodParse_data()
 void CMakeAstTest::testInstallProgramsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    InstallProgramsAst* ast = new InstallProgramsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2047,7 +2047,7 @@ void CMakeAstTest::testInstallTargetsGoodParse_data()
 void CMakeAstTest::testInstallTargetsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    InstallTargetsAst* ast = new InstallTargetsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2080,7 +2080,7 @@ void CMakeAstTest::testLinkDirectoriesGoodParse_data()
 void CMakeAstTest::testLinkDirectoriesBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    LinkDirectoriesAst* ast = new LinkDirectoriesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2113,7 +2113,7 @@ void CMakeAstTest::testLinkLibrariesGoodParse_data()
 void CMakeAstTest::testLinkLibrariesBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    LinkLibrariesAst* ast = new LinkLibrariesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2146,7 +2146,7 @@ void CMakeAstTest::testListGoodParse_data()
 void CMakeAstTest::testListBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ListAst* ast = new ListAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2179,7 +2179,7 @@ void CMakeAstTest::testLoadCacheGoodParse_data()
 void CMakeAstTest::testLoadCacheBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    LoadCacheAst* ast = new LoadCacheAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2212,7 +2212,7 @@ void CMakeAstTest::testLoadCommandGoodParse_data()
 void CMakeAstTest::testLoadCommandBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    LoadCommandAst* ast = new LoadCommandAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2261,7 +2261,7 @@ void CMakeAstTest::testMacroGoodParse_data()
 void CMakeAstTest::testMacroBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    MacroAst* ast = new MacroAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2307,7 +2307,7 @@ void CMakeAstTest::testMakeDirectoryGoodParse_data()
 void CMakeAstTest::testMakeDirectoryBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    MakeDirectoryAst* ast = new MakeDirectoryAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2396,7 +2396,7 @@ void CMakeAstTest::testMathGoodParse_data()
 void CMakeAstTest::testMathBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    MathAst* ast = new MathAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2430,7 +2430,7 @@ void CMakeAstTest::testMessageGoodParse_data()
 void CMakeAstTest::testMessageBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    MessageAst* ast = new MessageAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2463,7 +2463,7 @@ void CMakeAstTest::testOptionGoodParse_data()
 void CMakeAstTest::testOptionBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    OptionAst* ast = new OptionAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2496,7 +2496,7 @@ void CMakeAstTest::testOutputRequiredFilesGoodParse_data()
 void CMakeAstTest::testOutputRequiredFilesBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    OutputRequiredFilesAst* ast = new OutputRequiredFilesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2555,7 +2555,7 @@ void CMakeAstTest::testProjectGoodParse_data()
 void CMakeAstTest::testProjectBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ProjectAst* ast = new ProjectAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2603,7 +2603,7 @@ void CMakeAstTest::testQtWrapCppGoodParse_data()
 void CMakeAstTest::testQtWrapCppBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    QtWrapCppAst* ast = new QtWrapCppAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2636,7 +2636,7 @@ void CMakeAstTest::testQtWrapUiGoodParse_data()
 void CMakeAstTest::testQtWrapUiBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    QtWrapUiAst* ast = new QtWrapUiAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2702,7 +2702,7 @@ void CMakeAstTest::testRemoveDefinitionsGoodParse_data()
 void CMakeAstTest::testRemoveDefinitionsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    RemoveDefinitionsAst* ast = new RemoveDefinitionsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2735,7 +2735,7 @@ void CMakeAstTest::testReturnGoodParse_data()
 void CMakeAstTest::testReturnBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    ReturnAst* ast = new ReturnAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2768,7 +2768,7 @@ void CMakeAstTest::testSeparateArgumentsGoodParse_data()
 void CMakeAstTest::testSeparateArgumentsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SeparateArgumentsAst* ast = new SeparateArgumentsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2822,7 +2822,7 @@ void CMakeAstTest::testSetGoodParse_data()
 void CMakeAstTest::testSetBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SetAst* ast = new SetAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2878,7 +2878,7 @@ void CMakeAstTest::testSetDirectoryPropsGoodParse_data()
 void CMakeAstTest::testSetDirectoryPropsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SetDirectoryPropsAst* ast = new SetDirectoryPropsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2911,7 +2911,7 @@ void CMakeAstTest::testSetSourceFilesPropsGoodParse_data()
 void CMakeAstTest::testSetSourceFilesPropsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SetSourceFilesPropsAst* ast = new SetSourceFilesPropsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2944,7 +2944,7 @@ void CMakeAstTest::testSetTargetPropsGoodParse_data()
 void CMakeAstTest::testSetTargetPropsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SetTargetPropsAst* ast = new SetTargetPropsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -2977,7 +2977,7 @@ void CMakeAstTest::testSetTestsPropsGoodParse_data()
 void CMakeAstTest::testSetTestsPropsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SetTestsPropsAst* ast = new SetTestsPropsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3010,7 +3010,7 @@ void CMakeAstTest::testSiteNameGoodParse_data()
 void CMakeAstTest::testSiteNameBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SiteNameAst* ast = new SiteNameAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3043,7 +3043,7 @@ void CMakeAstTest::testSourceGroupGoodParse_data()
 void CMakeAstTest::testSourceGroupBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SourceGroupAst* ast = new SourceGroupAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3076,7 +3076,7 @@ void CMakeAstTest::testStringGoodParse_data()
 void CMakeAstTest::testStringBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    StringAst* ast = new StringAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3109,7 +3109,7 @@ void CMakeAstTest::testSubdirDependsGoodParse_data()
 void CMakeAstTest::testSubdirDependsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SubdirDependsAst* ast = new SubdirDependsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3142,7 +3142,7 @@ void CMakeAstTest::testSubdirsGoodParse_data()
 void CMakeAstTest::testSubdirsBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    SubdirsAst* ast = new SubdirsAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3194,7 +3194,7 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
 void CMakeAstTest::testTargetLinkLibrariesBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    TargetLinkLibrariesAst* ast = new TargetLinkLibrariesAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3296,7 +3296,7 @@ void CMakeAstTest::testTryRunGoodParse_data()
 void CMakeAstTest::testTryRunBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    TryRunAst* ast = new TryRunAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3329,7 +3329,7 @@ void CMakeAstTest::testUseMangledMesaGoodParse_data()
 void CMakeAstTest::testUseMangledMesaBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    UseMangledMesaAst* ast = new UseMangledMesaAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3362,7 +3362,7 @@ void CMakeAstTest::testUtilitySourceGoodParse_data()
 void CMakeAstTest::testUtilitySourceBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    UtilitySourceAst* ast = new UtilitySourceAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3395,7 +3395,7 @@ void CMakeAstTest::testVariableRequiresGoodParse_data()
 void CMakeAstTest::testVariableRequiresBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    VariableRequiresAst* ast = new VariableRequiresAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3428,7 +3428,7 @@ void CMakeAstTest::testVtkMakeInstantiatorGoodParse_data()
 void CMakeAstTest::testVtkMakeInstantiatorBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    VtkMakeInstantiatorAst* ast = new VtkMakeInstantiatorAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3483,7 +3483,7 @@ void CMakeAstTest::testVtkWrapJavaGoodParse_data()
 void CMakeAstTest::testVtkWrapJavaBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    VtkWrapJavaAst* ast = new VtkWrapJavaAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3560,7 +3560,7 @@ void CMakeAstTest::testVtkWrapPythonGoodParse_data()
 void CMakeAstTest::testVtkWrapPythonBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    VtkWrapPythonAst* ast = new VtkWrapPythonAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3656,7 +3656,7 @@ void CMakeAstTest::testVtkWrapTclGoodParse_data()
 void CMakeAstTest::testVtkWrapTclBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    VtkWrapTclAst* ast = new VtkWrapTclAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3715,7 +3715,7 @@ void CMakeAstTest::testWhileGoodParse_data()
 void CMakeAstTest::testWhileBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    WhileAst* ast = new WhileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
@@ -3763,7 +3763,7 @@ void CMakeAstTest::testWriteFileGoodParse_data()
 void CMakeAstTest::testWriteFileBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    AddExecutableAst* ast = new AddExecutableAst();
+    WriteFileAst* ast = new WriteFileAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
