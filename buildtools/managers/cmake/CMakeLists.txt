@@ -32,6 +32,7 @@ set( cmakecommon_SRCS
   parser/variablemap.cpp
   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
+  parser/cmakeparserutils.cpp
  )
 
 set( cmakemanager_SRCS
