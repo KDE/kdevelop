@@ -87,7 +87,7 @@
 #include "setuphelpers.h"
 #include "quickopen.h"
 
-#define DEBUG_UI_LOCKUP
+/*#define DEBUG_UI_LOCKUP */
 
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
