@@ -68,3 +68,10 @@ target_link_libraries( cmakeprojectvisitortest
         ${KDE4_KTEXTEDITOR_LIBS}
         kdev4cmakecommon )
 
+set ( cmakeparserutilstest_SRCS cmakeparserutilstest.cpp )
+kde4_add_unit_test( cmakeparserutilstest ${cmakeparserutilstest_SRCS} )
+target_link_libraries( cmakeparserutilstest 
+        ${QT_QTTEST_LIBRARY}
+        ${KDE_KDECORE_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
+        kdev4cmakecommon )
