@@ -882,8 +882,9 @@ void ExecProgramAst::writeBack( QString& ) const
 
 bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower() != "exec_program" || func.arguments.count()<2)
+    if(func.name.toLower() != "exec_program" || func.arguments.count() == 0 )
         return false;
+
     m_executableName = func.arguments[0].value;
     bool args=false;
 
