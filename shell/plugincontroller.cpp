@@ -88,8 +88,9 @@ PluginController::PluginController(Core *core)
 {
     d->core = core;
     d->profile = ShellExtension::getInstance() ->defaultProfile();
+    kDebug() << "Loading plugins which match:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
-        QLatin1String( "[X-KDevelop-Version] == 4" ) ) );
+        QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
     d->cleanupMode = PluginControllerPrivate::Running;
     d->m_manager = new QExtensionManager();
 }

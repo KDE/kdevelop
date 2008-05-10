@@ -49,6 +49,6 @@ Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevkonsoleview
 X-KDE-PluginInfo-Name=kdevkonsoleview
-X-KDevelop-Version=4
+X-KDevelop-Version=6
 X-KDevelop-Category=Global
 X-KDevelop-Properties=Console
