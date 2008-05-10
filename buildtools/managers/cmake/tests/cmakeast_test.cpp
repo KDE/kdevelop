@@ -697,7 +697,7 @@ void CMakeAstTest::testCreateTestSourcelistGoodParse_data()
     func4.name = func3.name;
 
     QStringList argList1, argList2, argList3, argList4;
-    argList1 << "$(TESTDRIVER_SRCS) test_driver $(TEST_SRCS)";
+    argList1 << "$(TESTDRIVER_SRCS)" << "test_driver" << "$(TEST_SRCS)";
     argList2 = argList1;
     argList2 << "EXTRA_INCLUDE" << "include.h";
     argList3 = argList1;
