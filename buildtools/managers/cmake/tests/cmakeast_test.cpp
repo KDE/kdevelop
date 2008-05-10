@@ -672,7 +672,7 @@ void CMakeAstTest::testConfigureFileBadParse_data()
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
-    func2.addArguments( argList3 );
+    func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "bad wrong name" ) << func1;
