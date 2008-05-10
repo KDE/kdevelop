@@ -66,6 +66,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevqmakemanager
 X-KDE-PluginInfo-Name=KDevQMakeManager
 X-KDevelop-FileManager=QMake
-X-KDevelop-Version=4
+X-KDevelop-Version=6
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
 X-KDevelop-IRequired=org.kdevelop.IQMakeBuilder
