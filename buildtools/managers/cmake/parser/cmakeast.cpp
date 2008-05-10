@@ -841,7 +841,10 @@ bool EnableLanguageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.name.toLower() != "enable_language" )
         return false;
 
-    if ( func.arguments.count() != 1 )
+    if ( func.arguments.isEmpty() || func.arguments.count() != 1 )
+        return false;
+
+    if ( func.arguments[0].value.isEmpty() )
         return false;
 
     m_language = func.arguments[0].value;
