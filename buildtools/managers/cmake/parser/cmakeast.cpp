@@ -717,20 +717,10 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value.toUpper() != "VERSION")
         return false;
 
-    QRegExp rx("([0-9]+)\\.([0-9]+)\\.?([0-9]+)");
-    rx.indexIn(func.arguments[1].value);
-
-    QStringList caps=rx.capturedTexts();
-    caps.erase(caps.begin());
-    foreach(const QString& s, caps)
-    {
-        bool correct;
-        if ( s.isEmpty() )
-            continue;
-        m_version.append(s.toInt(&correct));
-        if(!correct)
-            return false;
-    }
+    bool correct = false;
+    m_version = CMakeParserUtils::parseVersion(func.arguments[1].value, &correct);
+    if (!correct)
+        return false;
 
     if(func.arguments.count()==3)
     {
