@@ -75,6 +75,6 @@ X-KDE-PluginInfo-Name=kdevdocumentview
 X-KDE-PluginInfo-Author=Adam Treat
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=LGPL
-X-KDevelop-Version=4
+X-KDevelop-Version=6
 X-KDevelop-Category=Global
 X-KDevelop-Properties=GlobalFileManagement
