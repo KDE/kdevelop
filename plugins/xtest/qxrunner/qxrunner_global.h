@@ -30,23 +30,6 @@
 
 #include <Qt/qglobal.h>
 
-/*!
- * Macro to export symbols to DLL with VC++:
- *
- * - QXRUNNER_DLL_BUILD must be defined when building the DLL.
- * - QXRUNNER_DLL must be defined if linking against the DLL.
- * - If none of the above are defined then you are building or
- *   linking against the static library.
- */
-
-#if defined(QXRUNNER_DLL_BUILD)
-#  define QXRUNNER_EXPORT Q_DECL_EXPORT
-#elif defined (QXRUNNER_DLL)
-#  define QXRUNNER_EXPORT Q_DECL_IMPORT
-#else
-#  define QXRUNNER_EXPORT
-#endif
-
 #define QXRUNNER_VERSION_STR   "0.9.2"
 
 namespace QxRunner

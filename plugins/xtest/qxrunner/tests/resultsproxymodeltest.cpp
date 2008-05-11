@@ -19,7 +19,7 @@
  */
 
 #include <resultsproxymodel.h>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
 #include "resultsproxymodeltest.h"
 #include "modelcreation.h"
@@ -66,10 +66,8 @@ void ResultsProxyModelTest::enableColumns()
 {
     setAllColumnsEnabled(); // evrything should get through
 
-    // row 0
-    assertRowContains(0, "00", "01", "02");
-    // row 1
-    assertRowContains(1, "10", "11", "12");
+    assertRowContains(0, "00", "01", "02"); // row 0
+    assertRowContains(1, "10", "11", "12"); // row 1
 }
 
 //test command
@@ -82,10 +80,8 @@ void ResultsProxyModelTest::disableColumn()
     cols.setBit(2);
     proxy->setEnabledColumns(cols);
 
-    // row 0
-    assertRowContains(0, "00", QVariant(), "02");
-    // row 1
-    assertRowContains(1, "10", QVariant(), "12");
+    assertRowContains(0, "00", QVariant(), "02"); // row 0
+    assertRowContains(1, "10", QVariant(), "12"); // row 1
 }
 
 //test command
@@ -127,4 +123,4 @@ void ResultsProxyModelTest::assertRowContains(int row, const QVariant& col1, con
     assertDataAt(row,2, col3);
 }
 
-QTEST_MAIN( ResultsProxyModelTest );
+QTEST_KDEMAIN( ResultsProxyModelTest, NoGUI );

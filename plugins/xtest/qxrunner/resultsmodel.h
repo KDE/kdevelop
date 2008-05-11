@@ -46,7 +46,6 @@ class RunnerItem;
  *
  * \sa \ref results_model and \ref runner_item_index
  */
-
 class ResultsModel : public QAbstractListModel
 {
     Q_OBJECT

@@ -32,11 +32,10 @@ using QxRunner::RunnerItem;
 using QxRunner::RunnerModel;
 using QxRunner::ResultsModel;
 
-
-class StubRunnerItem : public RunnerItem
+class RunnerItemStub : public RunnerItem
 {
 public:
-    StubRunnerItem(const QList<QVariant>& data, RunnerItem* parent)
+    RunnerItemStub(const QList<QVariant>& data, RunnerItem* parent)
             : RunnerItem(data, parent) {}
 
     int run() {
@@ -53,26 +52,34 @@ public:
     static QList<int> executedItems; // store the index of rows that got executed
 };
 
-QList<int> StubRunnerItem::executedItems;
+QList<int> RunnerItemStub::executedItems;
 
-class StubRunnerModel : public RunnerModel
+class RunnerModelStub : public RunnerModel
 {
 public:
-    StubRunnerModel()
-            : RunnerModel(NULL) {
+    RunnerModelStub(bool fill=true)
+            : RunnerModel(NULL),
+              col0Caption("run_col0"),
+              col1Caption("run_col1"),
+              col2Caption("run_col2") 
+    {
+        if (fill) this->fill();
+    }
+
+    void fill() {
         QList<QVariant> rootData;
-        rootData << tr("run_col0") << tr("run_col1") << tr("run_col2");
-        setRootItem(new StubRunnerItem(rootData, NULL));
+        rootData << col0Caption << col1Caption << col2Caption;
+        setRootItem(new RunnerItemStub(rootData, NULL));
 
         QList<QVariant> columnData;
         columnData << "00" << "01" << "02";
-        StubRunnerItem* item1 = new StubRunnerItem(columnData, rootItem());
+        RunnerItemStub* item1 = new RunnerItemStub(columnData, rootItem());
         item1->setResult(QxRunner::RunSuccess);
         rootItem()->appendChild(item1);
 
         columnData.clear();
         columnData << "10" << "11" << "12";
-        StubRunnerItem* item2 = new StubRunnerItem(columnData, rootItem());
+        RunnerItemStub* item2 = new RunnerItemStub(columnData, rootItem());
         item2->setResult(QxRunner::RunFatal);
         rootItem()->appendChild(item2);
     }
@@ -84,11 +91,20 @@ public:
     RunnerItem* fetchItem(const QModelIndex& index) {
         return itemFromIndex(index);
     }
+
+    void decapitate() {
+        setRootItem(0);
+    }
+
+    // column headers
+    QVariant col0Caption;
+    QVariant col1Caption;
+    QVariant col2Caption;
 };
 
-inline StubRunnerModel* createRunnerModelStub()
+inline RunnerModelStub* createRunnerModelStub(bool fill=true)
 {
-    return new StubRunnerModel();
+    return new RunnerModelStub(fill);
 }
 
 class ResultsHeader
@@ -109,7 +125,7 @@ inline ResultsModel* createResultsModelStub()
     header << ResultsHeader::col0 << ResultsHeader::col1 << ResultsHeader::col2;
 
     ResultsModel* model = new ResultsModel(header);
-    StubRunnerModel* runnerModel = new StubRunnerModel();
+    RunnerModelStub* runnerModel = new RunnerModelStub();
 
     model->addResult(runnerModel->index(0, 0)); // invoke slot
     model->addResult(runnerModel->index(1, 0)); // invoke slot

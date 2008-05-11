@@ -20,7 +20,7 @@
 
 #include <runneritem.h>
 #include <QString>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
 #include "runneritemtest.h"
 
@@ -138,4 +138,4 @@ void RunnerItemTest::assertDefaultResult(ConcreteRunnerItem* item)
     KOMPARE(int(QxRunner::NoResult), item->result());
 }
 
-QTEST_MAIN( RunnerItemTest );
+QTEST_KDEMAIN( RunnerItemTest, NoGUI );

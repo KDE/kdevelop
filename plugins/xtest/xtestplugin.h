@@ -1,4 +1,7 @@
-/*
+/* KDevelop xUnit plugin
+ *
+ * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -15,31 +18,21 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXTSIGNALWAITER_H
-#define QXTSIGNALWAITER_H
+#include <interfaces/iplugin.h>
+#include <QVariantList>
 
-#include <QObject>
-class QTimerEvent;
+class KDevXtestPluginFactory;
 
-class QxtSignalWaiter : public QObject
+/**
+ * xUnit test runner plugin
+ **/
+class KDevXtestPlugin : public KDevelop::IPlugin
 {
-    Q_OBJECT
-
 public:
-    QxtSignalWaiter(const QObject* sender, const char* signal);
-    static bool wait(const QObject* sender, const char* signal, int msec = -1);
-    bool wait(int msec = -1);
-
-protected:
-    void timerEvent(QTimerEvent* event);
-
-private slots:
-    void signalCaught();
+    KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
+    virtual ~KDevXtestPlugin();
+    Qt::DockWidgetArea dockWidgetAreaHint() const;
 
 private:
-    bool ready;
-    bool timeout;
-    int timerID;
+    KDevXtestPluginFactory* m_xtestFactory;
 };
-
-#endif

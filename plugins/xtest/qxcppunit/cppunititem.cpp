@@ -10,11 +10,12 @@
 #include <cppunit/TestFailure.h>
 #include <cppunit/Exception.h>
 
-namespace QxCppUnit {
+namespace QxCppUnit
+{
 
 CppUnitItem::CppUnitItem(const QList<QVariant>& data, RunnerItem* parent,
-                                                      CPPUNIT_NS::Test* test)
-           : RunnerItem(data, parent), m_test(test)
+                         CPPUNIT_NS::Test* test)
+        : RunnerItem(data, parent), m_test(test)
 {
 
 }
@@ -26,54 +27,49 @@ CppUnitItem::~CppUnitItem()
 
 int CppUnitItem::run()
 {
-	if (child(0))
-	{
-		return QxRunner::NoResult;	// Have nothing to do as a parent
-	}
+    if (child(0)) {
+        return QxRunner::NoResult; // Have nothing to do as a parent
+    }
 
-	// Expect the best.
-	setResult(QxRunner::RunSuccess);
+    // Expect the best.
+    setResult(QxRunner::RunSuccess);
 
-	// Prepare for receiving failure notifications.
-	CPPUNIT_NS::TestResult testResult;
-	testResult.addListener(this);
+    // Prepare for receiving failure notifications.
+    CPPUNIT_NS::TestResult testResult;
+    testResult.addListener(this);
 
-	// Run the test
-	m_test->run(&testResult);
+    // Run the test
+    m_test->run(&testResult);
 
-	return result();
+    return result();
 }
 
 void CppUnitItem::addFailure(const CPPUNIT_NS::TestFailure& failure)
 {
-	CPPUNIT_NS::Exception* e = failure.thrownException();
+    CPPUNIT_NS::Exception* e = failure.thrownException();
 
-	QVariant msg = QString(e->what()).trimmed();
+    QVariant msg = QString(e->what()).trimmed();
 
-	QVariant fileName;
-	QVariant lineNumber;
+    QVariant fileName;
+    QVariant lineNumber;
 
-	CPPUNIT_NS::SourceLine line = failure.sourceLine();
+    CPPUNIT_NS::SourceLine line = failure.sourceLine();
 
-	if (line.isValid())
-	{
-		fileName = QString(line.fileName().c_str()).trimmed();
-		lineNumber = QString().setNum(line.lineNumber());
-	}
+    if (line.isValid()) {
+        fileName = QString(line.fileName().c_str()).trimmed();
+        lineNumber = QString().setNum(line.lineNumber());
+    }
 
-	setData(2, msg);
-	setData(3, fileName);
-	setData(4, lineNumber);
+    setData(2, msg);
+    setData(3, fileName);
+    setData(4, lineNumber);
 
-	if (failure.isError())
-	{
-		setResult(QxRunner::RunError);
-	}
-	else
-	{
-		setResult(QxRunner::RunWarning);
-		setData(1, "Failure");				// Use CppUnit terminology
-	}
+    if (failure.isError()) {
+        setResult(QxRunner::RunError);
+    } else {
+        setResult(QxRunner::RunWarning);
+        setData(1, "Failure");    // Use CppUnit terminology
+    }
 }
 
 } // namespace

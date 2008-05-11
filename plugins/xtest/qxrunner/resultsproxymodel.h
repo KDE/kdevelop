@@ -29,6 +29,7 @@
 #define RESULTSPROXYMODEL_H
 
 #include "qxrunner_global.h"
+#include "qxrunnerexport.h"
 #include "proxymodelcommon.h"
 
 #include <QSortFilterProxyModel>
@@ -50,9 +51,8 @@ class ResultsModel;
  *
  * \sa \ref views
  */
-
 class ResultsProxyModel : public QSortFilterProxyModel,
-            public ProxyModelCommon
+                          public ProxyModelCommon
 {
     Q_OBJECT
 

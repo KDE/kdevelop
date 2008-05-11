@@ -43,7 +43,6 @@ namespace QxRunner
  *
  * \sa \ref views
  */
-
 class ProxyModelCommon
 {
 public: // Operations

@@ -29,6 +29,8 @@
 #define RUNNERWINDOW_H
 
 #include "ui_runnerwindow.h"
+#include "qxrunner_global.h"
+#include "qxrunnerexport.h"
 
 #include <QSemaphore>
 #include <QLabel>
@@ -73,8 +75,7 @@ class ResultsViewController;
  *
  * \sa \ref main_window
  */
-
-class RunnerWindow : public QMainWindow
+class QXRUNNER_EXPORT RunnerWindow : public QMainWindow
 {
     Q_OBJECT
 

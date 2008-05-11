@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>28</height>
+    <width>577</width>
+    <height>37</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,16 +16,7 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>0</number>
    </property>
    <item>
@@ -36,7 +27,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::Fixed</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>6</width>
        <height>12</height>
@@ -91,16 +82,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -112,7 +94,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/success.png</pixmap>
        </property>
       </widget>
      </item>
@@ -130,16 +112,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -151,7 +124,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/exception.png</pixmap>
        </property>
       </widget>
      </item>
@@ -169,16 +142,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -190,7 +154,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/fatal.png</pixmap>
        </property>
       </widget>
      </item>
@@ -208,16 +172,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -229,7 +184,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/error.png</pixmap>
        </property>
       </widget>
      </item>
@@ -247,16 +202,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -268,7 +214,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/warning.png</pixmap>
        </property>
       </widget>
      </item>
@@ -286,16 +232,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -307,7 +244,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" >:/icons/info.png</pixmap>
        </property>
       </widget>
      </item>
@@ -325,7 +262,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>16</width>
        <height>20</height>
@@ -359,7 +296,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <resources>
-  <include location="resources/qxrunner.qrc" />
+  <include location="../../../../../Desktop/gsoc/qxrunner.0.9.2/qxrunner/src/qxrunner/resources/qxrunner.qrc" />
  </resources>
  <connections/>
 </ui>

@@ -20,8 +20,7 @@
 
 #include <runnerwindow.h>
 #include <runnermodel.h>
-#include <QtTest/qtest_gui.h>
-#include "qxtsignalwaiter.h"
+#include <qtest_kde.h>
 
 #include "kasserts.h"
 #include "runnerwindowtest.h"
@@ -29,8 +28,8 @@
 
 using QxRunner::RunnerWindow;
 using QxRunner::RunnerItem;
-using ModelCreation::StubRunnerItem;
-using ModelCreation::StubRunnerModel;
+using ModelCreation::RunnerItemStub;
+using ModelCreation::RunnerModelStub;
 using ModelCreation::createRunnerModelStub;
 
 void RunnerWindowTest::initTestCase()
@@ -51,19 +50,18 @@ void RunnerWindowTest::cleanupTestCase()
 
 void RunnerWindowTest::startItems()
 {
-    QxtSignalWaiter waiter(window->runnerModel(), SIGNAL(allItemsCompleted()));
-    StubRunnerItem::executedItems.clear();
+    RunnerItemStub::executedItems.clear();
 
     // invoke the run action
     window->ui().actionStart->trigger();
 
     // wait for all items to be executed
-    if (!waiter.wait(2000))
+    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()),2000))
         QFAIL("Timeout while waiting for runner items to complete execution");
 
     // check they got indeed executed
-    KOMPARE(0, StubRunnerItem::executedItems.takeFirst());
-    KOMPARE(1, StubRunnerItem::executedItems.takeFirst());
+    KOMPARE(0, RunnerItemStub::executedItems.takeFirst());
+    KOMPARE(1, RunnerItemStub::executedItems.takeFirst());
 
     // validate the runneritem content
     assertRunnerItemEquals(0, "00", "0_1", "0_2", QxRunner::RunSuccess);
@@ -108,12 +106,4 @@ void RunnerWindowTest::assertRunnerItemEquals(int itemNr, QVariant col0, QVarian
     KOMPARE(result, item->result());
 }
 
-#define QTEST2_MAIN(TestObject) \
-                 int main(int argc, char *argv[]) \
-{ \
-                 QApplication app(argc, argv); \
-                 TestObject tc; \
-                 return QTest::qExec(&tc, argc, argv); \
-}
-
-QTEST2_MAIN( RunnerWindowTest );
+QTEST_KDEMAIN(RunnerWindowTest, GUI )

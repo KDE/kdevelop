@@ -16,7 +16,7 @@ CppUnitModel::CppUnitModel(QObject* parent)
     // Data for column headers is stored in the root item.
     QList<QVariant> rootData;
     rootData << tr("Test Name") << tr("Result") << tr("Message")
-    << tr("File Name") << tr("Line Number");
+             << tr("File Name") << tr("Line Number");
 
     setRootItem(new CppUnitItem(rootData));
 

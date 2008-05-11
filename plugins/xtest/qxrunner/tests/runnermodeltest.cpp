@@ -25,75 +25,19 @@
 #include <QStringList>
 #include <QSignalSpy>
 #include <QMap>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
 #include "runnermodeltest.h"
+#include "modelcreation.h"
 
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
-
-namespace RunnerModelTestNm
-{
-
-class StubRunnerItem : public RunnerItem
-{
-public:
-    StubRunnerItem(const QList<QVariant>& data, RunnerItem* parent)
-            : RunnerItem(data, parent) {}
-
-    int run() {
-         if (child(0)) {
-             setResult(QxRunner::NoResult);  // Have nothing to do as a parent
-         } else {
-             setData(1, QString::number(row()) + QString("_1"));
-             setData(2, QString::number(row()) + QString("_2"));
-             setResult(QxRunner::RunSuccess);
-         }
-         return result();
-    }
-};
-
-class RunnerModelImpl : public RunnerModel
-{
-public:
-    RunnerModelImpl()
-            : RunnerModel(NULL) {
-    }
-
-    void fill() {
-        QList<QVariant> rootData;
-        rootData << tr("col0") << tr("col1") << tr("col2");
-        setRootItem(new StubRunnerItem(rootData, NULL));
-
-        QList<QVariant> columnData;
-        columnData << "00" << "01" << "02";
-        StubRunnerItem* item1 = new StubRunnerItem(columnData, rootItem());
-        item1->setResult(QxRunner::RunSuccess);
-        rootItem()->appendChild(item1);
-
-        columnData.clear();
-        columnData << "10" << "11" << "12";
-        StubRunnerItem* item2 = new StubRunnerItem(columnData, rootItem());
-        item2->setResult(QxRunner::RunFatal);
-        rootItem()->appendChild(item2);
-    }
-
-    QString name() const {
-        return "";
-    }
-
-    void decapitate() {
-        setRootItem(0);
-    }
-};
-
-} // end RunnerModelTestNm
-
-using RunnerModelTestNm::RunnerModelImpl;
+using ModelCreation::createRunnerModelStub;
+using ModelCreation::RunnerModelStub;
 
 void RunnerModelTest::init()
 {
-    model = new RunnerModelImpl();
+    model = createRunnerModelStub(false);
 }
 
 void RunnerModelTest::cleanup()
@@ -120,9 +64,9 @@ void RunnerModelTest::appendResults()
     KOMPARE(3, model->columnCount());
 
     // verify column headers
-    assertColumnHeader("col0", 0);
-    assertColumnHeader("col1", 1);
-    assertColumnHeader("col2", 2);
+    assertColumnHeader(model->col0Caption, 0);
+    assertColumnHeader(model->col1Caption, 1);
+    assertColumnHeader(model->col2Caption, 2);
 
     // should contain the right stuff
     verifyRowContent(0);
@@ -282,4 +226,4 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
     spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
 }
 
-QTEST_MAIN( RunnerModelTest );
+QTEST_KDEMAIN( RunnerModelTest, NoGUI );

@@ -29,9 +29,9 @@ namespace QxRunner
 class RunnerModel;
 }
 
-namespace RunnerModelTestNm
+namespace ModelCreation
 {
-class RunnerModelImpl;
+class RunnerModelStub;
 }
 
 class RunnerModelTest : public QObject
@@ -55,7 +55,7 @@ private:
     // custom asserts
     void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
-    void assertItemChecked(int row, bool checked=true);
+    void assertItemChecked(int row, bool checked = true);
     void verifyRowContent(int index);
     void assertSignalValue(QSignalSpy* spy, int expected);
 
@@ -64,7 +64,7 @@ private:
     void setUpResultSpies(QMap<QString, QSignalSpy*>& spies);
 
 private:
-    RunnerModelTestNm::RunnerModelImpl* model;
+    ModelCreation::RunnerModelStub* model;
 };
 
 #endif // QXRUNNER_RUNNERMODELTEST_H

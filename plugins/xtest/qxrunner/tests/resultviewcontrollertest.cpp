@@ -19,7 +19,7 @@
  */
 
 #include <resultsviewcontroller.h>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
 #include "resultviewcontrollertest.h"
 
@@ -37,4 +37,4 @@ void ResultViewControllerTest::cleanup()
     if (controller) delete controller;
 }
 
-QTEST_MAIN( ResultViewControllerTest );
+QTEST_KDEMAIN( ResultViewControllerTest, NoGUI );

@@ -50,9 +50,8 @@ class RunnerProxyModel;
  *
  * \sa \ref views and \ref selected_item
  */
-
 class RunnerViewController : public QObject,
-            public ViewControllerCommon
+                             public ViewControllerCommon
 {
     Q_OBJECT
 

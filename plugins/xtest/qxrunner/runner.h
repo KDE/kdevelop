@@ -29,6 +29,7 @@
 #define RUNNER_H
 
 #include "qxrunner_global.h"
+#include "qxrunnerexport.h"
 
 class QIcon;
 

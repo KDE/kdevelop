@@ -33,7 +33,7 @@ class RunnerModel;
 
 namespace ModelCreation
 {
-class StubRunnerModel;
+class RunnerModelStub;
 }
 
 class RunnerWindowTest : public QObject
@@ -53,7 +53,7 @@ private:
 
 private:
     QxRunner::RunnerWindow* window;
-    ModelCreation::StubRunnerModel* model;
+    ModelCreation::RunnerModelStub* model;
     Ui::StatusWidget* status;
 };
 

@@ -8,56 +8,64 @@
 #include "cppunitmodel.h"
 
 #include <qxrunner/runner.h>
+#include <qxrunner/runnerwindow.h>
 #include <cppunit/TestSuite.h>
 #include <QIcon>
 
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initQxCppUnitResource()
 {
-	Q_INIT_RESOURCE(qxcppunit);
+    Q_INIT_RESOURCE(qxcppunit);
 }
 
 using namespace QxRunner;
 
-namespace QxCppUnit {
+namespace QxCppUnit
+{
 
 TestRunner::TestRunner()
 {
-	m_runner = 0;
-	m_model = new CppUnitModel;
+    m_runner = 0;
+    m_model = new CppUnitModel;
 }
 
 TestRunner::~TestRunner()
 {
-	// Delete the runner first.
-	delete m_runner;
-	delete m_model;
+    // Delete the runner first.
+    delete m_runner;
+    delete m_model;
 }
 
 void TestRunner::addTest(CPPUNIT_NS::Test* test) const
 {
-	m_model->addTest(test);
+    m_model->addTest(test);
 }
 
 void TestRunner::addTests(const CppUnitVector<CPPUNIT_NS::Test*>& tests) const
 {
-	CppUnitVector<CPPUNIT_NS::Test*>::const_iterator it = tests.begin();
+    CppUnitVector<CPPUNIT_NS::Test*>::const_iterator it = tests.begin();
 
-	for (; it != tests.end(); ++it)
-	{
-		addTest(*it);
-	}
+    for (; it != tests.end(); ++it) {
+        addTest(*it);
+    }
 }
 
 void TestRunner::run()
 {
-	m_runner = new QxRunner::Runner(m_model);
+    m_runner = new QxRunner::Runner(m_model);
 
-	// Application icon.
-	initQxCppUnitResource();
-	m_runner->setWindowIcon(QIcon(":/icons/qxcppunit_16x16.png"));
+    // Application icon.
+    initQxCppUnitResource();
+    m_runner->setWindowIcon(QIcon(":/icons/qxcppunit_16x16.png"));
 
-	m_runner->run();
+    m_runner->run();
+}
+
+QWidget* TestRunner::spawn()
+{
+    QxRunner::RunnerWindow* window = new QxRunner::RunnerWindow;
+    window->setModel(m_model);
+    return window;
 }
 
 } // namespace

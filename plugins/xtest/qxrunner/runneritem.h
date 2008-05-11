@@ -29,6 +29,7 @@
 #define RUNNERITEM_H
 
 #include "qxrunner_global.h"
+#include "qxrunnerexport.h"
 
 #include <QVariant>
 
@@ -53,7 +54,6 @@ namespace QxRunner
  *
  * \sa \ref runner_model_item and \ref runner_item_index
  */
-
 class QXRUNNER_EXPORT RunnerItem
 {
 public: // Operations

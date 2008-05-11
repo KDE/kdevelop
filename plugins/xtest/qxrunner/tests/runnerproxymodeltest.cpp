@@ -19,7 +19,7 @@
  */
 
 #include <runnerproxymodel.h>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
 #include "runnerproxymodeltest.h"
 #include "modelcreation.h"
@@ -119,4 +119,4 @@ void RunnerProxyModelTest::assertRowContains(int row, const QVariant& col1, cons
     assertDataAt(row,2, col3);
 }
 
-QTEST_MAIN( RunnerProxyModelTest );
+QTEST_KDEMAIN( RunnerProxyModelTest, NoGUI );

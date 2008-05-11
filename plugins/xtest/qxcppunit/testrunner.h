@@ -7,20 +7,24 @@
 #ifndef TESTRUNNER_H
 #define TESTRUNNER_H
 
-#include "qxcppunit_global.h"
+#include "qxcppunitexport.h"
 
+#include <QWidget>
 #include <cppunit/Portability.h>
 #include <cppunit/portability/CppUnitVector.h>
 
-namespace CPPUNIT_NS {
-	class Test;
+namespace CPPUNIT_NS
+{
+class Test;
 }
 
-namespace QxRunner {
-	class Runner;
+namespace QxRunner
+{
+class Runner;
 }
 
-namespace QxCppUnit {
+namespace QxCppUnit
+{
 
 class CppUnitModel;
 
@@ -38,43 +42,48 @@ class QXCPPUNIT_EXPORT TestRunner
 {
 public: // Operations
 
-	/*!
-	 * Constructs a test runner. Creates the CppUnitModel instance.
-	 */
-	TestRunner();
+    /*!
+     * Constructs a test runner. Creates the CppUnitModel instance.
+     */
+    TestRunner();
 
-	/*!
-	 * Destroys this test runner.
-	 */
-	virtual ~TestRunner();
+    /*!
+     * Destroys this test runner.
+     */
+    virtual ~TestRunner();
 
-	/*!
-	 * Appends the \a test to the list of CppUnit tests. \a test can be
-	 * one individual test or a test suite.
-	 */ 
-	void addTest(CPPUNIT_NS::Test* test) const;
+    /*!
+     * Appends the \a test to the list of CppUnit tests. \a test can be
+     * one individual test or a test suite.
+     */
+    void addTest(CPPUNIT_NS::Test* test) const;
 
-	/*!
-	 * Appends the \a tests to the list of CppUnit tests. An entry in
-	 * \a tests can be one individual test or a test suite.
-	 */ 
-	void addTests(const CppUnitVector<CPPUNIT_NS::Test*>& tests) const;
+    /*!
+     * Appends the \a tests to the list of CppUnit tests. An entry in
+     * \a tests can be one individual test or a test suite.
+     */
+    void addTests(const CppUnitVector<CPPUNIT_NS::Test*>& tests) const;
 
-	/*!
-	 * Sets the application icon and shows the main window.
-	 */
-	void run();
+    /*!
+     * Sets the application icon and shows the main window.
+     */
+    void run();
+
+    /*!
+     * Dont start a full application, just construct the widget
+     */
+    QWidget* spawn();
 
 private: // Operations
 
-	// Copy and assignment not supported.
-	TestRunner(const TestRunner&);
-	TestRunner& operator=(const TestRunner&);
+    // Copy and assignment not supported.
+    TestRunner(const TestRunner&);
+    TestRunner& operator=(const TestRunner&);
 
 private: // Attributes
 
-	QxRunner::Runner* m_runner;
-	CppUnitModel*     m_model;
+    QxRunner::Runner* m_runner;
+    CppUnitModel*     m_model;
 };
 
 } // namespace

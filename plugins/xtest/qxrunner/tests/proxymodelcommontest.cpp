@@ -20,8 +20,9 @@
 
 #include <proxymodelcommon.h>
 #include <QString>
-
+#include <qtest_kde.h>
 #include "kasserts.h"
+
 #include "proxymodelcommontest.h"
 
 using QxRunner::ProxyModelCommon;
@@ -72,4 +73,4 @@ void ProxyModelCommonTest::enabledColumns()
     KVERIFY(proxy->isColumnEnabled(2));
 }
 
-QTEST_MAIN( ProxyModelCommonTest );
+QTEST_KDEMAIN( ProxyModelCommonTest, NoGUI );

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=xUnit test runner
+Name=Xtest runner
+GenericName=Unit test runner
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevxtest
+X-KDE-PluginInfo-Name=kdevxtest
+X-KDE-PluginInfo-Author=Manuel Breugelmans
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement

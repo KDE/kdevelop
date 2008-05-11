@@ -25,66 +25,23 @@
 #include <QIcon>
 #include <QString>
 #include <QStringList>
+#include <qtest_kde.h>
 
 #include "kasserts.h"
 #include "resultsmodeltest.h"
+#include "modelcreation.h"
 
 using QxRunner::ResultsModel;
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
-
-namespace ResultsModelTestNm
-{
-
-class StubRunnerItem : public RunnerItem
-{
-public:
-    StubRunnerItem(const QList<QVariant>& data, RunnerItem* parent)
-            : RunnerItem(data, parent) {}
-
-    int run() {
-        return 0;
-    }
-};
-
-class StubRunnerModel : public RunnerModel
-{
-public:
-    StubRunnerModel()
-            : RunnerModel(NULL) {
-        QList<QVariant> rootData;
-        rootData << tr("run_col0") << tr("run_col1") << tr("run_col2");
-        setRootItem(new StubRunnerItem(rootData, NULL));
-
-        QList<QVariant> columnData;
-        columnData << "00" << "01" << "02";
-        StubRunnerItem* item1 = new StubRunnerItem(columnData, rootItem());
-        item1->setResult(QxRunner::RunSuccess);
-        rootItem()->appendChild(item1);
-
-        columnData.clear();
-        columnData << "10" << "11" << "12";
-        StubRunnerItem* item2 = new StubRunnerItem(columnData, rootItem());
-        item2->setResult(QxRunner::RunFatal);
-        rootItem()->appendChild(item2);
-    }
-
-    QString name() const {
-        return "";
-    }
-
-};
-
-} // end ResultsModelTestNm
-
-using ResultsModelTestNm::StubRunnerModel;
+using ModelCreation::RunnerModelStub;
 
 void ResultsModelTest::init()
 {
     QStringList headers;
     headers << "col0" << "col1" << "col2";
     model = new ResultsModel(headers);
-    runnerModel = new StubRunnerModel();
+    runnerModel = new RunnerModelStub();
 }
 
 void ResultsModelTest::cleanup()
@@ -196,4 +153,4 @@ void ResultsModelTest::fillRows()
     model->addResult(runnerModel->index(1, 0)); // invoke slot
 }
 
-QTEST_MAIN( ResultsModelTest );
+QTEST_KDEMAIN( ResultsModelTest, NoGUI );

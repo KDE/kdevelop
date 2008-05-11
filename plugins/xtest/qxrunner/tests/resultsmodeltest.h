@@ -24,16 +24,15 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
+class QIcon;
+
 namespace QxRunner
 {
 class ResultsModel;
 }
-
-class QIcon;
-
-namespace ResultsModelTestNm
+namespace ModelCreation
 {
-class StubRunnerModel;
+class RunnerModelStub;
 }
 
 class ResultsModelTest : public QObject
@@ -50,7 +49,6 @@ private slots:
     void errorHandling();
     //void fetchIcon(); <- no equality defined for QIcon
 
-
 private:
     void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
@@ -60,7 +58,7 @@ private:
 
 private:
     QxRunner::ResultsModel* model;
-    ResultsModelTestNm::StubRunnerModel* runnerModel;
+    ModelCreation::RunnerModelStub* runnerModel;
 };
 
 #endif // QXRUNNER_RESULTSMODELTEST_H

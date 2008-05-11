@@ -24,4 +24,4 @@
 #define KVERIFY(condition) QVERIFY(condition)
 #define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
 #define KOMPARE(expected,actual) QVERIFY(expected == actual)
-#define KTODO QFAIL("Test command not implemented yet")
+#define KTODO QWARN("Test command not implemented yet")

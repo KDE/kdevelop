@@ -30,7 +30,8 @@
 
 #include <QThread>
 
-namespace QxRunner {
+namespace QxRunner
+{
 
 class RunnerModel;
 
@@ -44,38 +45,37 @@ class RunnerModel;
  * threaded code is executed. Therefore RunnerModelThread is a friend
  * of RunnerModel.
  */
-
 class RunnerModelThread : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public: // Operations
 
-	/*!
-	 * Constructs a runner model thread with the given \a parent.
-	 */
+    /*!
+     * Constructs a runner model thread with the given \a parent.
+     */
     RunnerModelThread(RunnerModel* parent);
 
-	/*!
-	 * Destroys this runner model thread.
-	 */
+    /*!
+     * Destroys this runner model thread.
+     */
     ~RunnerModelThread();
 
-	/*!
-	 * Causes the current thread to sleep for \a msecs milliseconds.
-	 */
-	void msleep(unsigned long msecs) const;
+    /*!
+     * Causes the current thread to sleep for \a msecs milliseconds.
+     */
+    void msleep(unsigned long msecs) const;
 
 private: // Operations
 
-	/*!
-	 * Reimplemented from QThread. Starts the thread.
-	 */
-	void run();
+    /*!
+     * Reimplemented from QThread. Starts the thread.
+     */
+    void run();
 
-	// Copy and assignment not supported.
-	RunnerModelThread(const RunnerModelThread&);
-	RunnerModelThread& operator=(const RunnerModelThread&);
+    // Copy and assignment not supported.
+    RunnerModelThread(const RunnerModelThread&);
+    RunnerModelThread& operator=(const RunnerModelThread&);
 };
 
 } // namespace

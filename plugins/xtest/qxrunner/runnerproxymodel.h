@@ -46,7 +46,7 @@ namespace QxRunner
  */
 
 class RunnerProxyModel : public QSortFilterProxyModel,
-            public ProxyModelCommon
+                         public ProxyModelCommon
 {
     Q_OBJECT
 

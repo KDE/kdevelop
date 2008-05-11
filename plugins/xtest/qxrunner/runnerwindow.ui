@@ -13,26 +13,23 @@
    <string>QxRunner</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="resources/qxrunner.qrc" >
+    <normaloff>:/icons/qxrunner_16x16.png</normaloff>:/icons/qxrunner_16x16.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>34</y>
+     <width>630</width>
+     <height>108</height>
+    </rect>
+   </property>
    <layout class="QGridLayout" >
-    <property name="leftMargin" >
+    <property name="margin" >
      <number>9</number>
     </property>
-    <property name="topMargin" >
-     <number>9</number>
-    </property>
-    <property name="rightMargin" >
-     <number>9</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>9</number>
-    </property>
-    <property name="horizontalSpacing" >
-     <number>6</number>
-    </property>
-    <property name="verticalSpacing" >
+    <property name="spacing" >
      <number>6</number>
     </property>
     <item row="0" column="0" >
@@ -47,40 +44,15 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar" >
+  <widget class="QToolBar" name="runnerToolBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
      <width>630</width>
-     <height>19</height>
+     <height>34</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;File</string>
-    </property>
-    <addaction name="actionExit" />
-   </widget>
-   <widget class="QMenu" name="menuRunner" >
-    <property name="title" >
-     <string>&amp;Runner</string>
-    </property>
-    <addaction name="actionStart" />
-    <addaction name="actionStop" />
-   </widget>
-   <widget class="QMenu" name="menuView" >
-    <property name="title" >
-     <string>&amp;View</string>
-    </property>
-    <addaction name="actionMinimalUpdate" />
-    <addaction name="actionResults" />
-   </widget>
-   <addaction name="menuFile" />
-   <addaction name="menuRunner" />
-   <addaction name="menuView" />
-  </widget>
-  <widget class="QToolBar" name="runnerToolBar" >
    <property name="windowTitle" >
     <string>Ru&amp;nner Toolbar</string>
    </property>
@@ -96,8 +68,25 @@
    <addaction name="actionStart" />
    <addaction name="actionStop" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QStatusBar" name="statusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>403</y>
+     <width>630</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QDockWidget" name="dockResults" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>148</y>
+     <width>630</width>
+     <height>255</height>
+    </rect>
+   </property>
    <property name="features" >
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
@@ -108,20 +97,19 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>630</width>
+      <height>235</height>
+     </rect>
+    </property>
     <layout class="QVBoxLayout" >
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>9</number>
-     </property>
-     <property name="topMargin" >
-      <number>9</number>
-     </property>
-     <property name="rightMargin" >
-      <number>9</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>9</number>
      </property>
      <item>
@@ -129,16 +117,7 @@
        <property name="spacing" >
         <number>0</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin" >
         <number>0</number>
        </property>
        <item>
@@ -150,7 +129,9 @@
           <string>dummy</string>
          </property>
          <property name="icon" >
-          <iconset/>
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
          <property name="checkable" >
           <bool>true</bool>
@@ -175,7 +156,9 @@
           <string>dummy</string>
          </property>
          <property name="icon" >
-          <iconset/>
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
          <property name="checkable" >
           <bool>true</bool>
@@ -200,7 +183,9 @@
           <string>dummy</string>
          </property>
          <property name="icon" >
-          <iconset/>
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
          <property name="checkable" >
           <bool>true</bool>
@@ -225,7 +210,9 @@
           <string>dummy</string>
          </property>
          <property name="icon" >
-          <iconset/>
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
          <property name="checkable" >
           <bool>true</bool>
@@ -246,7 +233,7 @@
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>40</width>
            <height>20</height>
@@ -261,7 +248,7 @@
        <property name="maximumSize" >
         <size>
          <width>16777215</width>
-         <height>80</height>
+         <height>10000</height>
         </size>
        </property>
        <property name="alternatingRowColors" >
@@ -274,7 +261,8 @@
   </widget>
   <action name="actionStart" >
    <property name="icon" >
-    <iconset/>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Start</string>
@@ -282,7 +270,8 @@
   </action>
   <action name="actionStop" >
    <property name="icon" >
-    <iconset/>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
    </property>
    <property name="text" >
     <string>S&amp;top</string>
@@ -290,7 +279,9 @@
   </action>
   <action name="actionSelectAll" >
    <property name="icon" >
-    <iconset/>
+    <iconset>
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text" >
     <string>Select &amp;All</string>
@@ -298,7 +289,9 @@
   </action>
   <action name="actionUnselectAll" >
    <property name="icon" >
-    <iconset/>
+    <iconset>
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text" >
     <string>&amp;Unselect All</string>
@@ -316,7 +309,9 @@
   </action>
   <action name="actionCollapseAll" >
    <property name="icon" >
-    <iconset/>
+    <iconset>
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text" >
     <string>&amp;Collapse All</string>
@@ -324,7 +319,9 @@
   </action>
   <action name="actionExpandAll" >
    <property name="icon" >
-    <iconset/>
+    <iconset>
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text" >
     <string>&amp;Expand All</string>
@@ -337,7 +334,8 @@
   </action>
   <action name="actionColumns" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >:/icons/columns.png</iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/columns.png</normaloff>:/icons/columns.png</iconset>
    </property>
    <property name="text" >
     <string>C&amp;olumns...</string>
@@ -350,7 +348,8 @@
   </action>
   <action name="actionSettings" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >:/icons/properties.png</iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/properties.png</normaloff>:/icons/properties.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Settings...</string>

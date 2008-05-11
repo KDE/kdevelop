@@ -51,9 +51,8 @@ class ResultsProxyModel;
  *
  * \sa \ref views
  */
-
 class ResultsViewController : public QObject,
-            public ViewControllerCommon
+                              public ViewControllerCommon
 {
     Q_OBJECT
 

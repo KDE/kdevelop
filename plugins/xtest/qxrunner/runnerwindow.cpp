@@ -69,8 +69,8 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     QAction* actionResults = m_ui.dockResults->toggleViewAction();
     actionResults->setText(m_ui.actionResults->text());
 
-    m_ui.menuView->insertAction(m_ui.actionResults, actionResults);
-    m_ui.menuView->removeAction(m_ui.actionResults);
+    //m_ui.menuView->insertAction(m_ui.actionResults, actionResults);
+    //m_ui.menuView->removeAction(m_ui.actionResults);
 
     qSwap(m_ui.actionResults, actionResults);
     delete actionResults;
@@ -1021,9 +1021,8 @@ void RunnerWindow::adjustMenus() const
         index = index.sibling(index.row() + 1, 0);
     }
 
-    QList<QAction*> viewActions = m_ui.menuView->actions();
-
-    /*    for (int i = 3; i < 6; i++) {
+    /*QList<QAction*> viewActions = m_ui.menuView->actions();
+      for (int i = 3; i < 6; i++) {
             viewActions[i]->setVisible(haveChildren);
         }*/
 }

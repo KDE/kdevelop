@@ -29,6 +29,7 @@
 #define RUNNERMODEL_H
 
 #include "qxrunner_global.h"
+#include "qxrunnerexport.h"
 
 #include <QAbstractItemModel>
 #include <QMutex>
@@ -63,7 +64,6 @@ class RunnerModelThread;
  *
  * \sa \ref runner_model_item and \ref implementation_ascpects
  */
-
 class QXRUNNER_EXPORT RunnerModel : public QAbstractItemModel
 {
     Q_OBJECT
