@@ -2756,6 +2756,7 @@ bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 SetAst::SetAst()
+    : m_parentScope(false)
 {
 }
 
@@ -2769,7 +2770,7 @@ void SetAst::writeBack( QString& ) const
 
 bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "set" || func.arguments.size() < 1 )
+    if ( func.name.toLower() != "set" || func.arguments.isEmpty() )
         return false;
 
     m_variableName = func.arguments.first().value;
@@ -2780,17 +2781,19 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     //look for the FORCE argument. Thanks to the CMake folks for letting
     //me read their code
     m_forceStoring = ( argSize > 4 && func.arguments.last().value == "FORCE" );
-
-    m_storeInCache = ( argSize > 3 && func.arguments[argSize - 3 - ( m_forceStoring ? 1 : 0 )].value == "CACHE" );
+    m_parentScope  = ( argSize > 2 && func.arguments.last().value == "PARENT_SCOPE" );
+    m_storeInCache = ( argSize > 3 &&
+        func.arguments[argSize - 3 - ( m_forceStoring || m_parentScope ? 1 : 0 )].value == "CACHE" );
 
     int numCacheArgs = ( m_storeInCache ? 3 : 0 );
     int numForceArgs = ( m_forceStoring ? 1 : 0 );
-    if ( argSize > 1 + numCacheArgs + numForceArgs )
+    int numParentScope = ( m_parentScope ? 1 : 0 );
+    if ( argSize > 1 + numCacheArgs + numForceArgs + numParentScope )
     {
         QList<CMakeFunctionArgument> args = func.arguments;
         QList<CMakeFunctionArgument>::const_iterator it, itEnd;
         it = args.begin() + 1;
-        itEnd = args.end() - numCacheArgs - numForceArgs;
+        itEnd = args.end() - numCacheArgs - numForceArgs - numParentScope;
         for ( ; it != itEnd; ++it )
             m_values.append( it->value );
     }
@@ -2803,6 +2806,10 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         return false;
     }
+    if((m_storeInCache || m_forceStoring) && m_parentScope)
+        return false;
+    if(func.arguments.last().value=="FORCE" && !m_forceStoring)
+        return false;
 
     return true;
 }

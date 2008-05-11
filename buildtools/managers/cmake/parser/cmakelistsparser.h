@@ -67,6 +67,7 @@ struct CMakeFunctionArgument
     bool quoted;
     quint32 line;
     quint32 column;
+    static QMap<QChar, QChar> scapings;
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
@@ -110,6 +111,7 @@ private:
     static bool readCMakeFunction( cmListFileLexer*,
                                     CMakeFunctionDesc&,
                                     const QString& fileName);
+                                    
 //     static bool parseCMakeFunction( cmListFileLexer*,
 //                                     CMakeFunctionDesc&,
 //                                     const QString& fileName, CMakeAst* parent);

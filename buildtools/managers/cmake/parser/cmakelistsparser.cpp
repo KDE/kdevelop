@@ -26,31 +26,39 @@
 #include <QStack>
 #include <KDebug>
 
+QMap<QChar, QChar> whatToScape()
+{
+    QMap<QChar, QChar> ret;
+    ret['n']='\n';
+    ret['r']='\r';
+    ret['t']='\t';
+    ret['\\']='\\';
+    return ret;
+}
+
+QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
+
 QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
     QString newValue;
+    bool escape=false;
     for(int i=0; i<value.size(); i++)
     {
-        if(value[i]=='\\') {
-            i++;
-            switch(value[i].toAscii())
-            {
-                case 'n':
-                    newValue += '\n';
-                    break;
-                case 't':
-                    newValue += '\t';
-                    break;
-                case '\\':
-                    newValue += '\\';
-                    break;
-                default:
-                    newValue += value[i];
-                    break;
-            }
-        } else
+        if(!escape && value[i]=='\\') 
+        {
+            escape=true;
+        }
+        else if(escape && scapings.contains(value[i])) {
+            newValue += scapings[value[i]];
+            escape = false;
+        }
+        else
+        {
             newValue += value[i];
+            escape = false;
+        }
     }
+//     qDebug() << "escapiiiiiiiiing" << value << newValue;
     return newValue;
 }
 
