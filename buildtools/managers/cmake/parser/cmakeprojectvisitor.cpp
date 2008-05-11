@@ -34,6 +34,7 @@
 #include <KProcess>
 #include <KDebug>
 #include <QHash>
+#include <QQueue>
 #include <QFile>
 #include <QDir>
 #include <QtCore/qglobal.h>
@@ -76,7 +77,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
     }
     else
     {
-        kDebug(9032) << "error:" << varName << " not found";
+        kDebug(9032) << "warning:" << varName << " not found";
         return QStringList();
     }
 }
@@ -206,19 +207,33 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
     }
 }
 
-int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
+void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources)
 {
-//     QString name = resolveVariable(exec->executable(), m_vars).join(";");
-    VisitorState p=m_backtrace.front();
+    VisitorState p;
+    QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
+    QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();
+    kDebug() << "holaaaaaaaa" << filename;
+    for(; it!=m_backtrace.constEnd(); ++it)
+    {
+        kDebug() << "caca!" << it->code << filename;
+        if(filename!=it->code->at(it->line).filePath)
+            break;
+        
+        p=*it;
+    }
+    
     DUChainWriteLocker lock(DUChain::lock());
     Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
-    d->setIdentifier( Identifier(exec->executable()) );
-    m_declarationsPerTarget.insert(exec->executable(), d);
-    kDebug(9042) << "looooooool" << d
-        << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
-    printBacktrace(m_backtrace);
+    d->setIdentifier( Identifier(id) );
+    m_declarationsPerTarget.insert(id, d);
+//     kDebug(9042) << "looooooool" << d
+//         << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
+    m_filesPerTarget.insert(id, sources);
+}
 
-    m_filesPerTarget.insert(exec->executable(), exec->sourceLists());
+int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
+{
+    defineTarget(exec->executable(), exec->sourceLists());
     kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
         << "was" << exec->content()[exec->line()].writeBack();
     return 1;
@@ -226,13 +241,7 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    VisitorState p=m_backtrace.front();
-    DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), Declaration::GlobalScope, p.context);
-    d->setIdentifier( Identifier(lib->libraryName()) );
-    m_declarationsPerTarget.insert(lib->libraryName(), d);
-    
-    m_filesPerTarget.insert(lib->libraryName(), lib->sourceLists());
+    defineTarget(lib->libraryName(), lib->sourceLists());
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
 }
@@ -504,7 +513,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
         return 1;
     if(m_cache->contains(fprog->variableName()))
     {
-        kDebug(9042) << "FindProgram: cache" << fprog->variableName();
+        kDebug(9042) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName());
         m_vars->insert(fprog->variableName(), m_cache->value(fprog->variableName()).split(';'));
         return 1;
     }
@@ -699,6 +708,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     Macro m;
     m.name = macro->macroName();
     m.knownArgs=macro->knownArgs();
+    m.isFunction=false;
     CMakeFileContent::const_iterator it=macro->content().constBegin()+macro->line();
     CMakeFileContent::const_iterator itEnd=macro->content().constEnd();
     int lines=0;
@@ -733,6 +743,53 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
             func->addArgument(AbstractType::Ptr(delayed));
         }
         d->setAbstractType( AbstractType::Ptr(func) );
+    }
+
+    return lines;
+}
+
+int CMakeProjectVisitor::visit(const FunctionAst *func)
+{
+    kDebug(9042) << "Adding function:" << func->name();
+    Macro m;
+    m.name = func->name();
+    m.knownArgs=func->knownArgs();
+    m.isFunction=true;
+    CMakeFileContent::const_iterator it=func->content().constBegin()+func->line();
+    CMakeFileContent::const_iterator itEnd=func->content().constEnd();
+
+    int lines=0;
+    for(; it!=itEnd; ++it)
+    {
+        if(it->name.toLower()=="endfunction")
+            break;
+        m.code += *it;
+        ++lines;
+    }
+    ++lines; //We do not want to return to endmacro
+    m_macros->insert(func->name(), m);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(func->name()));
+    SimpleRange sr=func->content().first().arguments.first().range();
+    if(!decls.isEmpty())
+    {
+        int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+        m_topctx->createUse(idx, sr, 0);
+    }
+    else
+    {
+        Declaration *d = new Declaration(m_topctx->url(), sr, Declaration::GlobalScope, m_topctx);
+        d->setIdentifier( Identifier(func->name()) );
+        
+        FunctionType* funct=new FunctionType();
+        foreach(const QString& arg, func->knownArgs())
+        {
+            DelayedType *delayed=new DelayedType;
+            delayed->setIdentifier( arg );
+            funct->addArgument(AbstractType::Ptr(delayed));
+        }
+        d->setAbstractType( AbstractType::Ptr(funct) );
     }
 
     return lines;
@@ -1015,12 +1072,51 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "FileAst: read ";
         }
             break;
-//         case FileAst::GLOB:
-//         case FileAst::GLOB_RECURSE:
-//         case FileAst::REMOVE:
-//         case FileAst::REMOVE_RECURSE:
-//         case FileAst::MAKE_DIRECTORY:
-//         case FileAst::RELATIVE_PATH:
+        case FileAst::GLOB: {
+            QString current;
+            if(file->path().isEmpty())
+                current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+            else
+                current=file->path();
+            QDir d(current);
+            QStringList matches=d.entryList(file->globbingExpressions());
+            m_vars->insert(file->variable(), matches);
+            kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
+        } break;
+        case FileAst::GLOB_RECURSE: {
+            QString current;
+            if(file->path().isEmpty())
+                current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+            else
+                current=file->path();
+            QQueue<QString> candidates;
+            candidates.enqueue(current);
+            QStringList directories;
+            while(!candidates.isEmpty())
+            {
+                QString dir=candidates.dequeue();
+                directories.append(dir);
+                QDir direc(dir);
+                foreach(const QString& s, direc.entryList(QDir::Dirs))
+                    candidates.enqueue(s);
+            }
+            
+            QDir d(current);
+            QStringList matches=d.entryList(file->globbingExpressions());
+            m_vars->insert(file->variable(), matches);
+            kDebug(9042) << "file glob_recurse" << file->path() << file->globbingExpressions() << matches;
+        }   break;
+        case FileAst::REMOVE:
+        case FileAst::REMOVE_RECURSE:
+            kDebug(9042) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
+            break;
+        case FileAst::MAKE_DIRECTORY:
+            kDebug(9042) << "warning. file-make_directory. KDevelop won't create anything.";
+            break;
+        case FileAst::RELATIVE_PATH:
+            m_vars->insert(file->variable(), QStringList(KUrl::relativePath(file->directory(), file->path())));
+            kDebug(9042) << "file relative_path" << file->directory() << file->path();
+            break;
         case FileAst::TO_CMAKE_PATH:
 #ifdef Q_OS_WIN
             m_vars->insert(file->variable(), file->path().split(';'));
@@ -1028,12 +1124,18 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             m_vars->insert(file->variable(), file->path().split(':'));
 #endif
             kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
-                    << m_vars->value(file->variable()) << "file:" << file->path();
+                    << m_vars->value(file->variable()) << "path:" << file->path();
             break;
-//         case FileAst::TO_NATIVE_PATH:
-//             break;
+        case FileAst::TO_NATIVE_PATH:
+#ifdef Q_OS_WIN
+            m_vars->insert(file->variable(), file->path().replace('/', QDir::separator()));
+#endif
+            kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
+                    << m_vars->value(file->variable()) << "path:" << file->path();
+            break;
         default:
-            kDebug(9032) << "error: not implemented. file:" << file->type() << "variable:" << file->variable() << "file:" << file->path();
+            kDebug(9032) << "error: not implemented. file:" << file->type() <<
+                "variable:" << file->variable() << "file:" << file->path() << file->content()[file->line()].arguments[0].value;
             break;
     }
     return 1;

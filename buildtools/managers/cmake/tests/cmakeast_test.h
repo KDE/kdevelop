@@ -220,6 +220,10 @@ private slots:
     void testMacroGoodParse_data();
     void testMacroBadParse();
     void testMacroBadParse_data();
+    void testFunctionGoodParse();
+    void testFunctionGoodParse_data();
+    void testFunctionBadParse();
+    void testFunctionBadParse_data();
     void testMakeDirectoryGoodParse();
     void testMakeDirectoryGoodParse_data();
     void testMakeDirectoryBadParse();

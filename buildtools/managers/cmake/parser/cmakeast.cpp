@@ -62,6 +62,7 @@ CMAKE_REGISTER_AST( FindPackageAst, find_package )
 CMAKE_REGISTER_AST( FindPathAst, find_path )
 CMAKE_REGISTER_AST( FindProgramAst, find_program )
 CMAKE_REGISTER_AST( ForeachAst, foreach )
+CMAKE_REGISTER_AST( FunctionAst, function )
 CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
 CMAKE_REGISTER_AST( GetDirPropertyAst, get_directory_property )
 CMAKE_REGISTER_AST( GetSourceFilePropAst, get_source_file_property )
@@ -1072,6 +1073,7 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FileAst::FileAst()
+    : m_newlineConsume(false), m_noHexConversion(false)
 {
 }
 
@@ -1085,13 +1087,10 @@ void FileAst::writeBack( QString& ) const
 
 bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "file" )
+    if ( func.name.toLower() != "file" || func.arguments.count()<2)
         return false;
 
-    if ( func.arguments.count()<2 )
-        return false;
-
-    QString type = func.arguments[0].value.toUpper();
+    QString type = func.arguments.first().value.toUpper();
     int min_args=-1;
     if(type=="WRITE") {
        m_type = WRITE;
@@ -1125,6 +1124,12 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         min_args=3;
     } else if(type=="TO_NATIVE_PATH") {
         m_type = TO_NATIVE_PATH;
+        min_args=3;
+    } else if(type=="STRINGS") {
+        m_type = STRINGS;
+        min_args=3;
+    } else if(type=="DOWNLOADS") {
+        m_type = DOWNLOAD;
         min_args=3;
     }
 
@@ -1178,9 +1183,89 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             break;
         case TO_CMAKE_PATH:
         case TO_NATIVE_PATH:
-            addOutputArgument(func.arguments[1]);
+            addOutputArgument(func.arguments[2]);
             m_path = func.arguments[1].value;
             m_variable = func.arguments[2].value;
+            break;
+        case DOWNLOAD:
+            m_url=func.arguments[1].value;
+            m_path=func.arguments[2].value;
+            it=func.arguments.constBegin()+3;
+            itEnd=func.arguments.constEnd();
+            for(; it!=itEnd; ++it)
+            {
+                if(it->value=="STATUS")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_variable = it->value;
+                }
+                else if(it->value=="LOG")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_message = it->value;
+                }
+            }
+            break;
+        case STRINGS:
+            m_path=func.arguments[1].value;
+            m_variable=func.arguments[2].value;
+            it=func.arguments.constBegin()+3;
+            itEnd=func.arguments.constEnd();
+            for(; it!=itEnd; ++it)
+            {
+                bool corr;
+                if(it->value=="LIMIT_COUNT")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_limitCount = it->value.toInt(&corr);
+                    if(!corr) return false;
+                }
+                else if(it->value=="LIMIT_INPUT")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_limitInput = it->value.toInt(&corr);
+                    if(!corr) return false;
+                }
+                else if(it->value=="LIMIT_OUTPUT")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_limitOutput = it->value.toInt(&corr);
+                    if(!corr) return false;
+                }
+                else if(it->value=="LENGTH_MINIMUM")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_lengthMinimum = it->value.toInt(&corr);
+                    if(!corr) return false;
+                }
+                else if(it->value=="LENGTH_MAXIMUM")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_lengthMaximum = it->value.toInt(&corr);
+                    if(!corr) return false;
+                }
+                else if(it->value=="REGEX")
+                {
+                    ++it;
+                    if(it==itEnd) break;
+                    m_regex = it->value;
+                }
+                else if(it->value=="NEWLINE_CONSUME")
+                {
+                    m_newlineConsume=true;
+                }
+                else if(it->value=="NO_HEX_CONVERSION")
+                {
+                    m_noHexConversion=true;
+                }
+            }
             break;
     }
     return true;
@@ -2334,6 +2419,31 @@ bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
 
     m_macroName = func.arguments.first().value.toLower();
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
+    for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
+        m_knownArgs.append( it->value );
+
+    return true;
+}
+
+FunctionAst::FunctionAst()
+{
+}
+
+FunctionAst::~FunctionAst()
+{
+}
+
+void FunctionAst::writeBack( QString& ) const
+{
+}
+
+bool FunctionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if ( func.name.toLower() != "function" || func.arguments.isEmpty())
+        return false;
+
+    m_name = func.arguments.first().value.toLower();
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
     for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
         m_knownArgs.append( it->value );

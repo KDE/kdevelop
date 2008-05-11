@@ -9,6 +9,7 @@ struct Macro
     QString name;
     QStringList knownArgs;
     CMakeFileContent code;
+    bool isFunction;
 };
 
 typedef QHash<QString, Macro> MacroMap;

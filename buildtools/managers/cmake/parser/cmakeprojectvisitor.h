@@ -64,6 +64,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const FindPackageAst * );
         virtual int visit( const MarkAsAdvancedAst * );
         virtual int visit( const FindProgramAst * );
+        virtual int visit( const FunctionAst * );
         virtual int visit( const FindPathAst * );
         virtual int visit( const FindLibraryAst * );
         virtual int visit( const FindFileAst * );
@@ -117,6 +118,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         const QMap<QString, KDevelop::Declaration*>& declarationsPerTarget() { return m_declarationsPerTarget; }
         QStringList resolveVariable(const QString &exp);
     private:
+        void defineTarget(const QString& id, const QStringList& sources);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
 
         struct VisitorState

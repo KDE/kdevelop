@@ -32,47 +32,26 @@
 
 class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
 {
-public:
-    CMakeAst() : m_line(-1) { }
-    virtual ~CMakeAst() { /*qDeleteAll( m_children );*/ }
-
-    /**
-     * Adds a child Ast Node to this node. This will only have uses in cases
-     * where custom macros are used since CMakeLists.txt files generally have
-     * a pretty flat tree structure
-     */
-//     virtual void addChildAst( CMakeAst* node ) { m_children.append( node ); }
-
-    /**
-     * Indicates if the Ast has children
-     * @return true if the Ast has children
-     * @return false if the Ast has no children
-     */
-//     bool hasChildren() const { return m_children.isEmpty(); }
-
-    /**
-     * Get the children of this ast
-     * @return the list of this ast's children
-     */
-//     QList<CMakeAst*> children() const  { return m_children; }
+    public:
+        CMakeAst() : m_line(-1) { }
+        virtual ~CMakeAst() { /*qDeleteAll( m_children );*/ }
+        
+        virtual int accept(CMakeAstVisitor * v) const { return v->visit(this); }
     
-    virtual int accept(CMakeAstVisitor * v) const { return v->visit(this); }
-
-    /**
-     * Writes the information stored in the Ast into the @p buffer.
-     * All Asts that are a child of this Ast are written back as well.
-     */
-    virtual void writeBack(QString& buffer) const;
+        /**
+        * Writes the information stored in the Ast into the @p buffer.
+        * All Asts that are a child of this Ast are written back as well.
+        */
+        virtual void writeBack(QString& buffer) const;
+        
+        virtual bool isDeprecated() const { return false; }
     
-    virtual bool isDeprecated() const { return false; }
-
-    virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
-
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
     
-    int line() const { return m_line; }
-    const CMakeFileContent & content() const { return m_content; }
-    void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
-    const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
+        int line() const { return m_line; }
+        const CMakeFileContent & content() const { return m_content; }
+        void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
+        const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
     private:
         CMakeAst( const CMakeAst&  ) /*: m_children( ast.m_children )*/ {}
         
@@ -312,7 +291,7 @@ CMAKE_END_AST_CLASS( ExportLibraryDepsAst )
 
 CMAKE_BEGIN_AST_CLASS( FileAst )
 enum TypeFile { WRITE, APPEND, READ, GLOB, GLOB_RECURSE, REMOVE, REMOVE_RECURSE,
-            MAKE_DIRECTORY, RELATIVE_PATH, TO_CMAKE_PATH, TO_NATIVE_PATH };
+            MAKE_DIRECTORY, RELATIVE_PATH, TO_CMAKE_PATH, TO_NATIVE_PATH, STRINGS, DOWNLOAD };
 CMAKE_ADD_AST_MEMBER(TypeFile, TypeFile, type, Type)
 CMAKE_ADD_AST_MEMBER(QString, const QString&, path, Path )
 CMAKE_ADD_AST_MEMBER(QString, const QString&, variable, Variable )
@@ -320,6 +299,18 @@ CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
 CMAKE_ADD_AST_MEMBER(QString, const QString&, message, Message )
 CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, globbingExpressions, GlobbingExpressions )
 CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, directories, Directories )
+
+CMAKE_ADD_AST_MEMBER(KUrl, const KUrl&, url, Url )
+CMAKE_ADD_AST_MEMBER(int, int, timeout, Timeout )
+
+CMAKE_ADD_AST_MEMBER(int, int, limitCount, LimitCount)
+CMAKE_ADD_AST_MEMBER(int, int, limitInput, LimitInput)
+CMAKE_ADD_AST_MEMBER(int, int, limitOutput, LimitOutput)
+CMAKE_ADD_AST_MEMBER(int, int, lengthMinimum, LenghtMinimum)
+CMAKE_ADD_AST_MEMBER(int, int, lengthMaximum, LenghtMaximum)
+CMAKE_ADD_AST_MEMBER(bool, bool, newlineConsume, NewlineConsume)
+CMAKE_ADD_AST_MEMBER(bool, bool, noHexConversion, NoHexConversion)
+CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
 CMAKE_END_AST_CLASS( FileAst )
 
 
@@ -836,14 +827,12 @@ CMAKE_ADD_AST_MEMBER( bool, bool, append, append)
 CMAKE_ADD_AST_MEMBER( QString, const QString &, filename, filename)
 CMAKE_END_AST_CLASS( ExportAst )
 
+CMAKE_BEGIN_AST_CLASS( FunctionAst )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, knownArgs, KnownArgs )
+CMAKE_END_AST_CLASS( FunctionAst )
 
 CMAKE_BEGIN_AST_CLASS( ReturnAst )
 CMAKE_END_AST_CLASS( ReturnAst )
 
 #endif
-
-
-
-
-
-

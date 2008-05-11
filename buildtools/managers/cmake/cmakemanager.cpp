@@ -744,7 +744,8 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path)
         {
             CacheLine c;
             c.readLine(line);
-            ret[c.name()]=c.value();
+            if(c.flag().isEmpty())
+                ret[c.name()]=c.value();
 //             kDebug(9042) << "Cache line" << line << c.name();
         }
     }
