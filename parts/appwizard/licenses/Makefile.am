@@ -3,4 +3,4 @@ METASOURCES = AUTO
 
 kdevelopdatadir = ${kde_datadir}/kdevelop
 licensesdir = ${kdevelopdatadir}/licenses
-licenses_DATA = GPL LGPL BSD QPL GPL+Qt-Exception
+licenses_DATA = GPL LGPL BSD QPL GPL+Qt-Exception MIT NCSA

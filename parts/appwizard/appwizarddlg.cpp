@@ -516,7 +516,8 @@ void AppWizardDialog::accept()
 	// These are the licenses known to KDE-3.2 KAboutData, KDevelop doesn't have all of these as prepared options today
 	QString license = license_combo->currentText();
 	if ( license == "GPL" || license == "GPL_V2" || license == "LGPL" || license == "LGPL_V2"||
-		license == "BSD" || license == "Artistic" || license == "QPL" || license == "QPL_V1_0" )
+		license == "BSD" || license == "NCSA" || license == "MIT" || license == "Artistic" || 
+		license == "QPL" || license == "QPL_V1_0" )
 	{
 		m_pCurrentAppInfo->subMap.insert("LICENSE", license );
 	}
