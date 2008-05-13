@@ -1,11 +1,11 @@
 Begin4
 Title:          kdevelop
-Version:        3.5.1
-Entered-date:   2008-02-13
+Version:        3.5.2
+Entered-date:   2008-05-13
 Description:    Integrated Development Environment for KDE
 Keywords:       KDE X11 desktop Qt 
 Author:         http://bugs.kde.org/ (KDE Bugtracking System)
-Primary-site:   http://www.kde.org/download/
+Primary-site:   http://www.kdevelop.org/index.html?filename=download.html
 Platforms:      Unix, Qt
 Copying-policy: GPL, Artistic
 End
