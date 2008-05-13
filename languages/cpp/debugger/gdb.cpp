@@ -45,9 +45,13 @@ GDB::GDB()
 {
     KConfigGroup config(KGlobal::config(), "GDB Debugger");
     // FIXME: verify that default value leads to something sensible
-    KUrl gdbUrl(config.readEntry("GDB Path", ""));   
-    // FIXME: verify its' a local path.
-    gdbBinary_ = gdbUrl.toLocalFile(KUrl::RemoveTrailingSlash);
+    KUrl gdbUrl = config.readEntry("GDB Path", "");
+    if (gdbUrl.isEmpty()) {
+        gdbBinary_ = "gdb";
+    } else {
+        // FIXME: verify its' a local path.
+        gdbBinary_ = gdbUrl.toLocalFile(KUrl::RemoveTrailingSlash);
+    }
 
     process_ = new KProcess(this);
     process_->setOutputChannelMode( KProcess::SeparateChannels ); 
@@ -354,8 +358,8 @@ void GDB::processErrored(QProcess::ProcessError error)
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly.",
-                 gdbBinary_,
-                 i18n("Could not start debugger")));
+                 gdbBinary_),
+            i18n("Could not start debugger"));
 
         /* FIXME: make sure the controller gets rids of GDB instance
         emit debuggerAbnormalExit(); 
