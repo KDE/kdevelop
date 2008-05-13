@@ -133,7 +133,9 @@ bool GDB::isReady() const
 void GDB::interrupt()
 {
     //TODO:win32 Porting needed
-    ::kill(process_->pid(), SIGINT);
+    int pid = process_->pid();
+    if (pid != 0)
+        ::kill(pid, SIGINT);
 }
 
 GDBCommand* GDB::currentCommand() const
