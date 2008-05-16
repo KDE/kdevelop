@@ -22,8 +22,12 @@
 
 #include "cpphighlighting.h"
 
-#include <ktexteditor/smartrange.h>
+#include <QApplication>
+#include <QPalette>
 
+#include <kapplication.h>
+#include <ktexteditor/smartrange.h>
+#include <kcolorutils.h>
 #include <topducontext.h>
 #include <declaration.h>
 #include <use.h>
@@ -36,13 +40,48 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-uint colors[] = {0x421919/* gray red */, 0x422f19 /* gray orange */,0x2a4219 /* gray green/orange */, 0x194219 /* gray pure green*/, 0x194239 /* gray green/blue */, 0x192942 /* gray blue */, 0x191c42 /* gray deep blue */, 0x321942 /* gray violet blue */, 0x42193b /* gray violet */, 0};
+QList<uint>  colors;
+uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
+uint totalColorInterpolationSteps = 6 * 0xff; //The total ring of all colors: 0xff0000 -> 0xffff00 -> 0x00ff00 -> 0x00ffff -> 0x0000ff -> 0xff00ff -> ...: 6 * 256 steps
+uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
+uchar foregroundRatio = 110; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
 
-const uint numColors = 9;
+///@param ratio ratio between 0 and 0xff
+uint mix(uint color1, uint color2, uchar ratio) {
+  return (((quint64)color1) * ((quint64)0xff - ratio) + ((quint64)color2) * ratio) / (quint64)0xff;
+}
+
+///Generates a color from the color wheel. @param step Step-number, one of totalColorInterpolationSteps
+uint interpolate(uint step) {
+  uint waypoint = step / 0xff;
+  step -= waypoint * 0xff;
+  waypoint %= 6;
+  uint nextWaypoint = (waypoint + 1) % 6;
+  uint interpolationWaypoints[] = {0xff0000, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00ff};
+  return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], step);
+}
+
+void generateColors(int count) {
+  colors.clear();
+  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
+  uint standardColor(0u); //QApplication::palette().foreground().color().rgb());
+  uint step = totalColorInterpolationSteps / count;
+  uint currentPos = colorOffset;
+  kDebug() << "text color:" << (void*)QApplication::palette().text().color().rgb();
+  for(int a = 0; a < count; ++a) {
+    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps << ":" << (void*)interpolate( currentPos );
+    colors.append( mix(interpolate( currentPos ), standardColor, foregroundRatio) );
+    //colors.append( interpolate(currentPos).rgb() );
+    currentPos += step;
+  }
+  colors.append(standardColor);
+  validColorCount = colors.count()-1;
+}
 
 CppHighlighting::CppHighlighting( QObject * parent )
   : QObject(parent), m_localColorization(true), m_useClassCache(false)
 {
+  generateColors(10);
 }
 
 CppHighlighting::~CppHighlighting( )
@@ -195,10 +234,8 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
         a->setDynamicAttribute(Attribute::ActivateMouseIn, d);
         break;
     }
-    if( color ) {
-      a->setForeground(QColor((color*5)/2));//0xffffff-(color)));
-                       //a->setBackground(QColor((color*7)));
-    }
+    if( color )
+      a->setForeground(QColor(color));
   }
 
   return a;
@@ -213,7 +250,7 @@ void CppHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 }
 
 ColorMap emptyColorMap() {
-  ColorMap ret(numColors+1, 0);
+  ColorMap ret(validColorCount+1, 0);
  return ret;
 }
 
@@ -310,7 +347,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   
   foreach (Declaration* dec, context->localDeclarations()) {
     //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
-    uint colorNum = dec->identifier().hash() % numColors;
+    uint colorNum = dec->identifier().hash() % validColorCount;
 
     if( declarationsForColors[colorNum] ) {
       takeFreeColors << dec; //Use one of the colors that stays free
@@ -324,13 +361,13 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   }
 
   foreach( Declaration* dec, takeFreeColors ) {
-    uint colorNum = dec->identifier().hash() % numColors;
+    uint colorNum = dec->identifier().hash() % validColorCount;
     uint oldColorNum = colorNum;
     while( declarationsForColors[colorNum] ) {
-      colorNum = (colorNum+1) % numColors;
+      colorNum = (colorNum+1) % validColorCount;
       if( colorNum == oldColorNum ) {
         //Could not allocate a unique color, what now? Just pick the black color.
-        colorNum = numColors;
+        colorNum = validColorCount;
         break;
       }
     }
@@ -342,7 +379,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
 
   for(int a = 0; a < context->uses().count(); ++a) {
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
-    uint colorNum = numColors;
+    uint colorNum = validColorCount;
     if( colorsForDeclarations.contains(decl) )
       colorNum = colorsForDeclarations[decl];
     highlightUse(context, a, colors[colorNum]);
