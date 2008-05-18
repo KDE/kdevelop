@@ -14,9 +14,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define MUTEXINTERFACE_H
 ///this ugly hack is necessary because the general concept of the boost thread-library wants
 ///to force us to use scoped lock-classes, but we want to do that work ourselves.
-#define private public
 #include <boost/thread/recursive_mutex.hpp>
-#undef private
 #include <boost/thread/xtime.hpp>
 
 class MutexInterfaceImpl {
@@ -33,7 +31,6 @@ class MutexInterfaceImpl {
     MutexInterfaceImpl() {}
 
     void lockCountUp() const {
-      m_.do_lock();
     }
 
     bool tryLockCountUp() const {
