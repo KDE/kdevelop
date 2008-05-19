@@ -1717,8 +1717,7 @@ struct TestContext {
   }
 
   ~TestContext() {
-    foreach(TestContext* ctx, imports)
-      unImport(ctx);
+    unImport(imports);
     DUChainWriteLocker lock(DUChain::lock());
     delete m_context;
   }
@@ -1736,7 +1735,8 @@ struct TestContext {
     //Verify that no other contexts are imported
     DUChainReadLocker lock(DUChain::lock());
     foreach(TestContext* context, allContexts)
-      QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
+      if(context != this)
+        QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
   }
 
   void collectImports(QSet<TestContext*>& collected) {
@@ -1755,13 +1755,19 @@ struct TestContext {
     m_context->addImportedParentContext(ctx->m_context);
   }
   
-  void unImport(TestContext* ctx) {
-    if(!imports.contains(ctx))
-      return;
-    imports.removeAll(ctx);
-    ctx->importers.removeAll(this);
+  void unImport(QList<TestContext*> ctxList) {
+    QList<TopDUContext*> list;
+
+    foreach(TestContext* ctx, ctxList) {
+      if(!imports.contains(ctx))
+        continue;
+      list << ctx->m_context;
+
+      imports.removeAll(ctx);
+      ctx->importers.removeAll(this);
+    }
     DUChainWriteLocker lock(DUChain::lock());
-    m_context->removeImportedParentContext(ctx->m_context);
+    m_context->removeImportedParentContexts(list);
   }
 
   QList<TestContext*> imports;
@@ -1774,6 +1780,7 @@ struct TestContext {
 
 void TestDUChain::testImportStructure()
 {
+  clock_t startClock = clock();
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
   int cycles = 5;
   for(int t = 0; t < cycles; ++t) {
@@ -1801,16 +1808,24 @@ void TestDUChain::testImportStructure()
       for(int a = 0; a < contextCount; a++) {
         //Import up to 5 random other contexts into each context
         int removeCount = rand() % 3;
+        QSet<TestContext*> removeImports;
         for(int i = 0; i < removeCount; ++i)
           if(allContexts[a]->imports.count())
-            allContexts[a]->unImport(allContexts[a]->imports[rand() % allContexts[a]->imports.count()]);
+            removeImports.insert(allContexts[a]->imports[rand() % allContexts[a]->imports.count()]);
+        allContexts[a]->unImport(removeImports.toList());
         
         for(int b = 0; b < contextCount; b++)
           if(rand() % verifyOnceIn == 0)
             allContexts[b]->verify(allContexts);
       }
     }
+
+///@todo re-enable and find out why it crashes
+//     for(int a = 0; a < contextCount; ++a)
+//       delete allContexts[a];
   }
+  clock_t endClock = clock();
+  kDebug() << "total clock cycles needed for import-structure test:" << endClock - startClock;
 }
 
 void TestDUChain::testForwardDeclaration2()

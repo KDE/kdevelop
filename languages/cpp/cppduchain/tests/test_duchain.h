@@ -100,6 +100,7 @@ private slots:
   void testEnum();
   void testCaseUse();
   void testDefinitionUse();
+  void testImportStructure();
 
   void testCStruct();
   void testCStruct2();
