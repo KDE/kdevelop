@@ -74,8 +74,13 @@ QString ClassFunctionDeclaration::toString() const {
     return ClassMemberDeclaration::toString();
 
   KSharedPtr<FunctionType> function = type<FunctionType>();
-  Q_ASSERT(function);
-  return QString("member-function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  if(function) {
+    return QString("member-function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  } else {
+    QString type = abstractType() ? abstractType()->toString() : QString("<notype>");
+    kDebug(9505) << "A function has a bad type attached:" << type;
+    return QString("invalid member-function %1 type %2").arg(identifier().toString()).arg(type);
+  }
 }
 
 
