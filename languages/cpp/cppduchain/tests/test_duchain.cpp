@@ -1708,6 +1708,111 @@ void TestDUChain::testDefinitionUse()
   QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
 }
 
+struct TestContext {
+  TestContext() {
+    static int number = 0;
+    ++number;
+    DUChainWriteLocker lock(DUChain::lock());
+    m_context = new TopDUContext(HashedString(QString("%1").arg(number)), SimpleRange());
+  }
+
+  ~TestContext() {
+    foreach(TestContext* ctx, imports)
+      unImport(ctx);
+    DUChainWriteLocker lock(DUChain::lock());
+    delete m_context;
+  }
+
+  void verify(QList<TestContext*> allContexts) {
+
+
+    QCOMPARE(m_context->importedParentContexts().count(), imports.count());
+    //Compute a closure of all children, and verify that they are imported.
+    QSet<TestContext*> collected;
+    collectImports(collected);
+    collected.remove(this);
+    foreach(TestContext* context, collected)
+      QVERIFY(m_context->imports(context->m_context, SimpleCursor::invalid()));
+    //Verify that no other contexts are imported
+    DUChainReadLocker lock(DUChain::lock());
+    foreach(TestContext* context, allContexts)
+      QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
+  }
+
+  void collectImports(QSet<TestContext*>& collected) {
+    if(collected.contains(this))
+      return;
+    collected.insert(this);
+    foreach(TestContext* context, imports)
+      context->collectImports(collected);
+  }
+  void import(TestContext* ctx) {
+    if(imports.contains(ctx) || ctx == this)
+      return;
+    imports << ctx;
+    ctx->importers << this;
+    DUChainWriteLocker lock(DUChain::lock());
+    m_context->addImportedParentContext(ctx->m_context);
+  }
+  
+  void unImport(TestContext* ctx) {
+    if(!imports.contains(ctx))
+      return;
+    imports.removeAll(ctx);
+    ctx->importers.removeAll(this);
+    DUChainWriteLocker lock(DUChain::lock());
+    m_context->removeImportedParentContext(ctx->m_context);
+  }
+
+  QList<TestContext*> imports;
+
+  private:
+
+  TopDUContext* m_context;
+  QList<TestContext*> importers;
+};
+
+void TestDUChain::testImportStructure()
+{
+  ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
+  int cycles = 5;
+  for(int t = 0; t < cycles; ++t) {
+    QList<TestContext*> allContexts;
+    //Create a random structure
+    int contextCount = 300;
+    int verifyOnceIn = contextCount/*((contextCount*contextCount)/20)+1*/; //Verify once in every chances(not in all cases, becase else the import-structure isn't built on-demand!)
+    for(int a = 0; a < contextCount; a++)
+      allContexts << new TestContext();
+    for(int c = 0; c < cycles; ++c) {
+      kDebug() << "main-cycle" << t  << "sub-cycle" << c;
+      //Add random imports and compare
+      for(int a = 0; a < contextCount; a++) {
+        //Import up to 5 random other contexts into each context
+        int importCount = rand() % 5;
+        for(int i = 0; i < importCount; ++i)
+          allContexts[a]->import(allContexts[rand() % contextCount]);
+        
+        for(int b = 0; b < contextCount; b++)
+          if(rand() % verifyOnceIn == 0)
+            allContexts[b]->verify(allContexts);
+      }
+  
+      //Remove random imports and compare
+      for(int a = 0; a < contextCount; a++) {
+        //Import up to 5 random other contexts into each context
+        int removeCount = rand() % 3;
+        for(int i = 0; i < removeCount; ++i)
+          if(allContexts[a]->imports.count())
+            allContexts[a]->unImport(allContexts[a]->imports[rand() % allContexts[a]->imports.count()]);
+        
+        for(int b = 0; b < contextCount; b++)
+          if(rand() % verifyOnceIn == 0)
+            allContexts[b]->verify(allContexts);
+      }
+    }
+  }
+}
+
 void TestDUChain::testForwardDeclaration2()
 {
   QByteArray method("class Test; Test t; class Test {int i; class SubTest; }; class Test; Test::SubTest t2; class Test::SubTest{ int i;};");
