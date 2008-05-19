@@ -137,7 +137,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 #endif
 
   if(timeout == 0)
-    timeout = 10000;
+    timeout = 40000;
   
   QMutexLocker lock(&d->m_mutex);
 
