@@ -631,9 +631,11 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     CMakeFolderItem *it=0;
     if(m_folderPerUrl.contains(dir))
         it=m_folderPerUrl[dir];
+    KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
+    projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
+
     kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
     KDevelop::IProject* proj=it->project();
-    KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
 
     if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
     {
