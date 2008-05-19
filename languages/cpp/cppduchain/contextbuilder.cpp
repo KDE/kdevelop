@@ -289,8 +289,16 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
             topLevelContext->removeImportedParentContext(parent.data());
       }
 
+      QList< QPair<TopDUContext*, SimpleCursor> > realIncluded;
+      QList< QPair<TopDUContext*, SimpleCursor> > realTemporaryIncluded;
       foreach (LineContextPair included, *includes)
-        topLevelContext->addImportedParentContext(included.context, SimpleCursor(included.sourceLine, 0));
+        if(!included.temporary)
+          realIncluded << qMakePair(included.context, SimpleCursor(included.sourceLine, 0));
+        else
+          realTemporaryIncluded << qMakePair(included.context, SimpleCursor(included.sourceLine, 0));
+      
+      topLevelContext->addImportedParentContexts(realIncluded);
+      topLevelContext->addImportedParentContexts(realTemporaryIncluded, true);
     }
   }
 
@@ -767,11 +775,12 @@ public:
   
   virtual void visitName (NameAST * node)
   {
-    if (result)
+    if (result) {
       if (!builder->currentContext()->findDeclarations(builder->identifierForName(node), cursor).isEmpty()) {
         result = false;
       }else{
       }
+    }
   }
 };
 

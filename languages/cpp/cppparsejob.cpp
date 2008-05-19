@@ -153,11 +153,6 @@ void CPPParseJob::parseForeground() {
     //Create the sub-jobs and directly execute them.
     Q_ASSERT( !m_preprocessJob && !m_parseJob );
 
-    //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
-    //It must be low so the GUI stays fluid.
-    if(QThread::currentThread())
-      QThread::currentThread()->setPriority(QThread::LowestPriority);
-
     m_preprocessJob = new PreprocessJob(this);
     m_parseJob = new CPPInternalParseJob(this);
     m_preprocessJob->run();
@@ -345,7 +340,7 @@ void CPPInternalParseJob::run()
     }
 
     QList<LineContextPair> importedContentChains; //All content-chains imported while this parse-run. Also contains the temporary ones.
-    QList<DUContext*> importedTemporaryChains; //All imported content-chains that were imported temporarily from parents.
+    QList<TopDUContext*> importedTemporaryChains; //All imported content-chains that were imported temporarily from parents.
     QSet<KDevelop::HashedString> encounteredIncludeUrls; //All imported file-urls that were encountered this run.
 
     {
@@ -372,6 +367,7 @@ void CPPInternalParseJob::run()
               if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
                   if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
                     importedContentChains << context;
+                    importedContentChains.back().temporary = true;
                     importedTemporaryChains << context.context;
                   }
               }
@@ -447,8 +443,7 @@ void CPPInternalParseJob::run()
           DUChainWriteLocker l(DUChain::lock());
 
           //Remove the temporary chains first, so we don't get warnings from them
-          foreach ( DUContext* context, importedTemporaryChains )
-              contentContext->removeImportedParentContext(context);
+          contentContext->removeImportedParentContexts(importedTemporaryChains);
 
           QVector<DUContextPointer> imports = contentContext->importedParentContexts();
           foreach(DUContextPointer ctx, imports) {
@@ -485,16 +480,8 @@ void CPPInternalParseJob::run()
       DUChainWriteLocker l(DUChain::lock());
       ///Add all our imports to the re-used context, just to make sure they are there.
       foreach( const LineContextPair& import, importedContentChains )
-          contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
-    }
-
-    //Remove include-files we imported temporarily
-    if( !importedTemporaryChains.isEmpty() ) {
-        foreach ( DUContext* context, importedTemporaryChains ) {
-            DUChainWriteLocker l(DUChain::lock());
-            contentContext->removeImportedParentContext(context); ///@todo don't import temporary chains this way, it's too expensive. Achieve the effect of visibility in other ways.
-            removeContext(importedContentChains, dynamic_cast<TopDUContext*>(context));
-        }
+          if(!import.temporary && !contentContext->imports(import.context, SimpleCursor::invalid())) ///@todo we should import anyway, but it's horribel for performance
+            contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
     }
 
     ///Build/update the proxy-context

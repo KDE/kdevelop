@@ -95,6 +95,11 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
+    //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
+    //It must be low so the GUI stays fluid.
+    if(QThread::currentThread())
+      QThread::currentThread()->setPriority(QThread::LowestPriority);
+
     //kDebug(9007) << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
     kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document().str();

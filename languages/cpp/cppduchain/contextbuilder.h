@@ -54,10 +54,11 @@ namespace Cpp {
 }
 
 struct KDEVCPPDUCHAIN_EXPORT LineContextPair {
-  LineContextPair( KDevelop::TopDUContext* _context, int _sourceLine ) : context(_context), sourceLine(_sourceLine) {
+  LineContextPair( KDevelop::TopDUContext* _context, int _sourceLine ) : context(_context), sourceLine(_sourceLine), temporary(false) {
   }
   KDevelop::TopDUContext* context;
   int sourceLine;
+  bool temporary; //When this flag is set, the import will be added in a special way that is faster
 };
 
 typedef QList<LineContextPair> IncludeFileList;
