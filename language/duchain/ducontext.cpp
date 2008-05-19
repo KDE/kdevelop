@@ -647,7 +647,7 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
 }
 
 
-void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous )
+void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool temporary )
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
@@ -782,7 +782,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     return;
   hadContexts[this] = true;
   
-  if( type() == DUContext::Namespace || type() == DUContext::Global && currentDepth < 1000 )
+  if( (type() == DUContext::Namespace || type() == DUContext::Global) && currentDepth < 1000 )
     currentDepth += 1000;
 
   {

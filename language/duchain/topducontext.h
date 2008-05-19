@@ -154,8 +154,17 @@ public:
   Flags flags() const;
   void setFlags(Flags f);
 
-  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor(), bool anonymous=false);
+  ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
+  ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
+  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor(), bool anonymous=false, bool temporary=false);
+  ///Use this for mass-adding of imported contexts, it is faster than adding them individually.
+  ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
+  ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
+  virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary=false);
+  
   virtual void removeImportedParentContext(DUContext* context);
+  ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
+  virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
   
   virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
 protected:

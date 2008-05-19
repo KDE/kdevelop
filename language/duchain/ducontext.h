@@ -218,7 +218,7 @@ public:
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor::invalid(), bool anonymous = false);
+  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor::invalid(), bool anonymous = false, bool temporary = false);
 
   /**
    * Removes a child context.
