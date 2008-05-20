@@ -20,7 +20,6 @@
 
 #include <QCheckBox>
 #include <qradiobutton.h>
-#include <QFontComboBox>
 
 #include <klocale.h>
 #include <kconfig.h>
