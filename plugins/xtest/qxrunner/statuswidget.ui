@@ -9,9 +9,6 @@
     <height>37</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>StatusWidget</string>
-  </property>
   <layout class="QHBoxLayout" >
    <property name="spacing" >
     <number>6</number>
