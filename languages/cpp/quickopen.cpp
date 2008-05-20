@@ -51,44 +51,6 @@ TopDUContextPointer getCurrentTopDUContext() {
   return TopDUContextPointer();
 }
 
-///Finds the shortest path through the imports to a given included file @param used Is needed to prevent endless recursion
-QList<HashedString> getInclusionPath( QSet<const DUContext*>& used, const DUContext* context, const DUContext* import ) {
-
-  QList<HashedString> ret;
-  
-  if( context == import ) {
-    ret << import->url();
-    return ret;
-  }
-  
-  if( used.contains(context) )
-    return ret;
-  used.insert(context);
-  
-  if( dynamic_cast<const TopDUContext*>(import) && dynamic_cast<const TopDUContext*>(context) && !static_cast<const TopDUContext*>(context)->imports( static_cast<const TopDUContext*>(import), context->range().end ) ) {
-    //Leave context in the "used" set, so it isn't searched again
-    return ret;
-  }
-  
-  QVector<DUContextPointer> imports = context->importedParentContexts();
-  
-  foreach( DUContextPointer i, imports ) {
-    if( !i )
-      continue;
-    
-    QList<HashedString> ret2 = getInclusionPath( used, i.data(), import );
-
-    if( !ret2.isEmpty() && ( ret.isEmpty() || ret.count() > ret2.count() ) )
-      ret = ret2;
-  }
-
-  if( !ret.isEmpty() )
-    ret.push_front( context->url() );
-  
-  used.remove(context);
-  return ret;
-}
-
 void collectImporters( QSet<HashedString>& importers, DUContext* ctx )
 {
   if( importers.contains( ctx->url() ) )
@@ -163,13 +125,12 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
-        QSet<const DUContext*> used;
-        QList<HashedString> inclusion = getInclusionPath( used, m_includedFrom.data(), t );
+        KDevelop::ImportTrace inclusion = m_includedFrom.data()->importTrace(t);
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
-          foreach(HashedString s, inclusion)
-            inclusionPath << KUrl(s.str());
+          foreach(KDevelop::ImportTraceItem s, inclusion)
+            inclusionPath << KUrl(s.ctx->url().str());
         }
       }
     }
@@ -184,13 +145,12 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
       {
-        QSet<const DUContext*> used;
-        QList<HashedString> inclusion = getInclusionPath( used, t, m_includedFrom.data() );
+        KDevelop::ImportTrace inclusion = t->importTrace(m_includedFrom.data());
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
-          foreach(HashedString s, inclusion)
-            inclusionPath << KUrl(s.str());
+          foreach(KDevelop::ImportTraceItem s, inclusion)
+            inclusionPath << KUrl(s.ctx->url().str());
         }
       }
     }
@@ -203,7 +163,6 @@ QWidget* IncludeFileData::expandingWidget() const {
       inclusionPath.pop_back(); //Remove the file itself from the list
     
     htmlSuffix = "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
-    
   }
   
   foreach( const KUrl& u, inclusionPath )
