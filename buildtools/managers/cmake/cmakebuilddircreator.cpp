@@ -20,6 +20,7 @@
 
 #include "cmakebuilddircreator.h"
 #include <QScrollBar>
+#include <QDir>
 #include <kdebug.h>
 #include "ui_cmakebuilddircreator.h"
 
@@ -164,13 +165,13 @@ void CMakeBuildDirCreator::updated()
         dirEmpty=d.exists() && d.count()<=2;
         if(!dirEmpty)
         {
-            alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
+            alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+QDir::separator()+"CMakeCache.txt");
             if(alreadyCreated)
             {
                 QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
                 
                 srcDir=buildDirProject(m_creatorUi->buildFolder->url());
-                correctProject= (srcDir==srcfold);
+                correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
             }
         }
     }
