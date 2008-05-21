@@ -88,7 +88,6 @@
 #include "quickopen.h"
 
 /*#define DEBUG_UI_LOCKUP */
-
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
@@ -884,14 +883,14 @@ QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const
   Cpp::MacroRepositoryIterator it = p->usedMacros().iterator();
   
   while(it) {
-    if((*it).name == word)
+    if((*it).name == word && !(*it).isUndef())
       return qMakePair(wordRange, *it);
     ++it;
   }
 
   it = p->definedMacros().iterator();
   while(it) {
-    if((*it).name == word)
+    if((*it).name == word && !(*it).isUndef())
       return qMakePair(wordRange, *it);
     ++it;
   }
