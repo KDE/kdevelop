@@ -858,7 +858,7 @@ void TestDUChain::testSearchAcrossNamespace()
 
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("namespace A { class B{}; } namespace Q{} namespace A{ B bla; }");
+  QByteArray method("namespace A { class B{}; } class B{}; namespace A{ B bla; }");
 
   DUContext* top = parse(method, DumpNone);
 
