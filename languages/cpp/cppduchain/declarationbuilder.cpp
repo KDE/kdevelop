@@ -223,12 +223,14 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   if (node->parameter_declaration_clause) {
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
 
-      QualifiedIdentifier id = identifierForName(node->id);
       DUChainWriteLocker lock(DUChain::lock());
+      //We have to search for the fully qualified identifier, so we always get the correct class
+      QualifiedIdentifier id = currentContext()->scopeIdentifier(false) + identifierForName(node->id);
+      id.setExplicitlyGlobal(true);
+
       if (id.count() > 1 ||
           (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
         SimpleCursor pos = currentDeclaration()->range().start;//m_editor->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
-
         // TODO: potentially excessive locking
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);

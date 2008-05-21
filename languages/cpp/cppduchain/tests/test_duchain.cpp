@@ -1070,21 +1070,23 @@ void TestDUChain::testFunctionDefinition2() {
 }
 
 void TestDUChain::testFunctionDefinition4() {
-  QByteArray text("namespace A{class B{B();};} namespace A{ B::B() {} } ");
+  QByteArray text("class B{ B(); }; namespace A{class B{B();};} namespace A{ B::B() {} } ");
 
   DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts().count(), 3);
   
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 1);
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
   
-  QVERIFY(top->childContexts()[1]->localDeclarations()[0]->isDefinition());
-  QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->declaration(), top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
-
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->isDefinition());
+  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->declaration(), top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]);
+  //Verify that the function-definition context also imports the correct class context
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->internalContext()->imports(top->childContexts()[1]->childContexts()[0]));
   release(top);
 }
 
@@ -1786,7 +1788,7 @@ void TestDUChain::testImportStructure()
   for(int t = 0; t < cycles; ++t) {
     QList<TestContext*> allContexts;
     //Create a random structure
-    int contextCount = 300;
+    int contextCount = 60;
     int verifyOnceIn = contextCount/*((contextCount*contextCount)/20)+1*/; //Verify once in every chances(not in all cases, becase else the import-structure isn't built on-demand!)
     for(int a = 0; a < contextCount; a++)
       allContexts << new TestContext();
