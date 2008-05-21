@@ -165,7 +165,7 @@ void CMakeBuildDirCreator::updated()
         dirEmpty=d.exists() && d.count()<=2;
         if(!dirEmpty)
         {
-            alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+QDir::separator()+"CMakeCache.txt");
+            alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(alreadyCreated)
             {
                 QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
