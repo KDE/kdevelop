@@ -866,8 +866,10 @@ void TestDUChain::testSearchAcrossNamespace()
   
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
   QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
   QVERIFY(top->childContexts()[2]->localDeclarations()[0]->abstractType());
+  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
   QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
   
   release(top);
