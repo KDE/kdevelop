@@ -366,6 +366,8 @@ bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& id
   foreach( const QualifiedIdentifier& identifier, targetIdentifiers ) {
     QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
     ret += checkDeclarations(declarations, position, dataType, flags);
+    if(foundEnough(ret))
+      return true;
   }
   return true;
 }

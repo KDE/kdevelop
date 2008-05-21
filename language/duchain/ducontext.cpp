@@ -563,11 +563,13 @@ bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
 bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   Q_D(const DUContext);
-  foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
-      findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, trace, flags);
-  
-  if( foundEnough(ret) )
-    return true;
+  if( type() != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
+    foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
+        findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, trace, flags);
+    
+    if( foundEnough(ret) )
+      return true;
+  }
 
   ///Step 1: Apply namespace-aliases and -imports
   QList<QualifiedIdentifier> aliasedIdentifiers;
@@ -1040,8 +1042,8 @@ void DUContext::applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) con
     //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended
     int cnt = identifiers.count();
 
-    for(int a = 0; a < cnt; ++a)
-      identifiers << localScopeIdentifier() + identifiers[a];
+    for(int a = cnt-1; a >= 0; --a)
+      identifiers.prepend(localScopeIdentifier() + identifiers[a]); //Prepend, so identifiers within the same namespace are preferred.
   }
 }
 
@@ -1053,7 +1055,7 @@ void DUContext::findContextsInternal(ContextType contextType, const QList<Qualif
       if (identifier == scopeIdentifier(true) && (!parentContext() || !identifier.explicitlyGlobal()) )
         ret.append(const_cast<DUContext*>(this));
   }
-
+  ///@todo This doesn't seem quite correct: Local Contexts aren't found anywhere
   ///Step 1: Apply namespace-aliases and -imports
   QList<QualifiedIdentifier> aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
