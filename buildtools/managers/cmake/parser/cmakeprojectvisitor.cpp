@@ -1103,7 +1103,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::TO_NATIVE_PATH:
             if(QDir::separator()!='/')
-                m_vars->insert(file->variable(), file->path().replace('/', QDir::separator()));
+                m_vars->insert(file->variable(), QStringList(file->path().replace('/', QDir::separator())));
 
             kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
