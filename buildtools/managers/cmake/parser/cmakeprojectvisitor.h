@@ -96,7 +96,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
         void setDefinitions(const Definitions& defs) { m_defs=defs; }
-        const Definitions& definitions() { return m_defs; }
+
+        const VariableMap* variables() const { return m_vars; }
+        const Definitions& definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
@@ -111,12 +113,18 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 //         static VariableType hasVariable(const QString &name);
         static QStringList envVarDirectories(const QString &varName);
         
-        enum FileType { Location, File, Executable, Library };
-        static QString findFile(const QString &file, const QStringList &folders, const QStringList& suffixes, FileType t=File);
+//         enum FileType { Location, File, Executable, Library };
+        static QString findFile(const QString& files, const QStringList &folders,
+                                    const QStringList& suffixes=QStringList(), bool location=false);
+        
+        QString findExecutable(const QString& filenames, const QStringList& dirs,
+                                    const QStringList& pathSuffixes=QStringList()) const;
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
         const QMap<QString, KDevelop::Declaration*>& declarationsPerTarget() { return m_declarationsPerTarget; }
         QStringList resolveVariable(const QString &exp);
+
+        bool hasMacro(const QString& name) const;
     private:
         void defineTarget(const QString& id, const QStringList& sources);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);

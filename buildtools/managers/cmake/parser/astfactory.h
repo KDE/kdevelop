@@ -48,6 +48,8 @@ public:
     CMakeAst* createAst( const QString& astId );
 
     QStringList commands() const;
+    
+    bool contains(const QString& name) const;
 private:
     typedef QMap<QString, CreateAstCallback> CallbackMap;
     AstFactory();

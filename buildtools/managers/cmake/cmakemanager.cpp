@@ -119,12 +119,15 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     }
     
     QStringList envVars;
+    QString executable;
 #ifdef Q_OS_WIN
     envVars=CMakeProjectVisitor::envVarDirectories("Path");
+    executable="cmake.exe";
 #else
     envVars=CMakeProjectVisitor::envVarDirectories("PATH");
+    executable="cmake";
 #endif
-    QString cmakeCmd = CMakeProjectVisitor::findFile("cmake", envVars, QStringList(), CMakeProjectVisitor::Executable);
+    QString cmakeCmd = CMakeProjectVisitor::findFile(executable, envVars);
     m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
@@ -657,7 +660,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
         reimport(fi);
         m_folderPerUrl[dir]=fi;
     }
-    else if(m_folderPerUrl.contains(dir))
+    else if(it)
     {
         proj->reloadModel();
     }

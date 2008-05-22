@@ -80,3 +80,8 @@ QStringList AstFactory::commands() const
 {
     return d->callbacks.uniqueKeys();
 }
+
+bool AstFactory::contains(const QString& name) const
+{
+    return d->callbacks.contains(name);
+}

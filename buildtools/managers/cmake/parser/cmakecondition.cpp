@@ -20,14 +20,14 @@
 #include <QFileInfo>
 #include <QDateTime>
 
+#include "astfactory.h"
+
 int CMakeCondition::m_priorities[Last];
 
-CMakeCondition::CMakeCondition(const VariableMap* vars) : m_vars(vars)
+CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v) : m_vars(v->variables()), m_visitor(v)
 {
-    //FIXME: Move this to the initialization
     for(int i=None; i<Last; i++) {
         m_priorities[i]=-1;
-//         m_parameters[i]=-1;
     }
     m_priorities[AND]=0;
     m_priorities[OR]=0;
@@ -44,22 +44,6 @@ CMakeCondition::CMakeCondition(const VariableMap* vars) : m_vars(vars)
     m_priorities[COMMAND]=3;
     m_priorities[EXISTS]=3;
     m_priorities[IS_DIRECTORY]=3;
-
-    /*m_parameters[AND]=2;
-    m_parameters[OR]=2;
-    m_parameters[NOT]=1;
-    m_parameters[IS_NEWER_THAN]=2;
-    m_parameters[MATCHES]=2;
-    m_parameters[LESS]=2;
-    m_parameters[GREATER]=2;
-    m_parameters[EQUAL]=2;
-    m_parameters[STRLESS]=2;
-    m_parameters[STRGREATER]=2;
-    m_parameters[STREQUAL]=2;
-    m_parameters[DEFINED]=1;
-    m_parameters[COMMAND]=1;
-    m_parameters[EXISTS]=1;
-    m_parameters[IS_DIRECTORY]=1;*/
 }
 
 CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
@@ -160,15 +144,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2;
                 break;
             case COMMAND:
-#ifdef Q_OS_WIN
-                cmd = CMakeProjectVisitor::findFile(*(it2+1),
-                        CMakeProjectVisitor::envVarDirectories("Path"), QStringList(), CMakeProjectVisitor::Executable);
-#else
-                cmd = CMakeProjectVisitor::findFile(*(it2+1),
-                        CMakeProjectVisitor::envVarDirectories("PATH"), QStringList(), CMakeProjectVisitor::Executable);
-#endif
-                last = !cmd.isEmpty();
-                itEnd=it2-1;
+                last = AstFactory::self()->contains((it2+1)->toLower()) || m_visitor->hasMacro((it2+1)->toLower());
+                itEnd=it2;
                 break;
             case EXISTS:
             {

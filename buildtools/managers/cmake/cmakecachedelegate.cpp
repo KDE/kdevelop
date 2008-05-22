@@ -23,30 +23,50 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <KDebug>
+#include <KUrlRequester>
 
 CMakeCacheDelegate::CMakeCacheDelegate(QObject * parent)
     : QItemDelegate(parent)
 {
+    m_sample=new KUrlRequester();
+}
+
+CMakeCacheDelegate::~CMakeCacheDelegate()
+{
+    delete m_sample;
 }
 
 QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+    QWidget *ret=0;
     if(index.column()==2)
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
         if(type=="BOOL")
         {
-            return new QCheckBox(parent);
+            ret=new QCheckBox(parent);
+        }
+        else if(type=="PATH")
+        {
+            KUrlRequester *r=new KUrlRequester(parent);
+            r->setMode(KFile::Directory | KFile::ExistingOnly);
+            ret=r;
+        }
+        else if(type=="FILEPATH")
+        {
+            KUrlRequester *r=new KUrlRequester(parent);
+            r->setMode(KFile::File);
+            ret=r;
         }
         else
         {
-            return QItemDelegate::createEditor(parent, option, index);
+            ret=QItemDelegate::createEditor(parent, option, index);
         }
         
         kDebug(9032) << "Did not recognize type " << type;
     }
-    return 0;
+    return ret;
 }
 
 void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
@@ -60,6 +80,11 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
             boolean->setCheckState(value=="ON" ? Qt::Checked : Qt::Unchecked);
+        }
+        else if(type=="PATH" || type=="FILEPATH")
+        {
+            KUrlRequester *url=qobject_cast<KUrlRequester*>(editor);
+            url->setUrl(KUrl(value));
         }
         else
         {
@@ -81,6 +106,11 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
             value = boolean->isChecked() ? "ON" : "OFF";
+        }
+        else if(type=="PATH" || type=="FILEPATH")
+        {
+            KUrlRequester *urlreq=qobject_cast<KUrlRequester*>(editor);
+            value = urlreq->url().toLocalFile(KUrl::RemoveTrailingSlash); //CMake usually don't put it
         }
         else
         {
@@ -104,5 +134,37 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
     }
     QItemDelegate::paint(painter, option, index);
 }
+
+QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    QSize ret=QItemDelegate::sizeHint(option, index);
+    if(index.column()==2)
+    {
+        QModelIndex typeIdx=index.sibling(index.row(), 1);
+        QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
+        if(type=="PATH" || type=="PATH")
+        {
+            ret.setHeight(m_sample->sizeHint().height());
+        }
+    }
+    return ret;
+}
+
+// void CMakeCacheDelegate::updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option,
+//                     const QModelIndex & index ) const
+// {
+//     if(index.column()==2)
+//     {
+//         QModelIndex typeIdx=index.sibling(index.row(), 1);
+//         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
+//         if(type=="PATH")
+//         {
+//             KUrlRequester* urlreq=qobject_cast<KUrlRequester*>(editor);
+//             urlreq->setGeometry(QRect(option.rect.topLeft(), urlreq->sizeHint()));
+//             return;
+//         }
+//     }
+//     QItemDelegate::updateEditorGeometry( editor, option, index );
+// }
 
 #include "cmakecachedelegate.moc"
