@@ -10,6 +10,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/shell
 )
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )
 
 ########### next target ###############
 

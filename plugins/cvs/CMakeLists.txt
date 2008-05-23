@@ -1,3 +1,6 @@
+
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9513 )
+
 add_subdirectory(tests)
 
 include_directories( ${KDE4_INCLUDES}

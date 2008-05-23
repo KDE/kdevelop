@@ -1,4 +1,5 @@
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9518 )
 include_directories(
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}
