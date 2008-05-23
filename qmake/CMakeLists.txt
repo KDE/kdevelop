@@ -1,4 +1,5 @@
 project(QMakeManager)
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 
 find_package(KDevelop-PG-Qt QUIET)
