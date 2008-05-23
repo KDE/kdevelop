@@ -1,4 +1,5 @@
 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
 # add_subdirectory(tests)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR}

@@ -1,3 +1,6 @@
+
+
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 add_subdirectory(qxrunner)
 add_subdirectory(qxcppunit) # need to write a FindCppUnit.cmake
 
