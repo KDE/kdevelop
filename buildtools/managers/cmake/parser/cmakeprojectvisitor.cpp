@@ -47,7 +47,7 @@
 using namespace KDevelop;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, TopDUContext *parent)
-    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_topctx(0), m_parentCtx(parent)
+    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
 {
 }
 
@@ -163,6 +163,7 @@ int CMakeProjectVisitor::notImplemented(const QString &name) const
 
 bool CMakeProjectVisitor::hasMacro(const QString& name) const
 {
+    Q_ASSERT(m_macros);
     return m_macros->contains(name);
 }
 

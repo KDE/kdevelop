@@ -33,18 +33,30 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars->insert("EMPTY", QStringList());
     m_vars->insert("ZERO", QStringList("0"));
     m_vars->insert("ONE", QStringList("1"));
+    
+    m_macros=new MacroMap();
+    Macro m;
+    m.name = "testmacro";
+    m.isFunction=false;
+    m_macros->insert("testmacro", m);
 }
 
 CMakeConditionTest::~CMakeConditionTest()
 {
     delete m_vars;
+    delete m_macros;
 }
 
 void CMakeConditionTest::testGoodParse()
 {
     QFETCH( QStringList, expression );
     QFETCH( bool, result );
-    CMakeCondition cond(m_vars);
+    
+    CMakeProjectVisitor v(QString(), 0);
+    v.setVariableMap( m_vars );
+    v.setMacroMap( m_macros );
+    
+    CMakeCondition cond(&v);
     QVERIFY( cond.condition(expression)==result );
 }
 
@@ -63,11 +75,10 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "false+and" ) << QString("ZERO;AND;ONE").split(";") << false;
     QTest::newRow( "and+false" ) << QString("ONE;AND;ZERO").split(";") << false;
     QTest::newRow( "not+and" ) << QString("NOT;ZERO;AND;ONE").split(";") << true;
+    QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;testmacro").split(";") << true;
 #ifdef Q_OS_WIN
-    QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;./cmake-cmakecondition.exe").split(";") << true;
     QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;./cmake-cmakecondition.exe").split(";") << true;
 #else
-    QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;./cmake-cmakecondition").split(";") << true;
     QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;./cmake-cmakecondition").split(";") << true;
 #endif
     QTest::newRow( "or" ) << QString("ONE;OR;ONE").split(";") << true;

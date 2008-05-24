@@ -41,6 +41,7 @@ private slots:
     
 private:
     VariableMap* m_vars;
+    MacroMap* m_macros;
 };
 
 #endif
