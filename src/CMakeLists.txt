@@ -35,5 +35,6 @@ install(TARGETS kdevelop DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
+install( FILES kdevelop.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 install( FILES kdeveloprc DESTINATION ${CONFIG_INSTALL_DIR} )
 install( FILES kdevelopui.rc kdevelop.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
