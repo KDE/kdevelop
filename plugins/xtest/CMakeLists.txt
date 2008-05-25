@@ -1,7 +1,7 @@
 
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 add_subdirectory(qxrunner)
+add_subdirectory(qxqtest)
 add_subdirectory(qxcppunit) # need to write a FindCppUnit.cmake
 
 project(XtestPlugin)
@@ -53,14 +53,12 @@ qt4_add_resources(qxrunner_SRCS
     ${PROJECT_SOURCE_DIR}/qxrunner/resources/qxrunner.qrc)
 
 kde4_add_library(qxrunner SHARED ${qxrunner_SRCS})
-
 target_link_libraries(qxrunner
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS})
 
 qt4_automoc(${qxrunner_SRCS})
-
 install(TARGETS qxrunner DESTINATION ${LIB_INSTALL_DIR})
 
 # ########### next target ###############
@@ -82,12 +80,20 @@ qt4_add_resources(qxcppunit_SRCS
     ${PROJECT_SOURCE_DIR}/qxcppunit/resources/qxcppunit.qrc)
 
 qt4_automoc( ${qxcppunit_SRCS} )
-
 kde4_add_library(qxcppunit SHARED ${qxcppunit_SRCS})
-
 target_link_libraries(qxcppunit qxrunner ${CPPUNIT_LIBRARY})
-
 install(TARGETS qxcppunit DESTINATION ${LIB_INSTALL_DIR})
+
+########## next target ###############
+
+set(qxqtest_SRCS
+    qxqtest/qtestresult.cpp
+    qxqtest/qtestxmlparser.cpp)
+
+qt4_automoc(q${xqtest_SRCS})
+kde4_add_library(qxqtest SHARED ${qxqtest_SRCS})
+target_link_libraries(qxqtest ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} )
+install(TARGETS qxqtest DESTINATION ${LIB_INSTALL_DIR})
 
 ########## next target ###############
 
