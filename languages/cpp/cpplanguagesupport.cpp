@@ -210,7 +210,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #endif
 }
 
-KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
+KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) const
 {
   QString urlPath = url.path(); ///@todo Make this work with real urls
   
@@ -269,6 +269,10 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url )
       return * it;
     }
   }
+
+  if(fast)
+    return KUrl();
+
   //kDebug( 9007 ) << "Now searching in project files." << endl;
   // Our last resort: search the project file list for matching files
   KUrl::List projectFileList;
@@ -348,11 +352,13 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 
     if(definition && definition->isDefinition() && definition->declaration()) {
       Declaration* declaration = definition->declaration();
-      KTextEditor::Cursor c = declaration->range().textRange().start();
+      KTextEditor::Range targetRange = declaration->range().textRange();
       KUrl url(declaration->url().str());
-      kDebug() << "found definition that has declaration: " << definition->toString() << "cursor" << c << "url" << url;
+      kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
       lock.unlock();
-      core()->documentController()->openDocument(url, normalizeCursor(c));
+      KDevelop::IDocument* document = core()->documentController()->openDocument(url);
+      if(document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))
+        document->textDocument()->activeView()->setCursorPosition(normalizeCursor(targetRange.start()));
       return;
     }else{
       kDebug(9007) << "Definition has no assigned declaration";
@@ -366,17 +372,20 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   Declaration* def = definitionForCursorDeclaration(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
 
   if(def) {
+    KUrl url(def->url().str());
+    KTextEditor::Range targetRange = def->range().textRange();
+
     ///@todo If the cursor is already in the target context, do not move it.
     if(def->internalContext()) {
-      KTextEditor::Cursor c = def->internalContext()->range().textRange().start();
-      lock.unlock();
-      core()->documentController()->openDocument(KUrl(def->url().str()), normalizeCursor(c));
+      targetRange.end() = def->internalContext()->range().end.textCursor();
     }else{
       kWarning(9007) << "Declaration does not have internal context";
-      KTextEditor::Cursor c = def->range().textRange().start();
-      lock.unlock();
-      core()->documentController()->openDocument(KUrl(def->url().str()), normalizeCursor(c));
     }
+    lock.unlock();
+
+    KDevelop::IDocument* document = core()->documentController()->openDocument(url);
+    if(document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))
+      document->textDocument()->activeView()->setCursorPosition(normalizeCursor(targetRange.start()));
     return;
   }else{
     kDebug(9007) << "Found no definition assigned to cursor position";
@@ -504,10 +513,19 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
     //TODO: Anything to do here?!?!
 }
 
-KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) const
+KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop::ProblemPointer>* problems) const
 {
+  KUrl source = file;
+
   KUrl::List allPaths;
   QSet<KUrl> hasPath;
+
+  if(headerExtensions.contains(QFileInfo(file.path()).suffix())) {
+    //This file is a header. Since a header doesn't represent a target, we just try to get the include-paths for the corresponding source-file, if there is one.
+    KUrl newSource = sourceOrHeaderCandidate(file, true);
+    if(newSource.isValid())
+      source = newSource;
+  }
 
   if( source.isEmpty() ) {
     foreach( QString path, *m_standardIncludePaths) {

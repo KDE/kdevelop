@@ -148,7 +148,8 @@ private:
     
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
   
-    KUrl sourceOrHeaderCandidate( const KUrl &url );
+    ///If @param fast is true, no exhaustive search is done as fallback.
+    KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false ) const;
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
