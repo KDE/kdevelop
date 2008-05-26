@@ -162,6 +162,8 @@ void StatusBar::showProgress(int minimum, int maximum, int value)
         bar = new QProgressBar(this);
         bar->setRange(minimum, maximum);
         bar->setValue(value);
+        bar->setMaximumWidth(300);
+        bar->setMaximumHeight((height()*2)/3);
         m_progressBars.insert(status, bar);
 
         addPermanentWidget(bar);
