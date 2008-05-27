@@ -105,7 +105,7 @@ struct SetNode : public KShared
     if(contiguous)
       return end - start;
     else if(left && right)
-      return left->size() + right->size();
+      return left->count() + right->count();
     else
       return 0;
   }
@@ -285,7 +285,7 @@ struct SetNode : public KShared
     }
     return 0;
   }
-
+  //Does not respect gaps
   Index size() const {
     return end - start;
   }
