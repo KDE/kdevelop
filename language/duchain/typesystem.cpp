@@ -833,6 +833,9 @@ DelayedType::DelayedType()
 {
 }
 
+DelayedType::DelayedType(const DelayedType& rhs) : AbstractType(*new DelayedTypePrivate(*rhs.d_func())) {
+}
+
 DelayedType::~DelayedType()
 {
 }

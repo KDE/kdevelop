@@ -430,6 +430,7 @@ public:
   };
 
   DelayedType();
+  DelayedType(const DelayedType& rhs);
   virtual ~DelayedType();
 
   KDevelop::TypeIdentifier identifier() const;
