@@ -80,6 +80,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(m_gdbView);
     topLayout->setStretchFactor(m_gdbView, 1);
+    topLayout->setMargin(0);
 
     QBoxLayout *userGDBCmdEntry = new QHBoxLayout();
     userGDBCmdEntry->addWidget(label);

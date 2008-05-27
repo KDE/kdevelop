@@ -96,6 +96,7 @@ VariableWidget::VariableWidget(CppDebuggerPlugin* plugin, GDBController*  contro
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(varTree_, 10);
     topLayout->addWidget(watchVarEditor_);
+    topLayout->setMargin(0);
 
     connect(watchVarEditor_, SIGNAL(returnPressed(const QString &)),
             this, SLOT(slotAddWatch(const QString&)));
@@ -135,7 +136,7 @@ void VariableWidget::slotAddWatch(const QString &expression)
             ->variables()->indexForItem(v, 0);
         /* For watches on structures, we really do want them to be shown
            expanded.  Except maybe for structure with custom pretty printing,
-           but will handle that later.  
+           but will handle that later.
            FIXME: it does not actually works now.
         */
         //varTree_->setExpanded(index, true);

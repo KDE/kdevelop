@@ -54,7 +54,7 @@ namespace GDBDebugger
         {
             QVBoxLayout* layout = new QVBoxLayout(this);
             layout->setContentsMargins(11, 0, 0, 11);
-            
+
             status_ = new QLabel(this);
             status_->setText("Breakpoint is active");
             status_->hide();
@@ -71,17 +71,17 @@ namespace GDBDebugger
             QFrame* frame = new QFrame(this);
             frame->setFrameShape(QFrame::HLine);
             hitsLayout->addWidget(frame, 1, 0, 1, 3);
-            
+
             QLabel *l2 = new QLabel(i18n("Ignore"), this);
             hitsLayout->addWidget(l2, 2, 0);
-            
+
             ignore_ = new SmallLineEdit(this);
             hitsLayout->addWidget(ignore_, 2, 1);
 
             QLabel *l3 = new QLabel(i18n("next hits"), this);
             hitsLayout->addWidget(l3, 2, 2);
 
-            
+
             layout->addStretch();
         }
 
@@ -133,7 +133,7 @@ namespace GDBDebugger
                                      "breakpoint only when the library is loaded.",
                                      status_);
             }
-            else if (link == "dirty") 
+            else if (link == "dirty")
             {
                 QWhatsThis::showText(pos,
                                      "<b>Breakpoint is dirty</b>"
@@ -148,13 +148,13 @@ namespace GDBDebugger
         QLabel* hits_;
         QLineEdit* ignore_;
     };
-    
+
     class BreakpointWidget : public QWidget
     {
         Q_OBJECT
     public:
-        BreakpointWidget(CppDebuggerPlugin* plugin, 
-                         GDBController* controller, 
+        BreakpointWidget(CppDebuggerPlugin* plugin,
+                         GDBController* controller,
                          QWidget *parent)
         : QWidget(parent), firstShow_(true), controller_(controller)
         {
@@ -168,6 +168,7 @@ namespace GDBDebugger
             setWindowIcon( KIcon("process-stop") );
 
             QHBoxLayout *layout = new QHBoxLayout(this);
+            layout->setMargin(0);
             QSplitter *s = new QSplitter(this);
             layout->addWidget(s);
 
@@ -181,18 +182,18 @@ namespace GDBDebugger
             s->setStretchFactor(0, 2);
 
             table_->verticalHeader()->hide();
-            
+
             table_->setModel(controller->breakpoints());
 
-            connect(table_->selectionModel(), 
+            connect(table_->selectionModel(),
                     SIGNAL(selectionChanged(const QItemSelection&,
                                             const QItemSelection&)),
                     this, SLOT(slotSelectionChanged(const QItemSelection &,
                                                     const QItemSelection&)));
 
-            connect(controller->breakpoints(), 
+            connect(controller->breakpoints(),
                     SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                    this, 
+                    this,
                     SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
 
             connect(controller, SIGNAL(breakpointHit(int)),
@@ -202,30 +203,30 @@ namespace GDBDebugger
                     SIGNAL(error(NewBreakpoint *, const QString&, int)),
                     this,
                     SLOT(breakpointError(NewBreakpoint *, const QString&, int)));
-            
+
             setupPopupMenu();
         }
 
-        void setupPopupMenu() 
+        void setupPopupMenu()
         {
             popup_ = new QMenu(this);
 
             QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "New") );
 
             QAction* action = newBreakpoint->addAction(
-                i18nc("Code breakpoint", "Code"), 
-                this, 
+                i18nc("Code breakpoint", "Code"),
+                this,
                 SLOT(slotAddBlankBreakpoint()) );
             // Use this action also to provide a local shortcut
             action->setShortcut(QKeySequence(Qt::Key_B + Qt::CTRL,
                                              Qt::Key_C));
             addAction(action);
 
-            newBreakpoint->addAction( 
+            newBreakpoint->addAction(
                 i18nc("Data breakpoint", "Data write"),
                 this, SLOT(slotAddBlankWatchpoint()));
-            newBreakpoint->addAction( 
-                i18nc("Data read breakpoint", "Data read"), 
+            newBreakpoint->addAction(
+                i18nc("Data read breakpoint", "Data read"),
                 this, SLOT(slotAddBlankReadWatchpoint()));
 
             #if 0
@@ -239,8 +240,8 @@ namespace GDBDebugger
             #endif
 
             QAction* breakpointDelete = popup_->addAction(
-                KIcon("breakpoint_delete"), 
-                i18n( "Delete" ), 
+                KIcon("breakpoint_delete"),
+                i18n( "Delete" ),
                 this,
                 SLOT(slotRemoveBreakpoint()));
             breakpointDelete->setShortcut(Qt::Key_Delete);
@@ -349,13 +350,13 @@ namespace GDBDebugger
                 header->resizeSection(1, 32);
                 width -= 32;
                 header->resizeSection(2, id_width);
-                width -= id_width;                
+                width -= id_width;
                 header->resizeSection(3, width/2);
                 header->resizeSection(4, width/2);
                 firstShow_ = false;
             }
         }
-        
+
     private:
         void edit(NewBreakpoint *n)
         {
@@ -371,7 +372,7 @@ namespace GDBDebugger
         {
             edit(controller_->breakpoints()->breakpointsItem()
                  ->addCodeBreakpoint());
-        }       
+        }
 
         void slotAddBlankWatchpoint()
         {
@@ -418,7 +419,7 @@ namespace GDBDebugger
                 QModelIndex index = controller_->breakpoints()
                     ->indexForItem(b, 0);
                 table_->selectionModel()->select(
-                    index, 
+                    index,
                     QItemSelectionModel::Rows
                     | QItemSelectionModel::ClearAndSelect);
             }
@@ -432,12 +433,12 @@ namespace GDBDebugger
                we get to notice when breakpoint changes.  */
             details_->setItem(
                 static_cast<NewBreakpoint*>(
-                    controller_->breakpoints()->itemForIndex(index)));            
+                    controller_->breakpoints()->itemForIndex(index)));
         }
 
         void breakpointError(NewBreakpoint *b, const QString& msg, int column)
         {
-            // FIXME: we probably should prevent this error notification during 
+            // FIXME: we probably should prevent this error notification during
             // initial setting of breakpoint, to avoid a cloud of popups.
             if (!table_->isVisible())
                 return;
@@ -446,12 +447,12 @@ namespace GDBDebugger
                 ->indexForItem(b, column);
             QPoint p = table_->visualRect(index).topLeft();
             p = table_->mapToGlobal(p);
-            
+
             KPassivePopup *pop = new KPassivePopup(table_);
             pop->setPopupStyle(KPassivePopup::Boxed);
             pop->setAutoDelete(true);
             // FIXME: the the icon, too.
-            pop->setView("", msg);            
+            pop->setView("", msg);
             pop->setTimeout(-1);
             pop->show(p);
         }
