@@ -204,6 +204,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     const StringSetRepository::LazySet& usedMacroNames() const;
     
     const StringSetRepository::LazySet& definedMacroNames() const;
+    
+    ///Set of all macros undefined to the outside
+    const StringSetRepository::LazySet& unDefinedMacroNames() const;
   
     ///Should contain a modification-time for each included-file
     const QMap<KDevelop::HashedString, KDevelop::ModificationRevision>& allModificationTimes() const;
@@ -238,6 +241,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     Cpp::StringSetRepository::LazySet m_usedMacroNames; //Set the names of all used macros
     Cpp::MacroRepository::LazySet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::StringSetRepository::LazySet m_definedMacroNames;
+    Cpp::StringSetRepository::LazySet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
     QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     mutable int m_contentStartLine; //Line-number where the actual content starts. Needs to be kept current when edited
     /*

@@ -50,6 +50,8 @@ public:
 
   bool operator == ( const pp_macro& rhs ) const;
 
+  QString toString() const;
+  
   bool isUndef() const  {
     return !defined;
   }

@@ -84,7 +84,7 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
     CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
     ret->merge( CppLanguageSupport::self()->standardMacros() );
-            
+    
     return ret;
 }
 
@@ -415,14 +415,14 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
             KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
             Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( environmentFile ) {
-                m_currentEnvironment->merge( environmentFile->definedMacros() );
+                m_currentEnvironment->merge( environmentFile );
                 ifDebug( kDebug() << "PreprocessJob" << parentJob()->document().str() << "Merging included file into environment-file"; )
                 m_currentEnvironment->environmentFile()->merge( *environmentFile );
             } else {
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }
         } else {
-            kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry in du-chain, parsing";
+            kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
 
 /*            if( updateNeeded && !parentJob()->masterJob()->needUpdateEverything() ) {
               //When a new include-file was found, that can influence not found declarations in all following encountered contexts, so they all need updating.

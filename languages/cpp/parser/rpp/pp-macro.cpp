@@ -80,6 +80,27 @@ size_t fastHashString( const QByteArray& str ) {
   return hash;
 }
 
+QString pp_macro::toString() const {
+  QString ret = name.str();
+  if(!defined)
+    ret = "undef " + ret;
+  if(function_like) {
+    ret += "(";
+    bool first = true;
+    foreach(QByteArray str, formals) {
+      if(!first)
+        ret += ", ";
+      first = false;
+      
+      ret += QString::fromUtf8(str);
+    }
+    ret += ")";
+  }
+  ret += QString::fromUtf8(definition);
+  
+  return ret;
+}
+
 void pp_macro::computeHash() const {
     if( m_valueHashValid || m_idHashValid )
       return;

@@ -668,6 +668,17 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         DUChain::self()->addParsingEnvironmentManager(environmentManager);
     }
     
+    {
+      addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
+      addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
+      TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QCOMPARE(envFile1->definedMacroNames().set().count(), 0u);
+      QCOMPARE(envFile1->definedMacros().set().count(), 0u);
+      QCOMPARE(envFile1->usedMacros().set().count(), 0u);
+    }
+    
     addInclude("h1.h", "#ifndef H1_H  \n#define H1_H  \n  class H1 {};\n #else \n class H1_Already_Defined {}; \n#endif");
     addInclude("h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
 
@@ -684,12 +695,14 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(envFile1);
         QVERIFY(envFile2);
 
+        QCOMPARE(envFile1->usedMacros().set().count(), 0u);
+        QCOMPARE(envFile2->usedMacros().set().count(), 0u);
         QVERIFY(findDeclaration( test1, Identifier("H1") ));
         
       QCOMPARE( envFile1->contentStartLine(), 3 );
     }
 
-    {
+    { //Test shadowing of strings through #undefs
       addInclude("stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
       addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
       
@@ -699,6 +712,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
         QVERIFY(envFile);
+        QCOMPARE(envFile->usedMacros().set().count(), 0u);
         QCOMPARE(toStringList(envFile->strings()), QString("String1\ns1\ns2").split("\n")); //The #undef protects String2, so it cannot be affected from outside
       }
       {
@@ -711,15 +725,16 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(toStringList(envFile->strings()), QString("s1\ns2").split("\n"));
         QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
 
-        QCOMPARE(envFile->definedMacros().set().count(), 2u);
-        
+        QCOMPARE(envFile->definedMacros().set().count(), 1u);
+        QCOMPARE(envFile->usedMacros().set().count(), 0u);
+
         QCOMPARE(top->importedParentContexts().count(), 1);
         TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].data());
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
         
-        QCOMPARE(envFile2->definedMacros().set().count(), 1u);
+        QCOMPARE(envFile2->definedMacros().set().count(), 0u);
         
         QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList("String1")); //stringset_test1.h used the Macro String1 from outside
         QCOMPARE(toStringList(envFile2->strings()), QString("String1\ns1\ns2").split("\n"));
@@ -730,8 +745,10 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
         QVERIFY(envFile);
-        QCOMPARE(envFile->definedMacros().set().count(), 2u);
+        QCOMPARE(envFile->definedMacros().set().count(), 0u);
+        QCOMPARE(envFile->usedMacros().set().count(), 0u);
         //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
+        kDebug() << toStringList(envFile->strings()) << QString("s1\ns2").split("\n");
         QCOMPARE(toStringList(envFile->strings()), QString("s1\ns2").split("\n"));
         QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
 
@@ -740,11 +757,39 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
-        QCOMPARE(envFile2->definedMacros().set().count(), 1u);
+        QCOMPARE(envFile2->definedMacros().set().count(), 0u);
         
         QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList()); //stringset_test1.h used the Macro String1 from outside. However it is an undef-macro, so it does not appear in usedMacroNames() and usedMacros()
         QCOMPARE(envFile2->usedMacros().set().count(), (unsigned int)0);
         QCOMPARE(toStringList(envFile2->strings()), QString("String1\ns1\ns2").split("\n"));
+      }
+      {
+        addInclude("usingtest1.h", "#define HONK\nMACRO m\n#undef HONK2\n");
+        
+        TopDUContext* top = parse(QByteArray("#define MACRO meh\nint MACRO;\n#include \"usingtest1.h\"\n"), DumpNone);
+        DUChainWriteLocker lock(DUChain::lock());
+        QVERIFY(top->parsingEnvironmentFile());
+        Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
+        QVERIFY(envFile);
+        QCOMPARE(envFile->definedMacros().set().count(), 2u);
+        QCOMPARE(envFile->unDefinedMacroNames().set().count(), 1u);
+        QCOMPARE(envFile->usedMacros().set().count(), 0u);
+        QCOMPARE(envFile->usedMacroNames().set().count(), 0u);
+        
+        kDebug() << toStringList(envFile->strings()) ;
+        QCOMPARE(envFile->strings().count(), 3u); //meh, m, int
+
+        QCOMPARE(top->importedParentContexts().count(), 1);
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].data());
+        QVERIFY(top2);
+        Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
+        QVERIFY(envFile2);
+        QCOMPARE(envFile2->definedMacros().set().count(), 1u);
+        QCOMPARE(envFile2->unDefinedMacroNames().set().count(), 1u);
+        QCOMPARE(envFile2->usedMacros().set().count(), 1u);
+        QCOMPARE(envFile2->usedMacroNames().set().count(), 1u);
+        kDebug() << toStringList(envFile2->strings()) ;
+        QCOMPARE(envFile2->strings().count(), 3u); //meh(from macro), MACRO, m
       }
     }
 

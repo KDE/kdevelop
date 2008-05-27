@@ -43,7 +43,7 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::HashedStr
 
     rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name);
 
-    if( !ret || !m_environmentFile->definedMacroNames().contains(name) ) {
+    if( !ret || (!m_environmentFile->definedMacroNames().contains(name) && !m_environmentFile->unDefinedMacroNames().contains(name)) ) {
         QMutexLocker l(&Cpp::EnvironmentManager::m_repositoryMutex);
         Utils::BasicSetRepository::Index idx;
         Cpp::EnvironmentManager::m_stringRepository.getItem(name, &idx);
@@ -87,6 +87,21 @@ void CppPreprocessEnvironment::merge( const Cpp::MacroRepository::LazySet& macro
           m_macroNameSet.insert((*it).name);
         else
           m_macroNameSet.remove((*it).name);
+    }
+}
+
+void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
+    for( Cpp::MacroRepositoryIterator it = file->definedMacros().iterator(); it; ++it ) {
+        rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+
+        m_macroNameSet.insert((*it).name);
+    }
+    for( Cpp::StringSetIterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
+        rpp::pp_macro*  m = new rpp::pp_macro(*it);
+        m->defined = false;
+        rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+
+        m_macroNameSet.remove(*it);
     }
 }
 

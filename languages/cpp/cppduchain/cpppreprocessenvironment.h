@@ -45,9 +45,12 @@ public:
   void swapMacros( Environment* parentEnvironment );
 
   /**
-    * Merges the given set of macros into the environment. Does not modify m_environmentFile
+    * Merges the given set of macros into the environment. Does not modify m_environmentFile.
     * */
   void merge( const Cpp::MacroRepository::LazySet& macros );
+  
+  ///Merges the macros  from the given EnvironmentFile(including undef macros). Does not modify m_environmentFile.
+  void merge( const Cpp::EnvironmentFile* file );
 
   virtual void setMacro(rpp::pp_macro* macro);
 

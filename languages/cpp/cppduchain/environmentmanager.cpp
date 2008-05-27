@@ -59,6 +59,21 @@ QString print(const Cpp::StringSetRepository::LazySet& set) {
   return print( set.set() );
 }
 
+QString print(const Cpp::MacroRepository::LazySet& set) {
+  QString ret;
+  bool first = true;
+  Cpp::MacroRepositoryIterator it = set.iterator();
+  while(it) {
+    if(!first)
+      ret += ", ";
+    first = false;
+    
+    ret += (*it).toString();
+    ++it;
+  }
+  return ret;
+}
+
 EnvironmentManager::EnvironmentManager() : m_simplifiedMatching(false) {
 }
 
@@ -176,7 +191,8 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const HashedString& fileNa
           //It is okay, we did not find a macro, but the used macro is an undef macro
           //Q_ASSERT(0); //Undef-macros should not be marked as used
         } else {
-          ifDebug( kDebug( 9007 ) << "The cached file " << fileName.str() << " used a macro called \"" << (*it).name.str() << "\"(from" << (*it).file.str() << "), but the driver does not contain that macro or the macro differs, the cached file is not used"  );
+          ifDebug( kDebug( 9007 ) << "The cached file " << fileName.str() << " used a macro called \"" << (*it).name.str() << "\"(from" << (*it).file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
+          ifDebug( if(m) { kDebug() << "Used macro: " << (*it).toString()  << "from" << (*it).file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
           success = false;
           break;
         }
@@ -252,7 +268,7 @@ void EnvironmentManager::erase( const CacheNode* node ) {
   ifDebug( kDebug( 9007 ) << "Error: could not find a node in the list for file" << ((const EnvironmentFile*)(node))->url().str()  );
 }
 
-EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_missingIncludeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_contentStartLine(0) {
+EnvironmentFile::EnvironmentFile( const HashedString& fileName, EnvironmentManager* manager ) : CacheNode( manager ), m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_missingIncludeFiles(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_usedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacros(&EnvironmentManager::m_macroRepository, &EnvironmentManager::m_repositoryMutex), m_definedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex), m_unDefinedMacroNames(&EnvironmentManager::m_stringRepository, &EnvironmentManager::m_repositoryMutex),m_contentStartLine(0) {
   QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
   m_modificationTime = fileInfo.lastModified();
   ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
@@ -273,7 +289,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
 #ifdef LEXERCACHE_DEBUG
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
 #endif
-  if( previousOfSameName )
+  if( previousOfSameName && m_definedMacros.contains(*previousOfSameName) ) ///@todo Make this faster. We cannot remove the definedMacros.contains(..), because else we get problems.
     m_definedMacros.remove( *previousOfSameName );
   else if( m_definedMacroNames.contains(macro.name) ) {
     //Search if there is already a macro of the same name in the set, and remove it
@@ -282,15 +298,25 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
     for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, m_definedMacros.set().iterator() ); it; ++it )
       if( macro.name == (*it).name )
         m_definedMacros.remove(*it);
-  }else{
-    m_definedMacroNames.insert( macro.name );
   }
+  
+  if(macro.isUndef()) {
+    m_definedMacroNames.remove( macro.name );
     
-  m_definedMacros.insert( macro );
+    m_unDefinedMacroNames.insert( macro.name );
+  } else {
+    m_unDefinedMacroNames.remove( macro.name );
+    m_definedMacroNames.insert( macro.name );
+    
+    m_definedMacros.insert( macro );
+  }
+  
+  //State: If it is an undef macro, it is not in m_definedMacroNames not in m_definedMacros, and it is in m_unDefinedMacroNames
+  //       If  it is a normal macro, it is in m_definedMacroNames, it is in m_definedMacros, and it is not in m_unDefinedMacroNames
 }
 
 void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
-  if ( !m_definedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
+  if ( !m_definedMacroNames.contains( macro.name ) && !m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef LEXERCACHE_DEBUG
     kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
 #endif
@@ -322,6 +348,10 @@ const StringSetRepository::LazySet& EnvironmentFile::usedMacroNames() const {
 ///Set of all macros used from outside, including those used in deeper included files
 const StringSetRepository::LazySet& EnvironmentFile::definedMacroNames() const {
   return m_definedMacroNames;
+}
+
+const StringSetRepository::LazySet& EnvironmentFile::unDefinedMacroNames() const {
+  return m_unDefinedMacroNames;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
@@ -383,30 +413,35 @@ void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Inde
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
   QMutexLocker l(&EnvironmentManager::m_repositoryMutex);
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "strings in other:" << print(file.m_strings);
+  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.m_strings);
 #endif
-  m_strings += file.m_strings - m_definedMacroNames.set();
-  
-  //Only add macros to the usedMacros-list that were not defined locally
-  m_usedMacroNames += file.m_usedMacroNames.set() - m_definedMacroNames.set();
+  m_strings += (file.m_strings - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();
+  ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.  
+  //Only add macros to the usedMacros-set that were not defined locally
+  m_usedMacroNames += (file.m_usedMacroNames.set() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();
 
   ///Merge those used macros that were not defined within this environment
   //This is slightly inefficient, would be nicer to have a fast mechanism for this
   for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, file.m_usedMacros.set().iterator() ); it; ++it )
-    if( !m_definedMacroNames.contains((*it).name) )
+    if( !m_definedMacroNames.contains((*it).name) && !m_unDefinedMacroNames.contains((*it).name) )
       m_usedMacros.insert( *it );
 
+  ifDebug( Q_ASSERT(m_usedMacroNames.set().count() == m_usedMacros.set().count()) );
+  
   ///Add defined macros from the merged file.
 
   //Since merged macros overrule already stored ones, first remove the ones of the same name.
   for( MacroRepository::Iterator it( &EnvironmentManager::m_macroRepository, m_definedMacros.set().iterator() ); it; ++it )
-    if( file.m_definedMacroNames.contains( (*it).name ) )
+    if( file.m_definedMacroNames.contains( (*it).name ) || file.m_unDefinedMacroNames.contains( (*it).name ) )
       m_definedMacros.remove(*it);
 
   //Now merge in the new defined macros
   
-  m_definedMacros += file.m_definedMacros.set();
+  m_unDefinedMacroNames += file.m_unDefinedMacroNames.set();
+  m_unDefinedMacroNames -= file.m_definedMacroNames.set();
+  m_definedMacroNames -= file.m_unDefinedMacroNames.set();
   m_definedMacroNames += file.m_definedMacroNames.set();
+  m_definedMacros += file.m_definedMacros.set();
 
   ///Merge include-files, problems and other stuff
   m_includeFiles += file.m_includeFiles.set();
@@ -417,7 +452,10 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
 
 #ifdef LEXERCACHE_DEBUG
-  kDebug( 9007 ) << id(this) << ": defined in this after merge:" << print(m_definedMacroNames);
+  kDebug( 9007 ) << id(this) << ": defined macro names in this after merge:" << m_definedMacroNames.set().count() << print(m_definedMacroNames);
+  kDebug( 9007 ) << id(this) << ": defined in this after merge:" << m_definedMacros.set().count() << print(m_definedMacros);
+  ifDebug( Q_ASSERT(m_definedMacros.set().count() == m_definedMacroNames.set().count()) );
+  kDebug( 9007 ) << id(this) << ": undefined in this after merge:" << print(m_unDefinedMacroNames);
   kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(m_strings);
   kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(m_usedMacroNames);
 #endif
