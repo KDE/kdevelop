@@ -42,35 +42,53 @@ using namespace KDevelop;
 
 QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
-uint totalColorInterpolationSteps = 6 * 0xff; //The total ring of all colors: 0xff0000 -> 0xffff00 -> 0x00ff00 -> 0x00ffff -> 0x0000ff -> 0xff00ff -> ...: 6 * 256 steps
 uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
-uchar foregroundRatio = 110; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+uchar foregroundRatio = 100; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+uchar backgroundRatio = 5; ///Mixing in background color makes the colors less annoying
 
 ///@param ratio ratio between 0 and 0xff
 uint mix(uint color1, uint color2, uchar ratio) {
-  return (((quint64)color1) * ((quint64)0xff - ratio) + ((quint64)color2) * ratio) / (quint64)0xff;
+  return KColorUtils::mix(QColor(color1), QColor(color2), float(ratio) / float(0xff)).rgb();
+  //return (((quint64)color1) * (((quint64)0xff) - ratio) + ((quint64)color2) * ratio) / (quint64)0xff;
+}
+
+uint totalColorInterpolationStepCount = 6;
+uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
+//Do less steps when interpolating to/from green: Green is very dominant, and different mixed green tones are hard to distinguish(and always seem green).
+uint interpolationLengths[] = {0xff, 0xff, 0xbb, 0xbb, 0xbb, 0xff};
+
+uint totalColorInterpolationSteps() {
+  uint ret = 0;
+  for(int a = 0; a < totalColorInterpolationStepCount; ++a)
+    ret += interpolationLengths[a];
+  return ret;
 }
 
 ///Generates a color from the color wheel. @param step Step-number, one of totalColorInterpolationSteps
 uint interpolate(uint step) {
-  uint waypoint = step / 0xff;
-  step -= waypoint * 0xff;
-  waypoint %= 6;
-  uint nextWaypoint = (waypoint + 1) % 6;
-  uint interpolationWaypoints[] = {0xff0000, 0xffff00, 0x00ff00, 0x00ffff, 0x0000ff, 0xff00ff};
-  return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], step);
+  
+  uint waypoint = 0;
+  while(step > interpolationLengths[waypoint]) {
+    step -= interpolationLengths[waypoint];
+    ++waypoint;
+  }
+    
+  uint nextWaypoint = (waypoint + 1) % totalColorInterpolationStepCount;
+  
+  return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], (step * 0xff) / interpolationLengths[waypoint]);
 }
 
 void generateColors(int count) {
   colors.clear();
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   uint standardColor(0u); //QApplication::palette().foreground().color().rgb());
-  uint step = totalColorInterpolationSteps / count;
+  uint backgroundColor(0xffffff);
+  uint step = totalColorInterpolationSteps() / count;
   uint currentPos = colorOffset;
   kDebug() << "text color:" << (void*)QApplication::palette().text().color().rgb();
   for(int a = 0; a < count; ++a) {
-    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps << ":" << (void*)interpolate( currentPos );
-    colors.append( mix(interpolate( currentPos ), standardColor, foregroundRatio) );
+    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*)interpolate( currentPos );
+    colors.append( mix(mix(interpolate( currentPos ), backgroundColor, backgroundRatio), standardColor, foregroundRatio) );
     //colors.append( interpolate(currentPos).rgb() );
     currentPos += step;
   }
