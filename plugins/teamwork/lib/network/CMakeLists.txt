@@ -46,6 +46,6 @@ INSTALL(TARGETS network ${INSTALL_TARGETS_DEFAULT_ARGS})
 ADD_EXECUTABLE( kdevteamwork_server ${testfiles} )
 TARGET_LINK_LIBRARIES( kdevteamwork_server  ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} dl )
 
-INSTALL(TARGETS kdevteamwork_server DESTINATION ${BIN_INSTALL_DIR})
+INSTALL(TARGETS kdevteamwork_server ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #ADD_DEPENDENCIES( kdevteamwork_server network )
