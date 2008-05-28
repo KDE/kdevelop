@@ -28,6 +28,7 @@
 #include "cppduchain/overloadresolutionhelper.h"
 #include <typesystem.h>
 #include "includeitem.h"
+#include "completionitem.h"
 
 namespace KTextEditor {
   class View;
@@ -39,6 +40,9 @@ namespace KDevelop {
   class AbstractType;
 }
 
+class CompletionTreeItem;
+typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+
 namespace Cpp {
   class OverloadResolutionFunction;
 
@@ -47,6 +51,11 @@ namespace Cpp {
    * */
   class CodeCompletionContext : public KShared {
     public:
+
+      ///Computes the full set of completion items, using the information retrieved earlier.
+      ///Should only be called on the first context, parent contexts are included in the computations.
+      ///@param Abort is checked regularly, and if it is false, the computation is aborted.
+      QList<CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort);
 
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 
@@ -103,7 +112,7 @@ namespace Cpp {
 
       ///@return the used access-operation
       MemberAccessOperation memberAccessOperation() const;
-      
+
       /**
        * When the access-operation is a MemberAccess or ArrowMemberAccess, this
        * is the container that completion should happen in
@@ -202,6 +211,8 @@ namespace Cpp {
       QList<Function> m_functions;
 
       KSharedPtr<CodeCompletionContext> m_parentContext;
+
+      QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
   };
 }
 
