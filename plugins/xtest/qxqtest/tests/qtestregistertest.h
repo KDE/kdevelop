@@ -18,17 +18,42 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_QTESTREGISTERTEST_H
+#define QXQTEST_QTESTREGISTERTEST_H
 
 #include <QtTest/QtTest>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+namespace QxQTest
+{
+class QTestRegister;
+class QTestSuite;
+class QTestCase;
+}
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+class QTestRegisterTest : public QObject
+{
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
 
-#endif // QXQTEST_KASSERTS_H
+    void parseSuiteXml();
+    void parseMultiSuitesXml();
+    void parseCaseXml();
+    void parseMultiCaseXml();
+    void parseCmdXml();
+    void parseMultiCmdXMl();
+
+private: // state
+    QxQTest::QTestRegister* reg;
+
+private: // helpers
+    void compareSuites(QxQTest::QTestSuite* exp,
+                       QxQTest::QTestSuite* actual);
+    void compareCase(QxQTest::QTestCase* expected,
+                     QxQTest::QTestCase* actual);
+    void registerTests(QByteArray& xml);
+};
+
+
+#endif // QXQTEST_QTESTREGISTERTEST_H

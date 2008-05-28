@@ -88,11 +88,19 @@ install(TARGETS qxcppunit DESTINATION ${LIB_INSTALL_DIR})
 
 set(qxqtest_SRCS
     qxqtest/qtestresult.cpp
-    qxqtest/qtestxmlparser.cpp)
+    qxqtest/qtestxmlparser.cpp
+    qxqtest/qtestcase.cpp
+    qxqtest/qtestcommand.cpp
+    qxqtest/qtestbase.cpp
+    qxqtest/qtestsuite.cpp
+    qxqtest/qtestregister.cpp
+    qxqtest/qtestitem.cpp
+    qxqtest/qtestmodel.cpp
+    qxqtest/testrunner.cpp)
 
 qt4_automoc(q${xqtest_SRCS})
 kde4_add_library(qxqtest SHARED ${qxqtest_SRCS})
-target_link_libraries(qxqtest ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} )
+target_link_libraries(qxqtest ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} qxrunner)
 install(TARGETS qxqtest DESTINATION ${LIB_INSTALL_DIR})
 
 ########## next target ###############
@@ -107,6 +115,7 @@ target_link_libraries(kdevxtest
     kdevplatformoutputview
     ${KDE4_THREADWEAVER_LIBRARIES}
     qxcppunit
+    qxqtest
     )
 
 install(TARGETS kdevxtest DESTINATION ${PLUGIN_INSTALL_DIR})

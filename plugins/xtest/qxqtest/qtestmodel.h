@@ -1,4 +1,4 @@
-/* KDevelop xUnit plugin
+/* KDevelop xUnit pluginQ
  *
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
@@ -18,17 +18,39 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_QTESTMODEL_H
+#define QXQTEST_QTESTMODEL_H
 
-#include <QtTest/QtTest>
+#include <qxrunner/runnermodel.h>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+class QIODevice;
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+namespace QxQTest
+{
 
-#endif // QXQTEST_KASSERTS_H
+class QTestSuite;
+class QTestCase;
+class QTestBase;
+
+class QTestModel : public QxRunner::RunnerModel
+{
+    Q_OBJECT
+
+public:
+    QTestModel(QObject* parent = 0);
+    ~QTestModel();
+
+    QString name() const;
+    QString about() const;
+
+    void readTests(QIODevice* dev);
+
+private:
+    void addSuite(QxQTest::QTestSuite* suite);
+    void addCase(QxQTest::QTestCase* caze, QxRunner::RunnerItem* parent);
+    QxRunner::RunnerItem* addTestItem(QxQTest::QTestBase*, QxRunner::RunnerItem*);
+};
+
+} // namespace QxQTest
+
+#endif // QXQTEST_QTESTMODEL_H

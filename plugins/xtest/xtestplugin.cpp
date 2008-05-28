@@ -26,7 +26,11 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
-#include "sample.h"
+//#include "sample.h"
+#include <QFile>
+#include "qxqtest/testrunner.h"
+
+#include <QDebug>
 
 K_PLUGIN_FACTORY(KDevXtestFactory, registerPlugin<KDevXtestPlugin>();)
 K_EXPORT_PLUGIN(KDevXtestFactory("kdevxtest"))
@@ -37,7 +41,11 @@ public:
     KDevXtestPluginFactory(KDevXtestPlugin *plugin): m_plugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent = 0) {
-        return sample::testRunnerWidget();
+        //return sample::testRunnerWidget();
+        QxQTest::TestRunner* runner = new QxQTest::TestRunner();
+        QFile* testXml = new QFile("/home/nix/.tests.xml");
+        runner->registerTests(testXml);
+        return runner->spawn();
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {

@@ -18,17 +18,39 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_QTESTCASE_H
+#define QXQTEST_QTESTCASE_H
 
-#include <QtTest/QtTest>
+#include <QString>
+#include <QFileInfo>
+#include <QList>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+#include "qtestbase.h"
+#include "qtestcommand.h"
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+namespace QxQTest
+{
 
-#endif // QXQTEST_KASSERTS_H
+class QTestCase : public QTestBase
+{
+Q_OBJECT
+public:
+    QTestCase();
+    QTestCase(const QString&, const QFileInfo&, QTestBase* parent);
+    virtual ~QTestCase();
+
+    void addTest(QTestCommand* test);
+    QTestCommand* getTestAt(unsigned i);
+    int nrofChildren();
+    QFileInfo exe();
+
+    void setExe(const QFileInfo&);
+
+private:
+    QFileInfo m_exe;
+    QList<QTestCommand*> m_children;
+};
+
+} // end namespace QxQTest
+
+#endif // QXQTEST_QTESTCASE_H

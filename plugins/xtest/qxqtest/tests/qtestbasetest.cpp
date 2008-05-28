@@ -18,17 +18,22 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "kasserts.h"
+#include "qtestbasetest.h"
+#include <qtest_kde.h>
 
-#include <QtTest/QtTest>
+using QxQTest::QTestBase;
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+void QTestBaseTest::construct()
+{
+    QTestBase t("t1", 0);
+    KOMPARE(t.name(), "t1");
+    KOMPARE(t.parent(), 0);
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+    QTestBase t2("t2", &t);
+    KOMPARE(t2.name(), "t2");
+    KOMPARE(t2.parent(), &t);
+}
 
-#endif // QXQTEST_KASSERTS_H
+#include "qtestbasetest.moc"
+QTEST_KDEMAIN(QTestBaseTest, NoGUI);

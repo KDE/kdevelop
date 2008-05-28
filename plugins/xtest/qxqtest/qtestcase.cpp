@@ -18,17 +18,48 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "qtestcase.h"
 
-#include <QtTest/QtTest>
+using QxQTest::QTestCase;
+using QxQTest::QTestBase;
+using QxQTest::QTestCommand;
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+QTestCase::QTestCase()
+    : QTestBase("", 0), m_exe(QFileInfo(""))
+{
+}
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestBase* parent)
+    : QTestBase(name, parent), m_exe(exe)
+{
+}
 
-#endif // QXQTEST_KASSERTS_H
+QTestCase::~QTestCase()
+{}
+
+int QTestCase::nrofChildren()
+{
+    return m_children.count();
+}
+
+QFileInfo QTestCase::exe()
+{
+    return m_exe;
+}
+
+void QTestCase::setExe(const QFileInfo& exe)
+{
+    m_exe = exe;
+}
+
+void QTestCase::addTest(QTestCommand* test)
+{
+    m_children.push_back(test);
+}
+
+QTestCommand* QTestCase::getTestAt(unsigned i)
+{
+    return m_children.value(i);
+}
+
+#include "qtestcase.moc"

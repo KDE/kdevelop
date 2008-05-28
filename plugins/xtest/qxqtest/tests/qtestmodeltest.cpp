@@ -18,17 +18,19 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "qtestmodeltest.h"
+#include <QByteArray>
+#include <QBuffer>
 
-#include <QtTest/QtTest>
+void QTestModelTest::processSingleSuite()
+{
+    QByteArray xml = 
+            "<?xml version="1.0" encoding="ISO-8859-1"?>"
+            "<root><suite name=\"suite1\" /></root>";
+    QBuffer buff(&xml);
+    QTestModel model;
+    model.registerFromXml(&buff);
+    KVERIFY(model.data());
+}
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
-
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
-
-#endif // QXQTEST_KASSERTS_H
+QTEST_KDEMAIN(QTestModelTest, NoGUI);

@@ -16,3 +16,8 @@ macro(kdev_qx_add_test test_EXEC test_SRCS)
 endmacro(kdev_qx_add_test)
 
 kdev_qx_add_test(ut-qtestxmlparser "qtestxmlparsertest.cpp")
+kdev_qx_add_test(ut-testcase "qtestcasetest.cpp")
+kdev_qx_add_test(ut-testcommand "qtestcommandtest.cpp")
+kdev_qx_add_test(ut-testbase "qtestbasetest.cpp")
+kdev_qx_add_test(ut-testsuite "qtestsuitetest.cpp")
+kdev_qx_add_test(ut-testregister "qtestregistertest.cpp")

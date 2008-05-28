@@ -18,17 +18,40 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_TESTRUNNER_H
+#define QXQTEST_TESTRUNNER_H
 
-#include <QtTest/QtTest>
+#include <QWidget>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+class QIODevice;
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+namespace QxRunner
+{
+class Runner;
+}
 
-#endif // QXQTEST_KASSERTS_H
+namespace QxQTest
+{
+
+class QTestModel;
+
+class TestRunner
+{
+public:
+    TestRunner();
+    virtual ~TestRunner();
+    void registerTests(QIODevice* dev);
+    QWidget* spawn();
+
+private: // operations
+    TestRunner(const TestRunner&);
+    TestRunner& operator=(const TestRunner&);
+
+private: // state
+    QxRunner::Runner* m_runner;
+    QTestModel* m_model;
+};
+
+} // namespace QxQTest
+
+#endif // QXQTEST_TESTRUNNER_H

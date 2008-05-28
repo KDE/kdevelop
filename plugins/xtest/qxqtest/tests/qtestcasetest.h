@@ -18,17 +18,27 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_QTESTCASETEST_H
+#define QXQTEST_QTESTCASETEST_H
 
 #include <QtTest/QtTest>
+#include <qtestcase.h>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+class QTestCaseTest : public QObject
+{
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
+    void constructDefault();
+    void construct();
+    void addCommand();
+    void addCommands();
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+private:
+    QFileInfo m_exe;
+    QString m_name;
+    QxQTest::QTestCase* m_case;
+};
 
-#endif // QXQTEST_KASSERTS_H
+#endif // QXQTEST_QTESTCASETEST_H

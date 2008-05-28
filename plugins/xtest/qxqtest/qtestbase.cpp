@@ -18,17 +18,40 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "qtestbase.h"
 
-#include <QtTest/QtTest>
+using QxQTest::QTestBase;
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+QTestBase::QTestBase()
+    :  m_name(""), m_parent(0)
+{
+}
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+QTestBase::QTestBase(const QString& name, QTestBase* parent)
+    : m_name(name), m_parent(parent)
+{}
 
-#endif // QXQTEST_KASSERTS_H
+QTestBase::~QTestBase()
+{}
+
+QString QTestBase::name()
+{
+    return m_name;
+}
+
+QTestBase* QTestBase::parent()
+{
+    return m_parent;
+}
+
+void QTestBase::setName(const QString& name)
+{
+    m_name = name;
+}
+
+void QTestBase::setParent(QTestBase* parent)
+{
+    m_parent = parent;
+}
+
+#include "qtestbase.moc"

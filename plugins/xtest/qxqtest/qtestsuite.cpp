@@ -18,17 +18,49 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "qtestsuite.h"
 
-#include <QtTest/QtTest>
+using QxQTest::QTestSuite;
+using QxQTest::QTestBase;
+using QxQTest::QTestCase;
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+QTestSuite::QTestSuite()
+    : QTestBase("", 0), m_path(QFileInfo(""))
+{
+}
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+QTestSuite::QTestSuite(const QString& name, const QFileInfo& path, QTestBase* parent)
+    : QTestBase(name, parent), m_path(path)
+{
+}
 
-#endif // QXQTEST_KASSERTS_H
+QTestSuite::~QTestSuite()
+{
+}
+
+unsigned QTestSuite::nrofChildren()
+{
+    return m_children.count();
+}
+
+QFileInfo QTestSuite::path()
+{
+    return m_path;
+}
+
+void QTestSuite::setPath(const QFileInfo& path)
+{
+    m_path = path;
+}
+
+void QTestSuite::addTest(QTestCase* test)
+{
+    m_children.push_back(test);
+}
+
+QTestCase* QTestSuite::getTestAt(unsigned i)
+{
+    return m_children.value(i);
+}
+
+#include "qtestsuite.moc"

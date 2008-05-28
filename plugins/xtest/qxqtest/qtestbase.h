@@ -18,17 +18,37 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#ifndef QXQTEST_QTESTBASE_H
+#define QXQTEST_QTESTBASE_H
 
-#include <QtTest/QtTest>
+#include <QString>
+#include <QFileInfo>
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+namespace QxQTest
+{
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+/**
+ * Base for QTestCase, QTestCommand, QTestSuite
+ **/
+class QTestBase : public QObject
+{
+Q_OBJECT
+public:
+    QTestBase();
+    QTestBase(const QString&, QTestBase* parent);
+    virtual ~QTestBase();
 
-#endif // QXQTEST_KASSERTS_H
+    QString name();
+    QTestBase* parent();
+
+    void setName(const QString&);
+    void setParent(QTestBase* parent);
+
+private:
+    QString m_name;
+    QTestBase* m_parent;
+};
+
+} // end namespace QxQTest
+
+#endif // QXQTEST_QTESTBASE_H

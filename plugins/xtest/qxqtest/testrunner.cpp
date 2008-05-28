@@ -18,17 +18,37 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
+#include "testrunner.h"
+#include "qtestmodel.h"
+#include <qxrunner/runner.h>
+#include <qxrunner/runnerwindow.h>
+#include <QIcon>
+#include <QIODevice>
 
-#include <QtTest/QtTest>
+using QxRunner::RunnerWindow;
+using QxQTest::TestRunner;
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
-#define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-#define KTODO QWARN("Test command not implemented yet")
+TestRunner::TestRunner()
+{
+    m_runner = 0;
+    m_model = new QTestModel;
+}
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+TestRunner::~TestRunner()
+{
+    // Delete the runner first.
+    delete m_runner;
+    delete m_model;
+}
 
-#endif // QXQTEST_KASSERTS_H
+void TestRunner::registerTests(QIODevice* dev)
+{
+    m_model->readTests(dev);
+}
+
+QWidget* TestRunner::spawn()
+{
+    RunnerWindow* window = new RunnerWindow;
+    window->setModel(m_model);
+    return window;
+}
