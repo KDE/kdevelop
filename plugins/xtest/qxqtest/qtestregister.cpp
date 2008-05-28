@@ -49,7 +49,8 @@ void cleanup(QTestCase* caze)
 
 void cleanup(QTestSuite* suite)
 {
-    if (!suite) return;
+    if (!suite) 
+        return;
     unsigned nrof = suite->nrofChildren();
     QTestCase* caze;
     for (unsigned i = 0; i < nrof; i++) {
@@ -68,12 +69,12 @@ QTestRegister::QTestRegister()
 
 QTestRegister::~QTestRegister()
 {
-/*    QTestSuite* suite;
+    QTestSuite* suite;
     unsigned size = m_suites.size();
     for (int i = 0; i < size; i++) {
         suite = m_suites.takeFirst();
         cleanup(suite);
-    }*/
+    }
 }
 
 bool QTestRegister::isStartElement_(const QString& elem)
@@ -93,12 +94,14 @@ void QTestRegister::addFromXml(QIODevice* dev)
 {
     Q_ASSERT(dev != 0);
     setDevice(dev);
-    if (!device()->isOpen()) device()->open(QIODevice::ReadOnly);
+    if (!device()->isOpen()) 
+        device()->open(QIODevice::ReadOnly);
 
     cout << "INSIDE ADDFROMXML READING STUFF" << endl;
     while (!atEnd()) {
         readNext();
-        if (isStartElement_(suiteTag)) processSuite();
+        if (isStartElement_(suiteTag)) 
+            processSuite();
     }
 
     cout << "NUMBER OF SUITES FOUND: " << nrofSuites() << endl;
@@ -114,7 +117,8 @@ void QTestRegister::processSuite()
 
     while (!atEnd() && !isEndElement_(suiteTag)) {
         readNext();
-        if (isStartElement_(caseTag)) processCase(suite);
+        if (isStartElement_(caseTag)) 
+            processCase(suite);
     }
 }
 
@@ -125,7 +129,8 @@ void QTestRegister::processCase(QTestSuite* suite)
 
     while (!atEnd() && !isEndElement_(caseTag)) {
         readNext();
-        if (isStartElement_(cmdTag)) processCmd(caze);
+        if (isStartElement_(cmdTag)) 
+            processCmd(caze);
     }
 }
 

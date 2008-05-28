@@ -70,7 +70,6 @@ void QTestModel::readTests(QIODevice* dev)
 {
     QTestRegister reg;
     reg.addFromXml(dev);
-    qDebug() << "QTestModel:: READTESTS ____________________________";
     for (unsigned i=0; i<reg.nrofSuites(); i++)
     {
         QTestSuite* suite = reg.takeSuite(i);
@@ -83,7 +82,6 @@ void QTestModel::readTests(QIODevice* dev)
 
 void QTestModel::addSuite(QTestSuite* suite)
 {
-    qDebug() << "QTestModel:: ADDING SUITE ____________________________";
     RunnerItem* item = addTestItem(suite, rootItem());
     for (unsigned i=0; i<suite->nrofChildren(); i++) 
         addCase(suite->getTestAt(i), item);
@@ -91,11 +89,9 @@ void QTestModel::addSuite(QTestSuite* suite)
 
 void QTestModel::addCase(QTestCase* caze, RunnerItem* parent)
 {
-    qDebug() << "QTestModel:: ADDING CASE ____________________________";
     RunnerItem* item = addTestItem(caze, parent);
     for (unsigned i=0; i<caze->nrofChildren(); i++)
     {
-        qDebug() << "QTestModel:: ADDING CMD ____________________________";
         addTestItem(caze->getTestAt(i), item);
     }
 }

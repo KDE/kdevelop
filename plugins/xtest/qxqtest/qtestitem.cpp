@@ -40,9 +40,11 @@ QTestItem::~QTestItem()
 
 int QTestItem::run()
 {
-    if (child(0)) return QxRunner::NoResult; // Have nothing to do as a parent
+    if (child(0)) 
+        return QxRunner::NoResult; // Have nothing to do as a parent
     QTestCommand* cmd = qobject_cast<QTestCommand*>(m_test);
-    if (cmd == 0) return QxRunner::NoResult; // Only run testcommands
+    if (cmd == 0) 
+        return QxRunner::NoResult; // Only run testcommands
 
     QProcess proc;
     startProcess(cmd, &proc);

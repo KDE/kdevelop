@@ -59,7 +59,9 @@ target_link_libraries(qxrunner
     ${KDE4_KDECORE_LIBS})
 
 qt4_automoc(${qxrunner_SRCS})
-install(TARGETS qxrunner DESTINATION ${LIB_INSTALL_DIR})
+
+install(TARGETS qxrunner ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS qxrunner DESTINATION ${LIB_INSTALL_DIR})
 
 # ########### next target ###############
 #
@@ -82,7 +84,8 @@ qt4_add_resources(qxcppunit_SRCS
 qt4_automoc( ${qxcppunit_SRCS} )
 kde4_add_library(qxcppunit SHARED ${qxcppunit_SRCS})
 target_link_libraries(qxcppunit qxrunner ${CPPUNIT_LIBRARY})
-install(TARGETS qxcppunit DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS qxcppunit ${INSTALL_TARGETS_DEFAULT_ARGS} )
+#install(TARGETS qxcppunit DESTINATION ${LIB_INSTALL_DIR})
 
 ########## next target ###############
 
@@ -101,7 +104,8 @@ set(qxqtest_SRCS
 qt4_automoc(q${xqtest_SRCS})
 kde4_add_library(qxqtest SHARED ${qxqtest_SRCS})
 target_link_libraries(qxqtest ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} qxrunner)
-install(TARGETS qxqtest DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS qxqtest ${INSTALL_TARGETS_DEFAULT_ARGS} )
+#install(TARGETS qxqtest DESTINATION ${LIB_INSTALL_DIR})
 
 ########## next target ###############
 

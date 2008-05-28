@@ -66,7 +66,8 @@ bool QTestXmlParser::isEndElement_(const char* elementName)
 
 QTestResult QTestXmlParser::go()
 {
-    if (!device()->isOpen()) device()->open(QIODevice::ReadOnly);
+    if (!device()->isOpen()) 
+        device()->open(QIODevice::ReadOnly);
     if (!device()->isReadable())
     {
         // do something
@@ -91,16 +92,20 @@ void QTestXmlParser::processTestFunction()
     while (!atEnd())
     {
         readNext();
-        if (isStartElement_("Incident")) fillResult();
-        if (isEndElement_("TestFunction")) return;
+        if (isStartElement_("Incident")) 
+            fillResult();
+        if (isEndElement_("TestFunction")) 
+            return;
     }
 }
 
 void QTestXmlParser::fillResult()
 {
     QString type = attributes().value("type").toString();
-    if (type == "pass") m_result.setState(QxRunner::RunSuccess);
-    else if (type == "fail") setFailure();
+    if (type == "pass") 
+        m_result.setState(QxRunner::RunSuccess);
+    else if (type == "fail") 
+        setFailure();
 }
 
 void QTestXmlParser::setFailure()
@@ -109,10 +114,10 @@ void QTestXmlParser::setFailure()
     m_result.setFile(QFileInfo(attributes().value("file").toString()));
     m_result.setLine(attributes().value("line").toString().toInt());
 
-    while (!atEnd())
+    while (!atEnd() && !isEndElement_("Description"))
     {
         readNext();
-        if (isCDATA()) m_result.setMessage(text().toString());
-        if (isEndElement_("Description")) break;
+        if (isCDATA())
+            m_result.setMessage(text().toString());
     }
 }
