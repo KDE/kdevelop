@@ -30,7 +30,7 @@ set(kdevprofileeditor_SRCS
 
 kde4_add_executable(kdevprofileeditor ${kdevprofileeditor_SRCS})
 target_link_libraries(kdevprofileeditor ${KDE4_KDECORE_LIBS} kdevplatform profileeditor ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
-install(TARGETS kdevprofileeditor DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS kdevprofileeditor ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
