@@ -162,7 +162,7 @@ public:
    * to be indices within m_usedLocalDeclarations, and positive indices within m_usedDeclarationIds
    * Any declarations that are within the same top-context are considered local.
    * */
-  QVector<Declaration*> m_usedLocalDeclarations;
+  QVector<DeclarationPointer> m_usedLocalDeclarations;
   private:
 
     void childClosure(QSet<TopDUContext*>& children) {
@@ -645,7 +645,7 @@ Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
   if(declarationIndex < 0) {
     declarationIndex = -(declarationIndex + 1);//Add one, because we have subtracted one in another place
     if(declarationIndex >= 0 && declarationIndex < d_func()->m_usedLocalDeclarations.size())
-      return d_func()->m_usedLocalDeclarations[declarationIndex];
+      return d_func()->m_usedLocalDeclarations[declarationIndex].data();
     else
       return 0;
   }else{
@@ -668,14 +668,15 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   }else{
     ENSURE_CAN_READ
   }
+  DeclarationPointer declarationPtr(declaration);
   if(declaration->topContext() == this) {
     //It is a local declaration, so we need a negative index.
-    int index = d_func()->m_usedLocalDeclarations.indexOf(declaration);
+    int index = d_func()->m_usedLocalDeclarations.indexOf(declarationPtr);
     if(index != -1)
       return -index - 1; //Subtract one so it's always negative
     if(!create)
       return std::numeric_limits<int>::max();
-    d_func()->m_usedLocalDeclarations.append(declaration);
+    d_func()->m_usedLocalDeclarations.append(declarationPtr);
     return -(d_func()->m_usedLocalDeclarations.count()-1) - 1; //Subtract one so it's always negative
   }else{
     DeclarationId id = declaration->id();
@@ -687,7 +688,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
       return std::numeric_limits<int>::max();
 
     d_func()->m_usedDeclarationIds.append(id);
-    d_func()->m_usedDeclarations.append(DeclarationPointer(declaration));
+    d_func()->m_usedDeclarations.append(declarationPtr);
 
     DUChain::uses()->addUse(id, this);
     
