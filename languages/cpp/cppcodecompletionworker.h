@@ -2,6 +2,7 @@
  * KDevelop C++ Code Completion Support
  *
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -27,55 +28,6 @@
 
 #include "cppcodecompletionmodel.h"
 
-namespace Cpp {
-  class CodeCompletionContext;
-}
-
-class CompletionTreeNode;
-class CompletionTreeItem;
-
-class CompletionTreeElement : public KShared {
-public:
-  CompletionTreeElement(CompletionTreeElement* _parent);
-  
-  virtual ~CompletionTreeElement();
-
-  CompletionTreeElement* parent() const;
-
-  int rowInParent() const;
-  
-  int columnInParent() const;
-
-  ///Each element is either a node, or an item.
-  
-  CompletionTreeNode* asNode();
-  
-  CompletionTreeItem* asItem();
-  
-  const CompletionTreeNode* asNode() const;
-  
-  const CompletionTreeItem* asItem() const;
-  
-private:
-  CompletionTreeElement* m_parent;
-  int m_rowInParent;
-};
-
-struct CompletionTreeNode : public CompletionTreeElement {
-  CompletionTreeNode(CompletionTreeElement* _parent);
-  ~CompletionTreeNode();
-  
-  KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
-  QVariant roleValue;
-  QList<KSharedPtr<CompletionTreeElement> > children;
-};
-
-struct CompletionTreeItem : public CompletionTreeElement {
-  CompletionTreeItem(CompletionTreeElement* _parent);
-  
-  CppCodeCompletionModel::CompletionItem item;
-};
-
 class CodeCompletionWorker : public QThread
 {
   Q_OBJECT
@@ -99,7 +51,7 @@ class CodeCompletionWorker : public QThread
 
   private:
 
-    void computeGroups(QList<CppCodeCompletionModel::CompletionItem> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
+    void computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
   
     KTextEditor::Cursor m_position;
     bool m_abort;

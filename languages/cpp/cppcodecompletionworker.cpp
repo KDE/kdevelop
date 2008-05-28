@@ -2,6 +2,7 @@
  * KDevelop C++ Code Completion Support
  *
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -49,63 +50,6 @@ using namespace TypeUtils;
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
 const int maxOverloadedArgumentHints = 5;
-
-///Intermediate nodes
-class CompletionTreeNode;
-///Leaf items
-class CompletionTreeItem;
-
-CompletionTreeElement::CompletionTreeElement(CompletionTreeElement* _parent) : m_parent(_parent), m_rowInParent(0) {
-  if( _parent ) {
-    CompletionTreeNode* node = _parent->asNode();
-    if( node )
-      m_rowInParent = node->children.count();
-  }
-}
-
-CompletionTreeElement::~CompletionTreeElement() {
-}
-
-CompletionTreeElement* CompletionTreeElement::parent() const {
-  return m_parent;
-}
-
-int CompletionTreeElement::columnInParent() const {
-  return 0;
-}
-
-CompletionTreeNode::CompletionTreeNode(CompletionTreeElement* _parent) : CompletionTreeElement(_parent) {
-}
-CompletionTreeNode::~CompletionTreeNode() {
-}
-  
-CompletionTreeItem::CompletionTreeItem(CompletionTreeElement* _parent) : CompletionTreeElement(_parent) {
-}
-  
-CompletionTreeNode* CompletionTreeElement::asNode() {
-  return dynamic_cast<CompletionTreeNode*>(this);
-}
-
-CompletionTreeItem* CompletionTreeElement::asItem() {
-  return dynamic_cast<CompletionTreeItem*>(this);
-}
-
-const CompletionTreeNode* CompletionTreeElement::asNode() const {
-  return dynamic_cast<const CompletionTreeNode*>(this);
-}
-
-const CompletionTreeItem* CompletionTreeElement::asItem() const {
-  return dynamic_cast<const CompletionTreeItem*>(this);
-}
-
-int CompletionTreeElement::rowInParent() const {
-  return m_rowInParent;
-/*  if( !m_parent )
-    return 0;
-  Q_ASSERT(m_parent->asNode());
-  
-  return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
-}
 
 
 CodeCompletionWorker::CodeCompletionWorker(CppCodeCompletionModel* parent)
@@ -165,7 +109,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     if (m_abort)
       return;
 
-    QList<CppCodeCompletionModel::CompletionItem> items;
+    QList<CompletionTreeItemPointer> items;
     
     if( completionContext->memberAccessContainer().isValid() ||completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
     {
@@ -176,10 +120,10 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
             return;
 
           foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, context->topContext(), false ) ) )
-            items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();
+            items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ) );
         }
       } else {
-        kDebug(9007) << "CppCodeCompletionModel::setContext: no container-type";
+        kDebug(9007) << "setContext: no container-type";
       }
     } else if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess ) {
       //Include-file completion
@@ -189,22 +133,20 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
         if (m_abort)
           return;
 
-        CppCodeCompletionModel::CompletionItem completionItem;
-        completionItem.includeItem = includeItem;
-        items << completionItem;
+        items << CompletionTreeItemPointer( new IncludeFileCompletionItem(includeItem) );
         ++cnt;
       }
       kDebug(9007) << "Added " << cnt << " include-files to completion-list";
     } else {
       //Show all visible declarations
-
-      foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->range().end : SimpleCursor(position), context->topContext()) ) ) {
+      QList<DeclarationDepthPair> decls = Cpp::hideOverloadedDeclarations( context->allDeclarations(context->type() == DUContext::Class ? context->range().end : SimpleCursor(position), context->topContext()) );
+      foreach( const DeclarationDepthPair& decl, decls ) {
         if (m_abort)
           return;
-        items << CppCodeCompletionModel::CompletionItem( DeclarationPointer(decl.first), completionContext, decl.second ), completionContext.data();
+        items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), completionContext, decl.second ) );
       }
 
-      kDebug(9007) << "CppCodeCompletionModel::setContext: using all declarations visible";
+      kDebug(9007) << "setContext: using all declarations visible:" << decls.size();
     }
 
 
@@ -220,15 +162,15 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
           //When there is too many overloaded functions, do not show them. They can just be too many.
           if( ((parentContext->functions().count() == 0 || parentContext->functions().count() > maxOverloadedOperatorArgumentHints) && parentContext->additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall)
                 || parentContext->functions().count() > maxOverloadedArgumentHints) {
-            items << CppCodeCompletionModel::CompletionItem( KDevelop::DeclarationPointer(), parentContext, 0, 0 );
+            items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(), parentContext, 0, 0 ) );
             if(parentContext->functions().count())
-              items.back().alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
+              items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
             else
-              items.back().alternativeText = parentContext->functionName();
+              items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = parentContext->functionName();
           }else{
             int num = 0;
             foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
-              items << CppCodeCompletionModel::CompletionItem( function.function.declaration(), parentContext, 0, num );
+              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), parentContext, 0, num ) );
               ++num;
             }
           }
@@ -239,19 +181,16 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     } while( parentContext );
     computeGroups( items, completionContext );
   } else {
-    kDebug(9007) << "CppCodeCompletionModel::setContext: Invalid code-completion context";
+    kDebug(9007) << "setContext: Invalid code-completion context";
   }
 }
 
 ///Always the last item of a grouping chain: Only inserts the items
 struct LastGrouper {
-  LastGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CppCodeCompletionModel::CompletionItem> items)
+  LastGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
   {
-    foreach( const CppCodeCompletionModel::CompletionItem& value, items )
-    {
-      KSharedPtr<CompletionTreeItem> item( new CompletionTreeItem(parent) );
-      item->item = value;
-      
+    foreach( CompletionTreeItemPointer item, items ) {
+      item->setParent(parent);
       tree << KSharedPtr<CompletionTreeElement>( item.data() );
     }
   }
@@ -262,22 +201,23 @@ template<class KeyExtractor, class NextGrouper = LastGrouper>
 struct ItemGrouper {
   typedef typename KeyExtractor::KeyType KeyType;
   
-  ItemGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CppCodeCompletionModel::CompletionItem> items)
+  ItemGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
   {
-    typedef QMap<KeyType, QList<CppCodeCompletionModel::CompletionItem> > GroupMap;
+    typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
     GroupMap groups;
     
-    foreach(const CppCodeCompletionModel::CompletionItem& item, items) {
+    foreach(const CompletionTreeItemPointer& item, items) {
       KeyType key = KeyExtractor::extract(item);
       typename GroupMap::iterator it = groups.find(key);
       if(it == groups.end())
-        it = groups.insert(key, QList<CppCodeCompletionModel::CompletionItem>());
+        it = groups.insert(key, QList<CompletionTreeItemPointer>());
 
       (*it).append(item);
     }
 
     for( typename GroupMap::const_iterator it = groups.begin(); it != groups.end(); ++it ) {
-      KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode(parent));
+      KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode());
+      node->setParent(parent);
       node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;
       node->roleValue = QVariant(it.key());
 
@@ -293,11 +233,8 @@ struct ArgumentHintDepthExtractor {
   typedef int KeyType;
   enum { Role = CodeCompletionModel::ArgumentHintDepth };
   
-  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
-    if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
-      return item.completionContext->depth();
-    else
-      return 0;
+  static KeyType extract( const CompletionTreeItemPointer& item ) {
+    return item->argumentHintDepth();
   }
 };
 
@@ -306,8 +243,8 @@ struct InheritanceDepthExtractor {
   
   enum { Role = CodeCompletionModel::InheritanceDepth };
   
-  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
-    return item.inheritanceDepth;
+  static KeyType extract( const CompletionTreeItemPointer& item ) {
+    return item->inheritanceDepth();
   }
 };
 
@@ -318,9 +255,10 @@ struct SimplifiedAttributesExtractor {
 
   static int groupingProperties;
   
-  static KeyType extract( const CppCodeCompletionModel::CompletionItem& item ) {
-    if( item.declaration.data() )
-      return DUChainUtils::completionProperties(item.declaration.data()) & groupingProperties;
+  static KeyType extract( const CompletionTreeItemPointer& item ) {
+    const NormalDeclarationCompletionItem* decItem = item->asItem<NormalDeclarationCompletionItem>();
+    if( decItem && decItem->declaration.data() )
+      return DUChainUtils::completionProperties(decItem->declaration.data()) & groupingProperties;
     else
       return 0;
   }
@@ -329,10 +267,10 @@ struct SimplifiedAttributesExtractor {
 ///@todo make configurable. These are the attributes that can be respected for grouping.
 int SimplifiedAttributesExtractor::groupingProperties = CodeCompletionModel::Public | CodeCompletionModel::Protected | CodeCompletionModel::Private | CodeCompletionModel::Static | CodeCompletionModel::TypeAlias | CodeCompletionModel::Variable | CodeCompletionModel::Class | CodeCompletionModel::GlobalScope | CodeCompletionModel::LocalScope | CodeCompletionModel::GlobalScope | CodeCompletionModel::NamespaceScope;
 
-void CodeCompletionWorker::computeGroups(QList<CppCodeCompletionModel::CompletionItem> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
+void CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
 {
+  kDebug(9007) << "grouping" << items.count() << "completion-items";
   QList<KSharedPtr<CompletionTreeElement> > tree;
-  
   /**
    * 1. Group by argument-hint depth
    * 2. Group by inheritance depth

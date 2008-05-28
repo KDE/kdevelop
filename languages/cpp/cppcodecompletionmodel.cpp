@@ -63,34 +63,6 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
-const bool indentByDepth = false;
-
-DUContext* getFunctionContext(Declaration* decl) {
-  DUContext* internal = decl->internalContext();
-  if( !internal )
-    return 0;
-  if( internal->type() == DUContext::Function )
-    return internal;
-  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
-    if( ctx )
-      if( ctx->type() == DUContext::Function )
-        return ctx.data();
-  }
-  return 0;
-}
-
-//Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
-AbstractType::Ptr effectiveType( Declaration* decl )
-{
-  if( !decl || !decl->abstractType() )
-    return AbstractType::Ptr();
-
-  if( decl->type<FunctionType>() )
-    return decl->type<FunctionType>()->returnType();
-
-  return decl->abstractType();
-}
-
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
   , m_mutex(new QMutex)
@@ -114,6 +86,11 @@ CppCodeCompletionModel::~CppCodeCompletionModel()
   m_worker->quit();
 
   delete m_mutex;
+}
+
+void CppCodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, Cpp::NavigationWidget* widget) const
+{
+  m_navigationWidgets[element] = widget;
 }
 
 void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
@@ -204,194 +181,7 @@ KSharedPtr<Cpp::CodeCompletionContext> CppCodeCompletionModel::completionContext
   return m_completionContext;
 }
 
-void CppCodeCompletionModel::createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const
-{
-  ///@todo also highlight the matches of the previous arguments, they are given by ViableFunction
-  Declaration* dec(item.declaration.data());
-
-  Cpp::CodeCompletionContext::Function f;
-
-  if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
-    f = item.completionContext->functions()[item.listOffset];
-
-  int textFormatStart = 0;
-  QTextFormat normalFormat(QTextFormat::CharFormat);
-  QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
-
-  AbstractFunctionDeclaration* decl = dynamic_cast<AbstractFunctionDeclaration*>(dec);
-  CppFunctionType::Ptr functionType = dec->type<CppFunctionType>();
-  if (functionType && decl) {
-
-    QVector<Declaration*> parameters;
-    if( getFunctionContext(dec) )
-      parameters = getFunctionContext(dec)->localDeclarations();
-    
-    QStringList defaultParams = decl->defaultParameters();
-
-    QVector<Declaration*>::const_iterator paramNameIt = parameters.begin();
-    QStringList::const_iterator defaultParamIt = defaultParams.begin();
-
-    int firstDefaultParam = functionType->arguments().count() - defaultParams.count();
-
-    ret = "(";
-    bool first = true;
-    int num = 0;
-
-    const QList<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
-    QList<Cpp::ViableFunction::ParameterConversion>::const_iterator parameterConversion = conversions.begin();
-
-    foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
-      if (first)
-        first = false;
-      else
-        ret += ", ";
-
-      bool doHighlight = false;
-      QTextFormat doFormat = normalFormat;
-
-      if( ( f.function.isValid() && num == f.matchedArguments ) )
-      {
-        doHighlight = true;
-        doFormat = highlightFormat;
-
-      } else if( num < f.matchedArguments )
-      {
-        doHighlight = true;
-        doFormat = QTextFormat( QTextFormat::CharFormat );
-
-        if( parameterConversion != conversions.end() ) {
-          //Interpolate the color
-          quint64 badMatchColor = 0xff7777ff; //Full blue
-          quint64 goodMatchColor = 0xff77ff77; //Full green
-
-          uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-(*parameterConversion).rank) + goodMatchColor*(*parameterConversion).rank)/Cpp::MaximumConversionResult;
-
-          doFormat.setBackground( QBrush(totalColor) );
-
-          ++parameterConversion;
-        }
-      }
-
-      if( doHighlight )
-      {
-        if( highlighting && ret.length() != textFormatStart )
-        {
-          //Add a default-highlighting for the passed text
-          *highlighting <<  QVariant(textFormatStart);
-          *highlighting << QVariant(ret.length() - textFormatStart);
-          *highlighting << QVariant(normalFormat);
-          textFormatStart = ret.length();
-        }
-      }
-
-      if (argument)
-        ret += argument->toString();
-      else
-        ret += "<incomplete type>";
-
-      if( paramNameIt != parameters.end() && !(*paramNameIt)->identifier().isEmpty() )
-        ret += " " + (*paramNameIt)->identifier().toString();
-
-      if( doHighlight  )
-      {
-        if( highlighting && ret.length() != textFormatStart )
-        {
-          *highlighting <<  QVariant(textFormatStart);
-          *highlighting << QVariant(ret.length() - textFormatStart);
-          *highlighting << doFormat;
-          textFormatStart = ret.length();
-        }
-      }
-
-      if( num >= firstDefaultParam ) {
-        ret += " = " + *defaultParamIt;
-        ++defaultParamIt;
-      }
-
-      ++num;
-      if( paramNameIt != parameters.end() )
-        ++paramNameIt;
-    }
-    ret += ')';
-
-    if( highlighting && ret.length() != textFormatStart ) {
-      *highlighting <<  QVariant(textFormatStart);
-      *highlighting << QVariant(ret.length());
-      *highlighting << normalFormat;
-      textFormatStart = ret.length();
-    }
-
-    return;
-  }
-}
-
-QVariant CppCodeCompletionModel::getIncludeData(const QModelIndex& index, int role) const
-{
-  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  if( !element || !element->asItem() )
-    return QVariant();
-
-  const CompletionItem& completionItem(element->asItem()->item);
-  const Cpp::IncludeItem& item( completionItem.includeItem );
-
-  switch (role) {
-    case IsExpandable:
-      return QVariant(true);
-    case ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(item, m_currentTopContext);
-      m_navigationWidgets[&completionItem] = nav;
-
-       QVariant v;
-       v.setValue<QWidget*>((QWidget*)nav);
-       return v;
-    }
-    case AccessibilityNext:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
-      if( w )
-        w->next();
-    }
-    break;
-    case AccessibilityPrevious:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
-      if( w )
-        w->previous();
-    }
-    break;
-    case AccessibilityAccept:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&completionItem];
-      if( w )
-        w->accept();
-    }
-    break;
-    case InheritanceDepth:
-      return item.pathNumber;
-    case Qt::DisplayRole:
-      switch (index.column()) {
-        case Prefix:
-          if(item.isDirectory)
-            return QVariant("directory");
-          else
-            return QVariant("file");
-        case Name: {
-          return item.isDirectory ? item.name + QDir::separator() : item.name;
-        }
-      }
-      break;
-    case ItemSelected:
-    {
-//      KUrl path = item.basePath;
-//      path.addPath("/" + item.name);
-//      return QVariant(path.prettyUrl());
-      return QVariant( Cpp::NavigationWidget::shortDescription(item) );
-    }
-  }
-
-  return QVariant();
-}
-
+///@todo move into subclass
 void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
 {
   DUChainReadLocker lock(DUChain::lock(), 3000);
@@ -404,66 +194,7 @@ void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Ra
   if( !element || !element->asItem() )
     return;
 
-  bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
-  bool spaceBetweenParens = true;
-  bool spaceBetweenEmptyParens = false;
-  
-  const CompletionItem& item(element->asItem()->item);
-  
-  if( index.data( CodeCompletionModel::ArgumentHintDepth ).toInt() )
-    return; //Do not replace any text when it is an argument-hint
-
-  QString newText = data(index.sibling(index.row(), Name)).toString();
-  int properties = data(index, CompletionRole).toInt();
-  
-  document->replaceText(word, newText);
-
-  if( properties & CodeCompletionModel::Function ) {
-    bool haveArguments = false;
-    if( item.declaration && item.declaration->type<CppFunctionType>() && item.declaration->type<CppFunctionType>()->arguments().count() )
-      haveArguments = true;
-    //Need to have a paren behind
-    QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
-    if( suffix.trimmed().startsWith("(") ) {
-      //Move the cursor behind the opening paren
-      if( document->activeView() )
-        document->activeView()->setCursorPosition( word.end() + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
-    }else{
-      //We need to insert an opening paren
-      QString openingParen;
-      if( spaceBeforeParen )
-        openingParen = " (";
-      else
-        openingParen = "(";
-
-      if( spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens) )
-        openingParen += " ";
-
-      QString closingParen;
-      if( spaceBetweenParens && (haveArguments) ) {
-        closingParen = " )";
-      } else
-        closingParen = ")";
-
-      KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
-
-      //If no arguments, move the cursor behind the closing paren
-      if( !haveArguments )
-        jumpPos += KTextEditor::Cursor( 0, closingParen.length() );
-      
-      document->insertText( word.end(), openingParen + closingParen );
-      if( document->activeView() )
-        document->activeView()->setCursorPosition( jumpPos );
-    }
-  }
-}
-
-//The name to be viewed in the name column
-QString nameForDeclaration(Declaration* dec) {
-  if (dec->identifier().toString().isEmpty())
-    return "<unknown>";
-  else
-    return dec->identifier().toString();
+  element->asItem()->execute(document, word);
 }
 
 QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
@@ -472,14 +203,7 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
   if( !element )
     return QVariant();
 
-  DUChainReadLocker lock(DUChain::lock(), 500);
-  if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
-    return QVariant();
-  }
-
-
-  const CompletionTreeElement& treeElement(*element);
+  CompletionTreeElement& treeElement(*element);
 
   if( role == CodeCompletionModel::GroupRole ) {
     if( treeElement.asNode() ) {
@@ -504,285 +228,42 @@ QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
     return QVariant();
   }
 
-  const CompletionItem& item(treeElement.asItem()->item);
-
-  bool isArgumentHint = false;
-  if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
-    isArgumentHint = true;
-  
-  //Stuff that does not require a declaration:
+  //Navigation widget interaction is done here, the other stuff is done within the tree-elements
   switch (role) {
-    case InheritanceDepth:
-      return item.inheritanceDepth;
-      break;
-    case SetMatchContext:
-      m_currentMatchContext = item;
-      return QVariant(1);
-    case ArgumentHintDepth:
-      if( isArgumentHint )
-        return item.completionContext->depth();
-      else
-        return QVariant();
-  };
+    case CodeCompletionModel::InheritanceDepth:
+      return treeElement.asItem()->inheritanceDepth();
+    case CodeCompletionModel::ArgumentHintDepth:
+      return treeElement.asItem()->argumentHintDepth();
   
-  Declaration* dec = const_cast<Declaration*>( item.declaration.data() );
-  if (!dec) {
-    if(completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::IncludeListAccess)
-      return getIncludeData(index, role);
-
-    if(role == Qt::DisplayRole && index.column() == Name)
-      return item.alternativeText;
-
-    return QVariant();
-  }
-  
-  //Stuff that needs a declaration:
-
-  switch (role) {
     case AccessibilityNext:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->next();
     }
     break;
     case AccessibilityPrevious:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->previous();
     }
     break;
     case AccessibilityAccept:
     {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&item];
+      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->accept();
     }
     break;
-    case BestMatchesCount:
-      return QVariant(5);
-    break;
-    case MatchQuality:
-    {
-      if( m_currentMatchContext.declaration && m_currentMatchContext.completionContext && m_currentMatchContext.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && m_currentMatchContext.listOffset < m_currentMatchContext.completionContext->functions().count() )
-      {
-        Cpp::CodeCompletionContext::Function f( m_currentMatchContext.completionContext->functions()[m_currentMatchContext.listOffset] );
-
-        if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<CppFunctionType>() && f.function.declaration()->type<CppFunctionType>()->arguments().count() > f.matchedArguments ) {
-          Cpp::TypeConversion conv(m_currentTopContext.data());
-
-          ///@todo fill the lvalue-ness correctly
-          int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
-          return QVariant(quality);
-        }else{
-          //kDebug(9007) << "MatchQuality requested with invalid match-context";
-        }
-      } else {
-        //kDebug(9007) << "MatchQuality requested with invalid match-context";
-      }
-    }
-    return QVariant();
-    case ArgumentHintDepth:
-    if( isArgumentHint )
-        return item.completionContext->depth();
-      else
-        return QVariant();
-    case ItemSelected:
-       return QVariant(Cpp::NavigationWidget::shortDescription(dec));
-    case IsExpandable:
-      return QVariant(true);
-    case ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(dec), m_currentTopContext);
-      m_navigationWidgets[&item] = nav;
-
-       QVariant v;
-       v.setValue<QWidget*>((QWidget*)nav);
-       return v;
-    }
-    case Qt::DisplayRole:
-      switch (index.column()) {
-        case Prefix:
-        {
-          int depth = item.inheritanceDepth;
-          if( depth >= 1000 )
-            depth-=1000;
-          QString indentation;
-          if(indentByDepth)
-            indentation = QString(depth, ' ');
-
-          if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
-            if( alias->identifier().isEmpty() ) {
-              return indentation + "using namespace";/* " + alias->importIdentifier().toString();*/
-            } else {
-              return indentation + "namespace";/* " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();*/
-            }
-          }
-
-          if( dec->isTypeAlias() )
-            indentation += "typedef ";
-
-          if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() && !dec->isTypeAlias() ) {
-            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
-              switch (classType->classType()) {
-                case CppClassType::Class:
-                  return indentation + "class";
-                  break;
-                case CppClassType::Struct:
-                  return indentation + "struct";
-                  break;
-                case CppClassType::Union:
-                  return indentation + "union";
-                  break;
-              }
-            return QVariant();
-          }
-          if (dec->abstractType()) {
-            if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
-              ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
-
-              if (functionType->returnType())
-                return indentation + functionType->returnType()->toString();
-              else if(funDecl && funDecl->isConstructor() )
-                return indentation + "<constructor>";
-              else if(funDecl && funDecl->isDestructor() )
-                return indentation + "<destructor>";
-              else
-                return indentation + "<incomplete type>";
-
-            } else {
-              QString ret = indentation;
-              if(dec->type<CppEnumeratorType>())
-                ret += "enumerator ";
-              return  ret + dec->abstractType()->toString();
-            }
-          } else {
-            return indentation + "<incomplete type>";
-          }
-        }
-
-        case Scope: {
-          //The scopes are not needed
-          return QVariant();
-/*          QualifiedIdentifier id = dec->qualifiedIdentifier();
-          if (id.isEmpty())
-            return QVariant();
-          id.pop();
-          if (id.isEmpty())
-            return QVariant();
-          return id.toString() + "::";*/
-        }
-
-        case Name:
-          return nameForDeclaration(dec);
-
-        case Arguments:
-          if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
-            QString ret;
-            createArgumentList(item, ret, 0);
-            return ret;
-          }
-        break;
-        case Postfix:
-          if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
-            return functionType->cvString();
-          }
-          break;
-      }
-      break;
-    case HighlightingMethod:
-    if( index.column() == Arguments ) {
-      if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-        return QVariant(CustomHighlighting);
-      }else{
-        return QVariant();
-      }
-      break;
-    } else if(index.column() == Name) {
-      return QVariant(CustomHighlighting);
-    }
-
-    break;
-
-    case CustomHighlight:
-    if( index.column() == Arguments && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-      QString ret;
-      QList<QVariant> highlight;
-      createArgumentList(item, ret, &highlight);
-      return QVariant(highlight);
-    }
-    if( index.column() == Name ) {
-      //Bold
-      QTextCharFormat boldFormat;
-      boldFormat.setFontWeight(QFont::Bold);
-
-      QList<QVariant> ret;
-      ret << 0;
-      ret << nameForDeclaration(dec).length();
-      ret << QVariant(boldFormat);
-      
-      return QVariant(ret);
-    }
-    break;
-    case Qt::DecorationRole:
-    case CompletionRole: {
-      CompletionProperties p = DUChainUtils::completionProperties(dec);
-
-      if (dec->abstractType()) {
-        if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
-          if (cv->isConstant())
-            p |= Const;
-          if (cv->isVolatile())
-            ;//TODO
-          }
-
-        switch (dec->abstractType()->whichType()) {
-          case AbstractType::TypeIntegral:
-            if (dec->type<CppEnumerationType>()) {
-              // Remove variable bit set in DUChainUtils
-              p &= ~Variable;
-              p |= Enum;
-            }
-            break;
-          case AbstractType::TypeStructure:
-            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
-              switch (classType->classType()) {
-                case CppClassType::Class:
-                  p |= Class;
-                  break;
-                case CppClassType::Struct:
-                  // Remove class bit set in DUChainUtils
-                  p &= ~Class;
-                  p |= Struct;
-                  break;
-                case CppClassType::Union:
-                  // Remove class bit set in DUChainUtils
-                  p &= ~Class;
-                  p |= Union;
-                  break;
-              }
-            break;
-        }
-      }
-
-      if( role == CompletionRole ) {
-        return (int)p;
-
-      } else {
-        if( index.column() == Icon ) {
-          lock.unlock();
-          return DUChainUtils::iconForProperties(p);
-        }
-        break;
-
-      }
-    }
-
-    case ScopeIndex:
-      return static_cast<int>(reinterpret_cast<long>(dec->context()));
   }
 
-  return QVariant();
+  return treeElement.asItem()->data(index, role, this);
+}
+
+KDevelop::TopDUContextPointer CppCodeCompletionModel::currentTopContext() const
+{
+  return m_currentTopContext;
 }
 
 QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex& parent) const

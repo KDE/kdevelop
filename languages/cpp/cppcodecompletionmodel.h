@@ -2,6 +2,7 @@
  * KDevelop C++ Code Completion Support
  *
  * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -30,6 +31,7 @@
 #include <duchainpointer.h>
 #include "codecompletioncontext.h"
 #include "includeitem.h"
+#include "completionitem.h"
 
 class QIcon;
 class QString;
@@ -70,19 +72,11 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
   
     void setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext);
     KSharedPtr<Cpp::CodeCompletionContext> completionContext() const;
-    
-    struct CompletionItem {
-      CompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
-      }
-      
-      KDevelop::DeclarationPointer declaration;
-      KSharedPtr<Cpp::CodeCompletionContext> completionContext;
-      int inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
-      int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
-      QString alternativeText; //Text shown when declaration is zero
-      //If this is a completion for an include-file, this contains the file.
-      Cpp::IncludeItem includeItem;
-    };
+
+    KDevelop::TopDUContextPointer currentTopContext() const;
+
+    //Tracks navigation widget so they can be interactive with through the keyboard later on
+    void addNavigationWidget(const CompletionTreeElement* element, Cpp::NavigationWidget* widget) const;
 
   Q_SIGNALS:
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
@@ -95,11 +89,7 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
 
-    void createArgumentList(const CompletionItem& item, QString& ret, QList<QVariant>* highlighting ) const;
-    
-    mutable CompletionItem m_currentMatchContext;
-    
-    mutable QMap<const CompletionItem*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
+    mutable QMap<const CompletionTreeElement*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
     QMutex* m_mutex;

@@ -40,6 +40,8 @@ set(kdevcpplanguagesupport_PART_SRCS
     includepathresolver.cpp
     setuphelpers.cpp
     quickopen.cpp
+    completionitem.cpp
+    completionhelpers.cpp
 )
 
 
