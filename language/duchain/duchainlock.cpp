@@ -24,6 +24,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
+#include <QtCore/QStack>
 #include <QTime>
 
 // Uncomment the following to turn on verbose locking information
@@ -37,6 +38,10 @@
 
 //If DEBUG_LOG_TIMING is uncommented, and the duchain is locked for more then this count of milliseconds, a message is printed
 #define LOCK_LOG_MILLISECONDS 1000
+
+//If this is uncommented, backtraces are produced whenever the duchain is read-locked, and shows it when the same thread tries to get a write-lock, triggering an assertion.
+//Very expensive!
+//#define DEBUG_ASSERTION_BACKTRACES
 
 //Uncomment this to search for Deadlocks. DEBUG_LOG_TIMING must be enabled too, and DEBUG_LOG_BACKTRACE is recommended
 //Warning: this may result in a total spamming of the command-line.
@@ -107,6 +112,10 @@ public:
   QString m_lockBacktrace;
 #endif
 #endif
+  
+#ifdef DEBUG_ASSERTION_BACKTRACES
+  QHash<Qt::HANDLE, QStack<QString> > m_readerBacktraces;
+#endif
 };
 
 class DUChainWriteLockerPrivate
@@ -171,10 +180,13 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 #ifdef DEBUG_LOCK_TIMING
     d->startLockTiming();
 #endif
+    
+#ifdef DEBUG_ASSERTION_BACKTRACES
+    d->m_readerBacktraces[QThread::currentThreadId()].push(kBacktrace());
+    Q_ASSERT(d->m_readerBacktraces[QThread::currentThreadId()].size() == d->m_readers[QThread::currentThreadId()]);
+#endif
   }
 
-  lock.unlock();
-  
   return locked;
 }
 
@@ -203,6 +215,10 @@ void DUChainLock::releaseReadLock()
 /*  if( *it == 0 )
     d->m_readers.erase(it); //Maybe it would even be wise simply leaving it there*/
 
+#ifdef DEBUG_ASSERTION_BACKTRACES
+  d->m_readerBacktraces[QThread::currentThreadId()].pop();
+#endif
+
 #ifdef DEBUG_LOCK_TIMING
   d->auditTime();
 #endif
@@ -222,13 +238,20 @@ bool DUChainLock::lockForWrite(uint timeout)
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
   kDebug(9505) << "DUChain write lock requested by thread:" << QThread::currentThreadId();
+  kDebug(9505) << "Current backtrace:" << kBacktrace();
 #endif
 
   if(timeout == 0)
     timeout = 10000;
   
   QMutexLocker lock(&d->m_mutex);
-  //It is not allowed to acquire a write-lock while holding read-lock 
+  //It is not allowed to acquire a write-lock while holding read-lock
+
+#ifdef DEBUG_ASSERTION_BACKTRACES
+  if(d->ownReaderRecursion())
+    kWarning(9505) << "Tried to lock the duchain for writing, but it was already locked for reading here:\n" << d->m_readerBacktraces[QThread::currentThreadId()].top();
+#endif
+
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
   unsigned int currentTime = 0;
