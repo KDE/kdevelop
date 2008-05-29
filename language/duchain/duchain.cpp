@@ -130,6 +130,8 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
   sdDUChainPrivate->m_chains.insert( context->parsingEnvironmentFile()->identity(), context );
   
   addToEnvironmentManager( context );
+
+  branchModified(context);
 }
 
 
@@ -138,7 +140,11 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
   ENSURE_CHAIN_WRITE_LOCKED
 
   kDebug(9505) << "duchain: removing document" << document.toString();
-  sdDUChainPrivate->m_chains.remove(document);
+  if (sdDUChainPrivate->m_chains.contains(document)) {
+    TopDUContext* context = sdDUChainPrivate->m_chains.take(document);
+
+    branchRemoved(context);
+  }
 }
 
 void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * chain )
@@ -343,6 +349,16 @@ DUChainObserver* DUChain::notifier()
 void DUChain::branchAdded(DUContext* context)
 {
   emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
+}
+
+void DUChain::branchModified(DUContext* context)
+{
+  emit sdDUChainPrivate->notifier->branchModified(DUContextPointer(context));
+}
+
+void DUChain::branchRemoved(DUContext* context)
+{
+  emit sdDUChainPrivate->notifier->branchRemoved(DUContextPointer(context));
 }
 
 void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {

@@ -134,6 +134,8 @@ public:
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);*/
 
   static void branchAdded(DUContext* context);
+  static void branchModified(DUContext* context);
+  static void branchRemoved(DUContext* context);
 
   /**
    * @see ParsingEnvironmentManager
