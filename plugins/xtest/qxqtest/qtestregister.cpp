@@ -37,10 +37,11 @@ namespace
 void cleanup(QTestCase* caze)
 {
     if (!caze) return;
-    unsigned nrof = caze->nrofChildren();
+    unsigned nrof = caze->testCommandCount();
     QTestCommand* cmd;
-    for (unsigned i = 0; i < nrof; i++) {
-        cmd = caze->getTestAt(i);
+    for (unsigned i = 0; i < nrof; i++)
+    {
+        cmd = caze->testAt(i);
         delete cmd;
     }
     delete caze;
@@ -49,12 +50,13 @@ void cleanup(QTestCase* caze)
 
 void cleanup(QTestSuite* suite)
 {
-    if (!suite) 
+    if (!suite)
         return;
-    unsigned nrof = suite->nrofChildren();
+    unsigned nrof = suite->testCaseCount();
     QTestCase* caze;
-    for (unsigned i = 0; i < nrof; i++) {
-        caze = suite->getTestAt(i);
+    for (unsigned i = 0; i < nrof; i++)
+    {
+        caze = suite->testAt(i);
         cleanup(caze);
     }
     delete suite;
@@ -69,12 +71,12 @@ QTestRegister::QTestRegister()
 
 QTestRegister::~QTestRegister()
 {
-    QTestSuite* suite;
-    unsigned size = m_suites.size();
-    for (int i = 0; i < size; i++) {
-        suite = m_suites.takeFirst();
-        cleanup(suite);
-    }
+//     QTestSuite* suite;
+//     unsigned size = m_suites.size();
+//     for (int i = 0; i < size; i++) {
+//         suite = m_suites.takeFirst();
+//         cleanup(suite);
+//     }
 }
 
 bool QTestRegister::isStartElement_(const QString& elem)
@@ -87,9 +89,6 @@ bool QTestRegister::isEndElement_(const QString& elem)
     return isEndElement() && (name() == elem);
 }
 
-#include <iostream>
-using namespace std;
-
 void QTestRegister::addFromXml(QIODevice* dev)
 {
     Q_ASSERT(dev != 0);
@@ -97,15 +96,15 @@ void QTestRegister::addFromXml(QIODevice* dev)
     if (!device()->isOpen()) 
         device()->open(QIODevice::ReadOnly);
 
-    cout << "INSIDE ADDFROMXML READING STUFF" << endl;
-    while (!atEnd()) {
+    while (!atEnd())
+    {
         readNext();
         if (isStartElement_(suiteTag)) 
             processSuite();
     }
 
-    cout << "NUMBER OF SUITES FOUND: " << nrofSuites() << endl;
-    if (hasError()) {
+    if (hasError())
+    {
         qDebug() << "ERR: " << errorString() << " @ " << lineNumber() << ":" << columnNumber();
     }
 }
@@ -115,7 +114,8 @@ void QTestRegister::processSuite()
     QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), 0);
     m_suites.push_back(suite);
 
-    while (!atEnd() && !isEndElement_(suiteTag)) {
+    while (!atEnd() && !isEndElement_(suiteTag))
+    {
         readNext();
         if (isStartElement_(caseTag)) 
             processCase(suite);
@@ -127,9 +127,10 @@ void QTestRegister::processCase(QTestSuite* suite)
     QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
     suite->addTest(caze);
 
-    while (!atEnd() && !isEndElement_(caseTag)) {
+    while (!atEnd() && !isEndElement_(caseTag))
+    {
         readNext();
-        if (isStartElement_(cmdTag)) 
+        if (isStartElement_(cmdTag))
             processCmd(caze);
     }
 }
@@ -155,7 +156,7 @@ QFileInfo QTestRegister::fetchExe()
     return QFileInfo(attributes().value("exe").toString());
 }
 
-unsigned QTestRegister::nrofSuites()
+unsigned QTestRegister::testSuiteCount()
 {
     return m_suites.size();
 }

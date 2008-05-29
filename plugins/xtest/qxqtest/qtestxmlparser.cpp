@@ -76,7 +76,8 @@ QTestResult QTestXmlParser::go()
     while (!atEnd() && m_result.isGood())
     {
         readNext();
-        if (isStartElement_("TestFunction")) processTestFunction();
+        if (isStartElement_("TestFunction"))
+            processTestFunction();
     }
 
     if (hasError())

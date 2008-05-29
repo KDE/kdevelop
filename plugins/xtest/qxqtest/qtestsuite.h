@@ -40,9 +40,9 @@ public:
     virtual ~QTestSuite();
 
     void addTest(QTestCase* test);
-    QTestCase* getTestAt(unsigned i);
+    QTestCase* testAt(unsigned i);
 
-    unsigned nrofChildren();
+    unsigned testCaseCount();
     QFileInfo path();
 
     void setPath(const QFileInfo&);

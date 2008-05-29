@@ -40,10 +40,10 @@ QTestItem::~QTestItem()
 
 int QTestItem::run()
 {
-    if (child(0)) 
+    if (child(0))
         return QxRunner::NoResult; // Have nothing to do as a parent
     QTestCommand* cmd = qobject_cast<QTestCommand*>(m_test);
-    if (cmd == 0) 
+    if (cmd == 0)
         return QxRunner::NoResult; // Only run testcommands
 
     QProcess proc;
@@ -53,13 +53,12 @@ int QTestItem::run()
 
 void QTestItem::startProcess(QTestCommand* cmd, QProcess* proc)
 {
-    QString cmdStr = cmd->cmd();
+    QString cmdStr = cmd->command();
     QStringList splitted = cmdStr.split(" ");
     QStringList argv;
     argv << "-xml" << splitted[1]; // the testcommand name
     proc->start(splitted[0], argv); // command name is argument to qtest exe
     proc->waitForFinished(-1); // blocks
-    qDebug() << "PROC EXITCODE "  << proc->exitCode() << "[ " << cmdStr << "]";
 }
 
 int QTestItem::parseOutput(QProcess* proc)

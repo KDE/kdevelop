@@ -20,7 +20,7 @@
 
 #include "qtestsuitetest.h"
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include <qtest_kde.h>
 #include <qtestcase.h>
 
@@ -55,13 +55,13 @@ void QTestSuiteTest::construct()
 
 void QTestSuiteTest::addChildCase()
 {
-    KOMPARE(m_suite->nrofChildren(), 0);
+    KOMPARE(m_suite->testCaseCount(), 0);
 
     QTestCase t("t1", someExe(), m_suite);
     m_suite->addTest(&t);
 
-    KOMPARE(m_suite->nrofChildren(), 1);
-    KOMPARE(m_suite->getTestAt(0), &t);
+    KOMPARE(m_suite->testCaseCount(), 1);
+    KOMPARE(m_suite->testAt(0), &t);
 }
 
 void QTestSuiteTest::addChildCases()
@@ -71,9 +71,9 @@ void QTestSuiteTest::addChildCases()
     m_suite->addTest(&t1);
     m_suite->addTest(&t2);
 
-    KOMPARE(m_suite->nrofChildren(), 2);
-    KOMPARE(m_suite->getTestAt(0), &t1);
-    KOMPARE(m_suite->getTestAt(1), &t2);
+    KOMPARE(m_suite->testCaseCount(), 2);
+    KOMPARE(m_suite->testAt(0), &t1);
+    KOMPARE(m_suite->testAt(1), &t2);
 }
 
 #include "qtestsuitetest.moc"

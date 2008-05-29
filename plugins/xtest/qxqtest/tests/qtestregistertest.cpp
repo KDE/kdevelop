@@ -25,7 +25,7 @@
 #include <qtestcase.h>
 #include <qtestcommand.h>
 
-#include "kasserts.h"
+#include <kasserts.h>
 
 #include <QByteArray>
 #include <QFileInfo>
@@ -96,31 +96,31 @@ void QTestRegisterTest::parseSuiteXml()
     QByteArray xml = headerXml + suite1Xml + footerXml;
     registerTests(xml);
 
-    KOMPARE(1, reg->nrofSuites());
+    KOMPARE(1, reg->testSuiteCount());
     QTestSuite expected("suite1", QFileInfo("/a/b"), 0);
     compareSuites(&expected, reg->takeSuite(0));
-    KOMPARE(0, reg->takeSuite(0)->nrofChildren());
+    KOMPARE(0, reg->takeSuite(0)->testCaseCount());
 }
 void QTestRegisterTest::parseMultiSuitesXml()
 {
     QByteArray xml = headerXml + suite1Xml + suite2Xml + footerXml;
     registerTests(xml);
 
-    KOMPARE(2, reg->nrofSuites());
+    KOMPARE(2, reg->testSuiteCount());
     // suite1
     QTestSuite exp1("suite1", QFileInfo("/a/b"), 0);
     compareSuites(&exp1, reg->takeSuite(0));
-    KOMPARE(0, reg->takeSuite(0)->nrofChildren());
+    KOMPARE(0, reg->takeSuite(0)->testCaseCount());
     // suite2
     QTestSuite exp2("suite2", QFileInfo("/c/d"), 0);
     compareSuites(&exp2, reg->takeSuite(1));
-    KOMPARE(0, reg->takeSuite(1)->nrofChildren());
+    KOMPARE(0, reg->takeSuite(1)->testCaseCount());
 }
 
 void QTestRegisterTest::compareCase(QTestCase* expected, QTestCase* actual)
 {
     KOMPARE(expected->name(), actual->name());
-    KOMPARE(expected->exe(),  actual->exe());
+    KOMPARE(expected->executable(),  actual->executable());
     KOMPARE(expected->parent(), actual->parent());
 }
 
@@ -129,9 +129,9 @@ void QTestRegisterTest::parseCaseXml()
     QByteArray xml = headerXml + suiteStart + caze1 + suiteEnd + footerXml;
     registerTests(xml);
 
-    KOMPARE(1, reg->takeSuite(0)->nrofChildren());
+    KOMPARE(1, reg->takeSuite(0)->testCaseCount());
     QTestCase exp("test1", QFileInfo("t.sh"), reg->takeSuite(0));
-    compareCase(&exp, reg->takeSuite(0)->getTestAt(0));
+    compareCase(&exp, reg->takeSuite(0)->testAt(0));
 }
 
 void QTestRegisterTest::parseMultiCaseXml()
@@ -139,13 +139,13 @@ void QTestRegisterTest::parseMultiCaseXml()
     QByteArray xml = headerXml + suiteStart + caze1 + caze2 + suiteEnd + footerXml;
     registerTests(xml);
 
-    KOMPARE(2, reg->takeSuite(0)->nrofChildren());
+    KOMPARE(2, reg->takeSuite(0)->testCaseCount());
     // caze1
     QTestCase exp1("test1", QFileInfo("t.sh"), reg->takeSuite(0));
-    compareCase(&exp1, reg->takeSuite(0)->getTestAt(0));
+    compareCase(&exp1, reg->takeSuite(0)->testAt(0));
     // caze2
     QTestCase exp2("test2", QFileInfo("t2.sh"), reg->takeSuite(0));
-    compareCase(&exp2, reg->takeSuite(0)->getTestAt(1));
+    compareCase(&exp2, reg->takeSuite(0)->testAt(1));
 }
 
 void QTestRegisterTest::registerTests(QByteArray& xml)
@@ -164,18 +164,18 @@ void QTestRegisterTest::parseMultiCmdXMl()
     QByteArray xml = headerXml + suiteStart + cazeStart + cmd1 + cmd2 + cazeEnd + suiteEnd + footerXml;
     registerTests(xml);
 
-    KOMPARE(1, reg->nrofSuites());
+    KOMPARE(1, reg->testSuiteCount());
     QTestSuite* suite = reg->takeSuite(0);
-    KOMPARE(1, suite->nrofChildren());
-    QTestCase* caze = suite->getTestAt(0);
-    KOMPARE(2, caze->nrofChildren());
+    KOMPARE(1, suite->testCaseCount());
+    QTestCase* caze = suite->testAt(0);
+    KOMPARE(2, caze->testCommandCount());
     // cmd1
-    QTestCommand* actual = caze->getTestAt(0);
+    QTestCommand* actual = caze->testAt(0);
     KOMPARE("cmd11", actual->name());
-    KOMPARE("/a/b/t.sh cmd11", actual->cmd());
-    actual = caze->getTestAt(1);
+    KOMPARE("/a/b/t.sh cmd11", actual->command());
+    actual = caze->testAt(1);
     KOMPARE("cmd12", actual->name());
-    KOMPARE("/a/b/t.sh cmd12", actual->cmd());
+    KOMPARE("/a/b/t.sh cmd12", actual->command());
 }
 
 #include "qtestregistertest.moc"

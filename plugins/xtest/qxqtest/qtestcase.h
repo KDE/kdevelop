@@ -40,9 +40,9 @@ public:
     virtual ~QTestCase();
 
     void addTest(QTestCommand* test);
-    QTestCommand* getTestAt(unsigned i);
-    int nrofChildren();
-    QFileInfo exe();
+    QTestCommand* testAt(unsigned i);
+    int testCommandCount();
+    QFileInfo executable();
 
     void setExe(const QFileInfo&);
 

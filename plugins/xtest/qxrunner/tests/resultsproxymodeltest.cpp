@@ -20,7 +20,7 @@
 
 #include <resultsproxymodel.h>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 #include "resultsproxymodeltest.h"
 #include "modelcreation.h"
 

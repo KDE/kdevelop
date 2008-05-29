@@ -26,7 +26,7 @@
 #include <QSignalSpy>
 #include <QMap>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 #include "runnermodeltest.h"
 #include "modelcreation.h"
 
@@ -122,9 +122,10 @@ void RunnerModelTest::runItems()
 
     foreach(QSignalSpy* spy, spies)
     {
-        //qDebug() << *spy;
         KOMPARE(1, spy->size());
-        KOMPARE(QVariant(0), spy->takeFirst().at(0));
+        QCOMPARE(QVariant(0), spy->takeFirst().at(0));
+        // using KOMPARE here makes qlist assert
+        // QFATAL : RunnerModelTest::runItems() ASSERT: "!isEmpty()" in file /usr/include/QtCore/qlist.h, line 252
     }
 
     foreach(QSignalSpy* spy, spies) delete spy;

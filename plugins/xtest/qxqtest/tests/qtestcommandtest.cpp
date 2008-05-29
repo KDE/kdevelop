@@ -19,7 +19,7 @@
  */
 
 #include "qtestcommandtest.h"
-#include "kasserts.h"
+#include <kasserts.h>
 #include <qtest_kde.h>
 
 #include <qtestsuite.h>
@@ -49,13 +49,13 @@ void QTestCommandTest::cmdString()
     suite.addTest(&caze);
     caze.addTest(&cmd);
 
-    KOMPARE("/a/b/c.sh cmd", cmd.cmd());
+    KOMPARE("/a/b/c.sh cmd", cmd.command());
 }
 
 void QTestCommandTest::cmdStringNoParent()
 {
     QTestCommand cmd("cmd1",0);
-    KOMPARE("", cmd.cmd());
+    KOMPARE("", cmd.command());
 }
 
 void QTestCommandTest::cmdStringNoSuite()
@@ -63,7 +63,7 @@ void QTestCommandTest::cmdStringNoSuite()
     QTestCase caze("c1", QFileInfo("c.sh"), 0);
     QTestCommand cmd("cmd1",&caze);
     caze.addTest(&cmd);
-    KOMPARE("c.sh cmd1", cmd.cmd());
+    KOMPARE("c.sh cmd1", cmd.command());
 }
 
 

@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include "qtestbasetest.h"
 #include <qtest_kde.h>
 

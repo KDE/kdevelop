@@ -20,7 +20,7 @@
 
 #include <utils.h>
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include "utilstest.h"
 
 using QxRunner::Utils;

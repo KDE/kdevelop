@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <qtest_kde.h>
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include "resultsmodeltest.h"
 #include "modelcreation.h"
 

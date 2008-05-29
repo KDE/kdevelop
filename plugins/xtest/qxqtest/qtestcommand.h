@@ -36,7 +36,7 @@ public:
     QTestCommand(const QString&, QTestBase*);
     virtual ~QTestCommand();
 
-    QString cmd();
+    QString command();
 };
 
 } // end namespace QxQTest

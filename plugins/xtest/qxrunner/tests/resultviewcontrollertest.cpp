@@ -20,7 +20,7 @@
 
 #include <resultsviewcontroller.h>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 #include "resultviewcontrollertest.h"
 
 using QxRunner::ResultViewController;

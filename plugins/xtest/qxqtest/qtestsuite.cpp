@@ -38,7 +38,7 @@ QTestSuite::~QTestSuite()
 {
 }
 
-unsigned QTestSuite::nrofChildren()
+unsigned QTestSuite::testCaseCount()
 {
     return m_children.count();
 }
@@ -58,7 +58,7 @@ void QTestSuite::addTest(QTestCase* test)
     m_children.push_back(test);
 }
 
-QTestCase* QTestSuite::getTestAt(unsigned i)
+QTestCase* QTestSuite::testAt(unsigned i)
 {
     return m_children.value(i);
 }

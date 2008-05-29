@@ -20,7 +20,7 @@
 
 #include <viewcontrollercommon.h>
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include "viewcontrollercommontest.h"
 
 using QxRunner::ViewControllerCommon;

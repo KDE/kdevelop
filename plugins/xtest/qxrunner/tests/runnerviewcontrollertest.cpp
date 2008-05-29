@@ -23,7 +23,7 @@
 #include <ui_runnerwindow.h>
 #include <QMainWindow>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 #include "runnerviewcontrollertest.h"
 #include "modelcreation.h"
 

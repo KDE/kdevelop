@@ -40,14 +40,14 @@ QTestCommand::QTestCommand(const QString& name, QTestBase* parent)
 QTestCommand::~QTestCommand()
 {}
 
-QString QTestCommand::cmd()
+QString QTestCommand::command()
 {
     // TODO get rid of all these casts
     QFileInfo cmd;
     QTestBase* caze = parent();
     if (caze == 0 || qobject_cast<QTestCase*>(caze) == 0)
             return "";
-    cmd = qobject_cast<QTestCase*>(caze)->exe();
+    cmd = qobject_cast<QTestCase*>(caze)->executable();
 
     QTestBase* suite = caze->parent();
     if(suite != 0 && qobject_cast<QTestSuite*>(suite) != 0)

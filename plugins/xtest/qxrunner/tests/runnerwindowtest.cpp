@@ -22,7 +22,7 @@
 #include <runnermodel.h>
 #include <qtest_kde.h>
 
-#include "kasserts.h"
+#include <kasserts.h>
 #include "runnerwindowtest.h"
 #include "modelcreation.h"
 
@@ -60,8 +60,8 @@ void RunnerWindowTest::startItems()
         QFAIL("Timeout while waiting for runner items to complete execution");
 
     // check they got indeed executed
-    KOMPARE(0, RunnerItemStub::executedItems.takeFirst());
-    KOMPARE(1, RunnerItemStub::executedItems.takeFirst());
+    QCOMPARE(0, RunnerItemStub::executedItems.takeFirst());
+    QCOMPARE(1, RunnerItemStub::executedItems.takeFirst());
 
     // validate the runneritem content
     assertRunnerItemEquals(0, "00", "0_1", "0_2", QxRunner::RunSuccess);

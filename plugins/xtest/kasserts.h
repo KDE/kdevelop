@@ -18,10 +18,20 @@
  * 02110-1301, USA.
  */
 
+#ifndef QXQTEST_KASSERTS_H
+#define QXQTEST_KASSERTS_H
+
 #include <QtTest/QtTest>
 
 #define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
 #define KVERIFY(condition) QVERIFY(condition)
 #define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY(expected == actual)
+#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual)) 
+// actually there's a subtle problem with this macro, will have to look into it a bit
+// I'm getting 'QFATAL : RunnerModelTest::runItems() ASSERT: "!isEmpty()" in file /usr/include/QtCore/qlist.h, line 252'
+// QCOMPARE generates no such assert ...
 #define KTODO QWARN("Test command not implemented yet")
+
+#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+
+#endif // QXQTEST_KASSERTS_H

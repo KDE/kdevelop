@@ -21,7 +21,7 @@
 #include <runneritem.h>
 #include <QString>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 #include "runneritemtest.h"
 
 using QxRunner::RunnerItem;

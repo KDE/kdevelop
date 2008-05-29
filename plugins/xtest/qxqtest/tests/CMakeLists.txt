@@ -1,8 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
-        ${XtestPlugin_BINARY_DIR} 
-        ${XtestPlugin_SOURCE_DIR}/qxqtest 
-        ${XtestPlugin_SOURCE_DIR})
+        ${XtestPlugin_SOURCE_DIR}/qxqtest
+        ${XtestPlugin_SOURCE_DIR}) # for kasserts.h
 
 macro(kdev_qx_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )

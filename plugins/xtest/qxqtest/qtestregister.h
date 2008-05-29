@@ -41,7 +41,7 @@ public:
     virtual ~QTestRegister();
 
     void addFromXml(QIODevice*);
-    unsigned nrofSuites();
+    unsigned testSuiteCount();
     QTestSuite* takeSuite(unsigned);
 
 private: // helpers

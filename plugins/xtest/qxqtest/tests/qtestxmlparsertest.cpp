@@ -24,7 +24,7 @@
 #include "qtestxmlparsertest.h"
 
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 
 #include <QBuffer>
 #include <QMetaType>

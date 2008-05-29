@@ -21,7 +21,7 @@
 #include <proxymodelcommon.h>
 #include <QString>
 #include <qtest_kde.h>
-#include "kasserts.h"
+#include <kasserts.h>
 
 #include "proxymodelcommontest.h"
 
