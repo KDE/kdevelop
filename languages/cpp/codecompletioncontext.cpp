@@ -560,6 +560,8 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
   return m_parentContext.data();
 }
 
+#ifndef TEST_COMPLETION
+
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& abort) {
     LOCKDUCHAIN;
     
@@ -644,3 +646,5 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     } while( parentContext );
   return items;
 }
+
+#endif
