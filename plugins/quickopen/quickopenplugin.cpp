@@ -243,7 +243,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
 }
 
 void QuickOpenWidgetHandler::run() {
-  m_dialog->exec();
+  m_dialog->show();
 }
 
 QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
@@ -486,6 +486,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 
 QuickOpenPlugin::~QuickOpenPlugin()
 {
+  freeModel();
+  
   delete m_model;
   delete m_projectFileData;
   delete m_projectItemData;
@@ -497,6 +499,9 @@ void QuickOpenPlugin::unload()
 
 void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
+  if(!freeModel())
+    return;
+  
   QStringList initialItems;
   if( modes & Files )
     initialItems << i18n("Files");
@@ -507,9 +512,9 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if( modes & Classes )
     initialItems << i18n("Classes");
   
-  QuickOpenWidgetHandler handler( m_model, initialItems, lastUsedScopes );
-  connect( &handler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
-  handler.run();
+  m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, lastUsedScopes );
+  connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
+  m_currentWidgetHandler->run();
 }
 
 
@@ -522,29 +527,21 @@ void QuickOpenPlugin::storeScopes( const QStringList& scopes )
 
 void QuickOpenPlugin::quickOpen()
 {
-  if(!modelIsFree())
-    return;
   showQuickOpen( All );
 }
 
 void QuickOpenPlugin::quickOpenFile()
 {
-  if(!modelIsFree())
-    return;
   showQuickOpen( Files );
 }
 
 void QuickOpenPlugin::quickOpenFunction()
 {
-  if(!modelIsFree())
-    return;
   showQuickOpen( Functions );
 }
 
 void QuickOpenPlugin::quickOpenClass()
 {
-  if(!modelIsFree())
-    return;
   showQuickOpen( Classes );
 }
 
@@ -682,7 +679,7 @@ void QuickOpenPlugin::quickOpenDefinition()
 
 void QuickOpenPlugin::quickOpenNavigate()
 {
-  if(!modelIsFree())
+  if(!freeModel())
     return;
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   
@@ -691,8 +688,8 @@ void QuickOpenPlugin::quickOpenNavigate()
 
   if(widget || decl) {
   
-    QuickOpenModel model(0);
-    model.setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
+    QuickOpenModel* model = new QuickOpenModel(0);
+    model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
 
     if(widget) {
       QPair<KUrl, SimpleCursor> jumpPos = specialObjectJumpPosition();
@@ -705,7 +702,7 @@ void QuickOpenPlugin::quickOpenNavigate()
       QList<CustomItem> items;
       items << item;
     
-      model.registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
+      model->registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
     }else{
       DUChainItem item;
       
@@ -715,13 +712,15 @@ void QuickOpenPlugin::quickOpenNavigate()
       QList<DUChainItem> items;
       items << item;
 
-      model.registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
+      model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
     }
 
     //Change the parent so there are no conflicts in destruction order
-    QuickOpenWidgetHandler handler( &model, QStringList(), QStringList(), true, true );
-    model.setExpanded(model.index(0,0, QModelIndex()), true);
-    handler.run();
+    m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true, true );
+    model->setParent(m_currentWidgetHandler);
+    model->setExpanded(model->index(0,0, QModelIndex()), true);
+    
+    m_currentWidgetHandler->run();
   }
   
   if(!decl) {
@@ -797,20 +796,18 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
   }
 }
 
-bool QuickOpenPlugin::modelIsFree() const
+bool QuickOpenPlugin::freeModel()
 {
-  if(m_model->treeView()) {
-    //We cannot allow more than 1 quickopen widget at a time, because the model is coupled to the view.
-    kDebug() << "Only one quickopen-widget at a time is allowed";
-    return false;
-  }else{
-    return true;
-  }
+  if(m_currentWidgetHandler)
+    delete m_currentWidgetHandler;
+  m_currentWidgetHandler = 0;
+  
+  return true;
 }
 
 void QuickOpenPlugin::quickOpenNavigateFunctions()
 {
-  if(!modelIsFree())
+  if(!freeModel())
     return;
 
   IDocument* doc = ICore::self()->documentController()->activeDocument();
@@ -828,7 +825,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
     return;
   }
   
-  QuickOpenModel model(0);
+  QuickOpenModel* model = new QuickOpenModel(0);
 
   QList<DUChainItem> items;
 
@@ -852,19 +849,20 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   Declaration* cursorDecl = cursorContextDeclaration();
   
-  model.registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
+  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
-  QuickOpenWidgetHandler handler( &model, QStringList(), QStringList(), true );
+  m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true );
   //Select the declaration that contains the cursor
   if(cursorDecl) {
     int num = 0;
     foreach(const DUChainItem& item, items) {
       if(item.m_item.data() == cursorDecl)
-        handler.o.list->setCurrentIndex( model.index(num,0,QModelIndex()) );
+        m_currentWidgetHandler->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
       ++num;
     }
   }
-  handler.run();
+  model->setParent(m_currentWidgetHandler);
+  m_currentWidgetHandler->run();
 }
 
 #include "quickopenplugin.moc"
