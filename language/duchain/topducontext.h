@@ -117,6 +117,10 @@ public:
      * Placeholder used in searching-functions, when the flag should simply be ignored.
      * */
     AnyFlag=2,
+    /**
+     * Can be used by language parts to mark contexts they currently update(for their internal usage)
+     * */
+    UpdatingContext = 4,
     LastFlag
   };
 
