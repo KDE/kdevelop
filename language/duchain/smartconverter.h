@@ -35,8 +35,6 @@ public:
   ~SmartConverter();
   ///Converts all ranges in the given context to smart-ranges
   void convertDUChain(DUContext* context) const;
-  ///@todo Why doesn't unconvertDUChain unconvert the duchain?
-  void unconvertDUChain(DUContext* context) const;
 
 private:
   class SmartConverterPrivate* const d;

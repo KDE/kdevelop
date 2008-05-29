@@ -389,14 +389,6 @@ QList<KUrl> DUChain::documents() const
 
 void DUChain::documentAboutToBeDeleted(KTextEditor::Document * doc)
 {
-    // Convert any smart chains to document chains
-    EditorIntegrator editor;
-    SmartConverter sc(&editor);
-
-    QList<TopDUContext*> chains = chainsForDocument(doc->url());
-
-    foreach (TopDUContext* chain, chains)
-        sc.unconvertDUChain(chain);
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)

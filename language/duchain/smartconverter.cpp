@@ -100,20 +100,6 @@ void SmartConverter::convertDUChain(DUContext* context) const
   }
 }
 
-void SmartConverter::unconvertDUChain(DUContext* context) const
-{
-  DUChainWriteLocker lock(DUChain::lock());
-
-  Q_ASSERT(!d->m_hl);
-  d->m_editor->setCurrentUrl( context->url() );
-
-  if (d->m_editor->smart() && !context->smartRange()) {
-    context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
-
-    d->convertDUChainInternal(context, true);
-  }
-}
-
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
