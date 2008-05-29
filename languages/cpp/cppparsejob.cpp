@@ -55,6 +55,7 @@
 #include <topducontext.h>
 #include "preprocessjob.h"
 #include "environmentmanager.h"
+#include <unistd.h>
 
 using namespace KDevelop;
 
@@ -406,6 +407,27 @@ void CPPInternalParseJob::run()
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
       if(contentContext) {
+        
+        ///We're updating, wait until no other thread is updating this context, and then mark that we are updating it.
+        bool wait = true;
+        
+        while(wait) {
+          DUChainWriteLocker l(DUChain::lock());
+          if( contentContext->flags() & TopDUContext::UpdatingContext )
+            wait = true;
+          else
+            wait = false;
+          kDebug(9007) << "waiting while" << parentJob()->document().str() << "is being updated by another thread";
+          
+          if(!wait)
+            contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() | TopDUContext::UpdatingContext) );
+          
+          if(wait) {
+            l.unlock();
+            sleep(1);
+          }
+        }
+        
         DUChainWriteLocker l(DUChain::lock());
         contentContext->clearProblems();
       }
@@ -454,28 +476,34 @@ void CPPInternalParseJob::run()
           }
       }
 
-      if (parentJob()->abortRequested())
-          return parentJob()->abortJob();
+      if (!parentJob()->abortRequested()) {
+        if (parentJob()->needUses() || (updatingContentContext && updatingContentContext->hasUses())) {
+            parentJob()->setLocalProgress(0.5, i18n("Building uses"));
+          
+            UseBuilder useBuilder(&editor);
+            useBuilder.buildUses(ast);
+        }
 
-      if (parentJob()->needUses() || (updatingContentContext && updatingContentContext->hasUses())) {
-          parentJob()->setLocalProgress(0.5, i18n("Building uses")); ///@todo better text?
-        
-          UseBuilder useBuilder(&editor);
-          useBuilder.buildUses(ast);
-
-          if (parentJob()->abortRequested())
-              return parentJob()->abortJob();
-      }
-
-      if (editor.smart()) {
-        editor.smart()->clearRevision();
-        
-        if ( parentJob()->cpp()->codeHighlighting() )
-        {
-            QMutexLocker lock(editor.smart()->smartMutex());
-            parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
+        if (!parentJob()->abortRequested() && editor.smart()) {
+          editor.smart()->clearRevision();
+          
+          if ( parentJob()->cpp()->codeHighlighting() )
+          {
+              QMutexLocker lock(editor.smart()->smartMutex());
+              parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
+          }
         }
       }
+      
+      ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
+      {
+          DUChainWriteLocker l(DUChain::lock());
+          contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
+      }
+      
+      if (parentJob()->abortRequested())
+        return parentJob()->abortJob();
+
     }else{
       DUChainWriteLocker l(DUChain::lock());
       ///Add all our imports to the re-used context, just to make sure they are there.

@@ -45,6 +45,8 @@ public:
    * Compile either a context-definition chain, or add uses to an existing
    * chain.
    *
+   * The returned context will have the TopDUContext::UpdatingContext flag set.
+   *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
   KDevelop::TopDUContext* buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);

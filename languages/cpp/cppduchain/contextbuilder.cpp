@@ -274,7 +274,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       
       topLevelContext->setSmartRange(m_editor->topRange(CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
-
+      topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
       DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
     }
 
