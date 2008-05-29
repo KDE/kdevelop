@@ -64,6 +64,15 @@ AbstractType* CppIntegralType::clone() const {
   return new CppIntegralType(*this);
 }
 
+bool CppIntegralType::moreExpressiveThan(CppIntegralType* rhs) const {
+  bool ret = m_type > rhs->m_type && !((rhs->m_modifiers & ModifierSigned) && !(m_modifiers & ModifierSigned));
+  if((rhs->m_modifiers & ModifierLongLong) && !(m_modifiers & ModifierLongLong))
+    ret = false;
+  if((rhs->m_modifiers & ModifierLong) && !(m_modifiers & ModifierLongLong) && !(m_modifiers & ModifierLong))
+    ret = false;
+  return ret;
+}
+
 AbstractType* CppTemplateParameterType::clone() const {
   return new CppTemplateParameterType(*this);
 }
@@ -288,28 +297,28 @@ CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstant
 }
 
 template<>
-void CppConstantIntegralType::setValue<qint64>(qint64 value) {
+void CppConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((typeModifiers() & ModifierUnsigned))
     kWarning() << "setValue(signed) called on unsigned type";
   m_value = value;
 }
 
 template<>
-void CppConstantIntegralType::setValue<quint64>(quint64 value) {
+void CppConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(typeModifiers() & ModifierUnsigned))
     kWarning() << "setValue(unsigned) called on not unsigned type";
   m_value = (qint64)value;
 }
 
 template<>
-void CppConstantIntegralType::setValue<float>(float value) {
+void CppConstantIntegralType::setValueInternal<float>(float value) {
   if(integralType() != TypeFloat)
     kWarning() << "setValue(float) called on non-float type";
   memcpy(&m_value, &value, sizeof(float));
 }
 
 template<>
-void CppConstantIntegralType::setValue<double>(double value) {
+void CppConstantIntegralType::setValueInternal<double>(double value) {
   if(integralType() != TypeDouble)
     kWarning() << "setValue(double) called on non-double type";
   memcpy(&m_value, &value, sizeof(double));

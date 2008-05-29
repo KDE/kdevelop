@@ -89,14 +89,14 @@ public:
   typedef KSharedPtr<CppIntegralType> Ptr;
 
   enum IntegralTypes {
+    TypeVoid,
     TypeNone,
     TypeChar,
-    TypeWchar_t,  // C++ only
     TypeBool, // C++ only
+    TypeWchar_t,  // C++ only
     TypeInt,
     TypeFloat,
-    TypeDouble,
-    TypeVoid
+    TypeDouble
   };
 
   IntegralTypes integralType() const;
@@ -122,6 +122,9 @@ public:
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
+
+  //A simple hack that tries taking the modifiers and the type itself into account
+  bool moreExpressiveThan(CppIntegralType* rhs) const;
   
 protected:
   CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
@@ -142,26 +145,35 @@ public:
   typedef KSharedPtr<CppConstantIntegralType> Ptr;
 
   /**The types and modifiers are not changed!
-   
-  * Implemented versions are:
-   * setValue<qint64>(),setValue<quint64>(), setValue<float>(), setValue<double>()
-   *
+   * The values are casted internally to the local representation, so you can lose precision.
    * */
   template<class ValueType>
-  void setValue(ValueType value);
+  void setValue(ValueType value) {
+    if(typeModifiers() & ModifierUnsigned)
+      setValueInternal<quint64>(value);
+    else if(integralType() == TypeFloat)
+      setValueInternal<float>(value);
+    else if(integralType() == TypeDouble)
+      setValueInternal<double>(value);
+    else
+      setValueInternal<qint64>(value);
+  }
 
   /**
    * For booleans, the value is 1 for true, and 0 for false.
    * All signed values should be retrieved and set through value(),
-   * unsigned ones through unsignedValue().
-   *
-   * Implemented versions are:
-   * value<qint64>(),value<quint64>(), value<float>(), value<double>()
    * 
    * */
-  template<class Type>
-  Type value() const {
-    return constant_value<Type>(&m_value);
+  template<class ValueType>
+  ValueType value() const {
+    if(typeModifiers() & ModifierUnsigned)
+      return constant_value<quint64>(&m_value);
+    else if(integralType() == TypeFloat)
+      return constant_value<float>(&m_value);
+    else if(integralType() == TypeDouble)
+      return constant_value<double>(&m_value);
+    else
+      return constant_value<qint64>(&m_value);
   }
 
   virtual QString toString() const;
@@ -172,6 +184,9 @@ public:
   
   CppConstantIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers = ModifierNone);
 private:
+  //Sets the value without casting
+  template<class ValueType>
+  void setValueInternal(ValueType value);
   qint64 m_value;
 };
 

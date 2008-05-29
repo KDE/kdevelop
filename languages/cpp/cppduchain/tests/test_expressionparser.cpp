@@ -552,6 +552,33 @@ void TestExpressionParser::testSimpleExpression() {
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.data()));
   
+  result = parser.evaluateExpression( "5.5 + 1.5", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("7"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  
+  result = parser.evaluateExpression( "3 + 0.5", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("3.5"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  
+  result = parser.evaluateExpression( "3u + 0.5", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type->toString(), QString("3.5"));
+  QVERIFY(result.instance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  lock.unlock();
+  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  
   result = parser.evaluateExpression( "0", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
