@@ -75,7 +75,10 @@ class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual void reset();
   
   protected:
-  
+
+    //Override to create own DUChainItemData derived classes
+    DUChainItemData* createData( const DUChainItem& item ) const;
+      
     //Reimplemented from Base<..>
     virtual QString itemText( const DUChainItem& data ) const;
 

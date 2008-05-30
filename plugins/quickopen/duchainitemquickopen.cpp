@@ -41,7 +41,7 @@ QString DUChainItemData::text() const {
   QString text;
   KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
   if( function )
-    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   else
     text = m_item.m_text;
   
@@ -61,12 +61,21 @@ QList<QVariant> DUChainItemData::highlighting() const {
    
   int prefixLength = function->partToString( FunctionType::SignatureReturn).length() + 1;
 
+  //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
+  QualifiedIdentifier id = m_item.m_item->qualifiedIdentifier();
+  QString fullId = id.toString();
+  QString lastId;
+  if(!id.isEmpty())
+      lastId = id.last().toString();
+  
+  prefixLength += fullId.length() - lastId.length();
+  
   QList<QVariant> ret;
   ret << 0;
   ret << prefixLength;
   ret << QVariant(normalFormat);
   ret << prefixLength;
-  ret << m_item.m_item->identifier().toString().length();
+  ret << lastId.length();
   ret << QVariant(boldFormat);
     
   return ret;
@@ -147,10 +156,14 @@ QList<KDevelop::QuickOpenDataPointer> DUChainItemDataProvider::data( uint start,
   
   for( uint a = start; a < end; a++ ) {
     DUChainItem f( Base::filteredItems()[a] );
-    ret << KDevelop::QuickOpenDataPointer( new DUChainItemData( Base::filteredItems()[a], m_openDefinitions ) );
+    ret << KDevelop::QuickOpenDataPointer( createData( Base::filteredItems()[a] ) );
   }
 
   return ret;
+}
+
+DUChainItemData* DUChainItemDataProvider::createData( const DUChainItem& item ) const {
+    return new DUChainItemData( item, m_openDefinitions );
 }
 
 QString DUChainItemDataProvider::itemText( const DUChainItem& data ) const {

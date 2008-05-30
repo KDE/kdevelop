@@ -57,6 +57,27 @@ bool ProjectFileData::isExpandable() const {
   return true;
 }
 
+QList<QVariant> ProjectFileData::highlighting() const {
+  QTextCharFormat boldFormat;
+  boldFormat.setFontWeight(QFont::Bold);
+  QTextCharFormat normalFormat;
+  
+  QString txt = text();
+  
+  QList<QVariant> ret;
+
+  int fileNameLength = m_file.m_url.fileName().length();
+  
+  ret << 0;
+  ret << txt.length() - fileNameLength;
+  ret << QVariant(normalFormat);
+  ret << txt.length() - fileNameLength;
+  ret << fileNameLength;
+  ret << QVariant(boldFormat);
+    
+  return ret;
+}
+    
 QWidget* ProjectFileData::expandingWidget() const {
   ///Find a du-chain for the document
   KUrl u( totalUrl() );

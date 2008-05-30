@@ -48,6 +48,9 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase {
     virtual QWidget* expandingWidget() const;
 
     virtual QIcon icon() const;
+    
+    QList<QVariant> highlighting() const;
+    
   private:
     KUrl totalUrl() const;
     
