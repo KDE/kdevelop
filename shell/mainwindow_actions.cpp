@@ -199,8 +199,10 @@ void MainWindowPrivate::quitAll()
 {
     s_quitRequested = true;
 
-    if (Core::self()->documentController()->saveAllDocuments(IDocument::Default))
-        return qApp->exit();
+    QApplication::closeAllWindows();
+
+    //if (Core::self()->documentController()->saveAllDocuments(IDocument::Default))
+    //    return qApp->exit();
 
     s_quitRequested = false;
 }
