@@ -200,7 +200,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
    * new Class;
    * a=function(exp
    * a = exp(
-   * ClassType instance
+   * ClassType instance(
    *
    * What else?
    *
@@ -218,7 +218,22 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
 
   ifDebug( log( "expressionPrefix: " + expressionPrefix ); )
-    
+
+  ///Handle constructions like "ClassType instance("
+  if(!expressionPrefix.isEmpty() && (expressionPrefix.endsWith('>') || expressionPrefix[expressionPrefix.length()-1].isLetterOrNumber() || expressionPrefix[expressionPrefix.length()-1] == '_')) {
+    int newExpressionStart = Utils::expressionAt(expressionPrefix, expressionPrefix.length());
+    if(newExpressionStart > 0) {
+      QString newExpression = expressionPrefix.mid(newExpressionStart).trimmed();
+      QString newExpressionPrefix = Utils::stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
+      if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
+        kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
+        m_expression = newExpression;
+        expressionPrefix = newExpressionPrefix;
+      }
+      
+    }
+  }
+
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
   if( expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
