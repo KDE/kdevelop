@@ -89,6 +89,31 @@ bool IncludeFileData::execute( QString& filterText ) {
   }
 }
 
+QList<QVariant> IncludeFileData::highlighting() const {
+  QTextCharFormat boldFormat;
+  boldFormat.setFontWeight(QFont::Bold);
+  QTextCharFormat normalFormat;
+  
+  QString txt = text();
+  
+  QList<QVariant> ret;
+
+  KUrl url(m_item.name);
+  int fileNameLength = url.fileName().length();
+  if(m_item.isDirectory)
+    ++fileNameLength;
+  
+  ret << 0;
+  ret << txt.length() - fileNameLength;
+  ret << QVariant(normalFormat);
+  ret << txt.length() - fileNameLength;
+  ret << fileNameLength;
+  ret << QVariant(boldFormat);
+    
+  return ret;
+}
+
+
 QIcon IncludeFileData::icon() const {
   ///@todo Better icons?
   static QIcon standardIcon = KIconLoader::global()->loadIcon( "CTdisconnected_parents", KIconLoader::Small );

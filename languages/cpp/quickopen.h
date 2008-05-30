@@ -44,6 +44,8 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     virtual bool isExpandable() const;
     virtual QWidget* expandingWidget() const;
 
+    virtual QList<QVariant> highlighting() const;
+    
     virtual QIcon icon() const;
   private:
     Cpp::IncludeItem m_item;
