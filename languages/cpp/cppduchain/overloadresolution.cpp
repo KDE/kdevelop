@@ -114,6 +114,8 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
         foreach(Declaration* f, functions)
           newDeclarations << QPair<OverloadResolver::ParameterList, Declaration*>( decl.first, f );
       }
+    }else{
+      newDeclarations << *it;
     }
   }
 }
@@ -164,7 +166,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
   m_worstConversionRank = ExactMatch;
 
   ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
-  QList<QPair<OverloadResolver::ParameterList, Declaration*> > newDeclarations = declarations;
+  QList<QPair<OverloadResolver::ParameterList, Declaration*> > newDeclarations;
   expandDeclarations( declarations, newDeclarations );
   
   ///Second step: Find best viable function
