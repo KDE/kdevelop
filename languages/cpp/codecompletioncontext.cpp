@@ -139,7 +139,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ///First: find out what kind of completion we are dealing with
 
-  if( m_text.endsWith( ';' ) || m_text.endsWith('}') || m_text.endsWith('{') || m_text.endsWith(')') ) {
+  if( m_text.endsWith( ':' ) || m_text.endsWith( ';' ) || m_text.endsWith('}') || m_text.endsWith('{') || m_text.endsWith(')') ) {
     ///We're at the beginning of a new statement. General completion is valid.
     return;
   }
