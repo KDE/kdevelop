@@ -34,6 +34,7 @@ namespace KDevelop {
 }
 
 class QuickOpenModel;
+class QuickOpenWidgetHandler;
 
 class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 {
@@ -80,8 +81,8 @@ private slots:
     void storeScopes( const QStringList& );
 
 private:
-    //Whether the model is free for use. Else we cannot create a quickopen-widget.
-    bool modelIsFree() const;
+    //Frees the model by closing active quickopen dialoags, and retuns whether successful.
+    bool freeModel();
 
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
@@ -91,9 +92,13 @@ private:
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;
     QStringList lastUsedScopes;
+    
+    //Contains a pointer to the current QuickOpenWidgetHandler, if a completion is active.
+    //We can only have one widget at a time, because we manipulate the model.
+    QPointer<QuickOpenWidgetHandler> m_currentWidgetHandler;
 };
 
-///You should create QuickOpenWidgetHandler on the stack, so it is automatically deleted.
+///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
 class QuickOpenWidgetHandler : public QObject {
   Q_OBJECT
   public:
@@ -106,7 +111,7 @@ class QuickOpenWidgetHandler : public QObject {
   QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidgetHandler();
 
-  ///Executes the dialog in a modal way.
+  ///Shows the dialog
   void run();
 
   signals:
