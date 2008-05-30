@@ -144,8 +144,8 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     QList< ViableFunction > resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial );
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors
-    void expandDeclarations( const QList<Declaration*>& from, QList<Declaration*>& to );
-    void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QList<QPair<OverloadResolver::ParameterList, Declaration*> >& to );
+    void expandDeclarations( const QList<Declaration*>& from, QSet<Declaration*>& to );
+    void expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& from, QHash<Declaration*, OverloadResolver::ParameterList>& to );
     ///Returns zero if applying failed. Returns the given declaration if it isn't a template function.
     Declaration* applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const;
 
