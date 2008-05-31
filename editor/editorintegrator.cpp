@@ -43,7 +43,7 @@ class EditorIntegratorPrivate
 {
 public:
   HashedString m_currentUrl;
-  KTextEditor::Document* m_currentDocument;
+  KTextEditor::Document* m_currentDocument; ///@todo Care about what happens when the document is deleted while being used here
   KTextEditor::SmartInterface* m_smart;
 
   QStack<KTextEditor::SmartRange*> m_currentRangeStack;
@@ -302,6 +302,11 @@ void EditorIntegrator::exitCurrentRange()
     return;
 
   d->m_currentRangeStack.pop();
+}
+
+int EditorIntegrator::rangeStackSize() const
+{
+    return d->m_currentRangeStack.size();
 }
 
 ModificationRevision EditorIntegrator::modificationRevision(const HashedString& url) {

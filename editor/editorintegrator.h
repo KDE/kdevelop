@@ -232,6 +232,11 @@ public:
   void setCurrentRange(KTextEditor::SmartRange* range);
 
   /**
+   * Count of ranges currently on the stack.
+   */
+  int rangeStackSize() const;
+  
+  /**
    * Sets the previous range on the stack to be the new current range.
    * Does nothing if the range stack is empty.
    */
