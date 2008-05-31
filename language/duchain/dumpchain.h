@@ -22,6 +22,11 @@
 #define DUMPCHAIN_H
 
 #include "languageexport.h"
+#include <QString>
+
+namespace KTextEditor {
+  class SmartRange;
+}
 
 namespace KDevelop
 {
@@ -36,6 +41,8 @@ public:
   ///@param context The context to dump
   ///@param imported internal
   void dump(KDevelop::DUContext* context, bool imported = false);
+  
+  QString dumpRanges(KTextEditor::SmartRange* range, QString indent = QString());
 
 private:
   int indent;
