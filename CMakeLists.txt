@@ -29,3 +29,6 @@ add_subdirectory(languages)
 add_subdirectory(plugins)
 add_subdirectory(buildtools)
 macro_optional_add_subdirectory(doc)
+
+macro_display_feature_log()
+
