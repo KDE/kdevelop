@@ -223,6 +223,24 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   return chosen;
 }
 
+Declaration* declarationUnderCursor(const SimpleCursor& c, DUContext* ctx)
+{
+  foreach( Declaration* decl, ctx->localDeclarations() )
+    if( decl->range().contains(c) )
+      return decl;
+  
+  //Search all collapsed sub-contexts. In C++, those can contain declarations that have ranges out of the context
+  foreach( DUContext* subCtx, ctx->childContexts() ) {
+    //This is a little hacky, but we need it in case of foreach macros and similar stuff
+    if(subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line) {
+      Declaration* decl = declarationUnderCursor(c, subCtx);
+      if(decl)
+        return decl;
+    }
+  }
+  return 0;
+}
+
 Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
@@ -233,10 +251,10 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
     
     while( ctx ) {
       //Try finding a declaration under the cursor
-      foreach( Declaration* decl, ctx->localDeclarations() )
-        if( decl->range().contains(c) )
-          return decl;
-
+      Declaration* decl = declarationUnderCursor(c, ctx);
+      if(decl)
+        return decl;
+      
       //Try finding a use under the cursor
       for(int a = 0; a < ctx->uses().count(); ++a)
         if( ctx->uses()[a].m_range.contains(c) )
