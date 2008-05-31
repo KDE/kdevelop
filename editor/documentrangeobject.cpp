@@ -73,10 +73,7 @@ void DocumentRangeObjectPrivate::syncToSmart() const {
     //Danger window
     QMutexLocker l(iface->smartMutex());
     
-    smartRange->start().setLine(range.start.line);
-    smartRange->start().setColumn(range.start.column);
-    smartRange->end().setLine(range.end.line);
-    smartRange->end().setColumn(range.end.column);
+    smartRange->setRange(range.textRange());
 }
 
 DocumentRangeObject::DocumentRangeObject(const HashedString& document, const SimpleRange& range)
