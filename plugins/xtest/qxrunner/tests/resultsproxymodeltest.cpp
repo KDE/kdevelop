@@ -123,4 +123,4 @@ void ResultsProxyModelTest::assertRowContains(int row, const QVariant& col1, con
     assertDataAt(row,2, col3);
 }
 
-QTEST_KDEMAIN( ResultsProxyModelTest, NoGUI );
+QTEST_KDEMAIN( ResultsProxyModelTest, NoGUI )

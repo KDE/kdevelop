@@ -138,4 +138,4 @@ void RunnerItemTest::assertDefaultResult(ConcreteRunnerItem* item)
     KOMPARE(int(QxRunner::NoResult), item->result());
 }
 
-QTEST_KDEMAIN( RunnerItemTest, NoGUI );
+QTEST_KDEMAIN( RunnerItemTest, NoGUI )

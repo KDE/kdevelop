@@ -33,8 +33,8 @@
 using QxQTest::QTestXmlParser;
 using QxQTest::QTestResult;
 
-Q_DECLARE_METATYPE(QFileInfo);
-Q_DECLARE_METATYPE(QxRunner::RunnerResult);
+Q_DECLARE_METATYPE(QFileInfo)
+Q_DECLARE_METATYPE(QxRunner::RunnerResult)
 
 namespace
 {
@@ -196,4 +196,4 @@ void QTestXmlParserTest::parse()
                 "Expected " + message + " got " + result.message());
 }
 
-QTEST_KDEMAIN( QTestXmlParserTest, NoGUI );
+QTEST_KDEMAIN( QTestXmlParserTest, NoGUI )

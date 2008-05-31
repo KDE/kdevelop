@@ -179,4 +179,4 @@ void QTestRegisterTest::parseMultiCmdXMl()
 }
 
 #include "qtestregistertest.moc"
-QTEST_KDEMAIN(QTestRegisterTest, NoGUI);
+QTEST_KDEMAIN(QTestRegisterTest, NoGUI)

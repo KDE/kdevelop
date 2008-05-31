@@ -77,4 +77,4 @@ void RunnerViewControllerTest::assertAllItemsChecked(bool checked)
 }
 
 
-QTEST_KDEMAIN( RunnerViewControllerTest, GUI );
+QTEST_KDEMAIN( RunnerViewControllerTest, GUI )

@@ -73,4 +73,4 @@ void ProxyModelCommonTest::enabledColumns()
     KVERIFY(proxy->isColumnEnabled(2));
 }
 
-QTEST_KDEMAIN( ProxyModelCommonTest, NoGUI );
+QTEST_KDEMAIN( ProxyModelCommonTest, NoGUI )

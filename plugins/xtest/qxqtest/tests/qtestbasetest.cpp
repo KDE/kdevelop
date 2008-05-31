@@ -36,4 +36,4 @@ void QTestBaseTest::construct()
 }
 
 #include "qtestbasetest.moc"
-QTEST_KDEMAIN(QTestBaseTest, NoGUI);
+QTEST_KDEMAIN(QTestBaseTest, NoGUI)

@@ -33,4 +33,4 @@ void QTestModelTest::processSingleSuite()
     KVERIFY(model.data());
 }
 
-QTEST_KDEMAIN(QTestModelTest, NoGUI);
+QTEST_KDEMAIN(QTestModelTest, NoGUI)

@@ -37,4 +37,4 @@ void ViewControllerCommonTest::cleanup()
     if (controller) delete controller;
 }
 
-QTEST_MAIN( ViewControllerCommonTest );
+QTEST_MAIN( ViewControllerCommonTest )

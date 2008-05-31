@@ -119,4 +119,4 @@ void RunnerProxyModelTest::assertRowContains(int row, const QVariant& col1, cons
     assertDataAt(row,2, col3);
 }
 
-QTEST_KDEMAIN( RunnerProxyModelTest, NoGUI );
+QTEST_KDEMAIN( RunnerProxyModelTest, NoGUI )

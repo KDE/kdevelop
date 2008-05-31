@@ -68,4 +68,4 @@ void QTestCommandTest::cmdStringNoSuite()
 
 
 #include "qtestcommandtest.moc"
-QTEST_KDEMAIN(QTestCommandTest, NoGUI );
+QTEST_KDEMAIN(QTestCommandTest, NoGUI )

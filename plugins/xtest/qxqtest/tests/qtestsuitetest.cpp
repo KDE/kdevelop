@@ -77,4 +77,4 @@ void QTestSuiteTest::addChildCases()
 }
 
 #include "qtestsuitetest.moc"
-QTEST_KDEMAIN(QTestSuiteTest, NoGUI);
+QTEST_KDEMAIN(QTestSuiteTest, NoGUI)

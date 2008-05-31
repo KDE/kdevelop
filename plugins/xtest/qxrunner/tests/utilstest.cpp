@@ -31,4 +31,4 @@ void UtilsTest::columnSizes()
     KTODO;
 }
 
-QTEST_MAIN( UtilsTest );
+QTEST_MAIN( UtilsTest )

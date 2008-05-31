@@ -227,4 +227,4 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
     spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
 }
 
-QTEST_KDEMAIN( RunnerModelTest, NoGUI );
+QTEST_KDEMAIN( RunnerModelTest, NoGUI )
