@@ -49,37 +49,37 @@ void QTestCaseTest::cleanup()
 void QTestCaseTest::constructDefault()
 {
     QTestCase q;
-    KOMPARE(q.testCommandCount(), 0);
+    KOMPARE(q.childCount(), 0);
     KOMPARE(q.name(), "");
     KOMPARE(q.executable(), QFileInfo(""));
 }
 
 void QTestCaseTest::construct()
 {
-    KOMPARE(m_case->testCommandCount(), 0);
+    KOMPARE(m_case->childCount(), 0);
     KOMPARE(m_case->name(), m_name);
     KOMPARE(m_case->executable(), m_exe);
 }
 
 void QTestCaseTest::addCommand()
 {
-    KOMPARE(m_case->testCommandCount(), 0);
+    KOMPARE(m_case->childCount(), 0);
     QTestCommand c1(someCmd(), m_case);
     m_case->addTest(&c1);
 
-    KOMPARE(m_case->testCommandCount(), 1);
+    KOMPARE(m_case->childCount(), 1);
     KOMPARE(m_case->testAt(0), &c1);
 }
 
 void QTestCaseTest::addCommands()
 {
-    KOMPARE(m_case->testCommandCount(), 0);
+    KOMPARE(m_case->childCount(), 0);
     QTestCommand c1(someCmd(), m_case);
     m_case->addTest(&c1);
     QTestCommand c2(someCmd(), m_case);
     m_case->addTest(&c2);
 
-    KOMPARE(m_case->testCommandCount(), 2);
+    KOMPARE(m_case->childCount(), 2);
     KOMPARE(m_case->testAt(0), &c1);
     KOMPARE(m_case->testAt(1), &c2);
 

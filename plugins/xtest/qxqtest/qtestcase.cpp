@@ -37,11 +37,6 @@ QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestBase* paren
 QTestCase::~QTestCase()
 {}
 
-int QTestCase::testCommandCount()
-{
-    return m_children.count();
-}
-
 QFileInfo QTestCase::executable()
 {
     return m_exe;
@@ -52,14 +47,9 @@ void QTestCase::setExe(const QFileInfo& exe)
     m_exe = exe;
 }
 
-void QTestCase::addTest(QTestCommand* test)
-{
-    m_children.push_back(test);
-}
-
 QTestCommand* QTestCase::testAt(unsigned i)
 {
-    return m_children.value(i);
+    return qobject_cast<QTestCommand*>(childAt(i));
 }
 
 #include "qtestcase.moc"

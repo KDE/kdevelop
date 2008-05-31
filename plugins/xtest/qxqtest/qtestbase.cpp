@@ -54,4 +54,19 @@ void QTestBase::setParent(QTestBase* parent)
     m_parent = parent;
 }
 
+void QTestBase::addTest(QTestBase* test)
+{
+    m_children.push_back(test);
+}
+
+QTestBase* QTestBase::childAt(unsigned i)
+{
+    return m_children.value(i);
+}
+
+unsigned QTestBase::childCount()
+{
+    return m_children.count();
+}
+
 #include "qtestbase.moc"

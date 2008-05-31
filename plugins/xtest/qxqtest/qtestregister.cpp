@@ -37,7 +37,7 @@ namespace
 void cleanup(QTestCase* caze)
 {
     if (!caze) return;
-    unsigned nrof = caze->testCommandCount();
+    unsigned nrof = caze->childCount();
     QTestCommand* cmd;
     for (unsigned i = 0; i < nrof; i++)
     {
@@ -52,7 +52,7 @@ void cleanup(QTestSuite* suite)
 {
     if (!suite)
         return;
-    unsigned nrof = suite->testCaseCount();
+    unsigned nrof = suite->childCount();
     QTestCase* caze;
     for (unsigned i = 0; i < nrof; i++)
     {

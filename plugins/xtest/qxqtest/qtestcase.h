@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QFileInfo>
-#include <QList>
 
 #include "qtestbase.h"
 #include "qtestcommand.h"
@@ -39,16 +38,13 @@ public:
     QTestCase(const QString&, const QFileInfo&, QTestBase* parent);
     virtual ~QTestCase();
 
-    void addTest(QTestCommand* test);
     QTestCommand* testAt(unsigned i);
-    int testCommandCount();
     QFileInfo executable();
 
     void setExe(const QFileInfo&);
 
 private:
     QFileInfo m_exe;
-    QList<QTestCommand*> m_children;
 };
 
 } // end namespace QxQTest

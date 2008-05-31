@@ -38,11 +38,6 @@ QTestSuite::~QTestSuite()
 {
 }
 
-unsigned QTestSuite::testCaseCount()
-{
-    return m_children.count();
-}
-
 QFileInfo QTestSuite::path()
 {
     return m_path;
@@ -53,14 +48,9 @@ void QTestSuite::setPath(const QFileInfo& path)
     m_path = path;
 }
 
-void QTestSuite::addTest(QTestCase* test)
-{
-    m_children.push_back(test);
-}
-
 QTestCase* QTestSuite::testAt(unsigned i)
 {
-    return m_children.value(i);
+    return qobject_cast<QTestCase*>(childAt(i));
 }
 
 #include "qtestsuite.moc"

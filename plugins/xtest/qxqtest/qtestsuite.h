@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QFileInfo>
-#include <QList>
 
 #include "qtestbase.h"
 #include "qtestcase.h"
@@ -39,17 +38,13 @@ public:
     QTestSuite(const QString&, const QFileInfo&, QTestBase* parent);
     virtual ~QTestSuite();
 
-    void addTest(QTestCase* test);
     QTestCase* testAt(unsigned i);
 
-    unsigned testCaseCount();
     QFileInfo path();
-
     void setPath(const QFileInfo&);
 
 private:
     QFileInfo m_path;
-    QList<QTestCase*> m_children;
 };
 
 } // end namespace QxQTest

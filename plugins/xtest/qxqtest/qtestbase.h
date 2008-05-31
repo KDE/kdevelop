@@ -21,6 +21,7 @@
 #ifndef QXQTEST_QTESTBASE_H
 #define QXQTEST_QTESTBASE_H
 
+#include <QList>
 #include <QString>
 #include <QFileInfo>
 
@@ -44,9 +45,16 @@ public:
     void setName(const QString&);
     void setParent(QTestBase* parent);
 
+    void addTest(QTestBase*);
+    unsigned childCount();
+
+protected:
+    QTestBase* childAt(unsigned i);
+
 private:
     QString m_name;
     QTestBase* m_parent;
+    QList<QTestBase*> m_children;
 };
 
 } // end namespace QxQTest

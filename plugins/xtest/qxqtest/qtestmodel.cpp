@@ -77,20 +77,17 @@ void QTestModel::readTests(QIODevice* dev)
     }
 }
 
-// TODO push-up the nrofChildren & getTestAt methods 
-//      so the follwing mtds can be merged
-
 void QTestModel::addSuite(QTestSuite* suite)
 {
     RunnerItem* item = addTestItem(suite, rootItem());
-    for (unsigned i=0; i<suite->testCaseCount(); i++)
+    for (unsigned i=0; i<suite->childCount(); i++)
         addCase(suite->testAt(i), item);
 }
 
 void QTestModel::addCase(QTestCase* caze, RunnerItem* parent)
 {
     RunnerItem* item = addTestItem(caze, parent);
-    for (unsigned i=0; i<caze->testCommandCount(); i++)
+    for (unsigned i=0; i<caze->childCount(); i++)
         addTestItem(caze->testAt(i), item);
 }
 

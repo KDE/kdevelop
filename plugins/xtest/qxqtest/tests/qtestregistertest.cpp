@@ -99,7 +99,7 @@ void QTestRegisterTest::parseSuiteXml()
     KOMPARE(1, reg->testSuiteCount());
     QTestSuite expected("suite1", QFileInfo("/a/b"), 0);
     compareSuites(&expected, reg->takeSuite(0));
-    KOMPARE(0, reg->takeSuite(0)->testCaseCount());
+    KOMPARE(0, reg->takeSuite(0)->childCount());
 }
 void QTestRegisterTest::parseMultiSuitesXml()
 {
@@ -110,11 +110,11 @@ void QTestRegisterTest::parseMultiSuitesXml()
     // suite1
     QTestSuite exp1("suite1", QFileInfo("/a/b"), 0);
     compareSuites(&exp1, reg->takeSuite(0));
-    KOMPARE(0, reg->takeSuite(0)->testCaseCount());
+    KOMPARE(0, reg->takeSuite(0)->childCount());
     // suite2
     QTestSuite exp2("suite2", QFileInfo("/c/d"), 0);
     compareSuites(&exp2, reg->takeSuite(1));
-    KOMPARE(0, reg->takeSuite(1)->testCaseCount());
+    KOMPARE(0, reg->takeSuite(1)->childCount());
 }
 
 void QTestRegisterTest::compareCase(QTestCase* expected, QTestCase* actual)
@@ -129,7 +129,7 @@ void QTestRegisterTest::parseCaseXml()
     QByteArray xml = headerXml + suiteStart + caze1 + suiteEnd + footerXml;
     registerTests(xml);
 
-    KOMPARE(1, reg->takeSuite(0)->testCaseCount());
+    KOMPARE(1, reg->takeSuite(0)->childCount());
     QTestCase exp("test1", QFileInfo("t.sh"), reg->takeSuite(0));
     compareCase(&exp, reg->takeSuite(0)->testAt(0));
 }
@@ -139,7 +139,7 @@ void QTestRegisterTest::parseMultiCaseXml()
     QByteArray xml = headerXml + suiteStart + caze1 + caze2 + suiteEnd + footerXml;
     registerTests(xml);
 
-    KOMPARE(2, reg->takeSuite(0)->testCaseCount());
+    KOMPARE(2, reg->takeSuite(0)->childCount());
     // caze1
     QTestCase exp1("test1", QFileInfo("t.sh"), reg->takeSuite(0));
     compareCase(&exp1, reg->takeSuite(0)->testAt(0));
@@ -166,9 +166,9 @@ void QTestRegisterTest::parseMultiCmdXMl()
 
     KOMPARE(1, reg->testSuiteCount());
     QTestSuite* suite = reg->takeSuite(0);
-    KOMPARE(1, suite->testCaseCount());
+    KOMPARE(1, suite->childCount());
     QTestCase* caze = suite->testAt(0);
-    KOMPARE(2, caze->testCommandCount());
+    KOMPARE(2, caze->childCount());
     // cmd1
     QTestCommand* actual = caze->testAt(0);
     KOMPARE("cmd11", actual->name());
