@@ -160,7 +160,7 @@ int StandardOutputView::registerToolView( const QString& title,
         }
         newid = ids.last()+1;
     }
-    kDebug(9500) << "Registering view" << title << "with type:" << type;
+    kDebug() << "Registering view" << title << "with type:" << type;
     ToolViewData* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
     tvdata->type = type;
@@ -218,7 +218,7 @@ void StandardOutputView::setModel( int id, QAbstractItemModel* model )
         }
     }
     if( tvid == -1 )
-        kDebug(9500) << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << id;
     else
     {
         toolviews.value( tvid )->outputdata.value( id )->setModel( model );
@@ -237,7 +237,7 @@ void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate )
         }
     }
     if( tvid == -1 )
-        kDebug(9500) << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << id;
     else
     {
         toolviews.value( tvid )->outputdata.value( id )->setDelegate( delegate );

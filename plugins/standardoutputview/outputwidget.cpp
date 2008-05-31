@@ -108,7 +108,7 @@ void OutputWidget::setCurrentWidget( QListView* view )
 
 void OutputWidget::changeDelegate( int id )
 {
-    kDebug(9500) << "delegate changed for id:" << id;
+    kDebug() << "delegate changed for id:" << id;
     if( data->outputdata.contains( id ) && views.contains( id ) )
         views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
     else
@@ -117,7 +117,7 @@ void OutputWidget::changeDelegate( int id )
 
 void OutputWidget::changeModel( int id )
 {
-    kDebug(9500) << "model changed for id:" << id;
+    kDebug() << "model changed for id:" << id;
     if( data->outputdata.contains( id ) && views.contains( id ) )
     {
         OutputData* od = data->outputdata.value(id);
@@ -270,7 +270,7 @@ QListView* OutputWidget::createListView(int id)
     {
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
-            kDebug(9500) << "creating listview";
+            kDebug() << "creating listview";
             listview = new QListView(this);
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
             views[id] = listview;
