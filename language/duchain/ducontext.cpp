@@ -494,7 +494,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || type() == Template || position > declaration->range().start || !position.isValid())
+      if (type() == Class || type() == Template || position > declaration->range().start || !position.isValid()) ///@todo This is C++-specific
         ret.append(declaration);
 
   if (tryToResolve.isEmpty() && ensureResolution.isEmpty())
@@ -517,7 +517,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->range().start || !position.isValid())
+      if (type() == Class || position >= declaration->range().start || !position.isValid()) ///@todo This is C++-specific
         ret.append(declaration);
 
   if (!ret.isEmpty())
@@ -541,7 +541,7 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
 
   foreach (Declaration* declaration, resolved)
     if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->range().start || !position.isValid())
+      if (type() == Class || position >= declaration->range().start || !position.isValid()) ///@todo This is C++-specific
         ret.append(declaration);
 
   //if (!ret.isEmpty())
@@ -764,7 +764,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor&
 
   QHash<const DUContext*, bool> hadContexts;
   // Iterate back up the chain
-  mergeDeclarationsInternal(ret, type() == DUContext::Class ? SimpleCursor::invalid() : position, hadContexts, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), searchInParents);
+  mergeDeclarationsInternal(ret, position, hadContexts, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), searchInParents);
 
   return ret;
 }
@@ -819,7 +819,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
   }
 
   if (searchInParents && parentContext())                            ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-    parentContext()->mergeDeclarationsInternal(definitions, (parentContext()->type() != DUContext::Class) ? position : SimpleCursor::invalid(), hadContexts, trace, true, currentDepth+1);
+    parentContext()->mergeDeclarationsInternal(definitions, position, hadContexts, trace, true, currentDepth+1);
 }
 
 void DUContext::deleteLocalDeclarations()
