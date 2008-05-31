@@ -111,6 +111,11 @@ Declaration* localClassFromCodeContext(DUContext* context)
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
     context = context->parentContext();
   }
+  
+  //Since declarations are assigned to the bodies, not to the argument contexts, go to the body context to make the step to the function
+  if(context->type() == DUContext::Function)
+    if(!context->importedChildContexts().isEmpty())
+      context = context->importedChildContexts().first();
 
   ///Step 1: Find the function-declaration for the function we are in
   Declaration* functionDeclaration = 0;

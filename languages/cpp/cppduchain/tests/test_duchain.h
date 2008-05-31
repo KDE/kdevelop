@@ -71,6 +71,7 @@ private slots:
   void testDeclareUsingNamespace();
   void testDeclareUsingNamespace2();
   void testSearchAcrossNamespace();
+  void testSearchAcrossNamespace2();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();

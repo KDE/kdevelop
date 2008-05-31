@@ -29,6 +29,7 @@
 #include "usebuilder.h"
 #include <declaration.h>
 #include <dumpdotgraph.h>
+#include <typeinfo>
 #include <time.h>
 #include <set>
 #include <algorithm>
@@ -448,7 +449,7 @@ void TestDUChain::testDeclareFor()
   QCOMPARE(main->importedParentContexts().count(), 1);
   QCOMPARE(main->childContexts().count(), 2);
   QCOMPARE(main->localDeclarations().count(), 0);
-  QVERIFY(main->localScopeIdentifier().isEmpty());
+  QCOMPARE(main->localScopeIdentifier(), QualifiedIdentifier("main"));
 
   QCOMPARE(findDeclaration(main, Identifier("i")), noDef);
 
@@ -827,8 +828,8 @@ void TestDUChain::testDeclareNamespace()
   DUContext* testCtx = top->childContexts()[2];
   QCOMPARE(testCtx->childContexts().count(), 0);
   QCOMPARE(testCtx->localDeclarations().count(), 0);
-  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
-  QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
+  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier("test"));
+  QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier("test"));
 
   Declaration* bar2 = top->localDeclarations().first();
   QCOMPARE(bar2->identifier(), Identifier("bar"));
@@ -872,6 +873,37 @@ void TestDUChain::testSearchAcrossNamespace()
   QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
   QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
   
+  release(top);
+}
+
+void TestDUChain::testSearchAcrossNamespace2()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("namespace A {class B{}; } namespace A { class C{ void member(B);};  } void A::C::member(B b) {B c;}");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 4);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[2]->type(), DUContext::Function);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[2]->localScopeIdentifier(), QualifiedIdentifier("A::C::member"));
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->abstractType()); //B should be found from that position
+  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
+  QCOMPARE(top->childContexts()[3]->type(), DUContext::Other);
+  QCOMPARE(top->childContexts()[3]->localDeclarations().count(), 1);
+  QVERIFY(top->childContexts()[3]->localDeclarations()[0]->abstractType()); //B should be found from that position
+  QCOMPARE(top->childContexts()[3]->localScopeIdentifier(), QualifiedIdentifier("A::C::member"));
+  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[3]->localDeclarations()[0]->abstractType().data()));
+
   release(top);
 }
 
@@ -978,8 +1010,8 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(testCtx->importedParentContexts().count(), 1);
   QCOMPARE(testCtx->childContexts().count(), 0);
   QCOMPARE(testCtx->localDeclarations().count(), 0);
-  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier());
-  QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier());
+  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier("test"));
+  QCOMPARE(testCtx->scopeIdentifier(), QualifiedIdentifier("test"));
   
   release(top);
 }

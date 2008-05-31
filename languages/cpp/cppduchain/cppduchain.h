@@ -61,7 +61,10 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
  * */
 KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
 
-  /**Tries determining the local class that the given code-context belongs to.*/
+  /**Tries determining the local class that the given code-context belongs to.
+   *
+   * This works within contexts of type DUContext::Other, as well as in argument contexts of type DUContext::Function(also within function definitions).
+   */
 KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context);
 
 /**

@@ -148,7 +148,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   DUContext* ctx = 0;
 
   if( first && last )
-    ctx = openContext(first, last, DUContext::Template, 0); //Open anonymous context for the template-parameters
+    ctx = openContext(first, last, DUContext::Template); //Open anonymous context for the template-parameters
   else
     ctx = openContextEmpty(ast, DUContext::Template); //Open an empty context, because there are no template-parameters
 
@@ -462,8 +462,9 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
   PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
                  
+  QualifiedIdentifier functionName;
   if (m_compilingContexts && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    QualifiedIdentifier functionName = identifierForName(node->init_declarator->declarator->id);
+    functionName = identifierForName(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
       // This is a class function definition
       DUChainReadLocker lock(DUChain::lock());
@@ -483,17 +484,18 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       }
     }
   }
-  
   visitFunctionDeclaration(node);
 
   if (node->constructor_initializers && node->function_body) {
-    openContext(node->constructor_initializers, node->function_body, DUContext::Other);
+    openContext(node->constructor_initializers, node->function_body, DUContext::Other); //The constructor initializer context
     addImportedContexts();
   }
   // Otherwise, the context is created in the function body visit
 
   visit(node->constructor_initializers);
+  m_openingFunctionBody = functionName;
   visit(node->function_body);
+  m_openingFunctionBody = QualifiedIdentifier();
 
   if (node->constructor_initializers)
     closeContext();
@@ -563,13 +565,13 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
   }
 }
 
-DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier)
+DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier)
 {
   if (m_compilingContexts) {
 #ifdef DEBUG_UPDATE_MATCHING
     kDebug() << "opening context with text" << m_editor->tokensToStrings( fromRange->start_token, toRange->end_token );
 #endif
-    DUContext* ret = openContextInternal(m_editor->findRangeForContext(fromRange->start_token, toRange->end_token), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
+    DUContext* ret = openContextInternal(m_editor->findRangeForContext(fromRange->start_token, toRange->end_token), type, identifier);
     fromRange->ducontext = ret;
     return ret;
   } else {
@@ -723,7 +725,8 @@ void ContextBuilder::closeContext()
 
 void ContextBuilder::visitCompoundStatement(CompoundStatementAST * node)
 {
-  openContext(node, DUContext::Other);
+  openContext(node, DUContext::Other, m_openingFunctionBody);
+  m_openingFunctionBody.clear();
 
   addImportedContexts();
 

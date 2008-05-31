@@ -68,6 +68,7 @@ While construction:
 #include <duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"
 #include "cpptypes.h"
+#include "cppduchain.h"
 #include "templatedeclaration.h"
 #include "expressionparser.h"
 
@@ -567,6 +568,38 @@ class CppDUContext : public BaseContext {
         m_instantiatedFrom->m_instatiations.remove( this );
       m_instantiatedFrom = context;
       m_instantiatedFrom->m_instatiations.insert( this );
+    }
+
+    virtual void applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) const
+    {
+      BaseContext::applyUpwardsAliases(identifiers);
+      ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
+      ///We need to make sure that when leaving a function definition, the namespace components are searched
+      QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
+      if(prefix.count() > 1) {
+        //This must be a function-definition, like void A::B::test() {}
+        KDevelop::Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
+        if(classDeclaration && classDeclaration->internalContext()) {
+          //If this is a definition of a class member, only add aliases for the namespace elements(The class scope will be
+          //searched using then normal import logic)
+          prefix = classDeclaration->internalContext()->scopeIdentifier(false);
+        }else{
+          prefix.pop();
+        }
+        prefix.setExplicitlyGlobal(true);
+        
+        QList<QualifiedIdentifier> addIdentifiers;
+        
+        while(!prefix.isEmpty()) {
+          for(QList<QualifiedIdentifier>::const_iterator it = identifiers.begin(); it != identifiers.end(); ++it) {
+            addIdentifiers.append(prefix + *it);
+          }
+          prefix.pop();
+        }
+        
+        if(!addIdentifiers.isEmpty())
+          identifiers = addIdentifiers + identifiers;
+      }
     }
 
     /**

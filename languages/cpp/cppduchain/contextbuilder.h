@@ -190,7 +190,7 @@ protected:
 
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
-  KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
+  KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier = KDevelop::QualifiedIdentifier());
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
   
@@ -223,6 +223,8 @@ protected:
 
   QStack<KDevelop::DUContext*> m_contextStack;
   QStack<int> m_nextContextStack;
+  
+  QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
   
   KDevelop::DUContext* m_lastContext; //Last context that was opened
 
