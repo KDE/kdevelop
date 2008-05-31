@@ -87,7 +87,8 @@
 #include "setuphelpers.h"
 #include "quickopen.h"
 
-/*#define DEBUG_UI_LOCKUP */
+//#define DEBUG_UI_LOCKUP
+#define LOCKUP_INTERVAL 30
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
@@ -206,7 +207,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
 #ifdef DEBUG_UI_LOCKUP
-    m_blockTester = new UIBlockTester(300);
+    m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif
 }
 
@@ -1009,4 +1010,3 @@ void UIBlockTester::lockup() {
  }
 
 #include "cpplanguagesupport.moc"
-
