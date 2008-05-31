@@ -45,7 +45,7 @@
 #include "cpptypes.h"
 #include "cppduchain.h"
 
-//#define DEBUG_UPDATE_MATCHING
+#define DEBUG_UPDATE_MATCHING
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -376,7 +376,19 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   }
 
 
-  SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name->unqualified_name) : rangeNode);
+  SimpleRange newRange;
+  if(name) {
+    std::size_t start = name->unqualified_name->start_token;
+    std::size_t end = name->unqualified_name->end_token;
+    
+    //We must exclude the tilde. Else we may get totally messed up ranges when the name of a destructor is renamed in a macro
+    if(name->unqualified_name->tilde)
+      start = name->unqualified_name->tilde+1;
+    
+    newRange = m_editor->findRange(start, end);
+  }else{
+    newRange = m_editor->findRange(rangeNode);
+  }
 
 //  if(newRange.start >= newRange.end) //It is collapsed if it's within a macro
 //    kDebug(9007) << "Range collapsed";
