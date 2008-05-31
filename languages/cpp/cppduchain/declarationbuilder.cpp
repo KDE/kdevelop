@@ -45,7 +45,7 @@
 #include "cpptypes.h"
 #include "cppduchain.h"
 
-#define DEBUG_UPDATE_MATCHING
+//#define DEBUG_UPDATE_MATCHING
 
 using namespace KTextEditor;
 using namespace KDevelop;
