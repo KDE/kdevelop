@@ -47,7 +47,7 @@
 #include <duchainpointer.h>
 #include <duchainlock.h>
 #include <dumpdotgraph.h>
-#include "dumpchain.h"
+#include <duchain/dumpchain.h>
 #include <parsejob.h>
 #include "cppeditorintegrator.h"
 #include "declarationbuilder.h"
@@ -56,6 +56,9 @@
 #include "preprocessjob.h"
 #include "environmentmanager.h"
 #include <unistd.h>
+
+//#define DUMP_SMART_RANGES
+//#define DUMP_DUCHAIN
 
 using namespace KDevelop;
 
@@ -564,13 +567,23 @@ void CPPInternalParseJob::run()
     // Debug output...
 
     if ( !parentJob()->parentPreprocessor() ) {
-/*            DUChainReadLocker lock(DUChain::lock());
+            DUChainReadLocker lock(DUChain::lock());
+#ifdef DUMP_DUCHAIN
         kDebug( 9007 ) << "================== duchain ==================";
-        DumpChain dump;
-        //dump.dump(ast, parentJob()->parseSession());
-        dump.dump(topContext);
-        KDevelop::DumpDotGraph dumpGraph;
-        kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);*/
+        KDevelop::DumpChain dump;
+        dump.dump(contentContext);
+#endif
+#ifdef DUMP_SMART_RANGES
+        if(contentContext->smartRange()) {
+          kDebug() << "dumping smart range";
+          KDevelop::DumpChain dump;
+          kDebug() << dump.dumpRanges(contentContext->smartRange());
+        }
+        
+#endif
+
+        //KDevelop::DumpDotGraph dumpGraph;
+        //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
     
 
