@@ -422,25 +422,20 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, SearchFlags flags ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
 {
   ENSURE_CAN_READ
 
   QList<Declaration*> ret;
-  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, allowUnqualifiedMatch, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
+  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
   return ret;
 }
 
-void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   Q_D(const DUContext);
   if( identifier.explicitlyGlobal() && parentContext() )
     return;
-
-  ///@todo use flags
-  QLinkedList<Declaration*> tryToResolve;
-  QLinkedList<Declaration*> ensureResolution;
-  QList<Declaration*> resolved;
 
   {
      QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
@@ -463,94 +458,11 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
       if((flags & OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(declaration))
         continue;
       
-      QualifiedIdentifier::MatchTypes m = identifier.match(declaration->identifier());
-      switch (m) {
-        case QualifiedIdentifier::NoMatch:
-          continue;
-
-        case QualifiedIdentifier::EndsWith:
-          // identifier is a more complete specification...
-          // Try again with a qualified definition identifier
-          ensureResolution.append(declaration);
-          continue;
-
-      case QualifiedIdentifier::TargetEndsWith : ///NOTE: This cannot happen, because declaration() identifier is of type Identifier
-          // definition is a more complete specification...
-          if (!allowUnqualifiedMatch)
-            tryToResolve.append(declaration);
-          else
-            resolved.append(declaration);
-          continue;
-
-        case QualifiedIdentifier::ExactMatch:
-          if (!allowUnqualifiedMatch)
-            ensureResolution.append(declaration);
-          else
-            resolved.append(declaration);
-          continue;
-      }
+      if (!dataType || dataType == declaration->abstractType())
+        if (type() == Class || type() == Template || position > declaration->range().start || !position.isValid()) ///@todo This is C++-specific
+          ret.append(declaration);
     }
   }
-
-  foreach (Declaration* declaration, resolved)
-    if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || type() == Template || position > declaration->range().start || !position.isValid()) ///@todo This is C++-specific
-        ret.append(declaration);
-
-  if (tryToResolve.isEmpty() && ensureResolution.isEmpty())
-    return;
-
-  QMutableLinkedListIterator<Declaration*> it = ensureResolution;
-  while (it.hasNext()) {
-    QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
-    switch (m) {
-      case QualifiedIdentifier::NoMatch:
-      case QualifiedIdentifier::EndsWith:
-        break;
-
-      case QualifiedIdentifier::TargetEndsWith:
-      case QualifiedIdentifier::ExactMatch:
-        resolved.append(it.value());
-        break;
-    }
-  }
-
-  foreach (Declaration* declaration, resolved)
-    if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->range().start || !position.isValid()) ///@todo This is C++-specific
-        ret.append(declaration);
-
-  if (!ret.isEmpty())
-    // Match(es)
-    return;
-
-  it = tryToResolve;
-  while (it.hasNext()) {
-    QualifiedIdentifier::MatchTypes m = identifier.match(it.next()->qualifiedIdentifier());
-    switch (m) {
-      case QualifiedIdentifier::NoMatch:
-      case QualifiedIdentifier::EndsWith:
-        break;
-
-      case QualifiedIdentifier::TargetEndsWith:
-      case QualifiedIdentifier::ExactMatch:
-        resolved.append(it.value());
-        break;
-    }
-  }
-
-  foreach (Declaration* declaration, resolved)
-    if (!dataType || dataType == declaration->abstractType())
-      if (type() == Class || position >= declaration->range().start || !position.isValid()) ///@todo This is C++-specific
-        ret.append(declaration);
-
-  //if (!ret.isEmpty())
-    // Match(es)... don't need to check, returning anyway
-
-
-  // TODO: namespace abbreviations
-
-  return;
 }
 
 bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
@@ -565,7 +477,7 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
   Q_D(const DUContext);
   if( type() != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
     foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
-        findLocalDeclarationsInternal(identifier, position, dataType, flags & InImportedParentContext, ret, trace, flags);
+        findLocalDeclarationsInternal(identifier, position, dataType, ret, trace, flags);
     
     if( foundEnough(ret) )
       return true;
