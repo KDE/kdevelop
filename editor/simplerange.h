@@ -49,6 +49,10 @@ struct KDEVPLATFORMEDITOR_EXPORT SimpleRange {
         return start.column != -1 || start.line != -1 || end.column != -1 || end.line != -1;
     }
     
+    bool isEmpty() const {
+        return start == end;
+    }
+    
     bool contains(const SimpleCursor& position) const {
         return position >= start && position < end;
     }
