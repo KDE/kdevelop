@@ -279,7 +279,7 @@ namespace TypeUtils {
       return;
     }
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->identifier()), SimpleCursor::invalid(), topContext, AbstractType::Ptr(), false, DUContext::OnlyFunctions);
+    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->identifier()), SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
     
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );

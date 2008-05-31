@@ -45,6 +45,10 @@
 //If this is enabled, all encounterd problems will be dumped to kDebug
 //#define DUMP_PROBLEMS
 
+//If this is enabled, problems will be created when no overloaded function was found for a function-call. This is expensive,
+//because the problem report contains a lot of information, and the problem currently appears very often.
+//#define DEBUG_FUNCTION_CALLS
+
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
 /** A typical expression:
@@ -1491,7 +1495,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         
         if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
         {
-          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), true, DUContext::OnlyFunctions ));
+          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
         }
       }
     }
@@ -1559,6 +1563,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
+#ifdef DEBUG_FUNCTION_CALLS
       QString params;
       foreach(const OverloadResolver::Parameter& param, m_parameters)
         params += param.toString() + ", ";
@@ -1575,6 +1580,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
       
       problem(node, QString("Could not find a function that matches the parameters. Using first candidate function. Parameters: %1 Candidates: %2").arg(params).arg(candidates));
+#endif
       fail = true;
     }
 

@@ -463,7 +463,7 @@ class CppDUContext : public BaseContext {
       return true;
     }
 
-    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, bool allowUnqualifiedMatch, QList<Declaration*>& ret, const ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
+    virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, typename BaseContext::SearchFlags flags ) const
     {
       ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
       ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
@@ -479,7 +479,7 @@ class CppDUContext : public BaseContext {
 
         int retCount = ret.count();
       
-        BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, allowUnqualifiedMatch, ret, trace, flags );
+        BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, trace, flags );
 
         ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.textCursor(); )
 
@@ -504,7 +504,7 @@ class CppDUContext : public BaseContext {
           ///Search in the context this one was instantiated from
           QList<Declaration*> decls;
           ifDebug( kDebug(9007) << "searching base"; )
-          m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, allowUnqualifiedMatch, decls, trace, flags );
+          m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, decls, trace, flags );
           
           ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
           ifDebug( kDebug(9007) << "found" << decls.count() << "in base"; )
@@ -631,7 +631,7 @@ class CppDUContext : public BaseContext {
         QVector<Declaration*> decls = m_instantiatedFrom->localDeclarations();
 
         foreach( Declaration* baseDecls, decls )
-          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), SimpleCursor::invalid(), AbstractType::Ptr(), true, temp, trace, DUContext::NoFiltering );
+          this->findLocalDeclarationsInternal( QualifiedIdentifier(baseDecls->identifier()), SimpleCursor::invalid(), AbstractType::Ptr(), temp, trace, DUContext::NoFiltering );
       }
 
       return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, trace, searchInParents, currentDepth);
