@@ -19,6 +19,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "safesharedptr.h"
 #include "networkexport.h"
 #include <vector>
+#include <string>
 
 #ifndef MESSAGEINTERFACE_H
 #define MESSAGEINTERFACE_H

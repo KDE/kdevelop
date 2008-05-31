@@ -13,18 +13,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #ifndef MUTEXINTERFACE_H
 #define MUTEXINTERFACE_H
 
-//TODO: use proper public API from boost, instead of the private do_lock() methods in boost's Mutex class. See
-//http://www.boost.org/doc/libs/1_34_1/doc/html/thread/concepts.html#thread.concepts.Lock
-//for more information.
-
-#include <boost/thread/recursive_mutex.hpp>
-#include <boost/thread/xtime.hpp>
+#include <QMutex>
 
 class MutexInterfaceImpl {
-    typedef boost::recursive_timed_mutex MutexType;
-    mutable MutexType m_;
+  mutable QMutex m_;
   public:
-    MutexInterfaceImpl( const MutexInterfaceImpl& /*rhs*/ ) {
+    MutexInterfaceImpl( const MutexInterfaceImpl& /*rhs*/ ) : m_(QMutex::Recursive) {
     }
 
     const MutexInterfaceImpl& operator=( const MutexInterfaceImpl& /*rhs*/ ) {
@@ -34,23 +28,25 @@ class MutexInterfaceImpl {
     MutexInterfaceImpl() {}
 
     void lockCountUp() const {
-      m_.do_lock();
+      m_.lock();
     }
 
     bool tryLockCountUp() const {
-      return m_.do_trylock();
+      return m_.tryLock();
     }
 
     ///timeout in nanoseconds, may have a significant delay, so it shouldn't be used too much
     bool tryLockCountUp( int timeout ) const {
-      boost::xtime t;
-      xtime_get( &t, boost::TIME_UTC );
-      t.nsec += timeout;
-      return m_.do_timedlock( t );
+      if(timeout) {
+	timeout /= 1000000; //nanoseconds -> milliseconds
+	if(timeout)
+	  timeout = 1;
+      }
+      return m_.tryLock( timeout );
     }
 
     void lockCountDown() const {
-      m_.do_unlock();
+      m_.lock();
     };
 
     ~MutexInterfaceImpl() {}

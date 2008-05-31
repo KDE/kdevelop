@@ -37,14 +37,14 @@ ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions)
 
 ###### First Target ##########
 ADD_LIBRARY( network SHARED ${libfiles} )
-TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} pthread)
+TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} pthread QtCore)
 
 INSTALL(TARGETS network ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ###### Next Target ##########
 
 ADD_EXECUTABLE( kdevteamwork_server ${testfiles} )
-TARGET_LINK_LIBRARIES( kdevteamwork_server  ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} dl )
+TARGET_LINK_LIBRARIES( kdevteamwork_server  QtCore ${Boost_SERIALIZATION_LIBRARY} network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} dl )
 
 INSTALL(TARGETS kdevteamwork_server ${INSTALL_TARGETS_DEFAULT_ARGS})
 
