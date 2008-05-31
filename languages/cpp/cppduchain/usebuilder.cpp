@@ -107,6 +107,7 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   }
 
   if (contextUpSteps) {
+    m_editor->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
     openContext(newContext);
     nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
     skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
@@ -154,27 +155,11 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
 
   if (!encountered) {
 
-    SmartRange* prior = m_editor->currentRange();
-
-    //We must close all ranges in the range-hierarchy that belong to context that we have moved this use out of
-    QList<SmartRange*> backupRanges;
-    for(int a = 0; a < contextUpSteps; a++) {
-      SmartRange* s = m_editor->currentRange();
-      if(s)
-        backupRanges.push_front(s);
-      m_editor->exitCurrentRange();
-    }
-
     SmartRange* use = m_editor->createRange(newRange.textRange());
     m_editor->exitCurrentRange();
 
     currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());
     ++nextUseIndex();
-
-    for (QList<SmartRange*>::const_iterator it = backupRanges.begin(); it != backupRanges.end(); ++it)
-      m_editor->setCurrentRange( *it );
-
-    Q_ASSERT(m_editor->currentRange() == prior);
   }
 
   if (contextUpSteps) {
