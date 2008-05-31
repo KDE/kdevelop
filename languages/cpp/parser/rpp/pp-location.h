@@ -42,8 +42,10 @@ class KDEVCPPRPP_EXPORT LocationTable
 
     /** @todo Correctly respect utf-8 characters. They may have the byte-length of 2, but actually are one character.
       * Returns the marked position for the character at @param offset. If the character is in a collapsed range, the collapsed member is true.
+      @param collapseIfMacroExpansion When this is true, all ranges that come from macro-expansion will be 
+                                      considered collapsed.(The returned anchor will also have the collapsed member set)
       * */
-    Anchor positionForOffset(std::size_t offset) const;
+    Anchor positionForOffset(std::size_t offset, bool collapseIfMacroExpansion = false) const;
 
     void dump() const;
 

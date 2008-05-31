@@ -32,12 +32,15 @@ namespace rpp {
  * */
 class KDEVCPPRPP_EXPORT Anchor : public KDevelop::SimpleCursor {
 public:
-  explicit Anchor(const SimpleCursor& cursor, bool _collapsed=false) : SimpleCursor(cursor), collapsed(_collapsed) {
+  explicit Anchor(const SimpleCursor& cursor, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(cursor), collapsed(_collapsed), macroExpansion(_macroExpansion) {
   }
-  explicit Anchor(int line, int column, bool _collapsed=false) : SimpleCursor(line, column), collapsed(_collapsed) {
+  explicit Anchor(int line, int column, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(line, column), collapsed(_collapsed), macroExpansion(_macroExpansion) {
   }
 
   bool collapsed;
+  
+  ///@todo create a sub-class that contains macroExpansion. It is only needed in the location-table and everything using not, not actually in the anchors.
+  KDevelop::SimpleCursor macroExpansion; //Zero if this position was not transformed through a macro-expansion, else a number that identifies the expansion
 };
 }
 

@@ -36,6 +36,7 @@ Stream::Stream()
   , m_isNull(true)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -49,6 +50,7 @@ Stream::Stream( QByteArray * string, const Anchor& offset, LocationTable* table 
   , m_isNull(false)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
@@ -66,6 +68,7 @@ Stream::Stream( QByteArray * string, LocationTable* table )
   , m_isNull(false)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
@@ -175,9 +178,11 @@ Stream& Stream::operator<< ( const Stream& input )
     ++m_pos;
 
     if (c == newline) {
+      Anchor inputPosition = input.inputPosition();
       ++m_inputLine;
       m_inputLineStartedAt = m_pos; ///@todo remove
-      mark(Anchor(input.inputPosition().line + 1, 0));
+      if(!inputPosition.collapsed)
+        mark(Anchor(inputPosition.line + 1, 0, false, m_macroExpansion));
     }
 
     m_string->append(c);
@@ -195,7 +200,7 @@ Stream& Stream::appendString( const Anchor& inputPosition, const QByteArray & st
       if (string.at(i) == newline) {
         m_pos += i + 1; //Move the current offset to that position, so the marker is set correctly
         if(!inputPosition.collapsed)
-          mark(Anchor(inputPosition.line + ++extraLines, 0));
+          mark(Anchor(inputPosition.line + ++extraLines, 0, false, m_macroExpansion));
         m_pos -= i + 1;
       }
     }
@@ -216,7 +221,7 @@ bool Stream::isNull() const
 
 Anchor Stream::inputPosition() const
 {
-  return Anchor(m_inputLine, m_pos - m_inputLineStartedAt, m_inputPositionLocked);
+  return Anchor(m_inputLine, m_pos - m_inputLineStartedAt, m_inputPositionLocked, m_macroExpansion);
 }
 
 void Stream::setInputPosition(const Anchor& position)
@@ -226,10 +231,27 @@ void Stream::setInputPosition(const Anchor& position)
   m_inputPositionLocked = position.collapsed;
 }
 
+void Stream::setMacroExpansion(const KDevelop::SimpleCursor& expansion)
+{
+  m_macroExpansion = expansion;
+}
+
+KDevelop::SimpleCursor Stream::macroExpansion() const
+{
+  return m_macroExpansion;
+}
+
 void Stream::mark(const Anchor& position)
 {
-  if (m_locationTable)
-    m_locationTable->anchor(m_pos, position);
+  if (m_locationTable) {
+    if(m_macroExpansion.isValid()) {
+      Anchor a(position);
+      a.macroExpansion = m_macroExpansion;
+      m_locationTable->anchor(m_pos, a);
+    }else{
+      m_locationTable->anchor(m_pos, position);
+    }
+  }
 }
 
 void Stream::reset( )

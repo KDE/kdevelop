@@ -40,6 +40,8 @@
 
 #include <climits>
 
+//#define DEBUG_UPDATE_MATCHING
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
@@ -511,7 +513,10 @@ void ContextBuilder::visitFunctionDeclaration (FunctionDefinitionAST* node)
 DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingContexts) {
-    DUContext* ret = openContextInternal(m_editor->findRange(rangeNode), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << m_editor->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+#endif
+    DUContext* ret = openContextInternal(m_editor->findRangeForContext(rangeNode->start_token, rangeNode->end_token), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
     rangeNode->ducontext = ret;
     return ret;
 
@@ -525,7 +530,10 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextType type)
 {
   if (m_compilingContexts) {
-    KDevelop::SimpleRange range = m_editor->findRange(rangeNode);
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << m_editor->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+#endif
+    KDevelop::SimpleRange range = m_editor->findRangeForContext(rangeNode->start_token, rangeNode->end_token);
     range.end = range.start;
     DUContext* ret = openContextInternal(range, type, QualifiedIdentifier());
     rangeNode->ducontext = ret;
@@ -541,7 +549,10 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   if (m_compilingContexts) {
-    DUContext* ret = openContextInternal(m_editor->findRange(rangeNode), type, identifier);
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << m_editor->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+#endif
+    DUContext* ret = openContextInternal(m_editor->findRangeForContext(rangeNode->start_token, rangeNode->end_token), type, identifier);
     rangeNode->ducontext = ret;
     return ret;
 
@@ -555,7 +566,10 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
 DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::ContextType type, NameAST* identifier)
 {
   if (m_compilingContexts) {
-    DUContext* ret = openContextInternal(m_editor->findRange(fromRange, toRange), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << m_editor->tokensToStrings( fromRange->start_token, toRange->end_token );
+#endif
+    DUContext* ret = openContextInternal(m_editor->findRangeForContext(fromRange->start_token, toRange->end_token), type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
     fromRange->ducontext = ret;
     return ret;
   } else {
@@ -570,6 +584,11 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
   DUContext* ret = 0L;
   if(range.start > range.end)
     kDebug(9007) << "Bad context-range" << range.textRange();
+  
+#ifdef DEBUG_UPDATE_MATCHING
+  kDebug() << "checking context" << identifier << range.textRange();
+#endif
+  
   {
     DUChainReadLocker readLock(DUChain::lock());
 
@@ -590,8 +609,12 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
       for (; nextContextIndex() < childContexts.count(); ++nextContextIndex()) {
         DUContext* child = childContexts.at(nextContextIndex());
 
-        if (child->range().start > translated.end && child->smartRange())
+        if (child->range().start > translated.end && child->smartRange()) {
+#ifdef DEBUG_UPDATE_MATCHING
+        kDebug() << "range order mismatch, stopping because encountered" << child->range().textRange();
+#endif
           break;
+        }
 
         if (child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated) {
           // Match
@@ -601,12 +624,21 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
 
           ret->clearImportedParentContexts();
           m_editor->setCurrentRange(ret->smartRange());
+          ++nextContextIndex();
           break;
+        }else{
+#ifdef DEBUG_UPDATE_MATCHING
+          kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
+#endif
         }
       }
     }
 
     if (!ret) {
+#ifdef DEBUG_UPDATE_MATCHING
+  kDebug() << "creating new" << identifier << range.textRange();
+#endif
+      
       readLock.unlock();
       DUChainWriteLocker writeLock(DUChain::lock());
 

@@ -55,9 +55,10 @@ public:
   /**
    * Return the position of the preprocessed source \a offset in the original source
    * If the "collapsed" member of the returned anchor is true, the position is within a collapsed range.
+   @param collapseIfMacroExpansion @see LocationTable::positionForOffset
    * \note the return line starts from 0, not 1.
    */
-  rpp::Anchor positionAt(std::size_t offset) const;
+  rpp::Anchor positionAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
 
   void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
 
@@ -76,7 +77,7 @@ public:
   TokenStream* token_stream;
 
   rpp::MacroBlock* macros;
-  KDevelop::SimpleCursor m_contentOffset;
+  KDevelop::SimpleCursor m_contentOffset; ///@todo remove
   KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:

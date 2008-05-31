@@ -134,6 +134,7 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
     for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
       const Use& use = uses[nextUseIndex()];
 
+      //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
       if (use.m_range.start > translated.end && m_editor->smart() )
         break;
 

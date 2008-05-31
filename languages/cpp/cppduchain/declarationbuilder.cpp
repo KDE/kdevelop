@@ -45,6 +45,8 @@
 #include "cpptypes.h"
 #include "cppduchain.h"
 
+//#define DEBUG_UPDATE_MATCHING
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
@@ -376,8 +378,8 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   SimpleRange newRange = m_editor->findRange(name ? static_cast<AST*>(name->unqualified_name) : rangeNode);
 
-  if(newRange.start >= newRange.end)
-    kDebug(9007) << "Range collapsed";
+//  if(newRange.start >= newRange.end) //It is collapsed if it's within a macro
+//    kDebug(9007) << "Range collapsed";
 
   QualifiedIdentifier id;
 
@@ -426,13 +428,36 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       translated = SimpleRange( m_editor->smart()->translateFromRevision(translated.textRange()) );
       lock.lock();
     }
+    
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "checking" << localId.toString() << "range" << translated.textRange();
+#endif
 
     foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
 
       if( wasEncountered(dec) )
         continue;
 
-      //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
+#ifdef DEBUG_UPDATE_MATCHING
+      if (!(dec->range() == translated))
+        kDebug() << "range mismatch" << dec->range().textRange() << translated.textRange();
+      
+      if(!(dec->scope() == scope))
+        kDebug() << "scope mismatch:" << int(dec->scope()) << int(scope);
+      
+      if(!((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())))
+        kDebug() << "id mismatch" << dec->identifier().toString() << localId.toString();
+      
+      if(!(dec->isDefinition() == isDefinition && 
+          dec->isTypeAlias() == m_inTypedef))
+        kDebug() << "attribute mismatch:" << dec->isDefinition() << isDefinition << dec->isTypeAlias() << m_inTypedef;
+
+      if(!((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
+             hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ))
+        kDebug() << "template mismatch";
+#endif
+      
+        //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
           dec->scope() == scope &&
           ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())) &&
@@ -482,10 +507,25 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 /*    if( recompiling() )
       kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
     SmartRange* prior = m_editor->currentRange();
+
+    ///We don't want to move the parent range around if the context is collapsed, so we find a parent range that can hold this range.
+    QVarLengthArray<SmartRange*, 5> backup;
+    while(m_editor->currentRange() && !m_editor->currentRange()->contains(newRange.textRange())) {
+      backup.append(m_editor->currentRange());
+      m_editor->exitCurrentRange();
+    }
+    
+    if(prior && !m_editor->currentRange()) {
+      m_editor->setCurrentRange(backup[backup.count()-1]);
+      backup.resize(backup.size()-1);
+    }
+    
     SmartRange* range = m_editor->createRange(newRange.textRange());
 
     m_editor->exitCurrentRange();
-  //Q_ASSERT(range->start() != range->end());
+    
+    for(int a = backup.size()-1; a >= 0; --a)
+      m_editor->setCurrentRange(backup[a]);
 
     Q_ASSERT(m_editor->currentRange() == prior);
 

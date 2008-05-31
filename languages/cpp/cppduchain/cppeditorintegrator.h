@@ -104,12 +104,26 @@ public:
    * \overload
    */
   KDevelop::SimpleRange findRange(std::size_t start_token, std::size_t end_token);
+
+  /**
+   * Create a range encompassing the given range \a tokens.
+   * 
+   * The difference to the common functions, this one checks whether the given range has been expanded within
+   * one macro-expansion, and if it has, returns a collapsed range at the position from where the expansion was started.
+   * \overload
+   */
+  KDevelop::SimpleRange findRangeForContext(std::size_t start_token, std::size_t end_token);
   
   /**
    * Retrieve the string represented by a token.
    */
   QString tokenToString(std::size_t token) const;
 
+  /**
+   * Retrieve the string represented by a range of tokens.
+   */
+  QString tokensToStrings(std::size_t start, std::size_t end) const;
+  
 private:
   static QHash<KUrl, KTextEditor::Document*> s_documents;
   static QHash<KUrl, QVector<KDevelop::SimpleRange*> > s_topRanges;

@@ -45,14 +45,15 @@ void LocationTable::anchor(std::size_t offset, Anchor anchor)
 {
   if (anchor.column) {
     // Check to see if it's different to what we already know
-    if (positionForOffset(offset) == anchor && !anchor.collapsed)
+    rpp::Anchor known = positionForOffset(offset);
+    if (known == anchor && !anchor.collapsed && known.macroExpansion == anchor.macroExpansion)
       return;
   }
   
   m_currentOffset = m_offsetTable.insert(offset, anchor);
 }
 
-Anchor LocationTable::positionForOffset(std::size_t offset) const
+Anchor LocationTable::positionForOffset(std::size_t offset, bool collapseIfMacroExpansion) const
 {
   // Look nearby for a match first
   QMap<std::size_t, Anchor>::ConstIterator constEnd = m_offsetTable.constEnd();
@@ -108,10 +109,14 @@ Anchor LocationTable::positionForOffset(std::size_t offset) const
   done:
   Q_ASSERT(m_currentOffset != constEnd);
   Anchor ret = m_currentOffset.value();
+  if(ret.macroExpansion.isValid() && collapseIfMacroExpansion) {
+    ret.collapsed = true;
+    return ret;
+  }
   if(ret.collapsed)
     return ret;
   else {
-    return Anchor(ret+ KDevelop::SimpleCursor(0, offset - m_currentOffset.key()), ret.collapsed);
+    return Anchor(ret+ KDevelop::SimpleCursor(0, offset - m_currentOffset.key()), ret.collapsed, ret.macroExpansion);
   }
 }
 

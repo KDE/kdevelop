@@ -106,6 +106,19 @@ pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderS
       continue; \
   } \
 
+struct EnableMacroExpansion {
+  EnableMacroExpansion(Stream& _input, const KDevelop::SimpleCursor& expansionPosition) : input(_input), hadMacroExpansion(_input.macroExpansion().isValid()) {
+    
+    if(!hadMacroExpansion)
+      _input.setMacroExpansion(expansionPosition);
+  }
+  ~EnableMacroExpansion() {
+    if(!hadMacroExpansion)
+      input.setMacroExpansion(KDevelop::SimpleCursor::invalid());
+  }
+  Stream& input;
+  bool hadMacroExpansion;
+};
 
 void pp_macro_expander::operator()(Stream& input, Stream& output)
 {
@@ -250,9 +263,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             output.appendString(inputPosition, name);
           continue;
         }
-
+        
         if (!macro->function_like)
         {
+          EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
           pp_macro* m = 0;
 
           if (!macro->definition.isEmpty()) {
@@ -392,6 +406,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         assert ((macro->variadics && macro->formals.size () >= actuals.size ())
                     || macro->formals.size() == actuals.size());
 #endif
+        EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
         pp_frame frame(macro, actuals);
         pp_macro_expander expand_macro(m_engine, &frame);

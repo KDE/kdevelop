@@ -77,6 +77,11 @@ class KDEVCPPRPP_EXPORT Stream
     /// Lock/unlock the input position. If the input position is locked, it will not be moved forwards.
     void lockInputPosition(bool lock);
 
+    /// If a macro-expansion is set, all anchors given to mark() will get that macro-expansion set.
+    /// It marks the position from where the macro-expansion was started that leads to the current output @see rpp::Anchor
+    void setMacroExpansion(const KDevelop::SimpleCursor&);
+    KDevelop::SimpleCursor macroExpansion() const;
+    
     inline const char& current() const { return *c; } //krazy:exclude=inline
     inline operator const char&() const { return *c; } //krazy:exclude=inline
     inline Stream& operator++() //krazy:exclude=inline
@@ -110,6 +115,7 @@ class KDEVCPPRPP_EXPORT Stream
     void setOriginalInputPosition(const KDevelop::SimpleCursor& position);
 
     ///Used for output streams to mark stream positions with input position
+    ///The macroExpansion member may have no effect if macroExpansion is set for this stream.
     void mark(const Anchor& position);
 
     Stream & operator<< ( const char& c );
@@ -123,6 +129,7 @@ class KDEVCPPRPP_EXPORT Stream
     const char* c;
     const char* end;
     bool m_isNull, m_skippedToEnd, m_inputPositionLocked;
+    KDevelop::SimpleCursor m_macroExpansion;
     int m_pos;
     int m_inputLine;
     int m_inputLineStartedAt;
