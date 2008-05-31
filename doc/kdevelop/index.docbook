@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
   <!ENTITY kdevrelease "3.1.0">
   <!ENTITY apache "<application>Apache</application>">
@@ -109,11 +109,12 @@ Entries which require special treatment are marked with comments starting with '
         <address><email>volker.paul@tiscali.de</email></address>
       </affiliation>
     </author>
+    <!-- TRANS:ROLES_OF_TRANSLATORS -->
   </authorgroup>
 
   <copyright>
     <year>2002</year>
-    <holder>Bernd Gehrmann</holder>
+    <holder>&Bernd.Gehrmann;</holder>
   </copyright>
   <copyright>
     <year>2002</year>
@@ -128,7 +129,8 @@ Entries which require special treatment are marked with comments starting with '
     <holder>Volker Paul</holder>
   </copyright>
 
-  <!--ROLES_OF_TRANSLATORS-->
+  <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+  &underFDL;
 
   <legalnotice>&FDLNotice;</legalnotice>
 
@@ -216,7 +218,7 @@ Entries which require special treatment are marked with comments starting with '
 <bibliography id="bibliography">
 
 <biblioentry>
-<title><ulink url="info://make/Top">GNU Make Manual</ulink></title>
+<title><ulink url="info://make/Top">&GNU; Make Manual</ulink></title>
 <authorgroup>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 <author><firstname>Roland</firstname><surname>McGrath</surname></author>
@@ -224,7 +226,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://automake/Top">GNU Automake</ulink></title>
+<title><ulink url="info://automake/Top">&GNU; Automake</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Tom</firstname><surname>Tromey</surname></author>
@@ -232,7 +234,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://autoconf/Top">GNU Autoconf</ulink></title>
+<title><ulink url="info://autoconf/Top">&GNU; Autoconf</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Ben</firstname><surname>Elliston</surname></author>
@@ -240,12 +242,12 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://gcc/Top">Using the GNU Compiler Collection</ulink></title>
+<title><ulink url="info://gcc/Top">Using the &GNU; Compiler Collection</ulink></title>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://libtool/Top">GNU Libtool</ulink></title>
+<title><ulink url="info://libtool/Top">&GNU; Libtool</ulink></title>
 <authorgroup>
 <author><firstname>Gordon</firstname><surname>Matzigkeit</surname></author>
 <author><firstname>Alexandre</firstname><surname>Oliva</surname></author>
@@ -255,7 +257,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>GNU Autoconf, Automake, and Libtool</title>
+<title>&GNU; Autoconf, Automake, and Libtool</title>
 <edition>1st edition</edition>
 <pubdate>October 2000</pubdate>
 <authorgroup>
@@ -288,7 +290,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>Open Source Development with CVS</title>
+<title>Open Source Development with &cvs;</title>
 <edition>2nd Edition</edition>
 <pubdate>October 12, 2001</pubdate>
 <authorgroup>
@@ -300,7 +302,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>Programming PHP</title>
+<title>Programming &php;</title>
 <edition>1st edition</edition>
 <pubdate>March 2002</pubdate>
 <authorgroup>
@@ -312,7 +314,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>Programming Python</title>
+<title>Programming &python;</title>
 <edition>2nd Edition</edition>
 <pubdate>March 2001</pubdate>
 <author><firstname>Mark</firstname><surname>Lutz</surname></author>
@@ -321,7 +323,7 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>Gui Programming With Python : Using the Qt Toolkit</title>
+<title>Gui Programming With &python; : Using the &Qt; Toolkit</title>
 <edition>Bk&amp;Cd-r edition</edition>
 <pubdate>January 2002</pubdate>
 <author><firstname>Boudewijn</firstname><surname>Rempt</surname></author>
@@ -330,21 +332,21 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-<title>Programming Perl</title>
-<subtitle>The Camel book</subtitle>
-<edition>3rd Edition</edition>
-<pubdate>July 2000</pubdate>
-<authorgroup>
-<author><firstname>Larry</firstname><surname>Wall</surname></author>
-<author><firstname>Tom</firstname><surname>Christiansen</surname></author>
-<author><firstname>Jon</firstname><surname>Orwant</surname></author>
-</authorgroup>
-<publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-<isbn>ISBN 0596000278</isbn>
+    <title>Programming &perl;</title>
+    <subtitle>The Camel book</subtitle>
+    <edition>3rd Edition</edition>
+    <pubdate>July 2000</pubdate>
+    <authorgroup>
+        <author><firstname>Larry</firstname><surname>Wall</surname></author>
+        <author><firstname>Tom</firstname><surname>Christiansen</surname></author>
+        <author><firstname>Jon</firstname><surname>Orwant</surname></author>
+    </authorgroup>
+    <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
+    <isbn>ISBN 0596000278</isbn>
 </biblioentry>
 
 <biblioentry>
-<title>Learning Perl</title>
+<title>Learning &perl;</title>
 <subtitle>The Lama book</subtitle>
 <edition>3rd Edition</edition>
 <pubdate>July 15, 2001</pubdate>
