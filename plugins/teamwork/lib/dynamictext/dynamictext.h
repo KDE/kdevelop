@@ -32,7 +32,7 @@ using namespace Tree;
 
 #define INVALID_POSITION -1000000
 
-struct OffsetRequest {
+struct DYNAMICTEXT_EXPORT OffsetRequest {
   VectorTimestamp from;
   VectorTimestamp to;
   OffsetRequest( const VectorTimestamp& f, const VectorTimestamp& t ) : from(f), to(t) {

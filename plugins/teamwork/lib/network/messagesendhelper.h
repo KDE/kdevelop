@@ -19,12 +19,13 @@
 #include "networkfwd.h"
 #include "sessioninterface.h"
 #include "messageinterface.h"
+#include "networkexport.h"
 
 namespace Teamwork {
   class MessageTypeSet;
 
 ///A little helper-class that allows creating types with less writing(can be imported into any class by inheritance)
-class MessageSendHelper {
+class NETWORK_EXPORT MessageSendHelper {
     MessageTypeSet& types_;
   public:
     MessageSendHelper( MessageTypeSet& types = globalMessageTypeSet() ) : types_( types ) {}

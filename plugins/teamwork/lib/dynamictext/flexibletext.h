@@ -25,11 +25,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "sumtree.h"
 #include "flexibletextnotifier.h"
+#include "dynamictextexport.h"
 
 namespace SumTree {
 
 template<class Tp>
-class TemporaryExchange {
+class DYNAMICTEXT_EXPORT TemporaryExchange {
   public:
     TemporaryExchange( Tp& target, Tp newValue ) : target_(target), oldValue_(target) {
       target_ = newValue;
@@ -44,7 +45,7 @@ class TemporaryExchange {
 ///This is just a little helper that autmatically deleted unremoved members of a string-list on exceptions etc.
 ///If they should be used on elsewhere, they must be removed from this list.
 template <class StringList>
-struct ManagedStringList {
+struct DYNAMICTEXT_EXPORT ManagedStringList {
   ManagedStringList( const StringList& rhs ) : list( rhs ) {}
 
   void delete_front() {
@@ -72,7 +73,7 @@ struct ManagedStringList {
  * */
 
 template <class String, class Char = char, Char lineBreak = '\n'>
-class FlexibleText {
+class DYNAMICTEXT_EXPORT FlexibleText {
   typedef std::deque<String*> StringVector;
   public:
     typedef std::list<String*> StringList;

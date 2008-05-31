@@ -16,13 +16,14 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "statictree.h"
 #include "messageinterface.h"
 #include <string>
+#include "networkexport.h"
 
 #define  DISABLEWARNINGS
 
 namespace Teamwork {
 using namespace Tree;
 class MessageInfo;
-struct MessageFactoryInterface {
+struct NETWORK_EXPORT MessageFactoryInterface {
   virtual MessagePointer buildMessage( InArchive& from , const MessageInfo& inf ) = 0;
   virtual std::string identify() = 0;
 #ifdef DISABLEWARNINGS
@@ -32,7 +33,7 @@ struct MessageFactoryInterface {
 ;
 
 template <class MessageType>
-struct MessageFactory : public MessageFactoryInterface {
+struct NETWORK_EXPORT MessageFactory : public MessageFactoryInterface {
   virtual MessagePointer buildMessage( InArchive& from, const MessageInfo& inf ) {
     return MessagePointer( new MessageType( from, inf ) );
   }
@@ -47,21 +48,21 @@ struct MessageFactory : public MessageFactoryInterface {
 ;
 
 template < class Type, class Target >
-struct RegisterAllTypes {
+struct NETWORK_EXPORT RegisterAllTypes {
   static void reg( Target& targ ) {
     targ.Error_Bad_Type_List();
   };
 };
 
 template < class Type, class Parent, uchar preferredSubId, class Target >
-struct RegisterAllTypes< Chain< Type, Parent, preferredSubId >, Target > {
+struct NETWORK_EXPORT RegisterAllTypes< Chain< Type, Parent, preferredSubId >, Target > {
   static void reg( Target& targ ) {
     targ.template registerMessageType< Type, Parent > ( preferredSubId );
   };
 };
 
 template < class Side1, class Side2, class Target >
-struct RegisterAllTypes< Binder< Side1, Side2 >, Target > {
+struct NETWORK_EXPORT RegisterAllTypes< Binder< Side1, Side2 >, Target > {
   static void reg( Target& targ ) {
     RegisterAllTypes< Side2, Target >::reg( targ );
     RegisterAllTypes< Side1, Target >::reg( targ );

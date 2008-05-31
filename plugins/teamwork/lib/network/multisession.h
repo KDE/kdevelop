@@ -40,7 +40,7 @@ class ServerInformation;
  *  It is created by Teamwork::Server and Teamwork::Client
 * */
 
-class MultiSession : public BasicTCPSession {
+class NETWORK_EXPORT MultiSession : public BasicTCPSession {
     bool incoming_;
     typedef std::map<UserPointer, ForwardSessionPointer, UserPointer::ValueSmallerCompare> ForwardSessionMap;
     ForwardSessionMap forwardSessions_;

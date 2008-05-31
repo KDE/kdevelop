@@ -23,10 +23,11 @@
 #include "logger.h"
 #include "sessioninterface.h"
 #include <map>
+#include "networkexport.h"
 
 namespace Teamwork {
 
- class SessionReplyManager {
+ class NETWORK_EXPORT SessionReplyManager {
     typedef std::map<uint, MessagePointer> WaitingMap;
     MutexInterfaceImpl* selfMutex_;
     WaitingMap waitingMessages_; ///here, all messages that wait for a reply are stored, mapped to their unique-ids.
@@ -42,7 +43,7 @@ namespace Teamwork {
     virtual ~SessionReplyManager();
 };
 
-class BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared,*/ public SessionInterface, public SessionReplyManager {
+class NETWORK_EXPORT BasicTCPSession : protected ost::TCPSession,   /*public virtual SafeShared,*/ public SessionInterface, public SessionReplyManager {
   public:
     using Thread::setName;
     using Thread::getName;

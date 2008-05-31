@@ -49,10 +49,11 @@
 //#include <boost/serialization/vector.hpp>
 #include <boost/serialization/level.hpp>
 #include <vector>
+#include "networkexport.h"
 
 namespace Teamwork {
 
-  class TeamworkError : public std::exception {
+  class NETWORK_EXPORT TeamworkError : public std::exception {
       std::string str_;
     public:
       TeamworkError( const std::string& str ) {
@@ -66,7 +67,7 @@ namespace Teamwork {
   };
 
   ///This error may be thrown while serialization and it will only stop the message from being sent, it will not close the session.
-  struct NonFatalSerializationError : public TeamworkError {
+  struct NETWORK_EXPORT NonFatalSerializationError : public TeamworkError {
     NonFatalSerializationError( const std::string& str ) : TeamworkError( "non-fatal serialization-error: " + str ) {}
   }
   ;
@@ -77,12 +78,12 @@ namespace Teamwork {
     *cases that behavior is not appropriate. Then this exception can be thrown
     *while reserializing or rebuilding the message, to make clear that the
     *message should be sent anyway. */
-  struct CannotReserialize : public NonFatalSerializationError {
+  struct NETWORK_EXPORT CannotReserialize : public NonFatalSerializationError {
     CannotReserialize() : NonFatalSerializationError( "the message cannot be serialized after being deserialized" ) {}
   }
   ;
 
-  class StreamError : public TeamworkError {
+  class NETWORK_EXPORT StreamError : public TeamworkError {
     public:
       StreamError( const std::string& str ) : TeamworkError( "Stream-Error: " + str ) {}
   }

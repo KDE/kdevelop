@@ -31,7 +31,7 @@ typedef WeakSharedPtr<Node> WeakNodePointer;
 
 
 ///A pair that contains an index and the sum of all values before that index
-struct IndexAndSum {
+struct DYNAMICTEXT_EXPORT IndexAndSum {
   int index;
   int sum;
 };

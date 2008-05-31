@@ -14,8 +14,9 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define MUTEXINTERFACE_H
 
 #include <QMutex>
+#include "networkexport.h"
 
-class MutexInterfaceImpl {
+class NETWORK_EXPORT MutexInterfaceImpl {
   mutable QMutex m_;
   public:
     MutexInterfaceImpl( const MutexInterfaceImpl& /*rhs*/ ) : m_(QMutex::Recursive) {

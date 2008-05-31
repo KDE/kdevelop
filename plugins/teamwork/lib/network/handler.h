@@ -16,9 +16,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "networkfwd.h"
 #include "safesharedptr.h"
+#include "networkexport.h"
 
 namespace Teamwork {
-class HandlerInterface : public SafeShared {
+class NETWORK_EXPORT HandlerInterface : public SafeShared {
   public:
     virtual ~HandlerInterface() {}
     /**When the handler is multithreaded, this function must be thread-safe by just queueing the Message to a secure list and processing later.
@@ -27,7 +28,7 @@ class HandlerInterface : public SafeShared {
 };
 
 template <class Target>
-struct HandlerProxy : public HandlerInterface {
+struct NETWORK_EXPORT HandlerProxy : public HandlerInterface {
   WeakSafeSharedPtr<Target> handler_;
   HandlerProxy( const SafeSharedPtr<Target>& targ ) : handler_( targ ) {}
 

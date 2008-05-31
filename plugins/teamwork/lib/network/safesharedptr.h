@@ -21,6 +21,7 @@
 #include "mutexinterface.h"
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/nvp.hpp>
+#include "networkexport.h"
 
 #define MILLI_TO_NANO 1000000
 #define SEC_TO_NANO 1000000000
@@ -37,7 +38,7 @@ class SafeSharedPtr;
  *  It can either be used with SafeSharedPtr to also control access to the function, or with SharedPtr
  *  to only do thread-safe reference-counting.
  * */
-class SafeShared : public MutexInterfaceImpl {
+class NETWORK_EXPORT SafeShared : public MutexInterfaceImpl {
   public:
     /**
     * Standard constructor.  This will initialize the reference count
@@ -99,7 +100,7 @@ class SafeShared : public MutexInterfaceImpl {
   As long as this object exists, the data pointed to can be used exclusively. The data may also be 0 (invalid)! */
 #ifndef USE_NEW_LOCKED
 template <class Item>
-class LockedSharedPtr : protected SharedPtr<Item> {
+class NETWORK_EXPORT LockedSharedPtr : protected SharedPtr<Item> {
   private:
     void release() {
       if ( *this )
@@ -213,7 +214,7 @@ class LockedSharedPtr : protected SharedPtr<Item> {
 };
 #else
 template <class Item>
-class LockedSharedPtr : protected SharedPtr<Item> {
+class NETWORK_EXPORT LockedSharedPtr : protected SharedPtr<Item> {
   private:
     void release() {
       if ( *this )
@@ -333,7 +334,7 @@ class LockedSharedPtr : protected SharedPtr<Item> {
 const int SafeSharedLockTimeout = SEC_TO_NANO * 5;
 
 template <class Item, class Serialization>
-class SafeSharedPtr : protected SharedPtr<Item, Serialization> {
+class NETWORK_EXPORT SafeSharedPtr : protected SharedPtr<Item, Serialization> {
   public:
     typedef SharedPtr<Item, Serialization> Precursor;
     

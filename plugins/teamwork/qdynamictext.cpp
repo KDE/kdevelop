@@ -34,7 +34,7 @@ QDynamicText& QDynamicText::operator = ( const QDynamicText& rhs ) {
   return *this;
 }
 
-BOOST_CLASS_EXPORT_GUID(QDynamicText, "QDynamicText")
+//BOOST_CLASS_EXPORT_GUID(QDynamicText, "QDynamicText")
 
 
 #include "qdynamictext.moc"

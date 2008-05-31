@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/split_member.hpp>
+#include "networkexport.h"
 
 /**
  * Warning: Not thread-safe: use SafeShared for thread-safe reference-counting.
@@ -40,7 +41,7 @@ Boston, MA 02110-1301, USA.
  *
  * @author Waldo Bastian <bastian@kde.org>
  */
-class Shared {
+class NETWORK_EXPORT Shared {
   public:
     /**
      * Standard constructor.  This will initialize the reference count
@@ -94,7 +95,7 @@ class Shared {
 
 ///NormaSerialization serializes the object in a primitive way by just calling the objects serialization-method.
 
-struct NormalSerialization {
+struct NETWORK_EXPORT NormalSerialization {
   template <class Type, class Archive, class Target>
   static void load( Target& t, Archive& arch, int /*version*/ ) {
     bool b = false;
@@ -132,7 +133,7 @@ struct extractItemUnsafe {
 /**BoostSerialization relies on boost's pointer-serialization(Which includes tracking, versioning, etc.).
  * Objects serialized this way must be registered to the boost serialization-system.
 */
-struct BoostSerialization {
+struct NETWORK_EXPORT BoostSerialization {
   template <class Type, class Archive, class Target>
   static void load( Target& t, Archive& arch, int /*version*/ ) {
     bool b = false;
@@ -205,7 +206,7 @@ struct BoostSerializationNormal {
  */
 
 template < class T, class Serialization = NormalSerialization >
-class SharedPtr {
+class NETWORK_EXPORT SharedPtr {
   public:
     friend class NormalSerialization;
     /**

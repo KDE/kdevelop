@@ -230,7 +230,7 @@ class NETWORK_EXPORT MessageDispatcher {
 
 
 ///This message-type-set contains all messages that were registered by a call to REGISTER_MESSAGE, and may be used instead of the local type-sets, for simplicity. That way messages can be serialized/deserialized without the core-parts being aware that they exist.
-MessageTypeSet& globalMessageTypeSet();
+MessageTypeSet& NETWORK_EXPORT globalMessageTypeSet();
 
 template <class MessageType>
 class NETWORK_EXPORT RegisterMessageTypeInternal {

@@ -917,7 +917,7 @@ void DynamicText::notifyInserted( const ReplacementPointer& /*rep*/ ) {}
 
 void DynamicText::notifyStateChanged() {}
 
-BOOST_CLASS_EXPORT_GUID( DynamicText, "DynamicText" )
+//BOOST_CLASS_EXPORT_GUID( DynamicText, "DynamicText" )
 
 template bool Replacement::unApply( DynamicText::Text& text, const OffsetMap& outerOffset, OffsetMap& contextOffset );
 template bool Replacement::apply( DynamicText::Text& text, const OffsetMap& outerOffset, OffsetMap& contextOffset );
