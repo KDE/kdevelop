@@ -1611,6 +1611,13 @@ void TestDUChain::testTemplatesRebind() {
   QCOMPARE(top->childContexts()[3]->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[3]->childContexts()[1]->localDeclarations().count(), 1);
   {
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>")));
+  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>"))->abstractType().data()));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>")));
+  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other"))->abstractType().data()));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type")));
+  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"))->abstractType().data()));
+  
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());

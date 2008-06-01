@@ -36,7 +36,7 @@ using namespace KDevelop;
 
 namespace Cpp {
 
-KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const TopDUContext* topContext ) {
+KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const TopDUContext* topContext ) {
   QList<Declaration*> ret;
   ret += context->findLocalDeclarations( identifier, SimpleCursor::invalid(), topContext );
   if( !ret.isEmpty() )
@@ -87,7 +87,7 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
   return ret;
 }
 
-QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position)
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const Identifier& identifier, const KDevelop::SimpleCursor& position)
 {
   if( context->type() == DUContext::Namespace || context->type() == DUContext::Global ) {
     ///May have been forward-declared anywhere

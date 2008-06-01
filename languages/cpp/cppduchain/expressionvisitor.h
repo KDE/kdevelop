@@ -257,7 +257,7 @@ private:
    * @param isConst Whether the type inherits const-ness from above
    * @param postError whether a problem should be posted when the member is not found
    */
-  void findMember( AST* node, AbstractType::Ptr type, const QualifiedIdentifier& member, bool isConst = false, bool postProblem = true );
+  void findMember( AST* node, AbstractType::Ptr type, const Identifier& member, bool isConst = false, bool postProblem = true );
 
   /**
    *  Visits post-fix sub-expressions.

@@ -181,15 +181,15 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
 
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
       if( !delayedType->identifier().isExpression() ) {
-        QList<QualifiedIdentifier> identifiers;
-        identifiers << delayedType->identifier();
-        QList<Declaration*> decls;
+        DUContext::SearchItem::PtrList identifiers;
+        identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(delayedType->identifier()) );
+        DUContext::DeclarationList decls;
         
         if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, inclusionTrace, searchFlags ) )
           return const_cast<AbstractType*>(type);
         
         if( !decls.isEmpty() )
-          return applyPointerReference(decls.front()->abstractType().data(), delayedType->identifier());
+          return applyPointerReference(decls[0]->abstractType().data(), delayedType->identifier());
       }
       ///Resolution as type has failed, or is not appropriate.
       ///Resolve delayed expression, for example static numeric expressions

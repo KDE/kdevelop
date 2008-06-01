@@ -35,6 +35,7 @@ namespace KDevelop {
   class Declaration;
   class DUContext;
   class TopDUContext;
+  class Identifier;
   class QualifiedIdentifier;
   class SimpleCursor;
 }
@@ -46,13 +47,13 @@ namespace Cpp {
  * @param topContext should be the top-context from where the search starts. This is needed to resolve template-parameters.
  * Du-chain must be locked before.
  * */
-KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const KDevelop::TopDUContext* topContext );
+KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::TopDUContext* topContext );
 
 /**
  * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context
  * Tries to follow the C++ rules, that decide where a type may have been forward-declared.
  * */
-QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position);
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::SimpleCursor& position);
 
 /**
  * Takes and returns a list of declarations together with inheritance-depth.

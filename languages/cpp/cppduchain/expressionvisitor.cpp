@@ -244,7 +244,7 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
 }
 
 /** Find the member in the declaration's du-chain. **/
-void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const QualifiedIdentifier& member, bool isConst, bool postProblem ) {
+void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Identifier& member, bool isConst, bool postProblem ) {
     
     ///have test
     
@@ -339,7 +339,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Qua
           m_lastType = pnt->baseType();
           m_lastInstance = Instance( getDeclaration(node, m_lastType) );
         } else {
-          findMember( node, m_lastType, QualifiedIdentifier("operator->") ); ///@todo respect const
+          findMember( node, m_lastType, Identifier("operator->") ); ///@todo respect const
           if( !m_lastType ) {
             problem( node, "no overloaded operator-> found" );
             return;
@@ -1357,7 +1357,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( dereferenceLastPointer(node) ) {
       } else {
         //Get return-value of operator*
-        findMember(node, m_lastType, QualifiedIdentifier("operator*") );
+        findMember(node, m_lastType, Identifier("operator*") );
         if( !m_lastType ) {
           problem( node, "no overloaded operator* found" );
           return;
@@ -1495,7 +1495,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         
         if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
         {
-          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( QualifiedIdentifier(constructedType->declaration()->identifier()), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
+          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( constructedType->declaration()->identifier(), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
         }
       }
     }

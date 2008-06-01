@@ -93,7 +93,7 @@ namespace Cpp
       bool m_isOperator;
       QList< DeclarationWithArgument > m_declarations; //Declarations are paired with the optional first argument for the declared functions
       OverloadResolver::ParameterList m_knownParameters;
-      QualifiedIdentifier m_operatorIdentifier;
+      Identifier m_operatorIdentifier;
   };
 
 }

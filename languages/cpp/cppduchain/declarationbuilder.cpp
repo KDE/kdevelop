@@ -759,7 +759,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
     SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id, pos);
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id.last(), pos);
 
     AbstractType::Ptr newLastType;
 

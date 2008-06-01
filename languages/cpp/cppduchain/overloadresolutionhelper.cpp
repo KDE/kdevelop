@@ -47,7 +47,7 @@ void OverloadResolutionHelper::setOperator( const OverloadResolver::Parameter& b
 {
   m_baseType = base;
   m_isOperator = true;
-  m_operatorIdentifier = QualifiedIdentifier("operator"+operatorName);
+  m_operatorIdentifier = Identifier("operator"+operatorName);
 }
 
 void OverloadResolutionHelper::setFunctions( const QList<Declaration*>& functions )

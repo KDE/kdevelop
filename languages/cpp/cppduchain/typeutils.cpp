@@ -241,7 +241,7 @@ namespace TypeUtils {
     int functionCount = functions.size();
 
     if( context ) {
-      QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(functionName), SimpleCursor::invalid(), topContext);
+      QList<Declaration*> declarations = context->findLocalDeclarations(Identifier(functionName), SimpleCursor::invalid(), topContext);
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
         CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
@@ -279,7 +279,7 @@ namespace TypeUtils {
       return;
     }
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(QualifiedIdentifier(context->owner()->identifier()), SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
+    QList<Declaration*> declarations = context->findLocalDeclarations(context->owner()->identifier(), SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
     
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
