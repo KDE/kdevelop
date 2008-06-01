@@ -68,8 +68,8 @@ AreaSelectorWidget::AreaSelectorWidget(QWidget *parent,
         areaIds_.push_back(a->objectName());
         combo_->addItem(a->title());
         if (a->title() == window->area()->title())
-            combo_->setCurrentIndex(combo_->count()-1);            
-    }   
+            combo_->setCurrentIndex(combo_->count()-1);
+    }
     connect (combo_, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
     connect (window_, SIGNAL(areaChanged(Sublime::Area*)),
              this, SLOT(areaChanged(Sublime::Area*)));
@@ -79,7 +79,7 @@ void AreaSelectorWidget::resetCurrentArea()
 {
     controller_->resetCurrentArea(window_);
 }
-    
+
 void AreaSelectorWidget::activateArea(int index)
 {
     controller_->showArea(areaIds_[index], window_);
@@ -193,7 +193,7 @@ void MainWindowPrivate::reconstruct()
     IdealMainLayout *l = idealMainWidget->mainLayout();
     l->setWidthForRole(IdealMainLayout::Left, area->thickness(Sublime::Left));
     l->setWidthForRole(IdealMainLayout::Right, area->thickness(Sublime::Right));
-    l->setWidthForRole(IdealMainLayout::Bottom, 
+    l->setWidthForRole(IdealMainLayout::Bottom,
                        area->thickness(Sublime::Bottom));
     l->setWidthForRole(IdealMainLayout::Top, area->thickness(Sublime::Top));
     kDebug(9504) << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
@@ -248,16 +248,16 @@ void MainWindowPrivate::recreateCentralWidget()
     layout->setMargin(0);
     centralWidget->setLayout(layout);
 
-    connect(idealMainWidget, 
+    connect(idealMainWidget,
             SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
-            this, 
+            this,
             SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
 
     connect(idealMainWidget->mainLayout(),
             SIGNAL(widgetResized(IdealMainLayout::Role, int)),
             this,
             SLOT(widgetResized(IdealMainLayout::Role, int)));
-            
+
 }
 
 void MainWindowPrivate::
@@ -311,7 +311,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     if (view->widget())
         widgetToView.remove(view->widget());
     viewContainers.remove(view);
-    
+
     if (container->count() > 1)
     {
         bool wasActive = m_mainWindow->activeView() == view;
@@ -333,20 +333,20 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         Q_ASSERT(splitter->count() == 1);
         container->removeWidget(view->widget());
         view->widget()->setParent(0);
-        // We can be called from signal handler of container 
+        // We can be called from signal handler of container
         // (which is tab widget), so defer deleting it.
         container->deleteLater();
-      
+
         /* If we're not at the top level, we get to collapse split views.  */
         if (index->parent())
         {
-            /* The splitter used to have container as the only child, now it's 
+            /* The splitter used to have container as the only child, now it's
                time to get rid of it.  Make sure deleting splitter does not
                delete container -- per above comment, we'll delete it later.  */
             container->setParent(0);
             m_indexSplitters.remove(index);
             delete splitter;
-            
+
             AreaIndex *parent = index->parent();
             QSplitter *parentSplitter = m_indexSplitters[parent];
 
@@ -357,7 +357,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //save sizes and orientation of the sibling splitter
             parentSplitter->setOrientation(siblingSplitter->orientation());
             QList<int> sizes = siblingSplitter->sizes();
-            
+
             /* Parent has two children -- 'index' that we've deleted and
                'sibling'.  We move all children of 'sibling' into parent,
                and delete 'sibling'.  sibling either contains a single
@@ -376,7 +376,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             parentSplitter->setSizes(sizes);
             parentSplitter->setUpdatesEnabled(true);
 
-            kDebug(9504) << "after deleation " << parent << " has " 
+            kDebug(9504) << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";
 
             //find the container somewhere to activate

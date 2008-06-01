@@ -119,7 +119,7 @@ Qt::Orientations IdealButtonBarLayout::expandingDirections() const
 
 QSize IdealButtonBarLayout::minimumSize() const
 {
-    // The code below appears to be completely wrong -- 
+    // The code below appears to be completely wrong --
     // it will return the maximum size of a single button, not any
     // estimate as to how much space is necessary to draw all buttons
     // in a minimally acceptable way.
@@ -169,7 +169,7 @@ QSize IdealButtonBarLayout::sizeHint() const
             {
                 orientationSize += spacing();
             }
-            orientationSize += orientationSizeHere;            
+            orientationSize += orientationSizeHere;
             first = false;
         }
 
@@ -230,7 +230,7 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
         if (y + itemSizeHint.height() + b > rect.height()) {
             int newX = x + currentLineWidth + spacing();
             if (newX + itemSizeHint.width() + r <= rect.width())
-            {            
+            {
                 x += currentLineWidth + spacing();
                 y = rect.y() + t;
             }
@@ -250,7 +250,7 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
 }
 
 int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeometry) const
-{    
+{
     int l, t, r, b;
     getContentsMargins(&l, &t, &r, &b);
     int x = rect.x() + l;
@@ -264,13 +264,13 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
             // row.
             int newY = y + currentLineHeight + spacing();
             if (newY + itemSizeHint.height() + b <= rect.height())
-            {          
+            {
                 y = newY;
                 x = rect.x() + l;
                 currentLineHeight = 0;
             }
         }
-    
+
         if (updateGeometry)
             item->setGeometry(QRect(x, y, itemSizeHint.width(), itemSizeHint.height()));
 
@@ -414,7 +414,7 @@ QLayoutItem * IdealMainLayout::itemAt(int index) const
         else
             --index;
     }
-    
+
 
     if (QLayoutItem* item = m_items[Left]->itemAt(index, at))
         return item;
@@ -475,7 +475,7 @@ QLayoutItem * IdealMainLayout::takeAt(int index)
 
 int IdealMainLayout::count() const
 {
-    return m_buttonBars.count() + m_items[Left]->count() + m_items[Right]->count() 
+    return m_buttonBars.count() + m_items[Left]->count() + m_items[Right]->count()
         + m_items[Top]->count() + m_items[Bottom]->count() + m_items[Central]->count();
 }
 
@@ -580,7 +580,7 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
         else if (role == Bottom) {
             geometry.setTop(rect.height() - hint.height());
             rect.setBottom(rect.height() - hint.height());
-        } 
+        }
         else if (role == Right)
             geometry.setLeft(rect.width() - hint.width());
         else if (role == Top)
@@ -711,7 +711,7 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
     if (IdealDockWidget* dock = qobject_cast<IdealDockWidget*>(widget))
         if (dock->isFloating())
             dock->setFloating(false);
-    
+
     if (widget->parent() != parentWidget()) {
         widget->setParent(parentWidget());
         addChildWidget(widget);
@@ -844,7 +844,7 @@ void IdealMainLayout::loadSettings()
     KConfigGroup cg(KGlobal::config(), "UiSettings");
 
     bool invalid = false;
-    
+
     int topOwnsTopLeft = cg.readEntry("TopLeftCornerOwner", 0);
     if (m_topOwnsTopLeft != topOwnsTopLeft) {
         m_topOwnsTopLeft = topOwnsTopLeft;
