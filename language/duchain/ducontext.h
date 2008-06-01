@@ -469,7 +469,7 @@ public:
 struct SearchItem : public KShared {
 
   typedef KSharedPtr<SearchItem> Ptr;
-  typedef QVarLengthArray<Ptr, 10> PtrList;
+  typedef QVarLengthArray<Ptr, 256> PtrList; ///@todo find out why this QVarLengthArray crashes when it's resized!
 
   ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
   ///@param nextItem is set as next item to the last item in the chain
