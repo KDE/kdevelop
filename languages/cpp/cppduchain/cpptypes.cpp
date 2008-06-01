@@ -83,7 +83,7 @@ bool CppCVType::equals(const CppCVType* rhs) const {
 
 bool CppFunctionType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppFunctionType*>(_rhs))
+  if( !fastCast<const CppFunctionType*>(_rhs))
     return false;
   const CppFunctionType* rhs = static_cast<const CppFunctionType*>(_rhs);
 
@@ -97,7 +97,7 @@ bool CppFunctionType::equals(const AbstractType* _rhs) const
 
 bool CppPointerType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppPointerType*>(_rhs))
+  if( !fastCast<const CppPointerType*>(_rhs))
     return false;
   const CppPointerType* rhs = static_cast<const CppPointerType*>(_rhs);
 
@@ -109,7 +109,7 @@ bool CppPointerType::equals(const AbstractType* _rhs) const
 
 bool CppReferenceType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppReferenceType*>(_rhs))
+  if( !fastCast<const CppReferenceType*>(_rhs))
     return false;
   const CppReferenceType* rhs = static_cast<const CppReferenceType*>(_rhs);
 
@@ -121,16 +121,23 @@ bool CppReferenceType::equals(const AbstractType* _rhs) const
 
 bool CppClassType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppClassType*>(_rhs) && !dynamic_cast<const ForwardDeclarationType*>(_rhs))
+  if( !fastCast<const CppClassType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs))
     return false;
-  const IdentifiedType* rhs = dynamic_cast<const IdentifiedType*>(_rhs);
+  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
+  
+  Declaration* decl = declaration();
+  Declaration* rhsDecl = rhs->declaration();
+  
+  if(!decl || !rhsDecl)
+    return false;
 
-  return identifier() == rhs->identifier();
+  ///We cannot use here IdentifiedType::equals, because else we get problems with forward declarations
+  return decl->equalQualifiedIdentifier(rhsDecl);
 }
 
 bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppTypeAliasType*>(_rhs))
+  if( !fastCast<const CppTypeAliasType*>(_rhs))
     return false;
   const CppTypeAliasType* rhs = static_cast<const CppTypeAliasType*>(_rhs);
 
@@ -159,9 +166,9 @@ QString CppEnumerationType::mangled() const
 
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppEnumerationType*>(_rhs) && !dynamic_cast<const ForwardDeclarationType*>(_rhs))
+  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs))
     return false;
-  const IdentifiedType* rhs = dynamic_cast<const IdentifiedType*>(_rhs);
+  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
 
   if( this == rhs )
     return true;
@@ -171,7 +178,7 @@ bool CppEnumerationType::equals(const AbstractType* _rhs) const
 
 bool CppArrayType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppArrayType*>(_rhs))
+  if( !fastCast<const CppArrayType*>(_rhs))
     return false;
   const CppArrayType* rhs = static_cast<const CppArrayType*>(_rhs);
 
@@ -183,7 +190,7 @@ bool CppArrayType::equals(const AbstractType* _rhs) const
 
 bool CppIntegralType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppIntegralType*>(_rhs))
+  if( !fastCast<const CppIntegralType*>(_rhs))
     return false;
   const CppIntegralType* rhs = static_cast<const CppIntegralType*>(_rhs);
 
@@ -195,7 +202,7 @@ bool CppIntegralType::equals(const AbstractType* _rhs) const
 
 bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const CppTemplateParameterType*>(_rhs))
+  if( !fastCast<const CppTemplateParameterType*>(_rhs))
     return false;
   const CppTemplateParameterType* rhs = static_cast<const CppTemplateParameterType*>(_rhs);
 

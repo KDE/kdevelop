@@ -414,6 +414,66 @@ public:
   private:
 };
 
+namespace KDevelop {
+
+template<>
+inline CppReferenceType* fastCast<CppReferenceType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeReference)
+    return 0;
+  else
+    return dynamic_cast<CppReferenceType*>(static_cast<ReferenceType*>(from));
+}
+
+template<>
+inline CppPointerType* fastCast<CppPointerType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypePointer)
+    return 0;
+  else
+    return dynamic_cast<CppPointerType*>(static_cast<PointerType*>(from));
+}
+
+template<>
+inline CppIntegralType* fastCast<CppIntegralType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeIntegral)
+    return 0;
+  else
+    return dynamic_cast<CppIntegralType*>(static_cast<IntegralType*>(from));
+}
+
+template<>
+inline CppConstantIntegralType* fastCast<CppConstantIntegralType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeIntegral)
+    return 0;
+  else
+    return dynamic_cast<CppConstantIntegralType*>(static_cast<IntegralType*>(from));
+}
+
+template<>
+inline CppFunctionType* fastCast<CppFunctionType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeFunction)
+    return 0;
+  else
+    return dynamic_cast<CppFunctionType*>(static_cast<FunctionType*>(from));
+}
+
+template<>
+inline CppClassType* fastCast<CppClassType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeStructure)
+    return 0;
+  else
+    return dynamic_cast<CppClassType*>(static_cast<StructureType*>(from));
+}
+
+template<>
+inline CppArrayType* fastCast<CppArrayType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeArray)
+    return 0;
+  else
+    return dynamic_cast<CppArrayType*>(static_cast<ArrayType*>(from));
+}
+
+}
+
 /*template <class _Target, class _Source>
 _Target model_static_cast(_Source item)
 {

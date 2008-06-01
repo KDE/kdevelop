@@ -40,26 +40,30 @@ namespace TypeUtils {
 
   AbstractType* realType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
-    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
+    ForwardDeclarationType* forward = fastCast<ForwardDeclarationType*>( base );
     if( forward ) {
       AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
       if( resolved.data() != (AbstractType*)forward )
         return realType( resolved.data(), topContext, constant );
     }
-    
-    CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
+  
+    if(base->whichType() == AbstractType::TypeReference) {
+      CppReferenceType* ref = fastCast<CppReferenceType*>( base );
 
-    while( ref ) {
-      if( constant )
-        (*constant) |= ref->isConstant();
-      base = ref->baseType().data();
-      ref = dynamic_cast<CppReferenceType*>( base );
+      while( ref ) {
+        if( constant )
+          (*constant) |= ref->isConstant();
+        base = ref->baseType().data();
+        ref = fastCast<CppReferenceType*>( base );
 
-      forward = dynamic_cast<ForwardDeclarationType*>( base );
-      if( forward ) {
-        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-        if( resolved.data() != (AbstractType*)forward )
-          return realType( resolved.data(), topContext, constant );
+        if(base->whichType() == AbstractType::TypeForward) {
+          forward = fastCast<ForwardDeclarationType*>( base );
+          if( forward ) {
+            AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+            if( resolved.data() != (AbstractType*)forward )
+              return realType( resolved.data(), topContext, constant );
+          }
+        }
       }
     }
 
@@ -68,9 +72,9 @@ namespace TypeUtils {
 
   AbstractType* targetType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
-    CppReferenceType* ref = dynamic_cast<CppReferenceType*>( base );
-    CppPointerType* pnt = dynamic_cast<CppPointerType*>( base );
-    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
+    CppReferenceType* ref = fastCast<CppReferenceType*>( base );
+    CppPointerType* pnt = fastCast<CppPointerType*>( base );
+    ForwardDeclarationType* forward = fastCast<ForwardDeclarationType*>( base );
     
     if( forward ) {
       AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
@@ -88,9 +92,9 @@ namespace TypeUtils {
           (*constant) |= pnt->isConstant();
         base = pnt->baseType().data();
       }
-      ref = dynamic_cast<CppReferenceType*>( base );
-      pnt = dynamic_cast<CppPointerType*>( base );
-      forward = dynamic_cast<ForwardDeclarationType*>( base );
+      ref = fastCast<CppReferenceType*>( base );
+      pnt = fastCast<CppPointerType*>( base );
+      forward = fastCast<ForwardDeclarationType*>( base );
     
       if( forward ) {
         AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
@@ -104,9 +108,9 @@ namespace TypeUtils {
 
   const AbstractType* targetType(const AbstractType* base, const TopDUContext* topContext, bool* constant) {
 
-    const CppReferenceType* ref = dynamic_cast<const CppReferenceType*>( base );
-    const CppPointerType* pnt = dynamic_cast<const CppPointerType*>( base );
-    const ForwardDeclarationType* forward = dynamic_cast<const ForwardDeclarationType*>( base );
+    const CppReferenceType* ref = fastCast<const CppReferenceType*>( base );
+    const CppPointerType* pnt = fastCast<const CppPointerType*>( base );
+    const ForwardDeclarationType* forward = fastCast<const ForwardDeclarationType*>( base );
     
     if( forward ) {
       AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
@@ -124,9 +128,9 @@ namespace TypeUtils {
           (*constant) |= pnt->isConstant();
         base = pnt->baseType().data();
       }
-      ref = dynamic_cast<const CppReferenceType*>( base );
-      pnt = dynamic_cast<const CppPointerType*>( base );
-      forward = dynamic_cast<const ForwardDeclarationType*>( base );
+      ref = fastCast<const CppReferenceType*>( base );
+      pnt = fastCast<const CppPointerType*>( base );
+      forward = fastCast<const ForwardDeclarationType*>( base );
     
       if( forward ) {
         AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
@@ -139,11 +143,11 @@ namespace TypeUtils {
   }
   
   bool isPointerType(AbstractType* type) {
-    return dynamic_cast<PointerType*>( realType(type, 0) );
+    return fastCast<PointerType*>( realType(type, 0) );
   }
 
   bool isReferenceType(AbstractType* type) {
-    return dynamic_cast<ReferenceType*>( type );
+    return fastCast<ReferenceType*>( type );
   }
 
   bool isConstant( AbstractType* t ) {
@@ -152,7 +156,7 @@ namespace TypeUtils {
   }
 
   bool isNullType( AbstractType* t ) {
-    CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(t);
+    CppConstantIntegralType* integral = fastCast<CppConstantIntegralType*>(t);
     if( integral && integral->integralType() == CppIntegralType::TypeInt && integral->value<qint64>() == 0 )
       return true;
     else
@@ -204,7 +208,7 @@ namespace TypeUtils {
   }
 
   bool isVoidType( AbstractType* type ) {
-    CppIntegralType* integral = dynamic_cast<CppIntegralType*>(type);
+    CppIntegralType* integral = fastCast<CppIntegralType*>(type);
     if( !integral ) return false;
     return integral->integralType() == CppIntegralType::TypeVoid;
   }
@@ -224,7 +228,7 @@ namespace TypeUtils {
       //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
       if( b.access != KDevelop::Declaration::Private ) {
         int nextBaseConversion = 0;
-        if( const CppClassType* c = dynamic_cast<const CppClassType*>(b.baseClass.data()) )
+        if( const CppClassType* c = fastCast<const CppClassType*>(b.baseClass.data()) )
           if( isPublicBaseClass( c, base, &nextBaseConversion ) )
             *baseConversionLevels += nextBaseConversion;
             return true;
@@ -243,7 +247,7 @@ namespace TypeUtils {
     if( context ) {
       QList<Declaration*> declarations = context->findLocalDeclarations(Identifier(functionName), SimpleCursor::invalid(), topContext);
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-        CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
+        CppFunctionType* function = fastCast<CppFunctionType*>( (*it)->abstractType().data() );
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
         if( function && functionDeclaration ) {
           if( !functions.contains(function) && (!mustBeConstant || function->isConstant()) ) {
@@ -260,7 +264,7 @@ namespace TypeUtils {
     //equivalent to using the imported parent-contexts
     for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
       if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-        if( dynamic_cast<const CppClassType*>((*it).baseClass.data()) )
+        if( fastCast<const CppClassType*>((*it).baseClass.data()) )
           getMemberFunctions( static_cast<CppClassType*>( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data() ), topContext, functions, functionName,   mustBeConstant);
     }
   }

@@ -73,12 +73,12 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
     return 0;
   }
   //kDebug(9007) << "Checking conversion from " << from->toString() << " to " << to->toString();
-  CppReferenceType* fromReference = dynamic_cast<CppReferenceType*>(from.data());
+  CppReferenceType* fromReference = fastCast<CppReferenceType*>(from.data());
   if( fromReference )
     fromLValue = true;
 
   ///iso c++ draft 13.3.3.1.4 reference-binding, modeled roughly
-  CppReferenceType* toReference = dynamic_cast<CppReferenceType*>(to.data());
+  CppReferenceType* toReference = fastCast<CppReferenceType*>(to.data());
   if( toReference ) {
     if( toReference->isConstant() || toReference->isConstant() == isConstant(from.data()) && fromLValue ) {
       ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
@@ -86,8 +86,8 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
       if( identityConversion( AbstractType::Ptr(realType(from, m_topContext)), AbstractType::Ptr(realType(toReference, m_topContext)) ) )
         return ExactMatch + 2*ConversionRankOffset;
       //Or realType(toReference) is a public base-class of realType(fromReference)
-      CppClassType* fromClass = dynamic_cast<CppClassType*>( realType(from, m_topContext) );
-      CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to, m_topContext) );
+      CppClassType* fromClass = fastCast<CppClassType*>( realType(from, m_topContext) );
+      CppClassType* toClass = fastCast<CppClassType*>( realType(to, m_topContext) );
       
       if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) )
         return ExactMatch + 2*ConversionRankOffset;
@@ -207,7 +207,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     }
 
     bool constRef = false;
-    if( ArrayType* array = dynamic_cast<ArrayType*>( realType(from, m_topContext, &constRef) ) ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
+    if( ArrayType* array = fastCast<ArrayType*>( realType(from, m_topContext, &constRef) ) ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
       ///Transform array to pointer. Iso c++ draft 4.2 modeled roughly.
       CppPointerType::Ptr p( new CppPointerType( constRef ? Declaration::Const : Declaration::CVNone ) );
       p->setBaseType(array->elementType());
@@ -217,7 +217,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     }
 
     constRef = false;
-    if( FunctionType* function = dynamic_cast<FunctionType*>( realType(from.data(), m_topContext, &constRef) ) ) {
+    if( FunctionType* function = fastCast<FunctionType*>( realType(from.data(), m_topContext, &constRef) ) ) {
       ///Transform lvalue-function. Iso c++ draft 4.3
       //This code is nearly the same as the above array-to-pointer conversion. Maybe it should be merged.
 
@@ -231,7 +231,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   }
 
   if( categories & QualificationAdjustmentCategory ) {
-    CppPointerType* pnt = dynamic_cast<CppPointerType*>(from.data());
+    CppPointerType* pnt = fastCast<CppPointerType*>(from.data());
 
     if( pnt ) {
       ///iso c++ 4.4.1 and 4.4.4 - multi-level pointer conversion
@@ -245,7 +245,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
         CppPointerType* p = pnt;
         while(p) {
           pointerLevels << p;
-          p = dynamic_cast<CppPointerType*>(p->baseType().data());
+          p = fastCast<CppPointerType*>(p->baseType().data());
         }
       }
 
@@ -285,7 +285,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
   if( categories & PromotionCategory ) {
 
-    CppIntegralType* integral = dynamic_cast<CppIntegralType*>( from.data() );
+    CppIntegralType* integral = fastCast<CppIntegralType*>( from.data() );
     if( integral ) {
 
       ///Integral promotions, iso c++ 4.5
@@ -309,9 +309,9 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
   if( categories & ConversionCategory )
   {
-    CppIntegralType* fromIntegral = dynamic_cast<CppIntegralType*>( from.data() );
-    CppEnumerationType* fromEnumeration = dynamic_cast<CppEnumerationType*>( fromIntegral );
-    CppIntegralType* toIntegral = dynamic_cast<CppIntegralType*>( to.data() );
+    CppIntegralType* fromIntegral = fastCast<CppIntegralType*>( from.data() );
+    CppEnumerationType* fromEnumeration = fastCast<CppEnumerationType*>( fromIntegral );
+    CppIntegralType* toIntegral = fastCast<CppIntegralType*>( to.data() );
 
     if( fromIntegral && toIntegral ) {
       ///iso c++ 4.7 integral conversion: we can convert from any integer type to any other integer type, and from enumeration-type to integer-type
@@ -336,8 +336,8 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     }
     
     ///iso c++ 4.10 pointer conversion: null-type con be converted to pointer
-    CppPointerType* fromPointer = dynamic_cast<CppPointerType*>(from.data());
-    CppPointerType* toPointer = dynamic_cast<CppPointerType*>(to.data());
+    CppPointerType* fromPointer = fastCast<CppPointerType*>(from.data());
+    CppPointerType* toPointer = fastCast<CppPointerType*>(to.data());
     
     if( isNullType(from.data()) && toPointer )
     {
@@ -352,8 +352,8 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
     ///iso c++ 4.10.3 - class-pointer conversion
     if( fromPointer && toPointer /*&& fromPointer->cv() == toPointer->cv()*/ ) { //reenable the cv-stuff once volative is treated correctly at qualification-adjustment level
-      CppClassType* fromClass = dynamic_cast<CppClassType*>( fromPointer->baseType().data() );
-      CppClassType* toClass = dynamic_cast<CppClassType*>( toPointer->baseType().data() );
+      CppClassType* fromClass = fastCast<CppClassType*>( fromPointer->baseType().data() );
+      CppClassType* toClass = fastCast<CppClassType*>( toPointer->baseType().data() );
       if( toClass && fromClass ) {
         if( isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) ) {
           maximizeRank( bestRank, Conversion );
@@ -399,7 +399,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 
   bool fromConst = false;
   AbstractType::Ptr realFrom( realType(from, m_topContext, &fromConst) );
-  CppClassType* fromClass = dynamic_cast<CppClassType*>( realFrom.data() );
+  CppClassType* fromClass = fastCast<CppClassType*>( realFrom.data() );
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
     
@@ -428,7 +428,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 
   {
     ///Try conversion using constructor
-    CppClassType* toClass = dynamic_cast<CppClassType*>( realType(to, m_topContext) ); //@todo think whether the realType(..) is ok
+    CppClassType* toClass = fastCast<CppClassType*>( realType(to, m_topContext) ); //@todo think whether the realType(..) is ok
     if( toClass && toClass->declaration() )
     {
       if( fromClass ) {
