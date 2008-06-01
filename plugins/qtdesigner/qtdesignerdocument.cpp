@@ -51,6 +51,9 @@
 #include <QtGui/QMdiArea>
 #include <QtGui/QMdiSubWindow>
 #include <QtCore/QFile>
+#include <QApplication>
+#include <KMessageBox>
+#include <KLocale>
 #include <sublime/view.h>
 
 QtDesignerDocument::QtDesignerDocument( const KUrl& url , KDevelop::ICore* core )
@@ -116,10 +119,34 @@ void QtDesignerDocument::reload()
     notifyStateChanged();
 }
 
-void QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
+bool QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
 {
-    if (!save(mode))
-        return;
+    if (!(mode & Discard)) {
+        if (mode & Silent) {
+            if (!save(mode))
+                return false;
+
+        } else {
+            if (state() == IDocument::Modified) {
+                int code = KMessageBox::warningYesNoCancel(
+                    qApp->activeWindow(),
+                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
+                    i18n("Close Document"));
+
+                if (code == KMessageBox::Yes) {
+                    if (!save(mode))
+                        return false;
+
+                } else if (code == KMessageBox::Cancel) {
+                    return false;
+                }
+
+            } else if (state() == IDocument::DirtyAndModified) {
+                if (!save(mode))
+                    return false;
+            }
+        }
+    }
 
     foreach(QDesignerFormWindowInterface* form, m_forms)
     {
