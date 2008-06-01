@@ -324,7 +324,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
         if( idType ) {
           if( idType->declaration() && idType->declaration()->internalContext() ) {
-            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(QualifiedIdentifier("operator->"));
+            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(Identifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
               ///@todo care about const
               m_expressionResult.allDeclarations = convert(operatorDeclarations);
