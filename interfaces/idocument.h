@@ -98,6 +98,8 @@ public:
 
     /**
      * Requests that the document be closed.
+     *
+     * \returns whether the document was successfully closed.
      */
     virtual bool close(DocumentSaveMode mode = Default) = 0;
 
