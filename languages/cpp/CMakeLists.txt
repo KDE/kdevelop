@@ -45,10 +45,9 @@ set(kdevcpplanguagesupport_PART_SRCS
 )
 
 
-ADD_DEFINITIONS(-DTEST)
-
-
 ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
+
+SET_TARGET_PROPERTIES( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
 
 TARGET_LINK_LIBRARIES( kdev_includepathresolver
 ${KDEVPLATFORM_INTERFACES_LIBRARY}  ${KDEVPLATFORM_PROJECT_LIBRARY}
