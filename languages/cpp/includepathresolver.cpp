@@ -285,7 +285,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   } else
     workingDirectory = _workingDirectory;
 
-  cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data();
+  ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data(); )
   
   ///STEP 1: CACHING
   QDir dir( workingDirectory );
