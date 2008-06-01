@@ -457,8 +457,6 @@ void TopDUContext::applyAliases( bool isAdded, const QualifiedIdentifier& prefix
     
     FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
       applyAliases(true, qualifiedName, next, target, position, canBeNamespace);
-    
-    kDebug() << "inserted" << target[target.size()-1]->toList()[0].toString() << "current" << identifier->identifier;
   }
   
   /*if( !prefix.explicitlyGlobal() || !prefix.isEmpty() ) {*/ ///@todo check iso c++ if using-directives should be respected on top-level when explicitly global
