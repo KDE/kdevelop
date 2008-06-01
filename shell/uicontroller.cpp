@@ -52,7 +52,7 @@ namespace KDevelop {
 class UiControllerPrivate {
 public:
     UiControllerPrivate(UiController *controller)
-    : cfgDlg(0), m_controller(controller), areasRestored(false)
+    : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
         // FIXME: remove this 'defaultArea' thing.
         AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
@@ -176,7 +176,6 @@ void UiController::mainWindowDeleted(MainWindow* mw)
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
     Q_UNUSED( switchMode );
-    KParts::MainWindow *oldMain = activeMainWindow();
 
     MainWindow *main = new MainWindow(this);
     // FIXME: what this is supposed to do?
@@ -444,7 +443,7 @@ void UiController::saveAllAreas(KSharedConfig::Ptr config)
     {
         Sublime::MainWindow *mw = mainWindows()[w];
 
-        KConfigGroup mainWindowConfig(&uiConfig, 
+        KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
         mainWindowConfig.writeEntry("currentArea", mw->area()->objectName());
 
@@ -486,11 +485,11 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
             addToolViewToArea(i.key(), i.value(), area);
         }
     }
-    
+
     /* Restore per-windows areas.  */
     for (int w = 0; w < wc; ++w)
     {
-        KConfigGroup mainWindowConfig(&uiConfig, 
+        KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
         QString currentArea = mainWindowConfig.readEntry("currentArea", "");
         Sublime::MainWindow *mw = mainWindows()[w];
@@ -548,16 +547,16 @@ void UiController::addToolViewToArea(IToolViewFactory* factory,
 {
     if (!area->wantToolView(factory->id()))
         return;
-    
+
     Sublime::View* view = doc->createView();
     area->addToolView(
         view,
         Sublime::dockAreaToPosition(factory->defaultPosition()));
-    
+
     connect(view, SIGNAL(raise(Sublime::View*)),
             SLOT(raiseToolView(Sublime::View*)));
-    
-    factory->viewCreated(view);    
+
+    factory->viewCreated(view);
 }
 
 }

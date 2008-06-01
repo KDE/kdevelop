@@ -239,8 +239,21 @@ bool TextDocument::save(DocumentSaveMode mode)
 
     switch (d->state)
     {
-        case IDocument::Clean: return true;
+        case IDocument::Clean:
+            return true;
+
         case IDocument::Modified: break;
+            if (!(mode & Silent))
+            {
+                int code = KMessageBox::warningYesNoCancel(
+                    Core::self()->uiController()->activeMainWindow(),
+                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
+                    i18n("Close Document"));
+                if (code != KMessageBox::Yes)
+                    return false;
+            }
+            break;
+
         case IDocument::Dirty:
         case IDocument::DirtyAndModified:
             if (!(mode & Silent))
@@ -296,57 +309,20 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
         view->setCursorPosition(c);
 }
 
-void TextDocument::close(DocumentSaveMode mode)
+bool TextDocument::close(DocumentSaveMode mode)
 {
-    if (!d->document)
-        return;
-
-    if (!(mode & Discard)) {
-        if (mode & Silent) {
-            if (!save(mode))
-                return;
-
-        } else {
-            if (state() == IDocument::Modified) {
-                int code = KMessageBox::warningYesNoCancel(
-                    Core::self()->uiController()->activeMainWindow(),
-                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
-                    i18n("Close Document"));
-                if (code == KMessageBox::Yes)
-                    save(mode);
-                else if (code == KMessageBox::Cancel)
-                    return;
-
-            } else if (state() == IDocument::DirtyAndModified) {
-                save(mode);
-            }
-        }
-    }
-
-    //close all views and then delete ourself
-    foreach (Sublime::Area *area, 
-             Core::self()->uiControllerInternal()->allAreas())
-    {
-        QList<Sublime::View*> areaViews = area->views();
-        foreach (Sublime::View *view, areaViews) {
-            if (views().contains(view)) {
-                area->removeView(view);
-                kDebug(9001) << "deleting view " << view;
-                delete view;
-            }
-        }
-    }
+    if (!PartDocument::close(mode))
+        return false;
 
     d->document->deleteLater();
 
-    Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
-
-    // Here we go...
-    deleteLater();
+    return true;
 }
 
 Sublime::View* TextDocument::newView(Sublime::Document* doc)
 {
+    Q_UNUSED(doc);
+
     emit viewNumberChanged(this);
     return new TextView(this);
 }

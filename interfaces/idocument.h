@@ -99,7 +99,7 @@ public:
     /**
      * Requests that the document be closed.
      */
-    virtual void close(DocumentSaveMode mode = Default) = 0;
+    virtual bool close(DocumentSaveMode mode = Default) = 0;
 
     /**
      * Enquires whether this document is currently active in the currently active mainwindow.

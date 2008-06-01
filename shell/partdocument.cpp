@@ -18,6 +18,9 @@
  ***************************************************************************/
 #include "partdocument.h"
 
+#include <KMessageBox>
+#include <KLocale>
+
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
@@ -87,10 +90,35 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
     return true;
 }
 
-void PartDocument::close(DocumentSaveMode mode)
+bool PartDocument::close(DocumentSaveMode mode)
 {
-    if (!save(mode))
-        return;
+    if (!(mode & Discard)) {
+        if (mode & Silent) {
+            if (!save(mode))
+                return false;
+
+        } else {
+            if (state() == IDocument::Modified) {
+                int code = KMessageBox::warningYesNoCancel(
+                    Core::self()->uiController()->activeMainWindow(),
+                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
+                    i18n("Close Document"));
+
+                if (code == KMessageBox::Yes) {
+                    if (!save(mode))
+                        return false;
+
+                } else if (code == KMessageBox::Cancel) {
+                    return false;
+                }
+
+            } else if (state() == IDocument::DirtyAndModified) {
+                if (!save(mode))
+                    return false;
+            }
+        }
+    }
+
 
     //close all views and then delete ourself
     ///@todo test this
@@ -113,6 +141,8 @@ void PartDocument::close(DocumentSaveMode mode)
 
     // Here we go...
     deleteLater();
+
+    return true;
 }
 
 void PartDocument::reload()
@@ -127,6 +157,7 @@ IDocument::DocumentState PartDocument::state() const
 
 void PartDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainWindow)
 {
+    Q_UNUSED(mainWindow);
     KParts::Part *part = partForView(activeView->widget());
     if (Core::self()->partManager()->activePart() != part)
         Core::self()->partManager()->setActivePart(part);

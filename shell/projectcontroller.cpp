@@ -335,7 +335,6 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
 
     ProjectFolderItem *topItem = project->projectItem();
-    ProjectModel *model = projectModel();
     d->workspaceitem->insertRow( d->workspaceitem->rowCount(), topItem );
 
     d->m_projects.append( project );
