@@ -177,9 +177,15 @@ QSize IdealButtonBarLayout::sizeHint() const
             m_hint = QSize(crossSize, orientationSize);
         else
             m_hint = QSize(orientationSize, crossSize);
-        int l, t, r, b;
-        getContentsMargins(&l, &t, &r, &b);
-        m_hint += QSize(l+r, t+b);
+
+        if (!_items.empty())
+        {
+            /* If we have no items, just use (0, 0) as hint, don't
+               append any margins.  */
+            int l, t, r, b;
+            getContentsMargins(&l, &t, &r, &b);
+            m_hint += QSize(l+r, t+b);
+        }
 
         m_sizeHintDirty = false;
     }
@@ -578,13 +584,19 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
             rect.setLeft(hint.width());
         }
         else if (role == Bottom) {
-            geometry.setTop(rect.height() - hint.height());
-            rect.setBottom(rect.height() - hint.height());
+            int x = rect.height() - hint.height();
+            geometry.setTop(x);
+            rect.setBottom(x);
         }
-        else if (role == Right)
-            geometry.setLeft(rect.width() - hint.width());
-        else if (role == Top)
+        else if (role == Right) {
+            int y = rect.width() - hint.width();
+            geometry.setLeft(y);
+            rect.setRight(y);
+        }
+        else if (role == Top) {
             geometry.setHeight(hint.height());
+            rect.setTop(hint.height());
+        }
 
         buttonBar->setGeometry(geometry);
     }
