@@ -47,23 +47,19 @@ namespace TypeUtils {
         return realType( resolved.data(), topContext, constant );
     }
   
-    if(base->whichType() == AbstractType::TypeReference) {
-      CppReferenceType* ref = fastCast<CppReferenceType*>( base );
+    CppReferenceType* ref = fastCast<CppReferenceType*>( base );
 
-      while( ref ) {
-        if( constant )
-          (*constant) |= ref->isConstant();
-        base = ref->baseType().data();
-        ref = fastCast<CppReferenceType*>( base );
+    while( ref ) {
+      if( constant )
+        (*constant) |= ref->isConstant();
+      base = ref->baseType().data();
+      ref = fastCast<CppReferenceType*>( base );
 
-        if(base->whichType() == AbstractType::TypeForward) {
-          forward = fastCast<ForwardDeclarationType*>( base );
-          if( forward ) {
-            AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-            if( resolved.data() != (AbstractType*)forward )
-              return realType( resolved.data(), topContext, constant );
-          }
-        }
+      forward = fastCast<ForwardDeclarationType*>( base );
+      if( forward ) {
+        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
+        if( resolved.data() != (AbstractType*)forward )
+          return realType( resolved.data(), topContext, constant );
       }
     }
 
