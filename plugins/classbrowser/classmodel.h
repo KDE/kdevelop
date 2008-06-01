@@ -1,7 +1,7 @@
 /*
  * KDevelop Class Browser
  *
- * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -50,12 +50,33 @@ public:
   ClassModel(ClassBrowserPlugin* parent);
   virtual ~ClassModel();
 
+  friend class Node;
   class Node : public KDevelop::DUChainBasePointer
   {
     public:
-      Node(KDevelop::DUChainBase* p, Node* parent) : KDevelop::DUChainBasePointer(p), m_parent(parent) {}
+      Node(KDevelop::DUChainBase* p, Node* parent);
+      ~Node();
+
+      bool topNode() const { return !m_parent; }
 
       Node* parent() const { return m_parent; }
+
+      bool childrenDiscovered() const { return m_childrenDiscovered; }
+      bool childrenDiscovering() const { return m_childrenDiscovering; }
+      void setChildrenDiscovering(bool discovering = true) { m_childrenDiscovering = discovering; }
+      void setChildrenDiscovered(bool discovered = true);
+
+      QList<Node*> children() const;
+      void insertChild(Node* node, const ClassModel* model);
+      void removeChild(Node* node, const ClassModel* model);
+      Node* findChild(KDevelop::DUChainBase* base) const;
+      void hideChildren();
+      void showChildren();
+      // performs an initial sorting of child items, this is only to be performed when the node's children are being discovered for the first time.
+      void sortChildren();
+
+      void resetEncounteredStatus();
+      void removeStaleItems(const ClassModel* model);
 
       const QList<KDevelop::DUContextPointer>& namespaceContexts() const { return m_namespaceContexts; }
       void addNamespaceContext(const KDevelop::DUContextPointer& context) { m_namespaceContexts.append(context); }
@@ -63,9 +84,15 @@ public:
     private:
       Node* m_parent;
       QList<KDevelop::DUContextPointer> m_namespaceContexts;
+      QList<Node*> m_children;
+      QVector<bool>* m_childrenEncountered;
+      bool m_childrenDiscovering : 1;
+      bool m_childrenDiscovered : 1;
+      bool m_childrenHidden : 1;
   };
 
   Node* objectForIndex(const QModelIndex& index) const;
+  QModelIndex indexForObject(Node* node) const;
 
   KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
   KDevelop::Declaration* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
@@ -86,6 +113,7 @@ public:
 private Q_SLOTS:
   // Definition use chain observer implementation
   void branchAdded(KDevelop::DUContextPointer context);
+  void branchModified(KDevelop::DUContextPointer context);
   void branchRemoved(KDevelop::DUContextPointer context, KDevelop::DUContextPointer parent);
 
 private:
@@ -95,26 +123,29 @@ private:
 
   static QVariant data(Node* node, int role = Qt::DisplayRole);
 
-  void contextAdded(Node* parent, KDevelop::DUContext* context);
-  void contextRemoved(Node* parent, KDevelop::DUContext* context);
+  void refreshNode(Node* node, KDevelop::DUChainBase* base = 0, QList<Node*>* resultChildren = 0) const;
 
-  void addTopLevelToList(KDevelop::DUContext* context, QList<Node*>* list, Node* parent, bool first = true) const;
-
-  QList<Node*>* childItems(Node* parent) const;
+  Node* topNode() const;
+  Node* discover(Node* node) const;
   KDevelop::DUContext* trueParent(KDevelop::DUContext* parent) const;
+  QPair<Node*, KDevelop::DUChainBase*> firstKnownObjectForBranch(KDevelop::DUChainBase* base) const;
+
+  void branchAddedInternal(KDevelop::DUContext* context);
 
   Node* pointer(KDevelop::DUChainBase* object) const;
   Node* createPointer(KDevelop::DUChainBase* object, Node* parent) const;
   Node* createPointer(KDevelop::DUContext* context, Node* parent) const;
+
+  KDevelop::DUContext* contextForBase(KDevelop::DUChainBase* base) const;
 
   // returns true if object should not be displayed
   bool filterObject(KDevelop::DUChainBase* object) const;
 
   static bool orderItems(ClassModel::Node* p1, ClassModel::Node* p2);
 
-  mutable QList<Node*>* m_topList;
+  mutable Node* m_topNode;
+  mutable QHash<KDevelop::DUContext*, QList<Node*>* > m_topLists;
   mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
-  mutable QHash<Node*, QList<Node*>* > m_lists;
   mutable QHash<KDevelop::QualifiedIdentifier, Node*> m_namespaces;
   mutable QMap<KUrl, bool> m_inProject;
 

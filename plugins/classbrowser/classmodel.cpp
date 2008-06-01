@@ -1,7 +1,7 @@
 /*
  * KDevelop Class Browser
  *
- * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -50,13 +50,14 @@ using namespace KDevelop;
 
 ClassModel::ClassModel(ClassBrowserPlugin* parent)
   : QAbstractItemModel(parent)
-  , m_topList(0L)
+  , m_topNode(0L)
   , m_filterDocument(0L)
   , m_filterProject(true)
 {
   //new ModelTest(this);
 
   bool success = connect(DUChain::self()->notifier(), SIGNAL(branchAdded(KDevelop::DUContextPointer)), SLOT(branchAdded(KDevelop::DUContextPointer)), Qt::QueuedConnection);
+  success &= connect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), SLOT(branchModified(KDevelop::DUContextPointer)), Qt::QueuedConnection);
   Q_ASSERT(success);
 }
 
@@ -66,18 +67,16 @@ ClassBrowserPlugin* ClassModel::plugin() const {
 
 ClassModel::~ClassModel()
 {
-  delete m_topList;
-  qDeleteAll(m_lists);
-  qDeleteAll(m_knownObjects);
+  delete m_topNode;
+  qDeleteAll(m_topLists);
 }
 
 void ClassModel::resetModel()
 {
-  delete m_topList;
-  m_topList = 0L;
-  qDeleteAll(m_lists);
-  m_lists.clear();
-  qDeleteAll(m_knownObjects);
+  delete m_topNode;
+  m_topNode = 0L;
+  qDeleteAll(m_topLists);
+  m_topLists.clear();
   m_knownObjects.clear();
   m_namespaces.clear();
 
@@ -141,6 +140,9 @@ int ClassModel::columnCount(const QModelIndex & parent) const
 
 ClassModel::Node* ClassModel::objectForIndex(const QModelIndex& index) const
 {
+  if (!index.isValid())
+    return topNode();
+
   return static_cast<Node*>(index.internalPointer());
 }
 
@@ -151,22 +153,40 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex & parentInd
 
   DUChainReadLocker readLock(DUChain::lock());
 
-  QList<Node*>* children;
+  Node* node;
   if (!parentIndex.isValid()) {
-    children = childItems(0L);
+    node = topNode();
 
   } else {
-    Node* parent = objectForIndex(parentIndex);
-    children = childItems(parent);
+    node = objectForIndex(parentIndex);
   }
 
-  if (!children)
+  if (!node)
     return QModelIndex();
 
-  if (row < children->count())
-    return createIndex(row, column, children->at(row));
+  if (row < discover(node)->children().count())
+    return createIndex(row, column, node->children().at(row));
 
   return QModelIndex();
+}
+
+QModelIndex ClassModel::indexForObject(Node * node) const
+{
+  ENSURE_CHAIN_READ_LOCKED
+
+  if (!node)
+    return QModelIndex();
+
+  if (!node->parent())
+    return QModelIndex();
+
+  if (node == m_topNode)
+    return QModelIndex();
+
+  int row = node->parent()->children().indexOf(node);
+  Q_ASSERT(row != -1);
+
+  return createIndex(row, 0, node);
 }
 
 /*bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
@@ -204,14 +224,10 @@ int ClassModel::rowCount(const QModelIndex & parentIndex) const
   DUChainReadLocker readLock(DUChain::lock());
 
   Node* parent = objectForIndex(parentIndex);
-  if (parent && !*parent)
+  if (!parent)
     return 0;
 
-  QList<Node*>* children = childItems(parent);
-  if (!children)
-    return 0;
-
-  return children->count();
+  return discover(parent)->children().count();
 }
 
 QModelIndex ClassModel::parent(const QModelIndex & index) const
@@ -225,19 +241,7 @@ QModelIndex ClassModel::parent(const QModelIndex & index) const
   if (!base)
     return QModelIndex();
 
-  Node* parent = base->parent();
-
-  if (!parent)
-    return QModelIndex();
-
-  Node* grandParent = parent->parent();
-
-  QList<Node*>* list = childItems(grandParent);
-
-  int i = list->indexOf(parent);
-  Q_ASSERT(i != -1);
-
-  return createIndex(i, 0, parent);
+  return indexForObject(base->parent());
 }
 
 bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
@@ -255,7 +259,7 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     }
 
   } else if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
-    if (DUContext* d = dynamic_cast<DUContext*>(p2->data()))
+    if (dynamic_cast<DUContext*>(p2->data()))
       return false;
 
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
@@ -284,109 +288,121 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
   return QString::localeAwareCompare(s1, s2) < 0;
 }
 
-QList<ClassModel::Node*>* ClassModel::childItems(Node* parent) const
+void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node*>* resultChildren) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  if (!parent) {
-    if (m_topList)
-      return m_topList;
+  Q_ASSERT(node);
 
-  } else if (m_lists.contains(parent)) {
-    return m_lists[parent];
-  }
+  bool childrenDiscovered = node->childrenDiscovered();
+  node->setChildrenDiscovering();
 
-  QList<Node*>* list = new QList<Node*>();
+  if (childrenDiscovered)
+    node->resetEncounteredStatus();
 
-  if (parent) {
-    if (DUContext* parentContext = dynamic_cast<DUContext*>(parent->data()))
-      addTopLevelToList(parentContext, list, parent);
+  if (!base)
+    base = node->data();
 
-    foreach (DUContextPointer nsContext, parent->namespaceContexts())
-      addTopLevelToList(nsContext.data(), list, parent);
+  if (DUContext* context = contextForBase(base)) {
+    foreach (DUContext* child, context->childContexts()) {
+      if (filterObject(context))
+        continue;
 
-    if (Declaration* declaration = dynamic_cast<Declaration*>(parent->data()))
-      if (declaration->internalContext())
-        if (declaration->internalContext()->type() == DUContext::Class)
-          addTopLevelToList(declaration->internalContext(), list, parent);
-
-  } else {
-    foreach (TopDUContext* chain, DUChain::self()->allChains())
-      addTopLevelToList(chain, list, parent);
-  }
-
-  qSort(list->begin(), list->end(), orderItems);
-
-  if (!parent)
-    m_topList = list;
-  else
-    m_lists.insert(parent, list);
-
-  if (parent) {
-    if (DUContext* parentContext = dynamic_cast<DUContext*>(parent->data()))
-      kDebug() << "Created list of" << list->count() << "child items for context " << parentContext->scopeIdentifier();
-    else if (Declaration* dec = dynamic_cast<Declaration*>(parent->data()))
-      kDebug() << "Created list of" << list->count() << " child items for declaration " << dec->qualifiedIdentifier();
-    else
-      kDebug() << "Created list of" << list->count() << " child items for node " << parent;
-  } else {
-    kDebug() << "Created list of" << list->count() << " child items for top node";
-  }
-
-  return list;
-}
-
-void ClassModel::addTopLevelToList(DUContext* context, QList<Node*>* list, Node* parent, bool first) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  foreach (DUContext* child, context->childContexts()) {
-    if (filterObject(child))
-      continue;
-
-    switch (child->type()) {
-      case DUContext::Class:
-        /*if (child->owner()) {
-          kDebug() << "Adding class " << child->scopeIdentifier() << " to list";
-          list->append(createPointer(child, parent));
-        }*/
-        break;
-
-      case DUContext::Namespace: {
-        Node* ns;
-        if (m_namespaces.contains(child->scopeIdentifier())) {
-          ns = m_namespaces[child->scopeIdentifier()];
-
-          if (list->contains(ns))
+      switch (child->type()) {
+        default:
+          // Only show the globally accessible variables
+          if (node->parent() != m_topNode)
             break;
+          // Otherwise, fallthrough
 
-        } else {
-          ns = createPointer(child, parent);
-        }
+        case DUContext::Class:
+          // We only add the definitions, not the contexts
+          foreach (Declaration* declaration, context->localDeclarations()) {
+            if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
+              /*QPair<Node*, KDevelop::DUChainBase*> first = firstKnownObjectForBranch(declaration);
+              if (first.first && first.first != node) {
+                if (first.first->childrenDiscovered()) {
+                  Node* newChild = createPointer(first.second, first.first);
+                  first.first->insertChild(newChild, this);
+                }
 
-        // FIXME must emit changes here??
-        ns->addNamespaceContext(DUContextPointer(child));
+                continue;
+              }*/
 
-        if (!list->contains(ns)) {
-          list->append(ns);
+              Node* parentNode = node;
+
+              if (declaration->declaration())
+                // This is a definition, skip it
+                continue;
+
+              /*if (declaration->declaration()) {
+                declaration = declaration->declaration();
+                DUContext* context = declaration->context();
+                if (context) {
+                  Declaration* classDeclaration = context->owner();
+                  if (Node* newParent = pointer(classDeclaration)) {
+                    parentNode = newParent;
+                  } else {
+                    parentNode = createPointer(classDeclaration, node);
+                    node->insertChild(parentNode, childrenDiscovered ? this : 0);
+                    continue;
+                  }
+                } else {
+                  // Weird
+                  continue;
+                }
+              }*/
+
+              Node* newChild = createPointer(declaration, parentNode);
+              parentNode->insertChild(newChild, childrenDiscovered ? this : 0);
+
+              if (newChild->childrenDiscovered())
+                refreshNode(newChild);
+
+              if (resultChildren)
+                resultChildren->append(newChild);
+            }
+          }
+          break;
+
+        /*case DUContext::Namespace: {
+          Node* ns;
+          if (m_namespaces.contains(child->scopeIdentifier())) {
+            continue;
+
+            // TODO figure out what's going on here
+            ns = m_namespaces[child->scopeIdentifier()];
+
+            if (node->children().contains(ns))
+              break;
+
+          } else {
+            ns = createPointer(child, node);
+          }
+
+          ns->addNamespaceContext(DUContextPointer(child));
+
+          node->insertChild(ns, childrenDiscovered ? this : 0);
+
+          if (ns->childrenDiscovered())
+            refreshNode(ns);
+
           kDebug() << "Adding namespace " << child->scopeIdentifier() << " to list";
-        }
 
-        break;
+          break;
+        }*/
       }
-
-      default:
-        addTopLevelToList(child, list, parent, false);
-        break;
     }
   }
 
-  if (first) {
-    foreach (Declaration* declaration, context->localDeclarations())
-      if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
-        kDebug() << "Adding declaration " << declaration->identifier() << " to list";
-        list->append(createPointer(declaration, parent));
-      }
+  if (childrenDiscovered) {
+    node->removeStaleItems(this);
+
+  } else {
+    if (!node->topNode())
+      node->sortChildren();
+
+    node->setChildrenDiscovered();
   }
 }
 
@@ -397,6 +413,7 @@ DUContext* ClassModel::trueParent(DUContext* parent) const
   while (parent) {
     switch (parent->type()) {
       case DUContext::Class:
+        //return parent->owner();
       case DUContext::Namespace:
         return parent;
       default:
@@ -413,91 +430,94 @@ void ClassModel::branchAdded(DUContextPointer context)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  if (context)
-    contextAdded(pointer(trueParent(context->parentContext())), context.data());
-}
-
-void ClassModel::contextAdded(Node* parent, DUContext* context)
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  if (parent && !m_lists.contains(parent))
-    // The parent node is not yet discovered, it will be figured out later if needed
-    return;
-
-  if (filterObject(context))
-    return;
-
-  if ((context->type() == DUContext::Class && context->owner()) || context->type() == DUContext::Namespace) {
-    QList<Node*>* list = childItems(parent);
-    if (!list) {
-      kWarning() << "Could not find list of child objects for" << parent;
-      return;
-    }
-
-    if (context->type() == DUContext::Namespace) {
-      if (m_namespaces.contains(context->scopeIdentifier()))
-        // This namespace is already known
-        return;
-    }
-
-    Node* contextPointer = createPointer(context, parent);
-
-    QList<Node*>::Iterator it = qUpperBound(list->begin(), list->end(), contextPointer, orderItems);
-
-    int index = 0;
-    if (it != list->end())
-      index = list->indexOf(*it);
-    else
-      index = list->count();
-
-    beginInsertRows(QModelIndex(), index, index);
-    list->insert(index, contextPointer);
-    endInsertRows();
-
-  } else {
-    foreach (DUContext* child, context->childContexts())
-      contextAdded(parent, child);
+  if (context) {
+    branchAddedInternal(context.data());
   }
 }
 
-void ClassModel::branchRemoved(DUContextPointer context, DUContextPointer parent)
+void ClassModel::branchAddedInternal(KDevelop::DUContext * context)
+{
+  Node* node = pointer(trueParent(context->parentContext()));
+
+  if (!node) {
+    QList<Node*>* topList = 0;
+
+    if (!m_topLists.contains(context)) {
+      topList = new QList<Node*>();
+      m_topLists.insert(context, topList);
+    } else {
+      topList = m_topLists[context];
+    }
+
+    refreshNode(topNode(), context, topList);
+
+  } else if (node->childrenDiscovered()) {
+    refreshNode(node);
+  }
+  // Else, the parent node is not yet discovered, it will be figured out later if needed
+}
+
+void ClassModel::branchModified(KDevelop::DUContextPointer context)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  if (context)
-    contextRemoved(pointer(trueParent(parent.data())), context.data());
+  if (context) {
+    Node* node = pointer(trueParent(context->parentContext()));
+
+    if (!node) {
+      if (m_topLists.contains(context.data())) {
+        QList<Node*>* topList = m_topLists[context.data()];
+        QList<Node*> newTopList;
+
+        refreshNode(topNode(), context.data(), &newTopList);
+
+        foreach (Node* node, *topList) {
+          if (!newTopList.contains(node)) {
+            topNode()->removeChild(node, this);
+          }
+        }
+
+        *topList = newTopList;
+
+      } else {
+        kWarning() << "Modified branch not previously encountered?";
+        branchAdded(context);
+      }
+
+    } else if (node->childrenDiscovered()) {
+      refreshNode(node);
+    }
+  }
 }
 
-void ClassModel::contextRemoved(Node* parent, DUContext* context)
+void ClassModel::branchRemoved(DUContextPointer context, DUContextPointer parentContext)
 {
-  ENSURE_CHAIN_READ_LOCKED
+  DUChainReadLocker readLock(DUChain::lock());
 
-  if (parent && !m_lists.contains(parent))
-    // The parent node is not yet discovered, it will be figured out later if needed
-    return;
+  if (context) {
+    Node* parent = pointer(trueParent(parentContext.data()));
 
-  if (context->type() == DUContext::Class || context->type() == DUContext::Namespace) {
-    QList<Node*>* list = childItems(parent);
-    if (!list) {
-      kWarning() << "Could not find list of child objects for" << parent;
-      return;
+    if (!parent) {
+      if (m_topLists.contains(context.data())) {
+        QList<Node*>* topList = m_topLists[context.data()];
+        foreach (Node* node, *topList) {
+          int index = topList->indexOf(node);
+          beginRemoveRows(QModelIndex(), index, index);
+          topList->removeAt(index);
+          endRemoveRows();
+          delete node;
+        }
+        m_topLists.remove(context.data());
+        delete topList;
+      }
     }
 
-    Node* cn = pointer(context);
-    if (!cn) {
-      // Strange, not currently known
-      kWarning() << "Unknown context removal requested - why is it unknown?";
-      return;
-    }
-
-    int index = list->indexOf(cn);
-    if (index == -1)
+    if (!parent->childrenDiscovered())
+      // The parent node is not yet discovered, it will be figured out later if needed
       return;
 
-    beginRemoveRows(QModelIndex(), index, index);
-    list->removeAt(index);
-    endRemoveRows();
+    Q_ASSERT(parent->parent());
+    parent->removeChild(parent, this);
   }
 }
 
@@ -515,14 +535,14 @@ ClassModel::Node* ClassModel::createPointer(DUContext* context, Node* parent) co
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  if (context->type() == DUContext::Namespace) {
+  /*if (context->type() == DUContext::Namespace) {
     Q_ASSERT(!m_namespaces.contains(context->scopeIdentifier()));
 
     Node* n = createPointer(static_cast<DUChainBase*>(context), parent);
     m_namespaces.insert(context->scopeIdentifier(), n);
 
     return n;
-  }
+  }*/
 
   return createPointer(static_cast<DUChainBase*>(context), parent);
 }
@@ -563,21 +583,6 @@ QVariant ClassModel::data(Node* node, int role)
 
   if (DUContext* context = dynamic_cast<DUContext*>(base)) {
     switch (context->type()) {
-      case DUContext::Class:
-        if (context->owner()) {
-          if (Declaration* declaration = context->owner()) {
-            if(context->owner()->isDefinition() && context->owner()->declaration())
-              declaration = context->owner()->declaration();
-
-            switch (role) {
-              case Qt::DisplayRole:
-                return declaration->identifier().toString();
-              case Qt::DecorationRole:
-                return DUChainUtils::iconForDeclaration(declaration);
-            }
-          }
-        }
-
       case DUContext::Namespace:
         switch (role) {
           case Qt::DisplayRole:
@@ -585,6 +590,9 @@ QVariant ClassModel::data(Node* node, int role)
           case Qt::DecorationRole:
             return KIcon("namespace");
         }
+
+      default:
+        break;
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
@@ -666,6 +674,208 @@ Declaration* ClassModel::definitionForObject(const DUChainBasePointer& pointer) 
   return 0L;
 }
 
+void ClassModel::Node::insertChild(Node * node, const ClassModel * model)
+{
+  if (m_children.contains(node)) {
+    if (m_childrenEncountered)
+      (*m_childrenEncountered)[m_children.indexOf(node)] = true;
+    return;
+  }
+
+  int index = m_children.count();
+
+  if (m_childrenDiscovered) {
+    QList<Node*>::Iterator it = qUpperBound(m_children.begin(), m_children.end(), node, orderItems);
+
+    if (it != m_children.end())
+      index = m_children.indexOf(*it);
+    else
+      index = m_children.count();
+  }
+
+  if (model)
+    const_cast<ClassModel*>(model)->beginInsertRows(model->indexForObject(node->parent()), index, index);
+
+  m_children.insert(index, node);
+  if (m_childrenEncountered)
+    m_childrenEncountered->insert(index, true);
+
+  if (model)
+    const_cast<ClassModel*>(model)->endInsertRows();
+}
+
+void ClassModel::Node::removeChild(Node * node, const ClassModel * model)
+{
+  int index = m_children.indexOf(node);
+  if (index == -1)
+    return;
+
+  if (model)
+    const_cast<ClassModel*>(model)->beginRemoveRows(model->indexForObject(this), index, index);
+
+  m_children.removeAt(index);
+
+  if (model)
+    const_cast<ClassModel*>(model)->endRemoveRows();
+}
+
+void ClassModel::Node::resetEncounteredStatus()
+{
+  // Top level node doesn't use this functionality, the class model coordinates this
+  if (!m_parent)
+    return;
+
+  Q_ASSERT(!m_childrenEncountered);
+
+  m_childrenEncountered = new QVector<bool>(m_children.count());
+}
+
+void ClassModel::Node::removeStaleItems(const ClassModel * model)
+{
+  // Top level node doesn't use this functionality, the class model coordinates this
+  if (!m_parent)
+    return;
+
+  Q_ASSERT(m_childrenEncountered);
+
+  for (int i = m_childrenEncountered->count() - 1; i >= 0; --i)
+    if (!m_childrenEncountered->at(i))
+      removeChild(m_children[i], model);
+
+  delete m_childrenEncountered;
+  m_childrenEncountered = 0;
+}
+
+void ClassModel::Node::setChildrenDiscovered(bool discovered)
+{
+  m_childrenDiscovered = discovered;
+}
+
+KDevelop::DUContext * ClassModel::contextForBase(KDevelop::DUChainBase * base) const
+{
+  if (DUContext* context = dynamic_cast<DUContext*>(base))
+    return context;
+
+  if (Declaration* declaration = dynamic_cast<Declaration*>(base))
+    if (declaration->internalContext())
+      if (declaration->internalContext()->type() == DUContext::Class)
+        return declaration->internalContext();
+
+  return 0;
+}
+
+ClassModel::Node::~ Node()
+{
+  qDeleteAll(m_children);
+  delete m_childrenEncountered;
+}
+
+ClassModel::Node * ClassModel::topNode() const
+{
+  if (!m_topNode) {
+    m_topNode = new Node(0, 0);
+
+    foreach (TopDUContext* chain, DUChain::self()->allChains()) {
+      m_topNode->setChildrenDiscovered(false);
+      const_cast<ClassModel*>(this)->branchAddedInternal(chain);
+    }
+
+    m_topNode->sortChildren();
+  }
+
+  return m_topNode;
+}
+
+ClassModel::Node* ClassModel::discover(Node * node) const
+{
+  if (!node->childrenDiscovering())
+    refreshNode(node);
+
+  return node;
+}
+
+
 #include "classmodel.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+
+ClassModel::Node * ClassModel::Node::findChild(KDevelop::DUChainBase * base) const
+{
+  foreach (Node* child, m_children)
+    if (child->data() == base)
+      return child;
+
+  return 0;
+}
+
+void ClassModel::Node::hideChildren()
+{
+  m_childrenHidden = true;
+}
+
+void ClassModel::Node::showChildren()
+{
+  m_childrenHidden = false;
+}
+
+QList< ClassModel::Node * > ClassModel::Node::children() const
+{
+  if (m_childrenHidden)
+    return QList<Node*>();
+
+  return m_children;
+}
+
+ClassModel::Node::Node(KDevelop::DUChainBase * p, Node * parent)
+  : KDevelop::DUChainBasePointer(p)
+  , m_parent(parent)
+  , m_childrenEncountered(0)
+  , m_childrenDiscovering(false)
+  , m_childrenDiscovered(false)
+  , m_childrenHidden(false)
+{
+}
+
+void ClassModel::Node::sortChildren()
+{
+  qSort(m_children.begin(), m_children.end(), orderItems);
+}
+
+QPair<ClassModel::Node*, DUChainBase*> ClassModel::firstKnownObjectForBranch(KDevelop::DUChainBase* base) const
+{
+  if (Node* n = pointer(base))
+    return qMakePair(n, static_cast<DUChainBase*>(0));
+
+  DUChainBase* oldBase = base;
+
+  if (Declaration* declaration = dynamic_cast<Declaration*>(base))
+    base = declaration->context();
+
+  if (DUContext* context = dynamic_cast<DUContext*>(base)) {
+    QualifiedIdentifier id = context->scopeIdentifier(true);
+
+    while (id.count() > 1) {
+      id.pop();
+
+      QList<Declaration*> declarations = context->findDeclarations(id, base->range().start);
+      foreach (Declaration* d, declarations)
+        if (Node* n = pointer(d))
+          return qMakePair(n, oldBase);
+
+      QList<DUContext*> contexts = context->findContexts(DUContext::Class, id, base->range().start);
+      foreach (DUContext* c, contexts)
+        if (Node* n = pointer(c))
+          return qMakePair(n, oldBase);
+
+      contexts = context->findContexts(DUContext::Namespace, id, base->range().start);
+      foreach (DUContext* c, contexts)
+        if (Node* n = pointer(c))
+          return qMakePair(n, oldBase);
+
+      oldBase = context;
+    }
+  }
+
+  return qMakePair(static_cast<Node*>(0), static_cast<DUChainBase*>(0));
+}
+

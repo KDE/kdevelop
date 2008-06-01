@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <kaction.h>
+#include <KMenu>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -70,12 +71,15 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   QActionGroup* ag = new QActionGroup(modeMenu);
   ag->setExclusive(true);
   QAction *currentdoc = ag->addAction( i18n( "&Current Document" ) );
+  currentdoc->setCheckable( true );
   currentdoc->setData(ModeCurrentDocument);
   QAction* project = ag->addAction( i18n( "&Project" ) );
   project->setData(ModeProject);
+  project->setCheckable( true );
   project->trigger();
   QAction* all = ag->addAction( i18n( "&All" ) );
   all->setData(ModeAll);
+  all->setCheckable( true );
   modeMenu->addActions(ag->actions());
 
   connect( ag, SIGNAL( triggered(QAction*) ), this, SLOT( setMode(QAction*) ) );
@@ -83,6 +87,13 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   action = new KAction(i18n( "Filter" ), this);
   action->setToolTip(i18n("Filter the class browser by item type"));
   addAction(action);
+
+  KMenu *filterMenu = new KMenu(this);
+  action->setMenu(filterMenu);
+  action = new KAction(i18n("Current Document Language Only"), filterMenu);
+  action->setChecked(true);
+  filterMenu->addAction(action);
+  connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));
 
   QVBoxLayout* vbox = new QVBoxLayout(this);
   vbox->setMargin(0);
@@ -173,7 +184,7 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
       openDef->setData(QVariant::fromValue(*base));
 
       Declaration* dec = 0;
-      
+
       if (DUContext* d = dynamic_cast<DUContext*>(base->data())) {
         dec = d->owner();
       } else if (0 != (dec = dynamic_cast<Declaration*>(base->data()))) {
@@ -213,7 +224,7 @@ void ClassTree::openDeclaration()
   QAction* a = static_cast<QAction*>(sender());
 
   Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-  
+
   DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(a->data());
   if (base) {
     Declaration* dec = model()->declarationForObject(base);
