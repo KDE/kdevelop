@@ -47,6 +47,9 @@ class TopDUContext;
 class DUContext;
 class DUContextPrivate;
 
+//Foreach macro that also works with QVarLengthArray
+#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0) 
+
 ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
 struct ImportTraceItem {
   ImportTraceItem(const DUContext* _ctx, SimpleCursor _pos = SimpleCursor::invalid()) : ctx(_ctx), position(_pos) {
@@ -295,7 +298,7 @@ public:
    *
    * Does not search imported parent-contexts(like base-classes).
    */
-  QList<Declaration*> findLocalDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findLocalDeclarations(const Identifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -459,6 +462,49 @@ public:
    * */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
 
+///Represents multiple qualified identifiers in a way that is better to manipulate and allows applying namespace-aliases or -imports easily.
+///A SearchItem generally represents a tree of identifiers, and represents all the qualified identifiers that can be constructed by walking
+///along the tree starting at an arbitrary root-node into the depth using the "next" pointers.
+///The insertion order in the hierarchy determines the order of the represented list.
+struct SearchItem : public KShared {
+
+  typedef KSharedPtr<SearchItem> Ptr;
+  typedef QVarLengthArray<Ptr, 10> PtrList;
+
+  ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
+  ///@param nextItem is set as next item to the last item in the chain
+  SearchItem(const QualifiedIdentifier& id, Ptr nextItem = Ptr(), int start = 0);
+  
+  ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
+  ///@param nextItem is set as next item to the last item in the chain
+  SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start = 0);
+
+  SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems);
+  SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem);
+  
+  bool isEmpty() const;
+  bool hasNext() const;
+  
+  ///Appends the given item to every item that can be reached from this item(Not only to the end items)
+  ///The effect to search is that the given item is searched with all prefixes contained in this earch-item prepended.
+  ///@warning This changes all contained sub-nodes, but they can be shared with other SearchItem trees. You should not
+  ///         use this on SearchItem trees that have shared nodes with other trees.
+  void addToEachNode(Ptr item);
+  void addToEachNode(PtrList items);
+  
+  ///Returns true if the given identifier matches one of the identifiers represented by this SearchItem. Does not respect the explicitlyGlobal flag
+  bool match(const QualifiedIdentifier& id, int offset = 0) const;
+  
+  //Expensive
+  QList<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix=QualifiedIdentifier()) const;
+  
+  void addNext(SearchItem::Ptr other);
+  
+  bool isExplicitlyGlobal;
+  Identifier identifier;
+  PtrList next;
+};  
+  
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
   /**
@@ -473,7 +519,9 @@ public:
    * @warning position Must be valid!
    * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
-  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  typedef QVarLengthArray<Declaration*, 40> DeclarationList;
+
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
@@ -484,7 +532,7 @@ public:
    * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.
    * The default-implementation returns true as soon as decls is not empty.
    * */
-  virtual bool foundEnough( const QList<Declaration*>& decls ) const;
+  virtual bool foundEnough( const DeclarationList& decls ) const;
   /**
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
@@ -494,26 +542,26 @@ public:
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  virtual void findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const;
 
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
    * */
-  void applyAliases(const QList<QualifiedIdentifier>& identifier, QList<QualifiedIdentifier>& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace) const;
-
+  void applyAliases(const SearchItem::PtrList& identifiers, SearchItem::PtrList& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace) const;
   /**
    * Applies the aliases that need to be applied when moving the search from this context up to the parent-context.
    * The default-implementation adds a set of identifiers with the own local identifier prefixed, if this is a namespace.
    * For C++, this is needed when searching out of a namespace, so the item can be found within that namespace in another place.
    * */
-  virtual void applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) const;
+  virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
   
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
 private:
+  
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);
   virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2);
   virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
@@ -533,14 +581,20 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier globalImportIdentifier;
 /**
   * Collects all uses of the given @param declarationIndex
   * */
-QList<SimpleRange> allUses(DUContext* context, int declarationIndex);
+KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex);
 
 /**
   * Collects the smart-ranges of all uses of the given @param declarationIndex
   * */
-QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
+KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
 
+///Little helper that saves you from shoveling around the items in the array
+KDEVPLATFORMLANGUAGE_EXPORT void insertToArray(KDevelop::DUContext::SearchItem::PtrList& array, KDevelop::DUContext::SearchItem::Ptr item, int position);
 }
+
+///Operator that allows using << with QVarLengthArray
+KDEVPLATFORMLANGUAGE_EXPORT KDevelop::DUContext::SearchItem::PtrList& operator<<(KDevelop::DUContext::SearchItem::PtrList& list, const KDevelop::DUContext::SearchItem::Ptr& item);
+
 
 #endif // DUCONTEXT_H
 

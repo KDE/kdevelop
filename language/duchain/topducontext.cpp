@@ -354,20 +354,22 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   d_func()->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
-bool TopDUContext::findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& /*trace*/, SearchFlags flags) const
+bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& /*trace*/, SearchFlags flags) const
 {
   ENSURE_CAN_READ
-//  foreach(id, identifiers)
-//      kDebug() << "searching" << id;
 
-  QList<QualifiedIdentifier> targetIdentifiers;
+  SearchItem::PtrList targetIdentifiers;
   applyAliases(identifiers, targetIdentifiers, position, false);
 
-  foreach( const QualifiedIdentifier& identifier, targetIdentifiers ) {
-    QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
-    ret += checkDeclarations(declarations, position, dataType, flags);
-    if(foundEnough(ret))
-      return true;
+  FOREACH_ARRAY(SearchItem::Ptr item, targetIdentifiers ) {
+    foreach( const QualifiedIdentifier& identifier, item->toList() ) { ///@todo The toList conversion is slow, search on the items directly
+      QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
+      foreach(Declaration* dec, checkDeclarations(declarations, position, dataType, flags))
+        ret.append(dec);
+      
+      if(foundEnough(ret))
+        return true;
+    }
   }
   return true;
 }
@@ -411,103 +413,93 @@ QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& d
   return found;
 }
 
-
-void TopDUContext::applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const SimpleCursor& position, bool canBeNamespace, int startPos, int endPos ) const
+void TopDUContext::applyAliases( bool isAdded, const QualifiedIdentifier& prefix, const SearchItem::Ptr& identifier, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const
 {
-  QList<QualifiedIdentifier> currentIdentifiers = identifiers;
-  int pos = startPos;
-  bool ready = false;
-  while(!ready && (endPos == -1 || pos < endPos))
-  {
-    ready = true;
-    QList<QualifiedIdentifier> newCurrentIdentifiers;
-    foreach( const QualifiedIdentifier& identifier, currentIdentifiers )
+  bool foundAlias = false;
+
+  QualifiedIdentifier qualifiedName = prefix;
+  qualifiedName.push(identifier->identifier);
+  
+  if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
+    
+    //Find namespace  aliases
+    QList<Declaration*> aliases = SymbolTable::self()->findDeclarations( qualifiedName );
+    aliases = checkDeclarations(aliases, position, AbstractType::Ptr(), NoSearchFlags);
+    //The first part of the identifier has been found as a namespace-alias.
+    //In c++, we only need the first alias. However, just to be correct, follow them all for now.
+    foreach( Declaration* aliasDecl, aliases )
     {
-      //This code is mainly a clone of DUContext::applyAliases
-      bool addUnmodified = true;
+      if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
+        continue;
       
-      if( identifier.count() > pos ) {
-        ready = false;
+      if( aliasDecl->range().end > position )
+        continue;
 
-        /*if( !identifier.explicitlyGlobal() || pos != 0 )*/ { ///@todo check iso c++ if using-directives should be respected on top-level when explicitly global
-          ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
-          //Find all namespace-imports at given scope
-          QList<Declaration*> imports = SymbolTable::self()->findDeclarations( identifier.mid(0, pos) + globalImportIdentifier );
-          imports = checkDeclarations(imports, position, AbstractType::Ptr(), NoSearchFlags);
+      NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
 
-          if( !imports.isEmpty() )
-          {
-            //We have namespace-imports.
-            foreach( Declaration* importDecl, imports )
-            {
-              //Search for the identifier with the import-identifier prepended
-              Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
-              NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
-              QualifiedIdentifier identifierInImport = alias->importIdentifier() + identifier.mid(pos);
-              QList<QualifiedIdentifier> temp;
-              temp << identifierInImport;
-              
-              if( alias->importIdentifier().count() )
-                applyAliases(temp, newCurrentIdentifiers, alias->range().start, canBeNamespace, alias->importIdentifier().count(), pos+1);
-              else
-                kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << " is \"" << alias->importIdentifier() << "\"";
-            }
-          }
-        }
+      foundAlias = true;
+      
+      if(identifier->next.isEmpty()) {
+        //Just insert the aliased namespace identifier
+        target.append(SearchItem::Ptr(new SearchItem(alias->importIdentifier())));
+      }else{
+        //Create an identifiers where namespace-alias part is replaced with the alias target
+        FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
+          applyAliases(false, alias->importIdentifier(), item, target, position, canBeNamespace);
       }
-
-        if( identifier.count() > (canBeNamespace ? pos  : pos+1) ) { //If it cannot be a namespace, the last part of the scope will be ignored
-          ready = false; //Find aliases
-          QList<Declaration*> aliases = SymbolTable::self()->findDeclarations( identifier.mid(0, pos+1) );
-          aliases = checkDeclarations(aliases, position, AbstractType::Ptr(), NoSearchFlags);
-          if(!aliases.isEmpty()) {
-
-            //The first part of the identifier has been found as a namespace-alias.
-            //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-            foreach( Declaration* aliasDecl, aliases )
-            {
-              if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
-                continue;
-              
-              if( aliasDecl->range().end > position )
-                continue;
-
-              addUnmodified = false; //The un-modified identifier can be ignored, because it will be replaced with the resolved alias
-              
-              NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
-
-              //Create an identifier where namespace-alias part is replaced with the alias target
-              QList<QualifiedIdentifier> temp;
-              temp << alias->importIdentifier() + identifier.mid(pos+1);
-
-              if( alias->importIdentifier().count() )
-                applyAliases(temp, newCurrentIdentifiers, alias->range().start, canBeNamespace, alias->importIdentifier().count(), pos+1);
-              else
-                kDebug(9505) << "ERROR: Namespace imported by \"" << alias->identifier().toString() << "\" in scope " << identifier.mid(0,pos) << "\" is \"" << alias->importIdentifier() << "\"";
-            }
-          }
-        }
-    
-      if( addUnmodified )
-          newCurrentIdentifiers << identifier;
+      break; //We only need one namespace-alias
     }
+  }  
+  
+  if(!foundAlias) { //If we haven't found an alias, put the current versions into the result list. Additionally we will compute the identifiers transformed through "using".
+    if(!isAdded)
+      target.append(SearchItem::Ptr(new SearchItem(prefix, identifier)));
     
-    currentIdentifiers = newCurrentIdentifiers;
-    ++pos;
+    FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
+      applyAliases(true, qualifiedName, next, target, position, canBeNamespace);
+    
+    kDebug() << "inserted" << target[target.size()-1]->toList()[0].toString() << "current" << identifier->identifier;
   }
+  
+  /*if( !prefix.explicitlyGlobal() || !prefix.isEmpty() ) {*/ ///@todo check iso c++ if using-directives should be respected on top-level when explicitly global
+  ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
+  
+  //Find all namespace-imports at given scope
 
-  target += currentIdentifiers;
+  {
+    QList<Declaration*> imports = SymbolTable::self()->findDeclarations( prefix + globalImportIdentifier );
+    imports = checkDeclarations(imports, position, AbstractType::Ptr(), NoSearchFlags);
+    
+    foreach( Declaration* importDecl, imports )
+    {
+      //Search for the identifier with the import-identifier prepended
+      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
+      NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+      applyAliases(false, alias->importIdentifier(), identifier, target, position, canBeNamespace);
+    }
+  }
 }
 
-void TopDUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
+void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const
+{
+  FOREACH_ARRAY(SearchItem::Ptr item, identifiers) {
+    QualifiedIdentifier id;
+    id.setExplicitlyGlobal(item->isExplicitlyGlobal);
+    applyAliases(false, id, item, target, position, canBeNamespace);
+  }
+}
+
+void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
 
   Q_UNUSED(flags);
-  QList<QualifiedIdentifier> targetIdentifiers;
+  SearchItem::PtrList targetIdentifiers;
   applyAliases(baseIdentifiers, targetIdentifiers, position, contextType == Namespace);
 
-  foreach( const QualifiedIdentifier& identifier, targetIdentifiers ) {
-    QList<DUContext*> allContexts = SymbolTable::self()->findContexts(identifier);
-    checkContexts(contextType, allContexts, position, ret, flags & DUContext::NoImportsCheck);
+  FOREACH_ARRAY(SearchItem::Ptr item, targetIdentifiers ) {
+      foreach( const QualifiedIdentifier& identifier, item->toList() ) { ///@todo The toList conversion is slow, search on the items directly
+      QList<DUContext*> allContexts = SymbolTable::self()->findContexts(identifier);
+      checkContexts(contextType, allContexts, position, ret, flags & DUContext::NoImportsCheck);
+    }
   }
 }
 

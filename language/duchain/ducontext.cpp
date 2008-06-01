@@ -43,6 +43,15 @@
 
 using namespace KTextEditor;
 
+template<class T, int num>
+QList<T> arrayToList(const QVarLengthArray<T, num>& array) {
+  QList<T> ret;
+  FOREACH_ARRAY(const T& item, array)
+    ret << item;
+    
+  return ret;
+}
+
 template<class Container, class Type>
 bool removeOne(Container& container, const Type& value) {
   int num = 0;
@@ -422,29 +431,26 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const QualifiedIdentifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
 {
   ENSURE_CAN_READ
 
-  QList<Declaration*> ret;
+  DeclarationList ret;
   findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
-  return ret;
+  return arrayToList(ret);
 }
 
-void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   Q_D(const DUContext);
-  if( identifier.explicitlyGlobal() && parentContext() )
-    return;
 
   {
      QMutexLocker lock(&DUContextPrivate::m_localDeclarationsMutex);
-    Identifier lastIdentifier = identifier.last();
 
-    QHash<Identifier, DeclarationPointer>::const_iterator it = d->m_localDeclarationsHash.find(lastIdentifier);
+    QHash<Identifier, DeclarationPointer>::const_iterator it = d->m_localDeclarationsHash.find(identifier);
     QHash<Identifier, DeclarationPointer>::const_iterator end = d->m_localDeclarationsHash.end();
 
-    for( ; it != end && it.key() == lastIdentifier; ++it ) {
+    for( ; it != end && it.key() == identifier; ++it ) {
       Declaration* declaration = (*it).data();
 
       if(!declaration) {
@@ -465,26 +471,27 @@ void DUContext::findLocalDeclarationsInternal( const QualifiedIdentifier& identi
   }
 }
 
-bool DUContext::foundEnough( const QList<Declaration*>& ret ) const {
+bool DUContext::foundEnough( const DeclarationList& ret ) const {
   if( !ret.isEmpty() )
     return true;
   else
     return false;
 }
 
-bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags ) const
+bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   Q_D(const DUContext);
   if( type() != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
-    foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
-        findLocalDeclarationsInternal(identifier, position, dataType, ret, trace, flags);
+    for(int a = 0; a < baseIdentifiers.size(); ++a)
+      if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
+        findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, trace, flags);
     
     if( foundEnough(ret) )
       return true;
   }
 
   ///Step 1: Apply namespace-aliases and -imports
-  QList<QualifiedIdentifier> aliasedIdentifiers;
+  SearchItem::PtrList aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
   if( type() == Namespace )
     applyAliases(baseIdentifiers, aliasedIdentifiers, position, false);
@@ -494,9 +501,9 @@ bool DUContext::findDeclarationsInternal( const QList<QualifiedIdentifier> & bas
 
   if( !d->m_importedParentContexts.isEmpty() ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
-    QList<QualifiedIdentifier> nonGlobalIdentifiers;
-    foreach( const QualifiedIdentifier& identifier, aliasedIdentifiers )
-      if( !identifier.explicitlyGlobal() )
+    SearchItem::PtrList nonGlobalIdentifiers;
+    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
+      if( !identifier->isExplicitlyGlobal )
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
@@ -546,11 +553,13 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 {
   ENSURE_CAN_READ
 
-  QList<Declaration*> ret;
-  QList<QualifiedIdentifier> identifiers;
-  identifiers << identifier;
+  DeclarationList ret;
+  SearchItem::PtrList identifiers;
+  identifiers << SearchItem::Ptr(new SearchItem(identifier));
+  
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
-  return ret;
+
+  return arrayToList(ret);
 }
 
 bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*/ ) const
@@ -818,11 +827,11 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
 {
   ENSURE_CAN_READ
 
-  QList<Declaration*> ret;
-  QList<QualifiedIdentifier> identifiers;
-  identifiers << QualifiedIdentifier(identifier);
+  DeclarationList ret;
+  SearchItem::PtrList identifiers;
+  identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
-  return ret;
+  return arrayToList(ret);
 }
 
 void DUContext::deleteUse(int index)
@@ -887,20 +896,21 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
   ENSURE_CAN_READ
 
   QList<DUContext*> ret;
-  QList<QualifiedIdentifier> identifiers;
-  identifiers << QualifiedIdentifier(identifier);
+  SearchItem::PtrList identifiers;
+  identifiers << SearchItem::Ptr(new SearchItem(identifier));
   
   findContextsInternal(contextType, identifiers, position.isValid() ? position : range().end, ret, flags);
   return ret;
 }
 
-void DUContext::applyAliases(const QList<QualifiedIdentifier>& baseIdentifiers, QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, bool canBeNamespace) const {
+void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace) const {
 
-  foreach( const QualifiedIdentifier& identifier, baseIdentifiers ) {
+  QList<Declaration*> imports = allLocalDeclarations(globalImportIdentifier);
+  
+  FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers ) {
     bool addUnmodified = true;
 
-    if( !identifier.explicitlyGlobal() ) {
-      QList<Declaration*> imports = allLocalDeclarations(globalImportIdentifier);
+    if( !identifier->isExplicitlyGlobal ) {
 
       if( !imports.isEmpty() )
       {
@@ -912,14 +922,12 @@ void DUContext::applyAliases(const QList<QualifiedIdentifier>& baseIdentifiers, 
           //Search for the identifier with the import-identifier prepended
           Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
           NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
-          QualifiedIdentifier identifierInImport = alias->importIdentifier();
-          identifierInImport.push(identifier);
-          identifiers << identifierInImport;
+          identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
         }
       }
 
-      if( !identifier.isEmpty() && (identifier.count() > 1 || canBeNamespace) ) {
-        QList<Declaration*> aliases = allLocalDeclarations(identifier.first());
+      if( !identifier->isEmpty() && (identifier->hasNext() || canBeNamespace) ) {
+        QList<Declaration*> aliases = allLocalDeclarations(identifier->identifier);
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
@@ -934,50 +942,52 @@ void DUContext::applyAliases(const QList<QualifiedIdentifier>& baseIdentifiers, 
             NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
 
             //Create an identifier where namespace-alias part is replaced with the alias target
-            QualifiedIdentifier aliasedIdentifier = alias->importIdentifier();
-            for( int a = 1; a <  identifier.count(); a++ )
-              aliasedIdentifier.push(identifier.at(a));
-
-            identifiers << aliasedIdentifier;
+            identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier->next ) ) ) ;
           }
         }
       }
     }
 
     if( addUnmodified )
-        identifiers << identifier;
+        identifiers.append(identifier);
   }
 }
 
-void DUContext::applyUpwardsAliases(QList<QualifiedIdentifier>& identifiers) const {
+void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers) const {
+  
   if(type() == Namespace) {
-    //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended
-    int cnt = identifiers.count();
-
-    for(int a = cnt-1; a >= 0; --a)
-      identifiers.prepend(localScopeIdentifier() + identifiers[a]); //Prepend, so identifiers within the same namespace are preferred.
+    QualifiedIdentifier localId = d_func()->m_scopeIdentifier;
+    if(localId.isEmpty())
+      return;
+    
+    //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended.
+    //We do this by prepending items to the current identifiers that equal the local scope identifier.
+    
+    SearchItem::Ptr newItem( new SearchItem(localId, identifiers) );
+    
+    insertToArray(identifiers, newItem, 0);
   }
 }
 
-void DUContext::findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const
+void DUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const
 {
   Q_D(const DUContext);
   if (contextType == type()) {
-    foreach( const QualifiedIdentifier& identifier, baseIdentifiers )
-      if (identifier == scopeIdentifier(true) && (!parentContext() || !identifier.explicitlyGlobal()) )
+    FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers )
+      if (identifier->match(scopeIdentifier(true)) && (!parentContext() || !identifier->isExplicitlyGlobal) )
         ret.append(const_cast<DUContext*>(this));
   }
   ///@todo This doesn't seem quite correct: Local Contexts aren't found anywhere
   ///Step 1: Apply namespace-aliases and -imports
-  QList<QualifiedIdentifier> aliasedIdentifiers;
+  SearchItem::PtrList aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
   applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace);
 
   if( !d->m_importedParentContexts.isEmpty() ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
-    QList<QualifiedIdentifier> nonGlobalIdentifiers;
-    foreach( const QualifiedIdentifier& identifier, aliasedIdentifiers )
-      if( !identifier.explicitlyGlobal() )
+    SearchItem::PtrList nonGlobalIdentifiers;
+    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
+      if( !identifier->isExplicitlyGlobal )
         nonGlobalIdentifiers << identifier;
     
     if( !nonGlobalIdentifiers.isEmpty() ) {
@@ -1236,6 +1246,124 @@ QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declaration
   
   return ret;
 }
+
+DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, Ptr nextItem, int start) : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false) {
+  if(!id.isEmpty()) {
+    if(id.count() > start)
+      identifier = id.at(start);
+    
+    if(id.count() > start+1)
+      addNext(Ptr( new SearchItem(id, nextItem, start+1) ));
+    else if(nextItem)
+      next.append(nextItem);
+  }else if(nextItem) {
+    ///If there is no prefix, just copy nextItem
+    isExplicitlyGlobal = nextItem->isExplicitlyGlobal;
+    identifier = nextItem->identifier;
+    next = nextItem->next;
+  }
+}
+
+DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start) : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false) {
+  if(id.count() > start)
+    identifier = id.at(start);
+  
+  if(id.count() > start+1)
+    addNext(Ptr( new SearchItem(id, nextItems, start+1) ));
+  else
+    next = nextItems;
+}
+
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems) : isExplicitlyGlobal(explicitlyGlobal), identifier(id), next(nextItems) {
+}
+
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem) : isExplicitlyGlobal(explicitlyGlobal), identifier(id) {
+  next.append(nextItem);
+}
+
+bool DUContext::SearchItem::match(const QualifiedIdentifier& id, int offset) const {
+  if(id.isEmpty()) {
+    if(identifier.isEmpty() && next.isEmpty())
+      return true;
+    else
+      return false;
+  }
+  
+  if(id.at(offset) != identifier) //The identifier is different
+    return false;
+  
+  if(offset == id.count()-1) {
+    if(next.isEmpty())
+      return true; //match
+    else
+      return false; //id is too short
+  }
+  
+  for(int a = 0; a < next.size(); ++a)
+    if(next[a]->match(id, offset+1))
+      return true;
+  
+  return false;
+}
+
+bool DUContext::SearchItem::isEmpty() const {
+  return identifier.isEmpty();
+}
+
+bool DUContext::SearchItem::hasNext() const {
+  return !next.isEmpty();
+}
+
+QList<QualifiedIdentifier> DUContext::SearchItem::toList(const QualifiedIdentifier& prefix) const {
+  QList<QualifiedIdentifier> ret;
+  
+  QualifiedIdentifier id = prefix;
+  if(id.isEmpty())
+  id.setExplicitlyGlobal(isExplicitlyGlobal);
+  if(!identifier.isEmpty())
+    id.push(identifier);
+  
+  if(next.isEmpty()) {
+    ret << id;
+  } else {
+    for(int a = 0; a < next.size(); ++a)
+      ret += next[a]->toList(id);
+  }
+  return ret;
+}
+
+
+void DUContext::SearchItem::addNext(SearchItem::Ptr other) {
+  next.append(other);
+}
+
+void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
+  next.append(other);
+  for(int a = 0; a < next.size()-1; ++a)
+    next[a]->addToEachNode(other);
+}
+
+void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
+  FOREACH_ARRAY(SearchItem::Ptr o, other)
+    next.append(o);
+  for(int a = 0; a < next.size()-1; ++a)
+    next[a]->addToEachNode(other);
+}
+
+}
+
+KDevelop::DUContext::SearchItem::PtrList& operator<<(KDevelop::DUContext::SearchItem::PtrList& list, const KDevelop::DUContext::SearchItem::Ptr& item) {
+  list.append(item);
+  return list;
+}
+
+void KDevelop::insertToArray(KDevelop::DUContext::SearchItem::PtrList& array, KDevelop::DUContext::SearchItem::Ptr item, int position) {
+  Q_ASSERT(position >= 0 && position <= array.size());
+  array.resize(array.size()+1);
+  for(int a = array.size()-1; a > position; --a) {
+    array[a] = array[a-1];
+  }
+  array[position] = item;
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

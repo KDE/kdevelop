@@ -170,14 +170,14 @@ public:
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
   
-  virtual bool findDeclarationsInternal(const QList<QualifiedIdentifier>& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, QList<Declaration*>& ret, const ImportTrace& trace, SearchFlags flags) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
   
   /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
   QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
 
-  virtual void findContextsInternal(ContextType contextType, const QList<QualifiedIdentifier>& identifier, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /// Place \a contexts of type \a contextType that are visible in this document from \a position in a \a{ret}urn list
   void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret, bool dontCheckImport) const;
@@ -187,9 +187,11 @@ protected:
    * @param canBeNamespace whether the searched identifier may be a namespace.
    * If this is true, namespace-aliasing is applied to the last elements of the identifiers.
    * */
-  void applyAliases( const QList<QualifiedIdentifier>& identifiers, QList<QualifiedIdentifier>& target, const SimpleCursor& position, bool canBeNamespace, int startPos = 0, int maxPos = -1 ) const;
+  void applyAliases( const SearchItem::PtrList& identifiers, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const;
   
 private:
+  ///@param isAdded whether the given prefix+identifier were already added to the target
+  void applyAliases( bool isAdded, const QualifiedIdentifier& prefix, const SearchItem::Ptr& identifier, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const;
   //Same as imports, without the slow access-check, for internal usage
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   Q_DECLARE_PRIVATE(TopDUContext)
