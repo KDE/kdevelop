@@ -207,9 +207,10 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   ENSURE_CAN_READ
   
   QualifiedIdentifier ret;
-  if(context())
-    ret = context()->scopeIdentifier(true);
-  ret.push(identifier());
+  DUContext* ctx = d_func()->m_context;
+  if(ctx)
+    ret = ctx->scopeIdentifier(true);
+  ret.push(d_func()->m_identifier);
   return ret;
 }
 
@@ -456,6 +457,15 @@ bool Declaration::isForwardDeclaration() const
 uint Declaration::additionalIdentity() const
 {
   return 0;
+}
+
+bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
+  ENSURE_CAN_READ
+  Q_D(const Declaration);
+  if(d->m_identifier != rhs->d_func()->m_identifier)
+    return false;
+  
+  return d->m_context->equalScopeIdentifier(d->m_context);
 }
 
 QList<KTextEditor::SmartRange*> Declaration::smartUses() const

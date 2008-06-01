@@ -376,8 +376,6 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
 QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const
 {
-  ENSURE_CAN_READ
-
   QList<Declaration*> found;
 
   foreach (Declaration* dec, declarations) {

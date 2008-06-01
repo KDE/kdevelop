@@ -33,10 +33,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationType : public AbstractType, 
   AbstractType::Ptr resolve(const TopDUContext* topContext) const;
 
   virtual uint hash() const;
+  AbstractType::WhichType whichType() const;
   
   virtual bool equals(const AbstractType* rhs) const;
   virtual QString toString() const;
   virtual AbstractType* clone() const;
   virtual void accept0 (TypeVisitor *v) const;
 };
+
+template<>
+inline ForwardDeclarationType* fastCast<ForwardDeclarationType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeForward)
+    return 0;
+  else
+    return static_cast<ForwardDeclarationType*>(from);
+}
+
 }

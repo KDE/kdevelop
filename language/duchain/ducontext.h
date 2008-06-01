@@ -165,6 +165,12 @@ public:
   QualifiedIdentifier scopeIdentifier(bool includeClasses = false) const;
 
   /**
+   * Returns true if this context has the same scope identifier as the given one.
+   * This is much more efficient than computing the identifiers through scopeIdentifier(..) and comparing them
+   * */
+  bool equalScopeIdentifier(const DUContext* rhs) const;
+  
+  /**
    * Scope identifier, used to qualify the identifiers occurring in each context.
    * This is the part relative to the parent context.
    */

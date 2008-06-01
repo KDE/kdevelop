@@ -125,15 +125,17 @@ bool ClassFunctionDeclaration::isConversionFunction() const {
 
 bool ClassFunctionDeclaration::isConstructor() const
 {
-  if (context() && context()->type() == DUContext::Class && context()->localScopeIdentifier().top().nameEquals(identifier()))
+  DUContext* ctx = context();
+  if (ctx && ctx->type() == DUContext::Class && ctx->localScopeIdentifier().top().nameEquals(identifier()))
     return true;
   return false;
 }
 
 bool ClassFunctionDeclaration::isDestructor() const
 {
+  DUContext* ctx = context();
   QString id = identifier().toString();
-  return context() && context()->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == context()->localScopeIdentifier().top().toString();
+  return ctx && ctx->type() == DUContext::Class && id.startsWith('~') && id.mid(1) == ctx->localScopeIdentifier().top().toString();
 }
 
 uint ClassFunctionDeclaration::additionalIdentity() const

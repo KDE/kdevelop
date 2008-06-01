@@ -36,6 +36,11 @@ bool ForwardDeclarationType::equals(const AbstractType* rhs) const {
   return identifier() == other->identifier();
 }
 
+AbstractType::WhichType ForwardDeclarationType::whichType() const
+{
+  return AbstractType::TypeForward;
+}
+
 QString ForwardDeclarationType::toString() const {
   if(declaration())
     return declaration()->toString();

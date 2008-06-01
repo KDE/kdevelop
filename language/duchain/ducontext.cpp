@@ -136,7 +136,7 @@ void DUContext::rangePositionChanged(KTextEditor::SmartRange* range)
     d_func()->m_rangesChanged = true;
 }
 
-void DUContext::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2)
+void DUContext::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* /*range2*/)
 {
   if(range != smartRange())
     d_func()->m_rangesChanged = true;
@@ -440,7 +440,7 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
   return arrayToList(ret);
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& /*trace*/, SearchFlags flags ) const
 {
   Q_D(const DUContext);
 
@@ -777,17 +777,40 @@ QVector< Declaration * > DUContext::clearLocalDeclarations( )
 
 QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
 {
+  Q_D(const DUContext);
   ENSURE_CAN_READ
 
   QualifiedIdentifier ret;
-  if (parentContext())
-    ret = parentContext()->scopeIdentifier(includeClasses);
+  if (d->m_parentContext)
+    ret = d->m_parentContext->scopeIdentifier(includeClasses);
 
-  if (includeClasses || type() != Class)
-    ret += localScopeIdentifier();
+  if (includeClasses || d->m_contextType != Class)
+    ret += d->m_scopeIdentifier;
 
 
   return ret;
+}
+
+bool DUContext::equalScopeIdentifier(const DUContext* rhs) const
+{
+  Q_D(const DUContext);
+  ENSURE_CAN_READ
+  
+  const DUContext* left = this;
+  const DUContext* right = rhs;
+  
+  while(left || right) {
+    if(!left || !right)
+      return false;
+    
+    if(left->d_func()->m_scopeIdentifier != right->d_func()->m_scopeIdentifier)
+      return false;
+    
+    left = left->parentContext();
+    right = right->parentContext();
+  }
+  
+  return true;
 }
 
 void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
@@ -1184,7 +1207,7 @@ TopDUContext* DUContext::topContext() const
   return 0;
 }
 
-QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const
+QWidget* DUContext::createNavigationWidget(Declaration* /*decl*/, TopDUContext* /*topContext*/, const QString& /*htmlPrefix*/, const QString& /*htmlSuffix*/) const
 {
   return 0;
 }

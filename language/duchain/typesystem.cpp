@@ -244,7 +244,7 @@ AbstractType* DelayedType::clone() const {
 
 bool IntegralType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const IntegralType*>(_rhs))
+  if( !fastCast<const IntegralType*>(_rhs))
     return false;
   const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
   
@@ -253,7 +253,7 @@ bool IntegralType::equals(const AbstractType* _rhs) const
 
 bool PointerType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const PointerType*>(_rhs))
+  if( !fastCast<const PointerType*>(_rhs))
     return false;
   const PointerType* rhs = static_cast<const PointerType*>(_rhs);
 
@@ -269,7 +269,7 @@ bool PointerType::equals(const AbstractType* _rhs) const
 
 bool ReferenceType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const ReferenceType*>(_rhs))
+  if( !fastCast<const ReferenceType*>(_rhs))
     return false;
   const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
 
@@ -285,7 +285,7 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
 
 bool FunctionType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const FunctionType*>(_rhs))
+  if( !fastCast<const FunctionType*>(_rhs))
     return false;
   const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
 
@@ -319,7 +319,7 @@ bool FunctionType::equals(const AbstractType* _rhs) const
 
 bool StructureType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const StructureType*>(_rhs))
+  if( !fastCast<const StructureType*>(_rhs))
     return false;
   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
   Q_D(const StructureType);
@@ -345,7 +345,7 @@ bool StructureType::equals(const AbstractType* _rhs) const
 
 bool ArrayType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const ArrayType*>(_rhs))
+  if( !fastCast<const ArrayType*>(_rhs))
     return false;
   const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
   Q_D(const ArrayType);
@@ -363,7 +363,7 @@ bool ArrayType::equals(const AbstractType* _rhs) const
 
 bool DelayedType::equals(const AbstractType* _rhs) const
 {
-  if( !dynamic_cast<const DelayedType*>(_rhs))
+  if( !fastCast<const DelayedType*>(_rhs))
     return false;
 
   const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);

@@ -186,9 +186,13 @@ public:
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
 
-  ///Returns the global qualified identifier of this declaration
+  ///Returns the global qualified identifier of this declaration. Is expensive.
   QualifiedIdentifier qualifiedIdentifier() const;
 
+  ///Compares the qualified identifier of this declaration with the other one, without needing to compute it.
+  ///This is more efficient than comparing the results of qualifiedIdentifier().
+  bool equalQualifiedIdentifier(const Declaration* rhs) const;
+  
   /**
    * Returns the kind of this declaration. @see Kind
    * */

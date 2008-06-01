@@ -165,7 +165,8 @@ public:
     TypeFunction  /**< a function */,
     TypeStructure /**< a structure */,
     TypeArray     /**< an array */,
-    TypeDelayed   /**< a delayed type */
+    TypeDelayed   /**< a delayed type */,
+    TypeForward   /**< a foward declaration type */
   };
 
   virtual WhichType whichType() const;
@@ -456,6 +457,77 @@ public:
 
 template <class T>
 uint qHash(const KSharedPtr<T>& type) { return (uint)((size_t)type.data()); }
+
+
+/**
+ * You can use these instead of dynamic_cast, for basic types it has better performance because it checks the whichType() member
+*/
+
+template<class To>
+inline To fastCast(AbstractType* from) {
+  return dynamic_cast<To>(from);
+}
+
+template<class To>
+inline const To fastCast(const AbstractType* from) {
+  return const_cast<const To>(fastCast<To>(const_cast<AbstractType*>(from))); //Hack so we don't need to define the functions twice, once for const, and once for not const
+}
+
+template<>
+inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeReference)
+    return 0;
+  else
+    return static_cast<ReferenceType*>(from);
+}
+
+template<>
+inline PointerType* fastCast<PointerType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypePointer)
+    return 0;
+  else
+    return static_cast<PointerType*>(from);
+}
+
+template<>
+inline IntegralType* fastCast<IntegralType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeIntegral)
+    return 0;
+  else
+    return static_cast<IntegralType*>(from);
+}
+
+template<>
+inline FunctionType* fastCast<FunctionType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeFunction)
+    return 0;
+  else
+    return static_cast<FunctionType*>(from);
+}
+
+template<>
+inline StructureType* fastCast<StructureType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeStructure)
+    return 0;
+  else
+    return static_cast<StructureType*>(from);
+}
+
+template<>
+inline ArrayType* fastCast<ArrayType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeArray)
+    return 0;
+  else
+    return static_cast<ArrayType*>(from);
+}
+
+template<>
+inline DelayedType* fastCast<DelayedType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeDelayed)
+    return 0;
+  else
+    return static_cast<DelayedType*>(from);
+}
 
 }
 
