@@ -663,14 +663,18 @@ struct TopDUContext::FindContextsAcceptor {
   }
   
   void operator() (const AliasChainElement& element) {
+#ifdef DEBUG_SEARCH
+    kDebug() << "accepting" << element.qualifiedIdentifier().toString();
+#endif
     QVarLengthArray<DUContext*> decls;
     
     SymbolTable::self()->findContextsByHash(element.hash, decls);
     FOREACH_ARRAY(DUContext* ctx, decls) {
       if(!check(ctx))
-        return;
+        continue;
+      
       if(ctx->localScopeIdentifier().last() != *element.identifier) ///@todo eventually do more extensive checking
-        return;
+        continue;
       
       target << ctx;
     }
