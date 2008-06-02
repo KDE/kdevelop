@@ -126,7 +126,7 @@ public:
   Identifier first() const;
   Identifier last() const;
   Identifier top() const;
-  Identifier at(int i) const;
+  const Identifier& at(int i) const;
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.
@@ -172,6 +172,12 @@ public:
    * */
   bool isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
 
+  /**
+   * Computes the hash-value that would be created with a qualified identifier with hash-value @param leftHash of size @param leftSize
+   * with @param appendIdentifier appended as an identifier
+   * */
+  static uint combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier);
+  
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
    * */

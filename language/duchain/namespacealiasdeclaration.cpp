@@ -38,12 +38,12 @@ public:
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) 
   : Declaration(*new NamespaceAliasDeclarationPrivate(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
-  
 }
 
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context)
   : Declaration(*new NamespaceAliasDeclarationPrivate, url, range, scope)
 {
+  setKind(NamespaceAlias);
   if( context )
     setContext( context );
 }

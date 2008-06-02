@@ -35,10 +35,123 @@
 
 #include "ducontext_p.h"
 
+//#define DEBUG_SEARCH
+
 using namespace KTextEditor;
 
 namespace KDevelop
 {
+
+struct TopDUContext::AliasChainElement {
+  AliasChainElement() { //Creates invalid entries, but we need it fast because it's used to intialize all items in QVarLengthArray
+  }
+  //id should never be zero for a valid element
+  AliasChainElement(const AliasChainElement* _prev, const Identifier* id) : previous(_prev), ownsPrevious(false), identifier(id), hash(0), length(0) {
+    if(previous) {
+      length = previous->length + 1;
+      hash = QualifiedIdentifier::combineHash(previous->hash, previous->length, *identifier);
+    } else{
+      length = 1;
+      hash = QualifiedIdentifier::combineHash(0, 0, *identifier);
+    }
+  }
+  
+  //Computes the identifier represented by this chain element(generally the the identifiers across the "previous" chain reversed
+  QualifiedIdentifier qualifiedIdentifier() const {
+    QualifiedIdentifier ret;
+    if(previous)
+      ret = previous->qualifiedIdentifier();
+    ret.push(*identifier);
+#ifdef DEBUG_SEARCH
+    if(hash != ret.hash()) {
+      kDebug() << "different hash:" << hash << ret.hash();
+      Q_ASSERT(0);
+    }
+#endif
+    return ret;
+  }
+  
+  const AliasChainElement* previous;
+  bool ownsPrevious;
+  const Identifier* identifier;
+  uint hash;
+  uint length;
+};
+
+
+///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
+struct TopDUContext::DeclarationChecker {
+  DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags) : top(_top), position(_position), dataType(_dataType), flags(_flags) {
+  }
+  
+  bool operator()(Declaration* dec) const {
+    const TopDUContext* otherTop = dec->topContext();
+    
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
+      return false;
+    
+    if (otherTop != top) {
+      if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
+        return false;
+
+      // Make sure that this declaration is accessible
+      if (!(flags & DUContext::NoImportsCheck) && !top->importsPrivate(otherTop, position))
+        return false;
+    } else {
+      if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
+        return false;
+
+      if (dec->range().start >= position)
+        if(!dec->context() || dec->context()->type() != DUContext::Class)
+            return false; // The declaration is behind the position we're searching from, therefore not accessible
+    }
+    // Success, this declaration is accessible
+    return true;
+  }
+  
+  const TopDUContext* top;
+  const SimpleCursor& position;
+  const AbstractType::Ptr& dataType;
+  DUContext::SearchFlags flags;
+};
+
+
+struct TopDUContext::ContextChecker {
+
+  ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, bool _dontCheckImport) : top(_top), position(_position), contextType(_contextType), dontCheckImport(_dontCheckImport) {
+  }
+  
+  bool operator()(DUContext* context) const {
+    const TopDUContext* otherTop = context->topContext();
+
+    if (otherTop != top) {
+      if (context->type() != contextType)
+        return false;
+
+      // Make sure that this declaration is accessible
+      if (!dontCheckImport && !top->importsPrivate(otherTop, position))
+        return false;
+
+    } else {
+      if (context->type() != contextType)
+        return false;
+
+      if (context->range().start > position)
+        if(!context->parentContext() || context->parentContext()->type() != Class)
+            return false;
+    }
+    //Success
+    return true;
+  }
+  
+  const TopDUContext* top;
+  const SimpleCursor& position;
+  ContextType contextType;
+  bool dontCheckImport;
+};
+
 
 QMutex importStructureMutex(QMutex::Recursive);
 
@@ -354,177 +467,229 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   d_func()->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 }
 
+struct TopDUContext::FindDeclarationsAcceptor {
+  FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check) : top(_top), target(_target), check(_check) {
+  }
+  
+  void operator() (const AliasChainElement& element) {
+    QVarLengthArray<Declaration*> decls;
+#ifdef DEBUG_SEARCH
+    kDebug() << "accepting" << element.qualifiedIdentifier().toString();
+#endif
+    
+    SymbolTable::self()->findDeclarationsByHash(element.hash, decls);
+    FOREACH_ARRAY(Declaration* decl, decls) {
+      if(!check(decl))
+        continue;
+      if(decl->identifier() != *element.identifier) ///@todo eventually do more extensive checking
+        continue;
+      
+      target.append(decl);
+    }
+  }
+  
+  const TopDUContext* top;
+  DeclarationList& target;
+  const DeclarationChecker& check;
+};
+
 bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& /*trace*/, SearchFlags flags) const
 {
   ENSURE_CAN_READ
-
-  SearchItem::PtrList targetIdentifiers;
-  applyAliases(identifiers, targetIdentifiers, position, false);
-
-  FOREACH_ARRAY(SearchItem::Ptr item, targetIdentifiers ) {
-    foreach( const QualifiedIdentifier& identifier, item->toList() ) { ///@todo The toList conversion is slow, search on the items directly
-      QList<Declaration*> declarations = SymbolTable::self()->findDeclarations(identifier);
-      foreach(Declaration* dec, checkDeclarations(declarations, position, dataType, flags))
-        ret.append(dec);
       
-      if(foundEnough(ret))
-        return true;
-    }
-  }
+#ifdef DEBUG_SEARCH
+  FOREACH_ARRAY(SearchItem::Ptr idTree, identifiers)
+      foreach(QualifiedIdentifier id, idTree->toList())
+        kDebug() << "findDeclarationsInternal" << id.toString();
+#endif
+
+  DeclarationChecker check(this, position, dataType, flags);
+  FindDeclarationsAcceptor storer(this, ret, check);
+  
+  ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
+  ///That stores the found declaration to the output.
+  applyAliases(identifiers, storer, position, false);
+  
   return true;
 }
 
-QList<Declaration*> TopDUContext::checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const
+template<class Acceptor>
+void TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const
 {
-  QList<Declaration*> found;
-
-  foreach (Declaration* dec, declarations) {
-    TopDUContext* top = dec->topContext();
-    
-    if((flags & OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
-      continue;
-    
-    if (top != this) {
-      if (dataType && dec->abstractType() != dataType)
-        // The declaration doesn't match the type filter we are applying
-        continue;
-
-      // Make sure that this declaration is accessible
-      if (!(flags & DUContext::NoImportsCheck) && !importsPrivate(top, position))
-        continue;
-
-    } else {
-      if (dataType && dec->abstractType() != dataType)
-        // The declaration doesn't match the type filter we are applying
-        continue;
-
-      if (dec->range().start >= position)
-        if(!dec->context() || dec->context()->type() != Class)
-            continue; // The declaration is behind the position we're searching from, therefore not accessible
-    }
-
-    // Success, this declaration is accessible
-    found.append(dec);
-  }
-
-  // Returns the list of accessible declarations
-  return found;
-}
-
-void TopDUContext::applyAliases( bool isAdded, const QualifiedIdentifier& prefix, const SearchItem::Ptr& identifier, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const
-{
+  ///@todo explicitlyGlobal if the first identifier los global
   bool foundAlias = false;
 
-  QualifiedIdentifier qualifiedName = prefix;
-  qualifiedName.push(identifier->identifier);
+  AliasChainElement newElement(backPointer, &identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
+  
+#ifdef DEBUG_SEARCH
+  kDebug() << "checking" << newElement.qualifiedIdentifier().toString();
+#endif
   
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
     
     //Find namespace  aliases
-    QList<Declaration*> aliases = SymbolTable::self()->findDeclarations( qualifiedName );
-    aliases = checkDeclarations(aliases, position, AbstractType::Ptr(), NoSearchFlags);
-    //The first part of the identifier has been found as a namespace-alias.
-    //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-    foreach( Declaration* aliasDecl, aliases )
-    {
-      if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
-        continue;
+    QVarLengthArray<Declaration*> aliases;
+    SymbolTable::self()->findDeclarationsByHash( newElement.hash, aliases );
+    
+    if(!aliases.isEmpty()) {
+#ifdef DEBUG_SEARCH
+      kDebug() << "found" << aliases.count() << "aliases";
+#endif
+      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags);
       
-      if( aliasDecl->range().end > position )
-        continue;
-
-      NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
-
-      foundAlias = true;
+      //The first part of the identifier has been found as a namespace-alias.
+      //In c++, we only need the first alias. However, just to be correct, follow them all for now.
+      FOREACH_ARRAY( Declaration* aliasDecl, aliases )
+      {
+        if(!check(aliasDecl))
+          continue;
+        
+        if(aliasDecl->identifier() != *newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
+          continue;
+        
+        if(aliasDecl->kind() != Declaration::NamespaceAlias)
+          continue;
+        
+        Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
+        
+        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
+  
+        foundAlias = true;
+        
+        QualifiedIdentifier importIdentifier = alias->importIdentifier();
+        
+        if(importIdentifier.isEmpty()) {
+          kDebug() << "found empty import";
+          continue;
+        }
+        
+        //Create a chain of AliasChainElements that represent the identifier
+        QVarLengthArray<AliasChainElement, 5> newChain;
+        newChain.resize(importIdentifier.count());
+        for(int a = 0; a < importIdentifier.count(); ++a)
+          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], &importIdentifier.at(a));
       
-      if(identifier->next.isEmpty()) {
-        //Just insert the aliased namespace identifier
-        target.append(SearchItem::Ptr(new SearchItem(alias->importIdentifier())));
-      }else{
-        //Create an identifiers where namespace-alias part is replaced with the alias target
-        FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
-          applyAliases(false, alias->importIdentifier(), item, target, position, canBeNamespace);
+        AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
+        
+        if(identifier->next.isEmpty()) {
+          //Just insert the aliased namespace identifier
+          accept(*newAliasedElement);
+        }else{
+          //Create an identifiers where namespace-alias part is replaced with the alias target
+          FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
+            applyAliases(newAliasedElement, item, accept, position, canBeNamespace);
+        }
+        break; //We only need one namespace-alias
       }
-      break; //We only need one namespace-alias
     }
-  }  
+  }
   
   if(!foundAlias) { //If we haven't found an alias, put the current versions into the result list. Additionally we will compute the identifiers transformed through "using".
-    if(!isAdded)
-      target.append(SearchItem::Ptr(new SearchItem(prefix, identifier)));
-    
-    FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
-      applyAliases(true, qualifiedName, next, target, position, canBeNamespace);
+    if(identifier->next.isEmpty()) {
+      accept(newElement); //We're at the end of a qualified identifier, accept it
+    } else {
+      FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
+        applyAliases(&newElement, next, accept, position, canBeNamespace);
+    }
   }
   
   /*if( !prefix.explicitlyGlobal() || !prefix.isEmpty() ) {*/ ///@todo check iso c++ if using-directives should be respected on top-level when explicitly global
   ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
   
   //Find all namespace-imports at given scope
+#ifdef DEBUG_SEARCH
+  kDebug() << "checking imports in" << (backPointer ? backPointer->qualifiedIdentifier().toString() : QString("global"));
+#endif
 
   {
-    QList<Declaration*> imports = SymbolTable::self()->findDeclarations( prefix + globalImportIdentifier );
-    imports = checkDeclarations(imports, position, AbstractType::Ptr(), NoSearchFlags);
+    AliasChainElement importChainItem(backPointer, &globalImportIdentifier);
     
-    foreach( Declaration* importDecl, imports )
-    {
-      //Search for the identifier with the import-identifier prepended
-      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
-      NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
-      applyAliases(false, alias->importIdentifier(), identifier, target, position, canBeNamespace);
+    QVarLengthArray<Declaration*> imports;
+    SymbolTable::self()->findDeclarationsByHash( importChainItem.hash, imports );
+    if(!imports.isEmpty()) {
+      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags);
+      
+      FOREACH_ARRAY( Declaration* importDecl, imports )
+      {
+#ifdef DEBUG_SEARCH
+      kDebug() << "found" << imports.size() << "imports";
+#endif
+        if(!check(importDecl))
+          continue;
+        if(importDecl->identifier() != globalImportIdentifier) //We need to check, since we've only searched by hash
+          continue;
+        
+        //Search for the identifier with the import-identifier prepended
+        Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
+        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+        
+#ifdef DEBUG_SEARCH
+        kDebug() << "found import of" << alias->importIdentifier().toString();
+#endif
+
+        QualifiedIdentifier importIdentifier = alias->importIdentifier();
+        
+        if(importIdentifier.isEmpty()) {
+          kDebug() << "found empty import";
+          continue;
+        }
+        
+        QVarLengthArray<AliasChainElement, 5> newChain;
+        newChain.resize(importIdentifier.count());
+        
+        for(int a = 0; a < importIdentifier.count(); ++a)
+          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], &importIdentifier.at(a));
+      
+        AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
+        
+#ifdef DEBUG_SEARCH
+        kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
+#endif
+        applyAliases(newAliasedElement, identifier, accept, position, canBeNamespace);
+      }
     }
   }
 }
 
-void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const
+template<class Acceptor>
+void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const
 {
-  FOREACH_ARRAY(SearchItem::Ptr item, identifiers) {
-    QualifiedIdentifier id;
-    id.setExplicitlyGlobal(item->isExplicitlyGlobal);
-    applyAliases(false, id, item, target, position, canBeNamespace);
-  }
+  FOREACH_ARRAY(SearchItem::Ptr item, identifiers)
+    applyAliases(0, item, acceptor, position, canBeNamespace);
 }
+
+struct TopDUContext::FindContextsAcceptor {
+  FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check) : top(_top), target(_target), check(_check) {
+  }
+  
+  void operator() (const AliasChainElement& element) {
+    QVarLengthArray<DUContext*> decls;
+    
+    SymbolTable::self()->findContextsByHash(element.hash, decls);
+    FOREACH_ARRAY(DUContext* ctx, decls) {
+      if(!check(ctx))
+        return;
+      if(ctx->localScopeIdentifier().last() != *element.identifier) ///@todo eventually do more extensive checking
+        return;
+      
+      target << ctx;
+    }
+  }
+  
+  const TopDUContext* top;
+  QList<DUContext*>& target;
+  const ContextChecker& check;
+};
 
 void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
 
-  Q_UNUSED(flags);
-  SearchItem::PtrList targetIdentifiers;
-  applyAliases(baseIdentifiers, targetIdentifiers, position, contextType == Namespace);
-
-  FOREACH_ARRAY(SearchItem::Ptr item, targetIdentifiers ) {
-      foreach( const QualifiedIdentifier& identifier, item->toList() ) { ///@todo The toList conversion is slow, search on the items directly
-      QList<DUContext*> allContexts = SymbolTable::self()->findContexts(identifier);
-      checkContexts(contextType, allContexts, position, ret, flags & DUContext::NoImportsCheck);
-    }
-  }
-}
-
-void TopDUContext::checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret, bool ignoreImports) const
-{
   ENSURE_CAN_READ
-
-  foreach (DUContext* context, contexts) {
-    TopDUContext* top = context->topContext();
-
-    if (top != this) {
-      if (context->type() != contextType)
-        continue;
-
-      // Make sure that this declaration is accessible
-      if (!ignoreImports && !importsPrivate(top, position))
-        continue;
-
-    } else {
-      if (context->type() != contextType)
-        continue;
-
-      if (context->range().start > position)
-        if(!context->parentContext() || context->parentContext()->type() != Class)
-            continue;
-    }
-
-    ret.append(context);
-  }
+  ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
+  FindContextsAcceptor storer(this, ret, check);
+  
+  ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindContextsAcceptor.
+  ///That stores the found declaration to the output.
+  applyAliases(baseIdentifiers, storer, position, contextType == Namespace);
 }
 
 TopDUContext * TopDUContext::topContext() const

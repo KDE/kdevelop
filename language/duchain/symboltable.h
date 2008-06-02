@@ -21,6 +21,7 @@
 
 #include <QtCore/QMultiHash>
 #include <QtCore/QMultiMap>
+#include <QtCore/QVarLengthArray>
 #include "../languageexport.h"
 
 namespace KDevelop
@@ -47,13 +48,20 @@ public:
   void removeDeclaration(Declaration* declaration);
 
   QList<Declaration*> findDeclarations(const QualifiedIdentifier& id) const;
-//   QList<Declaration*> findDeclarationsBeginningWith(const QualifiedIdentifier& id) const;
+
+  //Only takes the hash to comparison. The names should be compared later on.
+  //The hash-values computed by QualifiedIdentifier are used.
+  void findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*>& target) const;
 
   // Named Contexts (classes and namespaces)
   void addContext(DUContext* namedContext);
   void removeContext(DUContext* namedContext);
 
+  //Only takes the hash to comparison. The names should be compared later on.
+  //The hash-values computed by QualifiedIdentifier are used.
   QList<DUContext*> findContexts(const QualifiedIdentifier& id) const;
+  
+  void findContextsByHash(uint hash, QVarLengthArray<DUContext*>& target) const;
 
 private:
   SymbolTable();

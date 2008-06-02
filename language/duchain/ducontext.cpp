@@ -793,7 +793,6 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
 
 bool DUContext::equalScopeIdentifier(const DUContext* rhs) const
 {
-  Q_D(const DUContext);
   ENSURE_CAN_READ
   
   const DUContext* left = this;
@@ -985,10 +984,22 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers) const {
     
     //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended.
     //We do this by prepending items to the current identifiers that equal the local scope identifier.
+    SearchItem::Ptr newItem( new SearchItem(localId) );
     
-    SearchItem::Ptr newItem( new SearchItem(localId, identifiers) );
+    //This will exclude explictly global identifiers
+    newItem->addToEachNode( identifiers );
     
-    insertToArray(identifiers, newItem, 0);
+    if(!newItem->next.isEmpty()) {
+      //Prepend the full scope before newItem
+      DUContext* parent = d_func()->m_parentContext.data();
+      while(parent) {
+        newItem = SearchItem::Ptr( new SearchItem(parent->d_func()->m_scopeIdentifier, newItem) );
+        parent = parent->d_func()->m_parentContext.data();
+      }
+      
+      newItem->isExplicitlyGlobal = true;
+      insertToArray(identifiers, newItem, 0);
+    }
   }
 }
 
@@ -1361,6 +1372,9 @@ void DUContext::SearchItem::addNext(SearchItem::Ptr other) {
 }
 
 void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
+  if(other->isExplicitlyGlobal)
+    return;
+  
   next.append(other);
   for(int a = 0; a < next.size()-1; ++a)
     next[a]->addToEachNode(other);
@@ -1368,7 +1382,9 @@ void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
 
 void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
   FOREACH_ARRAY(SearchItem::Ptr o, other)
-    next.append(o);
+    if(!o->isExplicitlyGlobal)
+      next.append(o);
+  
   for(int a = 0; a < next.size()-1; ++a)
     next[a]->addToEachNode(other);
 }

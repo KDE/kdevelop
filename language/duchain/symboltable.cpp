@@ -77,12 +77,11 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
 
   QualifiedIdentifier id = declaration->qualifiedIdentifier();
   DeclarationMap::Iterator it = sdSymbolPrivate->m_declarations.find(id.hash());
-  if (it != sdSymbolPrivate->m_declarations.end())
-    for (; it.key() == id.hash(); ++it)
-      if (it.value() == declaration) {
-        sdSymbolPrivate->m_declarations.erase(it);
-        return;
-      }
+  for (; it != sdSymbolPrivate->m_declarations.end() && it.key() == id.hash(); ++it)
+    if (it.value() == declaration) {
+      sdSymbolPrivate->m_declarations.erase(it);
+      return;
+    }
 
   kWarning() << "Could not find declaration matching" << id ;
 }
@@ -92,7 +91,21 @@ QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id)
   ENSURE_CHAIN_READ_LOCKED
   ifDebug( kDebug(9505) << "Searching declaration " << id.toString() << " with hash " <<  id.hash(); )
 
-  return sdSymbolPrivate->m_declarations.values(id.hash());
+  QList<Declaration*> ret;
+  
+  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(id.hash()); it != sdSymbolPrivate->m_declarations.end() && it.key() == id.hash(); ++it)
+    if((*it)->identifier() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
+      ret << *it;
+
+  return ret;
+}
+
+void SymbolTable::findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*>& target) const
+{
+  ENSURE_CHAIN_READ_LOCKED
+  
+  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(hash); it != sdSymbolPrivate->m_declarations.end() && it.key() == hash; ++it)
+    target.append(*it);
 }
 
 // QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedIdentifier& id) const
@@ -132,7 +145,21 @@ QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) cons
   ENSURE_CHAIN_READ_LOCKED
   ifDebug( kDebug(9505) << "Searching context " << id.toString() << " with hash " <<  id.hash(); )
 
-  return sdSymbolPrivate->m_contexts.values(id.hash());
+  QList<DUContext*> ret;
+  
+  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(id.hash()); it != sdSymbolPrivate->m_contexts.end() && it.key() == id.hash(); ++it)
+    if((*it)->localScopeIdentifier().last() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
+      ret << *it;
+
+  return ret;
+}
+
+void SymbolTable::findContextsByHash(uint hash, QVarLengthArray<DUContext*>& target) const
+{
+  ENSURE_CHAIN_READ_LOCKED
+  
+  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(hash); it != sdSymbolPrivate->m_contexts.end() && it.key() == hash; ++it)
+    target.append(*it);
 }
 
 void SymbolTable::addContext(DUContext * namedContext)
@@ -151,12 +178,12 @@ void SymbolTable::removeContext(DUContext * namedContext)
 
   QualifiedIdentifier id = namedContext->scopeIdentifier(true);
   ContextMap::Iterator it = sdSymbolPrivate->m_contexts.find(id.hash());
-  if (it != sdSymbolPrivate->m_contexts.end())
-    for (; it.key() == id.hash(); ++it)
+    for (; it != sdSymbolPrivate->m_contexts.end() && it.key() == id.hash(); ++it) {
       if (it.value() == namedContext) {
         sdSymbolPrivate->m_contexts.erase(it);
         return;
       }
+    }
 
   kWarning() << "Could not find context matching" << id ;
 }

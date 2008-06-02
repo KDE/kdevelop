@@ -106,8 +106,11 @@ public:
     }
     return m_hash;
   }
-  
 };
+
+uint QualifiedIdentifier::combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier) {
+  return 11*leftHash + appendIdentifier.hash();
+}
 
 Identifier::Identifier(const Identifier& rhs) : d(rhs.d) {
 }
@@ -229,17 +232,16 @@ bool Identifier::operator==(const Identifier& rhs) const
 {
   if(d == rhs.d)
     return true;
+  const IdentifierPrivate* leftD = d.data();
+  const IdentifierPrivate* rightD = rhs.d.data();
   
-  if (isUnique() || rhs.isUnique())
-    if (uniqueToken() == rhs.uniqueToken())
-      return true;
-    else
-      return false;
+  if (leftD->m_unique || rightD->m_unique)
+    return leftD->m_unique == rightD->m_unique;
 
-  if (identifier() != rhs.identifier())
+  if (leftD->m_identifier != rightD->m_identifier)
     return false;
 
-  if (templateIdentifiers() != rhs.templateIdentifiers())
+  if (leftD->m_templateIdentifiers != rightD->m_templateIdentifiers)
     return false;
 
   return true;
@@ -675,7 +677,7 @@ QualifiedIdentifier QualifiedIdentifier::mid(int pos, int len) const {
   return ret;
 }
 
-Identifier QualifiedIdentifier::at(int i) const
+const Identifier& QualifiedIdentifier::at(int i) const
 {
   Q_ASSERT(i >= 0 && i < d->m_identifiers.size());
   return d->m_identifiers[i];

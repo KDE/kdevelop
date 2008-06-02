@@ -108,6 +108,7 @@ public:
     Class     /**< A context that declares class members */,
     Function  /**< A context that declares function-arguments */,
     Template  /**< A context that declares template-parameters */,
+    Helper    /**< A helper context, used for language-specific tweaks */,
     Other     /**< Represents executable code, like for example within a compound-statement */
   };
 
@@ -495,6 +496,7 @@ struct SearchItem : public KShared {
   ///The effect to search is that the given item is searched with all prefixes contained in this earch-item prepended.
   ///@warning This changes all contained sub-nodes, but they can be shared with other SearchItem trees. You should not
   ///         use this on SearchItem trees that have shared nodes with other trees.
+  ///These functions ignore explicitly global items.
   void addToEachNode(Ptr item);
   void addToEachNode(PtrList items);
   

@@ -34,6 +34,7 @@ namespace KDevelop
   class ParsingEnvironmentFile;
   class TopDUContextPrivate;
   class Problem;
+  class DeclarationChecker;
 
   typedef KSharedPtr<Problem> ProblemPointer;
 /**
@@ -174,24 +175,25 @@ public:
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
   
-  /// Return those \a declarations that are visible in this document from \a position and are of the specified \a dataType
-  QList<Declaration*> checkDeclarations(const QList<Declaration*>& declarations, const SimpleCursor& position, const AbstractType::Ptr& dataType, SearchFlags flags) const;
-
   virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
-
-  /// Place \a contexts of type \a contextType that are visible in this document from \a position in a \a{ret}urn list
-  void checkContexts(ContextType contextType, const QList<DUContext*>& contexts, const SimpleCursor& position, QList<DUContext*>& ret, bool dontCheckImport) const;
 
   /**
    * Does the same as DUContext::updateAliases, except that it uses the symbol-store, and processes the whole identifier.
    * @param canBeNamespace whether the searched identifier may be a namespace.
    * If this is true, namespace-aliasing is applied to the last elements of the identifiers.
    * */
-  void applyAliases( const SearchItem::PtrList& identifiers, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const;
+  template<class Acceptor>
+  void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const;
   
 private:
-  ///@param isAdded whether the given prefix+identifier were already added to the target
-  void applyAliases( bool isAdded, const QualifiedIdentifier& prefix, const SearchItem::Ptr& identifier, SearchItem::PtrList& target, const SimpleCursor& position, bool canBeNamespace ) const;
+  struct AliasChainElement;
+  struct FindDeclarationsAcceptor;
+  struct FindContextsAcceptor;
+  struct DeclarationChecker;
+  struct ContextChecker;
+
+  template<class Acceptor>
+  void applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const;
   //Same as imports, without the slow access-check, for internal usage
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   Q_DECLARE_PRIVATE(TopDUContext)
