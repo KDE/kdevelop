@@ -963,6 +963,8 @@ void IdealMainLayout::DockArea::removeWidgets()
 int Sublime::IdealMainLayout::DockArea::count() const
 {
     int count = 0;
+    if (m_buttonBarItem)
+        ++count;
     if (m_mainSplitter)
         ++count;
     count += m_items.count();
