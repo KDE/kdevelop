@@ -1165,6 +1165,23 @@ void TestDUChain::testFunctionDefinition5() {
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2); //Used 2 times
 }
 
+//Makes sure constructores cannot shadow the class itself
+void TestDUChain::testDeclareSubClass() {
+  QByteArray text("class Class {Class(); class SubClass; class Frog; }; class Class::SubClass { Class c; Frog f; };");
+  DUContext* top = parse(text, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations().count(), 2); //A virtual context is placed around SubClass
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().data());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->type<DelayedType>().data());
+}
+
 void TestDUChain::testBaseClasses() {
   QByteArray text("class A{int aValue; }; class B{int bValue;}; class C : public A{int cValue;}; class D : public A, B {int dValue;}; template<class Base> class F : public Base { int fValue;};");
 
