@@ -949,7 +949,7 @@ void IdealMainLayout::DockArea::removeWidget(QWidget * widget)
 
 IdealMainLayout::DockArea::~DockArea()
 {
-    remove
+    removeButtonBar();
     removeMainSplitter();
     removeWidgets();
 }
