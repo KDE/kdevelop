@@ -568,6 +568,13 @@ struct SearchItem : public KShared {
   
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
+  /**
+   * This is called whenever the search needs to do the decision whether it should be continued in the parent context.
+   * It is not called when the DontSearchInParent flag is set. Else this should be overriden to do language-specific logic.
+   * The default implementation returns false if the flag InImportedParentContext is set.
+   * */
+  virtual bool shouldSearchInParent(SearchFlags flags) const;
+  
 private:
   
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);

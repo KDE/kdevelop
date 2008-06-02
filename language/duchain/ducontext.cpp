@@ -542,7 +542,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     return true;
 
   ///Step 3: Continue search in parent-context
-  if (!(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
+  if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && parentContext()) {
     applyUpwardsAliases(aliasedIdentifiers);
     return parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, dataType, ret, trace, flags);
   }
@@ -1042,10 +1042,15 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
   }
 
   ///Step 3: Continue search in parent
-  if ( !(flags & DontSearchInParent) && !(flags & InImportedParentContext) && parentContext()) {
+  if ( !(flags & DontSearchInParent) && shouldSearchInParent(flags) && parentContext()) {
     applyUpwardsAliases(aliasedIdentifiers);
     parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, ret, flags);
   }
+}
+
+bool DUContext::shouldSearchInParent(SearchFlags flags) const
+{
+  return !(flags & InImportedParentContext);
 }
 
 const QVector< Use > & DUContext::uses() const
