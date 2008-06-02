@@ -102,6 +102,7 @@ private slots:
   void testCaseUse();
   void testDefinitionUse();
   void testImportStructure();
+  void testDeclareSubClass();
 
   void testCStruct();
   void testCStruct2();
