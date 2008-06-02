@@ -106,6 +106,7 @@ install(FILES
     duchain/duchainutils.h
     duchain/basecontextbuilder.h
     duchain/dumpchain.h
+    duchain/symboltable.h
     helpers/codecompletion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
