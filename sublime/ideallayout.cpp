@@ -392,36 +392,6 @@ void IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, i
 QLayoutItem * IdealMainLayout::itemAt(int index) const
 {
     int at = 0;
-    if (m_buttonBars.contains(Left))
-    {
-        if (index == 0)
-            return m_buttonBarItems[Left];
-        else
-            --index;
-    }
-    if (m_buttonBars.contains(Top))
-    {
-        if (index == 0)
-            return m_buttonBarItems[Top];
-        else
-            --index;
-    }
-    if (m_buttonBars.contains(Right))
-    {
-        if (index == 0)
-            return m_buttonBarItems[Right];
-        else
-            --index;
-    }
-    if (m_buttonBars.contains(Bottom))
-    {
-        if (index == 0)
-            return m_buttonBarItems[Bottom];
-        else
-            --index;
-    }
-
-
     if (QLayoutItem* item = m_items[Left]->itemAt(index, at))
         return item;
 
@@ -481,7 +451,7 @@ QLayoutItem * IdealMainLayout::takeAt(int index)
 
 int IdealMainLayout::count() const
 {
-    return m_buttonBars.count() + m_items[Left]->count() + m_items[Right]->count()
+    return m_items[Left]->count() + m_items[Right]->count()
         + m_items[Top]->count() + m_items[Bottom]->count() + m_items[Central]->count();
 }
 
@@ -574,7 +544,9 @@ void IdealMainLayout::layout(Role role1, Role role2, Role role3, Role role4, QRe
 
 void IdealMainLayout::layoutItem(Role role, QRect& rect) const
 {
-    QWidget* buttonBar = m_buttonBars.value(role);
+    DockArea* area = m_items[role];
+
+    QWidgetItem* buttonBar = area->buttonBar();
     if (buttonBar)
     {
         const QSize hint = buttonBar->sizeHint();
@@ -584,24 +556,22 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
             rect.setLeft(hint.width());
         }
         else if (role == Bottom) {
-            int x = rect.height() - hint.height();
-            geometry.setTop(x);
-            rect.setBottom(x);
+            int y = rect.height() - hint.height();
+            geometry.setTop(geometry.y() + y);
+            rect.setBottom(y);
         }
         else if (role == Right) {
-            int y = rect.width() - hint.width();
-            geometry.setLeft(y);
-            rect.setRight(y);
+            int x = rect.width() - hint.width();
+            geometry.setLeft(geometry.x() + x);
+            rect.setWidth(x);
         }
         else if (role == Top) {
-            geometry.setHeight(hint.height());
+            geometry.setWidth(hint.height());
             rect.setTop(hint.height());
         }
 
         buttonBar->setGeometry(geometry);
     }
-
-    DockArea* area = m_items[role];
 
     foreach (QLayoutItem* item, area->items()) {
         int hintDimension = 0;
@@ -748,8 +718,9 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
 
 void IdealMainLayout::addButtonBar(QWidget* widget, Role role)
 {
-    m_buttonBars[role] = widget;
-    m_buttonBarItems[role] = new QWidgetItem(widget);
+    DockArea* area = m_items[role];
+    area->setButtonBar(widget);
+    addChildWidget(widget);
 }
 
 void IdealMainLayout::removeWidgets(Role role)
@@ -906,6 +877,7 @@ IdealMainLayout::DockArea::DockArea(IdealMainLayout* layout, Role role)
     , m_layout(layout)
     , m_role(role)
     , m_mainSplitter(0)
+    , m_buttonBarItem(0)
 {
 }
 
@@ -977,6 +949,7 @@ void IdealMainLayout::DockArea::removeWidget(QWidget * widget)
 
 IdealMainLayout::DockArea::~DockArea()
 {
+    remove
     removeMainSplitter();
     removeWidgets();
 }
@@ -999,11 +972,17 @@ int Sublime::IdealMainLayout::DockArea::count() const
 
 QLayoutItem * Sublime::IdealMainLayout::DockArea::itemAt(int index, int& at) const
 {
-    if (m_mainSplitter && index == 0)
-        return m_mainSplitter;
+    if (m_buttonBarItem)
+        if (index == at)
+            return m_buttonBarItem;
+        else
+            ++at;
 
     if (m_mainSplitter)
-        ++at;
+        if (index == at)
+            return m_mainSplitter;
+        else
+            ++at;
 
     if (index < m_items.count() + at)
         return m_items.at(index - at);
@@ -1039,8 +1018,30 @@ Sublime::Position Sublime::IdealMainLayout::positionForRole(Role role)
         return Sublime::Bottom;
     case Top:
         return Sublime::Top;
+    default:
     case Central:
         Q_ASSERT (false && "called with center role");
+        return Sublime::Left;
+    }
+}
+
+QWidgetItem * Sublime::IdealMainLayout::DockArea::buttonBar() const
+{
+    return m_buttonBarItem;
+}
+
+void Sublime::IdealMainLayout::DockArea::setButtonBar(QWidget * buttonBar)
+{
+    delete m_buttonBarItem;
+    m_buttonBarItem = new QWidgetItem(buttonBar);
+}
+
+void Sublime::IdealMainLayout::DockArea::removeButtonBar()
+{
+    if (m_buttonBarItem) {
+        delete m_buttonBarItem->widget();
+        delete m_buttonBarItem;
+        m_buttonBarItem = 0;
     }
 }
 

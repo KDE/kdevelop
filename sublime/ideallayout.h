@@ -181,6 +181,10 @@ private:
         QWidgetItem* mainSplitter() const;
         void setMainSplitter(QWidget* splitter);
 
+        QWidgetItem* buttonBar() const;
+        void setButtonBar(QWidget* buttonBar);
+        void removeButtonBar();
+
         void setVisible(bool visible, bool showMainSplitter = false, QWidget* maximizedWidget = 0);
         void raise();
 
@@ -197,11 +201,10 @@ private:
         QList<int> m_heights;
         QWidgetItem* m_mainSplitter;
         QList<QWidgetItem*> m_subSplitters;
+        QWidgetItem* m_buttonBarItem;
     };
 
     QMap<Role, DockArea*> m_items;
-    QMap<Role, QWidget*> m_buttonBars;
-    QMap<Role, QWidgetItem*> m_buttonBarItems;
     mutable bool m_layoutDirty, m_minDirty;
     mutable QSize m_min;
     int m_splitterWidth;
