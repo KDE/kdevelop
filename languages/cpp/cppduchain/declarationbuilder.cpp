@@ -647,9 +647,6 @@ void DeclarationBuilder::eventuallyAssignInternalContext()
       if( !m_lastContext->owner() || !wasEncountered(m_lastContext->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
         currentDeclaration()->setInternalContext(m_lastContext);
 
-        if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
-          kDebug(9007) << "Warning: Range was invalidated";
-
         m_lastContext = 0;
       }
     }
@@ -669,11 +666,13 @@ void DeclarationBuilder::closeDeclaration()
     if( idType && idType->declaration() == 0 && !delayed )
         idType->setDeclaration( currentDeclaration() );
 
-    //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-    if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) )
-      currentDeclaration()->setKind(Declaration::Instance);
-    else
-      currentDeclaration()->setKind(Declaration::Type);
+    if(currentDeclaration()->kind() != Declaration::NamespaceAlias) {
+      //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
+      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) )
+        currentDeclaration()->setKind(Declaration::Instance);
+      else
+        currentDeclaration()->setKind(Declaration::Type);
+    }
 
     currentDeclaration()->setType(lastType());
   }

@@ -199,8 +199,9 @@ extern QMutex cppDuContextInstantiationsMutex;
 
               DUContext::SearchItem::Ptr prependedSearch( new DUContext::SearchItem(m_context->scopeIdentifier(false)) );
               prependedSearch->addToEachNode( allIdentifiers[0] );
-
-              insertToArray(allIdentifiers, prependedSearch, 0);
+              
+              if(!prependedSearch->next.isEmpty()) //Can happen when explicitly global is set
+                insertToArray(allIdentifiers, prependedSearch, 0);
 
               //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
               for( int a = m_trace.count()-1; a >= 0; --a ) {
@@ -572,24 +573,29 @@ class CppDUContext : public BaseContext {
       BaseContext::applyUpwardsAliases(identifiers);
       ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
       ///We need to make sure that when leaving a function definition, the namespace components are searched
-      QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
-      if(prefix.count() > 1) {
-        //This must be a function-definition, like void A::B::test() {}
-        KDevelop::Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
-        if(classDeclaration && classDeclaration->internalContext()) {
-          //If this is a definition of a class member, only add aliases for the namespace elements(The class scope will be
-          //searched using then normal import logic)
-          prefix = classDeclaration->internalContext()->scopeIdentifier(false);
-        }else{
-          prefix.pop();
-        }
-        
-        if(!prefix.isEmpty()) {
-          prefix.setExplicitlyGlobal(true);
+      if(BaseContext::type() == DUContext::Function || BaseContext::type() == DUContext::Other)
+      {
+        QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
+        if(prefix.count() > 1) {
+          //This must be a function-definition, like void A::B::test() {}
+          KDevelop::Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
+          if(classDeclaration && classDeclaration->internalContext()) {
+            //If this is a definition of a class member, only add aliases for the namespace elements(The class scope will be
+            //searched using then normal import logic)
+            prefix = classDeclaration->internalContext()->scopeIdentifier(false);
+          }else{
+            prefix.pop();
+          }
           
-          DUContext::SearchItem::Ptr newItem(new DUContext::SearchItem(prefix));
-          newItem->addToEachNode(identifiers);
-          insertToArray(identifiers, newItem, 0);
+          if(!prefix.isEmpty()) {
+            prefix.setExplicitlyGlobal(true);
+            
+            DUContext::SearchItem::Ptr newItem(new DUContext::SearchItem(prefix));
+            newItem->addToEachNode(identifiers);
+            
+            if(!newItem->next.isEmpty()) //Can happen if the identifier was explicitly global
+              insertToArray(identifiers, newItem, 0);
+          }
         }
       }
     }
