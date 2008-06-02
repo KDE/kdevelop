@@ -126,13 +126,37 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
-void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id) {
+void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
   if(id.count() < 2)
     return;
   QualifiedIdentifier prefixId(id);
   prefixId.pop();
-  ///@todo What would be the best context-type for this?
-  openContext(ast, DUContext::Namespace, prefixId);
+  DUContext* import = 0;
+  
+  //When creating a prefix-context that is there to embed a class within another class, import the enclosing class into that context.
+  //That way items from the base class can be found.
+  {
+    DUChainReadLocker lock(DUChain::lock());
+  
+    QualifiedIdentifier globalId = currentContext()->scopeIdentifier(true);
+    globalId += prefixId;
+    globalId.setExplicitlyGlobal(true);
+  
+    QList<Declaration*> decls = currentContext()->findDeclarations(globalId, pos);
+    
+    if(!decls.isEmpty()) {
+      DUContext* classContext = decls.first()->logicalInternalContext(0);
+      if(classContext && classContext->type() == DUContext::Class)
+        import = classContext;
+    }
+  }
+  
+  openContext(ast, DUContext::Helper, prefixId);
+  
+  if(import) {
+    DUChainWriteLocker lock(DUChain::lock());
+    currentContext()->addImportedParentContext(import);
+  }
 }
 
 void ContextBuilder::closePrefixContext(const QualifiedIdentifier& id) {
@@ -660,7 +684,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
       if (!identifier.isEmpty())
         ret->setLocalScopeIdentifier(identifier);
 
-      ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global);
+      ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper);
 
       if( recompiling() )
         kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
@@ -833,6 +857,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Global:
     case DUContext::Namespace:
     case DUContext::Class:
+    case DUContext::Helper:
       visit(node->declaration);
       break;
 

@@ -732,12 +732,14 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
    * Example: "class MyClass::RealClass{}"
    * Will create one helper-context named "MyClass" around RealClass
    * */
+  
+  SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
   QualifiedIdentifier id;
   if( node->name ) {
     id = identifierForName(node->name);
     ///@todo Make decision: Would it be better to allow giving declarations qualified identifiers? Then we wouldn't need to do this.
-    openPrefixContext(node, id);
+    openPrefixContext(node, id, pos);
   }
 
   openDefinition(node->name, node);
@@ -755,8 +757,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   if( node->name ) {
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
-
-    SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
     QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id.last(), pos);
 

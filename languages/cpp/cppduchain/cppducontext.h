@@ -573,16 +573,26 @@ class CppDUContext : public BaseContext {
       BaseContext::applyUpwardsAliases(identifiers);
       ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
       ///We need to make sure that when leaving a function definition, the namespace components are searched
-      if(BaseContext::type() == DUContext::Function || BaseContext::type() == DUContext::Other)
+      if(BaseContext::type() == DUContext::Function || BaseContext::type() == DUContext::Other || BaseContext::type() == DUContext::Helper)
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
           //This must be a function-definition, like void A::B::test() {}
-          KDevelop::Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
-          if(classDeclaration && classDeclaration->internalContext()) {
+          KDevelop::DUContext* classContext  = 0;
+          
+          if(BaseContext::type() == DUContext::Helper) {
+            if(!BaseContext::importedParentContexts().isEmpty())
+              classContext = BaseContext::importedParentContexts()[0].data();
+          } else {
+            Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
+            if(classDeclaration && classDeclaration->internalContext())
+              classContext = classDeclaration->internalContext();
+          }
+          
+          if(classContext) {
             //If this is a definition of a class member, only add aliases for the namespace elements(The class scope will be
             //searched using then normal import logic)
-            prefix = classDeclaration->internalContext()->scopeIdentifier(false);
+            prefix = classContext->scopeIdentifier(false);
           }else{
             prefix.pop();
           }
