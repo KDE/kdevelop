@@ -1386,11 +1386,15 @@ void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
 }
 
 void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
-  FOREACH_ARRAY(SearchItem::Ptr o, other)
-    if(!o->isExplicitlyGlobal)
+  int added = 0;
+  FOREACH_ARRAY(SearchItem::Ptr o, other) {
+    if(!o->isExplicitlyGlobal) {
       next.append(o);
+      ++added;
+    }
+  }
   
-  for(int a = 0; a < next.size()-1; ++a)
+  for(int a = 0; a < next.size()-added; ++a)
     next[a]->addToEachNode(other);
 }
 
