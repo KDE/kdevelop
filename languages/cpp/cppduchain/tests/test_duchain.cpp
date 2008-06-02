@@ -1167,19 +1167,33 @@ void TestDUChain::testFunctionDefinition5() {
 
 //Makes sure constructores cannot shadow the class itself
 void TestDUChain::testDeclareSubClass() {
-  QByteArray text("class Class {Class(); class SubClass; class Frog; }; class Class::SubClass { Class c; Frog f; };");
+  QByteArray text("class Enclosing { class Class {Class(); class SubClass; class Frog; }; class Beach; }; class Enclosing::Class::SubClass { Class c; Frog f; Beach b; };");
   DUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
-  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations().count(), 2); //A virtual context is placed around SubClass
-  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations().count(), 3); //A virtual context is placed around SubClass
+  
+  //Verify that "Class c" is matched correctly
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->type<DelayedType>().data());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
+  
+  //Verify that Frog is found
   QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().data());
   QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->type<DelayedType>().data());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().data(), top->childContexts()[0]->childContexts()[0]->localDeclarations()[2]->abstractType().data());
+  
+  //Make sure Beach is found
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().data());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->type<DelayedType>().data());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().data(), top->childContexts()[0]->localDeclarations()[1]->abstractType().data());
 }
 
 void TestDUChain::testBaseClasses() {
@@ -1727,6 +1741,7 @@ void TestDUChain::testForwardDeclaration()
   ForwardDeclarationType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<ForwardDeclarationType>().data();
   QVERIFY(subType);
 
+  QVERIFY(subType->resolve(0).data() != subType);
   QCOMPARE(subType->resolve(0).data(), (AbstractType*)type5);
   QCOMPARE(type1, type2);
   QCOMPARE(type1->declaration(), type2->declaration());

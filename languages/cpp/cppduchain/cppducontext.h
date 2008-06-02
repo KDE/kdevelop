@@ -621,6 +621,11 @@ class CppDUContext : public BaseContext {
       return m_instantiatedFrom || BaseContext::inDUChain();
     }
 
+    virtual bool shouldSearchInParent(typename BaseContext::SearchFlags flags) const {
+      //If the parent context is a class context, we should even search it from an import
+      return !(flags & DUContext::InImportedParentContext) || (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class);
+    }
+    
     virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const;
     
   private:
