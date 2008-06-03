@@ -239,7 +239,8 @@ void ContextWidget::setContext(KDevelop::DUContext* context, const KDevelop::Sim
         m_navigationWidget = 0;
         if(m_context)
             m_navigationWidget = m_context->createNavigationWidget();
-        m_layout->addWidget(m_navigationWidget);
+        if(m_navigationWidget)
+            m_layout->addWidget(m_navigationWidget);
     }
 }
 
