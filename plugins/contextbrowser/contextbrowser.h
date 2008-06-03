@@ -20,17 +20,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef USEHIGHLIGHTPLUGIN_H
-#define USEHIGHLIGHTPLUGIN_H
+#ifndef CONTEXTBROWSERPLUGIN_H
+#define CONTEXTBROWSERPLUGIN_H
 
 #include <iplugin.h>
 #include <QtCore/QVariant>
 #include <QSet>
 #include <QMap>
+#include <QList>
 #include <duchain/duchainpointer.h>
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
 #include <simplecursor.h>
+#include <irunprovider.h>
 
 namespace KDevelop {
   class IDocument;
@@ -43,19 +45,27 @@ namespace KTextEditor {
   class View;
 }
 
-#include <irunprovider.h>
-namespace KDevelop
-{
+using namespace KDevelop;
 
-class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRangeWatcher
+class ContextBrowserViewFactory;
+class ContextBrowserView;
+
+class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRangeWatcher
 {
     Q_OBJECT
   public:
-    UseHighlightPlugin(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~UseHighlightPlugin();
+    ContextBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    virtual ~ContextBrowserPlugin();
 
     virtual void unload();
 
+    void registerToolView(ContextBrowserView* view);
+    void unRegisterToolView(ContextBrowserView* view);
+
+  Q_SIGNALS:
+    void previousContextShortcut();
+    void nextContextShortcut();
+    
   private slots:
     void parseJobFinished(KDevelop::ParseJob* job);
     void documentLoaded( KDevelop::IDocument* document );
@@ -65,7 +75,11 @@ class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRa
     void cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition );
     void viewCreated( KTextEditor::Document* , KTextEditor::View* );
     void updateViews();
+    
+    void textHintRequested(const KTextEditor::Cursor&, QString&);
+    
   private:
+    void clearMouseHover();
     virtual void rangeDeleted (KTextEditor::SmartRange *range);
     virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
     virtual void mouseExitedRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
@@ -82,12 +96,14 @@ class UseHighlightPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRa
     QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
     QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range
 
+    //Holds a list of all active context browser tool views
+    QList<ContextBrowserView*> m_views;
+
     KUrl m_mouseHoverDocument;
     SimpleCursor m_mouseHoverCursor;
+    ContextBrowserViewFactory* m_viewFactory;
 };
 
-}
-
-#endif // USEHIGHLIGHTPLUGIN_H
+#endif // CONTEXTBROWSERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

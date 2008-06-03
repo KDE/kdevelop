@@ -1,0 +1,27 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevContextBrowser" version="1">
+<MenuBar>
+  <Menu name="navigation" group="search_menu_merge">
+    <text context="@title:menu">Navigation</text>
+
+    <Action name="previous_context"
+	    group="file_operations"/>
+
+    <Action name="next_context"
+	    group="file_operations"/>
+
+  </Menu>
+</MenuBar>
+
+<State name="has_project">
+  <enable>
+    <Action name="quick_open_class" />
+    <Action name="quick_open_function" />
+    <Action name="quick_open_navigate" />
+    <Action name="quick_open_navigate_function_definitions" />
+    <Action name="quick_open_jump_declaration" />
+    <Action name="quick_open_jump_definition" />
+  </enable>
+</State>
+
+</kpartgui>

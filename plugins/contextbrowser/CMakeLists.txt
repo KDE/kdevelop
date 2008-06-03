@@ -15,13 +15,14 @@ include_directories(
 
 set(kdevcontextbrowser_PART_SRCS
     contextbrowser.cpp
+    contextbrowserview.cpp
 )
 
 kde4_add_plugin(kdevcontextbrowser ${kdevcontextbrowser_PART_SRCS})
 target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
-
+install(FILES kdevcontextbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcontextbrowser)
 
 ########### install files ###############
 
