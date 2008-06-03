@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.
+Name=KDevContextBrowser
+GenericName=ContextBrowser
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevcontextbrowser
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=DUChainNavigation
+X-KDE-PluginInfo-Name=kdevcontextbrowser
+X-KDE-PluginInfo-Author=David Nolden
+X-KDE-PluginInfo-License=LGPL
