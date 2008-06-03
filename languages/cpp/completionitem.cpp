@@ -468,6 +468,12 @@ int IncludeFileCompletionItem::argumentHintDepth() const
 
 QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const
 {
+  DUChainReadLocker lock(DUChain::lock(), 500);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain in time";
+    return QVariant();
+  }
+  
   const Cpp::IncludeItem& item( includeItem );
 
   switch (role) {
@@ -495,9 +501,6 @@ QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, con
       break;
     case CodeCompletionModel::ItemSelected:
     {
-//      KUrl path = item.basePath;
-//      path.addPath("/" + item.name);
-//      return QVariant(path.prettyUrl());
       return QVariant( Cpp::NavigationWidget::shortDescription(item) );
     }
   }
