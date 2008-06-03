@@ -67,8 +67,13 @@ bool removeOne(Container& container, const Type& value) {
 
 //Stored statically for performance-reasons
 
+#ifndef NDEBUG
 #define ENSURE_CAN_WRITE_(x) {if(x->inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
 #define ENSURE_CAN_READ_(x) {if(x->inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
+#else
+#define ENSURE_CAN_WRITE_(x)
+#define ENSURE_CAN_READ_(x)
+#endif
 
 namespace KDevelop
 {
@@ -95,7 +100,7 @@ bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
 
 void DUContextPrivate::synchronizeUsesFromSmart() const
 {
-  if(m_rangesForUses.isEmpty() /*|| !m_rangesChanged*/) ///@todo find out why m_rangesChanged sometimes isn't filled correctly
+  if(m_rangesForUses.isEmpty() || !m_rangesChanged)
     return;
   
   Q_ASSERT(m_rangesForUses.count() == m_uses.count());
@@ -481,7 +486,7 @@ bool DUContext::foundEnough( const DeclarationList& ret ) const {
 bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const
 {
   Q_D(const DUContext);
-  if( type() != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
+  if( d_func()->m_contextType != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
     for(int a = 0; a < baseIdentifiers.size(); ++a)
       if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
         findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, trace, flags);
@@ -493,7 +498,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   ///Step 1: Apply namespace-aliases and -imports
   SearchItem::PtrList aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
-  if( type() == Namespace )
+  if( d_func()->m_contextType == Namespace )
     applyAliases(baseIdentifiers, aliasedIdentifiers, position, false);
   else
     aliasedIdentifiers = baseIdentifiers;
@@ -542,9 +547,9 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     return true;
 
   ///Step 3: Continue search in parent-context
-  if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && parentContext()) {
+  if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && d_func()->m_parentContext) {
     applyUpwardsAliases(aliasedIdentifiers);
-    return parentContext()->findDeclarationsInternal(aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, dataType, ret, trace, flags);
+    return d_func()->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == d_func()->m_parentContext->url() ? position : d_func()->m_parentContext->range().end, dataType, ret, trace, flags);
   }
   return true;
 }
