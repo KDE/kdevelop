@@ -13,16 +13,16 @@ include_directories(
 
 ########### next target ###############
 
-set(kdevusehighlight_PART_SRCS
-    usehighlight.cpp
+set(kdevcontextbrowser_PART_SRCS
+    contextbrowser.cpp
 )
 
-kde4_add_plugin(kdevusehighlight ${kdevusehighlight_PART_SRCS})
-target_link_libraries(kdevusehighlight kdevplatforminterfaces kdevplatformutil kdevplatformlanguage)
+kde4_add_plugin(kdevcontextbrowser ${kdevcontextbrowser_PART_SRCS})
+target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage)
 
-install(TARGETS kdevusehighlight DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install(FILES kdevusehighlight.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kdevcontextbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
