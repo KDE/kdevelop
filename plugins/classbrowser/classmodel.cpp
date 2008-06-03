@@ -265,19 +265,26 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
       if (d->abstractType()) {
         if (d2->abstractType()) {
-          switch (d->abstractType()) {
-            case AbstractType::TypeStructure:
-              return true;
-            case AbstractType::TypeFunction:
-              if (d2->abstractType() == AbstractType::TypeStructure)
-                return false;
-              break;
-            default:
-              if (d2->abstractType() == AbstractType::TypeStructure || d2->abstractType() == AbstractType::TypeFunction)
-                return false;
-              break;
+          if (d->abstractType() != d2->abstractType()) {
+            switch (d->abstractType()) {
+              case AbstractType::TypeStructure:
+                return true;
+              case AbstractType::TypeFunction:
+                if (d2->abstractType() == AbstractType::TypeStructure)
+                  return false;
+                break;
+              default:
+                if (d2->abstractType() == AbstractType::TypeStructure || d2->abstractType() == AbstractType::TypeFunction)
+                  return false;
+                break;
+            }
           }
+        } else {
+          return false;
         }
+      } else {
+        if (d2->abstractType())
+          return false;
       }
     }
   }
@@ -319,39 +326,16 @@ void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node
           // We only add the definitions, not the contexts
           foreach (Declaration* declaration, context->localDeclarations()) {
             if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
-              /*QPair<Node*, KDevelop::DUChainBase*> first = firstKnownObjectForBranch(declaration);
-              if (first.first && first.first != node) {
-                if (first.first->childrenDiscovered()) {
-                  Node* newChild = createPointer(first.second, first.first);
-                  first.first->insertChild(newChild, this);
-                }
-
-                continue;
-              }*/
 
               Node* parentNode = node;
 
               if (declaration->declaration())
                 // This is a definition, skip it
                 continue;
-
-              /*if (declaration->declaration()) {
-                declaration = declaration->declaration();
-                DUContext* context = declaration->context();
-                if (context) {
-                  Declaration* classDeclaration = context->owner();
-                  if (Node* newParent = pointer(classDeclaration)) {
-                    parentNode = newParent;
-                  } else {
-                    parentNode = createPointer(classDeclaration, node);
-                    node->insertChild(parentNode, childrenDiscovered ? this : 0);
-                    continue;
-                  }
-                } else {
-                  // Weird
-                  continue;
-                }
-              }*/
+                
+              if (declaration->identifier().isEmpty())
+                // Skip anonymous declarations
+                continue;
 
               Node* newChild = createPointer(declaration, parentNode);
               parentNode->insertChild(newChild, childrenDiscovered ? this : 0);
