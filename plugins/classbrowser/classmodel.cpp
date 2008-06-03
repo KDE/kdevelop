@@ -189,35 +189,30 @@ QModelIndex ClassModel::indexForObject(Node * node) const
   return createIndex(row, 0, node);
 }
 
-/*bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
+bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
 {
   DUChainReadLocker readLock(DUChain::lock());
 
   Node* parent = objectForIndex(parentIndex);
   if (!parent)
-    if (QList<Node*>* children = childItems(parent))
-      return children->count();
-    else
-      return false;
-
-  if (!*parent)
     return false;
 
-  DUContext* context = dynamic_cast<DUContext*>(parent->data());
-  if (!context)
-    return false;
+  if (parent->childrenDiscovered())
+    return !parent->children().isEmpty();
 
-  if (!context->localDeclarations().isEmpty())
+  if (dynamic_cast<DUContext*>(parent->data()))
     return true;
 
-  if (context->childContexts().isEmpty())
-    return false;
+  if (Declaration* definition = dynamic_cast<Declaration*>(parent->data())) {
+    AbstractType::Ptr type = definition->abstractType();
+    if (type)
+      if (type->whichType() == AbstractType::TypeStructure)
+        // There may be, so be lazy and guess
+        return true;
+  }
 
-  if (QList<Node*>* children = childItems(parent))
-    return children->count();
-  else
-    return false;
-}*/
+  return false;
+}
 
 int ClassModel::rowCount(const QModelIndex & parentIndex) const
 {
@@ -244,9 +239,34 @@ QModelIndex ClassModel::parent(const QModelIndex & index) const
   return indexForObject(base->parent());
 }
 
+int typeScore(AbstractType::WhichType type)
+{
+  switch (type) {
+    case AbstractType::TypeIntegral:
+      return 2;
+    case AbstractType::TypePointer:
+      return 2;
+    case AbstractType::TypeReference:
+      return 2;
+    case AbstractType::TypeFunction:
+      return 1;
+    case AbstractType::TypeStructure:
+      return 0;
+    case AbstractType::TypeArray:
+      return 2;
+    case AbstractType::TypeDelayed:
+      return 3;
+    case AbstractType::TypeForward:
+      return 3;
+    case AbstractType::TypeAbstract:
+      return 3;
+  }
+  return 100;
+}
+
 bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
 {
-  if (DUContext* d = dynamic_cast<DUContext*>(p1->data())) {
+  /*if (DUContext* d = dynamic_cast<DUContext*>(p1->data())) {
     if (dynamic_cast<Declaration*>(p2->data()))
       return true;
 
@@ -258,27 +278,23 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
           return false;
     }
 
-  } else if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
-    if (dynamic_cast<DUContext*>(p2->data()))
-      return false;
-
+  } else*/
+  
+  if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
       if (d->abstractType()) {
         if (d2->abstractType()) {
           if (d->abstractType() != d2->abstractType()) {
-            switch (d->abstractType()) {
-              case AbstractType::TypeStructure:
-                return true;
-              case AbstractType::TypeFunction:
-                if (d2->abstractType() == AbstractType::TypeStructure)
-                  return false;
-                break;
-              default:
-                if (d2->abstractType() == AbstractType::TypeStructure || d2->abstractType() == AbstractType::TypeFunction)
-                  return false;
-                break;
-            }
-          }
+            int typeScore1, typeScore2;
+            typeScore1 = typeScore(d->abstractType()->whichType());
+            typeScore2 = typeScore(d2->abstractType()->whichType());
+            if (typeScore1 < typeScore2)
+              return true;
+            else if (typeScore1 > typeScore2)
+              return false;
+            // else fallthrough intended
+
+          } // else fallthrough intended
         } else {
           return false;
         }
@@ -286,6 +302,8 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
         if (d2->abstractType())
           return false;
       }
+    } else {
+      return true;
     }
   }
 
