@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="1">
+<kpartgui name="KDevQuickopen" version="2">
 <MenuBar>
   <Menu name="navigation" group="search_menu_merge">
     <text context="@title:menu">Navigation</text>
