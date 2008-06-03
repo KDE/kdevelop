@@ -566,7 +566,7 @@ void IdealMainLayout::layoutItem(Role role, QRect& rect) const
             rect.setWidth(x);
         }
         else if (role == Top) {
-            geometry.setWidth(hint.height());
+            geometry.setHeight(hint.height());
             rect.setTop(hint.height());
         }
 
