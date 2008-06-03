@@ -36,7 +36,7 @@ class QMenu;
 
 //This widget represents one single context
 class ContextWidget : public QWidget {
-    Q_OBJECT;
+    Q_OBJECT
     public:
         ContextWidget();
         //duchain must be locked
@@ -75,7 +75,7 @@ class ContextWidget : public QWidget {
 
 //This widget represents one single context
 class DeclarationWidget : public QWidget {
-    Q_OBJECT;
+    Q_OBJECT
     public:
         DeclarationWidget();
         //duchain must be locked
