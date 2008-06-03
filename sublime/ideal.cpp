@@ -442,35 +442,42 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
 
     KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_L);
     connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
     ac->addAction("show_left_dock", action);
 
     m_showRightDock = action = new KAction(i18n("Show Right Dock"), this);
     action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_R);
     connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
     ac->addAction("show_right_dock", action);
 
     m_showBottomDock = action = new KAction(i18n("Show Bottom Dock"), this);
     action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_B);
     connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
     m_showTopDock = action = new KAction(i18n("Show Top Dock"), this);
     action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_T);
     connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
     ac->addAction("show_top_dock", action);
 
     action = new KAction(i18n("Hide All Docks"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
     connect(action, SIGNAL(triggered(bool)), SLOT(hideAllDocks()));
     ac->addAction("hide_all_docks", action);
 
     action = new KAction(i18n("Focus Editor"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_E);
     connect(action, SIGNAL(triggered(bool)), SLOT(focusEditor()));
     ac->addAction("focus_editor", action);
 
     m_anchorCurrentDock = action = new KAction(i18n("Anchor Current Dock"), this);
     action->setCheckable(true);
     action->setEnabled(false);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_A);
     connect(action, SIGNAL(toggled(bool)), SLOT(anchorCurrentDock(bool)));
     ac->addAction("anchor_current_dock", action);
 
@@ -481,10 +488,12 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     ac->addAction("maximize_current_dock", action);
 
     action = new KAction(i18n("Select Next Dock"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
     connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
     ac->addAction("select_next_dock", action);
 
     action = new KAction(i18n("Select Previous Dock"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
 
