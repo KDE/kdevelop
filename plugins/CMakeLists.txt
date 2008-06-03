@@ -18,7 +18,7 @@ macro_optional_find_package(Commoncpp)
 #TODO: Improve detection, apparently we use headers that are not part of either
 #      of these two libs, need to check for that.
 macro_optional_find_package(Boost COMPONENTS thread serialization )
-if(COMMONCPP2_FOUND AND Boost_NOTFOUND AND NOTHING)
+if(COMMONCPP2_FOUND AND Boost_FOUND)
     macro_push_required_vars()
     set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${Boost_INCLUDE_DIRS})
     check_include_file_cxx("boost/iostreams/categories.hpp" BOOST_HAS_CATEGORIES)
@@ -39,7 +39,7 @@ if(COMMONCPP2_FOUND AND Boost_NOTFOUND AND NOTHING)
       endif( NOT BOOST_HAS_XMLIARCHIVE OR NOT BOOST_HAS_XMLOARCHIVE OR NOT BOOST_HAS_TXTIARCHIVE OR NOT BOOST_HAS_TXTOARCHIVE )
     endif( NOT BOOST_HAS_CATEGORIES OR NOT BOOST_HAS_STREAM OR NOT BOOST_HAS_POSITIONING )
 
-endif(COMMONCPP2_FOUND AND Boost_FOUND AND NOTHING)
+endif(COMMONCPP2_FOUND AND Boost_FOUND)
 macro_log_feature( COMMONCPP2_FOUND "Common C++2" "Support for Teamwork plugin integration" "http://ftp.gnu.org/pub/gnu/commoncpp/" FALSE "1.5.9" "The commoncpp2 libraries are needed for the Teamwork plugin" )
 macro_log_feature( Boost_FOUND "Boost" "Support for Teamwork plugin integration" "http://www.boost.org/" FALSE "1.34.0" "The thread and serialization components of the boost C++ libraries are needed for the Teamwork plugin" )
 
