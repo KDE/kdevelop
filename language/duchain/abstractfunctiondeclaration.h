@@ -67,6 +67,8 @@ public:
   const QList<QString>& defaultParameters() const;
 
   void addDefaultParameter(const QString& str);
+  
+  void clearDefaultParameters() ;
 
   private:
     AbstractFunctionDeclarationPrivate* const d;

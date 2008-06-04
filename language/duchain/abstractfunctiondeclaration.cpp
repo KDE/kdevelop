@@ -49,6 +49,10 @@ void AbstractFunctionDeclaration::addDefaultParameter(const QString& str) {
   d->m_defaultParameters << str;
 }
 
+void AbstractFunctionDeclaration::clearDefaultParameters() {
+  d->m_defaultParameters.clear();
+}
+
 bool AbstractFunctionDeclaration::isVirtual() const
 {
   return d->m_isVirtual;
