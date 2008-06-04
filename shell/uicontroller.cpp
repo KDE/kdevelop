@@ -54,8 +54,6 @@ public:
     UiControllerPrivate(UiController *controller)
     : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
-        // FIXME: remove this 'defaultArea' thing.
-        AreaParams defaultAreaParams = ShellExtension::getInstance()->defaultArea();
         QMap<QString, Sublime::Position> desired;
 
         desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
@@ -94,7 +92,6 @@ public:
         }
     }
 
-    Sublime::Area *defaultArea;
     Core *core;
     MainWindow* defaultMainWindow;
 
@@ -219,7 +216,10 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
 {
-    d->defaultArea->raiseToolView(view);
+    foreach( Sublime::Area* area, allAreas() ) {
+        if( area->toolViews().contains( view ) )
+            area->raiseToolView( view );
+    }
 }
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
@@ -255,11 +255,6 @@ Sublime::MainWindow *UiController::activeSublimeWindow()
 MainWindow *UiController::defaultMainWindow()
 {
     return d->defaultMainWindow;
-}
-
-Sublime::Area * KDevelop::UiController::defaultArea()
-{
-    return d->defaultArea;
 }
 
 void UiController::initialize()
