@@ -322,6 +322,7 @@ void ContextBrowserPlugin::updateViews()
     
     if(!foundSpecialObject) {
       //If we haven't found a special language object, search for a use/declaration and eventually highlight it
+      kDebug() << "searching at cursor" << c.textCursor() << mouseHighlight << "document" << view->document()->url().pathOrUrl();
       foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
 
       if( foundDeclaration ) {

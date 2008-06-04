@@ -27,6 +27,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QAction>
 #include <QMenu>
 
@@ -48,19 +49,20 @@ using namespace KDevelop;
 ContextWidget::ContextWidget() : m_navigationWidget(0), m_nextHistoryIndex(0) {
     m_layout = new QGridLayout;
     QHBoxLayout* buttons = new QHBoxLayout;
-    
-    m_layout->addWidget(new QLabel(i18n("Context information:")));
+    QLabel* label = new QLabel(i18n("Context:"));
+    //m_layout->addWidget(label);
+    m_layout->setAlignment(Qt::AlignTop);
     
     m_previousButton = new QPushButton("Previous");
     m_nextButton = new QPushButton("Next");
     
     m_previousButton->setEnabled(false);
     m_nextButton->setEnabled(false);
-    
+    buttons->addWidget(label);
     buttons->addWidget(m_previousButton);
     buttons->addWidget(m_nextButton);
     
-    m_layout->addLayout(buttons, 1, 0, 1, 1);
+    m_layout->addLayout(buttons, 0, 0, 1, 1);
     
     m_previousMenu = new QMenu(this);
     m_previousButton->setMenu(m_previousMenu);
@@ -130,7 +132,9 @@ void ContextWidget::nextMenuAboutToShow() {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     for(int a = m_nextHistoryIndex; a < m_history.size(); ++a) {
         QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : m_history[a].absoluteCursorPosition.document().str();
-        if(actionText.isEmpty()) //Alternatively show file+line-number
+        if(actionText.isEmpty())
+            actionText = m_history[a].alternativeString;
+        if(actionText.isEmpty()) //ly show file+line-number
             actionText = KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
         
         QAction* action = new QAction(actionText, m_nextMenu);
@@ -145,6 +149,8 @@ void ContextWidget::previousMenuAboutToShow() {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     for(int a = m_nextHistoryIndex-2; a >= 0; --a) {
         QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : m_history[a].absoluteCursorPosition.document().str();
+        if(actionText.isEmpty())
+            actionText = m_history[a].alternativeString;
         if(actionText.isEmpty())
             continue;
         QAction* action = new QAction(actionText, m_previousMenu);
@@ -185,6 +191,10 @@ void ContextWidget::actionTriggered() {
 ContextWidget::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
         //Use a position relative to the context
         setCursorPosition(cursorPosition);
+        if(ctx)
+            alternativeString = ctx->scopeIdentifier(true).toString();;
+        if(!alternativeString.isEmpty())
+            alternativeString += i18n("(changed)"); //This is used when the context was deleted in between
 }
 
 DocumentCursor ContextWidget::HistoryEntry::computePosition() {
@@ -246,12 +256,23 @@ void ContextWidget::setContext(KDevelop::DUContext* context, const KDevelop::Sim
 
 DeclarationWidget::DeclarationWidget() : m_navigationWidget(0) {
     m_layout = new QGridLayout;
-    m_layout->addWidget(new QLabel(i18n("Declaration information:")), 2, 0, 1, 2);
+    m_layout->setAlignment(Qt::AlignTop);
+    QHBoxLayout* labelLayout = new QHBoxLayout;
+    labelLayout->addWidget(new QLabel(i18n("Declaration:")));
+    m_lockButton = new QCheckBox(i18n("lock"));
+    m_lockButton->setChecked(false);
+    labelLayout->addWidget(m_lockButton);
+    labelLayout->setAlignment(m_lockButton, Qt::AlignRight);
+    m_layout->addLayout(labelLayout, 0, 0, 1, 1);
     setLayout(m_layout);
 }
 
 void DeclarationWidget::setDeclaration(Declaration* decl, TopDUContext* topContext) {
     m_declaration = DeclarationPointer(decl);
+
+    if(m_lockButton->isChecked())
+        return;
+    
     delete m_navigationWidget;
     m_navigationWidget = decl->context()->createNavigationWidget(decl, topContext);
     if(m_navigationWidget)
@@ -260,6 +281,9 @@ void DeclarationWidget::setDeclaration(Declaration* decl, TopDUContext* topConte
 }
 
 void DeclarationWidget::setSpecialNavigationWidget(QWidget* widget) {
+    if(m_lockButton->isChecked())
+        return;
+
     m_declaration = DeclarationPointer();
     delete m_navigationWidget;
     
@@ -275,10 +299,11 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     
     m_splitter = new QSplitter;
     QGridLayout *layout = new QGridLayout;
-    m_splitter->setOrientation(Qt::Vertical);
     
     m_splitter->addWidget(m_contextWidget);
     m_splitter->addWidget(m_declarationWidget);
+
+    resizeEvent(0);
     
     layout->addWidget(m_splitter, 0, 0);
     setLayout(layout);
@@ -294,10 +319,17 @@ ContextBrowserView::~ContextBrowserView() {
 }
 
 void ContextBrowserView::resizeEvent ( QResizeEvent * /*event*/ ) {
-    if(width() > height())
+    int total = 0;
+    if(width() > height()) {
+        total = width();
         m_splitter->setOrientation(Qt::Horizontal);
-    else
+    } else {
+        total = height();
         m_splitter->setOrientation(Qt::Vertical);
+    }
+    QList<int> sizes;
+    sizes << total/2 << total/2;
+    m_splitter->setSizes( sizes );
 }
 
 DeclarationWidget* ContextBrowserView::declarationWidget() {

@@ -32,6 +32,7 @@ class ContextBrowserPlugin;
 class QSplitter;
 class QGridLayout;
 class QPushButton;
+class QCheckBox;
 class QMenu;
 
 //This widget represents one single context
@@ -66,6 +67,7 @@ class ContextWidget : public QWidget {
             KDevelop::DUContextPointer context;
             KDevelop::DocumentCursor absoluteCursorPosition;
             KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
+            QString alternativeString;
         };
         
         QVector<HistoryEntry> m_history;
@@ -88,6 +90,7 @@ class DeclarationWidget : public QWidget {
         KDevelop::DeclarationPointer m_declaration;
         QWidget* m_navigationWidget;
         QGridLayout *m_layout;
+        QCheckBox* m_lockButton;
 };
 
 class ContextBrowserView : public QWidget {
