@@ -399,17 +399,17 @@ bool ProjectController::closeProject( IProject* proj )
 //     d->m_globalFile.clear();
 //     d->m_projectsDir.clear();
 
-    if (d->m_core->uiControllerInternal()->defaultMainWindow())
-    {
-        if (MainWindow* mw = d->m_core->uiControllerInternal()->defaultMainWindow()) {
-            KActionCollection * ac = mw->actionCollection();
-            QAction * action;
-
-            action = ac->action( "project_close" );
-            if( action )
-                action->setEnabled( false );
-        }
-    }
+//     if (d->m_core->uiControllerInternal()->defaultMainWindow())
+//     {
+//         if (MainWindow* mw = d->m_core->uiControllerInternal()->defaultMainWindow()) {
+//             KActionCollection * ac = mw->actionCollection();
+//             QAction * action;
+// 
+//             action = ac->action( "project_close" );
+//             if( action )
+//                 action->setEnabled( false );
+//         }
+//     }
 
     // close all opened files.
     Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
