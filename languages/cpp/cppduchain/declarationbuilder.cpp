@@ -578,6 +578,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
         static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
     }
+  }else{
+    if(isFunction) { //Clear the default parameters so they don't accumulate
+      AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
+      if(funDecl)
+        funDecl->clearDefaultParameters();
+    }
   }
 
   if( m_inTypedef )
