@@ -32,9 +32,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   IndexedString();
   ///@param str must be a utf8 encoded string, does not need to be 0-terminated.
   ///@param length must be its length in bytes.
-  ///@param hash must be a hash as constructed with the here defined hash functions
-  IndexedString( const char* str, unsigned short length, unsigned int hash );
+  ///@param hash must be a hash as constructed with the here defined hash functions. If it is zero, it will be computed.
+  explicit IndexedString( const char* str, unsigned short length, unsigned int hash = 0 );
 
+  ///Needs a zero terminated string. When the information is already available, try using the other constructor.
+  explicit IndexedString( const char* str );
+  
+  ///When the information is already available, try using the other constructor. This is expensive.
+  explicit IndexedString( const QString& str );
+  
   inline unsigned int hash() const {
     return m_index;
   }

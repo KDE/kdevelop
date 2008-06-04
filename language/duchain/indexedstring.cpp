@@ -31,7 +31,26 @@ IndexedString::IndexedString( const char* str, unsigned short length, unsigned i
   if(!length)
     m_index = 0;
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hash, length));
+    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+}
+
+IndexedString::IndexedString( const QString& string ) {
+  QByteArray array(string.toUtf8());
+  
+  const char* str = array.constData();
+  
+  if(!array.size())
+    m_index = 0;
+  else
+    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, array.size()), array.size()));
+}
+
+IndexedString::IndexedString( const char* str) {
+  unsigned int length = strlen(str);
+  if(!length)
+    m_index = 0;
+  else
+    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
 }
 
 QString IndexedString::str() const {

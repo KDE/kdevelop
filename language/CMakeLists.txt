@@ -42,6 +42,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/definitions.cpp
     duchain/uses.cpp
     duchain/dumpchain.cpp
+    duchain/indexedstring.cpp
+    duchain/repositories/itemrepository.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
@@ -107,6 +109,7 @@ install(FILES
     duchain/basecontextbuilder.h
     duchain/dumpchain.h
     duchain/symboltable.h
+    duchain/indexedstring.h
     helpers/codecompletion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
