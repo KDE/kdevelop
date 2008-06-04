@@ -97,7 +97,8 @@ private slots:
   void testForwardDeclaration3();
   void testTemplateForwardDeclaration();
   void testTemplateForwardDeclaration2();
-  void testHashedStringRepository();
+  void testStringSets();
+  void testIndexedStrings();
   void testEnum();
   void testCaseUse();
   void testDefinitionUse();

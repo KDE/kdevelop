@@ -45,6 +45,7 @@
 #include "hashedstring.h"
 #include "typeutils.h"
 #include "templatedeclaration.h"
+#include <indexedstring.h>
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -2153,7 +2154,7 @@ void TestDUChain::testFileParse()
 
 typedef BasicSetRepository::Index Index;
 
-void TestDUChain::testHashedStringRepository() {
+void TestDUChain::testStringSets() {
 
   //Create 3 random sets with each 10 of 20 items
   const unsigned int setCount = 10;
@@ -2401,7 +2402,31 @@ void TestDUChain::testHashedStringRepository() {
   kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
 #endif
   }
+}
 
+void TestDUChain::testIndexedStrings() {
+  
+  int testCount  = 100000;
+
+  int a = 0;
+  for(a = 0; a < testCount; ++a) {
+    QString testString;
+    int length = rand() % 6;
+    for(int b = 0; b < length; ++b)
+      testString.append((char)(rand() % 6) + 'a');
+    QByteArray array = testString.toUtf8();
+    //kDebug() << "checking with" << testString;
+    //kDebug() << "checking" << a;
+    IndexedString indexed(array.constData(), array.size(), IndexedString::hashString(array.constData(), array.size()));
+    IndexedString indexed2(array.constData(), array.size(), IndexedString::hashString(array.constData(), array.size()));
+    
+    QCOMPARE(indexed.str(), testString);
+    QVERIFY(indexed == indexed2);
+    QCOMPARE(indexed.index(), indexed2.index());
+    if(a % (testCount/10) == 0)
+      kDebug() << a << "of" << testCount;
+  }
+  kDebug() << a << "successful tests";
 }
 
 void TestDUChain::release(DUContext* top)
