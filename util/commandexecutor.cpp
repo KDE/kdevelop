@@ -80,12 +80,8 @@ CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
 
 CommandExecutor::~CommandExecutor()
 {
-#warning Not sure this is correct, maybe just switching the first two deletes works as well
-    d->m_process->kill();
-    d->m_process->waitForFinished( 3000 );
-
-    delete d->m_lineMaker;
     delete d->m_process;
+    delete d->m_lineMaker;
     delete d;
 }
 
