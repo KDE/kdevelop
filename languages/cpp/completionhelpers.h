@@ -39,7 +39,6 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
 ///Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 KDevelop::AbstractType::Ptr effectiveType( KDevelop::Declaration* decl );
-KDevelop::DUContext* getArgumentContext(KDevelop::Declaration* decl);
 
 #endif
 

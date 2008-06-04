@@ -28,22 +28,10 @@
 #include <QStringList>
 #include "overloadresolution.h"
 #include "cpptypes.h"
+#include "cppduchain.h"
 
 using namespace KDevelop;
-
-DUContext* getArgumentContext(Declaration* decl) {
-  DUContext* internal = decl->internalContext();
-  if( !internal )
-    return 0;
-  if( internal->type() == DUContext::Function )
-    return internal;
-  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
-    if( ctx )
-      if( ctx->type() == DUContext::Function )
-        return ctx.data();
-  }
-  return 0;
-}
+using namespace Cpp;
 
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting )
 {

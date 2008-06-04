@@ -43,9 +43,11 @@
 
 #include "cpplanguagesupport.h"
 #include "cpptypes.h"
+#include "cppduchain.h"
 #include "templatedeclaration.h"
 #include "typeutils.h"
 #include "environmentmanager.h"
+#include "completionhelpers.h"
 
 using namespace KDevelop;
 using namespace rpp;
@@ -86,8 +88,9 @@ const Colorizer labelHighlight("000035");
 const Colorizer codeHighlight("005000");
 const Colorizer propertyHighlight("009900");
 const Colorizer navigationHighlight("000099");
-const Colorizer importantHighlight("000000", true);
+const Colorizer importantHighlight("000000", true, true);
 const Colorizer commentHighlight("000000", false, true);
+const Colorizer nameHighlight("000000", true, false);
 
 QString stringFromAccess(Declaration::AccessPolicy access) {
   switch(access) {
@@ -113,7 +116,7 @@ QString declarationName( Declaration* decl ) {
   if( !decl )
     return i18nc("An unknown c++ declaration that is unknown", "Unknown");
   else
-    return decl->qualifiedIdentifier().toString();
+    return decl->identifier().toString();
 }
 
 struct NavigationAction {
@@ -360,7 +363,7 @@ class NavigationContext : public KShared {
             if( type && function ) {
               if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
                 eventuallyMakeTypeLinks( type->returnType().data() );
-                m_currentText += ' ' + Qt::escape(m_declaration->identifier().toString());
+                m_currentText += ' ' + nameHighlight(Qt::escape(m_declaration->identifier().toString()));
               }
 
               if( type->arguments().count() == 0 )
@@ -370,22 +373,28 @@ class NavigationContext : public KShared {
                 m_currentText += "( ";
                 bool first = true;
 
-                QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
-                int firstDefaultParam = type->arguments().count() - function->defaultParameters().count();
-                int currentArgNum = 0;
+                KDevelop::DUContext* argumentContext = Cpp::getArgumentContext(m_declaration.data());
+                
+                if(argumentContext) {
+                  QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
+                  int firstDefaultParam = type->arguments().count() - function->defaultParameters().count();
+                  int currentArgNum = 0;
 
-                foreach( AbstractType::Ptr argType, type->arguments() )
-                {
-                  if( !first )
-                    m_currentText += ", ";
-                  first = false;
+                  foreach(Declaration* argument, argumentContext->localDeclarations()) {
+                    if( !first )
+                      m_currentText += ", ";
+                    first = false;
 
-                  eventuallyMakeTypeLinks( argType.data() );
+                    AbstractType::Ptr argType = argument->abstractType();
+                    
+                    eventuallyMakeTypeLinks( argType.data() );
+                    m_currentText += " " + nameHighlight(Qt::escape(argument->identifier().toString()));
 
-                  if( currentArgNum >= firstDefaultParam )
-                    m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ]);
+                    if( currentArgNum >= firstDefaultParam )
+                      m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ]);
 
-                  ++currentArgNum;
+                    ++currentArgNum;
+                  }
                 }
 
                 m_currentText += " )";
@@ -406,7 +415,7 @@ class NavigationContext : public KShared {
 
             eventuallyMakeTypeLinks( m_declaration->abstractType().data() );
 
-            m_currentText += ' ' + Qt::escape(declarationName(m_declaration.data())) + "<br>";
+            m_currentText += " " + nameHighlight(Qt::escape(declarationName(m_declaration.data()))) + "<br>";
           }else{
             CppClassType* klass = dynamic_cast<CppClassType*>(m_declaration->abstractType().data());
             if( m_declaration->kind() == Declaration::Type && klass ) {
@@ -574,7 +583,16 @@ class NavigationContext : public KShared {
       }
         const AbstractType* target = TypeUtils::targetType( type, m_topContext.data() );
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target );
-
+        
+        ///@todo handle const etc. correctly
+        const CppPointerType* pointer = dynamic_cast<const CppPointerType*>(type);
+        const CppReferenceType* ref = dynamic_cast<const CppReferenceType*>(type);
+        
+        if(pointer && pointer->cv() & Declaration::Const)
+          m_currentText += "const ";
+        if(ref && ref->cv() & Declaration::Const)
+          m_currentText += "const ";
+        
         if( idType ) {
           if( idType->declaration() ) {
 
@@ -585,6 +603,7 @@ class NavigationContext : public KShared {
             lastId.clearTemplateIdentifiers();
             id.push(lastId);
 
+            //We leave out the * and & reference and pointer signs, those are added to the end
             makeLink(id.toString() , DeclarationPointer(idType->declaration()), NavigationAction::NavigateDeclaration );
           } else {
             m_currentText += Qt::escape(type->toString());
@@ -611,6 +630,23 @@ class NavigationContext : public KShared {
               
               m_currentText += Qt::escape(" >");
             }
+          }
+          if(idType) {
+            //Add reference and pointer
+            ///@todo correct const handling
+            while(pointer || ref) {
+              if(pointer) {
+                m_currentText += Qt::escape("*");
+                ref = dynamic_cast<const CppReferenceType*>(pointer->baseType().data());
+                pointer = dynamic_cast<const CppPointerType*>(pointer->baseType().data());
+              }
+              if(ref) {
+                m_currentText += Qt::escape("&");
+                pointer = dynamic_cast<const CppPointerType*>(ref->baseType().data());
+                ref = dynamic_cast<const CppReferenceType*>(ref->baseType().data());
+              }
+            }
+            
           }
         }else if( type ) {
           m_currentText += Qt::escape(type->toString());
@@ -721,8 +757,10 @@ public:
   
     KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
-    makeLink(u.prettyUrl(), u.prettyUrl(), action);
+    makeLink(u.fileName(), u.prettyUrl(), action);
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
+    m_currentText += "<br />";
+    m_currentText += "path: " + u.pathOrUrl();
 
     //Pick the one duchain for this document that has the most child-contexts/declarations.
     //This prevents picking a context that is empty due to header-guards.
@@ -859,7 +897,7 @@ public:
       m_currentText += "<br />";
     }
 
-    makeLink(u.prettyUrl(), u.prettyUrl(), action);
+    makeLink(u.pathOrUrl(), u.prettyUrl(), action);
     
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;

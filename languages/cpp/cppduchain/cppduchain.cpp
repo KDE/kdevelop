@@ -36,6 +36,20 @@ using namespace KDevelop;
 
 namespace Cpp {
 
+KDevelop::DUContext* getArgumentContext(KDevelop::Declaration* decl) {
+  DUContext* internal = decl->internalContext();
+  if( !internal )
+    return 0;
+  if( internal->type() == DUContext::Function )
+    return internal;
+  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
+    if( ctx )
+      if( ctx->type() == DUContext::Function )
+        return ctx.data();
+  }
+  return 0;
+}
+
 KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const TopDUContext* topContext ) {
   QList<Declaration*> ret;
   ret += context->findLocalDeclarations( identifier, SimpleCursor::invalid(), topContext );
