@@ -147,9 +147,9 @@ UiController::UiController(Core *core)
     // FIXME: restore.
 #if 0
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
-                                    defaultMainWindow(), SLOT( loadSettings() ) );
+                                    defaultMainWindow(), "loadSettings" );
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
-                                    defaultMainWindow(), SLOT( loadSettings() ) );
+                                    defaultMainWindow(), "loadSettings" );
 #endif
     d->core = core;
     connect( QApplication::instance(),
@@ -180,9 +180,9 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     MainWindow *main = new MainWindow(this);
     // FIXME: what this is supposed to do?
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
-                                    main, SLOT( loadSettings() ) );
+                                    main, "loadSettings" );
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
-                                    main, SLOT( loadSettings() ) );
+                                    main, "loadSettings" );
 
     addMainWindow(main);
     showArea(areaName, main);
