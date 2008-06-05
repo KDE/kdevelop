@@ -57,9 +57,15 @@ private: // helpers
 private: // state
     QList<QTestSuite*> m_suites;
     QString m_root;
-    const QString suiteTag;
-    const QString caseTag;
-    const QString cmdTag;
+
+    // some xml constants
+    static const QString c_suite;
+    static const QString c_case;
+    static const QString c_cmd;
+    static const QString c_root;
+    static const QString c_dir;
+    static const QString c_name;
+    static const QString c_exe;
 };
 
 } // end namespace QxQTest

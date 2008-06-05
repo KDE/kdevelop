@@ -18,12 +18,12 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_QTESTXMLPARSERTEST
-#define QXQTEST_QTESTXMLPARSERTEST
+#ifndef QXQTEST_QTESTOUTPUTPARSERTEST
+#define QXQTEST_QTESTOUTPUTPARSERTEST
 
 #include <QtTest/QtTest>
 
-class QTestXmlParserTest : public QObject
+class QTestOutputParserTest : public QObject
 {
     Q_OBJECT
 
@@ -40,4 +40,4 @@ private:
     void constructFailureRow(QString name, QByteArray xml);
 };
 
-#endif // QXQTEST_QTESTXMLPARSERTEST
+#endif // QXQTEST_QTESTOUTPUTPARSERTEST

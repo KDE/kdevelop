@@ -64,8 +64,16 @@ void cleanup(QTestSuite* suite)
 
 } // namespace
 
+const QString QTestRegister::c_suite("suite");
+const QString QTestRegister::c_case("case");
+const QString QTestRegister::c_cmd("command");
+const QString QTestRegister::c_root("root");
+const QString QTestRegister::c_name("name");
+const QString QTestRegister::c_dir("dir");
+const QString QTestRegister::c_exe("exe");
+
 QTestRegister::QTestRegister()
-        : suiteTag("suite"), caseTag("case"), cmdTag("command"), m_root("")
+        : m_root("")
 {
 }
 
@@ -99,9 +107,9 @@ void QTestRegister::addFromXml(QIODevice* dev)
     while (!atEnd())
     {
         readNext();
-        if (isStartElement_("root"))
-            m_root = attributes().value("dir").toString();
-        if (isStartElement_(suiteTag)) 
+        if (isStartElement_(c_root))
+            m_root = attributes().value(c_dir).toString();
+        if (isStartElement_(c_suite))
             processSuite();
     }
 
@@ -114,10 +122,10 @@ void QTestRegister::processSuite()
     m_suites.push_back(suite);
     kDebug(9504) << suite->name();
 
-    while (!atEnd() && !isEndElement_(suiteTag))
+    while (!atEnd() && !isEndElement_(c_suite))
     {
         readNext();
-        if (isStartElement_(caseTag)) 
+        if (isStartElement_(c_case))
             processCase(suite);
     }
 }
@@ -127,10 +135,10 @@ void QTestRegister::processCase(QTestSuite* suite)
     QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
     suite->addTest(caze);
     kDebug(9504) << caze->name();
-    while (!atEnd() && !isEndElement_(caseTag))
+    while (!atEnd() && !isEndElement_(c_case))
     {
         readNext();
-        if (isStartElement_(cmdTag))
+        if (isStartElement_(c_cmd))
             processCmd(caze);
     }
 }
@@ -145,12 +153,12 @@ void QTestRegister::processCmd(QTestCase* caze)
 
 QString QTestRegister::fetchName()
 {
-    return attributes().value("name").toString();
+    return attributes().value(c_name).toString();
 }
 
 QFileInfo QTestRegister::fetchDir()
 {
-    QString dir = attributes().value("dir").toString();
+    QString dir = attributes().value(c_dir).toString();
     if (m_root != "")
         dir = m_root + dir;
     return QFileInfo(dir);
@@ -158,7 +166,7 @@ QFileInfo QTestRegister::fetchDir()
 
 QFileInfo QTestRegister::fetchExe()
 {
-    return QFileInfo(attributes().value("exe").toString());
+    return QFileInfo(attributes().value(c_exe).toString());
 }
 
 unsigned QTestRegister::testSuiteCount()

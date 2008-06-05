@@ -18,14 +18,14 @@
  * 02110-1301, USA.
  */
 
-#include "qtestxmlparser.h"
+#include "qtestoutputparser.h"
 #include "qtestresult.h"
 
 #include <QStringRef>
 #include <kdebug.h>
 
 using QxQTest::QTestResult;
-using QxQTest::QTestXmlParser;
+using QxQTest::QTestOutputParser;
 
 /*example xml:
      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
@@ -45,26 +45,36 @@ using QxQTest::QTestXmlParser;
      "</TestFunction>"
      "</TestCase>)"*/
 
-QTestXmlParser::QTestXmlParser(QIODevice* device)
+
+const QString QTestOutputParser::c_testfunction("TestFunction");
+const QString QTestOutputParser::c_description("Description");
+const QString QTestOutputParser::c_incident("Incident");
+const QString QTestOutputParser::c_type("type");
+const QString QTestOutputParser::c_file("file");
+const QString QTestOutputParser::c_line("line");
+const QString QTestOutputParser::c_pass("pass");
+const QString QTestOutputParser::c_fail("fail");
+
+QTestOutputParser::QTestOutputParser(QIODevice* device)
     : QXmlStreamReader(device)
 {
 }
 
-QTestXmlParser::~QTestXmlParser()
+QTestOutputParser::~QTestOutputParser()
 {
 }
 
-bool QTestXmlParser::isStartElement_(const char* elementName)
+bool QTestOutputParser::isStartElement_(const QString& elementName)
 {
     return isStartElement() && (name() == elementName);
 }
 
-bool QTestXmlParser::isEndElement_(const char* elementName)
+bool QTestOutputParser::isEndElement_(const QString& elementName)
 {
     return isEndElement() && (name() == elementName);
 }
 
-QTestResult QTestXmlParser::go()
+QTestResult QTestOutputParser::go()
 {
     if (!device()->isOpen()) 
         device()->open(QIODevice::ReadOnly);
@@ -76,7 +86,7 @@ QTestResult QTestXmlParser::go()
     while (!atEnd() && m_result.isGood())
     {
         readNext();
-        if (isStartElement_("TestFunction"))
+        if (isStartElement_(c_testfunction))
             processTestFunction();
     }
 
@@ -84,39 +94,37 @@ QTestResult QTestXmlParser::go()
     return m_result;
 }
 
-void QTestXmlParser::processTestFunction()
+void QTestOutputParser::processTestFunction()
 {
-    while (!atEnd())
+    while (!atEnd() && !isEndElement_(c_testfunction))
     {
         readNext();
-        if (isStartElement_("Incident")) 
+        if (isStartElement_(c_incident))
             fillResult();
-        if (isEndElement_("TestFunction")) 
-            return;
     }
 }
 
-void QTestXmlParser::fillResult()
+void QTestOutputParser::fillResult()
 {
-    QString type = attributes().value("type").toString();
-    if (type == "pass")
+    QString type = attributes().value(c_type).toString();
+    if (type == c_pass)
         setSuccess();
-    else if (type == "fail") 
+    else if (type == c_fail)
         setFailure();
 }
 
-void QTestXmlParser::setSuccess()
+void QTestOutputParser::setSuccess()
 {
     m_result.setState(QxRunner::RunSuccess);
 }
 
-void QTestXmlParser::setFailure()
+void QTestOutputParser::setFailure()
 {
     m_result.setState(QxRunner::RunError);
-    m_result.setFile(QFileInfo(attributes().value("file").toString()));
-    m_result.setLine(attributes().value("line").toString().toInt());
+    m_result.setFile(QFileInfo(attributes().value(c_file).toString()));
+    m_result.setLine(attributes().value(c_line).toString().toInt());
 
-    while (!atEnd() && !isEndElement_("Description"))
+    while (!atEnd() && !isEndElement_(c_description))
     {
         readNext();
         if (isCDATA())

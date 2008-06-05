@@ -15,7 +15,7 @@ include_directories(
 
 set(qxqtest_SRCS
     qtestresult.cpp
-    qtestxmlparser.cpp
+    qtestoutputparser.cpp
     qtestcase.cpp
     qtestcommand.cpp
     qtestbase.cpp

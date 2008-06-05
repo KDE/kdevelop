@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
-#include <qtestxmlparser.h>
+#include <qtestoutputparser.h>
 #include <qtestresult.h>
 
-#include "qtestxmlparsertest.h"
+#include "qtestoutputparsertest.h"
 
 #include <qtest_kde.h>
 #include <kasserts.h>
@@ -30,7 +30,7 @@
 #include <QMetaType>
 #include <QFileInfo>
 
-using QxQTest::QTestXmlParser;
+using QxQTest::QTestOutputParser;
 using QxQTest::QTestResult;
 
 Q_DECLARE_METATYPE(QFileInfo)
@@ -93,7 +93,7 @@ const QByteArray footerXml("</TestCase>\n");
 
 } // end anonymous namespace
 
-void QTestXmlParserTest::parse_data()
+void QTestOutputParserTest::parse_data()
 {
     setupColumns();
     addSunnyDayData();
@@ -102,7 +102,7 @@ void QTestXmlParserTest::parse_data()
     addCleanupFailureData();
 }
 
-void QTestXmlParserTest::setupColumns()
+void QTestOutputParserTest::setupColumns()
 {
     QTest::addColumn<QByteArray>("xml");
     QTest::addColumn<QxRunner::RunnerResult>("state");
@@ -116,7 +116,7 @@ QByteArray failureIncidentXml()
     return incidentXml("fail", "/path/to/file.cpp", "100", "some message");
 }
 
-void QTestXmlParserTest::constructFailureRow(QString name, QByteArray xml)
+void QTestOutputParserTest::constructFailureRow(QString name, QByteArray xml)
 {
     QTest::newRow(name.toAscii())
             << xml << QxRunner::RunError 
@@ -125,7 +125,7 @@ void QTestXmlParserTest::constructFailureRow(QString name, QByteArray xml)
 }
 
 // test data
-void QTestXmlParserTest::addSunnyDayData()
+void QTestOutputParserTest::addSunnyDayData()
 {
     // first row - sunny day test succes
     QByteArray input = headerXml + initTestCaseXml
@@ -138,7 +138,7 @@ void QTestXmlParserTest::addSunnyDayData()
 }
 
 // test data
-void QTestXmlParserTest::addBasicFailureData()
+void QTestOutputParserTest::addBasicFailureData()
 {
     // second row - test failure
     QByteArray input = headerXml 
@@ -150,7 +150,7 @@ void QTestXmlParserTest::addBasicFailureData()
 }
 
 // test data
-void QTestXmlParserTest::addInitFailureData()
+void QTestOutputParserTest::addInitFailureData()
 {
     // third row - failure in initTestCase
     QByteArray input = headerXml
@@ -160,7 +160,7 @@ void QTestXmlParserTest::addInitFailureData()
 }
 
 // test data
-void QTestXmlParserTest::addCleanupFailureData()
+void QTestOutputParserTest::addCleanupFailureData()
 {
     // fourth row - failure in initTestCase
     QByteArray input = headerXml 
@@ -171,12 +171,12 @@ void QTestXmlParserTest::addCleanupFailureData()
 }
 
 // test command
-void QTestXmlParserTest::parse()
+void QTestOutputParserTest::parse()
 {
     // exercise
     QFETCH(QByteArray, xml);
     QBuffer xmlOut(&xml, 0);
-    QTestXmlParser parser(&xmlOut);
+    QTestOutputParser parser(&xmlOut);
     QTestResult result = parser.go();
 
     // verify
@@ -196,4 +196,4 @@ void QTestXmlParserTest::parse()
                 "Expected " + message + " got " + result.message());
 }
 
-QTEST_KDEMAIN( QTestXmlParserTest, NoGUI )
+QTEST_KDEMAIN( QTestOutputParserTest, NoGUI )

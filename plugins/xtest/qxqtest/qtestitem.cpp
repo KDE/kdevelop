@@ -19,13 +19,13 @@
  */
 
 #include "qtestitem.h"
-#include "qtestxmlparser.h"
+#include "qtestoutputparser.h"
 #include "qtestcommand.h"
 
 #include "kdebug.h"
 
 using QxQTest::QTestItem;
-using QxQTest::QTestXmlParser;
+using QxQTest::QTestOutputParser;
 using QxQTest::QTestCommand;
 using QxRunner::RunnerItem;
 
@@ -66,7 +66,7 @@ void QTestItem::startProcess(QTestCommand* cmd, KProcess* proc)
 
 int QTestItem::parseOutput(KProcess* proc)
 {
-    QTestXmlParser parser(proc);
+    QTestOutputParser parser(proc);
     QTestResult res = parser.go();
     res.log();
     setData(2, res.message());

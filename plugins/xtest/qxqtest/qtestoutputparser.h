@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_QTESTXMLPARSER
-#define QXQTEST_QTESTXMLPARSER
+#ifndef QXQTEST_QTESTOUTPUTPARSER
+#define QXQTEST_QTESTOUTPUTPARSER
 
 #include <QXmlStreamReader>
 #include "qtestresult.h"
@@ -29,11 +29,11 @@ class QIODevice;
 namespace QxQTest
 {
 
-class QTestXmlParser : public QXmlStreamReader
+class QTestOutputParser : public QXmlStreamReader
 {
 public:
-    QTestXmlParser(QIODevice* device);
-    virtual ~QTestXmlParser();
+    QTestOutputParser(QIODevice* device);
+    virtual ~QTestOutputParser();
 
     /**
      * Start parsing & return the testresult
@@ -43,15 +43,26 @@ public:
 private:
     void processTestFunction();
     void fillResult();
-    bool isStartElement_(const char* elem);
-    bool isEndElement_(const char* elem);
     void setFailure();
     void setSuccess();
 
+    inline bool isStartElement_(const QString& elem);
+    inline bool isEndElement_(const QString& elem);
+
 private:
     QTestResult m_result;
+
+    // some xml constants
+    static const QString c_testfunction;
+    static const QString c_incident;
+    static const QString c_description;
+    static const QString c_type;
+    static const QString c_file;
+    static const QString c_line;
+    static const QString c_pass;
+    static const QString c_fail;
 };
 
 }
 
-#endif // QXQTEST_QTESTXMLPARSER
+#endif // QXQTEST_QTESTOUTPUTPARSER
