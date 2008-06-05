@@ -1808,7 +1808,6 @@ struct TestContext {
 
   void verify(QList<TestContext*> allContexts) {
 
-
     QCOMPARE(m_context->importedParentContexts().count(), imports.count());
     //Compute a closure of all children, and verify that they are imported.
     QSet<TestContext*> collected;
@@ -1867,6 +1866,8 @@ void TestDUChain::testImportStructure()
   clock_t startClock = clock();
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
   int cycles = 5;
+  //int cycles = 100;
+  srand(time(NULL));
   for(int t = 0; t < cycles; ++t) {
     QList<TestContext*> allContexts;
     //Create a random structure
@@ -1875,14 +1876,19 @@ void TestDUChain::testImportStructure()
     for(int a = 0; a < contextCount; a++)
       allContexts << new TestContext();
     for(int c = 0; c < cycles; ++c) {
-      kDebug() << "main-cycle" << t  << "sub-cycle" << c;
+      //kDebug() << "main-cycle" << t  << "sub-cycle" << c;
       //Add random imports and compare
       for(int a = 0; a < contextCount; a++) {
         //Import up to 5 random other contexts into each context
         int importCount = rand() % 5;
+        //kDebug()   << "cnt> " << importCount;
         for(int i = 0; i < importCount; ++i)
+        {
+          //int importNr = rand() % contextCount;
+          //kDebug() << "nmr > " << importNr;
+          //allContexts[a]->import(allContexts[importNr]);
           allContexts[a]->import(allContexts[rand() % contextCount]);
-        
+        }
         for(int b = 0; b < contextCount; b++)
           if(rand() % verifyOnceIn == 0)
             allContexts[b]->verify(allContexts);
