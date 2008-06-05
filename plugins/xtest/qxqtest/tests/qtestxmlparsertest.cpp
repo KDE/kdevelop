@@ -119,7 +119,7 @@ QByteArray failureIncidentXml()
 void QTestXmlParserTest::constructFailureRow(QString name, QByteArray xml)
 {
     QTest::newRow(name.toAscii())
-            << xml << QxRunner::RunWarning 
+            << xml << QxRunner::RunError 
             << QFileInfo("/path/to/file.cpp") << 100 
             << "some message";
 }

@@ -21,8 +21,8 @@
     <rect>
      <x>0</x>
      <y>34</y>
-     <width>630</width>
-     <height>108</height>
+     <width>350</width>
+     <height>369</height>
     </rect>
    </property>
    <layout class="QGridLayout" >
@@ -43,6 +43,8 @@
      </widget>
     </item>
    </layout>
+   <zorder>treeRunner</zorder>
+   <zorder>dockResults</zorder>
   </widget>
   <widget class="QToolBar" name="runnerToolBar" >
    <property name="geometry" >
@@ -81,10 +83,10 @@
   <widget class="QDockWidget" name="dockResults" >
    <property name="geometry" >
     <rect>
-     <x>0</x>
-     <y>148</y>
-     <width>630</width>
-     <height>255</height>
+     <x>356</x>
+     <y>34</y>
+     <width>274</width>
+     <height>369</height>
     </rect>
    </property>
    <property name="features" >
@@ -94,15 +96,15 @@
     <string>Results</string>
    </property>
    <attribute name="dockWidgetArea" >
-    <number>8</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents" >
     <property name="geometry" >
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>630</width>
-      <height>235</height>
+      <width>274</width>
+      <height>349</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" >
@@ -361,7 +363,7 @@
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="100" />
  <resources>
   <include location="resources/qxrunner.qrc" />
  </resources>

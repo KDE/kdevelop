@@ -30,7 +30,10 @@
 #include <QFile>
 #include "qxqtest/testrunner.h"
 
-#include <QDebug>
+#include <kdebug.h>
+
+// TODO read this to project configurationi
+#define KDEV_HOME "/home/nix/KdeDev/kdevelop"
 
 K_PLUGIN_FACTORY(KDevXtestFactory, registerPlugin<KDevXtestPlugin>();)
 K_EXPORT_PLUGIN(KDevXtestFactory("kdevxtest"))
@@ -43,7 +46,8 @@ public:
     virtual QWidget* create(QWidget *parent = 0) {
         //return sample::testRunnerWidget();
         QxQTest::TestRunner* runner = new QxQTest::TestRunner();
-        QFile* testXml = new QFile("/home/nix/.tests.xml");
+        QFile* testXml = new QFile(KDEV_HOME "/plugins/xtest/kdevtests.xml");
+        kDebug() << "Loading " << testXml->fileName();
         runner->registerTests(testXml);
         return runner->spawn();
     }

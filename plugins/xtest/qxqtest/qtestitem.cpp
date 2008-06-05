@@ -22,7 +22,7 @@
 #include "qtestxmlparser.h"
 #include "qtestcommand.h"
 
-#include <QDebug>
+#include "kdebug.h"
 
 using QxQTest::QTestItem;
 using QxQTest::QTestXmlParser;
@@ -46,28 +46,32 @@ int QTestItem::run()
     if (cmd == 0)
         return QxRunner::NoResult; // Only run testcommands
 
-    QProcess proc;
+    KProcess proc;
     startProcess(cmd, &proc);
     return parseOutput(&proc);
 }
 
-void QTestItem::startProcess(QTestCommand* cmd, QProcess* proc)
+void QTestItem::startProcess(QTestCommand* cmd, KProcess* proc)
 {
     QString cmdStr = cmd->command();
     QStringList splitted = cmdStr.split(" ");
     QStringList argv;
     argv << "-xml" << splitted[1]; // the testcommand name
-    proc->start(splitted[0], argv); // command name is argument to qtest exe
+    proc->setProgram(splitted[0], argv);
+    kDebug(9504) << proc->program().join(" ");
+    proc->setOutputChannelMode(KProcess::SeparateChannels);
+    proc->start(); // command name is argument to qtest exe
     proc->waitForFinished(-1); // blocks
 }
 
-int QTestItem::parseOutput(QProcess* proc)
+int QTestItem::parseOutput(KProcess* proc)
 {
     QTestXmlParser parser(proc);
     QTestResult res = parser.go();
-    qDebug() << "RESULT: " << res.state();
+    res.log();
     setData(2, res.message());
     setData(3, res.file().filePath());
     setData(4, res.line());
+    setResult(res.state());
     return res.state();
 }

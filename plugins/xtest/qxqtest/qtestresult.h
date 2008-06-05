@@ -43,6 +43,7 @@ public:
     void setMessage(QString);
     void setLine(int);
     void setFile(QFileInfo);
+    void log();
 
     /**
      * True when state is NotRun or RunSuccess

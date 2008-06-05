@@ -22,7 +22,7 @@
 #include "qtestresult.h"
 
 #include <QStringRef>
-#include <QDebug>
+#include <kdebug.h>
 
 using QxQTest::QTestResult;
 using QxQTest::QTestXmlParser;
@@ -80,11 +80,7 @@ QTestResult QTestXmlParser::go()
             processTestFunction();
     }
 
-    if (hasError())
-    {
-        qDebug() << "ERR: " << errorString() << " @ "
-                 << lineNumber() << ":" << columnNumber();
-    }
+    kError(hasError(), 9504) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
     return m_result;
 }
 
@@ -103,15 +99,20 @@ void QTestXmlParser::processTestFunction()
 void QTestXmlParser::fillResult()
 {
     QString type = attributes().value("type").toString();
-    if (type == "pass") 
-        m_result.setState(QxRunner::RunSuccess);
+    if (type == "pass")
+        setSuccess();
     else if (type == "fail") 
         setFailure();
 }
 
+void QTestXmlParser::setSuccess()
+{
+    m_result.setState(QxRunner::RunSuccess);
+}
+
 void QTestXmlParser::setFailure()
 {
-    m_result.setState(QxRunner::RunWarning);
+    m_result.setState(QxRunner::RunError);
     m_result.setFile(QFileInfo(attributes().value("file").toString()));
     m_result.setLine(attributes().value("line").toString().toInt());
 

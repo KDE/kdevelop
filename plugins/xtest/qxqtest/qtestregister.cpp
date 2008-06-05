@@ -24,7 +24,7 @@
 #include "qtestcommand.h"
 
 #include <QIODevice>
-#include <QDebug>
+#include "kdebug.h"
 
 using QxQTest::QTestRegister;
 using QxQTest::QTestSuite;
@@ -65,7 +65,7 @@ void cleanup(QTestSuite* suite)
 } // namespace
 
 QTestRegister::QTestRegister()
-        : suiteTag("suite"), caseTag("case"), cmdTag("command")
+        : suiteTag("suite"), caseTag("case"), cmdTag("command"), m_root("")
 {
 }
 
@@ -99,20 +99,20 @@ void QTestRegister::addFromXml(QIODevice* dev)
     while (!atEnd())
     {
         readNext();
+        if (isStartElement_("root"))
+            m_root = attributes().value("dir").toString();
         if (isStartElement_(suiteTag)) 
             processSuite();
     }
 
-    if (hasError())
-    {
-        qDebug() << "ERR: " << errorString() << " @ " << lineNumber() << ":" << columnNumber();
-    }
+    kError(hasError(), 9504) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
 void QTestRegister::processSuite()
 {
     QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), 0);
     m_suites.push_back(suite);
+    kDebug(9504) << suite->name();
 
     while (!atEnd() && !isEndElement_(suiteTag))
     {
@@ -126,7 +126,7 @@ void QTestRegister::processCase(QTestSuite* suite)
 {
     QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
     suite->addTest(caze);
-
+    kDebug(9504) << caze->name();
     while (!atEnd() && !isEndElement_(caseTag))
     {
         readNext();
@@ -139,6 +139,8 @@ void QTestRegister::processCmd(QTestCase* caze)
 {
     QTestCommand* cmd = new QTestCommand(fetchName(), caze);
     caze->addTest(cmd);
+    kDebug(9504) << cmd->name();
+    kDebug(9504) << cmd->command();
 }
 
 QString QTestRegister::fetchName()
@@ -148,7 +150,10 @@ QString QTestRegister::fetchName()
 
 QFileInfo QTestRegister::fetchDir()
 {
-    return QFileInfo(attributes().value("dir").toString());
+    QString dir = attributes().value("dir").toString();
+    if (m_root != "")
+        dir = m_root + dir;
+    return QFileInfo(dir);
 }
 
 QFileInfo QTestRegister::fetchExe()

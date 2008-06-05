@@ -56,6 +56,7 @@ private: // helpers
 
 private: // state
     QList<QTestSuite*> m_suites;
+    QString m_root;
     const QString suiteTag;
     const QString caseTag;
     const QString cmdTag;

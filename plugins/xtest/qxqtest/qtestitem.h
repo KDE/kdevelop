@@ -25,7 +25,8 @@
 
 #include <QList>
 #include <QVariant>
-#include <QProcess>
+//#include <QProcess>
+#include <kprocess.h>
 
 namespace QxQTest
 {
@@ -43,8 +44,8 @@ private: // state
     QTestBase* m_test;
 
 private: // operations
-    void startProcess(QTestCommand* cmd, QProcess* proc);
-    int parseOutput(QProcess* proc);
+    void startProcess(QTestCommand* cmd, KProcess* proc);
+    int parseOutput(KProcess* proc);
 };
 
 } // end namespace QxQTest

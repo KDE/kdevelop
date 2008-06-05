@@ -19,6 +19,7 @@
  */
 
 #include "qtestbase.h"
+#include <QDebug>
 
 using QxQTest::QTestBase;
 

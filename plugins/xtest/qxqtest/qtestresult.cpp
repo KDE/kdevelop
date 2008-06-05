@@ -19,6 +19,7 @@
  */
 
 #include "qtestresult.h"
+#include <kdebug.h>
 
 using QxQTest::QTestResult;
 using QxRunner::RunnerResult;
@@ -73,3 +74,18 @@ bool QTestResult::isGood()
     return (m_state == QxRunner::NoResult) || (m_state == QxRunner::RunSuccess);
 }
 
+
+void QTestResult::log()
+{
+    QString result = "default";
+    switch(m_state)
+    {
+        case QxRunner::NoResult:
+            result = "not set"; break;
+        case QxRunner::RunSuccess: 
+            result = "success"; break;
+        case QxRunner::RunError:
+            result = "failed"; break;
+    }
+    kDebug(9504) << result;
+}

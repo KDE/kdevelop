@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root dir="/home/nix/KdeDev/kdevelop/build/">
+<suite name="cmake" dir="buildtools/managers/cmake/tests">
+	<case name="projectvisitortest" exe="cmakeprojectvisitortest.shell">
+		<command name="testRun" />
+	</case>
+	<case name="astfactorytest" exe="cmake-astfactorytest.shell">
+		<command name="testNonRegisteredObject" />
+		<command name="testUnregisterObject" />
+		<command name="testRegisteredObject" />
+		<command name="testCaseSensitivity" />
+		<command name="testCreateObject" />
+	</case>
+	<case name="cmake-cmakecondition" exe="cmake-cmakecondition.shell" >
+		<command name="testGoodParse" />
+	</case>
+	<case name="cmake-parsertest" exe="cmake-parsertest.shell" >
+		<command name="testLexerCreation" />
+		<command name="testLexerWithFile" />
+		<command name="testParserWithGoodData" />
+		<command name="testParserWithBadData" />
+	</case>
+	<case name="cmakeast-test" exe="cmakeast-test.shell" >
+		<command name="testAddExecutableGoodParse" />
+		<command name="testAddExecutableBadParse" />
+		<command name="testAddLibraryGoodParse" />
+		<command name="testAddLibraryBadParse" />
+		<command name="testAddSubdirectoryGoodParse" />
+		<command name="testAddSubdirectoryBadParse" />
+		<command name="testAddTestGoodParse" />
+		<command name="testAddTestBadParse" />
+		<command name="testAuxSourceDirectoryGoodParse" />
+		<command name="testAuxSourceDirectoryBadParse" />
+		<command name="testBreakGoodParse" />
+		<command name="testBreakBadParse" />
+		<command name="testBuildCommandGoodParse" />
+		<command name="testBuildCommandBadParse" />
+		<command name="testBuildNameGoodParse" />
+		<command name="testBuildNameBadParse" />
+		<command name="testCMakeMinimumRequiredGoodParse" />
+		<command name="testCMakeMinimumRequiredBadParse" />
+		<command name="testCMakePolicyGoodParse" />
+		<command name="testCMakePolicyBadParse" />
+		<command name="testConfigureFileGoodParse" />
+		<command name="testConfigureFileBadParse" />
+		<command name="testCreateTestSourcelistGoodParse" />
+		<command name="testCreateTestSourcelistBadParse" />
+		<command name="testEnableLanguageGoodParse" />
+		<command name="testEnableLanguageBadParse" />
+		<command name="testEnableTestingGoodParse" />
+		<command name="testEnableTestingBadParse" />
+		<command name="testExecProgramGoodParse" />
+		<command name="testExecProgramBadParse" />
+		<command name="testExecuteProcessGoodParse" />
+		<command name="testExecuteProcessBadParse" />
+		<command name="testExportGoodParse" />
+		<command name="testExportBadParse" />
+		<command name="testExportLibraryDepsGoodParse" />
+		<command name="testExportLibraryDepsBadParse" />
+		<command name="testFileGoodParse" />
+		<command name="testFileBadParse" />
+		<command name="testFindFileGoodParse" />
+		<command name="testFindFileBadParse" />
+		<command name="testFindLibraryGoodParse" />
+		<command name="testFindLibraryBadParse" />
+		<command name="testFindPackageGoodParse" />
+		<command name="testFindPackageBadParse" />
+		<command name="testFindPathGoodParse" />
+		<command name="testFindPathBadParse" />
+		<command name="testFindProgramGoodParse" />
+		<command name="testFindProgramBadParse" />
+		<command name="testFltkWrapUiGoodParse" />
+		<command name="testFltkWrapUiBadParse" />
+		<command name="testForeachGoodParse" />
+		<command name="testForeachBadParse" />
+		<command name="testGetCMakePropertyGoodParse" />
+		<command name="testGetCMakePropertyBadParse" />
+		<command name="testGetDirPropertyGoodParse" />
+		<command name="testGetDirPropertyBadParse" />
+		<command name="testGetFilenameComponentGoodParse" />
+		<command name="testGetFilenameComponentBadParse" />
+		<command name="testGetSourceFilePropGoodParse" />
+		<command name="testGetSourceFilePropBadParse" />
+		<command name="testGetTargetPropGoodParse" />
+		<command name="testGetTargetPropBadParse" />
+		<command name="testGetTestPropGoodParse" />
+		<command name="testGetTestPropBadParse" />
+		<command name="testIfGoodParse" />
+		<command name="testIfBadParse" />
+		<command name="testIncludeGoodParse" />
+		<command name="testIncludeBadParse" />
+		<command name="testIncludeDirectoriesGoodParse" />
+		<command name="testIncludeDirectoriesBadParse" />
+		<command name="testIncludeExternalMsProjectGoodParse" />
+		<command name="testIncludeExternalMsProjectBadParse" />
+		<command name="testIncludeRegularExpressionGoodParse" />
+		<command name="testIncludeRegularExpressionBadParse" />
+		<command name="testInstallGoodParse" />
+		<command name="testInstallBadParse" />
+		<command name="testInstallFilesGoodParse" />
+		<command name="testInstallFilesBadParse" />
+		<command name="testInstallProgramsGoodParse" />
+		<command name="testInstallProgramsBadParse" />
+		<command name="testInstallTargetsGoodParse" />
+		<command name="testInstallTargetsBadParse" />
+		<command name="testLinkDirectoriesGoodParse" />
+		<command name="testLinkDirectoriesBadParse" />
+		<command name="testLinkLibrariesGoodParse" />
+		<command name="testLinkLibrariesBadParse" />
+		<command name="testListGoodParse" />
+		<command name="testListBadParse" />
+		<command name="testLoadCacheGoodParse" />
+		<command name="testLoadCacheBadParse" />
+		<command name="testLoadCommandGoodParse" />
+		<command name="testLoadCommandBadParse" />
+		<command name="testMacroGoodParse" />
+		<command name="testMacroBadParse" />
+		<command name="testFunctionGoodParse" />
+		<command name="testFunctionBadParse" />
+		<command name="testMakeDirectoryGoodParse" />
+		<command name="testMakeDirectoryBadParse" />
+		<command name="testMarkAsAdvancedGoodParse" />
+		<command name="testMarkAsAdvancedBadParse" />
+		<command name="testMathGoodParse" />
+		<command name="testMathBadParse" />
+		<command name="testMessageGoodParse" />
+		<command name="testMessageBadParse" />
+		<command name="testOptionGoodParse" />
+		<command name="testOptionBadParse" />
+		<command name="testOutputRequiredFilesGoodParse" />
+		<command name="testOutputRequiredFilesBadParse" />
+		<command name="testProjectGoodParse" />
+		<command name="testProjectBadParse" />
+		<command name="testQtWrapCppGoodParse" />
+		<command name="testQtWrapCppBadParse" />
+		<command name="testQtWrapUiGoodParse" />
+		<command name="testQtWrapUiBadParse" />
+		<command name="testRemoveGoodParse" />
+		<command name="testRemoveBadParse" />
+		<command name="testRemoveDefinitionsGoodParse" />
+		<command name="testRemoveDefinitionsBadParse" />
+		<command name="testReturnGoodParse" />
+		<command name="testReturnBadParse" />
+		<command name="testSeparateArgumentsGoodParse" />
+		<command name="testSeparateArgumentsBadParse" />
+		<command name="testSetGoodParse" />
+		<command name="testSetBadParse" />
+		<command name="testSetDirectoryPropsGoodParse" />
+		<command name="testSetDirectoryPropsBadParse" />
+		<command name="testSetSourceFilesPropsGoodParse" />
+		<command name="testSetSourceFilesPropsBadParse" />
+		<command name="testSetTargetPropsGoodParse" />
+		<command name="testSetTargetPropsBadParse" />
+		<command name="testSetTestsPropsGoodParse" />
+		<command name="testSetTestsPropsBadParse" />
+		<command name="testSiteNameGoodParse" />
+		<command name="testSiteNameBadParse" />
+		<command name="testSourceGroupGoodParse" />
+		<command name="testSourceGroupBadParse" />
+		<command name="testStringGoodParse" />
+		<command name="testStringBadParse" />
+		<command name="testSubdirDependsGoodParse" />
+		<command name="testSubdirDependsBadParse" />
+		<command name="testSubdirsGoodParse" />
+		<command name="testSubdirsBadParse" />
+		<command name="testTargetLinkLibrariesGoodParse" />
+		<command name="testTargetLinkLibrariesBadParse" />
+		<command name="testTryCompileGoodParse" />
+		<command name="testTryCompileBadParse" />
+		<command name="testTryRunGoodParse" />
+		<command name="testTryRunBadParse" />
+		<command name="testUseMangledMesaGoodParse" />
+		<command name="testUseMangledMesaBadParse" />
+		<command name="testUtilitySourceGoodParse" />
+		<command name="testUtilitySourceBadParse" />
+		<command name="testVariableRequiresGoodParse" />
+		<command name="testVariableRequiresBadParse" />
+		<command name="testVtkMakeInstantiatorGoodParse" />
+		<command name="testVtkMakeInstantiatorBadParse" />
+		<command name="testVtkWrapJavaGoodParse" />
+		<command name="testVtkWrapJavaBadParse" />
+		<command name="testVtkWrapPythonGoodParse" />
+		<command name="testVtkWrapPythonBadParse" />
+		<command name="testVtkWrapTclGoodParse" />
+		<command name="testVtkWrapTclBadParse" />
+		<command name="testWhileGoodParse" />
+		<command name="testWhileBadParse" />
+		<command name="testWriteFileGoodParse" />
+		<command name="testWriteFileBadParse" />
+	</case>
+	<case name="cmakecompliance" exe="cmakecompliance.shell" >
+		<command name="testEnumerate" />
+	</case>
+	<case name="cmakeduchaintest" exe="cmakeduchaintest.shell" >
+		<command name="testDUChainWalk" />
+		<command name="testUses" />
+	</case>
+	<case name="cmakeparserutilstest" exe="cmakeparserutilstest.shell" >
+		<command name="validVersionsTest" />
+		<command name="invalidVersionsTest" />
+	</case>
+</suite>
+<suite name="qmake" dir="buildtools/managers/qmake/parser/tests">
+	<case name="qmake-scopetest" exe="qmake-scopetest.shell" >
+		<command name="basicScope" />
+		<command name="basicScopeBrace" />
+		<command name="nestedScope" />
+		<command name="missingStatement" />
+		<command name="missingColon" />
+	</case>
+	<case name="qmake-assignmenttest" exe="qmake-assignmenttest.shell" >
+		<command name="simpleParsed" />
+		<command name="assignInValue" />
+		<command name="commentCont" />
+		<command name="quotedBrace" />
+		<command name="quotedVal" />
+		<command name="quotedValEscapeQuote" />
+		<command name="dotVariable" />
+		<command name="underscoreVariable" />
+		<command name="dashVariable" />
+		<command name="opNoSpace" />
+		<command name="opPlusEq" />
+		<command name="opTildeEq" />
+		<command name="opMinusEq" />
+		<command name="opStarEq" />
+		<command name="opEqual" />
+		<command name="otherVarSimple" />
+		<command name="otherVarBrace" />
+		<command name="otherVarBracket" />
+		<command name="shellVar" />
+		<command name="commandExec" />
+		<command name="bracketVarQuote" />
+		<command name="pathValue" />
+		<command name="varNameDollar" />
+		<command name="commentInMultiline" />
+		<command name="commandExecQMakeVar" />
+		<command name="varComment" />
+		<command name="noDashEndVar" />
+		<command name="contAfterComment" />
+	</case>
+	<case name="qmake-functionscopetest" exe="qmake-functionscopetest.shell" >
+		<command name="execSimpleFunc" />
+		<command name="execBasicFunc" />
+		<command name="evalQMakeSyntax" />
+		<command name="simpleVarArg" />
+		<command name="argWithEqual" />
+		<command name="partlyQuotedArg" />
+		<command name="slashArg" />
+		<command name="oneStatementScope" />
+		<command name="nestedFunccalls" />
+		<command name="multiLineScope" />
+		<command name="multiLineScopeFuncCall" />
+		<command name="oneStatementSubScope" />
+		<command name="notFunc" />
+		<command name="orOperator" />
+		<command name="spaceBeforeBrace" />
+		<command name="missingStatement" />
+		<command name="missingBrace" />
+		<command name="missingParenthesis" />
+	</case>
+	<case name="qmake-lexertest" exe="qmake-lexertest.shell" >
+		<command name="varAssignment" />
+		<command name="operators" />
+		<command name="scope" />
+		<command name="functions" />
+	</case>
+	<case name="qmake-parsetest" exe="qmake-parsetest.shell" >
+		<command name="successSimpleProject" />
+		<command name="failSimpleProject" />
+		<command name="successFullProject" />
+		<command name="failFullProject" />
+	</case>
+</suite>
+<suite name="cpp-parser" dir="languages/cpp/parser/tests">
+	<case name="pooltest" exe="pooltest.shell" >
+		<command name="testSimpleAllocation" />
+		<command name="testObjectAllocation" />
+		<command name="testNewBlockAllocation" />
+		<command name="testWastedMemoryDueToBlockAllocation" />
+		<command name="testStdlibCompliance" />
+	</case>
+	<case name="parsertest" exe="parsertest.shell" >
+		<command name="testSymbolTable" />
+		<command name="testTokenTable" />
+		<command name="testParser" />
+		<command name="testParserFail" />
+		<command name="testParseMethod" />
+		<command name="testForStatements" />
+		<command name="testIfStatements" />
+		<command name="testComments" />
+		<command name="testComments2" />
+		<command name="testComments3" />
+		<command name="testComments4" />
+		<command name="testPreprocessor" />
+		<command name="testStringConcatenation" />
+	</case>
+</suite>
+<suite name="cppduchain" dir="languages/cpp/cppduchain/tests">
+	<case name="duchaintest" exe="duchaintest.shell" >
+		<command name="testIdentifiers" />
+		<command name="testContextRelationships" />
+		<command name="testDeclareInt" />
+		<command name="testIntegralTypes" />
+		<command name="testArrayType" />
+		<command name="testDeclareFor" />
+		<command name="testVariableDeclaration" />
+		<command name="testDeclareStruct" />
+		<command name="testDeclareClass" />
+		<command name="testDeclareFriend" />
+		<command name="testDeclareNamespace" />
+		<command name="testDeclareUsingNamespace" />
+		<command name="testDeclareUsingNamespace2" />
+		<command name="testSearchAcrossNamespace" />
+		<command name="testSearchAcrossNamespace2" />
+		<command name="testTemplateEnums" />
+		<command name="testIntegralTemplates" />
+		<command name="testTypedef" />
+		<command name="testTemplateDependentClass" />
+		<command name="testTemplateFunctions" />
+		<command name="testTypedefUses" />
+		<command name="testTemplates" />
+		<command name="testTemplates2" />
+		<command name="testTemplatesRebind" />
+		<command name="testTemplatesRebind2" />
+		<command name="testTemplateDefaultParameters" />
+		<command name="testFunctionTemplates" />
+		<command name="testContextAssignment" />
+		<command name="testSpecializedTemplates" />
+		<command name="testFunctionDefinition" />
+		<command name="testFunctionDefinition2" />
+		<command name="testFunctionDefinition3" />
+		<command name="testFunctionDefinition4" />
+		<command name="testFunctionDefinition5" />
+		<command name="testBaseClasses" />
+		<command name="testForwardDeclaration" />
+		<command name="testForwardDeclaration2" />
+		<command name="testForwardDeclaration3" />
+		<command name="testTemplateForwardDeclaration" />
+		<command name="testTemplateForwardDeclaration2" />
+		<command name="testHashedStringRepository" />
+		<command name="testEnum" />
+		<command name="testCaseUse" />
+		<command name="testDefinitionUse" />
+		<command name="testImportStructure" />
+		<command name="testDeclareSubClass" />
+		<command name="testCStruct" />
+		<command name="testCStruct2" />
+	</case>
+	<case name="cppexpressionparsertest" exe="cppexpressionparsertest.shell" >
+		<command name="testSimpleExpression" />
+		<command name="testTypeConversion" />
+		<command name="testSmartPointer" />
+		<command name="testCasts" />
+		<command name="testBaseClasses" />
+		<command name="testTemplatesSimple" />
+		<command name="testTemplates" />
+		<command name="testOperators" />
+		<command name="testTemplateFunctions" />
+		<command name="testThis" />
+		<command name="testArray" />
+		<command name="testDynamicArray" />
+	</case>
+</suite>
+<suite name="cpp" dir="languages/cpp/tests">
+	<case name="cppcodecompletiontest" exe="cppcodecompletiontest.shell" >
+		<command name="testInclude" />
+		<command name="testTypeConversion" />
+		<command name="testCompletionContext" />
+		<command name="testUpdateChain" />
+		<command name="testHeaderSections" />
+		<command name="testForwardDeclaration" />
+		<command name="testAcrossHeaderReferences" />
+		<command name="testAcrossHeaderTemplateReferences" />
+		<command name="testEnvironmentMatching" />
+		<command name="testUsesThroughMacros" />
+		<command name="testMacroExpansionRanges" />
+	</case>
+</suite>
+<suite name="qxrunner" dir="plugins/xtest/qxrunner/tests">
+	<case name="qxrunner-ut-runnerproxymodel" exe="qxrunner-ut-runnerproxymodel.shell" >
+		<command name="default_" />
+		<command name="enableColumns" />
+		<command name="disableColumn" />
+		<command name="errorHandling" />
+	</case>
+	<case name="qxrunner-it-runnerwindow" exe="qxrunner-it-runnerwindow.shell" >
+		<command name="startItems" />
+		<command name="stopPremature" />
+		<command name="deselectItems" />
+	</case>
+	<case name="qxrunner-ut-proxymodelcommon" exe="qxrunner-ut-proxymodelcommon.shell" >
+		<command name="active" />
+		<command name="defaultEnabled" />
+		<command name="enabledColumns" />
+	</case>
+	<case name="qxrunner-ut-resultsmodel" exe="qxrunner-ut-resultsmodel.shell" >
+		<command name="default_" />
+		<command name="appendResults" />
+		<command name="mapIndices" />
+		<command name="errorHandling" />
+	</case>
+	<case name="qxrunner-ut-resultsproxymodel" exe="qxrunner-ut-resultsproxymodel.shell" >
+		<command name="default_" />
+		<command name="deactivate" />
+		<command name="enableColumns" />
+		<command name="disableColumn" />
+		<command name="filter" />
+	</case>
+	<case name="qxrunner-ut-runneritem" exe="qxrunner-ut-runneritem.shell" >
+		<command name="simpleRoot" />
+		<command name="multipleColumns" />
+		<command name="accessIllegalColumn" />
+		<command name="resetValue" />
+		<command name="appendChildren" />
+	</case>
+	<case name="qxrunner-ut-runnermodel" exe="qxrunner-ut-runnermodel.shell" >
+		<command name="default_" />
+		<command name="appendResults" />
+		<command name="changeItems" />
+		<command name="flags" />
+		<command name="changeChecked" />
+		<command name="runItems" />
+		<command name="errorHandling" />
+		<command name="countItems" />
+	</case>
+</suite>
+<suite name="qxqtest" dir="plugins/xtest/qxqtest/tests">
+	<case name="qxrunner-ut-testsuite" exe="qxrunner-ut-testsuite.shell" >
+		<command name="construct" />
+		<command name="addChildCase" />
+		<command name="addChildCases" />
+	</case>
+	<case name="qxrunner-ut-qtestxmlparser" exe="qxrunner-ut-qtestxmlparser.shell" >
+		<command name="parse" />
+	</case>
+	<case name="qxrunner-ut-testbase" exe="qxrunner-ut-testbase.shell" >
+		<command name="construct" />
+	</case>
+	<case name="qxrunner-ut-testcase" exe="qxrunner-ut-testcase.shell" >
+		<command name="constructDefault" />
+		<command name="construct" />
+		<command name="addCommand" />
+		<command name="addCommands" />
+	</case>
+	<case name="qxrunner-ut-testcommand" exe="qxrunner-ut-testcommand.shell" >
+		<command name="constructDefault" />
+		<command name="construct" />
+		<command name="cmdString" />
+		<command name="cmdStringNoParent" />
+		<command name="cmdStringNoSuite" />
+	</case>
+	<case name="qxrunner-ut-testregister" exe="qxrunner-ut-testregister.shell" >
+		<command name="parseSuiteXml" />
+		<command name="parseMultiSuitesXml" />
+		<command name="parseCaseXml" />
+		<command name="parseMultiCaseXml" />
+		<command name="parseCmdXml" />
+		<command name="parseMultiCmdXMl" />
+	</case>
+</suite>
+</root>

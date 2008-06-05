@@ -46,6 +46,7 @@ private:
     bool isStartElement_(const char* elem);
     bool isEndElement_(const char* elem);
     void setFailure();
+    void setSuccess();
 
 private:
     QTestResult m_result;

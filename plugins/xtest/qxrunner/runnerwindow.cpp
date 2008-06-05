@@ -62,7 +62,7 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 
     // Adjust GUI.
     m_ui.actionMinimalUpdate->setCheckable(true);
-    resultsView()->header()->setResizeMode(QHeaderView::Stretch);
+    //resultsView()->header()->setResizeMode(QHeaderView::Stretch);
 
     // Replace results menu item which serves as a placeholder
     // for the action from the dock widget.
@@ -284,7 +284,8 @@ void RunnerWindow::setModel(RunnerModel* model)
         }
     }
 
-    for (int i = 2; i < columnCount; i++) {
+    for (int i = 1; i < columnCount; i++) {
+        // hide all runner columns
         runnerView()->hideColumn(i);
     }
 
