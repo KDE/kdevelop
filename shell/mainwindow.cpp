@@ -91,7 +91,6 @@ MainWindow::~ MainWindow()
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
 }
 
-// TODO why doesn't called automatically when the settings are changed??
 void MainWindow::loadSettings()
 {
     kDebug(9501) << "Loading Settings";
