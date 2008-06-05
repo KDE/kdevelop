@@ -48,7 +48,7 @@ class DUContext;
 class DUContextPrivate;
 
 //Foreach macro that also works with QVarLengthArray
-#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0) 
+#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)
 
 ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
 struct ImportTraceItem {
@@ -89,9 +89,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
 public:
   /**
    * Constructor. No convenience methods, as the initialisation order is important,
-   * 
+   *
    * @param anonymous Whether the context should be added as an anonymous context to the parent. That way the context can never be found through any of the parent's member-functions.
-   * 
+   *
    * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
   explicit DUContext(const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
@@ -170,7 +170,7 @@ public:
    * This is much more efficient than computing the identifiers through scopeIdentifier(..) and comparing them
    * */
   bool equalScopeIdentifier(const DUContext* rhs) const;
-  
+
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context.
    * This is the part relative to the parent context.
@@ -398,7 +398,7 @@ public:
     * To save memory, smart-ranges are only attached to the uses when the document is actually loaded.
     * Uses need to be ordered by their appearance.
     * */
-  
+
   /**
    * Return a list of all uses which occur in this context.
    * When the uses have smart-ranges attached, those are synced in the moment that uses() is called, so you should
@@ -412,19 +412,19 @@ public:
    * @return The local index of the use, or -1
    */
   int findUseAt(const SimpleCursor& position) const;
-  
+
   /**
    * Returns the SmartRange assigned to the given use, or zero.
    * */
   KTextEditor::SmartRange* useSmartRange(int useIndex);
-  
+
   /**
    * Assigns the given SmartRange to the given use.
    * If one use gets a smart range, all uses need to get a smart range.
    * The ownership of the range is given to this context.
    * */
   void setUseSmartRange(int useIndex, KTextEditor::SmartRange* range);
-  
+
   /**
    * Assigns the declaration represented by @param declarationIndex to the use with index @param useIndex
    * */
@@ -447,7 +447,7 @@ public:
    * Deletes the use number @param index . index is the position in the vector of uses, not a used declaration index.
    * */
   void deleteUse(int index);
-  
+
   /**
    * Clear and delete all uses in this context.
    */
@@ -473,7 +473,7 @@ public:
 ///A SearchItem generally represents a tree of identifiers, and represents all the qualified identifiers that can be constructed by walking
 ///along the tree starting at an arbitrary root-node into the depth using the "next" pointers.
 ///The insertion order in the hierarchy determines the order of the represented list.
-struct SearchItem : public KShared {
+struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 
   typedef KSharedPtr<SearchItem> Ptr;
   typedef QVarLengthArray<Ptr, 256> PtrList; ///@todo find out why this QVarLengthArray crashes when it's resized!
@@ -481,17 +481,17 @@ struct SearchItem : public KShared {
   ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
   ///@param nextItem is set as next item to the last item in the chain
   SearchItem(const QualifiedIdentifier& id, Ptr nextItem = Ptr(), int start = 0);
-  
+
   ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
   ///@param nextItem is set as next item to the last item in the chain
   SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start = 0);
 
   SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems);
   SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem);
-  
+
   bool isEmpty() const;
   bool hasNext() const;
-  
+
   ///Appends the given item to every item that can be reached from this item(Not only to the end items)
   ///The effect to search is that the given item is searched with all prefixes contained in this earch-item prepended.
   ///@warning This changes all contained sub-nodes, but they can be shared with other SearchItem trees. You should not
@@ -499,20 +499,20 @@ struct SearchItem : public KShared {
   ///These functions ignore explicitly global items.
   void addToEachNode(Ptr item);
   void addToEachNode(PtrList items);
-  
+
   ///Returns true if the given identifier matches one of the identifiers represented by this SearchItem. Does not respect the explicitlyGlobal flag
   bool match(const QualifiedIdentifier& id, int offset = 0) const;
-  
+
   //Expensive
   QList<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix=QualifiedIdentifier()) const;
-  
+
   void addNext(SearchItem::Ptr other);
-  
+
   bool isExplicitlyGlobal;
   Identifier identifier;
   PtrList next;
-};  
-  
+};
+
   ///@todo Should be protected, moved here temporarily until I have figured out why the gcc 4.1.3 fails in cppducontext.h:212, which should work (within kdevelop)
   /// Declaration search implementation
   /**
@@ -533,7 +533,7 @@ struct SearchItem : public KShared {
 
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
-  
+
   protected:
 
   /**
@@ -565,18 +565,18 @@ struct SearchItem : public KShared {
    * For C++, this is needed when searching out of a namespace, so the item can be found within that namespace in another place.
    * */
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
-  
+
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
-  
+
   /**
    * This is called whenever the search needs to do the decision whether it should be continued in the parent context.
    * It is not called when the DontSearchInParent flag is set. Else this should be overriden to do language-specific logic.
    * The default implementation returns false if the flag InImportedParentContext is set.
    * */
   virtual bool shouldSearchInParent(SearchFlags flags) const;
-  
+
 private:
-  
+
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);
   virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2);
   virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
