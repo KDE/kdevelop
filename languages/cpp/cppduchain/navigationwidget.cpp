@@ -377,7 +377,7 @@ class NavigationContext : public KShared {
                 
                 if(argumentContext) {
                   QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
-                  int firstDefaultParam = type->arguments().count() - function->defaultParameters().count();
+                  int firstDefaultParam = argumentContext->localDeclarations().count() - function->defaultParameters().count();
                   int currentArgNum = 0;
 
                   foreach(Declaration* argument, argumentContext->localDeclarations()) {
