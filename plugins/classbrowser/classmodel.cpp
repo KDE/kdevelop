@@ -38,6 +38,8 @@
 #include "classbrowserplugin.h"
 #include "topducontext.h"
 #include "declaration.h"
+#include "classmemberdeclaration.h"
+#include "classfunctiondeclaration.h"
 #include "parsingenvironment.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -204,6 +206,9 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
     return true;
 
   if (Declaration* definition = dynamic_cast<Declaration*>(parent->data())) {
+    if (definition->kind() == Declaration::Instance)
+      return false;
+      
     AbstractType::Ptr type = definition->abstractType();
     if (type)
       if (type->whichType() == AbstractType::TypeStructure)
@@ -239,29 +244,51 @@ QModelIndex ClassModel::parent(const QModelIndex & index) const
   return indexForObject(base->parent());
 }
 
-int typeScore(AbstractType::WhichType type)
+int declarationScore(Declaration* d)
 {
-  switch (type) {
+  if (dynamic_cast<ClassFunctionDeclaration*>(d))
+    return 1;
+
+  if (dynamic_cast<ClassMemberDeclaration*>(d))
+    return 2;
+
+  if (dynamic_cast<AbstractFunctionDeclaration*>(d))
+    return 1;
+  
+  return 0;
+}
+
+int typeScore(Declaration* d)
+{
+  int ret = 0;
+  
+  if (d->kind() == Declaration::Instance)
+    return 4;
+
+  switch (d->abstractType()->whichType()) {
     case AbstractType::TypeIntegral:
-      return 2;
+      ret += 2;
     case AbstractType::TypePointer:
-      return 2;
+      ret += 2;
     case AbstractType::TypeReference:
-      return 2;
+      ret += 2;
     case AbstractType::TypeFunction:
-      return 1;
+      ret += 1;
     case AbstractType::TypeStructure:
-      return 0;
+      ret += 0;
     case AbstractType::TypeArray:
-      return 2;
+      ret += 2;
     case AbstractType::TypeDelayed:
-      return 3;
+      ret += 3;
     case AbstractType::TypeForward:
-      return 3;
+      ret += 3;
     case AbstractType::TypeAbstract:
-      return 3;
+      ret += 3;
+    default:
+      ret += 5;
   }
-  return 100;
+
+  return ret;
 }
 
 bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
@@ -282,12 +309,26 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
   
   if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
+      if (d->kind() != d2->kind())
+        if (d->kind() == Declaration::Instance)
+          return false;
+        else
+          return true;
+
+      int declarationScore1, declarationScore2;
+      declarationScore1 = declarationScore( d );
+      declarationScore2 = declarationScore( d2 );
+      if (declarationScore1 < declarationScore2)
+        return true;
+      if (declarationScore1 > declarationScore2)
+        return false;
+      
       if (d->abstractType()) {
         if (d2->abstractType()) {
-          if (d->abstractType() != d2->abstractType()) {
+          if (d->abstractType() != d2->abstractType()) {              
             int typeScore1, typeScore2;
-            typeScore1 = typeScore(d->abstractType()->whichType());
-            typeScore2 = typeScore(d2->abstractType()->whichType());
+            typeScore1 = typeScore(d);
+            typeScore2 = typeScore(d2);
             if (typeScore1 < typeScore2)
               return true;
             else if (typeScore1 > typeScore2)

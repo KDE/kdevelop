@@ -71,6 +71,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
   }
 
   if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
+    p |= CodeCompletionModel::Function;
     if (function->isVirtual())
       p |= CodeCompletionModel::Virtual;
     if (function->isInline())
@@ -126,15 +127,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
 {
   QString iconName;
 
-  if( (p & CodeCompletionModel::Variable) )
-    if( (p & CodeCompletionModel::Protected) )
-      iconName = "CVprotected_var";
-    else if( p & CodeCompletionModel::Private )
-      iconName = "CVprivate_var";
-    else
-      iconName = "CVpublic_var";
-
-  else if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
+  if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
     iconName = "protected_union";
 
   else if( p & CodeCompletionModel::Enum )
@@ -193,13 +186,21 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
     else
       iconName = "function";
 
+  else if( (p & CodeCompletionModel::Variable) )
+    if( (p & CodeCompletionModel::Protected) )
+      iconName = "CVprotected_var";
+    else if( p & CodeCompletionModel::Private )
+      iconName = "CVprivate_var";
+    else
+      iconName = "CVpublic_var";
+
   else if( p & CodeCompletionModel::Protected )
     iconName = "protected_field";
   else if( p & CodeCompletionModel::Private )
     iconName = "private_field";
   else
     iconName = "field";
-
+  
   return KIcon(iconName);
 }
 
