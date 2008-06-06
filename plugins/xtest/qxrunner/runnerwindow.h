@@ -87,7 +87,7 @@ public: // Operations
      * Constructs a runner window with the given \a parent and the
      * specified widget \a flags.
      */
-    RunnerWindow(QWidget* parent = 0, Qt::WFlags flags = 0);
+    explicit RunnerWindow(QWidget* parent = 0, Qt::WFlags flags = 0);
 
     /*!
      * Destroys this runner window.
@@ -258,7 +258,7 @@ private slots:
     void runItems();
 
     /*!
-     * Stops item execution. If first stopping attempt isn't successfull
+     * Stops item execution. If first stopping attempt isn't successful
      * the StoppingDialog is shown.
      */
     void stopItems();

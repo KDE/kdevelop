@@ -92,7 +92,7 @@ public: // Operations
     void run();
 
     /*!
-     * Dont start a full application, just construct the widget
+     * Don not start a full application, just construct the widget
      */
     QWidget* spawn();
 

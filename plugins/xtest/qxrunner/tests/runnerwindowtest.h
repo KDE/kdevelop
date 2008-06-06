@@ -21,7 +21,6 @@
 #ifndef QXRUNNER_RUNNERWINDOWTEST_H
 #define QXRUNNER_RUNNERWINDOWTEST_H
 
-#include <QtGui>
 #include <QtTest/QtTest>
 #include <ui_statuswidget.h>
 

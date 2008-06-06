@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_QTESTTITEM_H
+#ifndef QXQTEST_QTESTITEM_H
 #define QXQTEST_QTESTITEM_H
 
 #include <qxrunner/runneritem.h>
@@ -36,7 +36,7 @@ class QTestCommand;
 class QTestItem : public QxRunner::RunnerItem
 {
 public:
-    QTestItem(const QList<QVariant>& data, QxRunner::RunnerItem* parent = 0, QTestBase* test = 0);
+    explicit QTestItem(const QList<QVariant>& data, QxRunner::RunnerItem* parent = 0, QTestBase* test = 0);
     virtual ~QTestItem();
     int run();
 

@@ -18,13 +18,13 @@
  * 02110-1301, USA.
  */
 
+#include "runnerwindowtest.h"
+#include "modelcreation.h"
+
 #include <runnerwindow.h>
 #include <runnermodel.h>
 #include <qtest_kde.h>
-
 #include <kasserts.h>
-#include "runnerwindowtest.h"
-#include "modelcreation.h"
 
 using QxRunner::RunnerWindow;
 using QxRunner::RunnerItem;
@@ -84,7 +84,7 @@ void RunnerWindowTest::stopPremature()
 {
     // invoke the run action
     window->ui().actionStart->trigger();
-    // cancel immediatly
+    // cancel immediately
     window->ui().actionStop->trigger();
     // soft stop, so one still gets completed
     KOMPARE(QString("1"), status->labelNumRun->text());
@@ -93,7 +93,7 @@ void RunnerWindowTest::stopPremature()
 void RunnerWindowTest::deselectItems()
 {
     // select only one of the runner items
-    // validate that the other one didnt get executed
+    // validate that the other one didn't get executed
     KTODO;
 }
 

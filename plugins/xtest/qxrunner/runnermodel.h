@@ -75,7 +75,7 @@ public:  // Operations
     /*!
      * Constructs a runner model with the given \a parent.
      */
-    RunnerModel(QObject* parent = 0);
+    explicit RunnerModel(QObject* parent = 0);
 
     /*!
      * Destroys this runner model. Ongoing runner item execution is
@@ -454,7 +454,7 @@ class ItemStateChangedEvent : public QEvent
     {
     public: // Operations
 
-        ItemStateChangedEvent(const QModelIndex& index,
+        explicit ItemStateChangedEvent(const QModelIndex& index,
                               QEvent::Type type = (QEvent::Type)ItemStateChanged)
                 : QEvent(type), m_index(index) {}
 

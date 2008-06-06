@@ -18,11 +18,12 @@
  * 02110-1301, USA.
  */
 
+#include "resultsproxymodeltest.h"
+#include "modelcreation.h"
+
 #include <resultsproxymodel.h>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "resultsproxymodeltest.h"
-#include "modelcreation.h"
 
 using QxRunner::ResultsProxyModel;
 using QxRunner::ResultsModel;

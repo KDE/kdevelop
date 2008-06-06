@@ -18,11 +18,12 @@
  * 02110-1301, USA.
  */
 
+#include "runnerproxymodeltest.h"
+#include "modelcreation.h"
 #include <runnerproxymodel.h>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "runnerproxymodeltest.h"
-#include "modelcreation.h"
+
 
 using QxRunner::RunnerProxyModel;
 using ModelCreation::createRunnerModelStub;

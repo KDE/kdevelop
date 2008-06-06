@@ -56,7 +56,7 @@ public: // Operations
      * Constructs a results model with the given \a headerData and
      * \a parent.
      */
-    ResultsModel(const QStringList& headerData, QObject* parent = 0);
+    explicit ResultsModel(const QStringList& headerData, QObject* parent = 0);
 
     /*!
      * Destroys this results model.

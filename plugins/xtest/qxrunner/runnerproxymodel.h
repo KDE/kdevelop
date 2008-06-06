@@ -25,8 +25,8 @@
  * \brief Declares class RunnerProxyModel.
  */
 
-#ifndef RUNNERROXYMODEL_H
-#define RUNNERROXYMODEL_H
+#ifndef QXRUNNER_RUNNERPROXYMODEL_H
+#define QXRUNNER_RUNNERPROXYMODEL_H
 
 #include "proxymodelcommon.h"
 
@@ -77,4 +77,4 @@ private: // Operations
 
 } // namespace
 
-#endif // RUNNERROXYMODEL_H
+#endif // QXRUNNER_RUNNERPROXYMODEL_H

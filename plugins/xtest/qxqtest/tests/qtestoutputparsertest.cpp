@@ -18,14 +18,11 @@
  * 02110-1301, USA.
  */
 
+#include "qtestoutputparsertest.h"
 #include <qtestoutputparser.h>
 #include <qtestresult.h>
-
-#include "qtestoutputparsertest.h"
-
 #include <qtest_kde.h>
 #include <kasserts.h>
-
 #include <QBuffer>
 #include <QMetaType>
 #include <QFileInfo>

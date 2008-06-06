@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#include <kasserts.h>
 #include "qtestbasetest.h"
+#include <kasserts.h>
 #include <qtest_kde.h>
 
 using QxQTest::QTestBase;

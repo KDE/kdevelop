@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
+#include "resultviewcontrollertest.h"
 #include <resultsviewcontroller.h>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "resultviewcontrollertest.h"
 
 using QxRunner::ResultViewController;
 

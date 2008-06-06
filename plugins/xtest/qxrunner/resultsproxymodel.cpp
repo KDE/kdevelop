@@ -25,10 +25,9 @@
  * \brief Implements class ResultsProxyModel.
  */
 
-#include <QDebug>
-
 #include "resultsproxymodel.h"
 #include "resultsmodel.h"
+#include <QDebug>
 
 namespace QxRunner
 {

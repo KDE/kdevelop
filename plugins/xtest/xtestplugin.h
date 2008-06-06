@@ -18,6 +18,9 @@
  * 02110-1301, USA.
  */
 
+#ifndef XTEST_XTESTPLUGIN_H
+#define XTEST_XTESTPLUGIN_H
+
 #include <interfaces/iplugin.h>
 #include <QVariantList>
 
@@ -29,10 +32,12 @@ class KDevXtestPluginFactory;
 class KDevXtestPlugin : public KDevelop::IPlugin
 {
 public:
-    KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
+    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~KDevXtestPlugin();
     Qt::DockWidgetArea dockWidgetAreaHint() const;
 
 private:
     KDevXtestPluginFactory* m_xtestFactory;
 };
+
+#endif // XTEST_XTESTPLUGIN_H

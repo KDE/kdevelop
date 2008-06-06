@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
-#include <utils.h>
-
-#include <kasserts.h>
 #include "utilstest.h"
+#include <utils.h>
+#include <kasserts.h>
+
 
 using QxRunner::Utils;
 

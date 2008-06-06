@@ -18,6 +18,9 @@
  * 02110-1301, USA.
  */
 
+#include "runnermodeltest.h"
+#include "modelcreation.h"
+
 #include <runnermodel.h>
 #include <runneritem.h>
 
@@ -27,8 +30,6 @@
 #include <QMap>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "runnermodeltest.h"
-#include "modelcreation.h"
 
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
@@ -207,9 +208,9 @@ void RunnerModelTest::assertItemChecked(int row, bool checked)
 void RunnerModelTest::verifyRowContent(int index)
 {
     QString rowStr = QString::number(index);
-    assertDataAt(rowStr + "0", index, 0);
-    assertDataAt(rowStr + "1", index, 1);
-    assertDataAt(rowStr + "2", index, 2);
+    assertDataAt(rowStr + '0', index, 0);
+    assertDataAt(rowStr + '1', index, 1);
+    assertDataAt(rowStr + '2', index, 2);
     assertItemChecked(index, true);
 
     KOMPARE(0, model->rowCount(model->index(index,0))); // no children

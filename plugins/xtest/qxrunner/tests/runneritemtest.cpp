@@ -18,11 +18,11 @@
  * 02110-1301, USA.
  */
 
+#include "runneritemtest.h"
 #include <runneritem.h>
-#include <QString>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "runneritemtest.h"
+#include <QString>
 
 using QxRunner::RunnerItem;
 

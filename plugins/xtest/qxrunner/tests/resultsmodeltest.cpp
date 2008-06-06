@@ -18,6 +18,9 @@
  * 02110-1301, USA.
  */
 
+#include "resultsmodeltest.h"
+#include "modelcreation.h"
+#include <kasserts.h>
 #include <resultsmodel.h>
 #include <runnermodel.h>
 #include <runneritem.h>
@@ -27,9 +30,7 @@
 #include <QStringList>
 #include <qtest_kde.h>
 
-#include <kasserts.h>
-#include "resultsmodeltest.h"
-#include "modelcreation.h"
+
 
 using QxRunner::ResultsModel;
 using QxRunner::RunnerModel;
@@ -142,9 +143,9 @@ void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int colum
 void ResultsModelTest::checkRow(int index)
 {
     QString rowStr = QString::number(index);
-    assertDataAt(rowStr + "0", index, 0);
-    assertDataAt(rowStr + "1", index, 1);
-    assertDataAt(rowStr + "2", index, 2);
+    assertDataAt(rowStr + '0', index, 0);
+    assertDataAt(rowStr + '1', index, 1);
+    assertDataAt(rowStr + '2', index, 2);
 }
 
 void ResultsModelTest::fillRows()

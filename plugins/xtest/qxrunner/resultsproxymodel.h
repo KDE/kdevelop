@@ -62,7 +62,7 @@ public: // Operations
      * Constructs a results proxy model with the given \a parent and
      * \a filter.
      */
-    ResultsProxyModel(QObject* parent, int filter = QxRunner::AllResults);
+    explicit ResultsProxyModel(QObject* parent, int filter = QxRunner::AllResults);
 
     /*!
      * Destroys this results proxy model.

@@ -56,8 +56,8 @@ public: // Operations
      * Constructs a CppUnit item for one individual \a test with the
      * test name in \a data and the given \a parent.
      */
-    CppUnitItem(const QList<QVariant>& data, RunnerItem* parent = 0,
-                CPPUNIT_NS::Test* test = 0);
+    explicit CppUnitItem(const QList<QVariant>& data, RunnerItem* parent = 0,
+                         CPPUNIT_NS::Test* test = 0);
 
     /*!
      * Destroys this CppUnit item.

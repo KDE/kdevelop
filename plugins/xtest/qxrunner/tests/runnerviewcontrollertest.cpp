@@ -18,14 +18,14 @@
  * 02110-1301, USA.
  */
 
+#include "runnerviewcontrollertest.h"
+#include "modelcreation.h"
 #include <runnerviewcontroller.h>
 #include <runnerproxymodel.h>
 #include <ui_runnerwindow.h>
 #include <QMainWindow>
 #include <qtest_kde.h>
 #include <kasserts.h>
-#include "runnerviewcontrollertest.h"
-#include "modelcreation.h"
 
 using QxRunner::RunnerViewController;
 using QxRunner::RunnerProxyModel;

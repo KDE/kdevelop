@@ -32,7 +32,7 @@ class QTestResult
 {
 
 public:
-    QTestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=-1, QFileInfo=QFileInfo(""));
+    explicit QTestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=-1, QFileInfo=QFileInfo(""));
 
     QxRunner::RunnerResult state();
     QString message();

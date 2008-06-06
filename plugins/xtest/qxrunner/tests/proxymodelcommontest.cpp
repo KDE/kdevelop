@@ -18,12 +18,12 @@
  * 02110-1301, USA.
  */
 
+#include "proxymodelcommontest.h"
+
 #include <proxymodelcommon.h>
 #include <QString>
 #include <qtest_kde.h>
 #include <kasserts.h>
-
-#include "proxymodelcommontest.h"
 
 using QxRunner::ProxyModelCommon;
 

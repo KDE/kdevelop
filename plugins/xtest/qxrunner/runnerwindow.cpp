@@ -174,7 +174,7 @@ void RunnerWindow::show()
     setUpdatesEnabled(true);
 
     // Change the results tree view to manual adjustment after the columns
-    // have been stretched over the tree view at inital display.
+    // have been stretched over the tree view at initial display.
     // This is only for the situation when the column sizes aren't restored
     // from the settings.
     resultsView()->header()->setResizeMode(QHeaderView::Interactive);
@@ -927,7 +927,7 @@ void RunnerWindow::enableControlsAfterRunning() const
     QModelIndex currentIndex = Utils::proxyIndexFromModel(runnerProxyModel(),
                                runnerItemIndex);
 
-    // Suppress synchronisation of results view.
+    // Suppress synchronization of results view.
     enableRunnerItemSync(false);
 
     // Highlight row of runner item.
@@ -1083,7 +1083,7 @@ void RunnerWindow::closeEvent(QCloseEvent* event)
 
     // Items not stoppable.
     QString msg;
-    msg = tr("There are items running which can't be stopped immediately.\n"
+    msg = tr("There are items running which can not be stopped immediately.\n"
              "Should the program exit anyway which could result in inconsistent data?");
 
     r = QMessageBox::warning(this, tr("QxRunner"), msg,

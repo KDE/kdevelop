@@ -159,7 +159,7 @@ QString QTestRegister::fetchName()
 QFileInfo QTestRegister::fetchDir()
 {
     QString dir = attributes().value(c_dir).toString();
-    if (m_root != "")
+    if (!m_root.isEmpty())
         dir = m_root + dir;
     return QFileInfo(dir);
 }

@@ -62,7 +62,7 @@ QString QTestModel::name() const
 QString QTestModel::about() const
 {
     QString version("4.4");
-    QString aboutModel = tr("for QTestLib") + " " + version;
+    QString aboutModel = tr("for QTestLib") + ' ' + version;
     return aboutModel;
 }
 

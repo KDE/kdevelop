@@ -701,7 +701,7 @@ void RunnerModel::runItem(const QModelIndex& index)
         RunnerItem* item = itemFromIndex(currentIndex);
 
         if (item->isSelected()) {
-            // Set flag for thread synchronisation.
+            // Set flag for thread synchronization.
             setMustWait(true);
 
             // Send notification to main thread.
@@ -841,7 +841,7 @@ void RunnerModel::setChildItemChecked(const QModelIndex& index, bool checked)
     // Update views anyway.
     emit dataChanged(index, index);
 
-    // Done when no changes occured.
+    // Done when no changes occurred.
     if (!changed) {
         return;
     }

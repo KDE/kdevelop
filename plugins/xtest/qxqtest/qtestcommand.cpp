@@ -55,7 +55,7 @@ QString QTestCommand::command()
         QDir path = QDir(qobject_cast<QTestSuite*>(suite)->path().filePath());
         cmd.setFile(path, cmd.filePath());
     }
-    return cmd.filePath() + " " + name();
+    return cmd.filePath() + ' ' + name();
 }
 
 #include "qtestcommand.moc"

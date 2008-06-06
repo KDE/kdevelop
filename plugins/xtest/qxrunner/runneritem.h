@@ -64,7 +64,7 @@ public: // Operations
      * columns equals number of columns in \a parent. Initial result
      * is set to QxRunner::NoResult.
      */
-    RunnerItem(const QList<QVariant>& data, RunnerItem* parent = 0);
+    explicit RunnerItem(const QList<QVariant>& data, RunnerItem* parent = 0);
 
     /*!
      * Destroys this runner item and all its children.

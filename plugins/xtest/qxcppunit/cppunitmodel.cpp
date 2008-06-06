@@ -58,7 +58,7 @@ QString CppUnitModel::name() const
 QString CppUnitModel::about() const
 {
     QString version(CPPUNIT_VERSION);
-    QString aboutModel = tr("for CppUnit") + " " + version;
+    QString aboutModel = tr("for CppUnit") + ' ' + version;
     return aboutModel;
 }
 

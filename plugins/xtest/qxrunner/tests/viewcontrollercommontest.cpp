@@ -18,10 +18,9 @@
  * 02110-1301, USA.
  */
 
-#include <viewcontrollercommon.h>
-
-#include <kasserts.h>
 #include "viewcontrollercommontest.h"
+#include <viewcontrollercommon.h>
+#include <kasserts.h>
 
 using QxRunner::ViewControllerCommon;
 

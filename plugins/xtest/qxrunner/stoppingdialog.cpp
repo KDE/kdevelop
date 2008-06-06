@@ -57,7 +57,7 @@ int StoppingDialog::exec()
         return QDialog::Accepted;
     }
 
-    // If not successfull at first attempt then show the dialog.
+    // If not successful at first attempt then show the dialog.
     adjustSize();
     show();
 
