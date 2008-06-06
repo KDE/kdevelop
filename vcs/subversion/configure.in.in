@@ -117,7 +117,7 @@ if test "x$with_subversion" != xno; then
         AC_MSG_RESULT([not found])
         SVN_SUBDIR=
     fi
-    SVN_LIB="$SVN_LIB $APR_LIBS -lsvn_client-1"
+    SVN_LIB="$SVN_LIB $APR_LIBS -lsvn_client-1 -lsvn_subr-1 -lsvn_ra-1"
     SVN_INCLUDE="$SVN_INCLUDE $APR_INCLUDE"
     SVN_CPPFLAGS="$APR_CPPFLAGS $SVN_CPPFLAGS"
 
