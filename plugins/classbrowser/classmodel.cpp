@@ -370,34 +370,28 @@ void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node
     base = node->data();
 
   if (DUContext* context = contextForBase(base)) {
-    foreach (DUContext* child, context->childContexts()) {
-      if (filterObject(context))
-        continue;
-
-      switch (child->type()) {
+    if (!filterObject(context)) {
+      switch (context->type()) {
         default:
-          // Only show the globally accessible variables
-          if (node->parent() != m_topNode)
-            break;
-          // Otherwise, fallthrough
-
         case DUContext::Class:
           // We only add the definitions, not the contexts
           foreach (Declaration* declaration, context->localDeclarations()) {
             if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
 
-              Node* parentNode = node;
-
               if (declaration->declaration())
                 // This is a definition, skip it
                 continue;
-                
+
               if (declaration->identifier().isEmpty())
                 // Skip anonymous declarations
                 continue;
 
-              Node* newChild = createPointer(declaration, parentNode);
-              parentNode->insertChild(newChild, childrenDiscovered ? this : 0);
+              if (declaration->kind() == Declaration::NamespaceAlias)
+                // Skip importing declarations
+                continue;
+
+              Node* newChild = createPointer(declaration, node);
+              node->insertChild(newChild, childrenDiscovered ? this : 0);
 
               if (newChild->childrenDiscovered())
                 refreshNode(newChild);
