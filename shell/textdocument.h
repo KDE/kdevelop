@@ -23,6 +23,8 @@
 
 #include "sublime/view.h"
 
+#include "shellexport.h"
+
 namespace KTextEditor {
     class View;
 }
@@ -35,7 +37,7 @@ Text document which represents KTextEditor documents.
 Usually Kate documents are represented by this class but TextDocument is not
 limited to Kate. Each conforming text editor will work.
 */
-class TextDocument: public PartDocument {
+class KDEVPLATFORMSHELL_EXPORT TextDocument: public PartDocument {
     Q_OBJECT
 public:
     TextDocument(const KUrl &url, ICore* );
@@ -68,7 +70,7 @@ private:
     friend class TextDocumentPrivate;
 };
 
-class TextView : public Sublime::View
+class KDEVPLATFORMSHELL_EXPORT TextView : public Sublime::View
 {
     Q_OBJECT
 public:
