@@ -26,6 +26,7 @@
 #include <QtCore/QMap>
 class QString;
 class StandardOutputView;
+class QSignalMapper;
 class QStackedWidget;
 class QListView;
 class QToolButton;
@@ -56,6 +57,7 @@ Q_SIGNALS:
 private slots:
     void nextOutput();
     void previousOutput();
+    void scrollToBottom( int );
 private:
     QListView* createListView(int id);
     void setCurrentWidget( QListView* view );
@@ -69,6 +71,7 @@ private:
     QToolButton* m_closeButton;
     KAction* nextAction;
     KAction* previousAction;
+    QSignalMapper* scrollModelViewMapper;
 };
 
 #endif

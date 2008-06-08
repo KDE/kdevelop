@@ -23,6 +23,7 @@
 #include "ioutputviewmodel.h"
 
 #include "standardoutputview.h"
+#include <QtCore/QSignalMapper>
 #include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QListView>
@@ -43,6 +44,8 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     : QWidget( parent ), tabwidget(0), data(tvdata)
 {
     setWindowTitle(i18n("Output View"));
+    scrollModelViewMapper = new QSignalMapper(this);
+    connect(scrollModelViewMapper, SIGNAL(mapped(int)), this, SLOT(scrollToBottom(int)));
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
@@ -69,7 +72,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    connect( data, SIGNAL( outputAdded( int ) ), 
+    connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
 
     connect( this, SIGNAL( outputRemoved( int, int ) ),
@@ -108,7 +111,6 @@ void OutputWidget::setCurrentWidget( QListView* view )
 
 void OutputWidget::changeDelegate( int id )
 {
-    kDebug() << "delegate changed for id:" << id;
     if( data->outputdata.contains( id ) && views.contains( id ) )
         views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
     else
@@ -117,16 +119,16 @@ void OutputWidget::changeDelegate( int id )
 
 void OutputWidget::changeModel( int id )
 {
-    kDebug() << "model changed for id:" << id;
     if( data->outputdata.contains( id ) && views.contains( id ) )
     {
         OutputData* od = data->outputdata.value(id);
-        kDebug() << "output:" << od << "id of output:" << od->id << "title:" << od->title  << "tv id" << od->toolView->toolViewId << "tv title:" << od->toolView->title;
+        scrollModelViewMapper->removeMappings( views.value( id )->model() );
         views.value( id )->setModel(data->outputdata.value(id)->model);
         if( data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll )
         {
-            connect( data->outputdata.value(id)->model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                     views.value(id), SLOT(scrollToBottom()) );
+             scrollModelViewMapper->setMapping( data->outputdata.value(id)->model, id );
+             connect( data->outputdata.value(id)->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), 
+                      scrollModelViewMapper, SLOT(map()) );
         }
     }
     else
@@ -159,6 +161,7 @@ void OutputWidget::removeOutput( int id )
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
         }
+        scrollModelViewMapper->removeMappings( data->outputdata.value( id )->model );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -273,12 +276,14 @@ QListView* OutputWidget::createListView(int id)
             kDebug() << "creating listview";
             listview = new QListView(this);
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+            listview->setViewMode( QListView::ListMode );
+            listview->setUniformItemSizes( true );
             views[id] = listview;
             connect( listview, SIGNAL(activated(const QModelIndex&)),
                      this, SLOT(activate(const QModelIndex&)));
             connect( listview, SIGNAL(clicked(const QModelIndex&)),
                      this, SLOT(activate(const QModelIndex&)));
-    
+
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
                 tabwidget->addTab( listview, data->outputdata.value(id)->title );
@@ -293,6 +298,8 @@ QListView* OutputWidget::createListView(int id)
             {
                 listview = new QListView(this);
                 listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+                listview->setViewMode( QListView::ListMode );
+                listview->setUniformItemSizes( true );
                 layout()->addWidget( listview );
                 connect( listview, SIGNAL(activated(const QModelIndex&)),
                          this, SLOT(activate(const QModelIndex&)));
@@ -364,6 +371,14 @@ void OutputWidget::enableActions()
         Q_ASSERT(previousAction);
         previousAction->setEnabled( ( stackwidget->currentIndex() > 0 ) );
         nextAction->setEnabled( ( stackwidget->currentIndex() < stackwidget->count() - 1 ) );
+    }
+}
+
+void OutputWidget::scrollToBottom( int id )
+{
+    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() ) 
+    {
+        views.value( id )->scrollToBottom();
     }
 }
 
