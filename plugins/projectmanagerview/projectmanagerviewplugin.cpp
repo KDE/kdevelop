@@ -260,15 +260,19 @@ void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
 
 void ProjectManagerViewPlugin::closeProjects()
 {
+    QList<KDevelop::IProject*> projectsToClose;
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
-        if ( prjitem && prjitem->isProjectRoot() )
+        if( !projectsToClose.contains( item->project() ) )
         {
-            core()->projectController()->closeProject( prjitem->project() );
+            projectsToClose << item->project();
         }
     }
     d->ctxProjectItemList.clear();
+    foreach( KDevelop::IProject* proj, projectsToClose )
+    {
+        core()->projectController()->closeProject( proj );
+    }
 }
 
 
