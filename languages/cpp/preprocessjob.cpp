@@ -488,7 +488,7 @@ bool PreprocessJob::checkAbort()
 
     } else {
         // What... the parent job got deleted??
-        kWarning(9007) << "Parent job disappeared!!" ;
+        kDebug(9007) << "Parent job disappeared!!" ;
         m_success = false;
         setFinished(true);
         return true;

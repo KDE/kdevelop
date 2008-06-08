@@ -380,7 +380,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     if(def->internalContext()) {
       targetRange.end() = def->internalContext()->range().end.textCursor();
     }else{
-      kWarning(9007) << "Declaration does not have internal context";
+      kDebug(9007) << "Declaration does not have internal context";
     }
     lock.unlock();
 

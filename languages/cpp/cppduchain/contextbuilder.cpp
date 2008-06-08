@@ -264,7 +264,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
     if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
       lock.unlock();
-      kWarning() << "Smartening Context!";
+      kDebug() << "Smartening Context!";
       smartenContext(topLevelContext);
       lock.lock();
       topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
@@ -351,7 +351,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kWarning(9007) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
+    kDebug(9007) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
     DumpChain dump;
     dump.dump(topLevelContext);
     m_importedParentContexts.clear();
@@ -501,7 +501,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       if (classContexts.count() != 0)
         m_importedParentContexts.append(classContexts.first());
       if (classContexts.count() > 1) {
-        kWarning(9007) << "Muliple class contexts for" << className.toString() << "- shouldn't happen!" ;
+        kDebug(9007) << "Muliple class contexts for" << className.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
           kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->range().textRange() << "in" << classContext->url().str();
         }

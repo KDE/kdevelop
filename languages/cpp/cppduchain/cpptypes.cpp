@@ -306,28 +306,28 @@ CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstant
 template<>
 void CppConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((typeModifiers() & ModifierUnsigned))
-    kWarning() << "setValue(signed) called on unsigned type";
+    kDebug() << "setValue(signed) called on unsigned type";
   m_value = value;
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(typeModifiers() & ModifierUnsigned))
-    kWarning() << "setValue(unsigned) called on not unsigned type";
+    kDebug() << "setValue(unsigned) called on not unsigned type";
   m_value = (qint64)value;
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<float>(float value) {
   if(integralType() != TypeFloat)
-    kWarning() << "setValue(float) called on non-float type";
+    kDebug() << "setValue(float) called on non-float type";
   memcpy(&m_value, &value, sizeof(float));
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<double>(double value) {
   if(integralType() != TypeDouble)
-    kWarning() << "setValue(double) called on non-double type";
+    kDebug() << "setValue(double) called on non-double type";
   memcpy(&m_value, &value, sizeof(double));
 }
 
@@ -522,7 +522,7 @@ QString CppTypeAliasType::toString() const
 void CppClassType::addElement(AbstractType::Ptr element)
 {
   if (isClosed())
-    kWarning(9007) << "Tried to add type" << element->toString() << "to closed class!" ;
+    kDebug(9007) << "Tried to add type" << element->toString() << "to closed class!" ;
   else
     StructureType::addElement(element);
 }

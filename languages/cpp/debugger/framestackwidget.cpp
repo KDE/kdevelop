@@ -102,7 +102,7 @@ void FramestackWidget::slotSelectionChanged(const QItemSelection & selected,
         return;
 
     if (selected.count() > 1) {
-        kWarning() << "Selection not single as requested";
+        kDebug() << "Selection not single as requested";
         return;
     }
    

@@ -449,7 +449,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
           if( instantiatedDeclaration )
             tempDecl->setTemplateParameterContext( ctx );
           else
-            kWarning(9007) << "instantiated declaration is not a template declaration";
+            kDebug(9007) << "instantiated declaration is not a template declaration";
         }
       }
       else
@@ -640,7 +640,7 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
           return 0;
       }
     }else{
-      kWarning(9007) << "Problem in template forward-declaration";
+      kDebug(9007) << "Problem in template forward-declaration";
       return 0;
     }
   }else{
