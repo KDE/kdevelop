@@ -39,8 +39,6 @@ public:
     virtual void load();
     virtual void defaults();
 
-    virtual KUrl localNonShareableFile() const;
-
 private slots:
     void settingsChanged();
 

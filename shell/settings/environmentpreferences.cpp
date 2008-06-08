@@ -89,12 +89,6 @@ void EnvironmentPreferences::settingsChanged()
     unmanagedWidgetChangeState( true );
 }
 
-KUrl EnvironmentPreferences::localNonShareableFile() const
-{
-    return KUrl::fromPath(
-               KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-}
-
 }
 #include "environmentpreferences.moc"
 
