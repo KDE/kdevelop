@@ -138,6 +138,7 @@ void ProjectManagerViewPlugin::unload()
 
 ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::Context* context )
 {
+    d->ctxProjectItemList.clear();
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::contextMenuExtension( context );
 
