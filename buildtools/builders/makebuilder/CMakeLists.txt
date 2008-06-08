@@ -1,5 +1,5 @@
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9037 )
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
