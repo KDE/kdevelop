@@ -44,7 +44,7 @@ class EnvironmentWidget;
  *
  * Example Usage
  * \code
- *   KShareConfigPtr config = project->projectConfiguration();
+ *   KSharedConfigPtr config = KGlobal::config();
  *   EnvironmentGroupList env(config);
  *   KConfigGroup cfg(config, "QMake Builder");
  *   QMap<QString,QString> myenvVars = env.variables( cfg.readEntry("QMake Environment") );
@@ -85,7 +85,7 @@ public:
      * \a defaultEnvironment and those saved in \a group
      */
     QStringList createEnvironment(const QString& group, const QStringList& defaults) const;
-    
+
     /**
      * returns the variables that are set for a given group.
      * This function provides read-only access to the environment

@@ -19,6 +19,7 @@ Boston, MA 02110-1301, USA.
 #include "environmentselectionwidget.h"
 #include "environmentgrouplist.h"
 #include <ksettings/dispatcher.h>
+#include <kglobal.h>
 #include <kcomponentdata.h>
 
 namespace KDevelop
@@ -30,12 +31,11 @@ class EnvironmentSelectionWidgetPrivate
 
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     : KComboBox( parent ), d( new EnvironmentSelectionWidgetPrivate )
-{ 
-    // doesn't work for some reason. reimplement showEvent() instead.
-//     KComponentData data( "kdevplatformproject", "kdevplatformproject",
-//                          KComponentData::SkipMainComponentRegistration );
-//     KSettings::Dispatcher::registerComponent( data, this, SLOT(updateEnvGroup()) );
-//     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(), this, SLOT(updateEnvGroup()) );
+{
+    KComponentData data( "kdevplatform", "kdevplatform",
+                         KComponentData::SkipMainComponentRegistration );
+    KSettings::Dispatcher::registerComponent( data, this, "updateEnvGroup" );
+    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(), this, "updateEnvGroup" );
 
 }
 
