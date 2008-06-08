@@ -204,7 +204,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
-    kDebug(9501) ;
+    kDebug() ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
 
@@ -226,7 +226,7 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
-    kDebug(9501) ;
+    kDebug() ;
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
 
@@ -303,7 +303,7 @@ void UiController::addNewToolView(MainWindow *mw)
 void UiController::showSettingsDialog()
 {
     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
-    kDebug(9501) << "blacklist" << blacklist;
+    kDebug() << "blacklist" << blacklist;
     if(!d->cfgDlg)
     {
         d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",
@@ -504,14 +504,14 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
 
             KConfigGroup areaConfig(&mainWindowConfig, "Area " + type);
 
-            kDebug(9501) << "Trying to restore area " << type;
+            kDebug() << "Trying to restore area " << type;
 
             /* This is just an easy check that a group exists, to
                avoid "restoring" area from empty config group, wiping
                away programmatically installed defaults.  */
             if (areaConfig.readEntry("id", "") == type)
             {
-                kDebug(9501) << "Restoring area " << type;
+                kDebug() << "Restoring area " << type;
                 loadArea(area, areaConfig);
             }
 

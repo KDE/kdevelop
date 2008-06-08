@@ -90,7 +90,7 @@ struct DocumentControllerPrivate {
         QList<KUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
         foreach (const KUrl &url, urlsForDoc)
         {
-            kDebug(9501) << "destroying document" << doc;
+            kDebug() << "destroying document" << doc;
             documents.remove(url);
         }
     }
@@ -273,7 +273,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         //make sure the URL exists
         if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
         {
-            kDebug( 9000 ) << "cannot find URL:" << url.url();
+            kDebug() << "cannot find URL:" << url.url();
             return 0;
         }
 
@@ -291,7 +291,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         // is the URL pointing to a directory?
         if ( mimeType->is( "inode/directory" ) )
         {
-            kDebug( 9000 ) << "cannot open directory:" << url.url();
+            kDebug() << "cannot open directory:" << url.url();
             return 0;
         }
 
@@ -302,7 +302,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         if( !plugins.isEmpty() )
         {
             KPluginInfo info = plugins.first();
-            kDebug(9501) << "loading" << info.pluginName();
+            kDebug() << "loading" << info.pluginName();
             Core::self()->pluginController()->loadPlugin( info.pluginName() );
             if( d->factories.contains( mimeType->name() ) )
             {

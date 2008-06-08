@@ -287,7 +287,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
         d->tmp->close();
     }
 
-    kDebug(9501) << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
+    kDebug() << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
     d->m_cfg = KSharedConfig::openConfig( d->developerTempFile );
     d->m_cfg->addConfigSources( QStringList() << d->projectTempFile );
 
@@ -424,7 +424,7 @@ int Project::fileCount() const
 
 KUrl Project::relativeUrl( const KUrl& absolute ) const
 {
-    kDebug(9501) << "Creating relative url between: " << folder() << absolute;
+    kDebug() << "Creating relative url between: " << folder() << absolute;
     return KUrl::relativeUrl( folder(), absolute );
 }
 

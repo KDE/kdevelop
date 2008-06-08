@@ -51,9 +51,9 @@ struct CorePrivate {
     }
     void initialize()
     {
-	kDebug(9501) << "Creating ui controller";
+	kDebug() << "Creating ui controller";
         uiController = new UiController(m_core);
-	kDebug(9501) << "Creating plugin controller";
+	kDebug() << "Creating plugin controller";
         pluginController = new PluginController(m_core);
         partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
@@ -61,7 +61,7 @@ struct CorePrivate {
         documentController = new DocumentController(m_core);
         runController = new RunController(m_core);
 
-	kDebug(9501) << "initializing ui controller";
+	kDebug() << "initializing ui controller";
         uiController->initialize();
         languageController->initialize();
         projectController->initialize();
@@ -76,7 +76,7 @@ struct CorePrivate {
            tool views to a list of available tool view, and then grab
            those tool views when loading an area.  */
 
-	kDebug(9501) << "loading global plugin";
+	kDebug() << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
 
         /* Need to do this after everything else is loaded.  It's too
@@ -130,7 +130,7 @@ Core::Core(QObject *parent)
 
 Core::~Core()
 {
-    kDebug(9501) ;
+    kDebug() ;
     //Cleanup already called before mass destruction of GUI
     delete d;
 }

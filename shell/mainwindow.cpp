@@ -53,8 +53,8 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug(9501) << "Bottom Left:" << bottomleft;
-    kDebug(9501) << "Bottom Right:" << bottomright;
+    kDebug() << "Bottom Left:" << bottomleft;
+    kDebug() << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )
@@ -93,14 +93,14 @@ MainWindow::~ MainWindow()
 
 void MainWindow::loadSettings()
 {
-    kDebug(9501) << "Loading Settings";
+    kDebug() << "Loading Settings";
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
 
     // dock widget corner layout
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug(9501) << "Bottom Left:" << bottomleft;
-    kDebug(9501) << "Bottom Right:" << bottomright;
+    kDebug() << "Bottom Left:" << bottomleft;
+    kDebug() << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )
@@ -125,7 +125,7 @@ void MainWindow::initialize()
 {
     createGUI(0);
     Core::self()->partManager()->addManagedTopLevelWidget(this);
-    kDebug(9501) << "Adding plugin-added connection";
+    kDebug() << "Adding plugin-added connection";
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
     connect( Core::self()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),

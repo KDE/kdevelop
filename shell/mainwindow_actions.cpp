@@ -149,7 +149,7 @@ void MainWindowPrivate::configureEditors()
 
     if ( !editor->configDialogSupported() )
     {
-        kDebug( 9000 ) << "KTextEditor::configDialogSupported() == false";
+        kDebug() << "KTextEditor::configDialogSupported() == false";
     }
 
     // show the modal config dialog for this part if it has a ConfigInterface

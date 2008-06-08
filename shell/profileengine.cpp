@@ -58,7 +58,7 @@ ProfileEngine::~ProfileEngine()
 
 void ProfileEngine::processDir(const QString &dir, const QString &currPath, QMap<QString, Profile*> &passedPaths, Profile *root)
 {
-//     kDebug(9501) << "processDir:" << dir << "" << currPath;
+//     kDebug() << "processDir:" << dir << "" << currPath;
 
     QDir qDir(dir);
     QStringList entryList = qDir.entryList(QDir::Dirs);
@@ -109,7 +109,7 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
         constraint += " and ( " + constraint_add + " ) ";
 
 // //BEGIN debug
-//     kDebug(9501) << "Query for Profile:" << endl
+//     kDebug() << "Query for Profile:" << endl
 //               << constraint << endl << endl;
 // //END debug
 
@@ -143,12 +143,12 @@ KPluginInfo::List ProfileEngine::offers(const QString &profileName, PluginContro
     }
 
 //BEGIN debug
-//     kDebug(9501) << "=============" << endl
+//     kDebug() << "=============" << endl
 //         << " =============" << endl
 //         << "     =============   Plugins for Profile:" << endl;
 //     for (KService::List::const_iterator it = list.begin(); it != list.end(); ++it)
-//         kDebug(9501) << "  " << (*it)->name();
-//     kDebug(9501);
+//         kDebug() << "  " << (*it)->name();
+//     kDebug();
 //END debug
     KPluginInfo::List pluginList = KPluginInfo::fromServices( list );
     return pluginList;
@@ -230,21 +230,21 @@ void ProfileEngine::diffProfiles(PluginController::PluginType offerType, const Q
         it != offers2.constEnd(); ++it)
         offers2List[it->entryPath()] = *it;
 
-//    kDebug(9501) << "OLD PROFILE:" << offers1List;
-//    kDebug(9501) << "NEW PROFILE:" << offers2List;
+//    kDebug() << "OLD PROFILE:" << offers1List;
+//    kDebug() << "NEW PROFILE:" << offers2List;
 
     for (QStringList::const_iterator it = offers1List.constBegin();
         it != offers1List.constEnd(); ++it)
     {
-//         kDebug(9501) << "checking:" << *it;
+//         kDebug() << "checking:" << *it;
         if (offers2List.contains(*it))
         {
-//             kDebug(9501) << " keep";
+//             kDebug() << " keep";
             offers2.removeAll(offers2List[*it]);
         }
         else
         {
-//             kDebug(9501) << " unload";
+//             kDebug() << " unload";
             unload.append(*it);
         }
     }

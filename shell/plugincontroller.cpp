@@ -140,7 +140,7 @@ void PluginController::cleanup()
 {
     if(d->cleanupMode != PluginControllerPrivate::Running)
     {
-        kDebug(9501) << "called when not running. state =" << d->cleanupMode;
+        kDebug() << "called when not running. state =" << d->cleanupMode;
         return;
     }
 
@@ -271,7 +271,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
-    kDebug(9501) << "Attempting to load '" << pluginId << "'";
+    kDebug() << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.name() );
     QString str_error;
     IPlugin *plugin = 0;
@@ -293,7 +293,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         connect( plugin, SIGNAL( destroyed( QObject * ) ),
                  this, SLOT( pluginDestroyed( QObject * ) ) );
 
-        kDebug(9501) << "Successfully loaded plugin '" << pluginId << "'";
+        kDebug() << "Successfully loaded plugin '" << pluginId << "'";
 
         emit pluginLoaded( plugin );
     }
@@ -373,7 +373,7 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
             KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
             if( !loadPluginInternal( info.pluginName() ) )
 	    {
-		    kDebug(9501) << "Couldn't load optional dependecy:" << iface << info.pluginName();
+		    kDebug() << "Couldn't load optional dependecy:" << iface << info.pluginName();
 	    }
         }
     }
@@ -395,7 +395,7 @@ void PluginController::loadDependencies( const KPluginInfo& info )
 
 IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
 {
-    kDebug(9501) << "Loading Plugin ("<< pluginname << ") for Extension:" << extension;
+    kDebug() << "Loading Plugin ("<< pluginname << ") for Extension:" << extension;
     QStringList constraints;
     if (!pluginname.isEmpty())
         constraints << QString("[X-KDE-PluginInfo-Name]=='%1'").arg( pluginname );
@@ -405,7 +405,7 @@ IPlugin* PluginController::pluginForExtension( const QString& extension, const Q
 
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug(9501) << "Finding Plugin for Extension:" << extension << "|" << constraints;
+    kDebug() << "Finding Plugin for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
 
     if( infos.isEmpty() )
@@ -418,7 +418,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug(9501) << "Finding all Plugins for Extension:" << extension << "|" << constraints;
+    kDebug() << "Finding all Plugins for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)

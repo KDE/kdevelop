@@ -67,7 +67,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )
 {
-    kDebug(9037) << "add plugin" << plugin << plugin->componentData().componentName();
+    kDebug() << "add plugin" << plugin << plugin->componentData().componentName();
     Q_ASSERT( plugin );
 
     m_mainWindow->guiFactory()->addClient( plugin );
