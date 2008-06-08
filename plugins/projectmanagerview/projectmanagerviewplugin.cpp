@@ -154,13 +154,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     {
         d->ctxProjectItemList << item;
         KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
-        if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
-        {
-            KAction* close = new KAction( i18n( "Close projects" ), this );
-            connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
-            closeProjectsAdded = true;
-        }
         if ( !buildItemsAdded && ( item->folder() || item->target() || item->folder() ) )
         {
             KAction* action = new KAction( i18n( "Build items(s)" ), this );
@@ -177,14 +170,22 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             buildItemsAdded = true;
         }
+        if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
+        {
+            KAction* close = new KAction( i18n( "Close projects" ), this );
+            connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
+            closeProjectsAdded = true;
+        }
+
     }
-    if( items.count() == 1 )
-    {
-        KAction* action = new KAction( i18n( "Project Configuration" ), this );
-        connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
-        menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-    }
-    
+//     if( items.count() == 1 )
+//     {
+//         KAction* action = new KAction( i18n( "Project Configuration" ), this );
+//         connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
+//         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+//     }
+
     return menuExt;
 }
 
@@ -373,7 +374,7 @@ void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
         buildSet()->addProjectItem( item );
     }
 }
-    
+
 void ProjectManagerViewPlugin::storeBuildset()
 {
     KConfigGroup setgrp = KGlobal::config()->group("Buildset");
