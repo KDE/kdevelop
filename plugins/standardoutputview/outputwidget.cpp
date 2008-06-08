@@ -41,10 +41,9 @@
 #include "toolviewdata.h"
 
 OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
-    : QWidget( parent ), tabwidget(0), data(tvdata)
+    : QWidget( parent ), tabwidget(0), data(tvdata), scrollModelViewMapper(new QSignalMapper(this))
 {
     setWindowTitle(i18n("Output View"));
-    scrollModelViewMapper = new QSignalMapper(this);
     connect(scrollModelViewMapper, SIGNAL(mapped(int)), this, SLOT(scrollToBottom(int)));
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
@@ -124,11 +123,11 @@ void OutputWidget::changeModel( int id )
         OutputData* od = data->outputdata.value(id);
         scrollModelViewMapper->removeMappings( views.value( id )->model() );
         views.value( id )->setModel(data->outputdata.value(id)->model);
-        if( data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll )
+        if( data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll && data->outputdata.value(id)->model )
         {
-             scrollModelViewMapper->setMapping( data->outputdata.value(id)->model, id );
-             connect( data->outputdata.value(id)->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), 
-                      scrollModelViewMapper, SLOT(map()) );
+            scrollModelViewMapper->setMapping( data->outputdata.value(id)->model, id );
+            connect( data->outputdata.value(id)->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+                     scrollModelViewMapper, SLOT(map()) );
         }
     }
     else
@@ -376,7 +375,7 @@ void OutputWidget::enableActions()
 
 void OutputWidget::scrollToBottom( int id )
 {
-    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() ) 
+    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
     {
         views.value( id )->scrollToBottom();
     }
