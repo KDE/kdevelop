@@ -86,7 +86,7 @@ public:
             }
 
             QList<ProjectTargetItem*> target_list = folder->targetList();
-            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it ) 
+            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
             {
                 files += recurseFiles( ( *it ) );
             }
@@ -117,7 +117,7 @@ public:
                 files << file;
             }
         }
-    
+
         // Check top level targets
         foreach( ProjectTargetItem* target, folder->targetList() )
         {
@@ -129,7 +129,7 @@ public:
                 }
             }
         }
-        
+
         foreach( ProjectFolderItem* top, folder->folderList() )
         {
             files += filesForUrlInternal( url, top );
@@ -224,14 +224,14 @@ bool Project::open( const KUrl& projectFileUrl_ )
     //Canonicalize the project url, because we do the same in many other cases with files,
     //so we must canonicalize the project url too.
     KUrl projectFileUrl = projectFileUrl_;
-    
+
     if ( projectFileUrl.isLocalFile() )
     {
         QString path = QFileInfo( projectFileUrl.toLocalFile() ).canonicalFilePath();
         if ( !path.isEmpty() )
             projectFileUrl.setPath( path );
     }
-    
+
     KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
     if ( !statJob->exec() ) //be sync for right now
     {
@@ -316,6 +316,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
     {
 //         ProjectModel* model = Core::self()->projectController()->projectModel();
         d->topItem = iface->import( this );
+        d->topItem->setIcon();
         if( !d->topItem )
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
@@ -404,7 +405,7 @@ QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
 {
     // TODO: This is moderately efficient, but could be much faster with a
     // QHash<QString, ProjectFolderItem> member. Would it be worth it?
-   
+
 
     KUrl u = d->topItem->url();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
