@@ -58,7 +58,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
     connect( m_ui->removeItemButton, SIGNAL( clicked() ),
              this, SLOT( removeItems() ) );
 
-    
+
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
 
     KConfigGroup setgrp = KGlobal::config()->group("Buildset");
@@ -82,12 +82,20 @@ void ProjectBuildSetWidget::addItems()
 
 void ProjectBuildSetWidget::removeItems()
 {
+    kDebug() << "number of selected items:" << m_ui->itemView->selectionModel()->selectedIndexes().count();
+    QList<int> rows;
     foreach( QModelIndex idx, m_ui->itemView->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item = m_view->plugin()->buildSet()->itemForIndex( idx );
-        if( item )
+        kDebug() << "removing index" << idx << rows;
+        if( !rows.contains( idx.row() ) )
         {
-            m_view->plugin()->buildSet()->removeProjectItem( item );
+            KDevelop::ProjectBaseItem* item = m_view->plugin()->buildSet()->itemForIndex( idx );
+            if( item )
+            {
+                kDebug() << "got item for index" << item->type() << item->text();
+                m_view->plugin()->buildSet()->removeProjectItem( item );
+                rows << idx.row();
+            }
         }
     }
     m_view->plugin()->storeBuildset();

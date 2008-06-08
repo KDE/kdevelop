@@ -48,18 +48,21 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <widget class="QTreeView" name="itemView" >
+    <widget class="QTableView" name="itemView" >
+     <property name="editTriggers" >
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
      <property name="alternatingRowColors" >
       <bool>true</bool>
      </property>
-     <property name="selectionMode" >
-      <enum>QAbstractItemView::ExtendedSelection</enum>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
-     <property name="rootIsDecorated" >
-      <bool>false</bool>
+     <property name="verticalScrollMode" >
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
-     <property name="itemsExpandable" >
-      <bool>false</bool>
+     <property name="horizontalScrollMode" >
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
    </item>

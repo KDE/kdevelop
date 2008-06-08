@@ -63,17 +63,17 @@ KDevelop::ProjectBaseItem* findItem( const QString& item, const QString& path, K
             KDevelop::ProjectBaseItem* prjitem = dynamic_cast<KDevelop::ProjectBaseItem*>(sitem);
             if( prjitem )
             {
-                if( prjitem->file() 
-                    && prjitem->text() == item 
+                if( prjitem->file()
+                    && prjitem->text() == item
                     && path == getRelativeFolder( prjitem->file() ) )
                 {
                     return prjitem;
-                }else if( prjitem->folder() 
+                }else if( prjitem->folder()
                           && prjitem->text() == item
                           && path == getRelativeFolder( prjitem->folder() ) )
                 {
                     return prjitem;
-                }else if( prjitem->target() 
+                }else if( prjitem->target()
                           && prjitem->text() == item
                           && path == getRelativeFolder( prjitem->target() ) )
                 {
@@ -139,13 +139,17 @@ QVariant ProjectBuildSetModel::headerData( int section, Qt::Orientation orientat
     return QVariant();
 }
 
-int ProjectBuildSetModel::rowCount( const QModelIndex& ) const
+int ProjectBuildSetModel::rowCount( const QModelIndex& parent ) const
 {
+    if( parent.isValid() )
+        return 0;
     return m_items.count();
 }
 
-int ProjectBuildSetModel::columnCount( const QModelIndex& ) const
+int ProjectBuildSetModel::columnCount( const QModelIndex& parent ) const
 {
+    if( parent.isValid() )
+        return 0;
     return 3;
 }
 
@@ -162,10 +166,14 @@ void ProjectBuildSetModel::removeProjectItem( KDevelop::ProjectBaseItem* item )
 {
     if( !m_items.contains( item ) || m_items.isEmpty() )
         return;
+    kDebug(9511) << "removing item" << item->type() << item->text();
     int idx = m_items.indexOf( item );
+    kDebug(9511) << "counts before removal" << m_items.count();
+    kDebug(9511) << "calculated index:" << idx;
     beginRemoveRows( QModelIndex(), idx, idx );
     m_items.removeAll( item );
-    endInsertRows();
+    kDebug(9511) << "counts after removal" << m_items.count();
+    endRemoveRows();
 }
 
 KDevelop::ProjectBaseItem* ProjectBuildSetModel::itemForIndex( const QModelIndex& idx )
@@ -195,10 +203,13 @@ void ProjectBuildSetModel::saveSettings( KConfigGroup & base ) const
 
 void ProjectBuildSetModel::readSettings( KConfigGroup & base, KDevelop::ICore* core )
 {
-    beginRemoveRows( QModelIndex(), 0, rowCount() );
-    m_items.clear();
-    endRemoveRows();
-    
+    if( rowCount() > 0 )
+    {
+        beginRemoveRows( QModelIndex(), 0, rowCount() );
+        m_items.clear();
+        endRemoveRows();
+    }
+
     int count = base.readEntry("Number of Builditems", 0);
     for( int i = 0; i < count; i++ )
     {
@@ -210,7 +221,7 @@ void ProjectBuildSetModel::readSettings( KConfigGroup & base, KDevelop::ICore* c
         if( project )
         {
             KDevelop::ProjectBaseItem* top = findItem( item, path, project->projectItem() );
-            
+
             if( top )
             {
                 beginInsertRows( QModelIndex(), rowCount(), rowCount() );
