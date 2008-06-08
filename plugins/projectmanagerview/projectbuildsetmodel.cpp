@@ -166,13 +166,9 @@ void ProjectBuildSetModel::removeProjectItem( KDevelop::ProjectBaseItem* item )
 {
     if( !m_items.contains( item ) || m_items.isEmpty() )
         return;
-    kDebug(9511) << "removing item" << item->type() << item->text();
     int idx = m_items.indexOf( item );
-    kDebug(9511) << "counts before removal" << m_items.count();
-    kDebug(9511) << "calculated index:" << idx;
     beginRemoveRows( QModelIndex(), idx, idx );
     m_items.removeAll( item );
-    kDebug(9511) << "counts after removal" << m_items.count();
     endRemoveRows();
 }
 
