@@ -81,10 +81,8 @@ MakeBuilder::~MakeBuilder()
 
 void MakeBuilder::cleanupModel( int, int id )
 {
-    kDebug(9037) << "view was removed, check wether its one of ours";
     if( m_models.contains( id ) )
     {
-        kDebug(9037) << "do some cleanup";
         MakeOutputModel* model = m_models[id];
         KDevelop::CommandExecutor* cmd = m_commands[id];
         MakeOutputDelegate* delegate = m_delegates[id];
@@ -143,6 +141,7 @@ void MakeBuilder::commandFinished(int id)
                 emit makeTargetBuilt( m_items[id], m_customTargets[id] );
                 break;
         }
+        m_models[id]->appendRow( new QStandardItem( "Done." ) );
     }
 }
 
@@ -151,6 +150,7 @@ void MakeBuilder::commandFailed(int id)
     if( m_items.contains(id) )
     {
         emit failed( m_items[id] );
+        m_models[id]->appendRow( new QStandardItem( "Failed." ) );
     }
 }
 
@@ -294,7 +294,6 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
             {
                 id = m_ids[item];
                 m_models[id]->clear();
-                view->raiseOutput(id);
             }else
             {
                 QString target;
@@ -313,6 +312,8 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
                 view->setModel(id, m_models[id]);
                 view->setDelegate(id, m_delegates[id]);
             }
+            m_items[id] = item;
+            view->raiseOutput(id);
             m_models[id]->appendRow( new QStandardItem( cmd.join(" ") ) );
 
             if( m_commands.contains(id) )
@@ -330,10 +331,10 @@ bool MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, CommandType c,  cons
             connect(m_commands[id], SIGNAL(receivedStandardError(const QStringList&)),
                     m_models[id], SLOT(addStandardError(const QStringList&)));
 
-            connect( m_commands[id], SIGNAL( failed() ), m_errorMapper, SLOT( map() ) );
-            connect( m_commands[id], SIGNAL( completed() ), m_successMapper, SLOT( map() ) );
             m_errorMapper->setMapping( m_commands[id], id );
             m_successMapper->setMapping( m_commands[id], id );
+            connect( m_commands[id], SIGNAL( failed() ), m_errorMapper, SLOT( map() ) );
+            connect( m_commands[id], SIGNAL( completed() ), m_successMapper, SLOT( map() ) );
             kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
             m_commandTypes[id] = c;
             m_customTargets[id] = overrideTarget;
