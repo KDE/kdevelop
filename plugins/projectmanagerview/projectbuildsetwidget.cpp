@@ -82,17 +82,14 @@ void ProjectBuildSetWidget::addItems()
 
 void ProjectBuildSetWidget::removeItems()
 {
-    kDebug() << "number of selected items:" << m_ui->itemView->selectionModel()->selectedIndexes().count();
     QList<int> rows;
     foreach( QModelIndex idx, m_ui->itemView->selectionModel()->selectedIndexes() )
     {
-        kDebug() << "removing index" << idx << rows;
         if( !rows.contains( idx.row() ) )
         {
             KDevelop::ProjectBaseItem* item = m_view->plugin()->buildSet()->itemForIndex( idx );
             if( item )
             {
-                kDebug() << "got item for index" << item->type() << item->text();
                 m_view->plugin()->buildSet()->removeProjectItem( item );
                 rows << idx.row();
             }
