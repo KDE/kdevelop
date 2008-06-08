@@ -124,7 +124,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
 KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    kDebug(9504) << "adding widget";
+    kDebug() << "adding widget";
     KAction *action = new KAction(this);
     action->setCheckable(true);
     action->setText(title);

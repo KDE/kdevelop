@@ -213,7 +213,7 @@ View* Area::removeToolView(View *view)
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();
-    kDebug(9504) << this << "removed tool view " << id;
+    kDebug() << this << "removed tool view " << id;
     d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
@@ -272,7 +272,7 @@ void Area::save(KConfigGroup& group) const
         desired << i.key() + ":" + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
-    kDebug(9504) << "save " << this << "wrote" << group.readEntry("desired views", "");
+    kDebug() << "save " << this << "wrote" << group.readEntry("desired views", "");
     group.writeEntry("view on left", shownToolView(Sublime::Left));
     group.writeEntry("view on right", shownToolView(Sublime::Right));
     group.writeEntry("view on top", shownToolView(Sublime::Top));
@@ -285,7 +285,7 @@ void Area::save(KConfigGroup& group) const
 
 void Area::load(const KConfigGroup& group)
 {
-    kDebug(9504) << "loading areas config";
+    kDebug() << "loading areas config";
     d->desiredToolViews.clear();
     QStringList desired = group.readEntry("desired views", QStringList());
     foreach (const QString &s, desired)

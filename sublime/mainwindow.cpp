@@ -50,7 +50,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 
 MainWindow::~MainWindow()
 {
-    kDebug(9504) << "destroying mainwindow";
+    kDebug() << "destroying mainwindow";
     delete d;
 }
 
@@ -149,7 +149,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::loadSettings()
 {
-    kDebug(9504) << "loading settings for " << (area() ? area()->objectName() : "");
+    kDebug() << "loading settings for " << (area() ? area()->objectName() : "");
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();

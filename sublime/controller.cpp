@@ -164,7 +164,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     Area* area = NULL;
     foreach (Area* a, d->mainWindowAreas[index])
     {
-        kDebug(9504) << "Object name: " << a->objectName() << " id "
+        kDebug() << "Object name: " << a->objectName() << " id "
                      << areaTypeId;
         if (a->objectName() == areaTypeId)
         {
@@ -253,10 +253,10 @@ void Controller::addDocument(Document *document)
 void Controller::areaReleased()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
-    kDebug(9504) << "marking areas as mainwindow-free";
+    kDebug() << "marking areas as mainwindow-free";
     foreach (Area *area, d->shownAreas.keys(w))
     {
-        kDebug(9504) << "" << area->objectName();
+        kDebug() << "" << area->objectName();
         areaReleased(area);
         disconnect(area, 0, w, 0);
     }

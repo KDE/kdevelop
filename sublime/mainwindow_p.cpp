@@ -122,7 +122,7 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug(9504) << "reconstructing views for area index" << index;
+    kDebug() << "reconstructing views for area index" << index;
     QSplitter *parent = 0;
     QSplitter *splitter = d->m_indexSplitters.value(index);
     if (!splitter)
@@ -130,7 +130,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         //no splitter - we shall create it and populate with views
         if (!index->parent())
         {
-            kDebug(9504) << "reconstructing root area";
+            kDebug() << "reconstructing root area";
             //this is root area
             splitter = new QSplitter(d->centralWidget);
             d->m_indexSplitters[index] = splitter;
@@ -139,7 +139,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         else
         {
             parent = d->m_indexSplitters[index->parent()];
-            kDebug(9504) << "adding new splitter to" << parent;
+            kDebug() << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
             parent->addWidget(splitter);
@@ -196,7 +196,7 @@ void MainWindowPrivate::reconstruct()
     l->setWidthForRole(IdealMainLayout::Bottom,
                        area->thickness(Sublime::Bottom));
     l->setWidthForRole(IdealMainLayout::Top, area->thickness(Sublime::Top));
-    kDebug(9504) << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
+    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
         QString id = view->document()->documentSpecifier();
@@ -269,7 +269,7 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
     QString id;
     if (shown)
         id = view->document()->documentSpecifier();
-    kDebug(9504) << "View " << view->document()->documentSpecifier() << " " << shown;
+    kDebug() << "View " << view->document()->documentSpecifier() << " " << shown;
     area->setShownToolView(pos, id);
 }
 
@@ -304,8 +304,8 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         return;
 
     QSplitter *splitter = m_indexSplitters[index];
-    kDebug(9504) << "index " << index << " root " << area->rootIndex();
-    kDebug(9504) << "splitter " << splitter << " container " << splitter->widget(0);
+    kDebug() << "index " << index << " root " << area->rootIndex();
+    kDebug() << "splitter " << splitter << " container " << splitter->widget(0);
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
     if (view->widget())
@@ -376,7 +376,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             parentSplitter->setSizes(sizes);
             parentSplitter->setUpdatesEnabled(true);
 
-            kDebug(9504) << "after deleation " << parent << " has "
+            kDebug() << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";
 
             //find the container somewhere to activate
@@ -429,7 +429,7 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    kDebug(9504) << "for" << action;
+    kDebug() << "for" << action;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
 
