@@ -37,13 +37,7 @@
 #include "typerepository.h"
 #include "declarationbuilder.h"
 #include "expressionparser.h"
-//#define DEBUG
-
-#ifdef DEBUG
-#define ifDebug(x) x;
-#else
-#define ifDebug(x)
-#endif
+#include "cppdebughelper.h"
 
 using namespace KDevelop;
 

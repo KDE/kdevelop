@@ -3,6 +3,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/languages/cpp/expressionparser
     ${CMAKE_SOURCE_DIR}/languages/cpp
+    ${CMAKE_BINARY_DIR}/languages/cpp
 )
 
 ########### next target ###############

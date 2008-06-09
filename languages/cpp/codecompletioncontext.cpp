@@ -38,6 +38,7 @@
 #include "environmentmanager.h"
 #include "cppduchain/cppduchain.h"
 #include "pushvalue.h"
+#include "cppdebughelper.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -45,14 +46,6 @@
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
 const int maxOverloadedArgumentHints = 5;
-
-//#define DEBUG
-
-#ifdef DEBUG
-#define ifDebug(x) x
-#else
-#define ifDebug(x)
-#endif
 
 using namespace Cpp;
 using namespace KDevelop;

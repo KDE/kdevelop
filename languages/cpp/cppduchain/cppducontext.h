@@ -45,9 +45,6 @@ While construction:
 
 */
 
-#define ifDebug(x)
-//#define ifDebug(x) x
-
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
@@ -71,6 +68,7 @@ While construction:
 #include "cppduchain.h"
 #include "templatedeclaration.h"
 #include "expressionparser.h"
+#include "cppdebughelper.h"
 
 using namespace KDevelop;
 
