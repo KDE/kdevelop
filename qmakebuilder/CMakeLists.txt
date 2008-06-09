@@ -15,6 +15,7 @@ include_directories(
 
 set(qmakebuilder_LIB_SRCS
     qmakebuilder.cpp
+    qmakejob.cpp
 )
 
 
