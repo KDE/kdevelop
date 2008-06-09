@@ -201,7 +201,7 @@ void ProjectBuildSetModel::readSettings( KConfigGroup & base, KDevelop::ICore* c
 {
     if( rowCount() > 0 )
     {
-        beginRemoveRows( QModelIndex(), 0, rowCount() );
+        beginRemoveRows( QModelIndex(), 0, rowCount() - 1 );
         m_items.clear();
         endRemoveRows();
     }
