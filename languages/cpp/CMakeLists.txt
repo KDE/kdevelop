@@ -1,3 +1,4 @@
+include(CppBuildConfig.cmake)
 
 include_directories(${CMAKE_TOP_BUILD_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}

@@ -1,0 +1,12 @@
+OPTION(CPP_DEBUG_UI_LOCKUP "Enable this setting to debug UI lockups in the C++ support" OFF)
+OPTION(CPP_EXTRA_DEBUG "Enable excessive debug output from C++ support" OFF)
+OPTION(CPP_DEBUG_INCLUDE_PATHS "Enable include path debugging for C++ support" ON)
+
+MACRO_BOOL_TO_01(CPP_DEBUG_UI_LOCKUP DEBUG_UI_LOCKUP)
+MACRO_BOOL_TO_01(CPP_EXTRA_DEBUG DEBUG)
+MACRO_BOOL_TO_01(CPP_DEBUG_INCLUDE_PATHS DEBUG_INCLUDE_PATHS)
+
+MARK_AS_ADVANCED(CPP_DEBUG_UI_LOCKUP CPP_EXTRA_DEBUG CPP_DEBUG_INCLUDE_PATHS)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cppdebughelper.h.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/cppdebughelper.h) 
+
