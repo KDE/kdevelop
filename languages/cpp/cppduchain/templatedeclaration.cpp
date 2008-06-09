@@ -640,7 +640,8 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
           return 0;
       }
     }else{
-      kDebug(9007) << "Problem in template forward-declaration";
+      //TODO: report this in the problem reporter?
+      kWarning(9007) << "Problem in template forward-declaration";
       return 0;
     }
   }else{

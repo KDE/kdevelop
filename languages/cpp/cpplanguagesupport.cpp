@@ -383,7 +383,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
       document->textDocument()->activeView()->setCursorPosition(normalizeCursor(targetRange.start()));
     return;
   }else{
-    kDebug(9007) << "Found no definition assigned to cursor position";
+    kWarning(9007) << "Found no definition assigned to cursor position";
   }
   
   lock.unlock();

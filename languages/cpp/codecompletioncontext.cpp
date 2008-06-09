@@ -556,7 +556,7 @@ void CodeCompletionContext::preprocessText( int line ) {
   if( m_duContext ) {
   m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line );
   }else{
-    kDebug() << "error: no ducontext";
+    kWarning() << "error: no ducontext";
   }
 }
 

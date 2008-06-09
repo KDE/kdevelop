@@ -500,7 +500,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       if (classContexts.count() != 0)
         m_importedParentContexts.append(classContexts.first());
       if (classContexts.count() > 1) {
-        kDebug(9007) << "Muliple class contexts for" << className.toString() << "- shouldn't happen!" ;
+        kWarning(9007) << "Muliple class contexts for" << className.toString() << "- shouldn't happen!" ;
         foreach (DUContext* classContext, classContexts) {
           kDebug(9007) << "Context" << classContext->scopeIdentifier(true) << "range" << classContext->range().textRange() << "in" << classContext->url().str();
         }
