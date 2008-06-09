@@ -18,6 +18,7 @@ set(kdevmakebuilder_LIB_SRCS
     outputfilters.cpp
     makeitem.cpp
     makeoutputdelegate.cpp
+    makejob.cpp
 )
 
 

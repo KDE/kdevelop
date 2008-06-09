@@ -16,6 +16,7 @@ set(kdevgrepview_PART_SRCS
     grepdialog.cpp
     grepoutputmodel.cpp
     grepoutputdelegate.cpp
+    grepjob.cpp
 )
 
 set(kdevgrepview_PART_UI

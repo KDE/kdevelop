@@ -84,7 +84,8 @@ GDBController::GDBController(QObject* parent)
         gdb_(0),
         m_variableCollection(new VariableCollection(this)),
         m_stackManager(new StackManager(this)),
-        m_breakpointController(new BreakpointController(this))
+        m_breakpointController(new BreakpointController(this)),
+        gdbExecuteJob_(0)
 {
     configure();
     kDebug(9012) << "GDB script" << config_configGdbScript_ << "\n";
@@ -92,7 +93,7 @@ GDBController::GDBController(QObject* parent)
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
 
-    connect(this, SIGNAL(event(event_t)), 
+    connect(this, SIGNAL(event(event_t)),
             m_variableCollection, SLOT(slotEvent(event_t)));
 
     connect( this, SIGNAL(showStepInSource(const QString&, int, const QString&)),
@@ -255,7 +256,7 @@ void GDBController::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
         cmd->setStateReloading(true);
 
     commandQueue_->enqueue(cmd, queue_where);
-    
+
     kDebug(9012) << "QUEUE: " << cmd->initialString()
                   << (stateReloadInProgress_ ? "(state reloading)" : "");
 
@@ -453,8 +454,8 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
 
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
-            if (frame.hasField("fullname") 
-                && frame.hasField("line") 
+            if (frame.hasField("fullname")
+                && frame.hasField("line")
                 && frame.hasField("addr")) {
                 showStepInSource(frame["fullname"].literal(),
                      frame["line"].literal().toInt(),
@@ -611,9 +612,9 @@ bool GDBController::startDebugger()
     connect(gdb_, SIGNAL(applicationOutput(const QString&)),
             this, SIGNAL(ttyStdout(const QString &)));
 #endif
-    connect(gdb_, SIGNAL(userCommandOutput(const QString&)), this, 
+    connect(gdb_, SIGNAL(userCommandOutput(const QString&)), this,
             SIGNAL(gdbUserCommandStdout(const QString&)));
-    connect(gdb_, SIGNAL(internalCommandOutput(const QString&)), this, 
+    connect(gdb_, SIGNAL(internalCommandOutput(const QString&)), this,
             SIGNAL(gdbInternalCommandStdout(const QString&)));
 
     connect(gdb_, SIGNAL(ready()), this, SLOT(gdbReady()));
@@ -626,7 +627,7 @@ bool GDBController::startDebugger()
             this, SLOT(parseStreamRecord(const GDBMI::StreamRecord&)));
     connect(gdb_, SIGNAL(resultRecord(const GDBMI::ResultRecord&)),
             this, SLOT(resultRecord(const GDBMI::ResultRecord&)));
-    
+
     setStateOff(s_dbgNotStarted);
 
     // Initialise gdb. At this stage gdb is sitting wondering what to do,
@@ -663,7 +664,7 @@ bool GDBController::startDebugger()
     return true;
 }
 
-bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
+bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
@@ -689,10 +690,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
         return false;
     }
 
-    // FIXME: what's this?
-#if 0
-    m_process->setProperty("serial", serial);
-#endif
+    gdbExecuteJob_ = job;
 
     // Need to set up a new TTY for each run...
     if (tty_)
@@ -743,7 +741,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, int serial)
 
 // FIXME: not what it does, and how to get access to GDB's KProcess
 #if 0
-    foreach (const QString& envvar, l.createEnvironment(run.environmentKey(), 
+    foreach (const QString& envvar, l.createEnvironment(run.environmentKey(),
                                                         m_process->systemEnvironment()))
         queueCmd(new GDBCommand(GDBMI::GdbSet, "environment " + envvar));
 #endif
@@ -1103,7 +1101,7 @@ void GDBController::resultRecord(const GDBMI::ResultRecord& result)
         break;
     default:
         break;
-    }       
+    }
 }
 
 void GDBController::gdbReady()
@@ -1174,22 +1172,22 @@ void GDBController::explainDebuggerStatus()
     QString information = i18n(
         "%1 commands in queue\n"
         "%2 commands being processed by gdb\n"
-        "Debugger state: %3\n", 
+        "Debugger state: %3\n",
         commandQueue_->count(), (currentCmd_ ? 1 : 0), state_);
 
     if (currentCmd_)
     {
         QString extra = i18n("Current command class: '%1'\n"
                              "Current command text: '%2'\n"
-                             "Current command original text: '%3'\n", 
-                             typeid(*currentCmd_).name(), 
-                             currentCmd_->cmdToSend(), 
+                             "Current command original text: '%3'\n",
+                             typeid(*currentCmd_).name(),
+                             currentCmd_->cmdToSend(),
                              currentCmd_->initialString());
 
         information += extra;
     }
 
-    KMessageBox::information(qApp->activeWindow(), information, 
+    KMessageBox::information(qApp->activeWindow(), information,
                              i18n("Debugger status"));
 }
 
@@ -1211,7 +1209,7 @@ void GDBController::setStateOn(DBGStateFlags stateOn)
 void GDBController::setStateOff(DBGStateFlags stateOff)
 {
     DBGStateFlags oldState = state_;
-  
+
     debugStateChange(state_, state_ & ~stateOff);
     state_ &= ~stateOff;
 
@@ -1221,7 +1219,7 @@ void GDBController::setStateOff(DBGStateFlags stateOff)
 void GDBController::setState(DBGStateFlags newState)
 {
     DBGStateFlags oldState = state_;
-  
+
     debugStateChange(state_, newState);
     state_ = newState;
 
@@ -1286,18 +1284,9 @@ void GDBController::slotRestart()
     slotRun();
 }
 
-int GDBController::serial() const
+KJob* GDBController::job() const
 {
-    QVariant var;
-    // FIXME: no idea what this used to do.
-#if 0
-    if (m_process)
-        var = m_process->property("serial");
-
-    if (var.canConvert(QVariant::Int))
-        return var.toInt();
-#endif
-    return -1;
+    return gdbExecuteJob_;
 }
 
 VariableCollection * GDBController::variables() const

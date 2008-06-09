@@ -54,6 +54,7 @@
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 #include <iprojectcontroller.h>
+#include <iruncontroller.h>
 #include <iproject.h>
 #include <context.h>
 #include <util/processlinemaker.h>
@@ -86,7 +87,7 @@ template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
 {
 public:
-  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller, 
+  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller,
                       const QString &id, Qt::DockWidgetArea defaultArea)
   : m_plugin(plugin), m_controller(controller),
     m_id(id), m_defaultArea(defaultArea) {}
@@ -134,31 +135,31 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     controller = new GDBController(this);
 
     core()->uiController()->addToolView(
-        i18n("Breakpoints"), 
+        i18n("Breakpoints"),
         new DebuggerToolFactory<BreakpointWidget>(
             this, controller, "org.kdevelop.debugger.BreakpointsView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
-        i18n("Variables"), 
+        i18n("Variables"),
         new DebuggerToolFactory<VariableWidget>(
-            this, controller, "org.kdevelop.debugger.VariablesView", 
+            this, controller, "org.kdevelop.debugger.VariablesView",
             Qt::LeftDockWidgetArea));
 
     core()->uiController()->addToolView(
-        i18n("Frame Stack"), 
+        i18n("Frame Stack"),
         new DebuggerToolFactory<FramestackWidget>(
             this, controller, "org.kdevelop.debugger.StackView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
-        i18n("Disassemble"), 
+        i18n("Disassemble"),
         new DebuggerToolFactory<DisassembleWidget>(
             this, controller, "org.kdevelop.debugger.DisassemblerView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
-        i18n("GDB"), 
+        i18n("GDB"),
         new DebuggerToolFactory<GDBOutputWidget>(
             this, controller, "org.kdevelop.debugger.ConsoleView",
             Qt::BottomDockWidgetArea));
@@ -502,11 +503,11 @@ void CppDebuggerPlugin::setupController()
     connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 }
 
-bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, int serial)
+bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)
 {
     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
 
-    return controller->startProgram(run, serial);
+    return controller->startProgram(run, job);
 }
 
 void CppDebuggerPlugin::slotStopDebugger()
@@ -609,9 +610,9 @@ KConfigGroup CppDebuggerPlugin::config() const
     return m_config;
 }
 
-void CppDebuggerPlugin::abort(int serial)
+void CppDebuggerPlugin::abort(KJob* job)
 {
-    Q_UNUSED(serial);
+    Q_UNUSED(job);
     controller->stopDebugger();
 }
 
@@ -636,7 +637,7 @@ void CppDebuggerPlugin::slotStartDebugger()
 void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
 {
     QString message;
-  
+
     DBGStateFlags changedState = oldState ^ newState;
     if (changedState & s_dbgNotStarted) {
         if (newState & s_dbgNotStarted) {
@@ -776,13 +777,13 @@ void CppDebuggerPlugin::demandAttention() const
 void CppDebuggerPlugin::applicationStandardOutputLines(const QStringList& lines)
 {
     foreach (const QString& line, lines)
-        emit output(controller->serial(), line, KDevelop::IRunProvider::StandardOutput);
+        emit output(controller->job(), line, KDevelop::IRunProvider::StandardOutput);
 }
 
 void CppDebuggerPlugin::applicationStandardErrorLines(const QStringList& lines)
 {
     foreach (const QString& line, lines)
-        emit output(controller->serial(), line, KDevelop::IRunProvider::StandardError);
+        emit output(controller->job(), line, KDevelop::IRunProvider::StandardError);
 }
 
 }

@@ -51,10 +51,10 @@ public:
     explicit CMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~CMakeBuilder();
 
-    virtual bool build(KDevelop::ProjectBaseItem *dom);
-    virtual bool install(KDevelop::ProjectBaseItem *dom);
-    virtual bool clean(KDevelop::ProjectBaseItem *dom);
-    virtual bool configure(KDevelop::IProject*);
+    virtual KJob* build(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* configure(KDevelop::IProject*);
 
 //     bool updateConfig( KDevelop::IProject* project );
 
@@ -63,21 +63,8 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
-private Q_SLOTS:
-    void completed( int id );
-    void errored( int id );
-    void cleanupModel( int, int id );
-private:
-    QStringList cmakeArguments( KDevelop::IProject* project );
-    KUrl buildDir( KDevelop::IProject* project );
-    QString cmakeBinary( KDevelop::IProject* project );
-    QMap< KDevelop::ProjectBaseItem*, int > m_ids;
-    QMap< int, KDevelop::CommandExecutor* > m_cmds;
-    QMap< int, KDevelop::ProjectBaseItem* > m_items;
-    QMap< int, KDevelop::OutputModel* > m_models;
-    QSignalMapper* m_failedMapper;
-    QSignalMapper* m_completedMapper;
 
+private:
     bool m_dirty;
     IMakeBuilder* m_builder;
 };

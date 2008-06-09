@@ -27,7 +27,6 @@
 class QObject;
 class MakeActionFilter;
 class ErrorFilter;
-class MakeBuilder;
 
 class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
 {
@@ -38,7 +37,7 @@ public:
         MakeWarning,
         MakeBuilt
     };
-    explicit MakeOutputModel( MakeBuilder *builder, QObject* parent = 0 );
+    explicit MakeOutputModel( QObject* parent = 0 );
 
     // IOutputViewModel interfaces
     void activate( const QModelIndex& index );
@@ -52,7 +51,6 @@ public slots:
 private:
     MakeActionFilter* actionFilter;
     ErrorFilter* errorFilter;
-    MakeBuilder *m_builder;
 };
 
 #endif

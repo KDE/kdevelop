@@ -40,6 +40,7 @@
 ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     : QObject(parent)
     , m_process(new KProcess(this))
+    , m_job(0)
     , m_server(0)
     , m_connection(0)
     , m_model(new ValgrindModel(this))
@@ -56,9 +57,9 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 }
 
-bool ValgrindControl::run(const KDevelop::IRun& run, int serial)
+bool ValgrindControl::run(const KDevelop::IRun& run, KJob* job)
 {
-    m_serial = serial;
+    m_job = job;
 
     Q_ASSERT(m_process->state() != QProcess::Running);
 
@@ -193,7 +194,7 @@ void ValgrindControl::readyReadStandardOutput()
 void ValgrindControl::applicationOutput(const QStringList & lines)
 {
     foreach (const QString& line, lines)
-        emit plugin()->output(m_serial, line, KDevelop::IRunProvider::StandardOutput);
+        emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardOutput);
 }
 
 void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
@@ -202,7 +203,7 @@ void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
         return;
 
     foreach (const QString &line, lines)
-        emit plugin()->output(m_serial, line, KDevelop::IRunProvider::StandardError);
+        emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardError);
 }
 
 ValgrindModel * ValgrindControl::model() const

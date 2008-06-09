@@ -15,6 +15,7 @@ include_directories(
 
 set(cmakebuilder_LIB_SRCS
     cmakebuilder.cpp
+    cmakejob.cpp
 )
 
 

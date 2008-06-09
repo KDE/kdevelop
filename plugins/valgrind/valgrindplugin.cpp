@@ -48,6 +48,7 @@
 
 #include <icore.h>
 #include <iuicontroller.h>
+#include <iruncontroller.h>
 
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"
@@ -165,18 +166,18 @@ QStringList ValgrindPlugin::instrumentorsProvided() const
     return QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
 }
 
-bool ValgrindPlugin::execute(const KDevelop::IRun & run, int serial)
+bool ValgrindPlugin::execute(const KDevelop::IRun & run, KJob* job)
 {
     ValgrindControl* control = new ValgrindControl(this);
-    m_controls.insert(serial, control);
-    bool ret = control->run(run, serial);
+    m_controls.insert(job, control);
+    bool ret = control->run(run, job);
     emit newModel(control->model());
     return ret;
 }
 
-void ValgrindPlugin::abort(int serial)
+void ValgrindPlugin::abort(KJob* job)
 {
-    ValgrindControl* control = m_controls[serial];
+    ValgrindControl* control = m_controls[job];
     control->stop();
 }
 

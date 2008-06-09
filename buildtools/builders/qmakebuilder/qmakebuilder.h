@@ -49,11 +49,11 @@ public:
     explicit QMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~QMakeBuilder();
 
-    virtual bool build(KDevelop::ProjectBaseItem *dom);
-    virtual bool clean(KDevelop::ProjectBaseItem *dom);
-    virtual bool install(KDevelop::ProjectBaseItem *dom);
-    virtual bool configure(KDevelop::IProject *dom);
-    virtual bool prune(KDevelop::IProject *dom);
+    virtual KJob* build(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* configure(KDevelop::IProject *dom);
+    virtual KJob* prune(KDevelop::IProject *dom);
 
     QString qmakeBinary( KDevelop::IProject* project );
 
@@ -68,14 +68,12 @@ private Q_SLOTS:
     void qmakeCompleted( int id );
     void distcleanCompleted( KDevelop::ProjectBaseItem*, const QString& );
     void errored( int id );
-    void cleanupModel( int, int id );
+
 private:
     QMap< KDevelop::ProjectBaseItem*, int > m_ids;
     QMap< int, KDevelop::CommandExecutor* > m_cmds;
     QMap< int, KDevelop::ProjectBaseItem* > m_items;
     QMap< int, KDevelop::OutputModel* > m_models;
-    QSignalMapper* m_failedMapper;
-    QSignalMapper* m_qmakeCompletedMapper;
     KDevelop::IPlugin* m_makeBuilder;
     int toolviewid;
 };

@@ -49,15 +49,15 @@ public:
     KUrl valgrindExecutable() const;
 
     QList<ValgrindModel*> models() const;
-    
+
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
-    virtual bool execute(const KDevelop::IRun& run, int serial);
-    virtual void abort(int serial);
+    virtual bool execute(const KDevelop::IRun& run, KJob* job);
+    virtual void abort(KJob* job);
 
 signals:
-    void finished(int serial);
-    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+    void finished(KJob* job);
+    void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 
     void newModel(ValgrindModel* model);
 
@@ -73,7 +73,7 @@ private:
     QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams,
         m_lastCtExec, m_lastCtParams, m_lastKcExec;
 
-    QHash<int, ValgrindControl*> m_controls;
+    QHash<KJob*, ValgrindControl*> m_controls;
 };
 
 #endif // VALGRINDPLUGIN_H

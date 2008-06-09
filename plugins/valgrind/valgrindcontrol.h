@@ -27,6 +27,7 @@
 
 #include <irun.h>
 
+class KJob;
 class KProcess;
 class QXmlInputSource;
 class QXmlSimpleReader;
@@ -49,7 +50,7 @@ public:
 
     ValgrindPlugin* plugin() const;
 
-    bool run(const KDevelop::IRun& run, int serial);
+    bool run(const KDevelop::IRun& run, KJob* job);
     void stop();
 
 private slots:
@@ -68,7 +69,7 @@ private slots:
 private:
     KProcess* m_process;
     int m_currentPid;
-    int m_serial;
+    KJob* m_job;
 
     QTcpServer* m_server;
     QTcpSocket* m_connection;

@@ -26,12 +26,11 @@
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QVariant>
-
+#include "makejob.h"
 
 class QStringList;
 class MakeOutputModel;
 class KDialog;
-class QSignalMapper;
 class QString;
 class QStandardItem;
 class KUrl;
@@ -50,14 +49,6 @@ class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
     Q_OBJECT
     Q_INTERFACES( IMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
-private:
-    enum CommandType
-    {
-        BuildCommand,
-        CleanCommand,
-        CustomTargetCommand,
-        InstallCommand
-    };
 public:
     explicit MakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~MakeBuilder();
@@ -79,12 +70,14 @@ public:
      *
      * @TODO: Work on any project item, for fileitems you may find a target.
      */
-    virtual bool build(KDevelop::ProjectBaseItem *dom);
-    virtual bool clean(KDevelop::ProjectBaseItem *dom);
-    virtual bool install(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* build(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom);
 
-    virtual bool executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
-    bool runMake( KDevelop::ProjectBaseItem*, CommandType, const QString& = QString() );
+    virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
+    KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QString& = QString() );
+
+    MakeOutputDelegate* delegate() const;
 
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
@@ -94,25 +87,11 @@ Q_SIGNALS:
     void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );
 
 private Q_SLOTS:
-    void commandFinished(int id);
-    void commandFailed(int id);
-    void cleanupModel( int, int id );
+    void jobFinished(KJob* job);
 
 private:
-    QStringList computeBuildCommand(KDevelop::ProjectBaseItem *item, const QString& = QString() );
-    KUrl computeBuildDir( KDevelop::ProjectBaseItem* item );
-    QMap<QString, QString> environmentVars( KDevelop::ProjectBaseItem* item );
-
-private:
-    QMap< KDevelop::ProjectBaseItem*, int > m_ids;
-    QMap< int, CommandType > m_commandTypes;
-    QMap< int, KDevelop::CommandExecutor* > m_commands;
-    QMap< int, KDevelop::ProjectBaseItem* > m_items;
-    QMap< int, MakeOutputModel* > m_models;
-    QMap< int, MakeOutputDelegate* > m_delegates;
-    QMap< int, QString> m_customTargets;
-    QSignalMapper* m_errorMapper;
-    QSignalMapper* m_successMapper;
+    QHash< KDevelop::ProjectBaseItem*, KJob* > m_jobs;
+    MakeOutputDelegate* m_delegate;
 };
 
 #endif // KDEVMAKEBUILDER_H

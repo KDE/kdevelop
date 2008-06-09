@@ -21,15 +21,13 @@
 #include "makeoutputmodel.h"
 #include "outputfilters.h"
 #include "makeitem.h"
-#include "makebuilder.h"
 #include "icore.h"
 #include "idocumentcontroller.h"
 #include <ktexteditor/cursor.h>
 #include <kdebug.h>
 
-MakeOutputModel::MakeOutputModel( MakeBuilder *builder, QObject* parent )
+MakeOutputModel::MakeOutputModel( QObject* parent )
     : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
-    , m_builder( builder )
 {
 }
 
@@ -47,7 +45,7 @@ void MakeOutputModel::activate( const QModelIndex& index )
     if( warn )
     {
         KTextEditor::Cursor range( warn->lineNo, 0);
-        KDevelop::IDocumentController *docCtrl = m_builder->core()->documentController();
+        KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         docCtrl->openDocument( warn->file, range );
     }
 }

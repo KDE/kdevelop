@@ -46,26 +46,17 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "qmakejob.h"
+
 K_PLUGIN_FACTORY(QMakeBuilderFactory, registerPlugin<QMakeBuilder>(); )
 K_EXPORT_PLUGIN(QMakeBuilderFactory("kdevqmakebuilder"))
 
 QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent),
-      m_failedMapper( new QSignalMapper( this ) ),
-      m_qmakeCompletedMapper( new QSignalMapper( this ) )
+    : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IQMakeBuilder )
-    connect(m_failedMapper, SIGNAL(mapped( int )),
-            this, SLOT(errored( int)));
-    connect(m_qmakeCompletedMapper, SIGNAL(mapped( int )),
-            this, SLOT(qmakeCompleted( int )));
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if( i )
-    {
-        connect( i, SIGNAL( outputRemoved( int, int ) ),
-                 this, SLOT( cleanupModel( int, int ) ) );
-    }
+
     m_makeBuilder = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( m_makeBuilder )
     {
@@ -90,33 +81,7 @@ QMakeBuilder::~QMakeBuilder()
 {
 }
 
-void QMakeBuilder::cleanupModel( int, int id )
-{
-    kDebug(9039) << "view was removed, check wether its one of ours";
-    if( m_models.contains( id ) )
-    {
-        kDebug(9039) << "do some cleanup";
-        KDevelop::OutputModel* model = m_models[id];
-        KDevelop::CommandExecutor* cmd = m_cmds[id];
-        foreach( KDevelop::ProjectBaseItem* p, m_ids.keys() )
-        {
-            if( m_ids[p] == id )
-            {
-                m_ids.remove(p);
-                break;
-            }
-        }
-        m_models.remove(id);
-        m_cmds.remove(id);
-        m_items.remove(id);
-        m_failedMapper->removeMappings(cmd);
-        m_qmakeCompletedMapper->removeMappings(cmd);
-        delete model;
-        delete cmd;
-    }
-}
-
-bool QMakeBuilder::prune( KDevelop::IProject* project )
+KJob* QMakeBuilder::prune( KDevelop::IProject* project )
 {
     kDebug(9039) << "Distcleaning";
     if( m_makeBuilder )
@@ -128,10 +93,10 @@ bool QMakeBuilder::prune( KDevelop::IProject* project )
             return builder->executeMakeTarget(project->projectItem(), "distclean");
         }
     }
-    return false;
+    return 0;
 }
 
-bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9039) << "Building";
     if( m_makeBuilder )
@@ -143,56 +108,18 @@ bool QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             return builder->build(dom);
         }
     }
-    return false;
+    return 0;
 }
 
-bool QMakeBuilder::configure( KDevelop::IProject* project )
+KJob* QMakeBuilder::configure( KDevelop::IProject* project )
 {
-    if( !project )
-        return false;
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if( i )
-    {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-        if( view )
-        {
-
-            int id;
-            if( m_ids.contains( project->projectItem() ) )
-            {
-                id = m_ids[project->projectItem()];
-                m_models[id]->clear();
-                if( m_cmds.contains(id) )
-                    delete m_cmds[id];
-            }else
-            {
-                int tvid = view->standardToolView( KDevelop::IOutputView::BuildView );
-                id = view->registerOutputInToolView( tvid, i18n("QMake: %1", project->name()), KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-                m_ids[project->projectItem()] = id;
-                m_models[id] = new KDevelop::OutputModel(this);
-                view->setModel( id, m_models[id] );
-            }
-            m_items[id] = project->projectItem();
-            QString cmd = qmakeBinary( project );
-            m_cmds[id] = new KDevelop::CommandExecutor(cmd, this);
-            connect(m_cmds[id], SIGNAL(receivedStandardError(const QStringList&)),
-                    m_models[id], SLOT(appendLines(const QStringList&) ) );
-            connect(m_cmds[id], SIGNAL(receivedStandardOutput(const QStringList&)),
-                    m_models[id], SLOT(appendLines(const QStringList&) ) );
-            m_failedMapper->setMapping( m_cmds[id], id );
-            m_qmakeCompletedMapper->setMapping( m_cmds[id], id );
-            m_cmds[id]->setWorkingDirectory( project->folder().toLocalFile() );
-            connect( m_cmds[id], SIGNAL( failed() ), m_failedMapper, SLOT( map() ) );
-            connect( m_cmds[id], SIGNAL( completed() ), m_qmakeCompletedMapper, SLOT( map() ) );
-            m_cmds[id]->start();
-            return true;
-        }
-    }
-    return false;
+    QMakeJob* job = new QMakeJob(this);
+    job->setProject(project);
+    return job;
 }
 
 
-bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9039) << "Cleaning";
     if( m_makeBuilder )
@@ -204,10 +131,10 @@ bool QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
             return builder->clean(dom);
         }
     }
-    return false;
+    return 0;
 }
 
-bool QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
+KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
     kDebug(9039) << "Installing";
     if( m_makeBuilder )
@@ -219,7 +146,7 @@ bool QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
             return builder->install(dom);
         }
     }
-    return false;
+    return 0;
 }
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="51" name="kdevelop" >
+<kpartgui version="56" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1">
     <text context="@title:menu">File</text>
@@ -90,14 +90,12 @@
   <Menu name="run" noMerge="1">
     <text name="@title:menu">Run</text>
 
+    <Action name="run_default_target" />
     <Action name="run_execute" /> <!-- ### remove me -->
 
     <DefineGroup name="run_operations" />
 
-<!--
-    <Action name="stop_processes"
-	    group="stop_operations"/>
--->
+    <Action name="run_stop" />
 
     <Separator />
     <DefineGroup name="debug" /> <!-- ### remove me -->
@@ -183,6 +181,7 @@
   <text>Main Toolbar</text>
   <Action name="file_new" />
   <Action name="switch_area" />
+  <Action name="run_stop" />
 </ToolBar>
 
 <Menu name="rb_popup">

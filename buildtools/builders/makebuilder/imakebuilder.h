@@ -26,6 +26,7 @@
 
 class IProject;
 class ProjectItem;
+class KJob;
 
 /**
 @author Andreas Pakulat
@@ -36,7 +37,7 @@ class IMakeBuilder : public KDevelop::IProjectBuilder
 public:
 
     virtual ~IMakeBuilder() {}
-    virtual bool executeMakeTarget(KDevelop::ProjectBaseItem* item,
+    virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item,
                                    const QString& targetname ) = 0;
 signals:
     void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );

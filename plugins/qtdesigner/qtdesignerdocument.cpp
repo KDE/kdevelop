@@ -156,6 +156,8 @@ bool QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
         m_forms.removeAll(form);
         delete area;
     }
+
+    return true;
 }
 
 bool QtDesignerDocument::isActive() const

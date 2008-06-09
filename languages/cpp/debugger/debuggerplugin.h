@@ -83,12 +83,12 @@ public:
 
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
-    virtual bool execute(const KDevelop::IRun& run, int serial);
-    virtual void abort(int serial);
+    virtual bool execute(const KDevelop::IRun& run, KJob* job);
+    virtual void abort(KJob* job);
 
 Q_SIGNALS:
-    void finished(int serial);
-    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+    void finished(KJob* job);
+    void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 
 public:
     // BEGIN IStatus
@@ -147,7 +147,7 @@ private Q_SLOTS:
     void applicationStandardErrorLines(const QStringList& lines);
 
 Q_SIGNALS:
-    void startDebugger(const KDevelop::IRun & run, int serial);
+    void startDebugger(const KDevelop::IRun & run, KJob* job);
     void stopDebugger();
     void attachTo(int pid);
     void coreFile(const QString& core);

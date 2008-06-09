@@ -37,6 +37,8 @@
 
 #include "gdbglobal.h"
 
+class KJob;
+
 namespace GDBDebugger
 {
 
@@ -65,10 +67,10 @@ public:
     ~GDBController();
 
     /**
-     * Start the debugger, and execute the program specified by \a run, 
-     * and remember the provided \a serial number.
+     * Start the debugger, and execute the program specified by \a run,
+     * and remember the provided \a job.
      */
-    bool startProgram(const KDevelop::IRun& run, int serial);
+    bool startProgram(const KDevelop::IRun& run, KJob* job);
 
     /**
      * Run currently executing program to the given \a url and \a line.
@@ -96,9 +98,9 @@ public:
     void stopDebugger();
 
     /**
-     * Return the serial number for the currently run program, if one was given, else return -1.
+     * Return the job for the currently run program, if one was given, else return -1.
      */
-    int serial() const;
+    KJob* job() const;
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when
@@ -350,6 +352,8 @@ private:
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;
     BreakpointController* m_breakpointController;
+
+    KJob* gdbExecuteJob_;
 };
 
 }
