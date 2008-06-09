@@ -35,6 +35,7 @@
 #include <interfaces/idocument.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 #include <outputview/ioutputview.h>
 #include <project/projectmodel.h>
 #include <interfaces/context.h>
@@ -75,31 +76,11 @@
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>(); )
 K_EXPORT_PLUGIN(KDevSvnFactory("kdevsubversion"))
 
-class KDevSvnViewFactory: public KDevelop::IToolViewFactory{
-public:
-    KDevSvnViewFactory(KDevSvnPlugin *part): m_part(part) {}
-    virtual QWidget* create(QWidget */*parent*/ = 0)
-    {
-        return 0;
-//         return new KDevSvnView(m_part, parent);
-    }
-    virtual Qt::DockWidgetArea defaultPosition(const QString &/*areaName*/)
-    {
-        return Qt::BottomDockWidgetArea;
-    }
-private:
-    KDevSvnPlugin *m_part;
-    svn::Apr apr;
-};
-
-
 KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)
     , m_outputmodel(0), m_outputdelegate(0), m_factory(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl)
-//     m_factory = new KDevSvnViewFactory(this);
-//     core()->uiController()->addToolView("Subversion", m_factory);
     qRegisterMetaType<KDevelop::VcsStatusInfo>();
     qRegisterMetaType<SvnInfoHolder>();
     qRegisterMetaType<KDevelop::VcsEvent>();
@@ -567,9 +548,7 @@ void KDevSvnPlugin::doCommit( SvnCommitDialog* dlg )
     {
         mode = KDevelop::IBasicVersionControl::NonRecursive;
     }
-    KDevelop::VcsJob* job = commit( dlg->message(), dlg->checkedUrls(), mode );
-    job->exec();
-    delete job;
+    KDevelop::ICore::self()->runController()->registerJob( commit( dlg->message(), dlg->checkedUrls(), mode ) );
     dlg->deleteLater();
 }
 
@@ -582,30 +561,22 @@ void KDevSvnPlugin::ctxUpdate()
 {
     KDevelop::VcsRevision rev;
     rev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( KDevelop::VcsRevision::Head ), KDevelop::VcsRevision::Special );
-    KDevelop::VcsJob* job = update( m_ctxUrlList, rev );
-    job->exec();
-    delete job;
+    KDevelop::ICore::self()->runController()->registerJob( update( m_ctxUrlList, rev ) );
 }
 
 void KDevSvnPlugin::ctxAdd()
 {
-    KDevelop::VcsJob* job = add( m_ctxUrlList );
-    job->exec();
-    delete job;
+    KDevelop::ICore::self()->runController()->registerJob( add( m_ctxUrlList ) );
 }
 void KDevSvnPlugin::ctxRemove()
 {
-    KDevelop::VcsJob* job = remove( m_ctxUrlList );
-    job->exec();
-    delete job;
+    KDevelop::ICore::self()->runController()->registerJob( remove( m_ctxUrlList ) );
 }
 
 void KDevSvnPlugin::ctxRevert()
 {
     //@TODO: If one of the urls is a directory maybe ask whether all files in the dir should be reverted?
-    KDevelop::VcsJob* job = revert( m_ctxUrlList );
-    job->exec();
-    delete job;
+    KDevelop::ICore::self()->runController()->registerJob( revert( m_ctxUrlList ) );
 }
 
 void KDevSvnPlugin::ctxDiff()
@@ -628,6 +599,7 @@ void KDevSvnPlugin::ctxDiffHead()
     dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
+    //TODO: Fix this, the job should execute asynchronously via runcontroller
     job->exec();
     if( job->status() == KDevelop::VcsJob::JobSucceeded )
     {
@@ -651,6 +623,7 @@ void KDevSvnPlugin::ctxDiffBase()
     dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
     KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
 
+    //TODO: same as above ctxDiffHead
     job->exec();
     if( job->status() == KDevelop::VcsJob::JobSucceeded )
     {
@@ -703,9 +676,7 @@ void KDevSvnPlugin::ctxCopy()
         }
         if( dlg.exec() == QDialog::Accepted )
         {
-            KDevelop::VcsJob* job = copy( source, dlg.selectedUrl() );
-            job->exec();
-            delete job;
+            KDevelop::ICore::self()->runController()->registerJob( copy( source, dlg.selectedUrl() ) );
         }
     }else
     {
@@ -740,9 +711,7 @@ void KDevSvnPlugin::ctxMove()
         }
         if( dlg.exec() == QDialog::Accepted )
         {
-            KDevelop::VcsJob* job = move( source, dlg.selectedUrl() );
-            job->exec();
-            delete job;
+            KDevelop::ICore::self()->runController()->registerJob( move( source, dlg.selectedUrl() ) );
         }
     }else
     {
@@ -790,9 +759,7 @@ void KDevSvnPlugin::ctxImport( )
     dlg.setMainWidget( widget );
     if( dlg.exec() == QDialog::Accepted )
     {
-        KDevelop::VcsJob* job = import( widget->mapping(), widget->message() );
-        job->exec();
-        delete job;
+        KDevelop::ICore::self()->runController()->registerJob( import( widget->mapping(), widget->message() ) );
     }
 }
 
@@ -811,9 +778,7 @@ void KDevSvnPlugin::ctxCheckout( )
     dlg.setMainWidget( widget );
     if( dlg.exec() == QDialog::Accepted )
     {
-        KDevelop::VcsJob* job = checkout( widget->mapping() );
-        job->exec();
-        delete job;
+        KDevelop::ICore::self()->runController()->registerJob( checkout( widget->mapping() ) );
     }
 }
 
