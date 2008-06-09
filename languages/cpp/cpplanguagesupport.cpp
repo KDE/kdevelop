@@ -86,8 +86,8 @@
 #include "includepathresolver.h"
 #include "setuphelpers.h"
 #include "quickopen.h"
+#include "cppdebughelper.h"
 
-//#define DEBUG_UI_LOCKUP
 #define LOCKUP_INTERVAL 30
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
@@ -105,12 +105,6 @@ KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c) {
   return c;
 }
 
-//#define DEBUG
-
-//When this is enabled, the include-path-resolver will always be issued,
-//and the returned include-path compared to the one returned by the build-manager.
-//Set it to 1 to debug build-managers.
-#define DEBUG_INCLUDE_PATHS 1
 
 using namespace KDevelop;
 

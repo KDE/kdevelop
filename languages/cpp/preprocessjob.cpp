@@ -53,15 +53,7 @@
 #include "environmentmanager.h"
 #include "cpppreprocessenvironment.h"
 
-//Uncomment his to get logging from the preprocess job
-//#define DEBUG
-
-#ifdef DEBUG
-#define ifDebug(x) x
-#else
-#define ifDebug(x)
-#endif
-
+#include "cppdebughelper.h"
 
 QString urlsToString(const QList<KUrl>& urlList) {
   QString paths;
