@@ -28,6 +28,9 @@
 
 #include "../models/vcsannotationmodel.h"
 #include "../vcsannotation.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/iruncontroller.h"
+
 #include "ui_vcsannotationwidget.h"
 #include <kdebug.h>
 
@@ -76,7 +79,7 @@ VcsAnnotationWidget::VcsAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job
     connect( d->m_job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ),
              this, SLOT( addAnnotations( KDevelop::VcsJob* ) ) );
     d->m_job->setAutoDelete(false);
-    d->m_job->start();
+    ICore::self()->runController()->registerJob( d->m_job );
 }
 
 VcsAnnotationWidget::~VcsAnnotationWidget()

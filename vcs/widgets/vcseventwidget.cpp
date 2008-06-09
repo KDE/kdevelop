@@ -39,6 +39,8 @@
 
 #include "../models/vcsitemeventmodel.h"
 #include "../models/vcseventmodel.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/iruncontroller.h"
 
 #include "vcsdiffwidget.h"
 
@@ -51,7 +53,7 @@ public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
     {}
-    
+
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
     VcsEventModel *m_logModel;
@@ -177,7 +179,7 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
     d->m_job = job;
     //Don't autodelete this job, its metadata will be used later on
     d->m_job->setAutoDelete( false );
-    
+
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
@@ -205,10 +207,10 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
              this, SLOT( eventViewClicked( const QModelIndex& ) ) );
     connect( d->m_ui->eventView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              this, SLOT( eventViewCustomContextMenuRequested( const QPoint& ) ) );
-    
+
     connect( d->m_job, SIGNAL(resultsReady( KDevelop::VcsJob*) ),
              this, SLOT( jobReceivedResults( KDevelop::VcsJob* ) ) );
-    d->m_job->start();
+    ICore::self()->runController()->registerJob( d->m_job );
 }
 VcsEventWidget::~VcsEventWidget()
 {

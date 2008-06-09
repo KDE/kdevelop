@@ -28,6 +28,8 @@
 #include "../vcsjob.h"
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/iruncontroller.h"
 
 #include "ui_vcsdiffwidget.h"
 
@@ -44,7 +46,7 @@ public:
         if( job != m_job )
             return;
         KDevelop::VcsDiff diff = qVariantValue<KDevelop::VcsDiff>( m_job->fetchResults() );
-    
+
         kDebug(9510) << "diff:" << diff.leftTexts().count();
         foreach( KDevelop::VcsLocation l, diff.leftTexts().keys() )
         {
@@ -55,11 +57,11 @@ public:
         kDebug(9510) << "diff:" << diff.contentType();
         m_ui->diffDisplay->setPlainText( diff.diff() );
         m_ui->diffDisplay->setReadOnly( true );
-    
+
     }
 
 };
-    
+
 VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
     : QWidget( parent ), d(new VcsDiffWidgetPrivate)
 {
@@ -68,7 +70,7 @@ VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
     d->m_ui->setupUi( this );
     connect( d->m_job, SIGNAL( resultsReady( KDevelop::VcsJob *) ),
              this, SLOT( diffReady( KDevelop::VcsJob* ) ) );
-    d->m_job->start();
+    ICore::self()->runController()->registerJob( d->m_job );
 }
 
 VcsDiffWidget::~VcsDiffWidget()
