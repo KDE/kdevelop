@@ -316,13 +316,13 @@ bool Project::open( const KUrl& projectFileUrl_ )
     {
 //         ProjectModel* model = Core::self()->projectController()->projectModel();
         d->topItem = iface->import( this );
-        d->topItem->setIcon();
         if( !d->topItem )
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
                                 i18n("Couldn't open project") );
             return false;
         }
+        d->topItem->setIcon();
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
