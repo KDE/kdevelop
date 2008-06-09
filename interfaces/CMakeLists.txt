@@ -20,6 +20,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     idocumentcontroller.cpp
     istatus.cpp
     irun.cpp
+    iruncontroller.cpp
     irunprovider.cpp
     contextmenuextension.cpp
     scripting/scriptdocument.cpp
@@ -49,6 +50,7 @@ install(FILES
     interfacesexport.h
     istatus.h
     irun.h
+    iruncontroller.h
     irunprovider.h
     contextmenuextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces

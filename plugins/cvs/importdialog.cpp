@@ -13,6 +13,9 @@
 #include <KMessageBox>
 #include <KDebug>
 
+#include "icore.h"
+#include "iruncontroller.h"
+
 #include "cvsplugin.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
@@ -41,7 +44,7 @@ void ImportDialog::accept()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 

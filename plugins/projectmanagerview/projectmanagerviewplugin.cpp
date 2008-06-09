@@ -44,6 +44,7 @@
 #include "iprojectfilemanager.h"
 #include "ibuildsystemmanager.h"
 #include "iuicontroller.h"
+#include "iruncontroller.h"
 #include "idocumentcontroller.h"
 #include "iprojectbuilder.h"
 #include "iprojectcontroller.h"
@@ -214,7 +215,7 @@ void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
     core()->documentController()->saveAllDocuments(IDocument::Silent);
 
     if( builder )
-        builder->build( item );
+        core()->runController()->registerJob(builder->build( item ));
 }
 
 void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
@@ -222,7 +223,7 @@ void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Cleaning item:" << item->text();
     if( builder )
-        builder->clean( item );
+        core()->runController()->registerJob(builder->clean( item ));
 }
 
 void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
@@ -233,7 +234,7 @@ void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
     core()->documentController()->saveAllDocuments(IDocument::Silent);
 
     if( builder )
-        builder->install( item );
+        core()->runController()->registerJob(builder->install( item ));
 }
 
 
@@ -245,7 +246,7 @@ void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
     core()->documentController()->saveAllDocuments(IDocument::Silent);
 
     if( builder )
-        builder->configure( item );
+        core()->runController()->registerJob(builder->configure( item ));
 }
 
 void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
@@ -256,7 +257,7 @@ void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
     core()->documentController()->saveAllDocuments(IDocument::Silent);
 
     if( builder )
-        builder->prune( item );
+        core()->runController()->registerJob(builder->prune( item ));
 }
 
 

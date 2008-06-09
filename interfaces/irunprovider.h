@@ -24,6 +24,8 @@ Boston, MA 02110-1301, USA.
 
 #include "iextension.h"
 
+class KJob;
+
 namespace KDevelop
 {
 
@@ -40,7 +42,7 @@ public:
         StandardError  /**< indicates the process wrote to standard error */,
         RunProvider    /**< indicates the run provider produced output */
     };
-    
+
     /**
      * Return a list of instrumentors that your plugin supports.
      */
@@ -49,19 +51,14 @@ public:
     /**
      * Request the execution of \a run.
      */
-    virtual bool execute(const IRun& run, int serial) = 0;
+    virtual bool execute(const IRun& run, KJob* job) = 0;
 
     /**
      * Request the aborting of a run with the given \a serial number.
      */
-    virtual void abort(int serial) = 0;
+    virtual void abort(KJob* job) = 0;
 
 Q_SIGNALS:
-    /**
-     * Notify that process with the given \a serial number has finished.
-     */
-    void finished(int serial);
-
     /**
      * Notify that the process with given \a serial has produced the given \a output in the given \a type.
      */

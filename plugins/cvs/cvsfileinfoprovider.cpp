@@ -38,7 +38,7 @@ bool CvsFileInfoProvider::requestStatusASync(const KUrl & directory, KDevelop::I
         // immediately when stderr output is received. As cvs tells directory changes via stderr, we would
         // be unable to tell which part from the output to stdout belongs to which directory.
         job->setCommunicationMode( K3Process::Stdout | K3Process::MergedStderr );
-        job->start();
+        ICore::self()->runProvider()->registerJob(job);
         return true;
     }
 

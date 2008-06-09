@@ -46,12 +46,12 @@ class IRunController;
  * should be used.
  *
  * ICore can provide the user with instances of the following things:
- * - the mainwindow
+ * - the main window(s)
+ *   - the document controller(s)
  * - the plugin controller
  * - the project controller
  * - the language controller
  * - the KPart manager
- * - the document controller
  *
  * When an object is provided to ICore so it can be used later, ICore
  * will take ownership of the object and upon application shutdown will take

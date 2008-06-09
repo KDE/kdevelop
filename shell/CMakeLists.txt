@@ -14,6 +14,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/language/interfaces
     ${CMAKE_SOURCE_DIR}/outputview
+    ${CMAKE_SOURCE_DIR}/util
 )
 
 set(kdevplatformshell_LIB_SRCS
@@ -41,7 +42,7 @@ set(kdevplatformshell_LIB_SRCS
 
 
 kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
-target_link_libraries(kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformeditor kdevplatformlanguage sublime )
+target_link_libraries(kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformeditor kdevplatformlanguage sublime kdevplatformutil )
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevplatformshell ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

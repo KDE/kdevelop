@@ -46,17 +46,17 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
     /**
      * Request the execution of \a run.
      */
-    virtual bool execute(const IRun& run, int serial);
+    virtual bool execute(const IRun& run, KJob* serial);
 
     /**
      * Request the aborting of a run with the given \a serial number.
      */
-    virtual void abort(int serial);
+    virtual void abort(KJob* serial);
 
   Q_SIGNALS:
     // implementations from IRunProvider
-    void finished(int serial);
-    void output(int serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+    void finished(KJob* serial);
+    void output(KJob* serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 
   private Q_SLOTS:
     void readyReadStandardOutput();
@@ -66,7 +66,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
   private:
     void readFrom(QProcess* process, QProcess::ProcessChannel channel);
 
-    QMap<int, QProcess*> m_runners;
+    QMap<KJob*, QProcess*> m_runners;
 };
 
 }

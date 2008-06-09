@@ -13,6 +13,9 @@
 #include <KMessageBox>
 #include <KDebug>
 
+#include "icore.h"
+#include "iruncontroller.h"
+
 #include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
@@ -40,7 +43,7 @@ void CheckoutDialog::accept()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 

@@ -74,6 +74,11 @@ public:
      * start the command, after this has been called signals may be emitted
      */
     void start();
+    
+    /**
+     * kill the process, failed() will likely be emitted
+     */
+    void kill();
 
     /**
      * set the Command that should be started, now a commandexecutor can be reused

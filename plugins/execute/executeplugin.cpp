@@ -25,6 +25,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kdebug.h>
+#include <kjob.h>
 
 #include <environmentgrouplist.h>
 
@@ -52,7 +53,7 @@ QStringList ExecutePlugin::instrumentorsProvided() const
     return QStringList() << "default";
 }
 
-bool ExecutePlugin::execute(const IRun & run, int serial)
+bool ExecutePlugin::execute(const IRun & run, KJob* job)
 {
     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
 
@@ -61,21 +62,26 @@ bool ExecutePlugin::execute(const IRun & run, int serial)
     connect(process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
 
-    m_runners.insert(serial, process);
+    m_runners.insert(job, process);
 
     KDevelop::EnvironmentGroupList l(KGlobal::config());
-    process->setProperty("serial", serial);
+    process->setProperty("job", QVariant::fromValue(static_cast<void*>(job)));
     process->setEnvironment(l.createEnvironment(run.environmentKey(), process->systemEnvironment()));
     process->setWorkingDirectory(run.workingDirectory().path());
     process->start(run.executable().path(), run.arguments());
 
+    kDebug() << "Started process" << run.executable().path() << "with arguments" << run.arguments();
+
     return true;
 }
 
-void ExecutePlugin::abort(int serial)
+void ExecutePlugin::abort(KJob* job)
 {
-    if (m_runners.contains(serial))
-        delete m_runners.take(serial);
+    if (m_runners.contains(job)) {
+        QProcess* process = m_runners.take(job);
+        process->close();
+        delete process;
+    }
 }
 
 void ExecutePlugin::readyReadStandardError()
@@ -99,12 +105,12 @@ void ExecutePlugin::readyReadStandardOutput()
 void ExecutePlugin::readFrom(QProcess * process, QProcess::ProcessChannel channel)
 {
     process->setReadChannel(channel);
-    int serial = process->property("serial").toInt();
+    KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
 
     while (process->canReadLine()) {
         QByteArray line = process->readLine();
         QString string = QString::fromLocal8Bit(line, line.length() - 2);
-        emit output(serial, string, channel == QProcess::StandardOutput ? IRunProvider::StandardOutput : IRunProvider::StandardError);
+        emit output(job, string, channel == QProcess::StandardOutput ? IRunProvider::StandardOutput : IRunProvider::StandardError);
     }
 }
 
@@ -114,17 +120,20 @@ void ExecutePlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatu
     if (!process)
         return;
 
-    int serial = process->property("serial").toInt();
+    KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
 
     if (exitCode == 0 && exitStatus == QProcess::NormalExit)
-        emit output(serial, i18n("*** Exited normally ***"), IRunProvider::RunProvider);
+        emit output(job, i18n("*** Exited normally ***"), IRunProvider::RunProvider);
     else
         if (exitStatus == QProcess::NormalExit)
-            emit output(serial, i18n("*** Exited with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
+            emit output(job, i18n("*** Exited with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
         else
-            emit output(serial, i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
+            if (job->error() == KJob::KilledJobError)
+                emit output(job, i18n("*** Process aborted ***"), IRunProvider::RunProvider);
+            else
+                emit output(job, i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
 
-    emit finished(serial);
+    emit finished(job);
 }
 
 #include "executeplugin.moc"

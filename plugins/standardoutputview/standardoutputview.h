@@ -61,9 +61,9 @@ public:
                                         = KDevelop::IOutputView::AllowUserClose );
 
     void raiseOutput( int id );
-    void setModel( int id, QAbstractItemModel* );
+    void setModel( int id, QAbstractItemModel*, Ownership takeOwnership );
 
-    void setDelegate( int id, QAbstractItemDelegate* );
+    void setDelegate( int id, QAbstractItemDelegate*, Ownership takeOwnership );
 
 
     virtual void removeToolView( int id );

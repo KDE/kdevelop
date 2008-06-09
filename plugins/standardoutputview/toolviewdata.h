@@ -43,13 +43,15 @@ Q_OBJECT
 public:
     OutputData( ToolViewData* tv );
     QAbstractItemDelegate* delegate;
+    bool ownsDelegate;
     QAbstractItemModel* model;
+    bool ownsModel;
     ToolViewData* toolView;
     KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     int id;
-    void setModel( QAbstractItemModel* model);
-    void setDelegate( QAbstractItemDelegate* delegate);
+    void setModel( QAbstractItemModel* model, bool takeOwnership);
+    void setDelegate( QAbstractItemDelegate* delegate, bool takeOwnership);
 signals:
     void modelChanged( int );
     void delegateChanged( int );

@@ -29,6 +29,7 @@
 #include <projectmodel.h>
 #include <iuicontroller.h>
 #include <icore.h>
+#include <iruncontroller.h>
 #include <context.h>
 #include <vcsmapping.h>
 
@@ -163,7 +164,7 @@ void CvsPlugin::slotStatus()
     if (job) {
         CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
         emit addNewTabToMainView( view, i18n("Status") );
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -266,7 +267,7 @@ void CvsPlugin::ctxCommit()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -277,7 +278,7 @@ void CvsPlugin::ctxAdd()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -288,7 +289,7 @@ void CvsPlugin::ctxRemove()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -303,7 +304,7 @@ void CvsPlugin::ctxUpdate()
         if (job) {
             connect(job, SIGNAL( result(KJob*) ),
                     this, SIGNAL( jobFinished(KJob*) ));
-            job->start();
+            KDevelop::ICore::self()->runController()->registerJob(job);
         }
     }
 }
@@ -314,7 +315,7 @@ void CvsPlugin::ctxLog()
     KDevelop::VcsJob* j = log( d->m_ctxUrlList.first(), rev, 0 );
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
         LogView* view = new LogView(this, job);
         emit addNewTabToMainView( view, i18n("Log") );
     }
@@ -330,7 +331,7 @@ void CvsPlugin::ctxAnnotate()
     if (job) {
         AnnotateView* view = new AnnotateView(this, job);
         emit addNewTabToMainView( view, i18n("Annotate") );
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -342,7 +343,7 @@ void CvsPlugin::ctxRevert()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -355,7 +356,7 @@ void CvsPlugin::ctxDiff()
         KDevelop::VcsJob* j = diff(url, QString(""), dlg.revA(), dlg.revB(), KDevelop::VcsDiff::DiffUnified);
         CvsJob* job = dynamic_cast<CvsJob*>(j);
         if (job) {
-            job->start();
+            KDevelop::ICore::self()->runController()->registerJob(job);
             CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
             emit addNewTabToMainView( view, i18n("Diff") );
         }
@@ -371,7 +372,7 @@ void CvsPlugin::ctxEdit()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -384,7 +385,7 @@ void CvsPlugin::ctxUnEdit()
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
@@ -396,7 +397,7 @@ void CvsPlugin::ctxEditors()
     CvsJob* job = d->m_proxy->editors( info.absolutePath(),
                                        d->m_ctxUrlList);
     if (job) {
-        job->start();
+        KDevelop::ICore::self()->runController()->registerJob(job);
         EditorsView* view = new EditorsView(this, job);
         emit addNewTabToMainView( view, i18n("Editors") );
     }

@@ -208,7 +208,7 @@ public:
   virtual QString toString() const;
 
   virtual uint hash() const;
-  
+
   virtual WhichType whichType() const;
 
   virtual AbstractType* clone() const;
@@ -447,7 +447,7 @@ public:
   void setKind(Kind kind);
 
   virtual uint hash() const;
-  
+
   virtual WhichType whichType() const;
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;

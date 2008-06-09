@@ -96,25 +96,32 @@ public:
      */
     virtual void raiseOutput( int id ) = 0;
 
+    enum Ownership {
+        KeepOwnership,
+        TakeOwnership
+    };
+
     /**
      * Sets the model of the registered output identified by id to model
-     *
-     * This function does _not_ take ownership of the model, the user is
-     * responsible for deleting the model once the view is removed
-     *
      * Does nothing if the id doesn't exist
+     *
+     * \param takeOwnership If true, the output view plugin takes ownership of the model,
+     *                      and deletes it when the view is removed.  If false, the ownership
+     *                      remains with the caller.
+     *
      */
-    virtual void setModel( int id, QAbstractItemModel* model ) = 0;
+    virtual void setModel( int id, QAbstractItemModel* model, Ownership takeOwnership = KeepOwnership ) = 0;
 
     /**
      * Sets the item delegate of the registered output identified by id to @p delegate
-     *
-     * This function does _not_ take ownership of the delegate, the user is
-     * responsible for deleting the delegate once the view is removed
-     *
      * Does nothing if the id doesn't exist
+     *
+     * \param takeOwnership If true, the output view plugin takes ownership of the model,
+     *                      and deletes it when the view is removed.  If false, the ownership
+     *                      remains with the caller.
+     *
      */
-    virtual void setDelegate( int id, QAbstractItemDelegate* model ) = 0;
+    virtual void setDelegate( int id, QAbstractItemDelegate* model, Ownership takeOwnership = KeepOwnership ) = 0;
 
     /**
      * remove a toolview, don't forget to emit toolViewRemoved when you implement this

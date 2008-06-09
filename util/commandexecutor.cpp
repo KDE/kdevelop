@@ -116,6 +116,11 @@ void CommandExecutor::setCommand( const QString& command )
     d->m_command = command;
 }
 
+void CommandExecutor::kill()
+{
+    d->m_process->close();
+}
+
 }
 
 #include "commandexecutor.moc"

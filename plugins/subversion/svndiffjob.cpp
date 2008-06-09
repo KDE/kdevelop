@@ -36,6 +36,9 @@
 #include <kdevsvncpp/path.hpp>
 #include <kdevsvncpp/revision.hpp>
 
+#include "icore.h"
+#include "iruncontroller.h"
+
 #include "svnclient.h"
 #include "svncatjob.h"
 
@@ -373,7 +376,7 @@ void SvnDiffJob::setDiff( const QString& diff )
             connect( job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ), this, SLOT( addLeftText( KDevelop::VcsJob* ) ) );
             connect( job, SIGNAL( result( KJob* ) ), this, SLOT( removeJob( KJob* ) ) );
 
-            job->start();
+            KDevelop::ICore::self()->runController()->registerJob(job);
         }
     }
 }

@@ -23,6 +23,8 @@
 #include <interfaces/iextension.h>
 #include "../projectexport.h"
 
+class KJob;
+
 namespace KDevelop
 {
 class IProject;
@@ -45,13 +47,13 @@ public:
      * Installs the given project item, exact behaviour depends
      * on the implementation
      */
-    virtual bool install(ProjectBaseItem* item) = 0;
+    virtual KJob* install(ProjectBaseItem* item) = 0;
 
     /**
      * Builds the given project item, exact behaviour depends
      * on the implementation
      */
-    virtual bool build(ProjectBaseItem *dom) = 0;
+    virtual KJob* build(ProjectBaseItem *dom) = 0;
 
     /**
      * Cleans the given project item, exact behaviour depends
@@ -59,7 +61,7 @@ public:
      * output files, like C/C++ object files, binaries, files
      * that the builder needs shouldn't be removed.
      */
-    virtual bool clean(ProjectBaseItem *dom) = 0;
+    virtual KJob* clean(ProjectBaseItem *dom) = 0;
 
     /**
      * Configures the given project, exact behaviour depends
@@ -68,7 +70,7 @@ public:
      *
      * This function is optional, the default implementation does nothing.
      */
-    virtual bool configure(IProject*);
+    virtual KJob* configure(IProject*);
 
     /**
      * Prunes the given project, exact behaviour depends
@@ -78,7 +80,7 @@ public:
      *
      * This function is optional, the default implementation does nothing.
      */
-    virtual bool prune(IProject*);
+    virtual KJob* prune(IProject*);
 
 Q_SIGNALS:
     /**

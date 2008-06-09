@@ -39,7 +39,7 @@ public:
     IRun();
     IRun(const IRun& rhs);
     IRun& operator=(const IRun& rhs);
-    ~IRun();
+    virtual ~IRun();
 
     /**
      * The executable for this session.
@@ -124,54 +124,6 @@ public:
 private:
     class IRunPrivate;
     QSharedDataPointer<IRunPrivate> d;
-};
-
-/**
- * The main controller for running processes.
- */
-class KDEVPLATFORMINTERFACES_EXPORT IRunController : public QObject
-{
-    Q_OBJECT
-    
-public:
-    ///Constructor.
-    IRunController(QObject *parent);
-
-    /**
-     * Request the provided \a run object to be executed.
-     *
-     * \return the serial number for the run job, or -1 if \a run could not be executed.
-     */
-    virtual int execute(const IRun& run) = 0;
-
-    /**
-     * Request the run with the given \a serial number to be aborted.
-     */
-    virtual void abort(int serial) = 0;
-
-    /**
-     * Request for all running processes to be aborted.
-     */
-    virtual void abortAll() = 0;
-
-    /**
-     * Provide the default run object.
-     */
-    virtual IRun defaultRun() const = 0;
-
-    /**
-     * An enumeration of the possible states for the run controller.
-     */
-    enum State {
-        Idle     /**< No processes are currently running */,
-        Running  /**< processes are currently running */
-    };
-
-Q_SIGNALS:
-    /**
-     * Notify that the state of the run controller has changed to \a {state}.
-     */
-    void runStateChanged(State state);
 };
 
 }

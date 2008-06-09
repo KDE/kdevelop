@@ -26,14 +26,14 @@ IProjectBuilder::~IProjectBuilder()
 }
 
 
-bool IProjectBuilder::configure(IProject*)
+KJob* IProjectBuilder::configure(IProject*)
 {
-    return false;
+    return 0;
 }
 
-bool IProjectBuilder::prune(IProject*)
+KJob* IProjectBuilder::prune(IProject*)
 {
-    return false;
+    return 0;
 }
 
 }

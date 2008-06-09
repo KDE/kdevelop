@@ -103,11 +103,6 @@ IRun::~ IRun()
 {
 }
 
-IRunController::IRunController(QObject * parent)
-    : QObject(parent)
-{
-}
-
 KUrl IRun::workingDirectory() const
 {
     return d->workingDirectory;

@@ -6,7 +6,7 @@ add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
 include_directories( ${KDevSubversionPlugin_SOURCE_DIR}
                      ${KDE4_INCLUDES}
                      ${KDE4_INCLUDE_DIR}/threadweaver
-                     ${KDEVPLATFORM_INCLUDE_DIR}
+                     ${CMAKE_SOURCE_DIR}/interfaces
                      ${SUBVERSION_INCLUDE_DIRS}
                      ${KDevSubversionPlugin_BINARY_DIR}
 )
