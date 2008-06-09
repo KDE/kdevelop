@@ -18,14 +18,7 @@
 #include "rpp/pp-environment.h"
 #include <iproblem.h>
 #include "cpppreprocessenvironment.h"
-
-//#define LEXERCACHE_DEBUG
-
-#ifndef LEXERCACHE_DEBUG
-#define ifDebug(X) /**/
-#else
-#define ifDebug(X) X
-#endif
+#include "cppdebughelper.h"
 
 using namespace Cpp;
 using namespace KDevelop;

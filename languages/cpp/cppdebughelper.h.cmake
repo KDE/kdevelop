@@ -6,6 +6,8 @@
 //Set it to 1 to debug build-managers.
 #cmakedefine DEBUG_INCLUDE_PATHS 1
 
+#cmakedefine LEXERCACHE_DEBUG
+
 #ifdef DEBUG
 #define ifDebug(x) x
 #else
