@@ -39,8 +39,7 @@
 #include "pushvalue.h"
 
 #include <climits>
-
-//#define DEBUG_UPDATE_MATCHING
+#include "cppdebughelper.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
