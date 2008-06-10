@@ -109,27 +109,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   virtual int argumentHintDepth() const;
 };
 
-//A completion item used for completion of normal declarations while normal code-completion
-class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public CompletionTreeItem {
-public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<CodeCompletionContext> context=KSharedPtr<CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
-  }
-  
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
-
-  virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
-
-  KDevelop::DeclarationPointer declaration;
-  KSharedPtr<CodeCompletionContext> completionContext;
-  int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
-  int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
-  QString alternativeText; //Text shown when declaration is zero
-  //If this is a completion for an include-file, this contains the file.
-
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
-};
-
 typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
 
 }

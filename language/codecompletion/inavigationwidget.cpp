@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "navigationwidget.h"
+#include "inavigationwidget.h"
 
-KDevelop::NavigationWidget::~NavigationWidget()
+KDevelop::INavigationWidget::~INavigationWidget()
 {
 }

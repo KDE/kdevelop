@@ -48,7 +48,7 @@
 #include "codecompletioncontext.h"
 #include <duchainutils.h>
 #include "codecompletionworker.h"
-#include "navigationwidget.h"
+#include "inavigationwidget.h"
 
 using namespace KTextEditor;
 
@@ -89,8 +89,9 @@ void CodeCompletionModel::setCompletionWorker(CodeCompletionWorker* worker)
   m_worker->start();
 }
 
-void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, NavigationWidget* widget) const
+void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const
 {
+  Q_ASSERT(dynamic_cast<INavigationWidget*>(widget));
   m_navigationWidgets[element] = widget;
 }
 
@@ -185,21 +186,21 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   
     case AccessibilityNext:
     {
-      NavigationWidget* w = m_navigationWidgets[&treeElement];
+      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->next();
     }
     break;
     case AccessibilityPrevious:
     {
-      NavigationWidget* w = m_navigationWidgets[&treeElement];
+      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->previous();
     }
     break;
     case AccessibilityAccept:
     {
-      NavigationWidget* w = m_navigationWidgets[&treeElement];
+      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->accept();
     }

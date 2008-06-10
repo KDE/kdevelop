@@ -30,9 +30,8 @@ namespace KDevelop {
    * */
   class KDEVPLATFORMLANGUAGE_EXPORT INavigationWidget {
     public:
-      virtual ~NavigationWidget();
+      virtual ~INavigationWidget();
 
-    public:
       ///Keyboard-action "next"
       virtual void next() = 0;
       ///Keyboard-action "previous"

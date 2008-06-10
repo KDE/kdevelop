@@ -42,7 +42,7 @@ namespace KDevelop
 class DUContext;
 class Declaration;
 class CodeCompletionWorker;
-class NavigationWidget;
+class INavigationWidget;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
 {
@@ -70,7 +70,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     KDevelop::TopDUContextPointer currentTopContext() const;
 
     //Tracks navigation widget so they can be interactive with through the keyboard later on
-    void addNavigationWidget(const CompletionTreeElement* element, NavigationWidget* widget) const;
+    void addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const;
 
   Q_SIGNALS:
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
@@ -86,7 +86,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
 
   private:
-    mutable QMap<const CompletionTreeElement*, QPointer<NavigationWidget> > m_navigationWidgets;
+    mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
     QMutex* m_mutex;
