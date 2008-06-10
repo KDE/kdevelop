@@ -86,7 +86,7 @@ public:
     {
         mplugin->core()->documentController()->openDocument( url );
     }
-    
+
     /*void filtersChanged()
     {
         m_modelFilter->setFilterWildcard(m_filters->text());
@@ -107,14 +107,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
     vbox->addWidget( d->m_projectOverview );
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
-//     connect( d->m_projectOverview, SIGNAL( currentChanged( KDevelop::ProjectBaseItem* ) ),
-//              this, SLOT(currentItemChanged( KDevelop::ProjectBaseItem* ) ) );
-    
+
 //     d->m_filters = new KLineEdit(this);
 //     d->m_filters->setClearButtonShown(true);
 //     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
 //     vbox->addWidget( d->m_filters );
-    
+
     QHBoxLayout* hbox = new QHBoxLayout();
     vbox->addLayout( hbox );
 
@@ -146,8 +144,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_projectOverview->setSortingEnabled(true);
     d->m_projectOverview->setModel( d->m_modelFilter );
 //     d->m_projectOverview->setModel( overviewModel );
-    d->m_projectOverview->setSelectionModel(
-            new QItemSelectionModel( overviewModel, d->m_projectOverview ) );
     d->m_projectOverview->setExpanded( d->m_modelFilter->index(0,0,QModelIndex()), true );
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );

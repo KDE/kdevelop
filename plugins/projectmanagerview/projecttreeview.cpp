@@ -63,18 +63,6 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
-void ProjectTreeView::setSelectionModel( QItemSelectionModel* newmodel )
-{
-    if( selectionModel() )
-    {
-        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( slotCurrentChanged( const QModelIndex& ) ) );
-    }
-    QTreeView::setSelectionModel( newmodel );
-    connect( newmodel, SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( slotCurrentChanged( const QModelIndex& ) ) );
-}
-
 ProjectTreeView::~ProjectTreeView()
 {
     delete d;
@@ -83,12 +71,6 @@ ProjectTreeView::~ProjectTreeView()
 ProjectManagerViewPlugin *ProjectTreeView::plugin() const
 {
     return d->mplugin;
-}
-
-void ProjectTreeView::reset()
-
-{
-    QTreeView::reset();
 }
 
 ProjectFolderItem *ProjectTreeView::currentFolderItem() const
@@ -154,7 +136,7 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
     KDevelop::ProjectModel *ret;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     ret=qobject_cast<KDevelop::ProjectModel*>( proxy->sourceModel() );
-    
+
 //     ret=qobject_cast<KDevelop::ProjectModel*>( model() );
     Q_ASSERT(ret);
     return ret;
@@ -266,7 +248,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         {
             menu.addAction( act );
         }
-        
+
 
         menu.addSeparator();
 
@@ -288,16 +270,6 @@ void ProjectTreeView::openProjectConfig()
     {
         IProjectController* ip = d->mplugin->core()->projectController();
         ip->configureProject( m_ctxProject );
-    }
-}
-
-void ProjectTreeView::slotCurrentChanged( const QModelIndex &index )
-{
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    kDebug(9511) << "Changed model index";
-    if ( ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
-    {
-        emit currentChanged( item );
     }
 }
 

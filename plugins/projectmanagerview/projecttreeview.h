@@ -53,25 +53,18 @@ class ProjectTreeView: public QTreeView
         KDevelop::ProjectFileItem *currentFileItem() const;
         KDevelop::ProjectTargetItem *currentTargetItem() const;
 
-        void setSelectionModel( QItemSelectionModel* );
-
-        virtual void reset();
-
-        using QTreeView::currentChanged;
 
     Q_SIGNALS:
         void activateUrl( const KUrl &url );
-        void currentChanged( KDevelop::ProjectBaseItem *item );
 
     protected Q_SLOTS:
         void slotActivated( const QModelIndex &index );
-        void slotCurrentChanged( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
 
     private:
-        KDevelop::IProject* m_ctxProject;
         class ProjectTreeViewPrivate* const d;
+        KDevelop::IProject* m_ctxProject;
 };
 
 #endif // KDEVPROJECTMANAGER_H
