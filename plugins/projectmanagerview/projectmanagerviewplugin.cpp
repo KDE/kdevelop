@@ -197,6 +197,9 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
     if( !item )
         return 0;
     IProject* project = item->project();
+    if (!project)
+        return 0;
+    
     ProjectFolderItem* prjitem = project->projectItem();
     IPlugin* fmgr = project->managerPlugin();
     IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
