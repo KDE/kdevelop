@@ -71,6 +71,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
             "searched for within all files in the directories "
             "you specify. Matches will be displayed, you "
             "can switch to a match directly.</p>") );
+    action->setIcon(KIcon("edit-find"));
 }
 
 GrepViewPlugin::~GrepViewPlugin()
