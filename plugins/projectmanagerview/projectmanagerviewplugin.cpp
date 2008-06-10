@@ -102,6 +102,11 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
     d->buildSet = new ProjectBuildSetModel( this );
+    KConfigGroup grp = KGlobal::config()->group("Buildset");
+    d->buildSet->readSettings( grp );
+    connect( d->buildSet, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), this, SLOT( storeBuildset() ) );
+    connect( d->buildSet, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), this, SLOT( storeBuildset() ) );
+
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
@@ -319,18 +324,19 @@ void ProjectManagerViewPlugin::buildAllProjects()
 
 void ProjectManagerViewPlugin::installProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
+    foreach( BuildItem item, d->buildSet->items() )
     {
-        executeInstall( item );
+        executeInstall( item.findItem() );
     }
 }
 
 void ProjectManagerViewPlugin::pruneProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
-    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
+    foreach( BuildItem item, d->buildSet->items() )
     {
-        projects << item->project();
+        if( item.findItem() )
+            projects << item.findItem()->project();
     }
     foreach( KDevelop::IProject* project, projects )
     {
@@ -341,9 +347,11 @@ void ProjectManagerViewPlugin::pruneProjectItems()
 void ProjectManagerViewPlugin::configureProjectItems()
 {
     QSet<KDevelop::IProject*> projects;
-    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
+
+    foreach( BuildItem item, d->buildSet->items() )
     {
-        projects << item->project();
+        if( item.findItem() )
+            projects << item.findItem()->project();
     }
     foreach( KDevelop::IProject* project, projects )
     {
@@ -353,17 +361,17 @@ void ProjectManagerViewPlugin::configureProjectItems()
 
 void ProjectManagerViewPlugin::cleanProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
+    foreach( BuildItem item, d->buildSet->items() )
     {
-        executeClean( item );
+        executeClean( item.findItem() );
     }
 }
 
 void ProjectManagerViewPlugin::buildProjectItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->buildSet->items() )
+    foreach( BuildItem item, d->buildSet->items() )
     {
-        executeBuild( item );
+        executeBuild( item.findItem() );
     }
 }
 

@@ -32,6 +32,27 @@ class ICore;
 
 class KConfigGroup;
 
+class BuildItem
+{
+public:
+    BuildItem();
+    BuildItem( const QString& itemName, const QString& projectName, const QString& itemPath );
+    BuildItem( const BuildItem& rhs );
+    BuildItem( KDevelop::ProjectBaseItem* );
+    void initializeFromItem( KDevelop::ProjectBaseItem* item );
+    KDevelop::ProjectBaseItem* findItem() const;
+    BuildItem& operator=( const BuildItem& );
+    QString itemName() const { return m_itemName; }
+    QString projectName() const { return m_projectName; }
+    QString itemPath() const { return m_itemPath; }
+private:
+    QString m_itemName;
+    QString m_projectName;
+    QString m_itemPath;
+};
+
+bool operator==( const BuildItem& rhs, const BuildItem& lhs );
+
 class ProjectBuildSetModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -45,11 +66,11 @@ public:
     void addProjectItem( KDevelop::ProjectBaseItem* );
     void removeProjectItem( KDevelop::ProjectBaseItem* );
     KDevelop::ProjectBaseItem* itemForIndex( const QModelIndex& );
-    QList<KDevelop::ProjectBaseItem*> items();
+    QList<BuildItem> items();
     void saveSettings( KConfigGroup& ) const;
-    void readSettings( KConfigGroup &, KDevelop::ICore* );
+    void readSettings( KConfigGroup & );
 private:
-    QList<KDevelop::ProjectBaseItem*> m_items;
+    QList<BuildItem> m_items;
 };
 
 #endif

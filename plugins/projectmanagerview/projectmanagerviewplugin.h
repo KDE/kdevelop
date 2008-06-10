@@ -56,9 +56,9 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
     ProjectBuildSetModel* buildSet();
-    void storeBuildset();
 
 protected Q_SLOTS:
+    void storeBuildset();
     void closeProjects();
     void buildItemsFromContextMenu();
     void installItemsFromContextMenu();
