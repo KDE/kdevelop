@@ -24,6 +24,10 @@
 #include <QtTest/QtTest>
 #include <qtestcommand.h>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestCommandTest : public QObject
 {
     Q_OBJECT
@@ -35,5 +39,9 @@ private slots:
     void cmdStringNoParent();
     void cmdStringNoSuite();
 };
+
+}
+}
+
 
 #endif // QXQTEST_QTESTCOMMANDTEST_H

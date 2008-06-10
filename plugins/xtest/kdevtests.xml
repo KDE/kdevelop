@@ -425,31 +425,31 @@
 	</case>
 </suite>
 <suite name="qxqtest" dir="plugins/xtest/qxqtest/tests">
-	<case name="qxrunner-ut-testsuite" exe="qxrunner-ut-testsuite.shell" >
+	<case name="qxrunner-ut-qtestsuite" exe="qxrunner-ut-qtestsuite.shell" >
 		<command name="construct" />
 		<command name="addChildCase" />
 		<command name="addChildCases" />
 	</case>
-	<case name="qxrunner-ut-qtestxmlparser" exe="qxrunner-ut-qtestxmlparser.shell" >
+	<case name="qxrunner-ut-qtestoutputparser" exe="qxrunner-ut-qtestoutputparser.shell" >
 		<command name="parse" />
 	</case>
-	<case name="qxrunner-ut-testbase" exe="qxrunner-ut-testbase.shell" >
+	<case name="qxrunner-ut-qtestbase" exe="qxrunner-ut-qtestbase.shell" >
 		<command name="construct" />
 	</case>
-	<case name="qxrunner-ut-testcase" exe="qxrunner-ut-testcase.shell" >
+	<case name="qxrunner-ut-qtestcase" exe="qxrunner-ut-qtestcase.shell" >
 		<command name="constructDefault" />
 		<command name="construct" />
 		<command name="addCommand" />
 		<command name="addCommands" />
 	</case>
-	<case name="qxrunner-ut-testcommand" exe="qxrunner-ut-testcommand.shell" >
+	<case name="qxrunner-ut-qtestcommand" exe="qxrunner-ut-qtestcommand.shell" >
 		<command name="constructDefault" />
 		<command name="construct" />
 		<command name="cmdString" />
 		<command name="cmdStringNoParent" />
 		<command name="cmdStringNoSuite" />
 	</case>
-	<case name="qxrunner-ut-testregister" exe="qxrunner-ut-testregister.shell" >
+	<case name="qxrunner-ut-qtestregister" exe="qxrunner-ut-qtestregister.shell" >
 		<command name="parseSuiteXml" />
 		<command name="parseMultiSuitesXml" />
 		<command name="parseCaseXml" />

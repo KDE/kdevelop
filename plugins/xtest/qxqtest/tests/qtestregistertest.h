@@ -30,6 +30,10 @@ class QTestSuite;
 class QTestCase;
 }
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestRegisterTest : public QObject
 {
     Q_OBJECT
@@ -55,5 +59,7 @@ private: // helpers
     void registerTests(QByteArray& xml);
 };
 
+}
+}
 
 #endif // QXQTEST_QTESTREGISTERTEST_H

@@ -25,13 +25,17 @@
 
 #include <QList>
 #include <QVariant>
-//#include <QProcess>
 #include <kprocess.h>
 
 namespace QxQTest
 {
 class QTestBase;
 class QTestCommand;
+class QTestCase;
+
+// TODO it makes more sense to have QTestCase, QTestCommand,
+//      QTestSuite etc be runneritems themselves
+//      ie inheritance instead of composition
 
 class QTestItem : public QxRunner::RunnerItem
 {
@@ -39,13 +43,15 @@ public:
     explicit QTestItem(const QList<QVariant>& data, QxRunner::RunnerItem* parent = 0, QTestBase* test = 0);
     virtual ~QTestItem();
     int run();
+    bool isRunnable();
 
 private: // state
     QTestBase* m_test;
 
-private: // operations
+private: // helpers
     void startProcess(QTestCommand* cmd, KProcess* proc);
     int parseOutput(KProcess* proc);
+    void runCase(QTestCase*);
 };
 
 } // end namespace QxQTest

@@ -29,6 +29,11 @@ namespace QxRunner
 class ViewControllerCommon;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class ViewControllerCommonTest : public QObject
 {
     Q_OBJECT
@@ -41,5 +46,8 @@ private:
     QxRunner::ViewControllerCommon* controller;
 
 };
+
+}
+}
 
 #endif // QXRUNNER_VIEWCONTROLLERCOMMONTEST_H

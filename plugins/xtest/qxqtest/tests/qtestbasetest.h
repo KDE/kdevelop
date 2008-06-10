@@ -24,11 +24,18 @@
 #include <QtTest/QtTest>
 #include <qtestbase.h>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestBaseTest : public QObject
 {
     Q_OBJECT
 private slots:
     void construct();
 };
+
+}
+}
 
 #endif // QXQTEST_QTESTBASETEST_H

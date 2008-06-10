@@ -18,51 +18,48 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXRUNNER_RUNNERWINDOWTEST_H
-#define QXRUNNER_RUNNERWINDOWTEST_H
+#ifndef QXQTEST_QTESTRUNNERTEST_H
+#define QXQTEST_QTESTRUNNERTEST_H
 
-#include <QtTest/QtTest>
-#include <ui_statuswidget.h>
+#include <QtTest/QTest>
 
+class QAbstractItemModel;
+namespace Ui
+{
+class StatusWidget;
+}
 namespace QxRunner
 {
 class RunnerWindow;
-class RunnerModel;
 }
 
-namespace ModelCreation
-{
-class RunnerModelStub;
-}
-
-namespace QxRunner
+namespace QxQTest
 {
 namespace ut {
 
-
-class RunnerWindowTest : public QObject
+class QTestRunnerTest : public QObject
 {
     Q_OBJECT
-
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
-
-    void startItems();
-    void stopPremature();
-    void deselectItems();
+    void test();
+    void test_data();
 
 private:
-    void assertRunnerItemEquals(int item, QVariant col0, QVariant col1, QVariant col2, int result);
+    void runUI(QxRunner::RunnerWindow* win);
+    void checkRunnerItems(QAbstractItemModel* items);
+    void checkRunnerItem(const QVariant& expected, int lvl0, int lvl1 = -1, int lvl2 = -1);
+    void checkStatusWidget(Ui::StatusWidget* status);
+    void checkResultItems(QAbstractItemModel* results);
+    void checkResultItem(int num, const QStringList& item);
+    void nrofMessagesEquals(QAbstractItemModel* results, int num);
 
 private:
-    QxRunner::RunnerWindow* window;
-    ModelCreation::RunnerModelStub* model;
-    Ui::StatusWidget* status;
+    QAbstractItemModel* m_runnerItems;
+    QAbstractItemModel* m_resultItems;
 };
 
 }
 }
 
 
-#endif // QXRUNNER_RUNNERWINDOWTEST_H
+#endif // QXQTEST_QTESTRUNNERTEST_H

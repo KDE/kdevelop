@@ -27,6 +27,7 @@
 
 using QxRunner::RunnerProxyModel;
 using ModelCreation::createRunnerModelStub;
+using QxRunner::ut::RunnerProxyModelTest;
 
 void RunnerProxyModelTest::init()
 {
@@ -55,7 +56,7 @@ void RunnerProxyModelTest::default_()
 // {
 //     setAllColumnsEnabled();
 //     proxy->setActive(false);
-// 
+//
 //     assertRowFiltered(0);
 //     assertRowFiltered(1);
 // }
@@ -108,16 +109,16 @@ void RunnerProxyModelTest::setAllColumnsEnabled()
 
 void RunnerProxyModelTest::assertDataAt(int row, int column, const QVariant& expected)
 {
-    QVariant actual = proxy->data(proxy->index(row,column), Qt::DisplayRole);
-    KOMPARE_MSG(expected, actual, QString("\nExpected: ") + QTest::toString(expected) +\
-                                  QString("\nActual:   ") + QTest::toString(actual));
+    QVariant actual = proxy->data(proxy->index(row, column), Qt::DisplayRole);
+    KOMPARE_MSG(expected, actual, QString("\nExpected: ") + QTest::toString(expected) + \
+                QString("\nActual:   ") + QTest::toString(actual));
 }
 
 void RunnerProxyModelTest::assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3)
 {
-    assertDataAt(row,0, col1);
-    assertDataAt(row,1, col2);
-    assertDataAt(row,2, col3);
+    assertDataAt(row, 0, col1);
+    assertDataAt(row, 1, col2);
+    assertDataAt(row, 2, col3);
 }
 
-QTEST_KDEMAIN( RunnerProxyModelTest, NoGUI )
+QTEST_KDEMAIN(RunnerProxyModelTest, NoGUI)

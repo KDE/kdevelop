@@ -19,10 +19,13 @@
  */
 
 #include "qtestcase.h"
+#include "qtestsuite.h"
+#include <QDir>
 
 using QxQTest::QTestCase;
 using QxQTest::QTestBase;
 using QxQTest::QTestCommand;
+using QxQTest::QTestSuite;
 
 QTestCase::QTestCase()
     : QTestBase("", 0), m_exe(QFileInfo(""))
@@ -39,10 +42,17 @@ QTestCase::~QTestCase()
 
 QFileInfo QTestCase::executable()
 {
-    return m_exe;
+    QFileInfo exe(m_exe);
+    QTestBase* suite = parent();
+    if(suite != 0 && qobject_cast<QTestSuite*>(suite) != 0)
+    {
+        QDir path = QDir(qobject_cast<QTestSuite*>(suite)->path().filePath());
+        exe.setFile(path, m_exe.filePath());
+    }
+    return exe;
 }
 
-void QTestCase::setExe(const QFileInfo& exe)
+void QTestCase::setExecutable(const QFileInfo& exe)
 {
     m_exe = exe;
 }

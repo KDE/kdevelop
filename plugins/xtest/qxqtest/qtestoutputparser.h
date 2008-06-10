@@ -23,6 +23,7 @@
 
 #include <QXmlStreamReader>
 #include "qtestresult.h"
+#include "qtestitem.h"
 
 class QIODevice;
 
@@ -40,6 +41,12 @@ public:
      **/
     QTestResult go();
 
+    /**
+     * Start parsing the output of a whole
+     * testcase and emit results
+     **/
+    void goAsync(QTestItem* caze);
+
 private:
     void processTestFunction();
     void fillResult();
@@ -51,6 +58,12 @@ private:
 
 private:
     QTestResult m_result;
+
+    // remember state to continue when parsing
+    // incrementally
+    bool m_processingTestFunction;
+    bool m_fillingResult;
+    bool m_settingFailure;
 
     // some xml constants
     static const QString c_testfunction;

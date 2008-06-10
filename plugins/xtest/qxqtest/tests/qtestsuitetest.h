@@ -24,6 +24,10 @@
 #include <QtTest/QtTest>
 #include <qtestsuite.h>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestSuiteTest : public QObject
 {
     Q_OBJECT
@@ -40,5 +44,8 @@ private:
     QString m_name;
     QxQTest::QTestSuite* m_suite;
 };
+
+}
+}
 
 #endif // QXQTEST_QTESTSUITETEST_H

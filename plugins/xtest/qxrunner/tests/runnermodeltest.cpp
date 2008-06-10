@@ -35,6 +35,7 @@ using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
 using ModelCreation::createRunnerModelStub;
 using ModelCreation::RunnerModelStub;
+using QxRunner::ut::RunnerModelTest;
 
 void RunnerModelTest::init()
 {
@@ -78,15 +79,15 @@ void RunnerModelTest::appendResults()
 void RunnerModelTest::changeItems()
 {
     model->fill();
-    KVERIFY_MSG(!model->setData(model->index(0,1), "new_content"), 
+    KVERIFY_MSG(!model->setData(model->index(0, 1), "new_content"),
                 "Only allowed to select/deselect, not change arbitrary data");
-    KVERIFY_MSG(!model->setData(model->index(0,0), true, Qt::EditRole),
+    KVERIFY_MSG(!model->setData(model->index(0, 0), true, Qt::EditRole),
                 "Only allowed to select/deselect, not change arbitrary data");
 
-    KVERIFY_MSG(model->setData(model->index(0,0), false, Qt::CheckStateRole), 
+    KVERIFY_MSG(model->setData(model->index(0, 0), false, Qt::CheckStateRole),
                 "Failed to set checked state, this is bad mkay.");
     assertItemChecked(0, false);
-    KVERIFY_MSG(model->setData(model->index(0,0), true, Qt::CheckStateRole), 
+    KVERIFY_MSG(model->setData(model->index(0, 0), true, Qt::CheckStateRole),
                 "Failed to set checked state, this is bad mkay.");
     assertItemChecked(0, true);
 }
@@ -95,9 +96,9 @@ void RunnerModelTest::changeItems()
 void RunnerModelTest::flags()
 {
     model->fill();
-    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable), model->flags(model->index(0,0)));
-    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0,1)));
-    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0,2)));
+    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable), model->flags(model->index(0, 0)));
+    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 1)));
+    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 2)));
 }
 
 // test command
@@ -121,8 +122,7 @@ void RunnerModelTest::runItems()
 
     model->runItems();
 
-    foreach(QSignalSpy* spy, spies)
-    {
+    foreach(QSignalSpy* spy, spies) {
         KOMPARE(1, spy->size());
         QCOMPARE(QVariant(0), spy->takeFirst().at(0));
         // using KOMPARE here makes qlist assert
@@ -137,8 +137,8 @@ void RunnerModelTest::errorHandling()
 {
     QVariant illegal;
     KOMPARE(illegal, model->data(QModelIndex()));
-    KOMPARE(illegal, model->data(model->index(0,1), Qt::CheckStateRole));
-    KOMPARE(illegal, model->data(model->index(0,0), Qt::CheckStateRole));
+    KOMPARE(illegal, model->data(model->index(0, 1), Qt::CheckStateRole));
+    KOMPARE(illegal, model->data(model->index(0, 0), Qt::CheckStateRole));
 
     KOMPARE(false, model->setData(QModelIndex(), QVariant(), Qt::DisplayRole));
     KOMPARE(Qt::ItemIsEnabled, model->flags(QModelIndex()));
@@ -168,7 +168,7 @@ void RunnerModelTest::countItems()
 
     // all should be emitted just once
     foreach(QSignalSpy* spy, spies)
-        KOMPARE(1, spy->size());
+    KOMPARE(1, spy->size());
 
     assertSignalValue(spies.take("totalC"), 2);
     assertSignalValue(spies.take("selectedC"), 2);
@@ -177,7 +177,7 @@ void RunnerModelTest::countItems()
 
     // the others are zero
     foreach(QSignalSpy* spy, spies)
-        assertSignalValue(spy, 0);
+    assertSignalValue(spy, 0);
 }
 
 void RunnerModelTest::assertSignalValue(QSignalSpy* spy, int expected)
@@ -194,7 +194,7 @@ void RunnerModelTest::assertColumnHeader(const QVariant& expected, int index)
 
 void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
-    QVariant actual = model->data(model->index(row,column), Qt::DisplayRole);
+    QVariant actual = model->data(model->index(row, column), Qt::DisplayRole);
     //qDebug() << "actual >" << actual << "< ; expected >" << expected << "<";
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
@@ -213,8 +213,8 @@ void RunnerModelTest::verifyRowContent(int index)
     assertDataAt(rowStr + '2', index, 2);
     assertItemChecked(index, true);
 
-    KOMPARE(0, model->rowCount(model->index(index,0))); // no children
-    KOMPARE(3, model->columnCount(model->index(index,0)));
+    KOMPARE(0, model->rowCount(model->index(index, 0))); // no children
+    KOMPARE(3, model->columnCount(model->index(index, 0)));
 
 }
 
@@ -228,4 +228,4 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
     spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
 }
 
-QTEST_KDEMAIN( RunnerModelTest, NoGUI )
+QTEST_KDEMAIN(RunnerModelTest, NoGUI)

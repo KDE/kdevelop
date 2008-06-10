@@ -42,9 +42,11 @@ public:
         if (child(0)) {
             setResult(QxRunner::NoResult);  // Have nothing to do as a parent
         } else {
+            signalStarted(index());
             setData(1, QString::number(row()) + QString("_1"));
             setData(2, QString::number(row()) + QString("_2"));
             setResult(QxRunner::RunSuccess);
+            signalCompleted(index());
         }
         executedItems.push_back(row());
         return result();
@@ -57,12 +59,11 @@ QList<int> RunnerItemStub::executedItems;
 class RunnerModelStub : public RunnerModel
 {
 public:
-    RunnerModelStub(bool fill=true)
+    RunnerModelStub(bool fill = true)
             : RunnerModel(NULL),
-              col0Caption("run_col0"),
-              col1Caption("run_col1"),
-              col2Caption("run_col2") 
-    {
+            col0Caption("run_col0"),
+            col1Caption("run_col1"),
+            col2Caption("run_col2") {
         if (fill) this->fill();
     }
 
@@ -102,7 +103,7 @@ public:
     QVariant col2Caption;
 };
 
-inline RunnerModelStub* createRunnerModelStub(bool fill=true)
+inline RunnerModelStub* createRunnerModelStub(bool fill = true)
 {
     return new RunnerModelStub(fill);
 }

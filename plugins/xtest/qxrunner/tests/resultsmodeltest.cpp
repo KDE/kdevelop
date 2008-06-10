@@ -30,12 +30,11 @@
 #include <QStringList>
 #include <qtest_kde.h>
 
-
-
 using QxRunner::ResultsModel;
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
 using ModelCreation::RunnerModelStub;
+using QxRunner::ut::ResultsModelTest;
 
 void ResultsModelTest::init()
 {
@@ -86,8 +85,8 @@ void ResultsModelTest::appendResults()
 void ResultsModelTest::mapIndices()
 {
     fillRows();
-    QModelIndex runIndex0 = runnerModel->index(0,0);
-    QModelIndex resultIndex0 = model->index(0,0);
+    QModelIndex runIndex0 = runnerModel->index(0, 0);
+    QModelIndex resultIndex0 = model->index(0, 0);
 
     KOMPARE(runIndex0, model->mapToRunnerItemIndex(resultIndex0));
     KOMPARE(resultIndex0, model->mapFromRunnerItemIndex(runIndex0));
@@ -101,10 +100,10 @@ void ResultsModelTest::errorHandling()
 {
     fillRows();
     QVariant illegal; // default constructed variant denotes trouble
-    KOMPARE_MSG(illegal, model->data(model->index(0,0), Qt::CheckStateRole),
-               "Results have no items with checked state");
-    KOMPARE(illegal, model->data(model->index(0,0), Qt::EditRole));
-    KOMPARE(illegal, model->data(model->index(0,1), Qt::DecorationRole));
+    KOMPARE_MSG(illegal, model->data(model->index(0, 0), Qt::CheckStateRole),
+                "Results have no items with checked state");
+    KOMPARE(illegal, model->data(model->index(0, 0), Qt::EditRole));
+    KOMPARE(illegal, model->data(model->index(0, 1), Qt::DecorationRole));
 
     KOMPARE(illegal, model->headerData(0, Qt::Vertical, Qt::DisplayRole));
     KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::EditRole));
@@ -136,7 +135,7 @@ void ResultsModelTest::assertColumnHeader(const QVariant& expected, int index)
 
 void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
-    QVariant actual = model->data(model->index(row,column), Qt::DisplayRole);
+    QVariant actual = model->data(model->index(row, column), Qt::DisplayRole);
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
 
@@ -154,4 +153,4 @@ void ResultsModelTest::fillRows()
     model->addResult(runnerModel->index(1, 0)); // invoke slot
 }
 
-QTEST_KDEMAIN( ResultsModelTest, NoGUI )
+QTEST_KDEMAIN(ResultsModelTest, NoGUI)

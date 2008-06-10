@@ -1,4 +1,4 @@
-/* KDevelop xUnit pluginQ
+/* KDevelop xUnit plugin
  *
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *

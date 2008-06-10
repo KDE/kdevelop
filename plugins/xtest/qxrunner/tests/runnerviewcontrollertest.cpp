@@ -30,6 +30,7 @@
 using QxRunner::RunnerViewController;
 using QxRunner::RunnerProxyModel;
 using ModelCreation::createRunnerModelStub;
+using QxRunner::ut::RunnerViewControllerTest;
 
 Ui::RunnerWindow* ui;
 QMainWindow* w;
@@ -50,7 +51,7 @@ void RunnerViewControllerTest::cleanup()
 {
     if (viewController) delete viewController;
     if (ui) delete ui;
-    if(model) delete model;
+    if (model) delete model;
     if (proxy) delete proxy;
     if (w) delete w;
 }
@@ -66,10 +67,8 @@ void RunnerViewControllerTest::select()
 
 void RunnerViewControllerTest::assertAllItemsChecked(bool checked)
 {
-    for (int row=0; row<2; row++)
-    {
-        for (int col=0; col<3; col++)
-        {
+    for (int row = 0; row < 2; row++) {
+        for (int col = 0; col < 3; col++) {
             bool actualCheckState = model->data(model->index(row, col), Qt::CheckStateRole).toBool();
             KVERIFY_MSG(actualCheckState == checked, checked ? "Should be checked" : "Should not be checked");
         }
@@ -77,4 +76,4 @@ void RunnerViewControllerTest::assertAllItemsChecked(bool checked)
 }
 
 
-QTEST_KDEMAIN( RunnerViewControllerTest, GUI )
+QTEST_KDEMAIN(RunnerViewControllerTest, GUI)

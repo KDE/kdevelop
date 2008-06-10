@@ -32,9 +32,16 @@
 #include "qxrunnerexport.h"
 
 #include <QVariant>
+#include <QModelIndex>
+
+#include <kdebug.h>
+
+class QAbstractItemModel;
 
 namespace QxRunner
 {
+
+class RunnerModel;
 
 /*!
  * \brief The RunnerItem class represents an executable item in a tree
@@ -54,8 +61,9 @@ namespace QxRunner
  *
  * \sa \ref runner_model_item and \ref runner_item_index
  */
-class QXRUNNER_EXPORT RunnerItem
+class QXRUNNER_EXPORT RunnerItem : public QObject
 {
+    Q_OBJECT
 public: // Operations
 
     /*!
@@ -148,6 +156,29 @@ public: // Operations
      */
     virtual int run() = 0;
 
+    /*!
+     * Default to running leaves
+     */
+    virtual bool isRunnable()
+    {
+        return (m_childItems.count() == 0);
+    }
+
+    void setIndex(QModelIndex index) {
+        m_index = index;
+    }
+    QModelIndex index() {
+        return m_index;
+    }
+
+    void setModel(RunnerModel* model);
+    void signalCompleted(QModelIndex);
+    void signalStarted(QModelIndex);
+
+signals:
+    void completed(QModelIndex value);
+    void started(QModelIndex value);
+
 private: // Operations
 
     // Copy and assignment not supported.
@@ -159,6 +190,8 @@ private: // Attributes
     RunnerItem*        m_parentItem;
     QList<QVariant>    m_itemData;
     QList<RunnerItem*> m_childItems;
+    QModelIndex        m_index;
+    RunnerModel*       m_model;
 
     bool m_selected;
     int  m_result;

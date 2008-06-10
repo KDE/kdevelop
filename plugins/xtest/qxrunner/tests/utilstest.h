@@ -24,6 +24,11 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class UtilsTest : public QObject
 {
     Q_OBJECT
@@ -31,5 +36,9 @@ class UtilsTest : public QObject
 private slots:
     void columnSizes();
 };
+
+}
+}
+
 
 #endif // QXRUNNER_UTILSTESTTEST_H

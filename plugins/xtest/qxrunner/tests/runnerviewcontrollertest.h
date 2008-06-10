@@ -32,6 +32,11 @@ class RunnerProxyModel;
 class RunnerViewController;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class RunnerViewControllerTest : public QObject
 {
     Q_OBJECT
@@ -43,7 +48,7 @@ private slots:
     void select();
 
 private:
-    void assertAllItemsChecked(bool checked=true);
+    void assertAllItemsChecked(bool checked = true);
 
 private:
     QTreeView* view;
@@ -51,5 +56,9 @@ private:
     QxRunner::RunnerProxyModel* proxy;
     QxRunner::RunnerViewController* viewController;
 };
+
+}
+}
+
 
 #endif // QXRUNNER_VIEWCONTROLLERCOMMONTEST_H

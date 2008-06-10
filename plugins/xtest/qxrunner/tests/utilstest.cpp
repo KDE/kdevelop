@@ -22,8 +22,8 @@
 #include <utils.h>
 #include <kasserts.h>
 
-
 using QxRunner::Utils;
+using QxRunner::ut::UtilsTest;
 
 // test command
 void UtilsTest::columnSizes()
@@ -31,4 +31,4 @@ void UtilsTest::columnSizes()
     KTODO;
 }
 
-QTEST_MAIN( UtilsTest )
+QTEST_MAIN(UtilsTest)

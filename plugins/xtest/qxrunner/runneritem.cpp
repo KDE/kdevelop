@@ -26,6 +26,7 @@
  */
 
 #include "runneritem.h"
+#include "runnermodel.h"
 
 namespace QxRunner
 {
@@ -85,6 +86,37 @@ int RunnerItem::row() const
     }
 
     return 0;
+}
+
+void RunnerItem::setModel(RunnerModel* model)
+{
+    m_model = model;
+}
+
+
+void RunnerItem::signalCompleted(QModelIndex index_)
+{
+/*  Appears to be illegal, Qt crashes
+#0  0x00002ad575811641 in QCoreApplication::postEvent () from /usr/lib/libQtCore.so.4
+#1  0x00002ad576d60271 in QxRunner::RunnerItem::signalCompleted (this=0x70e100) at /home/nix/KdeDev/kdevelop/plugins/xtest/qxrunner/runneritem.cpp:101
+    if (m_model)
+    {
+        m_model->postItemCompleted(index());
+    }
+    else if (m_parentItem->m_model)
+    {
+        m_parentItem->m_model->postItemCompleted(index());
+    }
+    else
+    {
+        kDebug() << "Failed to post completion event for " << m_index;
+    }*/
+    emit completed(index_);
+}
+
+void RunnerItem::signalStarted(QModelIndex index_)
+{
+    emit started(index_);
 }
 
 int RunnerItem::columnCount() const

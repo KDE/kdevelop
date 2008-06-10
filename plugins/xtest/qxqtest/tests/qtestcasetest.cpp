@@ -25,13 +25,14 @@
 
 using QxQTest::QTestCase;
 using QxQTest::QTestCommand;
+using QxQTest::ut::QTestCaseTest;
 
 namespace
 {
-    QString someCmd()
-    {
-        return "someCmd";
-    }
+QString someCmd()
+{
+    return "someCmd";
+}
 }// end anonymous namespace
 
 void QTestCaseTest::init()
@@ -86,4 +87,4 @@ void QTestCaseTest::addCommands()
 }
 
 #include "qtestcasetest.moc"
-QTEST_KDEMAIN( QTestCaseTest, NoGUI )
+QTEST_KDEMAIN(QTestCaseTest, NoGUI)

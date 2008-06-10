@@ -24,6 +24,10 @@
 #include <QtTest/QtTest>
 #include <qtestcase.h>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestCaseTest : public QObject
 {
     Q_OBJECT
@@ -40,5 +44,9 @@ private:
     QString m_name;
     QxQTest::QTestCase* m_case;
 };
+
+}
+}
+
 
 #endif // QXQTEST_QTESTCASETEST_H

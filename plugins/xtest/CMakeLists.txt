@@ -1,5 +1,7 @@
 project(XtestPlugin)
 
+set(CMAKE_BUILD_TYPE debug)
+
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 add_subdirectory(qxrunner)
 add_subdirectory(qxqtest)

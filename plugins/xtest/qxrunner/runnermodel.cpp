@@ -132,7 +132,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     return Utils::resultIcon(item->result());
 }
 
-bool RunnerModel::setData (const QModelIndex& index, const QVariant& value, int role)
+bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (!index.isValid()) {
         return false;
@@ -202,7 +202,8 @@ QModelIndex RunnerModel::index(int row, int column,
     RunnerItem* childItem = parentItem->child(row);
 
     if (childItem) {
-        return createIndex(row, column, childItem);
+        childItem->setIndex(createIndex(row, column, childItem));
+        return childItem->index();
     }
 
     return QModelIndex();
@@ -221,7 +222,8 @@ QModelIndex RunnerModel::parent(const QModelIndex& index) const
         return QModelIndex();
     }
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    parentItem->setIndex(createIndex(parentItem->row(), 0, parentItem));
+    return parentItem->index();
 }
 
 int RunnerModel::rowCount(const QModelIndex& parent) const
@@ -686,12 +688,11 @@ void RunnerModel::runItem(const QModelIndex& index)
     QModelIndex currentIndex = index;
 
     while (currentIndex.isValid()) {
+
         if (currentIndex.child(0, 0).isValid()) {
             // Go down one level.
             runItem(currentIndex.child(0, 0));
 
-            currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-            continue;
         }
 
         if (mustStop()) {
@@ -700,45 +701,68 @@ void RunnerModel::runItem(const QModelIndex& index)
 
         RunnerItem* item = itemFromIndex(currentIndex);
 
-        if (item->isSelected()) {
-            // Set flag for thread synchronization.
-            setMustWait(true);
-
-            // Send notification to main thread.
-            ItemGetsStartedEvent* startedEvent;
-            startedEvent = new ItemGetsStartedEvent(currentIndex);
-            QCoreApplication::postEvent(this, startedEvent);
-
-            // Check stop flag before item processing.
-            if (mustStop()) {
-                break;  // Soft stop
-            }
-
-            // Don't proceed until event is processed in main thread.
-            mustWait(true);
-
-            // Execute custom code.
-            try {
-                item->run();
-            } catch (...) {
-                item->setResult(QxRunner::RunException);
-            }
-
-            setMustWait(true);
-
-            ItemCompletedEvent* completedEvent;
-            completedEvent = new ItemCompletedEvent(currentIndex);
-            QCoreApplication::postEvent(this, completedEvent);
-
-            if (mustStop()) {
-                break;  // Soft stop
-            }
-
-            mustWait(true);
+        if (!item->isRunnable() || !item->isSelected()) {
+            currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+            continue;
         }
+
+        // Set flag for thread synchronization.
+        //setMustWait(true);
+
+        connect(item, SIGNAL(completed(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
+        connect(item, SIGNAL(started(QModelIndex)), this, SLOT(postItemStarted(QModelIndex)));
+
+        // Check stop flag before item processing.
+        if (mustStop()) {
+            break;  // Soft stop
+        }
+
+        // Don't proceed until event is processed in main thread.
+        //mustWait(true);
+        //setMustWait(true);
+
+        // Execute custom code.
+        int res = 0;
+        try {
+            item->setModel(this);
+            res = item->run();
+        } catch (...) {
+            item->setResult(QxRunner::RunException);
+            postItemCompleted(currentIndex);
+        }
+
+        //if (res != NoResult)
+        //postItemCompleted(currentIndex);
+
+        if (mustStop()) {
+            break;  // Soft stop
+        }
+
+        //if (res != NoResult)
+        //mustWait(true);
 
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
+}
+
+void RunnerModel::postItemCompleted(QModelIndex index)
+{
+    // Send notification to main thread.
+    //setMustWait(true);
+    ItemCompletedEvent* completedEvent;
+    completedEvent = new ItemCompletedEvent(index);
+    QCoreApplication::postEvent(this, completedEvent);
+    //mustWait(true);
+}
+
+void RunnerModel::postItemStarted(QModelIndex index)
+{
+    // Send notification to main thread.
+    //setMustWait(true);
+    ItemGetsStartedEvent* startedEvent;
+    startedEvent = new ItemGetsStartedEvent(index);
+    QCoreApplication::postEvent(this, startedEvent);
+    //mustWait(true);
 }
 
 void RunnerModel::emitItemResult(const QModelIndex& index)

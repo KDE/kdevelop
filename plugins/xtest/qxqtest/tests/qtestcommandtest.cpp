@@ -28,6 +28,7 @@
 using QxQTest::QTestSuite;
 using QxQTest::QTestCase;
 using QxQTest::QTestCommand;
+using QxQTest::ut::QTestCommandTest;
 
 void QTestCommandTest::constructDefault()
 {
@@ -54,18 +55,18 @@ void QTestCommandTest::cmdString()
 
 void QTestCommandTest::cmdStringNoParent()
 {
-    QTestCommand cmd("cmd1",0);
+    QTestCommand cmd("cmd1", 0);
     KOMPARE("", cmd.command());
 }
 
 void QTestCommandTest::cmdStringNoSuite()
 {
     QTestCase caze("c1", QFileInfo("c.sh"), 0);
-    QTestCommand cmd("cmd1",&caze);
+    QTestCommand cmd("cmd1", &caze);
     caze.addTest(&cmd);
     KOMPARE("c.sh cmd1", cmd.command());
 }
 
 
 #include "qtestcommandtest.moc"
-QTEST_KDEMAIN(QTestCommandTest, NoGUI )
+QTEST_KDEMAIN(QTestCommandTest, NoGUI)

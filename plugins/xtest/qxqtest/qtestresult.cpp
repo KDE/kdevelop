@@ -87,5 +87,5 @@ void QTestResult::log()
         case QxRunner::RunError:
             result = "failed"; break;
     }
-    kDebug(9504) << result;
+    kDebug() << result;
 }

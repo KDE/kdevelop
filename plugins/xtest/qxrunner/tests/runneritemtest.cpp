@@ -25,15 +25,17 @@
 #include <QString>
 
 using QxRunner::RunnerItem;
+using QxRunner::ut::RunnerItemTest;
 
 // RunnerItem is abstract so stub the run method
 class ConcreteRunnerItem : public RunnerItem
 {
 public:
     ConcreteRunnerItem(const QList<QVariant>& data, RunnerItem* parent = 0)
-        : RunnerItem(data, parent)
-    {}
-    int run() { return 0; }
+            : RunnerItem(data, parent) {}
+    int run() {
+        return 0;
+    }
 };
 
 void RunnerItemTest::init()
@@ -118,7 +120,7 @@ void RunnerItemTest::appendChildren()
 QString toString(int expected, int actual)
 {
     return QString(" expecting: ") + QString::number(expected) +
-           QString(" got: ") + QString::number(actual); 
+           QString(" got: ") + QString::number(actual);
 }
 
 void RunnerItemTest::assertNrofChildren(ConcreteRunnerItem* item, int nrof)
@@ -138,4 +140,4 @@ void RunnerItemTest::assertDefaultResult(ConcreteRunnerItem* item)
     KOMPARE(int(QxRunner::NoResult), item->result());
 }
 
-QTEST_KDEMAIN( RunnerItemTest, NoGUI )
+QTEST_KDEMAIN(RunnerItemTest, NoGUI)

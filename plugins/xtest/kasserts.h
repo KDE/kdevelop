@@ -23,6 +23,20 @@
 
 #include <QtTest/QtTest>
 
+namespace QTest
+{
+    template<> inline char* toString(const QFileInfo& fi)
+    {
+        return qstrdup(fi.filePath().toLatin1().constData());
+    }
+    template<> inline char* toString(const QVariant& va)
+    {
+        return qstrdup(va.toString().toLatin1().constData());
+    }
+
+}
+
+
 #define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
 #define KVERIFY(condition) QVERIFY(condition)
 #define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))

@@ -35,6 +35,7 @@ using QxQTest::QTestRegister;
 using QxQTest::QTestSuite;
 using QxQTest::QTestCase;
 using QxQTest::QTestCommand;
+using QxQTest::ut::QTestRegisterTest;
 
 // <?xml version="1.0" encoding="ISO-8859-1"?>
 // <root>
@@ -64,14 +65,6 @@ QByteArray cazeStart = "<case name=\"test1\" exe=\"t.sh\" >";
 QByteArray cazeEnd = "</case>";
 QByteArray cmd1 = "<command name=\"cmd11\" />";
 QByteArray cmd2 = "<command name=\"cmd12\" />";
-}
-
-namespace QTest
-{
-template<> inline char* toString(const QFileInfo& fi)
-{
-    return qstrdup(fi.filePath().toLatin1().constData());
-}
 }
 
 void QTestRegisterTest::init()

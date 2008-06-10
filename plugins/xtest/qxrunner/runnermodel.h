@@ -274,6 +274,8 @@ public slots:
      * Sets minimal update mode to \a minimalUpdate.
      */
     void setMinimalUpdate(bool minimalUpdate);
+    void postItemCompleted(QModelIndex index);
+    void postItemStarted(QModelIndex index);
 
 protected: // Operations
 

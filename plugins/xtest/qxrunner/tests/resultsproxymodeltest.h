@@ -30,6 +30,11 @@ class ResultsModel;
 class ResultsProxyModel;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class ResultsProxyModelTest : public QObject
 {
     Q_OBJECT
@@ -54,5 +59,9 @@ private:
     QxRunner::ResultsModel* source;
     QxRunner::ResultsProxyModel* proxy;
 };
+
+}
+}
+
 
 #endif // QXRUNNER_RESULTSPROXYMODELTEST_H

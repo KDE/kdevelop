@@ -26,6 +26,11 @@
 
 class ConcreteRunnerItem;
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class RunnerItemTest : public QObject
 {
     Q_OBJECT
@@ -52,5 +57,9 @@ private:
     QVariant column3;
     ConcreteRunnerItem* root;
 };
+
+}
+}
+
 
 #endif // QXRUNNER_RUNNERITEMTEST_H

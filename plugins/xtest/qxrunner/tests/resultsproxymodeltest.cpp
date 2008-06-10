@@ -28,6 +28,7 @@
 using QxRunner::ResultsProxyModel;
 using QxRunner::ResultsModel;
 using ModelCreation::createResultsModelStub;
+using QxRunner::ut::ResultsProxyModelTest;
 
 void ResultsProxyModelTest::init()
 {
@@ -113,15 +114,15 @@ void ResultsProxyModelTest::setAllColumnsEnabled()
 
 void ResultsProxyModelTest::assertDataAt(int row, int column, const QVariant& expected)
 {
-    QVariant actual = proxy->data(proxy->index(row,column), Qt::DisplayRole);
+    QVariant actual = proxy->data(proxy->index(row, column), Qt::DisplayRole);
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
 
 void ResultsProxyModelTest::assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3)
 {
-    assertDataAt(row,0, col1);
-    assertDataAt(row,1, col2);
-    assertDataAt(row,2, col3);
+    assertDataAt(row, 0, col1);
+    assertDataAt(row, 1, col2);
+    assertDataAt(row, 2, col3);
 }
 
-QTEST_KDEMAIN( ResultsProxyModelTest, NoGUI )
+QTEST_KDEMAIN(ResultsProxyModelTest, NoGUI)

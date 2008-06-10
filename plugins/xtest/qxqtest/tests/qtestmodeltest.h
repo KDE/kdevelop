@@ -23,6 +23,10 @@
 
 #include <QtTest/QtTest>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestModelTest : public QObject
 {
     Q_OBJECT
@@ -32,5 +36,9 @@ private slots:
 
 private:
 };
+
+}
+}
+
 
 #endif // QXQTEST_QTESTMODELTEST_H

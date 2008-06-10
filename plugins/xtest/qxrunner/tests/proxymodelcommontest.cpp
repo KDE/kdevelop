@@ -26,6 +26,7 @@
 #include <kasserts.h>
 
 using QxRunner::ProxyModelCommon;
+using QxRunner::ut::ProxyModelCommonTest;
 
 void ProxyModelCommonTest::init()
 {
@@ -73,4 +74,4 @@ void ProxyModelCommonTest::enabledColumns()
     KVERIFY(proxy->isColumnEnabled(2));
 }
 
-QTEST_KDEMAIN( ProxyModelCommonTest, NoGUI )
+QTEST_KDEMAIN(ProxyModelCommonTest, NoGUI)

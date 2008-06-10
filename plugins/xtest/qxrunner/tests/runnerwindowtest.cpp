@@ -31,6 +31,7 @@ using QxRunner::RunnerItem;
 using ModelCreation::RunnerItemStub;
 using ModelCreation::RunnerModelStub;
 using ModelCreation::createRunnerModelStub;
+using QxRunner::ut::RunnerWindowTest;
 
 void RunnerWindowTest::initTestCase()
 {
@@ -56,7 +57,7 @@ void RunnerWindowTest::startItems()
     window->ui().actionStart->trigger();
 
     // wait for all items to be executed
-    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()),2000))
+    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
         QFAIL("Timeout while waiting for runner items to complete execution");
 
     // check they got indeed executed
@@ -99,11 +100,11 @@ void RunnerWindowTest::deselectItems()
 
 void RunnerWindowTest::assertRunnerItemEquals(int itemNr, QVariant col0, QVariant col1, QVariant col2, int result)
 {
-    RunnerItem* item = model->fetchItem(model->index(itemNr,0));
+    RunnerItem* item = model->fetchItem(model->index(itemNr, 0));
     KOMPARE(col0, item->data(0));
     KOMPARE(col1, item->data(1));
     KOMPARE(col2, item->data(2));
     KOMPARE(result, item->result());
 }
 
-QTEST_KDEMAIN(RunnerWindowTest, GUI )
+QTEST_KDEMAIN(RunnerWindowTest, GUI)

@@ -26,6 +26,7 @@
 
 using QxQTest::QTestSuite;
 using QxQTest::QTestCase;
+using QxQTest::ut::QTestSuiteTest;
 
 namespace
 {

@@ -113,14 +113,14 @@ void QTestRegister::addFromXml(QIODevice* dev)
             processSuite();
     }
 
-    kError(hasError(), 9504) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
 void QTestRegister::processSuite()
 {
     QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), 0);
     m_suites.push_back(suite);
-    kDebug(9504) << suite->name();
+    kDebug() << suite->name();
 
     while (!atEnd() && !isEndElement_(c_suite))
     {
@@ -134,7 +134,7 @@ void QTestRegister::processCase(QTestSuite* suite)
 {
     QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
     suite->addTest(caze);
-    kDebug(9504) << caze->name();
+    kDebug() << caze->name();
     while (!atEnd() && !isEndElement_(c_case))
     {
         readNext();
@@ -147,8 +147,8 @@ void QTestRegister::processCmd(QTestCase* caze)
 {
     QTestCommand* cmd = new QTestCommand(fetchName(), caze);
     caze->addTest(cmd);
-    kDebug(9504) << cmd->name();
-    kDebug(9504) << cmd->command();
+    kDebug() << cmd->name();
+    kDebug() << cmd->command();
 }
 
 QString QTestRegister::fetchName()

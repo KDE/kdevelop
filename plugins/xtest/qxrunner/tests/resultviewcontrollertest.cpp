@@ -24,6 +24,7 @@
 #include <kasserts.h>
 
 using QxRunner::ResultViewController;
+using QxRunner::ut::ResultsViewControllerTest;
 
 void ResultViewControllerTest::init()
 {
@@ -37,4 +38,4 @@ void ResultViewControllerTest::cleanup()
     if (controller) delete controller;
 }
 
-QTEST_KDEMAIN( ResultViewControllerTest, NoGUI )
+QTEST_KDEMAIN(ResultViewControllerTest, NoGUI)

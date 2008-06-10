@@ -23,6 +23,7 @@
 #include <qtest_kde.h>
 
 using QxQTest::QTestBase;
+using QxQTest::ut::QTestBaseTest;
 
 void QTestBaseTest::construct()
 {

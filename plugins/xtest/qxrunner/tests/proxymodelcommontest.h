@@ -29,6 +29,10 @@ namespace QxRunner
 class ProxyModelCommon;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
 class ProxyModelCommonTest : public QObject
 {
     Q_OBJECT
@@ -44,5 +48,8 @@ private slots:
 private:
     QxRunner::ProxyModelCommon* proxy;
 };
+
+}
+}
 
 #endif // QXRUNNER_PROXYMODELCOMMONTEST_H

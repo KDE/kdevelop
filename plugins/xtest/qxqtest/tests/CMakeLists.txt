@@ -1,7 +1,10 @@
+add_subdirectory(suite1)
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/qxqtest
-        ${XtestPlugin_SOURCE_DIR}) # for kasserts.h
+        ${XtestPlugin_SOURCE_DIR}  # for kasserts.h
+        ${XtestPlugin_BINARY_DIR}/qxrunner)
 
 macro(kdev_qx_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )
@@ -20,3 +23,10 @@ kdev_qx_add_test(ut-qtestcommand "qtestcommandtest.cpp")
 kdev_qx_add_test(ut-qtestbase "qtestbasetest.cpp")
 kdev_qx_add_test(ut-qtestsuite "qtestsuitetest.cpp")
 kdev_qx_add_test(ut-qtestregister "qtestregistertest.cpp")
+kdev_qx_add_test(it-qtestrunnertest "qtestrunnertest.cpp")
+
+add_executable(suite1/fakeqtest1 fakeqtest1_2cmds.cpp)
+target_link_libraries(suite1/fakeqtest1 ${KDE4_KDECORE_LIBS})
+
+add_executable(suite1/fakeqtest2 fakeqtest2_2cmds_fail.cpp)
+target_link_libraries(suite1/fakeqtest2 ${KDE4_KDECORE_LIBS})

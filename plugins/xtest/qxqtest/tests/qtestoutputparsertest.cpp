@@ -30,6 +30,8 @@
 using QxQTest::QTestOutputParser;
 using QxQTest::QTestResult;
 
+using QxQTest::ut::QTestOutputParserTest;
+
 Q_DECLARE_METATYPE(QFileInfo)
 Q_DECLARE_METATYPE(QxRunner::RunnerResult)
 
@@ -57,17 +59,17 @@ namespace
 QByteArray testFunctionXml(QByteArray name, QByteArray incident)
 {
     return QByteArray(
-        "<TestFunction name=\"" + name + "\">\n"
-        + incident +
-        "\n</TestFunction>\n");
+               "<TestFunction name=\"" + name + "\">\n"
+               + incident +
+               "\n</TestFunction>\n");
 }
 
 QByteArray incidentXml(QByteArray type, QByteArray file, QByteArray line, QByteArray msg)
 {
     return QByteArray(
-        "<Incident type=\"" + type + "\" file=\"" + file + "\" line=\"" + line + "\">\n"
-            "<Description><![CDATA[" + msg + "]]></Description>\n"
-        "</Incident>\n");
+               "<Incident type=\"" + type + "\" file=\"" + file + "\" line=\"" + line + "\">\n"
+               "<Description><![CDATA[" + msg + "]]></Description>\n"
+               "</Incident>\n");
 }
 
 QByteArray successIncidentXml()
@@ -80,12 +82,12 @@ QByteArray cleanupTestCaseXml = testFunctionXml("cleanupTestCase", successIncide
 QByteArray functionXml = testFunctionXml("someCommand", successIncidentXml());
 
 const QByteArray headerXml(
-        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-        "<TestCase name=\"RunnerItemTest\">\n"
-        "<Environment>\n"
-            "<QtVersion>4.4.0-rc1</QtVersion>\n"
-            "<QTestVersion>4.4.0-rc1</QTestVersion>\n"
-        "</Environment>\n");
+    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+    "<TestCase name=\"RunnerItemTest\">\n"
+    "<Environment>\n"
+    "<QtVersion>4.4.0-rc1</QtVersion>\n"
+    "<QTestVersion>4.4.0-rc1</QTestVersion>\n"
+    "</Environment>\n");
 const QByteArray footerXml("</TestCase>\n");
 
 } // end anonymous namespace
@@ -116,9 +118,9 @@ QByteArray failureIncidentXml()
 void QTestOutputParserTest::constructFailureRow(QString name, QByteArray xml)
 {
     QTest::newRow(name.toAscii())
-            << xml << QxRunner::RunError 
-            << QFileInfo("/path/to/file.cpp") << 100 
-            << "some message";
+    << xml << QxRunner::RunError
+    << QFileInfo("/path/to/file.cpp") << 100
+    << "some message";
 }
 
 // test data
@@ -126,23 +128,23 @@ void QTestOutputParserTest::addSunnyDayData()
 {
     // first row - sunny day test succes
     QByteArray input = headerXml + initTestCaseXml
-                                 + functionXml 
-                                 + cleanupTestCaseXml
-                                 + footerXml;
+                       + functionXml
+                       + cleanupTestCaseXml
+                       + footerXml;
     QTest::newRow("sunny day test succes")
-            << input << QxRunner::RunSuccess 
-            << QFileInfo("") << -1 << "";
+    << input << QxRunner::RunSuccess
+    << QFileInfo("") << -1 << "";
 }
 
 // test data
 void QTestOutputParserTest::addBasicFailureData()
 {
     // second row - test failure
-    QByteArray input = headerXml 
-                     + initTestCaseXml
-                     + testFunctionXml("somename", failureIncidentXml())
-                     + cleanupTestCaseXml
-                     + footerXml;
+    QByteArray input = headerXml
+                       + initTestCaseXml
+                       + testFunctionXml("somename", failureIncidentXml())
+                       + cleanupTestCaseXml
+                       + footerXml;
     constructFailureRow("basic failure", input);
 }
 
@@ -151,8 +153,8 @@ void QTestOutputParserTest::addInitFailureData()
 {
     // third row - failure in initTestCase
     QByteArray input = headerXml
-                    + testFunctionXml("initTestCase", failureIncidentXml())
-                    + footerXml;
+                       + testFunctionXml("initTestCase", failureIncidentXml())
+                       + footerXml;
     constructFailureRow("initTestCase failure", input);
 }
 
@@ -160,10 +162,10 @@ void QTestOutputParserTest::addInitFailureData()
 void QTestOutputParserTest::addCleanupFailureData()
 {
     // fourth row - failure in initTestCase
-    QByteArray input = headerXml 
-                     + initTestCaseXml + functionXml 
-                     + testFunctionXml("cleanupTestCase", failureIncidentXml())
-                     + footerXml;
+    QByteArray input = headerXml
+                       + initTestCaseXml + functionXml
+                       + testFunctionXml("cleanupTestCase", failureIncidentXml())
+                       + footerXml;
     constructFailureRow("cleanupTestCase failure", input);
 }
 
@@ -178,8 +180,8 @@ void QTestOutputParserTest::parse()
 
     // verify
     QFETCH(QxRunner::RunnerResult, state);
-    KOMPARE_MSG(state, result.state(), 
-                "Expected " + QString::number(state) + 
+    KOMPARE_MSG(state, result.state(),
+                "Expected " + QString::number(state) +
                 " got " + QString::number(result.state()));
 
     QFETCH(QFileInfo, file);
@@ -189,8 +191,8 @@ void QTestOutputParserTest::parse()
     KOMPARE(line, result.line());
 
     QFETCH(QString, message);
-    KOMPARE_MSG(message, result.message(), 
+    KOMPARE_MSG(message, result.message(),
                 "Expected " + message + " got " + result.message());
 }
 
-QTEST_KDEMAIN( QTestOutputParserTest, NoGUI )
+QTEST_KDEMAIN(QTestOutputParserTest, NoGUI)

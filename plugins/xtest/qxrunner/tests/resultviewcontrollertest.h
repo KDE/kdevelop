@@ -29,6 +29,11 @@ namespace QxRunner
 class ResultViewController;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class ResultViewControllerTest : public QObject
 {
     Q_OBJECT
@@ -41,5 +46,9 @@ private:
     QxRunner::ResultViewController* controller;
 
 };
+
+}
+}
+
 
 #endif // QXRUNNER_RESULTVIEWCONTROLLERTEST_H

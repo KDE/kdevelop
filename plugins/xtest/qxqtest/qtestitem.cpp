@@ -1,4 +1,4 @@
-/* KDevelop xUnit pluginQ
+/* KDevelop xUnit plugin
  *
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
@@ -19,14 +19,17 @@
  */
 
 #include "qtestitem.h"
-#include "qtestoutputparser.h"
+#include "qtestcase.h"
 #include "qtestcommand.h"
+#include "qtestoutputparser.h"
 
+#include <qxrunner/runnermodel.h>
 #include "kdebug.h"
 
 using QxQTest::QTestItem;
 using QxQTest::QTestOutputParser;
 using QxQTest::QTestCommand;
+using QxQTest::QTestCase;
 using QxRunner::RunnerItem;
 
 QTestItem::QTestItem(const QList<QVariant>& data, RunnerItem* parent, QTestBase* test)
@@ -38,9 +41,38 @@ QTestItem::~QTestItem()
 {
 }
 
+void QTestItem::runCase(QTestCase* caze)
+{
+     // Should be moved to QTestCase by making it runneritems themselves
+    KProcess* proc = new KProcess;
+    QStringList argv;
+    argv << "-xml";
+    proc->setProgram(caze->executable().filePath(), argv);
+    kDebug() << "executing " << proc->program();
+    proc->setOutputChannelMode(KProcess::SeparateChannels);
+    proc->start();
+    proc->waitForFinished(-1);
+    QTestOutputParser parser(proc);
+    parser.goAsync(this);
+    delete proc;
+}
+
+bool QTestItem::isRunnable()
+{
+    return (qobject_cast<QTestCase*>(m_test) != 0);
+}
+
 int QTestItem::run()
 {
-    if (child(0))
+    kDebug() << "running m_test " << m_test->name();
+    QTestCase* caze = qobject_cast<QTestCase*>(m_test);
+    if (caze)
+    {
+        runCase(caze);
+        return 1;
+    }
+    return 0;
+/*    if (child(0))
         return QxRunner::NoResult; // Have nothing to do as a parent
     QTestCommand* cmd = qobject_cast<QTestCommand*>(m_test);
     if (cmd == 0)
@@ -48,7 +80,9 @@ int QTestItem::run()
 
     KProcess proc;
     startProcess(cmd, &proc);
-    return parseOutput(&proc);
+    int i = parseOutput(&proc);
+    signalCompleted();
+    return i;*/
 }
 
 void QTestItem::startProcess(QTestCommand* cmd, KProcess* proc)
@@ -58,7 +92,7 @@ void QTestItem::startProcess(QTestCommand* cmd, KProcess* proc)
     QStringList argv;
     argv << "-xml" << splitted[1]; // the testcommand name
     proc->setProgram(splitted[0], argv);
-    kDebug(9504) << proc->program().join(" ");
+    kDebug() << proc->program().join(" ");
     proc->setOutputChannelMode(KProcess::SeparateChannels);
     proc->start(); // command name is argument to qtest exe
     proc->waitForFinished(-1); // blocks

@@ -41,7 +41,7 @@ public:
     QTestCommand* testAt(unsigned i);
     QFileInfo executable();
 
-    void setExe(const QFileInfo&);
+    void setExecutable(const QFileInfo&);
 
 private:
     QFileInfo m_exe;

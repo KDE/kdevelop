@@ -23,6 +23,10 @@
 
 #include <QtTest/QtTest>
 
+namespace QxQTest
+{
+namespace ut {
+
 class QTestOutputParserTest : public QObject
 {
     Q_OBJECT
@@ -39,5 +43,8 @@ private:
     void addCleanupFailureData();
     void constructFailureRow(QString name, QByteArray xml);
 };
+
+}
+}
 
 #endif // QXQTEST_QTESTOUTPUTPARSERTEST

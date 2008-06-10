@@ -49,12 +49,12 @@ QString QTestCommand::command()
             return "";
     cmd = qobject_cast<QTestCase*>(caze)->executable();
 
-    QTestBase* suite = caze->parent();
-    if(suite != 0 && qobject_cast<QTestSuite*>(suite) != 0)
-    {
-        QDir path = QDir(qobject_cast<QTestSuite*>(suite)->path().filePath());
-        cmd.setFile(path, cmd.filePath());
-    }
+//     QTestBase* suite = caze->parent();
+//     if(suite != 0 && qobject_cast<QTestSuite*>(suite) != 0)
+//     {
+//         QDir path = QDir(qobject_cast<QTestSuite*>(suite)->path().filePath());
+//         cmd.setFile(path, cmd.filePath());
+//     }
     return cmd.filePath() + ' ' + name();
 }
 

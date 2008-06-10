@@ -35,6 +35,11 @@ namespace ModelCreation
 class RunnerModelStub;
 }
 
+namespace QxRunner
+{
+namespace ut {
+
+
 class ResultsModelTest : public QObject
 {
     Q_OBJECT
@@ -60,5 +65,9 @@ private:
     QxRunner::ResultsModel* model;
     ModelCreation::RunnerModelStub* runnerModel;
 };
+
+}
+}
+
 
 #endif // QXRUNNER_RESULTSMODELTEST_H
