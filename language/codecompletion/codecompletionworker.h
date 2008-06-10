@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVCODECOMPLETIONWORKER_H
-#define KDEVCODECOMPLETIONWORKER_H
+#ifndef KDEV_CODECOMPLETIONWORKER_H
+#define KDEV_CODECOMPLETIONWORKER_H
 
 #include <QThread>
 #include <QList>
@@ -39,6 +39,8 @@ namespace KDevelop
 
 class CodeCompletion;
 
+class CompletionTreeElement;
+
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
 {
   Q_OBJECT
@@ -48,6 +50,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
     virtual ~CodeCompletionWorker();
 
     void abortCurrentCompletion();
+
+  Q_SIGNALS:
+    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
 
   protected:
     virtual void run();

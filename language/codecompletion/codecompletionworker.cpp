@@ -30,6 +30,7 @@
 
 #include "ducontext.h"
 #include "codecompletion.h"
+#include "codecompletionitem.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;

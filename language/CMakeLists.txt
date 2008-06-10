@@ -7,6 +7,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/language/duchain
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/editor
+    ${CMAKE_SOURCE_DIR}/util
 )
 
 set(kdevplatformlanguage_LIB_SRCS
@@ -48,7 +49,11 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
-    helpers/codecompletion.cpp
+    codecompletion/codecompletion.cpp
+    codecompletion/codecompletionworker.cpp
+    codecompletion/codecompletionmodel.cpp
+    codecompletion/codecompletionitem.cpp
+    codecompletion/codecompletioncontext.cpp
 )
 
 
@@ -110,11 +115,14 @@ install(FILES
     duchain/dumpchain.h
     duchain/symboltable.h
     duchain/indexedstring.h
-    helpers/codecompletion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 
 install(FILES
-    helpers/codecompletion.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/helpers
+    codecompletion/codecompletion.h
+    codecompletion/codecompletionworker.h
+    codecompletion/codecompletionmodel.h
+    codecompletion/codecompletionitem.h
+    codecompletion/codecompletioncontext.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion
 )

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CODECOMPLETIONCONTEXT_H
-#define CODECOMPLETIONCONTEXT_H
+#ifndef KDEV_CODECOMPLETIONCONTEXT_H
+#define KDEV_CODECOMPLETIONCONTEXT_H
 
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
@@ -43,11 +43,6 @@ namespace KDevelop {
    * */
   class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public KShared {
     public:
-      ///Computes the full set of completion items, using the information retrieved earlier.
-      ///Should only be called on the first context, parent contexts are included in the computations.
-      ///@param Abort is checked regularly, and if it is false, the computation is aborted.
-      QList<CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort);
-
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 
       /**
@@ -57,11 +52,11 @@ namespace KDevelop {
        * @param knownArgumentExpressions has no effect when firstContext is set
        * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0);
       virtual ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
-      virtual bool isValid() const = 0;
+      bool isValid() const;
 
       ///@return depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
       int depth() const;
@@ -70,7 +65,7 @@ namespace KDevelop {
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
        * */
-      CodeCompletionContext* parentContext();
+      virtual CodeCompletionContext* parentContext();
 
     protected:
       void log( const QString& str ) const;
@@ -79,6 +74,7 @@ namespace KDevelop {
       
       QString m_text;
       int m_depth;
+      bool m_valid;
 
       KDevelop::DUContextPointer m_duContext;
 

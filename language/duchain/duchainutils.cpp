@@ -113,12 +113,14 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
       p |= CodeCompletionModel::Variable;
   }
 
-  if( dec->context()->type() == DUContext::Global )
-    p |= CodeCompletionModel::GlobalScope;
-  else if( dec->context()->type() == DUContext::Namespace )
-    p |= CodeCompletionModel::NamespaceScope;
-  else if( dec->context()->type() != DUContext::Class )
-    p |= CodeCompletionModel::LocalScope;
+  if (dec->context()) {
+    if( dec->context()->type() == DUContext::Global )
+      p |= CodeCompletionModel::GlobalScope;
+    else if( dec->context()->type() == DUContext::Namespace )
+      p |= CodeCompletionModel::NamespaceScope;
+    else if( dec->context()->type() != DUContext::Class )
+      p |= CodeCompletionModel::LocalScope;
+  }
 
   return p;
 }

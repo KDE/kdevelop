@@ -48,7 +48,7 @@
 #include "codecompletioncontext.h"
 #include <duchainutils.h>
 #include "codecompletionworker.h"
-#include "inavigationwidget.h"
+#include "quickopendataprovider.h"
 
 using namespace KTextEditor;
 
@@ -66,8 +66,10 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
 CodeCompletionModel::~CodeCompletionModel()
 {
   // Let it leak...??
-  m_worker->setParent(0L);
-  m_worker->quit();
+  if (m_worker) {
+    m_worker->setParent(0L);
+    m_worker->quit();
+  }
 
   delete m_mutex;
 }
@@ -91,13 +93,16 @@ void CodeCompletionModel::setCompletionWorker(CodeCompletionWorker* worker)
 
 void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const
 {
-  Q_ASSERT(dynamic_cast<INavigationWidget*>(widget));
+  Q_ASSERT(dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(widget));
   m_navigationWidgets[element] = widget;
 }
 
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
   Q_UNUSED(invocationType)
+
+  if (!m_worker)
+    kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
 
   m_navigationWidgets.clear();
   m_completionItems.clear();
@@ -116,6 +121,15 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
   m_completionItems = items;
   m_completionContext = KSharedPtr<CodeCompletionContext>((CodeCompletionContext*)completionContext);
   reset();
+
+/*  if (completionContext == m_completionContext.data()) {
+    if( !m_completionItems.isEmpty() ) {
+      beginInsertRows(QModelIndex(), m_completionItems.count(), m_completionItems.count() + items.count() - 1);
+      m_completionItems += items;
+      endInsertRows();
+    } else {*/
+/*    }
+  }*/
 }
 
 void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
@@ -186,21 +200,21 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   
     case AccessibilityNext:
     {
-      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
+      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->next();
     }
     break;
     case AccessibilityPrevious:
     {
-      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
+      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->previous();
     }
     break;
     case AccessibilityAccept:
     {
-      INavigationWidget* w = dynamic_cast<INavigationWidget*>(m_navigationWidgets[&treeElement].data());
+      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
       if( w )
         w->accept();
     }
@@ -213,6 +227,11 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
 KDevelop::TopDUContextPointer CodeCompletionModel::currentTopContext() const
 {
   return m_currentTopContext;
+}
+
+void CodeCompletionModel::setCurrentTopContext(KDevelop::TopDUContextPointer topContext)
+{
+  m_currentTopContext = topContext;
 }
 
 QModelIndex CodeCompletionModel::index(int row, int column, const QModelIndex& parent) const

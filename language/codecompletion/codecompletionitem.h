@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CODECOMPLETIONITEM_H
-#define CODECOMPLETIONITEM_H
+#ifndef KDEV_CODECOMPLETIONITEM_H
+#define KDEV_CODECOMPLETIONITEM_H
 
 #include <ksharedptr.h>
 #include <ktexteditor/codecompletionmodel.h>

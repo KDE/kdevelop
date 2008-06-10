@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVCODECOMPLETIONMODEL_H
-#define KDEVCODECOMPLETIONMODEL_H
+#ifndef KDEV_CODECOMPLETIONMODEL_H
+#define KDEV_CODECOMPLETIONMODEL_H
 
 #include <QPair>
 #include <QMap>
@@ -42,7 +42,6 @@ namespace KDevelop
 class DUContext;
 class Declaration;
 class CodeCompletionWorker;
-class INavigationWidget;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
 {
@@ -68,6 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     KSharedPtr<CodeCompletionContext> completionContext() const;
 
     KDevelop::TopDUContextPointer currentTopContext() const;
+    void setCurrentTopContext(KDevelop::TopDUContextPointer topContext);
 
     //Tracks navigation widget so they can be interactive with through the keyboard later on
     void addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const;
@@ -85,10 +85,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     KSharedPtr<CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
 
-  private:
     mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
+  private:
     QMutex* m_mutex;
     CodeCompletionWorker* m_worker;
     KDevelop::TopDUContextPointer m_currentTopContext;

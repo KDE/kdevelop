@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVCODECOMPLETION_H
-#define KDEVCODECOMPLETION_H
+#ifndef KDEV_CODECOMPLETION_H
+#define KDEV_CODECOMPLETION_H
 
 #include <QObject>
 #include "languageexport.h"

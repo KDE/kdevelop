@@ -35,6 +35,7 @@ install( FILES
     environmentselectionwidget.h
     environmentgrouplist.h
     outputjob.h
+    pushvalue.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 
 
