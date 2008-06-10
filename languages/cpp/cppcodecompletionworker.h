@@ -23,39 +23,24 @@
 #ifndef KDEVCPPCODECOMPLETIONWORKER_H
 #define KDEVCPPCODECOMPLETIONWORKER_H
 
-#include <QThread>
-#include <QList>
+#include <codecompletionworker.h>
 
 #include "cppcodecompletionmodel.h"
 
-class CodeCompletionWorker : public QThread
+class CppCodeCompletionWorker : public KDevelop::CodeCompletionWorker
 {
   Q_OBJECT
 
   public:
-    CodeCompletionWorker(CppCodeCompletionModel* parent);
-    virtual ~CodeCompletionWorker();
-
+    CppCodeCompletionWorker(CppCodeCompletionModel* parent);
+    
     CppCodeCompletionModel* model() const;
 
-    void abortCurrentCompletion();
-
-  Q_SIGNALS:
-    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
-
   protected:
-    virtual void run();
-
-  private Q_SLOTS:
-    void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
 
   private:
-
-    void computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
-  
-    KTextEditor::Cursor m_position;
-    bool m_abort;
-    QMutex* m_mutex;
+    void computeGroups(QList<KDevelop::CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
 };
 
 #endif // KDEVCPPCODECOMPLETIONWORKER_H

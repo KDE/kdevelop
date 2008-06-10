@@ -22,7 +22,6 @@
 #include "completionitem.h"
 #include <duchain.h>
 #include <duchainlock.h>
-#include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/range.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -36,72 +35,7 @@
 #include "navigationwidget.h"
 #include "duchainutils.h"
 
-
-using namespace KTextEditor;
 using namespace KDevelop;
-
-///Intermediate nodes
-class CompletionTreeNode;
-///Leaf items
-class CompletionTreeItem;
-
-CompletionTreeElement::CompletionTreeElement() : m_parent(0), m_rowInParent(0) {
-}
-
-CompletionTreeElement::~CompletionTreeElement() {
-}
-
-CompletionTreeElement* CompletionTreeElement::parent() const {
-  return m_parent;
-}
-
-void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
-    Q_ASSERT(m_parent == 0);
-
-    m_parent = parent;
-    CompletionTreeNode* node = parent->asNode();
-    if( node ) {
-      m_rowInParent = node->children.count();
-    }
-}
-
-int CompletionTreeElement::columnInParent() const {
-  return 0;
-}
-
-CompletionTreeNode::CompletionTreeNode() : CompletionTreeElement() {
-}
-CompletionTreeNode::~CompletionTreeNode() {
-}
-  
-CompletionTreeNode* CompletionTreeElement::asNode() {
-  return dynamic_cast<CompletionTreeNode*>(this);
-}
-
-CompletionTreeItem* CompletionTreeElement::asItem() {
-  return dynamic_cast<CompletionTreeItem*>(this);
-}
-
-const CompletionTreeNode* CompletionTreeElement::asNode() const {
-  return dynamic_cast<const CompletionTreeNode*>(this);
-}
-
-const CompletionTreeItem* CompletionTreeElement::asItem() const {
-  return dynamic_cast<const CompletionTreeItem*>(this);
-}
-
-int CompletionTreeElement::rowInParent() const {
-  return m_rowInParent;
-/*  if( !m_parent )
-    return 0;
-  Q_ASSERT(m_parent->asNode());
-  
-  return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
-}
-
-void CompletionTreeItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
-  kDebug(9700) << "doing nothing";
-}
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
@@ -169,12 +103,6 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
 const bool indentByDepth = false;
 
-QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const {
-  if(role = Qt::DisplayRole)
-    return QString("not implemented");
-  return QVariant();
-}
-
 //The name to be viewed in the name column
 QString nameForDeclaration(Declaration* dec) {
   if (dec->identifier().toString().isEmpty())
@@ -183,7 +111,7 @@ QString nameForDeclaration(Declaration* dec) {
     return dec->identifier().toString();
 }
 
-QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const {
+QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
@@ -466,7 +394,7 @@ int IncludeFileCompletionItem::argumentHintDepth() const
   return 0;
 }
 
-QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const
+QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const
 {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {

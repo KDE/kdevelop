@@ -26,6 +26,7 @@
 #include <ktexteditor/codecompletionmodel.h>
 
 #include <duchainpointer.h>
+#include <codecompletion/codecompletionitem.h>
 #include "codecompletioncontext.h"
 #include "includeitem.h"
 
@@ -43,83 +44,15 @@ namespace KTextEditor {
 class QModelIndex;
 class CppCodeCompletionModel;
 
-class CompletionTreeNode;
-class CompletionTreeItem;
-
-class CompletionTreeElement : public KShared {
-public:
-  CompletionTreeElement();
-  
-  virtual ~CompletionTreeElement();
-
-  CompletionTreeElement* parent() const;
-
-  ///Reparenting is not supported. This is only allowed if parent() is still zero.
-  void setParent(CompletionTreeElement*);
-
-  int rowInParent() const;
-  
-  int columnInParent() const;
-
-  ///Each element is either a node, or an item.
-  
-  CompletionTreeNode* asNode();
-  
-  CompletionTreeItem* asItem();
-
-  template<class T>
-  T* asItem() {
-    return dynamic_cast<T*>(this);
-  }
-
-  template<class T>
-  const T* asItem() const {
-    return dynamic_cast<const T*>(this);
-  }
-  
-  const CompletionTreeNode* asNode() const;
-  
-  const CompletionTreeItem* asItem() const;
-  
-private:
-  CompletionTreeElement* m_parent;
-  int m_rowInParent;
-};
-
-struct CompletionTreeNode : public CompletionTreeElement {
-  CompletionTreeNode();
-  ~CompletionTreeNode();
-  
-  KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
-  QVariant roleValue;
-  QList<KSharedPtr<CompletionTreeElement> > children;
-};
-
-struct CompletionTreeItem : public CompletionTreeElement {
-  ///Execute the completion item. The default implementation does nothing.
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
-
-  ///Should return normal completion data, @see KTextEditor::CodeCompletionModel
-  ///The default implementation returns "unimplemented", so re-implement it!
-  ///The duchain is not locked when this is called
-  ///Navigation-widgets should be registered to the model, then it will care about the interaction.
-  virtual QVariant data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const;
-  
-  ///Should return the inheritance-depth. The completion-items don't need to return it through the data() function.
-  virtual int inheritanceDepth() const;
-  ///Should return the argument-hint depth. The completion-items don't need to return it through the data() function.
-  virtual int argumentHintDepth() const;
-};
-
 //A completion item used for completion of normal declarations while normal code-completion
-class NormalDeclarationCompletionItem : public CompletionTreeItem {
+class NormalDeclarationCompletionItem : public KDevelop::CompletionTreeItem {
 public:
   NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 
-  virtual QVariant data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
   KDevelop::DeclarationPointer declaration;
   KSharedPtr<Cpp::CodeCompletionContext> completionContext;
@@ -133,12 +66,12 @@ public:
 };
 
 //A completion item used for completing include-files
-class IncludeFileCompletionItem : public CompletionTreeItem {
+class IncludeFileCompletionItem : public KDevelop::CompletionTreeItem {
 public:
   IncludeFileCompletionItem(const Cpp::IncludeItem& include) : includeItem(include) {
   }
 
-  virtual QVariant data(const QModelIndex& index, int role, const CppCodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 
@@ -147,7 +80,5 @@ public:
 
   Cpp::IncludeItem includeItem;
 };
-
-typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
 
 #endif

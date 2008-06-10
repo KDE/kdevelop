@@ -29,6 +29,7 @@
 #include <typesystem.h>
 #include "includeitem.h"
 #include "completionitem.h"
+#include "codecompletion/codecompletioncontext.h"
 
 namespace KTextEditor {
   class View;
@@ -38,10 +39,10 @@ namespace KTextEditor {
 namespace KDevelop {
   class DUContext;
   class AbstractType;
-}
 
-class CompletionTreeItem;
-typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+  class CompletionTreeItem;
+  typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+}
 
 namespace Cpp {
   class OverloadResolutionFunction;
@@ -49,7 +50,7 @@ namespace Cpp {
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */
-  class CodeCompletionContext : public KShared {
+  class CodeCompletionContext : public KDevelop::CodeCompletionContext {
     public:
 
       ///Computes the full set of completion items, using the information retrieved earlier.
@@ -98,17 +99,11 @@ namespace Cpp {
 
       AdditionalContextType additionalContextType() const;
 
-      ///@return whether this context is valid for code-completion
-      bool isValid() const;
-
-      ///@return depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
-      int depth() const;
-      
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
        * */
-      CodeCompletionContext* parentContext();
+      virtual CodeCompletionContext* parentContext();
 
       ///@return the used access-operation
       MemberAccessOperation memberAccessOperation() const;
@@ -175,7 +170,6 @@ namespace Cpp {
       ///Should preprocess the given text(replace macros with their body etc.)
       void preprocessText( int line );
       void processIncludeDirective(QString line);
-      void log( const QString& str ) const;
       ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
       bool endsWithOperator( const QString& str ) const;
       /**
@@ -191,26 +185,22 @@ namespace Cpp {
       QString getEndOperator( const QString& str ) const;
       ///Should map a position in m_text to a position in the underlying document
       MemberAccessOperation m_memberAccessOperation;
-      bool m_valid;
       QString m_expression;
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
       ExpressionEvaluationResult m_expressionResult;
 
       QList<Cpp::IncludeItem> m_includeItems;
     
-      QString m_text, m_functionName;
-      int m_depth;
+      QString m_functionName;
 
       //Here known argument-expressions and their types, that may have come from sub-contexts, are stored
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
       
-      KDevelop::DUContextPointer m_duContext;
       AdditionalContextType m_contextType;
 
       QList<Function> m_functions;
 
-      KSharedPtr<CodeCompletionContext> m_parentContext;
 #ifndef TEST_COMPLETION
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
 #endif

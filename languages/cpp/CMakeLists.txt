@@ -15,6 +15,7 @@ include_directories(${CMAKE_TOP_BUILD_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/language/backgroundparser
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain/viewer
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/codecompletion
 )
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 ) 

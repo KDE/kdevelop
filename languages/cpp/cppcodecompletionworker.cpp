@@ -42,55 +42,19 @@
 #include "codecompletioncontext.h"
 #include <duchainutils.h>
 
-using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
-
-
-CodeCompletionWorker::CodeCompletionWorker(CppCodeCompletionModel* parent)
-  : QThread(parent)
-  , m_mutex(new QMutex)
+CppCodeCompletionWorker::CppCodeCompletionWorker(CppCodeCompletionModel* parent)
+  : CodeCompletionWorker(parent)
 {
 }
 
-CodeCompletionWorker::~CodeCompletionWorker()
+void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
 {
-  delete m_mutex;
-}
-
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
-{
-  {
-    QMutexLocker lock(m_mutex);
-    m_abort = false;
-  }
-
-  //Compute the text we should complete on
-  KTextEditor::Document* doc = view->document();
-  if( !doc ) {
-    kDebug(9007) << "No document for completion";
-    return;
-  }
-
-  KTextEditor::Range range;
-  QString text;
-  {
-    range = KTextEditor::Range(context->range().start.textCursor(), position);
-    text = doc->text(range);
-  }
-
-  if( text.isEmpty() ) {
-    kDebug(9007) << "no text for context";
-    return;
-  }
-
-  if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
-    text += '\n';
-
-  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, text ) );
+  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, contextText ) );
   if (CppCodeCompletionModel* m = model())
-    m->setCompletionContext(completionContext);
+    m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 
   if( completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
@@ -100,15 +64,13 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       return;
     }
 
-    if (m_abort)
-      return;
+    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting());
 
-    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), m_abort);
-
-    if (m_abort)
+    if (aborting())
       return;
     
     computeGroups( items, completionContext );
+
   } else {
     kDebug(9007) << "setContext: Invalid code-completion context";
   }
@@ -160,7 +122,7 @@ struct ItemGrouper {
 ///Extracts the argument-hint depth from completion-items, to be used in ItemGrouper for grouping by argument-hint depth.
 struct ArgumentHintDepthExtractor {
   typedef int KeyType;
-  enum { Role = CodeCompletionModel::ArgumentHintDepth };
+  enum { Role = KTextEditor::CodeCompletionModel::ArgumentHintDepth };
   
   static KeyType extract( const CompletionTreeItemPointer& item ) {
     return item->argumentHintDepth();
@@ -170,7 +132,7 @@ struct ArgumentHintDepthExtractor {
 struct InheritanceDepthExtractor {
   typedef int KeyType;
   
-  enum { Role = CodeCompletionModel::InheritanceDepth };
+  enum { Role = KTextEditor::CodeCompletionModel::InheritanceDepth };
   
   static KeyType extract( const CompletionTreeItemPointer& item ) {
     return item->inheritanceDepth();
@@ -180,7 +142,7 @@ struct InheritanceDepthExtractor {
 struct SimplifiedAttributesExtractor {
   typedef int KeyType;
   
-  enum { Role = CodeCompletionModel::CompletionRole };
+  enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
 
   static int groupingProperties;
   
@@ -196,7 +158,7 @@ struct SimplifiedAttributesExtractor {
 ///@todo make configurable. These are the attributes that can be respected for grouping.
 int SimplifiedAttributesExtractor::groupingProperties = CodeCompletionModel::Public | CodeCompletionModel::Protected | CodeCompletionModel::Private | CodeCompletionModel::Static | CodeCompletionModel::TypeAlias | CodeCompletionModel::Variable | CodeCompletionModel::Class | CodeCompletionModel::GlobalScope | CodeCompletionModel::LocalScope | CodeCompletionModel::GlobalScope | CodeCompletionModel::NamespaceScope;
 
-void CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
+void CppCodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
 {
   kDebug(9007) << "grouping" << items.count() << "completion-items";
   QList<KSharedPtr<CompletionTreeElement> > tree;
@@ -210,20 +172,9 @@ void CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items,
   emit foundDeclarations( tree, completionContext.data() );
 }
 
-CppCodeCompletionModel* CodeCompletionWorker::model() const
+CppCodeCompletionModel* CppCodeCompletionWorker::model() const
 {
   return const_cast<CppCodeCompletionModel*>(static_cast<const CppCodeCompletionModel*>(parent()));
-}
-
-void CodeCompletionWorker::run()
-{
-  exec();
-}
-
-void CodeCompletionWorker::abortCurrentCompletion()
-{
-  QMutexLocker lock(m_mutex);
-  m_abort = true;
 }
 
 #include "cppcodecompletionworker.moc"

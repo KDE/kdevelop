@@ -64,47 +64,18 @@ using namespace KDevelop;
 using namespace TypeUtils;
 
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
-  : CodeCompletionModel2(parent)
-  , m_mutex(new QMutex)
-  , m_worker(new CodeCompletionWorker(this))
+  : KDevelop::CodeCompletionModel(parent)
 {
-  qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
-  qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
-
-  connect(this, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
-
-  //We connect directly, so we can do the pre-grouping within the background thread
-  connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), this, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
-
-  m_worker->start();
+  setCompletionWorker(new CppCodeCompletionWorker(this));
 }
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
 {
-  // Let it leak...??
-  m_worker->setParent(0L);
-  m_worker->quit();
-
-  delete m_mutex;
 }
 
-void CppCodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, Cpp::NavigationWidget* widget) const
-{
-  m_navigationWidgets[element] = widget;
-}
-
-void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
+void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
 {
   Q_UNUSED(invocationType)
-
-  m_navigationWidgets.clear();
-  m_completionItems.clear();
-
-  reset();
-
-  m_worker->abortCurrentCompletion();
-
-  KUrl url = view->document()->url();
 
   DUChainReadLocker lock(DUChain::lock(), 400);
   if( !lock.locked() ) {
@@ -117,7 +88,7 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     kDebug(9007) << "no context or no parsingEnvironmentFile available, or the context is not a C++ context";
     return;
   }
-  m_currentTopContext = TopDUContextPointer(top);
+  setCurrentTopContext(TopDUContextPointer(top));
 
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
@@ -149,175 +120,6 @@ void CppCodeCompletionModel::completionInvoked(KTextEditor::View* view, const KT
     emit completionsNeeded(thisContext, range.start(), view);
   } else {
     kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
-  }
-}
-
-void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, void* completionContext)
-{
-  m_completionItems = items;
-  m_completionContext = KSharedPtr<Cpp::CodeCompletionContext>((Cpp::CodeCompletionContext*)completionContext);
-  reset();
-  
-/*  if (completionContext == m_completionContext.data()) {
-    if( !m_completionItems.isEmpty() ) {
-      beginInsertRows(QModelIndex(), m_completionItems.count(), m_completionItems.count() + items.count() - 1);
-      m_completionItems += items;
-      endInsertRows();
-    } else {*/
-/*    }
-  }*/
-  
-}
-
-void CppCodeCompletionModel::setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext)
-{
-  QMutexLocker lock(m_mutex);
-  m_completionContext = completionContext;
-}
-
-KSharedPtr<Cpp::CodeCompletionContext> CppCodeCompletionModel::completionContext() const
-{
-  QMutexLocker lock(m_mutex);
-  return m_completionContext;
-}
-
-///@todo move into subclass
-void CppCodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
-{
-  DUChainReadLocker lock(DUChain::lock(), 3000);
-  if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
-    return;
-  }
-  
-  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  if( !element || !element->asItem() )
-    return;
-
-  element->asItem()->execute(document, word);
-}
-
-QVariant CppCodeCompletionModel::data(const QModelIndex& index, int role) const
-{
-  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  if( !element )
-    return QVariant();
-
-  CompletionTreeElement& treeElement(*element);
-
-  if( role == CodeCompletionModel::GroupRole ) {
-    if( treeElement.asNode() ) {
-      return QVariant(treeElement.asNode()->role);
-    }else {
-      kDebug(9007) << "Requested group-role from leaf tree element";
-      return QVariant();
-    }
-  }else{
-    if( treeElement.asNode() ) {
-      if( role == treeElement.asNode()->role ) {
-        return treeElement.asNode()->roleValue;
-      } else {
-        kDebug(9007) << "Requested wrong role from non-leaf tree element";
-        return QVariant();
-      }
-    }
-  }
-
-  if(!treeElement.asItem()) {
-    kWarning(9007) << "Error in completion model";
-    return QVariant();
-  }
-
-  //Navigation widget interaction is done here, the other stuff is done within the tree-elements
-  switch (role) {
-    case CodeCompletionModel::InheritanceDepth:
-      return treeElement.asItem()->inheritanceDepth();
-    case CodeCompletionModel::ArgumentHintDepth:
-      return treeElement.asItem()->argumentHintDepth();
-  
-    case AccessibilityNext:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
-      if( w )
-        w->next();
-    }
-    break;
-    case AccessibilityPrevious:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
-      if( w )
-        w->previous();
-    }
-    break;
-    case AccessibilityAccept:
-    {
-      Cpp::NavigationWidget* w = m_navigationWidgets[&treeElement];
-      if( w )
-        w->accept();
-    }
-    break;
-  }
-
-  return treeElement.asItem()->data(index, role, this);
-}
-
-KDevelop::TopDUContextPointer CppCodeCompletionModel::currentTopContext() const
-{
-  return m_currentTopContext;
-}
-
-QModelIndex CppCodeCompletionModel::index(int row, int column, const QModelIndex& parent) const
-{
-  if( parent.isValid() ) {
-    CompletionTreeElement* element = (CompletionTreeElement*)parent.internalPointer();
-
-    CompletionTreeNode* node = element->asNode();
-
-    if( !node ) {
-      kDebug(9007) << "Requested sub-index of leaf node";
-      return QModelIndex();
-    }
-
-    if (row < 0 || row >= node->children.count() || column < 0 || column >= ColumnCount)
-      return QModelIndex();
-
-    return createIndex(row, column, node->children[row].data());
-  } else {
-    if (row < 0 || row >= m_completionItems.count() || column < 0 || column >= ColumnCount)
-      return QModelIndex();
-
-    return createIndex(row, column, const_cast<CompletionTreeElement*>(m_completionItems[row].data()));
-  }
-}
-
-QModelIndex CppCodeCompletionModel::parent ( const QModelIndex & index ) const
-{
-  if(rowCount() == 0)
-    return QModelIndex();
-
-  if( index.isValid() ) {
-    CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-
-    if( element->parent() )
-      return createIndex( element->rowInParent(), element->columnInParent(), element->parent() );
-  }
-
-  return QModelIndex();
-}
-
-int CppCodeCompletionModel::rowCount ( const QModelIndex & parent ) const
-{
-  if( parent.isValid() ) {
-    CompletionTreeElement* element = (CompletionTreeElement*)parent.internalPointer();
-
-    CompletionTreeNode* node = element->asNode();
-
-    if( !node )
-      return 0;
-
-    return node->children.count();
-  }else{
-    return m_completionItems.count();
   }
 }
 

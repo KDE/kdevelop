@@ -37,7 +37,7 @@
 #include <iproblem.h>
 #include "environmentmanager.h"
 #include "cppduchain/cppduchain.h"
-#include "pushvalue.h"
+#include <util/pushvalue.h>
 #include "cppdebughelper.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
@@ -47,8 +47,9 @@
 const int maxOverloadedOperatorArgumentHints = 5;
 const int maxOverloadedArgumentHints = 5;
 
-using namespace Cpp;
 using namespace KDevelop;
+
+namespace Cpp {
 
 ///@todo move these together with those from expressionvisitor into an own file, or make them unnecessary
 QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
@@ -77,33 +78,10 @@ QString extractLastLine(const QString& str) {
     return str;
 }
 
-bool CodeCompletionContext::isValid() const {
-  return m_valid;
-}
-
-int CodeCompletionContext::depth() const {
-  return m_depth;
-}
-
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions, int line ) : m_memberAccessOperation(NoMemberAccess), m_valid(true), m_text(text), m_depth(depth),  m_knownArgumentExpressions(knownArgumentExpressions), m_duContext(context), m_contextType(Normal), m_parentContext(0)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal)
 {
-  IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
-
-  if( depth > 10 ) {
-    log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
-    m_valid = false;
-    return;
-  }
-  
-  if( completionRecursionDepth > 10 ) {
-    log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
-    m_valid = false;
-    return;
-  }
-  //log( "Computing context for " + text );
-
   {
     //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
     QString lineText = extractLastLine(m_text).trimmed();
@@ -498,10 +476,6 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 CodeCompletionContext::~CodeCompletionContext() {
 }
 
-void CodeCompletionContext::log( const QString& str ) const {
-  kDebug(9007) << "CodeCompletionContext:" << str;
-}
-
 bool CodeCompletionContext::isValidPosition() {
   if( m_text.isEmpty() )
     return true;
@@ -565,7 +539,7 @@ CodeCompletionContext::MemberAccessOperation CodeCompletionContext::memberAccess
 }
 
 CodeCompletionContext* CodeCompletionContext::parentContext() {
-  return m_parentContext.data();
+  return static_cast<CodeCompletionContext*>(KDevelop::CodeCompletionContext::parentContext());
 }
 
 #ifndef TEST_COMPLETION
@@ -653,6 +627,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       }
     } while( parentContext );
   return items;
+}
+
 }
 
 #endif

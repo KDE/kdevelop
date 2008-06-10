@@ -30,13 +30,13 @@
 #include <declaration.h>
 #include <use.h>
 #include <smartconverter.h>
+#include <util/pushvalue.h>
 
 #include "parsesession.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include "dumpchain.h"
 #include "environmentmanager.h"
-#include "pushvalue.h"
 
 #include <climits>
 #include "cppdebughelper.h"

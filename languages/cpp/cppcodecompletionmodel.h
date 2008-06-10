@@ -26,7 +26,7 @@
 #include <QPair>
 #include <QMap>
 #include <QPointer>
-#include <ktexteditor/codecompletionmodel.h>
+#include <codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <duchainpointer.h>
 #include "codecompletioncontext.h"
@@ -48,11 +48,13 @@ namespace Cpp {
   class NavigationWidget;
 }
 
-class CodeCompletionWorker;
+class CppCodeCompletionWorker;
 
-class CompletionTreeElement;
+namespace KDevelop {
+  class CompletionTreeElement;
+}
 
-class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
+class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
 {
   Q_OBJECT
 
@@ -60,41 +62,14 @@ class CppCodeCompletionModel : public KTextEditor::CodeCompletionModel2
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
-    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
-
-    virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-
-    ///getData(..) for include-file completion
+        ///getData(..) for include-file completion
     QVariant getIncludeData(const QModelIndex& index, int role) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex parent ( const QModelIndex & index ) const;
   
-    void setCompletionContext(KSharedPtr<Cpp::CodeCompletionContext> completionContext);
-    KSharedPtr<Cpp::CodeCompletionContext> completionContext() const;
+  protected:
+    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
 
-    KDevelop::TopDUContextPointer currentTopContext() const;
-
-    //Tracks navigation widget so they can be interactive with through the keyboard later on
-    void addNavigationWidget(const CompletionTreeElement* element, Cpp::NavigationWidget* widget) const;
-
-  Q_SIGNALS:
-    void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
-
-  private Q_SLOTS:
-    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, void* completionContext);
-    
   private:
-    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<Cpp::CodeCompletionContext> > DeclarationContextPair;
-
-    mutable QMap<const CompletionTreeElement*, QPointer<Cpp::NavigationWidget> > m_navigationWidgets;
-    QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
-
-    QMutex* m_mutex;
-    CodeCompletionWorker* m_worker;
-    KDevelop::TopDUContextPointer m_currentTopContext;
 };
 
 

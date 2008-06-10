@@ -24,6 +24,7 @@
 #include <declaration.h>
 #include <identifiedtype.h>
 #include <typeinfo>
+#include <util/pushvalue.h>
 #include "tokens.h"
 #include "typebuilder.h"
 #include "typerepository.h"
@@ -36,7 +37,6 @@
 #include "overloadresolution.h"
 #include "cppduchain.h"
 #include "overloadresolutionhelper.h"
-#include "pushvalue.h"
 #include "builtinoperators.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
