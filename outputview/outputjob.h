@@ -22,12 +22,12 @@ Boston, MA 02110-1301, USA.
 
 #include <QPointer>
 
-#include "irun.h"
-#include "irunprovider.h"
-#include "iruncontroller.h"
-#include "ioutputview.h"
+#include "interfaces/irun.h"
+#include "interfaces/irunprovider.h"
+#include "interfaces/iruncontroller.h"
 
-#include "utilexport.h"
+#include "outputview/ioutputview.h"
+#include "outputview/outputviewexport.h"
 
 class QStandardItemModel;
 class QItemDelegate;
@@ -35,7 +35,7 @@ class QItemDelegate;
 namespace KDevelop
 {
 
-class KDEVPLATFORMUTIL_EXPORT OutputJob : public KJob
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputJob : public KJob
 {
     Q_OBJECT
 
@@ -49,6 +49,7 @@ public:
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
     void setToolTitle(const QString& title);
+    void setToolIcon(const KIcon& icon);
     void setTitle(const QString& title);
     void setViewType(IOutputView::ViewType type);
     void setBehaviours(IOutputView::Behaviours behaviours);
@@ -64,6 +65,7 @@ private Q_SLOTS:
 private:
     int m_standardToolView;
     QString m_title, m_toolTitle;
+    KIcon m_toolIcon;
     IOutputView::ViewType m_type;
     IOutputView::Behaviours m_behaviours;
     bool m_killJobOnOutputClose;

@@ -64,7 +64,6 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
     setWindowIcon( KIcon("dialog-information") ); ///@todo Use a proper icon
-  //setWindowIcon(KIcon("info"));
     setRootIsDecorated(true);
     setWhatsThis( i18n( "Problems" ) );
     setModel(new ProblemModel(m_plugin));
@@ -72,7 +71,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     //new ModelTest(model());
 
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
-  bool success = connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
+    bool success = connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     Q_ASSERT(success);

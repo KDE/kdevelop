@@ -44,6 +44,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     : QWidget( parent ), tabwidget(0), data(tvdata), scrollModelViewMapper(new QSignalMapper(this))
 {
     setWindowTitle(i18n("Output View"));
+    setWindowIcon(tvdata->icon);
     connect(scrollModelViewMapper, SIGNAL(mapped(int)), this, SLOT(scrollToBottom(int)));
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);

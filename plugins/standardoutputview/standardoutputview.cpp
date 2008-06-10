@@ -147,7 +147,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 }
 
 int StandardOutputView::registerToolView( const QString& title,
-                                          KDevelop::IOutputView::ViewType type )
+                                          KDevelop::IOutputView::ViewType type,
+                                          const KIcon& icon)
 {
     int newid = -1;
     if( ids.isEmpty() )
@@ -166,6 +167,7 @@ int StandardOutputView::registerToolView( const QString& title,
     tvdata->toolViewId = newid;
     tvdata->type = type;
     tvdata->title = title;
+    tvdata->icon = icon;
     tvdata->plugin = this;
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
     ids << newid;

@@ -58,8 +58,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
 
-    ///getData(..) for include-file completion
-    QVariant getIncludeData(const QModelIndex& index, int role) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent ( const QModelIndex & index ) const;

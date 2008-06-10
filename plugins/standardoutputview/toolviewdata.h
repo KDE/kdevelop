@@ -24,6 +24,7 @@
 #include <outputview/ioutputview.h>
 #include <QObject>
 #include <QMap>
+#include <KIcon>
 
 namespace Sublime
 {
@@ -70,6 +71,7 @@ public:
     QMap<int, OutputData*> outputdata;
     KDevelop::IOutputView::ViewType type;
     QString title;
+    KIcon icon;
     int toolViewId;
 signals:
     void outputAdded( int );

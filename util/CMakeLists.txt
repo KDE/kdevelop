@@ -13,7 +13,6 @@ set(kdevplatformutil_LIB_SRCS
     commandexecutor.cpp
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
-    outputjob.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -34,7 +33,6 @@ install( FILES
     utilexport.h
     environmentselectionwidget.h
     environmentgrouplist.h
-    outputjob.h
     pushvalue.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 

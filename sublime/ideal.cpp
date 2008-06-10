@@ -128,7 +128,7 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     KAction *action = new KAction(this);
     action->setCheckable(true);
     action->setText(title);
-    action->setIcon(dock->widget()->windowIcon());
+    action->setIcon(dock->windowIcon());
 
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | IdealDockWidget::DockWidgetVerticalTitleBar );
@@ -539,6 +539,7 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     }
 
     dock->setWindowTitle(view->widget()->windowTitle());
+    dock->setWindowIcon(view->widget()->windowIcon());
     dock->setAutoFillBackground(true);
     dock->setFocusProxy(dock->widget());
 

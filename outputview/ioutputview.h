@@ -24,6 +24,7 @@
 #include <interfaces/iextension.h>
 
 #include <QFlags>
+#include <KIcon>
 
 class QString;
 class QAbstractItemModel;
@@ -79,7 +80,7 @@ public:
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView ) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon() ) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends

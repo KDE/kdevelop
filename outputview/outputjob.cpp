@@ -22,9 +22,9 @@ Boston, MA 02110-1301, USA.
 #include <QStandardItemModel>
 #include <QItemDelegate>
 
-#include "icore.h"
-#include "iplugincontroller.h"
-#include "ioutputview.h"
+#include "interfaces/icore.h"
+#include "interfaces/iplugincontroller.h"
+#include "outputview/ioutputview.h"
 
 using namespace KDevelop;
 
@@ -55,7 +55,7 @@ void OutputJob::startOutput()
             if (m_standardToolView != -1) {
                 tvid = view->standardToolView( static_cast<IOutputView::StandardToolView>(m_standardToolView) );
             } else {
-                tvid = view->registerToolView(m_toolTitle, m_type);
+                tvid = view->registerToolView(m_toolTitle, m_type, m_toolIcon);
             }
 
             m_outputId = view->registerOutputInToolView( tvid, m_title, m_behaviours );
@@ -140,6 +140,11 @@ void KDevelop::OutputJob::setRaiseOnCreation(bool raise)
 void OutputJob::setToolTitle(const QString& title)
 {
     m_toolTitle = title;
+}
+
+void OutputJob::setToolIcon(const KIcon& icon)
+{   
+    m_toolIcon = icon;
 }
 
 #include "outputjob.moc"
