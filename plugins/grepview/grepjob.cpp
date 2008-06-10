@@ -220,6 +220,7 @@ void GrepJob::start()
         validProcs[2]->setStandardOutputProcess( validProcs[3] );
 
     setToolTitle(i18n("Find in Files"));
+    setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
     setTitle(patternString);
     setBehaviours( KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose );
