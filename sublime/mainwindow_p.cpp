@@ -332,7 +332,12 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         // the splitter.
         Q_ASSERT(splitter->count() == 1);
         container->removeWidget(view->widget());
-        view->widget()->setParent(0);
+
+        if (view->widget())
+            view->widget()->setParent(0);
+        else
+            kWarning() << "View does not have a widget!";
+
         // We can be called from signal handler of container
         // (which is tab widget), so defer deleting it.
         container->deleteLater();
