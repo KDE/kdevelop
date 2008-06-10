@@ -108,10 +108,12 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     connect( d->buildSet, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), this, SLOT( storeBuildset() ) );
 
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
+    d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
     d->m_build = new KAction( i18n("Build"), this );
     d->m_build->setShortcut( Qt::Key_F8 );
+    d->m_build->setIcon(KIcon("run-build"));
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
     d->m_install = new KAction( i18n("Install"), this );
@@ -121,6 +123,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
     actionCollection()->addAction( "project_clean", d->m_clean );
     d->m_configure = new KAction( i18n("Configure"), this );
+    d->m_configure->setIcon(KIcon("configure"));
     connect( d->m_configure, SIGNAL(triggered()), this, SLOT(configureProjectItems()) );
     actionCollection()->addAction( "project_configure", d->m_configure );
     d->m_prune = new KAction( i18n("Prune"), this );

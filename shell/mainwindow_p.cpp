@@ -224,6 +224,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::ALT + Qt::Key_Right );
     action->setToolTip( i18n( "Next window" ) );
     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
+    action->setIcon(KIcon("go-next"));
 
     action = actionCollection()->addAction( "view_previous_window" );
     action->setText( i18n( "&Previous Window" ) );
@@ -231,6 +232,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::ALT + Qt::Key_Left );
     action->setToolTip( i18n( "Previous window" ) );
     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
+    action->setIcon(KIcon("go-previous"));
 
     action = actionCollection()->addAction( "view_last_window" );
     action->setText( i18n( "&Last Accessed Window" ) );

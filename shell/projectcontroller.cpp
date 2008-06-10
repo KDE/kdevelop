@@ -169,6 +169,7 @@ void ProjectController::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open project" ) );
     action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project.</p>" ) );
+    action->setIcon(KIcon("project-open"));
 
 //    action = ac->addAction( "project_close" );
 //    action->setText( i18n( "C&lose Project" ) );
@@ -183,6 +184,7 @@ void ProjectController::setupActions()
     action->setToolTip( i18n( "Close all currently open projects" ) );
     action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects." ) );
     action->setEnabled( false );
+    action->setIcon(KIcon("window-close"));
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
@@ -198,6 +200,7 @@ void ProjectController::setupActions()
 
     d->m_projectConfigAction = new KActionMenu( i18n("Configure Project"), ac );
     ac->addAction( "project_config_menu", d->m_projectConfigAction );
+    d->m_projectConfigAction->setIcon(KIcon("configure"));
 }
 
 ProjectController::~ProjectController()
