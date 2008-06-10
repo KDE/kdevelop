@@ -25,8 +25,8 @@
 
 #include <KTextEditor/Range>
 
-#include "duchainpointer.h"
-#include "../interfaces/iproblem.h"
+#include "language/duchain/duchainpointer.h"
+#include "language/interfaces/iproblem.h"
 
 namespace KDevelop
 {
@@ -43,7 +43,7 @@ class Use;
  *
  * \todo change name to DUChainNotifier ?
  */
-class DUChainObserver : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainObserver : public QObject
 {
   Q_OBJECT
   friend class DUChain;

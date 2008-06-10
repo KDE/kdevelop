@@ -19,8 +19,7 @@
 #ifndef FORWARDDECLARATION_H
 #define FORWARDDECLARATION_H
 
-#include "declaration.h"
-#include "../languageexport.h"
+#include "language/duchain/declaration.h"
 
 namespace KDevelop
 {

@@ -21,7 +21,7 @@
 #ifndef DUMPCHAIN_H
 #define DUMPCHAIN_H
 
-#include "languageexport.h"
+#include "language/languageexport.h"
 #include <QString>
 
 namespace KTextEditor {

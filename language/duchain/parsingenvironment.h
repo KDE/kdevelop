@@ -23,8 +23,10 @@
 
 #include <ksharedptr.h>
 #include <kurl.h>
-#include <editor/hashedstring.h>
-#include "../languageexport.h"
+
+#include "editor/hashedstring.h"
+
+#include "language/languageexport.h"
 
 namespace KDevelop
 {

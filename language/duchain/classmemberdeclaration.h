@@ -21,8 +21,7 @@
 #ifndef CLASSMEMBERDECLARATION_H
 #define CLASSMEMBERDECLARATION_H
 
-#include "declaration.h"
-#include "../languageexport.h"
+#include "language/duchain/declaration.h"
 
 namespace KDevelop
 {

@@ -23,11 +23,9 @@
 #include <QtCore/QList>
 #include <editor/documentrangeobject.h>
 
-#include "../languageexport.h"
-
-#include "identifier.h"
-#include "typesystem.h"
-#include "duchainbase.h"
+#include "language/duchain/identifier.h"
+#include "language/duchain/typesystem.h"
+#include "language/duchain/duchainbase.h"
 
 class QByteArray;
 

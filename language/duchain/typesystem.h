@@ -25,8 +25,7 @@
 
 #include <ksharedptr.h>
 
-#include "identifier.h"
-#include "../languageexport.h"
+#include "language/duchain/identifier.h"
 
 namespace KDevelop
 {

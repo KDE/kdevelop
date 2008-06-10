@@ -20,7 +20,7 @@
 #define ABSTRACTFUNCTIONDECLARATION_H
 
 #include <QtCore/QString>
-#include "../languageexport.h"
+#include "language/languageexport.h"
 
 namespace KDevelop
 {

@@ -21,10 +21,8 @@
 
 #include <QtCore/QObject>
 
-#include "../languageexport.h"
-#include "duchainobserver.h"
-
-#include "topducontext.h"
+#include "language/duchain/duchainobserver.h"
+#include "language/duchain/topducontext.h"
 
 class KUrl;
 

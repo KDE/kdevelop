@@ -1,5 +1,5 @@
 /*
- * KDevelop C++ Code Completion Support
+ * KDevelop Generic Code Completion Support
  *
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  *

@@ -21,7 +21,7 @@
 
 #include <editor/documentrangeobject.h>
 #include <editor/hashedstring.h>
-#include "../languageexport.h"
+#include "language/languageexport.h"
 
 namespace KDevelop
 {

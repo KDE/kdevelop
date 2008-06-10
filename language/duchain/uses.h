@@ -20,8 +20,8 @@
 #define USES_H
 
 #include <QObject>
-#include "../languageexport.h"
-#include "declarationid.h"
+#include "language/languageexport.h"
+#include "language/duchain/declarationid.h"
 
 /**
  * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.

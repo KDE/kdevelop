@@ -2,6 +2,7 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/language/interfaces
     ${CMAKE_SOURCE_DIR}/language/duchain

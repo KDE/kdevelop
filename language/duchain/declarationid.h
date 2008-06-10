@@ -16,10 +16,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "hashedstring.h"
-#include "identifier.h"
-#include "../languageexport.h"
-#include <editor/simplecursor.h>
+#include "editor/hashedstring.h"
+#include "editor/simplecursor.h"
+
+#include "language/duchain/identifier.h"
 
 #ifndef DECLARATION_ID_H
 #define DECLARATION_ID_H

@@ -1,5 +1,5 @@
 /*
- * KDevelop Code Completion Support
+ * KDevelop Generic Code Completion Support
  *
  * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
@@ -26,12 +26,13 @@
 #include <QPair>
 #include <QMap>
 #include <QPointer>
-#include <ktexteditor/codecompletionmodel.h>
-#include <ksharedptr.h>
-#include <duchainpointer.h>
-#include "codecompletioncontext.h"
-#include "codecompletionitem.h"
-#include "../languageexport.h"
+#include <KTextEditor/CodeCompletionModel>
+#include <KSharedPtr>
+
+#include "language/duchain/duchainpointer.h"
+#include "language/codecompletion/codecompletioncontext.h"
+#include "language/codecompletion/codecompletionitem.h"
+#include "language/languageexport.h"
 
 class QIcon;
 class QString;

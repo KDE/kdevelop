@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "identifiedtype.h"
-#include "typesystem.h"
+#include "language/duchain/identifiedtype.h"
+#include "language/duchain/typesystem.h"
 
 namespace KDevelop {
   class TopDUContext;

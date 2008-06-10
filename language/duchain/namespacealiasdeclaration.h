@@ -19,8 +19,7 @@
 #ifndef NAMESPACEALIASDECLARATION_H
 #define NAMESPACEALIASDECLARATION_H
 
-#include "declaration.h"
-#include "../languageexport.h"
+#include "language/duchain/declaration.h"
 
 namespace KDevelop
 {

@@ -22,8 +22,8 @@
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 
-#include "duchainpointer.h"
-#include "../languageexport.h"
+#include "language/duchain/duchainpointer.h"
+#include "language/languageexport.h"
 
 namespace KTextEditor {
   class View;

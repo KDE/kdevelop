@@ -19,9 +19,9 @@
 #ifndef TOPDUCONTEXT_H
 #define TOPDUCONTEXT_H
 
-#include "ducontext.h"
-#include "../languageexport.h"
 #include <QtCore/QMutex>
+
+#include "language/duchain/ducontext.h"
 
 template< class T >
 class KSharedPtr;

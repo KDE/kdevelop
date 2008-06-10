@@ -1,5 +1,5 @@
 /*
- * KDevelop C++ Code Completion Support
+ * KDevelop Generic Code Completion Support
  *
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  *
@@ -23,7 +23,7 @@
 #define KDEV_CODECOMPLETION_H
 
 #include <QObject>
-#include "languageexport.h"
+#include "language/languageexport.h"
 
 namespace KParts { class Part; }
 namespace KTextEditor { class Document; class View; class CodeCompletionModel;  }

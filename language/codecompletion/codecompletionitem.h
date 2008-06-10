@@ -1,5 +1,5 @@
 /*
- * KDevelop Code Completion Support
+ * KDevelop Generic Code Completion Support
  *
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -25,8 +25,8 @@
 #include <ksharedptr.h>
 #include <ktexteditor/codecompletionmodel.h>
 
-#include <duchainpointer.h>
-#include "codecompletioncontext.h"
+#include "language/duchain/duchainpointer.h"
+#include "language/codecompletion/codecompletioncontext.h"
 
 namespace KTextEditor {
   class CodeCompletionModel;

@@ -17,7 +17,7 @@
 */
 
 #include <QObject>
-#include "../languageexport.h"
+#include "language/languageexport.h"
 
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H

@@ -1,5 +1,5 @@
 /*
- * KDevelop Code Completion Support
+ * KDevelop Generic Code Completion Support
  *
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *

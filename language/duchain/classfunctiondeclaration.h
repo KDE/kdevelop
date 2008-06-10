@@ -21,9 +21,8 @@
 #ifndef CLASSFUNCTIONDECLARATION_H
 #define CLASSFUNCTIONDECLARATION_H
 
-#include "classmemberdeclaration.h"
-#include "abstractfunctiondeclaration.h"
-#include "../languageexport.h"
+#include "language/duchain/classmemberdeclaration.h"
+#include "language/duchain/abstractfunctiondeclaration.h"
 
 namespace KDevelop
 {

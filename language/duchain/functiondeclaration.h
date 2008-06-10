@@ -21,9 +21,8 @@
 #ifndef FUNCTIONDECLARATION_H
 #define FUNCTIONDECLARATION_H
 
-#include "declaration.h"
-#include "abstractfunctiondeclaration.h"
-#include "../languageexport.h"
+#include "language/duchain/declaration.h"
+#include "language/duchain/abstractfunctiondeclaration.h"
 
 namespace KDevelop
 {
