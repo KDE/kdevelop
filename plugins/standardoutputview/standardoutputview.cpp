@@ -133,7 +133,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
         }
         case KDevelop::IOutputView::RunView:
         {
-            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("fork") );
+            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run") );
             break;
         }
         case KDevelop::IOutputView::DebugView:

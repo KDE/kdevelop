@@ -190,7 +190,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 {
     d->m_plugin = plugin;
     setObjectName("FileManager");
-//     setWindowIcon(SmallIcon("kdevelop"));
+    setWindowIcon(SmallIcon("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));
     setWhatsThis(i18n("Filesystem Browser"));
 

@@ -96,7 +96,7 @@ KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     {
         m_outputdelegate = new SvnOutputDelegate( this );
         KDevelop::IOutputView* iface = plugin->extension<KDevelop::IOutputView>();
-        int tvid = iface->registerToolView( "Subversion" );
+        int tvid = iface->registerToolView( "Subversion", KDevelop::IOutputView::OneView, KIcon("vcs_commit") );
         int id = iface->registerOutputInToolView( tvid, "Output", KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
         iface->setModel( id, m_outputmodel );
         iface->setDelegate( id, m_outputdelegate );
