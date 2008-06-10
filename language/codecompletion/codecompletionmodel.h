@@ -30,8 +30,7 @@
 #include <ksharedptr.h>
 #include <duchainpointer.h>
 #include "codecompletioncontext.h"
-#include "includeitem.h"
-#include "completionitem.h"
+#include "codecompletionitem.h"
 #include "../languageexport.h"
 
 class QIcon;
@@ -42,6 +41,8 @@ namespace KDevelop
 {
 class DUContext;
 class Declaration;
+class CodeCompletionWorker;
+class NavigationWidget;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
 {
@@ -63,13 +64,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent ( const QModelIndex & index ) const;
   
-    void setCompletionContext(KSharedPtr<::CodeCompletionContext> completionContext);
-    KSharedPtr<::CodeCompletionContext> completionContext() const;
+    void setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext);
+    KSharedPtr<CodeCompletionContext> completionContext() const;
 
     KDevelop::TopDUContextPointer currentTopContext() const;
 
     //Tracks navigation widget so they can be interactive with through the keyboard later on
-    void addNavigationWidget(const CompletionTreeElement* element, ::NavigationWidget* widget) const;
+    void addNavigationWidget(const CompletionTreeElement* element, NavigationWidget* widget) const;
 
   Q_SIGNALS:
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
@@ -81,11 +82,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url) = 0;
 
     virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
-    KSharedPtr<::CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<::CodeCompletionContext> > DeclarationContextPair;
+    KSharedPtr<CodeCompletionContext> m_completionContext;
+    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
 
   private:
-    mutable QMap<const CompletionTreeElement*, QPointer<::NavigationWidget> > m_navigationWidgets;
+    mutable QMap<const CompletionTreeElement*, QPointer<NavigationWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
     QMutex* m_mutex;

@@ -22,8 +22,7 @@
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 
-#include "duchain/duchainpointer.h"
-#include "completionitem.h"
+#include "duchainpointer.h"
 #include "../languageexport.h"
 
 namespace KTextEditor {
@@ -44,7 +43,6 @@ namespace KDevelop {
    * */
   class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public KShared {
     public:
-
       ///Computes the full set of completion items, using the information retrieved earlier.
       ///Should only be called on the first context, parent contexts are included in the computations.
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
@@ -52,8 +50,6 @@ namespace KDevelop {
 
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 
-      typedef QList<Function> FunctionList;
-      
       /**
        * @param firstContext should be true for a context that has no parent. Such a context will never be a function-call context.
        * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context, and ending at the position where completion should start
@@ -62,7 +58,7 @@ namespace KDevelop {
        * @param line Optional line that will be used to filter the macros
        * */
       CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
-      ~CodeCompletionContext();
+      virtual ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
       virtual bool isValid() const = 0;

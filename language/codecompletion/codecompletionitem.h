@@ -19,15 +19,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef COMPLETIONITEM_H
-#define COMPLETIONITEM_H
+#ifndef CODECOMPLETIONITEM_H
+#define CODECOMPLETIONITEM_H
 
 #include <ksharedptr.h>
 #include <ktexteditor/codecompletionmodel.h>
 
 #include <duchainpointer.h>
 #include "codecompletioncontext.h"
-#include "includeitem.h"
 
 namespace KTextEditor {
   class CodeCompletionModel;
@@ -113,7 +112,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
 //A completion item used for completion of normal declarations while normal code-completion
 class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public CompletionTreeItem {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<::CodeCompletionContext> context=KSharedPtr<::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<CodeCompletionContext> context=KSharedPtr<CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
@@ -121,7 +120,7 @@ public:
   virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
 
   KDevelop::DeclarationPointer declaration;
-  KSharedPtr<::CodeCompletionContext> completionContext;
+  KSharedPtr<CodeCompletionContext> completionContext;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
   int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
   QString alternativeText; //Text shown when declaration is zero
@@ -129,22 +128,6 @@ public:
 
   virtual int inheritanceDepth() const;
   virtual int argumentHintDepth() const;
-};
-
-//A completion item used for completing include-files
-class KDEVPLATFORMLANGUAGE_EXPORT IncludeFileCompletionItem : public CompletionTreeItem {
-public:
-  IncludeFileCompletionItem(const ::IncludeItem& include) : includeItem(include) {
-  }
-
-  virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
-
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
-
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
-
-  ::IncludeItem includeItem;
 };
 
 typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;

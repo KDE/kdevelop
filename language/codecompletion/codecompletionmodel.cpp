@@ -34,14 +34,8 @@
 #include <khtmlview.h>
 
 
-#include "cppduchain/cppduchain.h"
-#include "cppduchain/typeutils.h"
-
-#include "cppduchain/overloadresolutionhelper.h"
-
 #include <declaration.h>
-#include "cpptypes.h"
-#include "typeutils.h"
+#include "typesystem.h"
 #include <classfunctiondeclaration.h>
 #include <ducontext.h>
 #include <duchain.h>
@@ -51,17 +45,14 @@
 #include <duchainlock.h>
 #include <duchainbase.h>
 #include <topducontext.h>
-#include "dumpchain.h"
 #include "codecompletioncontext.h"
-#include "navigationwidget.h"
-#include "preprocessjob.h"
 #include <duchainutils.h>
-#include "cppcodecompletionworker.h"
-#include "cpplanguagesupport.h"
+#include "codecompletionworker.h"
+#include "navigationwidget.h"
 
 using namespace KTextEditor;
-using namespace KDevelop;
-using namespace TypeUtils;
+
+namespace KDevelop {
 
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
@@ -81,7 +72,7 @@ CodeCompletionModel::~CodeCompletionModel()
   delete m_mutex;
 }
 
-void setCompletionWorker(CodeCompletionWorker* worker)
+void CodeCompletionModel::setCompletionWorker(CodeCompletionWorker* worker)
 {
   if (m_worker) {
     kWarning() << "Already have a current code completion worker!";
@@ -98,7 +89,7 @@ void setCompletionWorker(CodeCompletionWorker* worker)
   m_worker->start();
 }
 
-void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, ::NavigationWidget* widget) const
+void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, NavigationWidget* widget) const
 {
   m_navigationWidgets[element] = widget;
 }
@@ -122,17 +113,17 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
 void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, void* completionContext)
 {
   m_completionItems = items;
-  m_completionContext = KSharedPtr<::CodeCompletionContext>((::CodeCompletionContext*)completionContext);
+  m_completionContext = KSharedPtr<CodeCompletionContext>((CodeCompletionContext*)completionContext);
   reset();
 }
 
-void CodeCompletionModel::setCompletionContext(KSharedPtr<::CodeCompletionContext> completionContext)
+void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
 {
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
 }
 
-KSharedPtr<::CodeCompletionContext> CodeCompletionModel::completionContext() const
+KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const
 {
   QMutexLocker lock(m_mutex);
   return m_completionContext;
@@ -194,21 +185,21 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   
     case AccessibilityNext:
     {
-      ::NavigationWidget* w = m_navigationWidgets[&treeElement];
+      NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->next();
     }
     break;
     case AccessibilityPrevious:
     {
-      ::NavigationWidget* w = m_navigationWidgets[&treeElement];
+      NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->previous();
     }
     break;
     case AccessibilityAccept:
     {
-      ::NavigationWidget* w = m_navigationWidgets[&treeElement];
+      NavigationWidget* w = m_navigationWidgets[&treeElement];
       if( w )
         w->accept();
     }
@@ -276,6 +267,8 @@ int CodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   }else{
     return m_completionItems.count();
   }
+}
+
 }
 
 #include "codecompletionmodel.moc"
