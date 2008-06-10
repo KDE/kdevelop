@@ -35,6 +35,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 #include <interfaces/contextmenuextension.h>
@@ -60,7 +61,13 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    if( KGlobalSettings::singleClick() )
+    {
+        connect( this, SIGNAL( clicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    } else
+    {
+        connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    }
 }
 
 void ProjectTreeView::setSelectionModel( QItemSelectionModel* newmodel )
@@ -154,7 +161,7 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
     KDevelop::ProjectModel *ret;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     ret=qobject_cast<KDevelop::ProjectModel*>( proxy->sourceModel() );
-    
+
 //     ret=qobject_cast<KDevelop::ProjectModel*>( model() );
     Q_ASSERT(ret);
     return ret;
@@ -266,7 +273,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         {
             menu.addAction( act );
         }
-        
+
 
         menu.addSeparator();
 

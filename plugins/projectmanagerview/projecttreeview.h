@@ -70,8 +70,8 @@ class ProjectTreeView: public QTreeView
         void openProjectConfig();
 
     private:
-        KDevelop::IProject* m_ctxProject;
         class ProjectTreeViewPrivate* const d;
+        KDevelop::IProject* m_ctxProject;
 };
 
 #endif // KDEVPROJECTMANAGER_H
