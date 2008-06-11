@@ -909,12 +909,14 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 
   closeContext();
 
-  const bool contextNeeded = createContextIfNeeded(node->statement, secondParentContext);
+  if (node->statement) {
+    const bool contextNeeded = createContextIfNeeded(node->statement, secondParentContext);
 
-  visit(node->statement);
+    visit(node->statement);
 
-  if (contextNeeded)
-    closeContext();
+    if (contextNeeded)
+      closeContext();
+  }
 
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();
