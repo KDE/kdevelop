@@ -192,7 +192,7 @@ QWidget* OutputWidget::currentWidget()
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
         widget = tabwidget->currentWidget();
-    } else if( data->type & KDevelop::IOutputView::MultipleView )
+    } else if( data->type & KDevelop::IOutputView::HistoryView )
     {
         widget = stackwidget->currentWidget();
     } else
