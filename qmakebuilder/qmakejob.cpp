@@ -72,9 +72,9 @@ void QMakeJob::start()
     QString cmd = qmakeBinary( m_project );
     m_cmd = new KDevelop::CommandExecutor(cmd, this);
     connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)),
-            m_model, SLOT(appendLines(const QStringList&) ) );
+            model(), SLOT(appendLines(const QStringList&) ) );
     connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)),
-            m_model, SLOT(appendLines(const QStringList&) ) );
+            model(), SLOT(appendLines(const QStringList&) ) );
     m_cmd->setWorkingDirectory( m_project->folder().toLocalFile() );
     connect( m_cmd, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
     connect( m_cmd, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );

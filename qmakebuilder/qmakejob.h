@@ -64,7 +64,6 @@ private:
     KDevelop::IProject* m_project;
     KDevelop::CommandExecutor* m_cmd;
     KDevelop::ProjectBaseItem* m_item;
-    KDevelop::OutputModel* m_model;
     bool m_killed;
 };
 
