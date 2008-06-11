@@ -618,7 +618,7 @@ KConfigGroup CppDebuggerPlugin::config() const
 void CppDebuggerPlugin::abort(KJob* job)
 {
     Q_UNUSED(job);
-    controller->stopDebugger();
+    slotStopDebugger();
 }
 
 QString CppDebuggerPlugin::statusName() const
