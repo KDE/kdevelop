@@ -46,7 +46,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/smartinterface.h>
-#include <helpers/codecompletion.h>
+#include <codecompletion/codecompletion.h>
 
 #include <icore.h>
 #include <iproblem.h>
