@@ -83,6 +83,7 @@ public:
 
     // BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
+    virtual QString translatedInstrumentor(const QString& instrumentor) const;
     virtual bool execute(const KDevelop::IRun& run, KJob* job);
     virtual void abort(KJob* job);
 

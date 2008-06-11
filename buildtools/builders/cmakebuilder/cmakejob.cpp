@@ -78,7 +78,7 @@ void CMakeJob::start()
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    setTitle(i18n("CMake: %1", m_project->name()));
+
     setModel( new KDevelop::OutputModel(this), KDevelop::IOutputView::TakeOwnership );
     startOutput();
 
@@ -149,6 +149,9 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
 void CMakeJob::setProject(KDevelop::IProject* project)
 {
     m_project = project;
+    
+    if (m_project)
+        setObjectName(i18n("CMake: %1", m_project->name()));
 }
 
 #include "cmakejob.moc"

@@ -605,6 +605,11 @@ QStringList CppDebuggerPlugin::instrumentorsProvided() const
     return QStringList() << "gdb";
 }
 
+QString CppDebuggerPlugin::translatedInstrumentor(const QString&) const
+{
+    return i18n("GDB");
+}
+
 KConfigGroup CppDebuggerPlugin::config() const
 {
     return m_config;

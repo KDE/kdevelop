@@ -63,6 +63,15 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
     , m_killed(false)
 {
     setCapabilities(Killable);
+
+    QString title;
+    if( !m_overrideTarget.isEmpty() )
+        title = i18n("Make: %1", m_overrideTarget);
+    else
+        title = i18n("Make: %1", m_item->text());
+    
+    setTitle(title);
+    setObjectName(title);
 }
 
 void MakeJob::start()
@@ -91,14 +100,6 @@ void MakeJob::start()
 
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-
-    if( !m_overrideTarget.isEmpty() )
-    {
-        setTitle(i18n("Make: %1", m_overrideTarget));
-    }else
-    {
-        setTitle(i18n("Make: %1", m_item->text()));
-    }
 
     setModel(new MakeOutputModel(this), IOutputView::TakeOwnership);
     setDelegate(m_builder->delegate());

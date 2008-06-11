@@ -62,7 +62,6 @@ void QMakeJob::start()
     }
 
     setStandardToolView(KDevelop::IOutputView::BuildView);
-    setTitle(i18n("QMake: %1", m_project->name()));
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel(new KDevelop::OutputModel(this), KDevelop::IOutputView::TakeOwnership);
     startOutput();
@@ -91,6 +90,9 @@ QString QMakeJob::qmakeBinary( KDevelop::IProject* project )
 void QMakeJob::setProject(KDevelop::IProject* project)
 {
     m_project = project;
+    
+    if (m_project)
+        setObjectName(i18n("QMake: %1", m_project->name()));
 }
 
 void QMakeJob::slotFailed()

@@ -361,11 +361,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
   return QVariant();
 }
 
-int CompletionTreeItem::inheritanceDepth() const
-{
-  return 0;
-}
-
 int NormalDeclarationCompletionItem::inheritanceDepth() const
 {
   return m_inheritanceDepth;
@@ -374,11 +369,6 @@ int NormalDeclarationCompletionItem::inheritanceDepth() const
 int IncludeFileCompletionItem::inheritanceDepth() const
 {
   return includeItem.pathNumber;
-}
-
-int CompletionTreeItem::argumentHintDepth() const
-{
-  return 0;
 }
 
 int NormalDeclarationCompletionItem::argumentHintDepth() const

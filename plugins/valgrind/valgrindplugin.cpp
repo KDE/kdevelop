@@ -167,6 +167,16 @@ QStringList ValgrindPlugin::instrumentorsProvided() const
     return QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
 }
 
+QString ValgrindPlugin::translatedInstrumentor(const QString& instrumentor) const
+{
+    QStringList instrumentors;
+    instrumentors << i18n("Valgrind (Memcheck)") << i18n("Valgrind (Callgrind)") << i18n("Valgrind (Cachegrind)") << i18n("Valgrind (Helgrind)") << i18n("Valgrind (Massif)") << i18n("Valgrind (DRD)") << i18n("Valgrind (Omega)") << i18n("Valgrind (Lackey)");
+    int index = instrumentorsProvided().indexOf(instrumentor);
+    if (index != -1)
+        return instrumentors.at(index);
+    return QString();
+}
+
 bool ValgrindPlugin::execute(const KDevelop::IRun & run, KJob* job)
 {
     ValgrindControl* control = new ValgrindControl(this);
