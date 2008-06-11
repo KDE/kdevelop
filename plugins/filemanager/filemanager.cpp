@@ -268,7 +268,6 @@ void FileManager::setupActions()
     action->setIcon(KIcon("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
     addAction(action);
-    addAction(action);
 }
 
 #include "filemanager.moc"
