@@ -53,6 +53,9 @@ public:
     
     QString qmakeBinary( KDevelop::IProject* project );
 
+protected:
+    bool doKill();
+
 private Q_SLOTS:
     void slotFailed();
     void slotCompleted();
@@ -62,6 +65,7 @@ private:
     KDevelop::CommandExecutor* m_cmd;
     KDevelop::ProjectBaseItem* m_item;
     KDevelop::OutputModel* m_model;
+    bool m_killed;
 };
 
 #endif // QMAKEJOB_H

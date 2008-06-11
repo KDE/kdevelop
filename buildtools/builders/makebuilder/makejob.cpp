@@ -272,8 +272,8 @@ void MakeJob::slotCompleted()
 
 bool MakeJob::doKill()
 {
-    m_executor->kill();
     m_killed = true;
+    m_executor->kill();
     return true;
 }
 

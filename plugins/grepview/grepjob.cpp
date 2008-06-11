@@ -53,6 +53,18 @@ GrepJob::GrepJob( GrepViewPlugin* parent )
     setCapabilities(Killable);
 }
 
+QString GrepJob::patternString() const
+{
+    return m_patternString;
+}
+
+void GrepJob::setPatternString(const QString& patternString)
+{
+    m_patternString = patternString;
+    
+    setObjectName(i18n("Grep: %1", m_patternString));
+}
+
 void GrepJob::start()
 {
     KProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
@@ -200,9 +212,9 @@ void GrepJob::start()
 
     QString pattern = templateString;
     if (regexpFlag)
-        pattern.replace(QRegExp("%s"), patternString);
+        pattern.replace(QRegExp("%s"), patternString());
     else
-        pattern.replace(QRegExp("%s"), escape( patternString ) );
+        pattern.replace(QRegExp("%s"), escape( patternString() ) );
 //     command += KShellProcess::quote(pattern);
 //     xargsCmd += quote(pattern); // quote isn't needed now.
     xargsCmd << pattern;
@@ -222,7 +234,7 @@ void GrepJob::start()
     setToolTitle(i18n("Find in Files"));
     setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
-    setTitle(patternString);
+    setTitle(patternString());
     setBehaviours( KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose );
 
     setModel(new GrepOutputModel(plugin()), KDevelop::IOutputView::TakeOwnership);

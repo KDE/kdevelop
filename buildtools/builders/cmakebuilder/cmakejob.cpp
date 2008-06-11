@@ -112,8 +112,8 @@ void CMakeJob::slotCompleted()
 
 bool CMakeJob::doKill()
 {
-    m_executor->kill();
     m_killed = true;
+    m_executor->kill();
     return true;
 }
 

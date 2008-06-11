@@ -50,7 +50,9 @@
 
 QMakeJob::QMakeJob(QObject *parent)
     : OutputJob(parent)
+    , m_killed(false)
 {
+    setCapabilities(Killable);
 }
 
 void QMakeJob::start()
@@ -97,15 +99,24 @@ void QMakeJob::setProject(KDevelop::IProject* project)
 
 void QMakeJob::slotFailed()
 {
-    setError(ConfigureError);
-    // FIXME need more detail i guess
-    setErrorText(i18n("Configure error"));
+    if (!m_killed) {
+        setError(ConfigureError);
+        // FIXME need more detail i guess
+        setErrorText(i18n("Configure error"));
+    }
     emitResult();
 }
 
 void QMakeJob::slotCompleted()
 {
     emitResult();
+}
+
+bool QMakeJob::doKill()
+{
+    m_killed = true;
+    m_cmd->kill();
+    return true;
 }
 
 #include "qmakejob.moc"

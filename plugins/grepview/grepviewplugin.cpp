@@ -133,7 +133,7 @@ void GrepViewPlugin::searchActivated()
 {
     GrepJob* job = new GrepJob(this);
     
-    job->patternString = m_grepdlg->patternString();
+    job->setPatternString(m_grepdlg->patternString());
     job->templateString = m_grepdlg->templateString();
     job->filesString = m_grepdlg->filesString();
     job->excludeString = m_grepdlg->excludeString();

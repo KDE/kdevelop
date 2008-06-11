@@ -42,7 +42,9 @@ public:
 
     GrepJob( GrepViewPlugin *parent );
 
-    QString patternString;
+    QString patternString() const;
+    void setPatternString(const QString& patternString);
+    
     QString templateString;
     QString filesString;
     QString excludeString;
@@ -74,6 +76,8 @@ private:
     KDevelop::IOutputView *m_view;
     KDevelop::ProcessLineMaker* m_lineMaker;
     QList<KProcess*> m_processes;
+    
+    QString m_patternString;
 };
 
 #endif
