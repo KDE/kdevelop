@@ -26,11 +26,16 @@ namespace KDevelop {
 class ProjectModel; 
 }
 
+class QStandardItem;
+
 class ProjectProxyModel : public QSortFilterProxyModel
 {
     public:
         ProjectProxyModel(QObject *parent);
         bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
+        
+        QModelIndex indexFromItem(QStandardItem* item) const;
+        
     private:
         KDevelop::ProjectModel* projectModel() const;
 };

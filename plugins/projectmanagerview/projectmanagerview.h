@@ -42,6 +42,7 @@ public:
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:
     void switchDetailView();
+    void locateCurrentDocument();
 private:
     Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
     Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )

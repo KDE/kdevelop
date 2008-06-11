@@ -99,6 +99,14 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 {
     setWindowTitle(i18n("Projects"));
 
+    KAction* action = new KAction(this);
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    action->setText(i18n("Locate Current Document"));
+    action->setToolTip(i18n("Locates the current document in the project tree and selects it."));
+    action->setIcon(KIcon("dirsync"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
+    addAction(action);
+
     d->mplugin = plugin;
     QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );
@@ -189,6 +197,23 @@ void ProjectManagerView::switchDetailView()
         d->m_detailStack->hide();
     }
     animation->start();
+}
+
+void ProjectManagerView::locateCurrentDocument()
+{
+    KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
+
+    foreach (IProject* proj, ICore::self()->projectController()->projects()) {
+        foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
+            QModelIndex index = d->m_modelFilter->indexFromItem(item);
+            if (index.isValid()) {
+                d->m_projectOverview->setCurrentIndex(index);
+                d->m_projectOverview->expand(index);
+                d->m_projectOverview->scrollTo(index);
+                return;
+            }
+        }
+    }
 }
 
 #include "projectmanagerview.moc"

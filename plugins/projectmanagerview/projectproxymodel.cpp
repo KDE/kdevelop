@@ -54,4 +54,9 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     return ret;
 }
 
+QModelIndex ProjectProxyModel::indexFromItem(QStandardItem* item) const
+{
+    return mapFromSource(projectModel()->indexFromItem(item));
+}
+
 #include "projectproxymodel.moc"
