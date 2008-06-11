@@ -49,7 +49,7 @@
 #include <dumpchain.h>
 #include <topducontext.h>
 #include <duchainlock.h>
-#include <codecompletion.h>
+#include <language/codecompletion/codecompletion.h>
 
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
