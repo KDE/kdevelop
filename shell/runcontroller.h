@@ -64,6 +64,7 @@ private Q_SLOTS:
     void slotExecute();
     void slotProjectOpened(KDevelop::IProject* project);
     void slotProjectClosing(KDevelop::IProject* project);
+    void slotKillJob();
 
 private:
     void setupActions();

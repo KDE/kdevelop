@@ -32,6 +32,7 @@ Boston, MA 02110-1301, USA.
 #include <QItemDelegate>
 
 #include <KSelectAction>
+#include <KActionMenu>
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KLocale>
@@ -46,8 +47,8 @@ public:
 
     IRunController::State state;
 
-    QSet<KJob*> jobs;
-    KAction* stopAction;
+    QHash<KJob*, KAction*> jobs;
+    KActionMenu* stopAction;
     KSelectAction* defaultTargetAction;
 };
 
@@ -90,7 +91,7 @@ void RunController::setupActions()
     ac->addAction("run_execute", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
-    d->stopAction = action = new KAction( KIcon("dialog-close"), i18n("Stop Jobs"), this);
+    action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
     action->setShortcut(Qt::Key_Escape);
     action->setToolTip(i18n("Stop all currently running jobs"));
     action->setWhatsThis(i18n("<b>Stop Jobs</b><p>Requests that all running jobs are stopped."));
@@ -196,7 +197,12 @@ void KDevelop::RunController::registerJob(KJob * job)
         return;
         
     if (!d->jobs.contains(job)) {
-        d->jobs.insert(job);
+        KAction* stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
+        stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
+        d->stopAction->addAction(stopJobAction);
+        connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
+
+        d->jobs.insert(job, stopJobAction);
 
         IRunController::registerJob(job);
 
@@ -212,7 +218,10 @@ void KDevelop::RunController::unregisterJob(KJob * job)
 {
     IRunController::unregisterJob(job);
 
-    d->jobs.remove(job);
+    Q_ASSERT(d->jobs.contains(job));
+
+    // Delete the stop job action
+    delete d->jobs.take(job);
 
     checkState();
 
@@ -223,7 +232,7 @@ void KDevelop::RunController::checkState()
 {
     bool running = false;
 
-    foreach (KJob* job, d->jobs) {
+    foreach (KJob* job, d->jobs.keys()) {
         if (!job->isSuspended()) {
             running = true;
             break;
@@ -240,10 +249,20 @@ void KDevelop::RunController::checkState()
 
 void KDevelop::RunController::stopAllProcesses()
 {
-    foreach (KJob* job, d->jobs) {
+    foreach (KJob* job, d->jobs.keys()) {
         if (job->capabilities() & KJob::Killable)
             job->kill(KJob::EmitResult);
     }
+}
+
+void KDevelop::RunController::slotKillJob()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    Q_ASSERT(action);
+    
+    KJob* job = static_cast<KJob*>(qvariant_cast<void*>(action->data()));
+    if (job->capabilities() & KJob::Killable)
+        job->kill();
 }
 
 void KDevelop::RunController::finished(KJob * job)
@@ -282,6 +301,7 @@ KDevelop::RunJob::RunJob(RunController* controller, const IRun & run)
     , m_run(run)
 {
     setCapabilities(Killable);
+    setObjectName(i18n("Run: %1", run.executable().path()));
 }
 
 void KDevelop::RunJob::start()
@@ -319,7 +339,7 @@ void KDevelop::RunJob::start()
 
 QList< KJob * > KDevelop::RunController::currentJobs() const
 {
-    return d->jobs.values();
+    return d->jobs.keys();
 }
 
 void RunJob::slotOutput(KJob * job, const QString & line, KDevelop::IRunProvider::OutputTypes type)
