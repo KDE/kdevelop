@@ -21,25 +21,18 @@
 #include "astfactory.h"
 #include <map>
 #include <QtCore/QString>
-#include <k3staticdeleter.h>
+#include <kglobal.h>
 #include "cmakeast.h"
 
 class AstFactory::Private
 {
 public:
-    static K3StaticDeleter<AstFactory> deleter;
-
     CallbackMap callbacks;
 };
 
-K3StaticDeleter<AstFactory> AstFactory::Private::deleter;
-AstFactory* AstFactory::s_self = 0;
-
 AstFactory* AstFactory::self()
 {
-    if ( !s_self )
-        Private::deleter.setObject( s_self, new AstFactory() );
-
+    K_GLOBAL_STATIC(AstFactory, s_self);
     return s_self;
 }
 

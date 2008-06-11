@@ -20,13 +20,17 @@
 
 #include <QMutexLocker>
 
-#include <k3staticdeleter.h>
+#include <kglobal.h>
+
 #include <duchain/identifier.h>
 
 using namespace KDevelop;
 
-static K3StaticDeleter<TypeRepository> sdType;
-TypeRepository* TypeRepository::s_instance = 0;
+TypeRepository* TypeRepository::self()
+{
+  K_GLOBAL_STATIC(TypeRepository, s_instance);
+  return s_instance;
+}
 
 TypeRepository::TypeRepository()
 {
@@ -155,14 +159,6 @@ void TypeRepository::newIntegralType(CppIntegralType::IntegralTypes type, CppInt
   m_integrals.append(CppIntegralType::Ptr(constVersion));
   m_integrals.append(CppIntegralType::Ptr(volatileVersion));
   m_integrals.append(CppIntegralType::Ptr(constVolatileVersion));
-}
-
-TypeRepository* TypeRepository::self()
-{
-  if (!s_instance)
-    sdType.setObject(s_instance, new TypeRepository());
-
-  return s_instance;
 }
 
 CppIntegralType::Ptr TypeRepository::getIntegral(int index, int cv) const

@@ -58,8 +58,6 @@ private:
   KDevelop::AbstractType::Ptr registerArray(KDevelop::ArrayType::Ptr input);
   KDevelop::AbstractType::Ptr registerDelayedType(KDevelop::DelayedType::Ptr input);
 
-  static TypeRepository* s_instance;
-
   // Inbuilt integral types
   QVector<CppIntegralType::Ptr> m_integrals;
 

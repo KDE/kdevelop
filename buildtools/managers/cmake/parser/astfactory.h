@@ -55,7 +55,6 @@ private:
     AstFactory();
     class Private;
     Private* d;
-    static AstFactory* s_self;
 };
 
 #endif
