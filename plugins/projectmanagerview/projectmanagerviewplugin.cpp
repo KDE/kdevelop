@@ -220,6 +220,8 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
 
 void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
 {
+    if( !item ) 
+        return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Building item:" << item->text();
 
@@ -231,6 +233,8 @@ void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
 {
+    if( !item ) 
+        return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Cleaning item:" << item->text();
     if( builder )
@@ -239,6 +243,8 @@ void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
 {
+    if( !item ) 
+        return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Installing item:" << item->text();
 
@@ -251,6 +257,8 @@ void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
 {
+    if( !item ) 
+        return;
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Configuring item:" << item->name();
 
@@ -262,6 +270,8 @@ void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
 
 void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
 {
+    if( !item ) 
+        return;
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Pruning item:" << item->name();
 
