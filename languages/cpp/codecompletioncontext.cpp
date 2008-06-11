@@ -629,6 +629,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
   return items;
 }
 
-}
-
 #endif
+
+}
