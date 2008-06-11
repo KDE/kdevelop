@@ -210,7 +210,7 @@ void KDevelop::RunController::registerJob(KJob * job)
     }
 
     job->start();
-
+    
     checkState();
 }
 
@@ -301,7 +301,15 @@ KDevelop::RunJob::RunJob(RunController* controller, const IRun & run)
     , m_run(run)
 {
     setCapabilities(Killable);
-    setObjectName(i18n("Run: %1", run.executable().path()));
+
+    QString instrumentorName = i18n("Run");
+    if (!m_run.instrumentor().isEmpty()) {
+        m_provider = m_controller->findProvider(m_run.instrumentor());
+        if (m_provider) {
+            instrumentorName = m_provider->translatedInstrumentor(run.instrumentor());
+        }
+    }
+    setObjectName(i18n("%1: %2", instrumentorName, run.executable().path()));
 }
 
 void KDevelop::RunJob::start()
@@ -312,8 +320,6 @@ void KDevelop::RunJob::start()
         emitResult();
         return;
     }
-
-    m_provider = m_controller->findProvider(m_run.instrumentor());
 
     if (!m_provider) {
         setErrorText(i18n("Execution failed: no plugin found for requested instrumentor \"%1\"", m_run.instrumentor()));

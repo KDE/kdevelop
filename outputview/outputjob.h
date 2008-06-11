@@ -50,6 +50,7 @@ protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
     void setToolTitle(const QString& title);
     void setToolIcon(const KIcon& icon);
+    /// Set the \a title for this job's output tab.  If not set, will default to the job's objectName().
     void setTitle(const QString& title);
     void setViewType(IOutputView::ViewType type);
     void setBehaviours(IOutputView::Behaviours behaviours);

@@ -47,6 +47,11 @@ public:
      * Return a list of instrumentors that your plugin supports.
      */
     virtual QStringList instrumentorsProvided() const = 0;
+    
+    /**
+     * Return the name of the instrumentor, translated and suitable for presentation to the user.
+     */
+    virtual QString translatedInstrumentor(const QString& instrumentor) const = 0;
 
     /**
      * Request the execution of \a run.

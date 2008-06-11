@@ -42,6 +42,8 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
     virtual void unload();
 
     virtual QStringList instrumentorsProvided() const;
+    
+    virtual QString translatedInstrumentor(const QString& instrumentor) const;
 
     /**
      * Request the execution of \a run.

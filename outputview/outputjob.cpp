@@ -58,6 +58,9 @@ void OutputJob::startOutput()
                 tvid = view->registerToolView(m_toolTitle, m_type, m_toolIcon);
             }
 
+            if (m_title.isEmpty())
+                m_title = objectName();
+                
             m_outputId = view->registerOutputInToolView( tvid, m_title, m_behaviours );
 
             if (!m_outputModel) {

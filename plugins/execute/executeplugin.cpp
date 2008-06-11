@@ -53,6 +53,11 @@ QStringList ExecutePlugin::instrumentorsProvided() const
     return QStringList() << "default";
 }
 
+QString ExecutePlugin::translatedInstrumentor(const QString&) const
+{
+    return i18n("Run");
+}
+
 bool ExecutePlugin::execute(const IRun & run, KJob* job)
 {
     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
