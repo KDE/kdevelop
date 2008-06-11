@@ -43,14 +43,18 @@ public:
     QStringList m_args;
     QString m_workDir;
     QMap<QString,QString> m_env;
+    void procError( QProcess::ProcessError error )
+    {
+        Q_UNUSED(error)
+        m_lineMaker->flushBuffers();
+        emit m_exec->failed();
+    }
     void procFinished( int code, QProcess::ExitStatus status )
     {
         Q_UNUSED(code)
         m_lineMaker->flushBuffers();
         if( status == QProcess::NormalExit )
             emit m_exec->completed();
-        else
-            emit m_exec->failed();
     }
 };
 
@@ -65,6 +69,8 @@ CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
              this, SIGNAL( receivedStandardOutput( const QStringList& ) ) );
     connect( d->m_lineMaker, SIGNAL(receivedStderrLines( const QStringList& ) ),
              this, SIGNAL( receivedStandardError( const QStringList& ) ) );
+    connect( d->m_process, SIGNAL( error( QProcess::ProcessError ) ),
+             this, SLOT( procError( QProcess::ProcessError ) ) );
     connect( d->m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
 }

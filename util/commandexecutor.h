@@ -91,6 +91,7 @@ Q_SIGNALS:
     void failed();
     void completed();
 private:
+    Q_PRIVATE_SLOT( d, void procError( QProcess::ProcessError ) )
     Q_PRIVATE_SLOT( d, void procFinished( int, QProcess::ExitStatus ) )
     class CommandExecutorPrivate* const d;
     friend class CommandExecutorPrivate;
