@@ -25,6 +25,55 @@
 //Foreach macro that also works with QVarLengthArray
 #define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)
 
+template <>
+void QVarLengthArray<KDevelop::Identifier, 5>::realloc(int asize, int aalloc)
+{
+    Q_ASSERT(aalloc >= asize);
+    KDevelop::Identifier *oldPtr = ptr;
+    int osize = s;
+    s = asize;
+
+    if (aalloc != a) {
+        ptr = reinterpret_cast<KDevelop::Identifier *>(qMalloc(aalloc * sizeof(KDevelop::Identifier)));
+        memset(ptr, 0, aalloc * sizeof(KDevelop::Identifier));
+        if (ptr) {
+            a = aalloc;
+
+/*            if (QTypeInfo<KDevelop::Identifier>::isStatic) {
+                KDevelop::Identifier *i = ptr + osize;
+                KDevelop::Identifier *j = oldPtr + osize;
+                while (i != ptr) {
+                    new (--i) KDevelop::Identifier(*--j);
+                    j->~Identifier();
+                }
+            } else {*/
+                qMemCopy(ptr, oldPtr, osize * sizeof(KDevelop::Identifier));
+//             }
+        } else {
+            ptr = oldPtr;
+            s = 0;
+            asize = 0;
+        }
+    }
+
+    if (QTypeInfo<KDevelop::Identifier>::isComplex) {
+        if (asize < osize) {
+            KDevelop::Identifier *i = oldPtr + osize;
+            KDevelop::Identifier *j = oldPtr + asize;
+            while (i-- != j)
+                i->~Identifier();
+        } else {
+            KDevelop::Identifier *i = ptr + asize;
+            KDevelop::Identifier *j = ptr + osize;
+            while (i != j)
+                new (--i) KDevelop::Identifier;
+        }
+    }
+
+    if (oldPtr != reinterpret_cast<KDevelop::Identifier *>(array) && oldPtr != ptr)
+        qFree(oldPtr);
+}
+
 namespace KDevelop
 {
 
