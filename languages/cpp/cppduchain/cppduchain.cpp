@@ -29,6 +29,7 @@
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-macro.h"
 #include "cppduchainexport.h"
+#include <parser/rpp/chartools.h>
 
 
 using namespace Cpp;
@@ -169,7 +170,7 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
       DUChainReadLocker lock(DUChain::lock());
 /*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
     //Copy in all macros from the file
-    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->definedMacros().set().iterator() ); it; ++it ) {
+    for( Cpp::MacroSetIterator it( file->definedMacros().set() ); it; ++it ) {
       if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
@@ -178,7 +179,7 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
       }
     }
 /*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
-    for( Cpp::MacroRepository::Iterator it( &Cpp::EnvironmentManager::m_macroRepository, file->usedMacros().set().iterator() ); it; ++it ) {
+    for( Cpp::MacroSetIterator it( file->usedMacros().set() ); it; ++it ) {
       if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
         pp.environment()->setMacro( new rpp::pp_macro( *it ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
@@ -188,7 +189,7 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
     }
   }
 
-  QString ret = pp.processFile("anonymous", rpp::pp::Data, text.toUtf8());
+  QString ret = QString::fromUtf8(stringFromContents(pp.processFile("anonymous", rpp::pp::Data, text.toUtf8())));
   pp.environment()->cleanup();
   
   return ret;

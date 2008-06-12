@@ -18,7 +18,7 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <hashedstring.h> //Needs to be up here, so qHash(HashedString) is found
+#include <indexedstring.h> //Needs to be up here, so qHash(IndexedString) is found
 
 #include "pp-environment.h"
 
@@ -129,7 +129,7 @@ void Environment::visitBlock(MacroBlock* block, int depth)
   m_replaying = wasReplaying;
 }
 
-MacroBlock* Environment::enterBlock(int sourceLine, const QByteArray& condition)
+MacroBlock* Environment::enterBlock(int sourceLine, const QVector<uint>& condition)
 {
   MacroBlock* ret = new MacroBlock(sourceLine);
   ret->condition = condition;
@@ -139,7 +139,7 @@ MacroBlock* Environment::enterBlock(int sourceLine, const QByteArray& condition)
   return ret;
 }
 
-MacroBlock* Environment::elseBlock(int sourceLine, const QByteArray& condition)
+MacroBlock* Environment::elseBlock(int sourceLine, const QVector<uint>& condition)
 {
   MacroBlock* ret = new MacroBlock(sourceLine);
   ret->condition = condition;
@@ -170,7 +170,7 @@ void Environment::clear()
   m_blocks.clear();
 }
 
-void Environment::clearMacro(const KDevelop::HashedString& name)
+void Environment::clearMacro(const KDevelop::IndexedString& name)
 {
 //   pp_macro* undef = new pp_macro();
 //   undef->name = name;
@@ -207,7 +207,7 @@ const Environment::EnvironmentMap& Environment::environment() const {
   return m_environment;
 }
 
-pp_macro* Environment::retrieveStoredMacro(const KDevelop::HashedString& name) const
+pp_macro* Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) const
 {
   if (m_environment.contains(name))
     return m_environment[name];
@@ -215,12 +215,7 @@ pp_macro* Environment::retrieveStoredMacro(const KDevelop::HashedString& name) c
   return 0;
 }
 
-pp_macro* Environment::retrieveMacro(const QByteArray& name) const
-{
-  return retrieveMacro(QString::fromUtf8(name));
-}
-
-pp_macro* Environment::retrieveMacro(const KDevelop::HashedString& name) const
+pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name) const
 {
   return retrieveStoredMacro(name);
 }

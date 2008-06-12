@@ -49,13 +49,11 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces)
     //Decode operator-names without spaces for now, since we rely on it in other places.
     ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = session->token_stream->token(a);
-      ret += tk.symbol();
+      ret += session->token_stream->token(a).symbolString();
     }
   } else {
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = session->token_stream->token(a);
-      ret += tk.symbol() + " ";
+      ret += session->token_stream->token(a).symbolString() + " ";
     }
   }
   return ret;
@@ -63,27 +61,30 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces)
 
 void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 {
-  QString tmp_name;
-
-  if (node->tilde)
-    tmp_name += QLatin1String("~");
+  IndexedString tmp_name;
 
   if (node->id)
-    tmp_name += m_session->token_stream->token(node->id).symbol();
+    tmp_name = m_session->token_stream->token(node->id).symbol();
 
+  if (node->tilde)
+    tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
+  
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
 #if defined(__GNUC__)
 #warning "NameASTVisitor::visitUnqualifiedName() -- implement me"
 #endif
 
-      tmp_name += QLatin1String("operator");
+      QString tmpString;
+      tmpString += QLatin1String("operator");
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode(m_session, op_id->op, true);
+        tmpString +=  decode(m_session, op_id->op, true);
       else
-        tmp_name += QLatin1String("{...cast...}");
+        tmpString += QLatin1String("{...cast...}");
 
+      tmp_name = IndexedString(tmpString);
+      
       m_typeSpecifier = op_id->type_specifier;
     }
 
@@ -162,13 +163,15 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
           {
             PtrOperatorAST* ptrOp = it->element;
             if (ptrOp && ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
-              QString op = m_session->token_stream->token(ptrOp->op).symbol();
+              IndexedString op = m_session->token_stream->token(ptrOp->op).symbol();
+              static IndexedString ref("&");
+              static IndexedString ptr("*");
               if (!op.isEmpty()) {
-                if (op[0] == '&') {
+                if (op == ref) {
                   CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(m_session, ptrOp->cv)));
                   pointer->setBaseType(res.type);
                   res.type = AbstractType::Ptr( pointer.data() );
-                } else if (op[0] == '*') {
+                } else if (op == ptr) {
                   CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(m_session, ptrOp->cv)));
                   pointer->setBaseType(res.type);
                   res.type = AbstractType::Ptr( pointer.data() );

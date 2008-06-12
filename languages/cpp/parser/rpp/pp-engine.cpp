@@ -61,19 +61,20 @@ Preprocessor* pp::preprocessor() {
   return m_preprocessor;
 }
 
-QByteArray pp::processFile(const QString& fileName, StringType type, const QByteArray& data)
+PreprocessedContents pp::processFile(const QString& fileName, StringType type, const QByteArray& data)
 {
   if ( type == File  )
   {
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly))
     {
-      m_files.push(fileName);
+      m_files.push(KDevelop::IndexedString(fileName));
 
       QByteArray contentsDecoded = file.readAll();
+      PreprocessedContents contents = convertFromByteArray(contentsDecoded);
 
-      Stream is(&contentsDecoded);
-      QByteArray result;
+      Stream is(&contents);
+      PreprocessedContents result;
       // Guestimate as to how much expansion will occur
       result.reserve(int(contentsDecoded.length() * 1.2));
 
@@ -87,17 +88,19 @@ QByteArray pp::processFile(const QString& fileName, StringType type, const QByte
     }
 
     kWarning(9007) << "file '" << fileName << "' not found!" ;
-    return QByteArray();
+    return PreprocessedContents();
   }
   else
   {
-    QByteArray result;
+    PreprocessedContents result;
     // Guestimate as to how much expansion will occur
     result.reserve(int(data.length() * 1.2));
-    m_files.push(fileName);
+    m_files.push(KDevelop::IndexedString(fileName));
+
+    PreprocessedContents contents = convertFromByteArray(data);
 
     {
-      Stream is(&const_cast<QByteArray&>(data));
+      Stream is(&contents);
       Stream rs(&result, m_environment->locationTable());
       operator () (is, rs);
     }
@@ -108,17 +111,20 @@ QByteArray pp::processFile(const QString& fileName, StringType type, const QByte
 
 }
 
-QByteArray pp::processFile(QIODevice* device)
+PreprocessedContents pp::processFile(QIODevice* device)
 {
   Q_ASSERT(device);
 
-  QByteArray result;
+  PreprocessedContents result;
 
-  m_files.push("<internal>");
+  m_files.push(KDevelop::IndexedString("<internal>"));
 
   {
     QTextStream input(device);
-    QByteArray contents = input.readAll().toUtf8();
+    QByteArray contentsDecoded = input.readAll().toUtf8();
+    
+    PreprocessedContents contents = convertFromByteArray(contentsDecoded);
+  
     Stream is(&contents);
     Stream rs(&result, m_environment->locationTable());
     operator () (is, rs);
@@ -127,99 +133,50 @@ QByteArray pp::processFile(QIODevice* device)
   return result;
 }
 
-pp::PP_DIRECTIVE_TYPE pp::find_directive (const QByteArray& directive) const
-{
-  // TODO profile - had to be switched away from a static hash
-  switch (directive.length()) {
-    case 2:
-      if (directive == "if")
-        return PP_IF;
-      break;
+uint ifDirective = KDevelop::IndexedString("if").index();
+uint elseDirective = KDevelop::IndexedString("else").index();
+uint elifDirective = KDevelop::IndexedString("elif").index();
+uint ifdefDirective = KDevelop::IndexedString("ifdef").index();
+uint undefDirective = KDevelop::IndexedString("undef").index();
+uint endifDirective = KDevelop::IndexedString("endif").index();
+uint ifndefDirective = KDevelop::IndexedString("ifndef").index();
+uint defineDirective = KDevelop::IndexedString("define").index();
+uint includeDirective = KDevelop::IndexedString("include").index();
+uint includeNextDirective = KDevelop::IndexedString("include_next").index();
 
-    case 4:
-      if (directive == "elif")
-        return PP_ELIF;
-      if (directive == "else")
-        return PP_ELSE;
-      break;
-
-    case 5:
-      if (directive == "ifdef")
-        return PP_IFDEF;
-      if (directive == "undef")
-        return PP_UNDEF;
-      if (directive == "endif")
-        return PP_ENDIF;
-      break;
-
-    case 6:
-      if (directive == "ifndef")
-        return PP_IFNDEF;
-      if (directive == "define")
-        return PP_DEFINE;
-      break;
-
-    case 7:
-      if (directive == "include")
-        return PP_INCLUDE;
-      break;
-
-    case 12:
-      if (directive == "include_next")
-        return PP_INCLUDE_NEXT;
-      break;
-
-    default:
-      break;
-  }
-
-  return PP_UNKNOWN_DIRECTIVE;
-}
-
-void pp::handle_directive(const QByteArray& directive, Stream& input, Stream& output)
+void pp::handle_directive(uint directive, Stream& input, Stream& output)
 {
   skip_blanks (input, output);
 
-  PP_DIRECTIVE_TYPE d = find_directive(directive);
-  switch (d)
-  {
-    case PP_DEFINE:
+  if(directive == defineDirective)
       if (! skipping ())
         return handle_define(input);
-      break;
-
-    case PP_INCLUDE:
-    case PP_INCLUDE_NEXT:
+  
+  if(directive == includeDirective || directive == includeNextDirective)
       if (! skipping ())
-        return handle_include (d == PP_INCLUDE_NEXT, input, output);
-      break;
-
-    case PP_UNDEF:
+        return handle_include (directive == includeNextDirective, input, output);
+  
+  if(directive == undefDirective)
       if (! skipping ())
         return handle_undef(input);
-      break;
 
-    case PP_ELIF:
+  if(directive == elifDirective)
       return handle_elif(input);
 
-    case PP_ELSE:
+  if(directive == elseDirective)
       return handle_else(input.inputPosition().line);
 
-    case PP_ENDIF:
+  if(directive == endifDirective)
       return handle_endif(input, output);
 
-    case PP_IF:
+  if(directive == ifDirective)
       return handle_if(input);
 
-    case PP_IFDEF:
+  if(directive == ifdefDirective)
       return handle_ifdef(false, input);
 
-    case PP_IFNDEF:
+  if(directive == ifndefDirective)
       return handle_ifdef(true, input);
-
-    default:
-      break;
-  }
 }
 
 void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
@@ -229,14 +186,14 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
 
     Anchor inputPosition = input.inputPosition();
     KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-    QByteArray includeString;
+    PreprocessedContents includeString;
     {
       Stream cs(&includeString);
       expand_include(input, cs);
     }
 
     skip_blanks(input, devnull());
-    RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.startsWith('<') || includeString.startsWith('"')));
+    RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.first() == indexFromCharacter('<') || includeString.first() == indexFromCharacter('"')));
 
     Stream newInput(&includeString, inputPosition);
     newInput.setOriginalInputPosition(originalInputPosition);
@@ -248,7 +205,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
   char quote((input == '"') ? '"' : '>');
   ++input;
 
-  QByteArray includeNameB;
+  PreprocessedContents includeNameB;
 
   while (!input.atEnd() && input != quote) {
     RETURN_ON_FAIL(input != '\n');
@@ -257,7 +214,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     ++input;
   }
 
-  QString includeName(QString::fromUtf8(includeNameB));
+  QString includeName(QString::fromUtf8(stringFromContents(includeNameB)));
 
   Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line, skip_current_path);
   Q_ASSERT(!include);
@@ -297,20 +254,14 @@ void pp::operator () (Stream& input, Stream& output)
     } else if (input == '#') {
       skip_blanks(++input, devnull());
 
-      QByteArray directive = skip_identifier(input);
-
-      if(directive.length() > 512) {
-        createProblem(input, i18n("too long directive")); //Is this actually a problem?
-        input.toEnd();
-        return;
-      }
+      uint directive = skip_identifier(input);
 
       skip_blanks(input, devnull());
 
       Anchor inputPosition = input.inputPosition();
       KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
       
-      QByteArray skipped;
+      PreprocessedContents skipped;
       {
         Stream ss(&skipped);
         skip (input, ss);
@@ -339,7 +290,7 @@ void pp::operator () (Stream& input, Stream& output)
 
 void pp::createProblem(Stream& input, const QString& description) {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(description);
     problemEncountered(problem);
 }
@@ -349,19 +300,19 @@ void pp::handle_define (Stream& input)
   pp_macro* macro = new pp_macro();
   macro->file = currentFileName();
   macro->sourceLine = input.originalInputPosition().line;
-  QByteArray definition;
+  PreprocessedContents definition;
 
   skip_blanks (input, devnull());
-  macro->name = QString::fromUtf8(skip_identifier(input)); //@todo make macros utf8 too
+  macro->name = KDevelop::IndexedString(skip_identifier(input)); //@todo make macros utf8 too
 
   if (!input.atEnd() && input == '(')
   {
     macro->function_like = true;
 
     skip_blanks (++input, devnull()); // skip '('
-    QByteArray formal = skip_identifier(input);
-    if (!formal.isEmpty())
-      macro->formals << formal;
+    uint formal = skip_identifier(input);
+    if (formal)
+      macro->formals.append( formal );
 
     skip_blanks(input, devnull());
 
@@ -378,9 +329,9 @@ void pp::handle_define (Stream& input)
     {
       skip_blanks(++input, devnull());
 
-      QByteArray formal = skip_identifier(input);
-      if (!formal.isEmpty())
-        macro->formals << formal;
+      uint formal = skip_identifier(input);
+      if (formal)
+        macro->formals.append(formal);
 
       skip_blanks (input, devnull());
 
@@ -402,7 +353,7 @@ void pp::handle_define (Stream& input)
 
   while (!input.atEnd() && input != '\n')
   {
-    if(input == '/' && (input.peek() == '/' || input.peek() == '*')) {
+    if(input == '/' && (input.peekNextCharacter() == '/' || input.peekNextCharacter() == '*')) {
       skip_comment_or_divop(input, devnull());
       if(input != '\n')
         skip_blanks (input, devnull());
@@ -416,7 +367,7 @@ void pp::handle_define (Stream& input)
       if (!input.atEnd() && input == '\n')
       {
         skip_blanks(++input, devnull());
-        definition += ' ';
+        definition += indexFromCharacter(' ');
         continue;
 
       } else {
@@ -425,7 +376,7 @@ void pp::handle_define (Stream& input)
       }
     }
 
-    definition += input;
+    definition.append(input.current());
     ++input;
   }
 
@@ -484,7 +435,6 @@ inline bool pp::test_if_level()
 inline int pp::skipping() const
 { return _M_skipping[iflevel]; }
 
-
 Value pp::eval_primary(Stream& input)
 {
   int start = input.offset();
@@ -513,10 +463,10 @@ Value pp::eval_primary(Stream& input)
       if (token != TOKEN_IDENTIFIER)
       {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
         QChar tk(token);
-        problem.setDescription(i18n("Expected \"identifier\", found: %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-        problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", QString::fromUtf8(token_text), QString::fromUtf8(input.stringFrom(start))));
+        problem.setDescription(i18n("Expected \"identifier\", found: %1", (tk < TOKENS_END && tk > TOKENS_START) ? QString(tk) : i18n("character %1", token)));
+        problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
         break;
       }
@@ -531,10 +481,10 @@ Value pp::eval_primary(Stream& input)
       if (expect_paren) {
         if (token != ')') {
           KDevelop::Problem problem;
-          problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+          problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
           QChar tk(token);
           problem.setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-          problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", QString::fromUtf8(token_text), QString::fromUtf8(input.stringFrom(start))));
+          problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
           problemEncountered(problem);
         } else {
           accept_token();
@@ -563,10 +513,10 @@ Value pp::eval_primary(Stream& input)
 
       if (token != ')') {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
         QChar tk(token);
         problem.setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-        problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", QString::fromUtf8(token_text), QString::fromUtf8(input.stringFrom(start))));
+        problem.setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
       } else {
         accept_token();
@@ -600,7 +550,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else if (token == '/') {
       if (value.is_zero()) {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Division by zero"));
         problem.setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
@@ -613,7 +563,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else {
       if (value.is_zero()) {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Division by zero"));
         problem.setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
@@ -851,7 +801,7 @@ Value pp::eval_constant_expression(Stream& input)
     else
     {
       KDevelop::Problem problem;
-      problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+      problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
       problem.setDescription(i18n("expected ``:'' = %1", int(token)));
       problemEncountered(problem);
       result = left_value;
@@ -878,7 +828,7 @@ void pp::handle_if (Stream& input)
 
     Anchor inputPosition = input.inputPosition();
     KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-    QByteArray condition;
+    PreprocessedContents condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
@@ -897,7 +847,7 @@ void pp::handle_if (Stream& input)
     // Capture info for precompiled macros
     pp_macro_expander expand_condition(this);
     skip_blanks(input, devnull());
-    QByteArray condition;
+    PreprocessedContents condition;
     {
       Stream cs(&condition);
       expand_condition(input, cs);
@@ -916,7 +866,7 @@ void pp::handle_else(int sourceLine)
   if (iflevel == 0 && !skipping ())
   {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0)));
     problem.setDescription(i18n("#else without #if"));
     problemEncountered(problem);
   }
@@ -940,7 +890,7 @@ void pp::handle_elif(Stream& input)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("#else without #if"));
     problemEncountered(problem);
   }
@@ -951,7 +901,7 @@ void pp::handle_elif(Stream& input)
 
     Anchor inputPosition = input.inputPosition();
     KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-    QByteArray condition;
+    PreprocessedContents condition;
     {
       Stream cs(&condition);
       cs.setOriginalInputPosition(originalInputPosition);
@@ -980,8 +930,8 @@ void pp::handle_endif(Stream& input, Stream& output)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->positionForOffset(output.offset()).line));
+    problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->anchorForOffset(output.offset()).second.line));
     problemEncountered(problem);
   }
   else
@@ -1010,9 +960,9 @@ uint pp::branchingHash() const
 
 void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
-  QString macro_name = QString::fromUtf8(skip_identifier(input));
-
-  environment()->enterBlock(input.inputPosition().line, QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name).toUtf8());
+  KDevelop::IndexedString macro_name(skip_identifier(input));
+///@todo eventually fix the block description
+  environment()->enterBlock(input.inputPosition().line);//, QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name).toUtf8());
 
   if (test_if_level())
   {
@@ -1034,7 +984,7 @@ void pp::handle_undef(Stream& input)
 {
   skip_blanks (input, devnull());
 
-  QString macro_name = QString::fromUtf8(skip_identifier(input));
+  KDevelop::IndexedString macro_name (skip_identifier(input));
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
   pp_macro* macro = new pp_macro();
@@ -1049,6 +999,8 @@ void pp::handle_undef(Stream& input)
   //m_environment->clearMacro(macro_name);
 }
 
+KDevelop::IndexedString definedText("defined");
+
 int pp::next_token (Stream& input)
 {
   if (haveNextToken)
@@ -1061,8 +1013,10 @@ int pp::next_token (Stream& input)
     return 0;
   }
 
-  char ch = input.current();
-  char ch2 = input.peek();
+  char ch = 0;
+  if(isCharacter(input.current()))
+    ch = characterFromIndex(input.current());
+  char ch2 = input.peekNextCharacter();
 
   nextToken = 0;
 
@@ -1160,24 +1114,23 @@ int pp::next_token (Stream& input)
       break;
 
     default:
-      if (isLetter(ch) || ch == '_')
+      if (isLetter(ch) || ch == '_' || !isCharacter(input.current()))
       {
-        token_text = skip_identifier (input);
-
-        if (token_text == "defined")
+        token_text = KDevelop::IndexedString( skip_identifier (input) );
+        if (token_text == definedText)
           nextToken = TOKEN_DEFINED;
         else
           nextToken = TOKEN_IDENTIFIER;
       }
       else if (isNumber(ch))
       {
-        QByteArray byteNumber;
+        PreprocessedContents byteNumber;
         {
           Stream ns(&byteNumber);
           skip_number(input, ns);
         }
 
-        QString number(QString::fromUtf8(byteNumber));
+        QString number(QString::fromUtf8(stringFromContents(byteNumber)));
 
         if (number.endsWith('u', Qt::CaseInsensitive)) {
           token_uvalue = number.toULong();
@@ -1190,7 +1143,10 @@ int pp::next_token (Stream& input)
       }
       else
       {
-        nextToken = input.current();
+        if(isCharacter(input.current()))
+          nextToken = characterFromIndex(input.current());
+        else
+          nextToken = TOKEN_IDENTIFIER;
         ++input;
       }
   }
@@ -1233,15 +1189,6 @@ void pp::setEnvironment(Environment* env)
 {
   delete m_environment;
   m_environment = env;
-}
-
-QString pp::currentFile() const
-{
-  if (m_files.count())
-    return currentFileName();
-
-  Q_ASSERT(false);
-  return "<internal>";
 }
 
 const QList< KDevelop::ProblemPointer > & rpp::pp::problems() const

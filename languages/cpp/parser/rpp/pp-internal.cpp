@@ -20,13 +20,14 @@
 */
 
 #include "pp-internal.h"
+#include "chartools.h"
 
 bool rpp::isComment(Stream& input)
 {
-  char c1 = input;
-  char c2 = input.peek();
+  uint c1 = input;
+  uint c2 = input.peek();
 
-  return c1 == '/' && (c2 == '/' || c2 == '*');
+  return c1 == indexFromCharacter('/') && (c2 == indexFromCharacter('/') || c2 == indexFromCharacter('*'));
 }
 
 rpp::Stream& rpp::devnull()

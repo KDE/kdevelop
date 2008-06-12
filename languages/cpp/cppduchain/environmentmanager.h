@@ -41,14 +41,15 @@
 #include "macroset.h"
 #include "cachemanager.h"
 #include "setrepository.h"
+#include "macrorepository.h"
 
-struct HashedStringHash {
-  uint operator() (const KDevelop::HashedString& str) const {
+struct IndexedStringHash {
+  uint operator() (const KDevelop::IndexedString& str) const {
     return str.hash();
   }
   
   #ifdef Q_CC_MSVC
-  bool operator() (const KDevelop::HashedString& lhs, const KDevelop::HashedString& rhs) const {
+  bool operator() (const KDevelop::IndexedString& lhs, const KDevelop::IndexedString& rhs) const {
     return lhs < rhs;
   }
     enum
@@ -134,11 +135,25 @@ namespace rpp {
 
 namespace Cpp {
 
-typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash>::Iterator StringSetIterator;
-typedef Utils::SetRepository<KDevelop::HashedString, HashedStringHash> StringSetRepository;
+struct KDEVCPPDUCHAIN_EXPORT IndexedStringConversion {
+  KDevelop::IndexedString toItem(uint index) const {
+    return KDevelop::IndexedString(index);
+  }
+  uint toIndex(const KDevelop::IndexedString& str) const {
+    return str.index();
+  }
+};
 
-typedef Utils::SetRepository<rpp::pp_macro, rpp::pp_macro::CompleteHash>::Iterator MacroRepositoryIterator;
-typedef Utils::SetRepository<rpp::pp_macro, rpp::pp_macro::CompleteHash> MacroRepository;
+struct KDEVCPPDUCHAIN_EXPORT MacroIndexConversion {
+  rpp::pp_macro toItem(uint index) const;
+  uint toIndex(const rpp::pp_macro& _macro) const;
+};
+
+typedef Utils::ConvenientIterator<KDevelop::IndexedString, IndexedStringConversion> StringSetIterator;
+typedef Utils::LazySet<KDevelop::IndexedString, IndexedStringConversion> LazyStringSet;
+
+typedef Utils::ConvenientIterator<rpp::pp_macro, MacroIndexConversion> MacroSetIterator;
+typedef Utils::LazySet<rpp::pp_macro, MacroIndexConversion> LazyMacroSet;
 
 class EnvironmentManager;
 class MacroSet;
@@ -146,7 +161,7 @@ class MacroSet;
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    EnvironmentFile( const KDevelop::HashedString& url, EnvironmentManager* manager );
+    EnvironmentFile( const KDevelop::IndexedString& url, EnvironmentManager* manager );
 
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
@@ -156,9 +171,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     ///the given macro will only make it into usedMacros() if it was not defined in this file
     void usingMacro( const rpp::pp_macro& macro );
 
-    void addIncludeFile( const KDevelop::HashedString& file, const KDevelop::ModificationRevision& modificationTime );
+    void addIncludeFile( const KDevelop::IndexedString& file, const KDevelop::ModificationRevision& modificationTime );
 
-//     inline bool hasString( const KDevelop::HashedString& string ) const {
+//     inline bool hasString( const KDevelop::IndexedString& string ) const {
 //       return m_strings[string];
 //     }
 
@@ -176,7 +191,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 
     virtual KDevelop::IdentifiedFile identity() const;
 
-    KDevelop::HashedString url() const;
+    KDevelop::IndexedString url() const;
 
     void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
     
@@ -188,32 +203,32 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
      * no other files were included.
      *
      * */
-    //const HashedStringSet& includeFiles() const;
+    //const IndexedStringSet& includeFiles() const;
 
-    void addMissingIncludeFile(const KDevelop::HashedString& file);
-    const StringSetRepository::LazySet& missingIncludeFiles() const;
+    void addMissingIncludeFile(const KDevelop::IndexedString& file);
+    const LazyStringSet& missingIncludeFiles() const;
 
     void clearMissingIncludeFiles();
   
     ///Set of all defined macros, including those of all deeper included files
-    const MacroRepository::LazySet& definedMacros() const;
+    const LazyMacroSet& definedMacros() const;
 
     ///Set of all macros used from outside, including those used in deeper included files
-    const MacroRepository::LazySet& usedMacros() const;
+    const LazyMacroSet& usedMacros() const;
 
-    const StringSetRepository::LazySet& usedMacroNames() const;
+    const LazyStringSet& usedMacroNames() const;
     
-    const StringSetRepository::LazySet& definedMacroNames() const;
+    const LazyStringSet& definedMacroNames() const;
     
     ///Set of all macros undefined to the outside
-    const StringSetRepository::LazySet& unDefinedMacroNames() const;
+    const LazyStringSet& unDefinedMacroNames() const;
   
     ///Should contain a modification-time for each included-file
-    const QMap<KDevelop::HashedString, KDevelop::ModificationRevision>& allModificationTimes() const;
+    const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>& allModificationTimes() const;
 
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
-    const QList<KDevelop::HashedString>& includePaths() const;
-    void setIncludePaths( const QList<KDevelop::HashedString>& paths );
+    const QList<KDevelop::IndexedString>& includePaths() const;
+    void setIncludePaths( const QList<KDevelop::IndexedString>& paths );
 
     /**
      * The identity-value usually only depends on the content of the environment-information. This can be used to separate environments that have the same content.
@@ -231,18 +246,18 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
 
     friend class EnvironmentManager;
     uint m_identityOffset;
-    QList<KDevelop::HashedString> m_includePaths;
-    KDevelop::HashedString m_url;
+    QList<KDevelop::IndexedString> m_includePaths;
+    KDevelop::IndexedString m_url;
     KDevelop::ModificationRevision m_modificationTime;
     Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
-    Cpp::StringSetRepository::LazySet m_includeFiles; //Set of all files with absolute paths
-    Cpp::StringSetRepository::LazySet m_missingIncludeFiles; //Set of relative file-names of missing includes
-    Cpp::MacroRepository::LazySet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
-    Cpp::StringSetRepository::LazySet m_usedMacroNames; //Set the names of all used macros
-    Cpp::MacroRepository::LazySet m_definedMacros; //Set of all macros that were defined while lexing this file
-    Cpp::StringSetRepository::LazySet m_definedMacroNames;
-    Cpp::StringSetRepository::LazySet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
-    QMap<KDevelop::HashedString, KDevelop::ModificationRevision>  m_allModificationTimes;
+    Cpp::LazyStringSet m_includeFiles; //Set of all files with absolute paths
+    Cpp::LazyStringSet m_missingIncludeFiles; //Set of relative file-names of missing includes
+    Cpp::LazyMacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
+    Cpp::LazyStringSet m_usedMacroNames; //Set the names of all used macros
+    Cpp::LazyMacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
+    Cpp::LazyStringSet m_definedMacroNames;
+    Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
+    QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     mutable int m_contentStartLine; //Line-number where the actual content starts. Needs to be kept current when edited
     /*
     Needed data:
@@ -265,31 +280,15 @@ struct KDEVCPPDUCHAIN_EXPORT EnvironmentFilePointerCompare {
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
   public:
+    
+    static MacroDataRepository macroDataRepository;
+    //Set-repository that contains the string-sets
+    static Utils::BasicSetRepository stringSetRepository;
+    //Set-repository that contains the macro-sets
+    static Utils::BasicSetRepository macroSetRepository;
+        
     EnvironmentManager();
     virtual ~EnvironmentManager();
-
-    ///No lock needs to be acquired for reading, only for writing.
-    static QMutex m_repositoryMutex;
-    static StringSetRepository m_stringRepository;
-    static MacroRepository m_macroRepository;
-
-    /**
-     * Use this to save memory. Whenever retrieving a string from a parsed file, first unify it.
-     * */
-    static const KDevelop::HashedString& unifyString( const KDevelop::HashedString& str ) {
-      QMutexLocker lock(&m_repositoryMutex);
-      #ifdef Q_CC_MSVC
-        stdext::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
-      #else
-        __gnu_cxx::hash_set<KDevelop::HashedString>::const_iterator it = m_totalStringSet.find( str );
-      #endif
-      if( it != m_totalStringSet.end() ) {
-        return *it;
-      } else {
-        m_totalStringSet.insert( str );
-        return str;
-      }
-    }
 
     virtual void saveMemory();
 
@@ -308,37 +307,33 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     /**
      * Search for the availability of a file parsed in a given environment
      * */
-    virtual KDevelop::ParsingEnvironmentFile* find( const KDevelop::HashedString& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
+    virtual KDevelop::ParsingEnvironmentFile* find( const KDevelop::IndexedString& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
 
   private:
     virtual int type() const;
     ///before this can be called, initFileModificationCache should be called once
-    QDateTime fileModificationTimeCached( const KDevelop::HashedString& fileName ) const;
+    QDateTime fileModificationTimeCached( const KDevelop::IndexedString& fileName ) const;
     void initFileModificationCache();
     virtual void erase( const CacheNode* node );
     bool hasSourceChanged( const EnvironmentFile& file ) const;///Returns true if the file itself, or any of its dependencies was modified.
 
     ///Returns zero if no fitting file is available for the given Environment
-    EnvironmentFilePointer lexedFile( const KDevelop::HashedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
+    EnvironmentFilePointer lexedFile( const KDevelop::IndexedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
     void addEnvironmentFile( const EnvironmentFilePointer& file );
     void removeEnvironmentFile( const EnvironmentFilePointer& file );
 
-    //typedef __gnu_cxx::hash_multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
-    typedef std::multimap<KDevelop::HashedString, EnvironmentFilePointer> EnvironmentFileMap;
+    //typedef __gnu_cxx::hash_multimap<KDevelop::IndexedString, EnvironmentFilePointer> EnvironmentFileMap;
+    typedef std::multimap<KDevelop::IndexedString, EnvironmentFilePointer> EnvironmentFileMap;
     EnvironmentFileMap m_files;
-    #ifdef Q_CC_MSVC
-        static stdext::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
-    #else
-        static __gnu_cxx::hash_set<KDevelop::HashedString> m_totalStringSet; ///This is used to reduce memory-usage: Most strings appear again and again. Because QString is reference-counted, this set contains a unique copy of each string to used for each appearance of the string
-    #endif
+    
     struct FileModificationCache {
       QDateTime m_readTime;
       QDateTime m_modificationTime;
     };
     #ifdef Q_CC_MSVC
-        typedef stdext::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
+        typedef stdext::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
     #else    
-        typedef __gnu_cxx::hash_map<KDevelop::HashedString, FileModificationCache> FileModificationMap;
+        typedef __gnu_cxx::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
     #endif
     mutable FileModificationMap m_fileModificationCache;
     QDateTime m_currentDateTime;

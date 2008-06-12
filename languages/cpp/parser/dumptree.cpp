@@ -24,6 +24,7 @@
 #include <QtCore/QString>
 
 #include <kdebug.h>
+#include "rpp/chartools.h"
 
 static char const * const names[] = {
   0,
@@ -120,7 +121,7 @@ void DumpTree::visit(AST *node)
   if( m_tokenStream && node ) {
     for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
-      nodeText += QByteArray( tok.session->contents()+tok.position, tok.size );
+      nodeText += tok.symbolString() + " ";
     }
   }
   if (node)

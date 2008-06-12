@@ -34,6 +34,7 @@
 #include "typerepository.h"
 #include <identifier.h>
 #include "dumpchain.h"
+#include "rpp/chartools.h"
 
 namespace KDevelop
 {
@@ -75,6 +76,7 @@ private slots:
   void testEnvironmentMatching();
   void testUsesThroughMacros();
   void testMacroExpansionRanges();
+  void testPreprocessor();
 
 public:
   enum DumpArea {
@@ -90,7 +92,7 @@ private:
   friend class TestPreprocessor;
 
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed. The url is only neede for the EnvironmentFile.
-  QString preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L );
+  QString preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, KSharedPtr<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L, PreprocessedContents* contents = 0L );
   
   KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 

@@ -34,6 +34,7 @@
 #include "environmentmanager.h"
 #include "templatedeclaration.h"
 #include "cppducontext.h"
+#include <rpp/chartools.h>
 
 
 #include "tokens.h"
@@ -393,7 +394,7 @@ void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
       
   QByteArray test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
-  DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUContext* c = parse( test, DumpAll /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
   DUContext* testContext = c->childContexts()[1];
@@ -910,7 +911,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
-  session->setContentsAndGenerateLocationTable(unit);
+  session->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
 
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);
@@ -922,7 +923,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   static int testNumber = 0;
-  HashedString url(QString("file:///internal/%1").arg(testNumber++));
+  IndexedString url(QString("file:///internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
 

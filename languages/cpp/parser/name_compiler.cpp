@@ -29,6 +29,7 @@
 
 using namespace KDevelop;
 
+///@todo this is very expensive
 QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
 {
   QString ret;
@@ -36,13 +37,11 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
     //Decode operator-names without spaces for now, since we rely on it in other places.
     ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = session->token_stream->token(a);
-      ret += tk.symbol();
+      ret += session->token_stream->token(a).symbolString();
     }
   } else {
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      const Token &tk = session->token_stream->token(a);
-      ret += tk.symbol() + " ";
+      ret += session->token_stream->token(a).symbolString() + " ";
     }
   }
   return ret;
@@ -88,7 +87,8 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
       do
         {
           if(it->element && it->element->op) { ///@todo What about ptr-to-member?
-            if( session->token_stream->token(it->element->op).symbol().startsWith('&')) {
+            static IndexedString ref('&');
+            if( session->token_stream->token(it->element->op).symbol() == ref) {
               //We're handling a 'reference'
               id.setIsReference(true);
               if(it->element->cv)
@@ -122,31 +122,32 @@ void NameCompiler::internal_run(AST *node)
 
 void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
 {
-  QString tmp_name;
-
-  if (node->tilde)
-    tmp_name += QLatin1String("~");
+  IndexedString tmp_name;
 
   if (node->id)
-    tmp_name += m_session->token_stream->token(node->id).symbol();
+    tmp_name = m_session->token_stream->token(node->id).symbol();
 
+  if (node->tilde)
+    tmp_name = IndexedString("~" + tmp_name.byteArray());
+  
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
 #if defined(__GNUC__)
 #warning "NameCompiler::visitUnqualifiedName() -- implement me"
 #endif
-
-      tmp_name += QLatin1String("operator");
+      static QString operatorString("operator");
+      QString tmp = operatorString;
 
       if (op_id->op && op_id->op->op)
-        tmp_name +=  decode(m_session, op_id->op, true);
+        tmp +=  decode(m_session, op_id->op, true);
       else
-        tmp_name += QLatin1String("{...cast...}");
+        tmp += QLatin1String("{...cast...}");
 
+      tmp_name = IndexedString(tmp);
       m_typeSpecifier = op_id->type_specifier;
     }
 
-  m_currentIdentifier = Identifier(m_session->unify(tmp_name));
+  m_currentIdentifier = Identifier(tmp_name);
 
   if (node->template_arguments)
     {

@@ -106,7 +106,7 @@ public:
 
     static CppLanguageSupport* self();
 
-    const Cpp::MacroRepository::LazySet& standardMacros() const;
+    const Cpp::LazyMacroSet& standardMacros() const;
 
     Cpp::EnvironmentManager* environmentManager() const;
 /**
@@ -155,7 +155,7 @@ private:
     CppHighlighting *m_highlights;
     KDevelop::CodeCompletion *m_cc;
     Cpp::EnvironmentManager* m_environmentManager;
-    Cpp::MacroRepository::LazySet *m_standardMacros;
+    Cpp::LazyMacroSet *m_standardMacros;
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;

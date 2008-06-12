@@ -35,6 +35,7 @@
 #include <identifier.h>
 #include <use.h>
 #include "parser/parsesession.h"
+#include "parser/rpp/chartools.h"
 
 using namespace KDevelop;
 
@@ -145,7 +146,7 @@ void DumpChain::visit(AST *node)
         const Token& tok( m_editor->parseSession()->token_stream->token((int) a) );
         if( !nodeText.isEmpty() )
           nodeText += ' ';
-        nodeText += QByteArray( tok.session->contents()+tok.position, tok.size );
+        nodeText += stringFromContents( tok.session->contentsVector(), tok.position, tok.size );
       }
       if( !nodeText.isEmpty() ) nodeText = "\"" + nodeText + "\"";
 

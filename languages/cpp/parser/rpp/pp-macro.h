@@ -24,29 +24,42 @@
 //krazy:excludeall=inline
 
 #include <QtCore/QStringList>
+#include <QVector>
 #include <cppparserexport.h>
+#include <indexedstring.h>
 #include <hashedstring.h>
 
 namespace rpp {
 
-class KDEVCPPRPP_EXPORT pp_macro
+  //This contains the data of a macro that can be marshalled by directly copying the memory
+struct KDEVCPPRPP_EXPORT pp_macro_direct_data
 {
-public:
-  pp_macro();
-  pp_macro(const KDevelop::HashedString& name);
+  pp_macro_direct_data(const KDevelop::IndexedString& nm = KDevelop::IndexedString());
+  typedef uint HashType;
 
-  typedef size_t HashType;
+  KDevelop::IndexedString name;
+  KDevelop::IndexedString file;
   
-  KDevelop::HashedString name;
-  QByteArray definition; //body in utf8
-  KDevelop::HashedString file; //fileName
   int sourceLine; //line
-  QList<QByteArray> formals; // argumentList
 
   bool defined: 1; // !isUndefMacro
   bool hidden: 1;
   bool function_like: 1; // hasArguments
   bool variadics: 1;
+  
+  //The valueHash is not necessarily valid
+  mutable HashType m_valueHash; //Hash that represents the values of all macros
+}; ///@todo enable structure packing
+  
+class KDEVCPPRPP_EXPORT pp_macro : public pp_macro_direct_data
+{
+public:
+  pp_macro();
+  pp_macro(const KDevelop::IndexedString& name);
+  pp_macro(const char* name);
+
+  QVector<uint> definition; //Indices in the string index(essentially the same thing as IndexedString)
+  QVector<uint> formals; // argumentList, also indices in the string repository(IndexedString)
 
   bool operator == ( const pp_macro& rhs ) const;
 
@@ -56,30 +69,28 @@ public:
     return !defined;
   }
 
-  size_t idHash() const {
-    if( !m_idHashValid ) computeHash();
-    return m_idHash;
+  HashType idHash() const {
+    return name.hash();
   }
-  size_t valueHash() const {
+  HashType valueHash() const {
     if( !m_valueHashValid ) computeHash();
     return m_valueHash;
+  }
+
+  ///Hash that identifies all of this macro, the value and the identity
+  HashType completeHash() const {
+    return valueHash() + idHash() * 3777;
   }
 
   void invalidateHash();
 
   struct NameCompare {
     bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
-        size_t lhash = lhs.idHash();
-        size_t rhash = rhs.idHash();
-        if( lhash < rhash ) return true;
-        else if( lhash > rhash ) return false;
-
-      int df = lhs.name.str().compare( rhs.name.str() );
-      return df < 0;
+      return lhs.name.index() < rhs.name.index();
     }
     #ifdef Q_CC_MSVC
     
-    std::size_t operator () ( const pp_macro& macro ) const
+    HashType operator () ( const pp_macro& macro ) const
     {
         return macro.idHash();
     }
@@ -94,14 +105,14 @@ public:
   //Hash over id and value
   struct CompleteHash {
     HashType operator () ( const pp_macro& lhs ) const {
-        return lhs.valueHash() + lhs.idHash();
+        return lhs.completeHash();
     }
     
     #ifdef Q_CC_MSVC
     
     bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
-        size_t lhash = lhs.valueHash()+lhs.idHash();
-        size_t rhash = rhs.valueHash()+rhs.idHash();
+        HashType lhash = lhs.valueHash()+lhs.idHash();
+        HashType rhash = rhs.valueHash()+rhs.idHash();
         if( lhash < rhash ) return true;
         else if( lhash > rhash ) return false;
 
@@ -118,10 +129,7 @@ public:
   
   private:
     void computeHash() const;
-    mutable bool m_idHashValid;
     mutable bool m_valueHashValid;
-    mutable size_t m_idHash; //Hash that represents the ids of all macros
-    mutable size_t m_valueHash; //Hash that represents the values of all macros
 };
 
 inline bool pp_macro::operator == ( const pp_macro& rhs ) const {
@@ -129,7 +137,7 @@ inline bool pp_macro::operator == ( const pp_macro& rhs ) const {
   rhs.computeHash();
 
   ///@todo think about maybe doing more exact comparison when hashes are equal
-  return m_idHash == rhs.m_idHash && m_valueHash == rhs.m_valueHash;
+  return name.index() == rhs.name.index() && m_valueHash == rhs.m_valueHash;
 }
 
 }

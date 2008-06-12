@@ -40,7 +40,7 @@ public:
 
     virtual ~Preprocessor();
 
-    QString processString(const QString& string);
+//     QString processString(const QString& string);
 
     
     /**

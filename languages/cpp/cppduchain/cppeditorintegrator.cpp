@@ -24,6 +24,7 @@
 
 #include <documentrange.h>
 #include <documentrangeobject.h>
+#include <indexedstring.h>
 
 #include "ast.h"
 #include "parsesession.h"
@@ -54,7 +55,7 @@ SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge )
     if(position.collapsed)
       return position;
     else
-      return position + SimpleCursor(0, token.size);
+      return position + SimpleCursor(0, token.symbolLength());
   } else
     return position;
 }
@@ -77,7 +78,7 @@ SimpleRange CppEditorIntegrator::findRangeForContext( size_t start_token, size_t
   rpp::Anchor start = m_session->positionAt(tStart.position, true);
   rpp::Anchor end = m_session->positionAt(tEnd.position, true);
   if(!end.collapsed)
-    end.column += tEnd.size; //We want the back edge
+    end.column += tEnd.symbolLength(); //We want the back edge
   
   if(start.macroExpansion.isValid() && start.macroExpansion == end.macroExpansion)
     return SimpleRange(start.macroExpansion, start.macroExpansion);
@@ -102,7 +103,7 @@ SimpleRange CppEditorIntegrator::findRange( const Token & token )
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const
 {
-  return m_session->token_stream->token(token).symbol();
+  return m_session->token_stream->token(token).symbol().str();
 }
 
 QString CppEditorIntegrator::tokensToStrings(std::size_t start, std::size_t end) const

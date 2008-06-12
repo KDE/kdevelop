@@ -24,15 +24,15 @@
 #include "lexer.h"
 #include "memorypool.h"
 #include <iproblem.h>
+#include <indexedstring.h>
 
 #include <cctype>
 
-ParseSession::ParseSession(QString (*stringUnifier) (const QString&))
+ParseSession::ParseSession()
   : mempool(new pool)
   , token_stream(0)
   , macros(0)
   , m_locationTable(0)
-  , m_unifier(stringUnifier)
 {
 }
 
@@ -48,18 +48,7 @@ rpp::Anchor ParseSession::positionAt(std::size_t offset, bool collapseIfMacroExp
 {
   Q_ASSERT(m_locationTable);
 
-  // FIXME shouldn't just add the column offset...??
-
-  rpp::Anchor ret = m_locationTable->positionForOffset(offset, collapseIfMacroExpansion);
-  return rpp::Anchor(ret + m_contentOffset, ret.collapsed, ret.macroExpansion);
-}
-
-QString ParseSession::unify(const QString& str) const
-{
-  if(m_unifier)
-    return m_unifier(str);
-  else
-    return str;
+  return m_locationTable->positionAt(offset, m_contents, collapseIfMacroExpansion);
 }
 
 std::size_t ParseSession::size() const
@@ -67,22 +56,30 @@ std::size_t ParseSession::size() const
   return m_contents.size() + 1;
 }
 
-const char * ParseSession::contents() const
+ uint* ParseSession::contents()
+ {
+   return m_contents.data();
+ }
+
+const uint* ParseSession::contents() const
+ {
+   return m_contents.data();
+ }
+ 
+const PreprocessedContents& ParseSession::contentsVector() const
 {
-  return m_contents.constData();
+  return m_contents;
 }
 
-void ParseSession::setContents(const QByteArray & contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset)
+void ParseSession::setContents(const PreprocessedContents& contents, rpp::LocationTable* locationTable)
 {
   m_contents = contents;
-  m_contentOffset = offset;
   m_locationTable = locationTable;
 }
 
-void ParseSession::setContentsAndGenerateLocationTable(const QByteArray & contents, const KDevelop::SimpleCursor& offset)
+void ParseSession::setContentsAndGenerateLocationTable(const PreprocessedContents& contents)
 {
   m_contents = contents;
-  m_contentOffset = offset;
   m_locationTable = new rpp::LocationTable(m_contents);
 }
 

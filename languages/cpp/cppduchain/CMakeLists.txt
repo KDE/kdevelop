@@ -25,7 +25,6 @@ set(kdevcppduchain_LIB_SRCS
     cpptypes.cpp
     typerepository.cpp
     dumptypes.cpp
-    macroset.cpp
     environmentmanager.cpp
     cachemanager.cpp
     hashedstringset.cpp
@@ -46,6 +45,7 @@ set(kdevcppduchain_LIB_SRCS
     name_visitor.cpp
     type_visitor.cpp
     builtinoperators.cpp
+    macrorepository.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

@@ -191,7 +191,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   }
   
   foreach( const KUrl& u, inclusionPath )
-    htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.prettyUrl()) + "<br/>";
+    htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.pathOrUrl()) + "<br/>";
   
   return new NavigationWidget( m_item, getCurrentTopDUContext(), htmlPrefix, htmlSuffix );
 }
@@ -203,9 +203,9 @@ QString IncludeFileData::htmlDescription() const
   QString ret;
   
   if( m_item.isDirectory )
-    ret = QString( i18n("Directory %1", path.prettyUrl()) );
+    ret = QString( i18n("Directory %1", path.pathOrUrl()) );
   else
-    ret = path.prettyUrl();
+    ret = path.pathOrUrl();
   
   return ret;
 }
@@ -399,7 +399,7 @@ QSet<HashedString> IncludeFileDataProvider::files() const {
     if( !item.basePath.isEmpty() ) {
       KUrl path = item.basePath;
       path.addPath( item.name );
-      set << path.prettyUrl();
+      set << path.pathOrUrl();
     }else{
       set << item.name;
     }

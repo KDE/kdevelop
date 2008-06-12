@@ -37,7 +37,7 @@ public:
   void finish();
 
 
-  virtual rpp::pp_macro* retrieveMacro( const KDevelop::HashedString& name ) const;
+  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name ) const;
 
   void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
   KSharedPtr<Cpp::EnvironmentFile> environmentFile() const;
@@ -47,7 +47,7 @@ public:
   /**
     * Merges the given set of macros into the environment. Does not modify m_environmentFile.
     * */
-  void merge( const Cpp::MacroRepository::LazySet& macros );
+  void merge( const Cpp::LazyMacroSet& macros );
   
   ///Merges the macros  from the given EnvironmentFile(including undef macros). Does not modify m_environmentFile.
   void merge( const Cpp::EnvironmentFile* file );
@@ -57,7 +57,7 @@ public:
   virtual int type() const;
 
   ///Does not include the names of undef macros
-  const Cpp::StringSetRepository::LazySet& macroNameSet() const;
+  const Cpp::LazyStringSet& macroNameSet() const;
 
   ///Restricts the header branching hash of searched contexts to the given number
   ///(Is only stored here, it is used in the environment-manager)
@@ -71,7 +71,7 @@ public:
 private:
     uint m_identityOffsetRestriction;
     bool m_finished;
-    Cpp::StringSetRepository::LazySet m_macroNameSet;
+    Cpp::LazyStringSet m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;
     mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };

@@ -23,6 +23,7 @@
 #include <cppparserexport.h>
 #include <QtCore/QString>
 #include <cstdlib>
+#include <indexedstring.h>
 
 #include <iproblem.h>
 
@@ -39,15 +40,22 @@ class KDEVCPPPARSER_EXPORT Token
 public:
   ///kind of the token @see TOKEN_KIND enum reference.
   int kind;
-  ///position in the c++ source buffer.
+  ///position in the preprocessed buffer
   std::size_t position;
-  ///size of the token text in the c++ source buffer.
+  ///size of the token in the preprocessed buffer. Do not confuse this with symbolLength.
   std::size_t size;
   ///pointer to the parse session.
   const ParseSession* session;
 
-  QString symbol() const;
+  //Symbol associated to the token. This only works if this is a simple symbol
+  //only consisting of one identifier(not comments), does not work for operators like "->" or numbers like "50"
+  KDevelop::IndexedString symbol() const;
+  
+  //This always works, but is expensive
+  QString symbolString() const;
 
+  uint symbolLength() const;
+  
   ///@todo adymo: find out what @p right_brace is
   union
   {
@@ -228,9 +236,64 @@ private:
 
 private:
   Control *control;
-  const char *cursor;
+  
+  struct SpecialCursor {
+    bool operator==(uint index) const {
+      return *current == index;
+    }
+    bool operator==(char character) const {
+      return *current == (character | 0xffff0000);
+    }
+    bool isChar() const {
+      return ((*current) & 0xffff0000) == 0xffff0000;
+    }
+    inline char operator*() const {
+      if(isChar())
+        return (char)*current;
+      else
+        return '_'; //Return a valid character, because the identifiers created by the preprocessor are alpha-numerical
+    }
+    void operator++() {
+      ++current;
+    }
+    void operator+=(int offset) {
+      current += offset;
+    }
+    bool operator !=(const SpecialCursor& rhs) const {
+      return current != rhs.current;
+    }
+    bool operator !=(const uint* rhs) const {
+      return current != rhs;
+    }
+    void operator--() {
+      --current;
+    }
+    bool operator<(const uint* end) const {
+      return current < end;
+    }
+    
+    int operator -(const SpecialCursor& rhs) const {
+      return (((char*)current) - ((char*)rhs.current)) / sizeof(uint);
+    }
+    
+    uint offsetIn(const uint* base) const {
+      return ((char*)current - (char*)base) / sizeof(uint);
+    }
+    
+    SpecialCursor operator +(int offset) {
+      SpecialCursor ret(*this);
+      ret.current += offset;
+      return ret;
+    }
+    
+    uint* current;
+  };
+  
+  SpecialCursor cursor;
+  const uint* endCursor;
   std::size_t index;
 
+  bool m_leaveSize; //Marks the current token that its size should not be automatically set
   bool m_canMergeComment; //Whether we may append new comments to the last encountered one
   bool m_firstInLine;   //Whether the next token is the first one in a line
   

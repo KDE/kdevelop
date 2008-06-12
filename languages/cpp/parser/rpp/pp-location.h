@@ -28,6 +28,8 @@
 #include <cppparserexport.h>
 #include "anchor.h"
 
+typedef QVector<unsigned int> PreprocessedContents;
+
 namespace rpp {
 
 class KDEVCPPRPP_EXPORT LocationTable
@@ -35,17 +37,27 @@ class KDEVCPPRPP_EXPORT LocationTable
   public:
     LocationTable();
 
-    /// Generates the location table from the byte array's contents
-    LocationTable(const QByteArray& contents);
+    /// Generates the location table from the contents
+    LocationTable(const PreprocessedContents& contents);
 
-    void anchor(std::size_t offset, Anchor anchor);
+    ///@param contents is allowed to be zero only if offset is zero, or if anchor.column is zero.
+    void anchor(std::size_t offset, Anchor anchor, const PreprocessedContents* contents);
 
-    /** @todo Correctly respect utf-8 characters. They may have the byte-length of 2, but actually are one character.
-      * Returns the marked position for the character at @param offset. If the character is in a collapsed range, the collapsed member is true.
+    /**
+    * Return the position of the preprocessed source \a offset in the original source
+    * If the "collapsed" member of the returned anchor is true, the position is within a collapsed range.
+    @param collapseIfMacroExpansion @see LocationTable::positionForOffset
+    * \note the return line starts from 0, not 1.
+    */
+    rpp::Anchor positionAt(std::size_t offset, const PreprocessedContents& contents, bool collapseIfMacroExpansion = false) const;
+    
+    /** 
+      * Returns the nearest anchor before @param position, and the position of the anchor.
+     * If the character is in a collapsed range, the collapsed member is true.
       @param collapseIfMacroExpansion When this is true, all ranges that come from macro-expansion will be 
                                       considered collapsed.(The returned anchor will also have the collapsed member set)
       * */
-    Anchor positionForOffset(std::size_t offset, bool collapseIfMacroExpansion = false) const;
+    QPair<std::size_t, Anchor> anchorForOffset(std::size_t position, bool collapseIfMacroExpansion = false) const;
 
     void dump() const;
 
@@ -54,7 +66,7 @@ class KDEVCPPRPP_EXPORT LocationTable
      * @param textStartPosition must be given as the start-position, because the location-table might not contain an anchor
      * for the first character.
     * */
-    void splitByAnchors(const QByteArray& text, const Anchor& textStartPosition, QList<QByteArray>& strings, QList<Anchor>& anchors) const;
+    void splitByAnchors(const PreprocessedContents& text, const Anchor& textStartPosition, QList<PreprocessedContents>& strings, QList<Anchor>& anchors) const;
   
   private:
     QMap<std::size_t, Anchor> m_offsetTable;

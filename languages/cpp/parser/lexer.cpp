@@ -22,14 +22,10 @@
 #include "parsesession.h"
 #include "rpp/pp-scanner.h"
 
-#include <hashedstring.h>
 #include <cctype>
+#include <QVarLengthArray>
 
 #include <kdebug.h>
-
-QString Token::symbol() const {
-  return session->unify(QString::fromUtf8(&(session->contents()[position]), size));
-}
 
 /**
  * Returns the character BEHIND the found comment
@@ -46,7 +42,7 @@ void Lexer::skipComment()
     IN_CXX_COMMENT
   } state (MAYBE_BEGIN);
 
-  while (*cursor) {
+  while (cursor < endCursor && *cursor) {
     switch (state) {
       case MAYBE_BEGIN:
         if (*cursor != '/')
@@ -98,24 +94,128 @@ void Lexer::skipComment()
   return;
 }
 
-scan_fun_ptr Lexer::s_scan_keyword_table[] = {
-  &Lexer::scanKeyword0, &Lexer::scanKeyword0,
-  &Lexer::scanKeyword2, &Lexer::scanKeyword3,
-  &Lexer::scanKeyword4, &Lexer::scanKeyword5,
-  &Lexer::scanKeyword6, &Lexer::scanKeyword7,
-  &Lexer::scanKeyword8, &Lexer::scanKeyword9,
-  &Lexer::scanKeyword10, &Lexer::scanKeyword11,
-  &Lexer::scanKeyword12, &Lexer::scanKeyword13,
-  &Lexer::scanKeyword14, &Lexer::scanKeyword0,
-  &Lexer::scanKeyword16
-};
+KDevelop::IndexedString Token::symbol() const {
+  if(size == 1)
+    return KDevelop::IndexedString(session->contents()[position]);
+  else
+    return KDevelop::IndexedString();
+}
+
+QString Token::symbolString() const {
+  return stringFromContents(session->contentsVector(), position, size);
+}
+
+uint Token::symbolLength() const {
+  uint ret = 0;
+  for(uint a = position; a < position+size; ++a) {
+    ret += KDevelop::IndexedString(session->contents()[a]).length();
+  }
+  return ret;
+}
+
+const uint index_size = 200;
+
+QVarLengthArray<QVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > createIndicesForTokens() {
+  QVarLengthArray<QVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > ret;
+  ret.resize(index_size);
+  #define ADD_TOKEN(string) ret[KDevelop::IndexedString(#string).index() % index_size].append(qMakePair(KDevelop::IndexedString(#string).index(), Token_ ## string));
+  ADD_TOKEN(K_DCOP);
+  ADD_TOKEN(Q_OBJECT);
+  ADD_TOKEN(__attribute__);
+  ADD_TOKEN(__typeof);
+  ADD_TOKEN(and);
+  ADD_TOKEN(and_eq);
+  ADD_TOKEN(asm);
+  ADD_TOKEN(auto);
+  ADD_TOKEN(bitand);
+  ADD_TOKEN(bitor);
+  ADD_TOKEN(bool);
+  ADD_TOKEN(break);
+  ADD_TOKEN(case);
+  ADD_TOKEN(catch);
+  ADD_TOKEN(char);
+  ADD_TOKEN(class);
+  ADD_TOKEN(compl);
+  ADD_TOKEN(const);
+  ADD_TOKEN(const_cast);
+  ADD_TOKEN(continue);
+  ADD_TOKEN(default);
+  ADD_TOKEN(delete);
+  ADD_TOKEN(do);
+  ADD_TOKEN(double);
+  ADD_TOKEN(dynamic_cast);
+  ADD_TOKEN(else);
+  ADD_TOKEN(emit);
+  ADD_TOKEN(enum);
+  ADD_TOKEN(explicit);
+  ADD_TOKEN(export);
+  ADD_TOKEN(extern);
+  ADD_TOKEN(false);
+  ADD_TOKEN(float);
+  ADD_TOKEN(for);
+  ADD_TOKEN(friend);
+  ADD_TOKEN(goto);
+  ADD_TOKEN(if);
+  ADD_TOKEN(incr);
+  ADD_TOKEN(inline);
+  ADD_TOKEN(int);
+  ADD_TOKEN(k_dcop);
+  ADD_TOKEN(k_dcop_signals);
+  ADD_TOKEN(long);
+  ADD_TOKEN(mutable);
+  ADD_TOKEN(namespace);
+  ADD_TOKEN(new);
+  ADD_TOKEN(not);
+  ADD_TOKEN(not_eq);
+  ADD_TOKEN(operator);
+  ADD_TOKEN(or);
+  ADD_TOKEN(or_eq);
+  ADD_TOKEN(private);
+  ADD_TOKEN(protected);
+  ADD_TOKEN(public);
+  ADD_TOKEN(register);
+  ADD_TOKEN(reinterpret_cast);
+  ADD_TOKEN(return);
+  ADD_TOKEN(short);
+  ADD_TOKEN(signals);
+  ADD_TOKEN(signed);
+  ADD_TOKEN(sizeof);
+  ADD_TOKEN(slots);
+  ADD_TOKEN(static);
+  ADD_TOKEN(static_cast);
+  ADD_TOKEN(struct);
+  ADD_TOKEN(switch);
+  ADD_TOKEN(template);
+  ADD_TOKEN(this);
+  ADD_TOKEN(throw);
+  ADD_TOKEN(true);
+  ADD_TOKEN(try);
+  ADD_TOKEN(typedef);
+  ADD_TOKEN(typeid);
+  ADD_TOKEN(typename);
+  ADD_TOKEN(union);
+  ADD_TOKEN(unsigned);
+  ADD_TOKEN(using);
+  ADD_TOKEN(virtual);
+  ADD_TOKEN(void);
+  ADD_TOKEN(volatile);
+  ADD_TOKEN(wchar_t);
+  ADD_TOKEN(while);
+  ADD_TOKEN(xor);
+  ADD_TOKEN(xor_eq);
+  return ret;
+}
+
+//A very simple lookup table: First level contains all pairs grouped by with (index % index_size), then there is a simple list
+QVarLengthArray<QVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > indicesForTokens = createIndicesForTokens();
 
 scan_fun_ptr Lexer::s_scan_table[256];
 bool Lexer::s_initialized = false;
 
 Lexer::Lexer(Control *c)
   : session(0),
-    control(c)
+    control(c),
+    m_leaveSize(false)
 {
 }
 
@@ -128,17 +228,18 @@ void Lexer::tokenize(ParseSession* _session)
 
   m_canMergeComment = false;
   m_firstInLine = true;
+  m_leaveSize = false;
   
   session->token_stream->resize(1024);
   (*session->token_stream)[0].kind = Token_EOF;
   (*session->token_stream)[0].session = session;
   (*session->token_stream)[0].position = 0;
-  (*session->token_stream)[0].size = 0;
   index = 1;
 
-  cursor = session->contents();
+  cursor.current = session->contents();
+  endCursor = session->contents() + session->contentsVector().size();
 
-  do {
+  while (cursor < endCursor) {
     size_t previousIndex = index;
     
     if (index == session->token_stream->size())
@@ -146,21 +247,34 @@ void Lexer::tokenize(ParseSession* _session)
 
     Token *current_token = &(*session->token_stream)[index];
     current_token->session = session;
-    current_token->position = cursor - session->contents();
-    (this->*s_scan_table[((uchar)*cursor)])();
-    current_token->size = cursor - session->contents() - current_token->position;
-
+    current_token->position = cursor.offsetIn( session->contents() );
+    current_token->size = 0;
+    
+    if(cursor.isChar()) {
+      (this->*s_scan_table[((uchar)*cursor)])();
+    }else{
+      //The cursor represents an identifier
+      scan_identifier_or_keyword();
+    }
+    
+    if(!m_leaveSize)
+      current_token->size = cursor.offsetIn( session->contents() ) - current_token->position;
+    
+    Q_ASSERT(m_leaveSize || (cursor.current == session->contents() + current_token->position + current_token->size));
+    Q_ASSERT(current_token->position + current_token->size <= session->contentsVector().size());
     Q_ASSERT(previousIndex == index-1 || previousIndex == index); //Never parse more than 1 token, because that won't be initialized correctly
 
-    if(previousIndex != index)
-    m_firstInLine = false;
+    m_leaveSize = false;
     
-  } while (cursor < session->contents() + session->size()-1);
+    if(previousIndex != index)
+      m_firstInLine = false;
+    
+  }
 
     if (index == session->token_stream->size())
       session->token_stream->resize(session->token_stream->size() * 2);
   (*session->token_stream)[index].session = session;
-  (*session->token_stream)[index].position = cursor - session->contents();
+  (*session->token_stream)[index].position = cursor.offsetIn(session->contents());
   (*session->token_stream)[index].size = 0;
   (*session->token_stream)[index].kind = Token_EOF;
 }
@@ -219,7 +333,7 @@ void Lexer::initialize_scan_table()
 
 void Lexer::scan_preprocessor()
 {
-  while (*cursor && *cursor != '\n')
+  while (cursor != endCursor && *cursor && *cursor != '\n')
     ++cursor;
 
   if (*cursor != '\n')
@@ -235,7 +349,7 @@ void Lexer::scan_char_constant()
   //const char *begin = cursor;
 
   ++cursor;
-  while (*cursor && *cursor != '\'')
+  while (cursor != endCursor && *cursor && *cursor != '\'')
     {
        if (*cursor == '\n')
         {
@@ -273,7 +387,7 @@ void Lexer::scan_string_constant()
   //const char *begin = cursor;
 
   ++cursor;
-  while (*cursor && *cursor != '"')
+  while (cursor != endCursor && *cursor && *cursor != '"')
     {
        if (*cursor == '\n')
         {
@@ -314,7 +428,7 @@ void Lexer::scan_newline()
 
 void Lexer::scan_white_spaces()
 {
-  while (isspace(*cursor))
+  while (cursor != endCursor && isspace(*cursor))
     {
       if (*cursor == '\n')
 	scan_newline();
@@ -345,21 +459,36 @@ void Lexer::scan_identifier_or_literal()
 
 void Lexer::scan_identifier_or_keyword()
 {
-  const char *skip = cursor;
-  while (isalnum(*skip) || *skip== '_')
-    ++skip;
+  if(!(cursor < endCursor))
+    return;
+  
+  //We have to merge symbols tokenized separately, they may have been contracted using ##
+  SpecialCursor nextCursor(cursor);
+  ++nextCursor;
+  
+  while(nextCursor < endCursor && (!isCharacter(*(nextCursor.current)) || isLetterOrNumber(*nextCursor.current) || characterFromIndex(*nextCursor.current) == '_')) {
+    //Fortunately this shouldn't happen too often, only when ## is used within the preprocessor
+    KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString(*(cursor.current)).byteArray() + KDevelop::IndexedString(*(nextCursor.current)).byteArray());
+    
+    (*cursor.current) = mergedSymbol.index();
+    (*nextCursor.current) = 0;
+    ++nextCursor;
+  }
+  
+  uint bucket = (*cursor.current) % index_size;
+  for(int a = 0; a < indicesForTokens[bucket].size(); ++a) {
+    if(indicesForTokens[bucket][a].first == *cursor.current) {
+      (*session->token_stream)[index++].kind = indicesForTokens[bucket][a].second;
+      ++cursor;
+      return;
+    }
+  }
 
-  int n = skip - cursor;
-  //Token *current_token = &(*session->token_stream)[index];
-  (this->*s_scan_keyword_table[n < 17 ? n : 0])();
-
-  /*if (current_token->kind == Token_identifier)
-    {
-      current_token->extra.symbol =
-        control->findOrInsertName((const char*) cursor, n);
-    }*/
-
-  cursor = skip;
+  m_leaveSize = true; //Since we may have skipped input tokens while mergin, we have to make sure that the size stays 1(the merged tokens will be empty)
+  (*session->token_stream)[index].size = 1;
+  (*session->token_stream)[index++].kind = Token_identifier;
+  
+  cursor = nextCursor;
 }
 
 void Lexer::scan_int_constant()
@@ -372,7 +501,7 @@ void Lexer::scan_int_constant()
 
   //const char *begin = cursor;
 
-  while (isalnum(*cursor) || *cursor == '.')
+  while (cursor != endCursor &&  (isalnum(*cursor) || *cursor == '.'))
     ++cursor;
 
   //(*session->token_stream)[index].extra.symbol =
@@ -580,7 +709,7 @@ void Lexer::scan_divide()
     {
       ///It is a comment
       --cursor; //Move back to the '/'
-      const char* commentBegin = cursor;
+      SpecialCursor commentBegin = cursor;
       skipComment();
       if( cursor != commentBegin ) {
         ///Store the comment
@@ -595,11 +724,11 @@ void Lexer::scan_divide()
           
           (*session->token_stream)[index++].kind = Token_comment;
           (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
-          (*session->token_stream)[index-1].position = commentBegin - session->contents();
+          (*session->token_stream)[index-1].position = commentBegin.offsetIn( session->contents() );
           (*session->token_stream)[index-1].session = session;
         }else{
           //Merge with previous comment
-          (*session->token_stream)[index-1].size = (size_t)(cursor - session->contents()) - (*session->token_stream)[index-1].position;
+          (*session->token_stream)[index-1].size = cursor.offsetIn(session->contents()) - (*session->token_stream)[index-1].position;
         }
       }
     }
@@ -810,1050 +939,6 @@ void Lexer::scan_invalid_input()
   ++cursor;
 }
 
-void Lexer::scanKeyword0()
-{
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword2()
-{
-  switch (*cursor)
-    {
-    case 'i':
-      if (*(cursor + 1) == 'f')
-	{
-	  (*session->token_stream)[index++].kind = Token_if;
-	  return;
-	}
-      break;
-
-    case 'd':
-      if (*(cursor + 1) == 'o')
-	{
-	  (*session->token_stream)[index++].kind = Token_do;
-	  return;
-	}
-      break;
-
-    case 'o':
-      if (*(cursor + 1) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_or;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword3()
-{
-  switch (*cursor)
-    {
-    case 'a':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_and;
-	  return;
-	}
-      if (*(cursor + 1) == 's' &&
-	  *(cursor + 2) == 'm')
-	{
-	  (*session->token_stream)[index++].kind = Token_asm;
-	  return;
-	}
-      break;
-
-    case 'f':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_for;
-	  return;
-	}
-      break;
-
-    case 'i':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_int;
-	  return;
-	}
-      break;
-
-    case 'n':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'w')
-	{
-	  (*session->token_stream)[index++].kind = Token_new;
-	  return;
-	}
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_not;
-	  return;
-	}
-      break;
-
-    case 't':
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == 'y')
-	{
-	  (*session->token_stream)[index++].kind = Token_try;
-	  return;
-	}
-      break;
-
-    case 'x':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_xor;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword4()
-{
-  switch (*cursor)
-    {
-    case 'a':
-      if (*(cursor + 1) == 'u' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'o')
-	{
-	  (*session->token_stream)[index++].kind = Token_auto;
-	  return;
-	}
-      break;
-
-    case 'c':
-      if (*(cursor + 1) == 'a' &&
-	  *(cursor + 2) == 's' &&
-	  *(cursor + 3) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_case;
-	  return;
-	}
-      if (*(cursor + 1) == 'h' &&
-	  *(cursor + 2) == 'a' &&
-	  *(cursor + 3) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_char;
-	  return;
-	}
-      break;
-
-    case 'b':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'o' &&
-	  *(cursor + 3) == 'l')
-	{
-	  (*session->token_stream)[index++].kind = Token_bool;
-	  return;
-	}
-      break;
-
-    case 'e':
-      if (*(cursor + 1) == 'l' &&
-	  *(cursor + 2) == 's' &&
-	  *(cursor + 3) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_else;
-	  return;
-	}
-      if (*(cursor + 1) == 'm' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_emit;
-	  return;
-	}
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 'u' &&
-	  *(cursor + 3) == 'm')
-	{
-	  (*session->token_stream)[index++].kind = Token_enum;
-	  return;
-	}
-      break;
-
-    case 'g':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'o')
-	{
-	  (*session->token_stream)[index++].kind = Token_goto;
-	  return;
-	}
-      break;
-
-    case 'l':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'n' &&
-	  *(cursor + 3) == 'g')
-	{
-	  (*session->token_stream)[index++].kind = Token_long;
-	  return;
-	}
-      break;
-
-    case 't':
-      if (*(cursor + 1) == 'h' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 's')
-	{
-	  (*session->token_stream)[index++].kind = Token_this;
-	  return;
-	}
-      break;
-
-    case 'v':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_void;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword5()
-{
-  switch (*cursor)
-    {
-    case 'c':
-      if (*(cursor + 1) == 'a' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'c' &&
-	  *(cursor + 4) == 'h')
-	{
-	  (*session->token_stream)[index++].kind = Token_catch;
-	  return;
-	}
-      if (*(cursor + 1) == 'l' &&
-	  *(cursor + 2) == 'a' &&
-	  *(cursor + 3) == 's' &&
-	  *(cursor + 4) == 's')
-	{
-	  (*session->token_stream)[index++].kind = Token_class;
-	  return;
-	}
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'm' &&
-	  *(cursor + 3) == 'p' &&
-	  *(cursor + 4) == 'l')
-	{
-	  (*session->token_stream)[index++].kind = Token_compl;
-	  return;
-	}
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'n' &&
-	  *(cursor + 3) == 's' &&
-	  *(cursor + 4) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_const;
-	  return;
-	}
-      break;
-
-    case 'b':
-      if (*(cursor + 1) == 'i' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'o' &&
-	  *(cursor + 4) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_bitor;
-	  return;
-	}
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == 'e' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'k')
-	{
-	  (*session->token_stream)[index++].kind = Token_break;
-	  return;
-	}
-      break;
-
-    case 'f':
-      if (*(cursor + 1) == 'l' &&
-	  *(cursor + 2) == 'o' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_float;
-	  return;
-	}
-      break;
-
-    case 'o':
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == '_' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'q')
-	{
-	  (*session->token_stream)[index++].kind = Token_or_eq;
-	  return;
-	}
-      break;
-
-    case 's':
-      if (*(cursor + 1) == 'h' &&
-	  *(cursor + 2) == 'o' &&
-	  *(cursor + 3) == 'r' &&
-	  *(cursor + 4) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_short;
-	  return;
-	}
-      if (*(cursor + 1) == 'l' &&
-	  *(cursor + 2) == 'o' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 's')
-	{
-	  (*session->token_stream)[index++].kind = Token_slots;
-	  return;
-	}
-      break;
-
-    case 'u':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'o' &&
-	  *(cursor + 4) == 'n')
-	{
-	  (*session->token_stream)[index++].kind = Token_union;
-	  return;
-	}
-      if (*(cursor + 1) == 's' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'n' &&
-	  *(cursor + 4) == 'g')
-	{
-	  (*session->token_stream)[index++].kind = Token_using;
-	  return;
-	}
-      break;
-
-    case 't':
-      if (*(cursor + 1) == 'h' &&
-	  *(cursor + 2) == 'r' &&
-	  *(cursor + 3) == 'o' &&
-	  *(cursor + 4) == 'w')
-	{
-	  (*session->token_stream)[index++].kind = Token_throw;
-	  return;
-	}
-      break;
-
-    case 'w':
-      if (*(cursor + 1) == 'h' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'l' &&
-	  *(cursor + 4) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_while;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword6()
-{
-  switch (*cursor)
-    {
-    case 'a':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 'd' &&
-	  *(cursor + 3) == '_' &&
-	  *(cursor + 4) == 'e' &&
-	  *(cursor + 5) == 'q')
-	{
-	  (*session->token_stream)[index++].kind = Token_and_eq;
-	  return;
-	}
-      break;
-
-    case 'b':
-      if (*(cursor + 1) == 'i' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'n' &&
-	  *(cursor + 5) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_bitand;
-	  return;
-	}
-      break;
-
-    case 'e':
-      if (*(cursor + 1) == 'x' &&
-	  *(cursor + 2) == 'p' &&
-	  *(cursor + 3) == 'o' &&
-	  *(cursor + 4) == 'r' &&
-	  *(cursor + 5) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_export;
-	  return;
-	}
-      if (*(cursor + 1) == 'x' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'r' &&
-	  *(cursor + 5) == 'n')
-	{
-	  (*session->token_stream)[index++].kind = Token_extern;
-	  return;
-	}
-      break;
-
-    case 'd':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'l' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 't' &&
-	  *(cursor + 5) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_delete;
-	  return;
-	}
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'u' &&
-	  *(cursor + 3) == 'b' &&
-	  *(cursor + 4) == 'l' &&
-	  *(cursor + 5) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_double;
-	  return;
-	}
-      break;
-
-    case 'f':
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'n' &&
-	  *(cursor + 5) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_friend;
-	  return;
-	}
-      break;
-
-    case 'i':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 'l' &&
-	  *(cursor + 3) == 'i' &&
-	  *(cursor + 4) == 'n' &&
-	  *(cursor + 5) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_inline;
-	  return;
-	}
-      break;
-
-    case 'K':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 'D' &&
-	  *(cursor + 3) == 'C' &&
-	  *(cursor + 4) == 'O' &&
-	  *(cursor + 5) == 'P')
-	{
-	  (*session->token_stream)[index++].kind = Token_K_DCOP;
-	  return;
-	}
-      break;
-
-    case 'n':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == '_' &&
-	  *(cursor + 4) == 'e' &&
-	  *(cursor + 5) == 'q')
-	{
-	  (*session->token_stream)[index++].kind = Token_not_eq;
-	  return;
-	}
-      break;
-
-    case 'p':
-      if (*(cursor + 1) == 'u' &&
-	  *(cursor + 2) == 'b' &&
-	  *(cursor + 3) == 'l' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'c')
-	{
-	  (*session->token_stream)[index++].kind = Token_public;
-	  return;
-	}
-      break;
-
-    case 's':
-      if (*(cursor + 1) == 'i' &&
-	  *(cursor + 2) == 'g' &&
-	  *(cursor + 3) == 'n' &&
-	  *(cursor + 4) == 'e' &&
-	  *(cursor + 5) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_signed;
-	  return;
-	}
-      if (*(cursor + 1) == 'i' &&
-	  *(cursor + 2) == 'z' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'o' &&
-	  *(cursor + 5) == 'f')
-	{
-	  (*session->token_stream)[index++].kind = Token_sizeof;
-	  return;
-	}
-      if (*(cursor + 1) == 't' &&
-	  *(cursor + 2) == 'a' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'c')
-	{
-	  (*session->token_stream)[index++].kind = Token_static;
-	  return;
-	}
-      if (*(cursor + 1) == 't' &&
-	  *(cursor + 2) == 'r' &&
-	  *(cursor + 3) == 'u' &&
-	  *(cursor + 4) == 'c' &&
-	  *(cursor + 5) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_struct;
-	  return;
-	}
-      if (*(cursor + 1) == 'w' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 'c' &&
-	  *(cursor + 5) == 'h')
-	{
-	  (*session->token_stream)[index++].kind = Token_switch;
-	  return;
-	}
-      break;
-
-    case 'r':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'u' &&
-	  *(cursor + 4) == 'r' &&
-	  *(cursor + 5) == 'n')
-	{
-	  (*session->token_stream)[index++].kind = Token_return;
-	  return;
-	}
-      break;
-
-    case 't':
-      if (*(cursor + 1) == 'y' &&
-	  *(cursor + 2) == 'p' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_typeid;
-	  return;
-	}
-      break;
-
-    case 'x':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'r' &&
-	  *(cursor + 3) == '_' &&
-	  *(cursor + 4) == 'e' &&
-	  *(cursor + 5) == 'q')
-	{
-	  (*session->token_stream)[index++].kind = Token_xor_eq;
-	  return;
-	}
-      break;
-
-    case 'k':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 'd' &&
-	  *(cursor + 3) == 'c' &&
-	  *(cursor + 4) == 'o' &&
-	  *(cursor + 5) == 'p')
-	{
-	  (*session->token_stream)[index++].kind = Token_k_dcop;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword7()
-{
-  switch (*cursor)
-    {
-    case 'd':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'f' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'u' &&
-	  *(cursor + 5) == 'l' &&
-	  *(cursor + 6) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_default;
-	  return;
-	}
-      break;
-
-    case 'm':
-      if (*(cursor + 1) == 'u' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'b' &&
-	  *(cursor + 5) == 'l' &&
-	  *(cursor + 6) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_mutable;
-	  return;
-	}
-      break;
-
-    case 'p':
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'v' &&
-	  *(cursor + 4) == 'a' &&
-	  *(cursor + 5) == 't' &&
-	  *(cursor + 6) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_private;
-	  return;
-	}
-      break;
-#if 0
-    case 's':
-      if (*(cursor + 1) == 'i' &&
-	  *(cursor + 2) == 'g' &&
-	  *(cursor + 3) == 'n' &&
-	  *(cursor + 4) == 'a' &&
-	  *(cursor + 5) == 'l' &&
-	  *(cursor + 6) == 's')
-	{
-	  (*session->token_stream)[index++].kind = Token_signals;
-	  return;
-	}
-      break;
-#endif
-    case 't':
-      if (*(cursor + 1) == 'y' &&
-	  *(cursor + 2) == 'p' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'd' &&
-	  *(cursor + 5) == 'e' &&
-	  *(cursor + 6) == 'f')
-	{
-	  (*session->token_stream)[index++].kind = Token_typedef;
-	  return;
-	}
-      break;
-
-    case 'v':
-      if (*(cursor + 1) == 'i' &&
-    *(cursor + 2) == 'r' &&
-    *(cursor + 3) == 't' &&
-    *(cursor + 4) == 'u' &&
-    *(cursor + 5) == 'a' &&
-    *(cursor + 6) == 'l')
-  {
-    (*session->token_stream)[index++].kind = Token_virtual;
-    return;
-  }
-    case 'w':
-      if (*(cursor + 1) == 'c' &&
-    *(cursor + 2) == 'h' &&
-    *(cursor + 3) == 'a' &&
-    *(cursor + 4) == 'r' &&
-    *(cursor + 5) == '_' &&
-    *(cursor + 6) == 't')
-  {
-    (*session->token_stream)[index++].kind = Token_wchar_t;
-    return;
-  }
-      break;
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword8()
-{
-  switch (*cursor)
-    {
-    case '_':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 't' &&
-	  *(cursor + 3) == 'y' &&
-	  *(cursor + 4) == 'p' &&
-	  *(cursor + 5) == 'e' &&
-	  *(cursor + 6) == 'o' &&
-	  *(cursor + 7) == 'f')
-	{
-	  (*session->token_stream)[index++].kind = Token___typeof;
-	  return;
-	}
-      break;
-
-    case 'c':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'n' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'n' &&
-	  *(cursor + 6) == 'u' &&
-	  *(cursor + 7) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_continue;
-	  return;
-	}
-      break;
-
-    case 'e':
-      if (*(cursor + 1) == 'x' &&
-	  *(cursor + 2) == 'p' &&
-	  *(cursor + 3) == 'l' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'c' &&
-	  *(cursor + 6) == 'i' &&
-	  *(cursor + 7) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_explicit;
-	  return;
-	}
-      break;
-
-    case 'o':
-      if (*(cursor + 1) == 'p' &&
-	  *(cursor + 2) == 'e' &&
-	  *(cursor + 3) == 'r' &&
-	  *(cursor + 4) == 'a' &&
-	  *(cursor + 5) == 't' &&
-	  *(cursor + 6) == 'o' &&
-	  *(cursor + 7) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_operator;
-	  return;
-	}
-      break;
-
-    case 'Q':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 'O' &&
-	  *(cursor + 3) == 'B' &&
-	  *(cursor + 4) == 'J' &&
-	  *(cursor + 5) == 'E' &&
-	  *(cursor + 6) == 'C' &&
-	  *(cursor + 7) == 'T')
-	{
-	  (*session->token_stream)[index++].kind = Token_Q_OBJECT;
-	  return;
-	}
-      break;
-
-    case 'r':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'g' &&
-	  *(cursor + 3) == 'i' &&
-	  *(cursor + 4) == 's' &&
-	  *(cursor + 5) == 't' &&
-	  *(cursor + 6) == 'e' &&
-	  *(cursor + 7) == 'r')
-	{
-	  (*session->token_stream)[index++].kind = Token_register;
-	  return;
-	}
-      break;
-
-    case 'u':
-      if (*(cursor + 1) == 'n' &&
-	  *(cursor + 2) == 's' &&
-	  *(cursor + 3) == 'i' &&
-	  *(cursor + 4) == 'g' &&
-	  *(cursor + 5) == 'n' &&
-	  *(cursor + 6) == 'e' &&
-	  *(cursor + 7) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_unsigned;
-	  return;
-	}
-      break;
-
-    case 't':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'm' &&
-	  *(cursor + 3) == 'p' &&
-	  *(cursor + 4) == 'l' &&
-	  *(cursor + 5) == 'a' &&
-	  *(cursor + 6) == 't' &&
-	  *(cursor + 7) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_template;
-	  return;
-	}
-      if (*(cursor + 1) == 'y' &&
-	  *(cursor + 2) == 'p' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 'n' &&
-	  *(cursor + 5) == 'a' &&
-	  *(cursor + 6) == 'm' &&
-	  *(cursor + 7) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_typename;
-	  return;
-	}
-      break;
-
-    case 'v':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'l' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 't' &&
-	  *(cursor + 5) == 'i' &&
-	  *(cursor + 6) == 'l' &&
-	  *(cursor + 7) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_volatile;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword9()
-{
-  switch (*cursor)
-    {
-    case 'p':
-      if (*(cursor + 1) == 'r' &&
-	  *(cursor + 2) == 'o' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 'e' &&
-	  *(cursor + 5) == 'c' &&
-	  *(cursor + 6) == 't' &&
-	  *(cursor + 7) == 'e' &&
-	  *(cursor + 8) == 'd')
-	{
-	  (*session->token_stream)[index++].kind = Token_protected;
-	  return;
-	}
-      break;
-
-    case 'n':
-      if (*(cursor + 1) == 'a' &&
-	  *(cursor + 2) == 'm' &&
-	  *(cursor + 3) == 'e' &&
-	  *(cursor + 4) == 's' &&
-	  *(cursor + 5) == 'p' &&
-	  *(cursor + 6) == 'a' &&
-	  *(cursor + 7) == 'c' &&
-	  *(cursor + 8) == 'e')
-	{
-	  (*session->token_stream)[index++].kind = Token_namespace;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword10()
-{
-  switch (*cursor)
-    {
-    case 'c':
-      if (*(cursor + 1) == 'o' &&
-	  *(cursor + 2) == 'n' &&
-	  *(cursor + 3) == 's' &&
-	  *(cursor + 4) == 't' &&
-	  *(cursor + 5) == '_' &&
-	  *(cursor + 6) == 'c' &&
-	  *(cursor + 7) == 'a' &&
-	  *(cursor + 8) == 's' &&
-	  *(cursor + 9) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_const_cast;
-	  return;
-	}
-      break;
-    case '_':
-    if (*(cursor + 1) == '_' && //The gcc __typeof__ keyword
-    *(cursor + 2) == 't' &&
-    *(cursor + 3) == 'y' &&
-    *(cursor + 4) == 'p' &&
-    *(cursor + 5) == 'e' &&
-    *(cursor + 6) == 'o' &&
-    *(cursor + 7) == 'f' && 
-    *(cursor + 8) == '_' &&
-    *(cursor + 9) == '_' )
-  {
-    (*session->token_stream)[index++].kind = Token___typeof;
-    return;
-  }
-    break;
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword11()
-{
-  switch (*cursor)
-    {
-    case 's':
-      if (*(cursor + 1) == 't' &&
-	  *(cursor + 2) == 'a' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 'i' &&
-	  *(cursor + 5) == 'c' &&
-	  *(cursor + 6) == '_' &&
-	  *(cursor + 7) == 'c' &&
-	  *(cursor + 8) == 'a' &&
-	  *(cursor + 9) == 's' &&
-	  *(cursor + 10) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_static_cast;
-	  return;
-	}
-    break;
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword12()
-{
-  switch (*cursor)
-    {
-    case 'd':
-      if (*(cursor + 1) == 'y' &&
-	  *(cursor + 2) == 'n' &&
-	  *(cursor + 3) == 'a' &&
-	  *(cursor + 4) == 'm' &&
-	  *(cursor + 5) == 'i' &&
-	  *(cursor + 6) == 'c' &&
-	  *(cursor + 7) == '_' &&
-	  *(cursor + 8) == 'c' &&
-	  *(cursor + 9) == 'a' &&
-	  *(cursor + 10) == 's' &&
-	  *(cursor + 11) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_dynamic_cast;
-	  return;
-	}
-      break;
-
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword13()
-{
-  switch (*cursor)
-    {
-    case '_':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 'a' &&
-	  *(cursor + 3) == 't' &&
-	  *(cursor + 4) == 't' &&
-	  *(cursor + 5) == 'r' &&
-	  *(cursor + 6) == 'i' &&
-	  *(cursor + 7) == 'b' &&
-	  *(cursor + 8) == 'u' &&
-	  *(cursor + 9) == 't' &&
-	  *(cursor + 10) == 'e' &&
-	  *(cursor + 11) == '_' &&
-	  *(cursor + 12) == '_')
-	{
-	  (*session->token_stream)[index++].kind = Token___attribute__;
-	  return;
-	}
-      break;
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword14()
-{
-  switch (*cursor)
-    {
-    case 'k':
-      if (*(cursor + 1) == '_' &&
-	  *(cursor + 2) == 'd' &&
-	  *(cursor + 3) == 'c' &&
-	  *(cursor + 4) == 'o' &&
-	  *(cursor + 5) == 'p' &&
-	  *(cursor + 6) == '_' &&
-	  *(cursor + 7) == 's' &&
-	  *(cursor + 8) == 'i' &&
-	  *(cursor + 9) == 'g' &&
-	  *(cursor + 10) == 'n' &&
-	  *(cursor + 11) == 'a' &&
-	  *(cursor + 12) == 'l' &&
-	  *(cursor + 13) == 's')
-	{
-	  (*session->token_stream)[index++].kind = Token_k_dcop_signals;
-	  return;
-	}
-      break;
-    }
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
-void Lexer::scanKeyword16()
-{
-  switch (*cursor)
-    {
-    case 'r':
-      if (*(cursor + 1) == 'e' &&
-	  *(cursor + 2) == 'i' &&
-	  *(cursor + 3) == 'n' &&
-	  *(cursor + 4) == 't' &&
-	  *(cursor + 5) == 'e' &&
-	  *(cursor + 6) == 'r' &&
-	  *(cursor + 7) == 'p' &&
-	  *(cursor + 8) == 'r' &&
-	  *(cursor + 9) == 'e' &&
-	  *(cursor + 10) == 't' &&
-	  *(cursor + 11) == '_' &&
-	  *(cursor + 12) == 'c' &&
-	  *(cursor + 13) == 'a' &&
-	  *(cursor + 14) == 's' &&
-	  *(cursor + 15) == 't')
-	{
-	  (*session->token_stream)[index++].kind = Token_reinterpret_cast;
-	  return;
-	}
-      break;
-    }
-
-  (*session->token_stream)[index++].kind = Token_identifier;
-}
-
 KDevelop::Problem Lexer::createProblem() const
 {
   Q_ASSERT(index > 0);
@@ -1862,7 +947,7 @@ KDevelop::Problem Lexer::createProblem() const
 
   KDevelop::SimpleCursor position = session->positionAt(index - 1);
 
-  p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.textCursor(), 1)));
+  p.setFinalLocation(KDevelop::DocumentRange(session->url().str(), KTextEditor::Range(position.textCursor(), 1))); ///@todo prevent conversion
 
   return p;
 }

@@ -69,15 +69,11 @@ bool importsContext(const QVector<DUContextPointer>& contexts, const DUContext* 
   return false;
 }
 
-QList<HashedString> convertFromUrls(const QList<KUrl>& urlList) {
-  QList<HashedString> ret;
+QList<IndexedString> convertFromUrls(const QList<KUrl>& urlList) {
+  QList<IndexedString> ret;
   foreach(const KUrl& url, urlList)
-    ret << Cpp::EnvironmentManager::unifyString(url.prettyUrl());
+    ret << IndexedString(url.pathOrUrl());
   return ret;
-}
-
-QString cppStringUnifier (const QString& str) {
-  return Cpp::EnvironmentManager::unifyString(str).str();
 }
 
 bool CPPParseJob::needUpdateEverything() const {
@@ -108,7 +104,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         : KDevelop::ParseJob( url, parent ),
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
-        m_session( new ParseSession(&cppStringUnifier) ),
+        m_session( new ParseSession ),
         m_readFromDisk( false ),
         m_includePathsComputed( false ),
         m_keepDuchain( false ),
@@ -180,7 +176,7 @@ const KUrl::List& CPPParseJob::includePathUrls() const {
   return masterJob()->m_includePathUrls;
 }
 
-const QList<HashedString>& CPPParseJob::includePaths() const {
+const QList<IndexedString>& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             m_includePathsComputed = true;
@@ -345,13 +341,13 @@ void CPPInternalParseJob::run()
 
     QList<LineContextPair> importedContentChains; //All content-chains imported while this parse-run. Also contains the temporary ones.
     QList<TopDUContext*> importedTemporaryChains; //All imported content-chains that were imported temporarily from parents.
-    QSet<KDevelop::HashedString> encounteredIncludeUrls; //All imported file-urls that were encountered this run.
+    QSet<KDevelop::IndexedString> encounteredIncludeUrls; //All imported file-urls that were encountered this run.
 
     {
         DUChainReadLocker lock(DUChain::lock());
         foreach ( LineContextPair context, parentJob()->includedFiles() ) {
             importedContentChains << contentFromProxy(context);
-            encounteredIncludeUrls << context.context->url();
+            encounteredIncludeUrls << IndexedString(context.context->url().str()); ///@todo prevent conversion
         }
     }
 
@@ -401,7 +397,7 @@ void CPPInternalParseJob::run()
           ast->session = parentJob()->parseSession();
       
       CppEditorIntegrator editor(parentJob()->parseSession());
-      editor.setCurrentUrl(parentJob()->document());
+      editor.setCurrentUrl(HashedString(parentJob()->document().str())); ///@todo
 
       // Translate the cursors we generate with edits that have happened since retrieval of the document source.
       if (editor.smart() && parentJob()->revisionToken() > 0)
@@ -472,7 +468,7 @@ void CPPInternalParseJob::run()
 
           QVector<DUContextPointer> imports = contentContext->importedParentContexts();
           foreach(DUContextPointer ctx, imports) {
-              if(ctx.data() && !encounteredIncludeUrls.contains(ctx->url())) {
+              if(ctx.data() && !encounteredIncludeUrls.contains(IndexedString(ctx->url().str()))) { ///@todo prevent conversion
                   contentContext->removeImportedParentContext(ctx.data());
                   kDebug( 9007 ) << "removing not encountered import " << ctx->url().str();
               }

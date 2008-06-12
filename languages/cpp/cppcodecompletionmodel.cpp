@@ -93,8 +93,8 @@ void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, 
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
 
-    if( top->parsingEnvironmentFile()->modificationRevision() != EditorIntegrator::modificationRevision(url.prettyUrl()) ) {
-      kDebug(9007) << "Found context is not current. Its revision is " << top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << EditorIntegrator::modificationRevision(url.prettyUrl());
+    if( top->parsingEnvironmentFile()->modificationRevision() != EditorIntegrator::modificationRevision(url.pathOrUrl()) ) {
+      kDebug(9007) << "Found context is not current. Its revision is " << top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << EditorIntegrator::modificationRevision(url.pathOrUrl());
     }
 
     DUContextPointer thisContext;

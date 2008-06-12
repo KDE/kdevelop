@@ -37,16 +37,16 @@ Preprocessor::~Preprocessor()
 {
 }
 
-QString Preprocessor::processString(const QString& string)
-{
-    pp proc(this);
-
-    QString ret = QString::fromUtf8(proc.processFile("anonymous", pp::Data, string.toUtf8()));
-
-    proc.environment()->cleanup();
-
-    return ret;
-}
+// QString Preprocessor::processString(const QString& string)
+// {
+//     pp proc(this);
+// 
+//     QString ret = QString::fromUtf8(proc.processFile("anonymous", pp::Data, string.toUtf8()));
+// 
+//     proc.environment()->cleanup();
+// 
+//     return ret;
+// }
 
 Stream * Preprocessor::sourceNeeded( QString & fileName, IncludeType type, int sourceLine, bool skipCurrentPath )
 {

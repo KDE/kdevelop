@@ -1,5 +1,6 @@
 /*
   Copyright 2007 Hamish Rodda <rodda@kde.org>
+  Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -21,39 +22,53 @@
 #include <pp-location.h>
 #include <QStringList>
 #include <kdebug.h>
+#include <duchain/indexedstring.h>
+#include "chartools.h"
 
 using namespace rpp;
 
 LocationTable::LocationTable()
 {
-  anchor(0, Anchor(0,0));
+  anchor(0, Anchor(0,0), 0);
 }
 
-LocationTable::LocationTable(const QByteArray& contents)
+LocationTable::LocationTable(const PreprocessedContents& contents)
 {
-  anchor(0, Anchor(0,0));
+  anchor(0, Anchor(0,0), 0);
 
-  const char newline = '\n';
+  const unsigned int newline = indexFromCharacter('\n');
   int line = 0;
 
   for (std::size_t i = 0; i < (std::size_t)contents.size(); ++i)
     if (contents.at(i) == newline)
-      anchor(i + 1, Anchor(++line, 0));
+      anchor(i + 1, Anchor(++line, 0), 0);
 }
 
-void LocationTable::anchor(std::size_t offset, Anchor anchor)
+rpp::Anchor LocationTable::positionAt(std::size_t offset, const PreprocessedContents& contents, bool collapseIfMacroExpansion) const
 {
-  if (anchor.column) {
+  QPair<std::size_t, rpp::Anchor> ret = anchorForOffset(offset, collapseIfMacroExpansion);
+
+  if(!ret.second.collapsed)
+    for(std::size_t a = ret.first; a < offset; ++a)
+      ret.second.column += KDevelop::IndexedString(contents[a]).length();
+  
+  return ret.second;
+}
+
+void LocationTable::anchor(std::size_t offset, Anchor anchor, const PreprocessedContents* contents)
+{
+  Q_ASSERT(!offset || !anchor.column || contents);
+  
+  if (offset && anchor.column) {
     // Check to see if it's different to what we already know
-    rpp::Anchor known = positionForOffset(offset);
+    rpp::Anchor known = positionAt(offset, *contents);
     if (known == anchor && !anchor.collapsed && known.macroExpansion == anchor.macroExpansion)
       return;
   }
-  
   m_currentOffset = m_offsetTable.insert(offset, anchor);
 }
 
-Anchor LocationTable::positionForOffset(std::size_t offset, bool collapseIfMacroExpansion) const
+QPair<std::size_t, Anchor> LocationTable::anchorForOffset(std::size_t offset, bool collapseIfMacroExpansion) const
 {
   // Look nearby for a match first
   QMap<std::size_t, Anchor>::ConstIterator constEnd = m_offsetTable.constEnd();
@@ -109,15 +124,10 @@ Anchor LocationTable::positionForOffset(std::size_t offset, bool collapseIfMacro
   done:
   Q_ASSERT(m_currentOffset != constEnd);
   Anchor ret = m_currentOffset.value();
-  if(ret.macroExpansion.isValid() && collapseIfMacroExpansion) {
+  if(ret.macroExpansion.isValid() && collapseIfMacroExpansion)
     ret.collapsed = true;
-    return ret;
-  }
-  if(ret.collapsed)
-    return ret;
-  else {
-    return Anchor(ret+ KDevelop::SimpleCursor(0, offset - m_currentOffset.key()), ret.collapsed, ret.macroExpansion);
-  }
+  
+  return qMakePair(m_currentOffset.key(), ret);
 }
 
 void LocationTable::dump() const
@@ -130,14 +140,14 @@ void LocationTable::dump() const
   }
 }
 
-void LocationTable::splitByAnchors(const QByteArray& text, const Anchor& textStartPosition, QList<QByteArray>& strings, QList<Anchor>& anchors) const {
+void LocationTable::splitByAnchors(const PreprocessedContents& text, const Anchor& textStartPosition, QList<PreprocessedContents>& strings, QList<Anchor>& anchors) const {
 
   Anchor currentAnchor = Anchor(textStartPosition);
   size_t currentOffset = 0;
   
   QMapIterator<std::size_t, Anchor> it = m_offsetTable;
 
-  while (currentOffset < (size_t)text.length())
+  while (currentOffset < (size_t)text.size())
   {
     Anchor nextAnchor(KDevelop::SimpleCursor::invalid());
     size_t nextOffset;
@@ -147,7 +157,7 @@ void LocationTable::splitByAnchors(const QByteArray& text, const Anchor& textSta
       nextOffset = it.key();
       nextAnchor = it.value();
     }else{
-      nextOffset = text.length();
+      nextOffset = text.size();
       nextAnchor = Anchor(KDevelop::SimpleCursor::invalid());
     }
 

@@ -46,11 +46,13 @@
 #include "typeutils.h"
 #include "templatedeclaration.h"
 #include <indexedstring.h>
+#include "rpp/chartools.h"
+#include "rpp/pp-engine.h"
+#include "rpp/preprocessor.h"
 
 #include "tokens.h"
 #include "parsesession.h"
 
-#include "rpp/preprocessor.h"
 
 #include <typeinfo>
 
@@ -146,7 +148,7 @@ void TestDUChain::initTestCase()
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-  topContext = new TopDUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
+  topContext = new TopDUContext(file1.pathOrUrl(), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
   DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
@@ -252,19 +254,19 @@ void TestDUChain::testContextRelationships()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  DUContext* firstChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(4,4), SimpleCursor(10,3)), topContext);
+  DUContext* firstChild = new DUContext(file1.pathOrUrl(), SimpleRange(SimpleCursor(4,4), SimpleCursor(10,3)), topContext);
 
   QCOMPARE(firstChild->parentContext(), topContext);
   QCOMPARE(firstChild->childContexts().count(), 0);
   QCOMPARE(topContext->childContexts().count(), 1);
   QCOMPARE(topContext->childContexts().last(), firstChild);
 
-  DUContext* secondChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(14,4), SimpleCursor(19,3)), topContext);
+  DUContext* secondChild = new DUContext(file1.pathOrUrl(), SimpleRange(SimpleCursor(14,4), SimpleCursor(19,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 2);
   QCOMPARE(topContext->childContexts()[1], secondChild);
 
-  DUContext* thirdChild = new DUContext(file1.prettyUrl(), SimpleRange(SimpleCursor(10,4), SimpleCursor(14,3)), topContext);
+  DUContext* thirdChild = new DUContext(file1.pathOrUrl(), SimpleRange(SimpleCursor(10,4), SimpleCursor(14,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 3);
   QCOMPARE(topContext->childContexts()[1], thirdChild);
@@ -301,7 +303,7 @@ void TestDUChain::testIntegralTypes()
 
   QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;");
 
-  DUContext* top = parse(method, DumpNone);
+  DUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1084,24 +1086,49 @@ QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->lo
 }
 
 void TestDUChain::testFunctionDefinition2() {
-  QByteArray text("//ääää\nclass B{B();}; B::B() {} "); //the ääää tests whether the column-numbers are resistant to special characters
+  {
+    QByteArray text("//ääää\nclass B{B();}; B::B() {} "); //the ääää tests whether the column-numbers are resistant to special characters
 
-  DUContext* top = parse(text, DumpNone);
+    DUContext* top = parse(text, DumpNone);
 
-  DUChainWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->childContexts().count(), 3);
-  
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 2);
 
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
 
-  QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
-  QCOMPARE(top->childContexts()[1]->range().start.column, 20);
-  QCOMPARE(top->childContexts()[1]->range().end.column, 20);
+    QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
+    QCOMPARE(top->childContexts()[1]->range().start.column, 20);
+    QCOMPARE(top->childContexts()[1]->range().end.column, 20);
 
-  release(top);
+    release(top);
+  }
+  {
+    QByteArray text("void test(int a, int cc);"); //the ääää tests whether the column-numbers are resistant to special characters
+
+    DUContext* top = parse(text, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->childContexts().count(), 1);
+    
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+
+    QCOMPARE(top->childContexts()[0]->range().start.column, 10);
+    QCOMPARE(top->childContexts()[0]->range().end.column, 23);
+
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->range().start.column, 21);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->range().end.column, 23);
+    
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->range().start.column, 14);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->range().end.column, 15);
+    
+    release(top);
+  }
+
 }
 
 void TestDUChain::testFunctionDefinition4() {
@@ -1355,7 +1382,7 @@ int value( const AbstractType::Ptr& type ) {
 void TestDUChain::testTemplateEnums()
 {
   QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
-  DUContext* top = parse(text, DumpNone);
+  DUContext* top = parse(text, DumpAll);
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 3);
@@ -1368,6 +1395,8 @@ void TestDUChain::testTemplateEnums()
 
   Declaration* tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::TempVal") );
   QVERIFY(tempDecl);
+  QVERIFY(!dynamic_cast<const DelayedType*>(tempDecl->abstractType().data()));
+  QVERIFY(dynamic_cast<const CppConstantIntegralType*>(tempDecl->abstractType().data()));
   QCOMPARE(value(tempDecl->abstractType()), 5);
   
   tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Num") );
@@ -1867,7 +1896,7 @@ void TestDUChain::testImportStructure()
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
   int cycles = 5;
   //int cycles = 100;
-  srand(time(NULL));
+  //srand(time(NULL));
   for(int t = 0; t < cycles; ++t) {
     QList<TestContext*> allContexts;
     //Create a random structure
@@ -2140,6 +2169,7 @@ void TestDUChain::testFileParse()
   QFile file("/opt/kde4/src/kdevelop/languages/csharp/parser/csharp_parser.cpp");
   //QFile file("/opt/kde4/src/kdevelop/plugins/outputviews/makewidget.cpp");
   //QFile file("/opt/kde4/src/kdelibs/kate/part/katecompletionmodel.h");
+  
   //QFile file("/opt/kde4/src/kdevelop/lib/kdevbackgroundparser.cpp");
   //QFile file("/opt/qt-copy/src/gui/kernel/qwidget.cpp");
   QVERIFY( file.open( QIODevice::ReadOnly ) );
@@ -2148,8 +2178,9 @@ void TestDUChain::testFileParse()
   file.close();
   QString contents = QString::fromUtf8( fileData.constData() );
   rpp::Preprocessor preprocessor;
-  QString ppd = preprocessor.processString( contents );
-  QByteArray preprocessed = ppd.toUtf8();
+  rpp::pp pp(&preprocessor);
+
+  QByteArray preprocessed = stringFromContents(pp.processFile("anonymous", rpp::pp::Data, fileData));
 
   DUContext* top = parse(preprocessed, DumpNone);
 
@@ -2167,12 +2198,9 @@ void TestDUChain::testStringSets() {
   const unsigned int choiceCount = 30;
   const unsigned int itemCount = 100;
   
-  BasicSetRepository rep;
+  BasicSetRepository rep("test repository", false, 1000000);
   
-  for(Index a = 0; a < itemCount; a++)
-    QVERIFY( a+1 == rep.appendIndices(1) );
-
-  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
+//  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
   clock_t repositoryClockTime = 0; //Time spent on repository-operations
   clock_t genericClockTime = 0; //Time spend on equivalent operations with generic sets
@@ -2233,6 +2261,9 @@ void TestDUChain::testStringSets() {
   }
 
   for(int cycle = 0; cycle < 100; ++cycle) {
+      if(cycle % 10 == 0)
+         kDebug() << "cycle" << cycle;
+      
     for(unsigned int a = 0; a < setCount; a++) {
       for(unsigned int b = 0; b < setCount; b++) {
         /// ----- SUBTRACTION/DIFFERENCE
@@ -2449,8 +2480,12 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
-  session->setContentsAndGenerateLocationTable(unit);
 
+  rpp::Preprocessor preprocessor;
+  rpp::pp pp(&preprocessor);
+
+  session->setContentsAndGenerateLocationTable(pp.processFile("anonymous", rpp::pp::Data, unit));
+  
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);
   ast->session = session;
@@ -2461,7 +2496,7 @@ DUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   }
 
   static int testNumber = 0;
-  HashedString url(QString("file:///internal/%1").arg(testNumber++));
+  IndexedString url(QString("/internal/%1").arg(testNumber++));
 
   DeclarationBuilder definitionBuilder(session);
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );

@@ -32,6 +32,7 @@
 
 #include <duchainpointer.h>
 #include <contextbuilder.h>
+#include <indexedstring.h>
 
 class PreprocessJob;
 class CppLanguageSupport;
@@ -81,7 +82,7 @@ public:
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
 
-    const QList<HashedString>& includePaths() const;
+    const QList<IndexedString>& includePaths() const;
     const KUrl::List& includePathUrls() const;
     
     void requestDependancies();
@@ -170,7 +171,7 @@ private:
   
     KUrl m_includedFromPath;
     mutable bool m_includePathsComputed;
-    mutable QList<HashedString> m_includePaths; //Only a master-job has this set
+    mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KUrl::List m_includePathUrls; //Only a master-job has this set
     bool m_keepDuchain;
     QStack<DocumentCursor> m_includeStack;

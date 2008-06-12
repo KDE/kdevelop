@@ -34,6 +34,7 @@
 //#include "typerepository.h"
 #include <identifier.h>
 #include "expressionvisitor.h"
+#include <parser/rpp/chartools.h>
 
 
 namespace Cpp {
@@ -101,7 +102,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     type = context->type();
   }
 
-  session->setContentsAndGenerateLocationTable(unit);
+  session->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
 
   ast = parser.parseTypeOrExpression(session, forceExpression);
 

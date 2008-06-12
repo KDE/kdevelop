@@ -20,56 +20,42 @@
 */
 
 #include "pp-macro.h"
+#include "chartools.h"
 
 using namespace rpp;
 
 void pp_macro::invalidateHash() {
-  m_idHashValid = false;
   m_valueHashValid = false;
 }
 
-pp_macro::pp_macro(const KDevelop::HashedString& nm)
-  : name(nm)
+pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : name(nm)
   , sourceLine(-1)
   , defined(true)
   , hidden(false)
   , function_like(false)
   , variadics(false)
-  , m_idHashValid(false)
-  , m_valueHashValid(false)
+{
+}
+pp_macro::pp_macro(const KDevelop::IndexedString& nm) : pp_macro_direct_data(nm), m_valueHashValid(false)
+
 {
 }
 
-pp_macro::pp_macro( )
-  : sourceLine(-1)
-  , defined(true)
-  , hidden(false)
-  , function_like(false)
-  , variadics(false)
-  , m_idHashValid(false)
-  , m_valueHashValid(false)
+pp_macro::pp_macro(const char* nm) : pp_macro_direct_data(KDevelop::IndexedString(nm, strlen(nm))), m_valueHashValid(false)
+
 {
 }
-size_t fastHashString( const QString& str ) {
-  size_t hash = 0;
-  if( !str.isEmpty() ) {
-    const QChar* curr = str.unicode();
-    const QChar* end = curr + str.length();
-    QChar c;
-    for(; curr < end ;) {
-      c = *curr;
-      hash = c.unicode() + ( hash * 17 );
-      ++curr;
-    }
-  }
-  return hash;
+
+pp_macro::pp_macro( ) : m_valueHashValid(false)
+{
 }
 
-size_t fastHashString( const QByteArray& str ) {
+
+size_t hashContents( const QVector<unsigned int>& str ) {
   size_t hash = 0;
   if( !str.isEmpty() ) {
-    const char* curr = str.constData();
-    const char* end = curr + str.length();
+    const uint* curr = str.constData();
+    const uint* end = curr + str.size();
     char c;
     for(; curr < end ;) {
       c = *curr;
@@ -87,33 +73,30 @@ QString pp_macro::toString() const {
   if(function_like) {
     ret += "(";
     bool first = true;
-    foreach(QByteArray str, formals) {
+    foreach(uint str, formals) {
       if(!first)
         ret += ", ";
       first = false;
       
-      ret += QString::fromUtf8(str);
+      ret += KDevelop::IndexedString(str).str();
     }
     ret += ")";
   }
-  ret += QString::fromUtf8(definition);
+  ret += QString::fromUtf8(stringFromContents(definition));
   
   return ret;
 }
 
 void pp_macro::computeHash() const {
-    if( m_valueHashValid || m_idHashValid )
+    if( m_valueHashValid )
       return;
-    m_idHash = 7 * ( name.hash() );
     int a = 1;
-  //m_idHash += 31 * m_argumentList.count();
 
-    m_valueHash = 27 * ( fastHashString( definition ) +  (defined ? 1 : 0 ) );
+    m_valueHash = 27 * ( hashContents( definition ) +  (defined ? 1 : 0 ) );
 
-    for( QList<QByteArray>::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
+    for( QVector<uint>::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
         a *= 19;
-        m_valueHash += a * fastHashString( *it );
+        m_valueHash += a * (*it);
     }
     m_valueHashValid = true;
-    m_idHashValid = true;
 }

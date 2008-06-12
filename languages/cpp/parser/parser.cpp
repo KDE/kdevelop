@@ -28,6 +28,7 @@
 #include <hashedstring.h>
 #include <cstdlib>
 #include <iostream>
+#include "rpp/chartools.h"
 
 #define ADVANCE(tk, descr) \
 { \
@@ -231,6 +232,8 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   return ast;
 }
 
+KDevelop::IndexedString declSpecString("__declspec");
+
 bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 {
   if (session->token_stream->lookAhead() != Token_identifier)
@@ -238,8 +241,8 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   std::size_t start = session->token_stream->cursor();
 
-  QString name = session->token_stream->token(session->token_stream->cursor()).symbol();
-  if (name != QLatin1String("__declspec"))
+  KDevelop::IndexedString name = session->token_stream->token(session->token_stream->cursor()).symbol();
+  if (name != declSpecString)
     return false;
   std::size_t specifier = session->token_stream->cursor();
 
@@ -517,6 +520,10 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 {
   _M_problem_count = 0;
 
+/*  kDebug() << "tokens:";
+  for(size_t a = 0; a < session->token_stream->size(); ++a)
+    kDebug() << token_name(session->token_stream->token(a).kind) << session->token_stream->token(a).symbolString();*/
+  
   std::size_t start = session->token_stream->cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
 

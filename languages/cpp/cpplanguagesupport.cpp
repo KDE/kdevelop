@@ -110,9 +110,9 @@ using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
 
-QList<KUrl> convertToUrls(const QList<HashedString>& stringList) {
+QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   QList<KUrl> ret;
-  foreach(const HashedString& str, stringList)
+  foreach(const IndexedString& str, stringList)
     ret << KUrl(str.str());
   return ret;
 }
@@ -144,7 +144,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_highlights = new CppHighlighting( this );
     m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
-    m_standardMacros = new Cpp::MacroRepository::LazySet( &Cpp::EnvironmentManager::m_macroRepository, &Cpp::EnvironmentManager::m_repositoryMutex );
+    m_standardMacros = new Cpp::LazyMacroSet( &Cpp::EnvironmentManager::macroSetRepository );
     m_standardIncludePaths = new QStringList;
     m_environmentManager = new Cpp::EnvironmentManager;
     m_environmentManager->setSimplifiedMatching(true); ///@todo Make simplified matching optional. Before that, make it work.
@@ -421,7 +421,7 @@ CppLanguageSupport::~CppLanguageSupport()
 #endif
 }
 
-const Cpp::MacroRepository::LazySet& CppLanguageSupport::standardMacros() const {
+const Cpp::LazyMacroSet& CppLanguageSupport::standardMacros() const {
     return *m_standardMacros;
 }
 
@@ -444,7 +444,7 @@ void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
     kDebug( 9007 ) << "CppLanguageSupport::documentLoaded";
 
     EditorIntegrator editor;
-    editor.setCurrentUrl(doc->url().prettyUrl());
+    editor.setCurrentUrl(doc->url().pathOrUrl());
 
     QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(doc->url());
 
@@ -596,7 +596,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                 newProblem->setSource(KDevelop::Problem::Preprocessor);
                 newProblem->setDescription(i18n("Build-manager for project %1 did not return a build-directory", projectName));
                 newProblem->setExplanation(i18n("The include-path resolver needs the build-directory to resolve additional include paths. Consider setting up a build-directory in the project manager if you haven't done so yet."));
-                newProblem->setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
                 (*problems) << KDevelop::ProblemPointer(newProblem);
             }
             m_includeResolver->resetOutOfSourceBuild();
@@ -628,14 +628,14 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                           allPaths << r;
                         hasPath.insert(r);
                         
-                        kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.prettyUrl();
+                        kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.pathOrUrl();
 
                         if( problems ) {
                           KDevelop::Problem p;
                           p.setSource(KDevelop::Problem::Preprocessor);
                           p.setDescription(i18n("Build-manager did not return an include-path" ));
-                          p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.prettyUrl()));
-                          p.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                          p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.pathOrUrl()));
+                          p.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
                           *problems << KDevelop::ProblemPointer( new KDevelop::Problem(p) );
                         }
                     }
@@ -644,7 +644,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                 if( hadMissingPath ) {
                     QString paths;
                     foreach( const KUrl& u, allPaths )
-                        paths += u.prettyUrl() + "\n";
+                        paths += u.pathOrUrl() + "\n";
                     
                     kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
                 }
@@ -653,8 +653,8 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem.setSource(KDevelop::Problem::Preprocessor);
             problem.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
-            problem.setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.prettyUrl(), result.longErrorMessage));
-            problem.setFinalLocation(DocumentRange(source.prettyUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+            problem.setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
+            problem.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
         }
     }
 
@@ -870,7 +870,7 @@ QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const
   if(!found.first.second.isValid())
     return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
 
-  HashedString word(found.first.first);
+  IndexedString word(found.first.first);
   SimpleRange wordRange(found.first.second);
 
   //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
@@ -893,7 +893,7 @@ QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const
 
   //We need to do a flat search through all macros here, which really hurts
 
-  Cpp::MacroRepositoryIterator it = p->usedMacros().iterator();
+  Cpp::MacroSetIterator it = p->usedMacros().iterator();
   
   while(it) {
     if((*it).name == word && !(*it).isUndef())

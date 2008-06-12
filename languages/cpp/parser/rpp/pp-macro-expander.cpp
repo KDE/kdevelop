@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include <iproblem.h>
+#include <indexedstring.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"
@@ -36,14 +37,31 @@
 #include "preprocessor.h"
 #include "chartools.h"
 
-QString joinByteArray(const QList<QByteArray>& arrays, QString between) {
+using namespace KDevelop;
+
+QString joinIndexVector(const QVector<uint>& arrays, QString between) {
   QString ret;
-  foreach(const QByteArray& array, arrays) {
+  foreach(uint item, arrays) {
     if(!ret.isEmpty())
       ret += between;
-    ret += QString::fromUtf8(array);
+    ret += IndexedString(item).str();
   }
   return ret;
+}
+
+void trim(QVector<uint>& array) {
+  int lastValid = array.size()-1;
+  for(; lastValid >= 0; --lastValid)
+    if(array[lastValid] != indexFromCharacter(' '))
+      break;
+  
+  array.resize(lastValid+1);
+  
+  int firstValid = 0;
+  for(; firstValid < array.size(); ++firstValid)
+    if(array[firstValid] != indexFromCharacter(' '))
+      break;
+  array = array.mid(firstValid);
 }
 
 using namespace rpp;              
@@ -54,32 +72,32 @@ pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals
 {
 }
 
-pp_actual pp_macro_expander::resolve_formal(const QByteArray& name, Stream& input)
+pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
 {
   if (!m_frame)
     return pp_actual();
 
   Q_ASSERT(m_frame->expandingMacro != 0);
 
-  const QList<QByteArray>& formals = m_frame->expandingMacro->formals;
+  const QVector<uint>& formals = m_frame->expandingMacro->formals;
 
   if(name.isEmpty()) {
     KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
     problem.setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
     return pp_actual();
   }
   
   for (int index = 0; index < formals.size(); ++index) {
-    if (name == formals[index]) {
+    if (name.index() == formals[index]) {
       if (index < m_frame->actuals.size())
         return m_frame->actuals[index];
       else {
         KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-        problem.setDescription(i18n("Call to macro %1 missing argument number %2", QString::fromUtf8(name), index));
-        problem.setExplanation(i18n("Formals: %1", joinByteArray(formals, ", ")));
+        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem.setDescription(i18n("Call to macro %1 missing argument number %2", IndexedString(name).str(), index));
+        problem.setExplanation(i18n("Formals: %1", joinIndexVector(formals, ", ")));
         m_engine->problemEncountered(problem);
       }
     }
@@ -120,6 +138,12 @@ struct EnableMacroExpansion {
   bool hadMacroExpansion;
 };
 
+IndexedString definedIndex = IndexedString("defined");
+IndexedString lineIndex = IndexedString("__LINE__");
+IndexedString fileIndex = IndexedString("__FILE_");
+IndexedString dateIndex = IndexedString("__DATE__");
+IndexedString timeIndex= IndexedString("__TIME__");
+
 void pp_macro_expander::operator()(Stream& input, Stream& output)
 {
   skip_blanks(input, output);
@@ -141,14 +165,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       }
       else if (input == '#')
       {
+        Q_ASSERT(isCharacter(input.current()));
+        Q_ASSERT(IndexedString(input.current()).str() == "#");
         skip_blanks(++input, output);
 
-        QByteArray identifier = skip_identifier(input);
+        IndexedString identifier( skip_identifier(input) );
 
         Anchor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-        QByteArray formal = resolve_formal(identifier, input).mergeText();
-        formal = formal.replace( "\"", "\\\"" ); //Escape so we don't break on '"'
+        PreprocessedContents formal = resolve_formal(identifier, input).mergeText();
+        
+        //Escape so we don't break on '"'
+        for(int a = formal.count()-1; a >= 0; --a)
+          if(formal[a] == indexFromCharacter('\"'))
+            formal.insert(a, indexFromCharacter('\\'));
 
         if (!formal.isEmpty()) {
           Stream is(&formal, inputPosition);
@@ -206,13 +236,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         skip_number (input, output);
       }
-      else if (isLetter(input.current()) || input == '_')
+      else if (isLetter(input.current()) || input == '_' || !isCharacter(input.current()))
       {
         check_header_section
         
         Anchor inputPosition = input.inputPosition();
-        QByteArray name = skip_identifier (input);
-
+        IndexedString name(skip_identifier (input));
         // search for the paste token
         int blankStart = input.offset();
         skip_blanks (input, devnull());
@@ -233,7 +262,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
           
-          QList<QByteArray>::const_iterator textIt = actual.text.begin();
+          QList<PreprocessedContents>::const_iterator textIt = actual.text.begin();
           QList<Anchor>::const_iterator cursorIt = actual.inputPosition.begin();
 
           for( ; textIt != actual.text.end(); ++textIt, ++cursorIt )
@@ -249,16 +278,16 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_macro* macro = m_engine->environment()->retrieveMacro(name);
         if (!macro || !macro->defined || macro->hidden || m_engine->hideNextMacro())
         {
-          m_engine->setHideNextMacro(name == "defined");
+          m_engine->setHideNextMacro(name == definedIndex);
 
-          if (name == "__LINE__")
-            output.appendString(inputPosition, QString::number(input.inputPosition().line).toUtf8());
-          else if (name == "__FILE__")
-            output.appendString(inputPosition, QString("\"%1\"").arg(m_engine->currentFile()).toUtf8());
-          else if (name == "__DATE__")
-            output.appendString(inputPosition, QDate::currentDate().toString("MMM dd yyyy").toUtf8());
-          else if (name == "__TIME__")
-            output.appendString(inputPosition, QTime::currentTime().toString("hh:mm:ss").toUtf8());
+          if (name == lineIndex)
+            output.appendString(inputPosition, convertFromByteArray(QString::number(input.inputPosition().line).toUtf8()));
+          else if (name == fileIndex)
+            output.appendString(inputPosition, convertFromByteArray(QString("\"%1\"").arg(m_engine->currentFileNameString()).toUtf8()));
+          else if (name == dateIndex)
+            output.appendString(inputPosition, convertFromByteArray(QDate::currentDate().toString("MMM dd yyyy").toUtf8()));
+          else if (name == timeIndex)
+            output.appendString(inputPosition, convertFromByteArray(QTime::currentTime().toString("hh:mm:ss").toUtf8()));
           else
             output.appendString(inputPosition, name);
           continue;
@@ -275,7 +304,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             pp_macro_expander expand_macro(m_engine);
             Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
             ms.setOriginalInputPosition(input.originalInputPosition());
-            QByteArray expanded;
+            PreprocessedContents expanded;
             {
               Stream es(&expanded);
               expand_macro(ms, es);
@@ -286,7 +315,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               Stream es(&expanded, Anchor(input.inputPosition(), true));
               es.setOriginalInputPosition(input.originalInputPosition());
               skip_whitespaces(es, devnull());
-              QByteArray identifier = skip_identifier(es);
+              IndexedString identifier( skip_identifier(es) );
 
               pp_macro* m2 = 0;
               if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
@@ -327,25 +356,25 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         {
           actual.clear();
 
-          QByteArray actualText;
+          PreprocessedContents actualText;
           skip_whitespaces(input, devnull());
           Anchor actualStart = input.inputPosition();
           {
             Stream as(&actualText);
             skip_argument_variadics(actuals, macro, input, as);
           }
-          actualText = actualText.trimmed();
+          trim(actualText);
 
           if (input.offset() != before)
           {
             pp_actual newActual;
             {
-              QByteArray newActualText;
+              PreprocessedContents newActualText;
               Stream as(&actualText, actualStart);
               as.setOriginalInputPosition(input.originalInputPosition());
 
               rpp::LocationTable table;
-              table.anchor(0, actualStart);
+              table.anchor(0, actualStart, 0);
               Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
               
@@ -362,24 +391,24 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input; // skip ','
 
           {
-            QByteArray actualText;
+            PreprocessedContents actualText;
             skip_whitespaces(input, devnull());
             Anchor actualStart = input.inputPosition();
             {
               Stream as(&actualText);
               skip_argument_variadics(actuals, macro, input, as);
             }
-            actualText = actualText.trimmed();
+            trim(actualText);
 
             pp_actual newActual;
             {
-              QByteArray newActualText;
+              PreprocessedContents newActualText;
               Stream as(&actualText, actualStart);
               as.setOriginalInputPosition(input.originalInputPosition());
 
-              QByteArray actualText;
+              PreprocessedContents actualText;
               rpp::LocationTable table;
-              table.anchor(0, actualStart);
+              table.anchor(0, actualStart, 0);
               Stream nas(&newActualText, actualStart, &table);
               expand_actual(as, nas);
               

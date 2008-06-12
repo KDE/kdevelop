@@ -56,7 +56,7 @@ private:
 class pp_skip_identifier
 {
 public:
-  QByteArray operator()(Stream& input);
+  uint operator()(Stream& input);
 };
 
 class pp_skip_number
@@ -84,7 +84,7 @@ public:
   void operator()(Stream& input, Stream& output);
 
 private:
-  pp_skip_identifier skip_number;
+  pp_skip_number skip_number;
   pp_skip_identifier skip_identifier;
   pp_skip_string_literal skip_string_literal;
   pp_skip_char_literal skip_char_literal;

@@ -26,8 +26,9 @@
 
 #include <kprocess.h>
 #include <kdebug.h>
+#include <parser/rpp/chartools.h>
 
-#include "macroset.h"
+using namespace KDevelop;
 
 namespace CppTools {
 
@@ -97,7 +98,11 @@ bool setupStandardIncludePaths(QStringList& includePaths)
     }
 }
 
-bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
+PreprocessedContents asBody(const char* lhs) {
+  return convertFromByteArray(QByteArray(lhs));
+}
+
+bool setupStandardMacros(Cpp::LazyMacroSet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
     //Used in several headers like sys/time.h
@@ -107,21 +112,21 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
     {
       //Used in several headers like sys/time.h
       rpp::pp_macro m("__const");
-      m.definition = "const";
+      m.definition = asBody( "const" );
       macros.insert( m );
     }
     {
       rpp::pp_macro m("__null");
-      m.definition = "0";
+      m.definition = asBody( "0" );
       macros.insert( m );
     }
 
     {
       //Used in several gcc headers
       rpp::pp_macro m("__inline");
-      m.definition = "inline";
+      m.definition = asBody( "inline" );
       macros.insert( m );
-      m.name = KDevelop::HashedString("__always_inline");
+      m.name = IndexedString("__always_inline");
       macros.insert( m );
     }
 
@@ -130,7 +135,7 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
       //If we wouldn't need this, macros could be more transparent.
       rpp::pp_macro m("__attribute__");
       m.function_like = true;
-      m.formals << QByteArray("param");
+      m.formals << IndexedString("param").index();
       macros.insert( m );
     }
     
@@ -155,10 +160,10 @@ bool setupStandardMacros(Cpp::MacroRepository::LazySet& macros)
                     int pos = line.indexOf(' ');
                     rpp::pp_macro macro;
                     if (pos != -1) {
-                        macro.name = line.left(pos);
-                        macro.definition = line.right(line.length() - pos - 1).toUtf8();
+                        macro.name = IndexedString( line.left(pos) );
+                        macro.definition = asBody( line.right(line.length() - pos - 1).toUtf8() );
                     } else {
-                        macro.name = line;
+                        macro.name = IndexedString( line );
                     }
                     macros.insert(macro);
                 }

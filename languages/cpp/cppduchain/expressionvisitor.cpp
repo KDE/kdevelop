@@ -87,11 +87,20 @@ namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
 
-bool isNumber( const QString& str ) {
+bool isNumber( const IndexedString& str ) {
+  static IndexedString _0("0");
+  static IndexedString _1("1");
+  static IndexedString _2("2");
+  static IndexedString _3("3");
+  static IndexedString _4("4");
+  static IndexedString _5("5");
+  static IndexedString _6("6");
+  static IndexedString _7("7");
+  static IndexedString _8("8");
+  static IndexedString _9("9");
   if( str.isEmpty() )
     return false;
-    QChar c = str[0];
-    return c == '0' || c == '1' || c == '2' || c == '3' || c == '4'|| c == '5'|| c == '6'|| c == '7'|| c == '8'|| c == '9';
+  return str == _0 || str == _1 || str == _2 || str == _3 || str == _4 || str == _5 || str == _6 || str == _7 || str == _8 || str == _9;
 }
 
 QHash<int, QString> initOperatorNames() {
@@ -534,14 +543,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     if( !node->literal && !node->sub_expression && !node->expression_statement && !node->name )
     {
-      QString symbol = tokenFromIndex(node->start_token).symbol();
-      
-      if( isNumber(symbol) )
+      IndexedString startNumber = IndexedString(m_session->contents()[tokenFromIndex(node->start_token).position]); //Extracts the first digit
+
+      if( isNumber(startNumber) )
       {
         QString num;
         for( size_t a = node->start_token; a < node->end_token; a++ )
-          num += tokenFromIndex(a).symbol();
-        
+          num += tokenFromIndex(a).symbolString();
         
         LOCKDUCHAIN;
         if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
@@ -785,7 +793,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   DelayedType::Ptr type(new DelayedType());
   QString id;
   for( size_t s = node->start_token; s < node->end_token; ++s )
-    id += m_session->token_stream->token(s).symbol();
+    id += m_session->token_stream->token(s).symbolString();
 
   QualifiedIdentifier ident( id );
   ident.setIsExpression( expression );

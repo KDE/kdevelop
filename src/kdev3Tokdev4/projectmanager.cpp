@@ -344,7 +344,7 @@ bool ProjectManager::loadProjectFile()
   QString path;
   if (!KIO::NetAccess::download(m_info->m_projectURL, path, 0)) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1", m_info->m_projectURL.prettyUrl()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.pathOrUrl()));
     return false;
   }
 
@@ -352,7 +352,7 @@ bool ProjectManager::loadProjectFile()
   if (!fin.open(QIODevice::ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1", m_info->m_projectURL.prettyUrl()));
+        i18n("Could not read project file: %1", m_info->m_projectURL.pathOrUrl()));
     return false;
   }
 

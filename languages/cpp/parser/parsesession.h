@@ -41,6 +41,8 @@ class pool;
 class TokenStream;
 class Token;
 
+typedef QVector<unsigned int> PreprocessedContents;
+
 namespace rpp { class MacroBlock; class LocationTable; }
 
 /// Contains everything needed to keep an AST useful once the rest of the parser
@@ -49,7 +51,7 @@ class KDEVCPPPARSER_EXPORT ParseSession
 {
 public:
   ///@todo Make stringUnifier unnecessary by moving the string-repository into the parser
-  ParseSession(QString (*stringUnifier) (const QString&) = 0);
+  ParseSession();
   ~ParseSession();
 
   /**
@@ -60,30 +62,28 @@ public:
    */
   rpp::Anchor positionAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
 
-  void setContents(const QByteArray& contents, rpp::LocationTable* locationTable, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
+  ///The contents must already be tokenized. Either by the preprocessor, or by tokenizeFromByteArray(..)
+  void setContents(const PreprocessedContents& contents, rpp::LocationTable* locationTable);
 
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
-  void setContentsAndGenerateLocationTable(const QByteArray& contents, const KDevelop::SimpleCursor& offset = KDevelop::SimpleCursor(0,0));
+  void setContentsAndGenerateLocationTable(const PreprocessedContents& contents);
 
-  void setUrl(const KDevelop::HashedString& url);
+  void setUrl(const KDevelop::HashedString& url); ///@todo change to IndexedString
   const KDevelop::HashedString& url() const;
 
-  /// This saves memory by sharing the strings using a global string repository
-  QString unify(const QString& str) const;
-  
-  const char *contents() const;
+  uint *contents();
+  const uint *contents() const;
+  const PreprocessedContents& contentsVector() const;
   std::size_t size() const;
   pool* mempool;
   TokenStream* token_stream;
 
   rpp::MacroBlock* macros;
-  KDevelop::SimpleCursor m_contentOffset; ///@todo remove
   KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:
-  QByteArray m_contents;
+  PreprocessedContents m_contents;
   rpp::LocationTable* m_locationTable;
-  QString (*m_unifier) (const QString&);
 };
 
 #endif

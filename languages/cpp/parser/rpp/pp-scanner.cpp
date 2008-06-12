@@ -21,6 +21,8 @@
 
 #include "pp-scanner.h"
 #include "chartools.h"
+#include <duchain/indexedstring.h>
+#include <QVarLengthArray>
 
 using namespace rpp;
 
@@ -124,21 +126,46 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
   }
 }
 
-QByteArray pp_skip_identifier::operator()(Stream& input)
+uint pp_skip_identifier::operator()(Stream& input)
 {
-  QByteArray identifier;
-  identifier.reserve(10);
+  QVarLengthArray<char, 100> identifier;
+  
+  KDevelop::IndexedString::RunningHash hash;
 
   while (!input.atEnd()) {
+    if(!isCharacter(input.current())) {
+      //Do a more complex merge, where also tokenized identifiers can be merged
+      KDevelop::IndexedString ret;
+      if(!identifier.isEmpty())
+        ret = KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash);
+      
+      while (!input.atEnd()) {
+        uint current = input.current();
+        
+        if (!isLetterOrNumber(current) && input != '_' && isCharacter(current))
+          break;
+        
+        if(ret.isEmpty())
+          ret = KDevelop::IndexedString(current); //The most common fast path
+        else ///@todo Be better to build up a complete buffer and then append it all, so we don't get he intermediate strings into the repository
+          ret = KDevelop::IndexedString(ret.byteArray() + KDevelop::IndexedString(input.current()).byteArray());
+        
+        ++input;
+      }
+      return ret.index();
+    }
+    //Collect characters and connect them to an IndexedString
+    
     if (!isLetterOrNumber(input.current()) && input != '_')
         break;
 
-    identifier.append(input);
+    char c = characterFromIndex(input);
+    hash.append(c);
+    identifier.append(c);
     ++input;
   }
 
-  identifier.squeeze();
-  return identifier;
+  return KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash).index();
 }
 
 void pp_skip_number::operator()(Stream& input, Stream& output)
@@ -265,12 +292,12 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
 
     } else if (isLetter(input.current()) || input == '_') {
       Anchor inputPosition = input.inputPosition();
-      output.appendString(inputPosition, skip_identifier(input));
+      output.appendString(inputPosition, KDevelop::IndexedString(skip_identifier(input)));
       continue;
 
     } else if (isNumber(input.current())) {
-      Anchor inputPosition = input.inputPosition();
-      output.appendString(inputPosition, skip_number(input));
+      output.mark(input.inputPosition());
+      skip_number(input, output);
       continue;
 
     }

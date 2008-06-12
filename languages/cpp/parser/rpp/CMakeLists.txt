@@ -13,6 +13,7 @@ set(kdevcpprpp_LIB_SRCS
     pp-environment.cpp
     pp-location.cpp
     preprocessor.cpp
+    chartools.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

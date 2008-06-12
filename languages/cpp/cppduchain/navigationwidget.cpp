@@ -48,6 +48,7 @@
 #include "typeutils.h"
 #include "environmentmanager.h"
 #include "completionhelpers.h"
+#include "parser/rpp/chartools.h"
 
 using namespace KDevelop;
 using namespace rpp;
@@ -757,7 +758,7 @@ public:
   
     KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
-    makeLink(u.fileName(), u.prettyUrl(), action);
+    makeLink(u.fileName(), u.pathOrUrl(), action);
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
     m_currentText += "<br />";
     m_currentText += "path: " + u.pathOrUrl();
@@ -865,11 +866,11 @@ public:
       args = "(";
 
       bool first = true;
-      foreach(const QByteArray& b, m_macro.formals) {
+      foreach(uint b, m_macro.formals) {
         if(!first)
           args += ", ";
         first = false;
-        args += QString::fromUtf8(b);
+        args += IndexedString(b).str();
       }
 
       args += ")";
@@ -893,11 +894,11 @@ public:
       
       m_currentText += labelHighlight(i18n("Body:")) + "<br />";
 
-      m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(m_macro.definition)));
+      m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents(m_macro.definition))));
       m_currentText += "<br />";
     }
 
-    makeLink(u.pathOrUrl(), u.prettyUrl(), action);
+    makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
     
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;

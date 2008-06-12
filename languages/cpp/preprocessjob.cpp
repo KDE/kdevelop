@@ -58,7 +58,7 @@
 QString urlsToString(const QList<KUrl>& urlList) {
   QString paths;
   foreach( const KUrl& u, urlList )
-      paths += u.prettyUrl() + "\n";
+      paths += u.pathOrUrl() + "\n";
 
   return paths;
 }
@@ -107,7 +107,7 @@ void PreprocessJob::run()
     if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
             m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
-            HashedString u = parentJob()->document();
+            IndexedString u = parentJob()->document();
             m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
             m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
         }
@@ -199,7 +199,7 @@ void PreprocessJob::run()
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(HashedString(parentJob()->document().str()), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
 
         if(m_secondEnvironmentFile)
           parentJob()->setUpdatingProxyContext( updating ); //The content-context to be updated will be searched later
@@ -219,7 +219,7 @@ void PreprocessJob::run()
 
     preprocessor.environment()->enterBlock(parentJob()->masterJob()->parseSession()->macros);
 
-    QByteArray result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
+    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
 
     m_currentEnvironment->finish();
     
@@ -235,7 +235,7 @@ void PreprocessJob::run()
     }
 
     parentJob()->parseSession()->setContents( result, m_currentEnvironment->takeLocationTable() );
-    parentJob()->parseSession()->setUrl( parentJob()->document() );
+    parentJob()->parseSession()->setUrl( HashedString(parentJob()->document().str()) );
 
     if(m_secondEnvironmentFile)
       parentJob()->setProxyEnvironmentFile( m_firstEnvironmentFile.data() );
@@ -272,11 +272,11 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
 
 bool PreprocessJob::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths)
 {
-  if(file->modificationRevision() != KDevelop::EditorIntegrator::modificationRevision(file->url()))
+  if(file->modificationRevision() != KDevelop::EditorIntegrator::modificationRevision(HashedString(file->url().str())))
     return true;
 
     ///@todo model the include-logic exactly, and check modification-revisions of all actually included files
-  for( Cpp::StringSetRepository::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
+  for( Cpp::StringSetIterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
 
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( includePaths, localPath, (*it).str(), IncludeLocal, KUrl(), true );
     if(!included.first.isEmpty()) {
@@ -308,12 +308,12 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 
         m_currentEnvironment->setIdentityOffsetRestriction(m_secondEnvironmentFile->identityOffset());
         
-        HashedString u = parentJob()->document();
+        IndexedString u = parentJob()->document();
 
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
-        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
+        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(HashedString(u.str()), m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
 
         m_currentEnvironment->setIdentityOffsetRestriction(0);
 
@@ -356,9 +356,13 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
     }
 }
 
-rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
+rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {
     Q_UNUSED(type)
+    
+    KUrl fileNameUrl(_fileName);
+    
+    QString fileName = fileNameUrl.pathOrUrl();
     
     if (checkAbort())
         return 0;
@@ -377,7 +381,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
         
-        if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(HashedString(fileName)) ) {
+        if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
           //We are finding a file that was not in the include-path last time
           //All following contexts need to be updated, because they may contain references to missing declarations
           parentJob()->masterJob()->setNeedUpdateEverything( true );
@@ -435,7 +439,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
             slaveJob->setIncludedFromPath(included.second);
 
-            includeStack.append(DocumentCursor(parentJob()->document(), KTextEditor::Cursor(sourceLine, 0)));
+            includeStack.append(DocumentCursor(HashedString(parentJob()->document().str()), KTextEditor::Cursor(sourceLine, 0)));
             slaveJob->setIncludeStack(includeStack);
 
             slaveJob->parseForeground();
@@ -458,7 +462,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& fileName, IncludeType type, in
 
         ///@todo respect all the specialties like starting search at a specific path
         ///Before doing that, model findInclude(..) exactly after the standard
-        m_firstEnvironmentFile->addMissingIncludeFile(HashedString(fileName));
+        m_firstEnvironmentFile->addMissingIncludeFile(IndexedString(fileName));
     }
 
     return 0;

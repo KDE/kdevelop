@@ -19,6 +19,9 @@
 #include <QFile>
 
 #include <iostream>
+#include <rpp/chartools.h>
+#include <rpp/pp-engine.h>
+
 
 bool hasKind(AST*, AST::NODE_KIND);
 AST* getAST(AST*, AST::NODE_KIND, int num = 0);
@@ -293,19 +296,34 @@ private slots:
     //QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
   }
 
+  QString preprocess(const QString& contents) {
+    rpp::Preprocessor preprocessor;
+    rpp::pp pp(&preprocessor);
+    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", rpp::pp::Data, contents.toUtf8())));
+  }
+
   void testPreprocessor() {
     rpp::Preprocessor preprocessor;
-    QCOMPARE(preprocessor.processString("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
-    QCOMPARE(preprocessor.processString("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
-    QCOMPARE(preprocessor.processString("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
+    //QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
+    QCOMPARE(preprocess("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
+    QCOMPARE(preprocess("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
     
   }
   
   void testStringConcatenation()
   {
     rpp::Preprocessor preprocessor;
-    QCOMPARE(preprocessor.processString("Hello##You"), QString("HelloYou"));
-    QCOMPARE(preprocessor.processString("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )"), QString("\nHelloYou YouHello"));
+    QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )"), QString("\nHelloYou YouHello"));
+  }
+  
+  void testCondition()
+  {
+    QByteArray method("bool i = (small < big || big > small);");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    dumper.dump(ast, lastSession->token_stream);
+    ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
   }
   
   /*void testParseFile()
@@ -330,7 +348,7 @@ private:
   {
     Parser parser(&control);
     lastSession = new ParseSession();
-    lastSession->setContentsAndGenerateLocationTable(unit);
+    lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
     return  parser.parse(lastSession);
   }
 

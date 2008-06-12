@@ -28,7 +28,7 @@
 #include <cppparserexport.h>
 
 namespace KDevelop {
-  class HashedString;
+  class IndexedString;
 }
 
 namespace rpp {
@@ -47,8 +47,8 @@ public:
 
   QList<MacroBlock*> childBlocks;
 
-  // The condition that opened this block
-  QByteArray condition;
+  // The condition that opened this block(list of string indices)
+  QVector<uint> condition;
   // The block to use if this block's condition was not met
   MacroBlock* elseBlock;
 
@@ -62,7 +62,7 @@ public:
 class KDEVCPPRPP_EXPORT Environment
 {
 public:
-  typedef QHash<KDevelop::HashedString, pp_macro*> EnvironmentMap;
+  typedef QHash<KDevelop::IndexedString, pp_macro*> EnvironmentMap;
 
   Environment(pp* preprocessor);
   virtual ~Environment();
@@ -71,8 +71,8 @@ public:
   MacroBlock* currentBlock() const;
 
   void enterBlock(MacroBlock* block);
-  MacroBlock* enterBlock(int sourceLine, const QByteArray& condition);
-  MacroBlock* elseBlock(int sourceLine, const QByteArray& condition = QByteArray());
+  MacroBlock* enterBlock(int sourceLine, const QVector<uint>& condition = QVector<uint>());
+  MacroBlock* elseBlock(int sourceLine, const QVector<uint>& condition = QVector<uint>());
   void leaveBlock();
 
   // Replay previously saved blocks on this environment
@@ -83,15 +83,14 @@ public:
   // For those not interested in the result, just in getting memory released etc.
   void cleanup();
 
-  void clearMacro(const KDevelop::HashedString& name);
+  void clearMacro(const KDevelop::IndexedString& name);
 
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
-  virtual pp_macro* retrieveMacro(const KDevelop::HashedString& name) const;
-  pp_macro* retrieveMacro(const QByteArray& name) const;
+  virtual pp_macro* retrieveMacro(const KDevelop::IndexedString& name) const;
   
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
-  pp_macro* retrieveStoredMacro(const KDevelop::HashedString& name) const;
+  pp_macro* retrieveStoredMacro(const KDevelop::IndexedString& name) const;
   
   QList<pp_macro*> allMacros() const;
 

@@ -201,7 +201,7 @@ void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
 
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
-  m_editor->setCurrentUrl(file->url());
+  m_editor->setCurrentUrl(file->url().str());
 
   TopDUContext* topLevelContext = 0;
   {
@@ -254,7 +254,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
   
-  m_editor->setCurrentUrl(file->url());
+  m_editor->setCurrentUrl(file->url().str());
 
   TopDUContext* topLevelContext = 0;
   {
@@ -263,7 +263,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
     if( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() ) {
       lock.unlock();
-      kDebug() << "Smartening Context!";
+      kWarning() << "Smartening Context!";
       smartenContext(topLevelContext);
       lock.lock();
       topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
@@ -271,7 +271,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
     if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->flags() & TopDUContext::ProxyContextFlag))
       if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure
-        kDebug() << *topLevelContext->smartRange() << "erroneously has a parent range" << *topLevelContext->smartRange()->parentRange();
+        kWarning() << *topLevelContext->smartRange() << "erroneously has a parent range" << *topLevelContext->smartRange()->parentRange();
         Q_ASSERT(false);
       }
     

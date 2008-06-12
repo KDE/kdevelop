@@ -37,6 +37,7 @@
 #include "typerepository.h"
 #include "declarationbuilder.h"
 #include "expressionparser.h"
+#include "parser/rpp/chartools.h"
 #include "cppdebughelper.h"
 
 using namespace KDevelop;
@@ -44,7 +45,7 @@ using namespace KDevelop;
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
     int endPosition = session->token_stream->position(end_token);
-    return QString::fromUtf8( QByteArray(session->contents() + startPosition, endPosition - startPosition) ); ///@todo Exact encoding?
+    return QString::fromUtf8( stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition) );
 }
 
 TypeBuilder::TypeBuilder(ParseSession* session)

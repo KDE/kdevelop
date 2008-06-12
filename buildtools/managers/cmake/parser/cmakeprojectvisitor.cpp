@@ -355,10 +355,10 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                 m_topctx=DUChain::self()->chainForDocument(KUrl(include.first().filePath));
                 if(m_topctx==0)
                 {
-                    m_topctx=new TopDUContext(HashedString(KUrl(include.first().filePath).prettyUrl()),
+                    m_topctx=new TopDUContext(HashedString(KUrl(include.first().filePath).pathOrUrl()),
                             SimpleRange(0,0, include.last().endColumn, include.last().endLine));
                     DUChain::self()->addDocumentChain(
-                        IdentifiedFile(HashedString(KUrl(include.first().filePath).prettyUrl())), m_topctx);
+                        IdentifiedFile(HashedString(KUrl(include.first().filePath).pathOrUrl())), m_topctx);
                     
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
                 }
@@ -416,7 +416,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
-            path=KUrl(path).prettyUrl();
+            path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
             TopDUContext *aux=m_topctx;
             {
@@ -1629,10 +1629,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         m_topctx=DUChain::self()->chainForDocument(KUrl(fc[0].filePath));
         if(m_topctx==0)
         {
-            m_topctx=new TopDUContext(HashedString(KUrl(fc[0].filePath).prettyUrl()),
+            m_topctx=new TopDUContext(HashedString(KUrl(fc[0].filePath).pathOrUrl()),
                     SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
             
-            DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).prettyUrl())), m_topctx);
+            DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).pathOrUrl())), m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
         }
         else

@@ -34,6 +34,8 @@
 #include "pp-macro-expander.h"
 #include "pp-scanner.h"
 
+typedef QVector<unsigned int> PreprocessedContents;
+
 namespace rpp {
 
 class Preprocessor;
@@ -114,6 +116,7 @@ struct Value
 #undef PP_DEFINE_BIN_OP
 };
 
+
 class KDEVCPPRPP_EXPORT pp
 {
   Environment* m_environment;
@@ -122,7 +125,7 @@ class KDEVCPPRPP_EXPORT pp
   pp_skip_comment_or_divop skip_comment_or_divop;
   pp_skip_blanks skip_blanks;
   pp_skip_number skip_number;
-  QStack<QString> m_files;
+  QStack<KDevelop::IndexedString> m_files;
   Preprocessor* m_preprocessor;
   QList<KDevelop::ProblemPointer> m_problems;
 
@@ -138,11 +141,12 @@ class KDEVCPPRPP_EXPORT pp
     long token_value;
     unsigned long token_uvalue;
   };
-  QByteArray token_text;
+  KDevelop::IndexedString token_text;
 
   enum TOKEN_TYPE
   {
-    TOKEN_NUMBER = 1000,
+    TOKENS_START = 1000,
+    TOKEN_NUMBER,
     TOKEN_UNUMBER,
     TOKEN_IDENTIFIER,
     TOKEN_DEFINED,
@@ -153,22 +157,8 @@ class KDEVCPPRPP_EXPORT pp
     TOKEN_EQ_EQ,
     TOKEN_NOT_EQ,
     TOKEN_OR_OR,
-    TOKEN_AND_AND
-  };
-
-  enum PP_DIRECTIVE_TYPE
-  {
-    PP_UNKNOWN_DIRECTIVE,
-    PP_DEFINE,
-    PP_INCLUDE,
-    PP_INCLUDE_NEXT,
-    PP_ELIF,
-    PP_ELSE,
-    PP_ENDIF,
-    PP_IF,
-    PP_IFDEF,
-    PP_IFNDEF,
-    PP_UNDEF
+    TOKEN_AND_AND,
+    TOKENS_END
   };
 
 public:
@@ -179,7 +169,10 @@ public:
 
   enum StringType { File, Data };
 
-  inline QString currentFileName () const { return m_files.top(); }
+  ///@todo Remove
+  inline QString currentFileNameString () const { return m_files.top().str(); }
+  
+  inline KDevelop::IndexedString currentFileName () const { return m_files.top(); }
 
   Value eval_expression (Stream& input);
 
@@ -188,8 +181,8 @@ public:
    * The file-name is needed so macros can be correctly marked.
    * Currently the file is expected to be utf8-encoded.
    * */
-  QByteArray processFile(const QString& fileName, StringType stringType, const QByteArray& data = QByteArray());
-  QByteArray processFile(QIODevice* input);
+  PreprocessedContents processFile(const QString& fileName, StringType stringType, const QByteArray& data = QByteArray());
+  PreprocessedContents processFile(QIODevice* input);
 
   void operator () (Stream& input, Stream& output);
 
@@ -201,8 +194,6 @@ public:
   Environment* environment() const;
   // once set, belongs to the engine
   void setEnvironment(Environment* env);
-
-  QString currentFile() const;
 
   const QList<KDevelop::ProblemPointer>& problems() const;
   void problemEncountered(const KDevelop::Problem& problem);
@@ -218,8 +209,6 @@ private:
 
   void createProblem(Stream& input, const QString& description);
   
-  PP_DIRECTIVE_TYPE find_directive (const QByteArray& directive) const;
-
   void skip(Stream& input, Stream& output, bool outputText = true);
 
   Value eval_primary(Stream& input);
@@ -246,7 +235,7 @@ private:
 
   Value eval_constant_expression(Stream& input);
 
-  void handle_directive(const QByteArray& directive, Stream& input, Stream& output);
+  void handle_directive(uint directive, Stream& input, Stream& output);
 
   void handle_include(bool skip_current_path, Stream& input, Stream& output);
 

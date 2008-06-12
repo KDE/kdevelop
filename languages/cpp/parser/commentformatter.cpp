@@ -21,6 +21,7 @@
 #include <QStringList>
 #include "parsesession.h"
 #include "lexer.h"
+#include "rpp/chartools.h"
 
 void CommentFormatter::rStrip( const QString& str, QString& from ) {
   if( str.isEmpty() ) return;
@@ -74,7 +75,7 @@ QString CommentFormatter::formatComment( size_t token, const ParseSession* sessi
   if( !token )
     return QString();
   const Token& commentToken( (*session->token_stream)[token] );
-  return formatComment( commentToken.symbol() );
+  return formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
 }
 
 QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {
