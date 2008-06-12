@@ -23,12 +23,13 @@
 
 #include <QXmlStreamReader>
 #include "qtestresult.h"
-#include "qtestitem.h"
 
 class QIODevice;
 
 namespace QxQTest
 {
+
+class QTestCase;
 
 class QTestOutputParser : public QXmlStreamReader
 {
@@ -37,17 +38,12 @@ public:
     virtual ~QTestOutputParser();
 
     /**
-     * Start parsing & return the testresult
-     **/
-    QTestResult go();
-
-    /**
      * Start parsing the output of a whole
      * testcase and emit results
      **/
-    void goAsync(QTestItem* caze);
+    void go(QTestCase* caze);
 
-private:
+private: // helpers
     void processTestFunction();
     void fillResult();
     void setFailure();
@@ -55,8 +51,9 @@ private:
 
     inline bool isStartElement_(const QString& elem);
     inline bool isEndElement_(const QString& elem);
+    inline bool fixtureFailed(const QString&);
 
-private:
+private: // state
     QTestResult m_result;
 
     // remember state to continue when parsing
@@ -65,7 +62,7 @@ private:
     bool m_fillingResult;
     bool m_settingFailure;
 
-    // some xml constants
+private:    // some xml constants
     static const QString c_testfunction;
     static const QString c_incident;
     static const QString c_description;
@@ -74,6 +71,8 @@ private:
     static const QString c_line;
     static const QString c_pass;
     static const QString c_fail;
+    static const QString c_initTestCase;
+    static const QString c_cleanupTestCase;
 };
 
 }

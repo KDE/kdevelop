@@ -24,6 +24,7 @@
 #include <QString>
 #include <QFileInfo>
 #include "qtestbase.h"
+#include "qtestresult.h"
 
 namespace QxQTest
 {
@@ -36,7 +37,7 @@ public:
     QTestCommand(const QString&, QTestBase*);
     virtual ~QTestCommand();
 
-    QString command();
+    QString command(); // dead code
 };
 
 } // end namespace QxQTest

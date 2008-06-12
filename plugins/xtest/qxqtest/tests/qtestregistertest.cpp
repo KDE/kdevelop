@@ -33,6 +33,7 @@
 
 using QxQTest::QTestRegister;
 using QxQTest::QTestSuite;
+using QxQTest::QTestBase;
 using QxQTest::QTestCase;
 using QxQTest::QTestCommand;
 using QxQTest::ut::QTestRegisterTest;
@@ -49,6 +50,14 @@ using QxQTest::ut::QTestRegisterTest;
 //    </case>
 //  </suite>
 // </root>
+
+namespace QTest
+{
+    template<> inline char* toString(const QTestBase& tb)
+    {
+        return qstrdup(tb.name().toLatin1().constData());
+    }
+}
 
 namespace
 {
@@ -81,7 +90,7 @@ void QTestRegisterTest::compareSuites(QTestSuite* exp, QTestSuite* actual)
 {
     KOMPARE(exp->name(), actual->name());
     KOMPARE(exp->path(), actual->path());
-    KOMPARE(exp->parent(), actual->parent());
+    KOMPARE(exp->owner(), actual->owner());
 }
 
 void QTestRegisterTest::parseSuiteXml()
@@ -90,8 +99,8 @@ void QTestRegisterTest::parseSuiteXml()
     registerTests(xml);
 
     KOMPARE(1, reg->testSuiteCount());
-    QTestSuite expected("suite1", QFileInfo("/a/b"), 0);
-    compareSuites(&expected, reg->takeSuite(0));
+    QTestSuite* expected = new QTestSuite("suite1", QFileInfo("/a/b"), reg->rootItem());
+    compareSuites(expected, reg->takeSuite(0));
     KOMPARE(0, reg->takeSuite(0)->childCount());
 }
 void QTestRegisterTest::parseMultiSuitesXml()
@@ -101,11 +110,11 @@ void QTestRegisterTest::parseMultiSuitesXml()
 
     KOMPARE(2, reg->testSuiteCount());
     // suite1
-    QTestSuite exp1("suite1", QFileInfo("/a/b"), 0);
+    QTestSuite exp1("suite1", QFileInfo("/a/b"), reg->rootItem());
     compareSuites(&exp1, reg->takeSuite(0));
     KOMPARE(0, reg->takeSuite(0)->childCount());
     // suite2
-    QTestSuite exp2("suite2", QFileInfo("/c/d"), 0);
+    QTestSuite exp2("suite2", QFileInfo("/c/d"), reg->rootItem());
     compareSuites(&exp2, reg->takeSuite(1));
     KOMPARE(0, reg->takeSuite(1)->childCount());
 }
@@ -114,7 +123,7 @@ void QTestRegisterTest::compareCase(QTestCase* expected, QTestCase* actual)
 {
     KOMPARE(expected->name(), actual->name());
     KOMPARE(expected->executable(),  actual->executable());
-    KOMPARE(expected->parent(), actual->parent());
+    KOMPARE(expected->owner(), actual->owner());
 }
 
 void QTestRegisterTest::parseCaseXml()

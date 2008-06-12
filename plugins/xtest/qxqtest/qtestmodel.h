@@ -44,11 +44,6 @@ public:
     QString about() const;
 
     void readTests(QIODevice* dev);
-
-private:
-    void addSuite(QxQTest::QTestSuite* suite);
-    void addCase(QxQTest::QTestCase* caze, QxRunner::RunnerItem* parent);
-    QxRunner::RunnerItem* addTestItem(QxQTest::QTestBase*, QxRunner::RunnerItem*);
 };
 
 } // namespace QxQTest

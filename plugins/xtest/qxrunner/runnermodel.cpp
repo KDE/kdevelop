@@ -717,29 +717,19 @@ void RunnerModel::runItem(const QModelIndex& index)
             break;  // Soft stop
         }
 
-        // Don't proceed until event is processed in main thread.
-        //mustWait(true);
-        //setMustWait(true);
-
         // Execute custom code.
         int res = 0;
         try {
-            item->setModel(this);
+            //item->setModel(this);
             res = item->run();
         } catch (...) {
             item->setResult(QxRunner::RunException);
             postItemCompleted(currentIndex);
         }
 
-        //if (res != NoResult)
-        //postItemCompleted(currentIndex);
-
         if (mustStop()) {
             break;  // Soft stop
         }
-
-        //if (res != NoResult)
-        //mustWait(true);
 
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
@@ -748,21 +738,17 @@ void RunnerModel::runItem(const QModelIndex& index)
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     // Send notification to main thread.
-    //setMustWait(true);
     ItemCompletedEvent* completedEvent;
     completedEvent = new ItemCompletedEvent(index);
     QCoreApplication::postEvent(this, completedEvent);
-    //mustWait(true);
 }
 
 void RunnerModel::postItemStarted(QModelIndex index)
 {
     // Send notification to main thread.
-    //setMustWait(true);
     ItemGetsStartedEvent* startedEvent;
     startedEvent = new ItemGetsStartedEvent(index);
     QCoreApplication::postEvent(this, startedEvent);
-    //mustWait(true);
 }
 
 void RunnerModel::emitItemResult(const QModelIndex& index)

@@ -22,41 +22,47 @@
 #include <QDebug>
 
 using QxQTest::QTestBase;
+using QxQTest::QTestResult;
+
+namespace
+{
+QList<QVariant> empty(const QString& name)
+{
+    return QList<QVariant>() << name << "" << "" << "" << "";
+}
+}
 
 QTestBase::QTestBase()
-    :  m_name(""), m_parent(0)
+    :  RunnerItem(empty("")), m_name(""), m_parent(0)
 {
 }
 
 QTestBase::QTestBase(const QString& name, QTestBase* parent)
-    : m_name(name), m_parent(parent)
+    : RunnerItem(empty(name), parent), m_name(name), m_parent(parent)
 {}
+
+QTestBase::QTestBase(const QList<QVariant>& data)
+    :  RunnerItem(data), m_name(""), m_parent(0)
+ {
+ }
+
 
 QTestBase::~QTestBase()
 {}
 
-QString QTestBase::name()
+QString QTestBase::name() const
 {
     return m_name;
 }
 
-QTestBase* QTestBase::parent()
+QTestBase* QTestBase::owner()
 {
     return m_parent;
 }
 
-void QTestBase::setName(const QString& name)
-{
-    m_name = name;
-}
-
-void QTestBase::setParent(QTestBase* parent)
-{
-    m_parent = parent;
-}
-
 void QTestBase::addTest(QTestBase* test)
 {
+    appendChild(test);
     m_children.push_back(test);
 }
 
@@ -70,4 +76,23 @@ unsigned QTestBase::childCount()
     return m_children.count();
 }
 
-#include "qtestbase.moc"
+QTestResult QTestBase::result_()
+{
+    QTestResult res;
+    res.setState(QxRunner::RunnerResult(result()));
+    res.setMessage(data(2).toString());
+    res.setFile(QFileInfo(data(3).toString()));
+    kDebug() << res.file().filePath();
+    res.setLine(data(4).toInt());
+    return res;
+}
+
+void QTestBase::setResult_(QTestResult& res)
+{
+    setData(2, res.message());
+    kDebug() << res.file().filePath();
+    setData(3, res.file().filePath());
+    kDebug() << data(3);
+    setData(4, res.line());
+    setResult(res.state());
+}

@@ -25,6 +25,11 @@
 
 namespace QxQTest
 {
+class QTestCase;
+}
+
+namespace QxQTest
+{
 namespace ut {
 
 class QTestOutputParserTest : public QObject
@@ -32,16 +37,21 @@ class QTestOutputParserTest : public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
+    void init();
+    void cleanup();
     void parse_data();
     void parse();
+    void initFailure();
+    void cleanupFailure();
 
 private:
     void setupColumns();
     void addSunnyDayData();
     void addBasicFailureData();
-    void addInitFailureData();
-    void addCleanupFailureData();
-    void constructFailureRow(QString name, QByteArray xml);
+
+private:
+    QTestCase* m_caze;
 };
 
 }

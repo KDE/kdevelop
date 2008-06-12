@@ -40,8 +40,12 @@ public:
 
     QTestCommand* testAt(unsigned i);
     QFileInfo executable();
-
+    QTestCommand* findTestNamed(const QString& name);
     void setExecutable(const QFileInfo&);
+
+    // RunnerItem stuff
+    int run();
+    bool isRunnable() { return true; }
 
 private:
     QFileInfo m_exe;

@@ -27,6 +27,7 @@
 using QxQTest::QTestCommand;
 using QxQTest::QTestBase;
 using QxQTest::QTestCase;
+using QxQTest::QTestResult;
 using QxQTest::QTestSuite;
 
 QTestCommand::QTestCommand()
@@ -42,20 +43,14 @@ QTestCommand::~QTestCommand()
 
 QString QTestCommand::command()
 {
-    // TODO get rid of all these casts
     QFileInfo cmd;
-    QTestBase* caze = parent();
+    QTestBase* caze = owner();
     if (caze == 0 || qobject_cast<QTestCase*>(caze) == 0)
             return "";
     cmd = qobject_cast<QTestCase*>(caze)->executable();
 
-//     QTestBase* suite = caze->parent();
-//     if(suite != 0 && qobject_cast<QTestSuite*>(suite) != 0)
-//     {
-//         QDir path = QDir(qobject_cast<QTestSuite*>(suite)->path().filePath());
-//         cmd.setFile(path, cmd.filePath());
-//     }
     return cmd.filePath() + ' ' + name();
 }
+
 
 #include "qtestcommand.moc"

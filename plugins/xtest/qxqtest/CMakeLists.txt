@@ -22,7 +22,6 @@ set(qxqtest_SRCS
     qtestbase.cpp
     qtestsuite.cpp
     qtestregister.cpp
-    qtestitem.cpp
     qtestmodel.cpp
     testrunner.cpp)
 

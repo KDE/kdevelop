@@ -55,9 +55,9 @@ void QTestRunnerTest::test()
 {
     RunnerWindow win;
     runUI(&win);
-    checkStatusWidget(win.statusWidget());
     checkRunnerItems(win.ui().treeRunner->model());
     checkResultItems(win.ui().treeResults->model());
+    checkStatusWidget(win.statusWidget());
 }
 
 // data

@@ -159,19 +159,10 @@ public: // Operations
     /*!
      * Default to running leaves
      */
-    virtual bool isRunnable()
-    {
-        return (m_childItems.count() == 0);
-    }
+    virtual bool isRunnable();
+    void setIndex(QModelIndex index);
+    QModelIndex index();
 
-    void setIndex(QModelIndex index) {
-        m_index = index;
-    }
-    QModelIndex index() {
-        return m_index;
-    }
-
-    void setModel(RunnerModel* model);
     void signalCompleted(QModelIndex);
     void signalStarted(QModelIndex);
 

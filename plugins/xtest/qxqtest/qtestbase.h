@@ -21,9 +21,12 @@
 #ifndef QXQTEST_QTESTBASE_H
 #define QXQTEST_QTESTBASE_H
 
+#include <qxrunner/runneritem.h>
+#include "qtestresult.h"
 #include <QList>
 #include <QString>
 #include <QFileInfo>
+
 
 namespace QxQTest
 {
@@ -31,22 +34,25 @@ namespace QxQTest
 /**
  * Base for QTestCase, QTestCommand, QTestSuite
  **/
-class QTestBase : public QObject
+class QTestBase : public QxRunner::RunnerItem
 {
-Q_OBJECT
 public:
     QTestBase();
     QTestBase(const QString&, QTestBase* parent);
+    QTestBase(const QList<QVariant>& data); // root
     virtual ~QTestBase();
 
-    QString name();
-    QTestBase* parent();
-
-    void setName(const QString&);
-    void setParent(QTestBase* parent);
+    QString name() const;
+    QTestBase* owner();
 
     void addTest(QTestBase*);
     unsigned childCount();
+    QTestResult result_();
+    void setResult_(QTestResult&);
+
+    // RunnerItem implementation. default to doing nadda
+    virtual int run() { return 0; }
+    virtual bool isRunnable() { return false; }
 
 protected:
     QTestBase* childAt(unsigned i);

@@ -89,3 +89,11 @@ void QTestResult::log()
     }
     kDebug() << result;
 }
+
+bool QTestResult::operator==(const QTestResult& other)
+{
+    return (m_state == other.m_state) &&
+            (m_file == other.m_file) &&
+            (m_line == other.m_line) &&
+            (m_message == other.m_message);
+}

@@ -44,27 +44,27 @@ void QTestCommandTest::construct()
 
 void QTestCommandTest::cmdString()
 {
-    QTestSuite suite("s1", QFileInfo("/a/b/"), 0);
-    QTestCase caze("c1", QFileInfo("c.sh"), &suite);
-    QTestCommand cmd("cmd", &caze);
-    suite.addTest(&caze);
-    caze.addTest(&cmd);
+    QTestSuite* suite = new QTestSuite("s1", QFileInfo("/a/b/"), 0);
+    QTestCase* caze = new QTestCase("c1", QFileInfo("c.sh"), suite);
+    QTestCommand* cmd = new QTestCommand("cmd", caze);
+    suite->addTest(caze);
+    caze->addTest(cmd);
 
-    KOMPARE("/a/b/c.sh cmd", cmd.command());
+    KOMPARE("/a/b/c.sh cmd", cmd->command());
 }
 
 void QTestCommandTest::cmdStringNoParent()
 {
-    QTestCommand cmd("cmd1", 0);
-    KOMPARE("", cmd.command());
+    QTestCommand* cmd = new QTestCommand("cmd1", 0);
+    KOMPARE("", cmd->command());
 }
 
 void QTestCommandTest::cmdStringNoSuite()
 {
-    QTestCase caze("c1", QFileInfo("c.sh"), 0);
-    QTestCommand cmd("cmd1", &caze);
-    caze.addTest(&cmd);
-    KOMPARE("c.sh cmd1", cmd.command());
+    QTestCase* caze = new QTestCase("c1", QFileInfo("c.sh"), 0);
+    QTestCommand* cmd = new QTestCommand("cmd1", caze);
+    caze->addTest(cmd);
+    KOMPARE("c.sh cmd1", cmd->command());
 }
 
 

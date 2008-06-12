@@ -32,7 +32,7 @@ class QTestResult
 {
 
 public:
-    explicit QTestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=-1, QFileInfo=QFileInfo(""));
+    explicit QTestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=0, QFileInfo=QFileInfo(""));
 
     QxRunner::RunnerResult state();
     QString message();
@@ -44,6 +44,8 @@ public:
     void setLine(int);
     void setFile(QFileInfo);
     void log();
+
+    bool operator==(const QTestResult& other);
 
     /**
      * True when state is NotRun or RunSuccess

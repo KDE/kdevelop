@@ -29,11 +29,11 @@ void QTestBaseTest::construct()
 {
     QTestBase t("t1", 0);
     KOMPARE(t.name(), "t1");
-    KOMPARE(t.parent(), 0);
+    KOMPARE(t.owner(), 0);
 
     QTestBase t2("t2", &t);
     KOMPARE(t2.name(), "t2");
-    KOMPARE(t2.parent(), &t);
+    KOMPARE(t2.owner(), &t);
 }
 
 #include "qtestbasetest.moc"

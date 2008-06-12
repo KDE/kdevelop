@@ -24,12 +24,15 @@
 #include "qtestcommand.h"
 
 #include <QIODevice>
-#include "kdebug.h"
+#include <klocalizedstring.h>
+#include <kdebug.h>
 
 using QxQTest::QTestRegister;
 using QxQTest::QTestSuite;
 using QxQTest::QTestCase;
+using QxQTest::QTestBase;
 using QxQTest::QTestCommand;
+using QxRunner::RunnerItem;
 
 namespace
 {
@@ -75,6 +78,11 @@ const QString QTestRegister::c_exe("exe");
 QTestRegister::QTestRegister()
         : m_root("")
 {
+        // Data for column headers is stored in the root item.
+    QList<QVariant> rootData;
+    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
+             << i18n("File Name") << i18n("Line Number");
+    m_rootItem = new QTestBase(rootData);
 }
 
 QTestRegister::~QTestRegister()
@@ -85,6 +93,11 @@ QTestRegister::~QTestRegister()
 //         suite = m_suites.takeFirst();
 //         cleanup(suite);
 //     }
+}
+
+QTestBase* QTestRegister::rootItem()
+{
+    return m_rootItem;
 }
 
 bool QTestRegister::isStartElement_(const QString& elem)
@@ -118,8 +131,9 @@ void QTestRegister::addFromXml(QIODevice* dev)
 
 void QTestRegister::processSuite()
 {
-    QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), 0);
+    QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), m_rootItem);
     m_suites.push_back(suite);
+    m_rootItem->appendChild(suite);
     kDebug() << suite->name();
 
     while (!atEnd() && !isEndElement_(c_suite))

@@ -19,34 +19,25 @@
  */
 
 #include "qtestmodel.h"
-#include "qtestitem.h"
 #include "qtestcase.h"
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestregister.h"
 #include "qtestbase.h"
 #include <QIODevice>
-#include <QDebug>
+#include <klocalizedstring.h>
 
 using QxQTest::QTestModel;
-using QxQTest::QTestItem;
 using QxQTest::QTestBase;
 using QxQTest::QTestSuite;
 using QxQTest::QTestCase;
 using QxQTest::QTestBase;
 using QxQTest::QTestCommand;
 using QxRunner::RunnerModel;
-using QxRunner::RunnerItem;
 
 QTestModel::QTestModel(QObject* parent)
         : RunnerModel(parent)
 {
-    // Data for column headers is stored in the root item.
-    QList<QVariant> rootData;
-    rootData << tr("Test Name") << tr("Result") << tr("Message")
-             << tr("File Name") << tr("Line Number");
-
-    setRootItem(new QTestItem(rootData));
     setExpectedResults(QxRunner::RunWarning | QxRunner::RunError);
 }
 
@@ -62,7 +53,7 @@ QString QTestModel::name() const
 QString QTestModel::about() const
 {
     QString version("4.4");
-    QString aboutModel = tr("for QTestLib") + ' ' + version;
+    QString aboutModel = i18n("for QTestLib") + ' ' + version;
     return aboutModel;
 }
 
@@ -70,34 +61,7 @@ void QTestModel::readTests(QIODevice* dev)
 {
     QTestRegister reg;
     reg.addFromXml(dev);
-    for (unsigned i=0; i<reg.testSuiteCount(); i++)
-    {
-        QTestSuite* suite = reg.takeSuite(i);
-        addSuite(suite);
-    }
-}
-
-void QTestModel::addSuite(QTestSuite* suite)
-{
-    RunnerItem* item = addTestItem(suite, rootItem());
-    for (unsigned i=0; i<suite->childCount(); i++)
-        addCase(suite->testAt(i), item);
-}
-
-void QTestModel::addCase(QTestCase* caze, RunnerItem* parent)
-{
-    RunnerItem* item = addTestItem(caze, parent);
-    for (unsigned i=0; i<caze->childCount(); i++)
-        addTestItem(caze->testAt(i), item);
-}
-
-RunnerItem* QTestModel::addTestItem(QTestBase* test, RunnerItem* parent)
-{
-    QList<QVariant> columnData;
-    columnData << test->name();
-    QTestItem* item = new QTestItem(columnData, parent, test);
-    parent->appendChild(item);
-    return item;
+    setRootItem(reg.rootItem());
 }
 
 #include "qtestmodel.moc"

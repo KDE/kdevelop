@@ -28,9 +28,15 @@
 
 class QIODevice;
 
+namespace QxRunner
+{
+class RunnerItem;
+}
+
 namespace QxQTest
 {
 
+class QTestBase;
 class QTestSuite;
 class QTestCase;
 
@@ -41,6 +47,7 @@ public:
     virtual ~QTestRegister();
 
     void addFromXml(QIODevice*);
+    QTestBase* rootItem();
     unsigned testSuiteCount();
     QTestSuite* takeSuite(unsigned);
 
@@ -55,10 +62,11 @@ private: // helpers
     QFileInfo fetchExe();
 
 private: // state
+    QTestBase* m_rootItem;
     QList<QTestSuite*> m_suites;
     QString m_root;
 
-    // some xml constants
+private: // some xml constants
     static const QString c_suite;
     static const QString c_case;
     static const QString c_cmd;

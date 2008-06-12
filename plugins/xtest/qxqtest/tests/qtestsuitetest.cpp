@@ -58,23 +58,23 @@ void QTestSuiteTest::addChildCase()
 {
     KOMPARE(m_suite->childCount(), 0);
 
-    QTestCase t("t1", someExe(), m_suite);
-    m_suite->addTest(&t);
+    QTestCase* t = new QTestCase("t1", someExe(), m_suite);
+    m_suite->addTest(t);
 
     KOMPARE(m_suite->childCount(), 1);
-    KOMPARE(m_suite->testAt(0), &t);
+    KOMPARE(m_suite->testAt(0), t);
 }
 
 void QTestSuiteTest::addChildCases()
 {
-    QTestCase t1("t1", someExe(), m_suite);
-    QTestCase t2("t2", someExe(), m_suite);
-    m_suite->addTest(&t1);
-    m_suite->addTest(&t2);
+    QTestCase* t1 = new QTestCase("t1", someExe(), m_suite);
+    QTestCase* t2 = new QTestCase("t2", someExe(), m_suite);
+    m_suite->addTest(t1);
+    m_suite->addTest(t2);
 
     KOMPARE(m_suite->childCount(), 2);
-    KOMPARE(m_suite->testAt(0), &t1);
-    KOMPARE(m_suite->testAt(1), &t2);
+    KOMPARE(m_suite->testAt(0), t1);
+    KOMPARE(m_suite->testAt(1), t2);
 }
 
 #include "qtestsuitetest.moc"

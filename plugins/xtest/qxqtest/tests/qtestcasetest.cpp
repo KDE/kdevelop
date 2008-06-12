@@ -65,24 +65,24 @@ void QTestCaseTest::construct()
 void QTestCaseTest::addCommand()
 {
     KOMPARE(m_case->childCount(), 0);
-    QTestCommand c1(someCmd(), m_case);
-    m_case->addTest(&c1);
+    QTestCommand* c1 = new QTestCommand(someCmd(), m_case);
+    m_case->addTest(c1);
 
     KOMPARE(m_case->childCount(), 1);
-    KOMPARE(m_case->testAt(0), &c1);
+    KOMPARE(m_case->testAt(0), c1);
 }
 
 void QTestCaseTest::addCommands()
 {
     KOMPARE(m_case->childCount(), 0);
-    QTestCommand c1(someCmd(), m_case);
-    m_case->addTest(&c1);
-    QTestCommand c2(someCmd(), m_case);
-    m_case->addTest(&c2);
+    QTestCommand* c1 = new QTestCommand(someCmd(), m_case);
+    m_case->addTest(c1);
+    QTestCommand* c2 = new QTestCommand(someCmd(), m_case);
+    m_case->addTest(c2);
 
     KOMPARE(m_case->childCount(), 2);
-    KOMPARE(m_case->testAt(0), &c1);
-    KOMPARE(m_case->testAt(1), &c2);
+    KOMPARE(m_case->testAt(0), c1);
+    KOMPARE(m_case->testAt(1), c2);
 
 }
 

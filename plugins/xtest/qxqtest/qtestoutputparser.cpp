@@ -20,13 +20,14 @@
 
 #include "qtestoutputparser.h"
 #include "qtestresult.h"
+#include "qtestcase.h"
 
 #include <qxrunner/runneritem.h>
 #include <QStringRef>
 #include <kdebug.h>
 
 using QxQTest::QTestResult;
-using QxQTest::QTestItem;
+using QxQTest::QTestCase;
 using QxQTest::QTestOutputParser;
 using QxRunner::RunnerItem;
 
@@ -57,6 +58,8 @@ const QString QTestOutputParser::c_file("file");
 const QString QTestOutputParser::c_line("line");
 const QString QTestOutputParser::c_pass("pass");
 const QString QTestOutputParser::c_fail("fail");
+const QString QTestOutputParser::c_initTestCase("initTestCase");
+const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 
 QTestOutputParser::QTestOutputParser(QIODevice* device)
         : QXmlStreamReader(device), m_processingTestFunction(false),
@@ -78,25 +81,7 @@ bool QTestOutputParser::isEndElement_(const QString& elementName)
     return isEndElement() && (name() == elementName);
 }
 
-QTestResult QTestOutputParser::go()
-{
-    if (!device()->isOpen())
-        device()->open(QIODevice::ReadOnly);
-    if (!device()->isReadable()) {
-        // do something
-    }
-
-    while (!atEnd() && m_result.isGood()) {
-        readNext();
-        if (isStartElement_(c_testfunction))
-            processTestFunction();
-    }
-
-    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
-    return m_result;
-}
-
-void QTestOutputParser::goAsync(QTestItem* caze)
+void QTestOutputParser::go(QTestCase* caze)
 {
     if (!device()->isOpen())
         device()->open(QIODevice::ReadOnly);
@@ -109,38 +94,40 @@ void QTestOutputParser::goAsync(QTestItem* caze)
     if (m_processingTestFunction)
         processTestFunction();
 
+    QTestCommand* cmd = 0;
     while (!atEnd() && m_result.isGood()) {
         readNext();
-        QString funcName;
-        // TODO clean this mess
+        QString cmdName;
         if (isStartElement_(c_testfunction)) {
-            funcName = attributes().value("name").toString();
-            kDebug() << "funcname: " << funcName;
-            for (int i = 0; i < caze->childCount(); i++) {
-                RunnerItem* qcmd = caze->child(i);
-                if (funcName == qcmd->data(0)) {
-                    caze->signalStarted(qcmd->index());
-                }
-            }
+            cmdName = attributes().value("name").toString();
+            cmd = caze->findTestNamed(cmdName);
+            if (cmd)
+                caze->signalStarted(cmd->index());
             processTestFunction();
         }
         if (isEndElement_(c_testfunction)) {
-            for (int i = 0; i < caze->childCount(); i++) {
-                RunnerItem* qcmd = caze->child(i);
-                kDebug() << qcmd->data(0) << " " << qcmd->data(1);
-                if (funcName == qcmd->data(0)) {
-                    // found the correct testcase
-                    qcmd->setData(2, m_result.message());
-                    qcmd->setData(3, m_result.file().filePath());
-                    qcmd->setData(4, m_result.line());
-                    qcmd->setResult(m_result.state());
-                    caze->signalCompleted(qcmd->index());
-                }
+            cmd = caze->findTestNamed(cmdName);
+            if (cmd) {
+                cmd->setResult_(m_result);
+                caze->signalCompleted(cmd->index());
+                m_result = QTestResult();
+            } else if (fixtureFailed(cmdName)) {
+                kDebug() << "init/cleanup TestCase failed";
+                caze->signalStarted(caze->index());
+                caze->setResult_(m_result);
+                caze->signalCompleted(caze->index());
             }
         }
     }
 
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+}
+
+bool QTestOutputParser::fixtureFailed(const QString& cmd)
+{
+    if (cmd != c_initTestCase && cmd != c_cleanupTestCase)
+        return false;
+    return !m_result.isGood();
 }
 
 void QTestOutputParser::processTestFunction()
