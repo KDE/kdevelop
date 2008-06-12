@@ -171,7 +171,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
 template<bool lock>
 struct Locker { //This is a dummy that does nothing
   template<class T>
-  Locker(const T& t) {
+  Locker(const T& /*t*/) {
   }
 };
 template<>
