@@ -24,7 +24,7 @@
 
 #include <JobSequence.h>
 #include <kurl.h>
-#include <editor/hashedstring.h>
+#include <duchain/indexedstring.h>
 #include "../languageexport.h"
 
 
@@ -61,7 +61,7 @@ public:
     /// or -1 if there was a problem.
     int revisionToken() const;
 
-    KDevelop::HashedString document() const;
+    KDevelop::IndexedString document() const;
 
     void setErrorMessage(const QString& message);
     QString errorMessage() const;
@@ -97,7 +97,7 @@ Q_SIGNALS:
      * Do not trigger this too often, for performance reasons. */
     void progress(KDevelop::ParseJob*, float value, QString text);
 protected:
-    KDevelop::HashedString m_document;
+    KDevelop::IndexedString m_document;
     QString m_errorMessage;
     BackgroundParser* m_backgroundParser;
 

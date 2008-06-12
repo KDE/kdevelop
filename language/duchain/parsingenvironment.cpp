@@ -26,7 +26,7 @@ class IdentifiedFilePrivate
 public:
   IdentifiedFilePrivate() : m_identity(0) {
   }
-  HashedString m_url;
+  IndexedString m_url;
   uint m_identity;
 };
 
@@ -35,17 +35,24 @@ IdentifiedFile::IdentifiedFile()
 {
 }
 
-IdentifiedFile::IdentifiedFile( const HashedString& url , uint identity )
+IdentifiedFile::IdentifiedFile( const IndexedString& url , uint identity )
   : d(new IdentifiedFilePrivate)
 {
   d->m_url = url;
   d->m_identity = identity;
 }
 
+IdentifiedFile::IdentifiedFile( const HashedString& url , uint identity )
+  : d(new IdentifiedFilePrivate)
+{
+  d->m_url = IndexedString(url.str());
+  d->m_identity = identity;
+}
+
 IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
   : d(new IdentifiedFilePrivate)
 {
-  d->m_url = HashedString( url.prettyUrl() );
+  d->m_url = IndexedString( url.pathOrUrl() );
   d->m_identity = identity;
 }
 
@@ -53,7 +60,7 @@ IdentifiedFile::~IdentifiedFile() {
  delete d;
 }
 
-HashedString IdentifiedFile::url() const {
+IndexedString IdentifiedFile::url() const {
   return d->m_url;
 }
 
@@ -119,7 +126,7 @@ void ParsingEnvironmentManager::addFile( ParsingEnvironmentFile* /*file*/ ) {
 void ParsingEnvironmentManager::removeFile( ParsingEnvironmentFile* /*file*/ ) {
 }
 
-ParsingEnvironmentFile* ParsingEnvironmentManager::find( const HashedString& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
+ParsingEnvironmentFile* ParsingEnvironmentManager::find( const IndexedString& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
   return 0;
 }
 

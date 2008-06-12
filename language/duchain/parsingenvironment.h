@@ -20,9 +20,12 @@
 #define PARSINGENVIRONMENT_H
 
 #include <QtCore/QDateTime>
+#include <QString>
 
 #include <ksharedptr.h>
 #include <kurl.h>
+
+#include "indexedstring.h"
 
 #include "editor/hashedstring.h"
 
@@ -46,13 +49,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedFile
     IdentifiedFile();
     IdentifiedFile(const IdentifiedFile&);
 
+    ///These strings should be constructed from KUrls using pathOrUrl
+    explicit IdentifiedFile( const IndexedString& url , uint identity = 0 );
+    ///These strings should be constructed from KUrls using pathOrUrl
     explicit IdentifiedFile( const HashedString& url , uint identity = 0 );
     explicit IdentifiedFile( const KUrl& url , uint identity = 0 );
 
     ~IdentifiedFile();
 
     ///@return url of the file
-    HashedString url() const;
+    IndexedString url() const;
 
     ///@return A number that identifies the version of this file above the url. If a language does not need multiple versions of a file, it can always return 0
     uint identity() const;
@@ -187,7 +193,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
      * @param accepter For each found matching file, accepter->accept(..) should be called to
      * decide whether to return the file, or search on. If it is zero, the first match should be returned.
      * */
-    virtual ParsingEnvironmentFile* find( const HashedString& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );
+    virtual ParsingEnvironmentFile* find( const IndexedString& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );
 private:
   class ParsingEnvironmentFilePrivate const *d;
 };

@@ -20,7 +20,10 @@
 
 #include <QHash>
 #include "stringhelpers.h"
-#include "hashedstring.h"
+#include "indexedstring.h"
+
+//Foreach macro that also works with QVarLengthArray
+#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)
 
 namespace KDevelop
 {
@@ -43,7 +46,7 @@ public:
   }
 
   int m_unique;
-  HashedString m_identifier;
+  IndexedString m_identifier;
   QList<TypeIdentifier> m_templateIdentifiers;
 
 private:
@@ -66,7 +69,7 @@ class QualifiedIdentifierPrivate : public KShared
 public:
   QualifiedIdentifierPrivate() : m_explicitlyGlobal(false), m_isExpression(false), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstantMask(0), m_hash(0) {
   }
-  QList<Identifier> m_identifiers;
+  QVarLengthArray<Identifier, 5> m_identifiers;
   bool m_explicitlyGlobal:1;
   bool m_isExpression:1;
   bool m_isConstant:1; //Data for TypeIdentifier, stored here.
@@ -81,7 +84,7 @@ public:
     uint currentStart = start;
 
     while( currentStart < (uint)str.length() ) {
-      m_identifiers << Identifier( str, currentStart, &currentStart );
+      m_identifiers.append(Identifier( str, currentStart, &currentStart ));
       while( currentStart < (uint)str.length() && (str[currentStart] == ' ' ) )
         ++currentStart;
       currentStart += 2; //Skip "::"
@@ -97,7 +100,7 @@ public:
     if( m_hash == 0 )
     {
       uint mhash = 0;
-      foreach( const Identifier& identifier, m_identifiers )
+      FOREACH_ARRAY( const Identifier& identifier, m_identifiers )
         mhash = 11*mhash + identifier.hash();
 
       mhash += 17 * m_isConstant + 19 * m_isReference + 23 * m_pointerDepth + 31 * m_pointerConstantMask;
@@ -108,7 +111,7 @@ public:
   }
 };
 
-uint QualifiedIdentifier::combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier) {
+uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
   return 11*leftHash + appendIdentifier.hash();
 }
 
@@ -130,12 +133,19 @@ bool Identifier::isEmpty() const {
   return d->m_identifier.str().isEmpty() && d->m_templateIdentifiers.isEmpty();
 }
 
+Identifier::Identifier(const IndexedString& str)
+  : d(new IdentifierPrivate)
+{
+  d->m_identifier = str;
+}
+
+
 Identifier::Identifier(const QString& id, uint start, uint* takenRange)
   : d(new IdentifierPrivate)
 {
   ///Extract template-parameters
   ParamIterator paramIt("<>:", id, start);
-  d->m_identifier = paramIt.prefix().trimmed();
+  d->m_identifier = IndexedString(paramIt.prefix().trimmed());
   while( paramIt ) {
     appendTemplateIdentifier( TypeIdentifier(*paramIt) );
     ++paramIt;
@@ -179,6 +189,12 @@ const QString Identifier::identifier() const
 }
 
 void Identifier::setIdentifier(const QString& identifier)
+{
+  prepareWrite();
+  d->m_identifier = IndexedString(identifier);
+}
+
+void Identifier::setIdentifier(const IndexedString& identifier)
 {
   prepareWrite();
   d->m_identifier = identifier;
@@ -288,7 +304,7 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
     d->m_explicitlyGlobal = true;
   } else {
     d->m_explicitlyGlobal = false;
-    d->m_identifiers << id;
+    d->m_identifiers.append(id);
   }
 }
 
@@ -318,7 +334,7 @@ QStringList QualifiedIdentifier::toStringList() const
   if (d->m_explicitlyGlobal)
     ret.append(QString());
 
-  foreach(const Identifier& id, d->m_identifiers)
+  FOREACH_ARRAY(const Identifier& id, d->m_identifiers)
     ret << id.toString();
 
   return ret;
@@ -331,7 +347,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
     ret = "::";
 
   bool first = true;
-  foreach(const Identifier& id, d->m_identifiers)
+  FOREACH_ARRAY(const Identifier& id, d->m_identifiers)
   {
     if( !first )
       ret += "::";
@@ -349,7 +365,7 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) 
   QualifiedIdentifier ret(base);
   ret.prepareWrite();
   
-  ret.d->m_identifiers += d->m_identifiers;
+  ret.d->m_identifiers.append(d->m_identifiers.constData(), d->m_identifiers.size());
   if( explicitlyGlobal() )
     ret.setExplicitlyGlobal(true);
 
@@ -413,13 +429,14 @@ QualifiedIdentifier QualifiedIdentifier::strip(const QualifiedIdentifier & unwan
       return *this;
   
   
-  QualifiedIdentifier ret(*this);
+  QualifiedIdentifier ret;
   ret.setExplicitlyGlobal(false);
   ret.prepareWrite();
 
-  for( int a = 0; a < unwantedBase.d->m_identifiers.count(); a++ )
-    ret.d->m_identifiers.pop_front();
+  int remove = unwantedBase.d->m_identifiers.count();
 
+  ret.d->m_identifiers.append(&d->m_identifiers[remove], d->m_identifiers.size() - remove);
+  
   return ret;
 }
 
@@ -483,8 +500,8 @@ QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const Identifier& rhs
   if( d->m_identifiers.isEmpty() )
     return NoMatch;
 
-  if( d->m_identifiers.last() == rhs ) {
-    if( d->m_identifiers.count() == 1 )
+  if( d->m_identifiers[d->m_identifiers.size()-1] == rhs ) {
+    if( d->m_identifiers.size() == 1 )
       return ExactMatch;
     else
       return EndsWith;
@@ -601,20 +618,20 @@ void QualifiedIdentifier::push(const Identifier& id)
 {
   prepareWrite();
   
-  d->m_identifiers << id;
+  d->m_identifiers.append(id);
 }
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
   prepareWrite();
 
-  d->m_identifiers += id.d->m_identifiers;
+  d->m_identifiers.append(id.d->m_identifiers.constData(), id.d->m_identifiers.size());
 }
 
 void QualifiedIdentifier::pop()
 {
   prepareWrite();
-  d->m_identifiers.pop_back();
+  d->m_identifiers.resize(d->m_identifiers.size()-1);
 }
 
 void QualifiedIdentifier::clear()

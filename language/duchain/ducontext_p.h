@@ -111,6 +111,9 @@ public:
    * */
   bool removeDeclaration(Declaration* declaration);
 
+  //Files the scope identifier into target
+  void scopeIdentifier(bool includeClasses, QualifiedIdentifier& target) const;
+  
   /**
    * This propagates the declaration into the parent search-hashes,
    * up to the first parent that has m_propagateDeclarations set to false.

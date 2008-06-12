@@ -98,7 +98,7 @@ HashedString DocumentCursorObject::url() const
 HashedString DocumentCursorObject::url( const KTextEditor::Cursor * cursor )
 {
     if (cursor->isSmartCursor()) ///@todo this conversion is bad
-        return static_cast<const SmartCursor*>(cursor)->document()->url().prettyUrl();
+        return static_cast<const SmartCursor*>(cursor)->document()->url().pathOrUrl();
     else
         return static_cast<const DocumentCursor*>(cursor)->document();
 }

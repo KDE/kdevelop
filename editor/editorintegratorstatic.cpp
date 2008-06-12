@@ -57,7 +57,7 @@ void EditorIntegratorStatic::documentLoaded()
   {
     QMutexLocker lock(mutex);
 
-    documents.insert(HashedString(doc->url().prettyUrl()), doc);
+    documents.insert(HashedString(doc->url().pathOrUrl()), doc);
   }
 }
 
@@ -70,7 +70,7 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
     it.next();
     if (it.value() == document) {
       it.remove();
-      documents.insert(document->url().prettyUrl(), document);
+      documents.insert(document->url().pathOrUrl(), document);
       // TODO trigger reparsing??
       return;
     }
@@ -82,7 +82,7 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
-  documents.remove(document->url().prettyUrl());
+  documents.remove(document->url().pathOrUrl());
 
   lock.unlock();
   

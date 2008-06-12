@@ -54,7 +54,7 @@ DocumentCursor::DocumentCursor(KTextEditor::Cursor* cursor)
     ,d( new DocumentCursorPrivate )
 {
   if (cursor->isSmartCursor()) ///@todo Possible high memory-usage here, because the string is re-allocated for each conversion
-        d->m_document = HashedString( cursor->toSmartCursor()->document()->url().prettyUrl() );
+        d->m_document = HashedString( cursor->toSmartCursor()->document()->url().pathOrUrl() );
     else
         d->m_document = static_cast<DocumentCursor*>(cursor)->document();
 }

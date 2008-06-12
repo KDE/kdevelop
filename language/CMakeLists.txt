@@ -116,6 +116,7 @@ install(FILES
     duchain/dumpchain.h
     duchain/symboltable.h
     duchain/indexedstring.h
+    duchain/repositories/itemrepository.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 

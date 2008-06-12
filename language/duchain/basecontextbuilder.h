@@ -83,7 +83,7 @@ public:
                                     = TopDUContextPointer() )
   {
     m_compilingContexts = true;
-    m_editor->setCurrentUrl( KDevelop::HashedString( url.prettyUrl() ) );
+    m_editor->setCurrentUrl( KDevelop::HashedString( url.pathOrUrl() ) );
   
     TopDUContext* top = 0;
     {
@@ -175,7 +175,7 @@ protected:
   {
   //     m_compilingContexts = true;
   //     m_recompiling = false;
-      m_editor->setCurrentUrl( HashedString( url.prettyUrl() ) );
+      m_editor->setCurrentUrl( HashedString( url.pathOrUrl() ) );
       setContextOnNode( node, parent );
       {
           openContext( contextFromNode( node ) );

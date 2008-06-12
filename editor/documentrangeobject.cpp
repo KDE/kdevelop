@@ -44,8 +44,10 @@ void DocumentRangeObjectPrivate::syncFromSmart() const {
         if(!m_smartRange)
             return;
 
-        KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
-        Q_ASSERT(iface);
+/*        KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+        if(!iface) //Probably the object is currently being destroyed
+            return;*/
+        
         //QMutexLocker l(iface->smartMutex()); //Nested to prevent deadlock in combination with m_mutex
         
         smartRange = m_smartRange;
@@ -60,20 +62,21 @@ void DocumentRangeObjectPrivate::syncFromSmart() const {
 void DocumentRangeObjectPrivate::syncToSmart() const {
     SimpleRange range;
     KTextEditor::SmartRange* smartRange;
-    KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
     {
         QMutexLocker lock(&DocumentRangeObject::m_mutex);
         if(!m_smartRange)
             return;
     
-        Q_ASSERT(iface);
         range = m_range;
         smartRange = m_smartRange;
     }
     //Danger window
-    QMutexLocker l(iface->smartMutex());
+    KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+    if(iface) { //If the document is currently being destroyed, it's possible that the interface cannot be casted, but the range still exists.
+        QMutexLocker l(iface->smartMutex());
     
-    smartRange->setRange(range.textRange());
+        smartRange->setRange(range.textRange());
+    }
 }
 
 DocumentRangeObject::DocumentRangeObject(const HashedString& document, const SimpleRange& range)
@@ -274,7 +277,7 @@ KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 // HashedString DocumentRangeObject::url( const KTextEditor::Range * range )
 // {
 //     if (range->isSmartRange()) ///@todo this conversion is bad
-//         return static_cast<const SmartRange*>(range)->document()->url().prettyUrl();
+//         return static_cast<const SmartRange*>(range)->document()->url().pathOrUrl();
 //     else
 //         return static_cast<const DocumentRange*>(range)->document();
 // }

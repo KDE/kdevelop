@@ -270,7 +270,7 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
 
 QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
 {
-  return chainsForDocument(HashedString(document.prettyUrl()));
+  return chainsForDocument(HashedString(document.pathOrUrl()));
 }
 
 QList<TopDUContext*> DUChain::chainsForDocument(const HashedString& document) const
@@ -279,7 +279,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const HashedString& document) co
 
   // Match all parsed versions of this document
   for (QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(IdentifiedFile(document)); it != sdDUChainPrivate->m_chains.constEnd(); ++it) {
-    if (it.key().url() == document)
+    if (it.key().url() == IndexedString(document.str()))
       chains << it.value();
     else
       break;
@@ -289,7 +289,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const HashedString& document) co
 }
 
 TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
-  return chainForDocument( HashedString(document.prettyUrl()), environment, flags );
+  return chainForDocument( HashedString(document.pathOrUrl()), environment, flags );
 }
 TopDUContext* DUChain::chainForDocument( const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
 
@@ -315,7 +315,7 @@ TopDUContext* DUChain::chainForDocument( const HashedString& document, const Par
   
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
   if( it != sdDUChainPrivate->m_managers.end() ) {
-    ParsingEnvironmentFilePointer file( (*it)->find(document, environment, &acceptor) );
+    ParsingEnvironmentFilePointer file( (*it)->find(IndexedString(document.str()), environment, &acceptor) );
     if( !file )
       return 0;
 
@@ -387,7 +387,7 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
-void DUChain::documentAboutToBeDeleted(KTextEditor::Document * doc)
+void DUChain::documentAboutToBeDeleted(KTextEditor::Document * /*doc*/)
 {
 }
 

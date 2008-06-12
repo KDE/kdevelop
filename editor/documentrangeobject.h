@@ -75,7 +75,7 @@ public:
     RangeOwning ownsRange() const;
 
     void setUrl(const HashedString& document);
-    ///Returns the url, for efficiency as a HashedString. This allows fast comparison. It is was from a real url using prettyUrl() at some point.
+    ///Returns the url, for efficiency as a HashedString. This allows fast comparison. It is was from a real url using pathOrUrl() at some point.
     HashedString url() const;
 
     bool contains(const SimpleCursor& cursor) const;

@@ -221,7 +221,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
       chosen = language->languageSupport()->standardContext(url);
 
   if(!chosen)
-    return DUChain::self()->chainForDocument(HashedString(url.prettyUrl()));
+    return DUChain::self()->chainForDocument(HashedString(url.pathOrUrl()));
 
   return chosen;
 }

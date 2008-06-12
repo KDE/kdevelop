@@ -24,8 +24,10 @@
 #include <QByteArray>
 #include <QMutex>
 #include <kdebug.h>
+#include "../languageexport.h"
 
-namespace Repositories {
+
+namespace KDevelop {
 
   /**
    * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
@@ -39,9 +41,7 @@ namespace Repositories {
    * @see ItemRepository
    * @see stringrepository.h
    * @see indexedstring.h
-   * */
-  
-  /**
+   *
    * Items must not be larger than the bucket size!
    * */
 
@@ -85,7 +85,7 @@ class ExampleRequestItem {
 };
 
 template<class Item, class ItemRequest>
-class Bucket {
+class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
     Bucket() : m_size(0), m_available(0), m_data(0) {
     }
@@ -93,9 +93,9 @@ class Bucket {
       delete[] m_data;
     }
 
-    ///Size must be smaller max. 2<<16
+    ///Size must be smaller max. 1<<16
     void initialize(unsigned int size) {
-      Q_ASSERT(size <= 2<<16);
+      Q_ASSERT(size <= 1<<16);
       if(!m_data) {
         m_size =(unsigned int) size;
         m_available = m_size;
@@ -107,6 +107,7 @@ class Bucket {
     }
 
     //Tries to get the index within this bucket, or returns zero.
+    //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
     unsigned short index(const ItemRequest& request) {
       unsigned short localHash = request.hash() % m_objectMap.size();
       unsigned short index = m_objectMap[localHash];
@@ -131,18 +132,21 @@ class Bucket {
         setFollowerIndex(index, insertedAt);
       setFollowerIndex(insertedAt, 0);
       
-      request.createItem((Item*)(m_data + insertedAt));
       m_available -= totalSize;
 
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
+      
+      //Last thing we do, because createItem may recursively do even more transformation of the repository
+      request.createItem((Item*)(m_data + insertedAt));
+      
       return insertedAt;
     }
     
-    const Item& itemFromIndex(unsigned short index) const {
+/*    const Item& itemFromIndex(unsigned short index) const {
       Q_ASSERT(index < m_size);
       return *(Item*)(m_data+index);
-    }
+    }*/
     
     const Item* itemFromIndex(unsigned short index) {
       return (Item*)(m_data+index);
@@ -164,17 +168,38 @@ class Bucket {
     QVector<short unsigned int> m_objectMap; //Points to the first object in m_data with (hash % m_size) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
 };
 
+template<bool lock>
+struct Locker { //This is a dummy that does nothing
+  template<class T>
+  Locker(const T& t) {
+  }
+};
+template<>
+struct Locker<true> : public QMutexLocker {
+  Locker(QMutex* mutex) : QMutexLocker(mutex) {
+  }
+};
+
 ///@param Item @see ExampleItem
-///This class is thread-safe
-template<class Item, class ItemRequest>
-class ItemRepository {
+///@param threadSafe Whether class access should be thread-safe
+template<class Item, class ItemRequest, bool threadSafe = true>
+class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
+
+  typedef Locker<threadSafe> ThisLocker;
+    
   public:
     ///@param size The total size in bytes of this repository
-    ///@param bucketSize the size of each bucket that makes up the repository. Must be max. 2<<16(the count of items an unsigned short can hold)
-  ItemRepository(QString repositoryName, unsigned int size, unsigned int bucketSize) : m_repositoryName(repositoryName), m_size(size), m_bucketSize(bucketSize) {
-    m_buckets.resize(m_size / m_bucketSize );
+    ///@param bucketSize the size of each bucket that makes up the repository. Must be max. 1<<16(the count of items an unsigned short can hold)
+    ///Max. 2<<16 buckets can be created
+  ItemRepository(QString repositoryName, unsigned int size, unsigned int bucketSize = 1<<16) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_size(size), m_bucketSize(bucketSize) {
+    unsigned int bucketCount = m_size / m_bucketSize;
+    if(bucketCount > 0xffff)
+      bucketCount = 0xffff; //We reserve the last bucket index for external purposes
+    m_buckets.resize(bucketCount);
     m_buckets.fill(0);
-    Q_ASSERT(m_buckets.size() <= (2<<16)); //Must fit into unsigned short
+    Q_ASSERT(m_buckets.size() <= (1<<16)); //Must fit into unsigned short
+    m_fastBuckets = m_buckets.data();
+    m_bucketCount = m_buckets.size();
   }
   ~ItemRepository() {
     typedef Bucket<Item, ItemRequest> B;
@@ -185,14 +210,14 @@ class ItemRepository {
   ///Returns the index for the given item. If the item is not in the repository yet, it is inserted.
   ///The index can never be zero. Zero is reserved for your own usage as invalid
   unsigned int index(const ItemRequest& request) {
-    QMutexLocker lock(&m_mutex);
     
-    unsigned int bucketNumber = request.hash() % m_buckets.size();
-    unsigned int bucketCount = m_buckets.size();
-    for(unsigned short bucket = 0; bucket < bucketCount; ++bucket) { //Try 
-      unsigned int testBucket = (bucketNumber + bucket) % bucketCount;
+    ThisLocker lock(&m_mutex);
+    
+    unsigned int bucketNumber = request.hash() % m_bucketCount;
+    for(unsigned short bucket = 0; bucket < m_bucketCount; ++bucket) { //Try 
+      unsigned int testBucket = (bucketNumber + bucket) % m_bucketCount;
       initializeBucket(testBucket);
-      unsigned short indexInBucket = m_buckets[ testBucket ]->index(request);
+      unsigned short indexInBucket = m_fastBuckets[ testBucket ]->index(request);
       if(indexInBucket)
         return (testBucket << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
     }
@@ -204,19 +229,21 @@ class ItemRepository {
   const Item* itemFromIndex(unsigned int index) const {
     Q_ASSERT(index);
     
-    QMutexLocker lock(&m_mutex);
+    ThisLocker lock(&m_mutex);
+    
     unsigned short bucket = (index >> 16);
     initializeBucket(bucket);
     unsigned short indexInBucket = index & 0xffff;
-    return m_buckets[bucket]->itemFromIndex(indexInBucket);
+    return m_fastBuckets[bucket]->itemFromIndex(indexInBucket);
   }
 
   private:
 
-  void initializeBucket(unsigned int bucketNumber) const {
-    if(!m_buckets[bucketNumber])
-      m_buckets[bucketNumber] = new Bucket<Item, ItemRequest>();
-    m_buckets[bucketNumber]->initialize(m_bucketSize);
+  inline void initializeBucket(unsigned int bucketNumber) const {
+    if(!m_fastBuckets[bucketNumber]) {
+      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest>();
+      m_fastBuckets[bucketNumber]->initialize(m_bucketSize);
+    }
   }
 
   mutable QMutex m_mutex;
@@ -224,6 +251,8 @@ class ItemRepository {
   unsigned int m_size;
   unsigned int m_bucketSize;
   mutable QVector<Bucket<Item, ItemRequest>* > m_buckets;
+  mutable Bucket<Item, ItemRequest>** m_fastBuckets; //For faster access
+  mutable uint m_bucketCount;
 };
 
 }

@@ -86,6 +86,14 @@ DUContextPrivate::DUContextPrivate(DUContext* d)
 {
 }
 
+void DUContextPrivate::scopeIdentifier(bool includeClasses, QualifiedIdentifier& target) const {
+  if (m_parentContext)
+    m_parentContext->d_func()->scopeIdentifier(includeClasses, target);
+
+  if (includeClasses || m_contextType != DUContext::Class)
+    target += m_scopeIdentifier;
+}
+
 bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
   if( this == context->d_func() )
     return true;
@@ -575,7 +583,7 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
 }
 
 
-void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool temporary )
+void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool /*temporary*/ )
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
@@ -786,12 +794,7 @@ QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
   ENSURE_CAN_READ
 
   QualifiedIdentifier ret;
-  if (d->m_parentContext)
-    ret = d->m_parentContext->scopeIdentifier(includeClasses);
-
-  if (includeClasses || d->m_contextType != Class)
-    ret += d->m_scopeIdentifier;
-
+  d->scopeIdentifier(includeClasses, ret);
 
   return ret;
 }

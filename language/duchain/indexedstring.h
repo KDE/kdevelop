@@ -27,6 +27,9 @@ class IndexedString;
 
 namespace KDevelop {
 
+//Empty strings have an index of zero.
+//Strings of length one are not put into the repository, but are encoded directly within the index:
+//They are encoded like 0xffff00bb where bb is the byte of the character.
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
  public:
   IndexedString();
@@ -37,9 +40,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
 
   ///Needs a zero terminated string. When the information is already available, try using the other constructor.
   explicit IndexedString( const char* str );
+
+  explicit IndexedString( char c );
   
   ///When the information is already available, try using the other constructor. This is expensive.
   explicit IndexedString( const QString& str );
+
+  ///When the information is already available, try using the other constructor. This is expensive.
+  explicit IndexedString( const QByteArray& str );
+  
+  explicit IndexedString( unsigned int index ) : m_index(index) {
+  }
   
   inline unsigned int hash() const {
     return m_index;
@@ -49,9 +60,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   inline unsigned int index() const {
     return m_index;
   }
+  
+  bool isEmpty() const {
+    return m_index == 0;
+  }
+  
+  //This is relatively expensive(needs a mutex lock, hash lookups, and eventual loading), so avoid it when possible.
+  int length() const;
 
   ///Convenience function, avoid using it, it's relatively expensive
   QString str() const;
+  
+  ///Convenience function, avoid using it, it's relatively expensive(les expensive then str() though)
+  QByteArray byteArray() const;
 
   bool operator == ( const IndexedString& rhs ) const {
     return m_index == rhs.m_index;

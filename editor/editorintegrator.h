@@ -104,7 +104,7 @@ public:
   static void removeDocument(KTextEditor::Document* document);
 
   /**
-   * Returns the text document for \a url, if one exists. The url should have been formatted using KUrl::prettyUrl() at some point.
+   * Returns the text document for \a url, if one exists. The url should have been formatted using KUrl::pathOrUrl() at some point.
    */
   static KTextEditor::Document* documentForUrl(const HashedString& url);
 

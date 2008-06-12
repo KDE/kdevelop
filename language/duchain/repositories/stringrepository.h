@@ -23,7 +23,7 @@
 #include <QString>
 
 namespace Repositories {
-
+using namespace KDevelop;
 struct StringRepositoryItemRequest {
 
   //The text is supposed to be utf8 encoded
@@ -69,6 +69,12 @@ QString stringFromItem(const unsigned short* item) {
   const unsigned short* textPos = item;
   ++textPos;
   return QString::fromUtf8((char*)textPos, (int)*item);
+}
+
+QByteArray arrayFromItem(const unsigned short* item) {
+  const unsigned short* textPos = item;
+  ++textPos;
+  return QByteArray((char*)textPos, (int)*item);
 }
 
 }

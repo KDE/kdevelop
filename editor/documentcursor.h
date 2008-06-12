@@ -62,7 +62,7 @@ public:
     /// Returns the associated document.
     const HashedString& document() const;
 
-    /// Sets the associated document. Should be formatted from an url using prettyUrl()
+    /// Sets the associated document. Should be formatted from an url using pathOrUrl()
     void setDocument(const HashedString& document);
 
     DocumentCursor& operator=(const DocumentCursor& rhs);

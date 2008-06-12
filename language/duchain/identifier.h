@@ -39,6 +39,7 @@ class TypeIdentifier;
 class QualifiedIdentifier;
 class QualifiedIdentifierPrivate;
 class IdentifierPrivate;
+class IndexedString;
 
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
@@ -51,6 +52,8 @@ public:
    * @param takenRange If this is nonzero, it will be filled with the length of the range from the beginning of the given string, that was used to construct this identifier.(optional)
    * */
   explicit Identifier(const QString& str, uint start = 0, uint* takenRange = 0);
+  ///Preferred constructor, ise this if you already have an IndexedString available. This does not decompose the given string.
+  explicit Identifier(const IndexedString& str);
   Identifier(const Identifier& rhs);
   Identifier();
   ~Identifier();
@@ -66,6 +69,8 @@ public:
 
   const QString identifier() const;
   void setIdentifier(const QString& identifier);
+  //Should be preferred over the other version
+  void setIdentifier(const IndexedString& identifier);
 
   QString mangled() const;
 

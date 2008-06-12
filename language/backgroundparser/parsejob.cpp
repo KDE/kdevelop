@@ -38,6 +38,7 @@
 #include <ktexteditor/smartinterface.h>
 
 #include "editorintegrator.h"
+#include "hashedstring.h"
 
 #include "backgroundparser.h"
 #include "parserdependencypolicy.h"
@@ -58,7 +59,7 @@ struct ParseJobPrivate
 ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
-        m_document( url.prettyUrl() ),
+        m_document( IndexedString(url.pathOrUrl()) ),
         m_backgroundParser( 0 ),
         m_abortMutex(new QMutex),
         m_abortRequested( false ),
@@ -72,7 +73,7 @@ ParseJob::~ParseJob()
   //@todo save the text-document when acquiring the revision-token, it must somehow be made sure that it is still the same instance
 
     if (m_revisionToken != -1) {
-      KTextEditor::Document* doc = EditorIntegrator::documentForUrl(m_document);
+      KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(m_document.str()));
       if( doc ) {
 	SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
 	Q_ASSERT(smart);
@@ -82,7 +83,7 @@ ParseJob::~ParseJob()
     delete d;
 }
 
-HashedString ParseJob::document() const
+IndexedString ParseJob::document() const
 {
     return m_document;
 }
@@ -116,7 +117,7 @@ QString ParseJob::errorMessage() const
 
 bool ParseJob::contentsAvailableFromEditor() const
 {
-    return (bool)EditorIntegrator::documentForUrl(m_document);
+    return (bool)EditorIntegrator::documentForUrl(HashedString(m_document.str()));
 }
 
 int ParseJob::revisionToken() const
@@ -126,7 +127,7 @@ int ParseJob::revisionToken() const
 
 QString ParseJob::contentsFromEditor(bool saveRevisionToken)
 {
-    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(m_document);
+    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(m_document.str()));
     if( !doc )
         return QString();
     
