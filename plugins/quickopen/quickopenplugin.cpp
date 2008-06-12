@@ -176,6 +176,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     QStringList allScopes = m_model->allScopes();
 
     QVBoxLayout *itemsLayout = new QVBoxLayout;
+    itemsLayout->setAlignment(Qt::AlignTop);
     
     foreach( QString type, allTypes )
     {
@@ -194,6 +195,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     o.itemsGroup->setLayout( itemsLayout );
       
     QVBoxLayout *scopesLayout = new QVBoxLayout;
+    scopesLayout->setAlignment(Qt::AlignTop);
+    
     
     foreach( QString scope, allScopes )
     {
