@@ -486,6 +486,24 @@ void RunnerModel::setRootItem(RunnerItem* rootItem)
 
     // Create the results model (anew).
     if (m_rootItem) resultsModel()->clear();
+    initItemConnect(index(0,0));
+}
+
+void RunnerModel::initItemConnect(QModelIndex current)
+{
+    while (current.isValid()) {
+        if (current.child(0, 0).isValid()) {
+            // Go down one level.
+            initItemConnect(current.child(0, 0));
+        }
+        RunnerItem* item = itemFromIndex(current);
+
+        if (item->isRunnable()) {
+            connect(item, SIGNAL(completed(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
+            connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
+        }
+        current = current.sibling(current.row() + 1, 0);
+    }
 }
 
 void RunnerModel::setExpectedResults(int expectedResults)
@@ -709,8 +727,7 @@ void RunnerModel::runItem(const QModelIndex& index)
         // Set flag for thread synchronization.
         //setMustWait(true);
 
-        connect(item, SIGNAL(completed(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
-        connect(item, SIGNAL(started(QModelIndex)), this, SLOT(postItemStarted(QModelIndex)));
+        // results get reported through signaling, initialized in initItemConnect()
 
         // Check stop flag before item processing.
         if (mustStop()) {

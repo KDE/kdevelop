@@ -82,7 +82,6 @@ QTestResult QTestBase::result_()
     res.setState(QxRunner::RunnerResult(result()));
     res.setMessage(data(2).toString());
     res.setFile(QFileInfo(data(3).toString()));
-    kDebug() << res.file().filePath();
     res.setLine(data(4).toInt());
     return res;
 }
@@ -90,9 +89,7 @@ QTestResult QTestBase::result_()
 void QTestBase::setResult_(QTestResult& res)
 {
     setData(2, res.message());
-    kDebug() << res.file().filePath();
     setData(3, res.file().filePath());
-    kDebug() << data(3);
     setData(4, res.line());
     setResult(res.state());
 }

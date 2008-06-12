@@ -303,6 +303,8 @@ protected: // Operations
 
 private:  // Operations
 
+    void initItemConnect(QModelIndex current);
+
     /*!
      * Helper method to return the subset of data when in minimal
      * update mode.

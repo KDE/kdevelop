@@ -72,19 +72,21 @@ public:
     void fill() {
         QList<QVariant> rootData;
         rootData << col0Caption << col1Caption << col2Caption;
-        setRootItem(new RunnerItemStub(rootData, NULL));
+        RunnerItemStub* root = new RunnerItemStub(rootData, 0);
 
         QList<QVariant> columnData;
         columnData << "00" << "01" << "02";
-        RunnerItemStub* item1 = new RunnerItemStub(columnData, rootItem());
+        RunnerItemStub* item1 = new RunnerItemStub(columnData, root);
         item1->setResult(QxRunner::RunSuccess);
-        rootItem()->appendChild(item1);
+        root->appendChild(item1);
 
         columnData.clear();
         columnData << "10" << "11" << "12";
-        RunnerItemStub* item2 = new RunnerItemStub(columnData, rootItem());
+        RunnerItemStub* item2 = new RunnerItemStub(columnData, root);
         item2->setResult(QxRunner::RunFatal);
-        rootItem()->appendChild(item2);
+        root->appendChild(item2);
+
+        setRootItem(root);
     }
 
     QString name() const {
