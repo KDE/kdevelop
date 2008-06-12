@@ -232,7 +232,7 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 
     ///@todo adymo: on document deletion all its views shall be also deleted
     foreach (Sublime::View *view, doc->views()) {
-        foreach (Sublime::Area *area, areas())
+        foreach (Sublime::Area *area, allAreas())
             if (area->removeToolView(view))
                 view->deleteLater();
     }
