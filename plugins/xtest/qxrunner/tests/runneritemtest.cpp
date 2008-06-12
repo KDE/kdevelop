@@ -27,6 +27,10 @@
 using QxRunner::RunnerItem;
 using QxRunner::ut::RunnerItemTest;
 
+namespace QxRunner
+{
+namespace ut
+{
 // RunnerItem is abstract so stub the run method
 class ConcreteRunnerItem : public RunnerItem
 {
@@ -37,6 +41,10 @@ public:
         return 0;
     }
 };
+}
+}
+
+using QxRunner::ut::ConcreteRunnerItem;
 
 void RunnerItemTest::init()
 {

@@ -31,7 +31,7 @@
 
 using QxRunner::RunnerWindow;
 using QxQTest::QTestModel;
-using QxQTest::ut::QTestRunnerTest;
+using QxQTest::it::QTestRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
 
@@ -128,8 +128,8 @@ void QTestRunnerTest::runUI(RunnerWindow* win)
     win->setModel(model);
     win->show();
     win->ui().actionStart->trigger();
-//    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
+    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
+//    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
        QFAIL("Timeout while waiting for runner items to complete execution");
 }
 

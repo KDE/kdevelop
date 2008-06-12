@@ -24,12 +24,11 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-class ConcreteRunnerItem;
-
 namespace QxRunner
 {
 namespace ut {
 
+class ConcreteRunnerItem;
 
 class RunnerItemTest : public QObject
 {

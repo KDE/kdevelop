@@ -30,15 +30,12 @@ namespace QxRunner
 {
 class ResultsModel;
 }
-namespace ModelCreation
-{
-class RunnerModelStub;
-}
 
 namespace QxRunner
 {
 namespace ut {
 
+class RunnerModelStub;
 
 class ResultsModelTest : public QObject
 {
@@ -63,7 +60,7 @@ private:
 
 private:
     QxRunner::ResultsModel* model;
-    ModelCreation::RunnerModelStub* runnerModel;
+    RunnerModelStub* runnerModel;
 };
 
 }

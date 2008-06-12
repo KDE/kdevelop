@@ -28,10 +28,10 @@
 
 using QxRunner::RunnerWindow;
 using QxRunner::RunnerItem;
-using ModelCreation::RunnerItemStub;
-using ModelCreation::RunnerModelStub;
-using ModelCreation::createRunnerModelStub;
-using QxRunner::ut::RunnerWindowTest;
+using QxRunner::ut::RunnerItemStub;
+using QxRunner::ut::RunnerModelStub;
+using QxRunner::ut::createRunnerModelStub;
+using QxRunner::it::RunnerWindowTest;
 
 void RunnerWindowTest::initTestCase()
 {
@@ -79,16 +79,6 @@ void RunnerWindowTest::startItems()
     KOMPARE(QString(": 0"), status->labelNumFatals->text());
     KOMPARE(QString(": 0"), status->labelNumErrors->text());
     KOMPARE(QString(": 0"), status->labelNumWarnings->text());
-}
-
-void RunnerWindowTest::stopPremature()
-{
-    // invoke the run action
-    window->ui().actionStart->trigger();
-    // cancel immediately
-    window->ui().actionStop->trigger();
-    // soft stop, so one still gets completed
-    KOMPARE(QString("1"), status->labelNumRun->text());
 }
 
 void RunnerWindowTest::deselectItems()

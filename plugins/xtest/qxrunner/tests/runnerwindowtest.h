@@ -30,15 +30,16 @@ class RunnerWindow;
 class RunnerModel;
 }
 
-namespace ModelCreation
+namespace QxRunner
 {
+namespace ut {
 class RunnerModelStub;
+}
 }
 
 namespace QxRunner
 {
-namespace ut {
-
+namespace it {
 
 class RunnerWindowTest : public QObject
 {
@@ -49,7 +50,6 @@ private slots:
     void cleanupTestCase();
 
     void startItems();
-    void stopPremature();
     void deselectItems();
 
 private:
@@ -57,7 +57,7 @@ private:
 
 private:
     QxRunner::RunnerWindow* window;
-    ModelCreation::RunnerModelStub* model;
+    QxRunner::ut::RunnerModelStub* model;
     Ui::StatusWidget* status;
 };
 

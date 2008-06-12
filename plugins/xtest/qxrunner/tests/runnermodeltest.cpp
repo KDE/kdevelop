@@ -33,8 +33,8 @@
 
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
-using ModelCreation::createRunnerModelStub;
-using ModelCreation::RunnerModelStub;
+using QxRunner::ut::createRunnerModelStub;
+using QxRunner::ut::RunnerModelStub;
 using QxRunner::ut::RunnerModelTest;
 
 void RunnerModelTest::init()

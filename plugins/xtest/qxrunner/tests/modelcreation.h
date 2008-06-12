@@ -25,7 +25,9 @@
 #include <runnermodel.h>
 #include <resultsmodel.h>
 
-namespace ModelCreation
+namespace QxRunner
+{
+namespace ut
 {
 
 using QxRunner::RunnerItem;
@@ -134,6 +136,7 @@ inline ResultsModel* createResultsModelStub()
     return model;
 }
 
+}
 }
 
 #endif // QXRUNNER_MODELCREATION_H

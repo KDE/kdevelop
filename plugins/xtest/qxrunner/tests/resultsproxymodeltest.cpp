@@ -27,7 +27,7 @@
 
 using QxRunner::ResultsProxyModel;
 using QxRunner::ResultsModel;
-using ModelCreation::createResultsModelStub;
+using QxRunner::ut::createResultsModelStub;
 using QxRunner::ut::ResultsProxyModelTest;
 
 void ResultsProxyModelTest::init()

@@ -29,15 +29,11 @@ namespace QxRunner
 class RunnerModel;
 }
 
-namespace ModelCreation
-{
-class RunnerModelStub;
-}
-
 namespace QxRunner
 {
 namespace ut {
 
+class RunnerModelStub;
 
 class RunnerModelTest : public QObject
 {
@@ -69,7 +65,7 @@ private:
     void setUpResultSpies(QMap<QString, QSignalSpy*>& spies);
 
 private:
-    ModelCreation::RunnerModelStub* model;
+    RunnerModelStub* model;
 };
 
 }

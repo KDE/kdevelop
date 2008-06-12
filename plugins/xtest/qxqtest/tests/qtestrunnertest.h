@@ -35,7 +35,7 @@ class RunnerWindow;
 
 namespace QxQTest
 {
-namespace ut {
+namespace it {
 
 class QTestRunnerTest : public QObject
 {

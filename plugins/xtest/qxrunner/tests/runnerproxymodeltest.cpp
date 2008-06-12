@@ -26,7 +26,7 @@
 
 
 using QxRunner::RunnerProxyModel;
-using ModelCreation::createRunnerModelStub;
+using QxRunner::ut::createRunnerModelStub;
 using QxRunner::ut::RunnerProxyModelTest;
 
 void RunnerProxyModelTest::init()

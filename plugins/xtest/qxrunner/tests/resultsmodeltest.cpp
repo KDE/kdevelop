@@ -33,7 +33,7 @@
 using QxRunner::ResultsModel;
 using QxRunner::RunnerModel;
 using QxRunner::RunnerItem;
-using ModelCreation::RunnerModelStub;
+using QxRunner::ut::RunnerModelStub;
 using QxRunner::ut::ResultsModelTest;
 
 void ResultsModelTest::init()

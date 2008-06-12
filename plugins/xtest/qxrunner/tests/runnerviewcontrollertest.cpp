@@ -29,7 +29,7 @@
 
 using QxRunner::RunnerViewController;
 using QxRunner::RunnerProxyModel;
-using ModelCreation::createRunnerModelStub;
+using QxRunner::ut::createRunnerModelStub;
 using QxRunner::ut::RunnerViewControllerTest;
 
 Ui::RunnerWindow* ui;
