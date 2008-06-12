@@ -34,6 +34,7 @@
 #include "pp-environment.h"
 #include "pp-location.h"
 #include "chartools.h"
+#include "macrorepository.h"
 
 using namespace rpp;
 
@@ -297,27 +298,27 @@ void pp::createProblem(Stream& input, const QString& description) {
 
 void pp::handle_define (Stream& input)
 {
-  pp_macro* macro = new pp_macro();
-  macro->file = currentFileName();
-  macro->sourceLine = input.originalInputPosition().line;
+  pp_dynamic_macro macro;
+  macro.file = currentFileName();
+  macro.sourceLine = input.originalInputPosition().line;
   PreprocessedContents definition;
 
   skip_blanks (input, devnull());
-  macro->name = KDevelop::IndexedString(skip_identifier(input)); //@todo make macros utf8 too
+  macro.name = KDevelop::IndexedString(skip_identifier(input)); //@todo make macros utf8 too
 
   if (!input.atEnd() && input == '(')
   {
-    macro->function_like = true;
+    macro.function_like = true;
 
     skip_blanks (++input, devnull()); // skip '('
     uint formal = skip_identifier(input);
     if (formal)
-      macro->formals.append( formal );
+      macro.formals.append( formal );
 
     skip_blanks(input, devnull());
 
     if (input == '.') {
-      macro->variadics = true;
+      macro.variadics = true;
 
       do {
         ++input;
@@ -331,12 +332,12 @@ void pp::handle_define (Stream& input)
 
       uint formal = skip_identifier(input);
       if (formal)
-        macro->formals.append(formal);
+        macro.formals.append(formal);
 
       skip_blanks (input, devnull());
 
       if (input == '.') {
-        macro->variadics = true;
+        macro.variadics = true;
 
         do {
           ++input;
@@ -380,9 +381,9 @@ void pp::handle_define (Stream& input)
     ++input;
   }
 
-  macro->definition = definition;
+  macro.definition = definition;
 
-  m_environment->setMacro(macro);
+  m_environment->setMacro(makeConstant(&macro));
 }
 
 
@@ -987,14 +988,14 @@ void pp::handle_undef(Stream& input)
   KDevelop::IndexedString macro_name (skip_identifier(input));
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
-  pp_macro* macro = new pp_macro();
-  macro->file = currentFileName();
-  macro->name = macro_name;
-  macro->sourceLine = input.originalInputPosition().line;
+  pp_dynamic_macro macro;
+  macro.file = currentFileName();
+  macro.name = macro_name;
+  macro.sourceLine = input.originalInputPosition().line;
 
-  macro->defined = false;
+  macro.defined = false;
 
-  m_environment->setMacro(macro);
+  m_environment->setMacro(makeConstant(&macro));
   
   //m_environment->clearMacro(macro_name);
 }

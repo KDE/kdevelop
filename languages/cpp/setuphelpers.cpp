@@ -27,6 +27,7 @@
 #include <kprocess.h>
 #include <kdebug.h>
 #include <parser/rpp/chartools.h>
+#include <parser/rpp/macrorepository.h>
 
 using namespace KDevelop;
 
@@ -102,41 +103,48 @@ PreprocessedContents asBody(const char* lhs) {
   return convertFromByteArray(QByteArray(lhs));
 }
 
+void insertMacro(Cpp::LazyMacroSet& macros, const rpp::pp_dynamic_macro& macro)
+{
+  rpp::pp_macro* m = makeConstant(&macro);
+  macros.insert(*m);
+  delete m;
+}
+
 bool setupStandardMacros(Cpp::LazyMacroSet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
     //Used in several headers like sys/time.h
-    macros.insert( rpp::pp_macro("__restrict") );
-    macros.insert( rpp::pp_macro("__extension__") );
+    insertMacro( macros, rpp::pp_dynamic_macro("__restrict") );
+    insertMacro( macros, rpp::pp_dynamic_macro("__extension__") );
     
     {
       //Used in several headers like sys/time.h
-      rpp::pp_macro m("__const");
+      rpp::pp_dynamic_macro m("__const");
       m.definition = asBody( "const" );
-      macros.insert( m );
+      insertMacro( macros, m );
     }
     {
-      rpp::pp_macro m("__null");
+      rpp::pp_dynamic_macro m("__null");
       m.definition = asBody( "0" );
-      macros.insert( m );
+      insertMacro( macros, m );
     }
 
     {
       //Used in several gcc headers
-      rpp::pp_macro m("__inline");
+      rpp::pp_dynamic_macro m("__inline");
       m.definition = asBody( "inline" );
-      macros.insert( m );
+      insertMacro( macros, m );
       m.name = IndexedString("__always_inline");
-      macros.insert( m );
+      insertMacro( macros, m );
     }
 
     {
       //It would be better if the parser could deal with it, for example in class declarations. However it cannot.
       //If we wouldn't need this, macros could be more transparent.
-      rpp::pp_macro m("__attribute__");
+      rpp::pp_dynamic_macro m("__attribute__");
       m.function_like = true;
       m.formals << IndexedString("param").index();
-      macros.insert( m );
+      insertMacro( macros, m );
     }
     
     //Get standard macros from gcc
@@ -158,14 +166,14 @@ bool setupStandardMacros(Cpp::LazyMacroSet& macros)
                 if (line.startsWith("#define ")) {
                     line = line.right(line.length() - 8).trimmed();
                     int pos = line.indexOf(' ');
-                    rpp::pp_macro macro;
+                    rpp::pp_dynamic_macro macro;
                     if (pos != -1) {
                         macro.name = IndexedString( line.left(pos) );
                         macro.definition = asBody( line.right(line.length() - pos - 1).toUtf8() );
                     } else {
                         macro.name = IndexedString( line );
                     }
-                    macros.insert(macro);
+                    insertMacro( macros, macro );
                 }
             }
         }

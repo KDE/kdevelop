@@ -49,6 +49,7 @@
 #include "environmentmanager.h"
 #include "completionhelpers.h"
 #include "parser/rpp/chartools.h"
+#include "parser/rpp/macrorepository.h"
 
 using namespace KDevelop;
 using namespace rpp;
@@ -853,8 +854,13 @@ private:
 
 class MacroNavigationContext : public NavigationContext {
 public:
-  MacroNavigationContext(const pp_macro& macro, QString preprocessedBody) : NavigationContext(DeclarationPointer(0), TopDUContextPointer(0)), m_macro(macro), m_body(preprocessedBody) {
+  MacroNavigationContext(const pp_macro& macro, QString preprocessedBody) : NavigationContext(DeclarationPointer(0), TopDUContextPointer(0)), m_macro(copyConstantMacro(&macro)), m_body(preprocessedBody) {
   }
+
+~MacroNavigationContext() {
+    delete m_macro;
+  }
+  
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
@@ -862,11 +868,11 @@ public:
 
     QString args;
     
-    if(!m_macro.formals.isEmpty()) {
+    if(m_macro->formalsSize()) {
       args = "(";
 
       bool first = true;
-      foreach(uint b, m_macro.formals) {
+      FOREACH_CUSTOM(uint b, m_macro->formals(), m_macro->formalsSize()) {
         if(!first)
           args += ", ";
         first = false;
@@ -876,10 +882,10 @@ public:
       args += ")";
     }
     
-    m_currentText += (m_macro.function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro.name.str()) + " " + args +  "<br />";
+    m_currentText += (m_macro->function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro->name.str()) + " " + args +  "<br />";
     
-    KUrl u(m_macro.file.str());
-    NavigationAction action(u, KTextEditor::Cursor(m_macro.sourceLine,0));
+    KUrl u(m_macro->file.str());
+    NavigationAction action(u, KTextEditor::Cursor(m_macro->sourceLine,0));
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
 
     if(!shorten) {
@@ -894,7 +900,7 @@ public:
       
       m_currentText += labelHighlight(i18n("Body:")) + "<br />";
 
-      m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents(m_macro.definition))));
+      m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents(m_macro->definition(), m_macro->definitionSize()))));
       m_currentText += "<br />";
     }
 
@@ -903,14 +909,14 @@ public:
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;
   }
-
+  
   virtual QString name() const {
-    return m_macro.name.str();
+    return m_macro->name.str();
   }
   
 private:
 
-  pp_macro m_macro;
+  pp_macro* m_macro;
   QString m_body;
 };
 

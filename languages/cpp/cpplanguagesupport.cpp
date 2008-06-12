@@ -79,7 +79,6 @@
 #include "typerepository.h"
 #include "cppparsejob.h"
 #include "environmentmanager.h"
-#include "macroset.h"
 #include "navigationwidget.h"
 #include "cppduchain/cppduchain.h"
 
@@ -863,12 +862,12 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
   return qMakePair( qMakePair(line.mid(start, end-start), wordRange), line.mid(end) );
 }
 
-QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const KUrl& url, const SimpleCursor& position) {
+QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPosition(const KUrl& url, const SimpleCursor& position) {
   //Extract the word under the cursor
 
   QPair<QPair<QString, SimpleRange>, QString> found = cursorIdentifier(url, position);
   if(!found.first.second.isValid())
-    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+    return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   IndexedString word(found.first.first);
   SimpleRange wordRange(found.first.second);
@@ -877,38 +876,38 @@ QPair<SimpleRange, rpp::pp_macro> CppLanguageSupport::usedMacroForPosition(const
   DUChainReadLocker lock(DUChain::lock(), 100);
   if(!lock.locked()) {
     kDebug(9007) << "Failed to lock the du-chain in time";
-    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+    return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
   }
   
   TopDUContext* ctx = standardContext(url, true);
   if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
-    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+    return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
   
   Q_ASSERT(p);
 
   if(!p->usedMacroNames().contains(word) && !p->definedMacroNames().contains(word))
-    return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+    return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   //We need to do a flat search through all macros here, which really hurts
 
   Cpp::MacroSetIterator it = p->usedMacros().iterator();
   
   while(it) {
-    if((*it).name == word && !(*it).isUndef())
-      return qMakePair(wordRange, *it);
+    if(it.ref().name == word && !it.ref().isUndef())
+      return qMakePair(wordRange, &it.ref());
     ++it;
   }
 
   it = p->definedMacros().iterator();
   while(it) {
-    if((*it).name == word && !(*it).isUndef())
-      return qMakePair(wordRange, *it);
+    if(it.ref().name == word && !it.ref().isUndef())
+      return qMakePair(wordRange, &it.ref());
     ++it;
   }
   
-  return qMakePair(SimpleRange::invalid(), rpp::pp_macro());
+  return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 }
 
 SimpleRange CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position) {
@@ -917,16 +916,16 @@ SimpleRange CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, cons
 }
 
 QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position) {
-    QPair<SimpleRange, rpp::pp_macro> m = usedMacroForPosition(url, position);
+    QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
 
     if(!m.first.isValid())
       return qMakePair(KUrl(), SimpleCursor::invalid());
 
-    return qMakePair(KUrl(m.second.file.str()), SimpleCursor(m.second.sourceLine, 0));
+    return qMakePair(KUrl(m.second->file.str()), SimpleCursor(m.second->sourceLine, 0));
 }
 
 QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
-    QPair<SimpleRange, rpp::pp_macro> m = usedMacroForPosition(url, position);
+    QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
     if(!m.first.isValid())
       return 0;
 
@@ -956,7 +955,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
       }
     }
     
-    return new Cpp::NavigationWidget(m.second, preprocessedBody);
+    return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {

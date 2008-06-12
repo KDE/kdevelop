@@ -27,6 +27,7 @@
 #include "pp-macro.h"
 #include "pp-engine.h"
 #include "pp-location.h"
+#include "macrorepository.h"
 
 using namespace rpp;
 
@@ -181,10 +182,10 @@ void Environment::clearMacro(const KDevelop::IndexedString& name)
 //   setMacro(undef); //Before, m_environment.remove(..) was called
 
  if(!m_replaying) {
-    pp_macro* undef = new pp_macro();
-    undef->name = name;
-    undef->defined = false;
-    m_blocks.top()->macros.append(undef);
+    pp_dynamic_macro undef;
+    undef.name = name;
+    undef.defined = false;
+    m_blocks.top()->macros.append(makeConstant(&undef));
   }
 
   ///@todo Think about how this plays together with environment-management

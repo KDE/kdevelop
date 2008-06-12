@@ -74,6 +74,9 @@ inline bool isNumber(unsigned int c) {
 ///Opposite of convertFromByteArray
 KDEVCPPRPP_EXPORT QByteArray stringFromContents(const PreprocessedContents& contents, int offset = 0, int count = 0);
 
+///Opposite of convertFromByteArray
+KDEVCPPRPP_EXPORT QByteArray stringFromContents(const uint* contents, int count);
+
 ///Returns a string that has a gap inserted between the tokens(for debugging)
 KDEVCPPRPP_EXPORT QByteArray stringFromContentsWithGaps(const PreprocessedContents& contents, int offset = 0, int count = 0);
 

@@ -36,6 +36,17 @@ QByteArray stringFromContents(const PreprocessedContents& contents, int offset, 
   return ret;
 }
 
+QByteArray stringFromContents(const uint* contents, int count) {
+  QByteArray ret;
+  for(int a = 0; a < count; ++a) {
+    if(isCharacter(contents[a]))
+      ret.append(characterFromIndex(contents[a]));
+    else
+      ret += KDevelop::IndexedString(contents[a]).byteArray();
+  }
+  return ret;
+}
+
 QByteArray stringFromContentsWithGaps(const PreprocessedContents& contents, int offset, int count) {
   QByteArray ret;
   for(int a = offset; a < (count ? offset+count : contents.size()); ++a) {

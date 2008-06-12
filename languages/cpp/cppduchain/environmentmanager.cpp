@@ -19,7 +19,7 @@
 #include <iproblem.h>
 #include "cpppreprocessenvironment.h"
 #include <itemrepository.h>
-#include "macrorepository.h"
+#include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 
 // #define LEXERCACHE_DEBUG
@@ -35,8 +35,8 @@ Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string s
 //Set-repository that contains the macro-sets
 Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets", true, 30000000u);
 
-rpp::pp_macro Cpp::MacroIndexConversion::toItem(uint index) const {
-  return macroFromItem( EnvironmentManager::macroDataRepository.itemFromIndex( index ) );
+const rpp::pp_macro& Cpp::MacroIndexConversion::toItem(uint index) const {
+  return *EnvironmentManager::macroDataRepository.itemFromIndex( index );
 }
 
 uint Cpp::MacroIndexConversion::toIndex(const rpp::pp_macro& macro) const {
@@ -77,7 +77,7 @@ QString print(const Cpp::LazyMacroSet& set) {
       ret += ", ";
     first = false;
     
-    ret += (*it).toString();
+    ret += it.ref().toString();
     ++it;
   }
   return ret;
@@ -193,10 +193,10 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const IndexedString& fileN
     ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << file.m_usedMacros.set().count() );
     
     for ( MacroSetIterator it( file.m_usedMacros.set() ); it; ++it ) {
-      rpp::pp_macro* m = environment->retrieveStoredMacro( ( *it ).name );
-      if ( !m || !(*m == *it) ) {
-        if( !m && (*it).isUndef() ) {
-          ifDebug( kDebug( 9007 ) << "Undef-macro" << (*it).name.str() << "is ok" << m );
+      rpp::pp_macro* m = environment->retrieveStoredMacro( it.ref().name );
+      if ( !m || !(*m == it.ref()) ) {
+        if( !m && it.ref().isUndef() ) {
+          ifDebug( kDebug( 9007 ) << "Undef-macro" << it.ref().name.str() << "is ok" << m );
           //It is okay, we did not find a macro, but the used macro is an undef macro
           //Q_ASSERT(0); //Undef-macros should not be marked as used
         } else {
@@ -304,8 +304,8 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
     //This is slow, but should not happen too often
     ///@todo maybe give a warning, and find out how this can happen
     for( MacroSetIterator it( m_definedMacros.set() ); it; ++it )
-      if( macro.name == (*it).name )
-        m_definedMacros.remove(*it);
+      if( macro.name == it.ref().name )
+        m_definedMacros.remove(it.ref());
   }
   
   if(macro.isUndef()) {
@@ -429,8 +429,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ///Merge those used macros that were not defined within this environment
   //This is slightly inefficient, would be nicer to have a fast mechanism for this
   for( MacroSetIterator it( file.m_usedMacros.set() ); it; ++it )
-    if( !m_definedMacroNames.contains((*it).name) && !m_unDefinedMacroNames.contains((*it).name) )
-      m_usedMacros.insert( *it );
+    if( !m_definedMacroNames.contains(it.ref().name) && !m_unDefinedMacroNames.contains(it.ref().name) )
+      m_usedMacros.insert( it.ref() );
 
   ifDebug( Q_ASSERT(m_usedMacroNames.set().count() == m_usedMacros.set().count()) );
   
@@ -438,8 +438,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
   //Since merged macros overrule already stored ones, first remove the ones of the same name.
   for( MacroSetIterator it( m_definedMacros.set() ); it; ++it )
-    if( file.m_definedMacroNames.contains( (*it).name ) || file.m_unDefinedMacroNames.contains( (*it).name ) )
-      m_definedMacros.remove(*it);
+    if( file.m_definedMacroNames.contains( it.ref().name ) || file.m_unDefinedMacroNames.contains( it.ref().name ) )
+      m_definedMacros.remove(it.ref());
 
   //Now merge in the new defined macros
   

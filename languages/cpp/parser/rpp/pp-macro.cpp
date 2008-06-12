@@ -21,10 +21,50 @@
 
 #include "pp-macro.h"
 #include "chartools.h"
+#include "macrorepository.h"
 
 using namespace rpp;
 
-void pp_macro::invalidateHash() {
+uint pp_macro::definitionSize() const {
+  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
+  return *((uint*)currentAddress);
+}
+
+const uint* pp_macro::definition() const {
+  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
+  currentAddress += sizeof(uint);
+  return (uint*)currentAddress;
+}
+
+uint pp_macro::formalsSize() const {
+  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
+
+  currentAddress += (1 + *((uint*)currentAddress)) * sizeof(uint);
+  return *((uint*)currentAddress);
+}
+
+const uint* pp_macro::formals() const {
+  char* currentAddress = ((char*)this)+ sizeof(rpp::pp_macro_direct_data);
+
+  currentAddress += (2 + *((uint*)currentAddress)) * sizeof(uint);
+  
+  return (uint*)(currentAddress);
+}
+
+bool pp_macro::operator==(const pp_macro& macro) const {
+  if(completeHash() != macro.completeHash())
+    return false;
+  
+  uint mySize = constantSize(this);
+  uint otherSize = constantSize(&macro);
+  
+  if(mySize != otherSize)
+    return false;
+  
+  return memcmp(this, &macro, mySize) == 0;
+}
+
+void pp_dynamic_macro::invalidateHash() {
   m_valueHashValid = false;
 }
 
@@ -36,17 +76,17 @@ pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : 
   , variadics(false)
 {
 }
-pp_macro::pp_macro(const KDevelop::IndexedString& nm) : pp_macro_direct_data(nm), m_valueHashValid(false)
+pp_dynamic_macro::pp_dynamic_macro(const KDevelop::IndexedString& nm) : pp_macro_direct_data(nm), m_valueHashValid(false)
 
 {
 }
 
-pp_macro::pp_macro(const char* nm) : pp_macro_direct_data(KDevelop::IndexedString(nm, strlen(nm))), m_valueHashValid(false)
+pp_dynamic_macro::pp_dynamic_macro(const char* nm) : pp_macro_direct_data(KDevelop::IndexedString(nm, strlen(nm))), m_valueHashValid(false)
 
 {
 }
 
-pp_macro::pp_macro( ) : m_valueHashValid(false)
+pp_dynamic_macro::pp_dynamic_macro( ) : m_valueHashValid(false)
 {
 }
 
@@ -73,6 +113,27 @@ QString pp_macro::toString() const {
   if(function_like) {
     ret += "(";
     bool first = true;
+    for(uint a = 0; a < formalsSize(); ++a) {
+      if(!first)
+        ret += ", ";
+      first = false;
+      
+      ret += KDevelop::IndexedString(formals()[a]).str();
+    }
+    ret += ")";
+  }
+  ret += QString::fromUtf8(stringFromContents(definition(), definitionSize()));
+  
+  return ret;
+}
+
+QString pp_dynamic_macro::toString() const {
+  QString ret = name.str();
+  if(!defined)
+    ret = "undef " + ret;
+  if(function_like) {
+    ret += "(";
+    bool first = true;
     foreach(uint str, formals) {
       if(!first)
         ret += ", ";
@@ -87,7 +148,7 @@ QString pp_macro::toString() const {
   return ret;
 }
 
-void pp_macro::computeHash() const {
+void pp_dynamic_macro::computeHash() const {
     if( m_valueHashValid )
       return;
     int a = 1;

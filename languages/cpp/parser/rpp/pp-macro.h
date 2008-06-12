@@ -29,6 +29,10 @@
 #include <indexedstring.h>
 #include <hashedstring.h>
 
+//Foreach macro that also works with QVarLengthArray
+#define FOREACH_CUSTOM(item, container, size) for(int a = 0, mustDo = 1; a < (int)size; ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)
+
+
 namespace rpp {
 
   //This contains the data of a macro that can be marshalled by directly copying the memory
@@ -49,29 +53,58 @@ struct KDEVCPPRPP_EXPORT pp_macro_direct_data
   
   //The valueHash is not necessarily valid
   mutable HashType m_valueHash; //Hash that represents the values of all macros
-}; ///@todo enable structure packing
-  
-class KDEVCPPRPP_EXPORT pp_macro : public pp_macro_direct_data
-{
-public:
-  pp_macro();
-  pp_macro(const KDevelop::IndexedString& name);
-  pp_macro(const char* name);
-
-  QVector<uint> definition; //Indices in the string index(essentially the same thing as IndexedString)
-  QVector<uint> formals; // argumentList, also indices in the string repository(IndexedString)
-
-  bool operator == ( const pp_macro& rhs ) const;
-
-  QString toString() const;
   
   bool isUndef() const  {
     return !defined;
+  }
+  
+  HashType completeHash() const {
+    return m_valueHash + name.hash() * 3777;
   }
 
   HashType idHash() const {
     return name.hash();
   }
+}; ///@todo enable structure packing
+
+///Never construct his directly. It represents a macro that is stored in a repository,
+///and that is stored in a memory-unit together with its definition- and formal-list
+///@see macrorepository.h and macrorepository.cpp
+struct KDEVCPPRPP_EXPORT pp_macro : public pp_macro_direct_data {
+  //Count of items in the tokenized definition vector
+  uint definitionSize() const;
+  const uint* definition() const;
+  
+  //Count of items in the list of formals
+  uint formalsSize() const;
+  const uint* formals() const;
+
+  QString toString() const;
+  
+  //Does a complete comparison
+  bool operator==(const pp_macro& rhs) const;
+  
+  ///Hash that identifies all of this macro, the value and the identity
+  HashType completeHash() const {
+    return m_valueHash + name.hash() * 3777;
+  }
+  
+  private:
+    Q_DISABLE_COPY(pp_macro)
+};
+
+class KDEVCPPRPP_EXPORT pp_dynamic_macro : public pp_macro_direct_data
+{
+public:
+  pp_dynamic_macro();
+  pp_dynamic_macro(const KDevelop::IndexedString& name);
+  pp_dynamic_macro(const char* name);
+
+  QVector<uint> definition; //Indices in the string index(essentially the same thing as IndexedString)
+  QVector<uint> formals; // argumentList, also indices in the string repository(IndexedString)
+
+  QString toString() const;
+  
   HashType valueHash() const {
     if( !m_valueHashValid ) computeHash();
     return m_valueHash;
@@ -85,12 +118,12 @@ public:
   void invalidateHash();
 
   struct NameCompare {
-    bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
+    bool operator () ( const pp_dynamic_macro& lhs, const pp_dynamic_macro& rhs ) const {
       return lhs.name.index() < rhs.name.index();
     }
     #ifdef Q_CC_MSVC
     
-    HashType operator () ( const pp_macro& macro ) const
+    HashType operator () ( const pp_dynamic_macro& macro ) const
     {
         return macro.idHash();
     }
@@ -104,13 +137,13 @@ public:
 
   //Hash over id and value
   struct CompleteHash {
-    HashType operator () ( const pp_macro& lhs ) const {
+    HashType operator () ( const pp_dynamic_macro& lhs ) const {
         return lhs.completeHash();
     }
     
     #ifdef Q_CC_MSVC
     
-    bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
+    bool operator () ( const pp_dynamic_macro& lhs, const pp_dynamic_macro& rhs ) const {
         HashType lhash = lhs.valueHash()+lhs.idHash();
         HashType rhash = rhs.valueHash()+rhs.idHash();
         if( lhash < rhash ) return true;
@@ -132,17 +165,9 @@ public:
     mutable bool m_valueHashValid;
 };
 
-inline bool pp_macro::operator == ( const pp_macro& rhs ) const {
-  computeHash();
-  rhs.computeHash();
-
-  ///@todo think about maybe doing more exact comparison when hashes are equal
-  return name.index() == rhs.name.index() && m_valueHash == rhs.m_valueHash;
 }
 
-}
-
-inline uint qHash( const rpp::pp_macro& m ) {
+inline uint qHash( const rpp::pp_dynamic_macro& m ) {
   return (uint)m.idHash();
 }
 

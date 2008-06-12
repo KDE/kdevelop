@@ -28,6 +28,7 @@
 #include "parser/rpp/preprocessor.h"
 #include "parser/rpp/pp-environment.h"
 #include "parser/rpp/pp-macro.h"
+#include "parser/rpp/macrorepository.h"
 #include "cppduchainexport.h"
 #include <parser/rpp/chartools.h>
 
@@ -171,8 +172,8 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
 /*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
     //Copy in all macros from the file
     for( Cpp::MacroSetIterator it( file->definedMacros().set() ); it; ++it ) {
-      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
-        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+      if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
+        pp.environment()->setMacro( copyConstantMacro( &it.ref() ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
       } else {
 /*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
@@ -180,8 +181,8 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
     }
 /*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
     for( Cpp::MacroSetIterator it( file->usedMacros().set() ); it; ++it ) {
-      if( line == -1 || line > (*it).sourceLine || file->url() != (*it).file ) {
-        pp.environment()->setMacro( new rpp::pp_macro( *it ) );
+      if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
+        pp.environment()->setMacro( copyConstantMacro(&it.ref()) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
       } else {
 /*        kDebug(9007) << "leaving macro " << (*it).name.str();*/

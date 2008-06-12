@@ -39,7 +39,11 @@ class KDEVCPPDUCHAIN_EXPORT ConvenientIterator {
     T operator*() const {
       return m_conversion.toItem(*m_it);
     }
-  
+
+    const T& ref() const {
+      return m_conversion.toItem(*m_it);
+    }
+
     private:
     Set::Iterator m_it;
     Conversion m_conversion;
@@ -73,13 +77,13 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
     void insert(const T& t) {
       if(!m_temporaryRemoveIndices.empty())
         apply();
-      m_temporaryIndices.push_back(t);
+      m_temporaryIndices.insert(m_conversion.toIndex(t));
     }
     
     void remove(const T& t) {
       if(!m_temporaryIndices.empty())
         apply();
-      m_temporaryRemoveIndices.push_back(t);
+      m_temporaryRemoveIndices.insert(m_conversion.toIndex(t));
     }
 
     ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
@@ -93,11 +97,11 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
       QMutexLocker l(m_lockBeforeAccess);
       uint index = m_conversion.toIndex(item);
 
-      if( m_temporaryRemoveIndices.empty() && m_temporaryIndices.size() < 10 ) {
+      if( m_temporaryRemoveIndices.empty() ) {
         //Simplification without creating the set
-        for( typename std::list<T>::const_iterator it = m_temporaryIndices.begin(); it != m_temporaryIndices.end(); ++it )
-          if( *it == item )
-            return true;
+        if(m_temporaryIndices.find(index) != m_temporaryIndices.end())
+          return true;
+        
         return m_set.contains(index);
       }
       
@@ -150,25 +154,13 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
     void apply() const {
       if(!m_temporaryIndices.empty()) {
         QMutexLocker l(m_lockBeforeAccess);
-        std::set<Utils::BasicSetRepository::Index> indices;
-        typename std::list<T>::const_iterator end = m_temporaryIndices.end();
-        for ( typename std::list<T>::const_iterator rit = m_temporaryIndices.begin(); rit != end; ++rit ) {
-          Utils::BasicSetRepository::Index idx = m_conversion.toIndex(*rit);
-          indices.insert(idx);
-        }
-        Set tempSet = m_rep->createSet(indices);
+        Set tempSet = m_rep->createSet(m_temporaryIndices);
         m_temporaryIndices.clear();
         m_set += tempSet;
       }
       if(!m_temporaryRemoveIndices.empty()) {
         QMutexLocker l(m_lockBeforeAccess);
-        std::set<Utils::BasicSetRepository::Index> indices;
-        typename std::list<T>::const_iterator end = m_temporaryRemoveIndices.end();
-        for ( typename std::list<T>::const_iterator rit = m_temporaryRemoveIndices.begin(); rit != end; ++rit ) {
-          Utils::BasicSetRepository::Index idx = m_conversion.toIndex(*rit);
-          indices.insert(idx);
-        }
-        Set tempSet = m_rep->createSet(indices);
+        Set tempSet = m_rep->createSet(m_temporaryRemoveIndices);
         m_temporaryRemoveIndices.clear();
         m_set -= tempSet;
       }
@@ -176,8 +168,9 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
     BasicSetRepository* m_rep;
     mutable Set m_set;
     QMutex* m_lockBeforeAccess;
-    mutable std::list<T> m_temporaryIndices;
-    mutable std::list<T> m_temporaryRemoveIndices;
+    typedef std::set<Utils::BasicSetRepository::Index> IndexList;
+    mutable IndexList m_temporaryIndices;
+    mutable IndexList m_temporaryRemoveIndices;
     Conversion m_conversion;
   };
 }

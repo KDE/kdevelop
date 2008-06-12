@@ -14,6 +14,7 @@ set(kdevcpprpp_LIB_SRCS
     pp-location.cpp
     preprocessor.cpp
     chartools.cpp
+    macrorepository.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

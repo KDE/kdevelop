@@ -47,6 +47,7 @@ Stream::Stream()
   , m_isNull(true)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_onwsString(true)
   , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(0)
@@ -61,6 +62,7 @@ Stream::Stream( PreprocessedContents * string, const Anchor& offset, LocationTab
   , m_isNull(false)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_onwsString(false)
   , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(offset.line)
@@ -74,11 +76,32 @@ Stream::Stream( PreprocessedContents * string, const Anchor& offset, LocationTab
   end = m_string->constData() + m_string->size();
 }
 
+Stream::Stream( const uint * string, uint stringSize, const Anchor& offset, LocationTable* table )
+  : m_string(new PreprocessedContents(stringSize))
+  , m_isNull(false)
+  , m_skippedToEnd(false)
+  , m_inputPositionLocked(false)
+  , m_onwsString(true)
+  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
+  , m_pos(0)
+  , m_inputLine(offset.line)
+  , m_inputLineStartedAt(-offset.column)
+  , m_locationTable(table)
+  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
+{
+  memcpy(m_string->data(), string, stringSize * sizeof(uint));
+  if(offset.collapsed)
+    m_inputPositionLocked = true;
+  c = m_string->constData();
+  end = m_string->constData() + m_string->size();
+}
+
 Stream::Stream( PreprocessedContents * string, LocationTable* table )
   : m_string(string)
   , m_isNull(false)
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
+  , m_onwsString(false)
   , m_macroExpansion(KDevelop::SimpleCursor::invalid())
   , m_pos(0)
   , m_inputLine(0)
@@ -92,7 +115,7 @@ Stream::Stream( PreprocessedContents * string, LocationTable* table )
 
 Stream::~Stream()
 {
-  if (m_isNull)
+  if (m_onwsString)
     delete m_string;
 }
 
@@ -258,6 +281,7 @@ Stream& Stream::appendString( const Anchor& inputPosition, const PreprocessedCon
 
     int extraLines = 0;
     for (int i = 0; i < string.size(); ++i) {
+      
       if (string.at(i) == newline) {
         m_pos += i + 1; //Move the current offset to that position, so the marker is set correctly
         if(!inputPosition.collapsed)

@@ -52,6 +52,7 @@ class KDEVCPPRPP_EXPORT Stream
   public:
     Stream();
     //If the given offset anchor has the member "collapsed" set to true, the position will be locked.
+    explicit Stream( const uint * string, uint stringSize, const Anchor& offset = Anchor(0,0), LocationTable* table = 0 );
     explicit Stream( PreprocessedContents * string, const Anchor& offset = Anchor(0,0), LocationTable* table = 0 );
     explicit Stream( PreprocessedContents * string, LocationTable* table );
     virtual ~Stream();
@@ -159,7 +160,7 @@ class KDEVCPPRPP_EXPORT Stream
     PreprocessedContents* m_string;
     const unsigned int* c;
     const unsigned int* end;
-    bool m_isNull, m_skippedToEnd, m_inputPositionLocked;
+    bool m_isNull, m_skippedToEnd, m_inputPositionLocked, m_onwsString;
     KDevelop::SimpleCursor m_macroExpansion;
     int m_pos;
     int m_inputLine;

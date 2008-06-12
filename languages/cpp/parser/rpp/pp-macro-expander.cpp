@@ -39,9 +39,9 @@
 
 using namespace KDevelop;
 
-QString joinIndexVector(const QVector<uint>& arrays, QString between) {
+QString joinIndexVector(const uint* arrays, uint size, QString between) {
   QString ret;
-  foreach(uint item, arrays) {
+  FOREACH_CUSTOM(uint item, arrays, size) {
     if(!ret.isEmpty())
       ret += between;
     ret += IndexedString(item).str();
@@ -79,7 +79,8 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
 
   Q_ASSERT(m_frame->expandingMacro != 0);
 
-  const QVector<uint>& formals = m_frame->expandingMacro->formals;
+  const uint* formals = m_frame->expandingMacro->formals();
+  uint formalsSize = m_frame->expandingMacro->formalsSize();
 
   if(name.isEmpty()) {
     KDevelop::Problem problem;
@@ -89,15 +90,15 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
     return pp_actual();
   }
   
-  for (int index = 0; index < formals.size(); ++index) {
+  for (uint index = 0; index < formalsSize; ++index) {
     if (name.index() == formals[index]) {
-      if (index < m_frame->actuals.size())
+      if (index < (uint)m_frame->actuals.size())
         return m_frame->actuals[index];
       else {
         KDevelop::Problem problem;
         problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
         problem.setDescription(i18n("Call to macro %1 missing argument number %2", IndexedString(name).str(), index));
-        problem.setExplanation(i18n("Formals: %1", joinIndexVector(formals, ", ")));
+        problem.setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
         m_engine->problemEncountered(problem);
       }
     }
@@ -242,6 +243,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         Anchor inputPosition = input.inputPosition();
         IndexedString name(skip_identifier (input));
+        
         // search for the paste token
         int blankStart = input.offset();
         skip_blanks (input, devnull());
@@ -276,6 +278,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         // TODO handle inbuilt "defined" etc functions
 
         pp_macro* macro = m_engine->environment()->retrieveMacro(name);
+        
         if (!macro || !macro->defined || macro->hidden || m_engine->hideNextMacro())
         {
           m_engine->setHideNextMacro(name == definedIndex);
@@ -298,11 +301,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
           pp_macro* m = 0;
 
-          if (!macro->definition.isEmpty()) {
+          if (macro->definitionSize()) {
             macro->hidden = true;
 
             pp_macro_expander expand_macro(m_engine);
-            Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
+            Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
             ms.setOriginalInputPosition(input.originalInputPosition());
             PreprocessedContents expanded;
             {
@@ -440,7 +443,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         pp_frame frame(macro, actuals);
         pp_macro_expander expand_macro(m_engine, &frame);
         macro->hidden = true;
-        Stream ms(&macro->definition, Anchor(input.inputPosition(), true));
+        Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
         ms.setOriginalInputPosition(input.originalInputPosition());
         expand_macro(ms, output);
         macro->hidden = false;
@@ -465,6 +468,6 @@ void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actua
             && first != input.offset()
             && !input.atEnd()
             && input == '.'
-            && (__actuals.size() + 1) == __macro->formals.size());
+            && (__actuals.size() + 1) == (int)__macro->formalsSize());
 }
 

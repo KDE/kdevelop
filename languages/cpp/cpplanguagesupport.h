@@ -140,7 +140,7 @@ private:
     //Returns the identifier and its range under the cursor as first return-value, and the tail behind at as the second
     QPair<QPair<QString, KDevelop::SimpleRange>, QString> cursorIdentifier(const KUrl& url, const KDevelop::SimpleCursor& position) const;
 
-    QPair<KDevelop::SimpleRange, rpp::pp_macro> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
+    QPair<KDevelop::SimpleRange, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
     
     virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);
 

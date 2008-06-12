@@ -38,10 +38,9 @@
 #include <iproblem.h>
 
 #include "cppduchainexport.h"
-#include "macroset.h"
 #include "cachemanager.h"
 #include "setrepository.h"
-#include "macrorepository.h"
+#include "parser/rpp/macrorepository.h"
 
 struct IndexedStringHash {
   uint operator() (const KDevelop::IndexedString& str) const {
@@ -130,6 +129,7 @@ The good things:
 
 namespace rpp {
   class pp_macro;
+  class pp_macro;
   class Environment;
 }
 
@@ -144,8 +144,9 @@ struct KDEVCPPDUCHAIN_EXPORT IndexedStringConversion {
   }
 };
 
+//This is expensive, because it needs to copy the complete macro with each conversion
 struct KDEVCPPDUCHAIN_EXPORT MacroIndexConversion {
-  rpp::pp_macro toItem(uint index) const;
+  const rpp::pp_macro& toItem(uint index) const;
   uint toIndex(const rpp::pp_macro& _macro) const;
 };
 

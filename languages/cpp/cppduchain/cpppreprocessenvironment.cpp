@@ -14,6 +14,7 @@
 #include "cpppreprocessenvironment.h"
 #include <hashedstring.h>
 #include <iproblem.h>
+#include <parser/rpp/macrorepository.h>
 
 CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::stringSetRepository), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
@@ -77,25 +78,25 @@ void CppPreprocessEnvironment::swapMacros( Environment* parentEnvironment ) {
   * */
 void CppPreprocessEnvironment::merge( const Cpp::LazyMacroSet& macros ) {
     for( Cpp::MacroSetIterator it(macros.set().iterator()); it; ++it ) {
-        rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
-        if( !(*it).isUndef() )
-          m_macroNameSet.insert((*it).name);
+        if( !it.ref().isUndef() )
+          m_macroNameSet.insert(it.ref().name);
         else
-          m_macroNameSet.remove((*it).name);
+          m_macroNameSet.remove(it.ref().name);
     }
 }
 
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
     for( Cpp::MacroSetIterator it(file->definedMacros().iterator()); it; ++it ) {
-        rpp::Environment::setMacro(new rpp::pp_macro(*it)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
-        m_macroNameSet.insert((*it).name);
+        m_macroNameSet.insert(it.ref().name);
     }
     for( Cpp::StringSetIterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
-        rpp::pp_macro*  m = new rpp::pp_macro(*it);
-        m->defined = false;
-        rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        rpp::pp_dynamic_macro m(*it);
+        m.defined = false;
+        rpp::Environment::setMacro(makeConstant(&m)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
         m_macroNameSet.remove(*it);
     }
