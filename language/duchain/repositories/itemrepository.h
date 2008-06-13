@@ -152,6 +152,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return (Item*)(m_data+index);
     }
     
+    uint usedMemory() const {
+      return m_size - m_available;
+    }
+    
   private:
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     unsigned short followerIndex(unsigned short index) {
@@ -235,6 +239,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     initializeBucket(bucket);
     unsigned short indexInBucket = index & 0xffff;
     return m_fastBuckets[bucket]->itemFromIndex(indexInBucket);
+  }
+  
+  uint usedMemory() const {
+    uint used = 0;
+    for(int a = 0; a < m_buckets.size(); ++a) {
+      if(m_buckets[a]) {
+        used += m_buckets[a]->usedMemory();
+      }
+    }
+    return used;
   }
 
   private:
