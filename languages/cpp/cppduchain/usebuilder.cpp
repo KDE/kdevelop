@@ -95,25 +95,26 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   /**
    * We need to find a context that this use fits into, which must not necessarily be the current one.
    * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
-   * sub-context that comes from the macro. That sub-context will have a very small range, and will most
-   * probably not be the range of the actual "SomeClass" text, so the "SomeClass" use has to be moved
-   * into the context that surrounds the SOME_MACRO invocation.
+   * sub-context that comes from the macro. That sub-context will have a collapsed range of length zero, 
+   * so the "SomeClass" use has to be moved into the context that surrounds the SOME_MACRO invocation.
    * */
   DUContext* newContext = currentContext();
-  int contextUpSteps = 0;
-  while (!newContext->range().contains(newRange) && newContext->parentContext()) {
-    newContext = newContext->parentContext();
+  
+  int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
+  while (!newContext->range().contains(newRange) && contextUpSteps < (m_contextStack.size()-1)) {
     ++contextUpSteps;
+    newContext = m_contextStack[m_contextStack.size()-1-contextUpSteps];
   }
 
   if (contextUpSteps) {
     m_editor->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
+    m_finishContext = false;
     openContext(newContext);
+    m_finishContext = true;
     nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
     skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
     
-    ///@todo fix this
-    //Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
+    Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
     Q_ASSERT(currentContext()->uses().count() >= nextUseIndex());
   }
   
@@ -164,8 +165,7 @@ void UseBuilder::newUse(std::size_t start_token, std::size_t end_token, KDevelop
   }
 
   if (contextUpSteps) {
-    ///@todo fix this
-    //Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
+    Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == currentContext());
     Q_ASSERT(currentContext()->uses().count() >= nextUseIndex());
     m_nextUseStack[m_nextUseStack.size()-contextUpSteps-2] = nextUseIndex();
     m_skippedUses[m_skippedUses.size()-contextUpSteps-2] = skippedUses();
