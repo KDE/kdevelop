@@ -78,46 +78,6 @@ struct TopDUContext::AliasChainElement {
   uint length;
 };
 
-
-///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
-struct TopDUContext::DeclarationChecker {
-  DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags) : top(_top), position(_position), dataType(_dataType), flags(_flags) {
-  }
-  
-  bool operator()(Declaration* dec) const {
-    const TopDUContext* otherTop = dec->topContext();
-    
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
-      return false;
-    
-    if (otherTop != top) {
-      if (dataType && dec->abstractType() != dataType)
-        // The declaration doesn't match the type filter we are applying
-        return false;
-
-      // Make sure that this declaration is accessible
-      if (!(flags & DUContext::NoImportsCheck) && !top->importsPrivate(otherTop, position))
-        return false;
-    } else {
-      if (dataType && dec->abstractType() != dataType)
-        // The declaration doesn't match the type filter we are applying
-        return false;
-
-      if (dec->range().start >= position)
-        if(!dec->context() || dec->context()->type() != DUContext::Class)
-            return false; // The declaration is behind the position we're searching from, therefore not accessible
-    }
-    // Success, this declaration is accessible
-    return true;
-  }
-  
-  const TopDUContext* top;
-  const SimpleCursor& position;
-  const AbstractType::Ptr& dataType;
-  DUContext::SearchFlags flags;
-};
-
-
 struct TopDUContext::ContextChecker {
 
   ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, bool _dontCheckImport) : top(_top), position(_position), contextType(_contextType), dontCheckImport(_dontCheckImport) {
@@ -399,6 +359,46 @@ public:
   }
 };
 
+///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
+///The import-structure needs to be constructed and locked when this is used
+struct TopDUContext::DeclarationChecker {
+  DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags) : top(_top), topDFunc(_top->d_func()), position(_position), dataType(_dataType), flags(_flags) {
+  }
+  
+  bool operator()(Declaration* dec) const {
+    const TopDUContext* otherTop = dec->topContext();
+    
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
+      return false;
+    
+    if (otherTop != top) {
+      if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
+        return false;
+
+      // Make sure that this declaration is accessible
+      if (!(flags & DUContext::NoImportsCheck) && !topDFunc->m_recursiveImports.contains(static_cast<const TopDUContext*>(otherTop)))
+        return false;
+    } else {
+      if (dataType && dec->abstractType() != dataType)
+        // The declaration doesn't match the type filter we are applying
+        return false;
+
+      if (dec->range().start >= position)
+        if(!dec->context() || dec->context()->type() != DUContext::Class)
+            return false; // The declaration is behind the position we're searching from, therefore not accessible
+    }
+    // Success, this declaration is accessible
+    return true;
+  }
+  
+  const TopDUContext* top; 
+  const TopDUContextPrivate* topDFunc;
+  const SimpleCursor& position;
+  const AbstractType::Ptr& dataType;
+  DUContext::SearchFlags flags;
+};
+
 
 ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
   {
@@ -508,6 +508,10 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
   
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
+  
+  QMutexLocker lock(&importStructureMutex);
+  d_func()->needImportStructure();
+
   applyAliases(identifiers, storer, position, false);
   
   return true;
