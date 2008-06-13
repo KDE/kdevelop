@@ -128,7 +128,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         case KDevelop::IOutputView::BuildView:
         {
-            return registerToolView( i18n("Build"), KDevelop::IOutputView::MultipleView, KIcon("run-build") );
+            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build") );
             break;
         }
         case KDevelop::IOutputView::RunView:
