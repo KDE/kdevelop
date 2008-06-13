@@ -24,7 +24,7 @@
 #include "duchainlock.h"
 #include "declaration.h"
 #include "ducontext.h"
-
+#include <ext/hash_map>
 //#define DEBUG
 
 #ifdef DEBUG
@@ -34,23 +34,32 @@
 #define ifDebug(X)
 #endif
 
-///@todo do some checking for randomly same hash values
+namespace std {
+  using namespace __gnu_cxx;
+}
 
 namespace KDevelop
 {
 
-typedef QMultiHash<QualifiedIdentifier::HashType, Declaration*> DeclarationMap;
-typedef QMultiHash<QualifiedIdentifier::HashType, DUContext*> ContextMap;
+typedef std::hash_multimap<QualifiedIdentifier::HashType, Declaration*> DeclarationMap;
+typedef std::hash_multimap<QualifiedIdentifier::HashType, DUContext*> ContextMap;
 
 class SymbolTablePrivate
 {
 public:
+  SymbolTablePrivate() {
+    m_declarationsEnd = m_declarations.end();
+    m_contextsEnd = m_contexts.end();
+  }
   DeclarationMap m_declarations;
+  DeclarationMap::const_iterator m_declarationsEnd;
   ContextMap m_contexts;
+  ContextMap::const_iterator m_contextsEnd;
   SymbolTable m_instance;
 };
 
-K_GLOBAL_STATIC(SymbolTablePrivate, sdSymbolPrivate)
+//K_GLOBAL_STATIC(SymbolTablePrivate, sdSymbolPrivate)
+SymbolTablePrivate* sdSymbolPrivate = new SymbolTablePrivate;
 
 SymbolTable::SymbolTable()
 {
@@ -68,7 +77,8 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 
   ifDebug( kDebug(9505) << "Adding declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
 
-  sdSymbolPrivate->m_declarations.insert(declaration->qualifiedIdentifier().hash(), declaration);
+  sdSymbolPrivate->m_declarations.insert( DeclarationMap::value_type(declaration->qualifiedIdentifier().hash(), declaration) );
+  sdSymbolPrivate->m_declarationsEnd = sdSymbolPrivate->m_declarations.end();
 }
 
 void SymbolTable::removeDeclaration(Declaration* declaration)
@@ -76,10 +86,11 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
   ENSURE_CHAIN_WRITE_LOCKED
 
   QualifiedIdentifier id = declaration->qualifiedIdentifier();
-  DeclarationMap::Iterator it = sdSymbolPrivate->m_declarations.find(id.hash());
-  for (; it != sdSymbolPrivate->m_declarations.end() && it.key() == id.hash(); ++it)
-    if (it.value() == declaration) {
+  DeclarationMap::iterator it = sdSymbolPrivate->m_declarations.find(id.hash());
+  for (; it != sdSymbolPrivate->m_declarations.end() && (*it).first == id.hash(); ++it)
+    if ((*it).second == declaration) {
       sdSymbolPrivate->m_declarations.erase(it);
+      sdSymbolPrivate->m_declarationsEnd = sdSymbolPrivate->m_declarations.end();
       return;
     }
 
@@ -93,19 +104,19 @@ QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id)
 
   QList<Declaration*> ret;
   
-  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(id.hash()); it != sdSymbolPrivate->m_declarations.end() && it.key() == id.hash(); ++it)
-    if((*it)->identifier() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
-      ret << *it;
+  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(id.hash()); it != sdSymbolPrivate->m_declarationsEnd && (*it).first == id.hash(); ++it)
+    if((*it).second->identifier() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
+      ret << (*it).second;
 
   return ret;
 }
 
 void SymbolTable::findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*>& target) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  //ENSURE_CHAIN_READ_LOCKED Commented out because this is used in very tight loops with high frequency
   
-  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(hash); it != sdSymbolPrivate->m_declarations.end() && it.key() == hash; ++it)
-    target.append(*it);
+  for(DeclarationMap::const_iterator it = sdSymbolPrivate->m_declarations.find(hash); it != sdSymbolPrivate->m_declarationsEnd && (*it).first == hash; ++it)
+    target.append((*it).second);
 }
 
 // QList<Declaration*> SymbolTable::findDeclarationsBeginningWith(const QualifiedIdentifier& id) const
@@ -113,8 +124,8 @@ void SymbolTable::findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*
 //   ENSURE_CHAIN_READ_LOCKED
 // 
 //   QList<Declaration*> ret;
-//   DeclarationMap::ConstIterator end = sdSymbolPrivate->m_declarations.constEnd();
-//   DeclarationMap::ConstIterator it = sdSymbolPrivate->m_declarations.lowerBound(id);
+//   DeclarationMap::Constiterator end = sdSymbolPrivate->m_declarations.constEnd();
+//   DeclarationMap::Constiterator it = sdSymbolPrivate->m_declarations.lowerBound(id);
 // 
 //   if (it != end) {
 //     bool forwards = it.key().startsWith(idString);
@@ -147,19 +158,19 @@ QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) cons
 
   QList<DUContext*> ret;
   
-  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(id.hash()); it != sdSymbolPrivate->m_contexts.end() && it.key() == id.hash(); ++it)
-    if((*it)->localScopeIdentifier().last() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
-      ret << *it;
+  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(id.hash()); it != sdSymbolPrivate->m_contextsEnd && (*it).first == id.hash(); ++it)
+    if((*it).second->localScopeIdentifier().last() == id.last()) ///@todo We cannot check the complete qualifiedIdentifier here, it's too expensive. But we must do a little better checking.
+      ret << (*it).second;
 
   return ret;
 }
 
 void SymbolTable::findContextsByHash(uint hash, QVarLengthArray<DUContext*>& target) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+  //ENSURE_CHAIN_READ_LOCKED Commented out because this is used in very tight loops with high frequency
   
-  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(hash); it != sdSymbolPrivate->m_contexts.end() && it.key() == hash; ++it)
-    target.append(*it);
+  for(ContextMap::const_iterator it = sdSymbolPrivate->m_contexts.find(hash); it != sdSymbolPrivate->m_contextsEnd && (*it).first == hash; ++it)
+    target.append((*it).second);
 }
 
 void SymbolTable::addContext(DUContext * namedContext)
@@ -168,19 +179,23 @@ void SymbolTable::addContext(DUContext * namedContext)
   ifDebug( kDebug(9505) << "Adding context " << namedContext->scopeIdentifier(true).toString() << " with hash " <<  namedContext->scopeIdentifier(true).hash(); )
 
   QualifiedIdentifier id(namedContext->scopeIdentifier(true));
-  if(!id.isEmpty())
-    sdSymbolPrivate->m_contexts.insert(id.hash(), namedContext);
+  if(!id.isEmpty()) {
+    sdSymbolPrivate->m_contexts.insert(ContextMap::value_type(id.hash(), namedContext));
+    sdSymbolPrivate->m_contextsEnd = sdSymbolPrivate->m_contexts.end();
+  }
 }
+
 
 void SymbolTable::removeContext(DUContext * namedContext)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
   QualifiedIdentifier id = namedContext->scopeIdentifier(true);
-  ContextMap::Iterator it = sdSymbolPrivate->m_contexts.find(id.hash());
-    for (; it != sdSymbolPrivate->m_contexts.end() && it.key() == id.hash(); ++it) {
-      if (it.value() == namedContext) {
+  ContextMap::iterator it = sdSymbolPrivate->m_contexts.find(id.hash());
+    for (; it != sdSymbolPrivate->m_contexts.end() && (*it).first == id.hash(); ++it) {
+      if ((*it).second == namedContext) {
         sdSymbolPrivate->m_contexts.erase(it);
+        sdSymbolPrivate->m_contextsEnd = sdSymbolPrivate->m_contexts.end();
         return;
       }
     }
