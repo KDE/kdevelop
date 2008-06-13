@@ -31,6 +31,11 @@
 #define Q_ASSERT(x)
 #endif
 
+//When this is enabled, all created nodes are split at the position computed by splitPositionForRange for their range, even
+//in nodes created during set_interface, set_union, etc.
+//The benefit is that more nodes are shared, the structure is more consistent, and thus several algorithms will terminate faster.
+//The disadvantage is that it takes about 30% more memory, because additional nodes need to be inserted.
+#define ENFORCE_SPLIT_POSITIONS
 
 namespace Utils {
 
@@ -108,8 +113,8 @@ uint splitPositionForRange(uint start, uint end) {
 struct SplitTreeNode {
   uint start, end;
   uint hash;
-  bool hasChildren; //If this is true, the next item in the array is the first child node.
-  uint rightChildOffset; //If hasChildren is true, this contains the offset in the array to the right child node(from this node)
+  bool hasSlaves; //If this is true, the next item in the array is the first child node.
+  uint rightChildOffset; //If hasSlaves is true, this contains the offset in the array to the right child node(from this node)
 };
 
 //Returns the hash-value for all children
@@ -126,7 +131,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
   SplitTreeNode* n(&target.back());
   n->start = start;
   n->end = end;
-  n->hasChildren = false;
+  n->hasSlaves = false;
   n->hash = 0;
   
   if(!split) {
@@ -134,7 +139,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
     Q_ASSERT(rangesSizes[0] == 2);
     Q_ASSERT(end - start == 1); //We have ended up like this
     n->hash = hashFromRange(n->start, n->end);
-    Q_ASSERT(!n->hasChildren || n->rightChildOffset);
+    Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
     return n->hash;
   }else{
     //Find the position where split splits all the ranges, 
@@ -145,7 +150,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
         
         if(split < thisRangeStart || (split >= thisRangeStart && split < thisRangeEnd)) {
           //Either split directly before [rangeList, range], or within this range
-          n->hasChildren = true;
+          n->hasSlaves = true;
           if(split <= thisRangeStart) {
             Q_ASSERT(rangeList != 0 || range != 0);
             //Split before the range-list
@@ -187,16 +192,16 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
   }
   
   Q_ASSERT(0);
-  Q_ASSERT(!n->hasChildren || n->rightChildOffset);
+  Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
   Q_ASSERT(n->hash);
-  Q_ASSERT(n->hasChildren);
+  Q_ASSERT(n->hasSlaves);
   Q_ASSERT(n->rightChildOffset);
   return n->hash;
 }
 
 QString printSplitTree(SplitTreeNode* tree, QString prefix = "") {
     QString ret = prefix + QString("%1 -> %2\n").arg(tree->start).arg(tree->end);
-    if(tree->hasChildren) {
+    if(tree->hasSlaves) {
         Q_ASSERT(tree->rightChildOffset);
         ret += printSplitTree(tree+1, prefix+" ");
         ret += printSplitTree(tree+tree->rightChildOffset, prefix+" ");
@@ -278,7 +283,69 @@ struct SetNodeDataRequest {
   void createItem(SetNodeData* item) const {
     if(data) {
       Q_ASSERT((data->rightNode && data->leftNode) || (!data->rightNode && !data->leftNode));
+      
       *item = *data;
+#ifdef ENFORCE_SPLIT_POSITIONS
+      uint split = splitPositionForRange(data->start, data->end);
+      
+      if(data->hasSlaves()) {
+        const SetNodeData* left = repository.itemFromIndex(data->leftNode);
+        const SetNodeData* right = repository.itemFromIndex(data->rightNode);
+        Q_ASSERT(left && right);
+        if(left->end <= split && right->start >= split) {
+          //The split is already perfect
+        }else{
+          //The split-position intersects with one of the children.
+          //Since we make sure that all children split at the correct positions, that child must have its split-position at "split".
+          if(split < left->end) {
+            Q_ASSERT(split >= left->start);
+            Q_ASSERT(left->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
+            //split intersects the left child-node
+            const SetNodeData* leftLeft = repository.itemFromIndex(left->leftNode);
+            const SetNodeData* leftRight = repository.itemFromIndex(left->rightNode);
+            
+            //Since we do this stuff here, we can be sure that children always have the correct split position
+            Q_ASSERT(split >= leftLeft->end && split <= leftRight->start);
+            
+            //The left node should be leftLeft, and we have to create a new right node, that 
+            //has the children leftRight and right, then we'll split around "split".
+            SetNodeData newRight;
+            newRight.start = leftRight->start;
+            newRight.end = right->end;
+          
+            newRight.leftNode = left->rightNode;
+            newRight.rightNode = data->rightNode;
+            newRight.updateHash(leftRight, right);
+            
+            item->rightNode = repository.index( SetNodeDataRequest( &newRight, repository ) );
+            item->leftNode = left->leftNode;
+          }else{
+            //split intersects the right child-node
+            Q_ASSERT(split > right->start && split < right->end);
+            Q_ASSERT(right->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
+            
+            const SetNodeData* rightLeft = repository.itemFromIndex(right->leftNode);
+            const SetNodeData* rightRight = repository.itemFromIndex(right->rightNode);
+            
+            //Since we do this stuff here, we can be sure that children always have the correct split position
+            Q_ASSERT(split >= rightLeft->end && split <= rightRight->start);
+            
+            //We have to create a new left node that contains left and rightLeft,
+            //and the right node will be rightRight
+            SetNodeData newLeft;
+            newLeft.start = left->start;
+            newLeft.end = rightLeft->end;
+          
+            newLeft.leftNode = data->leftNode;
+            newLeft.rightNode = right->leftNode;
+            newLeft.updateHash(left, rightLeft);
+            
+            item->leftNode = repository.index( SetNodeDataRequest( &newLeft, repository ) );
+            item->rightNode = right->rightNode;
+          }
+        }
+      }
+#endif
       Q_ASSERT(item->hash);
     }else{
       Q_ASSERT(splitNode);
@@ -286,7 +353,7 @@ struct SetNodeDataRequest {
       item->start = splitNode->start;
       item->end = splitNode->end;
       item->hash = m_hash;
-      if(splitNode->hasChildren) {
+      if(splitNode->hasSlaves) {
         item->leftNode = repository.index( SetNodeDataRequest( splitNode+1, repository) );
         item->rightNode = repository.index( SetNodeDataRequest( splitNode+splitNode->rightChildOffset, repository) );
         Q_ASSERT(item->leftNode);
@@ -298,6 +365,22 @@ struct SetNodeDataRequest {
     }
     
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
+    
+#ifdef ENFORCE_SPLIT_POSITIONS
+#ifdef DEBUG
+    //Make sure we split at the correct split position
+    if(item->hasSlaves()) {
+      uint split;
+      if(data)
+        split = splitPositionForRange(data->start, data->end);
+      else
+        split = splitPositionForRange(splitNode->start, splitNode->end);
+      const SetNodeData* left = repository.itemFromIndex(item->leftNode);
+      const SetNodeData* right = repository.itemFromIndex(item->rightNode);
+      Q_ASSERT(split >= left->end && split <= right->start);
+    }
+#endif
+#endif
   }
   
   //Should return whether the here requested item equals the given item
@@ -413,7 +496,7 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
 
 
 struct BasicSetRepository::Private {
-  Private(QString name, bool doLocking, uint dataSize) : dataRepository(name, dataSize), mutex(doLocking ? new QMutex(QMutex::Recursive) : 0) {
+  Private(QString _name, bool doLocking, uint dataSize) : dataRepository(_name, dataSize), mutex(doLocking ? new QMutex(QMutex::Recursive) : 0), name(_name) {
   }
   ~Private() {
     delete mutex;
@@ -421,6 +504,7 @@ struct BasicSetRepository::Private {
 
   SetDataRepository dataRepository;
   QMutex* mutex;
+  QString name;
   private:
 };
 
@@ -837,7 +921,7 @@ bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNode
     return false;
   
   while(true) {
-    if(!lhs->hasChildren && rhs->contiguous()) {
+    if(!lhs->hasSlaves && rhs->contiguous()) {
       //Here it must match, because the basic sets have size 1
       Q_ASSERT(lhs->end - lhs->start == 1 && rhs->end - rhs->start == 1); //We do this assumption in the algorithm
       
@@ -859,10 +943,10 @@ bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNode
     if(lhs->start == rhs->start && lhs->end == rhs->end && lhs->hash != rhs->hash)
       return false;
     
-    if(lhs->hasChildren || !rhs->contiguous()) {
+    if(lhs->hasSlaves || !rhs->contiguous()) {
         //We assume that on the bottom level there is exactly one set for each item
         if(lhs->end - lhs->start > rhs->end - rhs->start) {
-        if(!lhs->hasChildren)
+        if(!lhs->hasSlaves)
             return false;
         
         leftNextStack.push(lhs+lhs->rightChildOffset);
@@ -1075,6 +1159,7 @@ BasicSetRepository::BasicSetRepository(QString name, bool doLocking, uint dataSi
 }
 
 BasicSetRepository::~BasicSetRepository() {
+  kDebug() << "Size of " << d->name << ":" << d->dataRepository.usedMemory();
   delete d;
 }
 
