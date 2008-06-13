@@ -32,7 +32,7 @@ SvnCommitDialog::SvnCommitDialog( KDevSvnPlugin *part, QWidget *parent )
 
     ui.files->resizeColumnToContents(0);
     ui.files->resizeColumnToContents(1);
-    installEventFilter(this);
+    ui.message->installEventFilter(this);
     connect(this, SIGNAL( okClicked() ), SLOT( ok() ) );
     connect(this, SIGNAL( cancelClicked() ), SLOT( cancel() ) );
 }
