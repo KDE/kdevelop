@@ -187,7 +187,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 {
                     KDevelop::IDistributedVersionControl* iface =
                             plugin->extension<KDevelop::IDistributedVersionControl>();
-                    kDebug(9010) << "DVCS system is used, copying files to the project's dir and then initializing DVCS";
+                    kDebug(9010) << "DVCS system is used, copying new files to the project's dir and then initializing DVCS";
 
                     QList<KDevelop::VcsLocation> list = import.sourceLocations();
                     if (list.size() < 1) {
