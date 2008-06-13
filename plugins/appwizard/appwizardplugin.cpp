@@ -39,6 +39,7 @@
 #include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/interfaces/idistributedversioncontrol.h>
 
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
@@ -169,43 +170,139 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                                info.importInformation.destinationLocation( srcloc ),
                                info.importInformation.mappingFlag( srcloc ) );
             IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
-            KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
-            kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
-            kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
-            kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
-            if( plugin && iface )
+
+            //We use DVCS
+            if (plugin->extension<KDevelop::IDistributedVersionControl>() )
             {
-                KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
-                job->exec();
-                if( job->status() == KDevelop::VcsJob::JobSucceeded )
+                KDevelop::IDistributedVersionControl* iface = plugin->extension<KDevelop::IDistributedVersionControl>();
+                kDebug(9010) << "DVCS system is used, copying files to the project's dir and then initializing DVCS";
+                kDebug(9010) << "dest dir" << dest.toLocalFile();
+
+                QList<KDevelop::VcsLocation> list = import.sourceLocations();
+                if (list.size() < 1) {
+                    kDebug(9010) << "Oops, import.sourceLocations() < 1";
+                    return "";
+                }
+                KDevelop::VcsLocation srcLocation = list[0];
+                kDebug(9010) << "src:" <<srcLocation.localUrl().path();
+
+                //TODO: I don't check dirs, because I know they are.
+                QDir sourceDir(srcLocation.localUrl().path());
+                QString destDirName = dest.toLocalFile();
+
+                QFileInfoList entries = sourceDir.entryInfoList();
+
+                foreach (QFileInfo entry, entries)
                 {
-                    KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
-                    if (job) {
-                        job->exec();
-                        if( job->status() != KDevelop::VcsJob::JobSucceeded )
+                    if (entry.isDir())
+                    {
+                        QString newdest = destDirName+"/"+entry.fileName();
+                        if (!QFileInfo(newdest).exists() )
                         {
-                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                            kDebug(9010) << "Creating new dir:" << newdest;
+                            QDir::root().mkdir(newdest);
+                        }
+                    }
+                    else if (entry.isFile())
+                    {
+                        QString destName = destDirName+"/"+entry.fileName();
+                        if (!copyFile(QDir::cleanPath(sourceDir.absolutePath()+'/'+entry.fileName()),
+                             KMacroExpander::expandMacros(destName, m_variables)))
+                        {
+                            KMessageBox::sorry(0, i18n("The file %1 cannot be createDDD.", destDirName));
                             return "";
                         }
-                    } else {
-                        KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                    }
+                }
+
+                if( plugin && iface )
+                {
+                    //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
+                    KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
+                    job->exec();
+                    kDebug(9010) << "Initializing Git repository:" << dest.toLocalFile();
+                    if (job->status() == KDevelop::VcsJob::JobSucceeded)
+                    {
+                        //IDistributedVersionControl is not derived from IBasicVersionControl, 
+                        //maybe it's better to implement
+                        //IDistributedVersionControl as a derived class
+                        KDevelop::IBasicVersionControl *basicVersionIface =
+                                             plugin->extension<KDevelop::IBasicVersionControl>();
+                        KDevelop::VcsJob* job = basicVersionIface->add(KUrl::List(QStringList(".")),
+                                                           KDevelop::IBasicVersionControl::Recursive);
+                        if (job) 
+                        {
+                            job->exec();
+                            if (job->status() != KDevelop::VcsJob::JobSucceeded )
+                            {
+                                KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
+                                return "";
+                            }
+                        } 
+                        else 
+                        {
+                            KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
+                            tmpdir.unlink();
+                            return "";
+                        }
+                    } 
+                    else 
+                    {
+                        KMessageBox::error(0, i18n("Couldn't init Git repository"));
+                        tmpdir.unlink();
+                        return "";
+                    }
+                } 
+                else 
+                {
+                //This should never happen, the vcs dialog presented a list of vcs
+                //systems and now the chosen system doesn't exist anymore??
+                    tmpdir.unlink();
+                    return "";
+                }
+                tmpdir.unlink();
+            }
+            //VCS system is used
+            else
+            {
+                KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+                kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
+                kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
+                kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
+                if( plugin && iface )
+                {
+                    KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
+                    job->exec();
+                    if( job->status() == KDevelop::VcsJob::JobSucceeded )
+                    {
+                        KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
+                        if (job) {
+                            job->exec();
+                            if( job->status() != KDevelop::VcsJob::JobSucceeded )
+                            {
+                                KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                                return "";
+                            }
+                        } else {
+                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                            tmpdir.unlink();
+                            return "";
+                        }
+                    }else
+                    {
+                        KMessageBox::error(0, i18n("Couldn't import project"));
                         tmpdir.unlink();
                         return "";
                     }
                 }else
                 {
-                    KMessageBox::error(0, i18n("Couldn't import project"));
+                //This should never happen, the vcs dialog presented a list of vcs
+                //systems and now the chosen system doesn't exist anymore??
                     tmpdir.unlink();
                     return "";
                 }
-            }else
-            {
-                //This should never happen, the vcs dialog presented a list of vcs
-                //systems and now the chosen system doesn't exist anymore??
                 tmpdir.unlink();
-                return "";
             }
-            tmpdir.unlink();
         }
     }else
         kDebug(9010) << "failed to open template archive";
