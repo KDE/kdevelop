@@ -37,8 +37,8 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
-: m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_find(m_context, m_trace, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
+NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
+: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
 {
 }
 
@@ -145,7 +145,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     }
   } else if( node->type_id )
   {
-    TypeASTVisitor v( m_session, m_visitor, m_context, m_trace, m_debug );
+    TypeASTVisitor v( m_session, m_visitor, m_context, m_source, m_debug );
     v.run( node->type_id->type_specifier );
 
     ExpressionEvaluationResult res;

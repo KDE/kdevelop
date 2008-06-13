@@ -34,7 +34,7 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
 
-TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_trace(trace), m_debug(debug)
+TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_debug(debug)
 {
   m_position = m_context->range().end;
 }
@@ -84,7 +84,7 @@ QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 
 void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  Cpp::FindDeclaration find( m_context, m_trace, DUContext::NoSearchFlags, m_context->range().end );
+  Cpp::FindDeclaration find( m_context, m_source, DUContext::NoSearchFlags, m_context->range().end );
   find.openQualifiedIdentifier(false);
   
   if (const ListNode<std::size_t> *it = node->integrals)
@@ -141,7 +141,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 void TypeASTVisitor::visitName(NameAST *node)
 {
-  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_trace, m_position, KDevelop::DUContext::NoSearchFlags, m_debug);
+  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_position, KDevelop::DUContext::NoSearchFlags, m_debug);
   name_cc.run(node);
   _M_type = name_cc.identifier();
   m_declarations = name_cc.declarations();

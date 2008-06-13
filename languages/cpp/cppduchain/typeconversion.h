@@ -20,6 +20,7 @@
 #define TYPECONVERSION_H
 
 #include <QList>
+#include <qcontainerfwd.h>
 
 #include "cppduchainexport.h"
 #include "typesystem.h"
@@ -27,7 +28,7 @@
 namespace KDevelop {
   class TopDUContext;
   class ImportTraceItem;
-  typedef QList<ImportTraceItem> ImportTrace;
+  typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
 }
 
 namespace Cpp {

@@ -254,7 +254,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
 
       instantiateWith << res;
     }
-    return tempDecl->instantiate( instantiateWith, m_topContext->importTrace(declaration->topContext()) );
+    return tempDecl->instantiate( instantiateWith, declaration->topContext() );
   }
   
   return declaration;

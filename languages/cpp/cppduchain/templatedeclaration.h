@@ -78,7 +78,7 @@ namespace Cpp {
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
        * */
-      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const ImportTrace& inclusionTrace );
+      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const KDevelop::TopDUContext* source );
 
       ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
@@ -165,12 +165,12 @@ namespace Cpp {
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const ImportTrace& inclusionTrace, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
+  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
-  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::ImportTrace& inclusionTrace, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
+  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
 }
 
 #endif

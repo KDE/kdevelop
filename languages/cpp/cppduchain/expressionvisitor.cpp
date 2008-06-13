@@ -192,8 +192,8 @@ const Token& ExpressionVisitor::tokenFromIndex( int index ) {
 typedef PushValue<AbstractType::Ptr> PushAbstractType;
 
 TopDUContext* ExpressionVisitor::topContext() const {
-  if( !m_inclusionTrace.isEmpty() ) {
-    return m_inclusionTrace.front().ctx->topContext();
+  if( m_source ) {
+    return const_cast<TopDUContext*>(m_source); ///@todo remove const_cast
   }else{
     return m_topContext;
   }
@@ -203,7 +203,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::ImportTrace& inclusionTrace, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_inclusionTrace(inclusionTrace), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -469,13 +469,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     clearLast();
 
-    ImportTrace trace;
-    {
-      LOCKDUCHAIN;
-      trace = topContext()->importTrace(m_currentContext->topContext());
-    }
-    
-    NameASTVisitor nameV( m_session, this, m_currentContext, trace, position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
+    NameASTVisitor nameV( m_session, this, m_currentContext, topContext(), position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
     nameV.run(node, m_skipLastNamePart);
 
     if( nameV.identifier().isEmpty() ) {
@@ -614,7 +608,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       Declaration* functionDeclaration = 0;
 
       if( context->owner() && context->owner()->isDefinition() )
-        functionDeclaration = context->owner()->declaration(m_topContext);
+        functionDeclaration = context->owner()->declaration(topContext());
 
       if( !functionDeclaration && context->owner() )
         functionDeclaration = context->owner();
@@ -957,13 +951,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///@todo cv-qualifiers
     clearLast();
     
-    ImportTrace trace;
-    {
-      LOCKDUCHAIN;
-      trace = topContext()->importTrace(m_currentContext->topContext());
-    }
-    
-    TypeASTVisitor comp(m_session, this, m_currentContext, trace);
+    TypeASTVisitor comp(m_session, this, m_currentContext, topContext());
     comp.run(ast);
     
     LOCKDUCHAIN;
@@ -987,13 +975,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       problem(ast, "Could not resolve type");
 #ifdef DEBUG_RESOLUTION_PROBLEMS
       //Run the ast-visitor in debug mode
-      ImportTrace trace;
-      {
-        LOCKDUCHAIN;
-        trace = topContext()->importTrace(m_currentContext->topContext());
-      }
+
       ++m_ignore_uses;
-      TypeASTVisitor comp2(m_session, this, m_currentContext, trace, true);
+      TypeASTVisitor comp2(m_session, this, m_currentContext, topContext(), true);
       comp2.run(ast);
       --m_ignore_uses;
 #endif

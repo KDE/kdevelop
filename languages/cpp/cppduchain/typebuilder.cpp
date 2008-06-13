@@ -236,7 +236,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
       node->expression->ducontext = currentContext();
-      res = parser.evaluateType( node->expression, m_editor->parseSession(), ImportTrace() );
+      res = parser.evaluateType( node->expression, m_editor->parseSession() );
 
       //Delay the type-resolution of template-parameters
       if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front().data()) || isTemplateDependent(res.allDeclarations.front().data())) )
@@ -608,7 +608,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     DUChainReadLocker lock(DUChain::lock());
     if(expression) {
       expression->ducontext = currentContext();
-      res = parser.evaluateType( expression, m_editor->parseSession(), ImportTrace() );
+      res = parser.evaluateType( expression, m_editor->parseSession() );
     }
   
     CppArrayType::Ptr array(new CppArrayType());

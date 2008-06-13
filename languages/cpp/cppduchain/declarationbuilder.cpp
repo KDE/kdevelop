@@ -744,7 +744,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   QualifiedIdentifier id;
   if( node->name ) {
     id = identifierForName(node->name);
-    ///@todo Make decision: Would it be better to allow giving declarations qualified identifiers? Then we wouldn't need to do this.
     openPrefixContext(node, id, pos);
   }
 

@@ -790,7 +790,7 @@ void ContextBuilder::visitUsing(UsingAST* node)
  * */
 class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session, ImportTrace()), result(true) {
+    VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session), result(true) {
     }
     virtual void problem(AST* /*node*/, const QString& /*str*/) {
       result = false;

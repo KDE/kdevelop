@@ -80,7 +80,7 @@ QString ExpressionEvaluationResult::toShortString() const
 }
 
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::ImportTrace& trace, bool forceExpression ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
@@ -149,7 +149,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   if (m_debug)
     kDebug(9007) << "===== Finished evaluation.";
   */
-  ExpressionEvaluationResult ret = evaluateType( ast, session, trace );
+  ExpressionEvaluationResult ret = evaluateType( ast, session, source );
 
   delete session;
 
@@ -162,11 +162,11 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   return ret;
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::ImportTrace& trace ) {
-  return evaluateType( expression, context, trace, true );
+ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source ) {
+  return evaluateType( expression, context, source, true );
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session, const KDevelop::ImportTrace& trace ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session, const KDevelop::TopDUContext* source ) {
   
   if (m_debug) {
     DumpChain dumper;
@@ -175,7 +175,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   }
   
   ExpressionEvaluationResult ret;
-  ExpressionVisitor v(session, trace, m_strict);
+  ExpressionVisitor v(session, source, m_strict);
   v.parse( ast );
   ret.type = v.lastType();
   ret.instance = v.lastInstance();

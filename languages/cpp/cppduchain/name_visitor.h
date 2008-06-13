@@ -41,7 +41,7 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 {
 public:
-  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::ImportTrace& trace, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
+  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
 
   void run(NameAST *node, bool skipLastNamePart = false);
   void run(UnqualifiedNameAST *node);
@@ -68,7 +68,7 @@ private:
   ParseSession* m_session;
   Cpp::ExpressionVisitor* m_visitor;
   const KDevelop::DUContext* m_context;
-  KDevelop::ImportTrace m_trace;
+  const KDevelop::TopDUContext* m_source;
   TypeSpecifierAST* m_typeSpecifier;
   KDevelop::Identifier m_currentIdentifier;
   KDevelop::QualifiedIdentifier _M_name;

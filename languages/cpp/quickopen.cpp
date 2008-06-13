@@ -154,7 +154,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
-          foreach(KDevelop::ImportTraceItem s, inclusion)
+          FOREACH_ARRAY(KDevelop::ImportTraceItem s, inclusion)
             inclusionPath << KUrl(s.ctx->url().str());
         }
       }
@@ -174,7 +174,7 @@ QWidget* IncludeFileData::expandingWidget() const {
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
-          foreach(KDevelop::ImportTraceItem s, inclusion)
+          FOREACH_ARRAY(KDevelop::ImportTraceItem s, inclusion)
             inclusionPath << KUrl(s.ctx->url().str());
         }
       }

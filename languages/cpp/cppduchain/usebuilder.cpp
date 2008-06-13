@@ -269,7 +269,7 @@ void UseBuilder::visitMemInitializer(MemInitializerAST * node)
 
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session, ImportTrace()), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
+  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
   }
   private:
 

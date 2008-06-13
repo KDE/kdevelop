@@ -49,7 +49,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     /**
      * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
      * */
-    explicit ExpressionVisitor( ParseSession* session, const KDevelop::ImportTrace& inclusionTrace = KDevelop::ImportTrace(), bool strict = false );
+    explicit ExpressionVisitor( ParseSession* session, const KDevelop::TopDUContext* source = 0, bool strict = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -133,7 +133,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 
-    KDevelop::ImportTrace m_inclusionTrace;
+    const KDevelop::TopDUContext* m_source;
     
     //Whenever a list of declarations is queried, it is stored here. Especially in visitName(...) and findMember(...)
     QList<DeclarationPointer> m_lastDeclarations;
