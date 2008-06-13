@@ -36,6 +36,7 @@
 //The benefit is that more nodes are shared, the structure is more consistent, and thus several algorithms will terminate faster.
 //The disadvantage is that it takes about 30% more memory, because additional nodes need to be inserted.
 #define ENFORCE_SPLIT_POSITIONS
+///@todo modify the algorithms so they don't create many temporary nodes that don't respect the split-positions
 
 namespace Utils {
 
