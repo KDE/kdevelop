@@ -149,74 +149,53 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
     if (arch->open(QIODevice::ReadOnly))
     {
-        if( info.vcsPluginName.isEmpty() )
+        if( info.vcsPluginName.isEmpty())
         {
             if( !QFileInfo( dest.toLocalFile() ).exists() )
             {
                 QDir::root().mkdir( dest.toLocalFile() );
             }
             unpackArchive(arch->directory(), dest.toLocalFile());
-        }else
+        }
+        else
         {
+            IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
+
             KTempDir tmpdir;
-            if( !unpackArchive(arch->directory(), tmpdir.name()) )
+            QString unpackDir = tmpdir.name();
+            if (plugin->extension<KDevelop::IDistributedVersionControl>() )
             {
-                KMessageBox::error(0, i18n("Couldn't create new project"));
-                return "";
+                unpackDir = dest.toLocalFile();
             }
+
+            if ( !unpackArchive(arch->directory(), unpackDir) )
+            {
+                    KMessageBox::error(0, i18n("Couldn't create new project"));
+                    return "";
+            }
+
             KDevelop::VcsMapping import;
             KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
             import.addMapping( KDevelop::VcsLocation( KUrl( tmpdir.name() ) ),
                                info.importInformation.destinationLocation( srcloc ),
                                info.importInformation.mappingFlag( srcloc ) );
-            IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
 
-            //We use DVCS
-            if (plugin->extension<KDevelop::IDistributedVersionControl>() )
+            if (plugin)
             {
-                KDevelop::IDistributedVersionControl* iface = plugin->extension<KDevelop::IDistributedVersionControl>();
-                kDebug(9010) << "DVCS system is used, copying files to the project's dir and then initializing DVCS";
-                kDebug(9010) << "dest dir" << dest.toLocalFile();
-
-                QList<KDevelop::VcsLocation> list = import.sourceLocations();
-                if (list.size() < 1) {
-                    kDebug(9010) << "Oops, import.sourceLocations() < 1";
-                    return "";
-                }
-                KDevelop::VcsLocation srcLocation = list[0];
-                kDebug(9010) << "src:" <<srcLocation.localUrl().path();
-
-                //TODO: I don't check dirs, because I know they are.
-                QDir sourceDir(srcLocation.localUrl().path());
-                QString destDirName = dest.toLocalFile();
-
-                QFileInfoList entries = sourceDir.entryInfoList();
-
-                foreach (QFileInfo entry, entries)
+                //If We use DVCS?
+                if (plugin->extension<KDevelop::IDistributedVersionControl>() )
                 {
-                    if (entry.isDir())
-                    {
-                        QString newdest = destDirName+"/"+entry.fileName();
-                        if (!QFileInfo(newdest).exists() )
-                        {
-                            kDebug(9010) << "Creating new dir:" << newdest;
-                            QDir::root().mkdir(newdest);
-                        }
-                    }
-                    else if (entry.isFile())
-                    {
-                        QString destName = destDirName+"/"+entry.fileName();
-                        if (!copyFile(QDir::cleanPath(sourceDir.absolutePath()+'/'+entry.fileName()),
-                             KMacroExpander::expandMacros(destName, m_variables)))
-                        {
-                            KMessageBox::sorry(0, i18n("The file %1 cannot be createDDD.", destDirName));
-                            return "";
-                        }
-                    }
-                }
+                    KDevelop::IDistributedVersionControl* iface =
+                            plugin->extension<KDevelop::IDistributedVersionControl>();
+                    kDebug(9010) << "DVCS system is used, copying files to the project's dir and then initializing DVCS";
 
-                if( plugin && iface )
-                {
+                    QList<KDevelop::VcsLocation> list = import.sourceLocations();
+                    if (list.size() < 1) {
+                        kDebug(9010) << "Oops, import.sourceLocations() < 1";
+                        return "";
+                    }
+                    KDevelop::VcsLocation srcLocation = list[0];
+
                     //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
                     KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
                     job->exec();
@@ -227,9 +206,9 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         //maybe it's better to implement
                         //IDistributedVersionControl as a derived class
                         KDevelop::IBasicVersionControl *basicVersionIface =
-                                             plugin->extension<KDevelop::IBasicVersionControl>();
+                                plugin->extension<KDevelop::IBasicVersionControl>();
                         KDevelop::VcsJob* job = basicVersionIface->add(KUrl::List(QStringList(".")),
-                                                           KDevelop::IBasicVersionControl::Recursive);
+                                KDevelop::IBasicVersionControl::Recursive);
                         if (job) 
                         {
                             job->exec();
@@ -252,25 +231,13 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         tmpdir.unlink();
                         return "";
                     }
-                } 
-                else 
-                {
-                //This should never happen, the vcs dialog presented a list of vcs
-                //systems and now the chosen system doesn't exist anymore??
-                    tmpdir.unlink();
-                    return "";
                 }
-                tmpdir.unlink();
-            }
-            //VCS system is used
-            else
-            {
-                KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
-                kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
-                kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
-                kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
-                if( plugin && iface )
+                else
                 {
+                    KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+                    kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
+                    kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
+                    kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
                     KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
                     job->exec();
                     if( job->status() == KDevelop::VcsJob::JobSucceeded )
@@ -294,15 +261,16 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         tmpdir.unlink();
                         return "";
                     }
-                }else
-                {
+                }
+            }
+            else
+            {
                 //This should never happen, the vcs dialog presented a list of vcs
                 //systems and now the chosen system doesn't exist anymore??
-                    tmpdir.unlink();
-                    return "";
-                }
                 tmpdir.unlink();
+                return "";
             }
+            tmpdir.unlink();
         }
     }else
         kDebug(9010) << "failed to open template archive";
