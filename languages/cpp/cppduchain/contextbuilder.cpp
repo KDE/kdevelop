@@ -401,9 +401,17 @@ void ContextBuilder::supportBuild(AST *node, DUContext* context)
 {
   //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
 
-  
   if( !context )
     context = node->ducontext;
+  
+  TopDUContextPointer topContext;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    topContext = TopDUContextPointer(context->topContext());
+  }
+  
+  //We will have some caching in TopDUContext until this objects lifetime is over
+  TopDUContext::Cache cache(topContext);
   
   if( TopDUContext* topLevelContext = dynamic_cast<TopDUContext*>(context) )
     smartenContext(topLevelContext);

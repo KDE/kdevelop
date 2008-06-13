@@ -52,6 +52,16 @@ CppCodeCompletionWorker::CppCodeCompletionWorker(CppCodeCompletionModel* parent)
 
 void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
 {
+  TopDUContextPointer topContext;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    if(context)
+      topContext = TopDUContextPointer(context->topContext());
+  }
+  
+  //We will have some caching in TopDUContext until this objects lifetime is over
+  TopDUContext::Cache cache(topContext);
+  
   Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, contextText ) );
   if (CppCodeCompletionModel* m = model())
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
