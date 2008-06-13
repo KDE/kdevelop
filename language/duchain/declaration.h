@@ -21,6 +21,7 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
+#include <qcontainerfwd.h>
 #include <editor/documentrangeobject.h>
 
 #include "language/duchain/identifier.h"
@@ -44,7 +45,9 @@ class DeclarationPrivate;
 class DeclarationId;
 
 struct ImportTraceItem;
-typedef QList<ImportTraceItem> ImportTrace;
+
+
+typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
 
 /**
  * Represents a single declaration in a definition-use chain.

@@ -449,11 +449,11 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
   ENSURE_CAN_READ
 
   DeclarationList ret;
-  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
+  findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
   return arrayToList(ret);
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& /*trace*/, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
   Q_D(const DUContext);
 
@@ -491,13 +491,13 @@ bool DUContext::foundEnough( const DeclarationList& ret ) const {
     return false;
 }
 
-bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const
+bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const
 {
   Q_D(const DUContext);
   if( d_func()->m_contextType != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
     for(int a = 0; a < baseIdentifiers.size(); ++a)
       if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
-        findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, trace, flags);
+        findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, source, flags);
     
     if( foundEnough(ret) )
       return true;
@@ -534,18 +534,14 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         if( !context )
           break;
 
-        ImportTrace newTrace(trace);
-
         if( position.isValid() ) {
           QMap<DUContextPointer, SimpleCursor>::const_iterator it2 = d->m_importedParentContextPositions.find(*it);
           if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
             if( position < *it2 )
               continue; ///Respect the import-positions
-            
-              newTrace << ImportTraceItem(this, *it2);
           }
         }
-        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, newTrace, flags | InImportedParentContext) )
+        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext) )
           return false;
       }
     }
@@ -557,7 +553,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && d_func()->m_parentContext) {
     applyUpwardsAliases(aliasedIdentifiers);
-    return d_func()->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == d_func()->m_parentContext->url() ? position : d_func()->m_parentContext->range().end, dataType, ret, trace, flags);
+    return d_func()->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == d_func()->m_parentContext->url() ? position : d_func()->m_parentContext->range().end, dataType, ret, source, flags);
   }
   return true;
 }
@@ -570,7 +566,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(identifier));
   
-  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
 
   return arrayToList(ret);
 }
@@ -698,7 +694,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor&
 
   QHash<const DUContext*, bool> hadContexts;
   // Iterate back up the chain
-  mergeDeclarationsInternal(ret, position, hadContexts, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), searchInParents);
+  mergeDeclarationsInternal(ret, position, hadContexts, topContext ? topContext : this->topContext(), searchInParents);
 
   return ret;
 }
@@ -711,7 +707,7 @@ const QVector<Declaration*> DUContext::localDeclarations() const
   return d_func()->m_localDeclarations;
 }
 
-void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const ImportTrace& trace, bool searchInParents, int currentDepth) const
+void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
 {
   Q_D(const DUContext);
   if(hadContexts.contains(this))
@@ -737,23 +733,19 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     if( !context )
       break;
 
-    ImportTrace newTrace(trace);
-
     if( position.isValid() ) {
       QMap<DUContextPointer, SimpleCursor>::const_iterator it2 = d->m_importedParentContextPositions.find(DUContextPointer(context));
       if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
         if( position < *it2 )
           continue; ///Respect the import-positions
-
-        newTrace << ImportTraceItem(this, *it2);
       }
     }
     
-    context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, newTrace, false, currentDepth+1);
+    context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
   }
 
   if (searchInParents && parentContext())                            ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-    parentContext()->mergeDeclarationsInternal(definitions, position, hadContexts, trace, true, currentDepth+1);
+    parentContext()->mergeDeclarationsInternal(definitions, position, hadContexts, source, true, currentDepth+1);
 }
 
 void DUContext::deleteLocalDeclarations()
@@ -860,7 +852,7 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
   DeclarationList ret;
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
-  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext->importTrace(this->topContext()) : ImportTrace(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags);
   return arrayToList(ret);
 }
 

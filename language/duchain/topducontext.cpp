@@ -399,31 +399,38 @@ struct TopDUContext::DeclarationChecker {
   DUContext::SearchFlags flags;
 };
 
-
 ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
-  {
-    ImportTrace ret;
+{
+  ImportTrace ret;
+  importTrace(target, ret);
+  return ret;
+}
+
+void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) const
+{
     QMutexLocker lock(&importStructureMutex);
 
-    d_func()->needImportStructure();
+    const TopDUContext* current = this;
+    while(current != target) {
+      current->d_func()->needImportStructure();
     
-    TopDUContextPrivate::RecursiveImports::const_iterator it = d_func()->m_recursiveImports.find(target);
+      TopDUContextPrivate::RecursiveImports::const_iterator it = current->d_func()->m_recursiveImports.find(target);
     
-    if(it == d_func()->m_recursiveImports.end())
-      return ret;
+      if(it == current->d_func()->m_recursiveImports.end())
+        return;
+      
+      const TopDUContext* nextContext = (*it).second;
 
-    const TopDUContext* nextContext = (*it).second;
-    if(nextContext) {
-      ret << ImportTraceItem(this, DUContext::importPosition(nextContext));
+      if(nextContext) {
+        store.append(ImportTraceItem(current, current->importPosition(nextContext)));
 
-      if(target != nextContext)
-        ret += nextContext->importTrace(target);
-    }else{
-      kWarning() << "inconsistent import-structure";
-    }
-    return ret;
+        current = nextContext;
+      }else{
+        kWarning() << "inconsistent import-structure";
+        return;
+      }
   }
-
+}
 
 TopDUContext::TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
   : DUContext(*new TopDUContextPrivate(this), url, range)
@@ -493,7 +500,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   const DeclarationChecker& check;
 };
 
-bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& /*trace*/, SearchFlags flags) const
+bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags) const
 {
   ENSURE_CAN_READ
       

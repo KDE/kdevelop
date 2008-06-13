@@ -98,9 +98,13 @@ public:
   /**
    * Returns the trace of imports from this context top the given target.
    * The positions in the returned trace may be invalid.
+   * This is more efficient then the version below, because the trace doesn't need to be copied
    * */
-  ImportTrace importTrace(const TopDUContext* target) const;
+  void importTrace(const TopDUContext* target, ImportTrace& store) const;
 
+  ///More convenient version of the above
+  ImportTrace importTrace(const TopDUContext* target) const;
+  
   enum Flags {
     NoFlags = 0,
     /**
@@ -171,7 +175,7 @@ public:
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
   
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
   

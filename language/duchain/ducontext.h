@@ -20,6 +20,7 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
+#include <QVarLengthArray>
 
 #include <editor/documentcursorobject.h>
 #include "identifier.h"
@@ -54,13 +55,15 @@ class DUContextPrivate;
 struct ImportTraceItem {
   ImportTraceItem(const DUContext* _ctx, SimpleCursor _pos = SimpleCursor::invalid()) : ctx(_ctx), position(_pos) {
   }
+  ImportTraceItem() {
+  }
 
   //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
   const DUContext* ctx;
   SimpleCursor position;
 };
 
-typedef QList<ImportTraceItem> ImportTrace;
+typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
 
 template<class T>
 class DUChainPointer;
@@ -521,7 +524,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * Advantage of this interface:
    * - You can search multiple identifiers at one time. However, those should be aliased identifiers for one single item, because
    *   search might stop as soon as one item is found.
-   * - You can give an ImportTrace to correctly resolve template-paremeters.
+   * - The source top-context is needed to correctly resolve template-parameters
    * @param position A valid position, if in doubt use textRange().end()
    *
    * @warning position Must be valid!
@@ -529,7 +532,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * */
   typedef QVarLengthArray<Declaration*, 40> DeclarationList;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
 
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
@@ -545,12 +548,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const ImportTrace& trace, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const ImportTrace& trace, SearchFlags flags ) const;
+  virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
 
   /// Context search implementation
   virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
