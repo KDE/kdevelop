@@ -64,7 +64,7 @@ public:
     int columnCount( const QModelIndex&  = QModelIndex() ) const;
 
     void addProjectItem( KDevelop::ProjectBaseItem* );
-    void removeProjectItem( KDevelop::ProjectBaseItem* );
+    bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
     KDevelop::ProjectBaseItem* itemForIndex( const QModelIndex& );
     QList<BuildItem> items();
     void saveSettings( KConfigGroup& ) const;

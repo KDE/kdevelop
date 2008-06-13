@@ -83,12 +83,7 @@ void ProjectBuildSetWidget::removeItems()
     {
         if( !rows.contains( idx.row() ) )
         {
-            KDevelop::ProjectBaseItem* item = m_view->plugin()->buildSet()->itemForIndex( idx );
-            if( item )
-            {
-                m_view->plugin()->buildSet()->removeProjectItem( item );
-                rows << idx.row();
-            }
+            m_view->plugin()->buildSet()->removeRows( idx.row(), 1 );
         }
     }
 }

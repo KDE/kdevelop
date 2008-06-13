@@ -135,7 +135,7 @@ KDevelop::ProjectBaseItem* BuildItem::findItem() const
 
 bool operator==( const BuildItem& rhs, const BuildItem& lhs  )
 {
-    return( rhs.itemName() == lhs.itemName() && rhs.projectName() == lhs.projectName() && rhs.itemPath() == lhs.itemPath() ); 
+    return( rhs.itemName() == lhs.itemName() && rhs.projectName() == lhs.projectName() && rhs.itemPath() == lhs.itemPath() );
 }
 
 BuildItem& BuildItem::operator=( const BuildItem& rhs )
@@ -220,15 +220,18 @@ void ProjectBuildSetModel::addProjectItem( KDevelop::ProjectBaseItem* item )
     endInsertRows();
 }
 
-void ProjectBuildSetModel::removeProjectItem( KDevelop::ProjectBaseItem* item )
+bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& parent )
 {
-    BuildItem i( item );
-    if( !m_items.contains( i ) || m_items.isEmpty() )
-        return;
-    int idx = m_items.indexOf( i );
-    beginRemoveRows( QModelIndex(), idx, idx );
-    m_items.removeAll( i );
+    if( parent.isValid() || row > rowCount() || row < 0 || (row+count) > rowCount() || count <= 0 )
+        return false;
+
+    beginRemoveRows( QModelIndex(), row, row+count-1 );
+    for( int i = row; i < row+count; i++ )
+    {
+        m_items.removeAt( row );
+    }
     endRemoveRows();
+    return true;
 }
 
 KDevelop::ProjectBaseItem* ProjectBuildSetModel::itemForIndex( const QModelIndex& idx )
