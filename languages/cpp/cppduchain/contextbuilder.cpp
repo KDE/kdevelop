@@ -404,15 +404,6 @@ void ContextBuilder::supportBuild(AST *node, DUContext* context)
   if( !context )
     context = node->ducontext;
   
-  TopDUContextPointer topContext;
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    topContext = TopDUContextPointer(context->topContext());
-  }
-  
-  //We will have some caching in TopDUContext until this objects lifetime is over
-  TopDUContext::Cache cache(topContext);
-  
   if( TopDUContext* topLevelContext = dynamic_cast<TopDUContext*>(context) )
     smartenContext(topLevelContext);
   

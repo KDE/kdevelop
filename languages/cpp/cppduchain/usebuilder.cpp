@@ -55,6 +55,14 @@ void UseBuilder::buildUses(AST *node)
       setRecompiling(true);
   }
   
+  TopDUContextPointer topContext;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    topContext = TopDUContextPointer(node->ducontext->topContext());
+  }
+  //We will have some caching in TopDUContext until this objects lifetime is over
+  TopDUContext::Cache cache(topContext);
+
   supportBuild(node);
 
   if (top)
