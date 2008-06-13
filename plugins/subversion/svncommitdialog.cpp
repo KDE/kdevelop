@@ -11,6 +11,8 @@
 #include "svncommitdialog.h"
 #include "kdevsvnplugin.h"
 
+#include <QKeyEvent>
+
 #include <ktextedit.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -30,12 +32,27 @@ SvnCommitDialog::SvnCommitDialog( KDevSvnPlugin *part, QWidget *parent )
 
     ui.files->resizeColumnToContents(0);
     ui.files->resizeColumnToContents(1);
+    installEventFilter(this);
     connect(this, SIGNAL( okClicked() ), SLOT( ok() ) );
     connect(this, SIGNAL( cancelClicked() ), SLOT( cancel() ) );
 }
 
 SvnCommitDialog::~SvnCommitDialog()
 {}
+
+bool SvnCommitDialog::eventFilter( QObject* o, QEvent* e )
+{
+    if( e->type() == QEvent::KeyPress )
+    {
+        QKeyEvent* k = static_cast<QKeyEvent*>(e);
+        if( ( k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter ) && (k->modifiers() & Qt::ControlModifier) == Qt::ControlModifier )
+        {
+            ok();
+            return true;
+        }
+    }
+    return false;
+}
 
 
 void SvnCommitDialog::setKeepLocks( bool keeplock )
