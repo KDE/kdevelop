@@ -35,7 +35,10 @@ namespace KDevelop
   class TopDUContextPrivate;
   class Problem;
   class DeclarationChecker;
+  class TopDUContext;
 
+  typedef DUChainPointer<TopDUContext> TopDUContextPointer;
+  
   typedef KSharedPtr<Problem> ProblemPointer;
 /**
  * The top context in a definition-use chain for one source file.
@@ -175,6 +178,23 @@ public:
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
   
+  class CacheData;
+  
+  /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
+    *this should be done. Just create an item of type Cache, and give it the du-context. The duchain must not be locked when calling this.
+    *The cache will automatically be discarded on destruction of the item. It is thread-local, so you don't need to care about multi-threading.
+    *@warning The DUChain must not be locked when the constructor is called, and it must not be locked when the destructor is executed.
+    */
+  class Cache {
+    public:
+    Cache(TopDUContextPointer context);
+    ~Cache();
+    
+    private:
+    Q_DISABLE_COPY(Cache);
+    CacheData* d;
+  };
+  
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
@@ -190,6 +210,7 @@ protected:
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const;
   
 private:
+  
   struct AliasChainElement;
   struct FindDeclarationsAcceptor;
   struct FindContextsAcceptor;
