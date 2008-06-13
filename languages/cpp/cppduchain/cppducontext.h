@@ -571,14 +571,16 @@ class CppDUContext : public BaseContext {
       BaseContext::applyUpwardsAliases(identifiers);
       ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
       ///We need to make sure that when leaving a function definition, the namespace components are searched
-      if(BaseContext::type() == DUContext::Function || BaseContext::type() == DUContext::Other || BaseContext::type() == DUContext::Helper)
+      DUContext::ContextType type = BaseContext::type();
+      
+      if(type == DUContext::Function || type == DUContext::Other || type == DUContext::Helper)
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
           //This must be a function-definition, like void A::B::test() {}
           KDevelop::DUContext* classContext  = 0;
           
-          if(BaseContext::type() == DUContext::Helper) {
+          if(type == DUContext::Helper) {
             if(!BaseContext::importedParentContexts().isEmpty())
               classContext = BaseContext::importedParentContexts()[0].data();
           } else {
