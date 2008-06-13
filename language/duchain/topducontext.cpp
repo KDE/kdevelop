@@ -980,6 +980,7 @@ QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration) {
   return allUses(context, declarationIndex);
 }
 
+///@todo move this kind of caching into the symbol-table
 TopDUContext::Cache::Cache(TopDUContextPointer context) : d(new CacheData(context)) {
   DUChainWriteLocker lock(DUChain::lock());
   if(d->context)

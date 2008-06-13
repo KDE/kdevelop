@@ -159,7 +159,7 @@ public:
    * indexForUsedDeclaration(..).
    * */
   void clearDeclarationIndices();
-
+ 
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */
@@ -184,6 +184,7 @@ public:
     *this should be done. Just create an item of type Cache, and give it the du-context. The duchain must not be locked when calling this.
     *The cache will automatically be discarded on destruction of the item. It is thread-local, so you don't need to care about multi-threading.
     *@warning The DUChain must not be locked when the constructor is called, and it must not be locked when the destructor is executed.
+    *@warning Only use this in phases when you're not changing the Data within this contexts, else the cache will become invalid and search will be fuzzy.
     */
   class Cache {
     public:
