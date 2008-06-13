@@ -190,7 +190,7 @@ void Stream::seek(int offset)
 Stream & Stream::operator<< ( const unsigned int& c )
 {
   // Keep in sync with below
-  if (!isNull()) {
+  if (!m_isNull) {
     
 /*    if(m_pos > 0) {
       unsigned int& previous( (*m_string)[m_pos-1] );
@@ -221,7 +221,7 @@ Stream& Stream::operator<< ( const Stream& input )
   const uint c = input;
 
   // Keep in sync with above
-  if (!isNull()) {
+  if (!m_isNull) {
     
 /*    if(m_pos > 0) {
       unsigned int& previous( (*m_string)[m_pos-1] );
