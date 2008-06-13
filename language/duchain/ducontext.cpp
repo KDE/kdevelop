@@ -410,7 +410,7 @@ void DUContext::setOwner(Declaration* owner) {
 
 DUContext* DUContext::parentContext( ) const
 {
-  ENSURE_CAN_READ
+  //ENSURE_CAN_READ Commented out for performance reasons
 
   return d_func()->m_parentContext.data();
 }
@@ -832,7 +832,7 @@ void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 
 const QualifiedIdentifier & DUContext::localScopeIdentifier() const
 {
-  ENSURE_CAN_READ
+  //ENSURE_CAN_READ Commented out for performance reasons
 
   return d_func()->m_scopeIdentifier;
 }

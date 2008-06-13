@@ -153,9 +153,8 @@ void Declaration::setComment(const QString& str) {
 
 const Identifier& Declaration::identifier( ) const
 {
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_identifier;
+  //ENSURE_CAN_READ Commented out for performance reasons
+  return d_func()->m_identifier;
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
@@ -177,9 +176,8 @@ void Declaration::setIdentifier(const Identifier& identifier)
 
 AbstractType::Ptr Declaration::abstractType( ) const
 {
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_type;
+  //ENSURE_CAN_READ Commented out for performance reasons
+  return d_func()->m_type;
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
@@ -227,9 +225,8 @@ QString Declaration::mangledIdentifier() const
 
 DUContext * Declaration::context() const
 {
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_context;
+  //ENSURE_CAN_READ Commented out for performance reasons
+  return d_func()->m_context;
 }
 
 void Declaration::setContext(DUContext* context, bool anonymous)
