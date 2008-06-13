@@ -25,6 +25,7 @@
 #include "preprocessor.h"
 #include "pp-environment.h"
 #include "pp-location.h"
+#include "chartools.h"
 
 using namespace rpp;
 
@@ -48,9 +49,9 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.processFile(QString("pp-configuration"), pp::File); // ### put your macros here!
 
-  preprocess.environment()->enterBlock(0, QByteArray());
+  preprocess.environment()->enterBlock(0, PreprocessedContents());
 
-  QString result = preprocess.processFile(QString(filename), pp::File);
+  QString result = QString::fromUtf8(stringFromContents(preprocess.processFile(QString(filename), pp::File)));
 
   preprocess.environment()->cleanup();
 
