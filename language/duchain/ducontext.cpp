@@ -839,7 +839,7 @@ const QualifiedIdentifier & DUContext::localScopeIdentifier() const
 
 DUContext::ContextType DUContext::type() const
 {
-  ENSURE_CAN_READ
+  //ENSURE_CAN_READ This is disabled, because type() is called very often while searching, and it costs us performance
 
   return d_func()->m_contextType;
 }
