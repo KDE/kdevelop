@@ -26,6 +26,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QStack>
 #include <QTime>
+#include <ext/hash_map>
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
@@ -49,6 +50,10 @@
 
 #include <kdebug.h>
 
+namespace std {
+  using namespace __gnu_cxx;
+}
+
 namespace KDevelop
 {
 class DUChainLockPrivate
@@ -58,6 +63,7 @@ public:
     m_writer = 0;
     m_writerRecursion = 0;
     m_totalReaderRecursion = 0;
+    m_readersEnd = m_readers.end(); //This is used to speedup currentThreadHasReadLock()
   }
 
   /**
@@ -71,9 +77,9 @@ public:
   int ownReaderRecursion() const {
     int ownReaderRecursion = 0;
 
-    DUChainLockPrivate::ReaderMap::const_iterator it = m_readers.find( QThread::currentThreadId() );
-    if( it != m_readers.end() )
-      ownReaderRecursion = *it;
+    DUChainLockPrivate::DUChainLockPrivate::ReaderMap::const_iterator it = m_readers.find( QThread::currentThreadId() );
+    if( it != m_readersEnd )
+      ownReaderRecursion = (*it).second;
     return ownReaderRecursion;
   }
 
@@ -103,8 +109,9 @@ public:
   int m_totalReaderRecursion; ///How often is the chain read-locked recursively by all readers? Should be sum of all m_reader values
 
   ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
-  typedef QHash<Qt::HANDLE,int> ReaderMap;
+  typedef std::hash_map<Qt::HANDLE,int> ReaderMap; //Faster than QHash
   ReaderMap m_readers;
+  DUChainLockPrivate::ReaderMap::const_iterator m_readersEnd; //Must always be updated when a new reader was added
 
 #ifdef DEBUG_LOG_TIMING
   QTime m_lockTime;
@@ -167,11 +174,13 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   }
 
   if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
-    DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
+    DUChainLockPrivate::DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
     if( it != d->m_readers.end() )
-      ++(*it);
-    else
-      d->m_readers.insert(QThread::currentThreadId(), 1);
+      ++(*it).second;
+    else {
+      d->m_readers.insert( DUChainLockPrivate::ReaderMap::value_type(QThread::currentThreadId(), 1) );
+      d->m_readersEnd = d->m_readers.end();
+    }
     locked = true;
   }
 
@@ -203,10 +212,10 @@ void DUChainLock::releaseReadLock()
 #endif
 
   QMutexLocker lock(&d->m_mutex);
-  DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
+  DUChainLockPrivate::DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
   Q_ASSERT(it != d->m_readers.end());
-  --(*it);
-  Q_ASSERT((*it)>=0);
+  --(*it).second;
+  Q_ASSERT((*it).second>=0);
   --d->m_totalReaderRecursion;
 
   ///@todo Remove the all readers that do not exist any more at some point(leave other readers there with recursion 0
@@ -226,12 +235,15 @@ void DUChainLock::releaseReadLock()
 
 bool DUChainLock::currentThreadHasReadLock()
 {
-  QMutexLocker lock(&d->m_mutex);
-  DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
-  if( it != d->m_readers.end() )
-    return (*it) != 0;
-  else
-    return false;
+  d->m_mutex.lock();
+  
+  DUChainLockPrivate::DUChainLockPrivate::ReaderMap::const_iterator it = d->m_readers.find( QThread::currentThreadId() );
+  bool ret = false;
+  if( it != d->m_readersEnd )
+    ret = ((*it).second != 0);
+
+  d->m_mutex.unlock();
+  return ret;
 }
 
 bool DUChainLock::lockForWrite(uint timeout)
@@ -303,8 +315,10 @@ void DUChainLock::releaseWriteLock()
 
 bool DUChainLock::currentThreadHasWriteLock()
 {
-  QMutexLocker lock(&d->m_mutex);
-  return d->m_writer == QThread::currentThreadId();
+  d->m_mutex.lock();
+  bool ret = d->m_writer == QThread::currentThreadId();
+  d->m_mutex.unlock();
+  return ret;
 }
 
 
