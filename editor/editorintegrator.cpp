@@ -143,47 +143,88 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
   
   QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
-  SmartRange* currentRange;
-
-  if( !m_currentRangeStack.isEmpty() ) {
-    currentRange = dynamic_cast<SmartRange*>(m_currentRangeStack.top());
-    Q_ASSERT(currentRange);
-  }
 
   SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
 
+  KTextEditor::Cursor rangeStart = range.start();
+  KTextEditor::Cursor rangeEnd = range.end();
+  
   if (!m_currentRangeStack.isEmpty()) {
 
-    ///Special-case 2: The range we are creating is completely contained in a child-range of the current at any deeper level. Replace currentRange with it.
-    bool found = true;
-    while(found) {
-      found = false;
-      foreach( SmartRange* other, currentRange->childRanges() ) {
-      //for( QList<SmartRange*>::const_iterator it = currentRange->childRanges().begin(); it != currentRange->childRanges().end(); ++it ) {
-          if( range.start() < (other)->start() )
-              break;
-          if( range.end() > (other)->end() )
-              continue;
-          if( *other == range )
-            continue;
-          //Now the condition range.start() >= (other)->start() && range.end() <= (other)->end()  is fulfilled(range is contained)
-          currentRange = other; //Move down to the range that contains range
-          found = true;
-      }
-    }
-
-    ///Special-case 1: The range we are creating completely contains n ranges that are slaves of currentRange
-    QList<SmartRange*> importList;
+    SmartRange* currentRange = dynamic_cast<SmartRange*>(m_currentRangeStack.top());
+    Q_ASSERT(currentRange);
     
-    foreach( SmartRange* other, currentRange->childRanges() ) {
-    //for( QList<SmartRange*>::const_iterator it = currentRange->childRanges().begin(); it != currentRange->childRanges().end(); ++it ) {
-        if( (other)->end() > range.end() )
-            break;
-        if( (other)->start() < range.start() )
-            continue;
-        //Now the condition (other)->start() >= range.start() && (other)->end() <= range.end() is fulfilled(range is contained)
+    QList<SmartRange*> importList;
 
-        importList << other; //Delay the setParent because else the list we iterate over gets corrupted
+    bool found = true;
+    while(found && currentRange->childRanges().size()) {
+      found = false;
+      
+      
+      //We use a binary search hear to find contained ranges and containing ranges in one run
+      int count = currentRange->childRanges().size();
+      int leftBound = 0; //Left bound of the search, inclusive
+      int rightBound = count; //Right bound of the search, exclusive
+      int current = count/2;
+      const QList<KTextEditor::SmartRange*>& list(currentRange->childRanges());
+
+      //Find child ranges that are contained in range, or a child range that range is contained in, and build a usable structure
+      ///@todo eventually change kate so neighbours don't move each other around, then we won't need all this hacking, and will get a better result
+      
+      while(true) {
+        if(list[current]->end() <= rangeStart) {
+            //Our range is behind list[current], increase current, move to the point between current and rightBound
+            leftBound = current+1;
+            int nextCurrent =  current + (rightBound-current)/2;
+            if(nextCurrent == current)
+                ++nextCurrent;
+            if(nextCurrent >= rightBound)
+                break; //Found nothing
+            current = nextCurrent;
+        }else if(list[current]->start() >= rangeEnd) {
+            //Our range is before list[current], decrease current, move to point between current and leftBound
+            rightBound = current-1;
+            int nextCurrent =  current - (current-leftBound)/2;
+            if(nextCurrent == current)
+                --nextCurrent;
+            if(nextCurrent < leftBound)
+                break; //Found nothing
+            current = nextCurrent;
+        }else{
+            //We're contained in the range
+            //rangeEnd > rangeStart, rangeStart < currentEnd, rangeEnd > currentStart
+            
+            //We can have 3 possible cases now:
+            //- range is contained in list[current]
+            //- list[current] is contained in range
+            //- list[current] and range intersect in a not fixable way
+            
+            if(rangeStart >= list[current]->start() && rangeEnd <= list[current]->start()) {
+                found  = true;
+                currentRange = list[current];
+            } else {
+                //Range contains list[current], or intersects list[current]-> Find all neighbours of list[current] that are also contained
+                for(int a = current-1; a >= 0; --a) {
+                    if(list[a]->start() >= rangeStart && list[a]->end() <= rangeEnd)
+                        importList << list[a]; //The range is contained, add it to the import list
+                    else
+                        break;
+                }
+                if(rangeStart <= list[current]->start() && rangeEnd >= list[current]->start())
+                    importList << list[current]; //The current item is contained in range
+                    
+                for(int a = current+1; a < count; ++a) {
+                    if(list[a]->start() >= rangeStart && list[a]->end() <= rangeEnd)
+                        importList << list[a]; //The range is contained, add it to the import list
+                    else
+                        break;
+                }
+                ///If importList is empty now, we definitely have an intersection problem
+            }
+            
+            break;
+        }
+      }
     }
 
     for( QList<SmartRange*>::const_iterator it = importList.begin(); it != importList.end(); ++it ) {
