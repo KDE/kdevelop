@@ -63,7 +63,7 @@ AreaSelectorWidget::AreaSelectorWidget(QWidget *parent,
     menu->addAction("Delete Area");
     button->setMenu(menu);
 
-    foreach (Area *a, controller_->areas())
+    foreach (Area *a, controller_->defaultAreas())
     {
         areaIds_.push_back(a->objectName());
         combo_->addItem(a->title());

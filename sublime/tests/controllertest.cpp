@@ -51,7 +51,7 @@ void ControllerTest::testAreaDeletion()
     doc->createView();
     //create an area and two views in it
     Area *area = new Area(&controller, "MyArea");
-    QCOMPARE(controller.areas().count(), 1);
+    QCOMPARE(controller.defaultAreas().count(), 1);
     area->addView(doc->createView());
     area->addView(doc->createView());
     QCOMPARE(doc->views().count(), 3);
@@ -62,19 +62,19 @@ void ControllerTest::testAreaDeletion()
     //but we still have 3 because deleteLater only queues the deletion
     QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
     QCOMPARE(doc->views().count(), 1);
-    QCOMPARE(controller.areas().count(), 0);
+    QCOMPARE(controller.defaultAreas().count(), 0);
 }
 
 void ControllerTest::testNamedAreas()
 {
     Controller controller;
     Area *area1 = new Area(&controller, "1");
-    controller.addArea(area1);
+    controller.addDefaultArea(area1);
     Area *area2 = new Area(&controller, "2");
-    controller.addArea(area2);
+    controller.addDefaultArea(area2);
 
-    QCOMPARE(controller.area("1"), area1);
-    QCOMPARE(controller.area("2"), area2);
+    QCOMPARE(controller.defaultArea("1"), area1);
+    QCOMPARE(controller.defaultArea("2"), area2);
 }
 
 #include "controllertest.moc"

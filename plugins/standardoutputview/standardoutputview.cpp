@@ -259,7 +259,7 @@ void StandardOutputView::removeToolView( int id )
             {
                 widget->removeOutput( outid );
             }
-            foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->areas() )
+            foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->allAreas() )
             {
                 area->removeToolView( view );
             }

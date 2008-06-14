@@ -84,6 +84,9 @@ void RunController::setupActions()
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
+    action = new KAction (i18n("Configure Launches"), this);
+    ac->addAction("configure_launches", action);
+
     action = new KAction( KIcon("system-run"), i18n("Execute Program"), this);
     action->setShortcut(Qt::SHIFT + Qt::Key_F9);
     action->setToolTip(i18n("Execute program"));

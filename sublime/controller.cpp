@@ -202,7 +202,7 @@ void Controller::resetCurrentArea(MainWindow *mainWindow)
     delete prev;
 }
 
-const QList<Area*> &Controller::areas() const
+const QList<Area*> &Controller::defaultAreas() const
 {
     return d->areas;
 }
@@ -222,7 +222,7 @@ const QList<Document*> &Controller::documents() const
     return d->documents;
 }
 
-void Controller::addArea(Area *area)
+void Controller::addDefaultArea(Area *area)
 {
     d->areas.append(area);
     d->allAreas.append(area);
@@ -236,7 +236,7 @@ void Controller::addMainWindow(MainWindow* mainWindow)
     d->mainWindowAreas.resize(d->controlledWindows.size());
     int index = d->controlledWindows.size()-1;
 
-    foreach (Area* area, areas())
+    foreach (Area* area, defaultAreas())
     {
         Area *na = new Area(*area);
         d->allAreas.append(na);
@@ -269,16 +269,16 @@ void Controller::areaReleased(Sublime::Area *area)
     d->namedAreas.remove(area->objectName());
 }
 
-Area *Controller::area(const QString &areaName)
+Area *Controller::defaultArea(const QString &id)
 {
-    return d->namedAreas[areaName];
+    return d->namedAreas[id];
 }
 
-Area *Controller::area(int mainWindow, const QString& areaName)
+Area *Controller::area(int mainWindow, const QString& id)
 {
     foreach (Area* area, areas(mainWindow))
     {
-        if (area->objectName() == areaName)
+        if (area->objectName() == id)
             return area;
     }
     return 0;

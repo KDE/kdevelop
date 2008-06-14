@@ -65,7 +65,7 @@ public:
         Sublime::Area* a =
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
-        controller->addArea(a);
+        controller->addDefaultArea(a);
 
         desired.clear();
         desired["org.kdevelop.debugger.VariablesView"] = Sublime::Left;
@@ -74,7 +74,7 @@ public:
         desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
         a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
         a->setDesiredToolViews(desired);
-        controller->addArea(a);
+        controller->addDefaultArea(a);
 
         defaultMainWindow = new MainWindow(controller);
         controller->addMainWindow(defaultMainWindow);
@@ -444,7 +444,7 @@ void UiController::saveAllAreas(KSharedConfig::Ptr config)
                                       QString("Main Window %1").arg(w));
         mainWindowConfig.writeEntry("currentArea", mw->area()->objectName());
 
-        foreach (Sublime::Area* defaultArea, areas())
+        foreach (Sublime::Area* defaultArea, defaultAreas())
         {
             // FIXME: using object name seems ugly.
             QString type = defaultArea->objectName();
@@ -473,7 +473,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     QList<Sublime::Area*> changedAreas;
 
     /* Offer all toolviews to the default areas.  */
-    foreach (Sublime::Area *area, areas())
+    foreach (Sublime::Area *area, defaultAreas())
     {
         QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
         for (i = d->factoryDocuments.begin(),
@@ -497,7 +497,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
            the model were a given mainwindow can has it's own
            area types not represented in the default set is way
            too complex.  */
-        foreach (Sublime::Area* defaultArea, areas())
+        foreach (Sublime::Area* defaultArea, defaultAreas())
         {
             QString type = defaultArea->objectName();
             Sublime::Area* area = this->area(w, type);
