@@ -233,8 +233,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     unsigned int bucketNumber = request.hash() % m_bucketCount;
     for(unsigned short bucket = 0; bucket < m_bucketCount; ++bucket) { //Try 
       unsigned int testBucket = (bucketNumber + bucket) % m_bucketCount;
-      initializeBucket(testBucket);
-      unsigned short indexInBucket = m_fastBuckets[ testBucket ]->index(request);
+      
+      Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[testBucket];
+      if(!bucketPtr) {
+        initializeBucket(testBucket);
+        bucketPtr = m_fastBuckets[testBucket];
+      }
+      unsigned short indexInBucket = bucketPtr->index(request);
       if(indexInBucket)
         return (testBucket << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
     }
