@@ -192,7 +192,7 @@ public:
     ~Cache();
     
     private:
-    Q_DISABLE_COPY(Cache);
+    Q_DISABLE_COPY(Cache)
     CacheData* d;
   };
   
