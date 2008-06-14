@@ -46,7 +46,7 @@ const int visibilityCachingMargin = 10;
 
 namespace std {
   using namespace __gnu_cxx;
-};
+}
 
 namespace KDevelop
 {
