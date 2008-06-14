@@ -14,6 +14,7 @@
 #include "setrepository.h"
 #include <list>
 #include <QString>
+#include <QVarLengthArray>
 #include <iostream>
 #include <limits>
 #include <itemrepository.h>
@@ -302,7 +303,7 @@ struct SetNodeDataRequest {
             Q_ASSERT(split >= left->start);
             Q_ASSERT(left->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
             //split intersects the left child-node
-            const SetNodeData* leftLeft = repository.itemFromIndex(left->leftNode);
+            //const SetNodeData* leftLeft = repository.itemFromIndex(left->leftNode);
             const SetNodeData* leftRight = repository.itemFromIndex(left->rightNode);
             
             //Since we do this stuff here, we can be sure that children always have the correct split position
@@ -326,7 +327,7 @@ struct SetNodeDataRequest {
             Q_ASSERT(right->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
             
             const SetNodeData* rightLeft = repository.itemFromIndex(right->leftNode);
-            const SetNodeData* rightRight = repository.itemFromIndex(right->rightNode);
+            //const SetNodeData* rightRight = repository.itemFromIndex(right->rightNode);
             
             //Since we do this stuff here, we can be sure that children always have the correct split position
             Q_ASSERT(split >= rightLeft->end && split <= rightRight->start);
@@ -589,7 +590,7 @@ struct Set::Iterator::IteratorPrivate {
   IteratorPrivate() : currentIndex(0), repository(0) {
   }
   
-  std::list<const SetNodeData*> nodeStack;
+  QVarLengthArray<const SetNodeData*> nodeStack;
   Index currentIndex;
   BasicSetRepository* repository;
 
@@ -600,12 +601,12 @@ struct Set::Iterator::IteratorPrivate {
     currentIndex = node->start;
 
     do {
-      nodeStack.push_back(node);
+      nodeStack.append(node);
       if(node->contiguous())
         break; //We need no finer granularity, because the range is contiguous
       node = repository->d->dataRepository.itemFromIndex(node->leftNode);
     } while(node);
-    Q_ASSERT(currentIndex >= nodeStack.front()->start);
+    Q_ASSERT(currentIndex >= nodeStack[0]->start);
   }
 };
 
@@ -641,34 +642,34 @@ Set::Iterator::~Iterator() {
 }
 
 Set::Iterator::operator bool() const {
-  return !d->nodeStack.empty();
+  return !d->nodeStack.isEmpty();
 }
 
 Set::Iterator& Set::Iterator::operator++() {
   
-  Q_ASSERT(!d->nodeStack.empty());
+  Q_ASSERT(!d->nodeStack.isEmpty());
   
   QMutexLocker lock(d->repository->d->mutex);
   
   ++d->currentIndex;
-  if(d->currentIndex >= d->nodeStack.back()->end) {
+  if(d->currentIndex >= d->nodeStack[d->nodeStack.size()-1]->end) {
     //Advance to the next node
-    while(!d->nodeStack.empty() && d->currentIndex >= d->nodeStack.back()->end) {
-      d->nodeStack.pop_back();
+    while(!d->nodeStack.isEmpty() && d->currentIndex >= d->nodeStack[d->nodeStack.size()-1]->end) {
+      d->nodeStack.resize(d->nodeStack.size()-1);
     }
-    if(d->nodeStack.empty()) {
+    if(d->nodeStack.isEmpty()) {
       //ready
     }else{
       //We were iterating the left slave of the node, now continue with the right.
-      const SetNodeData& left = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack.back()->leftNode);
-      const SetNodeData& right = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack.back()->rightNode);
+      //const SetNodeData& left = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStack.size()-1]->leftNode);
+      const SetNodeData& right = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStack.size()-1]->rightNode);
       
       Q_ASSERT(left.end == d->currentIndex);
       d->startAtNode(&right);
     }
   }
 
-  Q_ASSERT(d->nodeStack.empty() || d->currentIndex < d->nodeStack.front()->end);
+  Q_ASSERT(d->nodeStack.isEmpty() || d->currentIndex < d->nodeStack[0]->end);
   
   return *this;
 }
