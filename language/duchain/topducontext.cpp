@@ -412,6 +412,9 @@ struct TopDUContext::DeclarationChecker {
       if (!(flags & DUContext::NoImportsCheck) && !visible)
         return false;
     } else {
+      if(createVisibleCache)
+        createVisibleCache->append(DeclarationPointer(dec));
+      
       if (dataType && dec->abstractType() != dataType)
         // The declaration doesn't match the type filter we are applying
         return false;
@@ -630,17 +633,28 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 #ifdef DEBUG_SEARCH
       kDebug() << "found" << aliases.count() << "aliases";
 #endif
-      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags);
+      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, createVisibleCache);
       
       //The first part of the identifier has been found as a namespace-alias.
       //In c++, we only need the first alias. However, just to be correct, follow them all for now.
       FOREACH_ARRAY( Declaration* aliasDecl, aliases )
       {
-        if(aliasDecl->kind() != Declaration::NamespaceAlias)
+        //Since the visible-cache is computed within check(...), we must always call it when we're computing the cache
+        if(!createVisibleCache && aliasDecl->kind() != Declaration::NamespaceAlias)
           continue;
 
         if(!check(aliasDecl))
           continue;
+        
+        if(aliasDecl->kind() != Declaration::NamespaceAlias)
+          continue;
+        
+        if(foundAlias) {
+          if(createVisibleCache) //We've got to walk through all declarations so we create a correct visible-cache
+            continue;
+          else
+            break;
+        }
         
         if(aliasDecl->identifier() != *newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
           continue;
@@ -674,7 +688,6 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
             applyAliases(newAliasedElement, item, accept, position, canBeNamespace);
         }
-        break; //We only need one namespace-alias
       }
     }
   }
