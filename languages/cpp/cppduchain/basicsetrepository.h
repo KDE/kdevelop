@@ -138,6 +138,8 @@ public:
    * */
   Set createSet(Index i);
   
+  void printStatistics() const;
+  
 private:
   friend class Set;
   class Private;
