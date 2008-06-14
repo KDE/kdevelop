@@ -3,6 +3,7 @@
  *   Copyright 2004-2005 Sascha Cunz <sascha@kdevelop.org>                 *
  *   Copyright 2005 Ian Reinhart Geiser <ian@geiseri.com>                  *
  *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
+ *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
