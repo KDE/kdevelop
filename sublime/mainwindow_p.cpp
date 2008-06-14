@@ -232,6 +232,7 @@ void MainWindowPrivate::clearArea()
             view->widget()->setParent(0);
     }
     recreateCentralWidget();
+    m_mainWindow->setActiveView(0);
     m_indexSplitters.clear();
     area = 0;
 }
