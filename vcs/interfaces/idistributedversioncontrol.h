@@ -35,6 +35,7 @@ namespace KDevelop
 class IDistributedVersionControl
 {
 public:
+    ~IDistributedVersionControl() {}
     /**
      * Create a new repository inside the given local directory.
      */
