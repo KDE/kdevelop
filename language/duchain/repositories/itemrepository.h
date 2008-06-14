@@ -87,10 +87,11 @@ class ExampleRequestItem {
 template<class Item, class ItemRequest>
 class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
-    Bucket() : m_size(0), m_available(0), m_data(0) {
+    Bucket() : m_size(0), m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0) {
     }
     ~Bucket() {
       delete[] m_data;
+      delete[] m_objectMap;
     }
 
     ///Size must be smaller max. 1<<16
@@ -101,21 +102,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         m_available = m_size;
         m_data = new char[size];
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
-        m_objectMap.resize((m_size / ItemRequest::AverageSize) + 1);
-        m_objectMap.fill(0);
+        m_objectMapSize = (m_size / ItemRequest::AverageSize) + 1;
+        m_objectMap = new short unsigned int[m_objectMapSize];
+        memset(m_objectMap, 0, m_objectMapSize * sizeof(short unsigned int));
       }
     }
 
     //Tries to get the index within this bucket, or returns zero.
     //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
     unsigned short index(const ItemRequest& request) {
-      unsigned short localHash = request.hash() % m_objectMap.size();
+      unsigned short localHash = request.hash() % m_objectMapSize;
       unsigned short index = m_objectMap[localHash];
       unsigned short insertedAt = 0;
 
+      unsigned short follower = 0;
       //Walk the chain of items with the same local hash
-      while(index && followerIndex(index) && !(request.equals(itemFromIndex(index))))
-        index = followerIndex(index);
+      while(index && (follower = followerIndex(index)) && !(request.equals(itemFromIndex(index))))
+        index = follower;
 
       if(index && request.equals(itemFromIndex(index)))
         return index; //We have found the item
@@ -143,12 +146,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return insertedAt;
     }
     
-/*    const Item& itemFromIndex(unsigned short index) const {
-      Q_ASSERT(index < m_size);
-      return *(Item*)(m_data+index);
-    }*/
-    
-    const Item* itemFromIndex(unsigned short index) {
+    inline const Item* itemFromIndex(unsigned short index) const {
       return (Item*)(m_data+index);
     }
     
@@ -156,9 +154,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return m_size - m_available;
     }
     
+    template<class Visitor>
+    bool visitAllItems(Visitor& visitor) const {
+      for(int a = 0; a < m_objectMapSize; ++a) {
+        uint currentIndex = m_objectMap[a];
+        while(currentIndex) {
+          if(!visitor((const Item*)(m_data+currentIndex)))
+            return false;
+          
+          currentIndex = followerIndex(currentIndex);
+        }
+      }
+      return true;
+    }
+    
   private:
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
-    unsigned short followerIndex(unsigned short index) {
+    inline unsigned short followerIndex(unsigned short index) const {
       Q_ASSERT(index >= 2);
       return *((unsigned short*)(m_data+(index-2)));
     }
@@ -169,7 +181,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
     unsigned int m_size, m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo m_size>(2 byte), <Item>(item.size() byte)
-    QVector<short unsigned int> m_objectMap; //Points to the first object in m_data with (hash % m_size) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
+    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_size) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
+    uint m_objectMapSize;
 };
 
 template<bool lock>
@@ -236,9 +249,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     ThisLocker lock(&m_mutex);
     
     unsigned short bucket = (index >> 16);
-    initializeBucket(bucket);
+    
+    const Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
+    if(!bucketPtr) {
+      initializeBucket(bucket);
+      bucketPtr = m_fastBuckets[bucket];
+    }
     unsigned short indexInBucket = index & 0xffff;
-    return m_fastBuckets[bucket]->itemFromIndex(indexInBucket);
+    return bucketPtr->itemFromIndex(indexInBucket);
   }
   
   uint usedMemory() const {
@@ -249,6 +267,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
       }
     }
     return used;
+  }
+  
+  ///This can be used to safely iterate through all items in the repository
+  ///@param visitor Should be an instance of a class that has a bool operator()(const Item*) member function,
+  ///               that returns whether more items are wanted.
+  ///@param onlyInMemory If this is true, only items are visited that are currently in memory.
+  template<class Visitor>
+  void visitAllItems(Visitor& visitor, bool /*onlyInMemory*/ = false) const {
+    ThisLocker lock(&m_mutex);
+    for(uint a = 0; a < m_bucketCount; ++a) {
+      if(m_buckets[a])
+        if(!m_buckets[a]->visitAllItems(visitor))
+          return;
+    }
   }
 
   private:
