@@ -38,7 +38,7 @@ namespace KDevelop
   class TopDUContext;
 
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
-  
+
   typedef KSharedPtr<Problem> ProblemPointer;
 /**
  * The top context in a definition-use chain for one source file.
@@ -46,7 +46,7 @@ namespace KDevelop
  * Implements SymbolTable lookups and locking for the chain.
  *
  * Contexts and Classes can only be found through TopDUContext if they are in the symbol table.
- * @see DUContext::setInSymbolTable, Declaration::setInSymbolTable 
+ * @see DUContext::setInSymbolTable, Declaration::setInSymbolTable
  *
  * \todo move the registration with DUChain here
  */
@@ -68,7 +68,7 @@ public:
    * May return zero if no file was set.
    * */
   KSharedPtr<ParsingEnvironmentFile> parsingEnvironmentFile() const;
-  
+
   /// Returns true if this object is being deleted, otherwise false.
   bool deleting() const;
 
@@ -87,10 +87,10 @@ public:
    * Add a parsing-problem to this context.
    * */
   void addProblem(const ProblemPointer& problem);
-  
+
   /// Clear the list of problems
   void clearProblems();
-  
+
   /**
    * Determine if this chain imports another chain.
    *
@@ -107,7 +107,7 @@ public:
 
   ///More convenient version of the above
   ImportTrace importTrace(const TopDUContext* target) const;
-  
+
   enum Flags {
     NoFlags = 0,
     /**
@@ -117,7 +117,7 @@ public:
      *
      * The problems should be stored within the proxy-contexts, and optionally there may be
      * any count of imported proxy-contexts imported behind the content-context(This can be used for tracking problems)
-     * 
+     *
      * Note: This flag does not directly change the behavior of the language-independent du-chain.
      */
     ProxyContextFlag = 1,
@@ -134,7 +134,7 @@ public:
 
   bool hasUses() const;
   void setHasUses(bool hasUses);
-  
+
   /**
    * Retrieves or creates a local index that is to be used for referencing the given @param declaration
    * in local uses. Also registers this context as a user of the declaration.
@@ -159,7 +159,7 @@ public:
    * indexForUsedDeclaration(..).
    * */
   void clearDeclarationIndices();
- 
+
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */
@@ -173,33 +173,33 @@ public:
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
   virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary=false);
-  
+
   virtual void removeImportedParentContext(DUContext* context);
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
-  
+
   class CacheData;
-  
+
   /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
     *this should be done. Just create an item of type Cache, and give it the du-context. The duchain must not be locked when calling this.
     *The cache will automatically be discarded on destruction of the item. It is thread-local, so you don't need to care about multi-threading.
     *@warning The DUChain must not be locked when the constructor is called, and it must not be locked when the destructor is executed.
     *@warning Only use this in phases when you're not changing the Data within this contexts, else the cache will become invalid and search will be fuzzy.
     */
-  class Cache {
+  class KDEVPLATFORMLANGUAGE_EXPORT Cache {
     public:
     Cache(TopDUContextPointer context);
     ~Cache();
-    
+
     private:
     Q_DISABLE_COPY(Cache)
     CacheData* d;
   };
-  
+
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
-  
+
   virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
 
   /**
@@ -209,9 +209,9 @@ protected:
    * */
   template<class Acceptor>
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const;
-  
+
 private:
-  
+
   struct AliasChainElement;
   struct FindDeclarationsAcceptor;
   struct FindContextsAcceptor;
