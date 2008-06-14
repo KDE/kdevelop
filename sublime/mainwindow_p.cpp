@@ -308,6 +308,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     kDebug() << "splitter " << splitter << " container " << splitter->widget(0);
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
+    if (!container) {
+        kWarning() << "Splitter does not have a left widget!";
+        return;
+    }
+
     if (view->widget())
         widgetToView.remove(view->widget());
     viewContainers.remove(view);
