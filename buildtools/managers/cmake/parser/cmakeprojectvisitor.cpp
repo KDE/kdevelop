@@ -1626,14 +1626,17 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
     if(m_topctx==0)
     {
         DUChainWriteLocker lock(DUChain::lock());
-        m_topctx=DUChain::self()->chainForDocument(KUrl(fc[0].filePath));
+        KUrl url(fc[0].filePath);
+        HashedString pathOrUrl(url.pathOrUrl());
+        m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
         if(m_topctx==0)
         {
-            m_topctx=new TopDUContext(HashedString(KUrl(fc[0].filePath).pathOrUrl()),
+            m_topctx=new TopDUContext(pathOrUrl,
                     SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
             
-            DUChain::self()->addDocumentChain(IdentifiedFile(HashedString(KUrl(fc[0].filePath).pathOrUrl())), m_topctx);
-            Q_ASSERT(DUChain::self()->chainForDocument(KUrl(fc[0].filePath)));
+            DUChain::self()->addDocumentChain(
+                IdentifiedFile(pathOrUrl), m_topctx);
+            Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
         }
         else
         {
