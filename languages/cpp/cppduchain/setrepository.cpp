@@ -90,10 +90,13 @@ uint hashFromRanges(const uint* ranges, uint count) {
 
 ///The returned split position shall be the end of the first sub-range, and the start of the second
 ///@param splitBit should be initialized with 31, unless you know better. The value can then be used on while computing child split positions.
+///In the end, it will contain the bit used to split the range. It will also contain zero if no split-position exists(length 1)
 uint splitPositionForRange(uint start, uint end, uchar& splitBit) {
 
-  if(end-start == 1)
+  if(end-start == 1) {
+    splitBit = 0;
     return 0;
+  }
   
   while(true) {
     uint position = ((end-1) >> splitBit) << splitBit; //Round to the split-position in this interval that is smaller than end
@@ -303,7 +306,7 @@ struct SetNodeDataRequest {
             Q_ASSERT(split >= left->start);
             Q_ASSERT(left->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
             //split intersects the left child-node
-            //const SetNodeData* leftLeft = repository.itemFromIndex(left->leftNode);
+            const SetNodeData* leftLeft = repository.itemFromIndex(left->leftNode);
             const SetNodeData* leftRight = repository.itemFromIndex(left->rightNode);
             
             //Since we do this stuff here, we can be sure that children always have the correct split position
@@ -327,7 +330,7 @@ struct SetNodeDataRequest {
             Q_ASSERT(right->hasSlaves()); //A single node with just 1 entry cannot intersect anything, we assume that items are represented by single nodes
             
             const SetNodeData* rightLeft = repository.itemFromIndex(right->leftNode);
-            //const SetNodeData* rightRight = repository.itemFromIndex(right->rightNode);
+            const SetNodeData* rightRight = repository.itemFromIndex(right->rightNode);
             
             //Since we do this stuff here, we can be sure that children always have the correct split position
             Q_ASSERT(split >= rightLeft->end && split <= rightRight->start);
@@ -661,7 +664,7 @@ Set::Iterator& Set::Iterator::operator++() {
       //ready
     }else{
       //We were iterating the left slave of the node, now continue with the right.
-      //const SetNodeData& left = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStack.size()-1]->leftNode);
+      const SetNodeData& left = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStack.size()-1]->leftNode);
       const SetNodeData& right = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStack.size()-1]->rightNode);
       
       Q_ASSERT(left.end == d->currentIndex);
@@ -810,17 +813,27 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, Index l
 
   uint leftUnion;
   uint rightUnion;
-  //Always split up the one side that is bigger, so we have a better chance that shared nodes meet each other.
-  if(firstEnd - firstStart < secondEnd - secondStart)
+  
+  uchar firstSplitBit = 31, secondSplitBit = 31;
+  uint firstSplitPosition, secondSplitPosition;
+  firstSplitPosition = splitPositionForRange(firstStart, firstEnd, firstSplitBit);
+  secondSplitPosition = splitPositionForRange(secondStart, secondEnd, secondSplitBit);
+  
+  //Always split up the one side that has the higher-grade split-position used.
+  //That way we will end up comparing nodes that have the same split-position
+  //We also need to check the split-positions, because we cannot read from the split-bit whether the item was
+  //split at all.
+  if(firstSplitBit < secondSplitBit || (secondSplitPosition && !firstSplitPosition))
   {
     //Merge first with second->leftNode and second->rightNode
     uint leftNode = second->leftNode, rightNode = second->rightNode;
     
     const SetNodeData* left = nodeFromIndex(leftNode);
 //    const SetNodeData* right = nodeFromIndex(rightNode);
+    Q_ASSERT(left->end <= secondSplitPosition); //The node must have respected its split-position
     
-    leftUnion = set_union(firstNode, leftNode, lowerBound, left->end < upperBound ? left->end : upperBound);
-    rightUnion = set_union(firstNode, rightNode, left->end > lowerBound ? left->end : lowerBound, upperBound);
+    leftUnion = set_union(firstNode, leftNode, lowerBound, secondSplitPosition < upperBound ? secondSplitPosition : upperBound);
+    rightUnion = set_union(firstNode, rightNode, secondSplitPosition > lowerBound ? secondSplitPosition : lowerBound, upperBound);
     if(leftUnion == leftNode && rightUnion == rightNode)
       return secondNode;
   } else {
@@ -828,9 +841,10 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, Index l
     uint leftNode = first->leftNode, rightNode = first->rightNode;
     const SetNodeData* left = nodeFromIndex(leftNode);
 //    const SetNodeData* right = nodeFromIndex(rightNode);
+    Q_ASSERT(left->end <= firstSplitPosition); //The node must have respected its split-position
     
-    leftUnion = set_union(secondNode, leftNode, lowerBound, left->end < upperBound ? left->end : upperBound);
-    rightUnion = set_union(secondNode, rightNode, left->end > lowerBound ? left->end : lowerBound, upperBound);
+    leftUnion = set_union(secondNode, leftNode, lowerBound, firstSplitPosition < upperBound ? firstSplitPosition : upperBound);
+    rightUnion = set_union(secondNode, rightNode, firstSplitPosition > lowerBound ? firstSplitPosition : lowerBound, upperBound);
     if(leftUnion == leftNode && rightUnion == rightNode)
       return firstNode;
   }
@@ -863,12 +877,65 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, Index l
 
 bool SetRepositoryAlgorithms::set_equals(const SetNodeData* lhs, const SetNodeData* rhs)
 {
-  QVarLengthArray<const SetNodeData*, 200> leftNextStack, rightNextStack;
+  if(lhs->start != rhs->start || lhs->end != rhs->end || lhs->hash != rhs->hash)
+    return false;
 
-  if(lhs->start != rhs->start || lhs->end != rhs->end)
+  QVarLengthArray<const SetNodeData*, 200> leftNextStack, rightNextStack;
+  
+#if defined(ENFORCE_SPLIT_POSITIONS) && 0
+  ///@todo Doesn't work, probably because of the splitting bounds
+  //When split-positions are enforced, we can be sure that the children of lhs and rhs have correct split-positions.
+  //Thus we just need to order them, and compare whether they're same
+  const SetNodeData* leftLeft = repository.itemFromIndex(lhs->leftNode);
+  const SetNodeData* leftRight = repository.itemFromIndex(lhs->rightNode);
+  const SetNodeData* rightLeft = repository.itemFromIndex(rhs->leftNode);
+  const SetNodeData* rightRight = repository.itemFromIndex(rhs->rightNode);
+
+  if(lhs->contiguous() || rhs->contiguous()) {
+    
+    if(lhs->contiguous() && rhs->contiguous())
+      return true;
+    else
+      return false; //When one is contiguous while the other isn't, something is wrong
+  }
+  
+  if(leftLeft->hasSlaves()) {
+    leftNextStack.append(leftNode(leftLeft));
+    leftNextStack.append(rightNode(leftLeft));
+  }else{
+    leftNextStack.append(leftLeft);
+  }
+  
+  if(leftRight->hasSlaves()) {
+    leftNextStack.append(leftNode(leftRight));
+    leftNextStack.append(rightNode(leftRight));
+  }else{
+    leftNextStack.append(leftRight);
+  }
+  
+  if(rightLeft->hasSlaves()) {
+    rightNextStack.append(leftNode(rightLeft));
+    rightNextStack.append(rightNode(rightLeft));
+  }else{
+    rightNextStack.append(rightLeft);
+  }
+  
+  if(rightRight->hasSlaves()) {
+    rightNextStack.append(leftNode(rightRight));
+    rightNextStack.append(rightNode(rightRight));
+  }else{
+    rightNextStack.append(rightRight);
+  }
+  
+  if(leftNextStack.size() != rightNextStack.size())
     return false;
   
+  return memcmp(leftNextStack.constData(), rightNextStack.constData(), rightNextStack.size()*sizeof(const SetNodeData*)) == 0;
+  
+#else
+  
   while(true) {
+    
     
     if(lhs == rhs || (lhs->contiguous() && rhs->contiguous())) {
       
@@ -888,6 +955,9 @@ bool SetRepositoryAlgorithms::set_equals(const SetNodeData* lhs, const SetNodeDa
       rhs = rightNextStack[newRightSize];
       rightNextStack.resize(newRightSize);
     }
+    
+    if(lhs->start != rhs->start)
+      return false;
     
     if(lhs->start == rhs->start && lhs->end == rhs->end && lhs->hash != rhs->hash)
       return false;
@@ -910,6 +980,7 @@ bool SetRepositoryAlgorithms::set_equals(const SetNodeData* lhs, const SetNodeDa
         }
     }
   }
+#endif
   
   return true;
 }
