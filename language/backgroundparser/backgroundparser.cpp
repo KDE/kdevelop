@@ -338,11 +338,8 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         
         parseJob->setBackgroundParser(0);
 
-		qDebug() << "Queueing job for deletion" << job->metaObject()->className() << "in thread" << QThread::currentThread();
+		kDebug() << "Queueing job for deletion" << job->metaObject()->className() << "in thread" << QThread::currentThread();
 
-        // Use a delayed delete to make sure the weaver has finished up.
-        // TODO: There has to be a better way to do this.
-        //QTimer::singleShot(100, parseJob, SLOT(deleteLater()));
 		delete parseJob;
 
         ++d->m_doneParseJobs;
