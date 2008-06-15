@@ -117,9 +117,6 @@ private:
   ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
   template<class DeclarationType>
   DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range );
-  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
-  template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range, int scope );
   
   void parseComments(const ListNode<size_t> *comments);
   

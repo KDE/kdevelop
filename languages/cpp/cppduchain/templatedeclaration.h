@@ -123,9 +123,6 @@ namespace Cpp {
     SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
     }
     ///Arguments are passed to the base
-    SpecialTemplateDeclaration( const HashedString& url, const KDevelop::SimpleRange& range, KDevelop::Declaration::Scope scope, KDevelop::DUContext* context ) : BaseDeclaration(url, range, scope, context) {
-    }
-    ///Arguments are passed to the base
     SpecialTemplateDeclaration( const HashedString& url, const KDevelop::SimpleRange& range, KDevelop::DUContext* context ) : BaseDeclaration(url, range, context) {
     }
 

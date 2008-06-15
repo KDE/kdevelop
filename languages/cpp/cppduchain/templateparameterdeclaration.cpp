@@ -30,7 +30,7 @@ public:
 };
 
 TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(url, range, LocalScope, context), d_ptr(new TemplateParameterDeclarationPrivate)
+  : Declaration(url, range, context), d_ptr(new TemplateParameterDeclarationPrivate)
 {
   if(context)
     setContext(context);

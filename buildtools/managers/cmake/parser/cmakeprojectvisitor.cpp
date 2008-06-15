@@ -228,8 +228,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(),
-                            Declaration::GlobalScope, p.context);
+    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), p.context);
     d->setIdentifier( Identifier(id) );
     m_declarationsPerTarget.insert(id, d);
 //     kDebug(9042) << "looooooool" << d
@@ -708,7 +707,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     }
     else
     {
-        Declaration *d = new Declaration(m_topctx->url(), sr, Declaration::GlobalScope, m_topctx);
+        Declaration *d = new Declaration(m_topctx->url(), sr, m_topctx);
         d->setIdentifier( Identifier(macro->macroName()) );
         
         FunctionType* func=new FunctionType();
@@ -755,7 +754,7 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     }
     else
     {
-        Declaration *d = new Declaration(m_topctx->url(), sr, Declaration::GlobalScope, m_topctx);
+        Declaration *d = new Declaration(m_topctx->url(), sr, m_topctx);
         d->setIdentifier( Identifier(func->name()) );
         
         FunctionType* funct=new FunctionType();
@@ -1725,7 +1724,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
         }
         else
         {
-            Declaration *d = new Declaration(m_topctx->url(), arg.range(), Declaration::GlobalScope, m_topctx);
+            Declaration *d = new Declaration(m_topctx->url(), arg.range(), m_topctx);
             d->setIdentifier( Identifier(arg.value) );
         }
     }

@@ -337,44 +337,12 @@ DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::SmartRange
     }
 }
 
-template<class DeclarationType>
-DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range, int scope )
-{
-    if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
-      ret->setSmartRange(smartRange);
-      ret->setTemplateParameterContext(ctx);
-      return ret;
-    } else{
-      DeclarationType* ret = new DeclarationType(m_editor->currentUrl(), range, (KDevelop::Declaration::Scope)scope, currentContext());
-      ret->setSmartRange(smartRange);
-      return ret;
-    }
-}
-
 Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& customName)
 {
   DUChainWriteLocker lock(DUChain::lock());
 
   if( isFunction && !m_functionDefinedStack.isEmpty() )
         isDefinition |= (bool)m_functionDefinedStack.top();
-
-  Declaration::Scope scope = Declaration::GlobalScope;
-  switch (currentContext()->type()) {
-    case DUContext::Namespace:
-      scope = Declaration::NamespaceScope;
-      break;
-    case DUContext::Class:
-      scope = Declaration::ClassScope;
-      break;
-    case DUContext::Function:
-    case DUContext::Template:
-      scope = Declaration::LocalScope;
-      break;
-    default:
-      break;
-  }
-
 
   SimpleRange newRange;
   if(name) {
@@ -454,10 +422,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if (!(dec->range() == translated))
         kDebug() << "range mismatch" << dec->range().textRange() << translated.textRange();
       
-      if(!(dec->scope() == scope))
-        kDebug() << "scope mismatch:" << int(dec->scope()) << int(scope);
-      
-      if(!((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())))
+      if(!(localId == dec->identifier()))
         kDebug() << "id mismatch" << dec->identifier().toString() << localId.toString();
       
       if(!(dec->isDefinition() == isDefinition && 
@@ -471,44 +436,35 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
-          dec->scope() == scope &&
-          ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())) &&
-           dec->isDefinition() == isDefinition &&
-          dec->isTypeAlias() == m_inTypedef &&
+          localId == dec->identifier() &&
           ( ((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
              hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ) )
          )
       {
-        if(currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
-          continue;
-        if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
-          continue;
-        } else if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
-          continue;
+        if(isNamespaceAlias) {
+          if(!dynamic_cast<NamespaceAliasDeclaration*>(dec))
+            continue;
+        } else if (isForward) {
+          if(!dynamic_cast<ForwardDeclaration*>(dec))
+            continue;
         } else if (isFunction) {
-          if (scope == Declaration::ClassScope) {
+          if (currentContext()->type() == DUContext::Class) {
             if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
               continue;
           } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
             continue;
           }
 
-        } else if (scope == Declaration::ClassScope) {
+        } else if (currentContext()->type() == DUContext::Class) {
           if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
+            continue;
+        } else if(currentContext()->type() == DUContext::Template) {
+          if(!dynamic_cast<TemplateParameterDeclaration*>(dec))
             continue;
         }
 
         // Match
         declaration = dec;
-
-        // Update access policy if needed
-        if (currentContext()->type() == DUContext::Class) {
-          ClassMemberDeclaration* classDeclaration = dynamic_cast<ClassMemberDeclaration*>(declaration);
-          Q_ASSERT(classDeclaration);
-          if (classDeclaration->accessPolicy() != currentAccessPolicy()) {
-            classDeclaration->setAccessPolicy(currentAccessPolicy());
-          }
-        }
         break;
       }
     }
@@ -542,41 +498,26 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     Q_ASSERT(m_editor->currentRange() == prior);
 
     if( isNamespaceAlias ) {
-      declaration = new NamespaceAliasDeclaration(m_editor->currentUrl(), newRange, scope, currentContext());
+      declaration = new NamespaceAliasDeclaration(m_editor->currentUrl(), newRange, currentContext());
       declaration->setSmartRange(range);
       declaration->setIdentifier(customName);
     } else if (isForward) {
-      declaration = specialDeclaration<ForwardDeclaration>(range, newRange, scope);
+      declaration = specialDeclaration<ForwardDeclaration>(range, newRange);
 
     } else if (isFunction) {
-      if (scope == Declaration::ClassScope) {
+      if (currentContext()->type() == DUContext::Class) {
         declaration = specialDeclaration<ClassFunctionDeclaration>( range, newRange );
       } else {
-        declaration = specialDeclaration<FunctionDeclaration>(range, newRange, scope );
+        declaration = specialDeclaration<FunctionDeclaration>(range, newRange );
       }
-    } else if (scope == Declaration::ClassScope) {
+    } else if (currentContext()->type() == DUContext::Class) {
         declaration = specialDeclaration<ClassMemberDeclaration>( range, newRange );
     } else if( currentContext()->type() == DUContext::Template ) {
       //This is a template-parameter.
       declaration = new TemplateParameterDeclaration( m_editor->currentUrl(), newRange, currentContext() );
       declaration->setSmartRange(range);
     } else {
-      declaration = specialDeclaration<Declaration>( range, newRange, scope );
-    }
-
-    if (!isNamespaceAlias) {
-      // FIXME this can happen if we're defining a staticly declared variable
-      //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
-/*      if(id.isEmpty())
-        kWarning() << "empty id";*/
-      declaration->setIdentifier(localId);
-    }
-
-    declaration->setDeclarationIsDefinition(isDefinition);
-
-    if (currentContext()->type() == DUContext::Class) {
-      if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
-        static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
+      declaration = specialDeclaration<Declaration>( range, newRange );
     }
   }else{
     if(isFunction) { //Clear the default parameters so they don't accumulate
@@ -584,6 +525,21 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
       if(funDecl)
         funDecl->clearDefaultParameters();
     }
+  }
+
+  if (!isNamespaceAlias) {
+    // FIXME this can happen if we're defining a staticly declared variable
+    //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
+/*      if(id.isEmpty())
+      kWarning() << "empty id";*/
+    declaration->setIdentifier(localId);
+  }
+
+  declaration->setDeclarationIsDefinition(isDefinition);
+
+  if (currentContext()->type() == DUContext::Class) {
+    if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
+      static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
   }
 
   if( m_inTypedef )
