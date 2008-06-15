@@ -131,11 +131,13 @@ void ContextWidget::nextMenuAboutToShow() {
     m_nextMenu->clear();
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     for(int a = m_nextHistoryIndex; a < m_history.size(); ++a) {
-        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : m_history[a].absoluteCursorPosition.document().str();
+        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : QString();
         if(actionText.isEmpty())
             actionText = m_history[a].alternativeString;
-        if(actionText.isEmpty()) //ly show file+line-number
-            actionText = KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
+        if(!actionText.isEmpty())
+            actionText += "   ";
+        
+        actionText += KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
         
         QAction* action = new QAction(actionText, m_nextMenu);
         action->setData(a);
@@ -148,11 +150,14 @@ void ContextWidget::previousMenuAboutToShow() {
     m_previousMenu->clear();
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     for(int a = m_nextHistoryIndex-2; a >= 0; --a) {
-        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : m_history[a].absoluteCursorPosition.document().str();
+        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : QString();
         if(actionText.isEmpty())
             actionText = m_history[a].alternativeString;
-        if(actionText.isEmpty())
-            continue;
+        if(!actionText.isEmpty())
+            actionText += "   ";
+        
+        actionText += KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
+
         QAction* action = new QAction(actionText, m_previousMenu);
         action->setData(a);
         m_previousMenu->addAction(action);
