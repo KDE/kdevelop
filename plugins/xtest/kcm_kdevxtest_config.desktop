@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdevxtest_config
+X-KDE-FactoryName=kcm_kdevxtest_config
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=xTest
+Name[x-test]=xxxTestxx
+Comment=xTest settings
+Comment[x-test]=xxxTest settingsxx

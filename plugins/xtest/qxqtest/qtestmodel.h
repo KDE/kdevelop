@@ -42,8 +42,12 @@ public:
 
     QString name() const;
     QString about() const;
+    void setRoot(const QString& root);
 
     void readTests(QIODevice* dev);
+
+private:
+    QString m_root;
 };
 
 } // namespace QxQTest

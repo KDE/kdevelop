@@ -293,6 +293,8 @@ void RunnerWindow::setModel(RunnerModel* model)
     for (int i = 0; i < columnCount; i++) {
         resultsView()->showColumn(i);
     }
+    enabledResultsColumns[1] = 0;
+    resultsView()->hideColumn(1);
 
     // Set the defaults in the proxy models.
     runnerProxyModel->setEnabledColumns(enabledRunnerColumns);

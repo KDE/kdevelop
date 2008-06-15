@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<root dir="/home/nix/KdeDev/kdevelop/build/">
+<root>
 <suite name="cmake" dir="buildtools/managers/cmake/tests">
 	<case name="projectvisitortest" exe="cmakeprojectvisitortest.shell">
 		<command name="testRun" />
@@ -37,7 +37,7 @@
 		<command name="testBuildCommandBadParse" />
 		<command name="testBuildNameGoodParse" />
 		<command name="testBuildNameBadParse" />
-		<command name="testCMakeMinimumRequiredGoodParse" />
+<!--		<command name="testCMakeMinimumRequiredGoodParse" />
 		<command name="testCMakeMinimumRequiredBadParse" />
 		<command name="testCMakePolicyGoodParse" />
 		<command name="testCMakePolicyBadParse" />
@@ -186,7 +186,7 @@
 		<command name="testWhileGoodParse" />
 		<command name="testWhileBadParse" />
 		<command name="testWriteFileGoodParse" />
-		<command name="testWriteFileBadParse" />
+		<command name="testWriteFileBadParse" />-->
 	</case>
 	<case name="cmakecompliance" exe="cmakecompliance.shell" >
 		<command name="testEnumerate" />

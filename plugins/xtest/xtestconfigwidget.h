@@ -18,44 +18,24 @@
  * 02110-1301, USA.
  */
 
-#include "testrunner.h"
-#include "qtestmodel.h"
-#include <qxrunner/runner.h>
-#include <qxrunner/runnerwindow.h>
-#include <QIcon>
-#include <QIODevice>
 
-using QxRunner::RunnerWindow;
-using QxQTest::TestRunner;
+#ifndef XTEST_XTESTCONFIGWIDGET_H
+#define XTEST_XTESTCONFIGWIDGET_H
 
-TestRunner::TestRunner()
+#include <projectkcmodule.h>
+#include <KSharedConfig>
+#include <KUrl>
+#include "ui_xtestconfigwidget.h"
+
+class XTestConfig;
+
+class XTestConfigWidget : public ProjectKCModule<XTestConfig>, public Ui::XTestConfigWidget
 {
-    m_runner = 0;
-    m_model = new QTestModel;
-}
+    Q_OBJECT
+public:
+    explicit XTestConfigWidget(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    virtual ~XTestConfigWidget();
 
-TestRunner::~TestRunner()
-{
-    // Delete the runner first.
-    delete m_runner;
-    delete m_model;
-}
+};
 
-void TestRunner::registerTests(QIODevice* dev)
-{
-    m_model->readTests(dev);
-}
-
-void TestRunner::registerTests(QIODevice* dev, const QString& root)
-{
-    m_model->setRoot(root);
-    m_model->readTests(dev);
-}
-
-
-QWidget* TestRunner::spawn()
-{
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(m_model);
-    return window;
-}
+#endif

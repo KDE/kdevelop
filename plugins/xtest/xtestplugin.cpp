@@ -22,9 +22,14 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <ksharedconfig.h>
 
-#include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <ibuildsystemmanager.h>
+#include <projectmodel.h>
+#include <shell/core.h>
 
 //#include "sample.h"
 #include <QFile>
@@ -32,11 +37,13 @@
 
 #include <kdebug.h>
 
-// TODO read this to project configurationi
-#define KDEV_HOME "/home/nix/KdeDev/kdevelop"
+#include "xtestconfig.h"
 
 K_PLUGIN_FACTORY(KDevXtestFactory, registerPlugin<KDevXtestPlugin>();)
 K_EXPORT_PLUGIN(KDevXtestFactory("kdevxtest"))
+
+using KDevelop::Core;
+using KDevelop::IProject;
 
 class KDevXtestPluginFactory: public KDevelop::IToolViewFactory
 {
@@ -46,9 +53,20 @@ public:
     virtual QWidget* create(QWidget *parent = 0) {
         //return sample::testRunnerWidget();
         QxQTest::TestRunner* runner = new QxQTest::TestRunner();
-        QFile* testXml = new QFile(KDEV_HOME "/plugins/xtest/kdevtests.xml");
-        kDebug() << "Loading " << testXml->fileName();
-        runner->registerTests(testXml);
+        QString root(""); // root build directory
+        QString testXmlLoc("");
+        if (Core::self()->projectController()->projectCount() != 0)
+        {
+            // only support a single project, for now
+            IProject* proj = Core::self()->projectController()->projectAt(0);
+            root = proj->buildSystemManager()->buildDirectory(proj->projectItem()).pathOrUrl();
+            KSharedConfig::Ptr cfg = proj->projectConfiguration();
+            KConfigGroup group(cfg.data(), "XTest");
+            testXmlLoc = KUrl(group.readEntry("Test Registration")).pathOrUrl();
+        }
+        QFile* testXml = new QFile(testXmlLoc);
+        kDebug() << "Loading test registration XML: " << testXml->fileName();
+        runner->registerTests(testXml, root);
         return runner->spawn();
     }
 

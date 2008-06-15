@@ -34,39 +34,6 @@ using QxQTest::QTestBase;
 using QxQTest::QTestCommand;
 using QxRunner::RunnerItem;
 
-namespace
-{
-
-void cleanup(QTestCase* caze)
-{
-    if (!caze) return;
-    unsigned nrof = caze->childCount();
-    QTestCommand* cmd;
-    for (unsigned i = 0; i < nrof; i++)
-    {
-        cmd = caze->testAt(i);
-        delete cmd;
-    }
-    delete caze;
-}
-
-
-void cleanup(QTestSuite* suite)
-{
-    if (!suite)
-        return;
-    unsigned nrof = suite->childCount();
-    QTestCase* caze;
-    for (unsigned i = 0; i < nrof; i++)
-    {
-        caze = suite->testAt(i);
-        cleanup(caze);
-    }
-    delete suite;
-}
-
-} // namespace
-
 const QString QTestRegister::c_suite("suite");
 const QString QTestRegister::c_case("case");
 const QString QTestRegister::c_cmd("command");
@@ -87,12 +54,6 @@ QTestRegister::QTestRegister()
 
 QTestRegister::~QTestRegister()
 {
-//     QTestSuite* suite;
-//     unsigned size = m_suites.size();
-//     for (int i = 0; i < size; i++) {
-//         suite = m_suites.takeFirst();
-//         cleanup(suite);
-//     }
 }
 
 QTestBase* QTestRegister::rootItem()
@@ -120,13 +81,18 @@ void QTestRegister::addFromXml(QIODevice* dev)
     while (!atEnd())
     {
         readNext();
-        if (isStartElement_(c_root))
-            m_root = attributes().value(c_dir).toString();
+        //if (isStartElement_(c_root) && m_root.isEmpty())
+        //    m_root = attributes().value(c_dir).toString();
         if (isStartElement_(c_suite))
             processSuite();
     }
 
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+}
+
+void QTestRegister::setRootDir(const QString& root)
+{
+    m_root = root;
 }
 
 void QTestRegister::processSuite()

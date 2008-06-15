@@ -36,13 +36,18 @@ using QxQTest::QTestCommand;
 using QxRunner::RunnerModel;
 
 QTestModel::QTestModel(QObject* parent)
-        : RunnerModel(parent)
+        : RunnerModel(parent), m_root("")
 {
     setExpectedResults(QxRunner::RunWarning | QxRunner::RunError);
 }
 
 QTestModel::~QTestModel()
 {
+}
+
+void QTestModel::setRoot(const QString& root)
+{
+    m_root = root;
 }
 
 QString QTestModel::name() const
@@ -60,6 +65,7 @@ QString QTestModel::about() const
 void QTestModel::readTests(QIODevice* dev)
 {
     QTestRegister reg;
+    reg.setRootDir(m_root);
     reg.addFromXml(dev);
     setRootItem(reg.rootItem());
 }

@@ -50,6 +50,7 @@ public:
     QTestBase* rootItem();
     unsigned testSuiteCount();
     QTestSuite* takeSuite(unsigned);
+    void setRootDir(const QString& root);
 
 private: // helpers
     bool isStartElement_(const QString& elem);

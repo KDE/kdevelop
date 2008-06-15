@@ -25,11 +25,28 @@ if (CPPUNIT_FOUND)
     add_subdirectory(qxcppunit)
 endif (CPPUNIT_FOUND)
 
-########### next target ###############
-
 include_directories(
     ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR})
+    ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
+    ${KDEVPLATFORM_INCLUDE_DIR}/shell
+    ${KDEVPLATFORM_INCLUDE_DIR}/project
+    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces)
+
+########### next target #################
+
+set(xtestconfig_SRCS xtestconfigwidget.cpp)
+kde4_add_kcfg_files(xtestconfig_SRCS xtestconfig.kcfgc)
+kde4_add_ui_files(xtestconfig_SRCS xtestconfigwidget.ui)
+kde4_add_plugin(kcm_kdevxtest_config ${xtestconfig_SRCS} )
+target_link_libraries(kcm_kdevxtest_config
+    ${KDE4_KIO_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY})
+
+install(TARGETS kcm_kdevxtest_config DESTINATION ${PLUGIN_INSTALL_DIR} )
+
+########### next target ###############
 
 set(kdevxtest_SRCS xtestplugin.cpp)
 kde4_add_plugin(kdevxtest ${kdevxtest_SRCS})
@@ -37,12 +54,14 @@ kde4_add_plugin(kdevxtest ${kdevxtest_SRCS})
 target_link_libraries(kdevxtest
     ${QT_QTDESIGNER_LIBRARY}
     ${KDE4_KDEUI_LIBS}
+    kdevplatformshell
     kdevplatforminterfaces
     kdevplatformoutputview
     ${KDE4_THREADWEAVER_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
     qxqtest)
 if (CPPUNIT_FOUND)
-    target_link_libraries( kdevxtest 
+    target_link_libraries( kdevxtest
     qxcppunit)
 endif (CPPUNIT_FOUND)
 
@@ -52,3 +71,4 @@ install(TARGETS kdevxtest DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES kdevxtest.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevxtest.rc DESTINATION ${DATA_INSTALL_DIR}/kdevxtest )
+install( FILES kcm_kdevxtest_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

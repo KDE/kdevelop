@@ -18,44 +18,32 @@
  * 02110-1301, USA.
  */
 
-#include "testrunner.h"
-#include "qtestmodel.h"
-#include <qxrunner/runner.h>
-#include <qxrunner/runnerwindow.h>
-#include <QIcon>
-#include <QIODevice>
 
-using QxRunner::RunnerWindow;
-using QxQTest::TestRunner;
+#include "xtestconfig.h"
+#include "xtestconfigwidget.h"
 
-TestRunner::TestRunner()
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+
+#include <QFile>
+#include <kdebug.h>
+
+K_PLUGIN_FACTORY(XTestConfigFactory, registerPlugin<XTestConfigWidget>(); )
+K_EXPORT_PLUGIN(XTestConfigFactory("kcm_kdevxtest_config"))
+
+XTestConfigWidget::XTestConfigWidget(QWidget* parent, const QVariantList& args)
+    : ProjectKCModule<XTestConfig>(XTestConfigFactory::componentData(), parent, args)
 {
-    m_runner = 0;
-    m_model = new QTestModel;
+    setupUi(this);
+    kDebug() << "0===> CONSTRUCTING";
+
+    kcfg_testRegistration->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
+    addConfig(XTestConfig::self(), this);
+    load();
 }
 
-TestRunner::~TestRunner()
+XTestConfigWidget::~XTestConfigWidget()
 {
-    // Delete the runner first.
-    delete m_runner;
-    delete m_model;
 }
 
-void TestRunner::registerTests(QIODevice* dev)
-{
-    m_model->readTests(dev);
-}
-
-void TestRunner::registerTests(QIODevice* dev, const QString& root)
-{
-    m_model->setRoot(root);
-    m_model->readTests(dev);
-}
-
-
-QWidget* TestRunner::spawn()
-{
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(m_model);
-    return window;
-}
+#include "xtestconfigwidget.moc"

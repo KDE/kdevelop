@@ -41,6 +41,7 @@ public:
     TestRunner();
     virtual ~TestRunner();
     void registerTests(QIODevice* dev);
+    void registerTests(QIODevice* dev, const QString& buildRoot);
     QWidget* spawn();
 
 private: // operations
