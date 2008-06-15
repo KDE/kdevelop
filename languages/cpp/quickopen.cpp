@@ -133,8 +133,8 @@ bool IncludeFileData::isExpandable() const {
 }
 
 QWidget* IncludeFileData::expandingWidget() const {
-  DUChainReadLocker lock( DUChain::lock() );
   
+  DUChainReadLocker lock( DUChain::lock() );
   QString htmlPrefix, htmlSuffix;
   
   QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
@@ -187,7 +187,7 @@ QWidget* IncludeFileData::expandingWidget() const {
     if( !inclusionPath.isEmpty() )
       inclusionPath.pop_back(); //Remove the file itself from the list
     
-    htmlSuffix = "<br/>" + i18n( "Found in %1th include-path", m_item.pathNumber );
+    htmlSuffix = "<br/>" + i18n( "In %1th include-path", m_item.pathNumber );
   }
   
   foreach( const KUrl& u, inclusionPath )
@@ -200,14 +200,46 @@ QString IncludeFileData::htmlDescription() const
 {
   KUrl path = m_item.url();
   
-  QString ret;
+  if( m_item.isDirectory ) {
+    return QString( i18n("Directory %1", path.pathOrUrl()) );
+  } else {
+    if(m_includedFrom) {
+
+    DUChainReadLocker lock( DUChain::lock() );
+    if(!m_includedFrom)
+      return QString();
+    
+    KUrl u = m_item.url();
+
+    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+
+    foreach( TopDUContext* t, allChains )
+    {
+      if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
+      {
+        QString ret = i18n("Included through") + " ";
+        KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
+        if(!inclusion.isEmpty()) {
+          for(int a = 0; a < inclusion.size(); ++a) {
+            if(a > 1)
+              ret += ", ";
+            if(a > 2) {
+              ret += "...";
+              return ret;
+            }else{
+              ret += KUrl(inclusion[a].ctx->url().str()).fileName();
+            }
+          }
+          return ret;
+        }
+      }
+    }
+    }else{
+      return i18n( "In %1th include-path", m_item.pathNumber );
+    }
+  }
   
-  if( m_item.isDirectory )
-    ret = QString( i18n("Directory %1", path.pathOrUrl()) );
-  else
-    ret = path.pathOrUrl();
-  
-  return ret;
+  return " ";
 }
 
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
