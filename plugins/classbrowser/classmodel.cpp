@@ -106,6 +106,10 @@ bool ClassModel::filterObject(DUChainBase* object) const
 {
   ENSURE_CHAIN_READ_LOCKED
 
+  //If the range is empty, it was probably created from a macro like Q_OBJECT
+  if(object->range().isEmpty() && dynamic_cast<Declaration*>(object))
+    return true;
+
   KUrl url(object->url().str());
 
   if (m_filterDocument)

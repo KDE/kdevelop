@@ -837,6 +837,8 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   class OutlineFilter : public DUChainItemFilter {
   public:
     virtual bool accept(Declaration* decl) {
+      if(decl->range().isEmpty())
+        return false;
       if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class))
         return true;
       else
