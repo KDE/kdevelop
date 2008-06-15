@@ -101,7 +101,12 @@ QString DUChainItemData::htmlDescription() const {
   else
     text = m_item.m_item->toString();
   
-  return "<small><small>" + text + ", " + i18n("Project") + " " + m_item.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
+  QString ret = "<small><small>" + text;
+  if(!m_item.m_project.isEmpty())
+      ret += ", " + i18n("Project") + " " + m_item.m_project /*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
+  
+  ret += "</small></small>";
+  return ret;
 }
 
 bool DUChainItemData::execute( QString& /*filterText*/ ) {
@@ -143,7 +148,7 @@ QWidget* DUChainItemData::expandingWidget() const {
   if( !decl || !decl->context() )
     return 0;
 
-  return decl->context()->createNavigationWidget( decl, decl->topContext(), "<small><small>" + i18n("Project") + " " + m_item.m_project + "<br>" + "</small></small>");
+  return decl->context()->createNavigationWidget( decl, decl->topContext(), m_item.m_project.isEmpty() ? QString() : ("<small><small>" + i18n("Project") + " " + m_item.m_project + "<br>" + "</small></small>"));
 }
 
 QIcon DUChainItemData::icon() const {
