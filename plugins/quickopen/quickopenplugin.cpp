@@ -868,8 +868,10 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   if(cursorDecl) {
     int num = 0;
     foreach(const DUChainItem& item, items) {
-      if(item.m_item.data() == cursorDecl)
+      if(item.m_item.data() == cursorDecl) {
         m_currentWidgetHandler->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+        m_currentWidgetHandler->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+      }
       ++num;
     }
   }
