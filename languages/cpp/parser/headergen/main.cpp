@@ -45,6 +45,8 @@
 #include "rpp/preprocessor.h"
 #include "rpp/pp-macro.h"
 #include "rpp/pp-engine.h"
+#include "rpp/chartools.h"
+#include "rpp/macrorepository.h"
 
 using namespace KDevelop;
 
@@ -67,7 +69,7 @@ struct HeaderGeneratorVisitor : public DefaultVisitor
     QualifiedIdentifier identifier = m_currentNS;
 
     if (node->namespace_name) {
-      QualifiedIdentifier nsID(m_session->token_stream->token(node->namespace_name).symbol());
+      QualifiedIdentifier nsID(m_session->token_stream->token(node->namespace_name).symbolString());
       m_currentNS = nsID.merge(m_currentNS);
     }
 
@@ -164,7 +166,7 @@ class HeaderStream : public rpp::Stream
 {
 public:
   HeaderStream(QByteArray* string)
-    : Stream(string)
+    : Stream(new PreprocessedContents(tokenizeFromByteArray(*string)))
     , m_string(string)
   {
   }
@@ -224,10 +226,10 @@ public:
 
   virtual void setMacro(rpp::pp_macro* macro)
   {
-    if (macro->name == "KDE_EXPORT" || macro->name == "KJS_EXPORT") {
-      // Exploit that the parser understands the windows declaration spec stuff
-      macro->definition = "__declspec(dllexport)";
-    }
+//     if (macro->name.str() == "KDE_EXPORT" || macro->name.str() == "KJS_EXPORT") {
+//       // Exploit that the parser understands the windows declaration spec stuff
+//       macro->definition = tokenizeFromByteArray("__declspec(dllexport)");
+//     }
 
     rpp::Environment::setMacro(macro);
   }
@@ -302,52 +304,52 @@ HeaderGenerator::HeaderGenerator()
   topBlock = new FileBlock;
   topBlock->file = "<internal pp>";
 
-  rpp::pp_macro* exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("__cplusplus");
-  exportMacro->definition = "1";
+  rpp::pp_dynamic_macro* exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("__cplusplus");
+  exportMacro->definition = tokenizeFromByteArray("1");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("__GNUC__");
-  exportMacro->definition = "4";
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("__GNUC__");
+  exportMacro->definition = tokenizeFromByteArray("4");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("__GNUC_MINOR__");
-  exportMacro->definition = "1";
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("__GNUC_MINOR__");
+  exportMacro->definition = tokenizeFromByteArray("1");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("__linux__");
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("__linux__");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("KDE_EXPORT");
-  exportMacro->definition = "__declspec(dllexport)";
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("KDE_EXPORT");
+  exportMacro->definition = tokenizeFromByteArray("__declspec(dllexport)");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("KJS_EXPORT");
-  exportMacro->definition = "__declspec(dllexport)";
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("KJS_EXPORT");
+  exportMacro->definition = tokenizeFromByteArray("__declspec(dllexport)");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_macro;
-  exportMacro->name = QString("Q_WS_X11");
+  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro->name = IndexedString("Q_WS_X11");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
-  topBlock->setMacro(exportMacro);
+  topBlock->setMacro(makeConstant(exportMacro));
 }
 
 QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
@@ -368,7 +370,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
   preprocessor.environment()->enterBlock(fileMacros);
 
-  QByteArray ret = preprocessor.processFile(url.pathOrUrl(), rpp::pp::Data, sourceToParse.readAll());
+  QByteArray ret = stringFromContents(preprocessor.processFile(url.pathOrUrl(), rpp::pp::Data, sourceToParse.readAll()));
 
   preprocessor.environment()->leaveBlock();
 
@@ -431,7 +433,7 @@ void printMacros(rpp::Environment* environment)
 {
   kDebug(9007) << "Macros for environment:";
   foreach (rpp::pp_macro* macro, environment->allMacros())
-    kDebug(9007) << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << macro->definition << (macro->defined ? "]" : "");
+    kDebug(9007) << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << QString::fromUtf8(stringFromContents(macro->definition(), macro->definitionSize())) << (macro->defined ? "]" : "");
 }
 
 void HeaderGenerator::run()
@@ -478,7 +480,7 @@ void HeaderGenerator::run()
         Control control;
 
         ParseSession session;
-        session.setContents(contents, preprocessor.environment()->takeLocationTable());
+        session.setContents(tokenizeFromByteArray(contents), preprocessor.environment()->takeLocationTable());
 
         Parser parser(&control);
         TranslationUnitAST* ast = parser.parse(&session);
