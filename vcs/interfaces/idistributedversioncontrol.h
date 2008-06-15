@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +23,15 @@
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
 #include <iextension.h>
+#include <kurl.h>
 
-class QString;
+#include <QString>
+#include <QStringList>
 
 namespace KDevelop
 {
+
+class VcsJob;
 
 /**
  * This interface has methods to support distributed version control systems
@@ -35,11 +40,13 @@ namespace KDevelop
 class IDistributedVersionControl
 {
 public:
-    virtual ~IDistributedVersionControl() {}
+
+    virtual ~IDistributedVersionControl(){}
+
     /**
      * Create a new repository inside the given local directory.
      */
-    virtual VcsJob* init( const KUrl& localRepositoryRoot );
+    virtual VcsJob* init( const KUrl& localRepositoryRoot ) = 0;
 
     /**
      * Create a new repository by cloning another one into a newly created
