@@ -150,132 +150,126 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
     if (arch->open(QIODevice::ReadOnly))
     {
-        KTempDir tmpdir;
-        QString unpackDir;
-        IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
-        if( info.vcsPluginName.isEmpty() || ( plugin && plugin->extension<KDevelop::IDistributedVersionControl>() ) )
+        if( info.vcsPluginName.isEmpty())
         {
             if( !QFileInfo( dest.toLocalFile() ).exists() )
             {
                 QDir::root().mkdir( dest.toLocalFile() );
             }
+            unpackArchive(arch->directory(), dest.toLocalFile());
         }
         else
         {
-            KUrl parentdir = dest;
-            parentdir.cd( ".." );
-            if( !QFileInfo( parentdir.toLocalFile() ).exists() )
-            {
-                QDir::root().mkdir( parentdir.toLocalFile() );
-            }
+            IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
+
+            KTempDir tmpdir;
             QString unpackDir = tmpdir.name();
-        }
-
-        if ( !unpackArchive( arch->directory(), unpackDir ) )
-        {
-                KMessageBox::error(0, i18n("Couldn't create new project"));
-                KIO::NetAccess::del( KUrl( unpackDir ), 0 );
-                return "";
-        }
-
-        if( !info.vcsPluginName.isEmpty() && plugin )
-        {
-            //If We use DVCS?
             if (plugin->extension<KDevelop::IDistributedVersionControl>() )
             {
-                KDevelop::IDistributedVersionControl* iface =
-                        plugin->extension<KDevelop::IDistributedVersionControl>();
-                kDebug(9010) << "DVCS system is used, just initializing DVCS";
+                unpackDir = dest.toLocalFile();
+            }
 
-                //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
-                KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
-                job->exec();
-                kDebug(9010) << "Initializing Git repository:" << dest.toLocalFile();
-                if (job->status() == KDevelop::VcsJob::JobSucceeded)
+            if ( !unpackArchive(arch->directory(), unpackDir) )
+            {
+                    KMessageBox::error(0, i18n("Couldn't create new project"));
+                    return "";
+            }
+
+            KDevelop::VcsMapping import;
+            KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
+            import.addMapping( KDevelop::VcsLocation( KUrl( tmpdir.name() ) ),
+                               info.importInformation.destinationLocation( srcloc ),
+                               info.importInformation.mappingFlag( srcloc ) );
+
+            if (plugin)
+            {
+                //If We use DVCS?
+                if (plugin->extension<KDevelop::IDistributedVersionControl>() )
                 {
-                    //IDistributedVersionControl is not derived from IBasicVersionControl,
-                    //maybe it's better to implement
-                    //IDistributedVersionControl as a derived class
-                    KDevelop::IBasicVersionControl *basicVersionIface =
-                            plugin->extension<KDevelop::IBasicVersionControl>();
-                    KDevelop::VcsJob* job = basicVersionIface->add(KUrl::List(QStringList(".")),
-                            KDevelop::IBasicVersionControl::Recursive);
-                    if (job)
+                    KDevelop::IDistributedVersionControl* iface =
+                            plugin->extension<KDevelop::IDistributedVersionControl>();
+                    kDebug(9010) << "DVCS system is used, copying new files to the project's dir and then initializing DVCS";
+
+                    QList<KDevelop::VcsLocation> list = import.sourceLocations();
+                    if (list.size() < 1) {
+                        kDebug(9010) << "Oops, import.sourceLocations() < 1";
+                        return "";
+                    }
+                    KDevelop::VcsLocation srcLocation = list[0];
+
+                    //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
+                    KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
+                    job->exec();
+                    kDebug(9010) << "Initializing Git repository:" << dest.toLocalFile();
+                    if (job->status() == KDevelop::VcsJob::JobSucceeded)
                     {
-                        job->exec();
-                        if (job->status() != KDevelop::VcsJob::JobSucceeded )
+                        KDevelop::VcsJob* job = iface->add(KUrl::List(QStringList(".")),
+                                                           KDevelop::IBasicVersionControl::Recursive);
+                        if (job) 
+                        {
+                            job->exec();
+                            if (job->status() != KDevelop::VcsJob::JobSucceeded )
+                            {
+                                KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
+                                return "";
+                            }
+                        } 
+                        else 
                         {
                             KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
-                            KIO::NetAccess::del( dest, 0);
+                            tmpdir.unlink();
                             return "";
                         }
-                    } else
+                    } 
+                    else 
                     {
-                        KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
-                        KIO::NetAccess::del( dest, 0 );
+                        KMessageBox::error(0, i18n("Couldn't init Git repository"));
+                        tmpdir.unlink();
                         return "";
                     }
                 }
                 else
                 {
-                    KMessageBox::error(0, i18n("Couldn't init Git repository"));
-                    KIO::NetAccess::del( dest, 0 );
-                    return "";
+                    KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+                    kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
+                    kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
+                    kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
+                    KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
+                    job->exec();
+                    if( job->status() == KDevelop::VcsJob::JobSucceeded )
+                    {
+                        KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
+                        if (job) {
+                            job->exec();
+                            if( job->status() != KDevelop::VcsJob::JobSucceeded )
+                            {
+                                KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                                return "";
+                            }
+                        } else {
+                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                            tmpdir.unlink();
+                            return "";
+                        }
+                    }else
+                    {
+                        KMessageBox::error(0, i18n("Couldn't import project"));
+                        tmpdir.unlink();
+                        return "";
+                    }
                 }
             }
             else
             {
-
-                KDevelop::VcsMapping import;
-                KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
-                import.addMapping( KDevelop::VcsLocation( KUrl( tmpdir.name() ) ),
-                                    info.importInformation.destinationLocation( srcloc ),
-                                    info.importInformation.mappingFlag( srcloc ) );
-
-                KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
-                kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
-                kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
-                kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
-                KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
-                job->exec();
-                if( job->status() == KDevelop::VcsJob::JobSucceeded )
-                {
-                    KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
-                    if (job) {
-                        job->exec();
-                        if( job->status() != KDevelop::VcsJob::JobSucceeded )
-                        {
-                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
-                            KIO::NetAccess::del( dest, 0 );
-                            tmpdir.unlink();
-                            return "";
-                        }
-                    } else {
-                        KMessageBox::error(0, i18n("Couldn't checkout imported project"));
-                        tmpdir.unlink();
-                        return "";
-                    }
-                }else
-                {
-                    KMessageBox::error(0, i18n("Couldn't import project"));
-                    tmpdir.unlink();
-                    return "";
-                }
+                //This should never happen, the vcs dialog presented a list of vcs
+                //systems and now the chosen system doesn't exist anymore??
+                tmpdir.unlink();
+                return "";
             }
-        }
-        else
-        {
-            //This should never happen, the vcs dialog presented a list of vcs
-            //systems and now the chosen system doesn't exist anymore??
             tmpdir.unlink();
-            return "";
         }
-        tmpdir.unlink();
     }else
-    {
         kDebug(9010) << "failed to open template archive";
-        return "";
-    }
 
     kDebug(9010) << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
     return QDir::cleanPath(dest.toLocalFile() + '/' + dest.fileName() + ".kdev4");
