@@ -68,6 +68,8 @@
 
 using namespace KDevelop;
 
+const bool noHtmlDestriptionInOutline = true;
+
 class QuickOpenDelegate : public ExpandingDelegate {
 public:
   QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = 0L) : ExpandingDelegate(model, parent) {
@@ -465,8 +467,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
   
-    QAction* quickOpenNavigateFunctions = actions->addAction("quick_open_navigate_function_definitions");
-    quickOpenNavigateFunctions->setText( i18n("Navigate Function Definitions") );
+    QAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
+    quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
@@ -832,10 +834,10 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   QList<DUChainItem> items;
 
-  class FunctionFilter : public DUChainItemFilter {
+  class OutlineFilter : public DUChainItemFilter {
   public:
     virtual bool accept(Declaration* decl) {
-      if(dynamic_cast<AbstractFunctionDeclaration*>(decl))
+      if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class))
         return true;
       else
         return false;
@@ -850,6 +852,11 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   
   collectItems( items, context, filter );
 
+  if(noHtmlDestriptionInOutline) {
+    for(int a = 0; a < items.size(); ++a)
+      items[a].m_noHtmlDestription = true;
+  }
+  
   Declaration* cursorDecl = cursorContextDeclaration();
   
   model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );

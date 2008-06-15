@@ -61,6 +61,8 @@ QList<QVariant> DUChainItemData::highlighting() const {
    
   int prefixLength = function->partToString( FunctionType::SignatureReturn).length() + 1;
 
+  QString signature = function->partToString( FunctionType::SignatureArguments );
+  
   //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
   QualifiedIdentifier id = m_item.m_item->qualifiedIdentifier();
   QString fullId = id.toString();
@@ -77,12 +79,17 @@ QList<QVariant> DUChainItemData::highlighting() const {
   ret << prefixLength;
   ret << lastId.length();
   ret << QVariant(boldFormat);
+  ret << prefixLength + lastId.length();
+  ret << signature.length();
+  ret << QVariant(normalFormat);
     
   return ret;
     
 }
 
 QString DUChainItemData::htmlDescription() const {
+  if(m_item.m_noHtmlDestription)
+      return QString();
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
     return i18n("Not available any more");
@@ -101,15 +108,22 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   if(!m_item.m_item)
     return false;
+  Declaration* decl = this->m_item.m_item.data();
 
-  KUrl url = KUrl(m_item.m_item->url().str());
-  KTextEditor::Cursor cursor = m_item.m_item->range().textRange().start();
-
-  if(m_openDefinition && m_item.m_item->definition()) {
-    url = KUrl(m_item.m_item->definition()->url().str());
-    cursor = m_item.m_item->definition()->range().textRange().start();
-  }
+  if(m_openDefinition && decl->definition())
+      decl = decl->definition();
   
+  KUrl url = KUrl(decl->url().str());
+  KTextEditor::Cursor cursor = decl->range().textRange().start();
+  
+  DUContext* internal = decl->internalContext();
+  
+  if(internal && (internal->type() == DUContext::Other || internal->type() == DUContext::Class)) {
+      //Move into the body
+      if(internal->range().end.line > internal->range().start.line)
+        cursor = KTextEditor::Cursor(internal->range().start.line+1, 0); //Move into the body
+  }
+
   lock.unlock();
   ICore::self()->documentController()->openDocument( url, cursor );
   return true;

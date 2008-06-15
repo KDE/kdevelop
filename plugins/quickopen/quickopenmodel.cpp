@@ -229,8 +229,13 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 
   switch( role ) {
-    case KTextEditor::CodeCompletionModel::ItemSelected:
-      return d->htmlDescription();
+    case KTextEditor::CodeCompletionModel::ItemSelected: {
+        QString desc = d->htmlDescription();
+      if(desc.isEmpty())
+          return QVariant();
+      else
+          return desc;
+    }
 
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return d->isExpandable();

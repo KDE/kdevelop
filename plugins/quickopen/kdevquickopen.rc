@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="3">
+<kpartgui name="KDevQuickopen" version="4">
 <MenuBar>
   <Menu name="navigation" group="search_menu_merge">
     <text context="@title:menu">Navigation</text>
@@ -19,7 +19,7 @@
     <Action name="quick_open_navigate"
 	    group="file_operations"/>
 
-    <Action name="quick_open_navigate_function_definitions"
+    <Action name="quick_open_outline"
             group="file_operations"/>
 
     <Action name="quick_open_jump_declaration"

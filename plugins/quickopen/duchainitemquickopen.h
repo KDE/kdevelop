@@ -30,11 +30,12 @@ namespace KDevelop {
 }
 
 struct DUChainItem {
-  DUChainItem() {
+  DUChainItem() : m_noHtmlDestription(false) {
   }
   KDevelop::DeclarationPointer m_item;
   QString m_text;
   QString m_project;
+  bool m_noHtmlDestription;
 };
 
 class DUChainItemData : public KDevelop::QuickOpenDataBase {
