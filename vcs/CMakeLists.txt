@@ -66,6 +66,7 @@ install(FILES
     interfaces/ibranchingversioncontrol.h
     interfaces/ibrowsableversioncontrol.h
     interfaces/idistributedversioncontrol.h
+    interfaces/icentralizedversioncontrol.h
     interfaces/irepositoryversioncontrol.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces
 )
