@@ -56,14 +56,14 @@ Declaration* ClassMemberDeclaration::clone() const {
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : Declaration(*new ClassMemberDeclarationPrivate,url, range, ClassScope )
+  : Declaration(*new ClassMemberDeclarationPrivate,url, range )
 {
   if( context )
     setContext( context );
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range, Scope s)
-  : Declaration(dd, url, range, s)
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range )
+  : Declaration(dd, url, range)
 {
 }
 

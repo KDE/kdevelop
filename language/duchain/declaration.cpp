@@ -59,7 +59,6 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
 {
   m_identifier = rhs.m_identifier;
   m_type = rhs.m_type;
-  m_scope = rhs.m_scope;
   m_kind = rhs.m_kind;
   m_isDefinition = rhs.m_isDefinition;
   m_isTypeAlias = rhs.m_isTypeAlias;
@@ -88,10 +87,9 @@ bool Declaration::inDUChain() const {
   return top && top->inDuChain();
 }
 
-Declaration::Declaration( const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context )
+Declaration::Declaration( const HashedString& url, const SimpleRange& range, DUContext* context )
   : DUChainBase(*new DeclarationPrivate, url, range)
 {
-  d_func()->m_scope = scope;
   if(context)
     setContext(context);
 }
@@ -105,11 +103,10 @@ Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd)
 {
 }
 
-Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope )
+Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range )
   : DUChainBase(dd, url, range)
 {
   Q_D(Declaration);
-  d->m_scope = scope;
 }
 
 Declaration::~Declaration()
@@ -191,13 +188,6 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
-}
-
-Declaration::Scope Declaration::scope( ) const
-{
-  ENSURE_CAN_READ
-  Q_D(const Declaration);
-  return d->m_scope;
 }
 
 QualifiedIdentifier Declaration::qualifiedIdentifier() const

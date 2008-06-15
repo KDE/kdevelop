@@ -41,8 +41,8 @@ FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Decla
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-FunctionDeclaration::FunctionDeclaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context)
-  : Declaration(*new FunctionDeclarationPrivate, url, range, scope)
+FunctionDeclaration::FunctionDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
+  : Declaration(*new FunctionDeclarationPrivate, url, range)
 {
   if( context )
     setContext( context );

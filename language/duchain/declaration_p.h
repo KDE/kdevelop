@@ -40,7 +40,6 @@ public:
   DeclarationPrivate( const DeclarationPrivate& rhs );
   
   DUContext* m_context, *m_internalContext;
-  Declaration::Scope m_scope;
   AbstractType::Ptr m_type;
   Identifier m_identifier;
   

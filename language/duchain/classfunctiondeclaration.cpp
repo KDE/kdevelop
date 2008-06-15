@@ -55,7 +55,7 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
 }
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate, url, range, ClassScope), AbstractFunctionDeclaration()
+  : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate, url, range), AbstractFunctionDeclaration()
 {
   if( context )
     setContext( context );

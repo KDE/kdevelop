@@ -72,7 +72,7 @@ public:
   virtual Declaration* clone() const;
 
 protected:
-  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range, Scope s);
+  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range);
   ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd);
   
 private:

@@ -60,13 +60,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
 
 public:
-  enum Scope {
-    GlobalScope    /**< a global declaration */,
-    NamespaceScope /**< a namespace declaration */,
-    ClassScope     /**< a class declaration */,
-    FunctionScope  /**< a function declaration */,
-    LocalScope     /**< a local declaration */
-  };
   enum AccessPolicy {
     Public    /**< a public declaration */,
     Protected /**< a protected declaration */,
@@ -89,7 +82,7 @@ public:
   /**
    * If @param parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
    * */
-  Declaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* parentContext);
+  Declaration(const HashedString& url, const SimpleRange& range, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   virtual ~Declaration();
@@ -175,8 +168,6 @@ public:
    * Else it is added to the symbol table with the new scope. @see TopDUContext for information about the symbol table.
    * */
   void setContext(DUContext* context, bool anonymous = false);
-
-  Scope scope() const;
 
   template <class T>
   KSharedPtr<T> type() const { return KSharedPtr<T>::dynamicCast(abstractType()); }
@@ -282,7 +273,7 @@ public:
   virtual Declaration* clone() const;
 protected:
     Declaration( DeclarationPrivate & dd );
-    Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range, Scope scope );
+    Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range );
 
 private:
   Q_DECLARE_PRIVATE(Declaration)

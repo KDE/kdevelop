@@ -31,7 +31,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclaration : public Declaration
 {
 public:
   ForwardDeclaration(const ForwardDeclaration& rhs);
-  ForwardDeclaration(const HashedString& url, const SimpleRange& range, Scope scope, DUContext* context);
+  ForwardDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
   virtual ~ForwardDeclaration();
 
   virtual bool isForwardDeclaration() const;
