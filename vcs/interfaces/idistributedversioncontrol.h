@@ -22,8 +22,7 @@
 #ifndef IDISTRIBUTEDVERSIONCONTROL_H
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
-#include <iextension.h>
-#include <kurl.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include <QString>
 #include <QStringList>
@@ -37,7 +36,7 @@ class VcsJob;
  * This interface has methods to support distributed version control systems
  * like git or svk.
  */
-class IDistributedVersionControl
+class IDistributedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
 

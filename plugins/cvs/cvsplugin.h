@@ -14,7 +14,7 @@
 #include <KUrl>
 #include <KJob>
 
-#include <ibasicversioncontrol.h>
+#include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcslocation.h>
 #include <iplugin.h>
 #include <qobject.h>
@@ -31,10 +31,10 @@ class ContextMenuExtension;
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CvsPlugin: public KDevelop::IPlugin , public KDevelop::IBasicVersionControl
+class CvsPlugin: public KDevelop::IPlugin , public KDevelop::ICentralizedVersionControl
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IBasicVersionControl )
+    Q_INTERFACES( KDevelop::IBasicVersionControl KDevelop::ICentralizedVersionControl )
 
 friend class CvsProxy;
 
@@ -54,16 +54,12 @@ public:
     virtual KDevelop::VcsJob* add( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
     virtual KDevelop::VcsJob* remove( const KUrl::List& localLocations );
-    virtual KDevelop::VcsJob* edit( const KUrl& localLocation );
-    virtual KDevelop::VcsJob* unedit( const KUrl& localLocation );
+    virtual KDevelop::VcsJob* copy( const KUrl& localLocationSrc,
+                                    const KUrl& localLocationDstn );
+    virtual KDevelop::VcsJob* move( const KUrl& localLocationSrc,
+                                    const KUrl& localLocationDst );
     virtual KDevelop::VcsJob* status( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* localRevision( const KUrl& localLocation,
-                KDevelop::VcsRevision::RevisionType );
-    virtual KDevelop::VcsJob* copy( const KUrl& localLocationSrc,
-                const KUrl& localLocationDstn );
-    virtual KDevelop::VcsJob* move( const KUrl& localLocationSrc,
-                const KUrl& localLocationDst );
     virtual KDevelop::VcsJob* revert( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
     virtual KDevelop::VcsJob* update( const KUrl::List& localLocations,
@@ -93,9 +89,16 @@ public:
                 const KUrl& localLocation );
     virtual KDevelop::VcsJob* resolve( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
+    // End:  KDevelop::IBasicVersionControl
+
+    // Begin:  KDevelop::ICentralizedVersionControl
+    virtual KDevelop::VcsJob* edit( const KUrl& localLocation );
+    virtual KDevelop::VcsJob* unedit( const KUrl& localLocation );
+    virtual KDevelop::VcsJob* localRevision( const KUrl& localLocation,
+                                             KDevelop::VcsRevision::RevisionType );
     virtual KDevelop::VcsJob* import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage );
     virtual KDevelop::VcsJob* checkout( const KDevelop::VcsMapping& mapping );
-    // End:  KDevelop::IBasicVersionControl
+    // End:  KDevelop::ICentralizedVersionControl
 
     CvsProxy* proxy();
 

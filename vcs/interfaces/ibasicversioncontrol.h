@@ -113,31 +113,6 @@ public:
     virtual VcsJob* remove( const KUrl::List& localLocations ) = 0;
 
     /**
-     * this is for files only, it makes a file editable, this may be a no-op
-     */
-    virtual VcsJob* edit( const KUrl& localLocation ) = 0;
-
-    /**
-     * this is for files only, it makes a file un-editable, this may be a no-op
-     * This is different from revert because it doesn't change the content of the
-     * file (it may fail if the file has changed).
-     */
-    virtual VcsJob* unedit( const KUrl& localLocation ) = 0;
-
-    /**
-     * retrieves status information for a file or dir recursive is only
-     * active for directories
-     */
-    virtual VcsJob* status( const KUrl::List& localLocations,
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
-    /**
-     * gives the revision of file/dir, that is the revision to which this files
-     * was updated when update() was run the last time
-     */
-    virtual VcsJob* localRevision( const KUrl& localLocation,
-                                   VcsRevision::RevisionType ) = 0;
-
-    /**
      * executes a copy of a file/dir, preserving history if the VCS system
      * allows that, may be implemented by filesystem copy+add
      */
@@ -150,6 +125,9 @@ public:
      */
     virtual VcsJob* move( const KUrl& localLocationSrc,
                           const KUrl& localLocationDst ) = 0;
+
+    virtual VcsJob* status( const KUrl::List& localLocations,
+                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
      * revert all local changes on the given file, making its content equal
@@ -258,24 +236,6 @@ public:
     virtual VcsJob* resolve( const KUrl::List& localLocations,
                              RecursionMode recursion ) = 0;
 
-    /**
-     * The following two methods are part of the basic interface so other plugins
-     * can depend on them, for example the appwizard. These two don't need a
-     * valid VCS-dir, in fact they should be invoked with a local directory that
-     * is either empty or contains a non-VCed project
-     */
-
-    /**
-     * take a mapping of local to repository locations and import that into the repository
-     */
-    virtual VcsJob* import( const VcsMapping& localLocation, const QString& commitMessage ) = 0;
-
-    /**
-     * Checks out files or dirs from a repository into a local directory
-     * hierarchy. The mapping exactly tells which file in the repository
-     * should go to which local file
-     */
-    virtual VcsJob* checkout( const VcsMapping& mapping ) = 0;
 };
 
 }
