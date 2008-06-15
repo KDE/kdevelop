@@ -1,7 +1,7 @@
 # KDE Config File
 [General]
 Name=Qt4 GUI Application
-Name[de]=Qt4 Anwendung mit graphischer Oberfläche
+Name[de]=Qt-4-Anwendung mit graphischer Oberfläche
 Name[el]=Εφαρμογή GUI της Qt4
 Name[es]=Aplicación con interfaz gráfica Qt4
 Name[fa]=کاربرد ونک Qt4
@@ -26,7 +26,7 @@ Name[zh_CN]=Qt4 图形界面应用程序
 Name[zh_TW]=Qt4 使用者介面應用程式
 Category=C++/Qt (qmake)
 Comment=Generate a QMake/Qt4 based application with graphical user interface (crossplatform compatible)
-Comment[de]=Erstellt eine QMake/Qt4 basierte Anwendung mit graphischer Benutzeroberfläche (Crossplattform kompatibel)
+Comment[de]=Erstellt eine auf QMake/Qt4 basierende Anwendung mit graphischer Benutzeroberfläche (Crossplattform kompatibel)
 Comment[el]=Δημιουργία μιας εφαρμογής με βάση τα QMake/Qt4 με γραφικό περιβάλλον (συμβατή με πολλαπλές πλατφόρμες)
 Comment[es]=Genera una aplicación basada en QMake/Qt4 con interfaz gráfica (compatible multiplataforma)
 Comment[fa]=یک کاربرد بر مبنای QMake/Qt4 با  واسط کاربر نگاره‌ای تولید می‌کند )همساز بین سکویی(

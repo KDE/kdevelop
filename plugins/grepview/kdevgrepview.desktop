@@ -44,6 +44,7 @@ Name[tg]=Намоиши KDevGrep
 Name[x-test]=xxKDevGrepViewxx
 GenericName=Grep Frontend
 GenericName[da]=Grep-grænseflade
+GenericName[de]=Oberfläche für Grep
 GenericName[el]=Διασύνδεση Grep
 GenericName[es]=Interfaz para Grep
 GenericName[et]=Programmi grep kasutajaliides

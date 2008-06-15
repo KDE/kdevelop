@@ -6,6 +6,7 @@ Name[hi]=केडेवसीमेकबिल्डर
 Name[sv]=KDevelop CMake-byggverktyg
 Name[x-test]=xxKDevCMakeBuilderxx
 Comment=Builds CMake Projects
+Comment[de]=Erstellt CMake-Projekte
 Comment[el]=Κατασκευή έργων CMake
 Comment[es]=Construye proyectos CMake
 Comment[fa]=پروژه‌های CMake را می‌سازد
