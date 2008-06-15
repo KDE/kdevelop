@@ -599,7 +599,8 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(ctorImplCtx->importedParentContexts().count(), 1);
   QCOMPARE(ctorImplCtx->childContexts().count(), 1);
   QCOMPARE(ctorImplCtx->localDeclarations().count(), 0);
-  QVERIFY(ctorImplCtx->localScopeIdentifier().isEmpty());
+  QVERIFY(!ctorImplCtx->localScopeIdentifier().isEmpty());
+  QVERIFY(ctorImplCtx->owner());
 
   DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().data();
   QVERIFY(ctorCtx->parentContext());
@@ -1020,7 +1021,7 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testFunctionDefinition() {
-  QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() {}; A::~A() {}; ");
+  QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() : i(3) {}; A::~A() {}; ");
 
   TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
@@ -1062,9 +1063,11 @@ void TestDUChain::testFunctionDefinition() {
 
   QCOMPARE(top->localDeclarations()[3]->declaration(), top->childContexts()[1]->localDeclarations()[1]);
   QCOMPARE(top->localDeclarations()[3], top->childContexts()[1]->localDeclarations()[1]->definition());
+  QCOMPARE(top->childContexts()[5]->owner(), top->localDeclarations()[3]);
+  QVERIFY(!top->childContexts()[5]->localScopeIdentifier().isEmpty());
 
-    QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
-QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
+  QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
+  QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
   QCOMPARE(top->localDeclarations()[4], top->childContexts()[1]->localDeclarations()[2]->definition());
 
   QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));

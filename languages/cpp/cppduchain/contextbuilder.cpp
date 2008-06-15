@@ -508,19 +508,23 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   }
   visitFunctionDeclaration(node);
 
+  m_openingFunctionBody = functionName;
+
   if (node->constructor_initializers && node->function_body) {
-    openContext(node->constructor_initializers, node->function_body, DUContext::Other); //The constructor initializer context
+    //Since we put the context around the context for the compound statement, it also gets the local scope identifier.
+    openContext(node->constructor_initializers, node->function_body, DUContext::Other, m_openingFunctionBody); //The constructor initializer context
     addImportedContexts();
+    m_openingFunctionBody = QualifiedIdentifier();
   }
   // Otherwise, the context is created in the function body visit
 
   visit(node->constructor_initializers);
-  m_openingFunctionBody = functionName;
   visit(node->function_body);
   m_openingFunctionBody = QualifiedIdentifier();
 
-  if (node->constructor_initializers)
+  if (node->constructor_initializers) {
     closeContext();
+  }
 
   visit(node->win_decl_specifiers);
 
