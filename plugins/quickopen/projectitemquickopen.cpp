@@ -99,7 +99,7 @@ void ProjectItemDataProvider::reset() {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
     TopDUContext* ctx = getTopContext( u );
-    if( ctx )
+    if( ctx ) ///@todo Get the project for this file and give it as first parameter
       fillItems( QString(), items, ctx, m_itemTypes );
   }
 
