@@ -138,11 +138,11 @@ Core::~Core()
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
-        /* Cleanup is done in the reverse order to construction.  */
+        /* Must be called before projectController->cleanup(). */
         d->documentController->cleanup();
+        d->uiController->cleanup();
         d->projectController->cleanup();
         d->pluginController->cleanup();
-        d->uiController->cleanup();
     }
 
     d->m_cleanedUp = true;
