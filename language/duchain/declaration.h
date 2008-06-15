@@ -100,6 +100,8 @@ public:
   ForwardDeclaration* toForwardDeclaration();
   const ForwardDeclaration* toForwardDeclaration() const;
 
+  virtual bool isFunctionDeclaration() const;
+  
   ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
   virtual bool inDUChain() const;
 

@@ -43,6 +43,8 @@ public:
 
   virtual QString toString() const;
 
+  virtual bool isFunctionDeclaration() const;
+  
   virtual uint additionalIdentity() const;
 private:
   Q_DECLARE_PRIVATE(FunctionDeclaration)

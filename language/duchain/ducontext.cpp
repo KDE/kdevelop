@@ -471,10 +471,10 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
         kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
         continue;
       }
-      if( dynamic_cast<NamespaceAliasDeclaration*>(declaration) )
+      if( declaration->kind() == Declaration::NamespaceAlias )
         continue; //Do not include NamespaceAliasDeclarations here, they are handled by DUContext directly.
 
-      if((flags & OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(declaration))
+      if((flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
         continue;
       
       if (!dataType || dataType == declaration->abstractType())

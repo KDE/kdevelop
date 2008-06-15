@@ -451,6 +451,11 @@ bool Declaration::isForwardDeclaration() const
   return false;
 }
 
+bool Declaration::isFunctionDeclaration() const
+{
+  return false;
+}
+
 uint Declaration::additionalIdentity() const
 {
   return 0;

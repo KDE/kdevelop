@@ -69,6 +69,11 @@ ClassFunctionDeclaration::~ClassFunctionDeclaration()
 {
 }
 
+bool ClassFunctionDeclaration::isFunctionDeclaration() const
+{
+  return true;
+}
+
 QString ClassFunctionDeclaration::toString() const {
   if( !abstractType() )
     return ClassMemberDeclaration::toString();

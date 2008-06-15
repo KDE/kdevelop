@@ -56,6 +56,11 @@ Declaration* FunctionDeclaration::clone() const {
   return new FunctionDeclaration(*this);
 }
 
+bool FunctionDeclaration::isFunctionDeclaration() const
+{
+  return true;
+}
+
 void FunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   Q_ASSERT( !type || dynamic_cast<FunctionType*>(type.data()) );
   Declaration::setAbstractType(type);

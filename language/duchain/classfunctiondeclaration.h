@@ -51,6 +51,8 @@ public:
   bool isConversionFunction() const;
 //  bool isExternalDefinition() const; //Whether this declaration is an external definition of a class-member(Mainly for C++)
 
+  bool isFunctionDeclaration() const;
+
   void setIsExternalDefinition(bool);
 
   virtual QString toString() const;
