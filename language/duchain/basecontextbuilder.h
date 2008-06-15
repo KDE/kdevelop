@@ -32,70 +32,48 @@
 
 #include <editor/editorintegrator.h>
 
-#include "language/duchain/smartconverter.h"
 #include "language/duchain/topducontext.h"
 #include "language/duchain/duchainpointer.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/duchain.h"
 #include "language/duchain/ducontext.h"
 #include "language/duchain/identifier.h"
+#include "language/duchain/indexedstring.h"
 #include "language/duchain/parsingenvironment.h"
-
-class KUrl;
 
 namespace KDevelop
 {
-class TopDUContext;
-class DUContext;
-class DUChainBase;
 
 template<typename T>
 class KDEVPLATFORMLANGUAGE_EXPORT BaseContextBuilder
 {
 public:
-  BaseContextBuilder()
-    : m_editor( new EditorIntegrator )
-    , m_compilingContexts( false )
-    , m_recompiling( false )
-    , m_ownsEditorIntegrator( true )
-    , m_lastContext( 0 )
-
-  {
-  }
-
-  BaseContextBuilder( EditorIntegrator* editor )
+  BaseContextBuilder( EditorIntegrator* editor, bool ownsEditorIntegrator )
     : m_editor( editor )
+    , m_ownsEditorIntegrator(ownsEditorIntegrator)
     , m_compilingContexts( false )
     , m_recompiling( false )
-    , m_ownsEditorIntegrator( false )
     , m_lastContext( 0 )
   {
   }
 
   virtual ~BaseContextBuilder()
   {
+    if (m_ownsEditorIntegrator)
+      delete m_editor;
   }
 
-  
-
-  TopDUContext buildContexts( const KUrl& url, T* node, 
+  TopDUContext* buildContexts( const IndexedString& url, T* node, 
                               const TopDUContextPointer& updateContext
                                     = TopDUContextPointer() )
   {
     m_compilingContexts = true;
-    m_editor->setCurrentUrl( KDevelop::HashedString( url.pathOrUrl() ) );
+    m_editor->setCurrentUrl( url.str() );
   
     TopDUContext* top = 0;
     {
       DUChainWriteLocker lock( DUChain::lock() );
       top = updateContext.data();
-      if( top && !top->smartRange() && m_editor->smart() )
-      {
-        lock.unlock();
-        smartenContext( top );
-        lock.lock();
-        top = updateContext.data();
-      }
       if( top && top->smartRange() )
       {
         if( top && top->smartRange()->parentRange() )
@@ -131,7 +109,7 @@ public:
       setContextOnNode( node, top );
     }
   
-    supportBuild( node );
+    supportBuild( node, top );
   
     if( m_editor->currentDocument() && m_editor->smart() &&
         top->range().textRange() != m_editor->currentDocument()->documentRange() )
@@ -155,23 +133,48 @@ public:
 
 protected:
   
-  virtual void supportBuild( T* node ) = 0;
-  virtual void setContextOnNode( T* node, KDevelop::DUContext* ctx ) = 0;
-  virtual DUContext* contextFromNode( T* node ) = 0;
-  virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
-  virtual const QualifiedIdentifier identifierForNode( T* ) = 0;
-
-  void smartenContext( TopDUContext* topLevelContext )
+  virtual void supportBuild( T* node, DUContext* context = 0 )
   {
-    if ( topLevelContext && !topLevelContext->smartRange() && m_editor->smart() )
-    {
-      SmartConverter conv( m_editor, 0 );
-      conv.convertDUChain( topLevelContext );
-    }
+    if (!context)
+      context = contextFromNode(node);
+
+    openContext( context );
+
+    m_editor->setCurrentUrl(currentContext()->url());
+
+    m_editor->setCurrentRange(currentContext()->smartRange());
+
+    startVisiting(node);
+
+    closeContext();
+
+    Q_ASSERT(m_contextStack.isEmpty());
   }
 
-  KDevelop::DUContext* buildSubContexts( const KUrl& url, T *node,
-                                         KDevelop::DUContext* parent )
+  virtual void startVisiting( T* node ) = 0;
+  virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
+  virtual DUContext* contextFromNode( T* node ) = 0;
+  virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
+  virtual QualifiedIdentifier identifierForNode( T* ) const = 0;
+
+  inline DUContext* currentContext() const { return m_contextStack.top(); }
+  inline DUContext* lastContext() const { return m_lastContext; }
+  inline void clearLastContext() { m_lastContext = 0; }
+  
+  /// Returns true if we are recompiling a definition-use chain
+  inline bool recompiling() const { return m_recompiling; }
+  inline void setRecompiling(bool recomp) { m_recompiling = recomp; }
+
+  inline bool compilingContexts() const { return m_compilingContexts; }
+  inline void setCompilingContexts(bool compilingContexts) { m_compilingContexts = compilingContexts; }
+  
+  bool hasSmartEditor() const
+  {
+    return m_editor->smart();
+  }
+
+  DUContext* buildSubContexts( const KUrl& url, T *node,
+                                         DUContext* parent )
   {
   //     m_compilingContexts = true;
   //     m_recompiling = false;
@@ -202,7 +205,7 @@ protected:
     setContextFromNode( node, 0 );
   }
 
-  void openContext( DUContext* newContext )
+  virtual void openContext( DUContext* newContext )
   {
     m_contextStack.push( newContext );
     m_nextContextStack.push( 0 );
@@ -212,13 +215,13 @@ protected:
   {
     if ( m_compilingContexts )
     {
-      DUContext* ret = openContextInternal( editorFindRange( rangeNode ), type, identifier ? identifierForName( identifier ) : QualifiedIdentifier() );
+      DUContext* ret = openContextInternal( editorFindRange( rangeNode, rangeNode ), type, identifier ? identifierForNode( identifier ) : QualifiedIdentifier() );
       setContextOnNode( rangeNode, ret );
       return ret;
     }
     else
     {
-      openContext( rangeNode->context );
+      openContext( contextFromNode(rangeNode) );
       m_editor->setCurrentRange( currentContext()->smartRange() );
       return currentContext();
     }
@@ -229,7 +232,7 @@ protected:
     if ( m_compilingContexts )
     {
       //kDebug() << "Opening ContextInternal";
-      DUContext* ret = openContextInternal( editorFindRange( rangeNode ), type, identifier );
+      DUContext* ret = openContextInternal( editorFindRange( rangeNode, rangeNode ), type, identifier );
       //kDebug() << "Associating context" ;
       setContextOnNode( rangeNode, ret );
       return ret;
@@ -237,7 +240,7 @@ protected:
     else
     {
       //kDebug() << "Opening Context associated with node";
-      openContext( rangeNode->context );
+      openContext( contextFromNode(rangeNode) );
       m_editor->setCurrentRange( currentContext()->smartRange() );
       return currentContext();
     }
@@ -248,22 +251,22 @@ protected:
     if ( m_compilingContexts )
     {
       DUContext* ret = openContextInternal( editorFindRange( fromRange, toRange ), type, identifier );
-      fromRange->context = ret;
+      setContextOnNode( fromRange, ret );
       return ret;
     }
     else
     {
-      openContext( fromRange->context );
+      openContext( contextFromNode(fromRange) );
       m_editor->setCurrentRange( currentContext()->smartRange() );
       return currentContext();
     }
   }
   
-  void closeContext()
+  virtual void closeContext()
   {
     {
       DUChainWriteLocker lock( DUChain::lock() );
-      currentContext()->cleanIfNotEncountered( m_encountered, m_compilingContexts );
+      //currentContext()->cleanIfNotEncountered( m_encountered );
       setEncountered( currentContext() );
     }
   
@@ -286,13 +289,17 @@ protected:
   void setIdentifier( const QString& id )
   {
     m_identifier = Identifier( id );
-    m_qIdentifier.clear();
     m_qIdentifier.push( m_identifier );
   }
 
-  QualifiedIdentifier qualifiedIdentifier()
+  QualifiedIdentifier qualifiedIdentifier() const
   {
     return m_qIdentifier;
+  }
+  
+  void clearQualifiedIdentifier()
+  {
+    m_qIdentifier.clear();
   }
   
   template <typename E> E* editor()
@@ -304,17 +311,6 @@ protected:
   }
   
 private:
-
-  bool recompiling()
-  {
-    return m_recompiling;
-  }
-
-  DUContext * currentContext()
-  {
-    return m_contextStack.top();
-  }
-
   int& nextContextIndex()
   {
     return m_nextContextStack.top();
@@ -392,15 +388,14 @@ private:
   Identifier m_identifier;
   QualifiedIdentifier m_qIdentifier;
   EditorIntegrator* m_editor;
+  bool m_ownsEditorIntegrator: 1;
   bool m_compilingContexts : 1;
   bool m_recompiling : 1;
-  bool m_ownsEditorIntegrator: 1;
   QStack<int> m_nextContextStack;
   DUContext* m_lastContext;
   QList<DUContext*> m_importedParentContexts;
-  QSet<KDevelop::DUChainBase*> m_encountered;
-  QStack<KDevelop::DUContext*> m_contextStack;
-
+  QSet<DUChainBase*> m_encountered;
+  QStack<DUContext*> m_contextStack;
 };
 
 }
