@@ -382,7 +382,7 @@ void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node
           foreach (Declaration* declaration, context->localDeclarations()) {
             if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
 
-              if (declaration->declaration())
+              if (!m_filterDocument && declaration->declaration())
                 // This is a definition, skip it
                 continue;
 
@@ -639,10 +639,18 @@ QVariant ClassModel::data(Node* node, int role)
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
       case Qt::DisplayRole: {
-        if(dec->isDefinition() && dec->declaration())
+        bool fullScope = false;
+        if(dec->isDefinition() && dec->declaration()) {
           dec = dec->declaration();
+          fullScope = true;
+        }
 
-        QString ret = dec->identifier().toString();
+        QString ret;
+        if(!fullScope)
+          ret = dec->identifier().toString();
+        else
+          ret = dec->qualifiedIdentifier().toString();
+        
         if (FunctionType::Ptr type = dec->type<FunctionType>())
           ret += type->partToString(FunctionType::SignatureArguments);
         return ret;
