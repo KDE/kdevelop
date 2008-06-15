@@ -26,11 +26,15 @@
 
 namespace KDevelop  {
   class Declaration;
+  class AbstractFunctionDeclaration;
 }
 
 ///The here defined class is about finding best viable functions as defined in iso c++ draft 13.3.3
 
 namespace Cpp {
+  
+  class TemplateDeclaration;
+  
   using namespace KDevelop;
 
   class KDEVCPPDUCHAIN_EXPORT ViableFunction {
@@ -81,6 +85,7 @@ namespace Cpp {
     KDevelop::DeclarationPointer m_declaration;
     KDevelop::TopDUContextPointer m_topContext;
     KSharedPtr<CppFunctionType> m_type;
+    KDevelop::AbstractFunctionDeclaration* m_funDecl;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };
 }

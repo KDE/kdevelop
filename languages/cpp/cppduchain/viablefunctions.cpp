@@ -40,7 +40,8 @@ inline bool ViableFunction::ParameterConversion::operator<(const ParameterConver
 
 ViableFunction::ViableFunction( TopDUContext* topContext, Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_topContext(topContext), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
-    m_type = KSharedPtr<CppFunctionType>(dynamic_cast<CppFunctionType*>( decl->abstractType().data()));
+    m_type = KSharedPtr<CppFunctionType>(fastCast<CppFunctionType*>( decl->abstractType().data()));
+  m_funDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
 }
 
 KDevelop::DeclarationPointer ViableFunction::declaration() const {
@@ -48,15 +49,14 @@ KDevelop::DeclarationPointer ViableFunction::declaration() const {
 }
 
 bool ViableFunction::isValid() const {
-  return m_type && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());;
+  return m_type && m_declaration && m_funDecl;
 }
 
 void ViableFunction::matchParameters( const OverloadResolver::ParameterList& params, bool partial ) {
   if( !isValid() || !m_topContext )
     return;
-  AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
-  Q_ASSERT(functionDecl);
-  if( params.parameters.size() + functionDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
+  Q_ASSERT(m_funDecl);
+  if( params.parameters.size() + m_funDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )
     return; //Too many parameters
@@ -114,8 +114,8 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
    * - this is a non-template function while other is one
    * - this is a template-function that is more specialized than other
    */
-    if(!dynamic_cast<TemplateDeclaration*>(m_declaration.data()) && dynamic_cast<TemplateDeclaration*>(other.m_declaration.data()))
-      return true;
+  if(!dynamic_cast<TemplateDeclaration*>(m_declaration.data()) && dynamic_cast<TemplateDeclaration*>(other.m_declaration.data()))
+    return true;
 //   if( m_type->isMoreSpecialized( other.m_type.data() ) )
 //     return true;
 

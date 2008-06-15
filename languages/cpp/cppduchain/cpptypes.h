@@ -472,6 +472,14 @@ inline CppArrayType* fastCast<CppArrayType*>(AbstractType* from) {
     return dynamic_cast<CppArrayType*>(static_cast<ArrayType*>(from));
 }
 
+template<>
+inline CppTemplateParameterType* fastCast<CppTemplateParameterType*>(AbstractType* from) {
+  if(!from || from->whichType() != AbstractType::TypeAbstract)
+    return 0;
+  else
+    return dynamic_cast<CppTemplateParameterType*>(static_cast<CppTemplateParameterType*>(from));
+}
+
 }
 
 /*template <class _Target, class _Source>

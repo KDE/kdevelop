@@ -44,7 +44,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       if( (*it)->abstractType() )
       {
-        CppFunctionType* function = dynamic_cast<CppFunctionType*>( (*it)->abstractType().data() );
+        CppFunctionType* function = fastCast<CppFunctionType*>( (*it)->abstractType().data() );
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>(*it);
         //Q_ASSERT();
         
@@ -81,7 +81,7 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
     Declaration* decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl->abstractType(), m_topContext.data(), &isConstant) ) )
+    if( CppClassType* klass = fastCast<CppClassType*>( TypeUtils::realType(decl->abstractType(), m_topContext.data(), &isConstant) ) )
     {
       if( decl->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
@@ -109,7 +109,7 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
     QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
     bool isConstant = false;
 
-    if( CppClassType* klass = dynamic_cast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), m_topContext.data(), &isConstant) ) )
+    if( CppClassType* klass = fastCast<CppClassType*>( TypeUtils::realType(decl.second->abstractType(), m_topContext.data(), &isConstant) ) )
     {
       if( decl.second->kind() == Declaration::Instance ) {
         //Instances of classes should be substituted with their operator() members
@@ -162,7 +162,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   }
 
   if( bestViableFunction.isViable() )
-    return dynamic_cast<Declaration*>(bestViableFunction.declaration().data());
+    return bestViableFunction.declaration().data();
   else
     return 0;
 }
@@ -224,7 +224,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
   QMap<QString, AbstractType::Ptr> instantiatedParameters; //Here we store the values assigned to each template-parameter
 
   foreach( Declaration* decl, templateContext->localDeclarations() ) {
-    CppTemplateParameterType* paramType = dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data());
+    CppTemplateParameterType* paramType = fastCast<CppTemplateParameterType*>(decl->abstractType().data());
     if( paramType ) //Parameters that are not of type CppTemplateParameterType are already assigned.
       instantiatedParameters[paramType->identifier().last().identifier()] = AbstractType::Ptr();
   }
@@ -246,7 +246,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     foreach( Declaration* decl, templateContext->localDeclarations() ) {
       ExpressionEvaluationResult res;
       
-      CppTemplateParameterType* paramType = dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data());
+      CppTemplateParameterType* paramType = fastCast<CppTemplateParameterType*>(decl->abstractType().data());
       if( paramType ) //Take the type we have assigned.
         res.type = instantiatedParameters[paramType->identifier().last().identifier()];
       else
@@ -271,13 +271,13 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, Abstract
   AbstractType::Ptr argumentType = TypeUtils::resolvedType(_argumentType, m_topContext.data());
   AbstractType::Ptr parameterType = TypeUtils::resolvedType(_parameterType, m_topContext.data());
   
-  DelayedType* delayed = dynamic_cast<DelayedType*>(parameterType.data());
+  DelayedType* delayed = fastCast<DelayedType*>(parameterType.data());
   if(delayed)
     return matchParameterTypes( argumentType.data(), delayed->identifier(), instantiatedTypes );
 
   ///In case of references on both sides, match the target-types
-  CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(argumentType.data());
-  CppReferenceType* parameterRef = dynamic_cast<CppReferenceType*>(parameterType.data());
+  CppReferenceType* argumentRef = fastCast<CppReferenceType*>(argumentType.data());
+  CppReferenceType* parameterRef = fastCast<CppReferenceType*>(parameterType.data());
 
   if( argumentRef && parameterRef )
     return matchParameterTypes( argumentRef->baseType().data(), parameterRef->baseType().data(), instantiatedTypes );
@@ -287,8 +287,8 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, Abstract
     return matchParameterTypes( argumentType.data(), parameterRef->baseType().data(), instantiatedTypes );
 
   ///In case of pointers on both sides, match the target-types
-  CppPointerType* argumentPointer = dynamic_cast<CppPointerType*>(argumentType.data());
-  CppPointerType* parameterPointer = dynamic_cast<CppPointerType*>(parameterType.data());
+  CppPointerType* argumentPointer = fastCast<CppPointerType*>(argumentType.data());
+  CppPointerType* parameterPointer = fastCast<CppPointerType*>(parameterType.data());
 
   if( argumentPointer && parameterPointer )
     return matchParameterTypes( argumentPointer->baseType().data(), parameterPointer->baseType().data(), instantiatedTypes );
@@ -348,7 +348,7 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Ty
     return true;
 
   {
-    CppReferenceType* argumentRef = dynamic_cast<CppReferenceType*>(_argumentType);
+    CppReferenceType* argumentRef = fastCast<CppReferenceType*>(_argumentType);
 
     if( argumentRef && parameterType.isReference() )
       _argumentType = argumentRef->baseType().data();
@@ -356,12 +356,12 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Ty
       return false; //Reference on right side, but not on left
   }
   {
-    CppPointerType* argumentPointer = dynamic_cast<CppPointerType*>(_argumentType);
+    CppPointerType* argumentPointer = fastCast<CppPointerType*>(_argumentType);
     int cnt = 0; ///@todo correct ordering of the pointers and their constnesses
     while( argumentPointer && cnt < parameterType.pointerDepth() ) {
       ++cnt;
       _argumentType = argumentPointer->baseType().data();
-      argumentPointer = dynamic_cast<CppPointerType*>(_argumentType);
+      argumentPointer = fastCast<CppPointerType*>(_argumentType);
     }
     if( cnt != parameterType.pointerDepth() || !_argumentType )
       return false; //Do not have the needed count of pointers
