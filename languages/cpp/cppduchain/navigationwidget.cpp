@@ -125,8 +125,7 @@ struct NavigationAction {
   enum Type {
     None,
     NavigateDeclaration,
-    JumpToSource, //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
-    JumpToDefinition
+    JumpToSource //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
   };
 
   NavigationAction() : targetContext(0), type(None) {
@@ -518,12 +517,12 @@ class NavigationContext : public KShared {
         //m_currentText += "<br />";
         if( m_declaration->definition() ) {
           m_currentText += labelHighlight(i18n( "Def.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), DeclarationPointer(m_declaration->definition()), NavigationAction::JumpToSource );
         }
         
         if( m_declaration->declaration() ) {
           m_currentText += labelHighlight(i18n( "Decl.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToDefinition );
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), DeclarationPointer(m_declaration->declaration()), NavigationAction::JumpToSource );
         }
         
         QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
@@ -730,19 +729,16 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
         KTextEditor::Cursor cursor = action.cursor;
         if(doc.isEmpty()) {
           doc = KUrl(action.decl->url().str());
-          cursor = action.decl->range().textRange().start();
+/*          if(action.decl->internalContext())
+            cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
+          else*/
+            cursor = action.decl->range().textRange().start();
         }
         
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
         QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
       }
-      case NavigationAction::JumpToDefinition:
-      //This is used to execute the slot delayed in the event-loop, so crashes are avoided
-      if( action.decl->definition() ) {
-        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, KUrl(action.decl->definition()->url().str())), Q_ARG(KTextEditor::Cursor, action.decl->definition()->range().textRange().start()) );
-      }
-      break;
   }
   
   return NavigationContextPointer( this );
