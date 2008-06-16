@@ -124,86 +124,90 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
 
   return p;
 }
+/**We have to construct the item from the pixmap, else the icon will be marked as "load on demand", 
+ * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
+ * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
+ */
+#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
 
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
-  QString iconName;
 
   if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
-    iconName = "protected_union";
+    RETURN_CACHED_ICON("protected_union")
 
   else if( p & CodeCompletionModel::Enum )
     if( p & CodeCompletionModel::Protected )
-      iconName = "protected_enum";
+      RETURN_CACHED_ICON("protected_enum")
     else if( p & CodeCompletionModel::Private )
-      iconName = "private_enum";
+      RETURN_CACHED_ICON("private_enum")
     else
-      iconName = "enum";
+      RETURN_CACHED_ICON("enum")
 
   else if( p & CodeCompletionModel::Struct )
     if( p & CodeCompletionModel::Private )
-      iconName = "private_struct";
+      RETURN_CACHED_ICON("private_struct")
     else
-      iconName = "struct";
+      RETURN_CACHED_ICON("struct")
 
   else if( p & CodeCompletionModel::Slot )
     if( p & CodeCompletionModel::Protected )
-      iconName = "CVprotected_slot";
+      RETURN_CACHED_ICON("CVprotected_slot")
     else if( p & CodeCompletionModel::Private )
-      iconName = "CVprivate_slot";
+      RETURN_CACHED_ICON("CVprivate_slot")
     else
-      iconName = "CVpublic_slot";
+      RETURN_CACHED_ICON("CVpublic_slot")
 
   else if( p & CodeCompletionModel::Signal )
     if( p & CodeCompletionModel::Protected )
-      iconName = "CVprotected_signal";
+      RETURN_CACHED_ICON("CVprotected_signal")
     else
-      iconName = "signal";
+      RETURN_CACHED_ICON("signal")
 
   else if( p & CodeCompletionModel::Class )
     if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Protected) )
-      iconName = "protected_class";
+      RETURN_CACHED_ICON("protected_class")
     else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Private) )
-      iconName = "private_class";
+      RETURN_CACHED_ICON("private_class")
     else
-      iconName = "class";
+      RETURN_CACHED_ICON("class")
 
   else if( p & CodeCompletionModel::Union )
     if( p & CodeCompletionModel::Private )
-      iconName = "private_union";
+      RETURN_CACHED_ICON("private_union")
     else
-      iconName = "union";
+      RETURN_CACHED_ICON("union")
 
   else if( p & CodeCompletionModel::TypeAlias )
     if ((p & CodeCompletionModel::Const) /*||  (p & CodeCompletionModel::Volatile)*/)
-      iconName = "CVtypedef";
+      RETURN_CACHED_ICON("CVtypedef")
     else
-      iconName = "typedef";
+      RETURN_CACHED_ICON("typedef")
 
   else if( p & CodeCompletionModel::Function )
     if( p & CodeCompletionModel::Protected )
-      iconName = "protected_function";
+      RETURN_CACHED_ICON("protected_function")
     else if( p & CodeCompletionModel::Private )
-      iconName = "private_function";
+      RETURN_CACHED_ICON("private_function")
     else
-      iconName = "function";
+      RETURN_CACHED_ICON("function")
 
   else if( (p & CodeCompletionModel::Variable) )
     if( (p & CodeCompletionModel::Protected) )
-      iconName = "CVprotected_var";
+      RETURN_CACHED_ICON("CVprotected_var")
     else if( p & CodeCompletionModel::Private )
-      iconName = "CVprivate_var";
+      RETURN_CACHED_ICON("CVprivate_var")
     else
-      iconName = "CVpublic_var";
+      RETURN_CACHED_ICON("CVpublic_var")
 
   else if( p & CodeCompletionModel::Protected )
-    iconName = "protected_field";
+    RETURN_CACHED_ICON("protected_field")
   else if( p & CodeCompletionModel::Private )
-    iconName = "private_field";
+    RETURN_CACHED_ICON("private_field")
   else
-    iconName = "field";
+    RETURN_CACHED_ICON("field")
   
-  return KIcon(iconName);
+  return KIcon();
 }
 
 QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
