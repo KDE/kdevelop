@@ -95,15 +95,17 @@ QString DUChainItemData::htmlDescription() const {
     return i18n("Not available any more");
 
   QString text;
-  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
-  if( function )
-    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
-  else
-    text = m_item.m_item->toString();
+  text = m_item.m_item->url().str();
+//   KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+//   if( function )
+//     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+//   else
+//     text = m_item.m_item->toString();
   
   QString ret = "<small><small>" + text;
-  if(!m_item.m_project.isEmpty())
-      ret += ", " + i18n("Project") + " " + m_item.m_project /*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
+  if(!m_item.m_project.isEmpty()) {
+      ret = i18n("Project") + " " + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
+  }
   
   ret += "</small></small>";
   return ret;
