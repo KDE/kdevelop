@@ -83,6 +83,7 @@ CvsPlugin::CvsPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevCvsFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ICentralizedVersionControl )
 
     d = new CvsPluginPrivate();
 

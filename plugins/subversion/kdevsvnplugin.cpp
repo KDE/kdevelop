@@ -81,6 +81,8 @@ KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     , m_outputmodel(0), m_outputdelegate(0), m_factory(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl)
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ICentralizedVersionControl )
+
     qRegisterMetaType<KDevelop::VcsStatusInfo>();
     qRegisterMetaType<SvnInfoHolder>();
     qRegisterMetaType<KDevelop::VcsEvent>();
