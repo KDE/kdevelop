@@ -30,6 +30,7 @@
 
 #include <kdebug.h>
 #include <kicon.h>
+#include <kmenu.h>
 
 #include "projectmodel.h"
 #include "iproject.h"
@@ -60,12 +61,23 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
 
 
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
+    m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
+             SLOT(showContextMenu(const QPoint&) ) );
     layout()->setMargin(0);
 }
 
 ProjectBuildSetWidget::~ProjectBuildSetWidget()
 {
     delete m_ui;
+}
+
+void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
+{
+    KMenu m;
+    m.setTitle( i18n("Buildset") );
+    m.addAction( i18n( "Remove from buildset" ), this, SLOT( removeItems() ) );
+    m.exec( m_ui->itemView->mapToGlobal( p ) );
 }
 
 void ProjectBuildSetWidget::addItems()
@@ -84,6 +96,7 @@ void ProjectBuildSetWidget::removeItems()
         if( !rows.contains( idx.row() ) )
         {
             m_view->plugin()->buildSet()->removeRows( idx.row(), 1 );
+            rows << idx.row();
         }
     }
 }

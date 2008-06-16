@@ -49,6 +49,7 @@ public:
 private slots:
     void addItems();
     void removeItems();
+    void showContextMenu( const QPoint& p );
 private:
     ProjectManagerViewPlugin* m_plugin;
     ProjectManagerView* m_view;
