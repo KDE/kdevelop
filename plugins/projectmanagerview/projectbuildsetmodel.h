@@ -28,6 +28,7 @@ namespace KDevelop
 {
 class ProjectBaseItem;
 class ICore;
+class IProject;
 }
 
 class KConfigGroup;
@@ -67,8 +68,9 @@ public:
     bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
     KDevelop::ProjectBaseItem* itemForIndex( const QModelIndex& );
     QList<BuildItem> items();
-    void saveSettings( KConfigGroup& ) const;
-    void readSettings( KConfigGroup & );
+public slots:
+    void saveToProject( KDevelop::IProject* ) const;
+    void loadFromProject( KDevelop::IProject* );
 private:
     QList<BuildItem> m_items;
 };

@@ -247,25 +247,29 @@ QList<BuildItem> ProjectBuildSetModel::items()
     return m_items ;
 }
 
-void ProjectBuildSetModel::saveSettings( KConfigGroup & base ) const
+void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
-    kDebug() << "storing buildset" << rowCount();
-    for( int i = 0; i < rowCount(); i++ )
+    KConfigGroup base = project->projectConfiguration()->group("Buildset");
+    int count = 0;
+    foreach( BuildItem item, m_items)
     {
-        KConfigGroup grp = base.group(QString("Builditem%1").arg(i));
-        grp.writeEntry("Projectname", m_items.at(i).projectName());
-        grp.writeEntry("Itemname", m_items.at(i).itemName());
-        grp.writeEntry("Itempath", m_items.at(i).itemPath());
+        if( item.projectName() == project->name() )
+        {
+            KConfigGroup grp = base.group(QString("Builditem%1").arg(count));
+            grp.writeEntry("Projectname", item.projectName());
+            grp.writeEntry("Itemname", item.itemName());
+            grp.writeEntry("Itempath", item.itemPath());
+            count++;
+        }
     }
-    base.writeEntry("Number of Builditems", rowCount());
+    base.writeEntry("Number of Builditems", count);
+    base.sync();
 }
 
-void ProjectBuildSetModel::readSettings( KConfigGroup & base )
+void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
-    // readSettings() should only be called once during loading the plugin
-    Q_ASSERT( m_items.isEmpty() );
+    KConfigGroup base = project->projectConfiguration()->group("Buildset");
     int count = base.readEntry("Number of Builditems", 0);
-    kDebug() << "reading" << count << "number of entries";
     for( int i = 0; i < count; i++ )
     {
         KConfigGroup grp = base.group(QString("Builditem%1").arg(i));
@@ -276,5 +280,4 @@ void ProjectBuildSetModel::readSettings( KConfigGroup & base )
         m_items.append( BuildItem( item, name, path ) );
         endInsertRows();
     }
-    kDebug() << "rowcount after reading settings" << rowCount();
 }

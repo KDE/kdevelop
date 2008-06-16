@@ -102,10 +102,12 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
     d->buildSet = new ProjectBuildSetModel( this );
-    KConfigGroup grp = KGlobal::config()->group("Buildset");
-    d->buildSet->readSettings( grp );
-    connect( d->buildSet, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), this, SLOT( storeBuildset() ) );
-    connect( d->buildSet, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), this, SLOT( storeBuildset() ) );
+
+    connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ),
+             d->buildSet, SLOT( loadFromProject( KDevelop::IProject* ) ) );
+
+    connect( core()->projectController(), SIGNAL( projectClosing( KDevelop::IProject* ) ),
+             d->buildSet, SLOT( saveToProject( KDevelop::IProject* ) ) );
 
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     d->m_buildAll->setIcon(KIcon("run-build"));
@@ -142,6 +144,7 @@ ProjectManagerViewPlugin::~ProjectManagerViewPlugin()
 
 void ProjectManagerViewPlugin::unload()
 {
+    kDebug() << "unloading manager view";
     core()->uiController()->removeToolView(d->factory);
 }
 
@@ -207,7 +210,7 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
     IProject* project = item->project();
     if (!project)
         return 0;
-    
+
     ProjectFolderItem* prjitem = project->projectItem();
     IPlugin* fmgr = project->managerPlugin();
     IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
@@ -220,7 +223,7 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
 
 void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
 {
-    if( !item ) 
+    if( !item )
         return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Building item:" << item->text();
@@ -233,7 +236,7 @@ void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
 {
-    if( !item ) 
+    if( !item )
         return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Cleaning item:" << item->text();
@@ -243,7 +246,7 @@ void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
 {
-    if( !item ) 
+    if( !item )
         return;
     IProjectBuilder* builder = getProjectBuilder( item );
     kDebug(9511) << "Installing item:" << item->text();
@@ -257,7 +260,7 @@ void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
 
 void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
 {
-    if( !item ) 
+    if( !item )
         return;
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Configuring item:" << item->name();
@@ -270,7 +273,7 @@ void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
 
 void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
 {
-    if( !item ) 
+    if( !item )
         return;
     IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
     kDebug(9511) << "Pruning item:" << item->name();
@@ -399,13 +402,6 @@ void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
     {
         buildSet()->addProjectItem( item );
     }
-}
-
-void ProjectManagerViewPlugin::storeBuildset()
-{
-    KConfigGroup setgrp = KGlobal::config()->group("Buildset");
-    buildSet()->saveSettings( setgrp );
-    setgrp.sync();
 }
 
 void ProjectManagerViewPlugin::projectConfiguration( )
