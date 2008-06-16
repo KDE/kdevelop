@@ -135,7 +135,7 @@
        </item>
        <item>
         <property name="text" >
-          <string>None</string>
+         <string>None</string>
         </property>
        </item>
       </widget>
@@ -147,7 +147,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>20</width>
        <height>40</height>
@@ -161,7 +161,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -179,6 +179,14 @@
    <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>directory</tabstop>
+  <tabstop>projectName</tabstop>
+  <tabstop>buildSystemCombo</tabstop>
+  <tabstop>vcsCombo</tabstop>
+  <tabstop>fetchModuleButton</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
