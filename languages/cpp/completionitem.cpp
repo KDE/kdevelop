@@ -229,7 +229,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             } else {
               QString ret = indentation;
               if(dec->type<CppEnumeratorType>())
-                ret += "enumerator ";
+                return ret + "enumerator";
               return  ret + dec->abstractType()->toString();
             }
           } else {
