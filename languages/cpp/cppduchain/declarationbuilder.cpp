@@ -456,7 +456,7 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
           }
 
         } else if (currentContext()->type() == DUContext::Class) {
-          if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
+          if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on 
             continue;
         } else if(currentContext()->type() == DUContext::Template) {
           if(!dynamic_cast<TemplateParameterDeclaration*>(dec))
@@ -681,6 +681,11 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   node->end_token = oldEndToken;
 
   DeclarationBuilderBase::visitEnumerator(node);
+
+  if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
+    DUChainWriteLocker lock(DUChain::lock());
+    classMember->setStatic(true);
+  }
 
   closeDeclaration();
 }
