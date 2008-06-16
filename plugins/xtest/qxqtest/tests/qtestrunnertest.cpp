@@ -47,126 +47,175 @@ QByteArray regXml =
     "<command name=\"cmd1\" />\n"
     "<command name=\"cmd2\" />\n"
     "</case>"
+    "<case name=\"fakeqtest3\" exe=\"fakeqtest3\">\n"
+    "<command name=\"cmd1\" />\n"
+    "</case>\n"
     "</suite>\n"
     "</root>\n";
 
-// command
-void QTestRunnerTest::test()
+void QTestRunnerTest::init()
 {
-    RunnerWindow win;
-    runUI(&win);
-    checkRunnerItems(win.ui().treeRunner->model());
-    checkResultItems(win.ui().treeResults->model());
-    checkStatusWidget(win.statusWidget());
+    m_window = new RunnerWindow();
 }
 
-// data
-void QTestRunnerTest::test_data()
+void QTestRunnerTest::cleanup()
 {
-    QTest::addColumn<QByteArray>("registrationXML");
-    QTest::addColumn<QStringList>("runnerItems");
-    QTest::addColumn<QList<QStringList> >("resultItems");
+    delete m_window;
+}
 
-    QStringList tree;
-    tree << "0 suite1"
-    << "0 0 fakeqtest1"
-    << "0 0 0 cmd1"
-    << "0 0 1 cmd2"
-    << "0 0 2 x"
-    << "0 1 fakeqtest2"
-    << "0 1 0 cmd1"
-    << "0 1 1 cmd2"
-    << "0 1 2 x"
-    << "0 2 x"
-    << "1 x";
+// command
+void QTestRunnerTest::empty()
+{
+    QByteArray reg =
+            "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+            "<root dir=\"\">\n"
+            "</root>\n";
+    initNrun(reg);
+
+    QStringList runnerItems;
+    runnerItems << "0 x";
+    checkRunnerItems(runnerItems);
+
+    QList<QStringList> results;
+    checkResultItems(results);
+
+    QMap<QString, QString> status;
+    status["total"] = "0";
+    status["selected"] = "0";
+    status["run"] = "0";
+}
+
+QStringList sunnyDayRunnerItems()
+{
+    QStringList runnerItems;
+    runnerItems << "0 suite1"
+            << "0 0 fakeqtest1"
+            << "0 0 0 cmd1"
+            << "0 0 1 cmd2"
+            << "0 0 2 x"
+            << "0 1 fakeqtest2"
+            << "0 1 0 cmd1"
+            << "0 1 1 cmd2"
+            << "0 1 2 x"
+            << "0 2 fakeqtest3"
+            << "0 2 0 cmd1"
+            << "0 2 1 x"
+            << "0 3 x"
+            << "1 x";
+    return runnerItems;
+}
+
+QMap<QString,QString> sunnyDayStatus()
+{
+    QMap<QString,QString> status;
+    status["total"] = "5";
+    status["selected"] = "5";
+    status["run"] = "5";
+    status["success"] = ": 4";
+    status["errors"] = ": 1";
+    status["warnings"] = ": 0";
+    return status;
+}
+
+// command
+void QTestRunnerTest::sunnyDay()
+{
+    initNrun(regXml);
+    checkRunnerItems(sunnyDayRunnerItems());
 
     QStringList result0;
-    result0 << "cmd2" << "Error" << "failure message" << "fakeqtest2.cpp" << "2";
+    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
     results << result0;
+    checkResultItems(results);
 
-    QTest::newRow("sunny day") << regXml << tree << results;
+    QMap<QString, QString> status;
+    checkStatusWidget(sunnyDayStatus());
+}
 
+// command
+void QTestRunnerTest::runTwice()
+{
+    initNrun(regXml);
+    m_window->ui().actionStart->trigger();
+    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
+        QFAIL("Timeout while waiting for runner items to complete execution");
+
+    checkRunnerItems(sunnyDayRunnerItems());
+
+    QStringList result0;
+    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
+    QList<QStringList> results;
+    results << result0;
+    checkResultItems(results);
+
+    checkStatusWidget(sunnyDayStatus());
 }
 
 // helper
-void QTestRunnerTest::checkResultItems(QAbstractItemModel* results)
+void QTestRunnerTest::checkResultItems(QList<QStringList> expected)
 {
-    m_resultItems = results;
-    QFETCH(QList<QStringList> , resultItems);
-    nrofMessagesEquals(results, resultItems.size());;
-    for (int i = 0; i < resultItems.size(); i++)
-        checkResultItem(i, resultItems.value(i));
+    nrofMessagesEquals(expected.size());;
+    for (int i = 0; i < expected.size(); i++)
+        checkResultItem(i, expected.value(i));
 }
 
 // helper
 void QTestRunnerTest::checkResultItem(int num, const QStringList& item)
 {
-    KOMPARE(item[0], m_resultItems->data(m_resultItems->index(num, 0))); // test name
-    KOMPARE(item[1], m_resultItems->data(m_resultItems->index(num, 1))); // status -> "Error"
-    KOMPARE(item[2], m_resultItems->data(m_resultItems->index(num, 2))); // failure message
-    KOMPARE(item[3], m_resultItems->data(m_resultItems->index(num, 3))); // filename
-    KOMPARE(item[4], m_resultItems->data(m_resultItems->index(num, 4))); // line number
+    QAbstractItemModel* results = m_window->ui().treeResults->model();
+    KOMPARE(item[0], results->data(results->index(num, 0))); // test name
+    //KOMPARE(item[1], results->data(results->index(num, 1))); // status -> "Error"
+    KOMPARE(item[1], results->data(results->index(num, 2))); // failure message
+    KOMPARE(item[2], results->data(results->index(num, 3))); // filename
+    KOMPARE(item[3], results->data(results->index(num, 4))); // line number
 }
 
 // helper
-void QTestRunnerTest::nrofMessagesEquals(QAbstractItemModel* results, int num)
+void QTestRunnerTest::nrofMessagesEquals(int num)
 {
+    QAbstractItemModel* results = m_window->ui().treeResults->model();
     for (int i = 0; i < num; i++)
         KVERIFY(results->index(i, 0).isValid());
     KVERIFY(!results->index(num, 0).isValid());
 }
 
 // helper
-void QTestRunnerTest::runUI(RunnerWindow* win)
+void QTestRunnerTest::initNrun(QByteArray& regXml)
 {
-    QFETCH(QByteArray, registrationXML);
-    QBuffer buff(&registrationXML);
+    QBuffer buff(&regXml);
     QTestModel* model = new QTestModel();
     model->readTests(&buff);
 
-    win->setModel(model);
-    win->show();
-    win->ui().actionStart->trigger();
-    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
+    m_window->setModel(model);
+    m_window->show();
+    m_window->ui().actionStart->trigger();
+    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
 //    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
        QFAIL("Timeout while waiting for runner items to complete execution");
 }
 
 // helper
-void QTestRunnerTest::checkStatusWidget(Ui::StatusWidget* status)
+void QTestRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
 {
+    Ui::StatusWidget* status = m_window->statusWidget();
+
     // validate the status widget
-    KOMPARE(QString("4"), status->labelNumTotal->text());
-    KOMPARE(QString("4"), status->labelNumSelected->text());
-    KOMPARE(QString("4"), status->labelNumRun->text());
+    KOMPARE(labels["total"], status->labelNumTotal->text());
+    KOMPARE(labels["selected"], status->labelNumSelected->text());
+    KOMPARE(labels["run"], status->labelNumRun->text());
 
-    KOMPARE(QString(": 3"), status->labelNumSuccess->text());
-    KOMPARE(QString(": 1"), status->labelNumErrors->text());
-    KOMPARE(QString(": 0"), status->labelNumWarnings->text());
-
+    if (labels.contains("success"))
+        KOMPARE(labels["success"], status->labelNumSuccess->text());
+    if (labels.contains("errors"))
+        KOMPARE(labels["errors"], status->labelNumErrors->text());
+    if (labels.contains("warnings"))
+        KOMPARE(labels["warnings"], status->labelNumWarnings->text());
 }
 
 // helper
-void QTestRunnerTest::checkRunnerItems(QAbstractItemModel* items)
+void QTestRunnerTest::checkRunnerItems(QStringList runnerItems)
 {
-    m_runnerItems = items;
-
-// eg:
-//     QStringList runn;
-//     runn << "0 suite1"
-//          << "0 0 fakeqtest1"
-//          << "0 0 0 cmd1"
-//          << "0 0 1 cmd2"
-//          << "0 0 2 x"
-//          << "0 1 fakeqtest2"
-//          << "0 1 0 cmd1"
-//          << "0 1 1 cmd2"
-//          << "0 1 2 x"
-//          << "0 2 x"
-//          << "1 x";
-
-    QFETCH(QStringList, runnerItems);
     foreach(QString s, runnerItems) {
         QStringList spl = s.split(" ");
         int lvl0 = spl[0].toInt();
@@ -180,17 +229,16 @@ void QTestRunnerTest::checkRunnerItems(QAbstractItemModel* items)
 // helper
 void QTestRunnerTest::checkRunnerItem(const QVariant& expected, int lvl0, int lvl1, int lvl2)
 {
-    QModelIndex index = m_runnerItems->index(lvl0, 0);
+    QAbstractItemModel* runner = m_window->ui().treeRunner->model();
+    QModelIndex index = runner->index(lvl0, 0);
     if (lvl1 != -1) {
-        index = m_runnerItems->index(lvl1, 0, index);
+        index = runner->index(lvl1, 0, index);
         if (lvl2 != -1) {
-            index = m_runnerItems->index(lvl2, 0, index);
+            index = runner->index(lvl2, 0, index);
         }
     }
-    KOMPARE(expected, m_runnerItems->data(index));
-
+    KOMPARE(expected, runner->data(index));
 }
-
 
 #include "qtestrunnertest.moc"
 QTEST_KDEMAIN(QTestRunnerTest, GUI)

@@ -30,3 +30,6 @@ target_link_libraries(suite1/fakeqtest1 ${KDE4_KDECORE_LIBS})
 
 add_executable(suite1/fakeqtest2 fakeqtest2_2cmds_fail.cpp)
 target_link_libraries(suite1/fakeqtest2 ${KDE4_KDECORE_LIBS})
+
+add_executable(suite1/fakeqtest3 fakeqtest3_slow.cpp)
+target_link_libraries(suite1/fakeqtest3 ${KDE4_KDECORE_LIBS})

@@ -81,8 +81,8 @@ void QTestRegister::addFromXml(QIODevice* dev)
     while (!atEnd())
     {
         readNext();
-        //if (isStartElement_(c_root) && m_root.isEmpty())
-        //    m_root = attributes().value(c_dir).toString();
+        if (isStartElement_(c_root) && m_root.isEmpty())
+            m_root = attributes().value(c_dir).toString();
         if (isStartElement_(c_suite))
             processSuite();
     }

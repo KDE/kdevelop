@@ -41,19 +41,24 @@ class QTestRunnerTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void test();
-    void test_data();
+    void init();
+    void cleanup();
+
+    void empty();
+    void sunnyDay();
+    void runTwice();
 
 private:
-    void runUI(QxRunner::RunnerWindow* win);
-    void checkRunnerItems(QAbstractItemModel* items);
+    void initNrun(QByteArray&);
+    void checkRunnerItems(QStringList items);
     void checkRunnerItem(const QVariant& expected, int lvl0, int lvl1 = -1, int lvl2 = -1);
-    void checkStatusWidget(Ui::StatusWidget* status);
-    void checkResultItems(QAbstractItemModel* results);
+    void checkStatusWidget(QMap<QString, QString> labels);
+    void checkResultItems(QList<QStringList> expected);
     void checkResultItem(int num, const QStringList& item);
-    void nrofMessagesEquals(QAbstractItemModel* results, int num);
+    void nrofMessagesEquals(int num);
 
 private:
+    QxRunner::RunnerWindow* m_window;
     QAbstractItemModel* m_runnerItems;
     QAbstractItemModel* m_resultItems;
 };
