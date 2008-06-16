@@ -151,7 +151,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     if (arch->open(QIODevice::ReadOnly))
     {
         KTempDir tmpdir;
-        QString unpackDir;
+        QString unpackDir = tmpdir.name(); //the default value for all Centralized VCS
         IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
         if( info.vcsPluginName.isEmpty() || ( plugin && plugin->extension<KDevelop::IDistributedVersionControl>() ) )
         {
@@ -159,6 +159,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             {
                 QDir::root().mkdir( dest.toLocalFile() );
             }
+            unpackDir = dest.toLocalFile(); //in DVCS we unpack template directly to the project's directory
         }
         else
         {
@@ -168,7 +169,6 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             {
                 QDir::root().mkdir( parentdir.toLocalFile() );
             }
-            QString unpackDir = tmpdir.name();
         }
 
         if ( !unpackArchive( arch->directory(), unpackDir ) )
@@ -282,6 +282,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
     QStringList entries = dir->entries();
     kDebug(9010) << "entries:" << entries.join(",");
 
+    //TODO: if we use DVCS we don't require it, if tdir used some unrequired copies are done...
     KTempDir tdir;
 
     bool ret = true;
