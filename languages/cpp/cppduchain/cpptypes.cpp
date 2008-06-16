@@ -290,6 +290,7 @@ CppTypeAliasType::CppTypeAliasType()
 
 CppEnumeratorType::CppEnumeratorType() : CppConstantIntegralType(TypeInt)
 {
+  setCV(KDevelop::Declaration::Const);
 }
 
 CppClassType::CppClassType(Declaration::CVSpecs spec)
