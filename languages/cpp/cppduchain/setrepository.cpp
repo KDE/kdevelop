@@ -17,7 +17,7 @@
 #include <QVarLengthArray>
 #include <iostream>
 #include <limits>
-#include <itemrepository.h>
+#include <language/duchain/repositories/itemrepository.h>
 #include <QMutex>
 #include <QStack>
 #include <QVarLengthArray>

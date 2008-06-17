@@ -18,7 +18,7 @@
 #include "rpp/pp-environment.h"
 #include <iproblem.h>
 #include "cpppreprocessenvironment.h"
-#include <itemrepository.h>
+#include <language/duchain/repositories/itemrepository.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 
