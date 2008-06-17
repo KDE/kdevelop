@@ -19,8 +19,7 @@
 #ifndef KDEV_DECLARATIONBUILDER_H
 #define KDEV_DECLARATIONBUILDER_H
 
-#include "language/duchain/basecontextbuilder.h"
-#include "language/duchain/declaration.h"
+#include "language/duchain/abstracttypebuilder.h"
 #include "language/duchain/classfunctiondeclaration.h"
 #include "language/duchain/symboltable.h"
 #include "language/duchain/forwarddeclaration.h"
@@ -35,19 +34,12 @@ class Declaration;
  * A class which iterates the AST to extract definitions of types.
  */
 template<typename T>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public BaseContextBuilder<T>
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public AbstractTypeBuilder<T>
 {
 public:
   AbstractDeclarationBuilder( EditorIntegrator* editor, bool ownsEditorIntegrator )
-    : BaseContextBuilder<T>(editor, ownsEditorIntegrator)
+    : AbstractTypeBuilder<T>(editor, ownsEditorIntegrator)
   {
-  }
-
-  virtual TopDUContext* buildDeclarations( const IndexedString& url, T* node, 
-                              const TopDUContextPointer& updateContext
-                                    = TopDUContextPointer() )
-  {
-    return buildContexts(url, node, updateContext);
   }
 
 protected:

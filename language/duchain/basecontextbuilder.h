@@ -63,7 +63,7 @@ public:
       delete m_editor;
   }
 
-  TopDUContext* buildContexts( const IndexedString& url, T* node, 
+  virtual TopDUContext* build( const IndexedString& url, T* node, 
                               const TopDUContextPointer& updateContext
                                     = TopDUContextPointer() )
   {
