@@ -81,13 +81,15 @@ DUContext* getTemplateContext(Declaration* decl) {
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(session), m_inTypedef(false)
+  : DeclarationBuilderBase(), m_inTypedef(false)
 {
+  setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(editor), m_inTypedef(false)
+  : DeclarationBuilderBase(), m_inTypedef(false)
 {
+  setEditor(editor, false);
 }
 
 TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
@@ -919,7 +921,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           if(declarations.first()->abstractType()) {
             //This belongs into the type-builder, but it's much easier to do here, since we already have all the information
             ///@todo See above, only search for fitting declarations(of structure/enum/class/union type)
-            injectType(AbstractType::Ptr(declarations.first()->abstractType().data()), node);
+            injectType(AbstractType::Ptr(declarations.first()->abstractType().data()));
             return;
           }else{
             kDebug(9007) << "Error: Bad declaration";

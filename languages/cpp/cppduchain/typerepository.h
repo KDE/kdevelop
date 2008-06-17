@@ -23,6 +23,8 @@
 #include <QtCore/QMultiHash>
 #include <QtCore/QMutex>
 
+#include <language/duchain/repositories/ityperepository.h>
+
 #include "cpptypes.h"
 #include "cppduchainexport.h"
 
@@ -30,7 +32,7 @@ namespace KDevelop {
   class QualifiedIdentifier;
 }
 
-class KDEVCPPDUCHAIN_EXPORT  TypeRepository
+class KDEVCPPDUCHAIN_EXPORT TypeRepository : public KDevelop::ITypeRepository
 {
 public:
   static TypeRepository* self();
@@ -44,7 +46,7 @@ public:
    * type, or the previously registered type if it has been encountered
    * before.
    */
-  KDevelop::AbstractType::Ptr registerType(KDevelop::AbstractType::Ptr input);
+  virtual KDevelop::AbstractType::Ptr registerType(KDevelop::AbstractType::Ptr input);
 
 private:
   TypeRepository();
