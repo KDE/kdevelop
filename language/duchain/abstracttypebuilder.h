@@ -44,7 +44,7 @@ protected:
   }
 
   // Call at the beginning of processing a class-specifier, right after the type for the class was created.
-  // The type can be retrieve through currentAbstractType().
+  // The type can be retrieved through currentAbstractType().
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {}
 
   virtual void supportBuild(T* node, DUContext* context = 0)
