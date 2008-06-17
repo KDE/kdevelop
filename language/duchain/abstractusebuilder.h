@@ -81,8 +81,13 @@ protected:
       }
     // If we don't break, there's no non-forward declaration
 
-    Declaration* declaration = !declarations.isEmpty() ? declarations.first() : 0;
-
+    lock.unlock();
+    newUse( newRange, !declarations.isEmpty() ? declarations.first() : 0 );
+  }
+  
+  void newUse(SimpleRange newRange, Declaration* declaration)
+  {
+    DUChainWriteLocker lock(DUChain::lock());
     if(!declaration) {
       kDebug() << "Tried to create use of zero declaration";
       return;
@@ -96,15 +101,17 @@ protected:
     * into the context that surrounds the SOME_MACRO invocation.
     * */
     DUContext* newContext = LanguageSpecificUseBuilderBase::currentContext();
-    int contextUpSteps = 0;
-    while (!newContext->range().contains(newRange) && newContext->parentContext()) {
-      newContext = newContext->parentContext();
+    int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
+    while (!newContext->range().contains(newRange) && contextUpSteps < (LanguageSpecificUseBuilderBase::contextStack().size()-1)) {
       ++contextUpSteps;
+      newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
     }
 
     if (contextUpSteps) {
       editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
+      m_finishContext = false;
       openContext(newContext);
+      m_finishContext = true;
       nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
       skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
 

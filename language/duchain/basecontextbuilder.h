@@ -268,25 +268,35 @@ protected:
     }
   }
   
+  // Write lock is already held here...
   virtual void closeContext()
   {
     {
       DUChainWriteLocker lock( DUChain::lock() );
-      //currentContext()->cleanIfNotEncountered( m_encountered );
+      //Remove all slaves that were not encountered while parsing
+      if(m_compilingContexts)
+        currentContext()->cleanIfNotEncountered( m_encountered );
       setEncountered( currentContext() );
     }
   
     m_lastContext = currentContext();
     m_contextStack.pop();
     m_nextContextStack.pop();
-    m_editor->exitCurrentRange();
+    if(m_editor->smart())
+      m_editor->exitCurrentRange();
   }
   
+  /**Signalize that a specific item has been encoutered while parsing.
+   * All contained items that are not signalized will be deleted at some stage
+   * */
   void setEncountered( DUChainBase* item )
   {
     m_encountered.insert( item );
   }
 
+  /**
+   * @return whether the given item is in the set of encountered items
+   * */
   bool wasEncountered( DUChainBase* item )
   {
     return m_encountered.contains( item );
@@ -311,6 +321,11 @@ protected:
   EditorIntegrator* editor() const
   {
     return m_editor;
+  }
+  
+  const QStack<DUContext*>& contextStack() const
+  {
+    return m_contextStack;
   }
   
 private:
@@ -396,7 +411,7 @@ private:
   bool m_recompiling : 1;
   QStack<int> m_nextContextStack;
   DUContext* m_lastContext;
-  QList<DUContext*> m_importedParentContexts;
+  //Here all valid declarations/uses/... will be collected
   QSet<DUChainBase*> m_encountered;
   QStack<DUContext*> m_contextStack;
 };
