@@ -34,17 +34,20 @@ namespace KDevelop
 class DUContext;
 }
 
+class QMakeEditorIntegrator;
+
 class KDEVQMAKEDUCHAIN_EXPORT ContextBuilder : public QMake::ASTVisitor, public KDevelop::BaseContextBuilder<QMake::AST>
 {
 public:
     ContextBuilder();
     ~ContextBuilder();
 protected:
-  virtual void supportBuild( QMake::AST* node );
-  virtual void setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx );
-  virtual KDevelop::DUContext* contextFromNode( QMake::AST* node );
-  virtual KTextEditor::Range editorFindRange( QMake::AST* fromRange, QMake::AST* toRange );
-  virtual const KDevelop::QualifiedIdentifier identifierForNode( QMake::AST* );
+    QMakeEditorIntegrator* editor() const;
+    virtual void startVisiting( QMake::AST* node );
+    virtual void setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx );
+    virtual KDevelop::DUContext* contextFromNode( QMake::AST* node );
+    virtual KTextEditor::Range editorFindRange( QMake::AST* fromRange, QMake::AST* toRange );
+    virtual KDevelop::QualifiedIdentifier identifierForNode( QMake::AST* );
 };
 
 #endif

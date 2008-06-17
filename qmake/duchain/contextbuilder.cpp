@@ -30,8 +30,9 @@ ContextBuilder::~ContextBuilder()
 {
 }
 
-void ContextBuilder::supportBuild( QMake::AST* node )
+void ContextBuilder::startVisiting( QMake::AST* node )
 {
+    visitNode(node);
 }
 
 void ContextBuilder::setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx )
@@ -44,13 +45,18 @@ KDevelop::DUContext* ContextBuilder::contextFromNode( QMake::AST* node )
     return node->context;
 }
 
+QMakeEditorIntegrator* ContextBuilder::editor() const
+{
+    return static_cast<QMakeEditorIntegrator*>(KDevelop::BaseContextBuilder<QMake::AST>::editor());
+}
+
 KTextEditor::Range ContextBuilder::editorFindRange( QMake::AST* fromRange, QMake::AST* toRange )
 {
-    QMakeEditorIntegrator* ed = editor<QMakeEditorIntegrator>();
+    QMakeEditorIntegrator* ed = editor();
     return ed->findRange(fromRange, toRange);
 }
 
-const KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode( QMake::AST* node )
+KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode( QMake::AST* node )
 {
     QMake::ValueAST* val = static_cast<QMake::ValueAST*>( node );
     setIdentifier( val->value );
