@@ -146,7 +146,7 @@ void SymbolTable::dumpStatistics() const
 {
   ENSURE_CHAIN_READ_LOCKED
 
-  ifDebug( kDebug(9505) << "Definitions" << sdSymbolPrivate->m_declarations.count() << ", Contexts" << sdSymbolPrivate->m_contexts.count(); )
+  ifDebug( kDebug(9505) << "Definitions" << sdSymbolPrivate->m_declarations.size() << ", Contexts" << sdSymbolPrivate->m_contexts.size(); )
 
   // TODO: more data
 }

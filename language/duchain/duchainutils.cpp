@@ -118,7 +118,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
       p |= CodeCompletionModel::GlobalScope;
     else if( dec->context()->type() == DUContext::Namespace )
       p |= CodeCompletionModel::NamespaceScope;
-    else if( dec->context()->type() != DUContext::Class )
+    else if( dec->context()->type() != DUContext::Class && dec->context()->type() != DUContext::Enum )
       p |= CodeCompletionModel::LocalScope;
   }
 

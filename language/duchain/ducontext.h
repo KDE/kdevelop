@@ -111,6 +111,7 @@ public:
     Class     /**< A context that declares class members */,
     Function  /**< A context that declares function-arguments */,
     Template  /**< A context that declares template-parameters */,
+    Enum      /**< A context that contains a list of enumerators */,
     Helper    /**< A helper context, used for language-specific tweaks */,
     Other     /**< Represents executable code, like for example within a compound-statement */
   };
@@ -368,12 +369,15 @@ public:
    * to into other contexts that were needed to find the declaration. Declarations reached through a namespace- or global-context
    * are offsetted by 1000.
    *
+   * This also includes Declarations from sub-contexts that were propagated upwards using setPropagateDeclarations(true).
+   *
    * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
   QList< QPair<Declaration*, int> > allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
 
   /**
    * Return all declarations in this context that have the given \a identifier, without any filtering.
+   * This includes declarations propagated from sub-contexts.
    * */
   QList<Declaration*> allLocalDeclarations(const Identifier& identifier) const;
 
@@ -546,6 +550,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual bool foundEnough( const DeclarationList& decls ) const;
   /**
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
+   * This includes declarations propagated from sub-contexts.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
   virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents = true, int currentDepth = 0) const;
