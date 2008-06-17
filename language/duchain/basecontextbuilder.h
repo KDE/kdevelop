@@ -48,9 +48,9 @@ template<typename T>
 class KDEVPLATFORMLANGUAGE_EXPORT BaseContextBuilder
 {
 public:
-  BaseContextBuilder( EditorIntegrator* editor, bool ownsEditorIntegrator )
-    : m_editor( editor )
-    , m_ownsEditorIntegrator(ownsEditorIntegrator)
+  BaseContextBuilder()
+    : m_editor( 0 )
+    , m_ownsEditorIntegrator(false)
     , m_compilingContexts( false )
     , m_recompiling( false )
     , m_lastContext( 0 )
@@ -61,6 +61,12 @@ public:
   {
     if (m_ownsEditorIntegrator)
       delete m_editor;
+  }
+  
+  void setEditor(EditorIntegrator* editor, bool ownsEditorIntegrator)
+  {
+    m_editor = editor;
+    m_ownsEditorIntegrator = ownsEditorIntegrator;
   }
 
   virtual TopDUContext* build( const IndexedString& url, T* node, 

@@ -29,20 +29,14 @@ namespace KDevelop {
 class ForwardDeclaration;
 
 template<typename T>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public BaseContextBuilder<T>
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
-public:
-  AbstractTypeBuilder(EditorIntegrator* editor, bool ownsEditorIntegrator)
-    : BaseContextBuilder<T>(editor, ownsEditorIntegrator)
-  {
-  }
-
 protected:
   virtual TypeRepository* typeRepository() const = 0;
   
   virtual void supportBuild(T* node, DUContext* context = 0)
   {
-    BaseContextBuilder<T>::supportBuild(node, context);
+    LangugageSpecificTypeBuilderBase::supportBuild(node, context);
     
     Q_ASSERT(m_typeStack.isEmpty());
   }
@@ -116,7 +110,7 @@ protected:
       SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
       DUChainReadLocker lock(DUChain::lock());
 
-      QList<Declaration*> dec = BaseContextBuilder<T>::currentContext()->findDeclarations(id, pos);
+      QList<Declaration*> dec = LangugageSpecificTypeBuilderBase::currentContext()->findDeclarations(id, pos);
 
       if ( dec.isEmpty() )
         delay = true;

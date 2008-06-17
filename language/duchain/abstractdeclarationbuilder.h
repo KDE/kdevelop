@@ -34,14 +34,8 @@ class Declaration;
  * A class which iterates the AST to extract definitions of types.
  */
 template<typename T>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public AbstractTypeBuilder<T>
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
 {
-public:
-  AbstractDeclarationBuilder( EditorIntegrator* editor, bool ownsEditorIntegrator )
-    : AbstractTypeBuilder<T>(editor, ownsEditorIntegrator)
-  {
-  }
-
 protected:
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
   inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
