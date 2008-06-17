@@ -429,29 +429,6 @@ KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, A
   return node->ducontext;
 }
 
-void ContextBuilder::supportBuild(AST *node, DUContext* context)
-{
-  //Q_ASSERT(dynamic_cast<TopDUContext*>(node->ducontext)); This assertion is invalid, because the node may also be a statement that has a non-top context set
-
-  if( !context )
-    context = node->ducontext;
-  
-  if( TopDUContext* topLevelContext = dynamic_cast<TopDUContext*>(context) )
-    smartenContext(topLevelContext);
-  
-  openContext( context );
-
-  editor()->setCurrentUrl(currentContext()->url());
-
-  editor()->setCurrentRange(currentContext()->smartRange());
-
-  visit (node);
-
-  closeContext();
-
-  Q_ASSERT(contextStack().isEmpty());
-}
-
 void ContextBuilder::visitNamespace (NamespaceAST *node)
 {
   QualifiedIdentifier identifier;
@@ -606,7 +583,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 
 DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
-  DUContext* ret = openContextInternal(range, type, identifier);
+  DUContext* ret = ContextBuilderBase::openContextInternal(range, type, identifier);
 
   /**
    * @todo either remove this here and add it to the correct other places, or remove it in the over places.
