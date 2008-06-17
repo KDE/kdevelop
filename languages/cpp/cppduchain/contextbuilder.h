@@ -133,6 +133,8 @@ protected:
   virtual void setContextOnNode( AST* node, DUContext* ctx );
   virtual DUContext* contextFromNode( AST* node );
   virtual KTextEditor::Range editorFindRange( AST* fromRange, AST* toRange );
+  virtual KTextEditor::Range editorFindRangeForContext( AST* fromRange, AST* toRange );
+  virtual DUContext* newContext(const SimpleRange& range);
   
   /**
    * Compile an identifier for the specified NameAST \a id.
@@ -176,11 +178,6 @@ protected:
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
 
-  using ContextBuilderBase::openContext;
-  KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
-  KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
-  KDevelop::DUContext* openContext(AST* node, const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
-  KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier = KDevelop::QualifiedIdentifier());
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
   
