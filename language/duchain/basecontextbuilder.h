@@ -161,7 +161,16 @@ protected:
   virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
   virtual DUContext* contextFromNode( T* node ) = 0;
   virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
+  virtual KTextEditor::Range editorFindRangeForContext( T* fromRange, T* toRange )
+  {
+    return editorFindRange(fromRange, toRange);
+  }
+  
   virtual QualifiedIdentifier identifierForNode( NameT* ) = 0;
+  virtual DUContext* newContext(const SimpleRange& range)
+  {
+    return new DUContext(editor()->currentUrl(), range, currentContext());
+  }
 
   inline DUContext* currentContext() const { return m_contextStack.top(); }
   inline DUContext* lastContext() const { return m_lastContext; }
@@ -217,11 +226,14 @@ protected:
     m_nextContextStack.push( 0 );
   }
   
-  DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier )
+  DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier = 0)
   {
     if ( m_compilingContexts )
     {
-      DUContext* ret = openContextInternal( editorFindRange( rangeNode, rangeNode ), type, identifier ? identifierForNode( identifier ) : QualifiedIdentifier() );
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+#endif
+      DUContext* ret = openContextInternal( editorFindRangeForContext( rangeNode, rangeNode ), type, identifier ? identifierForNode( identifier ) : QualifiedIdentifier() );
       setContextOnNode( rangeNode, ret );
       return ret;
     }
@@ -232,14 +244,32 @@ protected:
       return currentContext();
     }
   }
+ 
+  DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, NameT* identifier = 0)
+  {
+    if (m_compilingContexts) {
+#ifdef DEBUG_UPDATE_MATCHING
+      kDebug() << "opening custom context";
+#endif
+      DUContext* ret = openContextInternal(range, type, identifier ? identifierForNode(identifier) : QualifiedIdentifier());
+      setContextOnNode( node, ret );
+      return ret;
+
+    } else {
+      openContext( contextFromNode(node) );
+      m_editor->setCurrentRange(currentContext()->smartRange());
+      return currentContext();
+    }
+  }
   
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     if ( m_compilingContexts )
     {
-      //kDebug() << "Opening ContextInternal";
-      DUContext* ret = openContextInternal( editorFindRange( rangeNode, rangeNode ), type, identifier );
-      //kDebug() << "Associating context" ;
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+#endif
+      DUContext* ret = openContextInternal( editorFindRangeForContext( rangeNode, rangeNode ), type, identifier );
       setContextOnNode( rangeNode, ret );
       return ret;
     }
@@ -252,11 +282,14 @@ protected:
     }
   }
 
-  DUContext* openContext( T* fromRange, T* toRange, DUContext::ContextType type, const QualifiedIdentifier& identifier )
+  DUContext* openContext( T* fromRange, T* toRange, DUContext::ContextType type, const QualifiedIdentifier& identifier = QualifiedIdentifier() )
   {
     if ( m_compilingContexts )
     {
-      DUContext* ret = openContextInternal( editorFindRange( fromRange, toRange ), type, identifier );
+#ifdef DEBUG_UPDATE_MATCHING
+      kDebug() << "opening context with text" << editor()->tokensToStrings( fromRange->start_token, toRange->end_token );
+#endif
+      DUContext* ret = openContextInternal( editorFindRangeForContext( fromRange, toRange ), type, identifier );
       setContextOnNode( fromRange, ret );
       return ret;
     }
@@ -334,12 +367,13 @@ protected:
     return m_nextContextStack.top();
   }
 
-private:
-  DUContext* openContextInternal( const SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
+  virtual DUContext* openContextInternal( const SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
-    kDebug() << "OpenContextInternal";
     Q_ASSERT( m_compilingContexts );
     DUContext* ret = 0L;
+    if(range.start > range.end)
+      kDebug(9007) << "Bad context-range" << range.textRange();
+
     {
       DUChainReadLocker readLock( DUChain::lock() );
 
@@ -352,25 +386,31 @@ private:
         if ( m_editor->smart() )
           translated = SimpleRange( m_editor->smart()->translateFromRevision( translated.textRange() ) );
 
-        if ( !childContexts.count() )
-          kDebug() << "------No Child Contexts while Recompiling-----";
-
         for ( ; nextContextIndex() < childContexts.count(); ++nextContextIndex() )
         {
           DUContext* child = childContexts.at( nextContextIndex() );
 
           if ( child->range().start > translated.end && child->smartRange() )
+#ifdef DEBUG_UPDATE_MATCHING
+              kDebug() << "range order mismatch, stopping because encountered" << child->range().textRange();
+#endif
               break;
 
           if ( child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated )
           {
+            // Match
             ret = child;
             readLock.unlock();
             DUChainWriteLocker writeLock( DUChain::lock() );
 
             ret->clearImportedParentContexts();
             m_editor->setCurrentRange( ret->smartRange() );
+            ++nextContextIndex();
             break;
+          }else{
+#ifdef DEBUG_UPDATE_MATCHING
+            kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
+#endif
           }
         }
       }
@@ -380,22 +420,17 @@ private:
         readLock.unlock();
         DUChainWriteLocker writeLock( DUChain::lock() );
 
-        if ( !currentContext() )
-          kDebug() << "Current Context is Empty, need to Create a New One";
-
-        ret = new DUContext( m_editor->currentUrl(), SimpleRange( range ), m_contextStack.isEmpty() ? 0 : currentContext() );
-
+        ret = newContext( SimpleRange( range ) );
         ret->setSmartRange( m_editor->createRange( range.textRange() ), DocumentRangeObject::Own );
-
         ret->setType( type );
 
-        if ( !identifier.isEmpty() )
-        {
-          ret->setLocalScopeIdentifier( identifier );
+        if (!identifier.isEmpty())
+          ret->setLocalScopeIdentifier(identifier);
 
-          if ( type != DUContext::Class && type != DUContext::Global && DUContext::Namespace )
-            ret->setInSymbolTable(false);
-        }
+        ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
+
+        if( recompiling() )
+          kDebug() << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
       }
     }
 
@@ -404,6 +439,7 @@ private:
     return ret;
   }
 
+private:
   Identifier m_identifier;
   QualifiedIdentifier m_qIdentifier;
   EditorIntegrator* m_editor;
