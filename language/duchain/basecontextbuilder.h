@@ -138,7 +138,10 @@ public:
   }
 
 protected:
-  
+  /**
+   * Support another builder by tracking the current context.
+   * @param context the context to use. Must be set when the given node has no context. When it has one attached, this parameter is not needed.
+   */
   virtual void supportBuild( T* node, DUContext* context = 0 )
   {
     if (!context)
