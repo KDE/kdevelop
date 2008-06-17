@@ -27,7 +27,7 @@ namespace KDevelop {
   
 class ForwardDeclaration;
 
-template<typename T>
+template<typename T, typename NameT>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
 protected:
@@ -99,12 +99,12 @@ protected:
   KSharedPtr<T2> currentType() { return KSharedPtr<T2>::dynamicCast(m_typeStack.top()); }
 
   ///Returns whether a type was opened
-  bool openTypeFromName(const QualifiedIdentifier& id, T* typeNode, bool needClass)
+  bool openTypeFromName(QualifiedIdentifier id, T* typeNode, bool needClass)
   {
     bool openedType = false;
 
     bool delay = false;
-
+    
     if(!delay) {
       SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
       DUChainReadLocker lock(DUChain::lock());

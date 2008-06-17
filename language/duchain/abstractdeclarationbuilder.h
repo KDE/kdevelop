@@ -32,7 +32,7 @@ class Declaration;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-template<typename T>
+template<typename T, typename NameT>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
 {
 protected:
@@ -49,7 +49,7 @@ protected:
    * @param name When this is zero, the identifier given through customName is used.
    * \param range provide a valid AST node here if name is null
    */
-  Declaration* openDeclaration(T* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isLocked = false)
+  virtual Declaration* openDeclaration(NameT* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isLocked = false)
   {
     if (!isLocked)
       DUChain::lock()->lockForWrite();
@@ -69,20 +69,21 @@ protected:
 
     Declaration* declaration = 0;
 
-    if (BaseContextBuilder<T>::recompiling()) {
+    if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration
 
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
       SimpleRange translated = newRange;
 
-      if (BaseContextBuilder<T>::editor()->smart()) {
-        QMutexLocker smartLock(BaseContextBuilder<T>::editor()->smart()->smartMutex());
-        translated = SimpleRange( BaseContextBuilder<T>::editor()->smart()->translateFromRevision(translated.textRange()) );
+      if (LanguageSpecificDeclarationBuilderBase::editor()->smart()) {
+        QMutexLocker smartLock(LanguageSpecificDeclarationBuilderBase::editor()->smart()->smartMutex());
+        translated = SimpleRange( LanguageSpecificDeclarationBuilderBase::editor()->smart()->translateFromRevision(translated.textRange()) );
       }
 
-      foreach( Declaration* dec, BaseContextBuilder<T>::currentContext()->allLocalDeclarations(localId) ) {
+      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->allLocalDeclarations(localId);
+      foreach( Declaration* dec, declarations ) {
 
-        if( BaseContextBuilder<T>::wasEncountered(dec) )
+        if( LanguageSpecificDeclarationBuilderBase::wasEncountered(dec) )
           continue;
 
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
@@ -92,21 +93,21 @@ protected:
             //&& extraDeclarationComparisons()
           )
         {
-          if(BaseContextBuilder<T>::currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
+          if(LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
             continue;
           /*if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
             continue;
           } else */if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
             continue;
           } else if (isFunction) {
-            if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
+            if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
               if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
                 continue;
             } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
               continue;
             }
 
-          } else if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
+          } else if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
             if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
               continue;
           }
@@ -122,33 +123,33 @@ protected:
     }
 
     if (!declaration) {
-      KTextEditor::SmartRange* prior = BaseContextBuilder<T>::editor()->currentRange();
-      KTextEditor::SmartRange* range = BaseContextBuilder<T>::editor()->createRange(newRange.textRange());
+      KTextEditor::SmartRange* prior = LanguageSpecificDeclarationBuilderBase::editor()->currentRange();
+      KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(newRange.textRange());
 
-      BaseContextBuilder<T>::editor()->exitCurrentRange();
+      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
       //Q_ASSERT(range->start() != range->end());
 
-      Q_ASSERT(BaseContextBuilder<T>::editor()->currentRange() == prior);
+      Q_ASSERT(LanguageSpecificDeclarationBuilderBase::editor()->currentRange() == prior);
 
       if (isForward) {
-        declaration = new ForwardDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
+        declaration = new ForwardDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       } else if (isFunction) {
-        if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassFunctionDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
+        if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
+          declaration = new ClassFunctionDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
         } else {
-          declaration = new FunctionDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
+          declaration = new FunctionDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
         }
-      } else if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassMemberDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
+      } else if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
+          declaration = new ClassMemberDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       } else {
-        declaration = new Declaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
+        declaration = new Declaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       }
       
       declaration->setSmartRange(range);
       declaration->setDeclarationIsDefinition(isDefinition);
       declaration->setIdentifier(localId);
 
-      switch (BaseContextBuilder<T>::currentContext()->type()) {
+      switch (LanguageSpecificDeclarationBuilderBase::currentContext()->type()) {
         case DUContext::Global:
         case DUContext::Namespace:
         case DUContext::Class:
@@ -162,7 +163,7 @@ protected:
     declaration->setComment(m_lastComment);
     m_lastComment.clear();
 
-    BaseContextBuilder<T>::setEncountered(declaration);
+    LanguageSpecificDeclarationBuilderBase::setEncountered(declaration);
 
     m_declarationStack.push(declaration);
 
@@ -173,33 +174,33 @@ protected:
   }
 
   /// Same as the above, but sets it as the definition too
-  Declaration* openDefinition(T* name, T* range, bool isFunction = false)
+  Declaration* openDefinition(NameT* name, T* range, bool isFunction = false)
   {
     return openDeclaration(name, range, isFunction, false, true);
   }
 
-  ForwardDeclaration* openForwardDeclaration(T* name, T* range)
+  ForwardDeclaration* openForwardDeclaration(NameT* name, T* range)
   {
     return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
   }
     
   void eventuallyAssignInternalContext()
   {
-    if (BaseContextBuilder<T>::lastContext()) {
+    if (LanguageSpecificDeclarationBuilderBase::lastContext()) {
       DUChainWriteLocker lock(DUChain::lock());
 
       if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
         Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
 
-      if(BaseContextBuilder<T>::lastContext() && (BaseContextBuilder<T>::lastContext()->type() == DUContext::Class || BaseContextBuilder<T>::lastContext()->type() == DUContext::Other || BaseContextBuilder<T>::lastContext()->type() == DUContext::Function || BaseContextBuilder<T>::lastContext()->type() == DUContext::Template ) )
+      if(LanguageSpecificDeclarationBuilderBase::lastContext() && (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Class || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Other || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Function || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Template ) )
       {
-        if( !BaseContextBuilder<T>::lastContext()->owner() || !BaseContextBuilder<T>::wasEncountered(BaseContextBuilder<T>::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
-          currentDeclaration()->setInternalContext(BaseContextBuilder<T>::lastContext());
+        if( !LanguageSpecificDeclarationBuilderBase::lastContext()->owner() || !LanguageSpecificDeclarationBuilderBase::wasEncountered(LanguageSpecificDeclarationBuilderBase::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
+          currentDeclaration()->setInternalContext(LanguageSpecificDeclarationBuilderBase::lastContext());
 
           if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
             kDebug() << "Warning: Range was invalidated";
 
-          BaseContextBuilder<T>::clearLastContext();
+          LanguageSpecificDeclarationBuilderBase::clearLastContext();
         }
       }
     }

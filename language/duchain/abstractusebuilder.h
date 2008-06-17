@@ -30,7 +30,7 @@ namespace KDevelop {
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-template<typename T>
+template<typename T, typename NameT>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractUseBuilder: public LanguageSpecificUseBuilderBase
 {
 public:
@@ -65,7 +65,7 @@ protected:
    * @param decl May be zero for not found declarations
    * */
   /// Register a new use
-  void newUse(T* name)
+  void newUse(NameT* name)
   {
     QualifiedIdentifier id = identifierForNode(name);
 

@@ -44,7 +44,7 @@
 namespace KDevelop
 {
 
-template<typename T>
+template<typename T, typename NameT>
 class KDEVPLATFORMLANGUAGE_EXPORT BaseContextBuilder
 {
 public:
@@ -161,7 +161,7 @@ protected:
   virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
   virtual DUContext* contextFromNode( T* node ) = 0;
   virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
-  virtual QualifiedIdentifier identifierForNode( T* ) = 0;
+  virtual QualifiedIdentifier identifierForNode( NameT* ) = 0;
 
   inline DUContext* currentContext() const { return m_contextStack.top(); }
   inline DUContext* lastContext() const { return m_lastContext; }
@@ -217,7 +217,7 @@ protected:
     m_nextContextStack.push( 0 );
   }
   
-  DUContext* openContext( T* rangeNode, DUContext::ContextType type, T* identifier )
+  DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier )
   {
     if ( m_compilingContexts )
     {
@@ -327,13 +327,14 @@ protected:
   {
     return m_contextStack;
   }
-  
-private:
+
+  /// TODO: make private again?
   int& nextContextIndex()
   {
     return m_nextContextStack.top();
   }
 
+private:
   DUContext* openContextInternal( const SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     kDebug() << "OpenContextInternal";
