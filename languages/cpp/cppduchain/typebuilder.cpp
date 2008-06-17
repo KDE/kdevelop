@@ -140,7 +140,7 @@ CppClassType* TypeBuilder::openClass(int kind)
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  int kind = m_editor->parseSession()->token_stream->kind(node->class_key);
+  int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   CppClassType::Ptr classType = CppClassType::Ptr(openClass(kind));
   
   openType(classType, node);
@@ -185,7 +185,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
       int tk = 0;
       if( node->access_specifier )
-        tk = m_editor->parseSession()->token_stream->token(node->access_specifier).kind;
+        tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
 
       switch( tk ) {
         default:
@@ -204,7 +204,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
       
       addBaseType(instance);
     } else { //A case for the problem-reporter
-      kDebug(9007) << "Could not find base declaration for" << identifierForName(node->name);
+      kDebug(9007) << "Could not find base declaration for" << identifierForNode(node->name);
     }
   }
 
@@ -236,7 +236,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
       node->expression->ducontext = currentContext();
-      res = parser.evaluateType( node->expression, m_editor->parseSession() );
+      res = parser.evaluateType( node->expression, editor()->parseSession() );
 
       //Delay the type-resolution of template-parameters
       if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front().data()) || isTemplateDependent(res.allDeclarations.front().data())) )
@@ -256,7 +256,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     if( delay || (!openedType && templateDeclarationDepth() != 0) ) {
       QString str;
       ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
-      str += stringFromSessionTokens( m_editor->parseSession(), node->expression->start_token, node->expression->end_token );
+      str += stringFromSessionTokens( editor()->parseSession(), node->expression->start_token, node->expression->end_token );
 
       QualifiedIdentifier id( str.trimmed() );
       id.setIsExpression( true );
@@ -296,7 +296,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   m_lastTypeWasInstance = false;
   AbstractType::Ptr type;
 
-  int kind = m_editor->parseSession()->token_stream->kind(node->type);
+  int kind = editor()->parseSession()->token_stream->kind(node->type);
 
   if( kind == Token_typename ) {
     //For typename, just find the type and return
@@ -315,9 +315,9 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       
       ///If possible, find another fitting declaration/forward-declaration and re-use it's type
     
-      SimpleCursor pos = m_editor->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
-      QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForName(node->name), pos);
+      QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForNode(node->name), pos);
       if( !declarations.isEmpty() && declarations.first()->abstractType()) {
         openType(declarations.first()->abstractType(), node);
         closeType();
@@ -365,7 +365,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
     do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_char:
           type = CppIntegralType::TypeChar;
@@ -428,14 +428,14 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 }
 
 bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
-  QualifiedIdentifier id = identifierForName(name);
+  QualifiedIdentifier id = identifierForNode(name);
 
   bool openedType = false;
   
   bool delay = false;
 
   if(!delay) {
-    SimpleCursor pos = m_editor->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
     
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
@@ -535,7 +535,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
   bool typeOpened = false;
   if (node->op) {
-    QString op = m_editor->tokenToString(node->op);
+    QString op = editor()->tokenToString(node->op);
     if (!op.isEmpty())
       if (op[0] == '&') {
         CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(node->cv)));
@@ -608,7 +608,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     DUChainReadLocker lock(DUChain::lock());
     if(expression) {
       expression->ducontext = currentContext();
-      res = parser.evaluateType( expression, m_editor->parseSession() );
+      res = parser.evaluateType( expression, editor()->parseSession() );
     }
   
     CppArrayType::Ptr array(new CppArrayType());
@@ -646,7 +646,7 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
     const ListNode<std::size_t> *it = cv->toFront();
     const ListNode<std::size_t> *end = it;
     do {
-      int kind = m_editor->parseSession()->token_stream->kind(it->element);
+      int kind = editor()->parseSession()->token_stream->kind(it->element);
       if (kind == Token_const)
         ret |= Declaration::Const;
       else if (kind == Token_volatile)

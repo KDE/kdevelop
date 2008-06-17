@@ -64,9 +64,6 @@ public:
   inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
   
   protected:
-  virtual void openContext(KDevelop::DUContext* newContext);
-  virtual void closeContext();
-
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);

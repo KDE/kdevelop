@@ -22,7 +22,11 @@
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
 
-typedef ContextBuilder UseBuilderBase;
+typedef ContextBuilder LanguageSpecificUseBuilderBase;
+
+#include <language/duchain/abstractusebuilder.h>
+
+typedef KDevelop::AbstractUseBuilder<AST, NameAST> UseBuilderBase;
 
 /**
  * A class which iterates the AST to extract uses of definitions.
@@ -32,6 +36,7 @@ class KDEVCPPDUCHAIN_EXPORT  UseBuilder: public UseBuilderBase
 public:
   UseBuilder(ParseSession* session);
   UseBuilder(CppEditorIntegrator* editor);
+  virtual ~UseBuilder();
 
   /**
    * Compile either a context-definition chain, or add uses to an existing
@@ -41,15 +46,9 @@ public:
    */
   void buildUses(AST *node);
 
-  /**
-   * @param decl May be zero for not found declarations
-   * */
-  void newUse(std::size_t start_token, std::size_t end_token, KDevelop::Declaration* decl);
-
+  using UseBuilderBase::newUse;
+  
 protected:
-  virtual void openContext(KDevelop::DUContext* newContext);
-  virtual void closeContext();
-
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
 
@@ -78,9 +77,6 @@ private:
 
   void visitExpression(AST* node);
   
-  /// Register a new use
-  void newUse(NameAST* name);
-
   inline int& nextUseIndex() { return m_nextUseStack.top(); }
   inline QVector<int>& skippedUses() { return m_skippedUses.top(); }
   QStack<int> m_nextUseStack;

@@ -36,7 +36,9 @@ class DUContext;
 
 class QMakeEditorIntegrator;
 
-class KDEVQMAKEDUCHAIN_EXPORT ContextBuilder : public QMake::ASTVisitor, public KDevelop::BaseContextBuilder<QMake::AST>
+typedef KDevelop::BaseContextBuilder<QMake::AST, QMake::AST> ContextBuilderBase;
+
+class KDEVQMAKEDUCHAIN_EXPORT ContextBuilder : public QMake::ASTVisitor, public ContextBuilderBase
 {
 public:
     ContextBuilder();

@@ -26,11 +26,13 @@
 
 #include "cppducontext.h"
 
+#include <language/duchain/basecontextbuilder.h>
 #include <duchainpointer.h>
 #include <identifier.h>
 #include <ducontext.h>
 #include <ksharedptr.h>
 #include "cppduchainexport.h"
+#include "cppeditorintegrator.h"
 
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
@@ -38,10 +40,11 @@
 namespace KDevelop
 {
 class DUChain;
-class KDevelop::DUChainBase;
+class DUChainBase;
 class DUContext;
 class TopDUContext;
 }
+
 class CppEditorIntegrator;
 class ParseSession;
 class NameCompiler;
@@ -71,18 +74,22 @@ bool KDEVCPPDUCHAIN_EXPORT importsContext( const QList<LineContextPair>& lineCon
 ///Removes @param context from the list
 void KDEVCPPDUCHAIN_EXPORT removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context );
 
+typedef KDevelop::BaseContextBuilder<AST, NameAST> ContextBuilderBase;
+
 /**
  * A class which iterates the AST to identify contexts.
  */
-class KDEVCPPDUCHAIN_EXPORT  ContextBuilder: protected DefaultVisitor
+class KDEVCPPDUCHAIN_EXPORT  ContextBuilder: public ContextBuilderBase, protected DefaultVisitor
 {
   friend class IdentifierVerifier;
 
 public:
+  ContextBuilder();
   ContextBuilder(ParseSession* session);
   ContextBuilder(CppEditorIntegrator* editor);
   virtual ~ContextBuilder ();
 
+  void setEditor(CppEditorIntegrator* editor, bool ownsEditorIntegrator);
 
   /**
    * Builds or updates a proxy-context that represents a content-context under a different environment.
@@ -118,23 +125,15 @@ public:
    */
   void supportBuild(AST *node, KDevelop::DUContext* context = 0);
 
+  inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
+
 protected:
-  inline KDevelop::DUContext* currentContext() { return m_contextStack.top(); }
-
-  /**Signalize that a specific item has been encoutered while parsing.
-   * All contained items that are not signalized will be deleted at some stage
-   * */
-  void setEncountered( KDevelop::DUChainBase* item ) {
-    m_encountered.insert(item);
-  }
-
-  /**
-   * @return whether the given item is in the set of encountered items
-   * */
-  bool wasEncountered( KDevelop::DUChainBase* item ) {
-    return m_encountered.contains(item);
-  }
-
+  virtual KDevelop::QualifiedIdentifier identifierForNode(NameAST* id);
+  virtual void startVisiting( AST* node );
+  virtual void setContextOnNode( AST* node, DUContext* ctx );
+  virtual DUContext* contextFromNode( AST* node );
+  virtual KTextEditor::Range editorFindRange( AST* fromRange, AST* toRange );
+  
   /**
    * Compile an identifier for the specified NameAST \a id.
    *
@@ -142,22 +141,10 @@ protected:
    * is called, so you need to create a copy (store as non-reference).
    * @param typeSpecifier a pointer that will eventually be filled with a type-specifier that can be found in the name(for example the return-type of a cast-operator)
    */
-  KDevelop::QualifiedIdentifier identifierForName(NameAST* id, TypeSpecifierAST** typeSpecifier = 0) const;
-
-  CppEditorIntegrator* m_editor;
-
-  // Notifications for subclasses
-  /// Returns true if we are recompiling a definition-use chain
-  inline bool recompiling() const { return m_recompiling; }
-  inline void setRecompiling(bool recomp) { m_recompiling = recomp; }
+  KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
 
   virtual void addBaseType( CppClassType::BaseClassInstance base );
   
-  // Write lock is already held here...
-  virtual void openContext(KDevelop::DUContext* newContext);
-  // Write lock is already held here...
-  virtual void closeContext();
-
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.
   ///@param id should be the whole identifier. A prefix-context will only be created if it
@@ -189,6 +176,7 @@ protected:
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
 
+  using ContextBuilderBase::openContext;
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
   KDevelop::DUContext* openContext(AST* node, const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
@@ -207,31 +195,17 @@ protected:
   int templateDeclarationDepth() const {
     return m_templateDeclarationDepth;
   }
-
-protected:
+  
   // Variables
   NameCompiler* m_nameCompiler;
 
-  bool m_ownsEditorIntegrator: 1;
-  bool m_compilingContexts: 1;
-  bool m_recompiling : 1;
   bool m_inFunctionDefinition;
   bool smart() const;
 
   int m_templateDeclarationDepth;
 
-  //Here all valid declarations/uses/... will be collected
-  QSet<KDevelop::DUChainBase*> m_encountered;
-
-  QStack<KDevelop::DUContext*> m_contextStack;
-  QStack<int> m_nextContextStack;
-  
   QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
   
-  KDevelop::DUContext* m_lastContext; //Last context that was opened
-
-  inline int& nextContextIndex() { return m_nextContextStack.top(); }
-
 #ifdef DEBUG_CONTEXT_RANGES
   void checkRanges();
   QHash<KDevelop::DUContext*, KDevelop::SimpleRange> m_contextRanges;
