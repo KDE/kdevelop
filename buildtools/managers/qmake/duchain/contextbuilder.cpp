@@ -22,8 +22,9 @@
 #include "qmakeeditorintegrator.h"
 
 ContextBuilder::ContextBuilder()
-    : QMake::ASTVisitor(), KDevelop::BaseContextBuilder<QMake::AST>( new QMakeEditorIntegrator(), true )
+    : QMake::ASTVisitor(), KDevelop::BaseContextBuilder<QMake::AST>()
 {
+    setEditor(new QMakeEditorIntegrator(), true);
 }
 
 ContextBuilder::~ContextBuilder()
