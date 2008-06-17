@@ -4,6 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 METASOURCES = AUTO
 lib_LTLIBRARIES = libkdevbuildbase.la
 libkdevbuildbase_la_LDFLAGS = $(all_libraries)
+libkdevbuildbase_la_LIBADD = $(top_srcdir)/lib/interfaces/libkdevinterfaces.la $(LIB_QT) $(LIB_KDEUI)
 libkdevbuildbase_la_SOURCES = kdevbuildtool.cpp
 kdevelopbuildtoolsincludedir = $(includedir)/kdevelop/buildtools/base
 kdevelopbuildtoolsinclude_HEADERS = kdevbuildtool.h

@@ -4,6 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/external_interfaces \
 METASOURCES = AUTO
 lib_LTLIBRARIES = libprofileengine.la
 libprofileengine_la_LDFLAGS = $(all_libraries)
+libprofileengine_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO)
 libprofileengine_la_SOURCES = profileengine.cpp profile.cpp
 
 profileincludedir = $(includedir)/kdevelop/shell/profileengine

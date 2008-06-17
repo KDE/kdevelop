@@ -4,6 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 METASOURCES = AUTO
 libdesignerintegration_la_LDFLAGS = $(all_libraries)
 lib_LTLIBRARIES = libdesignerintegration.la
+libdesignerintegration_la_LIBADD = $(top_srcdir)/lib/interfaces/libkdevinterfaces.la $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)
 libdesignerintegration_la_SOURCES = implementationwidgetbase.ui \
 	implementationwidget.cpp qtdesignerintegration.cpp
 

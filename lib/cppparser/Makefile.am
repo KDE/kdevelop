@@ -2,6 +2,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 AM_CXXFLAGS = -DKDEVELOP_BGPARSER
 lib_LTLIBRARIES = libkdevcppparser.la
 libkdevcppparser_la_LDFLAGS = $(all_libraries)
+libkdevcppparser_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(top_srcdir)/lib/interfaces/libkdevinterfaces.la -lDCOP $(LIB_KDEUI) $(LIB_KPARTS) -lktexteditor $(LIB_KIO) -lkscript
 libkdevcppparser_la_SOURCES = ast.cpp cachemanager.cpp driver.cpp errors.cpp \
 	lexer.cpp lexercache.cpp lookup.cpp parser.cpp tree_parser.cpp
 

@@ -6,7 +6,9 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/lib/widgets/propeditor $(all_includes)
 
 lib_LTLIBRARIES = libkdevbuildtoolswidgets.la
-
+libkdevbuildtoolswidgets_la_LDFLAGS = $(all_libraries)
+libkdevbuildtoolswidgets_la_LIBADD = $(top_srcdir)/lib/interfaces/libkdevinterfaces.la \
+	$(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO) -lktexteditor
 libkdevbuildtoolswidgets_la_SOURCES = addenvvardlg.cpp addfilesdialog.cpp \
 	environmentdisplaydialog.cpp environmentdisplaydialogbase.ui environmentvariableswidget.cpp \
 	environmentvariableswidgetbase.ui envvartools.cpp makeoptionswidget.cpp makeoptionswidgetbase.ui \

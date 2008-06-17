@@ -4,6 +4,7 @@ METASOURCES = AUTO
 partincludedirdir = $(includedir)/kdevelop/parts/documentation
 lib_LTLIBRARIES = libdocumentation_interfaces.la
 libdocumentation_interfaces_la_LDFLAGS = $(all_libraries)
+libdocumentation_interfaces_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO)
 libdocumentation_interfaces_la_SOURCES = kdevdocumentationplugin.cpp
 partincludedir_HEADERS = kdevdocumentationplugin.h
 servicetypedir = $(kde_servicetypesdir)

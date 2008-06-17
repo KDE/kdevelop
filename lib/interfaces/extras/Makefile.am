@@ -1,6 +1,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces/external -I$(top_srcdir)/lib/util \
 	$(all_includes)
 METASOURCES = AUTO
+libkdevextras_la_LIBADD = $(LIB_QT)
 libkdevextras_la_LDFLAGS = $(all_libraries)
 lib_LTLIBRARIES = libkdevextras.la
 kdevelopincludedir = $(includedir)/kdevelop/interfaces/extras
