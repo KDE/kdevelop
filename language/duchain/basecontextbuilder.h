@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef BASECONTEXTBUILDER_H
-#define BASECONTEXTBUILDER_H
+#ifndef KDEV_BASECONTEXTBUILDER_H
+#define KDEV_BASECONTEXTBUILDER_H
 
 #include <climits>
 
@@ -155,7 +155,7 @@ protected:
   virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
   virtual DUContext* contextFromNode( T* node ) = 0;
   virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
-  virtual QualifiedIdentifier identifierForNode( T* ) const = 0;
+  virtual QualifiedIdentifier identifierForNode( T* ) = 0;
 
   inline DUContext* currentContext() const { return m_contextStack.top(); }
   inline DUContext* lastContext() const { return m_lastContext; }
@@ -302,12 +302,9 @@ protected:
     m_qIdentifier.clear();
   }
   
-  template <typename E> E* editor()
+  EditorIntegrator* editor() const
   {
-    E* editor = dynamic_cast<E*>( m_editor );
-    if( !editor )
-      Q_ASSERT_X(false, "editor cast", "Couldn't cast editor to proper return type");
-    return editor;
+    return m_editor;
   }
   
 private:

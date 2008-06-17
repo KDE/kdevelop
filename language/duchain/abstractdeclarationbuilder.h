@@ -39,8 +39,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public BaseContex
 {
 public:
   AbstractDeclarationBuilder( EditorIntegrator* editor, bool ownsEditorIntegrator )
-    : BaseContextBuilder(editor, ownsEditorIntegrator)
+    : BaseContextBuilder<T>(editor, ownsEditorIntegrator)
   {
+  }
+
+  virtual TopDUContext* buildDeclarations( const IndexedString& url, T* node, 
+                              const TopDUContextPointer& updateContext
+                                    = TopDUContextPointer() )
+  {
+    return buildContexts(url, node, updateContext);
   }
 
 protected:
@@ -62,24 +69,7 @@ protected:
     if (!isLocked)
       DUChain::lock()->lockForWrite();
 
-    Declaration::Scope scope = Declaration::GlobalScope;
-    switch (currentContext()->type()) {
-      case DUContext::Namespace:
-        scope = Declaration::NamespaceScope;
-        break;
-      case DUContext::Class:
-        scope = Declaration::ClassScope;
-        break;
-      case DUContext::Function:
-      case DUContext::Template:
-      case DUContext::Other:
-        scope = Declaration::LocalScope;
-        break;
-      default:
-        break;
-    }
-
-    SimpleRange newRange = editorFindRange(name ? name : rangeNode, name ? name : rangeNode);
+    SimpleRange newRange = editorFindRange(name ? name : range, name ? name : range);
 
     if (newRange.start >= newRange.end)
       kWarning() << "Range collapsed";
@@ -94,47 +84,44 @@ protected:
 
     Declaration* declaration = 0;
 
-    if (recompiling()) {
+    if (BaseContextBuilder<T>::recompiling()) {
       // Seek a matching declaration
 
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
       SimpleRange translated = newRange;
 
-      if (editor()->smart()) {
-        lock.unlock();
-        QMutexLocker smartLock(editor()->smart()->smartMutex());
-        translated = SimpleRange( editor()->smart()->translateFromRevision(translated.textRange()) );
-        lock.lock();
+      if (BaseContextBuilder<T>::editor()->smart()) {
+        QMutexLocker smartLock(BaseContextBuilder<T>::editor()->smart()->smartMutex());
+        translated = SimpleRange( BaseContextBuilder<T>::editor()->smart()->translateFromRevision(translated.textRange()) );
       }
 
-      foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
+      foreach( Declaration* dec, BaseContextBuilder<T>::currentContext()->allLocalDeclarations(localId) ) {
 
-        if( wasEncountered(dec) )
+        if( BaseContextBuilder<T>::wasEncountered(dec) )
           continue;
 
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
         if (dec->range() == translated &&
-            dec->scope() == scope &&
             ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())) &&
             dec->isDefinition() == isDefinition
             //&& extraDeclarationComparisons()
           )
         {
-          if(currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
+          if(BaseContextBuilder<T>::currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
             continue;
           /*if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
             continue;
           } else */if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
             continue;
           } else if (isFunction) {
-            if (scope == Declaration::ClassScope) {
+            if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
               if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
                 continue;
             } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
               continue;
             }
 
-          } else if (scope == Declaration::ClassScope) {
+          } else if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
             if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
               continue;
           }
@@ -150,33 +137,33 @@ protected:
     }
 
     if (!declaration) {
-      SmartRange* prior = editor()->currentRange();
-      SmartRange* range = editor()->createRange(newRange.textRange());
+      KTextEditor::SmartRange* prior = BaseContextBuilder<T>::editor()->currentRange();
+      KTextEditor::SmartRange* range = BaseContextBuilder<T>::editor()->createRange(newRange.textRange());
 
-      editor()->exitCurrentRange();
+      BaseContextBuilder<T>::editor()->exitCurrentRange();
       //Q_ASSERT(range->start() != range->end());
 
-      Q_ASSERT(editor()->currentRange() == prior);
+      Q_ASSERT(BaseContextBuilder<T>::editor()->currentRange() == prior);
 
       if (isForward) {
-        declaration = new ForwardDeclaration(editor()->currentUrl(), newRange, scope, currentContext());
+        declaration = new ForwardDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
       } else if (isFunction) {
-        if (scope == Declaration::ClassScope) {
-          declaration = new ClassFunctionDeclaration(editor()->currentUrl(), newRange, currentContext());
+        if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
+          declaration = new ClassFunctionDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
         } else {
-          declaration = new FunctionDeclaration(editor()->currentUrl(), newRange, scope, currentContext());
+          declaration = new FunctionDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
         }
-      } else if (scope == Declaration::ClassScope) {
-          declaration = new ClassMemberDeclaration(editor()->currentUrl(), newRange, currentContext());
+      } else if (BaseContextBuilder<T>::currentContext()->type() == DUContext::Class) {
+          declaration = new ClassMemberDeclaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
       } else {
-        declaration = new Declaration(editor()->currentUrl(), newRange, scope, currentContext());
+        declaration = new Declaration(BaseContextBuilder<T>::editor()->currentUrl(), newRange, BaseContextBuilder<T>::currentContext());
       }
       
       declaration->setSmartRange(range);
       declaration->setDeclarationIsDefinition(isDefinition);
       declaration->setIdentifier(localId);
 
-      switch (currentContext()->type()) {
+      switch (BaseContextBuilder<T>::currentContext()->type()) {
         case DUContext::Global:
         case DUContext::Namespace:
         case DUContext::Class:
@@ -190,7 +177,7 @@ protected:
     declaration->setComment(m_lastComment);
     m_lastComment.clear();
 
-    setEncountered(declaration);
+    BaseContextBuilder<T>::setEncountered(declaration);
 
     m_declarationStack.push(declaration);
 
@@ -203,7 +190,7 @@ protected:
   /// Same as the above, but sets it as the definition too
   Declaration* openDefinition(T* name, T* range, bool isFunction = false)
   {
-    return openDeclaration(name, rangeNode, isFunction, false, true);
+    return openDeclaration(name, range, isFunction, false, true);
   }
 
   ForwardDeclaration* openForwardDeclaration(T* name, T* range)
@@ -213,21 +200,21 @@ protected:
     
   void eventuallyAssignInternalContext()
   {
-    if (lastContext()) {
+    if (BaseContextBuilder<T>::lastContext()) {
       DUChainWriteLocker lock(DUChain::lock());
 
       if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
         Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
 
-      if(lastContext() && (lastContext()->type() == DUContext::Class || lastContext()->type() == DUContext::Other || lastContext()->type() == DUContext::Function || lastContext()->type() == DUContext::Template ) )
+      if(BaseContextBuilder<T>::lastContext() && (BaseContextBuilder<T>::lastContext()->type() == DUContext::Class || BaseContextBuilder<T>::lastContext()->type() == DUContext::Other || BaseContextBuilder<T>::lastContext()->type() == DUContext::Function || BaseContextBuilder<T>::lastContext()->type() == DUContext::Template ) )
       {
-        if( !lastContext()->owner() || !wasEncountered(lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
-          currentDeclaration()->setInternalContext(lastContext());
+        if( !BaseContextBuilder<T>::lastContext()->owner() || !BaseContextBuilder<T>::wasEncountered(BaseContextBuilder<T>::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
+          currentDeclaration()->setInternalContext(BaseContextBuilder<T>::lastContext());
 
           if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
             kDebug() << "Warning: Range was invalidated";
 
-          clearLastContext();
+          BaseContextBuilder<T>::clearLastContext();
         }
       }
     }
@@ -243,12 +230,14 @@ protected:
     m_declarationStack.pop();
   }
 
+#if 0
   ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
   template<class DeclarationType>
   DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range );
   ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
   template<class DeclarationType>
   DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range, int scope );
+#endif
 
 private:
   QStack<Declaration*> m_declarationStack;
