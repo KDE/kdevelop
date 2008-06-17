@@ -282,6 +282,12 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
     QStringList entries = dir->entries();
     kDebug(9010) << "entries:" << entries.join(",");
 
+    //This extra tempdir is needed just for the files files have special names,
+    //which may contain macros also files contain content with macros. So the
+    //easiest way to extract the files from the archive and then rename them
+    //and replace the macros is to use a tempdir and copy the file (and
+    //replacing while copying). This also allows to easily remove all files, by
+    //just unlinking the tempdir
     KTempDir tdir;
 
     bool ret = true;
@@ -305,7 +311,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
             const KArchiveFile *file = (KArchiveFile *)dir->entry(entry);
             file->copyTo(tdir.name());
             QString destName = dest + '/' + file->name();
-            if (!copyFile(QDir::cleanPath(tdir.name()+'/'+file->name()),
+            if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.name()+'/'+file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
                 KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));
@@ -317,7 +323,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
     return ret;
 }
 
-bool AppWizardPlugin::copyFile(const QString &source, const QString &dest)
+bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     kDebug(9010) << "copy:" << source << "to" << dest;
     QFile inputFile(source);
