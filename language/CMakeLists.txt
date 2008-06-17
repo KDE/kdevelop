@@ -116,6 +116,7 @@ install(FILES
     duchain/basecontextbuilder.h
     duchain/abstractdeclarationbuilder.h
     duchain/abstracttypebuilder.h
+    duchain/abstractusebuilder.h
     duchain/dumpchain.h
     duchain/symboltable.h
     duchain/indexedstring.h

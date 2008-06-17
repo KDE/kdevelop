@@ -19,7 +19,6 @@
 #ifndef KDEV_TYPEBUILDER_H
 #define KDEV_TYPEBUILDER_H
 
-#include "language/duchain/basecontextbuilder.h"
 #include "language/duchain/typesystem.h"
 #include "language/duchain/declaration.h"
 #include "language/duchain/repositories/typerepository.h"

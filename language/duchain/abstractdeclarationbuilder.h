@@ -19,7 +19,6 @@
 #ifndef KDEV_DECLARATIONBUILDER_H
 #define KDEV_DECLARATIONBUILDER_H
 
-#include "language/duchain/abstracttypebuilder.h"
 #include "language/duchain/classfunctiondeclaration.h"
 #include "language/duchain/symboltable.h"
 #include "language/duchain/forwarddeclaration.h"
