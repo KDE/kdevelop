@@ -174,6 +174,7 @@ protected:
   // Normal overridden visitors
   virtual void visitDeclarator(DeclaratorAST *node);
   virtual void visitNamespace(NamespaceAST *);
+  virtual void visitEnumSpecifier(EnumSpecifierAST* node);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
   virtual void visitTypedef(TypedefAST *);
   virtual void visitFunctionDefinition(FunctionDefinitionAST *);
@@ -190,6 +191,7 @@ protected:
 
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
   KDevelop::DUContext* openContext(AST* range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
+  KDevelop::DUContext* openContext(AST* node, const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, NameAST* identifier = 0);
   KDevelop::DUContext* openContext(AST* fromRange, AST* toRange, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier = KDevelop::QualifiedIdentifier());
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);

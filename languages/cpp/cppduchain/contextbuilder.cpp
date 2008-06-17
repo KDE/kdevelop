@@ -453,6 +453,21 @@ void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
   }
 }
 
+void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
+{
+  //The created context must be unnamed, so the enumerators can be found globally with the correct scope
+  openContext(node, DUContext::Enum, 0 );
+
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    currentContext()->setPropagateDeclarations(true);
+  }
+  
+  DefaultVisitor::visitEnumSpecifier(node);
+
+  closeContext();
+}
+
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   //We only use the local identifier here, because we build a prefix-context around
@@ -555,6 +570,23 @@ DUContext* ContextBuilder::openContext(AST* rangeNode, DUContext::ContextType ty
   }
 }
 
+DUContext* ContextBuilder::openContext(AST* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, NameAST* identifier)
+{
+  if (m_compilingContexts) {
+#ifdef DEBUG_UPDATE_MATCHING
+    kDebug() << "opening custom context";
+#endif
+    DUContext* ret = openContextInternal(range, type, identifier ? identifierForName(identifier) : QualifiedIdentifier());
+    node->ducontext = ret;
+    return ret;
+
+  } else {
+    openContext(node->ducontext);
+    m_editor->setCurrentRange(currentContext()->smartRange());
+    return currentContext();
+  }
+}
+
 DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextType type)
 {
   if (m_compilingContexts) {
@@ -595,13 +627,13 @@ DUContext* ContextBuilder::openContext(AST* fromRange, AST* toRange, DUContext::
 {
   if (m_compilingContexts) {
 #ifdef DEBUG_UPDATE_MATCHING
-    kDebug() << "opening context with text" << m_editor->tokensToStrings( fromRange->start_token, toRange->end_token );
+  kDebug() << "opening context with text" << m_editor->tokensToStrings( fromRange->start_token, toRange->end_token );
 #endif
-    DUContext* ret = openContextInternal(m_editor->findRangeForContext(fromRange->start_token, toRange->end_token), type, identifier);
-    fromRange->ducontext = ret;
+  DUContext* ret = openContextInternal(m_editor->findRangeForContext(fromRange->start_token, toRange->end_token), type, identifier);
+  fromRange->ducontext = ret;
     return ret;
   } else {
-    openContext(fromRange->ducontext);
+  openContext(fromRange->ducontext);
     m_editor->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
@@ -686,7 +718,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
       if (!identifier.isEmpty())
         ret->setLocalScopeIdentifier(identifier);
 
-      ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper);
+      ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
 
       if( recompiling() )
         kDebug(9007) << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";

@@ -502,16 +502,20 @@ void TestDUChain::testEnum()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->localDeclarations().count(), 6);
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 2);
   
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
   QVERIFY(decl);
+  QVERIFY(decl->internalContext());
   QVERIFY(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()));
   CppEnumerationType* en = static_cast<CppEnumerationType*>(decl->abstractType().data());
   QVERIFY(en->declaration());
   QCOMPARE(en->identifier(), QualifiedIdentifier("Enum"));
 
   {
+    QVERIFY(!top->findLocalDeclarations(Identifier("Value1")).isEmpty());
+
     decl = findDeclaration(top, QualifiedIdentifier("Value1"));
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));

@@ -497,8 +497,15 @@ class CppDUContext : public BaseContext {
             if(decl->internalContext())
               kDebug(9007) << "declaration" << decl->toString() << "has internal context";
 #endif
-            
-            instantiateDeclarationContext( const_cast<CppDUContext*>(this), source, decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy, decl );
+
+          ///@todo Handle up-propagated declarations like enumerators more correctly, by re-building the same structure in instantiated templates
+//             if(decl->context() != m_instantiatedFrom.data()) {
+//               //The declaration may have been propagated up using setPropagateDeclaration. So instead of copying it directly,
+//               //Instantiate the context that
+//               
+//             }else{
+           instantiateDeclarationContext( const_cast<CppDUContext*>(this), source, decl->internalContext(), QList<Cpp::ExpressionEvaluationResult>(), copy, decl );
+//             }
 
             ///instantiateDeclarationContext moved the declaration into this context anonymously, but we want to be able to find it
             copy->setContext(const_cast<CppDUContext*>(this));

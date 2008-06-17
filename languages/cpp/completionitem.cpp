@@ -211,6 +211,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                   return indentation + "union";
                   break;
               }
+              if(dec->type<CppEnumerationType>()) {
+                return "enum";
+              }              
             return QVariant();
           }
           if (dec->abstractType()) {
@@ -228,8 +231,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
             } else {
               QString ret = indentation;
-              if(dec->type<CppEnumeratorType>())
-                return ret + "enumerator";
+              if(dec->type<CppEnumeratorType>()) {
+                return ret + "enum " + (dec->context()->owner() ? dec->context()->owner()->identifier().toString() : QString());
+              }
               return  ret + dec->abstractType()->toString();
             }
           } else {
@@ -315,6 +319,14 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         switch (dec->abstractType()->whichType()) {
           case AbstractType::TypeIntegral:
             if (dec->type<CppEnumerationType>()) {
+              // Remove variable bit set in DUChainUtils
+              p &= ~CodeCompletionModel::Variable;
+              p |= CodeCompletionModel::Enum;
+            }
+            if (dec->type<CppEnumeratorType>()) {
+              //Get the properties from the parent, because that may contain information like "private"
+              if(dec->context()->owner())
+                p = DUChainUtils::completionProperties(dec->context()->owner()); 
               // Remove variable bit set in DUChainUtils
               p &= ~CodeCompletionModel::Variable;
               p |= CodeCompletionModel::Enum;

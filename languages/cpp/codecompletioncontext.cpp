@@ -561,12 +561,32 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       {
         QList<DUContext*> containers = memberAccessContainers();
         if( !containers.isEmpty() ) {
+          QSet<DUContext*> had;
           foreach(DUContext* ctx, containers) {
+            if(had.contains(ctx)) ///@todo why do we need this
+              continue;
+            had.insert(ctx);
+            
             if (abort)
               return items;
-
-            foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) )
-              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(this), decl.second ) );
+            
+            foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
+              //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
+              if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
+                if(decl.first->kind() != Declaration::Instance)
+                  continue;
+                ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
+                if(classMember && classMember->isStatic())
+                  continue; //Skip static class members when not doing static access
+                if(fastCast<CppEnumeratorType*>(decl.first->abstractType().data()))
+                  continue; //Skip enumerators
+              }else{
+                ///@todo what NOT to show on static member choose? Actually we cannot hide all non-static functions, because of function-pointers
+              }
+              
+              if(!decl.first->identifier().isEmpty())
+                items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(this), decl.second ) );
+            }
           }
         } else {
           kDebug(9007) << "setContext: no container-type";

@@ -456,7 +456,12 @@ class NavigationContext : public KShared {
             Declaration* decl = m_declaration->context()->owner();
             if(decl->isDefinition() && decl->declaration())
               decl = decl->declaration();
-            m_currentText += labelHighlight(i18n("Container: "));
+            
+            if(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()))
+              m_currentText += labelHighlight(i18n("Enum: "));
+            else
+              m_currentText += labelHighlight(i18n("Container: "));
+            
             makeLink( declarationName(decl), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
             m_currentText += " ";
           } else {
