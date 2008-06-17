@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -218,19 +218,6 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   --m_templateDeclarationDepth;
 }
 
-void ContextBuilder::smartenContext(TopDUContext* topLevelContext) {
-  
-  if( topLevelContext && !topLevelContext->smartRange() && editor()->smart() ) {
-    //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
-    //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
-    //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
-    kDebug(9007) << "Warning: A document is updated that has no smart-ranges, although the document is loaded. The ranges will be converted now.";
-    ///@todo what about smart-mutex locking?
-    SmartConverter conv(editor(), 0);
-    conv.convertDUChain(topLevelContext);
-  }
-}
-
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
   editor()->setCurrentUrl(file->url().str());
@@ -292,14 +279,6 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   {
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext.data();
-
-    if( topLevelContext && !topLevelContext->smartRange() && editor()->smart() ) {
-      lock.unlock();
-      kWarning() << "Smartening Context!";
-      smartenContext(topLevelContext);
-      lock.lock();
-      topLevelContext = updateContext.data(); //In case the context was deleted, updateContext as a DUChainPointer will have noticed it.
-    }
 
     if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->flags() & TopDUContext::ProxyContextFlag))
       if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure

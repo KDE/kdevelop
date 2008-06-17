@@ -21,7 +21,7 @@
 #ifndef QMAKE_CONTEXTBUILDER_H
 #define QMAKE_CONTEXTBUILDER_H
 
-#include <language/duchain/basecontextbuilder.h>
+#include <language/duchain/abstractcontextbuilder.h>
 #include "parser/qmakeastvisitor.h"
 #include "parser/ast.h"
 
@@ -36,7 +36,7 @@ class DUContext;
 
 class QMakeEditorIntegrator;
 
-typedef KDevelop::BaseContextBuilder<QMake::AST, QMake::AST> ContextBuilderBase;
+typedef KDevelop::AbstractContextBuilder<QMake::AST, QMake::AST> ContextBuilderBase;
 
 class KDEVQMAKEDUCHAIN_EXPORT ContextBuilder : public QMake::ASTVisitor, public ContextBuilderBase
 {

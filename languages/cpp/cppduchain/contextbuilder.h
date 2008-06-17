@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 
 #include "cppducontext.h"
 
-#include <language/duchain/basecontextbuilder.h>
+#include <language/duchain/abstractcontextbuilder.h>
 #include <duchainpointer.h>
 #include <identifier.h>
 #include <ducontext.h>
@@ -74,7 +74,7 @@ bool KDEVCPPDUCHAIN_EXPORT importsContext( const QList<LineContextPair>& lineCon
 ///Removes @param context from the list
 void KDEVCPPDUCHAIN_EXPORT removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context );
 
-typedef KDevelop::BaseContextBuilder<AST, NameAST> ContextBuilderBase;
+typedef KDevelop::AbstractContextBuilder<AST, NameAST> ContextBuilderBase;
 
 /**
  * A class which iterates the AST to identify contexts.
@@ -181,8 +181,6 @@ protected:
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
-  void smartenContext(TopDUContext* topLevelContext);
-  
   int templateDeclarationDepth() const {
     return m_templateDeclarationDepth;
   }
