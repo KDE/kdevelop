@@ -282,7 +282,6 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
     QStringList entries = dir->entries();
     kDebug(9010) << "entries:" << entries.join(",");
 
-    //TODO: if we use DVCS we don't require it, if tdir used some unrequired copies are done...
     KTempDir tdir;
 
     bool ret = true;
