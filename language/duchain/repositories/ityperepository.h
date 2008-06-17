@@ -23,10 +23,10 @@
 
 namespace KDevelop {
 
-class KDEVPLATFORMLANGUAGE_EXPORT TypeRepository
+class KDEVPLATFORMLANGUAGE_EXPORT ITypeRepository
 {
 public:
-  virtual ~TypeRepository();
+  virtual ~ITypeRepository();
   
   /**
    * Registers the given \a input type, and returns a pointer to the

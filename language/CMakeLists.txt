@@ -46,7 +46,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
     duchain/repositories/itemrepository.cpp
-    duchain/repositories/typerepository.cpp
+    duchain/repositories/ityperepository.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
@@ -125,7 +125,7 @@ install(FILES
 
 install(FILES
     duchain/repositories/itemrepository.h
-    duchain/repositories/typerepository.h
+    duchain/repositories/ityperepository.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories
 )
 

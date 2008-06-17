@@ -21,7 +21,7 @@
 
 #include "language/duchain/typesystem.h"
 #include "language/duchain/declaration.h"
-#include "language/duchain/repositories/typerepository.h"
+#include "language/duchain/repositories/ityperepository.h"
 
 namespace KDevelop {
   
@@ -30,11 +30,23 @@ class ForwardDeclaration;
 template<typename T, typename NameT>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
+public:
+  const QList< KDevelop::AbstractType::Ptr >& topTypes() const
+  {
+    return m_topTypes;
+  }
+
 protected:
-  virtual TypeRepository* typeRepository() const = 0;
-  
+  virtual ITypeRepository* typeRepository() const = 0;
+  virtual DUContext* searchContext() const
+  {
+    return LangugageSpecificTypeBuilderBase::currentContext();
+  }
+
   virtual void supportBuild(T* node, DUContext* context = 0)
   {
+    m_topTypes.clear();
+
     LangugageSpecificTypeBuilderBase::supportBuild(node, context);
     
     Q_ASSERT(m_typeStack.isEmpty());
@@ -49,16 +61,19 @@ protected:
   {
     m_lastType = ptr;
   }
-
-  // Called at the beginning of processing a class-specifier, right after the type for the class was created. The type can be gotten through currentAbstractType().
-  virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {};
+  
+  void clearLastType()
+  {
+    m_lastType = 0;
+  }
 
   /**Simulates that the given type was created.
    * After calling, the given type will be the last type.
    * */
   void injectType(const KDevelop::AbstractType::Ptr& type)
   {
-    m_lastType = type;
+    openType(type);
+    closeType();
   }
 
   template <class T2>
@@ -80,16 +95,16 @@ protected:
     // If it is, it will get replaced
     m_lastType = typeRepository()->registerType(currentAbstractType());
 
-    //bool replaced = m_lastType != currentAbstractType();
+    bool replaced = m_lastType != currentAbstractType();
 
     // And the reference will be lost...
     m_typeStack.pop();
 
-    //if (!hasCurrentType() && !replaced)
-      //m_topTypes.append(m_lastType);
+    if (!hasCurrentType() && !replaced)
+      m_topTypes.append(m_lastType);
   }
 
-  bool hasCurrentType() { return !m_typeStack.isEmpty(); }
+  inline bool hasCurrentType() { return !m_typeStack.isEmpty(); }
 
   // You must not use this in creating another type definition, as it may not be the registered type.
   inline KDevelop::AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
@@ -99,6 +114,11 @@ protected:
   KSharedPtr<T2> currentType() { return KSharedPtr<T2>::dynamicCast(m_typeStack.top()); }
 
   ///Returns whether a type was opened
+  bool openTypeFromName(NameT* name, bool needClass)
+  {
+    return openTypeFromName(identifierForNode(name), name, needClass);
+  }
+  
   bool openTypeFromName(QualifiedIdentifier id, T* typeNode, bool needClass)
   {
     bool openedType = false;
@@ -109,7 +129,7 @@ protected:
       SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
       DUChainReadLocker lock(DUChain::lock());
 
-      QList<Declaration*> dec = LangugageSpecificTypeBuilderBase::currentContext()->findDeclarations(id, pos);
+      QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
 
       if ( dec.isEmpty() )
         delay = true;
@@ -149,6 +169,8 @@ private:
   QStack<KDevelop::AbstractType::Ptr> m_typeStack;
 
   KDevelop::AbstractType::Ptr m_lastType;
+
+  QList<KDevelop::AbstractType::Ptr> m_topTypes;
 };
 
 }

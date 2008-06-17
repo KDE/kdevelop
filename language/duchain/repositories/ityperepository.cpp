@@ -16,11 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "typerepository.h"
+#include "ityperepository.h"
 
 namespace KDevelop {
 
-TypeRepository::~TypeRepository()
+ITypeRepository::~ITypeRepository()
 {
 }
 
