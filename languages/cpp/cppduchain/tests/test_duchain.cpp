@@ -1344,10 +1344,12 @@ void TestDUChain::testContextAssignment() {
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->owner(), top->localDeclarations()[0]);
 
-  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
   
   QCOMPARE((void*)top->childContexts()[0]->owner(), (void*)0);
-  QCOMPARE((void*)top->childContexts()[1]->localDeclarations()[0]->internalContext(), (void*)0);
+  QVERIFY((void*)top->childContexts()[1]->localDeclarations()[0]->internalContext());
+  QCOMPARE((void*)top->childContexts()[1]->localDeclarations()[0]->internalContext(), top->childContexts()[1]->childContexts()[0]);
 
   release(top);
 }
@@ -1809,11 +1811,13 @@ void TestDUChain::testCaseUse()
   DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 5);
+  QCOMPARE(top->localDeclarations().count(), 4);
+  QVERIFY(top->localDeclarations()[0]->internalContext());
+  QCOMPARE(top->localDeclarations()[0]->internalContext()->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->internalContext()->localDeclarations()[0]->uses().count(), 1);
   QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
-  QCOMPARE(top->localDeclarations()[2]->uses().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->internalContext()->localDeclarations()[0]->uses().begin()->count(), 1);
   QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
-  QCOMPARE(top->localDeclarations()[2]->uses().begin()->count(), 1);
 }
 
 void TestDUChain::testDefinitionUse()
