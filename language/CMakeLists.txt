@@ -113,7 +113,7 @@ install(FILES
     duchain/namespacealiasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
-    duchain/basecontextbuilder.h
+    duchain/abstractcontextbuilder.h
     duchain/abstractdeclarationbuilder.h
     duchain/abstracttypebuilder.h
     duchain/abstractusebuilder.h

@@ -1,6 +1,8 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2006 Roberto Raggi <roberto@kdevelop.org>                   *
+ *   Copyright 2006-2008 Hamish Rodda <rodda@kde.org>                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,8 +20,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEV_BASECONTEXTBUILDER_H
-#define KDEV_BASECONTEXTBUILDER_H
+#ifndef KDEV_ABSTRACTCONTEXTBUILDER_H
+#define KDEV_ABSTRACTCONTEXTBUILDER_H
 
 #include <climits>
 
@@ -45,10 +47,10 @@ namespace KDevelop
 {
 
 template<typename T, typename NameT>
-class KDEVPLATFORMLANGUAGE_EXPORT BaseContextBuilder
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractContextBuilder
 {
 public:
-  BaseContextBuilder()
+  AbstractContextBuilder()
     : m_editor( 0 )
     , m_ownsEditorIntegrator(false)
     , m_compilingContexts( false )
@@ -57,7 +59,7 @@ public:
   {
   }
 
-  virtual ~BaseContextBuilder()
+  virtual ~AbstractContextBuilder()
   {
     if (m_ownsEditorIntegrator)
       delete m_editor;
@@ -209,7 +211,7 @@ protected:
   
       if ( contextFromNode( node ) == parent )
       {
-          kDebug() << "Error in BaseContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
+          kDebug() << "Error in AbstractContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
           DUChainWriteLocker lock( DUChain::lock() );
           deleteContextOnNode( node );
       }
