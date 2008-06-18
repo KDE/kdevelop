@@ -12,6 +12,4 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=xTest
-Name[x-test]=xxxTestxx
 Comment=xTest settings
-Comment[x-test]=xxxTest settingsxx

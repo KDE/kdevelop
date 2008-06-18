@@ -23,5 +23,6 @@ GenericName[pt_BR]=Ambiente de Desenvolvimento Integrado
 GenericName[sv]=Integrerad utvecklingsmiljö
 GenericName[uk]=Інтегроване середовище розробки
 GenericName[x-test]=xxIntegrated Development Environmentxx
+GenericName[zh_CN]=集成开发环境
 GenericName[zh_TW]=整合開發環境
 Categories=Qt;KDE;Development;IDE;
