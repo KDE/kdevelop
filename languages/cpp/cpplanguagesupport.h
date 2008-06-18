@@ -35,7 +35,7 @@ class TranslationUnitAST;
 class IncludeFileDataProvider;
 
 namespace KParts { class Part; }
-namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; }
+namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer;}
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
 
@@ -137,9 +137,12 @@ private slots:
 
 private:
 
-    //Returns the identifier and its range under the cursor as first return-value, and the tail behind at as the second
+    //Returns the identifier and its range under the cursor as first return-value, and the tail behind it as the second
+    //If the given line is an include directive, the complete line is returned starting at the directive
     QPair<QPair<QString, KDevelop::SimpleRange>, QString> cursorIdentifier(const KUrl& url, const KDevelop::SimpleCursor& position) const;
 
+    QPair<KDevelop::TopDUContextPointer, KDevelop::SimpleRange> importedContextForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
+    
     QPair<KDevelop::SimpleRange, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
     
     virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);

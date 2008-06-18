@@ -847,6 +847,14 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
   int lineLength = doc->textDocument()->lineLength(lineNumber);
 
   QString line = doc->textDocument()->text(KTextEditor::Range(lineNumber, 0, lineNumber, lineLength));
+
+  if(line.trimmed().startsWith("#include")) { //If it is an include, return the complete line
+    int start = 0;
+    while(start < lineLength && line[start] == ' ')
+      ++start;
+    
+    return qMakePair( qMakePair(line, SimpleRange(lineNumber, start, lineNumber, lineLength)), QString() );
+  }
   
   int start = position.column;
   int end = position.column;
@@ -857,9 +865,64 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
   while(end <  lineLength && (line[end].isLetter() || line[end] == '_'))
     ++end;
 
-  SimpleRange wordRange = SimpleRange(SimpleCursor(lineLength, start), SimpleCursor(lineLength, end));
+  SimpleRange wordRange = SimpleRange(SimpleCursor(lineNumber, start), SimpleCursor(lineNumber, end));
 
   return qMakePair( qMakePair(line.mid(start, end-start), wordRange), line.mid(end) );
+}
+
+QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPosition(const KUrl& url, const SimpleCursor& position) {
+  QPair<QPair<QString, SimpleRange>, QString> found = cursorIdentifier(url, position);
+  if(!found.first.second.isValid())
+    return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
+
+  QString word(found.first.first);
+  SimpleRange wordRange(found.first.second);
+
+  for(uint pos = wordRange.end.column-wordRange.start.column-1; pos >= 0; --pos) {
+    if(word[pos] == '"' || word[pos].isSpace() || word[pos] == '>')
+      --wordRange.end.column;
+    else
+      break;
+  }
+  
+  for(uint pos = 0; pos < word.size(); ++pos) {
+    ++wordRange.start.column;
+    if(word[pos] == '"' || word[pos] == '<')
+      break;
+  }
+  
+  if(wordRange.start > wordRange.end)
+    wordRange.start = wordRange.end;
+  
+  //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
+  DUChainReadLocker lock(DUChain::lock(), 100);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain in time";
+    return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
+  }
+  
+  TopDUContext* ctx = standardContext(url, false);
+  if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
+    return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
+
+  Q_ASSERT(!(ctx->flags() & TopDUContext::ProxyContextFlag));
+  
+  Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
+  
+  Q_ASSERT(p);
+  
+  if(word.startsWith("#include")) {
+    //It's an #include, find out which file was included at the given line
+    foreach(DUContextPointer imported, ctx->importedParentContexts()) {
+      if(imported) {
+        if(ctx->importPosition(imported.data()).line == wordRange.start.line) {
+          if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.data()))
+            return qMakePair(TopDUContextPointer(importedTop), wordRange);
+        }
+      }
+    }
+  }
+  return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 }
 
 QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPosition(const KUrl& url, const SimpleCursor& position) {
@@ -886,7 +949,7 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
   
   Q_ASSERT(p);
-
+  
   if(!p->usedMacroNames().contains(word) && !p->definedMacroNames().contains(word))
     return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
@@ -912,10 +975,22 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
 
 SimpleRange CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position) {
 
+  QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+  if(import.first)
+    return import.second;
+  
   return usedMacroForPosition(url, position).first;
 }
 
 QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position) {
+
+  QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+    if(import.first) {
+      DUChainReadLocker lock(DUChain::lock());
+      if(import.first)
+        return qMakePair(KUrl::fromPathOrUrl(import.first->url().str()), SimpleCursor(0,0));
+    }
+  
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
 
     if(!m.first.isValid())
@@ -925,6 +1000,14 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
 }
 
 QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
+  
+  QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+    if(import.first) {
+      DUChainReadLocker lock(DUChain::lock());
+      if(import.first)
+        return import.first->createNavigationWidget();
+    }
+  
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
     if(!m.first.isValid())
       return 0;
