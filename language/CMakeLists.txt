@@ -45,6 +45,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
+    duchain/aliasdeclaration.cpp
     duchain/repositories/itemrepository.cpp
     duchain/repositories/ityperepository.cpp
     interfaces/ilanguagesupport.cpp
