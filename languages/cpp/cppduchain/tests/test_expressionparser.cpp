@@ -58,7 +58,7 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   }
   protected:
   virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance /*instance */) {
-    DumpChain d;
+    Cpp::DumpChain d;
     kDebug(9007) << "expression-result for";
     DUChainReadLocker lock( DUChain::lock() );
     d.dump( node, session() );
@@ -919,7 +919,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 
   if (dump & DumpAST) {
     kDebug(9007) << "===== AST:";
-    dumper.dump(ast, session);
+    cppDumper.dump(ast, session);
   }
 
   static int testNumber = 0;

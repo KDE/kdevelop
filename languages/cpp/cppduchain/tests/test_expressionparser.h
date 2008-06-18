@@ -31,6 +31,7 @@
 
 #include "typerepository.h"
 #include <identifier.h>
+#include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 
 namespace KDevelop
@@ -82,7 +83,8 @@ private:
 
   // Parser
   Control control;
-  DumpChain dumper;
+  KDevelop::DumpChain dumper;
+  Cpp::DumpChain cppDumper;
 
   KDevelop::AbstractType::Ptr typeVoid;
   KDevelop::AbstractType::Ptr typeInt;

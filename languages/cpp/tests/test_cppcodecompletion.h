@@ -33,6 +33,7 @@
 
 #include "typerepository.h"
 #include <identifier.h>
+#include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 
@@ -103,7 +104,8 @@ private:
   
   // Parser
   Control control;
-  DumpChain dumper;
+  Cpp::DumpChain cppDumper;
+  KDevelop::DumpChain dumper;
 
   KDevelop::AbstractType::Ptr typeVoid;
   KDevelop::AbstractType::Ptr typeInt;

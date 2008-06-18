@@ -1012,7 +1012,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   if (dump & DumpAST) {
     kDebug(9007) << "===== AST:";
-    dumper.dump(ast, session);
+    cppDumper.dump(ast, session);
   }
 
   DeclarationBuilder definitionBuilder(session);

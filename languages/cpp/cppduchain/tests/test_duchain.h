@@ -31,6 +31,7 @@
 
 #include "typerepository.h"
 #include <identifier.h>
+#include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 
 namespace KDevelop
@@ -125,7 +126,8 @@ private:
 
   // Parser
   Control control;
-  DumpChain dumper;
+  Cpp::DumpChain cppDumper;
+  KDevelop::DumpChain dumper;
 
   // Declaration - use chain
   KDevelop::Declaration* noDef;
