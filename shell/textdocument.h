@@ -87,7 +87,7 @@ public:
     virtual void setState(const QString& state);
 
 private Q_SLOTS:
-    void viewStatusChanged(KTextEditor::View*, const QString& status);
+    void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
 
 private:
     class TextViewPrivate* const d;

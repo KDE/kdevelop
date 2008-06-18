@@ -22,6 +22,8 @@
 #include <QTimer>
 #include <QProgressBar>
 
+#include <KDebug>
+
 #include <istatus.h>
 
 #include "view.h"
@@ -37,6 +39,7 @@ namespace KDevelop
 StatusBar::StatusBar(QWidget* parent)
     : KStatusBar(parent)
     , m_timer(new QTimer(this))
+    , m_currentView(0)
 {
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimeout()));
@@ -52,10 +55,15 @@ StatusBar::StatusBar(QWidget* parent)
 
 void StatusBar::viewChanged(Sublime::View* view)
 {
-    disconnect(0, 0, this, SLOT(viewStatusChanged(Sublime::View*)));
+    if (m_currentView)
+        m_currentView->disconnect(this);
+
+    m_currentView = view;
+
     if (view) {
-        connect(view, SIGNAL(viewStatusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
+        connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
         changeItem(view->viewStatus(), 0);
+
     } else {
         changeItem(i18n("No View Selected"), 0);
     }

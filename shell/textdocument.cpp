@@ -341,7 +341,8 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     d->m_view = static_cast<KTextEditor::View*>(
         static_cast<TextDocument*>(document())->createViewWidget(parent));
 
-    connect(d->m_view, SIGNAL(informationMessage(KTextEditor::View*, const QString&)), this, SLOT(viewStatusChanged(KTextEditor::View*, const QString&)));
+    connect(d->m_view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
+    viewStatusChanged(d->m_view, d->m_view->cursorPosition());
 
     return d->m_view;
 }
@@ -381,9 +382,9 @@ QString KDevelop::TextView::viewStatus() const
     return d->m_status;
 }
 
-void KDevelop::TextView::viewStatusChanged(KTextEditor::View*, const QString& status)
+void KDevelop::TextView::viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition)
 {
-    d->m_status = status;
+    d->m_status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(newPosition.line() + 1, 0), KGlobal::locale()->formatNumber(newPosition.column() + 1, 0));
     emit statusChanged(this);
 }
 

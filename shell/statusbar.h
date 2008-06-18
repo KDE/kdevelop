@@ -77,6 +77,7 @@ private:
     QMap<IStatus*, QProgressBar*> m_progressBars;
     QTimer* m_timer;
     QTime m_time;
+    Sublime::View* m_currentView;
 };
 
 }
