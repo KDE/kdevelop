@@ -112,6 +112,7 @@ install(FILES
     duchain/functiondeclaration.h
     duchain/stringhelpers.h
     duchain/namespacealiasdeclaration.h
+    duchain/aliasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
     duchain/abstractcontextbuilder.h
