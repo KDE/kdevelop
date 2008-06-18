@@ -28,6 +28,10 @@
 class QProgressBar;
 class QTimer;
 
+namespace Sublime {
+class View;
+}
+
 namespace KDevelop
 {
 
@@ -50,13 +54,16 @@ public:
     void registerStatusPlugin(QObject* status);
 
     void updateMessage();
-    
+
+    void viewChanged(Sublime::View* view);
+
 private Q_SLOTS:
     void clearMessage();
     void showMessage(const QString & message, int timeout);
     void hideProgress();
     void showProgress(int minimum, int maximum, int value);
     void slotTimeout();
+    void viewStatusChanged(Sublime::View* view);
 
     void pluginLoaded(KDevelop::IPlugin*);
     

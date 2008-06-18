@@ -54,6 +54,7 @@ public:
     QPointer<QWidget> centralPlugin;
 
     void setupActions();
+    void setupGui();
 
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );

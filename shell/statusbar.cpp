@@ -24,6 +24,8 @@
 
 #include <istatus.h>
 
+#include "view.h"
+
 #include "plugincontroller.h"
 #include "ilanguagecontroller.h"
 #include "backgroundparser.h"
@@ -44,6 +46,24 @@ StatusBar::StatusBar(QWidget* parent)
         registerStatusPlugin(plugin);
 
     registerStatusPlugin(Core::self()->languageController()->backgroundParser());
+    
+    insertPermanentItem(i18n("No View Selected"), 0);
+}
+
+void StatusBar::viewChanged(Sublime::View* view)
+{
+    disconnect(0, 0, this, SLOT(viewStatusChanged(Sublime::View*)));
+    if (view) {
+        connect(view, SIGNAL(viewStatusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
+        changeItem(view->viewStatus(), 0);
+    } else {
+        changeItem(i18n("No View Selected"), 0);
+    }
+}
+
+void StatusBar::viewStatusChanged(Sublime::View* view)
+{
+    changeItem(view->viewStatus(), 0);
 }
 
 void StatusBar::pluginLoaded(IPlugin* plugin)

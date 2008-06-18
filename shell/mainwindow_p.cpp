@@ -62,8 +62,13 @@ namespace KDevelop {
 bool MainWindowPrivate::s_quitRequested = false;
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-: m_mainWindow(mainWindow), m_statusBar(new KDevelop::StatusBar(mainWindow)), lastXMLGUIClientView(0)
+: m_mainWindow(mainWindow), m_statusBar(0), lastXMLGUIClientView(0)
 {
+}
+
+void MainWindowPrivate::setupGui()
+{
+    m_statusBar = new KDevelop::StatusBar(m_mainWindow);
     m_mainWindow->setStatusBar(m_statusBar);
 }
 
@@ -102,6 +107,8 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
         lastXMLGUIClientView = NULL;
     }
+    
+    m_statusBar->viewChanged(view);
 
     if (!view)
         return;

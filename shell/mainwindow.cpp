@@ -138,6 +138,7 @@ void MainWindow::initialize()
              d, SLOT( projectOpened() ) );
     connect( Core::projectController(), SIGNAL( projectClosed() ),
              d, SLOT( projectClosed() ) );*/
+    d->setupGui();
 }
 
 void MainWindow::cleanup()
