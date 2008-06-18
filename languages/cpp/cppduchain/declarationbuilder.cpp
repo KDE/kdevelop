@@ -112,7 +112,7 @@ DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST
 }
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
-  TypeBuilder::visitTemplateParameter(ast);
+  DeclarationBuilderBase::visitTemplateParameter(ast);
   if( ast->type_parameter && ast->type_parameter->name ) {
     ///@todo deal with all the other stuff the AST may contain
     Declaration* dec = openDeclaration(ast->type_parameter->name, ast);
@@ -166,7 +166,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
 void DeclarationBuilder::parseComments(const ListNode<size_t> *comments)
 {
-  m_lastComment = CommentFormatter::formatComment(comments, editor()->parseSession());
+  setComment(CommentFormatter::formatComment(comments, editor()->parseSession()));
 }
 
 
@@ -576,12 +576,12 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
   }
 
-  declaration->setComment(m_lastComment);
-  m_lastComment = QString();
+  declaration->setComment(comment());
+  clearComment();
 
   setEncountered(declaration);
 
-  m_declarationStack.push(declaration);
+  openDeclarationInternal(declaration);
 
   return declaration;
 }
@@ -596,25 +596,6 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
         idType->setDeclaration( currentDeclaration() );
 
     currentDeclaration()->setType(type);
-}
-
-void DeclarationBuilder::eventuallyAssignInternalContext()
-{
-  if (lastContext()) {
-    DUChainWriteLocker lock(DUChain::lock());
-
-    if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
-      Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
-
-    if(lastContext() && (lastContext()->type() == DUContext::Class || lastContext()->type() == DUContext::Other || lastContext()->type() == DUContext::Function || lastContext()->type() == DUContext::Template || lastContext()->type() == DUContext::Enum) )
-    {
-      if( !lastContext()->owner() || !wasEncountered(lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
-        currentDeclaration()->setInternalContext(lastContext());
-
-        clearLastContext();
-      }
-    }
-  }
 }
 
 void DeclarationBuilder::closeDeclaration()
@@ -645,12 +626,7 @@ void DeclarationBuilder::closeDeclaration()
 
   //kDebug(9007) << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
 
-  m_declarationStack.pop();
-}
-
-void DeclarationBuilder::abortDeclaration()
-{
-  m_declarationStack.pop();
+  DeclarationBuilderBase::closeDeclaration();
 }
 
 void DeclarationBuilder::visitTypedef(TypedefAST *def)

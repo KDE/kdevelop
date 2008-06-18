@@ -20,6 +20,10 @@
 #define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
+
+typedef TypeBuilder LanguageSpecificDeclarationBuilderBase;
+
+#include <language/duchain/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
 #include <declaration.h>
 #include <duchainpointer.h>
@@ -30,7 +34,7 @@ namespace KDevelop
 class Declaration;
 }
 
-typedef TypeBuilder DeclarationBuilderBase;
+typedef KDevelop::AbstractDeclarationBuilder<AST, NameAST> DeclarationBuilderBase;
 
 /**
  * A class which iterates the AST to extract definitions of types.
@@ -61,8 +65,6 @@ public:
    */
   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
-  inline KDevelop::Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
-  
   protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
@@ -96,18 +98,11 @@ private:
   KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isNamespaceAlias = false, const Identifier& customName = Identifier());
   /// Same as the above, but sets it as the definition too
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
-  void eventuallyAssignInternalContext();
-  void closeDeclaration();
-  void abortDeclaration();
+  virtual void closeDeclaration();
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
-  inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
-
-  template<class DeclarationType>
-  inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
-  
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
@@ -121,10 +116,7 @@ private:
   void applyFunctionSpecifiers();
   void popSpecifiers();
 
-  QStack<KDevelop::Declaration*> m_declarationStack;
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
-
-  QString m_lastComment;
 
   QStack<KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
