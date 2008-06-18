@@ -41,7 +41,9 @@ protected:
   template<class DeclarationType>
   inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
 
+  inline const QString& comment() const { return m_lastComment; }
   inline void setComment(const QString& comment) { m_lastComment = comment; }
+  inline void clearComment() { m_lastComment.clear(); }
 
   /**
    * Register a new declaration with the definition-use chain.
@@ -165,12 +167,17 @@ protected:
 
     LanguageSpecificDeclarationBuilderBase::setEncountered(declaration);
 
-    m_declarationStack.push(declaration);
+    openDeclarationInternal(declaration);
 
     if (!isLocked)
       DUChain::lock()->releaseWriteLock();
 
     return declaration;
+  }
+  
+  void openDeclarationInternal(Declaration* declaration)
+  {
+    m_declarationStack.push(declaration);
   }
 
   /// Same as the above, but sets it as the definition too
@@ -192,13 +199,10 @@ protected:
       if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
         Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
 
-      if(LanguageSpecificDeclarationBuilderBase::lastContext() && (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Class || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Other || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Function || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Template ) )
+      if(LanguageSpecificDeclarationBuilderBase::lastContext() && (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Class || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Other || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Function || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Template || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Enum) )
       {
         if( !LanguageSpecificDeclarationBuilderBase::lastContext()->owner() || !LanguageSpecificDeclarationBuilderBase::wasEncountered(LanguageSpecificDeclarationBuilderBase::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
           currentDeclaration()->setInternalContext(LanguageSpecificDeclarationBuilderBase::lastContext());
-
-          if( currentDeclaration()->range().start >= currentDeclaration()->range().end )
-            kDebug() << "Warning: Range was invalidated";
 
           LanguageSpecificDeclarationBuilderBase::clearLastContext();
         }
@@ -215,15 +219,6 @@ protected:
   {
     m_declarationStack.pop();
   }
-
-#if 0
-  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
-  template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range );
-  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
-  template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const SimpleRange& range, int scope );
-#endif
 
 private:
   QStack<Declaration*> m_declarationStack;
