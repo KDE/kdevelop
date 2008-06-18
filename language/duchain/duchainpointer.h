@@ -147,6 +147,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
       Q_ASSERT(d);
       return static_cast<Type*>(d->base());
     }
+    
+    bool operator<(const DUChainPointer<Type>& rhs) const {
+      return d.data() < rhs.d.data();
+    }
 
     template<class NewType>
     DUChainPointer<NewType> dynamicCast() const {
