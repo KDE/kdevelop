@@ -33,6 +33,7 @@
 #include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
+#include "aliasdeclaration.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
@@ -466,11 +467,22 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
     for( ; it != end && it.key() == identifier; ++it ) {
       Declaration* declaration = (*it).data();
 
-      if(!declaration) {
+      if( !declaration ) {
         //This should never happen, but let's see
         kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
         continue;
       }
+      
+      if( declaration->kind() == Declaration::Alias ) {
+        //Apply alias declarations
+        AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
+        if(alias->aliasedDeclaration()) {
+          declaration = alias->aliasedDeclaration().data();
+        } else {
+          kDebug() << "lost aliased declaration";
+        }
+      }
+
       if( declaration->kind() == Declaration::NamespaceAlias )
         continue; //Do not include NamespaceAliasDeclarations here, they are handled by DUContext directly.
 

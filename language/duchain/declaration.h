@@ -74,7 +74,8 @@ public:
   enum Kind {
     Type     /**< A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};") */,
     Instance /**< An instance of a type is declared("MyClass m;") */,
-    NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */
+    NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */,
+    Alias /**<This is an alias-declaration. You can safely cast this object to AliasDeclaration. */,
   };
 
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)

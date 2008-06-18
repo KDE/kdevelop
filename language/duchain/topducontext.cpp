@@ -28,6 +28,7 @@
 #include "duchainpointer.h"
 #include "declarationid.h"
 #include "namespacealiasdeclaration.h"
+#include "aliasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include <hashedstring.h>
 #include <iproblem.h>
@@ -562,6 +563,17 @@ struct TopDUContext::FindDeclarationsAcceptor {
         continue;
       if(decl->identifier() != *element.identifier) ///@todo eventually do more extensive checking
         continue;
+      
+      if( decl->kind() == Declaration::Alias ) {
+        //Apply alias declarations
+        AliasDeclaration* alias = static_cast<AliasDeclaration*>(decl);
+        if(alias->aliasedDeclaration()) {
+          decl = alias->aliasedDeclaration().data();
+        } else {
+          kDebug() << "lost aliased declaration";
+        }
+      }
+      
       
       target.append(decl);
     }
