@@ -1127,7 +1127,7 @@ void TestDUChain::testFunctionDefinition() {
   QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].data(), top->childContexts()[1]);
   
   
-  //QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
+  QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
 
   QVERIFY(top->localDeclarations()[2]->internalContext());
   QCOMPARE(top->localDeclarations()[2]->internalContext()->localDeclarations().count(), 1);

@@ -358,20 +358,20 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     newRange = editor()->findRange(rangeNode);
   }
 
-  Identifier localId;
+  Identifier localId = customName;
 
   if (name) {
     TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator. This is not catched by the type builder.
-    localId = identifierForNode(name, &typeSpecifier).last();
+    QualifiedIdentifier id = identifierForNode(name, &typeSpecifier);
     
     static Identifier castIdentifier("operator{...cast...}");
     
-    if( typeSpecifier && localId == castIdentifier ) {
+    if( typeSpecifier && id.last() == castIdentifier ) {
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
     }
-  } else {
-    localId = customName;
+    if(localId.isEmpty())
+      localId = id.last();
   }
 
   T* declaration = 0;
@@ -524,12 +524,27 @@ Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* range
 }
 
 Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* rangeNode) {
+  
+   QualifiedIdentifier id = identifierForNode(name);
+   Identifier localId = id.last(); //This also copies the template arguments
+   if(id.count() > 1) {
+     //Merge the scope of the declaration, and put them tog. Add semicolons instead of the ::, so you can see it's not a qualified identifier.
+     //Else the declarations could be confused with global functions.
+     //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
+     
+     QString newId = id.last().identifier();
+     for(int a = id.count()-2; a >= 0; --a)
+       newId = id.at(a).identifier() + ";;" + newId;
+ 
+     localId.setIdentifier(newId);
+   }
+  
   if(currentContext()->type() == DUContext::Class) {
-    ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode);
+    ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
     fun->setAccessPolicy(currentAccessPolicy());
     return fun;
   } else {
-    return openDeclaration<FunctionDeclaration>(name, rangeNode);
+    return openDeclaration<FunctionDeclaration>(name, rangeNode, localId);
   }
 }
 
