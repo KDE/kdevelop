@@ -21,8 +21,8 @@
     <rect>
      <x>0</x>
      <y>34</y>
-     <width>630</width>
-     <height>196</height>
+     <width>186</width>
+     <height>369</height>
     </rect>
    </property>
    <layout class="QGridLayout" >
@@ -39,6 +39,9 @@
       </property>
       <property name="selectionMode" >
        <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="indentation" >
+       <number>15</number>
       </property>
      </widget>
     </item>
@@ -81,10 +84,10 @@
   <widget class="QDockWidget" name="dockResults" >
    <property name="geometry" >
     <rect>
-     <x>0</x>
-     <y>236</y>
-     <width>630</width>
-     <height>167</height>
+     <x>192</x>
+     <y>34</y>
+     <width>438</width>
+     <height>369</height>
     </rect>
    </property>
    <property name="features" >
@@ -94,15 +97,15 @@
     <string>Results</string>
    </property>
    <attribute name="dockWidgetArea" >
-    <number>8</number>
+    <number>2</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents" >
     <property name="geometry" >
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>630</width>
-      <height>147</height>
+      <width>438</width>
+      <height>349</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" >

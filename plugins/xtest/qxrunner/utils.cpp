@@ -31,6 +31,8 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include <QIcon>
+#include <KIcon>
+#include <KIconLoader>
 #include <QSortFilterProxyModel>
 
 namespace QxRunner
@@ -51,32 +53,31 @@ QVariant Utils::resultIcon(int result)
 {
     switch (result) {
     case QxRunner::RunSuccess:
-        return QIcon(":/icons/success.png");
-        break;
+        return QIcon(KIconLoader::global()->loadIcon("dialog-ok-apply", KIconLoader::Small));
+        //KIcon("dialog-ok-apply");
 
     case QxRunner::RunInfo:
         return QIcon(":/icons/info.png");
-        break;
 
     case QxRunner::RunWarning:
         return QIcon(":/icons/warning.png");
-        break;
 
     case QxRunner::RunError:
-        return QIcon(":/icons/error.png");
-        break;
+        return QIcon(KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small));
+        //KIcon("edit-delete");
 
     case QxRunner::RunFatal:
         return QIcon(":/icons/fatal.png");
-        break;
 
     case QxRunner::RunException:
         return QIcon(":/icons/exception.png");
-        break;
 
+    case QxRunner::NoResult:
+        return QIcon(KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::Small));
+        //KIcon("dialog-ok");
+        
     default:
         return QIcon(":/icons/item.png");
-        break;
     }
 }
 

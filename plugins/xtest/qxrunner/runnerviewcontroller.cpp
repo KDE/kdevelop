@@ -27,6 +27,7 @@
 
 #include "runnerviewcontroller.h"
 #include "runnermodel.h"
+#include "runneritem.h"
 #include "runnerproxymodel.h"
 #include "utils.h"
 
@@ -165,7 +166,8 @@ void RunnerViewController::selectAllItems(bool select) const
 
     while (currentIndex.isValid()) {
         runnerItemIndex = Utils::modelIndexFromProxy(proxyModel(), currentIndex);
-        runnerModel()->setItemChecked(runnerItemIndex, select);
+        //runnerModel()->setItemChecked(runnerItemIndex, select);
+        runnerModel()->itemFromIndex(runnerItemIndex)->setSelected(select);
 
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
@@ -217,8 +219,9 @@ bool RunnerViewController::eventFilter(QObject* obj, QEvent* event)
     // Mimick a click of the user.
     QModelIndex runnerItemIndex;
     runnerItemIndex = Utils::modelIndexFromProxy(proxyModel(), highlightedRow());
-    bool checked = runnerModel()->data(runnerItemIndex, Qt::CheckStateRole).toBool();
-    runnerModel()->setItemChecked(runnerItemIndex, !checked);
+    RunnerItem* item = runnerModel()->itemFromIndex(runnerItemIndex);
+    bool checked = item->isSelected();
+    item->setSelected(!checked);
 
     return true;
 }

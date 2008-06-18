@@ -32,10 +32,10 @@ namespace QxRunner
 {
 
 RunnerItem::RunnerItem(const QList<QVariant>& data, RunnerItem* parent)
+    : m_parentItem(parent),
+      m_itemData(data),
+      m_result(QxRunner::NoResult)
 {
-    m_parentItem = parent;
-    m_itemData = data;
-
     // Make sure this item has as many columns as the parent.
     if (m_parentItem) {
         int parentColumns = m_parentItem->columnCount();
@@ -45,9 +45,7 @@ RunnerItem::RunnerItem(const QList<QVariant>& data, RunnerItem* parent)
             m_itemData.append("");
         }
     }
-
     setSelected(true);
-    setResult(QxRunner::NoResult);
 }
 
 RunnerItem::~RunnerItem()
@@ -141,6 +139,8 @@ bool RunnerItem::isSelected() const
 void RunnerItem::setSelected(bool select)
 {
     m_selected = select;
+    foreach (RunnerItem* child, m_childItems)
+        child->setSelected(select);
 }
 
 int RunnerItem::result() const

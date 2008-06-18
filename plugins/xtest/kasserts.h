@@ -25,27 +25,26 @@
 
 namespace QTest
 {
-    template<> inline char* toString(const QFileInfo& fi)
-    {
-        return qstrdup(fi.filePath().toLatin1().constData());
-    }
-    template<> inline char* toString(const QVariant& va)
-    {
-        return qstrdup(va.toString().toLatin1().constData());
-    }
 
+template<> inline char* toString(const QFileInfo& fi)
+{
+    return qstrdup(fi.filePath().toLatin1().constData());
+}
+template<> inline char* toString(const QVariant& va)
+{
+    return qstrdup(va.toString().toLatin1().constData());
 }
 
+} // namespace QTest
 
 #define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
 #define KVERIFY(condition) QVERIFY(condition)
 #define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual)) 
-// actually there's a subtle problem with this macro, will have to look into it a bit
-// I'm getting 'QFATAL : RunnerModelTest::runItems() ASSERT: "!isEmpty()" in file /usr/include/QtCore/qlist.h, line 252'
-// QCOMPARE generates no such assert ...
+#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
+// this is not quite what we want if expected/actual modifies stuff, and thus is caled twice ...
 #define KTODO QWARN("Test command not implemented yet")
 
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") + QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") +\
+        QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
 
 #endif // QXQTEST_KASSERTS_H

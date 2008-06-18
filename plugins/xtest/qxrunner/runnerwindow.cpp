@@ -35,6 +35,7 @@
 #include "statuswidget.h"
 #include "stoppingdialog.h"
 #include "utils.h"
+#include "selectionmanager.h"
 
 #include <QMessageBox>
 #include <QCloseEvent>
@@ -150,6 +151,9 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 
     // Set initially available.
     m_sema.release();
+
+    runnerView()->setMouseTracking(true);
+    m_selection = new SelectionManager(runnerView());
 }
 
 RunnerWindow::~RunnerWindow()

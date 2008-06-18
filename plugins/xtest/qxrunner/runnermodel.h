@@ -33,6 +33,7 @@
 
 #include <QAbstractItemModel>
 #include <QMutex>
+#include <QIcon>
 #include <QEvent>
 #include <QPair>
 
@@ -152,12 +153,6 @@ public:  // Operations
     int expectedResults() const;
 
     /*!
-     * Sets the check state for the item at \a index and any children
-     * to \a checked.
-     */
-    void setItemChecked(const QModelIndex& index, bool checked);
-
-    /*!
      * Removes previous results and starts runner item execution.
      * Forces attached views to update.
      */
@@ -188,6 +183,13 @@ public:  // Operations
      * created.
      */
     ResultsModel* resultsModel();
+
+    bool someChildHasStatus(int status, const QModelIndex& parent) const;
+
+    /*!
+     * Returns the runner item the \a index refers to.
+     */
+    RunnerItem* itemFromIndex(const QModelIndex& index) const;
 
 signals:
 
@@ -296,11 +298,6 @@ protected: // Operations
      */
     void setExpectedResults(int expectedResults);
 
-    /*!
-     * Returns the runner item the \a index refers to.
-     */
-    RunnerItem* itemFromIndex(const QModelIndex& index) const;
-
 private:  // Operations
 
     void initItemConnect(QModelIndex current);
@@ -310,18 +307,6 @@ private:  // Operations
      * update mode.
      */
     QVariant dataForMinimalUpdate(const QModelIndex& index, int role) const;
-
-    /*!
-     * Helper method to initialize internal data used for item check
-     * state management.
-     */
-    void initializeSelectionMap();
-
-    /*!
-     * Helper method to update internal data used for item check state
-     * management with data from \a index.
-     */
-    void updateSelectionMap(const QModelIndex& index);
 
     /*!
      * Entry point for thread processing in the model.
@@ -380,24 +365,6 @@ private:  // Operations
     bool isMinimalUpdate() const;
 
     /*!
-     * Helper method to recursively set the check state of the parent
-     * item at \a index and its children to \a checked.
-     */
-    void setParentItemChecked(const QModelIndex& index, bool checked);
-
-    /*!
-     * Helper method to set the check state of the child item at
-     * \a index to \a checked.
-     */
-    void setChildItemChecked(const QModelIndex& index, bool checked);
-
-    /*!
-     * Returns the check state of the item at \a index. Child items
-     * are two-state and parents are tri-state.
-     */
-    QVariant itemCheckState(const QModelIndex& index) const;
-
-    /*!
      * Processes events from the thread and fires signals with data
      * from the events. Forces attached views to update.
      */
@@ -435,6 +402,10 @@ private:  // Attributes
     int m_numErrors;
     int m_numFatals;
     int m_numExceptions;
+
+    QIcon m_greenFolderIcon;
+    QIcon m_redFolderIcon;
+    QIcon m_blueFolderIcon;
 
     typedef QPair<int, int> SelectionPair;
     typedef QMap<qint64, SelectionPair> SelectionMap;

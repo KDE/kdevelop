@@ -96,5 +96,6 @@ KDevXtestPlugin::~KDevXtestPlugin()
 
 Qt::DockWidgetArea KDevXtestPlugin::dockWidgetAreaHint() const 
 {
-    return Qt::LeftDockWidgetArea;
+    return Qt::BottomDockWidgetArea;
+    //return Qt::LeftDockWidgetArea;
 }

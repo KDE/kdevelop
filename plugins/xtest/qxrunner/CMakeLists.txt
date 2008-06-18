@@ -31,7 +31,9 @@ set(qxrunner_SRCS
     statuswidget.cpp
     stoppingdialog.cpp
     utils.cpp
-    viewcontrollercommon.cpp)
+    viewcontrollercommon.cpp
+    selectionmanager.cpp
+    selectiontoggle.cpp)
 
 kde4_add_ui_files(qxrunner_SRCS
     runnerwindow.ui
@@ -45,6 +47,7 @@ kde4_add_library(qxrunner SHARED ${qxrunner_SRCS})
 target_link_libraries(qxrunner
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDECORE_LIBS})
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS})
 qt4_automoc(${qxrunner_SRCS})
 install(TARGETS qxrunner ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -47,7 +47,6 @@ private slots:
     void appendResults();
     void changeItems();
     void flags();
-    void changeChecked();
     void runItems();
     void errorHandling();
     void countItems();
@@ -56,7 +55,6 @@ private:
     // custom asserts
     void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
-    void assertItemChecked(int row, bool checked = true);
     void verifyRowContent(int index);
     void assertSignalValue(QSignalSpy* spy, int expected);
 

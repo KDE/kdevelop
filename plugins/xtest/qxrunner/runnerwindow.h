@@ -51,6 +51,7 @@ class ResultsModel;
 class ResultsProxyModel;
 class RunnerViewController;
 class ResultsViewController;
+class SelectionManager;
 
 /*!
  * \brief The RunnerWindow class defines the QxRunner main window.
@@ -353,15 +354,12 @@ private: // Operations
 private: // Attributes
 
     Ui::RunnerWindow m_ui;
-
     StatusWidget* m_statusWidget;
-
     QSemaphore m_sema;
-
     QBrush m_highlightBrush;
-
     RunnerViewController*  m_runnerViewController;
     ResultsViewController* m_resultsViewController;
+    SelectionManager* m_selection;
 };
 
 } // namespace

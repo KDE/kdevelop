@@ -153,4 +153,4 @@ void ResultsModelTest::fillRows()
     model->addResult(runnerModel->index(1, 0)); // invoke slot
 }
 
-QTEST_KDEMAIN(ResultsModelTest, NoGUI)
+QTEST_KDEMAIN(ResultsModelTest, GUI)

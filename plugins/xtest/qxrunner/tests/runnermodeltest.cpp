@@ -83,34 +83,15 @@ void RunnerModelTest::changeItems()
                 "Only allowed to select/deselect, not change arbitrary data");
     KVERIFY_MSG(!model->setData(model->index(0, 0), true, Qt::EditRole),
                 "Only allowed to select/deselect, not change arbitrary data");
-
-    KVERIFY_MSG(model->setData(model->index(0, 0), false, Qt::CheckStateRole),
-                "Failed to set checked state, this is bad mkay.");
-    assertItemChecked(0, false);
-    KVERIFY_MSG(model->setData(model->index(0, 0), true, Qt::CheckStateRole),
-                "Failed to set checked state, this is bad mkay.");
-    assertItemChecked(0, true);
 }
 
 // test command
 void RunnerModelTest::flags()
 {
     model->fill();
-    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable), model->flags(model->index(0, 0)));
+    KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 0)));
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 1)));
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 2)));
-}
-
-// test command
-void RunnerModelTest::changeChecked()
-{
-    model->fill();
-    QModelIndex row0 = model->index(0, 0);
-    assertItemChecked(0, true);
-    model->setItemChecked(row0, false);
-    assertItemChecked(0, false);
-    model->setItemChecked(row0, true);
-    assertItemChecked(0, true);
 }
 
 // test command
@@ -144,10 +125,6 @@ void RunnerModelTest::errorHandling()
     KOMPARE(Qt::ItemIsEnabled, model->flags(QModelIndex()));
 
     KOMPARE(QModelIndex(), model->parent(QModelIndex()));
-
-    // KOMPARE(QVariant(Qt::Unchecked), model->itemCheckState(QModelIndex())); <- private
-
-    model->setItemChecked(QModelIndex(), true); // just exercise, result should be nada
 
     KOMPARE(illegal, model->headerData(0, Qt::Vertical, Qt::DisplayRole));
     KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::CheckStateRole));
@@ -199,19 +176,12 @@ void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
 
-void RunnerModelTest::assertItemChecked(int row, bool checked)
-{
-    bool actualCheckState = model->data(model->index(row, 0), Qt::CheckStateRole).toBool();
-    KVERIFY_MSG(actualCheckState == checked, checked ? "Should be checked" : "Should not be checked");
-}
-
 void RunnerModelTest::verifyRowContent(int index)
 {
     QString rowStr = QString::number(index);
     assertDataAt(rowStr + '0', index, 0);
     assertDataAt(rowStr + '1', index, 1);
     assertDataAt(rowStr + '2', index, 2);
-    assertItemChecked(index, true);
 
     KOMPARE(0, model->rowCount(model->index(index, 0))); // no children
     KOMPARE(3, model->columnCount(model->index(index, 0)));
@@ -228,4 +198,4 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
     spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
 }
 
-QTEST_KDEMAIN(RunnerModelTest, NoGUI)
+QTEST_KDEMAIN(RunnerModelTest, GUI)

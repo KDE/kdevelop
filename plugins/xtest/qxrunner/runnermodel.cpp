@@ -33,13 +33,19 @@
 
 #include <QStringList>
 #include <QIcon>
+#include <KGlobal>
+#include <KIcon>
+#include <KIconLoader>
 #include <QCoreApplication>
 
 namespace QxRunner
 {
 
 RunnerModel::RunnerModel(QObject* parent)
-        : QAbstractItemModel(parent)
+        : QAbstractItemModel(parent),
+          m_greenFolderIcon(KIconLoader::global()->loadIcon("folder-green", KIconLoader::Small)),
+          m_redFolderIcon  (KIconLoader::global()->loadIcon("folder-red", KIconLoader::Small)),
+          m_blueFolderIcon (KIconLoader::global()->loadIcon("folder-blue", KIconLoader::Small))
 {
     // Initialize counters.
     m_numSelected = 0;
@@ -106,55 +112,46 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    if (role == Qt::CheckStateRole) {
-        return itemCheckState(index);
-    }
-
     if (role != Qt::DecorationRole) {
         return QVariant();
     }
 
-    // Return decoration which reflects the item's result state.
-    if (index == m_startedItemIndex) {
-        return QIcon(":/icons/play.png");
-    }
-
     if (index.child(0, 0).isValid()) {
-        return QIcon(":/icons/group.png");
-    }
-
-    // Ready to run but no result yet.
-    if (item->isSelected() && item->result() == QxRunner::NoResult) {
-        return QIcon(":/icons/item_run.png");
+        if (someChildHasStatus(QxRunner::RunError, index))
+            return m_redFolderIcon;
+        else if (someChildHasStatus(QxRunner::NoResult, index))
+            return m_blueFolderIcon;
+        else // evrything ran succesfully
+            return m_greenFolderIcon;
     }
 
     // Icon corresponding to the item's result code.
     return Utils::resultIcon(item->result());
 }
 
+bool RunnerModel::someChildHasStatus(int status, const QModelIndex& parent) const
+{
+    QModelIndex currentIndex = parent;
+    if (currentIndex.child(0,0).isValid()) {
+        currentIndex = currentIndex.child(0,0);
+        while (currentIndex.isValid())
+        {
+            if (someChildHasStatus(status, currentIndex))
+                return true;
+            currentIndex = currentIndex.sibling(currentIndex.row()+1, 0);
+        }
+    } else {
+        return (status == itemFromIndex(currentIndex)->result());
+    }
+    return false;
+}
+
 bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (!index.isValid()) {
-        return false;
-    }
-
-    // No data changes from the outside when items are running.
-    if (isRunning()) {
-        return false;
-    }
-
-    // The only data which can be set from the outside is the selected flag.
-    if (role != Qt::CheckStateRole || index.column() != 0) {
-        return false;
-    }
-
-    if (index.child(0, 0).isValid()) {
-        setParentItemChecked(index, value.toBool());
-    } else {
-        setChildItemChecked(index, value.toBool());
-    }
-
-    return true;
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
+    return false;
 }
 
 Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
@@ -163,11 +160,7 @@ Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
         return Qt::ItemIsEnabled;
     }
 
-    if (index.column() > 0) {
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    } else {
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
-    }
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 QVariant RunnerModel::headerData(int section, Qt::Orientation orientation,
@@ -353,22 +346,6 @@ int RunnerModel::expectedResults() const
     return m_expectedResults;
 }
 
-void RunnerModel::setItemChecked(const QModelIndex& index, bool checked)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    if (index.child(0, 0).isValid()) {
-        // Children of parent items get the same check state.
-        setParentItemChecked(index, checked);
-    } else {
-        // Set check state for this item. This also calculates the
-        // check state of any parent items.
-        setData(index, checked, Qt::CheckStateRole);
-    }
-}
-
 void RunnerModel::runItems()
 {
     // No start when thread already/still runs.
@@ -518,6 +495,8 @@ RunnerItem* RunnerModel::itemFromIndex(const QModelIndex& index) const
 
 QVariant RunnerModel::dataForMinimalUpdate(const QModelIndex& index, int role) const
 {
+    // dead code.
+
     if (!index.isValid()) {
         return QVariant();
     }
@@ -531,18 +510,13 @@ QVariant RunnerModel::dataForMinimalUpdate(const QModelIndex& index, int role) c
 
     if (role == Qt::DecorationRole) {
         if (index.child(0, 0).isValid()) {
-            return QIcon(":/icons/group.png");
+            return KIcon("arrow-right-double");
         }
 
         if (item->isSelected()) {
-            return QIcon(":/icons/item_run.png");
+            return KIcon("arrow-right");
         }
-
-        return QIcon(":/icons/item.png");
-    }
-
-    if (role == Qt::CheckStateRole) {
-        return itemCheckState(index);
+        return KIcon("arrow-right");
     }
 
     if (role == Qt::DisplayRole) {
@@ -552,68 +526,68 @@ QVariant RunnerModel::dataForMinimalUpdate(const QModelIndex& index, int role) c
     return QVariant();
 }
 
-void RunnerModel::initializeSelectionMap()
-{
-    m_selectionMap.clear();
-
-    // Process all top level items.
-    QModelIndex currentIndex = index(0, 0);
-
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            // Recursively process sub branches.
-            updateSelectionMap(currentIndex.child(0, 0));
-        }
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
-}
-
-void RunnerModel::updateSelectionMap(const QModelIndex& index)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    QModelIndex currentIndex = index;
-
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            // Recursively process sub branches.
-            updateSelectionMap(currentIndex.child(0, 0));
-
-            currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-            continue;
-        }
-
-        // Update counters for all parents depending on the item state.
-        RunnerItem* item = itemFromIndex(currentIndex);
-
-        QModelIndex parentIndex = currentIndex.parent();
-        SelectionPair pair;
-
-        while (parentIndex.isValid()) {
-            if (m_selectionMap.contains(parentIndex.internalId())) {
-                pair = m_selectionMap.value(parentIndex.internalId());
-            } else {
-                pair = SelectionPair(0, 0);
-            }
-
-            pair.first++;
-
-            if (item->isSelected()) {
-                pair.second++;
-            }
-
-            m_selectionMap[parentIndex.internalId()] = pair;
-
-            // Next parent.
-            parentIndex = parentIndex.parent();
-        }
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
-}
+// void RunnerModel::initializeSelectionMap()
+// {
+//     m_selectionMap.clear();
+// 
+//     // Process all top level items.
+//     QModelIndex currentIndex = index(0, 0);
+// 
+//     while (currentIndex.isValid()) {
+//         if (currentIndex.child(0, 0).isValid()) {
+//             // Recursively process sub branches.
+//             updateSelectionMap(currentIndex.child(0, 0));
+//         }
+// 
+//         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+//     }
+// }
+// 
+// void RunnerModel::updateSelectionMap(const QModelIndex& index)
+// {
+//     if (!index.isValid()) {
+//         return;
+//     }
+// 
+//     QModelIndex currentIndex = index;
+// 
+//     while (currentIndex.isValid()) {
+//         if (currentIndex.child(0, 0).isValid()) {
+//             // Recursively process sub branches.
+//             updateSelectionMap(currentIndex.child(0, 0));
+// 
+//             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+//             continue;
+//         }
+// 
+//         // Update counters for all parents depending on the item state.
+//         RunnerItem* item = itemFromIndex(currentIndex);
+// 
+//         QModelIndex parentIndex = currentIndex.parent();
+//         SelectionPair pair;
+// 
+//         while (parentIndex.isValid()) {
+//             if (m_selectionMap.contains(parentIndex.internalId())) {
+//                 pair = m_selectionMap.value(parentIndex.internalId());
+//             } else {
+//                 pair = SelectionPair(0, 0);
+//             }
+// 
+//             pair.first++;
+// 
+//             if (item->isSelected()) {
+//                 pair.second++;
+//             }
+// 
+//             m_selectionMap[parentIndex.internalId()] = pair;
+// 
+//             // Next parent.
+//             parentIndex = parentIndex.parent();
+//         }
+// 
+//         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+//     }
+// }
 
 void RunnerModel::threadCode()
 {
@@ -695,57 +669,36 @@ void RunnerModel::runItem(const QModelIndex& index)
 {
     // This is thread code!
 
-    if (!index.isValid()) {
+    if (!index.isValid() || mustStop())
         return;
-    }
-
-    if (mustStop()) {
-        return;  // Soft stop
-    }
-
     QModelIndex currentIndex = index;
 
     while (currentIndex.isValid()) {
+        if (mustStop())
+            break;
 
         if (currentIndex.child(0, 0).isValid()) {
             // Go down one level.
             runItem(currentIndex.child(0, 0));
-
-        }
-
-        if (mustStop()) {
-            break;  // Soft stop
         }
 
         RunnerItem* item = itemFromIndex(currentIndex);
-
         if (!item->isRunnable() || !item->isSelected()) {
             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
             continue;
         }
 
-        // Set flag for thread synchronization.
-        //setMustWait(true);
-
-        // results get reported through signaling, initialized in initItemConnect()
-
-        // Check stop flag before item processing.
-        if (mustStop()) {
-            break;  // Soft stop
-        }
+        if (mustStop())
+            break;
 
         // Execute custom code.
         int res = 0;
         try {
-            //item->setModel(this);
-            res = item->run();
+            // results get reported with signals, initialized in initItemConnect()
+            item->run();
         } catch (...) {
             item->setResult(QxRunner::RunException);
             postItemCompleted(currentIndex);
-        }
-
-        if (mustStop()) {
-            break;  // Soft stop
         }
 
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
@@ -809,136 +762,110 @@ bool RunnerModel::isMinimalUpdate() const
     return m_minimalUpdate;
 }
 
-void RunnerModel::setParentItemChecked(const QModelIndex& index, bool checked)
-{
-    if (!index.isValid()) {
-        return;
-    }
 
-    // Note that the check state of parent items is calculated whenever the
-    // check state of one of its children is changed. Parent items are tri-state
-    // and their check state depends on the number of checked/unchecked children.
-
-    // Start with first child.
-    QModelIndex currentIndex = index.child(0, 0);
-
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            // Recursively process a sub branch.
-            setParentItemChecked(currentIndex, checked);
-        } else {
-            // Set check state for this child item. This also calculates the
-            // check state of the parent items.
-            setData(currentIndex, checked, Qt::CheckStateRole);
-        }
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
-}
-
-void RunnerModel::setChildItemChecked(const QModelIndex& index, bool checked)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    // The same item can get processed more than once per activation due to
-    // how it gets selected in the GUI and how the model/view framework reacts
-    // to the selection, therefore only 'real' changes are counted.
-    bool changed = false;
-
-    RunnerItem* item = itemFromIndex(index);
-
-    bool newState = checked;
-    bool oldState = item->isSelected();
-
-    if (newState != oldState) {
-        if (newState) {
-            m_numSelected++;
-        } else {
-            m_numSelected--;
-        }
-
-        item->setSelected(newState);
-        changed = true;
-
-        emit numSelectedChanged(m_numSelected);
-    }
-
-    // Update views anyway.
-    emit dataChanged(index, index);
-
-    // Done when no changes occurred.
-    if (!changed) {
-        return;
-    }
-
-    // Updated counters of the child item's parents for their
-    // tri-state handling.
-    QModelIndex parentIndex = index.parent();
-    SelectionPair pair;
-
-    while (parentIndex.isValid()) {
-        if (m_selectionMap.contains(parentIndex.internalId())) {
-            pair = m_selectionMap.value(parentIndex.internalId());
-        } else {
-            pair = SelectionPair(0, 0); // Shouldn't happen
-        }
-
-        if (item->isSelected()) {
-            pair.second++;
-        } else {
-            pair.second--;
-        }
-
-        m_selectionMap[parentIndex.internalId()] = pair;
-
-        // Update views to reflect state of parent item.
-        emit dataChanged(parentIndex, parentIndex);
-
-        parentIndex = parentIndex.parent();
-    }
-}
-
-QVariant RunnerModel::itemCheckState(const QModelIndex& index) const
-{
-    if (!index.isValid()) {
-        return Qt::Unchecked;
-    }
-
-    RunnerItem* item = itemFromIndex(index);
-
-    if (!index.child(0, 0).isValid()) {
-        // Non-parents have two states.
-        if (item->isSelected()) {
-            return Qt::Checked;
-        } else {
-            return Qt::Unchecked;
-        }
-    }
-
-    // If not yet there then setup selection map for tri-state handling.
-    if (m_selectionMap.count() < 1) {
-        const_cast<RunnerModel*>(this)->initializeSelectionMap();
-    }
-
-    // Parent items are tri-state.
-    SelectionPair pair;
-
-    if (m_selectionMap.contains(index.internalId())) {
-        pair = m_selectionMap.value(index.internalId());
-    } else {
-        pair = SelectionPair(0, 0); // Shouldn't happen
-    }
-
-    if (pair.first == pair.second) {
-        return Qt::Checked;
-    } else if (pair.second > 0) {
-        return Qt::PartiallyChecked;
-    } else {
-        return Qt::Unchecked;
-    }
-}
+// void RunnerModel::setChildItemChecked(const QModelIndex& index, bool checked)
+// {
+//     if (!index.isValid()) {
+//         return;
+//     }
+// 
+//     // The same item can get processed more than once per activation due to
+//     // how it gets selected in the GUI and how the model/view framework reacts
+//     // to the selection, therefore only 'real' changes are counted.
+//     bool changed = false;
+// 
+//     RunnerItem* item = itemFromIndex(index);
+// 
+//     bool newState = checked;
+//     bool oldState = item->isSelected();
+// 
+//     if (newState != oldState) {
+//         if (newState) {
+//             m_numSelected++;
+//         } else {
+//             m_numSelected--;
+//         }
+// 
+//         item->setSelected(newState);
+//         changed = true;
+// 
+//         emit numSelectedChanged(m_numSelected);
+//     }
+// 
+//     // Update views anyway.
+//     emit dataChanged(index, index);
+// 
+//     // Done when no changes occurred.
+//     if (!changed) {
+//         return;
+//     }
+// 
+//     // Updated counters of the child item's parents for their
+//     // tri-state handling.
+//     QModelIndex parentIndex = index.parent();
+//     SelectionPair pair;
+// 
+//     while (parentIndex.isValid()) {
+//         if (m_selectionMap.contains(parentIndex.internalId())) {
+//             pair = m_selectionMap.value(parentIndex.internalId());
+//         } else {
+//             pair = SelectionPair(0, 0); // Shouldn't happen
+//         }
+// 
+//         if (item->isSelected()) {
+//             pair.second++;
+//         } else {
+//             pair.second--;
+//         }
+// 
+//         m_selectionMap[parentIndex.internalId()] = pair;
+// 
+//         // Update views to reflect state of parent item.
+//         emit dataChanged(parentIndex, parentIndex);
+// 
+//         parentIndex = parentIndex.parent();
+//     }
+// }
+// 
+// QVariant RunnerModel::itemCheckState(const QModelIndex& index) const
+// {
+//     if (!index.isValid()) {
+//         return Qt::Unchecked;
+//     }
+// 
+//     RunnerItem* item = itemFromIndex(index);
+// 
+//     if (!index.child(0, 0).isValid()) {
+//         // Non-parents have two states.
+//         if (item->isSelected()) {
+//             return Qt::Checked;
+//         } else {
+//             return Qt::Unchecked;
+//         }
+//     }
+// 
+//     // If not yet there then setup selection map for tri-state handling.
+//     if (m_selectionMap.count() < 1) {
+//         const_cast<RunnerModel*>(this)->initializeSelectionMap();
+//     }
+// 
+//     // Parent items are tri-state.
+//     SelectionPair pair;
+// 
+//     if (m_selectionMap.contains(index.internalId())) {
+//         pair = m_selectionMap.value(index.internalId());
+//     } else {
+//         pair = SelectionPair(0, 0); // Shouldn't happen
+//     }
+// 
+//     if (pair.first == pair.second) {
+//         return Qt::Checked;
+//     } else if (pair.second > 0) {
+//         return Qt::PartiallyChecked;
+//     } else {
+//         return Qt::Unchecked;
+//     }
+// }
 
 bool RunnerModel::event(QEvent* event)
 {
