@@ -229,7 +229,9 @@ MacroBlock::MacroBlock(int _sourceLine)
 
 MacroBlock::~MacroBlock()
 {
-  qDeleteAll(macros);
+  foreach (pp_macro* macro, macros)
+    delete[] macro;
+  
   qDeleteAll(childBlocks);
   delete elseBlock;
 }

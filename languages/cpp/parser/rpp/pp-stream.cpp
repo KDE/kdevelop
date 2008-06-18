@@ -55,6 +55,7 @@ Stream::Stream()
   , m_locationTable(0L)
   , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
 {
+  end = 0;
 }
 
 Stream::Stream( PreprocessedContents * string, const Anchor& offset, LocationTable* table )

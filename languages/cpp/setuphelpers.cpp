@@ -107,7 +107,7 @@ void insertMacro(Cpp::LazyMacroSet& macros, const rpp::pp_dynamic_macro& macro)
 {
   rpp::pp_macro* m = makeConstant(&macro);
   macros.insert(*m);
-  delete m;
+  delete[] m;
 }
 
 bool setupStandardMacros(Cpp::LazyMacroSet& macros)
