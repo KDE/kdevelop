@@ -19,7 +19,7 @@ find_library(CPPUNIT_LIBRARY
 if (CPPUNIT_INCLUDE_DIR AND CPPUNIT_LIBRARY)
     set(CPPUNIT_FOUND on)
 endif (CPPUNIT_INCLUDE_DIR AND CPPUNIT_LIBRARY)
-macro_log_feature(CPPUNIT_FOUND "CppUnit" "CppUnit is a C++ unit testing framework" "http://cppunit.sourceforge.net")
+macro_log_feature(CPPUNIT_FOUND "CppUnit" "A C++ unit testing framework" "http://cppunit.sourceforge.net" FALSE "" "Needed for building qxcppunit")
 
 if (CPPUNIT_FOUND)
     add_subdirectory(qxcppunit)
