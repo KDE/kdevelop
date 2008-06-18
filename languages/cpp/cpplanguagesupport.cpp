@@ -817,8 +817,14 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
   delete env;
 
   if( !top ) {
-    kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
-    top = DUChain::self()->chainForDocument(url);
+    //kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
+    //Preferably pick a context that is not empty
+    QList<TopDUContext*> candidates = DUChain::self()->chainsForDocument(url);
+    foreach(TopDUContext* candidate, candidates)
+      if(!candidate->localDeclarations().isEmpty() || !candidate->childContexts().isEmpty())
+      top = candidate;
+    if(!top && !candidates.isEmpty())
+      top = candidates[0];
   }
 
   if(top && (top->flags() & TopDUContext::ProxyContextFlag) && !allowProxyContext)
@@ -878,7 +884,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   QString word(found.first.first);
   SimpleRange wordRange(found.first.second);
 
-  for(uint pos = wordRange.end.column-wordRange.start.column-1; pos >= 0; --pos) {
+  for(int pos = wordRange.end.column-wordRange.start.column-1; pos >= 0; --pos) {
     if(word[pos] == '"' || word[pos].isSpace() || word[pos] == '>')
       --wordRange.end.column;
     else
@@ -901,7 +907,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
   }
   
-  TopDUContext* ctx = standardContext(url, false);
+  TopDUContext* ctx = standardContext(url);
   if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 
@@ -988,7 +994,7 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
     if(import.first) {
       DUChainReadLocker lock(DUChain::lock());
       if(import.first)
-        return qMakePair(KUrl::fromPathOrUrl(import.first->url().str()), SimpleCursor(0,0));
+        return qMakePair(KUrl(import.first->url().str()), SimpleCursor(0,0));
     }
   
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
@@ -1004,8 +1010,17 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
   QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
     if(import.first) {
       DUChainReadLocker lock(DUChain::lock());
-      if(import.first)
+      if(import.first) {
+        //Prefer a standardContext, because the included one may have become empty due to 
+        if(import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
+          
+          KDevelop::TopDUContext* betterCtx = standardContext(KUrl::fromPathOrUrl(import.first->url().str()));
+          
+          if(betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0))
+            return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
+        }
         return import.first->createNavigationWidget();
+      }
     }
   
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
