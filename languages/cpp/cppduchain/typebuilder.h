@@ -20,9 +20,6 @@
 #define TYPEBUILDER_H
 
 #include "contextbuilder.h"
-
-typedef ContextBuilder LangugageSpecificTypeBuilderBase;
-
 #include <language/duchain/abstracttypebuilder.h>
 #include <typesystem.h>
 #include <declaration.h>
@@ -31,7 +28,7 @@ typedef ContextBuilder LangugageSpecificTypeBuilderBase;
 class CppClassType;
 class CppFunctionType;
 
-typedef KDevelop::AbstractTypeBuilder<AST, NameAST> TypeBuilderBase;
+typedef KDevelop::AbstractTypeBuilder<AST, NameAST, ContextBuilder> TypeBuilderBase;
 
 /**
  * Create types from an AST tree.

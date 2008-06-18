@@ -21,12 +21,9 @@
 
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
-
-typedef ContextBuilder LanguageSpecificUseBuilderBase;
-
 #include <language/duchain/abstractusebuilder.h>
 
-typedef KDevelop::AbstractUseBuilder<AST, NameAST> UseBuilderBase;
+typedef KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> UseBuilderBase;
 
 /**
  * A class which iterates the AST to extract uses of definitions.

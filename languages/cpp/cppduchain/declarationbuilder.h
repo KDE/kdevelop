@@ -21,9 +21,6 @@
 #define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
-
-typedef TypeBuilder LanguageSpecificDeclarationBuilderBase;
-
 #include <language/duchain/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
 #include <declaration.h>
@@ -35,7 +32,7 @@ namespace KDevelop
 class Declaration;
 }
 
-typedef KDevelop::AbstractDeclarationBuilder<AST, NameAST> DeclarationBuilderBase;
+typedef KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder> DeclarationBuilderBase;
 
 /**
  * A class which iterates the AST to extract definitions of types.
