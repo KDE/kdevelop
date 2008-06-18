@@ -27,6 +27,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
+#include <kacceleratormanager.h>
 
 #include "view.h"
 #include "document.h"
@@ -46,6 +47,7 @@ struct ContainerPrivate {
 Container::Container(QWidget *parent)
     :KTabWidget(parent), d(new ContainerPrivate())
 {
+    KAcceleratorManager::setNoAccel(this);
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     setHoverCloseButton(true);
