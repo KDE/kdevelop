@@ -828,7 +828,7 @@ private:
 
       if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == ctx->childContexts().end()) && declarationIterator != ctx->localDeclarations().end() )
       {
-        if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty()) {
+        if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty() && !(*declarationIterator)->range().isEmpty() && !(*declarationIterator)->isForwardDeclaration()) {
           //Show the declaration
           if(!first)
             m_currentText += Qt::escape(", ");
