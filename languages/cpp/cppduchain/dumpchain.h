@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUMPCHAIN_H
-#define DUMPCHAIN_H
+#ifndef CPP_DUMPCHAIN_H
+#define CPP_DUMPCHAIN_H
 
 
 #include "default_visitor.h"
@@ -30,6 +30,9 @@ namespace KDevelop
 class DUContext;
 }
 
+class CppEditorIntegrator;
+
+namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT DumpChain: protected DefaultVisitor
 {
 public:
@@ -38,16 +41,14 @@ public:
 
   void dump(AST *node, ParseSession* session = 0);
 
-  void dump(KDevelop::DUContext* context, bool imported = false);
-
-  
 protected:
   virtual void visit(AST *node);
 
 private:
-  class CppEditorIntegrator* m_editor;
+  CppEditorIntegrator* m_editor;
   int indent;
 };
+}
 
 #endif // DUMPCHAIN_H
 

@@ -584,7 +584,7 @@ class NavigationContext : public KShared {
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
     void eventuallyMakeTypeLinks( const AbstractType* type ) {
       if( !type ) {
-        m_currentText += Qt::escape("<notype>");
+        m_currentText += Qt::escape("<no type>");
         return;
       }
         const AbstractType* target = TypeUtils::targetType( type, m_topContext.data() );

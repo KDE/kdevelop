@@ -22,8 +22,8 @@
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 
-// #define LEXERCACHE_DEBUG
-// #define ifDebug(x) x
+ //#define LEXERCACHE_DEBUG
+ //#define ifDebug(x) x
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -200,13 +200,13 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const IndexedString& fileN
           //It is okay, we did not find a macro, but the used macro is an undef macro
           //Q_ASSERT(0); //Undef-macros should not be marked as used
         } else {
-          ifDebug( kDebug( 9007 ) << "The cached file " << fileName.str() << " used a macro called \"" << (*it).name.str() << "\"(from" << (*it).file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
-          ifDebug( if(m) { kDebug() << "Used macro: " << (*it).toString()  << "from" << (*it).file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
+          ifDebug( kDebug( 9007 ) << "The cached file " << fileName.str() << " used a macro called \"" << it.ref().name.str() << "\"(from" << it.ref().file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
+          ifDebug( if(m) { kDebug() << "Used macro: " << it.ref().toString()  << "from" << it.ref().file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
           success = false;
           break;
         }
       }else{
-        ifDebug( kDebug( 9007 ) << (*it).name.str() << "match" );
+        ifDebug( kDebug( 9007 ) << it.ref().name.str() << "match" );
       }
     }
     if( !success )

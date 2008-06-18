@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,10 @@
 
 #include <climits>
 #include "cppdebughelper.h"
+#include "debugbuilders.h"
+#include "dumpchain.h"
+#include "rpp/chartools.h"
+#include <language/duchain/dumpchain.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -338,6 +343,12 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     }
   }
 
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    //If we're debugging the current file, dump its preprocessed contents and the AST
+    ifDebugFile( HashedString(file->identity().url().str()), { kDebug() << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
+  }
+
   supportBuild(node);
 
   if (editor()->currentDocument() && editor()->smart() && topLevelContext->range().textRange() != editor()->currentDocument()->documentRange()) {
@@ -349,6 +360,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     DUChainReadLocker lock(DUChain::lock());
 
     kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
+    //If we're debugging the current file, dump the du-chain and the smart ranges
+    ifDebugFile( HashedString(file->identity().url().str()), { KDevelop::DumpChain dump; dump.dump(topLevelContext); if(topLevelContext->smartRange()) dump.dumpRanges(topLevelContext->smartRange()); } );
 
 /*     if( m_recompiling ) {
       DumpChain dump;
@@ -362,7 +375,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
     kDebug(9007) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
-    DumpChain dump;
+    KDevelop::DumpChain dump;
     dump.dump(topLevelContext);
     m_importedParentContexts.clear();
   }

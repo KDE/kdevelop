@@ -389,7 +389,7 @@ CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifi
       name = "void";
       break;
     default:
-      name = "<notype>";
+      name = "<unknown>";
       break;
   }
 

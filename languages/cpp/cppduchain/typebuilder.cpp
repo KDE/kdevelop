@@ -39,6 +39,7 @@
 #include "expressionparser.h"
 #include "parser/rpp/chartools.h"
 #include "cppdebughelper.h"
+#include "debugbuilders.h"
 
 using namespace KDevelop;
 
@@ -402,9 +403,12 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
   if(!delay) {
     SimpleCursor pos = editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
+    ifDebug( kDebug() << "searching" << id.toString(); )
+    ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
     
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
-
+    ifDebug( kDebug() << "found" << dec.count(); )
+    ifDebugCurrentFile( kDebug() << "found" << dec.count(); )
     if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) )
       delay = true;
 
