@@ -32,7 +32,7 @@ class Declaration;
 /**
  * A class which iterates the AST to extract definitions of types.
  */
-template<typename T, typename NameT>
+template<typename T, typename NameT, typename LanguageSpecificDeclarationBuilderBase>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
 {
 protected:

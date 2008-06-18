@@ -30,7 +30,7 @@ namespace KDevelop {
 /**
  * A class which iterates the AST to extract uses of definitions.
  */
-template<typename T, typename NameT>
+template<typename T, typename NameT, typename LanguageSpecificUseBuilderBase>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractUseBuilder: public LanguageSpecificUseBuilderBase
 {
 public:
@@ -51,7 +51,7 @@ public:
       DUChainWriteLocker lock(DUChain::lock());
       top->clearDeclarationIndices();
       if(top->hasUses())
-        setRecompiling(true);
+        LanguageSpecificUseBuilderBase::setRecompiling(true);
     }
 
     LanguageSpecificUseBuilderBase::supportBuild(node);
@@ -108,7 +108,7 @@ protected:
     }
 
     if (contextUpSteps) {
-      editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
+      LanguageSpecificUseBuilderBase::editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
       m_finishContext = false;
       openContext(newContext);
       m_finishContext = true;
@@ -123,15 +123,15 @@ protected:
 
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
 
-    if (recompiling()) {
+    if (LanguageSpecificUseBuilderBase::recompiling()) {
 
       const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
       SimpleRange translated = newRange;
-      if (editor()->smart()) {
+      if (LanguageSpecificUseBuilderBase::editor()->smart()) {
         lock.unlock();
-        QMutexLocker smartLock(editor()->smart()->smartMutex());
-        translated = SimpleRange(editor()->smart()->translateFromRevision(translated.textRange()) );
+        QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smart()->smartMutex());
+        translated = SimpleRange(LanguageSpecificUseBuilderBase::editor()->smart()->translateFromRevision(translated.textRange()) );
         lock.lock();
       }
 
@@ -139,7 +139,7 @@ protected:
         const Use& use = uses[nextUseIndex()];
 
         //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
-        if (use.m_range.start > translated.end && editor()->smart() )
+        if (use.m_range.start > translated.end && LanguageSpecificUseBuilderBase::editor()->smart() )
           break;
 
         if (use.m_range == translated)
@@ -158,8 +158,8 @@ protected:
 
     if (!encountered) {
 
-      KTextEditor::SmartRange* use = editor()->createRange(newRange.textRange());
-      editor()->exitCurrentRange();
+      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->createRange(newRange.textRange());
+      LanguageSpecificUseBuilderBase::editor()->exitCurrentRange();
 
       LanguageSpecificUseBuilderBase::currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());
       ++nextUseIndex();

@@ -27,7 +27,7 @@ namespace KDevelop {
   
 class ForwardDeclaration;
 
-template<typename T, typename NameT>
+template<typename T, typename NameT, typename LangugageSpecificTypeBuilderBase>
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
 public:

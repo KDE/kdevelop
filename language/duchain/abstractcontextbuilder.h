@@ -203,7 +203,7 @@ protected:
       {
           openContext( contextFromNode( node ) );
           m_editor->setCurrentRange( m_editor->topRange( EditorIntegrator::DefinitionUseChain ) );
-          visitAstNode( node );
+          startVisiting( node );
           closeContext();
       }
   
