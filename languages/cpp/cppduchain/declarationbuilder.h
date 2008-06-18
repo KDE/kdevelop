@@ -74,6 +74,7 @@ public:
   virtual void visitTypedef(TypedefAST *);
   virtual void visitTemplateParameter(TemplateParameterAST *);
   virtual void visitUsingDirective(UsingDirectiveAST *);
+  virtual void visitUsing(UsingAST *);
   virtual void visitEnumSpecifier(EnumSpecifierAST*);
   virtual void visitEnumerator(EnumeratorAST* node);
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
@@ -93,10 +94,19 @@ private:
    * @param name When this is zero, the identifier given through customName is used.
    * \param range provide a valid AST here if name is null
    */
-  KDevelop::Declaration* openDeclaration(NameAST* name, AST* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isNamespaceAlias = false, const Identifier& customName = Identifier());
+  template<class T>
+  T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier());
+  template<class T>
+  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, KDevelop::DUChainWriteLocker& lock);
   /// Same as the above, but sets it as the definition too
-  KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool isFunction = false);
   virtual void closeDeclaration();
+  
+  //Opens a Declaration that has the isDefinition flag set
+  KDevelop::Declaration* openDefinition(NameAST* name, AST* range);
+  //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
+  Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
+  //Opens either a ClassMemberDeclaration, or a Declaration
+  Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier());
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
@@ -104,10 +114,6 @@ private:
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
-  ///Creates a declaration of the given type, or if the current declaration is a template-declaration, it creates a template-specialized version of that type.
-  template<class DeclarationType>
-  DeclarationType* specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range );
-  
   void parseComments(const ListNode<size_t> *comments);
   
   void applyStorageSpecifiers();

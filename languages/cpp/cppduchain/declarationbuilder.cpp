@@ -20,6 +20,7 @@
 #include "declarationbuilder.h"
 
 #include <QByteArray>
+#include <typeinfo>
 
 #include "templatedeclaration.h"
 
@@ -34,6 +35,8 @@
 #include <duchainlock.h>
 #include <identifiedtype.h>
 #include <namespacealiasdeclaration.h>
+#include <aliasdeclaration.h>
+#include <util/pushvalue.h>
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
@@ -116,13 +119,12 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   DeclarationBuilderBase::visitTemplateParameter(ast);
   if( ast->type_parameter && ast->type_parameter->name ) {
     ///@todo deal with all the other stuff the AST may contain
-    Declaration* dec = openDeclaration(ast->type_parameter->name, ast);
-    TemplateParameterDeclaration* decl = dynamic_cast<TemplateParameterDeclaration*>(dec);
-    Q_ASSERT(decl);
+    TemplateParameterDeclaration* decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
+    
     DUChainWriteLocker lock(DUChain::lock());
     decl->setAbstractType(lastType());
     if( decl->type<CppTemplateParameterType>() ) {
-      decl->type<CppTemplateParameterType>()->setDeclaration(dec);
+      decl->type<CppTemplateParameterType>()->setDeclaration(decl);
     } else {
       kDebug(9007) << "bad last type";
     }
@@ -214,7 +216,12 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       node->parameter_declaration_clause = 0;
   }
   if (node->parameter_declaration_clause) {
-    openDeclaration(node->id, node, true);
+    Declaration* decl = openFunctionDeclaration(node->id, node);
+    
+    if( !m_functionDefinedStack.isEmpty() ) {
+        DUChainWriteLocker lock(DUChain::lock());
+        decl->setDeclarationIsDefinition( (bool)m_functionDefinedStack.top() );
+    }
 
     applyFunctionSpecifiers();
   } else {
@@ -295,12 +302,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
 ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)
 {
-  return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
-}
-
-Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool isFunction)
-{
-  return openDeclaration(name, rangeNode, isFunction, false, true);
+  return openDeclaration<ForwardDeclaration>(name, range);
 }
 
 template<class Type>
@@ -325,28 +327,23 @@ KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
   return hasTemplateContext( context->importedParentContexts() ).data();
 }
 
-template<class DeclarationType>
-DeclarationType* DeclarationBuilder::specialDeclaration( KTextEditor::SmartRange* smartRange, const KDevelop::SimpleRange& range )
-{
-    if( KDevelop::DUContext* ctx = hasTemplateContext(m_importedParentContexts) ) {
-      Cpp::SpecialTemplateDeclaration<DeclarationType>* ret = new Cpp::SpecialTemplateDeclaration<DeclarationType>(editor()->currentUrl(), range, currentContext());
-      ret->setSmartRange(smartRange);
-      ret->setTemplateParameterContext(ctx);
-      return ret;
-    } else{
-      DeclarationType* ret = new DeclarationType(editor()->currentUrl(), range, currentContext());
-      ret->setSmartRange(smartRange);
-      return ret;
-    }
-}
-
-Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, bool isFunction, bool isForward, bool isDefinition, bool isNamespaceAlias, const Identifier& customName)
+template<class T>
+T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName)
 {
   DUChainWriteLocker lock(DUChain::lock());
+  
+  if( KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts) ) {
+    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, lock );
+    ret->setTemplateParameterContext(templateCtx);
+    return ret;
+  } else{
+    return openDeclarationReal<T>( name, rangeNode, customName, lock );
+  }
+}
 
-  if( isFunction && !m_functionDefinedStack.isEmpty() )
-        isDefinition |= (bool)m_functionDefinedStack.top();
-
+template<class T>
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, DUChainWriteLocker& lock)
+{
   SimpleRange newRange;
   if(name) {
     std::size_t start = name->unqualified_name->start_token;
@@ -361,43 +358,23 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     newRange = editor()->findRange(rangeNode);
   }
 
-//  if(newRange.start >= newRange.end) //It is collapsed if it's within a macro
-//    kDebug(9007) << "Range collapsed";
-
-  QualifiedIdentifier id;
+  Identifier localId;
 
   if (name) {
-    TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator
-    id = identifierForNode(name, &typeSpecifier);
-    if( typeSpecifier && id == QualifiedIdentifier("operator{...cast...}") ) {
+    TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator. This is not catched by the type builder.
+    localId = identifierForNode(name, &typeSpecifier).last();
+    
+    static Identifier castIdentifier("operator{...cast...}");
+    
+    if( typeSpecifier && localId == castIdentifier ) {
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
     }
   } else {
-    id = QualifiedIdentifier(customName);
+    localId = customName;
   }
 
-  Identifier localId;
-
-  //For classes, the scope problem is solved differently: An intermediate scope context is created
-  ///@todo Solve this problem uniquely for classes and functions
-  if(id.count() > 1 && isFunction) {
-    //Merge the scope of the declaration. Add dollar-signs instead of the ::.
-    //Else the declarations could be confused with global functions.
-    //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
-
-    localId = id.last(); //This copies the template-arguments
-
-    QString newId = id.last().identifier();
-    for(int a = id.count()-2; a >= 0; --a)
-      newId = id.at(a).identifier() + ";;" + newId;
-
-    localId.setIdentifier(newId);
-  }else if(!id.isEmpty()) {
-    localId = id.last();
-  }
-
-  Declaration* declaration = 0;
+  T* declaration = 0;
 
   if (recompiling()) {
     // Seek a matching declaration
@@ -416,63 +393,35 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
     kDebug() << "checking" << localId.toString() << "range" << translated.textRange();
 #endif
 
+    ///@todo maybe order the declarations within ducontext and change here back to walking the indices, because that's easier to debug and faster
     foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
 
       if( wasEncountered(dec) )
         continue;
 
 #ifdef DEBUG_UPDATE_MATCHING
+      if( !(typeid(*dec) == typeid(T)) )
+        kDebug() << "typeid mismatch:" << typeid(*dec).name() << typeid(T).name();
+      
       if (!(dec->range() == translated))
         kDebug() << "range mismatch" << dec->range().textRange() << translated.textRange();
       
       if(!(localId == dec->identifier()))
         kDebug() << "id mismatch" << dec->identifier().toString() << localId.toString();
-      
-      if(!(dec->isDefinition() == isDefinition && 
-          dec->isTypeAlias() == m_inTypedef))
-        kDebug() << "attribute mismatch:" << dec->isDefinition() << isDefinition << dec->isTypeAlias() << m_inTypedef;
-
-      if(!((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
-             hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ))
-        kDebug() << "template mismatch";
 #endif
       
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
           localId == dec->identifier() &&
-          ( ((!hasTemplateContext(m_importedParentContexts) && !dynamic_cast<TemplateDeclaration*>(dec)) ||
-             hasTemplateContext(m_importedParentContexts) && dynamic_cast<TemplateDeclaration*>(dec) ) )
+          typeid(*dec) == typeid(T)
          )
       {
-        if(isNamespaceAlias) {
-          if(!dynamic_cast<NamespaceAliasDeclaration*>(dec))
-            continue;
-        } else if (isForward) {
-          if(!dynamic_cast<ForwardDeclaration*>(dec))
-            continue;
-        } else if (isFunction) {
-          if (currentContext()->type() == DUContext::Class) {
-            if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
-              continue;
-          } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
-            continue;
-          }
-
-        } else if (currentContext()->type() == DUContext::Class) {
-          if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on 
-            continue;
-        } else if(currentContext()->type() == DUContext::Template) {
-          if(!dynamic_cast<TemplateParameterDeclaration*>(dec))
-            continue;
-        }
-
         // Match
-        declaration = dec;
+        declaration = dynamic_cast<T*>(dec);
         break;
       }
     }
   }
-
 
   if (!declaration) {
 /*    if( recompiling() )
@@ -500,76 +449,40 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
 
     Q_ASSERT(editor()->currentRange() == prior);
 
-    if( isNamespaceAlias ) {
-      declaration = new NamespaceAliasDeclaration(editor()->currentUrl(), newRange, currentContext());
-      declaration->setSmartRange(range);
-      declaration->setIdentifier(customName);
-    } else if (isForward) {
-      declaration = specialDeclaration<ForwardDeclaration>(range, newRange);
-
-    } else if (isFunction) {
-      if (currentContext()->type() == DUContext::Class) {
-        declaration = specialDeclaration<ClassFunctionDeclaration>( range, newRange );
-      } else {
-        declaration = specialDeclaration<FunctionDeclaration>(range, newRange );
-      }
-    } else if (currentContext()->type() == DUContext::Class) {
-        declaration = specialDeclaration<ClassMemberDeclaration>( range, newRange );
-    } else if( currentContext()->type() == DUContext::Template ) {
-      //This is a template-parameter.
-      declaration = new TemplateParameterDeclaration( editor()->currentUrl(), newRange, currentContext() );
-      declaration->setSmartRange(range);
-    } else {
-      declaration = specialDeclaration<Declaration>( range, newRange );
-    }
-  }else{
-    if(isFunction) { //Clear the default parameters so they don't accumulate
-      AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
-      if(funDecl)
-        funDecl->clearDefaultParameters();
-    }
-  }
-
-  if (!isNamespaceAlias) {
-    // FIXME this can happen if we're defining a staticly declared variable
-    //Q_ASSERT(m_nameCompiler->identifier().count() == 1);
-/*      if(id.isEmpty())
-      kWarning() << "empty id";*/
+    declaration = new T(editor()->currentUrl(), newRange, currentContext());
+    declaration->setSmartRange(range);
     declaration->setIdentifier(localId);
   }
 
-  declaration->setDeclarationIsDefinition(isDefinition);
+  //Clear some settings
+  AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
+  if(funDecl)
+    funDecl->clearDefaultParameters();
+  
+  declaration->setDeclarationIsDefinition(false); //May be set later
 
-  if (currentContext()->type() == DUContext::Class) {
-    if(dynamic_cast<ClassMemberDeclaration*>(declaration)) //It may also be a forward-declaration, not based on ClassMemberDeclaration!
-      static_cast<ClassMemberDeclaration*>(declaration)->setAccessPolicy(currentAccessPolicy());
-  }
-
-  if( m_inTypedef )
-    declaration->setIsTypeAlias(true);
+  declaration->setIsTypeAlias(m_inTypedef);
 
   if( !localId.templateIdentifiers().isEmpty() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
     if( declaration && templateDecl ) {
       ///This is a template-specialization. Find the class it is specialized from.
       localId.clearTemplateIdentifiers();
-      id.pop();
-      id.push(localId);
 
       ///@todo Make sure the searched class is in the same namespace
-      QList<Declaration*> decls = currentContext()->findDeclarations(id, editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
+      QList<Declaration*> decls = currentContext()->findDeclarations(QualifiedIdentifier(localId), editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
 
       if( !decls.isEmpty() )
       {
         if( decls.count() > 1 )
-          kDebug(9007) << "Found multiple declarations of specialization-base" << id.toString() << "for" << declaration->toString();
+          kDebug(9007) << "Found multiple declarations of specialization-base" << localId.toString() << "for" << declaration->toString();
 
         foreach( Declaration* decl, decls )
           if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) )
             templateDecl->setSpecializedFrom(baseTemplateDecl);
 
         if( !templateDecl->specializedFrom() )
-          kDebug(9007) << "Could not find valid specialization-base" << id.toString() << "for" << declaration->toString();
+          kDebug(9007) << "Could not find valid specialization-base" << localId.toString() << "for" << declaration->toString();
       }
     } else {
       kDebug(9007) << "Specialization of non-template class" << declaration->toString();
@@ -585,6 +498,39 @@ Declaration* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, 
   openDeclarationInternal(declaration);
 
   return declaration;
+}
+
+Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode)
+{
+  Declaration* ret = openNormalDeclaration(name, rangeNode);
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  ret->setDeclarationIsDefinition(true);
+  return ret;
+}
+
+Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName) {
+  if(currentContext()->type() == DUContext::Class) {
+    ClassMemberDeclaration* mem = openDeclaration<ClassMemberDeclaration>(name, rangeNode, customName);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    mem->setAccessPolicy(currentAccessPolicy());
+    return mem;
+  } else if(currentContext()->type() == DUContext::Template) {
+    return openDeclaration<TemplateParameterDeclaration>(name, rangeNode, customName);
+  } else {
+    return openDeclaration<Declaration>(name, rangeNode, customName);
+  }
+}
+
+Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* rangeNode) {
+  if(currentContext()->type() == DUContext::Class) {
+    ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode);
+    fun->setAccessPolicy(currentAccessPolicy());
+    return fun;
+  } else {
+    return openDeclaration<FunctionDeclaration>(name, rangeNode);
+  }
 }
 
 void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
@@ -612,7 +558,7 @@ void DeclarationBuilder::closeDeclaration()
     if( idType && idType->declaration() == 0 && !delayed )
         idType->setDeclaration( currentDeclaration() );
 
-    if(currentDeclaration()->kind() != Declaration::NamespaceAlias) {
+    if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
       //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
       if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) )
         currentDeclaration()->setKind(Declaration::Instance);
@@ -633,9 +579,10 @@ void DeclarationBuilder::closeDeclaration()
 void DeclarationBuilder::visitTypedef(TypedefAST *def)
 {
   parseComments(def->comments);
-  m_inTypedef = true;
+  
+  PushValue<bool> setInTypedef(m_inTypedef, true);
+  
   DeclarationBuilderBase::visitTypedef(def);
-  m_inTypedef = false;
 }
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
@@ -655,7 +602,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   node->end_token = node->id + 1;
 
   Identifier id(editor()->parseSession()->token_stream->token(node->id).symbol());
-  DeclarationBuilder::openDeclaration(0, node, false, false, true, false, id);
+  openNormalDeclaration(0, node, id);
 
   node->end_token = oldEndToken;
 
@@ -671,8 +618,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  bool m_wasInTypedef = m_inTypedef;
-  m_inTypedef = false;
+  PushValue<bool> setNotInTypedef(m_inTypedef, false);
 
   /**Open helper contexts around the class, so the qualified identifier matches.
    * Example: "class MyClass::RealClass{}"
@@ -780,7 +726,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     closePrefixContext(id);
 
   m_accessPolicyStack.pop();
-  m_inTypedef = m_wasInTypedef;
 }
 
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)
@@ -801,6 +746,28 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
   }
 }
 
+void DeclarationBuilder::visitUsing(UsingAST * node)
+{
+  DeclarationBuilderBase::visitUsing(node);
+
+  QualifiedIdentifier id = identifierForNode(node->name);
+  
+  ///@todo only use the last name component as range
+  AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name, id.last());
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    
+    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
+    if(!declarations.isEmpty()) {
+      decl->setAliasedDeclaration(DeclarationPointer(declarations[0]));
+    }else{
+      kDebug() << "Aliased declaration not found:" << id.toString();
+    }
+  }
+
+  closeDeclaration();
+}
 
 void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
@@ -816,11 +783,10 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
   }
 
   if( compilingContexts() ) {
-    openDeclaration(0, node, false, false, false, true, globalImportIdentifier);
+    NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, globalImportIdentifier);
     {
       DUChainWriteLocker lock(DUChain::lock());
-      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
-      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->name), currentDeclaration()->range().start) );
+      decl->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->name), currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }
@@ -839,11 +805,10 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
   }
 
   if( compilingContexts() ) {
-    openDeclaration(0, node, false, false, false, true, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()));
+    NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()));
     {
       DUChainWriteLocker lock(DUChain::lock());
-      Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(currentDeclaration()));
-      static_cast<NamespaceAliasDeclaration*>(currentDeclaration())->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->alias_name), currentDeclaration()->range().start) );
+      decl->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->alias_name), currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }

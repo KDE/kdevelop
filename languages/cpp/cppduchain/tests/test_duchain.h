@@ -70,6 +70,7 @@ private slots:
   void testDeclareFriend();
   void testDeclareNamespace();
   void testDeclareUsingNamespace();
+  void testUsingDeclaration();
   void testDeclareUsingNamespace2();
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();

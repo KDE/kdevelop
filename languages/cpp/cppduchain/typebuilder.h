@@ -61,6 +61,7 @@ protected:
   virtual void visitTypedef(TypedefAST*);
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitPtrOperator(PtrOperatorAST*);
+  virtual void visitUsing(UsingAST *);
   virtual void visitParameterDeclaration(ParameterDeclarationAST*);
   virtual void visitTemplateParameter(TemplateParameterAST *);
   virtual void createTypeForDeclarator(DeclaratorAST *node);

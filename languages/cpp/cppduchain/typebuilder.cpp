@@ -407,8 +407,8 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
     ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
     
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
-    ifDebug( kDebug() << "found" << dec.count(); )
-    ifDebugCurrentFile( kDebug() << "found" << dec.count(); )
+    ifDebug( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
+    ifDebugCurrentFile( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
     if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) )
       delay = true;
 
@@ -441,7 +441,8 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
    openedType = true;
    openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
-   ifDebug( if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+   ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
   }
   return openedType;
 }
@@ -620,7 +621,7 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 }
 
 
-void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind) {
+void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* /*node*/, DelayedType::Kind kind) {
   DelayedType::Ptr type(new DelayedType());
   type->setIdentifier(identifier);
   type->setKind(kind);
@@ -648,6 +649,16 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
     }
     // else may be a template argument
   }
+}
+
+void TypeBuilder::visitUsing(UsingAST * node)
+{
+  TypeBuilderBase::visitUsing(node);
+
+  bool openedType = openTypeFromName(node->name, true);
+
+  if( openedType )
+    closeType();
 }
 
 KDevelop::ITypeRepository* TypeBuilder::typeRepository() const

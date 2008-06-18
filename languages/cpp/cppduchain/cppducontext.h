@@ -125,10 +125,6 @@ extern QMutex cppDuContextInstantiationsMutex;
          * The identifier must not have template identifiers, those need to be added using openQualifiedIdentifier(..) and closeQualifiedIdentifier(..)
          * */
         void openIdentifier( const Identifier& identifier ) {
-#ifdef DEBUG
-         for( int a = 0; a < identifier.count(); ++a )
-           Q_ASSERT(identifier.at(a).templateIdentifiers().count() == 0);
-#endif
          m_states.top().identifier.push(identifier);
         }
         /**
