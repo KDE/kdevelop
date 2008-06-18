@@ -331,6 +331,9 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             if(!needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (!parentJob()->needUses() || content->hasUses()) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
+                
+                //Merge the macros etc. into the current environment
+                m_currentEnvironment->merge( m_secondEnvironmentFile.data() );
 
                 closeStream = true;
                 parentJob()->setKeepDuchain(true); //We truncate all following content, so we don't want to update the du-chain.
