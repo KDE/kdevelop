@@ -426,7 +426,8 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 
 
     }
-
+    else
+    {
 
     QMenu* menu = new QMenu("Subversion");
     action = new KAction(i18n("Import..."), this);
@@ -456,6 +457,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 //         action = new QAction(i18n("Status..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
 //         actions << action;
+    }
 
 
     return menuExt;
