@@ -120,6 +120,7 @@ public:
         m_view = 0;
     }
     QPointer<KTextEditor::View> m_view;
+    QString m_status;
 };
 
 TextDocument::TextDocument(const KUrl &url, ICore* core)
@@ -166,13 +167,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
             connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
-
-        view = d->document->createView(parent);
-        Q_ASSERT(view);
     }
 
-    if (!view)
-        view = d->document->createView(parent);
+    view = d->document->createView(parent);
 
     if (view)
         view->setContextMenu( view->defaultContextMenu() );
@@ -344,6 +341,8 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     d->m_view = static_cast<KTextEditor::View*>(
         static_cast<TextDocument*>(document())->createViewWidget(parent));
 
+    connect(d->m_view, SIGNAL(informationMessage(KTextEditor::View*, const QString&)), this, SLOT(viewStatusChanged(KTextEditor::View*, const QString&)));
+
     return d->m_view;
 }
 
@@ -375,6 +374,17 @@ QString KDevelop::TextDocument::documentType() const
 KTextEditor::View *KDevelop::TextView::textView() const
 {
     return d->m_view;
+}
+
+QString KDevelop::TextView::viewStatus() const
+{
+    return d->m_status;
+}
+
+void KDevelop::TextView::viewStatusChanged(KTextEditor::View*, const QString& status)
+{
+    d->m_status = status;
+    emit statusChanged(this);
 }
 
 #include "textdocument.moc"

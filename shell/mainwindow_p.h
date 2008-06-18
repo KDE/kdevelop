@@ -44,6 +44,7 @@ namespace KDevelop {
 
 class IPlugin;
 class MainWindow;
+class StatusBar;
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -102,6 +103,7 @@ private:
     KActionCollection *actionCollection();
 
     MainWindow *m_mainWindow;
+    StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
     static bool s_quitRequested;
 };

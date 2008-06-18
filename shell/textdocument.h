@@ -81,8 +81,13 @@ public:
 
     KTextEditor::View *textView() const;
 
+    virtual QString viewStatus() const;
+
     virtual QString viewState() const;
     virtual void setState(const QString& state);
+
+private Q_SLOTS:
+    void viewStatusChanged(KTextEditor::View*, const QString& status);
 
 private:
     class TextViewPrivate* const d;

@@ -53,6 +53,7 @@ Boston, MA 02110-1301, USA.
 #include "partdocument.h"
 #include "partcontroller.h"
 #include "uicontroller.h"
+#include "statusbar.h"
 
 #include "mainwindow.h"
 
@@ -61,8 +62,9 @@ namespace KDevelop {
 bool MainWindowPrivate::s_quitRequested = false;
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-: m_mainWindow(mainWindow), lastXMLGUIClientView(0)
+: m_mainWindow(mainWindow), m_statusBar(new KDevelop::StatusBar(mainWindow)), lastXMLGUIClientView(0)
 {
+    m_mainWindow->setStatusBar(m_statusBar);
 }
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )

@@ -66,22 +66,22 @@ bool View::hasWidget() const
     return d->widget != 0;
 }
 
-void Sublime::View::requestRaise()
+void View::requestRaise()
 {
     emit raise(this);
 }
 
-QString Sublime::View::viewState() const
+QString View::viewState() const
 {
     return QString();
 }
 
-void Sublime::View::setState(const QString & state)
+void View::setState(const QString & state)
 {
     Q_UNUSED(state);
 }
 
-QList<QAction*> Sublime::View::toolBarActions() const
+QList<QAction*> View::toolBarActions() const
 {
     ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
     if( tooldoc )
@@ -89,6 +89,11 @@ QList<QAction*> Sublime::View::toolBarActions() const
         return tooldoc->factory()->toolBarActions( d->widget );
     }
     return QList<QAction*>();
+}
+
+QString View::viewStatus() const
+{
+    return QString();
 }
 
 }

@@ -52,6 +52,9 @@ public:
     /**@return true if this view has an initialized widget.*/
     bool hasWidget() const;
 
+    /// Retrieve information to be placed in the status bar.
+    virtual QString viewStatus() const;
+
     /// Retrieve view state for saving into configuration.
     virtual QString viewState() const;
     /// Restore view state from configuration
@@ -59,6 +62,8 @@ public:
 
 Q_SIGNALS:
     void raise(Sublime::View*);
+    /// Notify that the status for this document has changed
+    void statusChanged(Sublime::View*);
 
 public Q_SLOTS:
     void requestRaise();

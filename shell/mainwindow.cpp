@@ -42,7 +42,6 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
-#include "statusbar.h"
 
 namespace KDevelop
 {
@@ -139,7 +138,6 @@ void MainWindow::initialize()
              d, SLOT( projectOpened() ) );
     connect( Core::projectController(), SIGNAL( projectClosed() ),
              d, SLOT( projectClosed() ) );*/
-    setStatusBar(new KDevelop::StatusBar(this));
 }
 
 void MainWindow::cleanup()
