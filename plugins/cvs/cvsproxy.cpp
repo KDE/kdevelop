@@ -34,12 +34,14 @@ CvsProxy::~CvsProxy()
 
 bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
 {
-    QString path;
-    if (QFileInfo(dirPath.path()).isFile())
-        path = QFileInfo(dirPath.path()).path() + QDir::separator() + "CVS";
+    QString path = dirPath.path();
+    QFileInfo fsObject(path);
+    if (fsObject.isFile())
+        path = fsObject.path() + QDir::separator() + "CVS";
     else
-        path = dirPath.toLocalFile() + QDir::separator() + "CVS";
-    return QFileInfo(path).exists();
+        path = path + QDir::separator() + "CVS";
+    fsObject.setFile(path);
+    return fsObject.exists();
 }
 
 bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum RequestedOperation op)
