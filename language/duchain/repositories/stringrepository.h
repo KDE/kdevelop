@@ -62,7 +62,7 @@ struct StringRepositoryItemRequest {
   const char* m_text;
 };
 
-typedef ItemRepository<unsigned short, StringRepositoryItemRequest> StringRepository;
+typedef ItemRepository<unsigned short, StringRepositoryItemRequest, true> StringRepository;
 
 ///@param item must be valid(nonzero)
 QString stringFromItem(const unsigned short* item) {
