@@ -173,18 +173,17 @@ void CvsPlugin::slotStatus()
 
 KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context)
 {
-    // First we need to convert the data from the context* into something we can work with
-    // This means we have to pull the KUrls out of the given list of items.
     KUrl::List ctxUrlList;
-
-    // For now we only support the contextmenu from the ProjectView plugin.
-    // If, in future, further types should be supported, just add an else-if for that type here
-    if( context->type() == KDevelop::Context::ProjectItemContext ) {
+    if( context->type() == KDevelop::Context::ProjectItemContext )
+    {
         KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
-        QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
+        if( itemCtx )
+        {
+            QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
 
-        foreach( KDevelop::ProjectBaseItem* _item, baseItemList ) {
-            if( _item->project()->versionControlPlugin() == this ) {
+            // now general case
+            foreach( KDevelop::ProjectBaseItem* _item, baseItemList )
+            {
                 if( _item->folder() ){
                     KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(_item);
                     ctxUrlList << folderItem->url();
@@ -195,67 +194,93 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
                 }
             }
         }
-    } else {
-        // Unsupported context type
-        return KDevelop::IPlugin::contextMenuExtension( context );
+    }else if( context->type() == KDevelop::Context::EditorContext )
+    {
+        KDevelop::EditorContext *itemCtx = dynamic_cast<KDevelop::EditorContext*>(context);
+        ctxUrlList << itemCtx->url();
+    }else if( context->type() == KDevelop::Context::FileContext )
+    {
+        KDevelop::FileContext *itemCtx = dynamic_cast<KDevelop::FileContext*>(context);
+        ctxUrlList += itemCtx->urls();
     }
 
-    if( ctxUrlList.isEmpty() )
-        return KDevelop::IPlugin::contextMenuExtension( context );
-
-    // OK. If we made it until here, the requested context type is supported and at least one item
-    // was given. Now let's store the items in d->m_ctxUrlList and create the menu.
-
-    d->m_ctxUrlList = ctxUrlList;
 
     KDevelop::ContextMenuExtension menuExt;
 
+    bool hasVersionControlledEntries = false;
+    foreach( KUrl url, ctxUrlList )
+    {
+        if( isVersionControlled( url ) )
+        {
+            hasVersionControlledEntries = true;
+            break;
+        }
+    }
+    if( ctxUrlList.isEmpty() )
+        return IPlugin::contextMenuExtension( context );
+
+
+    d->m_ctxUrlList = ctxUrlList;
     QList<QAction*> actions;
     KAction *action;
+    kDebug() << "version controlled?" << hasVersionControlledEntries;
+    if( hasVersionControlledEntries )
+    {
+        action = new KAction(i18n("Commit..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Commit..."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Add"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Add"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Remove"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Remove"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Edit"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Edit"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Unedit"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Unedit"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Show Editors"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Show Editors"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Update.."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Update.."), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Log View"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Log View"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Annotate"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Annotate"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Revert"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-    action = new KAction(i18n("Revert"), this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-    action = new KAction("Diff...", this);
-    connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction("Diff...", this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+    }
+    else
+    {
+        QMenu* menu = new QMenu("CVS");
+        action = new KAction(i18n("Import..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(slotImport()) );
+        menu->addAction( action );
+        action = new KAction(i18n("Checkout..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(slotCheckout()) );
+        menu->addAction( action );
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+    }
 
     return menuExt;
 }
