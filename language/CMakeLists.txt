@@ -43,6 +43,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/functiondeclaration.cpp
     duchain/stringhelpers.cpp
     duchain/namespacealiasdeclaration.cpp
+    duchain/aliasdeclaration.cpp
     duchain/dumpdotgraph.cpp
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
