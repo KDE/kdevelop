@@ -19,31 +19,15 @@
  * 02110-1301, USA.
  */
 
-
-/*!
- * \file  testrunner.h
- *
- * \brief Declares class TestRunner.
- */
-
 #ifndef TESTRUNNER_H
 #define TESTRUNNER_H
 
 #include "qxcppunitexport.h"
 
 #include <QWidget>
-#include <cppunit/Portability.h>
-#include <cppunit/portability/CppUnitVector.h>
+#include <QFileInfo>
 
-namespace CPPUNIT_NS
-{
-class Test;
-}
-
-namespace QxRunner
-{
-class Runner;
-}
+namespace QxRunner { class Runner; }
 
 namespace QxCppUnit
 {
@@ -62,52 +46,23 @@ class CppUnitModel;
 
 class QXCPPUNIT_EXPORT TestRunner
 {
-public: // Operations
+public:
 
-    /*!
-     * Constructs a test runner. Creates the CppUnitModel instance.
-     */
     TestRunner();
-
-    /*!
-     * Destroys this test runner.
-     */
     virtual ~TestRunner();
-
-    /*!
-     * Appends the \a test to the list of CppUnit tests. \a test can be
-     * one individual test or a test suite.
-     */
-    void addTest(CPPUNIT_NS::Test* test) const;
-
-    /*!
-     * Appends the \a tests to the list of CppUnit tests. An entry in
-     * \a tests can be one individual test or a test suite.
-     */
-    void addTests(const CppUnitVector<CPPUNIT_NS::Test*>& tests) const;
-
-    /*!
-     * Sets the application icon and shows the main window.
-     */
-    void run();
-
-    /*!
-     * Don not start a full application, just construct the widget
-     */
+    void registerTests(const QFileInfo& exe);
     QWidget* spawn();
 
-private: // Operations
-
+private:
     // Copy and assignment not supported.
     TestRunner(const TestRunner&);
     TestRunner& operator=(const TestRunner&);
 
-private: // Attributes
-
+private:
     QxRunner::Runner* m_runner;
     CppUnitModel*     m_model;
 };
 
-} // namespace
+} // namespace QxCppUnit
 
 #endif // TESTRUNNER_H

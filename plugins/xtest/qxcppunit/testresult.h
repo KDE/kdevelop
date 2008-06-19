@@ -1,6 +1,5 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,47 +18,47 @@
  * 02110-1301, USA.
  */
 
+#ifndef QXCPPUNIT_TESTRESULT
+#define QXCPPUNIT_TESTRESULT
 
-/*!
- * \file  testrunner.cpp
- *
- * \brief Implements class TestRunner.
- */
-
-#include "testrunner.h"
-#include "cppunitmodel.h"
-
-#include <qxrunner/runner.h>
-#include <qxrunner/runnerwindow.h>
-
-using QxRunner::RunnerWindow;
+#include <QString>
+#include <QFileInfo>
+#include <qxrunner/qxrunner_global.h>
 
 namespace QxCppUnit
 {
 
-TestRunner::TestRunner()
+class TestResult
 {
-    m_runner = 0;
-    m_model = new CppUnitModel;
+
+public:
+    explicit TestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=0, QFileInfo=QFileInfo(""));
+
+    QxRunner::RunnerResult state();
+    QString message();
+    int line();
+    QFileInfo file();
+
+    void setState(QxRunner::RunnerResult);
+    void setMessage(QString);
+    void setLine(int);
+    void setFile(QFileInfo);
+    void log();
+
+    bool operator==(const TestResult& other);
+
+    /**
+     * True when state is NotRun or RunSuccess
+     **/
+    bool isGood();
+
+private:
+    QxRunner::RunnerResult m_state;
+    QString m_message;
+    int m_line;
+    QFileInfo m_file;
+};
+
 }
 
-TestRunner::~TestRunner()
-{
-    // Delete the runner first.
-    delete m_runner;
-    delete m_model;
-}
-
-void TestRunner::registerTests(const QFileInfo& exe)
-{
-    m_model->readTests(exe);
-}
-
-QWidget* TestRunner::spawn()
-{
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(m_model);
-    return window;
-}
-
-} // namespace
+#endif // QXCPPUNIT_TESTRESULT

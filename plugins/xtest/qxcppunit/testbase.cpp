@@ -18,11 +18,11 @@
  * 02110-1301, USA.
  */
 
-#include "qtestbase.h"
+#include "testbase.h"
 #include <QDebug>
 
-using QxQTest::QTestBase;
-using QxQTest::QTestResult;
+using QxCppUnit::TestBase;
+using QxCppUnit::TestResult;
 
 namespace
 {
@@ -32,53 +32,51 @@ QList<QVariant> empty(const QString& name)
 }
 }
 
-QTestBase::QTestBase()
-    :  RunnerItem(empty("")), m_name(""), m_parent(0)
+TestBase::TestBase()
+        :  RunnerItem(empty("")), m_name(""), m_parent(0)
 {
 }
 
-QTestBase::QTestBase(const QString& name, QTestBase* parent)
-    : RunnerItem(empty(name), parent), m_name(name), m_parent(parent)
+TestBase::TestBase(const QString& name, TestBase* parent)
+        : RunnerItem(empty(name), parent), m_name(name), m_parent(parent)
 {}
 
-QTestBase::QTestBase(const QList<QVariant>& data)
-    :  RunnerItem(data), m_name(""), m_parent(0)
- {
- }
-
-
-QTestBase::~QTestBase()
+TestBase::TestBase(const QList<QVariant>& data)
+        :  RunnerItem(data), m_name(""), m_parent(0)
 {}
 
-QString QTestBase::name() const
+TestBase::~TestBase()
+{}
+
+QString TestBase::name() const
 {
     return m_name;
 }
 
-QTestBase* QTestBase::owner()
+TestBase* TestBase::owner()
 {
     return m_parent;
 }
 
-void QTestBase::addTest(QTestBase* test)
+void TestBase::addTest(TestBase* test)
 {
     appendChild(test);
     m_children.push_back(test);
 }
 
-QTestBase* QTestBase::childAt(unsigned i)
+TestBase* TestBase::childAt(unsigned i)
 {
     return m_children.value(i);
 }
 
-unsigned QTestBase::childCount()
+unsigned TestBase::childCount()
 {
     return m_children.count();
 }
 
-QTestResult QTestBase::result_()
+TestResult TestBase::result_()
 {
-    QTestResult res;
+    TestResult res;
     res.setState(QxRunner::RunnerResult(result()));
     res.setMessage(data(2).toString());
     res.setFile(QFileInfo(data(3).toString()));
@@ -86,7 +84,7 @@ QTestResult QTestBase::result_()
     return res;
 }
 
-void QTestBase::setResult_(QTestResult& res)
+void TestBase::setResult_(TestResult& res)
 {
     setData(2, res.message());
     setData(3, res.file().filePath());
@@ -94,4 +92,16 @@ void QTestBase::setResult_(QTestResult& res)
     setResult(res.state());
 }
 
-#include "qtestbase.moc"
+TestBase* TestBase::findTestNamed(const QString& name)
+{
+    TestBase* child;
+    for (int i = 0; i < childCount(); i++)
+    {
+        child= childAt(i);
+        if (name == child->name())
+            return child;
+    }
+    return 0;
+}
+
+#include "testbase.moc"

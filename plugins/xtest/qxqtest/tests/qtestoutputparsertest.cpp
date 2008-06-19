@@ -180,9 +180,12 @@ public:
         return 1;
     }
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const {
+        Q_UNUSED(index);
+        Q_UNUSED(role);
         return QVariant("owk");
     }
     QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const {
+        Q_UNUSED(parent);
         QModelIndex i = createIndex(row, column, test);
         test->setIndex(i);
         return i;

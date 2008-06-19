@@ -32,8 +32,6 @@
 #include <qxrunner/runnermodel.h>
 #include <cppunit/Test.h>
 
-using namespace QxRunner;
-
 namespace QxCppUnit
 {
 
@@ -53,31 +51,18 @@ namespace QxCppUnit
  * - QxRunner::RunError   - CppUnit reported an error
  */
 
-class CppUnitModel : public RunnerModel
+class CppUnitModel : public QxRunner::RunnerModel
 {
     Q_OBJECT
 
 public: // Operations
 
-    /*!
-     * Constructs a CppUnit model with the given \a parent. The root
-     * item is created and the set of expected results is defined.
-     */
     CppUnitModel(QObject* parent = 0);
-
-    /*!
-     * Destroys this CppUnit model.
-     */
     ~CppUnitModel();
 
-    /*!
-     * Returns the model name "QxCppUnit".
-     */
-    QString name() const;
+    void readTests(const QFileInfo& exe);
 
-    /*!
-     * Returns the CppUnit version used.
-     */
+    QString name() const;
     QString about() const;
 
     /*!
@@ -93,7 +78,7 @@ private: // Operations
      * to the given \a parent. If \a test is a suite then recursively
      * a CppUnitItem object for each test in the suite is appended.
      */
-    void addTestItem(CPPUNIT_NS::Test* test, RunnerItem* parent) const;
+    void addTestItem(CPPUNIT_NS::Test* test, QxRunner::RunnerItem* parent) const;
 };
 
 } // namespace

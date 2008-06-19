@@ -476,6 +476,7 @@ void RunnerModel::initItemConnect(QModelIndex current)
         RunnerItem* item = itemFromIndex(current);
 
         if (item->isRunnable()) {
+            kDebug() << "Connecting item with runnermodel: " << item->data(0);
             connect(item, SIGNAL(completed(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
             connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
         }
@@ -708,6 +709,7 @@ void RunnerModel::runItem(const QModelIndex& index)
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     // Send notification to main thread.
+    kDebug() << "some item completed: " << itemFromIndex(index)->data(0);
     ItemCompletedEvent* completedEvent;
     completedEvent = new ItemCompletedEvent(index);
     QCoreApplication::postEvent(this, completedEvent);

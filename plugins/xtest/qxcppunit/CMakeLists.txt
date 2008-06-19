@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 #
 # TODO install qxcppunit headers
 #
@@ -19,7 +21,14 @@ include_directories(
 set(qxcppunit_SRCS
     cppunititem.cpp
     cppunitmodel.cpp
-    testrunner.cpp)
+    testrunner.cpp
+    testbase.cpp
+    testcase.cpp
+    testsuite.cpp
+    testcommand.cpp
+    testresult.cpp
+    cppunitregister.cpp
+    cppunitoutputparser.cpp)
 
 qt4_add_resources(qxcppunit_SRCS
     resources/qxcppunit.qrc)

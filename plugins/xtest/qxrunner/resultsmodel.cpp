@@ -87,11 +87,13 @@ QVariant ResultsModel::headerData(int section, Qt::Orientation orientation,
 
 int ResultsModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return m_runnerItemIndexes.count();
 }
 
 int ResultsModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return m_headerData.count();
 }
 

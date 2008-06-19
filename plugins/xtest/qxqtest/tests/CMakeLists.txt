@@ -8,8 +8,8 @@ include_directories(
 
 macro(kdev_qx_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )
-    kde4_add_unit_test(qxrunner-${test_EXEC} ${test_SRCS})
-    target_link_libraries(qxrunner-${test_EXEC}
+    kde4_add_unit_test(qxqtest-${test_EXEC} ${test_SRCS})
+    target_link_libraries(qxqtest-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
         ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}

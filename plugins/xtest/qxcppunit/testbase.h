@@ -18,52 +18,59 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_QTESTBASE_H
-#define QXQTEST_QTESTBASE_H
+#ifndef QXCPPUNIT_TESTBASE_H
+#define QXCPPUNIT_TESTBASE_H
 
 #include <qxrunner/runneritem.h>
-#include "qtestresult.h"
 #include <QList>
 #include <QString>
 #include <QFileInfo>
 
+#include "testresult.h"
 
-namespace QxQTest
+namespace QxCppUnit
 {
 
 /**
  * Base for QTestCase, QTestCommand, QTestSuite
  **/
-class QTestBase : public QxRunner::RunnerItem
+class TestBase : public QxRunner::RunnerItem
 {
 Q_OBJECT
+
 public:
-    QTestBase();
-    QTestBase(const QString&, QTestBase* parent);
-    QTestBase(const QList<QVariant>& data); // root
-    virtual ~QTestBase();
+    TestBase();
+    TestBase(const QString&, TestBase* parent);
+    TestBase(const QList<QVariant>& data); // root
+    virtual ~TestBase();
 
     QString name() const;
-    QTestBase* owner();
+    TestBase* owner();
 
-    void addTest(QTestBase*);
+    void addTest(TestBase*);
     unsigned childCount();
-    QTestResult result_();
-    void setResult_(QTestResult&);
+    TestResult result_();
+    void setResult_(TestResult&);
+
+    TestBase* findTestNamed(const QString& name);
 
     // RunnerItem implementation. default to doing nadda
-    virtual int run() { return 0; }
-    virtual bool isRunnable() { return false; }
+    virtual int run() {
+        return 0;
+    }
+    virtual bool isRunnable() {
+        return false;
+    }
 
 protected:
-    QTestBase* childAt(unsigned i);
+    TestBase* childAt(unsigned i);
 
 private:
     QString m_name;
-    QTestBase* m_parent;
-    QList<QTestBase*> m_children;
+    TestBase* m_parent;
+    QList<TestBase*> m_children;
 };
 
-} // end namespace QxQTest
+} // end namespace QxCppUnit
 
-#endif // QXQTEST_QTESTBASE_H
+#endif // QXCPPUNIT_TESTBASE_H

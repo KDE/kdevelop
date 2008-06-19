@@ -1,6 +1,5 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,47 +18,38 @@
  * 02110-1301, USA.
  */
 
+#ifndef QXCPPUNIT_TESTSUITE_H
+#define QXCPPUNIT_TESTSUITE_H
 
-/*!
- * \file  testrunner.cpp
- *
- * \brief Implements class TestRunner.
- */
+#include <QString>
+#include <QFileInfo>
+#include <KProcess>
 
-#include "testrunner.h"
-#include "cppunitmodel.h"
-
-#include <qxrunner/runner.h>
-#include <qxrunner/runnerwindow.h>
-
-using QxRunner::RunnerWindow;
+#include "testbase.h"
+#include "testcase.h"
 
 namespace QxCppUnit
 {
 
-TestRunner::TestRunner()
+class TestSuite : public TestBase
 {
-    m_runner = 0;
-    m_model = new CppUnitModel;
-}
+Q_OBJECT
+public:
+    TestSuite();
+    TestSuite(const QString&, const QFileInfo& executable, TestBase* parent);
+    virtual ~TestSuite();
 
-TestRunner::~TestRunner()
-{
-    // Delete the runner first.
-    delete m_runner;
-    delete m_model;
-}
+    TestCase* testAt(unsigned i);
 
-void TestRunner::registerTests(const QFileInfo& exe)
-{
-    m_model->readTests(exe);
-}
+    virtual int run();
+    virtual bool isRunnable() { 
+        return true;
+    }
 
-QWidget* TestRunner::spawn()
-{
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(m_model);
-    return window;
-}
+private:
+    QFileInfo m_exe;
+};
 
-} // namespace
+} // end namespace QxCppUnit
+
+#endif // QXCPPUNIT_TESTSUITE_H

@@ -19,35 +19,52 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  cppunitmodel.cpp
- *
- * \brief Implements class CppUnitModel.
- */
-
 #include "cppunitmodel.h"
 #include "cppunititem.h"
+#include "testbase.h"
+#include "cppunitregister.h"
+#include <KProcess>
 
-namespace QxCppUnit
-{
+using QxCppUnit::TestBase;
+using QxCppUnit::CppUnitModel;
+using QxCppUnit::CppUnitRegister;
 
 CppUnitModel::CppUnitModel(QObject* parent)
         : RunnerModel(parent)
 {
-    // Data for column headers is stored in the root item.
+/*    // Data for column headers is stored in the root item.
     QList<QVariant> rootData;
     rootData << tr("Test Name") << tr("Result") << tr("Message")
              << tr("File Name") << tr("Line Number");
 
     setRootItem(new CppUnitItem(rootData));
-
+*/
     // Define the set of expected results.
     setExpectedResults(QxRunner::RunWarning | QxRunner::RunError);
 }
 
 CppUnitModel::~CppUnitModel()
 {
+}
 
+void CppUnitModel::readTests(const QFileInfo& exe)
+{
+    KProcess proc;
+    QStringList argv;
+    argv << "-proto";
+    proc.setProgram(exe.filePath(), argv);
+    kDebug() << "executing " << proc.program();
+    proc.setOutputChannelMode(KProcess::SeparateChannels);
+    proc.start();
+    proc.waitForFinished(-1);
+
+    CppUnitRegister reg;
+    reg.setExecutable(exe);
+    reg.addFromXml(&proc);
+    setRootItem(reg.rootItem());
+
+/*    QTestOutputParser parser(proc);
+    parser.go(this);*/
 }
 
 QString CppUnitModel::name() const
@@ -84,4 +101,3 @@ void CppUnitModel::addTestItem(CPPUNIT_NS::Test* test, RunnerItem* parent) const
     }
 }
 
-} // namespace

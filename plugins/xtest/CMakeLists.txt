@@ -62,7 +62,7 @@ target_link_libraries(kdevxtest
     qxqtest)
 if (CPPUNIT_FOUND)
     target_link_libraries( kdevxtest
-    qxcppunit)
+                           qxcppunit)
 endif (CPPUNIT_FOUND)
 
 install(TARGETS kdevxtest DESTINATION ${PLUGIN_INSTALL_DIR})

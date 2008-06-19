@@ -85,8 +85,6 @@ void SelectionManager::slotEntered(const QModelIndex& index)
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
 
-        QItemSelectionModel* selModel = m_view->selectionModel();
-        //m_toggle->setChecked(selModel->isSelected(index));
         m_toggle->setChecked(itemFromIndex(index)->isSelected());
         m_toggle->show();
     } else {
@@ -112,13 +110,6 @@ void SelectionManager::setItemSelected(bool selected)
     const QModelIndex index = m_toggle->index();
     if (index.isValid()) {
         itemFromIndex(index)->setSelected(selected);
-/*        QItemSelectionModel* selModel = m_view->selectionModel();
-        if (selected) {
-            selModel->select(index, QItemSelectionModel::Select);
-        } else {
-            selModel->select(index, QItemSelectionModel::Deselect);
-        }
-        selModel->setCurrentIndex(index, QItemSelectionModel::Current);*/
     }
 }
 
@@ -151,10 +142,6 @@ RunnerItem* SelectionManager::itemFromIndex(const QModelIndex& index) const
     RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
     return runnerModel->itemFromIndex(runnerIndex);
-/*    
-    runnerItemIndex = Utils::modelIndexFromProxy(m_view->model(), index);
-    RunnerItem* item = static_cast<RunnerItem*>(index.internalPointer());
-    return item;*/
 }
 
 #include "selectionmanager.moc"

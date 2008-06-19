@@ -1,6 +1,5 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,47 +18,45 @@
  * 02110-1301, USA.
  */
 
+#include "testsuite.h"
+#include "cppunitoutputparser.h"
 
-/*!
- * \file  testrunner.cpp
- *
- * \brief Implements class TestRunner.
- */
+using QxCppUnit::TestSuite;
+using QxCppUnit::TestBase;
+using QxCppUnit::TestCase;
+using QxCppUnit::CppUnitOutputParser;
 
-#include "testrunner.h"
-#include "cppunitmodel.h"
-
-#include <qxrunner/runner.h>
-#include <qxrunner/runnerwindow.h>
-
-using QxRunner::RunnerWindow;
-
-namespace QxCppUnit
+TestSuite::TestSuite()
+    : TestBase("", 0)
 {
-
-TestRunner::TestRunner()
-{
-    m_runner = 0;
-    m_model = new CppUnitModel;
 }
 
-TestRunner::~TestRunner()
+TestSuite::TestSuite(const QString& name, const QFileInfo& exe, TestBase* parent)
+    : TestBase(name, parent), m_exe(exe)
 {
-    // Delete the runner first.
-    delete m_runner;
-    delete m_model;
 }
 
-void TestRunner::registerTests(const QFileInfo& exe)
+TestSuite::~TestSuite()
 {
-    m_model->readTests(exe);
 }
 
-QWidget* TestRunner::spawn()
+TestCase* TestSuite::testAt(unsigned i)
 {
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(m_model);
-    return window;
+    return qobject_cast<TestCase*>(childAt(i));
 }
 
-} // namespace
+int TestSuite::run()
+{
+    KProcess proc;
+    QStringList argv;
+    proc.setProgram(m_exe.filePath(), argv);
+    kDebug() << "executing " << proc.program();
+    proc.setOutputChannelMode(KProcess::SeparateChannels);
+    proc.start();
+    proc.waitForFinished(-1);
+    CppUnitOutputParser parser(&proc);
+    parser.go(this);
+    return 0;
+}
+
+#include "testsuite.moc"

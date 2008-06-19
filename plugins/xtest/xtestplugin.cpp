@@ -31,13 +31,12 @@
 #include <projectmodel.h>
 #include <shell/core.h>
 
-//#include "sample.h"
 #include <QFile>
+#include <KConfigGroup>
 #include "qxqtest/testrunner.h"
+#include "qxcppunit/testrunner.h"
 
 #include <kdebug.h>
-
-#include "xtestconfig.h"
 
 K_PLUGIN_FACTORY(KDevXtestFactory, registerPlugin<KDevXtestPlugin>();)
 K_EXPORT_PLUGIN(KDevXtestFactory("kdevxtest"))
@@ -51,7 +50,13 @@ public:
     KDevXtestPluginFactory(KDevXtestPlugin *plugin): m_plugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent = 0) {
-        //return sample::testRunnerWidget();
+        Q_UNUSED(parent);
+        return qtest();
+        //return cppunit();
+    }
+
+    QWidget* qtest() // temporary
+    {
         QxQTest::TestRunner* runner = new QxQTest::TestRunner();
         QString root(""); // root build directory
         QString testXmlLoc("");
@@ -67,6 +72,22 @@ public:
         QFile* testXml = new QFile(testXmlLoc);
         kDebug() << "Loading test registration XML: " << testXml->fileName();
         runner->registerTests(testXml, root);
+        return runner->spawn();
+    }
+
+    QWidget* cppunit() // temporary, as well
+    {
+        QxCppUnit::TestRunner* runner = new QxCppUnit::TestRunner();
+        QString exeLoc("");
+        if (Core::self()->projectController()->projectCount() != 0)
+        {
+            // only support a single project, for now
+            IProject* proj = Core::self()->projectController()->projectAt(0);
+            KSharedConfig::Ptr cfg = proj->projectConfiguration();
+            KConfigGroup group(cfg.data(), "XTest");
+            exeLoc = KUrl(group.readEntry("Test Registration")).pathOrUrl();
+        }
+        runner->registerTests(exeLoc);
         return runner->spawn();
     }
 
