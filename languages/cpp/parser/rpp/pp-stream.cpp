@@ -155,7 +155,7 @@ bool Stream::skippedToEnd() const
 
 const uint& Stream::peek(uint offset) const
 {
-  if (c + offset > end)
+  if (c + offset >= end)
     return nullItem;
 
   return *(c + offset);
