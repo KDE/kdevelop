@@ -97,7 +97,7 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
     
   ///Only keep the declarations of each name on the lowest inheritance-level
   foreach( const Pair& decl, declarations )
-    if( nearestDeclaration[decl.first->identifier()] == decl.first )
+    if( depthHash[nearestDeclaration[decl.first->identifier()]] == decl.second )
       ret << decl;
 
   return ret;
