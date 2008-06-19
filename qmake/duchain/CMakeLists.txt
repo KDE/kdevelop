@@ -10,7 +10,7 @@ set(duchain_STAT_SRCS
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 kde4_add_library( kdev4qmakeduchain SHARED ${duchain_STAT_SRCS})
-target_link_libraries(kdev4qmakeduchain ${KDE4_KDECORE_LIBS} kdev4qmakeparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} )
+target_link_libraries(kdev4qmakeduchain ${KDE4_KDECORE_LIBS} kdev4qmakeparser ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} )
 
 install(TARGETS kdev4qmakeduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -25,8 +25,8 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 
-#include <editor/documentrange.h>
-#include <editor/documentrangeobject.h>
+#include <language/editor/documentrange.h>
+#include <language/editor/documentrangeobject.h>
 
 #include "parser/ast.h"
 
