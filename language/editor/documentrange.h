@@ -19,7 +19,7 @@
 #ifndef KDEVDOCUMENTRANGE_H
 #define KDEVDOCUMENTRANGE_H
 
-#include "editorexport.h"
+#include "../languageexport.h"
 
 #include <kurl.h>
 
@@ -35,7 +35,7 @@ class HashedString;
  *
  * \todo parent/child relationships here too?
  */
-class KDEVPLATFORMEDITOR_EXPORT DocumentRange : public KTextEditor::Range
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
     DocumentRange();

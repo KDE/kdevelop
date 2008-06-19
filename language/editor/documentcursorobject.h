@@ -33,7 +33,7 @@ class HashedString;
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORMEDITOR_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursorObject : public KTextEditor::SmartCursorWatcher
 {
 public:
     DocumentCursorObject(KTextEditor::Cursor* cursor);

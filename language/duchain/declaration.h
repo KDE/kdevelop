@@ -22,8 +22,8 @@
 
 #include <QtCore/QList>
 #include <qcontainerfwd.h>
-#include <editor/documentrangeobject.h>
 
+#include "language/editor/documentrangeobject.h"
 #include "language/duchain/identifier.h"
 #include "language/duchain/typesystem.h"
 #include "language/duchain/duchainbase.h"

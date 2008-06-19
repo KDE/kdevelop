@@ -7,11 +7,18 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/language/interfaces
     ${CMAKE_SOURCE_DIR}/language/duchain
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/editor
+    ${CMAKE_SOURCE_DIR}/language/editor
     ${CMAKE_SOURCE_DIR}/util
 )
 
 set(kdevplatformlanguage_LIB_SRCS
+    editor/documentrange.cpp
+    editor/documentrangeobject.cpp
+    editor/documentcursor.cpp
+    editor/documentcursorobject.cpp
+    editor/editorintegrator.cpp
+    editor/editorintegratorstatic.cpp
+    editor/hashedstring.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
@@ -62,7 +69,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES}
-    kdevplatforminterfaces kdevplatformeditor)
+    kdevplatforminterfaces)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -81,6 +88,18 @@ install(FILES
     interfaces/iquickopen.h
     interfaces/iproblem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
+)
+
+install(FILES
+    editor/documentrange.h
+    editor/documentrangeobject.h
+    editor/documentcursor.h
+    editor/documentcursorobject.h
+    editor/editorintegrator.h
+    editor/hashedstring.h
+    editor/simplecursor.h
+    editor/simplerange.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor
 )
 
 install(FILES

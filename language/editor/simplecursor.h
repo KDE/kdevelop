@@ -19,10 +19,10 @@
 #define SIMPLECURSOR_H
 
 #include <ktexteditor/cursor.h>
-#include "editorexport.h"
+#include "../languageexport.h"
 
 namespace KDevelop {
-struct KDEVPLATFORMEDITOR_EXPORT SimpleCursor {
+struct KDEVPLATFORMLANGUAGE_EXPORT SimpleCursor {
 
  int line, column;
 

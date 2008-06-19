@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "editor/hashedstring.h"
-#include "editor/simplecursor.h"
+#include "language/editor/hashedstring.h"
+#include "language/editor/simplecursor.h"
 
 #include "language/duchain/identifier.h"
 

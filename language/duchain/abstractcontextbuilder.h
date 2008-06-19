@@ -32,8 +32,7 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include <editor/editorintegrator.h>
-
+#include "language/editor/editorintegrator.h"
 #include "language/duchain/topducontext.h"
 #include "language/duchain/duchainpointer.h"
 #include "language/duchain/duchainlock.h"

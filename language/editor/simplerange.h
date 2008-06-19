@@ -21,11 +21,11 @@
 
 #include <ktexteditor/range.h>
 
-#include "editorexport.h"
+#include "../languageexport.h"
 #include "simplecursor.h"
 
 namespace KDevelop {
-struct KDEVPLATFORMEDITOR_EXPORT SimpleRange {
+struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
     
     SimpleCursor start, end;
 

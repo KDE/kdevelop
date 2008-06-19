@@ -22,7 +22,7 @@
 #include <ktexteditor/document.h>
 
 #include "documentrangeobject.h"
-#include <hashedstring.h>
+#include "hashedstring.h"
 
 using namespace KTextEditor;
 

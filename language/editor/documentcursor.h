@@ -19,7 +19,7 @@
 #ifndef KDEVDOCUMENTCURSOR_H
 #define KDEVDOCUMENTCURSOR_H
 
-#include "editorexport.h"
+#include "../languageexport.h"
 
 #include <kurl.h>
 
@@ -37,7 +37,7 @@ class HashedString;
  *
  * \todo override comparison operators and take them into account
  */
-class KDEVPLATFORMEDITOR_EXPORT DocumentCursor : public KTextEditor::Cursor
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public KTextEditor::Cursor
 {
 public:
     explicit DocumentCursor(const HashedString& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());

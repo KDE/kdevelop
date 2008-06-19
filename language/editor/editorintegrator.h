@@ -25,7 +25,6 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/smartrange.h>
 
-#include "editorexport.h"
 #include "documentcursor.h"
 
 
@@ -47,7 +46,7 @@ namespace KDevelop
  *
  * Does not need a d-pointer, is only a container-class.
  * */
-struct KDEVPLATFORMEDITOR_EXPORT ModificationRevision
+struct KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {
   ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
 
@@ -63,7 +62,7 @@ struct KDEVPLATFORMEDITOR_EXPORT ModificationRevision
   int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
 };
 
-KDEVPLATFORMEDITOR_EXPORT kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev);
+KDEVPLATFORMLANGUAGE_EXPORT kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev);
 
 /**
  * Provides facilities for easy integration of a text editor component with
@@ -75,7 +74,7 @@ KDEVPLATFORMEDITOR_EXPORT kdbgstream& operator<< (kdbgstream& s, const Modificat
  * \todo move private members to a private class
  * \todo non-loaded documents don't trigger the removeDocument call...
  */
-class KDEVPLATFORMEDITOR_EXPORT EditorIntegrator
+class KDEVPLATFORMLANGUAGE_EXPORT EditorIntegrator
 {
 public:
   EditorIntegrator();

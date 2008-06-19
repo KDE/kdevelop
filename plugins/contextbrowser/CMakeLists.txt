@@ -5,9 +5,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/language/editor
     ${CMAKE_SOURCE_DIR}/language/duchain
     ${CMAKE_SOURCE_DIR}/language
-    ${CMAKE_SOURCE_DIR}/editor
 )
 
 

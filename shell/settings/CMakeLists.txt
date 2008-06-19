@@ -3,10 +3,10 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/sublime
     ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/editor
     ${CMAKE_SOURCE_DIR}/project
     ${CMAKE_SOURCE_DIR}/project/interfaces
     ${CMAKE_SOURCE_DIR}/language
+    ${CMAKE_SOURCE_DIR}/language/editor
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/language/interfaces
     ${CMAKE_SOURCE_DIR}/shell

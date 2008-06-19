@@ -17,7 +17,7 @@
 //krazy:excludeall=dpointer,inline
 
 #include <QString>
-#include "editorexport.h"
+#include "../languageexport.h"
 
 class QDataStream;
 
@@ -25,9 +25,9 @@ namespace KDevelop {
 class HashedString;
 }
 
-KDEVPLATFORMEDITOR_EXPORT QDataStream& operator << ( QDataStream& stream, const KDevelop::HashedString& str );
+KDEVPLATFORMLANGUAGE_EXPORT QDataStream& operator << ( QDataStream& stream, const KDevelop::HashedString& str );
 
-KDEVPLATFORMEDITOR_EXPORT QDataStream& operator >> ( QDataStream& stream, KDevelop::HashedString& str );
+KDEVPLATFORMLANGUAGE_EXPORT QDataStream& operator >> ( QDataStream& stream, KDevelop::HashedString& str );
 
 namespace KDevelop {
 
@@ -40,7 +40,7 @@ typedef uint HashType; ///@todo use at least 64 bit hash
  *
  * Since most of the member-functions boil down to a simply integer-comparison in the most common case, they are inlined for performance-reasons.
  * */
-class KDEVPLATFORMEDITOR_EXPORT HashedString {
+class KDEVPLATFORMLANGUAGE_EXPORT HashedString {
  public:
   HashedString();
 
@@ -79,12 +79,12 @@ class KDEVPLATFORMEDITOR_EXPORT HashedString {
   friend QDataStream& ::operator >> ( QDataStream& stream, HashedString& str );
 };
 
-KDEVPLATFORMEDITOR_EXPORT inline uint qHash( const KDevelop::HashedString& str ) {
+KDEVPLATFORMLANGUAGE_EXPORT inline uint qHash( const KDevelop::HashedString& str ) {
   return str.hash();
 }
 }
 
-// KDEVPLATFORMEDITOR_EXPORT inline uint qHash( const KDevelop::HashedString& str ) {
+// KDEVPLATFORMLANGUAGE_EXPORT inline uint qHash( const KDevelop::HashedString& str ) {
 //   return str.hash();
 // }
 

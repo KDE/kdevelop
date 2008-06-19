@@ -24,7 +24,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "editorexport.h"
+#include "../languageexport.h"
 
 #include "documentcursor.h"
 #include "documentrange.h"
@@ -40,7 +40,7 @@ class DocumentRangeObjectPrivate;
  *
  * This allows text without a currently loaded text editor to be represented.
  */
-class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
 public:
     /**

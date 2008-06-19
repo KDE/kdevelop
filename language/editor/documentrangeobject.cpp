@@ -24,7 +24,7 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-#include <hashedstring.h>
+#include "hashedstring.h"
 
 #include "editorintegrator.h"
 #include "documentrangeobject_p.h"

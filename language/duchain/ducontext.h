@@ -22,11 +22,11 @@
 #include <QtCore/QHash>
 #include <QVarLengthArray>
 
-#include <editor/documentcursorobject.h>
-#include "identifier.h"
-#include "typesystem.h"
-#include "duchainbase.h"
-#include "../languageexport.h"
+#include "language/editor/documentcursorobject.h"
+#include "language/duchain/identifier.h"
+#include "language/duchain/typesystem.h"
+#include "language/duchain/duchainbase.h"
+#include "language/languageexport.h"
 
 template<class T>
 class QSet;

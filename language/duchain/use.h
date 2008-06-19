@@ -19,7 +19,7 @@
 #ifndef DEFINITIONUSE_H
 #define DEFINITIONUSE_H
 
-#include "editor/simplerange.h"
+#include "language/editor/simplerange.h"
 
 #include "language/languageexport.h"
 

@@ -22,13 +22,11 @@
 #include "documentrangeobject.h"
 #include <ktexteditor/smartrange.h>
 #include "simplerange.h"
-#include "editorexport.h"
-
 
 namespace KDevelop
 {
 
-class KDEVPLATFORMEDITOR_EXPORT DocumentRangeObjectPrivate
+class DocumentRangeObjectPrivate
 {
     public:
     DocumentRangeObjectPrivate() : m_smartRange(0)

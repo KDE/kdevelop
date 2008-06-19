@@ -27,7 +27,7 @@
 
 #include "indexedstring.h"
 
-#include "editor/hashedstring.h"
+#include "language/editor/hashedstring.h"
 
 #include "language/languageexport.h"
 
