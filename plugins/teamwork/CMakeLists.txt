@@ -1,4 +1,6 @@
 
+find_package(Threads REQUIRED)
+
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9523 )
 include_directories(
     ${CMAKE_SOURCE_DIR}
