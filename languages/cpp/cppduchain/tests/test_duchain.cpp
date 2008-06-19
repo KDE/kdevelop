@@ -2252,7 +2252,7 @@ void TestDUChain::testStringSets() {
   const unsigned int choiceCount = 30;
   const unsigned int itemCount = 100;
   
-  BasicSetRepository rep("test repository", false, 1000000);
+  BasicSetRepository rep("test repository", false);
   
 //  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
@@ -2497,23 +2497,27 @@ void TestDUChain::testStringSets() {
 
 void TestDUChain::testIndexedStrings() {
   
-  int testCount  = 100000;
+  int testCount  = 600000;
 
+  QHash<QString, IndexedString> knownIndices;
   int a = 0;
   for(a = 0; a < testCount; ++a) {
     QString testString;
-    int length = rand() % 6;
+    int length = rand() % 10;
     for(int b = 0; b < length; ++b)
       testString.append((char)(rand() % 6) + 'a');
     QByteArray array = testString.toUtf8();
     //kDebug() << "checking with" << testString;
     //kDebug() << "checking" << a;
     IndexedString indexed(array.constData(), array.size(), IndexedString::hashString(array.constData(), array.size()));
-    IndexedString indexed2(array.constData(), array.size(), IndexedString::hashString(array.constData(), array.size()));
     
     QCOMPARE(indexed.str(), testString);
-    QVERIFY(indexed == indexed2);
-    QCOMPARE(indexed.index(), indexed2.index());
+    if(knownIndices.contains(testString)) {
+      QCOMPARE(indexed.index(), knownIndices[testString].index());
+    } else {
+      knownIndices[testString] = indexed;
+    }
+
     if(a % (testCount/10) == 0)
       kDebug() << a << "of" << testCount;
   }
