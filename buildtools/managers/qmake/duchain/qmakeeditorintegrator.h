@@ -23,7 +23,7 @@
 #ifndef QMAKEEDITORINTEGRATOR_H
 #define QMAKEEDITORINTEGRATOR_H
 
-#include <editor/editorintegrator.h>
+#include <language/editor/editorintegrator.h>
 #include "qmakeduchainexport.h"
 
 namespace QMake

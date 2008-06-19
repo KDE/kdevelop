@@ -8,7 +8,7 @@ include_directories(
  ${KDEVPLATFORM_INCLUDE_DIR}/language
  ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
  ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
- ${KDEVPLATFORM_INCLUDE_DIR}/editor
+ ${KDEVPLATFORM_INCLUDE_DIR}/language/editor
  ${KDEVPLATFORM_INCLUDE_DIR}/util
  ${CMAKE_CURRENT_SOURCE_DIR}/parser
  ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
@@ -63,12 +63,12 @@ kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS}
                         ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY}
                         ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
-                        ${KDEVPLATFORM_EDITOR_LIBRARY})
+                        )
 
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
                         ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon
-                        ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_EDITOR_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+                        ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
                         ${KDE4_KTEXTEDITOR_LIBS})
 
 

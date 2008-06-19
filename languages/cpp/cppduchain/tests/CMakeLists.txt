@@ -17,7 +17,7 @@ target_link_libraries(cppexpressionparsertest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTED
 include_directories(
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
     ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/editor
+    ${KDEVPLATFORM_INCLUDE_DIR}/language/editor
     ${KDEVPLATFORM_INCLUDE_DIR}/language
     ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
     ${CMAKE_SOURCE_DIR}/languages/cpp
