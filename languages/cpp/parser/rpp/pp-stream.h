@@ -72,7 +72,7 @@ class KDEVCPPRPP_EXPORT Stream
     
     char peekNextCharacter() const {
       const unsigned int* next = c+1;
-      if (next > end || !isCharacter(*next))
+      if (next >= end || !isCharacter(*next))
         return (char)0;
 
       return characterFromIndex(*next);
