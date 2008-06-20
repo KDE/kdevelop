@@ -97,7 +97,7 @@ class ExampleRequestItem {
 template<class Item, class ItemRequest>
 class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
-    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0) {
+    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0) {
     }
     ~Bucket() {
       delete[] m_data;
@@ -147,19 +147,44 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         return index; //We have found the item
 
       unsigned int totalSize = request.itemSize() + 2;
-      if(totalSize > m_available)
-        return 0; //Not enough space for the item
+      if(totalSize > m_available) {
+        //Try finding the smallest freed item that can hold the data
+        unsigned short currentIndex = m_largestFreeItem;
+        unsigned short previousIndex = 0;
+        while(currentIndex && freeSize(currentIndex) >= (totalSize-2)) {
+          unsigned short follower = followerIndex(currentIndex);
+          if(follower && freeSize(follower) >= (totalSize-2)) {
+            //The item also fits into the smaller follower, so use that one
+            previousIndex = currentIndex;
+            currentIndex = follower;
+          }else{
+            //The item fits into currentIndex, but not into the follower. So use currentIndex
+            break;
+          }
+        }
+        
+        if(!currentIndex || freeSize(currentIndex) < (totalSize-2))
+          return 0;
+        
+        if(previousIndex)
+          setFollowerIndex(previousIndex, followerIndex(currentIndex));
+        else
+          m_largestFreeItem = followerIndex(currentIndex);
+        
+        insertedAt = currentIndex;
+      }else{
+        //We have to insert the item
+        insertedAt = ItemRepositoryBucketSize - m_available;
+        
+        insertedAt += 2; //Room for the prepended follower-index
 
-      //We have to insert the item
-      insertedAt = ItemRepositoryBucketSize - m_available;
+        m_available -= totalSize;
+      }
       
-      insertedAt += 2; //Room for the prepended follower-index
       if(index)
         setFollowerIndex(index, insertedAt);
       setFollowerIndex(insertedAt, 0);
       
-      m_available -= totalSize;
-
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
       
@@ -167,6 +192,43 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       request.createItem((Item*)(m_data + insertedAt));
       
       return insertedAt;
+    }
+    
+    void deleteItem(unsigned int hash, unsigned short index, unsigned short size) {
+      //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
+      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short currentIndex = m_objectMap[localHash];
+      unsigned short previousIndex = 0;
+      //Fix the follower-link by setting the follower of the previous item to the next one, or updating m_objectMap
+      while(currentIndex != index) {
+        previousIndex = currentIndex;
+        currentIndex = followerIndex(currentIndex);
+        //If this assertion triggers, the deleted item was not registered under the given hash
+        Q_ASSERT(currentIndex);
+      }
+      
+      if(!previousIndex)
+        //The item was directly in the object map
+        m_objectMap[localHash] = followerIndex(index);
+      else
+        setFollowerIndex(previousIndex, followerIndex(index));
+      
+      setFreeSize(index, size);
+      
+      //Insert the free item into the chain opened by m_largestFreeItem
+      currentIndex = m_largestFreeItem;
+      previousIndex = 0;
+      
+      while(currentIndex && *(unsigned short*)(m_data + currentIndex) > size) {
+        previousIndex = currentIndex;
+        currentIndex = followerIndex(currentIndex);
+      }
+      
+      if(previousIndex)
+        //This item is larger than all already registered free items, or there are none.
+        setFollowerIndex(previousIndex, index);
+
+      setFollowerIndex(index, currentIndex);
     }
     
     inline const Item* itemFromIndex(unsigned short index) const {
@@ -204,6 +266,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
     
   private:
+    
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     inline unsigned short followerIndex(unsigned short index) const {
       Q_ASSERT(index >= 2);
@@ -214,10 +277,21 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       Q_ASSERT(index >= 2);
       *((unsigned short*)(m_data+(index-2))) = follower;
     }
+    //Only returns the corrent value if the item is actually free
+    inline unsigned short freeSize(unsigned short index) const {
+      return *((unsigned short*)(m_data+index));
+    }
+
+    //Convenience function to set the free-size, only for freed items
+    void setFreeSize(unsigned short index, unsigned short size) {
+      *((unsigned short*)(m_data+index)) = size;
+    }
+
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
     uint m_objectMapSize;
+    short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     
     ///@todo eventually replace this with an efficient structure that can also easily be stored to disk
     std::hash_map<uint, unsigned short> m_nextBucketForHash;
