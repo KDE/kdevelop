@@ -183,6 +183,11 @@ void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOw
 
 }
 
+void DocumentRangeObject::clearSmartRange()
+{
+    setSmartRange(0);
+}
+
 SimpleRange DocumentRangeObject::range( ) const
 {
     Q_D(const DocumentRangeObject);

@@ -1132,6 +1132,17 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
 //   range->setWantsDirectChanges(true);
 }
 
+void DUContext::clearUseSmartRanges()
+{
+  ENSURE_CAN_WRITE
+  foreach (SmartRange* range, d_func()->m_rangesForUses) {
+    range->removeWatcher(this);
+    EditorIntegrator::releaseRange(range);
+  }
+  
+  d_func()->m_rangesForUses.clear();
+}
+
 void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 {
   ENSURE_CAN_WRITE

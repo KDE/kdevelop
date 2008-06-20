@@ -433,6 +433,11 @@ public:
   void setUseSmartRange(int useIndex, KTextEditor::SmartRange* range);
 
   /**
+   * Clears all smart ranges associated with uses.
+   */
+  void clearUseSmartRanges();
+
+  /**
    * Assigns the declaration represented by @param declarationIndex to the use with index @param useIndex
    * */
   void setUseDeclaration(int useIndex, int declarationIndex);

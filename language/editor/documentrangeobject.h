@@ -63,6 +63,8 @@ public:
     void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 
     void setRangeOwning(RangeOwning ownsRange);
+    
+    void clearSmartRange();
 
     void setRange(const SimpleRange& range);
     ///Returns the text-range.

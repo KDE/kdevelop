@@ -35,6 +35,7 @@ public:
   ~SmartConverter();
   ///Converts all ranges in the given context to smart-ranges
   void convertDUChain(DUContext* context) const;
+  void deconvertDUChain(DUContext* context) const;
 
 private:
   class SmartConverterPrivate* const d;

@@ -51,6 +51,7 @@ public:
 
 Q_SIGNALS:
   void documentAboutToBeDeleted(KTextEditor::Document* document);
+  void documentAboutToBeReloaded(KTextEditor::Document* document);
 
 public Q_SLOTS:
   /**
@@ -61,6 +62,8 @@ public Q_SLOTS:
   void documentLoaded();
 
   void documentUrlChanged(KTextEditor::Document* document);
+  
+  void reloadDocument(KTextEditor::Document* document);
 
 public:
   QMutex* mutex;

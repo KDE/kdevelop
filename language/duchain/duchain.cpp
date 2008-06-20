@@ -91,6 +91,7 @@ DUChain::DUChain()
 {
   SymbolTable::self(); //Initialize singleton
 
+  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeReloaded(KTextEditor::Document*)), SLOT(documentAboutToBeReloaded(KTextEditor::Document*)));
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
@@ -387,8 +388,26 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
-void DUChain::documentAboutToBeDeleted(KTextEditor::Document * /*doc*/)
+void DUChain::documentAboutToBeReloaded(KTextEditor::Document* doc)
 {
+  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  
+  EditorIntegrator editor;
+  SmartConverter sc(&editor);
+
+  foreach (TopDUContext* top, chains)
+    sc.deconvertDUChain( top );
+}
+
+void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
+{
+  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  
+  EditorIntegrator editor;
+  SmartConverter sc(&editor);
+
+  foreach (TopDUContext* top, chains)
+    sc.deconvertDUChain( top );
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)

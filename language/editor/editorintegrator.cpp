@@ -71,6 +71,7 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
   Q_ASSERT(data()->thread() == document->thread());
   QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
   QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
+  QObject::connect(document, SIGNAL(aboutToReload(KTextEditor::Document*)), data(), SLOT(reloadDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
 }
 

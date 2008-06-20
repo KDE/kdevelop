@@ -89,6 +89,12 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
   emit documentAboutToBeDeleted(document);
 }
 
+
+void EditorIntegratorStatic::reloadDocument(KTextEditor::Document* document)
+{
+  emit documentAboutToBeReloaded(document);
+}
+
 }
 
 #include "editorintegratorstatic.moc"

@@ -21,6 +21,7 @@
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
+#include <KTextEditor/SmartInterface>
 
 #include <editorintegrator.h>
 #include <hashedstring.h>
@@ -66,6 +67,20 @@ public:
 
     m_editor->exitCurrentRange();
   }
+
+  void deconvertDUChainInternal(DUContext* context) const
+  {
+    foreach (Declaration* dec, context->localDeclarations())
+      dec->clearSmartRange();
+
+    context->clearUseSmartRanges();
+    
+    foreach (DUContext* child, context->childContexts())
+      deconvertDUChainInternal(child);
+
+    context->clearSmartRange();
+  }
+
   KDevelop::EditorIntegrator* m_editor;
   KDevelop::ICodeHighlighting* m_hl;
 };
@@ -89,6 +104,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
   d->m_editor->setCurrentUrl( context->url() );
 
   if (d->m_editor->smart() && !context->smartRange()) {
+    QMutexLocker smartLock(d->m_editor->smart()->smartMutex());
     context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
     if (context->range().textRange() != d->m_editor->currentDocument()->documentRange())
       kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << d->m_editor->currentDocument()->documentRange();
@@ -97,6 +113,18 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
     d->convertDUChainInternal(context, true);
     d->m_editor->exitCurrentRange(); //topRange(..) opens a range
+  }
+}
+
+void SmartConverter::deconvertDUChain(DUContext* context) const
+{
+  DUChainWriteLocker lock(DUChain::lock());
+
+  d->m_editor->setCurrentUrl( context->url() );
+
+  if (SmartInterface* smart = d->m_editor->smart()) {
+    QMutexLocker smartLock(smart->smartMutex());
+    d->deconvertDUChainInternal(context);
   }
 }
 
