@@ -402,7 +402,7 @@ protected:
         DUChainReadLocker readLock( DUChain::lock() );
         const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
-        QMutexLocker lock( m_editor->smartMutex() );
+        QMutexLocker smartLock( m_editor->smartMutex() );
         // translated is now in sync with the current state of the document, with whatever changes
         // have occurred since the text was fetched.
         SimpleRange translated = m_editor->translate(range);
@@ -420,6 +420,10 @@ protected:
 
           if ( child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated )
           {
+            // No need to have the translated range accurate any more
+            // Also we can't unlock after the duchain lock is unlocked
+            smartLock.unlock();
+
             // Match
             ret = child;
             readLock.unlock();
