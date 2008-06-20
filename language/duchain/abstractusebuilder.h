@@ -127,11 +127,8 @@ protected:
 
       const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
-      SimpleRange translated = newRange;
-      if (LanguageSpecificUseBuilderBase::editor()->smart()) {
-        QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smart()->smartMutex());
-        translated = SimpleRange(LanguageSpecificUseBuilderBase::editor()->smart()->translateFromRevision(translated.textRange()) );
-      }
+      QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smartMutex());
+      SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(newRange);
 
       for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
         const Use& use = uses[nextUseIndex()];

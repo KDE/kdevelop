@@ -75,12 +75,8 @@ protected:
       // Seek a matching declaration
 
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
-      SimpleRange translated = newRange;
-
-      if (LanguageSpecificDeclarationBuilderBase::editor()->smart()) {
-        QMutexLocker smartLock(LanguageSpecificDeclarationBuilderBase::editor()->smart()->smartMutex());
-        translated = SimpleRange( LanguageSpecificDeclarationBuilderBase::editor()->smart()->translateFromRevision(translated.textRange()) );
-      }
+      QMutexLocker smartLock(LanguageSpecificDeclarationBuilderBase::editor()->smartMutex());
+      SimpleRange translated = LanguageSpecificDeclarationBuilderBase::editor()->translate(newRange);
 
       QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->allLocalDeclarations(localId);
       foreach( Declaration* dec, declarations ) {
