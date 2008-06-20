@@ -46,17 +46,13 @@ EditorIntegratorStatic::~EditorIntegratorStatic()
   delete mutex;
 }
 
-void EditorIntegratorStatic::documentLoaded()
+void EditorIntegratorStatic::documentLoaded(KTextEditor::Document* doc)
 {
-  Document* doc = qobject_cast<Document*>(sender());
-  if (!doc) {
-    kWarning() << "Unexpected non-document sender called this slot!" ;
-    return;
-  }
-  
   // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
   if (SmartInterface* smart = dynamic_cast<SmartInterface*>(doc))
     smart->setClearOnDocumentReload(false);
+
+  disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded(KTextEditor::Document*)));
 
   {
     QMutexLocker lock(mutex);
