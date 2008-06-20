@@ -128,6 +128,7 @@ void DUContextPrivate::synchronizeUsesToSmart() const
   Q_ASSERT(m_rangesForUses.count() == m_uses.count());
   KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
   Q_ASSERT(iface);
+  
   QMutexLocker l(iface->smartMutex());
 
   for(int a = 0; a < m_uses.count(); a++) {

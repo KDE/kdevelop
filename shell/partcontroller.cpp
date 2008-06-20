@@ -179,6 +179,7 @@ KTextEditor::Document* PartController::createTextPart(
 
 void PartController::removePart( KParts::Part *part )
 {
+#if 0
     if ( KTextEditor::Document * doc = qobject_cast<KTextEditor::Document *>( part ) )
     {
         if ( KTextEditor::SmartInterface * smart = dynamic_cast<KTextEditor::SmartInterface*>( doc ) )
@@ -191,6 +192,7 @@ void PartController::removePart( KParts::Part *part )
 
         kWarning() << "Deleting text editor" << doc << "which does not have a smart interface." ;
     }
+#endif
 
     KParts::PartManager::removePart( part );
 }

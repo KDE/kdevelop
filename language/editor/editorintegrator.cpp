@@ -141,9 +141,7 @@ SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
 template<>
 SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
-  SmartInterface* iface = m_smart;
-  
-  QMutexLocker lock(iface ? iface->smartMutex() : 0);
+  QMutexLocker lock(m_smart->smartMutex());
 
 
   SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
@@ -246,9 +244,6 @@ SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTe
 {
   if(!smart())
       return 0;
-  SmartInterface* iface = smart();
-  
-  QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
   return d->createRange<SmartRange>(range, insertBehavior);
 }
@@ -321,6 +316,7 @@ void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
 void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
 {
   SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document());
+
   QMutexLocker lock(iface ? iface->smartMutex() : 0);
   
   if( range->parentRange() )

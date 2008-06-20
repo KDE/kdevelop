@@ -395,7 +395,7 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
   SmartConverter sc(&editor);
 
   foreach (TopDUContext* top, chains) {
-    DUChainWriteLocker lock( DUChain::lock() );
+    DUChainReadLocker lock( DUChain::lock() );
     sc.deconvertDUChain( top );
   }
 }
@@ -409,7 +409,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
   foreach (TopDUContext* chain, chains) {
-    DUChainWriteLocker lock( DUChain::lock() );
+    DUChainReadLocker lock( DUChain::lock() );
     sc.convertDUChain(chain);
   }
 

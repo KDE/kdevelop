@@ -129,10 +129,8 @@ protected:
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
       SimpleRange translated = newRange;
       if (LanguageSpecificUseBuilderBase::editor()->smart()) {
-        lock.unlock();
         QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smart()->smartMutex());
         translated = SimpleRange(LanguageSpecificUseBuilderBase::editor()->smart()->translateFromRevision(translated.textRange()) );
-        lock.lock();
       }
 
       for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
