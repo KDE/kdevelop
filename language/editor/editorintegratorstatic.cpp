@@ -59,6 +59,11 @@ void EditorIntegratorStatic::documentLoaded()
     // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
     smart->setClearOnDocumentReload(false);
     i.revision = smart->currentRevision();
+    // Don't use revision 0, we don't want it (it's pre-loading from disk)
+    if (i.revision == 0) {
+      i.revision = -1;
+      smart->releaseRevision(0);
+    }
   }
 
   disconnect(doc, SIGNAL(completed()), this, SLOT(documentLoaded()));
