@@ -96,7 +96,7 @@ SmartInterface* EditorIntegrator::smart() const
 
 QMutex* EditorIntegrator::smartMutex() const
 {
-  return d->m_smart->smartMutex();
+  return d->m_smart ? d->m_smart->smartMutex() : 0;
 }
 
 SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
@@ -145,7 +145,6 @@ template<>
 SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
   QMutexLocker lock(m_smart->smartMutex());
-
 
   SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
 
@@ -318,6 +317,11 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
 
 void EditorIntegrator::setCurrentUrl(const HashedString& url)
 {
+  if (d->m_smart) {
+    // Extra safety
+    d->m_smart->clearRevision();
+  }
+
   d->m_currentUrl = url;
 
   QMutexLocker lock(data()->mutex);
