@@ -397,26 +397,26 @@ protected:
       kDebug(9007) << "Bad context-range" << range.textRange();
 
     {
-      DUChainReadLocker readLock( DUChain::lock() );
-
       if ( recompiling() )
       {
+        DUChainReadLocker readLock( DUChain::lock() );
         const QVector<DUContext*>& childContexts = currentContext()->childContexts();
-        QMutexLocker lock( m_editor->smart() ? m_editor->smart()->smartMutex() : 0 );
-        SimpleRange translated = range;
 
-        if ( m_editor->smart() )
-          translated = SimpleRange( m_editor->smart()->translateFromRevision( translated.textRange() ) );
+        QMutexLocker lock( m_editor->smartMutex() );
+        // translated is now in sync with the current state of the document, with whatever changes
+        // have occurred since the text was fetched.
+        SimpleRange translated = m_editor->translate(range);
 
         for ( ; nextContextIndex() < childContexts.count(); ++nextContextIndex() )
         {
           DUContext* child = childContexts.at( nextContextIndex() );
 
-          if ( child->range().start > translated.end && child->smartRange() )
+          if ( child->range().start > translated.end && child->smartRange() ) {
 #ifdef DEBUG_UPDATE_MATCHING
               kDebug() << "range order mismatch, stopping because encountered" << child->range().textRange();
 #endif
               break;
+          }
 
           if ( child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated )
           {
@@ -439,7 +439,6 @@ protected:
 
       if ( !ret )
       {
-        readLock.unlock();
         DUChainWriteLocker writeLock( DUChain::lock() );
 
         ret = newContext( SimpleRange( range ) );

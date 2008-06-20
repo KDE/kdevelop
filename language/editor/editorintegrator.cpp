@@ -94,6 +94,11 @@ SmartInterface* EditorIntegrator::smart() const
   return d->m_smart;
 }
 
+QMutex* EditorIntegrator::smartMutex() const
+{
+  return d->m_smart->smartMutex();
+}
+
 SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
 {
   if (SmartInterface* iface = smart()) {
@@ -425,6 +430,22 @@ kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev) {
 QObject * EditorIntegrator::notifier()
 {
     return data();
+}
+
+void EditorIntegrator::adjustRangeTo(const SimpleRange& fromRange)
+{
+  Q_ASSERT(smart());
+  if (currentRange()) {
+    QMutexLocker lock(smartMutex());
+    currentRange()->setRange(smart()->translateFromRevision(fromRange.textRange()));
+  }
+}
+
+SimpleRange EditorIntegrator::translate(const SimpleRange& fromRange) const
+{
+  if (smart())
+    return smart()->translateFromRevision(fromRange.textRange());
+  return fromRange;
 }
 
 }

@@ -26,7 +26,7 @@
 #include <ktexteditor/smartrange.h>
 
 #include "documentcursor.h"
-
+#include "simplerange.h"
 
 class QMutex;
 
@@ -134,6 +134,9 @@ public:
   /// Convenience function to return the SmartInterface for the current document.
   KTextEditor::SmartInterface* smart() const;
 
+  /// Convenience function to return the mutex for the current SmartInterface, if one exists.
+  QMutex* smartMutex() const;
+
   enum TopRangeType {
     Highlighting /**< top range type for highlighting */,
     DefinitionUseChain /**< top range type for duchain */,
@@ -175,6 +178,19 @@ public:
    * Create a new persistant cursor from the given \a token on the given \a edge.
    */
   KTextEditor::SmartCursor* createCursor(std::size_t token, Edge edge);
+
+  /**
+   * Apply a possibly dated range to the current smart cursor.  Performs translation on \a fromRange,
+   * then applies it to smartRange.  Takes care of smart locking.
+   */
+  void adjustRangeTo(const SimpleRange& fromRange);
+
+  /**
+   * Translate the given \a range to the current smart revision, and return the result.
+   * You need to have the smart mutex locked for the result to remain valid while you process it.
+   */
+  SimpleRange translate(const SimpleRange& fromRange) const;
+
 
   // Set defaults for creation of ranges
   void setNewRange(const KTextEditor::SmartRange& range);
