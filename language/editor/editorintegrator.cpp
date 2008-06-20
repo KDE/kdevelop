@@ -63,6 +63,9 @@ EditorIntegrator::EditorIntegrator()
 
 EditorIntegrator::~ EditorIntegrator()
 {
+  if (d->m_smart)
+    d->m_smart->clearRevision();
+  
   delete d;
 }
 
