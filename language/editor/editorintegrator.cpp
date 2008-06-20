@@ -292,7 +292,7 @@ HashedString EditorIntegrator::currentUrl() const
   return d->m_currentUrl;
 }
 
-bool EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
+int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
 {
   if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(document)) {
     QMutexLocker lock(data()->mutex);
@@ -304,11 +304,11 @@ bool EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
         smart->releaseRevision(i.revision);
 
       i.revision = smart->currentRevision();
-      return true;
+      return i.revision;
     }
   }
 
-  return false;
+  return -1;
 }
 
 void EditorIntegrator::setCurrentUrl(const HashedString& url)

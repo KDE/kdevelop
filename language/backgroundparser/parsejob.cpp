@@ -121,7 +121,7 @@ QString ParseJob::contentsFromEditor()
     if( !doc )
         return QString();
 
-    EditorIntegrator::saveCurrentRevision(doc);
+    m_revisionToken = EditorIntegrator::saveCurrentRevision(doc);
 
     return doc->text();
 }
