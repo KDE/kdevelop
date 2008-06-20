@@ -1,7 +1,7 @@
 /*!
- * @mainpage editor - An editor integration library.
+ * @mainpage Editor Integration
  *
- * editor is a library that provides easier access to the KTextEditor
+ * The Editor Integration api provides easier access to the KTextEditor
  * API.
  *
  * @section desc Description

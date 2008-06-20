@@ -29,7 +29,7 @@ Platform consists of
 - lib/project and lib/language
   -  additional libraries for project managers and language supports (usable for other plugins as well)
   .
-- lib/config, lib/editor, etc.
+- lib/config, etc.
   -  additional libraries usable for both shell and plugins
   .
 .

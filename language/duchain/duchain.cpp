@@ -91,7 +91,6 @@ DUChain::DUChain()
 {
   SymbolTable::self(); //Initialize singleton
 
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeReloaded(KTextEditor::Document*)), SLOT(documentAboutToBeReloaded(KTextEditor::Document*)));
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
@@ -388,17 +387,6 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
-void DUChain::documentAboutToBeReloaded(KTextEditor::Document* doc)
-{
-  QList<TopDUContext*> chains = chainsForDocument(doc->url());
-  
-  EditorIntegrator editor;
-  SmartConverter sc(&editor);
-
-  foreach (TopDUContext* top, chains)
-    sc.deconvertDUChain( top );
-}
-
 void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
 {
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
@@ -406,20 +394,24 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
   EditorIntegrator editor;
   SmartConverter sc(&editor);
 
-  foreach (TopDUContext* top, chains)
+  foreach (TopDUContext* top, chains) {
+    DUChainWriteLocker lock( DUChain::lock() );
     sc.deconvertDUChain( top );
+  }
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 {
-    // Convert any duchains to the smart equivalent first
-    EditorIntegrator editor;
+  // Convert any duchains to the smart equivalent first
+  EditorIntegrator editor;
   SmartConverter sc(&editor/*, codeHighlighting()*/); ///@todo find a way to do the highlighting right now
 
-    QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
-    foreach (TopDUContext* chain, chains)
-        sc.convertDUChain(chain);
+  foreach (TopDUContext* chain, chains) {
+    DUChainWriteLocker lock( DUChain::lock() );
+    sc.convertDUChain(chain);
+  }
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
@@ -438,7 +430,7 @@ Uses* DUChain::uses()
 
 Definitions* DUChain::definitions()
 {
-    return &sdDUChainPrivate->m_definitions;
+  return &sdDUChainPrivate->m_definitions;
 }
 
 }

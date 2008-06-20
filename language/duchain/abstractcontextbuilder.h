@@ -41,6 +41,7 @@
 #include "language/duchain/identifier.h"
 #include "language/duchain/indexedstring.h"
 #include "language/duchain/parsingenvironment.h"
+#include "language/duchain/smartconverter.h"
 
 namespace KDevelop
 {
@@ -81,6 +82,11 @@ public:
     {
       DUChainWriteLocker lock( DUChain::lock() );
       top = updateContext.data();
+
+      // If the duchain does not have smart ranges associated, create them now from the preexisting simple ranges
+      //if( top && !top->smartRange() && hasSmartEditor() )
+        //smartenContext(topLevelContext);
+
       if( top && top->smartRange() )
       {
         if( top && top->smartRange()->parentRange() )
@@ -190,6 +196,18 @@ protected:
   bool hasSmartEditor() const
   {
     return m_editor->smart();
+  }
+
+  /// Iterates a duchain and creates smart ranges for the objects.  \warning you must hold the duchain write lock to call this function.
+  void smartenContext(TopDUContext* topLevelContext) {    
+    if( topLevelContext && !topLevelContext->smartRange() && hasSmartEditor() ) {
+      //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
+      //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
+      //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
+      // Smart mutex locking is performed by the smart converter.
+      SmartConverter conv(m_editor, 0);
+      conv.convertDUChain(topLevelContext);
+    }
   }
 
   DUContext* buildSubContexts( const KUrl& url, T *node,

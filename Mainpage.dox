@@ -7,9 +7,6 @@
  *
  * The libraries available in this KDE module are:
  *
- * - <a href="editor/html/index.html"><b>editor</b></a>.
- *   <i>An Editor integration library.</i>
- *
  * - <a href="interfaces/html/index.html"><b>interfaces</b></a>.
  *   <i>Library with the basic interfaces for the Shell.</i>
  *

@@ -53,7 +53,7 @@ The duchain is designed to operate in a multithreaded environment.  This means t
 
 A single read-write lock per <code>DUChain</code> (ie. per language plugin) is used to serialise writes to the chain and allow concurrent reads.  Thus, to call non-const methods, you must hold a write lock, and for const methods, a read lock.  This can be fairly simply accomplished with QReadLocker and QWriteLocker.  Refer to function documentation for exceptions to this general rule.
 
-Also, when manipulating text editor ranges, the <code>KTextEditor</code>'s smart interface must be locked.  See code in <code>ContextBuilder::openContextInternal</code> and <code>DUChainBase</code>.
+Also, when manipulating text editor ranges, the <code>KTextEditor</code>'s smart interface must be locked. \warning You must <em>always</em> hold the duchain write lock when attempting to acquire the smart lock, else you may cause a deadlock. See code in <code>ContextBuilder::openContextInternal</code> and <code>DUChainBase</code>.
 
 
 \section plugin-interface Interface for plugins

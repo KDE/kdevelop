@@ -12,6 +12,9 @@
  * the applications using the KDevelop Platform.
  * An introduction to the duchain can be found in \ref duchain-design
  *
+ * @section editor Editor Integration
+ * The editor integration tracks editor documents and smart ranges. <a href="editor/html/index.html"><b>Read more</b></a>.
+ *
  * @todo: add description and examples
  *
  * @licenses

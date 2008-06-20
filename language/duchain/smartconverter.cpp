@@ -99,7 +99,7 @@ SmartConverter::~SmartConverter()
 
 void SmartConverter::convertDUChain(DUContext* context) const
 {
-  DUChainWriteLocker lock(DUChain::lock());
+  ENSURE_CHAIN_WRITE_LOCKED
 
   d->m_editor->setCurrentUrl( context->url() );
 
@@ -118,7 +118,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
 void SmartConverter::deconvertDUChain(DUContext* context) const
 {
-  DUChainWriteLocker lock(DUChain::lock());
+  ENSURE_CHAIN_WRITE_LOCKED
 
   d->m_editor->setCurrentUrl( context->url() );
 

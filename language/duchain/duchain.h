@@ -152,7 +152,6 @@ public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
 
 private Q_SLOTS:
-  void documentAboutToBeReloaded(KTextEditor::Document* doc);
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
 private:

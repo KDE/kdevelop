@@ -53,6 +53,10 @@ void EditorIntegratorStatic::documentLoaded()
     kWarning() << "Unexpected non-document sender called this slot!" ;
     return;
   }
+  
+  // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
+  if (SmartInterface* smart = dynamic_cast<SmartInterface*>(doc))
+    smart->setClearOnDocumentReload(false);
 
   {
     QMutexLocker lock(mutex);
