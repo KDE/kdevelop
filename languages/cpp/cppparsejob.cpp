@@ -399,10 +399,6 @@ void CPPInternalParseJob::run()
       CppEditorIntegrator editor(parentJob()->parseSession());
       editor.setCurrentUrl(HashedString(parentJob()->document().str())); ///@todo
 
-      // Translate the cursors we generate with edits that have happened since retrieval of the document source.
-      if (editor.smart() && parentJob()->revisionToken() > 0)
-        editor.smart()->useRevision(parentJob()->revisionToken());
-
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
       if(contentContext) {

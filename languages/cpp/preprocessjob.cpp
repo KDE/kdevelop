@@ -159,7 +159,7 @@ void PreprocessJob::run()
             }
         }*/
 
-        contents = parentJob()->contentsFromEditor(true).toUtf8();
+        contents = parentJob()->contentsFromEditor().toUtf8();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
 
