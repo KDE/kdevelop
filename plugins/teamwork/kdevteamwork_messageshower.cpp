@@ -225,7 +225,7 @@ void KDevTeamworkUserInfoShower::setStatus() {
 
     m_widgetData.state->setText( QString( available.join( ", " ) ) );
   } else {
-    m_widgetData.state->setText( QString( QString( "Lock Failed" ) ) );
+    m_widgetData.state->setText( QString( "Lock Failed"  ) );
   }
 }
 

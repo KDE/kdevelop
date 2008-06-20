@@ -305,7 +305,7 @@ void EditPatch::slotUnapplyEditPatch() {
   LocalPatchSourcePointer::Locked l = patch;
   if ( l ) {
     if ( !l->command.empty() ) {
-      int result = KMessageBox::warningContinueCancel( m_editDlg, QString( "You are about to unapply a dynamic patch created by the command \"%1\". That can be very dangerous. If the same command will not produce the same text after the unapply, the patch cannot be reapplied and all data may be lost. \nRecommendation: Make the patch a file-patch before unapplying it." ), "Warning" );
+      int result = KMessageBox::warningContinueCancel( m_editDlg, i18n( "You are about to unapply a dynamic patch created by the command \"%1\". That can be very dangerous. If the same command will not produce the same text after the unapply, the patch cannot be reapplied and all data may be lost. \nRecommendation: Make the patch a file-patch before unapplying it." ), i18n("Warning") );
       if ( result != KMessageBox::Continue )
         return ;
     }

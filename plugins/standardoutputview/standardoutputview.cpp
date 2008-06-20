@@ -82,12 +82,12 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     KAction *action;
 
     action = actionCollection()->addAction("next_error");
-    action->setText("Next");
+    action->setText(i18n("Next"));
     action->setShortcut( QKeySequence(Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
 
     action = actionCollection()->addAction("prev_error");
-    action->setText("Previous");
+    action->setText(i18n("Previous"));
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 

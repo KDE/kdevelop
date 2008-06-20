@@ -101,7 +101,7 @@ void TimestampEditor::fillWidgets() {
     p2 = p2->next();
   }
 
-  m_widgets.enableAll->setText( QString( "Enable Disabled (%1)" ).arg( disabledCount ) );
+  m_widgets.enableAll->setText( i18n( "Enable Disabled (%1)" , disabledCount ) );
   if( disabledCount == 0 )
     m_widgets.enableAll->hide();
   else
