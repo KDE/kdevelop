@@ -84,6 +84,7 @@ class ExampleRequestItem {
   }
   //Should create an item where the information of the requested item is permanently stored. The pointer
   //@param item equals an allocated range with the size of itemSize().
+  ///@warning Never call non-constant functions on the repository from within this function!
   void createItem(ExampleItem* /*item*/) const {
   }
   
