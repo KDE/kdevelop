@@ -97,7 +97,7 @@ private:
   template<class T>
   T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier());
   template<class T>
-  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, KDevelop::DUChainWriteLocker& lock);
+  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName);
   /// Same as the above, but sets it as the definition too
   virtual void closeDeclaration();
   

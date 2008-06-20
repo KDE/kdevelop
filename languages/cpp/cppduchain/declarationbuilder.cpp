@@ -333,16 +333,16 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
   DUChainWriteLocker lock(DUChain::lock());
   
   if( KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts) ) {
-    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, lock );
+    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName );
     ret->setTemplateParameterContext(templateCtx);
     return ret;
   } else{
-    return openDeclarationReal<T>( name, rangeNode, customName, lock );
+    return openDeclarationReal<T>( name, rangeNode, customName );
   }
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, DUChainWriteLocker& lock)
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName)
 {
   SimpleRange newRange;
   if(name) {
@@ -380,15 +380,9 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     // Seek a matching declaration
 
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
-    SimpleRange translated = newRange;
+    QMutexLocker smartLock(editor()->smartMutex());
+    SimpleRange translated = editor()->translate(newRange);
 
-    if (editor()->smart()) {
-      lock.unlock();
-      QMutexLocker smartLock(editor()->smart()->smartMutex());
-      translated = SimpleRange( editor()->smart()->translateFromRevision(translated.textRange()) );
-      lock.lock();
-    }
-    
 #ifdef DEBUG_UPDATE_MATCHING
     kDebug() << "checking" << localId.toString() << "range" << translated.textRange();
 #endif
