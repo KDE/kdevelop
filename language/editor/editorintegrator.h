@@ -112,8 +112,19 @@ public:
    */
   static bool documentLoaded(KTextEditor::Document* document);
 
-   HashedString currentUrl() const;
-   void setCurrentUrl(const HashedString& currentUrl);
+  /**
+   * Save the current revision of the given \a document.  You should have the smart mutex locked so
+   * when you retrieve the text, it is at the same revision still ;)
+   *
+   * \Returns true for success, otherwise false.
+   */
+  static bool saveCurrentRevision(KTextEditor::Document* document);
+  
+  /// Returns the url of the currently associated editor
+  HashedString currentUrl() const;
+
+  /// Associate this editor integrator with the editor which is currently editing the given \a url
+  void setCurrentUrl(const HashedString& url);
 
   /**
    * Return the current text editor document, based on the current URL.

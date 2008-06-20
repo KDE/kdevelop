@@ -70,16 +70,6 @@ ParseJob::ParseJob( const KUrl &url,
 
 ParseJob::~ParseJob()
 {
-  //@todo save the text-document when acquiring the revision-token, it must somehow be made sure that it is still the same instance
-
-    if (m_revisionToken != -1) {
-      KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(m_document.str()));
-      if( doc ) {
-	SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
-	Q_ASSERT(smart);
-        smart->releaseRevision(m_revisionToken);
-      }
-    }
     delete d;
 }
 
@@ -125,19 +115,13 @@ int ParseJob::revisionToken() const
     return m_revisionToken;
 }
 
-QString ParseJob::contentsFromEditor(bool saveRevisionToken)
+QString ParseJob::contentsFromEditor()
 {
     KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(m_document.str()));
     if( !doc )
         return QString();
-    
-    SmartInterface* smart = dynamic_cast<SmartInterface*>(doc);
 
-    QMutexLocker lock(smart ? smart->smartMutex() : 0);
-
-    if (smart && saveRevisionToken) {
-        m_revisionToken = smart->currentRevision();
-    }
+    EditorIntegrator::saveCurrentRevision(doc);
 
     return doc->text();
 }

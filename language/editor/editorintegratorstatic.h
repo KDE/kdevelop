@@ -59,7 +59,7 @@ public Q_SLOTS:
    */
   void removeDocument(KTextEditor::Document* document);
 
-  void documentLoaded(KTextEditor::Document* doc);
+  void documentLoaded();
 
   void documentUrlChanged(KTextEditor::Document* document);
   
@@ -68,16 +68,13 @@ public Q_SLOTS:
 public:
   QMutex* mutex;
 
-  QHash<HashedString, KTextEditor::Document*> documents;
-
-  /* FIXME port to this?
-
-  struct URLData {
+  struct DocumentInfo {
     KTextEditor::Document* document;
-    QVector<KTextEditor::Range*> topRanges;
-  }
+    // This doesn't need to be thread local because there will only be a maximum of one thread using each document at any given time
+    int revision;
+  };
 
-  QHash<KUrl, URLData*> urls;*/
+  QHash<HashedString, DocumentInfo> documents;
 };
 
 }

@@ -46,18 +46,28 @@ EditorIntegratorStatic::~EditorIntegratorStatic()
   delete mutex;
 }
 
-void EditorIntegratorStatic::documentLoaded(KTextEditor::Document* doc)
+void EditorIntegratorStatic::documentLoaded()
 {
-  // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
-  if (SmartInterface* smart = dynamic_cast<SmartInterface*>(doc))
-    smart->setClearOnDocumentReload(false);
+  KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender());
+  Q_ASSERT(doc);
+  
+  DocumentInfo i;
+  i.document = doc;
+  i.revision = -1;
 
-  disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded(KTextEditor::Document*)));
+  if (SmartInterface* smart = dynamic_cast<SmartInterface*>(doc)) {
+    // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
+    smart->setClearOnDocumentReload(false);
+    i.revision = smart->currentRevision();
+  }
+
+  disconnect(doc, SIGNAL(completed()), this, SLOT(documentLoaded()));
+  disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded()));
 
   {
     QMutexLocker lock(mutex);
 
-    documents.insert(HashedString(doc->url().pathOrUrl()), doc);
+    documents.insert(HashedString(doc->url().pathOrUrl()), i);
   }
 }
 
@@ -65,12 +75,13 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 {
   QMutexLocker lock(mutex);
 
-  QMutableHashIterator<HashedString, Document*>  it = documents;
+  QMutableHashIterator<HashedString, DocumentInfo>  it = documents;
   while (it.hasNext()) {
     it.next();
-    if (it.value() == document) {
+    if (it.value().document == document) {
+      DocumentInfo i = it.value();
       it.remove();
-      documents.insert(document->url().pathOrUrl(), document);
+      documents.insert(document->url().pathOrUrl(), i);
       // TODO trigger reparsing??
       return;
     }
@@ -78,17 +89,25 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 
   //kWarning() << "Document URL change - couldn't find corresponding document!" ;
 }
+
 void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
-  documents.remove(document->url().pathOrUrl());
+  HashedString url = document->url().pathOrUrl();
+  if (documents.contains(url)) {
+    DocumentInfo i = documents[url];
+    if (i.revision != -1)
+      if (SmartInterface* smart = dynamic_cast<SmartInterface*>(i.document))
+        smart->releaseRevision(i.revision);
+
+    documents.remove(url);
+  }
 
   lock.unlock();
   
   emit documentAboutToBeDeleted(document);
 }
-
 
 void EditorIntegratorStatic::reloadDocument(KTextEditor::Document* document)
 {

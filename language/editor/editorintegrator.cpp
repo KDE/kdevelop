@@ -70,7 +70,10 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
 {
   Q_ASSERT(data()->thread() == document->thread());
   // Connect to the first text changed signal, it occurs before the completed() signal
-  QObject::connect(document, SIGNAL(textChanged(KTextEditor::Document*)), data(), SLOT(documentLoaded(KTextEditor::Document*)));
+  QObject::connect(document, SIGNAL(textChanged(KTextEditor::Document*)), data(), SLOT(documentLoaded()));
+  // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
+  QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
+
   QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(aboutToReload(KTextEditor::Document*)), data(), SLOT(reloadDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
@@ -81,14 +84,9 @@ Document * EditorIntegrator::documentForUrl(const HashedString& url)
   QMutexLocker lock(data()->mutex);
 
   if (data()->documents.contains(url))
-    return data()->documents[url];
+    return data()->documents[url].document;
 
   return 0;
-}
-
-bool EditorIntegrator::documentLoaded(KTextEditor::Document* document)
-{
-  return data()->documents.values().contains(document);
 }
 
 SmartInterface* EditorIntegrator::smart() const
@@ -294,11 +292,37 @@ HashedString EditorIntegrator::currentUrl() const
   return d->m_currentUrl;
 }
 
+bool EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
+{
+  if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(document)) {
+    QMutexLocker lock(data()->mutex);
+    HashedString url = document->url().pathOrUrl();
+
+    if (data()->documents.contains(url)) {
+      EditorIntegratorStatic::DocumentInfo& i = data()->documents[url];
+      if (i.revision != -1)
+        smart->releaseRevision(i.revision);
+
+      i.revision = smart->currentRevision();
+      return true;
+    }
+  }
+
+  return false;
+}
+
 void EditorIntegrator::setCurrentUrl(const HashedString& url)
 {
   d->m_currentUrl = url;
-  d->m_currentDocument = documentForUrl(url);
-  d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
+
+  QMutexLocker lock(data()->mutex);
+  if (data()->documents.contains(url)) {
+    EditorIntegratorStatic::DocumentInfo i = data()->documents[url];
+    d->m_currentDocument = i.document;
+    d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
+    if (d->m_smart && i.revision != -1)
+      d->m_smart->useRevision(i.revision);
+  }
 }
 
 void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)

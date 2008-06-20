@@ -55,7 +55,8 @@ public:
 
     /// Retrieve the contents of the file from the currently open editor.
     /// Ensure it is loaded by calling editorLoaded() first.
-    QString contentsFromEditor(bool saveRevisionToken = false);
+    /// The editor integrator seamlessly saves the revision token and applies it
+    QString contentsFromEditor();
 
     /// Returns the revision token issued by the document's smart interface,
     /// or -1 if there was a problem.
