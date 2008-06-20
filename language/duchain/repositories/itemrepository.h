@@ -24,7 +24,7 @@
 #include <QByteArray>
 #include <QMutex>
 #include <kdebug.h>
-#include <hash_map>
+#include <ext/hash_map>
 #include "../languageexport.h"
 
 namespace std {
