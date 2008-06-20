@@ -29,11 +29,11 @@ using namespace Cpp;
 using namespace KDevelop;
 
 //Repository that contains the actual macros, and maps them to indices
-MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository", 15000000u);
+MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository");
 //Set-repository that contains the string-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets", true, 30000000u);
+Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets", true);
 //Set-repository that contains the macro-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets", true, 30000000u);
+Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets", true);
 
 const rpp::pp_macro& Cpp::MacroIndexConversion::toItem(uint index) const {
   return *EnvironmentManager::macroDataRepository.itemFromIndex( index );

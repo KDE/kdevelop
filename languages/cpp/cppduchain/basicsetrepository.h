@@ -117,7 +117,7 @@ public:
   ///@param name The name must be unique, and is used for loading and storing the data
   ///@param doLocking Whether the repository should secured internally for multi-threading. If this is false, you need to secure it yourself
   ///@param dataSize Size of the internal data repository in bytes
-  BasicSetRepository(QString name, bool doLocking, uint dataSize = 5000000u);
+  BasicSetRepository(QString name, bool doLocking);
   ~BasicSetRepository();
   typedef unsigned int Index;
 
