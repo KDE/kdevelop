@@ -193,7 +193,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 kDebug(9010) << "Initializing Git repository:" << dest.toLocalFile();
                 if (job->status() == KDevelop::VcsJob::JobSucceeded)
                 {
-                    KDevelop::VcsJob* job = iface->add(KUrl::List(QStringList(".")),
+                    KDevelop::VcsJob* job = iface->add(KUrl::List(dest),
                             KDevelop::IBasicVersionControl::Recursive);
                     if (job)
                     {
