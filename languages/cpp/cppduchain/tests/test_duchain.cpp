@@ -2250,10 +2250,9 @@ typedef BasicSetRepository::Index Index;
 
 void TestDUChain::testStringSets() {
 
-  //Create 3 random sets with each 10 of 20 items
-  const unsigned int setCount = 20;
-  const unsigned int choiceCount = 300;
-  const unsigned int itemCount = 1000;
+  const unsigned int setCount = 11;
+  const unsigned int choiceCount = 40;
+  const unsigned int itemCount = 120;
   
   BasicSetRepository rep("test repository", false);
   
