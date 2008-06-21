@@ -194,7 +194,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return insertedAt;
     }
     
-    void deleteItem(unsigned int hash, unsigned short index, unsigned short size) {
+    void deleteItem(unsigned short index, unsigned int hash, unsigned short size) {
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
       unsigned short localHash = hash % m_objectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
@@ -422,6 +422,37 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     kWarning() << "Found no bucket for an item in" << m_repositoryName;
     return 0;
   }
+
+  ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
+//   void deleteItem(unsigned int index, unsigned int hash, unsigned short size) {
+//     ThisLocker lock(&m_mutex);
+//     
+//     short unsigned int previousBucketNumber = m_firstBucketForHash[hash % bucketHashSize];
+//     
+//     while(previousBucketNumber) {
+//       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
+//       
+//       Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[previousBucketNumber];
+//       if(!bucketPtr) {
+//         initializeBucket(previousBucketNumber);
+//         bucketPtr = m_fastBuckets[previousBucketNumber];
+//       }
+//       
+//       unsigned short indexInBucket = bucketPtr->findIndex(request);
+//       if(indexInBucket) {
+//         //We've found the item, it's already there
+//         return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+//       } else {
+//         //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
+//         //Should happen rarely
+//         short unsigned int next = bucketPtr->nextBucketForHash(hash);
+//         if(next)
+//           previousBucketNumber = next;
+//         else
+//           break;
+//       }
+//     }
+//   }
 
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   const Item* itemFromIndex(unsigned int index) const {

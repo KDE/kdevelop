@@ -106,7 +106,7 @@ Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd)
 Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range )
   : DUChainBase(dd, url, range)
 {
-  Q_D(Declaration);
+//  Q_D(Declaration);
 }
 
 Declaration::~Declaration()
@@ -202,16 +202,16 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   return ret;
 }
 
-QString Declaration::mangledIdentifier() const
-{
-  //GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
-
-  if (abstractType())
-    return abstractType()->mangled();
-
-  // Error...
-  return qualifiedIdentifier().mangled();
-}
+// QString Declaration::mangledIdentifier() const
+// {
+//   //GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
+// 
+//   if (abstractType())
+//     return abstractType()->mangled();
+// 
+//   // Error...
+//   return qualifiedIdentifier().mangled();
+// }
 
 DUContext * Declaration::context() const
 {

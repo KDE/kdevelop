@@ -72,10 +72,10 @@ void IdentifiedType::setDeclaration(Declaration* declaration)
   d->m_declaration = declaration;
 }
 
-QString IdentifiedType::idMangled() const
-{
-  return identifier().mangled();
-}
+// QString IdentifiedType::idMangled() const
+// {
+//   return identifier().mangled();
+// }
 
 }
 

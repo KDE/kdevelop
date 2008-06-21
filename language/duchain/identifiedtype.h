@@ -57,7 +57,7 @@ public:
    * */
   void setDeclaration(Declaration* declaration);
 
-  QString idMangled() const;
+//   QString idMangled() const;
 
 private:
   class IdentifiedTypePrivate* const d;

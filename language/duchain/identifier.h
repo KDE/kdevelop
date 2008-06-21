@@ -37,7 +37,9 @@ namespace KDevelop
 
 class TypeIdentifier;
 class QualifiedIdentifier;
+template<bool>
 class QualifiedIdentifierPrivate;
+template<bool>
 class IdentifierPrivate;
 class IndexedString;
 
@@ -55,6 +57,7 @@ public:
   ///Preferred constructor, ise this if you already have an IndexedString available. This does not decompose the given string.
   explicit Identifier(const IndexedString& str);
   Identifier(const Identifier& rhs);
+  Identifier(uint index);
   Identifier();
   ~Identifier();
 
@@ -72,7 +75,7 @@ public:
   //Should be preferred over the other version
   void setIdentifier(const IndexedString& identifier);
 
-  QString mangled() const;
+//   QString mangled() const;
 
   uint hash() const;
 
@@ -81,7 +84,9 @@ public:
    * */
   bool nameEquals(const Identifier& rhs) const;
 
-  const QList<TypeIdentifier>& templateIdentifiers() const;
+  //Expensive
+  TypeIdentifier templateIdentifier(int num) const;
+  uint templateIdentifiersCount() const;
   void appendTemplateIdentifier(const TypeIdentifier& identifier);
   void clearTemplateIdentifiers();
   void setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers);
@@ -94,6 +99,10 @@ public:
 
   bool isEmpty() const;
 
+  ///Returns a unique index within the global identifier repository for this identifier.
+  ///If the identifier isn't in the repository yet, it is added to the repository.
+  uint index() const;
+  
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -103,8 +112,15 @@ public:
   }
 
 private:
+  void makeConstant() const;
   void prepareWrite();
-  KSharedPtr<IdentifierPrivate> d;
+  
+  //Only one of the following pointers is valid at a given time
+  mutable uint m_index; //Valid if cd is valid
+  union {
+    mutable IdentifierPrivate<true>* dd; //Dynamic, owned by this identifier
+    mutable const IdentifierPrivate<false>* cd; //Constant, owned by the repository
+  };
 };
 
 /**
@@ -118,7 +134,7 @@ public:
   explicit QualifiedIdentifier(const QString& id);
   explicit QualifiedIdentifier(const Identifier& id);
   QualifiedIdentifier(const QualifiedIdentifier& id);
-  //QualifiedIdentifier(const QualifiedIdentifier& id);
+  QualifiedIdentifier(uint index);
   QualifiedIdentifier();
   ~QualifiedIdentifier();
 
@@ -132,7 +148,7 @@ public:
   Identifier first() const;
   Identifier last() const;
   Identifier top() const;
-  const Identifier& at(int i) const;
+  const Identifier at(int i) const;
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.
@@ -157,7 +173,7 @@ public:
   QString toString(bool ignoreExplicitlyGlobal = false) const;
   QStringList toStringList() const;
 
-  QString mangled() const;
+//   QString mangled() const;
 
   QualifiedIdentifier operator+(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator+=(const QualifiedIdentifier& rhs);
@@ -168,9 +184,8 @@ public:
 
   //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
-  QualifiedIdentifier mergeWhereDifferent(const QualifiedIdentifier& base) const;
-  //The returned identifier will have explicitlyGlobal() set to false
-  QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
+//   //The returned identifier will have explicitlyGlobal() set to false
+//   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
 
   /**
    * A more complex comparison than operator==(..).
@@ -190,7 +205,7 @@ public:
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
-
+#if 0
   enum MatchTypes {
     NoMatch        /**< matches no identifier */,
     EndsWith       /**< The current identifier ends with the one given to the match function */,
@@ -200,8 +215,11 @@ public:
 
   MatchTypes match(const Identifier& other) const;
   MatchTypes match(const QualifiedIdentifier& other) const;
+#endif
   bool beginsWith(const QualifiedIdentifier& other) const;
 
+  uint index() const;
+  
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -216,8 +234,16 @@ public:
   HashType hash() const;
 
 protected:
+  bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
+
+  void makeConstant() const;
   void prepareWrite();
-  KSharedPtr<QualifiedIdentifierPrivate> d;
+
+  mutable uint m_index;
+  union {
+    mutable QualifiedIdentifierPrivate<true>* dd;
+    mutable const QualifiedIdentifierPrivate<false>* cd;
+  };
 };
 
 /**
@@ -234,6 +260,7 @@ public:
   TypeIdentifier(const QString& str);
   TypeIdentifier(const QualifiedIdentifier& id);
   TypeIdentifier(const TypeIdentifier& id);
+  TypeIdentifier(uint index);
   bool isReference() const;
   void setIsReference(bool);
   

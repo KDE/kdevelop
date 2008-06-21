@@ -213,7 +213,7 @@ public:
   /**
    * Provides a mangled version of this definition's identifier, for use in a symbol table.
    */
-  QString mangledIdentifier() const;
+//   QString mangledIdentifier() const;
 
   bool inSymbolTable() const;
   //Adds or removes this declaration to/from the symbol table

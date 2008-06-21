@@ -64,14 +64,13 @@ class TopDUContext::CacheData {
 struct TopDUContext::AliasChainElement {
   AliasChainElement() { //Creates invalid entries, but we need it fast because it's used to intialize all items in QVarLengthArray
   }
-  //id should never be zero for a valid element
-  AliasChainElement(const AliasChainElement* _prev, const Identifier* id) : previous(_prev), ownsPrevious(false), identifier(id), hash(0), length(0) {
+  AliasChainElement(const AliasChainElement* _prev, Identifier id) : previous(_prev), ownsPrevious(false), identifier(id), hash(0), length(0) {
     if(previous) {
       length = previous->length + 1;
-      hash = QualifiedIdentifier::combineHash(previous->hash, previous->length, *identifier);
+      hash = QualifiedIdentifier::combineHash(previous->hash, previous->length, identifier);
     } else{
       length = 1;
-      hash = QualifiedIdentifier::combineHash(0, 0, *identifier);
+      hash = QualifiedIdentifier::combineHash(0, 0, identifier);
     }
   }
   
@@ -80,7 +79,7 @@ struct TopDUContext::AliasChainElement {
     QualifiedIdentifier ret;
     if(previous)
       ret = previous->qualifiedIdentifier();
-    ret.push(*identifier);
+    ret.push(identifier);
 #ifdef DEBUG_SEARCH
     if(hash != ret.hash()) {
       kDebug() << "different hash:" << hash << ret.hash();
@@ -92,7 +91,7 @@ struct TopDUContext::AliasChainElement {
   
   const AliasChainElement* previous;
   bool ownsPrevious;
-  const Identifier* identifier;
+  Identifier identifier;
   uint hash;
   uint length;
 };
@@ -561,7 +560,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
     FOREACH_ARRAY(Declaration* decl, decls) {
       if(!check(decl))
         continue;
-      if(decl->identifier() != *element.identifier) ///@todo eventually do more extensive checking
+      if(decl->identifier() != element.identifier) ///@todo eventually do more extensive checking
         continue;
       
       if( decl->kind() == Declaration::Alias ) {
@@ -618,7 +617,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   ///@todo explicitlyGlobal if the first identifier los global
   bool foundAlias = false;
 
-  AliasChainElement newElement(backPointer, &identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
+  AliasChainElement newElement(backPointer, identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
   
 #ifdef DEBUG_SEARCH
   kDebug() << "checking" << newElement.qualifiedIdentifier().toString();
@@ -668,7 +667,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
             break;
         }
         
-        if(aliasDecl->identifier() != *newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
+        if(aliasDecl->identifier() != newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
           continue;
         
         Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
@@ -685,10 +684,12 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         }
         
         //Create a chain of AliasChainElements that represent the identifier
+        uint count = importIdentifier.count();
+        
         QVarLengthArray<AliasChainElement, 5> newChain;
-        newChain.resize(importIdentifier.count());
-        for(int a = 0; a < importIdentifier.count(); ++a)
-          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], &importIdentifier.at(a));
+        newChain.resize(count);
+        for(uint a = 0; a < count; ++a)
+          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
       
         AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
         
@@ -722,7 +723,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 #endif
 
   {
-    AliasChainElement importChainItem(backPointer, &globalImportIdentifier);
+    AliasChainElement importChainItem(backPointer, globalImportIdentifier);
     
     QVarLengthArray<Declaration*> imports;
     QVector<DeclarationPointer>* createVisibleCache = 0;
@@ -772,7 +773,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         newChain.resize(importIdentifier.count());
         
         for(int a = 0; a < count; ++a)
-          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], &importIdentifier.at(a));
+          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
       
         AliasChainElement* newAliasedElement = &newChain[count-1];
         
@@ -808,7 +809,7 @@ struct TopDUContext::FindContextsAcceptor {
       if(!check(ctx))
         continue;
       
-      if(ctx->localScopeIdentifier().last() != *element.identifier) ///@todo eventually do more extensive checking
+      if(ctx->localScopeIdentifier().last() != element.identifier) ///@todo eventually do more extensive checking
         continue;
       
       target << ctx;
