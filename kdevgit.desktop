@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin integrates Git to KDevelop
+Comment[x-test]=xxThis plugin integrates Git to KDevelopxx
+Name=KDevGit
+Name[x-test]=xxKDevGitxx
+GenericName=Git frontend
+GenericName[x-test]=xxGit frontendxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevgit
+X-KDE-PluginInfo-Name=kdevgit
+X-KDE-PluginInfo-Author=Evgeniy Ivanov
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement
+X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl, IDistributedVersionControl

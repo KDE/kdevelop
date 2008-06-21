@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevGit" version="1">
+
+  <Menu name="git_popup">
+    <text context="@title:menu">Git</text>
+    <Action name="git_init" />
+    <Action name="git_clone" />
+  </Menu>
+
+</kpartgui>

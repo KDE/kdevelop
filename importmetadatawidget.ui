@@ -1,0 +1,38 @@
+<ui version="4.0" >
+ <class>ImportMetadataWidget</class>
+ <widget class="QWidget" name="ImportMetadataWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>581</width>
+    <height>37</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Import</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="labelUrl" >
+     <property name="text" >
+      <string>Source Directory:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="KUrlRequester" name="sourceLoc" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
