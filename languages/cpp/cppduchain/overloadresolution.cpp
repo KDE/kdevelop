@@ -401,18 +401,18 @@ bool OverloadResolver::matchParameterTypes(AbstractType* _argumentType, const Id
   
   TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>(identifiedArgument->declaration());
 
-  if( argumentTemplateDeclaration && !parameterType.templateIdentifiers().isEmpty() )
+  if( argumentTemplateDeclaration && parameterType.templateIdentifiersCount() )
   {
     DUContext* argumentTemplateDeclarationContext = argumentTemplateDeclaration->templateParameterContext();
 
     if( argumentTemplateDeclarationContext )
     {
       int matchLength = argumentTemplateDeclarationContext->localDeclarations().count();
-      if( parameterType.templateIdentifiers().count() < matchLength )
-        matchLength = parameterType.templateIdentifiers().count();
+      if( parameterType.templateIdentifiersCount() < matchLength )
+        matchLength = parameterType.templateIdentifiersCount();
     
       for( int a = 0; a < matchLength; ++a )
-        matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), parameterType.templateIdentifiers()[a], instantiatedTypes );
+        matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType().data(), parameterType.templateIdentifier(a), instantiatedTypes );
     }else{
       kDebug(9007) << "Template-declaration missing template-parameter context";
     }

@@ -404,11 +404,11 @@ class CppDUContext : public BaseContext {
           ///Step 1: Resolve the template-arguments
           //Since there may be non-type template-parameters, represent them as ExpressionEvaluationResult's
 
-          int tempCount = currentIdentifier.templateIdentifiers().size();
+          int tempCount = currentIdentifier.templateIdentifiersCount();
           for( int a = 0; a < tempCount; a++ ) {
             //Use the already available mechanism for resolving delayed types
             Cpp::ExpressionEvaluationResult res;
-            TypeIdentifier i = currentIdentifier.templateIdentifiers().at(a);
+            TypeIdentifier i = currentIdentifier.templateIdentifier(a);
             //If the identifier is empty, it is probably just a mark that a template should be instantiated, but without explicit paremeters.
             if( !i.isEmpty() ) {
               DelayedType::Ptr delayed( new DelayedType() );

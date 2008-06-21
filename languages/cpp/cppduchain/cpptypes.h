@@ -115,7 +115,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual uint hash() const;
 
@@ -203,7 +203,7 @@ public:
 
   virtual uint hash() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
 
@@ -219,7 +219,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
   
@@ -237,7 +237,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
   
@@ -290,7 +290,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
 
@@ -330,7 +330,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
   
@@ -370,7 +370,7 @@ public:
   
   virtual bool equals(const AbstractType* rhs) const;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
   
   virtual QString toString() const;
 };
@@ -380,7 +380,7 @@ class KDEVCPPDUCHAIN_EXPORT CppArrayType : public KDevelop::ArrayType
 public:
   typedef KSharedPtr<CppArrayType> Ptr;
 
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
   
@@ -401,7 +401,7 @@ public:
   TemplateParameterDeclaration* declaration() const;
 
   virtual QString toString() const;
-  virtual QString mangled() const;
+//   virtual QString mangled() const;
 
   virtual AbstractType* clone() const;
   

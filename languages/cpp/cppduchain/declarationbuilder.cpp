@@ -457,7 +457,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
   declaration->setIsTypeAlias(m_inTypedef);
 
-  if( !localId.templateIdentifiers().isEmpty() ) {
+  if( localId.templateIdentifiersCount() ) {
     TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
     if( declaration && templateDecl ) {
       ///This is a template-specialization. Find the class it is specialized from.

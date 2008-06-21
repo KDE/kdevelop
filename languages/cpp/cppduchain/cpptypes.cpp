@@ -159,10 +159,10 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
   }
 }
 
-QString CppEnumerationType::mangled() const
-{
-  return QString("E_%1_%2").arg(CppIntegralType::mangled()).arg(identifier().toString());
-}
+// QString CppEnumerationType::mangled() const
+// {
+//   return QString("E_%1_%2").arg(CppIntegralType::mangled()).arg(identifier().toString());
+// }
 
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
 {
@@ -573,51 +573,51 @@ uint CppEnumerationType::hash() const
   return identifier().hash();
 }
 
-QString CppIntegralType::mangled() const
-{
-  QString ret;
-  if (typeModifiers() & ModifierUnsigned)
-    ret = "U";
-
-  switch (integralType()) {
-    case TypeChar:
-      if (typeModifiers() & ModifierSigned)
-        ret += 'S';
-      ret += 'c';
-      break;
-    case TypeWchar_t:
-      ret += 'w';
-      break;
-    case TypeBool:
-      ret += 'b';
-      break;
-    case TypeInt:
-      if (typeModifiers() & ModifierLong)
-        if (typeModifiers() & ModifierLongLong)
-          ret += 'x';
-        else
-          ret += 'l';
-      else
-        ret += 'i';
-      break;
-    case TypeFloat:
-      ret += 'f';
-      break;
-    case TypeDouble:
-      if (typeModifiers() & ModifierLong)
-        ret += 'r';
-      else
-        ret += 'd';
-      break;
-    case TypeVoid:
-      ret += 'v';
-      break;
-    default:
-      ret += '?';
-      break;
-  }
-  return ret + cvMangled();
-}
+// QString CppIntegralType::mangled() const
+// {
+//   QString ret;
+//   if (typeModifiers() & ModifierUnsigned)
+//     ret = "U";
+// 
+//   switch (integralType()) {
+//     case TypeChar:
+//       if (typeModifiers() & ModifierSigned)
+//         ret += 'S';
+//       ret += 'c';
+//       break;
+//     case TypeWchar_t:
+//       ret += 'w';
+//       break;
+//     case TypeBool:
+//       ret += 'b';
+//       break;
+//     case TypeInt:
+//       if (typeModifiers() & ModifierLong)
+//         if (typeModifiers() & ModifierLongLong)
+//           ret += 'x';
+//         else
+//           ret += 'l';
+//       else
+//         ret += 'i';
+//       break;
+//     case TypeFloat:
+//       ret += 'f';
+//       break;
+//     case TypeDouble:
+//       if (typeModifiers() & ModifierLong)
+//         ret += 'r';
+//       else
+//         ret += 'd';
+//       break;
+//     case TypeVoid:
+//       ret += 'v';
+//       break;
+//     default:
+//       ret += '?';
+//       break;
+//   }
+//   return ret + cvMangled();
+// }
 
 QString CppCVType::cvMangled() const
 {
@@ -629,63 +629,63 @@ QString CppCVType::cvMangled() const
   return ret;
 }
 
-QString CppPointerType::mangled() const
-{
-  QString ret = "P" + cvMangled();
-  if (baseType())
-    ret += baseType()->mangled();
-  return ret;
-}
+// QString CppPointerType::mangled() const
+// {
+//   QString ret = "P" + cvMangled();
+//   if (baseType())
+//     ret += baseType()->mangled();
+//   return ret;
+// }
 
-QString CppReferenceType::mangled() const
-{
-  QString ret = "R" + cvMangled();
-  if (baseType())
-    ret += baseType()->mangled();
-  return ret;
-}
+// QString CppReferenceType::mangled() const
+// {
+//   QString ret = "R" + cvMangled();
+//   if (baseType())
+//     ret += baseType()->mangled();
+//   return ret;
+// }
 
-QString CppClassType::mangled() const
-{
-  return idMangled() + cvMangled();
-}
+// QString CppClassType::mangled() const
+// {
+//   return idMangled() + cvMangled();
+// }
 
-QString CppTypeAliasType::mangled() const
-{
-  if( type() )
-    return "TA" + type()->mangled() + cvMangled();
-  else
-    return "TA" + cvMangled();
-}
-
-QString CppFunctionType::mangled() const
-{
-  ClassFunctionDeclaration* classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration());
-
-  bool constructor = classFunctionDecl && classFunctionDecl->isConstructor();
-
-  QualifiedIdentifier id = identifier();
-
-  Identifier function = id.top();
-  if (!id.isEmpty())
-    id.pop();
-
-  QString ret = QString("%1__%2%3").arg(constructor ? QString() : function.mangled()).arg(cvMangled()).arg(id.mangled());
-
-  foreach (const AbstractType::Ptr& argument, arguments())
-    if (argument)
-      ret += argument->mangled();
-    else
-      ret += '?';
-
-  return ret;
-}
-
-QString CppArrayType::mangled() const
-{
-  return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
-}
-
+// QString CppTypeAliasType::mangled() const
+// {
+//   if( type() )
+//     return "TA" + type()->mangled() + cvMangled();
+//   else
+//     return "TA" + cvMangled();
+// }
+// 
+// QString CppFunctionType::mangled() const
+// {
+//   ClassFunctionDeclaration* classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration());
+// 
+//   bool constructor = classFunctionDecl && classFunctionDecl->isConstructor();
+// 
+//   QualifiedIdentifier id = identifier();
+// 
+//   Identifier function = id.top();
+//   if (!id.isEmpty())
+//     id.pop();
+// 
+//   QString ret = QString("%1__%2%3").arg(constructor ? QString() : function.mangled()).arg(cvMangled()).arg(id.mangled());
+// 
+//   foreach (const AbstractType::Ptr& argument, arguments())
+//     if (argument)
+//       ret += argument->mangled();
+//     else
+//       ret += '?';
+// 
+//   return ret;
+// }
+// 
+// QString CppArrayType::mangled() const
+// {
+//   return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
+// }
+// 
 TemplateParameterDeclaration* CppTemplateParameterType::declaration() const {
   return static_cast<TemplateParameterDeclaration*>(IdentifiedType::declaration());
 }
@@ -693,11 +693,11 @@ TemplateParameterDeclaration* CppTemplateParameterType::declaration() const {
 QString CppTemplateParameterType::toString() const {
   return "<template> " + (declaration() ? declaration()->identifier().toString() : QString());
 }
-
-QString CppTemplateParameterType::mangled() const
-{
-  return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
-}
+// 
+// QString CppTemplateParameterType::mangled() const
+// {
+//   return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
+// }
 
 void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
     v->visit(this);
