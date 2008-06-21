@@ -191,6 +191,8 @@ public:  // Operations
      */
     RunnerItem* itemFromIndex(const QModelIndex& index) const;
 
+    void updateColorAndFont(const QModelIndex& index);
+
 signals:
 
     /*!

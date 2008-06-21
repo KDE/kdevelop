@@ -106,26 +106,6 @@ void CppUnitOutputParser::go(TestSuite* suite)
         if (isStartElement_(c_suite)) {
             processSuite();
         }
-        /*        if (isStartElement_(c_testfunction)) {
-                    cmdName = attributes().value("name").toString();
-                    cmd = caze->findTestNamed(cmdName);
-                    if (cmd)
-                        caze->signalStarted(cmd->index());
-                    processTestFunction();
-                }
-                if (isEndElement_(c_testfunction)) {
-                    cmd = caze->findTestNamed(cmdName);
-                    if (cmd) {
-                        cmd->setResult_(m_result);
-                        caze->signalCompleted(cmd->index());
-                        m_result = QTestResult();
-                    } else if (fixtureFailed(cmdName)) {
-                        kDebug() << "init/cleanup TestCase failed";
-                        caze->signalStarted(caze->index());
-                        caze->setResult_(m_result);
-                        caze->signalCompleted(caze->index());
-                    }
-                }*/
     }
 
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();

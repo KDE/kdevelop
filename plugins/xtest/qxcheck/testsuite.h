@@ -18,26 +18,38 @@
  * 02110-1301, USA.
  */
 
-#ifndef XTEST_XTESTPLUGIN_H
-#define XTEST_XTESTPLUGIN_H
+#ifndef QXCHECK_TESTSUITE_H
+#define QXCHECK_TESTSUITE_H
 
-#include <interfaces/iplugin.h>
-#include <QVariantList>
+#include <QString>
+#include <QFileInfo>
+#include <KProcess>
 
-class KDevXtestPluginFactory;
+#include "testbase.h"
+#include "testcase.h"
 
-/**
- * xUnit test runner plugin
- **/
-class KDevXtestPlugin : public KDevelop::IPlugin
+namespace QxCheck
 {
+
+class TestSuite : public TestBase
+{
+Q_OBJECT
 public:
-    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~KDevXtestPlugin();
-    //virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    TestSuite();
+    TestSuite(const QString&, const QFileInfo& executable, TestBase* parent);
+    virtual ~TestSuite();
+
+    TestCase* testAt(unsigned i);
+
+    virtual int run();
+    virtual bool isRunnable() { 
+        return true;
+    }
 
 private:
-    KDevXtestPluginFactory* m_xtestFactory;
+    QFileInfo m_exe;
 };
 
-#endif // XTEST_XTESTPLUGIN_H
+} // end namespace QxCheck
+
+#endif // QXCHECK_TESTSUITE_H

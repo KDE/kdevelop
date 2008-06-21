@@ -21,21 +21,21 @@
 
 
 /*!
- * \file  cppunitmodel.h
+ * \file  checkmodel.h
  *
- * \brief Declares class CppUnitModel.
+ * \brief Declares class CheckModel.
  */
 
-#ifndef CPPUNITMODEL_H
-#define CPPUNITMODEL_H
+#ifndef QXCHECK_CHECKMODEL_H
+#define QXCHECK_CHECKMODEL_H
 
 #include <qxrunner/runnermodel.h>
 
-namespace QxCppUnit
+namespace QxCheck
 {
 
 /*!
- * \brief The CppUnitModel class maintains CppUnit data and executes
+ * \brief The CheckModel class maintains CppUnit data and executes
  *        CppUnit unit tests.
  *
  * This class stores CppUnit test data using CppUnitItem objects. The
@@ -44,20 +44,16 @@ namespace QxCppUnit
  *
  * The expected results from this model are:
  *
- *
- * - QxRunner::RunSuccess - CppUnit test case passed
- * - QxRunner::RunWarning - CppUnit assertion failed
- * - QxRunner::RunError   - CppUnit reported an error
  */
 
-class CppUnitModel : public QxRunner::RunnerModel
+class CheckModel : public QxRunner::RunnerModel
 {
     Q_OBJECT
 
 public: // Operations
 
-    CppUnitModel(QObject* parent = 0);
-    ~CppUnitModel();
+    CheckModel(QObject* parent = 0);
+    ~CheckModel();
 
     void readTests(const QFileInfo& exe);
 
@@ -67,4 +63,4 @@ public: // Operations
 
 } // namespace
 
-#endif // CPPUNITMODEL_H
+#endif // CHECKMODEL_H

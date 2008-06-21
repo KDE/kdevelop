@@ -110,6 +110,9 @@ void SelectionManager::setItemSelected(bool selected)
     const QModelIndex index = m_toggle->index();
     if (index.isValid()) {
         itemFromIndex(index)->setSelected(selected);
+        QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
+        RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
+        runnerModel->updateColorAndFont(index);
     }
 }
 

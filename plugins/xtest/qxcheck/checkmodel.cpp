@@ -19,27 +19,27 @@
  * 02110-1301, USA.
  */
 
-#include "cppunitmodel.h"
+#include "checkmodel.h"
 #include "testbase.h"
-#include "cppunitregister.h"
+#include "checkregister.h"
 #include <KProcess>
 
-using QxCppUnit::TestBase;
-using QxCppUnit::CppUnitModel;
-using QxCppUnit::CppUnitRegister;
+using QxCheck::TestBase;
+using QxCheck::CheckModel;
+using QxCheck::CheckRegister;
 
-CppUnitModel::CppUnitModel(QObject* parent)
+CheckModel::CheckModel(QObject* parent)
         : RunnerModel(parent)
 {
     // Define the set of expected results.
     setExpectedResults(QxRunner::RunWarning | QxRunner::RunError);
 }
 
-CppUnitModel::~CppUnitModel()
+CheckModel::~CheckModel()
 {
 }
 
-void CppUnitModel::readTests(const QFileInfo& exe)
+void CheckModel::readTests(const QFileInfo& exe)
 {
     KProcess proc;
     QStringList argv;
@@ -50,21 +50,18 @@ void CppUnitModel::readTests(const QFileInfo& exe)
     proc.start();
     proc.waitForFinished(-1);
 
-    CppUnitRegister reg;
+    CheckRegister reg;
     reg.setExecutable(exe);
     reg.addFromXml(&proc);
     setRootItem(reg.rootItem());
-
-/*    QTestOutputParser parser(proc);
-    parser.go(this);*/
 }
 
-QString CppUnitModel::name() const
+QString CheckModel::name() const
 {
-    return tr("QxCppUnit");
+    return tr("QxCheck");
 }
 
-QString CppUnitModel::about() const
+QString CheckModel::about() const
 {
     return "";
 }

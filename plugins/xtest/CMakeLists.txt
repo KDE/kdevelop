@@ -8,7 +8,7 @@ add_subdirectory(qxqtest)
 
 # TODO write a proper FindCppUnit.cmake
 
-find_path(CPPUNIT_INCLUDE_DIR 
+find_path(CPPUNIT_INCLUDE_DIR
     TestSuite.h
     /usr/include/cppunit /usr/local/include/cppunit)
 
@@ -24,6 +24,26 @@ macro_log_feature(CPPUNIT_FOUND "CppUnit" "A C++ unit testing framework" "http:/
 if (CPPUNIT_FOUND)
     add_subdirectory(qxcppunit)
 endif (CPPUNIT_FOUND)
+
+# TODO write a proper FindCheck.cmake
+
+find_path(CHECK_INCLUDE_DIR
+    check.h
+    /usr/include /usr/local/include)
+
+find_library(CHECK_LIBRARY
+    NAMES libcheck.so libcheck.so.0 libcheck.so.0.0.0
+    PATH /usr/lib /usr/local/lib)
+
+if (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
+    set(CHECK_FOUND on)
+endif (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
+macro_log_feature(CHECK_FOUND "Check" "A unit testing framework for C" "http://check.sourceforge.net/" FALSE "" "Needed for building qxcheck")
+
+if (CPPUNIT_FOUND)
+    add_subdirectory(qxcheck)
+endif (CPPUNIT_FOUND)
+
 
 include_directories(
     ${KDE4_INCLUDES}
@@ -60,10 +80,16 @@ target_link_libraries(kdevxtest
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     qxqtest)
+
 if (CPPUNIT_FOUND)
     target_link_libraries( kdevxtest
                            qxcppunit)
 endif (CPPUNIT_FOUND)
+
+if (CHECK_FOUND)
+    target_link_libraries( kdevxtest
+                           qxcheck)
+endif (CHECK_FOUND)
 
 install(TARGETS kdevxtest DESTINATION ${PLUGIN_INSTALL_DIR})
 

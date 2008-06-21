@@ -53,8 +53,7 @@ QVariant Utils::resultIcon(int result)
 {
     switch (result) {
     case QxRunner::RunSuccess:
-        return QIcon(KIconLoader::global()->loadIcon("dialog-ok-apply", KIconLoader::Small));
-        //KIcon("dialog-ok-apply");
+        return KIcon("arrow-right");
 
     case QxRunner::RunInfo:
         return QIcon(":/icons/info.png");
@@ -63,8 +62,7 @@ QVariant Utils::resultIcon(int result)
         return QIcon(":/icons/warning.png");
 
     case QxRunner::RunError:
-        return QIcon(KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small));
-        //KIcon("edit-delete");
+        return QIcon(":/icons/arrow-right-bordeaux-16.png");
 
     case QxRunner::RunFatal:
         return QIcon(":/icons/fatal.png");
@@ -73,9 +71,8 @@ QVariant Utils::resultIcon(int result)
         return QIcon(":/icons/exception.png");
 
     case QxRunner::NoResult:
-        return QIcon(KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::Small));
-        //KIcon("dialog-ok");
-        
+        return KIcon("arrow-right");
+
     default:
         return QIcon(":/icons/item.png");
     }

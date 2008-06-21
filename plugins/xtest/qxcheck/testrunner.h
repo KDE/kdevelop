@@ -1,5 +1,6 @@
 /* KDevelop xUnit plugin
  *
+ * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,26 +19,39 @@
  * 02110-1301, USA.
  */
 
-#ifndef XTEST_XTESTPLUGIN_H
-#define XTEST_XTESTPLUGIN_H
+#ifndef QXCHECK_TESTRUNNER_H
+#define QXCHECK_TESTRUNNER_H
 
-#include <interfaces/iplugin.h>
-#include <QVariantList>
+#include "checkexport.h"
 
-class KDevXtestPluginFactory;
+#include <QWidget>
+#include <QFileInfo>
 
-/**
- * xUnit test runner plugin
- **/
-class KDevXtestPlugin : public KDevelop::IPlugin
+namespace QxRunner { class Runner; }
+
+namespace QxCheck
+{
+class CheckModel;
+
+class QXCHECK_EXPORT TestRunner
 {
 public:
-    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~KDevXtestPlugin();
-    //virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+
+    TestRunner();
+    virtual ~TestRunner();
+    void registerTests(const QFileInfo& exe);
+    QWidget* spawn();
 
 private:
-    KDevXtestPluginFactory* m_xtestFactory;
+    // Copy and assignment not supported.
+    TestRunner(const TestRunner&);
+    TestRunner& operator=(const TestRunner&);
+
+private:
+    QxRunner::Runner* m_runner;
+    CheckModel*     m_model;
 };
 
-#endif // XTEST_XTESTPLUGIN_H
+} // namespace QxCheck
+
+#endif // TESTRUNNER_H

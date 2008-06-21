@@ -18,26 +18,47 @@
  * 02110-1301, USA.
  */
 
-#ifndef XTEST_XTESTPLUGIN_H
-#define XTEST_XTESTPLUGIN_H
+#ifndef QXCHECK_TESTRESULT_H
+#define QXCHECK_TESTRESULT_H
 
-#include <interfaces/iplugin.h>
-#include <QVariantList>
+#include <QString>
+#include <QFileInfo>
+#include <qxrunner/qxrunner_global.h>
 
-class KDevXtestPluginFactory;
-
-/**
- * xUnit test runner plugin
- **/
-class KDevXtestPlugin : public KDevelop::IPlugin
+namespace QxCheck
 {
+
+class TestResult
+{
+
 public:
-    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~KDevXtestPlugin();
-    //virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    explicit TestResult(QxRunner::RunnerResult=QxRunner::NoResult, QString message="", int line=0, QFileInfo=QFileInfo(""));
+
+    QxRunner::RunnerResult state();
+    QString message();
+    int line();
+    QFileInfo file();
+
+    void setState(QxRunner::RunnerResult);
+    void setMessage(QString);
+    void setLine(int);
+    void setFile(QFileInfo);
+    void log();
+
+    bool operator==(const TestResult& other);
+
+    /**
+     * True when state is NotRun or RunSuccess
+     **/
+    bool isGood();
 
 private:
-    KDevXtestPluginFactory* m_xtestFactory;
+    QxRunner::RunnerResult m_state;
+    QString m_message;
+    int m_line;
+    QFileInfo m_file;
 };
 
-#endif // XTEST_XTESTPLUGIN_H
+}
+
+#endif // QXCHECK_TESTRESULT_H

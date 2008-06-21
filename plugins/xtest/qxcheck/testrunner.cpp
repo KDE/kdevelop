@@ -1,5 +1,6 @@
 /* KDevelop xUnit plugin
  *
+ * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,26 +19,44 @@
  * 02110-1301, USA.
  */
 
-#ifndef XTEST_XTESTPLUGIN_H
-#define XTEST_XTESTPLUGIN_H
 
-#include <interfaces/iplugin.h>
-#include <QVariantList>
+/*!
+ * \file  testrunner.cpp
+ *
+ * \brief Implements class TestRunner.
+ */
 
-class KDevXtestPluginFactory;
+#include "testrunner.h"
+#include "checkmodel.h"
 
-/**
- * xUnit test runner plugin
- **/
-class KDevXtestPlugin : public KDevelop::IPlugin
+#include <qxrunner/runner.h>
+#include <qxrunner/runnerwindow.h>
+
+using QxRunner::RunnerWindow;
+using QxCheck::TestRunner;
+using QxCheck::CheckModel;
+
+TestRunner::TestRunner()
 {
-public:
-    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~KDevXtestPlugin();
-    //virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    m_runner = 0;
+    m_model = new CheckModel;
+}
 
-private:
-    KDevXtestPluginFactory* m_xtestFactory;
-};
+TestRunner::~TestRunner()
+{
+    // Delete the runner first.
+    delete m_runner;
+    delete m_model;
+}
 
-#endif // XTEST_XTESTPLUGIN_H
+void TestRunner::registerTests(const QFileInfo& exe)
+{
+    m_model->readTests(exe);
+}
+
+QWidget* TestRunner::spawn()
+{
+    RunnerWindow* window = new RunnerWindow;
+    window->setModel(m_model);
+    return window;
+}

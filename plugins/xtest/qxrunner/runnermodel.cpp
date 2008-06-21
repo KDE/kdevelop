@@ -37,6 +37,8 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <QCoreApplication>
+#include <QColor>
+#include <QFont>
 
 namespace QxRunner
 {
@@ -107,9 +109,19 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         return item->data(index.column());
     }
 
+    if ( role == Qt::FontRole && !item->isSelected()) {
+        QFont font;
+        font.setItalic(true);
+        return font;
+    }
+
     // The other roles are supported for the first column only.
     if (index.column() != 0) {
         return QVariant();
+    }
+
+    if ( role == Qt::TextColorRole && !item->isSelected()) {
+        return Qt::lightGray;
     }
 
     if (role != Qt::DecorationRole) {
@@ -118,11 +130,9 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
 
     if (index.child(0, 0).isValid()) {
         if (someChildHasStatus(QxRunner::RunError, index))
-            return m_redFolderIcon;
-        else if (someChildHasStatus(QxRunner::NoResult, index))
-            return m_blueFolderIcon;
+            return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
         else // evrything ran succesfully
-            return m_greenFolderIcon;
+            return KIcon("arrow-right-double");
     }
 
     // Icon corresponding to the item's result code.
@@ -152,6 +162,19 @@ bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int r
     Q_UNUSED(value);
     Q_UNUSED(role);
     return false;
+}
+
+void RunnerModel::updateColorAndFont(const QModelIndex& index)
+{
+    QModelIndex bottomRight = index;
+    while (bottomRight.child(0,0).isValid())
+    {
+        bottomRight = bottomRight.child(0,0);
+        while (bottomRight.sibling(bottomRight.row()+1, 0).isValid()) {
+            bottomRight = bottomRight.sibling(bottomRight.row()+1,0);
+        }
+    }
+    emit dataChanged(index, bottomRight);
 }
 
 Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
@@ -709,7 +732,7 @@ void RunnerModel::runItem(const QModelIndex& index)
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     // Send notification to main thread.
-    kDebug() << "some item completed: " << itemFromIndex(index)->data(0);
+    kDebug() << itemFromIndex(index)->data(0).toString() << " fini" ;
     ItemCompletedEvent* completedEvent;
     completedEvent = new ItemCompletedEvent(index);
     QCoreApplication::postEvent(this, completedEvent);
@@ -900,6 +923,7 @@ bool RunnerModel::event(QEvent* event)
     if (event->type() == ItemCompleted) {
         // Update result counters and provide default result type string if not
         // set in the item itself.
+        kDebug() << "itemCompleted";
         switch (item->result()) {
         case QxRunner::RunSuccess:
             setResultText(item, tr("Success"));

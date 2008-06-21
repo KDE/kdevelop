@@ -18,26 +18,6 @@
  * 02110-1301, USA.
  */
 
-#ifndef XTEST_XTESTPLUGIN_H
-#define XTEST_XTESTPLUGIN_H
+#include <checkwrapper.h>
 
-#include <interfaces/iplugin.h>
-#include <QVariantList>
-
-class KDevXtestPluginFactory;
-
-/**
- * xUnit test runner plugin
- **/
-class KDevXtestPlugin : public KDevelop::IPlugin
-{
-public:
-    explicit KDevXtestPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~KDevXtestPlugin();
-    //virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
-
-private:
-    KDevXtestPluginFactory* m_xtestFactory;
-};
-
-#endif // XTEST_XTESTPLUGIN_H
+CHECK_XTEST_MAIN( suite_create("my_suite") )

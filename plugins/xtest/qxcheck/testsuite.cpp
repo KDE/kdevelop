@@ -1,6 +1,5 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,52 +18,47 @@
  * 02110-1301, USA.
  */
 
-#include "cppunitmodel.h"
-#include "testbase.h"
-#include "cppunitregister.h"
-#include <KProcess>
+#include "testsuite.h"
+#include "checkoutputparser.h"
 
-using QxCppUnit::TestBase;
-using QxCppUnit::CppUnitModel;
-using QxCppUnit::CppUnitRegister;
+using QxCheck::TestSuite;
+using QxCheck::TestBase;
+using QxCheck::TestCase;
+using QxCheck::CheckOutputParser;
 
-CppUnitModel::CppUnitModel(QObject* parent)
-        : RunnerModel(parent)
-{
-    // Define the set of expected results.
-    setExpectedResults(QxRunner::RunWarning | QxRunner::RunError);
-}
-
-CppUnitModel::~CppUnitModel()
+TestSuite::TestSuite()
+    : TestBase("", 0)
 {
 }
 
-void CppUnitModel::readTests(const QFileInfo& exe)
+TestSuite::TestSuite(const QString& name, const QFileInfo& exe, TestBase* parent)
+    : TestBase(name, parent), m_exe(exe)
+{
+}
+
+TestSuite::~TestSuite()
+{
+}
+
+TestCase* TestSuite::testAt(unsigned i)
+{
+    return qobject_cast<TestCase*>(childAt(i));
+}
+
+int TestSuite::run()
 {
     KProcess proc;
     QStringList argv;
-    argv << "-proto";
-    proc.setProgram(exe.filePath(), argv);
+    proc.setProgram(m_exe.filePath(), argv);
     kDebug() << "executing " << proc.program();
     proc.setOutputChannelMode(KProcess::SeparateChannels);
     proc.start();
     proc.waitForFinished(-1);
-
-    CppUnitRegister reg;
-    reg.setExecutable(exe);
-    reg.addFromXml(&proc);
-    setRootItem(reg.rootItem());
-
-/*    QTestOutputParser parser(proc);
-    parser.go(this);*/
+    QStringList spl = m_exe.filePath().split('/');
+    QFile f(QFileInfo(m_exe.dir(), "checklog.xml").filePath());
+    CheckOutputParser parser(&f);
+    parser.go(this);
+    return 0;
 }
 
-QString CppUnitModel::name() const
-{
-    return tr("QxCppUnit");
-}
-
-QString CppUnitModel::about() const
-{
-    return "";
-}
+#include "testsuite.moc"

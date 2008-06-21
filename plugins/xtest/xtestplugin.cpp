@@ -35,6 +35,7 @@
 #include <KConfigGroup>
 #include "qxqtest/testrunner.h"
 #include "qxcppunit/testrunner.h"
+#include "qxcheck/testrunner.h"
 
 #include <kdebug.h>
 
@@ -53,6 +54,23 @@ public:
         Q_UNUSED(parent);
         return qtest();
         //return cppunit();
+        //return check();
+    }
+
+    QWidget* check() // temporary
+    {
+        QxCheck::TestRunner* runner = new QxCheck::TestRunner();
+        QString exeLoc("");
+        if (Core::self()->projectController()->projectCount() != 0)
+        {
+            // only support a single project, for now
+            IProject* proj = Core::self()->projectController()->projectAt(0);
+            KSharedConfig::Ptr cfg = proj->projectConfiguration();
+            KConfigGroup group(cfg.data(), "XTest");
+            exeLoc = KUrl(group.readEntry("Test Registration")).pathOrUrl();
+        }
+        runner->registerTests(exeLoc);
+        return runner->spawn();
     }
 
     QWidget* qtest() // temporary
@@ -92,7 +110,7 @@ public:
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
-        return Qt::LeftDockWidgetArea;
+        return Qt::BottomDockWidgetArea;
     }
 
     virtual QString id() const {
@@ -115,8 +133,9 @@ KDevXtestPlugin::~KDevXtestPlugin()
 {
 }
 
-Qt::DockWidgetArea KDevXtestPlugin::dockWidgetAreaHint() const 
-{
-    return Qt::BottomDockWidgetArea;
-    //return Qt::LeftDockWidgetArea;
-}
+// Qt::DockWidgetArea KDevXtestPlugin::dockWidgetAreaHint() const 
+// {
+//     //return Qt::BottomDockWidgetArea;
+//     //return Qt::LeftDockWidgetArea;
+//     return Qt::RightDockWidgetArea;
+// }

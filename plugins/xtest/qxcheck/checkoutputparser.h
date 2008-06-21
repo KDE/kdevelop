@@ -18,25 +18,25 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCPPUNIT_CPPUNITOUTPUTPARSER
-#define QXCPPUNIT_CPPUNITOUTPUTPARSER
+#ifndef QXCHECK_CHECKOUTPUTPARSER
+#define QXCHECK_CHECKOUTPUTPARSER
 
 #include <QXmlStreamReader>
 #include "testresult.h"
 
 class QIODevice;
 
-namespace QxCppUnit
+namespace QxCheck
 {
 
 class TestBase;
 class TestSuite;
 
-class CppUnitOutputParser : public QXmlStreamReader
+class CheckOutputParser : public QXmlStreamReader
 {
 public:
-    CppUnitOutputParser(QIODevice* device);
-    virtual ~CppUnitOutputParser();
+    CheckOutputParser(QIODevice* device);
+    virtual ~CheckOutputParser();
 
     /**
      * Start parsing and emit results
@@ -45,44 +45,39 @@ public:
 
 private: // helpers
     void processSuite();
-    void processCase();
-    void processCmd();
-    void setFailure();
-    void setSuccess();
+    void processTest();
+    bool readTestElement(QString&, QString&, QString&, QString&, QString&);
+    void postResult(const QString&, const QString&, const QString&,
+                    const QString&, const QString&);
     QString fetchName();
+    void setFailure(const QString&, const QString&);
+    void setSuccess();
 
     inline bool isStartElement_(const QString& elem);
     inline bool isEndElement_(const QString& elem);
 
 private: // state
     TestResult m_result;
-
-    // remember state to continue when parsing
-    // incrementally
-    bool m_processingSuite;
-    bool m_processingCase;
-    bool m_processingCmd;
-
     QString m_currentSuite;
-    QString m_currentCase;
-    QString m_currentCmd;
-
     TestSuite* m_suite;
     TestBase*  m_case;
     TestBase*  m_cmd;
 
-private:    // some xml constants
+private: // some xml constants
     static const QString c_suite;
-    static const QString c_case;
-    static const QString c_command;
-    static const QString c_name;
-    static const QString c_status;
-    static const QString c_type;
-    static const QString c_assertion;
+    static const QString c_test;
+    static const QString c_title;
+    static const QString c_path;
     static const QString c_file;
-    static const QString c_line;
+    static const QString c_id;
+    static const QString c_description;
+    static const QString c_message;
+    static const QString c_result;
+    static const QString c_error;
+    static const QString c_failure;
+    static const QString c_success;
 };
 
-} // namespace QxCppUnit
+} // namespace QxCheck
 
-#endif // QXCPPUNIT_CPPUNITOUTPUTPARSER
+#endif // QXCHECK_CHECKOUTPUTPARSER
