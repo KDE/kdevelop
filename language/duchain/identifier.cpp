@@ -1054,6 +1054,56 @@ TypeIdentifier::TypeIdentifier(const TypeIdentifier& id) : QualifiedIdentifier()
 TypeIdentifier::TypeIdentifier(const QualifiedIdentifier& id) : QualifiedIdentifier(id) {
 }
 
+IndexedIdentifier::IndexedIdentifier() : index(emptyConstantIdentifierPrivateIndex) {
+}
+
+IndexedIdentifier::IndexedIdentifier(const Identifier& id) : index(id.index()) {
+}
+
+IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id) {
+  index = id.index();
+  return *this;
+}
+bool IndexedIdentifier::operator==(const IndexedIdentifier& rhs) const {
+  return index == rhs.index;
+}
+bool IndexedIdentifier::operator==(const Identifier& id) const {
+  return index == id.index();
+}
+
+Identifier IndexedIdentifier::identifier() const {
+  return Identifier(index);
+}
+
+IndexedIdentifier::operator Identifier() const {
+  return Identifier(index);
+}
+
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex) {
+}
+
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id) : index(id.index()) {
+}
+
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const QualifiedIdentifier& id) {
+  index = id.index();
+  return *this;
+}
+bool IndexedQualifiedIdentifier::operator==(const IndexedQualifiedIdentifier& rhs) const {
+  return index == rhs.index;
+}
+bool IndexedQualifiedIdentifier::operator==(const QualifiedIdentifier& id) const {
+  return index == id.index();
+}
+
+QualifiedIdentifier IndexedQualifiedIdentifier::identifier() const {
+  return QualifiedIdentifier(index);
+}
+
+IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
+  return QualifiedIdentifier(index);
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

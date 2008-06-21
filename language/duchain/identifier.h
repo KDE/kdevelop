@@ -36,12 +36,45 @@ namespace KDevelop
 {
 
 class TypeIdentifier;
+class Identifier;
 class QualifiedIdentifier;
 template<bool>
 class QualifiedIdentifierPrivate;
 template<bool>
 class IdentifierPrivate;
 class IndexedString;
+
+//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
+//The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+//abilities or access to the contained data.
+struct IndexedIdentifier {
+  IndexedIdentifier();
+  IndexedIdentifier(const Identifier& id);
+  IndexedIdentifier& operator=(const Identifier& id);
+  bool operator==(const IndexedIdentifier& rhs) const;
+  bool operator==(const Identifier& id) const;
+  
+  Identifier identifier() const;
+  operator Identifier() const;
+  
+  uint index;
+};
+
+//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
+//The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+//abilities or access to the contained data.
+struct IndexedQualifiedIdentifier {
+  IndexedQualifiedIdentifier();
+  IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
+  IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
+  bool operator==(const IndexedQualifiedIdentifier& rhs) const;
+  bool operator==(const QualifiedIdentifier& id) const;
+  
+  QualifiedIdentifier identifier() const;
+  operator QualifiedIdentifier() const;
+  
+  uint index;
+};
 
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
