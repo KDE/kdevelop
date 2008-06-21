@@ -166,7 +166,9 @@ IRun KDevelop::RunController::defaultRun() const
 
     run.setExecutable(group.readEntry( "Executable", "" ));
     run.setWorkingDirectory(group.readEntry( "Working Directory", "" ));
-    run.setArguments(QStringList() << group.readEntry( "Arguments", QString() ));
+    QString arg=group.readEntry( "Arguments", QString() );
+    if(!arg.isEmpty())
+        run.setArguments(QStringList(arg));
     run.setInstrumentor("default");
 
     if (group.readEntry("Compile Before Execution", false))
