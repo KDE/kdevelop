@@ -80,6 +80,12 @@ void ParseSession::setContents(const PreprocessedContents& contents, rpp::Locati
 void ParseSession::setContentsAndGenerateLocationTable(const PreprocessedContents& contents)
 {
   m_contents = contents;
+  ///@todo We need this in the lexer, the problem is that we copy the vector when doing this
+  m_contents.append(0);
+  m_contents.append(0);
+  m_contents.append(0);
+  m_contents.append(0);
+  
   m_locationTable = new rpp::LocationTable(m_contents);
 }
 
