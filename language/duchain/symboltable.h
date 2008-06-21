@@ -35,7 +35,7 @@ class QualifiedIdentifier;
 /**
  * A global symbol table, which stores mangled identifiers for quick lookup.
  *
- * \todo profiling, map vs hash etc...
+ * \todo Use qualified-identifier indices instead of hash. But how to implement that within the TopDUContext search efficiently..
  */
 class KDEVPLATFORMLANGUAGE_EXPORT SymbolTable
 {
