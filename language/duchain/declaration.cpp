@@ -365,7 +365,7 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
 DeclarationId Declaration::id() const
 {
   ENSURE_CAN_READ
-  return DeclarationId(url(), qualifiedIdentifier(), additionalIdentity());
+  return DeclarationId(qualifiedIdentifier(), additionalIdentity());
 }
 
 Declaration* Declaration::declaration(TopDUContext* topContext) const

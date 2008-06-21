@@ -29,7 +29,7 @@
 namespace KDevelop {
 
 class Declaration;
-class DUContext;
+class TopDUContext;
   
 /**
  * Allows clearly identifying a Declaration.
@@ -37,35 +37,33 @@ class DUContext;
  * DeclarationId is needed to uniquely address Declarations that are in another top-context,
  * because there may be multiple parsed versions of a file.
  *
- * For performance-reasons, we don't want d-pointers here. Above that, we must think about ways
- * to make this more efficient, since we nearly create an instance of DeclarationId for each Declaration we have.
+ * 
+ * This only works when the declaration is in the symbol table
  * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
   public:
-    DeclarationId(const HashedString& url = HashedString(), const QualifiedIdentifier& id = QualifiedIdentifier(), uint additionalId = 0);
+    DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0);
     
     bool operator==(const DeclarationId& rhs) const {
-      return m_url == rhs.m_url && m_identifier == rhs.m_identifier && m_additionalIdentity == rhs.m_additionalIdentity;
+      return m_identifier == rhs.m_identifier && m_additionalIdentity == rhs.m_additionalIdentity;
     }
 
     uint hash() const {
-      return m_url.hash() * 37 + m_identifier.hash() * 13 + m_additionalIdentity;
+      return m_identifier.index * 13 + m_additionalIdentity;
     }
 
-    QualifiedIdentifier identifier() const;
-    HashedString url() const;
+    IndexedQualifiedIdentifier identifier() const;
     uint additionalIdentity() const;
 
     /**
      * Tries to retrieve the declaration, from the perspective of @param context
-     * Never returns a declaration that has isDefinition(..) set.
+     * In order to be retrievable, the declaration must be in the symbol table
      * */
-    Declaration* getDeclaration(DUContext* context) const;
+    Declaration* getDeclaration(TopDUContext* context) const;
     
   private:
-    HashedString m_url;
-    QualifiedIdentifier m_identifier;
+    IndexedQualifiedIdentifier m_identifier;
     uint m_additionalIdentity; //Hash from signature, or similar.
 
 };

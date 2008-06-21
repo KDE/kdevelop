@@ -18,25 +18,22 @@
 
 #include "declarationid.h"
 #include "ducontext.h"
+#include "topducontext.h"
 #include <editor/simplecursor.h>
 #include "declaration.h"
+#include "symboltable.h"
 
 namespace KDevelop {
 
-DeclarationId::DeclarationId(const HashedString& url, const QualifiedIdentifier& id, uint additionalId)
-  : m_url(url), m_identifier(id), m_additionalIdentity(additionalId)
+DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId)
+  : m_identifier(id), m_additionalIdentity(additionalId)
 {
   
 }
 
-QualifiedIdentifier DeclarationId::identifier() const
+IndexedQualifiedIdentifier DeclarationId::identifier() const
 {
   return m_identifier;
-}
-
-HashedString DeclarationId::url() const
-{
-  return m_url;
 }
 
 uint DeclarationId::additionalIdentity() const
@@ -44,24 +41,24 @@ uint DeclarationId::additionalIdentity() const
   return m_additionalIdentity;
 }
 
-Declaration* DeclarationId::getDeclaration(DUContext* context) const
+Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
 {
-  ///@todo This is quite slow, maybe think of a better way, especially for template-declarations.
-  //Resolve DeclarationId
-  
-  QList<Declaration*> declarations = context->findDeclarations(m_identifier, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoFiltering);
-  
-  for(QList<Declaration*>::const_iterator it2 = declarations.begin(); it2 != declarations.end(); ++it2) {
-    if( !(*it2)->isDefinition() && m_additionalIdentity == (*it2)->additionalIdentity() &&
-        m_url == (*it2)->url() )
-      return *it2;
-  }
+  QualifiedIdentifier id(m_identifier);
 
-  declarations = context->findDeclarations(m_identifier, SimpleCursor::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoFiltering | DUContext::NoImportsCheck));
-  for(QList<Declaration*>::const_iterator it2 = declarations.begin(); it2 != declarations.end(); ++it2) {
-    if( !(*it2)->isDefinition() && m_additionalIdentity == (*it2)->additionalIdentity() &&
-        m_url == (*it2)->url() )
-      return *it2;
+  TopDUContext* top = context->topContext();
+  
+  QVarLengthArray<Declaration*> declarations;
+  SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
+  
+  Identifier lastId = id.last();
+  
+  FOREACH_ARRAY(Declaration* decl, declarations) {
+    if(decl->identifier() == lastId) {
+      if(m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+        //Hit
+        return decl;
+      }
+    }
   }
 
   return 0;
