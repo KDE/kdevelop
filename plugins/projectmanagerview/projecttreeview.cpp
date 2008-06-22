@@ -60,7 +60,7 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
 ProjectTreeView::~ProjectTreeView()
@@ -146,7 +146,6 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );
-
     if ( item && item->file() )
     {
         emit activateUrl( item->file()->url() );
