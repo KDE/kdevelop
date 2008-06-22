@@ -666,6 +666,14 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
   QCOMPARE(ctx->localDeclarations()[1]->range().textRange(), KTextEditor::Range(1, 10, 1, 11));
 }
+{
+  //The range of the merged declaration name should be trimmed to the end of the macro invocation
+  QString test("#define TEST(X) class X ## Class {};\nTEST(Hallo)\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+  QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 5, 1, 11));
+}
 }
 
 void TestCppCodeCompletion::testEnvironmentMatching() {

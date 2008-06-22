@@ -48,8 +48,16 @@ class KDEVCPPRPP_EXPORT LocationTable
     * If the "collapsed" member of the returned anchor is true, the position is within a collapsed range.
     @param collapseIfMacroExpansion @see LocationTable::positionForOffset
     * \note the return line starts from 0, not 1.
+    * Returns the found position stored in the anchor, and the possible maximum length until the next anchored position, or zero.
     */
-    rpp::Anchor positionAt(std::size_t offset, const PreprocessedContents& contents, bool collapseIfMacroExpansion = false) const;
+    QPair<rpp::Anchor, uint> positionAt(std::size_t offset, const PreprocessedContents& contents, bool collapseIfMacroExpansion = false) const;
+    
+    struct AnchorInTable {
+      uint position; //Position of this anchor
+      Anchor anchor; //This anchor
+      uint nextPosition;//Position of the next following anchor, or zero
+      Anchor nextAnchor;//The next following anchor
+    };
     
     /** 
       * Returns the nearest anchor before @param position, and the position of the anchor.
@@ -57,7 +65,7 @@ class KDEVCPPRPP_EXPORT LocationTable
       @param collapseIfMacroExpansion When this is true, all ranges that come from macro-expansion will be 
                                       considered collapsed.(The returned anchor will also have the collapsed member set)
       * */
-    QPair<std::size_t, Anchor> anchorForOffset(std::size_t position, bool collapseIfMacroExpansion = false) const;
+    AnchorInTable anchorForOffset(std::size_t position, bool collapseIfMacroExpansion = false) const;
 
     void dump() const;
 

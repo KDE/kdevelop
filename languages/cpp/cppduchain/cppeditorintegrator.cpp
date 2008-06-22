@@ -50,12 +50,18 @@ SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) c
 
 SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
-  rpp::Anchor position = m_session->positionAt(token.position);
+  QPair<rpp::Anchor, uint> a = m_session->positionAndSpaceAt(token.position);
+  rpp::Anchor position = a.first;
   if(edge == BackEdge) {
     if(position.collapsed)
       return position;
-    else
-      return position + SimpleCursor(0, token.symbolLength());
+    else {
+      uint length = token.symbolLength();
+      if(a.second && length > a.second)
+        length = a.second;
+      //We have to check the following anchor in the location-table to make sure we don't make the range longer than possible
+      return position + SimpleCursor(0, length);
+    }
   } else
     return position;
 }

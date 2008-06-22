@@ -48,6 +48,13 @@ rpp::Anchor ParseSession::positionAt(std::size_t offset, bool collapseIfMacroExp
 {
   Q_ASSERT(m_locationTable);
 
+  return m_locationTable->positionAt(offset, m_contents, collapseIfMacroExpansion).first;
+}
+
+QPair<rpp::Anchor, uint> ParseSession::positionAndSpaceAt(std::size_t offset, bool collapseIfMacroExpansion) const
+{
+  Q_ASSERT(m_locationTable);
+
   return m_locationTable->positionAt(offset, m_contents, collapseIfMacroExpansion);
 }
 

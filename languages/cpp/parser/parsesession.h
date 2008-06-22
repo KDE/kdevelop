@@ -61,6 +61,8 @@ public:
    * \note the return line starts from 0, not 1.
    */
   rpp::Anchor positionAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
+  
+  QPair<rpp::Anchor, uint> positionAndSpaceAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
 
   ///The contents must already be tokenized. Either by the preprocessor, or by tokenizeFromByteArray(..)
   void setContents(const PreprocessedContents& contents, rpp::LocationTable* locationTable);

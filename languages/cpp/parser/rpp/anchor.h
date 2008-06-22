@@ -32,6 +32,9 @@ namespace rpp {
  * */
 class KDEVCPPRPP_EXPORT Anchor : public KDevelop::SimpleCursor {
 public:
+  Anchor() : collapsed(false) {
+  }
+  
   explicit Anchor(const SimpleCursor& cursor, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(cursor), collapsed(_collapsed), macroExpansion(_macroExpansion) {
   }
   explicit Anchor(int line, int column, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(line, column), collapsed(_collapsed), macroExpansion(_macroExpansion) {

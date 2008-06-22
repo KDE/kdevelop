@@ -932,7 +932,7 @@ void pp::handle_endif(Stream& input, Stream& output)
   {
     KDevelop::Problem problem;
     problem.setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->anchorForOffset(output.offset()).second.line));
+    problem.setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->anchorForOffset(output.offset()).anchor.line));
     problemEncountered(problem);
   }
   else
