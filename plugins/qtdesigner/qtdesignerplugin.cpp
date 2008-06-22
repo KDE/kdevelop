@@ -69,7 +69,7 @@ public:
         {
             QtDesignerDocument* d = new QtDesignerDocument(url, core);
             d->setDesignerPlugin(m_plugin);
-            m_plugin->activateDocument(d);
+//             m_plugin->activateDocument(d);
             return d;
         }
         return 0;
@@ -140,7 +140,7 @@ private:
 
 QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     : KDevelop::IPlugin(QtDesignerPluginFactory::componentData(),parent),
-      m_activeDoc(0), m_docFactory(new QtDesignerDocumentFactory(this)),
+      m_docFactory(new QtDesignerDocumentFactory(this)),
       m_widgetBoxFactory(0), m_propertyEditorFactory(0),
       m_objectInspectorFactory(0), m_actionEditorFactory(0)
 {
@@ -149,8 +149,8 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
 
-    connect( idc, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
-             this, SLOT( activateDocument( KDevelop::IDocument* ) ) );
+//     connect( idc, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
+//              this, SLOT( activateDocument( KDevelop::IDocument* ) ) );
 
     setXMLFile( "kdevqtdesigner.rc" );
 
@@ -180,32 +180,6 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     m_designer->core()->actionEditor()->setObjectName( i18n("Action Editor") );
     m_designer->core()->objectInspector()->setObjectName( i18n("Object Inspector") );
 
-    QList<QObject*> plugins = QPluginLoader::staticInstances();
-    kDebug(9038) << "pluginlist from designer:" << plugins;
-    foreach (QObject *plugin, plugins)
-    {
-        QDesignerFormEditorPluginInterface *fep;
-
-        if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
-        {
-                if ( !fep->isInitialized() )
-                        fep->initialize(formeditor);
-
-                fep->action()->setCheckable(true);
-                if( fep->action()->text() == "Edit Signals/Slots" )
-                    actionCollection()->addAction("signaleditor", fep->action());
-                if( fep->action()->text() == "Edit Buddies" )
-                    actionCollection()->addAction("buddyeditor", fep->action());
-                if( fep->action()->text() == "Edit Tab Order" )
-                    actionCollection()->addAction("tabordereditor", fep->action());
-
-                kDebug(9038) << "Added action:" << fep->action()->objectName() << "|" << fep->action()->text();
-        }
-    }
-
-
-    setupActions();
-
     m_widgetBoxFactory = new QtDesignerToolViewFactory( this,
             QtDesignerToolViewFactory::WidgetBox );
     m_propertyEditorFactory = new QtDesignerToolViewFactory( this,
@@ -231,29 +205,6 @@ QDesignerFormEditorInterface *QtDesignerPlugin::designer() const
     return m_designer->core();
 }
 
-void QtDesignerPlugin::setupActions()
-{
-    QDesignerFormWindowManagerInterface* manager = designer()->formWindowManager();
-    KActionCollection* ac = actionCollection();
-
-    ac->addAction( "file_save", KStandardAction::save( this, SLOT( saveActiveDocument() ), ac) );
-    ac->addAction( "adjust_size", manager->actionAdjustSize() );
-    ac->addAction( "break_layout", manager->actionBreakLayout() );
-    ac->addAction( "designer_cut", manager->actionCut() );
-    ac->addAction( "designer_copy", manager->actionCopy() );
-    ac->addAction( "designer_paste", manager->actionPaste() );
-    ac->addAction( "designer_delete", manager->actionDelete() );
-    ac->addAction( "layout_grid", manager->actionGridLayout() );
-    ac->addAction( "layout_horiz", manager->actionHorizontalLayout() );
-    ac->addAction( "layout_vertical", manager->actionVerticalLayout() );
-    ac->addAction( "layout_split_horiz", manager->actionSplitHorizontal() );
-    ac->addAction( "layout_split_vert", manager->actionSplitVertical() );
-    ac->addAction( "designer_undo", manager->actionUndo() );
-    ac->addAction( "designer_redo", manager->actionRedo() );
-    ac->addAction( "designer_select_all", manager->actionSelectAll() );
-}
-
-
 // bool QtDesignerPlugin::saveFile()
 // {
 //     KSaveFile uiFile( localFilePath() );
@@ -273,7 +224,7 @@ void QtDesignerPlugin::setupActions()
 //     setModified(false);
 //     return true;
 // }
-
+/*
 void QtDesignerPlugin::saveActiveDocument()
 {
     kDebug(9038) << "going to save:" << m_activeDoc;
@@ -290,6 +241,6 @@ void QtDesignerPlugin::activateDocument( KDevelop::IDocument* doc )
         kDebug(9038) << "Doc activated:" << doc;
         m_activeDoc = doc;
     }
-}
+}*/
 
 #include "qtdesignerplugin.moc"

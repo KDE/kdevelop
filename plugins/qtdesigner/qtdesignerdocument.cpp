@@ -42,9 +42,6 @@
 
 #include "qtdesignerdocument.h"
 
-#include "qtdesignerplugin.h"
-#include <icore.h>
-#include <iuicontroller.h>
 #include <QtDesigner/QDesignerFormWindowManagerInterface>
 #include <QtDesigner/QDesignerFormWindowInterface>
 #include <QtDesigner/QDesignerFormEditorInterface>
@@ -54,18 +51,22 @@
 #include <QApplication>
 #include <KMessageBox>
 #include <KLocale>
+
+#include <icore.h>
+#include <iuicontroller.h>
+#include <idocumentcontroller.h>
 #include <sublime/view.h>
+#include <sublime/area.h>
+#include <sublime/controller.h>
+
+#include "qtdesignerview.h"
+#include "qtdesignerplugin.h"
 
 QtDesignerDocument::QtDesignerDocument( const KUrl& url , KDevelop::ICore* core )
     : Sublime::UrlDocument(core->uiController()->controller(), url),
-      KDevelop::IDocument(core), m_url(url), m_state(KDevelop::IDocument::Clean)
+      KDevelop::IDocument(core), m_state(KDevelop::IDocument::Clean)
 {
 
-}
-
-KUrl QtDesignerDocument::url() const
-{
-    return m_url;
 }
 
 KSharedPtr<KMimeType> QtDesignerDocument::mimeType() const
@@ -91,16 +92,16 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
     kDebug(9038) << "Going to Save";
     if( m_state == KDevelop::IDocument::Clean )
         return false;
-    if( m_forms.isEmpty() )
+    if( !m_form )
         return false;
-    QFile f(m_url.toLocalFile());
+    QFile f(url().toLocalFile());
     if( !f.open( QIODevice::WriteOnly ) )
     {
         kDebug(9038) << "Couldn't open file:" << f.error();
         return false;
     }
     QTextStream s(&f);
-    s << m_forms.first()->contents();
+    s << m_form->contents();
     s.flush();
     f.close();
     m_state = KDevelop::IDocument::Clean;
@@ -110,11 +111,8 @@ bool QtDesignerDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
 
 void QtDesignerDocument::reload()
 {
-    QFile uiFile(m_url.toLocalFile());
-    foreach(QDesignerFormWindowInterface* form, m_forms)
-    {
-        form->setContents(&uiFile);
-    }
+    QFile uiFile(url().toLocalFile());
+    m_form->setContents(&uiFile);
     m_state = KDevelop::IDocument::Clean;
     notifyStateChanged();
 }
@@ -148,14 +146,26 @@ bool QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
         }
     }
 
-    foreach(QDesignerFormWindowInterface* form, m_forms)
+    //close all views and then delete ourself
+    ///@todo test this
+    foreach (Sublime::Area *area,
+        KDevelop::ICore::self()->uiController()->controller()->allAreas())
     {
-        m_designerPlugin->designer()->formWindowManager()->removeFormWindow(form);
-        QMdiArea* area = m_areas.at(m_forms.indexOf(form));
-        m_areas.removeAll(area);
-        m_forms.removeAll(form);
-        delete area;
+        QList<Sublime::View*> areaViews = area->views();
+        foreach (Sublime::View *view, areaViews) {
+            if (views().contains(view)) {
+                area->removeView(view);
+                delete view;
+            }
+        }
     }
+
+    m_designerPlugin->designer()->formWindowManager()->removeFormWindow(m_form);
+
+    KDevelop::ICore::self()->documentController()->notifyDocumentClosed(this);
+
+    // Here we go...
+    deleteLater();
 
     return true;
 }
@@ -164,11 +174,8 @@ bool QtDesignerDocument::isActive() const
 {
     QDesignerFormWindowInterface* activeWin =
             m_designerPlugin->designer()->formWindowManager()->activeFormWindow();
-    foreach( QDesignerFormWindowInterface* form, m_forms )
-    {
-        if( activeWin == form )
-            return true;
-    }
+    if( activeWin == m_form )
+        return true;
     return false;
 }
 
@@ -184,16 +191,7 @@ void QtDesignerDocument::setCursorPosition(const KTextEditor::Cursor&)
 
 void QtDesignerDocument::activate(Sublime::View* view, KParts::MainWindow*)
 {
-    QMdiArea* a = dynamic_cast<QMdiArea*>(view->widget());
-    if(a)
-    {
-        int num = m_areas.indexOf(a);
-        kDebug(9038) << "Area found at" << num;
-        if( num >= 0 )
-        {
-            m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_forms.at(num) );
-        }
-    }
+    m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_form );
     notifyActivated();
 }
 
@@ -202,52 +200,24 @@ void QtDesignerDocument::setDesignerPlugin(QtDesignerPlugin* plugin)
     m_designerPlugin = plugin;
 }
 
-QWidget *QtDesignerDocument::createViewWidget(QWidget *parent)
+Sublime::View *QtDesignerDocument::newView(Sublime::Document* doc)
 {
-    kDebug(9038) << "Creating new area for form:" << m_url;
-    QMdiArea* area = new QMdiArea(parent);
-//     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
-//     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-//     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    QFile uiFile(m_url.toLocalFile());
-    QDesignerFormWindowManagerInterface* manager = m_designerPlugin->designer()->formWindowManager();
+    if( qobject_cast<QtDesignerDocument*>( doc ) ) {
+        QFile uiFile(url().toLocalFile());
 
-    QDesignerFormWindowInterface* form = manager->createFormWindow();
-    kDebug(9038) << "now we have" << manager->formWindowCount() << "formwindows";
-    form->setFileName(m_url.toLocalFile());
-    form->setContents(&uiFile);
-    manager->setActiveFormWindow(form);
-    QMdiSubWindow* window = area->addSubWindow(form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
-    const QSize containerSize = form->mainContainer()->size();
-    const QSize containerMinimumSize = form->mainContainer()->minimumSize();
-    const QSize containerMaximumSize = form->mainContainer()->maximumSize();
-    const QSize decorationSize = window->geometry().size() - window->contentsRect().size();
-    window->resize(containerSize+decorationSize);
-    window->setMinimumSize(containerMinimumSize+decorationSize);
-    if( containerMaximumSize == QSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX) )
-        window->setMaximumSize(containerMaximumSize);
-    else
-        window->setMaximumSize(containerMaximumSize+decorationSize);
-    window->setWindowTitle( form->mainContainer()->windowTitle() );
-    m_areas << area;
-    connect( form, SIGNAL(changed()), this, SLOT(formChanged()));
-    m_forms << form;
-    return area;
+        m_form = formManager()->createFormWindow();
+        kDebug(9038) << "now we have" << formManager()->formWindowCount() << "formwindows";
+        m_form->setFileName(url().toLocalFile());
+        m_form->setContents(&uiFile);
+        connect( m_form, SIGNAL(changed()), this, SLOT(formChanged()));
+        formManager()->setActiveFormWindow(m_form);
+        return new QtDesignerView( this, m_form );
+    }
+    return 0;
 }
 
 void QtDesignerDocument::formChanged()
 {
-    kDebug(9038) << "Form changed";
-    QDesignerFormWindowInterface* activeForm = m_designerPlugin->designer()->formWindowManager()->activeFormWindow();
-    foreach(QDesignerFormWindowInterface* form, m_forms)
-    {
-        if( form != activeForm )
-        {
-            form->disconnect( this );
-            form->setContents(activeForm->contents());
-            connect( form, SIGNAL(changed()), this, SLOT(formChanged()));
-        }
-    }
     m_state = KDevelop::IDocument::Modified;
     notifyStateChanged();
 }
@@ -255,6 +225,16 @@ void QtDesignerDocument::formChanged()
 KTextEditor::Cursor QtDesignerDocument::cursorPosition( ) const
 {
     return KTextEditor::Cursor();
+}
+
+QtDesignerPlugin* QtDesignerDocument::designerPlugin()
+{
+    return m_designerPlugin;
+}
+
+QDesignerFormWindowManagerInterface* QtDesignerDocument::formManager()
+{
+    return m_designerPlugin->designer()->formWindowManager();
 }
 
 #include "qtdesignerdocument.moc"

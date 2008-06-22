@@ -21,10 +21,10 @@
 #ifndef QTDESIGNERDOCUMENT_H
 #define QTDESIGNERDOCUMENT_H
 
+#include <QtCore/QList>
+
 #include <sublime/urldocument.h>
 #include <idocument.h>
-
-#include <QtCore/QList>
 
 namespace KDevelop
 {
@@ -33,6 +33,7 @@ namespace KDevelop
 
 class QtDesignerPlugin;
 class QDesignerFormWindowInterface;
+class QDesignerFormWindowManagerInterface;
 class QMdiArea;
 
 class QtDesignerDocument : public Sublime::UrlDocument, public KDevelop::IDocument
@@ -41,7 +42,7 @@ class QtDesignerDocument : public Sublime::UrlDocument, public KDevelop::IDocume
 public:
     QtDesignerDocument( const KUrl&, KDevelop::ICore* );
 
-    KUrl url() const;
+    KUrl url() const { return Sublime::UrlDocument::url(); }
 
     virtual KSharedPtr<KMimeType> mimeType() const;
     virtual KParts::Part* partForView(QWidget*) const;
@@ -55,17 +56,16 @@ public:
     virtual void activate(Sublime::View*, KParts::MainWindow*);
     virtual KTextEditor::Cursor cursorPosition() const;
     void setDesignerPlugin(QtDesignerPlugin*);
+    QtDesignerPlugin* designerPlugin();
+    QDesignerFormWindowManagerInterface* formManager();
 
 private slots:
     void formChanged();
-protected:
-        virtual QWidget *createViewWidget(QWidget *parent = 0);
+    Sublime::View* newView( Sublime::Document* d );
 private:
     QtDesignerPlugin* m_designerPlugin;
-    KUrl m_url;
-    QList<QDesignerFormWindowInterface*> m_forms;
-    QList<QMdiArea*> m_areas;
     KDevelop::IDocument::DocumentState m_state;
+    QDesignerFormWindowInterface* m_form;
 };
 
 #endif

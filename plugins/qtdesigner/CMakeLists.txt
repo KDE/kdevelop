@@ -12,6 +12,8 @@ INCLUDE_DIRECTORIES(
 SET(kdevqtdesigner_PART_SRCS
 qtdesignerplugin.cpp
 qtdesignerdocument.cpp
+qtdesignerview.cpp
+qtdesignerwidget.cpp
 )
 
 

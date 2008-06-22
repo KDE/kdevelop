@@ -58,24 +58,22 @@ public:
     QtDesignerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
     virtual ~QtDesignerPlugin();
 
-    void setupActions();
-
 //   virtual bool openFile();
 //   virtual bool saveFile();
 
     QDesignerFormEditorInterface *designer() const;
 public Q_SLOTS:
-    void activateDocument( KDevelop::IDocument* );
+//     void activateDocument( KDevelop::IDocument* );
 protected:
 
 private:
 
 private Q_SLOTS:
-    void saveActiveDocument();
+//     void saveActiveDocument();
 private:
     QDesignerIntegrationInterface* m_designer;
 
-    KDevelop::IDocument* m_activeDoc;
+//     KDevelop::IDocument* m_activeDoc;
     QtDesignerDocumentFactory* m_docFactory;
     QtDesignerToolViewFactory* m_widgetBoxFactory;
     QtDesignerToolViewFactory* m_propertyEditorFactory;
