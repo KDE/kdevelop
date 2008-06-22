@@ -13,7 +13,7 @@ find_path(CPPUNIT_INCLUDE_DIR
     /usr/include/cppunit /usr/local/include/cppunit)
 
 find_library(CPPUNIT_LIBRARY
-    NAMES cppunit-1.12 libcppunit-1.12 libcppunit cppunit
+    NAMES cppunit-1.12 cppunit
     PATH /usr/lib /usr/local/lib)
 
 if (CPPUNIT_INCLUDE_DIR AND CPPUNIT_LIBRARY)
@@ -32,7 +32,7 @@ find_path(CHECK_INCLUDE_DIR
     /usr/include /usr/local/include)
 
 find_library(CHECK_LIBRARY
-    NAMES libcheck.so libcheck.so.0 libcheck.so.0.0.0
+    NAMES check
     PATH /usr/lib /usr/local/lib)
 
 if (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
