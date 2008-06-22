@@ -40,9 +40,9 @@ if (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
 endif (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
 macro_log_feature(CHECK_FOUND "Check" "A unit testing framework for C" "http://check.sourceforge.net/" FALSE "" "Needed for building qxcheck")
 
-if (CPPUNIT_FOUND)
+if (CHECK_FOUND)
     add_subdirectory(qxcheck)
-endif (CPPUNIT_FOUND)
+endif (CHECK_FOUND)
 
 
 include_directories(
