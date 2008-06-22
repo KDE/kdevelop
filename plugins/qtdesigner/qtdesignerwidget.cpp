@@ -35,11 +35,13 @@
 #include <sublime/view.h>
 
 QtDesignerWidget::QtDesignerWidget( QWidget* parent, QDesignerFormWindowInterface* form )
-    : QMdiArea( parent ), KXMLGUIClient( 0 ), m_form( form )
+    : QMdiArea( parent ), KXMLGUIClient(), m_form( form )
 {
     //     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
     //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+
+    setXMLFile( "kdevqtdesigner.rc" );
 
     QMdiSubWindow* window = addSubWindow(m_form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
     const QSize containerSize = m_form->mainContainer()->size();

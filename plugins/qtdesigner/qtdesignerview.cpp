@@ -32,16 +32,11 @@ QtDesignerView::QtDesignerView( QtDesignerDocument* doc, QDesignerFormWindowInte
 
 QtDesignerView::~QtDesignerView()
 {
-    delete m_widget;
 }
 
-QWidget* QtDesignerView::widget( QWidget* parent )
+QWidget* QtDesignerView::createWidget( QWidget* parent )
 {
-    if( m_widget )
-    {
-        m_widget = new QtDesignerWidget( parent, m_form );
-    }
-    return m_widget;
+    return new QtDesignerWidget( parent, m_form );
 }
 
 #include "qtdesignerview.moc"

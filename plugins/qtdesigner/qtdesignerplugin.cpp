@@ -175,6 +175,8 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     m_designer = new qdesigner_internal::QDesignerIntegration(formeditor, this);
     qdesigner_internal::QDesignerIntegration::initializePlugins( formeditor );
 
+    kDebug() << "integration now:" << formeditor->integration();
+
     m_designer->core()->widgetBox()->setObjectName( i18n("Widget Box") );
     m_designer->core()->propertyEditor()->setObjectName( i18n("Property Editor") );
     m_designer->core()->actionEditor()->setObjectName( i18n("Action Editor") );

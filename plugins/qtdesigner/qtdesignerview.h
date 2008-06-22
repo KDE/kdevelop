@@ -33,7 +33,7 @@ class QtDesignerView : public Sublime::View
 public:
     QtDesignerView( QtDesignerDocument*, QDesignerFormWindowInterface* );
     ~QtDesignerView();
-    QWidget* widget( QWidget* parent );
+    QWidget* createWidget( QWidget* parent = 0 );
 private:
     QDesignerFormWindowInterface* m_form;
     QtDesignerWidget* m_widget;
