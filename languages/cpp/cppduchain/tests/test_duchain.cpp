@@ -499,14 +499,14 @@ void TestDUChain::testEnum()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 };");
+    QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 }; union { int u1; float u2; };");
 
   DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->localDeclarations().count(), 2);
-  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 3);
   
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
   QVERIFY(decl);
@@ -550,6 +550,14 @@ void TestDUChain::testEnum()
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
     QCOMPARE((int)en->value<qint64>(), 2);
+  }
+  {
+    //Verify that the union members were propagated up
+    decl = findDeclaration(top, Identifier("u1"));
+    QVERIFY(decl);
+  
+    decl = findDeclaration(top, Identifier("u2"));
+    QVERIFY(decl);
   }
   release(top);
 }

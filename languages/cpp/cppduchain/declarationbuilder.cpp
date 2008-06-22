@@ -227,7 +227,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
     applyFunctionSpecifiers();
   } else {
-    openDefinition(node->id, node);
+    openDefinition(node->id, node, node->id == 0);
   }
 
   applyStorageSpecifiers();
@@ -505,9 +505,9 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   return declaration;
 }
 
-Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode)
+Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool collapseRange)
 {
-  Declaration* ret = openNormalDeclaration(name, rangeNode);
+  Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
   
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
@@ -607,7 +607,7 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  openNormalDeclaration(node->name, node->name ? (AST*)node->name : (AST*)node, Identifier(), node->name == 0);
+  openDefinition(node->name, node, node->name == 0);
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
 
@@ -653,7 +653,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     openPrefixContext(node, id, pos);
   }
 
-  openDefinition(node->name, node);
+  openDefinition(node->name, node, node->name == 0);
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)

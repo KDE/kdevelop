@@ -44,6 +44,7 @@
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 #include <language/duchain/dumpchain.h>
+#include "tokens.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -483,6 +484,17 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
   openContext(node, DUContext::Class, id.isEmpty() ? QualifiedIdentifier() : QualifiedIdentifier(id.last()) );
   addImportedContexts(); //eventually add template-context
 
+  if(!node->name) {
+    
+    int kind = editor()->parseSession()->token_stream->kind(node->class_key);
+    
+    if (kind == Token_union) {
+      //It's an unnamed union context, propagate the declarations to the parent
+      DUChainWriteLocker lock(DUChain::lock());
+      currentContext()->setPropagateDeclarations(true);
+    }
+  }
+  
   DefaultVisitor::visitClassSpecifier (node);
 
   closeContext();

@@ -103,7 +103,7 @@ private:
   virtual void closeDeclaration();
   
   //Opens a Declaration that has the isDefinition flag set
-  KDevelop::Declaration* openDefinition(NameAST* name, AST* range);
+  KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);
   //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
   //Opens either a ClassMemberDeclaration, or a Declaration 
