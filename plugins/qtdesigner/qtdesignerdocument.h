@@ -33,7 +33,6 @@ namespace KDevelop
 
 class QtDesignerPlugin;
 class QDesignerFormWindowInterface;
-class QDesignerFormWindowManagerInterface;
 class QMdiArea;
 
 class QtDesignerDocument : public Sublime::UrlDocument, public KDevelop::IDocument
@@ -47,7 +46,7 @@ public:
     virtual KSharedPtr<KMimeType> mimeType() const;
     virtual KParts::Part* partForView(QWidget*) const;
     virtual KTextEditor::Document* textDocument() const;
-    virtual bool save(KDevelop::IDocument::DocumentSaveMode);
+    virtual bool save(KDevelop::IDocument::DocumentSaveMode = KDevelop::IDocument::Default);
     virtual void reload();
     virtual bool close(KDevelop::IDocument::DocumentSaveMode);
     virtual bool isActive() const;
@@ -57,7 +56,7 @@ public:
     virtual KTextEditor::Cursor cursorPosition() const;
     void setDesignerPlugin(QtDesignerPlugin*);
     QtDesignerPlugin* designerPlugin();
-    QDesignerFormWindowManagerInterface* formManager();
+    QDesignerFormWindowInterface* form();
 
 private slots:
     void formChanged();

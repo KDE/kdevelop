@@ -24,16 +24,18 @@
 #include <QtGui/QMdiArea>
 #include <kxmlguiclient.h>
 
-class QDesignerFormWindowInterface;
+class QtDesignerDocument;
 
 class QtDesignerWidget : public QMdiArea, public KXMLGUIClient
 {
     Q_OBJECT
     public:
-        QtDesignerWidget( QWidget* parent, QDesignerFormWindowInterface* form );
+        QtDesignerWidget( QWidget* parent, QtDesignerDocument* document );
+    private slots:
+        void save();
     private:
         void setupActions();
-        QDesignerFormWindowInterface* m_form;
+        QtDesignerDocument* m_document;
 };
 
 #endif

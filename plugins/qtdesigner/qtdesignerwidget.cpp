@@ -34,19 +34,25 @@
 
 #include <sublime/view.h>
 
-QtDesignerWidget::QtDesignerWidget( QWidget* parent, QDesignerFormWindowInterface* form )
-    : QMdiArea( parent ), KXMLGUIClient(), m_form( form )
+#include "qtdesignerdocument.h"
+#include "qtdesignerplugin.h"
+
+QtDesignerWidget::QtDesignerWidget( QWidget* parent, QtDesignerDocument* document )
+    : QMdiArea( parent ), KXMLGUIClient(), m_document( document )
 {
     //     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
     //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
+    QDesignerFormWindowInterface* form = m_document->form();
+
+    setComponentData( m_document->designerPlugin()->componentData() );
     setXMLFile( "kdevqtdesigner.rc" );
 
-    QMdiSubWindow* window = addSubWindow(m_form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
-    const QSize containerSize = m_form->mainContainer()->size();
-    const QSize containerMinimumSize = m_form->mainContainer()->minimumSize();
-    const QSize containerMaximumSize = m_form->mainContainer()->maximumSize();
+    QMdiSubWindow* window = addSubWindow(form, Qt::Window | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
+    const QSize containerSize = form->mainContainer()->size();
+    const QSize containerMinimumSize = form->mainContainer()->minimumSize();
+    const QSize containerMaximumSize = form->mainContainer()->maximumSize();
     const QSize decorationSize = window->geometry().size() - window->contentsRect().size();
     window->resize(containerSize+decorationSize);
     window->setMinimumSize(containerMinimumSize+decorationSize);
@@ -55,7 +61,6 @@ QtDesignerWidget::QtDesignerWidget( QWidget* parent, QDesignerFormWindowInterfac
     else
         window->setMaximumSize(containerMaximumSize+decorationSize);
     window->setWindowTitle( form->mainContainer()->windowTitle() );
-    connect( m_form, SIGNAL(changed()), this, SLOT(formChanged()));
 
     setupActions();
 }
@@ -63,10 +68,10 @@ QtDesignerWidget::QtDesignerWidget( QWidget* parent, QDesignerFormWindowInterfac
 void QtDesignerWidget::setupActions()
 {
 
-    QDesignerFormWindowManagerInterface* manager = m_form->core()->formWindowManager();
+    QDesignerFormWindowManagerInterface* manager = m_document->form()->core()->formWindowManager();
     KActionCollection* ac = actionCollection();
 
-    ac->addAction( "file_save", KStandardAction::save( this, SLOT( saveActiveDocument() ), ac) );
+    ac->addAction( "file_save", KStandardAction::save( this, SLOT( save() ), ac) );
     ac->addAction( "adjust_size", manager->actionAdjustSize() );
     ac->addAction( "break_layout", manager->actionBreakLayout() );
     ac->addAction( "designer_cut", manager->actionCut() );
@@ -87,9 +92,6 @@ void QtDesignerWidget::setupActions()
 
         if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
         {
-            if ( !fep->isInitialized() )
-                fep->initialize(m_form->core());
-
             fep->action()->setCheckable(true);
             if( fep->action()->text() == "Edit Signals/Slots" )
                 actionCollection()->addAction("signaleditor", fep->action());
@@ -103,6 +105,11 @@ void QtDesignerWidget::setupActions()
     }
 
 
+}
+
+void QtDesignerWidget::save() 
+{
+    m_document->save();
 }
 
 #include "qtdesignerwidget.moc"

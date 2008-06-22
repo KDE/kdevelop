@@ -119,6 +119,7 @@ void QtDesignerDocument::reload()
 
 bool QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
 {
+    kDebug() << "form:" << m_form;
     if (!(mode & Discard)) {
         if (mode & Silent) {
             if (!save(mode))
@@ -154,13 +155,17 @@ bool QtDesignerDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
         QList<Sublime::View*> areaViews = area->views();
         foreach (Sublime::View *view, areaViews) {
             if (views().contains(view)) {
+                kDebug() << "form before:" << m_form;
+                kDebug() << "closing view" << view;
+                kDebug() << "form after:" << m_form;
                 area->removeView(view);
                 delete view;
             }
         }
     }
 
-    m_designerPlugin->designer()->formWindowManager()->removeFormWindow(m_form);
+//    kDebug() << "removing" << m_form << "from window manager";
+ //   m_designerPlugin->designer()->formWindowManager()->removeFormWindow(m_form);
 
     KDevelop::ICore::self()->documentController()->notifyDocumentClosed(this);
 
@@ -205,15 +210,20 @@ Sublime::View *QtDesignerDocument::newView(Sublime::Document* doc)
     if( qobject_cast<QtDesignerDocument*>( doc ) ) {
         QFile uiFile(url().toLocalFile());
 
-        m_form = formManager()->createFormWindow();
-        kDebug(9038) << "now we have" << formManager()->formWindowCount() << "formwindows";
+        m_form = designerPlugin()->designer()->formWindowManager()->createFormWindow();
+        kDebug(9038) << "now we have" << m_form->core()->formWindowManager()->formWindowCount() << "formwindows";
         m_form->setFileName(url().toLocalFile());
         m_form->setContents(&uiFile);
         connect( m_form, SIGNAL(changed()), this, SLOT(formChanged()));
-        formManager()->setActiveFormWindow(m_form);
-        return new QtDesignerView( this, m_form );
+        designerPlugin()->designer()->formWindowManager()->setActiveFormWindow(m_form);
+        return new QtDesignerView( this );
     }
     return 0;
+}
+
+QDesignerFormWindowInterface* QtDesignerDocument::form()
+{
+    return m_form;
 }
 
 void QtDesignerDocument::formChanged()
@@ -230,11 +240,6 @@ KTextEditor::Cursor QtDesignerDocument::cursorPosition( ) const
 QtDesignerPlugin* QtDesignerDocument::designerPlugin()
 {
     return m_designerPlugin;
-}
-
-QDesignerFormWindowManagerInterface* QtDesignerDocument::formManager()
-{
-    return m_designerPlugin->designer()->formWindowManager();
 }
 
 #include "qtdesignerdocument.moc"

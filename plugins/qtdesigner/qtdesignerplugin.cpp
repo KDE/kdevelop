@@ -146,13 +146,8 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args)
     QDesignerComponents::initializeResources();
-    KDevelop::IDocumentController* idc = core()->documentController();
-    idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
-
 //     connect( idc, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
 //              this, SLOT( activateDocument( KDevelop::IDocument* ) ) );
-
-    setXMLFile( "kdevqtdesigner.rc" );
 
     QDesignerFormEditorInterface* formeditor = QDesignerComponents::createFormEditor(this);
     QDesignerComponents::initializePlugins( formeditor );
@@ -182,6 +177,16 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     m_designer->core()->actionEditor()->setObjectName( i18n("Action Editor") );
     m_designer->core()->objectInspector()->setObjectName( i18n("Object Inspector") );
 
+
+    foreach (QObject *plugin, QPluginLoader::staticInstances())
+    {
+        QDesignerFormEditorPluginInterface *fep;
+
+        if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
+        {
+            fep->initialize(designer());
+        }
+    }
     m_widgetBoxFactory = new QtDesignerToolViewFactory( this,
             QtDesignerToolViewFactory::WidgetBox );
     m_propertyEditorFactory = new QtDesignerToolViewFactory( this,
@@ -194,6 +199,9 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
     core()->uiController()->addToolView("Property Editor", m_propertyEditorFactory );
     core()->uiController()->addToolView("Action Editor", m_actionEditorFactory );
     core()->uiController()->addToolView("Object Inspector", m_objectInspectorFactory );
+
+    KDevelop::IDocumentController* idc = core()->documentController();
+    idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
 }
 
 QtDesignerPlugin::~QtDesignerPlugin()

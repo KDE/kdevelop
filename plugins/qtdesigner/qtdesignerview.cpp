@@ -25,8 +25,8 @@
 #include "qtdesignerdocument.h"
 #include "qtdesignerwidget.h"
 
-QtDesignerView::QtDesignerView( QtDesignerDocument* doc, QDesignerFormWindowInterface* form )
-    : Sublime::View( doc ), m_form( form ), m_widget( 0 )
+QtDesignerView::QtDesignerView( QtDesignerDocument* doc )
+    : Sublime::View( doc ), m_widget( 0 )
 {
 }
 
@@ -36,7 +36,7 @@ QtDesignerView::~QtDesignerView()
 
 QWidget* QtDesignerView::createWidget( QWidget* parent )
 {
-    return new QtDesignerWidget( parent, m_form );
+    return new QtDesignerWidget( parent, qobject_cast<QtDesignerDocument*>( document() ) );
 }
 
 #include "qtdesignerview.moc"
