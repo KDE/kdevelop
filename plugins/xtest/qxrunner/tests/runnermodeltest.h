@@ -24,10 +24,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace QxRunner
-{
-class RunnerModel;
-}
+namespace QxRunner { class RunnerModel; }
 
 namespace QxRunner
 {
@@ -45,6 +42,7 @@ private slots:
 
     void default_();
     void appendResults();
+    void modeltest();
     void changeItems();
     void flags();
     void runItems();

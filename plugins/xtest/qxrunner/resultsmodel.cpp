@@ -44,9 +44,13 @@ ResultsModel::~ResultsModel()
 
 }
 
+bool ResultsModel::hasChildren(const QModelIndex& index) const
+{
+    return !index.isValid();
+}
+
 QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
-
     if (!index.isValid()) {
         return QVariant();
     }
@@ -87,8 +91,10 @@ QVariant ResultsModel::headerData(int section, Qt::Orientation orientation,
 
 int ResultsModel::rowCount(const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
-    return m_runnerItemIndexes.count();
+    if (hasChildren(parent))
+        return m_runnerItemIndexes.count();
+    else
+        return 0;
 }
 
 int ResultsModel::columnCount(const QModelIndex& parent) const
@@ -145,7 +151,8 @@ void ResultsModel::addResult(const QModelIndex& runnerItemIndex)
         return;
     }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    //beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     m_runnerItemIndexes.append(QPersistentModelIndex(runnerItemIndex));
     m_runnerItemMap[runnerItemIndex.internalId()] = rowCount() - 1;

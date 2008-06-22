@@ -112,7 +112,7 @@ void SelectionManager::setItemSelected(bool selected)
         itemFromIndex(index)->setSelected(selected);
         QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
         RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
-        runnerModel->updateColorAndFont(index);
+        runnerModel->updateView(proxyModel->mapToSource(index));
     }
 }
 

@@ -49,6 +49,7 @@ private slots:
     void appendResults();
     void mapIndices();
     void errorHandling();
+    void modeltest();
     //void fetchIcon(); <- no equality defined for QIcon
 
 private:

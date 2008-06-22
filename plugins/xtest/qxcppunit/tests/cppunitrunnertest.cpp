@@ -23,6 +23,7 @@
 
 #include <kasserts.h>
 #include <qtest_kde.h>
+#include <modeltest.h>
 #include <ui_statuswidget.h>
 #include <qxrunner/runnerwindow.h>
 
@@ -167,6 +168,16 @@ void CppUnitRunnerTest::nrofMessagesEquals(int num)
                     QString("Expected ") + QString::number(num) + " items but got " + QString::number(i));
     }
     KVERIFY(!results->index(num, 0).isValid());
+}
+
+// command
+void CppUnitRunnerTest::testmodel()
+{
+    CppUnitModel* model = new CppUnitModel();
+    ModelTest* mt = new ModelTest(model);
+    mt->runAllTests();
+    model->readTests(QFileInfo("./sunnysuite"));
+    mt->runAllTests();
 }
 
 // helper

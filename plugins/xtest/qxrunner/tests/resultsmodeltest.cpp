@@ -24,6 +24,7 @@
 #include <resultsmodel.h>
 #include <runnermodel.h>
 #include <runneritem.h>
+#include <modeltest.h>
 
 #include <QIcon>
 #include <QString>
@@ -48,6 +49,15 @@ void ResultsModelTest::cleanup()
 {
     if (model) delete model;
     if (runnerModel) delete runnerModel;
+}
+
+void ResultsModelTest::modeltest()
+{
+    ModelTest* mt = new ModelTest(model);
+    mt->runAllTests();
+    fillRows();
+    mt->runAllTests();
+    delete mt;
 }
 
 // test command

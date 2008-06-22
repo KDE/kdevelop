@@ -20,6 +20,7 @@
 
 #include "qtestrunnertest.h"
 #include <kasserts.h>
+#include <modeltest.h>
 #include <qtest_kde.h>
 #include <qxrunner/runnerwindow.h>
 #include <qtestmodel.h>
@@ -83,6 +84,17 @@ void QTestRunnerTest::empty()
     status["total"] = "0";
     status["selected"] = "0";
     status["run"] = "0";
+}
+
+// command
+void QTestRunnerTest::modeltest()
+{
+    QBuffer buff(&regXml);
+    QTestModel* model = new QTestModel();
+    ModelTest* mt = new ModelTest(model);
+    mt->runAllTests();
+    model->readTests(&buff);
+    mt->runAllTests();
 }
 
 QStringList sunnyDayRunnerItems()

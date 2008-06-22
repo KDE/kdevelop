@@ -110,9 +110,10 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     }
 
     if ( role == Qt::FontRole && !item->isSelected()) {
-        QFont font;
-        font.setItalic(true);
-        return font;
+//         QFont font;
+//         font.setItalic(true);
+//         return font;
+        return QVariant();
     }
 
     // The other roles are supported for the first column only.
@@ -120,8 +121,12 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    if ( role == Qt::TextColorRole && !item->isSelected()) {
-        return Qt::lightGray;
+    if ( role == Qt::TextColorRole) {
+        //kDebug() << item->data(0).toString();
+        if (!item->isSelected())
+            return Qt::lightGray;
+        else
+            return Qt::black;
     }
 
     if (role != Qt::DecorationRole) {
@@ -164,23 +169,21 @@ bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int r
     return false;
 }
 
-void RunnerModel::updateColorAndFont(const QModelIndex& index)
+void RunnerModel::updateView(const QModelIndex& index)
 {
     QModelIndex bottomRight = index;
-    while (bottomRight.child(0,0).isValid())
-    {
-        bottomRight = bottomRight.child(0,0);
-        while (bottomRight.sibling(bottomRight.row()+1, 0).isValid()) {
-            bottomRight = bottomRight.sibling(bottomRight.row()+1,0);
-        }
+    while (bottomRight.child(0,0).isValid()) {
+        bottomRight = bottomRight.child(rowCount(bottomRight)-1, 0);
     }
+    kDebug() << itemFromIndex(index)->data(0).toString() << " -> "
+             << itemFromIndex(bottomRight)->data(0).toString();
     emit dataChanged(index, bottomRight);
 }
 
 Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return Qt::ItemIsEnabled;
+        return 0;
     }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -203,7 +206,7 @@ QVariant RunnerModel::headerData(int section, Qt::Orientation orientation,
 QModelIndex RunnerModel::index(int row, int column,
                                const QModelIndex& parent) const
 {
-    if (!m_rootItem) {
+    if (!m_rootItem || row < 0 || column < 0) {
         return QModelIndex();
     }
 
@@ -244,7 +247,7 @@ QModelIndex RunnerModel::parent(const QModelIndex& index) const
 
 int RunnerModel::rowCount(const QModelIndex& parent) const
 {
-    if (!m_rootItem) {
+    if (!m_rootItem || parent.column() > 0) {
         return 0;
     }
 
@@ -732,7 +735,6 @@ void RunnerModel::runItem(const QModelIndex& index)
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     // Send notification to main thread.
-    kDebug() << itemFromIndex(index)->data(0).toString() << " fini" ;
     ItemCompletedEvent* completedEvent;
     completedEvent = new ItemCompletedEvent(index);
     QCoreApplication::postEvent(this, completedEvent);
@@ -923,7 +925,6 @@ bool RunnerModel::event(QEvent* event)
     if (event->type() == ItemCompleted) {
         // Update result counters and provide default result type string if not
         // set in the item itself.
-        kDebug() << "itemCompleted";
         switch (item->result()) {
         case QxRunner::RunSuccess:
             setResultText(item, tr("Success"));

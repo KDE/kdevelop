@@ -86,6 +86,7 @@ public: // Operations
      * Returns the number of columns. \a parent is ignored.
      */
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
     /*!
      * Returns the result located at \a row. If no entry is at the

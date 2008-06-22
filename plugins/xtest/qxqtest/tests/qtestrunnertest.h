@@ -45,6 +45,7 @@ private slots:
     void cleanup();
 
     void empty();
+    void modeltest();
     void sunnyDay();
     void runTwice();
 

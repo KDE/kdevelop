@@ -27,6 +27,7 @@
 
 #include "runneritem.h"
 #include "runnermodel.h"
+#include <KDebug>
 
 namespace QxRunner
 {

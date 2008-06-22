@@ -17,7 +17,18 @@ macro(kdev_qx_add_test test_EXEC test_SRCS)
         qxcppunit)
 endmacro(kdev_qx_add_test)
 
-kdev_qx_add_test(it-cppunitrunnertest "cppunitrunnertest.cpp")
+macro(kdev_qx_add_test2 test_EXEC test_SRCS more_SRCS)
+    qt4_automoc( ${test_SRCS} ${more_SRCS} )
+    kde4_add_unit_test(qxcppunit-${test_EXEC} ${test_SRCS} ${more_SRCS})
+    target_link_libraries(qxcppunit-${test_EXEC}
+        ${QT_QTGUI_LIBRARY}
+        ${QT_QTTEST_LIBRARY}
+        ${KDE4_KDECORE_LIBS}
+        qxrunner
+        qxcppunit)
+endmacro(kdev_qx_add_test2)
+
+kdev_qx_add_test2(it-cppunitrunnertest cppunitrunnertest.cpp ${XtestPlugin_SOURCE_DIR}/modeltest.cpp)
 
 add_executable(emptysuite fake_emptysuite.cpp)
 target_link_libraries(emptysuite ${QT_QTCORE_LIBRARY} ${CPPUNIT_LIBRARY})

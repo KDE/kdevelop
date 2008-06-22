@@ -23,6 +23,7 @@
 
 #include <runnermodel.h>
 #include <runneritem.h>
+#include <modeltest.h>
 
 #include <QString>
 #include <QStringList>
@@ -54,6 +55,15 @@ void RunnerModelTest::default_()
     KOMPARE(0, model->columnCount());
     KVERIFY(!model->isRunning());
     KOMPARE(QxRunner::AllResults, model->expectedResults());
+}
+
+// test command
+void RunnerModelTest::modeltest()
+{
+    ModelTest* mt = new ModelTest(model);
+    mt->runAllTests();
+    model->fill();
+    mt->runAllTests();
 }
 
 // test command
@@ -122,7 +132,7 @@ void RunnerModelTest::errorHandling()
     KOMPARE(illegal, model->data(model->index(0, 0), Qt::CheckStateRole));
 
     KOMPARE(false, model->setData(QModelIndex(), QVariant(), Qt::DisplayRole));
-    KOMPARE(Qt::ItemIsEnabled, model->flags(QModelIndex()));
+    KOMPARE(0, model->flags(QModelIndex()));
 
     KOMPARE(QModelIndex(), model->parent(QModelIndex()));
 

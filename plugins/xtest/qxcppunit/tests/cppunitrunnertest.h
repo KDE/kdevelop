@@ -40,6 +40,7 @@ private slots:
     void cleanup();
 
     void empty();
+    void testmodel();
     void sunnyDay();
     void runTwice();
 
