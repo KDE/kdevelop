@@ -96,7 +96,7 @@ class GitProxy : public QObject
 
         enum RequestedOperation {
             NormalOperation,
-            Init,
+            Init
         };
         bool prepareJob(GitJob* job, const QString& repository,
                         enum RequestedOperation op = GitProxy::NormalOperation);
