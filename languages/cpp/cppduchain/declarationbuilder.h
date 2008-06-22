@@ -92,12 +92,13 @@ private:
    * Register a new declaration with the definition-use chain.
    * Returns the new context created by this definition.
    * @param name When this is zero, the identifier given through customName is used.
-   * \param range provide a valid AST here if name is null
+   * @param range provide a valid AST here if name is null
+   * @param collapseRange If this is true, the end of the computed range will be moved to the start, so it's empty
    */
   template<class T>
-  T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier());
+  T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier(), bool collapseRange = false);
   template<class T>
-  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName);
+  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRange);
   /// Same as the above, but sets it as the definition too
   virtual void closeDeclaration();
   
@@ -105,8 +106,8 @@ private:
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range);
   //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
-  //Opens either a ClassMemberDeclaration, or a Declaration
-  Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier());
+  //Opens either a ClassMemberDeclaration, or a Declaration 
+  Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier(), bool collapseRange = false);
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);

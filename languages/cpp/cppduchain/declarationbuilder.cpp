@@ -51,6 +51,8 @@
 
 #include "cppdebughelper.h"
 
+//#define DEBUG_UPDATE_MATCHING
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
@@ -328,21 +330,21 @@ KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName)
+T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange)
 {
   DUChainWriteLocker lock(DUChain::lock());
   
   if( KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts) ) {
-    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName );
+    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRange );
     ret->setTemplateParameterContext(templateCtx);
     return ret;
   } else{
-    return openDeclarationReal<T>( name, rangeNode, customName );
+    return openDeclarationReal<T>( name, rangeNode, customName, collapseRange );
   }
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName)
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange)
 {
   SimpleRange newRange;
   if(name) {
@@ -357,6 +359,9 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   }else{
     newRange = editor()->findRange(rangeNode);
   }
+  
+  if(collapseRange)
+    newRange.end = newRange.start;
 
   Identifier localId = customName;
 
@@ -416,6 +421,12 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       }
     }
   }
+#ifdef DEBUG_UPDATE_MATCHING
+  if(declaration)
+    kDebug() << "found match for" << localId.toString();
+  else
+    kDebug() << "nothing found for" << localId.toString();
+#endif
 
   if (!declaration) {
 /*    if( recompiling() )
@@ -503,17 +514,17 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode)
   return ret;
 }
 
-Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName) {
+Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange) {
   if(currentContext()->type() == DUContext::Class) {
-    ClassMemberDeclaration* mem = openDeclaration<ClassMemberDeclaration>(name, rangeNode, customName);
+    ClassMemberDeclaration* mem = openDeclaration<ClassMemberDeclaration>(name, rangeNode, customName, collapseRange);
     
     DUChainWriteLocker lock(DUChain::lock());
     mem->setAccessPolicy(currentAccessPolicy());
     return mem;
   } else if(currentContext()->type() == DUContext::Template) {
-    return openDeclaration<TemplateParameterDeclaration>(name, rangeNode, customName);
+    return openDeclaration<TemplateParameterDeclaration>(name, rangeNode, customName, collapseRange);
   } else {
-    return openDeclaration<Declaration>(name, rangeNode, customName);
+    return openDeclaration<Declaration>(name, rangeNode, customName, collapseRange);
   }
 }
 
@@ -596,7 +607,7 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  openDefinition(node->name, node); ///@todo don't use the whole range
+  openNormalDeclaration(node->name, node->name ? (AST*)node->name : (AST*)node, Identifier(), node->name == 0);
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
 
@@ -762,7 +773,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
   QualifiedIdentifier id = identifierForNode(node->name);
   
   ///@todo only use the last name component as range
-  AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name, id.last());
+  AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name ? (AST*)node->name : (AST*)node, id.last());
   {
     DUChainReadLocker lock(DUChain::lock());
     
