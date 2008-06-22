@@ -1866,6 +1866,17 @@ void TestDUChain::testCaseUse()
   QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
 }
 
+void TestDUChain::testSizeofUse()
+{
+  QByteArray method("class C{}; const unsigned int i = sizeof(C);");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+}
+
 void TestDUChain::testDefinitionUse()
 {
   QByteArray method("class A{}; class C : public A{ void test(); }; C::test() {} ");

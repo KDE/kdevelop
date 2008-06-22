@@ -70,6 +70,7 @@ protected:
   virtual void visitCondition(ConditionAST *node);
   virtual void visitDeclarator(DeclaratorAST* node);
   virtual void visitUsing(UsingAST *);
+  void visitTypeId(TypeIdAST* type_id);
   
   virtual void visitClassSpecifier(ClassSpecifierAST* node);
 private:

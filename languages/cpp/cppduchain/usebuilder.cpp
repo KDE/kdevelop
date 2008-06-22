@@ -226,6 +226,18 @@ void UseBuilder::visitClassSpecifier(ClassSpecifierAST* node)
   UseBuilderBase::visitClassSpecifier(node);
 }
 
+void UseBuilder::visitTypeId(TypeIdAST* node) {
+  {
+    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    if( !node->ducontext )
+      node->ducontext = currentContext();
+
+    visitor.parse( node );
+  }
+  
+  UseBuilderBase::visitTypeId(node);
+}
+
 void UseBuilder::visitUsing(UsingAST *node)
 {
   if(node->name) {

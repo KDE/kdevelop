@@ -1681,6 +1681,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    visit(node->type_id);
+    visit(node->expression);
     m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
