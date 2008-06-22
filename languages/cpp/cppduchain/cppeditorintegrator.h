@@ -125,9 +125,6 @@ public:
   QString tokensToStrings(std::size_t start, std::size_t end) const;
   
 private:
-  static QHash<KUrl, KTextEditor::Document*> s_documents;
-  static QHash<KUrl, QVector<KDevelop::SimpleRange*> > s_topRanges;
-
   ParseSession* m_session;
 };
 
