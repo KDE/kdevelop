@@ -121,13 +121,13 @@ protected:
     }
 
     if (!declaration) {
-      KTextEditor::SmartRange* prior = LanguageSpecificDeclarationBuilderBase::editor()->currentRange();
+      //KTextEditor::SmartRange* prior = LanguageSpecificDeclarationBuilderBase::editor()->currentRange();
       KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(newRange.textRange());
 
       LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
       //Q_ASSERT(range->start() != range->end());
 
-      Q_ASSERT(LanguageSpecificDeclarationBuilderBase::editor()->currentRange() == prior);
+      //Q_ASSERT(LanguageSpecificDeclarationBuilderBase::editor()->currentRange() == prior);
 
       if (isForward) {
         declaration = new ForwardDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
