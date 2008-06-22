@@ -50,6 +50,8 @@ BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
     preferencesDialog->kcfg_delay->setRange( 0, 5000, true );
     preferencesDialog->kcfg_threads->setRange( 1, 32, true );
 
+    preferencesDialog->kcfg_threads->hide(); ///Hide the thread count setting until it's safe
+    
     l->addWidget( w );
 
     addConfig( BGSettings::self(), w );

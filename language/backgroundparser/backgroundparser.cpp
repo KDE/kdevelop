@@ -166,7 +166,7 @@ public:
 
         m_delay = config.readEntry("Delay", 500);
         m_timer.setInterval(m_delay);
-        m_threads = config.readEntry("Number of Threads", 1);
+        m_threads = config.readEntry("Real Number of Threads", 1);
         m_weaver.setMaximumNumberOfThreads(m_threads);
 
         if (config.readEntry("Enabled", true)) {
