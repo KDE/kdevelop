@@ -48,11 +48,11 @@ public:
   int m_unique;
   IndexedString m_identifier;
 
-  START_APPENDED_LISTS(IdentifierPrivate);
+  START_APPENDED_LISTS(IdentifierPrivate)
   
-  APPENDED_LIST_FIRST(uint, templateIdentifiers);
+  APPENDED_LIST_FIRST(uint, templateIdentifiers)
 
-  END_APPENDED_LISTS(templateIdentifiers);
+  END_APPENDED_LISTS(templateIdentifiers)
   
     void computeHash() const {
       Q_ASSERT(dynamic);
@@ -126,11 +126,11 @@ public:
   uint m_pointerConstantMask; //Stores in a mask for each pointer-depth whether it is constant. Supports only max. 32 levels.
   mutable uint m_hash;
 
-  START_APPENDED_LISTS(QualifiedIdentifierPrivate);
+  START_APPENDED_LISTS(QualifiedIdentifierPrivate)
   
-  APPENDED_LIST_FIRST(uint, identifiers);
+  APPENDED_LIST_FIRST(uint, identifiers)
 
-  END_APPENDED_LISTS(identifiers);
+  END_APPENDED_LISTS(identifiers)
   
   //Constructs m_identifiers
   void splitIdentifiers( const QString& str, int start )
