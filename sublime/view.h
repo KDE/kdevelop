@@ -36,7 +36,12 @@ Views are the convenient way to manage a widget. It is specifically designed to 
 light and fast. Use @ref Document::createView() to get the new view for the document
 and call @ref View::widget() to create and get the actual widget.
 
-It is not possible to create a view by hand. You need either subclass it or use a Document.*/
+It is not possible to create a view by hand. You need either subclass it or use a Document.
+
+If you create a subclass of View you need to override Sublime::View::createWidget to
+provide a custom widget for your view.
+
+*/
 class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
@@ -70,11 +75,16 @@ public Q_SLOTS:
 
 protected:
     View(Document *doc);
+    /**
+     * override this function to create a custom widget in your View subclass
+     * @param parent the parent widget
+     * @returns a new widget which is used for this view
+     */
+    virtual QWidget *createWidget(QWidget *parent);
 
 private:
     Q_PRIVATE_SLOT(d, void unsetWidget())
 
-    virtual QWidget *createWidget(QWidget *parent);
 
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
