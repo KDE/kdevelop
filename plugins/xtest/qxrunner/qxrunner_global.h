@@ -28,7 +28,7 @@
 #ifndef QXRUNNER_GLOBAL_H
 #define QXRUNNER_GLOBAL_H
 
-#include <Qt/QtCore>
+#include <QtCore>
 
 #define QXRUNNER_VERSION_STR   "0.9.2"
 
