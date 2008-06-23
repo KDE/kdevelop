@@ -52,6 +52,10 @@ AbstractType* CppTypeAliasType::clone() const {
   return new CppTypeAliasType(*this);
 }
 
+AbstractType* CppEnumeratorType::clone() const {
+  return new CppEnumeratorType(*this);
+}
+
 AbstractType* CppEnumerationType::clone() const {
   return new CppEnumerationType(*this);
 }
@@ -164,9 +168,31 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 //   return QString("E_%1_%2").arg(CppIntegralType::mangled()).arg(identifier().toString());
 // }
 
+bool CppEnumeratorType::equals(const AbstractType* _rhs) const
+{
+  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs) && !fastCast<const CppEnumeratorType*>(_rhs) )
+    return false;
+  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
+
+  if( this == rhs )
+    return true;
+  
+  return IdentifiedType::equals(rhs);
+}
+
+QString CppEnumeratorType::toString() const
+{
+  return "enum " + identifier().toString();
+}
+
+uint CppEnumeratorType::hash() const
+{
+  return identifier().hash();
+}
+
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs))
+  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs) && !fastCast<const CppEnumeratorType*>(_rhs) )
     return false;
   const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
 
@@ -190,7 +216,7 @@ bool CppArrayType::equals(const AbstractType* _rhs) const
 
 bool CppIntegralType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const CppIntegralType*>(_rhs))
+  if( !fastCast<const CppIntegralType*>(_rhs) || fastCast<CppEnumeratorType*>(_rhs) || fastCast<CppEnumerationType*>(_rhs) )
     return false;
   const CppIntegralType* rhs = static_cast<const CppIntegralType*>(_rhs);
 

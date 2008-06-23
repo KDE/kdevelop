@@ -99,8 +99,9 @@ private:
   T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier(), bool collapseRange = false);
   template<class T>
   T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRange);
-  /// Same as the above, but sets it as the definition too
-  virtual void closeDeclaration();
+  /// Same as the above, but sets it as the definition too @param forceInstance when this is true, the declaration is forced to be an instance, not a type declaration,
+  /// and its assigned identified type will not get the declaration assigned.
+  virtual void closeDeclaration(bool forceInstance = false);
   
   //Opens a Declaration that has the isDefinition flag set
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);

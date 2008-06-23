@@ -515,6 +515,7 @@ void TestDUChain::testEnum()
   CppEnumerationType* en = static_cast<CppEnumerationType*>(decl->abstractType().data());
   QVERIFY(en->declaration());
   QCOMPARE(en->identifier(), QualifiedIdentifier("Enum"));
+  Declaration* EnumDecl = decl;
 
   {
     QVERIFY(!top->findLocalDeclarations(Identifier("Value1")).isEmpty());
@@ -524,12 +525,14 @@ void TestDUChain::testEnum()
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
     QCOMPARE((int)en->value<qint64>(), 5);
+    QCOMPARE(en->declaration(), EnumDecl);
   
     decl = findDeclaration(top, Identifier("value2"));
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
     QCOMPARE((int)en->value<qint64>(), 6);
+    QCOMPARE(en->declaration(), EnumDecl);
   }
   decl = findDeclaration(top, Identifier("Enum2"));
   QVERIFY(decl);
@@ -537,6 +540,7 @@ void TestDUChain::testEnum()
   en = static_cast<CppEnumerationType*>(decl->abstractType().data());
   QVERIFY(en->declaration());
   QCOMPARE(en->identifier(), QualifiedIdentifier("Enum2"));
+  Declaration* Enum2Decl = decl;
   
   {
     decl = findDeclaration(top, Identifier("Value21"));
@@ -544,12 +548,14 @@ void TestDUChain::testEnum()
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
     QCOMPARE((int)en->value<qint64>(), 0);
-  
+    QCOMPARE(en->declaration(), Enum2Decl);
+
     decl = findDeclaration(top, Identifier("value22"));
     QVERIFY(decl);
     QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
     en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
     QCOMPARE((int)en->value<qint64>(), 2);
+    QCOMPARE(en->declaration(), Enum2Decl);
   }
   {
     //Verify that the union members were propagated up

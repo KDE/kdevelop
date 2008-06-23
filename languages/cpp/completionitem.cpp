@@ -231,9 +231,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
             } else {
               QString ret = indentation;
-              if(dec->type<CppEnumeratorType>()) {
-                return ret + "enum " + (dec->context()->owner() ? dec->context()->owner()->identifier().toString() : QString());
-              }
               return  ret + dec->abstractType()->toString();
             }
           } else {

@@ -282,6 +282,12 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
     ///@todo iso c++ 4.4.2 etc: pointer to member
   }
+  
+  CppEnumerationType* toEnumeration = fastCast<CppEnumerationType*>( to.data() );
+
+  if(toEnumeration)
+    ///iso c++ 7.2.9: No conversion or promotion to enumerator types is possible
+    return bestRank;
 
   if( categories & PromotionCategory ) {
 
@@ -311,11 +317,13 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   {
     CppIntegralType* fromIntegral = fastCast<CppIntegralType*>( from.data() );
     CppEnumerationType* fromEnumeration = fastCast<CppEnumerationType*>( fromIntegral );
+    CppEnumeratorType* fromEnumerator = fastCast<CppEnumeratorType*>( fromIntegral );
+    
     CppIntegralType* toIntegral = fastCast<CppIntegralType*>( to.data() );
-
+    
     if( fromIntegral && toIntegral ) {
       ///iso c++ 4.7 integral conversion: we can convert from any integer type to any other integer type, and from enumeration-type to integer-type
-      if( (fromEnumeration || isIntegerType(fromIntegral)) && isIntegerType(toIntegral) )
+      if( (fromEnumeration || fromEnumerator || isIntegerType(fromIntegral)) && isIntegerType(toIntegral) )
       {
         maximizeRank( bestRank, Conversion );
       }
@@ -327,7 +335,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       }
 
       ///iso c++ 4.9 floating-integral conversion: floating point can be converted to integral, enumeration and integral can be converted to floating point
-      if( ( ( fromEnumeration || isIntegerType(fromIntegral) ) && isFloatingPointType(toIntegral) ) ||
+      if( ( ( fromEnumeration || fromEnumerator || isIntegerType(fromIntegral) ) && isFloatingPointType(toIntegral) ) ||
           ( isFloatingPointType(fromIntegral) && isIntegerType(toIntegral) ) )
       {
 
@@ -366,7 +374,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     ///iso c++ 4.12 Boolean conversions
     if( toIntegral && toIntegral->integralType() == CppIntegralType::TypeBool ) {
       //We are converting to a boolean value
-      if( fromPointer || fromEnumeration || (fromIntegral && (isIntegerType(fromIntegral) || isFloatingPointType(fromIntegral))) ) {
+      if( fromPointer || fromEnumeration || fromEnumerator || (fromIntegral && (isIntegerType(fromIntegral) || isFloatingPointType(fromIntegral))) ) {
         maximizeRank( bestRank, Conversion );
       }
     }

@@ -565,7 +565,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
     currentDeclaration()->setType(type);
 }
 
-void DeclarationBuilder::closeDeclaration()
+void DeclarationBuilder::closeDeclaration(bool forceInstance)
 {
   if (lastType()) {
     DUChainWriteLocker lock(DUChain::lock());
@@ -575,12 +575,12 @@ void DeclarationBuilder::closeDeclaration()
 
     //When the given type has no declaration yet, assume we are declaring it now.
     //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-    if( idType && idType->declaration() == 0 && !delayed )
+    if( !forceInstance && idType && idType->declaration() == 0 && !delayed )
         idType->setDeclaration( currentDeclaration() );
 
     if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
       //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) )
+      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) || forceInstance )
         currentDeclaration()->setKind(Declaration::Instance);
       else
         currentDeclaration()->setKind(Declaration::Type);
@@ -628,12 +628,21 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 
   DeclarationBuilderBase::visitEnumerator(node);
 
+  CppEnumeratorType* enumeratorType = dynamic_cast<CppEnumeratorType*>(lastType().data());
+  
   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
     DUChainWriteLocker lock(DUChain::lock());
     classMember->setStatic(true);
   }
-
-  closeDeclaration();
+  
+  closeDeclaration(true);
+  
+  if(enumeratorType) {
+    DUChainWriteLocker lock(DUChain::lock());
+    enumeratorType->setDeclaration(currentDeclaration());
+  }else{
+    kWarning() << "not assigned enumerator type";
+  }
 }
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)

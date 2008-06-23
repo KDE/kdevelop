@@ -119,9 +119,9 @@ public:
 
   virtual uint hash() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
 
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   //A simple hack that tries taking the modifiers and the type itself into account
   bool moreExpressiveThan(CppIntegralType* rhs) const;
@@ -178,7 +178,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
 
   virtual uint hash() const;
   
@@ -205,9 +205,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
 
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 };
 
 class KDEVCPPDUCHAIN_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
@@ -221,9 +221,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
 };
@@ -239,9 +239,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
 };
@@ -255,7 +255,7 @@ public:
 
   struct BaseClassInstance
   {
-    AbstractType::Ptr baseClass; //May either be CppClassType, or CppDelayedType
+    KDevelop::AbstractType::Ptr baseClass; //May either be CppClassType, or CppDelayedType
     KDevelop::Declaration::AccessPolicy access;
     bool virtualInheritance;
   };
@@ -292,9 +292,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
 
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
   
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
 
@@ -332,9 +332,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
   
 protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const
@@ -349,11 +349,20 @@ private:
   KDevelop::AbstractType::Ptr m_type;
 };
 
-class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppConstantIntegralType
+//The same as CppEnumerationType, with the difference that here the value is also known
+class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppConstantIntegralType, public KDevelop::IdentifiedType
 {
 public:
   typedef KSharedPtr<CppEnumeratorType> Ptr;
 
+  virtual QString toString() const;
+
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
+
+  virtual KDevelop::AbstractType* clone() const;
+
+  virtual uint hash() const;
+  
   CppEnumeratorType();
 };
 
@@ -366,9 +375,9 @@ public:
 
   virtual uint hash() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
 //   virtual QString mangled() const;
   
@@ -382,9 +391,9 @@ public:
 
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 };
 
 /**
@@ -403,9 +412,9 @@ public:
   virtual QString toString() const;
 //   virtual QString mangled() const;
 
-  virtual AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const;
   
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
   
@@ -418,7 +427,7 @@ namespace KDevelop {
 
 template<>
 inline CppReferenceType* fastCast<CppReferenceType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeReference)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeReference)
     return 0;
   else
     return dynamic_cast<CppReferenceType*>(static_cast<ReferenceType*>(from));
@@ -426,7 +435,7 @@ inline CppReferenceType* fastCast<CppReferenceType*>(AbstractType* from) {
 
 template<>
 inline CppPointerType* fastCast<CppPointerType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypePointer)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypePointer)
     return 0;
   else
     return dynamic_cast<CppPointerType*>(static_cast<PointerType*>(from));
@@ -434,7 +443,7 @@ inline CppPointerType* fastCast<CppPointerType*>(AbstractType* from) {
 
 template<>
 inline CppIntegralType* fastCast<CppIntegralType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeIntegral)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
     return 0;
   else
     return dynamic_cast<CppIntegralType*>(static_cast<IntegralType*>(from));
@@ -442,7 +451,7 @@ inline CppIntegralType* fastCast<CppIntegralType*>(AbstractType* from) {
 
 template<>
 inline CppConstantIntegralType* fastCast<CppConstantIntegralType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeIntegral)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
     return 0;
   else
     return dynamic_cast<CppConstantIntegralType*>(static_cast<IntegralType*>(from));
@@ -450,7 +459,7 @@ inline CppConstantIntegralType* fastCast<CppConstantIntegralType*>(AbstractType*
 
 template<>
 inline CppFunctionType* fastCast<CppFunctionType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeFunction)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeFunction)
     return 0;
   else
     return dynamic_cast<CppFunctionType*>(static_cast<FunctionType*>(from));
@@ -458,7 +467,7 @@ inline CppFunctionType* fastCast<CppFunctionType*>(AbstractType* from) {
 
 template<>
 inline CppClassType* fastCast<CppClassType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeStructure)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeStructure)
     return 0;
   else
     return dynamic_cast<CppClassType*>(static_cast<StructureType*>(from));
@@ -466,7 +475,7 @@ inline CppClassType* fastCast<CppClassType*>(AbstractType* from) {
 
 template<>
 inline CppArrayType* fastCast<CppArrayType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeArray)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeArray)
     return 0;
   else
     return dynamic_cast<CppArrayType*>(static_cast<ArrayType*>(from));
@@ -474,7 +483,7 @@ inline CppArrayType* fastCast<CppArrayType*>(AbstractType* from) {
 
 template<>
 inline CppTemplateParameterType* fastCast<CppTemplateParameterType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeAbstract)
+  if(!from || from->whichType() != KDevelop::AbstractType::TypeAbstract)
     return 0;
   else
     return dynamic_cast<CppTemplateParameterType*>(static_cast<CppTemplateParameterType*>(from));
