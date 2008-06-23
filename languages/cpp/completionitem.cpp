@@ -115,6 +115,9 @@ QString nameForDeclaration(Declaration* dec) {
 
 KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompletionItem::completionProperties() const {
   Declaration* dec = declaration.data();
+  if(!dec)
+    return (KTextEditor::CodeCompletionModel::CompletionProperties)0;
+  
   CodeCompletionModel::CompletionProperties p = DUChainUtils::completionProperties(dec);
 
   if (dec->abstractType()) {
