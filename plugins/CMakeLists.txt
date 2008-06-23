@@ -50,16 +50,7 @@ if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
 
-FIND_PROGRAM(GIT NAMES git
-        PATHS
-        /bin
-        /usr/bin
-        /usr/local/bin
-)
-macro_log_feature( GIT "Git" "Support for Git integration" "http://git.or.cz" FALSE "Any version" "The git executables are needed for the Git support" )
-if (GIT)
-    macro_optional_add_subdirectory(git)
-endif (GIT)
+macro_optional_add_subdirectory(git)
 
 macro_display_feature_log()
 
