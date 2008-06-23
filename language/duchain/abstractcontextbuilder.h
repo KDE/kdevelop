@@ -253,7 +253,7 @@ protected:
     if ( m_compilingContexts )
     {
 #ifdef DEBUG_UPDATE_MATCHING
-    kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+    //kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
 #endif
       DUContext* ret = openContextInternal( editorFindRangeForContext( rangeNode, rangeNode ), type, identifier ? identifierForNode( identifier ) : QualifiedIdentifier() );
       setContextOnNode( rangeNode, ret );
@@ -289,7 +289,7 @@ protected:
     if ( m_compilingContexts )
     {
 #ifdef DEBUG_UPDATE_MATCHING
-    kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+    //kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
 #endif
       DUContext* ret = openContextInternal( editorFindRangeForContext( rangeNode, rangeNode ), type, identifier );
       setContextOnNode( rangeNode, ret );
@@ -309,7 +309,7 @@ protected:
     if ( m_compilingContexts )
     {
 #ifdef DEBUG_UPDATE_MATCHING
-      kDebug() << "opening context with text" << editor()->tokensToStrings( fromRange->start_token, toRange->end_token );
+      //kDebug() << "opening context with text" << editor()->tokensToStrings( fromRange->start_token, toRange->end_token );
 #endif
       DUContext* ret = openContextInternal( editorFindRangeForContext( fromRange, toRange ), type, identifier );
       setContextOnNode( fromRange, ret );
@@ -413,7 +413,7 @@ protected:
 
           if ( child->range().start > translated.end && child->smartRange() ) {
 #ifdef DEBUG_UPDATE_MATCHING
-              kDebug() << "range order mismatch, stopping because encountered" << child->range().textRange();
+              kDebug() << "While searching" << identifier << translated.textRange() << "stopping because found" << child->localScopeIdentifier() << child->range().textRange();
 #endif
               break;
           }
@@ -435,6 +435,13 @@ protected:
             break;
           }else{
 #ifdef DEBUG_UPDATE_MATCHING
+          if(child->type() != type)
+            kDebug() << "type mismatch" << child->type() << type;
+          if(child->localScopeIdentifier() != identifier)
+            kDebug() << "identifier mismatch" << child->localScopeIdentifier() << identifier;
+          if(translated != child->range())
+            kDebug() << "range mismatch" << child->range().textRange() << translated.textRange();
+          
             kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
 #endif
           }
