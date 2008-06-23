@@ -51,10 +51,9 @@ protected:
    * @param name When this is zero, the identifier given through customName is used.
    * \param range provide a valid AST node here if name is null
    */
-  virtual Declaration* openDeclaration(NameT* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false, bool isLocked = false)
+  Declaration* openDeclaration(NameT* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false)
   {
-    if (!isLocked)
-      DUChain::lock()->lockForWrite();
+    DUChainWriteLocker lock(DUChain::lock());
 
     SimpleRange newRange = editorFindRange(name ? name : range, name ? name : range);
 
@@ -63,6 +62,11 @@ protected:
 
     QualifiedIdentifier id = identifierForNode(name);
 
+    return openDeclaration(id, newRange, isFunction, isForward, isDefinition);
+  }
+
+  Declaration* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false, bool isForward = false, bool isDefinition = false)
+  {
     Identifier localId;
 
     if(!id.isEmpty()) {
@@ -164,9 +168,6 @@ protected:
     LanguageSpecificDeclarationBuilderBase::setEncountered(declaration);
 
     openDeclarationInternal(declaration);
-
-    if (!isLocked)
-      DUChain::lock()->releaseWriteLock();
 
     return declaration;
   }
