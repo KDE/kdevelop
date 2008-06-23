@@ -35,4 +35,3 @@ Exec=%{APPNAMELC}
 Icon=%{APPNAME}
 Type=Application
 Name=%{APPNAME}
-Encoding=UTF-8

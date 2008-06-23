@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KApp4
 Name[nds]=KProg4
 Name[sv]=KDE 4-program
@@ -7,7 +6,7 @@ Name[zh_TW]=KApp4 程式
 Exec=kapp4 %i -caption "%c"
 Icon=kapp4
 Type=Application
-DocPath=kapp4/kapp4.html
+X-DocPath=kapp4/kapp4.html
 GenericName=A KDE4 Application
 GenericName[ca]=Una aplicació del KDE4
 GenericName[da]=Et KDE4-program
@@ -28,5 +27,4 @@ GenericName[sr]=KDE4 програм
 GenericName[sr@Latn]=KDE4 program
 GenericName[sv]=Ett KDE 4-program
 GenericName[zh_TW]=KDE4 應用程式
-Terminal=0
-
+Terminal=false

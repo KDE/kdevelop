@@ -1,9 +1,8 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kdevassistant %u
 Icon=kdevelop
-DocPath=kdevelop/index.html
+X-DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop Assistant
 Name[br]=Skoazeller KDevelop

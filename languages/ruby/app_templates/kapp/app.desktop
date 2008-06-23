@@ -1,10 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=%{APPNAME}
-Exec=ruby %{APPNAMELC}/main.rb %i %m -caption "%c"
+Exec=ruby %{APPNAMELC}/main.rb %i -caption "%c"
 Icon=%{APPNAMELC}
 Type=Application
-DocPath=%{APPNAMELC}/%{APPNAMELC}.html
+X-DocPath=%{APPNAMELC}/%{APPNAMELC}.html
 Comment=A KDE KPart Application
 Comment[br]=Ur meziant Kpart evit KDE
 Comment[ca]=Una aplicació KPart per al KDE

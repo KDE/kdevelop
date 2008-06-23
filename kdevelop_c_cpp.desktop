@@ -1,10 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kdevelop --profile CandCppIDE %u
 MimeType=application/x-kdevelop;
 Icon=kdevelop
-DocPath=kdevelop/index.html
+X-DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop: C/C++
 Name[br]=KDevelop : C/C++
@@ -47,4 +46,3 @@ GenericName[zh_CN]=C/C++ 的 IDE
 GenericName[zh_TW]=C/C++ 整合開發環境
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
-

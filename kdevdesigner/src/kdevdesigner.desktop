@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KDevelop Designer
 Name[el]=Σχεδιαστής KDevelop
 Name[es]=Diseñador de KDevelop
@@ -54,10 +53,10 @@ GenericName[sv]=Gränssnittsdesign
 GenericName[tr]=Arayüz Tasarlayıcısı
 GenericName[zh_CN]=界面设计师
 GenericName[zh_TW]=介面設計器
-Exec=kdevdesigner %i %m -caption "%c"
+Exec=kdevdesigner %i -caption "%c"
 Icon=kdevdesigner
 Type=Application
-DocPath=kdevdesigner/kdevdesigner.html
+X-DocPath=kdevdesigner/kdevdesigner.html
 Comment=GUI Designer for Qt/KDE
 Comment[ca]=Dissenyador de IGU per Qt/KDE
 Comment[da]=Grafisk brugerfladedesigner til Qt/KDE

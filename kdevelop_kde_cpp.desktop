@@ -1,10 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kdevelop --profile KDECppIDE %u
 MimeType=application/x-kdevelop;
 Icon=kdevelop
-DocPath=kdevelop/index.html
+X-DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop: KDE/C++
 Name[br]=KDevelop : KDE/C++

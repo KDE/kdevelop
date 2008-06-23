@@ -1,10 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kdevelop %u
 MimeType=application/x-kdevelop;
 Icon=kdevelop
-DocPath=kdevelop/index.html
+X-DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop: Multilanguage
 Name[br]=KDevelop : meur a yezh

@@ -1,9 +1,8 @@
 [Desktop Entry]
-Encoding=UTF-8
 Exec=%{APPNAMELC}.kss
 Icon=kscreensaver
 Type=Application
-Actions=Setup;InWindow;Root
+Actions=Setup;InWindow;Root;
 X-KDE-Category=Miscellaneous
 Name=%{APPNAME}
 

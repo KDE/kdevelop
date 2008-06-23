@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Exec=kcmshell %{APPNAMELC}
 Icon=misc
 Type=Application
@@ -12,7 +11,6 @@ X-KDE-ParentApp=kcontrol
 
 
 [Desktop Entry]
-Encoding=UTF-8
 Comment=%{APPNAME} - a kcontrol module
 Comment[br]=%{APPNAME} - ur mollad kcontrol
 Comment[ca]=%{APPNAME} - un mòdul per a kcontrol
