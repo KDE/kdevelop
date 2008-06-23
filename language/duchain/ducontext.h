@@ -409,7 +409,8 @@ public:
   /**
    * Return a list of all uses which occur in this context.
    * When the uses have smart-ranges attached, those are synced in the moment that uses() is called, so you should
-   * call this immediately before using the returned ranges.
+   * call this immediately before using the returned ranges, and you should hold the smart-lock while calling this
+   * if you want to compare the ranges, so you can be sure they aren't changed in the meantime.
    * To get the actual declarations, use TopDUContext::usedDeclarationForIndex(..) with the declarationIndex.
    */
   const QVector<Use>& uses() const;
