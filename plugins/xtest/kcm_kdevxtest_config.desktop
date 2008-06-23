@@ -13,7 +13,11 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=xTest
 Comment=xTest settings
+Comment[es]=Preferencias de xTest
+Comment[fr]=Paramètres de  xTest
 Comment[ga]=Socruithe xTest
+Comment[gl]=Configuración de xTest
 Comment[pt]=Configuração do xTest
 Comment[pt_BR]=Configuração do xTest
+Comment[uk]=Параметри xTest
 Comment[zh_TW]=xTest 設定
