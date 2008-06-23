@@ -93,61 +93,71 @@ protected:
       return;
     }
 
-    /**
-    * We need to find a context that this use fits into, which must not necessarily be the current one.
-    * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
-    * sub-context that comes from the macro. That sub-context will have a very small range, and will most
-    * probably not be the range of the actual "SomeClass" text, so the "SomeClass" use has to be moved
-    * into the context that surrounds the SOME_MACRO invocation.
-    * */
-    DUContext* newContext = LanguageSpecificUseBuilderBase::currentContext();
-    int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
-    while (!newContext->range().contains(newRange) && contextUpSteps < (LanguageSpecificUseBuilderBase::contextStack().size()-1)) {
-      ++contextUpSteps;
-      newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
-    }
-
-    if (contextUpSteps) {
-      LanguageSpecificUseBuilderBase::editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
-      m_finishContext = false;
-      openContext(newContext);
-      m_finishContext = true;
-      nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
-      skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
-
-      Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
-      Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->uses().count() >= nextUseIndex());
-    }
-
     bool encountered = false;
-
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
-
-    if (LanguageSpecificUseBuilderBase::recompiling()) {
-
-      const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
-      // Translate cursor to take into account any changes the user may have made since the text was retrieved
+    int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
+    
+    {
+      //We've got to consider the translated range, and while we use it, the smart-mutex needs to be locked
       QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smartMutex());
       SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(newRange);
-
-      for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
-        const Use& use = uses[nextUseIndex()];
-
-        //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
-        if (use.m_range.start > translated.end && LanguageSpecificUseBuilderBase::editor()->smart() )
-          break;
-
-        if (use.m_range == translated)
-        {
-          LanguageSpecificUseBuilderBase::currentContext()->setUseDeclaration(nextUseIndex(), declarationIndex);
-          ++nextUseIndex();
-          // Match
-          encountered = true;
-
-          break;
+      
+      /**
+      * We need to find a context that this use fits into, which must not necessarily be the current one.
+      * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
+      * sub-context that comes from the macro. That sub-context will have a very small range, and will most
+      * probably not be the range of the actual "SomeClass" text, so the "SomeClass" use has to be moved
+      * into the context that surrounds the SOME_MACRO invocation.
+      * */
+      DUContext* newContext = LanguageSpecificUseBuilderBase::currentContext();
+      while (!newContext->range().contains(translated) && contextUpSteps < (LanguageSpecificUseBuilderBase::contextStack().size()-1)) {
+        ++contextUpSteps;
+        newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
+      }
+  
+      if (contextUpSteps) {
+        LanguageSpecificUseBuilderBase::editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
+        m_finishContext = false;
+        openContext(newContext);
+        m_finishContext = true;
+        nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
+        skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
+  
+        Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
+        Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->uses().count() >= nextUseIndex());
+      }
+  
+      if (LanguageSpecificUseBuilderBase::recompiling()) {
+  
+        const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
+        // Translate cursor to take into account any changes the user may have made since the text was retrieved
+  
+        for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
+          const Use& use = uses[nextUseIndex()];
+  
+          //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
+          if (use.m_range.start > translated.end && LanguageSpecificUseBuilderBase::editor()->smart() ) {
+#ifdef DEBUG_UPDATE_MATCHING
+            kDebug() << "use of" << (declaration ? declaration->qualifiedIdentifier().toString() : QString()) << "with range" << translated.textRange() << "found use of" << (LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex) ? LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex)->qualifiedIdentifier().toString() : QString()) << "with range" << use.m_range.textRange() << ", stopping";
+#endif
+            break;
+          }
+  
+          if (use.m_range == translated)
+          {
+            LanguageSpecificUseBuilderBase::currentContext()->setUseDeclaration(nextUseIndex(), declarationIndex);
+            ++nextUseIndex();
+            // Match
+            encountered = true;
+  
+            break;
+          }
+#ifdef DEBUG_UPDATE_MATCHING
+            kDebug() << "use of" << (declaration ? declaration->qualifiedIdentifier().toString() : QString()) << "with range" << translated.textRange() << "skipping use of" << (LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex) ? LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex)->qualifiedIdentifier().toString() : QString()) << "with range" << use.m_range.textRange();
+#endif
+          //Not encountered, and before the current range. Remove all intermediate uses.
+          skippedUses().append(nextUseIndex());
         }
-        //Not encountered, and before the current range. Remove all intermediate uses.
-        skippedUses().append(nextUseIndex());
       }
     }
 
