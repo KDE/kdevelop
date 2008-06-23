@@ -82,6 +82,7 @@ public slots:
     bool isRunning() const;
 
 private slots:
+    void slotProcessError(QProcess::ProcessError err);
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout(const QStringList&);
     void slotReceivedStderr(const QStringList&);
