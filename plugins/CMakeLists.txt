@@ -10,7 +10,6 @@ add_subdirectory(quickopen)
 add_subdirectory(contextbrowser)
 macro_optional_add_subdirectory(snippet)
 macro_optional_add_subdirectory(cvs)
-macro_optional_add_subdirectory(git)
 add_subdirectory(classbrowser)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
@@ -50,6 +49,17 @@ macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integra
 if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
+
+FIND_PROGRAM(GIT NAMES git
+        PATHS
+        /bin
+        /usr/bin
+        /usr/local/bin
+)
+macro_log_feature( GIT "Git" "Support for Git integration" "http://git.or.cz" FALSE "Any version" "The git executables are needed for the Git support" )
+if (GIT)
+    macro_optional_add_subdirectory(git)
+endif (GIT)
 
 macro_display_feature_log()
 
