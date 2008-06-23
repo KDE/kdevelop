@@ -491,50 +491,6 @@ inline CppTemplateParameterType* fastCast<CppTemplateParameterType*>(AbstractTyp
 
 }
 
-/*template <class _Target, class _Source>
-_Target model_static_cast(_Source item)
-{
-  typedef typename _Target::Type * _Target_pointer;
-
-  _Target ptr = static_cast<_Target_pointer>(item.data());
-  return ptr;
-}
-
-template <class _Target, class _Source>
-_Target model_safe_cast(_Source item)
-{
-  typedef typename _Target::Type * _Target_pointer;
-  typedef typename _Source::Type * _Source_pointer;
-
-  _Source_pointer source = item.data();
-  if (source && source->kind() == _Target_pointer(0)->__node_kind)
-    {
-      _Target ptr(static_cast<_Target_pointer>(source));
-      return ptr;
-    }
-
-  return _Target();
-}
-
-template <typename _Target, typename _Source>
-_Target model_dynamic_cast(_Source item)
-{
-  typedef typename _Target::Type * _Target_pointer;
-  typedef typename _Source::Type * _Source_pointer;
-
-  _Source_pointer source = item.data();
-  if (source && (source->kind() == _Target_pointer(0)->__node_kind
-         || (_Target_pointer(0)->__node_kind <= int(_CodeModelItem::KindMask)
-             && ((source->kind() & _Target_pointer(0)->__node_kind)
-                  == _Target_pointer(0)->__node_kind))))
-    {
-      _Target ptr(static_cast<_Target_pointer>(source));
-      return ptr;
-    }
-
-  return _Target();
-}*/
-
 
 #endif // CPPTYPES_H
 
