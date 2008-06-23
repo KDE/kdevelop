@@ -135,6 +135,8 @@ void GitJob::start()
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
+    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )), 
+            SLOT(slotProcessError(QProcess::ProcessError)));
 
     connect(d->lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
             SLOT(slotReceivedStdout(const QStringList&)));
@@ -158,6 +160,19 @@ void GitJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 void GitJob::cancel()
 {
     d->childproc->kill();
+}
+
+void GitJob::slotProcessError( QProcess::ProcessError err )
+{
+    // disconnect all connections to childproc's signals; they are no longer needed
+    d->childproc->disconnect();
+
+    d->isRunning = false;
+
+    setError( d->childproc->exitCode() );
+    setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
+    emitResult(); //KJob
+    emit resultsReady(this); //VcsJob
 }
 
 void GitJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
