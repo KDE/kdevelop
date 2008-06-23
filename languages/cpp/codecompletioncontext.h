@@ -163,7 +163,14 @@ namespace Cpp {
       ///@return the extracted expression, without any access-operation
       QString expression() const;
 
+      ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
+      void standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items);
+      
       void processFunctionCallAccess();
+      
+      //Returns the required prefix that is needed in order to find the givne declaration from the current context.
+      //In worst case, it is the scope prefix of the declaration.
+      QualifiedIdentifier requiredPrefix(Declaration* decl) const;
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();

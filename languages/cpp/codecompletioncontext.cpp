@@ -544,7 +544,7 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
 
 #ifndef TEST_COMPLETION
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& abort) {
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort) {
     LOCKDUCHAIN;
     
     QList<CompletionTreeItemPointer> items;
@@ -567,7 +567,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               continue;
             had.insert(ctx);
             
-            if (abort)
+            if (shouldAbort)
               return items;
             
             foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
@@ -596,7 +596,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         int cnt = 0;
         QList<Cpp::IncludeItem> allIncludeItems = includeItems();
         foreach(const Cpp::IncludeItem& includeItem, allIncludeItems) {
-          if (abort)
+          if (shouldAbort)
             return items;
 
           items << CompletionTreeItemPointer( new IncludeFileCompletionItem(includeItem) );
@@ -604,15 +604,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         }
         kDebug(9007) << "Added " << cnt << " include-files to completion-list";
       } else {
-        //Show all visible declarations
-        QList<DeclarationDepthPair> decls = Cpp::hideOverloadedDeclarations( m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext()) );
-        foreach( const DeclarationDepthPair& decl, decls ) {
-          if (abort)
-            return items;
-          items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), CodeCompletionContext::Ptr(this), decl.second ) );
-        }
+        standardAccessCompletionItems(position, items);
 
-        kDebug(9007) << "setContext: using all declarations visible:" << decls.size();
+        //kDebug(9007) << "setContext: using all declarations visible:" << decls.size();
       }
     }
 
@@ -620,7 +614,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     ///Find all recursive function-calls that should be shown as call-tips
     CodeCompletionContext::Ptr parentContext(this);
     do {
-      if (abort)
+      if (shouldAbort)
         return items;
 
       parentContext = parentContext->parentContext();
@@ -647,6 +641,66 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       }
     } while( parentContext );
   return items;
+}
+
+QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) const {
+  QualifiedIdentifier worstCase = decl->context()->scopeIdentifier(true);
+  if(!m_duContext)
+    return worstCase;
+  QualifiedIdentifier currentPrefix;
+
+  while(1) {
+    QList<Declaration*> found = m_duContext->findDeclarations( currentPrefix + decl->identifier() );
+    if(found.contains(decl))
+      return currentPrefix;
+  
+    if(currentPrefix.count() >= worstCase.count()) {
+      return worstCase;
+    }else {
+      currentPrefix.push(worstCase.at(currentPrefix.count()));
+    }
+  }
+}
+
+void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items) {
+  //Normal case: Show all visible declarations
+  typedef QPair<Declaration*, int> DeclarationDepthPair;
+  
+  QList<DeclarationDepthPair> decls = Cpp::hideOverloadedDeclarations( m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext()) );
+  foreach( const DeclarationDepthPair& decl, decls )
+    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), Ptr(this), decl.second ) );
+  
+  CodeCompletionContext* parent = parentContext();
+  if(parent) {
+    if(parent->memberAccessOperation() == FunctionCallAccess) {
+        foreach(const Cpp::OverloadResolutionFunction& function, parent->functions()) {
+          if(function.function.isValid() && function.function.isViable() && function.function.declaration()) {
+            //uint parameterNumber = parent->m_knownArgumentExpressions.size() + function.matchedArguments;
+            Declaration* functionDecl = function.function.declaration().data();
+            if(functionDecl->type<CppFunctionType>()->arguments().count() > function.matchedArguments) {
+              //Eventually pick additional specificly known items for the type
+              AbstractType::Ptr type = functionDecl->type<CppFunctionType>()->arguments()[function.matchedArguments];
+              if(type) {
+                if(CppEnumerationType* enumeration = dynamic_cast<CppEnumerationType*>(TypeUtils::realType(type.data(), m_duContext->topContext()))) {
+                  if(enumeration->declaration() && enumeration->declaration()->internalContext()) {
+                    
+                    QualifiedIdentifier prefix = requiredPrefix(enumeration->declaration());
+                    
+                    DUContext* enumInternal = enumeration->declaration()->internalContext();
+                    foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
+                      QualifiedIdentifier id = prefix + enumerator->identifier();
+                      items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), Ptr(this), 0 ));
+                      static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
+                      static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+      }
+    }
+  }
 }
 
 #endif

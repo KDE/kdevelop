@@ -47,7 +47,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
   QString newText;
 
-  {
+  if(!useAlternativeText) {
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     if(declaration) {
       newText = declaration->identifier().toString();
@@ -55,11 +55,13 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       kDebug() << "Declaration disappeared";
       return;
     }
+  }else{
+    newText = alternativeText;
   }
 
   document->replaceText(word, newText);
-
-  if( declaration && dynamic_cast<AbstractFunctionDeclaration*>(declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
+  
+  if( !useAlternativeText && declaration && dynamic_cast<AbstractFunctionDeclaration*>(declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     bool haveArguments = false;
     if( declaration && declaration->type<CppFunctionType>() && declaration->type<CppFunctionType>()->arguments().count() )
@@ -111,6 +113,67 @@ QString nameForDeclaration(Declaration* dec) {
     return dec->identifier().toString();
 }
 
+KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompletionItem::completionProperties() const {
+  Declaration* dec = declaration.data();
+  CodeCompletionModel::CompletionProperties p = DUChainUtils::completionProperties(dec);
+
+  if (dec->abstractType()) {
+    if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
+      if (cv->isConstant())
+        p |= CodeCompletionModel::Const;
+      if (cv->isVolatile())
+        ;//TODO
+      }
+
+    switch (dec->abstractType()->whichType()) {
+      case AbstractType::TypeIntegral:
+        if (dec->type<CppEnumerationType>()) {
+          // Remove variable bit set in DUChainUtils
+          p &= ~CodeCompletionModel::Variable;
+          p |= CodeCompletionModel::Enum;
+        }
+        if (dec->type<CppEnumeratorType>()) {
+          //Get the properties from the parent, because that may contain information like "private"
+          if(dec->context()->owner()) {
+            p = DUChainUtils::completionProperties(dec->context()->owner()); 
+          }
+          // Remove variable bit set in DUChainUtils
+          p &= 0xffffffff - CodeCompletionModel::Variable;
+          p |= CodeCompletionModel::Enum;
+        }
+        break;
+      case AbstractType::TypeStructure:
+        if (CppClassType::Ptr classType =  dec->type<CppClassType>())
+          switch (classType->classType()) {
+            case CppClassType::Class:
+              p |= CodeCompletionModel::Class;
+              break;
+            case CppClassType::Struct:
+              // Remove class bit set in DUChainUtils
+              p &= ~CodeCompletionModel::Class;
+              p |= CodeCompletionModel::Struct;
+              break;
+            case CppClassType::Union:
+              // Remove class bit set in DUChainUtils
+              p &= ~CodeCompletionModel::Class;
+              p |= CodeCompletionModel::Union;
+              break;
+          }
+        break;
+    }
+  }
+
+  if(useAlternativeText) {
+    //Remove other scope flags, and add the local scope flag
+    ///@todo Create an own "Hint" scope within KTextEditor::CodeCompletionModel, and use that
+    p &= ~CodeCompletionModel::GlobalScope;
+    p &= ~CodeCompletionModel::NamespaceScope;
+    p |= CodeCompletionModel::LocalScope;
+  }
+  return p;
+}
+
+
 QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   DUChainReadLocker lock(DUChain::lock(), 500);
@@ -133,7 +196,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     if(role == Qt::DisplayRole && index.column() == CodeCompletionModel::Name)
       return alternativeText;
     return QVariant();
-  }
+  }else if(index.column() == CodeCompletionModel::Name && useAlternativeText)
+    return alternativeText;
   
   Declaration* dec = const_cast<Declaration*>( declaration.data() );
 
@@ -301,66 +365,17 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       return QVariant(ret);
     }
     break;
+    case CodeCompletionModel::CompletionRole:
+      return (int)completionProperties();
     case Qt::DecorationRole:
-    case CodeCompletionModel::CompletionRole: {
-      CodeCompletionModel::CompletionProperties p = DUChainUtils::completionProperties(dec);
+     {
+      CodeCompletionModel::CompletionProperties p = completionProperties();
 
-      if (dec->abstractType()) {
-        if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
-          if (cv->isConstant())
-            p |= CodeCompletionModel::Const;
-          if (cv->isVolatile())
-            ;//TODO
-          }
-
-        switch (dec->abstractType()->whichType()) {
-          case AbstractType::TypeIntegral:
-            if (dec->type<CppEnumerationType>()) {
-              // Remove variable bit set in DUChainUtils
-              p &= ~CodeCompletionModel::Variable;
-              p |= CodeCompletionModel::Enum;
-            }
-            if (dec->type<CppEnumeratorType>()) {
-              //Get the properties from the parent, because that may contain information like "private"
-              if(dec->context()->owner())
-                p = DUChainUtils::completionProperties(dec->context()->owner()); 
-              // Remove variable bit set in DUChainUtils
-              p &= ~CodeCompletionModel::Variable;
-              p |= CodeCompletionModel::Enum;
-            }
-            break;
-          case AbstractType::TypeStructure:
-            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
-              switch (classType->classType()) {
-                case CppClassType::Class:
-                  p |= CodeCompletionModel::Class;
-                  break;
-                case CppClassType::Struct:
-                  // Remove class bit set in DUChainUtils
-                  p &= ~CodeCompletionModel::Class;
-                  p |= CodeCompletionModel::Struct;
-                  break;
-                case CppClassType::Union:
-                  // Remove class bit set in DUChainUtils
-                  p &= ~CodeCompletionModel::Class;
-                  p |= CodeCompletionModel::Union;
-                  break;
-              }
-            break;
-        }
+      if( index.column() == CodeCompletionModel::Icon ) {
+        lock.unlock();
+        return DUChainUtils::iconForProperties(p);
       }
-
-      if( role == CodeCompletionModel::CompletionRole ) {
-        return (int)p;
-
-      } else {
-        if( index.column() == CodeCompletionModel::Icon ) {
-          lock.unlock();
-          return DUChainUtils::iconForProperties(p);
-        }
-        break;
-
-      }
+      break;
     }
 
     case CodeCompletionModel::ScopeIndex:

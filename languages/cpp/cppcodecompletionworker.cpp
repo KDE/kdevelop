@@ -158,8 +158,8 @@ struct SimplifiedAttributesExtractor {
   
   static KeyType extract( const CompletionTreeItemPointer& item ) {
     const NormalDeclarationCompletionItem* decItem = item->asItem<NormalDeclarationCompletionItem>();
-    if( decItem && decItem->declaration.data() )
-      return DUChainUtils::completionProperties(decItem->declaration.data()) & groupingProperties;
+    if( decItem )
+      return decItem->completionProperties() & groupingProperties;
     else
       return 0;
   }
