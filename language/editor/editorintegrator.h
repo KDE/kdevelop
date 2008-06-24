@@ -37,32 +37,7 @@ namespace KDevelop
   class DocumentRange;
   class EditorIntegratorStatic;
   class HashedString;
-
-/**
- * Pairs together a date and a revision-number, for simpler moving around and comparison. Plus some convenience-functions.
- * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable(@see KTextEditor::SmartInterface)
- *
- * All member-functions directly act on the two members, without additional logic.
- *
- * Does not need a d-pointer, is only a container-class.
- * */
-struct KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
-{
-  ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
-
-  bool operator <( const ModificationRevision& rhs ) const;
-
-  bool operator==( const ModificationRevision& rhs ) const;
-
-  bool operator!=( const ModificationRevision& rhs ) const;
-
-  QString toString() const;
-
-  QDateTime modificationTime;  //On-disk modification-time of a document
-  int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
-};
-
-KDEVPLATFORMLANGUAGE_EXPORT kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev);
+  class IndexedString;
 
 /**
  * Provides facilities for easy integration of a text editor component with
@@ -106,6 +81,12 @@ public:
    * Returns the text document for \a url, if one exists. The url should have been formatted using KUrl::pathOrUrl() at some point.
    */
   static KTextEditor::Document* documentForUrl(const HashedString& url);
+
+  /**
+   * Returns the text document for \a url, if one exists. The url should have been formatted using KUrl::pathOrUrl() at some point.
+   * This shouuld be preferred over the method above
+   */
+  static KTextEditor::Document* documentForUrl(const IndexedString& url);
 
   /**
    * Determine if a document has been loaded yet
@@ -267,12 +248,6 @@ public:
    * Does nothing if the range stack is empty.
    */
   void exitCurrentRange();
-
-  /**
-   * Returns the modification-revision that contains the file-modification time,
-   * and if the document is loaded, the revision-number of it's content.
-   * */
-  static ModificationRevision modificationRevision(const HashedString& url);
 
   /**
    * Use this to connect to notifications provided by EditorIntegratorStatic.

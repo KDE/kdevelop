@@ -19,6 +19,7 @@ set(kdevplatformlanguage_LIB_SRCS
     editor/editorintegrator.cpp
     editor/editorintegratorstatic.cpp
     editor/hashedstring.cpp
+    editor/modificationrevision.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
@@ -101,6 +102,7 @@ install(FILES
     editor/hashedstring.h
     editor/simplecursor.h
     editor/simplerange.h
+    editor/modificationrevision.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor
 )
 

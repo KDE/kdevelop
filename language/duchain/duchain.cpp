@@ -44,6 +44,7 @@
 #include <ilanguagecontroller.h>
 #include <ilanguagesupport.h>
 #include <icodehighlighting.h>
+#include "duchainutils.h"
 
 namespace KDevelop
 {
@@ -96,6 +97,7 @@ DUChain::DUChain()
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
   }
 }
 
@@ -391,6 +393,21 @@ QList<KUrl> DUChain::documents() const
     ret << KUrl(file.url().str());
   }
   return ret;
+}
+
+void DUChain::documentActivated(KTextEditor::Document* doc)
+{
+  //Check whether the document has an attached environment-manager, and whether that one thinks the document needs to be updated.
+  //If yes, update it.
+  DUChainWriteLocker lock( DUChain::lock() );
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  if(ctx && ctx->parsingEnvironmentFile()) {
+    QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(ctx->parsingEnvironmentFile()->type());
+    if( it != sdDUChainPrivate->m_managers.end() ) {
+      if(it.value()->needsUpdate(ctx->parsingEnvironmentFile().data()))
+        ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
+    }  
+  }
 }
 
 void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)

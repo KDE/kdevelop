@@ -72,7 +72,7 @@ void EditorIntegratorStatic::documentLoaded()
   {
     QMutexLocker lock(mutex);
 
-    documents.insert(HashedString(doc->url().pathOrUrl()), i);
+    documents.insert(IndexedString(doc->url().pathOrUrl()), i);
   }
 }
 
@@ -80,13 +80,13 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 {
   QMutexLocker lock(mutex);
 
-  QMutableHashIterator<HashedString, DocumentInfo>  it = documents;
+  QMutableHashIterator<IndexedString, DocumentInfo>  it = documents;
   while (it.hasNext()) {
     it.next();
     if (it.value().document == document) {
       DocumentInfo i = it.value();
       it.remove();
-      documents.insert(document->url().pathOrUrl(), i);
+      documents.insert(IndexedString(document->url().pathOrUrl()), i);
       // TODO trigger reparsing??
       return;
     }
@@ -99,7 +99,7 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   QMutexLocker lock(mutex);
 
-  HashedString url = document->url().pathOrUrl();
+  IndexedString url(document->url().pathOrUrl());
   if (documents.contains(url)) {
     DocumentInfo i = documents[url];
     if (i.revision != -1)

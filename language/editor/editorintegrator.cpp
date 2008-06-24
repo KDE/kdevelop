@@ -84,6 +84,11 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
 
 Document * EditorIntegrator::documentForUrl(const HashedString& url)
 {
+  return documentForUrl(IndexedString(url.str()));
+}
+
+Document * EditorIntegrator::documentForUrl(const IndexedString& url)
+{
   QMutexLocker lock(data()->mutex);
 
   if (data()->documents.contains(url))
@@ -150,7 +155,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
   QMutexLocker lock(m_smart->smartMutex());
 
   SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
-
+  
   KTextEditor::Cursor rangeStart = ret->start();
   KTextEditor::Cursor rangeEnd = ret->end();
   
@@ -306,7 +311,7 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
 {
   if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(document)) {
     QMutexLocker lock(data()->mutex);
-    HashedString url = document->url().pathOrUrl();
+    IndexedString url(document->url().pathOrUrl());
 
     if (data()->documents.contains(url)) {
       EditorIntegratorStatic::DocumentInfo& i = data()->documents[url];
@@ -331,9 +336,11 @@ void EditorIntegrator::setCurrentUrl(const HashedString& url)
 
   d->m_currentUrl = url;
 
+  IndexedString indexedUrl(url.str());
+  
   QMutexLocker lock(data()->mutex);
-  if (data()->documents.contains(url)) {
-    EditorIntegratorStatic::DocumentInfo i = data()->documents[url];
+  if (data()->documents.contains(indexedUrl)) {
+    EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
     d->m_currentDocument = i.document;
     d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
     if (d->m_smart && i.revision != -1) {
@@ -388,56 +395,6 @@ void EditorIntegrator::exitCurrentRange()
 int EditorIntegrator::rangeStackSize() const
 {
     return d->m_currentRangeStack.size();
-}
-
-ModificationRevision EditorIntegrator::modificationRevision(const HashedString& url) {
-  ///@todo add a cache, use the old code from Cpp::EnvironmentManager
-  ///@todo support non-local files
-
-  
-  QString localFile = url.str();
-  if( localFile.startsWith("file://") )
-    localFile = localFile.mid(7); //This is much faster then first constructing KUrl
-  else
-    localFile = KUrl(url.str()).toLocalFile();
-
-  QFileInfo fileInfo( localFile );
-  
-  
-  ModificationRevision ret(fileInfo.lastModified());
-
-  KTextEditor::Document* doc = documentForUrl(url);
-  if( doc ) {
-    KTextEditor::SmartInterface* smart =   dynamic_cast<KTextEditor::SmartInterface*>(doc);
-    if( smart )
-      ret.revision = smart->currentRevision();
-  }
-  
-  return ret;
-}
-
-ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime), revision(revision_) {
-}
-
-bool ModificationRevision::operator <( const ModificationRevision& rhs ) const {
-  return modificationTime < rhs.modificationTime || (modificationTime == rhs.modificationTime && revision < rhs.revision);
-}
-
-bool ModificationRevision::operator ==( const ModificationRevision& rhs ) const {
-  return modificationTime == rhs.modificationTime && revision == rhs.revision;
-}
-
-bool ModificationRevision::operator !=( const ModificationRevision& rhs ) const {
-  return modificationTime != rhs.modificationTime || revision != rhs.revision;
-}
-
-QString ModificationRevision::toString() const {
-  return QString("%1 (rev %2)").arg(modificationTime.time().toString()).arg(revision);
-}
-
-kdbgstream& operator<< (kdbgstream& s, const ModificationRevision& rev) {
-  s << rev.toString();
-  return s;
 }
 
 QObject * EditorIntegrator::notifier()

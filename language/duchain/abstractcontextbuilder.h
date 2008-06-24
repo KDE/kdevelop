@@ -413,7 +413,7 @@ protected:
 
           if ( child->range().start > translated.end && child->smartRange() ) {
 #ifdef DEBUG_UPDATE_MATCHING
-              kDebug() << "While searching" << identifier << translated.textRange() << "stopping because found" << child->localScopeIdentifier() << child->range().textRange();
+              kDebug() << "While searching" << identifier << translated.textRange() << "(from" << range.textRange() << ") stopping because found" << child->localScopeIdentifier() << child->range().textRange();
 #endif
               break;
           }

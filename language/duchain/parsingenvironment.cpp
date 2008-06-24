@@ -107,6 +107,10 @@ void ParsingEnvironmentManager::clear() {
 ParsingEnvironmentFile::~ParsingEnvironmentFile() {
 }
 
+bool ParsingEnvironmentManager::needsUpdate( const ParsingEnvironmentFile* file ) const {
+  return false;
+}
+
 int ParsingEnvironment::type() const {
   return StandardParsingEnvironment;
 }

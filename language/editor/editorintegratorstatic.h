@@ -27,7 +27,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "hashedstring.h"
+#include "indexedstring.h"
 #include "documentcursor.h"
 
 namespace KTextEditor
@@ -74,7 +74,7 @@ public:
     int revision;
   };
 
-  QHash<HashedString, DocumentInfo> documents;
+  QHash<IndexedString, DocumentInfo> documents;
 };
 
 }

@@ -187,7 +187,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
     virtual void addFile( ParsingEnvironmentFile* file );
     ///Remove a file from the manager
     virtual void removeFile( ParsingEnvironmentFile* file );
-
+    ///Should use language-specific information to decide whether the top-context that has the given data attached needs to be reparsed
+    virtual bool needsUpdate( const ParsingEnvironmentFile* file ) const;
     /**
      * Search for the availability of a file parsed in a given environment
      * @param accepter For each found matching file, accepter->accept(..) should be called to
