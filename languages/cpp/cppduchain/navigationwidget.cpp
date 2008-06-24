@@ -497,54 +497,54 @@ class NavigationContext : public KShared {
         } else if( !detailsHtml.isEmpty() ) {
           m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
         }
-      }
 
-      m_currentText += "<br />";
-
-      if( !shorten && !m_declaration->comment().isEmpty() ) {
-        QString comment = m_declaration->comment();
-        comment.replace("<br />", "\n"); //do not escape html newlines within the comment
-        comment.replace("<br/>", "\n");
-        comment = Qt::escape(comment);
-        comment.replace("\n", "<br />"); //Replicate newlines in html
-        m_currentText += commentHighlight(comment);
         m_currentText += "<br />";
-      }
 
-      if( !shorten ) {
-        if(m_declaration->isDefinition())
-          m_currentText += labelHighlight(i18n( "Def.: " ));
-        else
-          m_currentText += labelHighlight(i18n( "Decl.: " ));
-        
-        makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
-        m_currentText += " ";
-        //m_currentText += "<br />";
-        if( m_declaration->definition() ) {
-          m_currentText += labelHighlight(i18n( "Def.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), DeclarationPointer(m_declaration->definition()), NavigationAction::JumpToSource );
+        if( !shorten && m_declaration && !m_declaration->comment().isEmpty() ) {
+          QString comment = m_declaration->comment();
+          comment.replace("<br />", "\n"); //do not escape html newlines within the comment
+          comment.replace("<br/>", "\n");
+          comment = Qt::escape(comment);
+          comment.replace("\n", "<br />"); //Replicate newlines in html
+          m_currentText += commentHighlight(comment);
+          m_currentText += "<br />";
         }
-        
-        if( m_declaration->declaration() ) {
-          m_currentText += labelHighlight(i18n( "Decl.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), DeclarationPointer(m_declaration->declaration()), NavigationAction::JumpToSource );
-        }
-        
-        QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
 
-        if(!uses.isEmpty()) {
-          m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
-          for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
-            m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
-            foreach(const SimpleRange& range, *it) {
-              m_currentText += "  ";
-              makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+        if( !shorten ) {
+          if(m_declaration->isDefinition())
+            m_currentText += labelHighlight(i18n( "Def.: " ));
+          else
+            m_currentText += labelHighlight(i18n( "Decl.: " ));
+
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
+          m_currentText += " ";
+          //m_currentText += "<br />";
+          if( m_declaration->definition() ) {
+            m_currentText += labelHighlight(i18n( "Def.: " ));
+            makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), DeclarationPointer(m_declaration->definition()), NavigationAction::JumpToSource );
+          }
+
+          if( m_declaration->declaration() ) {
+            m_currentText += labelHighlight(i18n( "Decl.: " ));
+            makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), DeclarationPointer(m_declaration->declaration()), NavigationAction::JumpToSource );
+          }
+
+          QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
+
+          if(!uses.isEmpty()) {
+            m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
+            for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+              m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
+              foreach(const SimpleRange& range, *it) {
+                m_currentText += "  ";
+                makeLink( QString("%1:%2").arg(range.start.line).arg(range.start.column), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+              }
+              m_currentText += "<br/>";
             }
-            m_currentText += "<br/>";
           }
         }
+        //m_currentText += "<br />";
       }
-      //m_currentText += "<br />";
 
       addExternalHtml(m_suffix);
       
