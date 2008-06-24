@@ -32,6 +32,8 @@ Boston, MA 02110-1301, USA.
 #include <QDir>
 #include <QList>
 
+#include <ktexteditor/document.h>
+
 namespace KDevelop
 {
 
@@ -50,20 +52,21 @@ bool Context::hasType( int aType ) const
 class EditorContextPrivate
 {
 public:
-    EditorContextPrivate( const KUrl &url, const KTextEditor::Cursor& position, const QString &linestr,
-             const QString &wordstr )
-            : m_url( url ), m_position( position ),
-            m_linestr( linestr ), m_wordstr( wordstr )
-    {}
+    EditorContextPrivate( KTextEditor::View* view )
+            : m_view( view )
+    {
+        m_url = view->document()->url();
+        m_position = view->cursorPosition();
+    }
 
     KUrl m_url;
     KTextEditor::Cursor m_position;
-    QString m_linestr, m_wordstr;
+    QString m_currentLine, m_currentWord;
+    KTextEditor::View* m_view;
 };
 
-EditorContext::EditorContext( const KUrl &url, const KTextEditor::Cursor& position,
-                              const QString &linestr, const QString &wordstr )
-        : Context(), d( new EditorContextPrivate( url, position, linestr, wordstr ) )
+EditorContext::EditorContext( KTextEditor::View* view )
+        : Context(), d( new EditorContextPrivate( view ) )
 {}
 
 EditorContext::~EditorContext()
@@ -88,12 +91,17 @@ KTextEditor::Cursor EditorContext::position() const
 
 QString EditorContext::currentLine() const
 {
-    return d->m_linestr;
+    return d->m_currentLine;
 }
 
 QString EditorContext::currentWord() const
 {
-    return d->m_wordstr;
+    return d->m_currentWord;
+}
+
+KTextEditor::View* EditorContext::view() const
+{
+    return d->m_view;
 }
 
 class FileContextPrivate

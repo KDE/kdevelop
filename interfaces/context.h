@@ -37,6 +37,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
+#include <ktexteditor/view.h>
 
 template <typename T> class QList;
 
@@ -123,8 +124,7 @@ public:
         @param position The position where the cursor is.
         @param linestr The content of the line where the cursor is.
         @param wordstr The current word under the cursor.*/
-    EditorContext( const KUrl &url, const KTextEditor::Cursor& position,
-                   const QString &linestr, const QString &wordstr );
+    EditorContext( KTextEditor::View* );
 
     /**Destructor.*/
     virtual ~EditorContext();
@@ -144,6 +144,8 @@ public:
     /**@return A QString containing the word near to the cursor when this
         context object was created.*/
     QString currentWord() const;
+
+    KTextEditor::View* view() const;
 
 private:
     class EditorContextPrivate* const d;
