@@ -151,8 +151,8 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
 
   SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
 
-  KTextEditor::Cursor rangeStart = range.start();
-  KTextEditor::Cursor rangeEnd = range.end();
+  KTextEditor::Cursor rangeStart = ret->start();
+  KTextEditor::Cursor rangeEnd = ret->end();
   
   if (!m_currentRangeStack.isEmpty()) {
 
@@ -207,6 +207,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
             if(rangeStart >= list[current]->start() && rangeEnd <= list[current]->start()) {
                 found  = true;
                 currentRange = list[current];
+                importList.clear();
             } else {
                 //Range contains list[current], or intersects list[current]-> Find all neighbours of list[current] that are also contained
                 for(int a = current-1; a >= 0; --a) {
@@ -215,7 +216,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
                     else
                         break;
                 }
-                if(rangeStart <= list[current]->start() && rangeEnd >= list[current]->start())
+                if(rangeStart <= list[current]->start() && rangeEnd >= list[current]->end())
                     importList << list[current]; //The current item is contained in range
                     
                 for(int a = current+1; a < count; ++a) {
@@ -234,6 +235,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
 
     for( QList<SmartRange*>::const_iterator it = importList.begin(); it != importList.end(); ++it ) {
       Q_ASSERT((*it)->parentRange()); //We must never import a top-range, top-ranges must stay top-ranges
+      Q_ASSERT(ret->contains(**it));
       (*it)->setParentRange(ret);
     }
 
@@ -241,6 +243,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
     ret->setParentRange( currentRange );
   }
 
+  Q_ASSERT(ret->end() == rangeEnd && ret->start() == rangeStart);
   m_currentRangeStack << ret;
   return ret;
 }
