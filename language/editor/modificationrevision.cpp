@@ -24,7 +24,7 @@
 #include <editor/editorintegrator.h>
 #include <editor/hashedstring.h>
 #include "indexedstring.h"
-#include <hash_map>
+#include <ext/hash_map>
 
 namespace KDevelop {
 
