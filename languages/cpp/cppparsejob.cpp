@@ -412,12 +412,12 @@ void CPPInternalParseJob::run()
             wait = true;
           else
             wait = false;
-          kDebug(9007) << "waiting while" << parentJob()->document().str() << "is being updated by another thread";
           
           if(!wait)
             contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() | TopDUContext::UpdatingContext) );
           
           if(wait) {
+            kDebug(9007) << "waiting while" << parentJob()->document().str() << "is being updated by another thread";
             l.unlock();
             sleep(1);
           }
@@ -429,6 +429,12 @@ void CPPInternalParseJob::run()
 
       DeclarationBuilder declarationBuilder(&editor);
       contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, TopDUContextPointer(contentContext), false);
+      
+      //If publically visible declarations were added/removed, all following parsed files need to be updated
+      if(declarationBuilder.changeWasSignificant()) {
+        kDebug() << "A significant change was recorded, all following contexts will be updated";
+        parentJob()->masterJob()->setNeedUpdateEverything(true);
+      }
 
       {
         DUChainReadLocker l(DUChain::lock());

@@ -1005,6 +1005,25 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
+bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths) const
+{
+  if(m_environmentManager->needsUpdate(file.data()))
+    return true;
+
+  ///@todo somehow this check should also go into EnvironmentManager
+  for( Cpp::StringSetIterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
+
+    ///@todo store IncludeLocal/IncludeGlobal somewhere
+    QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, KUrl(), true );
+    if(!included.first.isEmpty()) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }
 

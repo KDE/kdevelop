@@ -86,14 +86,20 @@ DUContext* getTemplateContext(Declaration* decl) {
   return 0;
 }
 
+bool DeclarationBuilder::changeWasSignificant() const
+{
+  ///@todo Also set m_changeWasSignificant if publically visible declarations were removed(needs interaction with abstractcontextbuilder)
+  return m_changeWasSignificant;
+}
+
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_inTypedef(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_inTypedef(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false)
 {
   setEditor(editor, false);
 }
@@ -429,6 +435,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 #endif
 
   if (!declaration) {
+    if(currentContext()->inSymbolTable())
+      m_changeWasSignificant = true; //We are adding a declaration that comes into the symbol table, so mark the change significant
 /*    if( recompiling() )
       kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
     SmartRange* prior = editor()->currentRange();

@@ -109,6 +109,10 @@ public:
     const Cpp::LazyMacroSet& standardMacros() const;
 
     Cpp::EnvironmentManager* environmentManager() const;
+    
+    ///Thread-safe
+    bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths ) const;
+    
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.
  * This function helps choosing the right one, by creating a standard parsing-environment,

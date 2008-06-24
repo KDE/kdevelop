@@ -34,6 +34,7 @@
 #include <ksharedptr.h>
 
 #include <parsingenvironment.h>
+#include <modificationrevision.h>
 #include <editorintegrator.h>
 #include <iproblem.h>
 
@@ -41,22 +42,6 @@
 #include "cachemanager.h"
 #include "setrepository.h"
 #include "parser/rpp/macrorepository.h"
-
-struct IndexedStringHash {
-  uint operator() (const KDevelop::IndexedString& str) const {
-    return str.hash();
-  }
-  
-  #ifdef Q_CC_MSVC
-  bool operator() (const KDevelop::IndexedString& lhs, const KDevelop::IndexedString& rhs) const {
-    return lhs < rhs;
-  }
-    enum
-		{	// parameters for hash table
-		bucket_size = 4,	// 0 < bucket_size
-		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
-  #endif
-};
 
 /**
  * The environment-manager helps achieving right representation of the way c++ works:
@@ -227,6 +212,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     ///Should contain a modification-time for each included-file
     const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>& allModificationTimes() const;
 
+    ///Clears the modification times of all dependencies
+    void clearModificationTimes();
+
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
     const QList<KDevelop::IndexedString>& includePaths() const;
     void setIncludePaths( const QList<KDevelop::IndexedString>& paths );
@@ -291,8 +279,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     EnvironmentManager();
     virtual ~EnvironmentManager();
 
-    virtual void saveMemory();
-
     //Overridden from ParsingEnvironmentManager
     virtual void clear();
 
@@ -300,6 +286,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     virtual void addFile( KDevelop::ParsingEnvironmentFile* file );
     ///Remove a file from the manager
     virtual void removeFile( KDevelop::ParsingEnvironmentFile* file );
+    ///Returns true if the file itself, or any of its dependencies was modified.
+    virtual bool needsUpdate( const KDevelop::ParsingEnvironmentFile* file ) const;
 
     ///See the comment about simplified matching at the top
     void setSimplifiedMatching(bool simplified);
@@ -310,13 +298,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
      * */
     virtual KDevelop::ParsingEnvironmentFile* find( const KDevelop::IndexedString& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
 
-  private:
+      private:
     virtual int type() const;
-    ///before this can be called, initFileModificationCache should be called once
-    QDateTime fileModificationTimeCached( const KDevelop::IndexedString& fileName ) const;
-    void initFileModificationCache();
     virtual void erase( const CacheNode* node );
-    bool hasSourceChanged( const EnvironmentFile& file ) const;///Returns true if the file itself, or any of its dependencies was modified.
 
     ///Returns zero if no fitting file is available for the given Environment
     EnvironmentFilePointer lexedFile( const KDevelop::IndexedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
@@ -327,17 +311,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     typedef std::multimap<KDevelop::IndexedString, EnvironmentFilePointer> EnvironmentFileMap;
     EnvironmentFileMap m_files;
     
-    struct FileModificationCache {
-      QDateTime m_readTime;
-      QDateTime m_modificationTime;
-    };
-    #ifdef Q_CC_MSVC
-        typedef stdext::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
-    #else    
-        typedef __gnu_cxx::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
-    #endif
-    mutable FileModificationMap m_fileModificationCache;
-    QDateTime m_currentDateTime;
     bool m_simplifiedMatching;
 };
 

@@ -58,6 +58,7 @@
 #include <duchainutils.h>
 #include "cppcodecompletionworker.h"
 #include "cpplanguagesupport.h"
+#include <modificationrevision.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -93,8 +94,8 @@ void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, 
   if (top) {
     kDebug(9007) << "completion invoked for context" << (DUContext*)top;
 
-    if( top->parsingEnvironmentFile()->modificationRevision() != EditorIntegrator::modificationRevision(url.pathOrUrl()) ) {
-      kDebug(9007) << "Found context is not current. Its revision is " << top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << EditorIntegrator::modificationRevision(url.pathOrUrl());
+    if( top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
+      kDebug(9007) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
     }
 
     DUContextPointer thisContext;

@@ -81,7 +81,6 @@ public:
      * */
     static KDevelop::ParsingEnvironment* createStandardEnvironment();
 private:
-    bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& path);
     void headerSectionEndedInternal(rpp::Stream* stream);
     bool checkAbort();
 

@@ -19,11 +19,12 @@
 #include <iproblem.h>
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/repositories/itemrepository.h>
+#include <language/duchain/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 
- //#define LEXERCACHE_DEBUG
- //#define ifDebug(x) x
+//  #define LEXERCACHE_DEBUG
+//  #define ifDebug(x) x
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -135,7 +136,6 @@ void EnvironmentManager::removeEnvironmentFile( const EnvironmentFilePointer& fi
 }
 
 EnvironmentFilePointer EnvironmentManager::lexedFile( const IndexedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* acceptor ) {
-  initFileModificationCache();
   std::pair< EnvironmentFileMap::iterator, EnvironmentFileMap::iterator> files = m_files.equal_range( fileName );
 
 #ifdef LEXERCACHE_DEBUG
@@ -219,38 +219,27 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const IndexedString& fileN
   return EnvironmentFilePointer();
 }
 
-QDateTime EnvironmentManager::fileModificationTimeCached( const IndexedString& fileName ) const {
-  FileModificationMap::const_iterator it = m_fileModificationCache.find( fileName );
-  if( it != m_fileModificationCache.end() ) {
-    ///Use the cache for 10 seconds
-    if( (*it).second.m_readTime.secsTo( m_currentDateTime ) < 10 ) {
-      return (*it).second.m_modificationTime;
-    }
+//Should be cached too!
+bool EnvironmentManager::needsUpdate( const KDevelop::ParsingEnvironmentFile* filePtr ) const {
+  //@todo Check if any of the dependencies changed
+  const EnvironmentFile* file = dynamic_cast<const EnvironmentFile*>(filePtr);
+
+  if(!file) {
+    kDebug() << "called with wrong file type";
+    return false;
   }
 
-  KUrl u(fileName.str());
-  QFileInfo fileInfo( u.path() ); ///@todo support non-local files and modifications in editor
-  m_fileModificationCache[fileName].m_readTime = QDateTime::currentDateTime();
-  m_fileModificationCache[fileName].m_modificationTime = fileInfo.lastModified();
-  return fileInfo.lastModified();
+  ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( file->url() );
 
-}
-
-//Should be cached too!
-bool EnvironmentManager::hasSourceChanged( const EnvironmentFile& file ) const {
-  //@todo Check if any of the dependencies changed
-
-  ModificationRevision revision = EditorIntegrator::modificationRevision( file.url().str() ); ///@todo prevent conversion
-
-  if ( revision != file.modificationRevision() ) {
-    ifDebug( kDebug( 9007 ) << file.url().str() << "has changed, stored stamp:" << file.modificationRevision() << "new time:" << revision  );
+  if ( revision != file->modificationRevision() ) {
+    ifDebug( kDebug( 9007 ) << file->url().str() << "has changed, stored stamp:" << file->modificationRevision() << "new time:" << revision  );
     return true;
   }
 
-  for( QMap<IndexedString, ModificationRevision>::const_iterator it = file.allModificationTimes().begin(); it != file.allModificationTimes().end(); ++it ) {
-    ModificationRevision revision = EditorIntegrator::modificationRevision( file.url().str() ); ///@todo preent conversion
+  for( QMap<IndexedString, ModificationRevision>::const_iterator it = file->allModificationTimes().begin(); it != file->allModificationTimes().end(); ++it ) {
+    ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( it.key() );
     if( revision != *it ) {
-      ifDebug( kDebug( 9007 ) << "dependency" << it.key().str() << "has changed"  );
+      ifDebug( kDebug( 9007 ) << "dependency" << it.key().str() << "has changed, stored stamp:" << it.value() << "new time:" << revision  );
       return true;
     }
   }
@@ -261,7 +250,6 @@ bool EnvironmentManager::hasSourceChanged( const EnvironmentFile& file ) const {
 
 void EnvironmentManager::clear() {
   m_files.clear();
-  m_fileModificationCache.clear();
 }
 
 void EnvironmentManager::erase( const CacheNode* node ) {
@@ -282,7 +270,6 @@ EnvironmentFile::EnvironmentFile( const IndexedString& fileName, EnvironmentMana
   ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
 
   addIncludeFile( m_url, m_modificationTime );
-  m_allModificationTimes[ m_url ] = m_modificationTime;
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
@@ -380,6 +367,11 @@ const QMap<IndexedString, KDevelop::ModificationRevision>& EnvironmentFile::allM
   return m_allModificationTimes;
 }
 
+void EnvironmentFile::clearModificationTimes() {
+  m_allModificationTimes.clear();
+  m_allModificationTimes[m_url] = m_modificationTime;
+}
+
 IndexedString EnvironmentFile::url() const {
   return m_url;
 }
@@ -406,6 +398,7 @@ void EnvironmentFile::addIncludeFile( const IndexedString& file, const Modificat
 
 void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
   m_modificationTime = rev;
+  m_allModificationTimes[m_url] = rev;
 }
 
 KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
@@ -489,16 +482,8 @@ int EnvironmentFile::type() const {
   return CppParsingEnvironment;
 }
 
-void EnvironmentManager::initFileModificationCache() {
-  m_currentDateTime = QDateTime::currentDateTime();
-}
-
 int EnvironmentManager::type() const {
   return CppParsingEnvironment;
-}
-
-void EnvironmentManager::saveMemory() {
-  m_fileModificationCache.clear();
 }
 
 ///Add a new file to the manager

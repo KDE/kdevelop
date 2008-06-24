@@ -63,6 +63,8 @@ public:
    */
   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
+  bool changeWasSignificant() const;
+  
   protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
@@ -128,7 +130,7 @@ private:
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 
-  bool m_inTypedef;
+  bool m_inTypedef, m_changeWasSignificant;
 };
 
 #endif // DECLARATIONBUILDER_H

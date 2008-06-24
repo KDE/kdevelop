@@ -218,6 +218,8 @@ void PreprocessJob::run()
       
         if( updating ) {
           m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
+          m_updatingEnvironmentFile->clearMissingIncludeFiles();
+          m_updatingEnvironmentFile->clearModificationTimes();
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
             //Must be true, because we explicity passed the flag to chainForDocument
@@ -280,23 +282,6 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
   headerSectionEndedInternal(&stream);
 }
 
-bool PreprocessJob::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths)
-{
-  if(file->modificationRevision() != KDevelop::EditorIntegrator::modificationRevision(HashedString(file->url().str())))
-    return true;
-
-    ///@todo model the include-logic exactly, and check modification-revisions of all actually included files
-  for( Cpp::StringSetIterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
-
-    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( includePaths, localPath, (*it).str(), IncludeLocal, KUrl(), true );
-    if(!included.first.isEmpty()) {
-      return true;
-    }
-  }
-  
-  return false;
-}
-
 void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 {
     bool closeStream = false;
@@ -338,7 +323,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
                 
-            if(!needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (!parentJob()->needUses() || content->hasUses()) ) {
+            if(!CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (!parentJob()->needUses() || content->hasUses()) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
                 
@@ -351,6 +336,8 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             } else {
                 ifDebug( kDebug(9007) << "updating content-context"; )
                 m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
+                m_updatingEnvironmentFile->clearMissingIncludeFiles();
+                m_updatingEnvironmentFile->clearModificationTimes();
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
             }
         } else {
@@ -412,7 +399,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment )
-                updateNeeded = needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
             }
         }
 
@@ -431,7 +418,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }
         } else {
-            kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
+            if(updateNeeded)
+              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": need to update" << includedFile;
+            else if(parentJob()->masterJob()->needUpdateEverything())
+              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": needUpateEverything, updating" << includedFile;
+            else
+              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
 
 /*            if( updateNeeded && !parentJob()->masterJob()->needUpdateEverything() ) {
               //When a new include-file was found, that can influence not found declarations in all following encountered contexts, so they all need updating.
