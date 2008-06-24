@@ -19,6 +19,8 @@
 #include "textdocument.h"
 
 #include <QPointer>
+#include <QMenu>
+#include <QAction>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -33,10 +35,14 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
+
 #include "core.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
+#include "plugincontroller.h"
 #include "documentcontroller.h"
 
 namespace KDevelop {
@@ -63,6 +69,76 @@ struct TextDocumentPrivate {
     {
         Q_UNUSED(document);
         m_textDocument->notifyContentChanged();
+    }
+
+    void populateContextMenu( KTextEditor::View* v, QMenu* menu )
+    {
+        Context* c = new EditorContext( v );
+        QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+        menu->addSeparator();
+        foreach( const ContextMenuExtension ext, extensions )
+        {
+            foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
+            {
+                menu->addAction( act );
+            }
+            menu->addSeparator();
+            foreach( QAction* act, ext.actions( ContextMenuExtension::EditGroup ) )
+            {
+                menu->addAction( act );
+            }
+        }
+
+        QList<QAction*> vcsActions;
+        QList<QAction*> extActions;
+        QList<QAction*> refactorActions;
+        foreach( const ContextMenuExtension ext, extensions )
+        {
+
+            foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
+            {
+                vcsActions << act;
+            }
+
+            foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
+            {
+                extActions << act;
+            }
+
+            foreach( QAction* act, ext.actions( ContextMenuExtension::RefactorGroup ) )
+            {
+                refactorActions << act;
+            }
+
+        }
+
+
+        QMenu* refactormenu = menu;
+        if( refactorActions.count() > 1 )
+        {
+            refactormenu = menu->addMenu( "Refactor");
+        }
+        foreach( QAction* act, refactorActions )
+        {
+            refactormenu->addAction( act );
+        }
+        menu->addSeparator();
+
+        QMenu* vcsmenu = menu;
+        if( vcsActions.count() > 1 )
+        {
+            vcsmenu = menu->addMenu( "Version Control");
+        }
+        foreach( QAction* act, vcsActions )
+        {
+            vcsmenu->addAction( act );
+        }
+
+        menu->addSeparator();
+        foreach( QAction* act, extActions )
+        {
+            menu->addAction( act );
+        }
     }
 
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
@@ -171,8 +247,10 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     view = d->document->createView(parent);
 
-    if (view)
+    if (view) {
         view->setContextMenu( view->defaultContextMenu() );
+        connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
+    }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
         KConfigGroup group(KGlobal::config(), "Code Completion");
