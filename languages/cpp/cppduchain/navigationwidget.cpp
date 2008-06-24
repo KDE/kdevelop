@@ -500,7 +500,7 @@ class NavigationContext : public KShared {
 
         m_currentText += "<br />";
 
-        if( !shorten && m_declaration && !m_declaration->comment().isEmpty() ) {
+        if( !shorten && !m_declaration->comment().isEmpty() ) {
           QString comment = m_declaration->comment();
           comment.replace("<br />", "\n"); //do not escape html newlines within the comment
           comment.replace("<br/>", "\n");
