@@ -19,7 +19,7 @@
 #include <iproblem.h>
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/repositories/itemrepository.h>
-#include <language/duchain/modificationrevision.h>
+#include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 

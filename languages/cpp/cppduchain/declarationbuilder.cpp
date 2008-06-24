@@ -35,7 +35,7 @@
 #include <duchainlock.h>
 #include <identifiedtype.h>
 #include <namespacealiasdeclaration.h>
-#include <aliasdeclaration.h>
+#include <language/duchain/aliasdeclaration.h>
 #include <util/pushvalue.h>
 
 #include "cppeditorintegrator.h"
