@@ -22,6 +22,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
+    backgroundparser/documentchangetracker.cpp
     duchain/duchain.cpp
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
@@ -106,6 +107,7 @@ install(FILES
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
+    backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser
 )
 

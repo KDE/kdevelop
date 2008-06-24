@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2006 Adam Treat <treat@kde.org>
+* Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -22,11 +23,12 @@
 #ifndef KDEVPARSEJOB_H
 #define KDEVPARSEJOB_H
 
-#include <JobSequence.h>
-#include <kurl.h>
-#include <duchain/indexedstring.h>
-#include "../languageexport.h"
+#include <KUrl>
 
+#include <JobSequence.h>
+
+#include "language/duchain/indexedstring.h"
+#include "language/backgroundparser/documentchangetracker.h"
 
 namespace KDevelop
 {
@@ -36,22 +38,26 @@ class TopDUContext;
 /**
  * The base class for background parser jobs.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence, public DocumentChangeTracker
 {
     Q_OBJECT
 public:
     ParseJob( const KUrl &url, QObject *parent );
-
     virtual ~ParseJob();
 
     BackgroundParser* backgroundParser() const;
     void setBackgroundParser(BackgroundParser* parser);
 
-    void setActiveDocument();
     virtual int priority() const;
 
-    /// Returns whether the editor can provide the contents of the document or not.
-    bool contentsAvailableFromEditor() const;
+    /**
+     * Determine whether the editor can provide the contents of the document or not.
+     * Once this is called, the editor integrator saves the revision token, and no changes will
+     * be made to the changedRanges().
+     * You can then just call KTextEditor::SmartRange::text() on each of the changedRanges().
+     * Or, you can parse the whole document, the text of which is available from contentsFromEditor().
+     */
+    bool contentsAvailableFromEditor();
 
     /// Retrieve the contents of the file from the currently open editor.
     /// Ensure it is loaded by calling editorLoaded() first.
@@ -62,10 +68,8 @@ public:
     /// or -1 if there was a problem.
     int revisionToken() const;
 
+    /// \returns the indexed url of the document to be parsed.
     KDevelop::IndexedString document() const;
-
-    void setErrorMessage(const QString& message);
-    QString errorMessage() const;
 
     /// Sets the du-context that was created by this parse-job
     virtual void setDuChain(TopDUContext* duChain);
@@ -92,20 +96,13 @@ public:
      * not be added and the method will return false.
      */
     bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
+
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
      * @param text may be a text that describes the current state of parsing
      * Do not trigger this too often, for performance reasons. */
     void progress(KDevelop::ParseJob*, float value, QString text);
-protected:
-    KDevelop::IndexedString m_document;
-    QString m_errorMessage;
-    BackgroundParser* m_backgroundParser;
 
-    QMutex* m_abortMutex;
-    volatile bool m_abortRequested : 1;
-    bool m_aborted : 1;
-    int m_revisionToken;
 private:
     class ParseJobPrivate* const d;
 };

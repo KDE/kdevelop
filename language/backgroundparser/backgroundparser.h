@@ -29,7 +29,9 @@
 #include <QtCore/QHash>
 #include <QtCore/QPointer>
 
-#include <kurl.h>
+#include <KUrl>
+
+#include <KTextEditor/SmartRangeWatcher>
 
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
@@ -42,11 +44,6 @@ class Weaver;
 class Job;
 }
 
-namespace KTextEditor
-{
-class Document;
-}
-
 namespace KDevelop
 {
 
@@ -54,7 +51,7 @@ class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
-class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus, public KTextEditor::SmartRangeWatcher
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
@@ -94,6 +91,18 @@ public:
      * Set the delay in miliseconds before the background parser starts parsing.
      */
     void setDelay(int miliseconds);
+
+    /**
+     * Inform the background parser that \a document has a given top smart \a range.
+     *
+     * This will be watched for modifications and background jobs scheduled accordingly.
+     */
+    void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
+
+    /**
+     * Remove an associated top \a range from modification watching.
+     */
+    void removeManagedTopRange(KTextEditor::SmartRange* range);
 
 Q_SIGNALS:
     /** 
@@ -152,6 +161,11 @@ protected:
 protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
+
+protected:
+    // Receive changed notifications
+    using KTextEditor::SmartRangeWatcher::rangeContentsChanged;
+    virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild);
 
 private:
     friend class BackgroundParserPrivate;

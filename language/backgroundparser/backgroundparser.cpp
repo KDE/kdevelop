@@ -88,6 +88,8 @@ public:
             it.value()->setBackgroundParser(0);
             delete it.value();
         }
+
+        qDeleteAll(m_delayedParseJobs.values());
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
@@ -96,7 +98,22 @@ public:
         kDebug(9505) << "BackgroundParser::parseDocumentsInternal";
         // First create the jobs, then enqueue them, because they may
         // need to access each other for generating dependencies.
+        
+        // Create delayed jobs, that is, jobs for documents which have been changed
+        // by the user.
         QList<ParseJob*> jobs;
+        QHashIterator<KUrl, DocumentChangeTracker*> it = m_delayedParseJobs;
+        while (it.hasNext()) {
+            ParseJob* job = createParseJob(it.next().key());
+            if (job) {
+                job->setChangedRanges(it.value()->changedRanges());
+                jobs.append(job);
+            } else {
+                kWarning() << "No job created for url " << it.key();
+            }
+        }
+        qDeleteAll(m_delayedParseJobs);
+        m_delayedParseJobs.clear();
 
         for (QMap<KUrl, bool>::Iterator it = m_documents.begin();
              it != m_documents.end(); ++it)
@@ -112,27 +129,9 @@ public:
             KUrl url = it.key();
             bool &p = it.value();
             if (p) {
-                QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
-                foreach (ILanguage* language, languages) {
-                    ParseJob* job = language->languageSupport()->createParseJob(url);
-                    if (!job) {
-                        continue; // Language part did not produce a valid ParseJob.
-                    }
-
-                    job->setBackgroundParser(m_parser);
-
-                    QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
-                                     m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-                    QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
-                                     m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-                    QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
-                                     m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
-
-                    m_parseJobs.insert(url, job);
+                ParseJob* job = createParseJob(url);
+                if (job)
                     jobs.append(job);
-
-                    ++m_maxParseJobs;
-                }
 
                 p = false; // Don't parse for next time.
             }
@@ -159,6 +158,36 @@ public:
         if(m_doneParseJobs == m_maxParseJobs)
             emit m_parser->hideProgress();
     }
+
+    ParseJob* createParseJob(const KUrl& url)
+    {
+        QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
+        foreach (ILanguage* language, languages) {
+            ParseJob* job = language->languageSupport()->createParseJob(url);
+            if (!job) {
+                continue; // Language part did not produce a valid ParseJob.
+            }
+
+            job->setBackgroundParser(m_parser);
+
+            QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
+                                m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+            QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
+                                m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
+                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
+
+            m_parseJobs.insert(url, job);
+
+            ++m_maxParseJobs;
+
+            // TODO more thinking required here to support multiple parse jobs per url (where multiple language plugins want to parse)
+            return job;
+        }
+
+        return 0;
+    }
+
 
     void loadSettings()
     {
@@ -213,6 +242,9 @@ public:
     QMap<KUrl, bool> m_documents;
     // Current parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
+    QHash<KUrl, DocumentChangeTracker*> m_delayedParseJobs;
+
+    QHash<KTextEditor::SmartRange*, KUrl> m_managedRanges;
 
     ThreadWeaver::Weaver m_weaver;
     ParserDependencyPolicy m_dependencyPolicy;
@@ -409,6 +441,49 @@ void BackgroundParser::setDelay(int miliseconds)
         d->m_delay = miliseconds;
         d->m_timer.setInterval(d->m_delay);
     }
+}
+
+void BackgroundParser::addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range)
+{
+    range->addWatcher(this);
+    d->m_managedRanges.insert(range, document);
+}
+
+void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
+{
+    range->removeWatcher(this);
+    d->m_managedRanges.remove(range);
+}
+
+void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild)
+{
+    QMutexLocker l(&d->m_mutex);
+
+    // Smart mutex is already locked
+    KUrl documentUrl = range->document()->url();
+
+    if (d->m_parseJobs.contains(documentUrl)) {
+        ParseJob* job = d->m_parseJobs[documentUrl];
+        if (job->addChangedRange( mostSpecificChild ))
+            // Success
+            return;
+    }
+
+    // Initially I just created a new parse job here, but that causes a deadlock as the smart mutex is locked
+    // So store the info in a class with just the changed ranges information...
+    DocumentChangeTracker* newTracker = 0;
+    if (d->m_delayedParseJobs.contains(documentUrl))
+        newTracker = d->m_delayedParseJobs[documentUrl];
+
+    if (!newTracker) {
+        newTracker = new DocumentChangeTracker();
+        d->m_delayedParseJobs.insert(documentUrl, newTracker);
+    }
+
+    newTracker->addChangedRange( mostSpecificChild );
+    
+    if (!d->m_timer.isActive())
+        d->m_timer.start(d->m_delay);
 }
 
 }

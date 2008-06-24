@@ -314,6 +314,7 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
         smart->releaseRevision(i.revision);
 
       i.revision = smart->currentRevision();
+      kDebug(9506) << "Saved revision" << i.revision;
       return i.revision;
     }
   }
@@ -335,9 +336,11 @@ void EditorIntegrator::setCurrentUrl(const HashedString& url)
     EditorIntegratorStatic::DocumentInfo i = data()->documents[url];
     d->m_currentDocument = i.document;
     d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
-    if (d->m_smart && i.revision != -1)
+    if (d->m_smart && i.revision != -1) {
+      kDebug(9506) << "Using revision" << i.revision;
       d->m_smart->useRevision(i.revision);
   }
+}
 }
 
 void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)

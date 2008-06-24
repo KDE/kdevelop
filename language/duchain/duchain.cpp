@@ -1,5 +1,5 @@
 /* This  is part of KDevelop
-    Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@
 #include "symboltable.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
+#include "backgroundparser.h"
 #include <idocumentcontroller.h>
 #include <icore.h>
 #include <ilanguage.h>
@@ -143,6 +144,9 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
   if (sdDUChainPrivate->m_chains.contains(document)) {
     TopDUContext* context = sdDUChainPrivate->m_chains.take(document);
 
+    if (context->smartRange())
+      ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
+
     branchRemoved(context);
   }
 }
@@ -153,8 +157,11 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 
   kDebug(9505) << "duchain: adding document" << document.toString() << " " << chain;
   Q_ASSERT(chain);
-  if (chain->smartRange())
+  if (chain->smartRange()) {
     Q_ASSERT(!chain->smartRange()->parentRange());
+
+    ICore::self()->languageController()->backgroundParser()->addManagedTopRange(KUrl(document.url().str()), chain->smartRange());
+  }
 
   if(chainForDocument(document)) {
     ///@todo practically this will result in lost memory, we will currently never delete the overwritten chain. Care about such stuff.
@@ -421,6 +428,9 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       if(language->languageSupport() && language->languageSupport()->codeHighlighting())
         language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
   }
+
+  //Since there may be additional information like include-paths available, always reparse opened documents
+  ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 Uses* DUChain::uses()

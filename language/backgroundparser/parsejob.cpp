@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2006 Adam Treat <treat@kde.org>
+* Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -50,22 +51,39 @@ namespace KDevelop
 
 struct ParseJobPrivate
 {
-    ParseJobPrivate() : m_duContext(0) {
+    ParseJobPrivate(const KUrl& url)
+        : duContext(0)
+        , document( IndexedString(url.pathOrUrl()) )
+        , backgroundParser( 0 )
+        , abortMutex(new QMutex)
+        , revisionToken(-1)
+        , abortRequested( false )
+        , aborted( false )
+    {
     }
 
-    TopDUContext* m_duContext;
+    ~ParseJobPrivate()
+    {
+        delete abortMutex;
+    }
+
+    TopDUContext* duContext;
+
+    KDevelop::IndexedString document;
+    QString errorMessage;
+    BackgroundParser* backgroundParser;
+
+    QMutex* abortMutex;
+    int revisionToken;
+
+    volatile bool abortRequested : 1;
+    bool aborted : 1;
 };
 
 ParseJob::ParseJob( const KUrl &url,
                             QObject *parent )
         : ThreadWeaver::JobSequence( parent ),
-        m_document( IndexedString(url.pathOrUrl()) ),
-        m_backgroundParser( 0 ),
-        m_abortMutex(new QMutex),
-        m_abortRequested( false ),
-        m_aborted( false ),
-        m_revisionToken(-1),
-        d(new ParseJobPrivate)
+        d(new ParseJobPrivate(url))
 {}
 
 ParseJob::~ParseJob()
@@ -75,68 +93,67 @@ ParseJob::~ParseJob()
 
 IndexedString ParseJob::document() const
 {
-    return m_document;
+    return d->document;
 }
 
 bool ParseJob::success() const
 {
-    return !m_aborted;
+    return !d->aborted;
 }
 
 void ParseJob::setDuChain(KDevelop::TopDUContext* duChain)
 {
-    d->m_duContext = duChain;
+    d->duContext = duChain;
 }
 
 TopDUContext* ParseJob::duChain() const
 {
-    return d->m_duContext;
+    return d->duContext;
 }
 
-
-QString ParseJob::errorMessage() const
+bool ParseJob::contentsAvailableFromEditor()
 {
-    return m_errorMessage;
+    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(d->document.str()));
+    if (!doc)
+        return false;
+
+    finaliseChangedRanges();
+
+    if (d->revisionToken == -1) {
+        SmartInterface* iface = qobject_cast<SmartInterface*>(doc);
+        if (iface) {
+            QMutexLocker smartLock(iface->smartMutex());
+            d->revisionToken = EditorIntegrator::saveCurrentRevision(doc);
 }
+    }
 
-// TopDUContext* ParseJob::duChain() const
-// {
-//     // No definition-use chain available by default
-//     return 0L;
-// }
-
-bool ParseJob::contentsAvailableFromEditor() const
-{
-    return (bool)EditorIntegrator::documentForUrl(HashedString(m_document.str()));
+    return true;
 }
 
 int ParseJob::revisionToken() const
 {
-    return m_revisionToken;
+    return d->revisionToken;
 }
 
 QString ParseJob::contentsFromEditor()
 {
-    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(m_document.str()));
+    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(d->document.str()));
     if( !doc )
         return QString();
 
-    m_revisionToken = EditorIntegrator::saveCurrentRevision(doc);
+    // You must have called contentsAvailableFromEditor, it sets state
+    QMutexLocker l(changeMutex());
+    rangeChangesFinalised();
 
     return doc->text();
-}
-
-void ParseJob::setErrorMessage(const QString& message)
-{
-    m_errorMessage = message;
 }
 
 int ParseJob::priority() const
 {
     ///@todo adymo: reenable after documentcontroller is ported
     return 0;
-/*    if (m_openDocument)
-        if (m_openDocument->isActive())
+/*    if (d->openDocument)
+        if (d->openDocument->isActive())
             return 2;
         else
             return 1;
@@ -154,7 +171,7 @@ void ParseJob::addJob(Job* job)
 
 BackgroundParser* ParseJob::backgroundParser() const
 {
-    return m_backgroundParser;
+    return d->backgroundParser;
 }
 
 void ParseJob::setBackgroundParser(BackgroundParser* parser)
@@ -165,15 +182,15 @@ void ParseJob::setBackgroundParser(BackgroundParser* parser)
         for (int i = 0; i < jobListLength(); ++i)
             jobAt(i)->assignQueuePolicy(parser->dependencyPolicy());
 
-    } else if (m_backgroundParser) {
+    } else if (d->backgroundParser) {
 
-        removeQueuePolicy(m_backgroundParser->dependencyPolicy());
+        removeQueuePolicy(d->backgroundParser->dependencyPolicy());
 
         for (int i = 0; i < jobListLength(); ++i)
-            jobAt(i)->removeQueuePolicy(m_backgroundParser->dependencyPolicy());
+            jobAt(i)->removeQueuePolicy(d->backgroundParser->dependencyPolicy());
     }
 
-    m_backgroundParser = parser;
+    d->backgroundParser = parser;
 }
 
 bool ParseJob::addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee)
@@ -186,24 +203,25 @@ bool ParseJob::addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDepe
 
 bool ParseJob::abortRequested() const
 {
-    QMutexLocker lock(m_abortMutex);
+    QMutexLocker lock(d->abortMutex);
 
-    return m_abortRequested;
+    return d->abortRequested;
 }
 
 void ParseJob::requestAbort()
 {
-    QMutexLocker lock(m_abortMutex);
+    QMutexLocker lock(d->abortMutex);
 
-    m_abortRequested = true;
+    d->abortRequested = true;
 }
 
 void ParseJob::abortJob()
 {
-    m_aborted = true;
+    d->aborted = true;
     setFinished(true);
 }
 
 }
+
 #include "parsejob.moc"
 
