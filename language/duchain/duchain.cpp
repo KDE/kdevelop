@@ -159,7 +159,6 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
   Q_ASSERT(chain);
   if (chain->smartRange()) {
     Q_ASSERT(!chain->smartRange()->parentRange());
-
     ICore::self()->languageController()->backgroundParser()->addManagedTopRange(KUrl(document.url().str()), chain->smartRange());
   }
 
@@ -418,6 +417,8 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   foreach (TopDUContext* chain, chains) {
     DUChainWriteLocker lock( DUChain::lock() );
     sc.convertDUChain(chain);
+    if(chain->smartRange())
+      ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), chain->smartRange());
   }
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
