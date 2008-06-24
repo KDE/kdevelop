@@ -445,11 +445,12 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     
     foreach( const QString& entry, entries )
     {
+        if( item->hasFileOrFolder( entry ) )
+            continue;
+
         KUrl folderurl = item->url();
         folderurl.addPath( entry );
         
-        if( item->project()->inProject( folderurl ) )
-            continue;
         if( QFileInfo( folderurl.toLocalFile() ).isDir() )
         {
             folderList.append(new KDevelop::ProjectFolderItem( item->project(), folderurl, item ));
