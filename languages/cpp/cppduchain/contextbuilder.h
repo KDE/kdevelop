@@ -21,8 +21,6 @@
 #ifndef CONTEXTBUILDER_H
 #define CONTEXTBUILDER_H
 
-#define DEBUG_UPDATE_MATCHING
-
 #include "default_visitor.h"
 
 #include <QtCore/QSet>
