@@ -125,12 +125,8 @@ public:
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
   
 private slots:
-    void documentLoaded(KDevelop::IDocument*);
-    void documentClosed(KDevelop::IDocument*);
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
-    void documentChanged( KDevelop::IDocument* document );
-    void documentActivated( KDevelop::IDocument* document );
 
     ///UI:
     void switchDefinitionDeclaration();

@@ -158,21 +158,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
     CppTools::setupStandardMacros(*m_standardMacros);
 
-    connect( core()->documentController(),
-             SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
-             this, SLOT( documentLoaded( KDevelop::IDocument* ) ) );
-    connect( core()->documentController(),
-             SIGNAL( documentClosed( KDevelop::IDocument* ) ),
-             this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
-    connect( core()->documentController(),
-             SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
-             this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
-    connect( core()->documentController(),
-             SIGNAL( documentContentChanged( KDevelop::IDocument* ) ),
-             this, SLOT( documentChanged( KDevelop::IDocument* ) ) );
-    connect( core()->documentController(),
-             SIGNAL( documentActivated( KDevelop::IDocument* ) ),
-             this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
     connect( core()->projectController(),
              SIGNAL( projectOpened( KDevelop::IProject* ) ),
              this, SLOT( projectOpened( KDevelop::IProject* ) ) );
@@ -428,40 +413,9 @@ CppLanguageSupport* CppLanguageSupport::self() {
     return m_self;
 }
 
-void CppLanguageSupport::documentChanged( KDevelop::IDocument* document )
-{
-    core()->languageController()->backgroundParser()->addDocument(document->url());
-}
-
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
     return new CPPParseJob( url, this );
-}
-
-void CppLanguageSupport::documentLoaded(KDevelop::IDocument* doc)
-{
-    kDebug( 9007 ) << "CppLanguageSupport::documentLoaded";
-
-    EditorIntegrator editor;
-    editor.setCurrentUrl(doc->url().pathOrUrl());
-
-    QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(doc->url());
-
-    foreach (TopDUContext* chain, chains) {
-      if ( codeHighlighting() && editor.smart() )
-      {
-          QMutexLocker lock(editor.smart()->smartMutex());
-          codeHighlighting()->highlightDUChain( chain );
-      }
-    }
-
-    //Since there may be additional information like include-paths available, always reparse opened documents
-    core()->languageController()->backgroundParser()->addDocument(doc->url());
-}
-
-void CppLanguageSupport::documentClosed(KDevelop::IDocument *)
-{
-    kDebug( 9007 ) << "CppLanguageSupport::documentClosed";
 }
 
 const KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
@@ -802,11 +756,6 @@ KDevelop::ILanguage *CppLanguageSupport::language()
 
 Cpp::EnvironmentManager* CppLanguageSupport::environmentManager() const {
     return m_environmentManager;
-}
-
-void CppLanguageSupport::documentActivated(KDevelop::IDocument * document)
-{
-  Q_UNUSED(document)
 }
 
 TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowProxyContext)

@@ -129,7 +129,26 @@ void PreprocessJob::run()
         QFile file( localFile );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            parentJob()->setErrorMessage(i18n( "Could not open file '%1'", localFile ));
+            KDevelop::ProblemPointer p(new Problem());
+            p->setSource(KDevelop::Problem::Disk);
+            p->setDescription(i18n( "Could not open file '%1'", localFile ));
+            switch (file.error()) {
+              case QFile::ReadError:
+                  p->setExplanation(i18n("File could not be read from."));
+                  break;
+              case QFile::OpenError:
+                  p->setExplanation(i18n("File could not be opened."));
+                  break;
+              case QFile::PermissionsError:
+                  p->setExplanation(i18n("File permissions prevent opening for read."));
+                  break;
+              default:
+                  break;
+            }
+            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+            p->setLocationStack(parentJob()->includeStack());
+            parentJob()->addPreprocessorProblem(p);
+
             kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
             return ;
         }
@@ -146,18 +165,9 @@ void PreprocessJob::run()
         KTextEditor::Range range = KTextEditor::Range::invalid();
 
         //===--- Incremental Parsing!!! yay :) ---===//
-        /*if (KDevelop::Core::activeProject() && parentJob->textRangeToParse().isValid()) {
-            //if (Core::activeProject()->persistentHash()->retrieveAST( parentJob->document() ))
-                // We have an AST which could be used
-
-            if (DUContext* topContext = DUChain::self()->chainForDocument(parentJob->document())) {
-                // We have a definition-use chain for this document already
-                // Find a recovery point
-                DUContext* specific = topContext->findContextIncluding(parentJob->textRangeToParse());
-                // Not worthwhile "incrementally" parsing the top level context (i think...?)
-                if (specific != topContext)
-            }
-        }*/
+        kDebug() << "We could have just parsed the changed ranges:";
+        foreach (KTextEditor::SmartRange* range, parentJob()->changedRanges())
+            kDebug() << *range << range->text().join("\n").left(20) << "...";
 
         contents = parentJob()->contentsFromEditor().toUtf8();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
@@ -210,7 +220,7 @@ void PreprocessJob::run()
           m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
-            //Must be true, because we explicity passed the flag to chaonForDocument
+            //Must be true, because we explicity passed the flag to chainForDocument
             Q_ASSERT((parentJob()->updatingProxyContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag));
         }
     }
