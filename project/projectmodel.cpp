@@ -281,6 +281,22 @@ void ProjectFolderItem::setIcon()
     QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, KIconLoader::Small ) );
 }
 
+bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
+{
+    for ( int i = 0; i < rowCount(); ++i )
+    {
+        QStandardItem* item = child( i );
+        if ( ProjectFileItem* file = dynamic_cast<ProjectFileItem*>(item))
+            if (file->url().fileName() == name)
+                return true;
+
+        if ( ProjectFolderItem* folder = dynamic_cast<ProjectFolderItem*>(item))
+            if (folder->url().fileName() == name)
+                return true;
+    }
+    return false;
+}
+
 ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
     : ProjectFolderItem( dd )
 {

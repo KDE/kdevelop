@@ -93,6 +93,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
+        
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
@@ -130,6 +131,9 @@ public:
 
     /** Sets whether it is the project root folder and sets the project name to the item */
     void setProjectRoot(bool isRoot);
+
+    /** @returns Returns whether this folder directly contains the specified file or folder. */
+    bool hasFileOrFolder(const QString& name) const;
 
 protected:
     ProjectFolderItem( ProjectFolderItemPrivate& );
