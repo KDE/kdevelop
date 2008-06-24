@@ -131,10 +131,11 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     
     foreach( QString entry, entries )
     {
+        if( item->hasFileOrFolder( entry ) )
+            continue;
+
         KUrl folderurl = item->url();
         folderurl.addPath( entry );
-        if( item->project()->inProject( folderurl ) )
-            continue;
         if( QFileInfo( folderurl.toLocalFile() ).isDir() )
         {
             new KDevelop::ProjectFolderItem( folderitem->project(), folderurl, folderitem );
