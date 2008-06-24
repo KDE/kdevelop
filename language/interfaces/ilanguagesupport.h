@@ -22,6 +22,7 @@
 #include <kurl.h>
 
 #include <interfaces/iextension.h>
+#include <editor/simplerange.h>
 #include "../languageexport.h"
 
 namespace KDevelop {
