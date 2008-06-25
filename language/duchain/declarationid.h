@@ -43,7 +43,8 @@ class TopDUContext;
 
 class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
   public:
-    DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0);
+    DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0, uint specialization = 0);
+    DeclarationId(uint topContext, uint declaration, uint specialization = 0);
     
     bool operator==(const DeclarationId& rhs) const {
       return m_identifier == rhs.m_identifier && m_additionalIdentity == rhs.m_additionalIdentity;
@@ -63,9 +64,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     Declaration* getDeclaration(TopDUContext* context) const;
     
   private:
-    IndexedQualifiedIdentifier m_identifier;
-    uint m_additionalIdentity; //Hash from signature, or similar.
-
+/*    union {
+      //An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
+      //declarations that are in the symbol-table
+      struct Indirect {*/
+        IndexedQualifiedIdentifier m_identifier;
+        uint m_additionalIdentity; //Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
+/*      } indirect;
+      
+      //A direct reference to the declaration, referencing it by the index of the top-context and declaration.
+      //Mainly useful for declarations that are not within the symbol-table
+      struct Direct {*/
+        uint m_topContext; //Identity-index of the top-context
+        uint m_declaration; //Identity-index of the declaration within that top-context
+/*      } direct;
+    };*/
+    bool m_direct;
+    uint m_specialization; //Can be used in a language-specific way to pick other versions of the declaration.
+                           //When the declaration is found, pickSpecialization is called on the found declaration with this value, and
+                           //the returned value is the actually found declaration.
 };
 
 inline uint qHash(const KDevelop::DeclarationId& id) {

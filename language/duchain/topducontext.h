@@ -58,6 +58,8 @@ public:
 
   TopDUContext* topContext() const;
 
+  uint ownIndex() const;
+  
   /**
    * There may be multiple context's for one file, but each of those should have a different identity().
    *  */
@@ -158,8 +160,16 @@ public:
    * usedDeclarationForIndex(..) must not be called until the use has gotten a new index through
    * indexForUsedDeclaration(..).
    * */
-  void clearDeclarationIndices();
+  void clearUsedDeclarationIndices();
 
+  ///Returns the declaration within this top-context that has the given index assigned(@see Declaration::ownIndex)
+  Declaration* declarationForIndex(uint index) const;
+  
+  ///Returns the index for the given declaration, which must be part of this top-context. Returns the same value as Declaration::ownIndex
+  uint indexForDeclaration(Declaration* decl);
+  
+  void removeDeclarationIndex(uint index);
+  
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */

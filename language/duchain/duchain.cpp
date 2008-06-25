@@ -20,6 +20,8 @@
 #include "duchainlock.h"
 
 #include <QCoreApplication>
+#include <QHash>
+#include <qatomic.h>
 
 #include <kglobal.h>
 
@@ -70,6 +72,7 @@ public:
   DUChain instance;
   DUChainLock lock;
   QMap<IdentifiedFile, TopDUContext*> m_chains;
+  QHash<uint, TopDUContext*> m_chainsByIndex;
   QMap<int,ParsingEnvironmentManager*> m_managers;
   DUChainObserver* notifier;
   Definitions m_definitions;
@@ -145,6 +148,7 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
   kDebug(9505) << "duchain: removing document" << document.toString();
   if (sdDUChainPrivate->m_chains.contains(document)) {
     TopDUContext* context = sdDUChainPrivate->m_chains.take(document);
+    sdDUChainPrivate->m_chainsByIndex.remove( context->ownIndex() );
 
     if (context->smartRange())
       ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
@@ -190,6 +194,8 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 //   }
 
   sdDUChainPrivate->m_chains.insert(document, chain);
+  sdDUChainPrivate->m_chainsByIndex.insert(chain->ownIndex(), chain);
+  
   {
     //This is just for debugging, and should be disabled later.
     int realChainCount = 0;
@@ -248,6 +254,14 @@ TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
 
 TopDUContext* DUChain::chainForDocument(const HashedString& document) const {
   return chainForDocument( IdentifiedFile(document) );
+}
+
+TopDUContext* DUChain::chainForIndex(uint index) const {
+  QHash<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
+  if(it != sdDUChainPrivate->m_chainsByIndex.end())
+    return *it;
+  else
+    return 0;
 }
 
 TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) const
@@ -347,6 +361,7 @@ void DUChain::clear()
     manager->clear();
 
   sdDUChainPrivate->m_chains.clear();
+  sdDUChainPrivate->m_chainsByIndex.clear();
 }
 
 DUChainObserver* DUChain::notifier()
@@ -460,6 +475,12 @@ Definitions* DUChain::definitions()
 {
   return &sdDUChainPrivate->m_definitions;
 }
+
+uint DUChain::newTopContextIndex() {
+  static QAtomicInt currentId(1);
+  return currentId.fetchAndAddRelaxed(1);
+}
+
 
 }
 

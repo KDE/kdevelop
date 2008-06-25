@@ -52,6 +52,7 @@ DeclarationPrivate::DeclarationPrivate()
   m_internalContext = 0;
   m_context = 0;
   m_kind = Declaration::Instance;
+  m_ownIndex = 0;
 }
   
   
@@ -67,6 +68,7 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
   m_internalContext = 0;
   m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
+  m_ownIndex = 0;
 }
   
 Declaration::Kind Declaration::kind() const {
@@ -92,6 +94,11 @@ Declaration::Declaration( const HashedString& url, const SimpleRange& range, DUC
 {
   if(context)
     setContext(context);
+}
+
+uint Declaration::ownIndex() const
+{
+  return d_func()->m_ownIndex;
 }
 
 Declaration::Declaration(const Declaration& rhs) 
@@ -225,6 +232,8 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   setInSymbolTable(false);
 
+  clearOwnIndex();
+  
   Q_D(Declaration);
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
@@ -239,15 +248,29 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   d->m_context = context;
   d->m_anonymousInContext = anonymous;
 
-  if (d->m_context) {
+  if (context) {
     if(!d->m_anonymousInContext) {
-      d->m_context->d_func()->addDeclaration(this);
+      context->d_func()->addDeclaration(this);
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
-  }
 
-  if(context && context->inSymbolTable() && !anonymous)
-    setInSymbolTable(true);
+    if(context->inSymbolTable() && !anonymous)
+      setInSymbolTable(true);
+    
+    allocateOwnIndex();
+  }
+}
+
+void Declaration::clearOwnIndex() {
+  if(d_func()->m_ownIndex)
+    d_func()->m_context->topContext()->removeDeclarationIndex(d_func()->m_ownIndex);
+  d_func()->m_ownIndex = 0;
+}
+
+void Declaration::allocateOwnIndex() {
+  Q_ASSERT(!d_func()->m_ownIndex);
+  if(d_func()->m_context->topContext())
+    d_func()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {

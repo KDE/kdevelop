@@ -249,6 +249,7 @@ void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, c
 void DUContextPrivate::addChildContext( DUContext * context )
 {
   // Internal, don't need to assert a lock
+  context->clearDeclarationIndices();
 
   Q_ASSERT(!context->d_func()->m_parentContext || context->d_func()->m_parentContext.data()->d_func() == this );
   
@@ -281,6 +282,27 @@ void DUContextPrivate::addChildContext( DUContext * context )
   }
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
+  context->updateDeclarationIndices();
+}
+
+void DUContext::clearDeclarationIndices() 
+{
+  ENSURE_CAN_WRITE
+  
+  foreach(Declaration* decl, localDeclarations())
+    decl->clearOwnIndex();
+  foreach(DUContext* child, childContexts())
+    child->clearDeclarationIndices();
+}
+
+void DUContext::updateDeclarationIndices()
+{
+  ENSURE_CAN_WRITE
+  
+  foreach(Declaration* decl, localDeclarations())
+    decl->allocateOwnIndex();
+  foreach(DUContext* child, childContexts())
+    child->clearDeclarationIndices();
 }
 
 bool DUContextPrivate::removeChildContext( DUContext* context ) {

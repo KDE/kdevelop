@@ -95,6 +95,9 @@ public:
    * */
   TopDUContext* chainForDocument(const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
   
+  ///Returns the top-context that has the given index assigned, or zero if it doesn't exist
+  TopDUContext* chainForIndex(uint index) const;
+  
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
 
@@ -148,6 +151,11 @@ public:
    * */
   void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
 
+  ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
+  static uint newTopContextIndex();
+  
+  
+  
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
 

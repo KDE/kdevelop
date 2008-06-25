@@ -590,6 +590,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
+  void clearDeclarationIndices();
+  void updateDeclarationIndices();
 
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);
   virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2);

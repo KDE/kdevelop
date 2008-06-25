@@ -136,8 +136,8 @@ QMutex importStructureMutex(QMutex::Recursive);
 class TopDUContextPrivate : public DUContextPrivate
 {
 public:
-  TopDUContextPrivate( TopDUContext* ctxt)
-    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_currentUsedDeclarationIndex(0)
+  TopDUContextPrivate( TopDUContext* ctxt, uint index)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_currentUsedDeclarationIndex(0), m_ownIndex(index), m_currentDeclarationIndex(0)
   {
   }
 
@@ -241,6 +241,9 @@ public:
   typedef QHash<const TopDUContext*, QPair<int, const TopDUContext*> > RecursiveImports;
   mutable RecursiveImports m_recursiveImports;
 
+  //Index of this top-context within the duchain
+  uint m_ownIndex;
+
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
 
@@ -254,8 +257,13 @@ public:
    * Any declarations that are within the same top-context are considered local.
    * */
   QVector<DeclarationPointer> m_usedLocalDeclarations;
+
+  QHash<uint, Declaration*> m_declarationsForIndices;
+  QHash<Declaration*, uint> m_indicesForDeclarations;
   
   mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
+  
+  uint m_currentDeclarationIndex;
   
   TopDUContext::CacheData* currentCache() const {
     QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
@@ -468,8 +476,13 @@ void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) c
   }
 }
 
+uint TopDUContext::ownIndex() const
+{
+  return d_func()->m_ownIndex;
+}
+
 TopDUContext::TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextPrivate(this), url, range)
+  : DUContext(*new TopDUContextPrivate(this, DUChain::newTopContextIndex()), url, range)
 {
   Q_D(TopDUContext);
   d->m_hasUses = false;
@@ -493,7 +506,7 @@ KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const 
 TopDUContext::~TopDUContext( )
 {
   d_func()->m_deleting = true;
-  clearDeclarationIndices();
+  clearUsedDeclarationIndices();
 }
 
 void TopDUContext::setHasUses(bool hasUses)
@@ -924,7 +937,7 @@ void TopDUContext::setFlags(Flags f) {
   d_func()->m_flags = f;
 }
 
-void TopDUContext::clearDeclarationIndices() {
+void TopDUContext::clearUsedDeclarationIndices() {
   ENSURE_CAN_WRITE
   for(int a = 0; a < d_func()->m_usedDeclarationIds.size(); ++a)
       DUChain::uses()->removeUse(d_func()->m_usedDeclarationIds[a], this);
@@ -1019,6 +1032,35 @@ TopDUContext::Cache::~Cache() {
     d->context->d_func()->m_threadCaches.remove(QThread::currentThreadId());
   
   delete d;
+}
+
+Declaration* TopDUContext::declarationForIndex(uint index) const {
+  QHash<uint, Declaration*>::const_iterator it = d_func()->m_declarationsForIndices.find(index);
+  if(it != d_func()->m_declarationsForIndices.end())
+    return *it;
+  else
+    return 0;
+}
+
+///Returns the index for the given declaration, which must be part of this top-context. Returns the same value as Declaration::ownIndex
+uint TopDUContext::indexForDeclaration(Declaration* decl) {
+  Q_ASSERT(decl->topContext() == this);
+  QHash<Declaration*, uint>::const_iterator it = d_func()->m_indicesForDeclarations.find(decl);
+  if(it != d_func()->m_indicesForDeclarations.constEnd()) {
+    return *it;
+  }else{
+    //Add the declaration to the index
+    d_func()->m_indicesForDeclarations[decl] = ++d_func()->m_currentDeclarationIndex;
+    d_func()->m_declarationsForIndices[d_func()->m_currentDeclarationIndex] = decl;
+    return d_func()->m_currentDeclarationIndex;
+  }
+}
+
+void TopDUContext::removeDeclarationIndex(uint index) {
+  Declaration* decl = declarationForIndex(index);
+  Q_ASSERT(decl);
+  d_func()->m_declarationsForIndices.remove(index);
+  d_func()->m_indicesForDeclarations.remove(decl);
 }
 
 }

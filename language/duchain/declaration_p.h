@@ -47,6 +47,8 @@ public:
 
   Declaration::Kind m_kind;
 
+  uint m_ownIndex;
+  
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;

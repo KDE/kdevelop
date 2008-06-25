@@ -25,8 +25,14 @@
 
 namespace KDevelop {
 
-DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId)
-  : m_identifier(id), m_additionalIdentity(additionalId)
+DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, uint specialization)
+  : m_identifier(id), m_additionalIdentity(additionalId), m_direct(false), m_specialization(specialization)
+{
+  
+}
+
+DeclarationId::DeclarationId(uint topContext, uint declaration, uint specialization)
+  : m_topContext(topContext), m_declaration(declaration), m_direct(true), m_specialization(specialization)
 {
   
 }

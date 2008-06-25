@@ -210,11 +210,6 @@ public:
   void setComment(const QByteArray& str);
   void setComment(const QString& str);
 
-  /**
-   * Provides a mangled version of this definition's identifier, for use in a symbol table.
-   */
-//   QString mangledIdentifier() const;
-
   bool inSymbolTable() const;
   //Adds or removes this declaration to/from the symbol table
   void setInSymbolTable(bool inSymbolTable);
@@ -254,6 +249,11 @@ public:
    * */
   virtual DeclarationId id() const;
   
+  ///Returns an index that uniquely identifies this declaration within its surrounding top-context. That index can be passed
+  ///to TopDUContext::declarationFromIndex(index) to get the declaration
+  uint ownIndex() const;
+  void clearOwnIndex();
+  void allocateOwnIndex();
   /**
    * Returns a clone of this declaration, with the difference that:
    * - context will be zero

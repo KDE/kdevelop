@@ -49,7 +49,7 @@ public:
 
     if (top) {
       DUChainWriteLocker lock(DUChain::lock());
-      top->clearDeclarationIndices();
+      top->clearUsedDeclarationIndices();
       if(top->hasUses())
         LanguageSpecificUseBuilderBase::setRecompiling(true);
     }
