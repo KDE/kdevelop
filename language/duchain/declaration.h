@@ -120,6 +120,11 @@ public:
   Declaration* definition() const;
 
   /**
+   * Should apply a specialization using a specialization index as returned in id()
+   * */
+  virtual Declaration* specialize(uint specialization);
+  
+  /**
    * Set the definition for this declaration.
    * 
    * Definitions and declarations are coupled by identity

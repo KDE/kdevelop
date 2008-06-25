@@ -20,6 +20,7 @@
 #include "ducontext.h"
 #include "topducontext.h"
 #include <editor/simplecursor.h>
+#include <duchain.h>
 #include "declaration.h"
 #include "symboltable.h"
 
@@ -49,25 +50,40 @@ uint DeclarationId::additionalIdentity() const
 
 Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
 {
-  QualifiedIdentifier id(m_identifier);
+  Declaration* ret = 0;
+  
+  if(m_direct == false) {
+    //Find the declaration by its qualified identifier and additionalIdentity
+    QualifiedIdentifier id(m_identifier);
 
-  TopDUContext* top = context->topContext();
-  
-  QVarLengthArray<Declaration*> declarations;
-  SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
-  
-  Identifier lastId = id.last();
-  
-  FOREACH_ARRAY(Declaration* decl, declarations) {
-    if(decl->identifier() == lastId) {
-      if(m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
-        //Hit
-        return decl;
+    TopDUContext* top = context->topContext();
+    
+    QVarLengthArray<Declaration*> declarations;
+    SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
+    
+    Identifier lastId = id.last();
+    
+    FOREACH_ARRAY(Declaration* decl, declarations) {
+      if(decl->identifier() == lastId) {
+        if(m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+          //Hit
+          ret = decl;
+          break;
+        }
       }
     }
+  }else{
+    //Find the declaration by m_topContext and m_declaration
+    TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
+    if(ctx)
+      ret = ctx->declarationForIndex(m_declaration);
+  }
+  
+  if(ret) {
+    ret = ret->specialize(m_specialization);
   }
 
-  return 0;
+  return ret;
 }
 
 }

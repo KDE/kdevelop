@@ -98,6 +98,7 @@ Declaration::Declaration( const HashedString& url, const SimpleRange& range, DUC
 
 uint Declaration::ownIndex() const
 {
+  ENSURE_CAN_READ
   return d_func()->m_ownIndex;
 }
 
@@ -197,6 +198,11 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
+Declaration* Declaration::specialize(uint specialization)
+{
+  return this;
+}
+
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
   ENSURE_CAN_READ
@@ -262,12 +268,15 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 }
 
 void Declaration::clearOwnIndex() {
-  if(d_func()->m_ownIndex)
+  ENSURE_CAN_WRITE
+  if(d_func()->m_ownIndex && d_func()->m_context->topContext())
     d_func()->m_context->topContext()->removeDeclarationIndex(d_func()->m_ownIndex);
   d_func()->m_ownIndex = 0;
 }
 
 void Declaration::allocateOwnIndex() {
+  ///@todo needs to be enabled, but currenty we cannot do it because of template instantiation(those shouldn't have an index at all)
+  //ENSURE_CAN_WRITE
   Q_ASSERT(!d_func()->m_ownIndex);
   if(d_func()->m_context->topContext())
     d_func()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
@@ -388,7 +397,10 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
 DeclarationId Declaration::id() const
 {
   ENSURE_CAN_READ
-  return DeclarationId(qualifiedIdentifier(), additionalIdentity());
+  if(inSymbolTable())
+    return DeclarationId(qualifiedIdentifier(), additionalIdentity());
+  else
+    return DeclarationId(topContext()->ownIndex(), ownIndex());
 }
 
 Declaration* Declaration::declaration(TopDUContext* topContext) const
