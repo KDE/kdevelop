@@ -27,6 +27,7 @@
 #include <forwarddeclarationtype.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
+#include <declarationid.h>
 #include <declaration.h>
 #include <dumpdotgraph.h>
 #include <typeinfo>
@@ -2236,6 +2237,34 @@ void TestDUChain::testTemplateForwardDeclaration2()
   QVERIFY(cDecl);
   
   release(top);
+}
+
+void TestDUChain::testDeclarationId()
+{
+  QByteArray method("template<class T> class C { template<class T2> class C2{}; }; ");
+
+  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpNone));
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QVERIFY(top->localDeclarations()[0]->internalContext());
+  QCOMPARE(top->localDeclarations()[0]->internalContext()->localDeclarations().count(), 1);
+  
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("C<int>::C2<float>"));
+  QVERIFY(decl);
+  kDebug() << decl->toString();
+  kDebug() << decl->qualifiedIdentifier().toString();
+  KDevelop::DeclarationId id = decl->id();
+  QVERIFY(top->localDeclarations()[0]->internalContext());
+  Declaration* declAgain = id.getDeclaration(top);
+  QVERIFY(declAgain);
+  QCOMPARE(declAgain->qualifiedIdentifier().toString(), decl->qualifiedIdentifier().toString());
+  QCOMPARE(declAgain, decl);
+  kDebug() << declAgain->qualifiedIdentifier().toString();
+  kDebug() << declAgain->toString();
+  QVERIFY(!id.isDirect());
+  QCOMPARE(declAgain, decl);
 }
 
 void TestDUChain::testFileParse()
