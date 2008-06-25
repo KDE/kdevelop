@@ -63,7 +63,7 @@ public:
     void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 
     void setRangeOwning(RangeOwning ownsRange);
-    
+
     void clearSmartRange();
 
     void setRange(const SimpleRange& range);
@@ -88,14 +88,13 @@ public:
     KTextEditor::SmartRange* takeRange();
 
 protected:
-    // Mutex protects all DocumentRangeObject internals from threading-conditioned corruption
-    static QMutex m_mutex;
+    static QMutex* mutex();
 
     DocumentRangeObject(DocumentRangeObjectPrivate& dd);
     DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
-    
+
     DocumentRangeObjectPrivate* const d_ptr;
-    
+
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
 private:
 

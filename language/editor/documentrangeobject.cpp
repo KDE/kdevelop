@@ -20,6 +20,8 @@
 
 #include <QMutexLocker>
 
+#include <kglobal.h>
+
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
@@ -31,6 +33,7 @@
 
 #define LOCK_SMART KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( d->m_smartRange ? d->m_smartRange->document() : 0); QMutexLocker l(iface ? iface->smartMutex() : 0);
 
+K_GLOBAL_STATIC(QMutex, s_mutex)
 
 using namespace KTextEditor;
 
@@ -63,7 +66,7 @@ DocumentRangeObject::DocumentRangeObject(const HashedString& document, const Sim
     if(range.isValid())
         d->m_range = range;
 }
-    
+
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range)
     : d_ptr( &dd )
 {
@@ -168,7 +171,7 @@ void DocumentRangeObject::setUrl(const HashedString& document)
 {
     Q_D(DocumentRangeObject);
 
-    QMutexLocker l(&m_mutex);
+    QMutexLocker l(s_mutex);
     d->m_document = document;
 }
 
@@ -176,7 +179,7 @@ HashedString DocumentRangeObject::url() const
 {
     Q_D(const DocumentRangeObject);
 
-    QMutexLocker l(&m_mutex);
+    QMutexLocker l(s_mutex);
     return d->m_document;
 }
 
@@ -185,7 +188,7 @@ SmartRange* DocumentRangeObject::smartRange() const
 {
     Q_D(const DocumentRangeObject);
 
-    QMutexLocker l(&m_mutex);
+    QMutexLocker l(s_mutex);
     return d->m_smartRange;
 }
 
@@ -201,7 +204,7 @@ bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
 // bool DocumentRangeObject::contains(const KTextEditor::Cursor& cursor) const
 // {
 //     Q_D(const DocumentRangeObject);
-//     QMutexLocker lock(&m_mutex);
+//     QMutexLocker lock(s_mutex);
 //     d->syncFromSmart();
 //     return d->m_document == cursor.document() && d->m_range->contains(SimpleCursor(cursor.line(), cursor.column()));
 // }
@@ -245,7 +248,9 @@ KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 //         return static_cast<const DocumentRange*>(range)->document();
 // }
 
+QMutex* DocumentRangeObject::mutex()
+{
+    return s_mutex;
 }
 
-//This mutex protects the non-range internal data of all document-range objects from simultaneous access
-QMutex KDevelop::DocumentRangeObject::m_mutex(QMutex::Recursive);
+}

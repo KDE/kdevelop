@@ -54,7 +54,7 @@ TopDUContext* DUChainBase::topContext() const
 
 const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
 {
-  QMutexLocker lock(&m_mutex);
+  QMutexLocker lock(mutex());
 
   if (!m_ptr) {
     m_ptr = new DUChainPointerData(const_cast<DUChainBase*>(this));
