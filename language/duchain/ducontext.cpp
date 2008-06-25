@@ -379,9 +379,6 @@ DUContext::~DUContext( )
   
   setInSymbolTable(false);
 
-  if (d->m_parentContext)
-    d->m_parentContext->d_func()->removeChildContext(this);
-
   while( !d->m_importedChildContexts.isEmpty() )
     importedChildContexts().first()->removeImportedParentContext(this);
 
@@ -397,6 +394,8 @@ DUContext::~DUContext( )
 
   deleteLocalDeclarations();
 
+  if (d->m_parentContext)
+    d->m_parentContext->d_func()->removeChildContext(this);
   //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
