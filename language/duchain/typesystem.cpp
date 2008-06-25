@@ -19,6 +19,7 @@
 
 
 #include "typesystem.h"
+#include "indexedstring.h"
 
 namespace KDevelop
 {
@@ -46,7 +47,7 @@ public:
     : AbstractTypePrivate(rhs), m_name( rhs.m_name )
   {
   }
-  QString m_name;
+  IndexedString m_name;
 };
 
 class PointerTypePrivate : public AbstractTypePrivate
@@ -96,10 +97,9 @@ public:
   {
   }
   StructureTypePrivate( const StructureTypePrivate& rhs )
-    : AbstractTypePrivate( rhs ), m_elements( rhs.m_elements )
+    : AbstractTypePrivate( rhs )
   {
   }
-  QList<AbstractType::Ptr> m_elements;
 };
 
 class ArrayTypePrivate : public AbstractTypePrivate
@@ -321,24 +321,9 @@ bool StructureType::equals(const AbstractType* _rhs) const
 {
   if( !fastCast<const StructureType*>(_rhs))
     return false;
-  const StructureType* rhs = static_cast<const StructureType*>(_rhs);
-  Q_D(const StructureType);
-  if( d->m_elements.count() != rhs->d_func()->m_elements.count() )
-    return false;
-  
-  QList<AbstractType::Ptr>::const_iterator it1 = d->m_elements.begin();
-  QList<AbstractType::Ptr>::const_iterator it2 = rhs->d_func()->m_elements.begin();
-  
-  for( ;it1 != d->m_elements.end(); ++it1, ++it2 ) {
-    if( (bool)*it1 != (bool)*it2 )
-      return false;
-    
-    if( !*it1)
-      continue;
-
-    if( !(*it1)->equals( (*it2).data() ) )
-      return false;
-  }
+//   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
+//   
+//   Q_D(const StructureType);
 
   return true;
 }
@@ -413,7 +398,7 @@ AbstractType::WhichType AbstractType::whichType() const
   return TypeAbstract;
 }
 
-IntegralType::IntegralType(const QString & name)
+IntegralType::IntegralType(const IndexedString& name)
   : AbstractType(*new IntegralTypePrivate)
 {
   d_func()->m_name = name;
@@ -428,12 +413,12 @@ IntegralType::~IntegralType()
 {
 }
 
-const QString& IntegralType::name() const
+const IndexedString& IntegralType::name() const
 {
   return d_func()->m_name;
 }
 
-void IntegralType::setName(const QString& name)
+void IntegralType::setName(const IndexedString& name)
 {
   d_func()->m_name = name;
 }
@@ -450,7 +435,7 @@ bool IntegralType::operator != (const IntegralType &other) const
 
 QString IntegralType::toString() const
 {
-  return d_func()->m_name;
+  return d_func()->m_name.str();
 }
 
 void IntegralType::accept0(TypeVisitor *v) const
@@ -684,53 +669,15 @@ StructureType::~StructureType()
 {
 }
 
-const QList<AbstractType::Ptr>& StructureType::elements () const
-{
-  return d_func()->m_elements;
-}
-
-bool StructureType::operator == (const StructureType &other) const
-{
-  return d_func()->m_elements == other.d_func()->m_elements;
-}
-
-bool StructureType::operator != (const StructureType &other) const
-{
-  return d_func()->m_elements != other.d_func()->m_elements;
-}
-
-void StructureType::addElement(AbstractType::Ptr element)
-{
-  d_func()->m_elements.append(element);
-}
-
-void StructureType::removeElement(AbstractType::Ptr element)
-{
-  d_func()->m_elements.removeAll(element);
-}
-
 void StructureType::clear() {
-  d_func()->m_elements.clear();
 }
 
 void StructureType::accept0 (TypeVisitor *v) const
 {
-  Q_D(const StructureType);
-  if (v->visit (this))
-    {
-      for (int i = 0; i < d->m_elements.count (); ++i)
-        acceptType (d->m_elements.at (i), v);
-    }
+//   Q_D(const StructureType);
+  v->visit (this);
 
   v->endVisit (this);
-}
-
-void StructureType::exchangeTypes( TypeExchanger* exchanger )
-{
-  Q_D(StructureType);
-  if( exchanger->exchangeMembers() )
-    for (int i = 0; i < d->m_elements.count (); ++i)
-      d->m_elements[i] = exchanger->exchange( d->m_elements[i].data() );
 }
 
 QString StructureType::toString() const
@@ -892,9 +839,6 @@ uint FunctionType::hash() const
 uint StructureType::hash() const
 {
   uint hash_value = 101;
-
-  foreach (const AbstractType::Ptr& t, d_func()->m_elements)
-    hash_value = (hash_value << 3) - hash_value + (t ? t->hash() : 0);
 
   return hash_value;
 }

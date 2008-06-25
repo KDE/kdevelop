@@ -47,6 +47,8 @@ class StructureTypePrivate;
 class ArrayTypePrivate;
 class DelayedTypePrivate;
 
+class IndexedString;
+
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
 public:
@@ -193,12 +195,12 @@ public:
 
   IntegralType();
   IntegralType(const IntegralType& rhs);
-  IntegralType(const QString& name);
+  IntegralType(const IndexedString& name);
   ~IntegralType();
 
-  const QString& name() const;
+  const IndexedString& name() const;
 
-  void setName(const QString& name);
+  void setName(const IndexedString& name);
 
   bool operator == (const IntegralType &other) const;
 
@@ -348,15 +350,6 @@ public:
 
   virtual bool equals(const AbstractType* rhs) const;
 
-  const QList<AbstractType::Ptr>& elements () const;
-
-  bool operator == (const StructureType &other) const;
-
-  bool operator != (const StructureType &other) const;
-
-  virtual void addElement(AbstractType::Ptr element);
-  void removeElement(AbstractType::Ptr element);
-
   void clear();
 
   virtual QString toString() const;
@@ -365,7 +358,6 @@ public:
 
   virtual WhichType whichType() const;
 
-  virtual void exchangeTypes( TypeExchanger* exchanger );
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
