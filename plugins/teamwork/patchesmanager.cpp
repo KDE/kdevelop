@@ -93,33 +93,33 @@ PatchesManager::PatchesManager( KDevTeamwork* tw ) : QObject( tw ), m_teamwork( 
   qRegisterMetaType<PatchesManagerMessagePointer>( "PatchesManagerMessagePointer" );
   qRegisterMetaType<LocalPatchSourcePointer>( "LocalPatchSourcePointer" );
 
-  m_showPatchAction = new QAction( "Show", this );
+  m_showPatchAction = new QAction( i18n("Show"), this );
   connect( m_showPatchAction, SIGNAL( triggered() ), this, SLOT( slotShowPatch() ) );
-  m_showPatchAction->setToolTip( "Request and show the selected file." );
+  m_showPatchAction->setToolTip( i18n("Request and show the selected file.") );
 
-  m_showPatchInfoAction = new QAction( "Show Info", this );
+  m_showPatchInfoAction = new QAction( i18n("Show Info"), this );
   connect( m_showPatchInfoAction, SIGNAL( triggered() ), this, SLOT( slotShowPatchInfo() ) );
-  m_showPatchInfoAction->setToolTip( "Show Information about the selected file." );
+  m_showPatchInfoAction->setToolTip( i18n("Show Information about the selected file.") );
 
-  m_downloadPatchAction = new QAction( "Download Item", this );
+  m_downloadPatchAction = new QAction( i18n("Download Item"), this );
   connect( m_downloadPatchAction, SIGNAL( triggered() ), this, SLOT( slotDownloadPatch() ) );
-  m_downloadPatchAction->setToolTip( "Download the item and store it into the list of local items." );
+  m_downloadPatchAction->setToolTip( i18n("Download the item and store it into the list of local items.") );
 
-  m_applyPatchAction = new QAction( "Apply Locally", this );
+  m_applyPatchAction = new QAction( i18n("Apply Locally"), this );
   connect( m_applyPatchAction, SIGNAL( triggered() ), this, SLOT( slotApplyPatch() ) );
-  m_applyPatchAction->setToolTip( "Apply the item/patch to the local workspace/project and store it into the list of local patches." );
+  m_applyPatchAction->setToolTip( i18n("Apply the item/patch to the local workspace/project and store it into the list of local patches.") );
 
-  m_allowPatchAction = new QAction( "Allow", this );
+  m_allowPatchAction = new QAction( i18n("Allow"), this );
   connect( m_allowPatchAction, SIGNAL( triggered() ), this, SLOT( slotAllowPatch() ) );
-  m_allowPatchAction->setToolTip( "Send the requested patch to the user." );
+  m_allowPatchAction->setToolTip( i18n("Send the requested patch to the user.") );
 
-  m_denyPatchAction = new QAction( "Deny", this );
+  m_denyPatchAction = new QAction( i18n("Deny"), this );
   connect( m_denyPatchAction, SIGNAL( triggered() ), this, SLOT( slotDenyPatch() ) );
-  m_denyPatchAction->setToolTip( "Do not send the requested patch to the user." );
+  m_denyPatchAction->setToolTip( i18n("Do not send the requested patch to the user.") );
 
-  m_showRequestedPatchAction = new QAction( "Show Patch-Info", this );
+  m_showRequestedPatchAction = new QAction( i18n("Show Patch-Info"), this );
   connect( m_showRequestedPatchAction, SIGNAL( triggered() ), this, SLOT( slotShowRequestedPatch() ) );
-  m_showRequestedPatchAction->setToolTip( "Show the requested patch." );
+  m_showRequestedPatchAction->setToolTip( i18n("Show the requested patch.") );
 
   m_updateTimer = new QTimer( this );
   m_updateTimer->setSingleShot( true );

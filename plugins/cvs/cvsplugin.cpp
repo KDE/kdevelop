@@ -266,7 +266,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
-        action = new KAction("Diff...", this);
+        action = new KAction(i18n("Diff..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
     }

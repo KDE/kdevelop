@@ -53,8 +53,8 @@ ContextWidget::ContextWidget() : m_navigationWidget(0), m_nextHistoryIndex(0) {
     //m_layout->addWidget(label);
     m_layout->setAlignment(Qt::AlignTop);
     
-    m_previousButton = new QPushButton("Previous");
-    m_nextButton = new QPushButton("Next");
+    m_previousButton = new QPushButton(i18n("Previous"));
+    m_nextButton = new QPushButton(i18n("Next"));
     
     m_previousButton->setEnabled(false);
     m_nextButton->setEnabled(false);

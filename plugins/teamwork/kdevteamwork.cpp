@@ -298,41 +298,41 @@ m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
   m_widgets->messageType->insertItem( 0, "Message" );
   m_widgets->messageType->insertItem( 1, "Source-Message" );
 
-  sendMessageToUserAction = new QAction( "Send Message", this );
+  sendMessageToUserAction = new QAction( i18n("Send Message"), this );
   connect( sendMessageToUserAction, SIGNAL( triggered() ), this, SLOT( sendMessageToUser() ) );
-  sendMessageToUserAction->setToolTip( "Send a text-message to the selected user." );
+  sendMessageToUserAction->setToolTip( i18n("Send a text-message to the selected user.") );
 
-  sendAnswerAction = new QAction( "Answer", this );
+  sendAnswerAction = new QAction( i18n("Answer"), this );
   connect( sendAnswerAction, SIGNAL( triggered() ), this, SLOT( sendAnswerMessage() ) );
-  sendAnswerAction->setToolTip( "Send an answer to this message." );
+  sendAnswerAction->setToolTip( i18n("Send an answer to this message.") );
 
-  disconnectFromServerAction = new QAction( "Disconnect", this );
+  disconnectFromServerAction = new QAction( i18n("Disconnect"), this );
   connect( disconnectFromServerAction, SIGNAL( triggered() ), this, SLOT( disconnectFromServer() ) );
-  disconnectFromServerAction ->setToolTip( "Disconnect from the selected server." );
+  disconnectFromServerAction ->setToolTip( i18n("Disconnect from the selected server.") );
 
-  disconnectAllServersAction = new QAction( "Disconnect All", this );
+  disconnectAllServersAction = new QAction( i18n("Disconnect All"), this );
   connect( disconnectAllServersAction, SIGNAL( triggered() ), this, SLOT( disconnectAllServers() ) );
-  disconnectAllServersAction->setToolTip( "Disconnect from all connected servers." );
+  disconnectAllServersAction->setToolTip( i18n("Disconnect from all connected servers.") );
 
-  kickClientAction = new QAction( "Kick", this );
+  kickClientAction = new QAction( i18n("Kick"), this );
   connect( kickClientAction, SIGNAL( triggered() ), this, SLOT( kickClient() ) );
-  kickClientAction->setToolTip( "Kick the selected client." );
+  kickClientAction->setToolTip( i18n("Kick the selected client.") );
 
-  banClientAction = new QAction( "Ban", this );
+  banClientAction = new QAction( i18n("Ban"), this );
   connect( banClientAction, SIGNAL( triggered() ), this, SLOT( banClient() ) );
-  banClientAction->setToolTip( "Ban the selected client(stop him from reconnecting)." );
+  banClientAction->setToolTip( i18n("Ban the selected client(stop him from reconnecting).") );
 
-  kickAllClientsAction = new QAction( "Disconnect All", this );
+  kickAllClientsAction = new QAction( i18n("Disconnect All"), this );
   connect( kickAllClientsAction, SIGNAL( triggered() ), this, SLOT( kickAllClients() ) );
-  kickAllClientsAction->setToolTip( "Disconnect all connected clients from the local server." );
+  kickAllClientsAction->setToolTip( i18n("Disconnect all connected clients from the local server.") );
 
-  m_userInfoAction = new QAction( "User Info", this );
+  m_userInfoAction = new QAction( i18n("User Info"), this );
   connect( m_userInfoAction, SIGNAL( triggered() ), this, SLOT( uiUserInfo() ) );
-  m_userInfoAction->setToolTip( "Show information about the user." );
+  m_userInfoAction->setToolTip( i18n("Show information about the user.") );
 
-  showPatchesAction = new QAction( "Show Patches", this );
+  showPatchesAction = new QAction( i18n("Show Patches"), this );
   connect( showPatchesAction, SIGNAL( triggered() ), this, SLOT( uiShowPatches() ) );
-  showPatchesAction->setToolTip( "Show the available patches published by the selected user." );
+  showPatchesAction->setToolTip( i18n("Show the available patches published by the selected user.") );
 
   connect( m_messageManager.data(), SIGNAL( messageUpdated( const MessagePointer& ) ), this, SLOT( messageUpdated( const MessagePointer& ) ) );
 

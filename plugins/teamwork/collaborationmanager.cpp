@@ -39,7 +39,7 @@ CollaborationManager::CollaborationManager( KDevTeamwork* tw ) : SafeLogger( tw-
 
   connect( m_contextMenuTimer, SIGNAL( timeout() ), this, SLOT( maybeContextMenu() ) );
 
-  m_closeCollaborationAction = new QAction( "Stop Collaboration", this );
+  m_closeCollaborationAction = new QAction( i18n("Stop Collaboration"), this );
   connect( m_closeCollaborationAction, SIGNAL( triggered() ), this, SLOT( uiCloseCollaboration() ) );
 
   m_developersModel = new QStandardItemModel( 0, 1, this );
@@ -47,17 +47,17 @@ CollaborationManager::CollaborationManager( KDevTeamwork* tw ) : SafeLogger( tw-
   qRegisterMetaType<MessagePointer>( "MessagePointer" );
   qRegisterMetaType<QFileCollaborationSessionPointer>( "QFileCollaborationSessionPointer" );
 
-  m_acceptConnectionAction = new QAction( "Accept Collaboration", this );
+  m_acceptConnectionAction = new QAction( i18n("Accept Collaboration"), this );
   connect( m_acceptConnectionAction, SIGNAL( triggered() ), this, SLOT( uiAcceptCollaboration() ) );
-  m_acceptConnectionAction->setToolTip( "Start a collaboration-session with the user." );
+  m_acceptConnectionAction->setToolTip( i18n("Start a collaboration-session with the user.") );
 
-  m_denyConnectionAction = new QAction( "Refuse Collaboration", this );
+  m_denyConnectionAction = new QAction( i18n("Refuse Collaboration"), this );
   connect( m_denyConnectionAction, SIGNAL( triggered() ), this, SLOT( uiDenyCollaboration() ) );
-  m_denyConnectionAction->setToolTip( "Refuse collaborating with the user." );
+  m_denyConnectionAction->setToolTip( i18n("Refuse collaborating with the user.") );
 
-  m_requestCollaborationAction = new QAction( "Request Collaboration", this );
+  m_requestCollaborationAction = new QAction( i18n("Request Collaboration"), this );
   connect( m_requestCollaborationAction, SIGNAL( triggered() ), this, SLOT( uiRequestCollaboration() ) );
-  m_requestCollaborationAction->setToolTip( "Request a collaboration-session to the selected user." );
+  m_requestCollaborationAction->setToolTip( i18n("Request a collaboration-session to the selected user.") );
 
   connect( m_teamwork, SIGNAL(init()), this, SLOT(init() ) );
 }
@@ -69,7 +69,7 @@ void CollaborationManager::init() {
   connect( m_teamwork->widgets().connectedDevelopers, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT(collaboratingDeveloperContextMenu( const QPoint& ) ) );
 
   connect( m_teamwork, SIGNAL( updateConnection(TeamworkClientPointer) ), this, SLOT( updateConnection(const TeamworkClientPointer&) ) );
-  m_closeCollaborationAction->setToolTip( "Stop collaborating with the selected developer." );
+  m_closeCollaborationAction->setToolTip( i18n("Stop collaborating with the selected developer.") );
 }
 
 CollaborationManager::~CollaborationManager() {

@@ -30,10 +30,10 @@ Q_DECLARE_METATYPE( MessagePointer )
 
 
 MessageManager::MessageManager( KDevTeamwork* tw ) : dispatcher_( *this ), m_teamwork( tw ), m_conversationManager( this ), m_historyManager( m_teamwork->logger() ) {
-  m_showMessageAction = new QAction( "Show", this );
+  m_showMessageAction = new QAction( i18n("Show"), this );
   connect( m_showMessageAction, SIGNAL( triggered() ), this, SLOT( slotShowMessage() ) );
   connect( m_teamwork, SIGNAL( init() ), this, SLOT( init() ) );
-  m_showMessageAction->setToolTip( "Show the message." );
+  m_showMessageAction->setToolTip( i18n("Show the message.") );
 }
 
 void MessageManager::init() {
