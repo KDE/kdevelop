@@ -1,0 +1,106 @@
+/*
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef APPENDEDLIST_H
+#define APPENDEDLIST_H
+
+#include <QVarLengthArray>
+
+namespace KDevelop {
+
+/**
+ * This file contains macros and classes that can be used to conveniently implement classes that store the data of an arbitrary count
+ * of additional lists within the same memory block directly behind the class data, in a way that one the whole data can be stored by one copy-operation
+ * to another place, like needed in ItemRepository. These macros simplify having two versions of a class: One that has its lists attached in memory,
+ * and one version that has them contained as a directly accessible QVarLengthArray. Both versions have their lists accessible through access-functions,
+ * have a completeSize() function that computes the size of the one-block version, and a copyListsFrom(..) function which can copy the lists from one
+ * version to the other. The class that contains these lists must have a boolean template parameter called "dynamic".
+ * 
+ * See identifier.cpp for an example how to use these classes. @todo Document this a bit more
+ * */
+
+//Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the lenght returned by the function-name with "Size" appended.
+//This might be a little slow
+#define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo = 1)) for(item(container()[a]); mustDo; mustDo = 0)
+
+#define START_APPENDED_LISTS(selftype) typedef selftype SelfType;
+
+#define APPENDED_LIST_COMMON(type, name) \
+      KDevelop::AppendedList<dynamic, type> name ## List; \
+      unsigned int name ## Size() const { return name ## List.size(); } \
+      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); return size == rhs.name ## Size() && memcmp( name(), rhs.name(), size * sizeof(type) ) == 0; }
+
+///@todo Make these things a bit faster(less recursion)
+
+#define APPENDED_LIST_FIRST(type, name)        APPENDED_LIST_COMMON(type, name) \
+                                               const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) ); } \
+                                               unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize(); } \
+                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
+                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); }
+                                                                                              
+#define APPENDED_LIST(type, name, predecessor) APPENDED_LIST_COMMON(type, name) \
+                                               const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) + predecessor ## OffsetBehind() ); } \
+                                               unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize() + predecessor ## OffsetBehind(); } \
+                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
+                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); predecessor ## CopyAllFrom(); }
+
+#define END_APPENDED_LISTS(predecessor) /* Returns the size of the object containing the appended lists, including them */ \
+                                      unsigned int completeSize() const { return sizeof(SelfType) + predecessor ## OffsetBehind(); } \
+                                     /* Compares all appended lists and returns true if they are equal */                \
+                                      template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
+                                      template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); }
+
+  template<bool dynamic, class T> 
+class AppendedList : public QVarLengthArray<T, 10> {
+  public: 
+    unsigned int dynamicDataSize() const {
+      return this->size() * sizeof(T);
+    }
+    const T* data(char* /*position*/) const {
+      return QVarLengthArray<T, 10>::data();
+    }
+    void copy(T* /*target*/, const T* data, uint size) {
+      this->resize(size);
+      memcpy(QVarLengthArray<T, 10>::data(), data, size * sizeof(T));
+    }
+};
+
+template<class T> 
+class AppendedList<false, T> {
+  public:
+    unsigned int listSize;
+    unsigned int size() const {
+      return listSize;
+    }
+
+    //currentOffset should point to the position where the data of this item should be saved
+    const T* data(char* position) const {
+      return (unsigned int*)position;
+    }
+    //Count of bytes that were appeendd
+    unsigned int dynamicDataSize() const {
+      return listSize * sizeof(unsigned int);
+    }
+    void copy(T* target, const T* data, uint size) {
+      listSize = size;
+      memcpy(target, data, size * sizeof(T));
+    }
+};
+}
+
+#endif
