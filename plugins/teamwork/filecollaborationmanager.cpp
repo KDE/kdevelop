@@ -83,7 +83,7 @@ FileCollaborationManager::FileCollaborationManager( CollaborationManager* manage
     m_manager( manager ),
 m_dispatcher( *this ) {
   connect( m_manager, SIGNAL( fillCollaboratingUserMenu( QMenu*, const UserPointer& ) ), this, SLOT( slotFillCollaboratingUserMenu( QMenu*, const UserPointer& ) ) );
-  m_startCollaborationSessionAction = new QAction( "Start File-Collaboration", this );
+  m_startCollaborationSessionAction = new QAction( i18n("Start File-Collaboration"), this );
   connect( m_startCollaborationSessionAction, SIGNAL( triggered() ), this, SLOT( slotStartCollaborationSession() ) );
   connect( manager, SIGNAL( updateModel( QStandardItemModel* ) ), this, SLOT( updateCollaborationModel( QStandardItemModel* ) ) );
 

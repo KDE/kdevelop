@@ -568,9 +568,9 @@ void InDocumentConversation::jumpTo() {
 
 void InDocumentConversation::fillContextMenu( QMenu* menu, KDevTeamwork* /*teamwork*/, MessagePointer msg ) {
   if ( !m_jumpToAction ) {
-    m_jumpToAction = new QAction( "Show in Document", this );
+    m_jumpToAction = new QAction( i18n("Show in Document"), this );
     connect( m_jumpToAction, SIGNAL( triggered() ), this, SLOT( jumpTo() ), Qt::QueuedConnection );
-    m_jumpToAction->setToolTip( "Open the document and jump to the references position." );
+    m_jumpToAction->setToolTip( i18n("Open the document and jump to the references position.") );
 
     QVariant v;
     v.setValue( msg );
@@ -737,15 +737,15 @@ void InDocumentConversation::setupWidget( QWidget* parent ) {
   m_widgets.messages->setModel( m_messagesModel );
 
   if ( !m_userInfoAction ) {
-    m_userInfoAction = new QAction( "User Info", this );
+    m_userInfoAction = new QAction( i18n("User Info"), this );
     connect( m_userInfoAction, SIGNAL( triggered() ), this, SLOT( userInfo() ) );
-    m_userInfoAction->setToolTip( "Show information about the selected user." );
+    m_userInfoAction->setToolTip( i18n("Show information about the selected user.") );
   }
 
   if ( !m_hideAction ) {
-    m_hideAction = new QAction( "Hide", this );
+    m_hideAction = new QAction( i18n("Hide"), this );
     connect( m_hideAction, SIGNAL( triggered() ), this, SLOT( hide() ) , Qt::QueuedConnection );
-    m_hideAction->setToolTip( "Hide this conversation." );
+    m_hideAction->setToolTip( i18n("Hide this conversation.") );
   }
 
   QMenu *actionMenu = new QMenu( "Actions", m_widgets.actionsButton );
