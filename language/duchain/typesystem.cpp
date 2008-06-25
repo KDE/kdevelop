@@ -20,6 +20,7 @@
 
 #include "typesystem.h"
 #include "indexedstring.h"
+#include "repositories/typerepository.h"
 
 namespace KDevelop
 {
@@ -241,6 +242,11 @@ AbstractType* ArrayType::clone() const {
 AbstractType* DelayedType::clone() const {
   return new DelayedType(*this);
 }
+
+uint AbstractType::index() const {
+  return TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this)));
+}
+
 
 bool IntegralType::equals(const AbstractType* _rhs) const
 {

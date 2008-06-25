@@ -16,13 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef DECLARATION_ID_H
+#define DECLARATION_ID_H
+
 #include "language/editor/hashedstring.h"
 #include "language/editor/simplecursor.h"
 
 #include "language/duchain/identifier.h"
-
-#ifndef DECLARATION_ID_H
-#define DECLARATION_ID_H
 
 //krazy:excludeall=dpointer
 
@@ -62,6 +62,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * In order to be retrievable, the declaration must be in the symbol table
      * */
     Declaration* getDeclaration(TopDUContext* context) const;
+    
+    //Whether this DeclarationId directly references a declaration by indices. If false, it uses identifiers and other data.
+    bool isDirect() const;
     
   private:
 /*    union {

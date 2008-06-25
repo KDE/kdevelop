@@ -48,6 +48,11 @@ uint DeclarationId::additionalIdentity() const
   return m_additionalIdentity;
 }
 
+bool DeclarationId::isDirect() const
+{
+  return m_direct;
+}
+
 Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
 {
   Declaration* ret = 0;

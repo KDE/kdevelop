@@ -158,6 +158,8 @@ public:
    * */
   virtual uint hash() const;
 
+  uint index() const;
+  
   enum WhichType {
     TypeAbstract  /**< an abstract type */,
     TypeIntegral  /**< an integral */,
