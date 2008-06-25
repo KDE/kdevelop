@@ -54,8 +54,10 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
         : QTreeView( parent ), d( new ProjectTreeViewPrivate ), m_ctxProject( 0 )
 {
     d->mplugin = plugin;
-    header()->setResizeMode( QHeaderView::Stretch );
+    header()->setResizeMode( QHeaderView::ResizeToContents );
     header()->hide();
+
+    setEditTriggers( QAbstractItemView::EditKeyPressed );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
