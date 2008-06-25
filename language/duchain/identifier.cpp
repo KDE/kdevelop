@@ -26,21 +26,30 @@
 
 namespace KDevelop
 {
-template<bool dynamic = false>
+//Here temporary data for dynamic versions of IdentifierPrivate and QualifiedIdentifierPrivate are stored
+DEFINE_LIST_MEMBER_HASH(IdentifierPrivate, templateIdentifiers, uint);
+DEFINE_LIST_MEMBER_HASH(QualifiedIdentifierPrivate, identifiers, uint);
+
+///@todo do some benchmarking and eventually go back to the older version of appendedlist.h, where the lists were really embedded into the private class
+template<bool m_dynamic = false>
 class IdentifierPrivate
 {
 public:
   IdentifierPrivate() : m_unique(0), m_hash(0){
+    initializeAppendedLists();
+  }
+  ~IdentifierPrivate() {
+    freeAppendedLists();
   }
 
   //Flags the stored hash-value invalid
   void clearHash() { //This is always called on an object private to an Identifier, so there is no threading-problem.
-    Q_ASSERT(dynamic);
+    Q_ASSERT(m_dynamic);
     m_hash = 0;
   }
 
   uint hash() const { //Since this only needs reading and the data needs not to be private, this may be called by multiple threads simultaneously, so computeHash() must be thread-safe.
-    if( !m_hash && dynamic )
+    if( !m_hash && m_dynamic )
       computeHash();
     return m_hash;
   }
@@ -50,12 +59,12 @@ public:
 
   START_APPENDED_LISTS(IdentifierPrivate)
   
-  APPENDED_LIST_FIRST(uint, templateIdentifiers)
+  APPENDED_LIST_FIRST(IdentifierPrivate, uint, templateIdentifiers)
 
-  END_APPENDED_LISTS(templateIdentifiers)
+  END_APPENDED_LISTS(IdentifierPrivate, templateIdentifiers)
   
     void computeHash() const {
-      Q_ASSERT(dynamic);
+      Q_ASSERT(m_dynamic);
       //this must stay thread-safe(may be called by multiple threads at a time)
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
@@ -112,11 +121,15 @@ uint emptyConstantIdentifierPrivateIndex = identifierRepository.index(DynamicIde
 const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate = identifierRepository.itemFromIndex(emptyConstantIdentifierPrivateIndex);
 
 ///Before something is modified in QualifiedIdentifierPrivate, it must be made sure that it is private to the QualifiedIdentifier it is used in(@see QualifiedIdentifier::prepareWrite)
-template<bool dynamic>
+template<bool m_dynamic>
 class QualifiedIdentifierPrivate
 {
 public:
   QualifiedIdentifierPrivate() : m_explicitlyGlobal(false), m_isExpression(false), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstantMask(0), m_hash(0) {
+    initializeAppendedLists();
+  }
+  ~QualifiedIdentifierPrivate() {
+    freeAppendedLists();
   }
   bool m_explicitlyGlobal:1;
   bool m_isExpression:1;
@@ -128,18 +141,18 @@ public:
 
   START_APPENDED_LISTS(QualifiedIdentifierPrivate)
   
-  APPENDED_LIST_FIRST(uint, identifiers)
+  APPENDED_LIST_FIRST(QualifiedIdentifierPrivate, uint, identifiers)
 
-  END_APPENDED_LISTS(identifiers)
+  END_APPENDED_LISTS(QualifiedIdentifierPrivate, identifiers)
   
   //Constructs m_identifiers
   void splitIdentifiers( const QString& str, int start )
   {
-    Q_ASSERT(dynamic);
+    Q_ASSERT(m_dynamic);
     uint currentStart = start;
 
     while( currentStart < (uint)str.length() ) {
-      identifiersList.append(Identifier( str, currentStart, &currentStart ).index());
+      identifiersList().append(Identifier( str, currentStart, &currentStart ).index());
       while( currentStart < (uint)str.length() && (str[currentStart] == ' ' ) )
         ++currentStart;
       currentStart += 2; //Skip "::"
@@ -354,13 +367,13 @@ uint Identifier::templateIdentifiersCount() const
 void Identifier::appendTemplateIdentifier(const TypeIdentifier& identifier)
 {
   prepareWrite();
-  dd->templateIdentifiersList.append(identifier.index());
+  dd->templateIdentifiersList().append(identifier.index());
 }
 
 void Identifier::clearTemplateIdentifiers()
 {
   prepareWrite();
-  dd->templateIdentifiersList.clear();
+  dd->templateIdentifiersList().clear();
 }
 
 uint Identifier::index() const
@@ -373,9 +386,9 @@ uint Identifier::index() const
 void Identifier::setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers)
 {
   prepareWrite();
-  dd->templateIdentifiersList.clear();
+  dd->templateIdentifiersList().clear();
   foreach(const TypeIdentifier& id, templateIdentifiers)
-    dd->templateIdentifiersList.append(id.index());
+    dd->templateIdentifiersList().append(id.index());
 }
 
 QString Identifier::toString() const
@@ -476,7 +489,7 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
     dd->m_explicitlyGlobal = true;
   } else {
     dd->m_explicitlyGlobal = false;
-    dd->identifiersList.append(id.index());
+    dd->identifiersList().append(id.index());
   }
 }
 
@@ -559,9 +572,9 @@ QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) 
   ret.prepareWrite();
   
   if(m_index)
-    ret.dd->identifiersList.append(cd->identifiers(), cd->identifiersSize());
+    ret.dd->identifiersList().append(cd->identifiers(), cd->identifiersSize());
   else
-    ret.dd->identifiersList.append(dd->identifiers(), dd->identifiersSize());
+    ret.dd->identifiersList().append(dd->identifiers(), dd->identifiersSize());
   
   if( explicitlyGlobal() )
     ret.setExplicitlyGlobal(true);
@@ -822,7 +835,7 @@ void QualifiedIdentifier::push(const Identifier& id)
 {
   prepareWrite();
   
-  dd->identifiersList.append(id.index());
+  dd->identifiersList().append(id.index());
 }
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
@@ -830,19 +843,19 @@ void QualifiedIdentifier::push(const QualifiedIdentifier& id)
   prepareWrite();
   id.makeConstant();
 
-  dd->identifiersList.append(id.cd->identifiers(), id.cd->identifiersSize());
+  dd->identifiersList().append(id.cd->identifiers(), id.cd->identifiersSize());
 }
 
 void QualifiedIdentifier::pop()
 {
   prepareWrite();
-  dd->identifiersList.resize(dd->identifiersList.size()-1);
+  dd->identifiersList().resize(dd->identifiersList().size()-1);
 }
 
 void QualifiedIdentifier::clear()
 {
   prepareWrite();
-  dd->identifiersList.clear();
+  dd->identifiersList().clear();
   dd->m_explicitlyGlobal = false;
   dd->m_isExpression = false;
 }
