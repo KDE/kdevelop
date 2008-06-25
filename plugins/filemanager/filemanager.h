@@ -21,37 +21,28 @@
 #define FILEMANAGER_H
 
 #include <QtGui/QWidget>
-#include <kurl.h>
 
-class QModelIndex;
+class KDirOperator;
+class KUrlNavigator;
 class KFileItem;
+class QString;
+class KUrl;
 class KDevFileManagerPlugin;
 
 class FileManager: public QWidget {
     Q_OBJECT
 public:
     FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
+    QList<QAction*> toolBarActions() const;
+private slots:
+    void gotoUrl(const KUrl&);
+    void updateNav( const KUrl& url );
 private:
     void setupActions();
+    QList<QAction*> tbActions;
 
-    Q_PRIVATE_SLOT(d, void goUp())
-    Q_PRIVATE_SLOT(d, void goHome())
-    Q_PRIVATE_SLOT(d, void goLeft())
-    Q_PRIVATE_SLOT(d, void goRight())
-    Q_PRIVATE_SLOT(d, void goToUrl(const KUrl &url))
-    Q_PRIVATE_SLOT(d, void goToUrl(const QString &url))
-
-    Q_PRIVATE_SLOT(d, void newFolder())
-
-    Q_PRIVATE_SLOT(d, void init())
-    Q_PRIVATE_SLOT(d, void open(const QModelIndex &index))
-    Q_PRIVATE_SLOT(d, void openFile(const KFileItem &fileItem))
-
-    Q_PRIVATE_SLOT(d, void urlChanged(const QModelIndex &index))
-    Q_PRIVATE_SLOT(d, void syncCurrentDocumentDirectory())
-
-    struct FileManagerPrivate* const d;
-
+    KDirOperator* dirop;
+    KUrlNavigator* urlnav;
 };
 
 #endif

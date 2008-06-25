@@ -20,175 +20,23 @@
 #include "filemanager.h"
 
 #include <QDir>
-#include <QDirModel>
 #include <QLayout>
-#include <QTreeView>
-#include <QTimer>
-#include <QThread>
 
 #include <kurl.h>
+#include <kurlnavigator.h>
+#include <kfileplacesmodel.h>
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kdirlister.h>
 #include <kaction.h>
-#include <kstandardaction.h>
-#include <kinputdialog.h>
-#include <kurlcombobox.h>
-#include <kurlcompletion.h>
-#include <kio/netaccess.h>
-#include <kdirsortfilterproxymodel.h>
+#include <kactioncollection.h>
 
-#include "icore.h"
-#include "idocumentcontroller.h"
+#include <kdiroperator.h>
+#include <klineedit.h>
 
 #include "kdevfilemanagerplugin.h"
-#include "drilldownview.h"
-#include "kdevdirmodel.h"
-
-class FileManagerPrivate
-{
-public:
-
-    FileManager *m_manager;
-    KDevDirModel *m_model;
-    KDirSortFilterProxyModel* m_proxyModel;
-    DrillDownView *m_view;
-//     QWidget *m_toolBar;
-    KUrlComboBox *m_urlBox;
-    KDevFileManagerPlugin *m_plugin;
-
-    FileManagerPrivate(FileManager *manager): m_manager(manager) {}
-
-    void open(const QModelIndex &index)
-    {
-        if (!index.isValid())
-            return;
-
-        QModelIndex realIndex = m_proxyModel->mapToSource(index);
-        KFileItem fileItem = m_model->itemForIndex(realIndex);
-        if (fileItem.isNull())
-            return;
-
-        if (fileItem.isFile())
-            openFile(fileItem);
-        else if (fileItem.isDir())
-            m_view->slideRight();
-    }
-
-    void openFile(const KFileItem &fileItem)
-    {
-        if (fileItem.isNull())
-            return;
-
-        m_plugin->core()->documentController()->openDocument(fileItem.url());
-    }
-
-    void init()
-    {
-        goHome();
-    }
-
-    void goUp()
-    {
-        if (m_view->isBusy())
-            return;
-        m_model->goUp();
-    }
-
-    void goHome()
-    {
-        goToUrl(KUrl::fromPath(QDir::homePath()));
-    }
-
-    void goLeft()
-    {
-        if (m_view->isBusy())
-            return;
-        m_view->slideLeft();
-    }
-
-    void goRight()
-    {
-        if (m_view->isBusy())
-            return;
-        m_view->slideRight();
-    }
-
-    void goToUrl(const KUrl &url)
-    {
-        if (m_view->isBusy())
-            return;
-        m_model->dirLister()->openUrl(url, KDirLister::Reload);
-        m_urlBox->setUrl(url.url());
-    }
-
-    void goToUrl(const QString &url)
-    {
-        kDebug(9500) ;
-        goToUrl(KUrl(url));
-        m_view->setFocus();
-    }
-
-    void newFolder()
-    {
-        KUrl url = m_model->dirLister()->url();
-        bool ok;
-        QString targetDir = url.url();
-        if (targetDir.startsWith("file:///"))
-            targetDir = targetDir.mid(7, 1000);
-        QString path = KInputDialog::getText(i18n("New Folder"),
-            i18n("Create new folder in:\n")+targetDir, "New Folder", &ok, m_view);
-        if (ok && !path.isEmpty())
-        {
-            url.addPath(path);
-            KIO::NetAccess::mkdir(url, m_view);
-            m_model->dirLister()->openUrl(url);
-        }
-    }
-
-    void urlChanged(const QModelIndex &index)
-    {
-        QModelIndex realIndex = m_proxyModel->mapToSource(index);
-        KFileItem file = m_model->itemForIndex(realIndex);
-        if (!file.isNull())
-            m_urlBox->setUrl(file.url());
-    }
-
-    void syncCurrentDocumentDirectory()
-    {
-        KDevelop::IDocument *doc = m_plugin->core()->documentController()->activeDocument();
-        if ( doc )
-        {
-            goToUrl(doc->url().upUrl());
-        }
-    }
-};
-
-class ToolBarParent: public QWidget {
-public:
-    ToolBarParent(QWidget *parent): QWidget(parent), m_toolBar(0) {}
-    void setToolBar(QToolBar *toolBar)
-    {
-        m_toolBar = toolBar;
-    }
-
-    virtual void resizeEvent(QResizeEvent *ev)
-    {
-        if (!m_toolBar)
-            return QWidget::resizeEvent(ev);
-        setMinimumHeight(m_toolBar->sizeHint().height());
-        m_toolBar->resize(width(), height());
-    }
-
-private:
-    QToolBar *m_toolBar;
-};
-
 
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
-    :QWidget(parent), d(new FileManagerPrivate(this))
+    :QWidget(parent)
 {
-    d->m_plugin = plugin;
     setObjectName("FileManager");
     setWindowIcon(SmallIcon("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));
@@ -197,77 +45,49 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
-
-//     d->m_toolBar = new QWidget(this);
-//     QHBoxLayout *toolBarLayout = new QHBoxLayout(d->m_toolBar);
-//     toolBarLayout->setMargin(0);
-//     toolBarLayout->setSpacing(0);
-//     l->addWidget(d->m_toolBar);
-
-    d->m_urlBox = new KUrlComboBox(KUrlComboBox::Directories, true, this);
-    KUrlCompletion *cmpl = new KUrlCompletion(KUrlCompletion::DirCompletion);
-    d->m_urlBox->setCompletionObject(cmpl);
-    d->m_urlBox->setFrame(false);
-    d->m_urlBox->setInsertPolicy(QComboBox::InsertAtBottom);
-    d->m_urlBox->setUrl(KUrl(QDir::homePath()));
-    l->addWidget(d->m_urlBox);
-    l->addSpacing(2);
-    connect(d->m_urlBox, SIGNAL(urlActivated(const KUrl&)),
-        this, SLOT(goToUrl(const KUrl&)));
-    connect(d->m_urlBox, SIGNAL(returnPressed(const QString&)),
-        this, SLOT(goToUrl(const QString&)));
-
-    d->m_view = new DrillDownView(this);
-    l->addWidget(d->m_view);
-
-    d->m_model = new KDevDirModel(d->m_view);
-    d->m_proxyModel = new KDirSortFilterProxyModel(this);
-    d->m_proxyModel->setSourceModel(d->m_model);
-    d->m_proxyModel->sort(0);
-    d->m_view->setModel(d->m_proxyModel);
-
-    connect(d->m_model->dirLister(), SIGNAL(completed()),
-        d->m_view, SLOT(animateNewUrl()));
-
-    connect(d->m_view, SIGNAL(doubleClicked(const QModelIndex &)),
-        this, SLOT(open(const QModelIndex &)));
-    connect(d->m_view, SIGNAL(returnPressed(const QModelIndex &)),
-        this, SLOT(open(const QModelIndex &)));
-    connect(d->m_view, SIGNAL(tryToSlideLeft()),
-        this, SLOT(goUp()));
-    connect(d->m_view, SIGNAL(rootIndexChanged(const QModelIndex&)),
-        this, SLOT(urlChanged(const QModelIndex&)));
+    KFilePlacesModel* model = new KFilePlacesModel( this );
+    urlnav = new KUrlNavigator(model, KUrl( QDir::homePath() ), this );
+    connect(urlnav, SIGNAL(urlChanged(const KUrl& )), SLOT(gotoUrl(const KUrl&)));
+    l->addWidget(urlnav);
+    dirop = new KDirOperator(QDir::homePath(), this);
+    dirop->setView( KFile::Simple );
+    connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
+    l->addWidget(dirop);
 
     setupActions();
-//     toolBarLayout->addStretch();
+}
 
-    QTimer::singleShot(0, this, SLOT(init()));
+
+void FileManager::gotoUrl( const KUrl& url ) 
+{
+     dirop->setUrl( url, true );
+}
+
+void FileManager::updateNav( const KUrl& url )
+{
+    urlnav->setUrl( url );
 }
 
 void FileManager::setupActions()
 {
-    KAction *action = KStandardAction::up(this, SLOT(goLeft()), this);
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    addAction(action);
+    tbActions << (dirop->actionCollection()->action("back"));
+    tbActions << (dirop->actionCollection()->action("up"));
+    tbActions << (dirop->actionCollection()->action("home"));
+    tbActions << (dirop->actionCollection()->action("forward"));
+    tbActions << (dirop->actionCollection()->action("reload"));
+    tbActions << (dirop->actionCollection()->action("sorting menu"));
 
-    action = KStandardAction::home(this, SLOT(goHome()), this);
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    addAction(action);
-
-    action = new KAction(this);
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    action->setIcon(KIcon("folder-new"));
-    action->setText(i18n("New Folder..."));
-    action->setToolTip(i18n("New Folder"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(newFolder()));
-    addAction(action);
-
-    action = new KAction(this);
+    KAction* action = new KAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(KIcon("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
-    addAction(action);
+    tbActions << action;
+}
+
+QList<QAction*> FileManager::toolBarActions() const
+{
+    return tbActions;
 }
 
 #include "filemanager.moc"

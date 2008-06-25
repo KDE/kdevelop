@@ -24,10 +24,11 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
 
 #include <icore.h>
 #include <iuicontroller.h>
-// #include <mainwindow.h>
 
 #include "filemanager.h"
 
@@ -41,8 +42,17 @@ public:
     virtual QWidget* create(QWidget *parent = 0)
     {
         Q_UNUSED(parent)
-        return new FileManager(m_plugin, parent);
+        return new FileManager(m_plugin,parent);
     }
+
+    QList<QAction*> toolBarActions( QWidget* w ) const
+    {
+        FileManager* m = qobject_cast<FileManager*>(w);
+        if( m )
+            return m->toolBarActions();
+        return KDevelop::IToolViewFactory::toolBarActions( w );
+    }
+
     virtual Qt::DockWidgetArea defaultPosition()
     {
         return Qt::LeftDockWidgetArea;
