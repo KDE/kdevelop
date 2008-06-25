@@ -22,8 +22,10 @@
 
 #include <classfunctiondeclaration.h>
 #include <abstractfunctiondeclaration.h>
+#include <indexedstring.h>
 #include <forwarddeclarationtype.h>
 #include "templateparameterdeclaration.h"
+
 using namespace KDevelop;
 
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
@@ -429,7 +431,7 @@ CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifi
   else if (modifiers & ModifierLong)
     name.prepend("long ");
 
-  setName(name);
+  setName(IndexedString(name));
 }
 
 CppIntegralType::TypeModifiers CppIntegralType::typeModifiers() const
@@ -544,14 +546,6 @@ QString CppTypeAliasType::toString() const
     return type()->toString();
 
   return "typedef <notype>";
-}
-
-void CppClassType::addElement(AbstractType::Ptr element)
-{
-  if (isClosed())
-    kWarning(9007) << "Tried to add type" << element->toString() << "to closed class!" ;
-  else
-    StructureType::addElement(element);
 }
 
 void CppClassType::clear() {

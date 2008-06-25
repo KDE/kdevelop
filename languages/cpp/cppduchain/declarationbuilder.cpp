@@ -67,9 +67,6 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   foreach( const CppClassType::BaseClassInstance& base, from->baseClasses() )
     to->addBaseClass(base);
 
-  foreach( const AbstractType::Ptr& element, from->elements() )
-    to->addElement(element);
-
   to->close();
 }
 

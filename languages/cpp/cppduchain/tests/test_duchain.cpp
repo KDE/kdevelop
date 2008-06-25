@@ -594,9 +594,6 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(defStructA->uses().count(), 1);
   QCOMPARE(defStructA->uses().begin()->count(), 1);
   QVERIFY(defStructA->type<CppClassType>());
-  QCOMPARE(defStructA->type<CppClassType>()->elements().count(), 3);
-  QCOMPARE(defStructA->type<CppClassType>()->elements().first(), typeShort);
-  QVERIFY(CppFunctionType::Ptr::dynamicCast(defStructA->type<CppClassType>()->elements()[1]));
   QCOMPARE(defStructA->type<CppClassType>()->classType(), CppClassType::Struct);
 
   DUContext* structA = top->childContexts().first();
@@ -766,12 +763,10 @@ void TestDUChain::testDeclareClass()
   QCOMPARE(defClassA->uses().count(), 1);
   QCOMPARE(defClassA->uses().begin()->count(), 2);
   QVERIFY(defClassA->type<CppClassType>());
-  QCOMPARE(defClassA->type<CppClassType>()->elements().count(), 3);
-  CppFunctionType::Ptr function = CppFunctionType::Ptr::dynamicCast(defClassA->type<CppClassType>()->elements()[2]);
-  QVERIFY(function);
-  QCOMPARE(function->returnType(), typeVoid);
-  QCOMPARE(function->arguments().count(), 1);
-  QCOMPARE(function->arguments().first(), typeInt);
+//   QVERIFY(function);
+//   QCOMPARE(function->returnType(), typeVoid);
+//   QCOMPARE(function->arguments().count(), 1);
+//   QCOMPARE(function->arguments().first(), typeInt);
 
   QVERIFY(defClassA->internalContext());
 

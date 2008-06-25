@@ -283,9 +283,6 @@ public:
   ///After clearing, a class-type is open again.
   void clear(); 
 
-  /// Error if the type is closed.
-  virtual void addElement(KDevelop::AbstractType::Ptr element);
-
   virtual uint hash() const;
 
   virtual QString toString() const;

@@ -559,10 +559,6 @@ void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {
 void TypeBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
   if (node->parameter_declaration_clause)
     closeType();
-
-  if (lastType() && hasCurrentType())
-    if (StructureType::Ptr structure = currentType<StructureType>())
-      structure->addElement(lastType());
 }
 
 
