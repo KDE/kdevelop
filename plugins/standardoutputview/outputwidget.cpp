@@ -277,7 +277,8 @@ QListView* OutputWidget::createListView(int id)
             listview = new QListView(this);
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
             listview->setViewMode( QListView::ListMode );
-            listview->setUniformItemSizes( true );
+            listview->setMovement( QListView::Static );
+            listview->setResizeMode( QListView::Fixed );
             views[id] = listview;
             connect( listview, SIGNAL(activated(const QModelIndex&)),
                      this, SLOT(activate(const QModelIndex&)));
