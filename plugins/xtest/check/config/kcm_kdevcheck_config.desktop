@@ -1,0 +1,23 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdevcheck_config
+X-KDE-FactoryName=kcm_kdevcheck_config
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Check
+Comment=Check settings
+Comment[es]=Preferencias de Check
+Comment[fr]=Paramètres de  Check
+Comment[ga]=Socruithe Check
+Comment[gl]=Configuración de Check
+Comment[pt]=Configuração do Check
+Comment[pt_BR]=Configuração do Check
+Comment[uk]=Параметри Check
+Comment[zh_TW]=Check 設定

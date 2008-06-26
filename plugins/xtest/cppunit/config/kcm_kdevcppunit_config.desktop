@@ -1,0 +1,23 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdevcppunit_config
+X-KDE-FactoryName=kcm_kdevcppunit_config
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=CppUnit
+Comment=CppUnit settings
+Comment[es]=Preferencias de CppUnit
+Comment[fr]=Paramètres de  CppUnit
+Comment[ga]=Socruithe CppUnit
+Comment[gl]=Configuración de CppUnit
+Comment[pt]=Configuração do CppUnit
+Comment[pt_BR]=Configuração do CppUnit
+Comment[uk]=Параметри CppUnit
+Comment[zh_TW]=CppUnit 設定

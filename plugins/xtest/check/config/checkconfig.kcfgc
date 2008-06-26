@@ -1,0 +1,5 @@
+File=checkconfig.kcfg
+ClassName=CheckConfig
+Singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=projectconfigskeleton.h

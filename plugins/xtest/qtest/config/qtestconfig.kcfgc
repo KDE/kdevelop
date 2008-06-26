@@ -1,0 +1,5 @@
+File=qtestconfig.kcfg
+ClassName=QTestConfig
+Singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=projectconfigskeleton.h
