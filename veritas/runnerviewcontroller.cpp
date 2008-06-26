@@ -33,6 +33,7 @@
 
 #include <QCoreApplication>
 #include <QKeyEvent>
+#include <KDebug>
 
 namespace Veritas
 {
@@ -45,9 +46,7 @@ RunnerViewController::RunnerViewController(QObject* parent, QTreeView* view)
 }
 
 RunnerViewController::~RunnerViewController()
-{
-
-}
+{}
 
 RunnerModel* RunnerViewController::runnerModel() const
 {
@@ -71,43 +70,12 @@ void RunnerViewController::unselectAll() const
 
 void RunnerViewController::expandAll() const
 {
-    // Recursively expand all branches.
-    QModelIndex currentIndex;
-    currentIndex = view()->indexBelow(view()->rootIndex());
-    expand(currentIndex);
-
-    // Make highlighted row visible.
-    currentIndex = highlightedRow();
-
-    if (currentIndex.isValid()) {
-        // This will expand any parents.
-        view()->scrollTo(currentIndex);
-    }
+    expand(runnerProxyModel()->index(0,0));
 }
 
 void RunnerViewController::collapseAll() const
 {
-    // Recursively collapse all branches.
-    QModelIndex currentIndex;
-    currentIndex = view()->indexBelow(view()->rootIndex());
-    collapse(currentIndex);
-
-    // Highlight and show top level parent of current branch.
-    currentIndex = highlightedRow();
-
-    if (!currentIndex.isValid()) {
-        return;  // No selection at all
-    }
-
-    QModelIndex parentIndex = currentIndex.parent();
-
-    // Search top level parent.
-    while (parentIndex.isValid()) {
-        currentIndex = parentIndex;
-        parentIndex = parentIndex.parent();
-    }
-
-    setHighlightedRow(currentIndex);
+    collapse(runnerProxyModel()->index(0,0));
 }
 
 void RunnerViewController::expand(const QModelIndex& index) const
@@ -115,21 +83,17 @@ void RunnerViewController::expand(const QModelIndex& index) const
     if (!index.isValid()) {
         return;
     }
-
     QModelIndex currentIndex = index;
-
     // Recursively expand branches.
     while (currentIndex.isValid()) {
         if (currentIndex.child(0, 0).isValid()) {
             // First proceed the levels down.
             expand(currentIndex.child(0, 0));
-
             // Expand this level.
             if (!view()->isExpanded(currentIndex)) {
                 view()->expand(currentIndex);
             }
         }
-
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
 }
@@ -139,41 +103,29 @@ void RunnerViewController::collapse(const QModelIndex& index) const
     if (!index.isValid()) {
         return;
     }
-
-    QModelIndex currentIndex = index;
-
-    // Recursively collapse branches.
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            // First collapse this level.
-            if (view()->isExpanded(currentIndex)) {
-                view()->collapse(currentIndex);
+    QModelIndex i = index;
+    while (i.isValid()) { // Recursively collapse branches.
+        if (i.child(0, 0).isValid()) {
+            if (view()->isExpanded(i)) {
+                view()->collapse(i); // First collapse this level.
             }
-
-            // Proceed one level down.
-            collapse(currentIndex.child(0, 0));
+            collapse(i.child(0, 0)); // Proceed one level down.
         }
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+        i = i.sibling(i.row() + 1, 0);
     }
 }
 
 void RunnerViewController::selectAllItems(bool select) const
 {
-    QModelIndex testItemIndex;
-
-    QModelIndex currentIndex = view()->indexBelow(view()->rootIndex());
-
-    while (currentIndex.isValid()) {
-        testItemIndex = Utils::modelIndexFromProxy(proxyModel(), currentIndex);
-        //runnerModel()->setItemChecked(testItemIndex, select);
-        runnerModel()->itemFromIndex(testItemIndex)->setSelected(select);
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+    QModelIndex i = proxyModel()->index(0,0);
+    while (i.isValid()) { // Walk all top level indices
+        QModelIndex s = proxyModel()->mapToSource(i);
+        Test* t = runnerModel()->itemFromIndex(s);
+        t->setSelected(select);
+        runnerModel()->updateView(s); // <- emits dataChanged
+        i = i.sibling(i.row() + 1, 0);
     }
-
-    // Update counters.
-    runnerModel()->countItems();
+    runnerModel()->countItems(); // Update counters.
 }
 
 bool RunnerViewController::eventFilter(QObject* obj, QEvent* event)

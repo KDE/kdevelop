@@ -49,13 +49,11 @@ private slots:
     void countItems();
 
 private:
-    // custom asserts
     void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
     void verifyRowContent(int index);
     void assertSignalValue(QSignalSpy* spy, int expected);
 
-    // fixture helpers
     void fillRows();
     void setUpResultSpies(QMap<QString, QSignalSpy*>& spies);
 

@@ -40,6 +40,8 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <KLocale>
+#include <KDebug>
+
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initVeritasResource()
 {
@@ -53,7 +55,6 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
         : QMainWindow(parent, flags)
 {
     initVeritasResource();
-
     m_ui.setupUi(this);
 
     // Controllers for the tree views, it's best to create them at the
@@ -156,6 +157,12 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     m_selection = new SelectionManager(runnerView());
 }
 
+void RunnerWindow::debugRootIndex(QModelIndex value)
+{
+    kDebug() << "Got rootIndexChanged signal " << value;
+    kDebug() << "runnerView root index -> " << runnerView()->rootIndex();
+}
+
 RunnerWindow::~RunnerWindow()
 {
     // Deleting the model is left to the owner of the model instance.
@@ -189,7 +196,7 @@ void RunnerWindow::show()
     QApplication::setActiveWindow(this);
 }
 
-void RunnerWindow::setModel(RunnerModel* model)
+void RunnerWindow::stopPreviousModel()
 {
     // It's not expected to set another model at the moment but if done so then
     // at least remove the previous model from the views to prevent the runner
@@ -198,7 +205,6 @@ void RunnerWindow::setModel(RunnerModel* model)
     // taken into account by simply asking the model to stop it without further
     // verification. A better solution must consider this in a later version.
     RunnerModel* prevModel = runnerModel();
-
     if (prevModel) {
         // Hope it stops the thread if it is running.
         prevModel->stopItems();
@@ -212,42 +218,17 @@ void RunnerWindow::setModel(RunnerModel* model)
         resultsView()->setModel(0);
         runnerView()->reset();
         resultsView()->reset();
-
         delete m1;
         delete m2;
-
         prevModel->disconnect();
     }
+}
 
-    // Set initial title.
-    QStringList tokens = windowTitle().split(" ");
-    setWindowTitle(tokens[0].trimmed());
-
-    // No user interaction without a model or a model without columns.
-    bool valid = true;
-
-    if (!model) {
-        valid = false;
-    } else if (model->columnCount() < 1) {
-        valid = false;
-    }
-
-    if (!valid) {
-        enableItemActions(false);
-        enableResultsFilter(false);
-        return;
-    }
-
-    // Set title with model name.
-    if (!model->name().trimmed().isEmpty()) {
-        setWindowTitle(windowTitle() + " - " + model->name());
-    }
-
+void RunnerWindow::initFilterButtons(RunnerModel* model)
+{
     // Hide filter buttons for results that are not expected.
     int results = model->expectedResults();
-
     bool expected;
-
 /*    expected = results & Veritas::RunInfo;
     m_ui.buttonInfos->setVisible(expected);
     expected = results & Veritas::RunWarning;
@@ -257,23 +238,27 @@ void RunnerWindow::setModel(RunnerModel* model)
     expected = results & Veritas::RunFatal;
     m_ui.buttonFatals->setVisible(expected);
 
+}
+
+void RunnerWindow::initProxyModels(RunnerModel* model)
+{
     // Proxy models for the views with the source model as their parent
     // to have the proxies deleted when the model gets deleted.
     RunnerProxyModel* runnerProxyModel = new RunnerProxyModel(model);
     runnerProxyModel->setSourceModel(model);
-
     runnerView()->setModel(runnerProxyModel);
 
     // Results model is contained in the runner model.
     ResultsModel* resultsModel = model->resultsModel();
     ResultsProxyModel* resultsProxyModel = new ResultsProxyModel(model);
     resultsProxyModel->setSourceModel(resultsModel);
-
     resultsView()->setModel(resultsProxyModel);
+}
 
+void RunnerWindow::initVisibleColumns(RunnerModel* model)
+{
     // Filter actions enabled, item actions only when there is data.
     enableResultsFilter(true);
-
     // Get the relevant column count.
     int columnCount = model->columnCount();
 
@@ -287,13 +272,10 @@ void RunnerWindow::setModel(RunnerModel* model)
             enabledRunnerColumns[i] = true;
         }
     }
-
     for (int i = 1; i < columnCount; i++) {
         // hide all runner columns
         runnerView()->hideColumn(i);
     }
-
-
     for (int i = 0; i < columnCount; i++) {
         resultsView()->showColumn(i);
     }
@@ -301,20 +283,23 @@ void RunnerWindow::setModel(RunnerModel* model)
     resultsView()->hideColumn(1);
 
     // Set the defaults in the proxy models.
-    runnerProxyModel->setEnabledColumns(enabledRunnerColumns);
-    resultsProxyModel->setEnabledColumns(enabledResultsColumns);
+    runnerProxyModel()->setEnabledColumns(enabledRunnerColumns);
+    resultsProxyModel()->setEnabledColumns(enabledResultsColumns);
+}
 
-    // Suppress results data display if view isn't shown.
-    showResults(isResultsViewVisible());
-
-    // Very limited user interaction without data.
-    if (model->rowCount() < 1) {
-        enableItemActions(false);
-        m_ui.actionColumns->setEnabled(true);
-        m_ui.actionSettings->setEnabled(true);
-        return;
+void RunnerWindow::expandBranches(RunnerModel* model)
+{
+    // Expand the branches, do it in the brackground to reduce flickering.
+    runnerView()->setUpdatesEnabled(false);
+    runnerController()->expandAll();
+    for (int i = 0; i < model->columnCount(); i++) {
+        runnerView()->resizeColumnToContents(i);
     }
+    runnerView()->setUpdatesEnabled(true);
+}
 
+void RunnerWindow::connectItemStatistics(RunnerModel* model)
+{
     // Item statistics.
     connect(model, SIGNAL(numTotalChanged(int)),
             SLOT(displayNumTotal(int)));
@@ -335,24 +320,10 @@ void RunnerWindow::setModel(RunnerModel* model)
 
     // This will fire the signals connected above.
     model->countItems();
+}
 
-    // Expand the branches, do it in the brackground to reduce flickering.
-    runnerView()->setUpdatesEnabled(false);
-
-    runnerController()->expandAll();
-    for (int i = 0; i < columnCount; i++) {
-        runnerView()->resizeColumnToContents(i);
-    }
-
-    runnerView()->setUpdatesEnabled(true);
-
-    // How much data is wanted when running the items.
-    connect(m_ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
-            model,
-            SLOT(setMinimalUpdate(bool)));
-
-    model->setMinimalUpdate(isMinimalUpdate());
-
+void RunnerWindow::connectProgressIndicators(RunnerModel* model)
+{
     // Get notified of items run.
     connect(model, SIGNAL(numStartedChanged(int)),
             SLOT(displayProgress(int)));
@@ -363,8 +334,42 @@ void RunnerWindow::setModel(RunnerModel* model)
     connect(model, SIGNAL(allItemsCompleted()),
             SLOT(displayCompleted()));
     connect(model, SIGNAL(itemCompleted(const QModelIndex&)),
-            resultsModel,
+            resultsModel(),
             SLOT(addResult(const QModelIndex&)));
+}
+
+void RunnerWindow::setModel(RunnerModel* model)
+{
+    stopPreviousModel();
+    if (!model || model->columnCount() < 1) {
+        // No user interaction without a model or a model without columns.
+        enableItemActions(false);
+        enableResultsFilter(false);
+        return;
+    }
+    initFilterButtons(model);
+    initProxyModels(model);
+    initVisibleColumns(model);
+
+    // Suppress results data display if view isn't shown.
+    showResults(isResultsViewVisible());
+    // Very limited user interaction without data.
+    if (model->rowCount() < 1) {
+        enableItemActions(false);
+        m_ui.actionColumns->setEnabled(true);
+        m_ui.actionSettings->setEnabled(true);
+        return;
+    }
+    connectItemStatistics(model);
+    //expandBranches(model);
+
+    // How much data is wanted when running the items.
+    connect(m_ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
+            model,
+            SLOT(setMinimalUpdate(bool)));
+
+    model->setMinimalUpdate(isMinimalUpdate());
+    connectProgressIndicators(model);
 
     enableItemActions(true);
     m_ui.actionStop->setDisabled(true);
@@ -373,8 +378,7 @@ void RunnerWindow::setModel(RunnerModel* model)
     setResultsFilter();
 
     // Start with top row highlighted.
-    QModelIndex index = runnerView()->indexBelow(runnerView()->rootIndex());
-    runnerView()->setCurrentIndex(index);
+    runnerView()->setCurrentIndex(runnerProxyModel()->index(0,0));
 }
 
 QTreeView* RunnerWindow::runnerView() const

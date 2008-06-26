@@ -40,6 +40,9 @@ public:
     TestStub(const QList<QVariant>& data, Test* parent)
             : Test(data, parent) {}
 
+    TestStub(const char* name, Test* parent)
+            : Test(name, parent) {}
+
     int run() {
         if (child(0)) {
             setState(Veritas::NoResult);  // Have nothing to do as a parent
@@ -53,9 +56,11 @@ public:
         executedItems.push_back(row());
         return state();
     }
+
     bool shouldRun() const {
         return true;
     }
+
     static QList<int> executedItems; // store the index of rows that got executed
 };
 
@@ -69,27 +74,38 @@ public:
             col0Caption("run_col0"),
             col1Caption("run_col1"),
             col2Caption("run_col2") {
-        if (fill) this->fill();
+        if (fill) {
+            this->fill1();
+        }
     }
 
-    void fill() {
+    void fill1() {
+        addParents();
+        setRootItem(root);
+    }
+
+    void fill2() {
+        addParents();
+        appendSomeChildren();
+        setRootItem(root);
+    }
+
+    void addParents() {
         QList<QVariant> rootData;
         rootData << col0Caption << col1Caption << col2Caption;
-        TestStub* root = new TestStub(rootData, 0);
+        root = new TestStub(rootData, 0);
 
         QList<QVariant> columnData;
         columnData << "00" << "01" << "02";
-        TestStub* item1 = new TestStub(columnData, root);
+        item1 = new TestStub(columnData, root);
         item1->setState(Veritas::RunSuccess);
         root->addChild(item1);
 
         columnData.clear();
         columnData << "10" << "11" << "12";
-        TestStub* item2 = new TestStub(columnData, root);
+        item2 = new TestStub(columnData, root);
         item2->setState(Veritas::RunFatal);
         root->addChild(item2);
-
-        setRootItem(root);
     }
 
     QString name() const {
@@ -104,10 +120,26 @@ public:
         setRootItem(0);
     }
 
+    void appendSomeChildren() {
+        child11 = new TestStub("child11", item1);
+        item1->addChild(child11);
+        child12 = new TestStub("child12", item1);
+        item1->addChild(child12);
+        child21 = new TestStub("child21", item2);
+        item2->addChild(child21);
+    }
+
     // column headers
     QVariant col0Caption;
     QVariant col1Caption;
     QVariant col2Caption;
+
+    TestStub* root;
+    TestStub* item1;
+    TestStub* child11;
+    TestStub* child12;
+    TestStub* item2;
+    TestStub* child21;
 };
 
 inline RunnerModelStub* createRunnerModelStub(bool fill = true)

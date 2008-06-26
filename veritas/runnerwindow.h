@@ -150,6 +150,7 @@ public: // Operations
     Ui::StatusWidget* statusWidget() const;
 
 private slots:
+    void debugRootIndex(QModelIndex value);
 
     /*!
      * Displays the execution progress for \a numItems items.
@@ -267,6 +268,13 @@ private slots:
     void showResults(bool show);
 
 private: // Operations
+    void stopPreviousModel();
+    void initFilterButtons(RunnerModel* model);
+    void initVisibleColumns(RunnerModel* model);
+    void expandBranches(RunnerModel* model);
+    void connectItemStatistics(RunnerModel* model);
+    void initProxyModels(RunnerModel* model);
+    void connectProgressIndicators(RunnerModel* model);
 
     /*!
      * Disables and modifies widgets and signals before running items.

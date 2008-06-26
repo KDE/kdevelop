@@ -82,7 +82,6 @@ QAbstractItemModel* Utils::modelFromProxy(QAbstractItemModel* model)
 {
     QSortFilterProxyModel* proxyModel;
     proxyModel = static_cast<QSortFilterProxyModel*>(model);
-
     if (proxyModel) {
         return proxyModel->sourceModel();
     } else {
@@ -96,10 +95,8 @@ QModelIndex Utils::modelIndexFromProxy(QAbstractItemModel* model,
     if (!index.isValid()) {
         return QModelIndex();
     }
-
     QSortFilterProxyModel* proxyModel;
     proxyModel = static_cast<QSortFilterProxyModel*>(model);
-
     return proxyModel->mapToSource(index);
 }
 
@@ -109,10 +106,8 @@ QModelIndex Utils::proxyIndexFromModel(QAbstractItemModel* model,
     if (!index.isValid()) {
         return QModelIndex();
     }
-
     QSortFilterProxyModel* proxyModel;
     proxyModel = static_cast<QSortFilterProxyModel*>(model);
-
     return proxyModel->mapFromSource(index);
 }
 

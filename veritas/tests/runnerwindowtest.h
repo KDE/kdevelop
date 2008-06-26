@@ -22,20 +22,25 @@
 #define VERITAS_RUNNERWINDOWTEST_H
 
 #include <QtTest/QtTest>
+#include <QTreeView>
 #include <ui_statuswidget.h>
 
 namespace Veritas
 {
 class RunnerWindow;
 class RunnerModel;
+class RunnerProxyModel;
 }
 
 namespace Veritas
 {
 namespace ut {
 class RunnerModelStub;
+class TestStub;
 }
 }
+
+using Veritas::ut::TestStub;
 
 namespace Veritas
 {
@@ -46,19 +51,33 @@ class RunnerWindowTest : public QObject
     Q_OBJECT
 
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
+    void init();
+    void cleanup();
 
     void startItems();
+    void selectAll();
+    void unselectAll();
+    void expandAll();
+    void collapseAll();
     void deselectItems();
 
 private:
-    void assertTestEquals(int item, QVariant col0, QVariant col1, QVariant col2, int result);
+    void expandSome();
+    void selectSome();
+
+    typedef bool (RunnerWindowTest::*checkMemberFun)(TestStub*);
+    void checkAllItems(checkMemberFun);
+    bool isSelected(TestStub*);
+    bool isNotSelected(TestStub*);
+    bool isExpanded(TestStub*);
+    bool isCollapsed(TestStub*);
 
 private:
     Veritas::RunnerWindow* window;
     Veritas::ut::RunnerModelStub* model;
     Ui::StatusWidget* status;
+    Veritas::RunnerProxyModel* m_proxy;
+    QTreeView* m_view;
 };
 
 }

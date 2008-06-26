@@ -23,6 +23,7 @@
 
 #include <runnerwindow.h>
 #include <runnermodel.h>
+#include <runnerproxymodel.h>
 #include <qtest_kde.h>
 #include <kasserts.h>
 
@@ -33,20 +34,113 @@ using Veritas::ut::RunnerModelStub;
 using Veritas::ut::createRunnerModelStub;
 using Veritas::it::RunnerWindowTest;
 
-void RunnerWindowTest::initTestCase()
+// fixture
+void RunnerWindowTest::init()
 {
-    model = createRunnerModelStub();
+    model = createRunnerModelStub(false);
+    model->fill2();
     window = new RunnerWindow();
     window->setModel(model);
     window->show();
     status = window->statusWidget();
+    m_proxy = window->runnerProxyModel();
+    m_view = window->runnerView();
 }
 
-void RunnerWindowTest::cleanupTestCase()
+// fxiture
+void RunnerWindowTest::cleanup()
 {
     window->ui().actionExit->trigger();
     if (window) delete window;
     if (model) delete model;
+}
+
+// helper
+void RunnerWindowTest::checkAllItems(checkMemberFun f)
+{
+    KVERIFY( (this->*f)(model->item1) );
+    KVERIFY( (this->*f)(model->child11) );
+    KVERIFY( (this->*f)(model->child12) );
+    KVERIFY( (this->*f)(model->item2) );
+    KVERIFY( (this->*f)(model->child21) );
+}
+
+// helper
+bool RunnerWindowTest::isSelected(TestStub* item)
+{
+    return item->selected();
+}
+
+// helper
+void RunnerWindowTest::selectSome()
+{
+    model->item1->setSelected(true);
+    model->child12->setSelected(false);
+    model->item2->setSelected(false);
+    model->child21->setSelected(true);
+}
+
+// command
+void RunnerWindowTest::selectAll()
+{
+    selectSome();
+    window->ui().actionSelectAll->trigger();
+    QTest::qWait(100);
+    checkAllItems(&RunnerWindowTest::isSelected);
+}
+
+// helper
+bool RunnerWindowTest::isNotSelected(TestStub* item)
+{
+    return !item->selected();
+}
+
+// command
+void RunnerWindowTest::unselectAll()
+{
+    selectSome();
+    window->ui().actionUnselectAll->trigger();
+    QTest::qWait(100);
+    checkAllItems(&RunnerWindowTest::isNotSelected);
+}
+
+// helper
+bool RunnerWindowTest::isExpanded(TestStub* item)
+{
+    QModelIndex i = m_proxy->mapFromSource(item->index());
+    return m_view->isExpanded(i);
+}
+
+// helper
+void RunnerWindowTest::expandSome()
+{
+    m_view->expand(m_proxy->index(0,0));
+}
+
+// command
+void RunnerWindowTest::expandAll()
+{
+    //expandSome();
+    window->ui().actionExpandAll->trigger();
+    QTest::qWait(100);
+    KVERIFY( isExpanded(model->item1) );
+    KVERIFY( isExpanded(model->item2) );
+}
+
+// helper
+bool RunnerWindowTest::isCollapsed(TestStub* item)
+{
+    QModelIndex i = m_proxy->mapFromSource(item->index());
+    return !m_view->isExpanded(i);
+}
+
+void RunnerWindowTest::collapseAll()
+{
+    //expandSome();
+    window->ui().actionCollapseAll->trigger();
+    QTest::qWait(100);
+    KVERIFY( isCollapsed(model->item1) );
+    KVERIFY( isCollapsed(model->item2) );
 }
 
 void RunnerWindowTest::startItems()
@@ -61,20 +155,24 @@ void RunnerWindowTest::startItems()
         QFAIL("Timeout while waiting for runner items to complete execution");
 
     // check they got indeed executed
+    // the rows of items that got executed are stored
+    // in the stub
     QCOMPARE(0, TestStub::executedItems.value(0));
     QCOMPARE(1, TestStub::executedItems.value(1));
+    QCOMPARE(0, TestStub::executedItems.value(2));
 
     // validate the test content
-    assertTestEquals(0, "00", "0_1", "0_2", Veritas::RunSuccess);
-    assertTestEquals(1, "10", "1_1", "1_2", Veritas::RunSuccess);
+    QCOMPARE(Veritas::RunSuccess, model->child11->state());
+    QCOMPARE(Veritas::RunSuccess, model->child12->state());
+    QCOMPARE(Veritas::RunSuccess, model->child21->state());
 
     // validate the status widget
-    KOMPARE(QString("2"), status->labelNumTotal->text());
-    KOMPARE(QString("2"), status->labelNumSelected->text());
-    KOMPARE(QString("2"), status->labelNumRun->text());
+    KOMPARE(QString("3"), status->labelNumTotal->text());
+    KOMPARE(QString("3"), status->labelNumSelected->text());
+    KOMPARE(QString("3"), status->labelNumRun->text());
 
     // TODO append ': ' to the labelNumXText instead
-    KOMPARE(QString(": 2"), status->labelNumSuccess->text());
+    KOMPARE(QString(": 3"), status->labelNumSuccess->text());
     KOMPARE(QString(": 0"), status->labelNumExceptions->text());
     KOMPARE(QString(": 0"), status->labelNumFatals->text());
     KOMPARE(QString(": 0"), status->labelNumErrors->text());
@@ -86,15 +184,6 @@ void RunnerWindowTest::deselectItems()
     // select only one of the runner items
     // validate that the other one didn't get executed
     KTODO;
-}
-
-void RunnerWindowTest::assertTestEquals(int itemNr, QVariant col0, QVariant col1, QVariant col2, int result)
-{
-    Test* item = model->fetchItem(model->index(itemNr, 0));
-    KOMPARE(col0, item->data(0));
-    KOMPARE(col1, item->data(1));
-    KOMPARE(col2, item->data(2));
-    KOMPARE(result, item->state());
 }
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

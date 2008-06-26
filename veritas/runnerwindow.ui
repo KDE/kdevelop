@@ -21,7 +21,7 @@
     <rect>
      <x>0</x>
      <y>34</y>
-     <width>100</width>
+     <width>514</width>
      <height>299</height>
     </rect>
    </property>
@@ -76,6 +76,10 @@
    </attribute>
    <addaction name="actionStart" />
    <addaction name="actionStop" />
+   <addaction name="actionCollapseAll" />
+   <addaction name="actionExpandAll" />
+   <addaction name="actionSelectAll" />
+   <addaction name="actionUnselectAll" />
   </widget>
   <widget class="QStatusBar" name="statusBar" >
    <property name="geometry" >
@@ -90,9 +94,9 @@
   <widget class="QDockWidget" name="dockResults" >
    <property name="geometry" >
     <rect>
-     <x>203</x>
+     <x>520</x>
      <y>34</y>
-     <width>591</width>
+     <width>274</width>
      <height>299</height>
     </rect>
    </property>
@@ -122,7 +126,7 @@
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>591</width>
+      <width>274</width>
       <height>279</height>
      </rect>
     </property>
@@ -300,9 +304,8 @@
   </action>
   <action name="actionSelectAll" >
    <property name="icon" >
-    <iconset>
-     <normaloff/>
-    </iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/checkedbox.png</normaloff>:/icons/checkedbox.png</iconset>
    </property>
    <property name="text" >
     <string>Select &amp;All</string>
@@ -310,9 +313,8 @@
   </action>
   <action name="actionUnselectAll" >
    <property name="icon" >
-    <iconset>
-     <normaloff/>
-    </iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/uncheckedbox.png</normaloff>:/icons/uncheckedbox.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Unselect All</string>
@@ -330,9 +332,8 @@
   </action>
   <action name="actionCollapseAll" >
    <property name="icon" >
-    <iconset>
-     <normaloff/>
-    </iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/expanded.png</normaloff>:/icons/expanded.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Collapse All</string>
@@ -340,9 +341,8 @@
   </action>
   <action name="actionExpandAll" >
    <property name="icon" >
-    <iconset>
-     <normaloff/>
-    </iconset>
+    <iconset resource="resources/qxrunner.qrc" >
+     <normaloff>:/icons/collapsed.png</normaloff>:/icons/collapsed.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Expand All</string>

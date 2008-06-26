@@ -58,7 +58,7 @@ void RunnerModelTest::default_()
 // test command
 void RunnerModelTest::appendResults()
 {
-    model->fill();
+    model->fill1();
 
     // size check
     KOMPARE(2, model->rowCount());
@@ -77,7 +77,7 @@ void RunnerModelTest::appendResults()
 // test command
 void RunnerModelTest::changeItems()
 {
-    model->fill();
+    model->fill1();
     KVERIFY_MSG(!model->setData(model->index(0, 1), "new_content"),
                 "Only allowed to select/deselect, not change arbitrary data");
     KVERIFY_MSG(!model->setData(model->index(0, 0), true, Qt::EditRole),
@@ -87,7 +87,7 @@ void RunnerModelTest::changeItems()
 // test command
 void RunnerModelTest::flags()
 {
-    model->fill();
+    model->fill1();
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 0)));
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 1)));
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 2)));
@@ -139,7 +139,7 @@ void RunnerModelTest::countItems()
     spies["selectedC"] = new QSignalSpy(model, SIGNAL(numSelectedChanged(int)));
     setUpResultSpies(spies);
 
-    model->fill();
+    model->fill1();
     model->countItems();
 
     // all should be emitted just once

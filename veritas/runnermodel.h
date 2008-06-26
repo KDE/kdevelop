@@ -382,10 +382,10 @@ private:  // Constants
 
 private:  // Attributes
 
-    Test*        m_rootItem;
+    Test* m_rootItem;
     RunnerModelThread* m_thread;
     ResultsModel* m_resultsModel;
-    QString  m_name;
+    QString m_name;
     QMutex m_lock;
 
     bool m_stop;
