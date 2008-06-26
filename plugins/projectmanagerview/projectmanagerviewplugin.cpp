@@ -71,7 +71,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         }
         virtual Qt::DockWidgetArea defaultPosition()
         {
-            return Qt::RightDockWidgetArea;
+            return Qt::LeftDockWidgetArea;
         }
         virtual QString id() const
         {
