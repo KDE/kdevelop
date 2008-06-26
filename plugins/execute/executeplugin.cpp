@@ -21,11 +21,14 @@
 
 #include "executeplugin.h"
 
+#include <QApplication>
+
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kdebug.h>
 #include <kjob.h>
+#include <kmessagebox.h>
 
 #include <environmentgrouplist.h>
 
@@ -66,6 +69,7 @@ bool ExecutePlugin::execute(const IRun & run, KJob* job)
     connect(process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
     connect(process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
+    connect(process, SIGNAL(error(QProcess::ProcessError)), SLOT(error(QProcess::ProcessError)));
 
     m_runners.insert(job, process);
 
@@ -73,6 +77,8 @@ bool ExecutePlugin::execute(const IRun & run, KJob* job)
     process->setProperty("job", QVariant::fromValue(static_cast<void*>(job)));
     process->setEnvironment(l.createEnvironment(run.environmentKey(), process->systemEnvironment()));
     process->setWorkingDirectory(run.workingDirectory().path());
+
+    process->setProperty("executable", run.executable().path());
     process->start(run.executable().path(), run.arguments());
 
     kDebug() << "Started process" << run.executable().path() << "with arguments" << run.arguments();
@@ -141,6 +147,28 @@ void ExecutePlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatu
     emit finished(job);
 }
 
+void ExecutePlugin::error(QProcess::ProcessError error)
+{
+    const QProcess* process = qobject_cast<const QProcess*>(sender());
+    Q_ASSERT(process);
+
+    if( error == QProcess::FailedToStart )
+    {
+        KMessageBox::information(
+            qApp->activeWindow(),
+            i18n("<b>Could not start program.</b>"
+                 "<p>Could not run '%1'. "
+                 "Make sure that the path name is specified correctly.",
+                 process->property("executable").toString()),
+            i18n("Could not start program"));
+    }
+
+    KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
+    Q_ASSERT(job);
+
+    emit finished(job);
+}
+
 #include "executeplugin.moc"
 
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on; auto-insert-doxygen on

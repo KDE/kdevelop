@@ -42,7 +42,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
     virtual void unload();
 
     virtual QStringList instrumentorsProvided() const;
-    
+
     virtual QString translatedInstrumentor(const QString& instrumentor) const;
 
     /**
@@ -64,6 +64,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
     void readyReadStandardOutput();
     void readyReadStandardError();
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void error(QProcess::ProcessError error);
 
   private:
     void readFrom(QProcess* process, QProcess::ProcessChannel channel);
