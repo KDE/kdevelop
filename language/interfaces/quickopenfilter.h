@@ -85,14 +85,12 @@ class Filter {
       if( !text.startsWith( m_oldFilterText ) )
         filterBase = m_items; //Start filtering based on the whole data
 
-      QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
-
-      ///@todo Use regexps, and the other additional filter-logic from kdevelop-3.4
+      //QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
 
       m_filtered.clear();
 
       foreach( const Item& data, filterBase )
-        if( itemText( data ).contains(exp) )
+        if( itemText( data ).contains(text, Qt::CaseInsensitive) )
           m_filtered << data;
       
       m_oldFilterText = text;
