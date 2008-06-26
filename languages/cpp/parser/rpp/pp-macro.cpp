@@ -122,7 +122,7 @@ QString pp_macro::toString() const {
     }
     ret += ")";
   }
-  ret += QString::fromUtf8(stringFromContents(definition(), definitionSize()));
+  ret += " " + QString::fromUtf8(stringFromContents(definition(), definitionSize()));
   
   return ret;
 }
