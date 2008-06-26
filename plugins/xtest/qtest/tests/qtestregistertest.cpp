@@ -33,7 +33,7 @@
 
 using Veritas::Test;
 using QTest::QTestRegister;
-using QTest::QTestSuite;;
+using QTest::QTestSuite;
 using QTest::QTestCase;
 using QTest::QTestCommand;
 using QTest::ut::QTestRegisterTest;
