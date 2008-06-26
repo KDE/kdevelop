@@ -388,7 +388,7 @@ void SvnDiffJob::addLeftText( KDevelop::VcsJob* job )
         QVariant v = job->fetchResults();
         m_diff.addLeftText( m_catJobMap[job], v.toString() );
         m_catJobMap.remove(job);
-        job->deleteLater();
+        // KJobs delete themselves when finished
     }
     if( m_catJobMap.isEmpty() )
     {
@@ -407,7 +407,7 @@ void SvnDiffJob::removeJob( KJob* job )
             if( m_catJobMap.contains( j ) )
             {
                 m_catJobMap.remove(j);
-                j->deleteLater();
+                // KJobs delete themselves when finished
             }
         }
     }
