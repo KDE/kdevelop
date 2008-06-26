@@ -416,17 +416,29 @@ void ModelTest::data()
     QVariant textAlignmentVariant = model->data(model->index(0, 0), Qt::TextAlignmentRole);
     if (textAlignmentVariant.isValid()) {
         int alignment = textAlignmentVariant.toInt();
-        Q_ASSERT(alignment == Qt::AlignLeft ||
-                 alignment == Qt::AlignRight ||
-                 alignment == Qt::AlignHCenter ||
-                 alignment == Qt::AlignJustify ||
-                 alignment == Qt::AlignTop ||
-                 alignment == Qt::AlignBottom ||
-                 alignment == Qt::AlignVCenter ||
-                 alignment == Qt::AlignCenter ||
-                 alignment == Qt::AlignAbsolute ||
-                 alignment == Qt::AlignLeading ||
-                 alignment == Qt::AlignTrailing);
+        int halignment = alignment & Qt::AlignHorizontal_Mask;
+        int valignment = alignment & Qt::AlignVertical_Mask;
+        Q_ASSERT(alignment != 0);
+        Q_ASSERT(halignment == 0 ||
+                halignment == Qt::AlignLeft ||
+                halignment == Qt::AlignRight ||
+                halignment == Qt::AlignHCenter ||
+                halignment == Qt::AlignJustify);
+        Q_ASSERT(valignment == 0 ||
+                valignment == Qt::AlignTop ||
+                valignment == Qt::AlignBottom ||
+                valignment == Qt::AlignVCenter);
+/*        Q_ASSERT(alignment == Qt::AlignLeft ||
+        alignment == Qt::AlignRight ||
+        alignment == Qt::AlignHCenter ||
+        alignment == Qt::AlignJustify ||
+        alignment == Qt::AlignTop ||
+        alignment == Qt::AlignBottom ||
+        alignment == Qt::AlignVCenter ||
+        alignment == Qt::AlignCenter ||
+        alignment == Qt::AlignAbsolute ||
+        alignment == Qt::AlignLeading ||
+        alignment == Qt::AlignTrailing);*/
     }
 
     // General Purpose roles that should return a QColor
