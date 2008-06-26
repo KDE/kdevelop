@@ -38,6 +38,7 @@ private slots:
     void openFile(const KFileItem&);
     void gotoUrl(const KUrl&);
     void updateNav( const KUrl& url );
+    void syncCurrentDocumentDirectory();
 private:
     void setupActions();
     QList<QAction*> tbActions;
