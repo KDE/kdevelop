@@ -43,7 +43,6 @@ private slots:
     void ok();
     void cancel();
 private:
-    bool eventFilter( QObject* o, QEvent* e );
 //     void insertRow( const KDevelop::VcsFileInfo &info );
     void insertRow( const QString& state, const KUrl& url );
 
