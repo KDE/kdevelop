@@ -113,7 +113,7 @@ void ExecutePlugin::readFrom(QProcess * process, QProcess::ProcessChannel channe
     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
 
     while (process->canReadLine()) {
-        QByteArray line = process->readLine();
+        QByteArray line = process->readLine() + '\n';
         QString string = QString::fromLocal8Bit(line, line.length() - 2);
         emit output(job, string, channel == QProcess::StandardOutput ? IRunProvider::StandardOutput : IRunProvider::StandardError);
     }
