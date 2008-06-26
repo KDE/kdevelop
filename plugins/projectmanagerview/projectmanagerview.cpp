@@ -99,13 +99,14 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 {
     setWindowTitle(i18n("Projects"));
 
-    KAction* action = new KAction(this);
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    action->setText(i18n("Locate Current Document"));
-    action->setToolTip(i18n("Locates the current document in the project tree and selects it."));
-    action->setIcon(KIcon("dirsync"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
-    addAction(action);
+    m_syncAction = new KAction(this);
+    m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_syncAction->setText(i18n("Locate Current Document"));
+    m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
+    m_syncAction->setIcon(KIcon("dirsync"));
+    connect(m_syncAction, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
+    addAction(m_syncAction);
+    updateSyncAction();
 
     d->mplugin = plugin;
     QVBoxLayout *vbox = new QVBoxLayout( this );
@@ -156,6 +157,15 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
+             SLOT(updateSyncAction(KDevelop::IDocument*)));
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
+             SLOT(updateSyncAction()));
+}
+
+void ProjectManagerView::updateSyncAction()
+{
+    m_syncAction->setEnabled( !KDevelop::ICore::self()->documentController()->openDocuments().isEmpty() );
 }
 
 ProjectManagerView::~ProjectManagerView()
