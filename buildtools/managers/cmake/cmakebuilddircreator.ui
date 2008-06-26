@@ -26,7 +26,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="0" column="2" >
     <widget class="KUrlRequester" name="cmakeBin" />
    </item>
    <item row="1" column="0" >
@@ -42,7 +42,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="2" >
     <widget class="KUrlRequester" name="buildFolder" />
    </item>
    <item row="2" column="0" >
@@ -58,7 +58,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="2" column="2" >
     <widget class="KUrlRequester" name="installPrefix" />
    </item>
    <item row="3" column="0" >
@@ -74,7 +74,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="3" column="2" >
     <widget class="QComboBox" name="buildType" >
      <property name="editable" >
       <bool>true</bool>
@@ -120,7 +120,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
+   <item row="4" column="2" >
     <widget class="QComboBox" name="generator" >
      <property name="enabled" >
       <bool>false</bool>
@@ -137,20 +137,7 @@
      </property>
     </widget>
    </item>
-   <item rowspan="2" row="5" column="1" >
-    <widget class="QTextEdit" name="cmakeOutput" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="2" >
+   <item row="7" column="0" colspan="3" >
     <widget class="QDialogButtonBox" name="buttonBox" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -163,7 +150,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1" >
+   <item row="6" column="2" >
     <widget class="QLabel" name="status" >
      <property name="text" >
       <string>TextLabel</string>
@@ -173,12 +160,25 @@
      </property>
     </widget>
    </item>
+   <item row="5" column="2" >
+    <widget class="QPlainTextEdit" name="cmakeOutput" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="readOnly" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
+   <extends></extends>
    <header>kurlrequester.h</header>
    <container>1</container>
   </customwidget>

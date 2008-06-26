@@ -34,12 +34,12 @@ CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, 
 
 	QString cmakeBin=executeProcess("which", QStringList("cmake"));
 	setCMakeBinary(KUrl(cmakeBin));
-	
+
 	connect(m_creatorUi->run, SIGNAL(clicked()), this, SLOT(runBegin()));
 	connect(m_creatorUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
 	connect(m_creatorUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
 	connect(m_creatorUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
-	connect(&m_proc, SIGNAL(readyReadStandardError()), this, SLOT(addError()));
+	connect(&m_proc, SIGNAL(readyReadStandardError()), this, SLOT(addOutput()));
 	connect(&m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(addOutput()));
 	connect(&m_proc, SIGNAL(finished ( int , QProcess::ExitStatus )), this, SLOT(cmakeCommandDone ( int , QProcess::ExitStatus )));
 	updated();
@@ -53,10 +53,17 @@ void CMakeBuildDirCreator::runBegin()
         kDebug(9042) << "Type of build: " << buildType();
         kDebug(9042) << "Installing to: " << installPrefix();
         kDebug(9042) << "Build directory: " << buildFolder();
+
+        QFileInfo f( buildFolder().toLocalFile() );
+        if( !f.exists() )
+        {
+            QDir::root().mkpath(f.absolutePath() );
+        }
+
         args += m_srcFolder.toLocalFile();
         args += "-DCMAKE_INSTALL_PREFIX="+installPrefix().toLocalFile();
         args += "-DCMAKE_BUILD_TYPE="+buildType();
-        
+
         m_proc.setWorkingDirectory(buildFolder().toLocalFile());
         m_proc.setProgram(cmakeBinary().toLocalFile(), args);
         m_proc.setOutputChannelMode(KProcess::MergedChannels);
@@ -77,22 +84,14 @@ void CMakeBuildDirCreator::runEnd()
 {
 }
 
-void CMakeBuildDirCreator::addError()
-{
-	QByteArray output=m_proc.readAllStandardError();
-	QString s;
-	s.append(output.trimmed());
-    m_creatorUi->cmakeOutput->setPlainText(m_creatorUi->cmakeOutput->toPlainText()+s+'\n');
-    m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
-}
-
 void CMakeBuildDirCreator::addOutput()
 {
 	QByteArray output=m_proc.readAllStandardOutput();
 	QString s;
 	s.append(output.trimmed());
-	m_creatorUi->cmakeOutput->setPlainText(m_creatorUi->cmakeOutput->toPlainText()+s+'\n');
-    m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
+	m_creatorUi->cmakeOutput->appendPlainText(s);
+    if( m_creatorUi->cmakeOutput->verticalScrollBar()->value() == m_creatorUi->cmakeOutput->verticalScrollBar()->maximum() )
+        m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
 }
 
 void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus)
@@ -101,7 +100,7 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
     QString t;
     t.prepend(b.trimmed());
     m_creatorUi->cmakeOutput->setPlainText(t);*/
-    
+
     bool successful=exitCode==0 & exitStatus==QProcess::NormalExit;
     if(successful) {
         m_creatorUi->status->setText(i18n("Created successfully"));
@@ -116,7 +115,7 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
 QString CMakeBuildDirCreator::buildDirProject(const KUrl& buildDir)
 {
     QFile file(buildDir.toLocalFile()+"/CMakeCache.txt");
-    
+
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         kWarning(9032) << "Something really strange happened reading CMakeCache.txt";
@@ -131,7 +130,7 @@ QString CMakeBuildDirCreator::buildDirProject(const KUrl& buildDir)
         QString line = file.readLine().trimmed();
         if(line.startsWith("#") || line.isEmpty())
             continue;
-        
+
         if(line.startsWith(pLine))
         {
             correct=true;
@@ -156,20 +155,21 @@ void CMakeBuildDirCreator::updated()
         return;
     }
 
-    bool dirEmpty=!m_creatorUi->buildFolder->url().isEmpty();
-    bool alreadyCreated=false, correctProject=false;
+    bool emptyUrl=m_creatorUi->buildFolder->url().isEmpty();
+    bool alreadyCreated=false, correctProject=false, dirExists = false, dirEmpty = false;
     QString srcDir;
-    if(dirEmpty)
+    if(!emptyUrl)
     {
         QDir d(m_creatorUi->buildFolder->url().toLocalFile());
-        dirEmpty=d.exists() && d.count()<=2;
-        if(!dirEmpty)
+        dirExists = d.exists();
+        dirEmpty=dirExists && d.count()<=2;
+        if(!dirEmpty && dirExists)
         {
             alreadyCreated=QFile::exists(m_creatorUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(alreadyCreated)
             {
                 QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
-                
+
                 srcDir=buildDirProject(m_creatorUi->buildFolder->url());
                 correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
             }
@@ -200,22 +200,23 @@ void CMakeBuildDirCreator::updated()
     }
     else
     {
-        m_creatorUi->installPrefix->setEnabled(dirEmpty);
-        m_creatorUi->buildType->setEnabled(dirEmpty);
+        m_creatorUi->installPrefix->setEnabled(dirEmpty || !dirExists);
+        m_creatorUi->buildType->setEnabled(dirEmpty || !dirExists);
 //         m_creatorUi->generator->setEnabled(dirEmpty);
-        m_creatorUi->run->setEnabled(dirEmpty);
+        m_creatorUi->run->setEnabled(dirEmpty || !dirExists);
         m_creatorUi->run->setText(i18n("&Run"));
         m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-        if(dirEmpty)
-            m_creatorUi->status->setText(i18n("Click run when you are ready"));
-        else
+        if( !dirEmpty && dirExists )
         {
             //Useful to prevent disasters
-            if(!alreadyCreated)
-                m_creatorUi->status->setText(i18n("The selected build directory does not exist or is not empty"));
-            else
+            if(alreadyCreated)
+                m_creatorUi->status->setText(i18n("The selected build directory is not empty"));
+            else if ( alreadyCreated && !correctProject )
                 m_creatorUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
+        } else
+        {
+            m_creatorUi->status->setText(i18n("Click the Run button to run CMake"));
         }
     }
 }
@@ -239,22 +240,24 @@ QString CMakeBuildDirCreator::buildType() const { return m_creatorUi->buildType-
 QString CMakeBuildDirCreator::executeProcess(const QString& execName, const QStringList& args)
 {
     kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-    
+
+
+
     KProcess p;
     p.setOutputChannelMode(KProcess::MergedChannels);
     p.setProgram(execName, args);
     p.start();
-    
+
     if(!p.waitForFinished())
     {
         kDebug(9042) << "failed to execute:" << execName;
     }
-    
+
     QByteArray b = p.readAllStandardOutput();
     QString t;
     t.prepend(b.trimmed());
     kDebug(9042) << "executed" << execName << "<" << t;
-    
+
     return t;
 }
 

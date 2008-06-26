@@ -51,7 +51,6 @@ class CMakeBuildDirCreator : public QDialog
         void runBegin();
         void runEnd();
 
-        void addError();
         void addOutput();
 
         void cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus);
