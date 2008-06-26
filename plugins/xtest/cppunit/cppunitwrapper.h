@@ -180,13 +180,21 @@ static inline void runAllTests(CppUnit::Test* root, int argc, char **argv)
     printf("</root>\n");
 }
 
+static inline void printAllTests(CppUnit::Test* root)
+{
+    printf("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+            "<root>\n");
+    printTestTree(root);
+    printf("</root>\n");
+}
+
 #define CPPUNIT_XTEST_MAIN( root ) \
 int main(int argc, char** argv)\
 {\
     if (argc == 1 || argv[1][0] != '-') { \
         CppUnit::runAllTests(root, argc, argv); \
     } else { \
-        CppUnit::printTestTree(root); \
+        CppUnit::printAllTests(root); \
     }\
     return 0;\
 }

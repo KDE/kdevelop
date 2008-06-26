@@ -42,8 +42,10 @@ bool TestSuite::shouldRun() const
 
 TestCase* TestSuite::child(int i) const
 {
-    TestCase* caze = qobject_cast<TestCase*>(Test::child(i));
-    kWarning(caze==0) << "cast failed? " << name() << " child " << i;
+    Test* child = Test::child(i);
+    TestCase* caze = qobject_cast<TestCase*>(child);
+    kWarning(caze==0) << "cast failed? " << name() << " " 
+                      << i << " " << ((child!=0) ? child->name() : "null");
     return caze;
 }
 
@@ -57,7 +59,8 @@ int TestSuite::run()
     proc.start();
     proc.waitForFinished(-1);
     QStringList spl = m_exe.filePath().split('/');
-    QFile f(QFileInfo(m_exe.dir(), "checklog.xml").filePath());
+    QFile f(QFileInfo(QDir::currentPath(), "checklog.xml").filePath());
+    kWarning(!f.exists()) << "Failure: testresult dump does not exist [" << f.fileName();
     OutputParser parser(&f);
     parser.go(this);
     return 0;

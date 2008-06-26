@@ -54,4 +54,5 @@ install(TARGETS kdevcheckview DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES kdevcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcheck.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcheck )
-
+install( FILES checkwrapper.h check_impl.h check_list.h 
+         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/veritas/ )

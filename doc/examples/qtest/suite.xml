@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+<suite name="money" dir="">
+	<case name="moneytest" exe="moneytest.shell">
+		<command name="create" />
+		<command name="negative" />
+		<command name="zero" />
+	</case>
+</suite>
+</root>

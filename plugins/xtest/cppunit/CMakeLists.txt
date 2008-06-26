@@ -57,3 +57,4 @@ install(TARGETS kdevcppunitview DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES kdevcppunit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcppunit.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppunit )
+install( FILES cppunitwrapper.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/veritas/ )
