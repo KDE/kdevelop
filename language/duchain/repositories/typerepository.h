@@ -27,6 +27,6 @@ namespace KDevelop {
       static uint indexForType(AbstractType::Ptr input);
       static AbstractType::Ptr typeForIndex(uint index);
   };
-};
+}
 
 #endif
