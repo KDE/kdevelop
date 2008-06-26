@@ -29,6 +29,8 @@
 #include <QByteArray>
 #include <QTimer>
 #include <QMenu>
+#include <QDBusConnectionInterface>
+#include <QDBusInterface>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -58,6 +60,8 @@
 #include <iproject.h>
 #include <context.h>
 #include <util/processlinemaker.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "variablewidget.h"
 #include "gdbbreakpointwidget.h"
@@ -172,11 +176,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setupActions();
 
-//     connect( core(), SIGNAL(contextMenu(Q3PopupMenu *, const KDevelop::Context *)),
-//              this, SLOT(contextMenu(Q3PopupMenu *, const KDevelop::Context *)) );
-//
-//     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
-//              this, SLOT(slotStop(KDevPlugin*)) );
+    setupDbus();
 
     procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -333,60 +333,35 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_toggle_breakpoint", action);
 }
 
-void CppDebuggerPlugin::setupDcop()
+void CppDebuggerPlugin::setupDbus()
 {
-    /*QCStringList objects = kapp->dcopClient()->registeredApplications();
-    for (QCStringList::Iterator it = objects.begin(); it != objects.end(); ++it)
-        if ((*it).indexOf("drkonqi-") == 0)
-            slotDCOPApplicationRegistered(*it);
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    drkonqiInterface = new QDBusInterface("org.kde.Krash", "/krashinfo", QString(), bus, this);
+    connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), this, SLOT(slotDebugExternalProcess()));
+    if (bus.interface()->isServiceRegistered( "org.kde.Krash" ))
+        slotDbusApplicationRegistered("org.kde.Krash");
 
-    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QByteArray&)), SLOT(slotDCOPApplicationRegistered(const QByteArray&)));
-    kapp->dcopClient()->setNotifications(true);*/
+    connect(bus.interface(), SIGNAL(serviceRegistered(const QString&)), SLOT(slotDbusApplicationRegistered(const QString&)));
 }
 
-/*void CppDebuggerPlugin::slotDCOPApplicationRegistered(const QByteArray& appId)
+void CppDebuggerPlugin::slotDbusApplicationRegistered(const QString& interface)
 {
-    if (appId.indexOf("drkonqi-") == 0) {
-        QByteArray answer;
-        QByteArray replyType;
-
-        kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true, 5000);
-
-        QDataStream d(answer, QIODevice::ReadOnly);
-        QByteArray appName;
-        d >> appName;
-
-        if (appName.length() && project() && project()->mainProgram().endsWith(appName)) {
-            kapp->dcopClient()->send(appId, "krashinfo", "registerDebuggingApplication(QString)", i18n("Debug in &KDevelop"));
-            connectDCOPSignal(appId, "krashinfo", "acceptDebuggingApplication()", "slotDebugExternalProcess()", true);
-        }
-    }
+    if (interface == "org.kde.Krash")
+        drkonqiInterface->call("registerDebuggingApplication", i18n("Debug in &KDevelop"));
 }
 
-ASYNC CppDebuggerPlugin::slotDebugExternalProcess()
+void CppDebuggerPlugin::slotDebugExternalProcess()
 {
-    QByteArray answer;
-    QByteArray replyType;
+    QDBusReply<int> reply = drkonqiInterface->call("pid");
 
-    kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true, 5000);
-
-    QDataStream d(answer, QIODevice::ReadOnly);
-    int pid;
-    d >> pid;
-
-    if (attachProcess(pid) && m_drkonqi.isEmpty()) {
-        m_drkonqi = kapp->dcopClient()->senderId();
+    if (reply.isValid()) {
+        attachProcess(reply.value());
         QTimer::singleShot(15000, this, SLOT(slotCloseDrKonqi()));
-        mainWindow()->raiseView(framestackWidget);
+        //mainWindow()->raiseView(framestackWidget);
     }
 
-    mainWindow()->main()->raise();
+    //mainWindow()->main()->raise();
 }
-
-ASYNC CppDebuggerPlugin::slotDebugCommandLine(const QString& /command/)
-{
-    KMessageBox::information(qApp->activeWindow(), "Asked to debug command line");
-}*/
 
 void CppDebuggerPlugin::slotCloseDrKonqi()
 {
@@ -396,8 +371,6 @@ void CppDebuggerPlugin::slotCloseDrKonqi()
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
-    //kapp->dcopClient()->setNotifications(false);
-
     delete controller;
     delete floatingToolBar;
 
@@ -410,12 +383,17 @@ void CppDebuggerPlugin::initializeGuiState()
     stateChanged("stopped");
 }
 
-void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *context)
+KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop::Context* context )
 {
-    if (!context->hasType( KDevelop::Context::EditorContext ))
-        return;
+    KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
 
-    const KDevelop::EditorContext *econtext = static_cast<const KDevelop::EditorContext*>(context);
+    if( context->type() != KDevelop::Context::EditorContext )
+        return menuExt;
+
+    KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+    if (!econtext)
+        return menuExt;
+
     m_contextIdent = econtext->currentWord();
 
     bool running = !(debuggerState_ & s_dbgNotStarted);
@@ -425,30 +403,34 @@ void CppDebuggerPlugin::contextMenu(QMenu *popup, const KDevelop::Context *conte
     // surely debugging, not editing code or something. So, first
     // menu items should be about debugging, not some copy/paste/cut
     // things.
-    if (!running)
-        popup->addSeparator();
+    //if (!running)
+        //popup->addSeparator();
 
     if (running)
     {
-        popup->addAction(m_runToCursor);
+        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_runToCursor);
     }
 
     if (econtext->url().isLocalFile())
     {
-        popup->addAction(m_toggleBreakpoint);
+        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_toggleBreakpoint);
     }
     if (!m_contextIdent.isEmpty())
     {
         // PORTING TODO
         //QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
-        QAction* action = popup->addAction( i18n("Evaluate: %1", m_contextIdent),
-                                    this, SLOT(contextEvaluate()));
+        QAction* action = new QAction( i18n("Evaluate: %1", m_contextIdent), this);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(contextEvaluate()));
         action->setWhatsThis(i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
-        action = popup->addAction( i18n("Watch: %1", m_contextIdent), this, SLOT(contextWatch()));
+        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
+
+        action = new QAction( i18n("Watch: %1", m_contextIdent), this);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(contextWatch()));
         action->setWhatsThis(i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
     }
 
-    popup->addSeparator();
+    return menuExt;
 }
 
 

@@ -40,6 +40,7 @@
 
 class QLabel;
 class QMenu;
+class QDBusInterface;
 class KDialog;
 class ProcessWidget;
 
@@ -81,7 +82,9 @@ public:
      */
     void demandAttention() const;
 
-    // BEGIN IRunProvider
+    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+
+    //BEGIN IRunProvider
     virtual QStringList instrumentorsProvided() const;
     virtual QString translatedInstrumentor(const QString& instrumentor) const;
     virtual bool execute(const KDevelop::IRun& run, KJob* job);
@@ -90,9 +93,10 @@ public:
 Q_SIGNALS:
     void finished(KJob* job);
     void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+    //END IRunProvider
 
 public:
-    // BEGIN IStatus
+    //BEGIN IStatus
     virtual QString statusName() const;
 
 Q_SIGNALS:
@@ -100,6 +104,7 @@ Q_SIGNALS:
     void showMessage(const QString & message, int timeout = 0);
     void hideProgress();
     void showProgress(int minimum, int maximum, int value);
+    //END IStatus
 
     void raiseOutputViews();
     void raiseFramestackViews();
@@ -115,13 +120,9 @@ Q_SIGNALS:
 
     void toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor);
 
-//k_dcop:
-//    virtual ASYNC slotDebugExternalProcess();
-//    virtual ASYNC slotDebugCommandLine(const QString& command);
-
 private Q_SLOTS:
-    void setupDcop();
-    void contextMenu(QMenu *popup, const KDevelop::Context *context);
+    void setupDbus();
+    void slotDebugExternalProcess();
     void toggleBreakpoint();
     void contextEvaluate();
     void contextWatch();
@@ -137,7 +138,7 @@ private Q_SLOTS:
 
     void slotGotoSource(const QString &fileName, int lineNum);
 
-    //void slotDCOPApplicationRegistered(const QByteArray &appId);
+    void slotDbusApplicationRegistered(const QString &service);
     void slotCloseDrKonqi();
 
     void slotDebuggerAbnormalExit();
@@ -169,6 +170,7 @@ private:
     QPointer<KToolBar> floatingToolBar;
     KDevelop::ProcessLineMaker* procLineMaker;
     KDevelop::ProcessLineMaker* gdbLineMaker;
+    QDBusInterface* drkonqiInterface;
 
     QString m_contextIdent;
     QByteArray m_drkonqi;
