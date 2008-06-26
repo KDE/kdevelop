@@ -217,9 +217,8 @@ void PreprocessJob::run()
           parentJob()->setUpdatingContentContext( updating );
       
         if( updating ) {
+          //We don't need to change anything, because the EnvironmentFile will be replaced with a new one
           m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
-          m_updatingEnvironmentFile->clearMissingIncludeFiles();
-          m_updatingEnvironmentFile->clearModificationTimes();
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
             //Must be true, because we explicity passed the flag to chainForDocument
@@ -336,9 +335,8 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             } else {
                 ifDebug( kDebug(9007) << "updating content-context"; )
                 m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
-                m_updatingEnvironmentFile->clearMissingIncludeFiles();
-                m_updatingEnvironmentFile->clearModificationTimes();
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
+                //We don't need to change m_updatingEnvironmentFile, because we will create a new one.
             }
         } else {
             //We need to process the content ourselves
