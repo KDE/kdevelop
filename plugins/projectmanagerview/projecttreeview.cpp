@@ -62,6 +62,8 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     setContextMenuPolicy( Qt::CustomContextMenu );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
+    setIndentation(12);
+
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
     connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
