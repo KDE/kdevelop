@@ -55,7 +55,6 @@ DeclarationPrivate::DeclarationPrivate()
   m_ownIndex = 0;
 }
   
-  
 DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChainBasePrivate(rhs)
 {
   m_identifier = rhs.m_identifier;
@@ -160,6 +159,21 @@ const Identifier& Declaration::identifier( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
   return d_func()->m_identifier;
+}
+
+IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex) : m_topContext(topContext), m_declarationIndex(declarationIndex) {
+}
+
+Declaration* IndexedDeclaration::declaration() const {
+  ENSURE_CHAIN_READ_LOCKED
+  if(!m_topContext || !m_declarationIndex)
+    return 0;
+  
+  TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
+  if(!ctx)
+    return 0;
+  
+  return ctx->declarationForIndex(m_declarationIndex);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)

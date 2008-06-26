@@ -23,6 +23,7 @@
 #include "language/editor/simplecursor.h"
 
 #include "language/duchain/identifier.h"
+#include "declaration.h"
 
 //krazy:excludeall=dpointer
 
@@ -44,18 +45,28 @@ class TopDUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
   public:
     DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0, uint specialization = 0);
-    DeclarationId(uint topContext, uint declaration, uint specialization = 0);
+    DeclarationId(const IndexedDeclaration& decl, uint specialization = 0);
     
     bool operator==(const DeclarationId& rhs) const {
-      return m_identifier == rhs.m_identifier && m_additionalIdentity == rhs.m_additionalIdentity;
+      if(m_direct != rhs.m_direct)
+        return false;
+      
+      if(!m_direct)
+        return indirect.m_identifier == rhs.indirect.m_identifier && indirect.m_additionalIdentity == rhs.indirect.m_additionalIdentity && m_specialization == rhs.m_specialization;
+      else
+        return direct == rhs.direct && m_specialization == rhs.m_specialization;
     }
 
+    ///Warning: This may return different hashes for the same declaration, depending on whether the id is direct or indirect
     uint hash() const {
-      return m_identifier.index * 13 + m_additionalIdentity;
+      if(m_direct)
+        return direct.hash() + m_specialization * 101;
+      else
+        return indirect.m_identifier.index * 13 + indirect.m_additionalIdentity + m_specialization * 101;
     }
 
-    IndexedQualifiedIdentifier identifier() const;
-    uint additionalIdentity() const;
+//     IndexedQualifiedIdentifier identifier() const;
+//     uint additionalIdentity() const;
 
     /**
      * Tries to retrieve the declaration, from the perspective of @param context
@@ -63,25 +74,24 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * */
     Declaration* getDeclaration(TopDUContext* context) const;
     
+    void setSpecialization(uint);
+    uint specialization() const;
+    
     //Whether this DeclarationId directly references a declaration by indices. If false, it uses identifiers and other data.
     bool isDirect() const;
     
   private:
-/*    union {
+    struct Indirect {
+      IndexedQualifiedIdentifier m_identifier;
+      uint m_additionalIdentity; //Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
+    } ;
+    
+    //union {
       //An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
       //declarations that are in the symbol-table
-      struct Indirect {*/
-        IndexedQualifiedIdentifier m_identifier;
-        uint m_additionalIdentity; //Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
-/*      } indirect;
-      
-      //A direct reference to the declaration, referencing it by the index of the top-context and declaration.
-      //Mainly useful for declarations that are not within the symbol-table
-      struct Direct {*/
-        uint m_topContext; //Identity-index of the top-context
-        uint m_declaration; //Identity-index of the declaration within that top-context
-/*      } direct;
-    };*/
+      Indirect indirect;
+      IndexedDeclaration direct;
+    //};
     bool m_direct;
     uint m_specialization; //Can be used in a language-specific way to pick other versions of the declaration.
                            //When the declaration is found, pickSpecialization is called on the found declaration with this value, and

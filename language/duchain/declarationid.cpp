@@ -27,42 +27,50 @@
 namespace KDevelop {
 
 DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, uint specialization)
-  : m_identifier(id), m_additionalIdentity(additionalId), m_direct(false), m_specialization(specialization)
+  : m_direct(false), m_specialization(specialization)
+{
+  indirect.m_identifier = id;
+  indirect.m_additionalIdentity = additionalId;
+  
+}
+
+DeclarationId::DeclarationId(const IndexedDeclaration& decl, uint specialization)
+  : direct(decl), m_direct(true), m_specialization(specialization)
 {
   
 }
 
-DeclarationId::DeclarationId(uint topContext, uint declaration, uint specialization)
-  : m_topContext(topContext), m_declaration(declaration), m_direct(true), m_specialization(specialization)
-{
-  
-}
-
-IndexedQualifiedIdentifier DeclarationId::identifier() const
-{
-  return m_identifier;
-}
-
-uint DeclarationId::additionalIdentity() const
-{
-  return m_additionalIdentity;
-}
+// IndexedQualifiedIdentifier DeclarationId::identifier() const
+// {
+//   return m_identifier;
+// }
+// 
+// uint DeclarationId::additionalIdentity() const
+// {
+//   return m_additionalIdentity;
+// }
 
 bool DeclarationId::isDirect() const
 {
   return m_direct;
 }
 
-Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
+void DeclarationId::setSpecialization(uint spec) {
+  m_specialization = spec;
+}
+
+uint DeclarationId::specialization() const {
+  return m_specialization;
+}
+
+Declaration* DeclarationId::getDeclaration(TopDUContext* top) const
 {
   Declaration* ret = 0;
   
   if(m_direct == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
-    QualifiedIdentifier id(m_identifier);
+    QualifiedIdentifier id(indirect.m_identifier);
 
-    TopDUContext* top = context->topContext();
-    
     QVarLengthArray<Declaration*> declarations;
     SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
     
@@ -70,7 +78,7 @@ Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
     
     FOREACH_ARRAY(Declaration* decl, declarations) {
       if(decl->identifier() == lastId) {
-        if(m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
           //Hit
           ret = decl;
           break;
@@ -79,16 +87,12 @@ Declaration* DeclarationId::getDeclaration(TopDUContext* context) const
     }
   }else{
     //Find the declaration by m_topContext and m_declaration
-    TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
-    if(ctx)
-      ret = ctx->declarationForIndex(m_declaration);
   }
   
-  if(ret) {
-    ret = ret->specialize(m_specialization);
-  }
-
-  return ret;
+  if(ret)
+    return ret->specialize(m_specialization);
+  else
+    return 0;
 }
 
 }

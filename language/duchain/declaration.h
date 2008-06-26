@@ -43,11 +43,30 @@ class Use;
 class ForwardDeclaration;
 class DeclarationPrivate;
 class DeclarationId;
+class Declaration;
 
 struct ImportTraceItem;
 
 
 typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
+
+
+///Represents a declaration only by its global indices
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
+  public:
+    IndexedDeclaration(uint topContext = 0, uint declarationIndex = 0);
+    //Duchain must be read locked
+    Declaration* declaration() const;
+    bool operator==(const IndexedDeclaration& rhs) const {
+      return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
+    }
+    uint hash() const {
+      return (m_topContext * 53 + m_declarationIndex) * 23;
+    }
+  private:
+  uint m_topContext;
+  uint m_declarationIndex;
+};
 
 /**
  * Represents a single declaration in a definition-use chain.
