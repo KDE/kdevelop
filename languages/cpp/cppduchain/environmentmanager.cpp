@@ -219,9 +219,7 @@ EnvironmentFilePointer EnvironmentManager::lexedFile( const IndexedString& fileN
   return EnvironmentFilePointer();
 }
 
-//Should be cached too!
 bool EnvironmentManager::needsUpdate( const KDevelop::ParsingEnvironmentFile* filePtr ) const {
-  //@todo Check if any of the dependencies changed
   const EnvironmentFile* file = dynamic_cast<const EnvironmentFile*>(filePtr);
 
   if(!file) {
@@ -397,7 +395,13 @@ void EnvironmentFile::addIncludeFile( const IndexedString& file, const Modificat
 }
 
 void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
+#ifdef LEXERCACHE_DEBUG
+  kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
+#endif
   m_modificationTime = rev;
+#ifdef LEXERCACHE_DEBUG
+  kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
+#endif
   m_allModificationTimes[m_url] = rev;
 }
 
