@@ -39,7 +39,7 @@
 
 #include <QMessageBox>
 #include <QCloseEvent>
-
+#include <KLocale>
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initVeritasResource()
 {
@@ -461,9 +461,9 @@ void RunnerWindow::displayNumInfos(int numItems) const
 {
     if (numItems != 1) {
         m_ui.buttonInfos->setText(QString().setNum(numItems) +
-                                tr(" Infos"));
+                                i18n(" Infos"));
     } else {
-        m_ui.buttonInfos->setText(tr("1 Info"));
+        m_ui.buttonInfos->setText(i18n("1 Info"));
     }
 
     displayStatusNum(statusWidget()->labelNumInfos,
@@ -474,9 +474,9 @@ void RunnerWindow::displayNumWarnings(int numItems) const
 {
     if (numItems != 1) {
         m_ui.buttonWarnings->setText(QString().setNum(numItems) +
-                                   tr(" Warnings"));
+                                   i18n(" Warnings"));
     } else {
-        m_ui.buttonWarnings->setText(tr("1 Warning"));
+        m_ui.buttonWarnings->setText(i18n("1 Warning"));
     }
 
     displayStatusNum(statusWidget()->labelNumWarnings,
@@ -487,9 +487,9 @@ void RunnerWindow::displayNumErrors(int numItems) const
 {
     if (numItems != 1) {
         m_ui.buttonErrors->setText(QString().setNum(numItems) +
-                                 tr(" Errors"));
+                                 i18n(" Errors"));
     } else {
-        m_ui.buttonErrors->setText(tr("1 Error"));
+        m_ui.buttonErrors->setText(i18n("1 Error"));
     }
 
     displayStatusNum(statusWidget()->labelNumErrors,
@@ -500,9 +500,9 @@ void RunnerWindow::displayNumFatals(int numItems) const
 {
     if (numItems != 1) {
         m_ui.buttonFatals->setText(QString().setNum(numItems) +
-                                 tr(" Fatals"));
+                                 i18n(" Fatals"));
     } else {
-        m_ui.buttonFatals->setText(tr("1 Fatal"));
+        m_ui.buttonFatals->setText(i18n("1 Fatal"));
     }
 
     displayStatusNum(statusWidget()->labelNumFatals,
