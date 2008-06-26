@@ -35,6 +35,7 @@ public:
     FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
     QList<QAction*> toolBarActions() const;
 private slots:
+    void openFile(const KFileItem&);
     void gotoUrl(const KUrl&);
     void updateNav( const KUrl& url );
 private:

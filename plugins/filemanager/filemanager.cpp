@@ -28,9 +28,12 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-
 #include <kdiroperator.h>
+#include <kfileitem.h>
 #include <klineedit.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "kdevfilemanagerplugin.h"
 
@@ -51,10 +54,18 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Simple );
+    dirop->setOnlyDoubleClickSelectsFiles(true);
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     l->addWidget(dirop);
 
+    connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
+
     setupActions();
+}
+
+void FileManager::openFile(const KFileItem& file)
+{
+    KDevelop::ICore::self()->documentController()->openDocument( file.url() );
 }
 
 
