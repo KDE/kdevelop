@@ -98,7 +98,9 @@ void FileManager::setupActions()
 
 void FileManager::syncCurrentDocumentDirectory()
 {
-    updateNav( KDevelop::ICore::self()->documentController()->activeDocument()->url().upUrl() );
+    if( KDevelop::IDocument* activeDoc = 
+                    KDevelop::ICore::self()->documentController()->activeDocument() )
+        updateNav( activeDoc->url().upUrl() );
 }
 
 QList<QAction*> FileManager::toolBarActions() const
