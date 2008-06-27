@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
+#include <QSignalMapper>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -176,7 +177,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setupActions();
 
-    setupDbus();
+    setupDBus();
 
     procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -333,26 +334,43 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_toggle_breakpoint", action);
 }
 
-void CppDebuggerPlugin::setupDbus()
+void CppDebuggerPlugin::setupDBus()
 {
-    QDBusConnection bus = QDBusConnection::sessionBus();
-    drkonqiInterface = new QDBusInterface("org.kde.Krash", "/krashinfo", QString(), bus, this);
-    connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), this, SLOT(slotDebugExternalProcess()));
-    if (bus.interface()->isServiceRegistered( "org.kde.Krash" ))
-        slotDbusApplicationRegistered("org.kde.Krash");
+    m_drkonqiMap = new QSignalMapper(this);
+    connect(m_drkonqiMap, SIGNAL(mapped(QObject*)), this, SLOT(slotDebugExternalProcess(QObject*)));
 
-    connect(bus.interface(), SIGNAL(serviceRegistered(const QString&)), SLOT(slotDbusApplicationRegistered(const QString&)));
+    QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
+    foreach (const QString& service, dbusInterface->registeredServiceNames().value())
+        slotDBusServiceOwnerChanged(service, QString(), service);
+
+    connect(dbusInterface, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(slotDBusServiceOwnerChanged(QString,QString,QString)));
 }
 
-void CppDebuggerPlugin::slotDbusApplicationRegistered(const QString& interface)
+void CppDebuggerPlugin::slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner)
 {
-    if (interface == "org.kde.Krash")
-        drkonqiInterface->call("registerDebuggingApplication", i18n("Debug in &KDevelop"));
+    if (name.startsWith("org.kde.drkonqi")) {
+        if (!oldOwner.isEmpty()) {
+            // Deregistration
+            if (m_drkonqis.contains(name))
+                delete m_drkonqis.take(name);
+        }
+
+        if (!newOwner.isEmpty()) {
+            // New registration
+            QDBusInterface* drkonqiInterface = new QDBusInterface(name, "/krashinfo", QString(), QDBusConnection::sessionBus(), this);
+            m_drkonqis.insert(name, drkonqiInterface);
+
+            connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
+            m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
+
+            drkonqiInterface->call("registerDebuggingApplication", i18n("Debug in &KDevelop"));
+        }
+    }
 }
 
-void CppDebuggerPlugin::slotDebugExternalProcess()
+void CppDebuggerPlugin::slotDebugExternalProcess(QObject* interface)
 {
-    QDBusReply<int> reply = drkonqiInterface->call("pid");
+    QDBusReply<int> reply = static_cast<QDBusInterface*>(interface)->call("pid");
 
     if (reply.isValid()) {
         attachProcess(reply.value());

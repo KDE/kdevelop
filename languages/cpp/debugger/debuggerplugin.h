@@ -41,6 +41,7 @@
 class QLabel;
 class QMenu;
 class QDBusInterface;
+class QSignalMapper;
 class KDialog;
 class ProcessWidget;
 
@@ -121,8 +122,8 @@ Q_SIGNALS:
     void toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor);
 
 private Q_SLOTS:
-    void setupDbus();
-    void slotDebugExternalProcess();
+    void setupDBus();
+    void slotDebugExternalProcess(QObject* interface);
     void toggleBreakpoint();
     void contextEvaluate();
     void contextWatch();
@@ -138,7 +139,7 @@ private Q_SLOTS:
 
     void slotGotoSource(const QString &fileName, int lineNum);
 
-    void slotDbusApplicationRegistered(const QString &service);
+    void slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner);
     void slotCloseDrKonqi();
 
     void slotDebuggerAbnormalExit();
@@ -170,7 +171,9 @@ private:
     QPointer<KToolBar> floatingToolBar;
     KDevelop::ProcessLineMaker* procLineMaker;
     KDevelop::ProcessLineMaker* gdbLineMaker;
-    QDBusInterface* drkonqiInterface;
+
+    QHash<QString, QDBusInterface*> m_drkonqis;
+    QSignalMapper* m_drkonqiMap;
 
     QString m_contextIdent;
     QByteArray m_drkonqi;
