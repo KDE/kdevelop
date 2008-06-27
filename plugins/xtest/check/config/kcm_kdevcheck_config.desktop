@@ -12,4 +12,8 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Check
+Name[gl]=Comprobar
+Name[zh_TW]=檢查
 Comment=Check settings
+Comment[gl]=Configuración da comprobación
+Comment[zh_TW]=檢查設定
