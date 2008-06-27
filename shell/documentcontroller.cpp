@@ -136,6 +136,12 @@ void KDevelop::DocumentController::initialize()
 void DocumentController::cleanup()
 {
     d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+
+    // Close all documents without checking if they should be saved.
+    // This is because the user gets a chance to save them during MainWindow::queryClose.
+    foreach (Sublime::MainWindow* mw, Core::self()->uiControllerInternal()->mainWindows())
+        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
+            doc->close(IDocument::Discard);
 }
 
 DocumentController::~DocumentController()
@@ -552,13 +558,13 @@ bool DocumentController::saveAllDocumentsForWindow(MainWindow* mw, IDocument::Do
 void DocumentController::reloadAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
-        if (!saveSomeDocuments(soloViews, IDocument::Default))
+        if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
             return;
 
-        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
+        foreach (IDocument* doc, views)
             doc->reload();
     }
 }
@@ -566,13 +572,13 @@ void DocumentController::reloadAllDocuments()
 void DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
-        if (!saveSomeDocuments(soloViews, IDocument::Default))
+        if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
             return;
 
-        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
+        foreach (IDocument* doc, views)
             doc->close(IDocument::Discard);
     }
 }

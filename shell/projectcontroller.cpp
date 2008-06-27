@@ -392,8 +392,6 @@ bool ProjectController::closeProject( IProject* proj )
     //Now we can save settings for all of the Core objects including this one!!
 //     Core::self()->saveSettings();
 
-//     Core::self()->documentController() ->closeAllDocuments();
-
     // save the the project to open it automatically on startup if needed
 //     d->m_lastProject = d->m_globalFile;
 
@@ -407,7 +405,7 @@ bool ProjectController::closeProject( IProject* proj )
 //         if (MainWindow* mw = d->m_core->uiControllerInternal()->defaultMainWindow()) {
 //             KActionCollection * ac = mw->actionCollection();
 //             QAction * action;
-// 
+//
 //             action = ac->action( "project_close" );
 //             if( action )
 //                 action->setEnabled( false );

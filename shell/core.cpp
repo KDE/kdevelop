@@ -138,9 +138,13 @@ Core::~Core()
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
-        /* Must be called before projectController->cleanup(). */
-        d->documentController->cleanup();
+        // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
+
+        /* Must be called before projectController->cleanup(). */
+        // Closes all documents (discards, as already saved if the user wished earlier)
+        d->documentController->cleanup();
+
         d->projectController->cleanup();
         d->pluginController->cleanup();
     }
