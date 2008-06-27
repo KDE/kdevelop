@@ -95,6 +95,7 @@ struct TextDocumentPrivate {
         QList<QAction*> vcsActions;
         QList<QAction*> extActions;
         QList<QAction*> refactorActions;
+        QList<QAction*> debugActions;
         foreach( const ContextMenuExtension ext, extensions )
         {
 
@@ -113,8 +114,23 @@ struct TextDocumentPrivate {
                 refactorActions << act;
             }
 
+            foreach( QAction* act, ext.actions( ContextMenuExtension::DebugGroup ) )
+            {
+                debugActions << act;
+            }
+
         }
 
+        QMenu* debugmenu = menu;
+        if( debugActions.count() > 1 )
+        {
+            debugmenu = menu->addMenu( "Refactor");
+        }
+        foreach( QAction* act, debugActions )
+        {
+            debugmenu->addAction( act );
+        }
+        menu->addSeparator();
 
         QMenu* refactormenu = menu;
         if( refactorActions.count() > 1 )
