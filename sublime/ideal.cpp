@@ -167,7 +167,7 @@ Qt::Orientation IdealButtonBarWidget::orientation() const
 void IdealButtonBarWidget::showWidget(bool checked)
 {
     Q_ASSERT(parentWidget() != 0);
-    
+
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
@@ -724,6 +724,10 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
         Q_ASSERT (0 && "unexpect position");
     }
     emit dockShown(dock->view(), pos, show);
+
+    // Put the focus back on the editor if a dock was hidden
+    if (!show)
+        focusEditor();
 }
 
 IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)
@@ -820,6 +824,9 @@ void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
         foreach (QAction* action, barForRole(role)->actions())
             if (action->isChecked())
                 action->setChecked(false);
+
+        // Focus editor
+        focusEditor();
     }
 }
 
