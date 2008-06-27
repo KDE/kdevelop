@@ -114,7 +114,8 @@ public:
 
   virtual void viewCreated(Sublime::View* view)
   {
-      QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
+      if (view->widget()->metaObject()->indexOfSignal(SIGNAL(requestRaise())) != -1)
+          QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
 
 private:
@@ -499,8 +500,9 @@ void CppDebuggerPlugin::setupController()
 //     connect(statusBarIndicator, SIGNAL(doubleClicked()),
 //             controller, SLOT(explainDebuggerStatus()));
 
-    connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
-    connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
+    // TODO: reimplement / re-enable
+    //connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
+    //connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 }
 
 bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)
