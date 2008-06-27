@@ -918,7 +918,8 @@ void GDBController::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(TargetAttach, pid));
+    queueCmd(new GDBCommand(NonMI, QString("attach %1").arg(pid)));
+    //queueCmd(new GDBCommand(TargetAttach, pid));
 
     raiseEvent(connected_to_program);
 
