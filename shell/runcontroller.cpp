@@ -200,7 +200,7 @@ void KDevelop::RunController::registerJob(KJob * job)
 {
     if (!job)
         return;
-        
+
     if (!d->jobs.contains(job)) {
         KAction* stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
         stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
@@ -215,7 +215,7 @@ void KDevelop::RunController::registerJob(KJob * job)
     }
 
     job->start();
-    
+
     checkState();
 }
 
@@ -264,7 +264,7 @@ void KDevelop::RunController::slotKillJob()
 {
     KAction* action = dynamic_cast<KAction*>(sender());
     Q_ASSERT(action);
-    
+
     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(action->data()));
     if (job->capabilities() & KJob::Killable)
         job->kill();
@@ -281,9 +281,7 @@ void KDevelop::RunController::finished(KJob * job)
             KMessageBox::error(qApp->activeWindow(), job->errorString(), i18n("Process Error"));
     }
 
-    d->jobs.remove(job);
-
-    checkState();
+    unregisterJob(job);
 }
 
 void KDevelop::RunController::suspended(KJob * job)
