@@ -93,7 +93,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   action = new KAction(i18n("Current Document Language Only"), filterMenu);
   action->setChecked(true);
   filterMenu->addAction(action);
-  connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));
+  //connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));
 
   QVBoxLayout* vbox = new QVBoxLayout(this);
   vbox->setMargin(0);

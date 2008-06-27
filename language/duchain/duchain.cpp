@@ -65,7 +65,7 @@ public:
     qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
     qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
     qRegisterMetaType<Problem>("KDevelop::Problem");
-      
+
     notifier = new DUChainObserver();
   }
 
@@ -127,14 +127,14 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
   ENSURE_CHAIN_WRITE_LOCKED
 
   removeFromEnvironmentManager( context );
-  
+
   if( context->parsingEnvironmentFile() )
     sdDUChainPrivate->m_chains.remove( context->parsingEnvironmentFile()->identity() );
-  
+
   context->setParsingEnvironmentFile( file );
-  
+
   sdDUChainPrivate->m_chains.insert( context->parsingEnvironmentFile()->identity(), context );
-  
+
   addToEnvironmentManager( context );
 
   branchModified(context);
@@ -172,18 +172,18 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
     ///@todo practically this will result in lost memory, we will currently never delete the overwritten chain. Care about such stuff.
     kDebug(9505) << "duchain: error: A document with the same identity is already in the du-chain";
   }
-  
+
 //   {
 //     ///Remove obsolete versions of the document
 //     IdentifiedFile firstDoc( document.url(), 0 );
 //     QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(firstDoc);
-// 
+//
 //     ModificationRevision rev = EditorIntegrator::modificationRevision( document.url() );
-// 
+//
 //     for( ;it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); )
 //     {
 //       ModificationRevision thisRev = (*it)->parsingEnvironmentFile()->modificationRevision();
-//       
+//
 //       if( (*it)->parsingEnvironmentFile() && !(thisRev == rev) )
 //       {
 //       } else {
@@ -195,7 +195,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
 
   sdDUChainPrivate->m_chains.insert(document, chain);
   sdDUChainPrivate->m_chainsByIndex.insert(chain->ownIndex(), chain);
-  
+
   {
     //This is just for debugging, and should be disabled later.
     int realChainCount = 0;
@@ -206,7 +206,7 @@ void DUChain::addDocumentChain( const IdentifiedFile& document, TopDUContext * c
       else
         ++realChainCount;
     }
-        
+
     kDebug(9505) << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount;
   }
   chain->setInDuChain(true);
@@ -286,7 +286,7 @@ TopDUContext * DUChain::chainForDocument( const IdentifiedFile & document ) cons
     return sdDUChainPrivate->m_chains[document];
 
   kDebug(9505) << "No chain found for document " << document.toString();
-    
+
   return 0;
 }
 
@@ -334,7 +334,7 @@ TopDUContext* DUChain::chainForDocument( const HashedString& document, const Par
   };
 
   FlagFileAcceptor acceptor(flags);
-  
+
   QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
   if( it != sdDUChainPrivate->m_managers.end() ) {
     ParsingEnvironmentFilePointer file( (*it)->find(IndexedString(document.str()), environment, &acceptor) );
@@ -410,7 +410,7 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
-void DUChain::documentActivated(KTextEditor::Document* doc)
+void DUChain::documentActivated(KDevelop::IDocument* doc)
 {
   //Check whether the document has an attached environment-manager, and whether that one thinks the document needs to be updated.
   //If yes, update it.
@@ -421,14 +421,14 @@ void DUChain::documentActivated(KTextEditor::Document* doc)
     if( it != sdDUChainPrivate->m_managers.end() ) {
       if(it.value()->needsUpdate(ctx->parsingEnvironmentFile().data()))
         ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
-    }  
+    }
   }
 }
 
 void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
 {
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
-  
+
   EditorIntegrator editor;
   SmartConverter sc(&editor);
 

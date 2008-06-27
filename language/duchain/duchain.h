@@ -73,7 +73,7 @@ public:
    * Should be preferred over the KUrl version.
    * */
   QList<TopDUContext*> chainsForDocument(const HashedString& document) const;
-  
+
   /**
    * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
    * */
@@ -94,10 +94,10 @@ public:
    * Prefer this over the KUrl version.
    * */
   TopDUContext* chainForDocument(const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
-  
+
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist
   TopDUContext* chainForIndex(uint index) const;
-  
+
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
 
@@ -109,10 +109,10 @@ public:
 
   /// Returns the structure that manages mapping between definitions and declarations
   static Definitions* definitions();
-  
+
   /// Returns the structure that manages mapping between uses and declarations
   static Uses* uses();
-  
+
   /**
    * Retrieve the read write lock for the entire definition-use chain.
    * To call non-const methods, you must be holding a write lock.
@@ -153,14 +153,14 @@ public:
 
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();
-  
-  
-  
+
+
+
 public Q_SLOTS:
   void removeDocumentChain(const IdentifiedFile& document);
 
 private Q_SLOTS:
-  void documentActivated(KTextEditor::Document* doc);
+  void documentActivated(KDevelop::IDocument* doc);
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
 private:
