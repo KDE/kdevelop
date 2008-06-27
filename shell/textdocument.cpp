@@ -124,7 +124,7 @@ struct TextDocumentPrivate {
         QMenu* debugmenu = menu;
         if( debugActions.count() > 1 )
         {
-            debugmenu = menu->addMenu( "Refactor");
+            debugmenu = menu->addMenu( i18n("Debug") );
         }
         foreach( QAction* act, debugActions )
         {
@@ -135,7 +135,7 @@ struct TextDocumentPrivate {
         QMenu* refactormenu = menu;
         if( refactorActions.count() > 1 )
         {
-            refactormenu = menu->addMenu( "Refactor");
+            refactormenu = menu->addMenu( i18n("Refactor") );
         }
         foreach( QAction* act, refactorActions )
         {
@@ -146,7 +146,7 @@ struct TextDocumentPrivate {
         QMenu* vcsmenu = menu;
         if( vcsActions.count() > 1 )
         {
-            vcsmenu = menu->addMenu( "Version Control");
+            vcsmenu = menu->addMenu( i18n("Version Control") );
         }
         foreach( QAction* act, vcsActions )
         {
