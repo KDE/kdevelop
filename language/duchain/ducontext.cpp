@@ -109,7 +109,7 @@ bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
 
 void DUContextPrivate::synchronizeUsesFromSmart() const
 {
-  if(m_rangesForUses.isEmpty() /*|| !m_rangesChanged*/)
+  if(m_rangesForUses.isEmpty() || !m_rangesChanged)
     return;
   
   Q_ASSERT(m_rangesForUses.count() == m_uses.count());
@@ -146,18 +146,6 @@ void DUContextPrivate::synchronizeUsesToSmart() const
 }
 
 void DUContext::rangePositionChanged(KTextEditor::SmartRange* range)
-{
-  if(range != smartRange())
-    d_func()->m_rangesChanged = true;
-}
-
-void DUContext::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* /*range2*/)
-{
-  if(range != smartRange())
-    d_func()->m_rangesChanged = true;
-}
-
-void DUContext::rangeContentsChanged(KTextEditor::SmartRange* range)
 {
   if(range != smartRange())
     d_func()->m_rangesChanged = true;

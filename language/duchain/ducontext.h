@@ -594,8 +594,6 @@ private:
   void updateDeclarationIndices();
 
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);
-  virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* range2);
-  virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
   Q_DECLARE_PRIVATE(DUContext)
