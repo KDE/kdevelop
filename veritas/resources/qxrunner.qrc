@@ -24,5 +24,7 @@
         <file>warning.png</file>
         <file>arrow-right-bordeaux-16.png</file>
         <file>arrow-right-double-bordeaux-16.png</file>
+        <file>arrow-right-grey-16.png</file>
+        <file>arrow-right-double-grey-16.png</file>
     </qresource>
 </RCC>

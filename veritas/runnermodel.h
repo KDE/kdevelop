@@ -387,13 +387,10 @@ private:  // Attributes
     ResultsModel* m_resultsModel;
     QString m_name;
     QMutex m_lock;
-
     bool m_stop;
     bool m_wait;
     bool m_minimalUpdate;
-
     QModelIndex m_startedItemIndex;
-
     int m_expectedResults;
 
     int m_numSelected;
@@ -404,10 +401,6 @@ private:  // Attributes
     int m_numErrors;
     int m_numFatals;
     int m_numExceptions;
-
-    QIcon m_greenFolderIcon;
-    QIcon m_redFolderIcon;
-    QIcon m_blueFolderIcon;
 
     typedef QPair<int, int> SelectionPair;
     typedef QMap<qint64, SelectionPair> SelectionMap;

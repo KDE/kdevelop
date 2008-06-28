@@ -71,7 +71,7 @@ QVariant Utils::resultIcon(int result)
         return QIcon(":/icons/exception.png");
 
     case Veritas::NoResult:
-        return KIcon("arrow-right");
+        return QIcon(":/icons/arrow-right-grey-16.png");
 
     default:
         return QIcon(":/icons/item.png");

@@ -46,10 +46,7 @@ namespace Veritas
 {
 
 RunnerModel::RunnerModel(QObject* parent)
-        : QAbstractItemModel(parent),
-        m_greenFolderIcon(KIconLoader::global()->loadIcon("folder-green", KIconLoader::Small)),
-        m_redFolderIcon(KIconLoader::global()->loadIcon("folder-red", KIconLoader::Small)),
-        m_blueFolderIcon(KIconLoader::global()->loadIcon("folder-blue", KIconLoader::Small))
+        : QAbstractItemModel(parent)
 {
     // Initialize counters.
     m_numSelected = 0;
@@ -144,6 +141,8 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     if (index.child(0, 0).isValid()) {
         if (someChildHasStatus(Veritas::RunError, index))
             return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
+        else if (someChildHasStatus(Veritas::NoResult, index))
+            return QIcon(":/icons/arrow-right-double-grey-16.png");
         else // evrything ran succesfully
             return KIcon("arrow-right-double");
     }
