@@ -11,6 +11,7 @@ endif(TestBuild)
 
 include_directories(
     ${KDE4_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/tests/common
     ${CMAKE_SOURCE_DIR}/veritas/interfaces )
 
@@ -36,7 +37,9 @@ set(veritas_SRCS
     selectionmanager.cpp
     selectiontoggle.cpp
     testresult.cpp
-    interfaces/itest.cpp)
+    testrunnertoolview.cpp
+    interfaces/itest.cpp
+    interfaces/itestrunner.cpp)
 #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
@@ -49,6 +52,7 @@ qt4_add_resources(veritas_SRCS
 
 kde4_add_library(kdevplatformveritas SHARED ${veritas_SRCS})
 target_link_libraries(kdevplatformveritas
+    kdevplatforminterfaces
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -59,19 +63,26 @@ install(TARGETS kdevplatformveritas ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install(FILES
-    runnermodel.h
     test.h
     testcommand.h
     testcase.h
     register.h
     register.hpp
-    runnerwindow.h
     veritasexport.h
     testresult.h
-    ${CMAKE_BINARY_DIR}/veritas/ui_runnerwindow.h
-    ${CMAKE_BINARY_DIR}/veritas/ui_statuswidget.h
+    testrunnertoolview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
+
+if(TestBuild)
+    install(FILES
+        runnerwindow.h
+        runnermodel.h
+        ${CMAKE_BINARY_DIR}/veritas/ui_runnerwindow.h
+        ${CMAKE_BINARY_DIR}/veritas/ui_statuswidget.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
+endif(TestBuild)
 
 install(FILES
     interfaces/itest.h
+    interfaces/itestrunner.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas/interfaces )

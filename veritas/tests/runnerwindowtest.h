@@ -60,6 +60,7 @@ private slots:
     void expandAll();
     void collapseAll();
     void deselectItems();
+    void newModel();
 
 private:
     void expandSome();

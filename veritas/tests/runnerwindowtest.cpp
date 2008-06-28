@@ -120,7 +120,7 @@ void RunnerWindowTest::expandSome()
 // command
 void RunnerWindowTest::expandAll()
 {
-    //expandSome();
+    expandSome();
     window->ui().actionExpandAll->trigger();
     QTest::qWait(100);
     KVERIFY( isExpanded(model->item1) );
@@ -134,15 +134,17 @@ bool RunnerWindowTest::isCollapsed(TestStub* item)
     return !m_view->isExpanded(i);
 }
 
+// command
 void RunnerWindowTest::collapseAll()
 {
-    //expandSome();
+    expandSome();
     window->ui().actionCollapseAll->trigger();
     QTest::qWait(100);
     KVERIFY( isCollapsed(model->item1) );
     KVERIFY( isCollapsed(model->item2) );
 }
 
+// command
 void RunnerWindowTest::startItems()
 {
     TestStub::executedItems.clear();
@@ -179,11 +181,40 @@ void RunnerWindowTest::startItems()
     KOMPARE(QString(": 0"), status->labelNumWarnings->text());
 }
 
+// command
 void RunnerWindowTest::deselectItems()
 {
     // select only one of the runner items
     // validate that the other one didn't get executed
     KTODO;
 }
+
+// command
+void RunnerWindowTest::newModel()
+{
+    // init() has loaded a model, now replace
+    // it with another one, with different items
+    RunnerModelStub* model = createRunnerModelStub(false);
+    model->fill1();
+    window->setModel(model);
+    window->show();
+
+    // it should now contain 2 top level items without
+    // children. since thats what model->fill1() does.
+    RunnerModel* actual = window->runnerModel();
+    KOMPARE(model, actual);
+    QModelIndex c1 = actual->index(0,0);
+    KVERIFY(c1.isValid());
+    KOMPARE("00", actual->data(c1));
+    KVERIFY(!c1.child(0,0).isValid());
+
+    QModelIndex c2 = actual->index(1,0);
+    KVERIFY(c2.isValid());
+    KOMPARE("10", actual->data(c2));
+    KVERIFY(!c2.child(0,0).isValid());
+
+    KVERIFY(!actual->index(2,0).isValid());
+}
+
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

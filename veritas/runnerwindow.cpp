@@ -40,6 +40,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <KLocale>
+#include <KIcon>
 #include <KDebug>
 
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
@@ -62,23 +63,53 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     m_runnerViewController = new RunnerViewController(this, runnerView());
     m_resultsViewController = new ResultsViewController(this, resultsView());
 
-    // Adjust GUI.
     m_ui.actionMinimalUpdate->setCheckable(true);
     //resultsView()->header()->setResizeMode(QHeaderView::Stretch);
 
-    // Replace results menu item which serves as a placeholder
-    // for the action from the dock widget.
-    QAction* actionResults = m_ui.dockResults->toggleViewAction();
-    actionResults->setText(m_ui.actionResults->text());
+//     // Replace results menu item which serves as a placeholder
+//     // for the action from the dock widget.
+//     QAction* actionResults = m_ui.dockResults->toggleViewAction();
+//     actionResults->setText(m_ui.actionResults->text());
+//
+//     //m_ui.menuView->insertAction(m_ui.actionResults, actionResults);
+//     //m_ui.menuView->removeAction(m_ui.actionResults);
+//
+//     qSwap(m_ui.actionResults, actionResults);
+//     delete actionResults;
+//     connect(m_ui.actionResults, SIGNAL(toggled(bool)), SLOT(showResults(bool)));
 
-    //m_ui.menuView->insertAction(m_ui.actionResults, actionResults);
-    //m_ui.menuView->removeAction(m_ui.actionResults);
+    connectFocusStuff();
+    setUpStatusBar();
 
-    qSwap(m_ui.actionResults, actionResults);
-    delete actionResults;
+    // Disable user interaction while there is no data.
+    enableItemActions(false);
+    enableResultsFilter(false);
 
-    connect(m_ui.actionResults, SIGNAL(toggled(bool)), SLOT(showResults(bool)));
+    initItemStatistics();
+    connectFilterButtons();
+    connectActions();
+    m_sema.release();
+    runnerView()->setMouseTracking(true);
+    m_selection = new SelectionManager(runnerView());
 
+    QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
+    m_ui.actionReload->setIcon(refresh);
+}
+
+// helper for RunnerWindow(...)
+void RunnerWindow::initItemStatistics()
+{
+    // Initial results.
+    displayNumInfos(0);
+    displayNumWarnings(0);
+    displayNumErrors(0);
+    displayNumFatals(0);
+    displayNumExceptions(0);
+}
+
+// helper for RunnerWindow(...)
+void RunnerWindow::connectFocusStuff()
+{
     // Fine tuning of the focus rect handling because there should
     // always be a focus rect visible in the views.
     connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
@@ -92,23 +123,20 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
             SLOT(scrollToHighlightedRows()));
     connect(resultsView(), SIGNAL(pressed(const QModelIndex&)),
             SLOT(scrollToHighlightedRows()));
+}
 
+// helper for RunnerWindow(...)
+void RunnerWindow::setUpStatusBar()
+{
     // Set-up statusbar.
     m_statusWidget = new StatusWidget(0);
     statusBar()->addPermanentWidget(m_statusWidget, 1);
     statusWidget()->progressRun->hide();
+}
 
-    // Disable user interaction while there is no data.
-    enableItemActions(false);
-    enableResultsFilter(false);
-
-    // Initial results.
-    displayNumInfos(0);
-    displayNumWarnings(0);
-    displayNumErrors(0);
-    displayNumFatals(0);
-    displayNumExceptions(0);
-
+// helper for RunnerWindow(...) ctor
+void RunnerWindow::connectFilterButtons()
+{
     // Results filter commands.
     connect(m_ui.buttonInfos,    SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
@@ -118,49 +146,31 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
             SLOT(setResultsFilter()));
     connect(m_ui.buttonFatals,   SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
+}
 
+// helper for RunnerWindow(...) ctor
+void RunnerWindow::connectActions()
+{
     // File commands.
     connect(m_ui.actionExit, SIGNAL(triggered(bool)), SLOT(close()));
-
     // Item commands.
     m_ui.actionStart->setShortcut(QKeySequence(tr("Ctrl+R")));
     connect(m_ui.actionStart, SIGNAL(triggered(bool)), SLOT(runItems()));
-
     m_ui.actionStop->setShortcut(QKeySequence(tr("Ctrl+K")));
     connect(m_ui.actionStop, SIGNAL(triggered(bool)), SLOT(stopItems()));
-
     // View commands
     m_ui.actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
     connect(m_ui.actionSelectAll, SIGNAL(triggered(bool)),
-            runnerController(),
-            SLOT(selectAll()));
-
+            runnerController(), SLOT(selectAll()));
     m_ui.actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
     connect(m_ui.actionUnselectAll, SIGNAL(triggered(bool)),
-            runnerController(),
-            SLOT(unselectAll()));
-
+            runnerController(), SLOT(unselectAll()));
     m_ui.actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
     connect(m_ui.actionExpandAll, SIGNAL(triggered(bool)),
-            runnerController(),
-            SLOT(expandAll()));
-
+            runnerController(), SLOT(expandAll()));
     m_ui.actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
     connect(m_ui.actionCollapseAll, SIGNAL(triggered(bool)),
-            runnerController(),
-            SLOT(collapseAll()));
-
-    // Set initially available.
-    m_sema.release();
-
-    runnerView()->setMouseTracking(true);
-    m_selection = new SelectionManager(runnerView());
-}
-
-void RunnerWindow::debugRootIndex(QModelIndex value)
-{
-    kDebug() << "Got rootIndexChanged signal " << value;
-    kDebug() << "runnerView root index -> " << runnerView()->rootIndex();
+            runnerController(), SLOT(collapseAll()));
 }
 
 RunnerWindow::~RunnerWindow()
@@ -171,9 +181,7 @@ RunnerWindow::~RunnerWindow()
 void RunnerWindow::show()
 {
     setUpdatesEnabled(false);   // Reduce flickering
-
     QMainWindow::show();
-
     // Workaround: The results tree view has a maximum height defined in
     // Designer which now is reset. Without the height restriction the
     // dock window would occupy half the main window after construcution
@@ -181,21 +189,18 @@ void RunnerWindow::show()
     // This is only for the situation when the main window geometry isn't
     // restored from the settings.
     resultsView()->setMaximumSize(QSize(16777215, 16777215));
-
     setUpdatesEnabled(true);
-
     // Change the results tree view to manual adjustment after the columns
     // have been stretched over the tree view at initial display.
     // This is only for the situation when the column sizes aren't restored
     // from the settings.
     resultsView()->header()->setResizeMode(QHeaderView::Interactive);
-
     // Some menus depend on current state.
     adjustMenus();
-
     QApplication::setActiveWindow(this);
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::stopPreviousModel()
 {
     // It's not expected to set another model at the moment but if done so then
@@ -224,6 +229,7 @@ void RunnerWindow::stopPreviousModel()
     }
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::initFilterButtons(RunnerModel* model)
 {
     // Hide filter buttons for results that are not expected.
@@ -240,6 +246,7 @@ void RunnerWindow::initFilterButtons(RunnerModel* model)
 
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::initProxyModels(RunnerModel* model)
 {
     // Proxy models for the views with the source model as their parent
@@ -255,6 +262,7 @@ void RunnerWindow::initProxyModels(RunnerModel* model)
     resultsView()->setModel(resultsProxyModel);
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::initVisibleColumns(RunnerModel* model)
 {
     // Filter actions enabled, item actions only when there is data.
@@ -287,6 +295,7 @@ void RunnerWindow::initVisibleColumns(RunnerModel* model)
     resultsProxyModel()->setEnabledColumns(enabledResultsColumns);
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::expandBranches(RunnerModel* model)
 {
     // Expand the branches, do it in the brackground to reduce flickering.
@@ -298,6 +307,7 @@ void RunnerWindow::expandBranches(RunnerModel* model)
     runnerView()->setUpdatesEnabled(true);
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::connectItemStatistics(RunnerModel* model)
 {
     // Item statistics.
@@ -322,6 +332,7 @@ void RunnerWindow::connectItemStatistics(RunnerModel* model)
     model->countItems();
 }
 
+// helper for setModel(RunnerModel*)
 void RunnerWindow::connectProgressIndicators(RunnerModel* model)
 {
     // Get notified of items run.
@@ -365,19 +376,14 @@ void RunnerWindow::setModel(RunnerModel* model)
 
     // How much data is wanted when running the items.
     connect(m_ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
-            model,
-            SLOT(setMinimalUpdate(bool)));
-
+            model, SLOT(setMinimalUpdate(bool)));
     model->setMinimalUpdate(isMinimalUpdate());
     connectProgressIndicators(model);
-
     enableItemActions(true);
     m_ui.actionStop->setDisabled(true);
-
-    // Set the filter in the results model.
     setResultsFilter();
 
-    // Start with top row highlighted.
+    // set top row higlighted
     runnerView()->setCurrentIndex(runnerProxyModel()->index(0,0));
 }
 
@@ -430,7 +436,8 @@ void RunnerWindow::displayCompleted() const
 
 bool RunnerWindow::isResultsViewVisible() const
 {
-    return m_ui.actionResults->isChecked();
+    //return m_ui.actionResults->isChecked();
+    return true;
 }
 
 void RunnerWindow::displayNumTotal(int numItems) const

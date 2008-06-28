@@ -202,11 +202,9 @@ QVariant RunnerModel::headerData(int section, Qt::Orientation orientation,
     if (!m_rootItem) {
         return QVariant();
     }
-
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         return m_rootItem->data(section);
     }
-
     return QVariant();
 }
 
@@ -216,7 +214,6 @@ QModelIndex RunnerModel::index(int row, int column,
     if (!m_rootItem || row < 0 || column < 0) {
         return QModelIndex();
     }
-
     Test* parentItem;
 
     if (!parent.isValid()) {
@@ -224,7 +221,6 @@ QModelIndex RunnerModel::index(int row, int column,
     } else {
         parentItem = itemFromIndex(parent);
     }
-
     Test* childItem = parentItem->child(row);
 
     if (childItem) {
@@ -271,11 +267,9 @@ int RunnerModel::columnCount(const QModelIndex& parent) const
     if (!m_rootItem) {
         return 0;
     }
-
     if (parent.isValid()) {
         return itemFromIndex(parent)->columnCount();
     }
-
     return m_rootItem->columnCount();
 }
 
@@ -505,7 +499,7 @@ void RunnerModel::initItemConnect(QModelIndex current)
         }
         Test* item = itemFromIndex(current);
 
-        kDebug() << "Connecting item with runnermodel: " << item->data(0);
+        //kDebug() << "Connecting item with runnermodel: " << item->data(0).toString();
         connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
         connect(item, SIGNAL(finished(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
 

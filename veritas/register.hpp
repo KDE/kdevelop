@@ -18,11 +18,6 @@
  * 02110-1301, USA.
  */
 
-// template<typename S> const QString Register<S>::c_suite("suite");
-// template<typename S> const QString Register<S>::c_case("case");
-// template<typename S> const QString Register<S>::c_cmd("command");
-// template<typename S> const QString Register<S>::c_name("name");
-
 template<typename S>
 Register<S>::Register()
         : m_root(""),

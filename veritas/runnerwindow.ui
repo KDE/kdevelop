@@ -80,6 +80,7 @@
    <addaction name="actionExpandAll" />
    <addaction name="actionSelectAll" />
    <addaction name="actionUnselectAll" />
+   <addaction name="actionReload" />
   </widget>
   <widget class="QStatusBar" name="statusBar" >
    <property name="geometry" >
@@ -379,6 +380,11 @@
   <action name="actionToolbars" >
    <property name="text" >
     <string>&amp;Toolbars</string>
+   </property>
+  </action>
+  <action name="actionReload" >
+   <property name="text" >
+    <string>Reload</string>
    </property>
   </action>
  </widget>

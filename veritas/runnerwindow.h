@@ -74,10 +74,7 @@ class SelectionManager;
  */
 class VERITAS_EXPORT RunnerWindow : public QMainWindow
 {
-    Q_OBJECT
-
-    friend class AppSettings;
-
+Q_OBJECT
 public: // Operations
 
     /*!
@@ -106,35 +103,21 @@ public: // Operations
     void setModel(RunnerModel* model);
 
     /*!
-     * Returns the view which presents runner items.
+     * Accessors for Runner model & view.
+     * The runner shows the test suite structure as
+     * a tree. It allows for individual test selection.
      */
     QTreeView* runnerView() const;
-
-    /*!
-     * Returns the view which presents result items.
-     */
-    QTreeView* resultsView() const;
-
-    /*!
-     * Returns the runner model that contains the data that is
-     * available through the runner proxy model.
-     */
     RunnerModel* runnerModel() const;
-
-    /*!
-     * Returns the proxy model that the runner view is presenting.
-     */
     RunnerProxyModel* runnerProxyModel() const;
 
     /*!
-     * Returns the results model that contains the data that is
-     * available through the results proxy model.
+     * Accessors for the Results model & view.
+     * The result component shows test failure
+     * information.
      */
+    QTreeView* resultsView() const;
     ResultsModel* resultsModel() const;
-
-    /*!
-     * Returns the proxy model that the results view is presenting.
-     */
     ResultsProxyModel* resultsProxyModel() const;
 
     /*!
@@ -143,14 +126,9 @@ public: // Operations
     bool isResultsViewVisible() const;
 
     Ui::RunnerWindow&  ui() { return m_ui; }
-
-    /*!
-     * Returns the status widget.
-     */
     Ui::StatusWidget* statusWidget() const;
 
 private slots:
-    void debugRootIndex(QModelIndex value);
 
     /*!
      * Displays the execution progress for \a numItems items.
@@ -268,6 +246,15 @@ private slots:
     void showResults(bool show);
 
 private: // Operations
+
+    // helpers for RunnerWindow(...) ctor
+    void initItemStatistics();
+    void connectFilterButtons();
+    void connectActions();
+    void connectFocusStuff();
+    void setUpStatusBar();
+
+    // helpers for setModel(RunnerModel*)
     void stopPreviousModel();
     void initFilterButtons(RunnerModel* model);
     void initVisibleColumns(RunnerModel* model);
@@ -275,6 +262,8 @@ private: // Operations
     void connectItemStatistics(RunnerModel* model);
     void initProxyModels(RunnerModel* model);
     void connectProgressIndicators(RunnerModel* model);
+
+    // more stuff
 
     /*!
      * Disables and modifies widgets and signals before running items.
