@@ -183,6 +183,11 @@ protected:
     return openDeclaration(name, range, isFunction, false, true);
   }
 
+  Declaration* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false)
+  {
+    return openDeclaration(id, newRange, isFunction, false, true);
+  }
+
   ForwardDeclaration* openForwardDeclaration(NameT* name, T* range)
   {
     return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
