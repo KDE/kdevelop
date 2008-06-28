@@ -87,38 +87,19 @@ void QTestOutputParser::go(QTestCase* caze)
     if (!device()->isReadable()) {
         // do something
     }
+    m_case = caze;
 
     if (m_settingFailure)
         setFailure();
     if (m_processingTestFunction)
         processTestFunction();
 
-    Test* cmd = 0;
     while (!atEnd() && doingOK()) {
         readNext();
-        QString cmdName;
         if (isStartElement_(c_testfunction)) {
-            cmdName = attributes().value("name").toString();
-            cmd = caze->childNamed(cmdName);
-            if (cmd)
-                cmd->started();
             processTestFunction();
         }
-        if (isEndElement_(c_testfunction)) {
-            cmd = caze->childNamed(cmdName);
-            if (cmd) {
-                cmd->setResult(m_result);
-                cmd->finished();
-                m_result = TestResult();
-            } else if (fixtureFailed(cmdName)) {
-                kDebug() << "init/cleanup TestCase failed";
-                caze->started();
-                caze->setResult(m_result);
-                caze->finished();
-            }
-        }
     }
-
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
@@ -136,14 +117,33 @@ bool QTestOutputParser::fixtureFailed(const QString& cmd)
 
 void QTestOutputParser::processTestFunction()
 {
+    QString cmdName;
+    if (!m_processingTestFunction) {
+        cmdName = attributes().value("name").toString();
+        Test* cmd = m_case->childNamed(cmdName);
+        if (cmd)
+            cmd->started();
+    }
     m_processingTestFunction = true;
     while (!atEnd() && !isEndElement_(c_testfunction)) {
         readNext();
         if (isStartElement_(c_incident))
             fillResult();
     }
-    if (isEndElement_(c_testfunction))
+    if (isEndElement_(c_testfunction)) {
+        Test* cmd = m_case->childNamed(cmdName);
+        if (cmd) {
+            cmd->setResult(m_result);
+            cmd->finished();
+            m_result = TestResult();
+        } else if (fixtureFailed(cmdName)) {
+            kDebug() << "init/cleanup TestCase failed";
+            m_case->started();
+            m_case->setResult(m_result);
+            m_case->finished();
+        }
         m_processingTestFunction = false;
+    }
 }
 
 void QTestOutputParser::fillResult()

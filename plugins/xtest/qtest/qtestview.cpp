@@ -28,8 +28,6 @@
 #include <ibuildsystemmanager.h>
 #include <projectmodel.h>
 #include <test.h>
-#include <runnermodel.h>
-#include <runnerwindow.h>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
@@ -48,10 +46,12 @@ using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 using KDevelop::IBuildSystemManager;
-using QTest::QTestRegister;
+
 using Veritas::Test;
-using Veritas::RunnerModel;
-using Veritas::RunnerWindow;
+using Veritas::ITest;
+using Veritas::TestRunnerToolView;
+
+using QTest::QTestRegister;
 
 class QTestViewFactory: public KDevelop::IToolViewFactory
 {
@@ -60,7 +60,7 @@ public:
 
     virtual QWidget* create(QWidget *parent = 0) {
         Q_UNUSED(parent);
-        return m_plugin->spawn();
+        return m_plugin->spawnWindow();
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
@@ -75,8 +75,8 @@ private:
     QTestView *m_plugin;
 };
 
-QTestView::QTestView(QObject* parent, const QVariantList &)
-        : KDevelop::IPlugin(QTestViewPluginFactory::componentData(), parent)
+QTestView::QTestView(QObject* parent, const QVariantList&)
+        : TestRunnerToolView(QTestViewPluginFactory::componentData(), parent)
 {
     m_factory = new QTestViewFactory(this);
     core()->uiController()->addToolView("QTest Runner", m_factory);
@@ -86,15 +86,16 @@ QTestView::QTestView(QObject* parent, const QVariantList &)
 QTestView::~QTestView()
 {}
 
-QWidget* QTestView::spawn()
+ITest* QTestView::registerTests()
 {
-    Test* root = registerTests(fetchRegXML(), fetchBuildRoot());
-    RunnerModel* model = new RunnerModel;
-    model->setRootItem(root);
-    model->setExpectedResults(Veritas::RunError);
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(model);
-    return window;
+    QString regXML = fetchRegXML();
+    QString rootDir = fetchBuildRoot();
+    kDebug() << "Loading test registration XML: " << regXML;
+    QFile* testXML = new QFile(regXML);
+    QTestRegister reg;
+    reg.setRootDir(rootDir);
+    reg.addFromXml(testXML);
+    return reg.rootItem();
 }
 
 QString QTestView::fetchBuildRoot()
@@ -120,16 +121,6 @@ QString QTestView::fetchRegXML()
         regXML = KUrl(group.readEntry("Test Registration")).pathOrUrl();
     }
     return regXML;
-}
-
-Test* QTestView::registerTests(const QString& regXML, const QString& rootDir)
-{
-    kDebug() << "Loading test registration XML: " << regXML;
-    QFile* testXML = new QFile(regXML);
-    QTestRegister reg;
-    reg.setRootDir(rootDir);
-    reg.addFromXml(testXML);
-    return reg.rootItem();
 }
 
 #include "qtestview.moc"

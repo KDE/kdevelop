@@ -31,23 +31,24 @@
 #include <projectmodel.h>
 #include <core.h>
 #include <test.h>
-#include <runnermodel.h>
-#include <runnerwindow.h>
+#include <register.h>
 
 #include <QFile>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KProcess>
 
-#include "register.h"
+#include "testsuite.h"
+
 
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 using Veritas::Test;
-using Veritas::RunnerModel;
-using Veritas::RunnerWindow;
-using CppUnit::Register;
+using Veritas::ITest;
+using Veritas::TestRunnerToolView;
+using Veritas::Register;
+using CppUnit::TestSuite;
 
 K_PLUGIN_FACTORY(CppUnitViewPluginFactory, registerPlugin<CppUnitView>();)
 K_EXPORT_PLUGIN(CppUnitViewPluginFactory("kdevcppunit"))
@@ -59,7 +60,7 @@ public:
 
     virtual QWidget* create(QWidget *parent = 0) {
         Q_UNUSED(parent);
-        return m_plugin->spawn();
+        return m_plugin->spawnWindow();
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
@@ -75,7 +76,7 @@ private:
 };
 
 CppUnitView::CppUnitView(QObject* parent, const QVariantList &)
-        : KDevelop::IPlugin(CppUnitViewPluginFactory::componentData(), parent)
+        : TestRunnerToolView(CppUnitViewPluginFactory::componentData(), parent)
 {
     m_factory = new CppUnitViewFactory(this);
     core()->uiController()->addToolView("CppUnit Runner", m_factory);
@@ -85,16 +86,22 @@ CppUnitView::CppUnitView(QObject* parent, const QVariantList &)
 CppUnitView::~CppUnitView()
 {}
 
-QWidget* CppUnitView::spawn()
+// void CppUnitView::reload()
+// {
+//     Register reg;
+//     reg.addFromExe(QFileInfo(fetchExe()));
+//     RunnerModel* model = new RunnerModel;
+//     model->setRootItem(reg.rootItem());
+//     model->setExpectedResults(Veritas::RunError);
+//     m_window->setModel(model);
+//     m_window->show();
+// }
+
+ITest* CppUnitView::registerTests()
 {
-    Register reg;
+    Register<TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));
-    RunnerModel* model = new RunnerModel;
-    model->setRootItem(reg.rootItem());
-    model->setExpectedResults(Veritas::RunError);
-    RunnerWindow* window = new RunnerWindow;
-    window->setModel(model);
-    return window;
+    return reg.rootItem();
 }
 
 QString CppUnitView::fetchExe()

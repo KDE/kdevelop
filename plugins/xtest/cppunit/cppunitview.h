@@ -21,25 +21,24 @@
 #ifndef CPPUNIT_CPPUNITPLUGIN_H
 #define CPPUNIT_CPPUNITPLUGIN_H
 
-#include <iplugin.h>
+#include <testrunnertoolview.h>
 #include <QVariantList>
 
 class CppUnitViewFactory;
-namespace Veritas
-{
-class Test;
-};
+namespace Veritas { class Test; }
+namespace Veritas { class ITest; }
 
-class CppUnitView : public KDevelop::IPlugin
+class CppUnitView : public Veritas::TestRunnerToolView
 {
     Q_OBJECT
 public:
     explicit CppUnitView(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CppUnitView();
-    QWidget* spawn();
+
+protected:
+    Veritas::ITest* registerTests();
 
 private:
-    Veritas::Test* registerTests(const QString& exe);
     QString fetchExe();
 
 private:

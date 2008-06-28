@@ -21,25 +21,28 @@
 #ifndef CHECK_CHECKVIEW
 #define CHECK_CHECKVIEW
 
-#include <iplugin.h>
+#include <testrunnertoolview.h>
 #include <QVariantList>
 
 class CheckViewFactory;
-namespace Veritas { class Test; }
+namespace Veritas { class ITest; }
 
-class CheckView : public KDevelop::IPlugin
+class CheckView : public Veritas::TestRunnerToolView
 {
 Q_OBJECT
 public:
     explicit CheckView(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CheckView();
-    QWidget* spawn();
+
+protected:
+    Veritas::ITest* registerTests();
 
 private:
     QString fetchExe();
 
 private:
     CheckViewFactory* m_factory;
+
 };
 
 #endif // CHECK_CHECKVIEW

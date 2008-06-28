@@ -26,6 +26,7 @@
 #include <runnerwindow.h>
 #include <runnermodel.h>
 #include <testresult.h>
+#include <register.h>
 
 #include <KDebug>
 #include <QBuffer>
@@ -34,11 +35,12 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 
-#include <register.h>
+#include "testsuite.h"
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
-using CppUnit::Register;
+using Veritas::Register;
+using CppUnit::TestSuite;
 using CppUnit::it::CppUnitRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
@@ -176,7 +178,7 @@ void CppUnitRunnerTest::nrofMessagesEquals(int num)
 // helper
 void CppUnitRunnerTest::initNrun(const char* exe)
 {
-    Register reg;
+    Register<TestSuite> reg;
     reg.addFromExe(QFileInfo(exe));
     RunnerModel* model = new RunnerModel;
     model->setRootItem(reg.rootItem());

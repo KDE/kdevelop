@@ -34,9 +34,12 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 
+#include "testsuite.h"
+
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
-using Check::Register;
+using Veritas::Register;
+using Check::TestSuite;
 using Check::it::CheckRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
@@ -177,7 +180,7 @@ void CheckRunnerTest::nrofMessagesEquals(int num)
 // helper
 void CheckRunnerTest::initNrun(const char* exe)
 {
-    Register reg;
+    Register<TestSuite> reg;
     QFileInfo executable(exe);
     reg.addFromExe(executable);
     RunnerModel* model = new RunnerModel;

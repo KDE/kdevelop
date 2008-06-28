@@ -56,6 +56,7 @@ private: // helpers
 
 private: // state
     Veritas::TestResult m_result;
+    QTestCase* m_case;
 
     // remember state to continue when parsing
     // incrementally

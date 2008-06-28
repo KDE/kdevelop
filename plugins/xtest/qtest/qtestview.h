@@ -21,25 +21,26 @@
 #ifndef QTEST_QTESTPLUGIN_H
 #define QTEST_QTESTPLUGIN_H
 
-#include <iplugin.h>
 #include <QVariantList>
+#include <testrunnertoolview.h>
 
 class QTestViewFactory;
-namespace Veritas { class Test; }
+namespace Veritas { class ITest; }
 
-class QTestView : public KDevelop::IPlugin
+class QTestView : public Veritas::TestRunnerToolView
 {
 Q_OBJECT
 
 public:
-    explicit QTestView(QObject* parent, const QVariantList & = QVariantList());
+    explicit QTestView(QObject* parent, const QVariantList& = QVariantList());
     virtual ~QTestView();
-    QWidget* spawn();
+
+protected:
+    Veritas::ITest* registerTests();
 
 private:
     QString fetchBuildRoot();
     QString fetchRegXML();
-    Veritas::Test* registerTests(const QString& regXML, const QString& rootDir);
 
 private:
     QTestViewFactory* m_factory;
