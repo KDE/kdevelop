@@ -32,5 +32,6 @@ add_subdirectory(outputview)
 add_subdirectory(vcs)
 add_subdirectory(plugins)
 add_subdirectory(veritas)
+add_subdirectory(kross)
 macro_optional_add_subdirectory(doc)
 

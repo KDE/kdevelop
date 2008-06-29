@@ -52,6 +52,9 @@ Type=QStringList
 [PropertyDef::X-KDevelop-Args]
 Type=QString
 
+[PropertyDef::X-KDevelop-PluginType]
+Type=QString
+
 [PropertyDef::X-KDevelop-Interfaces]
 Type=QStringList
 

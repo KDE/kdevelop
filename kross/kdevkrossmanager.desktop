@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevelop Kross Project Manager Support
+Comment=Kross kross kross
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevkrossprojectmanager
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Email=aleixpol@gmail.com
+X-KDE-PluginInfo-Name=KDevKrossManager
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-FileManager=Kross
+X-KDevelop-Version=6
+X-KDevelop-Category=Project
+X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,org.kdevelop.ILanguageSupport

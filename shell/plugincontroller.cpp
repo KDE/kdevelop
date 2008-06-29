@@ -276,10 +276,24 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     QString str_error;
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
+    kDebug() << "Checking... " << info.name();
     if ( checkForDependencies( info, missingInterfaces ) )
     {
-        plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
-                QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
+        QVariant prop = info.property( "X-KDevelop-PluginType" );
+        kDebug() << "Checked... starting to load:" << info.name() << "type:" << prop;
+        if(prop.toString()=="Kross")
+        {
+            kDebug() << "it is a kross plugin!!";
+            plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
+                            QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='KDevKrossManager'" ), 
+                            d->core, QVariantList() << info.pluginName(), &str_error );
+            kDebug() << "kross plugin:" << plugin;
+        }
+        else
+        {
+            plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
+                    QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
+        }
         loadDependencies( info );
         loadOptionalDependencies( info );
     }
@@ -304,7 +318,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
             kWarning(9501) << "Can't load plugin '" << pluginId
                     << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
-        }else
+        }
+        else
         {
             kWarning(9501) << "Loading plugin '" << pluginId
                 << "' failed, KPluginLoader reported error: '" << endl <<
