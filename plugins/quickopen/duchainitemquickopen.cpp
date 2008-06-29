@@ -39,7 +39,7 @@ QString DUChainItemData::text() const {
   if(!m_item.m_item)
     return i18n("Not available any more");
   QString text;
-  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
   if( function )
     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   else
@@ -51,7 +51,7 @@ QString DUChainItemData::text() const {
 QList<QVariant> DUChainItemData::highlighting() const {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
   if(!function)
     return QList<QVariant>();
 
@@ -96,7 +96,7 @@ QString DUChainItemData::htmlDescription() const {
 
   QString text;
   text = m_item.m_item->url().str();
-//   KSharedPtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+//   TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
 //   if( function )
 //     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
 //   else

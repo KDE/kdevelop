@@ -47,7 +47,7 @@ class IndexedString;
 //A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
 //The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
 //abilities or access to the contained data.
-struct IndexedIdentifier {
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier {
   IndexedIdentifier();
   IndexedIdentifier(const Identifier& id);
   IndexedIdentifier& operator=(const Identifier& id);
@@ -63,12 +63,14 @@ struct IndexedIdentifier {
 //A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
 //The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
 //abilities or access to the contained data.
-struct IndexedQualifiedIdentifier {
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   IndexedQualifiedIdentifier();
   IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
   IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
+  
+  bool isValid() const;
   
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;

@@ -87,10 +87,11 @@ Declaration* DeclarationId::getDeclaration(TopDUContext* top) const
     }
   }else{
     //Find the declaration by m_topContext and m_declaration
+    ret = direct.declaration();
   }
   
   if(ret)
-    return ret->specialize(m_specialization);
+    return ret->specialize(m_specialization, top);
   else
     return 0;
 }

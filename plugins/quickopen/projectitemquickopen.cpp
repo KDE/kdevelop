@@ -47,7 +47,7 @@ void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* d
       || ((itemTypes & ProjectItemDataProvider::Functions) && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
     DUChainItem f;
     f.m_project = project;
-        //KSharedPtr<FunctionType> function = decl->type<FunctionType>();
+        //TypePtr<FunctionType> function = decl->type<FunctionType>();
         //if( function )
       //f.m_text = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn )).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments )
     f.m_text = decl->qualifiedIdentifier().toString();

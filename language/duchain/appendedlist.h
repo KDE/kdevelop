@@ -32,9 +32,11 @@ namespace KDevelop {
  * to another place, like needed in ItemRepository. These macros simplify having two versions of a class: One that has its lists attached in memory,
  * and one version that has them contained as a directly accessible QVarLengthArray. Both versions have their lists accessible through access-functions,
  * have a completeSize() function that computes the size of the one-block version, and a copyListsFrom(..) function which can copy the lists from one
- * version to the other. The class that contains these lists must have an accessible constant boolean member value called "m_dynamic".
+ * version to the other.
  *
- * You must call initalizeAppendedLists() on construction, also in any copy-constructor, but before calling copyFrom(..)
+ * @warning Always follow these rules:
+ * You must call initalizeAppendedLists(bool) on construction, also in any copy-constructor, but before calling copyFrom(..).
+ * The parameter to that function should be whether the lists in the items should be dynamic, and thus most times "true".
  * You must call freeAppendedLists() on destruction, our you will be leaking memory(only when dynamic)
  *
  * For each embedded list, you must use macros to define a global hash that will be used to allocate the temporary lists, example fir identifier.cpp:
@@ -43,13 +45,23 @@ namespace KDevelop {
  * See identifier.cpp for an example how to use these classes. @todo Document this a bit more
  * */
 
+
+enum {
+  DynamicAppendedListMask = 1 << 31
+};
+
 /**
  * Manages a repository of items for temporary usage. The items will be allocated with an index on alloc(),
  * and freed on free(index). When freed, the same index will be re-used for a later allocation, thus no real allocations
  * will be happening in most cases.
+ * The returned indices will always be ored with DynamicAppendedListMask.
+ * 
  */
 template<class T, bool threadSafe = true>
 class TemporaryDataManager {
+  enum {
+    DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
+  };
   public:
     TemporaryDataManager() {
     }
@@ -59,6 +71,9 @@ class TemporaryDataManager {
     }
     
     T& getItem(uint index) {
+      Q_ASSERT(index & DynamicAppendedListMask);
+      index &= DynamicAppendedListRevertMask;
+      
       if(threadSafe)
         m_mutex.lock();
 
@@ -88,10 +103,15 @@ class TemporaryDataManager {
       if(threadSafe)
         m_mutex.unlock();
       
-      return ret;
+      Q_ASSERT(!(ret & DynamicAppendedListMask));
+      
+      return ret | DynamicAppendedListMask;
     }
     
     void free(uint index) {
+      Q_ASSERT(index & DynamicAppendedListMask);
+      index &= DynamicAppendedListRevertMask;
+      
       if(threadSafe)
         m_mutex.lock();
 
@@ -111,33 +131,34 @@ class TemporaryDataManager {
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo = 1)) for(item(container()[a]); mustDo; mustDo = 0)
 
-#define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> > temporaryHash ## container ## member
+#define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; };
+#define DECLARE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 #define START_APPENDED_LISTS(container)
 
 #define APPENDED_LIST_COMMON(container, type, name) \
       uint name ## Data; \
-      unsigned int name ## Size() const { if(!m_dynamic) return name ## Data; else return temporaryHash ## container ## name.getItem(name ## Data).size(); } \
-      QVarLengthArray<type, 10>& name ## List() { Q_ASSERT(m_dynamic); return temporaryHash ## container ## name.getItem(name ## Data); }\
+      unsigned int name ## Size() const { if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().getItem(name ## Data).size(); } \
+      QVarLengthArray<type, 10>& name ## List() { return temporaryHash ## container ## name().getItem(name ## Data); }\
       template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); return size == rhs.name ## Size() && memcmp( name(), rhs.name(), size * sizeof(type) ) == 0; } \
       template<class T> void name ## CopyFrom( const T& rhs ) { \
-        if(m_dynamic) {  \
-          QVarLengthArray<type, 10>& item( temporaryHash ## container ## name.getItem(name ## Data) ); \
+        if(appendedListsDynamic()) {  \
+          QVarLengthArray<type, 10>& item( temporaryHash ## container ## name().getItem(name ## Data) ); \
           item.resize(rhs.name ## Size()); \
         }else{ \
-          Q_ASSERT(name ## Data == 0); \
+          Q_ASSERT(name ## Data == 0); /*If this triggers, then the list wasn't initialized properly with initializeAppendedLists(..)*/ \
           name ## Data = rhs.name ## Size(); \
         }\
         memcpy(const_cast<type*>(name()), rhs.name(), name ## Size() * sizeof(type)); \
       } \
-      void name ## Initialize() { if(m_dynamic) {name ## Data = temporaryHash ## container ## name.alloc(); temporaryHash ## container ## name.getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
-      void name ## Free() { if(m_dynamic) temporaryHash ## container ## name.free(name ## Data); }  \
+      void name ## Initialize() { if(appendedListsDynamic()) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
+      void name ## Free() { if(appendedListsDynamic()) temporaryHash ## container ## name().free(name ## Data); }  \
       
 
 ///@todo Make these things a bit faster(less recursion)
 
 #define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!m_dynamic) return (uint*)(((char*)this) + sizeof(container)); else return temporaryHash ## container ## name.getItem(name ## Data).data(); } \
+                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + sizeof(container)); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
@@ -145,7 +166,7 @@ class TemporaryDataManager {
                                                void name ## FreeChain() { name ## Free(); }
                                                                                               
 #define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!m_dynamic) return (uint*)(((char*)this) + sizeof(container) + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name.getItem(name ## Data).data();  } \
+                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + sizeof(container) + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); predecessor ## CopyAllFrom(rhs); } \
@@ -158,8 +179,53 @@ class TemporaryDataManager {
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                      /* Copies all the lists from the given item. This item must be dynamic */   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
-                                      void initializeAppendedLists() { predecessor ## InitializeChain(); } \
-                                      void freeAppendedLists() { if(m_dynamic) predecessor ## FreeChain(); }
+                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? DynamicAppendedListMask : 0); predecessor ## InitializeChain(); } \
+                                      void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
+                                      bool appendedListsDynamic() const { return predecessor ## Data & DynamicAppendedListMask; } \
+                                      size_t dynamicSize() const { return predecessor ## OffsetBehind() + sizeof(container); }
+
+/**
+ * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.
+ * All your class needs to do is:
+ * - Be implemented using the APPENDED_LIST macros.
+ * - Except for these appended lists, only contain directly copyable data like indices(no pointers, no virtual functions)
+ * - Implement operator==(..) which should compare everything, including the lists. @warning The default operator will not work!
+ * - Implement an operator=(..) function that also copies the lists using copyListsFrom(..)
+ * - Implement a hash() function. The hash should equal for two instances when operator==(..) returns true.
+ * - Should be completely functional without a constructor called, only the data copied
+ * If those conditions are fulfilles, the data can easily be put into a repository using this request class.
+ * */
+
+template<class Type, uint averageAppendedBytes = 8>
+class AppendedListItemRequest {
+  public:
+  AppendedListItemRequest(const Type& item) : m_item(item) {
+  }
+  
+  enum {
+    AverageSize = sizeof(Type) + averageAppendedBytes
+  };
+
+  unsigned int hash() const {
+    return m_item.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_item.dynamicSize();
+  }
+  
+  void createItem(Type* item) const {
+    item->initializeAppendedLists(false);
+    *item = m_item;
+  }
+  
+  bool equals(const Type* item) const {
+    return m_item == *item;
+  }
+  
+  const Type& m_item;
+};
+
 }
 
 #endif

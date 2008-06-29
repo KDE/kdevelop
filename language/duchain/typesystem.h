@@ -23,7 +23,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QList>
 
-#include <ksharedptr.h>
+#include "typepointer.h"
 
 #include "language/duchain/identifier.h"
 
@@ -48,6 +48,7 @@ class ArrayTypePrivate;
 class DelayedTypePrivate;
 
 class IndexedString;
+class IndexedType;
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
@@ -125,10 +126,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
     virtual bool exchangeMembers() const = 0;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
 {
 public:
-  typedef KSharedPtr<AbstractType> Ptr;
+  typedef TypePtr<AbstractType> Ptr;
 
   AbstractType();
   AbstractType(const AbstractType& rhs);
@@ -158,7 +159,8 @@ public:
    * */
   virtual uint hash() const;
 
-  uint index() const;
+  ///This can also be called on zero types, those can then be reconstructed from the zero index
+  IndexedType indexed() const;
   
   enum WhichType {
     TypeAbstract  /**< an abstract type */,
@@ -190,10 +192,43 @@ private:
   Q_DECLARE_PRIVATE(AbstractType)
 };
 
+///Allows accessing the type just by a single index, so the reference can be stored to disk etc.
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
+  public:
+    IndexedType(uint index = 0) : m_index(index) {
+    }
+    
+    ///Returns zero type if this index is invalid
+    AbstractType::Ptr type() const;
+    
+    bool isValid() const {
+      return (bool)m_index;
+    }
+    
+    operator bool() const {
+      return (bool)m_index;
+    }
+    
+    bool operator==(const IndexedType& rhs) const {
+      return m_index == rhs.m_index;
+    }
+    
+    uint hash() const {
+      return m_index;
+    }
+    
+    uint index() const {
+      return m_index;
+    }
+    
+  private:
+    uint m_index;
+};
+
 class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
 {
 public:
-  typedef KSharedPtr<IntegralType> Ptr;
+  typedef TypePtr<IntegralType> Ptr;
 
   IntegralType();
   IntegralType(const IntegralType& rhs);
@@ -228,7 +263,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
 {
 public:
-  typedef KSharedPtr<PointerType> Ptr;
+  typedef TypePtr<PointerType> Ptr;
 
   PointerType ();
   PointerType(const PointerType& rhs);
@@ -260,7 +295,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
 {
 public:
-  typedef KSharedPtr<ReferenceType> Ptr;
+  typedef TypePtr<ReferenceType> Ptr;
 
   ReferenceType ();
   ReferenceType (const ReferenceType& rhs);
@@ -294,7 +329,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
 {
 public:
-  typedef KSharedPtr<FunctionType> Ptr;
+  typedef TypePtr<FunctionType> Ptr;
 
   enum SignaturePart {
     SignatureWhole /**< When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned */,
@@ -346,7 +381,7 @@ public:
   StructureType();
   StructureType(const StructureType&);
   ~StructureType();
-  typedef KSharedPtr<StructureType> Ptr;
+  typedef TypePtr<StructureType> Ptr;
 
   virtual AbstractType* clone() const;
 
@@ -370,7 +405,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 {
 public:
-  typedef KSharedPtr<ArrayType> Ptr;
+  typedef TypePtr<ArrayType> Ptr;
 
   ArrayType(const ArrayType&);
 
@@ -416,7 +451,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT DelayedType : public KDevelop::AbstractType
 {
 public:
-  typedef KSharedPtr<DelayedType> Ptr;
+  typedef TypePtr<DelayedType> Ptr;
 
   enum Kind {
     Delayed /**< The type should be resolved later. This is the default. */,
@@ -449,7 +484,7 @@ public:
 };
 
 template <class T>
-uint qHash(const KSharedPtr<T>& type) { return (uint)((size_t)type.data()); }
+uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.data()); }
 
 
 /**

@@ -71,7 +71,7 @@ QString FunctionDeclaration::toString() const {
   if( !abstractType() )
     return Declaration::toString();
 
-  KSharedPtr<FunctionType> function = type<FunctionType>();
+  TypePtr<FunctionType> function = type<FunctionType>();
   Q_ASSERT(function);
   
   return QString("function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));

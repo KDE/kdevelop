@@ -63,6 +63,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     uint hash() const {
       return (m_topContext * 53 + m_declarationIndex) * 23;
     }
+    
+    bool isValid() const {
+      return m_topContext != 0 || m_declarationIndex != 0;
+    }
+    
   private:
   uint m_topContext;
   uint m_declarationIndex;
@@ -141,7 +146,7 @@ public:
   /**
    * Should apply a specialization using a specialization index as returned in id()
    * */
-  virtual Declaration* specialize(uint specialization);
+  virtual Declaration* specialize(uint specialization, TopDUContext* topContext);
   
   /**
    * Set the definition for this declaration.
@@ -184,6 +189,9 @@ public:
    * Returns the parent-context of this declaration.
    * */
   DUContext* context() const;
+  
+  IndexedDeclaration indexed() const;
+  
   /**
    * When setContext(..) is called, this declaration is inserted into the given context
    * You only need to be able to write this declaration. You do not need write-privileges for the context, because addDeclaration(..) works separately from that.
@@ -195,10 +203,10 @@ public:
   void setContext(DUContext* context, bool anonymous = false);
 
   template <class T>
-  KSharedPtr<T> type() const { return KSharedPtr<T>::dynamicCast(abstractType()); }
+  TypePtr<T> type() const { return TypePtr<T>::dynamicCast(abstractType()); }
 
   template <class T>
-  void setType(KSharedPtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
+  void setType(TypePtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
 
   AbstractType::Ptr abstractType() const;
   virtual void setAbstractType(AbstractType::Ptr type);
@@ -267,14 +275,19 @@ public:
     * Affected by function-arguments, whether this is a template-declaration, etc..
     * */
   virtual uint additionalIdentity() const;
+  
+  /**
+   * 
+   * */
+  virtual uint specialization() const;
 
   /**
    * @see DeclarationId
    * */
   virtual DeclarationId id() const;
-  
   ///Returns an index that uniquely identifies this declaration within its surrounding top-context. That index can be passed
   ///to TopDUContext::declarationFromIndex(index) to get the declaration
+  ///This is only valid when the declaration is not a specialization(specialization() returns 0), and if it is not anonymous in its context
   uint ownIndex() const;
   void clearOwnIndex();
   void allocateOwnIndex();

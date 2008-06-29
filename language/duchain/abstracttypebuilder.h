@@ -81,11 +81,11 @@ protected:
   }
 
   template <class T2>
-  void injectType(const KSharedPtr<T2>& type)
+  void injectType(const TypePtr<T2>& type)
   { injectType(KDevelop::AbstractType::Ptr::staticCast(type)); }
 
   template <class T2>
-  void openType(KSharedPtr<T2> type)
+  void openType(TypePtr<T2> type)
   { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type)); }
 
   void openAbstractType(KDevelop::AbstractType::Ptr type)
@@ -115,7 +115,7 @@ protected:
 
   // You must not use this in creating another type definition, as it may not be the registered type.
   template <class T2>
-  KSharedPtr<T2> currentType() { return KSharedPtr<T2>::dynamicCast(m_typeStack.top()); }
+  TypePtr<T2> currentType() { return TypePtr<T2>::dynamicCast(m_typeStack.top()); }
 
   ///Returns whether a type was opened
   bool openTypeFromName(NameT* name, bool needClass)

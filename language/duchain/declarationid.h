@@ -56,6 +56,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
       else
         return direct == rhs.direct && m_specialization == rhs.m_specialization;
     }
+    
+    bool isValid() const {
+      return (m_direct && direct.isValid()) || indirect.m_identifier.isValid();
+    }
 
     ///Warning: This may return different hashes for the same declaration, depending on whether the id is direct or indirect
     uint hash() const {

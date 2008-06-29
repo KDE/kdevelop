@@ -243,8 +243,18 @@ AbstractType* DelayedType::clone() const {
   return new DelayedType(*this);
 }
 
-uint AbstractType::index() const {
-  return TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this)));
+AbstractType::Ptr IndexedType::type() const {
+  if(!m_index)
+    return AbstractType::Ptr();
+  return TypeRepository::typeForIndex(m_index);
+}
+
+
+IndexedType AbstractType::indexed() const {
+  if(this == 0)
+    return IndexedType();
+  else
+    return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
 }
 
 

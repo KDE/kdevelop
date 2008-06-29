@@ -1238,13 +1238,13 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
 {
   ENSURE_CAN_WRITE
 
-  foreach (DUContext* childContext, childContexts())
-    if (!encountered.contains(childContext))
-      delete childContext;
-
   foreach (Declaration* dec, localDeclarations())
     if (!encountered.contains(dec))
       delete dec;
+  
+  foreach (DUContext* childContext, childContexts())
+    if (!encountered.contains(childContext))
+      delete childContext;
 }
 
 TopDUContext* DUContext::topContext() const

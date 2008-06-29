@@ -78,7 +78,7 @@ QString ClassFunctionDeclaration::toString() const {
   if( !abstractType() )
     return ClassMemberDeclaration::toString();
 
-  KSharedPtr<FunctionType> function = type<FunctionType>();
+  TypePtr<FunctionType> function = type<FunctionType>();
   if(function) {
     return QString("member-function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   } else {

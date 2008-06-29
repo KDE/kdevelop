@@ -212,7 +212,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
-Declaration* Declaration::specialize(uint specialization)
+Declaration* Declaration::specialize(uint specialization, TopDUContext* topContext)
 {
   return this;
 }
@@ -248,7 +248,10 @@ DUContext * Declaration::context() const
 
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
-  ENSURE_CAN_WRITE
+  ///@todo re-enable. In C++ support we need a short window to put visible declarations into template contexts
+  if(!specialization()) {
+    ENSURE_CAN_WRITE
+  }
 
   setInSymbolTable(false);
 
@@ -282,15 +285,23 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 }
 
 void Declaration::clearOwnIndex() {
+  
+  if(!d_func()->m_ownIndex)
+    return;
+  
   ENSURE_CAN_WRITE
+  
   if(d_func()->m_ownIndex && d_func()->m_context->topContext())
     d_func()->m_context->topContext()->removeDeclarationIndex(d_func()->m_ownIndex);
   d_func()->m_ownIndex = 0;
 }
 
 void Declaration::allocateOwnIndex() {
-  ///@todo needs to be enabled, but currenty we cannot do it because of template instantiation(those shouldn't have an index at all)
-  //ENSURE_CAN_WRITE
+  if(d_func()->m_anonymousInContext || specialization())
+    return;
+  
+  ENSURE_CAN_WRITE
+  
   Q_ASSERT(!d_func()->m_ownIndex);
   if(d_func()->m_context->topContext())
     d_func()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
@@ -408,13 +419,17 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
   d->m_isTypeAlias = isTypeAlias;
 }
 
+uint Declaration::specialization() const {
+  return 0;
+}
+
 DeclarationId Declaration::id() const
 {
   ENSURE_CAN_READ
   if(inSymbolTable())
-    return DeclarationId(qualifiedIdentifier(), additionalIdentity());
+    return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
-    return DeclarationId(topContext()->ownIndex(), ownIndex());
+    return DeclarationId(indexed(), specialization());
 }
 
 Declaration* Declaration::declaration(TopDUContext* topContext) const
@@ -560,6 +575,11 @@ QMap<HashedString, QList<SimpleRange> > Declaration::uses() const
     }
   }
   return ret;
+}
+
+IndexedDeclaration Declaration::indexed() const {
+  ENSURE_CAN_READ
+  return IndexedDeclaration(topContext()->ownIndex(), ownIndex());
 }
 
 }

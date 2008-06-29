@@ -1082,6 +1082,10 @@ IndexedIdentifier::operator Identifier() const {
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex) {
 }
 
+bool IndexedQualifiedIdentifier::isValid() const {
+  return index != emptyConstantQualifiedIdentifierPrivateIndex;
+}
+
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id) : index(id.index()) {
 }
 
