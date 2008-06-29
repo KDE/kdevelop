@@ -13,7 +13,13 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Check
 Name[gl]=Comprobar
+Name[pt]=Verificar
+Name[pt_BR]=Verificar
 Name[zh_TW]=檢查
 Comment=Check settings
+Comment[es]=Preferencias de Check
 Comment[gl]=Configuración da comprobación
+Comment[pt]=Verificar a configuração
+Comment[pt_BR]=Verificar a configuração
+Comment[uk]=Параметри Check
 Comment[zh_TW]=檢查設定
