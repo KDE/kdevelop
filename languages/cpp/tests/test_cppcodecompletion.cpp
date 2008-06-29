@@ -111,7 +111,7 @@ namespace QTest {
     return qstrdup(s.toLatin1().constData());
   }
   template<>
-  char* toString(const KSharedPtr<AbstractType>& type)
+  char* toString(const TypePtr<AbstractType>& type)
   {
     QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
     return qstrdup(s.toLatin1().constData());
@@ -351,9 +351,9 @@ void TestCppCodeCompletion::testInclude() {
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Erna&"));
+  QCOMPARE(result.type.type()->toString(), QString("Erna&"));
 
   
   ///Test overload-resolution 
@@ -362,18 +362,18 @@ void TestCppCodeCompletion::testInclude() {
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Heinz"));
+  QCOMPARE(result.type.type()->toString(), QString("Heinz"));
   
   lock.unlock();
   result = parser.evaluateExpression( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Erna"));
+  QCOMPARE(result.type.type()->toString(), QString("Erna"));
 
   //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
   lock.unlock();
@@ -381,9 +381,9 @@ void TestCppCodeCompletion::testInclude() {
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  //QCOMPARE(result.type->toString(), QString("Heinz"));
+  //QCOMPARE(result.type.type()->toString(), QString("Heinz"));
   
   
   lock.unlock();
@@ -391,18 +391,18 @@ void TestCppCodeCompletion::testInclude() {
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Heinz"));
+  QCOMPARE(result.type.type()->toString(), QString("Heinz"));
   lock.unlock();
   
   result = parser.evaluateExpression( "globalFunction(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
   
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Erna"));
+  QCOMPARE(result.type.type()->toString(), QString("Erna"));
     
   release(c);
 }

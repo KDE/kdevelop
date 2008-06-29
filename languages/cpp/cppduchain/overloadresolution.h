@@ -46,7 +46,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     struct Parameter {
       Parameter() : type(0), lValue(false) {
       }
-      Parameter( AbstractType* t, bool isLValue ) : type(t), lValue( isLValue ) {
+      Parameter( AbstractType::Ptr t, bool isLValue ) : type(t), lValue( isLValue ) {
       }
       AbstractType::Ptr type;
       bool lValue;
@@ -77,7 +77,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
         parameters << param;
       }
 
-      ParameterList( AbstractType* param, bool isLValue ) {
+      ParameterList( AbstractType::Ptr param, bool isLValue ) {
         parameters << Parameter(param, isLValue);
       }
     };

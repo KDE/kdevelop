@@ -124,7 +124,7 @@ namespace QTest {
     return qstrdup(s.toLatin1().constData());
   }
   template<>
-  char* toString(const KSharedPtr<AbstractType>& type)
+  char* toString(const TypePtr<AbstractType>& type)
   {
     QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
     return qstrdup(s.toLatin1().constData());
@@ -225,22 +225,22 @@ void TestExpressionParser::testTemplates() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("c.member", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.type().data()));
 
-    QVERIFY(!result.allDeclarations.isEmpty());
-    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.data()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.data())->declaration(), defClassA);
+    QVERIFY(result.allDeclarationsSize());
+    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.type().data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(), defClassA);
   }
   
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("*c", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.type().data()));
 
-    QVERIFY(!result.allDeclarations.isEmpty());
-    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.data()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.data())->declaration(), defClassA);
+    QVERIFY(result.allDeclarationsSize());
+    QVERIFY(dynamic_cast<IdentifiedType*>(result.type.type().data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(), defClassA);
   }
   
   release(top);
@@ -259,7 +259,7 @@ void TestExpressionParser::testArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.type().data()));
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
@@ -268,18 +268,18 @@ void TestExpressionParser::testArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.instance);
+    QVERIFY(result.isInstance);
     kDebug() << result.toString();
-    kDebug() << typeid(*result.type.data()).name();
-    QVERIFY(dynamic_cast<CppArrayType*>(result.type.data()));
-    QCOMPARE(static_cast<CppArrayType*>(result.type.data())->dimension(), 8);
+    kDebug() << typeid(*result.type.type().data()).name();
+    QVERIFY(dynamic_cast<CppArrayType*>(result.type.type().data()));
+    QCOMPARE(static_cast<CppArrayType*>(result.type.type().data())->dimension(), 8);
   }
   
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray[5].val", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppIntegralType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppIntegralType*>(result.type.type().data()));
   }
 
   release(top);
@@ -298,7 +298,7 @@ void TestExpressionParser::testDynamicArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppClassType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppClassType*>(result.type.type().data()));
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
@@ -307,17 +307,17 @@ void TestExpressionParser::testDynamicArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.instance);
+    QVERIFY(result.isInstance);
     kDebug() << result.toString();
-    kDebug() << typeid(*result.type.data()).name();
-    QVERIFY(dynamic_cast<CppArrayType*>(result.type.data()));
+    kDebug() << typeid(*result.type.type().data()).name();
+    QVERIFY(dynamic_cast<CppArrayType*>(result.type.type().data()));
   }
   
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray[5].val", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(dynamic_cast<CppIntegralType*>(result.type.data()));
+    QVERIFY(dynamic_cast<CppIntegralType*>(result.type.type().data()));
   }
 
   release(top);
@@ -372,17 +372,17 @@ void TestExpressionParser::testSmartPointer() {
   
   kDebug(9007) << top->localDeclarations()[3]->abstractType()->toString();
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "*bPointer", KDevelop::DUContextPointer(top));
-  QVERIFY(result.instance);
-  QCOMPARE(result.type->toString(), QString("B&"));
+  QVERIFY(result.isInstance);
+  QCOMPARE(result.type.type()->toString(), QString("B&"));
 
   result = parser.evaluateExpression( "bPointer->i", KDevelop::DUContextPointer(top));
-  QVERIFY(result.instance);
-  QCOMPARE(result.type->toString(), QString("int"));
+  QVERIFY(result.isInstance);
+  QCOMPARE(result.type.type()->toString(), QString("int"));
   
 /*  result = parser.evaluateExpression( "bPointer->cast<B>()->i", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QCOMPARE(result.type->toString(), QString("int"));*/
+  QVERIFY(result.isInstance);
+  QCOMPARE(result.type.type()->toString(), QString("int"));*/
   
   release(top);
 }
@@ -415,179 +415,179 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateType( "const Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("Cont")); ///@todo Change this to "const Cont" once we parse const correctly
-  QVERIFY(!result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("Cont")); ///@todo Change this to "const Cont" once we parse const correctly
+  QVERIFY(!result.isInstance);
   lock.unlock();
   
   result = parser.evaluateExpression( "Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("Cont"));
-  QVERIFY(!result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("Cont"));
+  QVERIFY(!result.isInstance);
   lock.unlock();
 
   result = parser.evaluateExpression( "c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());   
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
   lock.unlock();
 
   result = parser.evaluateExpression( "d", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QCOMPARE(result.type->toString(), QString("Cont*"));
-  QCOMPARE(dynamic_cast<CppPointerType*>(result.type.data())->baseType()->toString(), QString("Cont"));
+  QVERIFY(result.isInstance);
+  QCOMPARE(result.type.type()->toString(), QString("Cont*"));
+  QCOMPARE(dynamic_cast<CppPointerType*>(result.type.type().data())->baseType()->toString(), QString("Cont"));
   lock.unlock();
   
   //Test pointer-referencing
   result = parser.evaluateExpression( "&c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int*"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("int*"));
+  QVERIFY(result.isInstance);
   lock.unlock();
 
   //Test pointer-referencing and dereferencing
   result = parser.evaluateExpression( "*(&c.a)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int"));
+  QCOMPARE(result.type.type()->toString(), QString("int"));
   kDebug() << result.toString();
-  QVERIFY(result.instance);
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   //Test overloaded "operator*"
   result = parser.evaluateExpression( "*c", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("double"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("double"));
+  QVERIFY(result.isInstance);
   lock.unlock();
 
   //Test overloaded "operator->"
   result = parser.evaluateExpression( "c->a", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int&"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("int&"));
+  QVERIFY(result.isInstance);
   lock.unlock();
 
   //Test normal pointer-access + assign expression
   result = parser.evaluateExpression( "d->a = 5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int&"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("int&"));
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   //Test double * (one real, one overloaded)
   result = parser.evaluateExpression( "**d", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("double"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("double"));
+  QVERIFY(result.isInstance);
   lock.unlock();
 
   //Test double &
   result = parser.evaluateExpression( "&d", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("Cont**"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("Cont**"));
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   //Test type-expression
   result = parser.evaluateExpression( "Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(!result.instance);
-  QVERIFY(result.type);
+  QVERIFY(!result.isInstance);
+  QVERIFY(result.type.type());
   lock.unlock();
 
   //Test conditional expression
   result = parser.evaluateExpression( "d ? c.a : c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int&"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("int&"));
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   result = parser.evaluateExpression( "\"hello\"", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString().trimmed(), QString("char* const").trimmed());
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString().trimmed(), QString("char* const").trimmed());
+  QVERIFY(result.isInstance);
   lock.unlock();
 
   result = parser.evaluateExpression( "sizeof(Cont)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("int"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("int"));
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   result = parser.evaluateExpression( "new Cont()", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("Cont*"));
-  QVERIFY(result.instance);
+  QCOMPARE(result.type.type()->toString(), QString("Cont*"));
+  QVERIFY(result.isInstance);
   lock.unlock();
   
   result = parser.evaluateExpression( "5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("5"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("5"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  QVERIFY(!TypeUtils::isNullType(result.type.type().data()));
   
   result = parser.evaluateExpression( "5.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("5.5"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("5.5"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  QVERIFY(!TypeUtils::isNullType(result.type.type().data()));
   
   result = parser.evaluateExpression( "5.5 + 1.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("7"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("7"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  QVERIFY(!TypeUtils::isNullType(result.type.type().data()));
   
   result = parser.evaluateExpression( "3 + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("3.5"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("3.5"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  QVERIFY(!TypeUtils::isNullType(result.type.type().data()));
   
   result = parser.evaluateExpression( "3u + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("3.5"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("3.5"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(!TypeUtils::isNullType(result.type.data()));
+  QVERIFY(!TypeUtils::isNullType(result.type.type().data()));
   
   result = parser.evaluateExpression( "0", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type->toString(), QString("0"));
-  QVERIFY(result.instance);
-  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.data()));
+  QCOMPARE(result.type.type()->toString(), QString("0"));
+  QVERIFY(result.isInstance);
+  QVERIFY(dynamic_cast<CppConstantIntegralType*>(result.type.type().data()));
   lock.unlock();
-  QVERIFY(TypeUtils::isNullType(result.type.data()));
+  QVERIFY(TypeUtils::isNullType(result.type.type().data()));
   
   lock.lock();
   release(c);
@@ -615,15 +615,15 @@ void TestExpressionParser::testThis() {
   Cpp::ExpressionEvaluationResult result1 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(testContext));
   QVERIFY(result1.isValid());
   QVERIFY(result1.type);
-  QVERIFY(result1.instance);
-  QCOMPARE(result1.type->toString(), QString("A*"));
+  QVERIFY(result1.isInstance);
+  QCOMPARE(result1.type.type()->toString(), QString("A*"));
 
   
   Cpp::ExpressionEvaluationResult result2 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(test2Context));
   QVERIFY(result2.isValid());
   QVERIFY(result2.type);
-  QVERIFY(result2.instance);
-  QCOMPARE(result2.type->toString().trimmed(), QString("A* const"));
+  QVERIFY(result2.isInstance);
+  QCOMPARE(result2.type.type()->toString().trimmed(), QString("A* const"));
 
   DUContext* extTestCtx = top->childContexts()[2];
   QCOMPARE(extTestCtx->type(), DUContext::Other);
@@ -632,8 +632,8 @@ void TestExpressionParser::testThis() {
   Cpp::ExpressionEvaluationResult result3 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(extTestCtx));
   QVERIFY(result3.isValid());
   QVERIFY(result3.type);
-  QVERIFY(result3.instance);
-  QCOMPARE(result3.type->toString(), QString("A*"));
+  QVERIFY(result3.isInstance);
+  QCOMPARE(result3.type.type()->toString(), QString("A*"));
   
   release(top);
 }
@@ -696,65 +696,65 @@ void TestExpressionParser::testCasts() {
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "(Cont2*)(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateExpression( "dynamic_cast<Cont2*>(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
 
   result = parser.evaluateExpression( "static_cast<Cont2*>(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateExpression( "reinterpret_cast<Cont2*>(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateExpression( "new Cont2*", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2**"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2**"));
   lock.unlock();
   
   result = parser.evaluateExpression( "new Cont2", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateExpression( "new Cont2[5]", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
   
   result = parser.evaluateExpression( "(int*)new Cont2[5]", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("int*"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("int*"));
   lock.unlock();
   
   lock.lock();
@@ -802,42 +802,42 @@ void TestExpressionParser::testOperators() {
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "c+c", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont2"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont2"));
   lock.unlock();
   
   result = parser.evaluateExpression( "c+c3", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont3"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont3"));
   lock.unlock();
   
   result = parser.evaluateExpression( "c()", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont3"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont3"));
   lock.unlock();
   
   result = parser.evaluateExpression( "c[5]", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont3"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont3"));
   lock.unlock();
 
   //A simple test: Constructing a type should always result in the type, no matter whether there is a constructor.
   result = parser.evaluateExpression( "Cont(5)", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
-  QVERIFY(result.instance);
-  QVERIFY(result.type);
-  QCOMPARE(result.type->toString(), QString("Cont"));
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.type());
+  QCOMPARE(result.type.type()->toString(), QString("Cont"));
   lock.unlock();
   
   lock.lock();
@@ -867,31 +867,31 @@ void TestExpressionParser::testTemplateFunctions() {
   result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   kDebug() << result.toString();
-  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());
+  QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
   
   result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  QCOMPARE(result.type.type(), top->localDeclarations()[0]->abstractType());
 
   result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   
   result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  QCOMPARE(result.type.type(), top->localDeclarations()[0]->abstractType());
   
   result = parser.evaluateExpression( "a(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
+  QCOMPARE(result.type.type(), top->localDeclarations()[0]->abstractType());
   
   result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[0]->abstractType());
-  kDebug() << result.type->toString();
+  QCOMPARE(result.type.type(), top->localDeclarations()[0]->abstractType());
+  kDebug() << result.type.type()->toString();
 
   result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  QCOMPARE(result.type, top->localDeclarations()[1]->abstractType());
+  QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

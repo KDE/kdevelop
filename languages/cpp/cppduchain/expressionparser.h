@@ -39,42 +39,7 @@ class DUContext;
 namespace Cpp  {
 using namespace KDevelop;
 
-/**
- *
- * The functions in ExpressionEvaluationResult are inlined for now, so they can be used from within the duchainbuilder module
- * (It's a circular dependency)
- * */
-class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
-  public:
-    ExpressionEvaluationResult() {
-    }
-
-    AbstractType::Ptr type; ///Type the expression evaluated to, may be zero when the expression failed to evaluate
-    ExpressionVisitor::Instance instance; ///If the expression evaluates to an instance, this contains a pointer to the instance's declaration(@see CppExpressionVisitor::expressionType())
-
-    QList<DeclarationPointer> allDeclarations; ///This contains the declarations found for the item evaluated.
-
-    ///@return whether the result is an lvalue
-    bool isLValue() const {
-      return instance && (instance.declaration || dynamic_cast<const ReferenceType*>( type.data() ));
-    }
-
-    ///@return whether this result is valid(has a type)
-    bool isValid() const {
-      return (bool)type;
-    }
-
-    ///Duchain must be read-locked
-    TypeIdentifier identifier() const;
-    
-    ///@return A short version, that only contains the name or value, without instance-information etc. Should be language-processable.
-    QString toShortString() const;
-    
-    ///it does not matter whether du-chain is locked or not
-    QString toString() const;
-
-    typedef KSharedPtr<ExpressionEvaluationResult> Ptr;
-};
+class ExpressionEvaluationResult;
 
 /**
  * A class that simplifies the usage of CppExpressionVisitor by eventually parsing the expression and using CppExpressionVisitor to evaluate its type

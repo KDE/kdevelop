@@ -67,6 +67,17 @@ QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
   return ret;
 }
 
+QList<Declaration*> convert( const DeclarationId* decls, uint count, TopDUContext* top ) {
+  QList<Declaration*> ret;
+  for(int a = 0; a < count; ++a) {
+    Declaration* d = decls[a].getDeclaration(top);
+    if(d)
+      ret << d;
+  }
+    
+  return ret;
+}
+
 typedef PushValue<int> IntPusher;
 
 ///Extracts the last line from the given string
@@ -82,6 +93,12 @@ int completionRecursionDepth = 0;
 
 CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal)
 {
+  if(depth > 10) {
+    kDebug() << "too much recursion";
+    m_valid = false;
+    return;
+  }
+  
   {
     //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
     QString lineText = extractLastLine(m_text).trimmed();
@@ -289,7 +306,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     {
       LOCKDUCHAIN;
       //Dereference a pointer
-      AbstractType::Ptr containerType = m_expressionResult.type;
+      AbstractType::Ptr containerType = m_expressionResult.type.type();
       CppPointerType* pnt = dynamic_cast<CppPointerType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
       if( !pnt ) {
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
@@ -298,12 +315,14 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
             QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(Identifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
               ///@todo care about const
-              m_expressionResult.allDeclarations = convert(operatorDeclarations);
+              foreach(Declaration* decl, operatorDeclarations)
+                m_expressionResult.allDeclarationsList().append(decl->id());
+              
               CppFunctionType* function = dynamic_cast<CppFunctionType*>( operatorDeclarations.front()->abstractType().data() );
 
               if( function ) {
-                m_expressionResult.type = function->returnType();
-                m_expressionResult.instance = ExpressionVisitor::Instance(true);
+                m_expressionResult.type = function->returnType()->indexed();
+                m_expressionResult.isInstance = true;
               } else {
                   log( QString("arrow-operator of class is not a function: %1").arg(containerType ? containerType->toString() : QString("null") ) );
               }
@@ -321,8 +340,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
       if( pnt ) {
         ///@todo what about const in pointer?
-        m_expressionResult.type = pnt->baseType();
-        m_expressionResult.instance = ExpressionVisitor::Instance(true);
+        m_expressionResult.type = pnt->baseType()->indexed();
+        m_expressionResult.isInstance = true;
       }
     }
     case MemberAccess:
@@ -356,27 +375,30 @@ void CodeCompletionContext::processFunctionCallAccess() {
   
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
-    if( !m_expressionResult.instance ) {
+    if( !m_expressionResult.isInstance ) {
       log( "tried to apply an operator to a non-instance: " + m_expressionResult.toString() );
       m_valid = false;
       return;
     }
 
-    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.data(), m_expressionResult.isLValue()), m_operator);
+    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.type(), m_expressionResult.isLValue()), m_operator);
     
     m_functionName = "operator"+m_operator;
   } else {
     ///Simply take all the declarations that were found by the expression-parser
     
-    helper.setFunctions(convert(m_expressionResult.allDeclarations));
+    helper.setFunctions(convert(m_expressionResult.allDeclarations(), m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
     
-    if(!m_expressionResult.allDeclarations.isEmpty())
-      m_functionName = m_expressionResult.allDeclarations[0]->identifier().toString();
+    if(m_expressionResult.allDeclarationsSize()) {
+      Declaration* decl = m_expressionResult.allDeclarations()[0].getDeclaration(m_duContext->topContext());
+      if(decl)
+        m_functionName = decl->identifier().toString();
+    }
   }
 
   OverloadResolver::ParameterList knownParameters;
   foreach( ExpressionEvaluationResult result, m_knownArgumentTypes )
-    knownParameters.parameters << OverloadResolver::Parameter( result.type.data(), result.isLValue() );
+    knownParameters.parameters << OverloadResolver::Parameter( result.type.type(), result.isLValue() );
   
   helper.setKnownParameters(knownParameters);
   
@@ -449,14 +471,14 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
 
   if(m_expressionResult.isValid() ) {
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.data(), m_duContext->topContext()) );
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.type().data(), m_duContext->topContext()) );
     if( idType && idType->declaration() ) {
       DUContext* ctx = idType->declaration()->logicalInternalContext(m_duContext->topContext());
       if( ctx )
         ret << ctx;
       else {
         //Print some debug-output
-        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type->toString();
+        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type.type()->toString();
         kDebug(9007) << "Declaration" << idType->declaration()->toString() << idType->declaration()->isForwardDeclaration();
         if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idType->declaration()) ) {
           if( tempDeclaration->instantiatedFrom() ) {
@@ -516,9 +538,9 @@ bool CodeCompletionContext::endsWithOperator( const QString& str ) const {
 
 QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes() const {
   QList<KDevelop::AbstractType::Ptr> ret;
-  if( m_operator == "=" && m_expressionResult.isValid() && m_expressionResult.instance ) {
+  if( m_operator == "=" && m_expressionResult.isValid() && m_expressionResult.isInstance ) {
     //Conversion to the left operand-type
-    ret << m_expressionResult.type;
+    ret << m_expressionResult.type.type();
   }
   return ret;
 }

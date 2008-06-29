@@ -23,10 +23,13 @@
 #include <QMutex>
 
 #include <duchain/declaration.h>
+#include <duchain/declarationid.h>
 #include <duchain/duchainpointer.h>
 #include <duchain/ducontext.h>
 #include "expressionparser.h"
 #include "cppduchainexport.h"
+#include <appendedlist.h>
+#include "expressionevaluationresult.h"
 
 
 namespace KTextEditor {
@@ -38,29 +41,75 @@ namespace  KDevelop {
 }
 
 namespace Cpp {
-  class ExpressionEvaluationResult;
-}
+  class IndexedInstantiationInformation;
+  
+  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult);
+  
+  struct InstantiationInformation {
+    InstantiationInformation();
+    ///@todo include some information for instantiation only with default parameters
+    InstantiationInformation(const InstantiationInformation& rhs);
+    
+    ~InstantiationInformation();
+    
+    InstantiationInformation& operator=(const InstantiationInformation& rhs);
 
-struct InstantiationKey {
-  ///Template-arguments
-  InstantiationKey() {
-  }
-  explicit InstantiationKey( const QList<Cpp::ExpressionEvaluationResult>& _args ) : args(_args) {
-  }
-  QList<Cpp::ExpressionEvaluationResult> args;
-  bool operator==(const InstantiationKey & rhs) const;
-};
-
-uint qHash( const InstantiationKey& );
-
-namespace Cpp {
+    bool operator==(const InstantiationInformation& rhs) const;
+    
+    uint hash() const;
+    
+    bool isValid() const {
+      return previousInstantiationInformation || templateParametersSize();
+    }
+    
+    QString toString() const;
+    
+    ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
+    uint previousInstantiationInformation;
+    
+    START_APPENDED_LISTS(InstantiationInformation);
+    
+    ///templateParameters contains the template-parameters used for the instantiation
+    APPENDED_LIST_FIRST(InstantiationInformation, IndexedExpressionEvaluationResult, templateParameters);
+    
+    END_APPENDED_LISTS(InstantiationInformation, templateParameters);
+    
+    IndexedInstantiationInformation indexed() const;
+  };
+  
+  class IndexedInstantiationInformation {
+    public:
+      IndexedInstantiationInformation();
+      IndexedInstantiationInformation(uint index);
+      
+      const InstantiationInformation& information() const;
+      
+      uint hash() const {
+        return m_index * 73;
+      }
+      
+      uint index() const {
+        return m_index;
+      }
+      
+      bool operator==(const IndexedInstantiationInformation& rhs) const {
+        return m_index == rhs.m_index;
+      }
+      
+      //Returns true if one of the values represented by this information is non-default
+      bool isValid() const;
+    
+    private:
+      uint m_index;
+  };
+  
   template<class Base>
   class CppDUContext;
   
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAIN_EXPORT TemplateDeclaration {
     public:
-      typedef QHash<InstantiationKey, TemplateDeclaration*> InstantiationsHash;
+      typedef QHash<IndexedInstantiationInformation, TemplateDeclaration*> InstantiationsHash;
       
       ///Copy-constructor for cloning
       TemplateDeclaration(const TemplateDeclaration& rhs);
@@ -73,12 +122,13 @@ namespace Cpp {
       TemplateDeclaration* instantiatedFrom() const;
 
       ///Marks this template-declaration as a instantiation of the given one. This also means that this declaration will be deleted when the here given is deleted.
-      void setInstantiatedFrom(TemplateDeclaration* from);
+      ///from can also be zero, then the declaration will just be marked as a specialization(instantiatedWith is set)
+      void setInstantiatedFrom(TemplateDeclaration* from, const InstantiationInformation& instantiatedWith);
       
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
        * */
-      KDevelop::Declaration* instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const KDevelop::TopDUContext* source );
+      KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool visible = false );
 
       ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
@@ -88,26 +138,30 @@ namespace Cpp {
       ///@return Zero, or a non-specialized(thus also non-instantiated) template-class, which this was explicitly specialized from.
       TemplateDeclaration* specializedFrom() const;
 
-      const QList<ExpressionEvaluationResult>& instantiatedWith() const;
-
-      ///Must not be called once setInstantiatedFrom was called
-      void setInstantiatedWith(const QList<ExpressionEvaluationResult>& templateParams);
+      IndexedInstantiationInformation instantiatedWith() const;
 
       ///Returns all current instantiations of this declaration
       InstantiationsHash instantiations() const;
       
+      uint specialization() const;
+      
+      DeclarationId id() const;
+      
+      Declaration* specialize(uint specialization, TopDUContext* topContext);
+    
     private:
 
       //The context in which the template-parameters are declared
       KDevelop::DUContextPointer m_parameterContext;
       TemplateDeclaration* m_instantiatedFrom;
       TemplateDeclaration* m_specializedFrom; 
-      InstantiationKey m_instantiatedWith;
+      IndexedInstantiationInformation m_instantiatedWith;
 
       static QMutex instantiationsMutex;
       ///Every access to m_instantiations must be serialized through instantiationsMutex!
-      InstantiationsHash m_instantiations;
-      QList<TemplateDeclaration*> m_specializations;
+      
+      InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
+      QList<TemplateDeclaration*> m_specializations; ///Explicit specializations
   };
 
   /**
@@ -137,6 +191,17 @@ namespace Cpp {
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
+    virtual Declaration* specialize(uint specialization, TopDUContext* topContext) {
+      return TemplateDeclaration::specialize(specialization, topContext);
+    }
+    
+    virtual uint specialization() const {
+      return TemplateDeclaration::specialization();
+    }
+    
+    virtual DeclarationId id() const {
+      return TemplateDeclaration::id();
+    }
     
     //Is specialized for ForwardDeclaration in templatedeclaration.cpp to actively instantiate template forward declarations
     virtual Declaration* resolve(const TopDUContext* /*topContext*/) const {
@@ -159,10 +224,11 @@ namespace Cpp {
    * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization. If it contains exactly one argument, and that argument is invalid, the context is instantiated without arguments(default-arguments are used). Default-arguments will be used if needed.
    * @param instantiatedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and its parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
    * @param instantiatedFrom The declaration instantiatedDeclaration should be/is instantiated from. This is needed to eventually change the declaration of in IdentifiedType
+   * @param visible Whether the created declaration should be non-anonymous in its parent context(thus findable)
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const QList<Cpp::ExpressionEvaluationResult>& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom  );
+  CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom , bool visible = false );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.

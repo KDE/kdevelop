@@ -242,17 +242,17 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
 
   if( allInstantiated ) {
     //We have new template-parameters at hand, we can specialize now.
-    QList<ExpressionEvaluationResult> instantiateWith;
+    Cpp::InstantiationInformation instantiateWith;
     foreach( Declaration* decl, templateContext->localDeclarations() ) {
       ExpressionEvaluationResult res;
       
       CppTemplateParameterType* paramType = fastCast<CppTemplateParameterType*>(decl->abstractType().data());
       if( paramType ) //Take the type we have assigned.
-        res.type = instantiatedParameters[paramType->identifier().last().identifier()];
+        res.type = instantiatedParameters[paramType->identifier().last().identifier()]->indexed();
       else
-        res.type = decl->abstractType(); //Take the type that was available already earlier
+        res.type = decl->abstractType()->indexed(); //Take the type that was available already earlier
 
-      instantiateWith << res;
+      instantiateWith.templateParametersList().append(res.indexed());
     }
     return tempDecl->instantiate( instantiateWith, declaration->topContext() );
   }

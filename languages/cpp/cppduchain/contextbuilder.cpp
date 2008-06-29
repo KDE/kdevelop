@@ -208,6 +208,8 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   getFirstLast(&first, &last, ast->template_parameters);
   DUContext* ctx = 0;
 
+  ++m_templateDeclarationDepth;
+  
   if( first && last )
     ctx = openContext(first, last, DUContext::Template); //Open anonymous context for the template-parameters
   else
@@ -216,8 +218,6 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   visitNodes(this,ast->template_parameters);
   closeContext();
   m_importedParentContexts << ctx; //Import the context into the following function-argument context(so the template-parameters can be found from there)
-
-  ++m_templateDeclarationDepth;
 
   DefaultVisitor::visit(ast->declaration);
 
@@ -729,6 +729,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     case DUContext::Namespace:
     case DUContext::Class:
     case DUContext::Helper:
+    case DUContext::Enum:
       visit(node->declaration);
       break;
 
@@ -794,10 +795,10 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   m_importedParentContexts.clear();
 }
 
-void ContextBuilder::createTypeForDeclarator(DeclaratorAST *node) {
+void ContextBuilder::createTypeForDeclarator(DeclaratorAST */*node*/) {
 }
 
-void ContextBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
+void ContextBuilder::closeTypeForDeclarator(DeclaratorAST */*node*/) {
 }
 
 void ContextBuilder::visitDeclarator(DeclaratorAST *node)

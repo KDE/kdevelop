@@ -205,15 +205,19 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       res = parser.evaluateType( node->expression, editor()->parseSession() );
 
       //Delay the type-resolution of template-parameters
-      if( !res.allDeclarations.isEmpty() && (dynamic_cast<TemplateParameterDeclaration*>(res.allDeclarations.front().data()) || isTemplateDependent(res.allDeclarations.front().data())) )
-        delay = true;
+      if( res.allDeclarationsSize() ) {
+        Declaration* decl = res.allDeclarations()[0].getDeclaration(currentContext()->topContext());
+        if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
+          delay = true;
+      }
 
-      if ( !delay && res.isValid() && res.instance ) {
-        if( dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
-          CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(res.type.data());
+      if ( !delay && res.isValid() && res.isInstance ) {
+        AbstractType::Ptr resType = res.type.type();
+        if( dynamic_cast<CppConstantIntegralType*>(resType.data()) ) {
+          CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(resType.data());
           m_currentEnumeratorValue = (int)type->value<qint64>();
-        } else if( dynamic_cast<DelayedType*>(res.type.data()) ) {
-          DelayedType* type = static_cast<DelayedType*>(res.type.data());
+        } else if( dynamic_cast<DelayedType*>(resType.data()) ) {
+          DelayedType* type = static_cast<DelayedType*>(resType.data());
           openType(AbstractType::Ptr(type)); ///@todo Make this an enumerator-type that holds the same information
           openedType = true;
         }
@@ -580,9 +584,9 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     CppArrayType::Ptr array(new CppArrayType());
     array->setElementType(lastType());
 
-    if( res.isValid() && dynamic_cast<CppConstantIntegralType*>(res.type.data()) ) {
-      CppConstantIntegralType* value = static_cast<CppConstantIntegralType*>( res.type.data() );
-      array->setDimension(value->value<qint64>());
+    CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(res.type.type().data());
+    if( res.isValid() && integral ) {
+      array->setDimension(integral->value<qint64>());
     } else {
       array->setDimension(0);
     }

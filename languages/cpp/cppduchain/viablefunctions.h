@@ -84,7 +84,7 @@ namespace Cpp {
     QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     KDevelop::TopDUContextPointer m_topContext;
-    KSharedPtr<CppFunctionType> m_type;
+    TypePtr<CppFunctionType> m_type;
     KDevelop::AbstractFunctionDeclaration* m_funDecl;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };

@@ -86,7 +86,7 @@ class KDEVCPPDUCHAIN_EXPORT CppIntegralType : public KDevelop::IntegralType, pub
   friend class TypeRepository;
 
 public:
-  typedef KSharedPtr<CppIntegralType> Ptr;
+  typedef TypePtr<CppIntegralType> Ptr;
 
   enum IntegralTypes {
     TypeVoid,
@@ -142,7 +142,7 @@ class KDEVCPPDUCHAIN_EXPORT CppConstantIntegralType : public CppIntegralType
   friend class TypeRepository;
 
 public:
-  typedef KSharedPtr<CppConstantIntegralType> Ptr;
+  typedef TypePtr<CppConstantIntegralType> Ptr;
 
   /**The types and modifiers are not changed!
    * The values are casted internally to the local representation, so you can lose precision.
@@ -195,7 +195,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CppIntegralType::TypeModifiers)
 class KDEVCPPDUCHAIN_EXPORT CppFunctionType : public KDevelop::FunctionType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppFunctionType> Ptr;
+  typedef TypePtr<CppFunctionType> Ptr;
 
   ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
   
@@ -213,7 +213,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppPointerType : public KDevelop::PointerType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppPointerType> Ptr;
+  typedef TypePtr<CppPointerType> Ptr;
 
   CppPointerType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
 
@@ -231,7 +231,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppReferenceType : public KDevelop::ReferenceType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppReferenceType> Ptr;
+  typedef TypePtr<CppReferenceType> Ptr;
 
   CppReferenceType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
 
@@ -249,7 +249,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppClassType : public KDevelop::StructureType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppClassType> Ptr;
+  typedef TypePtr<CppClassType> Ptr;
 
   CppClassType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
 
@@ -306,7 +306,7 @@ private:
 /*class CppArrayType : public ArrayType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppArrayType> Ptr;
+  typedef TypePtr<CppArrayType> Ptr;
 
   CppArrayType(Declaration::CVSpecs spec = Declaration::CVNone);
 
@@ -316,7 +316,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppTypeAliasType : public KDevelop::AbstractType, public KDevelop::IdentifiedType, public CppCVType
 {
 public:
-  typedef KSharedPtr<CppTypeAliasType> Ptr;
+  typedef TypePtr<CppTypeAliasType> Ptr;
 
   CppTypeAliasType();
 
@@ -350,7 +350,7 @@ private:
 class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppConstantIntegralType, public KDevelop::IdentifiedType
 {
 public:
-  typedef KSharedPtr<CppEnumeratorType> Ptr;
+  typedef TypePtr<CppEnumeratorType> Ptr;
 
   virtual QString toString() const;
 
@@ -366,7 +366,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppEnumerationType : public CppIntegralType, public KDevelop::IdentifiedType
 {
 public:
-  typedef KSharedPtr<CppEnumerationType> Ptr;
+  typedef TypePtr<CppEnumerationType> Ptr;
 
   CppEnumerationType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
 
@@ -384,7 +384,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppArrayType : public KDevelop::ArrayType
 {
 public:
-  typedef KSharedPtr<CppArrayType> Ptr;
+  typedef TypePtr<CppArrayType> Ptr;
 
 //   virtual QString mangled() const;
 
@@ -402,7 +402,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public KDevelop::AbstractType, public KDevelop::IdentifiedType
 {
 public:
-  typedef KSharedPtr<CppTemplateParameterType> Ptr;
+  typedef TypePtr<CppTemplateParameterType> Ptr;
 
   TemplateParameterDeclaration* declaration() const;
 

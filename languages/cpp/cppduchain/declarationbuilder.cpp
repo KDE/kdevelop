@@ -337,7 +337,11 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 {
   DUChainWriteLocker lock(DUChain::lock());
   
-  if( KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts) ) {
+  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts);
+  
+  ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
+  ///by specialize(..) and its indirect DeclarationId
+  if( templateCtx || m_templateDeclarationDepth ) {
     Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRange );
     ret->setTemplateParameterContext(templateCtx);
     return ret;

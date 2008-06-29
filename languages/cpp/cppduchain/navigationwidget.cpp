@@ -619,18 +619,19 @@ class NavigationContext : public KShared {
             if( templ->instantiatedFrom() ) {
               m_currentText += Qt::escape("  <");
 
-              const QList<ExpressionEvaluationResult>& params = templ->instantiatedWith();
+              const Cpp::InstantiationInformation& params = templ->instantiatedWith().information();
               bool first = true;
-              foreach( const ExpressionEvaluationResult& result, params ) {
+              FOREACH_FUNCTION( const IndexedExpressionEvaluationResult& result, params.templateParameters ) {
                 if( first )
                   first = false;
                 else
                   m_currentText += ", ";
 
-                if( result.type ) {
-                  eventuallyMakeTypeLinks(result.type.data());
+                if( result.result().type.isValid() ) {
+                  AbstractType::Ptr type(result.result().type.type());
+                  eventuallyMakeTypeLinks(type.data());
                 }else{
-                  m_currentText += Qt::escape(result.toShortString());
+                  m_currentText += Qt::escape(result.result().toShortString());
                 }
               }
               

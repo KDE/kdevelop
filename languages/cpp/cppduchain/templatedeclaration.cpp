@@ -25,6 +25,8 @@
 
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
+#include <duchain/repositories/itemrepository.h>
+#include <appendedlist.h>
 
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
@@ -33,10 +35,17 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-
 QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
+
+namespace Cpp {
+  DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult);
+  
+  uint qHash(const Cpp::IndexedInstantiationInformation& info) {
+    return info.hash();
+  }
+}
 
 struct AtomicIncrementer {
 #if QT_VERSION < 0x040400
@@ -55,34 +64,75 @@ struct AtomicIncrementer {
   Int* c;
 };
 
-uint qHash( const ExpressionEvaluationResult& key )
-{
-  uint ret = 13*key.instance.isInstance;// + 17*(quint64)key.instance.declaration*/;
-
-/*  if( key.type )
-    ret += qHash(key.type->toString()); ///@todo Expensive
-  else*/
-  ret += key.identifier().hash();
-/*  if( key.type )
-    return qHash(key.type);*/
-  
-  return ret;
+QString InstantiationInformation::toString() const {
+    QString ret;
+    if(previousInstantiationInformation)
+        ret = IndexedInstantiationInformation(previousInstantiationInformation).information().toString() + "::";
+    ret += "<";
+    for(int a = 0; a < templateParametersSize(); ++a) {
+        if(a)
+            ret += ", ";
+        ret += templateParameters()[a].result().toString();
+    }
+    ret += ">";
+    return ret;
 }
 
-uint qHash( const QList<ExpressionEvaluationResult>& key ) {
+InstantiationInformation::InstantiationInformation() : previousInstantiationInformation(0) {
+  initializeAppendedLists();
+}
+
+InstantiationInformation::InstantiationInformation(const InstantiationInformation& rhs) : previousInstantiationInformation(rhs.previousInstantiationInformation) {
+  initializeAppendedLists();
+  copyListsFrom(rhs);
+}
+
+InstantiationInformation::~InstantiationInformation() {
+  freeAppendedLists();
+}
+
+InstantiationInformation& InstantiationInformation::operator=(const InstantiationInformation& rhs) {
+  previousInstantiationInformation = rhs.previousInstantiationInformation;
+  copyListsFrom(rhs);
+  return *this;
+}
+
+bool InstantiationInformation::operator==(const InstantiationInformation& rhs) const {
+  if(previousInstantiationInformation != rhs.previousInstantiationInformation)
+    return false;
+  return listsEqual(rhs);
+}
+
+uint InstantiationInformation::hash() const {
   uint ret = 0;
-  foreach( const ExpressionEvaluationResult& expr, key )
-    ret = qHash(expr) + ret * 7;
-  return ret;
+  FOREACH_FUNCTION(const IndexedExpressionEvaluationResult& param, templateParameters) {
+    ret = (ret + param.hash()) * 117;
+  }
+  
+  return (ret + previousInstantiationInformation) * 31;
 }
 
-bool InstantiationKey::operator==(const InstantiationKey & rhs) const
-{
-  return qHash(args) == qHash(rhs.args);
+KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > instantiationInformationRepository("C++ Instantiation Information Repository");
+
+const uint standardInstantiationInformationIndex = instantiationInformationRepository.index( InstantiationInformation() );
+
+IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(standardInstantiationInformationIndex) {
 }
 
-uint qHash( const InstantiationKey& key ) {
-  return qHash( key.args );
+IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m_index(index) {
+}
+
+bool IndexedInstantiationInformation::isValid() const {
+  return m_index != standardInstantiationInformationIndex;
+}
+
+
+const InstantiationInformation& IndexedInstantiationInformation::information() const {
+  return *instantiationInformationRepository.itemFromIndex(m_index);
+}
+
+IndexedInstantiationInformation InstantiationInformation::indexed() const {
+  return IndexedInstantiationInformation(instantiationInformationRepository.index(*this));
 }
 
 AbstractType* applyPointerReference( AbstractType* ptr, const KDevelop::TypeIdentifier& id ) {
@@ -201,8 +251,8 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         res = p.evaluateType( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), source );
 
       ///@todo make this nicer
-      keepAlive = res.type; //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
-      return res.type.data();
+      keepAlive = res.type.type(); //Since the API uses AbstractType*, use keepAlive to make sure the type cannot be deleted
+      return keepAlive.data();
     }else{
       if( containsDelayedType(type) )
       {
@@ -231,9 +281,10 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
 
 AtomicIncrementer::Int DelayedTypeResolver::depth_counter = Q_BASIC_ATOMIC_INITIALIZER(0);
 
-bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
- return left.type == right.type && left.instance.isInstance == right.instance.isInstance;
-}
+// bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
+//  return left.type == right.type && left.isInstance == right.isInstance;
+// }
+
 
 namespace Cpp {
 // bool operator==( const QList<ExpressionEvaluationResult>& left, const QList<ExpressionEvaluationResult>& right ) {
@@ -245,6 +296,32 @@ TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m
 
 TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
 }
+
+Declaration* TemplateDeclaration::specialize(uint specialization, TopDUContext* topContext) {
+  if(specialization == 0)
+    return dynamic_cast<Declaration*>(this);
+  else
+    return instantiate(IndexedInstantiationInformation( specialization ).information(), topContext);
+} 
+
+uint TemplateDeclaration::specialization() const {
+  if(m_instantiatedWith.isValid())
+    return m_instantiatedWith.index();
+  else
+    return 0;
+}
+
+// DeclarationId TemplateDeclaration::id() const {
+//   const Declaration* thisDecl = dynamic_cast<const Declaration*>(this);
+//   if(m_instantiatedFrom) {
+//     DeclarationId ret = m_instantiatedFrom->id();
+//     ret.setSpecialization(m_instantiatedWith.index());
+//     return ret;
+//   } else{
+// thisDecl->topContext()->ownIndex();
+//     return thisDecl->Declaration::id();
+//   }
+// }
 
 TemplateDeclaration::~TemplateDeclaration()
 {
@@ -258,8 +335,10 @@ TemplateDeclaration::~TemplateDeclaration()
     ///Unregister at the declaration this one is instantiated from
     if( m_instantiatedFrom ) {
       InstantiationsHash::iterator it = m_instantiatedFrom->m_instantiations.find(m_instantiatedWith);
-      if( it != m_instantiatedFrom->m_instantiations.end() && *it == this )
+      if( it != m_instantiatedFrom->m_instantiations.end() ) {
+        Q_ASSERT(*it == this);
         m_instantiatedFrom->m_instantiations.erase(it);
+      }
       
       m_instantiatedFrom = 0;
     }
@@ -295,8 +374,14 @@ TemplateDeclaration* TemplateDeclaration::specializedFrom() const {
   return m_specializedFrom;
 }
 
-void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from)
+void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const InstantiationInformation& instantiatedWith)
 {
+  if(from && from->instantiatedFrom()) {
+    //Always register as instantiation of the basic template declaration
+    setInstantiatedFrom(from->instantiatedFrom(), instantiatedWith);
+    return;
+  }
+    
   Declaration* thisDecl = dynamic_cast<Declaration*>(this);
   //Change the identifier so it contains the template-parameters
   
@@ -309,7 +394,13 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from)
     m_instantiatedFrom = 0;
   }
   m_instantiatedFrom = from;
-  from->m_instantiations.insert(m_instantiatedWith, this);
+  m_instantiatedWith = instantiatedWith.indexed();
+  //Only one instantiation is allowed
+  if(from) {
+    Q_ASSERT(from->m_instantiations.find(instantiatedWith.indexed()) == from->m_instantiations.end());
+    from->m_instantiations.insert(m_instantiatedWith, this);
+    Q_ASSERT(from->m_instantiations.contains(m_instantiatedWith));
+  }
 }
 
 bool TemplateDeclaration::isInstantiatedFrom(const TemplateDeclaration* other) const {
@@ -349,45 +440,60 @@ DUContext* getTemplateContext(Declaration* decl)
   return 0;
 }
 
-///Applies the default-parameters from basicDeclaration
-void applyDefaultParameters( QList<Cpp::ExpressionEvaluationResult>& templateParameters, Declaration* basicDeclaration )
+///Applies the default-parameters from basicDeclaration. This must be called AFTER basicDeclaration was instantiated, so the
+///template-parameters are already replaced with their instantiated types
+// InstantiationInformation applyDefaultParameters( const InstantiationInformation& information, Declaration* basicDeclaration )
+// {
+//   DUContext* templateCtx = getTemplateContext(basicDeclaration);
+//   if( !templateCtx )
+//     return information;
+// 
+//   if( information.templateParametersSize() >= templateCtx->localDeclarations().count() )
+//     return information;
+//   
+//   InstantiationInformation ret(information);
+//   
+//   for( int a = information.templateParameters.count(); a < templateCtx->localDeclarations().count(); a++ ) {
+//     TemplateParameterDeclaration* decl = dynamic_cast<TemplateParameterDeclaration*>(templateCtx->localDeclarations()[a]);
+//     if( decl ) {
+//       if( !decl->defaultParameter().isEmpty() ) {
+//         ExpressionEvaluationResult res;
+//         res.type = decl->abstractType();
+// 
+//         ret.templateParametersList.append(res.indexed());
+//       }else{
+//         //kDebug(9007) << "missing needed default template-parameter";
+//       }
+//     } else {
+//       kDebug(9007) << "Warning: non template-parameter in template context";
+//     }
+//   }
+//   
+//   return ret;
+// }
+
+///Reads the template-parameters from the template-context of the declaration, and puts them into the identifier.
+///Must be called AFTER the declaration was instantiated.
+void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* basicDeclaration )
 {
+  identifier.clearTemplateIdentifiers();
+  
   DUContext* templateCtx = getTemplateContext(basicDeclaration);
   if( !templateCtx )
     return;
 
-  if( templateParameters.count() >= templateCtx->localDeclarations().count() )
-    return;
-  
-  for( int a = templateParameters.count(); a < templateCtx->localDeclarations().count(); a++ ) {
-    TemplateParameterDeclaration* decl = dynamic_cast<TemplateParameterDeclaration*>(templateCtx->localDeclarations()[a]);
-    if( decl ) {
-      if( !decl->defaultParameter().isEmpty() ) {
-        ExpressionEvaluationResult res;
-        res.type = decl->abstractType();
-
-        templateParameters << res;
-      }else{
-        //kDebug(9007) << "missing needed default template-parameter";
-      }
-    } else {
-      kDebug(9007) << "Warning: non template-parameter in template context";
-    }
+  for( int a = 0; a < templateCtx->localDeclarations().count(); a++ ) {
+    AbstractType::Ptr type = templateCtx->localDeclarations()[a]->abstractType();
+    if(type)
+        identifier.appendTemplateIdentifier( type->toString() );
+    else
+        identifier.appendTemplateIdentifier( QualifiedIdentifier("(missing template type)") );
   }
 }
 
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
-CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const QList<ExpressionEvaluationResult>& _templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
+CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom, bool visible )
 {
-  QList<ExpressionEvaluationResult> templateArguments = _templateArguments;
-
-  if( templateArguments.count() == 1 && !templateArguments[0].isValid() )
-    templateArguments.clear(); //If there is only exactly one template-argument, and that one is invalid, interpret the whole thing as no arguments at all
-  
-  if( instantiatedDeclaration )
-    ///Move the instantiated declaration anonymously into the parent-context
-    instantiatedDeclaration->setContext(parentContext, true);
-
   StandardCppDUContext* contextCopy = 0;
   
   if( context ) {
@@ -403,23 +509,32 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
       
     ///Now the created context is already partially functional and can be used for searching(not the instantiated template-params yet though)
     
-    if( context->type() == KDevelop::DUContext::Template ) { //templateArguments may be empty, that means that only copying should happen.
+    if( context->type() == KDevelop::DUContext::Template ) {
+      ///We're in the template-parameter context, exchange the template-parameters with their values.
       ///Specialize the local template-declarations
-      QList<ExpressionEvaluationResult>::const_iterator currentArgument = templateArguments.begin();
+      uint currentArgument = 0;
       
+    InstantiationInformation parameterInstantiationInformation;
+    parameterInstantiationInformation.previousInstantiationInformation = templateArguments.indexed().index();
+    
       foreach(Declaration* decl, context->localDeclarations())
       {
+        TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl);
+        Q_ASSERT(tempDecl);
+//         tempDecl->instantiate(parameterInstantiationInformation, source, true);
+        
         TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
         Q_ASSERT(templateDecl); //Only template-parameter declarations are allowed in template-contexts
         TemplateParameterDeclaration* declCopy = dynamic_cast<TemplateParameterDeclaration*>(decl->clone());
         Q_ASSERT(declCopy);
+        TemplateDeclaration* tempCopyDecl = dynamic_cast<TemplateDeclaration*>(declCopy);
+        Q_ASSERT(tempCopyDecl);
 
-        if( currentArgument != templateArguments.end() )
+        if( currentArgument < templateArguments.templateParametersSize() && templateArguments.templateParameters()[currentArgument].result().isValid() )
         {
-          declCopy->setAbstractType( currentArgument->type );
-          
-          ++currentArgument;
+          declCopy->setAbstractType( templateArguments.templateParameters()[currentArgument].result().type.type() );
         } else {
+          //Apply default-parameters
           //Use the already available delayed-type resolution to resolve the value/type
           if( !templateDecl->defaultParameter().isEmpty() ) {
             DelayedType::Ptr delayed( new DelayedType() );
@@ -429,11 +544,15 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
             //Parameter missing
           }
         }
+        ///We mark the declaration as a specialization, so no index is created for it within the top-context(that needs a write-lock)
+        tempCopyDecl->setInstantiatedFrom(0, parameterInstantiationInformation);
         ///This inserts the copied declaration into the copied context
         declCopy->setContext(contextCopy);
+        ++currentArgument;
       }
     }
     
+    ///Find  the template-parameter context, and recurse into it, so we can replace the template parameters
     foreach( KDevelop::DUContextPointer importedContext,  context->importedParentContexts() )
     {
       if( !importedContext)
@@ -441,7 +560,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
         ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
       if( importedContext->type() == KDevelop::DUContext::Template || importedContext->type() == KDevelop::DUContext::Function )
       {
-        DUContext* ctx = instantiateDeclarationContext( parentContext, source, importedContext.data(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, importedContext.data(), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
         
         if( instantiatedDeclaration && importedContext->type() == KDevelop::DUContext::Template ) {
@@ -492,74 +611,129 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationContext( KDevelop::DUCo
     TemplateDeclaration* fromTemplateDecl = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
     TemplateDeclaration* toTemplateDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
     if( toTemplateDecl && fromTemplateDecl && fromTemplateDecl->templateParameterContext() ) {
-        DUContext* ctx = instantiateDeclarationContext( parentContext, source, fromTemplateDecl->templateParameterContext(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, fromTemplateDecl->templateParameterContext(), templateArguments, 0, 0);
         toTemplateDecl->setTemplateParameterContext( ctx );
     }
   }
 
-  if( instantiatedDeclaration ) {
-    TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
-
-    applyDefaultParameters( templateArguments, instantiatedDeclaration );
-    
-    if(instantiatedTemplate) //Since this is also called for normal members, this does not have to be the case.
-      instantiatedTemplate->setInstantiatedWith(templateArguments);
-      
-    ///Change the identifier to reflect the set template-arguments
-    if( !templateArguments.isEmpty() ) {
-      KDevelop::Identifier id = instantiatedDeclaration->identifier();
-      foreach(Cpp::ExpressionEvaluationResult expr, templateArguments)
-        id.appendTemplateIdentifier(expr.identifier());
-
-      instantiatedDeclaration->setIdentifier(id);
-    }
-  }  
-  
   if( contextCopy )
     contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context), templateArguments);
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
 
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
 
-    ///Resolve all involved delayed types
+/*    if( parentContext->type() == DUContext::Template && templateArguments.previousInstantiationInformation ) {
+        DUContext* fromParent = instantiatedFrom->context();
+        ///This is a template parameter, replace it
+        uint currentArgument = fromParent->localDeclarations().indexOf(instantiatedFrom);
+        IndexedInstantiationInformation parentInfo(templateArguments.previousInstantiationInformation);
+        kDebug() << "instantiating template parameter declaration" << instantiatedFrom -> toString();
+        
+        if( currentArgument < parentInfo.information().templateParametersSize() && parentInfo.information().templateParameters()[currentArgument].result().isValid() )
+        {
+            kDebug() << "with" << parentInfo.information().templateParameters()[currentArgument].result().toString();
+            instantiatedDeclaration->setAbstractType( parentInfo.information().templateParameters()[currentArgument].result().type.type() );
+        } else {
+            kDebug() << "with default";
+            TemplateParameterDeclaration * paramDecl = dynamic_cast<TemplateParameterDeclaration*>(instantiatedFrom);
+            //Apply default-parameters
+            //Use the already available delayed-type resolution to resolve the value/type
+            if( paramDecl && !paramDecl->defaultParameter().isEmpty() ) {
+            DelayedType::Ptr delayed( new DelayedType() );
+            delayed->setIdentifier( paramDecl->defaultParameter() );
+            instantiatedDeclaration->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, source) );
+            }else{
+            //Parameter missing
+            }
+        }
+    }else{*/
+        ///Resolve all involved delayed types
+        
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
     
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(instantiatedDeclaration->abstractType().data());
+        ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
+        AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
+    
+        if( idType && idType->declaration() == instantiatedFrom ) {
+        if( changedType == instantiatedDeclaration->abstractType() )
+            changedType = instantiatedDeclaration->abstractType()->clone();
+        
+        IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
+        if( changedIdType )
+            changedIdType->setDeclaration(instantiatedDeclaration);
+        }
+    
+        instantiatedDeclaration->setAbstractType( changedType );
+//     }
+  }
+  
+  if( instantiatedDeclaration ) {
+    TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
 
-    ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-    AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
-
-    if( idType && idType->declaration() == instantiatedFrom ) {
-      if( changedType == instantiatedDeclaration->abstractType() )
-          changedType = instantiatedDeclaration->abstractType()->clone();
+    if(instantiatedTemplate) { //Since this is also called for normal members, this does not have to be the case.
       
-      IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
-      if( changedIdType )
-        changedIdType->setDeclaration(instantiatedDeclaration);
-    }
+      ///Change the identifier to reflect the used template-arguments
+      KDevelop::Identifier id = instantiatedDeclaration->identifier();
+      
+      updateIdentifierTemplateParameters( id, instantiatedDeclaration );
 
-    instantiatedDeclaration->setAbstractType( changedType );
+      instantiatedDeclaration->setIdentifier(id);
+    }
+    ///Last step, because after this, the declaration will be potentially findable
+    
+    if(instantiatedTemplate && dynamic_cast<TemplateDeclaration*>(instantiatedFrom))
+      instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
+    ///@todo Check the safety of this when the declaration is not anonymous!
+    instantiatedDeclaration->setContext(parentContext, !visible);
   }
   
   return contextCopy;
 }
 
+DeclarationId TemplateDeclaration::id() const
+{
+  if(m_instantiatedFrom) {
+      DeclarationId ret = m_instantiatedFrom->id();
+      ret.setSpecialization(specialization());
+      return ret;
+  }else{
+      return dynamic_cast<const Declaration*>(this)->Declaration::id();
+  }
+}
 
 ///@todo Use explicitly declared specializations
-///@todo Implement correct instantiation-cache updating in templatedeclaration.cpp, which includes correct checking for dead forward-declarations and any other dead declarations
-Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationResult>& templateArguments, const TopDUContext* source )
+Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& templateArguments, const TopDUContext* source, bool visible )
 {
   if( m_instantiatedFrom )
-    return m_instantiatedFrom->instantiate( templateArguments, source );
+    return m_instantiatedFrom->instantiate( templateArguments, source, visible );
   
   {
     QMutexLocker l(&instantiationsMutex);
    InstantiationsHash::const_iterator it;
-    it = m_instantiations.find( InstantiationKey(templateArguments) );
+    it = m_instantiations.find( templateArguments.indexed() );
     if( it != m_instantiations.end() ) {
       return dynamic_cast<Declaration*>(*it);
     }
   }
-
+  
+  DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
+  {
+    //Check whether the instantiation also instantiates the parent context, and if it does, replace surroundingContext with the instantiated version
+    CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>*>(surroundingContext);
+    if(parent && templateArguments.previousInstantiationInformation && templateArguments.previousInstantiationInformation != parent->instantiatedWith().index()) {
+      ///An instantiation has been requested, where the parent-context is specialized.
+      ///Specialize the parent
+      Declaration* newParentDecl = parent->owner();
+      if(newParentDecl) {
+        TemplateDeclaration* templDec = dynamic_cast<TemplateDeclaration*>(newParentDecl);
+        if(templDec)
+          newParentDecl = templDec->instantiate( IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source, visible );
+      }
+      
+      if(newParentDecl && newParentDecl->internalContext())
+        surroundingContext = newParentDecl->internalContext();
+    }
+  }
   
   Declaration* decl = dynamic_cast<Declaration*>(this);
   Q_ASSERT(decl);
@@ -568,10 +742,10 @@ Declaration* TemplateDeclaration::instantiate( const QList<ExpressionEvaluationR
   TemplateDeclaration* cloneTemplateDecl = dynamic_cast<TemplateDeclaration*>(clone);
   Q_ASSERT(cloneTemplateDecl);
   
-  ///Now eventually create the virtual contexts
-  instantiateDeclarationContext( decl->context(), source, decl->internalContext(), templateArguments, clone, decl );
+  ///Now eventually create the virtual contexts, and fill new information into the declaration
+  instantiateDeclarationAndContext( surroundingContext, source, decl->internalContext(), templateArguments, clone, decl, visible );
 
-  cloneTemplateDecl->setInstantiatedFrom(this);
+//  cloneTemplateDecl->setInstantiatedFrom(this);
 
   return clone;
 }
@@ -611,13 +785,13 @@ AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::D
   }
 }
 
-void TemplateDeclaration::setInstantiatedWith(const QList<ExpressionEvaluationResult>& with) {
-  Q_ASSERT(!m_instantiatedFrom);
-  m_instantiatedWith.args = with;
-}
+// void TemplateDeclaration::setInstantiatedWith(const InstantiationInformation& with) {
+//   Q_ASSERT(!m_instantiatedFrom);
+//   m_instantiatedWith = with.indexed();
+// }
 
-const QList<ExpressionEvaluationResult>& TemplateDeclaration::instantiatedWith() const {
-  return m_instantiatedWith.args;
+IndexedInstantiationInformation TemplateDeclaration::instantiatedWith() const {
+  return m_instantiatedWith;
 }
 
 TemplateDeclaration::InstantiationsHash TemplateDeclaration::instantiations() const {
@@ -633,7 +807,7 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
       Declaration* baseResolved = instantiatedFrom->resolve(topContext);
       TemplateDeclaration* baseTemplate = dynamic_cast<TemplateDeclaration*>(baseResolved);
       if( baseResolved && baseTemplate ) {
-        Declaration* ret = baseTemplate->instantiate(instantiatedWith(), topContext ? topContext : this->topContext());
+        Declaration* ret = baseTemplate->instantiate(instantiatedWith().information(), topContext ? topContext : this->topContext());
         return ret;
       }else{
           //Forward-declaration was not resolved

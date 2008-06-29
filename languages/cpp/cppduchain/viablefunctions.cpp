@@ -40,7 +40,7 @@ inline bool ViableFunction::ParameterConversion::operator<(const ParameterConver
 
 ViableFunction::ViableFunction( TopDUContext* topContext, Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_topContext(topContext), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
   if( decl )
-    m_type = KSharedPtr<CppFunctionType>(fastCast<CppFunctionType*>( decl->abstractType().data()));
+    m_type = TypePtr<CppFunctionType>(fastCast<CppFunctionType*>( decl->abstractType().data()));
   m_funDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
 }
 

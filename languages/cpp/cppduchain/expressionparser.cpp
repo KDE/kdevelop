@@ -31,7 +31,6 @@
 #include "parser.h"
 #include "control.h"
 #include "duchainlock.h"
-//#include "typerepository.h"
 #include <identifier.h>
 #include "expressionvisitor.h"
 #include <parser/rpp/chartools.h>
@@ -42,43 +41,6 @@ using namespace KDevelop;
 
 ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
 }
-
-TypeIdentifier ExpressionEvaluationResult::identifier() const {
-  static TypeIdentifier noIdentifier("(no type)");
-  
-  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data());
-  if( idType )
-    return idType->identifier();
-  
-  const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type.data());
-  if( delayedType )
-    return delayedType->identifier();
-  
-  if( type )
-    return TypeIdentifier( type->toString() );
-  else
-    return noIdentifier;
-  
-}
-
-QString ExpressionEvaluationResult::toString() const {
-  if( DUChain::lock()->currentThreadHasReadLock() )
-    return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("(no type)"));
-
-  DUChainReadLocker lock(DUChain::lock());
-  return QString(isLValue() ? "lvalue " : "") + QString(instance ? "instance " : "") + (type ? type->toString() : QString("(no type)"));
-}
-
-QString ExpressionEvaluationResult::toShortString() const
-{
-  //Inline for now, so it can be used from the duchainbuilder module
-  if( DUChain::lock()->currentThreadHasReadLock() )
-    return type ? type->toString() : QString("(no type)");
-
-  DUChainReadLocker lock(DUChain::lock());
-  return type ? type->toString() : QString("(no type)");
-}
-
 
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::TopDUContext* source, bool forceExpression ) {
 
@@ -177,9 +139,18 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   ExpressionEvaluationResult ret;
   ExpressionVisitor v(session, source, m_strict);
   v.parse( ast );
-  ret.type = v.lastType();
-  ret.instance = v.lastInstance();
-  ret.allDeclarations = v.lastDeclarations();
+
+  DUChainReadLocker lock(DUChain::lock());
+  
+  ret.type = v.lastType()->indexed();
+  ret.isInstance = v.lastInstance().isInstance;
+  
+  if(v.lastInstance().declaration)
+    ret.instanceDeclaration = v.lastInstance().declaration->indexed();
+  
+  foreach(DeclarationPointer decl, v.lastDeclarations())
+    if(decl)
+      ret.allDeclarationsList().append(decl->id());
   return ret;
 }
 

@@ -135,9 +135,15 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     ExpressionEvaluationResult res;
     if( !m_visitor->lastDeclarations().isEmpty() ) {
       LOCKDUCHAIN;
-      res.type = m_visitor->lastType();
-      res.allDeclarations = m_visitor->lastDeclarations();
-      res.instance = m_visitor->lastInstance();
+      res.type = m_visitor->lastType()->indexed();
+      foreach(DeclarationPointer decl, m_visitor->lastDeclarations())
+        if(decl)
+          res.allDeclarationsList().append(decl->id());
+
+      res.isInstance = m_visitor->lastInstance().isInstance;
+      if(m_visitor->lastInstance().declaration)
+        res.instanceDeclaration = m_visitor->lastInstance().declaration->id();
+      
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }else if( m_debug ) {
@@ -152,8 +158,11 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     if( !v.declarations().isEmpty() ) {
       LOCKDUCHAIN;
       if( v.declarations()[0] )
-        res.type = v.declarations()[0]->abstractType();
-      res.allDeclarations = v.declarations();
+        res.type = v.declarations()[0]->abstractType()->indexed();
+
+      foreach(DeclarationPointer decl, v.declarations())
+        if(decl)
+          res.allDeclarationsList().append(decl->id());
 
       if( node->type_id->declarator && node->type_id->declarator->ptr_ops ) {
         //Apply pointer operators
@@ -169,12 +178,12 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
               if (!op.isEmpty()) {
                 if (op == ref) {
                   CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(m_session, ptrOp->cv)));
-                  pointer->setBaseType(res.type);
-                  res.type = AbstractType::Ptr( pointer.data() );
+                  pointer->setBaseType(res.type.type());
+                  res.type = pointer->indexed();
                 } else if (op == ptr) {
                   CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(m_session, ptrOp->cv)));
-                  pointer->setBaseType(res.type);
-                  res.type = AbstractType::Ptr( pointer.data() );
+                  pointer->setBaseType(res.type.type());
+                  res.type = pointer.data()->indexed();
                 }
               }
             }

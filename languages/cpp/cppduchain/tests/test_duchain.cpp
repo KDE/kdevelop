@@ -20,6 +20,8 @@
 
 #include <QtTest/QtTest>
 
+#define private public
+
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
@@ -117,7 +119,7 @@ namespace QTest {
     return qstrdup(s.toLatin1().constData());
   }
   template<>
-  char* toString(const KSharedPtr<AbstractType>& type)
+  char* toString(const TypePtr<AbstractType>& type)
   {
     QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
     return qstrdup(s.toLatin1().constData());
@@ -2183,7 +2185,9 @@ void TestDUChain::testTemplateForwardDeclaration()
   QVERIFY(dynamic_cast<CppClassType*>(type2->resolve(0).data()));
   QCOMPARE(temp2DeclResolved->instantiatedFrom(), temp3Decl);
 
-  kDebug() << "searching";
+  QualifiedIdentifier t("Test<>");
+  kDebug() << "searching" << t;
+  
   Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test<>"));
   QVERIFY(decl);
   QCOMPARE(decl->abstractType()->toString(), QString("Test< B >"));
@@ -2243,27 +2247,34 @@ void TestDUChain::testDeclarationId()
 {
   QByteArray method("template<class T> class C { template<class T2> class C2{}; }; ");
 
-  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpNone));
+  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  QVERIFY(top->inSymbolTable());
   QCOMPARE(top->localDeclarations().count(), 1);
   QVERIFY(top->localDeclarations()[0]->internalContext());
+  QVERIFY(top->localDeclarations()[0]->inSymbolTable());
   QCOMPARE(top->localDeclarations()[0]->internalContext()->localDeclarations().count(), 1);
   
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QVERIFY(top->childContexts()[1]->localDeclarations()[0]->inSymbolTable());
+  //kDebug() << "pointer of C2:" << top->childContexts()[1]->localDeclarations()[0];
   Declaration* decl = findDeclaration(top, QualifiedIdentifier("C<int>::C2<float>"));
   QVERIFY(decl);
   kDebug() << decl->toString();
   kDebug() << decl->qualifiedIdentifier().toString();
   KDevelop::DeclarationId id = decl->id();
   QVERIFY(top->localDeclarations()[0]->internalContext());
+  kDebug() << "id:" << id.m_direct << id.m_specialization << "indirect:" << id.indirect.m_identifier.index << id.indirect.m_additionalIdentity << "direct:" << *((uint*)(&id.direct)) << *(((uint*)(&id.direct))+1);
   Declaration* declAgain = id.getDeclaration(top);
+  QVERIFY(!id.isDirect());
   QVERIFY(declAgain);
   QCOMPARE(declAgain->qualifiedIdentifier().toString(), decl->qualifiedIdentifier().toString());
   QCOMPARE(declAgain, decl);
-  kDebug() << declAgain->qualifiedIdentifier().toString();
-  kDebug() << declAgain->toString();
-  QVERIFY(!id.isDirect());
+  //kDebug() << declAgain->qualifiedIdentifier().toString();
+  //kDebug() << declAgain->toString();
   QCOMPARE(declAgain, decl);
 }
 
