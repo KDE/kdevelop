@@ -23,10 +23,14 @@
 
 #include <QtTest/QtTest>
 
-namespace QTest
-{
-class QTestCase;
-}
+class QSignalSpy;
+namespace QTest { class QTestCase; }
+namespace QTest { class QTestCommand; }
+namespace Veritas { class Test; }
+namespace Veritas { class TestResult; }
+
+using Veritas::Test;
+using Veritas::TestResult;
 
 namespace QTest
 {
@@ -44,11 +48,17 @@ private slots:
     void parse();
     void initFailure();
     void cleanupFailure();
+    void spammer();
+    void spamMulti();
 
 private:
     void setupColumns();
     void addSunnyDayData();
     void addBasicFailureData();
+    QTestCommand* initTestCmd(int i);
+
+    void assertCompleted(Test*, QSignalSpy&, QSignalSpy&);
+    void assertResult(const TestResult& expected, const TestResult& actual);
 
 private:
     QTestCase* m_caze;

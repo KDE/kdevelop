@@ -45,6 +45,7 @@ K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
+using KDevelop::ProjectFolderItem;
 using KDevelop::IBuildSystemManager;
 
 using Veritas::Test;
@@ -88,39 +89,30 @@ QTestView::~QTestView()
 
 ITest* QTestView::registerTests()
 {
-    QString regXML = fetchRegXML();
-    QString rootDir = fetchBuildRoot();
-    kDebug() << "Loading test registration XML: " << regXML;
-    QFile* testXML = new QFile(regXML);
+    kDebug() << "Loading test registration XML: " << fetchRegXML();
+    QFile* testXML = new QFile(fetchRegXML());
     QTestRegister reg;
-    reg.setRootDir(rootDir);
+    reg.setRootDir(fetchBuildRoot());
     reg.addFromXml(testXML);
     return reg.rootItem();
 }
 
 QString QTestView::fetchBuildRoot()
 {
-    QString rootDir("");
-    IProjectController* pc = Core::self()->projectController();
-    if (pc->projectCount() != 0) { // only support a single project, for now
-        IProject* proj = pc->projectAt(0);
-        IBuildSystemManager* man = proj->buildSystemManager();
-        rootDir = man->buildDirectory(proj->projectItem()).pathOrUrl();
-    }
-    return rootDir;
+    if (project() == 0)
+        return "";
+    IBuildSystemManager* man = project()->buildSystemManager();
+    ProjectFolderItem* pfi = project()->projectItem();
+    return man->buildDirectory(pfi).pathOrUrl();
 }
 
 QString QTestView::fetchRegXML()
 {
-    QString regXML("");
-    IProjectController* pc = Core::self()->projectController();
-    if (pc->projectCount() != 0) { // only support a single project, for now
-        IProject* proj = pc->projectAt(0);
-        KSharedConfig::Ptr cfg = proj->projectConfiguration();
-        KConfigGroup group(cfg.data(), "QTest");
-        regXML = KUrl(group.readEntry("Test Registration")).pathOrUrl();
-    }
-    return regXML;
+    if (project() == 0)
+        return "";
+    KSharedConfig::Ptr cfg = project()->projectConfiguration();
+    KConfigGroup group(cfg.data(), "QTest");
+    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
 
 #include "qtestview.moc"

@@ -92,15 +92,11 @@ ITest* CheckView::registerTests()
 
 QString CheckView::fetchExe()
 {
-    QString exe("");
-    IProjectController* pc = Core::self()->projectController();
-    if (pc->projectCount() != 0) { // only support a single project, for now
-        IProject* proj = pc->projectAt(0);
-        KSharedConfig::Ptr cfg = proj->projectConfiguration();
-        KConfigGroup group(cfg.data(), "Check");
-        exe = KUrl(group.readEntry("Test Registration")).pathOrUrl();
-    }
-    return exe;
+    if (project() == 0)
+        return "";
+    KSharedConfig::Ptr cfg = project()->projectConfiguration();
+    KConfigGroup group(cfg.data(), "Check");
+    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
 
 #include "checkview.moc"

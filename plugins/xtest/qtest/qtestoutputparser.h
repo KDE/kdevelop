@@ -48,6 +48,7 @@ private: // helpers
     void fillResult();
     void setFailure();
     void setSuccess();
+    void appendMsg();
 
     inline bool isStartElement_(const QString& elem);
     inline bool isEndElement_(const QString& elem);
@@ -68,6 +69,7 @@ private:    // some xml constants
     static const QString c_testfunction;
     static const QString c_incident;
     static const QString c_description;
+    static const QString c_message;
     static const QString c_type;
     static const QString c_file;
     static const QString c_line;

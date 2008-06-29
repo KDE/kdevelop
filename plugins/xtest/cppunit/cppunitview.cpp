@@ -40,7 +40,6 @@
 
 #include "testsuite.h"
 
-
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
@@ -86,17 +85,6 @@ CppUnitView::CppUnitView(QObject* parent, const QVariantList &)
 CppUnitView::~CppUnitView()
 {}
 
-// void CppUnitView::reload()
-// {
-//     Register reg;
-//     reg.addFromExe(QFileInfo(fetchExe()));
-//     RunnerModel* model = new RunnerModel;
-//     model->setRootItem(reg.rootItem());
-//     model->setExpectedResults(Veritas::RunError);
-//     m_window->setModel(model);
-//     m_window->show();
-// }
-
 ITest* CppUnitView::registerTests()
 {
     Register<TestSuite> reg;
@@ -106,16 +94,11 @@ ITest* CppUnitView::registerTests()
 
 QString CppUnitView::fetchExe()
 {
-    QString exe("");
-    IProjectController* pc = Core::self()->projectController();
-    if (pc->projectCount() != 0) { // only support a single project, for now
-        IProject* proj = pc->projectAt(0);
-        KSharedConfig::Ptr cfg = proj->projectConfiguration();
-        KConfigGroup group(cfg.data(), "CppUnit");
-        exe = KUrl(group.readEntry("Test Registration")).pathOrUrl();
-    }
-    return exe;
+    if (project() == 0)
+        return "";
+    KSharedConfig::Ptr cfg = project()->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CppUnit");
+    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
-
 
 #include "cppunitview.moc"

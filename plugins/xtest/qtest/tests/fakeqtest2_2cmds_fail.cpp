@@ -46,7 +46,10 @@ QString cmdSuccessXml(QString name)
 QString cmdFailXml(QString name, QString message, QString file, int line)
 {
     return QString(
-               "<TestFunction name=\"") + name + "\">\n"
+           "<TestFunction name=\"") + name + "\">\n"
+           "<Message>\n"
+           "<Description><![CDATA[SomeMessage]]></Description>\n"
+           "</Message>\n"
            "<Incident type=\"fail\" file=\"" + file + "\" line=\"" + QString::number(line) + "\">\n"
            "<Description><![CDATA[" + message + "]]></Description>\n"
            "</Incident>\n"

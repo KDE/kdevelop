@@ -56,6 +56,7 @@ const QString QTestOutputParser::c_type("type");
 const QString QTestOutputParser::c_file("file");
 const QString QTestOutputParser::c_line("line");
 const QString QTestOutputParser::c_pass("pass");
+const QString QTestOutputParser::c_message("Message");
 const QString QTestOutputParser::c_fail("fail");
 const QString QTestOutputParser::c_initTestCase("initTestCase");
 const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
@@ -129,6 +130,8 @@ void QTestOutputParser::processTestFunction()
         readNext();
         if (isStartElement_(c_incident))
             fillResult();
+        if (isStartElement_(c_message))
+            appendMsg();
     }
     if (isEndElement_(c_testfunction)) {
         Test* cmd = m_case->childNamed(cmdName);
@@ -153,6 +156,16 @@ void QTestOutputParser::fillResult()
         setSuccess();
     else if (type == c_fail)
         setFailure();
+}
+
+void QTestOutputParser::appendMsg()
+{
+    while (!atEnd() && !isEndElement_(c_message)) {
+        readNext();
+        if (isStartElement_(c_description)) {
+            m_result.addOutputLine(readElementText().toAscii());
+        }
+    }
 }
 
 void QTestOutputParser::setSuccess()

@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QVariant>
 #include <QModelIndex>
+#include <KDebug>
 #include <QAbstractListModel>
 
 using QTest::QTestOutputParser;
@@ -100,6 +101,29 @@ const QByteArray headerXml(
 const QByteArray footerXml("</TestCase>\n");
 
 } // end anonymous namespace
+
+#define XML_HEADER \
+    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"\
+    "<TestCase name=\"TestTest\">\n"\
+    "<Environment>\n"\
+        "<QtVersion>4.4.0-rc1</QtVersion>\n"\
+        "<QTestVersion>4.4.0-rc1</QTestVersion>\n"\
+    "</Environment>\n"
+
+#define XML_INIT_TESTCASE\
+    "<TestFunction name=\"initTestCase\">\n"\
+        "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"\
+    "</TestFunction>\n"
+
+#define XML_CLEANUP_TESTCASE\
+    "<TestFunction name=\"cleanupTestCase\">\n"\
+        "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"\
+    "</TestFunction>\n"
+
+#define FAILURE_MSG "some failure msg"
+#define SPAM_MSG1 "some spam msg"
+#define SPAM_MSG2 "some other spam msg"
+#define SPAM_MSG3 "some more spam"
 
 void QTestOutputParserTest::parse_data()
 {
@@ -297,31 +321,124 @@ void QTestOutputParserTest::cleanupFailure()
 
     parser.go(m_caze);
 
-    // verify
-    KOMPARE(1, starSpy.count());
-    KOMPARE(1, compSpy.count());
-    KOMPARE(1, starSpyCmd.count());
-    KOMPARE(1, compSpyCmd.count());
-
     // the testcommand should have been completed succesfully
-    QModelIndex i1 = compSpyCmd.takeFirst().value(0).value<QModelIndex>();
-    QModelIndex i2 = starSpyCmd.takeFirst().value(0).value<QModelIndex>();
-    KOMPARE(cmdIndex, i1);
-    KOMPARE(cmdIndex, i2);
-
+    assertCompleted(cmd, starSpyCmd, compSpyCmd);
     TestResult expected(Veritas::RunSuccess, "", 0, QFileInfo(""));
-    TestResult result = m_caze->child(0)->result();
-    KOMPARE(expected, result);
+    assertResult(expected, cmd->result());
 
     // the testcase should have failed
-    i1 = compSpy.takeFirst().value(0).value<QModelIndex>();
-    i2 = starSpy.takeFirst().value(0).value<QModelIndex>();
-    KOMPARE(caseIndex, i1);
-    KOMPARE(caseIndex, i2);
-
+    assertCompleted(m_caze, starSpy, compSpy);
     expected = TestResult(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
-    result = m_caze->result();
-    KOMPARE(expected, result);
+    assertResult(expected, m_caze->result());
+}
+
+// test command
+void QTestOutputParserTest::spammer()
+{
+    QByteArray xml =
+        XML_HEADER
+        XML_INIT_TESTCASE
+        "<TestFunction name=\"someCommand\">\n"
+            "<Message type=\"qdebug\" file=\"\" line=\"0\">\n"
+                "<Description><![CDATA[" SPAM_MSG1 "]]></Description>\n"
+            "</Message>\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+                "<Description><![CDATA[" FAILURE_MSG "]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        XML_CLEANUP_TESTCASE
+        "</TestCase>\n";
+
+    QTestCommand* cmd = initTestCmd(0);
+    QBuffer xmlOut(&xml, 0);
+    QTestOutputParser parser(&xmlOut);
+    QSignalSpy completedSpy(cmd, SIGNAL(finished(QModelIndex)));
+    QSignalSpy startSpy(cmd, SIGNAL(started(QModelIndex)));
+
+    parser.go(m_caze);
+
+    // verify
+    assertCompleted(cmd, startSpy, completedSpy);
+    TestResult expected = TestResult(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
+    assertResult(expected, cmd->result());
+
+    KOMPARE(1, cmd->result().outputLineCount());
+    KOMPARE(SPAM_MSG1, cmd->result().outputLine(0));
+}
+
+void QTestOutputParserTest::spamMulti()
+{
+    QByteArray xml =
+            XML_HEADER
+            XML_INIT_TESTCASE
+            "<TestFunction name=\"someCommand\">\n"
+            "<Message type=\"qdebug\" file=\"\" line=\"0\">\n"
+                "<Description><![CDATA[" SPAM_MSG1 "]]></Description>\n"
+            "</Message>\n"
+            "<Message type=\"qdebug\" file=\"\" line=\"0\">\n"
+                "<Description><![CDATA[" SPAM_MSG2 "]]></Description>\n"
+            "</Message>\n"
+            "<Message type=\"qdebug\" file=\"\" line=\"0\">\n"
+                "<Description><![CDATA[" SPAM_MSG3 "]]></Description>\n"
+            "</Message>\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+                "<Description><![CDATA[" FAILURE_MSG "]]></Description>\n"
+            "</Incident>\n"
+            "</TestFunction>\n"
+            XML_CLEANUP_TESTCASE
+            "</TestCase>\n";
+
+    QTestCommand* cmd = initTestCmd(0);
+    QBuffer xmlOut(&xml, 0);
+    QTestOutputParser parser(&xmlOut);
+    QSignalSpy completedSpy(cmd, SIGNAL(finished(QModelIndex)));
+    QSignalSpy startSpy(cmd, SIGNAL(started(QModelIndex)));
+
+    parser.go(m_caze);
+
+    // verify
+    assertCompleted(cmd, startSpy, completedSpy);
+    TestResult expected = TestResult(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
+    assertResult(expected, cmd->result());
+
+    KOMPARE(3, cmd->result().outputLineCount());
+    KOMPARE(SPAM_MSG1, cmd->result().outputLine(0));
+    KOMPARE(SPAM_MSG2, cmd->result().outputLine(1));
+    KOMPARE(SPAM_MSG3, cmd->result().outputLine(2));
+}
+
+
+// helper
+QTestCommand* QTestOutputParserTest::initTestCmd(int i)
+{
+    QTestCommand *cmd = m_caze->child(i);
+    FakeModel fm;
+    fm.test = cmd;
+    cmd->setIndex(fm.index(0));
+    return cmd;
+}
+
+// helper
+void QTestOutputParserTest::assertCompleted(Test* test, QSignalSpy& started, QSignalSpy& completed)
+{
+    KOMPARE(1, started.count());
+    KOMPARE(1, completed.count());
+    QModelIndex i1 = completed.takeFirst().value(0).value<QModelIndex>();
+    QModelIndex i2 = started.takeFirst().value(0).value<QModelIndex>();
+    KOMPARE(test, static_cast<Test*>(i1.internalPointer()));
+    KOMPARE(test, static_cast<Test*>(i2.internalPointer()));
+}
+
+// helper
+void QTestOutputParserTest::assertResult(const TestResult& expected, const TestResult& actual)
+{
+    KOMPARE_MSG(expected.state(), actual.state(),
+                "Expected " + QString::number(expected.state()) +
+                " got " + QString::number(actual.state()));
+    KOMPARE(expected.file().filePath(), actual.file().filePath());
+    KOMPARE(expected.line(), actual.line());
+    KOMPARE_MSG(expected.message(), actual.message(),
+                "Expected " + expected.message() + " got " + actual.message());
 }
 
 QTEST_KDEMAIN(QTestOutputParserTest, NoGUI)
