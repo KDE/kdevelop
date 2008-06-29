@@ -131,7 +131,7 @@ class TemporaryDataManager {
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo = 1)) for(item(container()[a]); mustDo; mustDo = 0)
 
-#define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; };
+#define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; }
 #define DECLARE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 #define START_APPENDED_LISTS(container)
