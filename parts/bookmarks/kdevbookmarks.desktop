@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Plugin that provides navigation and overview of active source bookmarks and persists them between sessions.

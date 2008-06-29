@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=A plugin for formatting of sourcecode according to a specified set of rules. When loaded it is found in the Tools menu.

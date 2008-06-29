@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Valgrind is a tool that helps you find memory management problems in programs. http://valgrind.org/

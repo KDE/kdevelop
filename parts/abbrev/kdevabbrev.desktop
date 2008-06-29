@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Provides support for customizable abbreviations - short words which expand into commonly needed code structures.

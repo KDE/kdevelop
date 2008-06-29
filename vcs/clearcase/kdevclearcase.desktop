@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=A plugin that provides support for Rational ClearCase, a large version control and build management system. http://www.rational.com/products/clearcase/index.jsp

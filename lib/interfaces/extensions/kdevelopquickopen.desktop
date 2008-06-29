@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/QuickOpen
 X-KDE-Derived=KDevelop/Plugin
@@ -29,7 +28,6 @@ Name[zh_TW]=快速開啟介面
 Type=int
 
 [Desktop Entry]
-Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/QuickOpen
 X-KDE-Derived=KDevelop/Plugin

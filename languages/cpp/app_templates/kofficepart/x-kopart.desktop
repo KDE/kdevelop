@@ -1,6 +1,5 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 MimeType=application/x-%{APPNAMELC}
 Comment= A really awesome KOffice application
 Comment[ca]=Una aplicació de KOffice realment interessant

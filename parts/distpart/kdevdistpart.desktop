@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Aids in building and publishing the final project. Supports creation of RPM packages or source packages.

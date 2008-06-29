@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=
 Comment=This plugin is an interactive projectwide "Search and Replace" tool. Search using string or regexp matching, and select the replacements to be made from a preview before the action is finalized. When loaded it appears in the Edit menu.
