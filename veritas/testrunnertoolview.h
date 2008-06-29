@@ -27,6 +27,7 @@
 
 class KComponentData;
 class QWidget;
+namespace KDevelop { class IProject; }
 
 namespace Veritas
 {
@@ -42,11 +43,16 @@ public:
     virtual ~TestRunnerToolView();
     QWidget* spawnWindow();
 
+protected:
+    KDevelop::IProject* project() const;
+
 private slots:
     void reload();
+    void setSelected(QAction*);
 
 private:
     RunnerWindow* m_window;
+    KDevelop::IProject* m_selected;
 };
 
 }

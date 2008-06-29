@@ -299,7 +299,7 @@ void RunnerModel::countItems()
 
         numTotal++;
 
-        if (item->selected()) {
+        if (item->selected() && !hasChildren(currentIndex)) {
             m_numSelected++;
         }
 
@@ -451,18 +451,14 @@ ResultsModel* RunnerModel::resultsModel()
     if (!m_rootItem) {
         return 0;
     }
-
     if (!m_resultsModel) {
         // Create the results model.
         QStringList resultHeaders;
-
         for (int i = 0; i < m_rootItem->columnCount(); i++) {
             resultHeaders.append(m_rootItem->data(i).toString());
         }
-
         m_resultsModel = new ResultsModel(resultHeaders);
     }
-
     return m_resultsModel;
 }
 

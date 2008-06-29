@@ -11,6 +11,7 @@ endif(TestBuild)
 
 include_directories(
     ${KDE4_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/shell
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/tests/common
     ${CMAKE_SOURCE_DIR}/veritas/interfaces )
@@ -39,8 +40,8 @@ set(veritas_SRCS
     testresult.cpp
     testrunnertoolview.cpp
     interfaces/itest.cpp
-    interfaces/itestrunner.cpp)
-#${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
+    interfaces/itestrunner.cpp
+    ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
     runnerwindow.ui

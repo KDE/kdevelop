@@ -35,6 +35,10 @@
 #include <QLabel>
 
 namespace Ui { class StatusWidget; }
+namespace KDevelop { class IProject; }
+
+class QAction;
+class KSelectAction;
 
 namespace Veritas
 {
@@ -127,6 +131,14 @@ public: // Operations
 
     Ui::RunnerWindow&  ui() { return m_ui; }
     Ui::StatusWidget* statusWidget() const;
+
+    KSelectAction* projectPopup() const {
+        return m_projectPopup;
+    }
+
+public slots:
+    void addProjectToPopup(KDevelop::IProject*);
+    void rmProjectFromPopup(KDevelop::IProject*);
 
 private slots:
 
@@ -253,6 +265,7 @@ private: // Operations
     void connectActions();
     void connectFocusStuff();
     void setUpStatusBar();
+    void addProjectMenu();
 
     // helpers for setModel(RunnerModel*)
     void stopPreviousModel();
@@ -353,6 +366,7 @@ private: // Attributes
     RunnerViewController*  m_runnerViewController;
     ResultsViewController* m_resultsViewController;
     SelectionManager* m_selection;
+    KSelectAction* m_projectPopup;
 };
 
 } // namespace

@@ -47,6 +47,7 @@ private slots:
     void runItems();
     void errorHandling();
     void countItems();
+    void updateViewLastItem();
 
 private:
     void assertColumnHeader(const QVariant& expected, int index);

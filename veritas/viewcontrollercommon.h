@@ -48,15 +48,16 @@ namespace Veritas
  * \sa \ref views
  */
 
-class ViewControllerCommon
+class ViewControllerCommon : public QObject
 {
+Q_OBJECT
 public: // Operations
 
     /*!
      * Constructs a view controller common for the given \a view. Sets
      * view default properties.
      */
-    ViewControllerCommon(QTreeView* view);
+    ViewControllerCommon(QObject*, QTreeView* view);
 
     /*!
      * Destroys this view controller common.
@@ -76,6 +77,9 @@ public: // Operations
      * new current index.
      */
     void setHighlightedRow(const QModelIndex& index) const;
+
+public slots:
+    void expandOrCollapse(const QModelIndex& index) const;
 
 protected: // Operations
 

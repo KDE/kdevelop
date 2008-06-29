@@ -28,12 +28,13 @@
 #include "resultsviewcontroller.h"
 #include "resultsmodel.h"
 #include "resultsproxymodel.h"
+#include <KDebug>
 
 namespace Veritas
 {
 
 ResultsViewController::ResultsViewController(QObject* parent, QTreeView* view)
-        : QObject(parent), ViewControllerCommon(view)
+        : ViewControllerCommon(parent, view)
 {
     // Allow clicking in the header, sorting gets enabled only when there are results.
     header()->setClickable(true);
@@ -71,6 +72,49 @@ void ResultsViewController::enableSorting(bool enable) const
     ///       from the model.
     ///
 }
+
+void ResultsViewController::spanOutputLines(const QModelIndex& parent, int firstRow, int lastRow)
+{
+    // span the output-lines of a result. ie the children of a top level index.
+    // the parent of a top level index is invalid.
+    if (parent.isValid()) {
+        return;
+    }
+    QModelIndex m,v;
+    for (int i=firstRow; i<=lastRow; i++) {
+        m = resultsModel()->index(i, 0);
+        int cc = resultsModel()->rowCount(m);
+        v = resultsProxyModel()->mapFromSource(m);
+        if (!v.isValid()) continue;
+        for (int j=0; j<cc; j++) {
+            view()->setFirstColumnSpanned(j, v, true);
+        }
+    }
+    //debugSpan(resultsProxyModel()->index(0,0));
+}
+
+void ResultsViewController::debugSpan(const QModelIndex& index)
+{
+    QModelIndex i = index;
+    while (i.isValid()) {
+        if (!i.parent().isValid()) {
+            // should be a top lvl index
+            kDebug() << " top lvl " << i << " span? " << view()->isFirstColumnSpanned(i.row(), QModelIndex())
+                     << " data " << resultsProxyModel()->data(i,Qt::DisplayRole).toString();
+        } else {
+            // should be lvl2 index, ie an output-line
+            kDebug() << " lvl 2 " << i << " span? " << view()->isFirstColumnSpanned(i.row(), i.parent())
+                     << " data " << resultsProxyModel()->data(i,Qt::DisplayRole).toString();
+
+        }
+        if (i.child(0,0).isValid()) {
+            // recurse down
+            debugSpan(i.child(0,0));
+        }
+        i = i.sibling(i.row()+1, 0);
+    }
+}
+
 
 ResultsModel* ResultsViewController::resultsModel() const
 {

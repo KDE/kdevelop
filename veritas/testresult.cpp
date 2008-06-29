@@ -99,3 +99,17 @@ void TestResult::log() const
     kDebug() << result << " " << m_message << " " << m_file.filePath() << " " << m_line;
 }
 
+void TestResult::addOutputLine(const QByteArray& line)
+{
+    m_output.append(line);
+}
+
+int TestResult::outputLineCount() const
+{
+    return m_output.count();
+}
+
+QByteArray TestResult::outputLine(int i) const
+{
+    return m_output.value(i);
+}

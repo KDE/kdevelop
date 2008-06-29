@@ -39,7 +39,7 @@ namespace Veritas
 {
 
 RunnerViewController::RunnerViewController(QObject* parent, QTreeView* view)
-        : QObject(parent), ViewControllerCommon(view)
+        : ViewControllerCommon(parent,view)
 {
     // Intercept tree view events for key press handling.
     view->installEventFilter(static_cast<RunnerViewController*>(this));

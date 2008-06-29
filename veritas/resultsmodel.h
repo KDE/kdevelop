@@ -46,10 +46,10 @@ class Test;
  *
  * \sa \ref results_model and \ref runner_item_index
  */
-class ResultsModel : public QAbstractListModel
+class ResultsModel : //public QAbstractListModel
+                    public QAbstractItemModel
 {
-    Q_OBJECT
-
+Q_OBJECT
 public: // Operations
 
     /*!
@@ -106,6 +106,11 @@ public: // Operations
      */
     QModelIndex mapFromTestIndex(const QModelIndex& testItemIndex) const;
 
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex& index) const;
+
+    QString debug() const;
+
 public slots:
 
     /*!
@@ -125,20 +130,21 @@ private: // Operations
      * Returns the runner item referred to by \a testItemIndex.
      */
     Test* itemFromIndex(const QModelIndex& testItemIndex) const;
+    bool isTopLevel(const QModelIndex& i) const;
 
     // Copy and assignment not supported.
     ResultsModel(const ResultsModel&);
     ResultsModel& operator=(const ResultsModel&);
 
 private: // Attributes
+    typedef QMap<const char*, int> ResultMap;
+    typedef QMap<qint64, int> TestMap;
+    typedef QList<QPersistentModelIndex> RunnerList;
 
     QStringList m_headerData;
-
-    QList<QPersistentModelIndex> m_testItemIndexes;
-
-    typedef QMap<qint64, int> TestMap;
-
-    TestMap m_testItemMap;
+    RunnerList m_result2runner;  // maps result rows to runner indices
+    TestMap m_runner2result;     // maps runner id's to result rows
+    ResultMap m_output2result;   // maps output lines back to the result-row that owns it
 };
 
 } // namespace

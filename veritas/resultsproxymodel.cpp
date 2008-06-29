@@ -28,7 +28,7 @@
 #include "resultsproxymodel.h"
 #include "resultsmodel.h"
 #include <testresult.h>
-#include <QDebug>
+#include <KDebug>
 
 namespace Veritas
 {
@@ -78,9 +78,7 @@ bool ResultsProxyModel::filterAcceptsRow(int source_row,
     if (!isActive()) {
         return false;
     }
-
     int result = model()->result(source_row);
-
     if ( (result & m_filter) || (result == Veritas::RunException)) {
         return true;
     } else {

@@ -23,6 +23,8 @@
 
 #include <QString>
 #include <QVariant>
+#include <QByteArray>
+#include <QList>
 #include <QFileInfo>
 #include <veritasexport.h>
 
@@ -56,9 +58,14 @@ public:
     void setLine(int);
     void setFile(QFileInfo);
 
+    void addOutputLine(const QByteArray& line);
+    int outputLineCount() const;
+    QByteArray outputLine(int i) const;
+
     void clear();
     bool operator==(const TestResult& other);
     void log() const; // debug
+    QList<QByteArray> m_output;
 
 private:
     TestState m_state;

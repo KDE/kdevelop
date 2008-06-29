@@ -40,8 +40,16 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <KLocale>
+#include <KAction>
+#include <KActionMenu>
+#include <KSelectAction>
 #include <KIcon>
 #include <KDebug>
+
+#include <iproject.h>
+
+using KDevelop::IProject;
+Q_DECLARE_METATYPE(KDevelop::IProject*);
 
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initVeritasResource()
@@ -57,6 +65,8 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 {
     initVeritasResource();
     m_ui.setupUi(this);
+//    kDebug() << "treeRunner.rootIsDecorated " << runnerView()->rootIsDecorated();
+    runnerView()->setRootIsDecorated(false);
 
     // Controllers for the tree views, it's best to create them at the
     // very beginning.
@@ -94,6 +104,52 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui.actionReload->setIcon(refresh);
+
+    runnerView()->setStyleSheet(
+        "QTreeView::branch{"
+            "image: none;"
+            "border-image: none"
+        "}");
+    resultsView()->setStyleSheet(
+        "QTreeView::branch{"
+            "image: none;"
+            "border-image: none"
+        "}");
+    connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
+            runnerController(), SLOT(expandOrCollapse(const QModelIndex&)));
+    connect(resultsView(), SIGNAL(clicked(const QModelIndex&)),
+            resultsController(), SLOT(expandOrCollapse(const QModelIndex&)));
+    kDebug() << "resultsView()->wordWrap() " << resultsView()->wordWrap();
+    resultsView()->setWordWrap(true);
+
+    addProjectMenu();
+}
+
+// helper for RunnerWindow(...)
+void RunnerWindow::addProjectMenu()
+{
+    KSelectAction *m = new KSelectAction(i18n("Project"), this);
+    m->setToolTip(i18n("Select project"));
+    m->setToolBarMode(KSelectAction::MenuMode);
+    m->setEditable(true);
+    m_ui.runnerToolBar->addAction(m);
+    m_projectPopup = m;
+}
+
+void RunnerWindow::addProjectToPopup(IProject* proj)
+{
+    kDebug() << "Adding project to popup " << proj->name();
+    QAction* p = new QAction(proj->name(), this);
+    QVariant v;
+    v.setValue(proj);
+    p->setData(v);
+    m_projectPopup->addAction(p);
+    m_ui.runnerToolBar->addAction(m_projectPopup);
+}
+
+void RunnerWindow::rmProjectFromPopup(IProject* proj)
+{
+    kDebug() << "Adding project to popup " << proj->name() << " TODO";;
 }
 
 // helper for RunnerWindow(...)
@@ -210,7 +266,8 @@ void RunnerWindow::stopPreviousModel()
     // taken into account by simply asking the model to stop it without further
     // verification. A better solution must consider this in a later version.
     RunnerModel* prevModel = runnerModel();
-    if (prevModel) {
+    if (prevModel)
+    {
         // Hope it stops the thread if it is running.
         prevModel->stopItems();
 
@@ -235,10 +292,10 @@ void RunnerWindow::initFilterButtons(RunnerModel* model)
     // Hide filter buttons for results that are not expected.
     int results = model->expectedResults();
     bool expected;
-/*    expected = results & Veritas::RunInfo;
-    m_ui.buttonInfos->setVisible(expected);
-    expected = results & Veritas::RunWarning;
-    m_ui.buttonWarnings->setVisible(expected);*/
+    /*    expected = results & Veritas::RunInfo;
+        m_ui.buttonInfos->setVisible(expected);
+        expected = results & Veritas::RunWarning;
+        m_ui.buttonWarnings->setVisible(expected);*/
     expected = results & Veritas::RunError;
     m_ui.buttonErrors->setVisible(expected);
     expected = results & Veritas::RunFatal;
@@ -274,17 +331,21 @@ void RunnerWindow::initVisibleColumns(RunnerModel* model)
     QBitArray enabledRunnerColumns(columnCount);
     QBitArray enabledResultsColumns(columnCount, true);
 
-    for (int i = 0; i < 2; i++) {
-        if (i < columnCount) {
+    for (int i = 0; i < 2; i++)
+    {
+        if (i < columnCount)
+        {
             runnerView()->showColumn(i);
             enabledRunnerColumns[i] = true;
         }
     }
-    for (int i = 1; i < columnCount; i++) {
+    for (int i = 1; i < columnCount; i++)
+    {
         // hide all runner columns
         runnerView()->hideColumn(i);
     }
-    for (int i = 0; i < columnCount; i++) {
+    for (int i = 0; i < columnCount; i++)
+    {
         resultsView()->showColumn(i);
     }
     enabledResultsColumns[1] = 0;
@@ -301,7 +362,8 @@ void RunnerWindow::expandBranches(RunnerModel* model)
     // Expand the branches, do it in the brackground to reduce flickering.
     runnerView()->setUpdatesEnabled(false);
     runnerController()->expandAll();
-    for (int i = 0; i < model->columnCount(); i++) {
+    for (int i = 0; i < model->columnCount(); i++)
+    {
         runnerView()->resizeColumnToContents(i);
     }
     runnerView()->setUpdatesEnabled(true);
@@ -352,7 +414,8 @@ void RunnerWindow::connectProgressIndicators(RunnerModel* model)
 void RunnerWindow::setModel(RunnerModel* model)
 {
     stopPreviousModel();
-    if (!model || model->columnCount() < 1) {
+    if (!model || model->columnCount() < 1)
+    {
         // No user interaction without a model or a model without columns.
         enableItemActions(false);
         enableResultsFilter(false);
@@ -365,7 +428,8 @@ void RunnerWindow::setModel(RunnerModel* model)
     // Suppress results data display if view isn't shown.
     showResults(isResultsViewVisible());
     // Very limited user interaction without data.
-    if (model->rowCount() < 1) {
+    if (model->rowCount() < 1)
+    {
         enableItemActions(false);
         m_ui.actionColumns->setEnabled(true);
         m_ui.actionSettings->setEnabled(true);
@@ -383,8 +447,14 @@ void RunnerWindow::setModel(RunnerModel* model)
     m_ui.actionStop->setDisabled(true);
     setResultsFilter();
 
+    connect(resultsModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            resultsController(), SLOT(spanOutputLines(const QModelIndex&, int, int)));
+    connect(m_selection, SIGNAL(selectionChanged()),
+            runnerModel(), SLOT(countItems()));
+
+
     // set top row higlighted
-    runnerView()->setCurrentIndex(runnerProxyModel()->index(0,0));
+    runnerView()->setCurrentIndex(runnerProxyModel()->index(0, 0));
 }
 
 QTreeView* RunnerWindow::runnerView() const
@@ -422,7 +492,8 @@ ResultsProxyModel* RunnerWindow::resultsProxyModel() const
 void RunnerWindow::displayProgress(int numItems) const
 {
     // Display only when there are selected items
-    if (statusWidget()->progressRun->maximum() > 0) {
+    if (statusWidget()->progressRun->maximum() > 0)
+    {
         statusWidget()->progressRun->setValue(numItems);
         statusWidget()->progressRun->show();
     }
@@ -470,10 +541,13 @@ void RunnerWindow::displayNumSuccess(int numItems) const
 
 void RunnerWindow::displayNumInfos(int numItems) const
 {
-    if (numItems != 1) {
+    if (numItems != 1)
+    {
         m_ui.buttonInfos->setText(QString().setNum(numItems) +
-                                i18n(" Infos"));
-    } else {
+                                  i18n(" Infos"));
+    }
+    else
+    {
         m_ui.buttonInfos->setText(i18n("1 Info"));
     }
 
@@ -483,10 +557,13 @@ void RunnerWindow::displayNumInfos(int numItems) const
 
 void RunnerWindow::displayNumWarnings(int numItems) const
 {
-    if (numItems != 1) {
+    if (numItems != 1)
+    {
         m_ui.buttonWarnings->setText(QString().setNum(numItems) +
-                                   i18n(" Warnings"));
-    } else {
+                                     i18n(" Warnings"));
+    }
+    else
+    {
         m_ui.buttonWarnings->setText(i18n("1 Warning"));
     }
 
@@ -496,10 +573,13 @@ void RunnerWindow::displayNumWarnings(int numItems) const
 
 void RunnerWindow::displayNumErrors(int numItems) const
 {
-    if (numItems != 1) {
+    if (numItems != 1)
+    {
         m_ui.buttonErrors->setText(QString().setNum(numItems) +
-                                 i18n(" Errors"));
-    } else {
+                                   i18n(" Errors"));
+    }
+    else
+    {
         m_ui.buttonErrors->setText(i18n("1 Error"));
     }
 
@@ -509,10 +589,13 @@ void RunnerWindow::displayNumErrors(int numItems) const
 
 void RunnerWindow::displayNumFatals(int numItems) const
 {
-    if (numItems != 1) {
+    if (numItems != 1)
+    {
         m_ui.buttonFatals->setText(QString().setNum(numItems) +
-                                 i18n(" Fatals"));
-    } else {
+                                   i18n(" Fatals"));
+    }
+    else
+    {
         m_ui.buttonFatals->setText(i18n("1 Fatal"));
     }
 
@@ -529,7 +612,8 @@ void RunnerWindow::displayNumExceptions(int numItems) const
 
 void RunnerWindow::highlightRunningItem(const QModelIndex& testItemIndex) const
 {
-    if (isMinimalUpdate()) {
+    if (isMinimalUpdate())
+    {
         return;
     }
 
@@ -546,7 +630,8 @@ void RunnerWindow::setResultsFilter() const
     QModelIndexList indexes;
     indexes = resultsView()->selectionModel()->selectedIndexes();
 
-    if (indexes.count() > 0) {
+    if (indexes.count() > 0)
+    {
         resultIndex = Utils::modelIndexFromProxy(resultsProxyModel(),
                       indexes.first());
     }
@@ -557,16 +642,18 @@ void RunnerWindow::setResultsFilter() const
 //     if (m_ui.buttonInfos->isEnabled() && m_ui.buttonInfos->isChecked()) {
 //         filter = Veritas::RunInfo;
 //     }
-// 
+//
 //     if (m_ui.buttonWarnings->isEnabled() && m_ui.buttonWarnings->isChecked()) {
 //         filter = filter | Veritas::RunWarning;
 //     }
 
-    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
+    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked())
+    {
         filter = filter | Veritas::RunError;
     }
 
-    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
+    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked())
+    {
         filter = filter | Veritas::RunFatal;
     }
 
@@ -575,9 +662,10 @@ void RunnerWindow::setResultsFilter() const
 
     // When no result was highlighted before than try to highlight the
     // one that corresponds to the currently highlighted runner item.
-    if (!resultIndex.isValid()) {
+    if (!resultIndex.isValid())
+    {
         syncResultWithTest(runnerView()->selectionModel()->selection(),
-                                 runnerView()->selectionModel()->selection());
+                           runnerView()->selectionModel()->selection());
         return;
     }
 
@@ -589,7 +677,8 @@ void RunnerWindow::setResultsFilter() const
     QModelIndex currentIndex;
     currentIndex = Utils::proxyIndexFromModel(resultsProxyModel(), resultIndex);
 
-    if (!currentIndex.isValid()) {
+    if (!currentIndex.isValid())
+    {
         // Previously highlighted result is filtered out now.
         return;
     }
@@ -604,17 +693,19 @@ void RunnerWindow::setResultsFilter() const
 }
 
 void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
-        const QItemSelection& deselected) const
+                                      const QItemSelection& deselected) const
 {
     Q_UNUSED(deselected);
     // Do nothing when there are no results or no runner item is selected.
-    if (!resultsView()->indexBelow(resultsView()->rootIndex()).isValid()) {
+    if (!resultsView()->indexBelow(resultsView()->rootIndex()).isValid())
+    {
         return;
     }
 
     QModelIndexList indexes = selected.indexes();
 
-    if (indexes.count() < 1 ) {
+    if (indexes.count() < 1)
+    {
         return;
     }
 
@@ -634,7 +725,8 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
     ensureCurrentResult();
 
     // If not found then there is no result for this runner item.
-    if (!resultIndex.isValid()) {
+    if (!resultIndex.isValid())
+    {
         // Enable selection handler again.
         enableResultSync(true);
         return;
@@ -645,7 +737,8 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
                                resultIndex);
 
     // When results proxy model index not exists it is filtered out.
-    if (!currentIndex.isValid()) {
+    if (!currentIndex.isValid())
+    {
         // Enable selection handler again.
         enableResultSync(true);
         return;
@@ -662,13 +755,14 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
 }
 
 void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
-        const QItemSelection& deselected) const
+                                      const QItemSelection& deselected) const
 {
     Q_UNUSED(deselected);
     // Do nothing when no result is selected.
     QModelIndexList indexes = selected.indexes();
 
-    if (indexes.count() < 1 ) {
+    if (indexes.count() < 1)
+    {
         return;
     }
 
@@ -699,26 +793,32 @@ void RunnerWindow::ensureFocusRect(const QModelIndex&  index)
 {
     QTreeView* treeView;
 
-    if (runnerView()->hasFocus()) {
+    if (runnerView()->hasFocus())
+    {
         treeView = runnerView();
-    } else {
+    }
+    else
+    {
         treeView = resultsView();
     }
 
     // No relevance when selections not allowed.
-    if (treeView->selectionMode() == QAbstractItemView::NoSelection) {
+    if (treeView->selectionMode() == QAbstractItemView::NoSelection)
+    {
         return;
     }
 
     // Focus rect is there when column entry not empty.
     QString data = index.data().toString();
 
-    if (!data.trimmed().isEmpty()) {
+    if (!data.trimmed().isEmpty())
+    {
         return;
     }
 
     // No relevance when column 0 is empty.
-    if (index.column() == 0) {
+    if (index.column() == 0)
+    {
         return;
     }
 
@@ -743,7 +843,8 @@ void RunnerWindow::scrollToHighlightedRows() const
 {
     // No relevance when selections not allowed.
     if (runnerView()->selectionMode() == QAbstractItemView::NoSelection ||
-            resultsView()->selectionMode() == QAbstractItemView::NoSelection) {
+            resultsView()->selectionMode() == QAbstractItemView::NoSelection)
+    {
         return;
     }
 
@@ -755,27 +856,33 @@ void RunnerWindow::scrollToHighlightedRows() const
 
     indexes = runnerView()->selectionModel()->selectedIndexes();
 
-    if (indexes.count() > 0) {
+    if (indexes.count() > 0)
+    {
         index = indexes.first();
     }
 
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         runnerView()->scrollTo(index);
     }
 
     index = QModelIndex();
     indexes = resultsView()->selectionModel()->selectedIndexes();
 
-    if (indexes.count() > 0) {
+    if (indexes.count() > 0)
+    {
         index = indexes.first();
     }
 
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         resultsView()->scrollTo(index);
-    } else {
+    }
+    else
+    {
         // Try to highlight a result.
         syncResultWithTest(runnerView()->selectionModel()->selection(),
-                                 runnerView()->selectionModel()->selection());
+                           runnerView()->selectionModel()->selection());
     }
 }
 
@@ -783,7 +890,8 @@ void RunnerWindow::runItems()
 {
     // Do not interfere with stopping the items. Could happen because Qt
     // input processing could be faster than executing event handlers.
-    if (!m_sema.tryAcquire()) {
+    if (!m_sema.tryAcquire())
+    {
         return;
     }
 
@@ -809,7 +917,8 @@ void RunnerWindow::stopItems()
 
     int r = dlg.exec();
 
-    if (r == QDialog::Accepted) {
+    if (r == QDialog::Accepted)
+    {
         enableControlsAfterRunning();
         m_sema.release();
         return;
@@ -822,7 +931,8 @@ void RunnerWindow::stopItems()
 
 void RunnerWindow::showResults(bool show)
 {
-    if (!runnerModel()) {
+    if (!runnerModel())
+    {
         return;
     }
 
@@ -832,7 +942,8 @@ void RunnerWindow::showResults(bool show)
     // and is shown now. In this case the data is retrieved again.
     bool visible = m_ui.treeResults->isVisible();
 
-    if (show && !visible) {
+    if (show && !visible)
+    {
         // Show data according to current filtering.
         resultsProxyModel()->clear();
         setResultsFilter();
@@ -841,7 +952,8 @@ void RunnerWindow::showResults(bool show)
         m_ui.dockResults->show();
     }
 
-    if (!show || runnerModel()->isRunning()) {
+    if (!show || runnerModel()->isRunning())
+    {
         return;
     }
     // Let the dock widget get its position and size before
@@ -885,9 +997,12 @@ void RunnerWindow::disableControlsBeforeRunning()
     bool bOk = (baseBrush.color().blue() > orange.color().blue() + 50) ||
                (baseBrush.color().blue() < orange.color().blue() - 50);
 
-    if (rOk && gOk && bOk) {
+    if (rOk && gOk && bOk)
+    {
         newBrush = orange;
-    } else {
+    }
+    else
+    {
         newBrush = QBrush(QColor(Qt::green));
     }
 
@@ -898,13 +1013,15 @@ void RunnerWindow::disableControlsBeforeRunning()
 void RunnerWindow::enableControlsAfterRunning() const
 {
     // Wait until all items stopped.
-    while (runnerModel()->isRunning(100)) {
+    while (runnerModel()->isRunning(100))
+    {
         // Prevent GUI from freezing.
         QCoreApplication::processEvents();
     }
 
     // Show results now if minimal update was active.
-    if (isMinimalUpdate()) {
+    if (isMinimalUpdate())
+    {
         runnerModel()->emitItemResults();
     }
 
@@ -928,7 +1045,8 @@ void RunnerWindow::enableControlsAfterRunning() const
     palette.setBrush(QPalette::Active, QPalette::Highlight, m_highlightBrush);
     runnerView()->setPalette(palette);
 
-    if (!isMinimalUpdate()) {
+    if (!isMinimalUpdate())
+    {
         return;
     }
 
@@ -936,7 +1054,8 @@ void RunnerWindow::enableControlsAfterRunning() const
     // Determine the results model index first.
     int row = resultsModel()->rowCount() - 1;
 
-    if (row < 1) {
+    if (row < 1)
+    {
         return;
     }
 
@@ -979,11 +1098,14 @@ void RunnerWindow::enableResultsFilter(bool enable) const
 
 void RunnerWindow::enableTestSync(bool enable) const
 {
-    if (enable) {
+    if (enable)
+    {
         connect(runnerView()->selectionModel(),
                 SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
                 SLOT(syncResultWithTest(const QItemSelection&, const QItemSelection&)));
-    } else {
+    }
+    else
+    {
         disconnect(runnerView()->selectionModel(),
                    SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
                    this,
@@ -993,11 +1115,14 @@ void RunnerWindow::enableTestSync(bool enable) const
 
 void RunnerWindow::enableResultSync(bool enable) const
 {
-    if (enable) {
+    if (enable)
+    {
         connect(resultsView()->selectionModel(),
                 SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
                 SLOT(syncTestWithResult(const QItemSelection&, const QItemSelection&)));
-    } else {
+    }
+    else
+    {
         disconnect(resultsView()->selectionModel(),
                    SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
                    this,
@@ -1008,14 +1133,16 @@ void RunnerWindow::enableResultSync(bool enable) const
 void RunnerWindow::ensureCurrentResult() const
 {
     // Do nothing if there is a current index or no data at all.
-    if (resultsView()->currentIndex().isValid()) {
+    if (resultsView()->currentIndex().isValid())
+    {
         return;
     }
 
     // Try to make first visible index the current one.
     QModelIndex currentIndex = resultsView()->indexAt(QPoint(1, 1));
 
-    if (!currentIndex.isValid()) {
+    if (!currentIndex.isValid())
+    {
         return;
     }
 
@@ -1032,8 +1159,10 @@ void RunnerWindow::adjustMenus() const
     QModelIndex index;
     index = runnerView()->indexBelow(runnerView()->rootIndex());
 
-    while (index.isValid()) {
-        if (index.child(0, 0).isValid()) {
+    while (index.isValid())
+    {
+        if (index.child(0, 0).isValid())
+        {
             haveChildren = true;
             break;
         }
@@ -1054,10 +1183,13 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
 
     bool visible;
 
-    if (numItems > 0) {
+    if (numItems > 0)
+    {
         visible = true;
-    } else {
-        visible =false;
+    }
+    else
+    {
+        visible = false;
     }
 
     labelForText->setVisible(visible);
@@ -1086,7 +1218,8 @@ ResultsViewController* RunnerWindow::resultsController() const
 
 void RunnerWindow::closeEvent(QCloseEvent* event)
 {
-    if (!runnerModel()) {
+    if (!runnerModel())
+    {
         return;
     }
 
@@ -1096,7 +1229,8 @@ void RunnerWindow::closeEvent(QCloseEvent* event)
 
     int r = dlg.exec();
 
-    if (r == QDialog::Accepted) {
+    if (r == QDialog::Accepted)
+    {
         return;
     }
 
@@ -1107,7 +1241,8 @@ void RunnerWindow::closeEvent(QCloseEvent* event)
 
     r = QMessageBox::warning(this, tr("Veritas"), msg,
                              tr("&Yes"), tr("&No"), 0, 0, 1);
-    if (r) {
+    if (r)
+    {
         event->ignore();
         return;
     }

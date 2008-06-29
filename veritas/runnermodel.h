@@ -141,12 +141,6 @@ public:  // Operations
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
     /*!
-     * Updates all internal counters and emits the signals which report
-     * counter values with the actual counts.
-     */
-    void countItems();
-
-    /*!
      * Returns the result types expected from runner items. Is a
      * combination of OR'ed Veritas::RunnerResult values.
      */
@@ -292,6 +286,12 @@ public slots:
     void setMinimalUpdate(bool minimalUpdate);
     void postItemCompleted(QModelIndex index);
     void postItemStarted(QModelIndex index);
+
+    /*!
+     * Updates all internal counters and emits the signals which report
+     * counter values with the actual counts.
+     */
+    void countItems();
 
 protected: // Operations
 

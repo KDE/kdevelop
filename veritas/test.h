@@ -34,6 +34,7 @@
 #include <testresult.h>
 
 #include <QMap>
+#include <QStringList>
 #include <QVariant>
 
 class QAbstractItemModel;
@@ -120,6 +121,8 @@ private: // Attributes
     QModelIndex m_index;
     QString m_name;
     TestState m_state;
+    QStringList m_outputLines;
+    TestResult m_result;
 
     bool m_selected;
 };

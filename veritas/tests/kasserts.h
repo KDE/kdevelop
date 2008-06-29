@@ -30,9 +30,17 @@ template<> inline char* toString(const QFileInfo& fi)
 {
     return qstrdup(fi.filePath().toLatin1().constData());
 }
+
 template<> inline char* toString(const QVariant& va)
 {
     return qstrdup(va.toString().toLatin1().constData());
+}
+
+template<> inline char* toString(const QModelIndex& mi)
+{
+    return qstrdup(QString(QString::number(mi.row()) + " " +
+                    QString::number(mi.column()) + " " + 
+                    QString::number(mi.internalId())).toLatin1().constData());
 }
 
 } // namespace QTest

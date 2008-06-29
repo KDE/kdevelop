@@ -36,6 +36,8 @@ using Veritas::ut::createRunnerModelStub;
 using Veritas::ut::RunnerModelStub;
 using Veritas::ut::RunnerModelTest;
 
+Q_DECLARE_METATYPE(QModelIndex);
+
 void RunnerModelTest::init()
 {
     model = createRunnerModelStub(false);
@@ -105,8 +107,6 @@ void RunnerModelTest::runItems()
     foreach(QSignalSpy* spy, spies) {
         KOMPARE(1, spy->size());
         QCOMPARE(QVariant(0), spy->takeFirst().at(0));
-        // using KOMPARE here makes qlist assert
-        // QFATAL : RunnerModelTest::runItems() ASSERT: "!isEmpty()" in file /usr/include/QtCore/qlist.h, line 252
     }
 
     foreach(QSignalSpy* spy, spies) delete spy;
@@ -156,6 +156,7 @@ void RunnerModelTest::countItems()
     assertSignalValue(spy, 0);
 }
 
+// helper
 void RunnerModelTest::assertSignalValue(QSignalSpy* spy, int expected)
 {
     QVariant actual = spy->takeFirst().at(0);
@@ -163,11 +164,13 @@ void RunnerModelTest::assertSignalValue(QSignalSpy* spy, int expected)
     delete spy;
 }
 
+// helper
 void RunnerModelTest::assertColumnHeader(const QVariant& expected, int index)
 {
     KOMPARE_MSG(expected, model->headerData(index, Qt::Horizontal), "Incorrect column header caption");
 }
 
+// helper
 void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
     QVariant actual = model->data(model->index(row, column), Qt::DisplayRole);
@@ -175,6 +178,7 @@ void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
 
+// helper
 void RunnerModelTest::verifyRowContent(int index)
 {
     QString rowStr = QString::number(index);
@@ -187,6 +191,7 @@ void RunnerModelTest::verifyRowContent(int index)
 
 }
 
+// helper
 void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
 {
     spies["successC"] = new QSignalSpy(model, SIGNAL(numSuccessChanged(int)));
@@ -195,6 +200,29 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
     spies["errorC"]   = new QSignalSpy(model, SIGNAL(numErrorsChanged(int)));
     spies["fatalC"]   = new QSignalSpy(model, SIGNAL(numFatalsChanged(int)));
     spies["exceptionC"] = new QSignalSpy(model, SIGNAL(numExceptionsChanged(int)));
+}
+
+// command
+void RunnerModelTest::updateViewLastItem()
+{
+    // Looks like a QTreeView bug here.
+    // The correct dataChanged() gets emitted but not the
+    // according data()'s. Great.
+    qRegisterMetaType<QModelIndex>("QModelIndex");
+    model->fill2();
+    QSignalSpy* s = new QSignalSpy(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)));
+    QModelIndex secondTopIndex = model->index(1,0);
+    model->updateView(secondTopIndex); // this should emit datachanged item2->child21
+
+    KOMPARE(1, s->size());
+    QList<QVariant> arg = s->takeFirst();
+
+    QModelIndex arg1 = arg[0].value<QModelIndex>();
+    KOMPARE(arg1, secondTopIndex);
+    QModelIndex arg2 = arg[1].value<QModelIndex>();
+    KOMPARE(arg2, secondTopIndex.child(0,0));
+
+    delete s;
 }
 
 QTEST_KDEMAIN(RunnerModelTest, GUI)

@@ -49,6 +49,7 @@ private slots:
     void appendResults();
     void mapIndices();
     void errorHandling();
+    void extraOutput();
 
 private:
     void assertColumnHeader(const QVariant& expected, int index);
@@ -58,8 +59,8 @@ private:
     void fillRows();
 
 private:
-    Veritas::ResultsModel* model;
-    RunnerModelStub* runnerModel;
+    Veritas::ResultsModel* m_model;
+    RunnerModelStub* m_runnerModel;
 };
 
 }

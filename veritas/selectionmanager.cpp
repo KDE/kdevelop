@@ -58,8 +58,7 @@ SelectionManager::SelectionManager(QAbstractItemView* parent) :
 }
 
 SelectionManager::~SelectionManager()
-{
-}
+{}
 
 void SelectionManager::reset()
 {
@@ -80,7 +79,6 @@ void SelectionManager::slotEntered(const QModelIndex& index)
                 SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
 
         const QRect rect = m_view->visualRect(index);
-
         const int x = rect.right() - 16;
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
@@ -105,8 +103,6 @@ void SelectionManager::slotViewportEntered()
 
 void SelectionManager::setItemSelected(bool selected)
 {
-    emit selectionChanged();
-
     const QModelIndex index = m_toggle->index();
     if (index.isValid()) {
         itemFromIndex(index)->setSelected(selected);
@@ -114,6 +110,7 @@ void SelectionManager::setItemSelected(bool selected)
         RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
         runnerModel->updateView(proxyModel->mapToSource(index));
     }
+    emit selectionChanged();
 }
 
 void SelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)

@@ -171,7 +171,7 @@ void Test::setState(TestState result)
 
 TestResult Test::result() const
 {
-    TestResult res;
+    TestResult res = m_result;
     res.setState(state());
     res.setMessage(data(2).toString());
     res.setFile(QFileInfo(data(3).toString()));
@@ -181,6 +181,7 @@ TestResult Test::result() const
 
 void Test::setResult(const TestResult& res)
 {
+    m_result = res;
     setData(2, res.message());
     setData(3, res.file().filePath());
     setData(4, res.line());

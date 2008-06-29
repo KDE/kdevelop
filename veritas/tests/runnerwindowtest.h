@@ -61,10 +61,12 @@ private slots:
     void collapseAll();
     void deselectItems();
     void newModel();
+    void ouputLinesSpanned();
 
 private:
     void expandSome();
     void selectSome();
+    void assertSpanned(const QModelIndex& i, const QString& content);
 
     typedef bool (RunnerWindowTest::*checkMemberFun)(TestStub*);
     void checkAllItems(checkMemberFun);
@@ -72,6 +74,8 @@ private:
     bool isNotSelected(TestStub*);
     bool isExpanded(TestStub*);
     bool isCollapsed(TestStub*);
+
+    void checkNrofSelectedStatusWidget(int);
 
 private:
     Veritas::RunnerWindow* window;

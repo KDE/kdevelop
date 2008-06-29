@@ -51,8 +51,7 @@ class ResultsProxyModel;
  *
  * \sa \ref views
  */
-class ResultsViewController : public QObject,
-                              public ViewControllerCommon
+class ResultsViewController : public ViewControllerCommon
 {
     Q_OBJECT
 
@@ -93,12 +92,14 @@ private slots:
      * sorting.
      */
     void setupSorting() const;
+    void spanOutputLines(const QModelIndex&, int, int);
 
 private: // Operations
 
     // Copy and assignment not supported.
     ResultsViewController(const ResultsViewController&);
     ResultsViewController& operator=(const ResultsViewController&);
+    void debugSpan(const QModelIndex& index);
 };
 
 } // namespace

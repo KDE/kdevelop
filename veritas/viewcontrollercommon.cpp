@@ -27,19 +27,29 @@
 
 #include "viewcontrollercommon.h"
 #include "utils.h"
+#include <KDebug>
 
-namespace Veritas
-{
+using Veritas::ViewControllerCommon;
 
-ViewControllerCommon::ViewControllerCommon(QTreeView* view) : m_view(view)
+
+ViewControllerCommon::ViewControllerCommon(QObject* parent, QTreeView* view)
+    : QObject(parent), m_view(view)
 {
     header()->setDefaultAlignment(Qt::AlignLeft);
     header()->setMovable(false);
 }
 
 ViewControllerCommon::~ViewControllerCommon()
-{
+{}
 
+void ViewControllerCommon::expandOrCollapse(const QModelIndex& index) const
+{
+    kDebug() << "view()->wordWrap() " << view()->wordWrap() << " [" << metaObject()->className() << "]";
+    bool isExpanded = view()->isExpanded(index);
+    if (isExpanded)
+        view()->collapse(index);
+    else
+        view()->expand(index);
 }
 
 QModelIndex ViewControllerCommon::highlightedRow() const
@@ -89,5 +99,4 @@ QSortFilterProxyModel* ViewControllerCommon::proxyModel() const
     return static_cast<QSortFilterProxyModel*>(view()->model());
 }
 
-} // namespace
-
+#include "viewcontrollercommon.moc"

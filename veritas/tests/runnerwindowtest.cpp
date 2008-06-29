@@ -21,14 +21,17 @@
 #include "runnerwindowtest.h"
 #include "modelcreation.h"
 
+#include <runnerproxymodel.h>
 #include <runnerwindow.h>
 #include <runnermodel.h>
-#include <runnerproxymodel.h>
+#include <resultsproxymodel.h>
 #include <qtest_kde.h>
 #include <kasserts.h>
 
 using Veritas::RunnerWindow;
 using Veritas::Test;
+using Veritas::ResultsProxyModel;
+
 using Veritas::ut::TestStub;
 using Veritas::ut::RunnerModelStub;
 using Veritas::ut::createRunnerModelStub;
@@ -75,6 +78,7 @@ bool RunnerWindowTest::isSelected(TestStub* item)
 void RunnerWindowTest::selectSome()
 {
     model->item1->setSelected(true);
+    model->child11->setSelected(true);
     model->child12->setSelected(false);
     model->item2->setSelected(false);
     model->child21->setSelected(true);
@@ -84,9 +88,13 @@ void RunnerWindowTest::selectSome()
 void RunnerWindowTest::selectAll()
 {
     selectSome();
+    model->countItems();
+    QTest::qWait(100);
+    checkNrofSelectedStatusWidget(2);
     window->ui().actionSelectAll->trigger();
     QTest::qWait(100);
     checkAllItems(&RunnerWindowTest::isSelected);
+    checkNrofSelectedStatusWidget(3);
 }
 
 // helper
@@ -102,6 +110,13 @@ void RunnerWindowTest::unselectAll()
     window->ui().actionUnselectAll->trigger();
     QTest::qWait(100);
     checkAllItems(&RunnerWindowTest::isNotSelected);
+    checkNrofSelectedStatusWidget(0);
+}
+
+// helper
+void RunnerWindowTest::checkNrofSelectedStatusWidget(int num)
+{
+    KOMPARE(QString::number(num), status->labelNumSelected->text());
 }
 
 // helper
@@ -216,5 +231,43 @@ void RunnerWindowTest::newModel()
     KVERIFY(!actual->index(2,0).isValid());
 }
 
+// command
+void RunnerWindowTest::ouputLinesSpanned()
+{
+    TestResult r;
+    r.addOutputLine("line 1");
+    r.addOutputLine("line 2");
+    model->child11->setResult(r);
+    model->child11->m_state = Veritas::RunError;
+
+    // invoke the run action
+    window->ui().actionStart->trigger();
+    // wait for all items to be executed
+    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
+        QFAIL("Timeout while waiting for runner items to complete execution");
+
+    //QTest::qWait(5000);
+
+    ResultsProxyModel* rproxy = window->resultsProxyModel();
+    QTreeView* resv = window->resultsView();
+    QModelIndex r1 = rproxy->index(0,0);
+    KVERIFY(r1.isValid());
+    KVERIFY(!resv->isFirstColumnSpanned(0,QModelIndex()));
+
+    assertSpanned(r1.child(0,0), "line 1");
+    assertSpanned(r1.child(1,0), "line 2");
+}
+
+// helper
+void RunnerWindowTest::assertSpanned(const QModelIndex& i, const QString& content)
+{
+    ResultsProxyModel* rproxy = window->resultsProxyModel();
+    QTreeView* resv = window->resultsView();
+
+    KVERIFY(i.isValid());
+    KOMPARE(content, rproxy->data(i, Qt::DisplayRole));
+    KVERIFY(resv->isFirstColumnSpanned(i.row(), i.parent()));
+
+}
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)
