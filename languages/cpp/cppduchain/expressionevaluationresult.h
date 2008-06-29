@@ -31,8 +31,8 @@ namespace KDevelop {
 class QString;
 
 namespace Cpp {
-using namespace KDevelop;;
-KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId);
+using namespace KDevelop;
+KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId)
 
 class ExpressionEvaluationResult;
 
@@ -70,7 +70,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     ///Returns the indexed version of this evalation result(eventually it is put into a repository)
     IndexedExpressionEvaluationResult indexed() const;
     
-    START_APPENDED_LISTS(ExpressionEvaluationResult);
+    START_APPENDED_LISTS(ExpressionEvaluationResult)
     ///This list contains the declarations found for the item evaluated.
     ///@todo Eventually get rid of this list somehow
     APPENDED_LIST_FIRST(ExpressionEvaluationResult, DeclarationId, allDeclarations);

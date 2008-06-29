@@ -43,7 +43,7 @@ namespace  KDevelop {
 namespace Cpp {
   class IndexedInstantiationInformation;
   
-  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult);
+  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult)
   
   struct InstantiationInformation {
     InstantiationInformation();
@@ -67,7 +67,7 @@ namespace Cpp {
     ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
     uint previousInstantiationInformation;
     
-    START_APPENDED_LISTS(InstantiationInformation);
+    START_APPENDED_LISTS(InstantiationInformation)
     
     ///templateParameters contains the template-parameters used for the instantiation
     APPENDED_LIST_FIRST(InstantiationInformation, IndexedExpressionEvaluationResult, templateParameters);
