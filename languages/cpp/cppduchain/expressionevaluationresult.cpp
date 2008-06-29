@@ -31,7 +31,7 @@ namespace Cpp {
 KDevelop::ItemRepository<ExpressionEvaluationResult, AppendedListItemRequest<ExpressionEvaluationResult> > expressionEvaluationResultRepository("Expression Evaluation Result Repository");
 const uint standardExpressionEvaluationResultIndex( expressionEvaluationResultRepository.index( ExpressionEvaluationResult() ) );
 
-DEFINE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId);
+DEFINE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId)
 
 TypeIdentifier ExpressionEvaluationResult::identifier() const {
   static TypeIdentifier noIdentifier("(no type)");

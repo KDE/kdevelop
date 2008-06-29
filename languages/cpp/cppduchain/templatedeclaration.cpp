@@ -40,7 +40,7 @@ QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 namespace Cpp {
-  DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult);
+  DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult)
   
   uint qHash(const Cpp::IndexedInstantiationInformation& info) {
     return info.hash();
