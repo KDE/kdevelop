@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.
