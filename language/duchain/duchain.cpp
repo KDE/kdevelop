@@ -154,6 +154,8 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
       ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
 
     branchRemoved(context);
+    
+    delete context;
   }
 }
 
