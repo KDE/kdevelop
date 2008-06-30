@@ -236,7 +236,8 @@ namespace TypeUtils {
   }
 
   void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
-    DUContext* context = klass->declaration() ? klass->declaration()->internalContext() : 0;
+    Declaration* klassDecl = klass->declaration(topContext);
+    DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
 
     int functionCount = functions.size();
 
@@ -273,7 +274,8 @@ namespace TypeUtils {
   }
 
   void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
-    DUContext* context = klass->declaration() ? klass->declaration()->internalContext() : 0;
+    Declaration* klassDecl = klass->declaration(topContext);
+    DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
     if( !context || !context->owner() || !context->owner() ) {
       kDebug(9007) << "Tried to get constructors of a class without context";
       return;

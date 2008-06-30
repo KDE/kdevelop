@@ -404,7 +404,7 @@ class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public KDevelop::Abstract
 public:
   typedef TypePtr<CppTemplateParameterType> Ptr;
 
-  TemplateParameterDeclaration* declaration() const;
+  TemplateParameterDeclaration* declaration(const KDevelop::TopDUContext* top) const;
 
   virtual QString toString() const;
 //   virtual QString mangled() const;

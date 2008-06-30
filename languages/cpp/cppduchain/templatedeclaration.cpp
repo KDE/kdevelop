@@ -25,6 +25,7 @@
 
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
+#include <duchain/forwarddeclarationtype.h>
 #include <duchain/repositories/itemrepository.h>
 #include <appendedlist.h>
 
@@ -40,7 +41,7 @@ QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 namespace Cpp {
-  DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult)
+  DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
   
   uint qHash(const Cpp::IndexedInstantiationInformation& info) {
     return info.hash();
@@ -72,7 +73,8 @@ QString InstantiationInformation::toString() const {
     for(int a = 0; a < templateParametersSize(); ++a) {
         if(a)
             ret += ", ";
-        ret += templateParameters()[a].result().toString();
+        if(templateParameters()[a].type())
+          ret += templateParameters()[a].type()->toString();
     }
     ret += ">";
     return ret;
@@ -105,7 +107,7 @@ bool InstantiationInformation::operator==(const InstantiationInformation& rhs) c
 
 uint InstantiationInformation::hash() const {
   uint ret = 0;
-  FOREACH_FUNCTION(const IndexedExpressionEvaluationResult& param, templateParameters) {
+  FOREACH_FUNCTION(const IndexedType& param, templateParameters) {
     ret = (ret + param.hash()) * 117;
   }
   
@@ -116,19 +118,20 @@ KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<Insta
 
 const uint standardInstantiationInformationIndex = instantiationInformationRepository.index( InstantiationInformation() );
 
-IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(standardInstantiationInformationIndex) {
+IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0) {
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m_index(index) {
+  if(m_index == standardInstantiationInformationIndex)
+    m_index = 0;
 }
 
 bool IndexedInstantiationInformation::isValid() const {
-  return m_index != standardInstantiationInformationIndex;
+  return m_index;
 }
 
-
 const InstantiationInformation& IndexedInstantiationInformation::information() const {
-  return *instantiationInformationRepository.itemFromIndex(m_index);
+  return *instantiationInformationRepository.itemFromIndex(m_index ? m_index : standardInstantiationInformationIndex);
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const {
@@ -297,7 +300,7 @@ TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m
 TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
-Declaration* TemplateDeclaration::specialize(uint specialization, TopDUContext* topContext) {
+Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUContext* topContext) {
   if(specialization == 0)
     return dynamic_cast<Declaration*>(this);
   else
@@ -530,9 +533,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         TemplateDeclaration* tempCopyDecl = dynamic_cast<TemplateDeclaration*>(declCopy);
         Q_ASSERT(tempCopyDecl);
 
-        if( currentArgument < templateArguments.templateParametersSize() && templateArguments.templateParameters()[currentArgument].result().isValid() )
+        if( currentArgument < templateArguments.templateParametersSize() && templateArguments.templateParameters()[currentArgument].type() )
         {
-          declCopy->setAbstractType( templateArguments.templateParameters()[currentArgument].result().type.type() );
+          declCopy->setAbstractType( templateArguments.templateParameters()[currentArgument].type() );
         } else {
           //Apply default-parameters
           //Use the already available delayed-type resolution to resolve the value/type
@@ -593,9 +596,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
             if( CppClassType* baseClass = dynamic_cast<CppClassType*>(newType.data()) )
             {
-              if( baseClass->declaration() && baseClass->declaration()->internalContext() )
+              if( baseClass->declaration(source) && baseClass->declaration(source)->internalContext() )
               {
-                contextCopy->addImportedParentContext( baseClass->declaration()->internalContext(), SimpleCursor::invalid(), true );
+                contextCopy->addImportedParentContext( baseClass->declaration(source)->internalContext(), SimpleCursor::invalid(), true );
               }
             } else {
               kDebug(9007) << "Resolved bad base-class";
@@ -654,13 +657,16 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
         AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
     
-        if( idType && idType->declaration() == instantiatedFrom ) {
+        if( idType && idType->declaration(source) == instantiatedFrom ) {
         if( changedType == instantiatedDeclaration->abstractType() )
             changedType = instantiatedDeclaration->abstractType()->clone();
         
         IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
-        if( changedIdType )
-            changedIdType->setDeclaration(instantiatedDeclaration);
+        if( changedIdType ) {
+          DeclarationId base = instantiatedFrom->id();
+          base.setSpecialization(templateArguments.indexed().index());
+          changedIdType->setDeclarationId(base);
+        }
         }
     
         instantiatedDeclaration->setAbstractType( changedType );
@@ -680,6 +686,15 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       instantiatedDeclaration->setIdentifier(id);
     }
     ///Last step, because after this, the declaration will be potentially findable
+
+    if(ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(instantiatedTemplate)) {
+      TypePtr<ForwardDeclarationType> forwardType = forward->type<ForwardDeclarationType>();
+      if(forwardType) {
+        DeclarationId id = instantiatedFrom->id();
+        id.setSpecialization(templateArguments.indexed().index());
+        forwardType->setDeclarationId(id);
+      }
+    }
     
     if(instantiatedTemplate && dynamic_cast<TemplateDeclaration*>(instantiatedFrom))
       instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
@@ -704,6 +719,11 @@ DeclarationId TemplateDeclaration::id() const
 ///@todo Use explicitly declared specializations
 Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& templateArguments, const TopDUContext* source, bool visible )
 {
+/*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
+    Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
+  }*/
+  //kDebug() << dynamic_cast<const Declaration*>(this)->toString() << templateArguments.toString() << templateArguments.viewDebug();
+  
   if( m_instantiatedFrom )
     return m_instantiatedFrom->instantiate( templateArguments, source, visible );
   
@@ -737,6 +757,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   
   Declaration* decl = dynamic_cast<Declaration*>(this);
   Q_ASSERT(decl);
+  Q_ASSERT(decl->topContext());
   Declaration* clone = decl->clone();
   Q_ASSERT(clone);
   TemplateDeclaration* cloneTemplateDecl = dynamic_cast<TemplateDeclaration*>(clone);
@@ -746,6 +767,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   instantiateDeclarationAndContext( surroundingContext, source, decl->internalContext(), templateArguments, clone, decl, visible );
 
 //  cloneTemplateDecl->setInstantiatedFrom(this);
+  Q_ASSERT(clone->topContext());
 
   return clone;
 }

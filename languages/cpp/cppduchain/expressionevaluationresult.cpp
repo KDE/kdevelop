@@ -39,7 +39,7 @@ TypeIdentifier ExpressionEvaluationResult::identifier() const {
   AbstractType::Ptr t(type.type());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   if( idType )
-    return idType->identifier();
+    return idType->qualifiedIdentifier();
   
   DelayedType* delayedType = dynamic_cast<DelayedType*>(t.data());
   if( delayedType )

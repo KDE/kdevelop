@@ -123,9 +123,9 @@ public:
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
 
-  void release(KDevelop::DUContext* top);
+  void release(KDevelop::TopDUContext* top);
 
   // Parser
   Control control;

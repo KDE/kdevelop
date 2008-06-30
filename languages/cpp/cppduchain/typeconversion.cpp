@@ -437,7 +437,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
   {
     ///Try conversion using constructor
     CppClassType* toClass = fastCast<CppClassType*>( realType(to, m_topContext) ); //@todo think whether the realType(..) is ok
-    if( toClass && toClass->declaration() )
+    if( toClass && toClass->declaration(m_topContext) )
     {
       if( fromClass ) {
         if( isPublicBaseClass(fromClass, toClass, &m_baseConversionLevels ) ) {
@@ -447,7 +447,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
         }
       }
       
-      KDevelop::DUContextPointer ptr(toClass->declaration()->logicalInternalContext(m_topContext));
+      KDevelop::DUContextPointer ptr(toClass->declaration(m_topContext)->logicalInternalContext(m_topContext));
       OverloadResolver resolver( ptr, TopDUContextPointer( const_cast<TopDUContext*>(m_topContext) ) );
       Declaration* function = resolver.resolveConstructor( OverloadResolver::Parameter( from, fromLValue ), true, true );
       

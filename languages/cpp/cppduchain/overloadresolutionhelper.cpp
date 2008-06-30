@@ -71,8 +71,8 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
     if( dynamic_cast<CppClassType*>( real.data() ) )
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
-      if( idType && idType->declaration() ) {
-        DUContext* ctx = idType->declaration()->logicalInternalContext(m_context->topContext());
+      if( idType && idType->declaration(m_context->topContext()) ) {
+        DUContext* ctx = idType->declaration(m_context->topContext())->logicalInternalContext(m_context->topContext());
         if( ctx ) {
           QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_operatorIdentifier, m_context->topContext() );
           foreach( Declaration* decl, decls )

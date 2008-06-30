@@ -78,7 +78,7 @@ void FindDeclaration::closeQualifiedIdentifier() {
   if( !m_states.isEmpty() ) {
     //Append template-parameter to parent
     if( s.expressionResult.isValid() ) {
-      m_states.top().templateParameters.templateParametersList().append(s.expressionResult.indexed());
+      m_states.top().templateParameters.templateParametersList().append(s.expressionResult.type.type()->indexed());
     } else {
       ExpressionEvaluationResult res;
       if( !s.result.isEmpty() ) {
@@ -90,7 +90,7 @@ void FindDeclaration::closeQualifiedIdentifier() {
           res.type = s.result[0]->abstractType()->indexed();
         res.isInstance = s.result[0]->kind() != Declaration::Type;
       }
-      m_states.top().templateParameters.templateParametersList().append(res.indexed());
+      m_states.top().templateParameters.templateParametersList().append(res.type.type()->indexed());
     }
   }
 }
@@ -117,8 +117,11 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
 
       if( !scopeContext || scopeContext->type() == DUContext::Template )
         if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data()) ) //Try to get the context from the type, maybe it is a typedef.
-          if( idType->declaration() )
-            scopeContext = idType->declaration()->logicalInternalContext(topContext());
+        {
+          Declaration* idDecl = idType->declaration(topContext());
+          if( idDecl )
+            scopeContext = idDecl->logicalInternalContext(topContext());
+        }
 
 #ifdef DEBUG
         kDebug(9007) << decl->toString() << ": scope-context" << scopeContext;

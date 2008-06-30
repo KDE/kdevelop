@@ -448,8 +448,9 @@ void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
   
   Q_ASSERT(currentContext()->type() == DUContext::Class);
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.data());
-  if( idType && idType->declaration() && idType->declaration()->logicalInternalContext(0) ) {
-    currentContext()->addImportedParentContext( idType->declaration()->logicalInternalContext(0) );
+  Declaration* idDecl = 0;
+  if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
+    currentContext()->addImportedParentContext( idDecl->logicalInternalContext(0) );
   } else if( !dynamic_cast<DelayedType*>(base.baseClass.data()) ) {
     kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass->toString());
   }

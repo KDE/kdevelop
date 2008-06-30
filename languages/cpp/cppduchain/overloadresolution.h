@@ -154,9 +154,9 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @param parameterType The type argumentType should be matched to. Once CppTemplateParameterType's are encountered here, they will be instantiated in instantiatedTypes
      * @return false if the matching failed
      * */
-    bool matchParameterTypes(AbstractType* argumentType, AbstractType* parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
-    bool matchParameterTypes(AbstractType* argumentType, const TypeIdentifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
-    bool matchParameterTypes(AbstractType* argumentType, const Identifier& parameterType, QMap<QString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, AbstractType* parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
+    bool matchParameterTypes(AbstractType* argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
     
     DUContextPointer m_context;
     TopDUContextPointer m_topContext;

@@ -131,14 +131,7 @@ bool CppClassType::equals(const AbstractType* _rhs) const
     return false;
   const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
   
-  Declaration* decl = declaration();
-  Declaration* rhsDecl = rhs->declaration();
-  
-  if(!decl || !rhsDecl)
-    return false;
-
-  ///We cannot use here IdentifiedType::equals, because else we get problems with forward declarations
-  return decl->equalQualifiedIdentifier(rhsDecl);
+  return IdentifiedType::equals(rhs);
 }
 
 bool CppTypeAliasType::equals(const AbstractType* _rhs) const
@@ -184,12 +177,12 @@ bool CppEnumeratorType::equals(const AbstractType* _rhs) const
 
 QString CppEnumeratorType::toString() const
 {
-  return "enum " + identifier().toString();
+  return "enum " + IdentifiedType::qualifiedIdentifier().toString();
 }
 
 uint CppEnumeratorType::hash() const
 {
-  return identifier().hash();
+  return IdentifiedType::hash();
 }
 
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
@@ -518,12 +511,12 @@ uint CppReferenceType::hash() const
 
 uint CppFunctionType::hash() const
 {
-  return cvHash(FunctionType::hash()) + 31 * identifier().hash();
+  return cvHash(FunctionType::hash()) + 31 * IdentifiedType::hash();
 }
 
 uint CppClassType::hash() const
 {
-  return identifier().hash();
+  return IdentifiedType::hash();
 
 /*  foreach (const BaseClassInstance& base, m_baseClasses)
     hash_val = (hash_val << 5) - hash_val + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
@@ -533,12 +526,12 @@ uint CppClassType::hash() const
 
 uint CppTypeAliasType::hash() const
 {
-  return 31 * identifier().hash() + (type() ? type()->hash() + 83 : 0);
+  return 31 * IdentifiedType::hash() + (type() ? type()->hash() + 83 : 0);
 }
 
 QString CppTypeAliasType::toString() const
 {
-  QualifiedIdentifier id = identifier();
+  QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty())
     return id.top().toString();
 
@@ -559,7 +552,7 @@ void CppClassType::clear() {
 
 QString CppClassType::toString() const
 {
-  QualifiedIdentifier id = identifier();
+  QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty())
     return id.top().toString();
 
@@ -586,11 +579,11 @@ CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec)
 
 QString CppEnumerationType::toString() const
 {
-  return "enum " + identifier().toString();
+  return "enum " + qualifiedIdentifier().toString();
 }
 uint CppEnumerationType::hash() const
 {
-  return identifier().hash();
+  return IdentifiedType::hash();
 }
 
 // QString CppIntegralType::mangled() const
@@ -706,12 +699,12 @@ QString CppCVType::cvMangled() const
 //   return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
 // }
 // 
-TemplateParameterDeclaration* CppTemplateParameterType::declaration() const {
-  return static_cast<TemplateParameterDeclaration*>(IdentifiedType::declaration());
+TemplateParameterDeclaration* CppTemplateParameterType::declaration(const TopDUContext* top) const {
+  return static_cast<TemplateParameterDeclaration*>(IdentifiedType::declaration(top));
 }
 
 QString CppTemplateParameterType::toString() const {
-  return "<template> " + (declaration() ? declaration()->identifier().toString() : QString());
+  return "<template> " + IdentifiedType::qualifiedIdentifier().toString();
 }
 // 
 // QString CppTemplateParameterType::mangled() const
@@ -725,6 +718,6 @@ void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
 }
 
 uint CppTemplateParameterType::hash() const {
-  return 41*identifier().hash();
+  return 41*IdentifiedType::hash();
 }
 

@@ -395,8 +395,16 @@ class CppDUContext : public BaseContext {
       }
       
       id.clearTemplateIdentifiers();
-      FOREACH_FUNCTION(IndexedExpressionEvaluationResult arg, templateArguments.templateParameters)
-        id.appendTemplateIdentifier( arg.result().identifier() );
+      FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
+        AbstractType::Ptr type(arg.type());
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
+        if(identified)
+          id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
+        else if(type)
+          id.appendTemplateIdentifier( type->toString() );
+        else
+          id.appendTemplateIdentifier(QualifiedIdentifier("no type"));
+      }
 
       totalId.push(id);
       

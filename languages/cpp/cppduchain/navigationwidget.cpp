@@ -600,38 +600,38 @@ class NavigationContext : public KShared {
           m_currentText += "const ";
         
         if( idType ) {
-          if( idType->declaration() ) {
+          if( idType->declaration(m_topContext.data()) ) {
 
             //Remove the last template-identifiers, because we create those directly
-            QualifiedIdentifier id = idType->identifier();
+            QualifiedIdentifier id = idType->qualifiedIdentifier();
             Identifier lastId = id.last();
             id.pop();
             lastId.clearTemplateIdentifiers();
             id.push(lastId);
 
             //We leave out the * and & reference and pointer signs, those are added to the end
-            makeLink(id.toString() , DeclarationPointer(idType->declaration()), NavigationAction::NavigateDeclaration );
+            makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
           } else {
             m_currentText += Qt::escape(type->toString());
           }
 
-          if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration()) ) {
+          if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration(m_topContext.data())) ) {
             if( templ->instantiatedFrom() ) {
               m_currentText += Qt::escape("  <");
 
               const Cpp::InstantiationInformation& params = templ->instantiatedWith().information();
               bool first = true;
-              FOREACH_FUNCTION( const IndexedExpressionEvaluationResult& result, params.templateParameters ) {
+              FOREACH_FUNCTION( const IndexedType& type, params.templateParameters ) {
                 if( first )
                   first = false;
                 else
                   m_currentText += ", ";
 
-                if( result.result().type.isValid() ) {
-                  AbstractType::Ptr type(result.result().type.type());
-                  eventuallyMakeTypeLinks(type.data());
+                if( type ) {
+                  AbstractType::Ptr t = type.type();
+                  eventuallyMakeTypeLinks(t.data());
                 }else{
-                  m_currentText += Qt::escape(result.result().toShortString());
+                   m_currentText += "missing type";
                 }
               }
               

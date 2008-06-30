@@ -43,7 +43,7 @@ namespace  KDevelop {
 namespace Cpp {
   class IndexedInstantiationInformation;
   
-  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedExpressionEvaluationResult)
+  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
   
   struct InstantiationInformation {
     InstantiationInformation();
@@ -70,7 +70,7 @@ namespace Cpp {
     START_APPENDED_LISTS(InstantiationInformation)
     
     ///templateParameters contains the template-parameters used for the instantiation
-    APPENDED_LIST_FIRST(InstantiationInformation, IndexedExpressionEvaluationResult, templateParameters);
+    APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
     
     END_APPENDED_LISTS(InstantiationInformation, templateParameters);
     
@@ -88,6 +88,7 @@ namespace Cpp {
         return m_index * 73;
       }
       
+      //Is always zero for the empty information
       uint index() const {
         return m_index;
       }
@@ -127,6 +128,7 @@ namespace Cpp {
       
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
+       * The template-arguments must chained up with the template-arguments of the parent, if the parent is a template class.
        * */
       KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool visible = false );
 
@@ -147,7 +149,7 @@ namespace Cpp {
       
       DeclarationId id() const;
       
-      Declaration* specialize(uint specialization, TopDUContext* topContext);
+      Declaration* specialize(uint specialization, const TopDUContext* topContext);
     
     private:
 
@@ -191,7 +193,7 @@ namespace Cpp {
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
-    virtual Declaration* specialize(uint specialization, TopDUContext* topContext) {
+    virtual Declaration* specialize(uint specialization, const TopDUContext* topContext) {
       return TemplateDeclaration::specialize(specialization, topContext);
     }
     

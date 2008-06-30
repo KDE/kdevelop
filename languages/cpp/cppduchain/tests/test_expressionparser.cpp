@@ -229,7 +229,7 @@ void TestExpressionParser::testTemplates() {
 
     QVERIFY(result.allDeclarationsSize());
     QVERIFY(dynamic_cast<IdentifiedType*>(result.type.type().data()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(), defClassA);
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(0), defClassA);
   }
   
   {
@@ -240,7 +240,7 @@ void TestExpressionParser::testTemplates() {
 
     QVERIFY(result.allDeclarationsSize());
     QVERIFY(dynamic_cast<IdentifiedType*>(result.type.type().data()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(), defClassA);
+    QCOMPARE(dynamic_cast<IdentifiedType*>(result.type.type().data())->declaration(0), defClassA);
   }
   
   release(top);
@@ -337,11 +337,11 @@ void TestExpressionParser::testSmartPointer() {
   
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[3]->abstractType().data());
   QVERIFY(idType);
-  QCOMPARE(idType->declaration()->context(), KDevelop::DUContextPointer(top).data());
-  QVERIFY(idType->declaration()->internalContext() != top->localDeclarations()[0]->internalContext());
+  QCOMPARE(idType->declaration(0)->context(), KDevelop::DUContextPointer(top).data());
+  QVERIFY(idType->declaration(0)->internalContext() != top->localDeclarations()[0]->internalContext());
 
   Declaration* baseDecl = top->localDeclarations()[0];
-  Declaration* specialDecl = idType->declaration();
+  Declaration* specialDecl = idType->declaration(0);
   TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(baseDecl);
   TemplateDeclaration* specialTemplateDecl = dynamic_cast<TemplateDeclaration*>(specialDecl);
 
@@ -394,7 +394,7 @@ void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
       
   QByteArray test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
-  DUContext* c = parse( test, DumpAll /*DumpDUChain | DumpAST */);
+  DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
   DUContext* testContext = c->childContexts()[1];
@@ -404,7 +404,7 @@ void TestExpressionParser::testSimpleExpression() {
   Declaration* d = findDeclaration( testContext, QualifiedIdentifier("c") );
   QVERIFY(d);
   QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() ) );
-  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->identifier().toString() == "Cont" );
+  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->qualifiedIdentifier().toString() == "Cont" );
 
   kDebug(9007) << "test-Context:" << testContext;
   lock.unlock();
@@ -685,7 +685,7 @@ void TestExpressionParser::testCasts() {
   Declaration* d = findDeclaration( testContext, QualifiedIdentifier("c") );
   QVERIFY(d);
   QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() ) );
-  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->identifier().toString() == "Cont" );
+  QVERIFY( dynamic_cast<IdentifiedType*>( d->abstractType().data() )->qualifiedIdentifier().toString() == "Cont" );
 
   lock.unlock();
 
@@ -845,9 +845,9 @@ void TestExpressionParser::testOperators() {
 }
 
 void TestExpressionParser::testTemplateFunctions() {
-  QByteArray method("template<class T> class A { template<class T> T a(T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T>& q) {}; template<class T> T c(A<T*&>& q) {}; A* aClass;");
+  QByteArray method("template<class T> class A { template<class T> T a(const T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T> q) {}; template<class T> T c(const A<T*&>& q) {}; A* aClass;");
 
-  DUContext* top = parse(method, DumpAll);
+  DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->localDeclarations().count(), 6);
@@ -863,10 +863,20 @@ void TestExpressionParser::testTemplateFunctions() {
 
   Cpp::ExpressionEvaluationResult result;
 
-  ///@todo Make this kind of matching work too(needs changes about handling DelayedType cppducontext and/or typebuilder)
-  result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
+  result = parser.evaluateExpression( "a(C())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
+  
+  result = parser.evaluateExpression( "b<C>(A<C>())", KDevelop::DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
+  
+  result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   kDebug() << result.toString();
+/*  IdentifiedType* identified = dynamic_cast<IdentifiedType*>(result.type.type().data());
+  Q_ASSERT(identified);*/
+  //kDebug() << "identified:" << identified->qualifiedIdentifier();
   QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
   
   result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
@@ -889,9 +899,12 @@ void TestExpressionParser::testTemplateFunctions() {
   QCOMPARE(result.type.type(), top->localDeclarations()[0]->abstractType());
   kDebug() << result.type.type()->toString();
 
-  result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
+  //This test will succeed again once we have a working type repository!
+  result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
+  kDebug() << result.toString();
   QCOMPARE(result.type.type(), top->localDeclarations()[1]->abstractType());
+  release(top);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

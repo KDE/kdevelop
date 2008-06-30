@@ -61,7 +61,7 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
 {
   to->clear();
   to->setClassType(from->classType());
-  to->setDeclaration(from->declaration());
+  to->setDeclarationId(from->declarationId());
   to->setCV(from->cv());
 
   foreach( const CppClassType::BaseClassInstance& base, from->baseClasses() )
@@ -546,9 +546,9 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
      //Else the declarations could be confused with global functions.
      //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
      
-     QString newId = id.last().identifier();
+     QString newId = id.last().identifier().str();
      for(int a = id.count()-2; a >= 0; --a)
-       newId = id.at(a).identifier() + ";;" + newId;
+       newId = id.at(a).identifier().str() + ";;" + newId;
  
      localId.setIdentifier(newId);
    }
@@ -568,7 +568,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
 
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
 
-    if( idType && idType->declaration() == 0 ) //When the given type has no declaration yet, assume we are declaring it now
+    if( idType && !idType->declarationId().isValid() ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
 
     currentDeclaration()->setType(type);
@@ -584,12 +584,12 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 
     //When the given type has no declaration yet, assume we are declaring it now.
     //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-    if( !forceInstance && idType && idType->declaration() == 0 && !delayed )
+    if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed )
         idType->setDeclaration( currentDeclaration() );
 
     if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
       //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-      if( (((!idType) || (idType && idType->declaration() != currentDeclaration())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) || forceInstance )
+      if( (((!idType) || (idType && idType->declarationId() != currentDeclaration()->id())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) || forceInstance )
         currentDeclaration()->setKind(Declaration::Instance);
       else
         currentDeclaration()->setKind(Declaration::Type);

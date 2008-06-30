@@ -276,7 +276,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       return;
     }
 
-    Declaration* declaration = idType->declaration();
+    Declaration* declaration = idType->declaration(topContext());
     MUST_HAVE(declaration);
     MUST_HAVE(declaration->context());
 
@@ -420,7 +420,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(base.data());
     if( idType ) {
       LOCKDUCHAIN;
-      return idType->declaration();
+      return idType->declaration(topContext());
     } else {
       return 0;
     }
@@ -458,7 +458,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         return;
       }
 
-      Declaration* declaration = idType->declaration();
+      Declaration* declaration = idType->declaration(topContext());
       MUST_HAVE(declaration);
       MUST_HAVE(declaration->context());
 
@@ -911,7 +911,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           if( functions.first().function.isViable() && function ) {
             success = true;
             m_lastType = function->returnType();
-            m_lastInstance = Instance(function->declaration());
+            m_lastInstance = Instance(function->declaration(topContext()));
             
             lock.unlock();
             newUse( node, node->op, node->op+1, functions.first().function.declaration() );
@@ -1466,7 +1466,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     m_lastType = f->returnType();
-    m_lastInstance = Instance(f->declaration());//Mark instances of function return-types with the function they were returned by
+    m_lastInstance = Instance(f->declaration(topContext()));//Mark instances of function return-types with the function they were returned by
   }
   
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
@@ -1485,9 +1485,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       LOCKDUCHAIN;
       if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
         
-        if( constructedType && constructedType->declaration() && constructedType->declaration()->internalContext() )
+        if( constructedType && constructedType->declaration(topContext()) && constructedType->declaration(topContext())->internalContext() )
         {
-          m_lastDeclarations = convert(constructedType->declaration()->internalContext()->findLocalDeclarations( constructedType->declaration()->identifier(), constructedType->declaration()->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
+          Declaration* constructedDecl = constructedType->declaration(topContext());
+          m_lastDeclarations = convert(constructedDecl->internalContext()->findLocalDeclarations( constructedDecl->identifier(), constructedDecl->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
         }
       }
     }
@@ -1536,8 +1537,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(declarations.isEmpty() && constructedType) {
       //Default-constructor is used
       m_lastType = AbstractType::Ptr(constructedType.data());
-      m_lastInstance = Instance(constructedType->declaration());
-      DeclarationPointer decl(constructedType->declaration());
+      DeclarationPointer decl(constructedType->declaration(topContext()));
+      m_lastInstance = Instance(decl.data());
       lock.unlock();
       if(oldCurrentUse.isValid)
         newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
@@ -1552,6 +1553,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( !fail ) {
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
     }
+    if(chosenFunction)
+      kDebug() << "result from resolver:" << chosenFunction->toString();
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
@@ -1589,12 +1592,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( constructedType ) {
       //Constructor was called
       m_lastType = AbstractType::Ptr(constructedType.data());
-      m_lastInstance = Instance(constructedType->declaration());
+      m_lastInstance = Instance(constructedType->declaration(topContext()));
     } else {
+      if(chosenFunction)
+        kDebug() << "result from resolver:" << chosenFunction->toString() << typeid(*chosenFunction).name() << typeid(*chosenFunction->abstractType().data()).name();
       CppFunctionType* functionType = dynamic_cast<CppFunctionType*>( chosenFunction->abstractType().data() );
       if( !chosenFunction || !functionType ) {
         problem( node, QString( "could not find a matching function for function-call" ) );
       } else {
+        kDebug() << "picking return-type" << functionType->returnType()->toString() << "from" << functionType->toString() << "from decl." << chosenFunction->toString();
         m_lastType = functionType->returnType();
         m_lastInstance = Instance(chosenFunction);
       }
