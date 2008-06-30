@@ -131,7 +131,9 @@ QVariant ResultsModel::data(const QModelIndex& index, int role) const
     if (isTopLevel(index)) {
         Test* item = itemFromIndex(m_result2runner.at(index.row()));
         if (role == Qt::DisplayRole) {
-            return item->data(index.column());
+            QVariant q = item->data(index.column());
+            //kDebug() << "topLevel-> " << q;
+            return q;
         }
         if (role != Qt::DecorationRole || index.column() != 0) {
             // First column only has a decoration.
@@ -142,7 +144,9 @@ QVariant ResultsModel::data(const QModelIndex& index, int role) const
     } else {
         if ( role != Qt::DisplayRole || index.column() != 0)
             return QVariant();
-        return static_cast<const char*>(index.internalPointer());
+        QVariant q = static_cast<const char*>(index.internalPointer());
+        //kDebug() << "lvl2   -> " << q;
+        return q;
     }
 }
 

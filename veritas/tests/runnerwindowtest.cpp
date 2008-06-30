@@ -26,6 +26,7 @@
 #include <runnermodel.h>
 #include <resultsproxymodel.h>
 #include <qtest_kde.h>
+#include <KDebug>
 #include <kasserts.h>
 
 using Veritas::RunnerWindow;
@@ -48,6 +49,8 @@ void RunnerWindowTest::init()
     status = window->statusWidget();
     m_proxy = window->runnerProxyModel();
     m_view = window->runnerView();
+    m_resultsProxy = window->resultsProxyModel();
+    TestStub::executedItems.clear();
 }
 
 // fxiture
@@ -162,14 +165,7 @@ void RunnerWindowTest::collapseAll()
 // command
 void RunnerWindowTest::startItems()
 {
-    TestStub::executedItems.clear();
-
-    // invoke the run action
-    window->ui().actionStart->trigger();
-
-    // wait for all items to be executed
-    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-        QFAIL("Timeout while waiting for runner items to complete execution");
+    runAllTests();
 
     // check they got indeed executed
     // the rows of items that got executed are stored
@@ -231,43 +227,99 @@ void RunnerWindowTest::newModel()
     KVERIFY(!actual->index(2,0).isValid());
 }
 
-// command
-void RunnerWindowTest::ouputLinesSpanned()
+// helper
+void RunnerWindowTest::convert2Spammer(TestStub* test)
 {
     TestResult r;
     r.addOutputLine("line 1");
     r.addOutputLine("line 2");
-    model->child11->setResult(r);
-    model->child11->m_state = Veritas::RunError;
+    test->setResult(r);
+    test->m_state = Veritas::RunError;
+}
 
+// helper
+void RunnerWindowTest::runAllTests()
+{
     // invoke the run action
     window->ui().actionStart->trigger();
+
     // wait for all items to be executed
     if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
         QFAIL("Timeout while waiting for runner items to complete execution");
 
+    // de-comment the line below if you want to inspect the window manually
     //QTest::qWait(5000);
+}
 
-    ResultsProxyModel* rproxy = window->resultsProxyModel();
-    QTreeView* resv = window->resultsView();
-    QModelIndex r1 = rproxy->index(0,0);
-    KVERIFY(r1.isValid());
-    KVERIFY(!resv->isFirstColumnSpanned(0,QModelIndex()));
+// command
+void RunnerWindowTest::ouputLinesSpanned()
+{
+    convert2Spammer(model->child11);
+    runAllTests();
 
-    assertSpanned(r1.child(0,0), "line 1");
-    assertSpanned(r1.child(1,0), "line 2");
+    QModelIndex r1 = m_resultsProxy->index(0,0);
+    assertResultItemEquals(r1, "child11");
+    assertOutputLineEquals(r1.child(0,0), "line 1");
+    assertOutputLineEquals(r1.child(1,0), "line 2");
+    KVERIFY(!r1.child(2,0).isValid());
 }
 
 // helper
-void RunnerWindowTest::assertSpanned(const QModelIndex& i, const QString& content)
+void RunnerWindowTest::assertResultItemEquals(const QModelIndex& i, const QString& content)
 {
-    ResultsProxyModel* rproxy = window->resultsProxyModel();
     QTreeView* resv = window->resultsView();
 
+    KOMPARE(content, m_resultsProxy->data(i, Qt::DisplayRole));
     KVERIFY(i.isValid());
-    KOMPARE(content, rproxy->data(i, Qt::DisplayRole));
+    KVERIFY(!resv->isFirstColumnSpanned(i.row(),QModelIndex()));
+}
+
+// helper
+void RunnerWindowTest::assertOutputLineEquals(const QModelIndex& i, const QString& content)
+{
+    QTreeView* resv = window->resultsView();
+
+    KVERIFY_MSG(i.isValid(), "Not enough outputlines in the result tree view.");
+    KOMPARE(content, m_resultsProxy->data(i, Qt::DisplayRole));
     KVERIFY(resv->isFirstColumnSpanned(i.row(), i.parent()));
 
+}
+
+void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
+{
+    QModelIndex i = mi;
+    char space[512];
+    for (int j=0; j<2*lvl; j++) {
+        space[j] = '+';
+    }
+    space[2*lvl] = 0x0;
+
+    while (i.isValid()) {
+        kDebug() << space << i.row()
+                 << i.model()->data(i, Qt::DisplayRole).toString();
+        if (i.child(0,0).isValid()) {
+            printModel(i.child(0,0), ++lvl);
+        }
+        i = i.sibling(i.row()+1, 0);
+    }
+}
+
+// command
+void RunnerWindowTest::resultSpamLastItem()
+{
+    convert2Spammer(model->child21);
+    runAllTests();
+
+    kDebug() << "RESULTSMODEL";
+    printModel(window->resultsModel()->index(0,0), 0);
+    kDebug() << "RESULTPROXYMODEL";
+    printModel(window->resultsProxyModel()->index(0,0), 0);
+
+    QModelIndex r2 = m_resultsProxy->index(0,0);
+    assertResultItemEquals(r2, "child21");
+    assertOutputLineEquals(r2.child(0,0), "line 1");
+    assertOutputLineEquals(r2.child(1,0), "line 2");
+    KVERIFY(!r2.child(2,0).isValid());
 }
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

@@ -30,6 +30,7 @@ namespace Veritas
 class RunnerWindow;
 class RunnerModel;
 class RunnerProxyModel;
+class ResultsProxyModel;
 }
 
 namespace Veritas
@@ -62,11 +63,13 @@ private slots:
     void deselectItems();
     void newModel();
     void ouputLinesSpanned();
+    void resultSpamLastItem();
 
 private:
     void expandSome();
     void selectSome();
-    void assertSpanned(const QModelIndex& i, const QString& content);
+    void assertOutputLineEquals(const QModelIndex&, const QString&);
+    void assertResultItemEquals(const QModelIndex&, const QString&);
 
     typedef bool (RunnerWindowTest::*checkMemberFun)(TestStub*);
     void checkAllItems(checkMemberFun);
@@ -76,12 +79,16 @@ private:
     bool isCollapsed(TestStub*);
 
     void checkNrofSelectedStatusWidget(int);
+    void convert2Spammer(TestStub*);
+    void runAllTests();
+    void printModel(const QModelIndex& mi, int);
 
 private:
     Veritas::RunnerWindow* window;
     Veritas::ut::RunnerModelStub* model;
     Ui::StatusWidget* status;
     Veritas::RunnerProxyModel* m_proxy;
+    Veritas::ResultsProxyModel* m_resultsProxy;
     QTreeView* m_view;
 };
 

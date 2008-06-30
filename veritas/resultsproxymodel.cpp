@@ -82,6 +82,11 @@ bool ResultsProxyModel::filterAcceptsRow(int source_row,
     if ( (result & m_filter) || (result == Veritas::RunException)) {
         return true;
     } else {
+        if (source_parent.isValid()) {
+            return true;
+        }
+        QModelIndex i = model()->index(source_row, 0, source_parent);
+        kDebug() << " filtering " << model()->data(i, Qt::DisplayRole).toString();
         return false;
     }
 }
