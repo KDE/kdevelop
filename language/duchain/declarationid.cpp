@@ -94,7 +94,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
   }
   
   if(ret)
-    return ret->specialize(m_specialization, top);
+    return ret->specialize(m_specialization, top ? top : ret->topContext());
   else
     return 0;
 }
