@@ -27,6 +27,8 @@
 
 //krazy:excludeall=dpointer
 
+class QString;
+
 namespace KDevelop {
 
 class Declaration;
@@ -57,6 +59,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
         return direct == rhs.direct && m_specialization == rhs.m_specialization;
     }
     
+    bool operator!=(const DeclarationId& rhs) const {
+      return !operator==(rhs);
+    }
+    
     bool isValid() const {
       return (m_direct && direct.isValid()) || indirect.m_identifier.isValid();
     }
@@ -76,13 +82,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * Tries to retrieve the declaration, from the perspective of @param context
      * In order to be retrievable, the declaration must be in the symbol table
      * */
-    Declaration* getDeclaration(TopDUContext* context) const;
+    Declaration* getDeclaration(const TopDUContext* context) const;
     
     void setSpecialization(uint);
     uint specialization() const;
     
     //Whether this DeclarationId directly references a declaration by indices. If false, it uses identifiers and other data.
     bool isDirect() const;
+
+    //This is relatively expensive, and not 100% correct in all cases(actually a top-context would be needed to resolve this correctly)
+    //So avoid using this, except for debugging purposes.
+    QualifiedIdentifier qualifiedIdentifier() const;
     
   private:
     struct Indirect {

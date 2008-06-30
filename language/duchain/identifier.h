@@ -105,7 +105,7 @@ public:
   /// Pass a token which is specific to the document to allow correct equality comparison.
   void setUnique(int token);
 
-  const QString identifier() const;
+  const IndexedString identifier() const;
   void setIdentifier(const QString& identifier);
   //Should be preferred over the other version
   void setIdentifier(const IndexedString& identifier);

@@ -21,6 +21,7 @@
 #include "identifiedtype.h"
 #include "declaration.h"
 #include "duchainpointer.h"
+#include "declarationid.h"
 
 namespace KDevelop
 {
@@ -28,7 +29,7 @@ namespace KDevelop
 class IdentifiedTypePrivate
 {
 public:
-  DeclarationPointer m_declaration; //Self-invalidating
+  DeclarationId m_id;
 };
 
 IdentifiedType::IdentifiedType(const IdentifiedType& rhs) : d(new IdentifiedTypePrivate(*rhs.d)) {
@@ -40,36 +41,49 @@ IdentifiedType::IdentifiedType()
 }
 
 void IdentifiedType::clear() {
-  d->m_declaration = DeclarationPointer();
+  d->m_id = DeclarationId();
 }
 
 bool IdentifiedType::equals(const IdentifiedType* rhs) const
 {
-  if( (bool)d->m_declaration != (bool)rhs->d->m_declaration )
-    return false;
-  if( d->m_declaration == rhs->d->m_declaration )
+  if( d->m_id == rhs->d->m_id )
     return true;
-  
-  if( !d->m_declaration )
+  else
     return false;
-
-  return d->m_declaration.data()->range() == rhs->d->m_declaration->range()
-         && d->m_declaration.data()->url() == rhs->d->m_declaration->url();
 }
 
-QualifiedIdentifier IdentifiedType::identifier() const
-{
-  return d->m_declaration ? d->m_declaration->qualifiedIdentifier() : QualifiedIdentifier();
+// QualifiedIdentifier IdentifiedType::identifier() const
+// {
+//   return d->m_id ? d->m_id->qualifiedIdentifier() : QualifiedIdentifier();
+// }
+
+QualifiedIdentifier IdentifiedType::qualifiedIdentifier() const {
+  return d->m_id.qualifiedIdentifier();
 }
 
-Declaration* IdentifiedType::declaration() const
+uint IdentifiedType::hash() const {
+  return d->m_id.hash();
+}
+
+DeclarationId IdentifiedType::declarationId() const {
+  return d->m_id;
+}
+
+void IdentifiedType::setDeclarationId(const DeclarationId& id) {
+  d->m_id = id;
+}
+
+Declaration* IdentifiedType::declaration(const TopDUContext* top) const
 {
-  return d->m_declaration.data();
+  return d->m_id.getDeclaration(top);
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)
 {
-  d->m_declaration = declaration;
+  if(declaration)
+    d->m_id = declaration->id();
+  else
+    d->m_id = DeclarationId();
 }
 
 // QString IdentifiedType::idMangled() const

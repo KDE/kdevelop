@@ -146,7 +146,7 @@ public:
   /**
    * Should apply a specialization using a specialization index as returned in id()
    * */
-  virtual Declaration* specialize(uint specialization, TopDUContext* topContext);
+  virtual Declaration* specialize(uint specialization, const TopDUContext* topContext);
   
   /**
    * Set the definition for this declaration.

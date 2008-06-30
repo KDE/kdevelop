@@ -27,6 +27,8 @@ namespace KDevelop
 {
 
 class Declaration;
+class DeclarationId;
+class TopDUContext;
 
 /**
  * An IdentifiedType is a type that has a declaration.
@@ -42,13 +44,21 @@ public:
   IdentifiedType(const IdentifiedType& rhs);
   IdentifiedType();
 
-  QualifiedIdentifier identifier() const;
+//   QualifiedIdentifier identifier() const;
 
   bool equals(const IdentifiedType* rhs) const;
 
   void clear();
+  
+  //This is relatively expensive. Use declarationId instead when possible!
+  QualifiedIdentifier qualifiedIdentifier() const;
+  
+  uint hash() const;
 
-  Declaration* declaration() const;
+  DeclarationId declarationId() const;
+  void setDeclarationId(const DeclarationId& id);
+  
+  Declaration* declaration(const TopDUContext* top) const;
   /**
    * You should be careful when setting this, because it also changes the meaning of the declaration.
    * The logic is:

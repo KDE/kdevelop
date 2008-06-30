@@ -123,18 +123,16 @@ Declaration::~Declaration()
   if( d->m_internalContext )
     d->m_internalContext->setOwner(0);
   
-  if (d->m_inSymbolTable)
+  if (d->m_inSymbolTable) {
     SymbolTable::self()->removeDeclaration(this);
+    d->m_inSymbolTable = false;
+  }
 
   // context is only null in the test cases
   if (context())
     context()->d_func()->removeDeclaration(this);
 
   setContext(0);
-
-  if( IdentifiedType* type = dynamic_cast<IdentifiedType*>(d->m_type.data()) )
-    if( type->declaration() == this )
-      type->setDeclaration(0);
 
   setAbstractType(AbstractType::Ptr());
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
@@ -212,7 +210,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
-Declaration* Declaration::specialize(uint specialization, TopDUContext* topContext)
+Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/)
 {
   return this;
 }
@@ -341,8 +339,8 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
     IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
-    if( idType && idType->declaration() && idType->declaration() != this )
-      return idType->declaration()->logicalInternalContext( topContext );
+    if( idType && idType->declaration(topContext) && idType->declaration(topContext) != this )
+      return idType->declaration(topContext)->logicalInternalContext( topContext );
   }
   
   return internalContext();

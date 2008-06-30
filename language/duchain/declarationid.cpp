@@ -63,7 +63,7 @@ uint DeclarationId::specialization() const {
   return m_specialization;
 }
 
-Declaration* DeclarationId::getDeclaration(TopDUContext* top) const
+Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
 {
   Declaration* ret = 0;
   
@@ -78,10 +78,13 @@ Declaration* DeclarationId::getDeclaration(TopDUContext* top) const
     
     FOREACH_ARRAY(Declaration* decl, declarations) {
       if(decl->identifier() == lastId) {
-        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (!top || top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
           //Hit
           ret = decl;
-          break;
+          
+          //If this is a forward declaration, search on.
+          if(!decl->isForwardDeclaration())
+            break;
         }
       }
     }
@@ -94,6 +97,14 @@ Declaration* DeclarationId::getDeclaration(TopDUContext* top) const
     return ret->specialize(m_specialization, top);
   else
     return 0;
+}
+
+QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
+  Declaration* decl = getDeclaration(0);
+  if(decl)
+    return decl->qualifiedIdentifier();
+  else
+    return QualifiedIdentifier(QString("(unknown %1 type").arg(m_direct ? "direct" : "indirect"));
 }
 
 }

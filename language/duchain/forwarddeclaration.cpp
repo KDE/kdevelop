@@ -55,7 +55,8 @@ ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declarat
     if( t ) {
       setAbstractType( AbstractType::Ptr(t->clone()) );
       Q_ASSERT(dynamic_cast<ForwardDeclarationType*>(abstractType().data()));
-      static_cast<ForwardDeclarationType*>(abstractType().data())->setDeclaration(this);
+      //Cannot do this here, because this declaration probably doesn't know the correct specialization etc. yet
+//      static_cast<ForwardDeclarationType*>(abstractType().data())->setDeclaration(this);
     }
   }
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
@@ -87,7 +88,7 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   //If we've got a type assigned, that counts as a way of resolution.
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
   if( idType && !fastCast<ForwardDeclarationType*>(abstractType().data()) ) {
-    return idType->declaration();
+    return idType->declaration(topContext);
   }
   
   if(!topContext)

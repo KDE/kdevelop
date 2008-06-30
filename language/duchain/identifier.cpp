@@ -315,12 +315,12 @@ void Identifier::setUnique(int token)
   dd->m_unique = token;
 }
 
-const QString Identifier::identifier() const
+const IndexedString Identifier::identifier() const
 {
   if(!m_index)
-    return dd->m_identifier.str();
+    return dd->m_identifier;
   else
-    return cd->m_identifier.str();
+    return cd->m_identifier;
 }
 
 void Identifier::setIdentifier(const QString& identifier)
@@ -384,7 +384,7 @@ QString Identifier::toString() const
     return "(null identifier)";
   }
 
-  QString ret = identifier();
+  QString ret = identifier().str();
 
   if (templateIdentifiersCount()) {
     ret.append("< ");
