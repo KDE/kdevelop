@@ -103,8 +103,10 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
   Declaration* decl = getDeclaration(0);
   if(decl)
     return decl->qualifiedIdentifier();
+  else if(m_direct)
+    return QualifiedIdentifier(QString("(unknown direct declaration)"));
   else
-    return QualifiedIdentifier(QString("(unknown %1 type").arg(m_direct ? "direct" : "indirect"));
+    return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier;
 }
 
 }
