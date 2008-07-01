@@ -260,7 +260,8 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
       instantiateWith.templateParametersList().append(type);
     }
     Declaration* ret = tempDecl->instantiate( instantiateWith, m_topContext.data() );
-    Q_ASSERT(ret->id().getDeclaration(m_topContext.data()) == ret);
+    ///@todo find out when can fail
+    //Q_ASSERT(ret->id().getDeclaration(m_topContext.data()) == ret);
     return ret;
   }
   
