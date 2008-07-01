@@ -311,8 +311,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       if( !pnt ) {
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
         if( idType ) {
-          if( idType->declaration() && idType->declaration()->internalContext() ) {
-            QList<Declaration*> operatorDeclarations = idType->declaration()->internalContext()->findLocalDeclarations(Identifier("operator->"));
+          Declaration* idDecl = idType->declaration(m_duContext->topContext());
+          if( idDecl && idDecl->internalContext() ) {
+            QList<Declaration*> operatorDeclarations = idDecl->internalContext()->findLocalDeclarations(Identifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
               ///@todo care about const
               foreach(Declaration* decl, operatorDeclarations)
@@ -472,15 +473,16 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 
   if(m_expressionResult.isValid() ) {
     const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.type().data(), m_duContext->topContext()) );
-    if( idType && idType->declaration() ) {
-      DUContext* ctx = idType->declaration()->logicalInternalContext(m_duContext->topContext());
-      if( ctx )
+      Declaration* idDecl = 0;
+    if( idType && (idDecl = idType->declaration(m_duContext->topContext())) ) {
+      DUContext* ctx = idDecl->logicalInternalContext(m_duContext->topContext());
+      if( ctx ){
         ret << ctx;
-      else {
+      }else {
         //Print some debug-output
         kDebug(9007) << "Could not get internal context from" << m_expressionResult.type.type()->toString();
-        kDebug(9007) << "Declaration" << idType->declaration()->toString() << idType->declaration()->isForwardDeclaration();
-        if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idType->declaration()) ) {
+        kDebug(9007) << "Declaration" << idDecl->toString() << idDecl->isForwardDeclaration();
+        if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idDecl) ) {
           if( tempDeclaration->instantiatedFrom() ) {
             kDebug(9007) << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
             kDebug(9007) << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
@@ -704,11 +706,12 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
               AbstractType::Ptr type = functionDecl->type<CppFunctionType>()->arguments()[function.matchedArguments];
               if(type) {
                 if(CppEnumerationType* enumeration = dynamic_cast<CppEnumerationType*>(TypeUtils::realType(type.data(), m_duContext->topContext()))) {
-                  if(enumeration->declaration() && enumeration->declaration()->internalContext()) {
+                  Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
+                  if(enumDecl && enumDecl->internalContext()) {
                     
-                    QualifiedIdentifier prefix = requiredPrefix(enumeration->declaration());
+                    QualifiedIdentifier prefix = requiredPrefix(enumDecl);
                     
-                    DUContext* enumInternal = enumeration->declaration()->internalContext();
+                    DUContext* enumInternal = enumDecl->internalContext();
                     foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
                       QualifiedIdentifier id = prefix + enumerator->identifier();
                       items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), Ptr(this), 0 ));
