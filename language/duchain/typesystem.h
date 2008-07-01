@@ -24,7 +24,7 @@
 #include <QtCore/QList>
 
 #include "typepointer.h"
-
+#include "appendedlist.h"
 #include "language/duchain/identifier.h"
 
 namespace KDevelop
@@ -38,17 +38,25 @@ class FunctionType;
 class StructureType;
 class ArrayType;
 
-class AbstractTypePrivate;
-class IntegralTypePrivate;
-class PointerTypePrivate;
-class ReferenceTypePrivate;
-class FunctionTypePrivate;
-class StructureTypePrivate;
-class ArrayTypePrivate;
-class DelayedTypePrivate;
+class AbstractTypeData;
+class IntegralTypeData;
+class PointerTypeData;
+class ReferenceTypeData;
+class FunctionTypeData;
+class StructureTypeData;
+class ArrayTypeData;
+class DelayedTypeData;
 
 class IndexedString;
 class IndexedType;
+
+#define TYPE_DECLARE_DATA(Class) \
+    inline Class##Data* d_func() { return reinterpret_cast<Class##Data *>(d_ptr); } \
+    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); } \
+    friend class Class##Data;
+
+#define TYPE_D(Class) Class##Data * const d = d_func()
+
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
@@ -133,7 +141,7 @@ public:
 
   AbstractType();
   AbstractType(const AbstractType& rhs);
-  AbstractType(AbstractTypePrivate& dd);
+  AbstractType(AbstractTypeData& dd);
   virtual ~AbstractType ();
 
   void accept(TypeVisitor *v) const;
@@ -142,8 +150,10 @@ public:
 
   virtual QString toString() const = 0;
 
-  virtual QString mangled() const;
-
+  ///Must always be called before anything in the data pointer is changed!
+  ///If it's not called beforehand, the type-repository gets corrupted
+  void makeDynamic();
+  
   ///Should return whether this type's content equals the given one
   virtual bool equals(const AbstractType* rhs) const = 0;
 
@@ -183,13 +193,13 @@ public:
 
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
-  AbstractTypePrivate* const d_ptr;
+  AbstractTypeData* const d_ptr;
 
 //  template <class T>
 //  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
 
 private:
-  Q_DECLARE_PRIVATE(AbstractType)
+  TYPE_DECLARE_DATA(AbstractType)
 };
 
 ///Allows accessing the type just by a single index, so the reference can be stored to disk etc.
@@ -257,7 +267,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(IntegralType)
+  TYPE_DECLARE_DATA(IntegralType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
@@ -289,7 +299,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(PointerType)
+  TYPE_DECLARE_DATA(PointerType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
@@ -323,7 +333,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(ReferenceType)
+  TYPE_DECLARE_DATA(ReferenceType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
@@ -345,7 +355,7 @@ public:
 
   void setReturnType(AbstractType::Ptr returnType);
 
-  const QList<AbstractType::Ptr>& arguments () const;
+  QList<AbstractType::Ptr> arguments () const;
 
   void addArgument(AbstractType::Ptr argument);
   void removeArgument(AbstractType::Ptr argument);
@@ -372,7 +382,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(FunctionType)
+  TYPE_DECLARE_DATA(FunctionType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
@@ -387,8 +397,6 @@ public:
 
   virtual bool equals(const AbstractType* rhs) const;
 
-  void clear();
-
   virtual QString toString() const;
 
   virtual uint hash() const;
@@ -399,7 +407,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(StructureType)
+  TYPE_DECLARE_DATA(StructureType)
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
@@ -439,7 +447,7 @@ protected:
   virtual void accept0 (TypeVisitor *v) const;
 
 private:
-  Q_DECLARE_PRIVATE(ArrayType)
+  TYPE_DECLARE_DATA(ArrayType)
 };
 
 /**
@@ -480,7 +488,7 @@ public:
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;
   private:
-    Q_DECLARE_PRIVATE(DelayedType)
+    TYPE_DECLARE_DATA(DelayedType)
 };
 
 template <class T>
