@@ -57,6 +57,7 @@
 #include <duchain/duchain.h>
 #include <duchain/identifiedtype.h>
 #include <duchain/typesystem.h>
+#include <duchain/indexedstring.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"
@@ -151,13 +152,24 @@ QString cursorItemText() {
   Declaration* decl = cursorDeclaration();
   if(!decl)
     return QString();
+
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(!doc)
+    return QString();
   
+  TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
+
+  if( !context ) {
+    kDebug() << "Got no standard context";
+    return QString();
+  }
+
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data());
-  if( idType && idType->declaration() )
-    decl = idType->declaration();
+  if( idType && idType->declaration(context) )
+    decl = idType->declaration(context);
 
   if(!decl->qualifiedIdentifier().isEmpty())
-    return decl->qualifiedIdentifier().last().identifier();
+    return decl->qualifiedIdentifier().last().identifier().str();
 
   return QString();
 }
