@@ -63,7 +63,8 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
 
   m_parameterCountMismatch = false;
   //Match all parameters against the argument-type
-  QList<AbstractType::Ptr>::const_iterator argumentIt = m_type->arguments().begin();
+  QList<AbstractType::Ptr> arguments = m_type->arguments();
+  QList<AbstractType::Ptr>::const_iterator argumentIt = arguments.begin();
 
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     TypeConversion conv(m_topContext.data());

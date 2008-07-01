@@ -542,7 +542,7 @@ QString CppTypeAliasType::toString() const
 }
 
 void CppClassType::clear() {
-  StructureType::clear();
+  //StructureType::clear();
   IdentifiedType::clear();
   CppCVType::clear();
   m_baseClasses.clear();
