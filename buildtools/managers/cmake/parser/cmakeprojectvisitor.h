@@ -49,7 +49,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const CustomTargetAst * );
         virtual int visit( const AddDefinitionsAst * );
         virtual int visit( const AddDependenciesAst * ) { return notImplemented("AddDependenciesAst"); }
-        virtual int visit( const AddTestAst * ) { return notImplemented("AddTestAst"); }
+        virtual int visit( const AddTestAst * );
         virtual int visit( const AuxSourceDirectoryAst * ) { return notImplemented("AuxSourceDirectoryAst"); }
         virtual int visit( const BuildCommandAst * ) { return notImplemented("BuildCommandAst"); }
         virtual int visit( const BuildNameAst * ) { return notImplemented("BuildNameAst"); }
@@ -126,7 +126,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 
         bool hasMacro(const QString& name) const;
     private:
-        void defineTarget(const QString& id, const QStringList& sources);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
 
         struct VisitorState
@@ -135,6 +134,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
             int line;
             KDevelop::TopDUContext* context;
         };
+        enum TargetType { Library, Executable, Test };
+        
+        void defineTarget(const QString& id, const QStringList& sources, TargetType t);
         static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
@@ -150,6 +152,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QMap<QString, QStringList> m_filesPerTarget;
         QMap<QString, QStringList> m_generatedFiles;
         QMap<QString, KDevelop::Declaration*> m_declarationsPerTarget;
+        QMap<QString, TargetType> m_targetsType;
+        
         QStack< VisitorState > m_backtrace;
         QString m_root;
         QStringList m_defaultPaths;

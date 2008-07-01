@@ -173,6 +173,14 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
     return 1;
 }
 
+int CMakeProjectVisitor::visit( const AddTestAst * test)
+{
+    m_targetsType[test->testName()]=Test;
+    if(!m_filesPerTarget.contains(test->testName()) || m_targetsType[test->testName()]==Library)
+        kDebug(9042) << "warning. The target " << test->testName() << " does not exist or it is not an executable";
+    return 1;
+}
+
 int CMakeProjectVisitor::visit(const ProjectAst *project)
 {
     m_projectName = project->projectName();
@@ -213,8 +221,9 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
     }
 }
 
-void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources)
+void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
 {
+    m_targetsType[id]=t;
     VisitorState p;
     QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
     QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();
@@ -238,7 +247,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
-    defineTarget(exec->executable(), exec->sourceLists());
+    defineTarget(exec->executable(), exec->sourceLists(), Executable);
     kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
         << "was" << exec->content()[exec->line()].writeBack();
     return 1;
@@ -246,7 +255,7 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    defineTarget(lib->libraryName(), lib->sourceLists());
+    defineTarget(lib->libraryName(), lib->sourceLists(), Library);
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
 }
