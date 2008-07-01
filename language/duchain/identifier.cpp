@@ -1108,6 +1108,35 @@ IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
   return QualifiedIdentifier(index);
 }
 
+IndexedTypeIdentifier::IndexedTypeIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex) {
+}
+
+bool IndexedTypeIdentifier::isValid() const {
+  return index != emptyConstantQualifiedIdentifierPrivateIndex;
+}
+
+IndexedTypeIdentifier::IndexedTypeIdentifier(const TypeIdentifier& id) : index(id.index()) {
+}
+
+IndexedTypeIdentifier& IndexedTypeIdentifier::operator=(const TypeIdentifier& id) {
+  index = id.index();
+  return *this;
+}
+bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {
+  return index == rhs.index;
+}
+bool IndexedTypeIdentifier::operator==(const TypeIdentifier& id) const {
+  return index == id.index();
+}
+
+TypeIdentifier IndexedTypeIdentifier::identifier() const {
+  return TypeIdentifier(index);
+}
+
+IndexedTypeIdentifier::operator TypeIdentifier() const {
+  return TypeIdentifier(index);
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

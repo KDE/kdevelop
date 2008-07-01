@@ -78,6 +78,24 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   uint index;
 };
 
+//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
+//The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+//abilities or access to the contained data.
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier {
+  IndexedTypeIdentifier();
+  IndexedTypeIdentifier(const TypeIdentifier& id);
+  IndexedTypeIdentifier& operator=(const TypeIdentifier& id);
+  bool operator==(const IndexedTypeIdentifier& rhs) const;
+  bool operator==(const TypeIdentifier& id) const;
+  
+  bool isValid() const;
+  
+  TypeIdentifier identifier() const;
+  operator TypeIdentifier() const;
+  
+  uint index;
+};
+
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
 {
