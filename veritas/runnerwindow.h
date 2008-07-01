@@ -320,11 +320,6 @@ private: // Operations
     void ensureCurrentResult() const;
 
     /*!
-     * Disables or removes menu items adapted to the model.
-     */
-    void adjustMenus() const;
-
-    /*!
      * Sets \a numItems as text in \a labelForText. If \a numItems
      * is 0 the labels are hidden, otherwise made visible.
      */

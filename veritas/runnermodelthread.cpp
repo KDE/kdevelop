@@ -28,19 +28,15 @@
 #include "runnermodelthread.h"
 #include "runnermodel.h"
 
-namespace Veritas
-{
+using Veritas::RunnerModel;
+using Veritas::RunnerModelThread;
 
 RunnerModelThread::RunnerModelThread(RunnerModel* parent)
         : QThread(parent)
-{
-
-}
+{}
 
 RunnerModelThread::~RunnerModelThread()
-{
-
-}
+{}
 
 void RunnerModelThread::msleep(unsigned long msecs) const
 {
@@ -50,12 +46,9 @@ void RunnerModelThread::msleep(unsigned long msecs) const
 void RunnerModelThread::run()
 {
     setTerminationEnabled();
-
     RunnerModel* model = static_cast<RunnerModel*>(parent());
 
     if (model) {
         model->threadCode();
     }
 }
-
-} // namespace

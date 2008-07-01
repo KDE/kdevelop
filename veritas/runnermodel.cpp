@@ -38,12 +38,15 @@
 #include <QStringList>
 #include <QIcon>
 #include <KGlobal>
+#include <KLocale>
 #include <KIcon>
 #include <KDebug>
 #include <KIconLoader>
 
-namespace Veritas
-{
+using Veritas::Test;
+using Veritas::RunnerModel;
+using Veritas::ResultsModel;
+using Veritas::RunnerModelThread;
 
 RunnerModel::RunnerModel(QObject* parent)
         : QAbstractItemModel(parent)
@@ -69,6 +72,7 @@ RunnerModel::RunnerModel(QObject* parent)
 
     // Thread for asynchronous execution of items.
     m_thread = new RunnerModelThread(this);
+    connect(m_thread, SIGNAL(finished()), this, SLOT(allDone()));
     //ModelTest* tm = new ModelTest(this);
 }
 
@@ -99,45 +103,32 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     if (!index.isValid()) {
         return QVariant();
     }
-
     if (role == Qt::TextAlignmentRole) {
         return int(Qt::AlignLeft | Qt::AlignTop);
     }
-
-    if (isRunning() && isMinimalUpdate()) {
-        return dataForMinimalUpdate(index, role);
-    }
-
     Test* item = itemFromIndex(index);
-
     if (role == Qt::DisplayRole) {
         return item->data(index.column());
     }
-
     if (role == Qt::FontRole && !item->selected()) {
-//         QFont font;
-//         font.setItalic(true);
-//         return font;
+        //  QFont font;
+        // font.setItalic(true);
+        // return font;
         return QVariant();
     }
-
     // The other roles are supported for the first column only.
     if (index.column() != 0) {
         return QVariant();
     }
-
     if (role == Qt::TextColorRole) {
-        //kDebug() << item->data(0).toString();
         if (!item->selected())
             return Qt::lightGray;
         else
             return Qt::black;
     }
-
     if (role != Qt::DecorationRole) {
         return QVariant();
     }
-
     if (index.child(0, 0).isValid()) {
         if (someChildHasStatus(Veritas::RunError, index))
             return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
@@ -146,7 +137,6 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         else // evrything ran succesfully
             return KIcon("arrow-right-double");
     }
-
     // Icon corresponding to the item's result code.
     return Utils::resultIcon(item->state());
 }
@@ -182,7 +172,7 @@ void RunnerModel::updateView(const QModelIndex& index)
         bottomRight = bottomRight.child(rowCount(bottomRight) - 1, 0);
     }
     kDebug() << itemFromIndex(index)->data(0).toString() << " -> "
-    << itemFromIndex(bottomRight)->data(0).toString();
+             << itemFromIndex(bottomRight)->data(0).toString();
     emit dataChanged(index, bottomRight);
 }
 
@@ -308,14 +298,6 @@ void RunnerModel::countItems()
             m_numSuccess++;
             break;
 
-//         case Veritas::RunInfo:
-//             m_numInfos++;
-//             break;
-// 
-//         case Veritas::RunWarning:
-//             m_numWarnings++;
-//             break;
-
         case Veritas::RunError:
             m_numErrors++;
             break;
@@ -425,12 +407,6 @@ bool RunnerModel::stopItems()
     }
 }
 
-void RunnerModel::emitItemResults()
-{
-    // Recursively process the items.
-    emitItemResult(index(0, 0));
-}
-
 bool RunnerModel::isRunning(unsigned long time) const
 {
     if (!m_thread->isRunning()) {
@@ -493,11 +469,9 @@ void RunnerModel::initItemConnect(QModelIndex current)
             initItemConnect(current.child(0, 0));
         }
         Test* item = itemFromIndex(current);
-
         //kDebug() << "Connecting item with runnermodel: " << item->data(0).toString();
         connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
         connect(item, SIGNAL(finished(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
-
         current = current.sibling(current.row() + 1, 0);
     }
 }
@@ -512,112 +486,17 @@ Test* RunnerModel::itemFromIndex(const QModelIndex& index) const
     return static_cast<Test*>(index.internalPointer());
 }
 
-QVariant RunnerModel::dataForMinimalUpdate(const QModelIndex& index, int role) const
-{
-    // dead code.
-
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    // Only first column gets displayed in minimal update mode.
-    if (index.column() != 0) {
-        return QVariant();
-    }
-
-    Test* item = itemFromIndex(index);
-
-    if (role == Qt::DecorationRole) {
-        if (index.child(0, 0).isValid()) {
-            return KIcon("arrow-right-double");
-        }
-
-        if (item->selected()) {
-            return KIcon("arrow-right");
-        }
-        return KIcon("arrow-right");
-    }
-
-    if (role == Qt::DisplayRole) {
-        return item->data(index.column());
-    }
-
-    return QVariant();
-}
-
-// void RunnerModel::initializeSelectionMap()
-// {
-//     m_selectionMap.clear();
-//
-//     // Process all top level items.
-//     QModelIndex currentIndex = index(0, 0);
-//
-//     while (currentIndex.isValid()) {
-//         if (currentIndex.child(0, 0).isValid()) {
-//             // Recursively process sub branches.
-//             updateSelectionMap(currentIndex.child(0, 0));
-//         }
-//
-//         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-//     }
-// }
-//
-// void RunnerModel::updateSelectionMap(const QModelIndex& index)
-// {
-//     if (!index.isValid()) {
-//         return;
-//     }
-//
-//     QModelIndex currentIndex = index;
-//
-//     while (currentIndex.isValid()) {
-//         if (currentIndex.child(0, 0).isValid()) {
-//             // Recursively process sub branches.
-//             updateSelectionMap(currentIndex.child(0, 0));
-//
-//             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-//             continue;
-//         }
-//
-//         // Update counters for all parents depending on the item state.
-//         Test* item = itemFromIndex(currentIndex);
-//
-//         QModelIndex parentIndex = currentIndex.parent();
-//         SelectionPair pair;
-//
-//         while (parentIndex.isValid()) {
-//             if (m_selectionMap.contains(parentIndex.internalId())) {
-//                 pair = m_selectionMap.value(parentIndex.internalId());
-//             } else {
-//                 pair = SelectionPair(0, 0);
-//             }
-//
-//             pair.first++;
-//
-//             if (item->selected()) {
-//                 pair.second++;
-//             }
-//
-//             m_selectionMap[parentIndex.internalId()] = pair;
-//
-//             // Next parent.
-//             parentIndex = parentIndex.parent();
-//         }
-//
-//         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-//     }
-// }
-
 void RunnerModel::threadCode()
 {
     // Recursively process the items.
     runItem(index(0, 0));
-
-    // Notify that all items have completed.
-    AllItemsCompletedEvent* completedEvent;
-    completedEvent = new AllItemsCompletedEvent(QModelIndex());
-    QCoreApplication::postEvent(this, completedEvent);
 }
+
+void RunnerModel::allDone()
+{
+    emit allItemsCompleted();  // Last item completed
+}
+
 
 bool RunnerModel::mustStop()
 {
@@ -667,19 +546,15 @@ void RunnerModel::clearItem(const QModelIndex& index)
     }
 
     QModelIndex currentIndex = index;
-
     while (currentIndex.isValid()) {
         if (currentIndex.child(0, 0).isValid()) {
             clearItem(currentIndex.child(0, 0));
         }
-
         Test* item = itemFromIndex(currentIndex);
         item->clear();
-
         QModelIndex lastIndex = this->index(currentIndex.row(),
                                             item->columnCount() - 1);
         emit dataChanged(currentIndex, lastIndex);
-
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
 }
@@ -693,23 +568,21 @@ void RunnerModel::runItem(const QModelIndex& index)
     QModelIndex currentIndex = index;
 
     while (currentIndex.isValid()) {
-        if (mustStop())
+        if (mustStop()) {
             break;
-
+        }
         if (currentIndex.child(0, 0).isValid()) {
             // Go down one level.
             runItem(currentIndex.child(0, 0));
         }
-
         Test* item = itemFromIndex(currentIndex);
         if (!item->shouldRun() || !item->selected()) {
             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
             continue;
         }
-
-        if (mustStop())
+        if (mustStop()) {
             break;
-
+        }
         // Execute custom code.
         int res = 0;
         try {
@@ -719,53 +592,52 @@ void RunnerModel::runItem(const QModelIndex& index)
             item->setState(Veritas::RunException);
             postItemCompleted(currentIndex);
         }
-
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
 }
 
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
-    // Send notification to main thread.
-    ItemCompletedEvent* completedEvent;
-    completedEvent = new ItemCompletedEvent(index);
-    QCoreApplication::postEvent(this, completedEvent);
+    Test* item = itemFromIndex(index);
+    // Update result counters and provide default result type string if not
+    // set in the item itself.
+    switch (item->state()) {
+    case Veritas::RunSuccess:
+        setResultText(item, i18n("Success"));
+        m_numSuccess++;
+        emit numSuccessChanged(m_numSuccess);
+        break;
+
+    case Veritas::RunError:
+        setResultText(item, i18n("Error"));
+        m_numErrors++;
+        emit numErrorsChanged(m_numErrors);
+        break;
+
+    case Veritas::RunFatal:
+        setResultText(item, i18n("Fatal"));
+        m_numFatals++;
+        emit numFatalsChanged(m_numFatals);
+        break;
+
+    case Veritas::RunException:
+        setResultText(item, i18n("Exception"));
+        m_numExceptions++;
+        emit numExceptionsChanged(m_numExceptions);
+        break;
+    }
+
+    emit numCompletedChanged(m_numStarted);
+    emit itemCompleted(index);
+    QModelIndex lastIndex = this->index(index.row(), item->columnCount() - 1);
+    emit dataChanged(index, lastIndex);
 }
 
 void RunnerModel::postItemStarted(QModelIndex index)
 {
-    // Send notification to main thread.
-    ItemGetsStartedEvent* startedEvent;
-    startedEvent = new ItemGetsStartedEvent(index);
-    QCoreApplication::postEvent(this, startedEvent);
-}
-
-void RunnerModel::emitItemResult(const QModelIndex& index)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    QModelIndex currentIndex = index;
-
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            emitItemResult(currentIndex.child(0, 0));
-        }
-
-        Test* item = itemFromIndex(currentIndex);
-
-        if (item->selected() && item->state() != Veritas::NoResult) {
-            Test* item = itemFromIndex(currentIndex);
-            QModelIndex lastIndex = this->index(currentIndex.row(),
-                                                item->columnCount() - 1);
-
-            emit dataChanged(currentIndex, lastIndex); // Also update views
-            emit itemCompleted(currentIndex);
-        }
-
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
+    emit itemStarted(index);
+    m_numStarted++;
+    emit numStartedChanged(m_numStarted);
 }
 
 void RunnerModel::setResultText(Test* item, const QString& text) const
@@ -780,213 +652,3 @@ bool RunnerModel::isMinimalUpdate() const
 {
     return m_minimalUpdate;
 }
-
-
-// void RunnerModel::setChildItemChecked(const QModelIndex& index, bool checked)
-// {
-//     if (!index.isValid()) {
-//         return;
-//     }
-//
-//     // The same item can get processed more than once per activation due to
-//     // how it gets selected in the GUI and how the model/view framework reacts
-//     // to the selection, therefore only 'real' changes are counted.
-//     bool changed = false;
-//
-//     Test* item = itemFromIndex(index);
-//
-//     bool newState = checked;
-//     bool oldState = item->selected();
-//
-//     if (newState != oldState) {
-//         if (newState) {
-//             m_numSelected++;
-//         } else {
-//             m_numSelected--;
-//         }
-//
-//         item->setSelected(newState);
-//         changed = true;
-//
-//         emit numSelectedChanged(m_numSelected);
-//     }
-//
-//     // Update views anyway.
-//     emit dataChanged(index, index);
-//
-//     // Done when no changes occurred.
-//     if (!changed) {
-//         return;
-//     }
-//
-//     // Updated counters of the child item's parents for their
-//     // tri-state handling.
-//     QModelIndex parentIndex = index.parent();
-//     SelectionPair pair;
-//
-//     while (parentIndex.isValid()) {
-//         if (m_selectionMap.contains(parentIndex.internalId())) {
-//             pair = m_selectionMap.value(parentIndex.internalId());
-//         } else {
-//             pair = SelectionPair(0, 0); // Shouldn't happen
-//         }
-//
-//         if (item->selected()) {
-//             pair.second++;
-//         } else {
-//             pair.second--;
-//         }
-//
-//         m_selectionMap[parentIndex.internalId()] = pair;
-//
-//         // Update views to reflect state of parent item.
-//         emit dataChanged(parentIndex, parentIndex);
-//
-//         parentIndex = parentIndex.parent();
-//     }
-// }
-//
-// QVariant RunnerModel::itemCheckState(const QModelIndex& index) const
-// {
-//     if (!index.isValid()) {
-//         return Qt::Unchecked;
-//     }
-//
-//     Test* item = itemFromIndex(index);
-//
-//     if (!index.child(0, 0).isValid()) {
-//         // Non-parents have two states.
-//         if (item->selected()) {
-//             return Qt::Checked;
-//         } else {
-//             return Qt::Unchecked;
-//         }
-//     }
-//
-//     // If not yet there then setup selection map for tri-state handling.
-//     if (m_selectionMap.count() < 1) {
-//         const_cast<RunnerModel*>(this)->initializeSelectionMap();
-//     }
-//
-//     // Parent items are tri-state.
-//     SelectionPair pair;
-//
-//     if (m_selectionMap.contains(index.internalId())) {
-//         pair = m_selectionMap.value(index.internalId());
-//     } else {
-//         pair = SelectionPair(0, 0); // Shouldn't happen
-//     }
-//
-//     if (pair.first == pair.second) {
-//         return Qt::Checked;
-//     } else if (pair.second > 0) {
-//         return Qt::PartiallyChecked;
-//     } else {
-//         return Qt::Unchecked;
-//     }
-// }
-
-bool RunnerModel::event(QEvent* event)
-{
-    if (event->type() < QEvent::User) {
-        return QAbstractItemModel::event(event);
-    }
-
-    if (event->type() == AllItemsCompleted) {
-        emit allItemsCompleted();  // Last item completed
-
-        return true;
-    }
-
-    ItemStateChangedEvent* stateChangedEvent = static_cast<ItemStateChangedEvent*>(event);
-
-    QModelIndex firstIndex = stateChangedEvent->index();
-    Test* item = itemFromIndex(firstIndex);
-    QModelIndex lastIndex = index(firstIndex.row(), item->columnCount() - 1);
-
-    if (event->type() == ItemGetsStarted) {
-        m_startedItemIndex = stateChangedEvent->index();
-        emit itemStarted(m_startedItemIndex);
-
-        m_numStarted++;
-        emit numStartedChanged(m_numStarted);
-    } else {
-        m_startedItemIndex = QModelIndex();
-    }
-
-    if (event->type() == ItemCompleted) {
-        // Update result counters and provide default result type string if not
-        // set in the item itself.
-        switch (item->state()) {
-        case Veritas::RunSuccess:
-            setResultText(item, tr("Success"));
-            m_numSuccess++;
-            emit numSuccessChanged(m_numSuccess);
-            break;
-
-//         case Veritas::RunInfo:
-//             setResultText(item, tr("Info"));
-//             m_numInfos++;
-//             emit numInfosChanged(m_numInfos);
-//             break;
-// 
-//         case Veritas::RunWarning:
-//             setResultText(item, tr("Warning"));
-//             m_numWarnings++;
-//             emit numWarningsChanged(m_numWarnings);
-//             break;
-
-        case Veritas::RunError:
-            setResultText(item, tr("Error"));
-            m_numErrors++;
-            emit numErrorsChanged(m_numErrors);
-            break;
-
-        case Veritas::RunFatal:
-            setResultText(item, tr("Fatal"));
-            m_numFatals++;
-            emit numFatalsChanged(m_numFatals);
-            break;
-
-        case Veritas::RunException:
-            setResultText(item, tr("Exception"));
-            m_numExceptions++;
-            emit numExceptionsChanged(m_numExceptions);
-            break;
-        }
-
-        emit numCompletedChanged(m_numStarted);
-
-        if (!isMinimalUpdate()) {
-            emit itemCompleted(stateChangedEvent->index());
-        }
-    }
-
-    // Thread can continue after posted events are processed.
-    setMustWait(false);
-
-    // Force view updates.
-    // As an optimization no updates are forced when an item gets started since this
-    // does not involve any data changes (but could change in the future).
-    // Additionally when minimal update is active the views should not get updated
-    // when an item has completed in order to speed up item execution since updating
-    // the views is time consuming.
-
-    if (event->type() == ItemGetsStarted) {
-        return true;
-    }
-
-    if (event->type() != ItemCompleted) {
-        emit dataChanged(firstIndex, lastIndex);
-
-        return true;
-    }
-
-    if (!isMinimalUpdate()) {
-        emit dataChanged(firstIndex, lastIndex);
-    }
-
-    return true;
-}
-
-} // namespace

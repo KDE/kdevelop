@@ -28,7 +28,6 @@
 #ifndef VERITAS_TEST_H
 #define VERITAS_TEST_H
 
-//#include "qxrunner_global.h"
 #include "veritasexport.h"
 #include <itest.h>
 #include <testresult.h>
@@ -121,9 +120,7 @@ private: // Attributes
     QModelIndex m_index;
     QString m_name;
     TestState m_state;
-    QStringList m_outputLines;
     TestResult m_result;
-
     bool m_selected;
 };
 

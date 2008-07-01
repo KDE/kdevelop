@@ -18,6 +18,13 @@
  * 02110-1301, USA.
  */
 
+#include <KDebug>
+#include <KProcess>
+#include <KLocalizedString>
+
+namespace Veritas
+{
+
 template<typename S>
 Register<S>::Register()
         : m_root(""),
@@ -90,7 +97,6 @@ void Register<S>::addFromXml(QIODevice* dev)
         if (isStartElement_(c_suite))
             processSuite();
     }
-
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
@@ -129,7 +135,6 @@ void Register<S>::setExecutable(const QFileInfo& exe)
     m_exe = exe;
 }
 
-
 template<typename S>
 void Register<S>::processCmd(TestCase* caze)
 {
@@ -144,3 +149,4 @@ QString Register<S>::fetchName()
     return attributes().value(c_name).toString();
 }
 
+} // namespace Veritas

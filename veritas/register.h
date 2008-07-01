@@ -21,18 +21,16 @@
 #ifndef VERITAS_TESTREGISTER_H
 #define VERITAS_TESTREGISTER_H
 
-#include <QList>
 #include <QString>
 #include <QFileInfo>
-#include <KProcess>
-#include <KLocalizedString>
-#include <KDebug>
-#include <QIODevice>
 #include <QXmlStreamReader>
 
 #include <test.h>
 #include <testcase.h>
 #include <veritasexport.h>
+
+class KProcess;
+class QIODevice;
 
 namespace Veritas
 {
@@ -80,8 +78,8 @@ private: // some xml constants
     const QString c_name;
 };
 
-#include "register.hpp"
-
 }
+
+#include "register.hpp"
 
 #endif // VERITAS_REGISTER_H

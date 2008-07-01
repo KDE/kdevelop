@@ -200,7 +200,6 @@ public:  // Operations
     void setExpectedResults(int expectedResults);
 
 signals:
-
     /*!
      * This signal is emitted when the runner item referred to by
      * \a index is started.
@@ -279,7 +278,6 @@ signals:
     void numExceptionsChanged(int numItems) const;
 
 public slots:
-
     /*!
      * Sets minimal update mode to \a minimalUpdate.
      */
@@ -292,6 +290,7 @@ public slots:
      * counter values with the actual counts.
      */
     void countItems();
+    void allDone();
 
 protected: // Operations
 
@@ -301,14 +300,7 @@ protected: // Operations
     Test* rootItem() const;
 
 private:  // Operations
-
     void initItemConnect(QModelIndex current);
-
-    /*!
-     * Helper method to return the subset of data when in minimal
-     * update mode.
-     */
-    QVariant dataForMinimalUpdate(const QModelIndex& index, int role) const;
 
     /*!
      * Entry point for thread processing in the model.
@@ -349,13 +341,6 @@ private:  // Operations
     void runItem(const QModelIndex& index);
 
     /*!
-     * Helper method to recursively fire itemCompleted() for runner
-     * items with a result. Starts with the runner item referred to
-     * by \a index.
-     */
-    void emitItemResult(const QModelIndex& index);
-
-    /*!
      * Sets the textual representation for the execution result in
      * \a item to \a text. An existing text isn't overwritten.
      */
@@ -366,22 +351,14 @@ private:  // Operations
      */
     bool isMinimalUpdate() const;
 
-    /*!
-     * Processes events from the thread and fires signals with data
-     * from the events. Forces attached views to update.
-     */
-    bool event(QEvent* event);
-
     // Copy and assignment not supported.
     RunnerModel(const RunnerModel&);
     RunnerModel& operator=(const RunnerModel&);
 
 private:  // Constants
-
     static const int WAIT_TIME_MILLI = 200;
 
 private:  // Attributes
-
     Test* m_rootItem;
     RunnerModelThread* m_thread;
     ResultsModel* m_resultsModel;
@@ -402,74 +379,8 @@ private:  // Attributes
     int m_numFatals;
     int m_numExceptions;
 
-    typedef QPair<int, int> SelectionPair;
-    typedef QMap<qint64, SelectionPair> SelectionMap;
-
-    SelectionMap m_selectionMap;
-
-private: // Classes and related constants
-
-    enum EventType {
-        ItemStateChanged = QEvent::User,
-        ItemGetsStarted,
-        ItemCompleted,
-        AllItemsCompleted
-    };
-
-    /*!
-     * Base class for events posted by the thread. The index refers
-     * to the runner item in question.
-     */
-class ItemStateChangedEvent : public QEvent
-    {
-    public: // Operations
-
-        explicit ItemStateChangedEvent(const QModelIndex& index,
-                              QEvent::Type type = (QEvent::Type)ItemStateChanged)
-                : QEvent(type), m_index(index) {}
-
-        QModelIndex index() const {
-            return m_index;
-        }
-
-    private: // Attributes
-
-        QModelIndex m_index;
-    };
-
-    /*!
-     * Event posted to notify of a started runner item.
-     */
-class ItemGetsStartedEvent : public ItemStateChangedEvent
-    {
-    public: // Operations
-
-        ItemGetsStartedEvent(const QModelIndex& index)
-                : ItemStateChangedEvent(index, (QEvent::Type)ItemGetsStarted) {}
-    };
-
-    /*!
-     * Event posted to notify of a completed runner item.
-     */
-class ItemCompletedEvent : public ItemStateChangedEvent
-    {
-    public: // Operations
-
-        ItemCompletedEvent(const QModelIndex& index)
-                : ItemStateChangedEvent(index, (QEvent::Type)ItemCompleted) {}
-    };
-
-    /*!
-     * Event posted when all items have completed. The index is invalid.
-     */
-class AllItemsCompletedEvent : public ItemStateChangedEvent
-    {
-    public: // Operations
-
-        AllItemsCompletedEvent(const QModelIndex& index)
-                : ItemStateChangedEvent(index, (QEvent::Type)AllItemsCompleted) {}
-    };
 };
+
 
 } // namespace
 

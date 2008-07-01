@@ -117,7 +117,6 @@ int Test::row() const
     if (m_parentItem) {
         return m_parentItem->m_childItems.indexOf(const_cast<Test*>(this));
     }
-
     return 0;
 }
 
@@ -194,7 +193,6 @@ void Test::clear()
     for (int i = 1; i < columnCount(); i++) {
         setData(i, "");
     }
-
     setState(Veritas::NoResult);
 }
 
