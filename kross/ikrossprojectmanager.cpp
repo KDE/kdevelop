@@ -78,12 +78,35 @@ KUrl IKrossProjectManager::buildDirectory(KDevelop::ProjectBaseItem* it) const
 
 KUrl::List IKrossProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    return m_includesPerItem[item];
+    QVariant param;
+    param.setValue((QObject*) item);
+    QVariant result=action->callFunction( "includeDirectories", QVariantList()<<param);
+    
+    KUrl::List directories;
+    foreach(const QString& adir, result.toStringList())
+    {
+        directories.append(KUrl(adir));
+    }
+    return directories;
 }
 
 QHash<QString,QString> IKrossProjectManager::defines(KDevelop::ProjectBaseItem *item)
 {
-    return m_defines[item];
+    QVariant param;
+    param.setValue((QObject*) item);
+    QVariant result=action->callFunction( "defines", QVariantList()<<param);
+    
+    QMap<QString, QVariant> resultDefines= result.toMap();
+    QList<QString> keys=resultDefines.keys();
+    QHash<QString, QString> defs;
+    
+    QList<QString>::const_iterator it=keys.constBegin(), itEnd=keys.constEnd();
+    for(; it!=itEnd; ++it)
+    {
+        defs[*it]=resultDefines[*it].toString();
+    }
+    
+    return defs;
 }
 
 QList<KDevelop::ProjectTargetItem*> IKrossProjectManager::targets() const

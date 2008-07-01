@@ -81,8 +81,6 @@ signals:
 private:
     Kross::Action* action;
     KDevelop::IProjectFileManager::Features m_features;
-    QMap<KDevelop::ProjectBaseItem*, KUrl::List> m_includesPerItem;
-    QMap<KDevelop::ProjectBaseItem*, QHash<QString, QString> > m_defines;
     QMap<KDevelop::ProjectFolderItem*, QList<KDevelop::ProjectTargetItem*> > m_targets;
     QMap<KUrl, KDevelop::ProjectFolderItem*> m_folderPerUrl;
     QMap<QString, KDevelop::ProjectTargetItem*> m_targetPerName;
