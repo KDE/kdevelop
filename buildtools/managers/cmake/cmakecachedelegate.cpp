@@ -22,6 +22,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QEvent>
 #include <KDebug>
 #include <KUrlRequester>
 
@@ -47,16 +48,15 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
         {
             ret=new QCheckBox(parent);
         }
-        else if(type=="PATH")
+        else if(type=="PATH" || type=="FILEPATH")
         {
             KUrlRequester *r=new KUrlRequester(parent);
-            r->setMode(KFile::Directory | KFile::ExistingOnly);
-            ret=r;
-        }
-        else if(type=="FILEPATH")
-        {
-            KUrlRequester *r=new KUrlRequester(parent);
-            r->setMode(KFile::File);
+            if(type=="FILEPATH")
+                r->setMode(KFile::File);
+            else
+                r->setMode(KFile::Directory | KFile::ExistingOnly);
+            emit const_cast<CMakeCacheDelegate*>(this)->sizeHintChanged ( index );
+            kDebug() << "EMITINT!" << index;
             ret=r;
         }
         else
@@ -64,7 +64,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
             ret=QItemDelegate::createEditor(parent, option, index);
         }
         
-        kDebug(9032) << "Did not recognize type " << type;
+        if(!ret) kDebug(9032) << "Did not recognize type " << type;
     }
     return ret;
 }
@@ -137,8 +137,9 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    kDebug(9042) << "calculant" << index << bool(option.state & QStyle::State_Editing);
     QSize ret=QItemDelegate::sizeHint(option, index);
-    if(index.column()==2)
+    if(index.column()==2 && option.state & QStyle::State_Editing)
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
@@ -148,6 +149,11 @@ QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
         }
     }
     return ret;
+}
+
+void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint)
+{
+    kDebug() << "closing...";
 }
 
 // void CMakeCacheDelegate::updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option,

@@ -38,6 +38,10 @@ class CMakeCacheDelegate : public QItemDelegate
         virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
         virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
         virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    private slots:
+        void closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = NoHint);
+
     private:
         KUrlRequester *m_sample;
 };

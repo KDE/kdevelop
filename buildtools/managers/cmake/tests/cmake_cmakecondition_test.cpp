@@ -57,7 +57,7 @@ void CMakeConditionTest::testGoodParse()
     v.setMacroMap( m_macros );
     
     CMakeCondition cond(&v);
-    QVERIFY( cond.condition(expression)==result );
+    QCOMPARE( cond.condition(expression), result );
 }
 
 void CMakeConditionTest::testGoodParse_data()
@@ -76,6 +76,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "and+false" ) << QString("ONE;AND;ZERO").split(";") << false;
     QTest::newRow( "not+and" ) << QString("NOT;ZERO;AND;ONE").split(";") << true;
     QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;testmacro").split(";") << true;
+    QTest::newRow( "not+and+command" ) << QString("COMMAND;add_library").split(";") << true;
 #ifdef Q_OS_WIN
     QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;./cmake-cmakecondition.exe").split(";") << true;
 #else
