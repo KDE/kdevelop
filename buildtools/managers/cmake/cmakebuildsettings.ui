@@ -56,14 +56,7 @@
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QTreeView" name="cacheList" >
-        <property name="rootIsDecorated" >
-         <bool>false</bool>
-        </property>
-        <property name="itemsExpandable" >
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QTableView" name="cacheList" />
       </item>
       <item>
        <widget class="QLabel" name="label_6" >
