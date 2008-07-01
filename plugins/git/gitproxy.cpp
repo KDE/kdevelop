@@ -186,7 +186,6 @@ GitJob* GitProxy::commit(const QString& repository,
     GitJob* job = new GitJob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git-commit";
-        addFileList(job, repository, files);
         *job << "-m";
         *job << KShell::quoteArg( message );
         return job;
