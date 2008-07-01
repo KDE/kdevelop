@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,134 +22,106 @@
 #include "typesystem.h"
 #include "indexedstring.h"
 #include "repositories/typerepository.h"
+#include "typesystemdata.h"
 
 namespace KDevelop
 {
 
-class AbstractTypeData
+AbstractTypeData::AbstractTypeData()
 {
-public:
-  AbstractTypeData() : m_registered( false )
-  {
-  }
-  AbstractTypeData( const AbstractTypeData& rhs )
-    : m_registered( rhs.m_registered )
-  {
-  }
-  bool m_registered;
-};
+  initializeAppendedLists(true);
+}
 
-class IntegralTypeData : public AbstractTypeData
+AbstractTypeData::AbstractTypeData( const AbstractTypeData& /*rhs*/ )
 {
-public:
-  IntegralTypeData()
-  {
-  }
-  IntegralTypeData( const IntegralTypeData& rhs )
-    : AbstractTypeData(rhs), m_name( rhs.m_name )
-  {
-  }
-  IndexedString m_name;
-};
+  initializeAppendedLists(true);
+}
 
-class PointerTypeData : public AbstractTypeData
+AbstractTypeData::~AbstractTypeData()
 {
-public:
-  PointerTypeData() : m_baseType(0)
-  {
-  }
-  PointerTypeData( const PointerTypeData& rhs )
-    : AbstractTypeData(rhs), m_baseType( rhs.m_baseType )
-  {
-  }
-  IndexedType m_baseType;
-};
+  freeAppendedLists();
+}
 
-class ReferenceTypeData : public AbstractTypeData
+AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&) {
+  Q_ASSERT(0);
+  return *this;
+}
+
+IntegralTypeData::IntegralTypeData()
 {
-public:
-  ReferenceTypeData() : m_baseType(0)
-  {
-  }
-  ReferenceTypeData( const ReferenceTypeData& rhs )
-    : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType )
-  {
-  }
-  IndexedType m_baseType;
-};
+}
 
-DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
+IntegralTypeData::IntegralTypeData( const IntegralTypeData& rhs )
+  : AbstractTypeData(rhs), m_name( rhs.m_name )
+{
+}
+
+PointerTypeData::PointerTypeData() : m_baseType(0)
+{
+}
+
+PointerTypeData::PointerTypeData( const PointerTypeData& rhs )
+  : AbstractTypeData(rhs), m_baseType( rhs.m_baseType )
+{
+}
+
+ReferenceTypeData::ReferenceTypeData() : m_baseType(0)
+{
+}
+
+ReferenceTypeData::ReferenceTypeData( const ReferenceTypeData& rhs )
+  : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType )
+{
+}
+
 DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
-class FunctionTypeData : public AbstractTypeData
+FunctionTypeData::FunctionTypeData()
 {
-public:
-  FunctionTypeData()
-  {
-    initializeAppendedLists(true);
-  }
-  ~FunctionTypeData() {
-    freeAppendedLists();
-  }
-  FunctionTypeData( const FunctionTypeData& rhs )
-    : AbstractTypeData( rhs ), m_returnType( rhs.m_returnType)
-  {
-    initializeAppendedLists(true);
-    copyListsFrom(rhs);
-  }
-  IndexedType m_returnType;
+  initializeAppendedLists(true);
+}
 
-  START_APPENDED_LISTS(FunctionTypeData);
-  
-  APPENDED_LIST_FIRST(FunctionTypeData, IndexedType, m_arguments);
-  
-  END_APPENDED_LISTS(FunctionTypeData, m_arguments);
-  private:
-    void operator=(const FunctionTypeData& ) {
-    }
-};
+FunctionTypeData::~FunctionTypeData() {
+  freeAppendedLists();
+}
 
-class StructureTypeData : public AbstractTypeData
+FunctionTypeData::FunctionTypeData( const FunctionTypeData& rhs )
+  : AbstractTypeData( rhs ), m_returnType( rhs.m_returnType)
 {
-public:
-  StructureTypeData()
-  {
-  }
-  StructureTypeData( const StructureTypeData& rhs )
-    : AbstractTypeData( rhs )
-  {
-  }
-};
+  initializeAppendedLists(true);
+  copyListsFrom(rhs);
+}
 
-class ArrayTypeData : public AbstractTypeData
+void FunctionTypeData::operator=(const FunctionTypeData& rhs) {
+}
+
+StructureTypeData::StructureTypeData()
 {
-public:
-  ArrayTypeData()
-  {
-  }
-  ArrayTypeData( const ArrayTypeData& rhs )
-    : AbstractTypeData( rhs ), m_dimension( rhs.m_dimension ),
-      m_elementType( rhs.m_elementType )
-  {
-  }
-  int m_dimension;
-  IndexedType m_elementType;
-};
+}
 
-class DelayedTypeData : public AbstractTypeData
+StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
+  : AbstractTypeData( rhs )
 {
-public:
-  DelayedTypeData() : m_kind(DelayedType::Delayed) {
-  }
-  DelayedTypeData( const DelayedTypeData& rhs )
-    : AbstractTypeData( rhs ), m_identifier( rhs.m_identifier ), 
-      m_kind( rhs.m_kind )
-  {
-  }
-  IndexedTypeIdentifier m_identifier;
-  DelayedType::Kind m_kind;
-};
+}
 
+ArrayTypeData::ArrayTypeData()
+{
+}
+
+ArrayTypeData::ArrayTypeData( const ArrayTypeData& rhs )
+  : AbstractTypeData( rhs ), m_dimension( rhs.m_dimension ),
+    m_elementType( rhs.m_elementType )
+{
+}
+
+DelayedTypeData::DelayedTypeData() : m_kind(DelayedType::Delayed) {
+}
+
+DelayedTypeData::DelayedTypeData( const DelayedTypeData& rhs )
+  : AbstractTypeData( rhs ), m_identifier( rhs.m_identifier ), 
+    m_kind( rhs.m_kind )
+{
+}
 
 bool SimpleTypeVisitor::preVisit (const AbstractType *) {
   return true;
@@ -293,7 +266,7 @@ bool PointerType::equals(const AbstractType* _rhs) const
     return false;
   const PointerType* rhs = static_cast<const PointerType*>(_rhs);
 
-  TYPE_D(const PointerType);
+  TYPE_D(PointerType);
   if( (bool)rhs->d_func()->m_baseType != (bool)d->m_baseType )
     return false;
   
@@ -309,7 +282,7 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
     return false;
   const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
 
-  TYPE_D(const ReferenceType);
+  TYPE_D(ReferenceType);
   if( (bool)rhs->d_func()->m_baseType != (bool)d->m_baseType )
     return false;
   
@@ -325,7 +298,7 @@ bool FunctionType::equals(const AbstractType* _rhs) const
     return false;
   const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
 
-  TYPE_D(const FunctionType);
+  TYPE_D(FunctionType);
   if( d->m_argumentsSize() != rhs->d_func()->m_argumentsSize() )
     return false;
   
@@ -356,7 +329,7 @@ bool StructureType::equals(const AbstractType* _rhs) const
     return false;
 //   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
 //   
-//   TYPE_D(const StructureType);
+//   TYPE_D(StructureType);
 
   return true;
 }
@@ -366,7 +339,7 @@ bool ArrayType::equals(const AbstractType* _rhs) const
   if( !fastCast<const ArrayType*>(_rhs))
     return false;
   const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
-  TYPE_D(const ArrayType);
+  TYPE_D(ArrayType);
   if( d->m_dimension != rhs->d_func()->m_dimension )
     return false;
   
@@ -429,7 +402,7 @@ AbstractType::WhichType AbstractType::whichType() const
 IntegralType::IntegralType(const IndexedString& name)
   : AbstractType(*new IntegralTypeData)
 {
-  d_func()->m_name = name;
+  d_func_dynamic()->m_name = name;
 }
 
 IntegralType::IntegralType()
@@ -448,7 +421,7 @@ const IndexedString& IntegralType::name() const
 
 void IntegralType::setName(const IndexedString& name)
 {
-  d_func()->m_name = name;
+  d_func_dynamic()->m_name = name;
 }
 
 bool IntegralType::operator == (const IntegralType &other) const
@@ -490,8 +463,7 @@ void PointerType::accept0 (TypeVisitor *v) const
 }
 
 void PointerType::exchangeTypes( TypeExchanger* exchanger ) {
-  makeDynamic();
-  d_func()->m_baseType = exchanger->exchange( d_func()->m_baseType.type().data() )->indexed();
+  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.type().data() )->indexed();
 }
 
 PointerType::~PointerType()
@@ -505,8 +477,7 @@ AbstractType::Ptr PointerType::baseType () const
 
 void PointerType::setBaseType(AbstractType::Ptr type)
 {
-  makeDynamic();
-  d_func()->m_baseType = type->indexed();
+  d_func_dynamic()->m_baseType = type->indexed();
 }
 
 bool PointerType::operator == (const PointerType &other) const
@@ -545,8 +516,7 @@ AbstractType::Ptr ReferenceType::baseType () const
 
 void ReferenceType::setBaseType(AbstractType::Ptr type)
 {
-  makeDynamic();
-  d_func()->m_baseType = type->indexed();
+  d_func_dynamic()->m_baseType = type->indexed();
 }
 
 bool ReferenceType::operator == (const ReferenceType &other) const
@@ -569,8 +539,7 @@ void ReferenceType::accept0 (TypeVisitor *v) const
 
 void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 {
-  makeDynamic();
-  d_func()->m_baseType = exchanger->exchange( d_func()->m_baseType.type().data() )->indexed();
+  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.type().data() )->indexed();
 }
 
 QString ReferenceType::toString() const
@@ -595,31 +564,28 @@ FunctionType::~FunctionType()
 
 void FunctionType::addArgument(AbstractType::Ptr argument)
 {
-  makeDynamic();
-  
-  d_func()->m_argumentsList().append(argument->indexed());
+  d_func_dynamic()->m_argumentsList().append(argument->indexed());
 }
 
 void FunctionType::removeArgument(AbstractType::Ptr argument)
 {
-  makeDynamic();
+  TYPE_D_DYNAMIC(FunctionType);
   
   IndexedType i = argument->indexed();
   uint shift = 0;
-  for(int a = 0; a < d_func()->m_argumentsSize(); ++a) {
-    if(d_func()->m_arguments()[a] == i) {
+  for(int a = 0; a < d->m_argumentsSize(); ++a) {
+    if(d->m_arguments()[a] == i) {
       ++shift;
     }else if(shift) {
-      d_func()->m_argumentsList()[a-shift] = d_func()->m_argumentsList()[a];
+      d->m_argumentsList()[a-shift] = d->m_argumentsList()[a];
     }
   }
-  d_func()->m_argumentsList().resize(d_func()->m_argumentsSize()-shift);
+  d->m_argumentsList().resize(d->m_argumentsSize()-shift);
 }
 
 void FunctionType::setReturnType(AbstractType::Ptr returnType)
 {
-  makeDynamic();
-  d_func()->m_returnType = returnType->indexed();
+  d_func_dynamic()->m_returnType = returnType->indexed();
 }
 
 AbstractType::Ptr FunctionType::returnType () const
@@ -638,13 +604,13 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
 
 bool FunctionType::operator == (const FunctionType &other) const
 {
-  TYPE_D(const FunctionType);
+  TYPE_D(FunctionType);
   return d->m_returnType == other.d_func()->m_returnType && d->listsEqual(*other.d_func());
 }
 
 bool FunctionType::operator != (const FunctionType &other) const
 {
-  TYPE_D(const FunctionType);
+  TYPE_D(FunctionType);
   return d->m_returnType != other.d_func()->m_returnType || !d->listsEqual(*other.d_func());
 }
 
@@ -653,7 +619,7 @@ void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
 
 void FunctionType::accept0 (TypeVisitor *v) const
 {
-  TYPE_D(const FunctionType);
+  TYPE_D(FunctionType);
   if (v->visit (this))
   {
     acceptType (d->m_returnType.type(), v);
@@ -667,8 +633,7 @@ void FunctionType::accept0 (TypeVisitor *v) const
 
 void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
-  makeDynamic();
-  TYPE_D(FunctionType);
+  TYPE_D_DYNAMIC(FunctionType);
   for (int i = 0; i < d->m_argumentsSize (); ++i)
     d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].type().data() )->indexed();
   d->m_returnType = exchanger->exchange(d->m_returnType.type().data())->indexed();
@@ -676,7 +641,7 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 
 QString FunctionType::partToString( SignaturePart sigPart ) const {
   QString args;
-  TYPE_D(const FunctionType);
+  TYPE_D(FunctionType);
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
     args += '(';
@@ -722,7 +687,7 @@ StructureType::~StructureType()
 
 void StructureType::accept0 (TypeVisitor *v) const
 {
-//   TYPE_D(const StructureType);
+//   TYPE_D(StructureType);
   v->visit (this);
 
   v->endVisit (this);
@@ -754,8 +719,7 @@ int ArrayType::dimension () const
 
 void ArrayType::setDimension(int dimension)
 {
-  makeDynamic();
-  d_func()->m_dimension = dimension;
+  d_func_dynamic()->m_dimension = dimension;
 }
 
 AbstractType::Ptr ArrayType::elementType () const
@@ -765,19 +729,18 @@ AbstractType::Ptr ArrayType::elementType () const
 
 void ArrayType::setElementType(AbstractType::Ptr type)
 {
-  makeDynamic();
-  d_func()->m_elementType = type->indexed();
+  d_func_dynamic()->m_elementType = type->indexed();
 }
 
 bool ArrayType::operator == (const ArrayType &other) const
 {
-  TYPE_D(const ArrayType);
+  TYPE_D(ArrayType);
   return d->m_elementType == other.d_func()->m_elementType && d->m_dimension == other.d_func()->m_dimension;
 }
 
 bool ArrayType::operator != (const ArrayType &other) const
 {
-  TYPE_D(const ArrayType);
+  TYPE_D(ArrayType);
   return d->m_elementType != other.d_func()->m_elementType || d->m_dimension != other.d_func()->m_dimension;
 }
 
@@ -798,8 +761,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
 
 void ArrayType::exchangeTypes( TypeExchanger* exchanger )
 {
-  makeDynamic();
-  TYPE_D(ArrayType);
+  TYPE_D_DYNAMIC(ArrayType);
   d->m_elementType = exchanger->exchange( d->m_elementType.type().data() )->indexed();
 }
 
@@ -823,8 +785,7 @@ DelayedType::Kind DelayedType::kind() const {
 }
 
 void DelayedType::setKind(Kind kind) {
-  makeDynamic();
-  d_func()->m_kind = kind;
+  d_func_dynamic()->m_kind = kind;
 }
 
 DelayedType::DelayedType()
@@ -841,8 +802,7 @@ DelayedType::~DelayedType()
 
 void DelayedType::setIdentifier(const TypeIdentifier& identifier)
 {
-  makeDynamic();
-  d_func()->m_identifier = identifier;
+  d_func_dynamic()->m_identifier = identifier;
 }
 
 TypeIdentifier DelayedType::identifier() const

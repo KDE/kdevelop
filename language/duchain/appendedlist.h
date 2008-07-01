@@ -127,14 +127,41 @@ class TemporaryDataManager {
     QMutex m_mutex;
 };
 
-//Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the lenght returned by the function-name with "Size" appended.
+///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the lenght returned by the function-name with "Size" appended.
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; }
 #define DECLARE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
-#define START_APPENDED_LISTS(container)
+///This implements the interfaces so this container can be used as a predecessor for classes with appended lists.
+///You should do this within the abstract base class that opens a tree of classes that can have appended lists,
+///so each class that uses them, can also give its predecessor to START_APPENDE_LISTS, to increase flexibility.
+///This  creates a boolean entry that is initialized when initializeAppendedLists is called.
+///You can call appendedListsDynamic() to find out whether the item is marked as dynamic.
+///When this item is used, the same rules have to be followed as for a class with appended lists: You have to call
+///initializeAppendedLists(...) and freeAppendedLists(..)
+#define APPENDED_LISTS_STUB(container) \
+bool m_dynamic;                          \
+unsigned int offsetBehindLastList() const { return 0; } \
+size_t dynamicSize() const { return sizeof(container); } \
+template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
+template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
+void initializeAppendedLists(bool dynamic) { m_dynamic = dynamic; }  \
+void freeAppendedLists() { } \
+bool appendedListsDynamic() const { return m_dynamic; }
+
+
+///use this if the class does not have a base class that also uses appended lists
+#define START_APPENDED_LISTS(container) \
+unsigned int offsetBehindBase() const { return 0; }
+
+///Use this if one of the base-classes of the container also has the appended lists interfaces implemented.
+///To reduce the probability of future problems, you should give the direct base class this one inherits from.
+///@note: Multiple inheritance is not supported, however it will work ok if only one of the base-classes uses appended lists.
+#define START_APPENDED_LISTS_BASE(container, base) \
+unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } 
+
 
 #define APPENDED_LIST_COMMON(container, type, name) \
       uint name ## Data; \
@@ -151,7 +178,7 @@ class TemporaryDataManager {
         }\
         memcpy(const_cast<type*>(name()), rhs.name(), name ## Size() * sizeof(type)); \
       } \
-      void name ## Initialize() { if(appendedListsDynamic()) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
+      void name ## Initialize(bool dynamic) { if(dynamic) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
       void name ## Free() { if(appendedListsDynamic()) temporaryHash ## container ## name().free(name ## Data); }  \
       
 
@@ -159,10 +186,10 @@ class TemporaryDataManager {
 
 #define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
                                                const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + sizeof(container)); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
-                                               unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type); } \
+                                               unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
-                                               void name ## InitializeChain() { name ## Initialize(); }  \
+                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); }  \
                                                void name ## FreeChain() { name ## Free(); }
                                                                                               
 #define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
@@ -170,7 +197,7 @@ class TemporaryDataManager {
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); predecessor ## CopyAllFrom(rhs); } \
-                                               void name ## InitializeChain() { name ## Initialize(); predecessor ## Initialize();  }  \
+                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## Initialize(dynamic);  }  \
                                                void name ## FreeChain() { name ## Free(); predecessor ## Free(); }
 
 #define END_APPENDED_LISTS(container, predecessor) /* Returns the size of the object containing the appended lists, including them */ \
@@ -179,10 +206,11 @@ class TemporaryDataManager {
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                      /* Copies all the lists from the given item. This item must be dynamic */   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
-                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? DynamicAppendedListMask : 0); predecessor ## InitializeChain(); } \
+                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
                                       void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
                                       bool appendedListsDynamic() const { return predecessor ## Data & DynamicAppendedListMask; } \
-                                      size_t dynamicSize() const { return predecessor ## OffsetBehind() + sizeof(container); }
+                                      unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
+                                      size_t dynamicSize() const { return offsetBehindLastList() + sizeof(container); }
 
 /**
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.

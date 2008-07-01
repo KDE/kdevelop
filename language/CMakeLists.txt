@@ -150,6 +150,7 @@ install(FILES
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/typepointer.h
+    duchain/typesystemdata.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 

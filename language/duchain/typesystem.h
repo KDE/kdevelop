@@ -24,7 +24,6 @@
 #include <QtCore/QList>
 
 #include "typepointer.h"
-#include "appendedlist.h"
 #include "language/duchain/identifier.h"
 
 namespace KDevelop
@@ -51,11 +50,12 @@ class IndexedString;
 class IndexedType;
 
 #define TYPE_DECLARE_DATA(Class) \
-    inline Class##Data* d_func() { return reinterpret_cast<Class##Data *>(d_ptr); } \
+    inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
     inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); } \
     friend class Class##Data;
 
-#define TYPE_D(Class) Class##Data * const d = d_func()
+#define TYPE_D(Class) const Class##Data * const d = d_func()
+#define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
