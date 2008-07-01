@@ -33,3 +33,10 @@ target_link_libraries(suite1/fakeqtest2 ${KDE4_KDECORE_LIBS})
 
 add_executable(suite1/fakeqtest3 fakeqtest3_slow.cpp)
 target_link_libraries(suite1/fakeqtest3 ${KDE4_KDECORE_LIBS})
+
+add_executable(qtestrunner standalonerunner.cpp)
+target_link_libraries(qtestrunner
+        ${QT_QTXML_LIBRARY}
+        ${KDE4_KDECORE_LIBS}
+        ${KDEVPLATFORM_VERITAS_LIBRARY}
+        kdevqtest)

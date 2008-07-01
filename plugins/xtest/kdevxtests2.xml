@@ -213,7 +213,7 @@
     <command name="testExecProgramGoodParse" />
     <command name="testExecProgramBadParse" />
     <command name="testExecuteProcessGoodParse" />
-    <command name="testExecuteProcessBadParse" />
+<!--    <command name="testExecuteProcessBadParse" />
     <command name="testExportGoodParse" />
     <command name="testExportBadParse" />
     <command name="testExportLibraryDepsGoodParse" />
@@ -347,7 +347,7 @@
     <command name="testWhileGoodParse" />
     <command name="testWhileBadParse" />
     <command name="testWriteFileGoodParse" />
-    <command name="testWriteFileBadParse" />
+    <command name="testWriteFileBadParse" /> -->
   </case>
   <case name="cmakeduchaintest" exe="cmakeduchaintest.shell">
     <command name="testDUChainWalk" />
@@ -417,11 +417,11 @@
     <command name="multiLineScopeFuncCall" />
     <command name="oneStatementSubScope" />
     <command name="notFunc" />
-    <command name="orOperator" />
+<!--    <command name="orOperator" />
     <command name="spaceBeforeBrace" />
     <command name="missingStatement" />
     <command name="missingBrace" />
-    <command name="missingParenthesis" />
+    <command name="missingParenthesis" /> -->
   </case>
   <case name="qmake-scopetest" exe="qmake-scopetest.shell">
     <command name="basicScope" />
