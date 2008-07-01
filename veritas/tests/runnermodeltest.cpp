@@ -36,7 +36,7 @@ using Veritas::ut::createRunnerModelStub;
 using Veritas::ut::RunnerModelStub;
 using Veritas::ut::RunnerModelTest;
 
-Q_DECLARE_METATYPE(QModelIndex);
+Q_DECLARE_METATYPE(QModelIndex)
 
 void RunnerModelTest::init()
 {
