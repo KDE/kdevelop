@@ -49,7 +49,7 @@
 #include <iproject.h>
 
 using KDevelop::IProject;
-Q_DECLARE_METATYPE(KDevelop::IProject*);
+Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 // Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initVeritasResource()

@@ -35,8 +35,8 @@
 #include <projectmodel.h>
 
 
-K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossProjectManager>(); );
-K_EXPORT_PLUGIN(KrossSupportFactory("kdevkrossmanager"));
+K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossProjectManager>(); )
+K_EXPORT_PLUGIN(KrossSupportFactory("kdevkrossmanager"))
 
 
 KrossProjectManager::KrossProjectManager( QObject* parent, const QVariantList& args )
