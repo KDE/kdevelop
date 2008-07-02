@@ -18,30 +18,55 @@
  * 02110-1301, USA.
  */
 
-#include "testsuite.h"
+#include "testroot.h"
 #include "outputparser.h"
-#include <KDebug>
 #include <QDir>
+#include <KDebug>
+#include <KProcess>
 
-using Check::TestSuite;
-using Check::OutputParser;
-using Veritas::TestCase;
+
 using Veritas::Test;
 
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
+using Check::TestRoot;
+using Check::TestSuite;
+using Check::OutputParser;
+
+TestRoot::TestRoot(const QList<QVariant>& data)
+    : Test(data, 0)
 {}
 
-TestSuite::~TestSuite()
+TestRoot::~TestRoot()
 {}
 
-TestCase* TestSuite::child(int i) const
+bool TestRoot::shouldRun() const
 {
-    Test* child = Test::child(i);
-    TestCase* caze = qobject_cast<TestCase*>(child);
-    kWarning(caze==0) << "cast failed? " << name() << " " 
-                      << i << " " << ((child!=0) ? child->name() : "null");
-    return caze;
+    return true;
 }
 
-#include "testsuite.moc"
+TestSuite* TestRoot::child(int i) const
+{
+    Test* child = Test::child(i);
+    TestSuite* suite = qobject_cast<TestSuite*>(child);
+    kWarning(suite==0) << "cast failed? " << name() << " " 
+                      << i << " " << ((child!=0) ? child->name() : "null");
+    return suite;
+}
+
+int TestRoot::run()
+{
+    KProcess proc;
+    QStringList argv;
+    proc.setProgram(m_exe.filePath(), argv);
+    kDebug() << "executing " << proc.program();
+    proc.setOutputChannelMode(KProcess::SeparateChannels);
+    proc.start();
+    proc.waitForFinished(-1);
+    QStringList spl = m_exe.filePath().split('/');
+    QFile f(QFileInfo(QDir::currentPath(), "checklog.xml").filePath());
+    kWarning(!f.exists()) << "Failure: testresult dump does not exist [" << f.fileName();
+    OutputParser parser(&f);
+    parser.go(this);
+    return 0;
+}
+
+#include "testroot.moc"

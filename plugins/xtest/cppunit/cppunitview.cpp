@@ -38,7 +38,7 @@
 #include <KDebug>
 #include <KProcess>
 
-#include "testsuite.h"
+#include "testroot.h"
 
 using KDevelop::Core;
 using KDevelop::IProject;
@@ -47,6 +47,7 @@ using Veritas::Test;
 using Veritas::ITest;
 using Veritas::TestRunnerToolView;
 using Veritas::Register;
+using CppUnit::TestRoot;
 using CppUnit::TestSuite;
 
 K_PLUGIN_FACTORY(CppUnitViewPluginFactory, registerPlugin<CppUnitView>();)
@@ -87,8 +88,9 @@ CppUnitView::~CppUnitView()
 
 ITest* CppUnitView::registerTests()
 {
-    Register<TestSuite> reg;
+    Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));
+    reg.rootItem()->setExecutable(fetchExe());
     return reg.rootItem();
 }
 

@@ -27,6 +27,7 @@ include_directories(
 
 set(kdevcppunit_SRCS
     testsuite.cpp
+    testroot.cpp
     outputparser.cpp)
 
 qt4_add_resources(kdevcppunit_SRCS

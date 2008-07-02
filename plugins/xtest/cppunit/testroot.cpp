@@ -18,48 +18,52 @@
  * 02110-1301, USA.
  */
 
-#include "testsuite.h"
+#include "testroot.h"
 #include "outputparser.h"
+#include <QDir>
 #include <KDebug>
+#include <KProcess>
 
-using CppUnit::TestSuite;
-using CppUnit::OutputParser;
-using Veritas::TestCase;
+
 using Veritas::Test;
 
-TestSuite::TestSuite()
-    : Test("", 0)
+using CppUnit::TestRoot;
+using CppUnit::TestSuite;
+using CppUnit::OutputParser;
+
+TestRoot::TestRoot(const QList<QVariant>& data)
+    : Test(data, 0)
 {}
 
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
+TestRoot::~TestRoot()
 {}
 
-TestSuite::~TestSuite()
-{}
-
-TestCase* TestSuite::child(int i) const
+bool TestRoot::shouldRun() const
 {
-    return static_cast<TestCase*>(Test::child(i));
+    return true;
 }
 
-// bool TestSuite::shouldRun() const
-// {
-//     return true;
-// }
-// 
-// int TestSuite::run()
-// {
-//     KProcess proc;
-//     QStringList argv;
-//     proc.setProgram(m_exe.filePath(), argv);
-//     kDebug() << "executing " << proc.program();
-//     proc.setOutputChannelMode(KProcess::SeparateChannels);
-//     proc.start();
-//     proc.waitForFinished(-1);
-//     OutputParser parser(&proc);
-//     parser.go(this);
-//     return 0;
-// }
+TestSuite* TestRoot::child(int i) const
+{
+    Test* child = Test::child(i);
+    TestSuite* suite = qobject_cast<TestSuite*>(child);
+    kWarning(suite==0) << "cast failed? " << name() << " " 
+                      << i << " " << ((child!=0) ? child->name() : "null");
+    return suite;
+}
 
-#include "testsuite.moc"
+int TestRoot::run()
+{
+    KProcess proc;
+    QStringList argv;
+    proc.setProgram(m_exe.filePath(), argv);
+    kDebug() << "executing " << proc.program();
+    proc.setOutputChannelMode(KProcess::SeparateChannels);
+    proc.start();
+    proc.waitForFinished(-1);
+    OutputParser parser(&proc);
+    parser.go(this);
+    return 0;
+}
+
+#include "testroot.moc"

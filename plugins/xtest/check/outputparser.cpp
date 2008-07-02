@@ -20,14 +20,14 @@
 
 #include "outputparser.h"
 #include "testsuite.h"
+#include "testroot.h"
 #include <testcase.h>
 #include <QStringRef>
 #include <KDebug>
 
-using Check::TestSuite;
+using Check::TestRoot;
 using Check::OutputParser;
 using Veritas::TestResult;
-using Veritas::TestCase;
 
 /*example xml:
 <?xml version="1.0"?>
@@ -77,6 +77,11 @@ const QString OutputParser::c_error("error");
 const QString OutputParser::c_failure("failure");
 const QString OutputParser::c_success("success");
 
+#define ENSURE_FOUND(c,p,n) Q_ASSERT_X(c, "hm",\
+    qstrdup((QString("Failed to find ") + n + QString(" as child of ")\
+        + p->name()).toAscii().data()));
+
+
 OutputParser::OutputParser(QIODevice* device)
         : QXmlStreamReader(device)
 {}
@@ -94,9 +99,9 @@ bool OutputParser::isEndElement_(const QString& elementName)
     return isEndElement() && (name() == elementName);
 }
 
-void OutputParser::go(TestSuite* suite)
+void OutputParser::go(TestRoot* root)
 {
-    m_suite = suite;
+    m_root = root;
     if (!device()->isOpen())
         device()->open(QIODevice::ReadOnly);
     if (!device()->isReadable()) {
@@ -113,11 +118,14 @@ void OutputParser::go(TestSuite* suite)
 
 void OutputParser::processSuite()
 {
-    m_currentSuite = fetchName();
-    while (!atEnd() && !isEndElement_(c_suite)) {
+   QString name = fetchName();
+   m_suite = m_root->childNamed(name);
+   ENSURE_FOUND(m_suite, m_root, name);
+   while (!atEnd() && !isEndElement_(c_suite)) {
         readNext();
-        if (isStartElement_(c_test))
+        if (isStartElement_(c_test)) {
             processTest();
+        }
     }
 }
 
@@ -139,9 +147,10 @@ void OutputParser::postResult(const QString& caze, const QString& cmd, const QSt
         kDebug() << "unkwown result: " << result << " for " << caze << ":" << cmd;
     }
     m_case = m_suite->childNamed(caze);
-    Q_ASSERT(m_case);
+    ENSURE_FOUND(m_case, m_suite, caze);
     m_cmd = m_case->childNamed(cmd);
-    Q_ASSERT(m_cmd);
+    ENSURE_FOUND(m_cmd, m_case, cmd);
+
     m_cmd->setResult(m_result);
     m_cmd->started();
     m_cmd->finished();

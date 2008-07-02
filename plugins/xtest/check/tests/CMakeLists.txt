@@ -26,3 +26,7 @@ target_link_libraries(emptysuite ${QT_QTCORE_LIBRARY} ${CHECK_LIBRARY})
 
 add_executable(sunnysuite fake_sunnysuite.cpp)
 target_link_libraries(sunnysuite ${QT_QTCORE_LIBRARY} ${CHECK_LIBRARY})
+
+add_executable(multisuite fake_multisuite.cpp)
+target_link_libraries(multisuite ${QT_QTCORE_LIBRARY} ${CHECK_LIBRARY})
+

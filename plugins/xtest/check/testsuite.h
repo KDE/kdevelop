@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCHECK_TESTSUITE_H
-#define QXCHECK_TESTSUITE_H
+#ifndef VERITAS_CHECK_TESTSUITE_H
+#define VERITAS_CHECK_TESTSUITE_H
 
 #include <QString>
 #include <QFileInfo>
@@ -35,11 +35,12 @@ class TestSuite : public Veritas::Test
 {
 Q_OBJECT
 public:
-    TestSuite(const QString&, const QFileInfo& executable, Veritas::Test* parent);
+    /*!
+     * Provide name, executable location and Test parent.
+     */
+    TestSuite(const QString&, const QFileInfo&, Veritas::Test*);
     virtual ~TestSuite();
     Veritas::TestCase* child(int i) const;
-    int run();
-    bool shouldRun() const;
 
 private:
     QFileInfo m_exe;
@@ -47,4 +48,4 @@ private:
 
 } // end namespace Check
 
-#endif // QXCHECK_TESTSUITE_H
+#endif // VERITAS_CHECK_TESTSUITE_H

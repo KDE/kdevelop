@@ -32,8 +32,10 @@
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <ksharedconfig.h>
+#include <qtestsettings.h>
+
 #include <KDebug>
+#include <KSharedConfig>
 #include <KConfigGroup>
 
 #include <QIODevice>
@@ -52,6 +54,8 @@ using Veritas::Test;
 using Veritas::ITest;
 using Veritas::TestRunnerToolView;
 
+using QTest::Settings;
+using QTest::ISettings;
 using QTest::QTestRegister;
 
 class QTestViewFactory: public KDevelop::IToolViewFactory
@@ -92,6 +96,7 @@ ITest* QTestView::registerTests()
     kDebug() << "Loading test registration XML: " << fetchRegXML();
     QFile* testXML = new QFile(fetchRegXML());
     QTestRegister reg;
+    reg.setSettings(new Settings(project()));
     reg.setRootDir(fetchBuildRoot());
     reg.addFromXml(testXML);
     return reg.rootItem();

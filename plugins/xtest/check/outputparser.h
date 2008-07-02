@@ -18,18 +18,18 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCHECK_CHECKOUTPUTPARSER
-#define QXCHECK_CHECKOUTPUTPARSER
+#ifndef VERITAS_CHECK_CHECKOUTPUTPARSER
+#define VERITAS_CHECK_CHECKOUTPUTPARSER
 
 #include <QXmlStreamReader>
 #include <testresult.h>
 
 class QIODevice;
 namespace Veritas { class Test; }
-namespace Check { class TestSuite; }
 
 namespace Check
 {
+class TestRoot;
 
 class OutputParser : public QXmlStreamReader
 {
@@ -40,7 +40,7 @@ public:
     /**
      * Start parsing and emit results
      **/
-    void go(TestSuite*);
+    void go(TestRoot*);
 
 private: // helpers
     void processSuite();
@@ -58,9 +58,10 @@ private: // helpers
 private: // state
     Veritas::TestResult m_result;
     QString m_currentSuite;
-    TestSuite* m_suite;
-    Veritas::Test*  m_case;
-    Veritas::Test*  m_cmd;
+    TestRoot* m_root;
+    Veritas::Test* m_suite;
+    Veritas::Test* m_case;
+    Veritas::Test* m_cmd;
 
 private: // some xml constants
     static const QString c_suite;
@@ -79,4 +80,4 @@ private: // some xml constants
 
 } // namespace Check
 
-#endif // QXCHECK_CHECKOUTPUTPARSER
+#endif // VERITAS_CHECK_CHECKOUTPUTPARSER

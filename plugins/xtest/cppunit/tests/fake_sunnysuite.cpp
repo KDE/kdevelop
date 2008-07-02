@@ -105,4 +105,4 @@ Test* suite()
     return suite;
 }
 
-CPPUNIT_XTEST_MAIN(suite())
+CPPUNIT_VERITAS_MAIN(suite())

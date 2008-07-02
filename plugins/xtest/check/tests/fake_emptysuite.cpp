@@ -20,4 +20,4 @@
 
 #include <checkwrapper.h>
 
-CHECK_XTEST_MAIN( suite_create("my_suite") )
+CHECK_VERITAS_MAIN_( suite_create("my_suite") )

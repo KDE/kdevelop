@@ -29,6 +29,7 @@
 namespace QTest
 {
 class QTestSuite;
+class ISettings;
 
 class QTestCase : public Veritas::Test
 {
@@ -44,8 +45,11 @@ public:
     int run();
     bool shouldRun() const;
 
+    void setSettings(ISettings* s) { m_settings = s; }
+
 private:
     QFileInfo m_exe;
+    ISettings* m_settings;
 };
 
 } // end namespace QTest

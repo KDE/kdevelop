@@ -36,15 +36,19 @@
 #include <KDebug>
 #include <KConfigGroup>
 
+#include "testroot.h"
 #include "testsuite.h"
 
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
+
 using Veritas::Test;
 using Veritas::ITest;
-using Veritas::TestRunnerToolView;
 using Veritas::Register;
+using Veritas::TestRunnerToolView;
+
+using Check::TestRoot;
 using Check::TestSuite;
 
 K_PLUGIN_FACTORY(CheckViewPluginFactory, registerPlugin<CheckView>();)
@@ -85,8 +89,9 @@ CheckView::~CheckView()
 
 ITest* CheckView::registerTests()
 {
-    Register<TestSuite> reg;
+    Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));
+    reg.rootItem()->setExecutable(fetchExe());
     return reg.rootItem();
 }
 

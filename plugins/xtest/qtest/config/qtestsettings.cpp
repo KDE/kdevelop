@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,30 +18,39 @@
  * 02110-1301, USA.
  */
 
-#include "testsuite.h"
-#include "outputparser.h"
-#include <KDebug>
-#include <QDir>
+#include "qtestsettings.h"
+#include <iproject.h>
 
-using Check::TestSuite;
-using Check::OutputParser;
-using Veritas::TestCase;
-using Veritas::Test;
+#include <KSharedConfig>
+#include <KConfigGroup>
 
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
+using QTest::Settings;
+using QTest::ISettings;
+using KDevelop::IProject;
+
+ISettings::ISettings()
 {}
 
-TestSuite::~TestSuite()
+ISettings::~ISettings()
 {}
 
-TestCase* TestSuite::child(int i) const
+Settings::Settings(IProject* p)
+    : m_project(p)
+{}
+
+Settings::~Settings()
+{}
+
+bool Settings::printAsserts() const
 {
-    Test* child = Test::child(i);
-    TestCase* caze = qobject_cast<TestCase*>(child);
-    kWarning(caze==0) << "cast failed? " << name() << " " 
-                      << i << " " << ((child!=0) ? child->name() : "null");
-    return caze;
+    KSharedConfig::Ptr cfg = m_project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "QTest");
+    return QVariant(group.readEntry("Print Asserts")).toBool();
 }
 
-#include "testsuite.moc"
+bool Settings::printSignals() const
+{
+    KSharedConfig::Ptr cfg = m_project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "QTest");
+    return QVariant(group.readEntry("Print Signals")).toBool();
+}

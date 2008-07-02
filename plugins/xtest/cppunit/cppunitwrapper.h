@@ -22,6 +22,7 @@
 #define CPPUNIT_WRAPPER_H
 
 #include <exception>
+#include <vector>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestPath.h>
 #include <cppunit/TestSuite.h>
@@ -155,50 +156,68 @@ static inline void runTest(CppUnit::Test* root)
     testrunner.run(testresult);
 }
 
-CppUnit::Test* rootSuite;
-
-static inline void runAllTests(CppUnit::Test* root, int argc, char **argv)
+template<typename T>
+static inline void runAllTests(T suites, int argc, char **)
 {
     printf("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
            "<root>\n");
     if (argc == 1) {
         // run evrything
-        runTest(root);
+        typename T::const_iterator it;
+        for (it=suites.begin(); it!=suites.end(); it++) {
+            runTest(*it);
+        }
     } else {
-        try {
-        for (int i = 1; i < argc; i++) {
-            CppUnit::TestPath path;
-            path = root->resolveTestPath(argv[i]);
-            runTest(path.getChildTest());
-        }
-        } catch (std::exception& exc) {
-            printf("<error message=\"%s\" />\n", exc.what());
-        } catch (...) {
-            printf("<error message=\"unkown exception occured in client test code\"/>\n");
-        }
+//         try {
+//         for (int i = 1; i < argc; i++) {
+//             CppUnit::TestPath path;
+//             path = root->resolveTestPath(argv[i]);
+//             runTest(path.getChildTest());
+//         }
+//         } catch (std::exception& exc) {
+//             printf("<error message=\"%s\" />\n", exc.what());
+//         } catch (...) {
+//             printf("<error message=\"unkown exception occured in client test code\"/>\n");
+//         }
     }
     printf("</root>\n");
 }
 
-static inline void printAllTests(CppUnit::Test* root)
+template<typename T>
+static inline void printAllTests(T suites)
 {
     printf("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
             "<root>\n");
-    printTestTree(root);
+    typename T::const_iterator it;
+    for (it=suites.begin(); it!= suites.end(); it++) {
+        printTestTree(*it);
+    }
     printf("</root>\n");
 }
 
-#define CPPUNIT_XTEST_MAIN( root ) \
+#define CPPUNIT_VERITAS_MAIN( root ) \
 int main(int argc, char** argv)\
 {\
+    std::vector<CppUnit::Test*> suites;\
+    suites.push_back(root);\
     if (argc == 1 || argv[1][0] != '-') { \
-        CppUnit::runAllTests(root, argc, argv); \
+        CppUnit::runAllTests(suites, argc, argv); \
     } else { \
-        CppUnit::printAllTests(root); \
+        CppUnit::printAllTests(suites); \
     }\
     return 0;\
 }
 
+#define CPPUNIT_VERITAS_MAIN_( suites ) \
+int main(int argc, char** argv)\
+{\
+    if (argc == 1 || argv[1][0] != '-') { \
+        CppUnit::runAllTests(suites, argc, argv); \
+    } else { \
+        CppUnit::printAllTests(suites); \
+    }\
+    return 0;\
+}
 
 } // namespace CppUnit
 

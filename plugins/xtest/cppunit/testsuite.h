@@ -38,8 +38,8 @@ public:
     TestSuite(const QString&, const QFileInfo& executable, Veritas::Test* parent);
     virtual ~TestSuite();
     Veritas::TestCase* child(int i) const;
-    int run();
-    bool shouldRun() const;
+//     int run();
+//     bool shouldRun() const;
 
 private:
     QFileInfo m_exe;

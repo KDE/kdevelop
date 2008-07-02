@@ -21,17 +21,17 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QXCHECKEXPORT_H
-#define QXCHECKEXPORT_H
+#ifndef VERITAS_CHECKEXPORT_H
+#define VERITAS_CHECKEXPORT_H
 
 #include <kdemacros.h>
 
-#ifndef QXCHECK_EXPORT
+#ifndef VERITAS_CHECK_EXPORT
 # ifdef MAKE_QXCHECK_LIB
-#  define QXCHECK_EXPORT KDE_EXPORT
+#  define VERITAS_CHECK_EXPORT KDE_EXPORT
 # else
-#  define QXCHECK_EXPORT KDE_IMPORT
+#  define VERITAS_CHECK_EXPORT KDE_IMPORT
 # endif
 #endif
 
-#endif // QXCHECK_H
+#endif // VERITAS_CHECK_H

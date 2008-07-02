@@ -18,30 +18,33 @@
  * 02110-1301, USA.
  */
 
+#ifndef VERITAS_CPPUNIT_TESTROOT_H
+#define VERITAS_CPPUNIT_TESTROOT_H
+
+#include <QString>
+#include <QFileInfo>
+
+#include <test.h>
 #include "testsuite.h"
-#include "outputparser.h"
-#include <KDebug>
-#include <QDir>
 
-using Check::TestSuite;
-using Check::OutputParser;
-using Veritas::TestCase;
-using Veritas::Test;
-
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
-{}
-
-TestSuite::~TestSuite()
-{}
-
-TestCase* TestSuite::child(int i) const
+namespace CppUnit
 {
-    Test* child = Test::child(i);
-    TestCase* caze = qobject_cast<TestCase*>(child);
-    kWarning(caze==0) << "cast failed? " << name() << " " 
-                      << i << " " << ((child!=0) ? child->name() : "null");
-    return caze;
-}
 
-#include "testsuite.moc"
+class TestRoot : public Veritas::Test
+{
+Q_OBJECT
+public:
+    TestRoot(const QList<QVariant>& data);
+    virtual ~TestRoot();
+    TestSuite* child(int i) const;
+    void setExecutable(const QFileInfo& e) { m_exe = e; }
+    int run();
+    bool shouldRun() const;
+
+private:
+    QFileInfo m_exe;
+};
+
+} // end namespace Check
+
+#endif // VERITAS_CPPUNIT_TESTROOT_H

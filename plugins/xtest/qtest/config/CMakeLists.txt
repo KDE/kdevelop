@@ -1,7 +1,9 @@
 include_directories(
     ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}/project)
-set(qtestconfig_SRCS qtestconfigwidget.cpp)
+
+set(qtestconfig_SRCS
+    qtestconfigwidget.cpp)
 kde4_add_kcfg_files(qtestconfig_SRCS qtestconfig.kcfgc)
 kde4_add_ui_files(qtestconfig_SRCS qtestconfigwidget.ui)
 kde4_add_plugin(kcm_kdevqtest_config ${qtestconfig_SRCS} )

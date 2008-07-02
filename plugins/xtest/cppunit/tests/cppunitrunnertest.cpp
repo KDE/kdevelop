@@ -35,12 +35,15 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 
+#include "testroot.h"
 #include "testsuite.h"
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
 using Veritas::Register;
+using Veritas::Test;
 using CppUnit::TestSuite;
+using CppUnit::TestRoot;
 using CppUnit::it::CppUnitRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
@@ -117,7 +120,6 @@ void CppUnitRunnerTest::sunnyDay()
     results << result0;
     checkResultItems(results);
 
-    QMap<QString, QString> status;
     checkStatusWidget(sunnyDayStatus());
 }
 
@@ -125,21 +127,39 @@ void CppUnitRunnerTest::sunnyDay()
 void CppUnitRunnerTest::runTwice()
 {
     KTODO;
+}
 
-/*    initNrun(regXml);
-    m_window->ui().actionStart->trigger();
-    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-        QFAIL("Timeout while waiting for runner items to complete execution");
+// command
+void CppUnitRunnerTest::multiSuite()
+{
+    initNrun("./multisuite");
 
-    checkTests(sunnyDayTests());
+    QStringList topo;
+    topo << "0 FooSuite"
+         << "0 0 FooTest"
+         << "0 0 0 FooTest::fooCmd"
+         << "0 0 1 x"
+         << "0 1 x"
+         << "1 BarSuite"
+         << "1 0 BarTest"
+         << "1 0 0 BarTest::barCmd"
+         << "1 0 1 x"
+         << "1 1 x"
+         << "2 x";
+    checkTests(topo);
 
-    QStringList result0;
-    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
-    results << result0;
     checkResultItems(results);
 
-    checkStatusWidget(sunnyDayStatus());*/
+    QMap<QString,QString> status;
+    status["total"] = "2";
+    status["selected"] = "2";
+    status["run"] = "2";
+    status["success"] = ": 2";
+    status["errors"] = ": 0";
+    status["warnings"] = ": 0";
+    checkStatusWidget(status);
+
 }
 
 // helper
@@ -178,8 +198,9 @@ void CppUnitRunnerTest::nrofMessagesEquals(int num)
 // helper
 void CppUnitRunnerTest::initNrun(const char* exe)
 {
-    Register<TestSuite> reg;
+    Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(exe));
+    reg.rootItem()->setExecutable(QFileInfo(exe));
     RunnerModel* model = new RunnerModel;
     model->setRootItem(reg.rootItem());
     model->setExpectedResults(Veritas::RunError);

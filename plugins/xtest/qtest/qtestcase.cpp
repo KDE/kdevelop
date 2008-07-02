@@ -22,14 +22,18 @@
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
+#include <qtestsettings.h>
+
 #include <QDir>
 #include <KProcess>
 #include <KDebug>
 
+using QTest::ISettings;
 using QTest::QTestCase;
-using QTest::QTestCommand;
 using QTest::QTestSuite;
+using QTest::QTestCommand;
 using QTest::QTestOutputParser;
+
 using Veritas::Test;
 
 QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* parent)
@@ -72,6 +76,11 @@ int QTestCase::run()
     KProcess* proc = new KProcess;
     QStringList argv;
     argv << "-xml";
+    if (m_settings && m_settings->printAsserts())
+        argv << "-v2";
+    if (m_settings && m_settings->printSignals())
+        argv << "-vs";
+
     QDir::setCurrent(executable().dir().absolutePath());
     proc->setProgram("./" + executable().fileName(), argv);
     kDebug() << "executing " << proc->program() << " [ " << executable().filePath() << " ]";;

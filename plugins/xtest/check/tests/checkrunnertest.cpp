@@ -35,11 +35,13 @@
 #include <QAbstractItemModel>
 
 #include "testsuite.h"
+#include "testroot.h"
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
 using Veritas::Register;
 using Check::TestSuite;
+using Check::TestRoot;
 using Check::it::CheckRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
@@ -118,9 +120,37 @@ void CheckRunnerTest::sunnyDay()
     QList<QStringList> results;
     results << result0;
     checkResultItems(results);
-
-    QMap<QString, QString> status;
     checkStatusWidget(sunnyDayStatus());
+}
+
+// command
+void CheckRunnerTest::multiSuite()
+{
+    initNrun("./multisuite");
+    QStringList topo;
+    topo << "0 foo"
+         << "0 0 foo_test"
+         << "0 0 0 foo_cmd"
+         << "0 0 1 x"
+         << "1 bar"
+         << "1 0 bar_test"
+         << "1 0 0 bar_cmd"
+         << "1 0 1 x"
+         << "1 1 x"
+         << "2 x";
+    checkTests(topo);
+
+    QList<QStringList> results;
+    checkResultItems(results);
+
+    QMap<QString,QString> status;
+    status["total"] = "2";
+    status["selected"] = "2";
+    status["run"] = "2";
+    status["success"] = ": 2";
+    status["errors"] = ": 0";
+    status["warnings"] = ": 0";
+    checkStatusWidget(status);
 }
 
 // command
@@ -180,9 +210,10 @@ void CheckRunnerTest::nrofMessagesEquals(int num)
 // helper
 void CheckRunnerTest::initNrun(const char* exe)
 {
-    Register<TestSuite> reg;
+    Register<TestRoot, TestSuite> reg;
     QFileInfo executable(exe);
     reg.addFromExe(executable);
+    reg.rootItem()->setExecutable(executable);
     RunnerModel* model = new RunnerModel;
     model->setRootItem(reg.rootItem());
     m_window = new RunnerWindow;
@@ -236,7 +267,10 @@ void CheckRunnerTest::checkTest(const QVariant& expected, int lvl0, int lvl1, in
             index = runner->index(lvl2, 0, index);
         }
     }
-    KOMPARE(expected, runner->data(index));
+    KOMPARE_MSG(expected, runner->data(index),
+                QString("lvl0 ") + QString::number(lvl0)  +
+                QString(" lvl1 ") + QString::number(lvl1) +
+                QString(" lvl2 ") + QString::number(lvl2));
 }
 
 #include "checkrunnertest.moc"

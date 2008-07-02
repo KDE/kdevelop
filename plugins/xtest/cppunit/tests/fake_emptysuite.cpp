@@ -21,4 +21,4 @@
 #include <cppunit/TestSuite.h>
 #include <cppunitwrapper.h>
 
-CPPUNIT_XTEST_MAIN( new CppUnit::TestSuite() )
+CPPUNIT_VERITAS_MAIN( new CppUnit::TestSuite() )

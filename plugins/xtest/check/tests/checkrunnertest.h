@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCHECK_CHECKRUNNERTEST_H
-#define QXCHECK_CHECKRUNNERTEST_H
+#ifndef VERITAS_CHECK_CHECKRUNNERTEST_H
+#define VERITAS_CHECK_CHECKRUNNERTEST_H
 
 #include <QtTest/QTest>
 
@@ -42,6 +42,7 @@ private slots:
     void empty();
     void sunnyDay();
     void runTwice();
+    void multiSuite();
 
 private:
     void initNrun(const char*);
@@ -61,4 +62,4 @@ private:
 } // namespace it
 } // namespace Check
 
-#endif // QXCHECK_CHECKRUNNERTEST
+#endif // VERITAS_CHECK_CHECKRUNNERTEST

@@ -31,7 +31,7 @@ namespace Veritas { class Test; }
 namespace CppUnit
 {
 
-class TestSuite;
+class TestRoot;
 
 class OutputParser : public QXmlStreamReader
 {
@@ -42,7 +42,7 @@ public:
     /**
      * Start parsing and emit results
      **/
-    void go(TestSuite*);
+    void go(TestRoot*);
 
 private: // helpers
     void processSuite();
@@ -68,7 +68,8 @@ private: // state
     QString m_currentCase;
     QString m_currentCmd;
 
-    TestSuite* m_suite;
+    TestRoot* m_root;
+    Veritas::Test* m_suite;
     Veritas::Test*  m_case;
     Veritas::Test*  m_cmd;
 

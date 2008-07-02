@@ -27,7 +27,8 @@ include_directories(
 
 set(kdevcheck_SRCS
     outputparser.cpp
-    testsuite.cpp)
+    testsuite.cpp
+    testroot.cpp)
 
 qt4_automoc( ${kdevcheck_SRCS} )
 kde4_add_library(kdevcheck SHARED ${kdevcheck_SRCS})

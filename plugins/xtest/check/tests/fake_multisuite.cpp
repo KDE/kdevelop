@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -21,67 +21,42 @@
 #include <checkwrapper.h>
 #include <unistd.h>
 
-// "0 root_suite"
+// "0 foo"
 // "0 0 foo_test"
-// "0 0 0 foo_cmd1"
-// "0 0 1 foo_cmd2"
-// "0 0 2 x"
-// "0 1 bar_test"
-// "0 1 0 bar_cmd1"
-// "0 1 1 bar_cmd2"
-// "0 1 2 x"
-// "0 2 baz_test"
-// "0 2 0 baz_cmd1"
-// "0 2 1 x"
-// "0 3 x"
-// "1 x"
+// "0 0 0 foo_cmd"
+// "0 0 1 x"
+// "0 bar"
+// "1 0 bar_test"
+// "1 0 0 bar_cmd"
+// "1 1 1 x"
+// "1 1 x"
+// "2 x"
 
-START_TEST( foo_cmd1 )
+START_TEST( foo_cmd )
 {}
 END_TEST
 
-START_TEST( foo_cmd2 )
+START_TEST( bar_cmd )
 {}
 END_TEST
 
-START_TEST( bar_cmd1 )
-{}
-END_TEST
+Suite* ss[2];
 
-START_TEST( bar_cmd2 )
+Suite** suites(void)
 {
-    fail_unless(0);
-}
-END_TEST
-
-START_TEST( baz_cmd1 )
-{
-    sleep(1);
-}
-END_TEST
-
-Suite* suite(void)
-{
-    Suite *s = suite_create("root_suite");
-
-    /* foo test case */
+    Suite *fs = suite_create("foo");
     TCase *tc_foo = tcase_create("foo_test");
-    tcase_add_test(tc_foo, foo_cmd1);
-    tcase_add_test(tc_foo, foo_cmd2);
-    suite_add_tcase(s, tc_foo);
+    tcase_add_test(tc_foo, foo_cmd);
+    suite_add_tcase(fs, tc_foo);
 
-    /* bar test case */
+    Suite *bs = suite_create("bar");
     TCase *tc_bar = tcase_create("bar_test");
-    tcase_add_test(tc_bar, bar_cmd1);
-    tcase_add_test(tc_bar, bar_cmd2);
-    suite_add_tcase(s, tc_bar);
+    tcase_add_test(tc_bar, bar_cmd);
+    suite_add_tcase(bs, tc_bar);
 
-    /* baz test case */
-    TCase *tc_baz = tcase_create("baz_test");
-    tcase_add_test(tc_baz, baz_cmd1);
-    suite_add_tcase(s, tc_baz);
-
-    return s;
+    ss[0] = fs;
+    ss[1] = bs;
+    return ss;
 }
 
-CHECK_VERITAS_MAIN_( suite() )
+CHECK_VERITAS_MAIN( suites(), 2 )

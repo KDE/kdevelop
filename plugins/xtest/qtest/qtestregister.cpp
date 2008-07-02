@@ -42,7 +42,7 @@ const QString QTestRegister::c_dir("dir");
 const QString QTestRegister::c_exe("exe");
 
 QTestRegister::QTestRegister()
-        : m_root("")
+        : m_root(""), m_settings(0)
 {
         // Data for column headers is stored in the root item.
     QList<QVariant> rootData;
@@ -112,6 +112,7 @@ void QTestRegister::processCase(QTestSuite* suite)
 {
     QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
     suite->addChild(caze);
+    caze->setSettings(m_settings);
     kDebug() << caze->name();
     while (!atEnd() && !isEndElement_(c_case))
     {

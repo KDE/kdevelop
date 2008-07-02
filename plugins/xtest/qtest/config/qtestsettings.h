@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,30 +18,45 @@
  * 02110-1301, USA.
  */
 
-#include "testsuite.h"
-#include "outputparser.h"
-#include <KDebug>
-#include <QDir>
+#ifndef VERITAS_QTEST_QTESTSETTINGS
+#define VERITAS_QTEST_QTESTSETTINGS
 
-using Check::TestSuite;
-using Check::OutputParser;
-using Veritas::TestCase;
-using Veritas::Test;
-
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
-{}
-
-TestSuite::~TestSuite()
-{}
-
-TestCase* TestSuite::child(int i) const
+namespace KDevelop
 {
-    Test* child = Test::child(i);
-    TestCase* caze = qobject_cast<TestCase*>(child);
-    kWarning(caze==0) << "cast failed? " << name() << " " 
-                      << i << " " << ((child!=0) ? child->name() : "null");
-    return caze;
+class IProject;
 }
 
-#include "testsuite.moc"
+namespace QTest
+{
+
+/*!
+ * Decouples config from implementation
+ */
+class ISettings
+{
+public:
+    ISettings();
+    virtual ~ISettings();
+
+    virtual bool printAsserts() const = 0;
+    virtual bool printSignals() const = 0;
+};
+
+/*!
+ * KConfig implementation
+ */
+class Settings : public ISettings
+{
+public:
+    Settings(KDevelop::IProject*);
+    virtual ~Settings();
+    bool printAsserts() const;
+    bool printSignals() const;
+
+private:
+    KDevelop::IProject* m_project;
+};
+
+} // end QTest
+
+#endif // VERITAS_QTEST_QTESTSETTINGS

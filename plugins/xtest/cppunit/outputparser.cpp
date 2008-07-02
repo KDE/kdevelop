@@ -19,7 +19,7 @@
  */
 
 #include "outputparser.h"
-#include "testsuite.h"
+#include "testroot.h"
 #include <test.h>
 #include <testcase.h>
 #include <QStringRef>
@@ -28,7 +28,7 @@
 using Veritas::Test;
 using Veritas::TestResult;
 using Veritas::TestCase;
-using CppUnit::TestSuite;
+using CppUnit::TestRoot;
 using CppUnit::OutputParser;
 
 /*example xml:
@@ -62,6 +62,11 @@ const QString OutputParser::c_assertion("assertion");
 const QString OutputParser::c_file("file");
 const QString OutputParser::c_line("line");
 
+#define ENSURE_FOUND(c,p,n) Q_ASSERT_X(c, "hm",\
+    qstrdup((QString("Failed to find ") + n + QString(" as child of ")\
+        + p->name()).toAscii().data()));
+
+
 OutputParser::OutputParser(QIODevice* device)
     : QXmlStreamReader(device),
       m_processingSuite(false),
@@ -82,9 +87,9 @@ bool OutputParser::isEndElement_(const QString& elementName)
     return isEndElement() && (name() == elementName);
 }
 
-void OutputParser::go(TestSuite* suite)
+void OutputParser::go(TestRoot* root)
 {
-    m_suite = suite;
+    m_root = root;
     if (!device()->isOpen())
         device()->open(QIODevice::ReadOnly);
     if (!device()->isReadable()) {
@@ -111,7 +116,9 @@ void OutputParser::go(TestSuite* suite)
 void OutputParser::processSuite()
 {
     m_processingSuite = true;
-    m_currentSuite = fetchName();
+    QString name = fetchName();
+    m_suite = m_root->childNamed(name);
+    ENSURE_FOUND(m_suite, m_root, name);
     while (!atEnd() && !isEndElement_(c_suite)) {
         readNext();
         if (isStartElement_(c_case))
@@ -127,7 +134,7 @@ void OutputParser::processCase()
         m_currentCase = fetchName();
         m_case = m_suite->childNamed(m_currentCase);
     }
-    Q_ASSERT(m_case);
+    ENSURE_FOUND(m_case, m_suite, m_currentCase);
     m_processingCase = true;
     while (!atEnd() && !isEndElement_(c_case)) {
         readNext();
@@ -148,7 +155,7 @@ void OutputParser::processCmd()
     if (!m_processingCmd) {
         m_currentCmd = fetchName();
         m_cmd = m_case->childNamed(m_currentCmd);
-        Q_ASSERT(m_cmd);
+        ENSURE_FOUND(m_cmd, m_case, m_currentCmd);
         m_cmd->started();
     }
     Q_ASSERT(m_cmd);

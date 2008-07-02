@@ -26,10 +26,8 @@
 #include "check_list.h"
 #include "check_impl.h"
 
-int qxcheck_print_tests(Suite* suite)
+void qxcheck_print_suite(Suite* suite)
 {
-    printf("<?xml version=\"1.0\"?>\n"
-           "<testsuites>\n");
     printf("<suite name=\"%s\">\n", suite->name);
     List *cases = suite->tclst;
     list_front(cases);
@@ -46,15 +44,30 @@ int qxcheck_print_tests(Suite* suite)
         printf("  </case>\n");
         list_advance(cases);
     }
-    printf("</suite>\n"
-           "</testsuites>\n");
+    printf("</suite>\n");
+}
+
+int qxcheck_print_tests(Suite** suites, int num)
+{
+    int i;
+    printf("<?xml version=\"1.0\"?>\n"
+            "<testsuites>\n");
+    for (i=0; i<num; i++) {
+        Suite* s = suites[i];
+        qxcheck_print_suite(s);
+    }
+    printf("</testsuites>\n");
     return 0;
 }
 
-int qxcheck_run_tests(Suite* suite)
+int qxcheck_run_tests(Suite** suites, int num)
 {
-    int number_failed;
-    SRunner *sr = srunner_create(suite);
+    int number_failed, i;
+
+    SRunner *sr = srunner_create(suites[0]);
+    for (i=1; i<num; i++) {
+        srunner_add_suite(sr, suites[i]);
+    }
     srunner_set_xml(sr, "checklog.xml");
     srunner_run_all(sr, CK_SILENT);
     number_failed = srunner_ntests_failed(sr);
@@ -62,16 +75,26 @@ int qxcheck_run_tests(Suite* suite)
     return (number_failed == 0) ? 0 : 1;
 }
 
-#define CHECK_XTEST_MAIN( root ) \
+#define CHECK_VERITAS_MAIN_( root ) \
 int main(int argc, char** argv)\
 {\
+    Suite* s = root; \
+    Suite* suites[1] = {s}; \
     if (argc == 1 || argv[1][0] != '-') { \
-        return qxcheck_run_tests(root); \
+        return qxcheck_run_tests(suites,1); \
     } else { \
-        return qxcheck_print_tests(root); \
+        return qxcheck_print_tests(suites,1); \
     }\
 }
 
-
+#define CHECK_VERITAS_MAIN( multi, num ) \
+int main(int argc, char** argv)\
+{\
+    if (argc == 1 || argv[1][0] != '-') {\
+        return qxcheck_run_tests(multi, num); \
+    } else { \
+       return qxcheck_print_tests(multi, num); \
+    }\
+}
 
 #endif // CHECK_WRAPPER_H

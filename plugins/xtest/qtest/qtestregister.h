@@ -28,14 +28,12 @@
 
 class QIODevice;
 
-namespace Veritas
-{
-class Test;
-}
+namespace Veritas { class Test; }
 
 namespace QTest
 {
 
+class ISettings;
 class QTestSuite;
 class QTestCase;
 
@@ -48,6 +46,8 @@ public:
     void addFromXml(QIODevice*);
     Veritas::Test* rootItem();
     void setRootDir(const QString& root);
+
+    void setSettings(ISettings* s) { m_settings = s; }
 
 private: // helpers
     bool isStartElement_(const QString& elem);
@@ -62,6 +62,7 @@ private: // helpers
 private: // state
     Veritas::Test* m_rootItem;
     QString m_root;
+    ISettings* m_settings;
 
 private: // some xml constants
     static const QString c_suite;
