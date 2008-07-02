@@ -13,6 +13,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 Name=CppUnit
 Comment=CppUnit settings
 Comment[es]=Preferencias de CppUnit
+Comment[fr]=Paramètres de CppUnit
 Comment[gl]=Configuración de CppUnit
 Comment[pt]=Configuração do CppUnit
 Comment[pt_BR]=Configuração do CppUnit

@@ -13,6 +13,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 Name=QTest
 Comment=QTest settings
 Comment[es]=Preferencias de QTest
+Comment[fr]=Paramètres de QTest
 Comment[gl]=Configuración de QTest
 Comment[pt]=Configuração do QTest
 Comment[pt_BR]=Configuração do QTest
