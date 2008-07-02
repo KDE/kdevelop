@@ -131,8 +131,8 @@ class TemporaryDataManager {
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
 
-#define DEFINE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; }
-#define DECLARE_LIST_MEMBER_HASH(container, member, type) TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
+#define DEFINE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; }
+#define DECLARE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 ///This implements the interfaces so this container can be used as a predecessor for classes with appended lists.
 ///You should do this within the abstract base class that opens a tree of classes that can have appended lists,
@@ -206,9 +206,9 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                      /* Copies all the lists from the given item. This item must be dynamic */   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
-                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
+                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
                                       void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
-                                      bool appendedListsDynamic() const { return predecessor ## Data & DynamicAppendedListMask; } \
+                                      bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
                                       size_t dynamicSize() const { return offsetBehindLastList() + sizeof(container); }
 

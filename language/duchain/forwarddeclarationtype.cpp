@@ -19,13 +19,17 @@
 
 #include "forwarddeclarationtype.h"
 #include "forwarddeclaration.h"
+#include "typesystemdata.h"
 
 using namespace KDevelop;
 
-ForwardDeclarationType::ForwardDeclarationType(const ForwardDeclarationType& rhs) : AbstractType(rhs), IdentifiedType(rhs) {
+ForwardDeclarationType::ForwardDeclarationType(const ForwardDeclarationType& rhs) : ForwardDeclarationTypeBase(*new ForwardDeclarationTypeData(*rhs.d_func())) {
 }
 
-ForwardDeclarationType::ForwardDeclarationType() {
+ForwardDeclarationType::ForwardDeclarationType(ForwardDeclarationTypeData& data) : ForwardDeclarationTypeBase(data) {
+}
+
+ForwardDeclarationType::ForwardDeclarationType() : ForwardDeclarationTypeBase(*new ForwardDeclarationTypeData()) {
 }
 
 bool ForwardDeclarationType::equals(const AbstractType* rhs) const {

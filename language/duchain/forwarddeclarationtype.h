@@ -16,17 +16,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "language/duchain/identifiedtype.h"
 #include "language/duchain/typesystem.h"
+#include "language/duchain/identifiedtype.h"
 
 namespace KDevelop {
   class TopDUContext;
   /**
    * A forward-declaration type is generally nothing more than an identified type.
    * */
-class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationType : public AbstractType, public IdentifiedType {
+
+typedef MergeIdentifiedType<AbstractType> ForwardDeclarationTypeBase;
+typedef ForwardDeclarationTypeBase::Data ForwardDeclarationTypeData;
+
+class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationType : public ForwardDeclarationTypeBase {
   public:
   ForwardDeclarationType(const ForwardDeclarationType& rhs);
+  ForwardDeclarationType(ForwardDeclarationTypeData& data);
   ForwardDeclarationType();
 
   ///Returns the resolved type, or this if it could not be resolved.
@@ -39,6 +44,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationType : public AbstractType, 
   virtual QString toString() const;
   virtual AbstractType* clone() const;
   virtual void accept0 (TypeVisitor *v) const;
+  
+  enum {
+    Identity = 9
+  };
+  
+  typedef ForwardDeclarationTypeData Data;
+  private:
+    TYPE_DECLARE_DATA(ForwardDeclarationType);
 };
 
 template<>

@@ -27,6 +27,22 @@
 namespace KDevelop
 {
 
+TypeSystem& TypeSystem::self() {
+  static TypeSystem system;
+  return system;
+}
+
+//REGISTER_TYPE(AbstractType);
+REGISTER_TYPE(IntegralType);
+REGISTER_TYPE(PointerType);
+REGISTER_TYPE(ReferenceType);
+REGISTER_TYPE(FunctionType);
+REGISTER_TYPE(StructureType);
+REGISTER_TYPE(ArrayType);
+REGISTER_TYPE(DelayedType);
+
+DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
+
 AbstractTypeData::AbstractTypeData()
 {
   initializeAppendedLists(true);
@@ -73,8 +89,6 @@ ReferenceTypeData::ReferenceTypeData( const ReferenceTypeData& rhs )
   : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType )
 {
 }
-
-DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
 FunctionTypeData::FunctionTypeData()
 {
@@ -185,11 +199,6 @@ TypeVisitor::~TypeVisitor()
 AbstractType::AbstractType(const AbstractType& rhs) : KShared(), d_ptr(new AbstractTypeData(*rhs.d_ptr)) {
 }
 
-AbstractType::AbstractType( AbstractTypeData& dd )
-  : d_ptr(&dd)
-{
-}
-
 IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(*new IntegralTypeData(*rhs.d_func())) {
 }
 
@@ -206,6 +215,32 @@ StructureType::StructureType(const StructureType& rhs) : AbstractType(*new Struc
 }
 
 ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(*new ArrayTypeData(*rhs.d_func())) {
+}
+
+AbstractType::AbstractType( AbstractTypeData& dd )
+  : d_ptr(&dd)
+{
+}
+
+IntegralType::IntegralType(IntegralTypeData& data) : AbstractType(data) {
+}
+
+PointerType::PointerType(PointerTypeData& data) : AbstractType(data) {
+}
+
+ReferenceType::ReferenceType(ReferenceTypeData& data) : AbstractType(data) {
+}
+
+FunctionType::FunctionType(FunctionTypeData& data) : AbstractType(data) {
+}
+
+StructureType::StructureType(StructureTypeData& data) : AbstractType(data) {
+}
+
+ArrayType::ArrayType(ArrayTypeData& data) : AbstractType(data) {
+}
+
+DelayedType::DelayedType(DelayedTypeData& data) : AbstractType(data) {
 }
 
 AbstractType* IntegralType::clone() const {
@@ -369,7 +404,6 @@ AbstractType::AbstractType()
 
 AbstractType::~AbstractType()
 {
-//  Q_ASSERT(!m_registered);
   delete d_ptr;
 }
 
@@ -719,7 +753,9 @@ int ArrayType::dimension () const
 
 void ArrayType::setDimension(int dimension)
 {
+  kDebug() << "setting dimension" << dimension;
   d_func_dynamic()->m_dimension = dimension;
+  kDebug() << "dimension" << d_func()->m_dimension;
 }
 
 AbstractType::Ptr ArrayType::elementType () const

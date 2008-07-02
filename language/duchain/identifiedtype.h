@@ -22,6 +22,7 @@
 #define IDENTIFIEDTYPE_H
 
 #include "language/duchain/identifier.h"
+#include "declarationid.h"
 
 namespace KDevelop
 {
@@ -29,6 +30,12 @@ namespace KDevelop
 class Declaration;
 class DeclarationId;
 class TopDUContext;
+
+class IdentifiedTypeData
+{
+public:
+  DeclarationId m_id;
+};
 
 /**
  * An IdentifiedType is a type that has a declaration.
@@ -41,8 +48,7 @@ class TopDUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
 {
 public:
-  IdentifiedType(const IdentifiedType& rhs);
-  IdentifiedType();
+  virtual ~IdentifiedType();
 
 //   QualifiedIdentifier identifier() const;
 
@@ -68,9 +74,29 @@ public:
   void setDeclaration(Declaration* declaration);
 
 //   QString idMangled() const;
+  virtual IdentifiedTypeData* idData() = 0;
+  virtual const IdentifiedTypeData* idData() const = 0;
+};
 
-private:
-  class IdentifiedTypePrivate* const d;
+///Implements everything necessary to merge the given Parent class with IdentifiedType
+///Your used Data class must be based on the Data member class
+template<class Parent>
+class KDEVPLATFORMLANGUAGE_EXPORT MergeIdentifiedType : public Parent, public IdentifiedType {
+  public:
+    
+    class Data : public Parent::Data, public IdentifiedTypeData {
+    };
+    
+    MergeIdentifiedType(Data& data) : Parent(data) {
+    }
+    
+    virtual IdentifiedTypeData* idData() {
+      return static_cast<Data*>(this->d_func_dynamic());
+    }
+    
+    virtual const IdentifiedTypeData* idData() const {
+      return static_cast<const Data*>(this->d_func());
+    }
 };
 
 }

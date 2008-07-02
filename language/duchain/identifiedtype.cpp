@@ -26,27 +26,17 @@
 namespace KDevelop
 {
 
-class IdentifiedTypePrivate
-{
-public:
-  DeclarationId m_id;
-};
-
-IdentifiedType::IdentifiedType(const IdentifiedType& rhs) : d(new IdentifiedTypePrivate(*rhs.d)) {
-}
-
-IdentifiedType::IdentifiedType()
-  : d(new IdentifiedTypePrivate)
+IdentifiedType::~IdentifiedType()
 {
 }
 
 void IdentifiedType::clear() {
-  d->m_id = DeclarationId();
+  idData()->m_id = DeclarationId();
 }
 
 bool IdentifiedType::equals(const IdentifiedType* rhs) const
 {
-  if( d->m_id == rhs->d->m_id )
+  if( idData()->m_id == rhs->idData()->m_id )
     return true;
   else
     return false;
@@ -54,36 +44,36 @@ bool IdentifiedType::equals(const IdentifiedType* rhs) const
 
 // QualifiedIdentifier IdentifiedType::identifier() const
 // {
-//   return d->m_id ? d->m_id->qualifiedIdentifier() : QualifiedIdentifier();
+//   return idData()->m_id ? idData()->m_iidData()->qualifiedIdentifier() : QualifiedIdentifier();
 // }
 
 QualifiedIdentifier IdentifiedType::qualifiedIdentifier() const {
-  return d->m_id.qualifiedIdentifier();
+  return idData()->m_id.qualifiedIdentifier();
 }
 
 uint IdentifiedType::hash() const {
-  return d->m_id.hash();
+  return idData()->m_id.hash();
 }
 
 DeclarationId IdentifiedType::declarationId() const {
-  return d->m_id;
+  return idData()->m_id;
 }
 
 void IdentifiedType::setDeclarationId(const DeclarationId& id) {
-  d->m_id = id;
+  idData()->m_id = id;
 }
 
 Declaration* IdentifiedType::declaration(const TopDUContext* top) const
 {
-  return d->m_id.getDeclaration(top);
+  return idData()->m_id.getDeclaration(top);
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)
 {
   if(declaration)
-    d->m_id = declaration->id();
+    idData()->m_id = declaration->id();
   else
-    d->m_id = DeclarationId();
+    idData()->m_id = DeclarationId();
 }
 
 // QString IdentifiedType::idMangled() const

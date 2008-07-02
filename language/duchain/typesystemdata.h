@@ -23,24 +23,27 @@
 
 #include "appendedlist.h"
 #include "typesystem.h"
+#include "indexedstring.h"
+#include "../languageexport.h"
 
 namespace KDevelop {
 
-DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
-class AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeData
 {
 public:
   AbstractTypeData();
   AbstractTypeData( const AbstractTypeData& /*rhs*/ );
-  ~AbstractTypeData();
+  ///@todo make non-virtual again and make sure the correct destructors are called in other ways
+  virtual ~AbstractTypeData();
   
   APPENDED_LISTS_STUB(AbstractTypeData)
   private:
   AbstractTypeData& operator=(const AbstractTypeData&);
 };
 
-class IntegralTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT IntegralTypeData : public AbstractTypeData
 {
 public:
   IntegralTypeData();
@@ -48,7 +51,7 @@ public:
   IndexedString m_name;
 };
 
-class PointerTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT PointerTypeData : public AbstractTypeData
 {
 public:
   PointerTypeData();
@@ -56,7 +59,7 @@ public:
   IndexedType m_baseType;
 };
 
-class ReferenceTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT ReferenceTypeData : public AbstractTypeData
 {
 public:
   ReferenceTypeData();
@@ -66,7 +69,7 @@ public:
 
 DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
-class FunctionTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionTypeData : public AbstractTypeData
 {
 public:
   FunctionTypeData();
@@ -84,14 +87,14 @@ public:
     void operator=(const FunctionTypeData& rhs);
 };
 
-class StructureTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT StructureTypeData : public AbstractTypeData
 {
 public:
   StructureTypeData();
   StructureTypeData( const StructureTypeData& rhs );
 };
 
-class ArrayTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT ArrayTypeData : public AbstractTypeData
 {
 public:
   ArrayTypeData();
@@ -100,7 +103,7 @@ public:
   IndexedType m_elementType;
 };
 
-class DelayedTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT DelayedTypeData : public AbstractTypeData
 {
 public:
   DelayedTypeData();

@@ -51,12 +51,65 @@ class IndexedType;
 
 #define TYPE_DECLARE_DATA(Class) \
     inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
-    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); } \
-    friend class Class##Data;
+    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
 
 #define TYPE_D(Class) const Class##Data * const d = d_func()
 #define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
+  public:
+  virtual AbstractType* create(AbstractTypeData* /*data*/) const = 0;
+  virtual ~AbstractTypeFactory() {
+  }
+};
+
+template<class T>
+class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
+  public:
+  AbstractType* create(AbstractTypeData* data) const {
+    return new T(*static_cast<typename T::Data*>(data));
+  }
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
+  public:
+    template<class T>
+    void registerTypeClass() {
+      Q_ASSERT(T::Identity < 64);
+      if(m_factories.size() <= T::Identity)
+        m_factories.resize(T::Identity+1);
+      
+      Q_ASSERT(!m_factories[T::Identity]);
+      m_factories[T::Identity] = new TypeFactory<T>();
+    }
+    
+    template<class T>
+    void unregisterTypeClass() {
+      Q_ASSERT(m_factories.size() > T::Identity);
+      Q_ASSERT(m_factories[T::Identity]);
+      delete m_factories[T::Identity];
+      m_factories[T::Identity] = 0;
+    }
+    
+    static TypeSystem& self();
+  private:
+    QVector<AbstractTypeFactory*> m_factories;
+};
+
+template<class T>
+struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
+  TypeSystemRegistrator() {
+    TypeSystem::self().registerTypeClass<T>();
+  }
+  ~TypeSystemRegistrator() {
+    TypeSystem::self().unregisterTypeClass<T>();
+  }
+};
+
+///You must add this into your source-files for every AbstractType based class
+///For this to work, the class must have an "Identity" enumerator, that is unique among all types, and should be a very low value.
+///The highest allowed identity is 63, so currently we're limited to having 64 different type classes.
+#define REGISTER_TYPE(Class) TypeSystemRegistrator<Class> register ## Class
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
@@ -186,11 +239,17 @@ public:
 
   virtual WhichType whichType() const;
 
+  enum {
+    Identity = 1
+  };
+  
   /**
    * Should, like accept0, be implemented by all types that hold references to other types.
    * */
   virtual void exchangeTypes( TypeExchanger* exchanger );
 
+  typedef AbstractTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
   AbstractTypeData* const d_ptr;
@@ -198,7 +257,6 @@ protected:
 //  template <class T>
 //  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
 
-private:
   TYPE_DECLARE_DATA(AbstractType)
 };
 
@@ -243,6 +301,7 @@ public:
   IntegralType();
   IntegralType(const IntegralType& rhs);
   IntegralType(const IndexedString& name);
+  IntegralType(IntegralTypeData& data);
   ~IntegralType();
 
   const IndexedString& name() const;
@@ -263,10 +322,15 @@ public:
 
   virtual bool equals(const AbstractType* rhs) const;
 
+  enum {
+    Identity = 2
+  };
+  
+  typedef IntegralTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(IntegralType)
 };
 
@@ -277,6 +341,7 @@ public:
 
   PointerType ();
   PointerType(const PointerType& rhs);
+  PointerType(PointerTypeData& data);
   ~PointerType();
 
   bool operator != (const PointerType &other) const;
@@ -295,10 +360,16 @@ public:
   virtual bool equals(const AbstractType* rhs) const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
+  
+  enum {
+    Identity = 3
+  };
+  
+  typedef PointerTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(PointerType)
 };
 
@@ -309,6 +380,7 @@ public:
 
   ReferenceType ();
   ReferenceType (const ReferenceType& rhs);
+  ReferenceType(ReferenceTypeData& data);
   ~ReferenceType();
   AbstractType::Ptr baseType () const;
 
@@ -329,10 +401,16 @@ public:
   virtual bool equals(const AbstractType* rhs) const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
+  
+  enum {
+    Identity = 4
+  };
+  
+  typedef ReferenceTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(ReferenceType)
 };
 
@@ -349,6 +427,7 @@ public:
 
   FunctionType();
   FunctionType(const FunctionType& rhs);
+  FunctionType(FunctionTypeData& data);
   ~FunctionType();
 
   AbstractType::Ptr returnType () const;
@@ -378,10 +457,16 @@ public:
   virtual WhichType whichType() const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
+  
+  enum {
+    Identity = 5
+  };
+  
+  typedef FunctionTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(FunctionType)
 };
 
@@ -391,6 +476,8 @@ public:
   StructureType();
   StructureType(const StructureType&);
   ~StructureType();
+  StructureType(StructureTypeData& data);
+  
   typedef TypePtr<StructureType> Ptr;
 
   virtual AbstractType* clone() const;
@@ -403,10 +490,15 @@ public:
 
   virtual WhichType whichType() const;
 
+  enum {
+    Identity = 6
+  };
+  
+  typedef StructureTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(StructureType)
 };
 
@@ -415,13 +507,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 public:
   typedef TypePtr<ArrayType> Ptr;
 
+  ArrayType();
   ArrayType(const ArrayType&);
+  ArrayType(ArrayTypeData& data);
 
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
 
-  ArrayType();
   ~ArrayType();
 
   int dimension () const;
@@ -443,10 +536,16 @@ public:
   virtual WhichType whichType() const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
+  
+  enum {
+    Identity = 7
+  };
+  
+  typedef ArrayTypeData Data;
+  
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
-private:
   TYPE_DECLARE_DATA(ArrayType)
 };
 
@@ -468,6 +567,7 @@ public:
 
   DelayedType();
   DelayedType(const DelayedType& rhs);
+  DelayedType(DelayedTypeData& data);
   virtual ~DelayedType();
 
   KDevelop::TypeIdentifier identifier() const;
@@ -485,9 +585,15 @@ public:
   virtual uint hash() const;
 
   virtual WhichType whichType() const;
+  
+  enum {
+    Identity = 8
+  };
+  
+  typedef DelayedTypeData Data;
+  
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;
-  private:
     TYPE_DECLARE_DATA(DelayedType)
 };
 
