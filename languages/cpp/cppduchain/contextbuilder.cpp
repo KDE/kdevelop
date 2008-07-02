@@ -441,18 +441,18 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   closeContext();
 }
 
-void ContextBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
+void ContextBuilder::addBaseType( BaseClassInstance base ) {
   DUChainWriteLocker lock(DUChain::lock());
 
   addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
   
   Q_ASSERT(currentContext()->type() == DUContext::Class);
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.data());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.baseClass.type().data());
   Declaration* idDecl = 0;
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
     currentContext()->addImportedParentContext( idDecl->logicalInternalContext(0) );
-  } else if( !dynamic_cast<DelayedType*>(base.baseClass.data()) ) {
-    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass->toString());
+  } else if( !dynamic_cast<DelayedType*>(base.baseClass.type().data()) ) {
+    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass.type()->toString());
   }
 }
 

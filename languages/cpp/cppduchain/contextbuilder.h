@@ -140,7 +140,7 @@ protected:
    */
   KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
 
-  virtual void addBaseType( CppClassType::BaseClassInstance base );
+  virtual void addBaseType( BaseClassInstance base );
   
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.

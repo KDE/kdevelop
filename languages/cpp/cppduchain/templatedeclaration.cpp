@@ -175,8 +175,9 @@ struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
     if( dynamic_cast<const DelayedType*>(type) )
       found = true;
     if( const CppClassType* classType = dynamic_cast<const CppClassType*>(type) ) {
-        foreach( const CppClassType::BaseClassInstance& base, classType->baseClasses() )
-          visit( base.baseClass.data() );
+      QList<BaseClassInstance> bases = classType->baseClasses();
+        foreach( const BaseClassInstance& base, bases )
+          visit( base.baseClass.type().data() );
     }
     return !found;
   }
@@ -201,11 +202,11 @@ const DelayedType* containsDelayedType(const AbstractType* type)
   if( rType )
     return containsDelayedType(rType->baseType().data());
   if( classType ) {
-    foreach( const CppClassType::BaseClassInstance& base, classType->baseClasses() ) {
-      const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
+    foreach( const BaseClassInstance& base, classType->baseClasses() ) {
+      const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.type().data());
       if( delayed )
         return delayed;
-      else if( (delayed = containsDelayedType( base.baseClass.data() )) )
+      else if( (delayed = containsDelayedType( base.baseClass.type().data() )) )
         return delayed;
     }
   }
@@ -587,8 +588,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       if( klass ) { //It could also be a function
         ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
 
-        foreach( const CppClassType::BaseClassInstance& base, klass->baseClasses() ) {
-          const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.data());
+        foreach( const BaseClassInstance& base, klass->baseClasses() ) {
+          const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.type().data());
           if( delayed ) {
             ///Resolve the delayed type, and import the context
             DelayedTypeResolver res(contextCopy, source);

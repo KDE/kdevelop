@@ -148,15 +148,15 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
       case AbstractType::TypeStructure:
         if (CppClassType::Ptr classType =  dec->type<CppClassType>())
           switch (classType->classType()) {
-            case CppClassType::Class:
+            case Class:
               p |= CodeCompletionModel::Class;
               break;
-            case CppClassType::Struct:
+            case Struct:
               // Remove class bit set in DUChainUtils
               p &= ~CodeCompletionModel::Class;
               p |= CodeCompletionModel::Struct;
               break;
-            case CppClassType::Union:
+            case Union:
               // Remove class bit set in DUChainUtils
               p &= ~CodeCompletionModel::Class;
               p |= CodeCompletionModel::Union;
@@ -268,13 +268,13 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() && !dec->isTypeAlias() ) {
             if (CppClassType::Ptr classType =  dec->type<CppClassType>())
               switch (classType->classType()) {
-                case CppClassType::Class:
+                case Class:
                   return indentation + "class";
                   break;
-                case CppClassType::Struct:
+                case Struct:
                   return indentation + "struct";
                   break;
-                case CppClassType::Union:
+                case Union:
                   return indentation + "union";
                   break;
               }

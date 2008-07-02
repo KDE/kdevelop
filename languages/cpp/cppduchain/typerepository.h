@@ -37,7 +37,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeRepository : public KDevelop::ITypeRepository
 public:
   static TypeRepository* self();
 
-  CppIntegralType::Ptr integral(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone, KDevelop::Declaration::CVSpecs cv = KDevelop::Declaration::CVNone) const;
+  CppIntegralType::Ptr integral(IntegralTypes type, TypeModifiers modifiers = ModifierNone, KDevelop::Declaration::CVSpecs cv = KDevelop::Declaration::CVNone) const;
 
   ///@todo The type-repository holds shared-pointers to types, and may keep AbstractType's alive that come from already deleted du-chains. AbstractType's with no declarations should be cleaned away on a regular basis.
 
@@ -51,7 +51,7 @@ public:
 private:
   TypeRepository();
 
-  void newIntegralType(CppIntegralType::IntegralTypes type, CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone);
+  void newIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
   CppIntegralType::Ptr getIntegral(int index, int cv) const;
 
   KDevelop::AbstractType::Ptr registerPointer(CppPointerType::Ptr input);

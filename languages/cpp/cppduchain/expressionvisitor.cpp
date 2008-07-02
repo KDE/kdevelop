@@ -487,7 +487,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if( identifier == trueIdentifier || identifier == falseIdentifier ) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
-      m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeBool, CppIntegralType::ModifierNone)) );
+      m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(TypeBool, ModifierNone)) );
       m_lastInstance = Instance( true );
       static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<qint64>( identifier == trueIdentifier );
     } else {
@@ -556,18 +556,18 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
 
           if( num.endsWith('f') ) {
-            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeFloat, CppIntegralType::ModifierNone)));
+            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(TypeFloat, ModifierNone)));
             static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<float>((float)val);
           } else {
-            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeDouble, CppIntegralType::ModifierNone)));
+            m_lastType = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(TypeDouble, ModifierNone)));
             static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<double>(val);
           }
         } else {
           qint64 val;
-          CppIntegralType::TypeModifier mod = CppIntegralType::ModifierNone;
+          TypeModifiers mod = ModifierNone;
 
           if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
-            mod = CppIntegralType::ModifierUnsigned;
+            mod = ModifierUnsigned;
 
           bool ok = false;
           while( !num.isEmpty() && !ok ) {
@@ -575,9 +575,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
             num.truncate(num.length()-1);
           }
 
-          m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, mod)));
+          m_lastType = TypeRepository::self()->registerType(AbstractType::Ptr(new CppConstantIntegralType(TypeInt, mod)));
 
-          if( mod & CppIntegralType::ModifierUnsigned )
+          if( mod & ModifierUnsigned )
             static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<quint64>(val);
           else
             static_cast<CppConstantIntegralType*>(m_lastType.data())->setValue<qint64>(val);
@@ -731,8 +731,8 @@ struct ConstantUnaryExpressionEvaluator {
 
   Type endValue;
 
-  CppIntegralType::IntegralTypes type;
-  CppIntegralType::TypeModifiers modifier;
+  IntegralTypes type;
+  TypeModifiers modifier;
 
   /**
    * Writes the results into endValue, type, and modifier.
@@ -744,15 +744,15 @@ struct ConstantUnaryExpressionEvaluator {
     evaluateSpecialTokens( tokenKind, left );
     switch( tokenKind ) {
       case '+':
-        endValue = +left->CppConstantIntegralType::value<Type>();
+        endValue = +left->value<Type>();
       break;
       case '-':
-        endValue = -left->CppConstantIntegralType::value<Type>();
+        endValue = -left->value<Type>();
       break;
       case Token_incr:
-        endValue = left->CppConstantIntegralType::value<Type>()+1;
+        endValue = left->value<Type>()+1;
       case Token_decr:
-        endValue = left->CppConstantIntegralType::value<Type>()-1;
+        endValue = left->value<Type>()-1;
     }
   }
 
@@ -760,17 +760,17 @@ struct ConstantUnaryExpressionEvaluator {
   void evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ) {
     switch( tokenKind ) {
       case '~':
-        endValue = ~left->CppConstantIntegralType::value<Type>();
+        endValue = ~left->value<Type>();
       break;
       case '!':
-        endValue = !left->CppConstantIntegralType::value<Type>();
+        endValue = !left->value<Type>();
       break;
     }
   }
 
   AbstractType::Ptr createType() {
     AbstractType::Ptr ret = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(type, modifier)) );
-    static_cast<CppConstantIntegralType*>(ret.data())->CppConstantIntegralType::setValue<Type>( endValue );
+    static_cast<CppConstantIntegralType*>(ret.data())->setValue<Type>( endValue );
     return ret;
   }
 };
@@ -991,8 +991,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     clearLast();
     
     if (node->integrals) {
-      CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
-      CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone;
+      IntegralTypes type = TypeNone;
+      TypeModifiers modifiers = ModifierNone;
 
       const ListNode<std::size_t> *it = node->integrals->toFront();
       const ListNode<std::size_t> *end = it;
@@ -1000,48 +1000,48 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         int kind = m_session->token_stream->kind(it->element);
         switch (kind) {
           case Token_char:
-            type = CppIntegralType::TypeChar;
+            type = TypeChar;
             break;
           case Token_wchar_t:
-            type = CppIntegralType::TypeWchar_t;
+            type = TypeWchar_t;
             break;
           case Token_bool:
-            type = CppIntegralType::TypeBool;
+            type = TypeBool;
             break;
           case Token_short:
-            modifiers |= CppIntegralType::ModifierShort;
+            modifiers |= ModifierShort;
             break;
           case Token_int:
-            type = CppIntegralType::TypeInt;
+            type = TypeInt;
             break;
           case Token_long:
-            if (modifiers & CppIntegralType::ModifierLong)
-              modifiers |= CppIntegralType::ModifierLongLong;
+            if (modifiers & ModifierLong)
+              modifiers |= ModifierLongLong;
             else
-              modifiers |= CppIntegralType::ModifierLong;
+              modifiers |= ModifierLong;
             break;
           case Token_signed:
-            modifiers |= CppIntegralType::ModifierSigned;
+            modifiers |= ModifierSigned;
             break;
           case Token_unsigned:
-            modifiers |= CppIntegralType::ModifierUnsigned;
+            modifiers |= ModifierUnsigned;
             break;
           case Token_float:
-            type = CppIntegralType::TypeFloat;
+            type = TypeFloat;
             break;
           case Token_double:
-            type = CppIntegralType::TypeDouble;
+            type = TypeDouble;
             break;
           case Token_void:
-            type = CppIntegralType::TypeVoid;
+            type = TypeVoid;
             break;
         }
 
         it = it->next;
       } while (it != end);
 
-      if(type == CppIntegralType::TypeNone)
-        type = CppIntegralType::TypeInt; //Happens, example: "unsigned short"
+      if(type == TypeNone)
+        type = TypeInt; //Happens, example: "unsigned short"
 
       CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers/*, parseConstVolatile(node->cv)*/);
       if (integral)
@@ -1069,7 +1069,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     LOCKDUCHAIN;
     if( node->array_dimensions ) {
       ///@todo cv-qualifiers
-      CppArrayType::Ptr p( new CppArrayType() );
+      ArrayType::Ptr p( new ArrayType() );
       p->setElementType( m_lastType );
       
       m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
@@ -1310,7 +1310,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = pt->baseType();
       m_lastInstance = Instance( getDeclaration(node,m_lastType) );
       return true;
-    }else if( CppArrayType* pt = dynamic_cast<CppArrayType*>( realLastType().data() ) ) {
+    }else if( ArrayType* pt = dynamic_cast<ArrayType*>( realLastType().data() ) ) {
       m_lastType = pt->elementType();
       m_lastInstance = Instance( getDeclaration(node,m_lastType) );
       return true;
@@ -1386,20 +1386,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         if( constantIntegral ) {
 
           switch( constantIntegral->integralType() ) {
-            case CppIntegralType::TypeFloat:
+            case TypeFloat:
             {
               ConstantUnaryExpressionEvaluator<float> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
               m_lastType = evaluator.createType();
               break;
             }
-            case CppIntegralType::TypeDouble:
+            case TypeDouble:
             {
               ConstantUnaryExpressionEvaluator<double> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
               m_lastType = evaluator.createType();
               break;
             }
             default:
-              if( constantIntegral->typeModifiers() & CppIntegralType::ModifierUnsigned ) {
+              if( constantIntegral->typeModifiers() & ModifierUnsigned ) {
                 ConstantUnaryExpressionEvaluator<quint64> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               } else {
@@ -1594,13 +1594,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = AbstractType::Ptr(constructedType.data());
       m_lastInstance = Instance(constructedType->declaration(topContext()));
     } else {
-      if(chosenFunction)
-        kDebug() << "result from resolver:" << chosenFunction->toString() << typeid(*chosenFunction).name() << typeid(*chosenFunction->abstractType().data()).name();
       CppFunctionType* functionType = dynamic_cast<CppFunctionType*>( chosenFunction->abstractType().data() );
       if( !chosenFunction || !functionType ) {
         problem( node, QString( "could not find a matching function for function-call" ) );
       } else {
-        kDebug() << "picking return-type" << functionType->returnType()->toString() << "from" << functionType->toString() << "from decl." << chosenFunction->toString();
         m_lastType = functionType->returnType();
         m_lastInstance = Instance(chosenFunction);
       }
@@ -1689,14 +1686,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(node->type_id);
     visit(node->expression);
     LOCKDUCHAIN;
-    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(TypeInt, ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
   void ExpressionVisitor::visitCondition(ConditionAST* node)  {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(CppIntegralType::TypeBool, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data() );
+    m_lastType = AbstractType::Ptr( TypeRepository::self()->integral(TypeBool, ModifierNone, KDevelop::Declaration::CVNone).data() );
     m_lastInstance = Instance(true);
   }
   
@@ -1710,7 +1707,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::Const) );
-    p->setBaseType( AbstractType::Ptr(TypeRepository::self()->integral(CppIntegralType::TypeChar, CppIntegralType::ModifierNone, KDevelop::Declaration::CVNone).data()) );
+    p->setBaseType( AbstractType::Ptr(TypeRepository::self()->integral(TypeChar, ModifierNone, KDevelop::Declaration::CVNone).data()) );
     
     m_lastType = AbstractType::Ptr( TypeRepository::self()->registerType( AbstractType::Ptr(p.data()) ).data() );
     m_lastInstance = Instance(true);
@@ -1736,7 +1733,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
 
         //Overloaded postfix operators have one additional int parameter
-        static AbstractType::Ptr integer = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(CppConstantIntegralType::TypeInt, CppIntegralType::ModifierNone)) );
+        static AbstractType::Ptr integer = TypeRepository::self()->registerType( AbstractType::Ptr(new CppConstantIntegralType(TypeInt, ModifierNone)) );
         helper.setKnownParameters( OverloadResolver::Parameter( integer, false ) );
         
         QList<OverloadResolutionFunction> functions = helper.resolve(false);

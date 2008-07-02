@@ -295,17 +295,17 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     if( integral ) {
 
       ///Integral promotions, iso c++ 4.5
-      if( integerConversionRank(integral) < unsignedIntConversionRank && integral->integralType() != CppIntegralType::TypeBool && integral->integralType() != CppIntegralType::TypeWchar_t && integral->integralType() != CppIntegralType::TypeVoid ) {
+      if( integerConversionRank(integral) < unsignedIntConversionRank && integral->integralType() != TypeBool && integral->integralType() != TypeWchar_t && integral->integralType() != TypeVoid ) {
         ///iso c++ 4.5.1
-        AbstractType::Ptr newFrom( TypeRepository::self()->integral(CppIntegralType::TypeInt, (integral->typeModifiers() & CppIntegralType::ModifierUnsigned) ? CppIntegralType::ModifierUnsigned : CppIntegralType::ModifierNone ).data() );
+        AbstractType::Ptr newFrom( TypeRepository::self()->integral(TypeInt, (integral->typeModifiers() & ModifierUnsigned) ? ModifierUnsigned : ModifierNone ).data() );
         ConversionRank rank = standardConversion( newFrom, to, removeCategories(categories,PromotionCategory), maxCategories-1 );
 
         maximizeRank( bestRank, worseRank(rank, Promotion ) );
       }
 
       ///Floating point promotion, iso c++ 4.6
-      if( integral->integralType() == CppIntegralType::TypeDouble ) {
-        AbstractType::Ptr newFrom( TypeRepository::self()->integral(CppIntegralType::TypeDouble ).data() );
+      if( integral->integralType() == TypeDouble ) {
+        AbstractType::Ptr newFrom( TypeRepository::self()->integral(TypeDouble ).data() );
         ConversionRank rank = standardConversion( newFrom, to, removeCategories(categories,PromotionCategory), maxCategories-1 );
 
         maximizeRank( bestRank, worseRank(rank, Promotion ) );
@@ -372,7 +372,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     ///@todo pointer-to-member conversion
 
     ///iso c++ 4.12 Boolean conversions
-    if( toIntegral && toIntegral->integralType() == CppIntegralType::TypeBool ) {
+    if( toIntegral && toIntegral->integralType() == TypeBool ) {
       //We are converting to a boolean value
       if( fromPointer || fromEnumeration || fromEnumerator || (fromIntegral && (isIntegerType(fromIntegral) || isFloatingPointType(fromIntegral))) ) {
         maximizeRank( bestRank, Conversion );

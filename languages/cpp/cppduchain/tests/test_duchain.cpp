@@ -156,9 +156,9 @@ void TestDUChain::initTestCase()
   
   DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
 
-  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
-  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
-  typeShort = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt, CppIntegralType::ModifierShort));
+  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeVoid));
+  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt));
+  typeShort = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt, ModifierShort));
 }
 
 void TestDUChain::cleanupTestCase()
@@ -322,8 +322,8 @@ void TestDUChain::testIntegralTypes()
   QCOMPARE(defI->identifier(), Identifier("i"));
   QCOMPARE(findDeclaration(top, defI->identifier()), defI);
   QVERIFY(defI->type<CppIntegralType>());
-  QCOMPARE(defI->type<CppIntegralType>()->integralType(), CppIntegralType::TypeInt);
-  QCOMPARE(defI->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierUnsigned);
+  QCOMPARE(defI->type<CppIntegralType>()->integralType(), TypeInt);
+  QCOMPARE(defI->type<CppIntegralType>()->typeModifiers(), ModifierUnsigned);
   QVERIFY(defI->type<CppIntegralType>()->isConstant());
   QVERIFY(!defI->type<CppIntegralType>()->isVolatile());
 
@@ -335,8 +335,8 @@ void TestDUChain::testIntegralTypes()
   QCOMPARE(defJ->identifier(), Identifier("j"));
   QCOMPARE(findDeclaration(top, defJ->identifier()), defJ);
   QVERIFY(defJ->type<CppIntegralType>());
-  QCOMPARE(defJ->type<CppIntegralType>()->integralType(), CppIntegralType::TypeDouble);
-  QCOMPARE(defJ->type<CppIntegralType>()->typeModifiers(), CppIntegralType::ModifierLong);
+  QCOMPARE(defJ->type<CppIntegralType>()->integralType(), TypeDouble);
+  QCOMPARE(defJ->type<CppIntegralType>()->typeModifiers(), ModifierLong);
   QVERIFY(!defJ->type<CppIntegralType>()->isConstant());
   QVERIFY(defJ->type<CppIntegralType>()->isVolatile());
 
@@ -359,7 +359,7 @@ void TestDUChain::testIntegralTypes()
   QVERIFY(!secondpointer->isVolatile());
   CppIntegralType::Ptr base = CppIntegralType::Ptr::dynamicCast(secondpointer->baseType());
   QVERIFY(base);
-  QCOMPARE(base->integralType(), CppIntegralType::TypeDouble);
+  QCOMPARE(base->integralType(), TypeDouble);
   QVERIFY(!base->isConstant());
   QVERIFY(!base->isVolatile());
 
@@ -368,7 +368,7 @@ void TestDUChain::testIntegralTypes()
   QVERIFY(defN->type<CppReferenceType>());
   base = CppIntegralType::Ptr::dynamicCast(defN->type<CppReferenceType>()->baseType());
   QVERIFY(base);
-  QCOMPARE(base->integralType(), CppIntegralType::TypeInt);
+  QCOMPARE(base->integralType(), TypeInt);
   QVERIFY(base->isConstant());
   QVERIFY(!base->isVolatile());
 
@@ -398,7 +398,7 @@ void TestDUChain::testArrayType()
   QVERIFY(array);
   CppIntegralType::Ptr element = CppIntegralType::Ptr::dynamicCast(array->elementType());
   QVERIFY(element);
-  QCOMPARE(element->integralType(), CppIntegralType::TypeInt);
+  QCOMPARE(element->integralType(), TypeInt);
   QCOMPARE(array->dimension(), 3);
 
   release(top);
@@ -599,7 +599,7 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(defStructA->uses().count(), 1);
   QCOMPARE(defStructA->uses().begin()->count(), 1);
   QVERIFY(defStructA->type<CppClassType>());
-  QCOMPARE(defStructA->type<CppClassType>()->classType(), CppClassType::Struct);
+  QCOMPARE(defStructA->type<CppClassType>()->classType(), Struct);
 
   DUContext* structA = top->childContexts().first();
   QVERIFY(structA->parentContext());
@@ -1354,7 +1354,7 @@ void TestDUChain::testBaseClasses() {
   QCOMPARE(defClassF->identifier(), Identifier("F"));
   QVERIFY(defClassF->type<CppClassType>());
   QCOMPARE( defClassF->type<CppClassType>()->baseClasses().size(), 1 );
-  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->type<CppClassType>()->baseClasses().front().baseClass.data() ) );
+  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->type<CppClassType>()->baseClasses().front().baseClass.type().data() ) );
 
   Declaration* FDDecl = findDeclaration(top, QualifiedIdentifier("F<D>") );
   QVERIFY(FDDecl);
@@ -1509,21 +1509,21 @@ void TestDUChain::testIntegralTemplates()
   QVERIFY(dec);
   CppIntegralType* integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
   QVERIFY( integral );
-  QCOMPARE( integral->integralType(), CppIntegralType::TypeInt );
+  QCOMPARE( integral->integralType(), TypeInt );
   
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   dec = findDeclaration( top, QualifiedIdentifier( "A<unsigned int>::i") );
   integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
   QVERIFY( integral );
-  QCOMPARE( integral->integralType(), CppIntegralType::TypeInt );
-  QCOMPARE( integral->typeModifiers(), CppIntegralType::ModifierUnsigned );
+  QCOMPARE( integral->integralType(), TypeInt );
+  QCOMPARE( integral->typeModifiers(), ModifierUnsigned );
   
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   dec = findDeclaration( top, QualifiedIdentifier( "A<long double>::i") );
   integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
   QVERIFY( integral );
-  QCOMPARE( integral->integralType(), CppIntegralType::TypeDouble );
-  QCOMPARE( integral->typeModifiers(), CppIntegralType::ModifierLong );
+  QCOMPARE( integral->integralType(), TypeDouble );
+  QCOMPARE( integral->typeModifiers(), ModifierLong );
   
   release(top);
 }
@@ -2290,7 +2290,7 @@ void TestDUChain::testDeclarationId()
   kDebug() << decl->qualifiedIdentifier().toString();
   KDevelop::DeclarationId id = decl->id();
   QVERIFY(top->localDeclarations()[0]->internalContext());
-  kDebug() << "id:" << id.m_direct << id.m_specialization << "indirect:" << id.indirect.m_identifier.index << id.indirect.m_additionalIdentity << "direct:" << *((uint*)(&id.direct)) << *(((uint*)(&id.direct))+1);
+//   kDebug() << "id:" << id.m_direct << id.m_specialization << "indirect:" << id.indirect.m_identifier.index << id.indirect.m_additionalIdentity << "direct:" << *((uint*)(&id.direct)) << *(((uint*)(&id.direct))+1);
   Declaration* declAgain = id.getDeclaration(top);
   QVERIFY(!id.isDirect());
   QVERIFY(declAgain);

@@ -153,7 +153,7 @@ namespace TypeUtils {
 
   bool isNullType( AbstractType* t ) {
     CppConstantIntegralType* integral = fastCast<CppConstantIntegralType*>(t);
-    if( integral && integral->integralType() == CppIntegralType::TypeInt && integral->value<qint64>() == 0 )
+    if( integral && integral->integralType() == TypeInt && integral->value<qint64>() == 0 )
       return true;
     else
       return false;
@@ -172,21 +172,21 @@ namespace TypeUtils {
      * 6 - 4 byte, long long int
      **/
     switch( type->integralType() ) {
-      case CppIntegralType::TypeBool:
+      case TypeBool:
         return 1;
       break;
-      case CppIntegralType::TypeChar:
+      case TypeChar:
         return 2;
       break;
-      case CppIntegralType::TypeWchar_t:
+      case TypeWchar_t:
         return 3;
       break;
-      case CppIntegralType::TypeInt:
-        if( type->typeModifiers() & CppIntegralType::ModifierShort )
+      case TypeInt:
+        if( type->typeModifiers() & ModifierShort )
           return 3;
-        if( type->typeModifiers() & CppIntegralType::ModifierLong )
+        if( type->typeModifiers() & ModifierLong )
           return 5;
-        if( type->typeModifiers() & CppIntegralType::ModifierLongLong )
+        if( type->typeModifiers() & ModifierLongLong )
           return 6;
 
         return 4; //default-integer
@@ -200,13 +200,13 @@ namespace TypeUtils {
   }
 
   bool isFloatingPointType( CppIntegralType* type ) {
-    return type->integralType() == CppIntegralType::TypeFloat || type->integralType() == CppIntegralType::TypeDouble;
+    return type->integralType() == TypeFloat || type->integralType() == TypeDouble;
   }
 
   bool isVoidType( AbstractType* type ) {
     CppIntegralType* integral = fastCast<CppIntegralType*>(type);
     if( !integral ) return false;
-    return integral->integralType() == CppIntegralType::TypeVoid;
+    return integral->integralType() == TypeVoid;
   }
 
   ///Returns whether base is a base-class of c
@@ -217,14 +217,15 @@ namespace TypeUtils {
     if( c->equals( base ) )
       return true;
     
-    foreach( const CppClassType::BaseClassInstance& b, c->baseClasses() )
+    QList<BaseClassInstance> bases = c->baseClasses();
+    foreach( const BaseClassInstance& b, bases )
     {
       if( baseConversionLevels )
         ++ (*baseConversionLevels);
       //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
       if( b.access != KDevelop::Declaration::Private ) {
         int nextBaseConversion = 0;
-        if( const CppClassType* c = fastCast<const CppClassType*>(b.baseClass.data()) )
+        if( const CppClassType* c = fastCast<const CppClassType*>(b.baseClass.type().data()) )
           if( isPublicBaseClass( c, base, &nextBaseConversion ) )
             *baseConversionLevels += nextBaseConversion;
             return true;
@@ -259,10 +260,12 @@ namespace TypeUtils {
       return;
 
     //equivalent to using the imported parent-contexts
-    for( QList<CppClassType::BaseClassInstance>::const_iterator it =  klass->baseClasses().begin(); it != klass->baseClasses().end(); ++it ) {
+    QList<BaseClassInstance> bases = klass->baseClasses();
+    
+    for( QList<BaseClassInstance>::const_iterator it =  bases.begin(); it != bases.end(); ++it ) {
       if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-        if( fastCast<const CppClassType*>((*it).baseClass.data()) )
-          getMemberFunctions( static_cast<CppClassType*>( const_cast<CppClassType::BaseClassInstance&>((*it)).baseClass.data() ), topContext, functions, functionName,   mustBeConstant);
+        if( fastCast<const CppClassType*>((*it).baseClass.type().data()) )
+          getMemberFunctions( static_cast<CppClassType*>( const_cast<BaseClassInstance&>((*it)).baseClass.type().data() ), topContext, functions, functionName,   mustBeConstant);
     }
   }
 

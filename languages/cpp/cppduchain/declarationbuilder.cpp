@@ -64,7 +64,7 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   to->setDeclarationId(from->declarationId());
   to->setCV(from->cv());
 
-  foreach( const CppClassType::BaseClassInstance& base, from->baseClasses() )
+  foreach( const BaseClassInstance& base, from->baseClasses() )
     to->addBaseClass(base);
 
   to->close();

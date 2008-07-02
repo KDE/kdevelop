@@ -126,8 +126,8 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
-  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
-  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
+  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeVoid));
+  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt));
 
   addInclude( "testFile1.h", testFile1 );
   addInclude( "testFile2.h", testFile2 );
@@ -576,8 +576,8 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(classType);
     QCOMPARE(classType->baseClasses().count(), 1);
     QVERIFY(classType->baseClasses()[0].baseClass);
-    kDebug() << typeid(*classType->baseClasses()[0].baseClass.data()).name();
-    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(classType->baseClasses()[0].baseClass.data());
+    kDebug() << typeid(*classType->baseClasses()[0].baseClass.type().data()).name();
+    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(classType->baseClasses()[0].baseClass.type().data());
     QVERIFY(parentClassType);
     QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }

@@ -82,16 +82,16 @@ bool isTemplateDependent(Declaration* decl) {
   return false;
 }
 
-CppClassType::ClassType classTypeFromTokenKind(int kind)
+ClassType classTypeFromTokenKind(int kind)
 {
   switch(kind)
   {
   case Token_struct:
-    return CppClassType::Struct;
+    return Struct;
   case Token_union:
-    return CppClassType::Union;
+    return Union;
   default:
-    return CppClassType::Class;
+    return Class;
   }
 }
 
@@ -121,7 +121,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeType();
 }
 
-void TypeBuilder::addBaseType( CppClassType::BaseClassInstance base ) {
+void TypeBuilder::addBaseType( BaseClassInstance base ) {
   {
     DUChainWriteLocker lock(DUChain::lock());
     CppClassType* klass = dynamic_cast<CppClassType*>(currentAbstractType().data());
@@ -144,10 +144,10 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     if( openedType ) {
       closeType();
 
-      CppClassType::BaseClassInstance instance;
+      BaseClassInstance instance;
       
       instance.virtualInheritance = (bool)node->virt;
-      instance.baseClass = lastType();
+      instance.baseClass = lastType()->indexed();
 
       int tk = 0;
       if( node->access_specifier )
@@ -329,8 +329,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   m_lastTypeWasInstance = false;
 
   if (node->integrals) {
-    CppIntegralType::IntegralTypes type = CppIntegralType::TypeNone;
-    CppIntegralType::TypeModifiers modifiers = CppIntegralType::ModifierNone;
+    IntegralTypes type = TypeNone;
+    TypeModifiers modifiers = ModifierNone;
 
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
@@ -338,48 +338,48 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_char:
-          type = CppIntegralType::TypeChar;
+          type = TypeChar;
           break;
         case Token_wchar_t:
-          type = CppIntegralType::TypeWchar_t;
+          type = TypeWchar_t;
           break;
         case Token_bool:
-          type = CppIntegralType::TypeBool;
+          type = TypeBool;
           break;
         case Token_short:
-          modifiers |= CppIntegralType::ModifierShort;
+          modifiers |= ModifierShort;
           break;
         case Token_int:
-          type = CppIntegralType::TypeInt;
+          type = TypeInt;
           break;
         case Token_long:
-          if (modifiers & CppIntegralType::ModifierLong)
-            modifiers |= CppIntegralType::ModifierLongLong;
+          if (modifiers & ModifierLong)
+            modifiers |= ModifierLongLong;
           else
-            modifiers |= CppIntegralType::ModifierLong;
+            modifiers |= ModifierLong;
           break;
         case Token_signed:
-          modifiers |= CppIntegralType::ModifierSigned;
+          modifiers |= ModifierSigned;
           break;
         case Token_unsigned:
-          modifiers |= CppIntegralType::ModifierUnsigned;
+          modifiers |= ModifierUnsigned;
           break;
         case Token_float:
-          type = CppIntegralType::TypeFloat;
+          type = TypeFloat;
           break;
         case Token_double:
-          type = CppIntegralType::TypeDouble;
+          type = TypeDouble;
           break;
         case Token_void:
-          type = CppIntegralType::TypeVoid;
+          type = TypeVoid;
           break;
       }
 
       it = it->next;
     } while (it != end);
 
-    if(type == CppIntegralType::TypeNone)
-      type = CppIntegralType::TypeInt; //Happens, example: "unsigned short"
+    if(type == TypeNone)
+      type = TypeInt; //Happens, example: "unsigned short"
     
     CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
     if (integral) {
@@ -581,7 +581,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
       res = parser.evaluateType( expression, editor()->parseSession() );
     }
   
-    CppArrayType::Ptr array(new CppArrayType());
+    ArrayType::Ptr array(new ArrayType());
     array->setElementType(lastType());
 
     CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(res.type.type().data());

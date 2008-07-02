@@ -25,10 +25,24 @@
 #include <indexedstring.h>
 #include <forwarddeclarationtype.h>
 #include "templateparameterdeclaration.h"
+#include <ducontext.h> //Only for FOREACH_ARRAY
 
 using namespace KDevelop;
 
+DEFINE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance);
+
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
+
+REGISTER_TYPE(CppFunctionType);
+REGISTER_TYPE(CppConstantIntegralType);
+REGISTER_TYPE(CppPointerType);
+REGISTER_TYPE(CppReferenceType);
+REGISTER_TYPE(CppClassType);
+REGISTER_TYPE(CppTypeAliasType);
+REGISTER_TYPE(CppEnumeratorType);
+REGISTER_TYPE(CppEnumerationType);
+// REGISTER_TYPE(CppArrayType);
+REGISTER_TYPE(CppIntegralType);
 
 AbstractType* CppFunctionType::clone() const {
   return new CppFunctionType(*this);
@@ -62,19 +76,21 @@ AbstractType* CppEnumerationType::clone() const {
   return new CppEnumerationType(*this);
 }
 
-AbstractType* CppArrayType::clone() const {
-  return new CppArrayType(*this);
-}
+// AbstractType* CppArrayType::clone() const {
+//   return new CppArrayType(*this);
+// }
 
 AbstractType* CppIntegralType::clone() const {
   return new CppIntegralType(*this);
 }
 
 bool CppIntegralType::moreExpressiveThan(CppIntegralType* rhs) const {
-  bool ret = m_type > rhs->m_type && !((rhs->m_modifiers & ModifierSigned) && !(m_modifiers & ModifierSigned));
-  if((rhs->m_modifiers & ModifierLongLong) && !(m_modifiers & ModifierLongLong))
+  TYPE_D(CppIntegralType);
+  
+  bool ret = d->m_type > rhs->d_func()->m_type && !((rhs->d_func()->m_modifiers & ModifierSigned) && !(d->m_modifiers & ModifierSigned));
+  if((rhs->d_func()->m_modifiers & ModifierLongLong) && !(d->m_modifiers & ModifierLongLong))
     ret = false;
-  if((rhs->m_modifiers & ModifierLong) && !(m_modifiers & ModifierLongLong) && !(m_modifiers & ModifierLong))
+  if((rhs->d_func()->m_modifiers & ModifierLong) && !(d->m_modifiers & ModifierLongLong) && !(d->m_modifiers & ModifierLong))
     ret = false;
   return ret;
 }
@@ -84,7 +100,7 @@ AbstractType* CppTemplateParameterType::clone() const {
 }
 
 bool CppCVType::equals(const CppCVType* rhs) const {
-  return m_constant == rhs->m_constant && m_volatile == rhs->m_volatile;
+  return cvData()->m_constant == rhs->cvData()->m_constant && cvData()->m_volatile == rhs->cvData()->m_volatile;
 }
 
 bool CppFunctionType::equals(const AbstractType* _rhs) const
@@ -145,13 +161,13 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
   
   if( CppCVType::equals(rhs) && IdentifiedType::equals(rhs) )
   {
-    if( (bool)m_type != (bool)rhs->m_type )
+    if( (bool)d_func()->m_type != (bool)rhs->d_func()->m_type )
       return false;
 
-    if( !m_type )
+    if( !d_func()->m_type )
       return true;
     
-    return m_type->equals(rhs->m_type.data());
+    return d_func()->m_type.type()->equals(rhs->d_func()->m_type.type().data());
   
   } else {
     return false;
@@ -197,20 +213,21 @@ bool CppEnumerationType::equals(const AbstractType* _rhs) const
   return IdentifiedType::equals(rhs);
 }
 
-bool CppArrayType::equals(const AbstractType* _rhs) const
-{
-  if( !fastCast<const CppArrayType*>(_rhs))
-    return false;
-  const CppArrayType* rhs = static_cast<const CppArrayType*>(_rhs);
-
-  if( this == rhs )
-    return true;
-  
-  return ArrayType::equals(rhs);
-}
+// bool CppArrayType::equals(const AbstractType* _rhs) const
+// {
+//   if( !fastCast<const CppArrayType*>(_rhs))
+//     return false;
+//   const CppArrayType* rhs = static_cast<const CppArrayType*>(_rhs);
+// 
+//   if( this == rhs )
+//     return true;
+//   
+//   return ArrayType::equals(rhs);
+// }
 
 bool CppIntegralType::equals(const AbstractType* _rhs) const
 {
+  TYPE_D(CppIntegralType);
   if( !fastCast<const CppIntegralType*>(_rhs) || fastCast<CppEnumeratorType*>(_rhs) || fastCast<CppEnumerationType*>(_rhs) )
     return false;
   const CppIntegralType* rhs = static_cast<const CppIntegralType*>(_rhs);
@@ -218,7 +235,7 @@ bool CppIntegralType::equals(const AbstractType* _rhs) const
   if( this == rhs )
     return true;
   
-  return m_type == rhs->m_type && m_modifiers == rhs->m_modifiers && IntegralType::equals(rhs) && CppCVType::equals(rhs);
+  return d->m_type == rhs->d_func()->m_type && d->m_modifiers == rhs->d_func()->m_modifiers && IntegralType::equals(rhs) && CppCVType::equals(rhs);
 }
 
 bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
@@ -237,8 +254,8 @@ void CppClassType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
     {
-      foreach(const BaseClassInstance& base, m_baseClasses)
-        acceptType (AbstractType::Ptr( const_cast<AbstractType*>( static_cast<const AbstractType*>(base.baseClass.data()) ) ), v);
+      FOREACH_FUNCTION(const BaseClassInstance& base, d_func()->m_baseClasses)
+        acceptType (AbstractType::Ptr( const_cast<AbstractType*>( static_cast<const AbstractType*>(base.baseClass.type().data()) ) ), v);
     }
 
   v->endVisit (this);
@@ -246,39 +263,47 @@ void CppClassType::accept0 (TypeVisitor *v) const
 
 void CppClassType::exchangeTypes(TypeExchanger *e)
 {
-  for(QList<BaseClassInstance>::iterator it = m_baseClasses.begin(); it != m_baseClasses.end(); ++it )
-    (*it).baseClass = e->exchange((*it).baseClass.data());
+  FOREACH_ARRAY(BaseClassInstance& base, d_func_dynamic()->m_baseClassesList())
+    base.baseClass = e->exchange(base.baseClass.type().data())->indexed();
 }
 
 
 // ---------------------------------------------------------------------------
-const QList<CppClassType::BaseClassInstance>& CppClassType::baseClasses() const
+const QList<BaseClassInstance> CppClassType::baseClasses() const
 {
-  return m_baseClasses;
+  ///@todo stop converting here
+  QList<BaseClassInstance> ret;
+  FOREACH_FUNCTION(const BaseClassInstance& i, d_func()->m_baseClasses)
+      ret << i;
+  return ret;
 }
 
 void CppClassType::addBaseClass(const BaseClassInstance& baseClass)
 {
-  m_baseClasses.append(baseClass);
+  d_func_dynamic()->m_baseClassesList().append(baseClass);
 }
 
 void CppClassType::removeBaseClass(AbstractType::Ptr baseClass)
 {
-  for (int i = 0; i < m_baseClasses.count(); ++i)
-    if (m_baseClasses[i].baseClass == baseClass) {
-      m_baseClasses.removeAt(i);
+  TYPE_D_DYNAMIC(CppClassType);
+  for (uint i = 0; i < d->m_baseClassesSize(); ++i)
+    if (d->m_baseClasses()[i].baseClass == baseClass) {
+      for(uint a = i+1; a < d->m_baseClassesSize(); ++a)
+        d->m_baseClassesList()[a-1] = d->m_baseClassesList()[a];
+      
+      d->m_baseClassesList().resize(d->m_baseClassesSize()-1);
       return;
     }
 }
 
 void CppClassType::setClassType(ClassType type)
 {
-  m_classType = type;
+  d_func_dynamic()->m_classType = type;
 }
 
-CppClassType::ClassType CppClassType::classType() const
+ClassType CppClassType::classType() const
 {
-  return m_classType;
+  return d_func()->m_classType;
 }
 
 // ---------------------------------------------------------------------------
@@ -286,12 +311,12 @@ CppClassType::ClassType CppClassType::classType() const
 // ---------------------------------------------------------------------------
 AbstractType::Ptr CppTypeAliasType::type() const
 {
-  return m_type;
+  return d_func()->m_type.type();
 }
 
 void CppTypeAliasType::setType(AbstractType::Ptr type)
 {
-  m_type = type;
+  d_func_dynamic()->m_type = type->indexed();
 }
 
 // ---------------------------------------------------------------------------
@@ -305,57 +330,47 @@ void CppEnumeratorType::setValue(const QString &value)
   m_value = value;
 }*/
 
-CppTypeAliasType::CppTypeAliasType()
-{
-}
-
-CppEnumeratorType::CppEnumeratorType() : CppConstantIntegralType(TypeInt)
-{
-  setCV(KDevelop::Declaration::Const);
-}
-
-CppClassType::CppClassType(Declaration::CVSpecs spec)
-  : CppCVType(spec)
-  , m_classType(Class)
-  , m_closed(false)
-{
+CppClassType::CppClassType(Declaration::CVSpecs spec) : CppClassTypeBase(*new CppClassTypeData()) {
+  CppCVType::setCV(spec);
 }
 
 
-CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, CppConstantIntegralType::TypeModifiers modifiers) : CppIntegralType(type, modifiers) {
+CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers) : CppIntegralType(*new CppConstantIntegralTypeData()) {
+  setIntegralType(type);
+  setTypeModifiers(modifiers);
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((typeModifiers() & ModifierUnsigned))
     kDebug() << "setValue(signed) called on unsigned type";
-  m_value = value;
+  d_func_dynamic()->m_value = value;
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(typeModifiers() & ModifierUnsigned))
     kDebug() << "setValue(unsigned) called on not unsigned type";
-  m_value = (qint64)value;
+  d_func_dynamic()->m_value = (qint64)value;
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<float>(float value) {
   if(integralType() != TypeFloat)
     kDebug() << "setValue(float) called on non-float type";
-  memcpy(&m_value, &value, sizeof(float));
+  memcpy(&d_func_dynamic()->m_value, &value, sizeof(float));
 }
 
 template<>
 void CppConstantIntegralType::setValueInternal<double>(double value) {
   if(integralType() != TypeDouble)
     kDebug() << "setValue(double) called on non-double type";
-  memcpy(&m_value, &value, sizeof(double));
+  memcpy(&d_func_dynamic()->m_value, &value, sizeof(double));
 }
 
 uint CppConstantIntegralType::hash() const {
   uint ret = IntegralType::hash();
-  ret += 47 * (uint)m_value + 11*(uint)integralType();
+  ret += 47 * (uint)d_func()->m_value + 11*(uint)integralType();
   return ret;
 }
 
@@ -364,13 +379,13 @@ QString CppConstantIntegralType::toString() const {
     case TypeNone:
       return "none";
     case TypeChar:
-      return QString("%1").arg((char)m_value);
+      return QString("%1").arg((char)d_func()->m_value);
     case TypeWchar_t:
-      return QString("%1").arg((wchar_t)m_value);
+      return QString("%1").arg((wchar_t)d_func()->m_value);
     case TypeBool:
-      return m_value ? "true" : "false";
+      return d_func()->m_value ? "true" : "false";
     case TypeInt:
-      return (typeModifiers() & ModifierUnsigned) ? QString("%1u").arg((uint)m_value) : QString("%1").arg((int)m_value);
+      return (typeModifiers() & ModifierUnsigned) ? QString("%1u").arg((uint)d_func()->m_value) : QString("%1").arg((int)d_func()->m_value);
     case TypeFloat:
       return QString("%1").arg( value<float>() );
     case TypeDouble:
@@ -381,10 +396,12 @@ QString CppConstantIntegralType::toString() const {
   return "<unknown_value>";
 }
 
-CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifiers modifiers)
-  : m_type(type)
-  , m_modifiers(modifiers)
+CppIntegralType::CppIntegralType(IntegralTypes type, TypeModifiers modifiers) : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData())
 {
+  TYPE_D_DYNAMIC(CppIntegralType);
+  d->m_type = type;
+  d->m_modifiers = modifiers;
+  
   QString name;
 
   switch (type) {
@@ -427,14 +444,14 @@ CppIntegralType::CppIntegralType(IntegralTypes type, CppIntegralType::TypeModifi
   setName(IndexedString(name));
 }
 
-CppIntegralType::TypeModifiers CppIntegralType::typeModifiers() const
+TypeModifiers CppIntegralType::typeModifiers() const
 {
-  return m_modifiers;
+  return d_func()->m_modifiers;
 }
 
-CppIntegralType::IntegralTypes CppIntegralType::integralType() const
+IntegralTypes CppIntegralType::integralType() const
 {
-  return m_type;
+  return d_func()->m_type;
 }
 
 QString CppIntegralType::toString() const
@@ -443,16 +460,16 @@ QString CppIntegralType::toString() const
 }
 
 void CppCVType::clear() {
-  m_constant = false;
-  m_volatile = false;
+  cvData()->m_constant = false;
+  cvData()->m_volatile = false;
 }
 
 
-CppCVType::CppCVType(Declaration::CVSpecs spec)
-  : m_constant(spec & Declaration::Const)
-  , m_volatile(spec & Declaration::Volatile)
-{
-}
+// CppCVType::CppCVType(/*Declaration::CVSpecs spec*/)
+// {
+//   cvData()->m_constant = spec & Declaration::Const;
+//   cvData()->m_volatile = spec & Declaration::Volatile;
+// }
 
 QString CppCVType::cvString() const
 {
@@ -464,9 +481,9 @@ QString CppFunctionType::toString() const
   return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
 }
 
-CppPointerType::CppPointerType(Declaration::CVSpecs spec)
-  : CppCVType(spec)
+CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(*new CppPointerTypeData())
 {
+  setCV(spec);
 }
 
 QString CppPointerType::toString() const
@@ -474,9 +491,9 @@ QString CppPointerType::toString() const
   return QString("%1%2").arg(PointerType::toString()).arg(cvString());
 }
 
-CppReferenceType::CppReferenceType(Declaration::CVSpecs spec)
-  : CppCVType(spec)
+CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceTypeBase(*new CppReferenceTypeData())
 {
+  setCV(spec);
 }
 
 QString CppReferenceType::toString() const
@@ -517,11 +534,6 @@ uint CppFunctionType::hash() const
 uint CppClassType::hash() const
 {
   return IdentifiedType::hash();
-
-/*  foreach (const BaseClassInstance& base, m_baseClasses)
-    hash_val = (hash_val << 5) - hash_val + base.baseClass->hash() + (base.access + base.virtualInheritance) * 281;
-
-  return hash_val;*/
 }
 
 uint CppTypeAliasType::hash() const
@@ -545,9 +557,9 @@ void CppClassType::clear() {
   //StructureType::clear();
   IdentifiedType::clear();
   CppCVType::clear();
-  m_baseClasses.clear();
-  m_classType = Class;
-  m_closed = false;
+  d_func_dynamic()->m_baseClassesList().clear();
+  d_func_dynamic()->m_classType = Class;
+  d_func_dynamic()->m_closed = false;
 }
 
 QString CppClassType::toString() const
@@ -571,9 +583,9 @@ QString CppClassType::toString() const
   return QString("<%1>%2").arg(type).arg(cvString());
 }
 
-CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec)
-  : CppIntegralType(TypeInt)
+CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerationTypeBase(*new CppEnumerationTypeData())
 {
+  CppIntegralType::setIntegralType(TypeInt);
   setCV(spec);
 }
 
@@ -586,119 +598,16 @@ uint CppEnumerationType::hash() const
   return IdentifiedType::hash();
 }
 
-// QString CppIntegralType::mangled() const
-// {
-//   QString ret;
-//   if (typeModifiers() & ModifierUnsigned)
-//     ret = "U";
-// 
-//   switch (integralType()) {
-//     case TypeChar:
-//       if (typeModifiers() & ModifierSigned)
-//         ret += 'S';
-//       ret += 'c';
-//       break;
-//     case TypeWchar_t:
-//       ret += 'w';
-//       break;
-//     case TypeBool:
-//       ret += 'b';
-//       break;
-//     case TypeInt:
-//       if (typeModifiers() & ModifierLong)
-//         if (typeModifiers() & ModifierLongLong)
-//           ret += 'x';
-//         else
-//           ret += 'l';
-//       else
-//         ret += 'i';
-//       break;
-//     case TypeFloat:
-//       ret += 'f';
-//       break;
-//     case TypeDouble:
-//       if (typeModifiers() & ModifierLong)
-//         ret += 'r';
-//       else
-//         ret += 'd';
-//       break;
-//     case TypeVoid:
-//       ret += 'v';
-//       break;
-//     default:
-//       ret += '?';
-//       break;
-//   }
-//   return ret + cvMangled();
-// }
-
 QString CppCVType::cvMangled() const
 {
   QString ret;
-  if (m_constant)
+  if (cvData()->m_constant)
     ret += 'C';
-  if (m_volatile)
+  if (cvData()->m_volatile)
     ret += 'V';
   return ret;
 }
 
-// QString CppPointerType::mangled() const
-// {
-//   QString ret = "P" + cvMangled();
-//   if (baseType())
-//     ret += baseType()->mangled();
-//   return ret;
-// }
-
-// QString CppReferenceType::mangled() const
-// {
-//   QString ret = "R" + cvMangled();
-//   if (baseType())
-//     ret += baseType()->mangled();
-//   return ret;
-// }
-
-// QString CppClassType::mangled() const
-// {
-//   return idMangled() + cvMangled();
-// }
-
-// QString CppTypeAliasType::mangled() const
-// {
-//   if( type() )
-//     return "TA" + type()->mangled() + cvMangled();
-//   else
-//     return "TA" + cvMangled();
-// }
-// 
-// QString CppFunctionType::mangled() const
-// {
-//   ClassFunctionDeclaration* classFunctionDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration());
-// 
-//   bool constructor = classFunctionDecl && classFunctionDecl->isConstructor();
-// 
-//   QualifiedIdentifier id = identifier();
-// 
-//   Identifier function = id.top();
-//   if (!id.isEmpty())
-//     id.pop();
-// 
-//   QString ret = QString("%1__%2%3").arg(constructor ? QString() : function.mangled()).arg(cvMangled()).arg(id.mangled());
-// 
-//   foreach (const AbstractType::Ptr& argument, arguments())
-//     if (argument)
-//       ret += argument->mangled();
-//     else
-//       ret += '?';
-// 
-//   return ret;
-// }
-// 
-// QString CppArrayType::mangled() const
-// {
-//   return QString("A%1%2").arg(dimension()).arg(elementType() ? elementType()->mangled() : QString());
-// }
-// 
 TemplateParameterDeclaration* CppTemplateParameterType::declaration(const TopDUContext* top) const {
   return static_cast<TemplateParameterDeclaration*>(IdentifiedType::declaration(top));
 }
@@ -706,11 +615,6 @@ TemplateParameterDeclaration* CppTemplateParameterType::declaration(const TopDUC
 QString CppTemplateParameterType::toString() const {
   return "<template> " + IdentifiedType::qualifiedIdentifier().toString();
 }
-// 
-// QString CppTemplateParameterType::mangled() const
-// {
-//   return QString("T%1").arg(declaration() ? declaration()->identifier().toString() : QString());
-// }
 
 void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
     v->visit(this);
@@ -719,5 +623,14 @@ void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
 
 uint CppTemplateParameterType::hash() const {
   return 41*IdentifiedType::hash();
+}
+
+TypeModifiers& operator|=(TypeModifiers& lhs, const TypeModifiers& rhs) {
+  lhs = (TypeModifiers)((uint)lhs | (uint)rhs);
+  return lhs;
+}
+
+TypeModifiers operator|(const TypeModifiers& lhs, const TypeModifiers& rhs) {
+  return (TypeModifiers)((uint)lhs | (uint)rhs);
 }
 

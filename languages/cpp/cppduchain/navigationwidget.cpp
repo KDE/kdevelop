@@ -423,9 +423,9 @@ class NavigationContext : public KShared {
               m_currentText += "class ";
               eventuallyMakeTypeLinks( klass );
 
-              foreach( const CppClassType::BaseClassInstance& base, klass->baseClasses() ) {
+              foreach( const BaseClassInstance& base, klass->baseClasses() ) {
                 m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
-                eventuallyMakeTypeLinks(base.baseClass.data());
+                eventuallyMakeTypeLinks(base.baseClass.type().data());
               }
               m_currentText += " ";
             }

@@ -67,7 +67,7 @@ protected:
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
-  virtual void addBaseType( CppClassType::BaseClassInstance base );
+  virtual void addBaseType( BaseClassInstance base );
 
   bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
 

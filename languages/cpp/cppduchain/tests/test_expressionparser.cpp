@@ -139,8 +139,8 @@ TestExpressionParser::TestExpressionParser()
 
 void TestExpressionParser::initTestCase()
 {
-  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeVoid));
-  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(CppIntegralType::TypeInt));
+  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeVoid));
+  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt));
 }
 
 void TestExpressionParser::cleanupTestCase()
@@ -271,8 +271,8 @@ void TestExpressionParser::testArray() {
     QVERIFY(result.isInstance);
     kDebug() << result.toString();
     kDebug() << typeid(*result.type.type().data()).name();
-    QVERIFY(dynamic_cast<CppArrayType*>(result.type.type().data()));
-    QCOMPARE(static_cast<CppArrayType*>(result.type.type().data())->dimension(), 8);
+    QVERIFY(dynamic_cast<ArrayType*>(result.type.type().data()));
+    QCOMPARE(static_cast<ArrayType*>(result.type.type().data())->dimension(), 8);
   }
   
   {
@@ -310,7 +310,7 @@ void TestExpressionParser::testDynamicArray() {
     QVERIFY(result.isInstance);
     kDebug() << result.toString();
     kDebug() << typeid(*result.type.type().data()).name();
-    QVERIFY(dynamic_cast<CppArrayType*>(result.type.type().data()));
+    QVERIFY(dynamic_cast<ArrayType*>(result.type.type().data()));
   }
   
   {
