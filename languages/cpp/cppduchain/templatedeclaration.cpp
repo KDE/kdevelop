@@ -496,7 +496,7 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
 }
 
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
-CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom, bool visible )
+CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
   StandardCppDUContext* contextCopy = 0;
   
@@ -699,8 +699,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     
     if(instantiatedTemplate && dynamic_cast<TemplateDeclaration*>(instantiatedFrom))
       instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
-    ///@todo Check the safety of this when the declaration is not anonymous!
-    instantiatedDeclaration->setContext(parentContext, !visible);
+    
+    ///@todo check for possible multi-threading issues when inserting visible declarations into anonymous contexts
+    instantiatedDeclaration->setContext(parentContext, (bool)templateArguments.templateParametersSize());
   }
   
   return contextCopy;
@@ -718,7 +719,7 @@ DeclarationId TemplateDeclaration::id() const
 }
 
 ///@todo Use explicitly declared specializations
-Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& templateArguments, const TopDUContext* source, bool visible )
+Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& templateArguments, const TopDUContext* source )
 {
 /*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
     Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
@@ -726,7 +727,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   //kDebug() << dynamic_cast<const Declaration*>(this)->toString() << templateArguments.toString() << templateArguments.viewDebug();
   
   if( m_instantiatedFrom )
-    return m_instantiatedFrom->instantiate( templateArguments, source, visible );
+    return m_instantiatedFrom->instantiate( templateArguments, source );
   
   {
     QMutexLocker l(&instantiationsMutex);
@@ -748,7 +749,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
       if(newParentDecl) {
         TemplateDeclaration* templDec = dynamic_cast<TemplateDeclaration*>(newParentDecl);
         if(templDec)
-          newParentDecl = templDec->instantiate( IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source, visible );
+          newParentDecl = templDec->instantiate( IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source );
       }
       
       if(newParentDecl && newParentDecl->internalContext())
@@ -765,7 +766,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   Q_ASSERT(cloneTemplateDecl);
   
   ///Now eventually create the virtual contexts, and fill new information into the declaration
-  instantiateDeclarationAndContext( surroundingContext, source, decl->internalContext(), templateArguments, clone, decl, visible );
+  instantiateDeclarationAndContext( surroundingContext, source, decl->internalContext(), templateArguments, clone, decl );
 
 //  cloneTemplateDecl->setInstantiatedFrom(this);
   Q_ASSERT(clone->topContext());
