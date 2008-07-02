@@ -190,7 +190,7 @@ void CMakePreferences::showInternal(int state)
         if(showAdv && !shown)
             shown=m_currentModel->isAdvanced(i);
 
-        m_prefsUi->cacheList->setRowHidden(i, QModelIndex(), shown);
+        m_prefsUi->cacheList->setRowHidden(i, shown);
     }
 }
 
