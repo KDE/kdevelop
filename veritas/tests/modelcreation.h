@@ -38,10 +38,10 @@ class TestStub : public Test
 {
 public:
     TestStub(const QList<QVariant>& data, Test* parent)
-            : Test(data, parent), m_state(Veritas::RunSuccess) {}
+            : Test(data, parent), m_state(Veritas::RunSuccess), m_shouldRun(false) {}
 
     TestStub(const char* name, Test* parent)
-            : Test(name, parent), m_state(Veritas::RunSuccess) {}
+            : Test(name, parent), m_state(Veritas::RunSuccess), m_shouldRun(true) {}
 
     int run() {
         if (child(0)) {
@@ -58,11 +58,12 @@ public:
     }
 
     bool shouldRun() const {
-        return true;
+        return m_shouldRun;
     }
 
     static QList<int> executedItems; // store the index of rows that got executed
     Veritas::TestState m_state;
+    bool m_shouldRun;
 };
 
 QList<int> TestStub::executedItems;

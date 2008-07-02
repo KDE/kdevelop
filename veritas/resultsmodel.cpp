@@ -61,17 +61,8 @@ QModelIndex ResultsModel::index(int row, int column, const QModelIndex& parent) 
             if (t->result().outputLineCount() > row) {
                 const char* data = t->result().outputLine(row).constData();
                 i = createIndex(row, column, (void*)data);
-            } else {
-                 //kDebug() << " row >= outputLineCount() ... "
-                 //         << row << "<->" << t->result().outputLineCount();
             }
         }
-    } else {
-        // lv2 item requested, which do not exist.
-        // kDebug() << "\n\tparent-> " << parent.internalId()
-        //          << " | " << QString(static_cast<const char*>(parent.internalPointer()))
-        //          << "\n\trow-> " << row
-        //          << "\n\trunner2result " << m_runner2result;*/
     }
     return i;
 }

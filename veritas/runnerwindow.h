@@ -204,12 +204,6 @@ private slots:
     void displayNumExceptions(int numItems) const;
 
     /*!
-     * Highlights the runner view row where the data of the runner
-     * item referred to by \a testItemIndex is displayed.
-     */
-    void highlightRunningItem(const QModelIndex& testItemIndex) const;
-
-    /*!
      * Sets the filter in the results model. The filter is determinded
      * from the enabled filter buttons.
      */
@@ -276,7 +270,12 @@ private: // Operations
     void initProxyModels(RunnerModel* model);
     void connectProgressIndicators(RunnerModel* model);
 
-    // more stuff
+    // helpers for setResultsFilter()
+    void highlightResultAgain(const QModelIndex& previous) const;
+    int readButtonFilterSetting() const;
+    QModelIndex selectedResultIndex() const;
+
+    // the rest
 
     /*!
      * Disables and modifies widgets and signals before running items.

@@ -85,7 +85,7 @@ public: // Operations
      */
     ResultsProxyModel* resultsProxyModel() const;
 
-private slots:
+public slots:
 
     /*!
      * Enables sortign when the model has data, otherwise disables
@@ -93,13 +93,13 @@ private slots:
      */
     void setupSorting() const;
     void spanOutputLines(const QModelIndex&, int, int);
+    void span();
 
 private: // Operations
 
     // Copy and assignment not supported.
     ResultsViewController(const ResultsViewController&);
     ResultsViewController& operator=(const ResultsViewController&);
-    void debugSpan(const QModelIndex& index);
 };
 
 } // namespace

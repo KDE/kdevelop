@@ -91,9 +91,7 @@ private: // Operations
     ProxyModelCommon& operator=(const ProxyModelCommon&);
 
 private: // Attributes
-
     bool m_active;
-
     QBitArray m_enabledColumns;
 };
 

@@ -489,6 +489,10 @@ Test* RunnerModel::itemFromIndex(const QModelIndex& index) const
 void RunnerModel::threadCode()
 {
     // Recursively process the items.
+    if (m_rootItem && m_rootItem->shouldRun()) {
+        kDebug() << "Running root item ...";
+        m_rootItem->run();
+    }
     runItem(index(0, 0));
 }
 

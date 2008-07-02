@@ -110,6 +110,13 @@ public: // Operations
     QModelIndex parent(const QModelIndex& index) const;
 
     QString debug() const;
+    Test* testFromIndex(const QModelIndex& i) const {
+        QModelIndex j = mapFromTestIndex(i);
+        return itemFromIndex(j);
+    }
+    void changed() {
+        emit dataChanged(index(0,0), index(rowCount(), 0));
+    }
 
 public slots:
 

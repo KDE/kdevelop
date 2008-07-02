@@ -28,32 +28,31 @@
 #include "resultsproxymodel.h"
 #include "resultsmodel.h"
 #include <testresult.h>
+#include <itest.h>
+#include <test.h>
 #include <KDebug>
 
-namespace Veritas
-{
+using Veritas::Test;
+using Veritas::ITest;
+using Veritas::ResultsModel;
+using Veritas::ResultsProxyModel;
 
 ResultsProxyModel::ResultsProxyModel(QObject* parent,  int filter)
         : QSortFilterProxyModel(parent), m_filter(filter)
 {
-
 }
 
 ResultsProxyModel::~ResultsProxyModel()
-{
-
-}
+{}
 
 QVariant ResultsProxyModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
     }
-
     if (!isColumnEnabled(index.column())) {
         return QVariant();
     }
-
     return QSortFilterProxyModel::data(index, role);
 }
 
@@ -67,6 +66,7 @@ void ResultsProxyModel::setFilter(int filter)
     if (m_filter != filter) {
         // Update only when not same filter.
         m_filter = filter;
+        resetTestFilter();
         reset();
     }
 }
@@ -79,14 +79,20 @@ bool ResultsProxyModel::filterAcceptsRow(int source_row,
         return false;
     }
     int result = model()->result(source_row);
-    if ( (result & m_filter) || (result == Veritas::RunException)) {
-        return true;
-    } else {
-        if (source_parent.isValid()) {
+    if ((result & m_filter) || (result == Veritas::RunException)) {
+        if (m_testFilter.isEmpty()) {
             return true;
         }
         QModelIndex i = model()->index(source_row, 0, source_parent);
-        kDebug() << " filtering " << model()->data(i, Qt::DisplayRole).toString();
+        Test* t = model()->testFromIndex(i);
+        bool b= m_testFilter.contains(t);
+        return b;
+    } else {
+        if (source_parent.isValid()) { // lvl2 item, ie output line
+            return true;
+        }
+        QModelIndex i = model()->index(source_row, 0, source_parent);
+        //kDebug() << " filtering " << model()->data(i, Qt::DisplayRole).toString();
         return false;
     }
 }
@@ -96,5 +102,14 @@ ResultsModel* ResultsProxyModel::model() const
     return static_cast<ResultsModel*>(sourceModel());
 }
 
-} // namespace
+void ResultsProxyModel::setTestFilter(const QList<ITest*>& t)
+{
+    m_testFilter = t;
+    reset();
+}
+
+void ResultsProxyModel::resetTestFilter()
+{
+    m_testFilter.clear();
+}
 

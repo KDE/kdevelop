@@ -30,10 +30,13 @@
 
 #include "proxymodelcommon.h"
 #include <testresult.h>
+#include <QList>
 #include <QSortFilterProxyModel>
 
 namespace Veritas
 {
+
+class ITest;
 
 class ResultsModel;
 
@@ -85,6 +88,8 @@ public: // Operations
      * filter are included in the model.
      */
     void setFilter(int filter);
+    void setTestFilter(const QList<ITest*>&);
+    void resetTestFilter();
 
 protected: // Operations
 
@@ -109,8 +114,8 @@ private: // Operations
     ResultsProxyModel& operator=(const ResultsProxyModel&);
 
 private: // Attributes
-
     int m_filter;
+    QList<ITest*> m_testFilter;;
 };
 
 } // namespace

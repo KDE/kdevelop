@@ -22,6 +22,7 @@
 #include "test.h"
 #include <KDebug>
 
+using Veritas::ITest;
 using Veritas::Test;
 using Veritas::TestState;
 using Veritas::TestResult;
@@ -61,7 +62,7 @@ QString Test::name() const
 
 Test::~Test()
 {
-    qDeleteAll(m_childItems);
+    qDeleteAll(m_children);
 }
 
 int Test::run()
@@ -90,7 +91,7 @@ Test* Test::parent() const
 
 Test* Test::child(int row) const
 {
-    return m_childItems.value(row);
+    return m_children.value(row);
 }
 
 Test* Test::childNamed(const QString& name) const
@@ -103,19 +104,19 @@ Test* Test::childNamed(const QString& name) const
 void Test::addChild(ITest* item)
 {
     Test* t = qobject_cast<Test*>(item);
-    m_childItems.append(t);
+    m_children.append(t);
     m_childMap[t->name()] = t;
 }
 
 int Test::childCount() const
 {
-    return m_childItems.count();
+    return m_children.count();
 }
 
 int Test::row() const
 {
     if (m_parentItem) {
-        return m_parentItem->m_childItems.indexOf(const_cast<Test*>(this));
+        return m_parentItem->m_children.indexOf(const_cast<Test*>(this));
     }
     return 0;
 }
@@ -154,7 +155,7 @@ bool Test::selected() const
 void Test::setSelected(bool select)
 {
     m_selected = select;
-    foreach (Test* child, m_childItems)
+    foreach (Test* child, m_children)
         child->setSelected(select);
 }
 
@@ -185,6 +186,16 @@ void Test::setResult(const TestResult& res)
     setData(3, res.file().filePath());
     setData(4, res.line());
     setState(res.state());
+    if (res.state() == Veritas::RunSuccess) {
+        // dont store the spam output, this consumes
+        // too much.
+        TestResult res2;
+        res2.setState(res.state());
+        res2.setFile(res.file());
+        res2.setMessage(res.message());
+        res2.setLine(res.line());
+        m_result = res2;
+    }
 }
 
 void Test::clear()
@@ -194,6 +205,19 @@ void Test::clear()
         setData(i, "");
     }
     setState(Veritas::NoResult);
+}
+
+QList<ITest*> Test::leafs() const
+{
+    QList<ITest*> l;
+    foreach(ITest* t, m_children) {
+        if (t->childCount() == 0) {
+            l.append(t);
+        } else {
+            l += t->leafs();
+        }
+    }
+    return l;
 }
 
 #include "test.moc"

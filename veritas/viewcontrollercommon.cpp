@@ -44,7 +44,6 @@ ViewControllerCommon::~ViewControllerCommon()
 
 void ViewControllerCommon::expandOrCollapse(const QModelIndex& index) const
 {
-    kDebug() << "view()->wordWrap() " << view()->wordWrap() << " [" << metaObject()->className() << "]";
     bool isExpanded = view()->isExpanded(index);
     if (isExpanded)
         view()->collapse(index);

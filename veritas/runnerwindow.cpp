@@ -281,10 +281,8 @@ void RunnerWindow::initFilterButtons(RunnerModel* model)
     // Hide filter buttons for results that are not expected.
     int results = model->expectedResults();
     bool expected;
-    /*    expected = results & Veritas::RunInfo;
-        m_ui.buttonInfos->setVisible(expected);
-        expected = results & Veritas::RunWarning;
-        m_ui.buttonWarnings->setVisible(expected);*/
+    m_ui.buttonInfos->setVisible(false);
+    m_ui.buttonWarnings->setVisible(false);
     expected = results & Veritas::RunError;
     m_ui.buttonErrors->setVisible(expected);
     expected = results & Veritas::RunFatal;
@@ -384,8 +382,6 @@ void RunnerWindow::connectProgressIndicators(RunnerModel* model)
     // Get notified of items run.
     connect(model, SIGNAL(numStartedChanged(int)),
             SLOT(displayProgress(int)));
-    connect(model, SIGNAL(itemStarted(const QModelIndex&)),
-            SLOT(highlightRunningItem(const QModelIndex&)));
     connect(model, SIGNAL(numCompletedChanged(int)),
             SLOT(displayNumCompleted(int)));
     connect(model, SIGNAL(allItemsCompleted()),
@@ -433,6 +429,8 @@ void RunnerWindow::setModel(RunnerModel* model)
             resultsController(), SLOT(spanOutputLines(const QModelIndex&, int, int)));
     connect(m_selection, SIGNAL(selectionChanged()),
             runnerModel(), SLOT(countItems()));
+    connect(resultsProxyModel(), SIGNAL(modelReset()),
+            resultsController(), SLOT(span()));
 
 
     // set top row higlighted
@@ -579,139 +577,105 @@ void RunnerWindow::displayNumExceptions(int numItems) const
                      statusWidget()->labelNumExceptionsPic, numItems);
 }
 
-void RunnerWindow::highlightRunningItem(const QModelIndex& testItemIndex) const
+void RunnerWindow::setResultsFilter() const
 {
-    if (isMinimalUpdate()) {
-        return;
-    }
-
-    // Determine runner model proxy index and highlight related row.
-/*    QModelIndex index;
-    index = Utils::proxyIndexFromModel(runnerProxyModel(), testItemIndex);
-    runnerController()->setHighlightedRow(index);*/
+    QModelIndex current = selectedResultIndex();
+    int filter = readButtonFilterSetting();
+    resultsProxyModel()->setFilter(filter); // also updates the view
+    highlightResultAgain(current);
 }
 
-void RunnerWindow::setResultsFilter() const
+// helper for setResultsFilter()
+void RunnerWindow::highlightResultAgain(const QModelIndex& previous) const
+{
+    // Try to highlight same result as was highlighted before.
+    if (!previous.isValid()) {
+        return; // When no result was highlighted before, do nothing
+    }
+    QModelIndex viewIndex;
+    viewIndex = Utils::proxyIndexFromModel(resultsProxyModel(), previous);
+    if (!viewIndex.isValid()) {
+        return; // Previously highlighted result is filtered out now.
+    }
+    enableResultSync(false);
+    resultsView()->setCurrentIndex(viewIndex);
+    enableResultSync(true);
+}
+
+// helper for setResultsFilter()
+int RunnerWindow::readButtonFilterSetting() const
+{
+        // Determine filter settings.
+    int filter = 0;
+    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
+        filter = filter | Veritas::RunError;
+    }
+    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
+        filter = filter | Veritas::RunFatal;
+    }
+    return filter;
+}
+
+// helper for setResultsFilter()
+QModelIndex RunnerWindow::selectedResultIndex() const
 {
     // Remember currently highlighted result.
     QModelIndex resultIndex;
     QModelIndexList indexes;
     indexes = resultsView()->selectionModel()->selectedIndexes();
-
     if (indexes.count() > 0) {
-        resultIndex = Utils::modelIndexFromProxy(resultsProxyModel(),
-                      indexes.first());
+        resultIndex = resultsProxyModel()->mapToSource(indexes.first());
     }
-
-    // Determine filter settings.
-    int filter = 0;
-
-//     if (m_ui.buttonInfos->isEnabled() && m_ui.buttonInfos->isChecked()) {
-//         filter = Veritas::RunInfo;
-//     }
-//
-//     if (m_ui.buttonWarnings->isEnabled() && m_ui.buttonWarnings->isChecked()) {
-//         filter = filter | Veritas::RunWarning;
-//     }
-
-    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
-        filter = filter | Veritas::RunError;
-    }
-
-    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
-        filter = filter | Veritas::RunFatal;
-    }
-
-    // Setting the filter updates the view.
-    resultsProxyModel()->setFilter(filter);
-
-    // When no result was highlighted before than try to highlight the
-    // one that corresponds to the currently highlighted runner item.
-    if (!resultIndex.isValid()) {
-        syncResultWithTest(runnerView()->selectionModel()->selection(),
-                           runnerView()->selectionModel()->selection());
-        return;
-    }
-
-    // At least there should be a current but not necessarily highlighted result
-    // in order to see the focus rect when the results view gets the focus.
-    ensureCurrentResult();
-
-    // Try to highlight same result as was highlighted before.
-    QModelIndex currentIndex;
-    currentIndex = Utils::proxyIndexFromModel(resultsProxyModel(), resultIndex);
-
-    if (!currentIndex.isValid()) {
-        // Previously highlighted result is filtered out now.
-        return;
-    }
-
-    // Highlight result without affecting the runner view.
-    enableResultSync(false);
-    resultsView()->setCurrentIndex(currentIndex);
-    enableResultSync(true);
-
-    // Make the row in every tree view visible and expand corresponding parents.
-    scrollToHighlightedRows();
+    return resultIndex;
 }
 
 void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
                                       const QItemSelection& deselected) const
 {
     Q_UNUSED(deselected);
-    // Do nothing when there are no results or no runner item is selected.
-    if (!resultsView()->indexBelow(resultsView()->rootIndex()).isValid()) {
-        return;
-    }
-
     QModelIndexList indexes = selected.indexes();
 
-    if (indexes.count() < 1) {
+    // Do nothing when there are no results or no runner item is selected.
+    if (indexes.count() < 1 || !runnerProxyModel()->index(0,0).isValid()) {
         return;
     }
 
-    // Prevent from circular dependencies.
-    enableResultSync(false);
-
-    // Try to highlight the corresponding result.
-    resultsView()->clearSelection();
+    enableResultSync(false); // Prevent circular reaction
 
     // Get the results model index that corresponds to the runner item index.
-    QModelIndex testItemIndex;
-    testItemIndex = Utils::modelIndexFromProxy(runnerProxyModel(), indexes.first());
+    QModelIndex testItemIndex = runnerProxyModel()->mapToSource(indexes.first());
     QModelIndex resultIndex = resultsModel()->mapFromTestIndex(testItemIndex);
+    QModelIndex viewIndex = resultsProxyModel()->mapFromSource(resultIndex);
 
     // At least there should be a current but not necessarily highlighted result
     // in order to see the focus rect when the results view gets the focus.
     ensureCurrentResult();
 
-    // If not found then there is no result for this runner item.
+    QModelIndex filterIndex;
+    if (resultIndex.isValid() && viewIndex.isValid()) {
+        resultsView()->clearSelection();
+        resultsView()->setCurrentIndex(viewIndex);
+        scrollToHighlightedRows();
+        filterIndex = testItemIndex.parent();
+    } else if (!resultIndex.isValid()) {
+        filterIndex = testItemIndex;
+    }
+
+    if (filterIndex.isValid()) {
+        Test* t = static_cast<Test*>(filterIndex.internalPointer());
+        resultsProxyModel()->setTestFilter(t->leafs());
+    }
+
     if (!resultIndex.isValid()) {
-        // Enable selection handler again.
-        enableResultSync(true);
-        return;
+        kDebug() << "Failed to find result item for runner stuff";
+    } else if (!viewIndex.isValid()) {
+        kDebug() << "Looks like result is being filtered";
     }
 
-    // Prepare row highlighting.
-    QModelIndex currentIndex = Utils::proxyIndexFromModel(resultsProxyModel(),
-                               resultIndex);
-
-    // When results proxy model index not exists it is filtered out.
-    if (!currentIndex.isValid()) {
-        // Enable selection handler again.
-        enableResultSync(true);
-        return;
-    }
-
-    // Highlight corresponding result now.
-    resultsView()->setCurrentIndex(currentIndex);
-
-    // Make the row in every tree view visible and expand corresponding parents.
-    scrollToHighlightedRows();
-
-    // Enable selection handler again.
     enableResultSync(true);
 }
+
+
 
 void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
                                       const QItemSelection& deselected) const
@@ -727,6 +691,10 @@ void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
     // Determine the results model index.
     QModelIndex resultIndex;
     resultIndex = Utils::modelIndexFromProxy(resultsProxyModel(), indexes.first());
+
+    if (resultIndex.parent().isValid()) {
+        resultIndex = resultIndex.parent();
+    }
 
     // Get the corresponding runner item index contained in the results model.
     QModelIndex testItemIndex;

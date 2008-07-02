@@ -98,11 +98,13 @@ void ResultsProxyModelTest::filter()
     assertRowFiltered(1);
 }
 
+// checker
 void ResultsProxyModelTest::assertRowFiltered(int row)
 {
     assertRowContains(row, QVariant(), QVariant(), QVariant());
 }
 
+// helper
 void ResultsProxyModelTest::setAllColumnsEnabled()
 {
     QBitArray cols(3);
@@ -112,12 +114,14 @@ void ResultsProxyModelTest::setAllColumnsEnabled()
     proxy->setEnabledColumns(cols);
 }
 
+// hecker
 void ResultsProxyModelTest::assertDataAt(int row, int column, const QVariant& expected)
 {
     QVariant actual = proxy->data(proxy->index(row, column), Qt::DisplayRole);
     KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
 }
 
+// checker
 void ResultsProxyModelTest::assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3)
 {
     assertDataAt(row, 0, col1);

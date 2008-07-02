@@ -32,19 +32,19 @@ namespace Veritas
 namespace ut
 {
 // Test is abstract so stub the run method
-class ConcreteTest : public Test
+class TestFake : public Test
 {
 public:
-    ConcreteTest(const QList<QVariant>& data, Test* parent = 0)
+    TestFake(const QList<QVariant>& data, Test* parent = 0)
             : Test(data, parent) {}
-    ConcreteTest(const QString& name, Test* parent = 0)
+    TestFake(const QString& name, Test* parent = 0)
             : Test(name, parent) {}
     int run() { return 0; }
 };
 }
 }
 
-using Veritas::ut::ConcreteTest;
+using Veritas::ut::TestFake;
 
 void TestTest::init()
 {
@@ -53,7 +53,7 @@ void TestTest::init()
     column2 = "one";
     column3 = 3.0;
     columns << column1 << column2 << column3;
-    root = new ConcreteTest(columns);
+    root = new TestFake(columns);
 }
 
 void TestTest::cleanup()
@@ -107,10 +107,10 @@ void TestTest::appendChildren()
 {
     QList<QVariant> child1Columns;
     child1Columns << "col1" << "col2" << "col3";
-    ConcreteTest* child1 = new ConcreteTest(child1Columns, root);
+    TestFake* child1 = new TestFake(child1Columns, root);
     root->addChild(child1);
 
-    ConcreteTest* child2 = new ConcreteTest("child2", root);
+    TestFake* child2 = new TestFake("child2", root);
     root->addChild(child2);
 
     assertNrofChildren(root, 2);
@@ -131,21 +131,69 @@ QString toString(int expected, int actual)
            QString(" got: ") + QString::number(actual);
 }
 
-void TestTest::assertNrofChildren(ConcreteTest* item, int nrof)
+// helper
+void TestTest::assertNrofChildren(TestFake* item, int nrof)
 {
     int actual = item->childCount();
     KOMPARE_MSG(nrof, actual, QString("Incorrect number of child items; ") + toString(nrof, actual));
 }
 
-void TestTest::assertNrofColumns(ConcreteTest* item, int nrof)
+// helper
+void TestTest::assertNrofColumns(TestFake* item, int nrof)
 {
     int actual = item->columnCount();
     KOMPARE_MSG(nrof, actual, QString("Not the right number of columns; ") + toString(nrof, actual));
 }
 
-void TestTest::assertDefaultResult(ConcreteTest* item)
+// helper
+void TestTest::assertDefaultResult(TestFake* item)
 {
     KOMPARE(int(Veritas::NoResult), item->state());
+}
+
+// command
+void TestTest::retrieveLeaves()
+{
+    QList<ITest*> leafs = root->leafs();
+    KOMPARE(0, leafs.size());
+
+    // single lvl1 item
+    TestFake* child1 = new TestFake("child1", root);
+    root->addChild(child1);
+    leafs = root->leafs();
+    KOMPARE(1, leafs.size());
+    KOMPARE("child1", leafs[0]->name());
+
+    // two lvl1 items
+    TestFake* child2 = new TestFake("child2", root);
+    root->addChild(child2);
+    leafs = root->leafs();
+    KOMPARE(2, leafs.size());
+    KOMPARE("child1", leafs[0]->name());
+    KOMPARE("child2", leafs[1]->name());
+
+    // add lvl2 item
+    TestFake* child11 = new TestFake("child11", child1);
+    child1->addChild(child11);
+    leafs = root->leafs();
+    KOMPARE(2, leafs.size());
+    KOMPARE("child11", leafs[0]->name());
+    KOMPARE("child2", leafs[1]->name());
+
+    // nother lvl2
+    TestFake* child12 = new TestFake("child12", child1);
+    child1->addChild(child12);
+    leafs = root->leafs();
+    KOMPARE(3, leafs.size());
+    KOMPARE("child11", leafs[0]->name());
+    KOMPARE("child12", leafs[1]->name());
+    KOMPARE("child2", leafs[2]->name());
+
+    // check lvl1's leafs
+    leafs = child1->leafs();
+    KOMPARE(2, leafs.size());
+    KOMPARE("child11", leafs[0]->name());
+    KOMPARE("child12", leafs[1]->name());
 }
 
 QTEST_KDEMAIN(TestTest, NoGUI)

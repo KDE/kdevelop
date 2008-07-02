@@ -28,7 +28,7 @@ namespace Veritas
 {
 namespace ut {
 
-class ConcreteTest;
+class TestFake;
 
 class TestTest : public QObject
 {
@@ -43,18 +43,19 @@ private slots:
     void accessIllegalColumn();
     void resetValue();
     void appendChildren();
+    void retrieveLeaves();
 
 private:
-    void assertNrofChildren(ConcreteTest*, int nrof);
-    void assertNrofColumns(ConcreteTest*, int nrof);
-    void assertDefaultResult(ConcreteTest*);
+    void assertNrofChildren(TestFake*, int nrof);
+    void assertNrofColumns(TestFake*, int nrof);
+    void assertDefaultResult(TestFake*);
 
 private:
     QList<QVariant> columns;
     QVariant column1;
     QVariant column2;
     QVariant column3;
-    ConcreteTest* root;
+    TestFake* root;
 };
 
 }

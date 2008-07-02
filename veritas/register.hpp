@@ -25,45 +25,39 @@
 namespace Veritas
 {
 
-template<typename S>
-Register<S>::Register()
+template<typename R, typename S>
+Register<R,S>::Register()
         : m_root(""),
-          c_suite("suite"),
-          c_case("case"),
-          c_cmd("command"),
-          c_name("name")
-{
-    // Data for column headers is stored in the root item.
-    QList<QVariant> rootData;
-    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
-             << i18n("File Name") << i18n("Line Number");
-    m_rootItem = new Test(rootData);
-}
-
-template<typename S>
-Register<S>::~Register()
+        c_suite("suite"),
+        c_case("case"),
+        c_cmd("command"),
+        c_name("name")
 {}
 
-template<typename S>
-Test* Register<S>::rootItem()
+template<typename R, typename S>
+Register<R,S>::~Register()
+{}
+
+template<typename R, typename S>
+R* Register<R,S>::rootItem()
 {
     return m_rootItem;
 }
 
-template<typename S>
-bool Register<S>::isStartElement_(const QString& elem)
+template<typename R, typename S>
+bool Register<R,S>::isStartElement_(const QString& elem)
 {
     return isStartElement() && (name() == elem);
 }
 
-template<typename S>
-bool Register<S>::isEndElement_(const QString& elem)
+template<typename R, typename S>
+bool Register<R,S>::isEndElement_(const QString& elem)
 {
     return isEndElement() && (name() == elem);
 }
 
-template<typename S>
-void Register<S>::addFromExe(const QFileInfo& exe)
+template<typename R, typename S>
+void Register<R,S>::addFromExe(const QFileInfo& exe)
 {
     KProcess* proc = new KProcess;
     setExecutable(exe);
@@ -71,8 +65,8 @@ void Register<S>::addFromExe(const QFileInfo& exe)
     addFromXml(proc);
 }
 
-template<typename S>
-void Register<S>::execute(KProcess* proc)
+template<typename R, typename S>
+void Register<R,S>::execute(KProcess* proc)
 {
     QStringList argv;
     argv << "-proto";
@@ -83,16 +77,21 @@ void Register<S>::execute(KProcess* proc)
     proc->waitForFinished(-1);
 }
 
-template<typename S>
-void Register<S>::addFromXml(QIODevice* dev)
+template<typename R, typename S>
+void Register<R,S>::addFromXml(QIODevice* dev)
 {
+    // Data for column headers is stored in the root item.
+    QList<QVariant> rootData;
+    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
+            << i18n("File Name") << i18n("Line Number");
+    m_rootItem = new TestRoot(rootData);
+
     Q_ASSERT(dev != 0);
     setDevice(dev);
     if (!device()->isOpen())
         device()->open(QIODevice::ReadOnly);
 
-    while (!atEnd())
-    {
+    while (!atEnd()) {
         readNext();
         if (isStartElement_(c_suite))
             processSuite();
@@ -100,51 +99,49 @@ void Register<S>::addFromXml(QIODevice* dev)
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
-template<typename S>
-void Register<S>::processSuite()
+template<typename R, typename S>
+void Register<R,S>::processSuite()
 {
     TestSuite* suite = new TestSuite(fetchName(), m_exe, m_rootItem);
     m_rootItem->addChild(suite);
     kDebug() << suite->name();
 
-    while (!atEnd() && !isEndElement_(c_suite))
-    {
+    while (!atEnd() && !isEndElement_(c_suite)) {
         readNext();
         if (isStartElement_(c_case))
             processCase(suite);
     }
 }
 
-template<typename S>
-void Register<S>::processCase(TestSuite* suite)
+template<typename R, typename S>
+void Register<R,S>::processCase(TestSuite* suite)
 {
     TestCase* caze = new TestCase(fetchName(), suite);
     suite->addChild(caze);
     kDebug() << caze->name();
-    while (!atEnd() && !isEndElement_(c_case))
-    {
+    while (!atEnd() && !isEndElement_(c_case)) {
         readNext();
         if (isStartElement_(c_cmd))
             processCmd(caze);
     }
 }
 
-template<typename S>
-void Register<S>::setExecutable(const QFileInfo& exe)
+template<typename R, typename S>
+void Register<R,S>::setExecutable(const QFileInfo& exe)
 {
     m_exe = exe;
 }
 
-template<typename S>
-void Register<S>::processCmd(TestCase* caze)
+template<typename R, typename S>
+void Register<R,S>::processCmd(TestCase* caze)
 {
     TestCommand* cmd = new TestCommand(fetchName(), caze);
     caze->addChild(cmd);
     kDebug() << cmd->name();
 }
 
-template<typename S>
-QString Register<S>::fetchName()
+template<typename R, typename S>
+QString Register<R,S>::fetchName()
 {
     return attributes().value(c_name).toString();
 }

@@ -33,6 +33,7 @@
 #include <testresult.h>
 
 #include <QMap>
+#include <QList>
 #include <QStringList>
 #include <QVariant>
 
@@ -105,6 +106,7 @@ public: // Operations
 
     void setIndex(const QModelIndex& index);
     QModelIndex index() const;
+    QList<ITest*> leafs() const;
 
 private: // Operations
 
@@ -115,7 +117,7 @@ private: // Operations
 private: // Attributes
     Test* m_parentItem;
     QList<QVariant> m_itemData;
-    QList<Test*> m_childItems;
+    QList<Test*> m_children;
     QMap<QString, Test*> m_childMap;
     QModelIndex m_index;
     QString m_name;

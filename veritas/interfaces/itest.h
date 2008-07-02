@@ -22,6 +22,7 @@
 #define VERITAS_ITEST_H
 
 #include <QString>
+#include <QList>
 #include <QModelIndex>
 #include <testresult.h>
 #include <veritasexport.h>
@@ -53,6 +54,9 @@ public:
      */
     void finished();
 
+    // these should be removed. instead keep a map
+    // of indicides <-> items in the runnermodel itself.
+    // remove modelindex param from started & finished signals.
     virtual QModelIndex index() const = 0;
     virtual void setIndex(const QModelIndex& index) = 0;
 
@@ -92,6 +96,8 @@ public:
      * Reports the item's location within its parent's list
      */
     virtual int row() const = 0;
+
+    virtual QList<ITest*> leafs() const = 0;
 
 signals:
     void started(QModelIndex);

@@ -40,10 +40,11 @@ namespace Veritas
  * & CppUnit plugins. It might be completly irrelevant for
  * other frameworks.
  */
-template<typename S>
+template<typename R, typename S>
 class VERITAS_EXPORT Register : public QXmlStreamReader
 {
 public:
+    typedef R TestRoot;
     typedef S TestSuite;
 
     Register();
@@ -51,7 +52,7 @@ public:
 
     void addFromXml(QIODevice*);
     void addFromExe(const QFileInfo& exe);
-    Veritas::Test* rootItem();
+    TestRoot* rootItem();
     void setRootDir(const QString& root);
     void setExecutable(const QFileInfo& exe);
 
@@ -67,7 +68,7 @@ private: // helpers
     QFileInfo fetchExe();
 
 private: // state
-    Veritas::Test* m_rootItem;
+    TestRoot* m_rootItem;
     QString m_root;
     QFileInfo m_exe;
 
