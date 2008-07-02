@@ -67,8 +67,6 @@ public:
   CppCVType() {
   }
   
-  CppCVType(CppCVTypeData& data) {
-  }
   virtual ~CppCVType() {
   }
 
@@ -276,7 +274,7 @@ TypeModifiers& operator|=(TypeModifiers& lhs, const TypeModifiers& rhs);
 TypeModifiers operator|(const TypeModifiers& lhs, const TypeModifiers& rhs);
 //Q_DECLARE_OPERATORS_FOR_FLAGS(TypeModifiers);
 
-typedef MergeCppCVType< KDevelop::MergeIdentifiedType<KDevelop::FunctionType> > CppFunctionTypeBase;
+typedef MergeCppCVType< KDevelop::FunctionType > CppFunctionTypeBase;
 
 struct CppFunctionTypeData : public CppFunctionTypeBase::Data {
 };

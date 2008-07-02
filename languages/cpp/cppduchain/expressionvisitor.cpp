@@ -911,7 +911,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           if( functions.first().function.isViable() && function ) {
             success = true;
             m_lastType = function->returnType();
-            m_lastInstance = Instance(function->declaration(topContext()));
+            m_lastInstance = Instance(functions.first().function.declaration());
             
             lock.unlock();
             newUse( node, node->op, node->op+1, functions.first().function.declaration() );
@@ -1466,7 +1466,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     m_lastType = f->returnType();
-    m_lastInstance = Instance(f->declaration(topContext()));//Mark instances of function return-types with the function they were returned by
+    //Just keep the function instance, set in findMember(..)
   }
   
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {

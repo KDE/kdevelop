@@ -528,7 +528,7 @@ uint CppReferenceType::hash() const
 
 uint CppFunctionType::hash() const
 {
-  return cvHash(FunctionType::hash()) + 31 * IdentifiedType::hash();
+  return cvHash(FunctionType::hash());
 }
 
 uint CppClassType::hash() const
