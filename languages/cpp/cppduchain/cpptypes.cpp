@@ -29,7 +29,7 @@
 
 using namespace KDevelop;
 
-DEFINE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance);
+DEFINE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance)
 
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
 

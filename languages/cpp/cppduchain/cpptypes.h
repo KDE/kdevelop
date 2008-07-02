@@ -416,7 +416,7 @@ enum ClassType
   Union
 };
 
-DECLARE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance);
+DECLARE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance)
 
 struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public CppClassTypeBase::Data {
   ClassType m_classType;
