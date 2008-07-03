@@ -23,6 +23,7 @@
 #include <QMutex>
 #include <QVector>
 #include <QStack>
+#include <kglobal.h>
 
 namespace KDevelop {
 
@@ -131,7 +132,7 @@ class TemporaryDataManager {
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
 
-#define DEFINE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member() { static TemporaryDataManager<QVarLengthArray<type, 10> > data; return data; }
+#define DEFINE_LIST_MEMBER_HASH(container, member, type) typedef TemporaryDataManager<QVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; K_GLOBAL_STATIC(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static); temporaryHash ## container ## member ## Type& temporaryHash ## container ## member() { return *temporaryHash ## container ## member ## Static; }
 #define DECLARE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 ///This implements the interfaces so this container can be used as a predecessor for classes with appended lists.
