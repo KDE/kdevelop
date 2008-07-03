@@ -100,7 +100,7 @@ DUContext * ForwardDeclaration::logicalInternalContext(const TopDUContext* topCo
 {
   ENSURE_CAN_READ
   Declaration* resolved = resolve(topContext);
-  if(resolved)
+  if(resolved && resolved != this)
     return resolved->logicalInternalContext(topContext);
   else
     return Declaration::logicalInternalContext(topContext);

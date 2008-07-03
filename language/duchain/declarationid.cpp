@@ -93,7 +93,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
     ret = direct.declaration();
   }
   
-  if(ret)
+  if(ret && m_specialization)
     return ret->specialize(m_specialization, top ? top : ret->topContext());
   else
     return 0;
