@@ -115,7 +115,7 @@ private: // Operations
 
 private: // Attributes
     int m_filter;
-    QList<ITest*> m_testFilter;;
+    QList<ITest*> m_testFilter;
 };
 
 } // namespace
