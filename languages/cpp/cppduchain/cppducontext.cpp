@@ -86,9 +86,11 @@ void FindDeclaration::closeQualifiedIdentifier() {
         foreach(DeclarationPointer decl, s.result)
           if(decl)
             res.allDeclarationsList().append(decl->id()); ///@todo prevent unneeded conversions here
-        if(s.result[0]->abstractType())
-          res.type = s.result[0]->abstractType()->indexed();
-        res.isInstance = s.result[0]->kind() != Declaration::Type;
+        if(s.result[0]) {
+          if(s.result[0]->abstractType())
+            res.type = s.result[0]->abstractType()->indexed();
+          res.isInstance = s.result[0]->kind() != Declaration::Type;
+        }
       }
       m_states.top().templateParameters.templateParametersList().append(res.type.type()->indexed());
     }
