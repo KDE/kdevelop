@@ -32,6 +32,7 @@ class QListView;
 class QToolButton;
 class ToolViewData;
 class KTabWidget;
+class KToggleAction;
 class QModelIndex;
 class KAction;
 
@@ -72,6 +73,8 @@ private:
     KAction* nextAction;
     KAction* previousAction;
     QSignalMapper* scrollModelViewMapper;
+    KToggleAction* activateOnSelect;
+    KToggleAction* focusOnSelect;
 };
 
 #endif

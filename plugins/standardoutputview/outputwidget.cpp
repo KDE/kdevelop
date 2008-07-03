@@ -34,6 +34,7 @@
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <ktoggleaction.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <ktabwidget.h>
@@ -71,6 +72,14 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
         addAction(nextAction);
     }
+
+    activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
+    connect( activateOnSelect, SIGNAL(triggered()), this, SLOT(enableActivateOnSelect()));
+    addAction(activateOnSelect);
+    focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
+    connect( focusOnSelect, SIGNAL(triggered()), this, SLOT(enableFocusOnSelect()));
+    addAction(focusOnSelect);
+
 
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
@@ -123,11 +132,11 @@ void OutputWidget::changeModel( int id )
     {
         OutputData* od = data->outputdata.value(id);
         scrollModelViewMapper->removeMappings( views.value( id )->model() );
-        views.value( id )->setModel(data->outputdata.value(id)->model);
-        if( data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll && data->outputdata.value(id)->model )
+        views.value( id )->setModel(od->model);
+        if( od->behaviour & KDevelop::IOutputView::AutoScroll && od->model )
         {
-            scrollModelViewMapper->setMapping( data->outputdata.value(id)->model, id );
-            connect( data->outputdata.value(id)->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            scrollModelViewMapper->setMapping( od->model, id );
+            connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                      scrollModelViewMapper, SLOT(map()) );
         }
     }
@@ -208,6 +217,12 @@ void OutputWidget::selectNextItem()
 
     if( !widget || !widget->isVisible() )
         return;
+
+    if( focusOnSelect->isChecked() && !widget->hasFocus() )
+    {
+        widget->setFocus( Qt::OtherFocusReason );
+    }
+
     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
     if( !view )
         return;
@@ -216,12 +231,16 @@ void OutputWidget::selectNextItem()
     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
     if( iface )
     {
-        kDebug() << "activating next item";
+        kDebug() << "selecting next item";
         QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
         if( index.isValid() )
         {
             view->setCurrentIndex( index );
-            iface->activate( index );
+            view->scrollTo( index );
+            if( activateOnSelect->isChecked() )
+            {
+                iface->activate( index );
+            }
         }
     }
 }
@@ -235,6 +254,11 @@ void OutputWidget::selectPrevItem()
     if( !view )
         return;
 
+    if( focusOnSelect->isChecked() && !widget->hasFocus() )
+    {
+        widget->setFocus( Qt::OtherFocusReason );
+    }
+
     QAbstractItemModel *absmodel = view->model();
     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
     if( iface )
@@ -244,7 +268,11 @@ void OutputWidget::selectPrevItem()
         if( index.isValid() )
         {
             view->setCurrentIndex( index );
-            iface->activate( index );
+            view->scrollTo( index );
+            if( activateOnSelect->isChecked() )
+            {
+                iface->activate( index );
+            }
         }
     }
 }
