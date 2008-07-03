@@ -31,6 +31,7 @@ class QAbstractItemModel;
 class QString;
 class QModelIndex;
 class QAbstractItemDelegate;
+class OutputWidget;
 
 /**
 @author Andreas Pakulat
@@ -66,9 +67,12 @@ public:
 
     void setDelegate( int id, QAbstractItemDelegate*, Ownership takeOwnership );
 
+    OutputWidget* outputWidgetForId( int id ) const;
 
     virtual void removeToolView( int id );
     virtual void removeOutput( int id );
+
+    virtual void scrollOutputTo( int id, const QModelIndex& idx );
 
 public Q_SLOTS:
     void removeSublimeView( Sublime::View* );

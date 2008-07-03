@@ -407,8 +407,19 @@ void OutputWidget::scrollToBottom( int id )
 {
     if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
     {
+        kDebug() << "doing auto-scroll";
         views.value( id )->scrollToBottom();
     }
+}
+
+void OutputWidget::scrollToIndex( const QModelIndex& idx )
+{
+    QWidget* w = currentWidget();
+    if( !w )
+        return;
+    kDebug() << "scrolling to index:" << idx;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
+    view->scrollTo( idx );
 }
 
 #include "outputwidget.moc"

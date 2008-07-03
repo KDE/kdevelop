@@ -270,7 +270,7 @@ void StandardOutputView::removeToolView( int id )
     }
 }
 
-void StandardOutputView::removeOutput( int id )
+OutputWidget* StandardOutputView::outputWidgetForId( int id ) const
 {
     foreach( ToolViewData* td, toolviews.values() )
     {
@@ -278,11 +278,26 @@ void StandardOutputView::removeOutput( int id )
         {
             foreach( Sublime::View* view, td->views )
             {
-                OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
-                widget->removeOutput( id );
+                return qobject_cast<OutputWidget*>( view->widget() );
             }
-            emit outputRemoved( td->toolViewId, id );
         }
+    }
+    return 0;
+}
+
+void StandardOutputView::scrollOutputTo( int id, const QModelIndex& idx )
+{
+    OutputWidget* widget = outputWidgetForId( id );
+    if( widget )
+        widget->scrollToIndex( idx );
+}
+
+void StandardOutputView::removeOutput( int id )
+{
+    OutputWidget* widget = outputWidgetForId( id );
+    if( widget ) 
+    {
+        widget->removeOutput( id );
     }
 }
 
