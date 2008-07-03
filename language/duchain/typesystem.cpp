@@ -380,6 +380,9 @@ bool ArrayType::equals(const AbstractType* _rhs) const
   
   if( (bool)rhs->d_func()->m_elementType != (bool)d->m_elementType )
     return false;
+
+  if( rhs->d_func()->m_dimension != (bool)d->m_dimension )
+    return false;
   
   if( !d->m_elementType )
     return true;
@@ -394,7 +397,7 @@ bool DelayedType::equals(const AbstractType* _rhs) const
 
   const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);
 
-  return d_func()->m_identifier == rhs->d_func()->m_identifier;
+  return d_func()->m_identifier == rhs->d_func()->m_identifier && rhs->d_func()->m_kind == d_func()->m_kind;
 }
 
 AbstractType::AbstractType()

@@ -208,6 +208,7 @@ public:
   void makeDynamic();
   
   ///Should return whether this type's content equals the given one
+  ///Since this is used by the type-repository, it must compare ALL members of the data type.
   virtual bool equals(const AbstractType* rhs) const = 0;
 
   /**
