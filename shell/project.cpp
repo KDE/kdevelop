@@ -193,7 +193,7 @@ KSharedConfig::Ptr Project::projectConfiguration() const
 //     d->globalFile = u;
 // }
 
-const KUrl& Project::folder() const
+const KUrl Project::folder() const
 {
     return d->folder;
 }

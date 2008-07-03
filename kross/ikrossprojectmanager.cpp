@@ -25,6 +25,10 @@
 #include <iproject.h>
 #include <kross/core/action.h>
 
+#include "projectitemadaptors.h"
+
+using namespace KDevelop;
+
 extern "C"
 {
     KDE_EXPORT QObject* krossmodule()
@@ -37,7 +41,7 @@ IKrossProjectManager::IKrossProjectManager( QObject* parent, const QVariantList&
     : m_rootFolder(0), action(0)
 {}
 
-KDevelop::ProjectFolderItem* IKrossProjectManager::import( const KUrl& file, KDevelop::IProject *project )
+ProjectFolderItem* IKrossProjectManager::import( const KUrl& file, KDevelop::IProject *project )
 {
     action = new Kross::Action(this, file);
     action->addObject(this, "IKrossProjectManager", Kross::ChildrenInterface::AutoConnectSignals);
@@ -47,18 +51,20 @@ KDevelop::ProjectFolderItem* IKrossProjectManager::import( const KUrl& file, KDe
     QVariant param;
     param.setValue((QObject*) project);
     QVariant result=action->callFunction( "importProject", QVariantList()<<param);
-    m_rootFolder=new KDevelop::ProjectFolderItem(project, KUrl(result.toString()));
+    m_rootFolder=new ProjectFolderItem(project, KUrl(result.toString()));
     m_folderPerUrl.insert(m_rootFolder->url(), m_rootFolder);
     return m_rootFolder;
 }
 
-QList<KDevelop::ProjectFolderItem*> IKrossProjectManager::parse( KDevelop::ProjectFolderItem* dom )
+QList<ProjectFolderItem*> IKrossProjectManager::parse( ProjectFolderItem* dom )
 {
+    ProjectFolderItemAdaptor domadp(dom);
+    
     QVariant param;
-    param.setValue(dom->url().toLocalFile());
+    param.setValue((QObject*) &domadp);
     QVariant result=action->callFunction( "parse", QVariantList()<<param);
     
-    QList<KDevelop::ProjectFolderItem*> folders;
+    QList<ProjectFolderItem*> folders;
     foreach(const QString& afolder, result.toStringList())
     {
         folders.append(m_folderPerUrl[KUrl(afolder)]);
@@ -66,21 +72,47 @@ QList<KDevelop::ProjectFolderItem*> IKrossProjectManager::parse( KDevelop::Proje
     return folders;
 }
 
-KDevelop::IProjectBuilder* IKrossProjectManager::builder(KDevelop::ProjectFolderItem*) const
+IProjectBuilder* IKrossProjectManager::builder(ProjectFolderItem*) const
 {
     return 0;
 }
 
-KUrl IKrossProjectManager::buildDirectory(KDevelop::ProjectBaseItem* it) const
+KUrl IKrossProjectManager::buildDirectory(ProjectBaseItem* it) const
 {
     return KUrl();
 }
 
-KUrl::List IKrossProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
+ProjectBaseItemAdaptor* createAdaptor(ProjectBaseItem* item)
 {
+    ProjectBaseItemAdaptor* adaptor=0;
+    switch(item->type())
+    {
+        case ProjectBaseItem::BuildFolder:
+        case ProjectBaseItem::Folder:
+            adaptor=new ProjectFolderItemAdaptor((ProjectFolderItem*) item);
+            break;
+        case ProjectBaseItem::File:
+            adaptor=new ProjectFileItemAdaptor((ProjectFileItem*) item);
+            break;
+        case ProjectBaseItem::Target:
+            adaptor=new ProjectTargetItemAdaptor((ProjectTargetItem*) item);
+            break;
+        default:
+            qFatal("unknown project model type");
+            break;
+    }
+    Q_ASSERT(adaptor);
+    return adaptor;
+}
+
+KUrl::List IKrossProjectManager::includeDirectories(ProjectBaseItem *item) const
+{
+    qDebug() << "includeeees";
+    ProjectBaseItemAdaptor *adapt=createAdaptor(item);
     QVariant param;
-    param.setValue((QObject*) item);
+    param.setValue((QObject*) adapt);
     QVariant result=action->callFunction( "includeDirectories", QVariantList()<<param);
+    delete adapt;
     
     KUrl::List directories;
     foreach(const QString& adir, result.toStringList())
@@ -90,11 +122,13 @@ KUrl::List IKrossProjectManager::includeDirectories(KDevelop::ProjectBaseItem *i
     return directories;
 }
 
-QHash<QString,QString> IKrossProjectManager::defines(KDevelop::ProjectBaseItem *item)
+QHash<QString,QString> IKrossProjectManager::defines(ProjectBaseItem *item)
 {
     QVariant param;
-    param.setValue((QObject*) item);
+    ProjectBaseItemAdaptor *adapt=createAdaptor(item);
+    param.setValue((QObject*) adapt);
     QVariant result=action->callFunction( "defines", QVariantList()<<param);
+    delete adapt;
     
     QMap<QString, QVariant> resultDefines= result.toMap();
     QList<QString> keys=resultDefines.keys();
@@ -109,65 +143,65 @@ QHash<QString,QString> IKrossProjectManager::defines(KDevelop::ProjectBaseItem *
     return defs;
 }
 
-QList<KDevelop::ProjectTargetItem*> IKrossProjectManager::targets() const
+QList<ProjectTargetItem*> IKrossProjectManager::targets() const
 {
-    QList<KDevelop::ProjectTargetItem*> targets;
-    foreach(const QList<KDevelop::ProjectTargetItem*> &it, m_targets.values())
+    QList<ProjectTargetItem*> targets;
+    foreach(const QList<ProjectTargetItem*> &it, m_targets.values())
         targets += it;
     return targets;
 }
 
-QList<KDevelop::ProjectTargetItem*> IKrossProjectManager::targets(KDevelop::ProjectFolderItem* folder) const
+QList<ProjectTargetItem*> IKrossProjectManager::targets(ProjectFolderItem* folder) const
 {
     return m_targets[folder];
 }
 
-KDevelop::ProjectFolderItem* IKrossProjectManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
+ProjectFolderItem* IKrossProjectManager::addFolder( const KUrl& folder, ProjectFolderItem* parent)
 {
     return 0;
 }
 
-KDevelop::ProjectTargetItem* IKrossProjectManager::createTarget( const QString&, KDevelop::ProjectFolderItem* )
+ProjectTargetItem* IKrossProjectManager::createTarget( const QString&, ProjectFolderItem* )
 {
     return 0;
 }
 
-KDevelop::ProjectFileItem* IKrossProjectManager::addFile( const KUrl&, KDevelop::ProjectFolderItem* )
+ProjectFileItem* IKrossProjectManager::addFile( const KUrl&, ProjectFolderItem* )
 {
     return 0;
 }
 
-bool IKrossProjectManager::addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* )
+bool IKrossProjectManager::addFileToTarget( ProjectFileItem*, ProjectTargetItem* )
 {
     return false;
 }
 
-bool IKrossProjectManager::removeFolder( KDevelop::ProjectFolderItem* )
+bool IKrossProjectManager::removeFolder( ProjectFolderItem* )
 {
     return false;
 }
 
-bool IKrossProjectManager::removeTarget( KDevelop::ProjectTargetItem* )
+bool IKrossProjectManager::removeTarget( ProjectTargetItem* )
 {
     return false;
 }
 
-bool IKrossProjectManager::removeFile( KDevelop::ProjectFileItem* )
+bool IKrossProjectManager::removeFile( ProjectFileItem* )
 {
     return false;
 }
 
-bool IKrossProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* )
+bool IKrossProjectManager::removeFileFromTarget( ProjectFileItem*, ProjectTargetItem* )
 {
     return false;
 }
 
-bool IKrossProjectManager::renameFile(KDevelop::ProjectFileItem*, const KUrl&)
+bool IKrossProjectManager::renameFile(ProjectFileItem*, const KUrl&)
 {
     return false;
 }
 
-bool IKrossProjectManager::renameFolder(KDevelop::ProjectFolderItem*, const KUrl&)
+bool IKrossProjectManager::renameFolder(ProjectFolderItem*, const KUrl&)
 {
     return false;
 }
@@ -175,24 +209,24 @@ bool IKrossProjectManager::renameFolder(KDevelop::ProjectFolderItem*, const KUrl
 void IKrossProjectManager::addFile(const QString& folder, const QString & targetName, const QString & filename)
 {
     kDebug() << "adding file" << folder << targetName << filename;
-    KDevelop::ProjectTargetItem* parent=m_targetPerName[targetName];
-    KDevelop::ProjectFileItem* newFile = new KDevelop::ProjectFileItem(parent->project(), KUrl(filename), parent);
+    ProjectTargetItem* parent=m_targetPerName[targetName];
+    ProjectFileItem* newFile = new ProjectFileItem(parent->project(), KUrl(filename), parent);
 }
 
 void IKrossProjectManager::addTarget(const QString& folder, const QString & targetName)
 {
     kDebug() << "adding target" << folder << targetName;
-    KDevelop::ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder)];
-    KDevelop::ProjectTargetItem* newTarget = new KDevelop::ProjectTargetItem(parent->project(), targetName, parent);
+    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder)];
+    ProjectTargetItem* newTarget = new ProjectTargetItem(parent->project(), targetName, parent);
     m_targetPerName[targetName]=newTarget;
 }
 
 void IKrossProjectManager::addFolder(const QString& folder)
 {
     kDebug() << "adding folder" << folder << m_folderPerUrl << KUrl(folder).upUrl();
-    KDevelop::ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder).upUrl()];
+    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder).upUrl()];
     
-    KDevelop::ProjectFolderItem* newFolder = new KDevelop::ProjectFolderItem(parent->project(), folder, parent);
+    ProjectFolderItem* newFolder = new ProjectFolderItem(parent->project(), folder, parent);
     m_folderPerUrl.insert(newFolder->url(), newFolder);
 }
 

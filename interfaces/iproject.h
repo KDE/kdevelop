@@ -134,7 +134,7 @@ public Q_SLOTS:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE const KUrl& folder() const = 0;
+    virtual Q_SCRIPTABLE const KUrl folder() const = 0;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const = 0;
