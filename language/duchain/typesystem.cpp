@@ -410,11 +410,6 @@ AbstractType::~AbstractType()
   delete d_ptr;
 }
 
-uint AbstractType::hash() const
-{
-  return static_cast<uint>(reinterpret_cast<long>(this));
-}
-
 void AbstractType::accept(TypeVisitor *v) const
 {
   if (v->preVisit (this))
@@ -857,7 +852,7 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 
 uint DelayedType::hash() const
 {
-  return d_func()->m_identifier.identifier().hash();
+  return 37*(d_func()->m_identifier.identifier().hash() + (uint)d_func()->m_kind);
 }
 
 uint PointerType::hash() const
@@ -897,7 +892,7 @@ uint StructureType::hash() const
 
 uint ArrayType::hash() const
 {
-  return (elementType() ? elementType()->hash() : 0) * 47 * dimension();
+  return (elementType() ? elementType()->hash() : 0) * 47 + 117* dimension();
 }
 
 }

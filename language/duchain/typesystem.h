@@ -219,9 +219,9 @@ public:
   /**
    * A hash-value that should have the following properties:
    * - When two types match on equals(), it should be same.
-   * - When two types don't match on qualis(), it should be different.
+   * - When two types don't match on equals(), it should be different with a high probability.
    * */
-  virtual uint hash() const;
+  virtual uint hash() const = 0;
 
   ///This can also be called on zero types, those can then be reconstructed from the zero index
   IndexedType indexed() const;
