@@ -22,10 +22,14 @@
 #define QTEST_QTESTPLUGIN_H
 
 #include <QVariantList>
+#include <KUrl>
 #include <testrunnertoolview.h>
 
 class QTestViewFactory;
 namespace Veritas { class ITest; }
+namespace KDevelop { class ContextMenuExtension;
+                     class Context;
+                     class ProjectFolderItem; }
 
 class QTestView : public Veritas::TestRunnerToolView
 {
@@ -34,9 +38,13 @@ Q_OBJECT
 public:
     explicit QTestView(QObject* parent, const QVariantList& = QVariantList());
     virtual ~QTestView();
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 protected:
     Veritas::ITest* registerTests();
+
+private slots:
+        void newQTest();
 
 private:
     QString fetchBuildRoot();
@@ -44,6 +52,7 @@ private:
 
 private:
     QTestViewFactory* m_factory;
+    KDevelop::ProjectFolderItem* m_dir;
 };
 
 #endif // QTEST_QTESTPLUGIN_H

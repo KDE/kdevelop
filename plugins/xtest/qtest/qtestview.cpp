@@ -24,8 +24,13 @@
 #include <core.h>
 #include <iuicontroller.h>
 #include <iproject.h>
+#include <idocument.h>
 #include <iprojectcontroller.h>
+#include <iprojectfilemanager.h>
 #include <ibuildsystemmanager.h>
+#include <documentcontroller.h>
+#include <contextmenuextension.h>
+#include <context.h>
 #include <projectmodel.h>
 #include <test.h>
 
@@ -34,9 +39,14 @@
 #include <kpluginloader.h>
 #include <qtestsettings.h>
 
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QFile>
 #include <KDebug>
+#include <KAction>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <QLabel>
 
 #include <QIODevice>
 #include <QFile>
@@ -46,9 +56,16 @@ K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
 
 using KDevelop::Core;
 using KDevelop::IProject;
-using KDevelop::IProjectController;
+using KDevelop::Context;
+using KDevelop::IDocument;
 using KDevelop::ProjectFolderItem;
+using KDevelop::IProjectController;
+using KDevelop::DocumentController;
+using KDevelop::ProjectBaseItem;
+using KDevelop::ProjectItemContext;
 using KDevelop::IBuildSystemManager;
+using KDevelop::IProjectFileManager;
+using KDevelop::ContextMenuExtension;
 
 using Veritas::Test;
 using Veritas::ITest;
@@ -118,6 +135,114 @@ QString QTestView::fetchRegXML()
     KSharedConfig::Ptr cfg = project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "QTest");
     return KUrl(group.readEntry("Test Registration")).pathOrUrl();
+}
+
+void QTestView::newQTest()
+{
+    if (!project()) {
+        QMessageBox::critical(
+            0, i18n("Errr"),
+            i18n("Select a project in the qtest view."),
+            QMessageBox::Ok);
+        return;
+    }
+
+    bool kk;
+    QString clz;
+    clz = QInputDialog::getText(
+              0, i18n("New QTest"),
+              i18n("Class name:"), QLineEdit::Normal,
+              QString("MyTest"), &kk);
+    if (!kk || clz.isEmpty()) return;
+
+    DocumentController* dc;
+    dc = Core::self()->documentControllerInternal();
+    IProjectFileManager* pfm;
+    pfm = project()->projectFileManager();
+
+    KUrl hdrUrl = m_dir->url();
+    hdrUrl.addPath(clz.toLower() + ".h");
+    QFile hdr(hdrUrl.pathOrUrl());
+    if (!hdr.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    QStringList lns;
+    lns << QString() + "#ifndef QTEST_" + clz.toUpper() + "_H_INCLUDED"
+    << QString() + "#define QTEST_" + clz.toUpper() + "_H_INCLUDED"
+    << ""
+    << "#include <QObject>"
+    << ""
+    << QString() + "class " + clz + " : public QObject"
+    << "{"
+    << "private slots:"
+    << "    void init();"
+    << "    void cleanup();"
+    << ""
+    << "    void someCmd();"
+    << "};"
+    << ""
+    << QString() + "#endif // QTEST_"+ clz.toUpper() + "_H_INCLUDED"
+    << "";
+    QTextStream out(&hdr);
+    out << lns.join("\n");
+    hdr.close();
+    dc->openDocument(hdrUrl);
+    pfm->addFile(hdrUrl, m_dir);
+
+    KUrl srcUrl = m_dir->url();
+    srcUrl.addPath(clz.toLower() + ".cpp");
+    QFile src(srcUrl.pathOrUrl());
+    if (!src.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    lns.clear();
+    lns << QString() + "#include \"" + clz.toLower() + "\""
+    << "#include <QTest/QtTest>"
+    << ""
+    << clz + "::init()"
+    << "{"
+    << "}"
+    << ""
+    << clz + "::cleanup()"
+    << "{"
+    << "}"
+    << ""
+    << clz + "::someCmd()"
+    << "{"
+    << "}"
+    << ""
+    << QString() + "QTEST_MAIN( " + clz + " )"
+    << QString() + "#include \"" + clz.toLower() + ".moc\""
+    << "";
+    QTextStream out2(&src);
+    out2 << lns.join("\n");
+    src.close();
+    dc->openDocument(srcUrl);
+    pfm->addFile(srcUrl, m_dir);
+}
+
+ContextMenuExtension QTestView::contextMenuExtension(Context* context)
+{
+    ContextMenuExtension cm;
+    if (context->type() != Context::ProjectItemContext) {
+        return cm; // NO-OP
+    }
+    ProjectItemContext *pc = dynamic_cast<ProjectItemContext*>(context);
+    if (!pc) {
+        kWarning() << "Context::ProjectItemContext but cast failed. Not good.";
+        return cm;
+    }
+    QList<ProjectBaseItem*> bl = pc->items();
+    if (!bl.count()) {
+        return cm;
+    }
+
+    if (!bl[0]->folder()) {
+        kDebug() << "Not a folder item. Aborting.";
+        return cm;
+    }
+
+    m_dir = bl[0]->folder();
+    KAction *action = new KAction(i18n("New QTest"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(newQTest()));
+    cm.addAction(ContextMenuExtension::ExtensionGroup, action);
+    return cm;
 }
 
 #include "qtestview.moc"

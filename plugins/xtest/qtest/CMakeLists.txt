@@ -45,6 +45,7 @@ target_link_libraries(kdevqtestview
     kdevqtest
     ${KDEVPLATFORM_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
     ${QT_QTCORE_LIBRARY})
 install(TARGETS kdevqtestview DESTINATION ${PLUGIN_INSTALL_DIR})
 
