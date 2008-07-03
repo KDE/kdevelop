@@ -272,6 +272,8 @@ void KDevelop::RunController::slotKillJob()
 
 void KDevelop::RunController::finished(KJob * job)
 {
+    unregisterJob(job);
+
     switch (job->error()) {
         case KJob::NoError:
         case KJob::KilledJobError:
@@ -280,8 +282,6 @@ void KDevelop::RunController::finished(KJob * job)
         default:
             KMessageBox::error(qApp->activeWindow(), job->errorString(), i18n("Process Error"));
     }
-
-    unregisterJob(job);
 }
 
 void KDevelop::RunController::suspended(KJob * job)
