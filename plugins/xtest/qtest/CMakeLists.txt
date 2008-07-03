@@ -53,9 +53,3 @@ install(TARGETS kdevqtestview DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES kdevqtest.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevqtest.rc DESTINATION ${DATA_INSTALL_DIR}/kdevqtest )
 
-add_executable(cmakeparser "cmakeparser.cpp")
-target_link_libraries(cmakeparser 
-    ${KDEVPLATFORM_VERITAS_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTXML_LIBRARY})
