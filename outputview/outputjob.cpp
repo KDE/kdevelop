@@ -150,4 +150,9 @@ void OutputJob::setToolIcon(const KIcon& icon)
     m_toolIcon = icon;
 }
 
+int OutputJob::outputId() const
+{
+    return m_outputId;
+}
+
 #include "outputjob.moc"

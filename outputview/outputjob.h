@@ -60,6 +60,8 @@ protected:
     void setModel(QStandardItemModel* model, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
     void setDelegate(QAbstractItemDelegate* delegate, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
 
+    int outputId() const;
+
 private Q_SLOTS:
     void outputViewRemoved(int , int id);
 

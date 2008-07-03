@@ -28,6 +28,7 @@
 
 class QString;
 class QAbstractItemModel;
+class QModelIndex;
 class QAbstractItemDelegate;
 
 /**
@@ -96,6 +97,8 @@ public:
      * Raise a given view
      */
     virtual void raiseOutput( int id ) = 0;
+
+    virtual void scrollOutputTo( int id, const QModelIndex& ) = 0;
 
     enum Ownership {
         KeepOwnership,

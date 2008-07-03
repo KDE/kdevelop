@@ -28,6 +28,7 @@ namespace KDevelop
 OutputModel::OutputModel( QObject* parent )
     : QStandardItemModel( parent ), d(0)
 {
+
 }
 
 void OutputModel::appendLine( const QString& line )
