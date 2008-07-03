@@ -43,14 +43,11 @@ public:
     void activate( const QModelIndex& index );
     QModelIndex nextHighlightIndex( const QModelIndex &current );
     QModelIndex previousHighlightIndex( const QModelIndex &current );
-
-public slots:
-    void addStandardError( const QStringList& );
-    void addStandardOutput( const QStringList& );
-
+    MakeActionFilter* actionFilter(); 
+    ErrorFilter* errorFilter();
 private:
-    MakeActionFilter* actionFilter;
-    ErrorFilter* errorFilter;
+    MakeActionFilter* m_actionFilter;
+    ErrorFilter* m_errorFilter;
 };
 
 #endif

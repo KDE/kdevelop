@@ -49,6 +49,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+#include "outputfilters.h"
 #include "makeoutputdelegate.h"
 
 using namespace KDevelop;
@@ -115,9 +116,9 @@ void MakeJob::start()
     m_executor->setEnvironment( environmentVars() );
 
     connect(m_executor, SIGNAL(receivedStandardOutput(const QStringList&)),
-            model(), SLOT(addStandardOutput(const QStringList&)));
+            SLOT(addStandardOutput(const QStringList&)));
     connect(m_executor, SIGNAL(receivedStandardError(const QStringList&)),
-            model(), SLOT(addStandardError(const QStringList&)));
+            SLOT(addStandardError(const QStringList&)));
     connect(m_executor, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
     connect(m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
 
@@ -264,6 +265,29 @@ void MakeJob::slotFailed()
     emitResult();
 }
 
+void MakeJob::addStandardError( const QStringList& lines )
+{
+    foreach( QString line, lines)
+    {
+        QStandardItem* item = model()->errorFilter()->processAndCreate(line);
+        if( !item )
+            item = new QStandardItem(line);
+        model()->appendRow(item);
+    }
+}
+
+void MakeJob::addStandardOutput( const QStringList& lines )
+{
+    foreach( QString line, lines)
+    {
+        QStandardItem* item = model()->actionFilter()->processAndCreate(line);
+        if( !item )
+            item = new QStandardItem(line);
+        model()->appendRow(item);
+    }
+}
+
+
 void MakeJob::slotCompleted()
 {
     model()->appendRow( new QStandardItem( i18n("*** Finished ***") ) );
@@ -275,6 +299,11 @@ bool MakeJob::doKill()
     m_killed = true;
     m_executor->kill();
     return true;
+}
+
+MakeOutputModel* MakeJob::model() const
+{
+    return dynamic_cast<MakeOutputModel*>( OutputJob::model() );
 }
 
 

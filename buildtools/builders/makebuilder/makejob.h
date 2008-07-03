@@ -33,6 +33,7 @@ class CommandExecutor;
 }
 
 class MakeBuilder;
+class MakeOutputModel;
 
 class MakeJob: public KDevelop::OutputJob
 {
@@ -62,7 +63,12 @@ public:
     KDevelop::ProjectBaseItem* item() const;
     CommandType commandType();
     const QString& customTarget() const;
-    
+ 
+    MakeOutputModel* model() const;
+
+public slots:
+    void addStandardError( const QStringList& );
+    void addStandardOutput( const QStringList& );   
 protected:
     bool doKill();
 

@@ -27,8 +27,18 @@
 #include <kdebug.h>
 
 MakeOutputModel::MakeOutputModel( QObject* parent )
-    : QStandardItemModel(parent), actionFilter(new MakeActionFilter), errorFilter(new ErrorFilter)
+    : QStandardItemModel(parent), m_actionFilter(new MakeActionFilter), m_errorFilter(new ErrorFilter)
 {
+}
+
+MakeActionFilter* MakeOutputModel::actionFilter()
+{
+    return m_actionFilter;
+}
+
+ErrorFilter* MakeOutputModel::errorFilter()
+{
+    return m_errorFilter;
 }
 
 void MakeOutputModel::activate( const QModelIndex& index )
@@ -135,27 +145,6 @@ QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentI
     return QModelIndex();
 }
 
-void MakeOutputModel::addStandardError( const QStringList& lines )
-{
-    foreach( QString line, lines)
-    {
-        QStandardItem* item = errorFilter->processAndCreate(line);
-        if( !item )
-            item = new QStandardItem(line);
-        appendRow(item);
-    }
-}
-
-void MakeOutputModel::addStandardOutput( const QStringList& lines )
-{
-    foreach( QString line, lines)
-    {
-        QStandardItem* item = actionFilter->processAndCreate(line);
-        if( !item )
-            item = new QStandardItem(line);
-        appendRow(item);
-    }
-}
 
 
 
