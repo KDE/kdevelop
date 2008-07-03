@@ -30,7 +30,6 @@
 #include "use_p.h"
 #include "declaration_p.h"
 #include "identifiedtype.h"
-#include "forwarddeclarationtype.h"
 
 using namespace KTextEditor;
 
@@ -49,16 +48,6 @@ public:
 };
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationPrivate(*rhs.d_func())) {
-  if( abstractType() ) {
-    //Also clone the foward-declaration type and assign it to the new forward-declaration
-    ForwardDeclarationType* t = fastCast<ForwardDeclarationType*>(abstractType().data());
-    if( t ) {
-      setAbstractType( AbstractType::Ptr(t->clone()) );
-      Q_ASSERT(dynamic_cast<ForwardDeclarationType*>(abstractType().data()));
-      //Cannot do this here, because this declaration probably doesn't know the correct specialization etc. yet
-//      static_cast<ForwardDeclarationType*>(abstractType().data())->setDeclaration(this);
-    }
-  }
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
@@ -87,9 +76,8 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
 
   //If we've got a type assigned, that counts as a way of resolution.
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
-  if( idType && !fastCast<ForwardDeclarationType*>(abstractType().data()) ) {
+  if( idType  )
     return idType->declaration(topContext);
-  }
   
   if(!topContext)
       topContext = this->topContext();

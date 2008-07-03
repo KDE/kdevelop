@@ -49,7 +49,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/dumpdotgraph.cpp
     duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
-    duchain/forwarddeclarationtype.cpp
     duchain/declarationid.cpp
     duchain/definitions.cpp
     duchain/uses.cpp
@@ -115,7 +114,6 @@ install(FILES
 )
 
 install(FILES
-    duchain/forwarddeclarationtype.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/ducontext.h
