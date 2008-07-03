@@ -431,8 +431,6 @@ class NavigationContext : public KShared {
                   m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
                   eventuallyMakeTypeLinks(base.baseClass.type().data());
                 }
-              }else{
-                m_currentText += " " + i18n("forward declaration");
               }
               m_currentText += " ";
             }
