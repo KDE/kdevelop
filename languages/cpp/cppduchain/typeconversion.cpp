@@ -22,6 +22,7 @@
 #include "cppduchain/typerepository.h"
 #include "overloadresolution.h"
 #include <duchain/ducontext.h>
+#include <typeinfo>
 
 
 using namespace Cpp;
@@ -285,9 +286,18 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   
   CppEnumerationType* toEnumeration = fastCast<CppEnumerationType*>( to.data() );
 
-  if(toEnumeration)
+  if(toEnumeration) {
+    //Eventually convert enumerator -> enumeration if the enumeration equals
+    CppEnumeratorType* fromEnumerator = fastCast<CppEnumeratorType*>( from.data() );
+    if(fromEnumerator) {
+      Declaration* enumeratorDecl = fromEnumerator->declaration(m_topContext);
+      Declaration* enumerationDecl = toEnumeration->declaration(m_topContext);
+      if(enumeratorDecl && enumerationDecl && enumeratorDecl->context()->owner() == enumerationDecl)
+        return ExactMatch; //Converting an enumeration value into its own enumerator type, perfect match.
+    }
     ///iso c++ 7.2.9: No conversion or promotion to enumerator types is possible
     return bestRank;
+  }
 
   if( categories & PromotionCategory ) {
 
@@ -388,6 +398,11 @@ bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::P
     return true;
   else if( !from || !to )
     return false;
+  
+  //CppConstantIntegralType::equals does not return true on equals in this case, but the type is compatible.
+  if(from.cast<CppConstantIntegralType>() && typeid(*to) == typeid(CppIntegralType))
+    return true;
+  
   return from->equals(to.data());
 }
 

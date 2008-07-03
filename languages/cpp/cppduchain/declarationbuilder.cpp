@@ -59,15 +59,15 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
-void copyCppClass( const CppClassType* from, CppClassType* to )
-{
-  to->clear();
-  to->setClassType(from->classType());
-  to->setDeclarationId(from->declarationId());
-  to->setCV(from->cv());
-
-  to->close();
-}
+// void copyCppClass( const CppClassType* from, CppClassType* to )
+// {
+//   to->clear();
+//   to->setClassType(from->classType());
+//   to->setDeclarationId(from->declarationId());
+//   to->setCV(from->cv());
+// 
+//   to->close();
+// }
 
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
 DUContext* getTemplateContext(Declaration* decl) {

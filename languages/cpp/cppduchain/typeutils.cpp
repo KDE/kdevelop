@@ -20,34 +20,19 @@
 #include "cppduchain/cpptypes.h"
 #include "duchain/ducontext.h"
 #include "duchain/forwarddeclaration.h"
-#include "duchain/forwarddeclarationtype.h"
 #include "duchain/classfunctiondeclaration.h"
 #include "classdeclaration.h"
 
 namespace TypeUtils {
   using namespace KDevelop;
   
-  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* topContext) {
+  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* /*topContext*/) {
 
-    ForwardDeclarationType* forward = dynamic_cast<ForwardDeclarationType*>( base );
-    if( forward ) {
-      AbstractType::Ptr ret( forward->resolve(topContext) );
-      if(ret)
-        return ret;
-    }
-    
     return AbstractType::Ptr(base);
   }
 
-  AbstractType* realType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
+  AbstractType* realType(AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
 
-    ForwardDeclarationType* forward = fastCast<ForwardDeclarationType*>( base );
-    if( forward ) {
-      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-      if( resolved.data() != (AbstractType*)forward )
-        return realType( resolved.data(), topContext, constant );
-    }
-  
     CppReferenceType* ref = fastCast<CppReferenceType*>( base );
 
     while( ref ) {
@@ -55,29 +40,15 @@ namespace TypeUtils {
         (*constant) |= ref->isConstant();
       base = ref->baseType().data();
       ref = fastCast<CppReferenceType*>( base );
-
-      forward = fastCast<ForwardDeclarationType*>( base );
-      if( forward ) {
-        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-        if( resolved.data() != (AbstractType*)forward )
-          return realType( resolved.data(), topContext, constant );
-      }
     }
 
     return base;
   }
 
-  AbstractType* targetType(AbstractType* base, const TopDUContext* topContext, bool* constant) {
+  AbstractType* targetType(AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
 
     CppReferenceType* ref = fastCast<CppReferenceType*>( base );
     CppPointerType* pnt = fastCast<CppPointerType*>( base );
-    ForwardDeclarationType* forward = fastCast<ForwardDeclarationType*>( base );
-    
-    if( forward ) {
-      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-      if( resolved.data() != (AbstractType*)forward )
-        return targetType( resolved.data(), topContext, constant );
-    }
     
     while( ref || pnt ) {
       if( ref ) {
@@ -91,30 +62,16 @@ namespace TypeUtils {
       }
       ref = fastCast<CppReferenceType*>( base );
       pnt = fastCast<CppPointerType*>( base );
-      forward = fastCast<ForwardDeclarationType*>( base );
-    
-      if( forward ) {
-        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-        if( resolved.data() != (AbstractType*)forward )
-          return targetType( resolved.data(), topContext, constant );
-      }
     }
 
     return base;
   }
 
-  const AbstractType* targetType(const AbstractType* base, const TopDUContext* topContext, bool* constant) {
+  const AbstractType* targetType(const AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
 
     const CppReferenceType* ref = fastCast<const CppReferenceType*>( base );
     const CppPointerType* pnt = fastCast<const CppPointerType*>( base );
-    const ForwardDeclarationType* forward = fastCast<const ForwardDeclarationType*>( base );
     
-    if( forward ) {
-      AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-      if( resolved.data() != (AbstractType*)forward )
-        return targetType( resolved.data(), topContext, constant );
-    }
-
     while( ref || pnt ) {
       if( ref ) {
         if( constant )
@@ -127,13 +84,6 @@ namespace TypeUtils {
       }
       ref = fastCast<const CppReferenceType*>( base );
       pnt = fastCast<const CppPointerType*>( base );
-      forward = fastCast<const ForwardDeclarationType*>( base );
-    
-      if( forward ) {
-        AbstractType::Ptr resolved = AbstractType::Ptr( forward->resolve(topContext) );
-        if( resolved.data() != (AbstractType*)forward )
-          return targetType( resolved.data(), topContext, constant );
-      }
     }
 
     return base;

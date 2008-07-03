@@ -25,7 +25,6 @@
 
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
-#include <duchain/forwarddeclarationtype.h>
 #include <duchain/repositories/itemrepository.h>
 #include <appendedlist.h>
 
@@ -679,15 +678,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     }
     ///Last step, because after this, the declaration will be potentially findable
 
-    if(ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(instantiatedTemplate)) {
-      TypePtr<ForwardDeclarationType> forwardType = forward->type<ForwardDeclarationType>();
-      if(forwardType) {
-        DeclarationId id = instantiatedFrom->id();
-        id.setSpecialization(templateArguments.indexed().index());
-        forwardType->setDeclarationId(id);
-      }
-    }
-    
     if(instantiatedTemplate && dynamic_cast<TemplateDeclaration*>(instantiatedFrom))
       instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
     

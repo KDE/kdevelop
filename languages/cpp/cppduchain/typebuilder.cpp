@@ -23,7 +23,6 @@
 #include <identifier.h>
 #include <duchain.h>
 #include <forwarddeclaration.h>
-#include <forwarddeclarationtype.h>
 #include <templateparameterdeclaration.h>
 #include <duchainlock.h>
 #include "cppeditorintegrator.h"
@@ -259,23 +258,21 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       }
     }*/
     
-//     switch (kind) {
-//       case Token_class:
-//       case Token_struct:
-//       case Token_union:
-//         type = AbstractType::Ptr(openClass(kind));
-//         break;
-//       case Token_enum:
-//         type = AbstractType::Ptr(new CppEnumerationType());
-//         break;
-//       case Token_typename:
-//         // TODO what goes here...?
-//         //type = def->abstractType();
-//         break;
-//     }
+    switch (kind) {
+      case Token_class:
+      case Token_struct:
+      case Token_union:
+        type = AbstractType::Ptr(openClass(kind));
+        break;
+      case Token_enum:
+        type = AbstractType::Ptr(new CppEnumerationType());
+        break;
+      case Token_typename:
+        // TODO what goes here...?
+        //type = def->abstractType();
+        break;
+    }
 
-    type = AbstractType::Ptr(new ForwardDeclarationType());
-    
     openType(type);
   }
 

@@ -23,7 +23,6 @@
 #include <classfunctiondeclaration.h>
 #include <abstractfunctiondeclaration.h>
 #include <indexedstring.h>
-#include <forwarddeclarationtype.h>
 #include "templateparameterdeclaration.h"
 #include <ducontext.h> //Only for FOREACH_ARRAY
 
@@ -141,11 +140,11 @@ bool CppReferenceType::equals(const AbstractType* _rhs) const
 
 bool CppClassType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const CppClassType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs))
+  if( !fastCast<const CppClassType*>(_rhs))
     return false;
-  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
+  const CppClassType* rhs = fastCast<const CppClassType*>(_rhs);
   
-  return IdentifiedType::equals(rhs);
+  return IdentifiedType::equals(rhs) && CppCVType::equals(rhs) && StructureType::equals(rhs);
 }
 
 bool CppTypeAliasType::equals(const AbstractType* _rhs) const
@@ -179,14 +178,15 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 
 bool CppEnumeratorType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs) && !fastCast<const CppEnumeratorType*>(_rhs) )
+  const CppEnumeratorType* rhs = fastCast<const CppEnumeratorType*>(_rhs);
+  
+  if( !rhs )
     return false;
-  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
 
   if( this == rhs )
     return true;
   
-  return IdentifiedType::equals(rhs);
+  return IdentifiedType::equals(rhs) && CppConstantIntegralType::equals(rhs);
 }
 
 QString CppEnumeratorType::toString() const
@@ -201,14 +201,14 @@ uint CppEnumeratorType::hash() const
 
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const CppEnumerationType*>(_rhs) && !fastCast<const ForwardDeclarationType*>(_rhs) && !fastCast<const CppEnumeratorType*>(_rhs) )
+  const CppEnumerationType* rhs = fastCast<const CppEnumerationType*>(_rhs);
+  if( !rhs )
     return false;
-  const IdentifiedType* rhs = fastCast<const IdentifiedType*>(_rhs);
 
   if( this == rhs )
     return true;
   
-  return IdentifiedType::equals(rhs);
+  return IdentifiedType::equals(rhs) && CppIntegralType::equals(rhs);
 }
 
 // bool CppArrayType::equals(const AbstractType* _rhs) const
@@ -254,7 +254,7 @@ void CppClassType::accept0 (TypeVisitor *v) const
   v->endVisit (this);
 }
 
-void CppClassType::exchangeTypes(TypeExchanger *e)
+void CppClassType::exchangeTypes(TypeExchanger */*e*/)
 {
 }
 
