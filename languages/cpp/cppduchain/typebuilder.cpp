@@ -121,16 +121,6 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeType();
 }
 
-void TypeBuilder::addBaseType( BaseClassInstance base ) {
-  {
-    DUChainWriteLocker lock(DUChain::lock());
-    CppClassType* klass = dynamic_cast<CppClassType*>(currentAbstractType().data());
-    Q_ASSERT( klass );
-    klass->addBaseClass(base);
-  }
-  TypeBuilderBase::addBaseType(base);
-}
-
 void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 {
   if (node->name) {
@@ -143,32 +133,6 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
     if( openedType ) {
       closeType();
-
-      BaseClassInstance instance;
-      
-      instance.virtualInheritance = (bool)node->virt;
-      instance.baseClass = lastType()->indexed();
-
-      int tk = 0;
-      if( node->access_specifier )
-        tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
-
-      switch( tk ) {
-        default:
-        case Token_private:
-          instance.access = KDevelop::Declaration::Private;
-          break;
-        case Token_public:
-          instance.access = KDevelop::Declaration::Public;
-          break;
-        case Token_protected:
-          instance.access = KDevelop::Declaration::Protected;
-          break;
-      }
-
-      lock.unlock();
-      
-      addBaseType(instance);
     } else { //A case for the problem-reporter
       kDebug(9007) << "Could not find base declaration for" << identifierForNode(node->name);
     }

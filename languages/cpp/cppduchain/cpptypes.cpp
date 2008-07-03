@@ -29,8 +29,6 @@
 
 using namespace KDevelop;
 
-DEFINE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance)
-
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
 
 REGISTER_TYPE(CppFunctionType);
@@ -252,48 +250,12 @@ bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
 
 void CppClassType::accept0 (TypeVisitor *v) const
 {
-  if (v->visit (this))
-    {
-      FOREACH_FUNCTION(const BaseClassInstance& base, d_func()->m_baseClasses)
-        acceptType (AbstractType::Ptr( const_cast<AbstractType*>( static_cast<const AbstractType*>(base.baseClass.type().data()) ) ), v);
-    }
-
+  v->visit (this);
   v->endVisit (this);
 }
 
 void CppClassType::exchangeTypes(TypeExchanger *e)
 {
-  FOREACH_ARRAY(BaseClassInstance& base, d_func_dynamic()->m_baseClassesList())
-    base.baseClass = e->exchange(base.baseClass.type().data())->indexed();
-}
-
-
-// ---------------------------------------------------------------------------
-const QList<BaseClassInstance> CppClassType::baseClasses() const
-{
-  ///@todo stop converting here
-  QList<BaseClassInstance> ret;
-  FOREACH_FUNCTION(const BaseClassInstance& i, d_func()->m_baseClasses)
-      ret << i;
-  return ret;
-}
-
-void CppClassType::addBaseClass(const BaseClassInstance& baseClass)
-{
-  d_func_dynamic()->m_baseClassesList().append(baseClass);
-}
-
-void CppClassType::removeBaseClass(AbstractType::Ptr baseClass)
-{
-  TYPE_D_DYNAMIC(CppClassType);
-  for (uint i = 0; i < d->m_baseClassesSize(); ++i)
-    if (d->m_baseClasses()[i].baseClass == baseClass) {
-      for(uint a = i+1; a < d->m_baseClassesSize(); ++a)
-        d->m_baseClassesList()[a-1] = d->m_baseClassesList()[a];
-      
-      d->m_baseClassesList().resize(d->m_baseClassesSize()-1);
-      return;
-    }
 }
 
 void CppClassType::setClassType(ClassType type)
@@ -305,9 +267,6 @@ ClassType CppClassType::classType() const
 {
   return d_func()->m_classType;
 }
-
-// ---------------------------------------------------------------------------
-
 // ---------------------------------------------------------------------------
 AbstractType::Ptr CppTypeAliasType::type() const
 {
@@ -557,7 +516,6 @@ void CppClassType::clear() {
   //StructureType::clear();
   IdentifiedType::clear();
   CppCVType::clear();
-  d_func_dynamic()->m_baseClassesList().clear();
   d_func_dynamic()->m_classType = Class;
   d_func_dynamic()->m_closed = false;
 }

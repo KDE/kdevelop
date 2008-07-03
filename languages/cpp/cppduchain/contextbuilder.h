@@ -38,6 +38,10 @@
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
 
+namespace Cpp {
+class BaseClassInstance;
+}
+
 namespace KDevelop
 {
 class DUChain;
@@ -140,7 +144,7 @@ protected:
    */
   KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
 
-  virtual void addBaseType( BaseClassInstance base );
+  virtual void addBaseType( Cpp::BaseClassInstance base );
   
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.

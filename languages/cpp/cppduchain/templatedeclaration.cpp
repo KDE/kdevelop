@@ -32,6 +32,7 @@
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 #include "expressionparser.h"
+#include "classdeclaration.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -174,11 +175,6 @@ struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
     if( found ) return false;
     if( dynamic_cast<const DelayedType*>(type) )
       found = true;
-    if( const CppClassType* classType = dynamic_cast<const CppClassType*>(type) ) {
-      QList<BaseClassInstance> bases = classType->baseClasses();
-        foreach( const BaseClassInstance& base, bases )
-          visit( base.baseClass.type().data() );
-    }
     return !found;
   }
 
@@ -196,20 +192,11 @@ const DelayedType* containsDelayedType(const AbstractType* type)
   const PointerType* pType = dynamic_cast<const PointerType*>(type);
   const ReferenceType* rType = dynamic_cast<const ReferenceType*>(type);
   const DelayedType* delayedType = dynamic_cast<const DelayedType*>(type);
-  const CppClassType* classType = dynamic_cast<const CppClassType*>(type);
   if( pType )
     return containsDelayedType(pType->baseType().data());
   if( rType )
     return containsDelayedType(rType->baseType().data());
-  if( classType ) {
-    foreach( const BaseClassInstance& base, classType->baseClasses() ) {
-      const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.type().data());
-      if( delayed )
-        return delayed;
-      else if( (delayed = containsDelayedType( base.baseClass.type().data() )) )
-        return delayed;
-    }
-  }
+
   return delayedType;
 }
 
@@ -584,11 +571,11 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
     if( instantiatedDeclaration ) {
       ///We do not need to respect forward-declarations here, because they are not allowed as base-classes.
-      const CppClassType* klass = dynamic_cast<const CppClassType*>( instantiatedDeclaration->abstractType().data() );
+      Cpp::ClassDeclaration* klass = dynamic_cast<Cpp::ClassDeclaration*>( instantiatedDeclaration );
       if( klass ) { //It could also be a function
         ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
-
-        foreach( const BaseClassInstance& base, klass->baseClasses() ) {
+        uint num = 0;
+        FOREACH_FUNCTION( const BaseClassInstance& base, klass->baseClasses ) {
           const DelayedType* delayed = dynamic_cast<const DelayedType*>(base.baseClass.type().data());
           if( delayed ) {
             ///Resolve the delayed type, and import the context
@@ -601,10 +588,14 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               {
                 contextCopy->addImportedParentContext( baseClass->declaration(source)->internalContext(), SimpleCursor::invalid(), true );
               }
+              BaseClassInstance newInstance(base);
+              newInstance.baseClass = newType->indexed();
+              klass->replaceBaseClass( num, newInstance );
             } else {
               kDebug(9007) << "Resolved bad base-class";
             }
           }
+          ++num;
         }
       }
     }

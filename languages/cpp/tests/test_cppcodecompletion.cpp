@@ -45,6 +45,7 @@
 #include "classfunctiondeclaration.h"
 #include "codecompletioncontext.h"
 #include "cpppreprocessenvironment.h"
+#include "cppduchain/classdeclaration.h"
 
 using namespace KTextEditor;
 
@@ -569,15 +570,14 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
-    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end);
+    Cpp::ClassDeclaration* decl = dynamic_cast<Cpp::ClassDeclaration*>(findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end));
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     CppClassType* classType = dynamic_cast<CppClassType*>(decl->abstractType().data());
     QVERIFY(classType);
-    QCOMPARE(classType->baseClasses().count(), 1);
-    QVERIFY(classType->baseClasses()[0].baseClass);
-    kDebug() << typeid(*classType->baseClasses()[0].baseClass.type().data()).name();
-    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(classType->baseClasses()[0].baseClass.type().data());
+    QCOMPARE(decl->baseClassesSize(), 1u);
+    QVERIFY(decl->baseClasses()[0].baseClass);
+    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(decl->baseClasses()[0].baseClass.type().data());
     QVERIFY(parentClassType);
     QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }

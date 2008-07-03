@@ -45,6 +45,7 @@
 #include "rpp/chartools.h"
 #include <language/duchain/dumpchain.h>
 #include "tokens.h"
+#include "classdeclaration.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -441,7 +442,7 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   closeContext();
 }
 
-void ContextBuilder::addBaseType( BaseClassInstance base ) {
+void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
   DUChainWriteLocker lock(DUChain::lock());
 
   addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.

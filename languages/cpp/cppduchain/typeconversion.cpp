@@ -89,7 +89,7 @@ uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::P
       CppClassType* fromClass = fastCast<CppClassType*>( realType(from, m_topContext) );
       CppClassType* toClass = fastCast<CppClassType*>( realType(to, m_topContext) );
       
-      if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) )
+      if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) )
         return ExactMatch + 2*ConversionRankOffset;
     }
 
@@ -363,7 +363,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       CppClassType* fromClass = fastCast<CppClassType*>( fromPointer->baseType().data() );
       CppClassType* toClass = fastCast<CppClassType*>( toPointer->baseType().data() );
       if( toClass && fromClass ) {
-        if( isPublicBaseClass( fromClass, toClass, &m_baseConversionLevels ) ) {
+        if( isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) ) {
           maximizeRank( bestRank, Conversion );
         }
       }
@@ -440,7 +440,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     if( toClass && toClass->declaration(m_topContext) )
     {
       if( fromClass ) {
-        if( isPublicBaseClass(fromClass, toClass, &m_baseConversionLevels ) ) {
+        if( isPublicBaseClass(fromClass, toClass, m_topContext, &m_baseConversionLevels ) ) {
           ///@todo check whether this is correct
           //There is a default-constructor in toClass that initializes from const toClass&, which fromClass can be converted to
           maximizeRank( bestRank, Conversion );

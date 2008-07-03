@@ -48,6 +48,8 @@
 #include "parsesession.h"
 #include "cpptypes.h"
 #include "cppduchain.h"
+#include "cpptypes.h"
+#include "classdeclaration.h"
 
 #include "cppdebughelper.h"
 
@@ -63,9 +65,6 @@ void copyCppClass( const CppClassType* from, CppClassType* to )
   to->setClassType(from->classType());
   to->setDeclarationId(from->declarationId());
   to->setCV(from->cv());
-
-  foreach( const BaseClassInstance& base, from->baseClasses() )
-    to->addBaseClass(base);
 
   to->close();
 }
@@ -514,6 +513,14 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   return declaration;
 }
 
+Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range) {
+  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range);
+  DUChainWriteLocker lock(DUChain::lock());
+  ret->setDeclarationIsDefinition(true);
+  ret->clearBaseClasses();
+  return ret;
+}
+
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool collapseRange)
 {
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
@@ -671,7 +678,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     openPrefixContext(node, id, pos);
   }
 
-  openDefinition(node->name, node, node->name == 0);
+  openClassDefinition(node->name, node);
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
@@ -764,6 +771,43 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     closePrefixContext(id);
 
   m_accessPolicyStack.pop();
+}
+
+void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
+  DeclarationBuilderBase::visitBaseSpecifier(node);
+  
+  BaseClassInstance instance;
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+
+    instance.virtualInheritance = (bool)node->virt;
+    instance.baseClass = lastType()->indexed();
+
+    int tk = 0;
+    if( node->access_specifier )
+      tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
+
+    switch( tk ) {
+      default:
+      case Token_private:
+        instance.access = KDevelop::Declaration::Private;
+        break;
+      case Token_public:
+        instance.access = KDevelop::Declaration::Public;
+        break;
+      case Token_protected:
+        instance.access = KDevelop::Declaration::Protected;
+        break;
+    }
+
+    ClassDeclaration* currentClass = dynamic_cast<ClassDeclaration*>(currentDeclaration());
+    if(currentClass) {
+      currentClass->addBaseClass(instance);
+    }else{
+      kWarning() << "base-specifier without class declaration";
+    }
+  }
+  addBaseType(instance);
 }
 
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)

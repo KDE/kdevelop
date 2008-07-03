@@ -400,13 +400,6 @@ public:
 
 typedef MergeCppCVType< KDevelop::MergeIdentifiedType<KDevelop::StructureType> > CppClassTypeBase;
 
-struct BaseClassInstance
-{
-  KDevelop::IndexedType baseClass; //May either be CppClassType, or CppDelayedType
-  KDevelop::Declaration::AccessPolicy access;
-  bool virtualInheritance;
-};
-
 enum ClassType
 {
   Class,
@@ -414,32 +407,21 @@ enum ClassType
   Union
 };
 
-DECLARE_LIST_MEMBER_HASH(CppClassTypeData, m_baseClasses, BaseClassInstance)
-
 struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public CppClassTypeBase::Data {
   ClassType m_classType;
   bool m_closed;
   
   CppClassTypeData() {
-    initializeAppendedLists(true);
     m_classType = Class;
     m_closed = false;
   }
   
   CppClassTypeData(const CppClassTypeData& rhs) :m_classType(rhs.m_classType), m_closed(rhs.m_closed)  {
-    initializeAppendedLists(true);
-    copyListsFrom(rhs);
   }
   
   ~CppClassTypeData() {
-    freeAppendedLists();
   }
   
-  START_APPENDED_LISTS_BASE(CppClassTypeData, CppClassTypeBase::Data);
-  
-  APPENDED_LIST_FIRST(CppClassTypeData, BaseClassInstance, m_baseClasses);
-  
-  END_APPENDED_LISTS(CppClassTypeData, m_baseClasses);
   private:
     CppClassTypeData& operator=(const CppClassTypeData&) {
       return *this;
@@ -458,10 +440,6 @@ public:
   typedef TypePtr<CppClassType> Ptr;
 
   CppClassType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
-
-  const QList<BaseClassInstance> baseClasses() const;
-  void addBaseClass(const BaseClassInstance& baseClass);
-  void removeBaseClass(AbstractType::Ptr baseClass);
 
   void setClassType(ClassType type);
   ClassType classType() const;

@@ -52,6 +52,7 @@
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"
 #include "rpp/preprocessor.h"
+#include "classdeclaration.h"
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -1319,15 +1320,17 @@ void TestDUChain::testBaseClasses() {
   QCOMPARE(defClassB->identifier(), Identifier("B"));
   QVERIFY(defClassB->type<CppClassType>());
 
-  Declaration* defClassC = top->localDeclarations()[2];
+  Cpp::ClassDeclaration* defClassC = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[2]);
+  QVERIFY(defClassC);
   QCOMPARE(defClassC->identifier(), Identifier("C"));
   QVERIFY(defClassC->type<CppClassType>());
-  QCOMPARE( defClassC->type<CppClassType>()->baseClasses().size(), 1 );
+  QCOMPARE( defClassC->baseClassesSize(), 1u );
   
-  Declaration* defClassD = top->localDeclarations()[3];
+  Cpp::ClassDeclaration* defClassD = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[3]);
+  QVERIFY(defClassD);
   QCOMPARE(defClassD->identifier(), Identifier("D"));
   QVERIFY(defClassD->type<CppClassType>());
-  QCOMPARE( defClassD->type<CppClassType>()->baseClasses().size(), 2 );
+  QCOMPARE( defClassD->baseClassesSize(), 2u );
 
   QVERIFY( findDeclaration( defClassD->internalContext(), Identifier("dValue") ) );
   QVERIFY( !findDeclaration( defClassD->internalContext(), Identifier("cValue") ) );
@@ -1350,11 +1353,12 @@ void TestDUChain::testBaseClasses() {
   QVERIFY( findDeclaration( defClassA->internalContext(), Identifier("aValue") ) );
 
   ///Now test a template-class as base-class
-  Declaration* defClassF = top->localDeclarations()[4];
+  Cpp::ClassDeclaration* defClassF = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[4]);
+  QVERIFY(defClassF);
   QCOMPARE(defClassF->identifier(), Identifier("F"));
   QVERIFY(defClassF->type<CppClassType>());
-  QCOMPARE( defClassF->type<CppClassType>()->baseClasses().size(), 1 );
-  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->type<CppClassType>()->baseClasses().front().baseClass.type().data() ) );
+  QCOMPARE( defClassF->baseClassesSize(), 1u );
+  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->baseClasses()[0].baseClass.type().data() ) );
 
   Declaration* FDDecl = findDeclaration(top, QualifiedIdentifier("F<D>") );
   QVERIFY(FDDecl);

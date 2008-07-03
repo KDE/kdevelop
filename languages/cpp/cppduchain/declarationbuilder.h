@@ -31,6 +31,9 @@ namespace KDevelop
 {
 class Declaration;
 }
+namespace Cpp {
+class ClassDeclaration;
+}
 
 typedef KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder> DeclarationBuilderBase;
 
@@ -68,6 +71,7 @@ public:
   protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
+  virtual void visitBaseSpecifier(BaseSpecifierAST *node);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
   virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
   virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
@@ -107,6 +111,8 @@ private:
   
   //Opens a Declaration that has the isDefinition flag set
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);
+  //Opens a ClassDeclaration
+  Cpp::ClassDeclaration* openClassDefinition(NameAST* name, AST* range);
   //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
   //Opens either a ClassMemberDeclaration, or a Declaration 

@@ -50,6 +50,7 @@
 #include "completionhelpers.h"
 #include "parser/rpp/chartools.h"
 #include "parser/rpp/macrorepository.h"
+#include "classdeclaration.h"
 
 using namespace KDevelop;
 using namespace rpp;
@@ -422,10 +423,16 @@ class NavigationContext : public KShared {
             if( m_declaration->kind() == Declaration::Type && klass ) {
               m_currentText += "class ";
               eventuallyMakeTypeLinks( klass );
+              
+              Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(klass->declaration(m_topContext.data()));
 
-              foreach( const BaseClassInstance& base, klass->baseClasses() ) {
-                m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
-                eventuallyMakeTypeLinks(base.baseClass.type().data());
+                if(classDecl) {
+                FOREACH_FUNCTION( const Cpp::BaseClassInstance& base, classDecl->baseClasses ) {
+                  m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
+                  eventuallyMakeTypeLinks(base.baseClass.type().data());
+                }
+              }else{
+                m_currentText += " " + i18n("forward declaration");
               }
               m_currentText += " ";
             }

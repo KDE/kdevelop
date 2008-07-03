@@ -22,6 +22,7 @@
 #include "duchain/forwarddeclaration.h"
 #include "duchain/forwarddeclarationtype.h"
 #include "duchain/classfunctiondeclaration.h"
+#include "classdeclaration.h"
 
 namespace TypeUtils {
   using namespace KDevelop;
@@ -210,34 +211,9 @@ namespace TypeUtils {
   }
 
   ///Returns whether base is a base-class of c
-  bool isPublicBaseClass( const CppClassType* c, CppClassType* base, int* baseConversionLevels ) {
-    if( baseConversionLevels )
-      *baseConversionLevels = 0;
-
-    if( c->equals( base ) )
-      return true;
-    
-    QList<BaseClassInstance> bases = c->baseClasses();
-    foreach( const BaseClassInstance& b, bases )
-    {
-      if( baseConversionLevels )
-        ++ (*baseConversionLevels);
-      //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
-      if( b.access != KDevelop::Declaration::Private ) {
-        int nextBaseConversion = 0;
-        if( const CppClassType* c = fastCast<const CppClassType*>(b.baseClass.type().data()) )
-          if( isPublicBaseClass( c, base, &nextBaseConversion ) )
-            *baseConversionLevels += nextBaseConversion;
-            return true;
-      }
-      if( baseConversionLevels )
-        -- (*baseConversionLevels);
-    }
-    return false;
-  }
-
   void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     Declaration* klassDecl = klass->declaration(topContext);
+    Cpp::ClassDeclaration* cppClassDecl = dynamic_cast<Cpp::ClassDeclaration*>(klassDecl);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
 
     int functionCount = functions.size();
@@ -259,13 +235,13 @@ namespace TypeUtils {
     if( functionCount != functions.size() )
       return;
 
-    //equivalent to using the imported parent-contexts
-    QList<BaseClassInstance> bases = klass->baseClasses();
-    
-    for( QList<BaseClassInstance>::const_iterator it =  bases.begin(); it != bases.end(); ++it ) {
-      if( (*it).access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-        if( fastCast<const CppClassType*>((*it).baseClass.type().data()) )
-          getMemberFunctions( static_cast<CppClassType*>( const_cast<BaseClassInstance&>((*it)).baseClass.type().data() ), topContext, functions, functionName,   mustBeConstant);
+    if(cppClassDecl) {
+      //equivalent to using the imported parent-contexts
+      FOREACH_FUNCTION(const Cpp::BaseClassInstance& base, cppClassDecl->baseClasses) {
+        if( base.access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
+          if( fastCast<const CppClassType*>(base.baseClass.type().data()) )
+            getMemberFunctions( static_cast<CppClassType*>( const_cast<Cpp::BaseClassInstance&>(base).baseClass.type().data() ), topContext, functions, functionName,   mustBeConstant);
+      }
     }
   }
 
@@ -292,4 +268,14 @@ namespace TypeUtils {
         functions <<  *it;
     }
   }
+  bool isPublicBaseClass( const CppClassType* c, CppClassType* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
+    Cpp::ClassDeclaration* fromDecl = dynamic_cast<Cpp::ClassDeclaration*>(c->declaration(topContext));
+    Cpp::ClassDeclaration* toDecl = dynamic_cast<Cpp::ClassDeclaration*>(base->declaration(topContext));
+    if(fromDecl && toDecl)
+      return fromDecl->isPublicBaseClass(toDecl, topContext, baseConversionLevels);
+    else
+      return false;
+  }    
+
+
 }
