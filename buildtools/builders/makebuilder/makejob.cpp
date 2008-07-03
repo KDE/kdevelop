@@ -62,6 +62,7 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
     , m_overrideTarget(overrideTarget)
     , m_executor(0)
     , m_killed(false)
+    , firstError(false)
 {
     setCapabilities(Killable);
 
@@ -270,8 +271,21 @@ void MakeJob::addStandardError( const QStringList& lines )
     foreach( QString line, lines)
     {
         QStandardItem* item = model()->errorFilter()->processAndCreate(line);
-        if( !item )
+        if( !item ) 
             item = new QStandardItem(line);
+        if( !firstError )
+        {
+            firstError = true;
+            KDevelop::IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+            if( i )
+            {
+                KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+                if( view )
+                {
+                    view->scrollOutputTo( outputId(), model()->index( item->row(), item->column(), QModelIndex() ) );
+                }
+            }
+        }
         model()->appendRow(item);
     }
 }

@@ -87,6 +87,7 @@ private:
     QString m_overrideTarget;
     KDevelop::CommandExecutor* m_executor;
     bool m_killed;
+    bool firstError;
 };
 
 #endif // MAKEJOB_H
