@@ -196,7 +196,7 @@ QString CppEnumeratorType::toString() const
 
 uint CppEnumeratorType::hash() const
 {
-  return IdentifiedType::hash();
+  return 27*(IdentifiedType::hash() + 13*CppConstantIntegralType::hash());
 }
 
 bool CppEnumerationType::equals(const AbstractType* _rhs) const
@@ -328,8 +328,8 @@ void CppConstantIntegralType::setValueInternal<double>(double value) {
 }
 
 uint CppConstantIntegralType::hash() const {
-  uint ret = IntegralType::hash();
-  ret += 47 * (uint)d_func()->m_value + 11*(uint)integralType();
+  uint ret = CppIntegralType::hash();
+  ret += 47 * (uint)d_func()->m_value;
   return ret;
 }
 
@@ -472,7 +472,7 @@ QString CppArrayType::toString() const
 
 uint CppIntegralType::hash() const
 {
-  return cvHash(IntegralType::hash());
+  return cvHash(IntegralType::hash()) + + 11*(uint)integralType()+83*(uint)typeModifiers();
 }
 
 uint CppPointerType::hash() const
@@ -492,12 +492,12 @@ uint CppFunctionType::hash() const
 
 uint CppClassType::hash() const
 {
-  return IdentifiedType::hash();
+  return cvHash(IdentifiedType::hash() + 19*StructureType::hash());
 }
 
 uint CppTypeAliasType::hash() const
 {
-  return 31 * IdentifiedType::hash() + (type() ? type()->hash() + 83 : 0);
+  return cvHash(31 * IdentifiedType::hash() + (type() ? type()->hash() + 83 : 0));
 }
 
 QString CppTypeAliasType::toString() const
@@ -553,7 +553,7 @@ QString CppEnumerationType::toString() const
 }
 uint CppEnumerationType::hash() const
 {
-  return IdentifiedType::hash();
+  return IdentifiedType::hash() + 57*CppIntegralType::hash();
 }
 
 QString CppCVType::cvMangled() const
