@@ -221,7 +221,7 @@ QString IncludeFileData::htmlDescription() const
         KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
         if(!inclusion.isEmpty()) {
           for(int a = 0; a < inclusion.size(); ++a) {
-            if(a > 1)
+            if(a >= 1)
               ret += ", ";
             if(a > 2) {
               ret += "...";
