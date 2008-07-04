@@ -39,7 +39,7 @@ class QMutex;
 
 namespace KDevelop
 {
-
+class EditorIntegrator;
 
 class EditorIntegratorStatic : public QObject, public KTextEditor::SmartRangeWatcher
 {
@@ -62,7 +62,7 @@ public Q_SLOTS:
   void documentLoaded();
 
   void documentUrlChanged(KTextEditor::Document* document);
-  
+
   void reloadDocument(KTextEditor::Document* document);
 
 public:
@@ -75,6 +75,7 @@ public:
   };
 
   QHash<IndexedString, DocumentInfo> documents;
+  QMultiHash<KTextEditor::Document*, EditorIntegrator*> editorIntegrators;
 };
 
 }

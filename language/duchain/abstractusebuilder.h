@@ -84,7 +84,7 @@ protected:
     lock.unlock();
     newUse( newRange, !declarations.isEmpty() ? declarations.first() : 0 );
   }
-  
+
   void newUse(SimpleRange newRange, Declaration* declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
@@ -96,12 +96,12 @@ protected:
     bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
-    
+
     {
       //We've got to consider the translated range, and while we use it, the smart-mutex needs to be locked
-      QMutexLocker smartLock(LanguageSpecificUseBuilderBase::editor()->smartMutex());
-      SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(newRange);
-      
+      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
+      SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(iface, newRange);
+
       /**
       * We need to find a context that this use fits into, which must not necessarily be the current one.
       * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
@@ -114,7 +114,7 @@ protected:
         ++contextUpSteps;
         newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
       }
-  
+
       if (contextUpSteps) {
         LanguageSpecificUseBuilderBase::editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
         m_finishContext = false;
@@ -122,19 +122,19 @@ protected:
         m_finishContext = true;
         nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
         skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
-  
+
         Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
         Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->uses().count() >= nextUseIndex());
       }
-  
+
       if (LanguageSpecificUseBuilderBase::recompiling()) {
-  
+
         const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
         // Translate cursor to take into account any changes the user may have made since the text was retrieved
-  
+
         for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
           const Use& use = uses[nextUseIndex()];
-  
+
           //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
           if (use.m_range.start > translated.end && LanguageSpecificUseBuilderBase::editor()->smart() ) {
 #ifdef DEBUG_UPDATE_MATCHING
@@ -142,14 +142,14 @@ protected:
 #endif
             break;
           }
-  
+
           if (use.m_range == translated)
           {
             LanguageSpecificUseBuilderBase::currentContext()->setUseDeclaration(nextUseIndex(), declarationIndex);
             ++nextUseIndex();
             // Match
             encountered = true;
-  
+
             break;
           }
 #ifdef DEBUG_UPDATE_MATCHING
@@ -189,7 +189,7 @@ protected:
     m_nextUseStack.push(0);
     m_skippedUses.push(QVector<int>());
   }
-  
+
   virtual void closeContext()
   {
     if(m_finishContext) {

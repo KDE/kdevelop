@@ -43,13 +43,15 @@ class EditorIntegratorPrivate
 {
 public:
   HashedString m_currentUrl;
-  KTextEditor::Document* m_currentDocument; ///@todo Care about what happens when the document is deleted while being used here
+
+  /// The following two pointers may only be accessed with the editor integrator static mutex held
+  KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartInterface* m_smart;
 
   QStack<KTextEditor::SmartRange*> m_currentRangeStack;
   KTextEditor::Range m_newRangeMarker;
   template<class RangeType>
-  SmartRange* createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
+  SmartRange* createRange( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
 };
 
 K_GLOBAL_STATIC( EditorIntegratorStatic, s_data)
@@ -63,9 +65,16 @@ EditorIntegrator::EditorIntegrator()
 
 EditorIntegrator::~ EditorIntegrator()
 {
-  if (d->m_smart)
-    d->m_smart->clearRevision();
-  
+  {
+    QMutexLocker lock(data()->mutex);
+
+    if (d->m_currentDocument) {
+      data()->editorIntegrators.remove(d->m_currentDocument, this);
+      if (d->m_smart)
+        d->m_smart->clearRevision();
+    }
+  }
+
   delete d;
 }
 
@@ -97,80 +106,59 @@ Document * EditorIntegrator::documentForUrl(const IndexedString& url)
   return 0;
 }
 
-SmartInterface* EditorIntegrator::smart() const
+LockedSmartInterface EditorIntegrator::smart() const
 {
-  return d->m_smart;
-}
-
-QMutex* EditorIntegrator::smartMutex() const
-{
-  return d->m_smart ? d->m_smart->smartMutex() : 0;
+  QMutexLocker lock(data()->mutex);
+  return LockedSmartInterface(d->m_smart, d->m_currentDocument);
 }
 
 SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
 {
-  if (SmartInterface* iface = smart()) {
-    QMutexLocker lock(iface->smartMutex());
+  LockedSmartInterface iface = smart();
+  if (iface) {
     return iface->newSmartCursor(position);
   }else{
       return 0;
   }
 }
 
-Document* EditorIntegrator::currentDocument() const
-{
-  return d->m_currentDocument;
-}
-
 SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
 {
-  QMutexLocker lock(data()->mutex);
-
-  if(!smart())
+  LockedSmartInterface iface = smart();
+  if(!iface)
       return 0;
-  
+
   Q_ASSERT(d->m_currentRangeStack.isEmpty());
-  
-  SmartRange* newRange = 0;
-  if (currentDocument()) {
-    newRange = createRange(currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-    Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
-    if (SmartInterface* iface = smart()) {
-      QMutexLocker lock(iface->smartMutex());
-      Q_ASSERT(newRange->isSmartRange());
-      iface->addHighlightToDocument( newRange->toSmartRange(), false );
-    }
-   } else {
-     // FIXME...
-     newRange = createRange(Range(0,0, INT_MAX, INT_MAX));
-   }
-  
+
+  SmartRange* newRange = createRange(iface.currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+  Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
+  Q_ASSERT(newRange->isSmartRange());
+  iface->addHighlightToDocument( newRange->toSmartRange(), false );
+
   d->m_currentRangeStack << newRange;
   return d->m_currentRangeStack.top();
 }
 
 template<>
-SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
+SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
-  QMutexLocker lock(m_smart->smartMutex());
+  SmartRange* ret = iface->newSmartRange(range, 0, insertBehavior);
 
-  SmartRange* ret = m_smart->newSmartRange(range, 0, insertBehavior);
-  
   KTextEditor::Cursor rangeStart = ret->start();
   KTextEditor::Cursor rangeEnd = ret->end();
-  
+
   if (!m_currentRangeStack.isEmpty()) {
 
     SmartRange* currentRange = dynamic_cast<SmartRange*>(m_currentRangeStack.top());
     Q_ASSERT(currentRange);
-    
+
     QList<SmartRange*> importList;
 
     bool found = true;
     while(found && currentRange->childRanges().size()) {
       found = false;
-      
-      
+
+
       //We use a binary search hear to find contained ranges and containing ranges in one run
       int count = currentRange->childRanges().size();
       int leftBound = 0; //Left bound of the search, inclusive
@@ -180,7 +168,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
 
       //Find child ranges that are contained in range, or a child range that range is contained in, and build a usable structure
       ///@todo eventually change kate so neighbours don't move each other around, then we won't need all this hacking, and will get a better result
-      
+
       while(true) {
         if(list[current]->end() <= rangeStart) {
             //Our range is behind list[current], increase current, move to the point between current and rightBound
@@ -203,12 +191,12 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
         }else{
             //We're contained in the range
             //rangeEnd > rangeStart, rangeStart < currentEnd, rangeEnd > currentStart
-            
+
             //We can have 3 possible cases now:
             //- range is contained in list[current]
             //- list[current] is contained in range
             //- list[current] and range intersect in a not fixable way
-            
+
             if(rangeStart >= list[current]->start() && rangeEnd <= list[current]->start()) {
                 found  = true;
                 currentRange = list[current];
@@ -223,7 +211,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
                 }
                 if(rangeStart <= list[current]->start() && rangeEnd >= list[current]->end())
                     importList << list[current]; //The current item is contained in range
-                    
+
                 for(int a = current+1; a < count; ++a) {
                     if(list[a]->start() >= rangeStart && list[a]->end() <= rangeEnd)
                         importList << list[a]; //The range is contained, add it to the import list
@@ -232,7 +220,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
                 }
                 ///If importList is empty now, we definitely have an intersection problem
             }
-            
+
             break;
         }
       }
@@ -255,10 +243,11 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const KTextEditor:
 
 SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
-  if(!smart())
-      return 0;
+  LockedSmartInterface iface = smart();
+  if (!iface)
+    return 0;
 
-  return d->createRange<SmartRange>(range, insertBehavior);
+  return d->createRange<SmartRange>(iface, range, insertBehavior);
 }
 
 
@@ -329,25 +318,39 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
 
 void EditorIntegrator::setCurrentUrl(const HashedString& url)
 {
-  if (d->m_smart) {
-    // Extra safety
-    d->m_smart->clearRevision();
+  QMutexLocker lock(data()->mutex);
+
+  if (d->m_currentDocument) {
+    data()->editorIntegrators.remove(d->m_currentDocument, this);
+
+    if (d->m_smart) {
+      // Extra safety
+      d->m_smart->clearRevision();
+    }
   }
 
   d->m_currentUrl = url;
 
   IndexedString indexedUrl(url.str());
-  
-  QMutexLocker lock(data()->mutex);
+
   if (data()->documents.contains(indexedUrl)) {
     EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
     d->m_currentDocument = i.document;
+    data()->editorIntegrators.insert(d->m_currentDocument, this);
+
     d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
     if (d->m_smart && i.revision != -1) {
       kDebug(9506) << "Using revision" << i.revision;
       d->m_smart->useRevision(i.revision);
+    }
   }
 }
+
+void EditorIntegrator::clearCurrentDocument()
+{
+  // The editor integrator static mutex is locked, because this is only called with it locked
+  d->m_currentDocument = 0;
+  d->m_smart = 0;
 }
 
 void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
@@ -367,7 +370,7 @@ void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
   SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document());
 
   QMutexLocker lock(iface ? iface->smartMutex() : 0);
-  
+
   if( range->parentRange() )
   {
     SmartRange* oldParent = range->parentRange();
@@ -404,18 +407,79 @@ QObject * EditorIntegrator::notifier()
 
 void EditorIntegrator::adjustRangeTo(const SimpleRange& fromRange)
 {
-  Q_ASSERT(smart());
+  LockedSmartInterface iface = smart();
+  if (!iface)
+    return;
+
   if (currentRange()) {
-    QMutexLocker lock(smartMutex());
-    currentRange()->setRange(smart()->translateFromRevision(fromRange.textRange()));
+    currentRange()->setRange(iface->translateFromRevision(fromRange.textRange()));
   }
 }
 
-SimpleRange EditorIntegrator::translate(const SimpleRange& fromRange) const
+SimpleRange EditorIntegrator::translate(const LockedSmartInterface& iface, const SimpleRange& fromRange) const
 {
-  if (smart())
-    return smart()->translateFromRevision(fromRange.textRange());
+  if (iface)
+    return iface->translateFromRevision(fromRange.textRange());
+
   return fromRange;
+}
+
+class LockedSmartInterfacePrivate
+{
+  public:
+    KTextEditor::SmartInterface* iface;
+    KTextEditor::Document* doc;
+    int ref;
+};
+
+LockedSmartInterface::LockedSmartInterface(KTextEditor::SmartInterface* iface, KTextEditor::Document* doc)
+  : d(new LockedSmartInterfacePrivate)
+{
+  d->iface = iface;
+  d->doc = doc;
+  d->ref = 1;
+
+  if (d->iface)
+    d->iface->smartMutex()->lock();
+}
+
+LockedSmartInterface::LockedSmartInterface(const LockedSmartInterface& lock)
+  : d(lock.d)
+{
+  ++d->ref;
+}
+
+LockedSmartInterface::~LockedSmartInterface()
+{
+  --d->ref;
+  if (!d->ref) {
+    unlock();
+    delete d;
+  }
+}
+
+void LockedSmartInterface::unlock() const
+{
+  if (d->iface) {
+    d->iface->smartMutex()->unlock();
+    d->iface = 0;
+    d->doc = 0;
+  }
+}
+
+KTextEditor::Document* LockedSmartInterface::currentDocument() const
+{
+  return d->doc;
+}
+
+KTextEditor::SmartInterface* LockedSmartInterface::operator->() const
+{
+  return d->iface;
+}
+
+LockedSmartInterface::operator bool() const
+{
+  return d->iface;
 }
 
 }

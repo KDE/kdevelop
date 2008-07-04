@@ -64,20 +64,20 @@ public:
     if (m_ownsEditorIntegrator)
       delete m_editor;
   }
-  
+
   void setEditor(EditorIntegrator* editor, bool ownsEditorIntegrator)
   {
     m_editor = editor;
     m_ownsEditorIntegrator = ownsEditorIntegrator;
   }
 
-  virtual TopDUContext* build( const IndexedString& url, T* node, 
+  virtual TopDUContext* build( const IndexedString& url, T* node,
                               const TopDUContextPointer& updateContext
                                     = TopDUContextPointer() )
   {
     m_compilingContexts = true;
     m_editor->setCurrentUrl( url.str() );
-  
+
     TopDUContext* top = 0;
     {
       DUChainWriteLocker lock( DUChain::lock() );
@@ -101,18 +101,20 @@ public:
         m_recompiling = true;
         if( m_compilingContexts )
         {
-          if( m_editor->currentDocument() && m_editor->smart() && top->range().textRange() != m_editor->currentDocument()->documentRange() )
+          LockedSmartInterface iface = m_editor->smart();
+          if( iface && top->range().textRange() != iface.currentDocument()->documentRange() )
           {
             kDebug() << "WARN: top level range changed";
-            top->setRange( SimpleRange( m_editor->currentDocument()->documentRange() ) );
+            top->setRange( SimpleRange( iface.currentDocument()->documentRange() ) );
           }
         }
       }else
       {
         kDebug() << "compiling";
+        LockedSmartInterface iface = m_editor->smart();
         top = new TopDUContext( m_editor->currentUrl(),
-                                m_editor->currentDocument()
-                                    ? SimpleRange( m_editor->currentDocument()->documentRange() )
+                                iface.currentDocument()
+                                    ? SimpleRange( iface.currentDocument()->documentRange() )
                                     : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
         top->setSmartRange( m_editor->topRange( EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
         top->setType( DUContext::Global );
@@ -121,20 +123,22 @@ public:
       setEncountered( top );
       setContextOnNode( node, top );
     }
-  
+
     supportBuild( node, top );
-  
-    if( m_editor->currentDocument() && m_editor->smart() &&
-        top->range().textRange() != m_editor->currentDocument()->documentRange() )
+
     {
-      kDebug() << "WARNING: top level context has wrong size:" << top->range().textRange() << "should be:" << m_editor->currentDocument()->documentRange();
-      top->setRange( m_editor->currentDocument()->documentRange() );
+      LockedSmartInterface iface = m_editor->smart();
+      if( iface && top->range().textRange() != iface.currentDocument()->documentRange() )
+      {
+        kDebug() << "WARNING: top level context has wrong size:" << top->range().textRange() << "should be:" << iface.currentDocument()->documentRange();
+        top->setRange( iface.currentDocument()->documentRange() );
+      }
     }
     {
       DUChainReadLocker lock( DUChain::lock() );
       //foreach(DUContext* context, topLevelContext->childContexts());
       kDebug() << "built top-level context with" << top->localDeclarations().count() << "declarations," << top->localDeclarations().count() << " Definitions and" << top->childContexts().size() << "Child-Contexts";
-  
+
       foreach( DUContext* contexts, top->childContexts() )
       {
         kDebug() << "CHILD:" << contexts->scopeIdentifier( true ) << "Parent:" << ( dynamic_cast<TopDUContext*>( contexts->parentContext() ) ? "top-context" : "" );
@@ -175,7 +179,7 @@ protected:
   {
     return editorFindRange(fromRange, toRange);
   }
-  
+
   virtual QualifiedIdentifier identifierForNode( NameT* ) = 0;
   virtual DUContext* newContext(const SimpleRange& range)
   {
@@ -185,21 +189,21 @@ protected:
   inline DUContext* currentContext() const { return m_contextStack.top(); }
   inline DUContext* lastContext() const { return m_lastContext; }
   inline void clearLastContext() { m_lastContext = 0; }
-  
+
   /// Returns true if we are recompiling a definition-use chain
   inline bool recompiling() const { return m_recompiling; }
   inline void setRecompiling(bool recomp) { m_recompiling = recomp; }
 
   inline bool compilingContexts() const { return m_compilingContexts; }
   inline void setCompilingContexts(bool compilingContexts) { m_compilingContexts = compilingContexts; }
-  
+
   bool hasSmartEditor() const
   {
     return m_editor->smart();
   }
 
   /// Iterates a duchain and creates smart ranges for the objects.  \warning you must hold the duchain write lock to call this function.
-  void smartenContext(TopDUContext* topLevelContext) {    
+  void smartenContext(TopDUContext* topLevelContext) {
     if( topLevelContext && !topLevelContext->smartRange() && hasSmartEditor() ) {
       //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
       //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
@@ -223,16 +227,16 @@ protected:
           startVisiting( node );
           closeContext();
       }
-  
+
       m_compilingContexts = false;
-  
+
       if ( contextFromNode( node ) == parent )
       {
           kDebug() << "Error in AbstractContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
           DUChainWriteLocker lock( DUChain::lock() );
           deleteContextOnNode( node );
       }
-  
+
       return contextFromNode( node );
   }
 
@@ -247,7 +251,7 @@ protected:
     m_contextStack.push( newContext );
     m_nextContextStack.push( 0 );
   }
-  
+
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier = 0)
   {
     if ( m_compilingContexts )
@@ -266,7 +270,7 @@ protected:
       return currentContext();
     }
   }
- 
+
   DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, NameT* identifier = 0)
   {
     if (m_compilingContexts) {
@@ -283,7 +287,7 @@ protected:
       return currentContext();
     }
   }
-  
+
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     if ( m_compilingContexts )
@@ -322,7 +326,7 @@ protected:
       return currentContext();
     }
   }
-  
+
   // Write lock is already held here...
   virtual void closeContext()
   {
@@ -333,14 +337,14 @@ protected:
         currentContext()->cleanIfNotEncountered( m_encountered );
       setEncountered( currentContext() );
     }
-  
+
     m_lastContext = currentContext();
     m_contextStack.pop();
     m_nextContextStack.pop();
     if(m_editor->smart())
       m_editor->exitCurrentRange();
   }
-  
+
   /**Signalize that a specific item has been encoutered while parsing.
    * All contained items that are not signalized will be deleted at some stage
    * */
@@ -356,7 +360,7 @@ protected:
   {
     return m_encountered.contains( item );
   }
-  
+
   void setIdentifier( const QString& id )
   {
     m_identifier = Identifier( id );
@@ -367,17 +371,17 @@ protected:
   {
     return m_qIdentifier;
   }
-  
+
   void clearQualifiedIdentifier()
   {
     m_qIdentifier.clear();
   }
-  
+
   EditorIntegrator* editor() const
   {
     return m_editor;
   }
-  
+
   const QStack<DUContext*>& contextStack() const
   {
     return m_contextStack;
@@ -402,10 +406,10 @@ protected:
         DUChainReadLocker readLock( DUChain::lock() );
         const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
-        QMutexLocker smartLock( m_editor->smartMutex() );
+        LockedSmartInterface iface = m_editor->smart();
         // translated is now in sync with the current state of the document, with whatever changes
         // have occurred since the text was fetched.
-        SimpleRange translated = m_editor->translate(range);
+        SimpleRange translated = m_editor->translate(iface, range);
 
         for ( ; nextContextIndex() < childContexts.count(); ++nextContextIndex() )
         {
@@ -422,7 +426,7 @@ protected:
           {
             // No need to have the translated range accurate any more
             // Also we can't unlock after the duchain lock is unlocked
-            smartLock.unlock();
+            iface.unlock();
 
             // Match
             ret = child;
@@ -441,7 +445,7 @@ protected:
             kDebug() << "identifier mismatch" << child->localScopeIdentifier() << identifier;
           if(translated != child->range())
             kDebug() << "range mismatch" << child->range().textRange() << translated.textRange();
-          
+
             kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
 #endif
           }

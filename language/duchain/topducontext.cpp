@@ -73,7 +73,7 @@ struct TopDUContext::AliasChainElement {
       hash = QualifiedIdentifier::combineHash(0, 0, identifier);
     }
   }
-  
+
   //Computes the identifier represented by this chain element(generally the the identifiers across the "previous" chain reversed
   QualifiedIdentifier qualifiedIdentifier() const {
     QualifiedIdentifier ret;
@@ -88,7 +88,7 @@ struct TopDUContext::AliasChainElement {
 #endif
     return ret;
   }
-  
+
   const AliasChainElement* previous;
   bool ownsPrevious;
   Identifier identifier;
@@ -100,7 +100,7 @@ struct TopDUContext::ContextChecker {
 
   ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, bool _dontCheckImport) : top(_top), position(_position), contextType(_contextType), dontCheckImport(_dontCheckImport) {
   }
-  
+
   bool operator()(DUContext* context) const {
     const TopDUContext* otherTop = context->topContext();
 
@@ -123,7 +123,7 @@ struct TopDUContext::ContextChecker {
     //Success
     return true;
   }
-  
+
   const TopDUContext* top;
   const SimpleCursor& position;
   ContextType contextType;
@@ -137,7 +137,7 @@ class TopDUContextPrivate : public DUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt, uint index)
-    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_currentUsedDeclarationIndex(0), m_ownIndex(index), m_currentDeclarationIndex(0)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_ownIndex(index), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
   {
   }
 
@@ -153,14 +153,14 @@ public:
   //Adds the context to this and all contexts that import this, and manages m_recursiveImports
   void addImportedContextRecursively(const TopDUContext* context, bool temporary) {
     QMutexLocker lock(&importStructureMutex);
-    
+
     if(!m_haveImportStructure)
       return;
 
     context->d_func()->needImportStructure();
 
     addImportedContextRecursion(context, context, 1, temporary);
-    
+
     QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->d_func()->m_recursiveImports;
     for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it)
       addImportedContextRecursion(context, it.key(), (*it).first+1, temporary); //Add contexts that were imported earlier into the given one
@@ -169,10 +169,10 @@ public:
   //Removes the context from this and all contexts that import this, and manages m_recursiveImports
   void removeImportedContextRecursively(const TopDUContext* context) {
     QMutexLocker lock(&importStructureMutex);
-    
+
     if(!m_haveImportStructure)
       return;
-    
+
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     removeImportedContextRecursion(context, context, 1, rebuild);
 
@@ -181,47 +181,47 @@ public:
       if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)
         removeImportedContextRecursion(context, it.key(), it->first+1, rebuild); //Remove all contexts that are imported through the context
     }
-    
+
     rebuildImportStructureRecursion(rebuild);
   }
 
   void removeImportedContextsRecursively(const QList<TopDUContext*>& contexts) {
     QMutexLocker lock(&importStructureMutex);
-    
+
     if(!m_haveImportStructure)
       return;
-    
+
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     foreach(TopDUContext* context, contexts) {
       removeImportedContextRecursion(context, context, 1, rebuild);
-  
+
       QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->d_func()->m_recursiveImports;
       for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
         if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)
           removeImportedContextRecursion(context, it.key(), it->first+1, rebuild); //Remove all contexts that are imported through the context
       }
     }
-    
+
     rebuildImportStructureRecursion(rebuild);
   }
-  
+
   void needImportStructure() const {
     if(m_haveImportStructure)
       return;
-    
+
     for(QVector<DUContextPointer>::const_iterator parentIt = m_importedParentContexts.constBegin(); parentIt != m_importedParentContexts.constEnd(); ++parentIt) {
       TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->data())); //To avoid detaching, use const iterator
       if(top) {
         RecursiveImports::iterator it = m_recursiveImports.find(top);
         if(it == m_recursiveImports.end() || it->first != 1) {
-          
+
           if(it == m_recursiveImports.end())
             m_recursiveImports.insert(top, qMakePair(1, const_cast<const TopDUContext*>(top)));
           else
             *it = qMakePair(1, const_cast<const TopDUContext*>(top));
-          
+
           top->d_func()->needImportStructure();
-          
+
           for(RecursiveImports::const_iterator importIt = top->d_func()->m_recursiveImports.constBegin(); importIt != top->d_func()->m_recursiveImports.constEnd(); ++importIt) {
             it = m_recursiveImports.find(importIt.key());
             if(it == m_recursiveImports.end())
@@ -234,7 +234,7 @@ public:
     }
     m_haveImportStructure = true;
   }
-  
+
   //Has an entry for every single recursively imported file, that contains the shortest path, and the next context on that path to the imported context.
   //This does not need to be stored to disk, because it is defined implicitly.
   //What makes this most complicated is the fact that loops are allowed in the import structure.
@@ -260,11 +260,11 @@ public:
 
   QHash<uint, Declaration*> m_declarationsForIndices;
   QHash<Declaration*, uint> m_indicesForDeclarations;
-  
+
   mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
-  
+
   uint m_currentDeclarationIndex;
-  
+
   TopDUContext::CacheData* currentCache() const {
     QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
     if(it != m_threadCaches.end())
@@ -284,12 +284,12 @@ public:
           top->d_func()->childClosure(children);
       }
     }
-    
+
   void addImportedContextRecursion(const TopDUContext* traceNext, const TopDUContext* imported, int depth, bool temporary = false) {
 
     if(!m_haveImportStructure)
       return;
-    
+
     if(imported == m_ctxt)
       return;
 
@@ -309,7 +309,7 @@ public:
       if(temporary) //For temporary imports, we don't record the best path.
         return;
       //It would be better if we would use the following code, but it creates too much cost in updateImportedContextRecursion when imports are removed again.
-      
+
       //Check whether the new way to "imported" is shorter than the stored one
       if((*it).first > depth) {
         //Add a shorter path
@@ -337,10 +337,10 @@ public:
 
     if(imported == m_ctxt)
       return;
-    
+
     if(!m_haveImportStructure)
       return;
-    
+
     RecursiveImports::iterator it = m_recursiveImports.find(imported);
     if(it == m_recursiveImports.end()) {
       //We don't import. Just return, this saves us from endless recursion.
@@ -352,7 +352,7 @@ public:
 
         m_recursiveImports.erase(it); //In order to prevent problems, we completely remove everything, and re-add it.
                                       //Just updating these complex structures is very hard.
-        
+
         rebuild.insert(qMakePair(m_ctxt, imported));
         //We MUST do this before finding another trace, because else we would create loops
         for(QVector<DUContext*>::const_iterator childIt = m_importedChildContexts.constBegin(); childIt != m_importedChildContexts.constEnd(); ++childIt) {
@@ -368,7 +368,7 @@ public:
   void rebuildStructure(const TopDUContext* imported) {
     if(m_ctxt == imported)
       return;
-    
+
     for(QVector<DUContextPointer>::const_iterator parentIt = m_importedParentContexts.constBegin(); parentIt != m_importedParentContexts.constEnd(); ++parentIt) {
       TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->data())); //To avoid detaching, use const iterator
       if(top) {
@@ -400,18 +400,18 @@ public:
 struct TopDUContext::DeclarationChecker {
   DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, QVector<DeclarationPointer>* _createVisibleCache = 0) : createVisibleCache(_createVisibleCache), top(_top), topDFunc(_top->d_func()), position(_position), dataType(_dataType), flags(_flags) {
   }
-  
+
   bool operator()(Declaration* dec) const {
     const TopDUContext* otherTop = dec->topContext();
-    
+
     if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(dec))
       return false;
-    
+
     if (otherTop != top) {
       bool visible = topDFunc->m_recursiveImports.contains(static_cast<const TopDUContext*>(otherTop));
       if(createVisibleCache && visible)
         createVisibleCache->append(DeclarationPointer(dec));
-      
+
       if (dataType && dec->abstractType() != dataType)
         // The declaration doesn't match the type filter we are applying
         return false;
@@ -422,7 +422,7 @@ struct TopDUContext::DeclarationChecker {
     } else {
       if(createVisibleCache)
         createVisibleCache->append(DeclarationPointer(dec));
-      
+
       if (dataType && dec->abstractType() != dataType)
         // The declaration doesn't match the type filter we are applying
         return false;
@@ -434,9 +434,9 @@ struct TopDUContext::DeclarationChecker {
     // Success, this declaration is accessible
     return true;
   }
-  
+
   mutable QVector<DeclarationPointer>* createVisibleCache;
-  const TopDUContext* top; 
+  const TopDUContext* top;
   const TopDUContextPrivate* topDFunc;
   const SimpleCursor& position;
   const AbstractType::Ptr& dataType;
@@ -457,12 +457,12 @@ void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) c
     const TopDUContext* current = this;
     while(current != target) {
       current->d_func()->needImportStructure();
-    
+
       TopDUContextPrivate::RecursiveImports::const_iterator it = current->d_func()->m_recursiveImports.find(target);
-    
+
       if(it == current->d_func()->m_recursiveImports.end())
         return;
-      
+
       const TopDUContext* nextContext = (*it).second;
 
       if(nextContext) {
@@ -532,9 +532,9 @@ void eventuallyUseCache(uint hash, TopDUContext::CacheData* cache, QVarLengthArr
     //This is a little expensive, we need to convert DeclarationPointer items to Declaration*, but there's no other way.
     const DeclarationPointer* decls((*it).second.constData());
     int size = (*it).second.size();
-    
+
     bool hadBad = false;
-    
+
     for(int a = 0; a < size; ++a) {
       if(!decls[a]) { //If a declaration has been deleted, clear the cache
         hadBad = true;
@@ -553,7 +553,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check) : top(_top), target(_target), check(_check) {
     cache = _top->d_func()->currentCache();
   }
-  
+
   void operator() (const AliasChainElement& element) {
     QVarLengthArray<Declaration*> decls;
 #ifdef DEBUG_SEARCH
@@ -565,17 +565,17 @@ struct TopDUContext::FindDeclarationsAcceptor {
 
     if(decls.isEmpty()) {
       SymbolTable::self()->findDeclarationsByHash(element.hash, decls);
-      
+
       if(decls.size() > visibilityCachingMargin && cache)
         check.createVisibleCache = &(*cache->visibleDeclarations.insert(std::make_pair( element.hash, QVector<DeclarationPointer>())).first).second;
     }
-    
+
     FOREACH_ARRAY(Declaration* decl, decls) {
       if(!check(decl))
         continue;
       if(decl->identifier() != element.identifier) ///@todo eventually do more extensive checking
         continue;
-      
+
       if( decl->kind() == Declaration::Alias ) {
         //Apply alias declarations
         AliasDeclaration* alias = static_cast<AliasDeclaration*>(decl);
@@ -585,14 +585,14 @@ struct TopDUContext::FindDeclarationsAcceptor {
           kDebug() << "lost aliased declaration";
         }
       }
-      
-      
+
+
       target.append(decl);
     }
-    
+
     check.createVisibleCache = 0;
   }
-  
+
   const TopDUContext* top;
   CacheData* cache;
   DeclarationList& target;
@@ -602,7 +602,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
 bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags) const
 {
   ENSURE_CAN_READ
-      
+
 #ifdef DEBUG_SEARCH
   FOREACH_ARRAY(SearchItem::Ptr idTree, identifiers)
       foreach(QualifiedIdentifier id, idTree->toList())
@@ -611,15 +611,15 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
   DeclarationChecker check(this, position, dataType, flags);
   FindDeclarationsAcceptor storer(this, ret, check);
-  
+
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
-  
+
   QMutexLocker lock(&importStructureMutex);
   d_func()->needImportStructure();
 
   applyAliases(identifiers, storer, position, false);
-  
+
   return true;
 }
 
@@ -631,34 +631,34 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   bool foundAlias = false;
 
   AliasChainElement newElement(backPointer, identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
-  
+
 #ifdef DEBUG_SEARCH
   kDebug() << "checking" << newElement.qualifiedIdentifier().toString();
 #endif
-  
+
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
-    
+
     //Find namespace  aliases
     QVarLengthArray<Declaration*> aliases;
     QVector<DeclarationPointer>* createVisibleCache = 0;
-    
+
     ///Eventually take a reduced list of declarations from the cache, instead of asking the symbol-store.
     if(accept.cache)
       eventuallyUseCache(newElement.hash, accept.cache, aliases);
-    
+
     if(aliases.isEmpty()) {
       SymbolTable::self()->findDeclarationsByHash( newElement.hash, aliases );
-      
+
       if(aliases.size() > visibilityCachingMargin && accept.cache)
         createVisibleCache = &(*accept.cache->visibleDeclarations.insert(std::make_pair( newElement.hash, QVector<DeclarationPointer>())).first).second;
     }
-    
+
     if(!aliases.isEmpty()) {
 #ifdef DEBUG_SEARCH
       kDebug() << "found" << aliases.count() << "aliases";
 #endif
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, createVisibleCache);
-      
+
       //The first part of the identifier has been found as a namespace-alias.
       //In c++, we only need the first alias. However, just to be correct, follow them all for now.
       FOREACH_ARRAY( Declaration* aliasDecl, aliases )
@@ -669,43 +669,43 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
         if(!check(aliasDecl))
           continue;
-        
+
         if(aliasDecl->kind() != Declaration::NamespaceAlias)
           continue;
-        
+
         if(foundAlias) {
           if(createVisibleCache) //We've got to walk through all declarations so we create a correct visible-cache
             continue;
           else
             break;
         }
-        
+
         if(aliasDecl->identifier() != newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
           continue;
-        
+
         Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
-        
+
         NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
-  
+
         foundAlias = true;
-        
+
         QualifiedIdentifier importIdentifier = alias->importIdentifier();
-        
+
         if(importIdentifier.isEmpty()) {
           kDebug() << "found empty import";
           continue;
         }
-        
+
         //Create a chain of AliasChainElements that represent the identifier
         uint count = importIdentifier.count();
-        
+
         QVarLengthArray<AliasChainElement, 5> newChain;
         newChain.resize(count);
         for(uint a = 0; a < count; ++a)
           newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
-      
+
         AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
-        
+
         if(identifier->next.isEmpty()) {
           //Just insert the aliased namespace identifier
           accept(*newAliasedElement);
@@ -717,7 +717,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
       }
     }
   }
-  
+
   if(!foundAlias) { //If we haven't found an alias, put the current versions into the result list. Additionally we will compute the identifiers transformed through "using".
     if(identifier->next.isEmpty()) {
       accept(newElement); //We're at the end of a qualified identifier, accept it
@@ -726,10 +726,10 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         applyAliases(&newElement, next, accept, position, canBeNamespace);
     }
   }
-  
+
   /*if( !prefix.explicitlyGlobal() || !prefix.isEmpty() ) {*/ ///@todo check iso c++ if using-directives should be respected on top-level when explicitly global
   ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
-  
+
   //Find all namespace-imports at given scope
 #ifdef DEBUG_SEARCH
   kDebug() << "checking imports in" << (backPointer ? backPointer->qualifiedIdentifier().toString() : QString("global"));
@@ -737,24 +737,24 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
   {
     AliasChainElement importChainItem(backPointer, globalImportIdentifier);
-    
+
     QVarLengthArray<Declaration*> imports;
     QVector<DeclarationPointer>* createVisibleCache = 0;
-    
+
     ///Eventually take a reduced list of declarations from the cache, instead of asking the symbol-store.
     if(accept.cache)
       eventuallyUseCache(importChainItem.hash, accept.cache, imports);
-    
+
     if(imports.isEmpty()) {
       SymbolTable::self()->findDeclarationsByHash( importChainItem.hash, imports );
-      
+
       if(imports.size() > visibilityCachingMargin && accept.cache)
         createVisibleCache = &(*accept.cache->visibleDeclarations.insert(std::make_pair( importChainItem.hash, QVector<DeclarationPointer>())).first).second;
     }
-    
+
     if(!imports.isEmpty()) {
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, createVisibleCache);
-      
+
       FOREACH_ARRAY( Declaration* importDecl, imports )
       {
         //We must never break or return from this loop, because else we might be creating a bad cache
@@ -765,31 +765,31 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           continue;
         if(importDecl->identifier() != globalImportIdentifier) //We need to check, since we've only searched by hash
           continue;
-        
+
         //Search for the identifier with the import-identifier prepended
         Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
         NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
-        
+
 #ifdef DEBUG_SEARCH
         kDebug() << "found import of" << alias->importIdentifier().toString();
 #endif
 
         QualifiedIdentifier importIdentifier = alias->importIdentifier();
-        
+
         if(importIdentifier.isEmpty()) {
           kDebug() << "found empty import";
           continue;
         }
-        
+
         int count = importIdentifier.count();
         QVarLengthArray<AliasChainElement, 5> newChain;
         newChain.resize(importIdentifier.count());
-        
+
         for(int a = 0; a < count; ++a)
           newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
-      
+
         AliasChainElement* newAliasedElement = &newChain[count-1];
-        
+
 #ifdef DEBUG_SEARCH
         kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
 #endif
@@ -812,25 +812,25 @@ struct TopDUContext::FindContextsAcceptor {
   FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check) : top(_top), target(_target), check(_check) {
     cache = _top->d_func()->currentCache();
   }
-  
+
   void operator() (const AliasChainElement& element) {
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
     QVarLengthArray<DUContext*> decls;
-    
+
     SymbolTable::self()->findContextsByHash(element.hash, decls);
     FOREACH_ARRAY(DUContext* ctx, decls) {
       if(!check(ctx))
         continue;
-      
+
       if(ctx->localScopeIdentifier().last() != element.identifier) ///@todo eventually do more extensive checking
         continue;
-      
+
       target << ctx;
     }
   }
-  
+
   const TopDUContext* top;
   CacheData* cache;
   QList<DUContext*>& target;
@@ -842,7 +842,7 @@ void TopDUContext::findContextsInternal(ContextType contextType, const SearchIte
   ENSURE_CAN_READ
   ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
   FindContextsAcceptor storer(this, ret, check);
-  
+
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindContextsAcceptor.
   ///That stores the found declaration to the output.
   applyAliases(baseIdentifiers, storer, position, contextType == Namespace);
@@ -887,7 +887,7 @@ bool TopDUContext::imports(const DUContext * origin, const SimpleCursor& positio
 bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& position) const
 {
   Q_UNUSED(position);
-    
+
   if( dynamic_cast<const TopDUContext*>(origin) ) {
     QMutexLocker lock(&importStructureMutex);
     d_func()->needImportStructure();
@@ -917,10 +917,10 @@ void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, Si
 void TopDUContext::removeImportedParentContexts(const QList<TopDUContext*>& contexts) {
   foreach(TopDUContext* context, contexts)
     DUContext::removeImportedParentContext(context);
-  
+
   d_func()->removeImportedContextsRecursively(contexts);
 }
- 
+
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
 bool TopDUContext::inDuChain() const {
   return d_func()->m_inDuChain;
@@ -943,7 +943,7 @@ void TopDUContext::clearUsedDeclarationIndices() {
   ENSURE_CAN_WRITE
   for(int a = 0; a < d_func()->m_usedDeclarationIds.size(); ++a)
       DUChain::uses()->removeUse(d_func()->m_usedDeclarationIds[a], this);
-  
+
   d_func()->m_usedDeclarations.clear();
   d_func()->m_usedDeclarationIds.clear();
   d_func()->m_usedLocalDeclarations.clear();
@@ -1000,7 +1000,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
     d_func()->m_usedDeclarations.append(declarationPtr);
 
     DUChain::uses()->addUse(id, this);
-    
+
     return d_func()->m_usedDeclarationIds.count()-1;
   }
 }
@@ -1032,7 +1032,7 @@ TopDUContext::Cache::~Cache() {
   DUChainWriteLocker lock(DUChain::lock());
   if(d->context && d->context->d_func()->m_threadCaches[QThread::currentThreadId()] == d)
     d->context->d_func()->m_threadCaches.remove(QThread::currentThreadId());
-  
+
   delete d;
 }
 

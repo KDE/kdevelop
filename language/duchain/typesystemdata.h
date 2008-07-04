@@ -39,19 +39,19 @@ public:
   //the AbstractType::copyData function cares about hat.
   AbstractTypeData( const AbstractTypeData& /*rhs*/ );
   ~AbstractTypeData();
-  
+
   //This must be called from actual class that belongs to this data(not parent classes), and the class must have the
   //"Identity" enumerator with a unique identity. Do NOT call this in copy-constructors!
   template<class T>
   void setTypeClassId() {
     typeClassId = T::Identity;
   }
-  
+
   uint typeClassId;
   bool inRepository : 1; //Not used for comparison or hashes.
-  
+
   APPENDED_LISTS_STUB(AbstractTypeData)
-  
+
   uint classSize() const;
   private:
   AbstractTypeData& operator=(const AbstractTypeData&);
@@ -89,13 +89,13 @@ public:
   FunctionTypeData();
   ~FunctionTypeData();
   FunctionTypeData( const FunctionTypeData& rhs );
-  
+
   IndexedType m_returnType;
 
   START_APPENDED_LISTS_BASE(FunctionTypeData, AbstractTypeData);
-  
+
   APPENDED_LIST_FIRST(FunctionTypeData, IndexedType, m_arguments);
-  
+
   END_APPENDED_LISTS(FunctionTypeData, m_arguments);
   private:
     void operator=(const FunctionTypeData& rhs);

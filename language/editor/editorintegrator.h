@@ -20,7 +20,9 @@
 #define KDEVEDITORINTEGRATOR_H
 
 #include <QtCore/QDateTime>
-#include <kurl.h>
+#include <QtCore/QMutexLocker>
+
+#include <KUrl>
 
 #include <ktexteditor/range.h>
 #include <ktexteditor/smartrange.h>
@@ -40,6 +42,36 @@ namespace KDevelop
   class IndexedString;
 
 /**
+ * Class to hold a reference to a locked KTextEditor::SmartInterface.
+ * Implicitly shared.
+ *
+ * This class is re-entrant, but not thread safe.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT LockedSmartInterface
+{
+  public:
+    LockedSmartInterface(KTextEditor::SmartInterface* iface = 0, KTextEditor::Document* doc = 0);
+    LockedSmartInterface(const LockedSmartInterface& lock);
+    ~LockedSmartInterface();
+
+    /// Unlock the smart interface when you've finished using it
+    /// This happens automatically on deletion, so you only need to call if
+    /// the object is not going to be deleted.
+    void unlock() const;
+
+    /**
+     * Return the current text editor document, based on the current URL.
+     */
+    KTextEditor::Document* currentDocument() const;
+
+    KTextEditor::SmartInterface* operator->() const;
+    operator bool() const;
+
+  private:
+    class LockedSmartInterfacePrivate* const d;
+};
+
+/**
  * Provides facilities for easy integration of a text editor component with
  * the information parsed from a source file.
  *
@@ -51,6 +83,8 @@ namespace KDevelop
  */
 class KDEVPLATFORMLANGUAGE_EXPORT EditorIntegrator
 {
+  friend class EditorIntegratorStatic;
+
 public:
   EditorIntegrator();
   virtual ~EditorIntegrator();
@@ -100,24 +134,17 @@ public:
    * \Returns the revision retrieved, or -1 if there was an error.
    */
   static int saveCurrentRevision(KTextEditor::Document* document);
-  
+
   /// Returns the url of the currently associated editor
   HashedString currentUrl() const;
 
   /// Associate this editor integrator with the editor which is currently editing the given \a url
   void setCurrentUrl(const HashedString& url);
 
-  /**
-   * Return the current text editor document, based on the current URL.
-   */
-  KTextEditor::Document* currentDocument() const;
-
   /// Convenience function to return the SmartInterface for the current document.
-  KTextEditor::SmartInterface* smart() const;
+  LockedSmartInterface smart() const;
 
-  /// Convenience function to return the mutex for the current SmartInterface, if one exists.
-  QMutex* smartMutex() const;
-
+  /// Top range type enumeration
   enum TopRangeType {
     Highlighting /**< top range type for highlighting */,
     DefinitionUseChain /**< top range type for duchain */,
@@ -170,7 +197,7 @@ public:
    * Translate the given \a range to the current smart revision, and return the result.
    * You need to have the smart mutex locked for the result to remain valid while you process it.
    */
-  SimpleRange translate(const SimpleRange& fromRange) const;
+  SimpleRange translate(const LockedSmartInterface& iface, const SimpleRange& fromRange) const;
 
 
   // Set defaults for creation of ranges
@@ -242,7 +269,7 @@ public:
    * Count of ranges currently on the stack.
    */
   int rangeStackSize() const;
-  
+
   /**
    * Sets the previous range on the stack to be the new current range.
    * Does nothing if the range stack is empty.
@@ -255,7 +282,11 @@ public:
   static QObject* notifier();
 
 private:
-  static KDevelop::EditorIntegratorStatic *data();
+  /// Remove a current associated document, eg. if the document gets closed
+  /// Only to be used by EditorIntegratorStatic
+  void clearCurrentDocument();
+
+  static EditorIntegratorStatic *data();
   class EditorIntegratorPrivate* const d;
 
 };

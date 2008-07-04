@@ -27,6 +27,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
+#include "editorintegrator.h"
+
 using namespace KTextEditor;
 
 namespace KDevelop
@@ -50,7 +52,7 @@ void EditorIntegratorStatic::documentLoaded()
 {
   KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender());
   Q_ASSERT(doc);
-  
+
   DocumentInfo i;
   i.document = doc;
   i.revision = -1;
@@ -110,8 +112,15 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
   }
 
   lock.unlock();
-  
+
   emit documentAboutToBeDeleted(document);
+
+  QMutexLocker lock2(mutex);
+  if (editorIntegrators.contains(document)) {
+    foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {
+      editor->clearCurrentDocument();
+    }
+  }
 }
 
 void EditorIntegratorStatic::reloadDocument(KTextEditor::Document* document)

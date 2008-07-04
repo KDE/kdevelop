@@ -79,8 +79,8 @@ protected:
       // Seek a matching declaration
 
       // Translate cursor to take into account any changes the user may have made since the text was retrieved
-      QMutexLocker smartLock(LanguageSpecificDeclarationBuilderBase::editor()->smartMutex());
-      SimpleRange translated = LanguageSpecificDeclarationBuilderBase::editor()->translate(newRange);
+      LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
+      SimpleRange translated = LanguageSpecificDeclarationBuilderBase::editor()->translate(iface, newRange);
 
       QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->allLocalDeclarations(localId);
       foreach( Declaration* dec, declarations ) {
@@ -146,7 +146,7 @@ protected:
       } else {
         declaration = new Declaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       }
-      
+
       declaration->setSmartRange(range);
       declaration->setDeclarationIsDefinition(isDefinition);
       declaration->setIdentifier(localId);
@@ -171,7 +171,7 @@ protected:
 
     return declaration;
   }
-  
+
   void openDeclarationInternal(Declaration* declaration)
   {
     m_declarationStack.push(declaration);
@@ -192,7 +192,7 @@ protected:
   {
     return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
   }
-    
+
   void eventuallyAssignInternalContext()
   {
     if (LanguageSpecificDeclarationBuilderBase::lastContext()) {
@@ -211,12 +211,12 @@ protected:
       }
     }
   }
-    
+
   virtual void closeDeclaration()
   {
     m_declarationStack.pop();
   }
-    
+
   void abortDeclaration()
   {
     m_declarationStack.pop();

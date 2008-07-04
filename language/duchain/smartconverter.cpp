@@ -58,7 +58,7 @@ public:
       context->setUseSmartRange(a, m_editor->createRange(context->uses()[a].m_range.textRange())->toSmartRange());
       m_editor->exitCurrentRange();
     }
-    
+
     if( m_hl )
       m_hl->highlightUses(context);
 
@@ -74,7 +74,7 @@ public:
       dec->clearSmartRange();
 
     context->clearUseSmartRanges();
-    
+
     foreach (DUContext* child, context->childContexts())
       deconvertDUChainInternal(child);
 
@@ -103,12 +103,12 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
   d->m_editor->setCurrentUrl( context->url() );
 
-  if (d->m_editor->smart() && !context->smartRange()) {
-    QMutexLocker smartLock(d->m_editor->smart()->smartMutex());
+  LockedSmartInterface iface  = d->m_editor->smart();
+  if (iface && !context->smartRange()) {
     context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
-    if (context->range().textRange() != d->m_editor->currentDocument()->documentRange())
-      kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << d->m_editor->currentDocument()->documentRange();
-    //Q_ASSERT(context->range().textRange() == d->m_editor->currentDocument()->documentRange());
+    if (context->range().textRange() != iface.currentDocument()->documentRange())
+      kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << iface.currentDocument()->documentRange();
+    //Q_ASSERT(context->range().textRange() == iface.currentDocument()->documentRange());
     Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 
     d->convertDUChainInternal(context, true);
@@ -122,8 +122,8 @@ void SmartConverter::deconvertDUChain(DUContext* context) const
 
   d->m_editor->setCurrentUrl( context->url() );
 
-  if (SmartInterface* smart = d->m_editor->smart()) {
-    QMutexLocker smartLock(smart->smartMutex());
+  LockedSmartInterface iface  = d->m_editor->smart();
+  if (iface) {
     d->deconvertDUChainInternal(context);
   }
 }
