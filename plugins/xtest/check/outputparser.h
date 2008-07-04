@@ -56,7 +56,7 @@ private: // helpers
     inline bool isEndElement_(const QString& elem);
 
 private: // state
-    Veritas::TestResult m_result;
+    Veritas::TestResult* m_result;
     QString m_currentSuite;
     TestRoot* m_root;
     Veritas::Test* m_suite;

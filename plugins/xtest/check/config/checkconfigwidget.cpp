@@ -19,8 +19,8 @@
  */
 
 
-#include "checkconfig.h"
 #include "checkconfigwidget.h"
+#include "checkconfig.h"
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

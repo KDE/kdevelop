@@ -69,6 +69,7 @@ const QString OutputParser::c_line("line");
 
 OutputParser::OutputParser(QIODevice* device)
     : QXmlStreamReader(device),
+      m_result(0),
       m_processingSuite(false),
       m_processingCase(false),
       m_processingCmd(false)
@@ -157,6 +158,7 @@ void OutputParser::processCmd()
         m_cmd = m_case->childNamed(m_currentCmd);
         ENSURE_FOUND(m_cmd, m_case, m_currentCmd);
         m_cmd->started();
+        m_result = new TestResult;
     }
     Q_ASSERT(m_cmd);
     m_processingCmd = true;
@@ -174,18 +176,17 @@ void OutputParser::processCmd()
             setSuccess();
         m_cmd->setResult(m_result);
         m_cmd->finished();
-        m_result.clear();
     }
 }
 
 void OutputParser::setSuccess()
 {
-    m_result.setState(Veritas::RunSuccess);
+    m_result->setState(Veritas::RunSuccess);
 }
 
 void OutputParser::setFailure()
 {
-    m_result.setState(Veritas::RunError);
-    m_result.setFile(QFileInfo(attributes().value(c_file).toString()));
-    m_result.setLine(attributes().value(c_line).toString().toInt());
+    m_result->setState(Veritas::RunError);
+    m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
+    m_result->setLine(attributes().value(c_line).toString().toInt());
 }

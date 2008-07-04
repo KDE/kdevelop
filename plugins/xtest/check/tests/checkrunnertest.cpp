@@ -177,7 +177,7 @@ void CheckRunnerTest::runTwice()
 // helper
 void CheckRunnerTest::checkResultItems(QList<QStringList> expected)
 {
-    nrofMessagesEquals(expected.size());;
+    nrofMessagesEquals(expected.size());
     for (int i = 0; i < expected.size(); i++)
         checkResultItem(i, expected.value(i));
 }

@@ -18,15 +18,15 @@
  * 02110-1301, USA.
  */
 
-#ifndef CPPUNIT_CPPUNITPLUGIN_H
-#define CPPUNIT_CPPUNITPLUGIN_H
+#ifndef CPPUNIT_CPPUNITVIEW_H
+#define CPPUNIT_CPPUNITVIEW_H
 
 #include <testrunnertoolview.h>
 #include <QVariantList>
 
 class CppUnitViewFactory;
-namespace Veritas { class Test; }
-namespace Veritas { class ITest; }
+namespace Veritas { class Test;
+                    class ITest; }
 
 class CppUnitView : public Veritas::TestRunnerToolView
 {
@@ -45,4 +45,4 @@ private:
     CppUnitViewFactory* m_factory;
 };
 
-#endif // CPPUNIT_CPPUNITPLUGIN_H
+#endif // CPPUNIT_CPPUNITVIEW_H

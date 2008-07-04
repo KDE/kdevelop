@@ -83,7 +83,7 @@ int QTestCase::run()
 
     QDir::setCurrent(executable().dir().absolutePath());
     proc->setProgram("./" + executable().fileName(), argv);
-    kDebug() << "executing " << proc->program() << " [ " << executable().filePath() << " ]";;
+    kDebug() << "executing " << proc->program() << " [ " << executable().filePath() << " ]";
     proc->setOutputChannelMode(KProcess::SeparateChannels);
     proc->start();
     proc->waitForFinished(-1);

@@ -62,8 +62,10 @@ const QString QTestOutputParser::c_initTestCase("initTestCase");
 const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 
 QTestOutputParser::QTestOutputParser(QIODevice* device)
-        : QXmlStreamReader(device), m_processingTestFunction(false),
-        m_fillingResult(false), m_settingFailure(false)
+    : QXmlStreamReader(device), m_result(0),
+      m_processingTestFunction(false),
+      m_fillingResult(false),
+      m_settingFailure(false)
 {
 }
 
@@ -106,7 +108,8 @@ void QTestOutputParser::go(QTestCase* caze)
 
 bool QTestOutputParser::doingOK() const
 {
-    return (m_result.state() == Veritas::NoResult || m_result.state() == Veritas::RunSuccess);
+    return (!m_result || m_result->state() == Veritas::NoResult 
+                      || m_result->state() == Veritas::RunSuccess);
 }
 
 bool QTestOutputParser::fixtureFailed(const QString& cmd)
@@ -122,6 +125,7 @@ void QTestOutputParser::processTestFunction()
     if (!m_processingTestFunction) {
         cmdName = attributes().value("name").toString();
         Test* cmd = m_case->childNamed(cmdName);
+        m_result = new TestResult; // this probably leaks. TODO
         if (cmd)
             cmd->started();
     }
@@ -138,7 +142,6 @@ void QTestOutputParser::processTestFunction()
         if (cmd) {
             cmd->setResult(m_result);
             cmd->finished();
-            m_result = TestResult();
         } else if (fixtureFailed(cmdName)) {
             kDebug() << "init/cleanup TestCase failed";
             m_case->started();
@@ -163,29 +166,29 @@ void QTestOutputParser::appendMsg()
     while (!atEnd() && !isEndElement_(c_message)) {
         readNext();
         if (isStartElement_(c_description)) {
-            m_result.addOutputLine(readElementText().toAscii());
+            m_result->addOutputLine(readElementText().toAscii());
         }
     }
 }
 
 void QTestOutputParser::setSuccess()
 {
-    m_result.setState(Veritas::RunSuccess);
+    m_result->setState(Veritas::RunSuccess);
 }
 
 void QTestOutputParser::setFailure()
 {
     if (!m_settingFailure) {
-        m_result.setState(Veritas::RunError);
-        m_result.setFile(QFileInfo(attributes().value(c_file).toString()));
-        m_result.setLine(attributes().value(c_line).toString().toInt());
+        m_result->setState(Veritas::RunError);
+        m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
+        m_result->setLine(attributes().value(c_line).toString().toInt());
     }
     m_settingFailure = true;
 
     while (!atEnd() && !isEndElement_(c_description)) {
         readNext();
         if (isCDATA())
-            m_result.setMessage(text().toString());
+            m_result->setMessage(text().toString());
     }
 
     if (isEndElement_(c_description))

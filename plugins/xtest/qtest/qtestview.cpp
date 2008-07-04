@@ -19,37 +19,39 @@
  */
 
 #include "qtestview.h"
-#include "qtestregister.h"
 
+// KDevelop
 #include <core.h>
-#include <iuicontroller.h>
+#include <context.h>
 #include <iproject.h>
 #include <idocument.h>
+#include <projectmodel.h>
+#include <iuicontroller.h>
 #include <iprojectcontroller.h>
+#include <documentcontroller.h>
 #include <iprojectfilemanager.h>
 #include <ibuildsystemmanager.h>
-#include <documentcontroller.h>
 #include <contextmenuextension.h>
-#include <context.h>
-#include <projectmodel.h>
-#include <test.h>
 
-#include <klocalizedstring.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+// xtest
+#include <test.h>
+#include <qtestregister.h>
 #include <qtestsettings.h>
 
-#include <QInputDialog>
-#include <QMessageBox>
+// Qt
 #include <QFile>
+#include <QIODevice>
+#include <QMessageBox>
+#include <QInputDialog>
+
+// KDE
 #include <KDebug>
 #include <KAction>
-#include <KSharedConfig>
+#include <KLocale>
 #include <KConfigGroup>
-#include <QLabel>
-
-#include <QIODevice>
-#include <QFile>
+#include <KPluginLoader>
+#include <KSharedConfig>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY(QTestViewPluginFactory, registerPlugin<QTestView>();)
 K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
@@ -141,7 +143,7 @@ void QTestView::newQTest()
 {
     if (!project()) {
         QMessageBox::critical(
-            0, i18n("Errr"),
+            0, i18n("Failed to comply."),
             i18n("Select a project in the qtest view."),
             QMessageBox::Ok);
         return;
@@ -172,6 +174,7 @@ void QTestView::newQTest()
     << ""
     << QString() + "class " + clz + " : public QObject"
     << "{"
+    << "Q_OBJECT"
     << "private slots:"
     << "    void init();"
     << "    void cleanup();"

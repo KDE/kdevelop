@@ -19,8 +19,8 @@
  */
 
 
-#include "qtestconfig.h"
 #include "qtestconfigwidget.h"
+#include "qtestconfig.h"
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

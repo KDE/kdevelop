@@ -56,7 +56,7 @@ private: // helpers
     inline bool isEndElement_(const QString& elem);
 
 private: // state
-    Veritas::TestResult m_result;
+    Veritas::TestResult* m_result;
 
     // remember state to continue when parsing
     // incrementally

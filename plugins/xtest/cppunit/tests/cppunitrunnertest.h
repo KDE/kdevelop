@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCPPUNIT_CPPUNITTESTRUNNERTEST_H
-#define QXCPPUNIT_CPPUNITTESTRUNNERTEST_H
+#ifndef CPPUNIT_CPPUNITRUNNERTEST_H
+#define CPPUNIT_CPPUNITRUNNERTEST_H
 
 #include <QtTest/QTest>
 
@@ -62,4 +62,4 @@ private:
 } // namespace it
 } // namespace CppUnit
 
-#endif // QXCPPUNIT_CUTESTRUNNERTEST_H
+#endif // CPPUNIT_CPPUNITRUNNERTEST_H

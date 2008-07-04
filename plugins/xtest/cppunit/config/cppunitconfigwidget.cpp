@@ -19,8 +19,8 @@
  */
 
 
-#include "cppunitconfig.h"
 #include "cppunitconfigwidget.h"
+#include "cppunitconfig.h"
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

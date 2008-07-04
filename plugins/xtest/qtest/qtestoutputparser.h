@@ -56,7 +56,7 @@ private: // helpers
     inline bool doingOK() const;
 
 private: // state
-    Veritas::TestResult m_result;
+    Veritas::TestResult* m_result;
     QTestCase* m_case;
 
     // remember state to continue when parsing

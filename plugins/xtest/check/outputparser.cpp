@@ -83,7 +83,8 @@ const QString OutputParser::c_success("success");
 
 
 OutputParser::OutputParser(QIODevice* device)
-        : QXmlStreamReader(device)
+        : QXmlStreamReader(device),
+          m_result(0)
 {}
 
 OutputParser::~OutputParser()
@@ -154,7 +155,6 @@ void OutputParser::postResult(const QString& caze, const QString& cmd, const QSt
     m_cmd->setResult(m_result);
     m_cmd->started();
     m_cmd->finished();
-    m_result.clear();
 }
 
 /*
@@ -173,6 +173,7 @@ bool OutputParser::readTestElement(QString& caze, QString& cmd, QString& result,
     int count = 0;
     QString path;
     result = attributes().value("result").toString();
+    m_result = new TestResult;
     while (!atEnd() && !isEndElement_(c_test)) {
         readNext();
         if (!isStartElement()) {
@@ -212,15 +213,14 @@ QString OutputParser::fetchName()
 
 void OutputParser::setSuccess()
 {
-    m_result.setState(Veritas::RunSuccess);
+    m_result->setState(Veritas::RunSuccess);
 }
 
 void OutputParser::setFailure(const QString& location, const QString& msg)
 {
-    kDebug() << location;
-    m_result.setState(Veritas::RunError);
+    m_result->setState(Veritas::RunError);
     QStringList spl = location.split(':');
-    m_result.setFile(QFileInfo(spl.value(0)));
-    m_result.setLine(spl.value(1).toInt());
-    m_result.setMessage(msg);
+    m_result->setFile(QFileInfo(spl.value(0)));
+    m_result->setLine(spl.value(1).toInt());
+    m_result->setMessage(msg);
 }

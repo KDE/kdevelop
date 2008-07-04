@@ -80,7 +80,7 @@ static inline const char* tagFor(CppUnit::Test* test)
     static const char* suite = "suite";
     static const char* caze  = "case";
     static const char* cmd   = "command";
-    static const char* unkw  = "unkown";
+    static const char* unkw  = "unknown";
     const char* tag;
     if (isSuite(test)) {
         tag = suite;
@@ -177,7 +177,7 @@ static inline void runAllTests(T suites, int argc, char **)
 //         } catch (std::exception& exc) {
 //             printf("<error message=\"%s\" />\n", exc.what());
 //         } catch (...) {
-//             printf("<error message=\"unkown exception occured in client test code\"/>\n");
+//             printf("<error message=\"unknown exception occurred in client test code\"/>\n");
 //         }
     }
     printf("</root>\n");

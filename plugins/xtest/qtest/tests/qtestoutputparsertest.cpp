@@ -244,27 +244,27 @@ void QTestOutputParserTest::parse()
     KOMPARE(index, i2);
 
     QFETCH(Veritas::TestState, state);
-    TestResult result = m_caze->child(0)->result();
-    KOMPARE_MSG(state, result.state(),
+    TestResult* result = m_caze->child(0)->result();
+    KOMPARE_MSG(state, result->state(),
                 "Expected " + QString::number(state) +
-                " got " + QString::number(result.state()));
+                " got " + QString::number(result->state()));
 
     QFETCH(QFileInfo, file);
-    KOMPARE(file.filePath(), result.file().filePath());
+    KOMPARE(file.filePath(), result->file().filePath());
 
     QFETCH(int, line);
-    KOMPARE(line, result.line());
+    KOMPARE(line, result->line());
 
     QFETCH(QString, message);
-    KOMPARE_MSG(message, result.message(),
-                "Expected " + message + " got " + result.message());
+    KOMPARE_MSG(message, result->message(),
+                "Expected " + message + " got " + result->message());
 }
 
 namespace QTest
 {
 template<> inline char* toString(const TestResult& res)
 {
-    return qstrdup((QString::number(res.state()) + " " +
+    return qstrdup((QString::number(res.state()) + ' ' +
                    res.message()).toLatin1().constData());
 }
 }
@@ -293,8 +293,8 @@ void QTestOutputParserTest::initFailure()
     KOMPARE(index, i2);
 
     TestResult expected(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
-    TestResult result = m_caze->result();
-    KOMPARE(expected, result);
+    TestResult* result = m_caze->result();
+    KOMPARE(expected, *result);
 }
 
 // test command
@@ -321,15 +321,15 @@ void QTestOutputParserTest::cleanupFailure()
 
     parser.go(m_caze);
 
-    // the testcommand should have been completed succesfully
+    // the testcommand should have been completed successfully
     assertCompleted(cmd, starSpyCmd, compSpyCmd);
     TestResult expected(Veritas::RunSuccess, "", 0, QFileInfo(""));
-    assertResult(expected, cmd->result());
+    assertResult(expected, *cmd->result());
 
     // the testcase should have failed
     assertCompleted(m_caze, starSpy, compSpy);
-    expected = TestResult(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
-    assertResult(expected, m_caze->result());
+    TestResult expected2(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
+    assertResult(expected2, *m_caze->result());
 }
 
 // test command
@@ -359,11 +359,11 @@ void QTestOutputParserTest::spammer()
 
     // verify
     assertCompleted(cmd, startSpy, completedSpy);
-    TestResult expected = TestResult(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
-    assertResult(expected, cmd->result());
+    TestResult expected(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
+    assertResult(expected, *cmd->result());
 
-    KOMPARE(1, cmd->result().outputLineCount());
-    KOMPARE(SPAM_MSG1, cmd->result().outputLine(0));
+    KOMPARE(1, cmd->result()->outputLineCount());
+    KOMPARE(SPAM_MSG1, cmd->result()->outputLine(0));
 }
 
 void QTestOutputParserTest::spamMulti()
@@ -398,13 +398,13 @@ void QTestOutputParserTest::spamMulti()
 
     // verify
     assertCompleted(cmd, startSpy, completedSpy);
-    TestResult expected = TestResult(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
-    assertResult(expected, cmd->result());
+    TestResult expected(Veritas::RunError, FAILURE_MSG , 100, QFileInfo("/path/to/file.cpp"));
+    assertResult(expected, *cmd->result());
 
-    KOMPARE(3, cmd->result().outputLineCount());
-    KOMPARE(SPAM_MSG1, cmd->result().outputLine(0));
-    KOMPARE(SPAM_MSG2, cmd->result().outputLine(1));
-    KOMPARE(SPAM_MSG3, cmd->result().outputLine(2));
+    KOMPARE(3, cmd->result()->outputLineCount());
+    KOMPARE(SPAM_MSG1, cmd->result()->outputLine(0));
+    KOMPARE(SPAM_MSG2, cmd->result()->outputLine(1));
+    KOMPARE(SPAM_MSG3, cmd->result()->outputLine(2));
 }
 
 
