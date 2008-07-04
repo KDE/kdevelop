@@ -164,7 +164,7 @@ QString cursorItemText() {
     return QString();
   }
 
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().dataUnsafe());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().unsafeData());
   if( idType && idType->declaration(context) )
     decl = idType->declaration(context);
 
@@ -800,7 +800,7 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
         item.m_text = decl->qualifiedIdentifier().toString();
         items << item;
 
-        FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().dataUnsafe());
+        FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().unsafeData());
 
         if(functionType) {
           item.m_text += functionType->partToString(FunctionType::SignatureArguments);
