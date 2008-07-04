@@ -77,8 +77,13 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   //If we've got a type assigned, that counts as a way of resolution.
   AbstractType::Ptr t = abstractType();
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
-  if( idType  )
-    return idType->declaration(topContext);
+  if( idType  ) {
+    Declaration* decl = idType->declaration(topContext);
+    if(decl && !decl->isForwardDeclaration())
+      return decl;
+    else
+      return 0;
+  }
   
   if(!topContext)
       topContext = this->topContext();
