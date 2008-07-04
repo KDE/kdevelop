@@ -65,7 +65,7 @@ using namespace Cpp;
 //   to->setClassType(from->classType());
 //   to->setDeclarationId(from->declarationId());
 //   to->setCV(from->cv());
-// 
+//
 //   to->close();
 // }
 
@@ -124,7 +124,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   if( ast->type_parameter && ast->type_parameter->name ) {
     ///@todo deal with all the other stuff the AST may contain
     TemplateParameterDeclaration* decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
-    
+
     DUChainWriteLocker lock(DUChain::lock());
     AbstractType::Ptr type = lastType();
     if( type.cast<CppTemplateParameterType>() ) {
@@ -222,7 +222,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   }
   if (node->parameter_declaration_clause) {
     Declaration* decl = openFunctionDeclaration(node->id, node);
-    
+
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
         decl->setDeclarationIsDefinition( (bool)m_functionDefinedStack.top() );
@@ -335,9 +335,9 @@ template<class T>
 T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange)
 {
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts);
-  
+
   ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
   ///by specialize(..) and its indirect DeclarationId
   if( templateCtx || m_templateDeclarationDepth ) {
@@ -356,16 +356,16 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   if(name) {
     std::size_t start = name->unqualified_name->start_token;
     std::size_t end = name->unqualified_name->end_token;
-    
+
     //We must exclude the tilde. Else we may get totally messed up ranges when the name of a destructor is renamed in a macro
     if(name->unqualified_name->tilde)
       start = name->unqualified_name->tilde+1;
-    
+
     newRange = editor()->findRange(start, end);
   }else{
     newRange = editor()->findRange(rangeNode);
   }
-  
+
   if(collapseRange)
     newRange.end = newRange.start;
 
@@ -374,9 +374,9 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   if (name) {
     TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator. This is not catched by the type builder.
     QualifiedIdentifier id = identifierForNode(name, &typeSpecifier);
-    
+
     static Identifier castIdentifier("operator{...cast...}");
-    
+
     if( typeSpecifier && id.last() == castIdentifier ) {
       if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
         visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
@@ -391,8 +391,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     // Seek a matching declaration
 
     // Translate cursor to take into account any changes the user may have made since the text was retrieved
-    QMutexLocker smartLock(editor()->smartMutex());
-    SimpleRange translated = editor()->translate(newRange);
+    LockedSmartInterface iface = editor()->smart();
+    SimpleRange translated = editor()->translate(iface, newRange);
 
 #ifdef DEBUG_UPDATE_MATCHING
     kDebug() << "checking" << localId.toString() << "range" << translated.textRange();
@@ -407,14 +407,14 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 #ifdef DEBUG_UPDATE_MATCHING
       if( !(typeid(*dec) == typeid(T)) )
         kDebug() << "typeid mismatch:" << typeid(*dec).name() << typeid(T).name();
-      
+
       if (!(dec->range() == translated))
         kDebug() << "range mismatch" << dec->range().textRange() << translated.textRange();
-      
+
       if(!(localId == dec->identifier()))
         kDebug() << "id mismatch" << dec->identifier().toString() << localId.toString();
 #endif
-      
+
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
           localId == dec->identifier() &&
@@ -447,16 +447,16 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       backup.append(editor()->currentRange());
       editor()->exitCurrentRange();
     }
-    
+
     if(prior && !editor()->currentRange()) {
       editor()->setCurrentRange(backup[backup.count()-1]);
       backup.resize(backup.size()-1);
     }
-    
+
     SmartRange* range = editor()->createRange(newRange.textRange());
 
     editor()->exitCurrentRange();
-    
+
     for(int a = backup.size()-1; a >= 0; --a)
       editor()->setCurrentRange(backup[a]);
 
@@ -471,7 +471,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
   if(funDecl)
     funDecl->clearDefaultParameters();
-  
+
   declaration->setDeclarationIsDefinition(false); //May be set later
 
   declaration->setIsTypeAlias(m_inTypedef);
@@ -524,7 +524,7 @@ Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AS
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool collapseRange)
 {
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
-  
+
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   return ret;
@@ -533,7 +533,7 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
 Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange) {
   if(currentContext()->type() == DUContext::Class) {
     ClassMemberDeclaration* mem = openDeclaration<ClassMemberDeclaration>(name, rangeNode, customName, collapseRange);
-    
+
     DUChainWriteLocker lock(DUChain::lock());
     mem->setAccessPolicy(currentAccessPolicy());
     return mem;
@@ -545,21 +545,21 @@ Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* range
 }
 
 Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* rangeNode) {
-  
+
    QualifiedIdentifier id = identifierForNode(name);
    Identifier localId = id.last(); //This also copies the template arguments
    if(id.count() > 1) {
      //Merge the scope of the declaration, and put them tog. Add semicolons instead of the ::, so you can see it's not a qualified identifier.
      //Else the declarations could be confused with global functions.
      //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
-     
+
      QString newId = id.last().identifier().str();
      for(int a = id.count()-2; a >= 0; --a)
        newId = id.at(a).identifier().str() + ";;" + newId;
- 
+
      localId.setIdentifier(newId);
    }
-  
+
   if(currentContext()->type() == DUContext::Class) {
     ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
     fun->setAccessPolicy(currentAccessPolicy());
@@ -617,9 +617,9 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 void DeclarationBuilder::visitTypedef(TypedefAST *def)
 {
   parseComments(def->comments);
-  
+
   PushValue<bool> setInTypedef(m_inTypedef, true);
-  
+
   DeclarationBuilderBase::visitTypedef(def);
 }
 
@@ -647,14 +647,14 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   DeclarationBuilderBase::visitEnumerator(node);
 
   CppEnumeratorType::Ptr enumeratorType = lastType().cast<CppEnumeratorType>();
-  
+
   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
     DUChainWriteLocker lock(DUChain::lock());
     classMember->setStatic(true);
   }
-  
+
   closeDeclaration(true);
-  
+
   if(enumeratorType) { ///@todo Move this into closeDeclaration in a logical way
     DUChainWriteLocker lock(DUChain::lock());
     enumeratorType->setDeclaration(decl);
@@ -672,7 +672,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
    * Example: "class MyClass::RealClass{}"
    * Will create one helper-context named "MyClass" around RealClass
    * */
-  
+
   SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
   QualifiedIdentifier id;
@@ -774,7 +774,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
 void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
   DeclarationBuilderBase::visitBaseSpecifier(node);
-  
+
   BaseClassInstance instance;
   {
     DUChainWriteLocker lock(DUChain::lock());
@@ -832,12 +832,12 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
   DeclarationBuilderBase::visitUsing(node);
 
   QualifiedIdentifier id = identifierForNode(node->name);
-  
+
   ///@todo only use the last name component as range
   AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name ? (AST*)node->name : (AST*)node, id.last());
   {
     DUChainReadLocker lock(DUChain::lock());
-    
+
     SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
     if(!declarations.isEmpty()) {
