@@ -19,17 +19,26 @@
 //If a file is defined here, the context-, type-, and declaration-builder will show additional
 //information while processing that file, but not while processing other files. This is perfect
 //for debugging specific reproducable problems in a runtime environment.
-//#define DEBUG_FILE "/home/nolden/kdedev/install-mini/include/kdevplatform/interfaces/icore.h"
+//#define DEBUG_FILE "/media/data/kdedev/kdevplatform/language/editor/documentrangeobject.h"
+//#define DEBUG_DECLARATION "KDevelop::DocumentRangeObject::range"
 
 #ifdef DEBUG_FILE
 #include <hashedstring.h>
 static HashedString globalDebuggedFileName(DEBUG_FILE);
-#define ifDebugCurrentFile(action) if(currentContext()->url() == globalDebuggedFileName) { action }
-
+#define ifDebugCurrentFile(action) if(this->currentContext()->url() == globalDebuggedFileName) { action }
 #define ifDebugFile(fileName, action) if(fileName == globalDebuggedFileName) { action }
 #else
 #define ifDebugCurrentFile(x)
 #define ifDebugFile(fileName, action)
+#endif
+
+#ifdef DEBUG_DECLARATION
+static QualifiedIdentifier globalDebuggedDeclaration(DEBUG_DECLARATION);
+#define ifDebugCurrentDeclaration(action) if(this->currentDeclaration()->qualifiedIdentifier() == globalDebuggedDeclaration) { action }
+#define ifDebugDeclaration(decl, action) if(decl->qualifiedIdentifier() == globalDebuggedDeclaration) { action }
+
+#else
+#define ifDebugCurrentDeclaration(action)
 #endif
 
 

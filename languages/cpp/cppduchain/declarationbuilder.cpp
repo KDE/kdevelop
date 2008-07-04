@@ -19,6 +19,8 @@
 
 #include "declarationbuilder.h"
 
+#include "debugbuilders.h"
+
 #include <QByteArray>
 #include <typeinfo>
 
@@ -603,14 +605,17 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       else
         currentDeclaration()->setKind(Declaration::Type);
     }
-
+    
     currentDeclaration()->setType(lastType());
+  }else{
+    DUChainWriteLocker lock(DUChain::lock());
+    currentDeclaration()->setAbstractType(AbstractType::Ptr());
   }
 
   eventuallyAssignInternalContext();
 
-  //kDebug(9007) << "Mangled declaration:" << currentDeclaration()->mangledIdentifier();
-
+  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
+    
   DeclarationBuilderBase::closeDeclaration();
 }
 

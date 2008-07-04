@@ -405,8 +405,11 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
    openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
    ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
-   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
   }
+  
+  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "opened type" << (currentAbstractType() ? currentAbstractType()->toString() : QString("(no type)")); )
+  
   return openedType;
 }
 
