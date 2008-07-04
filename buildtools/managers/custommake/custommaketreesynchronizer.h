@@ -14,7 +14,6 @@
 #include "projectfilesystemwatcher.h"
 
 class KUrl;
-class KUrl::List;
 
 namespace KDevelop
 {
