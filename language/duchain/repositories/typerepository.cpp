@@ -26,6 +26,7 @@
 #include "itemrepository.h"
 
 #define DEBUG_TYPE_REPOSITORY
+//#define ASSERT_ON_PROBLEM
 
 namespace KDevelop  {
 
@@ -56,12 +57,13 @@ class AbstractTypeDataRequest {
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
     if(!otherType->equals(&m_item)) {
       //For debugging, so one can trace what happened
+      kWarning() << "created type in repository does not equal source type:" << m_item.toString() << otherType->toString();
       TypeSystem::self().copy(*m_item.d_ptr, *item, true);
       otherType->equals(&m_item);
     }
-
+#ifdef ASSERT_ON_PROBLEM
     Q_ASSERT(otherType->equals(&m_item));
-    Q_ASSERT(m_item.equals(otherType.unsafeData()));
+#endif
 #endif
     item->inRepository = true;
   }
@@ -98,8 +100,14 @@ uint TypeRepository::indexForType(AbstractType::Ptr input) {
   uint i = data().repository.index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
   AbstractType::Ptr t = typeForIndex(i);
+  if(!t->equals(input.unsafeData())) {
+      kWarning() << "found type in repository does not equal source type:" << input->toString() << t->toString();
+      t->equals(input.unsafeData());
+  }
+#ifdef ASSERT_ON_PROBLEM
   Q_ASSERT(t->equals(input.unsafeData()));
   Q_ASSERT(input->equals(t.unsafeData()));
+#endif
 #endif
   return i;
 }

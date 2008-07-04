@@ -294,10 +294,7 @@ IndexedType AbstractType::indexed() const {
   if(this == 0)
     return IndexedType();
   else {
-    IndexedType i = IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
-    AbstractType::Ptr t = i.type();
-    Q_ASSERT(equals(t.unsafeData()));
-    return i;
+    return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
   }
 }
 
