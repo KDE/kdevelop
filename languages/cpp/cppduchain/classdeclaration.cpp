@@ -26,7 +26,7 @@ using namespace KDevelop;
 
 namespace Cpp {
 
-DEFINE_LIST_MEMBER_HASH(ClassDeclarationPrivate, baseClasses, BaseClassInstance);
+DEFINE_LIST_MEMBER_HASH(ClassDeclarationPrivate, baseClasses, BaseClassInstance)
   
 class ClassDeclarationPrivate
 {
