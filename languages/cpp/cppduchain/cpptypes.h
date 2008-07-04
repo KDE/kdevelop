@@ -144,7 +144,7 @@ class KDEVCPPDUCHAIN_EXPORT CppIntegralType : public MergeCppCVType< KDevelop::I
   friend class TypeRepository;
 
 public:
-  CppIntegralType() : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData()) {
+  CppIntegralType() : MergeCppCVType< KDevelop::IntegralType >(createData<CppIntegralTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppIntegralType>();
   }
   CppIntegralType(const CppIntegralType& rhs) : MergeCppCVType< KDevelop::IntegralType >(copyData<CppIntegralTypeData>(*rhs.d_func())) {
@@ -208,7 +208,7 @@ public:
   }
   CppConstantIntegralType(CppConstantIntegralTypeData& data) : CppIntegralType(data) {
   }
-  CppConstantIntegralType() : CppIntegralType(*new CppConstantIntegralTypeData()) {
+  CppConstantIntegralType() : CppIntegralType(createData<CppConstantIntegralTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
   }
   CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
@@ -293,7 +293,7 @@ public:
   CppFunctionType(CppFunctionTypeData& data) : CppFunctionTypeBase(data) {
   }
   
-  CppFunctionType() : CppFunctionTypeBase(*new CppFunctionTypeData()) {
+  CppFunctionType() : CppFunctionTypeBase(createData<CppFunctionTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppFunctionType>();
   }
   
@@ -335,7 +335,7 @@ public:
   CppPointerType(CppPointerTypeData& data) : CppPointerTypeBase(data) {
   }
   
-  CppPointerType() : CppPointerTypeBase(*new CppPointerTypeData()) {
+  CppPointerType() : CppPointerTypeBase(createData<CppPointerTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppPointerType>();
   }
   
@@ -377,7 +377,7 @@ public:
   CppReferenceType(CppReferenceTypeData& data) : CppReferenceTypeBase(data) {
   }
   
-  CppReferenceType() : CppReferenceTypeBase(*new CppReferenceTypeData()) {
+  CppReferenceType() : CppReferenceTypeBase(createData<CppReferenceTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppReferenceType>();
   }
   
@@ -507,7 +507,7 @@ public:
   CppTypeAliasType(CppTypeAliasTypeData& data) : CppTypeAliasTypeBase(data) {
   }
   
-  CppTypeAliasType() : CppTypeAliasTypeBase(*new CppTypeAliasTypeData()) {
+  CppTypeAliasType() : CppTypeAliasTypeBase(createData<CppTypeAliasTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppTypeAliasType>();
   }
 
@@ -556,7 +556,7 @@ public:
   CppEnumeratorType(CppEnumeratorTypeData& data) : CppEnumeratorTypeBase(data) {
   }
   
-  CppEnumeratorType() : CppEnumeratorTypeBase(*new CppEnumeratorTypeData()) {
+  CppEnumeratorType() : CppEnumeratorTypeBase(createData<CppEnumeratorTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppEnumeratorType>();
     CppConstantIntegralType::setIntegralType(TypeInt);
     setCV(KDevelop::Declaration::Const);
@@ -655,7 +655,7 @@ public:
   CppTemplateParameterType(CppTemplateParameterTypeData& data) : CppTemplateParameterTypeBase(data) {
   }
   
-  CppTemplateParameterType() : CppTemplateParameterTypeBase(*new CppTemplateParameterTypeData()) {
+  CppTemplateParameterType() : CppTemplateParameterTypeBase(createData<CppTemplateParameterTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppTemplateParameterType>();
   }
   

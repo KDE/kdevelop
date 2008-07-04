@@ -291,13 +291,13 @@ void CppEnumeratorType::setValue(const QString &value)
   m_value = value;
 }*/
 
-CppClassType::CppClassType(Declaration::CVSpecs spec) : CppClassTypeBase(*new CppClassTypeData()) {
+CppClassType::CppClassType(Declaration::CVSpecs spec) : CppClassTypeBase(createData<CppClassTypeData>()) {
   d_func_dynamic()->setTypeClassId<CppClassType>();
   CppCVType::setCV(spec);
 }
 
 
-CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers) : CppIntegralType(*new CppConstantIntegralTypeData()) {
+CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers) : CppIntegralType(createData<CppConstantIntegralTypeData>()) {
   d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
   
   setIntegralType(type);
@@ -368,7 +368,7 @@ QString CppConstantIntegralType::toString() const {
   return "<unknown_value>";
 }
 
-CppIntegralType::CppIntegralType(IntegralTypes type, TypeModifiers modifiers) : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData())
+CppIntegralType::CppIntegralType(IntegralTypes type, TypeModifiers modifiers) : MergeCppCVType< KDevelop::IntegralType >(createData<CppIntegralTypeData>())
 {
   TYPE_D_DYNAMIC(CppIntegralType);
   d->setTypeClassId<CppIntegralType>();
@@ -454,7 +454,7 @@ QString CppFunctionType::toString() const
   return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
 }
 
-CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(*new CppPointerTypeData())
+CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(createData<CppPointerTypeData>())
 {
   d_func_dynamic()->setTypeClassId<CppPointerType>();
   setCV(spec);
@@ -465,7 +465,7 @@ QString CppPointerType::toString() const
   return QString("%1%2").arg(PointerType::toString()).arg(cvString());
 }
 
-CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceTypeBase(*new CppReferenceTypeData())
+CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceTypeBase(createData<CppReferenceTypeData>())
 {
   d_func_dynamic()->setTypeClassId<CppReferenceType>();
   setCV(spec);
@@ -557,7 +557,7 @@ QString CppClassType::toString() const
   return QString("<%1>%2").arg(type).arg(cvString());
 }
 
-CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerationTypeBase(*new CppEnumerationTypeData())
+CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerationTypeBase(createData<CppEnumerationTypeData>())
 {
   d_func_dynamic()->setTypeClassId<CppEnumerationType>();
   CppIntegralType::setIntegralType(TypeInt);
