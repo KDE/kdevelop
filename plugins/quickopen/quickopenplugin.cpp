@@ -81,7 +81,7 @@ public:
       return highlightingFromVariantList(highlighting);
     return ExpandingDelegate::createHighlighting( index, option );
   }
-  
+
 };
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
@@ -101,7 +101,7 @@ Declaration* cursorDeclaration() {
     return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  
+
   return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
 }
 
@@ -124,7 +124,7 @@ Declaration* cursorContextDeclaration() {
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
   if(!ctx)
     return 0;
-  
+
   SimpleCursor cursor(view->cursorPosition());
 
   DUContext* subCtx = ctx->findContext(cursor);
@@ -156,7 +156,7 @@ QString cursorItemText() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(!doc)
     return QString();
-  
+
   TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
 
   if( !context ) {
@@ -164,7 +164,7 @@ QString cursorItemText() {
     return QString();
   }
 
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().dataUnsafe());
   if( idType && idType->declaration(context) )
     decl = idType->declaration(context);
 
@@ -191,7 +191,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
 
     QVBoxLayout *itemsLayout = new QVBoxLayout;
     itemsLayout->setAlignment(Qt::AlignTop);
-    
+
     foreach( QString type, allTypes )
     {
       QCheckBox* check = new QCheckBox( type );
@@ -201,27 +201,27 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
         check->setCheckState( Qt::Checked );
       else
         check->setCheckState( Qt::Unchecked );
-    
+
       connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
     }
 
     itemsLayout->addStretch( 1 );
     o.itemsGroup->setLayout( itemsLayout );
-      
+
     QVBoxLayout *scopesLayout = new QVBoxLayout;
     scopesLayout->setAlignment(Qt::AlignTop);
-    
-    
+
+
     foreach( QString scope, allScopes )
     {
       QCheckBox* check = new QCheckBox( scope );
       scopesLayout->addWidget( check );
-      
+
       if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
         check->setCheckState( Qt::Checked );
       else
         check->setCheckState( Qt::Unchecked );
-    
+
       connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
     }
 
@@ -232,7 +232,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     o.scopeGroup->hide();
     o.itemsGroup->hide();
   }
-  
+
   if( noSearchField ) {
     o.searchLine->hide();
     o.searchLabel->hide();
@@ -245,9 +245,9 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   connect( m_dialog, SIGNAL(accepted()), this, SLOT(accept()) );
 
   connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
-  
+
   updateProviders();
-  
+
   m_model->restart();
   m_model->setTreeView( o.list );
 
@@ -272,7 +272,7 @@ QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
 void QuickOpenWidgetHandler::updateProviders() {
   QStringList checkedItems;
   QStringList checkedScopes;
-  
+
   foreach( QObject* obj, o.itemsGroup->children() ) {
     QCheckBox* box = qobject_cast<QCheckBox*>( obj );
     if( box ) {
@@ -280,7 +280,7 @@ void QuickOpenWidgetHandler::updateProviders() {
         checkedItems << box->text().remove('&');
     }
   }
-  
+
   foreach( QObject* obj, o.scopeGroup->children() ) {
     QCheckBox* box = qobject_cast<QCheckBox*>( obj );
     if( box ) {
@@ -296,10 +296,10 @@ void QuickOpenWidgetHandler::updateProviders() {
 
 void QuickOpenWidgetHandler::textChanged( const QString& str ) {
   m_model->textChanged( str );
-  
+
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
   o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
-  
+
   callRowSelected();
 }
 
@@ -358,7 +358,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         QApplication::sendEvent( o.list, event );
       //callRowSelected();
         return true;
-        
+
       case Qt::Key_Left: {
         //Expand/unexpand
         if( keyEvent->modifiers() == Qt::ShiftModifier ) {
@@ -373,7 +373,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
           QModelIndex row = o.list->selectionModel()->currentIndex();
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
-            
+
             if( m_model->isExpanded( row ) ) {
               m_model->setExpanded( row, false );
               return true;
@@ -396,7 +396,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
           QModelIndex row = o.list->selectionModel()->currentIndex();
           if( row.isValid() ) {
             row = row.sibling( row.row(), 0 );
-            
+
             if( !m_model->isExpanded( row ) ) {
               m_model->setExpanded( row, true );
               return true;
@@ -448,7 +448,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpen->setText( i18n("&Quick Open") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
-    
+
     QAction* quickOpenFile = actions->addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
@@ -468,17 +468,17 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenDeclaration->setText( i18n("Jump to Declaration") );
     quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
     connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
-  
+
     QAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
     quickOpenDefinition->setText( i18n("Jump to Definition") );
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
-  
+
     QAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
     quickOpenNavigate->setText( i18n("Navigate Declaration") );
     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
-  
+
     QAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
@@ -504,7 +504,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 QuickOpenPlugin::~QuickOpenPlugin()
 {
   freeModel();
-  
+
   delete m_model;
   delete m_projectFileData;
   delete m_projectItemData;
@@ -518,7 +518,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
   if(!freeModel())
     return;
-  
+
   QStringList initialItems;
   if( modes & Files )
     initialItems << i18n("Files");
@@ -528,7 +528,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 
   if( modes & Classes )
     initialItems << i18n("Classes");
-  
+
   m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, lastUsedScopes );
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   m_currentWidgetHandler->run();
@@ -581,7 +581,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
 {
   if(jumpToSpecialObject())
     return;
-  
+
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   Declaration* decl = cursorDeclaration();
 
@@ -622,7 +622,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
     return false;
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
-  
+
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
     QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
     if(w)
@@ -637,14 +637,14 @@ QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
     return qMakePair(KUrl(), SimpleCursor());
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
-  
+
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
     QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }
   }
-  
+
   return qMakePair(KUrl(), SimpleCursor::invalid());
 }
 
@@ -656,7 +656,7 @@ bool QuickOpenPlugin::jumpToSpecialObject()
       kDebug() << "Got empty url for special language object";
       return false;
     }
-  
+
     ICore::self()->documentController()->openDocument(pos.first, pos.second.textCursor());
     return true;
   }
@@ -667,7 +667,7 @@ void QuickOpenPlugin::quickOpenDefinition()
 {
   if(jumpToSpecialObject())
     return;
-  
+
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
   Declaration* decl = cursorDeclaration();
 
@@ -699,18 +699,18 @@ void QuickOpenPlugin::quickOpenNavigate()
   if(!freeModel())
     return;
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  
+
   QWidget* widget = specialObjectNavigationWidget();
   Declaration* decl = cursorDeclaration();
 
   if(widget || decl) {
-  
+
     QuickOpenModel* model = new QuickOpenModel(0);
     model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
 
     if(widget) {
       QPair<KUrl, SimpleCursor> jumpPos = specialObjectJumpPosition();
-      
+
       CustomItem item;
       item.m_widget = widget;
       item.m_executeTargetPosition = jumpPos.second;
@@ -718,11 +718,11 @@ void QuickOpenPlugin::quickOpenNavigate()
 
       QList<CustomItem> items;
       items << item;
-    
+
       model->registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
     }else{
       DUChainItem item;
-      
+
       item.m_item = DeclarationPointer(decl);
       item.m_text = decl->qualifiedIdentifier().toString();
 
@@ -736,10 +736,10 @@ void QuickOpenPlugin::quickOpenNavigate()
     m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true, true );
     model->setParent(m_currentWidgetHandler);
     model->setExpanded(model->index(0,0, QModelIndex()), true);
-    
+
     m_currentWidgetHandler->run();
   }
-  
+
   if(!decl) {
     kDebug() << "Found no declaration for cursor, cannot navigate";
     return;
@@ -777,12 +777,12 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
       if(child && child->range().start >= decl->range().start)
         child = 0;
     }
-    
+
     if(child) {
       if(decl && decl->range().start >= child->range().start)
         decl = 0;
     }
-    
+
     if(child) {
       if( filter.accept(child) )
         collectItems(items, child, filter);
@@ -794,13 +794,13 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
       if( filter.accept(decl) ) {
         if(decl->isDefinition() && decl->declaration())
           decl = decl->declaration();
-        
+
         DUChainItem item;
         item.m_item = DeclarationPointer(decl);
         item.m_text = decl->qualifiedIdentifier().toString();
         items << item;
-        
-        FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().data());
+
+        FunctionType* functionType = dynamic_cast<FunctionType*>(decl->abstractType().dataUnsafe());
 
         if(functionType) {
           item.m_text += functionType->partToString(FunctionType::SignatureArguments);
@@ -818,7 +818,7 @@ bool QuickOpenPlugin::freeModel()
   if(m_currentWidgetHandler)
     delete m_currentWidgetHandler;
   m_currentWidgetHandler = 0;
-  
+
   return true;
 }
 
@@ -841,7 +841,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
     kDebug() << "Got no standard context";
     return;
   }
-  
+
   QuickOpenModel* model = new QuickOpenModel(0);
 
   QList<DUChainItem> items;
@@ -863,16 +863,16 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         return false;
     }
   } filter;
-  
+
   collectItems( items, context, filter );
 
   if(noHtmlDestriptionInOutline) {
     for(int a = 0; a < items.size(); ++a)
       items[a].m_noHtmlDestription = true;
   }
-  
+
   Declaration* cursorDecl = cursorContextDeclaration();
-  
+
   model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
   m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true );
