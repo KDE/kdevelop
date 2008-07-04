@@ -43,7 +43,7 @@ KDevelop::TopDUContext* getTopContext(const HashedString& url) {
 }
 
 void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* decl, ProjectItemDataProvider::ItemTypes itemTypes ) {
-  if( ((itemTypes & ProjectItemDataProvider::Classes) && decl->kind() == Declaration::Type && dynamic_cast<StructureType*>(decl->abstractType().unsafeData()))
+  if( ((itemTypes & ProjectItemDataProvider::Classes) && decl->kind() == Declaration::Type && decl->abstractType().cast<StructureType>())
       || ((itemTypes & ProjectItemDataProvider::Functions) && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
     DUChainItem f;
     f.m_project = project;
@@ -59,7 +59,7 @@ void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* d
 void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* context, ProjectItemDataProvider::ItemTypes itemTypes ) {
   QVector<DUContext*> contexts = context->childContexts();
   QVector<Declaration*> declarations = context->localDeclarations();
-
+  
   QVector<DUContext*>::const_iterator contextIterator = contexts.begin();
   QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
 
@@ -94,7 +94,7 @@ void ProjectItemDataProvider::reset() {
   QList<DUChainItem> items;
 
   QSet<HashedString> enabledFiles = m_quickopen->fileSet();
-
+  
   foreach( HashedString u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
@@ -120,7 +120,7 @@ void ProjectItemDataProvider::enableData( const QStringList& items, const QStrin
       m_itemTypes = (ItemTypes)(m_itemTypes | Classes);
     if( items.contains( i18n("Functions") ) )
       m_itemTypes = (ItemTypes)(m_itemTypes | Functions);
-
+      
   } else {
     m_itemTypes = NoItems;
   }
