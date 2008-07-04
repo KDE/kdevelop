@@ -34,11 +34,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeData
 {
 public:
   AbstractTypeData();
+  //While cloning, the dynamic/constant attribute alternates(The copy of dynamic data is constant, and the copy of constant data is dynamic)
+  //This means that when copying dynamic data, the size of the allocated buffer must be big enough to hold the appended lists.
+  //the AbstractType::copyData function cares about hat.
   AbstractTypeData( const AbstractTypeData& /*rhs*/ );
-  ///@todo make non-virtual again and make sure the correct destructors are called in other ways
-  virtual ~AbstractTypeData();
+  ~AbstractTypeData();
+  
+  //This must be called from actual class that belongs to this data(not parent classes), and the class must have the
+  //"Identity" enumerator with a unique identity. Do NOT call this in copy-constructors!
+  template<class T>
+  void setTypeClassId() {
+    typeClassId = T::Identity;
+  }
+  
+  uint typeClassId;
+  bool inRepository : 1; //Not used for comparison or hashes.
   
   APPENDED_LISTS_STUB(AbstractTypeData)
+  
+  uint classSize() const;
   private:
   AbstractTypeData& operator=(const AbstractTypeData&);
 };

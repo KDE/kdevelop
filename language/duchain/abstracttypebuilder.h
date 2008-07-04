@@ -21,7 +21,6 @@
 
 #include "language/duchain/typesystem.h"
 #include "language/duchain/declaration.h"
-#include "language/duchain/repositories/ityperepository.h"
 
 namespace KDevelop {
   
@@ -37,7 +36,6 @@ public:
   }
 
 protected:
-  virtual ITypeRepository* typeRepository() const = 0;
   virtual DUContext* searchContext() const
   {
     return LangugageSpecificTypeBuilderBase::currentContext();
@@ -95,9 +93,7 @@ protected:
 
   void closeType()
   {
-    // Check that this isn't the same as a previously existing type
-    // If it is, it will get replaced
-    m_lastType = typeRepository()->registerType(currentAbstractType());
+    m_lastType = currentAbstractType();
 
     bool replaced = m_lastType != currentAbstractType();
 
@@ -140,7 +136,7 @@ protected:
 
       if(!delay) {
         foreach( Declaration* decl, dec ) {
-          if( needClass && !dynamic_cast<StructureType*>(decl->abstractType().data()) )
+          if( needClass && !decl->abstractType().cast<StructureType>() )
             continue;
 
           if (decl->abstractType() ) {

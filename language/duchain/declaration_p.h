@@ -40,7 +40,7 @@ public:
   DeclarationPrivate( const DeclarationPrivate& rhs );
   
   DUContext* m_context, *m_internalContext;
-  AbstractType::Ptr m_type;
+  IndexedType m_type;
   Identifier m_identifier;
   
   QByteArray m_comment;

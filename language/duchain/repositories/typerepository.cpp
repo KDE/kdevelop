@@ -20,16 +20,68 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
+#include "typesystem.h"
+#include "typesystemdata.h"
+#include "typeregister.h"
+#include "itemrepository.h"
 
-using namespace KDevelop;
+#define DEBUG_TYPE_REPOSITORY
+
+namespace KDevelop  {
+
+class AbstractTypeDataRequest {
+  public:
+  AbstractTypeDataRequest(const AbstractType& type) : m_item(type) {
+  }
+  
+  enum {
+    AverageSize = sizeof(AbstractTypeData) + 12
+  };
+
+  unsigned int hash() const {
+    return m_item.hash();
+  }
+  
+  size_t itemSize() const {
+    return TypeSystem::self().dynamicSize(*m_item.d_ptr);
+  }
+  
+  void createItem(AbstractTypeData* item) const {
+    TypeSystem::self().copy(*m_item.d_ptr, *item, true);
+    if(item->m_dynamic) {
+    TypeSystem::self().copy(*m_item.d_ptr, *item, true);
+    }
+    Q_ASSERT(!item->m_dynamic);
+#ifdef DEBUG_TYPE_REPOSITORY
+    AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
+    if(!otherType->equals(&m_item)) {
+      //For debugging, so one can trace what happened
+      TypeSystem::self().copy(*m_item.d_ptr, *item, true);
+      otherType->equals(&m_item);
+    }
+
+    Q_ASSERT(otherType->equals(&m_item));
+    Q_ASSERT(m_item.equals(otherType.unsafeData()));
+#endif
+    item->inRepository = true;
+  }
+  
+  bool equals(const AbstractTypeData* item) const {
+    AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
+    if(!otherType)
+      return false;
+    return m_item.equals(otherType.unsafeData());
+  }
+  
+  const AbstractType& m_item;
+};
+
 
 struct TypeRepositoryData {
-  TypeRepositoryData() : currentIndex(0) {
+  TypeRepositoryData() : repository("Type Repository") {
   }
-  QHash<AbstractType::Ptr, uint> indices;
-  QHash<uint, AbstractType::Ptr> types;
-  uint currentIndex;
   QMutex mutex;
+  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, false> repository;
 };
 
 TypeRepositoryData& data() {
@@ -38,22 +90,27 @@ TypeRepositoryData& data() {
 }
 
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
+  if(!input)
+    return 0;
+  
   QMutexLocker(&data().mutex);
-  QHash<AbstractType::Ptr, uint>::const_iterator it = data().indices.find(input);
-  if(it != data().indices.end()) {
-    return *it;
-  }else{
-    data().indices.insert(input, ++data().currentIndex);
-    data().types.insert(data().currentIndex, input);
-    return data().currentIndex;
-  }
+  
+  uint i = data().repository.index(AbstractTypeDataRequest(*input));
+#ifdef DEBUG_TYPE_REPOSITORY
+  AbstractType::Ptr t = typeForIndex(i);
+  Q_ASSERT(t->equals(input.unsafeData()));
+  Q_ASSERT(input->equals(t.unsafeData()));
+#endif
+  return i;
 }
 
 AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
-  QMutexLocker(&data().mutex);
-  QHash<uint, AbstractType::Ptr>::const_iterator it = data().types.find(index);
-  if(it != data().types.end())
-    return *it;
-  else
+  if(index == 0)
     return AbstractType::Ptr();
+  
+  QMutexLocker(&data().mutex);
+  
+  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(data().repository.itemFromIndex(index))) );
+}
+
 }

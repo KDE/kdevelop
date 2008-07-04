@@ -97,13 +97,19 @@ public:
 
     /**
      * @return the pointer
+     * @warning Since often TypePtr is used only temporarily, it is dangerous to work
+     * with the pointer directly, because as soon as the TypePtr gets out of scope,
+     * the type instance is deleted. Make sure you have a TypePtr that holds the type alive.
      */
-    inline T* data() { return d; }
+    inline T* unsafeData() { return d; }
 
     /**
      * @return the pointer
+     * @warning Since often TypePtr is used only temporarily, it is dangerous to work
+     * with the pointer directly, because as soon as the TypePtr gets out of scope,
+     * the type instance is deleted. Make sure you have a TypePtr that holds the type alive.
      */
-    inline const T* data() const { return d; }
+    inline const T* unsafeData() const { return d; }
 
     /**
      * @return a const pointer to the shared object.

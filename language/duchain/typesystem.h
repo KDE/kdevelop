@@ -28,6 +28,7 @@
 
 namespace KDevelop
 {
+class AbstractTypeDataRequest;
 
 class AbstractType;
 class IntegralType;
@@ -49,6 +50,8 @@ class DelayedTypeData;
 class IndexedString;
 class IndexedType;
 
+class TypeExchanger;
+
 #define TYPE_DECLARE_DATA(Class) \
     inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
     inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
@@ -56,60 +59,6 @@ class IndexedType;
 #define TYPE_D(Class) const Class##Data * const d = d_func()
 #define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
-  public:
-  virtual AbstractType* create(AbstractTypeData* /*data*/) const = 0;
-  virtual ~AbstractTypeFactory() {
-  }
-};
-
-template<class T>
-class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
-  public:
-  AbstractType* create(AbstractTypeData* data) const {
-    return new T(*static_cast<typename T::Data*>(data));
-  }
-};
-
-class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
-  public:
-    template<class T>
-    void registerTypeClass() {
-      Q_ASSERT(T::Identity < 64);
-      if(m_factories.size() <= T::Identity)
-        m_factories.resize(T::Identity+1);
-      
-      Q_ASSERT(!m_factories[T::Identity]);
-      m_factories[T::Identity] = new TypeFactory<T>();
-    }
-    
-    template<class T>
-    void unregisterTypeClass() {
-      Q_ASSERT(m_factories.size() > T::Identity);
-      Q_ASSERT(m_factories[T::Identity]);
-      delete m_factories[T::Identity];
-      m_factories[T::Identity] = 0;
-    }
-    
-    static TypeSystem& self();
-  private:
-    QVector<AbstractTypeFactory*> m_factories;
-};
-
-template<class T>
-struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
-  TypeSystemRegistrator() {
-    TypeSystem::self().registerTypeClass<T>();
-  }
-  ~TypeSystemRegistrator() {
-    TypeSystem::self().unregisterTypeClass<T>();
-  }
-};
-
-///You must add this into your source-files for every AbstractType based class
-///For this to work, the class must have an "Identity" enumerator, that is unique among all types, and should be a very low value.
-///The highest allowed identity is 63, so currently we're limited to having 64 different type classes.
-#define REGISTER_TYPE(Class) TypeSystemRegistrator<Class> register ## Class
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeVisitor
 {
@@ -165,26 +114,6 @@ public:
 
   virtual bool visit (const ArrayType *) ;
   virtual void endVisit (const ArrayType *) ;
-};
-
-/**
- * A class that can be used to walk through all types that are references from one type, and exchange them with other types.
- * Examples for such types: Base-classes of a class, function-argument types of a function, etc.
- * */
-class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
-  public:
-    virtual ~TypeExchanger() {
-    }
-
-    /**
-     * By default should return the given type, and can return another type that the given should be replaced with.
-     * Types should allow replacing all their held types using this from within their exchangeTypes function.
-     * */
-    virtual AbstractType* exchange( const AbstractType* ) = 0;
-    /**
-     * Should member-types be exchanged?(Like the types of a structure's members) If false, only types involved in the identity will be exchanged.
-     * */
-    virtual bool exchangeMembers() const = 0;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
@@ -249,16 +178,48 @@ public:
    * */
   virtual void exchangeTypes( TypeExchanger* exchanger );
 
+  ///You must use this to create the internal data instances in copy constructors. It is needed, because it may need to allocate more memory
+  ///for appended lists.
+  template<class DataType>
+  static DataType& copyData(const DataType& rhs) {
+    size_t size;
+    if(!rhs.m_dynamic)
+      size = sizeof(DataType); //Create a dynamic data instance
+    else
+      size = rhs.dynamicSize(); //Create a constant data instance, that holds all the data embedded.
+      
+    return *new (new char[size]) DataType(rhs);
+  }
+  
   typedef AbstractTypeData Data;
   
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
-  AbstractTypeData* const d_ptr;
-
-//  template <class T>
-//  void deregister(T* that) { TypeSystem::self()->deregisterType(that); }
+  AbstractTypeData* d_ptr;
 
   TYPE_DECLARE_DATA(AbstractType)
+  
+  friend class AbstractTypeDataRequest;
+};
+
+/**
+ * A class that can be used to walk through all types that are references from one type, and exchange them with other types.
+ * Examples for such types: Base-classes of a class, function-argument types of a function, etc.
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
+  public:
+    virtual ~TypeExchanger() {
+    }
+
+    /**
+     * By default should return the given type, and can return another type that the given should be replaced with.
+     * Types should allow replacing all their held types using this from within their exchangeTypes function.
+     * */
+    virtual AbstractType::Ptr exchange( const AbstractType::Ptr& ) = 0;
+    /**
+     * Should member-types be exchanged?(Like the types of a structure's members) If false, only types involved in the identity will be exchanged.
+     * */
+    virtual bool exchangeMembers() const = 0;
 };
 
 ///Allows accessing the type just by a single index, so the reference can be stored to disk etc.
@@ -599,7 +560,7 @@ public:
 };
 
 template <class T>
-uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.data()); }
+uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.unsafeData()); }
 
 
 /**

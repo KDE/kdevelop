@@ -793,6 +793,8 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 #ifdef DEBUG_SEARCH
         kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
 #endif
+        //Prevent endless recursion by checking whether we're actually doing a change
+        if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
         applyAliases(newAliasedElement, identifier, accept, position, canBeNamespace);
       }
     }

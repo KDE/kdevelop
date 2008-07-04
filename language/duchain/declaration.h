@@ -208,9 +208,13 @@ public:
   template <class T>
   void setType(TypePtr<T> type) { setAbstractType(AbstractType::Ptr::staticCast(type)); }
 
+  //You should not compare or permanently store insances of AbstractType::Ptr. Use IndexedType instead.
   AbstractType::Ptr abstractType() const;
   virtual void setAbstractType(AbstractType::Ptr type);
 
+  //Should be preferred, this is the fastest way, and the correct way for doing equality-comparsion.
+  IndexedType indexedType() const;
+  
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
 

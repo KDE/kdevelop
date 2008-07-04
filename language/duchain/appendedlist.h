@@ -142,10 +142,12 @@ class TemporaryDataManager {
 ///You can call appendedListsDynamic() to find out whether the item is marked as dynamic.
 ///When this item is used, the same rules have to be followed as for a class with appended lists: You have to call
 ///initializeAppendedLists(...) and freeAppendedLists(..)
+///Also, when you use this, you have to implement an size_t classSize() function, that returns the size of the class including derived classes,
+///but not including the dynamic data.
 #define APPENDED_LISTS_STUB(container) \
-bool m_dynamic;                          \
+bool m_dynamic : 1;                          \
 unsigned int offsetBehindLastList() const { return 0; } \
-size_t dynamicSize() const { return sizeof(container); } \
+size_t dynamicSize() const { return classSize(); } \
 template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
 template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
 void initializeAppendedLists(bool dynamic) { m_dynamic = dynamic; }  \
@@ -186,7 +188,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
 ///@todo Make these things a bit faster(less recursion)
 
 #define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + sizeof(container)); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
+                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
@@ -194,7 +196,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                void name ## FreeChain() { name ## Free(); }
                                                                                               
 #define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + sizeof(container) + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
+                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); predecessor ## CopyAllFrom(rhs); } \
@@ -202,7 +204,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                void name ## FreeChain() { name ## Free(); predecessor ## Free(); }
 
 #define END_APPENDED_LISTS(container, predecessor) /* Returns the size of the object containing the appended lists, including them */ \
-                                      unsigned int completeSize() const { return sizeof(container) + predecessor ## OffsetBehind(); } \
+                                      unsigned int completeSize() const { return classSize() + predecessor ## OffsetBehind(); } \
                                      /* Compares all appended lists and returns true if they are equal */                \
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                      /* Copies all the lists from the given item. This item must be dynamic */   \
@@ -211,7 +213,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                       void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
                                       bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
-                                      size_t dynamicSize() const { return offsetBehindLastList() + sizeof(container); }
+                                      size_t dynamicSize() const { return offsetBehindLastList() + classSize(); }
 
 /**
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.

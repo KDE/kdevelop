@@ -75,7 +75,8 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   ENSURE_CAN_READ
 
   //If we've got a type assigned, that counts as a way of resolution.
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
+  AbstractType::Ptr t = abstractType();
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
   if( idType  )
     return idType->declaration(topContext);
   

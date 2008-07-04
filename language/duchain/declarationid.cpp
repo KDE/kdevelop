@@ -106,7 +106,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
   else if(m_direct)
     return QualifiedIdentifier(QString("(unknown direct declaration)"));
   else
-    return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier;
+    return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier.identifier();
 }
 
 }

@@ -191,10 +191,15 @@ void Declaration::setIdentifier(const Identifier& identifier)
   //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
+IndexedType Declaration::indexedType() const
+{
+  return d_func()->m_type;
+}
+
 AbstractType::Ptr Declaration::abstractType( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
-  return d_func()->m_type;
+  return d_func()->m_type.type();
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)
@@ -204,7 +209,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
-  d->m_type = type;
+  d->m_type = type->indexed();
 
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
@@ -338,7 +343,8 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(abstractType().data());
+    AbstractType::Ptr t = abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
     if( idType && idType->declaration(topContext) && idType->declaration(topContext) != this )
       return idType->declaration(topContext)->logicalInternalContext( topContext );
   }

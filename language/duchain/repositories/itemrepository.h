@@ -463,6 +463,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     unsigned short bucket = (index >> 16);
     
     const Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
+    Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
