@@ -183,7 +183,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
                 } else if (op == ptr) {
                   CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(m_session, ptrOp->cv)));
                   pointer->setBaseType(res.type.type());
-                  res.type = pointer.data()->indexed();
+                  res.type = pointer->indexed();
                 }
               }
             }

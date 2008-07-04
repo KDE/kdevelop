@@ -31,9 +31,9 @@
 #include "parser.h"
 #include "control.h"
 
-#include "typerepository.h"
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
+#include <typesystem.h>
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 

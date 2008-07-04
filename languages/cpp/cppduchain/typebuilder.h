@@ -43,7 +43,6 @@ public:
   TypeBuilder();
 
 protected:
-  virtual KDevelop::ITypeRepository* typeRepository() const;
   ///Returns either the current context, or the last importend parent-context(needed to find template-argument function return-values)
   virtual KDevelop::DUContext* searchContext() const;
    

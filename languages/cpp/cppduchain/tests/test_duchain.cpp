@@ -129,7 +129,7 @@ namespace QTest {
 Declaration* getDeclaration( AbstractType::Ptr base, TopDUContext* top ) {
   if( !base ) return 0;
 
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.data());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.unsafeData());
   if( idType ) {
     return idType->declaration(top);
   } else {
@@ -156,9 +156,9 @@ void TestDUChain::initTestCase()
   
   DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
 
-  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeVoid));
-  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt));
-  typeShort = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt, ModifierShort));
+  typeVoid = AbstractType::Ptr(new CppIntegralType(TypeVoid))->indexed();
+  typeInt = AbstractType::Ptr(new CppIntegralType(TypeInt))->indexed();
+  typeShort = AbstractType::Ptr(new CppIntegralType(TypeInt, ModifierShort))->indexed();
 }
 
 void TestDUChain::cleanupTestCase()
@@ -329,7 +329,7 @@ void TestDUChain::testIntegralTypes()
 
   Declaration* defK = top->localDeclarations()[1];
   QCOMPARE(defK->identifier(), Identifier("k"));
-  QCOMPARE(defK->type<CppIntegralType>(), defI->type<CppIntegralType>());
+  QCOMPARE(defK->type<CppIntegralType>()->indexed(), defI->type<CppIntegralType>()->indexed());
 
   Declaration* defJ = top->localDeclarations()[2];
   QCOMPARE(defJ->identifier(), Identifier("j"));
@@ -343,7 +343,7 @@ void TestDUChain::testIntegralTypes()
   Declaration* defL = top->localDeclarations()[3];
   QCOMPARE(defL->identifier(), Identifier("l"));
   QVERIFY(defL->type<CppPointerType>());
-  QCOMPARE(defL->type<CppPointerType>()->baseType(), typeInt);
+  QCOMPARE(defL->type<CppPointerType>()->baseType()->indexed(), typeInt);
   QVERIFY(!defL->type<CppPointerType>()->isConstant());
   QVERIFY(!defL->type<CppPointerType>()->isVolatile());
 
@@ -448,7 +448,7 @@ void TestDUChain::testDeclareFor()
   QCOMPARE(defMain->identifier(), Identifier("main"));
   QCOMPARE(findDeclaration(top, defMain->identifier()), defMain);
   QVERIFY(defMain->type<CppFunctionType>());
-  QCOMPARE(defMain->type<CppFunctionType>()->returnType(), typeInt);
+  QCOMPARE(defMain->type<CppFunctionType>()->returnType()->indexed(), typeInt);
   QCOMPARE(defMain->type<CppFunctionType>()->arguments().count(), 0);
   QVERIFY(!defMain->type<CppFunctionType>()->isConstant());
   QVERIFY(!defMain->type<CppFunctionType>()->isVolatile());
@@ -502,22 +502,35 @@ void TestDUChain::testEnum()
 {
   TEST_FILE_PARSE_ONLY
 
-  //                 0         1         2         3         4         5         6         7
-  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 }; union { int u1; float u2; };");
+/*                   0         1         2         3         4         5         6         7
+                     01234567890123456789012345678901234567890123456789012345678901234567890123456789*/
+  QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 }; union { int u1; float u2; };");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
+/*  {
+  DUChainWriteLocker lock(DUChain::lock());
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Value1"));
+    QVERIFY(decl);
+    AbstractType::Ptr t = decl->abstractType();
+    QVERIFY(t);
+    IdentifiedType* id = dynamic_cast<IdentifiedType*>(t.unsafeData());
+    QVERIFY(id);
+    QCOMPARE(id->declaration(top), decl);
+  }*/
+  
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts().count(), 3);
   
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
+  Declaration* enumDecl = decl;
   QVERIFY(decl);
   QVERIFY(decl->internalContext());
-  QVERIFY(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()));
-  CppEnumerationType* en = static_cast<CppEnumerationType*>(decl->abstractType().data());
+  AbstractType::Ptr t = decl->abstractType();
+  QVERIFY(dynamic_cast<CppEnumerationType*>(t.unsafeData()));
+  CppEnumerationType* en = static_cast<CppEnumerationType*>(t.unsafeData());
   QVERIFY(en->declaration(top));
   QCOMPARE(en->qualifiedIdentifier(), QualifiedIdentifier("Enum"));
   Declaration* EnumDecl = decl;
@@ -527,22 +540,33 @@ void TestDUChain::testEnum()
 
     decl = findDeclaration(top, QualifiedIdentifier("Value1"));
     QVERIFY(decl);
-    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
-    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+
+    QCOMPARE(decl->context()->owner(), enumDecl);
+//     QCOMPARE(decl->context()->scopeIdentifier(), QualifiedIdentifier("Enum"));
+    
+
+    t = decl->abstractType();
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(t.unsafeData()));
+    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(t.unsafeData());
     QCOMPARE((int)en->value<qint64>(), 5);
-    QCOMPARE(en->declaration(top), EnumDecl);
+    kDebug() << decl->qualifiedIdentifier().toString();
+    kDebug() << en->toString();
+    QCOMPARE(en->declaration(top), top->childContexts()[0]->localDeclarations()[0]);
   
     decl = findDeclaration(top, Identifier("value2"));
     QVERIFY(decl);
-    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
-    en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    t = decl->abstractType();
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(t.unsafeData()));
+    en = static_cast<CppEnumeratorType*>(t.unsafeData());
     QCOMPARE((int)en->value<qint64>(), 6);
-    QCOMPARE(en->declaration(top), EnumDecl);
+    QCOMPARE(en->declaration(top), top->childContexts()[0]->localDeclarations()[1]);
+    QCOMPARE(en->declaration(top)->context()->owner(), EnumDecl);
   }
   decl = findDeclaration(top, Identifier("Enum2"));
   QVERIFY(decl);
-  QVERIFY(dynamic_cast<CppEnumerationType*>(decl->abstractType().data()));
-  en = static_cast<CppEnumerationType*>(decl->abstractType().data());
+  t = decl->abstractType();
+  QVERIFY(dynamic_cast<CppEnumerationType*>(t.unsafeData()));
+  en = static_cast<CppEnumerationType*>(t.unsafeData());
   QVERIFY(en->declaration(top));
   QCOMPARE(en->qualifiedIdentifier(), QualifiedIdentifier("Enum2"));
   Declaration* Enum2Decl = decl;
@@ -550,17 +574,19 @@ void TestDUChain::testEnum()
   {
     decl = findDeclaration(top, Identifier("Value21"));
     QVERIFY(decl);
-    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
-    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    t = decl->abstractType();
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(t.unsafeData()));
+    CppEnumeratorType* en = static_cast<CppEnumeratorType*>(t.unsafeData());
     QCOMPARE((int)en->value<qint64>(), 0);
-    QCOMPARE(en->declaration(top), Enum2Decl);
+    QCOMPARE(en->declaration(top)->context()->owner(), Enum2Decl);
 
     decl = findDeclaration(top, Identifier("value22"));
     QVERIFY(decl);
-    QVERIFY(dynamic_cast<CppEnumeratorType*>(decl->abstractType().data()));
-    en = static_cast<CppEnumeratorType*>(decl->abstractType().data());
+    t = decl->abstractType();
+    QVERIFY(dynamic_cast<CppEnumeratorType*>(t.unsafeData()));
+    en = static_cast<CppEnumeratorType*>(t.unsafeData());
     QCOMPARE((int)en->value<qint64>(), 2);
-    QCOMPARE(en->declaration(top), Enum2Decl);
+    QCOMPARE(en->declaration(top)->context()->owner(), Enum2Decl);
   }
   {
     //Verify that the union members were propagated up
@@ -590,7 +616,8 @@ void TestDUChain::testDeclareStruct()
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
+  AbstractType::Ptr t = top->localDeclarations()[1]->abstractType();
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
   QVERIFY(idType);
   QCOMPARE( idType->qualifiedIdentifier(), QualifiedIdentifier("A") );
   
@@ -703,7 +730,7 @@ void TestDUChain::testCStruct2()
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->abstractType(), top->localDeclarations()[1]->abstractType());
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
            
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
   QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);*/
@@ -776,7 +803,7 @@ void TestDUChain::testDeclareClass()
   QVERIFY(defClassA->internalContext());
 
   QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 3);
-  QCOMPARE(defClassA->internalContext()->localDeclarations()[1]->abstractType(), defClassA->abstractType());
+  QCOMPARE(defClassA->internalContext()->localDeclarations()[1]->abstractType()->indexed(), defClassA->abstractType()->indexed());
 
   DUContext* classA = top->childContexts().first();
   QVERIFY(classA->parentContext());
@@ -787,7 +814,7 @@ void TestDUChain::testDeclareClass()
 
   Declaration* defRec = classA->localDeclarations()[1];
   QVERIFY(defRec->abstractType());
-  QCOMPARE(defRec->abstractType(), defClassA->abstractType());
+  QCOMPARE(defRec->abstractType()->indexed(), defClassA->abstractType()->indexed());
 
   release(top);
 }
@@ -895,8 +922,8 @@ void TestDUChain::testSearchAcrossNamespace()
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
   QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
   QVERIFY(top->childContexts()[2]->localDeclarations()[0]->abstractType());
-  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
-  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
+  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType()->indexed(), top->childContexts()[0]->localDeclarations()[0]->abstractType()->indexed());
+  QVERIFY(!top->childContexts()[2]->localDeclarations()[0]->abstractType().cast<DelayedType>());
   
   release(top);
 }
@@ -922,12 +949,12 @@ void TestDUChain::testSearchAcrossNamespace2()
   QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
   QCOMPARE(top->childContexts()[2]->localScopeIdentifier(), QualifiedIdentifier("A::C::member"));
   QVERIFY(top->childContexts()[2]->localDeclarations()[0]->abstractType()); //B should be found from that position
-  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[2]->localDeclarations()[0]->abstractType().data()));
+  QVERIFY(!top->childContexts()[2]->localDeclarations()[0]->abstractType().cast<DelayedType>());
   QCOMPARE(top->childContexts()[3]->type(), DUContext::Other);
   QCOMPARE(top->childContexts()[3]->localDeclarations().count(), 1);
   QVERIFY(top->childContexts()[3]->localDeclarations()[0]->abstractType()); //B should be found from that position
   QCOMPARE(top->childContexts()[3]->localScopeIdentifier(), QualifiedIdentifier("A::C::member"));
-  QVERIFY(!dynamic_cast<DelayedType*>(top->childContexts()[3]->localDeclarations()[0]->abstractType().data()));
+  QVERIFY(!top->childContexts()[3]->localDeclarations()[0]->abstractType().cast<DelayedType>());
 
   release(top);
 }
@@ -970,7 +997,7 @@ void TestDUChain::testUsingDeclaration()
   V_DECLARATION_COUNT(childContext(top, "n2"), 3);
   V_USE_COUNT(top->childContexts()[0]->localDeclarations()[0], 3);
   V_USE_COUNT(top->childContexts()[0]->localDeclarations()[1], 2);
-  QCOMPARE(localDeclaration(childContext(top, "n2"), "c")->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
+  QCOMPARE(localDeclaration(childContext(top, "n2"), "c")->abstractType()->indexed(), top->childContexts()[0]->localDeclarations()[0]->abstractType()->indexed());
   
   release(top);
 }
@@ -1239,6 +1266,9 @@ void TestDUChain::testFunctionDefinition3() {
   QVERIFY(top->localDeclarations()[5]->isDefinition());
   QVERIFY(top->localDeclarations()[6]->isDefinition());
   
+  kDebug() << top->childContexts()[0]->localDeclarations()[0]->toString();
+  kDebug() << top->localDeclarations()[1]->declaration(top->topContext())->toString();
+  
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1], top->localDeclarations()[2]->declaration(top->topContext()));
   QCOMPARE(top->childContexts()[0]->localDeclarations()[2], top->localDeclarations()[3]->declaration(top->topContext()));
@@ -1283,19 +1313,19 @@ void TestDUChain::testDeclareSubClass() {
   QVERIFY(top->childContexts()[0]->childContexts()[0]->inSymbolTable());
   
   //Verify that "Class c" is matched correctly
-  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data());
-  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->type<DelayedType>().data());
-  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().data(), top->childContexts()[0]->localDeclarations()[0]->abstractType().data());
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType().unsafeData());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->type<DelayedType>().unsafeData());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]->abstractType()->indexed(), top->childContexts()[0]->localDeclarations()[0]->abstractType()->indexed());
   
   //Verify that Frog is found
-  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().data());
-  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->type<DelayedType>().data());
-  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().data(), top->childContexts()[0]->childContexts()[0]->localDeclarations()[2]->abstractType().data());
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType().unsafeData());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->type<DelayedType>().unsafeData());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[1]->abstractType()->indexed(), top->childContexts()[0]->childContexts()[0]->localDeclarations()[2]->abstractType()->indexed());
   
   //Make sure Beach is found
-  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().data());
-  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->type<DelayedType>().data());
-  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().data(), top->childContexts()[0]->localDeclarations()[1]->abstractType().data());
+  QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().unsafeData());
+  QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->type<DelayedType>().unsafeData());
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType()->indexed(), top->childContexts()[0]->localDeclarations()[1]->abstractType()->indexed());
   
   QVERIFY(!top->findContexts(DUContext::Class, QualifiedIdentifier("Enclosing")).isEmpty());
   QVERIFY(!top->findContexts(DUContext::Class, QualifiedIdentifier("Enclosing::Class")).isEmpty());
@@ -1357,7 +1387,7 @@ void TestDUChain::testBaseClasses() {
   QCOMPARE(defClassF->identifier(), Identifier("F"));
   QVERIFY(defClassF->type<CppClassType>());
   QCOMPARE( defClassF->baseClassesSize(), 1u );
-  QVERIFY( dynamic_cast<const DelayedType*>( defClassF->baseClasses()[0].baseClass.type().data() ) );
+  QVERIFY( defClassF->baseClasses()[0].baseClass.type().cast<DelayedType>().unsafeData() );
 
   Declaration* FDDecl = findDeclaration(top, QualifiedIdentifier("F<D>") );
   QVERIFY(FDDecl);
@@ -1390,12 +1420,12 @@ void TestDUChain::testTypedef() {
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
   Declaration* defB = findDeclaration(top,  Identifier("B"));
-  QCOMPARE(defB->abstractType(), defClassA->abstractType());
+  QCOMPARE(defB->indexedType(), defClassA->indexedType());
   QVERIFY(defB->isTypeAlias());
   QCOMPARE(defB->kind(), Declaration::Type);
   QCOMPARE(QString::fromUtf8(defB->comment()), QString("This is a typedef"));
   
-  QVERIFY( !dynamic_cast<CppTypeAliasType*>(defB->abstractType().data()) ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
+  QVERIFY( !defB->type<CppTypeAliasType>().unsafeData() ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
   
   release(top);
 }
@@ -1447,7 +1477,7 @@ void TestDUChain::testSpecializedTemplates() {
 }
 
 int value( const AbstractType::Ptr& type ) {
-  const CppConstantIntegralType* integral = dynamic_cast<const CppConstantIntegralType*>(type.data());
+  const CppConstantIntegralType* integral = dynamic_cast<const CppConstantIntegralType*>(type.unsafeData());
   if( integral )
     return (int)integral->value<qint64>();
   else
@@ -1470,8 +1500,9 @@ void TestDUChain::testTemplateEnums()
 
   Declaration* tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::TempVal") );
   QVERIFY(tempDecl);
-  QVERIFY(!dynamic_cast<const DelayedType*>(tempDecl->abstractType().data()));
-  QVERIFY(dynamic_cast<const CppConstantIntegralType*>(tempDecl->abstractType().data()));
+  AbstractType::Ptr t = tempDecl->abstractType();
+  QVERIFY(!dynamic_cast<const DelayedType*>(t.unsafeData()));
+  QVERIFY(dynamic_cast<const CppConstantIntegralType*>(t.unsafeData()));
   QCOMPARE(value(tempDecl->abstractType()), 5);
   
   tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Num") );
@@ -1510,20 +1541,23 @@ void TestDUChain::testIntegralTemplates()
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   Declaration* dec = findDeclaration( top, QualifiedIdentifier( "A<int>::i") );
   QVERIFY(dec);
-  CppIntegralType* integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  AbstractType::Ptr t = dec->abstractType();
+  CppIntegralType* integral = dynamic_cast<CppIntegralType*>( t.unsafeData() );
   QVERIFY( integral );
   QCOMPARE( integral->integralType(), TypeInt );
   
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   dec = findDeclaration( top, QualifiedIdentifier( "A<unsigned int>::i") );
-  integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  t = dec->abstractType();
+  integral = dynamic_cast<CppIntegralType*>( t.unsafeData() );
   QVERIFY( integral );
   QCOMPARE( integral->integralType(), TypeInt );
   QCOMPARE( integral->typeModifiers(), ModifierUnsigned );
   
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   dec = findDeclaration( top, QualifiedIdentifier( "A<long double>::i") );
-  integral = dynamic_cast<CppIntegralType*>( dec->abstractType().data() );
+  t = dec->abstractType();
+  integral = dynamic_cast<CppIntegralType*>( t.unsafeData() );
   QVERIFY( integral );
   QCOMPARE( integral->integralType(), TypeDouble );
   QCOMPARE( integral->typeModifiers(), ModifierLong );
@@ -1544,7 +1578,7 @@ void TestDUChain::testFunctionTemplates() {
   QVERIFY( isTemplateDeclaration(defTest) );
 
   QCOMPARE( defTest->type<FunctionType>()->arguments().count(), 1 );
-  QVERIFY( dynamic_cast<const DelayedType*>( realType(defTest->type<FunctionType>()->arguments()[0], 0)) );
+  QVERIFY( realType(defTest->type<FunctionType>()->arguments()[0], 0).cast<DelayedType>() );
   
   release(top);
 }
@@ -1558,10 +1592,10 @@ void TestDUChain::testTemplateFunctions() {
   QCOMPARE(top->localDeclarations().count(), 2);
   Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
   QVERIFY(d);
-  CppFunctionType* cppFunction = dynamic_cast<CppFunctionType*>(d->abstractType().data());
+  CppFunctionType::Ptr cppFunction = d->type<CppFunctionType>();
   QVERIFY(cppFunction);
   QCOMPARE(cppFunction->arguments().count(), 1);
-  QCOMPARE(cppFunction->returnType(), top->localDeclarations()[0]->abstractType());
+  QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
   QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
   
   release(top);
@@ -1576,7 +1610,7 @@ void TestDUChain::testTemplateDependentClass() {
   Declaration* d = findDeclaration(top, QualifiedIdentifier("t"));
   QVERIFY(d);
   kDebug() << d->toString();
-  QCOMPARE(d->abstractType().data(), top->localDeclarations()[0]->abstractType().data());
+  QCOMPARE(d->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
   
   release(top);
 }
@@ -1632,7 +1666,7 @@ void TestDUChain::testTemplates() {
     QVERIFY(typedefDecl);
     QVERIFY(typedefDecl->isTypeAlias());
     QVERIFY(typedefDecl->abstractType());
-    DelayedType* delayed = dynamic_cast<DelayedType*>(typedefDecl->abstractType().data());
+    DelayedType::Ptr delayed = typedefDecl->type<DelayedType>();
     QVERIFY(delayed);
     QCOMPARE(delayed->identifier(), TypeIdentifier("T"));
   }
@@ -1656,7 +1690,8 @@ void TestDUChain::testTemplates() {
     QCOMPARE(instanceDefClassA->identifier(), Identifier("A<B,C>"));
     QCOMPARE(instanceDefClassA->identifier().toString(), QString("A< B, C >"));
     QVERIFY(instanceDefClassA->abstractType());
-    IdentifiedType* identifiedType = dynamic_cast<IdentifiedType*>(instanceDefClassA->abstractType().data());
+    AbstractType::Ptr t = instanceDefClassA->abstractType();
+    IdentifiedType* identifiedType = dynamic_cast<IdentifiedType*>(t.unsafeData());
     QVERIFY(identifiedType);
     QCOMPARE(identifiedType->declaration(top), instanceDefClassA);
     QCOMPARE(identifiedType->qualifiedIdentifier().toString(), Identifier("A<B,C>").toString());
@@ -1669,9 +1704,9 @@ void TestDUChain::testTemplates() {
     QVERIFY(defClassA->internalContext()->importedParentContexts().front() != instanceDefClassA->internalContext()->importedParentContexts().front()); //The template-context has been instantiated
 
     //Make sure the first template-parameter has been resolved to class B
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[0]->abstractType().data(), defClassB->abstractType().data() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
     //Make sure the second template-parameter has been resolved to class C
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[1]->abstractType().data(), defClassC->abstractType().data() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
 
     QualifiedIdentifier ident2(ident);
     ident2.push(Identifier("Template1"));
@@ -1760,11 +1795,11 @@ void TestDUChain::testTemplatesRebind() {
   QCOMPARE(top->childContexts()[3]->childContexts()[1]->localDeclarations().count(), 1);
   {
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>")));
-  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>"))->abstractType().data()));
+  QVERIFY(!findDeclaration(top, QualifiedIdentifier("Base<S>"))->type<DelayedType>());
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>")));
-  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other"))->abstractType().data()));
+  QVERIFY(!findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other"))->type<DelayedType>());
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type")));
-  QVERIFY(!dynamic_cast<DelayedType*>(findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"))->abstractType().data()));
+  QVERIFY(!findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"))->type<DelayedType>());
   
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"));
   QVERIFY(memberDecl);
@@ -1838,12 +1873,12 @@ void TestDUChain::testForwardDeclaration()
   QVERIFY(!dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[0]));
   QVERIFY(!dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[2]));
   
-  CppClassType* type1 = top->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType::Ptr type1 = top->localDeclarations()[0]->type<CppClassType>();
   kDebug() << typeid(*top->localDeclarations()[1]->abstractType()).name();
-  CppClassType* type2 = top->localDeclarations()[1]->type<CppClassType>().data();
-  CppClassType* type3 = top->localDeclarations()[2]->type<CppClassType>().data();
-  CppClassType* type4 = top->localDeclarations()[3]->type<CppClassType>().data();
-  CppClassType* type5 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType::Ptr type2 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->localDeclarations()[2]->type<CppClassType>();
+  CppClassType::Ptr type4 = top->localDeclarations()[3]->type<CppClassType>();
+  CppClassType::Ptr type5 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>();
 
 
   QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Type);
@@ -1861,16 +1896,15 @@ void TestDUChain::testForwardDeclaration()
   QVERIFY(TestDecl->internalContext());
   QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
 
-  CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType::Ptr subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>();
   QVERIFY(subType);
 
-  QVERIFY(subType->declaration(0)->abstractType().data() != subType);
-  QCOMPARE(subType->declaration(0)->abstractType().data(), (AbstractType*)type5);
-  QCOMPARE(type1, type2);
+  QCOMPARE(subType->declaration(0)->abstractType()->indexed(), type5->indexed());
+  QCOMPARE(type1->indexed(), type2->indexed());
   QCOMPARE(type1->declaration(top), type2->declaration(top));
-  QVERIFY(type1->equals(type3));
-  QVERIFY(type3->equals(type1));
-  QCOMPARE(type1->declaration(0)->abstractType().data(), type3);
+  QVERIFY(type1->equals(type3.unsafeData()));
+  QVERIFY(type3->equals(type1.unsafeData()));
+  QCOMPARE(type1->declaration(0)->abstractType()->indexed(), type3->indexed());
   kDebug() << typeid(*type3->declaration(top)).name();
   kDebug() << typeid(*type1->declaration(top)).name();
   QCOMPARE(type1->declaration(top)->logicalInternalContext(0), type3->declaration(top)->internalContext());
@@ -2069,12 +2103,12 @@ void TestDUChain::testForwardDeclaration2()
 
   QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[0]));
   
-  CppClassType* type1 = top->localDeclarations()[0]->type<CppClassType>().data();
-  CppClassType* type2 = top->localDeclarations()[1]->type<CppClassType>().data();
-  CppClassType* type3 = top->localDeclarations()[2]->type<CppClassType>().data();
-  CppClassType* type4 = top->localDeclarations()[4]->type<CppClassType>().data();
-  CppClassType* type5 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>().data();
-  CppClassType* type12 = top->localDeclarations()[3]->type<CppClassType>().data();
+  CppClassType::Ptr type1 = top->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type2 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->localDeclarations()[2]->type<CppClassType>();
+  CppClassType::Ptr type4 = top->localDeclarations()[4]->type<CppClassType>();
+  CppClassType::Ptr type5 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type12 = top->localDeclarations()[3]->type<CppClassType>();
 
   QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Type);
   QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::Instance);
@@ -2094,16 +2128,15 @@ void TestDUChain::testForwardDeclaration2()
   QVERIFY(TestDecl->internalContext());
   QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
 
-  CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType::Ptr subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>();
   QVERIFY(subType);
 
-  QCOMPARE(type1->declaration(0)->abstractType().data(), type2->declaration(0)->abstractType().data());
-  QCOMPARE(type2->declaration(0)->abstractType().data(), type3);
-  QCOMPARE(type1->declaration(0)->abstractType().data(), type12->declaration(0)->abstractType().data());
+  QCOMPARE(type1->declaration(0)->abstractType()->indexed(), type2->declaration(0)->abstractType()->indexed());
+  QCOMPARE(type2->declaration(0)->abstractType()->indexed(), type3->indexed());
+  QCOMPARE(type1->declaration(0)->abstractType()->indexed(), type12->declaration(0)->abstractType()->indexed());
   kDebug() << type4->qualifiedIdentifier().toString();
-  kDebug() << type4->declaration(0)->abstractType().data();
   kDebug() << type4->declaration(0)->toString();
-  QCOMPARE(type4->declaration(0)->abstractType().data(), (AbstractType*)type5);
+  QCOMPARE(type4->declaration(0)->abstractType()->indexed(), type5->indexed());
   QCOMPARE(type3->declaration(top)->internalContext()->scopeIdentifier(true), QualifiedIdentifier("Test"));
   QCOMPARE(type5->declaration(top)->internalContext()->scopeIdentifier(true), QualifiedIdentifier("Test::SubTest"));
   QCOMPARE(type3->declaration(top)->qualifiedIdentifier(), QualifiedIdentifier("Test"));
@@ -2111,14 +2144,14 @@ void TestDUChain::testForwardDeclaration2()
 
   ///@todo think about this
   QCOMPARE(type5->declaration(top)->identifier(), Identifier("SubTest"));
-  QVERIFY(subType->equals(type5));
-  QVERIFY(type5->equals(subType));
+  QVERIFY(subType->equals(type5.unsafeData()));
+  QVERIFY(type5->equals(subType.unsafeData()));
   kDebug() << type5->toString() << type4->toString();
   kDebug() << type4->qualifiedIdentifier().toString() << type5->qualifiedIdentifier().toString();
-  QVERIFY(type4->equals(type5));
-  QVERIFY(type5->equals(type4));
+  QVERIFY(type4->equals(type5.unsafeData()));
+  QVERIFY(type5->equals(type4.unsafeData()));
   kDebug() << subType->toString();
-  QCOMPARE(subType->declaration(0)->abstractType().data(), type5);
+  QCOMPARE(subType->declaration(0)->abstractType()->indexed(), type5->indexed());
   
   release(top);
 }
@@ -2141,11 +2174,11 @@ void TestDUChain::testForwardDeclaration3()
   QVERIFY(forwardDecl->resolve(0));
   QCOMPARE(forwardDecl->resolve(0), top->childContexts()[1]->localDeclarations()[0]);
   
-  CppClassType* type1 = top->childContexts()[0]->localDeclarations()[0]->type<CppClassType>().data();
-  CppClassType* type2 = top->localDeclarations()[0]->type<CppClassType>().data();
-  CppClassType* type3 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>().data();
-  CppClassType* type4 = top->localDeclarations()[1]->type<CppClassType>().data();
-  CppClassType* type5 = top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->type<CppClassType>().data();
+  CppClassType::Ptr type1 = top->childContexts()[0]->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type2 = top->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type4 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type5 = top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->type<CppClassType>();
 
   
   QVERIFY(type1);
@@ -2157,13 +2190,13 @@ void TestDUChain::testForwardDeclaration3()
   Declaration* TestDecl = top->childContexts()[1]->localDeclarations()[0];
   QVERIFY(TestDecl->internalContext());
   QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
-  CppClassType* subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>().data();
+  CppClassType::Ptr subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>();
   QVERIFY(subType);
 
-  QCOMPARE(type1, type2);
-  QCOMPARE(type2->declaration(0)->abstractType().data(), (AbstractType*)type3);
-  QCOMPARE(subType->declaration(0)->abstractType().data(), type4->declaration(0)->abstractType().data());
-  QCOMPARE(type4->declaration(0)->abstractType().data(), (AbstractType*)type5);
+  QCOMPARE(type1->indexed(), type2->indexed());
+  QCOMPARE(type2->declaration(0)->abstractType()->indexed(), type3->indexed());
+  QCOMPARE(subType->declaration(0)->abstractType()->indexed(), type4->declaration(0)->abstractType()->indexed());
+  QCOMPARE(type4->declaration(0)->abstractType()->indexed(), type5->indexed());
   
   release(top);
 }
@@ -2182,9 +2215,9 @@ void TestDUChain::testTemplateForwardDeclaration()
   
   QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[1]));
   
-  CppClassType* type1 = top->localDeclarations()[1]->type<CppClassType>().data();
-  CppClassType* type2 = top->localDeclarations()[2]->type<CppClassType>().data();
-  CppClassType* type3 = top->localDeclarations()[3]->type<CppClassType>().data();
+  CppClassType::Ptr type1 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type2 = top->localDeclarations()[2]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->localDeclarations()[3]->type<CppClassType>();
 
   QVERIFY(type1);
   QVERIFY(type2);
@@ -2208,8 +2241,8 @@ void TestDUChain::testTemplateForwardDeclaration()
   QCOMPARE(temp2Decl->instantiatedFrom(), temp1Decl);
   QCOMPARE(temp2DeclResolved->instantiatedFrom(), temp1DeclResolved);
   
-  QVERIFY(type2->declaration(0)->abstractType().data());
-  QVERIFY(dynamic_cast<CppClassType*>(type2->declaration(0)->abstractType().data()));
+  QVERIFY(type2->declaration(0)->abstractType().unsafeData());
+  QVERIFY(type2->declaration(0)->type<CppClassType>().unsafeData());
   QCOMPARE(temp2DeclResolved->instantiatedFrom(), temp3Decl);
 
   QualifiedIdentifier t("Test<>");
@@ -2236,15 +2269,15 @@ void TestDUChain::testTemplateForwardDeclaration2()
   
   QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[1]));
   
-  CppClassType* type1 = top->localDeclarations()[1]->type<CppClassType>().data();
-  CppClassType* type2 = top->localDeclarations()[2]->type<CppClassType>().data();
-  CppClassType* type3 = top->localDeclarations()[3]->type<CppClassType>().data();
+  CppClassType::Ptr type1 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type2 = top->localDeclarations()[2]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->localDeclarations()[3]->type<CppClassType>();
 
   QVERIFY(type1);
   QVERIFY(type2);
   QVERIFY(type3);
 
-  QCOMPARE(type1->declaration(0)->abstractType().data(), (AbstractType*)type3);
+  QCOMPARE(type1->declaration(0)->abstractType()->indexed(), type3->indexed());
   
   TemplateDeclaration* temp1Decl = dynamic_cast<TemplateDeclaration*>(type1->declaration(top));
   QVERIFY(temp1Decl);
@@ -2667,7 +2700,7 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
     DUChainWriteLocker lock(DUChain::lock());
     DumpTypes dt;
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.data());
+      dt.dump(type.unsafeData());
   }
 
   if (dump)

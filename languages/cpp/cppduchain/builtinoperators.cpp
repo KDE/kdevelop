@@ -19,7 +19,7 @@
 #include "builtinoperators.h"
 #include <typesystem.h>
 #include "cpptypes.h"
-#include "typerepository.h"
+//#include "typerepository.h"
 #include "parser/tokens.h"
 
 
@@ -120,8 +120,8 @@ struct ConstantBinaryExpressionEvaluator {
   }
   
   KDevelop::AbstractType::Ptr createType() {
-    KDevelop::AbstractType::Ptr ret = TypeRepository::self()->registerType( KDevelop::AbstractType::Ptr(new CppConstantIntegralType(type, modifier)) );
-    static_cast<CppConstantIntegralType*>(ret.data())->CppConstantIntegralType::setValue<Type>( endValue );
+    KDevelop::AbstractType::Ptr ret( new CppConstantIntegralType(type, modifier) );
+    static_cast<CppConstantIntegralType*>(ret.unsafeData())->CppConstantIntegralType::setValue<Type>( endValue );
     return ret;
   }
 };
@@ -141,15 +141,15 @@ KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr
   if(!left || !right)
     return KDevelop::AbstractType::Ptr();
   
-  CppIntegralType* leftIntegral = dynamic_cast<CppIntegralType*>(left.data());
-  CppIntegralType* rightIntegral = dynamic_cast<CppIntegralType*>(right.data());
-  CppPointerType* leftPointer = dynamic_cast<CppPointerType*>(right.data());
+  CppIntegralType* leftIntegral = dynamic_cast<CppIntegralType*>(left.unsafeData());
+  CppIntegralType* rightIntegral = dynamic_cast<CppIntegralType*>(right.unsafeData());
+  CppPointerType* leftPointer = dynamic_cast<CppPointerType*>(right.unsafeData());
 
   KDevelop::AbstractType::Ptr ret;
 
   //Constantly evaluate integral expressions
-  CppConstantIntegralType* leftConstantIntegral = dynamic_cast<CppConstantIntegralType*>(left.data());
-  CppConstantIntegralType* rightConstantIntegral = dynamic_cast<CppConstantIntegralType*>(right.data());
+  CppConstantIntegralType* leftConstantIntegral = dynamic_cast<CppConstantIntegralType*>(left.unsafeData());
+  CppConstantIntegralType* rightConstantIntegral = dynamic_cast<CppConstantIntegralType*>(right.unsafeData());
 
   if(leftIntegral && rightIntegral) {
     if(tokenKind == '+' || tokenKind == '-' || tokenKind == '*' || tokenKind == '/' || tokenKind == '%' || tokenKind == '^' || tokenKind == '&' || tokenKind == '|' || tokenKind == '~' || tokenKind == Token_shift) {
@@ -160,13 +160,13 @@ KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr
     }
     
     if(tokenKind == '<' || tokenKind == '>' || tokenKind == Token_eq || tokenKind == Token_not_eq || tokenKind == Token_leq || tokenKind == Token_geq || tokenKind == Token_not_eq || tokenKind == Token_and || tokenKind == Token_or)
-      ret = KDevelop::AbstractType::Ptr(TypeRepository::self()->integral(TypeBool, ModifierNone).data());
+      ret = KDevelop::AbstractType::Ptr(new CppIntegralType(TypeBool, ModifierNone));
   }
   
   if(leftPointer && rightIntegral && (tokenKind == '+' || tokenKind == '-'))
     ret = left;
 
-  CppIntegralType* retIntegral = dynamic_cast<CppIntegralType*>(ret.data());
+  CppIntegralType* retIntegral = dynamic_cast<CppIntegralType*>(ret.unsafeData());
 
   ///We have determined the resulting type now. If both sides are constant, also evaluate the resulting value.
   if(ret && retIntegral && leftConstantIntegral && rightConstantIntegral) {

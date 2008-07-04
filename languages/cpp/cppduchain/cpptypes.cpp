@@ -23,6 +23,7 @@
 #include <classfunctiondeclaration.h>
 #include <abstractfunctiondeclaration.h>
 #include <indexedstring.h>
+#include <typeregister.h>
 #include "templateparameterdeclaration.h"
 #include <ducontext.h> //Only for FOREACH_ARRAY
 
@@ -40,6 +41,7 @@ REGISTER_TYPE(CppEnumeratorType);
 REGISTER_TYPE(CppEnumerationType);
 // REGISTER_TYPE(CppArrayType);
 REGISTER_TYPE(CppIntegralType);
+REGISTER_TYPE(CppTemplateParameterType);
 
 AbstractType* CppFunctionType::clone() const {
   return new CppFunctionType(*this);
@@ -164,7 +166,7 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
     if( !d_func()->m_type )
       return true;
     
-    return d_func()->m_type.type()->equals(rhs->d_func()->m_type.type().data());
+    return d_func()->m_type == rhs->d_func()->m_type;
   
   } else {
     return false;
@@ -226,7 +228,7 @@ bool CppEnumerationType::equals(const AbstractType* _rhs) const
 bool CppIntegralType::equals(const AbstractType* _rhs) const
 {
   TYPE_D(CppIntegralType);
-  if( !fastCast<const CppIntegralType*>(_rhs) || fastCast<CppEnumeratorType*>(_rhs) || fastCast<CppEnumerationType*>(_rhs) )
+  if( !fastCast<const CppIntegralType*>(_rhs) )
     return false;
   const CppIntegralType* rhs = static_cast<const CppIntegralType*>(_rhs);
 
@@ -290,11 +292,14 @@ void CppEnumeratorType::setValue(const QString &value)
 }*/
 
 CppClassType::CppClassType(Declaration::CVSpecs spec) : CppClassTypeBase(*new CppClassTypeData()) {
+  d_func_dynamic()->setTypeClassId<CppClassType>();
   CppCVType::setCV(spec);
 }
 
 
 CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers) : CppIntegralType(*new CppConstantIntegralTypeData()) {
+  d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
+  
   setIntegralType(type);
   setTypeModifiers(modifiers);
 }
@@ -333,6 +338,14 @@ uint CppConstantIntegralType::hash() const {
   return ret;
 }
 
+bool CppConstantIntegralType::equals(const KDevelop::AbstractType* _rhs) const {
+  const CppConstantIntegralType* rhs = fastCast<const CppConstantIntegralType*>(_rhs);
+  if(!rhs)
+    return false;
+  return d_func()->m_value == rhs->d_func()->m_value && IntegralType::equals(rhs);
+}
+
+
 QString CppConstantIntegralType::toString() const {
   switch(integralType()) {
     case TypeNone:
@@ -358,6 +371,7 @@ QString CppConstantIntegralType::toString() const {
 CppIntegralType::CppIntegralType(IntegralTypes type, TypeModifiers modifiers) : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData())
 {
   TYPE_D_DYNAMIC(CppIntegralType);
+  d->setTypeClassId<CppIntegralType>();
   d->m_type = type;
   d->m_modifiers = modifiers;
   
@@ -442,6 +456,7 @@ QString CppFunctionType::toString() const
 
 CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(*new CppPointerTypeData())
 {
+  d_func_dynamic()->setTypeClassId<CppPointerType>();
   setCV(spec);
 }
 
@@ -452,6 +467,7 @@ QString CppPointerType::toString() const
 
 CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceTypeBase(*new CppReferenceTypeData())
 {
+  d_func_dynamic()->setTypeClassId<CppReferenceType>();
   setCV(spec);
 }
 
@@ -543,6 +559,7 @@ QString CppClassType::toString() const
 
 CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerationTypeBase(*new CppEnumerationTypeData())
 {
+  d_func_dynamic()->setTypeClassId<CppEnumerationType>();
   CppIntegralType::setIntegralType(TypeInt);
   setCV(spec);
 }

@@ -76,7 +76,6 @@
 #include "cppcodecompletionmodel.h"
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
-#include "typerepository.h"
 #include "cppparsejob.h"
 #include "environmentmanager.h"
 #include "navigationwidget.h"
@@ -164,9 +163,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     connect( core()->projectController(),
              SIGNAL( projectClosing( KDevelop::IProject* ) ),
              this, SLOT( projectClosing( KDevelop::IProject* ) ) );
-
-    // Initialise singletons, to prevent needing a mutex in their self() methods
-    TypeRepository::self();
 
     m_quickOpenDataProvider = new IncludeFileDataProvider();
 

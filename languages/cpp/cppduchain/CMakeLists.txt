@@ -23,7 +23,6 @@ set(kdevcppduchain_LIB_SRCS
     cppeditorintegrator.cpp
     dumpchain.cpp
     cpptypes.cpp
-    typerepository.cpp
     dumptypes.cpp
     environmentmanager.cpp
     cachemanager.cpp

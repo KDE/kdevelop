@@ -265,9 +265,9 @@ class CppDUContext : public BaseContext {
               DelayedType::Ptr delayed( new DelayedType() );
               delayed->setIdentifier( i );
               
-              res.type = Cpp::resolveDelayedTypes( AbstractType::Ptr( delayed.data() ), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
+              res.type = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
               
-              if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && (dynamic_cast<CppTemplateParameterType*>(TypeUtils::targetType(res.type.type().data(), 0)) || dynamic_cast<DelayedType*>(TypeUtils::targetType(res.type.type().data(), 0))) ) {
+              if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && ((TypeUtils::targetType(res.type.type(), 0).cast<CppTemplateParameterType>()) || TypeUtils::targetType(res.type.type(), 0).cast<DelayedType>() )) {
                 return false;
               }
 
@@ -313,7 +313,7 @@ class CppDUContext : public BaseContext {
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
           for(int a = 0; a < ret.size(); ) {
-            if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && dynamic_cast<const CppTemplateParameterType*>((ret[a])->abstractType().data()) )
+            if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && (ret[a])->abstractType().cast<CppTemplateParameterType>() )
                 || ( (!(flags & BaseContext::OnlyFunctions)) &&  (dynamic_cast<ClassFunctionDeclaration*>(ret[a]) && static_cast<ClassFunctionDeclaration*>(ret[a])->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
                 
               //Erase the item
@@ -397,7 +397,7 @@ class CppDUContext : public BaseContext {
       id.clearTemplateIdentifiers();
       FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
         AbstractType::Ptr type(arg.type());
-        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
         if(identified)
           id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
         else if(type)

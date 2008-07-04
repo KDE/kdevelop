@@ -33,7 +33,6 @@
 #include "tokens.h"
 #include "cppduchain.h"
 #include <declaration.h>
-#include "typerepository.h"
 #include "declarationbuilder.h"
 #include "expressionparser.h"
 #include "parser/rpp/chartools.h"
@@ -58,7 +57,7 @@ bool isTemplateDependent(Declaration* decl) {
   ///@todo Store this information somewhere, instead of recomputing it for each item
   if( !decl )
     return false;
-  if( dynamic_cast<CppTemplateParameterType*>(decl->abstractType().data()) )
+  if( decl->abstractType().cast<CppTemplateParameterType>() )
     return true;
   
   DUContext* ctx = decl->context();
@@ -70,7 +69,7 @@ bool isTemplateDependent(Declaration* decl) {
         continue;
       if( importedCtx->type() == DUContext::Template ) {
         foreach( Declaration* paramDecl, importedCtx->localDeclarations() ) {
-          CppTemplateParameterType* templateParamType = dynamic_cast<CppTemplateParameterType*>(paramDecl->abstractType().data());
+          CppTemplateParameterType::Ptr templateParamType = paramDecl->abstractType().cast<CppTemplateParameterType>();
           if( templateParamType )
             return true;
         }
@@ -110,7 +109,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   
   openType(classType);
 
-  classTypeOpened( TypeRepository::self()->registerType(currentAbstractType()) ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
+  classTypeOpened( currentAbstractType() ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
 
   TypeBuilderBase::visitClassSpecifier(node);
 
@@ -125,7 +124,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
   if (node->name) {
     DUChainReadLocker lock(DUChain::lock());
     
-    CppClassType* klass = dynamic_cast<CppClassType*>(currentAbstractType().data());
+    CppClassType::Ptr klass = currentAbstractType().cast<CppClassType>();
     Q_ASSERT( klass );
 
     bool openedType = openTypeFromName(node->name, true);
@@ -176,12 +175,10 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
       if ( !delay && res.isValid() && res.isInstance ) {
         AbstractType::Ptr resType = res.type.type();
-        if( dynamic_cast<CppConstantIntegralType*>(resType.data()) ) {
-          CppConstantIntegralType* type = static_cast<CppConstantIntegralType*>(resType.data());
-          m_currentEnumeratorValue = (int)type->value<qint64>();
-        } else if( dynamic_cast<DelayedType*>(resType.data()) ) {
-          DelayedType* type = static_cast<DelayedType*>(resType.data());
-          openType(AbstractType::Ptr(type)); ///@todo Make this an enumerator-type that holds the same information
+        if( CppConstantIntegralType::Ptr iType = resType.cast<CppConstantIntegralType>() ) {
+          m_currentEnumeratorValue = (int)iType->value<qint64>();
+        } else if( DelayedType::Ptr dType = resType.cast<DelayedType>() ) {
+          openType(dType.cast<AbstractType>()); ///@todo Make this an enumerator-type that holds the same information
           openedType = true;
         }
       }
@@ -342,7 +339,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if(type == TypeNone)
       type = TypeInt; //Happens, example: "unsigned short"
     
-    CppIntegralType::Ptr integral = TypeRepository::self()->integral(type, modifiers, parseConstVolatile(node->cv));
+    CppIntegralType::Ptr integral(new CppIntegralType(type, modifiers));
+    integral->setCV(parseConstVolatile(node->cv));
     if (integral) {
       openedType = true;
       openType(integral);
@@ -379,7 +377,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
 
     if(!delay) {
       foreach( Declaration* decl, dec ) {
-        if( needClass && !dynamic_cast<CppClassType*>(decl->abstractType().data()) )
+        if( needClass && !decl->abstractType().cast<CppClassType>() )
           continue;
         
         if (decl->abstractType() ) {
@@ -545,7 +543,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     ArrayType::Ptr array(new ArrayType());
     array->setElementType(lastType());
 
-    CppConstantIntegralType* integral = dynamic_cast<CppConstantIntegralType*>(res.type.type().data());
+    CppConstantIntegralType::Ptr integral = res.type.type().cast<CppConstantIntegralType>();
     if( res.isValid() && integral ) {
       array->setDimension(integral->value<qint64>());
     } else {
@@ -620,9 +618,4 @@ void TypeBuilder::visitUsing(UsingAST * node)
 
   if( openedType )
     closeType();
-}
-
-KDevelop::ITypeRepository* TypeBuilder::typeRepository() const
-{
-  return TypeRepository::self();
 }

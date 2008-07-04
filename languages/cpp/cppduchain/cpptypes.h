@@ -145,11 +145,14 @@ class KDEVCPPDUCHAIN_EXPORT CppIntegralType : public MergeCppCVType< KDevelop::I
 
 public:
   CppIntegralType() : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppIntegralType>();
   }
-  CppIntegralType(const CppIntegralType& rhs) : MergeCppCVType< KDevelop::IntegralType >(*new CppIntegralTypeData(*rhs.d_func())) {
+  CppIntegralType(const CppIntegralType& rhs) : MergeCppCVType< KDevelop::IntegralType >(copyData<CppIntegralTypeData>(*rhs.d_func())) {
   }
   CppIntegralType(CppIntegralTypeData& data) : MergeCppCVType< KDevelop::IntegralType >(data) {
   }
+  CppIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
+  
   typedef TypePtr<CppIntegralType> Ptr;
 
   IntegralTypes integralType() const;
@@ -184,7 +187,6 @@ public:
   };
   
 protected:
-  CppIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
   TYPE_DECLARE_DATA(CppIntegralType);
 };
 
@@ -202,11 +204,12 @@ class KDEVCPPDUCHAIN_EXPORT CppConstantIntegralType : public CppIntegralType
   friend class TypeRepository;
 
 public:
-  CppConstantIntegralType(const CppConstantIntegralType& rhs) : CppIntegralType(*new CppConstantIntegralTypeData(*rhs.d_func())) {
+  CppConstantIntegralType(const CppConstantIntegralType& rhs) : CppIntegralType(copyData<CppConstantIntegralTypeData>(*rhs.d_func())) {
   }
   CppConstantIntegralType(CppConstantIntegralTypeData& data) : CppIntegralType(data) {
   }
   CppConstantIntegralType() : CppIntegralType(*new CppConstantIntegralTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
   }
   CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
   
@@ -255,6 +258,8 @@ public:
 
   virtual uint hash() const;
   
+  virtual bool equals(const KDevelop::AbstractType* rhs) const;
+  
   typedef CppConstantIntegralTypeData Data;
   
   enum {
@@ -279,17 +284,17 @@ typedef MergeCppCVType< KDevelop::FunctionType > CppFunctionTypeBase;
 struct CppFunctionTypeData : public CppFunctionTypeBase::Data {
 };
     
-///@todo Make not identified
 class KDEVCPPDUCHAIN_EXPORT CppFunctionType : public CppFunctionTypeBase
 {
 public:
-  CppFunctionType(const CppFunctionType& rhs) : CppFunctionTypeBase(*new CppFunctionTypeData(*rhs.d_func())) {
+  CppFunctionType(const CppFunctionType& rhs) : CppFunctionTypeBase(copyData<CppFunctionTypeData>(*rhs.d_func())) {
   }
   
   CppFunctionType(CppFunctionTypeData& data) : CppFunctionTypeBase(data) {
   }
   
   CppFunctionType() : CppFunctionTypeBase(*new CppFunctionTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppFunctionType>();
   }
   
   typedef TypePtr<CppFunctionType> Ptr;
@@ -324,13 +329,14 @@ struct CppPointerTypeData : public CppPointerTypeBase::Data {
 class KDEVCPPDUCHAIN_EXPORT CppPointerType : public CppPointerTypeBase
 {
 public:
-  CppPointerType(const CppPointerType& rhs) : CppPointerTypeBase(*new CppPointerTypeData(*rhs.d_func())) {
+  CppPointerType(const CppPointerType& rhs) : CppPointerTypeBase(copyData<CppPointerTypeData>(*rhs.d_func())) {
   }
   
   CppPointerType(CppPointerTypeData& data) : CppPointerTypeBase(data) {
   }
   
   CppPointerType() : CppPointerTypeBase(*new CppPointerTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppPointerType>();
   }
   
   typedef TypePtr<CppPointerType> Ptr;
@@ -365,13 +371,14 @@ struct CppReferenceTypeData : public CppReferenceTypeBase::Data {
 class KDEVCPPDUCHAIN_EXPORT CppReferenceType : public CppReferenceTypeBase
 {
 public:
-  CppReferenceType(const CppReferenceType& rhs) : CppReferenceTypeBase(*new CppReferenceTypeData(*rhs.d_func())) {
+  CppReferenceType(const CppReferenceType& rhs) : CppReferenceTypeBase(copyData<CppReferenceTypeData>(*rhs.d_func())) {
   }
   
   CppReferenceType(CppReferenceTypeData& data) : CppReferenceTypeBase(data) {
   }
   
   CppReferenceType() : CppReferenceTypeBase(*new CppReferenceTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppReferenceType>();
   }
   
   typedef TypePtr<CppReferenceType> Ptr;
@@ -416,7 +423,7 @@ struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public CppClassTypeBase::Data {
     m_closed = false;
   }
   
-  CppClassTypeData(const CppClassTypeData& rhs) :m_classType(rhs.m_classType), m_closed(rhs.m_closed)  {
+  CppClassTypeData(const CppClassTypeData& rhs) :CppClassTypeBase::Data(rhs), m_classType(rhs.m_classType), m_closed(rhs.m_closed)  {
   }
   
   ~CppClassTypeData() {
@@ -431,7 +438,7 @@ struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public CppClassTypeBase::Data {
 class KDEVCPPDUCHAIN_EXPORT CppClassType : public CppClassTypeBase
 {
 public:
-  CppClassType(const CppClassType& rhs) : CppClassTypeBase(*new CppClassTypeData(*rhs.d_func())) {
+  CppClassType(const CppClassType& rhs) : CppClassTypeBase(copyData<CppClassTypeData>(*rhs.d_func())) {
   }
   
   CppClassType(CppClassTypeData& data) : CppClassTypeBase(data) {
@@ -494,13 +501,14 @@ class KDEVCPPDUCHAIN_EXPORT CppTypeAliasType : public CppTypeAliasTypeBase
 public:
   typedef TypePtr<CppTypeAliasType> Ptr;
 
-  CppTypeAliasType(const CppTypeAliasType& rhs) : CppTypeAliasTypeBase(*new CppTypeAliasTypeData(*rhs.d_func())) {
+  CppTypeAliasType(const CppTypeAliasType& rhs) : CppTypeAliasTypeBase(copyData<CppTypeAliasTypeData>(*rhs.d_func())) {
   }
   
   CppTypeAliasType(CppTypeAliasTypeData& data) : CppTypeAliasTypeBase(data) {
   }
   
   CppTypeAliasType() : CppTypeAliasTypeBase(*new CppTypeAliasTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppTypeAliasType>();
   }
 
   KDevelop::AbstractType::Ptr type() const;
@@ -542,13 +550,14 @@ typedef CppEnumeratorTypeBase::Data CppEnumeratorTypeData;
 class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppEnumeratorTypeBase
 {
 public:
-  CppEnumeratorType(const CppEnumeratorType& rhs) : CppEnumeratorTypeBase(*new CppEnumeratorTypeData(*rhs.d_func())) {
+  CppEnumeratorType(const CppEnumeratorType& rhs) : CppEnumeratorTypeBase(copyData<CppEnumeratorTypeData>(*rhs.d_func())) {
   }
   
   CppEnumeratorType(CppEnumeratorTypeData& data) : CppEnumeratorTypeBase(data) {
   }
   
   CppEnumeratorType() : CppEnumeratorTypeBase(*new CppEnumeratorTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppEnumeratorType>();
     CppConstantIntegralType::setIntegralType(TypeInt);
     setCV(KDevelop::Declaration::Const);
   }
@@ -580,7 +589,7 @@ typedef CppEnumerationTypeBase::Data CppEnumerationTypeData;
 class KDEVCPPDUCHAIN_EXPORT CppEnumerationType : public CppEnumerationTypeBase
 {
 public:
-  CppEnumerationType(const CppEnumerationType& rhs) : CppEnumerationTypeBase(*new CppEnumerationTypeData(*rhs.d_func())) {
+  CppEnumerationType(const CppEnumerationType& rhs) : CppEnumerationTypeBase(copyData<CppEnumerationTypeData>(*rhs.d_func())) {
   }
   
   CppEnumerationType(CppEnumerationTypeData& data) : CppEnumerationTypeBase(data) {
@@ -640,13 +649,14 @@ typedef CppTemplateParameterTypeBase::Data CppTemplateParameterTypeData;
 class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public CppTemplateParameterTypeBase
 {
 public:
-  CppTemplateParameterType(const CppTemplateParameterType& rhs) : CppTemplateParameterTypeBase(*new CppTemplateParameterTypeData(*rhs.d_func())) {
+  CppTemplateParameterType(const CppTemplateParameterType& rhs) : CppTemplateParameterTypeBase(copyData<CppTemplateParameterTypeData>(*rhs.d_func())) {
   }
   
   CppTemplateParameterType(CppTemplateParameterTypeData& data) : CppTemplateParameterTypeBase(data) {
   }
   
   CppTemplateParameterType() : CppTemplateParameterTypeBase(*new CppTemplateParameterTypeData()) {
+    d_func_dynamic()->setTypeClassId<CppTemplateParameterType>();
   }
   
   typedef TypePtr<CppTemplateParameterType> Ptr;

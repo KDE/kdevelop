@@ -29,10 +29,11 @@
 #include "parser.h"
 #include "control.h"
 
-#include "typerepository.h"
+#include "typesystem.h"
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
+#include <simplecursor.h>
 
 namespace KDevelop
 {
@@ -137,9 +138,9 @@ private:
   KUrl file1, file2;
   KDevelop::TopDUContext* topContext;
 
-  KDevelop::AbstractType::Ptr typeVoid;
-  KDevelop::AbstractType::Ptr typeInt;
-  KDevelop::AbstractType::Ptr typeShort;
+  KDevelop::IndexedType typeVoid;
+  KDevelop::IndexedType typeInt;
+  KDevelop::IndexedType typeShort;
 
   bool testFileParseOnly;
 };

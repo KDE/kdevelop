@@ -86,7 +86,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             int pos=index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            FunctionType::Ptr func = m_declarations[pos]->abstractType().cast<FunctionType>();
             if(func)
                 return "Macro";
             else
@@ -101,13 +101,13 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             DUChainReadLocker lock(DUChain::lock());
             int pos=index.row()-m_commands.count();
-            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            FunctionType::Ptr func=m_declarations[pos]->abstractType().cast<FunctionType>();
             if(func)
             {
                 QStringList args;
                 foreach(const AbstractType::Ptr& t, func->arguments())
                 {
-                    const DelayedType *delay=dynamic_cast<const DelayedType*>(t.data());
+                    DelayedType::Ptr delay = t.cast<DelayedType>();
                     args.append(delay->identifier().toString());
                 }
                 return '('+args.join(", ")+')';
@@ -127,7 +127,7 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
         case VariableMacro: {
             int pos=row-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            FunctionType *func=dynamic_cast<FunctionType*>(m_declarations[pos]->abstractType().data());
+            FunctionType::Ptr func=m_declarations[pos]->abstractType().cast<FunctionType>();
             if(func)
             {
                 document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');

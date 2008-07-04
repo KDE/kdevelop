@@ -127,8 +127,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
-  typeVoid = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeVoid));
-  typeInt = AbstractType::Ptr::staticCast(TypeRepository::self()->integral(TypeInt));
+  typeInt = AbstractType::Ptr(new CppIntegralType(TypeInt));
 
   addInclude( "testFile1.h", testFile1 );
   addInclude( "testFile2.h", testFile2 );
@@ -341,7 +340,7 @@ void TestCppCodeCompletion::testInclude() {
   ///HONK was #undef'ed in testFile2, so this must be unresolved.
   decl = findDeclaration(c, QualifiedIdentifier("undefinedHonk"));
   QVERIFY(decl);
-  QVERIFY(dynamic_cast<DelayedType*>(decl->abstractType().data()));
+  QVERIFY(decl->abstractType().cast<DelayedType>());
   
 
   Cpp::ExpressionParser parser;
@@ -476,7 +475,8 @@ void TestCppCodeCompletion::testForwardDeclaration()
   Declaration* decl = findDeclaration(top, Identifier("Test"), top->range().end);
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+  AbstractType::Ptr t(decl->abstractType());
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
   QVERIFY(!decl->isForwardDeclaration());
   
   release(top);
@@ -531,7 +531,8 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   Declaration* decl = findDeclaration(top, Identifier("t"), top->range().end);
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+  AbstractType::Ptr t(decl->abstractType());
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
   
   release(top);
 }
@@ -552,32 +553,35 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Dummy"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    AbstractType::Ptr t(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
     QCOMPARE(decl->abstractType()->toString(), QString("Dummy"));
   }
   {
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::B2"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    AbstractType::Ptr t(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test2<Dummy>::bm"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(decl->abstractType().data()));
+    AbstractType::Ptr t(decl->abstractType());
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
     Cpp::ClassDeclaration* decl = dynamic_cast<Cpp::ClassDeclaration*>(findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end));
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
-    CppClassType* classType = dynamic_cast<CppClassType*>(decl->abstractType().data());
+    CppClassType::Ptr classType = decl->abstractType().cast<CppClassType>();
     QVERIFY(classType);
     QCOMPARE(decl->baseClassesSize(), 1u);
     QVERIFY(decl->baseClasses()[0].baseClass);
-    const CppClassType* parentClassType = dynamic_cast<const CppClassType*>(decl->baseClasses()[0].baseClass.type().data());
+    CppClassType::Ptr parentClassType = decl->baseClasses()[0].baseClass.type().cast<CppClassType>();
     QVERIFY(parentClassType);
     QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }
@@ -1042,7 +1046,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
     DumpTypes dt;
     DUChainWriteLocker lock(DUChain::lock());
     foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.data());
+      dt.dump(type.unsafeData());
   }
 
   if( parent ) {

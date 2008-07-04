@@ -126,12 +126,13 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     TemplateParameterDeclaration* decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
     
     DUChainWriteLocker lock(DUChain::lock());
-    decl->setAbstractType(lastType());
-    if( decl->type<CppTemplateParameterType>() ) {
-      decl->type<CppTemplateParameterType>()->setDeclaration(decl);
+    AbstractType::Ptr type = lastType();
+    if( type.cast<CppTemplateParameterType>() ) {
+      type.cast<CppTemplateParameterType>()->setDeclaration(decl);
     } else {
       kDebug(9007) << "bad last type";
     }
+    decl->setAbstractType(type);
 
     if( ast->type_parameter && ast->type_parameter->type_id ) {
       //Extract default type-parameter
@@ -251,7 +252,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
 
-        CppFunctionType::Ptr currentFunction = CppFunctionType::Ptr(dynamic_cast<CppFunctionType*>(lastType().data()));
+        CppFunctionType::Ptr currentFunction = lastType().cast<CppFunctionType>();
         int functionArgumentCount = 0;
         if(currentFunction)
           functionArgumentCount = currentFunction->arguments().count();
@@ -265,8 +266,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
             if(dec == currentDeclaration() || dec->isDefinition())
               continue;
             //Compare signatures of function-declarations:
-            if(dec->abstractType() == lastType()
-                || (dec->abstractType() && lastType() && dec->abstractType()->equals(lastType().data())))
+            if(dec->abstractType()->indexed() == lastType()->indexed())
             {
               //The declaration-type matches this definition, good.
             }else{
@@ -573,7 +573,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
   //We override this so we can get the class-declaration into a usable state(with filled type) earlier
     DUChainWriteLocker lock(DUChain::lock());
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
 
     if( idType && !idType->declarationId().isValid() ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
@@ -586,13 +586,15 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
   if (lastType()) {
     DUChainWriteLocker lock(DUChain::lock());
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(lastType().data());
-    DelayedType* delayed = dynamic_cast<DelayedType*>(lastType().data());
+    AbstractType::Ptr type = lastType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    DelayedType::Ptr delayed = type.cast<DelayedType>();
 
     //When the given type has no declaration yet, assume we are declaring it now.
     //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-    if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed )
+    if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed ) {
         idType->setDeclaration( currentDeclaration() );
+    }
 
     if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
       //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
@@ -638,13 +640,13 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   node->end_token = node->id + 1;
 
   Identifier id(editor()->parseSession()->token_stream->token(node->id).symbol());
-  openNormalDeclaration(0, node, id);
+  Declaration* decl = openNormalDeclaration(0, node, id);
 
   node->end_token = oldEndToken;
 
   DeclarationBuilderBase::visitEnumerator(node);
 
-  CppEnumeratorType* enumeratorType = dynamic_cast<CppEnumeratorType*>(lastType().data());
+  CppEnumeratorType::Ptr enumeratorType = lastType().cast<CppEnumeratorType>();
   
   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
     DUChainWriteLocker lock(DUChain::lock());
@@ -653,9 +655,10 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   
   closeDeclaration(true);
   
-  if(enumeratorType) {
+  if(enumeratorType) { ///@todo Move this into closeDeclaration in a logical way
     DUChainWriteLocker lock(DUChain::lock());
-    enumeratorType->setDeclaration(currentDeclaration());
+    enumeratorType->setDeclaration(decl);
+    decl->setAbstractType(enumeratorType.cast<AbstractType>());
   }else{
     kWarning() << "not assigned enumerator type";
   }
@@ -695,8 +698,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     DUChainWriteLocker lock(DUChain::lock());
 
     QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id.last(), pos);
-
-    AbstractType::Ptr newLastType;
 
     foreach( Declaration* decl, declarations ) {
       if( decl->abstractType()) {
@@ -761,8 +762,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
       }
     }//foreach
 
-    if( newLastType )
-      setLastType(newLastType);
   }//node-name
 
   closeDeclaration();
@@ -945,7 +944,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           if(declarations.first()->abstractType()) {
             //This belongs into the type-builder, but it's much easier to do here, since we already have all the information
             ///@todo See above, only search for fitting declarations(of structure/enum/class/union type)
-            injectType(AbstractType::Ptr(declarations.first()->abstractType().data()));
+            injectType(declarations.first()->abstractType());
             return;
           }else{
             kDebug(9007) << "Error: Bad declaration";

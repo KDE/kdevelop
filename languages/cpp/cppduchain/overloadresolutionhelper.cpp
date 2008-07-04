@@ -68,9 +68,9 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   if( m_isOperator ) {
     ///Search for member operators
     AbstractType::Ptr real( TypeUtils::realType(m_baseType.type, m_context->topContext()) );
-    if( dynamic_cast<CppClassType*>( real.data() ) )
+    if( dynamic_cast<CppClassType*>( real.unsafeData() ) )
     {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.unsafeData() );
       if( idType && idType->declaration(m_context->topContext()) ) {
         DUContext* ctx = idType->declaration(m_context->topContext())->logicalInternalContext(m_context->topContext());
         if( ctx ) {
@@ -87,7 +87,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
     ///Search for static global operators
     QList<Declaration*> decls = m_context->findDeclarations(m_operatorIdentifier);
     foreach( Declaration* decl, decls ) {
-      FunctionType* fun = dynamic_cast<FunctionType*>( decl->abstractType().data() );
+      FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
       if( fun && fun->arguments().size() == 2 )
         m_declarations << DeclarationWithArgument( m_baseType, decl );
     }

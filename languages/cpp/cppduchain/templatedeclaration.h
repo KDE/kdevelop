@@ -69,6 +69,10 @@ namespace Cpp {
     
     START_APPENDED_LISTS(InstantiationInformation)
     
+    static size_t classSize() {
+      return sizeof(InstantiationInformation);
+    }
+    
     ///templateParameters contains the template-parameters used for the instantiation
     APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
     

@@ -23,6 +23,7 @@
 #include <QHash>
 #include "cppduchainexport.h"
 #include <duchain/declaration.h>
+#include "cpptypes.h"
 
 class CppIntegralType;
 class CppClassType;
@@ -38,27 +39,13 @@ namespace TypeUtils {
   using namespace KDevelop;
   /**
    * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
-   * Returns the resolved type of unresolved forward-declarations.
    *
    *  !!DU-Chain must be locked!
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  KDEVCPPDUCHAIN_EXPORT AbstractType* realType(AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
 
-  KDEVCPPDUCHAIN_EXPORT inline AbstractType* realType(AbstractType::Ptr type, const TopDUContext* topContext, bool* constant = 0) {
-    return realType(type.data(), topContext, constant );
-  }
-
-  /**
-   * Resolves the type in case it is a forward-declaration.
-   *
-   *  !!DU-Chain must be locked!
-   * @warning The returned type may be newly created, in case of template forward-declarations.
-   *          This means that the returned shared pointer must be kept to keep the type alive.
-   * @return return-value will never be zero. Either the type is resolved, or base is returned.
-   */
-  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* topContext);
   /**
    * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
    *
@@ -66,35 +53,22 @@ namespace TypeUtils {
   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  KDEVCPPDUCHAIN_EXPORT AbstractType* targetType(AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
-  KDEVCPPDUCHAIN_EXPORT const AbstractType* targetType(const AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
-
-  KDEVCPPDUCHAIN_EXPORT inline AbstractType* targetType(AbstractType::Ptr type, const TopDUContext* topContext, bool* constant = 0) {
-    return targetType(type.data(), topContext, constant);
-  }
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr targetType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
+  //KDEVCPPDUCHAIN_EXPORT const AbstractType* targetType(const AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
 
   /**k
    * Returns whether the type is a pointer-type or reference to pointer-type.
    *
    *  @param type The type
    * */
-  KDEVCPPDUCHAIN_EXPORT bool isPointerType(AbstractType* type);
-
-  KDEVCPPDUCHAIN_EXPORT inline bool isPointerType(AbstractType::Ptr type) {
-    return isPointerType(type.data());
-  }
-
+  KDEVCPPDUCHAIN_EXPORT bool isPointerType(const AbstractType::Ptr& type);
 
   /**
    * Returns whether the type is a reference-type.
    *
    *  @param type The type
    * */
-  KDEVCPPDUCHAIN_EXPORT bool isReferenceType(AbstractType* type);
-
-  KDEVCPPDUCHAIN_EXPORT inline bool isReferenceType(AbstractType::Ptr type) {
-    return isReferenceType(type.data());
-  }
+  KDEVCPPDUCHAIN_EXPORT bool isReferenceType(const AbstractType::Ptr& type);
 
   template<class Type>
   bool isType( AbstractType* t ) {
@@ -105,34 +79,26 @@ namespace TypeUtils {
    *
    * @return true when the given type is const-qualified
    * */
-  KDEVCPPDUCHAIN_EXPORT bool isConstant( AbstractType* t );
-
-  KDEVCPPDUCHAIN_EXPORT inline bool isConstant( AbstractType::Ptr t ) {
-    return isConstant(t.data());
-  }
+  KDEVCPPDUCHAIN_EXPORT bool isConstant( const AbstractType::Ptr& t );
 
   /**
    * null-type means that the type comes from a 0-literal
    * */
 
-  KDEVCPPDUCHAIN_EXPORT bool isNullType( AbstractType* t );
-
-  KDEVCPPDUCHAIN_EXPORT inline bool isNullType( AbstractType::Ptr t ) {
-    return isNullType(t.data());
-  }
+  KDEVCPPDUCHAIN_EXPORT bool isNullType( const AbstractType::Ptr& t );
 
   ///Integer-conversion-rank as described in iso c++ 4.13
-  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( CppIntegralType* type );
+  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( const CppIntegralType::Ptr& type );
 
   ///Whether the integral type is an integer-type
-  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( CppIntegralType* type );
+  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( const CppIntegralType::Ptr& type );
 
   ///Whether the integral type is an floating-point-type
-  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( CppIntegralType* type );
+  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( const CppIntegralType::Ptr& type );
 
-  KDEVCPPDUCHAIN_EXPORT bool isVoidType( AbstractType* type );
+  KDEVCPPDUCHAIN_EXPORT bool isVoidType( const AbstractType::Ptr& type );
 
-  KDEVCPPDUCHAIN_EXPORT bool isPublicBaseClass( const CppClassType* c, CppClassType* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 );
+  KDEVCPPDUCHAIN_EXPORT bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 );
 
   ///Conversion-rank of "unsigned int"
   KDEVCPPDUCHAIN_EXPORT extern const int unsignedIntConversionRank;
@@ -143,16 +109,16 @@ namespace TypeUtils {
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
   /**
    * Same as above, except that it adds the functions to a list.
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
   /**
    * Returns all constructors
    * */
-  KDEVCPPDUCHAIN_EXPORT void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions);
+  KDEVCPPDUCHAIN_EXPORT void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    **/

@@ -70,6 +70,10 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     ///Returns the indexed version of this evalation result(eventually it is put into a repository)
     IndexedExpressionEvaluationResult indexed() const;
     
+    static size_t classSize() {
+      return sizeof(ExpressionEvaluationResult);
+    }
+    
     START_APPENDED_LISTS(ExpressionEvaluationResult)
     ///This list contains the declarations found for the item evaluated.
     ///@todo Eventually get rid of this list somehow
@@ -79,7 +83,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
 
     ///@return whether the result is an lvalue
     bool isLValue() const {
-      return isInstance && (instanceDeclaration.isValid() || dynamic_cast<const ReferenceType*>( type.type().data() ));
+      return isInstance && (instanceDeclaration.isValid() || type.type().cast<ReferenceType>());
     }
 
     ///@return whether this result is valid(has a type)

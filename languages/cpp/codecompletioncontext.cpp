@@ -307,9 +307,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       LOCKDUCHAIN;
       //Dereference a pointer
       AbstractType::Ptr containerType = m_expressionResult.type.type();
-      CppPointerType* pnt = dynamic_cast<CppPointerType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
+      CppPointerType::Ptr pnt = TypeUtils::realType(containerType, m_duContext->topContext()).cast<CppPointerType>();
       if( !pnt ) {
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(TypeUtils::realType(containerType, m_duContext->topContext()));
+        AbstractType::Ptr realContainer = TypeUtils::realType(containerType, m_duContext->topContext());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(realContainer.unsafeData());
         if( idType ) {
           Declaration* idDecl = idType->declaration(m_duContext->topContext());
           if( idDecl && idDecl->internalContext() ) {
@@ -319,7 +320,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
               foreach(Declaration* decl, operatorDeclarations)
                 m_expressionResult.allDeclarationsList().append(decl->id());
               
-              CppFunctionType* function = dynamic_cast<CppFunctionType*>( operatorDeclarations.front()->abstractType().data() );
+              CppFunctionType::Ptr function = operatorDeclarations.front()->abstractType().cast<CppFunctionType>();
 
               if( function ) {
                 m_expressionResult.type = function->returnType()->indexed();
@@ -472,7 +473,8 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
 
   if(m_expressionResult.isValid() ) {
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( TypeUtils::targetType(m_expressionResult.type.type().data(), m_duContext->topContext()) );
+    AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext());
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( expressionTarget.unsafeData() );
       Declaration* idDecl = 0;
     if( idType && (idDecl = idType->declaration(m_duContext->topContext())) ) {
       DUContext* ctx = idDecl->logicalInternalContext(m_duContext->topContext());
@@ -602,7 +604,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                 ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
                 if(classMember && classMember->isStatic())
                   continue; //Skip static class members when not doing static access
-                if(fastCast<CppEnumeratorType*>(decl.first->abstractType().data()))
+                if(decl.first->abstractType().cast<CppEnumeratorType>())
                   continue; //Skip enumerators
               }else{
                 ///@todo what NOT to show on static member choose? Actually we cannot hide all non-static functions, because of function-pointers
@@ -705,7 +707,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
               //Eventually pick additional specificly known items for the type
               AbstractType::Ptr type = functionDecl->type<CppFunctionType>()->arguments()[function.matchedArguments];
               if(type) {
-                if(CppEnumerationType* enumeration = dynamic_cast<CppEnumerationType*>(TypeUtils::realType(type.data(), m_duContext->topContext()))) {
+                if(CppEnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<CppEnumerationType>()) {
                   Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
                   if(enumDecl && enumDecl->internalContext()) {
                     

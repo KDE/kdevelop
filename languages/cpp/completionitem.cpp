@@ -120,8 +120,9 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   
   CodeCompletionModel::CompletionProperties p = DUChainUtils::completionProperties(dec);
 
-  if (dec->abstractType()) {
-    if (CppCVType* cv = dynamic_cast<CppCVType*>(dec->abstractType().data())) {
+  AbstractType::Ptr type(dec->abstractType());
+  if (type) {
+    if (CppCVType* cv = dynamic_cast<CppCVType*>(type.unsafeData())) {
       if (cv->isConstant())
         p |= CodeCompletionModel::Const;
       if (cv->isVolatile())

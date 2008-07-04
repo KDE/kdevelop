@@ -29,8 +29,8 @@
 #include "parser.h"
 #include "control.h"
 
-#include "typerepository.h"
 #include <identifier.h>
+#include <typesystem.h>
 #include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 

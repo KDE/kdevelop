@@ -44,6 +44,10 @@ public:
     copyListsFrom(rhs);
   }
   
+  static size_t classSize() {
+    return sizeof(ClassDeclarationPrivate);
+  }
+  
   START_APPENDED_LISTS(ClassDeclarationPrivate);
   APPENDED_LIST_FIRST(ClassDeclarationPrivate, BaseClassInstance, baseClasses);
   END_APPENDED_LISTS(ClassDeclarationPrivate, baseClasses);
@@ -91,7 +95,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
   if( baseConversionLevels )
     *baseConversionLevels = 0;
 
-  if( abstractType() && abstractType()->equals(base->abstractType().data()) )
+  if( indexedType() == base->indexedType() )
     return true;
   
   FOREACH_FUNCTION(const Cpp::BaseClassInstance& b, baseClasses)
@@ -101,7 +105,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
     //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
     if( b.access != KDevelop::Declaration::Private ) {
       int nextBaseConversion = 0;
-      if( const CppClassType* c = fastCast<const CppClassType*>(b.baseClass.type().data()) ) {
+      if( CppClassType::Ptr c = b.baseClass.type().cast<CppClassType>() ) {
         ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
         if( decl && decl->isPublicBaseClass( base, topContext, &nextBaseConversion ) )
           *baseConversionLevels += nextBaseConversion;

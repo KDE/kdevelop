@@ -26,84 +26,60 @@
 namespace TypeUtils {
   using namespace KDevelop;
   
-  AbstractType::Ptr resolvedType(AbstractType* base, const TopDUContext* /*topContext*/) {
+  AbstractType::Ptr realType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
 
-    return AbstractType::Ptr(base);
-  }
-
-  AbstractType* realType(AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
-
-    CppReferenceType* ref = fastCast<CppReferenceType*>( base );
+    AbstractType::Ptr base = _base;
+    CppReferenceType::Ptr ref = base.cast<CppReferenceType>();
 
     while( ref ) {
       if( constant )
         (*constant) |= ref->isConstant();
-      base = ref->baseType().data();
-      ref = fastCast<CppReferenceType*>( base );
+      base = ref->baseType();
+      ref = base.cast<CppReferenceType>();
     }
 
     return base;
   }
 
-  AbstractType* targetType(AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
+  AbstractType::Ptr targetType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
 
-    CppReferenceType* ref = fastCast<CppReferenceType*>( base );
-    CppPointerType* pnt = fastCast<CppPointerType*>( base );
+    AbstractType::Ptr base(_base);
+    
+    CppReferenceType::Ptr ref = base.cast<CppReferenceType>();
+    CppPointerType::Ptr pnt = base.cast<CppPointerType>();
     
     while( ref || pnt ) {
       if( ref ) {
         if( constant )
           (*constant) |= ref->isConstant();
-        base = ref->baseType().data();
+        base = ref->baseType();
       } else {
         if( constant )
           (*constant) |= pnt->isConstant();
-        base = pnt->baseType().data();
+        base = pnt->baseType();
       }
-      ref = fastCast<CppReferenceType*>( base );
-      pnt = fastCast<CppPointerType*>( base );
+      ref = base.cast<CppReferenceType>();
+      pnt = base.cast<CppPointerType>();
     }
 
     return base;
   }
 
-  const AbstractType* targetType(const AbstractType* base, const TopDUContext* /*topContext*/, bool* constant) {
-
-    const CppReferenceType* ref = fastCast<const CppReferenceType*>( base );
-    const CppPointerType* pnt = fastCast<const CppPointerType*>( base );
-    
-    while( ref || pnt ) {
-      if( ref ) {
-        if( constant )
-          (*constant) |= ref->isConstant();
-        base = ref->baseType().data();
-      } else {
-        if( constant )
-          (*constant) |= pnt->isConstant();
-        base = pnt->baseType().data();
-      }
-      ref = fastCast<const CppReferenceType*>( base );
-      pnt = fastCast<const CppPointerType*>( base );
-    }
-
-    return base;
-  }
-  
-  bool isPointerType(AbstractType* type) {
-    return fastCast<PointerType*>( realType(type, 0) );
+  bool isPointerType(const AbstractType::Ptr& type) {
+    return realType(type, 0).cast<PointerType>();
   }
 
-  bool isReferenceType(AbstractType* type) {
-    return fastCast<ReferenceType*>( type );
+  bool isReferenceType(const AbstractType::Ptr& type) {
+    return type.cast<ReferenceType>();
   }
 
-  bool isConstant( AbstractType* t ) {
-    CppCVType* cv = dynamic_cast<CppCVType*>( t );
+  bool isConstant( const AbstractType::Ptr& t ) {
+    const CppCVType* cv = dynamic_cast<const CppCVType*>( t.unsafeData() );
     return cv && cv->isConstant();
   }
 
-  bool isNullType( AbstractType* t ) {
-    CppConstantIntegralType* integral = fastCast<CppConstantIntegralType*>(t);
+  bool isNullType( const AbstractType::Ptr& t ) {
+    CppConstantIntegralType::Ptr integral = t.cast<CppConstantIntegralType>();
     if( integral && integral->integralType() == TypeInt && integral->value<qint64>() == 0 )
       return true;
     else
@@ -112,7 +88,7 @@ namespace TypeUtils {
 
     const int unsignedIntConversionRank = 4;
 
-  int integerConversionRank( CppIntegralType* type ) {
+  int integerConversionRank( const CppIntegralType::Ptr& type ) {
     /**
      * Ranks:
      * 1 - bool
@@ -146,22 +122,22 @@ namespace TypeUtils {
         return 0;
     };
   }
-  bool isIntegerType( CppIntegralType* type ) {
+  bool isIntegerType( const CppIntegralType::Ptr& type ) {
     return integerConversionRank(type) != 0; //integerConversionRank returns 0 for non-integer types
   }
 
-  bool isFloatingPointType( CppIntegralType* type ) {
+  bool isFloatingPointType( const CppIntegralType::Ptr& type ) {
     return type->integralType() == TypeFloat || type->integralType() == TypeDouble;
   }
 
-  bool isVoidType( AbstractType* type ) {
-    CppIntegralType* integral = fastCast<CppIntegralType*>(type);
+  bool isVoidType( const AbstractType::Ptr& type ) {
+    CppIntegralType::Ptr integral = type.cast<CppIntegralType>();
     if( !integral ) return false;
     return integral->integralType() == TypeVoid;
   }
 
   ///Returns whether base is a base-class of c
-  void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QHash<CppFunctionType*, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+  void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     Declaration* klassDecl = klass->declaration(topContext);
     Cpp::ClassDeclaration* cppClassDecl = dynamic_cast<Cpp::ClassDeclaration*>(klassDecl);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
@@ -171,7 +147,7 @@ namespace TypeUtils {
     if( context ) {
       QList<Declaration*> declarations = context->findLocalDeclarations(Identifier(functionName), SimpleCursor::invalid(), topContext);
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-        CppFunctionType* function = fastCast<CppFunctionType*>( (*it)->abstractType().data() );
+        CppFunctionType::Ptr function = (*it)->abstractType().cast<CppFunctionType>();
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
         if( function && functionDeclaration ) {
           if( !functions.contains(function) && (!mustBeConstant || function->isConstant()) ) {
@@ -188,21 +164,23 @@ namespace TypeUtils {
     if(cppClassDecl) {
       //equivalent to using the imported parent-contexts
       FOREACH_FUNCTION(const Cpp::BaseClassInstance& base, cppClassDecl->baseClasses) {
-        if( base.access != KDevelop::Declaration::Private ) //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-          if( fastCast<const CppClassType*>(base.baseClass.type().data()) )
-            getMemberFunctions( static_cast<CppClassType*>( const_cast<Cpp::BaseClassInstance&>(base).baseClass.type().data() ), topContext, functions, functionName,   mustBeConstant);
+        if( base.access != KDevelop::Declaration::Private ) { //we need const-cast here because the constant list makes also the pointers constant, which is not intended
+          CppClassType::Ptr baseClass = base.baseClass.type().cast<CppClassType>();
+          if( baseClass )
+            getMemberFunctions( baseClass, topContext, functions, functionName,   mustBeConstant);
+        }
       }
     }
   }
 
-  void getMemberFunctions(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
-    QHash<CppFunctionType*, ClassFunctionDeclaration*> tempFunctions;
+  void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
+    QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*> tempFunctions;
     getMemberFunctions( klass, topContext, tempFunctions, functionName, mustBeConstant );
-    for( QHash<CppFunctionType*, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.begin(); it != tempFunctions.end(); ++it )
+    for( QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.begin(); it != tempFunctions.end(); ++it )
       functions << (*it);
   }
 
-  void getConstructors(CppClassType* klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
+  void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
     Declaration* klassDecl = klass->declaration(topContext);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
     if( !context || !context->owner() || !context->owner() ) {
@@ -218,7 +196,7 @@ namespace TypeUtils {
         functions <<  *it;
     }
   }
-  bool isPublicBaseClass( const CppClassType* c, CppClassType* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
+  bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
     Cpp::ClassDeclaration* fromDecl = dynamic_cast<Cpp::ClassDeclaration*>(c->declaration(topContext));
     Cpp::ClassDeclaration* toDecl = dynamic_cast<Cpp::ClassDeclaration*>(base->declaration(topContext));
     if(fromDecl && toDecl)

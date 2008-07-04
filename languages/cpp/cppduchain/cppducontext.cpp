@@ -117,13 +117,15 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       
       scopeContext = decl->logicalInternalContext(topContext());
 
-      if( !scopeContext || scopeContext->type() == DUContext::Template )
-        if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(decl->abstractType().data()) ) //Try to get the context from the type, maybe it is a typedef.
+      if( !scopeContext || scopeContext->type() == DUContext::Template ) {
+        AbstractType::Ptr t = decl->abstractType();
+        if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData()) ) //Try to get the context from the type, maybe it is a typedef.
         {
           Declaration* idDecl = idType->declaration(topContext());
           if( idDecl )
             scopeContext = idDecl->logicalInternalContext(topContext());
         }
+      }
 
 #ifdef DEBUG
         kDebug(9007) << decl->toString() << ": scope-context" << scopeContext;
