@@ -188,8 +188,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
       
+      char* borderBehind = m_data + insertedAt + (totalSize-2);
+      
+      quint64 oldValueBehind = 0;
+      if(m_available >= 8) {
+        oldValueBehind = *(quint64*)borderBehind;
+        *((quint64*)borderBehind) = 0xfafafafafafafafaLLU;
+      }
+      
       //Last thing we do, because createItem may recursively do even more transformation of the repository
       request.createItem((Item*)(m_data + insertedAt));
+      
+      if(m_available >= 8) {
+        //If this assertion triggers, then the item writes a bigger range than it advertised in 
+        Q_ASSERT(*((quint64*)borderBehind) == 0xfafafafafafafafaLLU);
+        *((quint64*)borderBehind) = oldValueBehind;
+      }
       
       return insertedAt;
     }
