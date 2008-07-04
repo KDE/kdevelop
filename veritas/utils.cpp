@@ -25,8 +25,8 @@
  * \brief Implements class Utils.
  */
 
-#include "utils.h"
-#include "test.h"
+#include <utils.h>
+#include <test.h>
 
 #include <QTreeView>
 #include <QHeaderView>

@@ -122,6 +122,7 @@ void SelectionToggle::leaveEvent(QEvent* event)
 
 void SelectionToggle::paintEvent(QPaintEvent* event)
 {
+    Q_UNUSED(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);

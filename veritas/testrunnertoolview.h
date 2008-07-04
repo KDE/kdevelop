@@ -18,22 +18,23 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_TESTRUNNER_H
-#define VERITAS_TESTRUNNER_H
+#ifndef VERITAS_TESTRUNNERTOOLVIEW_H
+#define VERITAS_TESTRUNNERTOOLVIEW_H
 
 #include <iplugin.h>
 #include <itestrunner.h>
-#include "veritasexport.h"
+#include <veritasexport.h>
 
-class KComponentData;
 class QWidget;
+class KComponentData;
 namespace KDevelop { class IProject; }
 
 namespace Veritas
 {
-class RunnerWindow;
-class RunnerModel;
 class ITest;
+class RunnerModel;
+class RunnerWindow;
+class TestRunnerToolViewPrivate;
 
 class VERITAS_EXPORT TestRunnerToolView : public KDevelop::IPlugin, public ITestRunner
 {
@@ -46,13 +47,12 @@ public:
 protected:
     KDevelop::IProject* project() const;
 
-private slots:
+private Q_SLOTS:
     void reload();
     void setSelected(QAction*);
 
 private:
-    RunnerWindow* m_window;
-    KDevelop::IProject* m_selected;
+    TestRunnerToolViewPrivate* const d;
 };
 
 }

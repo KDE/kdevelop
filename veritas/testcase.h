@@ -24,23 +24,27 @@
 #include <test.h>
 #include <veritasexport.h>
 #include <testcommand.h>
-#include <QString>
+#include <QtCore/QString>
 
 namespace Veritas
 {
 
 /*!
  * This class removes bad duplication between the Check
- * & CppUnit plugins. It might be completly irrelevant for
+ * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.
  */
+class TestCasePrivate;
 class VERITAS_EXPORT TestCase : public Test
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     TestCase(const QString& name, Test* parent);
     virtual ~TestCase();
     TestCommand* child(int i) const;
+
+private:
+    TestCasePrivate* const d;
 };
 
 }

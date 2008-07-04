@@ -29,10 +29,9 @@
 #define VERITAS_RUNNERWINDOW_H
 
 #include "ui_runnerwindow.h"
-#include "veritasexport.h"
 
-#include <QSemaphore>
-#include <QLabel>
+#include <QtGui/QLabel>
+#include <QtCore/QSemaphore>
 
 namespace Ui { class StatusWidget; }
 namespace KDevelop { class IProject; }
@@ -76,7 +75,7 @@ class SelectionManager;
  *
  * \sa \ref main_window
  */
-class VERITAS_EXPORT RunnerWindow : public QMainWindow
+class RunnerWindow : public QMainWindow
 {
 Q_OBJECT
 public: // Operations
@@ -136,11 +135,11 @@ public: // Operations
         return m_projectPopup;
     }
 
-public slots:
+public Q_SLOTS:
     void addProjectToPopup(KDevelop::IProject*);
     void rmProjectFromPopup(KDevelop::IProject*);
 
-private slots:
+private Q_SLOTS:
 
     /*!
      * Displays the execution progress for \a numItems items.

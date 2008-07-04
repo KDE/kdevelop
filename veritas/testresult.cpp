@@ -24,79 +24,119 @@
 using Veritas::TestResult;
 using Veritas::TestState;
 
-TestResult::TestResult(TestState state, QString message, int line, QFileInfo file)
-    : m_state(state), m_message(message), m_line(line), m_file(file)
+namespace Veritas
+{
+class TestResultPrivate
+{
+public:
+    TestResultPrivate(TestState state, const QString& msg, int line, const QFileInfo& file) :
+        m_state(state), m_message(msg), m_line(line), m_file(file) {}
+    TestState m_state;
+    QString m_message;
+    int m_line;
+    QFileInfo m_file;
+};
+}
+
+using Veritas::TestResultPrivate;
+
+TestResult::TestResult(TestState state, const QString& message, int line, const QFileInfo& file)
+        : d(new TestResultPrivate(state, message, line, file))
 {}
+
+TestResult::~TestResult()
+{
+    delete d;
+}
 
 TestState TestResult::state() const
 {
-    return m_state;
+    return d->m_state;
 }
 
 QString TestResult::message() const
 {
-    return m_message;
+    return d->m_message;
 }
 
 int TestResult::line() const
 {
-    return m_line;
+    return d->m_line;
 }
 
 QFileInfo TestResult::file() const
 {
-    return m_file;
+    return d->m_file;
 }
 
 void TestResult::setState(TestState state)
 {
-    m_state = state;
+    d->m_state = state;
 }
 
 void TestResult::setMessage(QString message)
 {
-    m_message = message;
+    d->m_message = message;
 }
 
 void TestResult::setLine(int line)
 {
-    m_line = line;
+    d->m_line = line;
 }
 
 void TestResult::setFile(QFileInfo file)
 {
-    m_file = file;
+    d->m_file = file;
 }
 
 void TestResult::clear()
 {
-    m_state = Veritas::NoResult;
-    m_message = "";
-    m_line = 0;
-    m_file = QFileInfo("");
+    d->m_state = Veritas::NoResult;
+    d->m_message = "";
+    d->m_line = 0;
+    d->m_file = QFileInfo();
 }
 
-bool TestResult::operator==(const TestResult& other)
+/*TestResult& TestResult::operator=(const TestResult& that)
 {
-    return (m_state == other.m_state) &&
-            (m_file == other.m_file) &&
-            (m_line == other.m_line) &&
-            (m_message == other.m_message);
+    if (*this != that) {
+        d->m_state = that.d->m_state;
+        d->m_file = that.d->m_file;
+        d->m_line = that.d->m_line;
+        d->m_message = that.d->m_message;
+    }
+    return *this;
 }
+*/
+
+bool TestResult::operator==(const TestResult& other) const
+{
+    return (d->m_state == other.d->m_state) &&
+           (d->m_file == other.d->m_file) &&
+           (d->m_line == other.d->m_line) &&
+           (d->m_message == other.d->m_message);
+}
+
+// bool TestResult::operator!=(const TestResult& other)
+// {
+//     return !(*this==other);
+// }
 
 void TestResult::log() const
 {
     QString result = "default";
-    switch(m_state)
-    {
-        case Veritas::NoResult:
-            result = "not set"; break;
-        case Veritas::RunSuccess: 
-            result = "success"; break;
-        case Veritas::RunError:
-            result = "failed"; break;
+    switch (d->m_state) {
+    case Veritas::NoResult:
+        result = "not set";
+        break;
+    case Veritas::RunSuccess:
+        result = "success";
+        break;
+    case Veritas::RunError:
+        result = "failed";
+        break;
     }
-    kDebug() << result << " " << m_message << " " << m_file.filePath() << " " << m_line;
+    kDebug() << result << " " << d->m_message << " " << d->m_file.filePath() << " " << d->m_line;
 }
 
 void TestResult::addOutputLine(const QByteArray& line)

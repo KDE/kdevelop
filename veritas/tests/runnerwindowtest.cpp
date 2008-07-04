@@ -230,11 +230,11 @@ void RunnerWindowTest::newModel()
 // helper
 void RunnerWindowTest::convert2Spammer(TestStub* test)
 {
-    TestResult r;
-    r.addOutputLine("line 1");
-    r.addOutputLine("line 2");
-    test->setResult(r);
+    TestResult* r = new TestResult;
+    r->addOutputLine("line 1");
+    r->addOutputLine("line 2");
     test->m_state = Veritas::RunError;
+    test->m_result = r;
 }
 
 // helper
@@ -257,6 +257,12 @@ void RunnerWindowTest::ouputLinesSpanned()
     convert2Spammer(model->child11);
     runAllTests();
 
+    // decomment line below to inspect the runner window
+    // manually
+    //QTest::qWait(5000);
+
+    // since some extra output was appended to the test,
+    // the result view should contain this.
     QModelIndex r1 = m_resultsProxy->index(0,0);
     assertResultItemEquals(r1, "child11");
     assertOutputLineEquals(r1.child(0,0), "line 1");
@@ -309,11 +315,11 @@ void RunnerWindowTest::resultSpamLastItem()
 {
     convert2Spammer(model->child21);
     runAllTests();
-
+/*
     kDebug() << "RESULTSMODEL";
     printModel(window->resultsModel()->index(0,0), 0);
     kDebug() << "RESULTPROXYMODEL";
-    printModel(window->resultsProxyModel()->index(0,0), 0);
+    printModel(window->resultsProxyModel()->index(0,0), 0);*/
 
     QModelIndex r2 = m_resultsProxy->index(0,0);
     assertResultItemEquals(r2, "child21");

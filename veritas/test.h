@@ -28,14 +28,14 @@
 #ifndef VERITAS_TEST_H
 #define VERITAS_TEST_H
 
-#include "veritasexport.h"
 #include <itest.h>
 #include <testresult.h>
+#include <veritasexport.h>
 
-#include <QMap>
-#include <QList>
-#include <QStringList>
-#include <QVariant>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtCore/QStringList>
 
 class QAbstractItemModel;
 
@@ -59,6 +59,7 @@ namespace Veritas
  * application specific work.
  *
  */
+// TODO d-pointer
 class VERITAS_EXPORT Test : public ITest
 {
     Q_OBJECT
@@ -100,8 +101,8 @@ public: // Operations
 
     TestState state() const;
     void setState(TestState result);
-    void setResult(const TestResult& res);
-    TestResult result() const;
+    void setResult(TestResult* res);
+    TestResult* result() const;
     void clear();
 
     void setIndex(const QModelIndex& index);
@@ -122,7 +123,7 @@ private: // Attributes
     QModelIndex m_index;
     QString m_name;
     TestState m_state;
-    TestResult m_result;
+    TestResult* m_result;
     bool m_selected;
 };
 

@@ -88,11 +88,11 @@ void ResultsModelTest::appendResults()
 // command
 void ResultsModelTest::extraOutput()
 {
-    TestResult r;
-    r.setState(Veritas::RunError);
-    r.setMessage("failed");
-    r.addOutputLine("line1");
-    r.addOutputLine("line2");
+    TestResult* r = new TestResult;
+    r->setState(Veritas::RunError);
+    r->setMessage("failed");
+    r->addOutputLine("line1");
+    r->addOutputLine("line2");
     m_runnerModel->item1->setResult(r);
     fillRows();
 

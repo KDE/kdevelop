@@ -23,8 +23,14 @@
 using Veritas::Test;
 using Veritas::TestCommand;
 
+namespace Veritas
+{
+class TestCommandPrivate
+{};
+}
+
 TestCommand::TestCommand(const QString& name, Test* parent)
-    : Test(name, parent)
+    : Test(name, parent), d(0)
 {}
 
 TestCommand::~TestCommand()

@@ -38,19 +38,25 @@ class TestStub : public Test
 {
 public:
     TestStub(const QList<QVariant>& data, Test* parent)
-            : Test(data, parent), m_state(Veritas::RunSuccess), m_shouldRun(false) {}
+            : Test(data, parent), m_state(Veritas::RunSuccess), m_shouldRun(false), m_result(0) {}
 
     TestStub(const char* name, Test* parent)
-            : Test(name, parent), m_state(Veritas::RunSuccess), m_shouldRun(true) {}
+            : Test(name, parent), m_state(Veritas::RunSuccess), m_shouldRun(true), m_result(0) {}
 
     int run() {
         if (child(0)) {
             setState(Veritas::NoResult);  // Have nothing to do as a parent
         } else {
             started();
+            if (!m_result) {
+                // do not interfere when result was set from the outside
+                m_result = new TestResult;
+            }
             setData(1, QString::number(row()) + QString("_1"));
             setData(2, QString::number(row()) + QString("_2"));
-            setState(m_state);
+            //setState(m_state);
+            m_result->setState(m_state);
+            setResult(m_result);
             finished();
         }
         executedItems.push_back(row());
@@ -64,6 +70,7 @@ public:
     static QList<int> executedItems; // store the index of rows that got executed
     Veritas::TestState m_state;
     bool m_shouldRun;
+    TestResult* m_result;
 };
 
 QList<int> TestStub::executedItems;

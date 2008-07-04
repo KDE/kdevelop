@@ -19,7 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "test.h"
+#include <test.h>
 #include <KDebug>
 
 using Veritas::ITest;
@@ -30,7 +30,8 @@ using Veritas::TestResult;
 Test::Test(const QList<QVariant>& data, Test* parent)
     : m_parentItem(parent),
       m_itemData(data),
-      m_state(Veritas::NoResult)
+      m_state(Veritas::NoResult),
+      m_result(new TestResult)
 {
     // Make sure this item has as many columns as the parent.
     for (int i= m_itemData.count(); i < s_columnCount; i++) {
@@ -46,7 +47,8 @@ Test::Test(const QList<QVariant>& data, Test* parent)
 Test::Test(const QString& name, Test* parent)
     : m_parentItem(parent),
       m_name(name),
-      m_state(Veritas::NoResult)
+      m_state(Veritas::NoResult),
+      m_result(new TestResult)
 {
     // Make sure this item has as many columns as the parent.
     for (int i=0; i < s_columnCount; i++) {
@@ -62,6 +64,7 @@ QString Test::name() const
 
 Test::~Test()
 {
+    delete m_result;
     qDeleteAll(m_children);
 }
 
@@ -167,34 +170,35 @@ TestState Test::state() const
 void Test::setState(TestState result)
 {
     m_state = result;
+    if (m_result)
+        m_result->setState(result);
 }
 
-TestResult Test::result() const
+TestResult* Test::result() const
 {
-    TestResult res = m_result;
-    res.setState(state());
-    res.setMessage(data(2).toString());
-    res.setFile(QFileInfo(data(3).toString()));
-    res.setLine(data(4).toInt());
-    return res;
+//     TestResult res = m_result;
+//     res.setState(state());
+//     res.setMessage(data(2).toString());
+//     //res.setFile(QFileInfo(data(3).toString()));
+//     res.setLine(data(4).toInt());
+//     return res;
+    return m_result;
 }
 
-void Test::setResult(const TestResult& res)
+void Test::setResult(TestResult* res)
 {
+    if (m_result) delete m_result;
     m_result = res;
-    setData(2, res.message());
-    setData(3, res.file().filePath());
-    setData(4, res.line());
-    setState(res.state());
-    if (res.state() == Veritas::RunSuccess) {
-        // dont store the spam output, this consumes
-        // too much.
-        TestResult res2;
-        res2.setState(res.state());
-        res2.setFile(res.file());
-        res2.setMessage(res.message());
-        res2.setLine(res.line());
-        m_result = res2;
+    if (res) {
+        setData(2, res->message());
+        setData(3, res->file().filePath());
+        setData(4, res->line());
+        setState(res->state());
+        if (res->state() == Veritas::RunSuccess) {
+            // do not store the spam output, this consumes
+            // too much.
+            res->m_output.clear();
+        }
     }
 }
 
@@ -205,6 +209,8 @@ void Test::clear()
         setData(i, "");
     }
     setState(Veritas::NoResult);
+    if (m_result) delete m_result;
+    m_result = new TestResult;
 }
 
 QList<ITest*> Test::leafs() const

@@ -21,9 +21,9 @@
 #ifndef VERITAS_TESTREGISTER_H
 #define VERITAS_TESTREGISTER_H
 
-#include <QString>
-#include <QFileInfo>
-#include <QXmlStreamReader>
+#include <QtCore/QString>
+#include <QtCore/QFileInfo>
+#include <QtXml/QXmlStreamReader>
 
 #include <test.h>
 #include <testcase.h>
@@ -37,7 +37,7 @@ namespace Veritas
 
 /*!
  * This class removes bad duplication between the Check
- * & CppUnit plugins. It might be completly irrelevant for
+ * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.
  */
 template<typename R, typename S>

@@ -24,12 +24,20 @@ using Veritas::Test;
 using Veritas::TestCase;
 using Veritas::TestCommand;
 
+namespace Veritas
+{
+class TestCasePrivate
+{};
+}
+
 TestCase::TestCase(const QString& name, Test* parent)
-    : Test(name, parent)
+        : Test(name, parent), d(new TestCasePrivate)
 {}
 
 TestCase::~TestCase()
-{}
+{
+    delete d;
+}
 
 TestCommand* TestCase::child(int i) const
 {

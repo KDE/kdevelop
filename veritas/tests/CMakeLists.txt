@@ -1,6 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${CMAKE_SOURCE_DIR}/veritas
+        ${CMAKE_SOURCE_DIR}/veritas/mvc
         ${CMAKE_SOURCE_DIR}/veritas/tests
         ${CMAKE_SOURCE_DIR}/veritas/interfaces
         ${CMAKE_BINARY_DIR}/veritas)

@@ -21,12 +21,13 @@
 #ifndef VERITAS_TESTRESULT_H
 #define VERITAS_TESTRESULT_H
 
-#include <QString>
-#include <QVariant>
-#include <QByteArray>
-#include <QList>
-#include <QFileInfo>
 #include <veritasexport.h>
+
+#include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
+#include <QtCore/QFileInfo>
+#include <QtCore/QByteArray>
 
 namespace Veritas
 {
@@ -42,11 +43,13 @@ enum TestState
 
 const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunException;
 
+class TestResultPrivate;
 class VERITAS_EXPORT TestResult
 {
 public:
-    explicit TestResult(TestState state = Veritas::NoResult, QString message = "",
-                         int line = 0, QFileInfo = QFileInfo(""));
+    explicit TestResult(TestState state = Veritas::NoResult, const QString& message = "",
+                         int line = 0, const QFileInfo& = QFileInfo());
+    virtual ~TestResult();
 
     TestState state() const;
     QString message() const;
@@ -61,17 +64,18 @@ public:
     void addOutputLine(const QByteArray& line);
     int outputLineCount() const;
     QByteArray outputLine(int i) const;
-
+    bool operator==(const TestResult&) const;
     void clear();
-    bool operator==(const TestResult& other);
+
     void log() const; // debug
     QList<QByteArray> m_output;
 
 private:
-    TestState m_state;
-    QString m_message;
-    int m_line;
-    QFileInfo m_file;
+    TestResult& operator=(const TestResult&);
+    TestResult(const TestResult&);
+
+private:
+    TestResultPrivate* const d;
 };
 
 }

@@ -45,32 +45,47 @@ using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::TestRunnerToolView;
 
+namespace Veritas
+{
+class TestRunnerToolViewPrivate
+{
+public:
+    TestRunnerToolViewPrivate() : window(0), selected(0) {}
+    RunnerWindow* window;
+    IProject* selected;
+};
+}
+
+using Veritas::TestRunnerToolViewPrivate;
+
 TestRunnerToolView::TestRunnerToolView(const KComponentData& about, QObject* parent)
-    : IPlugin(about, parent), m_window(0), m_selected(0)
+        : IPlugin(about, parent), d(new TestRunnerToolViewPrivate)
 {}
 
 TestRunnerToolView::~TestRunnerToolView()
-{}
+{
+    delete d;
+}
 
 QWidget* TestRunnerToolView::spawnWindow()
 {
-    m_window = new RunnerWindow;
+    d->window = new RunnerWindow;
     IProjectController* ipc = core()->projectController();
     foreach(IProject* proj, ipc->projects()) {
-        m_window->addProjectToPopup(proj);
+        d->window->addProjectToPopup(proj);
     }
-    connect(ipc, SIGNAL(projectOpened( KDevelop::IProject* )),
-            m_window, SLOT(addProjectToPopup(KDevelop::IProject*)) );
-    connect(ipc, SIGNAL(projectClosed( KDevelop::IProject* )),
-            m_window, SLOT(rmProjectFromPopup(KDevelop::IProject*)));
+    connect(ipc, SIGNAL(projectOpened(KDevelop::IProject*)),
+            d->window, SLOT(addProjectToPopup(KDevelop::IProject*)));
+    connect(ipc, SIGNAL(projectClosed(KDevelop::IProject*)),
+            d->window, SLOT(rmProjectFromPopup(KDevelop::IProject*)));
 
-    connect(m_window->projectPopup(), SIGNAL(triggered(QAction*)),
+    connect(d->window->projectPopup(), SIGNAL(triggered(QAction*)),
             this, SLOT(setSelected(QAction*)));
-    connect(m_window->ui().actionReload, SIGNAL(triggered(bool)),
+    connect(d->window->ui().actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
     reload();
-    return m_window;
+    return d->window;
 }
 
 void TestRunnerToolView::reload()
@@ -79,19 +94,19 @@ void TestRunnerToolView::reload()
     RunnerModel* model = new RunnerModel;
     model->setRootItem(qobject_cast<Test*>(root));
     model->setExpectedResults(Veritas::RunError);
-    m_window->setModel(model);
-    m_window->show();
-    m_window->runnerView()->setRootIsDecorated(false);
+    d->window->setModel(model);
+    d->window->show();
+    d->window->runnerView()->setRootIsDecorated(false);
 }
 
 IProject* TestRunnerToolView::project() const
 {
-    return m_selected;
+    return d->selected;
 }
 
 void TestRunnerToolView::setSelected(QAction* action)
 {
-    m_selected = action->data().value<IProject*>();
+    d->selected = action->data().value<IProject*>();
 }
 
 #include "testrunnertoolview.moc"

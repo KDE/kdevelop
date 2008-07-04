@@ -21,9 +21,9 @@
 #ifndef VERITAS_ITEST_H
 #define VERITAS_ITEST_H
 
-#include <QString>
-#include <QList>
-#include <QModelIndex>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QModelIndex>
 #include <testresult.h>
 #include <veritasexport.h>
 
@@ -79,10 +79,10 @@ public:
      * Reset the TestResult
      */
     virtual void clear() = 0;
-    virtual void setResult(const TestResult&) = 0;
+    virtual void setResult(TestResult*) = 0;
     virtual Veritas::TestState state() const = 0;
     virtual void setState(TestState) = 0;
-    virtual TestResult result() const = 0;
+    virtual TestResult* result() const = 0;
 
     virtual ITest* parent() const = 0;
     virtual void addChild(ITest*) = 0;
@@ -99,7 +99,7 @@ public:
 
     virtual QList<ITest*> leafs() const = 0;
 
-signals:
+Q_SIGNALS:
     void started(QModelIndex);
     void finished(QModelIndex);
 };

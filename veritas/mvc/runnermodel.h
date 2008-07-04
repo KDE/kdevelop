@@ -28,13 +28,11 @@
 #ifndef VERITAS_RUNNERMODEL_H
 #define VERITAS_RUNNERMODEL_H
 
-#include "veritasexport.h"
-
-#include <QAbstractItemModel>
-#include <QMutex>
-#include <QIcon>
-#include <QEvent>
-#include <QPair>
+#include <QtGui/QIcon>
+#include <QtCore/QPair>
+#include <QtCore/QMutex>
+#include <QtCore/QEvent>
+#include <QtCore/QAbstractItemModel>
 
 namespace Veritas
 {
@@ -64,7 +62,7 @@ class RunnerModelThread;
  *
  * \sa \ref runner_model_item and \ref implementation_ascpects
  */
-class VERITAS_EXPORT RunnerModel : public QAbstractItemModel
+class RunnerModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -199,7 +197,7 @@ public:  // Operations
      */
     void setExpectedResults(int expectedResults);
 
-signals:
+Q_SIGNALS:
     /*!
      * This signal is emitted when the runner item referred to by
      * \a index is started.
@@ -277,7 +275,7 @@ signals:
      */
     void numExceptionsChanged(int numItems) const;
 
-public slots:
+public Q_SLOTS:
     /*!
      * Sets minimal update mode to \a minimalUpdate.
      */

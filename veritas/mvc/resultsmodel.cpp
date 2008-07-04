@@ -19,24 +19,20 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  resultsmodel.cpp
- *
- * \brief Implements class ResultsModel.
- */
+#include <resultsmodel.h>
 
-#include "resultsmodel.h"
-#include "test.h"
-#include "utils.h"
-#include <KDebug>
+#include <test.h>
+#include <utils.h>
 #include <modeltest.h>
 
-namespace Veritas
-{
+#include <KDebug>
+
+using Veritas::Test;
+using Veritas::ResultsModel;
+
 
 ResultsModel::ResultsModel(const QStringList& headerData, QObject* parent)
-        :  //QAbstractListModel(parent), m_headerData(headerData)
-        QAbstractItemModel(parent), m_headerData(headerData)
+        : QAbstractItemModel(parent), m_headerData(headerData)
 {
     //ModelTest* tm = new ModelTest(this);
 }
@@ -58,8 +54,8 @@ QModelIndex ResultsModel::index(int row, int column, const QModelIndex& parent) 
         // lvl1 item requested, ie some output line
         if (parent.column() == 0) {
             Test* t = itemFromIndex(m_result2runner.value(parent.row()));
-            if (t->result().outputLineCount() > row) {
-                const char* data = t->result().outputLine(row).constData();
+            if (t->result()->outputLineCount() > row) {
+                const char* data = t->result()->outputLine(row).constData();
                 i = createIndex(row, column, (void*)data);
             }
         }
@@ -160,10 +156,10 @@ int ResultsModel::rowCount(const QModelIndex& index) const
 
     QModelIndex testItemIndex = m_result2runner.value(index.row());
     Test* item = itemFromIndex(testItemIndex);
-    if (item->state() == Veritas::RunError) {
+/*    if (item->state() == Veritas::RunError) {
         kDebug() << "nrof result lines: " << item->result().outputLineCount();
-    }
-    return item->result().outputLineCount();
+    }*/
+    return item->result()->outputLineCount();
 }
 
 int ResultsModel::columnCount(const QModelIndex& parent) const
@@ -217,12 +213,14 @@ void ResultsModel::addResult(const QModelIndex& testItemIndex)
     m_result2runner.append(QPersistentModelIndex(testItemIndex));
     m_runner2result[testItemIndex.internalId()] = rowCount() - 1;
 
-    TestResult res = itemFromIndex(testItemIndex)->result();
-    QList<QByteArray>::ConstIterator it = res.m_output.begin();
-    int id = rowCount() - 1;
-    while (it != res.m_output.end()) {
-        m_output2result[it->constData()] = id;
-        it++;
+    TestResult* res = itemFromIndex(testItemIndex)->result();
+    if (res) {
+        QList<QByteArray>::ConstIterator it = res->m_output.begin();
+        int id = rowCount() - 1;
+        while (it != res->m_output.end()) {
+            m_output2result[it->constData()] = id;
+            it++;
+        }
     }
 
     endInsertRows();
@@ -240,5 +238,3 @@ Test* ResultsModel::itemFromIndex(const QModelIndex& testItemIndex) const
 {
     return static_cast<Test*>(testItemIndex.internalPointer());
 }
-
-} // namespace

@@ -14,39 +14,41 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/shell
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/tests/common
+    ${CMAKE_SOURCE_DIR}/veritas
+    ${CMAKE_SOURCE_DIR}/veritas/mvc
     ${CMAKE_SOURCE_DIR}/veritas/interfaces )
 
 ########### next target ###############
 
 set(veritas_SRCS
-    proxymodelcommon.cpp
-    resultsmodel.cpp
-    resultsproxymodel.cpp
-    resultsviewcontroller.cpp
     test.cpp
     testcommand.cpp
     testcase.cpp
-    runnermodel.cpp
-    runnermodelthread.cpp
-    runnerproxymodel.cpp
-    runnerviewcontroller.cpp
-    runnerwindow.cpp
-    statuswidget.cpp
-    stoppingdialog.cpp
-    utils.cpp
-    viewcontrollercommon.cpp
-    selectionmanager.cpp
-    selectiontoggle.cpp
     testresult.cpp
     testrunnertoolview.cpp
+    utils.cpp
+    mvc/proxymodelcommon.cpp
+    mvc/resultsmodel.cpp
+    mvc/resultsproxymodel.cpp
+    mvc/resultsviewcontroller.cpp
+    mvc/runnermodel.cpp
+    mvc/runnermodelthread.cpp
+    mvc/runnerproxymodel.cpp
+    mvc/runnerviewcontroller.cpp
+    mvc/runnerwindow.cpp
+    mvc/statuswidget.cpp
+    mvc/stoppingdialog.cpp
+    mvc/viewcontrollercommon.cpp
+    mvc/selectionmanager.cpp
+    mvc/selectiontoggle.cpp
     interfaces/itest.cpp
     interfaces/itestrunner.cpp
     ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
-    runnerwindow.ui
-    statuswidget.ui
-    stoppingdialog.ui)
+    mvc/runnerwindow.ui
+    mvc/statuswidget.ui
+    mvc/stoppingdialog.ui)
 
 qt4_add_resources(veritas_SRCS
     resources/qxrunner.qrc)
@@ -76,8 +78,8 @@ install(FILES
 
 if(TestBuild)
     install(FILES
-        runnerwindow.h
-        runnermodel.h
+        mvc/runnerwindow.h
+        mvc/runnermodel.h
         ${CMAKE_BINARY_DIR}/veritas/ui_runnerwindow.h
         ${CMAKE_BINARY_DIR}/veritas/ui_statuswidget.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )

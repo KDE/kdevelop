@@ -23,22 +23,26 @@
 
 #include <test.h>
 #include <veritasexport.h>
-#include <QString>
+#include <QtCore/QString>
 
 namespace Veritas
 {
 
 /*!
  * This class removes bad duplication between the Check
- * & CppUnit plugins. It might be completly irrelevant for
+ * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.
  */
+class TestCommandPrivate;
 class VERITAS_EXPORT TestCommand : public Test
 {
 Q_OBJECT
 public:
     TestCommand(const QString& name, Test* parent);
     virtual ~TestCommand();
+
+private:
+    TestCommandPrivate* const d;
 };
 
 }

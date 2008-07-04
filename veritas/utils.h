@@ -38,6 +38,8 @@ class QAbstractItemModel;
 namespace Veritas
 {
 
+// TODO remove this, seems redundant.
+
 /*!
  * \brief The Utils class provides a set of static helper functions.
  *

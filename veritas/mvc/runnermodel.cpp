@@ -26,10 +26,11 @@
  */
 
 #include "runnermodel.h"
-#include "runnermodelthread.h"
-#include "test.h"
 #include "resultsmodel.h"
-#include "utils.h"
+#include "runnermodelthread.h"
+
+#include <test.h>
+#include <utils.h>
 #include <modeltest.h>
 
 #include <QColor>
@@ -134,7 +135,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
             return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
         else if (someChildHasStatus(Veritas::NoResult, index))
             return QIcon(":/icons/arrow-right-double-grey-16.png");
-        else // evrything ran succesfully
+        else // evrything ran successfully
             return KIcon("arrow-right-double");
     }
     // Icon corresponding to the item's result code.
