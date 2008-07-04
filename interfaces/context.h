@@ -94,7 +94,7 @@ public:
     {
         EditorContext,               /**<Editor menu.*/
         FileContext,                 /**<File menu.*/
-        CodeItemContext,             /**<CodeItem context menu.*/
+        CodeContext,                 /**<Code context menu.*/
         ProjectItemContext           /**<ProjectItem context menu.*/
     };
 

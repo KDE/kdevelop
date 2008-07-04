@@ -39,16 +39,21 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include "interfaces/contextmenuextension.h"
+#include "interfaces/icore.h"
+#include "interfaces/idocumentcontroller.h"
+#include "interfaces/idocument.h"
+#include "interfaces/iplugincontroller.h"
+
+#include "language/interfaces/codecontext.h"
+
+#include "language/duchain/duchainbase.h"
+#include "language/duchain/duchain.h"
+#include "language/duchain/duchainlock.h"
+#include "language/duchain/declaration.h"
 
 #include "classmodel.h"
 #include "classbrowserplugin.h"
-#include "duchainbase.h"
-#include "duchain.h"
-#include "duchainlock.h"
-#include "declaration.h"
 
 using namespace KDevelop;
 
@@ -173,31 +178,13 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
   QMenu *menu = new QMenu(this);
   QModelIndex index = indexAt(e->pos());
   if (index.isValid()) {
-    DUChainReadLocker readLock(DUChain::lock());
-
-    DUChainBasePointer* base = model()->objectForIndex(index);
-
-    if (base && base->data()) {
-      QAction* openDec = menu->addAction(i18n("Open &Declaration"), this, SLOT(openDeclaration()));
-      openDec->setData(QVariant::fromValue(*base));
-      QAction* openDef = menu->addAction(i18n("Open De&finition"), this, SLOT(openDefinition()));
-      openDef->setData(QVariant::fromValue(*base));
-
-      Declaration* dec = 0;
-
-      if (DUContext* d = dynamic_cast<DUContext*>(base->data())) {
-        dec = d->owner();
-      } else if (0 != (dec = dynamic_cast<Declaration*>(base->data()))) {
-	// ### do something here
-      }
-
-      if(!model()->definitionForObject(*base))
-        openDef->setEnabled(false);
-      if(!model()->declarationForObject(*base))
-        openDec->setEnabled(false);
-    }
+    Context* c = new CodeContext( *model()->objectForIndex(index) );
+    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+    ContextMenuExtension::populateMenu(menu, extensions);
   }
-  menu->exec(QCursor::pos());
+
+  if (!menu->actions().isEmpty())
+    menu->exec(QCursor::pos());
 }
 
 void ClassTree::itemActivated(const QModelIndex& index)
@@ -212,58 +199,6 @@ void ClassTree::itemActivated(const QModelIndex& index)
     readLock.unlock();
 
     m_plugin->core()->documentController()->openDocument(url, range.start());
-  }
-}
-
-void ClassTree::openDeclaration()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  QAction* a = static_cast<QAction*>(sender());
-
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-
-  DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(a->data());
-  if (base) {
-    Declaration* dec = model()->declarationForObject(base);
-
-    if (dec) {
-      KUrl url( dec->url().str() );
-      KTextEditor::Range range = dec->range().textRange();
-
-      readLock.unlock();
-
-      m_plugin->core()->documentController()->openDocument(url, range.start());
-
-    } else {
-      kDebug() << "No declaration for base object" << base;
-    }
-
-  } else {
-    kDebug() << "Base object has disappeared from the duchain";
-  }
-}
-
-void ClassTree::openDefinition()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(static_cast<QAction*>(sender())->data());
-  if (base) {
-    Declaration* def = model()->definitionForObject(base);
-
-    if (def) {
-      KUrl url(def->url().str());
-      KTextEditor::Range range = def->range().textRange();
-
-      readLock.unlock();
-
-      m_plugin->core()->documentController()->openDocument(url, range.start());
-    }
   }
 }
 

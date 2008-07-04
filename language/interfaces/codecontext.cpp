@@ -7,7 +7,7 @@ Copyright 2002 Simon Hausmann <hausmann@kde.org>
 Copyright 2002-2003 Roberto Raggi <roberto@kdevelop.org>
 Copyright 2003 Mario Scalas <mario.scalas@libero.it>
 Copyright 2003 Harald Fernengel <harry@kdevelop.org>
-Copyright 2003,2006 Hamish Rodda <rodda@kde.org>
+Copyright 2003,2006,2008 Hamish Rodda <rodda@kde.org>
 Copyright 2004 Alexander Dymo <adymo@kdevelop.org>
 Copyright 2006 Adam Treat <treat@kde.org>
 
@@ -27,12 +27,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "context.h"
+#include "codecontext.h"
 
 namespace KDevelop
 {
 
-class CodeItemContext::Private
+class CodeContext::Private
 {
 public:
     Private( const DUChainBasePointer& item ) : m_item( item )
@@ -41,22 +41,21 @@ public:
     DUChainBasePointer m_item;
 };
 
-CodeItemContext::CodeItemContext( const DUChainBasePointer& item )
+CodeContext::CodeContext( const DUChainBasePointer& item )
         : Context(), d( new Private( item ) )
 {}
 
-CodeItemContext::~CodeItemContext()
+CodeContext::~CodeContext()
 {
     delete d;
-    d = 0;
 }
 
-int CodeItemContext::type() const
+int CodeContext::type() const
 {
-    return Context::CodeItemContext;
+    return Context::CodeContext;
 }
 
-const DUChainBasePointer& CodeItemContext::item() const
+const DUChainBasePointer& CodeContext::item() const
 {
     return d->m_item;
 }

@@ -62,6 +62,7 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
+    interfaces/codecontext.cpp
     codecompletion/codecompletion.cpp
     codecompletion/codecompletionworker.cpp
     codecompletion/codecompletionmodel.cpp
@@ -90,6 +91,7 @@ install(FILES
     interfaces/quickopenfilter.h
     interfaces/iquickopen.h
     interfaces/iproblem.h
+    interfaces/codecontext.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
 )
 

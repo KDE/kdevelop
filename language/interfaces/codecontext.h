@@ -28,42 +28,51 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef CONTEXT_H
-#define CONTEXT_H
+#ifndef CODECONTEXT_H
+#define CODECONTEXT_H
 
-#include <interfaces/context.h>
+#include "interfaces/context.h"
 
-#include "../duchain/duchainpointer.h"
+#include "language/duchain/duchainpointer.h"
 
 namespace KDevelop
 {
 
 /**
-A context for DUChain objects.
+A context for definition-use chain objects.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeItemContext: public Context
+class KDEVPLATFORMLANGUAGE_EXPORT CodeContext: public Context
 {
 public:
     /**Builds the context.
     @param item The item to build the context from.*/
-    CodeItemContext( const DUChainBasePointer& item );
+    CodeContext( const DUChainBasePointer& item );
 
     /**Destructor.*/
-    virtual ~CodeItemContext();
+    virtual ~CodeContext();
 
-    int type() const;
+    /// Returns the type of this context.
+    virtual int type() const;
 
-    /**@return The code model item for the selected item.*/
+    /**
+     * Retrieve the definition-use chain item pointer.
+     *
+     * The duchain lock is not held when plugins are queried for
+     * context menu actions with this context, so you will need to lock
+     * it in order to access the duchain.
+     *
+     * @return The duchain item.
+     */
     const DUChainBasePointer& item() const;
 
 private:
     class Private;
     Private *d;
 
-    CodeItemContext( const CodeItemContext & );
-    CodeItemContext &operator=( const CodeItemContext & );
+    Q_DISABLE_COPY(CodeContext)
 };
 
 }
+
 #endif
 

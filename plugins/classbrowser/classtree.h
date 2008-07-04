@@ -24,8 +24,8 @@
 
 #include <QtGui/QTreeView>
 
-#include "duchainbase.h"
-#include "duchainobserver.h"
+#include "language/duchain/duchainbase.h"
+#include "language/duchain/duchainobserver.h"
 
 class ClassBrowserPlugin;
 
@@ -75,8 +75,6 @@ protected:
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
-  void openDeclaration();
-  void openDefinition();
 
 private:
   ClassBrowserPlugin* m_plugin;

@@ -23,7 +23,10 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 
-#include <kaction.h>
+#include <QtGui/QMenu>
+
+#include <KAction>
+#include <KLocale>
 
 namespace KDevelop
 {
@@ -86,6 +89,89 @@ void ContextMenuExtension::addAction( const QString& group, QAction* action )
     } else
     {
         d->extensions[group].append( action );
+    }
+}
+
+void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions)
+{
+    foreach( const ContextMenuExtension ext, extensions )
+    {
+        foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
+        {
+            menu->addAction( act );
+        }
+        menu->addSeparator();
+        foreach( QAction* act, ext.actions( ContextMenuExtension::EditGroup ) )
+        {
+            menu->addAction( act );
+        }
+    }
+
+    QList<QAction*> vcsActions;
+    QList<QAction*> extActions;
+    QList<QAction*> refactorActions;
+    QList<QAction*> debugActions;
+    foreach( const ContextMenuExtension ext, extensions )
+    {
+
+        foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
+        {
+            vcsActions << act;
+        }
+
+        foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
+        {
+            extActions << act;
+        }
+
+        foreach( QAction* act, ext.actions( ContextMenuExtension::RefactorGroup ) )
+        {
+            refactorActions << act;
+        }
+
+        foreach( QAction* act, ext.actions( ContextMenuExtension::DebugGroup ) )
+        {
+            debugActions << act;
+        }
+
+    }
+
+    QMenu* debugmenu = menu;
+    if( debugActions.count() > 1 )
+    {
+        debugmenu = menu->addMenu( i18n("Debug") );
+    }
+    foreach( QAction* act, debugActions )
+    {
+        debugmenu->addAction( act );
+    }
+    menu->addSeparator();
+
+    QMenu* refactormenu = menu;
+    if( refactorActions.count() > 1 )
+    {
+        refactormenu = menu->addMenu( i18n("Refactor") );
+    }
+    foreach( QAction* act, refactorActions )
+    {
+        refactormenu->addAction( act );
+    }
+    menu->addSeparator();
+
+    QMenu* vcsmenu = menu;
+    if( vcsActions.count() > 1 )
+    {
+        vcsmenu = menu->addMenu( i18n("Version Control") );
+    }
+    foreach( QAction* act, vcsActions )
+    {
+        vcsmenu->addAction( act );
+    }
+
+    menu->addSeparator();
+    foreach( QAction* act, extActions )
+    {
+        menu->addAction( act );
     }
 }
 

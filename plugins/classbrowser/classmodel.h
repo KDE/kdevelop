@@ -28,10 +28,10 @@
 #include <ktexteditor/cursor.h>
 #include <kurl.h>
 
-#include <duchainbase.h>
-#include <duchainobserver.h>
-#include <identifier.h>
-#include <duchainpointer.h>
+#include "language/duchain/duchainbase.h"
+#include "language/duchain/duchainobserver.h"
+#include "language/duchain/identifier.h"
+#include "language/duchain/duchainpointer.h"
 
 class ClassBrowserPlugin;
 

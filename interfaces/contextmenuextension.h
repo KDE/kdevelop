@@ -26,14 +26,16 @@
 #include "interfacesexport.h"
 
 class QAction;
+class QMenu;
 template <typename T> class QList;
+
 namespace KDevelop
 {
 
 class KDEVPLATFORMINTERFACES_EXPORT ContextMenuExtension
 {
 public:
-    
+
     /** The menu group containing file actions */
     static const QString FileGroup;
     /** menu group containing refactoring actions */
@@ -46,7 +48,7 @@ public:
     static const QString DebugGroup;
     /** menu group to contain editing actions */
     static const QString EditGroup;
-    /** menu group to contain editing actions */
+    /** menu group to contain version control actions */
     static const QString VcsGroup;
     /** menu group to contain project actions */
     static const QString ProjectGroup;
@@ -66,7 +68,7 @@ public:
     ContextMenuExtension( const ContextMenuExtension& rhs );
 
     ContextMenuExtension& operator=( const ContextMenuExtension& rhs );
-    
+
     /**
      * add an action to the given menu group
      * @param group the menu group to which the action should be added
@@ -80,6 +82,11 @@ public:
      * @returns a list of actions for that menu group
      */
     QList<QAction*> actions( const QString& group ) const;
+
+    /**
+     * Populate a QMenu with the actions in the given context menu extensions.
+     */
+    static void populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions);
 
 private:
     class ContextMenuExtensionPrivate* const d;

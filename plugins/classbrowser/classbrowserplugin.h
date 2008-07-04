@@ -2,7 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2006 Adam Treat <treat@kde.org>
- * Copyright 2006-2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -23,7 +23,7 @@
 #ifndef CLASSBROWSERPART_H
 #define CLASSBROWSERPART_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class ClassBrowserPlugin : public KDevelop::IPlugin
@@ -38,6 +38,12 @@ class ClassBrowserPlugin : public KDevelop::IPlugin
     virtual void unload();
 
     class ClassModel* model() const;
+
+    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+
+  private Q_SLOTS:
+    void openDeclaration();
+    void openDefinition();
 
   private:
     class ClassBrowserFactory* m_factory;

@@ -26,24 +26,24 @@
 #include <ktemporaryfile.h>
 #include <kprocess.h>
 
-#include "idocument.h"
-#include "icore.h"
-#include "ilanguagecontroller.h"
-#include "iprojectcontroller.h"
-#include "iproject.h"
+#include "interfaces/idocument.h"
+#include "interfaces/icore.h"
+#include "interfaces/ilanguagecontroller.h"
+#include "interfaces/iprojectcontroller.h"
+#include "interfaces/iproject.h"
 
-#include "backgroundparser/backgroundparser.h"
-#include "backgroundparser/parsejob.h"
+#include "language/backgroundparser/backgroundparser.h"
+#include "language/backgroundparser/parsejob.h"
+
+#include "language/duchain/topducontext.h"
+#include "language/duchain/classmemberdeclaration.h"
+#include "language/duchain/classfunctiondeclaration.h"
+#include "language/duchain/parsingenvironment.h"
+#include "language/duchain/duchain.h"
+#include "language/duchain/duchainlock.h"
+#include "language/duchain/duchainutils.h"
 
 #include "classbrowserplugin.h"
-#include "topducontext.h"
-#include "declaration.h"
-#include "classmemberdeclaration.h"
-#include "classfunctiondeclaration.h"
-#include "parsingenvironment.h"
-#include "duchain.h"
-#include "duchainlock.h"
-#include "duchainutils.h"
 
 //#include "modeltest.h"
 
@@ -212,7 +212,7 @@ bool ClassModel::hasChildren(const QModelIndex& parentIndex) const
   if (Declaration* definition = dynamic_cast<Declaration*>(parent->data())) {
     if (definition->kind() == Declaration::Instance)
       return false;
-      
+
     AbstractType::Ptr type = definition->abstractType();
     if (type)
       if (type->whichType() == AbstractType::TypeStructure)
@@ -258,14 +258,14 @@ int declarationScore(Declaration* d)
 
   if (dynamic_cast<AbstractFunctionDeclaration*>(d))
     return 1;
-  
+
   return 0;
 }
 
 int typeScore(Declaration* d)
 {
   int ret = 0;
-  
+
   if (d->kind() == Declaration::Instance)
     return 4;
 
@@ -310,7 +310,7 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
     }
 
   } else*/
-  
+
   if (Declaration* d = dynamic_cast<Declaration*>(p1->data())) {
     if (Declaration* d2 = dynamic_cast<Declaration*>(p2->data())) {
       if (d->kind() != d2->kind())
@@ -326,10 +326,10 @@ bool ClassModel::orderItems(ClassModel::Node* p1, ClassModel::Node* p2)
         return true;
       if (declarationScore1 > declarationScore2)
         return false;
-      
+
       if (d->abstractType()) {
         if (d2->abstractType()) {
-          if (d->abstractType() != d2->abstractType()) {              
+          if (d->abstractType() != d2->abstractType()) {
             int typeScore1, typeScore2;
             typeScore1 = typeScore(d);
             typeScore2 = typeScore(d2);
@@ -650,7 +650,7 @@ QVariant ClassModel::data(Node* node, int role)
           ret = dec->identifier().toString();
         else
           ret = dec->qualifiedIdentifier().toString();
-        
+
         if (FunctionType::Ptr type = dec->type<FunctionType>())
           ret += type->partToString(FunctionType::SignatureArguments);
         return ret;
