@@ -1553,8 +1553,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( !fail ) {
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
     }
-    if(chosenFunction)
-      kDebug() << "result from resolver:" << chosenFunction->toString();
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
