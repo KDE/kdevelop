@@ -74,6 +74,7 @@ pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : 
   , hidden(false)
   , function_like(false)
   , variadics(false)
+  , m_valueHash(0)
 {
 }
 pp_dynamic_macro::pp_dynamic_macro(const KDevelop::IndexedString& nm) : pp_macro_direct_data(nm), m_valueHashValid(false)
@@ -153,7 +154,7 @@ void pp_dynamic_macro::computeHash() const {
       return;
     int a = 1;
 
-    m_valueHash = 27 * ( hashContents( definition ) +  (defined ? 1 : 0 ) );
+    m_valueHash = 27 * ( 137 + hashContents( definition ) +  (defined ? 1 : 0 ) );
 
     for( QVector<uint>::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
         a *= 19;

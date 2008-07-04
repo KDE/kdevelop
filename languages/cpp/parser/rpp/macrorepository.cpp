@@ -67,6 +67,7 @@ rpp::pp_macro* copyConstantMacro(const rpp::pp_macro* macro) {
 }
 
 MacroRepositoryItemRequest::MacroRepositoryItemRequest(const rpp::pp_macro& _macro) : macro(_macro) {
+  //Q_ASSERT(_macro.m_valueHash); Can also be zero randomly. Only enable this for debugging.
 }
 
 void MacroRepositoryItemRequest::createItem(rpp::pp_macro* item) const {
