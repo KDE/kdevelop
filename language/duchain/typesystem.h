@@ -191,6 +191,13 @@ public:
     return *new (new char[size]) DataType(rhs);
   }
   
+  ///You must use this to create the internal data instances in normal constructors.
+  
+  template<class DataType>
+  static DataType& createData() {
+    return *new (new char[sizeof(DataType)]) DataType();
+  }
+  
   typedef AbstractTypeData Data;
   
 protected:
@@ -241,6 +248,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
     
     bool operator==(const IndexedType& rhs) const {
       return m_index == rhs.m_index;
+    }
+    
+    bool operator!=(const IndexedType& rhs) const {
+      return m_index != rhs.m_index;
     }
     
     uint hash() const {

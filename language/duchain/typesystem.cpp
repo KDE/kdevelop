@@ -383,7 +383,7 @@ bool DelayedType::equals(const AbstractType* _rhs) const
 }
 
 AbstractType::AbstractType()
-  : d_ptr(new AbstractTypeData)
+  : d_ptr(&createData<AbstractTypeData>())
 {
   d_func_dynamic()->setTypeClassId<AbstractType>();
 }
@@ -426,7 +426,7 @@ IntegralType::IntegralType(const IndexedString& name)
 }
 
 IntegralType::IntegralType()
-  : AbstractType(*new IntegralTypeData)
+  : AbstractType(createData<IntegralTypeData>())
 {
   d_func_dynamic()->setTypeClassId<IntegralType>();
 }
@@ -471,7 +471,7 @@ AbstractType::WhichType IntegralType::whichType() const
 }
 
 PointerType::PointerType()
-  : AbstractType(*new PointerTypeData)
+  : AbstractType(createData<PointerTypeData>())
 {
   d_func_dynamic()->setTypeClassId<PointerType>();
 }
@@ -523,7 +523,7 @@ AbstractType::WhichType PointerType::whichType() const
 }
 
 ReferenceType::ReferenceType()
-  : AbstractType(*new ReferenceTypeData)
+  : AbstractType(createData<ReferenceTypeData>())
 {
   d_func_dynamic()->setTypeClassId<ReferenceType>();
 }
@@ -576,7 +576,7 @@ AbstractType::WhichType ReferenceType::whichType() const
 }
 
 FunctionType::FunctionType()
-  : AbstractType(*new FunctionTypeData)
+  : AbstractType(createData<FunctionTypeData>())
 {
   d_func_dynamic()->setTypeClassId<FunctionType>();
 }
@@ -701,7 +701,7 @@ AbstractType::WhichType FunctionType::whichType() const
 }
 
 StructureType::StructureType()
-  : AbstractType(*new StructureTypeData)
+  : AbstractType(createData<StructureTypeData>())
 {
   d_func_dynamic()->setTypeClassId<StructureType>();
 }
@@ -729,7 +729,7 @@ AbstractType::WhichType StructureType::whichType() const
 }
 
 ArrayType::ArrayType()
-  : AbstractType(*new ArrayTypeData)
+  : AbstractType(createData<ArrayTypeData>())
 {
   d_func_dynamic()->setTypeClassId<ArrayType>();
 }
@@ -817,7 +817,7 @@ void DelayedType::setKind(Kind kind) {
 }
 
 DelayedType::DelayedType()
-  : AbstractType(*new DelayedTypeData)
+  : AbstractType(createData<DelayedTypeData>())
 {
   d_func_dynamic()->setTypeClassId<DelayedType>();
 }
