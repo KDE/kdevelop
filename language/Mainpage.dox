@@ -1,20 +1,17 @@
 /*!
- * @mainpage language - language interfaces and helper library.
+ * @mainpage Language library
  *
- * language is a library that provides and interface to implement
- * support for a particular language. Also included are helpers
- * to represent the source files and do the parsing.
+ * The language library provides an interface to the structure of code which
+ * is being edited by KDevelop, and allows such things as class browsing, code
+ * completion, and many more features to be provided for all supported languages.
  *
  * @section desc Description
- *
  *
  * @section editor Editor Integration
  * The editor integration tracks editor documents and smart ranges. <a href="../editor/html/index.html"><b>Read more</b></a>.
  *
- * @section editor Definition-Use Chain and Type System
- * The duchain and type system offer a language-neutral representation of source code structure. <a href="../duchain/html/index.html"><b>Read more</b></a>.
- *
- * @todo: add description and examples
+ * @section duchain Definition-Use Chain and Type System
+ * The definition-use chain and type system offer a language-neutral representation of source code structure. <a href="../duchain/html/index.html"><b>Read more</b></a>.
  *
  * @licenses
  * @lgpl

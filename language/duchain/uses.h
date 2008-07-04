@@ -23,12 +23,6 @@
 #include "language/languageexport.h"
 #include "language/duchain/declarationid.h"
 
-/**
- * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
- * 
- * To retrieve the actual uses, query the duchain for the files.
- * */
-
 namespace KDevelop {
 
   class Declaration;
@@ -36,9 +30,16 @@ namespace KDevelop {
   class Use;
   class TopDUContext;
 
+/**
+ * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
+ *
+ * To retrieve the actual uses, query the duchain for the files.
+ * */
   class KDEVPLATFORMLANGUAGE_EXPORT Uses {
     public:
+    /// Constructor.
     Uses();
+    /// Destructor.
     ~Uses();
     /**
      * Adds a top-context to the users-list of the given id

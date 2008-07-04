@@ -22,21 +22,22 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-/**
- * Global unique mapping of Declaration-Ids to Definitions, protected through DUChainLock.
- *
- * Currently it is only possible to map exactly one Definition to exactly one DeclarationId.
- * */
-
 namespace KDevelop {
 
   class Declaration;
   class DeclarationId;
   class TopDUContext;
 
+/**
+ * Global unique mapping of Declaration-Ids to Definitions, protected through DUChainLock.
+ *
+ * Currently it is only possible to map exactly one Definition to exactly one DeclarationId.
+ * */
   class KDEVPLATFORMLANGUAGE_EXPORT Definitions {
     public:
+    /// Constructor.
     Definitions();
+    /// Destructor.
     ~Definitions();
     /**
      * Assigns @param definition to the given @param id.
@@ -50,7 +51,7 @@ namespace KDevelop {
 
     ///Gets the declaration assigned to the given @param definition in @param context
     Declaration* declaration(const Declaration* definition, TopDUContext* context) const;
-    
+
     private:
       class DefinitionsPrivate* d;
   };

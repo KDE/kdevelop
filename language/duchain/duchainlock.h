@@ -80,6 +80,9 @@ namespace KDevelop
 #define ENSURE_CHAIN_WRITE_LOCKED
 #endif
 
+/**
+ * Customised read/write locker for the definition-use chain.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock
 {
 public:
@@ -127,7 +130,7 @@ public:
    * that already have an arbitrary count of write-locks acquired.
    *
    * @param timeout A timeout in milliseconds. If zero, the default-timeout is used(Currently 10 seconds).
-   * 
+   *
    * WARNING: Write-locks can NOT be acquired by threads that already have a read-lock.
    */
   bool lockForWrite(uint timeout = 0);
@@ -146,6 +149,9 @@ private:
   class DUChainLockPrivate* const d;
 };
 
+/**
+ * Customised read locker for the definition-use chain.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
 public:
@@ -159,13 +165,16 @@ public:
 
   ///Returns true if a lock was requested and the lock succeeded, else false
   bool locked() const;
-  
+
 private:
   DUChainLock* m_lock;
   bool m_locked;
   uint m_timeout;
 };
 
+/**
+ * Customised write locker for the definition-use chain.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {
 public:

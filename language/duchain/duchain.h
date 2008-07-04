@@ -41,10 +41,14 @@ class Definitions;
 class Uses;
 
 /**
- * Holds references to all top level source file contexts.
+ * \short Holds references to all top level source file contexts.
  *
- * \todo to pull the sorting off properly, will need to know the location of
- *       the defines used to pull in URLs other than the source file URL.
+ * The DUChain is a global static class which manages the definition-use
+ * chains.  It performs the following functions:
+ * \li registers chains with addDocumentChain() and deregisters with removeDocumentChain()
+ * \li allows querying for existing chains
+ * \li watches text editors, registering and deregistering them with the BackgroundParser when files
+ *     are opened and closed.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
 {
@@ -101,16 +105,23 @@ public:
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
 
+  /**
+   * Registers a new definition-use \a chain for the given \a document.
+   */
   void addDocumentChain(const IdentifiedFile& document, TopDUContext* chain);
 
+  /**
+   * Clears all definition-use chains.
+   */
   void clear();
 
+  /// Returns the global static instance.
   static DUChain* self();
 
   /// Returns the structure that manages mapping between definitions and declarations
   static Definitions* definitions();
 
-  /// Returns the structure that manages mapping between uses and declarations
+  /// Returns the structure that manages mapping between declarations, and which top level contexts contain uses of them.
   static Uses* uses();
 
   /**
@@ -134,8 +145,11 @@ public:
   static void definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);*/
 
+  /// Notify that a branch was added to \a context
   static void branchAdded(DUContext* context);
+  /// Notify that a branch was modified within \a context
   static void branchModified(DUContext* context);
+  /// Notify that a branch was removed from \a context
   static void branchRemoved(DUContext* context);
 
   /**
@@ -171,6 +185,7 @@ private:
 
   friend class DUChainPrivate;
 };
+
 }
 
 #endif // DUCHAIN_H
