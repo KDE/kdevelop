@@ -697,7 +697,7 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
         QFileInfo info(QDir(localPath.path()), includeName);
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.absoluteFilePath());
+            ret.first = KUrl(info.canonicalFilePath());
             ret.second = localPath;
             return ret;
         }
@@ -719,7 +719,7 @@ restart:
 
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.absoluteFilePath());
+            ret.first = KUrl(info.canonicalFilePath());
             ret.second = path.path();
             return ret;
         }
