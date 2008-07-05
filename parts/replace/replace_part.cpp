@@ -52,7 +52,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("Project wide string replacement") );
     mainWindow()->setViewAvailable( m_widget, false );
 
-    KAction * action = new KAction(i18n("Find-Select-Replace..."), 0,
+    action = new KAction(i18n("Find-Select-Replace..."), 0,
                                    CTRL+SHIFT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
     action->setToolTip( i18n("Project wide string replacement") );
     action->setWhatsThis( i18n("<b>Find-Select-Replace</b><p>"
@@ -63,8 +63,19 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                                "can replace them with the specified string, exclude them from replace operation or cancel the whole replace.") );
 
 	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(projectOpened()), this, SLOT(enableAction()));
+    connect( core(), SIGNAL(projectClosed()), this, SLOT(disableAction()));
 }
 
+void ReplacePart::enableAction()
+{
+    action->setEnabled(true);
+}
+
+void ReplacePart::disableAction()
+{
+    action->setEnabled(false);
+}
 
 ReplacePart::~ReplacePart()
 {

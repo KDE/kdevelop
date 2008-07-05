@@ -19,6 +19,7 @@
 
 
 class ReplaceWidget;
+class KAction;
 class Context;
 
 class ReplacePart : public KDevPlugin
@@ -32,10 +33,12 @@ public:
 public slots:
     void slotReplace();
 	void contextMenu(QPopupMenu *popup, const Context *context);
-
+    void enableAction();
+    void disableAction();
 private:
     QGuardedPtr<ReplaceWidget> m_widget;
 	QString m_popupstr;
+        KAction* action;
 
 };
 
