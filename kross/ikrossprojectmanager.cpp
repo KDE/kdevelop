@@ -58,7 +58,7 @@ ProjectFolderItem* IKrossProjectManager::import( const KUrl& file, KDevelop::IPr
 
 QList<ProjectFolderItem*> IKrossProjectManager::parse( ProjectFolderItem* dom )
 {
-    ProjectFolderItemAdaptor domadp(dom);
+    ProjectFolderItemAdaptor domadp(action, dom);
     
     QVariant param;
     param.setValue((QObject*) &domadp);
@@ -81,34 +81,10 @@ KUrl IKrossProjectManager::buildDirectory(ProjectBaseItem* it) const
 {
     return KUrl();
 }
-
-ProjectBaseItemAdaptor* createAdaptor(ProjectBaseItem* item)
-{
-    ProjectBaseItemAdaptor* adaptor=0;
-    switch(item->type())
-    {
-        case ProjectBaseItem::BuildFolder:
-        case ProjectBaseItem::Folder:
-            adaptor=new ProjectFolderItemAdaptor((ProjectFolderItem*) item);
-            break;
-        case ProjectBaseItem::File:
-            adaptor=new ProjectFileItemAdaptor((ProjectFileItem*) item);
-            break;
-        case ProjectBaseItem::Target:
-            adaptor=new ProjectTargetItemAdaptor((ProjectTargetItem*) item);
-            break;
-        default:
-            qFatal("unknown project model type");
-            break;
-    }
-    Q_ASSERT(adaptor);
-    return adaptor;
-}
-
 KUrl::List IKrossProjectManager::includeDirectories(ProjectBaseItem *item) const
 {
     qDebug() << "includeeees";
-    ProjectBaseItemAdaptor *adapt=createAdaptor(item);
+    ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
     QVariant param;
     param.setValue((QObject*) adapt);
     QVariant result=action->callFunction( "includeDirectories", QVariantList()<<param);
@@ -125,7 +101,7 @@ KUrl::List IKrossProjectManager::includeDirectories(ProjectBaseItem *item) const
 QHash<QString,QString> IKrossProjectManager::defines(ProjectBaseItem *item)
 {
     QVariant param;
-    ProjectBaseItemAdaptor *adapt=createAdaptor(item);
+    ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
     param.setValue((QObject*) adapt);
     QVariant result=action->callFunction( "defines", QVariantList()<<param);
     delete adapt;

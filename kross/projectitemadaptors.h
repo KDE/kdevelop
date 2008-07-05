@@ -31,21 +31,26 @@ namespace KDevelop
     class ProjectBaseItemAdaptor : public QObject
     {
         Q_OBJECT
+        public:
+            ProjectBaseItemAdaptor(const ProjectBaseItemAdaptor& copy) : QObject(copy.parent()), m_item(copy.m_item) {}
+            void operator=(const ProjectBaseItemAdaptor& copy) { if(&copy!=this) { m_item=copy.m_item; } }
+
+            static ProjectBaseItemAdaptor* createAdaptor(QObject* parent, ProjectBaseItem* item);
         protected:
-            ProjectBaseItemAdaptor(ProjectBaseItem* item) : QObject(), m_item(item) {}
+            explicit ProjectBaseItemAdaptor(QObject* parent, ProjectBaseItem* item) : QObject(parent), m_item(item) {}
             
         public slots:
             IProject* project() const { return m_item->project(); }
-            
+            ProjectBaseItemAdaptor* parent() const { return createAdaptor(QObject::parent(), (ProjectBaseItem*) m_item->parent()); }
         private:
-            ProjectBaseItem* m_item;
+            const ProjectBaseItem* m_item;
     };
     
     class ProjectFolderItemAdaptor : public ProjectBaseItemAdaptor
     {
         Q_OBJECT
         public:
-            ProjectFolderItemAdaptor(ProjectFolderItem* item) : ProjectBaseItemAdaptor(item), m_item(item) {}
+            ProjectFolderItemAdaptor(QObject* parent, ProjectFolderItem* item) : ProjectBaseItemAdaptor(parent, item), m_item(item) {}
         public slots:
             KUrl url() const { return m_item->url(); }
             bool isProjectRoot() const { return m_item->isProjectRoot(); }
@@ -59,7 +64,7 @@ namespace KDevelop
     {
         Q_OBJECT
         public:
-            ProjectTargetItemAdaptor(ProjectTargetItem* item) : ProjectBaseItemAdaptor(item) {}
+            ProjectTargetItemAdaptor(QObject* parent, ProjectTargetItem* item) : ProjectBaseItemAdaptor(parent, item) {}
         
     };
     
@@ -67,7 +72,7 @@ namespace KDevelop
     {
         Q_OBJECT
         public:
-            ProjectFileItemAdaptor(ProjectFileItem* item) : ProjectBaseItemAdaptor(item), m_item(item) {}
+            ProjectFileItemAdaptor(QObject* parent, ProjectFileItem* item) : ProjectBaseItemAdaptor(parent, item), m_item(item) {}
         public slots:
             KUrl url() const { return m_item->url(); }
             

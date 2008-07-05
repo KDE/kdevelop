@@ -46,7 +46,8 @@ KrossProjectManager::KrossProjectManager( QObject* parent, const QVariantList& a
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     
-    m_name = args.first().toString();
+    QStringList interfaces = args[0].toStringList();
+    m_name = args[1].toString();
 }
 
 KDevelop::IProjectFileManager::Features KrossProjectManager::features() const
@@ -62,7 +63,6 @@ QList<KDevelop::ProjectFolderItem*> KrossProjectManager::parse( KDevelop::Projec
 KDevelop::ProjectFolderItem* KrossProjectManager::import( KDevelop::IProject *project )
 {
     kDebug() << "importiiiiing" << project << m_name;
-//     QString file="/home/kde-devel/krosstest/vckross.py";
     
     KUrl file=KStandardDirs::installPath("kdedir");
     file.addPath("lib");
