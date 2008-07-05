@@ -26,6 +26,9 @@
 //  #define LEXERCACHE_DEBUG
 //  #define ifDebug(x) x
 
+//When uncommented, the reason for needed updates is printed
+#define DEBUG_NEEDSUPDATE
+
 using namespace Cpp;
 using namespace KDevelop;
 
@@ -230,14 +233,18 @@ bool EnvironmentManager::needsUpdate( const KDevelop::ParsingEnvironmentFile* fi
   ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( file->url() );
 
   if ( revision != file->modificationRevision() ) {
-    ifDebug( kDebug( 9007 ) << file->url().str() << "has changed, stored stamp:" << file->modificationRevision() << "new time:" << revision  );
+#ifdef DEBUG_NEEDSUPDATE
+    kDebug( 9007 ) << file->url().str() << "has changed, stored stamp:" << file->modificationRevision() << "new time:" << revision;
+#endif
     return true;
   }
 
   for( QMap<IndexedString, ModificationRevision>::const_iterator it = file->allModificationTimes().begin(); it != file->allModificationTimes().end(); ++it ) {
     ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( it.key() );
     if( revision != *it ) {
-      ifDebug( kDebug( 9007 ) << "dependency" << it.key().str() << "has changed, stored stamp:" << it.value() << "new time:" << revision  );
+#ifdef DEBUG_NEEDSUPDATE
+      kDebug( 9007 ) << "dependency" << it.key().str() << "has changed, stored stamp:" << it.value() << "new time:" << revision ;
+#endif
       return true;
     }
   }
