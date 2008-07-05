@@ -68,7 +68,7 @@ public:
 
     virtual QString id() const
     {
-        return "org.kdevelop.DUChainView";
+        return "org.kdevelop.ContextBrowser";
     }
 
 private:
@@ -87,7 +87,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   KActionCollection* actions = actionCollection();
 
   core()->uiController()->addToolView(i18n("Context Browser"), m_viewFactory);
-  
+
   connect( core()->documentController(), SIGNAL( documentLoaded( KDevelop::IDocument* ) ), this, SLOT( documentLoaded( KDevelop::IDocument* ) ) );
   connect( core()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
@@ -119,7 +119,7 @@ void ContextBrowserPlugin::unload()
 
 void ContextBrowserPlugin::rangeDeleted( KTextEditor::SmartRange *range ) {
   m_backups.remove( range );
-  
+
   for(QMap<KTextEditor::View*, KTextEditor::SmartRange*>::iterator it = m_highlightedRange.begin(); it != m_highlightedRange.end(); ++it)
     if(*it == range) {
       m_highlightedRange.erase(it);
@@ -212,7 +212,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
     }
     range->removeWatcher(this);
   }
-  
+
   range->setAttribute(attrib);
 }
 
@@ -221,11 +221,11 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::View* view, KDevelop::D
     kDebug() << "invalid view/declaration";
     return;
   }
-  
+
   KTextEditor::SmartRange* range = decl->smartRange();
   if( range )
     changeHighlight( range, highlight, true, mouseHighlight );
-  
+
 
   QList<KTextEditor::SmartRange*> uses;
   {
@@ -235,7 +235,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::View* view, KDevelop::D
 
   foreach(KTextEditor::SmartRange* range, uses)
     changeHighlight( range, highlight, false, mouseHighlight );
-  
+
   if( decl->definition() && decl->definition()->smartRange() ) {
     changeHighlight( decl->definition()->smartRange(), highlight, false, mouseHighlight );
   }
@@ -268,18 +268,18 @@ void ContextBrowserPlugin::updateViews()
 
     bool foundSpecialObject = false;
     KDevelop::ILanguage* pickedLanguage = 0;
-    
+
     if(iface) {
       //Delete old special highlighting
       if(m_highlightedRange.contains(view)) {
         QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
         Q_ASSERT(m_highlightedRange[view]->document() == view->document());
-        
+
         delete m_highlightedRange[view];
         m_highlightedRange.remove(view);
       }
-      
+
       //Eventually find a special language object, and directly highlight it
       QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(view->document()->url());
 
@@ -292,12 +292,12 @@ void ContextBrowserPlugin::updateViews()
           ///@todo This is a workaround for a probable bug, the range is not highlighted without a big master-range
           ///@todo Currently this ihghlighitng does no twork at all!
           KTextEditor::SmartRange* highlightRange = iface->newSmartRange( r.textRange(), m_highlightedRange[view] );
-          
+
           highlightRange->setAttribute( highlightedSpecialObjectAttribute() );
 /*          m_highlightedRange[view]*/
 
           m_highlightedRange[view]->addWatcher( this );
-          
+
           foundSpecialObject = true;
           pickedLanguage = language;
 
@@ -305,7 +305,7 @@ void ContextBrowserPlugin::updateViews()
         }
       }
     }
-    
+
     KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
     if(!lock.locked()) {
       kDebug() << "Failed to lock du-chain in time";
@@ -319,7 +319,7 @@ void ContextBrowserPlugin::updateViews()
       changeHighlight( view, m_highlightedDeclarations[view].data(), false, mouseHighlight );
 
     Declaration* foundDeclaration = 0;
-    
+
     if(!foundSpecialObject) {
       //If we haven't found a special language object, search for a use/declaration and eventually highlight it
       kDebug() << "searching at cursor" << c.textCursor() << mouseHighlight << "document" << view->document()->url().pathOrUrl();
@@ -333,7 +333,7 @@ void ContextBrowserPlugin::updateViews()
         m_highlightedDeclarations.remove(view);
       }
     }
-    
+
     ///Update the context widget, and maybe show a tooltip
     if(foundDeclaration || foundSpecialObject) {
       if(mouseHighlight || (view->isActiveView() && core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() == view->document())) {
@@ -345,7 +345,7 @@ void ContextBrowserPlugin::updateViews()
               contextView->declarationWidget()->setDeclaration(foundDeclaration, topContext);
             else
               contextView->declarationWidget()->setSpecialNavigationWidget(pickedLanguage->languageSupport()->specialLanguageObjectNavigationWidget(view->document()->url(), c));
-            
+
             if(contextView->isVisible())
               foundVisibleContextView = true;
           }
@@ -355,7 +355,7 @@ void ContextBrowserPlugin::updateViews()
         }
       }
     }
-  
+
     ///Update the context information
     if(topContext && !mouseHighlight) {
       DUContext* ctx = topContext->findContextAt(c);
@@ -366,7 +366,7 @@ void ContextBrowserPlugin::updateViews()
           if(masterWidget(contextView) == masterWidget(view))
             contextView->contextWidget()->setContext(ctx, c);
     }
-  
+
   }
   m_updateViews.clear();
 }
@@ -391,7 +391,7 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
     return;
   if(dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->flags() & TopDUContext::ProxyContextFlag && !ctx->importedParentContexts().isEmpty())
     return registerAsRangeWatcher(ctx->importedParentContexts()[0].data());
-  
+
   foreach(Declaration* decl, ctx->localDeclarations())
     registerAsRangeWatcher(decl);
 
@@ -449,18 +449,18 @@ void ContextBrowserPlugin::cursorPositionChanged( KTextEditor::View* view, const
 void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , KTextEditor::View* v )
 {
   kDebug() << "connecting view";
-  
+
   disconnect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) ); ///Just to make sure that multiple connections don't happen
   connect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) );
   connect( v, SIGNAL(destroyed( QObject* )), this, SLOT( viewDestroyed( QObject* ) ) );
-  
+
   KTextEditor::TextHintInterface *iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
   if( !iface )
       return;
 
   iface->enableTextHints(highlightingTimeout);
 
-  connect(v, SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)), this, SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));    
+  connect(v, SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)), this, SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));
 }
 
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)
