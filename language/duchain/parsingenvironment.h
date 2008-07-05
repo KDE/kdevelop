@@ -103,8 +103,6 @@ enum ParsingEnvironmentType
   PhpParsingEnvironment      /**< a PHP parsing environment */
 };
 
-  ///@WARNING: Access to all the following classes must be serialized through du-chain locking
-
 /**
  * Use this as base-class to define new parsing-environments.
  *
@@ -113,6 +111,8 @@ enum ParsingEnvironmentType
  * the environment mainly consists of macros. The include-path can
  * be considered to be a part of the parsing-environment too, because
  * different files may be included using another include-path.
+ *
+ * \warning Access to this class must be serialized through du-chain locking
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
 {
@@ -131,9 +131,9 @@ private:
  *
  * It is KShared because it is embedded into top-du-contexts and at the same time
  * references may be held by ParsingEnvironmentManager.
+ *
+ * \warning Access to this class must be serialized through du-chain locking
  * */
-
-
 class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
 {
   public:
@@ -157,7 +157,11 @@ private:
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 
-///Used decide from outside whether a matching ParsingEnvironmentFile should be returned by ParsingEnvironmentManager::find.
+/**
+ * Used decide from outside whether a matching ParsingEnvironmentFile should be returned by ParsingEnvironmentManager::find.
+ *
+ * \warning Access to this class must be serialized through du-chain locking
+ **/
 struct ParsingEnvironmentFileAcceptor {
   virtual bool accept(const ParsingEnvironmentFile& file) = 0;
   virtual ~ParsingEnvironmentFileAcceptor() {
@@ -172,6 +176,8 @@ struct ParsingEnvironmentFileAcceptor {
  *
  * Storing and saving of ParsingEnvironmentFile entries should be implemented within
  * ParsingEnvironmentManager, because that can use additional structural information.
+ *
+ * \warning Access to this class must be serialized through du-chain locking
  * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
@@ -179,19 +185,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
   public:
     virtual ~ParsingEnvironmentManager();
 
-    ///@see ParsingEnvironmentType
+    /**
+     * \returns the type of this parsing environment manager.
+     * @see ParsingEnvironmentType
+     */
     virtual int type() const;
+    /// Clear all files from the manager.
     virtual void clear();
 
-    ///Add a new file to the manager
+    ///Add a new \a file to the manager
     virtual void addFile( ParsingEnvironmentFile* file );
-    ///Remove a file from the manager
+    ///Remove a \a file from the manager
     virtual void removeFile( ParsingEnvironmentFile* file );
     ///Should use language-specific information to decide whether the top-context that has the given data attached needs to be reparsed
     virtual bool needsUpdate( const ParsingEnvironmentFile* file ) const;
     /**
      * Search for the availability of a file parsed in a given environment
-     * @param accepter For each found matching file, accepter->accept(..) should be called to
+     * @param acceptor For each found matching file, accepter->accept(..) should be called to
      * decide whether to return the file, or search on. If it is zero, the first match should be returned.
      * */
     virtual ParsingEnvironmentFile* find( const IndexedString& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );

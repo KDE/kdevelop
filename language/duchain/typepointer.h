@@ -34,8 +34,8 @@
 typedef QSharedData TypeShared;
 
 /**
- * \class TypePtr TypePtr.h <TypePtr>
- * 
+ * \class TypePtr typepointer.h <TypePtr>
+ *
  * Can be used to control the lifetime of an object that has derived
  * QSharedData. As long a someone holds
  * a TypePtr on some QSharedData object it won't become deleted but
@@ -160,7 +160,7 @@ public:
     TypePtr<U> cast() const {
       return TypePtr<U>(dynamic_cast<U*>(d));
     }
-    
+
     /**
      * Convert TypePtr<U> to TypePtr<T>, using a static_cast.
      * This will compile whenever T* and U* are compatible, i.e.
