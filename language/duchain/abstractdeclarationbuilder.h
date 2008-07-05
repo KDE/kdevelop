@@ -36,20 +36,29 @@ template<typename T, typename NameT, typename LanguageSpecificDeclarationBuilder
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
 {
 protected:
+  /// Determine if there is currently a declaration open. \returns true if a declaration is open, otherwise false.
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
+  /// Access the current declaration. \returns the current declaration, or null if there is no current declaration.
   inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
+  /// Access the current declaration, casted to type \a DeclarationType. \returns the current declaration if one exists and is an instance of the given \a DeclarationType.
   template<class DeclarationType>
   inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
 
+  /// Access the current comment. \returns the current comment, or an empty string if none exists.
   inline const QString& comment() const { return m_lastComment; }
+  /// Set the current \a comment. \param comment the new comment.
   inline void setComment(const QString& comment) { m_lastComment = comment; }
+  /// Clears the current comment.
   inline void clearComment() { m_lastComment.clear(); }
 
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new declaration created.
-   * @param name When this is zero, the identifier given through customName is used.
-   * \param range provide a valid AST node here if name is null
+   * \param name When this is zero, the identifier given through customName is used.
+   * \param range provide a valid AST node here if name is null.
+   * \param isFunction whether the new declaration is a function.
+   * \param isForward whether the new declaration is a forward declaration.
+   * \param isDefinition whether the new declaration is also a definition.
    */
   Declaration* openDeclaration(NameT* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false)
   {
@@ -65,6 +74,15 @@ protected:
     return openDeclaration(id, newRange, isFunction, isForward, isDefinition);
   }
 
+  /**
+   * \copydoc
+   *
+   * \param id the identifier of the new declaration.
+   * \param newRange the range which the identifier for the new declaration occupies.
+   * \param isFunction whether the new declaration is a function.
+   * \param isForward whether the new declaration is a forward declaration.
+   * \param isDefinition whether the new declaration is also a definition.
+   */
   Declaration* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false, bool isForward = false, bool isDefinition = false)
   {
     Identifier localId;
@@ -172,27 +190,33 @@ protected:
     return declaration;
   }
 
+  /// Internal function to open the given \a declaration by pushing it onto the declaration stack.
+  /// Provided for subclasses who don't want to use the generic openDeclaration() functions.
   void openDeclarationInternal(Declaration* declaration)
   {
     m_declarationStack.push(declaration);
   }
 
-  /// Same as the above, but sets it as the definition too
+  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
   Declaration* openDefinition(NameT* name, T* range, bool isFunction = false)
   {
     return openDeclaration(name, range, isFunction, false, true);
   }
 
+  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
   Declaration* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false)
   {
     return openDeclaration(id, newRange, isFunction, false, true);
   }
 
+  /// Convenience function. Same as openDeclaration(), but creates a forward declaration.
   ForwardDeclaration* openForwardDeclaration(NameT* name, T* range)
   {
     return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
   }
 
+  /// Set the internal context of a declaration; for example, a class declaration's internal context
+  /// is the context inside the brackets: class ClassName { ... }
   void eventuallyAssignInternalContext()
   {
     if (LanguageSpecificDeclarationBuilderBase::lastContext()) {
@@ -212,11 +236,13 @@ protected:
     }
   }
 
+  /// Close a declaration. Virtual to allow subclasses to perform customisations to declarations.
   virtual void closeDeclaration()
   {
     m_declarationStack.pop();
   }
 
+  /// Abort a declaration. \todo how does this differ to closeDeclaration()
   void abortDeclaration()
   {
     m_declarationStack.pop();
