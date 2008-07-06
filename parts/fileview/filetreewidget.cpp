@@ -274,9 +274,10 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
                 // Whenever we find out that a directory is already recorded as part of our project,
                 // we may stop adding, because its parent directories were already added -
                 // in some previous addition.
-                if( m_projectFiles.contains( paths.join("/") ) )
+                QString joinedPaths = paths.join("/");
+                if( m_projectFiles.contains( joinedPaths ) )
                     break;
-                m_projectFiles.insert( projectDirectory() + "/" + paths.join("/"), true );
+                m_projectFiles.insert( projectDirectory() + "/" + joinedPaths, true );
                 paths.pop_back();
             }
             m_projectFiles.insert( file, false );
