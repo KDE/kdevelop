@@ -516,7 +516,7 @@ QStringList PHPCodeCompletion::getArguments(QString classname, QString function)
 
 QString PHPCodeCompletion::getCurrentClassName() {
    kdDebug(9018) << "getCurrentClassName" << endl;
-   QRegExp Class("^[ \t]*(abstract|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
+   QRegExp Class("^[ \t]*(abstract|final|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
    Class.setCaseSensitive(FALSE);
 
    for(int i = m_currentLine; i >= 0; i--){

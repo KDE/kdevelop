@@ -141,7 +141,7 @@ bool PHPFile::ParseClass(QString line, int lineNo) {
    if (line.find("class ", 0, FALSE) == -1)
       return FALSE;
 
-   QRegExp Class("^[ \t]*(abstract|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
+   QRegExp Class("^[ \t]*(abstract|final|)[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
    Class.setCaseSensitive(FALSE);
 
    if (Class.search(line) != -1) {
