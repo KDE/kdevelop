@@ -137,7 +137,7 @@ class TopDUContextPrivate : public DUContextPrivate
 {
 public:
   TopDUContextPrivate( TopDUContext* ctxt, uint index)
-    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(false), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_ownIndex(index), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
+    : DUContextPrivate(ctxt), m_inDuChain(false), m_haveImportStructure(true), m_flags(TopDUContext::NoFlags), m_ctxt(ctxt), m_ownIndex(index), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
   {
   }
 
