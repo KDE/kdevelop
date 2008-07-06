@@ -99,27 +99,29 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 
 void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
+  // Tell KDevelop to extract itself from the document before it goes away
+  emit documentAboutToBeDeleted(document);
+
   QMutexLocker lock(mutex);
 
   IndexedString url(document->url().pathOrUrl());
   if (documents.contains(url)) {
     DocumentInfo i = documents[url];
-    if (i.revision != -1)
-      if (SmartInterface* smart = dynamic_cast<SmartInterface*>(i.document))
+
+    // Grab the smart mutex to make sure kdevelop is finished with this document.
+    SmartInterface* smart = dynamic_cast<SmartInterface*>(i.document);
+    QMutexLocker smartLock(smart ? smart->smartMutex() : 0);
+    if (smart)
+      if (i.revision != -1)
         smart->releaseRevision(i.revision);
 
-    documents.remove(url);
-  }
-
-  lock.unlock();
-
-  emit documentAboutToBeDeleted(document);
-
-  QMutexLocker lock2(mutex);
-  if (editorIntegrators.contains(document)) {
-    foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {
-      editor->clearCurrentDocument();
+    if (editorIntegrators.contains(document)) {
+      foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {
+        editor->clearCurrentDocument();
+      }
     }
+
+    documents.remove(url);
   }
 }
 
