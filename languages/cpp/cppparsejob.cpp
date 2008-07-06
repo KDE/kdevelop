@@ -43,6 +43,7 @@
 // #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
+#include "parser/dumptree.h"
 #include <duchain.h>
 #include <duchainpointer.h>
 #include <duchainlock.h>
@@ -58,6 +59,7 @@
 #include <unistd.h>
 
 //#define DUMP_SMART_RANGES
+//#define DUMP_AST
 //#define DUMP_DUCHAIN
 
 using namespace KDevelop;
@@ -141,7 +143,7 @@ void CPPParseJob::includedFileParsed() {
   float _progress = ((float)m_parsedIncludes) / estimateIncludes;
   if(_progress > 0.8)
     _progress = 0.8;
-  
+
   emit progress(this, _progress, i18n("Parsing included files"));
 }
 
@@ -303,12 +305,12 @@ void CPPInternalParseJob::run()
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().str();
 
-    
+
     if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
-    
+
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
     TopDUContext* updatingProxyContext = parentJob()->updatingProxyContext().data();
@@ -319,7 +321,7 @@ void CPPInternalParseJob::run()
 
     Cpp::EnvironmentFilePointer proxyEnvironmentFile(parentJob()->proxyEnvironmentFile());
     Cpp::EnvironmentFilePointer contentEnvironmentFile(parentJob()->contentEnvironmentFile());
-    
+
     //Eventually remove old imports
     if(contentContext) {
       /**
@@ -333,7 +335,7 @@ void CPPInternalParseJob::run()
         ((!parentJob()->masterJob()->wasUpdated(contentContext) && parentJob()->needUpdateEverything())
           || !proxyContext)) {
           DUChainWriteLocker lock(DUChain::lock());
-          
+
           foreach(const DUContextPointer& ctx, contentContext->importedParentContexts())
             contentContext->removeImportedParentContext(ctx.data());
           }
@@ -358,7 +360,7 @@ void CPPInternalParseJob::run()
         //we mix preprocessing and parsing, by triggering the parsing of included files by the preprocessor of the including file
         //So we simply assume that the includes are at the top of the file.
         CPPParseJob* currentJob = parentJob()->parentPreprocessor()->parentJob();
-        
+
         while(currentJob) {
           foreach ( LineContextPair topContext, currentJob->includedFiles() ) {
               //As above, we work with the content-contexts.
@@ -382,7 +384,7 @@ void CPPInternalParseJob::run()
     ///Now we build/update the content-context
 
     if(!parentJob()->keepDuchain()) {
-      
+
       TranslationUnitAST* ast = 0L;
 
       Control control;
@@ -393,43 +395,48 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
           return parentJob()->abortJob();
 
-      if ( ast )
+      if ( ast ) {
           ast->session = parentJob()->parseSession();
-      
+#ifdef DUMP_AST
+          DumpTree dump;
+          dump.dump(ast, parentJob()->parseSession()->token_stream);
+#endif
+      }
+
       CppEditorIntegrator editor(parentJob()->parseSession());
       editor.setCurrentUrl(HashedString(parentJob()->document().str())); ///@todo
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
       if(contentContext) {
-        
+
         ///We're updating, wait until no other thread is updating this context, and then mark that we are updating it.
         bool wait = true;
-        
+
         while(wait) {
           DUChainWriteLocker l(DUChain::lock());
           if( contentContext->flags() & TopDUContext::UpdatingContext )
             wait = true;
           else
             wait = false;
-          
+
           if(!wait)
             contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() | TopDUContext::UpdatingContext) );
-          
+
           if(wait) {
             kDebug(9007) << "waiting while" << parentJob()->document().str() << "is being updated by another thread";
             l.unlock();
             sleep(1);
           }
         }
-        
+
         DUChainWriteLocker l(DUChain::lock());
         contentContext->clearProblems();
       }
 
       DeclarationBuilder declarationBuilder(&editor);
       contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, TopDUContextPointer(contentContext), false);
-      
+
       //If publically visible declarations were added/removed, all following parsed files need to be updated
       if(declarationBuilder.changeWasSignificant()) {
         kDebug() << "A significant change was recorded, all following contexts will be updated";
@@ -444,20 +451,20 @@ void CPPInternalParseJob::run()
 
       {
         DUChainWriteLocker l(DUChain::lock());
-        
+
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
           if(problem->finalLocation().start().line() >= contentEnvironmentFile->contentStartLine()) {
             contentContext->addProblem(problem);
           }
         }
-      
+
         foreach( KDevelop::ProblemPointer p, control.problems() ) {
           p->setLocationStack(parentJob()->includeStack());
           p->setSource(KDevelop::Problem::Lexer);
           contentContext->addProblem(p);
         }
       }
-      
+
 
       ///When simplified environment-matching is enabled, we will accumulate many different
       ///versions of imports into a single top-context. To reduce that a little, we remove all
@@ -480,14 +487,14 @@ void CPPInternalParseJob::run()
       if (!parentJob()->abortRequested()) {
         if (parentJob()->needUses() || (updatingContentContext && updatingContentContext->hasUses())) {
             parentJob()->setLocalProgress(0.5, i18n("Building uses"));
-          
+
             UseBuilder useBuilder(&editor);
             useBuilder.buildUses(ast);
         }
 
         if (!parentJob()->abortRequested() && editor.smart()) {
           editor.smart()->clearRevision();
-          
+
           if ( parentJob()->cpp()->codeHighlighting() )
           {
               QMutexLocker lock(editor.smart()->smartMutex());
@@ -495,13 +502,13 @@ void CPPInternalParseJob::run()
           }
         }
       }
-      
+
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
           DUChainWriteLocker l(DUChain::lock());
           contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
       }
-      
+
       if (parentJob()->abortRequested())
         return parentJob()->abortJob();
 
@@ -520,15 +527,15 @@ void CPPInternalParseJob::run()
         proxyContext = builder.buildProxyContextFromContent(proxyEnvironmentFile, TopDUContextPointer(contentContext), TopDUContextPointer(updatingProxyContext));
 
         DUChainWriteLocker lock(DUChain::lock());
-        
+
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
         Q_ASSERT(proxyContext->importedParentContexts().count() <= 1);
 
         if(proxyContext->importedParentContexts().isEmpty()) //Failure
           return;
-        
+
         Q_ASSERT(proxyContext->importedParentContexts()[0].data() == contentContext);
-        
+
         //Add the non-content contexts behind to content-context to the created proxy,
         //By walking the chain of proxy-contexts.
         foreach ( LineContextPair context, parentJob()->includedFiles() )
@@ -536,7 +543,7 @@ void CPPInternalParseJob::run()
 
         proxyContext->clearProblems();
 
-        
+
         //Put the problems into the proxy-context
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
           if(problem->finalLocation().start().line() < proxyEnvironmentFile->contentStartLine())
@@ -547,7 +554,7 @@ void CPPInternalParseJob::run()
         foreach( const ProblemPointer& problem, contentContext->problems() )
           proxyContext->addProblem(problem);
     }
-    
+
     ///In the end, mark the contexts as updated.
     if(contentContext)
       parentJob()->masterJob()->setWasUpdated(contentContext);
@@ -558,10 +565,10 @@ void CPPInternalParseJob::run()
 
     //Indicate progress
     parentJob()->setLocalProgress(1, i18n("Ready"));
-    
+
     if(parentJob()->masterJob() != parentJob())
       parentJob()->masterJob()->includedFileParsed();
-    
+
     // Debug output...
 
     if ( !parentJob()->parentPreprocessor() ) {
@@ -577,13 +584,13 @@ void CPPInternalParseJob::run()
           KDevelop::DumpChain dump;
           kDebug() << dump.dumpRanges(contentContext->smartRange());
         }
-        
+
 #endif
 
         //KDevelop::DumpDotGraph dumpGraph;
         //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
-    
+
 
     //DumpTree dumpTree;
 

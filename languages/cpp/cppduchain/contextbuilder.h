@@ -100,9 +100,9 @@ public:
    * Builds or updates a proxy-context that represents a content-context under a different environment.
    * The built proxy-context will have exactly 1 imported content-context, or zero imports in case of failure.
    * */
-  
+
   KDevelop::TopDUContext* buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
-  
+
   /**
    * Compile either a context-definition chain, or add uses to an existing
    * chain.
@@ -134,7 +134,7 @@ protected:
   virtual KTextEditor::Range editorFindRange( AST* fromRange, AST* toRange );
   virtual KTextEditor::Range editorFindRangeForContext( AST* fromRange, AST* toRange );
   virtual DUContext* newContext(const SimpleRange& range);
-  
+
   /**
    * Compile an identifier for the specified NameAST \a id.
    *
@@ -145,7 +145,7 @@ protected:
   KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
 
   virtual void addBaseType( Cpp::BaseClassInstance base );
-  
+
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.
   ///@param id should be the whole identifier. A prefix-context will only be created if it
@@ -173,13 +173,16 @@ protected:
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
   virtual void visitForStatement(ForStatementAST*);
   virtual void visitIfStatement(IfStatementAST*);
+  virtual void visitDoStatement(DoStatementAST*);
+  virtual void visitTryBlockStatement(TryBlockStatementAST*);
+  virtual void visitCatchStatement(CatchStatementAST*);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
 
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
-  
+
   KDevelop::DUContext* openContextInternal(const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
   bool createContextIfNeeded(AST* node, const QList<KDevelop::DUContext*>& importedParentContexts);
@@ -189,7 +192,7 @@ protected:
   int templateDeclarationDepth() const {
     return m_templateDeclarationDepth;
   }
-  
+
   // Variables
   NameCompiler* m_nameCompiler;
 
@@ -199,13 +202,14 @@ protected:
   int m_templateDeclarationDepth;
 
   QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
-  
+
 #ifdef DEBUG_CONTEXT_RANGES
   void checkRanges();
   QHash<KDevelop::DUContext*, KDevelop::SimpleRange> m_contextRanges;
 #endif
 
   QList<KDevelop::DUContext*> m_importedParentContexts;
+  QStack< QList<DUContext*> > m_tryParentContexts;
 };
 
 #endif // CONTEXTBUILDER_H

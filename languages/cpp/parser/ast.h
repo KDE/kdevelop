@@ -96,6 +96,7 @@ struct TemplateParameterAST;
 struct ThrowExpressionAST;
 struct TranslationUnitAST;
 struct TryBlockStatementAST;
+struct CatchStatementAST;
 struct TypeIdAST;
 struct TypeIdentificationAST;
 struct TypeParameterAST;
@@ -177,17 +178,18 @@ struct AST
       Kind_ThrowExpression,                     // 61
       Kind_TranslationUnit,                     // 62
       Kind_TryBlockStatement,                   // 63
-      Kind_TypeId,                              // 64
-      Kind_TypeIdentification,                  // 65
-      Kind_TypeParameter,                       // 66
-      Kind_Typedef,                             // 67
-      Kind_UnaryExpression,                     // 68
-      Kind_UnqualifiedName,                     // 69
-      Kind_Using,                               // 70
-      Kind_UsingDirective,                      // 71
-      Kind_WhileStatement,                      // 72
-      Kind_WinDeclSpec,                         // 73
-      Kind_Comment,
+      Kind_CatchStatement,                      // 64
+      Kind_TypeId,                              // 65
+      Kind_TypeIdentification,                  // 66
+      Kind_TypeParameter,                       // 67
+      Kind_Typedef,                             // 68
+      Kind_UnaryExpression,                     // 69
+      Kind_UnqualifiedName,                     // 70
+      Kind_Using,                               // 71
+      Kind_UsingDirective,                      // 72
+      Kind_WhileStatement,                      // 73
+      Kind_WinDeclSpec,                         // 74
+      Kind_Comment,                             // 75
       NODE_KIND_COUNT
     };
 
@@ -605,7 +607,7 @@ struct OperatorFunctionIdAST: public AST
 {
   DECLARE_AST_NODE(OperatorFunctionId)
 
-  OperatorAST *op; 
+  OperatorAST *op;
   TypeSpecifierAST *type_specifier;
   const ListNode<PtrOperatorAST*> *ptr_ops;
 };
@@ -777,6 +779,17 @@ struct TranslationUnitAST: public AST, public CommentAST
 struct TryBlockStatementAST: public StatementAST
 {
   DECLARE_AST_NODE(TryBlockStatement)
+
+  StatementAST* try_block;
+  const ListNode<CatchStatementAST*> *catch_blocks;
+};
+
+struct CatchStatementAST: public StatementAST
+{
+  DECLARE_AST_NODE(CatchStatement)
+
+  ConditionAST* condition;
+  StatementAST* statement;
 };
 
 struct TypeIdAST: public AST

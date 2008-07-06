@@ -91,6 +91,7 @@ protected:
   virtual void visitThrowExpression(ThrowExpressionAST *);
   virtual void visitTranslationUnit(TranslationUnitAST *);
   virtual void visitTryBlockStatement(TryBlockStatementAST *);
+  virtual void visitCatchStatement(CatchStatementAST *);
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitTypeIdentification(TypeIdentificationAST *);
   virtual void visitTypeParameter(TypeParameterAST *);

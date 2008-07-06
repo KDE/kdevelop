@@ -885,6 +885,68 @@ void ContextBuilder::visitIfStatement(IfStatementAST* node)
   }
 }
 
+void ContextBuilder::visitDoStatement(DoStatementAST *node)
+{
+  DUContext* secondParentContext = openContext(node->statement, DUContext::Other);
+
+  visit(node->statement);
+
+  closeContext();
+
+  if (node->expression) {
+    const bool contextNeeded = createContextIfNeeded(node->expression, secondParentContext);
+
+    visit(node->expression);
+
+    if (contextNeeded)
+      closeContext();
+  }
+}
+
+void ContextBuilder::visitTryBlockStatement(TryBlockStatementAST *node)
+{
+  QList<DUContext*> parentContextsToImport = m_importedParentContexts;
+
+  openContext(node->try_block, DUContext::Other, m_openingFunctionBody);
+  m_openingFunctionBody.clear();
+  addImportedContexts();
+
+  visit(node->try_block);
+
+  closeContext();
+
+  m_tryParentContexts.push(parentContextsToImport);
+
+  visitNodes(this, node->catch_blocks);
+
+  m_tryParentContexts.pop();
+}
+
+void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
+{
+  QList<DUContext*> contextsToImport;
+
+  if (node->condition) {
+    DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
+    contextsToImport.append(secondParentContext);
+
+    visit(node->condition);
+
+    closeContext();
+  }
+
+  contextsToImport << m_tryParentContexts.top();
+
+  if (node->statement) {
+    const bool contextNeeded = createContextIfNeeded(node->statement, contextsToImport);
+
+    visit(node->statement);
+
+    if (contextNeeded)
+      closeContext();
+  }
+}
+
 bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)
 {
   return createContextIfNeeded(node, QList<DUContext*>() << importedParentContext);

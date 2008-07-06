@@ -388,9 +388,16 @@ void DefaultVisitor::visitTranslationUnit(TranslationUnitAST *node)
   visitNodes(this, node->declarations);
 }
 
-void DefaultVisitor::visitTryBlockStatement(TryBlockStatementAST *)
+void DefaultVisitor::visitTryBlockStatement(TryBlockStatementAST *node)
 {
-  // nothing to do
+  visit(node->try_block);
+  visitNodes(this, node->catch_blocks);
+}
+
+void DefaultVisitor::visitCatchStatement(CatchStatementAST * node)
+{
+  visit(node->condition);
+  visit(node->statement);
 }
 
 void DefaultVisitor::visitTypeId(TypeIdAST *node)

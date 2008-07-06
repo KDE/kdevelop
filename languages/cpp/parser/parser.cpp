@@ -3456,12 +3456,15 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
 {
   CHECK(Token_try);
 
+  TryBlockStatementAST *ast = CreateNode<TryBlockStatementAST>(session->mempool);
+
   StatementAST *stmt = 0;
   if (!parseCompoundStatement(stmt))
     {
       syntaxError();
       return false;
     }
+  ast->try_block = stmt;
 
   if (session->token_stream->lookAhead() != Token_catch)
     {
@@ -3491,9 +3494,15 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
           syntaxError();
           return false;
         }
+
+      CatchStatementAST *catch_ast = CreateNode<CatchStatementAST>(session->mempool);
+      catch_ast->condition = cond;
+      catch_ast->statement = body;
+
+      ast->catch_blocks = snoc(ast->catch_blocks, catch_ast, session->mempool);
     }
 
-  node = stmt;
+  node = ast;
   return true;
 }
 

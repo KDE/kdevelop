@@ -83,6 +83,7 @@ Visitor::visitor_fun_ptr Visitor::_S_table[AST::NODE_KIND_COUNT] = {
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitThrowExpression),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTranslationUnit),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTryBlockStatement),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitCatchStatement),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTypeId),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTypeIdentification),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTypeParameter),
