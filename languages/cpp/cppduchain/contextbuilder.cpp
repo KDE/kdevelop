@@ -459,7 +459,7 @@ void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
     currentContext()->addImportedParentContext( idDecl->logicalInternalContext(0) );
   } else if( !baseClass.cast<DelayedType>() ) {
-    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? QString() : base.baseClass.type()->toString());
+    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
   }
 }
 
