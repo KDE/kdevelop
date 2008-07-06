@@ -24,5 +24,6 @@ SOURCES += %{APPNAMELC}.cpp mainviewimp.cpp
 LIBS += -lkdeui -lkdecore
 INCLUDEPATH = $$KDEINCLUDE
 QMAKE_LIBDIR = $$KDELIB
-TARGET = ../bin/%{APPNAMELC}
+TARGET = %{APPNAMELC}
+DESTDIR = ../bin
 CONFIG += release warn_on

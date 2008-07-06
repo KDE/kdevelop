@@ -6,4 +6,5 @@ CONFIG += release \
           warn_on \
 	  thread \
           qt
-TARGET = ../bin/%{APPNAMELC}
+TARGET = %{APPNAMELC}
+DESTDIR = ../bin
