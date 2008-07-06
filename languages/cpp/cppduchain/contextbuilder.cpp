@@ -496,8 +496,8 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 
     int kind = editor()->parseSession()->token_stream->kind(node->class_key);
 
-    if (kind == Token_union) {
-      //It's an unnamed union context, propagate the declarations to the parent
+    if ((kind == Token_union || id.isEmpty()) && currentContext()->parentContext() && currentContext()->parentContext()->type() == DUContext::Class) {
+      //It's an unnamed union context, or an unnamed struct, propagate the declarations to the parent
       DUChainWriteLocker lock(DUChain::lock());
       currentContext()->setPropagateDeclarations(true);
     }

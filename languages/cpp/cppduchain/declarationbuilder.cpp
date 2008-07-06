@@ -515,8 +515,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   return declaration;
 }
 
-Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range) {
-  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range);
+Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange) {
+  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, Identifier(), collapseRange);
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();
@@ -686,7 +686,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     openPrefixContext(node, id, pos);
   }
 
-  openClassDefinition(node->name, node);
+  openClassDefinition(node->name, node, node->name == 0);
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   if (kind == Token_struct || kind == Token_union)
