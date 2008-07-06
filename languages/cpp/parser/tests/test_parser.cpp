@@ -63,15 +63,15 @@ private slots:
 //     const NameSymbol *n1 = control.findOrInsertName("a", 1);
 //     int *type1 = new int(1); // don't care much about types
 //     control.declare(n1, (Type*)type1);
-// 
+//
 //     control.pushContext();
 //     int *type2 = new int(2);
 //     const NameSymbol *n2 = control.findOrInsertName("b", 1);
 //     control.declare(n2, (Type*)type2);
-// 
+//
 //     QCOMPARE(control.lookupType(n1), (Type*)type1);
 //     QCOMPARE(control.lookupType(n2), (Type*)type2);
-// 
+//
 //     control.popContext();
 //     QCOMPARE(control.lookupType(n1), (Type*)type1);
 //     QCOMPARE(control.lookupType(n2), (Type*)0);
@@ -92,11 +92,11 @@ private slots:
 //     LocationTable location_table;
 //     LocationTable line_table;
 //     Control control;
-// 
+//
 //     Lexer lexer(token_stream, location_table, line_table, &control);
 //     lexer.tokenize(code, code.size()+1);
 //     QCOMPARE(control.problem(0).message(), QString("expected end of line"));
-// 
+//
 //     QByteArray code2("class Foo { int foo() {} }; ");
 //     lexer.tokenize(code2, code2.size()+1);
 //     QCOMPARE(control.problemCount(), 1);    //we still have the old problem in the list
@@ -123,7 +123,6 @@ private slots:
   void testParseMethod()
   {
     QByteArray method("void A::test() {  }");
-    QVERIFY(!control.skipFunctionBody());
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     QVERIFY(ast != 0);
@@ -143,7 +142,7 @@ private slots:
 //       (getAST(ast, AST::Kind_SimpleTypeSpecifier));
 //     QCOMPARE((TOKEN_KIND)parser.token_stream.kind(retType->start_token),
 // 	    Token_int);
-// 
+//
 //     // first param
 //     ParameterDeclarationAST* param = static_cast<ParameterDeclarationAST*>
 //       (getAST(ast, AST::Kind_ParameterDeclaration));
@@ -155,7 +154,7 @@ private slots:
 //       (getAST(param, AST::Kind_UnqualifiedName));
 //     QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
 // 	    QString("primitive"));
-// 
+//
 //     // second param
 //     param = static_cast<ParameterDeclarationAST*>
 //       (getAST(ast, AST::Kind_ParameterDeclaration, 1));
@@ -163,15 +162,15 @@ private slots:
 //       (getAST(param, AST::Kind_UnqualifiedName));
 //     QCOMPARE(parser.token_stream.symbol(argType->id)->as_string(),
 // 	    QString("B"));
-// 
+//
 //     // pointer operator
 //     QVERIFY(hasKind(param, AST::Kind_PtrOperator));
-// 
+//
 //     argName = static_cast<UnqualifiedNameAST*>
 //       (getAST(param, AST::Kind_UnqualifiedName, 1));
 //     QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
 // 	    QString("pointer"));
-// 
+//
 //   }
 
   void testForStatements()
@@ -208,7 +207,7 @@ private slots:
     QByteArray method("//TranslationUnitComment\n//Hello\nint A; //behind\n /*between*/\n /*Hello2*/\n class B{}; //behind\n//Hello3\n //beforeTest\nvoid test(); //testBehind");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    
+
     QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QString("TranslationUnitComment")); //The comments were merged
 
     const ListNode<DeclarationAST*>* it = ast->declarations;
@@ -220,7 +219,7 @@ private slots:
     it = it->next;
     QVERIFY(it);
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("between\nHello2\n(behind)"));
-    
+
     it = it->next;
     QVERIFY(it);
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello3\nbeforeTest\n(testBehind)"));
@@ -241,17 +240,17 @@ private slots:
 
     const EnumSpecifierAST* enumSpec = (const EnumSpecifierAST*)simpleDecl->type_specifier;
     QVERIFY(enumSpec);
-    
+
     const ListNode<EnumeratorAST*> *enumerator = enumSpec->enumerators;
     QVERIFY(enumerator);
     enumerator = enumerator->next;
     QVERIFY(enumerator);
-    
+
     QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator1Comment\n(enumerator1BehindComment)"));
 
     enumerator = enumerator->next;
     QVERIFY(enumerator);
-    
+
     QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator2Comment\n(enumerator2BehindComment)"));
   }
 
@@ -275,10 +274,10 @@ private slots:
     QVERIFY(members);
     members = members->next;
     QVERIFY(members);
-    
+
     QCOMPARE(CommentFormatter::formatComment(members->element->comments, lastSession), QString("Comment"));
   }
-  
+
   void testComments4()
   {
     QByteArray method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
@@ -307,16 +306,16 @@ private slots:
     //QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
     QCOMPARE(preprocess("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
     QCOMPARE(preprocess("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
-    
+
   }
-  
+
   void testStringConcatenation()
   {
     rpp::Preprocessor preprocessor;
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )"), QString("\nHelloYou YouHello"));
   }
-  
+
   void testCondition()
   {
     QByteArray method("bool i = (small < big || big > small);");
@@ -325,7 +324,7 @@ private slots:
     dumper.dump(ast, lastSession->token_stream);
     ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
   }
-  
+
   /*void testParseFile()
   {
      QFile file(TEST_FILE);

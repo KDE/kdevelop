@@ -72,9 +72,9 @@ void Parser::addComment( CommentAST* ast, const Comment& comment ) {
 void Parser::moveComments( CommentAST* ast ) {
   while( m_commentStore.hasComment() ) {
     size_t token = m_commentStore.takeFirstComment().token();
-    
+
 /*    kDebug() << "Moving comment" << session->token_stream->token(token).symbol();*/
-    
+
     ast->comments = snoc(ast->comments, token, session->mempool);
   }
 }
@@ -96,7 +96,7 @@ void Parser::rewind(size_t position) {
   //Search the previous valid token
 
   _M_last_valid_token = position > 0 ? position-1 : position;
-  
+
   while( _M_last_valid_token > 0 && session->token_stream->kind(_M_last_valid_token) == Token_comment )
     --_M_last_valid_token;
 }
@@ -160,7 +160,7 @@ void Parser::processComment( int offset, int line ) {
     return; //The comment was already parsed. May happen because of pre-parsing
 
   _M_last_parsed_comment = tokenNumber;
-  
+
   const Token& commentToken( (*session->token_stream)[tokenNumber] );
   Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
@@ -170,7 +170,7 @@ void Parser::processComment( int offset, int line ) {
 
 /*  kDebug() << "noticing comment" << commentToken.symbol();*/
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
-  
+
 }
 
 void Parser::clearComment( ) {
@@ -228,7 +228,7 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
     parseExpression(ast);
     return ast;
   }
-    
+
   return ast;
 }
 
@@ -319,7 +319,7 @@ void Parser::reportError(const QString& msg)
 bool Parser::skipUntil(int token)
 {
   clearComment();
-  
+
   while (session->token_stream->lookAhead())
     {
       if (session->token_stream->lookAhead() == token)
@@ -523,13 +523,13 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 /*  kDebug() << "tokens:";
   for(size_t a = 0; a < session->token_stream->size(); ++a)
     kDebug() << token_name(session->token_stream->token(a).kind) << session->token_stream->token(a).symbolString();*/
-  
+
   std::size_t start = session->token_stream->cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
 
   if( m_commentStore.hasComment() )
     addComment(ast, m_commentStore.takeFirstComment());
-  
+
   while (session->token_stream->lookAhead())
     {
       std::size_t startDecl = session->token_stream->cursor();
@@ -600,7 +600,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
 
         Comment mcomment = comment();
         clearComment();
-        
+
         TypeSpecifierAST *spec = 0;
         if (parseEnumSpecifier(spec)
             || parseClassSpecifier(spec))
@@ -625,10 +625,10 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
               addComment(ast, mcomment);
 
             preparseLineComments(ast->end_token-1);
-            
+
             if( m_commentStore.hasComment() )
               addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
-            
+
             return true;
           } else {
             rewind(start);
@@ -636,7 +636,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
               //Add the comments to the declaration
               if( mcomment )
                 addComment(node, mcomment);
-              
+
               preparseLineComments(node->end_token-1);
 
               if( m_commentStore.hasComment() )
@@ -724,7 +724,7 @@ bool Parser::parseLinkageBody(LinkageBodyAST *&node)
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
-  
+
   return true;
 }
 
@@ -904,7 +904,7 @@ bool Parser::parseTypedef(DeclarationAST *&node)
   std::size_t start = session->token_stream->cursor();
 
   Comment mcomment = comment();
-  
+
   CHECK(Token_typedef);
 
   TypeSpecifierAST *spec = 0;
@@ -926,9 +926,9 @@ bool Parser::parseTypedef(DeclarationAST *&node)
 
   if( mcomment )
       addComment( ast, mcomment );
-  
+
   ADVANCE(';', ";");
-  
+
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
 
@@ -1564,7 +1564,7 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
   EnumeratorAST *enumerator = 0;
   if (parseEnumerator(enumerator))
     {
-      
+
       ast->enumerators = snoc(ast->enumerators, enumerator, session->mempool);
 
       while (session->token_stream->lookAhead() == ',')
@@ -1582,9 +1582,9 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
     }
 
   clearComment();
-  
+
   ADVANCE_NR('}', "}");
-  
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -1915,7 +1915,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
     rewind(start);
     return false;
   }
-  
+
   ParameterDeclarationAST *ast = CreateNode<ParameterDeclarationAST>(session->mempool);
   ast->type_specifier = spec;
   ast->declarator = decl;
@@ -1972,7 +1972,7 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
   ast->class_key = class_key;
   ast->name = name;
   ast->base_clause = bases;
-    
+
   while (session->token_stream->lookAhead())
     {
       if (session->token_stream->lookAhead() == '}')
@@ -1992,9 +1992,9 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
     }
 
   clearComment();
-  
+
   ADVANCE_NR('}', "}");
-  
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -2104,19 +2104,19 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
 
       if( mcomment )
         addComment(ast,mcomment);
-      
+
       preparseLineComments(ast->end_token-1);
 
       if( m_commentStore.hasComment() )
         addComment( ast, m_commentStore.takeCommentInRange( lineFromTokenNumber( --ast->end_token ) ) );
-      
+
       node = ast;
 
-      
+
       return true;
     } else {
       rewind(start);
-      
+
       if( parseDeclarationInternal(node) ) {
         //Add the comments to the declaration
         if( mcomment )
@@ -2224,7 +2224,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
 
   EnumeratorAST *ast = CreateNode<EnumeratorAST>(session->mempool);
   ast->id = id;
-  
+
 
   if (session->token_stream->lookAhead() == '=')
     {
@@ -2244,7 +2244,7 @@ bool Parser::parseEnumerator(EnumeratorAST *&node)
 
   if( m_commentStore.hasComment() )
     addComment( node, m_commentStore.takeCommentInRange( lineFromTokenNumber(--ast->end_token) ) );
-  
+
   return true;
 }
 
@@ -2953,7 +2953,7 @@ bool Parser::parseCompoundStatement(StatementAST *&node)
   clearComment();
   ADVANCE_NR('}', "}");
 
-  
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -3060,7 +3060,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
     case Token_case:
       {
         std::size_t start = session->token_stream->cursor();
-        
+
         advance();
         ExpressionAST *expr = 0;
         if (!parseConstantExpression(expr))
@@ -3081,7 +3081,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
         LabeledStatementAST* ast = CreateNode<LabeledStatementAST>(session->mempool);
 
         ast->expression = expr;
-        
+
         parseStatement(ast->statement);
 
         if(ast->expression || ast->statement) {
@@ -3113,7 +3113,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
 
   Comment mcomment = comment();
   clearComment();
-    
+
   std::size_t start = session->token_stream->cursor();
 
   const ListNode<std::size_t> *cv = 0;
@@ -3147,10 +3147,10 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
-  
+
   if(mcomment)
     addComment(ast, mcomment);
-  
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -3281,6 +3281,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
               }
               break;
 
+            case Token_try:
             case '{':
               {
                 StatementAST *funBody = 0;
@@ -3339,7 +3340,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
       UPDATE_POS(ast, start, _M_last_valid_token+1);
       node = ast;
-      
+
       return true;
     }
 
@@ -3360,7 +3361,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
       if (session->token_stream->lookAhead() != ';')
         {
-          if (parseInitDeclarator(decl) && session->token_stream->lookAhead() == '{')
+          if (parseInitDeclarator(decl) && (session->token_stream->lookAhead() == '{' || session->token_stream->lookAhead() == Token_try))
             {
               // function definition
               maybeFunctionDefinition = true;
@@ -3395,6 +3396,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
           }
           return true;
 
+        case Token_try:
         case '{':
           {
             if (!maybeFunctionDefinition)
@@ -3415,7 +3417,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                 ast->type_specifier = spec;
                 ast->init_declarator = decl;
                 ast->function_body = funBody;
-                
+
                 UPDATE_POS(ast, start, _M_last_valid_token+1);
                 node = ast;
 
@@ -3430,20 +3432,10 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
   return false;
 }
 
-bool Parser::skipFunctionBody(StatementAST *&node)
-{
-#if defined(__GNUC__)
-#warning "Parser::skipFunctionBody() -- implement me"
-#endif
-  Q_ASSERT(0); // ### not implemented
-  Q_UNUSED(node)
-  return 0;
-}
-
 bool Parser::parseFunctionBody(StatementAST *&node)
 {
-  if (control->skipFunctionBody())
-    return skipFunctionBody(node);
+  if (session->token_stream->lookAhead() == Token_try)
+    return parseTryBlockStatement(node);
 
   return parseCompoundStatement(node);
 }
@@ -3462,9 +3454,6 @@ bool Parser::parseTypeSpecifierOrClassSpec(TypeSpecifierAST *&node)
 
 bool Parser::parseTryBlockStatement(StatementAST *&node)
 {
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
   CHECK(Token_try);
 
   StatementAST *stmt = 0;
@@ -4491,7 +4480,7 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
   std::size_t start = session->token_stream->cursor();
 
   size_t pos = session->token_stream->cursor();
-  
+
   CHECK(Token_throw);
 
   ThrowExpressionAST *ast = CreateNode<ThrowExpressionAST>(session->mempool);

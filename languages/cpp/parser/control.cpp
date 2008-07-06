@@ -20,8 +20,6 @@
 #include "lexer.h"
 
 Control::Control()
-  : _M_skip_function_body(false)
-
 {
 }
 

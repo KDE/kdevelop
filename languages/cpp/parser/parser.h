@@ -86,9 +86,6 @@ private:
   void tokenRequiredError(int expected);
 
 public:
-  bool skipFunctionBody(StatementAST *&node);
-
-public:
   bool parseAbstractDeclarator(DeclaratorAST *&node);
   bool parseAccessSpecifier(DeclarationAST *&node);
   bool parseAdditiveExpression(ExpressionAST *&node);
@@ -204,7 +201,7 @@ public:
   void addComment( CommentAST* ast, const Comment& comment );
   //Moves all currently available comments to the given AST, removing them from the comment-store
   void moveComments( CommentAST* ast );
-  
+
   void advance(bool skipComment = true);
   void rewind(size_t position);
   // private:
@@ -218,7 +215,7 @@ public:
 private:
 
   int lineFromTokenNumber( size_t tokenNumber ) const;
-  
+
   ///parses all comments until the end of the line
   Comment comment();
   ///Preparses comments in the same line as given token-number
@@ -228,7 +225,7 @@ private:
 
   Comment m_currentComment;
   CommentStore m_commentStore;
-  
+
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;

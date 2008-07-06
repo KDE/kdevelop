@@ -44,11 +44,7 @@ public:
   void reportProblem(const KDevelop::ProblemPointer &problem);
   void reportProblem(const KDevelop::Problem &problem);
 
-  inline bool skipFunctionBody() const { return _M_skip_function_body; }
-  inline void setSkipFunctionBody(bool skip) { _M_skip_function_body = skip; }
-
 private:
-  bool _M_skip_function_body;
   QList<KDevelop::ProblemPointer> _M_problems;
 };
 
