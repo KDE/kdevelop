@@ -627,6 +627,8 @@ void MakeWidget::slotExitedDirectory( ExitingDirectoryItem* item )
 		kdWarning(9004) << "Expected directory: \"" << *dir << "\" but got \"" << eDir << "\"" << endl;
 	}
 	insertItem( item );
+	if (dirstack.top())
+		insertItem( new EnteringDirectoryItem( *dirstack.top(), "" ) );
 	delete dir;
 }
 
