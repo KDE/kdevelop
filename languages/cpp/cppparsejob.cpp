@@ -439,8 +439,12 @@ void CPPInternalParseJob::run()
 
       //If publically visible declarations were added/removed, all following parsed files need to be updated
       if(declarationBuilder.changeWasSignificant()) {
-        kDebug() << "A significant change was recorded, all following contexts will be updated";
-        parentJob()->masterJob()->setNeedUpdateEverything(true);
+        ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
+        ///      While searching, always use the perspective of the proxy. Even better: Change the context-system so proxy-contexts become completely valid contexts from the outside perspective,
+        ///      that import all their imports, and that share all their content except the imports/environment-information with all the other proxy contexts for that file, and with one content-context.
+        ///      Problem: What to do with imports that happen within the content-section then?
+        //kDebug() << "A significant change was recorded, all following contexts will be updated";
+        //parentJob()->masterJob()->setNeedUpdateEverything(true);
       }
 
       {
