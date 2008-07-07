@@ -31,6 +31,8 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kactioncollection.h>
+#include <kmimetype.h>
+#include <kio/copyjob.h>
 #include <kio/netaccess.h>
 
 #include <icore.h>
@@ -326,31 +328,43 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     kDebug(9010) << "copy:" << source << "to" << dest;
-    QFile inputFile(source);
-    QFile outputFile(dest);
-
-    if (inputFile.open(QFile::ReadOnly) && outputFile.open(QFile::WriteOnly))
+    if( KMimeType::isBinaryData(source) ) 
     {
-        QTextStream input(&inputFile);
-        input.setCodec(QTextCodec::codecForName("UTF-8"));
-        QTextStream output(&outputFile);
-        output.setCodec(QTextCodec::codecForName("UTF-8"));
-        while(!input.atEnd())
+        KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );
+        if( !job->exec() )
         {
-            QString line = input.readLine();
-            output << KMacroExpander::expandMacros(line, m_variables) << "\n";
+            return false;
         }
-        // Preserve file mode...
-        struct stat fmode;
-        ::fstat(inputFile.handle(), &fmode);
-        ::fchmod(outputFile.handle(), fmode.st_mode);
         return true;
-    }
-    else
+    } else 
     {
-        inputFile.close();
-        outputFile.close();
-        return false;
+        QFile inputFile(source);
+        QFile outputFile(dest);
+    
+    
+        if (inputFile.open(QFile::ReadOnly) && outputFile.open(QFile::WriteOnly))
+        {
+            QTextStream input(&inputFile);
+            input.setCodec(QTextCodec::codecForName("UTF-8"));
+            QTextStream output(&outputFile);
+            output.setCodec(QTextCodec::codecForName("UTF-8"));
+            while(!input.atEnd())
+            {
+                QString line = input.readLine();
+                output << KMacroExpander::expandMacros(line, m_variables) << "\n";
+            }
+            // Preserve file mode...
+            struct stat fmode;
+            ::fstat(inputFile.handle(), &fmode);
+            ::fchmod(outputFile.handle(), fmode.st_mode);
+            return true;
+        }
+        else
+        {
+            inputFile.close();
+            outputFile.close();
+            return false;
+        }
     }
 }
 
