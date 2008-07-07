@@ -21,7 +21,7 @@
 #ifndef QMAKE_CONTEXTBUILDER_H
 #define QMAKE_CONTEXTBUILDER_H
 
-#include <language/duchain/abstractcontextbuilder.h>
+#include <language/duchain/builders/abstractcontextbuilder.h>
 #include "parser/qmakeastvisitor.h"
 #include "parser/ast.h"
 

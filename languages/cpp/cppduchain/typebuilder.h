@@ -20,7 +20,7 @@
 #define TYPEBUILDER_H
 
 #include "contextbuilder.h"
-#include <language/duchain/abstracttypebuilder.h>
+#include <language/duchain/builders/abstracttypebuilder.h>
 #include <typesystem.h>
 #include <declaration.h>
 #include "cppduchainexport.h"
@@ -45,10 +45,10 @@ public:
 protected:
   ///Returns either the current context, or the last importend parent-context(needed to find template-argument function return-values)
   virtual KDevelop::DUContext* searchContext() const;
-   
+
   // Created visitors
   virtual void visitArrayExpression(ExpressionAST*);
-  
+
   // Regular visitors
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);
@@ -73,10 +73,10 @@ protected:
   bool openTypeFromName(NameAST* name, bool needClass = false);
 
   bool lastTypeWasInstance() const;
-  
+
   private:
   void openDelayedType(const KDevelop::QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind);
-  
+
 
   CppClassType* openClass(int kind);
   CppFunctionType* openFunction(DeclaratorAST *node);

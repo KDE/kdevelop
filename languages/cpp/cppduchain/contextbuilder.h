@@ -27,7 +27,7 @@
 
 #include "cppducontext.h"
 
-#include <language/duchain/abstractcontextbuilder.h>
+#include <language/duchain/builders/abstractcontextbuilder.h>
 #include <duchainpointer.h>
 #include <identifier.h>
 #include <ducontext.h>

@@ -21,7 +21,7 @@
 #define DECLARATIONBUILDER_H
 
 #include "typebuilder.h"
-#include <language/duchain/abstractdeclarationbuilder.h>
+#include <language/duchain/builders/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
 #include <declaration.h>
 #include <duchainpointer.h>
@@ -55,7 +55,7 @@ public:
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
   KDevelop::TopDUContext* buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);
-  
+
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,
    * but should be deleted as fast as possible because it keeps a reference to an independent context.
@@ -67,7 +67,7 @@ public:
   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   bool changeWasSignificant() const;
-  
+
   protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitClassSpecifier(ClassSpecifierAST*);
@@ -92,7 +92,7 @@ private:
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position);
-  
+
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
    * Register a new declaration with the definition-use chain.
@@ -108,14 +108,14 @@ private:
   /// Same as the above, but sets it as the definition too @param forceInstance when this is true, the declaration is forced to be an instance, not a type declaration,
   /// and its assigned identified type will not get the declaration assigned.
   virtual void closeDeclaration(bool forceInstance = false);
-  
+
   //Opens a Declaration that has the isDefinition flag set
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);
   //Opens a ClassDeclaration
   Cpp::ClassDeclaration* openClassDefinition(NameAST* name, AST* range, bool collapseRange);
   //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
-  //Opens either a ClassMemberDeclaration, or a Declaration 
+  //Opens either a ClassMemberDeclaration, or a Declaration
   Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier(), bool collapseRange = false);
 
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
@@ -125,7 +125,7 @@ private:
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   void parseComments(const ListNode<size_t> *comments);
-  
+
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
   void popSpecifiers();

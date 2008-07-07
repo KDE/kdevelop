@@ -21,7 +21,7 @@
 
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
-#include <language/duchain/abstractusebuilder.h>
+#include <language/duchain/builders/abstractusebuilder.h>
 
 typedef KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> UseBuilderBase;
 
@@ -44,14 +44,14 @@ public:
   void buildUses(AST *node);
 
   using UseBuilderBase::newUse;
-  
+
 protected:
   virtual void visitPrimaryExpression (PrimaryExpressionAST*);
   virtual void visitMemInitializer(MemInitializerAST *);
 
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
   virtual void visitExpressionStatement(ExpressionStatementAST *) ;
-  
+
   virtual void visitBinaryExpression(BinaryExpressionAST *) ;
   virtual void visitCastExpression(CastExpressionAST *) ;
   virtual void visitConditionalExpression(ConditionalExpressionAST *) ;
@@ -71,12 +71,12 @@ protected:
   virtual void visitDeclarator(DeclaratorAST* node);
   virtual void visitUsing(UsingAST *);
   void visitTypeId(TypeIdAST* type_id);
-  
+
   virtual void visitClassSpecifier(ClassSpecifierAST* node);
 private:
 
   void visitExpression(AST* node);
-  
+
   inline int& nextUseIndex() { return m_nextUseStack.top(); }
   inline QVector<int>& skippedUses() { return m_skippedUses.top(); }
   QStack<int> m_nextUseStack;
