@@ -28,20 +28,30 @@
 namespace KDevelop {
 
 /**
- * A class which iterates the AST to extract uses of definitions.
+ * \short Abstract definition-use chain use builder class
+ *
+ * The AbstractUseBuilder is a convenience class template for creating customised
+ * definition-use chain use builders from an AST.  It simplifies:
+ * - use of your editor integrator
+ * - creating or modifying existing \ref Use "Uses"
+ *
+ * \author Hamish Rodda \<rodda@kde.org\>
  */
 template<typename T, typename NameT, typename LanguageSpecificUseBuilderBase>
 class AbstractUseBuilder: public LanguageSpecificUseBuilderBase
 {
 public:
+  /// Constructor.
   AbstractUseBuilder()
     : m_finishContext(true)
   {
   }
 
   /**
-   * Compile either a context-definition chain, or add uses to an existing
-   * chain.
+   * Iterate an existing duchain, and add, remove or modify uses as determined
+   * from the ast.
+   *
+   * \param node AST node to start visiting.
    */
   void buildUses(T *node)
   {
@@ -62,9 +72,10 @@ public:
 
 protected:
   /**
-   * @param decl May be zero for not found declarations
-   * */
-  /// Register a new use
+   * Register a new use at the AST node \a name.
+   *
+   * \param node AST node which both represents a use and the identifier for the declaration which is being used.
+   */
   void newUse(NameT* name)
   {
     QualifiedIdentifier id = identifierForNode(name);
@@ -85,6 +96,12 @@ protected:
     newUse( newRange, !declarations.isEmpty() ? declarations.first() : 0 );
   }
 
+  /**
+   * Register a new use.
+   *
+   * \param newRange Text range which encompasses the use.
+   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   */
   void newUse(SimpleRange newRange, Declaration* declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
@@ -102,7 +119,7 @@ protected:
       LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
       SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(iface, newRange);
 
-      /**
+      /*
       * We need to find a context that this use fits into, which must not necessarily be the current one.
       * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
       * sub-context that comes from the macro. That sub-context will have a very small range, and will most
@@ -181,6 +198,9 @@ protected:
     }
   }
 
+  /**
+   * Reimplementation of openContext, to track which uses should be assigned to which context.
+   */
   virtual void openContext(KDevelop::DUContext* newContext)
   {
     LanguageSpecificUseBuilderBase::openContext(newContext);
@@ -190,6 +210,9 @@ protected:
     m_skippedUses.push(QVector<int>());
   }
 
+  /**
+   * Reimplementation of closeContext, to track which uses should be assigned to which context.
+   */
   virtual void closeContext()
   {
     if(m_finishContext) {

@@ -1,7 +1,7 @@
 /*!
  * @mainpage Definition-Use Chain and Type System
  *
- * Overview | @ref duchain-design "Design" | \ref Implementing "Implementing"
+ * Overview | \ref duchain-design "Design" | \ref Implementing "Implementing"
  *
  * The definition-use chain and type system provide a language-neutral
  * representation of source code structure, used to provide language-based
@@ -10,7 +10,7 @@
  * An introduction to the duchain can be found in the \ref duchain-design document.
  *
  * Details about how to provide a duchain and type system for your favourite
- * language can be found here: \ref Implementing
+ * language can be found here: \ref Implementing.
  *
  * @licenses
  * @lgpl
@@ -20,10 +20,79 @@
  * mailing list.
  */
 
+/** \page duchain-design Definition-Use Chain Design
+
+ * @ref index "Overview" | Design | \ref Implementing "Implementing"
+
+\section overview Overview
+
+The duchain is a sequence of contexts in a code file, and the associated definitions which occur in those contexts.  A simplified way of thinking about it is that for each set of brackets (curly {} or not ()), there is a separate context.  Each context is represented by a \ref KDevelop::DUContext.  Each context will have one parent context (except in the case of the top level context which has none), and any number of child contexts (including none).  Additionally, each context can import any number of other contexts.  The reason for this will become clear later.  Thus, the \ref KDevelop::DUContext structure resembles a directed acyclic graph, for those familiar with the concept.
+
+
+\section parsing Parsing
+
+These \ref KDevelop::DUContext "DUContexts" are created on the first pass after parsing the code to an AST (abstract syntax tree).  Also, in this stage the data types are parsed, and any declarations which are encountered are recorded against the context in which they are encountered in.  Each declaration is represented by a Declaration.
+
+Parsing code is arranged into builder classes, which subclass the AST visitor pattern.  They are designed to be able to subclass each other, thus achieving multiple goals with each pass (as described in the above paragraph).
+
+For most languages, the first pass is accomplished by the \ref KDevelop::AbstractContextBuilder "AbstractContextBuilder", \ref KDevelop::AbstractTypeBuilder "AbstractTypeBuilder", and \ref KDevelop::AbstractDeclarationBuilder "AbstractDeclarationBuilder".  The customised builder class is a subclass of each of these classes. Thus, in the first pass, the \ref KDevelop::AbstractContextBuilder "AbstractContextBuilder" creates the \ref KDevelop::DUContext "DUContext" tree, the \ref KDevelop::AbstractTypeBuilder "AbstractTypeBuilder" records which \ref KDevelop::AbstractType "types" are encountered, and the \ref KDevelop::AbstractDeclarationBuilder "AbstractDeclarationBuilder" creates \ref KDevelop::Declaration "Declaration" instances which are associated with the current type and context.
+
+The second pass is the creation of uses, accomplished a subclass of both the \ref KDevelop::AbstractContextBuilder and the \ref KDevelop::AbstractUseBuilder.  On the second pass, we only iterate previously parsed contexts (as they are already created).  Then, as variable uses are encountered, a \ref KDevelop::Use is created for each.  A \ref KDevelop::Declaration is searched for in the current context, and if one is found, they are associated with each other.
+
+
+\section classes Classes and their purposes
+
+\li \ref KDevelop::DUChain - a global object which keeps track of all loaded source files and the top level context of their definition-use chains.
+
+\li \ref KDevelop::DUContext - an object which represents a single context in a source file, and stores information about parent and child \ref KDevelop::DUContext "DUContexts", and \ref KDevelop::Declarations "Declarations", \ref KDevelop::Definitions "Definitions" and \ref KDevelop::Use "Uses" which occur in them.  Also provides convenience methods for searching the chain.
+
+\li \ref KDevelop::Declaration - an object which represents a single declaration.  Has several subclasses which store more information specific to the type of declaration which is being represented.
+
+\li \ref KDevelop::Definition - an object which represents a definition corresponding to a \ref KDevelop::Declaration "Declaration".
+
+\li \ref KDevelop::Use - an object which represents a use of a particular declaration.
+
+\li \ref KDevelop::SymbolTable - a hash which stores identifiers available in the top level context of a source file and their respective \ref KDevelop::Declaration "Declarations".
+
+\li KDevelop::*Builder - objects whose purpose is to iterate the parsed AST and produce instances of the duchain objects.
+
+\li \ref KDevelop::AbstractType - the base class for types.
+
+
+\section searching Definition-use chain searching
+
+Because iterating a complete definition-use chain can become expensive when they are large, when a search is being performed (eg. for a declaration corresponding to a certain identifier) it is first performed up to the top level context, then the symbol table is consulted.  The symbol table is a hash of all identifiers which are known to the entire duchain.  All potential matches are evaluated to see if they are visible from the location of the use.
+
+
+\section locking Locking
+
+The duchain is designed to operate in a multithreaded environment.  This means that multiple parse jobs may be operating simultaneously, reading from and writing to the duchain.  Thus, locking is required.
+
+A single read-write lock is used to serialise writes to the chain and allow concurrent reads.  Thus, to call non-const methods, you must hold a write lock, and for const methods, a read lock.  Customised read/write lockers have been created, called DUChainWriteLocker and DUChainReadLocker.  You must not request a write lock while holding a read lock, or you could cause a deadlock.
+
+Also, when manipulating text editor ranges, the \ref KTextEditor::SmartInterface must be locked. \warning You must <em>never</em> attempt to acquire the duchain read or write lock when holding the smart lock, else you may cause a deadlock. See code in \ref KDevelop::AbstractContextBuilder::openContextInternal and \ref KDevelop::DUChainBase.
+
+
+\section plugin-interface Interface for plugins
+
+As plugins will be accessing the \ref KDevelop::DUChain from the main thread, they will need to hold a read lock.  In order to be notified of changes to the \ref KDevelop::DUChain, an observer interface is offered.  See \ref KDevelop::DUChainObserver.
+
+
+\section text-editor-integration Text editor integration
+
+The main classes are subclasses of a base class, \ref KDevelop::DUChainBase.  This object holds a reference to the text range.  When the source file is opened in an editor, the \ref KDevelop::EditorIntegrator will create smart text ranges, which are bound to the editor's copy of the document.  From there, highlighting can be applied to these ranges, as well as other advanced functions (see the \ref KTextEditor documentation for possibilities).  The language support will convert these ranges to smart ranges when the corresponding document is loaded into an editor.
+
+
+\section future Future features - ideas
+
+The completed duchain should allow for code refactoring, intelligent navigation, improved automatic code generation (eg. "create switch statement"), context-sensitive code completion, integration of documentation, debugger integration, a code structure view, call graph, static code analysis etc.
+
+*/
+
 /**
  * \page Implementing Implementing Definition-Use Chains for a specific language
  *
- * \ref index "Overview" | @ref duchain-design "Design" | Implementing
+ * \ref index "Overview" | \ref duchain-design "Design" | Implementing
  *
  * \section create Creating the Definition-Use Chain
  *
@@ -47,6 +116,17 @@
  * This is a LL parser generator, and allows you to specify the grammar from which the
  * parser and AST are generated.  The parser will also need a lexer, common solutions are to
  * use flex to create one for you, or to create one by hand.
+ *
+ * \subsection Generic DUChain Builders
+ *
+ * The abstract builder classes (detailed below) provide convenience functions for creating a
+ * definition-use chain.  They are template classes which require 2 or 3 class
+ * types:
+ * - T: your base AST node type
+ * - NameT: your identifier AST node type, if you have only one, or your base AST node type
+ *          if more than one exist
+ * - Base class: your base class, eg. for your use builder, you will usually supply your custom
+ *               context builder here.
  *
  * \subsection context Context Builder
  * By subclassing \ref KDevelop::AbstractContextBuilder "AbstractContextBuilder", you will have everything you need to
@@ -80,4 +160,6 @@
  * \todo complete this section
  */
 
-// DOXYGEN_PROJECT_NAME=Definition-Use Chain and Type System
+// DOXYGEN_REFERENCES = language/editor
+// DOXYGEN_SET_WARN_LOGFILE=language/duchain/doxygen.log
+// DOXYGEN_SET_RECURSIVE=yes

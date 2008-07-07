@@ -24,27 +24,58 @@
 
 namespace KDevelop {
 
-class ForwardDeclaration;
-
+/**
+ * \short Abstract definition-use chain type builder class
+ *
+ * The AbstractTypeBuilder is a convenience class template for creating customised
+ * definition-use chain type builders from an AST.  It simplifies:
+ * - use of your editor integrator
+ * - creating and re-using types
+ * - creating complex types in a stack
+ * - referencing named types
+ *
+ * \author Hamish Rodda \<rodda@kde.org\>
+ */
 template<typename T, typename NameT, typename LangugageSpecificTypeBuilderBase>
 class AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
 public:
+  /**
+   * Returns the list of types that were created in the parsing run, excluding subtypes
+   * (ie. returns complete types, not the simple types and intermediate types which
+   * went into creating any complex type)
+   *
+   * Used for unit tests only.
+   */
   const QList< KDevelop::AbstractType::Ptr >& topTypes() const
   {
     return m_topTypes;
   }
 
 protected:
+  /**
+   * Determine the context to search in when named types are requested.
+   * You may reimplement this to return a different context if required.
+   *
+   * \returns the context in which to search for named types.
+   */
   virtual DUContext* searchContext() const
   {
     return LangugageSpecificTypeBuilderBase::currentContext();
   }
 
-  // Call at the beginning of processing a class-specifier, right after the type for the class was created.
-  // The type can be retrieved through currentAbstractType().
+  /**
+   * Notify that a class type was opened.
+   *
+   * This should be called at the beginning of processing a class-specifier, right after the type for the class was created.
+   * The type can be retrieved through currentAbstractType().
+   */
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {}
 
+  /**
+   * Perform initialisation at the start of a build, and check that all types
+   * that were registered were also used.
+   */
   virtual void supportBuild(T* node, DUContext* context = 0)
   {
     m_topTypes.clear();
@@ -54,23 +85,34 @@ protected:
     Q_ASSERT(m_typeStack.isEmpty());
   }
 
+  /**
+   * Retrieve the last type that was encountered.
+   * \returns the last encountered type.
+   */
   KDevelop::AbstractType::Ptr lastType() const
   {
     return m_lastType;
   }
 
+  /**
+   * Set the last encountered type.
+   *
+   * \param ptr pointer to the last encountered type.
+   */
   void setLastType(KDevelop::AbstractType::Ptr ptr)
   {
     m_lastType = ptr;
   }
 
+  /// Clear the last encountered type.
   void clearLastType()
   {
     m_lastType = 0;
   }
 
-  /**Simulates that the given type was created.
-   * After calling, the given type will be the last type.
+  /**
+   * Simulates that the given type was created.
+   * After calling, this type will be the last type.
    * */
   void injectType(const KDevelop::AbstractType::Ptr& type)
   {
@@ -78,19 +120,32 @@ protected:
     closeType();
   }
 
+  /**
+   * Simulates that the given type was created.
+   * After calling, this type will be the last type.
+   * */
   template <class T2>
   void injectType(const TypePtr<T2>& type)
   { injectType(KDevelop::AbstractType::Ptr::staticCast(type)); }
 
+  /**
+   * Opens the given \a type, and sets it to be the current type.
+   */
   template <class T2>
   void openType(TypePtr<T2> type)
   { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type)); }
 
+  /**
+   * Opens the given \a type, and sets it to be the current type.
+   */
   void openAbstractType(KDevelop::AbstractType::Ptr type)
   {
     m_typeStack.append(type);
   }
 
+  /**
+   * Close the current type.
+   */
   void closeType()
   {
     m_lastType = currentAbstractType();
@@ -104,21 +159,50 @@ protected:
       m_topTypes.append(m_lastType);
   }
 
+  /// Determine if the type builder is currently parsing a type. \returns true if there is a current type, else returns false.
   inline bool hasCurrentType() { return !m_typeStack.isEmpty(); }
 
-  // You must not use this in creating another type definition, as it may not be the registered type.
+  /**
+   * Retrieve the current type being parsed.
+   *
+   * \warning You must not use this in creating another type definition, as it may not be a registered type.
+   *
+   * \returns the current abstract type being parsed.
+   */
   inline KDevelop::AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
 
-  // You must not use this in creating another type definition, as it may not be the registered type.
+  /**
+   * Retrieve the current type being parsed.
+   *
+   * \warning You must not use this in creating another type definition, as it may not be a registered type.
+   *
+   * \returns the current type being parsed.
+   */
   template <class T2>
   TypePtr<T2> currentType() { return TypePtr<T2>::dynamicCast(m_typeStack.top()); }
 
-  ///Returns whether a type was opened
+  /**
+   * Search for a type with the identifier given by \a name.
+   *
+   * \param name the AST node representing the name of the type to open.
+   * \param needClass if true, only class types will be searched, if false all named types will be searched.
+   *
+   * \returns whether a type was found (and thus opened).
+   */
   bool openTypeFromName(NameT* name, bool needClass)
   {
     return openTypeFromName(identifierForNode(name), name, needClass);
   }
 
+  /**
+   * Search for a type with the identifier given by \a name.
+   *
+   * \param id the identifier of the type for which to search.
+   * \param typeNode the AST node representing the type to open.
+   * \param needClass if true, only class types will be searched, if false all named types will be searched.
+   *
+   * \returns whether a type was found (and thus opened).
+   */
   bool openTypeFromName(QualifiedIdentifier id, T* typeNode, bool needClass)
   {
     bool openedType = false;
