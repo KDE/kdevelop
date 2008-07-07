@@ -681,7 +681,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
     
     ///@todo check for possible multi-threading issues when inserting visible declarations into anonymous contexts
-    instantiatedDeclaration->setContext(parentContext, (bool)templateArguments.templateParametersSize());
+    instantiatedDeclaration->setContext(parentContext, templateArguments.templateParametersSize() || parentContext->inSymbolTable());
   }
   
   return contextCopy;
