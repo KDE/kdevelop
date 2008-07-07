@@ -11,9 +11,9 @@ include_directories(
 )
 
 set(kdevkrossmanager_SRCS
-	krossprojectmanager.cpp
-	ikrossprojectmanager.cpp
-    projectitemadaptors.cpp
+	krossplugin.cpp
+	krossbuildsystemmanager.cpp
+	projectitemadaptors.cpp
 )
 
 kde4_add_plugin(kdevkrossprojectmanager ${kdevkrossmanager_SRCS})

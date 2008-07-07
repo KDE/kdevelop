@@ -30,21 +30,21 @@
 
 namespace Kross { class Action; }
 
-class IKrossProjectManager : public QObject
+class KrossBuildSystemManager : public KDevelop::IBuildSystemManager
 {
-Q_OBJECT
-
 public:
-    explicit IKrossProjectManager( QObject* parent=0, const QVariantList& o=QVariantList());
+    explicit KrossBuildSystemManager(const QVariantList& o=QVariantList());
+
+    void setAction(Kross::Action* anAction);
 
     QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    KDevelop::ProjectFolderItem* import( const KUrl& file, KDevelop::IProject *project );
+    KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
 
     KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
     KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
 
     KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
-    QHash<QString,QString> defines(KDevelop::ProjectBaseItem *);
+    QHash<QString,QString> defines(KDevelop::ProjectBaseItem *) const;
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
@@ -58,12 +58,13 @@ public:
     bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
     bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
+    QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const;
+    Features features() const;
 
-public slots:
     void addFile(const QString& folder, const QString& targetName, const QString& filename);
     void addTarget(const QString& folder, const QString& targetName);
     void addFolder(const QString& folder);
-    
+    /*
 signals:
     void init(const QVariantList& args);
     void parse( const KUrl& folder );
@@ -76,17 +77,15 @@ signals:
     void rename(const KUrl& from, const KUrl& to); //File or folder
     void remove(const KUrl& file); //File or folder
     void removeTarget(const KUrl& folder, const QString& targetname);
-    void removeFileFromTarget(const KUrl& folder, const QString& targetname, const KUrl& filename);
+    void removeFileFromTarget(const KUrl& folder, const QString& targetname, const KUrl& filename);*/
 
 private:
-    Kross::Action* action;
+    Kross::Action *action;
     KDevelop::IProjectFileManager::Features m_features;
     QMap<KDevelop::ProjectFolderItem*, QList<KDevelop::ProjectTargetItem*> > m_targets;
     QMap<KUrl, KDevelop::ProjectFolderItem*> m_folderPerUrl;
     QMap<QString, KDevelop::ProjectTargetItem*> m_targetPerName;
-    
-    KDevelop::ProjectFolderItem* m_rootFolder;
-    QList<KDevelop::ProjectFolderItem*> m_lastFolders;
 };
+
 
 #endif
