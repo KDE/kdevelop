@@ -45,11 +45,24 @@
 
 namespace KDevelop
 {
-
+/**
+ * \short Abstract definition-use chain context builder class
+ *
+ * The AbstractContextBuilder is a convenience class template for creating customised
+ * definition-use chain context builders from an AST.  It simplifies:
+ * - use of your editor integrator
+ * - creating or modifying an existing DUContext tree
+ * - following a DUContext tree for second and subsequent passes, if required
+ * - opening and closing DUContext instances
+ * - tracking which DUContext instances are still present when recompiling, and removing DUContexts which no longer exist in the source code.
+ *
+ * \author Hamish Rodda \<rodda@kde.org\>
+ */
 template<typename T, typename NameT>
 class AbstractContextBuilder
 {
 public:
+  /// Constructor.
   AbstractContextBuilder()
     : m_editor( 0 )
     , m_ownsEditorIntegrator(false)
@@ -59,18 +72,38 @@ public:
   {
   }
 
+  /// Destructor.  Deletes the editor integrator, if one was created specifically for this builder only.
   virtual ~AbstractContextBuilder()
   {
     if (m_ownsEditorIntegrator)
       delete m_editor;
   }
 
+  /**
+   * Associates an editor integrator with this builder.
+   *
+   * \param editor EditorIntegrator instance to use
+   * \param ownsEditorIntegrator set to true if this builder created the editor integrator (and should thus delete it later),
+   *                             or false if the editor integrator is owned by another object.
+   */
   void setEditor(EditorIntegrator* editor, bool ownsEditorIntegrator)
   {
     m_editor = editor;
     m_ownsEditorIntegrator = ownsEditorIntegrator;
   }
 
+  /**
+   * Entry point for building a definition-use chain with this builder.
+   *
+   * This function determines whether we are updating a chain, or creating a new one.  If we are
+   * creating a new chain, a new TopDUContext is created and registered with DUChain.
+   *
+   * \param url Url of the document being parsed.
+   * \param node AST node to start building from.
+   * \param updateContext TopDUContext to update if a duchain was previously created for this url, otherwise pass a null pointer.
+   *
+   * \returns the newly created or updated TopDUContext pointer.
+   */
   virtual TopDUContext* build( const IndexedString& url, T* node,
                               const TopDUContextPointer& updateContext
                                     = TopDUContextPointer() )
@@ -171,40 +204,138 @@ protected:
     Q_ASSERT(m_contextStack.isEmpty());
   }
 
+  /**
+   * Entry point to your visitor.  Reimplement and call the appropriate visit function.
+   *
+   * \param node AST node to visit.
+   */
   virtual void startVisiting( T* node ) = 0;
-  virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
+
+  /**
+   * Associate a \a context with a given AST \a node.  Once called on a \a node, the
+   * contextFromNode() function should return this \a context when called.
+   *
+   * \param node AST node to associate
+   * \param context DUContext to associate
+   */
+  virtual void setContextOnNode( T* node, DUContext* context ) = 0;
+
+  /**
+   * Retrieve an associated DUContext from the given \a node.  Used on second and
+   * subsequent passes of the context builder (for supporting other builds)
+   *
+   * \param node AST node which was previously associated
+   * \returns the DUContext which was previously associated
+   */
   virtual DUContext* contextFromNode( T* node ) = 0;
-  virtual KTextEditor::Range editorFindRange( T* fromRange, T* toRange ) = 0;
-  virtual KTextEditor::Range editorFindRangeForContext( T* fromRange, T* toRange )
+
+  /**
+   * Retrieves a text range from the given nodes.
+   *
+   * As editor integrators have to be extended to determine ranges from AST nodes,
+   * this function must be reimplemented to allow generic retrieving of rangs from nodes.
+   *
+   * \param fromNode the AST node to start from (on the start boundary)
+   * \param toNode the AST node to end at (on the end boundary)
+   *
+   * \returns the text range encompassing the given AST node(s)
+   */
+  virtual KTextEditor::Range editorFindRange( T* fromNode, T* toNode ) = 0;
+
+  /**
+   * Retrieve a text range for the given nodes.  This is a special function required
+   * by c++ support as a different range may need to be retrieved depending on
+   * whether macros are involved.  It is not usually required to implement this
+   * function separately to editorFindRange() for other languages.
+   *
+   * \param fromNode the AST node to start from (on the start boundary)
+   * \param toNode the AST node to end at (on the end boundary)
+   *
+   * \returns the text range encompassing the given AST node(s)
+   */
+  virtual KTextEditor::Range editorFindRangeForContext( T* fromNode, T* toNode )
   {
-    return editorFindRange(fromRange, toRange);
+    return editorFindRange(fromNode, toNode);
   }
 
-  virtual QualifiedIdentifier identifierForNode( NameT* ) = 0;
+  /**
+   * Determine the QualifiedIdentifier which corresponds to the given ast \a node.
+   *
+   * \param node ast node which represents an identifier
+   * \return the qualified identifier determined from \a node
+   */
+  virtual QualifiedIdentifier identifierForNode( NameT* node ) = 0;
+
+  /**
+   * Create a new DUContext from the given \a range.
+   *
+   * This exists so that you can create custom DUContext subclasses for your
+   * language if you need to.
+   *
+   * \param range range for the new context to encompass
+   * \returns the newly created context
+   */
   virtual DUContext* newContext(const SimpleRange& range)
   {
     return new DUContext(editor()->currentUrl(), range, currentContext());
   }
 
+  /// Determine the currently open context. \returns the current context.
   inline DUContext* currentContext() const { return m_contextStack.top(); }
+  /// Determine the last closed context. \returns the last closed context.
   inline DUContext* lastContext() const { return m_lastContext; }
+  /// Clears the last closed context.
   inline void clearLastContext() { m_lastContext = 0; }
 
-  /// Returns true if we are recompiling a definition-use chain
+  /**
+   * Determine if we are recompiling an existing definition-use chain, or if
+   * a new chain is being created from scratch.
+   *
+   * \returns true if an existing duchain is being updated, otherwise false.
+   */
   inline bool recompiling() const { return m_recompiling; }
+
+  /**
+   * Tell the context builder whether we are recompiling an existing definition-use chain, or if
+   * a new chain is being created from scratch.
+   *
+   * \param recomp set to true if an existing duchain is being updated, otherwise false.
+   */
   inline void setRecompiling(bool recomp) { m_recompiling = recomp; }
 
+  /**
+   * Determine whether this pass will create DUContext instances.
+   *
+   * On the first pass of definition-use chain compiling, DUContext instances
+   * are created to represent contexts in the source code.  These contexts are
+   * associated with their AST nodes at the time (see setContextOnNode()).
+   *
+   * On second and subsequent passes, the contexts already exist and thus can be
+   * retrieved through contextFromNode().
+   *
+   * \returns true if compiling contexts (ie. 1st pass), otherwise false.
+   */
   inline bool compilingContexts() const { return m_compilingContexts; }
+
+  /**
+   * Sets whether we need to create ducontexts, ie. if this is the first pass.
+   *
+   * \sa compilingContexts()
+   */
   inline void setCompilingContexts(bool compilingContexts) { m_compilingContexts = compilingContexts; }
 
-  bool hasSmartEditor() const
-  {
-    return m_editor->smart();
-  }
-
-  /// Iterates a duchain and creates smart ranges for the objects.  \warning you must hold the duchain write lock to call this function.
+  /**
+   * Iterates a duchain and creates smart ranges for the objects.
+   * \warning you must hold the duchain write lock to call this function.
+   * \todo determine the role of this function, is it still required?
+   * \param topLevelContext The top level context for which to create smart ranges.
+   */
   void smartenContext(TopDUContext* topLevelContext) {
-    if( topLevelContext && !topLevelContext->smartRange() && hasSmartEditor() ) {
+    if( topLevelContext && !topLevelContext->smartRange()) {
+      LockedSmartInterface iface = m_editor->smart();
+      if (!iface)
+        return;
+
       //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
       //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
       //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
@@ -214,6 +345,14 @@ protected:
     }
   }
 
+  /**
+   * Create child contexts for only a portion of the document at \a url.
+   *
+   * \param url The url of the document to parse
+   * \param node The AST node which corresponds to the context to parse
+   * \param parent The DUContext which encompasses the \a node.
+   * \returns The DUContext which was reparsed, ie. \a parent.
+   */
   DUContext* buildSubContexts( const KUrl& url, T *node,
                                          DUContext* parent )
   {
@@ -240,18 +379,40 @@ protected:
       return contextFromNode( node );
   }
 
+  /**
+   * Delete the DUContext which is associated with the given \a node,
+   * and remove the association.
+   *
+   * \param node Node which is associated with the context to delete.
+   */
   void deleteContextOnNode( T* node )
   {
     delete contextFromNode( node );
     setContextFromNode( node, 0 );
   }
 
+  /**
+   * Open a newly created or previously existing context.
+   *
+   * The open context is put on the context stack, and becomes the new
+   * currentContext().
+   *
+   * \param newContext Context to open.
+   */
   virtual void openContext( DUContext* newContext )
   {
     m_contextStack.push( newContext );
     m_nextContextStack.push( 0 );
   }
 
+  /**
+   * Open a context, and create / update it if necessary.
+   *
+   * \param rangeNode The range which encompasses the context.
+   * \param type The type of context to open.
+   * \param identifier The range which encompasses the name of this context, if one exists.
+   * \returns the opened context.
+   */
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier = 0)
   {
     if ( m_compilingContexts )
@@ -271,6 +432,15 @@ protected:
     }
   }
 
+  /**
+   * Open a context, and create / update it if necessary.
+   *
+   * \param node The range to associate with the context.
+   * \param range A custom range which the context should encompass.
+   * \param type The type of context to open.
+   * \param identifier The range which encompasses the name of this context, if one exists.
+   * \returns the opened context.
+   */
   DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, NameT* identifier = 0)
   {
     if (m_compilingContexts) {
@@ -288,6 +458,14 @@ protected:
     }
   }
 
+  /**
+   * Open a context, and create / update it if necessary.
+   *
+   * \param rangeNode The range which encompasses the context.
+   * \param type The type of context to open.
+   * \param identifier The identifier which corresponds to the context.
+   * \returns the opened context.
+   */
   DUContext* openContext( T* rangeNode, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     if ( m_compilingContexts )
@@ -308,6 +486,15 @@ protected:
     }
   }
 
+  /**
+   * Open a context, and create / update it if necessary.
+   *
+   * \param fromRange The range which starts the context.
+   * \param toRange The range which ends the context.
+   * \param type The type of context to open.
+   * \param identifier The identifier which corresponds to the context.
+   * \returns the opened context.
+   */
   DUContext* openContext( T* fromRange, T* toRange, DUContext::ContextType type, const QualifiedIdentifier& identifier = QualifiedIdentifier() )
   {
     if ( m_compilingContexts )
@@ -327,7 +514,12 @@ protected:
     }
   }
 
-  // Write lock is already held here...
+  /**
+   * Close the current DUContext.  When recompiling, this function will remove any
+   * contexts that were not encountered in this passing run.
+   *
+   * \note The DUChain write lock is already held here.
+   */
   virtual void closeContext()
   {
     {
@@ -345,8 +537,11 @@ protected:
       m_editor->exitCurrentRange();
   }
 
-  /**Signalize that a specific item has been encoutered while parsing.
-   * All contained items that are not signalized will be deleted at some stage
+  /**
+   * Remember that a specific item has been encoutered while parsing.
+   * All items that are not encountered will be deleted at some stage.
+   *
+   * \param item duchain item that was encountered.
    * */
   void setEncountered( DUChainBase* item )
   {
@@ -354,45 +549,85 @@ protected:
   }
 
   /**
-   * @return whether the given item is in the set of encountered items
+   * Determine whether the given \a item is in the set of encountered items.
+   *
+   * @return true if the \a item has been encountered, otherwise false.
    * */
   bool wasEncountered( DUChainBase* item )
   {
     return m_encountered.contains( item );
   }
 
+  /**
+   * Set the current identifier to \a id.
+   *
+   * \param id the new current identifier.
+   */
   void setIdentifier( const QString& id )
   {
     m_identifier = Identifier( id );
     m_qIdentifier.push( m_identifier );
   }
 
+  /**
+   * Determine the current identifier.
+   * \returns the current identifier.
+   */
   QualifiedIdentifier qualifiedIdentifier() const
   {
     return m_qIdentifier;
   }
 
+  /**
+   * Clears the current identifier.
+   */
   void clearQualifiedIdentifier()
   {
     m_qIdentifier.clear();
   }
 
+  /**
+   * Retrieve the associated editor integrator.
+   *
+   * \returns the editor integrator being used by this builder.
+   */
   EditorIntegrator* editor() const
   {
     return m_editor;
   }
 
+  /**
+   * Retrieve the current context stack.  This function is not expected
+   * to be used often and may be phased out.
+   *
+   * \todo Audit whether access to the context stack is still required, and provide
+   *       replacement functionality if possible.
+   */
   const QStack<DUContext*>& contextStack() const
   {
     return m_contextStack;
   }
 
-  /// TODO: make private again?
+  /**
+   * Access the index of the child context which has been encountered.
+   *
+   * \todo further delineate the role of this function and rename / document better.
+   * \todo make private again?
+   */
   int& nextContextIndex()
   {
     return m_nextContextStack.top();
   }
 
+  /**
+   * Open a context, either creating it if it does not exist, or referencing a previously existing
+   * context if already encountered in a previous duchain parse run (when recompiling()).
+   *
+   * \param range The range of the context.
+   * \param type The type of context to create.
+   * \param identifier The identifier which corresponds to the context.
+   * \returns the opened context.
+   */
   virtual DUContext* openContextInternal( const SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     Q_ASSERT( m_compilingContexts );
