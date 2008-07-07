@@ -33,7 +33,7 @@ class Declaration;
  * A class which iterates the AST to extract definitions of types.
  */
 template<typename T, typename NameT, typename LanguageSpecificDeclarationBuilderBase>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
+class AbstractDeclarationBuilder : public LanguageSpecificDeclarationBuilderBase
 {
 protected:
   /// Determine if there is currently a declaration open. \returns true if a declaration is open, otherwise false.

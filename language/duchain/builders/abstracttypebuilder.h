@@ -23,11 +23,11 @@
 #include "language/duchain/declaration.h"
 
 namespace KDevelop {
-  
+
 class ForwardDeclaration;
 
 template<typename T, typename NameT, typename LangugageSpecificTypeBuilderBase>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
+class AbstractTypeBuilder : public LangugageSpecificTypeBuilderBase
 {
 public:
   const QList< KDevelop::AbstractType::Ptr >& topTypes() const
@@ -50,10 +50,10 @@ protected:
     m_topTypes.clear();
 
     LangugageSpecificTypeBuilderBase::supportBuild(node, context);
-    
+
     Q_ASSERT(m_typeStack.isEmpty());
   }
-  
+
   KDevelop::AbstractType::Ptr lastType() const
   {
     return m_lastType;
@@ -63,7 +63,7 @@ protected:
   {
     m_lastType = ptr;
   }
-  
+
   void clearLastType()
   {
     m_lastType = 0;
@@ -118,13 +118,13 @@ protected:
   {
     return openTypeFromName(identifierForNode(name), name, needClass);
   }
-  
+
   bool openTypeFromName(QualifiedIdentifier id, T* typeNode, bool needClass)
   {
     bool openedType = false;
 
     bool delay = false;
-    
+
     if(!delay) {
       SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
       DUChainReadLocker lock(DUChain::lock());

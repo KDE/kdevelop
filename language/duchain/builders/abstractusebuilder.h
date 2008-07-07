@@ -31,7 +31,7 @@ namespace KDevelop {
  * A class which iterates the AST to extract uses of definitions.
  */
 template<typename T, typename NameT, typename LanguageSpecificUseBuilderBase>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractUseBuilder: public LanguageSpecificUseBuilderBase
+class AbstractUseBuilder: public LanguageSpecificUseBuilderBase
 {
 public:
   AbstractUseBuilder()

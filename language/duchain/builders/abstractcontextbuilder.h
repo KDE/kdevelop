@@ -47,7 +47,7 @@ namespace KDevelop
 {
 
 template<typename T, typename NameT>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractContextBuilder
+class AbstractContextBuilder
 {
 public:
   AbstractContextBuilder()

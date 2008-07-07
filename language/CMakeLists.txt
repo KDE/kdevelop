@@ -141,10 +141,6 @@ install(FILES
     duchain/aliasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
-    duchain/abstractcontextbuilder.h
-    duchain/abstractdeclarationbuilder.h
-    duchain/abstracttypebuilder.h
-    duchain/abstractusebuilder.h
     duchain/dumpchain.h
     duchain/symboltable.h
     duchain/indexedstring.h
@@ -153,6 +149,14 @@ install(FILES
     duchain/typepointer.h
     duchain/typesystemdata.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
+)
+
+install(FILES
+    duchain/builders/abstractcontextbuilder.h
+    duchain/builders/abstractdeclarationbuilder.h
+    duchain/builders/abstracttypebuilder.h
+    duchain/builders/abstractusebuilder.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders
 )
 
 install(FILES
