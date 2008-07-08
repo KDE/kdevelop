@@ -60,7 +60,7 @@ void DocumentRangeObjectPrivate::syncToSmart() const {
 }
 
 DocumentRangeObject::DocumentRangeObject(const HashedString& document, const SimpleRange& range)
-    : d_ptr( new DocumentRangeObjectPrivate )
+    : d_ptr( new DocumentRangeObjectPrivate ), m_ownsData(true)
 {
     Q_D(DocumentRangeObject);
     if(!document.str().isEmpty())
@@ -70,7 +70,7 @@ DocumentRangeObject::DocumentRangeObject(const HashedString& document, const Sim
 }
 
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range)
-    : d_ptr( &dd )
+    : d_ptr( &dd ), m_ownsData(true)
 {
     Q_D(DocumentRangeObject);
     if(!document.str().isEmpty())
@@ -79,8 +79,8 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const H
         d->m_range = range;
 }
 
-DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd)
-    : d_ptr( &dd )
+DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsData)
+    : d_ptr( &dd ), m_ownsData(ownsData)
 {
 }
 
@@ -89,6 +89,7 @@ DocumentRangeObject::~ DocumentRangeObject( )
 {
     Q_D(DocumentRangeObject);
 
+    if(m_ownsData)
     {
         QMutexLocker l(d->m_smartMutex);
         if (d->m_smartRange) {
@@ -100,7 +101,7 @@ DocumentRangeObject::~ DocumentRangeObject( )
                 EditorIntegrator::releaseRange(d->m_smartRange);
         }
     }
-
+    
     delete d_ptr;
 }
 

@@ -33,6 +33,7 @@ namespace KDevelop
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
   class TopDUContextPrivate;
+  class TopDUContextLocalPrivate;
   class Problem;
   class DeclarationChecker;
   class TopDUContext;
@@ -54,8 +55,26 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   explicit TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
+  /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
+   * (it must not have been created with this constructor).
+   * 
+   * When creating a context like this, all the data is shared among the context, except:
+   * parsingEnvironmentFile, ownIndex, identity, problems, imports and importers.
+   * 
+   * When you change any other attributes(including duchain data etc.), that data is changed within all contexts that also share the data of the
+   * given one.
+   * 
+   * Special thing to consider: The imported contexts will be merged with the imported contexts of the data owner, and the problems will be merged
+   * with the problems of the data owner. When one of these things changes in the data owner, it will automatically also change in this context.
+   * 
+   * @warning When creating context with shared data, the shared ones always have to be deleted before the owner is deleted.
+   * */
+  explicit TopDUContext(TopDUContext* shareDataFrom, ParsingEnvironmentFile* file = 0);
   virtual ~TopDUContext();
 
+  ///If this top-context uses the data from another top-context, this returns that one.
+  TopDUContext* sharedDataOwner() const;
+  
   TopDUContext* topContext() const;
 
   uint ownIndex() const;
@@ -178,16 +197,29 @@ public:
 
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
+  ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
   virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor(), bool anonymous=false, bool temporary=false);
   ///Use this for mass-adding of imported contexts, it is faster than adding them individually.
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
+  ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
   virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary=false);
 
+  ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
   virtual void removeImportedParentContext(DUContext* context);
   ///Use this for mass-removing of imported contexts, it is faster than removing them individually.
+  ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
   virtual void removeImportedParentContexts(const QList<TopDUContext*>& contexts);
 
+  ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
+  virtual void clearImportedParentContexts();
+  
+  virtual QVector<Import> importedParentContexts() const;
+  
+  virtual QVector<DUContext*> importedChildContexts() const;
+  
+  virtual SimpleCursor importPosition(const DUContext* target) const;
+  
   class CacheData;
 
   /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
@@ -234,6 +266,8 @@ private:
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   Q_DECLARE_PRIVATE(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
+  friend class TopDUContextLocalPrivate;
+  TopDUContextLocalPrivate* m_local;
 };
 
 /**

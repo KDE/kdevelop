@@ -27,6 +27,7 @@
 #include "language/duchain/typesystem.h"
 #include "language/duchain/duchainbase.h"
 #include "language/languageexport.h"
+#include "duchainpointer.h"
 
 template<class T>
 class QSet;
@@ -183,6 +184,7 @@ public:
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context
+   * This must not be called once this context has children.
    */
   void setLocalScopeIdentifier(const QualifiedIdentifier& identifier);
 
@@ -202,19 +204,28 @@ public:
    */
   DUContext* parentContext() const;
 
+  struct Import {
+    Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
+    DUContextPointer context;
+    bool operator==(const Import& rhs) const {
+      return context == rhs.context;
+    }
+    SimpleCursor position;
+  };
+  
   /**
    * Returns the list of imported parent contexts for this context.
    * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
    * @warning The import structure may contain loops if this is a TopDUContext, so be careful when traversing the tree.
    */
-  const QVector<DUContextPointer>& importedParentContexts() const;
+  virtual QVector<Import> importedParentContexts() const;
 
   /**
    * If the given context is directly imported into this one, and
    * addImportedParentContext(..) was called with a valid cursor, this will return that position.
    * Else an invalid cursor is returned.
    * */
-  SimpleCursor importPosition(const DUContext* target) const;
+  virtual SimpleCursor importPosition(const DUContext* target) const;
 
   /**
    * Returns true if this context imports @param origin at any depth, else false.
@@ -242,7 +253,7 @@ public:
   /**
    * Clear all imported parent contexts.
    */
-  void clearImportedParentContexts();
+  virtual void clearImportedParentContexts();
 
   /**
    * If this is set to true, all declarations that are added to this context will also be visible in the parent-context.
@@ -255,7 +266,7 @@ public:
   /**
    * Returns the list of contexts importing this context.
    */
-  const QVector<DUContext*>& importedChildContexts() const;
+  virtual QVector<DUContext*> importedChildContexts() const;
 
   /**
    * Returns the list of immediate child contexts for this context.
@@ -581,6 +592,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
 
   DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  
+  ///Just uses the given data(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
+  DUContext(DUContextPrivate& dd);
 
   /**
    * This is called whenever the search needs to do the decision whether it should be continued in the parent context.

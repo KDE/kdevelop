@@ -92,13 +92,15 @@ public:
 protected:
     static QMutex* mutex();
 
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd);
+    ///When ownsData is false, the data will not be deleted by the destructor.
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsData = true);
     DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
 
     DocumentRangeObjectPrivate* const d_ptr;
 
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
 private:
+  bool m_ownsData;
 
     Q_DISABLE_COPY(DocumentRangeObject)
     Q_DECLARE_PRIVATE(DocumentRangeObject)

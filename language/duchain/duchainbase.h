@@ -49,7 +49,7 @@ public:
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
 protected:
-  DUChainBase( class DUChainBasePrivate& dd );
+  DUChainBase( class DUChainBasePrivate& dd, bool ownsData = false );
   DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, const SimpleRange& range );
   
 private:

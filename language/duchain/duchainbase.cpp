@@ -36,8 +36,8 @@ DUChainBase::DUChainBase( DUChainBasePrivate & dd, const HashedString& url, cons
 {
 }
 
-DUChainBase::DUChainBase( DUChainBasePrivate & dd )
-  : KDevelop::DocumentRangeObject( dd ), m_ptr( 0 )
+DUChainBase::DUChainBase( DUChainBasePrivate & dd, bool ownsData )
+  : KDevelop::DocumentRangeObject( dd, ownsData ), m_ptr( 0 )
 {
 }
 

@@ -34,6 +34,12 @@
 
 class QMutex;
 
+namespace KTextEditor {
+  class Range;
+  class View;
+  class Cursor;
+}
+
 namespace KDevelop
 {
 

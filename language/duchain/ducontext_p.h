@@ -51,9 +51,7 @@ public:
   QualifiedIdentifier m_scopeIdentifier;
   DUContextPointer m_parentContext;
   Declaration* m_owner;
-  QVector<DUContextPointer> m_importedParentContexts;
-  ///Contains the import-positions of those imported contexts that have a valid one
-  QMap<DUContextPointer, SimpleCursor> m_importedParentContextPositions;
+  QVector<DUContext::Import> m_importedContexts;
   QVector<DUContext*> m_childContexts;
   QVector<DUContext*> m_importedChildContexts;
 

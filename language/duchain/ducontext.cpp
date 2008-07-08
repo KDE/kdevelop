@@ -362,6 +362,11 @@ DUContext::DUContext( DUContextPrivate& dd, const HashedString & url, const Simp
   }
 }
 
+DUContext::DUContext(DUContextPrivate& dd)
+  : DUChainBase(dd, false)
+{
+}
+
 DUContext::~DUContext( )
 {
   Q_D(DUContext);
@@ -373,11 +378,11 @@ DUContext::~DUContext( )
   while( !d->m_importedChildContexts.isEmpty() )
     importedChildContexts().first()->removeImportedParentContext(this);
 
-  while( !d->m_importedParentContexts.isEmpty() )
-    if( d->m_importedParentContexts.front() )
-      removeImportedParentContext(d->m_importedParentContexts.front().data());
+  while( !d->m_importedContexts.isEmpty() )
+    if( d->m_importedContexts.front().context )
+      removeImportedParentContext(d->m_importedContexts.front().context.data());
     else
-      d->m_importedParentContexts.pop_front();
+      d->m_importedContexts.pop_front();
 
   deleteChildContextsRecursively();
 
@@ -537,7 +542,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     aliasedIdentifiers = baseIdentifiers;
 
 
-  if( !d->m_importedParentContexts.isEmpty() ) {
+  if( !d->m_importedContexts.isEmpty() ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
     FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
@@ -545,27 +550,23 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
-      QVector<DUContextPointer>::const_iterator it = d->m_importedParentContexts.end();
-      QVector<DUContextPointer>::const_iterator begin = d->m_importedParentContexts.begin();
+      QVector<Import>::const_iterator it = d->m_importedContexts.end();
+      QVector<Import>::const_iterator begin = d->m_importedContexts.begin();
       while( it != begin ) {
         --it;
-        DUContext* context = (*it).data();
+        DUContext* context = (*it).context.data();
 
         while( !context && it != begin ) {
           --it;
-          context = (*it).data();
+          context = (*it).context.data();
         }
 
         if( !context )
           break;
 
-        if( position.isValid() ) {
-          QMap<DUContextPointer, SimpleCursor>::const_iterator it2 = d->m_importedParentContextPositions.find(*it);
-          if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
-            if( position < *it2 )
-              continue; ///Respect the import-positions
-          }
-        }
+        if( position.isValid() && (*it).position.isValid() && position < (*it).position )
+          continue;
+        
         if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext) )
           return false;
       }
@@ -614,12 +615,12 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     return;
   }
 
-  if( position.isValid() )
-    d->m_importedParentContextPositions[DUContextPointer(context)] = position;
-
-
-  if (d->m_importedParentContexts.contains(DUContextPointer(context)))
-    return;
+  for(int a = 0; a < d->m_importedContexts.size(); ++a) {
+    if(d->m_importedContexts[a].context.data() == context) {
+      d->m_importedContexts[a].position = position;
+      return;
+    }
+  }
 
   if( !anonymous ) {
     ENSURE_CAN_WRITE_(context)
@@ -628,16 +629,8 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
 
   ///Do not sort the imported contexts by their own line-number, it makes no sense.
   ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
-/*  for (int i = 0; i < d->m_importedParentContexts.count(); ++i) {
-    DUContext* parent = d->m_importedParentContexts.at(i).data();
-    if( !parent )
-      continue;
-    if (context->range().start < parent->range().start) {
-      d->m_importedParentContexts.insert(i, DUContextPointer(context));
-      return;
-    }
-  }*/
-  d->m_importedParentContexts.append(DUContextPointer(context));
+
+  d->m_importedContexts.append(Import(context, position));
 
   //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
@@ -646,8 +639,13 @@ void DUContext::removeImportedParentContext( DUContext * context )
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
-  d->m_importedParentContextPositions.remove(DUContextPointer(context));
-  removeOne(d->m_importedParentContexts, DUContextPointer(context));
+  
+  for(int a = 0; a < d->m_importedContexts.size(); ++a) {
+    if(d->m_importedContexts[a].context.data() == context) {
+      d->m_importedContexts.remove(a);
+      break;
+    }
+  }
 
   if( !context )
     return;
@@ -657,7 +655,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
-const QVector<DUContext*>& DUContext::importedChildContexts() const
+QVector<DUContext*> DUContext::importedChildContexts() const
 {
   ENSURE_CAN_READ
 
@@ -749,22 +747,17 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
           definitions << qMakePair(decl.data(), currentDepth);
   }
 
-  QVectorIterator<DUContextPointer> it = d->m_importedParentContexts;
+  QVectorIterator<Import> it = d->m_importedContexts;
   it.toBack();
   while (it.hasPrevious()) {
-    DUContext* context = it.previous().data();
+    DUContext* context = it.previous().context.data();
     while( !context && it.hasPrevious() )
-      context = it.previous().data();
+      context = it.previous().context.data();
     if( !context )
       break;
 
-    if( position.isValid() ) {
-      QMap<DUContextPointer, SimpleCursor>::const_iterator it2 = d->m_importedParentContextPositions.find(DUContextPointer(context));
-      if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() ) {
-        if( position < *it2 )
-          continue; ///Respect the import-positions
-      }
-    }
+    if( position.isValid() && it.previous().position.isValid() && position < it.previous().position )
+      continue;
 
     context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
   }
@@ -840,6 +833,7 @@ bool DUContext::equalScopeIdentifier(const DUContext* rhs) const
 void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 {
   ENSURE_CAN_WRITE
+  //Q_ASSERT(d_func()->m_childContexts.isEmpty() && d_func()->m_localDeclarations.isEmpty());
   bool wasInSymbolTable = inSymbolTable();
   setInSymbolTable(false);
   d_func()->m_scopeIdentifier = identifier;
@@ -924,18 +918,17 @@ SimpleCursor DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   Q_D(const DUContext);
-  QMap<DUContextPointer, SimpleCursor>::const_iterator it2 = d->m_importedParentContextPositions.find(DUContextPointer(const_cast<DUContext*>(target)));
-  if( it2 != d->m_importedParentContextPositions.end() && (*it2).isValid() )
-    return *it2;
-  else
-    return SimpleCursor::invalid();
+  for(int a = 0; a < d->m_importedContexts.size(); ++a)
+    if(d->m_importedContexts[a].context.data() == target)
+      return d->m_importedContexts[a].position;
+  return SimpleCursor::invalid();
 }
 
-const QVector<DUContextPointer>& DUContext::importedParentContexts() const
+QVector<DUContext::Import> DUContext::importedParentContexts() const
 {
   ENSURE_CAN_READ
 
-  return d_func()->m_importedParentContexts;
+  return d_func()->m_importedContexts;
 }
 
 QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position, SearchFlags flags) const
@@ -1042,7 +1035,7 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
   //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
   applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace);
 
-  if( !d->m_importedParentContexts.isEmpty() ) {
+  if( !d->m_importedContexts.isEmpty() ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
     FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
@@ -1050,13 +1043,13 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
-      QVectorIterator<DUContextPointer> it = d->m_importedParentContexts;
+      QVectorIterator<Import> it = d->m_importedContexts;
       it.toBack();
       while (it.hasPrevious()) {
-        DUContext* context = it.previous().data();
+        DUContext* context = it.previous().context.data();
 
         while( !context && it.hasPrevious() ) {
-          context = it.previous().data();
+          context = it.previous().context.data();
         }
         if( !context )
           break;
@@ -1230,11 +1223,11 @@ void DUContext::clearImportedParentContexts()
 {
   ENSURE_CAN_WRITE
   Q_D(DUContext);
-  foreach (DUContextPointer parent, d->m_importedParentContexts)
-      if( parent.data() )
-        removeImportedParentContext(parent.data());
+  foreach (Import parent, d->m_importedContexts)
+      if( parent.context.data() )
+        removeImportedParentContext(parent.context.data());
 
-  Q_ASSERT(d->m_importedParentContexts.isEmpty());
+  Q_ASSERT(d->m_importedContexts.isEmpty());
 }
 
 void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
@@ -1271,8 +1264,8 @@ void DUContext::squeeze()
   if(!d->m_uses.isEmpty())
     d->m_uses.squeeze();
 
-  if(!d->m_importedParentContexts.isEmpty())
-    d->m_importedParentContexts.squeeze();
+  if(!d->m_importedContexts.isEmpty())
+    d->m_importedContexts.squeeze();
 
   if(!d->m_childContexts.isEmpty())
     d->m_childContexts.squeeze();
@@ -1432,6 +1425,9 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
 
   for(int a = 0; a < next.size()-added; ++a)
     next[a]->addToEachNode(other);
+}
+
+DUContext::Import::Import(DUContext* _context, const SimpleCursor& _position) : context(_context), position(_position) {
 }
 
 }

@@ -90,8 +90,8 @@ void collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, 
   
   allProblems += context->problems();
   bool isProxy = context->flags() & TopDUContext::ProxyContextFlag;
-  foreach(DUContextPointer ctx, context->importedParentContexts()) {
-    TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.data());
+  foreach(DUContext::Import ctx, context->importedParentContexts()) {
+    TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context.data());
     if(topCtx) {
       //If we are starting at a proxy-context, only recurse into other proxy-contexts,
       //because those contain the problems.
