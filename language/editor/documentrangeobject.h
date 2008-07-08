@@ -59,6 +59,8 @@ public:
     /**
      * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be deleted when the object is deleted.
      * Does not change the url associated to this object, because that cannot be retrieved from the smart-range in a thread-safe way.
+     *
+     * \warning you need to hold the smart mutex in order to call this function from anywhere but a copy constructor.
      */
     void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 

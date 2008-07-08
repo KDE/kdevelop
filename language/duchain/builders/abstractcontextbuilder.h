@@ -692,7 +692,10 @@ protected:
         DUChainWriteLocker writeLock( DUChain::lock() );
 
         ret = newContext( SimpleRange( range ) );
-        ret->setSmartRange( m_editor->createRange( range.textRange() ), DocumentRangeObject::Own );
+        {
+          LockedSmartInterface iface = m_editor->smart();
+          ret->setSmartRange( m_editor->createRange( range.textRange() ), DocumentRangeObject::Own );
+        }
         ret->setType( type );
 
         if (!identifier.isEmpty())

@@ -169,6 +169,9 @@ public:
 
   /**
    * Releases + safely deletes a text editor range.
+   *
+   * \warning you must already hold the smart lock for the corresponding document.
+   * \todo audit uses to check for smart lock holding
    */
   static void releaseRange(KTextEditor::SmartRange* range);
 

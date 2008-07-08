@@ -29,12 +29,13 @@ namespace KDevelop
 class DocumentRangeObjectPrivate
 {
     public:
-    DocumentRangeObjectPrivate() : m_smartRange(0)
+    DocumentRangeObjectPrivate() : m_smartRange(0), m_smartMutex(0)
         , m_ownsRange(DocumentRangeObject::Own)
     {}
     DocumentRangeObjectPrivate(const DocumentRangeObjectPrivate& rhs);
 
     mutable KTextEditor::SmartRange* m_smartRange; //Mutable for synchronization
+    QMutex* m_smartMutex;
     DocumentRangeObject::RangeOwning m_ownsRange;
     mutable SimpleRange m_range; //Mutable for synchronization
     HashedString m_document; ///@todo get rid of this, the information can be gotten from elsewhere

@@ -143,14 +143,6 @@ protected:
     }
 
     if (!declaration) {
-      //KTextEditor::SmartRange* prior = LanguageSpecificDeclarationBuilderBase::editor()->currentRange();
-      KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(newRange.textRange());
-
-      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
-      //Q_ASSERT(range->start() != range->end());
-
-      //Q_ASSERT(LanguageSpecificDeclarationBuilderBase::editor()->currentRange() == prior);
-
       if (isForward) {
         declaration = new ForwardDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       } else if (isFunction) {
@@ -165,7 +157,12 @@ protected:
         declaration = new Declaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       }
 
-      declaration->setSmartRange(range);
+      {
+        LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
+        KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(newRange.textRange());
+        declaration->setSmartRange(range);
+      }
+
       declaration->setDeclarationIsDefinition(isDefinition);
       declaration->setIdentifier(localId);
 
@@ -178,6 +175,8 @@ protected:
         default:
           break;
       }
+
+      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
     }
 
     declaration->setComment(m_lastComment);

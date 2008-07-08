@@ -367,10 +367,7 @@ void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
 
 void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
 {
-  SmartInterface* iface = dynamic_cast<SmartInterface*>(range->toSmartRange()->document());
-
-  QMutexLocker lock(iface ? iface->smartMutex() : 0);
-
+  // Smart lock must already be held
   if( range->parentRange() )
   {
     SmartRange* oldParent = range->parentRange();

@@ -40,3 +40,4 @@
 
 // DOXYGEN_NAME="KDevelop Platform Libraries"
 // DOXYGEN_ENABLE=YES
+// DOXYGEN_SET_WARN_LOGFILE=doxygen.log

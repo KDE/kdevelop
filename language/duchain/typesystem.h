@@ -116,26 +116,56 @@ public:
   virtual void endVisit (const ArrayType *) ;
 };
 
+/**
+ * \brief Base class for all types.
+ *
+ * The AbstractType class is a base class from which all types derive.  It features:
+ * - mechanisms for visiting types
+ * - toString() feature
+ * - equivalence feature
+ * - cloning of types, and
+ * - hashing and indexing
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
 {
 public:
   typedef TypePtr<AbstractType> Ptr;
 
+  /// Constructor.
   AbstractType();
+  /// Copy Constructor.
   AbstractType(const AbstractType& rhs);
+  /// Constructor from data.
   AbstractType(AbstractTypeData& dd);
+  /// Destructor.
   virtual ~AbstractType ();
 
+  /**
+   * Visitor method.  Called by TypeVisitor to visit the type heirachy.
+   *
+   * \param v visitor which is calling this function.
+   */
   void accept(TypeVisitor *v) const;
 
+  /**
+   * Convenience visitor method which can be called with a null type.
+   *
+   * \param type type to visit, may be null.
+   * \param v visitor which is visiting the given \a type
+   */
   static void acceptType(AbstractType::Ptr type, TypeVisitor *v);
 
+  /**
+   * Returns this type as a string, preferably the same as it is expressed in the code.
+   *
+   * \return this type as a string
+   */
   virtual QString toString() const = 0;
 
   ///Must always be called before anything in the data pointer is changed!
   ///If it's not called beforehand, the type-repository gets corrupted
   void makeDynamic();
-  
+
   ///Should return whether this type's content equals the given one
   ///Since this is used by the type-repository, it must compare ALL members of the data type.
   virtual bool equals(const AbstractType* rhs) const = 0;
@@ -154,7 +184,7 @@ public:
 
   ///This can also be called on zero types, those can then be reconstructed from the zero index
   IndexedType indexed() const;
-  
+
   enum WhichType {
     TypeAbstract  /**< an abstract type */,
     TypeIntegral  /**< an integral */,
@@ -172,7 +202,7 @@ public:
   enum {
     Identity = 1
   };
-  
+
   /**
    * Should, like accept0, be implemented by all types that hold references to other types.
    * */
@@ -187,25 +217,25 @@ public:
       size = sizeof(DataType); //Create a dynamic data instance
     else
       size = rhs.dynamicSize(); //Create a constant data instance, that holds all the data embedded.
-      
+
     return *new (new char[size]) DataType(rhs);
   }
-  
+
   ///You must use this to create the internal data instances in normal constructors.
-  
+
   template<class DataType>
   static DataType& createData() {
     return *new (new char[sizeof(DataType)]) DataType();
   }
-  
+
   typedef AbstractTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const = 0;
   AbstractTypeData* d_ptr;
 
   TYPE_DECLARE_DATA(AbstractType)
-  
+
   friend class AbstractTypeDataRequest;
 };
 
@@ -234,34 +264,34 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
   public:
     IndexedType(uint index = 0) : m_index(index) {
     }
-    
+
     ///Returns zero type if this index is invalid
     AbstractType::Ptr type() const;
-    
+
     bool isValid() const {
       return (bool)m_index;
     }
-    
+
     operator bool() const {
       return (bool)m_index;
     }
-    
+
     bool operator==(const IndexedType& rhs) const {
       return m_index == rhs.m_index;
     }
-    
+
     bool operator!=(const IndexedType& rhs) const {
       return m_index != rhs.m_index;
     }
-    
+
     uint hash() const {
       return m_index;
     }
-    
+
     uint index() const {
       return m_index;
     }
-    
+
   private:
     uint m_index;
 };
@@ -298,9 +328,9 @@ public:
   enum {
     Identity = 2
   };
-  
+
   typedef IntegralTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -333,13 +363,13 @@ public:
   virtual bool equals(const AbstractType* rhs) const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
-  
+
   enum {
     Identity = 3
   };
-  
+
   typedef PointerTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -374,13 +404,13 @@ public:
   virtual bool equals(const AbstractType* rhs) const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
-  
+
   enum {
     Identity = 4
   };
-  
+
   typedef ReferenceTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -430,13 +460,13 @@ public:
   virtual WhichType whichType() const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
-  
+
   enum {
     Identity = 5
   };
-  
+
   typedef FunctionTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -450,7 +480,7 @@ public:
   StructureType(const StructureType&);
   ~StructureType();
   StructureType(StructureTypeData& data);
-  
+
   typedef TypePtr<StructureType> Ptr;
 
   virtual AbstractType* clone() const;
@@ -466,9 +496,9 @@ public:
   enum {
     Identity = 6
   };
-  
+
   typedef StructureTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -509,13 +539,13 @@ public:
   virtual WhichType whichType() const;
 
   virtual void exchangeTypes( TypeExchanger* exchanger );
-  
+
   enum {
     Identity = 7
   };
-  
+
   typedef ArrayTypeData Data;
-  
+
 protected:
   virtual void accept0 (TypeVisitor *v) const;
 
@@ -558,13 +588,13 @@ public:
   virtual uint hash() const;
 
   virtual WhichType whichType() const;
-  
+
   enum {
     Identity = 8
   };
-  
+
   typedef DelayedTypeData Data;
-  
+
   protected:
     virtual void accept0 (KDevelop::TypeVisitor *v) const ;
     TYPE_DECLARE_DATA(DelayedType)
