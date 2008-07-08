@@ -67,7 +67,7 @@ void ImportProject::accept()
     KUrl projectUrl = directory->url();
 
     if (projectUrl.isEmpty() || !projectUrl.isValid() || !KIO::NetAccess::exists(projectUrl, KIO::NetAccess::DestinationSide, QApplication::activeWindow())) {
-        KMessageBox::sorry(this, i18n("Please chose an existing directory."));
+        KMessageBox::sorry(this, i18n("Please choose an existing folder."));
         return;
     }
 

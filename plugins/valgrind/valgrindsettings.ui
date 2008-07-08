@@ -265,7 +265,7 @@
      </widget>
      <widget class="QWidget" name="tab_5" >
       <attribute name="title" >
-       <string>&amp;Hellgrind</string>
+       <string>&amp;Helgrind</string>
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" >
