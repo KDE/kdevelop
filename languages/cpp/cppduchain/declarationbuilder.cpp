@@ -455,6 +455,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       backup.resize(backup.size()-1);
     }
 
+    LockedSmartInterface iface = editor()->smart();
     SmartRange* range = editor()->createRange(newRange.textRange());
 
     editor()->exitCurrentRange();
@@ -605,7 +606,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       else
         currentDeclaration()->setKind(Declaration::Type);
     }
-    
+
     currentDeclaration()->setType(lastType());
   }else{
     DUChainWriteLocker lock(DUChain::lock());
@@ -615,7 +616,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
   eventuallyAssignInternalContext();
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
-    
+
   DeclarationBuilderBase::closeDeclaration();
 }
 
