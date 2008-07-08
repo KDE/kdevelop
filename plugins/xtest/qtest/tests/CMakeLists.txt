@@ -24,14 +24,7 @@ kdev_add_test(ut-qtestsuite "qtestsuitetest.cpp")
 kdev_add_test(ut-qtestregister "qtestregistertest.cpp")
 kdev_add_test(it-qtestrunnertest qtestrunnertest.cpp)
 
-add_executable(fakeqtest1 fakeqtest1_2cmds.cpp)
-target_link_libraries(fakeqtest1 ${KDE4_KDECORE_LIBS})
-
-add_executable(fakeqtest2 fakeqtest2_2cmds_fail.cpp)
-target_link_libraries(fakeqtest2 ${KDE4_KDECORE_LIBS})
-
-add_executable(fakeqtest3 fakeqtest3_slow.cpp)
-target_link_libraries(fakeqtest3 ${KDE4_KDECORE_LIBS})
+add_subdirectory(suite1)
 
 add_executable(qtestrunner standalonerunner.cpp)
 target_link_libraries(qtestrunner
