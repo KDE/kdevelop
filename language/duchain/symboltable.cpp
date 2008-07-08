@@ -85,10 +85,13 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
+  ifDebug( kDebug(9505) << "Removing declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
+  
   QualifiedIdentifier id = declaration->qualifiedIdentifier();
   DeclarationMap::iterator it = sdSymbolPrivate->m_declarations.find(id.hash());
   for (; it != sdSymbolPrivate->m_declarations.end() && (*it).first == id.hash(); ++it)
     if ((*it).second == declaration) {
+declaration->qualifiedIdentifier().hash(); )
       sdSymbolPrivate->m_declarations.erase(it);
       sdSymbolPrivate->m_declarationsEnd = sdSymbolPrivate->m_declarations.end();
       return;

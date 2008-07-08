@@ -166,16 +166,6 @@ protected:
       declaration->setDeclarationIsDefinition(isDefinition);
       declaration->setIdentifier(localId);
 
-      switch (LanguageSpecificDeclarationBuilderBase::currentContext()->type()) {
-        case DUContext::Global:
-        case DUContext::Namespace:
-        case DUContext::Class:
-          SymbolTable::self()->addDeclaration(declaration);
-          break;
-        default:
-          break;
-      }
-
       LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
     }
 
