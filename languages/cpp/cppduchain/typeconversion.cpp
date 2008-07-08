@@ -21,6 +21,7 @@
 #include "cppduchain/cpptypes.h"
 #include "overloadresolution.h"
 #include <duchain/ducontext.h>
+#include <duchain/topducontext.h>
 #include <typeinfo>
 
 

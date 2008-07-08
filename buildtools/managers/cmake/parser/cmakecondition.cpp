@@ -15,6 +15,7 @@
 
 #include "cmakecondition.h"
 #include "cmakeprojectvisitor.h"
+#include <duchain/declaration.h>
 #include <KDebug>
 #include <QRegExp>
 #include <QFileInfo>

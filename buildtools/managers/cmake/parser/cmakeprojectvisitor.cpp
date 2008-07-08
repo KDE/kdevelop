@@ -30,6 +30,7 @@
 #include <duchainlock.h>
 #include <parsingenvironment.h>
 #include <typesystem.h>
+#include <declaration.h>
 
 #include <KProcess>
 #include <KDebug>

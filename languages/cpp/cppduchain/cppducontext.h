@@ -434,7 +434,7 @@ class CppDUContext : public BaseContext {
           
           if(type == DUContext::Helper) {
             if(!BaseContext::importedParentContexts().isEmpty())
-              classContext = BaseContext::importedParentContexts()[0].data();
+              classContext = BaseContext::importedParentContexts()[0].context.data();
           } else {
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
             if(classDeclaration && classDeclaration->internalContext())

@@ -258,8 +258,8 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<HashedString, Incl
 
   used.insert(ctx.data());
   
-  foreach( DUContextPointer ctx2, ctx->importedParentContexts() ) {
-    TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.data()) );
+  foreach( DUContext::Import ctx2, ctx->importedParentContexts() ) {
+    TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.context.data()) );
     allIncludedRecursion( used, ret, d, prefixPath );
   }
 

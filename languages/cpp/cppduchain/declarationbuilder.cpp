@@ -76,10 +76,10 @@ DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
-  foreach( DUContextPointer ctx, internal->importedParentContexts() ) {
-    if( ctx )
-      if( ctx->type() == DUContext::Template )
-        return ctx.data();
+  foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
+    if( ctx.context )
+      if( ctx.context->type() == DUContext::Template )
+        return ctx.context.data();
   }
   return 0;
 }
@@ -314,7 +314,7 @@ ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, 
 template<class Type>
 Type hasTemplateContext( const QList<Type>& contexts ) {
   foreach( const Type& context, contexts )
-    if( context->type() == KDevelop::DUContext::Template )
+    if( context&& context->type() == KDevelop::DUContext::Template )
       return context;
   return Type(0);
 }
@@ -322,7 +322,7 @@ Type hasTemplateContext( const QList<Type>& contexts ) {
 template<class Type>
 Type hasTemplateContext( const QVector<Type>& contexts ) {
   foreach( const Type& context, contexts )
-    if( context->type() == KDevelop::DUContext::Template )
+    if( context.context && context.context->type() == KDevelop::DUContext::Template )
       return context;
 
   return Type(0);
@@ -330,7 +330,7 @@ Type hasTemplateContext( const QVector<Type>& contexts ) {
 
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context
 KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
-  return hasTemplateContext( context->importedParentContexts() ).data();
+  return hasTemplateContext( context->importedParentContexts() ).context.data();
 }
 
 template<class T>

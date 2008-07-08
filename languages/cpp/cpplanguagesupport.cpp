@@ -776,7 +776,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
   {
     if(!top->importedParentContexts().isEmpty())
     {
-      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().data());
+      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context.data());
 
       if(!top)
         kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
@@ -864,10 +864,10 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   
   if(word.startsWith("#include")) {
     //It's an #include, find out which file was included at the given line
-    foreach(DUContextPointer imported, ctx->importedParentContexts()) {
-      if(imported) {
-        if(ctx->importPosition(imported.data()).line == wordRange.start.line) {
-          if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.data()))
+    foreach(DUContext::Import imported, ctx->importedParentContexts()) {
+      if(imported.context) {
+        if(ctx->importPosition(imported.context.data()).line == wordRange.start.line) {
+          if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.context.data()))
             return qMakePair(TopDUContextPointer(importedTop), wordRange);
         }
       }

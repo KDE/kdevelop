@@ -25,6 +25,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <ducontext.h>
+#include <declaration.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include "astfactory.h"

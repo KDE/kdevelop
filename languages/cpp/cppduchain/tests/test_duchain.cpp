@@ -471,7 +471,7 @@ void TestDUChain::testDeclareFor()
   QCOMPARE(forCtx->localDeclarations().count(), 1);
   QVERIFY(forCtx->localScopeIdentifier().isEmpty());
 
-  DUContext* forParamCtx = forCtx->importedParentContexts().first().data();
+  DUContext* forParamCtx = forCtx->importedParentContexts().first().context.data();
   QVERIFY(forParamCtx->parentContext());
   QCOMPARE(forParamCtx->importedParentContexts().count(), 0);
   QCOMPARE(forParamCtx->childContexts().count(), 0);
@@ -652,7 +652,7 @@ void TestDUChain::testDeclareStruct()
   QVERIFY(!ctorImplCtx->localScopeIdentifier().isEmpty());
   QVERIFY(ctorImplCtx->owner());
 
-  DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().data();
+  DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().context.data();
   QVERIFY(ctorCtx->parentContext());
   QCOMPARE(ctorCtx->childContexts().count(), 0);
   QCOMPARE(ctorCtx->localDeclarations().count(), 2);
@@ -1165,10 +1165,10 @@ void TestDUChain::testFunctionDefinition() {
   
   QCOMPARE(top->childContexts()[3]->owner(), top->localDeclarations()[2]);
   QCOMPARE(top->childContexts()[3]->importedParentContexts().count(), 1);
-  QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].data(), top->childContexts()[2]);
+  QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].context.data(), top->childContexts()[2]);
   
   QCOMPARE(top->childContexts()[2]->importedParentContexts().count(), 1);
-  QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].data(), top->childContexts()[1]);
+  QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].context.data(), top->childContexts()[1]);
   
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
@@ -1700,13 +1700,13 @@ void TestDUChain::testTemplates() {
     QVERIFY(instanceDefClassA->context() == defClassA->context());
     QVERIFY(instanceDefClassA->internalContext()->importedParentContexts().size() == 1);
     QVERIFY(defClassA->internalContext()->importedParentContexts().size() == 1);
-    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front()->type(), DUContext::Template);
-    QVERIFY(defClassA->internalContext()->importedParentContexts().front() != instanceDefClassA->internalContext()->importedParentContexts().front()); //The template-context has been instantiated
+    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context->type(), DUContext::Template);
+    QVERIFY(defClassA->internalContext()->importedParentContexts().front().context != instanceDefClassA->internalContext()->importedParentContexts().front().context); //The template-context has been instantiated
 
     //Make sure the first template-parameter has been resolved to class B
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
     //Make sure the second template-parameter has been resolved to class C
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0]->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
 
     QualifiedIdentifier ident2(ident);
     ident2.push(Identifier("Template1"));

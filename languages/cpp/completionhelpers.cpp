@@ -24,6 +24,7 @@
 #include <QList>
 #include <QVariant>
 #include <duchain/declaration.h>
+#include <duchain/abstractfunctiondeclaration.h>
 #include <QTextFormat>
 #include <QStringList>
 #include "overloadresolution.h"
@@ -118,7 +119,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       else
         ret += "<incomplete type>";
 
-      if( paramNameIt != parameters.end() && !(*paramNameIt)->identifier().isEmpty() )
+      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ )
         ret += " " + (*paramNameIt)->identifier().toString();
 
       if( doHighlight  )

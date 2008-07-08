@@ -64,9 +64,9 @@
 
 using namespace KDevelop;
 
-bool importsContext(const QVector<DUContextPointer>& contexts, const DUContext* context) {
-  foreach(DUContextPointer listCtx, contexts)
-    if(listCtx && listCtx->imports(context))
+bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
+  foreach(DUContext::Import listCtx, contexts)
+    if(listCtx.context && listCtx.context->imports(context))
       return true;
   return false;
 }
@@ -289,7 +289,7 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 LineContextPair contentFromProxy(LineContextPair ctx) {
     if( ctx.context->flags() & TopDUContext::ProxyContextFlag ) {
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
-        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().data()), ctx.sourceLine );
+        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context.data()), ctx.sourceLine );
     }else{
         return ctx;
     }
@@ -336,8 +336,8 @@ void CPPInternalParseJob::run()
           || !proxyContext)) {
           DUChainWriteLocker lock(DUChain::lock());
 
-          foreach(const DUContextPointer& ctx, contentContext->importedParentContexts())
-            contentContext->removeImportedParentContext(ctx.data());
+          foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
+            contentContext->removeImportedParentContext(ctx.context.data());
           }
     }
 
@@ -479,11 +479,11 @@ void CPPInternalParseJob::run()
           //Remove the temporary chains first, so we don't get warnings from them
           contentContext->removeImportedParentContexts(importedTemporaryChains);
 
-          QVector<DUContextPointer> imports = contentContext->importedParentContexts();
-          foreach(DUContextPointer ctx, imports) {
-              if(ctx.data() && !encounteredIncludeUrls.contains(IndexedString(ctx->url().str()))) { ///@todo prevent conversion
-                  contentContext->removeImportedParentContext(ctx.data());
-                  kDebug( 9007 ) << "removing not encountered import " << ctx->url().str();
+          QVector<DUContext::Import> imports = contentContext->importedParentContexts();
+          foreach(DUContext::Import ctx, imports) {
+              if(ctx.context.data() && !encounteredIncludeUrls.contains(IndexedString(ctx.context->url().str()))) { ///@todo prevent conversion
+                  contentContext->removeImportedParentContext(ctx.context.data());
+                  kDebug( 9007 ) << "removing not encountered import " << ctx.context->url().str();
               }
           }
       }
@@ -538,7 +538,7 @@ void CPPInternalParseJob::run()
         if(proxyContext->importedParentContexts().isEmpty()) //Failure
           return;
 
-        Q_ASSERT(proxyContext->importedParentContexts()[0].data() == contentContext);
+        Q_ASSERT(proxyContext->importedParentContexts()[0].context.data() == contentContext);
 
         //Add the non-content contexts behind to content-context to the created proxy,
         //By walking the chain of proxy-contexts.

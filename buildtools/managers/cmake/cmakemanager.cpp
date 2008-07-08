@@ -48,6 +48,7 @@
 #include <duchain.h>
 #include <dumpchain.h>
 #include <topducontext.h>
+#include <declaration.h>
 #include <duchainlock.h>
 #include <language/codecompletion/codecompletion.h>
 
