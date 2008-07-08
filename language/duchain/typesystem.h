@@ -185,6 +185,7 @@ public:
   ///This can also be called on zero types, those can then be reconstructed from the zero index
   IndexedType indexed() const;
 
+  /// Enumeration of major data types.
   enum WhichType {
     TypeAbstract  /**< an abstract type */,
     TypeIntegral  /**< an integral */,
@@ -197,6 +198,11 @@ public:
     TypeForward   /**< a foward declaration type */
   };
 
+  /**
+   * Determine which data type this abstract type represents.
+   *
+   * \returns the data type represented by this type.
+   */
   virtual WhichType whichType() const;
 
   enum {
@@ -205,11 +211,19 @@ public:
 
   /**
    * Should, like accept0, be implemented by all types that hold references to other types.
+   *
+   * \todo document function
    * */
   virtual void exchangeTypes( TypeExchanger* exchanger );
 
-  ///You must use this to create the internal data instances in copy constructors. It is needed, because it may need to allocate more memory
-  ///for appended lists.
+  /**
+   * Method to create copies of internal type data. You must use this to create the internal
+   * data instances in copy constructors. It is needed, because it may need to allocate more memory
+   * for appended lists.
+   *
+   * \param rhs data to copy
+   * \returns copy of the data
+   */
   template<class DataType>
   static DataType& copyData(const DataType& rhs) {
     size_t size;
@@ -221,8 +235,11 @@ public:
     return *new (new char[size]) DataType(rhs);
   }
 
-  ///You must use this to create the internal data instances in normal constructors.
-
+  /**
+   * Method to create internal data structures. Use this in normal constructors.
+   *
+   * \returns the internal data structure
+   */
   template<class DataType>
   static DataType& createData() {
     return *new (new char[sizeof(DataType)]) DataType();
@@ -231,6 +248,11 @@ public:
   typedef AbstractTypeData Data;
 
 protected:
+  /**
+   * Visitor method, reimplement to allow visiting of types.
+   *
+   * \param v visitor which is visiting.
+   */
   virtual void accept0 (TypeVisitor *v) const = 0;
   AbstractTypeData* d_ptr;
 
@@ -259,35 +281,51 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
     virtual bool exchangeMembers() const = 0;
 };
 
-///Allows accessing the type just by a single index, so the reference can be stored to disk etc.
+/**
+ * \short Indexed type pointer.
+ *
+ * IndexedType is a class which references a type by an index.
+ * This way the type can be stored to disk.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
   public:
+    /// Constructor.
     IndexedType(uint index = 0) : m_index(index) {
     }
 
-    ///Returns zero type if this index is invalid
+    /**
+     * Access the type.
+     *
+     * \returns the type pointer, or null if this index is invalid.
+     */
     AbstractType::Ptr type() const;
 
+    /// Determine if the type is valid. \returns true if valid, otherwise false.
     bool isValid() const {
       return (bool)m_index;
     }
 
+    /// \copydoc
     operator bool() const {
       return (bool)m_index;
     }
 
+    /// Equivalence operator. \param rhs indexed type to compare. \returns true if equal (or both invalid), otherwise false.
     bool operator==(const IndexedType& rhs) const {
       return m_index == rhs.m_index;
     }
 
+    /// Not equal operator. \param rhs indexed type to compare. \returns true if types are not the same, otherwise false.
     bool operator!=(const IndexedType& rhs) const {
       return m_index != rhs.m_index;
     }
 
+    /// Access the type's hash value. \returns the hash value.
     uint hash() const {
       return m_index;
     }
 
+    /// Access the type's index. \returns the index.
     uint index() const {
       return m_index;
     }
@@ -296,23 +334,38 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
     uint m_index;
 };
 
+/**
+ * \short A type representing inbuilt data types.
+ *
+ * IntegralType is used to represent types which are native to a programming languge,
+ * such as (e.g.) int, float, double, char, bool etc.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
 {
 public:
   typedef TypePtr<IntegralType> Ptr;
 
+  /// Default constructor
   IntegralType();
+  /// Copy constructor. \param rhs type to copy
   IntegralType(const IntegralType& rhs);
+  /// Constructor for named integral types. \param name name of this type
   IntegralType(const IndexedString& name);
+  /// Constructor using raw data. \param data internal data.
   IntegralType(IntegralTypeData& data);
-  ~IntegralType();
+  /// Destructor
+  virtual ~IntegralType();
 
+  /// Access the name of this type. \returns the type's name.
   const IndexedString& name() const;
 
+  /// Set the name of this type.  \param name the type's name.
   void setName(const IndexedString& name);
 
+  /// Equivalence operator. \param other other integral type to compare. \returns true if types are equal, otherwise false
   bool operator == (const IntegralType &other) const;
 
+  /// Not equal operator. \param other other integral type to compare. \returns false if types are equal, otherwise false
   bool operator != (const IntegralType &other) const;
 
   virtual QString toString() const;
@@ -337,19 +390,43 @@ protected:
   TYPE_DECLARE_DATA(IntegralType)
 };
 
+/**
+ * \short A type representing pointer types.
+ *
+ * PointerType is used to represent types which hold a pointer to a location
+ * in memory.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
 {
 public:
   typedef TypePtr<PointerType> Ptr;
 
+  /// Default constructor
   PointerType ();
+  /// Copy constructor. \param rhs type to copy
   PointerType(const PointerType& rhs);
+  /// Constructor using raw data. \param data internal data.
   PointerType(PointerTypeData& data);
-  ~PointerType();
+  /// Destructor
+  virtual ~PointerType();
 
+  /// Equivalence operator. \param other other pointer type to compare. \returns true if types are equal, otherwise false
   bool operator != (const PointerType &other) const;
+  /// Not equal operator. \param other other pointer type to compare. \returns false if types are equal, otherwise false
   bool operator == (const PointerType &other) const;
+
+  /**
+   * Sets the base type of the pointer, ie. what type of data the pointer points to.
+   *
+   * \param baseType the base type.
+   */
   void setBaseType(AbstractType::Ptr type);
+
+  /**
+   * Retrieve the base type of the pointer, ie. what type of data the pointer points to.
+   *
+   * \returns the base type.
+   */
   AbstractType::Ptr baseType () const;
 
   virtual QString toString() const;
@@ -376,21 +453,44 @@ protected:
   TYPE_DECLARE_DATA(PointerType)
 };
 
+/**
+ * \short A type representing reference types.
+ *
+ * ReferenceType is used to represent types which hold a reference to a
+ * variable.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
 {
 public:
   typedef TypePtr<ReferenceType> Ptr;
 
+  /// Default constructor
   ReferenceType ();
+  /// Copy constructor. \param rhs type to copy
   ReferenceType (const ReferenceType& rhs);
+  /// Constructor using raw data. \param data internal data.
   ReferenceType(ReferenceTypeData& data);
-  ~ReferenceType();
+  /// Destructor
+  virtual ~ReferenceType();
+
+  /**
+   * Retrieve the referenced type, ie. what type of data this type references.
+   *
+   * \returns the base type.
+   */
   AbstractType::Ptr baseType () const;
 
+  /**
+   * Sets the referenced type, ie. what type of data this type references.
+   *
+   * \param baseType the base type.
+   */
   void setBaseType(AbstractType::Ptr baseType);
 
+  /// Equivalence operator. \param other other reference type to compare. \returns true if types are equal, otherwise false
   bool operator == (const ReferenceType &other) const;
 
+  /// Not equal operator. \param other other reference type to compare. \returns false if types are equal, otherwise false
   bool operator != (const ReferenceType &other) const;
 
   virtual QString toString() const;
@@ -417,33 +517,73 @@ protected:
   TYPE_DECLARE_DATA(ReferenceType)
 };
 
+/**
+ * \short A type representing function types.
+ *
+ * A FunctionType is represents the type of a function.  It provides access
+ * to the return type, and number and types of the arguments.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionType : public AbstractType
 {
 public:
   typedef TypePtr<FunctionType> Ptr;
 
+  /// An enumeration of sections of the function signature that can be returned.
   enum SignaturePart {
     SignatureWhole /**< When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned */,
     SignatureReturn /**< When this is given, only a string that represents the return-type is returned */,
     SignatureArguments /**< When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend */
   };
 
+  /// Default constructor
   FunctionType();
+  /// Copy constructor. \param rhs type to copy
   FunctionType(const FunctionType& rhs);
+  /// Constructor using raw data. \param data internal data.
   FunctionType(FunctionTypeData& data);
+  /// Destructor
   ~FunctionType();
 
+  /**
+   * Retrieve the return type of the function.
+   *
+   * \returns the return type.
+   */
   AbstractType::Ptr returnType () const;
 
+  /**
+   * Sets the return type of the function.
+   *
+   * \param returnType the return type.
+   */
   void setReturnType(AbstractType::Ptr returnType);
 
+  /**
+   * Retrieve the list of types of the function's arguments.
+   *
+   * \returns the argument types.
+   */
   QList<AbstractType::Ptr> arguments () const;
 
+  /**
+   * Add an argument to the function, specifying what type it takes.
+   *
+   * \param argument the argument's type
+   */
   void addArgument(AbstractType::Ptr argument);
+
+  /**
+   * Remove an argument type from the function.
+   *
+   * \param argument the argument type to remove
+   * \todo this function doesn't seem to be used, remove it?
+   */
   void removeArgument(AbstractType::Ptr argument);
 
+  /// Equivalence operator. \param other other function type to compare. \returns true if types are equal, otherwise false
   bool operator == (const FunctionType &other) const;
 
+  /// Not equal operator. \param other other function type to compare. \returns false if types are equal, otherwise false
   bool operator != (const FunctionType &other) const;
 
   virtual AbstractType* clone() const;
@@ -452,7 +592,13 @@ public:
 
   virtual QString toString() const;
 
-  ///Creates a string that represents the given part of the signature
+  /**
+   * This function creates a string that represents the requested part of
+   * this function's signature.
+   *
+   * \param sigPart part of the signature requested.
+   * \returns the signature as text.
+   */
   virtual QString partToString( SignaturePart sigPart ) const;
 
   virtual uint hash() const;
@@ -473,15 +619,25 @@ protected:
   TYPE_DECLARE_DATA(FunctionType)
 };
 
+/**
+ * \short A type representing structure types.
+ *
+ * StructureType represents all structures, including classes,
+ * interfaces, etc.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
 {
 public:
-  StructureType();
-  StructureType(const StructureType&);
-  ~StructureType();
-  StructureType(StructureTypeData& data);
-
   typedef TypePtr<StructureType> Ptr;
+
+  /// Default constructor
+  StructureType();
+  /// Copy constructor. \param rhs type to copy
+  StructureType(const StructureType& rhs);
+  /// Constructor using raw data. \param data internal data.
+  StructureType(StructureTypeData& data);
+  /// Destructor
+  virtual ~StructureType();
 
   virtual AbstractType* clone() const;
 
@@ -510,22 +666,46 @@ class KDEVPLATFORMLANGUAGE_EXPORT ArrayType : public AbstractType
 public:
   typedef TypePtr<ArrayType> Ptr;
 
+  /// Default constructor
   ArrayType();
-  ArrayType(const ArrayType&);
+  /// Copy constructor. \param rhs type to copy
+  ArrayType(const ArrayType& rhs);
+  /// Constructor using raw data. \param data internal data.
   ArrayType(ArrayTypeData& data);
+  /// Destructor
+  virtual ~ArrayType();
 
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;
 
-  ~ArrayType();
-
+  /**
+   * Retrieve the dimension of this array type. Multiple-dimensioned
+   * arrays will have another array type as their elementType().
+   *
+   * \returns the dimension of the array, or zero if the array is dimensionless (eg. int[])
+   */
   int dimension () const;
 
+  /**
+   * Set this array type's dimension.
+   *
+   * \param dimension new dimension, set to zero for a dimensionless type (eg. int[])
+   */
   void setDimension(int dimension);
 
+  /**
+   * Retrieve the element type of the array, e.g. "int" for int[3].
+   *
+   * \returns the element type.
+   */
   AbstractType::Ptr elementType () const;
 
+  /**
+   * Set the element type of the array, e.g. "int" for int[3].
+   *
+   * \returns the element type.
+   */
   void setElementType(AbstractType::Ptr type);
 
   bool operator == (const ArrayType &other) const;
@@ -553,6 +733,8 @@ protected:
 };
 
 /**
+ * \short A type which has not yet been resolved.
+ *
  * Delayed types can be used for any types that cannot be resolved in the moment they are encountered.
  * They can be used for example in template-classes, or to store the names of unresolved types.
  * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
