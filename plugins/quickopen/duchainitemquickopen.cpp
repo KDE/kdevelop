@@ -51,6 +51,9 @@ QString DUChainItemData::text() const {
 QList<QVariant> DUChainItemData::highlighting() const {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  if(!m_item.m_item)
+    return QList<QVariant>();
+
   TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
   if(!function)
     return QList<QVariant>();
