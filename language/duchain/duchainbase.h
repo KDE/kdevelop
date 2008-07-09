@@ -69,6 +69,14 @@ protected:
    * \param ownsSmartRange if true, the DocumentRangeObject will delete the smart range when this object is deleted.
    */
   DUChainBase( class DUChainBasePrivate& dd, bool ownsSmartRange = false );
+
+  /**
+    * Constructor for copy constructors in subclasses.
+    *
+    * \param dd data to copy.
+    * \param url document url in which this object is located.
+    * \param range text range which this object covers.
+    */
   DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, const SimpleRange& range );
 
 private:
