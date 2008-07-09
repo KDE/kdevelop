@@ -393,40 +393,40 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   return topLevelContext;
 }
 
-KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
-  setCompilingContexts(true);
-  setRecompiling(false);
-
-  editor()->setCurrentUrl(url);
-
-  node->ducontext = parent;
-
-  {
-    //copied out of supportBuild
-
-    openContext(node->ducontext);
-
-    editor()->setCurrentRange(editor()->topRange(EditorIntegrator::DefinitionUseChain));
-
-    visit (node);
-
-    closeContext();
-  }
-
-  setCompilingContexts(false);
-
-  if( node->ducontext == parent ) {
-    //The node's du-context should have been replaced!
-    //Maybe dump the node
-    kDebug(9007) << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
-    DUChainWriteLocker lock(DUChain::lock());
-    delete node->ducontext;
-
-    node->ducontext = 0;
-  }
-
-  return node->ducontext;
-}
+// KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
+//   setCompilingContexts(true);
+//   setRecompiling(false);
+// 
+//   editor()->setCurrentUrl(url);
+// 
+//   node->ducontext = parent;
+// 
+//   {
+//     //copied out of supportBuild
+// 
+//     openContext(node->ducontext);
+// 
+//     editor()->setCurrentRange(editor()->topRange(EditorIntegrator::DefinitionUseChain));
+// 
+//     visit (node);
+// 
+//     closeContext();
+//   }
+// 
+//   setCompilingContexts(false);
+// 
+//   if( node->ducontext == parent ) {
+//     //The node's du-context should have been replaced!
+//     //Maybe dump the node
+//     kDebug(9007) << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
+//     DUChainWriteLocker lock(DUChain::lock());
+//     delete node->ducontext;
+// 
+//     node->ducontext = 0;
+//   }
+// 
+//   return node->ducontext;
+// }
 
 void ContextBuilder::visitNamespace (NamespaceAST *node)
 {
@@ -587,7 +587,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
     return ret;
 
   } else {
-    openContext(rangeNode->ducontext);
+    injectContext(rangeNode->ducontext);
     editor()->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }

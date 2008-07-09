@@ -64,7 +64,7 @@ public:
    *
    * \param parent Context that will be used as parent for this context
    */
-  KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
+//   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   bool changeWasSignificant() const;
 

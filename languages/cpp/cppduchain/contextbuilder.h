@@ -122,7 +122,7 @@ public:
    *
    * \param parent Context that will be used as parent for this context
    */
-  KDevelop::DUContext* buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
+//   KDevelop::DUContext* buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
 

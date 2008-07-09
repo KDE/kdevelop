@@ -112,14 +112,14 @@ TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePo
   return top;
 }
 
-DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
-  DUContext* top = buildSubContexts(url, node, parent);
-
-  Q_ASSERT(m_accessPolicyStack.isEmpty());
-  Q_ASSERT(m_functionDefinedStack.isEmpty());
-
-  return top;
-}
+// DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
+//   DUContext* top = buildSubContexts(url, node, parent);
+// 
+//   Q_ASSERT(m_accessPolicyStack.isEmpty());
+//   Q_ASSERT(m_functionDefinedStack.isEmpty());
+// 
+//   return top;
+// }
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   DeclarationBuilderBase::visitTemplateParameter(ast);
@@ -443,6 +443,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
     SmartRange* prior = editor()->currentRange();
 
+    LockedSmartInterface iface = editor()->smart();
     ///We don't want to move the parent range around if the context is collapsed, so we find a parent range that can hold this range.
     QVarLengthArray<SmartRange*, 5> backup;
     while(editor()->currentRange() && !editor()->currentRange()->contains(newRange.textRange())) {
@@ -455,7 +456,6 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       backup.resize(backup.size()-1);
     }
 
-    LockedSmartInterface iface = editor()->smart();
     SmartRange* range = editor()->createRange(newRange.textRange());
 
     editor()->exitCurrentRange();
@@ -977,13 +977,15 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
               globalCtx = globalCtx->parentContext();
             Q_ASSERT(globalCtx);
           }
-          openContext(globalCtx);
+          
+          //Just temporarily insert the new context
+          injectContext( globalCtx, currentContext()->smartRange() );
         }
 
         openForwardDeclaration(node->name, node);
 
         if(forwardDeclarationGlobal)
-          closeContext();
+          closeInjectedContext();
 
         openedDeclaration = true;
         break;

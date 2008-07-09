@@ -2201,6 +2201,50 @@ void TestDUChain::testForwardDeclaration3()
   release(top);
 }
 
+void TestDUChain::testForwardDeclaration4()
+{
+  QByteArray method("namespace B {class Test{ class Forward* mem; };} ");
+
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 3);
+
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->childContexts()[0]->localDeclarations()[0]));
+
+  ForwardDeclaration* forwardDecl = static_cast<ForwardDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
+  kDebug() << forwardDecl->toString();
+  QVERIFY(forwardDecl->resolve(0));
+  QCOMPARE(forwardDecl->resolve(0), top->childContexts()[1]->localDeclarations()[0]);
+  
+  CppClassType::Ptr type1 = top->childContexts()[0]->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type2 = top->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type3 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>();
+  CppClassType::Ptr type4 = top->localDeclarations()[1]->type<CppClassType>();
+  CppClassType::Ptr type5 = top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->type<CppClassType>();
+
+  
+  QVERIFY(type1);
+  QVERIFY(type2);
+  QVERIFY(type3);
+  QVERIFY(type4);
+  QVERIFY(type5);
+
+  Declaration* TestDecl = top->childContexts()[1]->localDeclarations()[0];
+  QVERIFY(TestDecl->internalContext());
+  QCOMPARE(TestDecl->internalContext()->localDeclarations().count(), 2);
+  CppClassType::Ptr subType = TestDecl->internalContext()->localDeclarations()[1]->type<CppClassType>();
+  QVERIFY(subType);
+
+  QCOMPARE(type1->indexed(), type2->indexed());
+  QCOMPARE(type2->declaration(0)->abstractType()->indexed(), type3->indexed());
+  QCOMPARE(subType->declaration(0)->abstractType()->indexed(), type4->declaration(0)->abstractType()->indexed());
+  QCOMPARE(type4->declaration(0)->abstractType()->indexed(), type5->indexed());
+  
+  release(top);
+}
 void TestDUChain::testTemplateForwardDeclaration()
 {
   QByteArray method("class B{}; template<class T = B>class Test; Test<B> t; template<class T = B>class Test {}; ");
