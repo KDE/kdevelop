@@ -125,6 +125,15 @@ public:
  * - equivalence feature
  * - cloning of types, and
  * - hashing and indexing
+ *
+ *  Type classes are created in a way that allows storing them in memory or on disk
+ *  efficiently.  They are classes which can store arbitrary lists immediately after their
+ *  private data structures in memory (thus enabling them to be mmapped or memcopied),
+ *  or being "dynamic" where you use exactly the same class and same access functions,
+ *  but the list data is stored in a temporary QVarLengthArray from a central repository,
+ *  until we save it back to the static memory-region again.
+ *
+ *  \sa appendedlist.h
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
 {
@@ -745,17 +754,33 @@ class KDEVPLATFORMLANGUAGE_EXPORT DelayedType : public KDevelop::AbstractType
 public:
   typedef TypePtr<DelayedType> Ptr;
 
+  /// An enumeration of
   enum Kind {
     Delayed /**< The type should be resolved later. This is the default. */,
     Unresolved /**< The type could not be resolved */
   };
 
+  /// Default constructor
   DelayedType();
+  /// Copy constructor. \param rhs type to copy
   DelayedType(const DelayedType& rhs);
+  /// Constructor using raw data. \param data internal data.
   DelayedType(DelayedTypeData& data);
+  /// Destructor
   virtual ~DelayedType();
 
+  /**
+   * Access the type identifier which this type represents.
+   *
+   * \returns the type identifier.
+   */
   KDevelop::TypeIdentifier identifier() const;
+
+  /**
+   * Set the type identifier which this type represents.
+   *
+   * \param identifier the type identifier.
+   */
   void setIdentifier(const KDevelop::TypeIdentifier& identifier);
 
   virtual QString toString() const;

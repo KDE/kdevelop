@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006 Adam Treat <treat@kde.org>
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,9 @@ class Declaration;
 class DeclarationId;
 class TopDUContext;
 
+/**
+ * Data structure for identified types.
+ */
 class IdentifiedTypeData
 {
 public:
@@ -38,43 +41,83 @@ public:
 };
 
 /**
- * An IdentifiedType is a type that has a declaration.
+ * \short An IdentifiedType is a type that has a declaration.
+ *
  * Example of an identified type:
  * - A class type
- * Example of not identified types:
- * - Pointer types(can point to identified types, but itself has no declaration)
- * - Reference types(the same)
+ *
+ * Example of types which are not identified:
+ * - Pointer types (they can point to identified types, but by themselves have no declaration)
+ * - Reference types (the same)
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT IdentifiedType
 {
 public:
+  /// Destructor
   virtual ~IdentifiedType();
 
-//   QualifiedIdentifier identifier() const;
-
+  /**
+   * Test for equivalence with another type.
+   *
+   * \param rhs other type to check for equivalence
+   * \returns true if equal, otherwise false.
+   */
   bool equals(const IdentifiedType* rhs) const;
 
+  /// Clear the identifier
   void clear();
-  
-  //This is relatively expensive. Use declarationId instead when possible!
+
+  /**
+   * Determine the qualified identifier for this identified type.
+   *
+   * \note This is relatively expensive. Use declarationId() instead when possible!
+   * \returns the type's qualified identifier
+   */
   QualifiedIdentifier qualifiedIdentifier() const;
-  
+
+  /// Determine this identified type's hash value. \returns the hash value
   uint hash() const;
 
-  DeclarationId declarationId() const;
-  void setDeclarationId(const DeclarationId& id);
-  
-  Declaration* declaration(const TopDUContext* top) const;
   /**
-   * You should be careful when setting this, because it also changes the meaning of the declaration.
+   * Access the identified type's declaration id, which is a unique global identifier for the
+   * type even when the same identifier represents a different type in a different context
+   * or source file.
+   *
+   * \returns the declaration identifier.
+   * \sa DeclarationId
+   */
+  DeclarationId declarationId() const;
+
+  /**
+   * Set the globally unique declaration \a id.
+   * \param id new identifier
+   */
+  void setDeclarationId(const DeclarationId& id);
+
+  /**
+   * Look up the declaration of this type in the given \a top context.
+   *
+   * \param top Top context to search for the declaration within
+   * \returns the declaration corresponding to this identified type
+   */
+  Declaration* declaration(const TopDUContext* top) const;
+
+  /**
+   * Set the declaration which created this type.
+   *
+   * \note You should be careful when setting this, because it also changes the meaning of the declaration.
+   *
    * The logic is:
    * If a declaration has a set abstractType(), and that abstractType() has set the same declaration as declaration(),
    * then the declaration declares the type(thus it is a type-declaration, see Declaration::kind())
+   *
+   * \param declaration Declaration which created the type
    * */
   void setDeclaration(Declaration* declaration);
 
-//   QString idMangled() const;
+  /// Allow IdentifiedType to access its data.
   virtual IdentifiedTypeData* idData() = 0;
+  /// Allow IdentifiedType to access its data.
   virtual const IdentifiedTypeData* idData() const = 0;
 };
 
@@ -83,17 +126,17 @@ public:
 template<class Parent>
 class KDEVPLATFORMLANGUAGE_EXPORT MergeIdentifiedType : public Parent, public IdentifiedType {
   public:
-    
+
     class Data : public Parent::Data, public IdentifiedTypeData {
     };
-    
+
     MergeIdentifiedType(Data& data) : Parent(data) {
     }
-    
+
     virtual IdentifiedTypeData* idData() {
       return static_cast<Data*>(this->d_func_dynamic());
     }
-    
+
     virtual const IdentifiedTypeData* idData() const {
       return static_cast<const Data*>(this->d_func());
     }

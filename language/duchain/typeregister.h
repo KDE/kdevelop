@@ -24,18 +24,57 @@
 
 namespace KDevelop {
 
+/**
+ * \short A factory class for type data.
+ *
+ * This class provides an interface for creating private data
+ * structures for classes.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
   public:
-  virtual AbstractType* create(AbstractTypeData* /*data*/) const = 0;
+  /**
+   * Create a new type for the given \a data.
+   *
+   * \param data Data to assign to the new type.
+   */
+  virtual AbstractType* create(AbstractTypeData* data) const = 0;
+
+  /**
+   * Release the \a data from a type which is being destroyed.
+   *
+   * \param data data to destroy.
+   */
   virtual void callDestructor(AbstractTypeData* data) const = 0;
+
+
+  /**
+   * Copy data \a from one type \a to another.
+   *
+   * \param from data to copy from
+   * \param to data to copy to
+   * \param constant set to true if \a to is to be a static data type, or false if \a to is to be a dynamic data type.
+   *
+   * \todo David, please check this
+   */
   virtual void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const = 0;
+
+  /**
+   * Return the memory size of the given private \a data, excluding dynamic data.
+   *
+   * \param data data structure
+   * \returns the size in memory of the data.
+   */
   virtual uint dynamicSize(const AbstractTypeData& data) const = 0;
-  ///Returns the class size(measures the most derived class), but does not include dynamic data.
-  
+
+  /// Destructor.
   virtual ~AbstractTypeFactory() {
   }
 };
 
+/**
+ * Template class to implement factories for each AbstractType subclass you want
+ * to instantiate.
+ */
 template<class T, class Data>
 class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
   public:
@@ -44,13 +83,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
   }
   void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
     Q_ASSERT(from.typeClassId == T::Identity);
-    
+
     if((bool)from.m_dynamic == (bool)!constant) {
       //We have a problem, "from" and "to" should both be either dynamic or constant. We must copy once more.
       Data* temp = &AbstractType::copyData<Data>(static_cast<const Data&>(from));
-      
+
       new (&to) Data(*temp); //Call the copy constructor to initialize the target
-      
+
       Q_ASSERT((bool)to.m_dynamic == (bool)!constant);
       delete temp;
     }else{
@@ -61,15 +100,24 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
     Q_ASSERT(data->typeClassId == T::Identity);
     static_cast<Data*>(data)->~Data();
   }
-  
+
   uint dynamicSize(const AbstractTypeData& data) const {
     Q_ASSERT(data.typeClassId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
 };
 
+/**
+ * \short A class which registers data types and creates factories for them.
+ *
+ * TypeSystem is a global static class which allows you to register new
+ * AbstractType subclasses for creation.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
   public:
+    /**
+     * Register a new AbstractType subclass.
+     */
     template<class T, class Data>
     void registerTypeClass() {
       Q_ASSERT(T::Identity < 64);
@@ -77,12 +125,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
         m_factories.resize(T::Identity+1);
         m_dataClassSizes.resize(T::Identity+1);
       }
-      
+
       Q_ASSERT(!m_factories[T::Identity]);
       m_factories[T::Identity] = new TypeFactory<T, Data>();
       m_dataClassSizes[T::Identity] = sizeof(Data);
     }
-    
+
+    /**
+     * Unregister an AbstractType subclass.
+     */
     template<class T, class Data>
     void unregisterTypeClass() {
       Q_ASSERT(m_factories.size() > T::Identity);
@@ -91,31 +142,39 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
       m_factories[T::Identity] = 0;
       m_dataClassSizes[T::Identity] = 0;
     }
-    
-    //Creates an AbstractType for the given data. The returned type must be put into a AbstractType::Ptr immediately.
-    //Can return zero, of no type-factory is available for the given data(for example when a language-part is not loaded)
+
+    /**
+     * Create an AbstractType for the given data. The returned type must be put into a AbstractType::Ptr immediately.
+     * Can return null if no type-factory is available for the given data (for example when a language-part is not loaded)
+     */
     AbstractType* create(AbstractTypeData* data) const;
-    
-    ///This just calls the correct constructor on the target. The target must be big enough to hold all the data.
+
+    /**
+     * This just calls the correct constructor on the target. The target must be big enough to hold all the data.
+     */
     void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const;
-    
+
     ///Calls the dynamicSize(..) member on the given data, in the most special class. Since we cannot use virtual functions, this is the only way.
     uint dynamicSize(const AbstractTypeData& data) const;
-    
+
     ///Returns the size of the derived class, not including dynamic data.
     ///Returns zero if the class is not known.
     size_t dataClassSize(const AbstractTypeData& data) const;
-    
-    //Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
+
+    ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
     void callDestructor(AbstractTypeData* data) const;
-    
+
+    /// Access the static TypeSystem instance.
     static TypeSystem& self();
-    
+
   private:
     QVector<AbstractTypeFactory*> m_factories;
     QVector<size_t> m_dataClassSizes;
 };
 
+/// Helper class to register an AbstractType subclass.
+///
+/// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
 template<class T, class Data>
 struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
   TypeSystemRegistrator() {

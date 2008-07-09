@@ -56,7 +56,7 @@ enum {
  * and freed on free(index). When freed, the same index will be re-used for a later allocation, thus no real allocations
  * will be happening in most cases.
  * The returned indices will always be ored with DynamicAppendedListMask.
- * 
+ *
  */
 template<class T, bool threadSafe = true>
 class TemporaryDataManager {
@@ -70,49 +70,49 @@ class TemporaryDataManager {
       foreach(T* item, m_items)
         delete item;
     }
-    
+
     T& getItem(uint index) {
       Q_ASSERT(index & DynamicAppendedListMask);
       index &= DynamicAppendedListRevertMask;
-      
+
       if(threadSafe)
         m_mutex.lock();
 
       T& ret(*m_items[index]);
-      
+
       if(threadSafe)
         m_mutex.unlock();
-      
+
       return ret;
     }
-    
+
     ///Allocates an item index, which from now on you can get using getItem, until you call free(..) on the index.
     ///The returned item is not initialized and may contain random older content, so you should clear it after getting it for the first time
     uint alloc() {
       if(threadSafe)
         m_mutex.lock();
-      
+
       uint ret;
-      
+
       if(!m_freeIndices.isEmpty()) {
         ret = m_freeIndices.pop();
       }else{
         ret = m_items.size();
         m_items.append(new T);
       }
-      
+
       if(threadSafe)
         m_mutex.unlock();
-      
+
       Q_ASSERT(!(ret & DynamicAppendedListMask));
-      
+
       return ret | DynamicAppendedListMask;
     }
-    
+
     void free(uint index) {
       Q_ASSERT(index & DynamicAppendedListMask);
       index &= DynamicAppendedListRevertMask;
-      
+
       if(threadSafe)
         m_mutex.lock();
 
@@ -121,14 +121,14 @@ class TemporaryDataManager {
       if(threadSafe)
         m_mutex.unlock();
     }
-    
+
   private:
     QVector<T*> m_items;
     QStack<uint> m_freeIndices;
     QMutex m_mutex;
 };
 
-///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the lenght returned by the function-name with "Size" appended.
+///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
 
@@ -169,7 +169,7 @@ unsigned int offsetBehindBase() const { return 0; }
 ///To reduce the probability of future problems, you should give the direct base class this one inherits from.
 ///@note: Multiple inheritance is not supported, however it will work ok if only one of the base-classes uses appended lists.
 #define START_APPENDED_LISTS_BASE(container, base) \
-unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } 
+unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
 
 
 #define APPENDED_LIST_COMMON(container, type, name) \
@@ -189,7 +189,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
       } \
       void name ## Initialize(bool dynamic) { if(dynamic) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
       void name ## Free() { if(appendedListsDynamic()) temporaryHash ## container ## name().free(name ## Data); }  \
-      
+
 
 ///@todo Make these things a bit faster(less recursion)
 
@@ -200,7 +200,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
                                                void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); }  \
                                                void name ## FreeChain() { name ## Free(); }
-                                                                                              
+
 #define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
                                                const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
@@ -230,7 +230,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
  * - Implement an operator=(..) function that also copies the lists using copyListsFrom(..)
  * - Implement a hash() function. The hash should equal for two instances when operator==(..) returns true.
  * - Should be completely functional without a constructor called, only the data copied
- * If those conditions are fulfilles, the data can easily be put into a repository using this request class.
+ * If those conditions are fulfilled, the data can easily be put into a repository using this request class.
  * */
 
 template<class Type, uint averageAppendedBytes = 8>
@@ -238,7 +238,7 @@ class AppendedListItemRequest {
   public:
   AppendedListItemRequest(const Type& item) : m_item(item) {
   }
-  
+
   enum {
     AverageSize = sizeof(Type) + averageAppendedBytes
   };
@@ -246,20 +246,20 @@ class AppendedListItemRequest {
   unsigned int hash() const {
     return m_item.hash();
   }
-  
+
   size_t itemSize() const {
       return m_item.dynamicSize();
   }
-  
+
   void createItem(Type* item) const {
     item->initializeAppendedLists(false);
     *item = m_item;
   }
-  
+
   bool equals(const Type* item) const {
     return m_item == *item;
   }
-  
+
   const Type& m_item;
 };
 
