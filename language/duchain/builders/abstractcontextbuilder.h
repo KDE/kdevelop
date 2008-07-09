@@ -392,20 +392,6 @@ protected:
   }
 
   /**
-   * Open a newly created or previously existing context.
-   *
-   * The open context is put on the context stack, and becomes the new
-   * currentContext().
-   *
-   * \param newContext Context to open.
-   */
-  virtual void openContext( DUContext* newContext )
-  {
-    m_contextStack.push( newContext );
-    m_nextContextStack.push( 0 );
-  }
-
-  /**
    * Open a context, and create / update it if necessary.
    *
    * \param rangeNode The range which encompasses the context.
@@ -513,11 +499,46 @@ protected:
       return currentContext();
     }
   }
+  
+  /**
+   * Open a newly created or previously existing context.
+   *
+   * The open context is put on the context stack, and becomes the new
+   * currentContext().
+   * 
+   * \warning When you call this, you also have to open a range! If you want to re-use
+   * the range associated to the context, use injectContext
+   * 
+   * \param newContext Context to open.
+   */
+  virtual void openContext( DUContext* newContext )
+  {
+    m_contextStack.push( newContext );
+    m_nextContextStack.push( 0 );
+  }
+  
+  /**
+   * This can be used to temporarily change the current context.
+   * \param range The range that will be used as new current range, or zero(then the range associated to the context is used)
+   * */
+  void injectContext( DUContext* ctx, KTextEditor::SmartRange* range = 0 ) {
+    openContext( ctx );
+    m_editor->setCurrentRange( range ? range : ctx->smartRange() );
+  }
+  
+  /**
+   * Use this to close the context previously injected with injectContext.
+   * */
+  void closeInjectedContext() {
+    m_contextStack.pop();
+    m_nextContextStack.pop();
+    if(m_editor->smart())
+      m_editor->exitCurrentRange();
+  }
 
   /**
    * Close the current DUContext.  When recompiling, this function will remove any
    * contexts that were not encountered in this passing run.
-   *
    * \note The DUChain write lock is already held here.
    */
   virtual void closeContext()
@@ -528,9 +549,10 @@ protected:
       if(m_compilingContexts)
         currentContext()->cleanIfNotEncountered( m_encountered );
       setEncountered( currentContext() );
+      
+      m_lastContext = currentContext();
     }
 
-    m_lastContext = currentContext();
     m_contextStack.pop();
     m_nextContextStack.pop();
     if(m_editor->smart())
@@ -714,6 +736,7 @@ protected:
   }
 
 private:
+  
   Identifier m_identifier;
   QualifiedIdentifier m_qIdentifier;
   EditorIntegrator* m_editor;
