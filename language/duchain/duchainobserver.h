@@ -49,7 +49,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainObserver : public QObject
   friend class DUChain;
 
 public:
+  /// Destructor.
   virtual ~DUChainObserver();
+
+#if 0
+  // This code was too slow, firing way too many notifications.  Needs rethinking.
 
   enum Modification {
     Addition /**< Something was added to the duchain */,
@@ -91,14 +95,17 @@ public:
   };
 
 Q_SIGNALS:
-  /*void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
+  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
   void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
   void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
-  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);*/
+  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
 
+#endif
+
+Q_SIGNALS:
   void branchAdded(KDevelop::DUContextPointer context);
   void branchModified(KDevelop::DUContextPointer context);
   void branchRemoved(KDevelop::DUContextPointer context);

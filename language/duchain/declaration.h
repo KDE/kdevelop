@@ -108,7 +108,7 @@ public:
   /**
    * Constructor.
    *
-   * If @param parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
+   * If \a parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
    *
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier

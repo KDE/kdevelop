@@ -170,7 +170,7 @@ struct ParsingEnvironmentFileAcceptor {
 
 /**
  * This class is responsible for managing parsing-environments and
- * especialla a whole set of ParsingEnvironmentFile instances.
+ * especially a whole set of ParsingEnvironmentFile instances.
  * It must be implemented case-by-case to work nicely together
  * with specific implementations of ParsingEnvironment.
  *

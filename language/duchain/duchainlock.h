@@ -86,7 +86,9 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock
 {
 public:
+  /// Constructor.
   DUChainLock();
+  /// Destructor.
   ~DUChainLock();
 
   /**
@@ -131,7 +133,7 @@ public:
    *
    * @param timeout A timeout in milliseconds. If zero, the default-timeout is used(Currently 10 seconds).
    *
-   * WARNING: Write-locks can NOT be acquired by threads that already have a read-lock.
+   * \warning Write-locks can NOT be acquired by threads that already have a read-lock.
    */
   bool lockForWrite(uint timeout = 0);
 
@@ -155,12 +157,20 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
 public:
-  ///@param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+  /**
+   * Constructor.  Attempts to acquire a read lock.
+   *
+   * \param duChainLock lock to read-acquire.
+   * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+   */
   DUChainReadLocker(DUChainLock* duChainLock, uint timeout = 0);
+
+  /// Destructor.
   ~DUChainReadLocker();
 
-  ///Uses the same timeout given to the constructor
+  /// Acquire the read lock (again). Uses the same timeout given to the constructor.
   bool lock();
+  /// Unlock the read lock.
   void unlock();
 
   ///Returns true if a lock was requested and the lock succeeded, else false
@@ -178,12 +188,19 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {
 public:
-  ///@param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+  /**
+   * Constructor.  Attempts to acquire a write lock.
+   *
+   * \param duChainLock lock to write-acquire.
+   * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
+   */
   DUChainWriteLocker(DUChainLock* duChainLock, uint timeout = 0);
+  /// Destructor.
   ~DUChainWriteLocker();
 
-  ///Uses the same timeout given to the constructor
+  /// Acquire the write lock (again). Uses the same timeout given to the constructor.
   bool lock();
+  /// Unlock the write lock.
   void unlock();
 
   ///Returns true if a lock was requested and the lock succeeded, else false

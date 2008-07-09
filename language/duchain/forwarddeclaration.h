@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,8 +30,21 @@ class ForwardDeclarationPrivate;
 class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclaration : public Declaration
 {
 public:
-  ForwardDeclaration(const ForwardDeclaration& rhs);
+  /**
+   * Constructor.
+   *
+   * If \a context is in the symbol table, the declaration will automatically be added into the symbol table.
+   *
+   * \param url url of the document where this occurred
+   * \param range range of the alias declaration's identifier
+   * \param parentContext context in which this declaration occurred
+   * */
   ForwardDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+
+  ///Copy-constructor for cloning
+  ForwardDeclaration(const ForwardDeclaration& rhs);
+
+  /// Destructor.
   virtual ~ForwardDeclaration();
 
   virtual bool isForwardDeclaration() const;
@@ -49,10 +62,10 @@ public:
 
   virtual Declaration* clone() const;
 
-  DUContext * logicalInternalContext(const TopDUContext* topContext) const;
+  virtual DUContext * logicalInternalContext(const TopDUContext* topContext) const;
 
   virtual QString toString() const;
-  
+
 private:
   Q_DECLARE_PRIVATE(ForwardDeclaration)
 };

@@ -62,8 +62,8 @@ public:
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
     qRegisterMetaType<UsePointer>("KDevelop::UsePointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
-    qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
-    qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
+    //qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
+    //qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
     qRegisterMetaType<Problem>("KDevelop::Problem");
 
     notifier = new DUChainObserver();
@@ -154,7 +154,7 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
       ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
 
     branchRemoved(context);
-    
+
     delete context;
   }
 }
