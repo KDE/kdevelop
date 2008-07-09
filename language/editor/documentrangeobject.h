@@ -170,8 +170,6 @@ protected:
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
 private:
-    bool m_ownsSmartRange;
-
     Q_DISABLE_COPY(DocumentRangeObject)
     Q_DECLARE_PRIVATE(DocumentRangeObject)
 };
