@@ -94,7 +94,6 @@ DocumentRangeObject::~ DocumentRangeObject( )
 {
     Q_D(DocumentRangeObject);
 
-    if (d->m_ownsRange == DocumentRangeObject::Own)
     {
         QMutexLocker l(d->m_smartMutex);
         if (d->m_smartRange) {
