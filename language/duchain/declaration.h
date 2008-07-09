@@ -63,38 +63,39 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     uint hash() const {
       return (m_topContext * 53 + m_declarationIndex) * 23;
     }
-    
+
     bool isValid() const {
       return m_topContext != 0 || m_declarationIndex != 0;
     }
-    
+
   private:
   uint m_topContext;
   uint m_declarationIndex;
 };
 
 /**
- * Represents a single declaration in a definition-use chain.
+ * \short Represents a single declaration in a definition-use chain.
  *
- * NOTE: A du-context can be freely edited as long as it's parent-context is zero.
+ * \note A du-context can be freely edited as long as it's parent-context is zero.
  * In the moment the parent-context is set, the context may only be edited when it
- * is allowed to edited it's top-level context(@see TopLevelContext::inDUChain()
+ * is allowed to edited it's top-level context (@see TopLevelContext::inDUChain())
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Declaration : public DUChainBase
 {
-
 public:
+  /// Access types
   enum AccessPolicy {
     Public    /**< a public declaration */,
     Protected /**< a protected declaration */,
     Private   /**< a private declaration */
   };
+  /// Const and volatile flags
   enum CVSpec {
     CVNone = 0     /**< no CV given */,
     Const = 0x1    /**< a const declaration */,
     Volatile = 0x2 /**< a volatile declaration */
   };
-
+  /// Enumeration of the types of declarations
   enum Kind {
     Type     /**< A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};") */,
     Instance /**< An instance of a type is declared("MyClass m;") */,
@@ -105,11 +106,18 @@ public:
   Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   /**
+   * Constructor.
+   *
    * If @param parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
+   *
+   * \param url url of the document where this occurred
+   * \param range range of the alias declaration's identifier
+   * \param parentContext context in which this declaration occurred
    * */
   Declaration(const HashedString& url, const SimpleRange& range, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
+  /// Destructor
   virtual ~Declaration();
 
   virtual TopDUContext* topContext() const;
@@ -119,7 +127,7 @@ public:
   const ForwardDeclaration* toForwardDeclaration() const;
 
   virtual bool isFunctionDeclaration() const;
-  
+
   ///Returns true if this declaration is accessible through the du-chain, and thus cannot be edited without a du-chain write lock
   virtual bool inDUChain() const;
 
@@ -147,10 +155,10 @@ public:
    * Should apply a specialization using a specialization index as returned in id()
    * */
   virtual Declaration* specialize(uint specialization, const TopDUContext* topContext);
-  
+
   /**
    * Set the definition for this declaration.
-   * 
+   *
    * Definitions and declarations are coupled by identity
    * rather than by their pointer. When you call this, you will
    * effectively set the definition for ALL declarations that have:
@@ -184,14 +192,14 @@ public:
    * */
   const Declaration* logicalDeclaration(const TopDUContext* topContext) const;
   Declaration* logicalDeclaration(const TopDUContext* topContext);
-  
+
   /**
    * Returns the parent-context of this declaration.
    * */
   DUContext* context() const;
-  
+
   IndexedDeclaration indexed() const;
-  
+
   /**
    * When setContext(..) is called, this declaration is inserted into the given context
    * You only need to be able to write this declaration. You do not need write-privileges for the context, because addDeclaration(..) works separately from that.
@@ -214,7 +222,7 @@ public:
 
   //Should be preferred, this is the fastest way, and the correct way for doing equality-comparsion.
   IndexedType indexedType() const;
-  
+
   void setIdentifier(const Identifier& identifier);
   const Identifier& identifier() const;
 
@@ -224,7 +232,7 @@ public:
   ///Compares the qualified identifier of this declaration with the other one, without needing to compute it.
   ///This is more efficient than comparing the results of qualifiedIdentifier().
   bool equalQualifiedIdentifier(const Declaration* rhs) const;
-  
+
   /**
    * Returns the kind of this declaration. @see Kind
    * */
@@ -255,7 +263,7 @@ public:
   virtual QString toString() const;
 
   ///@todo The following two are convenience-functions. Think whether they should stay here, or be moved out.
-  
+
   /**
    * Returns a list of pairs:
    * An url of a file, paired together with all use-ranges of this declaration in that file.
@@ -270,7 +278,7 @@ public:
    * in the result.
    * */
   QList<KTextEditor::SmartRange*> smartUses() const;
-  
+
   /**
     * This hash-value should differentiate between multiple different
     * declarations that have the same qualifiedIdentifier, but should have a different
@@ -279,9 +287,9 @@ public:
     * Affected by function-arguments, whether this is a template-declaration, etc..
     * */
   virtual uint additionalIdentity() const;
-  
+
   /**
-   * 
+   *
    * */
   virtual uint specialization() const;
 

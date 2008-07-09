@@ -99,6 +99,7 @@ public:
   PointerTypeData();
   /// Copy constructor. \param rhs data to copy
   PointerTypeData( const PointerTypeData& rhs );
+  /// Type of data at which the pointer points
   IndexedType m_baseType;
 };
 
@@ -110,6 +111,7 @@ public:
   ReferenceTypeData();
   /// Copy constructor. \param rhs data to copy
   ReferenceTypeData( const ReferenceTypeData& rhs );
+  /// Type of data which is referenced
   IndexedType m_baseType;
 };
 
@@ -126,6 +128,7 @@ public:
   /// Destructor
   ~FunctionTypeData();
 
+  /// Function return type
   IndexedType m_returnType;
 
   START_APPENDED_LISTS_BASE(FunctionTypeData, AbstractTypeData);
@@ -171,6 +174,7 @@ public:
   DelayedTypeData( const DelayedTypeData& rhs );
   /// Identifier of the delayed type
   IndexedTypeIdentifier m_identifier;
+  /// Type of delay in resolving the type
   DelayedType::Kind m_kind;
 };
 

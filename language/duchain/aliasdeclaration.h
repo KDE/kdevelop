@@ -33,20 +33,44 @@ class AliasDeclarationPrivate;
 class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclaration : public Declaration
 {
 public:
+  /// Copy constructor \param rhs declaration to copy
   AliasDeclaration(const AliasDeclaration& rhs);
-  //Constructs a AliasDeclaration. The default value for isNamespaceAlias is true.
+  /**
+   * Constructs an AliasDeclaration. The default value for isNamespaceAlias is true.
+   *
+   * \param url url of the document where this occurred
+   * \param range range of the alias declaration's identifier
+   * \param context context in which this declaration occurred
+   */
   AliasDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+  /// Destructor
   virtual ~AliasDeclaration();
 
-  ///A AliasDeclaration cannot have a type, so setAbstractType does nothing here.
+  /**
+   * An AliasDeclaration cannot have a type, so setAbstractType does nothing here.
+   *
+   * \param type ignored type
+   */
   virtual void setAbstractType(AbstractType::Ptr type);
 
   virtual Declaration* clone() const;
 
+  /**
+   * Set the declaration that is aliased by this declaration.
+   *
+   * \param decl the declaration that this declaration references
+   */
   void setAliasedDeclaration(const DeclarationPointer& decl);
+
+  /**
+   * Access the declaration that is aliased by this declaration.
+   *
+   * \returns the aliased declaration
+   */
   DeclarationPointer aliasedDeclaration() const;
 
   virtual QString toString() const;
+
 private:
   Q_DECLARE_PRIVATE(AliasDeclaration)
 };

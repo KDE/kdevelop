@@ -33,13 +33,26 @@ class DUChainPointerData;
 
 /**
  * Base class for definition-use chain objects.
+ *
+ * This class provides a thread safe pointer type to reference duchain objects
+ * while the DUChain mutex is not held (\see DUChainPointer)
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
 public:
+  /**
+   * Constructor.
+   *
+   * \param url url of the document where this occurred
+   * \param range range of the alias declaration's identifier
+   */
   DUChainBase(const HashedString& url, const SimpleRange& range);
+  /// Destructor
   virtual ~DUChainBase();
 
+  /**
+   * Determine the top context to which this object belongs.
+   */
   virtual TopDUContext* topContext() const;
 
   /**
@@ -49,9 +62,15 @@ public:
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
 protected:
-  DUChainBase( class DUChainBasePrivate& dd, bool ownsData = false );
+  /**
+   * Copy constructor
+   *
+   * \param dd private data to copy
+   * \param ownsSmartRange if true, the DocumentRangeObject will delete the smart range when this object is deleted.
+   */
+  DUChainBase( class DUChainBasePrivate& dd, bool ownsSmartRange = false );
   DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, const SimpleRange& range );
-  
+
 private:
   Q_DECLARE_PRIVATE(DUChainBase)
   mutable KSharedPtr<DUChainPointerData> m_ptr;

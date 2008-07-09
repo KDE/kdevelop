@@ -30,6 +30,10 @@ namespace KParts
 class PartManager;
 }
 
+/**
+ * The KDevelop namespace contains all classes provided by the KDevelop
+ * platform libraries.
+ */
 namespace KDevelop
 {
 

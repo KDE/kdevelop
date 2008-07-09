@@ -44,17 +44,27 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObject : public KTextEditor::Smar
 {
 public:
     /**
-     * @param range May be invalid, then it is not changed(So it can come from a copy constructor)
-     * @param document May be emty, then it will not be changed(can come from a copy constructor)
+     * Constructor.
+     *
+     * @param document The document which this object is located in. May be empty, then it will not be changed (can come from a copy constructor)
+     * @param range The range which this object occupies. May be invalid, then it is not changed (So it can come from a copy constructor)
      * */
     DocumentRangeObject(const HashedString& document, const SimpleRange& range);
+    /// Destructor.
     virtual ~DocumentRangeObject();
 
+    /// An enumeration of ownership for the smart range.
     enum RangeOwning{
         Own /**< this object owns the range */,
         DontOwn /**< this object does not own the range */
     };
-    Q_DECLARE_FLAGS( RangeOwnings, RangeOwning )
+
+    /**
+     * Access the smart range of this object.
+     *
+     * \returns the SmartRange if the object has one, otherwise returns null
+     */
+    KTextEditor::SmartRange* smartRange() const;
 
     /**
      * Sets the text \a range to this object.  If \a ownsRange is false, the range won't be deleted when the object is deleted.
@@ -64,50 +74,107 @@ public:
      */
     void setSmartRange(KTextEditor::SmartRange* range, RangeOwning ownsRange = Own);
 
-    void setRangeOwning(RangeOwning ownsRange);
-
-    void clearSmartRange();
-
-    void setRange(const SimpleRange& range);
-    ///Returns the text-range.
-    SimpleRange range() const;
-    ///If this document's range is a SmartRange, returns it. Else 0.
-    KTextEditor::SmartRange* smartRange() const;
-
-    //static HashedString url(const KTextEditor::Range* cursor);
-
+    /**
+     * Determine whether this object owns its smart range.
+     *
+     * \returns true if the object owns its smart range, otherwise false.
+     */
     RangeOwning ownsRange() const;
 
-    void setUrl(const HashedString& document);
-    ///Returns the url, for efficiency as a HashedString. This allows fast comparison. It is was from a real url using pathOrUrl() at some point.
+    /**
+     * Sets whether this object owns its smart range, and should delete it when it is deleted.
+     *
+     * \param ownsRange whether this object owns its smart range.
+     */
+    void setRangeOwning(RangeOwning ownsRange);
+
+    /**
+     * Clear the smart range from this object.
+     */
+    void clearSmartRange();
+
+    /**
+     * Returns the text range of this object.
+     */
+    SimpleRange range() const;
+
+    /**
+     * Set the text range (non-smart range) for this object.
+     *
+     * \param range new text range
+     */
+    void setRange(const SimpleRange& range);
+
+    /**
+     * Returns the url of the document in which this object is located.
+     *
+     * This is a HashedString to allow for fast comparison. It was from a real url using KUrl::pathOrUrl() at some point.
+     *
+     * \returns the url of the document in which this object is located.
+     */
     HashedString url() const;
 
-    bool contains(const SimpleCursor& cursor) const;
-    //bool contains(const KTextEditor::Cursor& cursor) const;
+    /**
+     * Set the url of the document in which this object is located.
+     *
+     * \param document url of the document in which this object is located.
+     */
+    void setUrl(const HashedString& document);
 
-    /// Take the range from this object. USE WITH CARE!! You must be willing to
-    /// immediately delete this range object if you take its range.
+    /**
+     * Determine if this range contains the given \a cursor.
+     *
+     * \param cursor cursor to check if it is contained by this range.
+     * \returns true if the cursor is contained by this range, otherwise false.
+     */
+    bool contains(const SimpleCursor& cursor) const;
+
+    /**
+     * Take the range from this object, and set its smart range to null.
+     *
+     * \warning USE WITH CARE!! You must be willing to
+     * immediately delete this range object if you take its range.
+     *
+     * \returns this object's smart range
+     */
     KTextEditor::SmartRange* takeRange();
 
 protected:
+    /// Static shared mutex protecting internal data.  May be used to protect private data in subclasses. \returns the internal mutex
     static QMutex* mutex();
 
-    ///When ownsData is false, the data will not be deleted by the destructor.
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsData = true);
+    /**
+     * Constructor for copy constructors in subclasses.
+     *
+     * \param dd data to copy.
+     * \param ownsSmartRange set to true if this object owns the smart range and should delete it when this object is deleted, otherwise set to false (the default)
+     */
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsSmartRange = true);
+
+    /**
+     * Constructor for copy constructors in subclasses.
+     *
+     * \param dd data to copy.
+     * \param document document in which this object is located.
+     * \param range text range which this object covers.
+     */
     DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
 
+    /// Private data pointer.
     DocumentRangeObjectPrivate* const d_ptr;
 
+    /**
+     * Reimplementation of KTextEditor::SmartWatcher::rangeDeleted(), to clean up the smart
+     * range when it is deleted (for example, on file close).
+     */
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
+
 private:
-  bool m_ownsData;
+    bool m_ownsSmartRange;
 
     Q_DISABLE_COPY(DocumentRangeObject)
     Q_DECLARE_PRIVATE(DocumentRangeObject)
 };
-
-
-Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::DocumentRangeObject::RangeOwnings )
 
 }
 #endif // RANGEOBJECT_H
