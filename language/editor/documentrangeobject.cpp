@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,11 +61,9 @@ void DocumentRangeObjectPrivate::syncToSmart() const {
 }
 
 DocumentRangeObject::DocumentRangeObject(const HashedString& document, const SimpleRange& range)
-    : d_ptr( new DocumentRangeObjectPrivate )
+    : d_ptr( new DocumentRangeObjectPrivate ), m_ownsData(true)
 {
     Q_D(DocumentRangeObject);
-    d->m_ownsRange = Own;
-
     if(!document.str().isEmpty())
         d->m_document = document;
     if(range.isValid())
@@ -72,10 +71,9 @@ DocumentRangeObject::DocumentRangeObject(const HashedString& document, const Sim
 }
 
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range)
-    : d_ptr( &dd )
+    : d_ptr( &dd ), m_ownsData(true)
 {
     Q_D(DocumentRangeObject);
-    d->m_ownsRange = Own;
     if(!document.str().isEmpty())
         d->m_document = document;
     if(range.isValid())
@@ -83,10 +81,8 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const H
 }
 
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsData)
-    : d_ptr( &dd )
+    : d_ptr( &dd ), m_ownsData(ownsData)
 {
-    Q_D(DocumentRangeObject);
-    d->m_ownsRange = ownsData ? Own : DontOwn;
 }
 
 
@@ -94,11 +90,14 @@ DocumentRangeObject::~ DocumentRangeObject( )
 {
     Q_D(DocumentRangeObject);
 
+    if(m_ownsData)
     {
         QMutexLocker l(d->m_smartMutex);
         if (d->m_smartRange) {
             d->m_smartRange->removeWatcher(this);
 
+            //If a smart-range is deleted, move it's child-ranges into it's parent.
+            //That way we do not delete other DocumentRangeObject's smart-ranges, which corrupts the structure integrity.
             if (d->m_ownsRange == DocumentRangeObject::Own)
                 EditorIntegrator::releaseRange(d->m_smartRange);
         }
