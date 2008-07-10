@@ -28,6 +28,7 @@
 #include <simplerange.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/use.h>
+#include <language/duchain/indexedstring.h>
 
 using namespace KDevelop;
 
@@ -38,7 +39,7 @@ Q_DECLARE_METATYPE(QList<SimpleRange>)
 CMakeDUChainTest::CMakeDUChainTest()
 {
 	DUChainWriteLocker lock(DUChain::lock());
-	m_fakeContext = new TopDUContext(HashedString("test"), SimpleRange(0,0,0,0));
+	m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
 }
 
 CMakeDUChainTest::~CMakeDUChainTest()
