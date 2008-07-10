@@ -96,12 +96,12 @@ void ParseSession::setContentsAndGenerateLocationTable(const PreprocessedContent
   m_locationTable = new rpp::LocationTable(m_contents);
 }
 
-void ParseSession::setUrl(const KDevelop::HashedString& url)
+void ParseSession::setUrl(const KDevelop::IndexedString& url)
 {
   m_url = url;
 }
 
-const KDevelop::HashedString& ParseSession::url() const
+const KDevelop::IndexedString& ParseSession::url() const
 {
   return m_url;
 }

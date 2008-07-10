@@ -31,7 +31,7 @@
 #include <kurl.h>
 #include "rpp/anchor.h"
 
-#include <hashedstring.h>
+#include <indexedstring.h>
 
 namespace Cpp {
   class EnvironmentFile;
@@ -70,8 +70,8 @@ public:
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
   void setContentsAndGenerateLocationTable(const PreprocessedContents& contents);
 
-  void setUrl(const KDevelop::HashedString& url); ///@todo change to IndexedString
-  const KDevelop::HashedString& url() const;
+  void setUrl(const KDevelop::IndexedString& url); ///@todo change to IndexedString
+  const KDevelop::IndexedString& url() const;
 
   uint *contents();
   const uint *contents() const;
@@ -81,7 +81,7 @@ public:
   TokenStream* token_stream;
 
   rpp::MacroBlock* macros;
-  KDevelop::HashedString m_url; //Should contain the url from which the content was extracted, can also be empty.
+  KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:
   PreprocessedContents m_contents;

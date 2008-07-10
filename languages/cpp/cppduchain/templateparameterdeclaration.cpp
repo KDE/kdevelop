@@ -29,8 +29,8 @@ public:
   QualifiedIdentifier m_defaultParameter;
 };
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const HashedString& url, const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(url, range, context), d_ptr(new TemplateParameterDeclarationPrivate)
+TemplateParameterDeclaration::TemplateParameterDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
+  : Declaration(range, context), d_ptr(new TemplateParameterDeclarationPrivate)
 {
   if(context)
     setContext(context);

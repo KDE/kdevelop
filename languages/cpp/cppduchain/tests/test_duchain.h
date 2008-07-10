@@ -98,7 +98,6 @@ private slots:
   void testForwardDeclaration();
   void testForwardDeclaration2();
   void testForwardDeclaration3();
-  void testForwardDeclaration4();
   void testTemplateForwardDeclaration();
   void testTemplateForwardDeclaration2();
   void testStringSets();

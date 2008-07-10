@@ -36,6 +36,7 @@
 #include <duchainlock.h>
 #include "cpplanguagesupport.h"
 #include "cppduchain.h"
+#include <hashedstring.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -286,7 +287,7 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
   //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
   if(context == standardCtx) {
     //Clear the highlighting of all other contexts for this file
-    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(context->url());
+    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(HashedString(context->url().str()));
 
     foreach(TopDUContext* ctx, contexts) {
       if(ctx == context)

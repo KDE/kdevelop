@@ -535,11 +535,11 @@ class NavigationContext : public KShared {
             makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), DeclarationPointer(m_declaration->declaration()), NavigationAction::JumpToSource );
           }
 
-          QMap<HashedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
+          QMap<IndexedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
 
           if(!uses.isEmpty()) {
             m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
-            for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+            for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
               m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
               foreach(const SimpleRange& range, *it) {
                 m_currentText += "  ";

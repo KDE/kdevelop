@@ -465,7 +465,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
     Q_ASSERT(editor()->currentRange() == prior);
 
-    declaration = new T(editor()->currentUrl(), newRange, currentContext());
+    declaration = new T(newRange, currentContext());
     declaration->setSmartRange(range);
     declaration->setIdentifier(localId);
   }

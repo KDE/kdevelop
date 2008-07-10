@@ -246,7 +246,7 @@ void PreprocessJob::run()
     }
 
     parentJob()->parseSession()->setContents( result, m_currentEnvironment->takeLocationTable() );
-    parentJob()->parseSession()->setUrl( HashedString(parentJob()->document().str()) );
+    parentJob()->parseSession()->setUrl( parentJob()->document() );
 
     if(m_secondEnvironmentFile)
       parentJob()->setProxyEnvironmentFile( m_firstEnvironmentFile.data() );

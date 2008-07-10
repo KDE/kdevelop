@@ -404,7 +404,7 @@ void CPPInternalParseJob::run()
       }
 
       CppEditorIntegrator editor(parentJob()->parseSession());
-      editor.setCurrentUrl(HashedString(parentJob()->document().str())); ///@todo
+      editor.setCurrentUrl(parentJob()->document()); ///@todo
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 

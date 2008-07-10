@@ -29,6 +29,8 @@
 #include <cstdlib>
 #include <iostream>
 #include "rpp/chartools.h"
+#include <editor/hashedstring.h>
+
 
 #define ADVANCE(tk, descr) \
 { \
@@ -308,7 +310,7 @@ void Parser::reportError(const QString& msg)
       KDevelop::SimpleCursor position = session->positionAt(session->token_stream->position(tok));
 
       KDevelop::Problem p;
-      p.setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.textCursor(), 0)));
+      p.setFinalLocation(KDevelop::DocumentRange(session->url().str(), KTextEditor::Range(position.textCursor(), 0)));
       p.setDescription(msg);
       p.setSource(KDevelop::Problem::Parser);
 

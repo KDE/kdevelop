@@ -53,8 +53,8 @@ public:
   END_APPENDED_LISTS(ClassDeclarationPrivate, baseClasses);
 };
 
-ClassDeclaration::ClassDeclaration(const HashedString& url, const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(url, range, context), d_ptr(new ClassDeclarationPrivate)
+ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
+  : Declaration(range, context), d_ptr(new ClassDeclarationPrivate)
 {
 }
 

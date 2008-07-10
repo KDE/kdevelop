@@ -227,7 +227,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
-  editor()->setCurrentUrl(file->url().str());
+  editor()->setCurrentUrl(file->url());
 
   TopDUContext* topLevelContext = 0;
   {
@@ -280,7 +280,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
 
-  editor()->setCurrentUrl(file->url().str());
+  editor()->setCurrentUrl(file->url());
 
   TopDUContext* topLevelContext = 0;
   {
@@ -609,7 +609,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
 
 DUContext* ContextBuilder::newContext(const SimpleRange& range)
 {
-  return new CppDUContext<DUContext>(editor()->currentUrl(), SimpleRange(range), currentContext());
+  return new CppDUContext<DUContext>(range, currentContext());
 }
 
 #ifdef DEBUG_CONTEXT_RANGES

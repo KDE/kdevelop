@@ -50,7 +50,7 @@ class KDEVCPPDUCHAIN_EXPORT ClassDeclaration : public KDevelop::Declaration
 {
 public:
   ClassDeclaration(const ClassDeclaration& rhs);
-  ClassDeclaration(const KDevelop::HashedString& url, const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
+  ClassDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
   ~ClassDeclaration();
 
   void clearBaseClasses();

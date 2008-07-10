@@ -238,7 +238,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(p.context->url(), p.code->at(p.line).arguments.first().range(), p.context);
+    Declaration *d = new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
     d->setIdentifier( Identifier(id) );
     m_declarationsPerTarget.insert(id, d);
 //     kDebug(9042) << "looooooool" << d
@@ -364,10 +364,10 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                 m_topctx=DUChain::self()->chainForDocument(KUrl(include.first().filePath));
                 if(m_topctx==0)
                 {
-                    m_topctx=new TopDUContext(HashedString(KUrl(include.first().filePath).pathOrUrl()),
+                    m_topctx=new TopDUContext(IndexedString(KUrl(include.first().filePath).pathOrUrl()),
                             SimpleRange(0,0, include.last().endColumn, include.last().endLine));
                     DUChain::self()->addDocumentChain(
-                        IdentifiedFile(HashedString(KUrl(include.first().filePath).pathOrUrl())), m_topctx);
+                        IdentifiedFile(IndexedString(KUrl(include.first().filePath).pathOrUrl())), m_topctx);
                     
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
                 }
@@ -433,10 +433,10 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
                 m_topctx=DUChain::self()->chainForDocument(KUrl(path));
                 if(m_topctx==0)
                 {
-                    m_topctx=new TopDUContext(HashedString(path),
+                    m_topctx=new TopDUContext(IndexedString(path),
                             SimpleRange(0,0, package.last().endColumn, package.last().endLine));
                     DUChain::self()->addDocumentChain(
-                        IdentifiedFile(HashedString(path)), m_topctx);
+                        IdentifiedFile(IndexedString(path)), m_topctx);
                     
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
                     aux->addImportedParentContext(m_topctx);
@@ -717,7 +717,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     }
     else
     {
-        Declaration *d = new Declaration(m_topctx->url(), sr, m_topctx);
+        Declaration *d = new Declaration(sr, m_topctx);
         d->setIdentifier( Identifier(macro->macroName()) );
         
         FunctionType* func=new FunctionType();
@@ -764,7 +764,7 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     }
     else
     {
-        Declaration *d = new Declaration(m_topctx->url(), sr, m_topctx);
+        Declaration *d = new Declaration(sr, m_topctx);
         d->setIdentifier( Identifier(func->name()) );
         
         FunctionType* funct=new FunctionType();
@@ -1640,7 +1640,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
         if(m_topctx==0)
         {
-            m_topctx=new TopDUContext(pathOrUrl,
+            m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
                     SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
             
             DUChain::self()->addDocumentChain(
@@ -1734,7 +1734,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
         }
         else
         {
-            Declaration *d = new Declaration(m_topctx->url(), arg.range(), m_topctx);
+            Declaration *d = new Declaration(arg.range(), m_topctx);
             d->setIdentifier( Identifier(arg.value) );
         }
     }

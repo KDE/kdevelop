@@ -51,7 +51,7 @@ TopDUContextPointer getCurrentTopDUContext() {
   return TopDUContextPointer();
 }
 
-void collectImporters( QSet<HashedString>& importers, DUContext* ctx )
+void collectImporters( QSet<IndexedString>& importers, DUContext* ctx )
 {
   if( importers.contains( ctx->url() ) )
     return;
@@ -245,7 +245,7 @@ QString IncludeFileData::htmlDescription() const
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
 }
 
-void allIncludedRecursion( QSet<const DUContext*>& used, QMap<HashedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
+void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, IncludeItem>& ret, TopDUContextPointer ctx, QString prefixPath ) {
 
   if( !ctx )
     return;
@@ -277,7 +277,7 @@ QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixP
 
   DUChainReadLocker lock( DUChain::lock() );
 
-  QMap<HashedString, IncludeItem> ret;
+  QMap<IndexedString, IncludeItem> ret;
   QSet<const DUContext*> used;
   allIncludedRecursion( used, ret, ctx, prefixPath );
   return ret.values();
@@ -329,7 +329,7 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext );
       
-      foreach( HashedString u, m_importers ) {
+      foreach( IndexedString u, m_importers ) {
         IncludeItem i;
         i.isDirectory = false;
         i.name = u.str();
@@ -364,7 +364,7 @@ void IncludeFileDataProvider::reset()
       m_duContext = TopDUContextPointer( CppLanguageSupport::self()->standardContext( doc->url() )  );
 
       if( m_allowImporters && m_duContext ) {
-        QSet<HashedString> importers;
+        QSet<IndexedString> importers;
 
         collectImporters( importers, m_duContext.data() );
 

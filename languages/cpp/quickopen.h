@@ -26,6 +26,7 @@
 #include <quickopenfilter.h>
 #include <kurl.h>
 #include <duchainpointer.h>
+#include <indexedstring.h>
 #include "includeitem.h"
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {
@@ -85,7 +86,7 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     bool m_allowImports, m_allowPossibleImports, m_allowImporters;
 
     ///Cache for all documents that import the current one
-    QList<KDevelop::HashedString> m_importers;
+    QList<KDevelop::IndexedString> m_importers;
   
     KDevelop::TopDUContextPointer m_duContext;
 };
