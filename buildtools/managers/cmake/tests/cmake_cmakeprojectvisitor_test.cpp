@@ -27,6 +27,7 @@
 #include <duchainlock.h>
 #include <duchain.h>
 #include <simplerange.h>
+#include <indexedstring.h>
 #include <language/duchain/dumpchain.h>
 
 QTEST_MAIN( CMakeProjectVisitorTest )
@@ -35,7 +36,7 @@ using namespace KDevelop;
 
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
 {
-    m_fakeContext = new TopDUContext(HashedString("test"), SimpleRange(0,0,0,0));
+    m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
 }
 
 /*void CMakeProjectVisitorTest::testVariables_data()
