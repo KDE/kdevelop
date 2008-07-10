@@ -362,6 +362,13 @@ TemplateDeclaration* TemplateDeclaration::specializedFrom() const {
   return m_specializedFrom;
 }
 
+void TemplateDeclaration::reserveInstantiation(const IndexedInstantiationInformation& info) {
+  QMutexLocker l(&instantiationsMutex);
+
+  Q_ASSERT(m_instantiations.find(info) == m_instantiations.end());
+  m_instantiations.insert(info, 0);
+}
+
 void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const InstantiationInformation& instantiatedWith)
 {
   if(from && from->instantiatedFrom()) {
@@ -385,7 +392,7 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const I
   m_instantiatedWith = instantiatedWith.indexed();
   //Only one instantiation is allowed
   if(from) {
-    Q_ASSERT(from->m_instantiations.find(instantiatedWith.indexed()) == from->m_instantiations.end());
+    Q_ASSERT(from->m_instantiations.find(instantiatedWith.indexed()) == from->m_instantiations.end() || (*from->m_instantiations.find(instantiatedWith.indexed())) == 0);
     from->m_instantiations.insert(m_instantiatedWith, this);
     Q_ASSERT(from->m_instantiations.contains(m_instantiatedWith));
   }
@@ -482,6 +489,14 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
 CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
+  TemplateDeclaration* instantiatedFromTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
+  
+  if(instantiatedFromTemplate) { //This makes sure that we don't try to do the same instantiation in the meantime
+    Q_ASSERT(!instantiatedFromTemplate->instantiatedFrom());
+    Q_ASSERT(instantiatedDeclaration);
+    instantiatedFromTemplate->reserveInstantiation(templateArguments.indexed());
+  }
+  
   StandardCppDUContext* contextCopy = 0;
   
   if( context ) {
@@ -677,8 +692,8 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     }
     ///Last step, because after this, the declaration will be potentially findable
 
-    if(instantiatedTemplate && dynamic_cast<TemplateDeclaration*>(instantiatedFrom))
-      instantiatedTemplate->setInstantiatedFrom(dynamic_cast<TemplateDeclaration*>(instantiatedFrom), templateArguments);
+    if(instantiatedTemplate && instantiatedFromTemplate)
+      instantiatedTemplate->setInstantiatedFrom(instantiatedFromTemplate, templateArguments);
     
     ///@todo check for possible multi-threading issues when inserting visible declarations into anonymous contexts
     instantiatedDeclaration->setContext(parentContext, templateArguments.templateParametersSize() || parentContext->inSymbolTable());
@@ -714,7 +729,14 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
    InstantiationsHash::const_iterator it;
     it = m_instantiations.find( templateArguments.indexed() );
     if( it != m_instantiations.end() ) {
-      return dynamic_cast<Declaration*>(*it);
+      if(*it) {
+        return dynamic_cast<Declaration*>(*it);
+      }else{
+        ///We are currently instantiating this declaration with the same template arguments. This would lead to an assertion.
+        kDebug() << "tried to recursively instantiate" << dynamic_cast<Declaration*>(this)->toString() << "with" << templateArguments.toString();
+        ///Maybe problematic, because the returned declaration is not in the correct context etc.
+        return dynamic_cast<Declaration*>(this);
+      }
     }
   }
   

@@ -145,9 +145,14 @@ namespace Cpp {
       TemplateDeclaration* specializedFrom() const;
 
       IndexedInstantiationInformation instantiatedWith() const;
+      
+      ///Marks that currently a declaration is instantiated with the given instantiation-information. A zero instantiation is inserted into
+      ///the cache to make sure that we don't instantiate the same declaration again in the meantime.
+      void reserveInstantiation(const IndexedInstantiationInformation& info);
 
       ///Returns all current instantiations of this declaration
-      InstantiationsHash instantiations() const;
+      ///@warning Some instantiations may have the value zero when an instantiation is currently happening.
+       InstantiationsHash instantiations() const;
       
       uint specialization() const;
       
