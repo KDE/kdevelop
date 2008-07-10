@@ -21,7 +21,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="dir_label" >
        <property name="text" >
-        <string>&amp;Directory</string>
+        <string>&amp;Directory:</string>
        </property>
        <property name="buddy" >
         <cstring>directory</cstring>
@@ -109,7 +109,7 @@
      <item row="3" column="0" >
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>&amp;Build System</string>
+        <string>&amp;Build System:</string>
        </property>
        <property name="buddy" >
         <cstring>buildSystemCombo</cstring>

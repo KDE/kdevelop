@@ -71,7 +71,7 @@
     <item>
      <widget class="QCheckBox" name="kcfg_printSignals" >
       <property name="text" >
-       <string>Print every signal emitted. very slow.</string>
+       <string>Print every signal emitted (very slow)</string>
       </property>
      </widget>
     </item>
