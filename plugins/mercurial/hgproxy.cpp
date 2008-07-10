@@ -55,26 +55,14 @@ HgProxy::~HgProxy()
 //maybe func()const?
 bool HgProxy::isValidDirectory(const KUrl & dirPath)
 {
-    HgJob* job = new HgJob(vcsplugin);
-    if (job)
-    {
-        job->clear();
-        *job << "hg-rev-parse";
-        *job << "--is-inside-work-tree";
-        QString path = dirPath.path();
-        QFileInfo fsObject(path);
-        if (fsObject.isFile())
-            path = fsObject.path();
-        job->setDirectory(path);
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        {
-            kDebug(9500) << "Dir:" << path << " is is inside work tree of hg" ;
-            return true;
-        }
-    }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is is not inside work tree of hg" ;
-    return false;
+    QString path = dirPath.path();
+    QFileInfo fsObject(path);
+    if (fsObject.isFile())
+        path = fsObject.path() + QDir::separator() + ".hg";
+    else
+        path = path + QDir::separator() + ".hg";
+    fsObject.setFile(path);
+    return fsObject.exists();
 }
 
 bool HgProxy::prepareJob(HgJob* job, const QString& repository, enum RequestedOperation op)
@@ -144,7 +132,8 @@ bool HgProxy::addFileList(HgJob* job, const QString& repository, const KUrl::Lis
 HgJob* HgProxy::init(const KUrl &directory)
 {
     HgJob* job = new HgJob(vcsplugin);
-    if (prepareJob(job, directory.toLocalFile(), HgProxy::Init) ) {
+    kDebug() << "HG HG HG" << directory.toLocalFile();
+    if ( prepareJob(job, directory.toLocalFile(), HgProxy::Init) ) {
         *job << "hg init";
         return job;
     }

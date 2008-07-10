@@ -29,13 +29,14 @@
 
 #include <QtTest/QtTest>
 #include <KUrl>
+#include <KDebug>
 
 #include <hgjob.h>
 #include <hgproxy.h>
 
 #define HGTEST_DIR1            "kdevHg_testdir"
 #define HGTEST_BASEDIR         "/tmp/kdevHg_testdir/"
-#define HG_REPO                HGTEST_BASEDIR".hg"
+#define HG_REPO                "/tmp/kdevHg_testdir/.hg"
 #define HGTEST_BASEDIR2        "/tmp/kdevHg_testdir2/"
 #define HG_TESTFILE_NAME       "testfile"
 
@@ -65,24 +66,30 @@ void HgInitTest::initTestCase()
 void HgInitTest::cleanupTestCase()
 {
     delete m_proxy;
-
+/*
    if ( QFileInfo(HGTEST_BASEDIR).exists() ) {
        system("rm -rf "HGTEST_BASEDIR);
    }
    if ( QFileInfo(HGTEST_BASEDIR2).exists() ) {
        system("rm -rf "HGTEST_BASEDIR2);
    }
+*/
 }
 
 void HgInitTest::repoInit()
 {
     // make job that creates the local repository
     HgJob* j = m_proxy->init(KUrl(HGTEST_BASEDIR));
+    kDebug() << KUrl(HGTEST_BASEDIR);
     QVERIFY( j );
 
 
     // try to start the job
     QVERIFY( j->exec() );
+
+    while(j->status() == KDevelop::VcsJob::JobRunning)
+    {
+    };
 
     //check if the CVSROOT directory in the new local repository exists now
     QVERIFY( QFileInfo(QString(HG_REPO)).exists() );
