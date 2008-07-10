@@ -186,8 +186,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
 };
 
 ///You must add this into your source-files for every AbstractType based class
-///For this to work, the class must have an "Identity" enumerator, that is unique among all types, and should be a very low value.
-///The highest allowed identity is 63, so currently we're limited to having 64 different type classes.
+///For this to work, the class must have an "Identity" enumerator, that is unique among all types.
+///It can be any value that fits into "unsigned int".
 #define REGISTER_TYPE(Class) TypeSystemRegistrator<Class, Class ## Data> register ## Class
 
 }

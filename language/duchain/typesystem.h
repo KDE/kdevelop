@@ -133,6 +133,19 @@ public:
  *  but the list data is stored in a temporary QVarLengthArray from a central repository,
  *  until we save it back to the static memory-region again.
  *
+ * When creating an own type, you must:
+ * - Implement equals(..), clone(), hash()
+ * - Add an enumerator "Identity" that contains an arbitrary unique identity value of the type
+ * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules(@todo)
+ * - Register the type in a source-file using REGISTER_TYPE(..), @see typeregister.h
+ * - Add a typedef "Data", that contains the actual data of the type using the mechanisms described in appendedlist.h.
+ *   That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
+ *   @see AbstractTypeData
+ * - When creating a data object in a constructor, you must call setTypeClassId<YourType>() on that data to mark it.
+ *
+ *   Every type can have only one other type as base-class,
+ *   but it can have additional base-classes that are not a direct part of the type-system(@see IdentifiedType).
+ * 
  *  \sa appendedlist.h
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
@@ -390,7 +403,7 @@ public:
   enum {
     Identity = 2
   };
-
+  
   typedef IntegralTypeData Data;
 
 protected:
