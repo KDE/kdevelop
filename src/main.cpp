@@ -82,7 +82,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( ki18n("Oliver Kellogg"), ki18n( "Ada support" ), "okellogg@users.sourceforge.net" );
     aboutData.addAuthor( ki18n("Jakob Simon-Gaarde"), ki18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
-    aboutData.addAuthor( ki18n("F@lk Brettschneider"), ki18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Falk Brettschneider"), ki18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
     aboutData.addAuthor( ki18n("Mario Scalas"), ki18n( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
     aboutData.addAuthor( ki18n("Jens Dagerbo"), ki18n( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
     aboutData.addAuthor( ki18n("Julian Rockey"), ki18n( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
@@ -99,7 +99,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Matt Newell"), ki18n( "Fileselector component" ), "newellm@proaxis.com" );
     aboutData.addCredit( ki18n("Trolltech AS"), ki18n( "Designer code" ), "info@trolltech.com" );
     aboutData.addCredit( ki18n("Daniel Engelschalt"), ki18n( "C++ code completion, persistant class store" ), "daniel.engelschalt@gmx.net" );
-    aboutData.addCredit( ki18n("Stephane ANCELOT"), ki18n( "Patches" ), "sancelot@free.fr" );
+    aboutData.addCredit( ki18n("Stephane Ancelot"), ki18n( "Patches" ), "sancelot@free.fr" );
     aboutData.addCredit( ki18n("Jens Zurheide"), ki18n( "Patches" ), "jens.zurheide@gmx.de" );
     aboutData.addCredit( ki18n("Luc Willems"), ki18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
     aboutData.addCredit( ki18n("Marcel Turino"), ki18n( "Documentation index view" ), "M.Turino@gmx.de" );
