@@ -35,7 +35,18 @@
 namespace KDevelop
 {
 class HashedString;
-class DocumentRangeObjectPrivate;
+
+///Contains data that is stored to disk
+class DocumentRangeObjectData
+{
+    public:
+    DocumentRangeObjectData() {
+    }
+    DocumentRangeObjectData(const DocumentRangeObjectData& rhs);
+
+    mutable SimpleRange m_range; //Mutable for synchronization
+};
+
 class DocumentRangeObjectDynamicPrivate;
 /**
  * Base class for any object which has an associated range of text.
@@ -159,10 +170,10 @@ protected:
      * \param document document in which this object is located.
      * \param range text range which this object covers.
      */
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const SimpleRange& range = SimpleRange::invalid());
+    DocumentRangeObject(DocumentRangeObjectData& dd, const SimpleRange& range = SimpleRange::invalid());
 
     /// Private data pointer.
-    DocumentRangeObjectPrivate* const d_ptr;
+    DocumentRangeObjectData* const d_ptr;
 
     /**
      * Reimplementation of KTextEditor::SmartWatcher::rangeDeleted(), to clean up the smart
@@ -176,9 +187,6 @@ private:
   
     class DocumentRangeObjectDynamicPrivate* const dd_ptr;
     bool m_ownsData;
-
-    Q_DISABLE_COPY(DocumentRangeObject)
-    Q_DECLARE_PRIVATE(DocumentRangeObject)
 };
 
 }

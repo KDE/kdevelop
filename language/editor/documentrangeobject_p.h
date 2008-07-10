@@ -27,24 +27,6 @@
 namespace KDevelop
 {
 
-///Contains data that is stored to disk
-class DocumentRangeObjectPrivate
-{
-    public:
-    DocumentRangeObjectPrivate() {
-    }
-    DocumentRangeObjectPrivate(const DocumentRangeObjectPrivate& rhs);
-
-    mutable SimpleRange m_range; //Mutable for synchronization
-
-    uint classSize() const {
-      ///@todo implement correctly with a register
-      return sizeof(DocumentRangeObjectPrivate);
-    }
-
-    APPENDED_LISTS_STUB(DocumentRangeObjectPrivate);
-};
-
 ///Contains data that is not stored to disk
 class DocumentRangeObjectDynamicPrivate {
   public:

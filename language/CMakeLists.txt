@@ -55,6 +55,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
     duchain/typeregister.cpp
+    duchain/duchainregister.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
@@ -148,6 +149,7 @@ install(FILES
     duchain/appendedlist.h
     duchain/typepointer.h
     duchain/typesystemdata.h
+    duchain/duchainregister.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 

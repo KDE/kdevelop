@@ -38,7 +38,7 @@ using namespace KTextEditor;
 
 namespace KDevelop {
 
-DocumentRangeObjectPrivate::DocumentRangeObjectPrivate(const DocumentRangeObjectPrivate& rhs) : m_range(rhs.m_range) {
+DocumentRangeObjectData::DocumentRangeObjectData(const DocumentRangeObjectData& rhs) : m_range(rhs.m_range) {
 }
 
 DocumentRangeObjectDynamicPrivate::DocumentRangeObjectDynamicPrivate() : m_smartRange(0), m_smartMutex(0), m_ownsRange(DocumentRangeObject::DontOwn) {
@@ -63,13 +63,13 @@ void DocumentRangeObject::syncToSmart() const {
 }
 
 DocumentRangeObject::DocumentRangeObject(const SimpleRange& range)
-    : d_ptr( new DocumentRangeObjectPrivate ), dd_ptr(new DocumentRangeObjectDynamicPrivate), m_ownsData(true)
+    : d_ptr( new DocumentRangeObjectData ), dd_ptr(new DocumentRangeObjectDynamicPrivate), m_ownsData(true)
 {
     if(range.isValid())
         d_ptr->m_range = range;
 }
 
-DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectPrivate& dd, const SimpleRange& range)
+DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectData& dd, const SimpleRange& range)
     : d_ptr( &dd ), dd_ptr(new DocumentRangeObjectDynamicPrivate), m_ownsData(true)
 {
   Q_ASSERT(d_ptr);
@@ -146,10 +146,8 @@ void DocumentRangeObject::clearSmartRange()
 
 SimpleRange DocumentRangeObject::range( ) const
 {
-    Q_D(const DocumentRangeObject);
-
     syncFromSmart();
-    return d->m_range;
+    return d_ptr->m_range;
 }
 
 void DocumentRangeObject::setRange(const SimpleRange& range)
@@ -166,10 +164,8 @@ SmartRange* DocumentRangeObject::smartRange() const
 
 bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
 {
-    Q_D(const DocumentRangeObject);
-
     syncFromSmart();
-    return d->m_range.contains(cursor);
+    return d_ptr->m_range.contains(cursor);
 }
 
 void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
