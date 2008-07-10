@@ -361,7 +361,7 @@ void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
     action->setWhatsThis(i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
-            "This option will affect only future commands, it won't "
+            "This option will affect only future commands, it will not "
             "add or remove already issued commands from the view."));
 
     popup->addAction(i18n("Copy All"),
@@ -411,7 +411,7 @@ void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
     action->setWhatsThis(i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
-            "This option will affect only future commands, it won't "
+            "This option will affect only future commands, it will not "
             "add or remove already issued commands from the view."));
 
     popup->exec(event->globalPos());

@@ -175,7 +175,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
-                KMessageBox::error(0, i18n("Couldn't create new project"));
+                KMessageBox::error(0, i18n("Could not create new project"));
                 KIO::NetAccess::del( KUrl( unpackDir ), 0 );
                 return "";
         }
@@ -202,20 +202,20 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         job->exec();
                         if (job->status() != KDevelop::VcsJob::JobSucceeded )
                         {
-                            KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
+                            KMessageBox::error(0, i18n("Could not add files to the Git repository"));
                             KIO::NetAccess::del( dest, 0);
                             return "";
                         }
                     } else
                     {
-                        KMessageBox::error(0, i18n("Couldn't add files to the Git repository"));
+                        KMessageBox::error(0, i18n("Could not add files to the Git repository"));
                         KIO::NetAccess::del( dest, 0 );
                         return "";
                     }
                 }
                 else
                 {
-                    KMessageBox::error(0, i18n("Couldn't init Git repository"));
+                    KMessageBox::error(0, i18n("Could not init Git repository"));
                     KIO::NetAccess::del( dest, 0 );
                     return "";
                 }
@@ -242,19 +242,19 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         job->exec();
                         if( job->status() != KDevelop::VcsJob::JobSucceeded )
                         {
-                            KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                            KMessageBox::error(0, i18n("Could not checkout imported project"));
                             KIO::NetAccess::del( dest, 0 );
                             tmpdir.unlink();
                             return "";
                         }
                     } else {
-                        KMessageBox::error(0, i18n("Couldn't checkout imported project"));
+                        KMessageBox::error(0, i18n("Could not checkout imported project"));
                         tmpdir.unlink();
                         return "";
                     }
                 }else
                 {
-                    KMessageBox::error(0, i18n("Couldn't import project"));
+                    KMessageBox::error(0, i18n("Could not import project"));
                     tmpdir.unlink();
                     return "";
                 }
