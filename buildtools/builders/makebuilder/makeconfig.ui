@@ -5,11 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>440</height>
+    <width>720</width>
+    <height>262</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QFormLayout" name="formLayout" >
+   <property name="fieldGrowthPolicy" >
+    <enum>QFormLayout::ExpandingFieldsGrow</enum>
+   </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="label_8" >
      <property name="text" >
@@ -30,8 +33,7 @@
    <item row="1" column="0" >
     <widget class="QLabel" name="label_7" >
      <property name="text" >
-      <string>Display commands but do not
-execute them:</string>
+      <string>Display commands but do not execute them:</string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -139,7 +141,7 @@ execute them:</string>
    <item row="7" column="0" >
     <widget class="QLabel" name="label_2" >
      <property name="text" >
-      <string>Active Environment Profile: </string>
+      <string>Active Environment Profile:</string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -148,6 +150,12 @@ execute them:</string>
    </item>
    <item row="7" column="1" >
     <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="editable" >
       <bool>false</bool>
      </property>
@@ -158,19 +166,6 @@ execute them:</string>
       <bool>false</bool>
      </property>
     </widget>
-   </item>
-   <item row="8" column="0" colspan="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
