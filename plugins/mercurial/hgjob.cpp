@@ -6,6 +6,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -23,7 +26,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitjob.h"
+#include "hgjob.h"
 
 #include <QFile>
 #include <QList>
@@ -35,7 +38,7 @@
 #include "processlinemaker.h"
 #include <iplugin.h>
 
-struct GitJob::Private
+struct HgJob::Private
 {
     Private() : isRunning(false), commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
@@ -60,73 +63,73 @@ struct GitJob::Private
     KDevelop::IPlugin* vcsplugin;
 };
 
-GitJob::GitJob(KDevelop::IPlugin* parent)
+HgJob::HgJob(KDevelop::IPlugin* parent)
     : VcsJob(parent), d(new Private)
 {
     d->vcsplugin = parent;
 }
 
-GitJob::~GitJob()
+HgJob::~HgJob()
 {
     delete d;
 }
 
-void GitJob::clear()
+void HgJob::clear()
 {
     d->childproc->clearEnvironment();
     d->command.clear();
     d->outputLines.clear();
 }
 
-void GitJob::setServer(const QString& server)
+void HgJob::setServer(const QString& server)
 {
     d->server = server;
 }
 
-void GitJob::setDirectory(const QString& directory)
+void HgJob::setDirectory(const QString& directory)
 {
     d->directory = directory;
 }
 
-QString GitJob::getDirectory()
+QString HgJob::getDirectory()
 {
     return d->directory;
 }
 
-bool GitJob::isRunning() const
+bool HgJob::isRunning() const
 {
     return d->isRunning;
 }
 
-GitJob& GitJob::operator<<(const QString& arg)
+HgJob& HgJob::operator<<(const QString& arg)
 {
     d->command.append( arg );
     return *this;
 }
 
-GitJob& GitJob::operator<<(const char* arg)
+HgJob& HgJob::operator<<(const char* arg)
 {
     d->command.append( arg );
     return *this;
 }
 
-GitJob& GitJob::operator<<(const QStringList& args)
+HgJob& HgJob::operator<<(const QStringList& args)
 {
     d->command.append( args.join(" ") );
     return *this;
 }
 
-QString GitJob::gitCommand() const
+QString HgJob::hgCommand() const
 {
     return d->command.join(" ");
 }
 
-QString GitJob::output() const
+QString HgJob::output() const
 {
     return d->outputLines.join("\n");
 }
 
-void GitJob::start()
+void HgJob::start()
 {
     if( !d->directory.isEmpty() ) {
         kDebug(9500) << "Working directory:" << d->directory;
@@ -143,7 +146,7 @@ void GitJob::start()
     connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
             SLOT(slotReceivedStderr(const QStringList&)) );
 
-    kDebug(9500) << "Execute git command:" << gitCommand();
+    kDebug(9500) << "Execute hg command:" << hgCommand();
 
     d->outputLines.clear();
     d->isRunning = true;
@@ -152,17 +155,17 @@ void GitJob::start()
     d->childproc->start();
 }
 
-void GitJob::setCommunicationMode(KProcess::OutputChannelMode comm)
+void HgJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 {
     d->commMode = comm;
 }
 
-void GitJob::cancel()
+void HgJob::cancel()
 {
     d->childproc->kill();
 }
 
-void GitJob::slotProcessError( QProcess::ProcessError err )
+void HgJob::slotProcessError( QProcess::ProcessError err )
 {
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -175,7 +178,7 @@ void GitJob::slotProcessError( QProcess::ProcessError err )
     emit resultsReady(this); //VcsJob
 }
 
-void GitJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
+void HgJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -190,7 +193,7 @@ void GitJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     emit resultsReady(this); //VcsJob
 }
 
-void GitJob::slotReceivedStdout(const QStringList& output)
+void HgJob::slotReceivedStdout(const QStringList& output)
 {
     // accumulate output
     d->outputLines += output;
@@ -199,7 +202,7 @@ void GitJob::slotReceivedStdout(const QStringList& output)
     kDebug(9500)<<output.join("\n");
 }
 
-void GitJob::slotReceivedStderr(const QStringList& output)
+void HgJob::slotReceivedStderr(const QStringList& output)
 {
     // accumulate output
     d->outputLines += output;
@@ -208,13 +211,13 @@ void GitJob::slotReceivedStderr(const QStringList& output)
     kDebug(9500)<<output.join("\n");
 }
 
-QVariant GitJob::fetchResults()
+QVariant HgJob::fetchResults()
 {
     return output();
 }
 
 
-KDevelop::VcsJob::JobStatus GitJob::status() const
+KDevelop::VcsJob::JobStatus HgJob::status() const
 {
     if (d->isRunning)
         return KDevelop::VcsJob::JobRunning;
@@ -225,9 +228,9 @@ KDevelop::VcsJob::JobStatus GitJob::status() const
     return KDevelop::VcsJob::JobSucceeded;
 }
 
-KDevelop::IPlugin* GitJob::vcsPlugin() const
+KDevelop::IPlugin* HgJob::vcsPlugin() const
 {
     return d->vcsplugin;
 }
 
-#include "gitjob.moc"
+#include "hgjob.moc"

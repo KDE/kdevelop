@@ -4,6 +4,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -21,24 +24,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitmainview.h"
+#include "hgmainview.h"
 
 #include <KLocale>
 #include <KDebug>
 
-#include "gitplugin.h"
-#include "gitjob.h"
-#include "gitgenericoutputview.h"
+#include "hgplugin.h"
+#include "hgjob.h"
+#include "hggenericoutputview.h"
 
-GitMainView::GitMainView(GitPlugin *plugin, QWidget* parent )
+HgMainView::HgMainView(HgPlugin *plugin, QWidget* parent )
  : QWidget( parent ),
    Ui::CvsMainViewBase(),
    m_plugin(plugin)
 {
     Ui::CvsMainViewBase::setupUi(this);
-    setWindowTitle(i18n("CVS"));
+    setWindowTitle(i18n("Mercurial"));
 
-        // GitPlugin will notify when a job finished
+        // HgPlugin will notify when a job finished
     connect(m_plugin, SIGNAL(jobFinished(KJob*)),
             this, SLOT(slotJobFinished(KJob*)));
 
@@ -47,8 +50,8 @@ GitMainView::GitMainView(GitPlugin *plugin, QWidget* parent )
             this, SLOT(slotAddTab(QWidget*, QString)) );
 
     // create a default output view
-    m_mainview = new GitGenericOutputView(m_plugin);
-    tabwidget->addTab( m_mainview, i18n("Git") );
+    m_mainview = new HgGenericOutputView(m_plugin);
+    tabwidget->addTab( m_mainview, i18n("Hg") );
 
     // add a close button as corner widget
     m_closeButton = new QToolButton(tabwidget);
@@ -61,12 +64,12 @@ GitMainView::GitMainView(GitPlugin *plugin, QWidget* parent )
             this, SLOT( slotTabClose() ));
 }
 
-GitMainView::~GitMainView()
+HgMainView::~HgMainView()
 {
     delete m_mainview;
 }
 
-void GitMainView::slotAddTab(QWidget * tab, const QString& label)
+void HgMainView::slotAddTab(QWidget * tab, const QString& label)
 {
     kDebug(9500) << "adding tab:" << label;
 
@@ -77,13 +80,13 @@ void GitMainView::slotAddTab(QWidget * tab, const QString& label)
         m_closeButton->setEnabled(true);
 }
 
-void GitMainView::slotJobFinished(KJob * job)
+void HgMainView::slotJobFinished(KJob * job)
 {
     m_mainview->slotJobFinished(job);
     tabwidget->setCurrentIndex(0);
 }
 
-void GitMainView::slotTabClose()
+void HgMainView::slotTabClose()
 {
     int idx = tabwidget->currentIndex();
 
@@ -96,4 +99,4 @@ void GitMainView::slotTabClose()
         m_closeButton->setEnabled(false);
 }
 
-// #include "gitmainview.moc"
+// #include "hgmainview.moc"

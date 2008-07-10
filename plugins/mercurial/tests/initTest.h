@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -22,14 +25,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_INIT_H
-#define GIT_INIT_H
+#ifndef HG_INIT_H
+#define HG_INIT_H
 
 #include <QtCore/QObject>
 
-class GitProxy;
+class HgProxy;
 
-class GitInitTest: public QObject
+class HgInitTest: public QObject
 {
     Q_OBJECT
 
@@ -47,7 +50,7 @@ class GitInitTest: public QObject
         void cleanupTestCase();
 
     private:
-        GitProxy* m_proxy;
+        HgProxy* m_proxy;
 };
 
 #endif

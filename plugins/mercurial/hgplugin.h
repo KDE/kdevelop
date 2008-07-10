@@ -5,6 +5,10 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Mercurial                                                 *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -22,8 +26,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#ifndef HG_PLUGIN_H
+#define HG_PLUGIN_H
 
 #include <KUrl>
 #include <KJob>
@@ -33,7 +37,7 @@
 #include <interfaces/iplugin.h>
 #include <qobject.h>
 
-class GitProxy;
+class HgProxy;
 
 namespace KDevelop
 {
@@ -41,22 +45,23 @@ namespace KDevelop
 }
 
 /**
- * This is the main class of KDevelop's Git plugin.
+ * This is the main class of KDevelop's Hg plugin.
  *
  * It implements the IBasicVersionControl and IDistributedVersionControl interfaces.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
+ * @author Tom Burdick <thomas.burdick@gmail.com>
  */
-class GitPlugin: public KDevelop::IPlugin, public KDevelop::IDistributedVersionControl
+class HgPlugin: public KDevelop::IPlugin, public KDevelop::IDistributedVersionControl
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
 
-friend class GitProxy;
+friend class HgProxy;
 
 public:
-    GitPlugin( QObject *parent, const QVariantList & args = QVariantList() );
-    ~GitPlugin();
+    HgPlugin( QObject *parent, const QVariantList & args = QVariantList() );
+    ~HgPlugin();
 
     // From KDevelop::IPlugin
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
@@ -117,7 +122,7 @@ public:
                   const KUrl& localRepositoryLocation );
     // End:  KDevelop::IDistributedVersionControl
 
-    GitProxy* proxy();
+    HgProxy* proxy();
 
     const KUrl urlFocusedDocument() const;
 
@@ -142,22 +147,22 @@ signals:
     /**
      * Some actions like commit, add, remove... will connect the job's
      * result() signal to this signal. Anybody, like for instance the
-     * GitMainView class, that is interested in getting notified about
+     * HgMainView class, that is interested in getting notified about
      * jobs that finished can connect to this signal.
-     * @see class GitMainView
+     * @see class HgMainView
      */
     void jobFinished(KJob* job);
 
     /**
      * Gets emmited when a job like log, editors... was created.
-     * GitPlugin will connect the newly created view to the result() signal
+     * HgPlugin will connect the newly created view to the result() signal
      * of a job. So the new view will show the output of that job as
      * soon as it has finished.
      */
     void addNewTabToMainView(QWidget* tab, QString label);
 
 private:
-    class GitPluginPrivate* d;
+    class HgPluginPrivate* d;
 
     void setupActions();
 };

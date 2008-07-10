@@ -1,16 +1,16 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=This plugin integrates Git to KDevelop
-Comment[x-test]=xxThis plugin integrates Git to KDevelopxx
-Name=KDevGit
-Name[x-test]=xxKDevGitxx
-GenericName=Git frontend
-GenericName[x-test]=xxGit frontendxx
+Comment=This plugin integrates Hg to KDevelop
+Comment[x-test]=xxThis plugin integrates Hg to KDevelopxx
+Name=KDevHg
+Name[x-test]=xxKDevHgxx
+GenericName=Hg frontend
+GenericName[x-test]=xxHg frontendxx
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevgit
-X-KDE-PluginInfo-Name=kdevgit
-X-KDE-PluginInfo-Author=Evgeniy Ivanov
+X-KDE-Library=kdevhg
+X-KDE-PluginInfo-Name=kdevhg
+X-KDE-PluginInfo-Author=Tom Burdick
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Version=6

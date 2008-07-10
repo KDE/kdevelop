@@ -12,29 +12,29 @@ include_directories( ${KDE4_INCLUDES}
 
 ########### next target ###############
 
-set(kdevgit_PART_SRCS
-    gitplugin.cpp
-    gitjob.cpp
-    gitproxy.cpp
+set(kdevhg_PART_SRCS
+    hgplugin.cpp
+    hgjob.cpp
+    hgproxy.cpp
     commitdialog.cpp
-    gitmainview.cpp
-    gitgenericoutputview.cpp
+    hgmainview.cpp
+    hggenericoutputview.cpp
     importdialog.cpp
     importmetadatawidget.cpp
 )
 
-set(kdevgit_PART_UI
+set(kdevhg_PART_UI
     commitdialog.ui
     cvsgenericoutputview.ui
     cvsmainview.ui
     importmetadatawidget.ui
 )
 
-kde4_add_ui_files(kdevgit_PART_SRCS ${kdevgit_PART_UI})
-kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
+kde4_add_ui_files(kdevhg_PART_SRCS ${kdevhg_PART_UI})
+kde4_add_plugin(kdevhg ${kdevhg_PART_SRCS})
 
 
-target_link_libraries(kdevgit
+target_link_libraries(kdevhg
     ${KDE4_KDECORE_LIBS}
     kdevplatformutil
     kdevplatforminterfaces
@@ -42,10 +42,10 @@ target_link_libraries(kdevgit
     kdevplatformproject
 )
 
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevhg DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevgit.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgit )
+install( FILES kdevhg.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevhg.rc DESTINATION ${DATA_INSTALL_DIR}/kdevhg )
 

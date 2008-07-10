@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -22,7 +25,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitproxy.h"
+#include "hgproxy.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -35,28 +38,28 @@
 #include <kshell.h>
 #include <KDebug>
 
-#include "gitjob.h"
+#include "hgjob.h"
 
 #include <iplugin.h>
 
-GitProxy::GitProxy(KDevelop::IPlugin* parent)
+HgProxy::HgProxy(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)
 {
 }
 
-GitProxy::~GitProxy()
+HgProxy::~HgProxy()
 {
 }
 
 //TODO: write tests for this method!
 //maybe func()const?
-bool GitProxy::isValidDirectory(const KUrl & dirPath)
+bool HgProxy::isValidDirectory(const KUrl & dirPath)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     if (job)
     {
         job->clear();
-        *job << "git-rev-parse";
+        *job << "hg-rev-parse";
         *job << "--is-inside-work-tree";
         QString path = dirPath.path();
         QFileInfo fsObject(path);
@@ -66,22 +69,22 @@ bool GitProxy::isValidDirectory(const KUrl & dirPath)
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
-            kDebug(9500) << "Dir:" << path << " is is inside work tree of git" ;
+            kDebug(9500) << "Dir:" << path << " is is inside work tree of hg" ;
             return true;
         }
     }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is is not inside work tree of git" ;
+    kDebug(9500) << "Dir:" << dirPath.path() << " is is not inside work tree of hg" ;
     return false;
 }
 
-bool GitProxy::prepareJob(GitJob* job, const QString& repository, enum RequestedOperation op)
+bool HgProxy::prepareJob(HgJob* job, const QString& repository, enum RequestedOperation op)
 {
     // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "git clone" isValidDirectory() would fail as the
-    // directory is not yet under git control
-    if (op == GitProxy::NormalOperation &&
+    // For other operations like "hg clone" isValidDirectory() would fail as the
+    // directory is not yet under hg control
+    if (op == HgProxy::NormalOperation &&
         !isValidDirectory(repository)) {
-        kDebug(9500) << repository << " is not a valid git repository";
+        kDebug(9500) << repository << " is not a valid hg repository";
         return false;
         }
 
@@ -94,7 +97,7 @@ bool GitProxy::prepareJob(GitJob* job, const QString& repository, enum Requested
         return true;
 }
 
-bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::List& urls)
+bool HgProxy::addFileList(HgJob* job, const QString& repository, const KUrl::List& urls)
 {
     QStringList args;
 
@@ -111,7 +114,7 @@ bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::L
     return true;
 }
 
-// QString GitProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
+// QString HgProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
 // {
 //     QString str;
 // 
@@ -138,22 +141,22 @@ bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::L
 //     return str;
 // }
 
-GitJob* GitProxy::init(const KUrl &directory)
+HgJob* HgProxy::init(const KUrl &directory)
 {
-    GitJob* job = new GitJob(vcsplugin);
-    if (prepareJob(job, directory.toLocalFile(), GitProxy::Init) ) {
-        *job << "git-init";
+    HgJob* job = new HgJob(vcsplugin);
+    if (prepareJob(job, directory.toLocalFile(), HgProxy::Init) ) {
+        *job << "hg init";
         return job;
     }
     if (job) delete job;
     return NULL;
 }
 
-GitJob* GitProxy::clone(const KUrl &repository, const KUrl directory)
+HgJob* HgProxy::clone(const KUrl &repository, const KUrl directory)
 {
-    GitJob* job = new GitJob(vcsplugin);
-    if (prepareJob(job, directory.toLocalFile(), GitProxy::Init) ) {
-        *job << "git-clone";
+    HgJob* job = new HgJob(vcsplugin);
+    if (prepareJob(job, directory.toLocalFile(), HgProxy::Init) ) {
+        *job << "hg clone";
         *job << repository.path();
 //         addFileList(job, repository.path(), directory); //TODO it's temp, should work only with local repos
         return job;
@@ -162,11 +165,11 @@ GitJob* GitProxy::clone(const KUrl &repository, const KUrl directory)
     return NULL;
 }
 
-GitJob* GitProxy::add(const QString& repository, const KUrl::List &files)
+HgJob* HgProxy::add(const QString& repository, const KUrl::List &files)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git";
+        *job << "hg";
         *job << "add";
 
         addFileList(job, repository, files);
@@ -177,15 +180,15 @@ GitJob* GitProxy::add(const QString& repository, const KUrl::List &files)
     return NULL;
 }
 
-//TODO: git doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
+//TODO: hg doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
-GitJob* GitProxy::commit(const QString& repository,
+HgJob* HgProxy::commit(const QString& repository,
                          const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
                          const KUrl::List &files /*= QStringList("-a")*/)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-commit";
+        *job << "hg commit";
         *job << "-m";
         *job << KShell::quoteArg( message );
         return job;
@@ -194,11 +197,11 @@ GitJob* GitProxy::commit(const QString& repository,
     return NULL;
 }
 
-GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
+HgJob* HgProxy::remove(const QString& repository, const KUrl::List &files)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-rm";
+        *job << "hg rm";
         addFileList(job, repository, files);
         return job;
     }
@@ -206,14 +209,14 @@ GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
     return NULL;
 }
 
-// //TODO: now just only "git log" or "git log file", no extensions
-// GitJob* GitProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
+// //TODO: now just only "hg log" or "hg log file", no extensions
+// HgJob* HgProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 // {
 //     QFileInfo info(url.toLocalFile());
 //     if (!info.isFile())
 //         return false;
 // 
-//     GitJob* job = new GitJob(vcsplugin);
+//     HgJob* job = new HgJob(vcsplugin);
 //     if ( prepareJob(job, info.absolutePath()) ) {
 //         *job << "cvs";
 //         *job << "log";
@@ -232,14 +235,14 @@ GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
 //     return NULL;
 // }
 // 
-// GitJob* GitProxy::diff(const KUrl& url, 
+// HgJob* HgProxy::diff(const KUrl& url, 
 //                        const KDevelop::VcsRevision& revA, 
 //                        const KDevelop::VcsRevision& revB,
 //                        const QString& diffOptions)
 // {
 //     QFileInfo info(url.toLocalFile());
 // 
-//     GitJob* job = new GitJob(vcsplugin);
+//     HgJob* job = new HgJob(vcsplugin);
 //     if ( prepareJob(job, info.absolutePath()) ) {
 //         *job << "cvs";
 //         *job << "diff";
@@ -262,11 +265,11 @@ GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
 //     return NULL;
 // }
 // 
-// GitJob* GitProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
+// HgJob* HgProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 // {
 //     QFileInfo info(url.toLocalFile());
 // 
-//     GitJob* job = new GitJob(vcsplugin);
+//     HgJob* job = new HgJob(vcsplugin);
 //     if ( prepareJob(job, info.absolutePath()) ) {
 //         *job << "cvs";
 //         *job << "annotate";
@@ -283,11 +286,11 @@ GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
 //     return NULL;
 // }
 
-GitJob* GitProxy::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
+HgJob* HgProxy::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git";
+        *job << "hg";
         *job << "status";
         addFileList(job, repository, files);
 
@@ -297,19 +300,19 @@ GitJob* GitProxy::status(const QString & repository, const KUrl::List & files, b
     return NULL;
 }
 
-// GitJob* GitProxy::is_inside_work_tree(const QString& repository)
+// HgJob* HgProxy::is_inside_work_tree(const QString& repository)
 // {
 // 
 //     return NULL;
 // }
 
-GitJob* GitProxy::empty_cmd() const
+HgJob* HgProxy::empty_cmd() const
 {
     ///TODO: maybe just "" command?
-    GitJob* job = new GitJob(vcsplugin);
+    HgJob* job = new HgJob(vcsplugin);
     *job << "echo";
     *job << "-n";
     return job;
 }
 
-#include "gitproxy.moc"
+#include "hgproxy.moc"

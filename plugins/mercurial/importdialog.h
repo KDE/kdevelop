@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -31,20 +34,21 @@
 
 class ImportMetadataWidget;
 
-class GitPlugin;
+class HgPlugin;
 
 /**
  * Asks the user for all options needed to init an existing directory into
- * a Git repository. In IBasicVersionControl "import" term is used, that is why 
+ * a Hg repository. In IBasicVersionControl "import" term is used, that is why 
  * it is called import, but not init.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
+ * @author Tom Burdick <thomas.burdick@gmail.com>
  */
 class ImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ImportDialog(GitPlugin *plugin, const KUrl& url, QWidget* parent=0);
+    ImportDialog(HgPlugin *plugin, const KUrl& url, QWidget* parent=0);
     virtual ~ImportDialog();
 
 public slots:
@@ -53,7 +57,7 @@ public slots:
 
 private:
     KUrl m_url;
-    GitPlugin* m_plugin;
+    HgPlugin* m_plugin;
     ImportMetadataWidget* m_widget;
 };
 

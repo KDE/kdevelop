@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -27,16 +30,16 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "gitplugin.h"
-#include "gitproxy.h"
-#include "gitjob.h"
+#include "hgplugin.h"
+#include "hgproxy.h"
+#include "hgjob.h"
 
 #include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 
 #include "importmetadatawidget.h"
 
-ImportDialog::ImportDialog(GitPlugin* plugin, const KUrl& url, QWidget *parent)
+ImportDialog::ImportDialog(HgPlugin* plugin, const KUrl& url, QWidget *parent)
     : KDialog(parent), m_url(url), m_plugin(plugin)
 {
     m_widget = new ImportMetadataWidget(this);
@@ -51,7 +54,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    GitJob *job = dynamic_cast<GitJob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
+    HgJob *job = dynamic_cast<HgJob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));
@@ -67,11 +70,11 @@ void ImportDialog::jobFinished(KJob * job)
     }
 
     // The job finished, now let's check the output is everything was OK
-    GitJob* gitjob = dynamic_cast<GitJob*>(job);
+    HgJob* hgjob = dynamic_cast<HgJob*>(job);
 
     static QRegExp re_file("^[IN]\\s(.*)");
     bool error = false;
-    QStringList lines = gitjob->output().split("\n");
+    QStringList lines = hgjob->output().split("\n");
     foreach(QString line, lines) {
         if (line.isEmpty()) {
             // ignore empty lines

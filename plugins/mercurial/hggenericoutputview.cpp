@@ -4,6 +4,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -21,60 +24,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GITMAINVIEW_H
-#define GITMAINVIEW_H
+#include "hggenericoutputview.h"
 
-#include <QWidget>
-#include <KJob>
-#include <QToolButton>
+#include "hgjob.h"
 
-#include "ui_cvsmainview.h"
+HgGenericOutputView::HgGenericOutputView(HgPlugin *plugin, HgJob* job, QWidget* parent)
+    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
+{
+    Ui::CvsGenericOutputViewBase::setupUi(this);
 
-class GitPlugin;
-class GitGenericOutputView;
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SLOT( slotJobFinished(KJob*) ));
+    }
+}
 
-/**
- * This class is the main output view of KDevelop's Git plugin.
- * It only constists out of a KTabWidget.
- *
- * When created, a GitGenericOutputView will be inserted.
- *
- * Inserting text into that default output view is possible via the
- * slotJobFinished() slot.
- *
- * Additional tabs can be added via slotAddTab().
- *
- * @author Robert Gruber <rgruber@users.sourceforge.net>
- */
-class GitMainView : public QWidget, private Ui::CvsMainViewBase {
-    Q_OBJECT
-public:
-    GitMainView(GitPlugin *plugin, QWidget* parent);
-    virtual ~GitMainView();
+HgGenericOutputView::~HgGenericOutputView()
+{
+}
 
-public slots:
-    /**
-     * Inserts @p tag into the KTabWidget and calls it @p label .
-     * This slot gets connected to GitPlugin::addNewTabToMainView().
-     */
-    void slotAddTab(QWidget* tab, const QString& label);
+void HgGenericOutputView::appendText(const QString& text)
+{
+    textArea->append(text);
+}
 
-    /**
-     * When this slot gets called, the output of the job will be written to
-     * the default outputview of the KTabWidget.
-     * This slot gets connected to GitPlugin::jobFinished().
-     */
-    void slotJobFinished(KJob* job);
+void HgGenericOutputView::slotJobFinished(KJob * job)
+{
+    HgJob * hgjob = dynamic_cast<HgJob*>(job);
+    if (hgjob) {
+        appendText( hgjob->hgCommand() );
+        appendText( hgjob->output() );
+        if (job->error() == 0) {
+            appendText( i18n("Job exited normally") );
+        } else {
+            appendText( job->errorText() );
+        }
+    }
+}
 
-    /**
-     * Closes the current active tab (if it's not the first tab)
-     */
-    void slotTabClose();
-
-private:
-    GitPlugin* m_plugin;
-    GitGenericOutputView* m_mainview;
-    QToolButton* m_closeButton;
-};
-
-#endif
+// #include "cvsgenericoutputview.moc"

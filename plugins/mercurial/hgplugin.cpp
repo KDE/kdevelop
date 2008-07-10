@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Thomas Burdick <thomas.burdick@gmail.com>              *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -22,7 +25,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitplugin.h"
+#include "hgplugin.h"
 
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
@@ -48,26 +51,26 @@
 
 #include<interfaces/contextmenuextension.h>
 
-#include "gitproxy.h"
-#include "gitjob.h"
+#include "hgproxy.h"
+#include "hgjob.h"
 #include "commitdialog.h"
 #include "importdialog.h"
-#include "gitmainview.h"
+#include "hgmainview.h"
 #include "importmetadatawidget.h"
 // #include "diffoptionsdialog.h"
 // #include "editorsview.h"
 // #include "logview.h"
 // #include "annotateview.h"
 
-K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
-K_EXPORT_PLUGIN(KDevGitFactory("kdevgit"))
+K_PLUGIN_FACTORY(KDevHgFactory, registerPlugin<HgPlugin>(); )
+K_EXPORT_PLUGIN(KDevHgFactory("kdevhg"))
 
-class KDevGitViewFactory: public KDevelop::IToolViewFactory{
+class KDevHgViewFactory: public KDevelop::IToolViewFactory{
 public:
-    KDevGitViewFactory(GitPlugin *plugin): m_plugin(plugin) {}
+    KDevHgViewFactory(HgPlugin *plugin): m_plugin(plugin) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
-        return new GitMainView(m_plugin, parent);
+        return new HgMainView(m_plugin, parent);
     }
     virtual Qt::DockWidgetArea defaultPosition()
     {
@@ -75,56 +78,56 @@ public:
     }
     virtual QString id() const
     {
-        return "org.kdevelop.GitView";
+        return "org.kdevelop.HgView";
     }
 
 private:
-    GitPlugin *m_plugin;
+    HgPlugin *m_plugin;
 };
 
-class GitPluginPrivate {
+class HgPluginPrivate {
 public:
-    KDevGitViewFactory* m_factory;
-    QPointer<GitProxy> m_proxy;
+    KDevHgViewFactory* m_factory;
+    QPointer<HgProxy> m_proxy;
     KUrl::List m_ctxUrlList;
 };
 
-GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin(KDevGitFactory::componentData(), parent)
+HgPlugin::HgPlugin( QObject *parent, const QVariantList & )
+    : KDevelop::IPlugin(KDevHgFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
-    d = new GitPluginPrivate();
+    d = new HgPluginPrivate();
 
-    d->m_factory = new KDevGitViewFactory(this);
-    core()->uiController()->addToolView(i18n("Git"), d->m_factory);
+    d->m_factory = new KDevHgViewFactory(this);
+    core()->uiController()->addToolView(i18n("Hg"), d->m_factory);
 
-    setXMLFile("kdevgit.rc");
+    setXMLFile("kdevhg.rc");
     setupActions();
 
-    d->m_proxy = new GitProxy(this);
+    d->m_proxy = new HgProxy(this);
 }
 
-GitPlugin::~GitPlugin()
+HgPlugin::~HgPlugin()
 {
     delete d;
 }
 
 
-GitProxy* GitPlugin::proxy()
+HgProxy* HgPlugin::proxy()
 {
     return d->m_proxy;
 }
 
-void GitPlugin::setupActions()
+void HgPlugin::setupActions()
 {
     KAction *action;
 
-    action = actionCollection()->addAction("git_init");
+    action = actionCollection()->addAction("hg_init");
     action->setText(i18n("Init Directory..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotInit()));
 
-//     action = actionCollection()->addAction("git_clone");
+//     action = actionCollection()->addAction("hg_clone");
 //     action->setText(i18n("Clone..."));
 //     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
 
@@ -133,7 +136,7 @@ void GitPlugin::setupActions()
 //         connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
 }
 
-void GitPlugin::slotInit()
+void HgPlugin::slotInit()
 {
         KUrl url = urlFocusedDocument();
 
@@ -141,7 +144,7 @@ void GitPlugin::slotInit()
         dlg.exec();
 }
 
-const KUrl GitPlugin::urlFocusedDocument() const
+const KUrl HgPlugin::urlFocusedDocument() const
 {
     KParts::ReadOnlyPart *plugin =
                          dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
@@ -153,16 +156,16 @@ const KUrl GitPlugin::urlFocusedDocument() const
     return KUrl();
 }
 
-//     void GitPlugin::slotStatus()
+//     void HgPlugin::slotStatus()
 //     {
 //         KUrl url = urlFocusedDocument();
 //         KUrl::List urls;
 //         urls << url;
 // 
 //         KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
-//         GitJob* job = dynamic_cast<GitJob*>(j);
+//         HgJob* job = dynamic_cast<HgJob*>(j);
 //         if (job) {
-//             GitGenericOutputView* view = new GitGenericOutputView(this, job);
+//             HgGenericOutputView* view = new HgGenericOutputView(this, job);
 //             emit addNewTabToMainView( view, i18n("Status") );
 //             job->start();
 //         }
@@ -170,7 +173,7 @@ const KUrl GitPlugin::urlFocusedDocument() const
 
 
 
-KDevelop::ContextMenuExtension GitPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension HgPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KUrl::List ctxUrlList;
     if( context->type() == KDevelop::Context::ProjectItemContext )
@@ -272,7 +275,7 @@ KDevelop::ContextMenuExtension GitPlugin::contextMenuExtension(KDevelop::Context
     }
     else
     {
-        QMenu* menu = new QMenu("Git");
+        QMenu* menu = new QMenu("Hg");
         action = new KAction(i18n("Init..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(slotInit()) );
         menu->addAction( action );
@@ -283,10 +286,10 @@ KDevelop::ContextMenuExtension GitPlugin::contextMenuExtension(KDevelop::Context
 }
 
 
-    void GitPlugin::ctxCommit()
+    void HgPlugin::ctxCommit()
     {
         KDevelop::VcsJob* j = commit("", d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
-        GitJob* job = dynamic_cast<GitJob*>(j);
+        HgJob* job = dynamic_cast<HgJob*>(j);
         if (job) {
             connect(job, SIGNAL( result(KJob*) ),
                     this, SIGNAL( jobFinished(KJob*) ));
@@ -294,10 +297,10 @@ KDevelop::ContextMenuExtension GitPlugin::contextMenuExtension(KDevelop::Context
         }
     }
 
-    void GitPlugin::ctxAdd()
+    void HgPlugin::ctxAdd()
     {
         KDevelop::VcsJob* j = add(d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
-        GitJob* job = dynamic_cast<GitJob*>(j);
+        HgJob* job = dynamic_cast<HgJob*>(j);
         if (job) {
             connect(job, SIGNAL( result(KJob*) ),
                     this, SIGNAL( jobFinished(KJob*) ));
@@ -305,11 +308,11 @@ KDevelop::ContextMenuExtension GitPlugin::contextMenuExtension(KDevelop::Context
         }
     }
 
-void GitPlugin::ctxRemove()
+void HgPlugin::ctxRemove()
 {
 
      KDevelop::VcsJob* j = remove(d->m_ctxUrlList);
-      GitJob* job = dynamic_cast<GitJob*>(j);
+      HgJob* job = dynamic_cast<HgJob*>(j);
         if (job) {
           connect(job, SIGNAL( result(KJob*) ),
                             this, SIGNAL( jobFinished(KJob*) ));
@@ -321,14 +324,14 @@ void GitPlugin::ctxRemove()
     }
 
 
-//     void GitPlugin::ctxUpdate()
+//     void HgPlugin::ctxUpdate()
 //     {
 //         UpdateOptionsDialog dlg;
 //         if (dlg.exec() == QDialog::Accepted) {
 //             KDevelop::VcsJob* j = update(d->m_ctxUrlList,
 //                                          dlg.revision(),
 //                                                  KDevelop::IBasicVersionControl::Recursive);
-//             GitJob* job = dynamic_cast<GitJob*>(j);
+//             HgJob* job = dynamic_cast<HgJob*>(j);
 //             if (job) {
 //                 connect(job, SIGNAL( result(KJob*) ),
 //                         this, SIGNAL( jobFinished(KJob*) ));
@@ -337,11 +340,11 @@ void GitPlugin::ctxRemove()
 //         }
 //     }
 // 
-//     void GitPlugin::ctxLog()
+//     void HgPlugin::ctxLog()
 //     {
 //         KDevelop::VcsRevision rev;
 //         KDevelop::VcsJob* j = log( d->m_ctxUrlList.first(), rev, 0 );
-//         GitJob* job = dynamic_cast<GitJob*>(j);
+//         HgJob* job = dynamic_cast<HgJob*>(j);
 //         if (job) {
 //             job->start();
 //             LogView* view = new LogView(this, job);
@@ -349,13 +352,13 @@ void GitPlugin::ctxRemove()
 //         }
 //     }
 // 
-//     void GitPlugin::ctxAnnotate()
+//     void HgPlugin::ctxAnnotate()
 //     {
 //     /// @todo let user pick annotate revision
 //         KDevelop::VcsRevision rev;
 // 
 //         KDevelop::VcsJob* j = annotate(d->m_ctxUrlList.first(), rev);
-//         GitJob* job = dynamic_cast<GitJob*>(j);
+//         HgJob* job = dynamic_cast<HgJob*>(j);
 //         if (job) {
 //             AnnotateView* view = new AnnotateView(this, job);
 //             emit addNewTabToMainView( view, i18n("Annotate") );
@@ -363,11 +366,11 @@ void GitPlugin::ctxRemove()
 //         }
 //     }
 // 
-//     void GitPlugin::ctxRevert()
+//     void HgPlugin::ctxRevert()
 //     {
 //         KDevelop::VcsJob* j = revert(d->m_ctxUrlList,
 //                                      KDevelop::IBasicVersionControl::Recursive);
-//         GitJob* job = dynamic_cast<GitJob*>(j);
+//         HgJob* job = dynamic_cast<HgJob*>(j);
 //         if (job) {
 //             connect(job, SIGNAL( result(KJob*) ),
 //                     this, SIGNAL( jobFinished(KJob*) ));
@@ -375,28 +378,28 @@ void GitPlugin::ctxRemove()
 //         }
 //     }
 // 
-//     void GitPlugin::ctxDiff()
+//     void HgPlugin::ctxDiff()
 //     {
 //         KUrl url = d->m_ctxUrlList.first();
 //         DiffOptionsDialog dlg(0, url);
 // 
 //         if (dlg.exec() == QDialog::Accepted) {
 //             KDevelop::VcsJob* j = diff(url, QString(""), dlg.revA(), dlg.revB(), KDevelop::VcsDiff::DiffUnified);
-//             GitJob* job = dynamic_cast<GitJob*>(j);
+//             HgJob* job = dynamic_cast<HgJob*>(j);
 //             if (job) {
 //                 job->start();
-//                 GitGenericOutputView* view = new GitGenericOutputView(this, job);
+//                 HgGenericOutputView* view = new HgGenericOutputView(this, job);
 //                 emit addNewTabToMainView( view, i18n("Diff") );
 //             }
 //         }
 //     }
 /*
-    void GitPlugin::ctxEditors()
+    void HgPlugin::ctxEditors()
     {
     ///@todo find a common base directory for the files
         QFileInfo info( d->m_ctxUrlList[0].toLocalFile() );
 
-        GitJob* job = d->m_proxy->editors( info.absolutePath(),
+        HgJob* job = d->m_proxy->editors( info.absolutePath(),
                                            d->m_ctxUrlList);
         if (job) {
             job->start();
@@ -410,82 +413,82 @@ void GitPlugin::ctxRemove()
 
 // Begin:  KDevelop::IBasicVersionControl
 
-QString GitPlugin::name() const
+QString HgPlugin::name() const
 {
-        return i18n("Git");
+        return i18n("Hg");
 }
 
-KDevelop::VcsImportMetadataWidget* GitPlugin::createImportMetadataWidget( QWidget* parent )
+KDevelop::VcsImportMetadataWidget* HgPlugin::createImportMetadataWidget( QWidget* parent )
 {
     return new ImportMetadataWidget(parent);
 }
 
-bool GitPlugin::isVersionControlled( const KUrl& localLocation )
+bool HgPlugin::isVersionControlled( const KUrl& localLocation )
 {
     //TODO: some files from repository location can be not version controlled
     return d->m_proxy->isValidDirectory(localLocation);
 }
 
-KDevelop::VcsJob * GitPlugin::repositoryLocation(const KUrl & localLocation)
+KDevelop::VcsJob * HgPlugin::repositoryLocation(const KUrl & localLocation)
 {
     return NULL;
 }
 
 //Note: recursion is not used
-KDevelop::VcsJob * GitPlugin::add(const KUrl::List & localLocations,
+KDevelop::VcsJob * HgPlugin::add(const KUrl::List & localLocations,
                                   KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     QFileInfo info( localLocations[0].toLocalFile() );
 
-    GitJob* job = d->m_proxy->add(info.absolutePath(), localLocations);
+    HgJob* job = d->m_proxy->add(info.absolutePath(), localLocations);
     return job;
 }
 
-KDevelop::VcsJob * GitPlugin::remove(const KUrl::List & localLocations)
+KDevelop::VcsJob * HgPlugin::remove(const KUrl::List & localLocations)
 {
     QFileInfo info(localLocations[0].toLocalFile() );
 
-    GitJob* job = d->m_proxy->remove(info.absolutePath(), localLocations);
+    HgJob* job = d->m_proxy->remove(info.absolutePath(), localLocations);
     return job;
 }
 
-KDevelop::VcsJob * GitPlugin::status(const KUrl::List & localLocations, 
+KDevelop::VcsJob * HgPlugin::status(const KUrl::List & localLocations, 
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     QFileInfo info( localLocations[0].toLocalFile() );
-    GitJob* job = d->m_proxy->status( info.absolutePath(),
+    HgJob* job = d->m_proxy->status( info.absolutePath(),
                                       localLocations,
                                       (recursion == KDevelop::IBasicVersionControl::Recursive) ? true:false);
     return job;
 }
 
 ///Not used in DVCS;
-KDevelop::VcsJob* GitPlugin::copy(const KUrl& localLocationSrc,
+KDevelop::VcsJob* HgPlugin::copy(const KUrl& localLocationSrc,
                        const KUrl& localLocationDstn) 
 {
     return d->m_proxy->empty_cmd();
 }
 
 ///Not used in DVCS;
-KDevelop::VcsJob* GitPlugin::move(const KUrl& localLocationSrc,
+KDevelop::VcsJob* HgPlugin::move(const KUrl& localLocationSrc,
                        const KUrl& localLocationDst ) 
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob * GitPlugin::revert(const KUrl::List & localLocations, 
+KDevelop::VcsJob * HgPlugin::revert(const KUrl::List & localLocations, 
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob * GitPlugin::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev,
+KDevelop::VcsJob * HgPlugin::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob * GitPlugin::commit(const QString & message, const KUrl::List & localLocations,
+KDevelop::VcsJob * HgPlugin::commit(const QString & message, const KUrl::List & localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     QString msg = message;
@@ -499,11 +502,11 @@ KDevelop::VcsJob * GitPlugin::commit(const QString & message, const KUrl::List &
     }
     QFileInfo info( localLocations[0].toLocalFile() );
 
-    GitJob* job = d->m_proxy->commit(info.absolutePath(), msg, localLocations);
+    HgJob* job = d->m_proxy->commit(info.absolutePath(), msg, localLocations);
     return job;
 }
 
-KDevelop::VcsJob * GitPlugin::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc,
+KDevelop::VcsJob * HgPlugin::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc,
                                    const KDevelop::VcsLocation & localOrRepoLocationDst,
                                    const KDevelop::VcsRevision & srcRevision,
                                    const KDevelop::VcsRevision & dstRevision,
@@ -517,27 +520,27 @@ KDevelop::VcsJob * GitPlugin::diff(const KDevelop::VcsLocation & localOrRepoLoca
 
 
 
-KDevelop::VcsJob* GitPlugin::log(const KUrl& localLocation,
+KDevelop::VcsJob* HgPlugin::log(const KUrl& localLocation,
                       const KDevelop::VcsRevision& rev,
                       unsigned long limit )
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::log(const KUrl& localLocation,
+KDevelop::VcsJob* HgPlugin::log(const KUrl& localLocation,
                       const KDevelop::VcsRevision& rev,
                       const KDevelop::VcsRevision& limit )
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::annotate(const KUrl& localLocation,
+KDevelop::VcsJob* HgPlugin::annotate(const KUrl& localLocation,
                            const KDevelop::VcsRevision& rev )
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::merge(const KDevelop::VcsLocation& localOrRepoLocationSrc,
+KDevelop::VcsJob* HgPlugin::merge(const KDevelop::VcsLocation& localOrRepoLocationSrc,
                         const KDevelop::VcsLocation& localOrRepoLocationDst,
                         const KDevelop::VcsRevision& srcRevision,
                         const KDevelop::VcsRevision& dstRevision,
@@ -546,7 +549,7 @@ KDevelop::VcsJob* GitPlugin::merge(const KDevelop::VcsLocation& localOrRepoLocat
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::resolve(const KUrl::List& localLocations,
+KDevelop::VcsJob* HgPlugin::resolve(const KUrl::List& localLocations,
                           KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     return d->m_proxy->empty_cmd();
@@ -556,25 +559,25 @@ KDevelop::VcsJob* GitPlugin::resolve(const KUrl::List& localLocations,
 
 
 // Begin:  KDevelop::IDistributedVersionControl
-KDevelop::VcsJob* GitPlugin::init(const KUrl& localRepositoryRoot)
+KDevelop::VcsJob* HgPlugin::init(const KUrl& localRepositoryRoot)
 {
-    GitJob* job = d->m_proxy->init(localRepositoryRoot);
+    HgJob* job = d->m_proxy->init(localRepositoryRoot);
     return job;
 }
 
-KDevelop::VcsJob* GitPlugin::clone(const QString& repositoryLocationSrc,
+KDevelop::VcsJob* HgPlugin::clone(const QString& repositoryLocationSrc,
                         const KUrl& localRepositoryRoot )
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation,
+KDevelop::VcsJob* HgPlugin::push(const KUrl& localRepositoryLocation,
                        const QString& repositoryLocation )
 {
     return d->m_proxy->empty_cmd();
 }
 
-KDevelop::VcsJob* GitPlugin::pull(const QString& repositoryLocation,
+KDevelop::VcsJob* HgPlugin::pull(const QString& repositoryLocation,
                        const KUrl& localRepositoryLocation )
 {
     return d->m_proxy->empty_cmd();
@@ -583,4 +586,4 @@ KDevelop::VcsJob* GitPlugin::pull(const QString& repositoryLocation,
 // End:  KDevelop::IDistributedVersionControl
 
 
-// #include "gitplugin.moc"
+// #include "hgplugin.moc"

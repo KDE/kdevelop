@@ -6,33 +6,33 @@
 
 if (UNIX)
 
-# Running the test only makes sense if the git command line client
+# Running the test only makes sense if the hg command line client
 # is present. So check for it before adding the test...
-FIND_PROGRAM(GIT NAMES git
+FIND_PROGRAM(HG NAMES hg
 	PATHS
 	/bin
 	/usr/bin
 	/usr/local/bin
 )
 
-if (GIT)
+if (HG)
 
 	include_directories( ${KDE4_INCLUDES}
 		${CMAKE_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/util
         ${CMAKE_SOURCE_DIR}/interfaces
 		${CMAKE_SOURCE_DIR}/vcs
-		${CMAKE_SOURCE_DIR}/plugins/git
+		${CMAKE_SOURCE_DIR}/plugins/mercurial
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-	set(gitInitTest_SRCS initTest.cpp ../gitjob.cpp ../gitproxy.cpp)
-    kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})
-	target_link_libraries(kdevgit-test
+	set(hgInitTest_SRCS initTest.cpp ../hgjob.cpp ../hgproxy.cpp)
+    kde4_add_unit_test(kdevhg-test ${hgInitTest_SRCS})
+	target_link_libraries(kdevhg-test
 		${QT_QTTEST_LIBRARY}
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
 	)
-endif (GIT)
+endif (HG)
 
 endif (UNIX)

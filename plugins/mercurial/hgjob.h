@@ -6,6 +6,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -24,8 +27,8 @@
  ***************************************************************************/
 
 
-#ifndef GITJOB_H
-#define GITJOB_H
+#ifndef HGJOB_H
+#define HGJOB_H
 
 
 #include <QStringList>
@@ -34,18 +37,19 @@
 #include "vcsjob.h"
 
 /**
- * This class is capable of running our git commands
+ * This class is capable of running our hg commands
  * Connect to Kjob::result(KJob*) to be notified when the job finished.
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
+ * @author Tom Burdick <thomas.burdick@gmail.com>
  */
-class GitJob : public KDevelop::VcsJob
+class HgJob : public KDevelop::VcsJob
 {
     Q_OBJECT
     public:
-        GitJob(KDevelop::IPlugin* parent);
-        virtual ~GitJob();
+        HgJob(KDevelop::IPlugin* parent);
+        virtual ~HgJob();
 
         void clear();
         void setServer(const QString& server);
@@ -53,9 +57,9 @@ class GitJob : public KDevelop::VcsJob
 
         QString getDirectory();
 
-        GitJob& operator<<(const QString& arg);
-        GitJob& operator<<(const char* arg);
-        GitJob& operator<<(const QStringList& args);
+        HgJob& operator<<(const QString& arg);
+        HgJob& operator<<(const char* arg);
+        HgJob& operator<<(const QStringList& args);
 
     /**
          * Call this mehod to start this job.
@@ -66,7 +70,7 @@ class GitJob : public KDevelop::VcsJob
 
     /**
          * In some cases it's needed to specify the communisation mode between the
-         * process and the job object. This is for instance done for the "git status"
+         * process and the job object. This is for instance done for the "hg status"
          * command. If stdout and stderr are processed as separate streams their signals
          * do not always get emmited in correct order by KProcess. Which will lead to a
          * screwed up output.
@@ -77,7 +81,7 @@ class GitJob : public KDevelop::VcsJob
     /**
          * @return The command that is executed when calling start()
      */
-        QString gitCommand() const;
+        QString hgCommand() const;
 
     /**
          * @return The whole output of the job

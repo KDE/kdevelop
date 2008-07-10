@@ -1,8 +1,11 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
  *                                                                         *
- *   Adapted for Git                                                       *
+ *   Adapted for Hg                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *                                                                         *
+ *   Adapted for Hg                                                        *
+ *   Copyright 2008 Tom Burdick <thomas.burdick@gmail.com>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -21,42 +24,38 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitgenericoutputview.h"
+#ifndef HGGENERICOUTPUTVIEW_H
+#define HGGENERICOUTPUTVIEW_H
 
-#include "gitjob.h"
+#include <QWidget>
+#include <KJob>
 
-GitGenericOutputView::GitGenericOutputView(GitPlugin *plugin, GitJob* job, QWidget* parent)
-    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
-{
-    Ui::CvsGenericOutputViewBase::setupUi(this);
+#include "ui_cvsgenericoutputview.h"
 
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( slotJobFinished(KJob*) ));
-    }
-}
+class HgPlugin;
+class HgJob;
 
-GitGenericOutputView::~GitGenericOutputView()
-{
-}
+/**
+ * Shows plain text.
+ *
+ * Text can either be added directly by calling appendText().
+ *
+ * Or by connecting a job's result() signal to slotJobFinished().
+ *
+ * @author Robert Gruber <rgruber@users.sourceforge.net>
+ */
+class HgGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
+    Q_OBJECT
+public:
+    explicit HgGenericOutputView(HgPlugin *plugin, HgJob* job=0, QWidget* parent=0);
+    virtual ~HgGenericOutputView();
 
-void GitGenericOutputView::appendText(const QString& text)
-{
-    textArea->append(text);
-}
+public slots:
+    void appendText(const QString& text);
+    void slotJobFinished(KJob* job);
 
-void GitGenericOutputView::slotJobFinished(KJob * job)
-{
-    GitJob * gitjob = dynamic_cast<GitJob*>(job);
-    if (gitjob) {
-        appendText( gitjob->gitCommand() );
-        appendText( gitjob->output() );
-        if (job->error() == 0) {
-            appendText( i18n("Job exited normally") );
-        } else {
-            appendText( job->errorText() );
-        }
-    }
-}
+private:
+    HgPlugin* m_plugin;
+};
 
-// #include "cvsgenericoutputview.moc"
+#endif
