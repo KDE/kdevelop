@@ -23,6 +23,8 @@
 #include "lexer.h"
 #include "commentparser.h"
 
+#include <QtCore/QQueue>
+#include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
 
@@ -132,6 +134,8 @@ public:
   bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node);
   bool parseInitializer(InitializerAST *&node);
   bool parseInitializerClause(InitializerClauseAST *&node);
+  bool parseInitializerList(const ListNode<InitializerClauseAST*> *&node);
+  bool parseJumpStatement(StatementAST *&node);
   bool parseLabeledStatement(StatementAST *&node);
   bool parseLinkageBody(LinkageBodyAST *&node);
   bool parseLinkageSpecification(DeclarationAST *&node);
@@ -207,8 +211,6 @@ public:
   // private:
   TokenStream* token_stream;
 
-  bool block_errors(bool block);
-
 // private:
   Control *control;
   Lexer lexer;
@@ -223,15 +225,34 @@ private:
   void processComment( int offset = 0, int line = -1 );
   void clearComment( );
 
+  bool holdErrors(bool hold);
+  void reportPendingErrors();
+
   Comment m_currentComment;
   CommentStore m_commentStore;
 
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;
-  bool _M_block_errors;
+  bool _M_hold_errors;
   size_t _M_last_valid_token; //Last encountered token that was not a comment
   size_t _M_last_parsed_comment;
+
+  // keeps track of tokens where a syntax error has been found
+  // so that the same error is not reported twice for a token
+  QSet<std::size_t> m_syntaxErrorTokens;
+
+  // when _M_hold_errors is true, reported errors are held in m_pendingErrors
+  // rather than being reported to the Control immediately.
+  //
+  // this is used, for example, when parsing ambiguous statements.
+  struct PendingError
+  {
+   QString message;
+   std::size_t cursor;
+  };
+  QQueue<PendingError> m_pendingErrors;
+
 private:
   Parser(const Parser& source);
   void operator = (const Parser& source);

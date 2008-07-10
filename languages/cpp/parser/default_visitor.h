@@ -59,6 +59,7 @@ protected:
   virtual void visitInitDeclarator(InitDeclaratorAST *);
   virtual void visitInitializer(InitializerAST *);
   virtual void visitInitializerClause(InitializerClauseAST *);
+  virtual void visitJumpStatement(JumpStatementAST *);
   virtual void visitLabeledStatement(LabeledStatementAST *);
   virtual void visitLinkageBody(LinkageBodyAST *);
   virtual void visitLinkageSpecification(LinkageSpecificationAST *);

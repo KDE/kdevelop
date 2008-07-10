@@ -93,7 +93,9 @@ Visitor::visitor_fun_ptr Visitor::_S_table[AST::NODE_KIND_COUNT] = {
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitUsing),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitUsingDirective),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitWhileStatement),
-  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitWinDeclSpec)
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitWinDeclSpec),
+  0,
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitJumpStatement)
 };
 
 Visitor::Visitor()

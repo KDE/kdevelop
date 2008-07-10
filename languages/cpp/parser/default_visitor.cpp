@@ -202,6 +202,12 @@ void DefaultVisitor::visitInitializer(InitializerAST *node)
 void DefaultVisitor::visitInitializerClause(InitializerClauseAST *node)
 {
   visit(node->expression);
+  visitNodes(this, node->initializer_list);
+}
+
+void DefaultVisitor::visitJumpStatement(JumpStatementAST *)
+{
+  // nothing to do
 }
 
 void DefaultVisitor::visitLabeledStatement(LabeledStatementAST *node)

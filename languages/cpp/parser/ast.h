@@ -190,6 +190,7 @@ struct AST
       Kind_WhileStatement,                      // 73
       Kind_WinDeclSpec,                         // 74
       Kind_Comment,                             // 75
+      Kind_JumpStatement,                       // 76
       NODE_KIND_COUNT
     };
 
@@ -496,7 +497,12 @@ struct InitializerClauseAST: public AST
 {
   DECLARE_AST_NODE(InitializerClause)
 
+  // either 'expression' or 'initializer_list' or neither are used.
+  // neither are used when the clause represents the empty initializer "{}"
+
+  // assignment expression
   ExpressionAST *expression;
+  const ListNode<InitializerClauseAST*> *initializer_list;
 };
 
 struct LabeledStatementAST: public StatementAST
@@ -670,6 +676,18 @@ struct PtrOperatorAST: public AST
 struct PtrToMemberAST: public AST
 {
   DECLARE_AST_NODE(PtrToMember)
+};
+
+struct JumpStatementAST : public StatementAST
+{
+  DECLARE_AST_NODE(JumpStatement)
+
+  // index of operator token which describes the jump, one of
+  // 'break', 'continue' or 'goto.  Return statements are handled by
+  // ReturnStatementAST
+  std::size_t op;
+  // identifier for 'goto' statements
+  std::size_t identifier;
 };
 
 struct ReturnStatementAST: public StatementAST

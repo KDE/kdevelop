@@ -85,7 +85,7 @@ Parser::Parser(Control *c)
   : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0)
 {
   _M_max_problem_count = 5;
-  _M_block_errors = false;
+  _M_hold_errors = false;
 }
 
 Parser::~Parser()
@@ -181,7 +181,7 @@ void Parser::clearComment( ) {
 
 TranslationUnitAST *Parser::parse(ParseSession* _session)
 {
-  _M_block_errors = false;
+  _M_hold_errors = false;
   session = _session;
 
   if (!session->token_stream)
@@ -197,7 +197,7 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
 
 StatementAST *Parser::parseStatement(ParseSession* _session)
 {
-  _M_block_errors = false;
+  _M_hold_errors = false;
   session = _session;
 
   if (!session->token_stream)
@@ -213,7 +213,7 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
 
 AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
 {
-  _M_block_errors = false;
+  _M_hold_errors = false;
   session = _session;
 
   if (!session->token_stream)
@@ -276,31 +276,62 @@ void Parser::tokenRequiredError(int token)
 {
   QString err;
 
-  err += "expected token ";
-  err += "``";
+  err += "Expected token ";
+  err += '\'';
   err += token_name(token);
-  err += "'' found ``";
+  err += "\' after \'";
+  err += token_name(session->token_stream->lookAhead(-1));
+  err += "\' found \'";
   err += token_name(session->token_stream->lookAhead());
-  err += "''";
+  err += '\'';
 
   reportError(err);
 }
 
 void Parser::syntaxError()
 {
+  std::size_t cursor = session->token_stream->cursor();
+  std::size_t kind = session->token_stream->lookAhead();
+
+  if (m_syntaxErrorTokens.contains(cursor))
+      return; // syntax error at this point has already been reported
+
+  m_syntaxErrorTokens.insert(cursor);
+
   QString err;
 
-  err += "unexpected token ";
-  err += "``";
-  err += token_name(session->token_stream->lookAhead());
-  err += "''";
+  if (kind == Token_EOF)
+    err += "Unexpected end of file";
+  else
+  {
+    err += "Unexpected token ";
+    err += '\'';
+    err += token_name(kind);
+    err += '\'';
+  }
 
   reportError(err);
 }
 
+void Parser::reportPendingErrors()
+{
+  bool hold = holdErrors(false);
+
+  std::size_t start = session->token_stream->cursor();
+ while (m_pendingErrors.count() > 0)
+ {
+   PendingError error = m_pendingErrors.dequeue();
+    session->token_stream->rewind(error.cursor);
+    reportError(error.message);
+ }
+  rewind(start);
+
+  holdErrors(hold);
+}
+
 void Parser::reportError(const QString& msg)
 {
-  if (!_M_block_errors && _M_problem_count < _M_max_problem_count)
+  if (!_M_hold_errors && _M_problem_count < _M_max_problem_count)
     {
       ++_M_problem_count;
 
@@ -316,6 +347,13 @@ void Parser::reportError(const QString& msg)
 
       control->reportProblem(p);
     }
+  else if (_M_hold_errors)
+  {
+    PendingError pending;
+    pending.message = msg;
+    pending.cursor = session->token_stream->cursor();
+    m_pendingErrors.enqueue(pending);
+  }
 }
 
 bool Parser::skipUntil(int token)
@@ -764,7 +802,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
         }
       else
         {
-          reportError(("namespace expected"));
+          reportError(("Namespace expected"));
           return false;
         }
     }
@@ -994,7 +1032,7 @@ bool Parser::parseTemplateDeclaration(DeclarationAST *&node)
   DeclarationAST *declaration = 0;
   if (!parseDeclaration(declaration))
     {
-      reportError(("expected a declaration"));
+      reportError(("Expected a declaration"));
     }
 
   TemplateDeclarationAST *ast = CreateNode<TemplateDeclarationAST>(session->mempool);
@@ -2461,6 +2499,27 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
   return true;
 }
 
+bool Parser::parseInitializerList(const ListNode<InitializerClauseAST*> *&node)
+{
+  const ListNode<InitializerClauseAST*> *list = 0;
+  do
+    {
+      if (list)
+        advance(); // skip ',' separator between clauses
+
+      InitializerClauseAST *init_clause = 0;
+      if (!parseInitializerClause(init_clause))
+        {
+          return false;
+        }
+      list = snoc(list,init_clause,session->mempool);
+    } while (session->token_stream->lookAhead() == ',');
+
+  node = list;
+
+  return true;
+}
+
 bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
@@ -2469,19 +2528,23 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 
   if (session->token_stream->lookAhead() == '{')
     {
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
-      if (skip('{','}'))
-        advance();
-      else
-        reportError(("} missing"));
+      advance();
+      const ListNode<InitializerClauseAST*> *initializer_list = 0;
+      if (session->token_stream->lookAhead() != '}' &&
+              !parseInitializerList(initializer_list))
+        {
+            return false;
+        }
+      ADVANCE('}',"}");
+
+      ast->initializer_list = initializer_list;
     }
   else
     {
       if (!parseAssignmentExpression(ast->expression))
         {
-          //reportError(("Expression expected"));
+          reportError("Expression expected");
+          return false;
         }
     }
 
@@ -2638,6 +2701,32 @@ bool Parser::parseExpressionStatement(StatementAST *&node)
   return true;
 }
 
+bool Parser::parseJumpStatement(StatementAST *&node)
+{
+  std::size_t op = session->token_stream->cursor();
+  std::size_t kind = session->token_stream->lookAhead();
+  std::size_t identifier = 0;
+
+  if (kind != Token_break && kind != Token_continue && kind != Token_goto)
+      return false;
+
+  advance();
+  if (kind == Token_goto)
+    {
+      ADVANCE(Token_identifier,"label");
+      identifier = op+1;
+    }
+  ADVANCE(';',";");
+
+  JumpStatementAST* ast = CreateNode<JumpStatementAST>(session->mempool);
+  ast->op = op;
+  ast->identifier = identifier;
+
+  UPDATE_POS(ast,ast->op,_M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
 bool Parser::parseStatement(StatementAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
@@ -2668,21 +2757,8 @@ bool Parser::parseStatement(StatementAST *&node)
 
     case Token_break:
     case Token_continue:
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
-      advance();
-      ADVANCE(';', ";");
-      return true;
-
     case Token_goto:
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
-      advance();
-      ADVANCE(Token_identifier, "identifier");
-      ADVANCE(';', ";");
-      return true;
+      return parseJumpStatement(node);
 
     case Token_return:
       {
@@ -2715,7 +2791,9 @@ bool Parser::parseStatement(StatementAST *&node)
 
 bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
 {
-  bool blocked = block_errors(true);
+  // hold any errors while the expression/declaration ambiguity is resolved
+  // for this statement
+  bool hold = holdErrors(true);
 
   std::size_t start = session->token_stream->cursor();
 
@@ -2724,12 +2802,26 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
   bool maybe_amb = parseDeclarationStatement(decl_ast);
   maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
 
+  // if parsing as a declaration succeeded, then any pending errors are genuine.
+  // Otherwise this is not a declaration so ignore the errors.
+  if (decl_ast)
+      reportPendingErrors();
+  else
+      m_pendingErrors.clear();
+
   std::size_t end = session->token_stream->cursor();
 
   rewind(start);
   StatementAST *expr_ast = 0;
   maybe_amb &= parseExpressionStatement(expr_ast);
   maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
+
+  // if parsing as an expression succeeded, then any pending errors are genuine.
+  // Otherwise this is not an expression so ignore the errors.
+  if (expr_ast)
+      reportPendingErrors();
+  else
+      m_pendingErrors.clear();
 
   if (maybe_amb)
     {
@@ -2751,7 +2843,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
         node = expr_ast;
     }
 
-  block_errors(blocked);
+  holdErrors(hold);
 
   if (!node)
     syntaxError();
@@ -2820,7 +2912,7 @@ bool Parser::parseWhileStatement(StatementAST *&node)
   ConditionAST *cond = 0;
   if (!parseCondition(cond))
     {
-      reportError(("condition expected"));
+      reportError("Condition expected");
       return false;
     }
   ADVANCE(')', ")");
@@ -2828,7 +2920,7 @@ bool Parser::parseWhileStatement(StatementAST *&node)
   StatementAST *body = 0;
   if (!parseStatement(body))
     {
-      reportError(("statement expected"));
+      reportError("Statement expected");
       return false;
     }
 
@@ -2851,7 +2943,7 @@ bool Parser::parseDoStatement(StatementAST *&node)
   StatementAST *body = 0;
   if (!parseStatement(body))
     {
-      reportError(("statement expected"));
+      reportError(("Statement expected"));
       //return false;
     }
 
@@ -2861,7 +2953,7 @@ bool Parser::parseDoStatement(StatementAST *&node)
   ExpressionAST *expr = 0;
   if (!parseCommaExpression(expr))
     {
-      reportError(("expression expected"));
+      reportError(("Expression expected"));
       //return false;
     }
 
@@ -2888,7 +2980,7 @@ bool Parser::parseForStatement(StatementAST *&node)
   StatementAST *init = 0;
   if (!parseForInitStatement(init))
     {
-      reportError(("for initialization expected"));
+      reportError(("'for' initialization expected"));
       return false;
     }
 
@@ -2975,7 +3067,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
   ConditionAST *cond = 0;
   if (!parseCondition(cond))
     {
-      reportError(("condition expected"));
+      reportError(("Condition expected"));
       return false;
     }
   ADVANCE(')', ")");
@@ -2983,7 +3075,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
   StatementAST *stmt = 0;
   if (!parseStatement(stmt))
     {
-      reportError(("statement expected"));
+      reportError(("Statement expected"));
       return false;
     }
 
@@ -2996,7 +3088,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
 
       if (!parseStatement(ast->else_statement))
         {
-          reportError(("statement expected"));
+          reportError(("Statement expected"));
           return false;
         }
     }
@@ -3017,7 +3109,7 @@ bool Parser::parseSwitchStatement(StatementAST *&node)
   ConditionAST *cond = 0;
   if (!parseCondition(cond))
     {
-      reportError(("condition expected"));
+      reportError(("Condition expected"));
       return false;
     }
   ADVANCE(')', ")");
@@ -3067,7 +3159,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
         ExpressionAST *expr = 0;
         if (!parseConstantExpression(expr))
           {
-            reportError(("expression expected"));
+            reportError(("Expression expected"));
           }
         else if (session->token_stream->lookAhead() == Token_ellipsis)
           {
@@ -3075,7 +3167,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
 
             if (!parseConstantExpression(expr))
               {
-                reportError(("expression expected"));
+                reportError(("Expression expected"));
               }
           }
         ADVANCE(':', ":");
@@ -3456,6 +3548,8 @@ bool Parser::parseTypeSpecifierOrClassSpec(TypeSpecifierAST *&node)
 
 bool Parser::parseTryBlockStatement(StatementAST *&node)
 {
+  std::size_t start = session->token_stream->cursor();
+
   CHECK(Token_try);
 
   TryBlockStatementAST *ast = CreateNode<TryBlockStatementAST>(session->mempool);
@@ -3470,7 +3564,7 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
 
   if (session->token_stream->lookAhead() != Token_catch)
     {
-      reportError(("catch expected"));
+      reportError(("'catch' expected after try block"));
       return false;
     }
 
@@ -3505,6 +3599,7 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
     }
 
   node = ast;
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   return true;
 }
 
@@ -4505,10 +4600,10 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
   return true;
 }
 
-bool Parser::block_errors(bool block)
+bool Parser::holdErrors(bool hold)
 {
-  bool current = _M_block_errors;
-  _M_block_errors = block;
+  bool current = _M_hold_errors;
+  _M_hold_errors = hold;
   return current;
 }
 
