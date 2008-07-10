@@ -19,32 +19,28 @@
 #ifndef TYPEREGISTER_H
 #define TYPEREGISTER_H
 
-#include "typesystem.h"
-#include "typesystemdata.h"
+#include "duchainbase.h"
 
 namespace KDevelop {
-
+class DUChainBase;
+class DUChainBaseData;
 /**
  * \short A factory class for type data.
  *
  * This class provides an interface for creating private data
  * structures for classes.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
   public:
   /**
-   * Create a new type for the given \a data.
-   *
-   * \param data Data to assign to the new type.
+   * Create a new duchain item for the given \a data.
    */
-  virtual AbstractType* create(AbstractTypeData* data) const = 0;
+  virtual DUChainBase* create(DUChainBaseData* data) const = 0;
 
   /**
-   * Release the \a data from a type which is being destroyed.
-   *
-   * \param data data to destroy.
+   * Release the \a data from an item which is being destroyed.
    */
-  virtual void callDestructor(AbstractTypeData* data) const = 0;
+  virtual void callDestructor(DUChainBaseData* data) const = 0;
 
 
   /**
@@ -56,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
    *
    * \todo David, please check this
    */
-  virtual void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const = 0;
+//   virtual void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const = 0;
 
   /**
    * Return the memory size of the given private \a data, including dynamic data.
@@ -64,29 +60,29 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
    * \param data data structure
    * \returns the size in memory of the data.
    */
-  virtual uint dynamicSize(const AbstractTypeData& data) const = 0;
+  virtual uint dynamicSize(const DUChainBaseData& data) const = 0;
 
   /// Destructor.
-  virtual ~AbstractTypeFactory() {
+  virtual ~DUChainBaseFactory() {
   }
 };
 
 /**
- * Template class to implement factories for each AbstractType subclass you want
+ * Template class to implement factories for each DUChainBase subclass you want
  * to instantiate.
  */
 template<class T, class Data>
-class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
+class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public DUChainBaseFactory {
   public:
-  AbstractType* create(AbstractTypeData* data) const {
+  DUChainBase* create(DUChainBaseData* data) const {
     return new T(*static_cast<typename T::Data*>(data));
   }
-  void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
-    Q_ASSERT(from.typeClassId == T::Identity);
+/*  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
+    Q_ASSERT(from.classId == T::Identity);
 
     if((bool)from.m_dynamic == (bool)!constant) {
       //We have a problem, "from" and "to" should both be either dynamic or constant. We must copy once more.
-      Data* temp = &AbstractType::copyData<Data>(static_cast<const Data&>(from));
+      Data* temp = &DUChainBase::copyData<Data>(static_cast<const Data&>(from));
 
       new (&to) Data(*temp); //Call the copy constructor to initialize the target
 
@@ -95,14 +91,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
     }else{
       new (&to) Data(static_cast<const Data&>(from)); //Call the copy constructor to initialize the target
     }
-  }
-  void callDestructor(AbstractTypeData* data) const {
-    Q_ASSERT(data->typeClassId == T::Identity);
+  }*/
+  void callDestructor(DUChainBaseData* data) const {
+    Q_ASSERT(data->classId == T::Identity);
     static_cast<Data*>(data)->~Data();
   }
 
-  uint dynamicSize(const AbstractTypeData& data) const {
-    Q_ASSERT(data.typeClassId == T::Identity);
+  uint dynamicSize(const DUChainBaseData& data) const {
+    Q_ASSERT(data.classId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
 };
@@ -110,13 +106,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
 /**
  * \short A class which registers data types and creates factories for them.
  *
- * TypeSystem is a global static class which allows you to register new
- * AbstractType subclasses for creation.
+ * DUChainItemSystem is a global static class which allows you to register new
+ * DUChainBase subclasses for creation.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
   public:
     /**
-     * Register a new AbstractType subclass.
+     * Register a new DUChainBase subclass.
      */
     template<class T, class Data>
     void registerTypeClass() {
@@ -132,7 +128,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     }
 
     /**
-     * Unregister an AbstractType subclass.
+     * Unregister an DUChainBase subclass.
      */
     template<class T, class Data>
     void unregisterTypeClass() {
@@ -144,51 +140,51 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     }
 
     /**
-     * Create an AbstractType for the given data. The returned type must be put into a AbstractType::Ptr immediately.
+     * Create an DUChainBase for the given data. The returned type must be put into a DUChainBase::Ptr immediately.
      * Can return null if no type-factory is available for the given data (for example when a language-part is not loaded)
      */
-    AbstractType* create(AbstractTypeData* data) const;
+    DUChainBase* create(DUChainBaseData* data) const;
 
     /**
      * This just calls the correct constructor on the target. The target must be big enough to hold all the data.
      */
-    void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const;
+//     void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const;
 
     ///Calls the dynamicSize(..) member on the given data, in the most special class. Since we cannot use virtual functions, this is the only way.
-    uint dynamicSize(const AbstractTypeData& data) const;
+    uint dynamicSize(const DUChainBaseData& data) const;
 
     ///Returns the size of the derived class, not including dynamic data.
     ///Returns zero if the class is not known.
-    size_t dataClassSize(const AbstractTypeData& data) const;
+    size_t dataClassSize(const DUChainBaseData& data) const;
 
     ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
-    void callDestructor(AbstractTypeData* data) const;
+    void callDestructor(DUChainBaseData* data) const;
 
-    /// Access the static TypeSystem instance.
-    static TypeSystem& self();
+    /// Access the static DUChainItemSystem instance.
+    static DUChainItemSystem& self();
 
   private:
-    QVector<AbstractTypeFactory*> m_factories;
+    QVector<DUChainBaseFactory*> m_factories;
     QVector<size_t> m_dataClassSizes;
 };
 
-/// Helper class to register an AbstractType subclass.
+/// Helper class to register an DUChainBase subclass.
 ///
 /// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
 template<class T, class Data>
-struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
-  TypeSystemRegistrator() {
-    TypeSystem::self().registerTypeClass<T, Data>();
+struct KDEVPLATFORMLANGUAGE_EXPORT DUChainItemRegistrator {
+  DUChainItemRegistrator() {
+    DUChainItemSystem::self().registerTypeClass<T, Data>();
   }
-  ~TypeSystemRegistrator() {
-    TypeSystem::self().unregisterTypeClass<T, Data>();
+  ~DUChainItemRegistrator() {
+    DUChainItemSystem::self().unregisterTypeClass<T, Data>();
   }
 };
 
-///You must add this into your source-files for every AbstractType based class
-///For this to work, the class must have an "Identity" enumerator, that is unique among all types.
+///You must add this into your source-files for every DUChainBase based class
+///For this to work, the class must have an "Identity" enumerator.
 ///It should be a unique value, but as small as possible, because a buffer at least as big as that number is created internally.
-#define REGISTER_TYPE(Class) TypeSystemRegistrator<Class, Class ## Data> register ## Class
+#define REGISTER_DUCHAIN_ITEM(Class) DUChainItemRegistrator<Class, Class ## Data> register ## Class
 
 }
 

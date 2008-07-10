@@ -25,7 +25,7 @@
 #include <QMultiHash>
 #include <QMap>
 
-#include "duchainbase_p.h"
+#include "duchainbase.h"
 #include "ducontext.h"
 #include "duchainpointer.h"
 #include "simplecursor.h"
@@ -43,7 +43,7 @@ namespace KTextEditor {
 
 namespace KDevelop{
 class DUContext;
-class DUContextPrivate : public DUChainBasePrivate
+class DUContextPrivate : public DUChainBaseData
 {
 public:
   DUContextPrivate( DUContext* );

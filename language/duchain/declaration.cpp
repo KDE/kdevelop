@@ -34,7 +34,6 @@
 #include "duchainlock.h"
 #include "identifiedtype.h"
 #include "ducontext_p.h"
-#include "use_p.h"
 #include "declarationid.h"
 #include "definitions.h"
 #include "uses.h"
@@ -55,7 +54,7 @@ DeclarationPrivate::DeclarationPrivate()
   m_ownIndex = 0;
 }
   
-DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChainBasePrivate(rhs)
+DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChainBaseData(rhs)
 {
   m_identifier = rhs.m_identifier;
   m_type = rhs.m_type;

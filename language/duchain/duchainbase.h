@@ -22,6 +22,7 @@
 #include "language/editor/documentrangeobject.h"
 #include "language/editor/hashedstring.h"
 #include "language/languageexport.h"
+#include "appendedlist.h"
 
 namespace KDevelop
 {
@@ -31,6 +32,36 @@ class DUChainBase;
 class DUChainPointerData;
 class IndexedString;
 
+#define DUCHAIN_DECLARE_DATA(Class) \
+    inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
+    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
+
+#define DUCHAIN_D(Class) const Class##Data * const d = d_func()
+#define DUCHAIN_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
+
+struct DUChainBaseData : public DocumentRangeObjectData {
+    DUChainBaseData() : classId(0) {
+    }
+    DUChainBaseData(const DUChainBaseData& rhs) : DocumentRangeObjectData(rhs), classId(rhs.classId) {
+    }
+    
+    uint classId;
+
+    /**
+    * Internal setup for the data structure.
+    *
+    * This must be called from actual class that belongs to this data(not parent classes), and the class must have the
+    * "Identity" enumerator with a unique identity. Do NOT call this in copy-constructors!
+    */
+    template<class T>
+    void setClassId() {
+      classId = T::Identity;
+    }
+      
+    uint classSize() const;
+
+    APPENDED_LISTS_STUB(DocumentRangeObjectData);
+};
 
 /**
  * Base class for definition-use chain objects.
@@ -38,6 +69,7 @@ class IndexedString;
  * This class provides a thread safe pointer type to reference duchain objects
  * while the DUChain mutex is not held (\see DUChainPointer)
  */
+
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
 {
 public:
@@ -64,6 +96,17 @@ public:
 
   IndexedString url() const;
   
+  typedef DUChainBaseData Data;
+  
+  enum {
+    Identity = 1
+  };
+  
+  void makeDynamic() {
+  }
+  
+  DUChainBase( DUChainBaseData& dd );
+  
 protected:
   /**
    * Creates a duchain object that uses the data of the given one, and will not delete it on destruction.
@@ -78,12 +121,10 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  DUChainBase( class DUChainBasePrivate& dd, const SimpleRange& range );
+  DUChainBase( DUChainBaseData& dd, const SimpleRange& range );
 
-  DUChainBase( class DUChainBasePrivate& dd );
-  
 private:
-  Q_DECLARE_PRIVATE(DUChainBase)
+  DUCHAIN_DECLARE_DATA(DUChainBase)
   mutable KSharedPtr<DUChainPointerData> m_ptr;
 };
 }

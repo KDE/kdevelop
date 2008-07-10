@@ -19,7 +19,7 @@
 #ifndef DECLARATION_P_H
 #define DECLARATION_P_H
 
-#include "duchainbase_p.h"
+#include "duchainbase.h"
 #include "contextowner_p.h"
 
 #include "declaration.h"
@@ -32,7 +32,7 @@
 namespace KDevelop
 {
 
-class DeclarationPrivate : public DUChainBasePrivate
+class DeclarationPrivate : public DUChainBaseData
 {
 public:
   DeclarationPrivate();

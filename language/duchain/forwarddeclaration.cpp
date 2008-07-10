@@ -27,7 +27,6 @@
 #include "ducontext.h"
 #include "use.h"
 #include "symboltable.h"
-#include "use_p.h"
 #include "declaration_p.h"
 #include "identifiedtype.h"
 

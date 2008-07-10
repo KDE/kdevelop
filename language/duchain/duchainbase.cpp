@@ -17,28 +17,34 @@
 */
 
 #include "duchainbase.h"
-#include "duchainbase_p.h"
 
 #include <QMutexLocker>
 
 #include "duchainpointer.h"
 #include "indexedstring.h"
 #include "topducontext.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
+REGISTER_DUCHAIN_ITEM(DUChainBase);
 
-DUChainBase::DUChainBase(const SimpleRange& range)
-  : KDevelop::DocumentRangeObject(*new DUChainBasePrivate, range), m_ptr( 0L )
-{
+uint DUChainBaseData::classSize() const {
+  return DUChainItemSystem::self().dataClassSize(*this);
 }
 
-DUChainBase::DUChainBase( DUChainBasePrivate & dd, const SimpleRange& range )
+DUChainBase::DUChainBase(const SimpleRange& range)
+  : KDevelop::DocumentRangeObject(*new DUChainBaseData, range), m_ptr( 0L )
+{
+  d_func_dynamic()->setClassId<DUChainBase>();
+}
+
+DUChainBase::DUChainBase( DUChainBaseData & dd, const SimpleRange& range )
   : KDevelop::DocumentRangeObject( dd, range ), m_ptr( 0 )
 {
 }
 
-DUChainBase::DUChainBase( DUChainBasePrivate & dd )
+DUChainBase::DUChainBase( DUChainBaseData & dd )
   : KDevelop::DocumentRangeObject( dd ), m_ptr( 0 )
 {
 }
