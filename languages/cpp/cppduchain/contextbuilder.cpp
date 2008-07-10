@@ -587,7 +587,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
     return ret;
 
   } else {
-    injectContext(rangeNode->ducontext);
+    openContext(rangeNode->ducontext);
     editor()->setCurrentRange(currentContext()->smartRange());
     return currentContext();
   }
