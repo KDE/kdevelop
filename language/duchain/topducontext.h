@@ -54,7 +54,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  explicit TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
   /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
    * (it must not have been created with this constructor).
    * 
@@ -78,6 +78,8 @@ public:
   TopDUContext* topContext() const;
 
   uint ownIndex() const;
+  
+  IndexedString url() const;
   
   /**
    * There may be multiple context's for one file, but each of those should have a different identity().

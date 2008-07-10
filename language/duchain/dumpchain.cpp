@@ -33,6 +33,7 @@
 #include <duchainpointer.h>
 #include <identifier.h>
 #include <use.h>
+#include "indexedstring.h"
 
 using namespace KDevelop;
 
@@ -59,8 +60,8 @@ void DumpChain::dump( DUContext * context, bool imported )
       kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (dec->definition())
         kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << dec->definition()->range().textRange();
-      QMap<HashedString, QList<SimpleRange> > uses = dec->uses();
-      for(QMap<HashedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+      QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
+      for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
         kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
         foreach (const SimpleRange& range, *it)
           kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();

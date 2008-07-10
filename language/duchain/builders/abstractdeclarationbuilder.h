@@ -144,17 +144,17 @@ protected:
 
     if (!declaration) {
       if (isForward) {
-        declaration = new ForwardDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
+        declaration = new ForwardDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       } else if (isFunction) {
         if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassFunctionDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
+          declaration = new ClassFunctionDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
         } else {
-          declaration = new FunctionDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
+          declaration = new FunctionDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
         }
       } else if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassMemberDeclaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
+          declaration = new ClassMemberDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       } else {
-        declaration = new Declaration(LanguageSpecificDeclarationBuilderBase::editor()->currentUrl(), newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
+        declaration = new Declaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
       }
 
       {

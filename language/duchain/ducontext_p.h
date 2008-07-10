@@ -26,7 +26,7 @@
 #include <QMap>
 
 #include "duchainbase_p.h"
-
+#include "ducontext.h"
 #include "duchainpointer.h"
 #include "simplecursor.h"
 #include "use.h"
@@ -76,11 +76,6 @@ public:
    * */
   mutable QVector<KTextEditor::SmartRange*> m_rangesForUses;
 
-  //Synchronizes the use-ranges from the smart-ranges
-  void synchronizeUsesFromSmart() const;
-  //Synchronizes the smart-ranges from the use-ranges
-  void synchronizeUsesToSmart() const;
-  
   DUContext* m_context;
   bool m_inSymbolTable : 1;
   bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
@@ -127,6 +122,7 @@ public:
    * */
   bool isThisImportedBy(const DUContext* context) const;
 };
+
 }
 
 

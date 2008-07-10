@@ -29,6 +29,7 @@ namespace KDevelop
 class TopDUContext;
 class DUChainBase;
 class DUChainPointerData;
+class IndexedString;
 
 
 /**
@@ -46,7 +47,7 @@ public:
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    */
-  DUChainBase(const HashedString& url, const SimpleRange& range);
+  DUChainBase(const SimpleRange& range);
   /// Destructor
   virtual ~DUChainBase();
 
@@ -61,24 +62,26 @@ public:
    * */
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
+  IndexedString url() const;
+  
 protected:
   /**
-   * Copy constructor
-   *
-   * \param dd private data to copy
-   * \param ownsSmartRange if true, the DocumentRangeObject will delete the smart range when this object is deleted.
+   * Creates a duchain object that uses the data of the given one, and will not delete it on destruction.
+   * The data will be shared, and this object must be deleted before the given one is.
    */
-  DUChainBase( class DUChainBasePrivate& dd, bool ownsSmartRange = false );
+  DUChainBase( DUChainBase& rhs );
 
   /**
     * Constructor for copy constructors in subclasses.
     *
-    * \param dd data to copy.
+    * \param dd data to use.
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  DUChainBase( class DUChainBasePrivate& dd, const HashedString& url, const SimpleRange& range );
+  DUChainBase( class DUChainBasePrivate& dd, const SimpleRange& range );
 
+  DUChainBase( class DUChainBasePrivate& dd );
+  
 private:
   Q_DECLARE_PRIVATE(DUChainBase)
   mutable KSharedPtr<DUChainPointerData> m_ptr;

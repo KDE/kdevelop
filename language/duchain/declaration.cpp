@@ -24,7 +24,6 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include <hashedstring.h>
 #include <limits>
 
 #include "topducontext.h"
@@ -39,6 +38,7 @@
 #include "declarationid.h"
 #include "definitions.h"
 #include "uses.h"
+#include "indexedstring.h"
 
 using namespace KTextEditor;
 
@@ -88,8 +88,8 @@ bool Declaration::inDUChain() const {
   return top && top->inDuChain();
 }
 
-Declaration::Declaration( const HashedString& url, const SimpleRange& range, DUContext* context )
-  : DUChainBase(*new DeclarationPrivate, url, range)
+Declaration::Declaration( const SimpleRange& range, DUContext* context )
+  : DUChainBase(*new DeclarationPrivate, range)
 {
   if(context)
     setContext(context);
@@ -110,8 +110,8 @@ Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd)
 {
 }
 
-Declaration::Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range )
-  : DUChainBase(dd, url, range)
+Declaration::Declaration( DeclarationPrivate & dd, const SimpleRange& range )
+  : DUChainBase(dd, range)
 {
 //  Q_D(Declaration);
 }
@@ -549,10 +549,10 @@ QList<KTextEditor::SmartRange*> Declaration::smartUses() const
   return tempUses.toList();
 }
 
-QMap<HashedString, QList<SimpleRange> > Declaration::uses() const
+QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
 {
   ENSURE_CAN_READ
-  QMap<HashedString, QMap<SimpleRange, bool> > tempUses;
+  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
 
   //First, search for uses within the own context
   {
@@ -569,9 +569,9 @@ QMap<HashedString, QList<SimpleRange> > Declaration::uses() const
       ranges[range] = true;
   }
 
-  QMap<HashedString, QList<SimpleRange> > ret;
+  QMap<IndexedString, QList<SimpleRange> > ret;
 
-  for(QMap<HashedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.begin(); it != tempUses.end(); ++it) {
+  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.begin(); it != tempUses.end(); ++it) {
     if(!(*it).isEmpty()) {
       QList<SimpleRange>& list(ret[it.key()]);
       for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2)

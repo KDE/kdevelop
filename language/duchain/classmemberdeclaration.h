@@ -33,7 +33,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
-  ClassMemberDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+  ClassMemberDeclaration(const SimpleRange& range, DUContext* context);
   ~ClassMemberDeclaration();
 
   AccessPolicy accessPolicy() const;
@@ -72,7 +72,7 @@ public:
   virtual Declaration* clone() const;
 
 protected:
-  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range);
+  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const SimpleRange& range);
   ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd);
   
 private:

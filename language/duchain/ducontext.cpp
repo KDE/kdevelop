@@ -36,7 +36,7 @@
 #include "aliasdeclaration.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
-#include <hashedstring.h>
+#include <indexedstring.h>
 #include <editor/editorintegrator.h>
 #include <limits>
 
@@ -107,41 +107,44 @@ bool DUContextPrivate::isThisImportedBy(const DUContext* context) const {
   return false;
 }
 
-void DUContextPrivate::synchronizeUsesFromSmart() const
+void DUContext::synchronizeUsesFromSmart() const
 {
-  if(m_rangesForUses.isEmpty() || !m_rangesChanged)
+  Q_D(const DUContext);
+  
+  if(d->m_rangesForUses.isEmpty() || !d->m_rangesChanged)
     return;
 
-  Q_ASSERT(m_rangesForUses.count() == m_uses.count());
+  Q_ASSERT(d->m_rangesForUses.count() == d->m_uses.count());
 
-  for(int a = 0; a < m_uses.count(); a++)
-    if(m_rangesForUses[a])
-      m_uses[a].m_range = SimpleRange(*m_rangesForUses[a]);
+  for(int a = 0; a < d->m_uses.count(); a++)
+    if(d->m_rangesForUses[a])
+      d->m_uses[a].m_range = SimpleRange(*d->m_rangesForUses[a]);
 
-  m_rangesChanged = false;
+  d->m_rangesChanged = false;
 }
 
-void DUContextPrivate::synchronizeUsesToSmart() const
+void DUContext::synchronizeUsesToSmart() const
 {
-  if(m_rangesForUses.isEmpty())
+  Q_D(const DUContext);
+  if(d->m_rangesForUses.isEmpty())
     return;
-  Q_ASSERT(m_rangesForUses.count() == m_uses.count());
+  Q_ASSERT(d->m_rangesForUses.count() == d->m_uses.count());
 
   // TODO: file close race? from here
-  KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( m_smartRange->document() );
+  KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( smartRange()->document() );
   Q_ASSERT(iface);
 
   // TODO: file close race to here
   QMutexLocker l(iface->smartMutex());
 
-  for(int a = 0; a < m_uses.count(); a++) {
+  for(int a = 0; a < d->m_uses.count(); a++) {
     if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
       l.unlock();
       l.relock();
     }
-    if(m_rangesForUses[a]) {
-      m_rangesForUses[a]->start() = m_uses[a].m_range.start.textCursor();
-      m_rangesForUses[a]->end() = m_uses[a].m_range.end.textCursor();
+    if(d->m_rangesForUses[a]) {
+      d->m_rangesForUses[a]->start() = d->m_uses[a].m_range.start.textCursor();
+      d->m_rangesForUses[a]->end() = d->m_uses[a].m_range.end.textCursor();
     }else{
       kDebug() << "bad smart-range";
     }
@@ -297,6 +300,7 @@ void DUContext::updateDeclarationIndices()
 }
 
 bool DUContextPrivate::removeChildContext( DUContext* context ) {
+//   ENSURE_CAN_WRITE
 
   if( removeOne(m_childContexts, context) )
     return true;
@@ -306,6 +310,7 @@ bool DUContextPrivate::removeChildContext( DUContext* context ) {
 
 void DUContextPrivate::addImportedChildContext( DUContext * context )
 {
+//   ENSURE_CAN_WRITE
   Q_ASSERT(!m_importedChildContexts.contains(context));
 
   m_importedChildContexts.append(context);
@@ -316,6 +321,7 @@ void DUContextPrivate::addImportedChildContext( DUContext * context )
 //Can also be called with a context that is not in the list
 void DUContextPrivate::removeImportedChildContext( DUContext * context )
 {
+//   ENSURE_CAN_WRITE
   removeOne(m_importedChildContexts, context);
   //if( != 0 )
     //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
@@ -326,8 +332,8 @@ int DUContext::depth() const
   { if (!parentContext()) return 0; return parentContext()->depth() + 1; }
 }
 
-DUContext::DUContext(const HashedString& url, const SimpleRange& range, DUContext* parent, bool anonymous)
-  : DUChainBase(*new DUContextPrivate(this), url, range)
+DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous)
+  : DUChainBase(*new DUContextPrivate(this), range)
 {
   Q_D(DUContext);
   d->m_contextType = Other;
@@ -346,8 +352,8 @@ DUContext::DUContext(const HashedString& url, const SimpleRange& range, DUContex
     setInSymbolTable(true);
 }
 
-DUContext::DUContext( DUContextPrivate& dd, const HashedString & url, const SimpleRange& range, DUContext * parent, bool anonymous )
-  : DUChainBase(dd, url, range)
+DUContext::DUContext( DUContextPrivate& dd, const SimpleRange& range, DUContext * parent, bool anonymous )
+  : DUChainBase(dd, range)
 {
   Q_D(DUContext);
   d->m_contextType = Other;
@@ -362,8 +368,8 @@ DUContext::DUContext( DUContextPrivate& dd, const HashedString & url, const Simp
   }
 }
 
-DUContext::DUContext(DUContextPrivate& dd)
-  : DUChainBase(dd, false)
+DUContext::DUContext(DUContext& useDataFrom)
+  : DUChainBase(useDataFrom)
 {
 }
 
@@ -750,13 +756,14 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
   QVectorIterator<Import> it = d->m_importedContexts;
   it.toBack();
   while (it.hasPrevious()) {
-    DUContext* context = it.previous().context.data();
+    const Import& import(it.previous());
+    DUContext* context = import.context.data();
     while( !context && it.hasPrevious() )
       context = it.previous().context.data();
     if( !context )
       break;
 
-    if( position.isValid() && it.previous().position.isValid() && position < it.previous().position )
+    if( position.isValid() && import.position.isValid() && position < import.position )
       continue;
 
     context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
@@ -1075,7 +1082,7 @@ const QVector< Use > & DUContext::uses() const
 {
   ENSURE_CAN_READ
 
-  d_func()->synchronizeUsesFromSmart();
+  synchronizeUsesFromSmart();
   return d_func()->m_uses;
 }
 
@@ -1188,7 +1195,7 @@ int DUContext::findUseAt(const SimpleCursor & position) const
 {
   ENSURE_CAN_READ
 
-  d_func()->synchronizeUsesFromSmart();
+  synchronizeUsesFromSmart();
 
   if (!range().contains(position))
     return -1;

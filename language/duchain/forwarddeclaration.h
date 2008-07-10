@@ -39,7 +39,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
-  ForwardDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+  ForwardDeclaration(const SimpleRange& range, DUContext* context);
 
   ///Copy-constructor for cloning
   ForwardDeclaration(const ForwardDeclaration& rhs);

@@ -114,7 +114,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
-  Declaration(const HashedString& url, const SimpleRange& range, DUContext* parentContext);
+  Declaration(const SimpleRange& range, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   /// Destructor
@@ -387,7 +387,7 @@ public:
    *
    * This is a non-trivial operation.
    * */
-  QMap<HashedString, QList<SimpleRange> > uses() const;
+  QMap<IndexedString, QList<SimpleRange> > uses() const;
 
   /**
    * Collects the smart-ranges for all uses. Uses that do not have smart ranges are not represented
@@ -468,7 +468,7 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  Declaration( DeclarationPrivate & dd, const HashedString& url, const SimpleRange& range );
+  Declaration( DeclarationPrivate & dd, const SimpleRange& range );
 
 private:
   Q_DECLARE_PRIVATE(Declaration)

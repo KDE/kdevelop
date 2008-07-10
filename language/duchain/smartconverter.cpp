@@ -33,6 +33,7 @@
 #include "topducontext.h"
 #include "duchain.h"
 #include "duchainlock.h"
+#include "indexedstring.h"
 
 using namespace KTextEditor;
 
@@ -101,7 +102,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  d->m_editor->setCurrentUrl( context->url() );
+  d->m_editor->setCurrentUrl( IndexedString(context->url().str()) );
 
   LockedSmartInterface iface  = d->m_editor->smart();
   if (iface && !context->smartRange()) {
@@ -120,7 +121,7 @@ void SmartConverter::deconvertDUChain(DUContext* context) const
 {
   ENSURE_CHAIN_WRITE_LOCKED
 
-  d->m_editor->setCurrentUrl( context->url() );
+  d->m_editor->setCurrentUrl( IndexedString(context->url().str()) );
 
   LockedSmartInterface iface  = d->m_editor->smart();
   if (iface) {

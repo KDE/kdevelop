@@ -420,8 +420,8 @@ public:
 class TopDUContextPrivate : public DUContextPrivate
 {
 public:
-  TopDUContextPrivate(TopDUContext* ctxt)
-    : DUContextPrivate(ctxt), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
+  TopDUContextPrivate(IndexedString url, TopDUContext* ctxt)
+    : DUContextPrivate(ctxt), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
   {
   }
   
@@ -431,6 +431,7 @@ public:
   bool m_deleting : 1;
   bool m_inDuChain : 1;
 
+  IndexedString m_url;
 
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
@@ -598,8 +599,8 @@ uint TopDUContext::ownIndex() const
   return m_local->m_ownIndex;
 }
 
-TopDUContext::TopDUContext(const HashedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextPrivate(this), url, range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
+  : DUContext(*new TopDUContextPrivate(url, this), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
 {
   Q_D(TopDUContext);
   d->m_hasUses = false;
@@ -609,7 +610,7 @@ TopDUContext::TopDUContext(const HashedString& url, const SimpleRange& range, Pa
 }
 
 TopDUContext::TopDUContext(TopDUContext* sharedDataOwner, ParsingEnvironmentFile* file)
-  : DUContext(*sharedDataOwner->d_func()), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex()))
+  : DUContext(*sharedDataOwner), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex()))
 {
   m_local->m_file = ParsingEnvironmentFilePointer(file);
 }
@@ -1227,6 +1228,11 @@ void TopDUContext::removeDeclarationIndex(uint index) {
   d_func()->m_declarationsForIndices.remove(index);
   d_func()->m_indicesForDeclarations.remove(decl);
 }
+
+IndexedString TopDUContext::url() const {
+  return d_func()->m_url;
+}
+
 
 }
 

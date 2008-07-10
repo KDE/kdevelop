@@ -58,7 +58,7 @@ TopDUContext* getRealContext(TopDUContext* ctx) {
 }
 
 ProxyObject::ProxyObject(DUChainBase* _parent, DUChainBase* _object)
-: DUChainBase(HashedString(), _object->range())
+: DUChainBase(_object->range())
   , parent(_parent)
   , object(_object)
 {

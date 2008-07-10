@@ -109,7 +109,7 @@ public:
                                     = TopDUContextPointer() )
   {
     m_compilingContexts = true;
-    m_editor->setCurrentUrl( url.str() );
+    m_editor->setCurrentUrl( url );
 
     TopDUContext* top = 0;
     {
@@ -277,7 +277,7 @@ protected:
    */
   virtual DUContext* newContext(const SimpleRange& range)
   {
-    return new DUContext(editor()->currentUrl(), range, currentContext());
+    return new DUContext(range, currentContext());
   }
 
   /// Determine the currently open context. \returns the current context.
@@ -358,7 +358,7 @@ protected:
   {
   //     m_compilingContexts = true;
   //     m_recompiling = false;
-      m_editor->setCurrentUrl( HashedString( url.pathOrUrl() ) );
+      m_editor->setCurrentUrl( IndexedString( url.pathOrUrl() ) );
       setContextOnNode( node, parent );
       {
           openContext( contextFromNode( node ) );

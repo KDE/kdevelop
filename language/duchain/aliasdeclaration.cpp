@@ -41,8 +41,8 @@ AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs)
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-AliasDeclaration::AliasDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : Declaration(*new AliasDeclarationPrivate, url, range)
+AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
+  : Declaration(*new AliasDeclarationPrivate, range)
 {
   setKind(Alias);
   if( context )

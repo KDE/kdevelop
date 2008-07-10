@@ -136,10 +136,10 @@ public:
   static int saveCurrentRevision(KTextEditor::Document* document);
 
   /// Returns the url of the currently associated editor
-  HashedString currentUrl() const;
+  IndexedString currentUrl() const;
 
   /// Associate this editor integrator with the editor which is currently editing the given \a url
-  void setCurrentUrl(const HashedString& url);
+  void setCurrentUrl(const IndexedString& url);
 
   /// Convenience function to return the SmartInterface for the current document.
   LockedSmartInterface smart() const;

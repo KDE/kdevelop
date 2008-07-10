@@ -42,7 +42,7 @@ namespace KDevelop
 class EditorIntegratorPrivate
 {
 public:
-  HashedString m_currentUrl;
+  IndexedString m_currentUrl;
 
   /// The following two pointers may only be accessed with the editor integrator static mutex held
   KTextEditor::Document* m_currentDocument;
@@ -291,7 +291,7 @@ SmartRange* EditorIntegrator::currentRange( ) const
     return 0;
 }
 
-HashedString EditorIntegrator::currentUrl() const
+IndexedString EditorIntegrator::currentUrl() const
 {
   return d->m_currentUrl;
 }
@@ -316,7 +316,7 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
   return -1;
 }
 
-void EditorIntegrator::setCurrentUrl(const HashedString& url)
+void EditorIntegrator::setCurrentUrl(const IndexedString& url)
 {
   QMutexLocker lock(data()->mutex);
 

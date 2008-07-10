@@ -51,8 +51,8 @@ ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declarat
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-ForwardDeclaration::ForwardDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context )
-  : Declaration(*new ForwardDeclarationPrivate, url, range)
+ForwardDeclaration::ForwardDeclaration(const SimpleRange& range, DUContext* context )
+  : Declaration(*new ForwardDeclarationPrivate, range)
 {
   if( context )
     setContext( context );

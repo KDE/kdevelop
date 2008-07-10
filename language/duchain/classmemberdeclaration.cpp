@@ -55,15 +55,15 @@ Declaration* ClassMemberDeclaration::clone() const {
   return new ClassMemberDeclaration(*this);
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : Declaration(*new ClassMemberDeclarationPrivate,url, range )
+ClassMemberDeclaration::ClassMemberDeclaration(const SimpleRange& range, DUContext* context)
+  : Declaration(*new ClassMemberDeclarationPrivate, range )
 {
   if( context )
     setContext( context );
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const HashedString& url, const SimpleRange& range )
-  : Declaration(dd, url, range)
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const SimpleRange& range )
+  : Declaration(dd, range)
 {
 }
 

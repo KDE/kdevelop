@@ -37,6 +37,8 @@
 #include <duchain/ducontext.h>
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
+#include <duchain/indexedstring.h>
+
 #include <icore.h>
 #include <idocumentcontroller.h>
 
@@ -206,7 +208,7 @@ DocumentCursor ContextWidget::HistoryEntry::computePosition() {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     DocumentCursor ret;
     if(context) {
-        ret = DocumentCursor(context->url(), relativeCursorPosition.textCursor());
+        ret = DocumentCursor(context->url().str(), relativeCursorPosition.textCursor());
         ret.setLine(ret.line() + context->range().start.line);
     }else{
         ret = absoluteCursorPosition;
@@ -217,7 +219,7 @@ DocumentCursor ContextWidget::HistoryEntry::computePosition() {
 void ContextWidget::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     if(context) {
-        absoluteCursorPosition =  DocumentCursor(context->url(), cursorPosition.textCursor());
+        absoluteCursorPosition =  DocumentCursor(context->url().str(), cursorPosition.textCursor());
         relativeCursorPosition = cursorPosition;
         relativeCursorPosition.line -= context->range().start.line;
     }

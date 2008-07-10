@@ -591,7 +591,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
     return;
   }
 
-  HashedString u = decl->url();
+  IndexedString u = decl->url();
   SimpleCursor c = decl->range().start;
 
   if(u.str().isEmpty()) {
@@ -677,7 +677,7 @@ void QuickOpenPlugin::quickOpenDefinition()
     return;
   }
 
-  HashedString u = decl->url();
+  IndexedString u = decl->url();
   SimpleCursor c = decl->range().start;
   if(decl->definition()) {
     u = decl->definition()->url();

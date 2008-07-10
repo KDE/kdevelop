@@ -36,6 +36,7 @@ namespace KDevelop
 {
 class HashedString;
 class DocumentRangeObjectPrivate;
+class DocumentRangeObjectDynamicPrivate;
 /**
  * Base class for any object which has an associated range of text.
  *
@@ -50,7 +51,7 @@ public:
      * @param document The document which this object is located in. May be empty, then it will not be changed (can come from a copy constructor)
      * @param range The range which this object occupies. May be invalid, then it is not changed (So it can come from a copy constructor)
      * */
-    DocumentRangeObject(const HashedString& document, const SimpleRange& range);
+    DocumentRangeObject(const SimpleRange& range);
     /// Destructor.
     virtual ~DocumentRangeObject();
 
@@ -145,12 +146,11 @@ protected:
     static QMutex* mutex();
 
     /**
-     * Constructor for copy constructors in subclasses.
-     *
-     * \param dd data to copy.
-     * \param ownsSmartRange set to true if this object owns the smart range and should delete it when this object is deleted, otherwise set to false (the default)
+     * This constructor should be used when sharing the data from another object without owning it.
+     * This object will use that data, but will not destroy it on destruction.
+     * This object must be destroyed before the object given through @param useDataFrom is destroyed!
      */
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd, bool ownsSmartRange = true);
+    DocumentRangeObject(DocumentRangeObject& useDataFrom);
 
     /**
      * Constructor for copy constructors in subclasses.
@@ -159,7 +159,7 @@ protected:
      * \param document document in which this object is located.
      * \param range text range which this object covers.
      */
-    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const HashedString& document, const SimpleRange& range);
+    DocumentRangeObject(DocumentRangeObjectPrivate& dd, const SimpleRange& range = SimpleRange::invalid());
 
     /// Private data pointer.
     DocumentRangeObjectPrivate* const d_ptr;
@@ -171,6 +171,10 @@ protected:
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
 private:
+    void syncFromSmart() const;
+    void syncToSmart() const;
+  
+    class DocumentRangeObjectDynamicPrivate* const dd_ptr;
     bool m_ownsData;
 
     Q_DISABLE_COPY(DocumentRangeObject)

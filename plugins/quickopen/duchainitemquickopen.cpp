@@ -28,6 +28,7 @@
 #include <duchain/duchainlock.h>
 #include <duchain/declaration.h>
 #include <duchain/typesystem.h>
+#include <duchain/indexedstring.h>
 
 using namespace KDevelop;
 

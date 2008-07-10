@@ -33,7 +33,7 @@ class ClassFunctionDeclarationPrivate;
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration
 {
 public:
-  ClassFunctionDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+  ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
   ~ClassFunctionDeclaration();
 
   enum QtFunctionType

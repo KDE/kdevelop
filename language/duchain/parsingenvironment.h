@@ -121,8 +121,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
 
     ///@see ParsingEnvironmentType
     virtual int type() const;
-private:
-  class ParsingEnvironmentPrivate const *d;
 };
 
 /**
@@ -150,9 +148,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
      * If the time-stamp is invalid and the revision is 0, the file will be automatically deleted.
      * */
     virtual ModificationRevision modificationRevision() const = 0;
-
-private:
-  class ParsingEnvironmentFilePrivate const *d;
 };
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
@@ -205,8 +200,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
      * decide whether to return the file, or search on. If it is zero, the first match should be returned.
      * */
     virtual ParsingEnvironmentFile* find( const IndexedString& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );
-private:
-  class ParsingEnvironmentFilePrivate const *d;
 };
 }
 

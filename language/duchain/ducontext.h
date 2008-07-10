@@ -98,7 +98,7 @@ public:
    *
    * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
-  explicit DUContext(const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -591,10 +591,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * */
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
 
-  DUContext(DUContextPrivate& dd, const HashedString& url, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  DUContext(DUContextPrivate& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
-  ///Just uses the given data(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
-  DUContext(DUContextPrivate& dd);
+  ///Just uses the data from the given context(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
+  DUContext(DUContext& useDataFrom);
 
   /**
    * This is called whenever the search needs to do the decision whether it should be continued in the parent context.
@@ -604,6 +604,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
+  void synchronizeUsesFromSmart() const;
+  void synchronizeUsesToSmart() const;
+  
   void clearDeclarationIndices();
   void updateDeclarationIndices();
 

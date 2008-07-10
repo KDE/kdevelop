@@ -22,27 +22,38 @@
 #include "documentrangeobject.h"
 #include <ktexteditor/smartrange.h>
 #include "simplerange.h"
+#include "appendedlist.h"
 
 namespace KDevelop
 {
 
+///Contains data that is stored to disk
 class DocumentRangeObjectPrivate
 {
     public:
-    DocumentRangeObjectPrivate() : m_smartRange(0), m_smartMutex(0)
-        , m_ownsRange(DocumentRangeObject::Own)
-    {}
+    DocumentRangeObjectPrivate() {
+    }
     DocumentRangeObjectPrivate(const DocumentRangeObjectPrivate& rhs);
 
+    mutable SimpleRange m_range; //Mutable for synchronization
+
+    uint classSize() const {
+      ///@todo implement correctly with a register
+      return sizeof(DocumentRangeObjectPrivate);
+    }
+
+    APPENDED_LISTS_STUB(DocumentRangeObjectPrivate);
+};
+
+///Contains data that is not stored to disk
+class DocumentRangeObjectDynamicPrivate {
+  public:
+    DocumentRangeObjectDynamicPrivate();
     mutable KTextEditor::SmartRange* m_smartRange; //Mutable for synchronization
     QMutex* m_smartMutex;
     DocumentRangeObject::RangeOwning m_ownsRange;
-    mutable SimpleRange m_range; //Mutable for synchronization
-    HashedString m_document; ///@todo get rid of this, the information can be gotten from elsewhere
-
-    void syncFromSmart() const;
-    void syncToSmart() const;
 };
+
 }
 
 #endif

@@ -22,24 +22,41 @@
 #include <QMutexLocker>
 
 #include "duchainpointer.h"
+#include "indexedstring.h"
+#include "topducontext.h"
 
 namespace KDevelop
 {
 
-DUChainBase::DUChainBase(const HashedString& url, const SimpleRange& range)
-  : KDevelop::DocumentRangeObject(*new DUChainBasePrivate, url, range), m_ptr( 0L )
+DUChainBase::DUChainBase(const SimpleRange& range)
+  : KDevelop::DocumentRangeObject(*new DUChainBasePrivate, range), m_ptr( 0L )
 {
 }
 
-DUChainBase::DUChainBase( DUChainBasePrivate & dd, const HashedString& url, const SimpleRange& range )
-  : KDevelop::DocumentRangeObject( dd, url, range ), m_ptr( 0 )
+DUChainBase::DUChainBase( DUChainBasePrivate & dd, const SimpleRange& range )
+  : KDevelop::DocumentRangeObject( dd, range ), m_ptr( 0 )
 {
 }
 
-DUChainBase::DUChainBase( DUChainBasePrivate & dd, bool ownsData )
-  : KDevelop::DocumentRangeObject( dd, ownsData ), m_ptr( 0 )
+DUChainBase::DUChainBase( DUChainBasePrivate & dd )
+  : KDevelop::DocumentRangeObject( dd ), m_ptr( 0 )
 {
 }
+
+DUChainBase::DUChainBase( DUChainBase& rhs )
+  : KDevelop::DocumentRangeObject( rhs ), m_ptr( 0 )
+{
+}
+
+IndexedString DUChainBase::url() const
+{
+  TopDUContext* top = topContext();
+  if(top)
+    return top->url();
+  else
+    return IndexedString();
+}
+
 
 DUChainBase::~DUChainBase()
 {

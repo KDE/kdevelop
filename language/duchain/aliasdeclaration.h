@@ -42,7 +42,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param context context in which this declaration occurred
    */
-  AliasDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context);
+  AliasDeclaration(const SimpleRange& range, DUContext* context);
   /// Destructor
   virtual ~AliasDeclaration();
 

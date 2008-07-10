@@ -40,8 +40,8 @@ NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclara
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(const HashedString& url, const SimpleRange& range, DUContext* context)
-  : Declaration(*new NamespaceAliasDeclarationPrivate, url, range)
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context)
+  : Declaration(*new NamespaceAliasDeclarationPrivate, range)
 {
   setKind(NamespaceAlias);
   if( context )
