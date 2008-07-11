@@ -13,7 +13,7 @@ include_directories( ${KDE4_INCLUDES}
 
 ########### next target ###############
 
-set(kdevgit_PART_SRCS
+set(kdevhg_PART_SRCS
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsjob.cpp
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.cpp
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsplugin.cpp
@@ -21,22 +21,22 @@ set(kdevgit_PART_SRCS
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsgenericoutputview.cpp
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/importdialog.cpp
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.cpp
-    gitplugin.cpp
-    gitexecutor.cpp
+    hgplugin.cpp
+    hgexecutor.cpp
 )
 
-set(kdevgit_PART_UI
+set(kdevhg_PART_UI
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.ui
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsgenericoutputview.ui
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsmainview.ui
     ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.ui
 )
 
-kde4_add_ui_files(kdevgit_PART_SRCS ${kdevgit_PART_UI})
-kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
+kde4_add_ui_files(kdevhg_PART_SRCS ${kdevhg_PART_UI})
+kde4_add_plugin(kdevhg ${kdevhg_PART_SRCS})
 
 
-target_link_libraries(kdevgit
+target_link_libraries(kdevhg
     ${KDE4_KDECORE_LIBS}
     kdevplatformutil
     kdevplatforminterfaces
@@ -44,10 +44,10 @@ target_link_libraries(kdevgit
     kdevplatformproject
 )
 
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevhg DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevgit.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgit )
+install( FILES kdevhg.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevhg.rc DESTINATION ${DATA_INSTALL_DIR}/kdevhg )
 

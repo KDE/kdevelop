@@ -1,4 +1,8 @@
 /***************************************************************************
+ *   This file was partly taken from KDevelop's cvs plugin                 *
+ *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *                                                                         *
+ *   Adapted for Hg                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -18,34 +22,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#ifndef GIT_INIT_H
+#define GIT_INIT_H
 
-#include <vcs/interfaces/idistributedversioncontrol.h>
-#include <dvcs/dvcsplugin.h>
-#include <qobject.h>
+#include <QtCore/QObject>
 
-class GitExecutor;
+class HgExecutor;
 
-/**
- * This is the main class of KDevelop's Git plugin.
- *
- * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
- * @author Evgeniy Ivanov <powerfox@kde.ru>
- */
-class GitPlugin: public KDevelop::DistributedVersionControlPlugin
+class HgInitTest: public QObject
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
 
-friend class GitExecutor;
+    private:
+        void repoInit();
+        void addFiles();
+        void commitFiles();
+        void cloneRepository();
 
-public:
-    GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
-    ~GitPlugin();
+    private slots:
+        void initTestCase();
+        void testInitAndCommit();
+        void cleanupTestCase();
 
-    QString name() const;
-
+    private:
+        HgExecutor* m_proxy;
 };
 
 #endif

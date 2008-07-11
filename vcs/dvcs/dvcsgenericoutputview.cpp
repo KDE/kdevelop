@@ -1,4 +1,7 @@
 /***************************************************************************
+ *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *                                                                         *
+ *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -18,34 +21,43 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#include "dvcsgenericoutputview.h"
 
-#include <vcs/interfaces/idistributedversioncontrol.h>
-#include <dvcs/dvcsplugin.h>
-#include <qobject.h>
+#include "dvcsplugin.h"
+#include "dvcsjob.h"
 
-class GitExecutor;
-
-/**
- * This is the main class of KDevelop's Git plugin.
- *
- * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
- * @author Evgeniy Ivanov <powerfox@kde.ru>
- */
-class GitPlugin: public KDevelop::DistributedVersionControlPlugin
+DVCSgenericOutputView::DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, DVCSjob* job, QWidget* parent)
+    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
 {
-    Q_OBJECT
-    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
+    Ui::CvsGenericOutputViewBase::setupUi(this);
 
-friend class GitExecutor;
+    if (job) {
+        connect(job, SIGNAL( result(KJob*) ),
+                this, SLOT( slotJobFinished(KJob*) ));
+    }
+}
 
-public:
-    GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
-    ~GitPlugin();
+DVCSgenericOutputView::~DVCSgenericOutputView()
+{
+}
 
-    QString name() const;
+void DVCSgenericOutputView::appendText(const QString& text)
+{
+    textArea->append(text);
+}
 
-};
+void DVCSgenericOutputView::slotJobFinished(KJob * job)
+{
+    DVCSjob * gitjob = dynamic_cast<DVCSjob*>(job);
+    if (gitjob) {
+        appendText( gitjob->dvcsCommand() );
+        appendText( gitjob->output() );
+        if (job->error() == 0) {
+            appendText( i18n("Job exited normally") );
+        } else {
+            appendText( job->errorText() );
+        }
+    }
+}
 
-#endif
+// #include "cvsgenericoutputview.moc"

@@ -1,8 +1,4 @@
 /***************************************************************************
- *   This file was partly taken from KDevelop's cvs plugin                 *
- *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
- *                                                                         *
- *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -22,39 +18,43 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef IMPORTDIALOG_H
-#define IMPORTDIALOG_H
+#include "hgplugin.h"
 
-#include <KDialog>
-#include <KUrl>
-#include <KJob>
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <klocalizedstring.h>
 
-class ImportMetadataWidget;
+#include <icore.h>
 
-class GitPlugin;
+#include <dvcsjob.h>
 
-/**
- * Asks the user for all options needed to init an existing directory into
- * a Git repository. In IBasicVersionControl "import" term is used, that is why 
- * it is called import, but not init.
- * @author Robert Gruber <rgruber@users.sourceforge.net>
- * @author Evgeniy Ivanov <powerfox@kde.ru>
- */
-class ImportDialog : public KDialog
+#include "hgexecutor.h"
+
+K_PLUGIN_FACTORY(KDevHgFactory, registerPlugin<HgPlugin>(); )
+K_EXPORT_PLUGIN(KDevHgFactory("kdevhg"))
+
+HgPlugin::HgPlugin( QObject *parent, const QVariantList & )
+    : DistributedVersionControlPlugin(parent, KDevHgFactory::componentData())
 {
-    Q_OBJECT
-public:
-    ImportDialog(GitPlugin *plugin, const KUrl& url, QWidget* parent=0);
-    virtual ~ImportDialog();
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
 
-public slots:
-    virtual void accept();
-    void jobFinished(KJob* job);
+    core()->uiController()->addToolView(i18n("Mercurial"), DistributedVersionControlPlugin::d->m_factory);
 
-private:
-    KUrl m_url;
-    GitPlugin* m_plugin;
-    ImportMetadataWidget* m_widget;
-};
+    setXMLFile("kdevhg.rc");
+    setupActions();
 
-#endif
+    DistributedVersionControlPlugin::d->m_exec = new HgExecutor(this);
+}
+
+HgPlugin::~HgPlugin()
+{
+    delete DistributedVersionControlPlugin::d;
+}
+
+QString HgPlugin::name() const
+{
+        return i18n("Mercurial");
+}
+
+// #include "hgplugin.moc"

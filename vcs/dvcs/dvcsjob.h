@@ -3,7 +3,7 @@
  *   Copyright 2002-2003 Christian Loose <christian.loose@hamburg.de>      *
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
  *                                                                         *
- *   Adapted for Git                                                       *
+ *   Adapted for DVCS                                                      *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -24,14 +24,14 @@
  ***************************************************************************/
 
 
-#ifndef GITJOB_H
-#define GITJOB_H
-
+#ifndef DVCS_JOB_H
+#define DVCS_JOB_H
 
 #include <QStringList>
 #include <KProcess>
 
-#include "vcsjob.h"
+#include <vcsjob.h>
+
 
 /**
  * This class is capable of running our git commands
@@ -40,69 +40,71 @@
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class GitJob : public KDevelop::VcsJob
+class DVCSjob : public KDevelop::VcsJob
 {
     Q_OBJECT
-    public:
-        GitJob(KDevelop::IPlugin* parent);
-        virtual ~GitJob();
+public:
+    DVCSjob(KDevelop::IPlugin* parent);
+    virtual ~DVCSjob();
 
-        void clear();
-        void setServer(const QString& server);
-        void setDirectory(const QString& directory);
+    void clear();
+    void setServer(const QString& server);
+    void setDirectory(const QString& directory);
 
-        QString getDirectory();
+    QString getDirectory();
 
-        GitJob& operator<<(const QString& arg);
-        GitJob& operator<<(const char* arg);
-        GitJob& operator<<(const QStringList& args);
-
-    /**
-         * Call this mehod to start this job.
-         * @note Default communiaction mode is KProcess::AllOutput.
-         * @see Use setCommunicationMode() to override the default communication mode.
-     */
-        virtual void start();
+    //Note: <<"one two" is not the same as <<"one"<<"two; or job<<"one";job<<"two", becouse space will be quoted
+    //or something else, don't use it!
+    DVCSjob& operator<<(const QString& arg);
+    DVCSjob& operator<<(const char* arg);
+    DVCSjob& operator<<(const QStringList& args);
 
     /**
-         * In some cases it's needed to specify the communisation mode between the
-         * process and the job object. This is for instance done for the "git status"
-         * command. If stdout and stderr are processed as separate streams their signals
-         * do not always get emmited in correct order by KProcess. Which will lead to a
-         * screwed up output.
-         * @note Default communiaction mode is KProcess::SeparateChannels.
+     * Call this mehod to start this job.
+     * @note Default communiaction mode is KProcess::AllOutput.
+     * @see Use setCommunicationMode() to override the default communication mode.
      */
-        void setCommunicationMode(KProcess::OutputChannelMode comm);
+    virtual void start();
 
     /**
-         * @return The command that is executed when calling start()
+     * In some cases it's needed to specify the communisation mode between the
+     * process and the job object. This is for instance done for the "git status"
+     * command. If stdout and stderr are processed as separate streams their signals
+     * do not always get emmited in correct order by KProcess. Which will lead to a
+     * screwed up output.
+     * @note Default communiaction mode is KProcess::SeparateChannels.
      */
-        QString gitCommand() const;
+    void setCommunicationMode(KProcess::OutputChannelMode comm);
 
     /**
-         * @return The whole output of the job
+     * @return The command that is executed when calling start()
      */
-        QString output() const;
+    QString dvcsCommand() const;
+
+    /**
+     * @return The whole output of the job
+     */
+    QString output() const;
 
     // Begin:  KDevelop::VcsJob
-        virtual QVariant fetchResults();
-        virtual KDevelop::VcsJob::JobStatus status() const;
-        virtual KDevelop::IPlugin* vcsPlugin() const;
+    virtual QVariant fetchResults();
+    virtual KDevelop::VcsJob::JobStatus status() const;
+    virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
 
-    public slots:
-        void cancel();
-        bool isRunning() const;
+public slots:
+    void cancel();
+    bool isRunning() const;
 
-    private slots:
-        void slotProcessError( QProcess::ProcessError );
-        void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
-        void slotReceivedStdout(const QStringList&);
-        void slotReceivedStderr(const QStringList&);
+private slots:
+    void slotProcessError( QProcess::ProcessError );
+    void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
+    void slotReceivedStdout(const QStringList&);
+    void slotReceivedStderr(const QStringList&);
 
-    private:
-        struct Private;
-        Private* d;
+private:
+    struct Private;
+    Private* d;
 };
 
 #endif

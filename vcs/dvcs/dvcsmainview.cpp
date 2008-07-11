@@ -21,33 +21,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitmainview.h"
+#include "dvcsmainview.h"
 
 #include <KLocale>
 #include <KDebug>
 
-#include "gitplugin.h"
-#include "gitjob.h"
-#include "gitgenericoutputview.h"
+#include "dvcsplugin.h"
+#include "dvcsgenericoutputview.h"
 
-GitMainView::GitMainView(GitPlugin *plugin, QWidget* parent )
+DVCSmainView::DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QWidget* parent )
  : QWidget( parent ),
    Ui::CvsMainViewBase(),
    m_plugin(plugin)
 {
     Ui::CvsMainViewBase::setupUi(this);
-    setWindowTitle(i18n("CVS"));
+    setWindowTitle(i18n("Git"));
 
-        // GitPlugin will notify when a job finished
     connect(m_plugin, SIGNAL(jobFinished(KJob*)),
             this, SLOT(slotJobFinished(KJob*)));
 
-    // allow appending of new views
     connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*, QString)),
             this, SLOT(slotAddTab(QWidget*, QString)) );
 
     // create a default output view
-    m_mainview = new GitGenericOutputView(m_plugin);
+    m_mainview = new DVCSgenericOutputView(m_plugin);
     tabwidget->addTab( m_mainview, i18n("Git") );
 
     // add a close button as corner widget
@@ -61,12 +58,12 @@ GitMainView::GitMainView(GitPlugin *plugin, QWidget* parent )
             this, SLOT( slotTabClose() ));
 }
 
-GitMainView::~GitMainView()
+DVCSmainView::~DVCSmainView()
 {
     delete m_mainview;
 }
 
-void GitMainView::slotAddTab(QWidget * tab, const QString& label)
+void DVCSmainView::slotAddTab(QWidget * tab, const QString& label)
 {
     kDebug(9500) << "adding tab:" << label;
 
@@ -77,13 +74,13 @@ void GitMainView::slotAddTab(QWidget * tab, const QString& label)
         m_closeButton->setEnabled(true);
 }
 
-void GitMainView::slotJobFinished(KJob * job)
+void DVCSmainView::slotJobFinished(KJob * job)
 {
     m_mainview->slotJobFinished(job);
     tabwidget->setCurrentIndex(0);
 }
 
-void GitMainView::slotTabClose()
+void DVCSmainView::slotTabClose()
 {
     int idx = tabwidget->currentIndex();
 

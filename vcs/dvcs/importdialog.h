@@ -1,6 +1,7 @@
 /***************************************************************************
+ *   This file was partly taken from KDevelop's cvs plugin                 *
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
-  *                                                                         *
+ *                                                                         *
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
@@ -21,38 +22,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GITGENERICOUTPUTVIEW_H
-#define GITGENERICOUTPUTVIEW_H
+#ifndef IMPORTDIALOG_H
+#define IMPORTDIALOG_H
 
-#include <QWidget>
+#include <KDialog>
+#include <KUrl>
 #include <KJob>
 
-#include "ui_cvsgenericoutputview.h"
+class ImportMetadataWidget;
 
-class GitPlugin;
-class GitJob;
+namespace KDevelop
+{
+class DistributedVersionControlPlugin;
+}
 
 /**
- * Shows plain text.
- *
- * Text can either be added directly by calling appendText().
- *
- * Or by connecting a job's result() signal to slotJobFinished().
- *
+ * Asks the user for all options needed to init an existing directory into
+ * a Git repository. In IBasicVersionControl "import" term is used, that is why 
+ * it is called import, but not init.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
+ * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class GitGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
+class ImportDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit GitGenericOutputView(GitPlugin *plugin, GitJob* job=0, QWidget* parent=0);
-    virtual ~GitGenericOutputView();
+    ImportDialog(KDevelop::DistributedVersionControlPlugin *plugin, const KUrl& url, QWidget* parent=0);
+    virtual ~ImportDialog();
 
 public slots:
-    void appendText(const QString& text);
-    void slotJobFinished(KJob* job);
+    virtual void accept();
+    void jobFinished(KJob* job);
 
 private:
-    GitPlugin* m_plugin;
+    KUrl m_url;
+    KDevelop::DistributedVersionControlPlugin* m_plugin;
+    ImportMetadataWidget* m_widget;
 };
 
 #endif

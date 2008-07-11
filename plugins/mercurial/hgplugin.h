@@ -1,7 +1,4 @@
 /***************************************************************************
- *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
- *                                                                         *
- *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -21,42 +18,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitgenericoutputview.h"
+#ifndef HG_PLUGIN_H
+#define HG_PLUGIN_H
 
-#include "gitjob.h"
+#include <vcs/interfaces/idistributedversioncontrol.h>
+#include <dvcs/dvcsplugin.h>
+#include <qobject.h>
 
-GitGenericOutputView::GitGenericOutputView(GitPlugin *plugin, GitJob* job, QWidget* parent)
-    : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
+class HgExecutor;
+
+/**
+ * This is the main class of KDevelop's Mercurial plugin.
+ *
+ * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
+ * @author Evgeniy Ivanov <powerfox@kde.ru>
+ */
+class HgPlugin: public KDevelop::DistributedVersionControlPlugin
 {
-    Ui::CvsGenericOutputViewBase::setupUi(this);
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
 
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( slotJobFinished(KJob*) ));
-    }
-}
+friend class HgExecutor;
 
-GitGenericOutputView::~GitGenericOutputView()
-{
-}
+public:
+    HgPlugin(QObject *parent, const QVariantList & args = QVariantList() );
+    ~HgPlugin();
 
-void GitGenericOutputView::appendText(const QString& text)
-{
-    textArea->append(text);
-}
+    QString name() const;
 
-void GitGenericOutputView::slotJobFinished(KJob * job)
-{
-    GitJob * gitjob = dynamic_cast<GitJob*>(job);
-    if (gitjob) {
-        appendText( gitjob->gitCommand() );
-        appendText( gitjob->output() );
-        if (job->error() == 0) {
-            appendText( i18n("Job exited normally") );
-        } else {
-            appendText( job->errorText() );
-        }
-    }
-}
+};
 
-// #include "cvsgenericoutputview.moc"
+#endif

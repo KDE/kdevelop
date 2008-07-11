@@ -51,6 +51,7 @@ if(SUBVERSION_FOUND)
 endif(SUBVERSION_FOUND)
 
 macro_optional_add_subdirectory(git)
+macro_optional_add_subdirectory(mercurial)
 
 macro_optional_add_subdirectory(mercurial)
 

@@ -21,8 +21,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GITMAINVIEW_H
-#define GITMAINVIEW_H
+#ifndef DVCS_MAINVIEW_H
+#define DVCS_MAINVIEW_H
 
 #include <QWidget>
 #include <KJob>
@@ -30,14 +30,18 @@
 
 #include "ui_cvsmainview.h"
 
-class GitPlugin;
-class GitGenericOutputView;
+class DVCSgenericOutputView;
+
+namespace KDevelop
+{
+    class DistributedVersionControlPlugin;
+}
 
 /**
  * This class is the main output view of KDevelop's Git plugin.
  * It only constists out of a KTabWidget.
  *
- * When created, a GitGenericOutputView will be inserted.
+ * When created, a DVCSgenericOutputView will be inserted.
  *
  * Inserting text into that default output view is possible via the
  * slotJobFinished() slot.
@@ -46,23 +50,23 @@ class GitGenericOutputView;
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class GitMainView : public QWidget, private Ui::CvsMainViewBase {
+class DVCSmainView : public QWidget, private Ui::CvsMainViewBase {
     Q_OBJECT
 public:
-    GitMainView(GitPlugin *plugin, QWidget* parent);
-    virtual ~GitMainView();
+    DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QWidget* parent);
+    virtual ~DVCSmainView();
 
 public slots:
     /**
      * Inserts @p tag into the KTabWidget and calls it @p label .
-     * This slot gets connected to GitPlugin::addNewTabToMainView().
+     * This slot gets connected to KDevelop::DistributedVersionControlPlugin::addNewTabToMainView().
      */
     void slotAddTab(QWidget* tab, const QString& label);
 
     /**
      * When this slot gets called, the output of the job will be written to
      * the default outputview of the KTabWidget.
-     * This slot gets connected to GitPlugin::jobFinished().
+     * This slot gets connected to KDevelop::DistributedVersionControlPlugin::jobFinished().
      */
     void slotJobFinished(KJob* job);
 
@@ -72,8 +76,8 @@ public slots:
     void slotTabClose();
 
 private:
-    GitPlugin* m_plugin;
-    GitGenericOutputView* m_mainview;
+    KDevelop::DistributedVersionControlPlugin* m_plugin;
+    DVCSgenericOutputView* m_mainview;
     QToolButton* m_closeButton;
 };
 

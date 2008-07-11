@@ -27,16 +27,18 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "gitplugin.h"
-#include "gitproxy.h"
-#include "gitjob.h"
+#include "dvcsplugin.h"
+#include "idvcsexecutor.h"
+#include <dvcsjob.h>
 
 #include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 
 #include "importmetadatawidget.h"
 
-ImportDialog::ImportDialog(GitPlugin* plugin, const KUrl& url, QWidget *parent)
+using KDevelop::DistributedVersionControlPlugin;
+
+ImportDialog::ImportDialog(DistributedVersionControlPlugin* plugin, const KUrl& url, QWidget *parent)
     : KDialog(parent), m_url(url), m_plugin(plugin)
 {
     m_widget = new ImportMetadataWidget(this);
@@ -51,7 +53,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    GitJob *job = dynamic_cast<GitJob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
+    DVCSjob *job = dynamic_cast<DVCSjob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));
@@ -67,7 +69,7 @@ void ImportDialog::jobFinished(KJob * job)
     }
 
     // The job finished, now let's check the output is everything was OK
-    GitJob* gitjob = dynamic_cast<GitJob*>(job);
+    DVCSjob* gitjob = dynamic_cast<DVCSjob*>(job);
 
     static QRegExp re_file("^[IN]\\s(.*)");
     bool error = false;

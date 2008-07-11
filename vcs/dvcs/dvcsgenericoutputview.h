@@ -1,4 +1,7 @@
 /***************************************************************************
+ *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+  *                                                                         *
+ *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -18,34 +21,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#ifndef DVCS_GENERIC_OUTPUTVIEW_H
+#define DVCS_GENERIC_OUTPUTVIEW_H
 
-#include <vcs/interfaces/idistributedversioncontrol.h>
-#include <dvcs/dvcsplugin.h>
-#include <qobject.h>
+#include <QWidget>
+#include <KJob>
 
-class GitExecutor;
+#include "ui_cvsgenericoutputview.h"
+
+class DVCSjob;
+
+namespace KDevelop
+{
+    class DistributedVersionControlPlugin;
+}
 
 /**
- * This is the main class of KDevelop's Git plugin.
+ * Shows plain text.
  *
- * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
- * @author Evgeniy Ivanov <powerfox@kde.ru>
+ * Text can either be added directly by calling appendText().
+ *
+ * Or by connecting a job's result() signal to slotJobFinished().
+ *
+ * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class GitPlugin: public KDevelop::DistributedVersionControlPlugin
-{
+class DVCSgenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
-
-friend class GitExecutor;
-
 public:
-    GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
-    ~GitPlugin();
+    explicit DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, DVCSjob* job=0, QWidget* parent=0);
+    virtual ~DVCSgenericOutputView();
 
-    QString name() const;
+public slots:
+    void appendText(const QString& text);
+    void slotJobFinished(KJob* job);
 
+private:
+    KDevelop::DistributedVersionControlPlugin* m_plugin;
 };
 
 #endif

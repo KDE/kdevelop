@@ -22,16 +22,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PROXY_H
-#define GIT_PROXY_H
+#ifndef GIT_EXECUTOR_H
+#define GIT_EXECUTOR_H
 
 
 #include <KUrl>
 #include <KJob>
 #include <QStringList>
+
+#include <idvcsexecutor.h>
 #include "vcsrevision.h"
 
-class GitJob;
+class DVCSjob;
 
 namespace KDevelop
 {
@@ -40,13 +42,13 @@ namespace KDevelop
 
 /**
  * This proxy acts as a single point of entry for most of the common git commands.
- * It is very easy to use, as the caller does not have to deal which the GitJob class directly.
- * All the command line generation and job handling is done internally. The caller gets a GitJob
+ * It is very easy to use, as the caller does not have to deal which the DVCSjob class directly.
+ * All the command line generation and job handling is done internally. The caller gets a DVCSjob
  * object returned from the proxy and can then call it's start() method.
  *
  * Here is and example of how to user the proxy:
  * @code
- * GitJob* job = proxy->editors( repo, urls );
+ * DVCSjob* job = proxy->editors( repo, urls );
  * if ( job ) {
  *     connect(job, SIGNAL( result(KJob*) ),
  *             this, SIGNAL( jobFinished(KJob*) ));
@@ -62,44 +64,38 @@ namespace KDevelop
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class GitProxy : public QObject
+class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
 {
     Q_OBJECT
     public:
-        GitProxy(KDevelop::IPlugin* parent = 0);
-        ~GitProxy();
+        GitExecutor(KDevelop::IPlugin* parent = 0);
+        ~GitExecutor();
 
         bool isValidDirectory(const KUrl &dirPath);
 
-        GitJob* init(const KUrl & directory);
-        GitJob* clone(const KUrl &directory, const KUrl repository);
-        GitJob* add(const QString& repository, const KUrl::List &files);
-        GitJob* commit(const QString& repository,
+        DVCSjob* init(const KUrl & directory);
+        DVCSjob* clone(const KUrl &directory, const KUrl repository);
+        DVCSjob* add(const QString& repository, const KUrl::List &files);
+        DVCSjob* commit(const QString& repository,
                        const QString& message = "KDevelop didn't provide any message, it may be a bug",
-                       const KUrl::List& files = QStringList("-a"));
-        GitJob* remove(const QString& repository, const KUrl::List& files);
-        GitJob* status(const QString & repo, const KUrl::List & files,
+                       const KUrl::List& args = QStringList());
+        DVCSjob* remove(const QString& repository, const KUrl::List& files);
+        DVCSjob* status(const QString & repo, const KUrl::List & files,
                        bool recursive=false, bool taginfo=false);
-/*        GitJob* is_inside_work_tree(const QString& repository);*/
-        GitJob* empty_cmd() const;
-
-/*        GitJob* log(const KUrl& file, const KDevelop::VcsRevision& rev);*/
-//         GitJob* diff(const KUrl& url,
-//                      const KDevelop::VcsRevision& revA, 
-//                      const KDevelop::VcsRevision& revB,
-//                      const QString& diffOptions="");
-//         GitJob* annotate(const KUrl& url, const KDevelop::VcsRevision& rev);
+/*        DVCSjob* is_inside_work_tree(const QString& repository);*/
+        DVCSjob* var(const QString &directory);
+        DVCSjob* empty_cmd() const;
 
     private:
-        bool addFileList(GitJob* job, const QString& repository, const KUrl::List& urls);
+        bool addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls);
 //         QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
 
         enum RequestedOperation {
             NormalOperation,
             Init
         };
-        bool prepareJob(GitJob* job, const QString& repository,
-                        enum RequestedOperation op = GitProxy::NormalOperation);
+        bool prepareJob(DVCSjob* job, const QString& repository,
+                        enum RequestedOperation op = GitExecutor::NormalOperation);
         KDevelop::IPlugin* vcsplugin;
 
 };
