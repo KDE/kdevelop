@@ -545,7 +545,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                 newProblem->setSource(KDevelop::Problem::Preprocessor);
                 newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", projectName));
                 newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. Consider setting up a build directory in the project manager if you have not done so yet."));
-                newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
                 (*problems) << KDevelop::ProblemPointer(newProblem);
             }
             m_includeResolver->resetOutOfSourceBuild();
