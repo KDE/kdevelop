@@ -93,9 +93,7 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::add(const KUrl::List & localLocations,
                                              IBasicVersionControl::RecursionMode recursion)
 {
-    QFileInfo info( localLocations[0].toLocalFile() );
-
-    return d->m_exec->add(info.absolutePath(), localLocations);
+    return d->m_exec->add(localLocations[0].path(), localLocations);
 }
 
 KDevelop::VcsJob*
