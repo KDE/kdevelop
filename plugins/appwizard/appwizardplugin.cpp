@@ -192,7 +192,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
                 KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
                 job->exec();
-                kDebug(9010) << "Initializing Git repository:" << dest.toLocalFile();
+                kDebug(9010) << "Initializing DVCS repository:" << dest.toLocalFile();
                 if (job->status() == KDevelop::VcsJob::JobSucceeded)
                 {
                     KDevelop::VcsJob* job = iface->add(KUrl::List(dest),
@@ -202,20 +202,20 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                         job->exec();
                         if (job->status() != KDevelop::VcsJob::JobSucceeded )
                         {
-                            KMessageBox::error(0, i18n("Could not add files to the Git repository"));
+                            KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
                             KIO::NetAccess::del( dest, 0);
                             return "";
                         }
                     } else
                     {
-                        KMessageBox::error(0, i18n("Could not add files to the Git repository"));
+                        KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
                         KIO::NetAccess::del( dest, 0 );
                         return "";
                     }
                 }
                 else
                 {
-                    KMessageBox::error(0, i18n("Could not init Git repository"));
+                    KMessageBox::error(0, i18n("Could not init DVCS repository"));
                     KIO::NetAccess::del( dest, 0 );
                     return "";
                 }
