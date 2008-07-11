@@ -372,7 +372,7 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
             qApp->activeWindow(),
             i18n("<b>Invalid gdb reply</b>"
                  "<p>The 'stopped' packet does not include the 'reason' field."),
-            i18n("The gdb reply is: bla-bla-bla"),
+            i18n("The gdb reply is: invalid"),
             i18n("Invalid gdb reply"));
         return;
     }
