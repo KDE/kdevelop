@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevelop MSVC Manager
+Comment=Imports MSVC projects
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevmsvcmanager
+X-KDE-PluginInfo-Name=KDevMSVCManager
+X-KDevelop-PluginType=Kross
+X-KDevelop-FileManager=MSVC
+X-KDevelop-Version=6
+X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
