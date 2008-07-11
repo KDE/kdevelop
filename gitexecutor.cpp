@@ -22,8 +22,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "gitproxy.h"
-
 #include <QFileInfo>
 #include <QDir>
 #include <QFileInfo>
@@ -35,24 +33,25 @@
 #include <kshell.h>
 #include <KDebug>
 
-#include "gitjob.h"
-
+#include <dvcsjob.h>
 #include <iplugin.h>
 
-GitProxy::GitProxy(KDevelop::IPlugin* parent)
+#include "gitexecutor.h"
+
+GitExecutor::GitExecutor(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)
 {
 }
 
-GitProxy::~GitProxy()
+GitExecutor::~GitExecutor()
 {
 }
 
 //TODO: write tests for this method!
 //maybe func()const?
-bool GitProxy::isValidDirectory(const KUrl & dirPath)
+bool GitExecutor::isValidDirectory(const KUrl & dirPath)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     if (job)
     {
         job->clear();
@@ -74,27 +73,27 @@ bool GitProxy::isValidDirectory(const KUrl & dirPath)
     return false;
 }
 
-bool GitProxy::prepareJob(GitJob* job, const QString& repository, enum RequestedOperation op)
+bool GitExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
 {
     // Only do this check if it's a normal operation like diff, log ...
     // For other operations like "git clone" isValidDirectory() would fail as the
     // directory is not yet under git control
-    if (op == GitProxy::NormalOperation &&
+    if (op == GitExecutor::NormalOperation &&
         !isValidDirectory(repository)) {
         kDebug(9500) << repository << " is not a valid git repository";
         return false;
         }
 
     // clear commands and args from a possible previous run
-        job->clear();
+    job->clear();
 
     // setup the working directory for the new job
-        job->setDirectory(repository);
+    job->setDirectory(repository);
 
-        return true;
+    return true;
 }
 
-bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::List& urls)
+bool GitExecutor::addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls)
 {
     QStringList args;
 
@@ -111,7 +110,7 @@ bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::L
     return true;
 }
 
-// QString GitProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
+// QString GitExecutor::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
 // {
 //     QString str;
 // 
@@ -138,10 +137,10 @@ bool GitProxy::addFileList(GitJob* job, const QString& repository, const KUrl::L
 //     return str;
 // }
 
-GitJob* GitProxy::init(const KUrl &directory)
+DVCSjob* GitExecutor::init(const KUrl &directory)
 {
-    GitJob* job = new GitJob(vcsplugin);
-    if (prepareJob(job, directory.toLocalFile(), GitProxy::Init) ) {
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, directory.toLocalFile(), GitExecutor::Init) ) {
         *job << "git-init";
         return job;
     }
@@ -149,10 +148,10 @@ GitJob* GitProxy::init(const KUrl &directory)
     return NULL;
 }
 
-GitJob* GitProxy::clone(const KUrl &repository, const KUrl directory)
+DVCSjob* GitExecutor::clone(const KUrl &repository, const KUrl directory)
 {
-    GitJob* job = new GitJob(vcsplugin);
-    if (prepareJob(job, directory.toLocalFile(), GitProxy::Init) ) {
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, directory.toLocalFile(), GitExecutor::Init) ) {
         *job << "git-clone";
         *job << repository.path();
 //         addFileList(job, repository.path(), directory); //TODO it's temp, should work only with local repos
@@ -162,9 +161,9 @@ GitJob* GitProxy::clone(const KUrl &repository, const KUrl directory)
     return NULL;
 }
 
-GitJob* GitProxy::add(const QString& repository, const KUrl::List &files)
+DVCSjob* GitExecutor::add(const QString& repository, const KUrl::List &files)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "add";
@@ -179,13 +178,15 @@ GitJob* GitProxy::add(const QString& repository, const KUrl::List &files)
 
 //TODO: git doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
-GitJob* GitProxy::commit(const QString& repository,
+DVCSjob* GitExecutor::commit(const QString& repository,
                          const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
-                         const KUrl::List &files /*= QStringList("-a")*/)
+                         const KUrl::List &args /*= QStringList("")*/)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git-commit";
+        foreach(KUrl arg, args)
+            *job<<arg.path();  //TODO much better to use QStringlist, but IBasicVS...
         *job << "-m";
         *job << KShell::quoteArg( message );
         return job;
@@ -194,9 +195,9 @@ GitJob* GitProxy::commit(const QString& repository,
     return NULL;
 }
 
-GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
+DVCSjob* GitExecutor::remove(const QString& repository, const KUrl::List &files)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git-rm";
         addFileList(job, repository, files);
@@ -206,86 +207,9 @@ GitJob* GitProxy::remove(const QString& repository, const KUrl::List &files)
     return NULL;
 }
 
-// //TODO: now just only "git log" or "git log file", no extensions
-// GitJob* GitProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
-// {
-//     QFileInfo info(url.toLocalFile());
-//     if (!info.isFile())
-//         return false;
-// 
-//     GitJob* job = new GitJob(vcsplugin);
-//     if ( prepareJob(job, info.absolutePath()) ) {
-//         *job << "cvs";
-//         *job << "log";
-// 
-//         QString convRev = convertVcsRevisionToString(rev);
-//         if (!convRev.isEmpty()) {
-//             convRev.replace("-D", "-d");
-//             *job << convRev;
-//         }
-// 
-//         *job << KShell::quoteArg(info.fileName());
-// 
-//         return job;
-//     }
-//     if (job) delete job;
-//     return NULL;
-// }
-// 
-// GitJob* GitProxy::diff(const KUrl& url, 
-//                        const KDevelop::VcsRevision& revA, 
-//                        const KDevelop::VcsRevision& revB,
-//                        const QString& diffOptions)
-// {
-//     QFileInfo info(url.toLocalFile());
-// 
-//     GitJob* job = new GitJob(vcsplugin);
-//     if ( prepareJob(job, info.absolutePath()) ) {
-//         *job << "cvs";
-//         *job << "diff";
-// 
-//         if (!diffOptions.isEmpty())
-//             *job << diffOptions;
-// 
-//         QString rA = convertVcsRevisionToString(revA);
-//         if (!rA.isEmpty())
-//             *job << rA;
-//         QString rB = convertVcsRevisionToString(revB);
-//         if (!rB.isEmpty())
-//             *job << rB;
-// 
-//         *job << KShell::quoteArg(info.fileName());
-// 
-//         return job;
-//     }
-//     if (job) delete job;
-//     return NULL;
-// }
-// 
-// GitJob* GitProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
-// {
-//     QFileInfo info(url.toLocalFile());
-// 
-//     GitJob* job = new GitJob(vcsplugin);
-//     if ( prepareJob(job, info.absolutePath()) ) {
-//         *job << "cvs";
-//         *job << "annotate";
-// 
-//         QString revision = convertVcsRevisionToString(rev);
-//         if (!revision.isEmpty())
-//             *job << revision;
-// 
-//         *job << KShell::quoteArg(info.fileName());
-// 
-//         return job;
-//     }
-//     if (job) delete job;
-//     return NULL;
-// }
-
-GitJob* GitProxy::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
+DVCSjob* GitExecutor::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
 {
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "status";
@@ -297,19 +221,31 @@ GitJob* GitProxy::status(const QString & repository, const KUrl::List & files, b
     return NULL;
 }
 
-// GitJob* GitProxy::is_inside_work_tree(const QString& repository)
+// DVCSjob* GitExecutor::is_inside_work_tree(const QString& repository)
 // {
 // 
 //     return NULL;
 // }
 
-GitJob* GitProxy::empty_cmd() const
+DVCSjob* GitExecutor::var(const QString & repository)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, repository) ) {
+        *job << "git-var";
+        *job << "-l";
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+DVCSjob* GitExecutor::empty_cmd() const
 {
     ///TODO: maybe just "" command?
-    GitJob* job = new GitJob(vcsplugin);
+    DVCSjob* job = new DVCSjob(vcsplugin);
     *job << "echo";
     *job << "-n";
     return job;
 }
 
-#include "gitproxy.moc"
+// #include "hgexetor.moc"

@@ -27,7 +27,7 @@
 
 #include <QtCore/QObject>
 
-class GitProxy;
+class GitExecutor;
 
 class GitInitTest: public QObject
 {
@@ -47,7 +47,7 @@ class GitInitTest: public QObject
         void cleanupTestCase();
 
     private:
-        GitProxy* m_proxy;
+        GitExecutor* m_proxy;
 };
 
 #endif

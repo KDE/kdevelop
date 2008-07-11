@@ -25,10 +25,12 @@
 #include "initTest.h"
 
 #include <QtTest/QtTest>
-#include <KUrl>
 
-#include <gitjob.h>
-#include <gitproxy.h>
+#include <KUrl>
+#include <KDebug>
+
+#include <dvcsjob.h>
+#include <gitexecutor.h>
 
 #define GITTEST_DIR1            "kdevGit_testdir"
 #define GITTEST_BASEDIR         "/tmp/kdevGit_testdir/"
@@ -42,7 +44,7 @@
 
 void GitInitTest::initTestCase()
 {
-    m_proxy = new GitProxy;
+    m_proxy = new GitExecutor;
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
@@ -73,8 +75,9 @@ void GitInitTest::cleanupTestCase()
 
 void GitInitTest::repoInit()
 {
+    kDebug() << "Trying to init repo";
     // make job that creates the local repository
-    GitJob* j = m_proxy->init(KUrl(GITTEST_BASEDIR));
+    DVCSjob* j = m_proxy->init(KUrl(GITTEST_BASEDIR));
     QVERIFY( j );
 
 
@@ -87,6 +90,7 @@ void GitInitTest::repoInit()
 
 void GitInitTest::addFiles()
 {
+    kDebug() << "Adding files to the repo";
     //we start it after repoInit, so we still have empty git repo
     //First let's create a file
     QFile f(GITTEST_BASEDIR""GIT_TESTFILE_NAME);
@@ -96,7 +100,7 @@ void GitInitTest::addFiles()
     }
     f.flush();
 
-    GitJob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(GIT_TESTFILE_NAME)));
+    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(GIT_TESTFILE_NAME)));
     QVERIFY( j );
 
     // try to start the job
@@ -110,9 +114,14 @@ void GitInitTest::addFiles()
 
 void GitInitTest::commitFiles()
 {
+    kDebug() << "\nListing variables with KProcess\n";
+    DVCSjob* j_var = m_proxy->var(QString(GITTEST_BASEDIR));
+    QVERIFY(j_var->exec() );
+
+    kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    GitJob* j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit"),
-                                KUrl::List(QStringList(GIT_TESTFILE_NAME)));
+    ///TODO: if "" is ok?
+    DVCSjob* j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("Test commit"));
     QVERIFY( j );
 
     // try to start the job
@@ -134,6 +143,7 @@ void GitInitTest::commitFiles()
 
     QVERIFY(firstCommit!="");
 
+    kDebug() << "Committing one more time";
     //let's try to change the file and test "git commit -a"
     QFile f(GITTEST_BASEDIR""GIT_TESTFILE_NAME);
     if(f.open(QIODevice::WriteOnly)) {
@@ -143,7 +153,7 @@ void GitInitTest::commitFiles()
     f.flush();
 
     //Since KJob uses delete later we don't care about deleting pld *j
-    j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit2"));
+    j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit2"),KUrl::List(QStringList("-a")));
     QVERIFY( j );
 
     // try to start the job
@@ -163,8 +173,9 @@ void GitInitTest::commitFiles()
 
 void GitInitTest::cloneRepository()
 {
+    kDebug() << "Do not clone people, clone Git repos!";
     // make job that clones the local repository, created in the previous test
-    GitJob* j = m_proxy->clone(KUrl(GITTEST_BASEDIR), KUrl(GITTEST_BASEDIR2));
+    DVCSjob* j = m_proxy->clone(KUrl(GITTEST_BASEDIR), KUrl(GITTEST_BASEDIR2));
     QVERIFY( j );
 
     // try to start the job

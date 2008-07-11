@@ -7,27 +7,29 @@ include_directories( ${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/vcs
     ${CMAKE_SOURCE_DIR}/vcs/interfaces
     ${CMAKE_SOURCE_DIR}/vcs/models
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/
 )
 
 
 ########### next target ###############
 
 set(kdevgit_PART_SRCS
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsjob.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsplugin.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsmainview.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsgenericoutputview.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importdialog.cpp
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.cpp
     gitplugin.cpp
-    gitjob.cpp
-    gitproxy.cpp
-    commitdialog.cpp
-    gitmainview.cpp
-    gitgenericoutputview.cpp
-    importdialog.cpp
-    importmetadatawidget.cpp
+    gitexecutor.cpp
 )
 
 set(kdevgit_PART_UI
-    commitdialog.ui
-    cvsgenericoutputview.ui
-    cvsmainview.ui
-    importmetadatawidget.ui
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.ui
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsgenericoutputview.ui
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsmainview.ui
+    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.ui
 )
 
 kde4_add_ui_files(kdevgit_PART_SRCS ${kdevgit_PART_UI})

@@ -23,9 +23,10 @@ if (GIT)
         ${CMAKE_SOURCE_DIR}/interfaces
 		${CMAKE_SOURCE_DIR}/vcs
 		${CMAKE_SOURCE_DIR}/plugins/git
+        ${CMAKE_SOURCE_DIR}/vcs/dvcs/
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-	set(gitInitTest_SRCS initTest.cpp ../gitjob.cpp ../gitproxy.cpp)
+	set(gitInitTest_SRCS initTest.cpp ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsjob.cpp ../gitexecutor.cpp)
     kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})
 	target_link_libraries(kdevgit-test
 		${QT_QTTEST_LIBRARY}
