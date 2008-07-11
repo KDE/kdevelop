@@ -76,10 +76,10 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         error->setBackground(QColor(Qt::red)); // 0xB60003
         error->setForeground(Qt::white);
 
-        KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
+        /*KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
         dyn->setBackground(Qt::red);
         error->setDynamicAttribute(Attribute::ActivateMouseIn, dyn);
-        error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);
+        error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);*/
 
         // TODO text hint for problem
         range->setAttribute(error);
