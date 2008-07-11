@@ -20,11 +20,9 @@
 #define DECLARATION_DATA_H
 
 #include "duchainbase.h"
-#include "contextowner_p.h"
 
 #include "declaration.h"
 #include "ducontext.h"
-#include "ducontext_p.h"
 #include "topducontext.h"
 #include "duchainlock.h"
 #include "duchain.h"
