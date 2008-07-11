@@ -16,7 +16,6 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include <vector>
 #include <boost/serialization/extended_type_info_typeid.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/level.hpp>
 #include <iosfwd>
 #include "dynamictextexport.h"

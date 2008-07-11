@@ -15,6 +15,7 @@
 #include "dynamictext/dynamictext.h"
 #include "utils.h"
 #include "qtserialization.h"
+#include <boost/serialization/vector.hpp>
 
 FileSynchronizeData::FileSynchronizeData( const QString& fileName, const QDynamicText& text, bool sendDynamic ) {
   if( sendDynamic ) {
