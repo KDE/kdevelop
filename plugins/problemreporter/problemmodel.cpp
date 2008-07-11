@@ -58,7 +58,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         return QVariant();
 
     DUChainReadLocker lock(DUChain::lock());
-  
+
     ProblemPointer p = problemForIndex(index);
 
     if (!index.internalId()) {
@@ -90,7 +90,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Line:
                         return QString::number(p->finalLocation().start().line() + 1);
                     case Column:
-                        return QString::number(p->finalLocation().start().column());
+                        return QString::number(p->finalLocation().start().column() + 1);
                 }
                 break;
 
@@ -112,7 +112,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Line:
                         return QString::number(p->locationStack().at(index.row()).line() + 1);
                     case Column:
-                        return QString::number(p->locationStack().at(index.row()).column());
+                        return QString::number(p->locationStack().at(index.row()).column() + 1);
                 }
                 break;
 
@@ -135,7 +135,7 @@ QModelIndex ProblemModel::parent(const QModelIndex & index) const
 QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent) const
 {
     DUChainReadLocker lock(DUChain::lock());
-  
+
     if (row < 0 || column < 0 || column >= LastColumn)
         return QModelIndex();
 

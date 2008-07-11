@@ -81,13 +81,13 @@ ProblemWidget::~ProblemWidget()
 {
 }
 
-void collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, QSet<TopDUContext*>& hadContexts)
+void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, QSet<TopDUContext*>& hadContexts)
 {
   if(hadContexts.contains(context))
     return;
-  
+
   hadContexts.insert(context);
-  
+
   allProblems += context->problems();
   bool isProxy = context->flags() & TopDUContext::ProxyContextFlag;
   foreach(DUContext::Import ctx, context->importedParentContexts()) {
@@ -118,11 +118,11 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
 void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
 {
   kDebug() << "activated document:" << doc->url();
-  
+
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   KDevelop::TopDUContext* chosen = 0;
-  
+
   foreach( KDevelop::ILanguage* language, languages)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(doc->url(), true);
@@ -154,7 +154,7 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
 
   KTextEditor::Cursor start;
     KUrl url;
-  
+
     {
       DUChainReadLocker lock(DUChain::lock());
       KDevelop::ProblemPointer problem = model()->problemForIndex(index);

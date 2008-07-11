@@ -26,6 +26,13 @@
 #include <iplugin.h>
 #include <QtCore/QVariant>
 
+#include "language/duchain/indexedstring.h"
+
+namespace KTextEditor { class Document; }
+namespace KDevelop { class IDocument; class ParseJob; }
+
+class ProblemHighlighter;
+
 class ProblemReporterPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
@@ -37,8 +44,15 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     // KDevelop::Plugin methods
     virtual void unload();
 
+  private Q_SLOTS:
+    void documentAboutToBeDeleted(KTextEditor::Document* doc);
+    void documentLoaded(KDevelop::IDocument* document);
+    void parseJobFinished(KDevelop::ParseJob* parseJob);
+
   private:
     class ProblemReporterFactory* m_factory;
+
+    QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
 };
 
 #endif // CLASSBROWSERPART_H

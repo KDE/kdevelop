@@ -18,6 +18,7 @@ set(kdevproblemreporter_PART_SRCS
     problemreporterplugin.cpp
     problemwidget.cpp
     problemmodel.cpp
+    problemhighlighter.cpp
 #modeltest.cpp
 )
 

@@ -157,9 +157,13 @@ protected:
     static QMutex* mutex();
 
     /**
+     * Constructor for copy constructors in subclasses.
      * This constructor should be used when sharing the data from another object without owning it.
      * This object will use that data, but will not destroy it on destruction.
      * This object must be destroyed before the object given through @param useDataFrom is destroyed!
+     *
+     * \param dd data to copy.
+     * \param ownsData set to true if this object owns the private data including the smart range and should delete it when this object is deleted, otherwise set to false (the default)
      */
     DocumentRangeObject(DocumentRangeObject& useDataFrom);
 

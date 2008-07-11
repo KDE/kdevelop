@@ -122,23 +122,6 @@ SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
   }
 }
 
-SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
-{
-  LockedSmartInterface iface = smart();
-  if(!iface)
-      return 0;
-
-  Q_ASSERT(d->m_currentRangeStack.isEmpty());
-
-  SmartRange* newRange = createRange(iface.currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-  Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
-  Q_ASSERT(newRange->isSmartRange());
-  iface->addHighlightToDocument( newRange->toSmartRange(), false );
-
-  d->m_currentRangeStack << newRange;
-  return d->m_currentRangeStack.top();
-}
-
 template<>
 SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
@@ -239,6 +222,23 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartI
   Q_ASSERT(ret->end() == rangeEnd && ret->start() == rangeStart);
   m_currentRangeStack << ret;
   return ret;
+}
+
+SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
+{
+  LockedSmartInterface iface = smart();
+  if(!iface)
+      return 0;
+
+  Q_ASSERT(d->m_currentRangeStack.isEmpty());
+
+  SmartRange* newRange = d->createRange<SmartRange>(iface, iface.currentDocument()->documentRange(), KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
+  Q_ASSERT(!dynamic_cast<KTextEditor::SmartRange*>(newRange) || static_cast<KTextEditor::SmartRange*>(newRange)->parentRange() == 0 || static_cast<KTextEditor::SmartRange*>(newRange)->childRanges().count() == 0);
+  Q_ASSERT(newRange->isSmartRange());
+  iface->addHighlightToDocument( newRange->toSmartRange(), false );
+
+  Q_ASSERT(d->m_currentRangeStack.count() == 1);
+  return d->m_currentRangeStack.top();
 }
 
 SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )

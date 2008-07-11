@@ -47,12 +47,14 @@ public:
 
   class ProblemModel* model() const;
 
+  static void collectProblems(QList<KDevelop::ProblemPointer>& allProblems, KDevelop::TopDUContext* context, QSet<KDevelop::TopDUContext*>& hadContexts);
+
 protected:
   virtual void showEvent(QShowEvent* event);
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
-    
+
   void parseJobFinished(KDevelop::ParseJob* job);
 
   void documentActivated(KDevelop::IDocument*);

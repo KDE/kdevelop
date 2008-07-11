@@ -28,10 +28,20 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
+#include <KTextEditor/Document>
+
 #include <icore.h>
 #include <iuicontroller.h>
 #include <idocumentcontroller.h>
 
+#include "language/backgroundparser/parsejob.h"
+#include "language/editor/editorintegrator.h"
+#include "interfaces/ilanguagecontroller.h"
+#include "language/backgroundparser/backgroundparser.h"
+#include "language/duchain/duchainlock.h"
+#include "language/duchain/duchain.h"
+
+#include "problemhighlighter.h"
 #include "problemwidget.h"
 
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
@@ -69,15 +79,58 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
 {
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
+
+  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
+  connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()
 {
+  qDeleteAll(m_highlighters);
 }
 
 void ProblemReporterPlugin::unload()
 {
   core()->uiController()->removeToolView(m_factory);
+}
+
+void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
+{
+  QMutableHashIterator<IndexedString, ProblemHighlighter*> it = m_highlighters;
+
+  IndexedString url(doc->url().pathOrUrl());
+
+  if (m_highlighters.contains(url))
+    delete m_highlighters.take(url);
+}
+
+void ProblemReporterPlugin::documentLoaded(KDevelop::IDocument* document)
+{
+  if (document->textDocument())
+    m_highlighters.insert(IndexedString(document->url().pathOrUrl()), new ProblemHighlighter(document->textDocument()));
+}
+
+void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
+{
+  if (m_highlighters.contains(parseJob->document())) {
+    ProblemHighlighter* ph = m_highlighters[parseJob->document()];
+    if (!ph)
+      return;
+
+    QList<ProblemPointer> allProblems;
+    QSet<TopDUContext*> hadContexts;
+
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      if (!parseJob->duChain())
+        return;
+
+      ProblemWidget::collectProblems(allProblems, parseJob->duChain(), hadContexts);
+    }
+
+    ph->setProblems(allProblems);
+  }
 }
 
 #include "problemreporterplugin.moc"
