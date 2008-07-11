@@ -27,31 +27,37 @@
 #include "ducontext.h"
 #include "use.h"
 #include "symboltable.h"
-#include "declaration_p.h"
+#include "declarationdata.h"
 #include "identifiedtype.h"
+#include "duchainregister.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-class ForwardDeclarationPrivate : public DeclarationPrivate
+class ForwardDeclarationData : public DeclarationData
 {
 public:
-  ForwardDeclarationPrivate() {
+  ForwardDeclarationData() {
   }
-  ForwardDeclarationPrivate( const ForwardDeclarationPrivate& rhs ) 
-      : DeclarationPrivate( rhs )
+  ForwardDeclarationData( const ForwardDeclarationData& rhs ) 
+      : DeclarationData( rhs )
   {
   }
 };
 
-ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationPrivate(*rhs.d_func())) {
+REGISTER_DUCHAIN_ITEM(ForwardDeclaration);
+
+ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationData(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
+ForwardDeclaration::ForwardDeclaration(ForwardDeclarationData& data) : Declaration(data) {
+}
+
 ForwardDeclaration::ForwardDeclaration(const SimpleRange& range, DUContext* context )
-  : Declaration(*new ForwardDeclarationPrivate, range)
+  : Declaration(*new ForwardDeclarationData, range)
 {
   if( context )
     setContext( context );

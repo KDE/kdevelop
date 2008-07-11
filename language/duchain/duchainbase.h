@@ -33,8 +33,8 @@ class DUChainPointerData;
 class IndexedString;
 
 #define DUCHAIN_DECLARE_DATA(Class) \
-    inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
-    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
+    inline class Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
+    inline const class Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
 
 #define DUCHAIN_D(Class) const Class##Data * const d = d_func()
 #define DUCHAIN_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
@@ -95,8 +95,6 @@ public:
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
   IndexedString url() const;
-  
-  typedef DUChainBaseData Data;
   
   enum {
     Identity = 1

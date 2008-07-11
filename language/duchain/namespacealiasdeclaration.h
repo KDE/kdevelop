@@ -23,7 +23,7 @@
 
 namespace KDevelop
 {
-class NamespaceAliasDeclarationPrivate;
+class NamespaceAliasDeclarationData;
 /**
  * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
  *
@@ -34,8 +34,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclaration : public Declaration
 public:
   NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs);
   NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context);
-  virtual ~NamespaceAliasDeclaration();
+  NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
 
+  virtual ~NamespaceAliasDeclaration();
   ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
   virtual void setAbstractType(AbstractType::Ptr type);
 
@@ -48,9 +49,15 @@ public:
 
   //Declaration::identifier() is the identifier that importIdentifier() should be "renamed to" within scope, or globalImportIdentifier() if it should be imported.
 
+  enum {
+    Identity = 13
+  };
+  
+  typedef Declaration BaseClass;
+
   virtual QString toString() const;
 private:
-  Q_DECLARE_PRIVATE(NamespaceAliasDeclaration)
+  DUCHAIN_DECLARE_DATA(NamespaceAliasDeclaration)
 };
 }
 

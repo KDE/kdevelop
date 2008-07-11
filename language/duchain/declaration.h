@@ -41,7 +41,7 @@ class AbstractType;
 class DUContext;
 class Use;
 class ForwardDeclaration;
-class DeclarationPrivate;
+class DeclarationData;
 class DeclarationId;
 class Declaration;
 
@@ -65,7 +65,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     }
 
     bool isValid() const {
-      return m_topContext != 0 || m_declarationIndex != 0;
+      return m_topContext != 0 || m_declarationIndex != 0 || declaration() == 0;
     }
 
   private:
@@ -119,6 +119,8 @@ public:
   Declaration(const Declaration& rhs);
   /// Destructor
   virtual ~Declaration();
+  /// Uses the given data
+  Declaration( DeclarationData & dd );
 
   virtual TopDUContext* topContext() const;
 
@@ -453,13 +455,11 @@ public:
    * */
   virtual Declaration* clone() const;
 
+  enum {
+    Identity = 7
+  };
+  
 protected:
-  /**
-   * Copy constructor.
-   *
-   * \param dd private data to copy
-   */
-  Declaration( DeclarationPrivate & dd );
 
   /**
     * Constructor for copy constructors in subclasses.
@@ -468,10 +468,10 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  Declaration( DeclarationPrivate & dd, const SimpleRange& range );
+  Declaration( DeclarationData & dd, const SimpleRange& range );
 
 private:
-  Q_DECLARE_PRIVATE(Declaration)
+  DUCHAIN_DECLARE_DATA(Declaration)
 };
 
 }

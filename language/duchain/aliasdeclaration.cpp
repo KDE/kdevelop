@@ -19,35 +19,43 @@
 #include "aliasdeclaration.h"
 
 #include "ducontext.h"
-#include "declaration_p.h"
+#include "declarationdata.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
 
-class AliasDeclarationPrivate : public DeclarationPrivate
+class AliasDeclarationData : public DeclarationData
 {
 public:
-  AliasDeclarationPrivate() {}
-  AliasDeclarationPrivate( const AliasDeclarationPrivate& rhs )
-      : DeclarationPrivate( rhs )
+  AliasDeclarationData() {}
+  AliasDeclarationData( const AliasDeclarationData& rhs )
+      : DeclarationData( rhs )
   {
     m_aliasedDeclaration = rhs.m_aliasedDeclaration;
   }
-  DeclarationPointer m_aliasedDeclaration;
+  IndexedDeclaration m_aliasedDeclaration;
 };
 
+REGISTER_DUCHAIN_ITEM(AliasDeclaration);
+
+
 AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs) 
-  : Declaration(*new AliasDeclarationPrivate(*rhs.d_func())) {
+  : Declaration(*new AliasDeclarationData(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new AliasDeclarationPrivate, range)
+  : Declaration(*new AliasDeclarationData, range)
 {
   setKind(Alias);
   if( context )
     setContext( context );
 }
+
+AliasDeclaration::AliasDeclaration(AliasDeclarationData& data) : Declaration(data) {
+}
+
 
 AliasDeclaration::~AliasDeclaration()
 {
@@ -58,17 +66,17 @@ Declaration* AliasDeclaration::clone() const {
 }
 
 QString AliasDeclaration::toString() const {
-  if( aliasedDeclaration() )
-    return QString("Alias %1 as %2").arg(aliasedDeclaration()->qualifiedIdentifier().toString()).arg(identifier().toString());
+  if( aliasedDeclaration().isValid() )
+    return QString("Alias %1 as %2").arg(aliasedDeclaration().declaration()->qualifiedIdentifier().toString()).arg(identifier().toString());
   else
     return QString("Lost alias %1").arg(identifier().toString());
 }
 
-void AliasDeclaration::setAliasedDeclaration(const DeclarationPointer& decl) {
-  d_func()->m_aliasedDeclaration = decl;
+void AliasDeclaration::setAliasedDeclaration(const IndexedDeclaration& decl) {
+  d_func_dynamic()->m_aliasedDeclaration = decl;
 }
 
-DeclarationPointer AliasDeclaration::aliasedDeclaration() const {
+IndexedDeclaration AliasDeclaration::aliasedDeclaration() const {
   return d_func()->m_aliasedDeclaration;
 }
 

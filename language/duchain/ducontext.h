@@ -47,7 +47,7 @@ class DUChain;
 class Use;
 class TopDUContext;
 class DUContext;
-class DUContextPrivate;
+class DUContextData;
 
 //Foreach macro that also works with QVarLengthArray
 #define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)
@@ -87,7 +87,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
 {
   friend class Use;
   friend class Declaration;
-  friend class DeclarationPrivate;
+  friend class DeclarationData;
+  friend class DUContextData;
   friend class Definition;
 
 public:
@@ -99,6 +100,7 @@ public:
    * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
   explicit DUContext(const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(DUContextData&);
 
   /**
    * Destructor. Will delete all child contexts which are defined within
@@ -493,6 +495,10 @@ public:
    * */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString()) const;
 
+  enum {
+    Identity = 2
+  };
+  
 ///Represents multiple qualified identifiers in a way that is better to manipulate and allows applying namespace-aliases or -imports easily.
 ///A SearchItem generally represents a tree of identifiers, and represents all the qualified identifiers that can be constructed by walking
 ///along the tree starting at an arbitrary root-node into the depth using the "next" pointers.
@@ -591,7 +597,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * */
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
 
-  DUContext(DUContextPrivate& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  DUContext(DUContextData& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
   
   ///Just uses the data from the given context(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
   DUContext(DUContext& useDataFrom);
@@ -613,7 +619,7 @@ private:
   virtual void rangePositionChanged(KTextEditor::SmartRange* range);
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
-  Q_DECLARE_PRIVATE(DUContext)
+  DUCHAIN_DECLARE_DATA(DUContext)
 };
 
 /**

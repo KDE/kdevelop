@@ -19,12 +19,13 @@
 */
 
 #include "classmemberdeclaration.h"
-#include "classmemberdeclaration_p.h"
+#include "classmemberdeclarationdata.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
 
-ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate()
+ClassMemberDeclarationData::ClassMemberDeclarationData()
 {
   m_accessPolicy = Declaration::Public;
   m_isStatic = false;
@@ -35,8 +36,8 @@ ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate()
   m_isMutable = false;
   
 }
-ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate( const ClassMemberDeclarationPrivate& rhs ) 
-    : DeclarationPrivate( rhs )
+ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs ) 
+    : DeclarationData( rhs )
 {
   m_accessPolicy = rhs.m_accessPolicy;
   m_isStatic = rhs.m_isStatic;
@@ -46,28 +47,30 @@ ClassMemberDeclarationPrivate::ClassMemberDeclarationPrivate( const ClassMemberD
   m_isExtern = rhs.m_isExtern;
   m_isMutable = rhs.m_isMutable;
 }
-  
-ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationPrivate(*rhs.d_func())) {
+
+ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
+
+REGISTER_DUCHAIN_ITEM(ClassMemberDeclaration);
 
 Declaration* ClassMemberDeclaration::clone() const {
   return new ClassMemberDeclaration(*this);
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new ClassMemberDeclarationPrivate, range )
+  : Declaration(*new ClassMemberDeclarationData, range )
 {
   if( context )
     setContext( context );
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const SimpleRange& range )
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range )
   : Declaration(dd, range)
 {
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd)
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd)
   : Declaration(dd)
 {
 }
@@ -83,7 +86,7 @@ bool ClassMemberDeclaration::isStatic() const
 
 void ClassMemberDeclaration::setStatic(bool isStatic)
 {
-  d_func()->m_isStatic = isStatic;
+  d_func_dynamic()->m_isStatic = isStatic;
 }
 
 bool ClassMemberDeclaration::isAuto() const
@@ -93,7 +96,7 @@ bool ClassMemberDeclaration::isAuto() const
 
 void ClassMemberDeclaration::setAuto(bool isAuto)
 {
-  d_func()->m_isAuto = isAuto;
+  d_func_dynamic()->m_isAuto = isAuto;
 }
 
 bool ClassMemberDeclaration::isFriend() const
@@ -103,7 +106,7 @@ bool ClassMemberDeclaration::isFriend() const
 
 void ClassMemberDeclaration::setFriend(bool isFriend)
 {
-  d_func()->m_isFriend = isFriend;
+  d_func_dynamic()->m_isFriend = isFriend;
 }
 
 bool ClassMemberDeclaration::isRegister() const
@@ -113,7 +116,7 @@ bool ClassMemberDeclaration::isRegister() const
 
 void ClassMemberDeclaration::setRegister(bool isRegister)
 {
-  d_func()->m_isRegister = isRegister;
+  d_func_dynamic()->m_isRegister = isRegister;
 }
 
 bool ClassMemberDeclaration::isExtern() const
@@ -123,7 +126,7 @@ bool ClassMemberDeclaration::isExtern() const
 
 void ClassMemberDeclaration::setExtern(bool isExtern)
 {
-  d_func()->m_isExtern = isExtern;
+  d_func_dynamic()->m_isExtern = isExtern;
 }
 
 bool ClassMemberDeclaration::isMutable() const
@@ -133,7 +136,7 @@ bool ClassMemberDeclaration::isMutable() const
 
 void ClassMemberDeclaration::setMutable(bool isMutable)
 {
-  d_func()->m_isMutable = isMutable;
+  d_func_dynamic()->m_isMutable = isMutable;
 }
 
 Declaration::AccessPolicy ClassMemberDeclaration::accessPolicy() const
@@ -143,12 +146,12 @@ Declaration::AccessPolicy ClassMemberDeclaration::accessPolicy() const
 
 void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPolicy)
 {
-  d_func()->m_accessPolicy = accessPolicy;
+  d_func_dynamic()->m_accessPolicy = accessPolicy;
 }
 
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
-  Q_D(ClassMemberDeclaration);
+  DUCHAIN_D_DYNAMIC(ClassMemberDeclaration);
   d->m_isStatic = specifiers & StaticSpecifier;
   d->m_isAuto = specifiers & AutoSpecifier;
   d->m_isFriend = specifiers & FriendSpecifier;

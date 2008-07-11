@@ -17,7 +17,7 @@
 */
 
 #include "declaration.h"
-#include "declaration_p.h"
+#include "declarationdata.h"
 
 #include <QByteArray>
 
@@ -38,15 +38,21 @@
 #include "definitions.h"
 #include "uses.h"
 #include "indexedstring.h"
+#include "repositories/stringrepository.h"
+#include "duchainregister.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-DeclarationPrivate::DeclarationPrivate() 
+Repositories::StringRepository commentRepository("Comment Repository");
+
+REGISTER_DUCHAIN_ITEM(Declaration);
+
+DeclarationData::DeclarationData() 
   : m_isDefinition(false), m_inSymbolTable(false),  
-    m_isTypeAlias(false), m_anonymousInContext(false) 
+    m_isTypeAlias(false), m_anonymousInContext(false), m_comment(0)
 {
   m_internalContext = 0;
   m_context = 0;
@@ -54,7 +60,7 @@ DeclarationPrivate::DeclarationPrivate()
   m_ownIndex = 0;
 }
   
-DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChainBaseData(rhs)
+DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs)
 {
   m_identifier = rhs.m_identifier;
   m_type = rhs.m_type;
@@ -70,17 +76,17 @@ DeclarationPrivate::DeclarationPrivate( const DeclarationPrivate& rhs ) : DUChai
 }
   
 Declaration::Kind Declaration::kind() const {
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   return d->m_kind;
 }
 
 void Declaration::setKind(Kind kind) {
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   d->m_kind = kind;
 }
 
 bool Declaration::inDUChain() const {
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   if( d->m_anonymousInContext )
     return false;
   TopDUContext* top = topContext();
@@ -88,7 +94,7 @@ bool Declaration::inDUChain() const {
 }
 
 Declaration::Declaration( const SimpleRange& range, DUContext* context )
-  : DUChainBase(*new DeclarationPrivate, range)
+  : DUChainBase(*new DeclarationData, range)
 {
   if(context)
     setContext(context);
@@ -101,23 +107,23 @@ uint Declaration::ownIndex() const
 }
 
 Declaration::Declaration(const Declaration& rhs) 
-  : DUChainBase(*new DeclarationPrivate( *rhs.d_func() )) {
+  : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-Declaration::Declaration( DeclarationPrivate & dd ) : DUChainBase(dd)
+Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
 {
 }
 
-Declaration::Declaration( DeclarationPrivate & dd, const SimpleRange& range )
+Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
   : DUChainBase(dd, range)
 {
-//  Q_D(Declaration);
+//  DUCHAIN_D(Declaration);
 }
 
 Declaration::~Declaration()
 {
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   // Inserted by the builder after construction has finished.
   if( d->m_internalContext )
     d->m_internalContext->setOwner(0);
@@ -129,7 +135,7 @@ Declaration::~Declaration()
 
   // context is only null in the test cases
   if (context())
-    context()->d_func()->removeDeclaration(this);
+    context()->d_func_dynamic()->removeDeclaration(this);
 
   setContext(0);
 
@@ -138,18 +144,23 @@ Declaration::~Declaration()
 }
 
 QByteArray Declaration::comment() const {
-  Q_D(const Declaration);
-  return d->m_comment;
+  DUCHAIN_D(Declaration);
+  if(!d->m_comment)
+    return 0;
+  else
+    return Repositories::arrayFromItem(commentRepository.itemFromIndex(d->m_comment));
 }
 
 void Declaration::setComment(const QByteArray& str) {
-  Q_D(Declaration);
-  d->m_comment = str;
+  DUCHAIN_D_DYNAMIC(Declaration);
+  if(str.isEmpty())
+    d->m_comment = 0;
+  else
+    d->m_comment = commentRepository.index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
 }
 
 void Declaration::setComment(const QString& str) {
-  Q_D(Declaration);
-  d->m_comment = str.toUtf8();
+  setComment(str.toUtf8());
 }
 
 const Identifier& Declaration::identifier( ) const
@@ -176,7 +187,7 @@ Declaration* IndexedDeclaration::declaration() const {
 void Declaration::setIdentifier(const Identifier& identifier)
 {
   ENSURE_CAN_WRITE
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   bool wasInSymbolTable = d->m_inSymbolTable;
   
   setInSymbolTable(false);
@@ -204,7 +215,7 @@ AbstractType::Ptr Declaration::abstractType( ) const
 void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CAN_WRITE
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
@@ -259,13 +270,13 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   clearOwnIndex();
   
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
     if( !d->m_anonymousInContext ) {
-      d->m_context->d_func()->removeDeclaration(this);// if( )
+      d->m_context->d_func_dynamic()->removeDeclaration(this);// if( )
         //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
     }
   }
@@ -275,7 +286,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   if (context) {
     if(!d->m_anonymousInContext) {
-      context->d_func()->addDeclaration(this);
+      context->d_func_dynamic()->addDeclaration(this);
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
 
@@ -295,7 +306,7 @@ void Declaration::clearOwnIndex() {
   
   if(d_func()->m_ownIndex && d_func()->m_context->topContext())
     d_func()->m_context->topContext()->removeDeclarationIndex(d_func()->m_ownIndex);
-  d_func()->m_ownIndex = 0;
+  d_func_dynamic()->m_ownIndex = 0;
 }
 
 void Declaration::allocateOwnIndex() {
@@ -306,7 +317,7 @@ void Declaration::allocateOwnIndex() {
   
   Q_ASSERT(!d_func()->m_ownIndex);
   if(d_func()->m_context->topContext())
-    d_func()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
+    d_func_dynamic()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
@@ -360,7 +371,7 @@ DUContext * Declaration::internalContext() const
 void Declaration::setInternalContext(DUContext* context)
 {
   ENSURE_CAN_WRITE
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
 
   if( context == d->m_internalContext )
     return;
@@ -396,7 +407,7 @@ QString Declaration::toString() const
 bool Declaration::isDefinition() const
 {
   ENSURE_CAN_READ
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
 
   return d->m_isDefinition;
 }
@@ -404,7 +415,7 @@ bool Declaration::isDefinition() const
 void Declaration::setDeclarationIsDefinition(bool dd)
 {
   ENSURE_CAN_WRITE
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   d->m_isDefinition = dd;
 //   if (d->m_isDefinition && definition()) {
 //     setDefinition(0);
@@ -413,12 +424,12 @@ void Declaration::setDeclarationIsDefinition(bool dd)
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
 bool Declaration::isTypeAlias() const {
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   return d->m_isTypeAlias;
 }
 
 void Declaration::setIsTypeAlias(bool isTypeAlias) {
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   d->m_isTypeAlias = isTypeAlias;
 }
 
@@ -463,13 +474,13 @@ void Declaration::setDefinition(Declaration* definition)
 
 bool Declaration::inSymbolTable() const
 {
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   return d->m_inSymbolTable;
 }
 
 void Declaration::setInSymbolTable(bool inSymbolTable)
 {
-  Q_D(Declaration);
+  DUCHAIN_D_DYNAMIC(Declaration);
   if(!d->m_identifier.isEmpty()) {
     if(!d->m_inSymbolTable && inSymbolTable)
       SymbolTable::self()->addDeclaration(this);
@@ -492,7 +503,7 @@ const ForwardDeclaration* Declaration::toForwardDeclaration() const
 
 TopDUContext * Declaration::topContext() const
 {
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   if (d->m_context)
       return d->m_context->topContext();
 
@@ -520,7 +531,7 @@ uint Declaration::additionalIdentity() const
 
 bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   ENSURE_CAN_READ
-  Q_D(const Declaration);
+  DUCHAIN_D(Declaration);
   if(d->m_identifier != rhs->d_func()->m_identifier)
     return false;
   

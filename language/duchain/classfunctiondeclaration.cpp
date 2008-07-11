@@ -22,20 +22,20 @@
 
 #include "ducontext.h"
 #include "typesystem.h"
-#include "classmemberdeclaration_p.h"
+#include "classmemberdeclarationdata.h"
 
 namespace KDevelop
 {
 Identifier conversionIdentifier("operator{...cast...}");
 
-class ClassFunctionDeclarationPrivate : public ClassMemberDeclarationPrivate
+class ClassFunctionDeclarationPrivate : public ClassMemberDeclarationData
 {
 public:
   ClassFunctionDeclarationPrivate() {
     m_functionType = ClassFunctionDeclaration::Normal;
   }
   ClassFunctionDeclarationPrivate( const ClassFunctionDeclarationPrivate& rhs )
-      : ClassMemberDeclarationPrivate( rhs )
+      : ClassMemberDeclarationData( rhs )
   {
     m_functionType = rhs.m_functionType;
   }

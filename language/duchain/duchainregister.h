@@ -75,7 +75,7 @@ template<class T, class Data>
 class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public DUChainBaseFactory {
   public:
   DUChainBase* create(DUChainBaseData* data) const {
-    return new T(*static_cast<typename T::Data*>(data));
+    return new T(*static_cast<Data*>(data));
   }
 /*  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
     Q_ASSERT(from.classId == T::Identity);

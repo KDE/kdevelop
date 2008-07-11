@@ -32,7 +32,7 @@ namespace KDevelop
   class DUChain;
   class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
-  class TopDUContextPrivate;
+  class TopDUContextData;
   class TopDUContextLocalPrivate;
   class Problem;
   class DeclarationChecker;
@@ -55,6 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   explicit TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(TopDUContextData& data);
   /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
    * (it must not have been created with this constructor).
    * 
@@ -131,6 +132,10 @@ public:
   ///More convenient version of the above
   ImportTrace importTrace(const TopDUContext* target) const;
 
+  enum {
+    Identity = 4
+  };
+  
   enum Flags {
     NoFlags = 0,
     /**
@@ -266,7 +271,7 @@ private:
   void applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const;
   //Same as imports, without the slow access-check, for internal usage
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
-  Q_DECLARE_PRIVATE(TopDUContext)
+  DUCHAIN_DECLARE_DATA(TopDUContext)
   friend class DUChain; //To allow access to setParsingEnvironmentFile
   friend class TopDUContextLocalPrivate;
   TopDUContextLocalPrivate* m_local;

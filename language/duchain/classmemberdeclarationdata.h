@@ -1,4 +1,6 @@
-/* This file is part of KDevelop
+/* This  is part of KDevelop
+    Copyright 2002-2005 Roberto Raggi <roberto@kdevelop.org>
+    Copyright 2006 Adam Treat <treat@kde.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -16,46 +18,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATION_P_H
-#define DECLARATION_P_H
+#ifndef CLASSMEMBERDECLARATIONDATA_H
+#define CLASSMEMBERDECLARATIONDATA_H
 
-#include "duchainbase.h"
-#include "contextowner_p.h"
-
-#include "declaration.h"
-#include "ducontext.h"
-#include "ducontext_p.h"
-#include "topducontext.h"
-#include "duchainlock.h"
-#include "duchain.h"
+#include "declarationdata.h"
 
 namespace KDevelop
 {
 
-class DeclarationPrivate : public DUChainBaseData
+class ClassMemberDeclarationData : public DeclarationData
 {
 public:
-  DeclarationPrivate();
+  ClassMemberDeclarationData();
+  ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs );
   
-  DeclarationPrivate( const DeclarationPrivate& rhs );
-  
-  DUContext* m_context, *m_internalContext;
-  IndexedType m_type;
-  Identifier m_identifier;
-  
-  QByteArray m_comment;
-
-  Declaration::Kind m_kind;
-
-  uint m_ownIndex;
-  
-  bool m_isDefinition  : 1;
-  bool m_inSymbolTable : 1;
-  bool m_isTypeAlias   : 1;
-  bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
-  
+  Declaration::AccessPolicy m_accessPolicy;
+  bool m_isStatic: 1;
+  bool m_isAuto: 1;
+  bool m_isFriend: 1;
+  bool m_isRegister: 1;
+  bool m_isExtern: 1;
+  bool m_isMutable: 1;
 };
 
 }
 
 #endif
+

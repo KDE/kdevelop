@@ -26,7 +26,7 @@
 
 namespace KDevelop
 {
-class FunctionDeclarationPrivate;
+class FunctionDeclarationData;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -35,6 +35,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public Declaration, publ
 public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
   FunctionDeclaration(const SimpleRange& range, DUContext* context);
+  FunctionDeclaration(FunctionDeclarationData& data);
   virtual ~FunctionDeclaration();
 
   virtual void setAbstractType(AbstractType::Ptr type);
@@ -46,8 +47,14 @@ public:
   virtual bool isFunctionDeclaration() const;
   
   virtual uint additionalIdentity() const;
+  
+  enum {
+    Identity = 12
+  };
+  
+  typedef Declaration Base;
 private:
-  Q_DECLARE_PRIVATE(FunctionDeclaration)
+  DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 }
 

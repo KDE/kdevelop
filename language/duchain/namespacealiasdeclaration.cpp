@@ -19,41 +19,48 @@
 #include "namespacealiasdeclaration.h"
 
 #include "ducontext.h"
-#include "declaration_p.h"
+#include "declarationdata.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
 
-class NamespaceAliasDeclarationPrivate : public DeclarationPrivate
+class NamespaceAliasDeclarationData : public DeclarationData
 {
 public:
-  NamespaceAliasDeclarationPrivate() {}
-  NamespaceAliasDeclarationPrivate( const NamespaceAliasDeclarationPrivate& rhs )
-      : DeclarationPrivate( rhs )
+  NamespaceAliasDeclarationData() {}
+  NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
+      : DeclarationData( rhs )
   {
   }
-  QualifiedIdentifier m_importIdentifier; //The identifier that was imported
+  IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };
 
+REGISTER_DUCHAIN_ITEM(NamespaceAliasDeclaration);
+
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) 
-  : Declaration(*new NamespaceAliasDeclarationPrivate(*rhs.d_func())) {
+  : Declaration(*new NamespaceAliasDeclarationData(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new NamespaceAliasDeclarationPrivate, range)
+  : Declaration(*new NamespaceAliasDeclarationData, range)
 {
   setKind(NamespaceAlias);
   if( context )
     setContext( context );
 }
 
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data) : Declaration(data) {
+}
+
+
 QualifiedIdentifier NamespaceAliasDeclaration::importIdentifier() const {
-  return d_func()->m_importIdentifier;
+  return d_func()->m_importIdentifier.identifier();
 }
 
 void NamespaceAliasDeclaration::setImportIdentifier(const QualifiedIdentifier& id) {
-  d_func()->m_importIdentifier = id;
+  d_func_dynamic()->m_importIdentifier = id;
 }
 
 NamespaceAliasDeclaration::~NamespaceAliasDeclaration()
@@ -70,11 +77,11 @@ void NamespaceAliasDeclaration::setAbstractType(AbstractType::Ptr type) {
 }
 
 QString NamespaceAliasDeclaration::toString() const {
-  Q_D(const NamespaceAliasDeclaration);
+  DUCHAIN_D(NamespaceAliasDeclaration);
   if( identifier() != globalImportIdentifier )
-    return QString("Import %1 as %2").arg(d->m_importIdentifier.toString()).arg(identifier().toString());
+    return QString("Import %1 as %2").arg(d->m_importIdentifier.identifier().toString()).arg(identifier().toString());
   else
-    return QString("Import %1").arg(d->m_importIdentifier.toString());
+    return QString("Import %1").arg(d->m_importIdentifier.identifier().toString());
 }
 
 }

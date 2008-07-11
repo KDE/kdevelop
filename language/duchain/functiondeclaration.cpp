@@ -19,30 +19,36 @@
 */
 
 #include "functiondeclaration.h"
-#include "declaration_p.h"
+#include "declarationdata.h"
 #include "ducontext.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
 
-class FunctionDeclarationPrivate : public DeclarationPrivate
+class FunctionDeclarationData : public DeclarationData
 {
   public:
-    FunctionDeclarationPrivate()
+    FunctionDeclarationData()
     {
     }
-    FunctionDeclarationPrivate( const FunctionDeclarationPrivate& rhs )
-      :DeclarationPrivate( rhs )
+    FunctionDeclarationData( const FunctionDeclarationData& rhs )
+      :DeclarationData( rhs )
     {
     }
 };
 
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(*new FunctionDeclarationPrivate( *rhs.d_func() )), AbstractFunctionDeclaration(rhs) {
+REGISTER_DUCHAIN_ITEM(FunctionDeclaration);
+
+FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data) : Declaration(data) {
+}
+
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(*new FunctionDeclarationData( *rhs.d_func() )), AbstractFunctionDeclaration(rhs) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 FunctionDeclaration::FunctionDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new FunctionDeclarationPrivate, range)
+  : Declaration(*new FunctionDeclarationData, range)
 {
   if( context )
     setContext( context );

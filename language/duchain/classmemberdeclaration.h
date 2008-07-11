@@ -25,7 +25,7 @@
 
 namespace KDevelop
 {
-class ClassMemberDeclarationPrivate;
+class ClassMemberDeclarationData;
 /**
  * Represents a single class member definition in a definition-use chain.
  */
@@ -34,6 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
   ClassMemberDeclaration(const SimpleRange& range, DUContext* context);
+  ClassMemberDeclaration(ClassMemberDeclarationData& dd);
   ~ClassMemberDeclaration();
 
   AccessPolicy accessPolicy() const;
@@ -71,12 +72,15 @@ public:
 
   virtual Declaration* clone() const;
 
+  enum {
+    Identity = 9
+  };
+  
 protected:
-  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd, const SimpleRange& range);
-  ClassMemberDeclaration(ClassMemberDeclarationPrivate& dd);
+  ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range);
   
 private:
-  Q_DECLARE_PRIVATE(ClassMemberDeclaration)
+  DUCHAIN_DECLARE_DATA(ClassMemberDeclaration)
 };
 }
 

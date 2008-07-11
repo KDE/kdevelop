@@ -24,7 +24,7 @@
 
 namespace KDevelop
 {
-class AliasDeclarationPrivate;
+class AliasDeclarationData;
 /**
  * An alias declaration maps one declaration to another.
  * While searching in the duchain, an AliasDeclaration is transparently
@@ -43,6 +43,8 @@ public:
    * \param context context in which this declaration occurred
    */
   AliasDeclaration(const SimpleRange& range, DUContext* context);
+  
+  AliasDeclaration(AliasDeclarationData& data);
   /// Destructor
   virtual ~AliasDeclaration();
 
@@ -60,19 +62,23 @@ public:
    *
    * \param decl the declaration that this declaration references
    */
-  void setAliasedDeclaration(const DeclarationPointer& decl);
+  void setAliasedDeclaration(const IndexedDeclaration& decl);
 
   /**
    * Access the declaration that is aliased by this declaration.
    *
    * \returns the aliased declaration
    */
-  DeclarationPointer aliasedDeclaration() const;
+  IndexedDeclaration aliasedDeclaration() const;
 
   virtual QString toString() const;
 
+  enum {
+    Identity = 6
+  };
+  
 private:
-  Q_DECLARE_PRIVATE(AliasDeclaration)
+  DUCHAIN_DECLARE_DATA(AliasDeclaration)
 };
 }
 

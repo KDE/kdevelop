@@ -123,7 +123,9 @@ install(FILES
     duchain/ducontext.h
     duchain/topducontext.h
     duchain/declaration.h
+    duchain/declarationdata.h
     duchain/classmemberdeclaration.h
+    duchain/classmemberdeclarationdata.h
     duchain/classfunctiondeclaration.h
     duchain/use.h
     duchain/typesystem.h

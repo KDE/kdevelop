@@ -23,7 +23,7 @@
 
 namespace KDevelop
 {
-class ForwardDeclarationPrivate;
+class ForwardDeclarationData;
 /**
  * Represents a forward declaration
  */
@@ -40,6 +40,7 @@ public:
    * \param parentContext context in which this declaration occurred
    * */
   ForwardDeclaration(const SimpleRange& range, DUContext* context);
+  ForwardDeclaration(ForwardDeclarationData& data);
 
   ///Copy-constructor for cloning
   ForwardDeclaration(const ForwardDeclaration& rhs);
@@ -66,8 +67,14 @@ public:
 
   virtual QString toString() const;
 
+  enum {
+    Identity = 10
+  };
+  
+  typedef Declaration BaseClass;
+  
 private:
-  Q_DECLARE_PRIVATE(ForwardDeclaration)
+  DUCHAIN_DECLARE_DATA(ForwardDeclaration)
 };
 
 }

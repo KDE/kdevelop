@@ -65,13 +65,13 @@ struct StringRepositoryItemRequest {
 typedef ItemRepository<unsigned short, StringRepositoryItemRequest, true> StringRepository;
 
 ///@param item must be valid(nonzero)
-QString stringFromItem(const unsigned short* item) {
+inline QString stringFromItem(const unsigned short* item) {
   const unsigned short* textPos = item;
   ++textPos;
   return QString::fromUtf8((char*)textPos, (int)*item);
 }
 
-QByteArray arrayFromItem(const unsigned short* item) {
+inline QByteArray arrayFromItem(const unsigned short* item) {
   const unsigned short* textPos = item;
   ++textPos;
   return QByteArray((char*)textPos, (int)*item);

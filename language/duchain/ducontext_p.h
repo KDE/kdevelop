@@ -43,10 +43,10 @@ namespace KTextEditor {
 
 namespace KDevelop{
 class DUContext;
-class DUContextPrivate : public DUChainBaseData
+class DUContextData : public DUChainBaseData
 {
 public:
-  DUContextPrivate( DUContext* );
+  DUContextData( DUContext* );
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
   DUContextPointer m_parentContext;
