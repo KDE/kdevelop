@@ -206,7 +206,7 @@ public:
    */
   DUContext* parentContext() const;
 
-  struct Import {
+  struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
     DUContextPointer context;
     bool operator==(const Import& rhs) const {
@@ -214,7 +214,7 @@ public:
     }
     SimpleCursor position;
   };
-  
+
   /**
    * Returns the list of imported parent contexts for this context.
    * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
@@ -498,7 +498,7 @@ public:
   enum {
     Identity = 2
   };
-  
+
 ///Represents multiple qualified identifiers in a way that is better to manipulate and allows applying namespace-aliases or -imports easily.
 ///A SearchItem generally represents a tree of identifiers, and represents all the qualified identifiers that can be constructed by walking
 ///along the tree starting at an arbitrary root-node into the depth using the "next" pointers.
@@ -598,7 +598,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
 
   DUContext(DUContextData& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
-  
+
   ///Just uses the data from the given context(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
   DUContext(DUContext& useDataFrom);
 
@@ -612,7 +612,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 private:
   void synchronizeUsesFromSmart() const;
   void synchronizeUsesToSmart() const;
-  
+
   void clearDeclarationIndices();
   void updateDeclarationIndices();
 
