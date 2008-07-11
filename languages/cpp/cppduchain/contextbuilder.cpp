@@ -887,6 +887,10 @@ void ContextBuilder::visitIfStatement(IfStatementAST* node)
 
 void ContextBuilder::visitDoStatement(DoStatementAST *node)
 {
+  if(!node->statement) {
+    kWarning() << "error, no statement"; //Warning instead of crashing here
+    return;
+  }
   DUContext* secondParentContext = openContext(node->statement, DUContext::Other);
 
   visit(node->statement);
