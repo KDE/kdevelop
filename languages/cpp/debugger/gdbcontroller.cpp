@@ -371,7 +371,7 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
         KMessageBox::detailedSorry(
             qApp->activeWindow(),
             i18n("<b>Invalid gdb reply</b>"
-                 "<p>The 'stopped' packet does not include the 'reason' field'."),
+                 "<p>The 'stopped' packet does not include the 'reason' field."),
             i18n("The gdb reply is: bla-bla-bla"),
             i18n("Invalid gdb reply"));
         return;
