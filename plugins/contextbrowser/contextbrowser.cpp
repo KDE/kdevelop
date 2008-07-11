@@ -410,18 +410,22 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
 void ContextBrowserPlugin::documentLoaded( KDevelop::IDocument* document )
 {
   kDebug() << "connecting document";
-  connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
-  connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
+  if (document->textDocument()) {
+    connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
+    connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
 
-  if (document->textDocument())
     foreach( KTextEditor::View* view, document->textDocument()->views() )
       viewCreated( document->textDocument(), view );
 
-  KDevelop::DUChainWriteLocker lock( DUChain::lock() );
-  QList<TopDUContext*> chains = DUChain::self()->chainsForDocument( document->url() );
+    KDevelop::DUChainWriteLocker lock( DUChain::lock() );
+    QList<TopDUContext*> chains = DUChain::self()->chainsForDocument( document->url() );
 
-  foreach( TopDUContext* chain, chains )
-    registerAsRangeWatcher( chain );
+    foreach( TopDUContext* chain, chains )
+      registerAsRangeWatcher( chain );
+
+  } else if (document->isTextDocument()) {
+    connect(dynamic_cast<QObject*>(document), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
+  }
 }
 
 void ContextBrowserPlugin::documentClosed( KDevelop::IDocument* document )
