@@ -67,7 +67,6 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             continue;
 
         KTextEditor::SmartRange* range = editor.topRange(EditorIntegrator::Highlighting);
-        //KTextEditor::SmartRange* range = editor.createRange(problem->finalLocation());
         *range = problem->finalLocation();
         if (range->isEmpty())
             range->smartEnd().advance(1);
@@ -87,7 +86,6 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         m_topHLRanges.append(range);
 
         editor.exitCurrentRange();
-        //editor.exitCurrentRange();
     }
 }
 

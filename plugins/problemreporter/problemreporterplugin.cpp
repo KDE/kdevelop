@@ -109,6 +109,8 @@ void ProblemReporterPlugin::documentLoaded(KDevelop::IDocument* document)
 {
   if (document->textDocument())
     m_highlighters.insert(IndexedString(document->url().pathOrUrl()), new ProblemHighlighter(document->textDocument()));
+  else if (document->isTextDocument())
+    connect(dynamic_cast<QObject*>(document), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
 }
 
 void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)

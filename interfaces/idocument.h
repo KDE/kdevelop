@@ -81,6 +81,11 @@ public:
     virtual KParts::Part* partForView(QWidget *view) const = 0;
 
     /**
+     * Returns whether this document is a text document.
+     */
+    virtual bool isTextDocument() const;
+
+    /**
      * Returns the text editor, if this is a text document or 0 otherwise.
      */
     virtual KTextEditor::Document* textDocument() const = 0;
@@ -114,7 +119,18 @@ public:
     */
     virtual DocumentState state() const = 0;
 
+    /**
+     * Access the current text cursor position, if possible.
+     *
+     * \returns the current text cursor position, or an invalid cursor otherwise.
+     */
     virtual KTextEditor::Cursor cursorPosition() const = 0;
+
+    /**
+     * Set the current text cursor position, if possible.
+     *
+     * \param cursor new cursor position.
+     */
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor) = 0;
 
     /**
@@ -122,6 +138,16 @@ public:
      * This needs to call notifyActivated()
      */
     virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) = 0;
+
+// signals
+    /**
+     * Indicate that the textDocument() has been created, used by plugins to detect when
+     * the document is requested to create a view and thus needs to perform loading of the document.
+     * (ie. loading is lazy)
+     *
+     * \param doc document which now has a textDocument().
+     */
+    virtual void textDocumentCreated(KDevelop::IDocument* doc);
 
 protected:
     ICore* core();

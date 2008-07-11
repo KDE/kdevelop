@@ -54,9 +54,13 @@ public:
     virtual KTextEditor::Cursor cursorPosition() const;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
+    virtual bool isTextDocument() const;
     virtual KTextEditor::Document* textDocument() const;
 
     virtual QString documentType() const;
+
+Q_SIGNALS:
+    void textDocumentCreated(KDevelop::IDocument* doc);
 
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);

@@ -84,5 +84,15 @@ void IDocument::notifyContentChanged()
     emit core()->documentController()->documentContentChanged(this);
 }
 
+bool IDocument::isTextDocument() const
+{
+    return false;
+}
+
+void IDocument::textDocumentCreated(KDevelop::IDocument* doc)
+{
+    Q_UNUSED(doc)
+}
+
 }
 

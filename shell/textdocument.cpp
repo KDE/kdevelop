@@ -153,6 +153,11 @@ TextDocument::~TextDocument()
     delete d;
 }
 
+bool TextDocument::isTextDocument() const
+{
+    return true;
+}
+
 KTextEditor::Document *TextDocument::textDocument() const
 {
     return d->document;
@@ -185,6 +190,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
             connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
+
+        emit textDocumentCreated(this);
     }
 
     view = d->document->createView(parent);
