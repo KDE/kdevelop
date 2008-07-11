@@ -139,16 +139,6 @@ public:
      */
     virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) = 0;
 
-// signals
-    /**
-     * Indicate that the textDocument() has been created, used by plugins to detect when
-     * the document is requested to create a view and thus needs to perform loading of the document.
-     * (ie. loading is lazy)
-     *
-     * \param doc document which now has a textDocument().
-     */
-    virtual void textDocumentCreated(KDevelop::IDocument* doc);
-
 protected:
     ICore* core();
     IDocument( ICore* );
@@ -156,6 +146,7 @@ protected:
     void notifyStateChanged();
     void notifyActivated();
     void notifyContentChanged();
+    void notifyTextDocumentCreated();
 
 private:
     friend class IDocumentPrivate;

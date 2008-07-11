@@ -81,7 +81,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
   setXMLFile( "kdevproblemreporter.rc" );
 
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
-  connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
   connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
 }
 
@@ -105,12 +105,10 @@ void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
     delete m_highlighters.take(url);
 }
 
-void ProblemReporterPlugin::documentLoaded(KDevelop::IDocument* document)
+void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
-  if (document->textDocument())
-    m_highlighters.insert(IndexedString(document->url().pathOrUrl()), new ProblemHighlighter(document->textDocument()));
-  else if (document->isTextDocument())
-    connect(dynamic_cast<QObject*>(document), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
+  Q_ASSERT(document->textDocument());
+  m_highlighters.insert(IndexedString(document->url().pathOrUrl()), new ProblemHighlighter(document->textDocument()));
 }
 
 void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)

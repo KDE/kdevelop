@@ -77,7 +77,7 @@ public:
     Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
 
     Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
-    
+
     virtual void notifyDocumentClosed(IDocument* doc) = 0;
 
 public Q_SLOTS:
@@ -101,6 +101,10 @@ Q_SIGNALS:
     /**Emitted when a document has been loaded.
     Note, no views exist for the document at the time this signal is emitted.*/
     void documentLoaded( KDevelop::IDocument* document );
+
+    /**Emitted when a text document has been loaded, and the text document created.
+    Note, no views exist for the document at the time this signal is emitted.*/
+    void textDocumentCreated( KDevelop::IDocument* document );
 
     /**Emitted when a document has been closed.*/
     void documentClosed( KDevelop::IDocument* document );

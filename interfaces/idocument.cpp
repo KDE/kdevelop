@@ -89,9 +89,9 @@ bool IDocument::isTextDocument() const
     return false;
 }
 
-void IDocument::textDocumentCreated(KDevelop::IDocument* doc)
+void IDocument::notifyTextDocumentCreated()
 {
-    Q_UNUSED(doc)
+    emit core()->documentController()->textDocumentCreated(this);
 }
 
 }

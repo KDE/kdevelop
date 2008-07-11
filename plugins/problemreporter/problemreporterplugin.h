@@ -46,7 +46,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
 
   private Q_SLOTS:
     void documentAboutToBeDeleted(KTextEditor::Document* doc);
-    void documentLoaded(KDevelop::IDocument* document);
+    void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
   private:

@@ -191,7 +191,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
 
-        emit textDocumentCreated(this);
+        notifyTextDocumentCreated();
     }
 
     view = d->document->createView(parent);

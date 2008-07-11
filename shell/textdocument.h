@@ -59,9 +59,6 @@ public:
 
     virtual QString documentType() const;
 
-Q_SIGNALS:
-    void textDocumentCreated(KDevelop::IDocument* doc);
-
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);
 

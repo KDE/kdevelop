@@ -65,31 +65,31 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
   Q_SIGNALS:
     void previousContextShortcut();
     void nextContextShortcut();
-    
+
   private slots:
     void parseJobFinished(KDevelop::ParseJob* job);
-    void documentLoaded( KDevelop::IDocument* document );
+    void textDocumentCreated( KDevelop::IDocument* document );
     void documentClosed( KDevelop::IDocument* document );
     void documentDestroyed( QObject* obj );
     void viewDestroyed( QObject* obj );
     void cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition );
     void viewCreated( KTextEditor::Document* , KTextEditor::View* );
     void updateViews();
-    
+
     void textHintRequested(const KTextEditor::Cursor&, QString&);
-    
+
   private:
     void clearMouseHover();
     virtual void rangeDeleted (KTextEditor::SmartRange *range);
     virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
     virtual void mouseExitedRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
-  
+
     void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration, bool mouseHighlight );
     void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight );
 
     void registerAsRangeWatcher(KDevelop::DUChainBase* base);
     void registerAsRangeWatcher(KDevelop::DUContext* ctx);
-  
+
     QTimer* m_updateTimer;
     QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
     QSet<KTextEditor::View*> m_updateViews;
