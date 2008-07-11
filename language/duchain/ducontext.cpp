@@ -114,7 +114,7 @@ bool DUContextData::isThisImportedBy(const DUContext* context) const {
 void DUContext::synchronizeUsesFromSmart() const
 {
   DUCHAIN_D(DUContext);
-  
+
   if(d->m_rangesForUses.isEmpty() || !d->m_rangesChanged)
     return;
 
@@ -581,7 +581,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
 
         if( position.isValid() && (*it).position.isValid() && position < (*it).position )
           continue;
-        
+
         if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext) )
           return false;
       }
@@ -654,7 +654,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  
+
   for(int a = 0; a < d->m_importedContexts.size(); ++a) {
     if(d->m_importedContexts[a].context.data() == context) {
       d->m_importedContexts.remove(a);
@@ -899,8 +899,13 @@ void DUContext::deleteUse(int index)
 
   if(!d->m_rangesForUses.isEmpty()) {
     if(d->m_rangesForUses[index]) {
-      d->m_rangesForUses[index]->removeWatcher(this);
-      EditorIntegrator::releaseRange(d->m_rangesForUses[index]);
+      EditorIntegrator editor;
+      editor.setCurrentUrl(url());
+      LockedSmartInterface iface = editor.smart();
+      if (iface) {
+        d->m_rangesForUses[index]->removeWatcher(this);
+        EditorIntegrator::releaseRange(d->m_rangesForUses[index]);
+      }
     }
     d->m_rangesForUses.remove(index);
   }
@@ -912,14 +917,8 @@ void DUContext::deleteUses()
   DUCHAIN_D_DYNAMIC(DUContext);
 
   d->m_uses.clear();
-  foreach(SmartRange* range, d->m_rangesForUses) {
-    if(range) {
-      range->removeWatcher(this);
-      EditorIntegrator::releaseRange(range);
-    }
-  }
 
-  d->m_rangesForUses.clear();
+  clearUseSmartRanges();
 }
 
 bool DUContext::inDUChain() const {
@@ -1144,8 +1143,13 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
   Q_ASSERT(d_func()->m_rangesForUses.size() == d_func()->m_uses.size());
 
   if(d_func()->m_rangesForUses[useIndex]) {
-    d_func()->m_rangesForUses[useIndex]->removeWatcher(this);
-    EditorIntegrator::releaseRange(d_func()->m_rangesForUses[useIndex]);
+    EditorIntegrator editor;
+    editor.setCurrentUrl(url());
+    LockedSmartInterface iface = editor.smart();
+    if (iface) {
+      d_func()->m_rangesForUses[useIndex]->removeWatcher(this);
+      EditorIntegrator::releaseRange(d_func()->m_rangesForUses[useIndex]);
+    }
   }
 
   d_func()->m_rangesForUses[useIndex] = range;
@@ -1157,12 +1161,20 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
 void DUContext::clearUseSmartRanges()
 {
   ENSURE_CAN_WRITE
-  foreach (SmartRange* range, d_func()->m_rangesForUses) {
-    range->removeWatcher(this);
-    EditorIntegrator::releaseRange(range);
-  }
 
-  d_func()->m_rangesForUses.clear();
+  if (!d_func()->m_rangesForUses.isEmpty()) {
+    EditorIntegrator editor;
+    editor.setCurrentUrl(url());
+    LockedSmartInterface iface = editor.smart();
+    if (iface) {
+      foreach (SmartRange* range, d_func()->m_rangesForUses) {
+        range->removeWatcher(this);
+        EditorIntegrator::releaseRange(range);
+      }
+    }
+
+    d_func()->m_rangesForUses.clear();
+  }
 }
 
 void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
