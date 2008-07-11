@@ -284,9 +284,10 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if(prop.toString()=="Kross")
         {
             kDebug() << "it is a kross plugin!!";
+            QStringList interfaces=info.property( "X-KDevelop-Interfaces" ).toStringList();
             plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
                             QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='KDevKrossManager'" ), 
-                            d->core, QVariantList() << info.pluginName(), &str_error );
+                            d->core, QVariantList() << interfaces << info.pluginName(), &str_error );
             kDebug() << "kross plugin:" << plugin;
         }
         else
