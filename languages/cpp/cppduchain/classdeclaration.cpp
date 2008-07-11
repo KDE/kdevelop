@@ -19,72 +19,82 @@
 #include "classdeclaration.h"
 #include <duchain/identifier.h>
 #include <duchain/declaration.h>
+#include <duchain/declarationdata.h>
 #include <appendedlist.h>
+#include "duchainregister.h"
 
 
 using namespace KDevelop;
 
 namespace Cpp {
 
-DEFINE_LIST_MEMBER_HASH(ClassDeclarationPrivate, baseClasses, BaseClassInstance)
+DEFINE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
   
-class ClassDeclarationPrivate
+class ClassDeclarationData : public DeclarationData
 {
 public:
-  ClassDeclarationPrivate() {
+  ClassDeclarationData() {
     initializeAppendedLists(true);
   }
   
-  ~ClassDeclarationPrivate() {
+  ~ClassDeclarationData() {
     freeAppendedLists();
   }
   
-  ClassDeclarationPrivate(const ClassDeclarationPrivate& rhs) {
+  ClassDeclarationData(const ClassDeclarationData& rhs) : DeclarationData(rhs) {
     initializeAppendedLists(true);
     copyListsFrom(rhs);
   }
   
   static size_t classSize() {
-    return sizeof(ClassDeclarationPrivate);
+    return sizeof(ClassDeclarationData);
   }
   
-  START_APPENDED_LISTS(ClassDeclarationPrivate);
-  APPENDED_LIST_FIRST(ClassDeclarationPrivate, BaseClassInstance, baseClasses);
-  END_APPENDED_LISTS(ClassDeclarationPrivate, baseClasses);
+  START_APPENDED_LISTS(ClassDeclarationData);
+  APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
+  END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
 };
 
 ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(range, context), d_ptr(new ClassDeclarationPrivate)
+  : Declaration(*new ClassDeclarationData, range)
+{
+  setContext(context);
+}
+
+ClassDeclaration::ClassDeclaration(ClassDeclarationData& data)
+  : Declaration(data)
 {
 }
 
+REGISTER_DUCHAIN_ITEM(ClassDeclaration);
+
 void ClassDeclaration::clearBaseClasses() {
-  d_ptr->baseClassesList().clear();
+  d_func_dynamic()->baseClassesList().clear();
 }
 
 uint ClassDeclaration::baseClassesSize() const {
-  return d_ptr->baseClassesSize();
+  return d_func()->baseClassesSize();
 }
 
 const BaseClassInstance* ClassDeclaration::baseClasses() const {
-  return d_ptr->baseClasses();
+  return d_func()->baseClasses();
 }
 
 void ClassDeclaration::addBaseClass(BaseClassInstance klass) {
-  d_ptr->baseClassesList().append(klass);
+  d_func_dynamic()->baseClassesList().append(klass);
 }
 
 void ClassDeclaration::replaceBaseClass(uint n, BaseClassInstance klass) {
-  Q_ASSERT(n <= d_ptr->baseClassesSize());
-  d_ptr->baseClassesList()[n] = klass;
+  Q_ASSERT(n <= d_func()->baseClassesSize());
+  d_func_dynamic()->baseClassesList()[n] = klass;
 }
 
 ClassDeclaration::~ClassDeclaration()
 {
 }
 
-ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs) : Declaration(rhs), 
-        d_ptr(new ClassDeclarationPrivate(*rhs.d_ptr)) {
+ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs) : Declaration(*new ClassDeclarationData(*rhs.d_func())) {
+  d_func_dynamic()->setClassId<ClassDeclaration>();
 }
 
 Declaration* ClassDeclaration::clone() const {

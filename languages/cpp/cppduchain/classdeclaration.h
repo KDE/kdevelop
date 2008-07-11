@@ -41,7 +41,7 @@ struct BaseClassInstance
   bool virtualInheritance;
 };
 
-class ClassDeclarationPrivate;
+class ClassDeclarationData;
 
 /**
  * Represents a single template-parameter definition
@@ -50,6 +50,7 @@ class KDEVCPPDUCHAIN_EXPORT ClassDeclaration : public KDevelop::Declaration
 {
 public:
   ClassDeclaration(const ClassDeclaration& rhs);
+  ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
   ~ClassDeclaration();
 
@@ -69,9 +70,12 @@ public:
   
   virtual KDevelop::Declaration* clone() const;
   
+  enum {
+    Identity = 17
+  };
+  
 private:
-  ClassDeclarationPrivate* const d_ptr;
-  Q_DECLARE_PRIVATE(ClassDeclaration)
+  DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };
 
 }
