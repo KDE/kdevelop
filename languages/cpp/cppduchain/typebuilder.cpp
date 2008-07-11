@@ -435,8 +435,12 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   clearLastType();
-
+  
+  m_declarationHasInitDeclarators = (bool)node->init_declarator;
+  
   TypeBuilderBase::visitFunctionDeclaration(node);
+  
+  m_declarationHasInitDeclarators = false;
 }
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)

@@ -506,7 +506,7 @@ void TestDUChain::testEnum()
                      01234567890123456789012345678901234567890123456789012345678901234567890123456789*/
   QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 }; union { int u1; float u2; };");
 
-  TopDUContext* top = parse(method, DumpAll);
+  TopDUContext* top = parse(method, DumpNone);
 
 /*  {
   DUChainWriteLocker lock(DUChain::lock());
@@ -716,7 +716,7 @@ void TestDUChain::testCStruct2()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-   
+  {
   QByteArray method("struct A {struct C c; }; struct C { int v; };");
 
   /* Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
@@ -730,12 +730,39 @@ void TestDUChain::testCStruct2()
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->indexedType().type()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->indexedType().type()).name();
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
            
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
   QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);*/
-  
   release(top);
+  }
+  {
+  QByteArray method("struct A {inline struct C c() {}; }; struct C { int v; };");
+
+  /* Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
+  */
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->indexedType().type()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->indexedType().type()).name();
+  CppFunctionType::Ptr function(top->childContexts()[0]->localDeclarations()[0]->indexedType().type().cast<CppFunctionType>());
+  QVERIFY(function);
+  kDebug() << "RETURN:" << function->returnType()->toString() << typeid(*function->returnType()).name();
+  QCOMPARE(function->returnType()->indexed(), top->localDeclarations()[1]->indexedType());
+  //QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
+           
+  //QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
+//   QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
+  release(top);
+  }
+
 }
 
 void TestDUChain::testVariableDeclaration()
