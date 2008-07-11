@@ -65,7 +65,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     }
 
     bool isValid() const {
-      return m_topContext != 0 || m_declarationIndex != 0 || declaration() == 0;
+      return declaration() != 0;
     }
 
   private:
