@@ -270,8 +270,11 @@ class CppDUContext : public BaseContext {
               
               res.type = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
               
-              if( (basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) && ((TypeUtils::targetType(res.type.type(), 0).cast<CppTemplateParameterType>()) || TypeUtils::targetType(res.type.type(), 0).cast<DelayedType>() )) {
-                return false;
+              if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
+                AbstractType::Ptr targetTypePtr = TypeUtils::targetType(res.type.type(), 0);
+                if (targetTypePtr.cast<CppTemplateParameterType>() || targetTypePtr.cast<DelayedType>()) {
+                  return false;
+                }
               }
 
               ifDebug( if( !res.isValid() ) kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifiers().at(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString(); )
@@ -316,7 +319,9 @@ class CppDUContext : public BaseContext {
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
           for(int a = 0; a < ret.size(); ) {
-            if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && (ret[a])->abstractType().cast<CppTemplateParameterType>() )
+            
+            AbstractType::Ptr retAbstractTypePtr = ret[a]->abstractType();
+            if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && retAbstractTypePtr.cast<CppTemplateParameterType>() )
                 || ( (!(flags & BaseContext::OnlyFunctions)) &&  (dynamic_cast<ClassFunctionDeclaration*>(ret[a]) && static_cast<ClassFunctionDeclaration*>(ret[a])->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
                 
               //Erase the item
