@@ -157,7 +157,7 @@ public:
 
     ///Uses dynamic_cast to cast this pointer to the given type
     template<class U>
-    TypePtr<U> cast() const {
+    TypePtr<U> cast(U * /*dummy*/ = 0) const {
       return TypePtr<U>(dynamic_cast<U*>(d));
     }
 

@@ -220,7 +220,8 @@ protected:
 
       if(!delay) {
         foreach( Declaration* decl, dec ) {
-          if( needClass && !decl->abstractType().cast<StructureType>() )
+          // gcc 4.0.1 doesn't eath this // if( needClass && !decl->abstractType().cast<StructureType>() )
+          if( needClass && !decl->abstractType().cast(static_cast<StructureType *>(0)) )
             continue;
 
           if (decl->abstractType() ) {
