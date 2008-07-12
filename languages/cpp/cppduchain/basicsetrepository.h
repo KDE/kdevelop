@@ -142,6 +142,7 @@ public:
   
 private:
   friend class Set;
+  friend class Set::Iterator;
   class Private;
   Private* d;
 };
@@ -161,6 +162,8 @@ public:
   BasicSetRepository::Index operator*() const;
 private:
   friend class Set;
+  friend class IteratorPrivate;
+  static inline BasicSetRepository::Private *getPrivatePtr(BasicSetRepository *repo) { return repo->d; }
   class IteratorPrivate;
   IteratorPrivate* d;
 };
