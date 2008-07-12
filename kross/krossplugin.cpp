@@ -48,12 +48,14 @@ extern "C"
 }
 
 KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
-    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this)
+    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this),
+    action(0)
 {
     kDebug() << "Krossing the krossed paths of this krossed world" << args;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     
+    Q_ASSERT(args.count() >= 2);
     QStringList interfaces = args[0].toStringList();
     QString name = args[1].toString();
 

@@ -37,7 +37,7 @@ class DVCSCallbacks : public QObject
 {
     Q_OBJECT
     public:
-        DVCSCallbacks(KrossDistributedVersionControl* self) : QObject(0), m_self(self) {}
+        DVCSCallbacks(QObject* parent, KrossDistributedVersionControl* self) : QObject(parent), m_self(self) {}
     public slots:
         void ctxCommit() {}
         void ctxAdd() {}
@@ -58,7 +58,7 @@ class DVCSCallbacks : public QObject
 KrossDistributedVersionControl::KrossDistributedVersionControl(KDevelop::IPlugin* plugin)
     : action(0), m_plugin(plugin)
 {
-    m_callbacks=new DVCSCallbacks(this);
+    m_callbacks=new DVCSCallbacks(plugin, this);
 }
 
 KrossDistributedVersionControl::~KrossDistributedVersionControl()
@@ -118,6 +118,7 @@ KDevelop::ContextMenuExtension KrossDistributedVersionControl::distributedMenuEx
     kDebug() << "version controlled?" << hasVersionControlledEntries;
     if(hasVersionControlledEntries)
     {
+/*
         _action = new KAction(i18n("Commit..."), m_callbacks);
         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(ctxCommit()) );
         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
@@ -161,13 +162,16 @@ KDevelop::ContextMenuExtension KrossDistributedVersionControl::distributedMenuEx
         _action = new KAction(i18n("Annotation..."), m_callbacks);
         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(ctxBlame()) );
         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+*/
     }
     else
     {
         QMenu* menu = new QMenu(name());
+/*
         _action = new KAction(i18n("Init..."), menu);
         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(slotInit()) );
         menu->addAction( _action );
+*/
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
 
@@ -181,7 +185,8 @@ void KrossDistributedVersionControl::setActionDistributed(Kross::Action* anActio
 
 QString KrossDistributedVersionControl::name() const
 {
-    QVariant result=action->callFunction( "pluginName");
+    QVariantList args;
+    QVariant result=action->callFunction("name", args );
     kDebug() << "retrieving name" << result.toString();
     return result.toString();
 }
@@ -193,14 +198,16 @@ KDevelop::VcsImportMetadataWidget * KrossDistributedVersionControl::createImport
 
 bool KrossDistributedVersionControl::isVersionControlled(const KUrl & url)
 {
-    QVariant result=action->callFunction( "isVersionControlled", QVariantList() << QUrl(url));
+    QVariantList args;
+    args << QUrl(url);
+    QVariant result=action->callFunction( "isVersionControlled", args);
     return result.toBool();
 }
 
 KDevelop::VcsJob * KrossDistributedVersionControl::add(const KUrl::List & files, KDevelop::IBasicVersionControl::RecursionMode mode)
 {
     QVariant param(files);
-    QVariant param1(mode);
+    QVariant param1(mode==Recursive);
     
     return new KrossVcsJob("add", QVariantList() << param << param1, action, m_plugin, action);
 }
@@ -239,7 +246,7 @@ KDevelop::VcsJob * KrossDistributedVersionControl::status(const KUrl::List & fil
 KDevelop::VcsJob * KrossDistributedVersionControl::revert(const KUrl::List & files, KDevelop::IBasicVersionControl::RecursionMode mode)
 {
     QVariant param(files);
-    QVariant param1(mode);
+    QVariant param1(mode==Recursive);
     
     return new KrossVcsJob("revert", QVariantList() << param << param1, action, m_plugin, action);
 }
@@ -247,9 +254,10 @@ KDevelop::VcsJob * KrossDistributedVersionControl::revert(const KUrl::List & fil
 KDevelop::VcsJob * KrossDistributedVersionControl::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev,
                                                             KDevelop::IBasicVersionControl::RecursionMode rec)
 {
+/*
     const VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
     QVariant revision;
-    revision.setValue((QObject*) &revadapt);
+    revision.setValue((QObject*) revadapt);
     
     QVariantList parameters;
     parameters.append(QVariant(localLocations));
@@ -257,6 +265,8 @@ KDevelop::VcsJob * KrossDistributedVersionControl::update(const KUrl::List & loc
     parameters.append(QVariant(rec));
     
     return new KrossVcsJob("update", parameters, action, m_plugin, action);
+*/
+    return 0;
 }
 
 KDevelop::VcsJob * KrossDistributedVersionControl::commit(const QString & msg, const KUrl::List & files,
@@ -272,11 +282,14 @@ KDevelop::VcsJob * KrossDistributedVersionControl::commit(const QString & msg, c
 KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KUrl::List & files, KDevelop::VcsRevision & rev,
                                                         KDevelop::IBasicVersionControl::RecursionMode mode)
 {
+/*
     const VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
     QVariant revision;
-    revision.setValue((QObject*) &revadapt);
+    revision.setValue((QObject*) revadapt);
     
     return new KrossVcsJob("commit", QVariantList() << files << revision << mode, action, m_plugin, action);
+*/
+    return 0;
 }
 
 KDevelop::VcsJob * KrossDistributedVersionControl::repositoryLocation(const KUrl::List & files)
@@ -296,57 +309,69 @@ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KDevelop::VcsLocat
                                                         KDevelop::VcsDiff::Type t,
                                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
+/*
     VcsRevisionAdaptor *srcrevadapt=new VcsRevisionAdaptor(&srcRevision, action);
     QVariant srcrev;
-    srcrev.setValue((QObject*) &srcrevadapt);
+    srcrev.setValue((QObject*) srcrevadapt);
     
     VcsRevisionAdaptor *dstrevadapt=new VcsRevisionAdaptor(&dstRevision, action);
     QVariant dstrev;
-    dstrev.setValue((QObject*) &dstrevadapt);
+    dstrev.setValue((QObject*) dstrevadapt);
     
     VcsLocationAdaptor *srclocadapt=new VcsLocationAdaptor(&localOrRepoLocationSrc, action);
     QVariant srcloc;
-    srcloc.setValue((QObject*) &srclocadapt);
+    srcloc.setValue((QObject*) srclocadapt);
     
     VcsLocationAdaptor *dstlocadapt=new VcsLocationAdaptor(&localOrRepoLocationDst, action);
     QVariant dstloc;
-    dstloc.setValue((QObject*) &dstlocadapt);
+    dstloc.setValue((QObject*) dstlocadapt);
     
     return new KrossVcsJob("repositoryLocation",
                                          QVariantList() << srcloc << dstloc << srcrev << dstrev << QVariant(t) << QVariant(recursion), action, m_plugin, action);
+*/
+    return 0;
 }
 
 KDevelop::VcsJob * KrossDistributedVersionControl::log(const KUrl & file, const KDevelop::VcsRevision & rev, long unsigned int limit)
 {
+/*
     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
     QVariant revision;
     revision.setValue((QObject*) &revadapt);
 
     return new KrossVcsJob("log",
                                          QVariantList() << file << revision << qlonglong(limit), action, m_plugin, action);
+*/
+    return 0;
 }
 
 VcsJob* KrossDistributedVersionControl::log(const KUrl& file, const VcsRevision& rev, const VcsRevision& lim)
 {
+/*
     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
     QVariant revision;
-    revision.setValue((QObject*) &revadapt);
+    revision.setValue((QObject*) revadapt);
 
     VcsRevisionAdaptor *limitadapt=new VcsRevisionAdaptor(&lim, action);
     QVariant limit;
-    limit.setValue((QObject*) &limitadapt);
+    limit.setValue((QObject*) limitadapt);
 
     return new KrossVcsJob("log",
                                          QVariantList() << file << revision << limit, action, m_plugin, action);
+*/
+    return 0;
 }
 
 VcsJob* KrossDistributedVersionControl::annotate(const KUrl& file, const VcsRevision& rev)
 {
+/*
     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
     QVariant revision;
-    revision.setValue((QObject*) &revadapt);
+    revision.setValue((QObject*) revadapt);
     
     return new KrossVcsJob("annotate", QVariantList() << file << revision, action, m_plugin, action);
+*/
+    return 0;
 }
 
 VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLocationSrc,
@@ -355,13 +380,14 @@ VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLoca
                                               const VcsRevision& dstRevision,
                                               const KUrl& localLocation )
 {
+/*
     VcsRevisionAdaptor *srcrevadapt=new VcsRevisionAdaptor(&srcRevision, action);
     QVariant srcrev;
-    srcrev.setValue((QObject*) &srcrevadapt);
+    srcrev.setValue((QObject*) srcrevadapt);
     
     VcsRevisionAdaptor *dstrevadapt=new VcsRevisionAdaptor(&dstRevision, action);
     QVariant dstrev;
-    dstrev.setValue((QObject*) &dstrevadapt);
+    dstrev.setValue((QObject*) dstrevadapt);
     
     VcsLocationAdaptor *srclocadapt=new VcsLocationAdaptor(&localOrRepoLocationSrc, action);
     QVariant srcloc;
@@ -369,10 +395,12 @@ VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLoca
     
     VcsLocationAdaptor *dstlocadapt=new VcsLocationAdaptor(&localOrRepoLocationDst, action);
     QVariant dstloc;
-    dstloc.setValue((QObject*) &dstlocadapt);
+    dstloc.setValue((QObject*) dstlocadapt);
     
     return new KrossVcsJob("merge",
                                          QVariantList() << srcloc << dstloc << srcrev << dstrev << localLocation, action, m_plugin, action);
+*/
+    return 0;
 }
 
 VcsJob* KrossDistributedVersionControl::resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion )

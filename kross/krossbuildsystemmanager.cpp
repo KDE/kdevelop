@@ -55,8 +55,9 @@ QList<ProjectFolderItem*> KrossBuildSystemManager::parse( ProjectFolderItem* dom
     kDebug() << "end of parse";
 
     QList<ProjectFolderItem*> folders;
-    foreach(const QString& afolder, result.toStringList())
+    foreach(const QString afolder, result.toStringList())
     {
+        Q_ASSERT( m_folderPerUrl.contains(KUrl(afolder)) );
         folders.append(m_folderPerUrl[KUrl(afolder)]);
     }
     return folders;
@@ -90,10 +91,10 @@ KUrl::List KrossBuildSystemManager::includeDirectories(ProjectBaseItem *item) co
 
 QHash<QString,QString> KrossBuildSystemManager::defines(ProjectBaseItem *item) const
 {
-    QVariant param;
     ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
-    param.setValue((QObject*) adapt);
-    QVariant result=action->callFunction( "defines", QVariantList()<<param);
+        QVariant param;
+        param.setValue((QObject*) adapt);
+        QVariant result=action->callFunction( "defines", QVariantList()<<param);
     delete adapt;
     
     QMap<QString, QVariant> resultDefines= result.toMap();
@@ -111,10 +112,10 @@ QHash<QString,QString> KrossBuildSystemManager::defines(ProjectBaseItem *item) c
 
 QHash<QString,QString> KrossBuildSystemManager::environment(ProjectBaseItem *item) const
 {
-    QVariant param;
     ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
-    param.setValue((QObject*) adapt);
-    QVariant result=action->callFunction( "environment", QVariantList()<<param);
+        QVariant param;
+        param.setValue((QObject*) adapt);
+        QVariant result=action->callFunction( "environment", QVariantList()<<param);
     delete adapt;
 
     QMap<QString, QVariant> resultEnv= result.toMap();
@@ -136,7 +137,7 @@ IBuildSystemManager::Features KrossBuildSystemManager::features() const
 QList<ProjectTargetItem*> KrossBuildSystemManager::targets() const
 {
     QList<ProjectTargetItem*> targets;
-    foreach(const QList<ProjectTargetItem*> &it, m_targets.values())
+    foreach(const QList<ProjectTargetItem*> it, m_targets.values())
         targets += it;
     return targets;
 }
@@ -200,7 +201,7 @@ class ProjectManagerCallbacks : public QObject
 {
     Q_OBJECT
     public:
-        ProjectManagerCallbacks(KrossBuildSystemManager* pm, QObject* parent) : QObject(parent), m_interface(pm) {}
+        ProjectManagerCallbacks(QObject* p, KrossBuildSystemManager* pm) : QObject(p), m_interface(pm) {}
         
     public slots:
         void addFile(const QString& folder, const QString & targetName, const QString & filename)
@@ -212,19 +213,20 @@ class ProjectManagerCallbacks : public QObject
         void addFolder(const QString& folder)
             { m_interface->addFolder(folder); }
     private:
-        KrossBuildSystemManager *m_interface;
+        KrossBuildSystemManager* m_interface;
 };
 
 void KrossBuildSystemManager::setAction(Kross::Action* anAction)
 {
     action=anAction;
-    ProjectManagerCallbacks* callbacks= new ProjectManagerCallbacks(this, action);
-    action->addObject(callbacks, "IBuildSystemManager", Kross::ChildrenInterface::AutoConnectSignals);
+    ProjectManagerCallbacks* callbacks= new ProjectManagerCallbacks(action, this);
+    action->addObject(callbacks, "IBuildSystemManager" , Kross::ChildrenInterface::AutoConnectSignals);
 }
 
 void KrossBuildSystemManager::addFile(const QString& folder, const QString & targetName, const QString & filename)
 {
     kDebug() << "adding file" << folder << targetName << filename;
+    Q_ASSERT(m_targetPerName.contains(targetName));
     ProjectTargetItem* parent=m_targetPerName[targetName];
     new ProjectFileItem(parent->project(), KUrl(filename), parent);
 }
@@ -232,17 +234,24 @@ void KrossBuildSystemManager::addFile(const QString& folder, const QString & tar
 void KrossBuildSystemManager::addTarget(const QString& folder, const QString & targetName)
 {
     kDebug() << "adding target" << folder << targetName;
-    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder)];
+    KUrl url(folder);
+    Q_ASSERT(m_folderPerUrl.contains(url));
+    ProjectFolderItem* parent=m_folderPerUrl[url];
     ProjectTargetItem* newTarget = new ProjectTargetItem(parent->project(), targetName, parent);
+    Q_ASSERT(! m_targetPerName.contains(targetName));
     m_targetPerName[targetName]=newTarget;
 }
 
 void KrossBuildSystemManager::addFolder(const QString& folder)
 {
     kDebug() << "adding folder" << folder << m_folderPerUrl << KUrl(folder).upUrl();
-    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder).upUrl()];
-    
+    KUrl url = KUrl(folder).upUrl();
+    Q_ASSERT(url.isValid());
+    Q_ASSERT(m_folderPerUrl.contains(url));
+    ProjectFolderItem* parent=m_folderPerUrl[url];
+
     ProjectFolderItem* newFolder = new ProjectFolderItem(parent->project(), folder, parent);
+    Q_ASSERT(! m_folderPerUrl.contains(newFolder->url()));
     m_folderPerUrl.insert(newFolder->url(), newFolder);
 }
 

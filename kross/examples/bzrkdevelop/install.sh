@@ -1,4 +1,5 @@
 #!/bin/sh
 
 cp kdevbzr.desktop $KDEDIR/share/kde4/services/
-cp -r kdevbzr/ $KDEDIR/lib/kde4/
+mkdir -p $KDEDIR/lib/kde4/kdevbzr
+cp -r kdevbzr/*.py $KDEDIR/lib/kde4/kdevbzr/
