@@ -52,8 +52,7 @@ endif(SUBVERSION_FOUND)
 
 macro_optional_add_subdirectory(git)
 macro_optional_add_subdirectory(mercurial)
-
-macro_optional_add_subdirectory(mercurial)
+macro_optional_add_subdirectory(bazaar)
 
 macro_display_feature_log()
 

@@ -105,7 +105,7 @@ class HgExecutor : public QObject, public KDevelop::IDVCSexecutor
 //Often used methods should be inline
 inline QString HgExecutor::name() const
 {
-    return QString("Hg");
+    return QLatin1String("Hg");
 }
 
 //TODO: write tests for this method!

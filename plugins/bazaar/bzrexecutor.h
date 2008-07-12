@@ -2,7 +2,7 @@
  *   This file was partly taken from KDevelop's cvs plugin                 *
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
  *                                                                         *
- *   Adapted for Git                                                       *
+ *   Adapted for Bazaar                                                    *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -22,15 +22,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_EXECUTOR_H
-#define GIT_EXECUTOR_H
+#ifndef BZR_EXECUTOR_H
+#define BZR_EXECUTOR_H
 
-#include <KDebug>
-#include <QFileInfo>
-#include <QStringList>
 
 #include <KUrl>
 #include <KJob>
+#include <QStringList>
 
 #include <idvcsexecutor.h>
 #include "vcsrevision.h"
@@ -43,7 +41,7 @@ namespace KDevelop
 }
 
 /**
- * This proxy acts as a single point of entry for most of the common git commands.
+ * This proxy acts as a single point of entry for most of the common hg commands.
  * It is very easy to use, as the caller does not have to deal which the DVCSjob class directly.
  * All the command line generation and job handling is done internally. The caller gets a DVCSjob
  * object returned from the proxy and can then call it's start() method.
@@ -60,18 +58,18 @@ namespace KDevelop
  *
  * @note All actions that take a KUrl::List also need an url to the repository which
  *       must be a common base directory to all files from the KUrl::List.
- *       Actions that just take a single KUrl don't need a repository, the git command will be
+ *       Actions that just take a single KUrl don't need a repository, the hg command will be
  *       called directly in the directory of the given file
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
+class BzrExecutor : public QObject, public KDevelop::IDVCSexecutor
 {
     Q_OBJECT
     public:
-        GitExecutor(KDevelop::IPlugin* parent = 0);
-        ~GitExecutor();
+        BzrExecutor(KDevelop::IPlugin* parent = 0);
+        ~BzrExecutor();
 
         bool isValidDirectory(const KUrl &dirPath);
         QString name() const;
@@ -81,12 +79,11 @@ class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
         DVCSjob* add(const QString& repository, const KUrl::List &files);
         DVCSjob* commit(const QString& repository,
                        const QString& message = "KDevelop didn't provide any message, it may be a bug",
-                       const KUrl::List& args = QStringList());
+                       const KUrl::List& files = QStringList());
         DVCSjob* remove(const QString& repository, const KUrl::List& files);
         DVCSjob* status(const QString & repo, const KUrl::List & files,
                        bool recursive=false, bool taginfo=false);
 /*        DVCSjob* is_inside_work_tree(const QString& repository);*/
-        DVCSjob* var(const QString &directory);
         DVCSjob* empty_cmd() const;
 
     private:
@@ -98,61 +95,9 @@ class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
             Init
         };
         bool prepareJob(DVCSjob* job, const QString& repository,
-                        enum RequestedOperation op = GitExecutor::NormalOperation);
+                        enum RequestedOperation op = BzrExecutor::NormalOperation);
         KDevelop::IPlugin* vcsplugin;
 
 };
-
-//Often used methods should be inline
-inline QString GitExecutor::name() const
-{
-    return QLatin1String("Git");
-}
-
-//TODO: write tests for this method!
-//maybe func()const?
-inline bool GitExecutor::isValidDirectory(const KUrl & dirPath)
-{
-    DVCSjob* job = new DVCSjob(vcsplugin);
-    if (job)
-    {
-        job->clear();
-        *job << "git-rev-parse";
-        *job << "--is-inside-work-tree";
-        QString path = dirPath.path();
-        QFileInfo fsObject(path);
-        if (fsObject.isFile())
-            path = fsObject.path();
-        job->setDirectory(path);
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        {
-            kDebug(9500) << "Dir:" << path << " is is inside work tree of git" ;
-            return true;
-        }
-    }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is is not inside work tree of git" ;
-    return false;
-}
-
-inline bool GitExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
-{
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "git clone" isValidDirectory() would fail as the
-    // directory is not yet under git control
-    if (op == GitExecutor::NormalOperation &&
-        !isValidDirectory(repository)) {
-        kDebug(9500) << repository << " is not a valid git repository";
-        return false;
-        }
-
-    // clear commands and args from a possible previous run
-        job->clear();
-
-    // setup the working directory for the new job
-        job->setDirectory(repository);
-
-        return true;
-}
 
 #endif
