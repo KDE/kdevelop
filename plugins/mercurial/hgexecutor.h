@@ -25,10 +25,12 @@
 #ifndef HG_EXECUTOR_H
 #define HG_EXECUTOR_H
 
+#include <QFileInfo>
+#include <QStringList>
 
 #include <KUrl>
 #include <KJob>
-#include <QStringList>
+#include <KDebug>
 
 #include <idvcsexecutor.h>
 #include "vcsrevision.h"
@@ -99,5 +101,57 @@ class HgExecutor : public QObject, public KDevelop::IDVCSexecutor
         KDevelop::IPlugin* vcsplugin;
 
 };
+
+//Often used methods should be inline
+inline QString HgExecutor::name() const
+{
+    return QString("Hg");
+}
+
+//TODO: write tests for this method!
+//maybe func()const?
+inline bool HgExecutor::isValidDirectory(const KUrl & dirPath)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (job)
+    {
+        job->clear();
+        *job << "hg";
+        *job << "root";
+        QString path = dirPath.path();
+        QFileInfo fsObject(path);
+        if (fsObject.isFile())
+            path = fsObject.path();
+        job->setDirectory(path);
+        job->exec();
+        if (job->status() == KDevelop::VcsJob::JobSucceeded)
+        {
+            kDebug(9500) << "Dir:" << path << " is inside work tree of hg" ;
+            return true;
+        }
+    }
+    kDebug(9500) << "Dir:" << dirPath.path() << " is not inside work tree of hg" ;
+    return false;
+}
+
+inline bool HgExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
+{
+    // Only do this check if it's a normal operation like diff, log ...
+    // For other operations like "hg clone" isValidDirectory() would fail as the
+    // directory is not yet under hg control
+    if (op == HgExecutor::NormalOperation &&
+        !isValidDirectory(repository)) {
+        kDebug(9500) << repository << " is not a valid hg repository";
+        return false;
+        }
+
+    // clear commands and args from a possible previous run
+        job->clear();
+
+    // setup the working directory for the new job
+        job->setDirectory(repository);
+
+        return true;
+}
 
 #endif

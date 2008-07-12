@@ -50,7 +50,6 @@
 
 #include<interfaces/contextmenuextension.h>
 
-#include "idvcsexecutor.h"
 #include "vcsjob.h"
 #include "dvcsjob.h"
 #include "dvcsmainview.h"
@@ -69,22 +68,6 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 }
 
 // Begin:  KDevelop::IBasicVersionControl
-
-// QString DistributedVersionControlPlugin::name() const
-// {
-//     return d->m_exec->name();
-// }
-
-bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocation)
-{
-    //TODO: some files from repository location can be not version controlled
-    return d->m_exec->isValidDirectory(localLocation);
-}
-
-QString DistributedVersionControlPlugin::name() const
-{
-    return d->m_exec->name();
-}
 
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::repositoryLocation(const KUrl & localLocation)
@@ -136,14 +119,12 @@ KDevelop::VcsJob*
     return d->m_exec->empty_cmd();
 }
 
-
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::revert(const KUrl::List & localLocations, 
                                                 IBasicVersionControl::RecursionMode recursion)
 {
     return d->m_exec->empty_cmd();
 }
-
 
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::update(const KUrl::List & localLocations, const VcsRevision & rev,

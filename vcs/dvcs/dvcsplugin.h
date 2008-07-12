@@ -31,13 +31,20 @@
 #include <iuicontroller.h>
 #include <interfaces/iplugin.h>
 
+#include "idvcsexecutor.h"
+
 class QString;
-struct DVCSpluginPrivate;
+class KDevDVCSViewFactory;
+
+struct DVCSpluginPrivate {
+    KDevDVCSViewFactory* m_factory;
+    KDevelop::IDVCSexecutor* m_exec;
+    KUrl::List m_ctxUrlList;
+};
 
 namespace KDevelop
 {
 class VcsJob;
-class IDVCSexecutor;
 class ContextMenuExtension;
 
 class DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
@@ -50,8 +57,15 @@ public:
     virtual ~DistributedVersionControlPlugin(){}
 
     // Begin: KDevelop::IBasicVersionControl
-    virtual QString name() const;
-    virtual bool isVersionControlled(const KUrl& localLocation);
+    virtual QString name() const
+    {
+        return d->m_exec->name();
+    }
+    virtual bool isVersionControlled(const KUrl& localLocation)
+    {
+    //TODO: some files from repository location can be not version controlled
+        return d->m_exec->isValidDirectory(localLocation);
+    }
     virtual VcsJob* repositoryLocation(const KUrl& localLocation);
     virtual VcsJob* add(const KUrl::List& localLocations,
                         IBasicVersionControl::RecursionMode recursion);
@@ -154,12 +168,6 @@ public:
     virtual QString id() const;
 private:
     KDevelop::DistributedVersionControlPlugin *m_plugin;
-};
-
-struct DVCSpluginPrivate {
-    KDevDVCSViewFactory* m_factory;
-    KDevelop::IDVCSexecutor* m_exec;
-    KUrl::List m_ctxUrlList;
 };
 
 #endif
