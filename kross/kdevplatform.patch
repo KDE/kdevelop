@@ -1,0 +1,481 @@
+Index: krossdistributedversioncontrol.cpp
+===================================================================
+--- krossdistributedversioncontrol.cpp	(revision 831358)
++++ krossdistributedversioncontrol.cpp	(working copy)
+@@ -37,7 +37,7 @@
+ {
+     Q_OBJECT
+     public:
+-        DVCSCallbacks(KrossDistributedVersionControl* self) : QObject(0), m_self(self) {}
++        DVCSCallbacks(QObject* parent, KrossDistributedVersionControl* self) : QObject(parent), m_self(self) {}
+     public slots:
+         void ctxCommit() {}
+         void ctxAdd() {}
+@@ -58,7 +58,7 @@
+ KrossDistributedVersionControl::KrossDistributedVersionControl(KDevelop::IPlugin* plugin)
+     : action(0), m_plugin(plugin)
+ {
+-    m_callbacks=new DVCSCallbacks(this);
++    m_callbacks=new DVCSCallbacks(plugin, this);
+ }
+ 
+ KrossDistributedVersionControl::~KrossDistributedVersionControl()
+@@ -118,6 +118,7 @@
+     kDebug() << "version controlled?" << hasVersionControlledEntries;
+     if(hasVersionControlledEntries)
+     {
++/*
+         _action = new KAction(i18n("Commit..."), m_callbacks);
+         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(ctxCommit()) );
+         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+@@ -161,13 +162,16 @@
+         _action = new KAction(i18n("Annotation..."), m_callbacks);
+         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(ctxBlame()) );
+         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
++*/
+     }
+     else
+     {
+         QMenu* menu = new QMenu(name());
++/*
+         _action = new KAction(i18n("Init..."), menu);
+         QObject::connect( _action, SIGNAL(triggered()), m_callbacks, SLOT(slotInit()) );
+         menu->addAction( _action );
++*/
+         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+     }
+ 
+@@ -181,7 +185,8 @@
+ 
+ QString KrossDistributedVersionControl::name() const
+ {
+-    QVariant result=action->callFunction( "pluginName");
++    QVariantList args;
++    QVariant result=action->callFunction( "pluginName", args );
+     kDebug() << "retrieving name" << result.toString();
+     return result.toString();
+ }
+@@ -193,7 +198,9 @@
+ 
+ bool KrossDistributedVersionControl::isVersionControlled(const KUrl & url)
+ {
+-    QVariant result=action->callFunction( "isVersionControlled", QVariantList() << QUrl(url));
++    QVariantList args;
++    args << QUrl(url);
++    QVariant result=action->callFunction( "isVersionControlled", args);
+     return result.toBool();
+ }
+ 
+@@ -247,9 +254,10 @@
+ KDevelop::VcsJob * KrossDistributedVersionControl::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev,
+                                                             KDevelop::IBasicVersionControl::RecursionMode rec)
+ {
++/*
+     const VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
+     QVariant revision;
+-    revision.setValue((QObject*) &revadapt);
++    revision.setValue((QObject*) revadapt);
+     
+     QVariantList parameters;
+     parameters.append(QVariant(localLocations));
+@@ -257,6 +265,8 @@
+     parameters.append(QVariant(rec));
+     
+     return new KrossVcsJob("update", parameters, action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ KDevelop::VcsJob * KrossDistributedVersionControl::commit(const QString & msg, const KUrl::List & files,
+@@ -272,11 +282,14 @@
+ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KUrl::List & files, KDevelop::VcsRevision & rev,
+                                                         KDevelop::IBasicVersionControl::RecursionMode mode)
+ {
++/*
+     const VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
+     QVariant revision;
+-    revision.setValue((QObject*) &revadapt);
++    revision.setValue((QObject*) revadapt);
+     
+     return new KrossVcsJob("commit", QVariantList() << files << revision << mode, action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ KDevelop::VcsJob * KrossDistributedVersionControl::repositoryLocation(const KUrl::List & files)
+@@ -296,57 +309,69 @@
+                                                         KDevelop::VcsDiff::Type t,
+                                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
+ {
++/*
+     VcsRevisionAdaptor *srcrevadapt=new VcsRevisionAdaptor(&srcRevision, action);
+     QVariant srcrev;
+-    srcrev.setValue((QObject*) &srcrevadapt);
++    srcrev.setValue((QObject*) srcrevadapt);
+     
+     VcsRevisionAdaptor *dstrevadapt=new VcsRevisionAdaptor(&dstRevision, action);
+     QVariant dstrev;
+-    dstrev.setValue((QObject*) &dstrevadapt);
++    dstrev.setValue((QObject*) dstrevadapt);
+     
+     VcsLocationAdaptor *srclocadapt=new VcsLocationAdaptor(&localOrRepoLocationSrc, action);
+     QVariant srcloc;
+-    srcloc.setValue((QObject*) &srclocadapt);
++    srcloc.setValue((QObject*) srclocadapt);
+     
+     VcsLocationAdaptor *dstlocadapt=new VcsLocationAdaptor(&localOrRepoLocationDst, action);
+     QVariant dstloc;
+-    dstloc.setValue((QObject*) &dstlocadapt);
++    dstloc.setValue((QObject*) dstlocadapt);
+     
+     return new KrossVcsJob("repositoryLocation",
+                                          QVariantList() << srcloc << dstloc << srcrev << dstrev << QVariant(t) << QVariant(recursion), action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ KDevelop::VcsJob * KrossDistributedVersionControl::log(const KUrl & file, const KDevelop::VcsRevision & rev, long unsigned int limit)
+ {
++/*
+     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
+     QVariant revision;
+     revision.setValue((QObject*) &revadapt);
+ 
+     return new KrossVcsJob("log",
+                                          QVariantList() << file << revision << qlonglong(limit), action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ VcsJob* KrossDistributedVersionControl::log(const KUrl& file, const VcsRevision& rev, const VcsRevision& lim)
+ {
++/*
+     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
+     QVariant revision;
+-    revision.setValue((QObject*) &revadapt);
++    revision.setValue((QObject*) revadapt);
+ 
+     VcsRevisionAdaptor *limitadapt=new VcsRevisionAdaptor(&lim, action);
+     QVariant limit;
+-    limit.setValue((QObject*) &limitadapt);
++    limit.setValue((QObject*) limitadapt);
+ 
+     return new KrossVcsJob("log",
+                                          QVariantList() << file << revision << limit, action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ VcsJob* KrossDistributedVersionControl::annotate(const KUrl& file, const VcsRevision& rev)
+ {
++/*
+     VcsRevisionAdaptor *revadapt=new VcsRevisionAdaptor(&rev, action);
+     QVariant revision;
+-    revision.setValue((QObject*) &revadapt);
++    revision.setValue((QObject*) revadapt);
+     
+     return new KrossVcsJob("annotate", QVariantList() << file << revision, action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLocationSrc,
+@@ -355,13 +380,14 @@
+                                               const VcsRevision& dstRevision,
+                                               const KUrl& localLocation )
+ {
++/*
+     VcsRevisionAdaptor *srcrevadapt=new VcsRevisionAdaptor(&srcRevision, action);
+     QVariant srcrev;
+-    srcrev.setValue((QObject*) &srcrevadapt);
++    srcrev.setValue((QObject*) srcrevadapt);
+     
+     VcsRevisionAdaptor *dstrevadapt=new VcsRevisionAdaptor(&dstRevision, action);
+     QVariant dstrev;
+-    dstrev.setValue((QObject*) &dstrevadapt);
++    dstrev.setValue((QObject*) dstrevadapt);
+     
+     VcsLocationAdaptor *srclocadapt=new VcsLocationAdaptor(&localOrRepoLocationSrc, action);
+     QVariant srcloc;
+@@ -369,10 +395,12 @@
+     
+     VcsLocationAdaptor *dstlocadapt=new VcsLocationAdaptor(&localOrRepoLocationDst, action);
+     QVariant dstloc;
+-    dstloc.setValue((QObject*) &dstlocadapt);
++    dstloc.setValue((QObject*) dstlocadapt);
+     
+     return new KrossVcsJob("merge",
+                                          QVariantList() << srcloc << dstloc << srcrev << dstrev << localLocation, action, m_plugin, action);
++*/
++    return 0;
+ }
+ 
+ VcsJob* KrossDistributedVersionControl::resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion )
+Index: krossdistributedversioncontrol.h
+===================================================================
+--- krossdistributedversioncontrol.h	(revision 831358)
++++ krossdistributedversioncontrol.h	(working copy)
+@@ -23,6 +23,7 @@
+ 
+ #include <QObject>
+ #include <QList>
++#include <QPointer>
+ 
+ #include <vcsjob.h>
+ #include <idistributedversioncontrol.h>
+@@ -81,8 +82,8 @@
+     void setActionDistributed(Kross::Action* anAction);
+     KDevelop::ContextMenuExtension distributedMenuExtension(KDevelop::Context* context);
+ private:
+-    Kross::Action *action;
+-    KDevelop::IPlugin* m_plugin;
++    QPointer<Kross::Action> action;
++    QPointer<KDevelop::IPlugin> m_plugin;
+     DVCSCallbacks* m_callbacks;
+ 
+     KUrl::List m_ctxUrls;
+Index: krossplugin.cpp
+===================================================================
+--- krossplugin.cpp	(revision 831358)
++++ krossplugin.cpp	(working copy)
+@@ -48,12 +48,14 @@
+ }
+ 
+ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
+-    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this)
++    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this),
++    action(0)
+ {
+     kDebug() << "Krossing the krossed paths of this krossed world" << args;
+     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
+     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
+     
++    Q_ASSERT(args.count() >= 2);
+     QStringList interfaces = args[0].toStringList();
+     QString name = args[1].toString();
+ 
+Index: krossbuildsystemmanager.cpp
+===================================================================
+--- krossbuildsystemmanager.cpp	(revision 831358)
++++ krossbuildsystemmanager.cpp	(working copy)
+@@ -55,8 +55,9 @@
+     kDebug() << "end of parse";
+ 
+     QList<ProjectFolderItem*> folders;
+-    foreach(const QString& afolder, result.toStringList())
++    foreach(const QString afolder, result.toStringList())
+     {
++        Q_ASSERT( m_folderPerUrl.contains(KUrl(afolder)) );
+         folders.append(m_folderPerUrl[KUrl(afolder)]);
+     }
+     return folders;
+@@ -90,10 +91,10 @@
+ 
+ QHash<QString,QString> KrossBuildSystemManager::defines(ProjectBaseItem *item) const
+ {
+-    QVariant param;
+     ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
+-    param.setValue((QObject*) adapt);
+-    QVariant result=action->callFunction( "defines", QVariantList()<<param);
++        QVariant param;
++        param.setValue((QObject*) adapt);
++        QVariant result=action->callFunction( "defines", QVariantList()<<param);
+     delete adapt;
+     
+     QMap<QString, QVariant> resultDefines= result.toMap();
+@@ -111,10 +112,10 @@
+ 
+ QHash<QString,QString> KrossBuildSystemManager::environment(ProjectBaseItem *item) const
+ {
+-    QVariant param;
+     ProjectBaseItemAdaptor *adapt=ProjectBaseItemAdaptor::createAdaptor(action, item);
+-    param.setValue((QObject*) adapt);
+-    QVariant result=action->callFunction( "environment", QVariantList()<<param);
++        QVariant param;
++        param.setValue((QObject*) adapt);
++        QVariant result=action->callFunction( "environment", QVariantList()<<param);
+     delete adapt;
+ 
+     QMap<QString, QVariant> resultEnv= result.toMap();
+@@ -136,7 +137,7 @@
+ QList<ProjectTargetItem*> KrossBuildSystemManager::targets() const
+ {
+     QList<ProjectTargetItem*> targets;
+-    foreach(const QList<ProjectTargetItem*> &it, m_targets.values())
++    foreach(const QList<ProjectTargetItem*> it, m_targets.values())
+         targets += it;
+     return targets;
+ }
+@@ -200,7 +201,7 @@
+ {
+     Q_OBJECT
+     public:
+-        ProjectManagerCallbacks(KrossBuildSystemManager* pm, QObject* parent) : QObject(parent), m_interface(pm) {}
++        ProjectManagerCallbacks(QObject* p, KrossBuildSystemManager* pm) : QObject(p), m_interface(pm) {}
+         
+     public slots:
+         void addFile(const QString& folder, const QString & targetName, const QString & filename)
+@@ -212,19 +213,20 @@
+         void addFolder(const QString& folder)
+             { m_interface->addFolder(folder); }
+     private:
+-        KrossBuildSystemManager *m_interface;
++        KrossBuildSystemManager* m_interface;
+ };
+ 
+ void KrossBuildSystemManager::setAction(Kross::Action* anAction)
+ {
+     action=anAction;
+-    ProjectManagerCallbacks* callbacks= new ProjectManagerCallbacks(this, action);
+-    action->addObject(callbacks, "IBuildSystemManager", Kross::ChildrenInterface::AutoConnectSignals);
++    ProjectManagerCallbacks* callbacks= new ProjectManagerCallbacks(action, this);
++    action->addObject(callbacks, "IBuildSystemManager" /*, Kross::ChildrenInterface::AutoConnectSignals*/);
+ }
+ 
+ void KrossBuildSystemManager::addFile(const QString& folder, const QString & targetName, const QString & filename)
+ {
+     kDebug() << "adding file" << folder << targetName << filename;
++    Q_ASSERT(m_targetPerName.contains(targetName));
+     ProjectTargetItem* parent=m_targetPerName[targetName];
+     new ProjectFileItem(parent->project(), KUrl(filename), parent);
+ }
+@@ -232,17 +234,24 @@
+ void KrossBuildSystemManager::addTarget(const QString& folder, const QString & targetName)
+ {
+     kDebug() << "adding target" << folder << targetName;
+-    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder)];
++    KUrl url(folder);
++    Q_ASSERT(m_folderPerUrl.contains(url));
++    ProjectFolderItem* parent=m_folderPerUrl[url];
+     ProjectTargetItem* newTarget = new ProjectTargetItem(parent->project(), targetName, parent);
++    Q_ASSERT(! m_targetPerName.contains(targetName));
+     m_targetPerName[targetName]=newTarget;
+ }
+ 
+ void KrossBuildSystemManager::addFolder(const QString& folder)
+ {
+     kDebug() << "adding folder" << folder << m_folderPerUrl << KUrl(folder).upUrl();
+-    ProjectFolderItem* parent=m_folderPerUrl[KUrl(folder).upUrl()];
+-    
++    KUrl url = KUrl(folder).upUrl();
++    Q_ASSERT(url.isValid());
++    Q_ASSERT(m_folderPerUrl.contains(url));
++    ProjectFolderItem* parent=m_folderPerUrl[url];
++
+     ProjectFolderItem* newFolder = new ProjectFolderItem(parent->project(), folder, parent);
++    Q_ASSERT(! m_folderPerUrl.contains(newFolder->url()));
+     m_folderPerUrl.insert(newFolder->url(), newFolder);
+ }
+ 
+Index: projectitemadaptors.cpp
+===================================================================
+--- projectitemadaptors.cpp	(revision 831358)
++++ projectitemadaptors.cpp	(working copy)
+@@ -9,13 +9,13 @@
+     {
+         case ProjectBaseItem::BuildFolder:
+         case ProjectBaseItem::Folder:
+-            adaptor=new ProjectFolderItemAdaptor(parent, (ProjectFolderItem*) item);
++            adaptor=new ProjectFolderItemAdaptor(parent, dynamic_cast<ProjectFolderItem*>(item));
+             break;
+         case ProjectBaseItem::File:
+-            adaptor=new ProjectFileItemAdaptor(parent, (ProjectFileItem*) item);
++            adaptor=new ProjectFileItemAdaptor(parent, dynamic_cast<ProjectFileItem*> (item));
+             break;
+         case ProjectBaseItem::Target:
+-            adaptor=new ProjectTargetItemAdaptor(parent, (ProjectTargetItem*) item);
++            adaptor=new ProjectTargetItemAdaptor(parent, dynamic_cast<ProjectTargetItem*>( item));
+             break;
+         default:
+             qFatal("unknown project model type");
+Index: krossplugin.h
+===================================================================
+--- krossplugin.h	(revision 831358)
++++ krossplugin.h	(working copy)
+@@ -22,6 +22,7 @@
+ #define KROSSPROJECTMANAGER_H
+ 
+ #include <iplugin.h>
++#include <QPointer>
+ 
+ #include <kross/core/action.h>
+ 
+@@ -42,9 +43,8 @@
+ 
+     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+ private:
+-    Kross::Action* action;
+-
+-    KrossBuildSystemManager* m_script;
++    QPointer<Kross::Action> action;
++    QPointer<KrossBuildSystemManager> m_script;
+ };
+ 
+ #endif
+Index: krossbuildsystemmanager.h
+===================================================================
+--- krossbuildsystemmanager.h	(revision 831358)
++++ krossbuildsystemmanager.h	(working copy)
+@@ -23,6 +23,7 @@
+ 
+ #include <QObject>
+ #include <QList>
++#include <QPointer>
+ 
+ #include <iprojectfilemanager.h>
+ #include <ibuildsystemmanager.h>
+@@ -80,7 +81,7 @@
+     void removeFileFromTarget(const KUrl& folder, const QString& targetname, const KUrl& filename);*/
+ 
+ private:
+-    Kross::Action *action;
++    QPointer<Kross::Action> action;
+     KDevelop::IProjectFileManager::Features m_features;
+     QMap<KDevelop::ProjectFolderItem*, QList<KDevelop::ProjectTargetItem*> > m_targets;
+     QMap<KUrl, KDevelop::ProjectFolderItem*> m_folderPerUrl;
+Index: projectitemadaptors.h
+===================================================================
+--- projectitemadaptors.h	(revision 831358)
++++ projectitemadaptors.h	(working copy)
+@@ -41,9 +41,9 @@
+             
+         public slots:
+             IProject* project() const { return m_item->project(); }
+-            ProjectBaseItemAdaptor* parent() const { return createAdaptor(QObject::parent(), (ProjectBaseItem*) m_item->parent()); }
++            ProjectBaseItemAdaptor* parent() const { return createAdaptor(QObject::parent(), dynamic_cast<ProjectBaseItem*>(m_item->parent())); }
+         private:
+-            const ProjectBaseItem* m_item;
++            ProjectBaseItem* m_item;
+     };
+     
+     class ProjectFolderItemAdaptor : public ProjectBaseItemAdaptor
+@@ -57,7 +57,7 @@
+             bool hasFileOrFolder(const QString& name) const { return m_item->hasFileOrFolder(name); }
+             
+         private:
+-            ProjectFolderItem *m_item;
++            ProjectFolderItem* m_item;
+     };
+     
+     class ProjectTargetItemAdaptor : public ProjectBaseItemAdaptor
+@@ -77,7 +77,7 @@
+             KUrl url() const { return m_item->url(); }
+             
+         private:
+-            ProjectFileItem *m_item;
++            ProjectFileItem* m_item;
+     };
+ }
+ 
+Index: examples/bzrkdevelop/kdevbzr/kdevbzr.py
+===================================================================
+--- examples/bzrkdevelop/kdevbzr/kdevbzr.py	(revision 831358)
++++ examples/bzrkdevelop/kdevbzr/kdevbzr.py	(working copy)
+@@ -6,6 +6,7 @@
+ import os
+ 
+ def pluginName():
++	print "................."
+ 	return "Bazaar"
+ 
+ def isVersionControlled(url):
