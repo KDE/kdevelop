@@ -106,7 +106,7 @@ class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
 //Often used methods should be inline
 inline QString GitExecutor::name() const
 {
-    return QString("Git");
+    return QLatin1String("Git");
 }
 
 //TODO: write tests for this method!
