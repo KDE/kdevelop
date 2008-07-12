@@ -95,12 +95,12 @@ public:
 
     // Begin:  KDevelop::IDistributedVersionControl
     virtual VcsJob* init(const KUrl& localRepositoryRoot);
-    virtual VcsJob* clone(const QString& repositoryLocationSrc,
+    virtual VcsJob* clone(const VcsLocation& localOrRepoLocationSrc,
                           const KUrl& localRepositoryRoot);
-    virtual VcsJob* pull(const QString& repositoryLocation,
-                         const KUrl& localRepositoryLocation);
     virtual VcsJob* push(const KUrl& localRepositoryLocation,
-                 const QString& repositoryLocation);
+                         const VcsLocation& localOrRepoLocationDst);
+    virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
+                         const KUrl& localRepositoryLocation);
     // End:  KDevelop::IDistributedVersionControl
 
     IDVCSexecutor* proxy();

@@ -228,22 +228,22 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::clone(const QString& repositoryLocationSrc,
+        DistributedVersionControlPlugin::clone(const VcsLocation& localOrRepoLocationSrc,
                                                const KUrl& localRepositoryRoot)
 {
     return d->m_exec->empty_cmd();
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::pull(const QString& repositoryLocation,
-                                              const KUrl& localRepositoryLocation)
+        DistributedVersionControlPlugin::push(const KUrl& localRepositoryLocation,
+                                              const VcsLocation& localOrRepoLocationDst)
 {
     return d->m_exec->empty_cmd();
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::push(const KUrl& localRepositoryLocation,
-                                              const QString& repositoryLocation)
+        DistributedVersionControlPlugin::pull(const VcsLocation& localOrRepoLocationSrc,
+                                              const KUrl& localRepositoryLocation)
 {
     return d->m_exec->empty_cmd();
 }
