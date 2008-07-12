@@ -23,9 +23,6 @@
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
-#include <QString>
-#include <QStringList>
-
 namespace KDevelop
 {
 

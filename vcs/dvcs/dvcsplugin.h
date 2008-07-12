@@ -50,7 +50,7 @@ public:
     virtual ~DistributedVersionControlPlugin(){}
 
     // Begin: KDevelop::IBasicVersionControl
-    virtual QString name() const = 0;
+    virtual QString name() const;
     virtual bool isVersionControlled(const KUrl& localLocation);
     virtual VcsJob* repositoryLocation(const KUrl& localLocation);
     virtual VcsJob* add(const KUrl::List& localLocations,

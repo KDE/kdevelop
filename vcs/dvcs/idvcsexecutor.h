@@ -61,6 +61,7 @@ public:
     virtual ~IDVCSexecutor() {}
 
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
+    virtual QString name() const = 0;
 
     virtual DVCSjob* init(const KUrl & directory) = 0;
     virtual DVCSjob* clone(const KUrl &directory, const KUrl repository) = 0;
@@ -73,8 +74,6 @@ public:
                             bool recursive=false, bool taginfo=false) = 0;
     /*    virtual DVCSjob* is_inside_work_tree(const QString& repository) = 0;*/
     virtual DVCSjob* empty_cmd() const = 0;
-
-//     virtual QString name() const = 0;
 
 };
 

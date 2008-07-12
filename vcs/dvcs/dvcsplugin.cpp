@@ -81,6 +81,11 @@ bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocat
     return d->m_exec->isValidDirectory(localLocation);
 }
 
+QString DistributedVersionControlPlugin::name() const
+{
+    return d->m_exec->name();
+}
+
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::repositoryLocation(const KUrl & localLocation)
 {
@@ -345,7 +350,7 @@ KDevelop::ContextMenuExtension
     }
     else
     {
-        QMenu* menu = new QMenu("Git");
+        QMenu* menu = new QMenu(name() );
         action = new KAction(i18n("Init..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(slotInit()) );
         menu->addAction(action);
@@ -360,15 +365,15 @@ void DistributedVersionControlPlugin::setupActions()
 {
     KAction *action;
 
-    action = actionCollection()->addAction("git_init");
+    action = actionCollection()->addAction("dvcs_init");
     action->setText(i18n("Init Directory..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotInit()));
 
-//     action = actionCollection()->addAction("git_clone");
+//     action = actionCollection()->addAction("dvcs_clone");
 //     action->setText(i18n("Clone..."));
 //     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
 
-//     action = actionCollection()->addAction("git_status");
+//     action = actionCollection()->addAction("dvcs_status");
 //     action->setText(i18n("Status..."));
 //     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
 }

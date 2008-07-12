@@ -72,6 +72,7 @@ class HgExecutor : public QObject, public KDevelop::IDVCSexecutor
         ~HgExecutor();
 
         bool isValidDirectory(const KUrl &dirPath);
+        QString name() const;
 
         DVCSjob* init(const KUrl & directory);
         DVCSjob* clone(const KUrl &directory, const KUrl repository);

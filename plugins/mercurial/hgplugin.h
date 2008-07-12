@@ -44,8 +44,6 @@ public:
     HgPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~HgPlugin();
 
-    QString name() const;
-
 };
 
 #endif

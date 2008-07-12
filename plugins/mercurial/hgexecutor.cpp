@@ -73,6 +73,11 @@ bool HgExecutor::isValidDirectory(const KUrl & dirPath)
     return false;
 }
 
+QString HgExecutor::name() const
+{
+    return QString("Hg");
+}
+
 bool HgExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
 {
     // Only do this check if it's a normal operation like diff, log ...

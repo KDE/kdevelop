@@ -52,9 +52,4 @@ HgPlugin::~HgPlugin()
     delete DistributedVersionControlPlugin::d;
 }
 
-QString HgPlugin::name() const
-{
-        return i18n("Mercurial");
-}
-
 // #include "hgplugin.moc"

@@ -72,6 +72,7 @@ class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
         ~GitExecutor();
 
         bool isValidDirectory(const KUrl &dirPath);
+        QString name() const;
 
         DVCSjob* init(const KUrl & directory);
         DVCSjob* clone(const KUrl &directory, const KUrl repository);
