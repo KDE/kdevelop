@@ -18,33 +18,23 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSPROJECTMANAGER_H
-#define KROSSPROJECTMANAGER_H
-
-#include <iplugin.h>
+#include "krossvcsjob.h"
 
 #include <kross/core/action.h>
 
-#include "krossbuildsystemmanager.h"
-#include "krossdistributedversioncontrol.h"
+using namespace KDevelop;
 
-namespace Kross { class Action; }
-
-class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
+KrossVcsJob::KrossVcsJob(const QString& funcname, const QVariantList& parameters,
+Kross::Action* anAction, KDevelop::IPlugin* plugin, QObject* parent)
+    : VcsJob(parent), m_funcname(funcname), m_parameters(parameters), action(anAction), m_status(JobNotStarted), m_plugin(plugin)
 {
-Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildSystemManager )
-Q_INTERFACES( KDevelop::IProjectFileManager )
-Q_INTERFACES( KDevelop::IDistributedVersionControl )
-public:
-    explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
-    virtual ~KrossPlugin() {}
+}
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-private:
-    Kross::Action* action;
+void KrossVcsJob::start()
+{
+    m_status=JobRunning;
+    m_result=action->callFunction(m_funcname, m_parameters);
+    m_status=JobSucceeded;
+}
 
-    KrossBuildSystemManager* m_script;
-};
-
-#endif
+#include "krossvcsjob.moc"

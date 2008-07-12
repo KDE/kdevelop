@@ -18,33 +18,36 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSPROJECTMANAGER_H
-#define KROSSPROJECTMANAGER_H
+#ifndef KROSSVCSJOB_H
+#define KROSSVCSJOB_H
 
-#include <iplugin.h>
+#include <QObject>
+#include <QList>
 
-#include <kross/core/action.h>
-
-#include "krossbuildsystemmanager.h"
-#include "krossdistributedversioncontrol.h"
+#include <vcsjob.h>
+#include <idistributedversioncontrol.h>
 
 namespace Kross { class Action; }
 
-class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
+class KrossVcsJob : public KDevelop::VcsJob
 {
 Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildSystemManager )
-Q_INTERFACES( KDevelop::IProjectFileManager )
-Q_INTERFACES( KDevelop::IDistributedVersionControl )
 public:
-    explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
-    virtual ~KrossPlugin() {}
+    KrossVcsJob(const QString& funcname, const QVariantList& parameters, Kross::Action* anAction, KDevelop::IPlugin* plugin, QObject* parent);
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    void start();
+    QVariant fetchResults() { return m_result; }
+    JobStatus status() const { return m_status; }
+    KDevelop::IPlugin* vcsPlugin() const { return m_plugin; }
 private:
-    Kross::Action* action;
+    QString m_funcname;
+    QVariantList m_parameters;
+    Kross::Action *action;
 
-    KrossBuildSystemManager* m_script;
+    QVariant m_result;
+    JobStatus m_status;
+    KDevelop::IPlugin* m_plugin;
 };
+
 
 #endif

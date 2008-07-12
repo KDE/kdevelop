@@ -19,5 +19,4 @@ def main():
         print vc.configurations()
         print vc.defines(vc.configurations()[0])
 
-if __name__ == "__main__":
-    main()
+main()

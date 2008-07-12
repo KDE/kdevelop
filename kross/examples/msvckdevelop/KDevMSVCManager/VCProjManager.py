@@ -1,14 +1,13 @@
 #!/usr/bin/env kdevelop
 # coding: utf-8
 
+import xml.dom.minidom
+
 class VCProjManager:
 	"""hoooola"""
 	fileList={}
 	configs={}
 	projectData=0
-	
-	def __init__(self, dom):
-		self.dom = dom
 	
 	def files(self):
 		return self.fileList
@@ -20,7 +19,7 @@ class VCProjManager:
 		lastdash=url.rfind('/')
 		baseurl=url[0:lastdash]
 		
-		self.projectData = self.dom(url).documentElement
+		self.projectData = xml.dom.minidom.parse(url).documentElement
 		
 		filesNode=self.projectData.getElementsByTagName("Files")[0]
 		

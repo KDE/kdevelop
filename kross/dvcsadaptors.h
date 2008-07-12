@@ -18,33 +18,35 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSPROJECTMANAGER_H
-#define KROSSPROJECTMANAGER_H
+#ifndef DVCSADAPTORS_H
+#define DVCSADAPTORS_H
 
-#include <iplugin.h>
+#include <QObject>
 
-#include <kross/core/action.h>
-
-#include "krossbuildsystemmanager.h"
-#include "krossdistributedversioncontrol.h"
-
-namespace Kross { class Action; }
-
-class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
+namespace KDevelop
 {
-Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildSystemManager )
-Q_INTERFACES( KDevelop::IProjectFileManager )
-Q_INTERFACES( KDevelop::IDistributedVersionControl )
-public:
-    explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
-    virtual ~KrossPlugin() {}
-
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-private:
-    Kross::Action* action;
-
-    KrossBuildSystemManager* m_script;
-};
+    class VcsRevision;
+    class VcsLocation;
+    
+    class VcsRevisionAdaptor : public QObject
+    {
+        Q_OBJECT
+        public:
+            VcsRevisionAdaptor(const VcsRevision* rev, QObject* parent) : QObject(parent), m_rev(rev) {}
+        
+        private:
+            const KDevelop::VcsRevision* m_rev;
+    };
+    
+    class VcsLocationAdaptor : public QObject
+    {
+        Q_OBJECT
+        public:
+            VcsLocationAdaptor(const VcsLocation* rev, QObject* parent) : QObject(parent), m_rev(rev) {}
+        
+        private:
+            const KDevelop::VcsLocation* m_rev;
+    };
+}
 
 #endif

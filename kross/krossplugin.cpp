@@ -34,6 +34,8 @@
 #include <kpluginloader.h>
 #include <projectmodel.h>
 
+#include <contextmenuextension.h>
+
 K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossPlugin>(); )
 K_EXPORT_PLUGIN(KrossSupportFactory("kdevkrossmanager"))
 
@@ -46,7 +48,7 @@ extern "C"
 }
 
 KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
-    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent )
+    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this)
 {
     kDebug() << "Krossing the krossed paths of this krossed world" << args;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -64,10 +66,16 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     action = new Kross::Action(this, file);
     action->setFile(file.toLocalFile());
     
-    action->addObject(KDevelop::ICore::self(), "ICore", Kross::ChildrenInterface::AutoConnectSignals);
+    action->addObject(KDevelop::ICore::self(), "ICore");
     setAction(action); //should add it here and only if it is necessary (when more ifaces)
-    
+    setActionDistributed(action); //should add it here and only if it is necessary (when more ifaces)
+
     action->trigger();
+}
+
+KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Context* context)
+{
+    return distributedMenuExtension(context);
 }
 
 #include "krossplugin.moc"
