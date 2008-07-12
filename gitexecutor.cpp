@@ -22,16 +22,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include <QFileInfo>
 #include <QDir>
-#include <QFileInfo>
 #include <QString>
 #include <QDateTime>
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
-#include <KDebug>
 
 #include <dvcsjob.h>
 #include <iplugin.h>
@@ -45,57 +42,6 @@ GitExecutor::GitExecutor(KDevelop::IPlugin* parent)
 
 GitExecutor::~GitExecutor()
 {
-}
-
-//TODO: write tests for this method!
-//maybe func()const?
-bool GitExecutor::isValidDirectory(const KUrl & dirPath)
-{
-    DVCSjob* job = new DVCSjob(vcsplugin);
-    if (job)
-    {
-        job->clear();
-        *job << "git-rev-parse";
-        *job << "--is-inside-work-tree";
-        QString path = dirPath.path();
-        QFileInfo fsObject(path);
-        if (fsObject.isFile())
-            path = fsObject.path();
-        job->setDirectory(path);
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        {
-            kDebug(9500) << "Dir:" << path << " is is inside work tree of git" ;
-            return true;
-        }
-    }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is is not inside work tree of git" ;
-    return false;
-}
-
-QString GitExecutor::name() const
-{
-    return QString("Git");
-}
-
-bool GitExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
-{
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "git clone" isValidDirectory() would fail as the
-    // directory is not yet under git control
-    if (op == GitExecutor::NormalOperation &&
-        !isValidDirectory(repository)) {
-        kDebug(9500) << repository << " is not a valid git repository";
-        return false;
-        }
-
-    // clear commands and args from a possible previous run
-    job->clear();
-
-    // setup the working directory for the new job
-    job->setDirectory(repository);
-
-    return true;
 }
 
 bool GitExecutor::addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls)
