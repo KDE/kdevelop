@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=This plugin integrates Bazaar to KDevelop
+Comment[x-test]=xxThis plugin integrates Bazaar to KDevelopxx
+Name=KDevBzr
+Name[x-test]=xxKDevBzrxx
+GenericName=Bzr frontend
+GenericName[x-test]=xxBzr frontendxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevgit
+X-KDE-PluginInfo-Name=kdevbzr
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Version=0.01
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement
+X-KDevelop-PluginType=Kross
+X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl, IDistributedVersionControl
