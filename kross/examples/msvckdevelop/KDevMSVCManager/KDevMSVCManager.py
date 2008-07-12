@@ -13,9 +13,6 @@ import IBuildSystemManager
 
 projects={}
 
-def parseDat(url):
-    return xml.dom.minidom.parse(url)
-
 def importProject(project):
 	print "project: %s %s folder: %s" %(project, project.name(), project.folder())
 	
@@ -41,7 +38,7 @@ def parse(item):
 		IBuildSystemManager.addFolder(baseurl)
 		IBuildSystemManager.addTarget(baseurl, projectName)
 		
-		vc=VCProjManager(parseDat)
+		vc=VCProjManager()
 		vc.titolito(project)
 		vc.importProject(project)
 		projects[baseurl]=vc #not really correct but good enough
@@ -49,10 +46,10 @@ def parse(item):
 		print "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
 		
 		#print "preparing to add %s" % (vc.files())
-		#for filter in vc.files():
-			#for file in vc.files()[filter]:
-				#print "adding file %s" % (file)
-				#IBuildSystemManager.addFile(baseurl, projectName, file)
+		for filter in vc.files():
+			for file in vc.files()[filter]:
+				print "adding file %s" % (file)
+				IBuildSystemManager.addFile(baseurl, projectName, file)
 
 def defines(item):
 	pass
