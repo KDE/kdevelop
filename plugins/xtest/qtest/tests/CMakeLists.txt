@@ -28,7 +28,9 @@ add_subdirectory(suite1)
 
 add_executable(qtestrunner standalonerunner.cpp)
 target_link_libraries(qtestrunner
+        ${QT_QTGUI_LIBRARY}
         ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS}
         ${KDEVPLATFORM_VERITAS_LIBRARY}
         kdevqtest)
