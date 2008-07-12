@@ -73,6 +73,11 @@ bool GitExecutor::isValidDirectory(const KUrl & dirPath)
     return false;
 }
 
+QString GitExecutor::name() const
+{
+    return QString("Git");
+}
+
 bool GitExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
 {
     // Only do this check if it's a normal operation like diff, log ...

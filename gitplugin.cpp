@@ -52,9 +52,4 @@ GitPlugin::~GitPlugin()
     delete DistributedVersionControlPlugin::d;
 }
 
-QString GitPlugin::name() const
-{
-        return i18n("Git");
-}
-
 // #include "gitplugin.moc"

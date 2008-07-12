@@ -44,8 +44,6 @@ public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
 
-    QString name() const;
-
 };
 
 #endif
