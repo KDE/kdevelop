@@ -65,7 +65,7 @@ public:
     KDevelop::VcsJob* log(const KUrl& file, const KDevelop::VcsRevision& rev, long unsigned int limit);
     KDevelop::VcsJob* log(const KUrl& file, const KDevelop::VcsRevision&, const KDevelop::VcsRevision&);
     KDevelop::VcsJob* annotate(const KUrl& file, const KDevelop::VcsRevision& rev);
-    
+
     KDevelop::VcsJob* merge( const KDevelop::VcsLocation& localOrRepoLocationSrc,
                            const KDevelop::VcsLocation& localOrRepoLocationDst,
                            const KDevelop::VcsRevision& srcRevision,
@@ -74,9 +74,9 @@ public:
     KDevelop::VcsJob* resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion );
     //DVCS
     KDevelop::VcsJob* init(const KUrl& location);
-    KDevelop::VcsJob* clone(const QString& repositoryLocation, const KUrl& localRepositoryLocationSrc);
-    KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const QString& repositoryLocation);
-    KDevelop::VcsJob* pull(const QString& repositoryLocation, const KUrl& localRepositoryLocation);
+    KDevelop::VcsJob* clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryRoot);
+    KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
+    KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
 
     void setActionDistributed(Kross::Action* anAction);
     KDevelop::ContextMenuExtension distributedMenuExtension(KDevelop::Context* context);

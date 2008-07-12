@@ -27,6 +27,7 @@ namespace KDevelop
 {
 
 class VcsJob;
+class VcsLocation;
 
 /**
  * This interface has methods to support distributed version control systems

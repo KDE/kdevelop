@@ -413,19 +413,19 @@ VcsJob* KrossDistributedVersionControl::init(const KUrl& location)
     return new KrossVcsJob("init", QVariantList() << location, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::clone(const QString& repositoryLocation, const KUrl& localRepositoryLocationSrc)
+VcsJob* KrossDistributedVersionControl::clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocationSrc)
 {
-    return new KrossVcsJob("clone", QVariantList() << repositoryLocation << localRepositoryLocationSrc, action, m_plugin, action);
+    return new KrossVcsJob("clone", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocationSrc, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::push(const KUrl& localRepositoryLocation, const QString& repositoryLocation)
+VcsJob* KrossDistributedVersionControl::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
-    return new KrossVcsJob("push", QVariantList() << localRepositoryLocation << repositoryLocation, action, m_plugin, action);
+    return new KrossVcsJob("push", QVariantList() << localRepositoryLocation << localOrRepoLocationDst.localUrl(), action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::pull(const QString& repositoryLocation, const KUrl& localRepositoryLocation)
+VcsJob* KrossDistributedVersionControl::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
-    return new KrossVcsJob("pull", QVariantList() << repositoryLocation << localRepositoryLocation, action, m_plugin, action);
+    return new KrossVcsJob("pull", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocation, action, m_plugin, action);
 }
 
 #include "krossdistributedversioncontrol.moc"
