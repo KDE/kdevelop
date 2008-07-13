@@ -493,7 +493,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
 #endif
-    kDebug(9042) << "Find:" << fprog->variableName() /*<< "program into" << modulePath<<":"<< fprog->path()*/;
+    kDebug(9042) << "Find:" << fprog->variableName() << fprog->filenames() << "program into" << modulePath<<":"<< fprog->path();
     QString path;
     foreach(const QString& filename, fprog->filenames())
     {
@@ -515,7 +515,10 @@ QString CMakeProjectVisitor::findExecutable(const QString& file,
                 const QStringList& directories, const QStringList& pathSuffixes) const
 {
     QString path;
-    foreach(const QString& suffix, m_vars->value("CMAKE_EXECUTABLE_SUFFIX"))
+    QStringList suffixes=m_vars->value("CMAKE_EXECUTABLE_SUFFIX");
+    suffixes.prepend(QString());
+    
+    foreach(const QString& suffix, suffixes)
     {
         path=findFile(file+suffix, directories, pathSuffixes);
         if(!path.isEmpty())

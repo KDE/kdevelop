@@ -1575,6 +1575,7 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else {
         m_filenames=QStringList(it->value);
         s=PATHS;
+        ++it;
     }
 
     for(; it!=itEnd; ++it) {
@@ -1893,6 +1894,7 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(nextIsResult)
         {
             m_resultVariable=it->value;
+            addOutputArgument( *it );
             nextIsResult=false;
         }
         else if ( it->value == "OPTIONAL" )

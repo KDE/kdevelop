@@ -1761,22 +1761,28 @@ void CMakeAstTest::testIncludeGoodParse()
 
 void CMakeAstTest::testIncludeGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3;
+    CMakeFunctionDesc func1, func2, func3, func4, func5;
     func1.name = "INCLUDE";
-    func2.name = func3.name = func1.name.toLower();
+    func2.name = func3.name = func4.name = func5.name = func1.name.toLower();
 
-    QStringList argList1, argList2;
+    QStringList argList1, argList2, argList3, argList4;
     argList1 << "SomeFile";
     argList2 << "SomeFile" << "OPTIONAL";
+    argList3 << "SomeFile" << "RESULT_VARIABLE" << "output";
+    argList4 << "SomeFile" << "OPTIONAL" << "RESULT_VARIABLE" << "output";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList1 );
     func3.addArguments( argList2 );
+    func4.addArguments( argList3 );
+    func5.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "good upper" ) << func1;
     QTest::newRow( "good lower" ) << func2;
-    QTest::newRow( "good all args" ) << func3;
+    QTest::newRow( "good optional" ) << func3;
+    QTest::newRow( "good result" ) << func4;
+    QTest::newRow( "good all args" ) << func5;
 }
 
 void CMakeAstTest::testIncludeBadParse()
