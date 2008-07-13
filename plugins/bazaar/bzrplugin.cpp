@@ -52,4 +52,4 @@ BzrPlugin::~BzrPlugin()
     delete DistributedVersionControlPlugin::d;
 }
 
-// #include "bzrplugin.moc"
+// #include "gitplugin.moc"

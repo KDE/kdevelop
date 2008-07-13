@@ -28,7 +28,7 @@
 class BzrExecutor;
 
 /**
- * This is the main class of KDevelop's Bazaar plugin.
+ * This is the main class of KDevelop's Git plugin.
  *
  * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
  * @author Evgeniy Ivanov <powerfox@kde.ru>
