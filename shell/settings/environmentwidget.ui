@@ -5,15 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>638</width>
-    <height>555</height>
+    <width>696</width>
+    <height>480</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Default Environment Group: </string>
+      <string>Environment Group</string>
      </property>
     </widget>
    </item>
@@ -44,41 +44,41 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4" >
-    <widget class="QTableWidget" name="variableTable" >
+   <item row="0" column="4" >
+    <widget class="KPushButton" name="setAsDefaultBtn" >
+     <property name="text" >
+      <string>Set As Default Group</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="5" >
+    <widget class="QTableView" name="variableTable" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>2</verstretch>
       </sizepolicy>
      </property>
-     <column>
-      <property name="text" >
-       <string>Variable Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Variable Value</string>
-      </property>
-     </column>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="sortingEnabled" >
+      <bool>true</bool>
+     </property>
+     <property name="cornerButtonEnabled" >
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="4" >
+   <item row="2" column="0" colspan="5" >
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -86,7 +86,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
@@ -105,16 +105,6 @@
       <widget class="KPushButton" name="deleteButton" >
        <property name="text" >
         <string>Delete</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="processDefaultButton" >
-       <property name="enabled" >
-        <bool>false</bool>
-       </property>
-       <property name="text" >
-        <string>Process Default</string>
        </property>
       </widget>
      </item>

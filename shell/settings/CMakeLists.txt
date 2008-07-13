@@ -108,6 +108,7 @@ install( FILES kcm_kdev_runsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} 
 
 set( envsettings_cfg_SRCS
   environmentwidget.cpp
+  environmentgroupmodel.cpp
   environmentpreferences.cpp
 )
 

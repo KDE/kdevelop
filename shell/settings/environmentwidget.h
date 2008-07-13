@@ -26,11 +26,14 @@ Boston, MA 02110-1301, USA.
 #include <environmentgrouplist.h>
 
 class KConfig;
-class QTableWidgetItem;
+class QSortFilterProxyModel;
 
 
 namespace KDevelop
 {
+
+class EnvironmentGroupModel;
+
 
 /**
  * @short Environment variable setting widget.
@@ -41,7 +44,6 @@ namespace KDevelop
 class EnvironmentWidget: public QWidget
 {
     Q_OBJECT
-//     Q_PROPERTY( QStringList items READ items WRITE setItems USER true )
 
 public:
     explicit EnvironmentWidget( QWidget *parent = 0 );
@@ -56,32 +58,19 @@ Q_SIGNALS:
 private Q_SLOTS:
     void newButtonClicked();
     void deleteButtonClicked();
-    void processDefaultButtonClicked();
-    void settingsChanged( int row, int column );
-    void focusChanged( int row, int, int, int );
     void addGroupClicked();
     void removeGroupClicked();
     void activeGroupChanged(int);
+    void enableDeleteButton();
+    void setAsDefault();
 
 private:
-//     void load( bool defaults );
-    bool isOverride( QTableWidgetItem *item ) const;
-    bool isProcessDefault( QTableWidgetItem *item ) const;
-    void setOverride( QTableWidgetItem *item );
-    void setProcessDefault( QTableWidgetItem *item );
-    void generateCurrentMaps();
-    bool diff();
 
 private:
     Ui::EnvironmentWidget ui;
-    QString m_enabled;
-    QMap< QString, QString > m_procDefaultMaps;
-    EnvironmentGroupList m_groups;
-    
-//     QMap<QString, QString> m_overrides;
-//     QMap<QString, QString> m_processDefaults;
-//     QMap<QString, QString> m_currentOverrides;
-//     QMap<QString, QString> m_currentProcessDefaults;
+    EnvironmentGroupModel* groupModel;
+    QSortFilterProxyModel* proxyModel;
+
 };
 
 }
