@@ -3132,6 +3132,22 @@ void CMakeAstTest::testStringGoodParse()
 
 void CMakeAstTest::testStringGoodParse_data()
 {
+    QStringList cases;
+    cases << "string STRIP string output";
+    cases << "string RANDOM output";
+    cases << "stRing RANDOM LENGTH 3 output";
+    cases << "string RANDOM ALPHABET abcd output";
+    cases << "string RANDOM output LENGTH 3 ALPHABET abcd";
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    
+    foreach(const QString& acase, cases)
+    {
+        QStringList splitted=acase.split(" ");
+        CMakeFunctionDesc func;
+        func.name = splitted.takeFirst();
+        func.addArguments(splitted);
+        QTest::newRow( qPrintable(acase) ) << func;
+    }
 }
 
 void CMakeAstTest::testStringBadParse()
@@ -3145,14 +3161,6 @@ void CMakeAstTest::testStringBadParse()
 void CMakeAstTest::testStringBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
 
 
 void CMakeAstTest::testSubdirDependsGoodParse()

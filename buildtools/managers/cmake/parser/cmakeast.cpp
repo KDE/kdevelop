@@ -3075,7 +3075,7 @@ void StringAst::writeBack( QString& ) const
 
 bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="string" || func.arguments.count()<3)
+    if(func.name.toLower()!="string" || func.arguments.count()<2)
         return false;
     QString stringType=func.arguments[0].value.toUpper();
     if(stringType=="REGEX")
@@ -3196,6 +3196,60 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(!correctBegin || !correctLength)
             return false;
     }
+    else if(stringType=="STRIP")
+    {
+        if(func.arguments.count()!=3)
+            return false;
+        m_string = func.arguments[1].value;
+        m_outputVariable = func.arguments.last().value;
+        addOutputArgument(func.arguments.last());
+    }
+    else if(stringType=="RANDOM")
+    {
+        if(func.arguments.count()>6 || func.arguments.count()<2)
+            return false;
+        
+        enum State { ALPHABET, LENGTH, None };
+        State s = None;
+        m_length=5;
+        m_string="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        bool first=true;
+        
+        foreach(const CMakeFunctionArgument& arg, func.arguments)
+        {
+            if(first) { first=false; continue; }
+            
+            bool correct=true;
+            switch(s) {
+                case ALPHABET:
+                    m_regex=arg.value;
+                    s=None;
+                    continue;
+                case LENGTH:
+                    m_length = arg.value.toInt(&correct);
+                    if(!correct) return false;
+                    s=None;
+                    continue;
+            }
+            
+            if(arg.value=="LENGTH")
+                s = LENGTH;
+            else if(arg.value=="ALPHABET")
+                s = ALPHABET;
+            else
+            {
+                s=None;
+                if(!m_outputVariable.isEmpty())
+                {
+                    return false;
+                }
+                m_outputVariable = arg.value;
+                addOutputArgument(arg);
+            }
+        }
+    }
+    else
+        return false;
     return true;
 }
 

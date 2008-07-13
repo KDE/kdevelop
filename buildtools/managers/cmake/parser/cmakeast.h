@@ -52,6 +52,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         const CMakeFileContent & content() const { return m_content; }
         void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
         const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
+        QStringList errors() const { return m_errors; }
     private:
         CMakeAst( const CMakeAst&  ) /*: m_children( ast.m_children )*/ {}
         
@@ -61,6 +62,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
 
         CMakeFileContent m_content;
         int m_line;
+        QStringList m_errors;
 
 };
 
@@ -685,12 +687,13 @@ CMAKE_END_AST_CLASS( SourceGroupAst )
 
 CMAKE_BEGIN_AST_CLASS( StringAst )
 enum StringAstType { REGEX, REPLACE, COMPARE, ASCII, CONFIGURE,
-    TOUPPER, TOLOWER, LENGTH, SUBSTRING };
+    TOUPPER, TOLOWER, LENGTH, SUBSTRING, STRIP, RANDOM };
 enum CommandType { MATCH, MATCHALL, REGEX_REPLACE, EQUAL, NOTEQUAL, LESS, GREATER };
 CMAKE_ADD_AST_MEMBER( StringAstType, StringAstType, type, Type )
 CMAKE_ADD_AST_MEMBER( CommandType, CommandType, cmdType, CmdType )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, string, String)
 CMAKE_ADD_AST_MEMBER( QString, const QString&, replace, Replace )
 CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, input, Input)
 CMAKE_ADD_AST_MEMBER( bool, bool, only, Only )

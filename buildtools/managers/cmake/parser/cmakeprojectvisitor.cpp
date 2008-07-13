@@ -1446,8 +1446,19 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             QString res=sast->input()[0];
             res=res.mid(sast->begin(), sast->length());
             m_vars->insert(sast->outputVariable(), QStringList(res));
-        }
+        }   break;
+        case StringAst::STRIP:
+            m_vars->insert(sast->outputVariable(), QStringList(CMakeFunctionArgument::unescapeValue( sast->string() )));
             break;
+        case StringAst::RANDOM: {
+            QString alphabet=sast->string(), result;
+            for(int i=0; i<sast->length(); i++)
+            {
+                int randv=qrand() % alphabet.size();
+                result += alphabet[randv];
+            }
+            m_vars->insert(sast->outputVariable(), QStringList(result));
+        }   break;
     }
     kDebug(9042) << "String " << m_vars->value(sast->outputVariable());
     return 1;

@@ -58,7 +58,7 @@ struct CMakeFunctionArgument
 
     bool isCorrect() const { return column>0; }
 
-    QString unescapeValue(const QString& value);
+    static QString unescapeValue(const QString& value);
     
     KDevelop::SimpleRange range() const
     { return KDevelop::SimpleRange(line-1, column-1, line-1, column+value.length()-1); }
