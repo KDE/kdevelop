@@ -22,18 +22,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
+#include "gitexecutor.h"
+
+
+#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
 #include <QString>
 #include <QDateTime>
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
+#include <KDebug>
 
 #include <dvcsjob.h>
 #include <iplugin.h>
-
-#include "gitexecutor.h"
 
 GitExecutor::GitExecutor(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)
