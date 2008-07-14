@@ -136,7 +136,7 @@ Declaration::~Declaration()
 
   // context is only null in the test cases
   if (context())
-    context()->d_func_dynamic()->removeDeclaration(this);
+    context()->m_dynamicData->removeDeclaration(this);
 
   setContext(0);
 
@@ -277,7 +277,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   if (d->m_context) {
     if( !d->m_anonymousInContext ) {
-      d->m_context->d_func_dynamic()->removeDeclaration(this);// if( )
+      d->m_context->m_dynamicData->removeDeclaration(this);// if( )
         //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
     }
   }
@@ -287,7 +287,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   if (context) {
     if(!d->m_anonymousInContext) {
-      context->d_func_dynamic()->addDeclaration(this);
+      context->m_dynamicData->addDeclaration(this);
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
     }
 

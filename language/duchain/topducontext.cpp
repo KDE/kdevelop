@@ -162,6 +162,16 @@ public:
     }
   }
   
+  mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
+  
+  TopDUContext::CacheData* currentCache() const {
+    QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
+    if(it != m_threadCaches.end())
+      return *it;
+    else
+      return 0;
+  }
+  
   ~TopDUContextLocalPrivate() {
     //Either we use some other contexts data and have no users, or we own the data and have users that share it.
     QMutexLocker lock(&importStructureMutex);
@@ -423,8 +433,8 @@ public:
 class TopDUContextData : public DUContextData
 {
 public:
-  TopDUContextData(IndexedString url, TopDUContext* ctxt)
-    : DUContextData(ctxt), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
+  TopDUContextData(IndexedString url)
+    : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
   {
   }
   
@@ -453,17 +463,7 @@ public:
   QHash<uint, Declaration*> m_declarationsForIndices;
   QHash<Declaration*, uint> m_indicesForDeclarations;
 
-  mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
-
   uint m_currentDeclarationIndex;
-
-  TopDUContext::CacheData* currentCache() const {
-    QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
-    if(it != m_threadCaches.end())
-      return *it;
-    else
-      return 0;
-  }
 };
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
@@ -607,7 +607,7 @@ TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(ne
 
 
 TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextData(url, this), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+  : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
 {
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d_func_dynamic()->setClassId(this);
@@ -636,8 +636,10 @@ KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const 
 
 TopDUContext::~TopDUContext( )
 {
-  d_func_dynamic()->m_deleting = true;
-  clearUsedDeclarationIndices();
+  if(!m_local->m_sharedDataOwner) {
+    d_func_dynamic()->m_deleting = true;
+    clearUsedDeclarationIndices();
+  }
   delete m_local;
 }
 
@@ -683,7 +685,7 @@ void eventuallyUseCache(uint hash, TopDUContext::CacheData* cache, QVarLengthArr
 
 struct TopDUContext::FindDeclarationsAcceptor {
   FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check) : top(_top), target(_target), check(_check) {
-    cache = _top->d_func()->currentCache();
+    cache = _top->m_local->currentCache();
   }
 
   void operator() (const AliasChainElement& element) {
@@ -942,7 +944,7 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
 
 struct TopDUContext::FindContextsAcceptor {
   FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check) : top(_top), target(_target), check(_check) {
-    cache = _top->d_func()->currentCache();
+    cache = _top->m_local->currentCache();
   }
 
   void operator() (const AliasChainElement& element) {
@@ -1016,7 +1018,7 @@ void TopDUContext::clearProblems()
   m_local->m_problems.clear();
 }
 
-QVector<DUContext*> TopDUContext::importedChildContexts() const
+QVector<DUContext*> TopDUContext::importers() const
 {
   ENSURE_CAN_READ
   return QVector<DUContext*>::fromList( m_local->m_directImporters.toList() );
@@ -1064,8 +1066,8 @@ void TopDUContext::clearImportedParentContexts() {
   
 }
 
-void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous, bool temporary) {
-  if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importedChildContexts in TopDUContextLocalPrivate
+void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool /*anonymous*/, bool temporary) {
+  if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
     DUContext::addImportedParentContext(context, position, true, temporary); 
   
   m_local->addImportedContextRecursively(static_cast<TopDUContext*>(context), temporary, true);
@@ -1197,13 +1199,13 @@ QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration) {
 TopDUContext::Cache::Cache(TopDUContextPointer context) : d(new CacheData(context)) {
   DUChainWriteLocker lock(DUChain::lock());
   if(d->context)
-    d->context->d_func()->m_threadCaches.insert(QThread::currentThreadId(), d);
+    d->context->m_local->m_threadCaches.insert(QThread::currentThreadId(), d);
 }
 
 TopDUContext::Cache::~Cache() {
   DUChainWriteLocker lock(DUChain::lock());
-  if(d->context && d->context->d_func()->m_threadCaches[QThread::currentThreadId()] == d)
-    d->context->d_func()->m_threadCaches.remove(QThread::currentThreadId());
+  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThreadId()] == d)
+    d->context->m_local->m_threadCaches.remove(QThread::currentThreadId());
 
   delete d;
 }

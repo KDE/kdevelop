@@ -29,59 +29,66 @@
 #include "ducontext.h"
 #include "duchainpointer.h"
 #include "simplecursor.h"
+#include "declaration.h"
 #include "use.h"
 
 namespace KTextEditor {
   class SmartRange;
 }
 
-/**
- * For memory-efficiency, we store everything using QVector instead of QList, because in QVector
- * we have no more space allocated what is physically needed, while QList allocates each element
- * separately.
- * */
 
 namespace KDevelop{
 class DUContext;
+
+///This class contains data that needs to be stored to disk
 class DUContextData : public DUChainBaseData
 {
 public:
-  DUContextData( DUContext* );
+  DUContextData();
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
-  DUContextPointer m_parentContext;
   Declaration* m_owner;
   QVector<DUContext::Import> m_importedContexts;
   QVector<DUContext*> m_childContexts;
-  QVector<DUContext*> m_importedChildContexts;
+  QVector<DUContext*> m_importers;
+
+  ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
+  QVector<Declaration*> m_localDeclarations;
+  /**
+   * Vector of all uses in this context
+   * Mutable for range synchronization
+   * */
+  mutable QVector<Use> m_uses;
+
+  bool m_inSymbolTable : 1;
+  bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
+  bool m_propagateDeclarations : 1;
+};
+
+///This class contains data that is only runtime-dependant and does not need to be stored to disk
+class DUContextDynamicData
+{
+public:
+  DUContextDynamicData( DUContext* );
+  DUContextPointer m_parentContext;
 
   //Use DeclarationPointer instead of declaration, so we can locate management-problems
   typedef QMultiHash<Identifier, DeclarationPointer> DeclarationsHash;
   
   static QMutex m_localDeclarationsMutex;
-  ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsMutex must be locked.
-  QVector<Declaration*> m_localDeclarations;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
-  /**
-   * Vector of all uses in this document
-   * Mutable for synchronization
-   * */
-  mutable QVector<Use> m_uses;
-
   /**
    * If this document is loaded, this contains a smart-range for each use.
    * This may temporarily contain zero ranges.
    * */
   mutable QVector<KTextEditor::SmartRange*> m_rangesForUses;
-
+  
   DUContext* m_context;
-  bool m_inSymbolTable : 1;
-  bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
-  bool m_propagateDeclarations : 1;
+
   mutable bool m_rangesChanged : 1;
-    /**
+   /**
    * Adds a child context.
    *
    * \note Be sure to have set the text location first, so that

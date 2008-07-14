@@ -88,6 +88,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
   friend class Declaration;
   friend class DeclarationData;
   friend class DUContextData;
+  friend class DUContextDynamicData;
   friend class Definition;
 
 public:
@@ -267,7 +268,7 @@ public:
   /**
    * Returns the list of contexts importing this context.
    */
-  virtual QVector<DUContext*> importedChildContexts() const;
+  virtual QVector<DUContext*> importers() const;
 
   /**
    * Returns the list of immediate child contexts for this context.
@@ -619,6 +620,7 @@ private:
   virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
   DUCHAIN_DECLARE_DATA(DUContext)
+  class DUContextDynamicData* m_dynamicData;
 };
 
 /**

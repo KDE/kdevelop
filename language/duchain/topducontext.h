@@ -223,7 +223,7 @@ public:
   
   virtual QVector<Import> importedParentContexts() const;
   
-  virtual QVector<DUContext*> importedChildContexts() const;
+  virtual QVector<DUContext*> importers() const;
   
   virtual SimpleCursor importPosition(const DUContext* target) const;
   

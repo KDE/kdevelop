@@ -131,8 +131,8 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       
       label = file.toString();
       
-      if( topCtx->importedChildContexts().count() != 0 )
-        label += QString(" imported by %1").arg(topCtx->importedChildContexts().count());
+      if( topCtx->importers().count() != 0 )
+        label += QString(" imported by %1").arg(topCtx->importers().count());
     } else {
       label = "unknown file";
     }
@@ -147,7 +147,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
 
   if( isMaster && !dynamic_cast<TopDUContext*>(context) ) {
     //Also draw contexts that import this one
-    foreach( DUContext* ctx, context->importedChildContexts() )
+    foreach( DUContext* ctx, context->importers() )
       stream << dotGraphInternal(ctx, false, true);
   }
   
