@@ -15,6 +15,8 @@ include_directories(
     ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces # needed for core.h & documentcontroller.h
+    ${KDEVPLATFORM_INCLUDE_DIR}/veritas
+    ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces
     )
 
 set(kdevqtest_SRCS
