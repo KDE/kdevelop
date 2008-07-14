@@ -94,7 +94,7 @@ ClassDeclaration::~ClassDeclaration()
 }
 
 ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs) : Declaration(*new ClassDeclarationData(*rhs.d_func())) {
-  d_func_dynamic()->setClassId<ClassDeclaration>();
+  d_func_dynamic()->setClassId(this);
 }
 
 Declaration* ClassDeclaration::clone() const {
