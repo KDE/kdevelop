@@ -24,13 +24,17 @@
 
 #include "hgexecutor.h"
 
+
+#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
 #include <QString>
 #include <QDateTime>
 #include <KLocale>
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
+#include <KDebug>
 
 #include <dvcsjob.h>
 #include <iplugin.h>

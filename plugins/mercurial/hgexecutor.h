@@ -25,12 +25,9 @@
 #ifndef HG_EXECUTOR_H
 #define HG_EXECUTOR_H
 
-#include <QFileInfo>
-#include <QStringList>
-
 #include <KUrl>
 #include <KJob>
-#include <KDebug>
+#include <QStringList>
 
 #include <idvcsexecutor.h>
 #include "vcsrevision.h"

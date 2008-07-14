@@ -25,7 +25,6 @@
 #ifndef BZR_EXECUTOR_H
 #define BZR_EXECUTOR_H
 
-
 #include <KUrl>
 #include <KJob>
 #include <QStringList>

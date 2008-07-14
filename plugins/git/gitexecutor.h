@@ -25,12 +25,9 @@
 #ifndef GIT_EXECUTOR_H
 #define GIT_EXECUTOR_H
 
-#include <KDebug>
-#include <QFileInfo>
-#include <QStringList>
-
 #include <KUrl>
 #include <KJob>
+#include <QStringList>
 
 #include <idvcsexecutor.h>
 #include "vcsrevision.h"
