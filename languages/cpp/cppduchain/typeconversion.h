@@ -22,8 +22,9 @@
 #include <QList>
 #include <qcontainerfwd.h>
 
+#include <language/duchain/types/abstracttype.h>
+
 #include "cppduchainexport.h"
-#include <language/duchain/types/typesystem.h>
 
 namespace KDevelop {
   class TopDUContext;

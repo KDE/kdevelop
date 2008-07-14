@@ -27,7 +27,6 @@
 #include "cppduchain/viablefunctions.h"
 #include "cppduchain/overloadresolutionhelper.h"
 #include "cppduchain/expressionevaluationresult.h"
-#include <language/duchain/types/typesystem.h>
 #include "includeitem.h"
 #include "completionitem.h"
 #include "codecompletion/codecompletioncontext.h"

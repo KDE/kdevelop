@@ -19,7 +19,7 @@
 #ifndef EXPRESSIONVISITOR_H
 #define EXPRESSIONVISITOR_H
 
-#include <language/duchain/types/typesystem.h>
+#include <language/duchain/types/abstracttype.h>
 #include <duchain/declaration.h>
 #include <ducontext.h>
 #include "visitor.h"

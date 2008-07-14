@@ -29,9 +29,9 @@
 #include "parser.h"
 #include "control.h"
 
-#include <language/duchain/types/typesystem.h>
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
+#include <language/duchain/types/indexedtype.h>
 #include "dumpchain.h"
 #include <simplecursor.h>
 

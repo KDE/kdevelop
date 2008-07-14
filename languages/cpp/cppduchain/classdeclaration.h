@@ -21,7 +21,6 @@
 
 #include <declaration.h>
 #include "cppduchainexport.h"
-#include <language/duchain/types/typesystem.h>
 #include "cpptypes.h"
 
 namespace KDevelop {

@@ -19,11 +19,11 @@
 #ifndef OVERLOADRESOLUTION_H
 #define OVERLOADRESOLUTION_H
 
-#include <language/duchain/types/typesystem.h>
 #include <duchain/duchainpointer.h>
 #include "typeconversion.h"
 #include <QList>
 #include "cppduchainexport.h"
+#include <language/duchain/identifier.h>
 
 class CppFunctionType;
 class CppTemplateParameterType;

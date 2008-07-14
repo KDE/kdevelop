@@ -33,7 +33,6 @@
 
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
-#include <language/duchain/types/typesystem.h>
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 

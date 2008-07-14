@@ -19,7 +19,6 @@
 #ifndef TYPEUTILS_H
 #define TYPEUTILS_H
 
-#include <language/duchain/types/typesystem.h>
 #include <QHash>
 #include "cppduchainexport.h"
 #include <duchain/declaration.h>

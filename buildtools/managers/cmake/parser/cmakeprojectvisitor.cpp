@@ -29,8 +29,9 @@
 #include <dumpchain.h>
 #include <duchainlock.h>
 #include <parsingenvironment.h>
-#include <language/duchain/types/typesystem.h>
 #include <declaration.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/delayedtype.h>
 
 #include <KProcess>
 #include <KDebug>

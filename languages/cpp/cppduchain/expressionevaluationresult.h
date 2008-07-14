@@ -20,8 +20,9 @@
 
 #include "cppduchainexport.h"
 #include <duchain/appendedlist.h>
-#include <language/duchain/types/typesystem.h>
 #include <declarationid.h>
+#include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/indexedtype.h>
 
 namespace KDevelop {
   class IndexedType;

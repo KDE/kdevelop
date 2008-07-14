@@ -29,10 +29,11 @@
 
 #include <duchain/identifier.h>
 #include <language/duchain/types/typesystemdata.h>
-#include <language/duchain/types/typesystem.h>
 #include <declaration.h>
 #include <language/duchain/types/identifiedtype.h>
 #include "cppduchainexport.h"
+#include <language/duchain/types/alltypes.h>
+#include <language/duchain/types/typesystem.h>
 
 namespace KDevelop
 {

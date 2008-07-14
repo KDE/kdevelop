@@ -28,7 +28,6 @@
 #include <duchain/declaration.h>
 #include <duchain/ducontext.h>
 #include <duchain/duchainlock.h>
-#include <language/duchain/types/typesystem.h>
 #include <duchain/functiondeclaration.h>
 #include <duchain/forwarddeclaration.h>
 #include <duchain/namespacealiasdeclaration.h>

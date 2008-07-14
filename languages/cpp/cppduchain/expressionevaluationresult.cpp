@@ -22,8 +22,8 @@
 #include <duchainlock.h>
 #include <repositories/itemrepository.h>
 #include <duchain/duchain.h>
-#include <language/duchain/types/typesystem.h>
 #include <language/duchain/types/identifiedtype.h>
+#include <language/duchain/types/delayedtype.h>
 
 namespace Cpp {
 

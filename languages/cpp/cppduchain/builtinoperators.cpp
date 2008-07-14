@@ -17,7 +17,6 @@
 */
 
 #include "builtinoperators.h"
-#include <language/duchain/types/typesystem.h>
 #include "cpptypes.h"
 //#include "typerepository.h"
 #include "parser/tokens.h"

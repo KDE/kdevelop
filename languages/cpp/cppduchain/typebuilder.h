@@ -21,7 +21,6 @@
 
 #include "contextbuilder.h"
 #include <language/duchain/builders/abstracttypebuilder.h>
-#include <language/duchain/types/typesystem.h>
 #include <declaration.h>
 #include "cppduchainexport.h"
 

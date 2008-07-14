@@ -23,7 +23,6 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
-#include <language/duchain/types/typesystem.h>
 #include "typeutils.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"

@@ -18,6 +18,8 @@
 
 #include "dumptypes.h"
 
+#include <language/duchain/types/alltypes.h>
+
 using namespace KDevelop;
 
 DumpTypes::DumpTypes()

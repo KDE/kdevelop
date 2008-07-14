@@ -30,8 +30,9 @@
 #include "control.h"
 
 #include <identifier.h>
-#include <language/duchain/types/typesystem.h>
 #include <language/duchain/dumpchain.h>
+#include <language/duchain/types/abstracttype.h>
+#include <language/duchain/types/indexedtype.h>
 #include "dumpchain.h"
 
 namespace KDevelop

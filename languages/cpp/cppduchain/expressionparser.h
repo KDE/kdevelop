@@ -20,7 +20,6 @@
 #define EXPRESSIONPARSER_H
 
 #include <ksharedptr.h>
-#include <language/duchain/types/typesystem.h>
 #include <duchain/duchainpointer.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>

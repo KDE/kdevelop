@@ -24,7 +24,6 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
-#include <language/duchain/types/typesystem.h>
 #include <duchain/forwarddeclaration.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"

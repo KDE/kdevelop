@@ -22,7 +22,7 @@
 #ifndef COMPLETIONHELPERS_H
 #define COMPLETIONHELPERS_H
 
-#include <language/duchain/types/typesystem.h>
+#include <language/duchain/types/abstracttype.h>
 
 class NormalDeclarationCompletionItem;
 class QString;
