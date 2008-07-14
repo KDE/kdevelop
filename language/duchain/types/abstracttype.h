@@ -188,8 +188,7 @@ public:
     TypeFunction  /**< a function */,
     TypeStructure /**< a structure */,
     TypeArray     /**< an array */,
-    TypeDelayed   /**< a delayed type */,
-    TypeForward   /**< a foward declaration type */
+    TypeDelayed   /**< a delayed type */
   };
 
   /**
