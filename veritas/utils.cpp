@@ -19,14 +19,8 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  utils.cpp
- *
- * \brief Implements class Utils.
- */
-
-#include <utils.h>
-#include <test.h>
+#include "veritas/utils.h"
+#include "veritas/test.h"
 
 #include <QTreeView>
 #include <QHeaderView>

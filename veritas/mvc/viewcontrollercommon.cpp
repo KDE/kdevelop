@@ -19,14 +19,8 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  viewcontrollercommon.cpp
- *
- * \brief Implements class ViewControllerCommon.
- */
-
-#include "viewcontrollercommon.h"
-#include "utils.h"
+#include "veritas/mvc/viewcontrollercommon.h"
+#include "veritas/utils.h"
 #include <KDebug>
 
 using Veritas::ViewControllerCommon;

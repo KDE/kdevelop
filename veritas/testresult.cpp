@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "testresult.h"
+#include "veritas/testresult.h"
 #include <KDebug>
 
 using Veritas::TestResult;

@@ -25,11 +25,12 @@
  * \brief Implements class ResultsProxyModel.
  */
 
-#include "resultsproxymodel.h"
-#include "resultsmodel.h"
-#include <testresult.h>
-#include <itest.h>
-#include <test.h>
+#include "veritas/mvc/resultsproxymodel.h"
+#include "veritas/mvc/resultsmodel.h"
+#include "veritas/testresult.h"
+#include "veritas/test.h"
+#include "veritas/interfaces/itest.h"
+
 #include <KDebug>
 
 using Veritas::Test;
@@ -39,8 +40,7 @@ using Veritas::ResultsProxyModel;
 
 ResultsProxyModel::ResultsProxyModel(QObject* parent,  int filter)
         : QSortFilterProxyModel(parent), m_filter(filter)
-{
-}
+{}
 
 ResultsProxyModel::~ResultsProxyModel()
 {}

@@ -28,8 +28,9 @@
 #ifndef VERITAS_RESULTSPROXYMODEL_H
 #define VERITAS_RESULTSPROXYMODEL_H
 
-#include "proxymodelcommon.h"
-#include <testresult.h>
+#include "veritas/mvc/proxymodelcommon.h"
+#include "veritas/testresult.h"
+
 #include <QList>
 #include <QSortFilterProxyModel>
 

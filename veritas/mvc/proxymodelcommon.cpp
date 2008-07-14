@@ -25,7 +25,7 @@
  * \brief Implements class ProxyModelCommon.
  */
 
-#include "proxymodelcommon.h"
+#include "veritas/mvc/proxymodelcommon.h"
 
 namespace Veritas
 {

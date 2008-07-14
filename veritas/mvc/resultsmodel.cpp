@@ -19,11 +19,11 @@
  * 02110-1301, USA.
  */
 
-#include <resultsmodel.h>
+#include "veritas/mvc/resultsmodel.h"
 
-#include <test.h>
-#include <utils.h>
-#include <modeltest.h>
+#include "veritas/test.h"
+#include "veritas/utils.h"
+#include "tests/common/modeltest.h"
 
 #include <KDebug>
 

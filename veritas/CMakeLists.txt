@@ -1,22 +1,17 @@
 add_subdirectory(tests)
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
 set(TestBuild on)
-if(TestBuild)
-# expose all symbols
+if(TestBuild) # expose all symbols
     add_definitions( -fvisibility=default )
 endif(TestBuild)
 
 include_directories(
     ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/shell
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/tests/common
-    ${CMAKE_SOURCE_DIR}/veritas
-    ${CMAKE_SOURCE_DIR}/veritas/mvc
-    ${CMAKE_SOURCE_DIR}/veritas/interfaces )
+    ${CMAKE_SOURCE_DIR}/interfaces # needed since shell/core.h (ab)uses angle brackets.
+    )
 
 ########### next target ###############
 

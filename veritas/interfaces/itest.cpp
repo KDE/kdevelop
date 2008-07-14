@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "itest.h"
+#include "veritas/interfaces/itest.h"
 
 using Veritas::ITest;
 

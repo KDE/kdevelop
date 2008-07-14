@@ -25,18 +25,21 @@
  * \brief Implements class RunnerViewController.
  */
 
-#include "runnerviewcontroller.h"
-#include "runnermodel.h"
-#include "test.h"
-#include "runnerproxymodel.h"
-#include "utils.h"
+#include "veritas/mvc/runnerviewcontroller.h"
+#include "veritas/mvc/runnerproxymodel.h"
+#include "veritas/mvc/runnermodel.h"
+
+#include "veritas/test.h"
+#include "veritas/utils.h"
 
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <KDebug>
 
-namespace Veritas
-{
+using Veritas::RunnerViewController;
+using Veritas::RunnerProxyModel;
+using Veritas::RunnerModel;
+using Veritas::Test;
 
 RunnerViewController::RunnerViewController(QObject* parent, QTreeView* view)
         : ViewControllerCommon(parent,view)
@@ -177,5 +180,3 @@ bool RunnerViewController::eventFilter(QObject* obj, QEvent* event)
 
     return true;
 }
-
-} // namespace

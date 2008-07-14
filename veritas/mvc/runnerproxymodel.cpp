@@ -25,7 +25,7 @@
  * \brief Implements class RunnerProxyModel.
  */
 
-#include "runnerproxymodel.h"
+#include "veritas/mvc/runnerproxymodel.h"
 
 namespace Veritas
 {

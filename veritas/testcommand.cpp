@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "testcommand.h"
+#include "veritas/testcommand.h"
 
 using Veritas::Test;
 using Veritas::TestCommand;

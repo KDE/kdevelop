@@ -25,13 +25,15 @@
  * \brief Implements class ResultsViewController.
  */
 
-#include "resultsviewcontroller.h"
-#include "resultsmodel.h"
-#include "resultsproxymodel.h"
+#include "veritas/mvc/resultsviewcontroller.h"
+#include "veritas/mvc/resultsmodel.h"
+#include "veritas/mvc/resultsproxymodel.h"
+
 #include <KDebug>
 
-namespace Veritas
-{
+using Veritas::ResultsViewController;
+using Veritas::ResultsModel;
+using Veritas::ResultsProxyModel;
 
 ResultsViewController::ResultsViewController(QObject* parent, QTreeView* view)
         : ViewControllerCommon(parent, view)
@@ -124,5 +126,3 @@ void ResultsViewController::setupSorting() const
 
     enableSorting(enable);
 }
-
-} // namespace

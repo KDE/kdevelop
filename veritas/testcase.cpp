@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "testcase.h"
+#include "veritas/testcase.h"
 
 using Veritas::Test;
 using Veritas::TestCase;

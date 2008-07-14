@@ -19,13 +19,6 @@
  * 02110-1301, USA.
  */
 
-
-/*!
- * \file  viewcontrollercommon.h
- *
- * \brief Declares class ViewControllerCommon.
- */
-
 #ifndef VERITAS_VIEWCONTROLLERCOMMON_H
 #define VERITAS_VIEWCONTROLLERCOMMON_H
 

@@ -28,7 +28,7 @@
 #ifndef VERITAS_RUNNERPROXYMODEL_H
 #define VERITAS_RUNNERPROXYMODEL_H
 
-#include "proxymodelcommon.h"
+#include "veritas/mvc/proxymodelcommon.h"
 
 #include <QSortFilterProxyModel>
 

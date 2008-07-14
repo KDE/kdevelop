@@ -24,20 +24,41 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QModelIndex>
-#include <testresult.h>
-#include <veritasexport.h>
+
+#include "veritas/testresult.h"
+#include "veritas/veritasexport.h"
 
 namespace Veritas
 {
 
+/*!
+ * Prime class, represents a single test entity in a
+ * test tree. Also used as data for the underlying 
+ * (runner)model.
+ * Concrete plugins can introduce structure in this
+ * test tree, but this is not a must.
+ *
+ * eg
+ * TestSuite
+ *   TestCase
+ *      TestCommand
+ *
+ * Implemented in Veritas::Test
+ * Subclasses should implement the run method.
+ *
+ */
 class VERITAS_EXPORT ITest : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     ITest();
     virtual ~ITest();
 
-    virtual QString name() const = 0; // must be unique across siblings
+    /*!
+     * String identifier which must be unique 
+     * across siblings
+     */
+    virtual QString name() const = 0;
     static const int s_columnCount;
 
     /*!
@@ -80,27 +101,63 @@ public:
      */
     virtual void clear() = 0;
     virtual void setResult(TestResult*) = 0;
+    /*!
+     * The overall state of the test.
+     * This can be NotRun, RunSuccess, RunError (among
+     * others)
+     */
     virtual Veritas::TestState state() const = 0;
     virtual void setState(TestState) = 0;
     virtual TestResult* result() const = 0;
 
+    /*!
+     * The test that owns this one.
+     * Ie a suite can be parent of a case
+     */
     virtual ITest* parent() const = 0;
+    /*!
+     * Append a child test
+     */
     virtual void addChild(ITest*) = 0;
-    virtual ITest* child(int) const = 0;
-    virtual int childCount() const = 0;
+    /*!
+     * Retrieve the i-th child
+     */
+    virtual ITest* child(int /*i*/) const = 0;
+    /*!
+     * Find a first-level child with a specific name.
+     */
     virtual ITest* childNamed(const QString& name) const = 0;
+    /*!
+     * The number of children
+     */
+    virtual int childCount() const = 0;
 
+    // TODO To be removed. this accesses the 
+    // data for a 
     virtual QVariant data(int column) const = 0;
 
     /*!
      * Reports the item's location within its parent's list
+     * TODO rename this
      */
     virtual int row() const = 0;
 
     virtual QList<ITest*> leafs() const = 0;
 
 Q_SIGNALS:
+    /*!
+     * Implementor needs to emit this when execution
+     * of this test commences.
+     *
+     * TODO: remove the model index parameter
+     */
     void started(QModelIndex);
+    /*!
+     * Implementor needs to emit this when execution 
+     * finished.
+     * 
+     * TODO remove this model index parameter
+     */
     void finished(QModelIndex);
 };
 

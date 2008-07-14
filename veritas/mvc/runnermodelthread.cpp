@@ -25,8 +25,8 @@
  * \brief Implements class RunnerModelThread.
  */
 
-#include "runnermodelthread.h"
-#include "runnermodel.h"
+#include "veritas/mvc/runnermodelthread.h"
+#include "veritas/mvc/runnermodel.h"
 
 using Veritas::RunnerModel;
 using Veritas::RunnerModelThread;

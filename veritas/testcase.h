@@ -21,9 +21,10 @@
 #ifndef VERITAS_TESTCASE_H
 #define VERITAS_TESTCASE_H
 
-#include <test.h>
-#include <veritasexport.h>
-#include <testcommand.h>
+#include "veritas/test.h"
+#include "veritas/testcommand.h"
+#include "veritas/veritasexport.h"
+
 #include <QtCore/QString>
 
 namespace Veritas

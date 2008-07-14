@@ -18,12 +18,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
- 
-/*!
- * \file  runnerwindow.h
- *
- * \brief Declares class RunnerWindow.
- */
 
 #ifndef VERITAS_RUNNERWINDOW_H
 #define VERITAS_RUNNERWINDOW_H
@@ -41,8 +35,6 @@ class KSelectAction;
 
 namespace Veritas
 {
-
-class AppSettings;
 class StatusWidget;
 class RunnerModel;
 class RunnerProxyModel;
@@ -128,12 +120,10 @@ public: // Operations
      */
     bool isResultsViewVisible() const;
 
-    Ui::RunnerWindow&  ui() { return m_ui; }
+    Ui::RunnerWindow& ui() { return m_ui; }
     Ui::StatusWidget* statusWidget() const;
 
-    KSelectAction* projectPopup() const {
-        return m_projectPopup;
-    }
+    KSelectAction* projectPopup() const;
 
 public Q_SLOTS:
     void addProjectToPopup(KDevelop::IProject*);
@@ -352,14 +342,14 @@ private: // Operations
 
 private: // Attributes
 
-    Ui::RunnerWindow m_ui;
-    StatusWidget* m_statusWidget;
-    QSemaphore m_sema;
-    QBrush m_highlightBrush;
-    RunnerViewController*  m_runnerViewController;
-    ResultsViewController* m_resultsViewController;
-    SelectionManager* m_selection;
-    KSelectAction* m_projectPopup;
+    Ui::RunnerWindow m_ui;             // QtDesigner main object
+    StatusWidget* m_statusWidget;      // shows num run, selected etc
+    QSemaphore m_sema;                 // currently unused, should remove
+    QBrush m_highlightBrush;           // hmm not sure about this either
+    RunnerViewController*  m_runnerViewController; // extracts some functionality from this class
+    ResultsViewController* m_resultsViewController; // idem
+    SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
+    KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
 };
 
 } // namespace

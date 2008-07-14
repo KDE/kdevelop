@@ -21,7 +21,7 @@
 #ifndef VERITAS_ITESTRUNNER_H
 #define VERITAS_ITESTRUNNER_H
 
-#include <veritasexport.h>
+#include "veritas/veritasexport.h"
 
 class QWidget;
 
@@ -29,14 +29,27 @@ namespace Veritas
 {
 class ITest;
 
+/*!
+ * base for test runner toolviews/plugins.
+ * implemented in TestRunnerToolView
+ */
 class VERITAS_EXPORT ITestRunner
 {
 public:
     ITestRunner();
     virtual ~ITestRunner();
+
+    /*!
+     * Create a new test runner widget
+     */
     virtual QWidget* spawnWindow() = 0;
 
 protected:
+
+    /*!
+     * Reload the test tree.
+     * To be implemented by concrete plugins.
+     */
     virtual ITest* registerTests() = 0;
 };
 

@@ -19,23 +19,21 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  runnerwindow.cpp
- *
- * \brief Implements class RunnerWindow.
- */
+#include "veritas/mvc/runnerwindow.h"
 
-#include "runnerwindow.h"
-#include "runnerviewcontroller.h"
-#include "resultsviewcontroller.h"
-#include "runnermodel.h"
-#include "resultsmodel.h"
-#include "runnerproxymodel.h"
-#include "resultsproxymodel.h"
-#include "statuswidget.h"
-#include "stoppingdialog.h"
-#include "utils.h"
-#include "selectionmanager.h"
+#include "interfaces/iproject.h"
+
+#include "veritas/mvc/resultsmodel.h"
+#include "veritas/mvc/resultsproxymodel.h"
+#include "veritas/mvc/resultsviewcontroller.h"
+#include "veritas/mvc/runnermodel.h"
+#include "veritas/mvc/runnerproxymodel.h"
+#include "veritas/mvc/runnerviewcontroller.h"
+#include "veritas/mvc/selectionmanager.h"
+#include "veritas/mvc/statuswidget.h"
+#include "veritas/mvc/stoppingdialog.h"
+
+#include "veritas/utils.h"
 
 #include <QMessageBox>
 #include <QCloseEvent>
@@ -46,12 +44,9 @@
 #include <KIcon>
 #include <KDebug>
 
-#include <iproject.h>
-
 using KDevelop::IProject;
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 
-// Helper function needed to expand Q_INIT_RESOURCE outside the namespace.
 static void initVeritasResource()
 {
     Q_INIT_RESOURCE(qxrunner);
@@ -171,6 +166,12 @@ void RunnerWindow::connectFocusStuff()
     connect(resultsView(), SIGNAL(pressed(const QModelIndex&)),
             SLOT(scrollToHighlightedRows()));
 }
+
+KSelectAction* RunnerWindow::projectPopup() const
+{
+    return m_projectPopup;
+}
+
 
 // helper for RunnerWindow(...)
 void RunnerWindow::setUpStatusBar()
@@ -605,7 +606,7 @@ void RunnerWindow::highlightResultAgain(const QModelIndex& previous) const
 // helper for setResultsFilter()
 int RunnerWindow::readButtonFilterSetting() const
 {
-        // Determine filter settings.
+    // Determine filter settings.
     int filter = 0;
     if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
         filter = filter | Veritas::RunError;
@@ -636,7 +637,7 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
     QModelIndexList indexes = selected.indexes();
 
     // Do nothing when there are no results or no runner item is selected.
-    if (indexes.count() < 1 || !runnerProxyModel()->index(0,0).isValid()) {
+    if (indexes.count() < 1 || !runnerProxyModel()->index(0, 0).isValid()) {
         return;
     }
 
@@ -1079,7 +1080,7 @@ void RunnerWindow::closeEvent(QCloseEvent* event)
     // Items not stoppable.
     QString msg;
     msg = i18n("There are items running which can not be stopped immediately.\n"
-             "Should the program exit anyway which could result in inconsistent data?");
+               "Should the program exit anyway which could result in inconsistent data?");
     r = QMessageBox::warning(this, i18n("Veritas"), msg,
                              i18n("&Yes"), i18n("&No"), 0, 0, 1);
     if (r) {

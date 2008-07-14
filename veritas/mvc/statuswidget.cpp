@@ -25,20 +25,15 @@
  * \brief Implements class StatusWidget.
  */
 
-#include "statuswidget.h"
+#include "veritas/mvc/statuswidget.h"
 
-namespace Veritas 
-{
+using Veritas::StatusWidget;
 
 StatusWidget::StatusWidget(QWidget* parent)
             : QWidget(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 }
 
 StatusWidget::~StatusWidget()
-{
-
-}
-
-} // namespace
+{}

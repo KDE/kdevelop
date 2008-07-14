@@ -21,9 +21,9 @@
 #ifndef VERITAS_TESTRUNNERTOOLVIEW_H
 #define VERITAS_TESTRUNNERTOOLVIEW_H
 
-#include <iplugin.h>
-#include <itestrunner.h>
-#include <veritasexport.h>
+#include "interfaces/iplugin.h"
+#include "veritas/veritasexport.h"
+#include "veritas/interfaces/itestrunner.h"
 
 class QWidget;
 class KComponentData;

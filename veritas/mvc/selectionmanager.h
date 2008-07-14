@@ -21,8 +21,7 @@
 #ifndef VERITAS_SELECTIONMANAGER_H
 #define VERITAS_SELECTIONMANAGER_H
 
-#include <test.h>
-
+#include "veritas/test.h"
 #include <QObject>
 
 class QAbstractItemView;

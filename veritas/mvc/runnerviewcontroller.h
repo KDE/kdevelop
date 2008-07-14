@@ -28,7 +28,7 @@
 #ifndef VERITAS_RUNNERVIEWCONTROLLER_H
 #define VERITAS_RUNNERVIEWCONTROLLER_H
 
-#include "viewcontrollercommon.h"
+#include "veritas/mvc/viewcontrollercommon.h"
 
 #include <QObject>
 

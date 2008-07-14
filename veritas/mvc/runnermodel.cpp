@@ -25,13 +25,13 @@
  * \brief Implements class RunnerModel.
  */
 
-#include "runnermodel.h"
-#include "resultsmodel.h"
-#include "runnermodelthread.h"
+#include "veritas/mvc/runnermodel.h"
+#include "veritas/mvc/resultsmodel.h"
+#include "veritas/mvc/runnermodelthread.h"
 
-#include <test.h>
-#include <utils.h>
-#include <modeltest.h>
+#include "veritas/test.h"
+#include "veritas/utils.h"
+#include "tests/common/modeltest.h"
 
 #include <QColor>
 #include <QFont>

@@ -18,20 +18,21 @@
  * 02110-1301, USA.
  */
 
-#include "testrunnertoolview.h"
-#include "runnermodel.h"
-#include "runnerwindow.h"
+#include "veritas/testrunnertoolview.h"
+
 #include <KAboutData>
-#include <KSelectAction>
 #include <KDebug>
+#include <KSelectAction>
 #include <QWidget>
 
-#include <itest.h>
-#include <core.h>
-#include <iproject.h>
-#include <iprojectcontroller.h>
+#include "interfaces/iproject.h"
+#include "interfaces/iprojectcontroller.h"
+#include "shell/core.h"
 
-#include "test.h"
+#include "veritas/test.h"
+#include "veritas/interfaces/itest.h"
+#include "veritas/mvc/runnermodel.h"
+#include "veritas/mvc/runnerwindow.h"
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 

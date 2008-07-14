@@ -21,7 +21,7 @@
 #ifndef VERITAS_TESTRESULT_H
 #define VERITAS_TESTRESULT_H
 
-#include <veritasexport.h>
+#include "veritas/veritasexport.h"
 
 #include <QtCore/QList>
 #include <QtCore/QString>

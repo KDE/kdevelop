@@ -25,9 +25,9 @@
 #include <QtCore/QFileInfo>
 #include <QtXml/QXmlStreamReader>
 
-#include <test.h>
-#include <testcase.h>
-#include <veritasexport.h>
+#include "veritas/test.h"
+#include "veritas/testcase.h"
+#include "veritas/veritasexport.h"
 
 class KProcess;
 class QIODevice;
@@ -81,6 +81,6 @@ private: // some xml constants
 
 }
 
-#include "register.hpp"
+#include "register.hpp" // template implementation
 
 #endif // VERITAS_REGISTER_H

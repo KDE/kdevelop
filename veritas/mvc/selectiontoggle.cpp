@@ -18,13 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "selectiontoggle.h"
-
-#include <kglobalsettings.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <kiconeffect.h>
-#include <klocale.h>
+#include "veritas/mvc/selectiontoggle.h"
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -33,6 +27,11 @@
 #include <QTimeLine>
 
 #include <KDebug>
+#include <KGlobalSettings>
+#include <KIcon>
+#include <KIconLoader>
+#include <KIconEffect>
+#include <KLocale>
 
 using Veritas::SelectionToggle;
 
