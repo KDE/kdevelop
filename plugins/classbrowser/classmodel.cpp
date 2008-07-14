@@ -285,8 +285,6 @@ int typeScore(Declaration* d)
       ret += 2;
     case AbstractType::TypeDelayed:
       ret += 3;
-    case AbstractType::TypeForward:
-      ret += 3;
     case AbstractType::TypeAbstract:
       ret += 3;
     default:
