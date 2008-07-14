@@ -79,14 +79,14 @@ void EnvironmentWidget::enableDeleteButton()
 
 void EnvironmentWidget::setAsDefault()
 {
-    groupModel->setDefaultGroup( ui.activeCombo->currentText() );
+    groupModel->changeDefaultGroup( ui.activeCombo->currentText() );
     emit changed();
 }
 
 void EnvironmentWidget::loadSettings( KConfig* config )
 {
     kDebug() << "Loading groups from config";
-    groupModel->loadSettings( config );
+    groupModel->loadFromConfig( config );
 
     ui.activeCombo->clear();
 
@@ -103,7 +103,7 @@ void EnvironmentWidget::loadSettings( KConfig* config )
 
 void EnvironmentWidget::saveSettings( KConfig* config )
 {
-    groupModel->saveSettings( config );
+    groupModel->saveToConfig( config );
 }
 
 void EnvironmentWidget::defaults( KConfig* config )
@@ -181,7 +181,7 @@ void EnvironmentWidget::removeGroupClicked()
     ui.activeCombo->removeItem( idx );
 }
 
-void EnvironmentWidget::activeGroupChanged( int idx )
+void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
 {
 
     groupModel->setCurrentGroup( ui.activeCombo->currentText() );

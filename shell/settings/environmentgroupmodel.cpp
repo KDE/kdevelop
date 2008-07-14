@@ -116,14 +116,6 @@ bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& dat
     return true;
 }
 
-void EnvironmentGroupModel::setDefaultGroup( const QString& grp )
-{
-    if( !grp.isEmpty() )
-    {
-        setDefaultGroup( grp );
-    }
-}
-
 void EnvironmentGroupModel::addVariable( const QString& var, const QString& value )
 {
     beginInsertRows( QModelIndex(), rowCount( QModelIndex() ), rowCount( QModelIndex() ) );
@@ -168,23 +160,20 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     reset();
 }
 
-void EnvironmentGroupModel::loadSettings( KConfig* cfg )
+void EnvironmentGroupModel::changeDefaultGroup( const QString& grp )
+{
+    if( !grp.isEmpty() )
+        setDefaultGroup( grp );
+}
+
+void EnvironmentGroupModel::loadFromConfig( KConfig* cfg )
 {
     loadSettings( cfg );
     setCurrentGroup("");
 }
 
-QString EnvironmentGroupModel::defaultGroup() const
-{
-    return defaultGroup();
-}
 
-QStringList EnvironmentGroupModel::groups() const
-{
-    return groups();
-}
-
-void EnvironmentGroupModel::saveSettings( KConfig* cfg )
+void EnvironmentGroupModel::saveToConfig( KConfig* cfg )
 {
     saveSettings( cfg );
 }

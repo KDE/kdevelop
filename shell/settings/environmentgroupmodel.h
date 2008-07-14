@@ -42,14 +42,12 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
     bool setData( const QModelIndex& idx, const QVariant&, int role );
     void setCurrentGroup( const QString& group );
-    void loadSettings( KConfig* );
-    void saveSettings( KConfig* );
+    void loadFromConfig( KConfig* );
+    void saveToConfig( KConfig* );
     void addVariable( const QString& var, const QString& value );
     void removeVariable( const QModelIndex& idx );
-    QStringList groups() const;
     void removeGroup( const QString& grp );
-    QString defaultGroup() const;
-    void setDefaultGroup( const QString& );
+    void changeDefaultGroup( const QString& grp );
 
 private:
     QMap<int, QString> m_variableMap;
