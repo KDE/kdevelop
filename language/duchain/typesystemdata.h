@@ -67,6 +67,9 @@ public:
   /// Remember which type this data was created for. \sa setTypeClassId()
   uint typeClassId;
 
+  /// Type modifier flags
+  quint64 m_modifiers;
+
   /// Remember whether this type is in a TypeRepository. Not used for comparison or hashes.
   bool inRepository : 1;
 
@@ -89,6 +92,8 @@ public:
   IntegralTypeData( const IntegralTypeData& rhs );
   /// Name of the integral type.
   IndexedString m_name;
+  /// Data type
+  uint m_dataType;
 };
 
 /// Private data structure for PointerType
@@ -148,6 +153,10 @@ public:
   StructureTypeData();
   /// Copy constructor. \param rhs data to copy
   StructureTypeData( const StructureTypeData& rhs );
+  /// Type of the class (struct, class, etc.)
+  uint m_classType;
+  /// Whether the type is closed yet
+  bool m_closed;
 };
 
 /// Private data structure for ArrayType

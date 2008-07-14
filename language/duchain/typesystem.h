@@ -117,6 +117,43 @@ public:
 };
 
 /**
+  * An enumeration of common modifiers for data types.
+  * If you have any language-specific modifiers that don't belong here,
+  * you can add them at/after LanguageSpecificModifier
+  */
+namespace CommonModifiers {
+  enum {
+    NoModifiers                 = 0,
+    ConstModifier               = 1 << 0,
+    VolatileModifier            = 1 << 1,
+    PrivateModifier             = 1 << 2,
+    PublicModifier              = 1 << 3,
+    ProtectedModifier           = 1 << 4,
+    TransientModifier           = 1 << 5,
+    FinalModifier               = 1 << 6,
+    AbstractModifier            = 1 << 7,
+    NativeModifier              = 1 << 8,
+    SynchronizedModifier        = 1 << 9,
+    StrictFPModifier            = 1 << 10,
+    NewModifier                 = 1 << 11,
+    SealedModifier              = 1 << 12,
+    StaticModifier              = 1 << 13,
+    ReadonlyModifier            = 1 << 14,
+    VirtualModifier             = 1 << 15,
+    OverrideModifier            = 1 << 16,
+    ExternModifier              = 1 << 17,
+    UnsafeModifier              = 1 << 18,
+    FixedModifier               = 1 << 19,
+    ShortModifier               = 1 << 20,
+    LongModifier                = 1 << 21,
+    LongLongModifier            = 1 << 22,
+    SignedModifier              = 1 << 23,
+    UnsignedModifier            = 1 << 24,
+    LanguageSpecificModifier    = 1 << 25  //TODO make this support 64 bit values
+  };
+}
+
+/**
  * \brief Base class for all types.
  *
  * The AbstractType class is a base class from which all types derive.  It features:
@@ -161,6 +198,20 @@ public:
   AbstractType(AbstractTypeData& dd);
   /// Destructor.
   virtual ~AbstractType ();
+
+  /**
+   * Access the type modifiers
+   *
+   * \returns the type's modifiers.
+   */
+  quint64 modifiers() const;
+
+  /**
+   * Set the type's modifiers.
+   *
+   * \param modifiers modifiers of this type.
+   */
+  void setModifiers(quint64 modifiers);
 
   /**
    * Visitor method.  Called by TypeVisitor to visit the type heirachy.
@@ -357,6 +408,30 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
 };
 
 /**
+  * Enumeration of frequently used integral types.
+  * If your language has another integral type not listed here,
+  * you can create custom types staring from TypeLanguageSpecific.
+  */
+namespace CommonIntegralTypes {
+  enum {
+    TypeVoid,
+    TypeNone,
+    TypeNull,
+    TypeChar,
+    TypeBoolean,
+    TypeByte,
+    TypeSbyte,
+    TypeShort,
+    TypeInt,
+    TypeLong,
+    TypeFloat,
+    TypeDouble,
+    TypeWchar_t,
+    TypeLanguageSpecific = 200
+  };
+}
+
+/**
  * \short A type representing inbuilt data types.
  *
  * IntegralType is used to represent types which are native to a programming languge,
@@ -377,6 +452,20 @@ public:
   IntegralType(IntegralTypeData& data);
   /// Destructor
   virtual ~IntegralType();
+
+  /**
+   * Access the integral type
+   *
+   * \returns the type's modifiers.
+   */
+  uint dataType() const;
+
+  /**
+   * Set the type's modifiers.
+   *
+   * \param modifiers modifiers of this type.
+   */
+  void setDataType(uint dataType);
 
   /// Access the name of this type. \returns the type's name.
   const IndexedString& name() const;
@@ -641,6 +730,16 @@ protected:
   TYPE_DECLARE_DATA(FunctionType)
 };
 
+
+namespace CommonClassTypes {
+  enum {
+    Class,
+    Struct,
+    Union,
+    Interface
+  };
+}
+
 /**
  * \short A type representing structure types.
  *
@@ -660,6 +759,12 @@ public:
   StructureType(StructureTypeData& data);
   /// Destructor
   virtual ~StructureType();
+
+  void setClassType(uint type);
+  uint classType() const;
+
+  bool isClosed() const;
+  void close();
 
   virtual AbstractType* clone() const;
 

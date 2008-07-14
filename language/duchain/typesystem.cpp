@@ -27,7 +27,7 @@
 
 namespace KDevelop
 {
-  
+
 
 
 //REGISTER_TYPE(AbstractType);
@@ -41,7 +41,9 @@ REGISTER_TYPE(DelayedType);
 
 DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
-AbstractTypeData::AbstractTypeData() : inRepository(false)
+AbstractTypeData::AbstractTypeData()
+  : m_modifiers(CommonModifiers::NoModifiers)
+  , inRepository(false)
 {
   initializeAppendedLists(true);
 }
@@ -50,10 +52,13 @@ uint AbstractTypeData::classSize() const {
   return TypeSystem::self().dataClassSize(*this);
 }
 
-AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs ) : inRepository(false)
+AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs )
+  : m_modifiers(rhs.m_modifiers)
+  , inRepository(false)
 {
   initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
   typeClassId = rhs.typeClassId;
+  m_modifiers = rhs.m_modifiers;
 }
 
 AbstractTypeData::~AbstractTypeData()
@@ -67,11 +72,12 @@ AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&) {
 }
 
 IntegralTypeData::IntegralTypeData()
+  : m_dataType(CommonIntegralTypes::TypeNone)
 {
 }
 
 IntegralTypeData::IntegralTypeData( const IntegralTypeData& rhs )
-  : AbstractTypeData(rhs), m_name( rhs.m_name )
+  : AbstractTypeData(rhs), m_name( rhs.m_name ), m_dataType(CommonIntegralTypes::TypeNone)
 {
 }
 
@@ -113,11 +119,15 @@ void FunctionTypeData::operator=(const FunctionTypeData& rhs) {
 }
 
 StructureTypeData::StructureTypeData()
+  : m_classType(CommonClassTypes::Class)
+  , m_closed(false)
 {
 }
 
 StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
   : AbstractTypeData( rhs )
+  , m_classType(rhs.m_classType)
+  , m_closed(rhs.m_closed)
 {
 }
 
@@ -136,7 +146,7 @@ DelayedTypeData::DelayedTypeData() : m_kind(DelayedType::Delayed) {
 }
 
 DelayedTypeData::DelayedTypeData( const DelayedTypeData& rhs )
-  : AbstractTypeData( rhs ), m_identifier( rhs.m_identifier ), 
+  : AbstractTypeData( rhs ), m_identifier( rhs.m_identifier ),
     m_kind( rhs.m_kind )
 {
 }
@@ -234,7 +244,27 @@ AbstractType::AbstractType( AbstractTypeData& dd )
 {
 }
 
+quint64 AbstractType::modifiers() const
+{
+  return d_func()->m_modifiers;
+}
+
+void AbstractType::setModifiers(quint64 modifiers)
+{
+  d_func_dynamic()->m_modifiers = modifiers;
+}
+
 IntegralType::IntegralType(IntegralTypeData& data) : AbstractType(data) {
+}
+
+uint IntegralType::dataType() const
+{
+  return d_func()->m_dataType;
+}
+
+void IntegralType::setDataType(uint dataType)
+{
+  d_func_dynamic()->m_dataType = dataType;
 }
 
 PointerType::PointerType(PointerTypeData& data) : AbstractType(data) {
@@ -304,7 +334,7 @@ bool IntegralType::equals(const AbstractType* _rhs) const
   if( !fastCast<const IntegralType*>(_rhs))
     return false;
   const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
-  
+
   return rhs->d_func()->m_name == d_func()->m_name;
 }
 
@@ -335,13 +365,13 @@ bool FunctionType::equals(const AbstractType* _rhs) const
   TYPE_D(FunctionType);
   if( d->m_argumentsSize() != rhs->d_func()->m_argumentsSize() )
     return false;
-  
+
   if( (bool)rhs->d_func()->m_returnType != (bool)d->m_returnType )
     return false;
-  
+
   if( d->m_returnType != rhs->d_func()->m_returnType )
     return false;
-  
+
   for(int a = 0; a < d->m_argumentsSize(); ++a)
     if(d->m_arguments()[a] != rhs->d_func()->m_arguments()[a])
       return false;
@@ -354,7 +384,7 @@ bool StructureType::equals(const AbstractType* _rhs) const
   if( !fastCast<const StructureType*>(_rhs))
     return false;
 //   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
-//   
+//
 //   TYPE_D(StructureType);
 
   return true;
@@ -368,7 +398,7 @@ bool ArrayType::equals(const AbstractType* _rhs) const
   TYPE_D(ArrayType);
   if( d->m_dimension != rhs->d_func()->m_dimension )
     return false;
-  
+
   return d->m_elementType == rhs->d_func()->m_elementType;
 }
 
@@ -421,7 +451,7 @@ IntegralType::IntegralType(const IndexedString& name)
   : AbstractType(*new IntegralTypeData)
 {
   d_func_dynamic()->setTypeClassId<IntegralType>();
-  
+
   d_func_dynamic()->m_name = name;
 }
 
@@ -594,7 +624,7 @@ void FunctionType::addArgument(AbstractType::Ptr argument)
 void FunctionType::removeArgument(AbstractType::Ptr argument)
 {
   TYPE_D_DYNAMIC(FunctionType);
-  
+
   IndexedType i = argument->indexed();
   uint shift = 0;
   for(int a = 0; a < d->m_argumentsSize(); ++a) {
@@ -679,7 +709,7 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
     }
     args += ')';
   }
-  
+
   if( sigPart == SignatureArguments )
     return args;
   else if( sigPart == SignatureWhole )
@@ -708,6 +738,24 @@ StructureType::StructureType()
 
 StructureType::~StructureType()
 {
+}
+
+void StructureType::setClassType(uint type)
+{
+}
+
+uint StructureType::classType() const
+{
+}
+
+bool StructureType::isClosed() const
+{
+  return d_func()->m_closed;
+}
+
+void StructureType::close()
+{
+  d_func_dynamic()->m_closed = true;
 }
 
 void StructureType::accept0 (TypeVisitor *v) const

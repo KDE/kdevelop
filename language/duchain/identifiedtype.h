@@ -130,6 +130,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT MergeIdentifiedType : public Parent, public Id
     class Data : public Parent::Data, public IdentifiedTypeData {
     };
 
+    MergeIdentifiedType() {
+    }
+
+
     MergeIdentifiedType(Data& data) : Parent(data) {
     }
 
