@@ -130,8 +130,8 @@ Declaration* localClassFromCodeContext(DUContext* context)
   
   //Since declarations are assigned to the bodies, not to the argument contexts, go to the body context to make the step to the function
   if(context->type() == DUContext::Function)
-    if(!context->importedChildContexts().isEmpty())
-      context = context->importedChildContexts().first();
+    if(!context->importers().isEmpty())
+      context = context->importers().first();
 
   ///Step 1: Find the function-declaration for the function we are in
   Declaration* functionDeclaration = 0;
