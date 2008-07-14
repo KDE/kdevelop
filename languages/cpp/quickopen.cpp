@@ -58,7 +58,7 @@ void collectImporters( QSet<IndexedString>& importers, DUContext* ctx )
   
   importers.insert( ctx->url() );
 
-  foreach( DUContext* ctx, ctx->importedChildContexts() )
+  foreach( DUContext* ctx, ctx->importers() )
     collectImporters( importers, ctx );
 }
 
