@@ -44,36 +44,35 @@ class TypeExchanger;
  * An enumeration of common modifiers for data types.
  * If you have any language-specific modifiers that don't belong here,
  * you can add them at/after LanguageSpecificModifier
+ * @warning Think twice what information you store into the type-system.
+ *          The type-system should store information that is shared among many declarations,
+ *          and attributes of specific Declarations like public/private should be stored in
+ *          the Declarations themselves, not in the type-system.
  */
 namespace CommonModifiers {
   enum {
     NoModifiers                 = 0,
     ConstModifier               = 1 << 0,
     VolatileModifier            = 1 << 1,
-    PrivateModifier             = 1 << 2,
-    PublicModifier              = 1 << 3,
-    ProtectedModifier           = 1 << 4,
-    TransientModifier           = 1 << 5,
-    FinalModifier               = 1 << 6,
-    AbstractModifier            = 1 << 7,
-    NativeModifier              = 1 << 8,
-    SynchronizedModifier        = 1 << 9,
-    StrictFPModifier            = 1 << 10,
-    NewModifier                 = 1 << 11,
-    SealedModifier              = 1 << 12,
-    StaticModifier              = 1 << 13,
-    ReadonlyModifier            = 1 << 14,
-    VirtualModifier             = 1 << 15,
-    OverrideModifier            = 1 << 16,
-    ExternModifier              = 1 << 17,
-    UnsafeModifier              = 1 << 18,
-    FixedModifier               = 1 << 19,
-    ShortModifier               = 1 << 20,
-    LongModifier                = 1 << 21,
-    LongLongModifier            = 1 << 22,
-    SignedModifier              = 1 << 23,
-    UnsignedModifier            = 1 << 24,
-    LanguageSpecificModifier    = 1 << 25  //TODO make this support 64 bit values
+    TransientModifier           = 1 << 2,
+    FinalModifier               = 1 << 3,
+    AbstractModifier            = 1 << 4,
+    NativeModifier              = 1 << 5,
+    SynchronizedModifier        = 1 << 6,
+    StrictFPModifier            = 1 << 7,
+    NewModifier                 = 1 << 8,
+    SealedModifier              = 1 << 9,
+    StaticModifier              = 1 << 10,
+    ReadonlyModifier            = 1 << 11,
+    OverrideModifier            = 1 << 12,
+    UnsafeModifier              = 1 << 13,
+    FixedModifier               = 1 << 14,
+    ShortModifier               = 1 << 15,
+    LongModifier                = 1 << 16,
+    LongLongModifier            = 1 << 17,
+    SignedModifier              = 1 << 18,
+    UnsignedModifier            = 1 << 19,
+    LanguageSpecificModifier    = 1 << 20 //TODO make this support 64 bit values
   };
 }
 
