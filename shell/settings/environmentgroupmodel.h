@@ -30,7 +30,7 @@ namespace KDevelop
 {
 
 
-class EnvironmentGroupModel : public QAbstractTableModel
+class EnvironmentGroupModel : public QAbstractTableModel, public EnvironmentGroupList
 {
     Q_OBJECT
 public:
@@ -54,8 +54,6 @@ public:
 private:
     QMap<int, QString> m_variableMap;
     QString m_currentGroup;
-    EnvironmentGroupList m_groups;
-
 };
 
 }

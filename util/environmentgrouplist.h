@@ -31,8 +31,6 @@ class QStringList;
 namespace KDevelop
 {
 
-class EnvironmentWidget;
-
 /**
  * This class manages a list of environment groups, each group containing a number
  * of environment variables and their values.
@@ -70,7 +68,6 @@ class EnvironmentWidget;
  */
 class KDEVPLATFORMUTIL_EXPORT EnvironmentGroupList
 {
-friend class KDevelop::EnvironmentWidget;
 public:
     /**
      * Creates an a list of EnvironmentGroups from a KConfig object

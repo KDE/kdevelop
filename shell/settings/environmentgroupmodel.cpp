@@ -59,7 +59,7 @@ Qt::ItemFlags EnvironmentGroupModel::flags( const QModelIndex& idx ) const
 
 QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
 {
-    if( !idx.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole ) 
+    if( !idx.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole )
         || m_currentGroup.isEmpty()
         || idx.row() < 0 || idx.row() >= rowCount(QModelIndex())
         || idx.column() < 0 || idx.column() >= columnCount(QModelIndex()) )
@@ -73,7 +73,7 @@ QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
     } else
     {
         QString var = m_variableMap[idx.row()];
-        return m_groups.variables( m_currentGroup ).value( var );
+        return variables( m_currentGroup ).value( var );
     }
 }
 
@@ -105,13 +105,13 @@ bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& dat
     if( idx.column() == 0 )
     {
         QString var = m_variableMap[idx.row()];
-        QString value = m_groups.variables( m_currentGroup ).value( var );
-        m_groups.variables( m_currentGroup ).remove( var );
-        m_groups.variables( m_currentGroup ).insert( data.toString(), value );
+        QString value = variables( m_currentGroup ).value( var );
+        variables( m_currentGroup ).remove( var );
+        variables( m_currentGroup ).insert( data.toString(), value );
         m_variableMap[idx.row()] = data.toString();
     } else
     {
-        m_groups.variables( m_currentGroup ).insert( m_variableMap[idx.row()], data.toString() );
+        variables( m_currentGroup ).insert( m_variableMap[idx.row()], data.toString() );
     }
     return true;
 }
@@ -120,7 +120,7 @@ void EnvironmentGroupModel::setDefaultGroup( const QString& grp )
 {
     if( !grp.isEmpty() )
     {
-        m_groups.setDefaultGroup( grp );
+        setDefaultGroup( grp );
     }
 }
 
@@ -128,15 +128,15 @@ void EnvironmentGroupModel::addVariable( const QString& var, const QString& valu
 {
     beginInsertRows( QModelIndex(), rowCount( QModelIndex() ), rowCount( QModelIndex() ) );
     m_variableMap.insert( rowCount( QModelIndex() ), var );
-    m_groups.variables( m_currentGroup ).insert( var, value );
+    variables( m_currentGroup ).insert( var, value );
     endInsertRows();
 }
 
 void EnvironmentGroupModel::removeGroup( const QString& grp )
 {
-    if( m_groups.groups().contains( grp ) )
+    if( groups().contains( grp ) )
     {
-        m_groups.removeGroup( grp );
+        removeGroup( grp );
         setCurrentGroup("");
     }
 }
@@ -151,7 +151,7 @@ void EnvironmentGroupModel::removeVariable( const QModelIndex& idx )
         beginRemoveRows( QModelIndex(), idx.row(), idx.row() );
         QString var = m_variableMap[idx.row()];
         m_variableMap.remove(idx.row());
-        m_groups.variables( m_currentGroup ).remove( var );
+        variables( m_currentGroup ).remove( var );
         endRemoveRows();
     }
 }
@@ -161,7 +161,7 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     m_currentGroup = group;
     m_variableMap.clear();
     int i = 0;
-    foreach( const QString var, m_groups.variables( m_currentGroup ).keys() )
+    foreach( const QString var, variables( m_currentGroup ).keys() )
     {
         m_variableMap.insert(i++, var);
     }
@@ -170,23 +170,23 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
 
 void EnvironmentGroupModel::loadSettings( KConfig* cfg )
 {
-    m_groups.loadSettings( cfg );
+    loadSettings( cfg );
     setCurrentGroup("");
 }
 
 QString EnvironmentGroupModel::defaultGroup() const
 {
-    return m_groups.defaultGroup();
+    return defaultGroup();
 }
 
 QStringList EnvironmentGroupModel::groups() const
 {
-    return m_groups.groups();
+    return groups();
 }
 
 void EnvironmentGroupModel::saveSettings( KConfig* cfg )
 {
-    m_groups.saveSettings( cfg );
+    saveSettings( cfg );
 }
 
 }
