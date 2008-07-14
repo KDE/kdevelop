@@ -51,6 +51,7 @@ FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Decla
 FunctionDeclaration::FunctionDeclaration(const SimpleRange& range, DUContext* context)
   : Declaration(*new FunctionDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   if( context )
     setContext( context );
 }

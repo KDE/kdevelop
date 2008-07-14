@@ -23,18 +23,19 @@
 #include "ducontext.h"
 #include "language/duchain/types/functiontype.h"
 #include "classmemberdeclarationdata.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
 Identifier conversionIdentifier("operator{...cast...}");
 
-class ClassFunctionDeclarationPrivate : public ClassMemberDeclarationData
+class ClassFunctionDeclarationData : public ClassMemberDeclarationData
 {
 public:
-  ClassFunctionDeclarationPrivate() {
+  ClassFunctionDeclarationData() {
     m_functionType = ClassFunctionDeclaration::Normal;
   }
-  ClassFunctionDeclarationPrivate( const ClassFunctionDeclarationPrivate& rhs )
+  ClassFunctionDeclarationData( const ClassFunctionDeclarationData& rhs )
       : ClassMemberDeclarationData( rhs )
   {
     m_functionType = rhs.m_functionType;
@@ -42,8 +43,10 @@ public:
   ClassFunctionDeclaration::QtFunctionType m_functionType;
 };
 
+REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
+
 ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs)
-    : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate( *rhs.d_func() ))
+    : ClassMemberDeclaration(*new ClassFunctionDeclarationData( *rhs.d_func() ))
       , AbstractFunctionDeclaration(rhs) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
@@ -54,9 +57,14 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ClassMemberDeclaration::setAbstractType(type);
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUContext* context)
-  : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate, range), AbstractFunctionDeclaration()
+ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data) : ClassMemberDeclaration(data)
 {
+}
+
+ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUContext* context)
+  : ClassMemberDeclaration(*new ClassFunctionDeclarationData, range), AbstractFunctionDeclaration()
+{
+  d_func_dynamic()->setClassId(this);
   if( context )
     setContext( context );
 }
@@ -121,7 +129,7 @@ ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType(
 
 void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
 {
-  d_func()->m_functionType = functionType;
+  d_func_dynamic()->m_functionType = functionType;
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {

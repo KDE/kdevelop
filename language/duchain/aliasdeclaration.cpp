@@ -48,6 +48,7 @@ AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs)
 AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
   : Declaration(*new AliasDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   setKind(Alias);
   if( context )
     setContext( context );

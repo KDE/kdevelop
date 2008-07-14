@@ -59,6 +59,7 @@ ForwardDeclaration::ForwardDeclaration(ForwardDeclarationData& data) : Declarati
 ForwardDeclaration::ForwardDeclaration(const SimpleRange& range, DUContext* context )
   : Declaration(*new ForwardDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   if( context )
     setContext( context );
 }

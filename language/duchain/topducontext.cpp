@@ -610,6 +610,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   : DUContext(*new TopDUContextData(url, this), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
 {
   DUCHAIN_D_DYNAMIC(TopDUContext);
+  d_func_dynamic()->setClassId(this);
   d->m_hasUses = false;
   d->m_deleting = false;
   m_local->m_file = ParsingEnvironmentFilePointer(file);

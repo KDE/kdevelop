@@ -46,6 +46,7 @@ NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclara
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context)
   : Declaration(*new NamespaceAliasDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   setKind(NamespaceAlias);
   if( context )
     setContext( context );

@@ -54,7 +54,7 @@ struct DUChainBaseData : public DocumentRangeObjectData {
     * "Identity" enumerator with a unique identity. Do NOT call this in copy-constructors!
     */
     template<class T>
-    void setClassId() {
+    void setClassId(T*) {
       classId = T::Identity;
     }
       

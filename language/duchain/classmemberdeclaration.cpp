@@ -49,6 +49,7 @@ ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclara
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
+  d_func_dynamic()->setClassId(this);
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 

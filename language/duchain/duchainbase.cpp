@@ -36,7 +36,7 @@ uint DUChainBaseData::classSize() const {
 DUChainBase::DUChainBase(const SimpleRange& range)
   : KDevelop::DocumentRangeObject(*new DUChainBaseData, range), m_ptr( 0L )
 {
-  d_func_dynamic()->setClassId<DUChainBase>();
+  d_func_dynamic()->setClassId(this);
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd, const SimpleRange& range )

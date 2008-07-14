@@ -26,7 +26,7 @@
 
 namespace KDevelop
 {
-class ClassFunctionDeclarationPrivate;
+class ClassFunctionDeclarationData;
 /**
  * Represents a single variable definition in a definition-use chain.
  */
@@ -34,6 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberD
 {
 public:
   ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
+  ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
   ~ClassFunctionDeclaration();
 
   enum QtFunctionType
@@ -62,10 +63,15 @@ public:
   virtual Declaration* clone() const;
   
   virtual uint additionalIdentity() const;
+  
+  enum {
+    Identity = 14
+  };
+  
 protected:
   ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs);
 private:
-  Q_DECLARE_PRIVATE(ClassFunctionDeclaration)
+  DUCHAIN_DECLARE_DATA(ClassFunctionDeclaration)
 };
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassFunctionDeclaration::FunctionSpecifiers)

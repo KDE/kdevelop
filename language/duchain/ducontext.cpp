@@ -343,6 +343,7 @@ DUContext::DUContext(DUContextData& data) : DUChainBase(data) {
 DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous)
   : DUChainBase(*new DUContextData(this), range)
 {
+  d_func_dynamic()->setClassId(this);
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_contextType = Other;
   d->m_parentContext = 0;

@@ -96,6 +96,7 @@ bool Declaration::inDUChain() const {
 Declaration::Declaration( const SimpleRange& range, DUContext* context )
   : DUChainBase(*new DeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   if(context)
     setContext(context);
 }
