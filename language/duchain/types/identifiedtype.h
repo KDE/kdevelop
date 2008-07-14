@@ -22,7 +22,7 @@
 #define IDENTIFIEDTYPE_H
 
 #include "language/duchain/identifier.h"
-#include "declarationid.h"
+#include "language/duchain/declarationid.h"
 
 namespace KDevelop
 {

@@ -21,8 +21,8 @@
 #ifndef TYPESYSTEMDATA_H
 #define TYPESYSTEMDATA_H
 
-#include "appendedlist.h"
-#include "indexedstring.h"
+#include "language/duchain/appendedlist.h"
+#include "language/duchain/indexedstring.h"
 #include "language/duchain/types/indexedtype.h"
 #include "language/duchain/types/delayedtype.h"
 
