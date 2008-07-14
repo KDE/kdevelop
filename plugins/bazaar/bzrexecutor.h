@@ -25,12 +25,10 @@
 #ifndef BZR_EXECUTOR_H
 #define BZR_EXECUTOR_H
 
-#include <QStringList>
-#include <QFileInfo>
 
 #include <KUrl>
 #include <KJob>
-#include <KDebug>
+#include <QStringList>
 
 #include <idvcsexecutor.h>
 #include "vcsrevision.h"
@@ -101,56 +99,5 @@ class BzrExecutor : public QObject, public KDevelop::IDVCSexecutor
         KDevelop::IPlugin* vcsplugin;
 
 };
-
-//TODO: write tests for this method!
-//maybe func()const?
-inline bool BzrExecutor::isValidDirectory(const KUrl & dirPath)
-{
-    DVCSjob* job = new DVCSjob(vcsplugin);
-    if (job)
-    {
-        job->clear();
-        *job << "bzr";
-        *job << "root";
-        QString path = dirPath.path();
-        QFileInfo fsObject(path);
-        if (fsObject.isFile())
-            path = fsObject.path();
-        job->setDirectory(path);
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        {
-            kDebug(9500) << "Dir:" << path << " is inside work tree of bzr" ;
-            return true;
-        }
-    }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is not inside work tree of bzr" ;
-    return false;
-}
-
-inline QString BzrExecutor::name() const
-{
-    return QLatin1String("Bazaar");
-}
-
-inline bool BzrExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
-{
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "bzr clone" isValidDirectory() would fail as the
-    // directory is not yet under bzr control
-    if (op == BzrExecutor::NormalOperation &&
-       !isValidDirectory(repository)) {
-        kDebug(9500) << repository << " is not a valid bzr repository";
-        return false;
-    }
-
-    // clear commands and args from a possible previous run
-    job->clear();
-
-    // setup the working directory for the new job
-    job->setDirectory(repository);
-
-    return true;
-}
 
 #endif
