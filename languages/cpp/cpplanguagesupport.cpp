@@ -188,7 +188,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) const
 {
   QString urlPath = url.path(); ///@todo Make this work with real urls
-  
+
 // get the path of the currently active document
   QFileInfo fi( urlPath );
   QString path = fi.filePath();
@@ -221,7 +221,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   {
     foreach(QString ext, sourceExtensions)
       candidates << ( base + addDot(ext) );
-    
+
     possibleExts = sourceExtensions;
   }
   // if file is an implementation file, search for header file
@@ -229,7 +229,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   {
     foreach(QString ext, headerExtensions)
       candidates << ( base + addDot(ext) );
-    
+
     possibleExts = headerExtensions;
   }
   // search for files from the assembled candidate lists, return the first
@@ -267,7 +267,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
     //kDebug( 9007 ) << "candidate file: " << url << endl;
     if( !candidateFileWoExt.suffix().isEmpty() )
       candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
-    
+
     if ( candidateFileWoExtString == fileNameWoExt )
     {
       if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
@@ -294,7 +294,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   kDebug(9007) << "Document:" << doc->url();
 
   DUChainReadLocker lock(DUChain::lock());
-  
+
   TopDUContext* standardCtx = standardContext(doc->url());
   if(standardCtx) {
     Declaration* definition = 0;
@@ -365,7 +365,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   }else{
     kWarning(9007) << "Found no definition assigned to cursor position";
   }
-  
+
   lock.unlock();
   ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
   KUrl url = sourceOrHeaderCandidate(doc->textDocument()->url());
@@ -382,7 +382,7 @@ CppLanguageSupport::~CppLanguageSupport()
     m_self = 0;
 
     delete m_quickOpenDataProvider;
-    
+
     // Remove any documents waiting to be parsed from the background paser.
     core()->languageController()->backgroundParser()->clear(this);
 
@@ -486,7 +486,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
     QString projectName;
 
     bool gotPathsFromManager = false;
-    
+
     foreach (KDevelop::IProject *project, core()->projectController()->projects()) {
         QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(source);
         ProjectFileItem* file = 0;
@@ -504,7 +504,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             continue;
         }
 
-        
+
         projectName = project->name();
         projectDirectory = project->folder();
         effectiveBuildDirectory = buildDirectory = buildManager->buildDirectory(project->projectItem());
@@ -512,11 +512,11 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
 
         if(projectDirectory == effectiveBuildDirectory)
             projectDirectory = effectiveBuildDirectory = KUrl();
-        
+
         KUrl::List dirs = buildManager->includeDirectories(file);
 
         gotPathsFromManager = true;
-        
+
         kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
 
         foreach( KUrl dir, dirs ) {
@@ -529,9 +529,9 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
 
     if(!gotPathsFromManager)
       kDebug(9007) << "Did not find a build-manager for" << source;
-    
+
     KDevelop::Problem problem;
-    
+
     if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
         //Fallback-search using include-path resolver
 
@@ -545,7 +545,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                 newProblem->setSource(KDevelop::Problem::Preprocessor);
                 newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", projectName));
                 newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. Consider setting up a build directory in the project manager if you have not done so yet."));
-                newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
+                newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Range::invalid()));
                 (*problems) << KDevelop::ProblemPointer(newProblem);
             }
             m_includeResolver->resetOutOfSourceBuild();
@@ -564,19 +564,19 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             } else {
                 //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
                 foreach( QString res, result.paths ) {
-                    
+
                     KUrl r(res);
                     r.adjustPath(KUrl::AddTrailingSlash);
-                    
+
                     KUrl r2(res);
                     r2.adjustPath(KUrl::RemoveTrailingSlash);
-                    
+
                     if( !hasPath.contains(r) && !hasPath.contains(r2) ) {
                         hadMissingPath = true;
                         if(!hasPath.contains(r))
                           allPaths << r;
                         hasPath.insert(r);
-                        
+
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.pathOrUrl();
 
                         if( problems ) {
@@ -589,12 +589,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                         }
                     }
                 }
-                
+
                 if( hadMissingPath ) {
                     QString paths;
                     foreach( const KUrl& u, allPaths )
                         paths += u.pathOrUrl() + "\n";
-                    
+
                     kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
                 }
             }
@@ -609,7 +609,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
 
     if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown && problems )
       *problems << KDevelop::ProblemPointer( new KDevelop::Problem(problem) );
-    
+
     if( allPaths.isEmpty() ) {
         ///Last chance: Take a parsed version of the file from the du-chain, and get its include-paths(We will then get the include-path that some time was used to parse the file)
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -648,7 +648,7 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
         localPath.setFileName(QString());
         paths.push_front(localPath);
     }
-    
+
     int pathNumber = 0;
 
     foreach(const KUrl& path, paths)
@@ -803,10 +803,10 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
     int start = 0;
     while(start < lineLength && line[start] == ' ')
       ++start;
-    
+
     return qMakePair( qMakePair(line, SimpleRange(lineNumber, start, lineNumber, lineLength)), QString() );
   }
-  
+
   int start = position.column;
   int end = position.column;
 
@@ -835,33 +835,33 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
     else
       break;
   }
-  
+
   for(uint pos = 0; pos < word.size(); ++pos) {
     ++wordRange.start.column;
     if(word[pos] == '"' || word[pos] == '<')
       break;
   }
-  
+
   if(wordRange.start > wordRange.end)
     wordRange.start = wordRange.end;
-  
+
   //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
   DUChainReadLocker lock(DUChain::lock(), 100);
   if(!lock.locked()) {
     kDebug(9007) << "Failed to lock the du-chain in time";
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
   }
-  
+
   TopDUContext* ctx = standardContext(url);
   if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 
   Q_ASSERT(!(ctx->flags() & TopDUContext::ProxyContextFlag));
-  
+
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
-  
+
   Q_ASSERT(p);
-  
+
   if(word.startsWith("#include")) {
     //It's an #include, find out which file was included at the given line
     foreach(DUContext::Import imported, ctx->importedParentContexts()) {
@@ -892,22 +892,22 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
     kDebug(9007) << "Failed to lock the du-chain in time";
     return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
   }
-  
+
   TopDUContext* ctx = standardContext(url, true);
   if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
-  
+
   Q_ASSERT(p);
-  
+
   if(!p->usedMacroNames().contains(word) && !p->definedMacroNames().contains(word))
     return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   //We need to do a flat search through all macros here, which really hurts
 
   Cpp::MacroSetIterator it = p->usedMacros().iterator();
-  
+
   while(it) {
     if(it.ref().name == word && !it.ref().isUndef())
       return qMakePair(wordRange, &it.ref());
@@ -920,7 +920,7 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
       return qMakePair(wordRange, &it.ref());
     ++it;
   }
-  
+
   return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 }
 
@@ -929,7 +929,7 @@ SimpleRange CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, cons
   QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
   if(import.first)
     return import.second;
-  
+
   return usedMacroForPosition(url, position).first;
 }
 
@@ -941,7 +941,7 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
       if(import.first)
         return qMakePair(KUrl(import.first->url().str()), SimpleCursor(0,0));
     }
-  
+
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
 
     if(!m.first.isValid())
@@ -951,23 +951,23 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
 }
 
 QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
-  
+
   QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
     if(import.first) {
       DUChainReadLocker lock(DUChain::lock());
       if(import.first) {
-        //Prefer a standardContext, because the included one may have become empty due to 
+        //Prefer a standardContext, because the included one may have become empty due to
         if(import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
-          
+
           KDevelop::TopDUContext* betterCtx = standardContext(KUrl::fromPathOrUrl(import.first->url().str()));
-          
+
           if(betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0))
             return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
         }
         return import.first->createNavigationWidget();
       }
     }
-  
+
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
     if(!m.first.isValid())
       return 0;
@@ -997,7 +997,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
         }
       }
     }
-    
+
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
@@ -1015,7 +1015,7 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -1036,11 +1036,11 @@ UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent )
            m_parent.m_timeMutex.unlock();
   }
  }
- 
+
  void UIBlockTester::UIBlockTesterThread::stop() {
          m_stop = true;
  }
- 
+
  UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
          m_timer = new QTimer( this );
          m_timer->start( milliseconds/10 );
@@ -1052,13 +1052,13 @@ UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent )
    m_thread.stop();
   m_thread.wait();
  }
- 
+
  void UIBlockTester::timer() {
          m_timeMutex.lock();
          m_lastTime = QDateTime::currentDateTime();
          m_timeMutex.unlock();
  }
- 
+
 void UIBlockTester::lockup() {
     kDebug() << "ui is blocking";
         //std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..

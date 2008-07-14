@@ -19,7 +19,7 @@
 #ifndef EXPRESSIONVISITOR_H
 #define EXPRESSIONVISITOR_H
 
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <duchain/declaration.h>
 #include <ducontext.h>
 #include "visitor.h"
@@ -78,7 +78,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
     ///Parses the qualification prefix of the given name
     void parseNamePrefix( NameAST* ast );
-    
+
     AbstractType::Ptr lastType();
     Instance lastInstance();
 
@@ -116,7 +116,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
   virtual void usingDeclaration( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
     Q_UNUSED(node) Q_UNUSED(start_token) Q_UNUSED(end_token) Q_UNUSED(decl)
     }
-  
+
     /** Called when there is a problem, with a string for that problem.
      * The default-implementation dumps all relevant information to
      * kdDebug.
@@ -128,13 +128,13 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
   private:
 
     TopDUContext* topContext() const;
-    
+
     bool m_strict, m_memberAccess, m_skipLastNamePart;
     AbstractType::Ptr m_lastType;
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 
     const KDevelop::TopDUContext* m_source;
-    
+
     //Whenever a list of declarations is queried, it is stored here. Especially in visitName(...) and findMember(...)
     QList<DeclarationPointer> m_lastDeclarations;
 
@@ -166,7 +166,7 @@ private:
         usingDeclaration( m_currentUse.node, m_currentUse.start_token, m_currentUse.end_token, m_currentUse.declaration );
       m_currentUse.isValid = false;
     }
-    
+
     struct CurrentUse {
       CurrentUse() : isValid(false), start_token(0), end_token(0) {
       }
@@ -175,7 +175,7 @@ private:
       size_t start_token, end_token;
       KDevelop::DeclarationPointer declaration;
     } m_currentUse; //This is used to temporarily delay the calling of usingDeclaration.
-  
+
     ParseSession* m_session;
     KDevelop::DUContext* m_currentContext;
     KDevelop::TopDUContext* m_topContext;
@@ -214,7 +214,7 @@ private:
    * !!DU-Chain must be locked!
    * */
   bool dereferenceLastPointer(AST* node);
-  
+
   /**
    *  m_lastType must be a pointer. It will be dereferenced in m_lastType,
    *  and m_lastDeclaration filled appropriately.
@@ -269,7 +269,7 @@ private:
   void visitSubExpressions( AST* node, const ListNode<ExpressionAST*>* nodes );
 
   void visitTypeSpecifier(TypeSpecifierAST*);
-  
+
   virtual void visitAccessSpecifier(AccessSpecifierAST *) ;
   virtual void visitAsmDefinition(AsmDefinitionAST *) ;
   virtual void visitBaseClause(BaseClauseAST *) ;

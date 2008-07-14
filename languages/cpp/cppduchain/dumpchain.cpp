@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <ktexteditor/range.h>
 
-#include <identifiedtype.h>
+#include <language/duchain/types/identifiedtype.h>
 #include "cppeditorintegrator.h"
 #include <ducontext.h>
 #include <topducontext.h>

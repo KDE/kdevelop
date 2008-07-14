@@ -33,7 +33,7 @@
 
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 
@@ -94,14 +94,14 @@ private:
 
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed. The url is only neede for the EnvironmentFile.
   QString preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, KSharedPtr<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L, PreprocessedContents* contents = 0L );
-  
+
   KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
 
   void release(KDevelop::DUContext* top);
 
   //Add the text for a fake include-file
   void addInclude( const QString& identity, const QString& text );
-  
+
   // Parser
   Control control;
   Cpp::DumpChain cppDumper;
@@ -111,7 +111,7 @@ private:
   KDevelop::AbstractType::Ptr typeInt;
 
   QMap<QString, QString> fakeIncludes;
-  
+
   bool testFileParseOnly;
 };
 

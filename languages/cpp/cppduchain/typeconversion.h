@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #include <qcontainerfwd.h>
 
 #include "cppduchainexport.h"
-#include "typesystem.h"
+#include <language/duchain/types/typesystem.h>
 
 namespace KDevelop {
   class TopDUContext;
@@ -35,7 +35,7 @@ namespace Cpp {
 using namespace KDevelop;
 /**
  * Class that is responsible for finding out whether one type can be converted to another.It should also do some caching.
- * 
+ *
 **/
   enum ConversionCategories {
     LValueTransformationCategory = 1,
@@ -80,7 +80,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * An implicit conversion sequence is a sequence of conversions used to convert an argument in a function call to the type of the corresponding parameter of the function being called. (iso c++ draft 13.3.3.1)
      *
      * 13.3.3.2(ranking of implicit conversion sequences) is only partially modeled.
-     * 
+     *
      * @param from The type from which to convert
      * @param to The type to which to convert
      * @param fromLValue Whether the from-type is explicitly an lvalue. When the from-type is a reference, it is an lvalue anyway. This especially influences whether a conversion to a non-constant reference is possible.
@@ -102,7 +102,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * */
     ConversionRank standardConversion( AbstractType::Ptr from, AbstractType::Ptr to, int allowedCategories = IdentityCategory | LValueTransformationCategory | QualificationAdjustmentCategory | PromotionCategory | ConversionCategory, int maxCategories = 3 );
 
-    
+
   private:
     /**iso c++ draft 13.3.3.1.2
      *
@@ -112,8 +112,8 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
 
     ///iso c++ draft 13.3.3.1.3
     ConversionRank ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to );
-    
-    
+
+
     virtual void problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString&  desc );
 
 
@@ -121,9 +121,9 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * This represents an identity-conversion in the context of copying. That means that top-level cv-qualifiers are ignored.
      *
      * It currently achieves this by just comparing the mangled identifiers.
-     * 
+     *
      * @return Whether the types are same except for cv-qualification */
-    
+
     bool identityConversion( AbstractType::Ptr from, AbstractType::Ptr to );
 
     //Used to store the count of steps by which a class needed to be converted to it's base-class

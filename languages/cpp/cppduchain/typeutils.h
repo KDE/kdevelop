@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #ifndef TYPEUTILS_H
 #define TYPEUTILS_H
 
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <QHash>
 #include "cppduchainexport.h"
 #include <duchain/declaration.h>

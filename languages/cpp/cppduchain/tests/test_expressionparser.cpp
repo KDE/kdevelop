@@ -23,7 +23,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
-#include <duchain/typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "typeutils.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
@@ -175,11 +175,11 @@ void TestExpressionParser::testTemplatesSimple() {
   Declaration* defClassB = top->localDeclarations()[2];
   QCOMPARE(defClassB->identifier(), Identifier("B"));
   QVERIFY(defClassB->type<CppClassType>());
-  
+
   Declaration* defClassC = top->localDeclarations()[3];
   QCOMPARE(defClassC->identifier(), Identifier("C"));
   QVERIFY(defClassC->type<CppClassType>());
-  
+
   DUContext* classA = defClassA->logicalInternalContext(0);
   QVERIFY(classA->parentContext());
   QCOMPARE(classA->importedParentContexts().count(), 1); //The template-parameter context is imported
@@ -189,7 +189,7 @@ void TestExpressionParser::testTemplatesSimple() {
   QVERIFY(classB->parentContext());
   QCOMPARE(classB->importedParentContexts().count(), 0);
   QCOMPARE(classB->localScopeIdentifier(), QualifiedIdentifier("B"));
-  
+
   DUContext* classC = defClassC->logicalInternalContext(0);
   QVERIFY(classC->parentContext());
   QCOMPARE(classC->importedParentContexts().count(), 0);
@@ -216,9 +216,9 @@ void TestExpressionParser::testTemplates() {
   Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(container);
   QVERIFY(templateDecl);
 
-  
+
   Cpp::ExpressionParser parser;
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("c.member", KDevelop::DUContextPointer(top));
 
@@ -230,7 +230,7 @@ void TestExpressionParser::testTemplates() {
     QVERIFY(dynamic_cast<IdentifiedType*>(t.unsafeData()));
     QCOMPARE(dynamic_cast<IdentifiedType*>(t.unsafeData())->declaration(0), defClassA);
   }
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("*c", KDevelop::DUContextPointer(top));
 
@@ -242,7 +242,7 @@ void TestExpressionParser::testTemplates() {
     QVERIFY(dynamic_cast<IdentifiedType*>(t.unsafeData()));
     QCOMPARE(dynamic_cast<IdentifiedType*>(t.unsafeData())->declaration(0), defClassA);
   }
-  
+
   release(top);
 }
 
@@ -254,7 +254,7 @@ void TestExpressionParser::testArray() {
   DUChainWriteLocker lock(DUChain::lock());
 
   Cpp::ExpressionParser parser;
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
@@ -263,7 +263,7 @@ void TestExpressionParser::testArray() {
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray", KDevelop::DUContextPointer(top));
 
@@ -273,7 +273,7 @@ void TestExpressionParser::testArray() {
     QVERIFY(result.type.type().cast<ArrayType>());
     QCOMPARE(result.type.type().cast<ArrayType>()->dimension(), 8);
   }
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray[5].val", KDevelop::DUContextPointer(top));
 
@@ -293,7 +293,7 @@ void TestExpressionParser::testDynamicArray() {
   DUChainWriteLocker lock(DUChain::lock());
 
   Cpp::ExpressionParser parser;
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
@@ -302,7 +302,7 @@ void TestExpressionParser::testDynamicArray() {
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray", KDevelop::DUContextPointer(top));
 
@@ -311,7 +311,7 @@ void TestExpressionParser::testDynamicArray() {
     kDebug() << result.toString();
     QVERIFY(result.type.type().cast<ArrayType>());
   }
-  
+
   {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray[5].val", KDevelop::DUContextPointer(top));
 
@@ -327,7 +327,7 @@ void TestExpressionParser::testSmartPointer() {
   //QByteArray method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
 
   DUContext* top = parse(method, DumpNone);
-  
+
   DUChainWriteLocker lock(DUChain::lock());
 
   Cpp::ExpressionParser parser;
@@ -365,11 +365,11 @@ void TestExpressionParser::testSmartPointer() {
   QVERIFY(baseTemplateCtx);
   QVERIFY(specialTemplateCtx);
   QCOMPARE(specialTemplateCtx->instantiatedFrom(), baseTemplateContext);*/
-  
+
   QCOMPARE(specialTemplateContext->localDeclarations().count(), 1);
   QCOMPARE(baseTemplateContext->localDeclarations().count(), 1);
   QVERIFY(specialTemplateContext->localDeclarations()[0] != baseTemplateContext->localDeclarations()[0]);
-  
+
   kDebug(9007) << top->localDeclarations()[3]->abstractType()->toString();
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "*bPointer", KDevelop::DUContextPointer(top));
   QVERIFY(result.isInstance);
@@ -378,12 +378,12 @@ void TestExpressionParser::testSmartPointer() {
   result = parser.evaluateExpression( "bPointer->i", KDevelop::DUContextPointer(top));
   QVERIFY(result.isInstance);
   QCOMPARE(result.type.type()->toString(), QString("int"));
-  
+
 /*  result = parser.evaluateExpression( "bPointer->cast<B>()->i", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QCOMPARE(result.type.type()->toString(), QString("int"));*/
-  
+
   release(top);
 }
 
@@ -392,11 +392,11 @@ void TestExpressionParser::testSmartPointer() {
 
 void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   DUContext* testContext = c->childContexts()[1];
   QCOMPARE( testContext->type(), DUContext::Function );
 
@@ -419,7 +419,7 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("Cont")); ///@todo Change this to "const Cont" once we parse const correctly
   QVERIFY(!result.isInstance);
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -429,7 +429,7 @@ void TestExpressionParser::testSimpleExpression() {
 
   result = parser.evaluateExpression( "c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
-  QVERIFY(result.isValid());   
+  QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type());
   lock.unlock();
@@ -441,7 +441,7 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("Cont*"));
   QCOMPARE(result.type.type().cast<CppPointerType>()->baseType()->toString(), QString("Cont"));
   lock.unlock();
-  
+
   //Test pointer-referencing
   result = parser.evaluateExpression( "&c.a", KDevelop::DUContextPointer(testContext));
   lock.lock();
@@ -458,7 +458,7 @@ void TestExpressionParser::testSimpleExpression() {
   kDebug() << result.toString();
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   //Test overloaded "operator*"
   result = parser.evaluateExpression( "*c", KDevelop::DUContextPointer(testContext));
   lock.lock();
@@ -482,7 +482,7 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("int&"));
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   //Test double * (one real, one overloaded)
   result = parser.evaluateExpression( "**d", KDevelop::DUContextPointer(testContext));
   lock.lock();
@@ -498,7 +498,7 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("Cont**"));
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   //Test type-expression
   result = parser.evaluateExpression( "Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
@@ -514,7 +514,7 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("int&"));
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "\"hello\"", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -528,14 +528,14 @@ void TestExpressionParser::testSimpleExpression() {
   QCOMPARE(result.type.type()->toString(), QString("int"));
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "new Cont()", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("Cont*"));
   QVERIFY(result.isInstance);
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -544,7 +544,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
-  
+
   result = parser.evaluateExpression( "5.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -553,7 +553,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
-  
+
   result = parser.evaluateExpression( "5.5 + 1.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -562,7 +562,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
-  
+
   result = parser.evaluateExpression( "3 + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -571,7 +571,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
-  
+
   result = parser.evaluateExpression( "3u + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -580,7 +580,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
-  
+
   result = parser.evaluateExpression( "0", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -589,25 +589,25 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(TypeUtils::isNullType(result.type.type()));
-  
+
   lock.lock();
   release(c);
 }
 
 void TestExpressionParser::testThis() {
   TEST_FILE_PARSE_ONLY
-  
+
   QByteArray text("class A{ void test() { } void test2() const { }; void extTest(); }; void A::extTest() {}");
   DUContext* top = parse( text, DumpNone);//DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   QCOMPARE(top->childContexts().count(), 3);
   QCOMPARE(top->childContexts()[0]->type(), DUContext::Class);
   QCOMPARE(top->childContexts()[0]->childContexts().count(), 5);
   DUContext* testContext = top->childContexts()[0]->childContexts()[1];
   QCOMPARE(testContext->type(), DUContext::Other);
   QVERIFY(testContext->owner());
-  
+
   DUContext* test2Context = top->childContexts()[0]->childContexts()[3];
   QCOMPARE(test2Context->type(), DUContext::Other);
   QVERIFY(test2Context->owner());
@@ -619,7 +619,7 @@ void TestExpressionParser::testThis() {
   QVERIFY(result1.isInstance);
   QCOMPARE(result1.type.type()->toString(), QString("A*"));
 
-  
+
   Cpp::ExpressionEvaluationResult result2 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(test2Context));
   QVERIFY(result2.isValid());
   QVERIFY(result2.type);
@@ -629,13 +629,13 @@ void TestExpressionParser::testThis() {
   DUContext* extTestCtx = top->childContexts()[2];
   QCOMPARE(extTestCtx->type(), DUContext::Other);
   QVERIFY(extTestCtx->owner());
-  
+
   Cpp::ExpressionEvaluationResult result3 = parser.evaluateExpression( "this", KDevelop::DUContextPointer(extTestCtx));
   QVERIFY(result3.isValid());
   QVERIFY(result3.type);
   QVERIFY(result3.isInstance);
   QCOMPARE(result3.type.type()->toString(), QString("A*"));
-  
+
   release(top);
 }
 
@@ -645,14 +645,14 @@ void TestExpressionParser::testBaseClasses() {
 
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   DUContext* testContext = c->childContexts()[1];
   QCOMPARE( testContext->type(), DUContext::Function );
-  
+
   DUContext* contContext = c->childContexts()[0];
   Declaration* decl = contContext->localDeclarations()[0];
 
@@ -666,7 +666,7 @@ void TestExpressionParser::testTypeConversion() {
 
   QVERIFY(functionDecl->defaultParameters().size() == 1);
   QCOMPARE(functionDecl->defaultParameters()[0], QString("5"));
-  
+
   //QVERIFY(0);
   //lock.lock();
   release(c);
@@ -674,11 +674,11 @@ void TestExpressionParser::testTypeConversion() {
 
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }";
   DUContext* c = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   DUContext* testContext = c->childContexts()[2];
   QCOMPARE( testContext->type(), DUContext::Function );
 
@@ -694,7 +694,7 @@ void TestExpressionParser::testCasts() {
   Cpp::ExpressionParser parser;
 
   //Reenable this once the type-parsing system etc. is fixed
-  
+
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "(Cont2*)(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -702,7 +702,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "dynamic_cast<Cont2*>(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -718,7 +718,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "reinterpret_cast<Cont2*>(d)", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -726,7 +726,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "new Cont2*", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -734,7 +734,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2**"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "new Cont2", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -742,7 +742,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "new Cont2[5]", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -750,7 +750,7 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2*"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "(int*)new Cont2[5]", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -758,18 +758,18 @@ void TestExpressionParser::testCasts() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("int*"));
   lock.unlock();
-  
+
   lock.lock();
   release(c);
 }
 
 void TestExpressionParser::testOperators() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "struct Cont2 {operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
   DUContext* ctx = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   QCOMPARE(ctx->childContexts().count(), 5);
   QCOMPARE(ctx->localDeclarations().count(), 6);
 
@@ -787,7 +787,7 @@ void TestExpressionParser::testOperators() {
 
   QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()")));
   QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<CppFunctionType>());
-  
+
   CppClassType::Ptr cont2 = cont2Dec->type<CppClassType>();
   CppClassType::Ptr cont3 = cont3Dec->type<CppClassType>();
   CppClassType::Ptr cont = contDec->type<CppClassType>();
@@ -800,7 +800,7 @@ void TestExpressionParser::testOperators() {
   Cpp::ExpressionParser parser;
 
   //Reenable this once the type-parsing system etc. is fixed
-  
+
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "c+c", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
@@ -808,7 +808,7 @@ void TestExpressionParser::testOperators() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont2"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "c+c3", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
@@ -816,7 +816,7 @@ void TestExpressionParser::testOperators() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont3"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "c()", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
@@ -824,7 +824,7 @@ void TestExpressionParser::testOperators() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont3"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "c[5]", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
@@ -841,7 +841,7 @@ void TestExpressionParser::testOperators() {
   QVERIFY(result.type.type());
   QCOMPARE(result.type.type()->toString(), QString("Cont"));
   lock.unlock();
-  
+
   lock.lock();
   release(ctx);
 }
@@ -860,7 +860,7 @@ void TestExpressionParser::testTemplateFunctions() {
   QCOMPARE(cppFunction->arguments().count(), 1);
   QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->indexedType());
   QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
-  
+
   Cpp::ExpressionParser parser(false, true);
 
   Cpp::ExpressionEvaluationResult result;
@@ -868,11 +868,11 @@ void TestExpressionParser::testTemplateFunctions() {
   result = parser.evaluateExpression( "a(C())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
-  
+
   result = parser.evaluateExpression( "b<C>(A<C>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
-  
+
   result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   kDebug() << result.toString();
@@ -880,22 +880,22 @@ void TestExpressionParser::testTemplateFunctions() {
   Q_ASSERT(identified);*/
   //kDebug() << "identified:" << identified->qualifiedIdentifier();
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
-  
+
   result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
   result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
-  
+
   result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
-  
+
   result = parser.evaluateExpression( "a(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
-  
+
   result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
@@ -954,7 +954,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
-  
+
   if (dump & DumpType) {
     kDebug(9007) << "===== Types:";
     DumpTypes dt;

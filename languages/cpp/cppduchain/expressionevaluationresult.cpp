@@ -22,8 +22,8 @@
 #include <duchainlock.h>
 #include <repositories/itemrepository.h>
 #include <duchain/duchain.h>
-#include <duchain/typesystem.h>
-#include <duchain/identifiedtype.h>
+#include <language/duchain/types/typesystem.h>
+#include <language/duchain/types/identifiedtype.h>
 
 namespace Cpp {
 
@@ -35,16 +35,16 @@ DEFINE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, Declaration
 
 TypeIdentifier ExpressionEvaluationResult::identifier() const {
   static TypeIdentifier noIdentifier("(no type)");
-  
+
   AbstractType::Ptr t(type.type());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
   if( idType )
     return idType->qualifiedIdentifier();
-  
+
   DelayedType* delayedType = dynamic_cast<DelayedType*>(t.unsafeData());
   if( delayedType )
     return delayedType->identifier();
-  
+
   if( t )
     return TypeIdentifier( t->toString() );
   else
@@ -77,7 +77,7 @@ unsigned int ExpressionEvaluationResult::hash() const {
   uint ret = ((type.hash() + (isInstance ? 1 : 0) * 101) + instanceDeclaration.hash()) * 73;
   FOREACH_FUNCTION(const DeclarationId& id, allDeclarations)
       ret *= (id.hash() * 37);
-  
+
   return ret;
 }
 
@@ -102,7 +102,7 @@ ExpressionEvaluationResult::ExpressionEvaluationResult() : isInstance(false) {
 ExpressionEvaluationResult::ExpressionEvaluationResult(const ExpressionEvaluationResult& rhs) {
   initializeAppendedLists();
   copyListsFrom(rhs);
-    
+
   type = rhs.type;
   isInstance = rhs.isInstance;
   instanceDeclaration = rhs.instanceDeclaration;
@@ -111,16 +111,16 @@ ExpressionEvaluationResult::ExpressionEvaluationResult(const ExpressionEvaluatio
 bool ExpressionEvaluationResult::operator==(const ExpressionEvaluationResult& rhs) const {
     if(!listsEqual(rhs))
       return false;
-    
+
     return type == rhs.type && isInstance == rhs.isInstance && instanceDeclaration == rhs.instanceDeclaration;
 }
 
 
 ExpressionEvaluationResult& ExpressionEvaluationResult::operator=(const ExpressionEvaluationResult& rhs) {
   copyListsFrom(rhs);
-    
+
   type = rhs.type;
-    
+
   isInstance = rhs.isInstance;
   instanceDeclaration = rhs.instanceDeclaration;
   return *this;

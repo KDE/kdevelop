@@ -21,7 +21,7 @@
 
 #include <declaration.h>
 #include "cppduchainexport.h"
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "cpptypes.h"
 
 namespace KDevelop {
@@ -67,13 +67,13 @@ public:
    * @param baseConversionLevels If nonzero, this will count the distance of the classes.
    * */
   bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
-  
+
   virtual KDevelop::Declaration* clone() const;
-  
+
   enum {
     Identity = 17
   };
-  
+
 private:
   DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };

@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include "cppduchain/viablefunctions.h"
 #include "cppduchain/overloadresolutionhelper.h"
 #include "cppduchain/expressionevaluationresult.h"
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "includeitem.h"
 #include "completionitem.h"
 #include "codecompletion/codecompletioncontext.h"
@@ -64,7 +64,7 @@ namespace Cpp {
       typedef OverloadResolutionFunction Function;
 
       typedef QList<Function> FunctionList;
-      
+
       enum MemberAccessOperation {
         NoMemberAccess,  ///With NoMemberAccess, a global completion should be done
         MemberAccess,      ///klass.
@@ -118,7 +118,7 @@ namespace Cpp {
        * should list all static members of this container.
        *
        * When memberAccessOperation is MemberChoose, it should be treated equivalently to MemberAccess.
-       * 
+       *
        * The type does not respect the member-access-operation, so
        * the code-completion may check whether the arrow-access was used correctly
        * and maybe do automatic correction.
@@ -128,12 +128,12 @@ namespace Cpp {
 
       /**
        * Returns the internal context of memberAccessContainer, if any.
-       * 
+       *
        * When memberAccessOperation is StaticMemberChoose, this returns all
        * fitting namespace-contexts.
        * */
       QList<DUContext*> memberAccessContainers() const;
-      
+
       /**
        * When memberAccessOperation is FunctionCallAccess,
        * this returns all functions available for matching, together with the argument-number that should be matched.
@@ -166,13 +166,13 @@ namespace Cpp {
 
       ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
       void standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items);
-      
+
       void processFunctionCallAccess();
-      
+
       //Returns the required prefix that is needed in order to find the givne declaration from the current context.
       //In worst case, it is the scope prefix of the declaration.
       QualifiedIdentifier requiredPrefix(Declaration* decl) const;
-      
+
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
       ///Should preprocess the given text(replace macros with their body etc.)
@@ -198,13 +198,13 @@ namespace Cpp {
       ExpressionEvaluationResult m_expressionResult;
 
       QList<Cpp::IncludeItem> m_includeItems;
-    
+
       QString m_functionName;
 
       //Here known argument-expressions and their types, that may have come from sub-contexts, are stored
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
-      
+
       AdditionalContextType m_contextType;
 
       QList<Function> m_functions;

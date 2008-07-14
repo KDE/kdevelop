@@ -28,10 +28,10 @@
 #include <QtCore/QVarLengthArray>
 
 #include <duchain/identifier.h>
-#include <duchain/typesystemdata.h>
-#include <typesystem.h>
+#include <language/duchain/types/typesystemdata.h>
+#include <language/duchain/types/typesystem.h>
 #include <declaration.h>
-#include <identifiedtype.h>
+#include <language/duchain/types/identifiedtype.h>
 #include "cppduchainexport.h"
 
 namespace KDevelop
@@ -66,7 +66,7 @@ class KDEVCPPDUCHAIN_EXPORT CppCVType
 public:
   CppCVType() {
   }
-  
+
   virtual ~CppCVType() {
   }
 
@@ -75,7 +75,7 @@ public:
   inline bool isVolatile() const { return cvData()->m_volatile; }
 
   void clear();
-  
+
   QString cvString() const;
   QString cvMangled() const;
 
@@ -84,12 +84,12 @@ public:
   KDevelop::Declaration::CVSpecs cv() const { return static_cast<KDevelop::Declaration::CVSpecs>((cvData()->m_constant & KDevelop::Declaration::Const) | (cvData()->m_volatile & KDevelop::Declaration::Volatile)); }
 
   bool equals(const CppCVType* rhs) const;
-  
+
   virtual CppCVTypeData* cvData() = 0;
   virtual const CppCVTypeData* cvData() const = 0;
-  
+
   inline void setCV(KDevelop::Declaration::CVSpecs spec) { cvData()->m_constant = spec & KDevelop::Declaration::Const; cvData()->m_volatile = spec & KDevelop::Declaration::Volatile; }
-  
+
 protected:
   inline void setConstant(bool is) { cvData()->m_constant = is; }
   inline void setVolatile(bool is) { cvData()->m_volatile = is; }
@@ -105,7 +105,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT MergeCppCVType : public Parent, public CppCVTy
     virtual CppCVTypeData* cvData() {
       return static_cast<Data*>(this->d_func_dynamic());
     }
-    
+
     virtual const CppCVTypeData* cvData() const {
       return static_cast<const Data*>(this->d_func());
     }
@@ -152,15 +152,15 @@ public:
   CppIntegralType(CppIntegralTypeData& data) : MergeCppCVType< KDevelop::IntegralType >(data) {
   }
   CppIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
-  
+
   typedef TypePtr<CppIntegralType> Ptr;
 
   IntegralTypes integralType() const;
-  
+
   void setIntegralType(IntegralTypes t) {
     d_func_dynamic()->m_type = t;
   }
-  
+
   void setTypeModifiers(TypeModifiers mod) {
     d_func_dynamic()->m_modifiers = mod;
   }
@@ -179,13 +179,13 @@ public:
 
   //A simple hack that tries taking the modifiers and the type itself into account
   bool moreExpressiveThan(CppIntegralType* rhs) const;
-  
+
   typedef CppIntegralTypeData Data;
-  
+
   enum {
     Identity = 13
   };
-  
+
 protected:
   TYPE_DECLARE_DATA(CppIntegralType);
 };
@@ -212,7 +212,7 @@ public:
     d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
   }
   CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers = ModifierNone);
-  
+
   typedef TypePtr<CppConstantIntegralType> Ptr;
 
   /**The types and modifiers are not changed!
@@ -233,7 +233,7 @@ public:
   /**
    * For booleans, the value is 1 for true, and 0 for false.
    * All signed values should be retrieved and set through value(),
-   * 
+   *
    * */
   template<class ValueType>
   ValueType value() const {
@@ -247,7 +247,7 @@ public:
       return constant_value<qint64>(&d_func()->m_value);
     }
   }
-  
+
   qint64 plainValue() const {
     return d_func()->m_value;
   }
@@ -257,15 +257,15 @@ public:
   virtual KDevelop::AbstractType* clone() const;
 
   virtual uint hash() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
-  
+
   typedef CppConstantIntegralTypeData Data;
-  
+
   enum {
     Identity = 14
   };
-  
+
 protected:
   TYPE_DECLARE_DATA(CppConstantIntegralType);
 private:
@@ -283,24 +283,24 @@ typedef MergeCppCVType< KDevelop::FunctionType > CppFunctionTypeBase;
 
 struct CppFunctionTypeData : public CppFunctionTypeBase::Data {
 };
-    
+
 class KDEVCPPDUCHAIN_EXPORT CppFunctionType : public CppFunctionTypeBase
 {
 public:
   CppFunctionType(const CppFunctionType& rhs) : CppFunctionTypeBase(copyData<CppFunctionTypeData>(*rhs.d_func())) {
   }
-  
+
   CppFunctionType(CppFunctionTypeData& data) : CppFunctionTypeBase(data) {
   }
-  
+
   CppFunctionType() : CppFunctionTypeBase(createData<CppFunctionTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppFunctionType>();
   }
-  
+
   typedef TypePtr<CppFunctionType> Ptr;
 
   ///Declarations of this class(@see KDevelop::IdentifiedType::declaration()) are guaranteed to be based on AbstractFunctionDeclaration
-  
+
   virtual QString toString() const;
 
   virtual uint hash() const;
@@ -310,13 +310,13 @@ public:
   virtual KDevelop::AbstractType* clone() const;
 
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
-  
+
   enum {
     Identity = 15
   };
-  
+
   typedef CppFunctionTypeData Data;
-  
+
   protected:
     TYPE_DECLARE_DATA(CppFunctionType);
 };
@@ -331,14 +331,14 @@ class KDEVCPPDUCHAIN_EXPORT CppPointerType : public CppPointerTypeBase
 public:
   CppPointerType(const CppPointerType& rhs) : CppPointerTypeBase(copyData<CppPointerTypeData>(*rhs.d_func())) {
   }
-  
+
   CppPointerType(CppPointerTypeData& data) : CppPointerTypeBase(data) {
   }
-  
+
   CppPointerType() : CppPointerTypeBase(createData<CppPointerTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppPointerType>();
   }
-  
+
   typedef TypePtr<CppPointerType> Ptr;
 
   CppPointerType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
@@ -348,17 +348,17 @@ public:
 //   virtual QString mangled() const;
 
   virtual KDevelop::AbstractType* clone() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
-  
+
   enum {
     Identity = 16
   };
-  
+
   typedef CppPointerTypeData Data;
-  
+
 protected:
   TYPE_DECLARE_DATA(CppPointerType);
 };
@@ -373,14 +373,14 @@ class KDEVCPPDUCHAIN_EXPORT CppReferenceType : public CppReferenceTypeBase
 public:
   CppReferenceType(const CppReferenceType& rhs) : CppReferenceTypeBase(copyData<CppReferenceTypeData>(*rhs.d_func())) {
   }
-  
+
   CppReferenceType(CppReferenceTypeData& data) : CppReferenceTypeBase(data) {
   }
-  
+
   CppReferenceType() : CppReferenceTypeBase(createData<CppReferenceTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppReferenceType>();
   }
-  
+
   typedef TypePtr<CppReferenceType> Ptr;
 
   CppReferenceType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
@@ -390,17 +390,17 @@ public:
 //   virtual QString mangled() const;
 
   virtual KDevelop::AbstractType* clone() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
-  
+
   enum {
     Identity = 17
   };
-  
+
   typedef CppReferenceTypeData Data;
-  
+
   protected:
   TYPE_DECLARE_DATA(CppReferenceType);
 };
@@ -417,18 +417,18 @@ enum ClassType
 struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public CppClassTypeBase::Data {
   ClassType m_classType;
   bool m_closed;
-  
+
   CppClassTypeData() {
     m_classType = Class;
     m_closed = false;
   }
-  
+
   CppClassTypeData(const CppClassTypeData& rhs) :CppClassTypeBase::Data(rhs), m_classType(rhs.m_classType), m_closed(rhs.m_closed)  {
   }
-  
+
   ~CppClassTypeData() {
   }
-  
+
   private:
     CppClassTypeData& operator=(const CppClassTypeData&) {
       return *this;
@@ -440,10 +440,10 @@ class KDEVCPPDUCHAIN_EXPORT CppClassType : public CppClassTypeBase
 public:
   CppClassType(const CppClassType& rhs) : CppClassTypeBase(copyData<CppClassTypeData>(*rhs.d_func())) {
   }
-  
+
   CppClassType(CppClassTypeData& data) : CppClassTypeBase(data) {
   }
-  
+
   typedef TypePtr<CppClassType> Ptr;
 
   CppClassType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
@@ -456,7 +456,7 @@ public:
   void close() { d_func_dynamic()->m_closed = true; }
 
   ///After clearing, a class-type is open again.
-  void clear(); 
+  void clear();
 
   virtual uint hash() const;
 
@@ -465,17 +465,17 @@ public:
   virtual KDevelop::AbstractType* clone() const;
 
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
-  
+
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
 
   virtual void exchangeTypes(KDevelop::TypeExchanger*);
-  
+
   enum {
     Identity = 18
   };
-  
+
   typedef CppClassTypeData Data;
-  
+
 protected:
   TYPE_DECLARE_DATA(CppClassType);
 };
@@ -503,10 +503,10 @@ public:
 
   CppTypeAliasType(const CppTypeAliasType& rhs) : CppTypeAliasTypeBase(copyData<CppTypeAliasTypeData>(*rhs.d_func())) {
   }
-  
+
   CppTypeAliasType(CppTypeAliasTypeData& data) : CppTypeAliasTypeBase(data) {
   }
-  
+
   CppTypeAliasType() : CppTypeAliasTypeBase(createData<CppTypeAliasTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppTypeAliasType>();
   }
@@ -521,18 +521,18 @@ public:
 //   virtual QString mangled() const;
 
   virtual KDevelop::AbstractType* clone() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
-  
+
   enum {
     Identity = 19
   };
-  
+
   typedef CppTypeAliasTypeData Data;
-  
+
 protected:
   TYPE_DECLARE_DATA(CppTypeAliasType);
-    
+
   virtual void accept0 (KDevelop::TypeVisitor *v) const
   {
     if (v->visit (this))
@@ -552,16 +552,16 @@ class KDEVCPPDUCHAIN_EXPORT CppEnumeratorType : public CppEnumeratorTypeBase
 public:
   CppEnumeratorType(const CppEnumeratorType& rhs) : CppEnumeratorTypeBase(copyData<CppEnumeratorTypeData>(*rhs.d_func())) {
   }
-  
+
   CppEnumeratorType(CppEnumeratorTypeData& data) : CppEnumeratorTypeBase(data) {
   }
-  
+
   CppEnumeratorType() : CppEnumeratorTypeBase(createData<CppEnumeratorTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppEnumeratorType>();
     CppConstantIntegralType::setIntegralType(TypeInt);
     setCV(KDevelop::Declaration::Const);
   }
-  
+
   typedef TypePtr<CppEnumeratorType> Ptr;
 
   virtual QString toString() const;
@@ -571,13 +571,13 @@ public:
   virtual KDevelop::AbstractType* clone() const;
 
   virtual uint hash() const;
-  
+
   enum {
     Identity = 20
   };
-  
+
   typedef CppEnumeratorTypeData Data;
-  
+
 protected:
   TYPE_DECLARE_DATA(CppEnumeratorType);
 };
@@ -591,10 +591,10 @@ class KDEVCPPDUCHAIN_EXPORT CppEnumerationType : public CppEnumerationTypeBase
 public:
   CppEnumerationType(const CppEnumerationType& rhs) : CppEnumerationTypeBase(copyData<CppEnumerationTypeData>(*rhs.d_func())) {
   }
-  
+
   CppEnumerationType(CppEnumerationTypeData& data) : CppEnumerationTypeBase(data) {
   }
-  
+
   typedef TypePtr<CppEnumerationType> Ptr;
 
   CppEnumerationType(KDevelop::Declaration::CVSpecs spec = KDevelop::Declaration::CVNone);
@@ -602,19 +602,19 @@ public:
   virtual uint hash() const;
 
   virtual KDevelop::AbstractType* clone() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
 //   virtual QString mangled() const;
-  
+
   virtual QString toString() const;
-  
+
   enum {
     Identity = 21
   };
-  
+
   typedef CppEnumerationTypeData Data;
-  
+
 protected:
   TYPE_DECLARE_DATA(CppEnumerationType);
 };
@@ -623,13 +623,13 @@ protected:
 // {
 // public:
 //   typedef TypePtr<CppArrayType> Ptr;
-// 
+//
 // //   virtual QString mangled() const;
-// 
+//
 //   virtual KDevelop::AbstractType* clone() const;
-//   
+//
 //   virtual bool equals(const KDevelop::AbstractType* rhs) const;
-//   
+//
 //   enum {
 //     Identity = 22
 //   };
@@ -651,14 +651,14 @@ class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public CppTemplateParamet
 public:
   CppTemplateParameterType(const CppTemplateParameterType& rhs) : CppTemplateParameterTypeBase(copyData<CppTemplateParameterTypeData>(*rhs.d_func())) {
   }
-  
+
   CppTemplateParameterType(CppTemplateParameterTypeData& data) : CppTemplateParameterTypeBase(data) {
   }
-  
+
   CppTemplateParameterType() : CppTemplateParameterTypeBase(createData<CppTemplateParameterTypeData>()) {
     d_func_dynamic()->setTypeClassId<CppTemplateParameterType>();
   }
-  
+
   typedef TypePtr<CppTemplateParameterType> Ptr;
 
   TemplateParameterDeclaration* declaration(const KDevelop::TopDUContext* top) const;
@@ -667,17 +667,17 @@ public:
 //   virtual QString mangled() const;
 
   virtual KDevelop::AbstractType* clone() const;
-  
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual uint hash() const;
-  
+
   enum {
     Identity = 23
   };
-  
+
   typedef CppTemplateParameterTypeData Data;
-  
+
   protected:
   virtual void accept0 (KDevelop::TypeVisitor *v) const;
   TYPE_DECLARE_DATA(CppTemplateParameterType);

@@ -30,7 +30,7 @@
 #include "control.h"
 
 #include <identifier.h>
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 

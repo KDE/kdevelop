@@ -24,7 +24,7 @@
 #include <duchain.h>
 #include <duchainlock.h>
 #include <topducontext.h>
-#include <duchain/typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <duchain/forwarddeclaration.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
@@ -159,11 +159,11 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 
 void TestCppCodeCompletion::testCompletionContext() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "#include \"testFile1.h\"\n";
   test += "#include \"testFile2.h\"\n";
   test += "void test() { }";
-      
+
   DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -186,12 +186,12 @@ void TestCppCodeCompletion::testCompletionContext() {
     QVERIFY(function);
     QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
     QVERIFY(!function->functions().isEmpty());
-    
+
     lock.lock();
     for( Cpp::CodeCompletionContext::FunctionList::const_iterator it = function->functions().begin(); it != function->functions().end(); ++it )
       kDebug(9007) << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)")) ;
     lock.unlock();
-    
+
     QCOMPARE(function->functions().size(), 4);
     QVERIFY(function->functions()[0].function.isViable());
     //Because Honk has a conversion-function to int, globalFunction(int) is yet viable(although it can take only 1 parameter)
@@ -200,8 +200,8 @@ void TestCppCodeCompletion::testCompletionContext() {
     QVERIFY(function->functions()[2].function.isViable());
     //Because a value of type Honk is given, 2 globalFunction's are not viable
     QVERIFY(!function->functions()[3].function.isViable());
-    
-    
+
+
     function = function->parentContext();
     QVERIFY(function);
     QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
@@ -214,7 +214,7 @@ void TestCppCodeCompletion::testCompletionContext() {
     QVERIFY(function->functions()[2].function.isViable());
     QVERIFY(function->functions()[3].function.isViable());
   }
-  
+
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
     DUContextPointer contPtr(context);
@@ -231,16 +231,16 @@ void TestCppCodeCompletion::testCompletionContext() {
 
 void TestCppCodeCompletion::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
-      
+
   QByteArray test = "#include \"testFile1.h\"\n";
   test += "#include \"testFile2.h\"\n";
   test += "#include \"testFile3.h\"\n";
   test += "int n;\n";
   test += "void test() { }\n";
-      
+
   DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   DUContext* testContext = context->childContexts()[0];
   QCOMPARE( testContext->type(), DUContext::Function );
 
@@ -262,11 +262,11 @@ void TestCppCodeCompletion::testTypeConversion() {
   AbstractType::Ptr n = findDeclaration( testContext, QualifiedIdentifier("n") )->abstractType();
 
   QVERIFY(n);
-  
+
   {
     CppFunctionType::Ptr test = findDeclaration( testContext, QualifiedIdentifier("test") )->type<CppFunctionType>();
     QVERIFY(test);
-  
+
     Cpp::TypeConversion conv(context->topContext());
     QVERIFY(!conv.implicitConversion(test->returnType(), Heinz, false));
     QVERIFY(!conv.implicitConversion(Heinz, test->returnType(), false));
@@ -285,9 +285,9 @@ void TestCppCodeCompletion::testTypeConversion() {
     ///@todo reenable once base-classes are parsed correctly
     //QVERIFY( conv.implicitConversion(B, A) ); //B is based on A, so there is an implicit copy-constructor that creates A from B
     //QVERIFY( conv.implicitConversion(Heinz, Erna) ); //Heinz is based on Erna, so there is an implicit copy-constructor that creates Erna from Heinz
-    
+
   }
-  
+
   //lock.lock();
   release(context);
 }
@@ -296,8 +296,8 @@ void TestCppCodeCompletion::testInclude() {
   TEST_FILE_PARSE_ONLY
 
   addInclude("file1.h", "#include \"testFile1.h\"\n#include \"testFile2.h\"\n");
-  
-  
+
+
   QByteArray test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }; HONK undefinedHonk;";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
@@ -306,7 +306,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Heinz"));
-  
+
   decl = findDeclaration(c, QualifiedIdentifier("globalErna"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
@@ -316,22 +316,22 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("int"));
-  
+
   decl = findDeclaration(c, QualifiedIdentifier("Honk"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
-  
+
   decl = findDeclaration(c, QualifiedIdentifier("honky"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
-  
+
   decl = findDeclaration(c, QualifiedIdentifier("globalHonk"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   QCOMPARE(decl->abstractType()->toString(), QString("Honk"));
-  
+
   decl = findDeclaration(c, QualifiedIdentifier("globalMacroHonk"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
@@ -341,7 +341,7 @@ void TestCppCodeCompletion::testInclude() {
   decl = findDeclaration(c, QualifiedIdentifier("undefinedHonk"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType().cast<DelayedType>());
-  
+
 
   Cpp::ExpressionParser parser;
 
@@ -349,27 +349,27 @@ void TestCppCodeCompletion::testInclude() {
   lock.unlock();
   Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "globalHonk.erna", DUContextPointer( c ) );
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
   QCOMPARE(result.type.type()->toString(), QString("Erna&"));
 
-  
-  ///Test overload-resolution 
+
+  ///Test overload-resolution
   lock.unlock();
   result = parser.evaluateExpression( "globalClass.function(globalHeinz)", DUContextPointer(c));
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
   QCOMPARE(result.type.type()->toString(), QString("Heinz"));
-  
+
   lock.unlock();
   result = parser.evaluateExpression( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
@@ -379,37 +379,37 @@ void TestCppCodeCompletion::testInclude() {
   lock.unlock();
   result = parser.evaluateExpression( "globalClass.function(globalHonk)", DUContextPointer(c));
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
   //QCOMPARE(result.type.type()->toString(), QString("Heinz"));
-  
-  
+
+
   lock.unlock();
   result = parser.evaluateExpression( "globalFunction(globalHeinz)", DUContextPointer(c));
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
   QCOMPARE(result.type.type()->toString(), QString("Heinz"));
   lock.unlock();
-  
+
   result = parser.evaluateExpression( "globalFunction(globalHonk.erna)", DUContextPointer(c));
   lock.lock();
-  
+
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
   QCOMPARE(result.type.type()->toString(), QString("Erna"));
-    
+
   release(c);
 }
 
 void TestCppCodeCompletion::testUpdateChain() {
   TEST_FILE_PARSE_ONLY
-      
+
   DUContext* context = parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
   parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
   parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
@@ -417,8 +417,8 @@ void TestCppCodeCompletion::testUpdateChain() {
   parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
   parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
   parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  
-  
+
+
   DUChainWriteLocker lock(DUChain::lock());
   //lock.lock();
   release(context);
@@ -432,15 +432,15 @@ void TestCppCodeCompletion::testHeaderSections() {
 
   addInclude( "someHeader.h", "\n" );
   addInclude( "otherHeader.h", "\n" );
-      
+
   IncludeFileList includes;
 
   HashedString turl("ths.h");
-  
+
   QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
-  
+
   QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\nHello", includes, 0, false), QString("\nHello"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
@@ -452,11 +452,11 @@ void TestCppCodeCompletion::testHeaderSections() {
   QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\n#include \"otherHeader.h\"\nHello", includes, 0, true), QString("\n\n"));
   QCOMPARE(includes.count(), 2);
   includes.clear();
-  
+
   QCOMPARE(preprocess(turl, "#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, true), QString("\n\n\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
-  
+
   QCOMPARE(preprocess(turl, "#ifndef GUARD\n#define GUARD\n#include \"someHeader.h\"\nHello\n#endif", includes, 0, false), QString("\n\n\nHello\n"));
   QCOMPARE(includes.count(), 1);
   includes.clear();
@@ -478,7 +478,7 @@ void TestCppCodeCompletion::testForwardDeclaration()
   AbstractType::Ptr t(decl->abstractType());
   QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
   QVERIFY(!decl->isForwardDeclaration());
-  
+
   release(top);
 }
 
@@ -533,7 +533,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   QVERIFY(decl->abstractType());
   AbstractType::Ptr t(decl->abstractType());
   QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
-  
+
   release(top);
 }
 
@@ -585,7 +585,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(parentClassType);
     QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }
-  
+
   release(top);
 }
 
@@ -615,7 +615,7 @@ QString print(const Cpp::LazyStringSet& set) {
     if(!first)
       ret += ", ";
     first = false;
-    
+
     ret += (*it).str();
     ++it;
   }
@@ -686,7 +686,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         DUChainWriteLocker l(DUChain::lock());
         DUChain::self()->addParsingEnvironmentManager(environmentManager);
     }
-    
+
     {
       addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
       addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
@@ -697,7 +697,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       QCOMPARE(envFile1->definedMacros().set().count(), 0u);
       QCOMPARE(envFile1->usedMacros().set().count(), 0u);
     }
-    
+
     addInclude("h1.h", "#ifndef H1_H  \n#define H1_H  \n  class H1 {};\n #else \n class H1_Already_Defined {}; \n#endif");
     addInclude("h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
 
@@ -717,14 +717,14 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile1->usedMacros().set().count(), 0u);
         QCOMPARE(envFile2->usedMacros().set().count(), 0u);
         QVERIFY(findDeclaration( test1, Identifier("H1") ));
-        
+
       QCOMPARE( envFile1->contentStartLine(), 3 );
     }
 
     { //Test shadowing of strings through #undefs
       addInclude("stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
       addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
-      
+
       {
         TopDUContext* top = parse(QByteArray("#include \"stringset_test1.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
@@ -753,9 +753,9 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
-        
+
         QCOMPARE(envFile2->definedMacros().set().count(), 0u);
-        
+
         QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList("String1")); //stringset_test1.h used the Macro String1 from outside
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
@@ -778,14 +778,14 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
         QCOMPARE(envFile2->definedMacros().set().count(), 0u);
-        
+
         QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList()); //stringset_test1.h used the Macro String1 from outside. However it is an undef-macro, so it does not appear in usedMacroNames() and usedMacros()
         QCOMPARE(envFile2->usedMacros().set().count(), (unsigned int)0);
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
       {
         addInclude("usingtest1.h", "#define HONK\nMACRO m\n#undef HONK2\n");
-        
+
         TopDUContext* top = parse(QByteArray("#define MACRO meh\nint MACRO;\n#include \"usingtest1.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(top->parsingEnvironmentFile());
@@ -795,7 +795,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile->unDefinedMacroNames().set().count(), 1u);
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
         QCOMPARE(envFile->usedMacroNames().set().count(), 0u);
-        
+
         kDebug() << toStringList(envFile->strings()) ;
         QCOMPARE(envFile->strings().count(), 3u); //meh, m, int
 
@@ -830,20 +830,20 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 //     QCOMPARE(top3->importedParentContexts().count(), 2);
 
     QCOMPARE(top1->importedParentContexts()[0], top2->importedParentContexts()[1]);*/
-    
+
     DUChainWriteLocker lock(DUChain::lock());
     DUChain::self()->removeParsingEnvironmentManager(environmentManager);
 }
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
-  {//Test simple #if 
+  {//Test simple #if
     TopDUContext* top = parse(QByteArray("#define X\n#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("xDefined"));
   }
-  {//Test simple #if 
+  {//Test simple #if
     TopDUContext* top = parse(QByteArray("#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QVERIFY(top->localDeclarations().count() >= 1);
@@ -904,7 +904,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
 
   TestPreprocessor( TestCppCodeCompletion* _cc, IncludeFileList& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
-  
+
   rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
@@ -932,7 +932,7 @@ struct TestPreprocessor : public rpp::Preprocessor {
 QString TestCppCodeCompletion::preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
-    
+
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
 
@@ -943,30 +943,30 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
       environmentFile = Cpp::EnvironmentFilePointer( new Cpp::EnvironmentFile( IndexedString(url.str()), 0 ) );
 
   ppc.environmentFile = environmentFile;
-  
+
     if( paramEnvironmentFile )
       *paramEnvironmentFile = environmentFile;
-    
+
     CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( &preprocessor, environmentFile );
     preprocessor.setEnvironment( currentEnvironment );
     currentEnvironment->setEnvironmentFile( environmentFile );
-    
+
     rpp::MacroBlock* macros = new rpp::MacroBlock(0);
 
     preprocessor.environment()->enterBlock(macros);
-    
+
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
-    
+
     PreprocessedContents contents = preprocessor.processFile("<test>", rpp::pp::Data, text.toUtf8());
     if(targetContents)
       *targetContents = contents;
-    
+
     QString result = QString::fromUtf8(stringFromContents(contents));
 
     if (returnLocationTable)
       *returnLocationTable = preprocessor.environment()->takeLocationTable();
-    
+
     currentEnvironment->finish();
 
     if( parent ) {
@@ -984,7 +984,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   ParseSession* session = new ParseSession();
    ;
-  
+
   static int testNumber = 0;
   HashedString url(QString("file:///internal/%1").arg(testNumber++));
   if( !_identity.isEmpty() )
@@ -994,11 +994,11 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
    QList<DUContext*> temporaryIncluded;
 
   rpp::LocationTable* locationTable;
-  
+
   Cpp::EnvironmentFilePointer file;
-  
+
   PreprocessedContents contents;
-   
+
   preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents ).toUtf8();
 
   session->setContents( contents, locationTable );
@@ -1017,7 +1017,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
         kDebug(9007) << "PROBLEM";
       }
     }
-  
+
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);
   ast->session = session;
@@ -1040,7 +1040,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
   }
-  
+
   if (dump & DumpType) {
     kDebug(9007) << "===== Types:";
     DumpTypes dt;
@@ -1060,7 +1060,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
       kDebug(9007) << "PROBLEM";
     }
   }
-  
+
 
   if (dump)
     kDebug(9007) << "===== Finished test case.";

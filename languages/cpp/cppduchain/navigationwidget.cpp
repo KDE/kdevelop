@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@
 #include <duchain/declaration.h>
 #include <duchain/ducontext.h>
 #include <duchain/duchainlock.h>
-#include <duchain/typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <duchain/functiondeclaration.h>
 #include <duchain/forwarddeclaration.h>
 #include <duchain/namespacealiasdeclaration.h>
@@ -106,7 +106,7 @@ QString stringFromAccess(Declaration::AccessPolicy access) {
   }
   return "";
 }
-    
+
 QString declarationName( Declaration* decl ) {
 
   if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl) ) {
@@ -115,7 +115,7 @@ QString declarationName( Declaration* decl ) {
     else
       return "namespace " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();
   }
-  
+
   if( !decl )
     return i18nc("An unknown c++ declaration that is unknown", "Unknown");
   else
@@ -143,22 +143,22 @@ struct NavigationAction {
   }
 
   NavigationContext* targetContext; //If this is set, this action does nothing else than jumping to that context
-  
+
   DeclarationPointer decl;
   Type type;
-  
+
   KUrl document;
   KTextEditor::Cursor cursor;
 };
 
 
-  
+
 class NavigationContext : public KShared {
   public:
     NavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, NavigationContext* previousContext = 0 ) : m_declaration(decl), m_selectedLink(0), m_linkCount(-1), m_previousContext(previousContext), m_topContext(topContext) {
       //Jump from definition to declaration if possible
       if(m_declaration && m_declaration->isDefinition() && m_declaration->declaration())
-        m_declaration = DeclarationPointer(m_declaration->declaration()); 
+        m_declaration = DeclarationPointer(m_declaration->declaration());
     }
     virtual ~NavigationContext() {
     }
@@ -168,23 +168,23 @@ class NavigationContext : public KShared {
       //Make sure link-count is valid
       if( m_linkCount == -1 )
         html();
-      
+
       if( m_linkCount > 0 )
         m_selectedLink = (m_selectedLink+1) % m_linkCount;
     }
-    
+
     void previousLink()
     {
       //Make sure link-count is valid
       if( m_linkCount == -1 )
         html();
-      
+
       if( m_linkCount > 0 ) {
         --m_selectedLink;
         if( m_selectedLink <  0 )
           m_selectedLink += m_linkCount;
       }
-        
+
       Q_ASSERT(m_selectedLink >= 0);
     }
 
@@ -210,7 +210,7 @@ class NavigationContext : public KShared {
 
       return execute(m_links[link]);
     }
-    
+
 
     NavigationAction currentAction() const {
       return m_selectedLinkAction;
@@ -229,7 +229,7 @@ class NavigationContext : public KShared {
         else
           i18n("Class");
       }
-      
+
       if( decl->kind() == Declaration::Instance )
         kind = i18n("Variable");
 
@@ -242,24 +242,24 @@ class NavigationContext : public KShared {
 
       if(function)
         kind = i18n("Function");
-      
+
       if( decl->isForwardDeclaration() )
         kind = i18n("Forward Declaration");
-      
+
       return kind;
     }
 
   virtual QString name() const {
     return declarationName(m_declaration.data());
   }
-  
+
     virtual QString html(bool shorten = false) {
 
       m_linkCount = 0;
       m_currentText  = "<html><body><p><small><small>";
 
       addExternalHtml(m_prefix);
-      
+
       if( shorten && !m_declaration->comment().isEmpty() ) {
         QString comment = m_declaration->comment();
         if( comment.length() > 60 ) {
@@ -271,8 +271,8 @@ class NavigationContext : public KShared {
         comment.replace("<br/>", " ");
         m_currentText += commentHighlight(Qt::escape(comment)) + "   ";
       }
-      
-      
+
+
       if( m_previousContext ) {
         m_currentText += navigationHighlight("Back to ");
         makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
@@ -284,7 +284,7 @@ class NavigationContext : public KShared {
         QStringList details;
         QString kind = declarationKind(m_declaration.data());
         QString access;
-        
+
         const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
 
         const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(m_declaration.data());
@@ -377,7 +377,7 @@ class NavigationContext : public KShared {
                 bool first = true;
 
                 KDevelop::DUContext* argumentContext = Cpp::getArgumentContext(m_declaration.data());
-                
+
                 if(argumentContext) {
                   QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
                   int firstDefaultParam = argumentContext->localDeclarations().count() - function->defaultParameters().count();
@@ -389,7 +389,7 @@ class NavigationContext : public KShared {
                     first = false;
 
                     AbstractType::Ptr argType = argument->abstractType();
-                    
+
                     eventuallyMakeTypeLinks( argType );
                     m_currentText += " " + nameHighlight(Qt::escape(argument->identifier().toString()));
 
@@ -408,11 +408,11 @@ class NavigationContext : public KShared {
             }
           }
         } else if( !shorten ) {
-          
+
           if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
             if( m_declaration->isTypeAlias() )
               m_currentText += importantHighlight("typedef ");
-            
+
             if(m_declaration->type<CppEnumeratorType>())
               m_currentText += i18n("enumerator") + " ";
 
@@ -424,7 +424,7 @@ class NavigationContext : public KShared {
             if( m_declaration->kind() == Declaration::Type && klass ) {
               m_currentText += "class ";
               eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
-              
+
               Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(klass->declaration(m_topContext.data()));
 
                 if(classDecl) {
@@ -462,12 +462,12 @@ class NavigationContext : public KShared {
             Declaration* decl = m_declaration->context()->owner();
             if(decl->isDefinition() && decl->declaration())
               decl = decl->declaration();
-            
+
             if(decl->abstractType().cast<CppEnumerationType>())
               m_currentText += labelHighlight(i18n("Enum: "));
             else
               m_currentText += labelHighlight(i18n("Container: "));
-            
+
             makeLink( declarationName(decl), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
             m_currentText += " ";
           } else {
@@ -479,10 +479,10 @@ class NavigationContext : public KShared {
 
         if( !access.isEmpty() )
           m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
-        
-        
+
+
         ///@todo Enumerations
-        
+
         QString detailsHtml;
 
         if( !details.isEmpty() ) {
@@ -553,7 +553,7 @@ class NavigationContext : public KShared {
       }
 
       addExternalHtml(m_suffix);
-      
+
       m_currentText += "</small></small></p></body></html>";
 
       return m_currentText;
@@ -580,13 +580,13 @@ class NavigationContext : public KShared {
             makeLink( KUrl(file).fileName(), file, NavigationAction( KUrl(file), KTextEditor::Cursor() ) );
           }
         }
-        
+
         lastPos = pos;
       }
-      
+
       m_currentText += text.mid(lastPos, text.length()-lastPos);
     }
-  
+
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
     void eventuallyMakeTypeLinks( AbstractType::Ptr type ) {
       if( !type ) {
@@ -595,16 +595,16 @@ class NavigationContext : public KShared {
       }
         AbstractType::Ptr target = TypeUtils::targetType( type, m_topContext.data() );
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
-        
+
         ///@todo handle const etc. correctly
         CppPointerType::Ptr pointer = type.cast<CppPointerType>();
         CppReferenceType::Ptr ref = type.cast<CppReferenceType>();
-        
+
         if(pointer && pointer->cv() & Declaration::Const)
           m_currentText += "const ";
         if(ref && ref->cv() & Declaration::Const)
           m_currentText += "const ";
-        
+
         if( idType ) {
           if( idType->declaration(m_topContext.data()) ) {
 
@@ -640,7 +640,7 @@ class NavigationContext : public KShared {
                    m_currentText += "missing type";
                 }
               }
-              
+
               m_currentText += Qt::escape(" >");
             }
           }
@@ -659,13 +659,13 @@ class NavigationContext : public KShared {
                 ref = ref->baseType().cast<CppReferenceType>();
               }
             }
-            
+
           }
         }else if( type ) {
           m_currentText += Qt::escape(type->toString());
         }
     }
-    
+
     ///Creates and registers a link to the given declaration, labeled by the given name
     void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
     {
@@ -683,7 +683,7 @@ class NavigationContext : public KShared {
       QString str = Qt::escape(name);
       if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
         str = "<font color=\"#880088\">" + str + "</font>";
-      
+
       m_currentText += "<a href=\"" + targetId + "\"" + (m_linkCount == m_selectedLink ? QString(" name = \"selectedItem\"") : QString()) + ">" + str + "</a>";
 
       if( m_selectedLink == m_linkCount )
@@ -691,7 +691,7 @@ class NavigationContext : public KShared {
 
       ++m_linkCount;
     }
-  
+
     int m_selectedLink; //The link currently selected
     NavigationAction m_selectedLinkAction; //Target of the currently selected link
 
@@ -699,7 +699,7 @@ class NavigationContext : public KShared {
       m_children << NavigationContextPointer(context);
       return m_children.last();
     }
-    
+
     QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
 
     //A counter used while building the html-code to count the used links.
@@ -716,14 +716,14 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
 {
   if(action.targetContext)
     return NavigationContextPointer(action.targetContext);
-  
+
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
       kDebug(9007) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
   qRegisterMetaType<KUrl>("KUrl");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
-  
+
   switch( action.type ) {
     case NavigationAction::None:
       kDebug(9007) << "Tried to execute an invalid action in navigation-widget" << endl;
@@ -732,7 +732,7 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
     {
       if( m_previousContext && m_previousContext->m_declaration == action.decl )
         return NavigationContextPointer( m_previousContext );
-      
+
       return registerChild( new NavigationContext(action.decl, m_topContext, this) );
     } break;
   case NavigationAction::JumpToSource:
@@ -746,13 +746,13 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
           else*/
             cursor = action.decl->range().textRange().start();
         }
-        
+
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
         QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
       }
   }
-  
+
   return NavigationContextPointer( this );
 }
 
@@ -764,7 +764,7 @@ public:
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
     addExternalHtml(m_prefix);
-  
+
     KUrl u(m_item.url());
     NavigationAction action(u, KTextEditor::Cursor(0,0));
     makeLink(u.fileName(), u.pathOrUrl(), action);
@@ -789,9 +789,9 @@ public:
       if(!duchain)
         duchain = ctx; //Any is better than none
     }
-    
+
     m_currentText += "<br />";
-    
+
     if(duchain) {
       const Cpp::EnvironmentFile* f = dynamic_cast<const Cpp::EnvironmentFile*>(duchain->parsingEnvironmentFile().data());
       Q_ASSERT(f); //Should always be for c++
@@ -806,7 +806,7 @@ public:
     }
 
     addExternalHtml(m_suffix);
-    
+
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;
   }
@@ -814,7 +814,7 @@ public:
   virtual QString name() const {
     return m_item.name;
   }
-  
+
 private:
 
   void addDeclarationsFromContext(DUContext* ctx, QString indent = "", bool first = true) {
@@ -829,7 +829,7 @@ private:
       int currentContextLine = -1;
       if(declarationIterator != ctx->localDeclarations().end())
         currentDeclarationLine = (*declarationIterator)->range().textRange().start().line();
-      
+
       if(childIterator != ctx->childContexts().end())
         currentDeclarationLine = (*childIterator)->range().textRange().start().line();
 
@@ -841,7 +841,7 @@ private:
             m_currentText += Qt::escape(", ");
           else
             first = false;
-          
+
           m_currentText += Qt::escape(indent + declarationKind(*declarationIterator) + " ");
           makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
         }
@@ -856,7 +856,7 @@ private:
     }
     //m_currentText += "}<br />";
   }
-  
+
   IncludeItem m_item;
 };
 
@@ -868,14 +868,14 @@ public:
 ~MacroNavigationContext() {
     delete m_macro;
   }
-  
+
   virtual QString html(bool shorten) {
     m_currentText  = "<html><body><p><small><small>";
     m_linkCount = 0;
     addExternalHtml(m_prefix);
 
     QString args;
-    
+
     if(m_macro->formalsSize()) {
       args = "(";
 
@@ -889,9 +889,9 @@ public:
 
       args += ")";
     }
-    
+
     m_currentText += (m_macro->function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro->name.str()) + " " + args +  "<br />";
-    
+
     KUrl u(m_macro->file.str());
     NavigationAction action(u, KTextEditor::Cursor(m_macro->sourceLine,0));
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
@@ -905,7 +905,7 @@ public:
       m_currentText += "<br />";
       }
 
-      
+
       m_currentText += labelHighlight(i18n("Body:")) + "<br />";
 
       m_currentText += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents(m_macro->definition(), m_macro->definitionSize()))));
@@ -913,15 +913,15 @@ public:
     }
 
     makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
-    
+
     m_currentText += "</small></small></p></body></html>";
     return m_currentText;
   }
-  
+
   virtual QString name() const {
     return m_macro->name.str();
   }
-  
+
 private:
 
   pp_macro* m_macro;
@@ -940,7 +940,7 @@ NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDe
 
 NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext) {
   initBrowser(200);
-  
+
 //The first context is registered so it is kept alive by the shared-pointer mechanism
   m_startContext = NavigationContextPointer(new IncludeNavigationContext(includeItem, m_topContext));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
@@ -949,7 +949,7 @@ NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::Top
 
 NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& preprocessedBody, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(0) {
   initBrowser(200);
-  
+
 //The first context is registered so it is kept alive by the shared-pointer mechanism
   m_startContext = NavigationContextPointer(new MacroNavigationContext(macro, preprocessedBody));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );

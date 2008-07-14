@@ -35,7 +35,7 @@
 #include <forwarddeclaration.h>
 #include <duchain.h>
 #include <duchainlock.h>
-#include <identifiedtype.h>
+#include <language/duchain/types/identifiedtype.h>
 #include <namespacealiasdeclaration.h>
 #include <language/duchain/aliasdeclaration.h>
 #include <util/pushvalue.h>
@@ -114,10 +114,10 @@ TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePo
 
 // DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
 //   DUContext* top = buildSubContexts(url, node, parent);
-// 
+//
 //   Q_ASSERT(m_accessPolicyStack.isEmpty());
 //   Q_ASSERT(m_functionDefinedStack.isEmpty());
-// 
+//
 //   return top;
 // }
 
@@ -977,7 +977,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
               globalCtx = globalCtx->parentContext();
             Q_ASSERT(globalCtx);
           }
-          
+
           //Just temporarily insert the new context
           injectContext( globalCtx, currentContext()->smartRange() );
         }

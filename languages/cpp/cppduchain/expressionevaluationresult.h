@@ -20,7 +20,7 @@
 
 #include "cppduchainexport.h"
 #include <duchain/appendedlist.h>
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <declarationid.h>
 
 namespace KDevelop {
@@ -40,17 +40,17 @@ class KDEVCPPDUCHAIN_EXPORT IndexedExpressionEvaluationResult {
   public:
     IndexedExpressionEvaluationResult();
     IndexedExpressionEvaluationResult(uint index);
-    
+
     const ExpressionEvaluationResult& result() const;
-    
+
     uint hash() const {
       return m_index;
     }
-    
+
     bool operator==(const IndexedExpressionEvaluationResult& rhs) const {
       return m_index == rhs.m_index;
     }
-    
+
   private:
     uint m_index;
 };
@@ -63,22 +63,22 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     ExpressionEvaluationResult& operator=(const ExpressionEvaluationResult& rhs);
 
     IndexedType type; ///Type the expression evaluated to, may be zero when the expression failed to evaluate
-    
+
     bool isInstance; ///Whether the result of this expression is an instance(as it normally should be)
     DeclarationId instanceDeclaration; ///If this expression is an instance of some type, this either contains the declaration of the instance, or the type
 
     ///Returns the indexed version of this evalation result(eventually it is put into a repository)
     IndexedExpressionEvaluationResult indexed() const;
-    
+
     static size_t classSize() {
       return sizeof(ExpressionEvaluationResult);
     }
-    
+
     START_APPENDED_LISTS(ExpressionEvaluationResult)
     ///This list contains the declarations found for the item evaluated.
     ///@todo Eventually get rid of this list somehow
     APPENDED_LIST_FIRST(ExpressionEvaluationResult, DeclarationId, allDeclarations);
-    
+
     END_APPENDED_LISTS(ExpressionEvaluationResult, allDeclarations);
 
     ///@return whether the result is an lvalue
@@ -90,17 +90,17 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     bool isValid() const {
       return type.isValid();
     }
-    
+
     bool operator==(const ExpressionEvaluationResult& rhs) const;
 
     unsigned int hash() const;
-    
+
     ///Duchain must be read-locked
     TypeIdentifier identifier() const;
-    
+
     ///@return A short version, that only contains the name or value, without instance-information etc. Should be language-processable.
     QString toShortString() const;
-    
+
     ///it does not matter whether du-chain is locked or not
     QString toString() const;
 };

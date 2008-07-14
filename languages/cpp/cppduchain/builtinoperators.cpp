@@ -17,7 +17,7 @@
 */
 
 #include "builtinoperators.h"
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "cpptypes.h"
 //#include "typerepository.h"
 #include "parser/tokens.h"
@@ -37,12 +37,12 @@ struct ConstantBinaryExpressionEvaluator {
    * */
   ConstantBinaryExpressionEvaluator( IntegralTypes _type, TypeModifiers _modifier, int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
     endValue = 0;
-    
+
     type = _type;
     modifier = _modifier;
 
     evaluateSpecialTokens(tokenKind, left, right);
-    
+
     switch( tokenKind ) {
       case '+':
         endValue = left->CppConstantIntegralType::value<Type>() + right->CppConstantIntegralType::value<Type>();
@@ -118,7 +118,7 @@ struct ConstantBinaryExpressionEvaluator {
       break;
     }
   }
-  
+
   KDevelop::AbstractType::Ptr createType() {
     KDevelop::AbstractType::Ptr ret( new CppConstantIntegralType(type, modifier) );
     static_cast<CppConstantIntegralType*>(ret.unsafeData())->CppConstantIntegralType::setValue<Type>( endValue );
@@ -140,7 +140,7 @@ KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr
 
   if(!left || !right)
     return KDevelop::AbstractType::Ptr();
-  
+
   CppIntegralType* leftIntegral = dynamic_cast<CppIntegralType*>(left.unsafeData());
   CppIntegralType* rightIntegral = dynamic_cast<CppIntegralType*>(right.unsafeData());
   CppPointerType* leftPointer = dynamic_cast<CppPointerType*>(right.unsafeData());
@@ -158,11 +158,11 @@ KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr
       else
         ret = right;
     }
-    
+
     if(tokenKind == '<' || tokenKind == '>' || tokenKind == Token_eq || tokenKind == Token_not_eq || tokenKind == Token_leq || tokenKind == Token_geq || tokenKind == Token_not_eq || tokenKind == Token_and || tokenKind == Token_or)
       ret = KDevelop::AbstractType::Ptr(new CppIntegralType(TypeBool, ModifierNone));
   }
-  
+
   if(leftPointer && rightIntegral && (tokenKind == '+' || tokenKind == '-'))
     ret = left;
 

@@ -29,7 +29,7 @@
 #include "parser.h"
 #include "control.h"
 
-#include "typesystem.h"
+#include <language/duchain/types/typesystem.h>
 #include <identifier.h>
 #include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
@@ -51,7 +51,7 @@ public:
 
   KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
   KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
-  
+
 
   //Move to slots again once it should be tested
   void testFileParse();

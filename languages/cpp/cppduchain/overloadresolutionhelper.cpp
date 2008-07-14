@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 
 #include <duchain/declaration.h>
 #include <duchain/ducontext.h>
-#include <duchain/identifiedtype.h>
+#include <language/duchain/types/identifiedtype.h>
 
 #include <cpptypes.h>
 
@@ -94,7 +94,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   }else{
     //m_declarations should already be set by setFunctions(..)
   }
-  
+
   QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
   foreach( const DeclarationWithArgument& decl, m_declarations )
     m_argumentCountMap[decl.second] = decl.first.parameters.size();
@@ -116,13 +116,13 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   QList< ViableFunction > viableFunctions;
 
   viableFunctions = resolv.resolveListOffsetted( m_knownParameters, m_declarations, partial );
-  
+
   foreach( const ViableFunction& function, viableFunctions ) {
     if( function.declaration() && function.declaration()->abstractType() ) {
       functions << OverloadResolutionFunction( m_argumentCountMap[function.declaration().data()] + m_knownParameters.parameters.size(), function );
     }
   }
-  
+
   return functions;
 }
 

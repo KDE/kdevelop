@@ -19,7 +19,7 @@
 #ifndef DUMPTYPES_H
 #define DUMPTYPES_H
 
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include "cppduchainexport.h"
 
 class KDEVCPPDUCHAIN_EXPORT DumpTypes : protected KDevelop::TypeVisitor
@@ -37,7 +37,7 @@ protected:
   virtual void visit (const KDevelop::IntegralType *);
 
   virtual bool visit (const KDevelop::AbstractType *);
-  
+
   virtual bool visit (const KDevelop::PointerType * type);
   virtual void endVisit (const KDevelop::PointerType *);
 

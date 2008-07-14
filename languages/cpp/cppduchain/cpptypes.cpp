@@ -23,7 +23,7 @@
 #include <classfunctiondeclaration.h>
 #include <abstractfunctiondeclaration.h>
 #include <indexedstring.h>
-#include <typeregister.h>
+#include <language/duchain/types/typeregister.h>
 #include "templateparameterdeclaration.h"
 #include <ducontext.h> //Only for FOREACH_ARRAY
 
@@ -85,7 +85,7 @@ AbstractType* CppIntegralType::clone() const {
 
 bool CppIntegralType::moreExpressiveThan(CppIntegralType* rhs) const {
   TYPE_D(CppIntegralType);
-  
+
   bool ret = d->m_type > rhs->d_func()->m_type && !((rhs->d_func()->m_modifiers & ModifierSigned) && !(d->m_modifiers & ModifierSigned));
   if((rhs->d_func()->m_modifiers & ModifierLongLong) && !(d->m_modifiers & ModifierLongLong))
     ret = false;
@@ -110,7 +110,7 @@ bool CppFunctionType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   //Ignore IdentifiedType here, because we do not want to respect that while comparing function-types.
 
   return CppCVType::equals(rhs) && FunctionType::equals(rhs);
@@ -136,7 +136,7 @@ bool CppReferenceType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   return CppCVType::equals(rhs) && ReferenceType::equals(rhs);
 }
 
@@ -145,7 +145,7 @@ bool CppClassType::equals(const AbstractType* _rhs) const
   if( !fastCast<const CppClassType*>(_rhs))
     return false;
   const CppClassType* rhs = fastCast<const CppClassType*>(_rhs);
-  
+
   return IdentifiedType::equals(rhs) && CppCVType::equals(rhs) && StructureType::equals(rhs);
 }
 
@@ -157,7 +157,7 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   if( CppCVType::equals(rhs) && IdentifiedType::equals(rhs) )
   {
     if( (bool)d_func()->m_type != (bool)rhs->d_func()->m_type )
@@ -165,9 +165,9 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 
     if( !d_func()->m_type )
       return true;
-    
+
     return d_func()->m_type == rhs->d_func()->m_type;
-  
+
   } else {
     return false;
   }
@@ -181,13 +181,13 @@ bool CppTypeAliasType::equals(const AbstractType* _rhs) const
 bool CppEnumeratorType::equals(const AbstractType* _rhs) const
 {
   const CppEnumeratorType* rhs = fastCast<const CppEnumeratorType*>(_rhs);
-  
+
   if( !rhs )
     return false;
 
   if( this == rhs )
     return true;
-  
+
   return IdentifiedType::equals(rhs) && CppConstantIntegralType::equals(rhs);
 }
 
@@ -209,7 +209,7 @@ bool CppEnumerationType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   return IdentifiedType::equals(rhs) && CppIntegralType::equals(rhs);
 }
 
@@ -218,10 +218,10 @@ bool CppEnumerationType::equals(const AbstractType* _rhs) const
 //   if( !fastCast<const CppArrayType*>(_rhs))
 //     return false;
 //   const CppArrayType* rhs = static_cast<const CppArrayType*>(_rhs);
-// 
+//
 //   if( this == rhs )
 //     return true;
-//   
+//
 //   return ArrayType::equals(rhs);
 // }
 
@@ -234,7 +234,7 @@ bool CppIntegralType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   return d->m_type == rhs->d_func()->m_type && d->m_modifiers == rhs->d_func()->m_modifiers && IntegralType::equals(rhs) && CppCVType::equals(rhs);
 }
 
@@ -246,7 +246,7 @@ bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
 
   if( this == rhs )
     return true;
-  
+
   return IdentifiedType::equals(rhs);
 }
 
@@ -299,7 +299,7 @@ CppClassType::CppClassType(Declaration::CVSpecs spec) : CppClassTypeBase(createD
 
 CppConstantIntegralType::CppConstantIntegralType(IntegralTypes type, TypeModifiers modifiers) : CppIntegralType(createData<CppConstantIntegralTypeData>()) {
   d_func_dynamic()->setTypeClassId<CppConstantIntegralType>();
-  
+
   setIntegralType(type);
   setTypeModifiers(modifiers);
 }
@@ -374,7 +374,7 @@ CppIntegralType::CppIntegralType(IntegralTypes type, TypeModifiers modifiers) : 
   d->setTypeClassId<CppIntegralType>();
   d->m_type = type;
   d->m_modifiers = modifiers;
-  
+
   QString name;
 
   switch (type) {

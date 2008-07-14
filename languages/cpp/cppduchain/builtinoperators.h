@@ -19,7 +19,7 @@
 #ifndef BUILTINOPERATORS_H
 #define BUILTINOPERATORS_H
 
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 
 ///The duchain must be locked!
 ///Returns the type that the builtin binary operator given through @param tokenKind with the given left and right operand types yields.

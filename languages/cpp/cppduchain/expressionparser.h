@@ -20,7 +20,7 @@
 #define EXPRESSIONPARSER_H
 
 #include <ksharedptr.h>
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <duchain/duchainpointer.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
@@ -61,13 +61,13 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      * should be used whenever possible.
      *
      * This function should be perfect for places in C++ where either a type-id, or a static expression are allowed, like template-arguments.
-     * 
+     *
      * @param exp The expression to evaluate
      * @param context the context within which the expression should be evaluated
      * @param forceExpression do not consider the expression to be a type-id
      * @param debug whether additional output to kdDebug should be issued
      *
-     * 
+     *
     */
     ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0, bool forceExpression = false );
 

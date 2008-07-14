@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #ifndef OVERLOADRESOLUTION_H
 #define OVERLOADRESOLUTION_H
 
-#include <typesystem.h>
+#include <language/duchain/types/typesystem.h>
 #include <duchain/duchainpointer.h>
 #include "typeconversion.h"
 #include <QList>
@@ -63,16 +63,16 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
         return ret;
       }
     };
-    
+
     struct ParameterList {
       QList<Parameter> parameters;
 
       ParameterList() {
       }
-      
+
       ParameterList( const QList<Parameter>& params ) : parameters(params) {
       }
-      
+
       ParameterList( const Parameter& param ) {
         parameters << param;
       }
@@ -105,7 +105,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * It is valued like the results of TypeConversion::implicitConversion(..)
      * */
     uint worstConversionRank();
-    
+
     /**
      * Tries to find a constructor of the class represented by the current context
      * that matches the given parameter-list
@@ -114,15 +114,15 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @param noUserDefinedConversion When this is true, user-defined conversions(constructor- or conversion-function conversion) are not allowed while matching the parameters
      * */
     Declaration* resolveConstructor( const ParameterList& params, bool implicit = false, bool noUserDefinedConversion = false );
-  
+
     /**
      * Tries to choose the correct function out of a given list of function-declarations.
      * If one of those declarations is a class-declaration, it will be substituted by its constructors.
      * If one of those declarations is an instance of a class, it will be substituted with its operator()
      * functions. Constant references to class-instances are treated correctly.
-     * 
+     *
      * @warning du-chain must be locked
-     
+
     * @param params parameters to match
      * @param declarations list of declarations
      * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
@@ -134,9 +134,9 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * actually given, if @param partial is given.
      *
      * The main difference of this call to resolveList(..) is that it for each given declaration, it allows a list of parameters that are prepended.
-     * 
+     *
      * Returns a sorted list containing all given declarations.
-     * 
+     *
      * @warning du-chain must be locked
      *
      * @return List of all given functions. The list is sorted by viability(the first item is most viable). Non-viable functions are also included.
@@ -157,7 +157,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     bool matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
     bool matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
     bool matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
-    
+
     DUContextPointer m_context;
     TopDUContextPointer m_topContext;
     uint m_worstConversionRank;
