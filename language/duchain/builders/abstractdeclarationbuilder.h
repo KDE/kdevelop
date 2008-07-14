@@ -22,7 +22,7 @@
 #include "language/duchain/classfunctiondeclaration.h"
 #include "language/duchain/symboltable.h"
 #include "language/duchain/forwarddeclaration.h"
-#include "language/duchain/identifiedtype.h"
+#include "language/duchain/types/identifiedtype.h"
 #include "language/duchain/functiondeclaration.h"
 
 namespace KDevelop

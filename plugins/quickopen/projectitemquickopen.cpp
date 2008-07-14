@@ -23,7 +23,7 @@
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
 #include <duchain/declaration.h>
-#include <duchain/typesystem.h>
+#include <duchain/types/typesystem.h>
 #include <duchain/abstractfunctiondeclaration.h>
 #include <project/projectmodel.h>
 #include <klocale.h>
@@ -59,7 +59,7 @@ void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* d
 void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* context, ProjectItemDataProvider::ItemTypes itemTypes ) {
   QVector<DUContext*> contexts = context->childContexts();
   QVector<Declaration*> declarations = context->localDeclarations();
-  
+
   QVector<DUContext*>::const_iterator contextIterator = contexts.begin();
   QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
 
@@ -94,7 +94,7 @@ void ProjectItemDataProvider::reset() {
   QList<DUChainItem> items;
 
   QSet<HashedString> enabledFiles = m_quickopen->fileSet();
-  
+
   foreach( HashedString u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
@@ -120,7 +120,7 @@ void ProjectItemDataProvider::enableData( const QStringList& items, const QStrin
       m_itemTypes = (ItemTypes)(m_itemTypes | Classes);
     if( items.contains( i18n("Functions") ) )
       m_itemTypes = (ItemTypes)(m_itemTypes | Functions);
-      
+
   } else {
     m_itemTypes = NoItems;
   }

@@ -27,7 +27,7 @@
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
 #include <duchain/declaration.h>
-#include <duchain/typesystem.h>
+#include <duchain/types/typesystem.h>
 #include <duchain/indexedstring.h>
 
 using namespace KDevelop;
@@ -45,7 +45,7 @@ QString DUChainItemData::text() const {
     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   else
     text = m_item.m_text;
-  
+
   return text;
 }
 
@@ -62,20 +62,20 @@ QList<QVariant> DUChainItemData::highlighting() const {
   QTextCharFormat boldFormat;
   boldFormat.setFontWeight(QFont::Bold);
   QTextCharFormat normalFormat;
-   
+
   int prefixLength = function->partToString( FunctionType::SignatureReturn).length() + 1;
 
   QString signature = function->partToString( FunctionType::SignatureArguments );
-  
+
   //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
   QualifiedIdentifier id = m_item.m_item->qualifiedIdentifier();
   QString fullId = id.toString();
   QString lastId;
   if(!id.isEmpty())
       lastId = id.last().toString();
-  
+
   prefixLength += fullId.length() - lastId.length();
-  
+
   QList<QVariant> ret;
   ret << 0;
   ret << prefixLength;
@@ -86,9 +86,9 @@ QList<QVariant> DUChainItemData::highlighting() const {
   ret << prefixLength + lastId.length();
   ret << signature.length();
   ret << QVariant(normalFormat);
-    
+
   return ret;
-    
+
 }
 
 QString DUChainItemData::htmlDescription() const {
@@ -105,12 +105,12 @@ QString DUChainItemData::htmlDescription() const {
 //     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
 //   else
 //     text = m_item.m_item->toString();
-  
+
   QString ret = "<small><small>" + text;
   if(!m_item.m_project.isEmpty()) {
       ret = i18n("Project") + " " + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
   }
-  
+
   ret += "</small></small>";
   return ret;
 }
@@ -123,12 +123,12 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
 
   if(m_openDefinition && decl->definition())
       decl = decl->definition();
-  
+
   KUrl url = KUrl(decl->url().str());
   KTextEditor::Cursor cursor = decl->range().textRange().start();
-  
+
   DUContext* internal = decl->internalContext();
-  
+
   if(internal && (internal->type() == DUContext::Other || internal->type() == DUContext::Class)) {
       //Move into the body
       if(internal->range().end.line > internal->range().start.line)
@@ -178,7 +178,7 @@ QList<KDevelop::QuickOpenDataPointer> DUChainItemDataProvider::data( uint start,
     end = Base::filteredItems().count();
 
   QList<KDevelop::QuickOpenDataPointer> ret;
-  
+
   for( uint a = start; a < end; a++ ) {
     DUChainItem f( Base::filteredItems()[a] );
     ret << KDevelop::QuickOpenDataPointer( createData( Base::filteredItems()[a] ) );

@@ -6,6 +6,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/language/interfaces
     ${CMAKE_SOURCE_DIR}/language/duchain
+    ${CMAKE_SOURCE_DIR}/language/duchain/types
     ${CMAKE_SOURCE_DIR}/language/backgroundparser
     ${CMAKE_SOURCE_DIR}/language/editor
     ${CMAKE_SOURCE_DIR}/util
@@ -32,14 +33,12 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/classmemberdeclaration.cpp
     duchain/classfunctiondeclaration.cpp
     duchain/use.cpp
-    duchain/typesystem.cpp
     duchain/smartconverter.cpp
     duchain/symboltable.cpp
     duchain/forwarddeclaration.cpp
     duchain/duchainbase.cpp
     duchain/duchainlock.cpp
     duchain/identifier.cpp
-    duchain/identifiedtype.cpp
     duchain/parsingenvironment.cpp
     duchain/abstractfunctiondeclaration.cpp
     duchain/functiondeclaration.cpp
@@ -54,8 +53,11 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
-    duchain/typeregister.cpp
     duchain/duchainregister.cpp
+
+    duchain/types/typesystem.cpp
+    duchain/types/typeregister.cpp
+    duchain/types/identifiedtype.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
@@ -117,7 +119,6 @@ install(FILES
 )
 
 install(FILES
-    duchain/typeregister.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/ducontext.h
@@ -128,7 +129,6 @@ install(FILES
     duchain/classmemberdeclarationdata.h
     duchain/classfunctiondeclaration.h
     duchain/use.h
-    duchain/typesystem.h
     duchain/smartconverter.h
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
@@ -136,7 +136,6 @@ install(FILES
     duchain/duchainobserver.h
     duchain/duchainlock.h
     duchain/identifier.h
-    duchain/identifiedtype.h
     duchain/abstractfunctiondeclaration.h
     duchain/functiondeclaration.h
     duchain/stringhelpers.h
@@ -149,10 +148,17 @@ install(FILES
     duchain/indexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h
-    duchain/typepointer.h
-    duchain/typesystemdata.h
     duchain/duchainregister.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
+)
+
+install(FILES
+    duchain/types/identifiedtype.h
+    duchain/types/typesystem.h
+    duchain/types/typeregister.h
+    duchain/types/typepointer.h
+    duchain/types/typesystemdata.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types
 )
 
 install(FILES
