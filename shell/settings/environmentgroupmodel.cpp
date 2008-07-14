@@ -129,7 +129,7 @@ void EnvironmentGroupModel::removeGroup( const QString& grp )
     if( groups().contains( grp ) )
     {
         removeGroup( grp );
-        setCurrentGroup("");
+        setCurrentGroup(defaultGroup());
     }
 }
 
