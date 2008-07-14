@@ -150,6 +150,8 @@ void EnvironmentGroupModel::removeVariable( const QModelIndex& idx )
 
 void EnvironmentGroupModel::setCurrentGroup( const QString& group )
 {
+    if( group.isEmpty() )
+        return;
     m_currentGroup = group;
     m_variableMap.clear();
     int i = 0;
@@ -169,7 +171,7 @@ void EnvironmentGroupModel::changeDefaultGroup( const QString& grp )
 void EnvironmentGroupModel::loadFromConfig( KConfig* cfg )
 {
     loadSettings( cfg );
-    setCurrentGroup("");
+    setCurrentGroup(defaultGroup());
 }
 
 
