@@ -88,6 +88,10 @@ void CMakePreferences::load()
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
 
+    if(m_prefsUi->buildDirs->count()==0)
+    {
+        m_prefsUi->removeBuildDir->setEnabled(false);
+    }
 //     QString cmDir=group.readEntry("CMakeDirectory");
 //     m_prefsUi->kcfg_cmakeDir->setUrl(KUrl(cmDir));
 //     kDebug(9032) << "cmakedir" << cmDir;

@@ -101,7 +101,7 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
     t.prepend(b.trimmed());
     m_creatorUi->cmakeOutput->setPlainText(t);*/
 
-    bool successful=exitCode==0 & exitStatus==QProcess::NormalExit;
+    bool successful=exitCode==0 && exitStatus==QProcess::NormalExit;
     if(successful) {
         m_creatorUi->status->setText(i18n("Created successfully"));
     }
@@ -198,14 +198,18 @@ void CMakeBuildDirCreator::updated()
         m_creatorUi->status->setText(i18n("Using an already created build directory"));
         m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
+    else if(!dirExists)
+    {
+        m_creatorUi->installPrefix->setEnabled(false);
+        m_creatorUi->buildType->setEnabled(false);
+//         m_creatorUi->generator->setEnabled(dirEmpty);
+        m_creatorUi->run->setEnabled(false);
+        m_creatorUi->status->setText(i18n("Using a missing build directory, please create it first"));
+        m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    }
     else
     {
-        m_creatorUi->installPrefix->setEnabled(dirEmpty || !dirExists);
-        m_creatorUi->buildType->setEnabled(dirEmpty || !dirExists);
-//         m_creatorUi->generator->setEnabled(dirEmpty);
-        m_creatorUi->run->setEnabled(dirEmpty || !dirExists);
-        m_creatorUi->run->setText(i18n("&Run"));
-        m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        bool enabled=false;
         if( !dirEmpty && dirExists )
         {
             //Useful to prevent disasters
@@ -214,10 +218,18 @@ void CMakeBuildDirCreator::updated()
             else if ( alreadyCreated && !correctProject )
                 m_creatorUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
-        } else
+        }
+        else
         {
             m_creatorUi->status->setText(i18n("Click the Run button to run CMake"));
+            enabled=true;
         }
+        m_creatorUi->installPrefix->setEnabled(enabled);
+        m_creatorUi->buildType->setEnabled(enabled);
+//         m_creatorUi->generator->setEnabled(enabled);
+        m_creatorUi->run->setEnabled(enabled);
+        m_creatorUi->run->setText(i18n("&Run"));
+        m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
 }
 
