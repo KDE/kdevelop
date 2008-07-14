@@ -60,6 +60,8 @@ private slots:
     void nextOutput();
     void previousOutput();
     void scrollToBottom( int );
+    void doScrollToBottom( int );
+
 private:
     QListView* createListView(int id);
     void setCurrentWidget( QListView* view );
@@ -67,6 +69,7 @@ private:
     void enableActions();
 
     QMap<int, QListView*> views;
+    QMap<int, QTimer*> scrollTimers;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     ToolViewData* data;
@@ -74,6 +77,7 @@ private:
     KAction* nextAction;
     KAction* previousAction;
     QSignalMapper* scrollModelViewMapper;
+    QSignalMapper* scrollModelViewMapper2;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
 };

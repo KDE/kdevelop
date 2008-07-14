@@ -24,6 +24,7 @@
 
 #include "standardoutputview.h"
 #include <QtCore/QSignalMapper>
+#include <QtCore/QTimer>
 #include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QListView>
@@ -42,11 +43,12 @@
 #include "toolviewdata.h"
 
 OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
-    : QWidget( parent ), tabwidget(0), data(tvdata), scrollModelViewMapper(new QSignalMapper(this))
+    : QWidget( parent ), tabwidget(0), data(tvdata), scrollModelViewMapper(new QSignalMapper(this)), scrollModelViewMapper2(new QSignalMapper(this))
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
     connect(scrollModelViewMapper, SIGNAL(mapped(int)), this, SLOT(scrollToBottom(int)));
+    connect(scrollModelViewMapper2, SIGNAL(mapped(int)), this, SLOT(doScrollToBottom(int)));
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
@@ -406,6 +408,25 @@ void OutputWidget::enableActions()
 void OutputWidget::scrollToBottom( int id )
 {
     if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
+    {
+        kDebug() << "starting auto-scroll timer";
+        if (!scrollTimers.contains(id)) {
+            QTimer* timer = new QTimer(this);
+            timer->setSingleShot( true );
+            scrollTimers[id] = timer;
+            scrollModelViewMapper2->setMapping(timer, id);
+            connect(timer, SIGNAL(timeout()), scrollModelViewMapper2, SLOT(map()));
+        }
+
+        if (!scrollTimers[id]->isActive())
+            // 100ms delay in scrolling, for performance reasons
+            scrollTimers[id]->start(100);
+    }
+}
+
+void OutputWidget::doScrollToBottom( int id )
+{
+    if( views.contains( id ) )
     {
         kDebug() << "doing auto-scroll";
         views.value( id )->scrollToBottom();
