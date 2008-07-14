@@ -19,7 +19,7 @@
 #ifndef KDEV_TYPEBUILDER_H
 #define KDEV_TYPEBUILDER_H
 
-#include "language/duchain/types/typesystem.h"
+#include "language/duchain/types/abstracttype.h"
 #include "language/duchain/declaration.h"
 
 namespace KDevelop {

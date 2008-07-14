@@ -42,6 +42,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/duchainutils.h"
+#include "language/duchain/types/functiontype.h"
 
 #include "classbrowserplugin.h"
 

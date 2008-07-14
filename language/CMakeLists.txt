@@ -58,6 +58,15 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
     duchain/types/identifiedtype.cpp
+    duchain/types/abstracttype.cpp
+    duchain/types/integraltype.cpp
+    duchain/types/functiontype.cpp
+    duchain/types/structuretype.cpp
+    duchain/types/pointertype.cpp
+    duchain/types/referencetype.cpp
+    duchain/types/delayedtype.cpp
+    duchain/types/arraytype.cpp
+    duchain/types/indexedtype.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
@@ -158,6 +167,16 @@ install(FILES
     duchain/types/typeregister.h
     duchain/types/typepointer.h
     duchain/types/typesystemdata.h
+    duchain/types/abstracttype.h
+    duchain/types/integraltype.h
+    duchain/types/functiontype.h
+    duchain/types/structuretype.h
+    duchain/types/pointertype.h
+    duchain/types/referencetype.h
+    duchain/types/delayedtype.h
+    duchain/types/arraytype.h
+    duchain/types/indexedtype.h
+    duchain/types/alltypes.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types
 )
 

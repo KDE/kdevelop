@@ -1,0 +1,206 @@
+/* This file is part of KDevelop
+    Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "functiontype.h"
+
+#include "indexedstring.h"
+#include "repositories/typerepository.h"
+#include "typesystemdata.h"
+#include "typeregister.h"
+#include "typesystem.h"
+
+namespace KDevelop
+{
+
+REGISTER_TYPE(FunctionType);
+
+DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
+
+FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(copyData<FunctionTypeData>(*rhs.d_func())) {
+}
+
+FunctionType::FunctionType(FunctionTypeData& data) : AbstractType(data) {
+}
+
+AbstractType* FunctionType::clone() const {
+  return new FunctionType(*this);
+}
+
+bool FunctionType::equals(const AbstractType* _rhs) const
+{
+  if( !fastCast<const FunctionType*>(_rhs))
+    return false;
+  const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
+
+  TYPE_D(FunctionType);
+  if( d->m_argumentsSize() != rhs->d_func()->m_argumentsSize() )
+    return false;
+
+  if( (bool)rhs->d_func()->m_returnType != (bool)d->m_returnType )
+    return false;
+
+  if( d->m_returnType != rhs->d_func()->m_returnType )
+    return false;
+
+  for(int a = 0; a < d->m_argumentsSize(); ++a)
+    if(d->m_arguments()[a] != rhs->d_func()->m_arguments()[a])
+      return false;
+
+  return true;
+}
+
+FunctionType::FunctionType()
+  : AbstractType(createData<FunctionTypeData>())
+{
+  d_func_dynamic()->setTypeClassId<FunctionType>();
+}
+
+FunctionType::~FunctionType()
+{
+}
+
+
+void FunctionType::addArgument(AbstractType::Ptr argument)
+{
+  d_func_dynamic()->m_argumentsList().append(argument->indexed());
+}
+
+void FunctionType::removeArgument(AbstractType::Ptr argument)
+{
+  TYPE_D_DYNAMIC(FunctionType);
+
+  IndexedType i = argument->indexed();
+  uint shift = 0;
+  for(int a = 0; a < d->m_argumentsSize(); ++a) {
+    if(d->m_arguments()[a] == i) {
+      ++shift;
+    }else if(shift) {
+      d->m_argumentsList()[a-shift] = d->m_argumentsList()[a];
+    }
+  }
+  d->m_argumentsList().resize(d->m_argumentsSize()-shift);
+}
+
+void FunctionType::setReturnType(AbstractType::Ptr returnType)
+{
+  d_func_dynamic()->m_returnType = returnType->indexed();
+}
+
+AbstractType::Ptr FunctionType::returnType () const
+{
+  return d_func()->m_returnType.type();
+}
+
+QList<AbstractType::Ptr> FunctionType::arguments () const
+{
+  ///@todo Don't do the conversion
+  QList<AbstractType::Ptr> ret;
+  FOREACH_FUNCTION(IndexedType arg, d_func()->m_arguments)
+    ret << arg.type();
+  return ret;
+}
+
+bool FunctionType::operator == (const FunctionType &other) const
+{
+  TYPE_D(FunctionType);
+  return d->m_returnType == other.d_func()->m_returnType && d->listsEqual(*other.d_func());
+}
+
+bool FunctionType::operator != (const FunctionType &other) const
+{
+  TYPE_D(FunctionType);
+  return d->m_returnType != other.d_func()->m_returnType || !d->listsEqual(*other.d_func());
+}
+
+void FunctionType::accept0 (TypeVisitor *v) const
+{
+  TYPE_D(FunctionType);
+  if (v->visit (this))
+  {
+    acceptType (d->m_returnType.type(), v);
+
+    for (int i = 0; i < d->m_argumentsSize (); ++i)
+      acceptType (d->m_arguments()[i].type(), v);
+  }
+
+  v->endVisit (this);
+}
+
+void FunctionType::exchangeTypes( TypeExchanger* exchanger )
+{
+  TYPE_D_DYNAMIC(FunctionType);
+  for (int i = 0; i < d->m_argumentsSize (); ++i)
+    d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].type() )->indexed();
+  d->m_returnType = exchanger->exchange(d->m_returnType.type())->indexed();
+}
+
+QString FunctionType::partToString( SignaturePart sigPart ) const {
+  QString args;
+  TYPE_D(FunctionType);
+  if( sigPart == SignatureArguments || sigPart == SignatureWhole )
+  {
+    args += '(';
+    bool first = true;
+    FOREACH_FUNCTION(const IndexedType& type, d->m_arguments) {
+      if (first)
+        first = false;
+      else
+        args.append(", ");
+      args.append(type ? type.type()->toString() : QString("<notype>"));
+    }
+    args += ')';
+  }
+
+  if( sigPart == SignatureArguments )
+    return args;
+  else if( sigPart == SignatureWhole )
+    return QString("function %1 %2").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
+  else if( sigPart == SignatureReturn )
+    return returnType() ? returnType()->toString() : QString();
+
+  return QString("ERROR");
+}
+
+QString FunctionType::toString() const
+{
+  return partToString(SignatureWhole);
+}
+
+AbstractType::WhichType FunctionType::whichType() const
+{
+  return TypeFunction;
+}
+
+uint FunctionType::hash() const
+{
+  uint hash_value = 0;
+  if(returnType())
+    hash_value += returnType()->hash();
+
+  FOREACH_FUNCTION(IndexedType t, d_func()->m_arguments) {
+    hash_value = (hash_value << 5) - hash_value + t.hash();
+  }
+
+  return hash_value;
+}
+
+}
+
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

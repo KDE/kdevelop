@@ -23,8 +23,8 @@
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
 #include <duchain/declaration.h>
-#include <duchain/types/typesystem.h>
 #include <duchain/abstractfunctiondeclaration.h>
+#include "language/duchain/types/structuretype.h"
 #include <project/projectmodel.h>
 #include <klocale.h>
 #include <iquickopen.h>

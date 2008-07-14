@@ -29,7 +29,6 @@
 #include "declaration.h"
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
-#include "typesystem.h"
 #include "kiconloader.h"
 #include <ilanguage.h>
 #include <ilanguagesupport.h>
@@ -124,7 +123,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
 
   return p;
 }
-/**We have to construct the item from the pixmap, else the icon will be marked as "load on demand", 
+/**We have to construct the item from the pixmap, else the icon will be marked as "load on demand",
  * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
  * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
  */
@@ -206,7 +205,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
     RETURN_CACHED_ICON("private_field")
   else
     RETURN_CACHED_ICON("field")
-  
+
   return KIcon();
 }
 
@@ -235,7 +234,7 @@ Declaration* declarationUnderCursor(const SimpleCursor& c, DUContext* ctx)
   foreach( Declaration* decl, ctx->localDeclarations() )
     if( decl->range().contains(c) )
       return decl;
-  
+
   //Search all collapsed sub-contexts. In C++, those can contain declarations that have ranges out of the context
   foreach( DUContext* subCtx, ctx->childContexts() ) {
     //This is a little hacky, but we need it in case of foreach macros and similar stuff
@@ -251,17 +250,17 @@ Declaration* declarationUnderCursor(const SimpleCursor& c, DUContext* ctx)
 Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
-  
+
   if( chosen )
   {
     DUContext* ctx = chosen->findContextAt(c);
-    
+
     while( ctx ) {
       //Try finding a declaration under the cursor
       Declaration* decl = declarationUnderCursor(c, ctx);
       if(decl)
         return decl;
-      
+
       //Try finding a use under the cursor
       for(int a = 0; a < ctx->uses().count(); ++a)
         if( ctx->uses()[a].m_range.contains(c) )
@@ -277,16 +276,16 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
 {
   if(!definition)
     return 0;
-  
+
   if(!topContext)
     topContext = definition->topContext();
-  
+
   if(definition->isDefinition()) {
     Declaration* ret = definition->declaration();
     if(ret)
       return ret;
   }
-  
+
   return definition;
 }
 
@@ -294,7 +293,7 @@ Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& curso
   foreach(Declaration* decl, ctx->localDeclarations())
     if(decl->range().start.line == cursor.line)
       return decl;
-  
+
   foreach(DUContext* child, ctx->childContexts()){
     Declaration* decl = declarationInLine(cursor, child);
     if(decl)

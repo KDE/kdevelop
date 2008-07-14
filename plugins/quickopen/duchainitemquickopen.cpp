@@ -27,8 +27,8 @@
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
 #include <duchain/declaration.h>
-#include <duchain/types/typesystem.h>
 #include <duchain/indexedstring.h>
+#include "language/duchain/types/functiontype.h"
 
 using namespace KDevelop;
 

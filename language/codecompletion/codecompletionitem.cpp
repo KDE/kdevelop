@@ -30,7 +30,6 @@
 
 #include "duchain.h"
 #include "duchainlock.h"
-#include "typesystem.h"
 #include "codecompletionmodel.h"
 #include "declaration.h"
 #include "classfunctiondeclaration.h"
@@ -74,7 +73,7 @@ CompletionTreeNode::CompletionTreeNode() : CompletionTreeElement() {
 }
 CompletionTreeNode::~CompletionTreeNode() {
 }
-  
+
 CompletionTreeNode* CompletionTreeElement::asNode() {
   return dynamic_cast<CompletionTreeNode*>(this);
 }
@@ -96,7 +95,7 @@ int CompletionTreeElement::rowInParent() const {
 /*  if( !m_parent )
     return 0;
   Q_ASSERT(m_parent->asNode());
-  
+
   return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
 }
 

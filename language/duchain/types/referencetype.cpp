@@ -1,0 +1,112 @@
+/* This file is part of KDevelop
+    Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "referencetype.h"
+
+#include "indexedstring.h"
+#include "repositories/typerepository.h"
+#include "typesystemdata.h"
+#include "typeregister.h"
+#include "typesystem.h"
+
+namespace KDevelop
+{
+REGISTER_TYPE(ReferenceType);
+
+ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(copyData<ReferenceTypeData>(*rhs.d_func())) {
+}
+
+ReferenceType::ReferenceType(ReferenceTypeData& data) : AbstractType(data) {
+}
+
+AbstractType* ReferenceType::clone() const {
+  return new ReferenceType(*this);
+}
+
+bool ReferenceType::equals(const AbstractType* _rhs) const
+{
+  if( !fastCast<const ReferenceType*>(_rhs))
+    return false;
+  const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
+
+  return d_func()->m_baseType == rhs->d_func()->m_baseType;
+}
+
+ReferenceType::ReferenceType()
+  : AbstractType(createData<ReferenceTypeData>())
+{
+  d_func_dynamic()->setTypeClassId<ReferenceType>();
+}
+
+ReferenceType::~ReferenceType()
+{
+}
+
+AbstractType::Ptr ReferenceType::baseType () const
+{
+  return d_func()->m_baseType.type();
+}
+
+void ReferenceType::setBaseType(AbstractType::Ptr type)
+{
+  d_func_dynamic()->m_baseType = type->indexed();
+}
+
+bool ReferenceType::operator == (const ReferenceType &other) const
+{
+  return d_func()->m_baseType == other.d_func()->m_baseType;
+}
+
+bool ReferenceType::operator != (const ReferenceType &other) const
+{
+  return d_func()->m_baseType != other.d_func()->m_baseType;
+}
+
+void ReferenceType::accept0 (TypeVisitor *v) const
+{
+  if (v->visit (this))
+    acceptType (d_func()->m_baseType.type(), v);
+
+  v->endVisit (this);
+}
+
+void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
+{
+  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.type() )->indexed();
+}
+
+QString ReferenceType::toString() const
+{
+  return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
+}
+
+AbstractType::WhichType ReferenceType::whichType() const
+{
+  return TypeReference;
+}
+
+uint ReferenceType::hash() const
+{
+  return (baseType() ? baseType()->hash() : 1) * 29;
+}
+
+}
+
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

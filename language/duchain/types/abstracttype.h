@@ -1,0 +1,284 @@
+/* This file is part of KDevelop
+    Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef ABSTRACTTYPE_H
+#define ABSTRACTTYPE_H
+
+#include <QtCore/QString>
+#include "language/duchain/types/typepointer.h"
+#include "language/languageexport.h"
+
+namespace KDevelop
+{
+class AbstractTypeData;
+
+class IndexedType;
+
+class TypeVisitor;
+class TypeExchanger;
+
+#define TYPE_DECLARE_DATA(Class) \
+    inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
+    inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
+
+#define TYPE_D(Class) const Class##Data * const d = d_func()
+#define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
+
+/**
+ * An enumeration of common modifiers for data types.
+ * If you have any language-specific modifiers that don't belong here,
+ * you can add them at/after LanguageSpecificModifier
+ */
+namespace CommonModifiers {
+  enum {
+    NoModifiers                 = 0,
+    ConstModifier               = 1 << 0,
+    VolatileModifier            = 1 << 1,
+    PrivateModifier             = 1 << 2,
+    PublicModifier              = 1 << 3,
+    ProtectedModifier           = 1 << 4,
+    TransientModifier           = 1 << 5,
+    FinalModifier               = 1 << 6,
+    AbstractModifier            = 1 << 7,
+    NativeModifier              = 1 << 8,
+    SynchronizedModifier        = 1 << 9,
+    StrictFPModifier            = 1 << 10,
+    NewModifier                 = 1 << 11,
+    SealedModifier              = 1 << 12,
+    StaticModifier              = 1 << 13,
+    ReadonlyModifier            = 1 << 14,
+    VirtualModifier             = 1 << 15,
+    OverrideModifier            = 1 << 16,
+    ExternModifier              = 1 << 17,
+    UnsafeModifier              = 1 << 18,
+    FixedModifier               = 1 << 19,
+    ShortModifier               = 1 << 20,
+    LongModifier                = 1 << 21,
+    LongLongModifier            = 1 << 22,
+    SignedModifier              = 1 << 23,
+    UnsignedModifier            = 1 << 24,
+    LanguageSpecificModifier    = 1 << 25  //TODO make this support 64 bit values
+  };
+}
+
+/**
+ * \brief Base class for all types.
+ *
+ * The AbstractType class is a base class from which all types derive.  It features:
+ * - mechanisms for visiting types
+ * - toString() feature
+ * - equivalence feature
+ * - cloning of types, and
+ * - hashing and indexing
+ *
+ *  Type classes are created in a way that allows storing them in memory or on disk
+ *  efficiently.  They are classes which can store arbitrary lists immediately after their
+ *  private data structures in memory (thus enabling them to be mmapped or memcopied),
+ *  or being "dynamic" where you use exactly the same class and same access functions,
+ *  but the list data is stored in a temporary QVarLengthArray from a central repository,
+ *  until we save it back to the static memory-region again.
+ *
+ * When creating an own type, you must:
+ * - Implement equals(..), clone(), hash()
+ * - Add an enumerator "Identity" that contains an arbitrary unique identity value of the type
+ * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules(@todo)
+ * - Register the type in a source-file using REGISTER_TYPE(..), @see typeregister.h
+ * - Add a typedef "Data", that contains the actual data of the type using the mechanisms described in appendedlist.h.
+ *   That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
+ *   @see AbstractTypeData
+ * - When creating a data object in a constructor, you must call setTypeClassId<YourType>() on that data to mark it.
+ *
+ *   Every type can have only one other type as base-class,
+ *   but it can have additional base-classes that are not a direct part of the type-system(@see IdentifiedType).
+ *
+ *  \sa appendedlist.h
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
+{
+public:
+  typedef TypePtr<AbstractType> Ptr;
+
+  /// Constructor.
+  AbstractType();
+  /// Constructor from data.
+  AbstractType(AbstractTypeData& dd);
+  /// Destructor.
+  virtual ~AbstractType ();
+
+  /**
+   * Access the type modifiers
+   *
+   * \returns the type's modifiers.
+   */
+  quint64 modifiers() const;
+
+  /**
+   * Set the type's modifiers.
+   *
+   * \param modifiers modifiers of this type.
+   */
+  void setModifiers(quint64 modifiers);
+
+  /**
+   * Visitor method.  Called by TypeVisitor to visit the type heirachy.
+   *
+   * \param v visitor which is calling this function.
+   */
+  void accept(TypeVisitor *v) const;
+
+  /**
+   * Convenience visitor method which can be called with a null type.
+   *
+   * \param type type to visit, may be null.
+   * \param v visitor which is visiting the given \a type
+   */
+  static void acceptType(AbstractType::Ptr type, TypeVisitor *v);
+
+  /**
+   * Returns this type as a string, preferably the same as it is expressed in the code.
+   *
+   * \return this type as a string
+   */
+  virtual QString toString() const = 0;
+
+  ///Must always be called before anything in the data pointer is changed!
+  ///If it's not called beforehand, the type-repository gets corrupted
+  void makeDynamic();
+
+  ///Should return whether this type's content equals the given one
+  ///Since this is used by the type-repository, it must compare ALL members of the data type.
+  virtual bool equals(const AbstractType* rhs) const = 0;
+
+  /**
+   * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
+   * */
+  virtual AbstractType* clone() const = 0;
+
+  /**
+   * A hash-value that should have the following properties:
+   * - When two types match on equals(), it should be same.
+   * - When two types don't match on equals(), it should be different with a high probability.
+   * */
+  virtual uint hash() const = 0;
+
+  ///This can also be called on zero types, those can then be reconstructed from the zero index
+  IndexedType indexed() const;
+
+  /// Enumeration of major data types.
+  enum WhichType {
+    TypeAbstract  /**< an abstract type */,
+    TypeIntegral  /**< an integral */,
+    TypePointer   /**< a pointer*/,
+    TypeReference /**< a reference */,
+    TypeFunction  /**< a function */,
+    TypeStructure /**< a structure */,
+    TypeArray     /**< an array */,
+    TypeDelayed   /**< a delayed type */,
+    TypeForward   /**< a foward declaration type */
+  };
+
+  /**
+   * Determine which data type this abstract type represents.
+   *
+   * \returns the data type represented by this type.
+   */
+  virtual WhichType whichType() const;
+
+  enum {
+    Identity = 1
+  };
+
+  /**
+   * Should, like accept0, be implemented by all types that hold references to other types.
+   *
+   * \todo document function
+   * */
+  virtual void exchangeTypes( TypeExchanger* exchanger );
+
+  /**
+   * Method to create copies of internal type data. You must use this to create the internal
+   * data instances in copy constructors. It is needed, because it may need to allocate more memory
+   * for appended lists.
+   *
+   * \param rhs data to copy
+   * \returns copy of the data
+   */
+  template<class DataType>
+  static DataType& copyData(const DataType& rhs) {
+    size_t size;
+    if(!rhs.m_dynamic)
+      size = sizeof(DataType); //Create a dynamic data instance
+    else
+      size = rhs.dynamicSize(); //Create a constant data instance, that holds all the data embedded.
+
+    return *new (new char[size]) DataType(rhs);
+  }
+
+  /**
+   * Method to create internal data structures. Use this in normal constructors.
+   *
+   * \returns the internal data structure
+   */
+  template<class DataType>
+  static DataType& createData() {
+    return *new (new char[sizeof(DataType)]) DataType();
+  }
+
+  typedef AbstractTypeData Data;
+
+protected:
+  /**
+   * Visitor method, reimplement to allow visiting of types.
+   *
+   * \param v visitor which is visiting.
+   */
+  virtual void accept0 (TypeVisitor *v) const = 0;
+  AbstractTypeData* d_ptr;
+
+  TYPE_DECLARE_DATA(AbstractType)
+
+  friend class AbstractTypeDataRequest;
+
+private:
+  AbstractType(const AbstractType& rhs);
+};
+
+template <class T>
+uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.unsafeData()); }
+
+
+/**
+ * You can use these instead of dynamic_cast, for basic types it has better performance because it checks the whichType() member
+*/
+
+template<class To>
+inline To fastCast(AbstractType* from) {
+  return dynamic_cast<To>(from);
+}
+
+template<class To>
+inline const To fastCast(const AbstractType* from) {
+  return const_cast<const To>(fastCast<To>(const_cast<AbstractType*>(from))); //Hack so we don't need to define the functions twice, once for const, and once for not const
+}
+
+}
+
+#endif
+
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

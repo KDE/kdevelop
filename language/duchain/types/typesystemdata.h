@@ -22,9 +22,9 @@
 #define TYPESYSTEMDATA_H
 
 #include "appendedlist.h"
-#include "typesystem.h"
 #include "indexedstring.h"
-#include "../languageexport.h"
+#include "language/duchain/types/indexedtype.h"
+#include "language/duchain/types/delayedtype.h"
 
 namespace KDevelop {
 

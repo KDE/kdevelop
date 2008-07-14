@@ -30,7 +30,6 @@
 #include "duchainlock.h"
 #include "use.h"
 #include "identifier.h"
-#include "typesystem.h"
 #include "topducontext.h"
 #include "symboltable.h"
 #include "aliasdeclaration.h"

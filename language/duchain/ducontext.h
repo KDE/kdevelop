@@ -24,9 +24,8 @@
 
 #include "language/editor/documentcursorobject.h"
 #include "language/duchain/identifier.h"
-#include "language/duchain/types/typesystem.h"
 #include "language/duchain/duchainbase.h"
-#include "language/languageexport.h"
+#include "language/duchain/types/abstracttype.h"
 #include "duchainpointer.h"
 
 template<class T>

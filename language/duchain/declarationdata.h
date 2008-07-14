@@ -27,6 +27,7 @@
 #include "duchainlock.h"
 #include "duchain.h"
 #include "language/languageexport.h"
+#include "language/duchain/types/indexedtype.h"
 
 namespace KDevelop
 {
@@ -35,25 +36,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationData : public DUChainBaseData
 {
 public:
   DeclarationData();
-  
+
   DeclarationData( const DeclarationData& rhs );
-  
+
   DUContext* m_context, *m_internalContext;
   IndexedType m_type;
   Identifier m_identifier;
-  
+
   //Index in the comment repository
   uint m_comment;
 
   Declaration::Kind m_kind;
 
   uint m_ownIndex;
-  
+
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
   bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
-  
+
 };
 
 }

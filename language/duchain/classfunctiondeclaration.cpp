@@ -21,7 +21,7 @@
 #include "classfunctiondeclaration.h"
 
 #include "ducontext.h"
-#include "typesystem.h"
+#include "language/duchain/types/functiontype.h"
 #include "classmemberdeclarationdata.h"
 
 namespace KDevelop
@@ -42,7 +42,7 @@ public:
   ClassFunctionDeclaration::QtFunctionType m_functionType;
 };
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs) 
+ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs)
     : ClassMemberDeclaration(*new ClassFunctionDeclarationPrivate( *rhs.d_func() ))
       , AbstractFunctionDeclaration(rhs) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);

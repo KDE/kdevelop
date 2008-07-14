@@ -20,7 +20,6 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
-#include "typesystem.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "itemrepository.h"
@@ -34,7 +33,7 @@ class AbstractTypeDataRequest {
   public:
   AbstractTypeDataRequest(const AbstractType& type) : m_item(type) {
   }
-  
+
   enum {
     AverageSize = sizeof(AbstractTypeData) + 12
   };
@@ -42,11 +41,11 @@ class AbstractTypeDataRequest {
   unsigned int hash() const {
     return m_item.hash();
   }
-  
+
   size_t itemSize() const {
     return TypeSystem::self().dynamicSize(*m_item.d_ptr);
   }
-  
+
   void createItem(AbstractTypeData* item) const {
     TypeSystem::self().copy(*m_item.d_ptr, *item, true);
     if(item->m_dynamic) {
@@ -67,14 +66,14 @@ class AbstractTypeDataRequest {
 #endif
     item->inRepository = true;
   }
-  
+
   bool equals(const AbstractTypeData* item) const {
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
     if(!otherType)
       return false;
     return m_item.equals(otherType.unsafeData());
   }
-  
+
   const AbstractType& m_item;
 };
 
@@ -94,9 +93,9 @@ TypeRepositoryData& data() {
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
     return 0;
-  
+
   QMutexLocker(&data().mutex);
-  
+
   uint i = data().repository.index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
   AbstractType::Ptr t = typeForIndex(i);
@@ -115,9 +114,9 @@ uint TypeRepository::indexForType(AbstractType::Ptr input) {
 AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
   if(index == 0)
     return AbstractType::Ptr();
-  
+
   QMutexLocker(&data().mutex);
-  
+
   return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(data().repository.itemFromIndex(index))) );
 }
 

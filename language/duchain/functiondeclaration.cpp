@@ -22,6 +22,7 @@
 #include "declarationdata.h"
 #include "ducontext.h"
 #include "duchainregister.h"
+#include "language/duchain/types/functiontype.h"
 
 namespace KDevelop
 {
@@ -79,7 +80,7 @@ QString FunctionDeclaration::toString() const {
 
   TypePtr<FunctionType> function = type<FunctionType>();
   Q_ASSERT(function);
-  
+
   return QString("function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
 }
 

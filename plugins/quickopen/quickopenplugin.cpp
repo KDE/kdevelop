@@ -56,8 +56,8 @@
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
 #include <duchain/types/identifiedtype.h>
-#include <duchain/types/typesystem.h>
 #include <duchain/indexedstring.h>
+#include "language/duchain/types/functiontype.h"
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"

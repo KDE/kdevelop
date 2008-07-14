@@ -34,7 +34,6 @@
 
 
 #include <declaration.h>
-#include "typesystem.h"
 #include <classfunctiondeclaration.h>
 #include <ducontext.h>
 #include <duchain.h>
@@ -79,7 +78,7 @@ void CodeCompletionModel::setCompletionWorker(CodeCompletionWorker* worker)
     kWarning() << "Already have a current code completion worker!";
     return;
   }
-  
+
   m_worker = worker;
 
   //We connect directly, so we can do the pre-grouping within the background thread
@@ -151,7 +150,7 @@ void CodeCompletionModel::executeCompletionItem2(Document* document, const Range
     kDebug(9007) << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
     return;
   }
-  
+
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element || !element->asItem() )
     return;
@@ -196,7 +195,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
       return treeElement.asItem()->inheritanceDepth();
     case CodeCompletionModel::ArgumentHintDepth:
       return treeElement.asItem()->argumentHintDepth();
-  
+
     case AccessibilityNext:
     {
       QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());

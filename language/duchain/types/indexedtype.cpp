@@ -1,5 +1,7 @@
-/*
-   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+/* This file is part of KDevelop
+    Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
+    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,17 +18,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEREPOSITORY_H
-#define TYPEREPOSITORY_H
+#include "indexedtype.h"
 
-#include "language/duchain/types/abstracttype.h"
+#include "repositories/typerepository.h"
 
-namespace KDevelop {
-  class TypeRepository {
-    public:
-      static uint indexForType(AbstractType::Ptr input);
-      static AbstractType::Ptr typeForIndex(uint index);
-  };
+namespace KDevelop
+{
+
+AbstractType::Ptr IndexedType::type() const {
+  if(!m_index)
+    return AbstractType::Ptr();
+  return TypeRepository::typeForIndex(m_index);
 }
 
-#endif
+}
+
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
