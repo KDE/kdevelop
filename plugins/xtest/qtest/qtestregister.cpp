@@ -24,8 +24,8 @@
 #include "qtestcommand.h"
 
 #include <QIODevice>
-#include <klocalizedstring.h>
-#include <kdebug.h>
+#include <KLocalizedString>
+#include <KDebug>
 
 using QTest::QTestRegister;
 using QTest::QTestSuite;

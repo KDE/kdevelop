@@ -21,9 +21,10 @@
 #include "qtestoutputparser.h"
 #include "qtestcase.h"
 
-#include <test.h>
+#include <kdevplatform/veritas/test.h>
+
 #include <QStringRef>
-#include <kdebug.h>
+#include <KDebug>
 
 using QTest::QTestCase;
 using QTest::QTestOutputParser;

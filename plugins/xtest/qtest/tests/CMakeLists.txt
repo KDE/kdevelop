@@ -3,6 +3,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/qtest
         ${XtestPlugin_SOURCE_DIR}  # for kasserts.h
+        ${KDEVPLATFORM_INCLUDE_DIR}
         ${KDEVPLATFORM_INCLUDE_DIR}/veritas
         ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
 

@@ -21,9 +21,10 @@
 #ifndef QTEST_QTESTVIEW_H
 #define QTEST_QTESTVIEW_H
 
-#include <QVariantList>
 #include <KUrl>
-#include <testrunnertoolview.h>
+#include <QVariantList>
+
+#include <kdevplatform/veritas/testrunnertoolview.h>
 
 class QTestViewFactory;
 namespace Veritas { class ITest; }

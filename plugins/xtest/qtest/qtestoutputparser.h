@@ -22,7 +22,7 @@
 #define QXQTEST_QTESTOUTPUTPARSER
 
 #include <QXmlStreamReader>
-#include <testresult.h>
+#include <kdevplatform/veritas/testresult.h>
 
 class QIODevice;
 

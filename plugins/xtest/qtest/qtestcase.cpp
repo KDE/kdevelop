@@ -22,11 +22,12 @@
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
-#include <qtestsettings.h>
+#include "config/qtestsettings.h"
 
 #include <QDir>
-#include <KProcess>
 #include <KDebug>
+#include <KProcess>
+
 
 using QTest::ISettings;
 using QTest::QTestCase;

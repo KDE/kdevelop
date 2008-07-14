@@ -1,7 +1,7 @@
 add_subdirectory(tests)
 add_subdirectory(config)
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
 set(TestBuild on)
@@ -14,12 +14,8 @@ include_directories(
     config
     ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/shell
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
+    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces # needed for core.h & documentcontroller.h
+    )
 
 set(kdevqtest_SRCS
     qtestoutputparser.cpp

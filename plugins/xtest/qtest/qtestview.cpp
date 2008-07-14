@@ -20,38 +20,38 @@
 
 #include "qtestview.h"
 
-// KDevelop
-#include <core.h>
-#include <context.h>
-#include <iproject.h>
-#include <idocument.h>
-#include <projectmodel.h>
-#include <iuicontroller.h>
-#include <iprojectcontroller.h>
-#include <documentcontroller.h>
-#include <iprojectfilemanager.h>
-#include <ibuildsystemmanager.h>
-#include <contextmenuextension.h>
-
-// xtest
-#include <test.h>
-#include <qtestregister.h>
-#include <qtestsettings.h>
-
-// Qt
 #include <QFile>
+#include <QInputDialog>
 #include <QIODevice>
 #include <QMessageBox>
-#include <QInputDialog>
 
-// KDE
-#include <KDebug>
 #include <KAction>
-#include <KLocale>
 #include <KConfigGroup>
+#include <KDebug>
+#include <KLocale>
+#include <KPluginFactory>
 #include <KPluginLoader>
 #include <KSharedConfig>
-#include <KPluginFactory>
+
+#include <kdevplatform/interfaces/context.h>
+#include <kdevplatform/interfaces/contextmenuextension.h>
+
+#include <kdevplatform/interfaces/idocument.h>
+#include <kdevplatform/interfaces/iproject.h>
+#include <kdevplatform/interfaces/iprojectcontroller.h>
+#include <kdevplatform/interfaces/iuicontroller.h>
+
+#include <kdevplatform/project/projectmodel.h>
+#include <kdevplatform/project/interfaces/ibuildsystemmanager.h>
+#include <kdevplatform/project/interfaces/iprojectfilemanager.h>
+
+#include <kdevplatform/shell/core.h>
+#include <kdevplatform/shell/documentcontroller.h>
+
+#include <kdevplatform/veritas/test.h>
+
+#include "qtestregister.h"
+#include "qtestsettings.h"
 
 K_PLUGIN_FACTORY(QTestViewPluginFactory, registerPlugin<QTestView>();)
 K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))

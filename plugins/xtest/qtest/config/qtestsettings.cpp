@@ -19,7 +19,7 @@
  */
 
 #include "qtestsettings.h"
-#include <iproject.h>
+#include <kdevplatform/interfaces/iproject.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
