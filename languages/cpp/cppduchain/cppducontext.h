@@ -186,19 +186,6 @@ class CppDUContext : public BaseContext {
     CppDUContext( const Param1& p1, const Param2& p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
     }
 
-    ~CppDUContext() {
-      //Delete all the local declarations first, so they also delete their instantiations
-      BaseContext::deleteLocalDeclarations();
-      //Specializations will be destroyed the same time this is destroyed
-      QSet<CppDUContext<BaseContext>*> instatiations;
-      {
-        QMutexLocker l(&cppDuContextInstantiationsMutex);
-        instatiations = m_instatiations;
-      }
-      foreach( CppDUContext<BaseContext>* instatiation, instatiations )
-        delete instatiation;
-    }
-    
     ///Overridden to take care of templates and other c++ specific things
     virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags ) const
     {
@@ -494,6 +481,18 @@ class CppDUContext : public BaseContext {
     virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const;
     
   private:
+    ~CppDUContext() {
+      //Delete all the local declarations first, so they also delete their instantiations
+      BaseContext::deleteLocalDeclarations();
+      //Specializations will be destroyed the same time this is destroyed
+      QSet<CppDUContext<BaseContext>*> instatiations;
+      {
+        QMutexLocker l(&cppDuContextInstantiationsMutex);
+        instatiations = m_instatiations;
+      }
+      foreach( CppDUContext<BaseContext>* instatiation, instatiations )
+        delete instatiation;
+    }
 
     virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source,  bool searchInParents, int currentDepth) const
     {

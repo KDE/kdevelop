@@ -847,7 +847,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
     SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
     if(!declarations.isEmpty()) {
-      decl->setAliasedDeclaration(declarations[0]->indexed());
+      decl->setAliasedDeclaration(declarations[0]);
     }else{
       kDebug() << "Aliased declaration not found:" << id.toString();
     }

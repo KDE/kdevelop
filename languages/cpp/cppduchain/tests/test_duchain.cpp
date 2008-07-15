@@ -170,7 +170,7 @@ void TestDUChain::cleanupTestCase()
   DUChainWriteLocker lock(DUChain::lock());
 
   //KDevelop::EditorIntegrator::releaseTopRange(topContext->textRangePtr());
-  delete topContext;
+  topContext->deleteSelf();
 }
 
 Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
@@ -1999,7 +1999,7 @@ struct TestContext {
   ~TestContext() {
     unImport(imports);
     DUChainWriteLocker lock(DUChain::lock());
-    delete m_context;
+    m_context->deleteSelf();
   }
 
   void verify(QList<TestContext*> allContexts) {

@@ -145,7 +145,7 @@ void PreprocessJob::run()
               default:
                   break;
             }
-            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
             p->setLocationStack(parentJob()->includeStack());
             parentJob()->addPreprocessorProblem(p);
 
@@ -157,7 +157,6 @@ void PreprocessJob::run()
         
     //        Q_ASSERT( !contents.isEmpty() );
         file.close();
-        
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
     }
     else
@@ -172,6 +171,8 @@ void PreprocessJob::run()
         contents = parentJob()->contentsFromEditor().toUtf8();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
+    
+    KDevelop::ModificationRevision::clearModificationCache(parentJob()->document());
 
     if(m_secondEnvironmentFile) //Copy some information from the environment-file to its content-part
         m_secondEnvironmentFile->setModificationRevision(m_firstEnvironmentFile->modificationRevision());

@@ -146,7 +146,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   ret.isInstance = v.lastInstance().isInstance;
   
   if(v.lastInstance().declaration)
-    ret.instanceDeclaration = v.lastInstance().declaration->indexed();
+    ret.instanceDeclaration = KDevelop::IndexedDeclaration(v.lastInstance().declaration.data());
   
   foreach(DeclarationPointer decl, v.lastDeclarations())
     if(decl)
