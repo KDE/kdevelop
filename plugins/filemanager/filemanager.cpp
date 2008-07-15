@@ -54,10 +54,10 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect(urlnav, SIGNAL(urlChanged(const KUrl& )), SLOT(gotoUrl(const KUrl&)));
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
-#if KDE_VERSION < KDE_MAKE_VERSION( 4, 1, 60 )
-    dirop->setView( KFile::Simple );
-#else
+#if KDE_IS_VERSION(4,1,60)
     dirop->setView( KFile::Tree );
+#else
+    dirop->setView( KFile::Simple );
 #endif
     dirop->setOnlyDoubleClickSelectsFiles(true);
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
