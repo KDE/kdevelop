@@ -63,8 +63,12 @@ void CMakeBuildDirCreator::runBegin()
                             "Do you want KDevelop to create it for you?", buildFolder().toLocalFile()));
             if(ret==KMessageBox::Continue)
             {
-                QDir::root().mkpath(d.absolutePath() );
+                bool res=QDir::root().mkpath(d.absolutePath() );
+		if(!res)
+			return;
             }
+	    else
+	    	return;
         }
 
         args += m_srcFolder.toLocalFile();
