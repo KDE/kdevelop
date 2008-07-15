@@ -79,6 +79,8 @@ public:
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
+  uint m_indexInTopContext; //Index of this DUContext in the top-context
+  
   /**
    * If this document is loaded, this contains a smart-range for each use.
    * This may temporarily contain zero ranges.

@@ -17,7 +17,7 @@
 */
 
 #include "ducontext.h"
-#include "ducontext_p.h"
+#include "ducontextdata.h"
 
 #include <QMutableLinkedListIterator>
 #include <QSet>
@@ -39,6 +39,7 @@
 #include <editor/editorintegrator.h>
 #include <limits>
 #include "duchainregister.h"
+#include "topducontextdynamicdata.h"
 
 
 ///It is fine to use one global static mutex here
@@ -67,6 +68,7 @@ bool removeOne(Container& container, const Type& value) {
   return false;
 }
 
+
 //Stored statically for performance-reasons
 
 #ifndef NDEBUG
@@ -91,7 +93,7 @@ DUContextData::DUContextData()
 }
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
-  : m_context(d), m_rangesChanged(true)
+  : m_context(d), m_rangesChanged(true), m_indexInTopContext(0)
 {
 }
 
@@ -113,6 +115,31 @@ bool DUContextDynamicData::isThisImportedBy(const DUContext* context) const {
   }
 
   return false;
+}
+
+IndexedDUContext::IndexedDUContext(uint topContext, uint contextIndex) : m_topContext(topContext), m_contextIndex(contextIndex) {
+}
+
+IndexedDUContext::IndexedDUContext(DUContext* decl) {
+  if(decl) {
+    m_topContext = decl->topContext()->ownIndex();
+    m_contextIndex = decl->m_dynamicData->m_indexInTopContext;
+  }else{
+    m_topContext = 0;
+    m_contextIndex = 0;
+  }
+}
+
+DUContext* IndexedDUContext::context() const {
+  ENSURE_CHAIN_READ_LOCKED
+  if(!m_topContext || !m_contextIndex)
+    return 0;
+  
+  TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
+  if(!ctx)
+    return 0;
+  
+  return ctx->m_dynamicData->getContextForIndex(m_contextIndex);
 }
 
 void DUContext::synchronizeUsesFromSmart() const
@@ -251,8 +278,6 @@ void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, c
 void DUContextDynamicData::addChildContext( DUContext * context )
 {
   // Internal, don't need to assert a lock
-  context->clearDeclarationIndices();
-
   Q_ASSERT(!context->m_dynamicData->m_parentContext || context->m_dynamicData->m_parentContext.data()->m_dynamicData == this );
 
   bool inserted = false;
@@ -284,27 +309,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   }
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
-  context->updateDeclarationIndices();
-}
-
-void DUContext::clearDeclarationIndices()
-{
-  ENSURE_CAN_WRITE
-
-  foreach(Declaration* decl, localDeclarations())
-    decl->clearOwnIndex();
-  foreach(DUContext* child, childContexts())
-    child->clearDeclarationIndices();
-}
-
-void DUContext::updateDeclarationIndices()
-{
-  ENSURE_CAN_WRITE
-
-  foreach(Declaration* decl, localDeclarations())
-    decl->allocateOwnIndex();
-  foreach(DUContext* child, childContexts())
-    child->clearDeclarationIndices();
 }
 
 bool DUContextDynamicData::removeChildContext( DUContext* context ) {
@@ -342,6 +346,9 @@ int DUContext::depth() const
 
 DUContext::DUContext(DUContextData& data) : DUChainBase(data), m_dynamicData(new DUContextDynamicData(this)) {
   ///@todo care about symbol table when loading
+  ///@todo correctly re-create the index
+/*  if(parent)
+    m_dynamicData->m_indexInTopContext = topContext()->m_dynamicData->allocateContextIndex(isAnonymous());*/
 }
 
 
@@ -364,6 +371,13 @@ DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous
 
   if(parent && !anonymous && parent->inSymbolTable())
     setInSymbolTable(true);
+
+  if(parent)
+    m_dynamicData->m_indexInTopContext = topContext()->m_dynamicData->allocateContextIndex(this, isAnonymous());
+}
+
+bool DUContext::isAnonymous() const {
+  return d_func()->m_anonymousInParent || (m_dynamicData->m_parentContext && m_dynamicData->m_parentContext->isAnonymous());
 }
 
 DUContext::DUContext( DUContextData& dd, const SimpleRange& range, DUContext * parent, bool anonymous )
@@ -380,6 +394,9 @@ DUContext::DUContext( DUContextData& dd, const SimpleRange& range, DUContext * p
     else
       m_dynamicData->m_parentContext = parent;
   }
+
+if(parent)
+    m_dynamicData->m_indexInTopContext = topContext()->m_dynamicData->allocateContextIndex(this, isAnonymous());
 }
 
 DUContext::DUContext(DUContext& useDataFrom)

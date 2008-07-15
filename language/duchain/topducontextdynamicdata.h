@@ -1,0 +1,75 @@
+/* This  is part of KDevelop
+    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef TOPDUCONTEXTDYNAMICDATA_H
+#define TOPDUCONTEXTDYNAMICDATA_H
+
+#include <QVector>
+#include <QMutex>
+
+namespace KDevelop {
+
+class TopDUContext;
+class DUContext;
+class Declaration;
+
+///This class contains dynamic data of a top-context, and also the repository that contains all the data within this top-context.
+class TopDUContextDynamicData {
+  public:
+  TopDUContextDynamicData(TopDUContext* topContext);
+  ~TopDUContextDynamicData();
+  
+  /**
+   * Allocates an index for the given declaration in this top-context.
+   * The returned index is never zero.
+   * @param anonymous whether the declaration is temporary. If it is, it will be stored separately, not stored to disk,
+   *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
+  */
+  uint allocateDeclarationIndex(Declaration* decl, bool temporary);
+  
+  Declaration* getDeclarationForIndex(uint index) const;
+  
+  void clearDeclarationIndex(Declaration* decl);
+
+  /**
+   * Allocates an index for the given context in this top-context.
+   * The returned index is never zero.
+   * @param anonymous whether the context is temporary. If it is, it will be stored separately, not stored to disk,
+   *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
+  */
+  uint allocateContextIndex(DUContext* ctx, bool temporary);
+  
+  DUContext* getContextForIndex(uint index) const;
+  
+  void clearContextIndex(DUContext* ctx);
+  
+  private:
+    //May contain zero contexts if they were deleted
+    QVector<DUContext*> m_contexts;
+    //May contain zero declarations if they were deleted
+    QVector<Declaration*> m_declarations;
+    
+    //Protects m_temporaryDeclarations, must be locked before accessing that vector
+    static QMutex m_temporaryDataMutex;
+    //For temporary declarations that will not be stored to disk, like template instantiations
+    QVector<Declaration*> m_temporaryDeclarations;
+    QVector<DUContext*> m_temporaryContexts;
+};
+}
+
+#endif

@@ -40,7 +40,6 @@ namespace KTextEditor {
 namespace KDevelop
 {
 
-class ContextOwner;
 class Declaration;
 class DUChain;
 class Use;
@@ -50,6 +49,29 @@ class DUContextData;
 
 //Foreach macro that also works with QVarLengthArray
 #define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)
+
+///Represents a context only by its global indices
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
+  public:
+    IndexedDUContext(DUContext* decl);
+    IndexedDUContext(uint topContext = 0, uint contextIndex = 0);
+    //Duchain must be read locked
+    DUContext* context() const;
+    bool operator==(const IndexedDUContext& rhs) const {
+      return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
+    }
+    uint hash() const {
+      return (m_topContext * 57 + m_contextIndex) * 29;
+    }
+
+    bool isValid() const {
+      return context() != 0;
+    }
+
+  private:
+  uint m_topContext;
+  uint m_contextIndex;
+};
 
 ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
 struct ImportTraceItem {
@@ -602,6 +624,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   ///Just uses the data from the given context(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
   DUContext(DUContext& useDataFrom);
 
+  ///Whether this context, or any of its parent contexts, has been inserted anonymously into the du-chain(@see DUContext::DUContext)
+  bool isAnonymous() const;
+  
   /**
    * This is called whenever the search needs to do the decision whether it should be continued in the parent context.
    * It is not called when the DontSearchInParent flag is set. Else this should be overriden to do language-specific logic.
@@ -610,6 +635,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
+  friend class IndexedDUContext;
+  friend class TopDUContextDynamicData;
   void synchronizeUsesFromSmart() const;
   void synchronizeUsesToSmart() const;
 

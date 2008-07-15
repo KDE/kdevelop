@@ -36,8 +36,9 @@
 #include "uses.h"
 #include <ext/hash_map>
 
-#include "ducontext_p.h"
+#include "ducontextdata.h"
 #include "duchainregister.h"
+#include "topducontextdynamicdata.h"
 
 //#define DEBUG_SEARCH
 
@@ -434,7 +435,7 @@ class TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0), m_currentDeclarationIndex(0)
+    : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0)
   {
   }
   
@@ -459,11 +460,6 @@ public:
    * Any declarations that are within the same top-context are considered local.
    * */
   QVector<DeclarationPointer> m_usedLocalDeclarations;
-
-  QHash<uint, Declaration*> m_declarationsForIndices;
-  QHash<Declaration*, uint> m_indicesForDeclarations;
-
-  uint m_currentDeclarationIndex;
 };
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
@@ -602,12 +598,12 @@ uint TopDUContext::ownIndex() const
   return m_local->m_ownIndex;
 }
 
-TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())) {
+TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this)) {
 }
 
 
 TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+  : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
 {
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d_func_dynamic()->setClassId(this);
@@ -618,7 +614,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
 }
 
 TopDUContext::TopDUContext(TopDUContext* sharedDataOwner, ParsingEnvironmentFile* file)
-  : DUContext(*sharedDataOwner), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex()))
+  : DUContext(*sharedDataOwner), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex())), m_dynamicData(sharedDataOwner->m_dynamicData)
 {
   m_local->m_file = ParsingEnvironmentFilePointer(file);
 }
@@ -640,8 +636,19 @@ TopDUContext::~TopDUContext( )
     d_func_dynamic()->m_deleting = true;
     clearUsedDeclarationIndices();
   }
-  delete m_local;
 }
+
+void TopDUContext::deleteSelf() {
+  //We've got to make sure that m_dynamicData and m_local are still valid while all the sub-contexts are destroyed
+  TopDUContextLocalPrivate* local = m_local;
+  TopDUContextDynamicData* dynamicData = m_dynamicData;
+
+  delete this;
+  
+  delete local;
+  delete dynamicData;
+}
+
 
 void TopDUContext::setHasUses(bool hasUses)
 {
@@ -1210,39 +1217,9 @@ TopDUContext::Cache::~Cache() {
   delete d;
 }
 
-Declaration* TopDUContext::declarationForIndex(uint index) const {
-  QHash<uint, Declaration*>::const_iterator it = d_func()->m_declarationsForIndices.find(index);
-  if(it != d_func()->m_declarationsForIndices.end())
-    return *it;
-  else
-    return 0;
-}
-
-///Returns the index for the given declaration, which must be part of this top-context. Returns the same value as Declaration::ownIndex
-uint TopDUContext::indexForDeclaration(Declaration* decl) {
-  Q_ASSERT(decl->topContext() == this);
-  QHash<Declaration*, uint>::const_iterator it = d_func()->m_indicesForDeclarations.find(decl);
-  if(it != d_func()->m_indicesForDeclarations.constEnd()) {
-    return *it;
-  }else{
-    //Add the declaration to the index
-    d_func_dynamic()->m_indicesForDeclarations[decl] = ++d_func_dynamic()->m_currentDeclarationIndex;
-    d_func_dynamic()->m_declarationsForIndices[d_func()->m_currentDeclarationIndex] = decl;
-    return d_func()->m_currentDeclarationIndex;
-  }
-}
-
-void TopDUContext::removeDeclarationIndex(uint index) {
-  Declaration* decl = declarationForIndex(index);
-  Q_ASSERT(decl);
-  d_func_dynamic()->m_declarationsForIndices.remove(index);
-  d_func_dynamic()->m_indicesForDeclarations.remove(decl);
-}
-
 IndexedString TopDUContext::url() const {
   return d_func()->m_url;
 }
-
 
 }
 

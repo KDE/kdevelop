@@ -34,6 +34,7 @@ namespace KDevelop
   class ParsingEnvironmentFile;
   class TopDUContextData;
   class TopDUContextLocalPrivate;
+  class TopDUContextDynamicData;
   class Problem;
   class DeclarationChecker;
   class TopDUContext;
@@ -50,12 +51,18 @@ namespace KDevelop
  * @see DUContext::setInSymbolTable, Declaration::setInSymbolTable
  *
  * \todo move the registration with DUChain here
+ *
+ * @warning When you delete a top-context, delete it using TopDUContext::deleteSelf(), else you will leak memory
  */
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   explicit TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
   explicit TopDUContext(TopDUContextData& data);
+  
+  ///Call this to destroy a top-context.
+  void deleteSelf();
+  
   /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
    * (it must not have been created with this constructor).
    * 
@@ -71,7 +78,6 @@ public:
    * @warning When creating context with shared data, the shared ones always have to be deleted before the owner is deleted.
    * */
   explicit TopDUContext(TopDUContext* shareDataFrom, ParsingEnvironmentFile* file = 0);
-  virtual ~TopDUContext();
 
   ///If this top-context uses the data from another top-context, this returns that one.
   TopDUContext* sharedDataOwner() const;
@@ -188,14 +194,6 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
-  ///Returns the declaration within this top-context that has the given index assigned(@see Declaration::ownIndex)
-  Declaration* declarationForIndex(uint index) const;
-  
-  ///Returns the index for the given declaration, which must be part of this top-context. Returns the same value as Declaration::ownIndex
-  uint indexForDeclaration(Declaration* decl);
-  
-  void removeDeclarationIndex(uint index);
-  
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */
@@ -259,8 +257,11 @@ protected:
   template<class Acceptor>
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const;
 
-private:
+protected:
 
+  virtual ~TopDUContext();
+private:
+  
   struct AliasChainElement;
   struct FindDeclarationsAcceptor;
   struct FindContextsAcceptor;
@@ -272,9 +273,17 @@ private:
   //Same as imports, without the slow access-check, for internal usage
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
+  
   friend class DUChain; //To allow access to setParsingEnvironmentFile
   friend class TopDUContextLocalPrivate;
+  friend class Declaration;
+  friend class DUContext;
+  friend class IndexedDeclaration;
+  friend class IndexedDUContext;
+  
   TopDUContextLocalPrivate* m_local;
+  
+  TopDUContextDynamicData* m_dynamicData;
 };
 
 /**

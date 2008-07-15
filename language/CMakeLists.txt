@@ -29,6 +29,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
     duchain/topducontext.cpp
+    duchain/topducontextdynamicdata.cpp
     duchain/declaration.cpp
     duchain/classmemberdeclaration.cpp
     duchain/classfunctiondeclaration.cpp

@@ -27,13 +27,14 @@
 #include <limits>
 
 #include "topducontext.h"
+#include "topducontextdynamicdata.h"
 #include "use.h"
 #include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
 #include "identifiedtype.h"
-#include "ducontext_p.h"
+#include "ducontextdata.h"
 #include "declarationid.h"
 #include "definitions.h"
 #include "uses.h"
@@ -57,7 +58,6 @@ DeclarationData::DeclarationData()
   m_internalContext = 0;
   m_context = 0;
   m_kind = Declaration::Instance;
-  m_ownIndex = 0;
 }
   
 DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs)
@@ -72,7 +72,6 @@ DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData
   m_internalContext = 0;
   m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
-  m_ownIndex = 0;
 }
   
 Declaration::Kind Declaration::kind() const {
@@ -97,6 +96,9 @@ Declaration::Declaration( const SimpleRange& range, DUContext* context )
   : DUChainBase(*new DeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
+  m_topContext = 0;
+  m_indexInTopContext = 0;
+  
   if(context)
     setContext(context);
 }
@@ -104,22 +106,27 @@ Declaration::Declaration( const SimpleRange& range, DUContext* context )
 uint Declaration::ownIndex() const
 {
   ENSURE_CAN_READ
-  return d_func()->m_ownIndex;
+  return m_indexInTopContext;
 }
 
 Declaration::Declaration(const Declaration& rhs) 
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
+  m_topContext = 0;
+  m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
 {
+  m_topContext = 0;
+  m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
   : DUChainBase(dd, range)
 {
-//  DUCHAIN_D(Declaration);
+  m_topContext = 0;
+  m_indexInTopContext = 0;
 }
 
 Declaration::~Declaration()
@@ -173,6 +180,16 @@ const Identifier& Declaration::identifier( ) const
 IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex) : m_topContext(topContext), m_declarationIndex(declarationIndex) {
 }
 
+IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
+  if(decl) {
+    m_topContext = decl->topContext()->ownIndex();
+    m_declarationIndex = decl->m_indexInTopContext;
+  }else{
+    m_topContext = 0;
+    m_declarationIndex = 0;
+  }
+}
+
 Declaration* IndexedDeclaration::declaration() const {
   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)
@@ -182,7 +199,7 @@ Declaration* IndexedDeclaration::declaration() const {
   if(!ctx)
     return 0;
   
-  return ctx->declarationForIndex(m_declarationIndex);
+  return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
@@ -262,6 +279,7 @@ DUContext * Declaration::context() const
 
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
+  Q_ASSERT(!context || context->topContext());
   ///@todo re-enable. In C++ support we need a short window to put visible declarations into template contexts
   if(!specialization()) {
     ENSURE_CAN_WRITE
@@ -271,13 +289,18 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   clearOwnIndex();
   
+  if(context)
+    m_topContext = context->topContext();
+  else
+    m_topContext = 0;
+  
   DUCHAIN_D_DYNAMIC(Declaration);
   if (d->m_context && context)
     Q_ASSERT(d->m_context->topContext() == context->topContext());
 
   if (d->m_context) {
     if( !d->m_anonymousInContext ) {
-      d->m_context->m_dynamicData->removeDeclaration(this);// if( )
+      d->m_context->m_dynamicData->removeDeclaration(this);
         //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
     }
   }
@@ -300,25 +323,30 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
 void Declaration::clearOwnIndex() {
   
-  if(!d_func()->m_ownIndex)
+  if(!m_indexInTopContext)
     return;
   
-  ENSURE_CAN_WRITE
+  if(!context() || (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
+    ENSURE_CAN_WRITE
+  }
   
-  if(d_func()->m_ownIndex && d_func()->m_context->topContext())
-    d_func()->m_context->topContext()->removeDeclarationIndex(d_func()->m_ownIndex);
-  d_func_dynamic()->m_ownIndex = 0;
+  if(m_indexInTopContext) {
+    Q_ASSERT(m_topContext);
+    m_topContext->m_dynamicData->clearDeclarationIndex(this);
+  }
+  m_indexInTopContext = 0;
 }
 
 void Declaration::allocateOwnIndex() {
-  if(d_func()->m_anonymousInContext || specialization())
-    return;
   
-  ENSURE_CAN_WRITE
-  
-  Q_ASSERT(!d_func()->m_ownIndex);
-  if(d_func()->m_context->topContext())
-    d_func_dynamic()->m_ownIndex = d_func()->m_context->topContext()->indexForDeclaration(this);
+  if(!context() || (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
+    ENSURE_CAN_WRITE
+  }
+
+  Q_ASSERT(m_topContext);
+
+  m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || context()->isAnonymous());
+  Q_ASSERT(m_indexInTopContext);
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
@@ -444,7 +472,7 @@ DeclarationId Declaration::id() const
   if(inSymbolTable())
     return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
-    return DeclarationId(indexed(), specialization());
+    return DeclarationId(IndexedDeclaration(const_cast<Declaration*>(this)), specialization());
 }
 
 Declaration* Declaration::declaration(TopDUContext* topContext) const
@@ -504,11 +532,7 @@ const ForwardDeclaration* Declaration::toForwardDeclaration() const
 
 TopDUContext * Declaration::topContext() const
 {
-  DUCHAIN_D(Declaration);
-  if (d->m_context)
-      return d->m_context->topContext();
-
-    return 0;
+  return m_topContext;
 }
 
 Declaration* Declaration::clone() const  {
@@ -590,11 +614,6 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
     }
   }
   return ret;
-}
-
-IndexedDeclaration Declaration::indexed() const {
-  ENSURE_CAN_READ
-  return IndexedDeclaration(topContext()->ownIndex(), ownIndex());
 }
 
 }

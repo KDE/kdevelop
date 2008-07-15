@@ -54,7 +54,8 @@ typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
 ///Represents a declaration only by its global indices
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
   public:
-    IndexedDeclaration(uint topContext = 0, uint declarationIndex = 0);
+    IndexedDeclaration(Declaration* decl = 0);
+    IndexedDeclaration(uint topContext, uint declarationIndex);
     //Duchain must be read locked
     Declaration* declaration() const;
     bool operator==(const IndexedDeclaration& rhs) const {
@@ -241,12 +242,6 @@ public:
   DUContext* context() const;
 
   /**
-   * Create an indexed reference to this declaration.
-   * \returns the indexed reference to this declaration.
-   */
-  IndexedDeclaration indexed() const;
-
-  /**
    * Set the context in which this declaration occurs.
    *
    * When setContext() is called, this declaration is inserted into the given context.
@@ -257,7 +252,7 @@ public:
    *  or if the context is zero, this declaration is removed from the symbol-table.
    * Else it is added to the symbol table with the new scope. See TopDUContext for information about the symbol table.
    *
-   * \param context New context which contains this declaration.
+   * \param context New context which contains this declaration. The context must have a top-context if it is not zero.
    * \param anonymous If this is set, this declaration will be added anonymously into the parent-context.
    *                  This way it can never be found through any of the context's functions, and will
    *                  not be deleted when the context is deleted, so it must be deleted from elsewhere.
@@ -471,6 +466,10 @@ protected:
   Declaration( DeclarationData & dd, const SimpleRange& range );
 
 private:
+  friend class IndexedDeclaration;
+  friend class TopDUContextDynamicData;
+  TopDUContext* m_topContext;
+  int m_indexInTopContext;
   DUCHAIN_DECLARE_DATA(Declaration)
 };
 
