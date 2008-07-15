@@ -603,7 +603,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             problem.setSource(KDevelop::Problem::Preprocessor);
             problem.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
             problem.setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
-            problem.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+            problem.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Range::invalid()));
         }
     }
 
@@ -836,7 +836,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
       break;
   }
 
-  for(uint pos = 0; pos < word.size(); ++pos) {
+  for(int pos = 0; pos < word.size(); ++pos) {
     ++wordRange.start.column;
     if(word[pos] == '"' || word[pos] == '<')
       break;
@@ -959,7 +959,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
         //Prefer a standardContext, because the included one may have become empty due to
         if(import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
 
-          KDevelop::TopDUContext* betterCtx = standardContext(KUrl::fromPathOrUrl(import.first->url().str()));
+          KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
 
           if(betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0))
             return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
