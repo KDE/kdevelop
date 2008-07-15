@@ -88,9 +88,13 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case File:
                         return p->finalLocation().document().str();
                     case Line:
-                        return QString::number(p->finalLocation().start().line() + 1);
+                        if (p->finalLocation().isValid())
+                            return QString::number(p->finalLocation().start().line() + 1);
+                        break;
                     case Column:
-                        return QString::number(p->finalLocation().start().column() + 1);
+                        if (p->finalLocation().isValid())
+                            return QString::number(p->finalLocation().start().column() + 1);
+                        break;
                 }
                 break;
 
@@ -110,9 +114,13 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case File:
                         return p->locationStack().at(index.row()).document().str();
                     case Line:
-                        return QString::number(p->locationStack().at(index.row()).line() + 1);
+                        if (p->finalLocation().isValid())
+                            return QString::number(p->finalLocation().start().line() + 1);
+                        break;
                     case Column:
-                        return QString::number(p->locationStack().at(index.row()).column() + 1);
+                        if (p->finalLocation().isValid())
+                            return QString::number(p->finalLocation().start().column() + 1);
+                        break;
                 }
                 break;
 
