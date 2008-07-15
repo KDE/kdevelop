@@ -452,9 +452,12 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         KUrl folderurl = item->url();
         folderurl.addPath( entry );
         
-        if( QFileInfo( folderurl.toLocalFile() ).isDir() )
+        KUrl cache=folderurl;
+        cache.addPath("CMakeCache.txt");
+        if( QFileInfo( folderurl.toLocalFile() ).isDir())
         {
-            folderList.append(new KDevelop::ProjectFolderItem( item->project(), folderurl, item ));
+            if(!QFile::exists(cache.toLocalFile()))
+                folderList.append(new KDevelop::ProjectFolderItem( item->project(), folderurl, item ));
         }
         else
         {
