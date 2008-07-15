@@ -48,8 +48,6 @@ private slots:
     void parse();
     void initFailure();
     void cleanupFailure();
-    void spammer();
-    void spamMulti();
 
 private:
     void setupColumns();

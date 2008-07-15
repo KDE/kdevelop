@@ -166,9 +166,9 @@ void QTestOutputParser::appendMsg()
 {
     while (!atEnd() && !isEndElement_(c_message)) {
         readNext();
-        if (isStartElement_(c_description)) {
+/*        if (isStartElement_(c_description)) {
             m_result->addOutputLine(readElementText().toAscii());
-        }
+        }*/
     }
 }
 
