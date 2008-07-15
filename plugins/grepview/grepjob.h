@@ -73,7 +73,6 @@ private:
     static QString escape(const QString &str);
     GrepViewPlugin* plugin() const;
     
-    KDevelop::IOutputView *m_view;
     KDevelop::ProcessLineMaker* m_lineMaker;
     QList<KProcess*> m_processes;
     
