@@ -66,7 +66,6 @@ private slots:
 private:
     void expandSome();
     void selectSome();
-    void assertOutputLineEquals(const QModelIndex&, const QString&);
     void assertResultItemEquals(const QModelIndex&, const QString&);
 
     typedef bool (RunnerWindowTest::*checkMemberFun)(TestStub*);
@@ -77,7 +76,6 @@ private:
     bool isCollapsed(TestStub*);
 
     void checkNrofSelectedStatusWidget(int);
-    void convert2Spammer(TestStub*);
     void runAllTests();
     void printModel(const QModelIndex& mi, int);
 

@@ -97,18 +97,6 @@ void TestResult::clear()
     d->m_file = QFileInfo();
 }
 
-/*TestResult& TestResult::operator=(const TestResult& that)
-{
-    if (*this != that) {
-        d->m_state = that.d->m_state;
-        d->m_file = that.d->m_file;
-        d->m_line = that.d->m_line;
-        d->m_message = that.d->m_message;
-    }
-    return *this;
-}
-*/
-
 bool TestResult::operator==(const TestResult& other) const
 {
     return (d->m_state == other.d->m_state) &&
@@ -116,11 +104,6 @@ bool TestResult::operator==(const TestResult& other) const
            (d->m_line == other.d->m_line) &&
            (d->m_message == other.d->m_message);
 }
-
-// bool TestResult::operator!=(const TestResult& other)
-// {
-//     return !(*this==other);
-// }
 
 void TestResult::log() const
 {
@@ -139,17 +122,17 @@ void TestResult::log() const
     kDebug() << result << " " << d->m_message << " " << d->m_file.filePath() << " " << d->m_line;
 }
 
-void TestResult::addOutputLine(const QByteArray& line)
-{
-    m_output.append(line);
-}
-
-int TestResult::outputLineCount() const
-{
-    return m_output.count();
-}
-
-QByteArray TestResult::outputLine(int i) const
-{
-    return m_output.value(i);
-}
+// void TestResult::addOutputLine(const QByteArray& line)
+// {
+//     m_output.append(line);
+// }
+// 
+// int TestResult::outputLineCount() const
+// {
+//     return m_output.count();
+// }
+// 
+// QByteArray TestResult::outputLine(int i) const
+// {
+//     return m_output.value(i);
+// }

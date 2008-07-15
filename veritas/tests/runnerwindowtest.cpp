@@ -228,16 +228,6 @@ void RunnerWindowTest::newModel()
 }
 
 // helper
-void RunnerWindowTest::convert2Spammer(TestStub* test)
-{
-    TestResult* r = new TestResult;
-    r->addOutputLine("line 1");
-    r->addOutputLine("line 2");
-    test->m_state = Veritas::RunError;
-    test->m_result = r;
-}
-
-// helper
 void RunnerWindowTest::runAllTests()
 {
     // invoke the run action
@@ -261,17 +251,7 @@ void RunnerWindowTest::assertResultItemEquals(const QModelIndex& i, const QStrin
     KVERIFY(!resv->isFirstColumnSpanned(i.row(),QModelIndex()));
 }
 
-// helper
-void RunnerWindowTest::assertOutputLineEquals(const QModelIndex& i, const QString& content)
-{
-    QTreeView* resv = window->resultsView();
-
-    KVERIFY_MSG(i.isValid(), "Not enough outputlines in the result tree view.");
-    KOMPARE(content, m_resultsProxy->data(i, Qt::DisplayRole));
-    KVERIFY(resv->isFirstColumnSpanned(i.row(), i.parent()));
-
-}
-
+// debug helper
 void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
 {
     QModelIndex i = mi;
@@ -285,7 +265,7 @@ void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
         kDebug() << space << i.row()
                  << i.model()->data(i, Qt::DisplayRole).toString();
         if (i.child(0,0).isValid()) {
-            printModel(i.child(0,0), ++lvl);
+            printModel(i.child(0,0), lvl+1);
         }
         i = i.sibling(i.row()+1, 0);
     }

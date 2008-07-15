@@ -61,14 +61,14 @@ public:
     void setLine(int);
     void setFile(QFileInfo);
 
-    void addOutputLine(const QByteArray& line);
-    int outputLineCount() const;
-    QByteArray outputLine(int i) const;
+//     void addOutputLine(const QByteArray& line);
+//     int outputLineCount() const;
+//     QByteArray outputLine(int i) const;
     bool operator==(const TestResult&) const;
     void clear();
 
     void log() const; // debug
-    QList<QByteArray> m_output;
+//     QList<QByteArray> m_output;
 
 private:
     TestResult& operator=(const TestResult&);

@@ -194,11 +194,6 @@ void Test::setResult(TestResult* res)
         setData(3, res->file().filePath());
         setData(4, res->line());
         setState(res->state());
-        if (res->state() == Veritas::RunSuccess) {
-            // do not store the spam output, this consumes
-            // too much.
-            res->m_output.clear();
-        }
     }
 }
 
