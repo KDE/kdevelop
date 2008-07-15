@@ -26,6 +26,8 @@
 #include "indexedstring.h"
 #include <ext/hash_map>
 
+const unsigned int cacheModTimeForSeconds = 2;
+
 namespace KDevelop {
 
 struct IndexedStringHash {
@@ -53,25 +55,35 @@ struct FileModificationCache {
 #else    
     typedef __gnu_cxx::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
 #endif
-  
-QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
-  static FileModificationMap fileModificationCache;
-  static QDateTime currentDateTime = QDateTime::currentDateTime();
 
-  FileModificationMap::const_iterator it = fileModificationCache.find( fileName );
-  if( it != fileModificationCache.end() ) {
-    ///Use the cache for 10 seconds
-    if( (*it).second.m_readTime.secsTo( currentDateTime ) < 10 ) {
+FileModificationMap& fileModificationCache() {
+  static FileModificationMap cache;
+  return cache;
+}
+
+QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
+  QDateTime currentDateTime = QDateTime::currentDateTime();
+
+  FileModificationMap::const_iterator it = fileModificationCache().find( fileName );
+  if( it != fileModificationCache().end() ) {
+    ///Use the cache for X seconds
+    if( (*it).second.m_readTime.secsTo( currentDateTime ) < cacheModTimeForSeconds ) {
       return (*it).second.m_modificationTime;
     }
   }
 
   ///@todo support non-local files
   QFileInfo fileInfo( fileName.str() );
-  fileModificationCache[fileName].m_readTime = QDateTime::currentDateTime();
-  fileModificationCache[fileName].m_modificationTime = fileInfo.lastModified();
+  fileModificationCache()[fileName].m_readTime = QDateTime::currentDateTime();
+  fileModificationCache()[fileName].m_modificationTime = fileInfo.lastModified();
   return fileInfo.lastModified();
 
+}
+
+void ModificationRevision::clearModificationCache(const IndexedString& fileName) {
+  FileModificationMap::iterator it = fileModificationCache().find(fileName);
+  if(it != fileModificationCache().end())
+    fileModificationCache().erase(it);
 }
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url) {
