@@ -21,7 +21,8 @@
 #include "cmakebuilddircreator.h"
 #include <QScrollBar>
 #include <QDir>
-#include <kdebug.h>
+#include <KDebug>
+#include <KMessageBox>
 #include "ui_cmakebuilddircreator.h"
 
 CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, Qt::WindowFlags f)
@@ -54,10 +55,16 @@ void CMakeBuildDirCreator::runBegin()
         kDebug(9042) << "Installing to: " << installPrefix();
         kDebug(9042) << "Build directory: " << buildFolder();
 
-        QFileInfo f( buildFolder().toLocalFile() );
-        if( !f.exists() )
+        QDir d( buildFolder().toLocalFile() );
+        if( !d.exists() )
         {
-            QDir::root().mkpath(f.absolutePath() );
+            int ret=KMessageBox::warningContinueCancel(0,
+                        i18n("The %1 directory doesn't exist, but is needed before the build directory is created.\n"
+                            "Do you want KDevelop to create it for you?", buildFolder().toLocalFile()));
+            if(ret==KMessageBox::Continue)
+            {
+                QDir::root().mkpath(d.absolutePath() );
+            }
         }
 
         args += m_srcFolder.toLocalFile();
@@ -156,7 +163,7 @@ void CMakeBuildDirCreator::updated()
     }
 
     bool emptyUrl=m_creatorUi->buildFolder->url().isEmpty();
-    bool alreadyCreated=false, correctProject=false, dirExists = false, dirEmpty = false;
+    bool alreadyCreated=false, correctProject=false, dirEmpty = false, dirExists=false;
     QString srcDir;
     if(!emptyUrl)
     {
@@ -198,19 +205,14 @@ void CMakeBuildDirCreator::updated()
         m_creatorUi->status->setText(i18n("Using an already created build directory"));
         m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
-    else if(!dirExists)
-    {
-        m_creatorUi->installPrefix->setEnabled(false);
-        m_creatorUi->buildType->setEnabled(false);
-//         m_creatorUi->generator->setEnabled(dirEmpty);
-        m_creatorUi->run->setEnabled(false);
-        m_creatorUi->status->setText(i18n("Using a missing build directory, please create it first"));
-        m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-    }
     else
     {
-        bool enabled=false;
-        if( !dirEmpty && dirExists )
+        bool correct=dirEmpty || !dirExists;
+        if(correct)
+        {
+            m_creatorUi->status->setText(i18n("Click the Run button to run CMake"));
+        }
+        else
         {
             //Useful to prevent disasters
             if(alreadyCreated)
@@ -219,15 +221,11 @@ void CMakeBuildDirCreator::updated()
                 m_creatorUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
         }
-        else
-        {
-            m_creatorUi->status->setText(i18n("Click the Run button to run CMake"));
-            enabled=true;
-        }
-        m_creatorUi->installPrefix->setEnabled(enabled);
-        m_creatorUi->buildType->setEnabled(enabled);
-//         m_creatorUi->generator->setEnabled(enabled);
-        m_creatorUi->run->setEnabled(enabled);
+        
+        m_creatorUi->installPrefix->setEnabled(correct);
+        m_creatorUi->buildType->setEnabled(correct);
+//         m_creatorUi->generator->setEnabled(correct);
+        m_creatorUi->run->setEnabled(correct);
         m_creatorUi->run->setText(i18n("&Run"));
         m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
@@ -252,8 +250,6 @@ QString CMakeBuildDirCreator::buildType() const { return m_creatorUi->buildType-
 QString CMakeBuildDirCreator::executeProcess(const QString& execName, const QStringList& args)
 {
     kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-
-
 
     KProcess p;
     p.setOutputChannelMode(KProcess::MergedChannels);
