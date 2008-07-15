@@ -136,6 +136,7 @@ public:
     }
 };
 
+
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
 {

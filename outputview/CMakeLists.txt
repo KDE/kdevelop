@@ -14,7 +14,7 @@ set( outputviewinterfaces_LIB_SRCS
 )
 kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
 target_link_libraries(kdevplatformoutputview ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} kdevplatforminterfaces  )
-set_target_properties(kdevplatformoutputview PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
+set_target_properties(kdevplatformoutputview PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformoutputview ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
  ########### install files ###############
