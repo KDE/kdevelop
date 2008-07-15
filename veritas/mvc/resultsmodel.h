@@ -46,8 +46,7 @@ class Test;
  *
  * \sa \ref results_model and \ref runner_item_index
  */
-class ResultsModel : //public QAbstractListModel
-                    public QAbstractItemModel
+class ResultsModel : public QAbstractListModel
 {
 Q_OBJECT
 public: // Operations
@@ -61,7 +60,7 @@ public: // Operations
     /*!
      * Destroys this results model.
      */
-    ~ResultsModel();
+    virtual ~ResultsModel();
 
     /*!
      * Returns the data stored under the given \a role for the item
@@ -106,17 +105,15 @@ public: // Operations
      */
     QModelIndex mapFromTestIndex(const QModelIndex& testItemIndex) const;
 
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex& index) const;
+    /*!
+     * Concatenates mapFromTestIndex and itemFromIndex
+     */
+    Test* testFromIndex(const QModelIndex& i) const;
 
-    QString debug() const;
-    Test* testFromIndex(const QModelIndex& i) const {
-        QModelIndex j = mapFromTestIndex(i);
-        return itemFromIndex(j);
-    }
-    void changed() {
-        emit dataChanged(index(0,0), index(rowCount(), 0));
-    }
+    /*!
+     * Trigger a model update
+     */
+    void changed();
 
 public slots:
 
@@ -137,21 +134,16 @@ private: // Operations
      * Returns the runner item referred to by \a testItemIndex.
      */
     Test* itemFromIndex(const QModelIndex& testItemIndex) const;
-    bool isTopLevel(const QModelIndex& i) const;
 
     // Copy and assignment not supported.
     ResultsModel(const ResultsModel&);
     ResultsModel& operator=(const ResultsModel&);
 
 private: // Attributes
-    typedef QMap<const char*, int> ResultMap;
-    typedef QMap<qint64, int> TestMap;
-    typedef QList<QPersistentModelIndex> RunnerList;
-
     QStringList m_headerData;
-    RunnerList m_result2runner;  // maps result rows to runner indices
-    TestMap m_runner2result;     // maps runner id's to result rows
-    ResultMap m_output2result;   // maps output lines back to the result-row that owns it
+    QList<QPersistentModelIndex> m_testItemIndexes;
+    typedef QMap<qint64, int> TestMap;
+    TestMap m_testItemMap;
 };
 
 } // namespace

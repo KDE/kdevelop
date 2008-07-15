@@ -251,25 +251,6 @@ void RunnerWindowTest::runAllTests()
     //QTest::qWait(5000);
 }
 
-// command
-void RunnerWindowTest::ouputLinesSpanned()
-{
-    convert2Spammer(model->child11);
-    runAllTests();
-
-    // decomment line below to inspect the runner window
-    // manually
-    //QTest::qWait(5000);
-
-    // since some extra output was appended to the test,
-    // the result view should contain this.
-    QModelIndex r1 = m_resultsProxy->index(0,0);
-    assertResultItemEquals(r1, "child11");
-    assertOutputLineEquals(r1.child(0,0), "line 1");
-    assertOutputLineEquals(r1.child(1,0), "line 2");
-    KVERIFY(!r1.child(2,0).isValid());
-}
-
 // helper
 void RunnerWindowTest::assertResultItemEquals(const QModelIndex& i, const QString& content)
 {
@@ -308,24 +289,6 @@ void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
         }
         i = i.sibling(i.row()+1, 0);
     }
-}
-
-// command
-void RunnerWindowTest::resultSpamLastItem()
-{
-    convert2Spammer(model->child21);
-    runAllTests();
-/*
-    kDebug() << "RESULTSMODEL";
-    printModel(window->resultsModel()->index(0,0), 0);
-    kDebug() << "RESULTPROXYMODEL";
-    printModel(window->resultsProxyModel()->index(0,0), 0);*/
-
-    QModelIndex r2 = m_resultsProxy->index(0,0);
-    assertResultItemEquals(r2, "child21");
-    assertOutputLineEquals(r2.child(0,0), "line 1");
-    assertOutputLineEquals(r2.child(1,0), "line 2");
-    KVERIFY(!r2.child(2,0).isValid());
 }
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

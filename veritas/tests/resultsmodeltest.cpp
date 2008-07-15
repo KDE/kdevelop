@@ -85,30 +85,6 @@ void ResultsModelTest::appendResults()
     checkRow(1);
 }
 
-// command
-void ResultsModelTest::extraOutput()
-{
-    TestResult* r = new TestResult;
-    r->setState(Veritas::RunError);
-    r->setMessage("failed");
-    r->addOutputLine("line1");
-    r->addOutputLine("line2");
-    m_runnerModel->item1->setResult(r);
-    fillRows();
-
-    QModelIndex res1 = m_model->index(0,0);
-    KVERIFY(res1.isValid());
-    QModelIndex c1 = m_model->index(0,0, res1);
-    KVERIFY_MSG(c1.isValid(), m_model->debug());
-    KOMPARE("line1", m_model->data(c1, Qt::DisplayRole));
-    QModelIndex c2 = res1.child(1,0);
-    KVERIFY_MSG(c2.isValid(), m_model->debug());
-    KOMPARE("line2", m_model->data(c2, Qt::DisplayRole));
-    QModelIndex c3 = res1.child(2,0);
-    KVERIFY(!c3.isValid());
-}
-
-
 // test command
 void ResultsModelTest::mapIndices()
 {

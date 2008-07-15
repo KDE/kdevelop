@@ -62,8 +62,6 @@ private slots:
     void collapseAll();
     void deselectItems();
     void newModel();
-    void ouputLinesSpanned();
-    void resultSpamLastItem();
 
 private:
     void expandSome();
