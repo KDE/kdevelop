@@ -27,7 +27,7 @@
 #include <QtCore/QStack>
 #include <QTime>
 
-#if defined(Q_OS_MACX) && defined(Q_CC_GNU)
+#if (defined(Q_OS_MACX) || defined(Q_WS_WIN)) && defined(Q_CC_GNU)
 // hash_map in OS X's gcc throws really interesting errors, so fall back to QHash
 #  define USE_QT_HASH
 #endif
