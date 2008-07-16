@@ -152,11 +152,11 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   }
   
   foreach (DUContext::Import parent, context->importedParentContexts()) {
-    if( parent.context ) {
+    if( parent.context.data() ) {
       stream << dotGraphInternal(parent.context.data(), false, true);
       QString label = "imports";
-      if( (!dynamic_cast<TopDUContext*>(parent.context.data()) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context->url() == context->url()) ) {
-        label += " from " + KUrl(parent.context->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
+      if( (!dynamic_cast<TopDUContext*>(parent.context.data()) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context.data()->url() == context->url()) ) {
+        label += " from " + KUrl(parent.context.data()->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
       }
       
       stream << shortLabel(context) << " -> " << shortLabel(parent.context.data()) << "[style=dotted,label=\"" << label  << "\"];\n";

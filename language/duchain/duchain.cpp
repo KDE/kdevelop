@@ -148,14 +148,16 @@ void DUChain::removeDocumentChain( const  IdentifiedFile& document )
   kDebug(9505) << "duchain: removing document" << document.toString();
   if (sdDUChainPrivate->m_chains.contains(document)) {
     TopDUContext* context = sdDUChainPrivate->m_chains.take(document);
-    sdDUChainPrivate->m_chainsByIndex.remove( context->ownIndex() );
+    uint index = context->ownIndex();
 
     if (context->smartRange())
       ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
 
     branchRemoved(context);
 
-    delete context;
+    context->deleteSelf();
+    
+    sdDUChainPrivate->m_chainsByIndex.remove( index );
   }
 }
 

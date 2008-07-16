@@ -55,8 +55,6 @@ DeclarationData::DeclarationData()
   : m_isDefinition(false), m_inSymbolTable(false),  
     m_isTypeAlias(false), m_anonymousInContext(false), m_comment(0)
 {
-  m_internalContext = 0;
-  m_context = 0;
   m_kind = Declaration::Instance;
 }
   
@@ -68,8 +66,6 @@ DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData
   m_isDefinition = rhs.m_isDefinition;
   m_isTypeAlias = rhs.m_isTypeAlias;
   m_inSymbolTable = false;
-  m_context = 0;
-  m_internalContext = 0;
   m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
 }
@@ -88,6 +84,8 @@ bool Declaration::inDUChain() const {
   DUCHAIN_D(Declaration);
   if( d->m_anonymousInContext )
     return false;
+  if( !context() )
+    return false;
   TopDUContext* top = topContext();
   return top && top->inDuChain();
 }
@@ -97,6 +95,7 @@ Declaration::Declaration( const SimpleRange& range, DUContext* context )
 {
   d_func_dynamic()->setClassId(this);
   m_topContext = 0;
+  m_context = 0;
   m_indexInTopContext = 0;
   
   if(context)
@@ -113,12 +112,14 @@ Declaration::Declaration(const Declaration& rhs)
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
   m_topContext = 0;
+  m_context = 0;
   m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
 {
   m_topContext = 0;
+  m_context = 0;
   m_indexInTopContext = 0;
 }
 
@@ -126,6 +127,7 @@ Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
   : DUChainBase(dd, range)
 {
   m_topContext = 0;
+  m_context = 0;
   m_indexInTopContext = 0;
 }
 
@@ -133,8 +135,8 @@ Declaration::~Declaration()
 {
   DUCHAIN_D_DYNAMIC(Declaration);
   // Inserted by the builder after construction has finished.
-  if( d->m_internalContext )
-    d->m_internalContext->setOwner(0);
+  if( d->m_internalContext.context() )
+    d->m_internalContext.context()->setOwner(0);
   
   if (d->m_inSymbolTable) {
     SymbolTable::self()->removeDeclaration(this);
@@ -142,9 +144,12 @@ Declaration::~Declaration()
   }
 
   // context is only null in the test cases
-  if (context())
-    context()->m_dynamicData->removeDeclaration(this);
+  if (context() && !d->m_anonymousInContext) {
+    Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
+  }
 
+  clearOwnIndex();
+  
   setContext(0);
 
   setAbstractType(AbstractType::Ptr());
@@ -210,8 +215,8 @@ void Declaration::setIdentifier(const Identifier& identifier)
   
   setInSymbolTable(false);
     
-  if( d->m_context && !d->m_anonymousInContext )
-    d->m_context->changingIdentifier( this, d->m_identifier, identifier );
+  if( m_context && !d->m_anonymousInContext )
+    m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
   
@@ -253,7 +258,7 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   ENSURE_CAN_READ
   
   QualifiedIdentifier ret;
-  DUContext* ctx = d_func()->m_context;
+  DUContext* ctx = m_context;
   if(ctx)
     ret = ctx->scopeIdentifier(true);
   ret.push(d_func()->m_identifier);
@@ -274,7 +279,7 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
 DUContext * Declaration::context() const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
-  return d_func()->m_context;
+  return m_context;
 }
 
 void Declaration::setContext(DUContext* context, bool anonymous)
@@ -287,37 +292,41 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   setInSymbolTable(false);
 
-  clearOwnIndex();
+  //We don't need to clear, because it's not allowed to move from one top-context into another
+//   clearOwnIndex();
   
+  
+  DUCHAIN_D_DYNAMIC(Declaration);
+  if (m_context && context) {
+    Q_ASSERT(m_context->topContext() == context->topContext());
+  }
+
+  if (m_context) {
+    if( !d->m_anonymousInContext ) {
+      m_context->m_dynamicData->removeDeclaration(this);
+        //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
+    }
+  }
+
   if(context)
     m_topContext = context->topContext();
   else
     m_topContext = 0;
   
-  DUCHAIN_D_DYNAMIC(Declaration);
-  if (d->m_context && context)
-    Q_ASSERT(d->m_context->topContext() == context->topContext());
-
-  if (d->m_context) {
-    if( !d->m_anonymousInContext ) {
-      d->m_context->m_dynamicData->removeDeclaration(this);
-        //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, d->m_context);
-    }
-  }
-
-  d->m_context = context;
+  m_context = context;
   d->m_anonymousInContext = anonymous;
 
   if (context) {
+    if(!m_indexInTopContext)
+      allocateOwnIndex();
+    
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
-      //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, d->m_context);
+      //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
     }
 
     if(context->inSymbolTable() && !anonymous)
       setInSymbolTable(true);
-    
-    allocateOwnIndex();
   }
 }
 
@@ -339,13 +348,13 @@ void Declaration::clearOwnIndex() {
 
 void Declaration::allocateOwnIndex() {
   
-  if(!context() || (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
+  if(context() && (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
     ENSURE_CAN_WRITE
   }
 
   Q_ASSERT(m_topContext);
 
-  m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || context()->isAnonymous());
+  m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || !context() || context()->isAnonymous());
   Q_ASSERT(m_indexInTopContext);
 }
 
@@ -394,18 +403,26 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
 DUContext * Declaration::internalContext() const
 {
   ENSURE_CAN_READ
-  return d_func()->m_internalContext;
+  return d_func()->m_internalContext.context();
 }
 
 void Declaration::setInternalContext(DUContext* context)
 {
-  ENSURE_CAN_WRITE
+  if(this->context()) {
+    ENSURE_CAN_WRITE
+  }
   DUCHAIN_D_DYNAMIC(Declaration);
 
-  if( context == d->m_internalContext )
+  if( context == d->m_internalContext.context() )
     return;
 
-  DUContext* oldInternalContext = d->m_internalContext;
+  if(!m_topContext) {
+    //Take the top-context from the other side. We need to allocate an index, so we can safely call setOwner(..)
+    m_topContext = context->topContext();
+    allocateOwnIndex();
+  }
+  
+  DUContext* oldInternalContext = d->m_internalContext.context();
   
   d->m_internalContext = context;
 
@@ -414,8 +431,8 @@ void Declaration::setInternalContext(DUContext* context)
     oldInternalContext->setOwner(0);
   
 
-  if( d->m_internalContext )
-    d->m_internalContext->setOwner(this);
+  if( context )
+    context->setOwner(this);
 }
 
 
@@ -560,7 +577,7 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   if(d->m_identifier != rhs->d_func()->m_identifier)
     return false;
   
-  return d->m_context->equalScopeIdentifier(d->m_context);
+  return m_context->equalScopeIdentifier(m_context);
 }
 
 QList<KTextEditor::SmartRange*> Declaration::smartUses() const

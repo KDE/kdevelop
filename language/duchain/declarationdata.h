@@ -39,7 +39,7 @@ public:
 
   DeclarationData( const DeclarationData& rhs );
 
-  DUContext* m_context, *m_internalContext;
+  IndexedDUContext m_internalContext;
   IndexedType m_type;
   Identifier m_identifier;
 

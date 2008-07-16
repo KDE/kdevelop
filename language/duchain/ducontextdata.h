@@ -47,13 +47,13 @@ public:
   DUContextData();
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
-  Declaration* m_owner;
+  IndexedDeclaration m_owner;
   QVector<DUContext::Import> m_importedContexts;
-  QVector<DUContext*> m_childContexts;
-  QVector<DUContext*> m_importers;
+  QVector<IndexedDUContext> m_childContexts;
+  QVector<IndexedDUContext> m_importers;
 
   ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
-  QVector<Declaration*> m_localDeclarations;
+  QVector<IndexedDeclaration> m_localDeclarations;
   /**
    * Vector of all uses in this context
    * Mutable for range synchronization
@@ -72,6 +72,8 @@ public:
   DUContextDynamicData( DUContext* );
   DUContextPointer m_parentContext;
 
+  TopDUContext* m_topContext;
+  
   //Use DeclarationPointer instead of declaration, so we can locate management-problems
   typedef QMultiHash<Identifier, DeclarationPointer> DeclarationsHash;
   

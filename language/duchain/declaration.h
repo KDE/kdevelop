@@ -58,6 +58,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     IndexedDeclaration(uint topContext, uint declarationIndex);
     //Duchain must be read locked
     Declaration* declaration() const;
+    
+    Declaration* data() const {
+      return declaration();
+    }
+    
     bool operator==(const IndexedDeclaration& rhs) const {
       return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
@@ -67,6 +72,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
 
     bool isValid() const {
       return declaration() != 0;
+    }
+
+    bool operator<(const IndexedDeclaration& rhs) const {
+      return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
     }
 
   private:
@@ -199,6 +208,7 @@ public:
    * For example, a class will have a declaration which is contained within the context in which
    * it is declared, and a new context will be created to hold class members.  This function returns
    * that context.
+   * The declaration has to be part of the same top-context.
    *
    * \returns the internal context for this declaration
    * */
@@ -468,6 +478,7 @@ protected:
 private:
   friend class IndexedDeclaration;
   friend class TopDUContextDynamicData;
+  DUContext* m_context;
   TopDUContext* m_topContext;
   int m_indexInTopContext;
   DUCHAIN_DECLARE_DATA(Declaration)

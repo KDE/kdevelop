@@ -57,6 +57,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
     IndexedDUContext(uint topContext = 0, uint contextIndex = 0);
     //Duchain must be read locked
     DUContext* context() const;
+    
+    DUContext* data() const {
+      return context();
+    }
+    
     bool operator==(const IndexedDUContext& rhs) const {
       return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
     }
@@ -66,6 +71,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
 
     bool isValid() const {
       return context() != 0;
+    }
+
+    bool operator<(const IndexedDUContext& rhs) const {
+      return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_contextIndex < rhs.m_contextIndex);
     }
 
   private:
@@ -166,6 +175,7 @@ public:
   Declaration* owner() const;
   /**
    * Sets the declaration/definition, and also updates it's internal context(they are strictly paired together)
+   * The declaration has to be part of the same top-context.
    * */
   void setOwner(Declaration* decl);
 
@@ -230,7 +240,7 @@ public:
 
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
-    DUContextPointer context;
+    IndexedDUContext context;
     bool operator==(const Import& rhs) const {
       return context == rhs.context;
     }
@@ -241,6 +251,7 @@ public:
    * Returns the list of imported parent contexts for this context.
    * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
    * @warning The import structure may contain loops if this is a TopDUContext, so be careful when traversing the tree.
+   * Expensive.
    */
   virtual QVector<Import> importedParentContexts() const;
 
@@ -289,13 +300,15 @@ public:
 
   /**
    * Returns the list of contexts importing this context.
+   * Expensive.
    */
   virtual QVector<DUContext*> importers() const;
 
   /**
    * Returns the list of immediate child contexts for this context.
+   * Expensive.
    */
-  const QVector<DUContext*>& childContexts() const;
+  const QVector<DUContext*> childContexts() const;
 
   /**
    * Clears and deletes all child contexts recursively.
