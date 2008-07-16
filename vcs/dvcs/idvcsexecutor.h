@@ -88,7 +88,7 @@ public:
     virtual DVCSjob* status(const QString & repo, const KUrl::List & files,
                             bool recursive=false, bool taginfo=false) = 0;
 
-    //TODO: implement in Hg and Bazaar then make pure virtual
+    ///TODO: implement in Hg and Bazaar then make pure virtual
     virtual DVCSjob* log(const KUrl& url) 
     {
         Q_UNUSED(url)
@@ -104,8 +104,9 @@ public:
      * @param jobOutput Pass in the plain output of a @code dvcs log @endcode job
      * @param revisions Will be filled with all revision infos found in @p jobOutput
      */
+    ///TODO: should be pure virtual
     virtual void parseOutput(const QString& jobOutput,
-                        QList<DVCScommit>& revisions) const = 0;
+                        QList<DVCScommit>& revisions) const {}
 
 };
 
