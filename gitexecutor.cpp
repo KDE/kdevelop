@@ -215,12 +215,31 @@ DVCSjob* GitExecutor::remove(const QString& repository, const KUrl::List &files)
 
 DVCSjob* GitExecutor::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
 {
+    Q_UNUSED(files)
+    Q_UNUSED(recursive)
+    Q_UNUSED(taginfo)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "status";
-        addFileList(job, repository, files);
 
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+DVCSjob* GitExecutor::log(const KUrl& url)
+{
+    QFileInfo info(url.toLocalFile());
+    if (!info.isFile())
+        return false;
+
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, info.absolutePath()) ) {
+        *job << "git";
+        *job << "log";
+        *job << info.fileName();
         return job;
     }
     if (job) delete job;
@@ -252,6 +271,38 @@ DVCSjob* GitExecutor::empty_cmd() const
     *job << "echo";
     *job << "-n";
     return job;
+}
+
+//Actually we can just copy the outpuc without parsing. So it's a kind of draft for future
+void GitExecutor::parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const
+{
+//     static QRegExp rx_sep( "[-=]+" );
+//     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
+
+    static QRegExp rx_com( "commit \\w{1,40}" );
+
+    QStringList lines = jobOutput.split("\n");
+
+    DVCScommit item;
+
+    for (int i=0; i<lines.count(); ++i) {
+        QString s = lines[i];
+        kDebug(9500) << "line:" << s ;
+
+        if (rx_com.exactMatch(s)) {
+            kDebug(9500) << "MATCH COMMIT";
+            item.commit = s;
+            s = lines[++i];
+            item.author = s;
+            s = lines[++i];
+            item.date = s;
+            commits.append(item);
+        }
+        else 
+        {
+            item.log += s+'\n';
+        }
+    }
 }
 
 // #include "hgexetor.moc"
