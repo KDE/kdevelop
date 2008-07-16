@@ -72,6 +72,7 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::repositoryLocation(const KUrl & localLocation)
 {
+    Q_UNUSED(localLocation)
     return NULL;
 }
 
@@ -81,6 +82,7 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::add(const KUrl::List & localLocations,
                                              IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(recursion)
     return d->m_exec->add(localLocations[0].path(), localLocations);
 }
 
@@ -108,6 +110,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::copy(const KUrl& localLocationSrc,
                                               const KUrl& localLocationDstn) 
 {
+    Q_UNUSED(localLocationSrc)
+    Q_UNUSED(localLocationDstn)
     return d->m_exec->empty_cmd();
 }
 
@@ -116,6 +120,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::move(const KUrl& localLocationSrc,
                                               const KUrl& localLocationDst ) 
 {
+    Q_UNUSED(localLocationSrc)
+    Q_UNUSED(localLocationDst)
     return d->m_exec->empty_cmd();
 }
 
@@ -123,6 +129,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::revert(const KUrl::List & localLocations, 
                                                 IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(localLocations)
+    Q_UNUSED(recursion)
     return d->m_exec->empty_cmd();
 }
 
@@ -130,6 +138,9 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::update(const KUrl::List & localLocations, const VcsRevision & rev,
                                                 IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(localLocations)
+    Q_UNUSED(rev)
+    Q_UNUSED(recursion)
     return d->m_exec->empty_cmd();
 }
 
@@ -137,6 +148,7 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::commit(const QString & message, const KUrl::List & localLocations,
                                                 IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(recursion)
     QString msg = message;
     if( msg.isEmpty() )
     {
@@ -158,6 +170,11 @@ KDevelop::VcsJob*
                                               const VcsRevision & dstRevision,
                                               VcsDiff::Type, IBasicVersionControl::RecursionMode)
 {
+    Q_UNUSED(localOrRepoLocationSrc)
+    Q_UNUSED(localOrRepoLocationDst)
+    Q_UNUSED(srcRevision)
+    Q_UNUSED(dstRevision)
+
     return d->m_exec->empty_cmd();
 }
 
@@ -166,6 +183,9 @@ KDevelop::VcsJob*
                                              const VcsRevision& rev,
                                              unsigned long limit )
 {
+    Q_UNUSED(localLocation)
+    Q_UNUSED(rev)
+    Q_UNUSED(limit)
     return d->m_exec->empty_cmd();
 }
 
@@ -174,6 +194,9 @@ KDevelop::VcsJob*
                                              const VcsRevision& rev,
                                              const VcsRevision& limit )
 {
+    Q_UNUSED(localLocation)
+    Q_UNUSED(rev)
+    Q_UNUSED(limit)
     return d->m_exec->empty_cmd();
 }
 
@@ -181,6 +204,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::annotate(const KUrl& localLocation,
                                                   const VcsRevision& rev )
 {
+    Q_UNUSED(localLocation)
+    Q_UNUSED(rev)
     return d->m_exec->empty_cmd();
 }
 
@@ -191,6 +216,11 @@ KDevelop::VcsJob*
                                                const VcsRevision& dstRevision,
                                                const KUrl& localLocation )
 {
+    Q_UNUSED(localOrRepoLocationSrc)
+    Q_UNUSED(localOrRepoLocationDst)
+    Q_UNUSED(srcRevision)
+    Q_UNUSED(dstRevision)
+    Q_UNUSED(localLocation)
     return d->m_exec->empty_cmd();
 }
 
@@ -199,6 +229,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::resolve(const KUrl::List& localLocations,
                                                  IBasicVersionControl::RecursionMode recursion )
 {
+    Q_UNUSED(localLocations)
+    Q_UNUSED(recursion)
     return d->m_exec->empty_cmd();
 }
 
@@ -210,6 +242,7 @@ KDevelop::VcsJob*
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::init(const KUrl& localRepositoryRoot)
 {
+    Q_UNUSED(localRepositoryRoot)
     return d->m_exec->init(localRepositoryRoot);
 }
 
@@ -217,6 +250,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::clone(const VcsLocation& localOrRepoLocationSrc,
                                                const KUrl& localRepositoryRoot)
 {
+    Q_UNUSED(localOrRepoLocationSrc)
+    Q_UNUSED(localRepositoryRoot)
     return d->m_exec->empty_cmd();
 }
 
@@ -231,6 +266,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::pull(const VcsLocation& localOrRepoLocationSrc,
                                               const KUrl& localRepositoryLocation)
 {
+    Q_UNUSED(localOrRepoLocationSrc)
+    Q_UNUSED(localRepositoryLocation)
     return d->m_exec->empty_cmd();
 }
 
@@ -417,6 +454,7 @@ void DistributedVersionControlPlugin::ctxRemove()
             this, SIGNAL( jobFinished(KJob*) ));
     job->start();
 }
+
 //-----------------------------------------------------------------------------------
 
 
