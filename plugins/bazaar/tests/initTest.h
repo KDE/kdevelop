@@ -42,6 +42,7 @@ class BzrInitTest: public QObject
     private slots:
         void initTestCase();
         void testInitAndCommit();
+        void testPlugin();
         void cleanupTestCase();
 
     private:

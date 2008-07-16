@@ -26,6 +26,8 @@
 
 #include <icore.h>
 
+#include "vcsjob.h"
+#include "vcsrevision.h"
 #include <dvcsjob.h>
 
 #include "gitexecutor.h"
@@ -50,6 +52,26 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 GitPlugin::~GitPlugin()
 {
     delete DistributedVersionControlPlugin::d;
+}
+
+KDevelop::VcsJob*
+        GitPlugin::log(const KUrl& localLocation,
+                       const KDevelop::VcsRevision& rev,
+                       unsigned long limit)
+{
+    Q_UNUSED(limit)
+
+    DVCSjob* job = d->m_exec->log(localLocation);
+    return job;
+}
+
+KDevelop::VcsJob*
+        GitPlugin::log(const KUrl& localLocation,
+                       const KDevelop::VcsRevision& rev,
+                       const KDevelop::VcsRevision& limit)
+{
+    Q_UNUSED(limit)
+    return log(localLocation, rev, 0);
 }
 
 // #include "gitplugin.moc"

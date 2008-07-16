@@ -25,6 +25,12 @@
 #include <dvcs/dvcsplugin.h>
 #include <qobject.h>
 
+namespace KDevelop
+{
+    class VcsJob;
+    class VcsRevision;
+}
+
 class GitExecutor;
 
 /**
@@ -43,6 +49,14 @@ friend class GitExecutor;
 public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
+    
+    //TODO:Things to be moved to DVCSplugin, but not moved because require executor changes in all implemented DVCS
+    KDevelop::VcsJob* log(const KUrl& localLocation,
+                          const KDevelop::VcsRevision& rev,
+                          unsigned long limit);
+    KDevelop::VcsJob* log(const KUrl& localLocation,
+                          const KDevelop::VcsRevision& rev,
+                          const KDevelop::VcsRevision& limit);
 
 };
 

@@ -22,6 +22,7 @@ if (BZR)
         ${CMAKE_SOURCE_DIR}/util
         ${CMAKE_SOURCE_DIR}/interfaces
 		${CMAKE_SOURCE_DIR}/vcs
+        ${CMAKE_SOURCE_DIR}/shell
 		${CMAKE_SOURCE_DIR}/plugins/bazaar
         ${CMAKE_SOURCE_DIR}/vcs/dvcs/
 	)
@@ -33,6 +34,7 @@ if (BZR)
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
+        kdevplatformshell
 	)
 endif (BZR)
 

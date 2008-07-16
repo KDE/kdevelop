@@ -44,6 +44,7 @@
 #include <interfaces/iproject.h>
 #include <projectmodel.h>
 #include <iuicontroller.h>
+#include <iruncontroller.h>
 #include <icore.h>
 #include <context.h>
 #include <vcsmapping.h>
@@ -53,13 +54,15 @@
 #include "vcsjob.h"
 #include "dvcsjob.h"
 #include "dvcsmainview.h"
+#include "dvcsgenericoutputview.h"
 #include "commitdialog.h"
 #include "importdialog.h"
 #include "importmetadatawidget.h"
+#include "logview.h"
 
 using KDevelop::DistributedVersionControlPlugin;
 
-
+//class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
     :IPlugin(compData, parent)
 {
@@ -68,6 +71,17 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 }
 
 // Begin:  KDevelop::IBasicVersionControl
+
+QString DistributedVersionControlPlugin::name() const
+{
+    return d->m_exec->name();
+}
+
+bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocation)
+{
+    //TODO: some files from repository location can be not version controlled
+    return d->m_exec->isValidDirectory(localLocation);
+}
 
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::repositoryLocation(const KUrl & localLocation)
@@ -259,6 +273,8 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::push(const KUrl& localRepositoryLocation,
                                               const VcsLocation& localOrRepoLocationDst)
 {
+    Q_UNUSED(localRepositoryLocation)
+    Q_UNUSED(localOrRepoLocationDst)
     return d->m_exec->empty_cmd();
 }
 
@@ -365,6 +381,14 @@ KDevelop::ContextMenuExtension
         action = new KAction(i18n("Remove"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Status"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Log View"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
     }
     else
     {
@@ -453,6 +477,33 @@ void DistributedVersionControlPlugin::ctxRemove()
     connect(job, SIGNAL( result(KJob*) ),
             this, SIGNAL( jobFinished(KJob*) ));
     job->start();
+}
+
+void DistributedVersionControlPlugin::ctxLog()
+{
+    VcsRevision rev;
+    VcsJob* j = log(d->m_ctxUrlList.first(), rev, 0);
+    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+    if (job) {
+        ICore::self()->runController()->registerJob(job);
+        LogView* view = new LogView(this, job);
+        emit addNewTabToMainView( view, i18n("Log") );
+    }
+}
+
+void DistributedVersionControlPlugin::ctxStatus()
+{
+    KUrl url = urlFocusedDocument();
+    KUrl::List urls;
+    urls << url;
+
+    KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
+    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+    if (job) {
+        DVCSgenericOutputView* view = new DVCSgenericOutputView(this, job);
+        emit addNewTabToMainView(view, i18n("Status") );
+        KDevelop::ICore::self()->runController()->registerJob(job);
+    }
 }
 
 //-----------------------------------------------------------------------------------

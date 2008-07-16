@@ -1,7 +1,7 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
-  *                                                                         *
- *   Adapted for Git                                                       *
+  *                                                                        *
+ *   Adapted for DVCS                                                      *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *

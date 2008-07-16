@@ -42,6 +42,7 @@ struct DVCSpluginPrivate {
     KUrl::List m_ctxUrlList;
 };
 
+
 namespace KDevelop
 {
 class VcsJob;
@@ -57,15 +58,8 @@ public:
     virtual ~DistributedVersionControlPlugin(){}
 
     // Begin: KDevelop::IBasicVersionControl
-    virtual QString name() const
-    {
-        return d->m_exec->name();
-    }
-    virtual bool isVersionControlled(const KUrl& localLocation)
-    {
-    //TODO: some files from repository location can be not version controlled
-        return d->m_exec->isValidDirectory(localLocation);
-    }
+    virtual QString name() const;
+    virtual bool isVersionControlled(const KUrl& localLocation);
     virtual VcsJob* repositoryLocation(const KUrl& localLocation);
     virtual VcsJob* add(const KUrl::List& localLocations,
                         IBasicVersionControl::RecursionMode recursion);
@@ -128,6 +122,8 @@ public slots:
     void ctxCommit();
     void ctxAdd();
     void ctxRemove();
+    void ctxLog();
+    void ctxStatus();
 
     // slots for menu
     void slotInit();

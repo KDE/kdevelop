@@ -25,7 +25,17 @@
 #include "initTest.h"
 
 #include <QtTest/QtTest>
+
 #include <KUrl>
+#include <KDebug>
+#include <kplugininfo.h>
+
+#include <iplugincontroller.h>
+#include <iplugin.h>
+#include <plugincontroller.h>
+#include <core.h>
+
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include <dvcsjob.h>
 #include <bzrexecutor.h>
@@ -181,6 +191,27 @@ void BzrInitTest::testInitAndCommit()
     cloneRepository();
 }
 
+using namespace KDevelop;
+
+void BzrInitTest::testPlugin()
+{
+//     Core::initialize();
+    Core *core;
+    core->initialize();
+    IPluginController* controller = core->pluginController();
+
+//     IPlugin* bzrPlugin = controller->loadPlugin(QString("kdevbzr"));
+//     QVERIFY(bzrPlugin);
+// 
+//     KPluginInfo bzrInfo = controller->pluginInfo(bzrPlugin);
+//     QVERIFY(bzrInfo.isValid());
+// 
+//     //TODO: compare name() etc
+//     kDebug()<<"name: "<<bzrInfo.name()<<" pluginName: "<<bzrInfo.pluginName();
+// 
+//     IBasicVersionControl* iface = bzrPlugin->extension<IBasicVersionControl>();
+//     QVERIFY(iface);
+}
 
 QTEST_MAIN(BzrInitTest)
 

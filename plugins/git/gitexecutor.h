@@ -82,9 +82,12 @@ class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
         DVCSjob* remove(const QString& repository, const KUrl::List& files);
         DVCSjob* status(const QString & repo, const KUrl::List & files,
                        bool recursive=false, bool taginfo=false);
+        DVCSjob* log(const KUrl& url);
 /*        DVCSjob* is_inside_work_tree(const QString& repository);*/
         DVCSjob* var(const QString &directory);
         DVCSjob* empty_cmd() const;
+
+        void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
 
     private:
         bool addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls);
