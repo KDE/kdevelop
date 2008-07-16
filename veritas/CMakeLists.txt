@@ -4,9 +4,9 @@ add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
 set(TestBuild on)
-if(TestBuild AND !WIN32) # expose all symbols
+if(TestBuild AND NOT WIN32) # expose all symbols
     add_definitions( -fvisibility=default )
-endif(TestBuild AND !WIN32)
+endif(TestBuild AND NOT WIN32)
 
 include_directories(
     ${KDE4_INCLUDES}
