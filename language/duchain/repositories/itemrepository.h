@@ -23,6 +23,9 @@
 #include <QVector>
 #include <QByteArray>
 #include <QMutex>
+#include <QList>
+#include <QDir>
+#include <QFile>
 #include <kdebug.h>
 #include "../languageexport.h"
 
@@ -43,6 +46,43 @@ namespace KDevelop {
    *
    * Items must not be larger than the bucket size!
    * */
+
+
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
+  public:
+    virtual ~AbstractItemRepository();
+    ///@param path is supposed to be a shared directory-name that the item-repository is to be loaded from
+    ///@param clear will be true if the old repository should be discarded and a new one started
+    ///If this returns false, that indicates that loading failed. In that case, all repositories will be discarded.
+    virtual bool open(const QString& path, bool clear) = 0;
+    virtual void close() = 0;
+};
+
+/**
+ * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
+  public:
+    ItemRepositoryRegistry();
+    ~ItemRepositoryRegistry();
+    
+    ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
+    ///@param clear Whether a fresh start should be done, and all repositories cleared
+    ///If this returns false, loading has failed, and all repositories have been discarded.
+    bool open(const QString& path, bool clear = false);
+    void close();
+    ///The registered repository will automatically be opened with the current path, if one is set.
+    void registerRepository(AbstractItemRepository* repository);
+    ///The registered repository will automatically be closed if it was open.
+    void unRegisterRepository(AbstractItemRepository* repository);
+  private:
+    QString m_path;
+    QList<AbstractItemRepository*> m_repositories;
+    bool m_cleared;
+};
+
+///The global item-repository registry that is used by default
+KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
 
   ///This is the actual data that is stored in the repository. All the data that is not directly in the class-body,
   ///like the text of a string, can be stored behind the item in the same memory region. The only important thing is
@@ -95,6 +135,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     NextBucketHashSize = 500 //Affects the average count of bucket-chains that need to be walked in ItemRepository::index
   };
   public:
+    enum {
+      ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
+      DataSize = sizeof(unsigned int) + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize)
+    };
     Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_nextBucketHash(0) {
     }
     ~Bucket() {
@@ -108,12 +152,40 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         m_available = ItemRepositoryBucketSize;
         m_data = new char[ItemRepositoryBucketSize];
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
-        m_objectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1;
+        m_objectMapSize = ObjectMapSize;
         m_objectMap = new short unsigned int[m_objectMapSize];
         memset(m_objectMap, 0, m_objectMapSize * sizeof(short unsigned int));
         m_nextBucketHash = new short unsigned int[NextBucketHashSize];
         memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
       }
+    }
+    void initialize(QFile* file, size_t offset) {
+      if(!m_data) {
+        initialize();
+        if(file->size() >= offset + DataSize) {
+          file->seek(offset);
+          
+          file->read((char*)&m_available, sizeof(unsigned int));
+          file->read(m_data, ItemRepositoryBucketSize);
+          file->read((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
+          file->read((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
+        }
+      }
+    }
+
+    void store(QFile* file, size_t offset) {
+      if(!m_data)
+        return;
+      
+      if(file->size() < offset + DataSize)
+        file->resize(offset + DataSize);
+
+      file->seek(offset);
+      
+      file->write((char*)&m_available, sizeof(unsigned int));
+      file->write(m_data, ItemRepositoryBucketSize);
+      file->write((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
+      file->write((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
     }
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
@@ -322,12 +394,18 @@ struct Locker<true> : public QMutexLocker {
 ///@param Item @see ExampleItem
 ///@param threadSafe Whether class access should be thread-safe
 template<class Item, class ItemRequest, bool threadSafe = true, unsigned int bucketHashSize = 524288>
-class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
+class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
-    
+  
+  enum {
+    ItemRepositoryVersion = 1,
+    BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
+  };
+  
   public:
-  ItemRepository(QString repositoryName) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName) {
+  ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
+  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_repositoryVersion(repositoryVersion) {
     m_buckets.resize(10);
     m_buckets.fill(0);
     m_fastBuckets = m_buckets.data();
@@ -338,16 +416,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     
     m_statBucketHashClashes = m_statItemCount = 0;
     m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
+    if(m_registry)
+      m_registry->registerRepository(this);
   }
   
   ~ItemRepository() {
-    //kDebug() << m_repositoryName << ":" << statistics();
+    if(m_registry)
+      m_registry->unRegisterRepository(this);
 
-    typedef Bucket<Item, ItemRequest> B;
-    foreach(B* bucket, m_buckets)
-      delete bucket;
-    
-    delete[] m_firstBucketForHash;
+    close();
   }
 
   ///Returns the index for the given item. If the item is not in the repository yet, it is inserted.
@@ -520,11 +597,109 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
   }
 
   private:
+  virtual bool open(const QString& path, bool clear) {
+    close();
+    m_currentOpenPath = path;
+    kDebug() << "opening repository" << m_repositoryName << "at" << path;
+    QDir dir(path);
+    m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
+    if(!m_file->open( QFile::ReadWrite )) {
+      delete m_file;
+      m_file = 0;
+      return false;
+    }
+    
+    if(clear) {
+      m_file->resize(0);
+      m_file->write((char*)&m_repositoryVersion, sizeof(uint));
+      uint hashSize = bucketHashSize;
+      m_file->write((char*)&hashSize, sizeof(uint));
+      uint itemRepositoryVersion  = ItemRepositoryVersion;
+      m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
+      
+      m_statBucketHashClashes = m_statItemCount = 0;
+      
+      m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
+      m_file->write((char*)&m_statItemCount, sizeof(uint));
+      
+      m_buckets.resize(10);
+      m_buckets.fill(0);
+      uint bucketCount = m_buckets.size();
+      m_file->write((char*)&bucketCount, sizeof(uint));
+
+      m_firstBucketForHash = new short unsigned int[bucketHashSize];
+      memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
+
+      m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
+      m_file->write((char*)&m_currentBucket, sizeof(uint));
+      m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
+      //We have completely initialized the file now
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+    }else{
+      //Check that the version is correct
+      uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
+
+      m_file->read((char*)&storedVersion, sizeof(uint));
+      m_file->read((char*)&hashSize, sizeof(uint));
+      m_file->read((char*)&itemRepositoryVersion, sizeof(uint));
+      m_file->read((char*)&m_statBucketHashClashes, sizeof(uint));
+      m_file->read((char*)&m_statItemCount, sizeof(uint));
+      
+      if(storedVersion != m_repositoryVersion || hashSize != bucketHashSize || itemRepositoryVersion != ItemRepositoryVersion) {
+        kDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << ItemRepositoryVersion;
+        delete m_file;
+        m_file = 0;
+        return false;
+      }
+      uint bucketCount;
+      m_file->read((char*)&bucketCount, sizeof(uint));
+      m_buckets.resize(bucketCount);
+      m_buckets.fill(0);
+      m_file->read((char*)&m_currentBucket, sizeof(uint));
+    
+      m_firstBucketForHash = new short unsigned int[bucketHashSize];
+      m_file->read((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+    }
+    
+    m_fastBuckets = m_buckets.data();
+    m_bucketCount = m_buckets.size();
+    return true;
+  }
+  
+  virtual void close() {
+    if(!m_currentOpenPath.isEmpty()) {
+    }
+    m_currentOpenPath = QString();
+    
+    typedef Bucket<Item, ItemRequest> B;
+    for(int a = 0; a < m_buckets.size(); ++a) {
+      storeBucket(a);
+      delete m_buckets[a];
+    }
+
+    delete m_file;
+    m_file = 0;
+    
+    delete[] m_firstBucketForHash;
+    
+    m_buckets.clear();
+    m_firstBucketForHash = 0;
+  }
 
   inline void initializeBucket(unsigned int bucketNumber) const {
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest>();
-      m_fastBuckets[bucketNumber]->initialize();
+      if(m_file)
+        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest>::DataSize);
+      else
+        m_fastBuckets[bucketNumber]->initialize();
+    }
+  }
+  
+  void storeBucket(unsigned int bucketNumber) const {
+    if(m_file && m_fastBuckets[bucketNumber]) {
+      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest>::DataSize);
     }
   }
 
@@ -538,6 +713,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
   uint m_statBucketHashClashes, m_statItemCount;
   //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
   short unsigned int* m_firstBucketForHash;
+  
+  QString m_currentOpenPath;
+  ItemRepositoryRegistry* m_registry;
+  QFile* m_file;
+  uint m_repositoryVersion;
 };
 
 }
