@@ -29,12 +29,10 @@
 #include "veritas/mvc/resultsmodel.h"
 #include "veritas/testresult.h"
 #include "veritas/test.h"
-#include "veritas/interfaces/itest.h"
 
 #include <KDebug>
 
 using Veritas::Test;
-using Veritas::ITest;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 
@@ -102,7 +100,7 @@ ResultsModel* ResultsProxyModel::model() const
     return static_cast<ResultsModel*>(sourceModel());
 }
 
-void ResultsProxyModel::setTestFilter(const QList<ITest*>& t)
+void ResultsProxyModel::setTestFilter(const QList<Test*>& t)
 {
     m_testFilter = t;
     reset();

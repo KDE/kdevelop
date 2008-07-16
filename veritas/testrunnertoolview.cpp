@@ -30,7 +30,6 @@
 #include "shell/core.h"
 
 #include "veritas/test.h"
-#include "veritas/interfaces/itest.h"
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/runnerwindow.h"
 
@@ -41,7 +40,6 @@ using KDevelop::IProject;
 using KDevelop::IProjectController;
 
 using Veritas::Test;
-using Veritas::ITest;
 using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::TestRunnerToolView;
@@ -91,7 +89,7 @@ QWidget* TestRunnerToolView::spawnWindow()
 
 void TestRunnerToolView::reload()
 {
-    ITest* root = registerTests(); // implemented by concrete plugins
+    Test* root = registerTests(); // implemented by concrete plugins
     RunnerModel* model = new RunnerModel;
     model->setRootItem(qobject_cast<Test*>(root));
     model->setExpectedResults(Veritas::RunError);

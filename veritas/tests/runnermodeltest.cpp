@@ -38,6 +38,8 @@ using Veritas::ut::RunnerModelTest;
 
 Q_DECLARE_METATYPE(QModelIndex)
 
+#define TEST_COLUMN_COUNT 5
+
 void RunnerModelTest::init()
 {
     model = createRunnerModelStub(false);
@@ -64,7 +66,7 @@ void RunnerModelTest::appendResults()
 
     // size check
     KOMPARE(2, model->rowCount());
-    KOMPARE(Test::s_columnCount, model->columnCount());
+    KOMPARE(TEST_COLUMN_COUNT, model->columnCount());
 
     // verify column headers
     assertColumnHeader(model->col0Caption, 0);
@@ -187,7 +189,7 @@ void RunnerModelTest::verifyRowContent(int index)
     assertDataAt(rowStr + '2', index, 2);
 
     KOMPARE(0, model->rowCount(model->index(index, 0))); // no children
-    KOMPARE(Test::s_columnCount, model->columnCount(model->index(index, 0)));
+    KOMPARE(TEST_COLUMN_COUNT, model->columnCount(model->index(index, 0)));
 
 }
 

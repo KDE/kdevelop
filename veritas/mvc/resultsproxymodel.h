@@ -37,7 +37,7 @@
 namespace Veritas
 {
 
-class ITest;
+class Test;
 
 class ResultsModel;
 
@@ -89,7 +89,7 @@ public: // Operations
      * filter are included in the model.
      */
     void setFilter(int filter);
-    void setTestFilter(const QList<ITest*>&);
+    void setTestFilter(const QList<Test*>&);
     void resetTestFilter();
 
 protected: // Operations
@@ -116,7 +116,7 @@ private: // Operations
 
 private: // Attributes
     int m_filter;
-    QList<ITest*> m_testFilter;
+    QList<Test*> m_testFilter;
 };
 
 } // namespace

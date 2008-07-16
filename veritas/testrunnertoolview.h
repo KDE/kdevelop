@@ -23,7 +23,6 @@
 
 #include "interfaces/iplugin.h"
 #include "veritas/veritasexport.h"
-#include "veritas/interfaces/itestrunner.h"
 
 class QWidget;
 class KComponentData;
@@ -31,20 +30,28 @@ namespace KDevelop { class IProject; }
 
 namespace Veritas
 {
-class ITest;
+class Test;
 class RunnerModel;
 class RunnerWindow;
 class TestRunnerToolViewPrivate;
 
-class VERITAS_EXPORT TestRunnerToolView : public KDevelop::IPlugin, public ITestRunner
+class VERITAS_EXPORT TestRunnerToolView : public KDevelop::IPlugin
 {
 Q_OBJECT
 public:
     TestRunnerToolView(const KComponentData&, QObject*);
     virtual ~TestRunnerToolView();
+
+    /*! Create a new test runner widget
+        Call this in your toolview factory's create() member. */
     QWidget* spawnWindow();
 
 protected:
+    /*!
+     * Reload the test tree.
+     * To be implemented by concrete plugins.
+     */
+    virtual Test* registerTests() = 0;
     KDevelop::IProject* project() const;
 
 private Q_SLOTS:

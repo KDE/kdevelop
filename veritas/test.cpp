@@ -22,10 +22,11 @@
 #include "veritas/test.h"
 #include <KDebug>
 
-using Veritas::ITest;
 using Veritas::Test;
 using Veritas::TestState;
 using Veritas::TestResult;
+
+const int Test::s_columnCount = 5;
 
 Test::Test(const QList<QVariant>& data, Test* parent)
     : m_parentItem(parent),
@@ -104,7 +105,7 @@ Test* Test::childNamed(const QString& name) const
     return m_childMap[name];
 }
 
-void Test::addChild(ITest* item)
+void Test::addChild(Test* item)
 {
     Test* t = qobject_cast<Test*>(item);
     m_children.append(t);
@@ -158,8 +159,9 @@ bool Test::selected() const
 void Test::setSelected(bool select)
 {
     m_selected = select;
-    foreach (Test* child, m_children)
+    foreach (Test* child, m_children) {
         child->setSelected(select);
+    }
 }
 
 TestState Test::state() const
@@ -170,18 +172,13 @@ TestState Test::state() const
 void Test::setState(TestState result)
 {
     m_state = result;
-    if (m_result)
+    if (m_result) {
         m_result->setState(result);
+    }
 }
 
 TestResult* Test::result() const
 {
-//     TestResult res = m_result;
-//     res.setState(state());
-//     res.setMessage(data(2).toString());
-//     //res.setFile(QFileInfo(data(3).toString()));
-//     res.setLine(data(4).toInt());
-//     return res;
     return m_result;
 }
 
@@ -208,10 +205,10 @@ void Test::clear()
     m_result = new TestResult;
 }
 
-QList<ITest*> Test::leafs() const
+QList<Test*> Test::leafs() const
 {
-    QList<ITest*> l;
-    foreach(ITest* t, m_children) {
+    QList<Test*> l;
+    foreach(Test* t, m_children) {
         if (t->childCount() == 0) {
             l.append(t);
         } else {
@@ -220,5 +217,18 @@ QList<ITest*> Test::leafs() const
     }
     return l;
 }
+
+void Test::signalStarted()
+{
+    Q_ASSERT(index().isValid());
+    emit started(index());
+}
+
+void Test::signalFinished()
+{
+    Q_ASSERT(index().isValid());
+    emit finished(index());
+}
+
 
 #include "test.moc"

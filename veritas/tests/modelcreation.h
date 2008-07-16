@@ -47,7 +47,7 @@ public:
         if (child(0)) {
             setState(Veritas::NoResult);  // Have nothing to do as a parent
         } else {
-            started();
+            signalStarted();
             if (!m_result) {
                 // do not interfere when result was set from the outside
                 m_result = new TestResult;
@@ -57,7 +57,7 @@ public:
             //setState(m_state);
             m_result->setState(m_state);
             setResult(m_result);
-            finished();
+            signalFinished();
         }
         executedItems.push_back(row());
         return state();

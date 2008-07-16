@@ -46,6 +46,8 @@ public:
 
 using Veritas::ut::TestFake;
 
+#define TEST_COLUMN_COUNT 5
+
 void TestTest::init()
 {
     columns = QList<QVariant>();
@@ -65,7 +67,7 @@ void TestTest::cleanup()
 void TestTest::simpleRoot()
 {
     assertNrofChildren(root, 0);
-    assertNrofColumns(root, Test::s_columnCount);
+    assertNrofColumns(root, TEST_COLUMN_COUNT);
     assertDefaultResult(root);
     KVERIFY_MSG(root->selected(), "Not selected. Item should be enabled by default");
     KOMPARE_MSG(0, root->row(), "No parent so should surely be the first row");
@@ -97,7 +99,7 @@ void TestTest::resetValue()
     QVariant empty = "";
 
     assertDefaultResult(root);
-    assertNrofColumns(root, Test::s_columnCount);
+    assertNrofColumns(root, TEST_COLUMN_COUNT);
     KOMPARE(empty, root->data(1));
     KOMPARE(empty, root->data(2));
 }
@@ -118,8 +120,8 @@ void TestTest::appendChildren()
     assertNrofChildren(child2, 0);
     KOMPARE(root, child1->parent());
     KOMPARE(root, child2->parent());
-    assertNrofColumns(child1, Test::s_columnCount);
-    assertNrofColumns(child2, Test::s_columnCount);
+    assertNrofColumns(child1, TEST_COLUMN_COUNT);
+    assertNrofColumns(child2, TEST_COLUMN_COUNT);
     KOMPARE(0, child1->row());
     KOMPARE(1, child2->row());
     KOMPARE("child2", child2->name());
@@ -154,7 +156,7 @@ void TestTest::assertDefaultResult(TestFake* item)
 // command
 void TestTest::retrieveLeaves()
 {
-    QList<ITest*> leafs = root->leafs();
+    QList<Test*> leafs = root->leafs();
     KOMPARE(0, leafs.size());
 
     // single lvl1 item

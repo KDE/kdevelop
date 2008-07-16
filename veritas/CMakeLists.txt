@@ -36,8 +36,6 @@ set(veritas_SRCS
     mvc/viewcontrollercommon.cpp
     mvc/selectionmanager.cpp
     mvc/selectiontoggle.cpp
-    interfaces/itest.cpp
-    interfaces/itestrunner.cpp
     ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
@@ -79,8 +77,3 @@ if(TestBuild)
         ${CMAKE_BINARY_DIR}/veritas/ui_statuswidget.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
 endif(TestBuild)
-
-install(FILES
-    interfaces/itest.h
-    interfaces/itestrunner.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas/interfaces )
