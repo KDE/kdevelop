@@ -24,12 +24,7 @@
 #include <QByteArray>
 #include <QMutex>
 #include <kdebug.h>
-#include <ext/hash_map>
 #include "../languageexport.h"
-
-namespace std {
-  using namespace __gnu_cxx;
-}
 
 namespace KDevelop {
 
@@ -96,11 +91,15 @@ class ExampleRequestItem {
 
 template<class Item, class ItemRequest>
 class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
+  enum {
+    NextBucketHashSize = 500 //Affects the average count of bucket-chains that need to be walked in ItemRepository::index
+  };
   public:
-    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0) {
+    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_nextBucketHash(0) {
     }
     ~Bucket() {
       delete[] m_data;
+      delete[] m_nextBucketHash;
       delete[] m_objectMap;
     }
 
@@ -112,6 +111,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         m_objectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1;
         m_objectMap = new short unsigned int[m_objectMapSize];
         memset(m_objectMap, 0, m_objectMapSize * sizeof(short unsigned int));
+        m_nextBucketHash = new short unsigned int[NextBucketHashSize];
+        memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
       }
     }
 
@@ -268,15 +269,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
     
     unsigned short nextBucketForHash(uint hash) {
-      std::hash_map<uint, unsigned short>::const_iterator it = m_nextBucketForHash.find(hash);
-      if(it != m_nextBucketForHash.end())
-        return (*it).second;
-      else
-        return 0;
+      return m_nextBucketHash[hash % NextBucketHashSize];
     }
     
     void setNextBucketForHash(unsigned int hash, unsigned short bucket) {
-      m_nextBucketForHash.insert(std::make_pair(hash, bucket));
+      m_nextBucketHash[hash % NextBucketHashSize] = bucket;
     }
     
   private:
@@ -307,8 +304,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     uint m_objectMapSize;
     short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     
-    ///@todo eventually replace this with an efficient structure that can also easily be stored to disk
-    std::hash_map<uint, unsigned short> m_nextBucketForHash;
+    unsigned short* m_nextBucketHash;
 };
 
 template<bool lock>
@@ -362,7 +358,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository {
     
     unsigned int hash = request.hash();
     
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
     
     while(previousBucketNumber) {
