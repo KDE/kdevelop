@@ -18,36 +18,29 @@
  * 02110-1301, USA.
  */
 
-#ifndef DVCSADAPTORS_H
-#define DVCSADAPTORS_H
+#ifndef KROSSTOOLVIEWFACTORY_H
+#define KROSSTOOLVIEWFACTORY_H
 
-#include <QObject>
-#include <vcsrevision.h>
+#include <kross/core/action.h>
+#include "iuicontroller.h"
 
-namespace KDevelop
+class KrossToolViewFactory: public KDevelop::IToolViewFactory, public QObject
 {
-    class VcsRevision;
-    class VcsLocation;
+public:
+    KrossToolViewFactory(QObject* parent, Kross::Action* action, const QString& method, const QString& id, Qt::DockWidgetArea pos)
+        : QObject(parent), m_action(action), m_method(method), m_id(id), m_pos(pos) {}
     
-    class VcsRevisionAdaptor : public QObject
-    {
-        Q_OBJECT
-        public:
-            VcsRevisionAdaptor(const VcsRevision& rev, QObject* parent) : QObject(parent), m_rev(rev) {}
-        
-        private:
-            KDevelop::VcsRevision m_rev;
-    };
+    virtual QWidget* create(QWidget *parent = 0);
     
-    class VcsLocationAdaptor : public QObject
-    {
-        Q_OBJECT
-        public:
-            VcsLocationAdaptor(const VcsLocation* rev, QObject* parent) : QObject(parent), m_rev(rev) {}
-        
-        private:
-            const KDevelop::VcsLocation* m_rev;
-    };
-}
+    virtual Qt::DockWidgetArea defaultPosition();
+    
+    virtual QString id() const;
+    
+private:
+    Kross::Action* m_action;
+    QString m_method;
+    QString m_id;
+    Qt::DockWidgetArea m_pos;
+};
 
 #endif

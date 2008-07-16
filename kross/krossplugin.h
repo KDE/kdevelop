@@ -32,19 +32,23 @@ namespace Kross { class Action; }
 
 class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
 {
-Q_OBJECT
-Q_INTERFACES( KDevelop::IBuildSystemManager )
-Q_INTERFACES( KDevelop::IProjectFileManager )
-Q_INTERFACES( KDevelop::IDistributedVersionControl )
-public:
-    explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
-    virtual ~KrossPlugin() {}
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IBuildSystemManager )
+    Q_INTERFACES( KDevelop::IProjectFileManager )
+    Q_INTERFACES( KDevelop::IDistributedVersionControl )
+    public:
+        explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
+        virtual ~KrossPlugin() {}
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-private:
-    Kross::Action* action;
+        KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+        
+    public slots:
+        void createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos);
+        
+    private:
+        Kross::Action* action;
 
-    KrossBuildSystemManager* m_script;
+        KrossBuildSystemManager* m_script;
 };
 
 #endif

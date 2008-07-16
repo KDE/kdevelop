@@ -18,36 +18,24 @@
  * 02110-1301, USA.
  */
 
-#ifndef DVCSADAPTORS_H
-#define DVCSADAPTORS_H
+#include "krosstoolviewfactory.h"
 
-#include <QObject>
-#include <vcsrevision.h>
-
-namespace KDevelop
+QWidget* KrossToolViewFactory::create(QWidget *parent)
 {
-    class VcsRevision;
-    class VcsLocation;
+    QVariant param;
+    param.setValue((QObject*) parent);
+    QVariant result=m_action->callFunction( m_method, QVariantList()<<param);
     
-    class VcsRevisionAdaptor : public QObject
-    {
-        Q_OBJECT
-        public:
-            VcsRevisionAdaptor(const VcsRevision& rev, QObject* parent) : QObject(parent), m_rev(rev) {}
-        
-        private:
-            KDevelop::VcsRevision m_rev;
-    };
-    
-    class VcsLocationAdaptor : public QObject
-    {
-        Q_OBJECT
-        public:
-            VcsLocationAdaptor(const VcsLocation* rev, QObject* parent) : QObject(parent), m_rev(rev) {}
-        
-        private:
-            const KDevelop::VcsLocation* m_rev;
-    };
+    return result.value<QWidget*>();
 }
 
-#endif
+Qt::DockWidgetArea KrossToolViewFactory::defaultPosition()
+{
+    return m_pos;
+}
+
+QString KrossToolViewFactory::id() const
+{
+    return m_id;
+}
+

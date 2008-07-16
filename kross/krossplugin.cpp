@@ -21,6 +21,7 @@
 #include "krossplugin.h"
 
 #include "krossbuildsystemmanager.h"
+#include "krosstoolviewfactory.h"
 
 #include <KUrl>
 #include <KProcess>
@@ -69,6 +70,7 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     action->setFile(file.toLocalFile());
     
     action->addObject(KDevelop::ICore::self(), "ICore");
+    action->addObject(this, "IPlugin");
     setAction(action); //should add it here and only if it is necessary (when more ifaces)
     setActionDistributed(action); //should add it here and only if it is necessary (when more ifaces)
 
@@ -79,5 +81,14 @@ KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Conte
 {
     return distributedMenuExtension(context);
 }
+
+void KrossPlugin::createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos)
+{
+    kDebug() << "creating kross tool view" << method << id;
+    //KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, pos);
+    KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, Qt::BottomDockWidgetArea);
+    core()->uiController()->addToolView(id, toolFactory);
+}
+
 
 #include "krossplugin.moc"

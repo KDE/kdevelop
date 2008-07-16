@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Service
+Encoding=UTF-8
+Name=KDev Kross GUI Example
+Comment=Example of the GUI
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevguiexample
+X-KDE-PluginInfo-Name=GUIExample
+X-KDevelop-PluginType=Kross
+X-KDevelop-Version=6
+X-KDevelop-Category=Global

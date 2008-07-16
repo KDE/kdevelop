@@ -91,6 +91,20 @@ def mergeStatus(a, b):
 	a.unchanged.append(b.unchanged)
 	
 	return a
+	
+def commit(message, files, isRecursive):
+	for url in files:
+		fullpath=urlparse(url).path
+		path=pathHelper(fullpath)
+		wt = workingtree.WorkingTree.open(path["path"])
+		wt.commit(message)
+
+def update(files, revision, isRecursive):
+	for url in files:
+		fullpath=urlparse(url).path
+		path=pathHelper(fullpath)
+		wt = workingtree.WorkingTree.open(path["path"])
+		wt.update()
 
 def status(files, isRecursive):
 	from bzrlib import delta
@@ -182,7 +196,7 @@ def test():
 		assert r["Added"][0][0]=="bbb"
 		assert len(r["Added"])==1
 		
-		commit(folderpath+"/bbb")
+		commit("hello sportboy!", folderpath+"/bbb", False)
 		r=status([folderpath+"/bbb"], False)
 		for list in r:
 			assert len(r)==0

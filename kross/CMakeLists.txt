@@ -16,9 +16,10 @@ set(kdevkrossmanager_SRCS
     krossplugin.cpp
     krossbuildsystemmanager.cpp
     krossdistributedversioncontrol.cpp
+    krosstoolviewfactory.cpp
+    krossvcsjob.cpp
     projectitemadaptors.cpp
     dvcsadaptors.cpp
-    krossvcsjob.cpp
 )
 
 kde4_add_plugin(kdevkrossprojectmanager ${kdevkrossmanager_SRCS})
