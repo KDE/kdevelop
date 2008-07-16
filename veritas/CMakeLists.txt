@@ -63,7 +63,6 @@ install(FILES
     testcommand.h
     testcase.h
     register.h
-    register.hpp
     veritasexport.h
     testresult.h
     testrunnertoolview.h
