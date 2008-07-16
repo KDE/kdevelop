@@ -17,8 +17,8 @@ include_directories(
 
 set(veritas_SRCS
     test.cpp
-    testcommand.cpp
-    testcase.cpp
+#     testcommand.cpp
+#     testcase.cpp
     testresult.cpp
     testrunnertoolview.cpp
     utils.cpp
@@ -60,9 +60,6 @@ install(TARGETS kdevplatformveritas ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     test.h
-    testcommand.h
-    testcase.h
-    register.h
     veritasexport.h
     testresult.h
     testrunnertoolview.h
