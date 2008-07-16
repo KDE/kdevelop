@@ -44,7 +44,6 @@ using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 using Veritas::Test;
-using Veritas::ITest;
 using Veritas::TestRunnerToolView;
 using Veritas::Register;
 using CppUnit::TestRoot;
@@ -86,7 +85,7 @@ CppUnitView::CppUnitView(QObject* parent, const QVariantList &)
 CppUnitView::~CppUnitView()
 {}
 
-ITest* CppUnitView::registerTests()
+Test* CppUnitView::registerTests()
 {
     Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));

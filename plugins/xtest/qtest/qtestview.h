@@ -27,7 +27,6 @@
 #include <kdevplatform/veritas/testrunnertoolview.h>
 
 class QTestViewFactory;
-namespace Veritas { class ITest; }
 namespace KDevelop { class ContextMenuExtension;
                      class Context;
                      class ProjectFolderItem; }
@@ -42,10 +41,10 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 protected:
-    Veritas::ITest* registerTests();
+    Veritas::Test* registerTests();
 
 private slots:
-        void newQTest();
+    void newQTest();
 
 private:
     QString fetchBuildRoot();

@@ -70,7 +70,6 @@ using KDevelop::IProjectFileManager;
 using KDevelop::ContextMenuExtension;
 
 using Veritas::Test;
-using Veritas::ITest;
 using Veritas::TestRunnerToolView;
 
 using QTest::Settings;
@@ -110,7 +109,7 @@ QTestView::QTestView(QObject* parent, const QVariantList&)
 QTestView::~QTestView()
 {}
 
-ITest* QTestView::registerTests()
+Test* QTestView::registerTests()
 {
     kDebug() << "Loading test registration XML: " << fetchRegXML();
     QFile* testXML = new QFile(fetchRegXML());

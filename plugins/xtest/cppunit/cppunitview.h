@@ -25,8 +25,7 @@
 #include <QVariantList>
 
 class CppUnitViewFactory;
-namespace Veritas { class Test;
-                    class ITest; }
+namespace Veritas { class Test; }
 
 class CppUnitView : public Veritas::TestRunnerToolView
 {
@@ -36,7 +35,7 @@ public:
     virtual ~CppUnitView();
 
 protected:
-    Veritas::ITest* registerTests();
+    Veritas::Test* registerTests();
 
 private:
     QString fetchExe();

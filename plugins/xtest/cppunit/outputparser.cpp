@@ -157,7 +157,7 @@ void OutputParser::processCmd()
         m_currentCmd = fetchName();
         m_cmd = m_case->childNamed(m_currentCmd);
         ENSURE_FOUND(m_cmd, m_case, m_currentCmd);
-        m_cmd->started();
+        m_cmd->signalStarted();
         m_result = new TestResult;
     }
     Q_ASSERT(m_cmd);
@@ -175,7 +175,7 @@ void OutputParser::processCmd()
         if (!gotFailureMsg)
             setSuccess();
         m_cmd->setResult(m_result);
-        m_cmd->finished();
+        m_cmd->signalFinished();
     }
 }
 

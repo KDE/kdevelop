@@ -128,7 +128,7 @@ void QTestOutputParser::processTestFunction()
         Test* cmd = m_case->childNamed(cmdName);
         m_result = new TestResult; // this probably leaks. TODO
         if (cmd)
-            cmd->started();
+            cmd->signalStarted();
     }
     m_processingTestFunction = true;
     while (!atEnd() && !isEndElement_(c_testfunction)) {
@@ -142,12 +142,12 @@ void QTestOutputParser::processTestFunction()
         Test* cmd = m_case->childNamed(cmdName);
         if (cmd) {
             cmd->setResult(m_result);
-            cmd->finished();
+            cmd->signalFinished();
         } else if (fixtureFailed(cmdName)) {
             kDebug() << "init/cleanup TestCase failed";
-            m_case->started();
+            m_case->signalStarted();
             m_case->setResult(m_result);
-            m_case->finished();
+            m_case->signalFinished();
         }
         m_processingTestFunction = false;
     }

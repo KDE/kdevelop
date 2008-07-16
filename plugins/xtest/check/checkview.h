@@ -25,7 +25,7 @@
 #include <QVariantList>
 
 class CheckViewFactory;
-namespace Veritas { class ITest; }
+namespace Veritas { class Test; }
 
 class CheckView : public Veritas::TestRunnerToolView
 {
@@ -35,7 +35,7 @@ public:
     virtual ~CheckView();
 
 protected:
-    Veritas::ITest* registerTests();
+    Veritas::Test* registerTests();
 
 private:
     QString fetchExe();

@@ -103,8 +103,9 @@ bool OutputParser::isEndElement_(const QString& elementName)
 void OutputParser::go(TestRoot* root)
 {
     m_root = root;
-    if (!device()->isOpen())
+    if (!device()->isOpen()) {
         device()->open(QIODevice::ReadOnly);
+    }
     if (!device()->isReadable()) {
         // do something
     }
@@ -153,8 +154,8 @@ void OutputParser::postResult(const QString& caze, const QString& cmd, const QSt
     ENSURE_FOUND(m_cmd, m_case, cmd);
 
     m_cmd->setResult(m_result);
-    m_cmd->started();
-    m_cmd->finished();
+    m_cmd->signalStarted();
+    m_cmd->signalFinished();
 }
 
 /*

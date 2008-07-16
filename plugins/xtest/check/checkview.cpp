@@ -44,7 +44,6 @@ using KDevelop::IProject;
 using KDevelop::IProjectController;
 
 using Veritas::Test;
-using Veritas::ITest;
 using Veritas::Register;
 using Veritas::TestRunnerToolView;
 
@@ -87,7 +86,7 @@ CheckView::CheckView(QObject* parent, const QVariantList &)
 CheckView::~CheckView()
 {}
 
-ITest* CheckView::registerTests()
+Test* CheckView::registerTests()
 {
     Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));
