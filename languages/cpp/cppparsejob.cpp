@@ -66,7 +66,7 @@ using namespace KDevelop;
 
 bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
   foreach(DUContext::Import listCtx, contexts)
-    if(listCtx.context && listCtx.context->imports(context))
+    if(listCtx.context.data() && listCtx.context.data()->imports(context))
       return true;
   return false;
 }
@@ -481,9 +481,9 @@ void CPPInternalParseJob::run()
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
-              if(ctx.context.data() && !encounteredIncludeUrls.contains(IndexedString(ctx.context->url().str()))) { ///@todo prevent conversion
+              if(ctx.context.data() && !encounteredIncludeUrls.contains(IndexedString(ctx.context.data()->url().str()))) { ///@todo prevent conversion
                   contentContext->removeImportedParentContext(ctx.context.data());
-                  kDebug( 9007 ) << "removing not encountered import " << ctx.context->url().str();
+                  kDebug( 9007 ) << "removing not encountered import " << ctx.context.data()->url().str();
               }
           }
       }

@@ -70,6 +70,15 @@ using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
 
+void release(TopDUContext* top)
+{
+  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  
+  TopDUContextPointer tp(top);
+  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+  Q_ASSERT(!tp);
+}
+    
 namespace QTest {
   template<>
   char* toString(const Cursor& cursor)
@@ -1727,13 +1736,13 @@ void TestDUChain::testTemplates() {
     QVERIFY(instanceDefClassA->context() == defClassA->context());
     QVERIFY(instanceDefClassA->internalContext()->importedParentContexts().size() == 1);
     QVERIFY(defClassA->internalContext()->importedParentContexts().size() == 1);
-    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context->type(), DUContext::Template);
-    QVERIFY(defClassA->internalContext()->importedParentContexts().front().context != instanceDefClassA->internalContext()->importedParentContexts().front().context); //The template-context has been instantiated
+    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context.data()->type(), DUContext::Template);
+    QVERIFY(defClassA->internalContext()->importedParentContexts().front().context.data() != instanceDefClassA->internalContext()->importedParentContexts().front().context.data()); //The template-context has been instantiated
 
     //Make sure the first template-parameter has been resolved to class B
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context.data()->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
     //Make sure the second template-parameter has been resolved to class C
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context.data()->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
 
     QualifiedIdentifier ident2(ident);
     ident2.push(Identifier("Template1"));
@@ -1993,26 +2002,33 @@ struct TestContext {
     static int number = 0;
     ++number;
     DUChainWriteLocker lock(DUChain::lock());
-    m_context = new TopDUContext(IndexedString(QString("%1").arg(number)), SimpleRange());
+    m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), SimpleRange());
+    DUChain::self()->addDocumentChain(IdentifiedFile(IndexedString(QString("/test1/%1").arg(number))), m_context);
+    Q_ASSERT(IndexedDUContext(m_context).context() == m_context);
   }
 
   ~TestContext() {
     unImport(imports);
     DUChainWriteLocker lock(DUChain::lock());
-    m_context->deleteSelf();
+    release(m_context);//->deleteSelf();
   }
 
   void verify(QList<TestContext*> allContexts) {
 
-    QCOMPARE(m_context->importedParentContexts().count(), imports.count());
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      QCOMPARE(m_context->importedParentContexts().count(), imports.count());
+    }
     //Compute a closure of all children, and verify that they are imported.
     QSet<TestContext*> collected;
     collectImports(collected);
     collected.remove(this);
+    
+    DUChainReadLocker lock(DUChain::lock());
     foreach(TestContext* context, collected)
       QVERIFY(m_context->imports(context->m_context, SimpleCursor::invalid()));
     //Verify that no other contexts are imported
-    DUChainReadLocker lock(DUChain::lock());
+    
     foreach(TestContext* context, allContexts)
       if(context != this)
         QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
@@ -2673,15 +2689,6 @@ void TestDUChain::testIndexedStrings() {
       kDebug() << a << "of" << testCount;
   }
   kDebug() << a << "successful tests";
-}
-
-void TestDUChain::release(TopDUContext* top)
-{
-  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
-  
-  TopDUContextPointer tp(top);
-  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
-  Q_ASSERT(!tp);
 }
 
 TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)

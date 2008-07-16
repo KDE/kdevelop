@@ -77,8 +77,8 @@ DUContext* getTemplateContext(Declaration* decl) {
   if( !internal )
     return 0;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context )
-      if( ctx.context->type() == DUContext::Template )
+    if( ctx.context.data() )
+      if( ctx.context.data()->type() == DUContext::Template )
         return ctx.context.data();
   }
   return 0;
@@ -322,7 +322,7 @@ Type hasTemplateContext( const QList<Type>& contexts ) {
 template<class Type>
 Type hasTemplateContext( const QVector<Type>& contexts ) {
   foreach( const Type& context, contexts )
-    if( context.context && context.context->type() == KDevelop::DUContext::Template )
+    if( context.context.data() && context.context.data()->type() == KDevelop::DUContext::Template )
       return context;
 
   return Type(0);

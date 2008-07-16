@@ -45,8 +45,8 @@ KDevelop::DUContext* getArgumentContext(KDevelop::Declaration* decl) {
   if( internal->type() == DUContext::Function )
     return internal;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context )
-      if( ctx.context->type() == DUContext::Function )
+    if( ctx.context.data() )
+      if( ctx.context.data()->type() == DUContext::Function )
         return ctx.context.data();
   }
   return 0;
@@ -63,7 +63,7 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   
   QVector<DUContext::Import> bases = context->importedParentContexts();
   for( QVector<DUContext::Import>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
-    if( it->context )
+    if( it->context.data() )
       ret += findLocalDeclarations( (*it).context.data(), identifier, topContext );
   }
   return ret;

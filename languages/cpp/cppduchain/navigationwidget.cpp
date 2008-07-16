@@ -818,21 +818,24 @@ private:
 
   void addDeclarationsFromContext(DUContext* ctx, QString indent = "", bool first = true) {
     //m_currentText += indent + ctx->localScopeIdentifier().toString() + "{<br />";
-    QVector<DUContext*>::const_iterator childIterator = ctx->childContexts().begin();
-    QVector<Declaration*>::const_iterator declarationIterator = ctx->localDeclarations().begin();
+    QVector<DUContext*> children = ctx->childContexts();
+    QVector<Declaration*> declarations = ctx->localDeclarations();
+    
+    QVector<DUContext*>::const_iterator childIterator = children.begin();
+    QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
 
-    while(childIterator != ctx->childContexts().end() || declarationIterator != ctx->localDeclarations().end()) {
+    while(childIterator != children.end() || declarationIterator != declarations.end()) {
 
       //Show declarations/contexts in the order they appear in the file
       int currentDeclarationLine = -1;
       int currentContextLine = -1;
-      if(declarationIterator != ctx->localDeclarations().end())
+      if(declarationIterator != declarations.end())
         currentDeclarationLine = (*declarationIterator)->range().textRange().start().line();
 
-      if(childIterator != ctx->childContexts().end())
+      if(childIterator != children.end())
         currentDeclarationLine = (*childIterator)->range().textRange().start().line();
 
-      if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == ctx->childContexts().end()) && declarationIterator != ctx->localDeclarations().end() )
+      if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.end()) && declarationIterator != declarations.end() )
       {
         if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty() && !(*declarationIterator)->range().isEmpty() && !(*declarationIterator)->isForwardDeclaration()) {
           //Show the declaration

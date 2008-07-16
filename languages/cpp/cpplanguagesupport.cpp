@@ -865,7 +865,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   if(word.startsWith("#include")) {
     //It's an #include, find out which file was included at the given line
     foreach(DUContext::Import imported, ctx->importedParentContexts()) {
-      if(imported.context) {
+      if(imported.context.data()) {
         if(ctx->importPosition(imported.context.data()).line == wordRange.start.line) {
           if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.context.data()))
             return qMakePair(TopDUContextPointer(importedTop), wordRange);

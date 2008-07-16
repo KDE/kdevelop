@@ -27,7 +27,7 @@
 #include <QHash>
 #include <QModelIndex>
 #include <vector>
-#include <duchain/duchainpointer.h>
+#include <duchain/ducontext.h>
 
 #include <ktexteditor/attribute.h>
 
@@ -128,8 +128,8 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
   
     //Here the colors of function context are stored until they are merged into the function body
-    mutable QMap<KDevelop::DUContextPointer, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
-    mutable QMap<KDevelop::DUContextPointer, ColorMap> m_functionDeclarationsForColors;
+    mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
+    mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
 
   //Should be used to enable/disable the colorization of local variables and their uses
   bool m_localColorization;
