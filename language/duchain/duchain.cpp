@@ -24,6 +24,9 @@
 #include <qatomic.h>
 
 #include <kglobal.h>
+#include <klockfile.h>
+#include <kstandarddirs.h>
+#include <kapplication.h>
 
 #include <KTextEditor/Document>
 
@@ -47,15 +50,18 @@
 #include <ilanguagesupport.h>
 #include <icodehighlighting.h>
 #include "duchainutils.h"
+#include "repositories/itemrepository.h"
 
 namespace KDevelop
 {
-
+class DUChainPrivate;
+static DUChainPrivate* duChainPrivateSelf = 0;
 class DUChainPrivate
 {
 public:
-  DUChainPrivate()
+  DUChainPrivate() : instance(0)             
   {
+    duChainPrivateSelf = this;
     qRegisterMetaType<DUChainBasePointer>("KDevelop::DUChainBasePointer");
     qRegisterMetaType<DUContextPointer>("KDevelop::DUContextPointer");
     qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
@@ -67,9 +73,13 @@ public:
     qRegisterMetaType<Problem>("KDevelop::Problem");
 
     notifier = new DUChainObserver();
+    instance = new DUChain();
+  }
+  ~DUChainPrivate() {
+    delete instance;
   }
 
-  DUChain instance;
+  DUChain* instance;
   DUChainLock lock;
   QMap<IdentifiedFile, TopDUContext*> m_chains;
   QHash<uint, TopDUContext*> m_chainsByIndex;
@@ -78,6 +88,8 @@ public:
   Definitions m_definitions;
   Uses m_uses;
 
+  QString duchainDataDirectory;
+  
   ParsingEnvironmentManager* managerForType(int type)
   {
     QMap<int,ParsingEnvironmentManager*>::const_iterator it = m_managers.find(type);
@@ -87,6 +99,7 @@ public:
     else
       return 0;
   }
+  KLockFile::Ptr duchainDirLock;
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -101,6 +114,34 @@ DUChain::DUChain()
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
+    KStandardDirs dirs;
+    QString baseDir = KStandardDirs::locateLocal("data", "kdevduchain");
+    
+    KStandardDirs::makeDir(baseDir);
+    //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
+    for(int a = 0; a < 100; ++a) {
+      QString specificDir = baseDir + QString("/%1").arg(a);
+      KStandardDirs::makeDir(specificDir);
+      duChainPrivateSelf->duchainDirLock = new KLockFile(specificDir + "/lock");
+      KLockFile::LockResult result = duChainPrivateSelf->duchainDirLock->lock(KLockFile::NoBlockFlag);
+      if(result == KLockFile::LockOK || result == KLockFile::LockStale) {
+        duChainPrivateSelf->duchainDataDirectory = specificDir;
+        if(result == KLockFile::LockStale)
+          kWarning() << "stale lock detected:" << specificDir + "/lock";
+        break;
+      }
+    }
+    
+    if(duChainPrivateSelf->duchainDataDirectory.isEmpty()) {
+      kWarning() << "could not create a directory for the duchain data";
+    }else{
+      kDebug() << "picked duchain directory" << duChainPrivateSelf->duchainDataDirectory;
+      if(!globalItemRepositoryRegistry().open(duChainPrivateSelf->duchainDataDirectory)) {
+        ///@todo clear all duchain data and re-open clearing the directory
+      }else{
+        kDebug() << "successfully opened" << duChainPrivateSelf->duchainDataDirectory;
+      }
+    }
   }
 }
 
@@ -110,7 +151,7 @@ DUChain::~DUChain()
 
 DUChain* DUChain::self()
 {
-  return &sdDUChainPrivate->instance;
+  return sdDUChainPrivate->instance;
 }
 
 DUChainLock* DUChain::lock()
