@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,29 +18,20 @@
  * 02110-1301, USA.
  */
 
-#include "testsuite.h"
-#include "outputparser.h"
-#include <KDebug>
-#include <QDir>
+#include "testcase.h"
 
-using Check::TestSuite;
-using Check::OutputParser;
 using Veritas::Test;
 
-TestSuite::TestSuite(const QString& name, const QFileInfo& exe, Test* parent)
-    : Test(name, parent), m_exe(exe)
+TestCase::TestCase(const QString& name, Test* parent)
+        : Test(name, parent)
 {}
 
-TestSuite::~TestSuite()
+TestCase::~TestCase()
 {}
 
-TestCase* TestSuite::child(int i) const
+TestCommand* TestCase::child(int i) const
 {
-    Test* child = Test::child(i);
-    TestCase* caze = qobject_cast<TestCase*>(child);
-    kWarning(caze==0) << "cast failed? " << name() << " " 
-                      << i << " " << ((child!=0) ? child->name() : "null");
-    return caze;
+    return static_cast<TestCommand*>(Test::child(i));
 }
 
-#include "testsuite.moc"
+#include "testcase.moc"

@@ -25,7 +25,7 @@
 #include <ui_statuswidget.h>
 #include <runnerwindow.h>
 #include <runnermodel.h>
-#include <register.h>
+#include "plugins/xtest/cppunit/register.h"
 
 #include <KDebug>
 #include <QBuffer>
@@ -39,7 +39,6 @@
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
-using Veritas::Register;
 using Check::TestSuite;
 using Check::TestRoot;
 using Check::it::CheckRunnerTest;

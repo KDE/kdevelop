@@ -26,7 +26,7 @@
 #include <runnerwindow.h>
 #include <runnermodel.h>
 #include <testresult.h>
-#include <register.h>
+#include "register.h"
 
 #include <KDebug>
 #include <QBuffer>
@@ -40,7 +40,6 @@
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
-using Veritas::Register;
 using Veritas::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestRoot;

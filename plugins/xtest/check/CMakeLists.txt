@@ -26,6 +26,8 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
 
 set(kdevcheck_SRCS
+    ../cppunit/testcase.cpp
+    ../cppunit/testcommand.cpp
     outputparser.cpp
     testsuite.cpp
     testroot.cpp)

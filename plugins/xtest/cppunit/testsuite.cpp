@@ -24,7 +24,6 @@
 
 using CppUnit::TestSuite;
 using CppUnit::OutputParser;
-using Veritas::TestCase;
 using Veritas::Test;
 
 TestSuite::TestSuite()
@@ -42,24 +41,5 @@ TestCase* TestSuite::child(int i) const
 {
     return static_cast<TestCase*>(Test::child(i));
 }
-
-// bool TestSuite::shouldRun() const
-// {
-//     return true;
-// }
-// 
-// int TestSuite::run()
-// {
-//     KProcess proc;
-//     QStringList argv;
-//     proc.setProgram(m_exe.filePath(), argv);
-//     kDebug() << "executing " << proc.program();
-//     proc.setOutputChannelMode(KProcess::SeparateChannels);
-//     proc.start();
-//     proc.waitForFinished(-1);
-//     OutputParser parser(&proc);
-//     parser.go(this);
-//     return 0;
-// }
 
 #include "testsuite.moc"

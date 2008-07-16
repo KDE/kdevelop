@@ -21,7 +21,7 @@
 #include "outputparser.h"
 #include "testsuite.h"
 #include "testroot.h"
-#include <testcase.h>
+#include "plugins/xtest/cppunit/testcase.h"
 #include <QStringRef>
 #include <KDebug>
 

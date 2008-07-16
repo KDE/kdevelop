@@ -25,7 +25,8 @@
 #include <QFileInfo>
 #include <KProcess>
 #include <test.h>
-#include <testcase.h>
+
+#include "testcase.h"
 
 namespace CppUnit
 {
@@ -37,9 +38,7 @@ public:
     TestSuite();
     TestSuite(const QString&, const QFileInfo& executable, Veritas::Test* parent);
     virtual ~TestSuite();
-    Veritas::TestCase* child(int i) const;
-//     int run();
-//     bool shouldRun() const;
+    TestCase* child(int i) const;
 
 private:
     QFileInfo m_exe;

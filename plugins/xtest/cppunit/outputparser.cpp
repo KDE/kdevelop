@@ -21,13 +21,12 @@
 #include "outputparser.h"
 #include "testroot.h"
 #include <test.h>
-#include <testcase.h>
+#include "testcase.h"
 #include <QStringRef>
 #include <KDebug>
 
 using Veritas::Test;
 using Veritas::TestResult;
-using Veritas::TestCase;
 using CppUnit::TestRoot;
 using CppUnit::OutputParser;
 

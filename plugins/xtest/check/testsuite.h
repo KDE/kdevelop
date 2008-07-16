@@ -26,7 +26,8 @@
 #include <KProcess>
 
 #include <test.h>
-#include <testcase.h>
+
+#include "plugins/xtest/cppunit/testcase.h"
 
 namespace Check
 {
@@ -40,7 +41,7 @@ public:
      */
     TestSuite(const QString&, const QFileInfo&, Veritas::Test*);
     virtual ~TestSuite();
-    Veritas::TestCase* child(int i) const;
+    TestCase* child(int i) const;
 
 private:
     QFileInfo m_exe;
