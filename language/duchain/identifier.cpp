@@ -61,7 +61,7 @@ public:
       uint hash = m_identifier.hash();
       FOREACH_FUNCTION(uint templateIdentifier, templateIdentifiers)
         hash = hash * 13 + TypeIdentifier(templateIdentifier).hash();
-      m_hash += m_unique;
+      hash += m_unique;
       m_hash = hash;
     }
     
@@ -259,9 +259,9 @@ uint Identifier::hash() const {
 
 bool Identifier::isEmpty() const {
   if(!m_index)
-    return dd->m_identifier.isEmpty() && dd->templateIdentifiersSize() == 0;
+    return dd->m_identifier.isEmpty() && dd->m_unique == 0 && dd->templateIdentifiersSize() == 0;
   else
-    return cd->m_identifier.isEmpty() && cd->templateIdentifiersSize() == 0;
+    return cd->m_identifier.isEmpty() && cd->m_unique == 0 && cd->templateIdentifiersSize() == 0;
 }
 
 Identifier::Identifier(const IndexedString& str)
@@ -391,6 +391,9 @@ QString Identifier::toString() const
 
   QString ret = identifier().str();
 
+/*  if(isUnique())
+    ret += "unique";*/
+  
   if (templateIdentifiersCount()) {
     ret.append("< ");
     for (uint i = 0; i < templateIdentifiersCount(); ++i) {
