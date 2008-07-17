@@ -46,47 +46,30 @@ void RunnerProxyModelTest::cleanup()
 void RunnerProxyModelTest::default_()
 {
     KVERIFY(proxy->isActive());
-    // all columns are disabled by default ...
-    assertRowFiltered(0);
-    assertRowFiltered(1);
 }
 
-// test command
-// void RunnerProxyModelTest::deactivate()
+// // test command
+// void RunnerProxyModelTest::enableColumns()
 // {
-//     setAllColumnsEnabled();
-//     proxy->setActive(false);
-//
-//     assertRowFiltered(0);
-//     assertRowFiltered(1);
+//     setAllColumnsEnabled(); // evrything should get through
+// 
+//     assertRowContains(0, "00", "01", "02");     // row 0
+//     assertRowContains(1, "10", "11", "12");     // row 1
 // }
-
-// test command
-void RunnerProxyModelTest::enableColumns()
-{
-    setAllColumnsEnabled(); // evrything should get through
-
-    // row 0
-    assertRowContains(0, "00", "01", "02");
-    // row 1
-    assertRowContains(1, "10", "11", "12");
-}
-
-//test command
-void RunnerProxyModelTest::disableColumn()
-{
-    // disable column 1
-    QBitArray cols(3);
-    cols.setBit(0);
-    cols.clearBit(1);
-    cols.setBit(2);
-    proxy->setEnabledColumns(cols);
-
-    // row 0
-    assertRowContains(0, "00", QVariant(), "02");
-    // row 1
-    assertRowContains(1, "10", QVariant(), "12");
-}
+// 
+// //test command
+// void RunnerProxyModelTest::disableColumn()
+// {
+//     // disable column 1
+//     QBitArray cols(3);
+//     cols.setBit(0);
+//     cols.clearBit(1);
+//     cols.setBit(2);
+//     proxy->setEnabledColumns(cols);
+// 
+//     assertRowContains(0, "00", QVariant(), "02");     // row 0
+//     assertRowContains(1, "10", QVariant(), "12");     // row 1
+// }
 
 void RunnerProxyModelTest::errorHandling()
 {

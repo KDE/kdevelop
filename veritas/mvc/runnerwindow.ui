@@ -124,6 +124,9 @@
            <property name="wordWrap" >
             <bool>false</bool>
            </property>
+           <property name="headerHidden" >
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>

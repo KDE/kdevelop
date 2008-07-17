@@ -44,9 +44,6 @@ private slots:
     void cleanup();
 
     void default_();
-    //void deactivate(); TODO
-    void enableColumns();
-    void disableColumn();
     void errorHandling();
 
 private:

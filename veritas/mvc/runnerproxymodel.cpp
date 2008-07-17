@@ -19,39 +19,20 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  runnerproxymodel.cpp
- *
- * \brief Implements class RunnerProxyModel.
- */
-
 #include "veritas/mvc/runnerproxymodel.h"
 
-namespace Veritas
-{
+using Veritas::RunnerProxyModel;
 
 RunnerProxyModel::RunnerProxyModel(QObject* parent)
         : QSortFilterProxyModel(parent)
-{
-
-}
+{}
 
 RunnerProxyModel::~RunnerProxyModel()
-{
-
-}
+{}
 
 QVariant RunnerProxyModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    if (isColumnEnabled(index.column())) {
-        return QSortFilterProxyModel::data(index, role);
-    }
-
-    return QVariant();
+    return QSortFilterProxyModel::data(index,role);
 }
 
-} // namespace
+#include "runnerproxymodel.moc"

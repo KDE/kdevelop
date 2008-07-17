@@ -19,12 +19,6 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  runnerproxymodel.h
- *
- * \brief Declares class RunnerProxyModel.
- */
-
 #ifndef VERITAS_RUNNERPROXYMODEL_H
 #define VERITAS_RUNNERPROXYMODEL_H
 
@@ -39,37 +33,23 @@ namespace Veritas
  * \brief The RunnerProxyModel class provides support for sorting and
  *        filtering data passed between RunnerModel and a view.
  *
- * When a column of the model is disabled, no data is returned for
- * that column.
- *
- * \sa \ref views
+ * It is currently not used, but will probably be in the near
+ * future. Most likely for a regex-test filter box.
  */
-
 class RunnerProxyModel : public QSortFilterProxyModel,
                          public ProxyModelCommon
 {
-    Q_OBJECT
+Q_OBJECT
 
-public: // Operations
-
-    /*!
-     * Constructs a runner proxy model with the given \a parent.
-     */
+public:
     RunnerProxyModel(QObject* parent);
-
-    /*!
-     * Destroys this runner proxy model.
-     */
     ~RunnerProxyModel();
 
-    /*!
-     * Returns the data stored under the given \a role for the item
-     * referred to by \a index.
-     */
+    /*! Returns the data stored under the given \a role for the item
+     * referred to by \a index. */
     QVariant data(const QModelIndex& index, int role) const;
 
-private: // Operations
-
+private:
     // Copy and assignment not supported.
     RunnerProxyModel(const RunnerProxyModel&);
     RunnerProxyModel& operator=(const RunnerProxyModel&);
