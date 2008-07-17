@@ -27,11 +27,6 @@ namespace KDevelop {
 
 REGISTER_TYPE(EnumeratorType);
 
-EnumeratorTypeData::EnumeratorTypeData()
-  : m_value(0)
-{
-}
-
 EnumeratorType::EnumeratorType(const EnumeratorType& rhs)
   : EnumeratorTypeBase(copyData<EnumeratorTypeData>(*rhs.d_func()))
 {
@@ -50,11 +45,6 @@ EnumeratorType::EnumeratorType()
   setModifiers(ConstModifier);
 }
 
-qint64 EnumeratorType::plainValue() const
-{
-  return d_func()->m_value;
-}
-
 AbstractType* EnumeratorType::clone() const
 {
   return new EnumeratorType(*this);
@@ -63,76 +53,34 @@ AbstractType* EnumeratorType::clone() const
 bool EnumeratorType::equals(const AbstractType* _rhs) const
 {
   const EnumeratorType* rhs = fastCast<const EnumeratorType*>(_rhs);
+  bool ret = false;
 
   if( !rhs )
-    return false;
+    ret = false;
 
-  if( this == rhs )
-    return true;
+  else if( this == rhs )
+    ret = true;
 
-  return IdentifiedType::equals(rhs) && d_func()->m_value == rhs->d_func()->m_value && IntegralType::equals(rhs);
-}
+  else
+    ret = IdentifiedType::equals(rhs) && ConstantIntegralType::equals(rhs);
 
-QString EnumeratorType::toString() const
-{
-  QString ret = "enum ";
-
-  switch(dataType()) {
-    case TypeNone:
-      ret += "none";
-    case TypeChar:
-      ret += QString("%1").arg((char)d_func()->m_value);
-    case TypeWchar_t:
-      ret += QString("%1").arg((wchar_t)d_func()->m_value);
-    case TypeBoolean:
-      ret += d_func()->m_value ? "true" : "false";
-    case TypeInt:
-      ret += (modifiers() & UnsignedModifier) ? QString("%1u").arg((uint)d_func()->m_value) : QString("%1").arg((int)d_func()->m_value);
-    case TypeFloat:
-      ret += QString("%1").arg( value<float>() );
-    case TypeDouble:
-      ret += QString("%1").arg( value<double>() );
-    case TypeVoid:
-      ret += "void";
-    default:
-      ret += "<unknown_value>";
-  }
-
+  kDebug() << this << rhs << _rhs << ret << toString() << _rhs->toString();
   return ret;
 }
 
 uint EnumeratorType::hash() const
 {
-  uint hashValue = IntegralType::hash() + 47 * (uint)d_func()->m_value;
-  return 27*IdentifiedType::hash() + 13*hashValue;
+  return 27*(IdentifiedType::hash() + 13*ConstantIntegralType::hash());
 }
 
-template<>
-void EnumeratorType::setValueInternal<qint64>(qint64 value) {
-  if((modifiers() & UnsignedModifier))
-    kDebug() << "setValue(signed) called on unsigned type";
-  d_func_dynamic()->m_value = value;
+AbstractType::WhichType EnumeratorType::whichType() const
+{
+  return TypeEnumerator;
 }
 
-template<>
-void EnumeratorType::setValueInternal<quint64>(quint64 value) {
-  if((modifiers() & UnsignedModifier))
-    kDebug() << "setValue(unsigned) called on not unsigned type";
-  d_func_dynamic()->m_value = (qint64)value;
-}
-
-template<>
-void EnumeratorType::setValueInternal<float>(float value) {
-  if(dataType() != TypeFloat)
-    kDebug() << "setValue(float) called on non-float type";
-  memcpy(&d_func_dynamic()->m_value, &value, sizeof(float));
-}
-
-template<>
-void EnumeratorType::setValueInternal<double>(double value) {
-  if(dataType() != TypeDouble)
-    kDebug() << "setValue(double) called on non-double type";
-  memcpy(&d_func_dynamic()->m_value, &value, sizeof(double));
+QString EnumeratorType::toString() const
+{
+  return "enum " + IdentifiedType::qualifiedIdentifier().toString();
 }
 
 }

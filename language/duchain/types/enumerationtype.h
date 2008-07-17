@@ -61,13 +61,13 @@ protected:
   TYPE_DECLARE_DATA(EnumerationType);
 };
 
-template<>
+/*template<>
 inline EnumerationType* fastCast<EnumerationType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeEnumeration)
     return 0;
   else
     return static_cast<EnumerationType*>(from);
-}
+}*/
 
 }
 

@@ -22,28 +22,14 @@
 #define ENUMERATORTYPE_H
 
 #include <language/duchain/types/identifiedtype.h>
-#include <language/duchain/types/integraltype.h>
-#include <language/duchain/types/typesystemdata.h>
+#include <language/duchain/types/constantintegraltype.h>
 
 namespace KDevelop
 {
 
-template<typename T>
-T constant_value(const qint64* realval)
-{
-  T value;
-  memcpy(&value, realval, sizeof(T));
-  return value;
-}
+typedef KDevelop::MergeIdentifiedType<ConstantIntegralType> EnumeratorTypeBase;
 
-typedef KDevelop::MergeIdentifiedType<IntegralType> EnumeratorTypeBase;
-
-struct EnumeratorTypeData : public EnumeratorTypeBase::Data {
-  /// Constructor
-  EnumeratorTypeData();
-  /// Constant integer value
-  qint64 m_value;
-};
+typedef EnumeratorTypeBase::Data EnumeratorTypeData;
 
 //The same as EnumerationType, with the difference that here the value is also known
 class KDEVPLATFORMLANGUAGE_EXPORT EnumeratorType : public EnumeratorTypeBase
@@ -57,48 +43,15 @@ public:
 
   typedef TypePtr<EnumeratorType> Ptr;
 
-    /**The types and modifiers are not changed!
-   * The values are casted internally to the local representation, so you can lose precision.
-   * */
-  template<class ValueType>
-  void setValue(ValueType value) {
-    if(AbstractType::modifiers() & UnsignedModifier)
-      setValueInternal<quint64>(value);
-    else if(IntegralType::dataType() == TypeFloat)
-      setValueInternal<float>(value);
-    else if(IntegralType::dataType() == TypeDouble)
-      setValueInternal<double>(value);
-    else
-      setValueInternal<qint64>(value);
-  }
-
-  /**
-   * For booleans, the value is 1 for true, and 0 for false.
-   * All signed values should be retrieved and set through value(),
-   *
-   * */
-  template<class ValueType>
-  ValueType value() const {
-    if(modifiers() & UnsignedModifier) {
-      return constant_value<quint64>(&d_func()->m_value);
-    } else if(dataType() == TypeFloat) {
-      return constant_value<float>(&d_func()->m_value);
-    } else if(dataType() == TypeDouble) {
-      return constant_value<double>(&d_func()->m_value);
-    } else {
-      return constant_value<qint64>(&d_func()->m_value);
-    }
-  }
-
-  qint64 plainValue() const;
-
-  virtual QString toString() const;
-
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual KDevelop::AbstractType* clone() const;
 
   virtual uint hash() const;
+
+  virtual WhichType whichType() const;
+
+  virtual QString toString() const;
 
   enum {
     Identity = 20
@@ -108,20 +61,15 @@ public:
 
 protected:
   TYPE_DECLARE_DATA(EnumeratorType);
-
-private:
-  //Sets the value without casting
-  template<class ValueType>
-  void setValueInternal(ValueType value);
 };
 
-template<>
+/*template<>
 inline EnumeratorType* fastCast<EnumeratorType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeEnumerator)
     return 0;
   else
     return static_cast<EnumeratorType*>(from);
-}
+}*/
 
 }
 
