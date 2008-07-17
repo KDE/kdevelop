@@ -26,7 +26,7 @@
 #include <QTreeView>
 #include <QModelIndex>
 #include <QAbstractItemModel>
-#include <ui_statuswidget.h>
+#include <ui_runnerwindow.h>
 
 #include <qtestregister.h>
 #include <runnermodel.h>
@@ -202,7 +202,7 @@ void QTestRunnerTest::initNrun(QByteArray& regXml)
 // helper
 void QTestRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
 {
-    Ui::StatusWidget* status = m_window->statusWidget();
+    const Ui::RunnerWindow* status = m_window->statusWidget();
 
     // validate the status widget
     KOMPARE(labels["total"], status->labelNumTotal->text());

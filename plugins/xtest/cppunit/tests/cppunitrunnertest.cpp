@@ -22,7 +22,7 @@
 
 #include <kasserts.h>
 #include <qtest_kde.h>
-#include <ui_statuswidget.h>
+#include <ui_runnerwindow.h>
 #include <runnerwindow.h>
 #include <runnermodel.h>
 #include <testresult.h>
@@ -215,7 +215,7 @@ void CppUnitRunnerTest::initNrun(const char* exe)
 // helper
 void CppUnitRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
 {
-    Ui::StatusWidget* status = m_window->statusWidget();
+    const Ui::RunnerWindow* status = m_window->statusWidget();
 
     // validate the status widget
     KOMPARE(labels["total"], status->labelNumTotal->text());

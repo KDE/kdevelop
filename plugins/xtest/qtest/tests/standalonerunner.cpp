@@ -19,6 +19,7 @@
  */
 
 #include <QFile>
+#include <QMainWindow>
 #include <KApplication>
 #include <KComponentData>
 #include <KAboutData>
