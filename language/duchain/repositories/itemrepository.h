@@ -26,8 +26,11 @@
 #include <QList>
 #include <QDir>
 #include <QFile>
+#include <klockfile.h>
 #include <kdebug.h>
 #include "../languageexport.h"
+
+#define DEBUG_ITEMREPOSITORY_LOADING
 
 namespace KDevelop {
 
@@ -63,22 +66,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
   public:
-    ItemRepositoryRegistry();
+    ItemRepositoryRegistry(QString openPath = QString(), KLockFile::Ptr lock = KLockFile::Ptr());
     ~ItemRepositoryRegistry();
     
     ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
     ///@param clear Whether a fresh start should be done, and all repositories cleared
     ///If this returns false, loading has failed, and all repositories have been discarded.
-    bool open(const QString& path, bool clear = false);
+    bool open(const QString& path, bool clear = false, KLockFile::Ptr lock = KLockFile::Ptr());
     void close();
     ///The registered repository will automatically be opened with the current path, if one is set.
     void registerRepository(AbstractItemRepository* repository);
     ///The registered repository will automatically be closed if it was open.
     void unRegisterRepository(AbstractItemRepository* repository);
+    ///Returns the path currently set
+    QString path() const;
   private:
     QString m_path;
     QList<AbstractItemRepository*> m_repositories;
     bool m_cleared;
+    KLockFile::Ptr m_lock;
 };
 
 ///The global item-repository registry that is used by default
@@ -137,7 +143,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
-      DataSize = sizeof(unsigned int) + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize)
+      DataSize = sizeof(unsigned int) * 3 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
+    };
+    enum {
+      CheckStart = 0xff00ff1,
+      CheckEnd = 0xfafcfb
     };
     Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_nextBucketHash(0) {
     }
@@ -165,10 +175,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         if(file->size() >= offset + DataSize) {
           file->seek(offset);
           
+          uint checkStart, checkEnd;
+          file->read((char*)&checkStart, sizeof(unsigned int));
           file->read((char*)&m_available, sizeof(unsigned int));
           file->read(m_data, ItemRepositoryBucketSize);
           file->read((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
           file->read((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
+          file->read((char*)&m_largestFreeItem, sizeof(short unsigned int));
+          file->read((char*)&checkEnd, sizeof(unsigned int));
+          Q_ASSERT(checkStart == CheckStart);
+          Q_ASSERT(checkEnd == CheckEnd);
+          Q_ASSERT(file->pos() == offset + DataSize);
         }
       }
     }
@@ -182,10 +199,50 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
 
       file->seek(offset);
       
+      uint checkStart = CheckStart, checkEnd = CheckEnd;
+      file->write((char*)&checkStart, sizeof(unsigned int));
       file->write((char*)&m_available, sizeof(unsigned int));
       file->write(m_data, ItemRepositoryBucketSize);
       file->write((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
       file->write((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
+      file->write((char*)&m_largestFreeItem, sizeof(short unsigned int));
+      file->write((char*)&checkEnd, sizeof(unsigned int));
+      Q_ASSERT(file->pos() == offset + DataSize);
+#ifdef DEBUG_ITEMREPOSITORY_LOADING
+      {
+        file->flush();
+        file->seek(offset);
+        
+        uint available;
+        short unsigned int largestFree;
+        
+        char* d = new char[ItemRepositoryBucketSize];
+        short unsigned int* m = new short unsigned int[m_objectMapSize];
+        short unsigned int* h = new short unsigned int[NextBucketHashSize];
+        
+        file->read((char*)&checkStart, sizeof(unsigned int));
+        file->read((char*)&available, sizeof(unsigned int));
+        file->read(d, ItemRepositoryBucketSize);
+        file->read((char*)m, sizeof(short unsigned int) * m_objectMapSize);
+        file->read((char*)h, sizeof(short unsigned int) * NextBucketHashSize);
+        file->read((char*)&largestFree, sizeof(short unsigned int));
+        file->read((char*)&checkEnd, sizeof(unsigned int));
+
+        Q_ASSERT(checkStart == CheckStart);
+        Q_ASSERT(checkEnd == CheckEnd);
+        
+        Q_ASSERT(available == m_available);
+        Q_ASSERT(memcmp(d, m_data, ItemRepositoryBucketSize) == 0);
+        Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * m_objectMapSize) == 0);
+        Q_ASSERT(memcmp(h, m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize) == 0);
+        Q_ASSERT(m_largestFreeItem == largestFree);
+        
+        Q_ASSERT(file->pos() == offset + DataSize);
+        
+        delete[] m;
+        delete[] h;
+      }
+#endif
     }
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
@@ -399,7 +456,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 1,
+    ItemRepositoryVersion = 2,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -548,6 +605,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     ThisLocker lock(&m_mutex);
     
     unsigned short bucket = (index >> 16);
+    Q_ASSERT(bucket); //We don't use zero buckets
     
     const Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
     Q_ASSERT(bucket < m_bucketCount);
@@ -609,7 +667,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       return false;
     }
     
-    if(clear) {
+    if(clear || m_file->size() == 0) {
       m_file->resize(0);
       m_file->write((char*)&m_repositoryVersion, sizeof(uint));
       uint hashSize = bucketHashSize;
@@ -672,12 +730,60 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
     m_currentOpenPath = QString();
     
+    if(m_file) {
+      m_file->seek(0);
+      m_file->write((char*)&m_repositoryVersion, sizeof(uint));
+      uint hashSize = bucketHashSize;
+      m_file->write((char*)&hashSize, sizeof(uint));
+      uint itemRepositoryVersion  = ItemRepositoryVersion;
+      m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
+      m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
+      m_file->write((char*)&m_statItemCount, sizeof(uint));
+      uint bucketCount = m_buckets.size();
+      m_file->write((char*)&bucketCount, sizeof(uint));
+      m_file->write((char*)&m_currentBucket, sizeof(uint));
+      m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+#ifdef DEBUG_ITEMREPOSITORY_LOADING
+      {
+        m_file->flush();
+        m_file->seek(0);
+        uint storedVersion, hashSize, itemRepositoryVersion, statBucketHashClashes, statItemCount;
+
+        m_file->read((char*)&storedVersion, sizeof(uint));
+        m_file->read((char*)&hashSize, sizeof(uint));
+        m_file->read((char*)&itemRepositoryVersion, sizeof(uint));
+        m_file->read((char*)&statBucketHashClashes, sizeof(uint));
+        m_file->read((char*)&statItemCount, sizeof(uint));
+        Q_ASSERT(storedVersion == m_repositoryVersion);
+        Q_ASSERT(hashSize == bucketHashSize);
+        Q_ASSERT(itemRepositoryVersion == ItemRepositoryVersion);
+        Q_ASSERT(statBucketHashClashes == m_statBucketHashClashes);
+        Q_ASSERT(statItemCount == m_statItemCount);
+        
+        uint bucketCount, currentBucket;
+        m_file->read((char*)&bucketCount, sizeof(uint));
+        Q_ASSERT(bucketCount == m_buckets.size());
+        m_file->read((char*)&currentBucket, sizeof(uint));
+        Q_ASSERT(currentBucket == m_currentBucket);
+      
+        short unsigned int* s = new short unsigned int[bucketHashSize];
+        m_file->read((char*)s, sizeof(short unsigned int) * bucketHashSize);
+        Q_ASSERT(memcmp(s, m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize) == 0);
+        Q_ASSERT(m_file->pos() == BucketStartOffset);
+        delete[] s;
+      }
+#endif
+    }
+    
     typedef Bucket<Item, ItemRequest> B;
     for(int a = 0; a < m_buckets.size(); ++a) {
       storeBucket(a);
       delete m_buckets[a];
     }
 
+    if(m_file)
+      m_file->close();
     delete m_file;
     m_file = 0;
     
@@ -688,6 +794,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   }
 
   inline void initializeBucket(unsigned int bucketNumber) const {
+    Q_ASSERT(bucketNumber);
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest>();
       if(m_file)
