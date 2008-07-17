@@ -30,7 +30,6 @@
 #include "veritas/mvc/runnerproxymodel.h"
 #include "veritas/mvc/runnerviewcontroller.h"
 #include "veritas/mvc/selectionmanager.h"
-#include "veritas/mvc/statuswidget.h"
 #include "veritas/mvc/stoppingdialog.h"
 
 #include "veritas/utils.h"

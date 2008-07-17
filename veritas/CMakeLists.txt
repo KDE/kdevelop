@@ -17,8 +17,6 @@ include_directories(
 
 set(veritas_SRCS
     test.cpp
-#     testcommand.cpp
-#     testcase.cpp
     testresult.cpp
     testrunnertoolview.cpp
     utils.cpp
@@ -31,7 +29,6 @@ set(veritas_SRCS
     mvc/runnerproxymodel.cpp
     mvc/runnerviewcontroller.cpp
     mvc/runnerwindow.cpp
-    mvc/statuswidget.cpp
     mvc/stoppingdialog.cpp
     mvc/viewcontrollercommon.cpp
     mvc/selectionmanager.cpp
@@ -40,7 +37,6 @@ set(veritas_SRCS
 
 kde4_add_ui_files(veritas_SRCS
     mvc/runnerwindow.ui
-    mvc/statuswidget.ui
     mvc/stoppingdialog.ui)
 
 qt4_add_resources(veritas_SRCS
