@@ -351,10 +351,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->addValue( "CONFIG", "dbus" );
         else
             myProjectItem->removeValue( "CONFIG", "dbus" );
-        if ( checkQtScript->isChecked() )
-            myProjectItem->addValue( "QT", "script" );
-        else
-            myProjectItem->removeValue( "QT", "script" );
         if ( checkBuildAll->isChecked() )
             myProjectItem->addValue( "CONFIG", "build_all" );
         else
@@ -392,6 +388,22 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->addValue( "QT", "opengl" );
         else
             myProjectItem->removeValue( "QT", "opengl" );
+        if ( checkQtScript->isChecked() )
+            myProjectItem->addValue( "QT", "script" );
+        else
+            myProjectItem->removeValue( "QT", "script" );
+        if ( checkQtWebKit->isChecked() )
+            myProjectItem->addValue( "QT", "webkit" );
+        else
+            myProjectItem->removeValue( "QT", "webkit" );
+        if ( checkQtXmlPatterns->isChecked() )
+            myProjectItem->addValue( "QT", "xmlpatterns" );
+        else
+            myProjectItem->removeValue( "QT", "xmlpatterns" );
+        if ( checkPhonon->isChecked() )
+            myProjectItem->addValue( "QT", "phonon" );
+        else
+            myProjectItem->removeValue( "QT", "phonon" );
     }
 
     QStringList confValues = myProjectItem->scope->variableValues( "CONFIG" );
@@ -851,6 +863,18 @@ void ProjectConfigurationDlg::updateControls()
             checkQtScript->setChecked( true );
         else
             checkQtScript->setChecked( false );
+        if ( qtLibs.findIndex( "phonon" ) != -1 )
+            checkPhonon->setChecked( true );
+        else
+            checkPhonon->setChecked( false );
+        if ( qtLibs.findIndex( "webkit" ) != -1 )
+            checkQtWebKit->setChecked( true );
+        else
+            checkQtWebKit->setChecked( false );
+        if ( qtLibs.findIndex( "xmlpatterns" ) != -1 )
+            checkQtXmlPatterns->setChecked( true );
+        else
+            checkQtXmlPatterns->setChecked( false );
 
         checkDebugReleaseMode->setEnabled( true );
         checkBuildAll->setEnabled( true );
