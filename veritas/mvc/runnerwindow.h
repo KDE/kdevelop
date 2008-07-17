@@ -27,7 +27,6 @@
 #include <QtGui/QLabel>
 #include <QtCore/QSemaphore>
 
-namespace Ui { class StatusWidget; }
 namespace KDevelop { class IProject; }
 
 class QAction;
@@ -67,7 +66,7 @@ class SelectionManager;
  *
  * \sa \ref main_window
  */
-class RunnerWindow : public QMainWindow
+class RunnerWindow : public QWidget
 {
 Q_OBJECT
 public: // Operations
@@ -90,7 +89,8 @@ public: // Operations
     /*!
      * Shows the main window adapted to the current model and settings.
      */
-    void show();
+//     void show();
+//     void show_();
 
     /*!
      * Sets the \a model for the main window to present.
@@ -121,7 +121,7 @@ public: // Operations
     bool isResultsViewVisible() const;
 
     Ui::RunnerWindow& ui() { return m_ui; }
-    Ui::StatusWidget* statusWidget() const;
+    const Ui::RunnerWindow* statusWidget() const;
 
     KSelectAction* projectPopup() const;
 
@@ -199,8 +199,8 @@ private Q_SLOTS:
     void setResultsFilter() const;
 
     /*!
-     * Highlights the results view row that corresponds to the runner
-     * proxy model selection in \a selected. \a deselected is ignored.
+     * Filter all results which belong to the selected in the 
+     * results view.
      */
     void syncResultWithTest(const QItemSelection& selected,
                                   const QItemSelection& deselected) const;
@@ -343,7 +343,7 @@ private: // Operations
 private: // Attributes
 
     Ui::RunnerWindow m_ui;             // QtDesigner main object
-    StatusWidget* m_statusWidget;      // shows num run, selected etc
+    //StatusWidget* m_statusWidget;      // shows num run, selected etc
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm not sure about this either
     RunnerViewController*  m_runnerViewController; // extracts some functionality from this class

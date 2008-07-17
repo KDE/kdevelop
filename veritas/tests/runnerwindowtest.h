@@ -23,7 +23,7 @@
 
 #include <QtTest/QtTest>
 #include <QTreeView>
-#include <ui_statuswidget.h>
+#include <ui_runnerwindow.h>
 
 namespace Veritas
 {
@@ -62,6 +62,7 @@ private slots:
     void collapseAll();
     void deselectItems();
     void newModel();
+    void clickRunnerResults();
 
 private:
     void expandSome();
@@ -82,7 +83,7 @@ private:
 private:
     Veritas::RunnerWindow* window;
     Veritas::ut::RunnerModelStub* model;
-    Ui::StatusWidget* status;
+    const Ui::RunnerWindow* status;
     Veritas::RunnerProxyModel* m_proxy;
     Veritas::ResultsProxyModel* m_resultsProxy;
     QTreeView* m_view;

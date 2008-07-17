@@ -49,6 +49,7 @@ private slots:
     void appendResults();
     void mapIndices();
     void errorHandling();
+    void testFromIndex();
 
 private:
     void assertColumnHeader(const QVariant& expected, int index);

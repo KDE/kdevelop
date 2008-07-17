@@ -32,7 +32,7 @@ using Veritas::ResultsModel;
 
 Test* ResultsModel::testFromIndex(const QModelIndex& i) const
 {
-    QModelIndex j = mapFromTestIndex(i);
+    QModelIndex j = mapToTestIndex(i);
     return itemFromIndex(j);
 }
 
@@ -48,9 +48,7 @@ ResultsModel::ResultsModel(const QStringList& headerData, QObject* parent)
 }
 
 ResultsModel::~ResultsModel()
-{
-
-}
+{}
 
 bool ResultsModel::hasChildren(const QModelIndex& index) const
 {
@@ -114,13 +112,10 @@ int ResultsModel::columnCount(const QModelIndex& parent) const
 int ResultsModel::result(int row) const
 {
     QModelIndex testItemIndex = mapToTestIndex(index(row, 0));
-
     if (!testItemIndex.isValid()) {
         return Veritas::NoResult;
     }
-
     Test* item = itemFromIndex(testItemIndex);
-
     return item->state();
 }
 
@@ -129,9 +124,7 @@ QModelIndex ResultsModel::mapToTestIndex(const QModelIndex& index) const
     if (!index.isValid()) {
         return QModelIndex();
     }
-
     return m_testItemIndexes.value(index.row());
-
     // Note: QList provides sensible default values if the row
     // number is out of range.
 }
@@ -141,15 +134,12 @@ QModelIndex ResultsModel::mapFromTestIndex(const QModelIndex& testItemIndex) con
     if (!testItemIndex.isValid()) {
         return QModelIndex();
     }
-
     QModelIndex modelIndex;
-
     qint64 id = testItemIndex.internalId();
-
+    kDebug() << id;
     if (m_testItemMap.contains(id)) {
         modelIndex = index(m_testItemMap[id], 0);
     }
-
     return modelIndex;
 }
 
@@ -158,13 +148,9 @@ void ResultsModel::addResult(const QModelIndex& testItemIndex)
     if (!testItemIndex.isValid()) {
         return;
     }
-
-    //beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-
     m_testItemIndexes.append(QPersistentModelIndex(testItemIndex));
     m_testItemMap[testItemIndex.internalId()] = rowCount() - 1;
-
     endInsertRows();
 }
 

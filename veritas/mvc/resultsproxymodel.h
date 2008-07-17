@@ -19,12 +19,6 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  resultsproxymodel.h
- *
- * \brief Declares class ResultsProxyModel.
- */
-
 #ifndef VERITAS_RESULTSPROXYMODEL_H
 #define VERITAS_RESULTSPROXYMODEL_H
 

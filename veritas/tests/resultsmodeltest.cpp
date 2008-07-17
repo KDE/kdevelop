@@ -29,6 +29,7 @@
 #include <QString>
 #include <QStringList>
 #include <qtest_kde.h>
+#include <KDebug>
 
 using Veritas::ResultsModel;
 using Veritas::RunnerModel;
@@ -77,7 +78,8 @@ void ResultsModelTest::appendResults()
     KOMPARE(Veritas::RunSuccess, m_model->result(0));
     KOMPARE(Veritas::RunFatal, m_model->result(1));
 
-    QModelIndex topIndex = m_model->index(0,0); 
+    QModelIndex topIndex = m_model->index(0,0);
+    KVERIFY(topIndex.isValid());
     KVERIFY_MSG(!topIndex.child(0,0).isValid(), "Not expecting children");
     KVERIFY_MSG(!m_model->index(0,0, topIndex).isValid(), "Not expecting children");
 
@@ -90,7 +92,9 @@ void ResultsModelTest::mapIndices()
 {
     fillRows();
     QModelIndex runIndex0 = m_runnerModel->index(0, 0);
+    KVERIFY(runIndex0.isValid());
     QModelIndex resultIndex0 = m_model->index(0, 0);
+    KVERIFY(resultIndex0.isValid());
 
     KOMPARE(runIndex0, m_model->mapToTestIndex(resultIndex0));
     KOMPARE(resultIndex0, m_model->mapFromTestIndex(runIndex0));
@@ -117,6 +121,20 @@ void ResultsModelTest::errorHandling()
     KOMPARE(QModelIndex(), m_model->mapFromTestIndex(QModelIndex()));
 }
 
+// command
+void ResultsModelTest::testFromIndex()
+{
+    fillRows();
+    QModelIndex testIndex = m_runnerModel->index(0,0);
+    Test* actual = m_model->testFromIndex(testIndex);
+    Test* expected = static_cast<Test*>(testIndex.internalPointer());
+
+    KVERIFY(expected != NULL); // sanity check
+    KVERIFY_MSG(actual != NULL,
+        "Null pointer. Failed to map to test through resultsmodel.");
+    KOMPARE(actual->name(), expected->name());
+}
+
 // test command
 // void ResultsModelTest::fetchIcon()
 // {
@@ -132,11 +150,13 @@ void ResultsModelTest::errorHandling()
 //     KOMPARE(icon, actualIcon);
 // }
 
+// helper
 void ResultsModelTest::assertColumnHeader(const QVariant& expected, int index)
 {
     KOMPARE_MSG(expected, m_model->headerData(index, Qt::Horizontal), "Incorrect column header caption");
 }
 
+// helper
 void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
     QVariant actual = m_model->data(m_model->index(row, column), Qt::DisplayRole);
@@ -144,6 +164,7 @@ void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int colum
                                   " actual " + QTest::toString(actual));
 }
 
+// helper
 void ResultsModelTest::checkRow(int index)
 {
     QString rowStr = QString::number(index);
@@ -152,6 +173,7 @@ void ResultsModelTest::checkRow(int index)
     assertDataAt(rowStr + '2', index, 2);
 }
 
+// helper
 void ResultsModelTest::fillRows()
 {
     m_model->addResult(m_runnerModel->index(0, 0)); // invoke slot

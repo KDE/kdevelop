@@ -271,4 +271,51 @@ void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
     }
 }
 
+#define PRINT_MODEL(mdl) printModel(mdl->index(0,0), 0)
+
+// command
+void RunnerWindowTest::clickRunnerResults()
+{
+/*    TestResult* t = new TestResult;
+    QString someFailureMsg = "some failure message";
+    t->setMessage(someFailureMsg);
+    model->child21->m_result = t;
+ */
+    model->child11->m_state = Veritas::RunError;
+    model->child21->m_state = Veritas::RunError;
+
+
+    runAllTests();
+
+    // fake a click on  the second root test.
+    // this is expected to filter all but the result of
+    // child21.
+    // r0
+    //   -child10
+    //   -child11 [failed]
+    // r1 <- clicked
+    //   -child21 [failed]
+    QModelIndex i = m_proxy->index(1,0);
+    m_view->selectionModel()->select(i, QItemSelectionModel::Select);
+
+    kDebug() << "RUNNER_PROXY";
+    PRINT_MODEL(m_proxy);
+    kDebug() << "RESULT_PROXY";
+    PRINT_MODEL(m_resultsProxy);
+    kDebug() << "RESULT";
+    PRINT_MODEL(window->resultsModel());
+
+    // since the 2nd item in the runnertree was set to fail,
+    // and we selected it's parent this should be the only
+    // item currently visible in the resultsview.
+    QModelIndex result21 = m_resultsProxy->index(0,0);
+    KVERIFY_MSG(result21.isValid(), 
+        "Was expecting to find something in the resultsview, "
+        "however it is empty (filtered).");
+    KVERIFY_MSG(!m_resultsProxy->index(1,0).isValid(),
+        "Resultsview should contain only a single item.");
+    KOMPARE("child21", m_resultsProxy->data(result21));
+
+}
+
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

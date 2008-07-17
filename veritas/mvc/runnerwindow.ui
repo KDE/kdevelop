@@ -1,311 +1,430 @@
 <ui version="4.0" >
  <class>RunnerWindow</class>
- <widget class="QMainWindow" name="RunnerWindow" >
+ <widget class="QWidget" name="RunnerWindow" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>821</width>
-    <height>394</height>
+    <width>1138</width>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>QxRunner</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="resources/qxrunner.qrc" >
+   <iconset resource="../resources/qxrunner.qrc" >
     <normaloff>:/icons/qxrunner_16x16.png</normaloff>:/icons/qxrunner_16x16.png</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>34</y>
-     <width>328</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" >
-    <property name="margin" >
-     <number>9</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item row="0" column="0" >
-     <widget class="QTreeView" name="treeRunner" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="alternatingRowColors" >
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode" >
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="indentation" >
-       <number>15</number>
-      </property>
-      <property name="rootIsDecorated" >
-       <bool>false</bool>
-      </property>
-      <property name="wordWrap" >
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QToolBar" name="runnerToolBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>821</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="windowTitle" >
-    <string>Ru&amp;nner Toolbar</string>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
-   </attribute>
-   <addaction name="actionStart" />
-   <addaction name="actionStop" />
-   <addaction name="actionCollapseAll" />
-   <addaction name="actionExpandAll" />
-   <addaction name="actionSelectAll" />
-   <addaction name="actionUnselectAll" />
-   <addaction name="actionReload" />
-  </widget>
-  <widget class="QStatusBar" name="statusBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>375</y>
-     <width>821</width>
-     <height>19</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QDockWidget" name="dockResults" >
-   <property name="geometry" >
-    <rect>
-     <x>334</x>
-     <y>34</y>
-     <width>487</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>200</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="features" >
-    <set>QDockWidget::AllDockWidgetFeatures</set>
-   </property>
-   <property name="windowTitle" >
-    <string>Results</string>
-   </property>
-   <attribute name="dockWidgetArea" >
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>20</y>
-      <width>487</width>
-      <height>321</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" >
-     <property name="spacing" >
-      <number>3</number>
+  <layout class="QVBoxLayout" name="verticalLayout_2" >
+   <item>
+    <widget class="QToolBar" name="runnerToolBar" >
+     <property name="windowTitle" >
+      <string>Ru&amp;nner Toolbar</string>
      </property>
-     <property name="margin" >
-      <number>9</number>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
      </property>
+     <addaction name="actionStart" />
+     <addaction name="actionStop" />
+     <addaction name="actionCollapseAll" />
+     <addaction name="actionExpandAll" />
+     <addaction name="actionSelectAll" />
+     <addaction name="actionUnselectAll" />
+     <addaction name="actionReload" />
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3" >
      <item>
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
-        <number>0</number>
+      <widget class="QSplitter" name="splitter" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="buttonFatals" >
-         <property name="focusPolicy" >
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="text" >
-          <string>dummy</string>
-         </property>
-         <property name="icon" >
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="buttonErrors" >
-         <property name="focusPolicy" >
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="text" >
-          <string>dummy</string>
-         </property>
-         <property name="icon" >
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="buttonWarnings" >
-         <property name="focusPolicy" >
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="text" >
-          <string>dummy</string>
-         </property>
-         <property name="icon" >
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="buttonInfos" >
-         <property name="focusPolicy" >
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="text" >
-          <string>dummy</string>
-         </property>
-         <property name="icon" >
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTreeView" name="treeResults" >
-       <property name="windowModality" >
-        <enum>Qt::NonModal</enum>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>10000</height>
-        </size>
-       </property>
-       <property name="alternatingRowColors" >
-        <bool>true</bool>
-       </property>
-       <property name="indentation" >
-        <number>30</number>
-       </property>
-       <property name="rootIsDecorated" >
-        <bool>false</bool>
-       </property>
-       <property name="wordWrap" >
-        <bool>true</bool>
-       </property>
+       <widget class="QFrame" name="runnerFrame" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="baseSize" >
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="frameShape" >
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow" >
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout" >
+         <item>
+          <widget class="QFrame" name="frame_3" >
+           <property name="frameShape" >
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow" >
+            <enum>QFrame::Plain</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2" >
+            <item>
+             <widget class="QProgressBar" name="progressRun" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>16777215</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="value" >
+               <number>0</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTreeView" name="treeRunner" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Expanding" hsizetype="MinimumExpanding" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="alternatingRowColors" >
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode" >
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="indentation" >
+            <number>15</number>
+           </property>
+           <property name="rootIsDecorated" >
+            <bool>false</bool>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_2" >
+           <property name="frameShape" >
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow" >
+            <enum>QFrame::Plain</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout" >
+            <item>
+             <spacer name="spacer_2" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>6</width>
+                <height>12</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumTotalText" >
+              <property name="text" >
+               <string>Total:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumTotal" >
+              <property name="text" >
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumSelectedText" >
+              <property name="text" >
+               <string>Selected:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumSelected" >
+              <property name="text" >
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumRunText" >
+              <property name="text" >
+               <string>Run:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelNumRun" >
+              <property name="text" >
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_18" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumSuccessPic" >
+                <property name="toolTip" >
+                 <string>Success</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/success.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumSuccess" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_14" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumExceptionsPic" >
+                <property name="toolTip" >
+                 <string>Exceptions</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/exception.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumExceptions" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_19" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumFatalsPic" >
+                <property name="toolTip" >
+                 <string>Fatals</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/fatal.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumFatals" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_17" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumErrorsPic" >
+                <property name="toolTip" >
+                 <string>Errors</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/error.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumErrors" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_15" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumWarningsPic" >
+                <property name="toolTip" >
+                 <string>Warnings</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/warning.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumWarnings" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_16" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelNumInfosPic" >
+                <property name="toolTip" >
+                 <string>Infos</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/info.png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelNumInfos" >
+                <property name="text" >
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="spacer" >
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>28</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+        <zorder>treeRunner</zorder>
+        <zorder>frame_3</zorder>
+        <zorder>frame_2</zorder>
+       </widget>
+       <widget class="QTreeView" name="treeResults" >
+        <property name="windowModality" >
+         <enum>Qt::NonModal</enum>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>10000</height>
+         </size>
+        </property>
+        <property name="alternatingRowColors" >
+         <bool>true</bool>
+        </property>
+        <property name="indentation" >
+         <number>30</number>
+        </property>
+        <property name="rootIsDecorated" >
+         <bool>false</bool>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
-   </widget>
-  </widget>
+   </item>
+  </layout>
   <action name="actionStart" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/play.png</normaloff>:/icons/play.png</iconset>
    </property>
    <property name="text" >
@@ -314,7 +433,7 @@
   </action>
   <action name="actionStop" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
    </property>
    <property name="text" >
@@ -323,7 +442,7 @@
   </action>
   <action name="actionSelectAll" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/checkedbox.png</normaloff>:/icons/checkedbox.png</iconset>
    </property>
    <property name="text" >
@@ -332,7 +451,7 @@
   </action>
   <action name="actionUnselectAll" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/uncheckedbox.png</normaloff>:/icons/uncheckedbox.png</iconset>
    </property>
    <property name="text" >
@@ -351,7 +470,7 @@
   </action>
   <action name="actionCollapseAll" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/expanded.png</normaloff>:/icons/expanded.png</iconset>
    </property>
    <property name="text" >
@@ -360,7 +479,7 @@
   </action>
   <action name="actionExpandAll" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/collapsed.png</normaloff>:/icons/collapsed.png</iconset>
    </property>
    <property name="text" >
@@ -374,7 +493,7 @@
   </action>
   <action name="actionColumns" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/columns.png</normaloff>:/icons/columns.png</iconset>
    </property>
    <property name="text" >
@@ -388,7 +507,7 @@
   </action>
   <action name="actionSettings" >
    <property name="icon" >
-    <iconset resource="resources/qxrunner.qrc" >
+    <iconset resource="../resources/qxrunner.qrc" >
      <normaloff>:/icons/properties.png</normaloff>:/icons/properties.png</iconset>
    </property>
    <property name="text" >
@@ -406,9 +525,9 @@
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="100" />
+ <layoutdefault spacing="6" margin="6" />
  <resources>
-  <include location="resources/qxrunner.qrc" />
+  <include location="../resources/qxrunner.qrc" />
  </resources>
  <connections/>
 </ui>

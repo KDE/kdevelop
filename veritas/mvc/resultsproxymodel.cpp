@@ -19,12 +19,6 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  resultsproxymodel.cpp
- *
- * \brief Implements class ResultsProxyModel.
- */
-
 #include "veritas/mvc/resultsproxymodel.h"
 #include "veritas/mvc/resultsmodel.h"
 #include "veritas/testresult.h"
@@ -83,16 +77,10 @@ bool ResultsProxyModel::filterAcceptsRow(int source_row,
         }
         QModelIndex i = model()->index(source_row, 0, source_parent);
         Test* t = model()->testFromIndex(i);
-        bool b= m_testFilter.contains(t);
+        bool b = m_testFilter.contains(t);
         return b;
-    } else {
-        if (source_parent.isValid()) { // lvl2 item, ie output line
-            return true;
-        }
-        QModelIndex i = model()->index(source_row, 0, source_parent);
-        //kDebug() << " filtering " << model()->data(i, Qt::DisplayRole).toString();
-        return false;
     }
+    return false;
 }
 
 ResultsModel* ResultsProxyModel::model() const

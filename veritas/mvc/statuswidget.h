@@ -38,21 +38,15 @@ namespace Veritas
  *
  * The information mainly consists of counters such as number of items,
  * number of errrors, execution progress and the like. Actual values
- * must be inserted by clients. The status widget is placed in the
- * statusbar of the main window.
- *
- * \sa \ref main_window
+ * must be inserted by clients.
  */
 
 class StatusWidget : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
-public: // Operations
+public:
 
-    /*!
-     * Constructs a status widget with the given \a parent.
-     */
     StatusWidget(QWidget* parent);
 
     /*!

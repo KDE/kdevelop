@@ -61,7 +61,7 @@ using Veritas::RunnerViewController;
 using Veritas::ResultsViewController;
 
 RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
-        : QMainWindow(parent, flags)
+        : QWidget(parent, flags)
 {
     initVeritasResource();
     m_ui.setupUi(this);
@@ -177,23 +177,24 @@ KSelectAction* RunnerWindow::projectPopup() const
 void RunnerWindow::setUpStatusBar()
 {
     // Set-up statusbar.
-    m_statusWidget = new StatusWidget(0);
+/*    m_statusWidget = new StatusWidget(0);
     statusBar()->addPermanentWidget(m_statusWidget, 1);
-    statusWidget()->progressRun->hide();
+    statusWidget()->progressRun->hide();*/
+    statusWidget()->progressRun->show();
 }
 
 // helper for RunnerWindow(...) ctor
 void RunnerWindow::connectFilterButtons()
 {
     // Results filter commands.
-    connect(m_ui.buttonInfos,    SIGNAL(toggled(bool)),
+/*    connect(m_ui.buttonInfos,    SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
     connect(m_ui.buttonWarnings, SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
     connect(m_ui.buttonErrors,   SIGNAL(toggled(bool)),
             SLOT(setResultsFilter()));
     connect(m_ui.buttonFatals,   SIGNAL(toggled(bool)),
-            SLOT(setResultsFilter()));
+            SLOT(setResultsFilter()));*/
 }
 
 // helper for RunnerWindow(...) ctor
@@ -226,26 +227,31 @@ RunnerWindow::~RunnerWindow()
     // Deleting the model is left to the owner of the model instance.
 }
 
-void RunnerWindow::show()
-{
-    setUpdatesEnabled(false);   // Reduce flickering
-    QMainWindow::show();
+// void RunnerWindow::show()
+// {
+//    setUpdatesEnabled(false);   // Reduce flickering
+//    QMainWindow::show();
     // Workaround: The results tree view has a maximum height defined in
     // Designer which now is reset. Without the height restriction the
     // dock window would occupy half the main window after construcution
     // instead of sitting "nicely" at the bottom.
     // This is only for the situation when the main window geometry isn't
     // restored from the settings.
-    resultsView()->setMaximumSize(QSize(16777215, 16777215));
-    setUpdatesEnabled(true);
+//    resultsView()->setMaximumSize(QSize(16777215, 16777215));
+//    setUpdatesEnabled(true);
     // Change the results tree view to manual adjustment after the columns
     // have been stretched over the tree view at initial display.
     // This is only for the situation when the column sizes aren't restored
     // from the settings.
-    resultsView()->header()->setResizeMode(QHeaderView::Interactive);
+//    resultsView()->header()->setResizeMode(QHeaderView::Interactive);
     // Some menus depend on current state.
-    QApplication::setActiveWindow(this);
-}
+//    QApplication::setActiveWindow(this);
+// }
+
+// void RunnerWindow::show_()
+// {
+//     QMainWindow::show();
+// }
 
 // helper for setModel(RunnerModel*)
 void RunnerWindow::stopPreviousModel()
@@ -282,12 +288,12 @@ void RunnerWindow::initFilterButtons(RunnerModel* model)
     // Hide filter buttons for results that are not expected.
     int results = model->expectedResults();
     bool expected;
-    m_ui.buttonInfos->setVisible(false);
-    m_ui.buttonWarnings->setVisible(false);
+/*    m_ui.buttonInfos->setVisible(false);
+    m_ui.buttonWarnings->setVisible(false);*/
     expected = results & Veritas::RunError;
-    m_ui.buttonErrors->setVisible(expected);
+//    m_ui.buttonErrors->setVisible(expected);
     expected = results & Veritas::RunFatal;
-    m_ui.buttonFatals->setVisible(expected);
+//    m_ui.buttonFatals->setVisible(expected);
 
 }
 
@@ -481,7 +487,7 @@ void RunnerWindow::displayProgress(int numItems) const
 
 void RunnerWindow::displayCompleted() const
 {
-    statusWidget()->progressRun->hide();
+//    statusWidget()->progressRun->hide();
     enableControlsAfterRunning();
 }
 
@@ -501,7 +507,7 @@ void RunnerWindow::displayNumSelected(int numItems) const
     statusWidget()->labelNumSelected->setText(QString().setNum(numItems));
 
     // During item selection the progress bar shouldn't be visible.
-    statusWidget()->progressRun->hide();
+    //statusWidget()->progressRun->hide();
     statusWidget()->progressRun->setMaximum(numItems);
 }
 
@@ -521,12 +527,12 @@ void RunnerWindow::displayNumSuccess(int numItems) const
 
 void RunnerWindow::displayNumInfos(int numItems) const
 {
-    if (numItems != 1) {
-        m_ui.buttonInfos->setText(QString().setNum(numItems) +
-                                  i18n(" Infos"));
-    } else {
-        m_ui.buttonInfos->setText(i18n("1 Info"));
-    }
+//     if (numItems != 1) {
+//         m_ui.buttonInfos->setText(QString().setNum(numItems) +
+//                                   i18n(" Infos"));
+//     } else {
+//         m_ui.buttonInfos->setText(i18n("1 Info"));
+//     }
 
     displayStatusNum(statusWidget()->labelNumInfos,
                      statusWidget()->labelNumInfosPic, numItems);
@@ -534,12 +540,12 @@ void RunnerWindow::displayNumInfos(int numItems) const
 
 void RunnerWindow::displayNumWarnings(int numItems) const
 {
-    if (numItems != 1) {
-        m_ui.buttonWarnings->setText(QString().setNum(numItems) +
-                                     i18n(" Warnings"));
-    } else {
-        m_ui.buttonWarnings->setText(i18n("1 Warning"));
-    }
+//     if (numItems != 1) {
+//         m_ui.buttonWarnings->setText(QString().setNum(numItems) +
+//                                      i18n(" Warnings"));
+//     } else {
+//         m_ui.buttonWarnings->setText(i18n("1 Warning"));
+//     }
 
     displayStatusNum(statusWidget()->labelNumWarnings,
                      statusWidget()->labelNumWarningsPic, numItems);
@@ -547,12 +553,12 @@ void RunnerWindow::displayNumWarnings(int numItems) const
 
 void RunnerWindow::displayNumErrors(int numItems) const
 {
-    if (numItems != 1) {
-        m_ui.buttonErrors->setText(QString().setNum(numItems) +
-                                   i18n(" Errors"));
-    } else {
-        m_ui.buttonErrors->setText(i18n("1 Error"));
-    }
+//     if (numItems != 1) {
+//         m_ui.buttonErrors->setText(QString().setNum(numItems) +
+//                                    i18n(" Errors"));
+//     } else {
+//         m_ui.buttonErrors->setText(i18n("1 Error"));
+//     }
 
     displayStatusNum(statusWidget()->labelNumErrors,
                      statusWidget()->labelNumErrorsPic, numItems);
@@ -560,12 +566,12 @@ void RunnerWindow::displayNumErrors(int numItems) const
 
 void RunnerWindow::displayNumFatals(int numItems) const
 {
-    if (numItems != 1) {
-        m_ui.buttonFatals->setText(QString().setNum(numItems) +
-                                   i18n(" Fatals"));
-    } else {
-        m_ui.buttonFatals->setText(i18n("1 Fatal"));
-    }
+//     if (numItems != 1) {
+//         m_ui.buttonFatals->setText(QString().setNum(numItems) +
+//                                    i18n(" Fatals"));
+//     } else {
+//         m_ui.buttonFatals->setText(i18n("1 Fatal"));
+//     }
 
     displayStatusNum(statusWidget()->labelNumFatals,
                      statusWidget()->labelNumFatalsPic, numItems);
@@ -607,14 +613,14 @@ void RunnerWindow::highlightResultAgain(const QModelIndex& previous) const
 int RunnerWindow::readButtonFilterSetting() const
 {
     // Determine filter settings.
-    int filter = 0;
-    if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
-        filter = filter | Veritas::RunError;
-    }
-    if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
-        filter = filter | Veritas::RunFatal;
-    }
-    return filter;
+//    int filter = 0;
+//     if (m_ui.buttonErrors->isEnabled() && m_ui.buttonErrors->isChecked()) {
+//         filter = filter | Veritas::RunError;
+//     }
+//     if (m_ui.buttonFatals->isEnabled() && m_ui.buttonFatals->isChecked()) {
+//         filter = filter | Veritas::RunFatal;
+//     }
+    return Veritas::RunError | Veritas::RunFatal;
 }
 
 // helper for setResultsFilter()
@@ -635,12 +641,10 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
 {
     Q_UNUSED(deselected);
     QModelIndexList indexes = selected.indexes();
-
     // Do nothing when there are no results or no runner item is selected.
     if (indexes.count() < 1 || !runnerProxyModel()->index(0, 0).isValid()) {
         return;
     }
-
     enableResultSync(false); // Prevent circular reaction
 
     // Get the results model index that corresponds to the runner item index.
@@ -672,11 +676,8 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
     } else if (!viewIndex.isValid()) {
         kDebug() << "Looks like result is being filtered";
     }
-
     enableResultSync(true);
 }
-
-
 
 void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
                                       const QItemSelection& deselected) const
@@ -850,7 +851,7 @@ void RunnerWindow::showResults(bool show)
         setResultsFilter();
 
         // Make sure that highlighted row sync works as expected.
-        m_ui.dockResults->show();
+        //m_ui.dockResults->show();
     }
 
     if (!show || runnerModel()->isRunning()) {
@@ -978,10 +979,10 @@ void RunnerWindow::enableItemActions(bool enable) const
 
 void RunnerWindow::enableResultsFilter(bool enable) const
 {
-    m_ui.buttonInfos->setEnabled(enable);
+/*    m_ui.buttonInfos->setEnabled(enable);
     m_ui.buttonWarnings->setEnabled(enable);
     m_ui.buttonErrors->setEnabled(enable);
-    m_ui.buttonFatals->setEnabled(enable);
+    m_ui.buttonFatals->setEnabled(enable);*/
 }
 
 void RunnerWindow::enableTestSync(bool enable) const
@@ -1018,14 +1019,11 @@ void RunnerWindow::ensureCurrentResult() const
     if (resultsView()->currentIndex().isValid()) {
         return;
     }
-
     // Try to make first visible index the current one.
     QModelIndex currentIndex = resultsView()->indexAt(QPoint(1, 1));
-
     if (!currentIndex.isValid()) {
         return;
     }
-
     // Set current index without highlighting.
     resultsView()->selectionModel()->setCurrentIndex(currentIndex,
             QItemSelectionModel::NoUpdate);
@@ -1050,9 +1048,10 @@ bool RunnerWindow::isMinimalUpdate() const
     return m_ui.actionMinimalUpdate->isChecked();
 }
 
-Ui::StatusWidget* RunnerWindow::statusWidget() const
+const Ui::RunnerWindow* RunnerWindow::statusWidget() const
 {
-    return &(m_statusWidget->ui);
+//    return &(m_statusWidget->ui);
+    return &(m_ui);
 }
 
 RunnerViewController* RunnerWindow::runnerController() const
