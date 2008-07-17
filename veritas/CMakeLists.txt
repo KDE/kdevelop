@@ -10,7 +10,7 @@ endif(TestBuild AND NOT WIN32)
 
 include_directories(
     ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/interfaces # needed since shell/core.h (ab)uses angle brackets.
+    ${CMAKE_SOURCE_DIR}/interfaces # needed for shell/core.h
     )
 
 ########### next target ###############

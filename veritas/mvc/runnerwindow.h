@@ -71,270 +71,140 @@ class RunnerWindow : public QWidget
 Q_OBJECT
 public: // Operations
 
-    /*!
-     * Constructs a runner window with the given \a parent and the
-     * specified widget \a flags.
-     */
     explicit RunnerWindow(QWidget* parent = 0, Qt::WFlags flags = 0);
 
-    /*!
-     * Destroys this runner window.
-     *
-     * \note
+    /*!\note
      * Deleting the model provided for the main window is left to
-     * the owner of the model instance.
-     */
+     * the owner of the model instance. */
     ~RunnerWindow();
 
-    /*!
-     * Shows the main window adapted to the current model and settings.
-     */
-//     void show();
-//     void show_();
-
-    /*!
-     * Sets the \a model for the main window to present.
-     */
+    /*! Sets the RunnerModel which holds the test-tree */
     void setModel(RunnerModel* model);
 
-    /*!
-     * Accessors for Runner model & view.
+    /*! Accessors for Runner model & view.
      * The runner shows the test suite structure as
-     * a tree. It allows for individual test selection.
-     */
+     * a tree. It allows for individual test selection. */
     QTreeView* runnerView() const;
     RunnerModel* runnerModel() const;
     RunnerProxyModel* runnerProxyModel() const;
 
-    /*!
-     * Accessors for the Results model & view.
+    /*! Accessors for the Results model & view.
      * The result component shows test failure
-     * information.
-     */
+     * information. */
     QTreeView* resultsView() const;
     ResultsModel* resultsModel() const;
     ResultsProxyModel* resultsProxyModel() const;
 
-    /*!
-     * Returns true if the results view is visible, otherwise false.
-     */
-    bool isResultsViewVisible() const;
-
-    Ui::RunnerWindow& ui() { return m_ui; }
-    const Ui::RunnerWindow* statusWidget() const;
-
+    const Ui::RunnerWindow* ui() const;
     KSelectAction* projectPopup() const;
 
 public Q_SLOTS:
+
     void addProjectToPopup(KDevelop::IProject*);
     void rmProjectFromPopup(KDevelop::IProject*);
 
 private Q_SLOTS:
 
-    /*!
-     * Displays the execution progress for \a numItems items.
-     */
-    void displayProgress(int numItems) const;
-
-    /*!
-     * Updates the GUI when all items have completed.
-     */
+    // Bunch of slots to trigger status updates in the GUI
     void displayCompleted() const;
-
-    /*!
-     * Displays the total number \a numItems of items.
-     */
+    void displayProgress(int numItems) const;
     void displayNumTotal(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of selected items.
-     */
     void displayNumSelected(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of completed items.
-     */
     void displayNumCompleted(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that completed
-     * successfully.
-     */
     void displayNumSuccess(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that returned an
-     * info result.
-     */
     void displayNumInfos(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that returned a
-     * warning result.
-     */
     void displayNumWarnings(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that returned an
-     * error result.
-     */
     void displayNumErrors(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that returned a
-     * fatal result.
-     */
     void displayNumFatals(int numItems) const;
-
-    /*!
-     * Displays the number \a numItems of items that produced an
-     * unhandled error.
-     */
     void displayNumExceptions(int numItems) const;
 
-    /*!
-     * Sets the filter in the results model. The filter is determinded
-     * from the enabled filter buttons.
-     */
+    /*! Sets the filter in the results model. The filter is determinded
+     * from the enabled filter buttons. */
     void setResultsFilter() const;
 
-    /*!
-     * Filter all results which belong to the selected in the 
-     * results view.
-     */
+    /*! Filter all results which belong to the selected in the 
+     * results view. */
     void syncResultWithTest(const QItemSelection& selected,
                                   const QItemSelection& deselected) const;
 
-    /*!
-     * Highlights the runner view row that corresponds to the results
-     * proxy model selection in \a selected. \a deselected is ignored.
-     */
+    /*! Highlights the runner view row that corresponds to the results
+     * proxy model selection in \a selected. \a deselected is ignored. */
     void syncTestWithResult(const QItemSelection& selected,
                                   const QItemSelection& deselected) const;
 
-    /*!
-     * Ensures that the view which has the focus shows a focus rect
-     * in the row referred to by \a index.
-     */
+    /*! Ensures that the view which has the focus shows a focus rect
+     * in the row referred to by \a index */
     void ensureFocusRect(const QModelIndex& index);
 
-    /*!
-     * Ensures that the highlighted row in every view is visible.
-     */
+    /*! Ensures that the highlighted row in every view is visible. */
     void scrollToHighlightedRows() const;
 
-    /*!
-     * Exectues the items in the model.
-     */
+    /*! Exectues the items in the model. */
     void runItems();
 
-    /*!
-     * Stops item execution. If first stopping attempt isn't successful
-     * the StoppingDialog is shown.
-     */
+    /*! Stops item execution. If first stopping attempt isn't successful
+     * the StoppingDialog is shown */
     void stopItems();
 
-    /*!
-     * Helper method needed to sync the results display with the results
-     * dock widget visibility. Ensures highlighted rows are visible.
-     */
+    /*! Helper method needed to sync the results display with the results
+     * dock widget visibility. Ensures highlighted rows are visible. */
     void showResults(bool show);
 
 private: // Operations
 
     // helpers for RunnerWindow(...) ctor
     void initItemStatistics();
-    void connectFilterButtons();
     void connectActions();
     void connectFocusStuff();
-    void setUpStatusBar();
     void addProjectMenu();
 
     // helpers for setModel(RunnerModel*)
     void stopPreviousModel();
-    void initFilterButtons(RunnerModel* model);
     void initVisibleColumns(RunnerModel* model);
-    void expandBranches(RunnerModel* model);
     void connectItemStatistics(RunnerModel* model);
     void initProxyModels(RunnerModel* model);
     void connectProgressIndicators(RunnerModel* model);
 
     // helpers for setResultsFilter()
     void highlightResultAgain(const QModelIndex& previous) const;
-    int readButtonFilterSetting() const;
     QModelIndex selectedResultIndex() const;
 
     // the rest
 
-    /*!
-     * Disables and modifies widgets and signals before running items.
-     */
+    /*! Disables and modifies widgets and signals before running items. */
     void disableControlsBeforeRunning();
 
-    /*!
-     * Enables and modifies widgets and signals after item execution
-     * has finished.
-     */
+    /*! Enables and modifies widgets and signals after item execution
+     * has finished. */
     void enableControlsAfterRunning() const;
 
-    /*!
-     * If \a enable is true the actions for item manipulation are
-     * enabled, otherwise disabled.
-     */
+    /*! If \a enable is true the actions for item manipulation are
+     * enabled, otherwise disabled. */
     void enableItemActions(bool enable) const;
 
-    /*!
-     * If \a enable is true the filter buttons are enabled, otherwise
-     * disabled.
-     */
-    void enableResultsFilter(bool enable) const;
-
-    /*!
-     * If \a enable is true syncResultWithTest() is enabled,
-     * otherwise disabled.
-     */
+    /*! If \a enable is true syncResultWithTest() is enabled,
+     * otherwise disabled. */
     void enableTestSync(bool enable) const;
 
-    /*!
-     * If \a enable is true syncTestWithResult() is enabled,
-     * otherwise disabled.
-     */
+    /*! If \a enable is true syncTestWithResult() is enabled,
+     * otherwise disabled. */
     void enableResultSync(bool enable) const;
 
-    /*!
-     * Sets a suitable current index in the results view so the view
-     * has a focus rect and behaves 'normal' when it gets the focus.
-     */
+    /*! Sets a suitable current index in the results view so the view
+     * has a focus rect and behaves 'normal' when it gets the focus. */
     void ensureCurrentResult() const;
 
-    /*!
-     * Sets \a numItems as text in \a labelForText. If \a numItems
-     * is 0 the labels are hidden, otherwise made visible.
-     */
+    /*! Sets \a numItems as text in \a labelForText. If \a numItems
+     * is 0 the labels are hidden, otherwise made visible. */
     void displayStatusNum(QLabel* labelForText,
                           QLabel* labelForPic, int numItems) const;
 
-    /*!
-     * Returns true if the GUI and model are in minimal update mode,
-     * otherwise false.
-     */
+    /*! Returns true if the GUI and model are in minimal update mode,
+     * otherwise false. */
     bool isMinimalUpdate() const;
 
-    /*!
-     * Returns the runner view controller.
-     */
     RunnerViewController* runnerController() const;
-
-    /*!
-     * Returns the results view controller.
-     */
     ResultsViewController* resultsController() const;
-
-    /*!
-     * Writes settings to the INI file and ends the program. If items are
-     * running the user can choose to terminate 'the hard way'.
-     */
-    void closeEvent(QCloseEvent* event);
 
     // Copy and assignment not supported.
     RunnerWindow(const RunnerWindow&);
@@ -343,10 +213,9 @@ private: // Operations
 private: // Attributes
 
     Ui::RunnerWindow m_ui;             // QtDesigner main object
-    //StatusWidget* m_statusWidget;      // shows num run, selected etc
     QSemaphore m_sema;                 // currently unused, should remove
-    QBrush m_highlightBrush;           // hmm not sure about this either
-    RunnerViewController*  m_runnerViewController; // extracts some functionality from this class
+    QBrush m_highlightBrush;           // hmm
+    RunnerViewController*  m_runnerViewController; // used to reduce bloat in this class
     ResultsViewController* m_resultsViewController; // idem
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project

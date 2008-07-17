@@ -80,7 +80,7 @@ QWidget* TestRunnerToolView::spawnWindow()
 
     connect(d->window->projectPopup(), SIGNAL(triggered(QAction*)),
             this, SLOT(setSelected(QAction*)));
-    connect(d->window->ui().actionReload, SIGNAL(triggered(bool)),
+    connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
     reload();
@@ -94,7 +94,6 @@ void TestRunnerToolView::reload()
     model->setRootItem(qobject_cast<Test*>(root));
     model->setExpectedResults(Veritas::RunError);
     d->window->setModel(model);
-    d->window->show();
     d->window->runnerView()->setRootIsDecorated(false);
 }
 

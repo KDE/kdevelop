@@ -63,6 +63,7 @@ private slots:
     void deselectItems();
     void newModel();
     void clickRunnerResults();
+    void progressBarMaxedOutAfterRun();
 
 private:
     void expandSome();
@@ -83,7 +84,7 @@ private:
 private:
     Veritas::RunnerWindow* window;
     Veritas::ut::RunnerModelStub* model;
-    const Ui::RunnerWindow* status;
+    const Ui::RunnerWindow* m_ui;
     Veritas::RunnerProxyModel* m_proxy;
     Veritas::ResultsProxyModel* m_resultsProxy;
     QTreeView* m_view;
