@@ -419,7 +419,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
-          localId == dec->identifier() &&
+          (localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
           typeid(*dec) == typeid(T)
          )
       {
@@ -517,7 +517,16 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 }
 
 Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange) {
-  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, Identifier(), collapseRange);
+  Identifier id;
+  
+  if(!name) {
+    //Unnamed class/struct, use a unique id
+    ///@todo store/load the current unique id from/to disk, and think about it a bit
+    static uint uniqueClassNumber = 1;
+    id = Identifier::unique( ++uniqueClassNumber );
+  }
+  
+  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, id, collapseRange);
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();
@@ -597,6 +606,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
     if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed ) {
         idType->setDeclaration( currentDeclaration() );
+        //Q_ASSERT(idType->declaration() == currentDeclaration());
     }
 
     if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {

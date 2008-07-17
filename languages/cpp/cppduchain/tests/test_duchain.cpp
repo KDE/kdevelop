@@ -130,7 +130,7 @@ namespace QTest {
   template<>
   char* toString(const TypePtr<AbstractType>& type)
   {
-    QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
+    QString s = QString("Type: %1 (%2 %3)").arg(type ? type->toString() : QString("<null>")).arg(typeid(*type).name()).arg((size_t)type.unsafeData());
     return qstrdup(s.toLatin1().constData());
   }
 }
@@ -611,90 +611,160 @@ void TestDUChain::testEnum()
 void TestDUChain::testDeclareStruct()
 {
   TEST_FILE_PARSE_ONLY
-
-  //                 0         1         2         3         4         5         6         7
-  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("struct A { short i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
-
-  TopDUContext* top = parse(method, DumpNone);
-
-  DUChainWriteLocker lock(DUChain::lock());
-
-  QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 2);
-  QVERIFY(top->localScopeIdentifier().isEmpty());
-
-  AbstractType::Ptr t = top->localDeclarations()[1]->abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
-  QVERIFY(idType);
-  QCOMPARE( idType->qualifiedIdentifier(), QualifiedIdentifier("A") );
+  {
+    QByteArray method("struct { short i; } instance;");
   
-  Declaration* defStructA = top->localDeclarations().first();
-  QCOMPARE(defStructA->identifier(), Identifier("A"));
-  QCOMPARE(defStructA->uses().count(), 1);
-  QCOMPARE(defStructA->uses().begin()->count(), 1);
-  QVERIFY(defStructA->type<CppClassType>());
-  QCOMPARE(defStructA->type<CppClassType>()->classType(), Struct);
+    TopDUContext* top = parse(method, DumpAll);
+  
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+  
+    AbstractType::Ptr t = top->localDeclarations()[0]->abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+    QVERIFY(idType);
+    QVERIFY(idType->qualifiedIdentifier().count() == 1);
+    QVERIFY(idType->qualifiedIdentifier().at(0).uniqueToken());
+    
+    Declaration* defStructA = top->localDeclarations().first();
+    
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
-  DUContext* structA = top->childContexts().first();
-  QVERIFY(structA->parentContext());
-  QCOMPARE(structA->importedParentContexts().count(), 0);
-  QCOMPARE(structA->childContexts().count(), 3);
-  QCOMPARE(structA->localDeclarations().count(), 3);
-  QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
+    QCOMPARE(idType->declaration(top), defStructA);
+    QVERIFY(defStructA->type<CppClassType>());
+    QVERIFY(defStructA->internalContext());
+    QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
+    QCOMPARE(defStructA->type<CppClassType>()->classType(), Struct);
+  
+    release(top);
+  }
 
-  Declaration* defI = structA->localDeclarations().first();
-  QCOMPARE(defI->identifier(), Identifier("i"));
-  QCOMPARE(defI->uses().count(), 1);
-  QCOMPARE(defI->uses().begin()->count(), 1);
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("typedef struct { short i; } A; A instance;");
+  
+    TopDUContext* top = parse(method, DumpNone);
+  
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+  
+    AbstractType::Ptr t = top->localDeclarations()[0]->abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+    QVERIFY(idType);
+    QVERIFY(idType->qualifiedIdentifier().count() == 1);
+    QVERIFY(idType->qualifiedIdentifier().at(0).uniqueToken());
+    
+    QVERIFY(top->localDeclarations()[1]->isTypeAlias());
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("A"));
+    QCOMPARE(top->localDeclarations()[2]->abstractType()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    
+    QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
+    QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
+    
+    Declaration* defStructA = top->localDeclarations().first();
 
-  QCOMPARE(findDeclaration(structA,  Identifier("i")), defI);
-  QCOMPARE(findDeclaration(structA,  Identifier("b")), noDef);
-  QCOMPARE(findDeclaration(structA,  Identifier("c")), noDef);
-
-  DUContext* ctorImplCtx = structA->childContexts()[1];
-  QVERIFY(ctorImplCtx->parentContext());
-  QCOMPARE(ctorImplCtx->importedParentContexts().count(), 1);
-  QCOMPARE(ctorImplCtx->childContexts().count(), 1);
-  QCOMPARE(ctorImplCtx->localDeclarations().count(), 0);
-  QVERIFY(!ctorImplCtx->localScopeIdentifier().isEmpty());
-  QVERIFY(ctorImplCtx->owner());
-
-  DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().context.data();
-  QVERIFY(ctorCtx->parentContext());
-  QCOMPARE(ctorCtx->childContexts().count(), 0);
-  QCOMPARE(ctorCtx->localDeclarations().count(), 2);
-  QCOMPARE(ctorCtx->localScopeIdentifier(), QualifiedIdentifier("A")); ///@todo check if it should really be this way
-
-  Declaration* defB = ctorCtx->localDeclarations().first();
-  QCOMPARE(defB->identifier(), Identifier("b"));
-  QCOMPARE(defB->uses().count(), 0);
-
-  Declaration* defC = ctorCtx->localDeclarations()[1];
-  QCOMPARE(defC->identifier(), Identifier("c"));
-  QCOMPARE(defC->uses().count(), 1);
-  QCOMPARE(defC->uses().begin()->count(), 1);
-
-  QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
-  QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
-  QCOMPARE(findDeclaration(ctorCtx,  Identifier("c")), defC);
-
-  DUContext* testCtx = structA->childContexts().last();
-  QCOMPARE(testCtx->childContexts().count(), 0);
-  QCOMPARE(testCtx->localDeclarations().count(), 1);
-  QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier("test")); ///@todo check if it should really be this way
-
-  Declaration* defJ = testCtx->localDeclarations().first();
-  QCOMPARE(defJ->identifier(), Identifier("j"));
-  QCOMPARE(defJ->uses().count(), 0);
-
-  /*DUContext* insideCtorCtx = ctorCtx->childContexts().first();
-  QCOMPARE(insideCtorCtx->childContexts().count(), 0);
-  QCOMPARE(insideCtorCtx->localDeclarations().count(), 0);
-  QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());*/
-
-  release(top);
+    QCOMPARE(idType->declaration(top), defStructA);
+    QVERIFY(defStructA->type<CppClassType>());
+    QVERIFY(defStructA->internalContext());
+    QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
+    QCOMPARE(defStructA->type<CppClassType>()->classType(), Struct);
+  
+    release(top);
+  }
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("struct A { short i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
+  
+    TopDUContext* top = parse(method, DumpNone);
+  
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+  
+    AbstractType::Ptr t = top->localDeclarations()[1]->abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+    QVERIFY(idType);
+    QCOMPARE( idType->qualifiedIdentifier(), QualifiedIdentifier("A") );
+    
+    Declaration* defStructA = top->localDeclarations().first();
+    QCOMPARE(defStructA->identifier(), Identifier("A"));
+    QCOMPARE(defStructA->uses().count(), 1);
+    QCOMPARE(defStructA->uses().begin()->count(), 1);
+    QVERIFY(defStructA->type<CppClassType>());
+    QCOMPARE(defStructA->type<CppClassType>()->classType(), Struct);
+  
+    DUContext* structA = top->childContexts().first();
+    QVERIFY(structA->parentContext());
+    QCOMPARE(structA->importedParentContexts().count(), 0);
+    QCOMPARE(structA->childContexts().count(), 3);
+    QCOMPARE(structA->localDeclarations().count(), 3);
+    QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
+  
+    Declaration* defI = structA->localDeclarations().first();
+    QCOMPARE(defI->identifier(), Identifier("i"));
+    QCOMPARE(defI->uses().count(), 1);
+    QCOMPARE(defI->uses().begin()->count(), 1);
+  
+    QCOMPARE(findDeclaration(structA,  Identifier("i")), defI);
+    QCOMPARE(findDeclaration(structA,  Identifier("b")), noDef);
+    QCOMPARE(findDeclaration(structA,  Identifier("c")), noDef);
+  
+    DUContext* ctorImplCtx = structA->childContexts()[1];
+    QVERIFY(ctorImplCtx->parentContext());
+    QCOMPARE(ctorImplCtx->importedParentContexts().count(), 1);
+    QCOMPARE(ctorImplCtx->childContexts().count(), 1);
+    QCOMPARE(ctorImplCtx->localDeclarations().count(), 0);
+    QVERIFY(!ctorImplCtx->localScopeIdentifier().isEmpty());
+    QVERIFY(ctorImplCtx->owner());
+  
+    DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().context.data();
+    QVERIFY(ctorCtx->parentContext());
+    QCOMPARE(ctorCtx->childContexts().count(), 0);
+    QCOMPARE(ctorCtx->localDeclarations().count(), 2);
+    QCOMPARE(ctorCtx->localScopeIdentifier(), QualifiedIdentifier("A")); ///@todo check if it should really be this way
+  
+    Declaration* defB = ctorCtx->localDeclarations().first();
+    QCOMPARE(defB->identifier(), Identifier("b"));
+    QCOMPARE(defB->uses().count(), 0);
+  
+    Declaration* defC = ctorCtx->localDeclarations()[1];
+    QCOMPARE(defC->identifier(), Identifier("c"));
+    QCOMPARE(defC->uses().count(), 1);
+    QCOMPARE(defC->uses().begin()->count(), 1);
+  
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
+    QCOMPARE(findDeclaration(ctorCtx,  Identifier("c")), defC);
+  
+    DUContext* testCtx = structA->childContexts().last();
+    QCOMPARE(testCtx->childContexts().count(), 0);
+    QCOMPARE(testCtx->localDeclarations().count(), 1);
+    QCOMPARE(testCtx->localScopeIdentifier(), QualifiedIdentifier("test")); ///@todo check if it should really be this way
+  
+    Declaration* defJ = testCtx->localDeclarations().first();
+    QCOMPARE(defJ->identifier(), Identifier("j"));
+    QCOMPARE(defJ->uses().count(), 0);
+  
+    /*DUContext* insideCtorCtx = ctorCtx->childContexts().first();
+    QCOMPARE(insideCtorCtx->childContexts().count(), 0);
+    QCOMPARE(insideCtorCtx->localDeclarations().count(), 0);
+    QVERIFY(insideCtorCtx->localScopeIdentifier().isEmpty());*/
+  
+    release(top);
+  }
 }
 
 void TestDUChain::testCStruct()
