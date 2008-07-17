@@ -24,7 +24,6 @@
 #include <QtTest/QTest>
 
 class QAbstractItemModel;
-namespace Ui { class StatusWidget; }
 namespace Veritas { class RunnerWindow; }
 
 namespace CppUnit

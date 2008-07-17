@@ -158,7 +158,7 @@ void CheckRunnerTest::runTwice()
     KTODO;
 
 /*    initNrun(regXml);
-    m_window->ui().actionStart->trigger();
+    m_window->ui()->actionStart->trigger();
     if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
         QFAIL("Timeout while waiting for runner items to complete execution");
 
@@ -184,7 +184,7 @@ void CheckRunnerTest::checkResultItems(QList<QStringList> expected)
 // helper
 void CheckRunnerTest::checkResultItem(int num, const QStringList& item)
 {
-    QAbstractItemModel* results = m_window->ui().treeResults->model();
+    QAbstractItemModel* results = m_window->ui()->treeResults->model();
     KOMPARE(item[0], results->data(results->index(num, 0))); // test name
     //KOMPARE(item[1], results->data(results->index(num, 1))); // status -> "Error"
     // commented out since this row is currently hidden
@@ -198,7 +198,7 @@ void CheckRunnerTest::checkResultItem(int num, const QStringList& item)
 // helper
 void CheckRunnerTest::nrofMessagesEquals(int num)
 {
-    QAbstractItemModel* results = m_window->ui().treeResults->model();
+    QAbstractItemModel* results = m_window->ui()->treeResults->model();
     for (int i = 0; i < num; i++) {
         KVERIFY_MSG(results->index(i, 0).isValid(),
                     QString("Expected ") + QString::number(num) + " items but got " + QString::number(i));
@@ -218,7 +218,7 @@ void CheckRunnerTest::initNrun(const char* exe)
     m_window = new RunnerWindow;
     m_window->setModel(model);
     m_window->show();
-    m_window->ui().actionStart->trigger();
+    m_window->ui()->actionStart->trigger();
     if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
 //    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
        QFAIL("Timeout while waiting for runner items to complete execution");
@@ -227,19 +227,19 @@ void CheckRunnerTest::initNrun(const char* exe)
 // helper
 void CheckRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
 {
-    const Ui::RunnerWindow* status = m_window->statusWidget();
+    const Ui::RunnerWindow* ui = m_window->ui();
 
     // validate the status widget
-    KOMPARE(labels["total"], status->labelNumTotal->text());
-    KOMPARE(labels["selected"], status->labelNumSelected->text());
-    KOMPARE(labels["run"], status->labelNumRun->text());
+    KOMPARE(labels["total"], ui->labelNumTotal->text());
+    KOMPARE(labels["selected"], ui->labelNumSelected->text());
+    KOMPARE(labels["run"], ui->labelNumRun->text());
 
     if (labels.contains("success"))
-        KOMPARE(labels["success"], status->labelNumSuccess->text());
+        KOMPARE(labels["success"], ui->labelNumSuccess->text());
     if (labels.contains("errors"))
-        KOMPARE(labels["errors"], status->labelNumErrors->text());
+        KOMPARE(labels["errors"], ui->labelNumErrors->text());
     if (labels.contains("warnings"))
-        KOMPARE(labels["warnings"], status->labelNumWarnings->text());
+        KOMPARE(labels["warnings"], ui->labelNumWarnings->text());
 }
 
 // helper
@@ -258,7 +258,7 @@ void CheckRunnerTest::checkTests(QStringList runnerItems)
 // helper
 void CheckRunnerTest::checkTest(const QVariant& expected, int lvl0, int lvl1, int lvl2)
 {
-    QAbstractItemModel* runner = m_window->ui().treeRunner->model();
+    QAbstractItemModel* runner = m_window->ui()->treeRunner->model();
     QModelIndex index = runner->index(lvl0, 0);
     if (lvl1 != -1) {
         index = runner->index(lvl1, 0, index);
