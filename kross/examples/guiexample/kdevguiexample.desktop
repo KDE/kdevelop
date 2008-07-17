@@ -1,12 +1,17 @@
 [Desktop Entry]
 Type=Service
-Encoding=UTF-8
-Name=KDev Kross GUI Example
-Comment=Example of the GUI
-Icon=gear
+Exec=blubb
+Comment=GUI Example
+Name=GUIExample
+GenericName=GUIExample
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevguiexample
+X-KDE-Library=kdevexamplegui
 X-KDE-PluginInfo-Name=GUIExample
-X-KDevelop-PluginType=Kross
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Version=0.01
+X-KDE-PluginInfo-License=GPL
 X-KDevelop-Version=6
 X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement
+X-KDevelop-PluginType=Kross
+X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl, IDistributedVersionControl

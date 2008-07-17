@@ -42,13 +42,14 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
 
         KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
         
-    public slots:
-        void createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos);
+        Q_SCRIPTABLE void createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos);
+        Q_SCRIPTABLE KUrl pluginDirectory() const { return m_pluginDir; }
         
     private:
         Kross::Action* action;
 
         KrossBuildSystemManager* m_script;
+        KUrl m_pluginDir;
 };
 
 #endif

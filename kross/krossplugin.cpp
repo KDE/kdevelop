@@ -64,6 +64,7 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     file.addPath("lib");
     file.addPath("kde4");
     file.addPath(name);
+    m_pluginDir=file;
     file.addPath(name+".py");
 
     action = new Kross::Action(this, file);

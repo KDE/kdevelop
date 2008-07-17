@@ -19,14 +19,15 @@
  */
 
 #include "krosstoolviewfactory.h"
+#include <KDebug>
+#include <QWidget>
 
 QWidget* KrossToolViewFactory::create(QWidget *parent)
 {
-    QVariant param;
-    param.setValue((QObject*) parent);
-    QVariant result=m_action->callFunction( m_method, QVariantList()<<param);
+    QVariant result=m_action->callFunction( m_method, QVariantList() << qVariantFromValue(parent));
     
-    return result.value<QWidget*>();
+    QWidget* ret= qobject_cast<QWidget*>(result.value<QObject*>());
+    return ret;
 }
 
 Qt::DockWidgetArea KrossToolViewFactory::defaultPosition()
