@@ -109,7 +109,10 @@ struct IdentifierItemRequest {
 
 ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest> identifierRepository("Identifier Repository");
 uint emptyConstantIdentifierPrivateIndex = identifierRepository.index(DynamicIdentifierPrivate());
-const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate = identifierRepository.itemFromIndex(emptyConstantIdentifierPrivateIndex);
+
+const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
+  return identifierRepository.itemFromIndex(emptyConstantIdentifierPrivateIndex);
+}
 
 ///Before something is modified in QualifiedIdentifierPrivate, it must be made sure that it is private to the QualifiedIdentifier it is used in(@see QualifiedIdentifier::prepareWrite)
 template<bool dynamic>
@@ -219,7 +222,9 @@ ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemReques
 
 uint emptyConstantQualifiedIdentifierPrivateIndex = qualifiedIdentifierRepository.index(DynamicQualifiedIdentifierPrivate());
 
-const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate = qualifiedIdentifierRepository.itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex);
+const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
+  return qualifiedIdentifierRepository.itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex);
+}
 
 uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
   return 11*leftHash + appendIdentifier.hash();
@@ -282,7 +287,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
 }
 
 Identifier::Identifier()
-  : m_index(emptyConstantIdentifierPrivateIndex), cd(emptyConstantIdentifierPrivate)
+  : m_index(emptyConstantIdentifierPrivateIndex), cd(emptyConstantIdentifierPrivate())
 {
 }
 
@@ -481,7 +486,7 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
 }
 
 QualifiedIdentifier::QualifiedIdentifier()
-  : m_index(emptyConstantQualifiedIdentifierPrivateIndex), cd(emptyConstantQualifiedIdentifierPrivate)
+  : m_index(emptyConstantQualifiedIdentifierPrivateIndex), cd(emptyConstantQualifiedIdentifierPrivate())
 {
 }
 
