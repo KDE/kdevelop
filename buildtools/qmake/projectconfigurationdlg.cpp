@@ -355,6 +355,10 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
             myProjectItem->addValue( "CONFIG", "build_all" );
         else
             myProjectItem->removeValue( "CONFIG", "build_all" );
+        if ( checkQtHelp->isChecked() )
+            myProjectItem->addValue( "CONFIG", "help" );
+        else
+            myProjectItem->removeValue( "CONFIG", "help" );
 
         if ( checkQt4Core->isChecked() )
             myProjectItem->addValue( "QT", "core" );
@@ -825,6 +829,10 @@ void ProjectConfigurationDlg::updateControls()
             checkBuildAll->setChecked( true );
         else
             checkBuildAll->setChecked( false );
+        if ( configValues.findIndex( "help" ) != -1 )
+            checkQtHelp->setChecked( true );
+        else
+            checkQtHelp->setChecked( false );
 
         QStringList qtLibs = myProjectItem->scope->variableValues( "QT" );
         if ( qtLibs.findIndex( "core" ) != -1 )

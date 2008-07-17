@@ -33,7 +33,7 @@
 
 const QStringList Scope::KnownVariables = QStringList() << "QT" << "CONFIG" << "TEMPLATE" << "SUBDIRS" << "VERSION" << "LIBS" << "target.path" << "INSTALLS" << "MAKEFILE" << "TARGETDEPS" << "INCLUDEPATH" << "TARGET" << "DESTDIR" << "DEFINES" << "QMAKE_CXXFLAGS_DEBUG" << "QMAKE_CXXFLAGS_RELEASE" << "OBJECTS_DIR" << "UI_DIR" << "MOC_DIR" << "IDL_COMPILER" << "IDL_OPTIONS" << "RCC_DIR" << "IDLS" << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES" << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES" << "INTERFACES" << "FORMS" ;
 
-const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all";
+const QStringList Scope::KnownConfigValues = QStringList() << "debug" << "release" << "debug_and_release" << "warn_on" << "warn_off" << "staticlib" << "dll" << "plugin" << "designer" << "create_pkgconf" << "create_libtool" << "qt" << "console" << "windows" << "x11" << "thread" << "exceptions" << "stl" << "rtti" << "opengl" << "thread" << "ordered" << "precompile_header" << "qtestlib" << "uitools" << "dbus" << "assistant" << "build_all" << "help";
 
 Scope::Scope( const QMap<QString, QString>& env, const QString &filename, TrollProjectPart* part )
     : m_root( 0 ), m_incast( 0 ), m_parent( 0 ), m_num(0), m_isEnabled( true ), m_part(part), m_defaultopts(0), m_environment( env )
