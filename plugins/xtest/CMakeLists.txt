@@ -12,4 +12,3 @@ if (CHECK_FOUND)
     add_subdirectory(check)
 endif (CHECK_FOUND)
 
-add_subdirectory(spikey)
