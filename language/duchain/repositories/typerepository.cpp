@@ -82,7 +82,7 @@ struct TypeRepositoryData {
   TypeRepositoryData() : repository("Type Repository") {
   }
   QMutex mutex;
-  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, false> repository;
+  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData, false> repository;
 };
 
 TypeRepositoryData& data() {

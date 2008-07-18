@@ -146,9 +146,10 @@ class ExampleRequestItem {
   }
 };
 
-template<class Item, class ItemRequest>
+template<class Item, class ItemRequest, class DynamicData>
 class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   enum {
+    AdditionalSpacePerItem = DynamicData::Size + 2,
     NextBucketHashSize = 500 //Affects the average count of bucket-chains that need to be walked in ItemRepository::index
   };
   public:
@@ -257,7 +258,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
-    unsigned short findIndex(const ItemRequest& request) const {
+    unsigned short findIndex(const ItemRequest& request, const DynamicData* dynamic) const {
       unsigned short localHash = request.hash() % m_objectMapSize;
       unsigned short index = m_objectMap[localHash];
 
@@ -266,15 +267,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       while(index && (follower = followerIndex(index)) && !(request.equals(itemFromIndex(index))))
         index = follower;
 
-      if(index && request.equals(itemFromIndex(index)))
+      if(index && request.equals(itemFromIndex(index))) {
+        if(dynamic)
+          itemFromIndex(index, dynamic);
         return index; //We have found the item
+      }
 
       return 0;
     }
     
     //Tries to get the index within this bucket, or returns zero. Will put the item into the bucket if there is room.
     //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
-    unsigned short index(const ItemRequest& request) {
+    unsigned short index(const ItemRequest& request, const DynamicData* dynamic) {
       unsigned short localHash = request.hash() % m_objectMapSize;
       unsigned short index = m_objectMap[localHash];
       unsigned short insertedAt = 0;
@@ -287,14 +291,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(index && request.equals(itemFromIndex(index)))
         return index; //We have found the item
 
-      unsigned int totalSize = request.itemSize() + 2;
+      unsigned int totalSize = request.itemSize() + AdditionalSpacePerItem;
       if(totalSize > m_available) {
         //Try finding the smallest freed item that can hold the data
         unsigned short currentIndex = m_largestFreeItem;
         unsigned short previousIndex = 0;
-        while(currentIndex && freeSize(currentIndex) >= (totalSize-2)) {
+        while(currentIndex && freeSize(currentIndex) >= (totalSize-AdditionalSpacePerItem)) {
           unsigned short follower = followerIndex(currentIndex);
-          if(follower && freeSize(follower) >= (totalSize-2)) {
+          if(follower && freeSize(follower) >= (totalSize-AdditionalSpacePerItem)) {
             //The item also fits into the smaller follower, so use that one
             previousIndex = currentIndex;
             currentIndex = follower;
@@ -304,7 +308,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
           }
         }
         
-        if(!currentIndex || freeSize(currentIndex) < (totalSize-2))
+        if(!currentIndex || freeSize(currentIndex) < (totalSize-AdditionalSpacePerItem))
           return 0;
         
         if(previousIndex)
@@ -317,10 +321,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         //We have to insert the item
         insertedAt = ItemRepositoryBucketSize - m_available;
         
-        insertedAt += 2; //Room for the prepended follower-index
+        insertedAt += AdditionalSpacePerItem; //Room for the prepended follower-index
 
         m_available -= totalSize;
       }
+      
+      DynamicData::initialize(m_data + insertedAt - AdditionalSpacePerItem);
       
       if(index)
         setFollowerIndex(index, insertedAt);
@@ -329,7 +335,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
       
-      char* borderBehind = m_data + insertedAt + (totalSize-2);
+      char* borderBehind = m_data + insertedAt + (totalSize-AdditionalSpacePerItem);
       
       quint64 oldValueBehind = 0;
       if(m_available >= 8) {
@@ -348,6 +354,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       
       Q_ASSERT(itemFromIndex(insertedAt)->hash() == request.hash());
       Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == request.itemSize());
+      
+      if(dynamic)
+        itemFromIndex(insertedAt, dynamic);
       
       return insertedAt;
     }
@@ -413,7 +422,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     inline const Item* itemFromIndex(unsigned short index) const {
       return (Item*)(m_data+index);
     }
-    
+
+    ///When dynamic is nonzero, and apply(..) returns false, the item is freed, and the returned item is invalid.
+    inline const Item* itemFromIndex(unsigned short index, const DynamicData* dynamic) const {
+      Item* ret((Item*)(m_data+index));
+      if(dynamic)
+        dynamic->apply(m_data + index - AdditionalSpacePerItem);
+      return ret;
+    }
+
     uint usedMemory() const {
       return ItemRepositoryBucketSize - m_available;
     }
@@ -483,9 +500,54 @@ struct Locker<true> : public QMutexLocker {
   }
 };
 
+struct NoDynamicData {
+  
+  enum {
+    Size = 0
+  };
+
+  static void initialize(char* /*data*/) {
+  }
+  
+  ///When this returns false, the item is deleted
+  bool apply(const char*) const {
+    return true;
+  }
+};
+
+struct ReferenceCounting {
+  
+  enum {
+    Size = sizeof(unsigned int)
+  };
+  
+  ReferenceCounting(bool increment) : m_increment(increment) {
+  }
+
+  static void initialize(char* data) {
+    *((unsigned int*)data) = 0;
+  }
+  
+  ///When this returns false, the item is deleted
+  bool apply(char* data) const {
+    if(m_increment)
+      ++*((unsigned int*)data);
+    else
+      --*((unsigned int*)data);
+    
+    return *((unsigned int*)data);
+  }
+  
+  bool m_increment;
+};
+
 ///@param Item @see ExampleItem
+///@param ItemRequest @see ExampleReqestItem
+///@param DynamicData Can be used to attach additional metadata of constant size to each item. 
+///                   That meta-data can be manipulated by giving manipulators to the ItemRepository Member functions. 
+///                   This can be used to implement reference-counting, @see ReferenceCounting
 ///@param threadSafe Whether class access should be thread-safe
-template<class Item, class ItemRequest, bool threadSafe = true, unsigned int bucketHashSize = 524288>
+template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, unsigned int bucketHashSize = 524288>
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
@@ -521,7 +583,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
 
   ///Returns the index for the given item. If the item is not in the repository yet, it is inserted.
   ///The index can never be zero. Zero is reserved for your own usage as invalid
-  unsigned int index(const ItemRequest& request) {
+  ///@param dynamic will be applied to the dynamic data of the found item
+  unsigned int index(const ItemRequest& request, const DynamicData* dynamic = 0) {
     
     ThisLocker lock(&m_mutex);
     
@@ -533,13 +596,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     while(previousBucketNumber) {
       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
       
-      Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[previousBucketNumber];
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[previousBucketNumber];
       if(!bucketPtr) {
         initializeBucket(previousBucketNumber);
         bucketPtr = m_fastBuckets[previousBucketNumber];
       }
       
-      unsigned short indexInBucket = bucketPtr->findIndex(request);
+      unsigned short indexInBucket = bucketPtr->findIndex(request, dynamic);
       if(indexInBucket) {
         //We've found the item, it's already there
         return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
@@ -571,12 +634,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           memset(m_fastBuckets + oldBucketCount, 0, (m_bucketCount-oldBucketCount) * sizeof(void*));
         }
       }
-      Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[m_currentBucket];
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[m_currentBucket];
       if(!bucketPtr) {
         initializeBucket(m_currentBucket);
         bucketPtr = m_fastBuckets[m_currentBucket];
       }
-      unsigned short indexInBucket = bucketPtr->index(request);
+      unsigned short indexInBucket = bucketPtr->index(request, dynamic);
       
       if(indexInBucket) {
         if(!(*bucketHashPosition))
@@ -618,7 +681,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     if(previousBucketNumber == bucket)
       previousBucketNumber = 0;
     
-    Bucket<Item, ItemRequest>* previousBucketPtr = 0;
+    Bucket<Item, ItemRequest, DynamicData>* previousBucketPtr = 0;
     
     //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
     
@@ -639,7 +702,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         previousBucketNumber = nextBucket;
     }
     
-    Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -679,7 +742,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   }
 
   ///@param index The index. It must be valid(match an existing item), and nonzero.
-  const Item* itemFromIndex(unsigned int index) const {
+  ///@param dynamic will be applied to the item.
+  const Item* itemFromIndex(unsigned int index, const DynamicData* dynamic = 0) const {
     Q_ASSERT(index);
     
     ThisLocker lock(&m_mutex);
@@ -687,14 +751,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
     
-    const Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
+    const Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
     Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
     }
     unsigned short indexInBucket = index & 0xffff;
-    return bucketPtr->itemFromIndex(indexInBucket);
+    return bucketPtr->itemFromIndex(indexInBucket, dynamic);
   }
   
   QString statistics() const {
@@ -856,7 +920,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
 #endif
     }
     
-    typedef Bucket<Item, ItemRequest> B;
+    typedef Bucket<Item, ItemRequest, DynamicData> B;
     for(int a = 0; a < m_buckets.size(); ++a) {
       storeBucket(a);
       delete m_buckets[a];
@@ -876,9 +940,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   inline void initializeBucket(unsigned int bucketNumber) const {
     Q_ASSERT(bucketNumber);
     if(!m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest>();
+      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
       if(m_file)
-        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest>::DataSize);
+        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
       else
         m_fastBuckets[bucketNumber]->initialize();
     }
@@ -886,7 +950,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest>::DataSize);
+      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
     }
   }
 
@@ -894,8 +958,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   QString m_repositoryName;
   unsigned int m_size;
   mutable uint m_currentBucket;
-  mutable QVector<Bucket<Item, ItemRequest>* > m_buckets;
-  mutable Bucket<Item, ItemRequest>** m_fastBuckets; //For faster access
+  mutable QVector<Bucket<Item, ItemRequest, DynamicData>* > m_buckets;
+  mutable Bucket<Item, ItemRequest, DynamicData>** m_fastBuckets; //For faster access
   mutable uint m_bucketCount;
   uint m_statBucketHashClashes, m_statItemCount;
   //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
