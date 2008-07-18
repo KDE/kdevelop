@@ -58,7 +58,11 @@ class TopDUContextDynamicData {
   
   void clearContextIndex(DUContext* ctx);
   
+  ///Stores this top-context to disk
+  void store() const;
+  
   private:
+    TopDUContext* m_topContext;
     //May contain zero contexts if they were deleted
     QVector<DUContext*> m_contexts;
     //May contain zero declarations if they were deleted

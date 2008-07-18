@@ -132,7 +132,9 @@ install(FILES
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/ducontext.h
+    duchain/ducontextdata.h
     duchain/topducontext.h
+    duchain/topducontextdata.h
     duchain/declaration.h
     duchain/declarationdata.h
     duchain/classmemberdeclaration.h

@@ -22,11 +22,12 @@
 #define CLASSMEMBERDECLARATIONDATA_H
 
 #include "declarationdata.h"
+#include "../languageexport.h"
 
 namespace KDevelop
 {
 
-class ClassMemberDeclarationData : public DeclarationData
+class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationData : public DeclarationData
 {
 public:
   ClassMemberDeclarationData();

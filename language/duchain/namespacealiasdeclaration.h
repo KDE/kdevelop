@@ -20,10 +20,20 @@
 #define NAMESPACEALIASDECLARATION_H
 
 #include "language/duchain/declaration.h"
+#include "declarationdata.h"
 
 namespace KDevelop
 {
-class NamespaceAliasDeclarationData;
+class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclarationData : public DeclarationData
+{
+public:
+  NamespaceAliasDeclarationData() {}
+  NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
+      : DeclarationData( rhs )
+  {
+  }
+  IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
+};
 /**
  * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
  *

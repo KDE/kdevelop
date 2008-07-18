@@ -19,22 +19,10 @@
 #include "namespacealiasdeclaration.h"
 
 #include "ducontext.h"
-#include "declarationdata.h"
 #include "duchainregister.h"
 
 namespace KDevelop
 {
-
-class NamespaceAliasDeclarationData : public DeclarationData
-{
-public:
-  NamespaceAliasDeclarationData() {}
-  NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
-      : DeclarationData( rhs )
-  {
-  }
-  IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
-};
 
 REGISTER_DUCHAIN_ITEM(NamespaceAliasDeclaration);
 

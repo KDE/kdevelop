@@ -31,6 +31,7 @@
 #include "simplecursor.h"
 #include "declaration.h"
 #include "use.h"
+#include "../languageexport.h"
 
 namespace KTextEditor {
   class SmartRange;
@@ -41,7 +42,7 @@ namespace KDevelop{
 class DUContext;
 
 ///This class contains data that needs to be stored to disk
-class DUContextData : public DUChainBaseData
+class KDEVPLATFORMLANGUAGE_EXPORT DUContextData : public DUChainBaseData
 {
 public:
   DUContextData();

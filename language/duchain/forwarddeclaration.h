@@ -20,10 +20,20 @@
 #define FORWARDDECLARATION_H
 
 #include "language/duchain/declaration.h"
+#include "declarationdata.h"
 
 namespace KDevelop
 {
-class ForwardDeclarationData;
+class KDEVPLATFORMLANGUAGE_EXPORT ForwardDeclarationData : public DeclarationData
+{
+public:
+  ForwardDeclarationData() {
+  }
+  ForwardDeclarationData( const ForwardDeclarationData& rhs ) 
+      : DeclarationData( rhs )
+  {
+  }
+};
 /**
  * Represents a forward declaration
  */

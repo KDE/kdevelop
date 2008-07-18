@@ -27,7 +27,6 @@
 #include "ducontext.h"
 #include "use.h"
 #include "symboltable.h"
-#include "declarationdata.h"
 #include "identifiedtype.h"
 #include "duchainregister.h"
 
@@ -35,18 +34,6 @@ using namespace KTextEditor;
 
 namespace KDevelop
 {
-
-class ForwardDeclarationData : public DeclarationData
-{
-public:
-  ForwardDeclarationData() {
-  }
-  ForwardDeclarationData( const ForwardDeclarationData& rhs ) 
-      : DeclarationData( rhs )
-  {
-  }
-};
-
 REGISTER_DUCHAIN_ITEM(ForwardDeclaration);
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationData(*rhs.d_func())) {

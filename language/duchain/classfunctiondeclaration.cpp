@@ -22,26 +22,11 @@
 
 #include "ducontext.h"
 #include "language/duchain/types/functiontype.h"
-#include "classmemberdeclarationdata.h"
 #include "duchainregister.h"
 
 namespace KDevelop
 {
 Identifier conversionIdentifier("operator{...cast...}");
-
-class ClassFunctionDeclarationData : public ClassMemberDeclarationData
-{
-public:
-  ClassFunctionDeclarationData() {
-    m_functionType = ClassFunctionDeclaration::Normal;
-  }
-  ClassFunctionDeclarationData( const ClassFunctionDeclarationData& rhs )
-      : ClassMemberDeclarationData( rhs )
-  {
-    m_functionType = rhs.m_functionType;
-  }
-  ClassFunctionDeclaration::QtFunctionType m_functionType;
-};
 
 REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 

@@ -25,10 +25,14 @@ using namespace KDevelop;
 
 QMutex KDevelop::TopDUContextDynamicData::m_temporaryDataMutex(QMutex::Recursive);
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext) {
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
+}
+
+void TopDUContextDynamicData::store() const {
+  
 }
 
 uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary) {

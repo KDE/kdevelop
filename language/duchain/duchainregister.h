@@ -116,7 +116,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
      */
     template<class T, class Data>
     void registerTypeClass() {
-      Q_ASSERT(T::Identity < 64);
       if(m_factories.size() <= T::Identity) {
         m_factories.resize(T::Identity+1);
         m_dataClassSizes.resize(T::Identity+1);

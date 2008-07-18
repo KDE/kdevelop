@@ -19,26 +19,12 @@
 #include "aliasdeclaration.h"
 
 #include "ducontext.h"
-#include "declarationdata.h"
 #include "duchainregister.h"
 
 namespace KDevelop
 {
 
-class AliasDeclarationData : public DeclarationData
-{
-public:
-  AliasDeclarationData() {}
-  AliasDeclarationData( const AliasDeclarationData& rhs )
-      : DeclarationData( rhs )
-  {
-    m_aliasedDeclaration = rhs.m_aliasedDeclaration;
-  }
-  IndexedDeclaration m_aliasedDeclaration;
-};
-
 REGISTER_DUCHAIN_ITEM(AliasDeclaration);
-
 
 AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs) 
   : Declaration(*new AliasDeclarationData(*rhs.d_func())) {

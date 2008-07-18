@@ -20,6 +20,7 @@
 #include <QStringList>
 
 namespace KDevelop {
+  ///@todo put into duchain storing structure!
 class AbstractFunctionDeclarationPrivate
 {
 public:

@@ -36,7 +36,7 @@
 #include "uses.h"
 #include <ext/hash_map>
 
-#include "ducontextdata.h"
+#include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 
@@ -429,37 +429,6 @@ public:
       it->first->m_local->rebuildStructure(it->second);
     }
   }
-};
-
-class TopDUContextData : public DUContextData
-{
-public:
-  TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0)
-  {
-  }
-  
-  TopDUContext::Flags m_flags;
-
-  bool m_hasUses  : 1;
-  bool m_deleting : 1;
-  bool m_inDuChain : 1;
-
-  IndexedString m_url;
-
-  ///Is used to count up the used declarations while building uses
-  uint m_currentUsedDeclarationIndex;
-
-  ///Maps a declarationIndex to a DeclarationId, which is used when the entry in m_usedDeclaration is zero.
-  QVector<DeclarationId> m_usedDeclarationIds;
-  ///Maps a declarationIndex to an actual used Declaration
-  QVector<DeclarationPointer> m_usedDeclarations;
-
-  /**Maps a declarationIndex to local declarations. Generally, negative indices are considered
-   * to be indices within m_usedLocalDeclarations, and positive indices within m_usedDeclarationIds
-   * Any declarations that are within the same top-context are considered local.
-   * */
-  QVector<DeclarationPointer> m_usedLocalDeclarations;
 };
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.

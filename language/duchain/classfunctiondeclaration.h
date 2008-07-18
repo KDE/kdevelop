@@ -23,26 +23,42 @@
 
 #include "language/duchain/classmemberdeclaration.h"
 #include "language/duchain/abstractfunctiondeclaration.h"
+#include "classmemberdeclarationdata.h"
 
 namespace KDevelop
 {
-class ClassFunctionDeclarationData;
-/**
- * Represents a single variable definition in a definition-use chain.
- */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration
-{
-public:
-  ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
-  ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
-  ~ClassFunctionDeclaration();
 
+struct QtFunctionEnumContainer {
   enum QtFunctionType
   {
     Normal /**< Indicates a normal function */,
     Signal /**< indicates a Qt slot */,
     Slot   /**< indicates a Qt signal */
   };
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclarationData : public ClassMemberDeclarationData, public QtFunctionEnumContainer
+{
+public:
+  ClassFunctionDeclarationData() {
+    m_functionType = Normal;
+  }
+  ClassFunctionDeclarationData( const ClassFunctionDeclarationData& rhs )
+      : ClassMemberDeclarationData( rhs )
+  {
+    m_functionType = rhs.m_functionType;
+  }
+  QtFunctionType m_functionType;
+};
+/**
+ * Represents a single variable definition in a definition-use chain.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration, public QtFunctionEnumContainer
+{
+public:
+  ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
+  ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
+  ~ClassFunctionDeclaration();
 
   QtFunctionType functionType() const;
   void setFunctionType(QtFunctionType functionType);

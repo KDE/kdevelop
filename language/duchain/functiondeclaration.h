@@ -23,10 +23,21 @@
 
 #include "language/duchain/declaration.h"
 #include "language/duchain/abstractfunctiondeclaration.h"
+#include "declarationdata.h"
 
 namespace KDevelop
 {
-class FunctionDeclarationData;
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationData
+{
+  public:
+    FunctionDeclarationData()
+    {
+    }
+    FunctionDeclarationData( const FunctionDeclarationData& rhs )
+      :DeclarationData( rhs )
+    {
+    }
+};
 /**
  * Represents a single variable definition in a definition-use chain.
  */

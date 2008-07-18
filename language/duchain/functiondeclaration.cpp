@@ -19,25 +19,12 @@
 */
 
 #include "functiondeclaration.h"
-#include "declarationdata.h"
 #include "ducontext.h"
 #include "duchainregister.h"
 #include "language/duchain/types/functiontype.h"
 
 namespace KDevelop
 {
-
-class FunctionDeclarationData : public DeclarationData
-{
-  public:
-    FunctionDeclarationData()
-    {
-    }
-    FunctionDeclarationData( const FunctionDeclarationData& rhs )
-      :DeclarationData( rhs )
-    {
-    }
-};
 
 REGISTER_DUCHAIN_ITEM(FunctionDeclaration);
 

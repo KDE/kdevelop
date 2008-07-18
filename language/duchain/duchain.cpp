@@ -76,6 +76,16 @@ public:
   ~DUChainPrivate() {
     delete instance;
   }
+  
+//   void storeChain(const IdentifiedFile& file) {
+//     Q_ASSERT(m_chains.contains(file));
+//     TopDUContext* top = m_chains[file];
+//     top->m_dynamicData->store();
+//   }
+//   
+//   void loadChain(const IdentifiedFile& file) {
+//     Q_ASSERT(!m_chains.contains(file));
+//   }
 
   DUChain* instance;
   DUChainLock lock;

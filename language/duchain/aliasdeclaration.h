@@ -21,10 +21,21 @@
 
 #include "declaration.h"
 #include "duchainpointer.h"
+#include "declarationdata.h"
 
 namespace KDevelop
 {
-class AliasDeclarationData;
+class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclarationData : public DeclarationData
+{
+public:
+  AliasDeclarationData() {}
+  AliasDeclarationData( const AliasDeclarationData& rhs )
+      : DeclarationData( rhs )
+  {
+    m_aliasedDeclaration = rhs.m_aliasedDeclaration;
+  }
+  IndexedDeclaration m_aliasedDeclaration;
+};
 /**
  * An alias declaration maps one declaration to another.
  * While searching in the duchain, an AliasDeclaration is transparently

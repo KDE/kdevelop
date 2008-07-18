@@ -39,7 +39,7 @@ class IndexedString;
 #define DUCHAIN_D(Class) const Class##Data * const d = d_func()
 #define DUCHAIN_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
-struct DUChainBaseData : public DocumentRangeObjectData {
+struct KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectData {
     DUChainBaseData() : classId(0) {
     }
     DUChainBaseData(const DUChainBaseData& rhs) : DocumentRangeObjectData(rhs), classId(rhs.classId) {
