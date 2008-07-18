@@ -27,8 +27,8 @@ QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
 typedef CppDUContext<TopDUContext> CppTopDUContext;
 REGISTER_DUCHAIN_ITEM_WITH_DATA(CppTopDUContext, TopDUContextData);
 
-typedef CppDUContext<TopDUContext> CppDUContext;
-REGISTER_DUCHAIN_ITEM_WITH_DATA(CppDUContext, DUContextData);
+typedef CppDUContext<TopDUContext> CppNormalDUContext;
+REGISTER_DUCHAIN_ITEM_WITH_DATA(CppNormalDUContext, DUContextData);
 
 template<>
 QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {
