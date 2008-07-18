@@ -19,7 +19,6 @@
 #include "classdeclaration.h"
 #include <duchain/identifier.h>
 #include <duchain/declaration.h>
-#include <duchain/declarationdata.h>
 #include <appendedlist.h>
 #include "duchainregister.h"
 
@@ -30,30 +29,6 @@ namespace Cpp {
 
 DEFINE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
   
-class ClassDeclarationData : public DeclarationData
-{
-public:
-  ClassDeclarationData() {
-    initializeAppendedLists(true);
-  }
-  
-  ~ClassDeclarationData() {
-    freeAppendedLists();
-  }
-  
-  ClassDeclarationData(const ClassDeclarationData& rhs) : DeclarationData(rhs) {
-    initializeAppendedLists(true);
-    copyListsFrom(rhs);
-  }
-  
-  static size_t classSize() {
-    return sizeof(ClassDeclarationData);
-  }
-  
-  START_APPENDED_LISTS(ClassDeclarationData);
-  APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
-  END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
-};
 
 ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
   : Declaration(*new ClassDeclarationData, range)

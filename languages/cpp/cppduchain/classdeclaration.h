@@ -20,6 +20,7 @@
 #define CLASSDECLARATION_H
 
 #include <declaration.h>
+#include <duchain/declarationdata.h>
 #include "cppduchainexport.h"
 #include "cpptypes.h"
 
@@ -40,7 +41,32 @@ struct BaseClassInstance
   bool virtualInheritance;
 };
 
-class ClassDeclarationData;
+DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
+
+class ClassDeclarationData : public KDevelop::DeclarationData
+{
+public:
+  ClassDeclarationData() {
+    initializeAppendedLists(true);
+  }
+  
+  ~ClassDeclarationData() {
+    freeAppendedLists();
+  }
+  
+  ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::DeclarationData(rhs) {
+    initializeAppendedLists(true);
+    copyListsFrom(rhs);
+  }
+  
+  static size_t classSize() {
+    return sizeof(ClassDeclarationData);
+  }
+  
+  START_APPENDED_LISTS(ClassDeclarationData);
+  APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
+  END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
+};
 
 /**
  * Represents a single template-parameter definition

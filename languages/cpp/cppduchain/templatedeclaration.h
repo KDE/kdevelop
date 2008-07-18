@@ -188,6 +188,9 @@ namespace Cpp {
   template<class BaseDeclaration>
   class KDEVCPPDUCHAIN_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
     public:
+    template<class Data>
+    SpecialTemplateDeclaration(Data& data) : BaseDeclaration(data) {
+    }
     ///Copy-constructor for cloning
     SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
     }

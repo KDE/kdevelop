@@ -24,6 +24,7 @@
 #include <kglobal.h>
 
 #include <duchain/declaration.h>
+#include <duchain/declarationdata.h>
 #include <duchain/forwarddeclaration.h>
 #include <duchain/aliasdeclaration.h>
 #include <duchain/functiondeclaration.h>
@@ -40,10 +41,12 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-#define REGISTER_TEMPLATE_DECLARATION(Declaration) typedef TemplateDeclaration<Declaration> Template ## Declaration; REGISTER_DUCHAIN_ITEM_WITH_DATA(Template ## Declaration, Declaration ## Data);
+#define REGISTER_TEMPLATE_DECLARATION(Declaration) typedef SpecialTemplateDeclaration<Declaration> TheTemplate ## Declaration; \
+REGISTER_DUCHAIN_ITEM_WITH_DATA(TheTemplate ## Declaration, Declaration ## Data);
 
 REGISTER_TEMPLATE_DECLARATION(Declaration);
 REGISTER_TEMPLATE_DECLARATION(ClassDeclaration);
+REGISTER_TEMPLATE_DECLARATION(TemplateParameterDeclaration);
 REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration);
 REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration);
 REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration);

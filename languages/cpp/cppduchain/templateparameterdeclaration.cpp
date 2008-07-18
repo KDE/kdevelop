@@ -19,18 +19,14 @@
 #include "templateparameterdeclaration.h"
 #include <duchain/identifier.h>
 #include <duchain/declaration.h>
-
+#include <duchainregister.h>
 
 using namespace KDevelop;
 
-class TemplateParameterDeclarationPrivate
-{
-public:
-  QualifiedIdentifier m_defaultParameter;
-};
+REGISTER_DUCHAIN_ITEM(TemplateParameterDeclaration);
 
 TemplateParameterDeclaration::TemplateParameterDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
-  : Declaration(range, context), d_ptr(new TemplateParameterDeclarationPrivate)
+  : Declaration(*new TemplateParameterDeclarationData, range)
 {
   if(context)
     setContext(context);
@@ -41,16 +37,18 @@ TemplateParameterDeclaration::~TemplateParameterDeclaration()
 }
 
 QualifiedIdentifier TemplateParameterDeclaration::defaultParameter() const {
-  return d_func()->m_defaultParameter;
+  return d_func()->m_defaultParameter.identifier();
 }
 
 void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier& str) {
-  d_func()->m_defaultParameter = str;
+  d_func_dynamic()->m_defaultParameter = str;
 }
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs), 
-        d_ptr(new TemplateParameterDeclarationPrivate) {
-  d_func()->m_defaultParameter = rhs.d_func()->m_defaultParameter;
+TemplateParameterDeclaration::TemplateParameterDeclaration(TemplateParameterDeclarationData& data) : Declaration(data) {
+}
+
+TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs) {
+  d_func_dynamic()->m_defaultParameter = rhs.d_func()->m_defaultParameter;
   setIsTypeAlias(true);
 }
 

@@ -173,6 +173,10 @@ extern QMutex cppDuContextInstantiationsMutex;
 template<class BaseContext>
 class CppDUContext : public BaseContext {
   public:
+    template<class Data>
+    CppDUContext(Data& data) : BaseContext(data) {
+    }
+
     ///Parameters will be reached to the base-class
     template<class Param1, class Param2>
     CppDUContext( const Param1& p1, const Param2& p2, bool isInstantiationContext ) : BaseContext(p1, p2, isInstantiationContext), m_instantiatedFrom(0) {

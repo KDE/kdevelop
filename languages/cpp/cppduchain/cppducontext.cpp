@@ -19,6 +19,7 @@
 #include "cppducontext.h"
 #include "navigationwidget.h"
 #include <duchainregister.h>
+#include <topducontextdata.h>
 
 namespace Cpp {
 
@@ -27,7 +28,7 @@ QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
 typedef CppDUContext<TopDUContext> CppTopDUContext;
 REGISTER_DUCHAIN_ITEM_WITH_DATA(CppTopDUContext, TopDUContextData);
 
-typedef CppDUContext<TopDUContext> CppNormalDUContext;
+typedef CppDUContext<DUContext> CppNormalDUContext;
 REGISTER_DUCHAIN_ITEM_WITH_DATA(CppNormalDUContext, DUContextData);
 
 template<>

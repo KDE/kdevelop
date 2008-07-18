@@ -20,6 +20,8 @@
 #define TEMPLATEPARAMETERDECLARATION_H
 
 #include <declaration.h>
+#include <declarationdata.h>
+#include <identifier.h>
 #include "cppduchainexport.h"
 
 namespace KDevelop {
@@ -30,7 +32,11 @@ namespace KDevelop {
   class DUContext;
 }
 
-class TemplateParameterDeclarationPrivate;
+class TemplateParameterDeclarationData : public KDevelop::DeclarationData
+{
+public:
+  KDevelop::IndexedQualifiedIdentifier m_defaultParameter;
+};
 
 /**
  * Represents a single template-parameter definition
@@ -38,6 +44,7 @@ class TemplateParameterDeclarationPrivate;
 class KDEVCPPDUCHAIN_EXPORT TemplateParameterDeclaration : public KDevelop::Declaration
 {
 public:
+  TemplateParameterDeclaration(TemplateParameterDeclarationData& data);
   TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);
   TemplateParameterDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
@@ -51,9 +58,12 @@ public:
 
   virtual Declaration* clone() const;
   
+  enum {
+    Identity = 18
+  };
+  
 private:
-  TemplateParameterDeclarationPrivate* const d_ptr;
-  Q_DECLARE_PRIVATE(TemplateParameterDeclaration)
+  DUCHAIN_DECLARE_DATA(TemplateParameterDeclaration)
 };
 
 #endif // FUNCTIONDECLARATION_H
