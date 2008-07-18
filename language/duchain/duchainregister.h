@@ -185,6 +185,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT DUChainItemRegistrator {
 ///For this to work, the class must have an "Identity" enumerator.
 ///It should be a unique value, but as small as possible, because a buffer at least as big as that number is created internally.
 #define REGISTER_DUCHAIN_ITEM(Class) DUChainItemRegistrator<Class, Class ## Data> register ## Class
+#define REGISTER_DUCHAIN_ITEM_WITH_DATA(Class, Data) DUChainItemRegistrator<Class, Data> register ## Class
 
 }
 
