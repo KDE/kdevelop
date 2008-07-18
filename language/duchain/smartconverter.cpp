@@ -25,7 +25,6 @@
 
 #include <editorintegrator.h>
 #include <hashedstring.h>
-#include "icodehighlighting.h"
 
 #include "ducontext.h"
 #include "declaration.h"
@@ -50,8 +49,6 @@ public:
 
     foreach (Declaration* dec, context->localDeclarations()) {
       dec->setSmartRange(m_editor->createRange(dec->range().textRange())->toSmartRange());
-      if( m_hl )
-        m_hl->highlightDeclaration(dec);
       m_editor->exitCurrentRange();
     }
 
@@ -59,9 +56,6 @@ public:
       context->setUseSmartRange(a, m_editor->createRange(context->uses()[a].m_range.textRange())->toSmartRange());
       m_editor->exitCurrentRange();
     }
-
-    if( m_hl )
-      m_hl->highlightUses(context);
 
     foreach (DUContext* child, context->childContexts())
       convertDUChainInternal(child);
@@ -83,14 +77,12 @@ public:
   }
 
   KDevelop::EditorIntegrator* m_editor;
-  KDevelop::ICodeHighlighting* m_hl;
 };
 
-SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl)
+SmartConverter::SmartConverter(KDevelop::EditorIntegrator* editor)
   : d(new SmartConverterPrivate)
 {
   d->m_editor = editor;
-  d->m_hl = hl;
 }
 
 SmartConverter::~SmartConverter()

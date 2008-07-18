@@ -453,7 +453,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 {
   // Convert any duchains to the smart equivalent first
   EditorIntegrator editor;
-  SmartConverter sc(&editor/*, codeHighlighting()*/); ///@todo find a way to do the highlighting right now
+  SmartConverter sc(&editor);
 
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 

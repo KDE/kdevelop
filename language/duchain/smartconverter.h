@@ -25,13 +25,12 @@
 namespace KDevelop
 {
 class EditorIntegrator;
-class ICodeHighlighting;
 class DUContext;
 
 class KDEVPLATFORMLANGUAGE_EXPORT SmartConverter
 {
 public:
-  SmartConverter(KDevelop::EditorIntegrator* editor, KDevelop::ICodeHighlighting* hl = 0);
+  SmartConverter(KDevelop::EditorIntegrator* editor);
   ~SmartConverter();
   ///Converts all ranges in the given context to smart-ranges
   void convertDUChain(DUContext* context) const;
