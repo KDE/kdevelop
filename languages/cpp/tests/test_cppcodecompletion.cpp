@@ -680,12 +680,6 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
 }
 
 void TestCppCodeCompletion::testEnvironmentMatching() {
-    Cpp::EnvironmentManager* environmentManager = new Cpp::EnvironmentManager;
-    {
-        DUChainWriteLocker l(DUChain::lock());
-        DUChain::self()->addParsingEnvironmentManager(environmentManager);
-    }
-
     {
       addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
       addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
@@ -829,9 +823,6 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 //     QCOMPARE(top3->importedParentContexts().count(), 2);
 
     QCOMPARE(top1->importedParentContexts()[0], top2->importedParentContexts()[1]);*/
-
-    DUChainWriteLocker lock(DUChain::lock());
-    DUChain::self()->removeParsingEnvironmentManager(environmentManager);
 }
 
 void TestCppCodeCompletion::testPreprocessor() {

@@ -39,7 +39,6 @@
 #include <iproblem.h>
 
 #include "cppduchainexport.h"
-#include "cachemanager.h"
 #include "setrepository.h"
 #include "parser/rpp/macrorepository.h"
 
@@ -144,7 +143,7 @@ typedef Utils::LazySet<rpp::pp_macro, MacroIndexConversion> LazyMacroSet;
 class EnvironmentManager;
 class MacroSet;
 
-class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop::ParsingEnvironmentFile {
+class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KDevelop::IndexedString& url, EnvironmentManager* manager );
@@ -230,6 +229,10 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public CacheNode, public KDevelop:
     void setContentStartLine(int line);
     int contentStartLine() const;
 
+    virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const;
+    
+    virtual bool needsUpdate() const;
+    
   private:
     virtual int type() const;
 
@@ -267,7 +270,7 @@ struct KDEVCPPDUCHAIN_EXPORT EnvironmentFilePointerCompare {
   }
 };
 
-class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDevelop::ParsingEnvironmentManager {
+class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
   public:
     
     static MacroDataRepository macroDataRepository;
@@ -276,42 +279,11 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager : public CacheManager, public KDe
     //Set-repository that contains the macro-sets
     static Utils::BasicSetRepository macroSetRepository;
         
-    EnvironmentManager();
-    virtual ~EnvironmentManager();
-
-    //Overridden from ParsingEnvironmentManager
-    virtual void clear();
-
-    ///Add a new file to the manager
-    virtual void addFile( KDevelop::ParsingEnvironmentFile* file );
-    ///Remove a file from the manager
-    virtual void removeFile( KDevelop::ParsingEnvironmentFile* file );
-    ///Returns true if the file itself, or any of its dependencies was modified.
-    virtual bool needsUpdate( const KDevelop::ParsingEnvironmentFile* file ) const;
-
     ///See the comment about simplified matching at the top
-    void setSimplifiedMatching(bool simplified);
-    bool isSimplifiedMatching() const;
+    static void setSimplifiedMatching(bool simplified);
+    static bool isSimplifiedMatching();
     
-    /**
-     * Search for the availability of a file parsed in a given environment
-     * */
-    virtual KDevelop::ParsingEnvironmentFile* find( const KDevelop::IndexedString& url, const KDevelop::ParsingEnvironment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
-
-      private:
-    virtual int type() const;
-    virtual void erase( const CacheNode* node );
-
-    ///Returns zero if no fitting file is available for the given Environment
-    EnvironmentFilePointer lexedFile( const KDevelop::IndexedString& fileName, const rpp::Environment* environment, KDevelop::ParsingEnvironmentFileAcceptor* accepter );
-    void addEnvironmentFile( const EnvironmentFilePointer& file );
-    void removeEnvironmentFile( const EnvironmentFilePointer& file );
-
-    //typedef __gnu_cxx::hash_multimap<KDevelop::IndexedString, EnvironmentFilePointer> EnvironmentFileMap;
-    typedef std::multimap<KDevelop::IndexedString, EnvironmentFilePointer> EnvironmentFileMap;
-    EnvironmentFileMap m_files;
-    
-    bool m_simplifiedMatching;
+    static bool m_simplifiedMatching;
 };
 
 }

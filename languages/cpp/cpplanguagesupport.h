@@ -108,8 +108,6 @@ public:
 
     const Cpp::LazyMacroSet& standardMacros() const;
 
-    Cpp::EnvironmentManager* environmentManager() const;
-    
     ///Thread-safe
     bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths ) const;
     
@@ -157,7 +155,6 @@ private:
 
     CppHighlighting *m_highlights;
     KDevelop::CodeCompletion *m_cc;
-    Cpp::EnvironmentManager* m_environmentManager;
     Cpp::LazyMacroSet *m_standardMacros;
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;

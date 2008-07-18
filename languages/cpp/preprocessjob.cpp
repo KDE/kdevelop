@@ -104,7 +104,7 @@ void PreprocessJob::run()
     {
       KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-    if(CppLanguageSupport::self()->environmentManager()->isSimplifiedMatching()) {
+    if(Cpp::EnvironmentManager::isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
             m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
             IndexedString u = parentJob()->document();
@@ -474,7 +474,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
 bool PreprocessJob::checkAbort()
 {
-  if(!CppLanguageSupport::self() || !CppLanguageSupport::self()->environmentManager()) {
+  if(!CppLanguageSupport::self()) {
     kDebug(9007) << "Environment-manager disappeared" ;
     return true;
   }

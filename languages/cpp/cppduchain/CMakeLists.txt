@@ -25,7 +25,6 @@ set(kdevcppduchain_LIB_SRCS
     cpptypes.cpp
     dumptypes.cpp
     environmentmanager.cpp
-    cachemanager.cpp
     hashedstringset.cpp
     cppduchain.cpp
     templateparameterdeclaration.cpp

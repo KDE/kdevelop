@@ -144,12 +144,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
     m_standardMacros = new Cpp::LazyMacroSet( &Cpp::EnvironmentManager::macroSetRepository );
     m_standardIncludePaths = new QStringList;
-    m_environmentManager = new Cpp::EnvironmentManager;
-    m_environmentManager->setSimplifiedMatching(true); ///@todo Make simplified matching optional. Before that, make it work.
-    {
-        DUChainWriteLocker l(DUChain::lock());
-        DUChain::self()->addParsingEnvironmentManager(m_environmentManager);
-    }
+    Cpp::EnvironmentManager::setSimplifiedMatching(true); ///@todo Make simplified matching optional.
 
     m_includeResolver = new CppTools::IncludePathResolver;
     // Retrieve the standard include paths & macro definitions for this machine.
@@ -386,15 +381,9 @@ CppLanguageSupport::~CppLanguageSupport()
     // Remove any documents waiting to be parsed from the background paser.
     core()->languageController()->backgroundParser()->clear(this);
 
-    // Remove the corresponding parsing environment from the DUChain.
-    {
-        DUChainWriteLocker l(DUChain::lock());
-        DUChain::self()->removeParsingEnvironmentManager(m_environmentManager);
-    }
 
     delete m_standardMacros;
     delete m_standardIncludePaths;
-    delete m_environmentManager;
     delete m_includeResolver;
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
@@ -750,10 +739,6 @@ KDevelop::ILanguage *CppLanguageSupport::language()
     return core()->languageController()->language(name());
 }
 
-Cpp::EnvironmentManager* CppLanguageSupport::environmentManager() const {
-    return m_environmentManager;
-}
-
 TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowProxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());
@@ -1003,7 +988,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
 
 bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths) const
 {
-  if(m_environmentManager->needsUpdate(file.data()))
+  if(file->needsUpdate())
     return true;
 
   ///@todo somehow this check should also go into EnvironmentManager
