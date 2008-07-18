@@ -21,9 +21,28 @@
 
 #include "itemrepository.h"
 #include <QString>
+#include "../indexedstring.h"
 
 namespace Repositories {
 using namespace KDevelop;
+
+struct StringData {
+  unsigned short length;
+  unsigned short itemSize() const {
+    return sizeof(StringData) + length;
+  }
+  unsigned int hash() const {
+    IndexedString::RunningHash running;
+    const char* str = ((const char*)this) + sizeof(StringData);
+    for(int a = length-1; a >= 0; --a) {
+      running.append(*str);
+      ++str;
+    }
+    return running.hash;
+    
+  }
+};
+
 struct StringRepositoryItemRequest {
 
   //The text is supposed to be utf8 encoded
@@ -43,38 +62,36 @@ struct StringRepositoryItemRequest {
   
   //Should return the size of an item created with createItem
   size_t itemSize() const {
-    return sizeof(unsigned short) + m_length;
+    return sizeof(StringData) + m_length;
   }
   //Should create an item where the information of the requested item is permanently stored. The pointer
   //@param item equals an allocated range with the size of itemSize().
-  void createItem(unsigned short* item) const {
-    *item = m_length;
+  void createItem(StringData* item) const {
+    item->length = m_length;
     ++item;
     memcpy(item, m_text, m_length);
   }
   
   //Should return whether the here requested item equals the given item
-  bool equals(const unsigned short* item) const {
-    return *item == m_length && (memcmp(++item, m_text, m_length) == 0);
+  bool equals(const StringData* item) const {
+    return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
   }
   unsigned int m_hash;
   unsigned short m_length;
   const char* m_text;
 };
 
-typedef ItemRepository<unsigned short, StringRepositoryItemRequest, true> StringRepository;
+typedef ItemRepository<StringData, StringRepositoryItemRequest, true> StringRepository;
 
 ///@param item must be valid(nonzero)
-inline QString stringFromItem(const unsigned short* item) {
-  const unsigned short* textPos = item;
-  ++textPos;
-  return QString::fromUtf8((char*)textPos, (int)*item);
+inline QString stringFromItem(const StringData* item) {
+  const unsigned short* textPos = (unsigned short*)(item+1);
+  return QString::fromUtf8((char*)textPos, item->length);
 }
 
-inline QByteArray arrayFromItem(const unsigned short* item) {
-  const unsigned short* textPos = item;
-  ++textPos;
-  return QByteArray((char*)textPos, (int)*item);
+inline QByteArray arrayFromItem(const StringData* item) {
+  const unsigned short* textPos = (unsigned short*)(item+1);
+  return QByteArray((char*)textPos, item->length);
 }
 
 }

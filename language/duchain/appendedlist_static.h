@@ -61,6 +61,7 @@ namespace KDevelop {
 
 #define END_APPENDED_LISTS(predecessor) /* Returns the size of the object containing the appended lists, including them */ \
                                       unsigned int completeSize() const { return sizeof(SelfType) + predecessor ## OffsetBehind(); } \
+                                      unsigned int lastOffsetBehind() const { return predecessor ## OffsetBehind(); } \
                                      /* Compares all appended lists and returns true if they are equal */                \
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); }

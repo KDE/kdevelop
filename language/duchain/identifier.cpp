@@ -54,6 +54,10 @@ public:
 
   END_APPENDED_LISTS(templateIdentifiers)
   
+  unsigned int itemSize() const {
+    return sizeof(IdentifierPrivate<false>) + lastOffsetBehind();
+  }
+  
     void computeHash() const {
       Q_ASSERT(dynamic);
       //this must stay thread-safe(may be called by multiple threads at a time)
@@ -65,7 +69,6 @@ public:
       m_hash = hash;
     }
     
-  
     mutable uint m_hash;
 };
 
@@ -87,8 +90,8 @@ struct IdentifierItemRequest {
   }
   
   //Should return the size of an item created with createItem
-  size_t itemSize() const {
-      return m_identifier.completeSize();
+  unsigned int itemSize() const {
+      return m_identifier.itemSize();
   }
   //Should create an item where the information of the requested item is permanently stored. The pointer
   //@param item equals an allocated range with the size of itemSize().
@@ -134,6 +137,10 @@ public:
   APPENDED_LIST_FIRST(uint, identifiers)
 
   END_APPENDED_LISTS(identifiers)
+  
+  unsigned int itemSize() const {
+    return sizeof(QualifiedIdentifierPrivate<false>) + lastOffsetBehind();
+  }
   
   //Constructs m_identifiers
   void splitIdentifiers( const QString& str, int start )
@@ -187,8 +194,8 @@ struct QualifiedIdentifierItemRequest {
   }
   
   //Should return the size of an item created with createItem
-  size_t itemSize() const {
-      return m_identifier.completeSize();
+  unsigned int itemSize() const {
+      return m_identifier.itemSize();
   }
   //Should create an item where the information of the requested item is permanently stored. The pointer
   //@param item equals an allocated range with the size of itemSize().

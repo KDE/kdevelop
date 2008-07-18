@@ -75,9 +75,15 @@ public:
 
   APPENDED_LISTS_STUB(AbstractTypeData)
 
-  /// Returns the data size of this class.
+  /// Returns the pure data size of this class(not including anything dynamic).
   uint classSize() const;
+  
+  /// Returns the complete size of this item in memory, including derived class data and derived class appended list data
+  unsigned short itemSize() const;
 
+  /// Expensive
+  unsigned int hash() const;
+  
 private:
   AbstractTypeData& operator=(const AbstractTypeData&);
 };

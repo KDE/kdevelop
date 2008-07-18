@@ -220,7 +220,6 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                       bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
                                       size_t dynamicSize() const { return offsetBehindLastList() + classSize(); }
-
 /**
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.
  * All your class needs to do is:

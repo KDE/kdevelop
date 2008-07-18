@@ -34,7 +34,7 @@ namespace KDevelop
   class ParsingEnvironmentFile;
   class TopDUContextData;
   class TopDUContextLocalPrivate;
-  class TopDUContextDynamicData;
+//   class TopDUContextDynamicData;
   class Problem;
   class DeclarationChecker;
   class TopDUContext;
@@ -283,7 +283,7 @@ private:
   
   TopDUContextLocalPrivate* m_local;
   
-  TopDUContextDynamicData* m_dynamicData;
+  class TopDUContextDynamicData* m_dynamicData;
 };
 
 /**

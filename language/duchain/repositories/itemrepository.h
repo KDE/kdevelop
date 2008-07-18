@@ -94,6 +94,17 @@ KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry
   ///like the text of a string, can be stored behind the item in the same memory region. The only important thing is
   ///that the Request item(@see ExampleItemRequest) correctly advertises the space needed by this item.
 class ExampleItem {
+  //Every item has to implement this function, and return a valid hash.
+  //Must be exactly the same hash value as ExampleItemRequest::hash() has returned while creating the item.
+  unsigned int hash() const {
+    return 0;
+  }
+  
+  //Every item has to implement this function, and return the complete size this item takes in memory.
+  //Must be exactly the same value as ExampleItemRequest::itemSize() has returned while creating the item.
+  unsigned short int itemSize() const {
+    return 0;
+  }
 };
 
 /**
@@ -335,14 +346,38 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         *((quint64*)borderBehind) = oldValueBehind;
       }
       
+      Q_ASSERT(itemFromIndex(insertedAt)->hash() == request.hash());
+      Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == request.itemSize());
+      
       return insertedAt;
     }
     
-    void deleteItem(unsigned short index, unsigned int hash, unsigned short size) {
+    ///@param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
+    ///              The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
+    bool hasClashingItem(uint hash, uint modulo = NextBucketHashSize) {
+      uint hashMod = hash % modulo;
+      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short currentIndex = m_objectMap[localHash];
+      
+      if(currentIndex == 0)
+        return false;
+
+      while(currentIndex) {
+        currentIndex = followerIndex(currentIndex);
+        if(itemFromIndex(currentIndex)->hash() % modulo == hashMod)
+          return true; //Clash
+      }
+      return false;
+    }
+    
+    void deleteItem(unsigned short index, unsigned int hash) {
+
+      unsigned short size = itemFromIndex(index)->itemSize();
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
       unsigned short localHash = hash % m_objectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
       unsigned short previousIndex = 0;
+      
       //Fix the follower-link by setting the follower of the previous item to the next one, or updating m_objectMap
       while(currentIndex != index) {
         previousIndex = currentIndex;
@@ -568,35 +603,80 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   }
 
   ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
-//   void deleteItem(unsigned int index, unsigned int hash, unsigned short size) {
-//     ThisLocker lock(&m_mutex);
-//     
-//     short unsigned int previousBucketNumber = m_firstBucketForHash[hash % bucketHashSize];
-//     
-//     while(previousBucketNumber) {
-//       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-//       
-//       Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[previousBucketNumber];
-//       if(!bucketPtr) {
-//         initializeBucket(previousBucketNumber);
-//         bucketPtr = m_fastBuckets[previousBucketNumber];
-//       }
-//       
-//       unsigned short indexInBucket = bucketPtr->findIndex(request);
-//       if(indexInBucket) {
-//         //We've found the item, it's already there
-//         return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
-//       } else {
-//         //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
-//         //Should happen rarely
-//         short unsigned int next = bucketPtr->nextBucketForHash(hash);
-//         if(next)
-//           previousBucketNumber = next;
-//         else
-//           break;
-//       }
-//     }
-//   }
+  void deleteItem(unsigned int index) {
+    ThisLocker lock(&m_mutex);
+    
+    unsigned short bucket = (index >> 16);
+    Q_ASSERT(bucket); //We don't use zero buckets
+
+    unsigned int hash = itemFromIndex(index)->hash();
+    
+    short unsigned int previousBucketNumber = m_firstBucketForHash[hash % bucketHashSize];
+
+    Q_ASSERT(previousBucketNumber);
+    
+    if(previousBucketNumber == bucket)
+      previousBucketNumber = 0;
+    
+    Bucket<Item, ItemRequest>* previousBucketPtr = 0;
+    
+    //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
+    
+    while(previousBucketNumber) {
+      //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
+      
+      previousBucketPtr = m_fastBuckets[previousBucketNumber];
+      if(!previousBucketPtr) {
+        initializeBucket(previousBucketNumber);
+        previousBucketPtr = m_fastBuckets[previousBucketNumber];
+      }
+      
+      short unsigned int nextBucket = previousBucketPtr->nextBucketForHash(hash);
+      Q_ASSERT(nextBucket);
+      if(nextBucket == bucket)
+        break; //Now previousBucketNumber
+      else
+        previousBucketNumber = nextBucket;
+    }
+    
+    Bucket<Item, ItemRequest>* bucketPtr = m_fastBuckets[bucket];
+    if(!bucketPtr) {
+      initializeBucket(bucket);
+      bucketPtr = m_fastBuckets[bucket];
+    }
+    
+    bucketPtr->deleteItem(index, hash);
+    
+    /**
+     * Now check whether the link previousBucketNumber -> bucket is still needed.
+     */
+    if(previousBucketNumber == 0) {
+      //The item is directly in the m_firstBucketForHash hash
+      //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
+      Q_ASSERT(m_firstBucketForHash[hash % bucketHashSize] == bucket);
+      
+      while(!bucketPtr->hasClashingItem(hash, bucketHashSize)) 
+      {
+        unsigned short next = bucketPtr->nextBucketForHash(hash);
+        m_firstBucketForHash[hash % bucketHashSize] = next;
+        
+        if(next) {
+          bucketPtr = m_fastBuckets[next];
+          
+          if(!bucketPtr) 
+          {
+            initializeBucket(next);
+            bucketPtr = m_fastBuckets[next];
+          }
+        }else{
+          return;
+        }
+      }
+    }else{
+      if(!bucketPtr->hasClashingItem(hash))
+        previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
+    }
+  }
 
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   const Item* itemFromIndex(unsigned int index) const {
@@ -763,7 +843,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         
         uint bucketCount, currentBucket;
         m_file->read((char*)&bucketCount, sizeof(uint));
-        Q_ASSERT(bucketCount == m_buckets.size());
+        Q_ASSERT(bucketCount == (uint)m_buckets.size());
         m_file->read((char*)&currentBucket, sizeof(uint));
         Q_ASSERT(currentBucket == m_currentBucket);
       

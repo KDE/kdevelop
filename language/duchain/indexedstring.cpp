@@ -90,7 +90,7 @@ int IndexedString::length() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return 1;
   else
-    return *globalStringRepository().itemFromIndex(m_index);
+    return globalStringRepository().itemFromIndex(m_index)->length;
 }
 
 QByteArray IndexedString::byteArray() const {

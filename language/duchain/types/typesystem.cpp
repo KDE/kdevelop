@@ -42,6 +42,15 @@ uint AbstractTypeData::classSize() const {
   return TypeSystem::self().dataClassSize(*this);
 }
 
+unsigned short AbstractTypeData::itemSize() const {
+  return TypeSystem::self().dynamicSize(*this);
+}
+
+unsigned int AbstractTypeData::hash() const {
+  AbstractType::Ptr type( TypeSystem::self().create(const_cast<AbstractTypeData*>(this)) );
+  return type->hash();
+}
+
 AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs )
   : m_modifiers(rhs.m_modifiers)
   , inRepository(false)
