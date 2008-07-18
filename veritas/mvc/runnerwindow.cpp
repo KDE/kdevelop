@@ -21,6 +21,8 @@
 
 #include "veritas/mvc/runnerwindow.h"
 
+#include "ui_runnerwindow.h"
+
 #include "interfaces/iproject.h"
 
 #include "veritas/mvc/resultsmodel.h"
@@ -61,14 +63,15 @@ using Veritas::ResultsViewController;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
 {
-    return &m_ui;
+    return m_ui;
 }
 
 RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
         : QWidget(parent, flags)
 {
     initVeritasResource();
-    m_ui.setupUi(this);
+    m_ui=new Ui::RunnerWindow;
+    m_ui->setupUi(this);
     runnerView()->setRootIsDecorated(false);
     runnerView()->setUniformRowHeights(true);
 
@@ -90,7 +93,7 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     m_selection = new SelectionManager(runnerView());
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
-    m_ui.actionReload->setIcon(refresh);
+    m_ui->actionReload->setIcon(refresh);
 
     runnerView()->setStyleSheet(
         "QTreeView::branch{"
@@ -119,7 +122,7 @@ void RunnerWindow::addProjectMenu()
     m->setToolTip(i18n("Select project"));
     m->setToolBarMode(KSelectAction::MenuMode);
     m->setEditable(true);
-    m_ui.runnerToolBar->addAction(m);
+    m_ui->runnerToolBar->addAction(m);
     m_projectPopup = m;
 }
 
@@ -131,7 +134,7 @@ void RunnerWindow::addProjectToPopup(IProject* proj)
     v.setValue(proj);
     p->setData(v);
     m_projectPopup->addAction(p);
-    m_ui.runnerToolBar->addAction(m_projectPopup);
+    m_ui->runnerToolBar->addAction(m_projectPopup);
 }
 
 void RunnerWindow::rmProjectFromPopup(IProject* proj)
@@ -177,24 +180,24 @@ KSelectAction* RunnerWindow::projectPopup() const
 void RunnerWindow::connectActions()
 {
     // File commands.
-    connect(m_ui.actionExit, SIGNAL(triggered(bool)), SLOT(close()));
+    connect(m_ui->actionExit, SIGNAL(triggered(bool)), SLOT(close()));
     // Item commands.
-    m_ui.actionStart->setShortcut(QKeySequence(tr("Ctrl+R")));
-    connect(m_ui.actionStart, SIGNAL(triggered(bool)), SLOT(runItems()));
-    m_ui.actionStop->setShortcut(QKeySequence(tr("Ctrl+K")));
-    connect(m_ui.actionStop, SIGNAL(triggered(bool)), SLOT(stopItems()));
+    m_ui->actionStart->setShortcut(QKeySequence(tr("Ctrl+R")));
+    connect(m_ui->actionStart, SIGNAL(triggered(bool)), SLOT(runItems()));
+    m_ui->actionStop->setShortcut(QKeySequence(tr("Ctrl+K")));
+    connect(m_ui->actionStop, SIGNAL(triggered(bool)), SLOT(stopItems()));
     // View commands
-    m_ui.actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
-    connect(m_ui.actionSelectAll, SIGNAL(triggered(bool)),
+    m_ui->actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
+    connect(m_ui->actionSelectAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(selectAll()));
-    m_ui.actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
-    connect(m_ui.actionUnselectAll, SIGNAL(triggered(bool)),
+    m_ui->actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
+    connect(m_ui->actionUnselectAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(unselectAll()));
-    m_ui.actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
-    connect(m_ui.actionExpandAll, SIGNAL(triggered(bool)),
+    m_ui->actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
+    connect(m_ui->actionExpandAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(expandAll()));
-    m_ui.actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
-    connect(m_ui.actionCollapseAll, SIGNAL(triggered(bool)),
+    m_ui->actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
+    connect(m_ui->actionCollapseAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(collapseAll()));
 }
 
@@ -334,19 +337,19 @@ void RunnerWindow::setModel(RunnerModel* model)
     // Very limited user interaction without data.
     if (model->rowCount() < 1) {
         enableItemActions(false);
-        m_ui.actionColumns->setEnabled(true);
-        m_ui.actionSettings->setEnabled(true);
+        m_ui->actionColumns->setEnabled(true);
+        m_ui->actionSettings->setEnabled(true);
         return;
     }
     connectItemStatistics(model);
 
     // How much data is wanted when running the items.
-    connect(m_ui.actionMinimalUpdate, SIGNAL(triggered(bool)),
+    connect(m_ui->actionMinimalUpdate, SIGNAL(triggered(bool)),
             model, SLOT(setMinimalUpdate(bool)));
     model->setMinimalUpdate(isMinimalUpdate());
     connectProgressIndicators(model);
     enableItemActions(true);
-    m_ui.actionStop->setDisabled(true);
+    m_ui->actionStop->setDisabled(true);
     setResultsFilter();
 
     connect(resultsModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
@@ -362,12 +365,12 @@ void RunnerWindow::setModel(RunnerModel* model)
 
 QTreeView* RunnerWindow::runnerView() const
 {
-    return m_ui.treeRunner;
+    return m_ui->treeRunner;
 }
 
 QTreeView* RunnerWindow::resultsView() const
 {
-    return m_ui.treeResults;
+    return m_ui->treeResults;
 }
 
 RunnerModel* RunnerWindow::runnerModel() const
@@ -666,7 +669,7 @@ void RunnerWindow::runItems()
 
 void RunnerWindow::stopItems()
 {
-    m_ui.actionStop->setDisabled(true);
+    m_ui->actionStop->setDisabled(true);
     QCoreApplication::processEvents();  // Disable command immediately
 
     // Stopping is done in a dialog which shows itself only when
@@ -679,7 +682,7 @@ void RunnerWindow::stopItems()
         return;
     }
     // Give a chance for another stop request.
-    m_ui.actionStop->setEnabled(true);
+    m_ui->actionStop->setEnabled(true);
     m_sema.release();
 }
 
@@ -693,7 +696,7 @@ void RunnerWindow::showResults(bool show)
 
     // An invisible results view means that the dock widget was closed
     // and is shown now. In this case the data is retrieved again.
-    bool visible = m_ui.treeResults->isVisible();
+    bool visible = m_ui->treeResults->isVisible();
 
     if (show && !visible) {
         // Show data according to current filtering.
@@ -715,7 +718,7 @@ void RunnerWindow::disableControlsBeforeRunning()
     enableItemActions(false);
     resultsController()->enableSorting(false);
 
-    m_ui.actionStop->setEnabled(true);
+    m_ui->actionStop->setEnabled(true);
     runnerView()->setCursor(QCursor(Qt::BusyCursor));
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::NoSelection);
@@ -769,7 +772,7 @@ void RunnerWindow::enableControlsAfterRunning() const
     // Enable user interaction.
     enableItemActions(true);
 
-    m_ui.actionStop->setDisabled(true);
+    m_ui->actionStop->setDisabled(true);
     runnerView()->setCursor(QCursor());
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -809,15 +812,15 @@ void RunnerWindow::enableControlsAfterRunning() const
 
 void RunnerWindow::enableItemActions(bool enable) const
 {
-    m_ui.actionStart->setEnabled(enable);
-    m_ui.actionStop->setEnabled(enable);
-    m_ui.actionSelectAll->setEnabled(enable);
-    m_ui.actionUnselectAll->setEnabled(enable);
-    m_ui.actionExpandAll->setEnabled(enable);
-    m_ui.actionCollapseAll->setEnabled(enable);
-    m_ui.actionMinimalUpdate->setEnabled(enable);
-    m_ui.actionColumns->setEnabled(enable);
-    m_ui.actionSettings->setEnabled(enable);
+    m_ui->actionStart->setEnabled(enable);
+    m_ui->actionStop->setEnabled(enable);
+    m_ui->actionSelectAll->setEnabled(enable);
+    m_ui->actionUnselectAll->setEnabled(enable);
+    m_ui->actionExpandAll->setEnabled(enable);
+    m_ui->actionCollapseAll->setEnabled(enable);
+    m_ui->actionMinimalUpdate->setEnabled(enable);
+    m_ui->actionColumns->setEnabled(enable);
+    m_ui->actionSettings->setEnabled(enable);
 }
 
 void RunnerWindow::enableTestSync(bool enable) const
@@ -880,7 +883,7 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
 
 bool RunnerWindow::isMinimalUpdate() const
 {
-    return m_ui.actionMinimalUpdate->isChecked();
+    return m_ui->actionMinimalUpdate->isChecked();
 }
 
 RunnerViewController* RunnerWindow::runnerController() const

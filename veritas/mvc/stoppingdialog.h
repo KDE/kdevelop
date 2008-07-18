@@ -28,7 +28,9 @@
 #ifndef VERITAS_STOPPINGDIALOG_H
 #define VERITAS_STOPPINGDIALOG_H
 
-#include "ui_stoppingdialog.h"
+#include <QDialog>
+
+namespace Ui { class StoppingDialog; }
 
 namespace Veritas
 {
@@ -83,7 +85,7 @@ private: // Operations
 
 private: // Attributes
 
-    Ui::StoppingDialog ui;
+    Ui::StoppingDialog *ui;
 
     RunnerModel* m_model;
 

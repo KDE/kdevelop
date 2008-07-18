@@ -24,6 +24,8 @@
 
 using Veritas::StoppingDialog;
 using Veritas::RunnerModel;
+#include "ui_stoppingdialog.h"
+
 
 StoppingDialog::StoppingDialog(QWidget* parent, RunnerModel* model)
         : QDialog(parent, Qt::WindowTitleHint      |
@@ -31,8 +33,9 @@ StoppingDialog::StoppingDialog(QWidget* parent, RunnerModel* model)
                   Qt::MSWindowsFixedSizeDialogHint),
         m_model(model)
 {
-    ui.setupUi(this);
-    connect(ui.buttonCancel, SIGNAL(clicked()), SLOT(reject()));
+    ui=new Ui::StoppingDialog;
+    ui->setupUi(this);
+    connect(ui->buttonCancel, SIGNAL(clicked()), SLOT(reject()));
     m_shouldClose = false;
 }
 
@@ -51,10 +54,10 @@ int StoppingDialog::exec()
     while (!(stopped || m_shouldClose)) {
         // Prevent GUI from freezing.
         QCoreApplication::processEvents();
-        ui.progressBar->setValue(ui.progressBar->value() + 1);
+        ui->progressBar->setValue(ui->progressBar->value() + 1);
         stopped = m_model->stopItems();
-        if (ui.progressBar->value() >= ui.progressBar->maximum()) {
-            ui.progressBar->setValue(ui.progressBar->minimum());
+        if (ui->progressBar->value() >= ui->progressBar->maximum()) {
+            ui->progressBar->setValue(ui->progressBar->minimum());
         }
     }
     if (stopped) {

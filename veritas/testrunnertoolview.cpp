@@ -32,6 +32,7 @@
 #include "veritas/test.h"
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/runnerwindow.h"
+#include "ui_runnerwindow.h"
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 

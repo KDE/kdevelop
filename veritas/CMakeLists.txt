@@ -11,6 +11,7 @@ endif(TestBuild AND NOT WIN32)
 include_directories(
     ${KDE4_INCLUDES}
     ${CMAKE_SOURCE_DIR}/interfaces # needed for shell/core.h
+    ${CMAKE_BINARY_DIR}/veritas/
     )
 
 ########### next target ###############
@@ -65,7 +66,5 @@ if(TestBuild)
     install(FILES
         mvc/runnerwindow.h
         mvc/runnermodel.h
-        ${CMAKE_BINARY_DIR}/veritas/ui_runnerwindow.h
-        ${CMAKE_BINARY_DIR}/veritas/ui_statuswidget.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
 endif(TestBuild)

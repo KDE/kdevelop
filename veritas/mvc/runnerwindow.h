@@ -22,13 +22,14 @@
 #ifndef VERITAS_RUNNERWINDOW_H
 #define VERITAS_RUNNERWINDOW_H
 
-#include "ui_runnerwindow.h"
-
 #include <QtGui/QLabel>
 #include <QtCore/QSemaphore>
-
+#include <QTreeView>
 namespace KDevelop { class IProject; }
 
+namespace Ui { class RunnerWindow; }
+
+class QItemSelection;
 class QAction;
 class KSelectAction;
 
@@ -66,6 +67,7 @@ class SelectionManager;
  *
  * \sa \ref main_window
  */
+
 class RunnerWindow : public QWidget
 {
 Q_OBJECT
@@ -212,7 +214,7 @@ private: // Operations
 
 private: // Attributes
 
-    Ui::RunnerWindow m_ui;             // QtDesigner main object
+    Ui::RunnerWindow *m_ui;             // QtDesigner main object
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm
     RunnerViewController*  m_runnerViewController; // used to reduce bloat in this class
