@@ -254,7 +254,7 @@ struct SetNodeData {
 };
 
 class SetNodeDataRequest;
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false> SetDataRepository;
+typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false> SetDataRepository;
 
 struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
