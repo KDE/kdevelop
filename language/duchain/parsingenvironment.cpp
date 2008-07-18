@@ -98,40 +98,15 @@ IdentifiedFile::operator bool() const {
 ParsingEnvironment::~ParsingEnvironment() {
 }
 
-ParsingEnvironmentManager::~ParsingEnvironmentManager() {
-}
-
-void ParsingEnvironmentManager::clear() {
-}
-
 ParsingEnvironmentFile::~ParsingEnvironmentFile() {
-}
-
-bool ParsingEnvironmentManager::needsUpdate( const ParsingEnvironmentFile* file ) const {
-  return false;
 }
 
 int ParsingEnvironment::type() const {
   return StandardParsingEnvironment;
 }
 
-int ParsingEnvironmentManager::type() const {
-  return StandardParsingEnvironment;
-}
-
 int ParsingEnvironmentFile::type() const {
   return StandardParsingEnvironment;
-}
-
-void ParsingEnvironmentManager::addFile( ParsingEnvironmentFile* /*file*/ ) {
-}
-
-    ///Remove a file from the manager
-void ParsingEnvironmentManager::removeFile( ParsingEnvironmentFile* /*file*/ ) {
-}
-
-ParsingEnvironmentFile* ParsingEnvironmentManager::find( const IndexedString& /*url*/, const ParsingEnvironment* /*environment*/, ParsingEnvironmentFileAcceptor* ) {
-  return 0;
 }
 
 } //KDevelop

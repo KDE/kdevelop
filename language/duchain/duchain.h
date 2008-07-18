@@ -153,14 +153,6 @@ public:
   static void branchRemoved(DUContext* context);
 
   /**
-   * @see ParsingEnvironmentManager
-   * */
-  void addParsingEnvironmentManager( ParsingEnvironmentManager* manager );
-
-  ///Remove a manager, for example when a language-part is unloaded
-  void removeParsingEnvironmentManager( ParsingEnvironmentManager* manager );
-
-  /**
    * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
    * */
   void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );

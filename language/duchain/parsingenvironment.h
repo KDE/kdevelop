@@ -148,59 +148,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
      * If the time-stamp is invalid and the revision is 0, the file will be automatically deleted.
      * */
     virtual ModificationRevision modificationRevision() const = 0;
+
+    ///Should return whether this file matches into the given environment
+    virtual bool matchEnvironment(const ParsingEnvironment* environment) const = 0;
+
+    ///Should use language-specific information to decide whether the top-context that has this data attached needs to be reparsed
+    virtual bool needsUpdate() const = 0;
 };
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
-
-/**
- * Used decide from outside whether a matching ParsingEnvironmentFile should be returned by ParsingEnvironmentManager::find.
- *
- * \warning Access to this class must be serialized through du-chain locking
- **/
-struct ParsingEnvironmentFileAcceptor {
-  virtual bool accept(const ParsingEnvironmentFile& file) = 0;
-  virtual ~ParsingEnvironmentFileAcceptor() {
-  };
-};
-
-/**
- * This class is responsible for managing parsing-environments and
- * especially a whole set of ParsingEnvironmentFile instances.
- * It must be implemented case-by-case to work nicely together
- * with specific implementations of ParsingEnvironment.
- *
- * Storing and saving of ParsingEnvironmentFile entries should be implemented within
- * ParsingEnvironmentManager, because that can use additional structural information.
- *
- * \warning Access to this class must be serialized through du-chain locking
- * */
-
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentManager
-{
-  public:
-    virtual ~ParsingEnvironmentManager();
-
-    /**
-     * \returns the type of this parsing environment manager.
-     * @see ParsingEnvironmentType
-     */
-    virtual int type() const;
-    /// Clear all files from the manager.
-    virtual void clear();
-
-    ///Add a new \a file to the manager
-    virtual void addFile( ParsingEnvironmentFile* file );
-    ///Remove a \a file from the manager
-    virtual void removeFile( ParsingEnvironmentFile* file );
-    ///Should use language-specific information to decide whether the top-context that has the given data attached needs to be reparsed
-    virtual bool needsUpdate( const ParsingEnvironmentFile* file ) const;
-    /**
-     * Search for the availability of a file parsed in a given environment
-     * @param acceptor For each found matching file, accepter->accept(..) should be called to
-     * decide whether to return the file, or search on. If it is zero, the first match should be returned.
-     * */
-    virtual ParsingEnvironmentFile* find( const IndexedString& url, const ParsingEnvironment* environment, ParsingEnvironmentFileAcceptor* acceptor = 0 );
-};
 }
 
 #endif

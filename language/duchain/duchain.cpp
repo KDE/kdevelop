@@ -21,6 +21,7 @@
 
 #include <QCoreApplication>
 #include <QHash>
+#include <QMultiMap>
 #include <qatomic.h>
 
 #include <kglobal.h>
@@ -80,20 +81,10 @@ public:
   DUChainLock lock;
   QMap<IdentifiedFile, TopDUContext*> m_chains;
   QHash<uint, TopDUContext*> m_chainsByIndex;
-  QMap<int,ParsingEnvironmentManager*> m_managers;
+  QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
-
-  ParsingEnvironmentManager* managerForType(int type)
-  {
-    QMap<int,ParsingEnvironmentManager*>::const_iterator it = m_managers.find(type);
-
-    if( it != m_managers.end() )
-      return *it;
-    else
-      return 0;
-  }
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
@@ -234,13 +225,7 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
   if( !file )
     return; //We don't need to manage
 
-  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
-
-  if( it != sdDUChainPrivate->m_managers.end() ) {
-    (*it)->addFile( file.data() );
-  } else {
-    //No manager available for the type
-  }
+  sdDUChainPrivate->m_fileEnvironmentInformations.insert(chain->url(), file);
 }
 
 void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
@@ -250,13 +235,7 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   if( !file )
     return; //We don't need to manage
 
-  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(file->type());
-
-  if( it != sdDUChainPrivate->m_managers.end() ) {
-    (*it)->removeFile( file.data() );
-  } else {
-    //No manager available for the type
-  }
+  sdDUChainPrivate->m_fileEnvironmentInformations.remove(chain->url(), file);
 }
 
 TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
@@ -326,37 +305,21 @@ TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvi
 }
 TopDUContext* DUChain::chainForDocument( const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
 
-  //Use this struct to search for context that match the specified flags
-  struct FlagFileAcceptor : public ParsingEnvironmentFileAcceptor {
-    TopDUContext::Flags searchFlags;
-    FlagFileAcceptor(TopDUContext::Flags f) : searchFlags(f) {
-    }
-    virtual bool accept(const ParsingEnvironmentFile& file) {
-      if(searchFlags == TopDUContext::AnyFlag)
-        return true;
-      else {
-        TopDUContext* ctx = DUChain::self()->chainForDocument(file.identity());
-        if(ctx && ctx->flags() == searchFlags)
-          return true;
-        else
-          return false;
+  IndexedString indexed(document.str());
+
+  QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::const_iterator it = sdDUChainPrivate->m_fileEnvironmentInformations.lowerBound(indexed);
+  while(it != sdDUChainPrivate->m_fileEnvironmentInformations.end() && it.key() == indexed) {
+    if(*it) {
+      ///@todo don't load the context just for testing the flags, store the flags in the parsing-environment file
+      TopDUContext* ctx = DUChain::self()->chainForDocument((*it)->identity());
+      if(flags == TopDUContext::AnyFlag || (ctx && ctx->flags() == flags)) {
+        return ctx;
       }
     }
-  };
-
-  FlagFileAcceptor acceptor(flags);
-
-  QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(environment->type());
-  if( it != sdDUChainPrivate->m_managers.end() ) {
-    ParsingEnvironmentFilePointer file( (*it)->find(IndexedString(document.str()), environment, &acceptor) );
-    if( !file )
-      return 0;
-
-      return chainForDocument( file->identity() );
-  } else {
-    //No manager available for the type
-    return chainForDocument( document );
+    ++it;
   }
+
+  return 0;
 }
 
 void DUChain::clear()
@@ -368,9 +331,7 @@ void DUChain::clear()
     delete context;
   }
 
-  foreach( ParsingEnvironmentManager* manager, sdDUChainPrivate->m_managers )
-    manager->clear();
-
+  sdDUChainPrivate->m_fileEnvironmentInformations.clear();
   sdDUChainPrivate->m_chains.clear();
   sdDUChainPrivate->m_chainsByIndex.clear();
 }
@@ -395,23 +356,6 @@ void DUChain::branchRemoved(DUContext* context)
   emit sdDUChainPrivate->notifier->branchRemoved(DUContextPointer(context));
 }
 
-void DUChain::addParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
-  ENSURE_CHAIN_WRITE_LOCKED
-  Q_ASSERT( sdDUChainPrivate->m_managers.find(manager->type()) == sdDUChainPrivate->m_managers.end() ); //If this fails, there may be multiple managers with the same type, which is wrong
-
-  sdDUChainPrivate->m_managers[manager->type()] = manager;
-  }
-
-void DUChain::removeParsingEnvironmentManager( ParsingEnvironmentManager* manager ) {
-  ENSURE_CHAIN_WRITE_LOCKED
-  QMap<int,ParsingEnvironmentManager*>::iterator it = sdDUChainPrivate->m_managers.find(manager->type());
-
-  if( it != sdDUChainPrivate->m_managers.end() ) {
-    Q_ASSERT( *it == manager ); //If this fails, there may be multiple managers with the same type, which is wrong
-    sdDUChainPrivate->m_managers.erase(it);
-  }
-}
-
 QList<KUrl> DUChain::documents() const
 {
   QList<KUrl> ret;
@@ -427,13 +371,9 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
   //If yes, update it.
   DUChainWriteLocker lock( DUChain::lock() );
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
-  if(ctx && ctx->parsingEnvironmentFile()) {
-    QMap<int,ParsingEnvironmentManager*>::const_iterator it = sdDUChainPrivate->m_managers.find(ctx->parsingEnvironmentFile()->type());
-    if( it != sdDUChainPrivate->m_managers.end() ) {
-      if(it.value()->needsUpdate(ctx->parsingEnvironmentFile().data()))
-        ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
-    }
-  }
+  if(ctx && ctx->parsingEnvironmentFile())
+    if(ctx->parsingEnvironmentFile()->needsUpdate())
+      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
 void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
