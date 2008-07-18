@@ -18,10 +18,17 @@
 
 #include "cppducontext.h"
 #include "navigationwidget.h"
+#include <duchainregister.h>
 
 namespace Cpp {
 
 QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
+
+typedef CppDUContext<TopDUContext> CppTopDUContext;
+REGISTER_DUCHAIN_ITEM_WITH_DATA(CppTopDUContext, TopDUContextData);
+
+typedef CppDUContext<TopDUContext> CppDUContext;
+REGISTER_DUCHAIN_ITEM_WITH_DATA(CppDUContext, DUContextData);
 
 template<>
 QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {

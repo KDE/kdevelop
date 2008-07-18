@@ -480,6 +480,10 @@ class CppDUContext : public BaseContext {
     
     virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const;
     
+    enum {
+      Identity = BaseContext::Identity + 50
+    };
+    
   private:
     ~CppDUContext() {
       //Delete all the local declarations first, so they also delete their instantiations

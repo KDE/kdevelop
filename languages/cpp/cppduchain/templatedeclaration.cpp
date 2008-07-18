@@ -25,16 +25,30 @@
 
 #include <duchain/declaration.h>
 #include <duchain/forwarddeclaration.h>
+#include <duchain/aliasdeclaration.h>
+#include <duchain/functiondeclaration.h>
 #include <duchain/repositories/itemrepository.h>
+#include <duchain/classfunctiondeclaration.h>
 #include <appendedlist.h>
 
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 #include "expressionparser.h"
 #include "classdeclaration.h"
+#include <duchainregister.h>
 
 using namespace KDevelop;
 using namespace Cpp;
+
+#define REGISTER_TEMPLATE_DECLARATION(Declaration) typedef TemplateDeclaration<Declaration> Template ## Declaration; REGISTER_DUCHAIN_ITEM_WITH_DATA(Template ## Declaration, Declaration ## Data);
+
+REGISTER_TEMPLATE_DECLARATION(Declaration);
+REGISTER_TEMPLATE_DECLARATION(ClassDeclaration);
+REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration);
+REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration);
+REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration);
+REGISTER_TEMPLATE_DECLARATION(AliasDeclaration);
+REGISTER_TEMPLATE_DECLARATION(ForwardDeclaration);
 
 QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 

@@ -223,6 +223,11 @@ namespace Cpp {
       Q_ASSERT(0);
       return 0;
     }
+    
+    enum {
+      Identity = BaseDeclaration::Identity + 50
+    };
+    
   };
 
   bool KDEVCPPDUCHAIN_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);
