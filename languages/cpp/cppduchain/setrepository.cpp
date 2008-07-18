@@ -56,8 +56,8 @@ namespace Utils {
 
 typedef BasicSetRepository::Index Index;
 
-//Constructs a hash that is only dependent on the items in the range.
-//The sum of the hashes of multiple separate ranges equal the hash of the complete range. Example:
+//Constructs a m_hash that is only dependent on the items in the range.
+//The sum of the hashes of multiple separate ranges equal the m_hash of the complete range. Example:
 //hashFromRange(3, 5) + hashFromRange(5, 7) == hashFromRange(3, 7)
 const uint primes[] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103};
 const uint primeCount = 26;
@@ -116,12 +116,12 @@ uint splitPositionForRange(uint start, uint end) {
 //Node used for computing the temporary split-tree
 struct SplitTreeNode {
   uint start, end;
-  uint hash;
+  uint m_hash;
   bool hasSlaves; //If this is true, the next item in the array is the first child node.
   uint rightChildOffset; //If hasSlaves is true, this contains the offset in the array to the right child node(from this node)
 };
 
-//Returns the hash-value for all children
+//Returns the m_hash-value for all children
 uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* rangesSizes, uint rangeListCounts, uchar splitBit = 31) {
   
   uint start = ranges[0][0];
@@ -136,15 +136,15 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
   n->start = start;
   n->end = end;
   n->hasSlaves = false;
-  n->hash = 0;
+  n->m_hash = 0;
   
   if(!split) {
     Q_ASSERT(rangeListCounts == 1);
     Q_ASSERT(rangesSizes[0] == 2);
     Q_ASSERT(end - start == 1); //We have ended up like this
-    n->hash = hashFromRange(n->start, n->end);
+    n->m_hash = hashFromRange(n->start, n->end);
     Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
-    return n->hash;
+    return n->m_hash;
   }else{
     //Find the position where split splits all the ranges, 
     for(uint rangeList = 0; rangeList < rangeListCounts; ++rangeList) {
@@ -165,7 +165,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
             uint oldRangeSize = rangesSizes[rangeList];
             rangesSizes[rangeList] = range;
             
-            uint hash = splitTreeForRanges(target, ranges, rangesSizes, rangeList+1, splitBit);
+            uint m_hash = splitTreeForRanges(target, ranges, rangesSizes, rangeList+1, splitBit);
             
             n = &target[position]; //The adress may have changed
             
@@ -176,16 +176,16 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
             uint* oldRanges = ranges[rangeList];
             ranges[rangeList] += range;
             rangesSizes[rangeList] = oldRangeSize - range;
-            hash += splitTreeForRanges(target, ranges+rangeList, rangesSizes+rangeList, rangeListCounts - rangeList, splitBit);
+            m_hash += splitTreeForRanges(target, ranges+rangeList, rangesSizes+rangeList, rangeListCounts - rangeList, splitBit);
             
             n = &target[position]; //The adress may have changed
             
-            n->hash = hash;
+            n->m_hash = m_hash;
             
             ranges[rangeList] = oldRanges;
             rangesSizes[rangeList] = oldRangeSize;
             Q_ASSERT(n->rightChildOffset);
-            return n->hash;
+            return n->m_hash;
           }else{
             //Split in the middle of the range list
             Q_ASSERT(0); ///@todo eventually support real ranges
@@ -197,10 +197,10 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
   
   Q_ASSERT(0);
   Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
-  Q_ASSERT(n->hash);
+  Q_ASSERT(n->m_hash);
   Q_ASSERT(n->hasSlaves);
   Q_ASSERT(n->rightChildOffset);
-  return n->hash;
+  return n->m_hash;
 }
 
 QString printSplitTree(SplitTreeNode* tree, QString prefix = "") {
@@ -222,9 +222,17 @@ struct SetNodeData {
   //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
   //Ptr left, right;
   uint leftNode, rightNode;
-  uint hash;
+  uint m_hash;
   
-  SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), hash(0) {
+  SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0) {
+  }
+  
+  uint hash() const {
+    return m_hash;
+  }
+  
+  short unsigned int itemSize() const {
+    return sizeof(SetNodeData);
   }
   
   inline bool contiguous() const {
@@ -237,11 +245,11 @@ struct SetNodeData {
   
   //Must always be called when an attribute was changed!
   void updateHash(const SetNodeData* left, const SetNodeData* right) {
-    hash = 0;
+    m_hash = 0;
     if(left && right) {
-      hash = left->hash + right->hash;
+      m_hash = left->m_hash + right->m_hash;
     } else
-      hash = hashFromRange(start, end);
+      m_hash = hashFromRange(start, end);
   }
 };
 
@@ -301,16 +309,16 @@ struct SetNodeDataRequest {
   };
   
   //This constructor creates a request that finds or creates a node that equals the given node
-  //The hash must be up to dat, and the node must be split correctly around its splitPosition
-  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->hash), repository(_repository) {
+  //The m_hash must be up to dat, and the node must be split correctly around its splitPosition
+  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository) {
     ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
   }
   
-  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->hash), repository(_repository) {
+  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository) {
   
     data.start = splitNode->start;
     data.end = splitNode->end;
-    data.hash = m_hash;
+    data.m_hash = m_hash;
     if(splitNode->hasSlaves) {
       data.leftNode = repository.index( SetNodeDataRequest( splitNode+1, repository) );
       data.rightNode = repository.index( SetNodeDataRequest( splitNode+splitNode->rightChildOffset, repository) );
@@ -324,7 +332,7 @@ struct SetNodeDataRequest {
 
   typedef unsigned int HashType;
   
-  //Should return the hash-value associated with this request(For example the hash of a string)
+  //Should return the m_hash-value associated with this request(For example the m_hash of a string)
   HashType hash() const {
     return m_hash;
   }
@@ -339,7 +347,7 @@ struct SetNodeDataRequest {
     Q_ASSERT((data.rightNode && data.leftNode) || (!data.rightNode && !data.leftNode));
     
     *item = data;
-    Q_ASSERT(item->hash);
+    Q_ASSERT(item->m_hash);
   
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
     
@@ -349,7 +357,7 @@ struct SetNodeDataRequest {
       uint split = splitPositionForRange(data.start, data.end);
       const SetNodeData* left = repository.itemFromIndex(item->leftNode);
       const SetNodeData* right = repository.itemFromIndex(item->rightNode);
-      Q_ASSERT(item->hash == left->hash + right->hash);
+      Q_ASSERT(item->m_hash == left->m_hash + right->m_hash);
       Q_ASSERT(split >= left->end && split <= right->start);
     }
 #endif
@@ -357,7 +365,7 @@ struct SetNodeDataRequest {
   
   //Should return whether the here requested item equals the given item
   inline bool equals(const SetNodeData* item) const {
-    Q_ASSERT(item->hash);
+    Q_ASSERT(item->m_hash);
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
     //Just compare child nodes, since data must be correctly split, this is perfectly ok
     //Since this happens in very tight loops, we don't call an additional function here, but just do the check.
@@ -817,7 +825,7 @@ bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNode
       //Here it must match, because the basic sets have size 1
       Q_ASSERT(lhs->end - lhs->start == 1 && rhs->end - rhs->start == 1); //We do this assumption in the algorithm
       
-      if(lhs->start != rhs->start || lhs->end != rhs->end || lhs->hash != rhs->hash)
+      if(lhs->start != rhs->start || lhs->end != rhs->end || lhs->m_hash != rhs->m_hash)
         return false;
       
       if(leftNextStack.isEmpty() && rightNextStack.isEmpty())
@@ -832,7 +840,7 @@ bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNode
       rightNextStack.pop();
     }
     
-    if(lhs->start == rhs->start && lhs->end == rhs->end && lhs->hash != rhs->hash)
+    if(lhs->start == rhs->start && lhs->end == rhs->end && lhs->m_hash != rhs->m_hash)
       return false;
     
     if(lhs->hasSlaves || !rhs->contiguous()) {

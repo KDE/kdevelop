@@ -96,6 +96,10 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
 
     unsigned int hash() const;
 
+    unsigned int itemSize() const {
+      return dynamicSize();
+    }
+    
     ///Duchain must be read-locked
     TypeIdentifier identifier() const;
 

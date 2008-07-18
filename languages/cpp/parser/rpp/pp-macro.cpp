@@ -25,6 +25,10 @@
 
 using namespace rpp;
 
+short unsigned int pp_macro::itemSize() const {
+  return constantSize(this);
+}
+
 uint pp_macro::definitionSize() const {
   char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
   return *((uint*)currentAddress);

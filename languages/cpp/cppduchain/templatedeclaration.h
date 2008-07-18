@@ -73,6 +73,10 @@ namespace Cpp {
       return sizeof(InstantiationInformation);
     }
     
+    short unsigned int itemSize() const {
+      return dynamicSize();
+    }
+    
     ///templateParameters contains the template-parameters used for the instantiation
     APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
     
