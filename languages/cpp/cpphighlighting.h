@@ -100,7 +100,6 @@ class CppHighlighting : public QObject, public KDevelop::ICodeHighlighting
   
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
     virtual void highlightUse(KDevelop::DUContext* context, int index, uint color) const;
-    virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;
     virtual void highlightUses(KDevelop::DUContext* context) const;
 
     //color should be zero when undecided

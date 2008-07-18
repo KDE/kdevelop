@@ -538,12 +538,6 @@ void CppHighlighting::highlightDeclaration(Declaration * declaration, uint color
     range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
 }
 
-void CppHighlighting::highlightDeclaration(Declaration * declaration) const
-{
-  if (SmartRange* range = declaration->smartRange())
-    range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, 0));
-}
-
 void CppHighlighting::highlightUse(DUContext* context, int index, uint color) const
 {
   if (SmartRange* range = context->useSmartRange(index)) {
