@@ -27,32 +27,45 @@ namespace Veritas
 {
 class Test;
 
+/*! Initiates and starts execution of test executable in a test tree.
+ *  Links succeeding tests together in a signal-slot chain triggered 
+ *  with the `fireStarter()' signal. */
 class TestExecutor : public QObject
 {
 Q_OBJECT
 public:
     TestExecutor();
 
-    void setRoot(Test*);
+    /*! The root of the test tree which needs to be executed.
+     *  Clients must set this before `go()'. */
+    void setRoot(Test* root);
+
+    /*! Initialize and start execution of (user) selected tests in the test
+     *  tree with root `root' */
     void go();
 
 signals:
-    void fireStarter(); // triggers first execution.
-    void allDone();     // all tests have completed.
+    /*! triggers first execution */
+    void fireStarter();
+
+    /*! emitted when all tests completed */
+    void allDone();
 
 private slots:
+    /*! disconnects the test signal-chain */
     void cleanup();
 
 private:
-    void disconnectAll(Test* target);
-    void traverse(Test*);
-    void setupChain(Test*);
-    void disconnectChain(Test*);
-    void fixLast();
+    /*! Recursive function which traverses the tree in a depth first manner.
+     *  Applies the visit functor on each test */
+    template<typename V>
+    void traverse(Test* current, V& visit);
+
+    /*! Connects the last test with allDone() */
+    void fixLast(Test*);
 
 private:
     Test* m_root;
-    Test* m_previous; // previously found exe in the depth-first traversal
 };
 
 }

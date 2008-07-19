@@ -24,80 +24,98 @@
 #include <QtGlobal>
 #include <KDebug>
 
+#include <iostream>
+
 using Veritas::Test;
 using Veritas::TestExecutor;
 
+namespace
+{
+
+/*! functor which disconnects a tests' execution finished signal */
+class DisconnectTest
+{
+public:
+    void operator()(Test* t);
+};
+
+void DisconnectTest::operator()(Test* t)
+{
+    t->disconnect(SIGNAL(executionFinished()));
+}
+
+/*! functor which inter-connects the tests to be run in a signal-slot chain,
+ *  so that the next starts when previous finished */
+class SetupChain
+{
+public:
+    SetupChain(TestExecutor* exec) : m_previous(0), m_exec(exec) {}
+    void operator()(Test* current);
+    Test* m_previous;     // previously discovered test-exe
+    TestExecutor* m_exec;
+};
+
+void SetupChain::operator()(Test* current)
+{
+    if (not(current->shouldRun() && current->selected())) {
+        return;           // only run if is an exe and selected
+    }
+    if (not m_previous) { // first test in the chain.
+        QObject::connect(m_exec, SIGNAL(fireStarter()),
+                         current, SLOT(run()));
+    } else {              // start current when previous finished.
+        kDebug() << "connect " << m_previous->name() 
+                 << " -> "     << current->name();
+        QObject::connect(m_previous,SIGNAL(executionFinished()),
+                         current, SLOT(run()));
+    }
+    m_previous = current;
+}
+
+} // end anonymous namespace
+
 TestExecutor::TestExecutor()
-    : m_root(0)
+        : m_root(0)
 {
     connect(this, SIGNAL(allDone()), this, SLOT(cleanup()));
 }
 
 void TestExecutor::go()
 {
-    m_previous = 0;
-    traverse(m_root);
-    fixLast();
+    SetupChain sc(this);
+    traverse(m_root, sc);
+    fixLast(sc.m_previous);
     emit fireStarter();
 }
 
 void TestExecutor::cleanup()
 {
-    disconnectAll(m_root);
+    DisconnectTest dt;
+    traverse(m_root, dt);
 }
 
-void TestExecutor::disconnectAll(Test* current)
+void TestExecutor::fixLast(Test* last)
 {
-    // TODO visitor with traverse.
-    if (not current) return;
-    current->disconnect(SIGNAL(executionFinished()));
-    int nrof = current->childCount();
-    if (nrof != 0) { // go down
-        for(int i=0; i<nrof; i++) {
-            disconnectAll(current->child(i));
-        }
-    }
-}
-
-void TestExecutor::fixLast()
-{
-    if (m_previous) {
-        connect(m_previous, SIGNAL(executionFinished()),
+    if (last) {
+        connect(last, SIGNAL(executionFinished()),
                 this, SIGNAL(allDone()));
     } else {
         emit allDone(); // nothing to be run.
     }
 }
 
-void TestExecutor::traverse(Test* current)
+template <typename V>
+void TestExecutor::traverse(Test* current, V& visit)
 {
     // depth-first traversal
     if (not current) return;
     int nrof = current->childCount();
     if (nrof != 0) { // go down
-        for(int i=0; i<nrof; i++) {
-            traverse(current->child(i));
+        for (int i = 0; i < nrof; i++) {
+            traverse(current->child(i), visit);
         }
     }
-    setupChain(current);
-}
-
-void TestExecutor::setupChain(Test* current)
-{
-    if (not (current->shouldRun() && current->selected())) {
-        return; // only run if is an exe and selected
-    }
-    if (not m_previous) {
-        // first test in the chain.
-        connect(this, SIGNAL(fireStarter()),
-                current, SLOT(run()));
-    } else {
-        // start current when previous finished.
-        kDebug() << "connect " << m_previous->name() << " -> " << current->name();
-        connect(m_previous, SIGNAL(executionFinished()),
-                current, SLOT(run()));
-    }
-    m_previous = current;
+    visit(current); // functor
 }
 
 void TestExecutor::setRoot(Test* root)
