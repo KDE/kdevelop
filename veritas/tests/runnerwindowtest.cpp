@@ -233,11 +233,7 @@ void RunnerWindowTest::runAllTests()
     // invoke the run action
     m_ui->actionStart->trigger();
 
-    // wait for all items to be executed
-    if (!QTest::kWaitForSignal(window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-        QFAIL("Timeout while waiting for runner items to complete execution");
-
-    // de-comment the line below if you want to inspect the window manually
+    // de-comment the line below to inspect the window manually
     //QTest::qWait(5000);
 }
 
@@ -299,6 +295,7 @@ void RunnerWindowTest::clickRunnerResults()
     KVERIFY_MSG(result21.isValid(), 
         "Was expecting to find something in the resultsview, "
         "however it is empty (filtered).");
+    //QTest::qWait(5000);
     KVERIFY_MSG(!m_resultsProxy->index(1,0).isValid(),
         "Resultsview should contain only a single item.");
     KOMPARE("child21", m_resultsProxy->data(result21));

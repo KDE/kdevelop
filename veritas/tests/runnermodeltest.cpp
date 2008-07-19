@@ -42,6 +42,7 @@ Q_DECLARE_METATYPE(QModelIndex)
 
 void RunnerModelTest::init()
 {
+    kDebug() << "INIT";
     model = createRunnerModelStub(false);
 }
 
@@ -104,10 +105,13 @@ void RunnerModelTest::runItems()
     spies["startedC"] = new QSignalSpy(model, SIGNAL(numStartedChanged(int)));
     setUpResultSpies(spies);
 
-    model->runItems();
+    model->runItems(); 
 
-    foreach(QSignalSpy* spy, spies) {
-        KOMPARE(1, spy->size());
+    QMapIterator<QString, QSignalSpy*> it(spies);
+    while (it.hasNext()) {
+        it.next();
+        QSignalSpy* spy = it.value();
+        KOMPARE_MSG(1, spy->size(), "No signal emitted for " + it.key());
         QCOMPARE(QVariant(0), spy->takeFirst().at(0));
     }
 
@@ -145,8 +149,9 @@ void RunnerModelTest::countItems()
     model->countItems();
 
     // all should be emitted just once
-    foreach(QSignalSpy* spy, spies)
-    KOMPARE(1, spy->size());
+    foreach(QSignalSpy* spy, spies) {
+        KOMPARE(1, spy->size());
+    }
 
     assertSignalValue(spies.take("totalC"), 2);
     assertSignalValue(spies.take("selectedC"), 2);
@@ -154,8 +159,9 @@ void RunnerModelTest::countItems()
     assertSignalValue(spies.take("fatalC"), 1);
 
     // the others are zero
-    foreach(QSignalSpy* spy, spies)
-    assertSignalValue(spy, 0);
+    foreach(QSignalSpy* spy, spies) {
+        assertSignalValue(spy, 0);
+    }
 }
 
 // helper

@@ -19,12 +19,6 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  proxymodelcommon.h
- *
- * \brief Declares class ProxyModelCommon.
- */
-
 #ifndef PROXYMODELCOMMON_H
 #define PROXYMODELCOMMON_H
 
@@ -41,7 +35,9 @@ namespace Veritas
  * model classes. It is not intended to be used directly, but must
  * be subclassed.
  *
- * \sa \ref views
+ * TODO The RunnerProxyModel does not inherit from this anymore, so the
+ * code here should be moved to ResultsProxyModel (which is the only user atm)
+ *
  */
 class ProxyModelCommon
 {

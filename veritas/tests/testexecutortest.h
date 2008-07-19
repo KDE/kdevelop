@@ -18,45 +18,51 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_RUNNERPROXYMODELTEST_H
-#define VERITAS_RUNNERPROXYMODELTEST_H
+#ifndef VERITAS_TESTEXECUTORTEST_H
+#define VERITAS_TESTEXECUTORTEST_H
 
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
+#include <QString>
 
-namespace Veritas
-{
-class RunnerModel;
-class RunnerProxyModel;
-}
+class QSignalSpy;
+namespace Veritas { class Test; class TestExecutor; }
 
 namespace Veritas
 {
 namespace ut {
 
-
-class RunnerProxyModelTest : public QObject
+class TestExecutorTest : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 private slots:
+    void initTestCase();
     void init();
     void cleanup();
 
-    void errorHandling();
+    void rootOnly();
+    void noneShouldRun();
+    void levelOneAggregate();
+    void levelTwoAggregate();
+    void multipleAggregates();
+    void unbalancedAggregates(); // test runs, but this is not supported.
+    void noneSelected();
+    void deselectedTests();
+    void runTwice();
 
 private:
-    void assertDataAt(int row, int column, const QVariant& expected);
-    void assertRowFiltered(int row);
-    void assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3);
+    void assertRun(QSignalSpy*, Test*);
+    void assertRunTwice(QSignalSpy*, Test*);
+    void assertNotRun(QSignalSpy*, Test*);
+    void assertAllDone();
 
 private:
-    Veritas::RunnerModel* source;
-    Veritas::RunnerProxyModel* proxy;
+    Veritas::TestExecutor* m_executor;
+    QSignalSpy* m_allDoneSpy;
 };
 
 }
 }
 
-
-#endif // VERITAS_RUNNERPROXYMODELTEST_H
+#endif // VERITAS_TESTEXECUTORTEST_H

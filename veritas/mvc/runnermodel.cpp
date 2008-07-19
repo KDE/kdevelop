@@ -19,40 +19,35 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  runnermodel.cpp
- *
- * \brief Implements class RunnerModel.
- */
-
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/resultsmodel.h"
-#include "veritas/mvc/runnermodelthread.h"
 
 #include "veritas/test.h"
+#include "veritas/testexecutor.h"
 #include "veritas/utils.h"
 #include "tests/common/modeltest.h"
 
 #include <QColor>
-#include <QFont>
+
 #include <QCoreApplication>
 #include <QStringList>
+#include <QFont>
 #include <QIcon>
+
+#include <KDebug>
+#include <KIcon>
+#include <KIconLoader>
 #include <KGlobal>
 #include <KLocale>
-#include <KIcon>
-#include <KDebug>
-#include <KIconLoader>
 
-using Veritas::Test;
-using Veritas::RunnerModel;
 using Veritas::ResultsModel;
-using Veritas::RunnerModelThread;
+using Veritas::RunnerModel;
+using Veritas::Test;
+using Veritas::TestExecutor;
 
 RunnerModel::RunnerModel(QObject* parent)
         : QAbstractItemModel(parent)
 {
-    // Initialize counters.
     m_numSelected = 0;
     m_numStarted = 0;
     m_numSuccess = 0;
@@ -62,36 +57,19 @@ RunnerModel::RunnerModel(QObject* parent)
     m_numFatals = 0;
     m_numExceptions = 0;
 
-    // Other attributes.
     m_rootItem = 0;
+    m_executor = 0;
     m_resultsModel = 0;
-
-    setMustStop(false);
-    setMustWait(false);
-    setMinimalUpdate(false);
+    m_isRunning = false;
     setExpectedResults(Veritas::AllStates);
-
-    // Thread for asynchronous execution of items.
-    m_thread = new RunnerModelThread(this);
-    connect(m_thread, SIGNAL(finished()), this, SLOT(allDone()));
     //ModelTest* tm = new ModelTest(this);
 }
 
 RunnerModel::~RunnerModel()
 {
     stopItems();
-
     delete m_resultsModel;
     delete m_rootItem;
-
-    // Learned by experience that the thread should get deleted last.
-    m_thread->terminate();
-    delete m_thread;
-
-    ///
-    /// \todo Stopping items and deleting the thread must become
-    ///       bullet proof.
-    ///
 }
 
 QString RunnerModel::name() const
@@ -101,6 +79,8 @@ QString RunnerModel::name() const
 
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
+    // TODO switch
+
     if (!index.isValid()) {
         return QVariant();
     }
@@ -117,7 +97,9 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         // return font;
         return QVariant();
     }
+
     // The other roles are supported for the first column only.
+    // There factually is only one column left. TODO rewrite this.
     if (index.column() != 0) {
         return QVariant();
     }
@@ -148,8 +130,9 @@ bool RunnerModel::someChildHasStatus(int status, const QModelIndex& parent) cons
     if (currentIndex.child(0, 0).isValid()) {
         currentIndex = currentIndex.child(0, 0);
         while (currentIndex.isValid()) {
-            if (someChildHasStatus(status, currentIndex))
+            if (someChildHasStatus(status, currentIndex)) {
                 return true;
+            }
             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
         }
     } else {
@@ -182,7 +165,6 @@ Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
     if (!index.isValid()) {
         return 0;
     }
-
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
@@ -205,19 +187,16 @@ QModelIndex RunnerModel::index(int row, int column,
         return QModelIndex();
     }
     Test* parentItem;
-
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
         parentItem = itemFromIndex(parent);
     }
     Test* childItem = parentItem->child(row);
-
     if (childItem) {
         childItem->setIndex(createIndex(row, column, childItem));
         return childItem->index();
     }
-
     return QModelIndex();
 }
 
@@ -226,14 +205,11 @@ QModelIndex RunnerModel::parent(const QModelIndex& index) const
     if (!index.isValid()) {
         return QModelIndex();
     }
-
     Test* childItem = itemFromIndex(index);
     Test* parentItem = childItem->parent();
-
     if (parentItem == m_rootItem) {
         return QModelIndex();
     }
-
     parentItem->setIndex(createIndex(parentItem->row(), 0, parentItem));
     return parentItem->index();
 }
@@ -277,63 +253,45 @@ void RunnerModel::countItems()
 
     // Non-recursive traversal of the tree structure.
     QModelIndex currentIndex = index(0, 0);
-
     while (currentIndex.isValid()) {
         if (currentIndex.child(0, 0).isValid()) {
-            // Go down.
-            currentIndex = currentIndex.child(0, 0);
+            currentIndex = currentIndex.child(0, 0); // Go down.
             continue;
         }
-
-        // Have an item.
-        Test* item = itemFromIndex(currentIndex);
-
+        Test* item = itemFromIndex(currentIndex);    // Have an item.
         numTotal++;
-
         if (item->selected() && !hasChildren(currentIndex)) {
             m_numSelected++;
         }
-
         switch (item->state()) {
         case Veritas::RunSuccess:
             m_numSuccess++;
             break;
-
         case Veritas::RunError:
             m_numErrors++;
             break;
-
         case Veritas::RunFatal:
             m_numFatals++;
             break;
-
         case Veritas::RunException:
             m_numExceptions++;
             break;
         }
-
         QModelIndex siblingIndex;
         siblingIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-
-        if (siblingIndex.isValid()) {
-            // Proceed on same level.
+        if (siblingIndex.isValid()) {                // Proceed on same level.
             currentIndex = siblingIndex;
             continue;
         }
-
-        // Go up one or more levels.
-        QModelIndex parentIndex = currentIndex.parent();
+        QModelIndex parentIndex = currentIndex.parent(); // Go up one or more levels.
         currentIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
-
         while (!currentIndex.isValid()) {
             if (parentIndex.isValid()) {
                 parentIndex = parentIndex.parent();
                 currentIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
                 continue;
             }
-
-            // No more items.
-            break;
+            break;  // No more items.
         }
     }
 
@@ -352,17 +310,9 @@ int RunnerModel::expectedResults() const
     return m_expectedResults;
 }
 
-void RunnerModel::runItems()
+// helper for runItems()
+void RunnerModel::initCounters()
 {
-    // No start when thread already/still runs.
-    if (isRunning(WAIT_TIME_MILLI)) {
-        return;
-    }
-
-    // Remove all results.
-    clearItem(index(0, 0));
-    if (resultsModel()) resultsModel()->clear();
-
     // Initialize counters.
     m_numStarted = 0;
     m_numSuccess = 0;
@@ -381,46 +331,38 @@ void RunnerModel::runItems()
     emit numFatalsChanged(m_numFatals);
     emit numExceptionsChanged(m_numExceptions);
 
-    setMustStop(false);
+}
 
-    // Start asynchronous processing of the items.
-    m_thread->start();
+void RunnerModel::runItems()
+{
+    if (isRunning()) return; // dont start while buzzy
+    initCounters();
+    if (not rootItem()) return;
+    m_isRunning = true;
+    clearItem(index(0, 0));  // Remove all results.
+    if (resultsModel()) resultsModel()->clear();
+    if (m_executor) delete m_executor;
+
+    m_executor = new TestExecutor;
+    m_executor->setRoot(rootItem());
+    connect(m_executor, SIGNAL(allDone()), this, SLOT(allDone()));
+    m_executor->go();
+}
+
+void RunnerModel::allDone()
+{
+    m_isRunning = false;
+    emit allItemsCompleted();
 }
 
 bool RunnerModel::stopItems()
 {
-    if (!isRunning()) {
-        return true;
-    }
-
-    setMustWait(false);  // Unblock waiting thread
-    setMustStop(true);  // Force soft stop
-
-    // Give thread a chance to run if it's waiting.
-    isRunning(WAIT_TIME_MILLI);
-
-    setMustStop(false);  // Proceed if not successful
-
-    if (!isRunning()) {
-        return true;
-    } else {
-        return false;
-    }
+    // TODO
 }
 
 bool RunnerModel::isRunning(unsigned long time) const
 {
-    if (!m_thread->isRunning()) {
-        return false;
-    }
-
-    if (!time) {
-        return true;
-    }
-
-    m_thread->wait(time);
-
-    return m_thread->isRunning();
+    return m_isRunning;
 }
 
 ResultsModel* RunnerModel::resultsModel()
@@ -437,11 +379,6 @@ ResultsModel* RunnerModel::resultsModel()
         m_resultsModel = new ResultsModel(resultHeaders);
     }
     return m_resultsModel;
-}
-
-void RunnerModel::setMinimalUpdate(bool minimalUpdate)
-{
-    m_minimalUpdate = minimalUpdate;
 }
 
 Test* RunnerModel::rootItem() const
@@ -487,69 +424,11 @@ Test* RunnerModel::itemFromIndex(const QModelIndex& index) const
     return static_cast<Test*>(index.internalPointer());
 }
 
-void RunnerModel::threadCode()
-{
-    // Recursively process the items.
-    if (m_rootItem && m_rootItem->shouldRun()) {
-        kDebug() << "Running root item ...";
-        m_rootItem->run();
-    }
-    runItem(index(0, 0));
-}
-
-void RunnerModel::allDone()
-{
-    emit allItemsCompleted();  // Last item completed
-}
-
-
-bool RunnerModel::mustStop()
-{
-    QMutexLocker locker(&m_lock);
-
-    return m_stop;
-}
-
-void RunnerModel::setMustStop(bool stop)
-{
-    QMutexLocker locker(&m_lock);
-
-    m_stop = stop;
-}
-
-bool RunnerModel::mustWait(bool block)
-{
-    m_lock.lock();
-
-    while (block) {
-        if (m_wait) {
-            m_lock.unlock();
-            m_thread->msleep(10); // Minimal wait
-            m_lock.lock();
-        } else {
-            block = false;
-        }
-    }
-
-    bool b = m_wait;
-    m_lock.unlock();
-
-    return b;
-}
-
-void RunnerModel::setMustWait(bool wait)
-{
-    QMutexLocker locker(&m_lock);
-
-    m_wait = wait;
-}
-
 void RunnerModel::clearItem(const QModelIndex& index)
 {
     if (!index.isValid()) {
         return;
     }
-
     QModelIndex currentIndex = index;
     while (currentIndex.isValid()) {
         if (currentIndex.child(0, 0).isValid()) {
@@ -560,43 +439,6 @@ void RunnerModel::clearItem(const QModelIndex& index)
         QModelIndex lastIndex = this->index(currentIndex.row(),
                                             item->columnCount() - 1);
         emit dataChanged(currentIndex, lastIndex);
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
-}
-
-void RunnerModel::runItem(const QModelIndex& index)
-{
-    // This is thread code!
-
-    if (!index.isValid() || mustStop())
-        return;
-    QModelIndex currentIndex = index;
-
-    while (currentIndex.isValid()) {
-        if (mustStop()) {
-            break;
-        }
-        if (currentIndex.child(0, 0).isValid()) {
-            // Go down one level.
-            runItem(currentIndex.child(0, 0));
-        }
-        Test* item = itemFromIndex(currentIndex);
-        if (!item->shouldRun() || !item->selected()) {
-            currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-            continue;
-        }
-        if (mustStop()) {
-            break;
-        }
-        // Execute custom code.
-        int res = 0;
-        try {
-            // results get reported with signals, initialized in initItemConnect()
-            item->run();
-        } catch (...) {
-            item->setState(Veritas::RunException);
-            postItemCompleted(currentIndex);
-        }
         currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
     }
 }
@@ -651,9 +493,4 @@ void RunnerModel::setResultText(Test* item, const QString& text) const
     if (item->data(1).toString().trimmed().isEmpty()) {
         item->setData(1, text);
     }
-}
-
-bool RunnerModel::isMinimalUpdate() const
-{
-    return m_minimalUpdate;
 }

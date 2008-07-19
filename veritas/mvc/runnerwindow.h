@@ -58,10 +58,6 @@ class SelectionManager;
  * But problems could arise for example when there are still items
 *  executed in the thread of the model to be replaced.
  *
- * In minimal update mode only a subset of the item result data is
- * displayed during item execution. When all items have finished
- * all result data is shown at once.
- *
  * GUI internal synchronization is employed to prevent from user
  * interactions interfere with the ongoing item execution.
  *
@@ -201,10 +197,6 @@ private: // Operations
     void displayStatusNum(QLabel* labelForText,
                           QLabel* labelForPic, int numItems) const;
 
-    /*! Returns true if the GUI and model are in minimal update mode,
-     * otherwise false. */
-    bool isMinimalUpdate() const;
-
     RunnerViewController* runnerController() const;
     ResultsViewController* resultsController() const;
 
@@ -213,7 +205,6 @@ private: // Operations
     RunnerWindow& operator=(const RunnerWindow&);
 
 private: // Attributes
-
     Ui::RunnerWindow *m_ui;             // QtDesigner main object
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm

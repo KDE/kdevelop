@@ -39,6 +39,8 @@ public:
             : Test(data, parent) {}
     TestFake(const QString& name, Test* parent = 0)
             : Test(name, parent) {}
+
+public slots:
     int run() { return 0; }
 };
 }

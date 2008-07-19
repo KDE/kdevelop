@@ -136,7 +136,6 @@ QModelIndex ResultsModel::mapFromTestIndex(const QModelIndex& testItemIndex) con
     }
     QModelIndex modelIndex;
     qint64 id = testItemIndex.internalId();
-    kDebug() << id;
     if (m_testItemMap.contains(id)) {
         modelIndex = index(m_testItemMap[id], 0);
     }

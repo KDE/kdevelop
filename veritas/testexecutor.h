@@ -1,6 +1,5 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2006 systest.ch <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,36 +18,43 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  runnermodelthread.cpp
- *
- * \brief Implements class RunnerModelThread.
- */
+#ifndef VERITAS_TESTEXECUTOR_H
+#define VERITAS_TESTEXECUTOR_H
 
-#include "veritas/mvc/runnermodelthread.h"
-#include "veritas/mvc/runnermodel.h"
+#include <QtCore/QObject>
 
-using Veritas::RunnerModel;
-using Veritas::RunnerModelThread;
-
-RunnerModelThread::RunnerModelThread(RunnerModel* parent)
-        : QThread(parent)
-{}
-
-RunnerModelThread::~RunnerModelThread()
-{}
-
-void RunnerModelThread::msleep(unsigned long msecs) const
+namespace Veritas
 {
-    QThread::msleep(msecs);
+class Test;
+
+class TestExecutor : public QObject
+{
+Q_OBJECT
+public:
+    TestExecutor();
+
+    void setRoot(Test*);
+    void go();
+
+signals:
+    void fireStarter(); // triggers first execution.
+    void allDone();     // all tests have completed.
+
+private slots:
+    void cleanup();
+
+private:
+    void disconnectAll(Test* target);
+    void traverse(Test*);
+    void setupChain(Test*);
+    void disconnectChain(Test*);
+    void fixLast();
+
+private:
+    Test* m_root;
+    Test* m_previous; // previously found exe in the depth-first traversal
+};
+
 }
 
-void RunnerModelThread::run()
-{
-    setTerminationEnabled();
-    RunnerModel* model = static_cast<RunnerModel*>(parent());
-
-    if (model) {
-        model->threadCode();
-    }
-}
+#endif // VERITAS_TESTEXECUTOR_H

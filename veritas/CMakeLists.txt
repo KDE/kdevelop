@@ -19,6 +19,7 @@ include_directories(
 set(veritas_SRCS
     test.cpp
     testresult.cpp
+    testexecutor.cpp
     testrunnertoolview.cpp
     utils.cpp
     mvc/proxymodelcommon.cpp
@@ -26,7 +27,6 @@ set(veritas_SRCS
     mvc/resultsproxymodel.cpp
     mvc/resultsviewcontroller.cpp
     mvc/runnermodel.cpp
-    mvc/runnermodelthread.cpp
     mvc/runnerproxymodel.cpp
     mvc/runnerviewcontroller.cpp
     mvc/runnerwindow.cpp

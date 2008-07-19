@@ -24,6 +24,7 @@
 #include <test.h>
 #include <runnermodel.h>
 #include <resultsmodel.h>
+#include <KDebug>
 
 namespace Veritas
 {
@@ -43,6 +44,11 @@ public:
     TestStub(const char* name, Test* parent)
             : Test(name, parent), m_state(Veritas::RunSuccess), m_shouldRun(true), m_result(0) {}
 
+    bool shouldRun() const {
+        return m_shouldRun;
+    }
+
+public slots:
     int run() {
         if (child(0)) {
             setState(Veritas::NoResult);  // Have nothing to do as a parent
@@ -59,14 +65,13 @@ public:
             setResult(m_result);
             signalFinished();
         }
+        kDebug() << "EXECUTED " << name();
         executedItems.push_back(row());
+        emit executionFinished();
         return state();
     }
 
-    bool shouldRun() const {
-        return m_shouldRun;
-    }
-
+public:
     static QList<int> executedItems; // store the index of rows that got executed
     Veritas::TestState m_state;
     bool m_shouldRun;

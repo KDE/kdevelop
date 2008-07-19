@@ -29,7 +29,8 @@ using Veritas::TestResult;
 const int Test::s_columnCount = 5;
 
 Test::Test(const QList<QVariant>& data, Test* parent)
-    : m_parentItem(parent),
+    : QObject(parent),
+      m_parentItem(parent),
       m_itemData(data),
       m_state(Veritas::NoResult),
       m_result(new TestResult)
@@ -38,10 +39,11 @@ Test::Test(const QList<QVariant>& data, Test* parent)
     for (int i= m_itemData.count(); i < s_columnCount; i++) {
         m_itemData << "";
     }
-    if (!data.empty())
+    if (!data.empty()) {
         m_name = data.value(0).toString();
-    else
+    } else {
         m_name = "";
+    }
     setSelected(true);
 }
 

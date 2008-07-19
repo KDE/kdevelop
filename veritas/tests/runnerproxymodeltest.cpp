@@ -42,12 +42,6 @@ void RunnerProxyModelTest::cleanup()
     if (source) delete source;
 }
 
-// test command
-void RunnerProxyModelTest::default_()
-{
-    KVERIFY(proxy->isActive());
-}
-
 // // test command
 // void RunnerProxyModelTest::enableColumns()
 // {
@@ -79,15 +73,6 @@ void RunnerProxyModelTest::errorHandling()
 void RunnerProxyModelTest::assertRowFiltered(int row)
 {
     assertRowContains(row, QVariant(), QVariant(), QVariant());
-}
-
-void RunnerProxyModelTest::setAllColumnsEnabled()
-{
-    QBitArray cols(3);
-    cols.setBit(0);
-    cols.setBit(1);
-    cols.setBit(2);
-    proxy->setEnabledColumns(cols);
 }
 
 void RunnerProxyModelTest::assertDataAt(int row, int column, const QVariant& expected)

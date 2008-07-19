@@ -54,9 +54,19 @@ namespace Veritas
  *
  */
 // TODO d-pointer
+// TODO Factually there are 3 kinds of tests
+//        -> aggregates without associated executable
+//        -> aggregates with exe
+//        -> leaf tests.
+//      This should be reflected in the class hierarchy.
 class VERITAS_EXPORT Test : public QObject
 {
 Q_OBJECT
+
+public Q_SLOTS:
+
+    /*! Implement this in a subclass. Default to doing nada. */
+    virtual int run();
 
 public: // Operations
 
@@ -66,20 +76,17 @@ public: // Operations
      * columns equals number of columns in \a parent. Initial result
      * is set to Veritas::NoResult.
      *
-     * TODO this constructor is deprecated and should be removed
+     * TODO should be removed
      */
     explicit Test(const QList<QVariant>& data, Test* parent = 0);
 
     explicit Test(const QString& name, Test* parent = 0);
     virtual ~Test();
 
-    /*! Implement this in a subclass. Default to doing nada. */
-    virtual int run();
-
     /*! Returns false if this test's run method should not be executed. 
         eg because it is a test container (suite).
         Implement this in a subclass. Default to not run. */
-    virtual bool shouldRun() const; // TODO get rid of this.
+    virtual bool shouldRun() const;
 
     /*! Identifies this test. Also shown in the runnerview-tree */
     QString name() const;
@@ -132,19 +139,16 @@ public: // Operations
     void signalFinished();
 
 Q_SIGNALS:
-    /*!
-     * Implementor needs to emit this when execution
-     * of this test commences.
-     *
-     * TODO: remove the model index parameter
-     */
+    /*! Implementor needs to emit this when an aggregate
+     *  Test completed executing its children */ 
+    void executionFinished();
+
+    /*! Implementor needs to emit this when execution
+     * of a leaf test commences. */
     void started(QModelIndex);
-    /*!
-     * Implementor needs to emit this when execution 
-     * finished.
-     * 
-     * TODO remove this model index parameter
-     */
+
+    /*! Implementor needs to emit this when a leaf test
+     * finished. */
     void finished(QModelIndex);
 
 private: // Operations

@@ -278,7 +278,6 @@ void RunnerWindow::initVisibleColumns(RunnerModel* model)
     resultsView()->hideColumn(1);
 
     // Set the defaults in the proxy models.
-    runnerProxyModel()->setEnabledColumns(enabledRunnerColumns);
     resultsProxyModel()->setEnabledColumns(enabledResultsColumns);
 }
 
@@ -317,9 +316,8 @@ void RunnerWindow::connectProgressIndicators(RunnerModel* model)
             SLOT(displayNumCompleted(int)));
     connect(model, SIGNAL(allItemsCompleted()),
             SLOT(displayCompleted()));
-    connect(model, SIGNAL(itemCompleted(const QModelIndex&)),
-            resultsModel(),
-            SLOT(addResult(const QModelIndex&)));
+    connect(model, SIGNAL(itemCompleted(QModelIndex)),
+            resultsModel(),SLOT(addResult(QModelIndex)));
 }
 
 void RunnerWindow::setModel(RunnerModel* model)
@@ -343,17 +341,13 @@ void RunnerWindow::setModel(RunnerModel* model)
     }
     connectItemStatistics(model);
 
-    // How much data is wanted when running the items.
-    connect(m_ui->actionMinimalUpdate, SIGNAL(triggered(bool)),
-            model, SLOT(setMinimalUpdate(bool)));
-    model->setMinimalUpdate(isMinimalUpdate());
     connectProgressIndicators(model);
     enableItemActions(true);
     m_ui->actionStop->setDisabled(true);
     setResultsFilter();
 
-    connect(resultsModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            resultsController(), SLOT(spanOutputLines(const QModelIndex&, int, int)));
+    connect(resultsModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+            resultsController(), SLOT(spanOutputLines(QModelIndex, int, int)));
     connect(m_selection, SIGNAL(selectionChanged()),
             runnerModel(), SLOT(countItems()));
     connect(resultsProxyModel(), SIGNAL(modelReset()),
@@ -543,6 +537,7 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
     } else if (!viewIndex.isValid()) {
         kDebug() << "Looks like result is being filtered";
     }
+
     enableResultSync(true);
 }
 
@@ -707,8 +702,7 @@ void RunnerWindow::showResults(bool show)
     if (!show || runnerModel()->isRunning()) {
         return;
     }
-    // Let the dock widget get its position and size before
-    // synchronizing the highlighted rows display.
+
     QCoreApplication::processEvents();
     scrollToHighlightedRows();
 }
@@ -762,15 +756,10 @@ void RunnerWindow::enableControlsAfterRunning() const
 {
     // Wait until all items stopped.
     while (runnerModel()->isRunning(100)) {
-        // Prevent GUI from freezing.
-        QCoreApplication::processEvents();
+        QCoreApplication::processEvents(); // Prevent GUI from freezing.
     }
-
-    // Give the GUI a chance to update.
-    QCoreApplication::processEvents();
-
-    // Enable user interaction.
-    enableItemActions(true);
+    QCoreApplication::processEvents();     // Give the GUI a chance to update.
+    enableItemActions(true);               // Enable user interaction.
 
     m_ui->actionStop->setDisabled(true);
     runnerView()->setCursor(QCursor());
@@ -785,29 +774,6 @@ void RunnerWindow::enableControlsAfterRunning() const
     QPalette palette(runnerView()->palette());
     palette.setBrush(QPalette::Active, QPalette::Highlight, m_highlightBrush);
     runnerView()->setPalette(palette);
-
-    if (!isMinimalUpdate()) {
-        return;
-    }
-
-    // Scroll to the last processed item when in minimal update mode.
-    // Determine the results model index first.
-    int row = resultsModel()->rowCount() - 1;
-
-    if (row < 1) {
-        return;
-    }
-
-    QModelIndex resultIndex = resultsModel()->index(row, 0);
-    QModelIndex testItemIndex;
-    testItemIndex = resultsModel()->mapToTestIndex(resultIndex);
-    QModelIndex currentIndex = Utils::proxyIndexFromModel(runnerProxyModel(),
-                               testItemIndex);
-
-
-    enableTestSync(false);     // Suppress synchronization of results view.
-    runnerController()->setHighlightedRow(currentIndex); 
-    enableTestSync(true);      // Enable selection handler again.
 }
 
 void RunnerWindow::enableItemActions(bool enable) const
@@ -879,11 +845,6 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
     }
     labelForText->setVisible(visible);
     labelForPic->setVisible(visible);
-}
-
-bool RunnerWindow::isMinimalUpdate() const
-{
-    return m_ui->actionMinimalUpdate->isChecked();
 }
 
 RunnerViewController* RunnerWindow::runnerController() const

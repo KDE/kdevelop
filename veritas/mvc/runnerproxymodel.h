@@ -36,8 +36,7 @@ namespace Veritas
  * It is currently not used, but will probably be in the near
  * future. Most likely for a regex-test filter box.
  */
-class RunnerProxyModel : public QSortFilterProxyModel,
-                         public ProxyModelCommon
+class RunnerProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 

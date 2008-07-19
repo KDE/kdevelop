@@ -32,7 +32,9 @@ kdev_add_test2(ut-runnermodel ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp run
 kdev_add_test(ut-proxymodelcommon proxymodelcommontest.cpp)
 kdev_add_test(ut-resultsproxymodel resultsproxymodeltest.cpp)
 kdev_add_test(ut-runnerproxymodel runnerproxymodeltest.cpp)
+kdev_add_test(ut-testexecutor testexecutortest.cpp)
 kdev_add_test(it-runnerwindow runnerwindowtest.cpp)
+
 
 # kdev_qx_add_test(viewcontrollercommon-tdd "viewcontrollercommontest.cpp")
 # kdev_qx_add_test(runnerviewcontroller-tdd "runnerviewcontrollertest.cpp")
