@@ -53,7 +53,8 @@ private: // helpers
     bool isStartElement_(const QString& elem);
     bool isEndElement_(const QString& elem);
     void processSuite();
-    void processCase(QTestSuite* suite);
+    QTestCase* instantiateCase(QTestSuite* parent);
+    void processCase(QTestCase* caze);
     void processCmd(QTestCase* caze);
     QString   fetchName();
     QFileInfo fetchDir();

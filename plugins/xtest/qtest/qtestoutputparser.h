@@ -22,48 +22,64 @@
 #define QXQTEST_QTESTOUTPUTPARSER
 
 #include <QXmlStreamReader>
+
 #include <kdevplatform/veritas/testresult.h>
 
 class QIODevice;
+namespace Veritas { class Test; }
 
 namespace QTest
 {
-
 class QTestCase;
 
-class QTestOutputParser : public QXmlStreamReader
+/*! Recoverable QTest XML-output parser */
+class QTestOutputParser : public QObject, public QXmlStreamReader
 {
+Q_OBJECT
 public:
-    QTestOutputParser(QIODevice* device);
+    QTestOutputParser();
     virtual ~QTestOutputParser();
 
-    /**
-     * Start parsing the output of a whole
-     * testcase and emit results
-     **/
-    void go(QTestCase* caze);
+    /*! Must be called before parsing */
+    void setCase(QTestCase*caze);
 
-private: // helpers
+    /*! Reset internal parser state. Call this
+     *  Before reusing this object. */
+    void reset();
+
+public slots:
+    /*! Start parsing the output of a testcase.
+     *  Emit signals for each command being started/finished.
+     *  This slot is triggered repeatedly as soon as new data is available
+     *  and recovers from previus errors in the XML due to abortion. */
+    void go();
+
+private:
+    // precondition
+    void assertDeviceSet();
+    void assertCaseSet();
+
+     // helpers
+    void iterateTestFunctions();
     void processTestFunction();
     void fillResult();
     void setFailure();
     void setSuccess();
-    void appendMsg();
 
     inline bool isStartElement_(const QString& elem);
     inline bool isEndElement_(const QString& elem);
     inline bool fixtureFailed(const QString&);
     inline bool doingOK() const;
 
-private: // state
+private:
+    // remember state to continue parsing
+    enum State { Main = 0, TestFunction = 1, Failure = 2 };
+    State m_state;
+    bool m_buzzy;
     Veritas::TestResult* m_result;
     QTestCase* m_case;
-
-    // remember state to continue when parsing
-    // incrementally
-    bool m_processingTestFunction;
-    bool m_fillingResult;
-    bool m_settingFailure;
+    Veritas::Test* m_cmd;
+    QString m_cmdName;
 
 private:    // some xml constants
     static const QString c_testfunction;

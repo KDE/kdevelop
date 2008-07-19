@@ -226,14 +226,16 @@ void QTestOutputParserTest::parse()
     // exercise
     QFETCH(QByteArray, xml);
     QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser(&xmlOut);
+    QTestOutputParser parser;
+    parser.setDevice(&xmlOut);
     QTestCommand* cmd = m_caze->child(0);
     QSignalSpy compSpy(cmd, SIGNAL(finished(QModelIndex)));
     QSignalSpy starSpy(cmd, SIGNAL(started(QModelIndex)));
     FakeModel fm;
     fm.test = m_caze->child(0);
     QModelIndex index = fm.index(0);
-    parser.go(m_caze);
+    parser.setCase(m_caze);
+    parser.go();
 
     // verify
     KOMPARE(1, starSpy.count());
@@ -276,13 +278,15 @@ void QTestOutputParserTest::initFailure()
                      + testFunctionXml("initTestCase", failureIncidentXml())
                      + footerXml;
     QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser(&xmlOut);
+    QTestOutputParser parser;
+    parser.setDevice(&xmlOut);
     QSignalSpy compSpy(m_caze, SIGNAL(finished(QModelIndex)));
     QSignalSpy starSpy(m_caze, SIGNAL(started(QModelIndex)));
     FakeModel fm;
     fm.test = m_caze;
     QModelIndex index = fm.index(0);
-    parser.go(m_caze);
+    parser.setCase(m_caze);
+    parser.go();
 
     // verify
     KOMPARE(1, starSpy.count());
@@ -305,7 +309,8 @@ void QTestOutputParserTest::cleanupFailure()
                      + testFunctionXml("cleanupTestCase", failureIncidentXml())
                      + footerXml;
     QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser(&xmlOut);
+    QTestOutputParser parser;
+    parser.setDevice(&xmlOut);
     QSignalSpy compSpy(m_caze, SIGNAL(finished(QModelIndex)));
     QSignalSpy starSpy(m_caze, SIGNAL(started(QModelIndex)));
     QTestCommand* cmd = m_caze->child(0);
@@ -319,7 +324,8 @@ void QTestOutputParserTest::cleanupFailure()
     fm2.test = m_caze->child(0);
     QModelIndex cmdIndex = fm2.index(0);
 
-    parser.go(m_caze);
+    parser.setCase(m_caze);
+    parser.go();
 
     // the testcommand should have been completed successfully
     assertCompleted(cmd, starSpyCmd, compSpyCmd);

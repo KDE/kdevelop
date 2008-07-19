@@ -36,6 +36,9 @@ namespace QTest
 {
 namespace ut {
 
+// TODO this test is far from sufficient.
+//      need to add some slow-updating XML chunks
+//      to test the recover stuff.
 class QTestOutputParserTest : public QObject
 {
     Q_OBJECT

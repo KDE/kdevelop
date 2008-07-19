@@ -62,16 +62,21 @@ const QString QTestOutputParser::c_fail("fail");
 const QString QTestOutputParser::c_initTestCase("initTestCase");
 const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 
-QTestOutputParser::QTestOutputParser(QIODevice* device)
-    : QXmlStreamReader(device), m_result(0),
-      m_processingTestFunction(false),
-      m_fillingResult(false),
-      m_settingFailure(false)
-{
-}
+QTestOutputParser::QTestOutputParser()
+    : m_state(Main),
+      m_result(0),
+      m_buzzy(false)
+{}
 
 QTestOutputParser::~QTestOutputParser()
+{}
+
+void QTestOutputParser::reset()
 {
+    m_case = 0;
+    m_result = 0;
+    m_buzzy = false;
+    m_state = Main;
 }
 
 bool QTestOutputParser::isStartElement_(const QString& elementName)
@@ -84,27 +89,55 @@ bool QTestOutputParser::isEndElement_(const QString& elementName)
     return isEndElement() && (name() == elementName);
 }
 
-void QTestOutputParser::go(QTestCase* caze)
+void QTestOutputParser::assertDeviceSet()
 {
-    if (!device()->isOpen())
-        device()->open(QIODevice::ReadOnly);
-    if (!device()->isReadable()) {
-        // do something
-    }
+    Q_ASSERT_X(device(), "QTestOutputParser::go()",
+               "Illegal usage. Client classes should set a QIODevice*, with setDevice().");
+}
+
+void QTestOutputParser::assertCaseSet()
+{
+    Q_ASSERT_X(m_case, "QTestOutputParser::go()",
+               "Illegal usage. TestCase should have been set, with setCase().");
+}
+
+void QTestOutputParser::setCase(QTestCase* caze)
+{
+    Q_ASSERT(caze);
     m_case = caze;
+}
 
-    if (m_settingFailure)
-        setFailure();
-    if (m_processingTestFunction)
-        processTestFunction();
+void QTestOutputParser::go()
+{
+    if (m_buzzy) return; // do not disturb.
+    m_buzzy = true;
 
-    while (!atEnd() && doingOK()) {
-        readNext();
-        if (isStartElement_(c_testfunction)) {
+    assertCaseSet();
+    assertDeviceSet();
+
+    if (!device()->isOpen()) {
+        device()->open(QIODevice::ReadOnly);
+    }
+    if (!device()->isReadable()) {
+        kWarning() << "Device not readable. Failed to parse test output.";
+        m_buzzy = false;
+        return;
+    }
+
+    // recover from previous state by falling through.
+    switch (m_state) {
+        case Failure: {
+            setFailure();
+        } case TestFunction: {
             processTestFunction();
+        } case Main: {
+            iterateTestFunctions();
+            break;
+        } default: {
+            kError() << "Serious corruption, impossible switch value.";
         }
     }
-    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+    m_buzzy = false;
 }
 
 bool QTestOutputParser::doingOK() const
@@ -115,60 +148,66 @@ bool QTestOutputParser::doingOK() const
 
 bool QTestOutputParser::fixtureFailed(const QString& cmd)
 {
-    if (cmd != c_initTestCase && cmd != c_cleanupTestCase)
+    if (cmd != c_initTestCase && cmd != c_cleanupTestCase) {
         return false;
-    return !doingOK();
+    } else {
+        return !doingOK();
+    }
+}
+
+void QTestOutputParser::iterateTestFunctions()
+{
+    // main loop
+    while (!atEnd() && doingOK()) {
+        readNext();
+        if (isStartElement_(c_testfunction)) {
+            m_cmdName = attributes().value("name").toString();
+            kDebug() << m_cmdName;
+            m_cmd = m_case->childNamed(m_cmdName);
+            m_result = new TestResult; // hmm leaks I suppose..
+            if (m_cmd) m_cmd->signalStarted();
+            m_state = TestFunction;
+            processTestFunction();
+            if (m_state != Main) return;
+        }
+    }
+    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
 void QTestOutputParser::processTestFunction()
 {
-    QString cmdName;
-    if (!m_processingTestFunction) {
-        cmdName = attributes().value("name").toString();
-        Test* cmd = m_case->childNamed(cmdName);
-        m_result = new TestResult; // this probably leaks. TODO
-        if (cmd)
-            cmd->signalStarted();
-    }
-    m_processingTestFunction = true;
     while (!atEnd() && !isEndElement_(c_testfunction)) {
         readNext();
-        if (isStartElement_(c_incident))
+        if (isStartElement_(c_incident)) {
             fillResult();
-        if (isStartElement_(c_message))
-            appendMsg();
+            if (m_state != TestFunction) return;
+        }
     }
     if (isEndElement_(c_testfunction)) {
-        Test* cmd = m_case->childNamed(cmdName);
-        if (cmd) {
-            cmd->setResult(m_result);
-            cmd->signalFinished();
-        } else if (fixtureFailed(cmdName)) {
+        if (m_cmd) {
+            m_cmd->setResult(m_result);
+            m_cmd->signalFinished();
+        } else if (fixtureFailed(m_cmdName)) {
             kDebug() << "init/cleanup TestCase failed";
             m_case->signalStarted();
             m_case->setResult(m_result);
             m_case->signalFinished();
         }
-        m_processingTestFunction = false;
+        m_state = Main;
     }
 }
 
 void QTestOutputParser::fillResult()
 {
     QString type = attributes().value(c_type).toString();
-    if (type == c_pass)
+    if (type == c_pass) {
         setSuccess();
-    else if (type == c_fail)
+    } else if (type == c_fail) {
+        m_result->setState(Veritas::RunError);
+        m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
+        m_result->setLine(attributes().value(c_line).toString().toInt());
+        m_state = Failure;
         setFailure();
-}
-
-void QTestOutputParser::appendMsg()
-{
-    while (!atEnd() && !isEndElement_(c_message)) {
-        readNext();
-/*        if (isStartElement_(c_description)) {
-            m_result->addOutputLine(readElementText().toAscii());
-        }*/
     }
 }
 
@@ -179,19 +218,15 @@ void QTestOutputParser::setSuccess()
 
 void QTestOutputParser::setFailure()
 {
-    if (!m_settingFailure) {
-        m_result->setState(Veritas::RunError);
-        m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
-        m_result->setLine(attributes().value(c_line).toString().toInt());
-    }
-    m_settingFailure = true;
-
     while (!atEnd() && !isEndElement_(c_description)) {
         readNext();
         if (isCDATA())
             m_result->setMessage(text().toString());
     }
 
-    if (isEndElement_(c_description))
-        m_settingFailure = false;
+    if (isEndElement_(c_description)) {
+        m_state = TestFunction;
+    }
 }
+
+#include "qtestoutputparser.moc"

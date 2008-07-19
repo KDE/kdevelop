@@ -22,15 +22,20 @@
 #define QXQTEST_QTESTCASE_H
 
 #include <QString>
+#include <QTimer>
 #include <QFileInfo>
 
 #include <kdevplatform/veritas/test.h>
 
 #include "qtestcommand.h"
 
+class KTemporaryFile;
+class KProcess;
+
 namespace QTest
 {
 class QTestSuite;
+class QTestOutputParser;
 class ISettings;
 
 class QTestCase : public Veritas::Test
@@ -42,16 +47,41 @@ public:
 
     QTestCommand* child(int i) const;
     QFileInfo executable();
-    void setExecutable(const QFileInfo&);
 
     int run();
     bool shouldRun() const;
 
-    void setSettings(ISettings* s) { m_settings = s; }
+    /*! Client classes should instantiate a KProcess.
+        QTestCase takes ownership.
+        Sole purpose is to increase testability through DI */
+    void setProcess(KProcess*);
+    void setOutputParser(QTestOutputParser*);
+    void setSettings(ISettings*);
+    void initProcArguments();
+    void setUpProcSignals();
+    void setExecutable(const QFileInfo&);
+
+private:
+    // preconditions for run()
+    inline void assertProcessSet();
+    inline void assertOutputParserSet();
+
+    // helpers for run()
+    bool createTempOutputFile();
+    void executeProc();
+    void initOutputParser();
+
+// private slots:
+//     void maybeParse();
+//     void surelyParse();
 
 private:
     QFileInfo m_exe;
     ISettings* m_settings;
+    KTemporaryFile* m_output;
+    KProcess* m_proc;
+    QTestOutputParser* m_parser;
+    QTimer* m_timer;
 };
 
 } // end namespace QTest

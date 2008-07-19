@@ -19,18 +19,24 @@
  */
 
 #include "qtestregister.h"
-#include "qtestsuite.h"
+
 #include "qtestcase.h"
 #include "qtestcommand.h"
+#include "qtestoutputparser.h"
+#include "qtestsuite.h"
+
+#include <KDebug>
+#include <KLocalizedString>
+#include <KProcess>
 
 #include <QIODevice>
-#include <KLocalizedString>
-#include <KDebug>
 
-using QTest::QTestRegister;
-using QTest::QTestSuite;
 using QTest::QTestCase;
 using QTest::QTestCommand;
+using QTest::QTestOutputParser;
+using QTest::QTestRegister;
+using QTest::QTestSuite;
+
 using Veritas::Test;
 
 const QString QTestRegister::c_suite("suite");
@@ -44,10 +50,10 @@ const QString QTestRegister::c_exe("exe");
 QTestRegister::QTestRegister()
         : m_root(""), m_settings(0)
 {
-        // Data for column headers is stored in the root item.
+    // Data for column headers is stored in the root item.
     QList<QVariant> rootData;
     rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
-             << i18n("File Name") << i18n("Line Number");
+    << i18n("File Name") << i18n("Line Number");
     m_rootItem = new Test(rootData);
 }
 
@@ -74,18 +80,18 @@ void QTestRegister::addFromXml(QIODevice* dev)
 {
     Q_ASSERT(dev != 0);
     setDevice(dev);
-    if (!device()->isOpen()) 
+    if (!device()->isOpen()) {
         device()->open(QIODevice::ReadOnly);
-
-    while (!atEnd())
-    {
-        readNext();
-        if (isStartElement_(c_root) && m_root.isEmpty())
-            m_root = attributes().value(c_dir).toString();
-        if (isStartElement_(c_suite))
-            processSuite();
     }
-
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement_(c_root) && m_root.isEmpty()) {
+            m_root = attributes().value(c_dir).toString();
+        }
+        if (isStartElement_(c_suite)) {
+            processSuite();
+        }
+    }
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
@@ -100,25 +106,33 @@ void QTestRegister::processSuite()
     m_rootItem->addChild(suite);
     kDebug() << suite->name();
 
-    while (!atEnd() && !isEndElement_(c_suite))
-    {
+    while (!atEnd() && !isEndElement_(c_suite)) {
         readNext();
-        if (isStartElement_(c_case))
-            processCase(suite);
+        if (isStartElement_(c_case)) {
+            QTestCase* caze = instantiateCase(suite);
+            processCase(caze);
+        }
     }
 }
 
-void QTestRegister::processCase(QTestSuite* suite)
+QTestCase* QTestRegister::instantiateCase(QTestSuite* parent)
 {
-    QTestCase* caze = new QTestCase(fetchName(), fetchExe(), suite);
-    suite->addChild(caze);
+    QTestCase* caze = new QTestCase(fetchName(), fetchExe(), parent);
+    parent->addChild(caze);
     caze->setSettings(m_settings);
-    kDebug() << caze->name();
-    while (!atEnd() && !isEndElement_(c_case))
-    {
+    caze->setProcess(new KProcess(caze));
+    caze->setOutputParser(new QTestOutputParser);
+    kDebug() << "Instantiated new QTestCase: " << caze->name();
+    return caze;
+}
+
+void QTestRegister::processCase(QTestCase* caze)
+{
+    while (!atEnd() && !isEndElement_(c_case)) {
         readNext();
-        if (isStartElement_(c_cmd))
+        if (isStartElement_(c_cmd)) {
             processCmd(caze);
+        }
     }
 }
 
@@ -126,8 +140,8 @@ void QTestRegister::processCmd(QTestCase* caze)
 {
     QTestCommand* cmd = new QTestCommand(fetchName(), caze);
     caze->addChild(cmd);
-    kDebug() << cmd->name();
-    kDebug() << cmd->command();
+    kDebug() << "  Instantiated new QTestCommand " 
+             << cmd->name() << " " << cmd->command();
 }
 
 QString QTestRegister::fetchName()
@@ -138,8 +152,9 @@ QString QTestRegister::fetchName()
 QFileInfo QTestRegister::fetchDir()
 {
     QString dir = attributes().value(c_dir).toString();
-    if (!m_root.isEmpty())
+    if (!m_root.isEmpty()) {
         dir = m_root + dir;
+    }
     return QFileInfo(dir);
 }
 

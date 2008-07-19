@@ -63,6 +63,7 @@ int TestRoot::run()
     proc.waitForFinished(-1);
     OutputParser parser(&proc);
     parser.go(this);
+    emit executionFinished();
     return 0;
 }
 

@@ -22,10 +22,11 @@
 
 #include <kasserts.h>
 #include <qtest_kde.h>
-#include <ui_runnerwindow.h>
+
 #include <runnerwindow.h>
 #include <runnermodel.h>
 #include "plugins/xtest/cppunit/register.h"
+#include "plugins/xtest/qtest/tests/ui_runnerwindow.h"
 
 #include <KDebug>
 #include <QBuffer>
@@ -219,9 +220,6 @@ void CheckRunnerTest::initNrun(const char* exe)
     m_window->setModel(model);
     m_window->show();
     m_window->ui()->actionStart->trigger();
-    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-//    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
-       QFAIL("Timeout while waiting for runner items to complete execution");
 }
 
 // helper

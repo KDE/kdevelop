@@ -22,11 +22,12 @@
 #include <kasserts.h>
 #include <qtest_kde.h>
 #include <runnerwindow.h>
+#include <KDebug>
 #include <QBuffer>
 #include <QTreeView>
 #include <QModelIndex>
 #include <QAbstractItemModel>
-#include <ui_runnerwindow.h>
+#include "ui_runnerwindow.h"
 
 #include <qtestregister.h>
 #include <runnermodel.h>
@@ -73,7 +74,19 @@ void QTestRunnerTest::empty()
             "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
             "<root dir=\"\">\n"
             "</root>\n";
-    initNrun(reg);
+    QBuffer buff(&reg);
+
+    QTestRegister reg_;
+    reg_.addFromXml(&buff);
+    RunnerModel* model = new RunnerModel;
+    QSignalSpy* s = new QSignalSpy(model, SIGNAL(allItemsCompleted()));
+
+    model->setRootItem(reg_.rootItem());
+    m_window->setModel(model);
+    m_window->show();
+    m_window->ui()->actionStart->trigger();
+
+    KOMPARE(s->count(), 1);
 
     QStringList runnerItems;
     runnerItems << "0 x";
@@ -86,6 +99,8 @@ void QTestRunnerTest::empty()
     status["total"] = "0";
     status["selected"] = "0";
     status["run"] = "0";
+
+    delete s;
 }
 
 QStringList sunnyDayTests()
@@ -130,6 +145,8 @@ void QTestRunnerTest::sunnyDay()
     result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
     results << result0;
+
+    QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
     checkResultItems(results);
 
     QMap<QString, QString> status;
@@ -142,7 +159,7 @@ void QTestRunnerTest::runTwice()
     initNrun(regXml);
     m_window->ui()->actionStart->trigger();
     if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-        QFAIL("Timeout while waiting for runner items to complete execution");
+         QFAIL("Timeout while waiting for runner items to complete execution");
 
     checkTests(sunnyDayTests());
 
@@ -150,6 +167,9 @@ void QTestRunnerTest::runTwice()
     result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
     results << result0;
+
+    QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
+
     checkResultItems(results);
 
     checkStatusWidget(sunnyDayStatus());
@@ -195,8 +215,10 @@ void QTestRunnerTest::initNrun(QByteArray& regXml)
     m_window->show();
     m_window->ui()->actionStart->trigger();
     if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-//    if (!QTest::kWaitForSignal(win->runnerModel(), SIGNAL(allItemsCompleted())))
-       QFAIL("Timeout while waiting for runner items to complete execution");
+         QFAIL("Timeout while waiting for runner items to complete execution");
+
+    // decomment the line below to inspect the window manually
+    //QTest::qWait(5000);
 }
 
 // helper

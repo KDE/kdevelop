@@ -66,6 +66,7 @@ int TestRoot::run()
     kWarning(!f.exists()) << "Failure: testresult dump does not exist [" << f.fileName();
     OutputParser parser(&f);
     parser.go(this);
+    emit executionFinished();
     return 0;
 }
 
