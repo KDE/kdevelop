@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=KDevelop Kross Project Manager Support
-Comment=Kross kross kross
+Name=KDevelop Kross Support
+Comment=KDevelop Kross Support
 Icon=gear
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevkrossprojectmanager
+X-KDE-Library=kdevkrossplugin
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-Email=aleixpol@gmail.com
 X-KDE-PluginInfo-Name=KDevKrossManager

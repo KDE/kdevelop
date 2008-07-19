@@ -12,7 +12,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(kdevkrossmanager_SRCS
+set(kdevkrossplugin_SRCS
     krossplugin.cpp
     krossbuildsystemmanager.cpp
     krossdistributedversioncontrol.cpp
@@ -22,10 +22,10 @@ set(kdevkrossmanager_SRCS
     dvcsadaptors.cpp
 )
 
-kde4_add_plugin(kdevkrossprojectmanager ${kdevkrossmanager_SRCS})
-target_link_libraries(kdevkrossprojectmanager ${KDE4_KDEUI_LIBS}
-	kdevplatforminterfaces kdevplatformproject kdevplatformvcs ${KDE4_KROSSUI_LIBS})
+kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})
+target_link_libraries(kdevkrossplugin ${KDE4_KDEUI_LIBS}
+    kdevplatforminterfaces kdevplatformproject kdevplatformvcs ${KDE4_KROSSUI_LIBS})
 
-install(TARGETS kdevkrossprojectmanager DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kdevkrossmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kdevkrossplugin DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kdevkrossplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
