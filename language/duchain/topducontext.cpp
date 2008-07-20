@@ -1101,8 +1101,10 @@ void TopDUContext::clearUsedDeclarationIndices() {
 
 Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
   ENSURE_CAN_READ
-  Q_ASSERT(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIdsSize());
-  return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
+  if(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIdsSize())
+    return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
+  else
+    return 0;
 }
 
 int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create) {
