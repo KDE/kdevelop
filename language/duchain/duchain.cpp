@@ -323,7 +323,8 @@ TopDUContext* DUChain::chainForDocument( const HashedString& document, const Par
       ///@todo don't load the context just for testing the flags, store the flags in the parsing-environment file
       TopDUContext* ctx = DUChain::self()->chainForDocument((*it)->identity());
       if(flags == TopDUContext::AnyFlag || (ctx && ctx->flags() == flags)) {
-        return ctx;
+        if((*it)->match(environment))
+          return ctx;
       }
     }
     ++it;
