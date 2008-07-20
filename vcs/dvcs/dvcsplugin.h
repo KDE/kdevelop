@@ -131,6 +131,8 @@ public slots:
     // slots for menu
     void slotInit();
 
+    void checkoutFinished(KJob*);
+
 signals:
     /**
      * Some actions like commit, add, remove... will connect the job's

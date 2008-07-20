@@ -23,8 +23,11 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <klocalizedstring.h>
+#include <QDebug>
 
 #include <icore.h>
+#include <iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 #include "vcsjob.h"
 #include "vcsrevision.h"
@@ -60,6 +63,7 @@ KDevelop::VcsJob*
                        unsigned long limit)
 {
     Q_UNUSED(limit)
+    Q_UNUSED(rev)
 
     DVCSjob* job = d->m_exec->log(localLocation);
     return job;
@@ -76,10 +80,9 @@ KDevelop::VcsJob*
 
 KDevelop::VcsJob* 
         GitPlugin::checkout(const QString &localLocation,
-                            const QString &repo)
+                            const QString &branch)
 {
-    DVCSjob* job = d->m_exec->checkout(localLocation, repo);
-    
+    DVCSjob* job = d->m_exec->checkout(localLocation, branch);
     return job;
 }
 

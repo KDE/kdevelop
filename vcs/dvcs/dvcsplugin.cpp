@@ -45,6 +45,7 @@
 #include <projectmodel.h>
 #include <iuicontroller.h>
 #include <iruncontroller.h>
+#include <iprojectcontroller.h>
 #include <icore.h>
 #include <context.h>
 #include <vcsmapping.h>
@@ -295,6 +296,7 @@ KDevelop::VcsJob*
 {
     Q_UNUSED(localLocation)
     Q_UNUSED(repo)
+    kDebug(9500) << "Ooops, it's not implemented yet";
     return d->m_exec->empty_cmd();
 }
 
@@ -505,12 +507,12 @@ void DistributedVersionControlPlugin::ctxCheckout()
     {
         msg = dlg.message();
     }
-    
+ 
     //Todo: to not forget to move to the checkout()
     DVCSjob* job = d->m_exec->checkout(d->m_ctxUrlList.first().path(), msg);
     if (job) {
         connect(job, SIGNAL(result(KJob*) ),
-                this, SIGNAL(jobFinished(KJob*) ));
+                this, SLOT(checkoutFinished(KJob*) ));
         job->start();
     }
 }
@@ -540,6 +542,19 @@ void DistributedVersionControlPlugin::ctxStatus()
         emit addNewTabToMainView(view, i18n("Status") );
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
+}
+
+void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
+{
+    DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
+    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
+    KUrl projectFile = curProject->projectFileUrl();
+    qDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    qDebug() << "Project will be closed and open";
+    core()->projectController()->closeProject(curProject);
+    core()->projectController()->openProject(projectFile);
+//  maybe  IProject::reloadModel?
+    emit jobFinished(checkoutJob);
 }
 
 //-----------------------------------------------------------------------------------
