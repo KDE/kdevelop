@@ -74,4 +74,12 @@ KDevelop::VcsJob*
     return log(localLocation, rev, 0);
 }
 
+KDevelop::VcsJob* 
+        GitPlugin::checkout(const QString &localLocation,
+                            const QString &repo)
+{
+    DVCSjob* job = d->m_exec->checkout(localLocation, repo);
+    return job;
+}
+
 // #include "gitplugin.moc"
