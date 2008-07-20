@@ -95,6 +95,9 @@ IdentifiedFile::operator bool() const {
   return !isEmpty();
 }
 
+ParsingEnvironment::ParsingEnvironment() : DUChainBase(SimpleRange::invalid()) {
+}
+
 ParsingEnvironment::~ParsingEnvironment() {
 }
 

@@ -28,8 +28,8 @@
 #include "indexedstring.h"
 
 #include "language/editor/hashedstring.h"
-
 #include "language/languageexport.h"
+#include "duchainbase.h"
 
 namespace KDevelop
 {
@@ -112,11 +112,15 @@ enum ParsingEnvironmentType
  * be considered to be a part of the parsing-environment too, because
  * different files may be included using another include-path.
  *
+ * The classes have to use the serialization scheme from the duchain.
+ * Each class must be registered using REGISTER_DUCHAIN_ITEM with a unique id.
+ *
  * \warning Access to this class must be serialized through du-chain locking
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment : public DUChainBase
 {
   public:
+    ParsingEnvironment();
     virtual ~ParsingEnvironment();
 
     ///@see ParsingEnvironmentType
