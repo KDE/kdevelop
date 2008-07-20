@@ -1319,8 +1319,7 @@ void DUContext::clearImportedParentContexts()
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
   FOREACH_FUNCTION(Import parent, d->m_importedContexts)
-      if( parent.context.data() )
-        removeImportedParentContext(parent.context.data());
+    removeImportedParentContext(parent.context.data());
 
   Q_ASSERT(d->m_importedContextsSize() == 0);
 }
