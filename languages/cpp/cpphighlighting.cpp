@@ -338,7 +338,7 @@ void CppHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
     if(dec->smartRange())
       dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
 
-  for(int a = 0; a < context->uses().count(); ++a)
+  for(int a = 0; a < context->usesCount(); ++a)
     if(context->useSmartRange(a))
       context->useSmartRange(a)->setAttribute(KTextEditor::Attribute::Ptr());
 
@@ -396,7 +396,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
     highlightDeclaration(dec, colors[colorNum]);
   }
 
-  for(int a = 0; a < context->uses().count(); ++a) {
+  for(int a = 0; a < context->usesCount(); ++a) {
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
     uint colorNum = validColorCount;
     if( colorsForDeclarations.contains(decl) )
@@ -552,7 +552,7 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
 
 void CppHighlighting::highlightUses(DUContext* context) const
 {
-  for(int a = 0; a < context->uses().count(); ++a) {
+  for(int a = 0; a < context->usesCount(); ++a) {
     if (SmartRange* range = context->useSmartRange(a)) {
       Types type = ErrorVariableType;
       Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);

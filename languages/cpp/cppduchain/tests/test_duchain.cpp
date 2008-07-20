@@ -426,7 +426,7 @@ void TestDUChain::testTypedefUses()
   DUChainWriteLocker lock(DUChain::lock());
 
   QCOMPARE(top->localDeclarations().count(), 4);
-  QCOMPARE(top->uses().count(), 3);
+  QCOMPARE(top->usesCount(), 3);
   QCOMPARE(top->localDeclarations()[0]->uses().count(), 1); //1 File
   QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //1 File
   

@@ -37,6 +37,7 @@
 #include "navigationwidget.h"
 #include "cppcodecompletionmodel.h"
 #include "cpplanguagesupport.h"
+#include <arrayhelpers.h>
 
 using namespace KDevelop;
 using namespace Cpp;
