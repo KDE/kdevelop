@@ -28,12 +28,23 @@
 
 namespace KDevelop {
 
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId);
+
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
     : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0)
   {
+    initializeAppendedLists();
+  }
+  TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false), m_inDuChain(false) {
+    initializeAppendedLists();
+    copyListsFrom(rhs);
+    m_hasUses = rhs.m_hasUses;
+  }
+  ~TopDUContextData() {
+    freeAppendedLists();
   }
   
   TopDUContext::Flags m_flags;
@@ -47,16 +58,10 @@ public:
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
 
+  START_APPENDED_LISTS_BASE(TopDUContextData, DUContextData);
   ///Maps a declarationIndex to a DeclarationId, which is used when the entry in m_usedDeclaration is zero.
-  QVector<DeclarationId> m_usedDeclarationIds;
-  ///Maps a declarationIndex to an actual used Declaration
-  QVector<DeclarationPointer> m_usedDeclarations;
-
-  /**Maps a declarationIndex to local declarations. Generally, negative indices are considered
-   * to be indices within m_usedLocalDeclarations, and positive indices within m_usedDeclarationIds
-   * Any declarations that are within the same top-context are considered local.
-   * */
-  QVector<DeclarationPointer> m_usedLocalDeclarations;
+  APPENDED_LIST_FIRST(TopDUContextData, DeclarationId, m_usedDeclarationIds);
+  END_APPENDED_LISTS(TopDUContextData, m_usedDeclarationIds);
 };
 
 }
