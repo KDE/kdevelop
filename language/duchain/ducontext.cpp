@@ -1318,10 +1318,9 @@ void DUContext::clearImportedParentContexts()
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  FOREACH_FUNCTION(Import parent, d->m_importedContexts)
-    removeImportedParentContext(parent.context.data());
-
-  Q_ASSERT(d->m_importedContextsSize() == 0);
+  
+  while(d->m_importedContextsSize())
+    removeImportedParentContext(d->m_importedContexts()[0].context.data());
 }
 
 void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
