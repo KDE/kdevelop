@@ -24,6 +24,7 @@
 
 #include "initTest.h"
 
+#include <tests/common/kdevtest.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -71,12 +72,10 @@ void BzrInitTest::cleanupTestCase()
 {
     delete m_proxy;
 
-   if ( QFileInfo(BZRTEST_BASEDIR).exists() ) {
-       system("rm -rf "BZRTEST_BASEDIR);
-   }
-   if ( QFileInfo(BZRTEST_BASEDIR2).exists() ) {
-       system("rm -rf "BZRTEST_BASEDIR2);
-   }
+   if ( QFileInfo(BZRTEST_BASEDIR).exists() )
+       KIO::NetAccess::del(KUrl(QString(BZRTEST_BASEDIR)), 0);
+   if ( QFileInfo(BZRTEST_BASEDIR2).exists() )
+       KIO::NetAccess::del(KUrl(QString(BZRTEST_BASEDIR2)), 0);
 }
 
 void BzrInitTest::repoInit()
@@ -211,7 +210,7 @@ void BzrInitTest::testPlugin()
 //     QVERIFY(iface);
 }
 
-QTEST_MAIN(BzrInitTest)
+KDEVTEST_MAIN(BzrInitTest)
 
 
-// #include "gittest.moc"
+#include "initTest.moc"

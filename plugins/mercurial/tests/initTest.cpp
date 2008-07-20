@@ -24,7 +24,9 @@
 
 #include "initTest.h"
 
+#include <tests/common/kdevtest.h>
 #include <QtTest/QtTest>
+
 #include <KUrl>
 #include <kio/netaccess.h>
 
@@ -48,6 +50,7 @@ void HgInitTest::initTestCase()
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
     if ( QFileInfo(HGTEST_BASEDIR).exists() )
+//         KIO::Job * job = KIO::del( KUrl(QString(HGTEST_BASEDIR) );
         KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR)), 0);
     if ( QFileInfo(HGTEST_BASEDIR2).exists() )
         KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR2)), 0);
@@ -62,12 +65,10 @@ void HgInitTest::cleanupTestCase()
 {
     delete m_proxy;
 
-   if ( QFileInfo(HGTEST_BASEDIR).exists() ) {
-       system("rm -rf "HGTEST_BASEDIR);
-   }
-   if ( QFileInfo(HGTEST_BASEDIR2).exists() ) {
-       system("rm -rf "HGTEST_BASEDIR2);
-   }
+   if ( QFileInfo(HGTEST_BASEDIR).exists() )
+       KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR)), 0);
+   if ( QFileInfo(HGTEST_BASEDIR2).exists() )
+       KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR2)), 0);
 }
 
 void HgInitTest::repoInit()
@@ -180,8 +181,6 @@ void HgInitTest::testInitAndCommit()
     cloneRepository();
 }
 
+KDEVTEST_MAIN(HgInitTest)
 
-QTEST_MAIN(HgInitTest)
-
-
-// #include "gittest.moc"
+#include "initTest.moc"

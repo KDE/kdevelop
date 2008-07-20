@@ -245,4 +245,4 @@ void GitExecutor::parseOutput(const QString& jobOutput, QList<DVCScommit>& commi
     }
 }
 
-// #include "hgexetor.moc"
+// #include "gitexetor.moc"

@@ -50,11 +50,11 @@ bool IDVCSexecutor::prepareJob(DVCSjob* job, const QString& repository, enum Req
     job->clear();
 
     //repository is sent by ContextMenu, so we check if it is a file and use it's path
+    //if it's a dir then we use it as a working dir and use "git add ."
     QFileInfo repoInfo = QFileInfo(repository);
     if (repoInfo.isFile())
         job->setDirectory(repoInfo.path());
     else
-        //repository = root of the repo
         job->setDirectory(repository);
 
     return true;
@@ -68,12 +68,14 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
         QFileInfo fileInfo = QFileInfo(url.path());
-        QString file;
-        if (fileInfo.isFile())
-            //Note: we
+        QString file = url.path();
+        ///@todo else will work only for relative pathes
+        ///I don't think any ctions required, "." in working dir is ok for us
+        if (fileInfo.isFile() || fileInfo.isDir())
             file = fileInfo.fileName();
         else
             file = QString(".");
+        qDebug() << "url is: " << url <<" url.path() is " << url.path()  << " file is: " << file;
         args << KShell::quoteArg(file);
     }
 

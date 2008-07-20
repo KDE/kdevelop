@@ -79,6 +79,7 @@ KDevelop::VcsJob*
                             const QString &repo)
 {
     DVCSjob* job = d->m_exec->checkout(localLocation, repo);
+    
     return job;
 }
 

@@ -24,6 +24,7 @@
 
 #include "initTest.h"
 
+#include <tests/common/kdevtest.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -38,10 +39,8 @@
 #define GIT_REPO                GITTEST_BASEDIR".git"
 #define GITTEST_BASEDIR2        "/tmp/kdevGit_testdir2/"
 #define GIT_TESTFILE_NAME       "testfile"
+#define GIT_TESTFILE_NAME2      "foo"
 
-//TODO: bugs, this test didn't notice:
-//* git commit home/... wasn't notice
-// test for isValidDirectory is required!!!
 
 void GitInitTest::initTestCase()
 {
@@ -51,7 +50,6 @@ void GitInitTest::initTestCase()
     // previous run; remove it...
     if ( QFileInfo(GITTEST_BASEDIR).exists() )
         KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR)), 0);
-        system("rm -rf "GITTEST_BASEDIR"/*");
     if ( QFileInfo(GITTEST_BASEDIR2).exists() )
         KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR2)), 0);
 
@@ -65,12 +63,10 @@ void GitInitTest::cleanupTestCase()
 {
     delete m_proxy;
 
-   if ( QFileInfo(GITTEST_BASEDIR).exists() ) {
-       system("rm -rf "GITTEST_BASEDIR);
-   }
-   if ( QFileInfo(GITTEST_BASEDIR2).exists() ) {
-       system("rm -rf "GITTEST_BASEDIR2);
-   }
+   if ( QFileInfo(GITTEST_BASEDIR).exists() )
+       KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR)), 0);
+   if ( QFileInfo(GITTEST_BASEDIR2).exists() )
+       KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR2)), 0);
 }
 
 void GitInitTest::repoInit()
@@ -86,30 +82,47 @@ void GitInitTest::repoInit()
 
     //check if the CVSROOT directory in the new local repository exists now
     QVERIFY( QFileInfo(QString(GIT_REPO)).exists() );
+
+    //check if isValidDirectory works
+    QVERIFY(m_proxy->isValidDirectory(KUrl(GITTEST_BASEDIR)));
+    //and for non-git dir, I hope nobody has /tmp under git
+    QVERIFY(!m_proxy->isValidDirectory(KUrl("/tmp")));
 }
 
 void GitInitTest::addFiles()
 {
     kDebug() << "Adding files to the repo";
+
     //we start it after repoInit, so we still have empty git repo
-    //First let's create a file
     QFile f(GITTEST_BASEDIR""GIT_TESTFILE_NAME);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "HELLO WORLD";
     }
     f.flush();
+    f.close();
+    f.setFileName(GITTEST_BASEDIR""GIT_TESTFILE_NAME2);
+    if(f.open(QIODevice::WriteOnly)) {
+        QTextStream input( &f );
+        input << "No, bar()!";
+    }
+    f.flush();
+    f.close();
 
-    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(GIT_TESTFILE_NAME)));
+    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
     QVERIFY( j );
 
-    // try to start the job
-    QVERIFY( j->exec() );
+    if (j)
+        QVERIFY(j->exec() );
+    //Wait the job will be finished
+    while(j->status() == KDevelop::VcsJob::JobRunning) ;
 
-    //since we added the file to the empty repository, .git/index should exist
-    //TODO: maybe other method should be used
-    QString testfile(GIT_REPO"/index");
-    QVERIFY( QFileInfo(testfile).exists() );
+    //let's use absolute path, because it's used in ContextMenus
+    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_BASEDIR""GIT_TESTFILE_NAME2))));
+    if (j)
+        QVERIFY(j->exec() );
+    while(j->status() == KDevelop::VcsJob::JobRunning) ;
+
 }
 
 void GitInitTest::commitFiles()
@@ -131,6 +144,18 @@ void GitInitTest::commitFiles()
     //TODO: maybe other method should be used
     QString headRefName(GIT_REPO"/refs/heads/master");
     QVERIFY( QFileInfo(headRefName).exists() );
+
+    //Test the results of the "git add"
+    DVCSjob* jobLs = new DVCSjob(0);
+    jobLs->clear();
+    jobLs->setDirectory(QString(GITTEST_BASEDIR));
+    *jobLs<<"git-ls-tree"<<"--name-only"<<"-r"<<"HEAD";
+    if (jobLs) {
+        QVERIFY(jobLs->exec() );
+        while(jobLs->status() == KDevelop::VcsJob::JobRunning) ;
+        QStringList files = jobLs->output().split("\n");
+        QVERIFY(files.contains(QString(GIT_TESTFILE_NAME)));
+    }
 
     QString firstCommit;
     QFile headRef(headRefName);
@@ -200,7 +225,7 @@ void GitInitTest::testInitAndCommit()
 }
 
 
-QTEST_MAIN(GitInitTest)
+KDEVTEST_MAIN(GitInitTest)
 
 
 // #include "gittest.moc"

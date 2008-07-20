@@ -10,7 +10,9 @@
 
 #include "cvstest.h"
 
+#include <tests/common/kdevtest.h>
 #include <QtTest/QtTest>
+
 #include <KUrl>
 #include <kio/netaccess.h>
 
@@ -43,9 +45,8 @@ void CvsTest::cleanupTestCase()
 {
     delete m_proxy;
 
-    if ( QFileInfo(CVSTEST_BASEDIR).exists() ) {
-        system("rm -rf "CVSTEST_BASEDIR"/*");
-    }
+    if ( QFileInfo(CVSTEST_BASEDIR).exists() )
+        KIO::NetAccess::del(KUrl(QString(CVSTEST_BASEDIR)), 0);
 }
 
 void CvsTest::repoInit()
@@ -118,7 +119,7 @@ void CvsTest::testInitAndImport()
 }
 
 
-QTEST_MAIN(CvsTest)
+KDEVTEST_MAIN(CvsTest)
 
 
 #include "cvstest.moc"
