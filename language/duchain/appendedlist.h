@@ -19,11 +19,11 @@
 #ifndef APPENDEDLIST_H
 #define APPENDEDLIST_H
 
-#include <QVarLengthArray>
 #include <QMutex>
 #include <QVector>
 #include <QStack>
 #include <kglobal.h>
+#include <util/kdevvarlengtharray.h>
 
 namespace KDevelop {
 
@@ -31,7 +31,7 @@ namespace KDevelop {
  * This file contains macros and classes that can be used to conveniently implement classes that store the data of an arbitrary count
  * of additional lists within the same memory block directly behind the class data, in a way that one the whole data can be stored by one copy-operation
  * to another place, like needed in ItemRepository. These macros simplify having two versions of a class: One that has its lists attached in memory,
- * and one version that has them contained as a directly accessible QVarLengthArray. Both versions have their lists accessible through access-functions,
+ * and one version that has them contained as a directly accessible KDevVarLengthArray. Both versions have their lists accessible through access-functions,
  * have a completeSize() function that computes the size of the one-block version, and a copyListsFrom(..) function which can copy the lists from one
  * version to the other.
  *
@@ -133,13 +133,13 @@ class TemporaryDataManager {
 #define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
-    typedef TemporaryDataManager<QVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
+    typedef TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
     K_GLOBAL_STATIC(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static) \
     temporaryHash ## container ## member ## Type& temporaryHash ## container ## member() { \
         return *temporaryHash ## container ## member ## Static; \
     }
 
-#define DECLARE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<QVarLengthArray<type, 10> >& temporaryHash ## container ## member();
+#define DECLARE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 ///This implements the interfaces so this container can be used as a predecessor for classes with appended lists.
 ///You should do this within the abstract base class that opens a tree of classes that can have appended lists,
@@ -175,11 +175,11 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
 #define APPENDED_LIST_COMMON(container, type, name) \
       uint name ## Data; \
       unsigned int name ## Size() const { if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().getItem(name ## Data).size(); } \
-      QVarLengthArray<type, 10>& name ## List() { return temporaryHash ## container ## name().getItem(name ## Data); }\
+      KDevVarLengthArray<type, 10>& name ## List() { return temporaryHash ## container ## name().getItem(name ## Data); }\
       template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); return size == rhs.name ## Size() && memcmp( name(), rhs.name(), size * sizeof(type) ) == 0; } \
       template<class T> void name ## CopyFrom( const T& rhs ) { \
         if(appendedListsDynamic()) {  \
-          QVarLengthArray<type, 10>& item( temporaryHash ## container ## name().getItem(name ## Data) ); \
+          KDevVarLengthArray<type, 10>& item( temporaryHash ## container ## name().getItem(name ## Data) ); \
           item.resize(rhs.name ## Size()); \
         }else{ \
           Q_ASSERT(name ## Data == 0); /*If this triggers, then the list wasn't initialized properly with initializeAppendedLists(..)*/ \

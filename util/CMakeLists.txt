@@ -34,6 +34,7 @@ install( FILES
     environmentselectionwidget.h
     environmentgrouplist.h
     pushvalue.h
+    kdevvarlengtharray.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 
 
