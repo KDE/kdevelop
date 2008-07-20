@@ -28,7 +28,7 @@
 
 #include <KUrl>
 #include <KDebug>
-#include <kplugininfo.h>
+#include <kio/netaccess.h>
 
 #include <iplugincontroller.h>
 #include <iplugin.h>
@@ -56,12 +56,10 @@ void BzrInitTest::initTestCase()
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
-    if ( QFileInfo(BZRTEST_BASEDIR).exists() ) {
-        system("rm -rf "BZRTEST_BASEDIR);
-    }
-    if ( QFileInfo(BZRTEST_BASEDIR2).exists() ) {
-        system("rm -rf "BZRTEST_BASEDIR2);
-    }
+    if ( QFileInfo(BZRTEST_BASEDIR).exists() )
+        KIO::NetAccess::del(KUrl(QString(BZRTEST_BASEDIR)), 0);
+    if ( QFileInfo(BZRTEST_BASEDIR2).exists() )
+        KIO::NetAccess::del(KUrl(QString(BZRTEST_BASEDIR2)), 0);
 
     // Now create the basic directory structure
     QDir tmpdir("/tmp");

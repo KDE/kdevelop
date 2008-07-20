@@ -28,6 +28,7 @@
 
 #include <KUrl>
 #include <KDebug>
+#include <kio/netaccess.h>
 
 #include <dvcsjob.h>
 #include <gitexecutor.h>
@@ -48,12 +49,11 @@ void GitInitTest::initTestCase()
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
-    if ( QFileInfo(GITTEST_BASEDIR).exists() ) {
+    if ( QFileInfo(GITTEST_BASEDIR).exists() )
+        KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR)), 0);
         system("rm -rf "GITTEST_BASEDIR"/*");
-    }
-    if ( QFileInfo(GITTEST_BASEDIR2).exists() ) {
-        system("rm -rf "GITTEST_BASEDIR2"/*");
-    }
+    if ( QFileInfo(GITTEST_BASEDIR2).exists() )
+        KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR2)), 0);
 
     // Now create the basic directory structure
     QDir tmpdir("/tmp");

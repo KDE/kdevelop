@@ -26,6 +26,7 @@
 
 #include <QtTest/QtTest>
 #include <KUrl>
+#include <kio/netaccess.h>
 
 #include <dvcsjob.h>
 #include <hgexecutor.h>
@@ -46,12 +47,10 @@ void HgInitTest::initTestCase()
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
-    if ( QFileInfo(HGTEST_BASEDIR).exists() ) {
-        system("rm -rf "HGTEST_BASEDIR"/*");
-    }
-    if ( QFileInfo(HGTEST_BASEDIR2).exists() ) {
-        system("rm -rf "HGTEST_BASEDIR2"/*");
-    }
+    if ( QFileInfo(HGTEST_BASEDIR).exists() )
+        KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR)), 0);
+    if ( QFileInfo(HGTEST_BASEDIR2).exists() )
+        KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR2)), 0);
 
     // Now create the basic directory structure
     QDir tmpdir("/tmp");

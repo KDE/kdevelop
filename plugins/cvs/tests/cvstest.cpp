@@ -12,6 +12,7 @@
 
 #include <QtTest/QtTest>
 #include <KUrl>
+#include <kio/netaccess.h>
 
 #include <cvsjob.h>
 #include <cvsproxy.h>
@@ -28,9 +29,8 @@ void CvsTest::initTestCase()
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
-    if ( QFileInfo(CVSTEST_BASEDIR).exists() ) {
-        system("rm -rf "CVSTEST_BASEDIR"/*");
-    }
+    if ( QFileInfo(CVSTEST_BASEDIR).exists() )
+        KIO::NetAccess::del(KUrl(QString(CVSTEST_BASEDIR)), 0);
 
     // Now create the basic directory structure
     QDir tmpdir("/tmp");
