@@ -395,7 +395,7 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
   foreach(Declaration* decl, ctx->localDeclarations())
     registerAsRangeWatcher(decl);
 
-  for(int a = 0; a < ctx->uses().size(); ++a) {
+  for(int a = 0; a < ctx->usesCount(); ++a) {
     KTextEditor::SmartRange* range = ctx->useSmartRange(a);
     if(range) {
       range->removeWatcher(this); //Make sure we're never registered twice

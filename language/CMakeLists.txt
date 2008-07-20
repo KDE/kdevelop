@@ -133,6 +133,7 @@ install(FILES
     duchain/duchain.h
     duchain/ducontext.h
     duchain/ducontextdata.h
+    duchain/arrayhelpers.h
     duchain/topducontext.h
     duchain/topducontextdata.h
     duchain/declaration.h
