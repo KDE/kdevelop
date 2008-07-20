@@ -319,13 +319,10 @@ TopDUContext* DUChain::chainForDocument( const HashedString& document, const Par
 
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::const_iterator it = sdDUChainPrivate->m_fileEnvironmentInformations.lowerBound(indexed);
   while(it != sdDUChainPrivate->m_fileEnvironmentInformations.end() && it.key() == indexed) {
-    if(*it) {
-      ///@todo don't load the context just for testing the flags, store the flags in the parsing-environment file
+    if(*it && (*it)->matchEnvironment(environment)) {
       TopDUContext* ctx = DUChain::self()->chainForDocument((*it)->identity());
-      if(flags == TopDUContext::AnyFlag || (ctx && ctx->flags() == flags)) {
-        if((*it)->matchEnvironment(environment))
-          return ctx;
-      }
+      if(ctx && (flags == TopDUContext::AnyFlag || ctx->flags() == flags))
+        return ctx;
     }
     ++it;
   }
