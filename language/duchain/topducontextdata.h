@@ -47,7 +47,6 @@ public:
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
 
-  ///@todo Make this serializable
   ///Maps a declarationIndex to a DeclarationId, which is used when the entry in m_usedDeclaration is zero.
   QVector<DeclarationId> m_usedDeclarationIds;
   ///Maps a declarationIndex to an actual used Declaration

@@ -262,7 +262,7 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& 
         return decl;
 
       //Try finding a use under the cursor
-      for(int a = 0; a < ctx->uses().count(); ++a)
+      for(int a = 0; a < ctx->usesCount(); ++a)
         if( ctx->uses()[a].m_range.contains(c) )
           return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
 

@@ -41,29 +41,46 @@ namespace KTextEditor {
 namespace KDevelop{
 class DUContext;
 
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_childContexts, IndexedDUContext);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, IndexedDeclaration);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_uses, Use);
+
 ///This class contains data that needs to be stored to disk
 class KDEVPLATFORMLANGUAGE_EXPORT DUContextData : public DUChainBaseData
 {
 public:
   DUContextData();
+  ~DUContextData();
+  DUContextData(const DUContextData& rhs);
   DUContext::ContextType m_contextType;
   QualifiedIdentifier m_scopeIdentifier;
   IndexedDeclaration m_owner;
-  QVector<DUContext::Import> m_importedContexts;
-  QVector<IndexedDUContext> m_childContexts;
-  QVector<IndexedDUContext> m_importers;
+  
+  START_APPENDED_LISTS_BASE(DUContextData, DUChainBaseData);
+  APPENDED_LIST_FIRST(DUContextData, DUContext::Import, m_importedContexts);
+  APPENDED_LIST(DUContextData, IndexedDUContext, m_childContexts, m_importedContexts);
+  
+  ///@todo eventually move the importers into some separate structure
+  APPENDED_LIST(DUContextData, IndexedDUContext, m_importers, m_childContexts);
 
   ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
-  QVector<IndexedDeclaration> m_localDeclarations;
+  APPENDED_LIST(DUContextData, IndexedDeclaration, m_localDeclarations, m_importers);
   /**
    * Vector of all uses in this context
    * Mutable for range synchronization
    * */
-  mutable QVector<Use> m_uses;
+  APPENDED_LIST(DUContextData, Use, m_uses, m_localDeclarations);
+  END_APPENDED_LISTS(DUContextData, m_uses);
 
   bool m_inSymbolTable : 1;
   bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
   bool m_propagateDeclarations : 1;
+  private:
+    DUContextData& operator=(const DUContextData&) {
+      return *this;
+    }
 };
 
 ///This class contains data that is only runtime-dependant and does not need to be stored to disk

@@ -40,34 +40,11 @@
 #include <limits>
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
-
+#include "arrayhelpers.h"
 
 ///It is fine to use one global static mutex here
 
 using namespace KTextEditor;
-
-template<class T, int num>
-QList<T> arrayToList(const QVarLengthArray<T, num>& array) {
-  QList<T> ret;
-  FOREACH_ARRAY(const T& item, array)
-    ret << item;
-
-  return ret;
-}
-
-template<class Container, class Type>
-bool removeOne(Container& container, const Type& value) {
-  int num = 0;
-  for(typename Container::const_iterator it = container.begin(); it != container.end(); ++it) {
-    if((*it) == value) {
-      container.remove(num);
-      return true;
-    }
-    ++num;
-  }
-  return false;
-}
-
 
 //Stored statically for performance-reasons
 
@@ -83,13 +60,40 @@ namespace KDevelop
 {
 QMutex DUContextDynamicData::m_localDeclarationsMutex(QMutex::Recursive);
 
+template<class Container>
+bool removeOneImport(Container& container, const DUContext* value) {
+  for(int a = 0; a < container.size(); ++a) {
+    if(container[a].context.data() == value) {
+      removeFromArray(container, a);
+      return true;
+    }
+  }
+  return false;
+}
+
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, IndexedDUContext);
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext);
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import);
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, IndexedDeclaration);
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use);
+
 REGISTER_DUCHAIN_ITEM(DUContext);
 
 const Identifier globalImportIdentifier("{...import...}");
 
 DUContextData::DUContextData()
-  : m_anonymousInParent(false), m_propagateDeclarations(false)
+  : m_anonymousInParent(false), m_propagateDeclarations(false), m_inSymbolTable(false)
 {
+  initializeAppendedLists();
+}
+
+DUContextData::~DUContextData() {
+  freeAppendedLists();
+}
+
+DUContextData::DUContextData(const DUContextData& rhs)  : DUChainBaseData(rhs), m_anonymousInParent(rhs.m_anonymousInParent), m_propagateDeclarations(rhs.m_propagateDeclarations), m_inSymbolTable(false) {
+  initializeAppendedLists();
+  copyListsFrom(rhs);
 }
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
@@ -109,7 +113,7 @@ bool DUContextDynamicData::isThisImportedBy(const DUContext* context) const {
   if( this == context->m_dynamicData )
     return true;
 
-  foreach( IndexedDUContext ctx, m_context->d_func()->m_importers ) {
+  FOREACH_FUNCTION( IndexedDUContext ctx, m_context->d_func()->m_importers ) {
     if( ctx.context() && ctx.context()->m_dynamicData->isThisImportedBy(context) )
       return true;
   }
@@ -152,11 +156,11 @@ void DUContext::synchronizeUsesFromSmart() const
   if(m_dynamicData->m_rangesForUses.isEmpty() || !m_dynamicData->m_rangesChanged)
     return;
 
-  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_uses.count());
+  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_usesSize());
 
-  for(int a = 0; a < d->m_uses.count(); a++)
-    if(m_dynamicData->m_rangesForUses[a])
-      d->m_uses[a].m_range = SimpleRange(*m_dynamicData->m_rangesForUses[a]);
+  for(int a = 0; a < d->m_usesSize(); a++)
+    if(m_dynamicData->m_rangesForUses[a]) ///@todo somehow signalize the change
+      const_cast<Use&>(d->m_uses()[a]).m_range = SimpleRange(*m_dynamicData->m_rangesForUses[a]);
 
   m_dynamicData->m_rangesChanged = false;
 }
@@ -166,7 +170,7 @@ void DUContext::synchronizeUsesToSmart() const
   DUCHAIN_D(DUContext);
   if(m_dynamicData->m_rangesForUses.isEmpty())
     return;
-  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_uses.count());
+  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_usesSize());
 
   // TODO: file close race? from here
   KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( smartRange()->document() );
@@ -175,14 +179,14 @@ void DUContext::synchronizeUsesToSmart() const
   // TODO: file close race to here
   QMutexLocker l(iface->smartMutex());
 
-  for(int a = 0; a < d->m_uses.count(); a++) {
+  for(int a = 0; a < d->m_usesSize(); a++) {
     if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
       l.unlock();
       l.relock();
     }
     if(m_dynamicData->m_rangesForUses[a]) {
-      m_dynamicData->m_rangesForUses[a]->start() = d->m_uses[a].m_range.start.textCursor();
-      m_dynamicData->m_rangesForUses[a]->end() = d->m_uses[a].m_range.end.textCursor();
+      m_dynamicData->m_rangesForUses[a]->start() = d->m_uses()[a].m_range.start.textCursor();
+      m_dynamicData->m_rangesForUses[a]->end() = d->m_uses()[a].m_range.end.textCursor();
     }else{
       kDebug() << "bad smart-range";
     }
@@ -203,7 +207,7 @@ void DUContext::rangeDeleted(KTextEditor::SmartRange* range)
     range->removeWatcher(this);
     int index = m_dynamicData->m_rangesForUses.indexOf(range);
     if(index != -1) {
-      d_func()->m_uses[index].m_range = SimpleRange(*range);
+      d_func_dynamic()->m_usesList()[index].m_range = SimpleRange(*range);
       m_dynamicData->m_rangesForUses[index] = 0;
     }
 
@@ -239,19 +243,19 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   SimpleCursor start = newDeclaration->range().start;
 
   bool inserted = false;
-  for (int i = m_context->d_func_dynamic()->m_localDeclarations.count()-1; i >= 0; --i) {
-    Declaration* child = m_context->d_func_dynamic()->m_localDeclarations.at(i).declaration();
+  for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
+    Declaration* child = m_context->d_func_dynamic()->m_localDeclarations()[i].declaration();
     Q_ASSERT(child);
     if(child == newDeclaration)
       return;
     if (start > child->range().start) {
-      m_context->d_func_dynamic()->m_localDeclarations.insert(i+1, newDeclaration);
+      insertToArray(m_context->d_func_dynamic()->m_localDeclarationsList(), newDeclaration, i+1);
       inserted = true;
       break;
     }
   }
   if( !inserted )
-    m_context->d_func_dynamic()->m_localDeclarations.append(newDeclaration);
+    m_context->d_func_dynamic()->m_localDeclarationsList().append(newDeclaration);
 
     addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
   }
@@ -265,7 +269,7 @@ bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 
   removeDeclarationFromHash(declaration->identifier(), declaration);
 
-  if( removeOne(m_context->d_func_dynamic()->m_localDeclarations, IndexedDeclaration(declaration)) ) {
+  if( removeOne(m_context->d_func_dynamic()->m_localDeclarationsList(), IndexedDeclaration(declaration)) ) {
     //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
     return true;
   }else {
@@ -288,20 +292,20 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   
   bool inserted = false;
 
-  int childCount = m_context->d_func()->m_childContexts.count();
+  int childCount = m_context->d_func()->m_childContextsSize();
 
   //Optimization: In most cases while parsing, the new child-context will be added to the end, so check if it is the case.
-  if(!m_context->d_func()->m_childContexts.isEmpty()) {
-    if(m_context->d_func()->m_childContexts.at(childCount-1).context()->range().start <= context->range().start)
+  if(m_context->d_func()->m_childContextsSize() != 0) {
+    if(m_context->d_func()->m_childContexts()[childCount-1].context()->range().start <= context->range().start)
       goto insertAtEnd;
   }
 
   for (int i = 0; i < childCount; ++i) {
-    DUContext* child = m_context->d_func()->m_childContexts.at(i).context();
+    DUContext* child = m_context->d_func()->m_childContexts()[i].context();
     if (context == child)
       return;
     if (context->range().start < child->range().start) {
-      m_context->d_func_dynamic()->m_childContexts.insert(i, indexed);
+      insertToArray(m_context->d_func_dynamic()->m_childContextsList(), indexed, i);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
       break;
@@ -310,7 +314,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   insertAtEnd:
   if( !inserted ) {
-    m_context->d_func_dynamic()->m_childContexts.append(indexed);
+    m_context->d_func_dynamic()->m_childContextsList().append(indexed);
     context->m_dynamicData->m_parentContext = m_context;
   }
 
@@ -320,7 +324,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 //   ENSURE_CAN_WRITE
 
-  if( removeOne(m_context->d_func_dynamic()->m_childContexts, IndexedDUContext(context)) )
+  if( removeOne(m_context->d_func_dynamic()->m_childContextsList(), IndexedDUContext(context)) )
     return true;
   else
     return false;
@@ -329,9 +333,9 @@ bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 void DUContextDynamicData::addImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
-  Q_ASSERT(!m_context->d_func_dynamic()->m_importers.contains(context));
+  Q_ASSERT(!arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context)));
 
-  m_context->d_func_dynamic()->m_importers.append(context);
+  m_context->d_func_dynamic()->m_importersList().append(context);
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
@@ -340,7 +344,7 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
 void DUContextDynamicData::removeImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
-  removeOne(m_context->d_func_dynamic()->m_importers, IndexedDUContext(context));
+  removeOne(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context));
   //if( != 0 )
     //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
 }
@@ -431,14 +435,14 @@ DUContext::~DUContext( )
 
   setInSymbolTable(false);
 
-  while( !d->m_importers.isEmpty() )
-    d->m_importers.first().data()->removeImportedParentContext(this);
+  while( d->m_importersSize() != 0 )
+    d->m_importers()[0].data()->removeImportedParentContext(this);
 
-  while( !d->m_importedContexts.isEmpty() )
-    if( d->m_importedContexts.front().context.context() )
-      removeImportedParentContext(d->m_importedContexts.front().context.context());
+  while( d->m_importedContextsSize() != 0 )
+    if( d->m_importedContexts()[0].context.context() )
+      removeImportedParentContext(d->m_importedContexts()[0].context.context());
     else
-      d->m_importedContexts.pop_front();
+      removeOneImport(d->m_importedContextsList(), 0);
 
   deleteChildContextsRecursively();
 
@@ -459,7 +463,7 @@ const QVector< DUContext * > DUContext::childContexts( ) const
   ENSURE_CAN_READ
 
   QVector< DUContext * > ret;
-  foreach(IndexedDUContext ctx, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext ctx, d_func()->m_childContexts)
     ret << ctx.context();
   return ret;
 }
@@ -602,7 +606,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     aliasedIdentifiers = baseIdentifiers;
 
 
-  if( !d->m_importedContexts.isEmpty() ) {
+  if( d->m_importedContextsSize() != 0 ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
     FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
@@ -610,21 +614,18 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
-      QVector<Import>::const_iterator it = d->m_importedContexts.end();
-      QVector<Import>::const_iterator begin = d->m_importedContexts.begin();
-      while( it != begin ) {
-        --it;
-        DUContext* context = (*it).context.data();
+      for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
+        DUContext* context = d->m_importedContexts()[import].context.data();
 
-        while( !context && it != begin ) {
-          --it;
-          context = (*it).context.data();
+        while( !context && import > 0 ) {
+          --import;
+          DUContext* context = d->m_importedContexts()[import].context.data();
         }
 
         if( !context )
           break;
 
-        if( position.isValid() && (*it).position.isValid() && position < (*it).position )
+        if( position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position )
           continue;
 
         if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext) )
@@ -675,9 +676,9 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     return;
   }
 
-  for(int a = 0; a < d->m_importedContexts.size(); ++a) {
-    if(d->m_importedContexts[a].context.data() == context) {
-      d->m_importedContexts[a].position = position;
+  for(int a = 0; a < d->m_importedContextsSize(); ++a) {
+    if(d->m_importedContexts()[a].context.data() == context) {
+      d->m_importedContextsList()[a].position = position;
       return;
     }
   }
@@ -690,7 +691,7 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
   ///Do not sort the imported contexts by their own line-number, it makes no sense.
   ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
 
-  d->m_importedContexts.append(Import(context, position));
+  d->m_importedContextsList().append(Import(context, position));
 
   //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
@@ -700,9 +701,9 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  for(int a = 0; a < d->m_importedContexts.size(); ++a) {
-    if(d->m_importedContexts[a].context.data() == context) {
-      d->m_importedContexts.remove(a);
+  for(int a = 0; a < d->m_importedContextsSize(); ++a) {
+    if(d->m_importedContexts()[a].context.data() == context) {
+      removeFromArray(d->m_importedContextsList(), a);
       break;
     }
   }
@@ -720,7 +721,7 @@ QVector<DUContext*> DUContext::importers() const
   ENSURE_CAN_READ
 
   QVector<DUContext*> ret;
-  foreach(IndexedDUContext ctx, d_func()->m_importers)
+  FOREACH_FUNCTION(IndexedDUContext ctx, d_func()->m_importers)
     ret << ctx.context();
 
   return ret;
@@ -733,7 +734,7 @@ DUContext * DUContext::findContext( const SimpleCursor& position, DUContext* par
   if (!parent)
     parent = const_cast<DUContext*>(this);
 
-  foreach (IndexedDUContext context, parent->d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext context, parent->d_func()->m_childContexts)
     if (context.data()->range().contains(position)) {
       DUContext* ret = findContext(position, context.data());
       if (!ret)
@@ -750,7 +751,7 @@ bool DUContext::parentContextOf(DUContext* context) const
   if (this == context)
     return true;
 
-  foreach (IndexedDUContext child, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext child, d_func()->m_childContexts)
     if (child.data()->parentContextOf(context))
       return true;
 
@@ -792,7 +793,7 @@ const QVector<Declaration*> DUContext::localDeclarations() const
 
   QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
   QVector<Declaration*> ret;
-  foreach(IndexedDeclaration decl, d_func()->m_localDeclarations)
+  FOREACH_FUNCTION(IndexedDeclaration decl, d_func()->m_localDeclarations)
     ret << decl.declaration();
   
   return ret;
@@ -815,17 +816,18 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
           definitions << qMakePair(decl.data(), currentDepth);
   }
 
-  QVectorIterator<Import> it = d->m_importedContexts;
-  it.toBack();
-  while (it.hasPrevious()) {
-    const Import& import(it.previous());
-    DUContext* context = import.context.data();
-    while( !context && it.hasPrevious() )
-      context = it.previous().context.data();
+  for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
+    const Import* import(&d->m_importedContexts()[a]);
+    DUContext* context = import->context.data();
+    while( !context && a > 0 ) {
+      --a;
+      import = &d->m_importedContexts()[a];
+      context = import->context.data();
+    }
     if( !context )
       break;
 
-    if( position.isValid() && import.position.isValid() && position < import.position )
+    if( position.isValid() && import->position.isValid() && position < import->position )
       continue;
 
     context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
@@ -838,27 +840,31 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 void DUContext::deleteLocalDeclarations()
 {
   ENSURE_CAN_WRITE
-  QVector<IndexedDeclaration> declarations;
+  QVarLengthArray<IndexedDeclaration> declarations;
   {
     QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-    declarations = d_func()->m_localDeclarations;
+    FOREACH_FUNCTION(const IndexedDeclaration& decl, d_func()->m_localDeclarations)
+      declarations.append(decl);
   }
 
-  foreach(IndexedDeclaration decl, declarations)
+  FOREACH_ARRAY(IndexedDeclaration decl, declarations)
     delete decl.declaration();
 
-  Q_ASSERT(d_func()->m_localDeclarations.isEmpty());
+  Q_ASSERT(d_func()->m_localDeclarationsSize() == 0);
 }
 
 void DUContext::deleteChildContextsRecursively()
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  QVector<IndexedDUContext> children = d->m_childContexts;
+  QVector<IndexedDUContext> children;
+  FOREACH_FUNCTION(IndexedDUContext ctx, d->m_childContexts)
+    children << ctx;
+    
   foreach(IndexedDUContext ctx, children)
     delete ctx.context();
 
-  Q_ASSERT(d->m_childContexts.isEmpty());
+  Q_ASSERT(d->m_childContextsSize() == 0);
 }
 
 QVector< Declaration * > DUContext::clearLocalDeclarations( )
@@ -949,7 +955,7 @@ void DUContext::deleteUse(int index)
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  d->m_uses.remove(index);
+  removeFromArray(d->m_usesList(), index);
 
   if(!m_dynamicData->m_rangesForUses.isEmpty()) {
     if(m_dynamicData->m_rangesForUses[index]) {
@@ -970,7 +976,7 @@ void DUContext::deleteUses()
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  d->m_uses.clear();
+  d->m_usesList().clear();
 
   clearUseSmartRanges();
 }
@@ -987,17 +993,19 @@ SimpleCursor DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  for(int a = 0; a < d->m_importedContexts.size(); ++a)
-    if(d->m_importedContexts[a].context.data() == target)
-      return d->m_importedContexts[a].position;
+  for(int a = 0; a < d->m_importedContextsSize(); ++a)
+    if(d->m_importedContexts()[a].context.data() == target)
+      return d->m_importedContexts()[a].position;
   return SimpleCursor::invalid();
 }
 
 QVector<DUContext::Import> DUContext::importedParentContexts() const
 {
   ENSURE_CAN_READ
-
-  return d_func()->m_importedContexts;
+  QVector<DUContext::Import> ret;
+  FOREACH_FUNCTION(const DUContext::Import& import, d_func()->m_importedContexts)
+    ret << import;
+  return ret;
 }
 
 QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position, SearchFlags flags) const
@@ -1104,7 +1112,7 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
   //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
   applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace);
 
-  if( !d->m_importedContexts.isEmpty() ) {
+  if( d->m_importedContextsSize() != 0 ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
     FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
@@ -1112,13 +1120,13 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
-      QVectorIterator<Import> it = d->m_importedContexts;
-      it.toBack();
-      while (it.hasPrevious()) {
-        DUContext* context = it.previous().context.data();
+      for(int a = d->m_importedContextsSize()-1; a >= 0; ) {
+        
+        DUContext* context = d->m_importedContexts()[a].context.data();
 
-        while( !context && it.hasPrevious() ) {
-          context = it.previous().context.data();
+        while( !context && a > 0 ) {
+          --a;
+          context = d->m_importedContexts()[a].context.data();
         }
         if( !context )
           break;
@@ -1140,12 +1148,17 @@ bool DUContext::shouldSearchInParent(SearchFlags flags) const
   return !(flags & InImportedParentContext);
 }
 
-const QVector< Use > & DUContext::uses() const
+const Use* DUContext::uses() const
 {
   ENSURE_CAN_READ
 
   synchronizeUsesFromSmart();
-  return d_func()->m_uses;
+  return d_func()->m_uses();
+}
+
+int DUContext::usesCount() const
+{
+  return d_func()->m_usesSize();
 }
 
 int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore)
@@ -1156,19 +1169,19 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
   if(insertBefore == -1) {
     //Find position where to insert
     int a = 0;
-    for(; a < d->m_uses.size() && range.start > d->m_uses[a].m_range.start; ++a) { ///@todo do binary search
+    for(; a < d->m_usesSize() && range.start > d->m_uses()[a].m_range.start; ++a) { ///@todo do binary search
     }
     insertBefore = a;
   }
 
-  d->m_uses.insert(insertBefore, Use(range, declarationIndex));
+  insertToArray(d->m_usesList(), Use(range, declarationIndex), insertBefore);
   if(smartRange) {
-    Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d->m_uses.size()-1);
+    Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d->m_usesSize()-1);
     m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
     smartRange->addWatcher(this);
 //     smartRange->setWantsDirectChanges(true);
 
-    d->m_uses[insertBefore].m_range = SimpleRange(*smartRange);
+    d->m_usesList()[insertBefore].m_range = SimpleRange(*smartRange);
   }else{
     Q_ASSERT(m_dynamicData->m_rangesForUses.isEmpty());
   }
@@ -1192,9 +1205,9 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
 {
   ENSURE_CAN_WRITE
   if(m_dynamicData->m_rangesForUses.isEmpty())
-      m_dynamicData->m_rangesForUses.insert(0, d_func()->m_uses.size(), 0);
+      m_dynamicData->m_rangesForUses.insert(0, d_func()->m_usesSize(), 0);
 
-  Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d_func()->m_uses.size());
+  Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d_func()->m_usesSize());
 
   if(m_dynamicData->m_rangesForUses[useIndex]) {
     EditorIntegrator editor;
@@ -1207,7 +1220,7 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
   }
 
   m_dynamicData->m_rangesForUses[useIndex] = range;
-  d_func()->m_uses[useIndex].m_range = SimpleRange(*range);
+  d_func_dynamic()->m_usesList()[useIndex].m_range = SimpleRange(*range);
   range->addWatcher(this);
 //   range->setWantsDirectChanges(true);
 }
@@ -1234,7 +1247,7 @@ void DUContext::clearUseSmartRanges()
 void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 {
   ENSURE_CAN_WRITE
-  d_func()->m_uses[useNumber].m_declarationIndex = declarationIndex;
+  d_func_dynamic()->m_usesList()[useNumber].m_declarationIndex = declarationIndex;
 }
 
 
@@ -1245,7 +1258,7 @@ DUContext * DUContext::findContextAt(const SimpleCursor & position) const
   if (!range().contains(position))
     return 0;
 
-  foreach (IndexedDUContext child, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext child, d_func()->m_childContexts)
     if (DUContext* specific = child.context()->findContextAt(position))
       return specific;
 
@@ -1259,7 +1272,7 @@ DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
   if (!this->range().contains(range))
     return 0;
 
-  foreach (IndexedDUContext child, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext child, d_func()->m_childContexts)
     if (DUContext* specific = child.context()->findContextIncluding(range))
       return specific;
 
@@ -1275,8 +1288,8 @@ int DUContext::findUseAt(const SimpleCursor & position) const
   if (!range().contains(position))
     return -1;
 
-  for(int a = 0; a < d_func()->m_uses.size(); ++a)
-    if (d_func()->m_uses[a].m_range.contains(position))
+  for(int a = 0; a < d_func()->m_usesSize(); ++a)
+    if (d_func()->m_uses()[a].m_range.contains(position))
       return a;
 
   return -1;
@@ -1305,11 +1318,11 @@ void DUContext::clearImportedParentContexts()
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  foreach (Import parent, d->m_importedContexts)
+  FOREACH_FUNCTION(Import parent, d->m_importedContexts)
       if( parent.context.data() )
         removeImportedParentContext(parent.context.data());
 
-  Q_ASSERT(d->m_importedContexts.isEmpty());
+  Q_ASSERT(d->m_importedContextsSize() == 0);
 }
 
 void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
@@ -1320,7 +1333,7 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
     if (!encountered.contains(dec))
       delete dec;
 
-  foreach (IndexedDUContext childContext, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext childContext, d_func()->m_childContexts)
     if (!encountered.contains(childContext.data()))
       delete childContext.data();
 }
@@ -1337,36 +1350,19 @@ QWidget* DUContext::createNavigationWidget(Declaration* /*decl*/, TopDUContext* 
 
 void DUContext::squeeze()
 {
-  DUCHAIN_D_DYNAMIC(DUContext);
-
-  if(!d->m_uses.isEmpty())
-    d->m_uses.squeeze();
-
-  if(!d->m_importedContexts.isEmpty())
-    d->m_importedContexts.squeeze();
-
-  if(!d->m_childContexts.isEmpty())
-    d->m_childContexts.squeeze();
-
-  if(!d->m_importers.isEmpty())
-    d->m_importers.squeeze();
-
-  if(!d->m_localDeclarations.isEmpty())
-    d->m_localDeclarations.squeeze();
-
   if(!m_dynamicData->m_rangesForUses.isEmpty())
     m_dynamicData->m_rangesForUses.squeeze();
 
-  foreach (IndexedDUContext child, d_func()->m_childContexts)
+  FOREACH_FUNCTION(IndexedDUContext child, d_func()->m_childContexts)
     child.data()->squeeze();
 }
 
 QList<SimpleRange> allUses(DUContext* context, int declarationIndex)
 {
   QList<SimpleRange> ret;
-  foreach(const Use& use, context->uses())
-    if(use.m_declarationIndex == declarationIndex)
-      ret << use.m_range;
+  for(int a = 0; a < context->usesCount(); ++a)
+    if(context->uses()[a].m_declarationIndex == declarationIndex)
+      ret << context->uses()[a].m_range;
 
   foreach(DUContext* child, context->childContexts())
     ret += allUses(child, declarationIndex);
@@ -1378,9 +1374,9 @@ QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declaration
 {
   QList<KTextEditor::SmartRange*> ret;
 
-  const QVector<Use>& uses(context->uses());
+  const Use* uses(context->uses());
 
-  for(int a = 0; a < uses.size(); ++a)
+  for(int a = 0; a < context->usesCount(); ++a)
     if(uses[a].m_declarationIndex == declarationIndex) {
       KTextEditor::SmartRange* range = context->useSmartRange(a);
       if(range)
@@ -1513,15 +1509,6 @@ DUContext::Import::Import(DUContext* _context, const SimpleCursor& _position) : 
 KDevelop::DUContext::SearchItem::PtrList& operator<<(KDevelop::DUContext::SearchItem::PtrList& list, const KDevelop::DUContext::SearchItem::Ptr& item) {
   list.append(item);
   return list;
-}
-
-void KDevelop::insertToArray(KDevelop::DUContext::SearchItem::PtrList& array, KDevelop::DUContext::SearchItem::Ptr item, int position) {
-  Q_ASSERT(position >= 0 && position <= array.size());
-  array.resize(array.size()+1);
-  for(int a = array.size()-1; a > position; --a) {
-    array[a] = array[a-1];
-  }
-  array[position] = item;
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

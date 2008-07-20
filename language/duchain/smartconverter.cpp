@@ -52,7 +52,7 @@ public:
       m_editor->exitCurrentRange();
     }
 
-    for(int a = 0; a < context->uses().count(); ++a) {
+    for(int a = 0; a < context->usesCount(); ++a) {
       context->setUseSmartRange(a, m_editor->createRange(context->uses()[a].m_range.textRange())->toSmartRange());
       m_editor->exitCurrentRange();
     }

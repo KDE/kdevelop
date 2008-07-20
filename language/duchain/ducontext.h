@@ -47,9 +47,6 @@ class TopDUContext;
 class DUContext;
 class DUContextData;
 
-//Foreach macro that also works with QVarLengthArray
-#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)
-
 ///Represents a context only by its global indices
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
   public:
@@ -461,8 +458,11 @@ public:
    * if you want to compare the ranges, so you can be sure they aren't changed in the meantime.
    * To get the actual declarations, use TopDUContext::usedDeclarationForIndex(..) with the declarationIndex.
    */
-  const QVector<Use>& uses() const;
+  const Use* uses() const;
 
+  ///Returns the count of uses that can be accessed through uses()
+  int usesCount() const;
+  
   /**
    * Find the use which encompasses \a position, if one exists.
    * @return The local index of the use, or -1
@@ -680,9 +680,6 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int d
   * Collects the smart-ranges of all uses of the given @param declarationIndex
   * */
 KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
-
-///Little helper that saves you from shoveling around the items in the array
-KDEVPLATFORMLANGUAGE_EXPORT void insertToArray(KDevelop::DUContext::SearchItem::PtrList& array, KDevelop::DUContext::SearchItem::Ptr item, int position);
 }
 
 ///Operator that allows using << with QVarLengthArray

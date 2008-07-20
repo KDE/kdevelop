@@ -23,6 +23,7 @@
 #include <duchain.h>
 #include "declaration.h"
 #include "symboltable.h"
+#include "arrayhelpers.h"
 
 namespace KDevelop {
 

@@ -36,6 +36,7 @@
 #include "uses.h"
 #include <ext/hash_map>
 
+#include "arrayhelpers.h"
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
@@ -516,9 +517,9 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  for(int a = 0; a < d->m_importedContexts.size(); ++a)
-    if(d->m_importedContexts[a].context.data() == target)
-      return d->m_importedContexts[a].position;
+  for(int a = 0; a < d->m_importedContextsSize(); ++a)
+    if(d->m_importedContexts()[a].context.data() == target)
+      return d->m_importedContexts()[a].position;
   
   return DUContext::importPosition(target);
 }
@@ -544,8 +545,8 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
     }
   }
   
-  for(QVector<DUContext::Import>::const_iterator parentIt = m_ctxt->d_func()->m_importedContexts.constBegin(); parentIt != m_ctxt->d_func()->m_importedContexts.constEnd(); ++parentIt) {
-    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context.data())); //To avoid detaching, use const iterator
+  for(int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
+  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context.data())); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {

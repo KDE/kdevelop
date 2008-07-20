@@ -141,15 +141,15 @@ protected:
         skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
 
         Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
-        Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->uses().count() >= nextUseIndex());
+        Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->usesCount() >= nextUseIndex());
       }
 
       if (LanguageSpecificUseBuilderBase::recompiling()) {
 
-        const QVector<Use>& uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
+        const Use* uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
         // Translate cursor to take into account any changes the user may have made since the text was retrieved
 
-        for (; nextUseIndex() < uses.count(); ++nextUseIndex()) {
+        for (; nextUseIndex() < LanguageSpecificUseBuilderBase::currentContext()->usesCount(); ++nextUseIndex()) {
           const Use& use = uses[nextUseIndex()];
 
           //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
@@ -189,7 +189,7 @@ protected:
 
     if (contextUpSteps) {
       Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
-      Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->uses().count() >= nextUseIndex());
+      Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->usesCount() >= nextUseIndex());
       m_nextUseStack[m_nextUseStack.size()-contextUpSteps-2] = nextUseIndex();
       m_skippedUses[m_skippedUses.size()-contextUpSteps-2] = skippedUses();
       m_finishContext = false;
@@ -219,8 +219,8 @@ protected:
       DUChainWriteLocker lock(DUChain::lock());
 
       //Delete all uses that were not encountered
-      //That means: All uses in skippedUses, and all uses from nextUseIndex() to LanguageSpecificUseBuilderBase::currentContext()->uses().count()
-      for(int a = LanguageSpecificUseBuilderBase::currentContext()->uses().count()-1; a >= nextUseIndex(); --a)
+      //That means: All uses in skippedUses, and all uses from nextUseIndex() to LanguageSpecificUseBuilderBase::currentContext()->usesCount()
+      for(int a = LanguageSpecificUseBuilderBase::currentContext()->usesCount()-1; a >= nextUseIndex(); --a)
         LanguageSpecificUseBuilderBase::currentContext()->deleteUse(a);
       for(int a = skippedUses().count()-1; a >= 0; --a)
         LanguageSpecificUseBuilderBase::currentContext()->deleteUse(skippedUses()[a]);
