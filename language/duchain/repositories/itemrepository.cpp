@@ -38,7 +38,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
   
   KLockFile::Ptr lock;
   QString repoPath;
-//   KComponentData component("item repositories temp");
+   KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
 //   if(ICore::self()) {
 ///@todo Use the kde directory again, once we know how to get it in this early stage
 //     QString baseDir = KStandardDirs::locateLocal("data", "kdevduchain");
@@ -48,14 +48,14 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
     for(int a = 0; a < 100; ++a) {
       QString specificDir = baseDir + QString("/%1").arg(a);
       KStandardDirs::makeDir(specificDir);
-//       lock = new KLockFile(specificDir + "/lock"/*, component*/);
-//       KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag);
-//       if(result == KLockFile::LockOK || result == KLockFile::LockStale) {
-        repoPath = specificDir;
-//         if(result == KLockFile::LockStale)
-//           kWarning() << "stale lock detected:" << specificDir + "/lock";
-        break;
-//       }
+       lock = new KLockFile(specificDir + "/lock", component);
+       KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag);
+       if(result == KLockFile::LockOK || result == KLockFile::LockStale) {
+          repoPath = specificDir;
+          if(result == KLockFile::LockStale)
+            kWarning() << "stale lock detected:" << specificDir + "/lock";
+          break;
+       }
     }
     
     if(repoPath.isEmpty()) {
