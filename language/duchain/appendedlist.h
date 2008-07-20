@@ -194,7 +194,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
 ///@todo Make these things a bit faster(less recursion)
 
 #define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
+                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
@@ -206,14 +206,14 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); predecessor ## CopyAllFrom(rhs); } \
-                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## Initialize(dynamic);  }  \
+                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## InitializeChain(dynamic);  }  \
                                                void name ## FreeChain() { name ## Free(); predecessor ## Free(); }
 
 #define END_APPENDED_LISTS(container, predecessor) /* Returns the size of the object containing the appended lists, including them */ \
                                       unsigned int completeSize() const { return classSize() + predecessor ## OffsetBehind(); } \
-                                     /* Compares all appended lists and returns true if they are equal */                \
+                                     /* Compares all local appended lists(not from base classes) and returns true if they are equal */                \
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
-                                     /* Copies all the lists from the given item. This item must be dynamic */   \
+                                     /* Copies all the local appended lists(not from base classes) from the given item.*/   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
                                       void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
                                       void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
