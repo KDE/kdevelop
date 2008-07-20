@@ -40,7 +40,7 @@
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class DVCSjob : public KDevelop::VcsJob
+class KDEVPLATFORMVCS_EXPORT DVCSjob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:

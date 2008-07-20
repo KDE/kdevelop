@@ -66,36 +66,26 @@ namespace KDevelop
 class HgExecutor : public QObject, public KDevelop::IDVCSexecutor
 {
     Q_OBJECT
-    public:
-        HgExecutor(KDevelop::IPlugin* parent = 0);
-        ~HgExecutor();
+public:
+    HgExecutor(KDevelop::IPlugin* parent = 0);
+    ~HgExecutor();
 
-        bool isValidDirectory(const KUrl &dirPath);
-        QString name() const;
+    bool isValidDirectory(const KUrl &dirPath);
+    QString name() const;
 
-        DVCSjob* init(const KUrl & directory);
-        DVCSjob* clone(const KUrl &directory, const KUrl repository);
-        DVCSjob* add(const QString& repository, const KUrl::List &files);
-        DVCSjob* commit(const QString& repository,
-                       const QString& message = "KDevelop didn't provide any message, it may be a bug",
-                       const KUrl::List& files = QStringList());
-        DVCSjob* remove(const QString& repository, const KUrl::List& files);
-        DVCSjob* status(const QString & repo, const KUrl::List & files,
-                       bool recursive=false, bool taginfo=false);
-/*        DVCSjob* is_inside_work_tree(const QString& repository);*/
-        DVCSjob* empty_cmd() const;
+    DVCSjob* init(const KUrl & directory);
+    DVCSjob* clone(const KUrl &directory, const KUrl repository);
+    DVCSjob* add(const QString& repository, const KUrl::List &files);
+    DVCSjob* commit(const QString& repository,
+                    const QString& message = "KDevelop didn't provide any message, it may be a bug",
+                    const KUrl::List& files = QStringList());
+    DVCSjob* remove(const QString& repository, const KUrl::List& files);
+    DVCSjob* status(const QString & repo, const KUrl::List & files,
+                    bool recursive=false, bool taginfo=false);
+    DVCSjob* empty_cmd() const;
 
-    private:
-        bool addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls);
-//         QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
-
-        enum RequestedOperation {
-            NormalOperation,
-            Init
-        };
-        bool prepareJob(DVCSjob* job, const QString& repository,
-                        enum RequestedOperation op = HgExecutor::NormalOperation);
-        KDevelop::IPlugin* vcsplugin;
+private:
+    KDevelop::IPlugin* vcsplugin;
 
 };
 

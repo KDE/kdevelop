@@ -59,5 +59,3 @@ void DVCSgenericOutputView::slotJobFinished(KJob * job)
         }
     }
 }
-
-// #include "cvsgenericoutputview.moc"

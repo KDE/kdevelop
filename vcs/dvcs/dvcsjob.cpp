@@ -165,6 +165,7 @@ void DVCSjob::cancel()
 
 void DVCSjob::slotProcessError( QProcess::ProcessError err )
 {
+    Q_UNUSED(err)
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
 
@@ -230,5 +231,3 @@ KDevelop::IPlugin* DVCSjob::vcsPlugin() const
 {
     return d->vcsplugin;
 }
-
-// #include "DVCSjob.moc"

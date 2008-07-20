@@ -60,14 +60,15 @@ bool HgExecutor::isValidDirectory(const KUrl & dirPath)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (job)
     {
-        job->clear();
-        *job << "hg";
-        *job << "root";
         QString path = dirPath.path();
         QFileInfo fsObject(path);
         if (fsObject.isFile())
             path = fsObject.path();
+
+        job->clear();
         job->setDirectory(path);
+        *job << "hg";
+        *job << "root";
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
@@ -78,70 +79,6 @@ bool HgExecutor::isValidDirectory(const KUrl & dirPath)
     kDebug(9500) << "Dir:" << dirPath.path() << " is not inside work tree of hg" ;
     return false;
 }
-
-bool HgExecutor::prepareJob(DVCSjob* job, const QString& repository, enum RequestedOperation op)
-{
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "hg clone" isValidDirectory() would fail as the
-    // directory is not yet under hg control
-    if (op == HgExecutor::NormalOperation &&
-        !isValidDirectory(repository)) {
-        kDebug(9500) << repository << " is not a valid hg repository";
-        return false;
-        }
-
-    // clear commands and args from a possible previous run
-    job->clear();
-
-    // setup the working directory for the new job
-    job->setDirectory(repository);
-
-    return true;
-}
-
-bool HgExecutor::addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls)
-{
-    QStringList args;
-
-    foreach(KUrl url, urls) {
-        ///@todo this is ok for now, but what if some of the urls are not
-        ///      to the given repository
-        QString file = KUrl::relativeUrl(repository + QDir::separator(), url);
-
-        args << KShell::quoteArg( file );
-    }
-
-    *job << args;
-
-    return true;
-}
-
-// QString HgExecutor::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
-// {
-//     QString str;
-// 
-//     switch (rev.revisionType())
-//     {
-//         case KDevelop::VcsRevision::Special:
-//             break;
-// 
-//         case KDevelop::VcsRevision::FileNumber:
-//             if (rev.revisionValue().isValid())
-//                 str = "-r"+rev.revisionValue().toString();
-//             break;
-// 
-//         case KDevelop::VcsRevision::Date:
-//             if (rev.revisionValue().isValid())
-//                 str = "-D"+rev.revisionValue().toString();
-//             break;
-// 
-//             case KDevelop::VcsRevision::GlobalNumber: // !! NOT SUPPORTED BY CVS !!
-//         default:
-//             break;
-//     }
-// 
-//     return str;
-// }
 
 DVCSjob* HgExecutor::init(const KUrl &directory)
 {
@@ -162,7 +99,6 @@ DVCSjob* HgExecutor::clone(const KUrl &repository, const KUrl directory)
         *job << "hg";
         *job << "clone";
         *job << repository.path();
-//         addFileList(job, repository.path(), directory); //TODO it's temp, should work only with local repos
         return job;
     }
     if (job) delete job;
@@ -175,7 +111,7 @@ DVCSjob* HgExecutor::add(const QString& repository, const KUrl::List &files)
     if (prepareJob(job, repository) ) {
         *job << "hg"; 
         *job << "add";
-        addFileList(job, repository, files);
+        addFileList(job, files);
 
         return job;
     }
@@ -186,9 +122,10 @@ DVCSjob* HgExecutor::add(const QString& repository, const KUrl::List &files)
 //TODO: hg doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
 DVCSjob* HgExecutor::commit(const QString& repository,
-                         const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
-                         const KUrl::List &files /*= QStringList("-a")*/)
+                            const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
+                            const KUrl::List &files /*= QStringList("-a")*/)
 {
+    Q_UNUSED(files)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "hg"; 
@@ -207,7 +144,7 @@ DVCSjob* HgExecutor::remove(const QString& repository, const KUrl::List &files)
     if (prepareJob(job, repository) ) {
         *job << "hg"; 
         *job << "rm";
-        addFileList(job, repository, files);
+        addFileList(job, files);
         return job;
     }
     if (job) delete job;
@@ -216,23 +153,19 @@ DVCSjob* HgExecutor::remove(const QString& repository, const KUrl::List &files)
 
 DVCSjob* HgExecutor::status(const QString & repository, const KUrl::List & files, bool recursive, bool taginfo)
 {
+    Q_UNUSED(recursive)
+    Q_UNUSED(taginfo)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "hg";
         *job << "status";
-        addFileList(job, repository, files);
+        addFileList(job, files);
 
         return job;
     }
     if (job) delete job;
     return NULL;
 }
-
-// DVCSjob* HgExecutor::is_inside_work_tree(const QString& repository)
-// {
-// 
-//     return NULL;
-// }
 
 DVCSjob* HgExecutor::empty_cmd() const
 {

@@ -62,6 +62,7 @@
 
 using KDevelop::DistributedVersionControlPlugin;
 
+
 //class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
     :IPlugin(compData, parent)
@@ -97,6 +98,7 @@ KDevelop::VcsJob*
                                              IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion)
+    ///TODO: why do we send localLocations twice? In most cases [0] is a repo pass and an dir item to add path
     return d->m_exec->add(localLocations[0].path(), localLocations);
 }
 
@@ -287,6 +289,15 @@ KDevelop::VcsJob*
     return d->m_exec->empty_cmd();
 }
 
+KDevelop::VcsJob* 
+        DistributedVersionControlPlugin::checkout(const QString &localLocation,
+                                                  const QString &repo)
+{
+    Q_UNUSED(localLocation)
+    Q_UNUSED(repo)
+    return d->m_exec->empty_cmd();
+}
+
 // End:  KDevelop::IDistributedVersionControl
 
 
@@ -323,6 +334,7 @@ KDevelop::ContextMenuExtension
         ProjectItemContext *itemCtx = dynamic_cast<ProjectItemContext*>(context);
         if( itemCtx )
         {
+            kDebug() << "itemCtx is true";
             QList<ProjectBaseItem *> baseItemList = itemCtx->items();
 
             // now general case
@@ -330,10 +342,12 @@ KDevelop::ContextMenuExtension
             {
                 if( _item->folder() ){
                     ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(_item);
+                    kDebug() << "folderItem->url() is assigned to ctxUrlList"<<folderItem->url();
                     ctxUrlList << folderItem->url();
                 }
                 else if( _item->file() ){
                     ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>(_item);
+                    kDebug() << "fileItem->url() is assigned to ctxUrlList"<<fileItem->url();
                     ctxUrlList << fileItem->url();
                 }
             }
@@ -380,6 +394,10 @@ KDevelop::ContextMenuExtension
 
         action = new KAction(i18n("Remove"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+        menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+
+        action = new KAction(i18n("Checkout"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
 
         action = new KAction(i18n("Status"), this);
@@ -479,6 +497,24 @@ void DistributedVersionControlPlugin::ctxRemove()
     job->start();
 }
 
+void DistributedVersionControlPlugin::ctxCheckout()
+{
+    CommitDialog dlg;
+    QString msg;
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        msg = dlg.message();
+    }
+    
+    //Todo: to not forget to move to the checkout()
+    DVCSjob* job = d->m_exec->checkout(d->m_ctxUrlList.first().path(), msg);
+    if (job) {
+        connect(job, SIGNAL(result(KJob*) ),
+                this, SIGNAL(jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
 void DistributedVersionControlPlugin::ctxLog()
 {
     VcsRevision rev;
@@ -524,5 +560,6 @@ QString KDevDVCSViewFactory::id() const
 {
          return "org.kdevelop.DVCSview";
 }
+
 
 #endif

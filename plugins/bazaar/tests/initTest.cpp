@@ -57,10 +57,10 @@ void BzrInitTest::initTestCase()
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
     if ( QFileInfo(BZRTEST_BASEDIR).exists() ) {
-        system("rm -rf "BZRTEST_BASEDIR"/*");
+        system("rm -rf "BZRTEST_BASEDIR);
     }
     if ( QFileInfo(BZRTEST_BASEDIR2).exists() ) {
-        system("rm -rf "BZRTEST_BASEDIR2"/*");
+        system("rm -rf "BZRTEST_BASEDIR2);
     }
 
     // Now create the basic directory structure
@@ -196,9 +196,9 @@ using namespace KDevelop;
 void BzrInitTest::testPlugin()
 {
 //     Core::initialize();
-    Core *core;
-    core->initialize();
-    IPluginController* controller = core->pluginController();
+//     Core *core;
+//     core->initialize();
+//     IPluginController* controller = core->pluginController();
 
 //     IPlugin* bzrPlugin = controller->loadPlugin(QString("kdevbzr"));
 //     QVERIFY(bzrPlugin);

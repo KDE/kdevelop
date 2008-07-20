@@ -21,14 +21,13 @@
 #ifndef IDVCS_EXECUTOR_H
 #define IDVCS_EXECUTOR_H
 
-#include <QStringList>
-
+#include<QStringList>
 #include <KUrl>
-#include <KJob>
 
-#include "dvcsjob.h"
+#include "../vcsexport.h"
 
-class QString;
+class KUrl;
+class DVCSjob;
 
 /**
  * This is a helper class for the LogView::parseOutput() method.
@@ -70,7 +69,7 @@ namespace KDevelop
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class IDVCSexecutor
+class KDEVPLATFORMVCS_EXPORT IDVCSexecutor
 {
 public:
     virtual ~IDVCSexecutor() {}
@@ -89,11 +88,7 @@ public:
                             bool recursive=false, bool taginfo=false) = 0;
 
     ///TODO: implement in Hg and Bazaar then make pure virtual
-    virtual DVCSjob* log(const KUrl& url) 
-    {
-        Q_UNUSED(url)
-        return 0;
-    }
+    virtual DVCSjob* log(const KUrl& url);
 
     /*    virtual DVCSjob* is_inside_work_tree(const QString& repository) = 0;*/
     virtual DVCSjob* empty_cmd() const = 0;
@@ -106,7 +101,17 @@ public:
      */
     ///TODO: should be pure virtual
     virtual void parseOutput(const QString& jobOutput,
-                        QList<DVCScommit>& revisions) const {}
+                             QList<DVCScommit>& revisions) const;
+    virtual DVCSjob* checkout(const QString &repository, const QString &branch);
+
+protected:
+    enum RequestedOperation {
+        NormalOperation,
+        Init
+    };
+    virtual bool prepareJob(DVCSjob* job, const QString& repository, 
+                            enum RequestedOperation op = NormalOperation);
+    static bool addFileList(DVCSjob* job, const KUrl::List& urls);
 
 };
 

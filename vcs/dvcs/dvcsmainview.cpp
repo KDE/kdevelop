@@ -92,5 +92,3 @@ void DVCSmainView::slotTabClose()
     if (tabwidget->count() <= 1)
         m_closeButton->setEnabled(false);
 }
-
-// #include "gitmainview.moc"

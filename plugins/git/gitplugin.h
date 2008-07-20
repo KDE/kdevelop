@@ -57,6 +57,9 @@ public:
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
                           const KDevelop::VcsRevision& limit);
+    //TODO: use KUrl for location!
+    KDevelop::VcsJob* checkout(const QString &localLocation,
+                               const QString &repo);
 
 };
 

@@ -14,29 +14,11 @@ include_directories( ${KDE4_INCLUDES}
 ########### next target ###############
 
 set(kdevhg_PART_SRCS
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsjob.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsplugin.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsmainview.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsgenericoutputview.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importdialog.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.cpp
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/logview.cpp
     hgplugin.cpp
     hgexecutor.cpp
 )
 
-set(kdevhg_PART_UI
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/commitdialog.ui
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsgenericoutputview.ui
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/cvsmainview.ui
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/importmetadatawidget.ui
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/logview.ui
-)
-
-kde4_add_ui_files(kdevhg_PART_SRCS ${kdevhg_PART_UI})
 kde4_add_plugin(kdevhg ${kdevhg_PART_SRCS})
-
 
 target_link_libraries(kdevhg
     ${KDE4_KDECORE_LIBS}

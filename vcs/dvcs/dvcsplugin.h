@@ -48,7 +48,7 @@ namespace KDevelop
 class VcsJob;
 class ContextMenuExtension;
 
-class DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
+class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
@@ -109,6 +109,8 @@ public:
                          const VcsLocation& localOrRepoLocationDst);
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation);
+    virtual VcsJob* checkout(const QString &localLocation,
+                               const QString &repo);
     // End:  KDevelop::IDistributedVersionControl
 
     IDVCSexecutor* proxy();
@@ -122,6 +124,7 @@ public slots:
     void ctxCommit();
     void ctxAdd();
     void ctxRemove();
+    void ctxCheckout();
     void ctxLog();
     void ctxStatus();
 

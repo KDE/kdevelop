@@ -29,7 +29,7 @@
 
 #include "dvcsplugin.h"
 #include "idvcsexecutor.h"
-#include <dvcsjob.h>
+#include "dvcsjob.h"
 
 #include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>

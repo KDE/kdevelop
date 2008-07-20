@@ -152,8 +152,14 @@ void GitInitTest::commitFiles()
     }
     f.flush();
 
-    //Since KJob uses delete later we don't care about deleting pld *j
-    j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit2"),KUrl::List(QStringList("-a")));
+    //add changes
+    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(GIT_TESTFILE_NAME)));
+    QVERIFY( j );
+
+    // try to start the job
+    QVERIFY( j->exec() );
+
+    j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit2"));
     QVERIFY( j );
 
     // try to start the job

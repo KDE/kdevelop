@@ -66,40 +66,32 @@ namespace KDevelop
 class GitExecutor : public QObject, public KDevelop::IDVCSexecutor
 {
     Q_OBJECT
-    public:
-        GitExecutor(KDevelop::IPlugin* parent = 0);
-        ~GitExecutor();
+public:
+    GitExecutor(KDevelop::IPlugin* parent = 0);
+    ~GitExecutor();
 
-        bool isValidDirectory(const KUrl &dirPath);
-        QString name() const;
+    bool isValidDirectory(const KUrl &dirPath);
+    QString name() const;
 
-        DVCSjob* init(const KUrl & directory);
-        DVCSjob* clone(const KUrl &directory, const KUrl repository);
-        DVCSjob* add(const QString& repository, const KUrl::List &files);
-        DVCSjob* commit(const QString& repository,
-                       const QString& message = "KDevelop didn't provide any message, it may be a bug",
-                       const KUrl::List& args = QStringList());
-        DVCSjob* remove(const QString& repository, const KUrl::List& files);
-        DVCSjob* status(const QString & repo, const KUrl::List & files,
-                       bool recursive=false, bool taginfo=false);
-        DVCSjob* log(const KUrl& url);
-/*        DVCSjob* is_inside_work_tree(const QString& repository);*/
-        DVCSjob* var(const QString &directory);
-        DVCSjob* empty_cmd() const;
+    DVCSjob* init(const KUrl & directory);
+    DVCSjob* clone(const KUrl &directory, const KUrl repository);
+    DVCSjob* add(const QString& repository, const KUrl::List &files);
+    DVCSjob* commit(const QString& repository,
+                    const QString& message = "KDevelop didn't provide any message, it may be a bug",
+                    const KUrl::List& args = QStringList());
+    DVCSjob* remove(const QString& repository, const KUrl::List& files);
+    DVCSjob* status(const QString & repo, const KUrl::List & files,
+                    bool recursive=false, bool taginfo=false);
+    DVCSjob* log(const KUrl& url);
+    DVCSjob* var(const QString &directory);
+    DVCSjob* empty_cmd() const;
 
-        void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
+    DVCSjob* checkout(const QString &repository, const QString &branch);
 
-    private:
-        bool addFileList(DVCSjob* job, const QString& repository, const KUrl::List& urls);
-//         QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
+    void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
 
-        enum RequestedOperation {
-            NormalOperation,
-            Init
-        };
-        bool prepareJob(DVCSjob* job, const QString& repository,
-                        enum RequestedOperation op = GitExecutor::NormalOperation);
-        KDevelop::IPlugin* vcsplugin;
+private:
+    KDevelop::IPlugin* vcsplugin;
 
 };
 
