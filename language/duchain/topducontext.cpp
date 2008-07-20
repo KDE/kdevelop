@@ -1111,12 +1111,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   }else{
     ENSURE_CAN_READ
   }
-  DeclarationId id;
-  if(declaration->topContext() == this)
-    //When it's within the same top-context, we make sure it's adressed directly
-    id = DeclarationId(IndexedDeclaration(declaration));
-  else
-    id = DeclarationId(declaration);
+  DeclarationId id(declaration->id());
 
   int index = -1;
   for(int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
