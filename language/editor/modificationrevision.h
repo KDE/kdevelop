@@ -56,7 +56,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 
   QString toString() const;
 
-  QDateTime modificationTime;  //On-disk modification-time of a document
+  uint modificationTime;  //On-disk modification-time of a document in time_t format
   int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
 };
 

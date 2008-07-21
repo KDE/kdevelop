@@ -77,7 +77,6 @@ QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
   fileModificationCache()[fileName].m_readTime = QDateTime::currentDateTime();
   fileModificationCache()[fileName].m_modificationTime = fileInfo.lastModified();
   return fileInfo.lastModified();
-
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName) {
@@ -101,7 +100,7 @@ ModificationRevision ModificationRevision::revisionForFile(const IndexedString& 
   return ret;
 }
 
-ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime), revision(revision_) {
+ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime.toTime_t()), revision(revision_) {
 }
 
 bool ModificationRevision::operator <( const ModificationRevision& rhs ) const {
@@ -117,7 +116,7 @@ bool ModificationRevision::operator !=( const ModificationRevision& rhs ) const 
 }
 
 QString ModificationRevision::toString() const {
-  return QString("%1 (rev %2)").arg(modificationTime.time().toString()).arg(revision);
+  return QString("%1 (rev %2)").arg(QDateTime::fromTime_t(modificationTime).time().toString()).arg(revision);
 }
 
 }
