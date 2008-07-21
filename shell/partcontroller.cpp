@@ -256,8 +256,11 @@ KParts::Part* PartController::createPart( const KUrl & url )
                                   0,
                                   this,
                                   className.toLatin1() );
-        readOnly( part ) ->openUrl( url );
-        return part;
+        if( part )
+        {
+            readOnly( part ) ->openUrl( url );
+            return part;
+        }
     }
 
     return 0;
