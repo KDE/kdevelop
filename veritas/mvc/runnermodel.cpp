@@ -358,6 +358,7 @@ void RunnerModel::allDone()
 bool RunnerModel::stopItems()
 {
     // TODO
+    return false;
 }
 
 bool RunnerModel::isRunning(unsigned long time) const
