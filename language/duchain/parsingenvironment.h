@@ -117,7 +117,7 @@ enum ParsingEnvironmentType
  *
  * \warning Access to this class must be serialized through du-chain locking
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment : public DUChainBase
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
 {
   public:
     ParsingEnvironment();
@@ -136,10 +136,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment : public DUChainBase
  *
  * \warning Access to this class must be serialized through du-chain locking
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, public KShared
 {
   public:
     virtual ~ParsingEnvironmentFile();
+    ParsingEnvironmentFile();
+    ParsingEnvironmentFile(DUChainBaseData& data);
 
     ///@see ParsingEnvironmentType
     virtual int type() const;

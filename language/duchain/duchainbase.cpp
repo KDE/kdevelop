@@ -33,6 +33,9 @@ uint DUChainBaseData::classSize() const {
   return DUChainItemSystem::self().dataClassSize(*this);
 }
 
+void DUChainBase::aboutToSave() {
+}
+
 DUChainBase::DUChainBase(const SimpleRange& range)
   : KDevelop::DocumentRangeObject(*new DUChainBaseData, range), m_ptr( 0L )
 {

@@ -95,13 +95,20 @@ IdentifiedFile::operator bool() const {
   return !isEmpty();
 }
 
-ParsingEnvironment::ParsingEnvironment() : DUChainBase(SimpleRange::invalid()) {
+ParsingEnvironment::ParsingEnvironment() {
 }
 
 ParsingEnvironment::~ParsingEnvironment() {
 }
 
+ParsingEnvironmentFile::ParsingEnvironmentFile() : DUChainBase(SimpleRange::invalid()) {
+}
+
+
 ParsingEnvironmentFile::~ParsingEnvironmentFile() {
+}
+
+ParsingEnvironmentFile::ParsingEnvironmentFile(DUChainBaseData& data) : DUChainBase(data) {
 }
 
 int ParsingEnvironment::type() const {
