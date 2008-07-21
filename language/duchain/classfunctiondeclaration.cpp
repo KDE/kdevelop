@@ -41,7 +41,7 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ClassMemberDeclaration::setAbstractType(type);
 }
 
-DEFINE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString);
+DEFINE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString)
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data) : ClassFunctionDeclarationBase(data)
 {

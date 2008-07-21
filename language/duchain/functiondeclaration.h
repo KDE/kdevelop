@@ -27,7 +27,7 @@
 
 namespace KDevelop
 {
-KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString)
 
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationData, public AbstractFunctionDeclarationData
 {

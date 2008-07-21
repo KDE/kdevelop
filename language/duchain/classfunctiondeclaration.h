@@ -37,7 +37,7 @@ struct QtFunctionEnumContainer {
   };
 };
 
-KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString)
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclarationData : public ClassMemberDeclarationData, public AbstractFunctionDeclarationData, public QtFunctionEnumContainer
 {

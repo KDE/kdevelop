@@ -28,7 +28,7 @@ namespace KDevelop
 
 REGISTER_DUCHAIN_ITEM(FunctionDeclaration);
 
-DEFINE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString);
+DEFINE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString)
 
 FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data) : FunctionDeclarationBase(data) {
 }

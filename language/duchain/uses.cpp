@@ -26,7 +26,7 @@
 
 namespace KDevelop {
 
-DEFINE_LIST_MEMBER_HASH(UsesItem, uses, IndexedTopDUContext);
+DEFINE_LIST_MEMBER_HASH(UsesItem, uses, IndexedTopDUContext)
   
 class UsesItem {
   public:

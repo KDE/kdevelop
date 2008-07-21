@@ -26,7 +26,7 @@
 
 namespace KDevelop {
 
-DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration);
+DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration)
   
 class DefinitionsItem {
   public:

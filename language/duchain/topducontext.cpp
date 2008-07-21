@@ -68,7 +68,7 @@ TopDUContext* IndexedTopDUContext::data() const {
     return 0;
 }
 
-DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId);
+DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
 class TopDUContext::CacheData {

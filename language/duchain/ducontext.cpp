@@ -71,11 +71,11 @@ bool removeOneImport(Container& container, const DUContext* value) {
   return false;
 }
 
-DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, IndexedDUContext);
-DEFINE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext);
-DEFINE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import);
-DEFINE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, IndexedDeclaration);
-DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use);
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, IndexedDUContext)
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext)
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import)
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, IndexedDeclaration)
+DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 REGISTER_DUCHAIN_ITEM(DUContext);
 

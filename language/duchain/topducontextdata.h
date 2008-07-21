@@ -28,7 +28,7 @@
 
 namespace KDevelop {
 
-KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId);
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
