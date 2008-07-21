@@ -1111,8 +1111,10 @@ Set BasicSetRepository::createSet(Index i) {
   return createSetFromRanges(ranges);
 }
 
-Set BasicSetRepository::createSet(const std::set<Index>& indices) {
-
+Set BasicSetRepository::createSet(const std::set<Index>& _indices) {
+  
+  std::set<Index> indices(_indices); //Create a copy to prevent strange problems
+  
   std::vector<Index> ranges;
 
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
