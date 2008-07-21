@@ -167,11 +167,11 @@ void CMakeDUChainTest::testUses()
     QCOMPARE(declarations.count(), 2);
     QVERIFY(declarations[0]->inSymbolTable());
     QVERIFY(declarations[1]->inSymbolTable());
-    QCOMPARE(ctx->uses().size(), 1);
+    QCOMPARE(ctx->usesCount(), 1);
 
-    if(ctx->uses().first().m_range.textRange() != SimpleRange(2,4,2,7).textRange())
-        kDebug() << ctx->uses().first().m_range.textRange();
-    QCOMPARE(ctx->uses().first().m_range.textRange(), SimpleRange(2,4,2,7).textRange());
+    if(ctx->uses()[0].m_range.textRange() != SimpleRange(2,4,2,7).textRange())
+        kDebug() << ctx->uses()[0].m_range.textRange();
+    QCOMPARE(ctx->uses()[0].m_range.textRange(), SimpleRange(2,4,2,7).textRange());
 
     QCOMPARE(ctx->range().end.column, 15);
     QCOMPARE(ctx->range().end.line, 2);
