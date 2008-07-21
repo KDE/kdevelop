@@ -44,14 +44,14 @@ using namespace Cpp;
 #define REGISTER_TEMPLATE_DECLARATION(Declaration) typedef SpecialTemplateDeclaration<Declaration> TheTemplate ## Declaration; \
 REGISTER_DUCHAIN_ITEM_WITH_DATA(TheTemplate ## Declaration, Declaration ## Data);
 
-REGISTER_TEMPLATE_DECLARATION(Declaration);
-REGISTER_TEMPLATE_DECLARATION(ClassDeclaration);
-REGISTER_TEMPLATE_DECLARATION(TemplateParameterDeclaration);
-REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration);
-REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration);
-REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration);
-REGISTER_TEMPLATE_DECLARATION(AliasDeclaration);
-REGISTER_TEMPLATE_DECLARATION(ForwardDeclaration);
+REGISTER_TEMPLATE_DECLARATION(Declaration)
+REGISTER_TEMPLATE_DECLARATION(ClassDeclaration)
+REGISTER_TEMPLATE_DECLARATION(TemplateParameterDeclaration)
+REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration)
+REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration)
+REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration)
+REGISTER_TEMPLATE_DECLARATION(AliasDeclaration)
+REGISTER_TEMPLATE_DECLARATION(ForwardDeclaration)
 
 QMutex TemplateDeclaration::instantiationsMutex(QMutex::Recursive);
 

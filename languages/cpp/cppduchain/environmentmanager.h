@@ -144,8 +144,8 @@ class EnvironmentManager;
 class MacroSet;
 typedef QPair<KDevelop::IndexedString, KDevelop::ModificationRevision> StringModificationPair;
 
-DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString);
-DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair);
+DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
+DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair)
 
 struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     EnvironmentFileData() {

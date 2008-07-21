@@ -58,8 +58,8 @@ using namespace Cpp;
 using namespace KDevelop;
 
 namespace Cpp {
-DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString);
-DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair);
+DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
+DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair)
 }
 
 REGISTER_DUCHAIN_ITEM(EnvironmentFile);
