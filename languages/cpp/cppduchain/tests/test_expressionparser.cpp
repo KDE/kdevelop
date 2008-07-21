@@ -663,8 +663,8 @@ void TestExpressionParser::testTypeConversion() {
   AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(testDecl);
   QVERIFY(functionDecl);
 
-  QVERIFY(functionDecl->defaultParameters().size() == 1);
-  QCOMPARE(functionDecl->defaultParameters()[0], QString("5"));
+  QVERIFY(functionDecl->defaultParametersSize() == 1);
+  QCOMPARE(functionDecl->defaultParameters()[0].str(), QString("5"));
 
   //QVERIFY(0);
   //lock.lock();
