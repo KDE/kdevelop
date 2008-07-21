@@ -14,6 +14,7 @@
 #define GREPOUTPUTMODEL_H
 
 #include <QStandardItemModel>
+#include <QRegExp>
 #include <ioutputviewmodel.h>
 class QModelIndex;
 
@@ -43,6 +44,8 @@ public:
     explicit GrepOutputModel( QObject *parent );
     ~GrepOutputModel();
 
+    void setRegExp(const QString& regExp);
+
     void activate( const QModelIndex &idx );
     QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
     QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
@@ -56,6 +59,8 @@ public Q_SLOTS:
 private:
 //     int m_matchCount;
     QString _lastfilename;
+    QRegExp m_regExp;
+    QString m_pattern;
 };
 
 #endif

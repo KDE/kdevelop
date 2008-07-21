@@ -61,7 +61,7 @@ QString GrepJob::patternString() const
 void GrepJob::setPatternString(const QString& patternString)
 {
     m_patternString = patternString;
-    
+
     setObjectName(i18n("Grep: %1", m_patternString));
 }
 
@@ -237,10 +237,13 @@ void GrepJob::start()
     setTitle(patternString());
     setBehaviours( KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose );
 
-    setModel(new GrepOutputModel(plugin()), KDevelop::IOutputView::TakeOwnership);
+    GrepOutputModel* grepModel = new GrepOutputModel(plugin());
+    grepModel->setRegExp(pattern);
+
+    setModel(grepModel, KDevelop::IOutputView::TakeOwnership);
     setDelegate(plugin()->delegate());
     startOutput();
-    
+
     m_lineMaker = new KDevelop::ProcessLineMaker( xargsProc );
 
     // Delete the tempfile when xargs process is destroyed
@@ -292,7 +295,7 @@ void GrepJob::slotFinished()
 {
     m_lineMaker->flushBuffers();
     model()->slotCompleted();
-    
+
     emitResult();
 }
 
@@ -305,7 +308,7 @@ void GrepJob::slotError(QProcess::ProcessError error)
     {
         proc->kill();
     }
-    
+
     setError(UserDefinedError);
     // TODO more informative error codes
     switch (error) {
@@ -328,7 +331,7 @@ void GrepJob::slotError(QProcess::ProcessError error)
             setErrorText(i18n("Unknown process error."));
             break;
     }
-    
+
     emitResult();
 }
 
@@ -346,7 +349,7 @@ bool GrepJob::doKill()
 {
     foreach (KProcess* p, m_processes)
         p->close();
-    
+
     return true;
 }
 

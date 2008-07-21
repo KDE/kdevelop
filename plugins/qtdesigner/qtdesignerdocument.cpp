@@ -194,6 +194,10 @@ void QtDesignerDocument::setCursorPosition(const KTextEditor::Cursor&)
     return;
 }
 
+void QtDesignerDocument::setTextSelection(const KTextEditor::Range &)
+{
+}
+
 void QtDesignerDocument::activate(Sublime::View* view, KParts::MainWindow*)
 {
     m_designerPlugin->designer()->formWindowManager()->setActiveFormWindow( m_form );

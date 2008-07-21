@@ -15,6 +15,7 @@
 #include <QModelIndex>
 #include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
+#include <ktexteditor/document.h>
 #include <icore.h>
 #include <idocumentcontroller.h>
 
@@ -55,8 +56,28 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if( !grepitem )
         return;
 
-    KTextEditor::Cursor range( grepitem->m_lineNumber.toInt() - 1, 0 );
-    ICore::self()->documentController()->openDocument( KUrl(grepitem->m_fileName), range );
+    KUrl url(grepitem->m_fileName);
+
+    int line = grepitem->m_lineNumber.toInt() - 1;
+    KTextEditor::Range range( line, 0, line+1, 0);
+
+    // Try to find the actual text range we found during the grep
+    if (IDocument* doc = ICore::self()->documentController()->documentForUrl( url )) {
+        KTextEditor::Range currentSelection = doc->textSelection();
+        if (KTextEditor::Document* tdoc = doc->textDocument()) {
+            QString text = tdoc->text( range );
+            if (m_regExp.isEmpty())
+                m_regExp.setPattern(m_pattern);
+            int index = m_regExp.indexIn(text);
+            if (index != -1)
+                range = KTextEditor::Range(line, index, line, index + m_regExp.matchedLength());
+        }
+
+        ICore::self()->documentController()->activateDocument( doc, range );
+
+    } else {
+        ICore::self()->documentController()->openDocument( url, range );
+    }
 }
 
 QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex& currentIndex )
@@ -156,6 +177,11 @@ void GrepOutputModel::slotCompleted()
 void GrepOutputModel::slotFailed()
 {
     appendRow( new QStandardItem( "Failed" ) );
+}
+
+void GrepOutputModel::setRegExp(const QString& regExp)
+{
+    m_pattern = regExp;
 }
 
 #include "grepoutputmodel.moc"
