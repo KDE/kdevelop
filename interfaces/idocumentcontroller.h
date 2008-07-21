@@ -23,6 +23,7 @@
 
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
+#include <ktexteditor/range.h>
 
 #include "interfacesexport.h"
 
@@ -70,7 +71,7 @@ public:
     @return The active document.*/
     Q_SCRIPTABLE virtual KDevelop::IDocument* activeDocument() const = 0;
 
-    Q_SCRIPTABLE virtual void activateDocument( KDevelop::IDocument * document ) = 0;
+    Q_SCRIPTABLE virtual void activateDocument( KDevelop::IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) = 0;
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
@@ -85,8 +86,16 @@ public Q_SLOTS:
     @param url The full Url of the document to open.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
+    KDevelop::IDocument* openDocument( const KUrl &url,
+            const KTextEditor::Cursor& cursor,
+            DocumentActivationParams activationParams = 0 );
+
+    /**Opens a new or existing document.
+    @param url The full Url of the document to open.
+    @param range The range of text to select, if applicable.
+    @param activate Indicates whether to fully activate the document.*/
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
-            const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
+            const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0 ) = 0;
 
     virtual void closeAllDocuments() = 0;

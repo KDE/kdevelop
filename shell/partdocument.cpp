@@ -122,7 +122,7 @@ bool PartDocument::close(DocumentSaveMode mode)
 
     //close all views and then delete ourself
     ///@todo test this
-    foreach (Sublime::Area *area, 
+    foreach (Sublime::Area *area,
              Core::self()->uiControllerInternal()->allAreas())
     {
         QList<Sublime::View*> areaViews = area->views();
@@ -173,6 +173,11 @@ void PartDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
     //do nothing here
     Q_UNUSED(cursor);
+}
+
+void PartDocument::setTextSelection(const KTextEditor::Range &range)
+{
+    Q_UNUSED(range);
 }
 
 KUrl PartDocument::url() const

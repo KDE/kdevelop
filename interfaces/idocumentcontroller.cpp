@@ -25,6 +25,13 @@ IDocumentController::IDocumentController(QObject *parent)
 {
 }
 
+KDevelop::IDocument* IDocumentController::openDocument( const KUrl &url,
+        const KTextEditor::Cursor& cursor,
+        DocumentActivationParams activationParams )
+{
+    return openDocument(url, cursor.isValid() ? KTextEditor::Range(cursor, 0) : KTextEditor::Range::invalid(), activationParams);
+}
+
 }
 
 #include "idocumentcontroller.moc"

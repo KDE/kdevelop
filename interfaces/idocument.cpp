@@ -94,5 +94,10 @@ void IDocument::notifyTextDocumentCreated()
     emit core()->documentController()->textDocumentCreated(this);
 }
 
+KTextEditor::Range IDocument::textSelection() const
+{
+    return KTextEditor::Range::invalid();
+}
+
 }
 

@@ -79,7 +79,7 @@ public:
     @return The active document.*/
     virtual IDocument* activeDocument() const;
 
-    virtual void activateDocument( IDocument * document );
+    virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() );
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
 
@@ -99,13 +99,15 @@ public:
 
     QString documentType(Sublime::Document* document) const;
 
+    using IDocumentController::openDocument;
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
     @param range The location information, if applicable.
     @param activate Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
-            const KTextEditor::Cursor& range = KTextEditor::Cursor::invalid(),
+            const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0);
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );

@@ -54,6 +54,9 @@ public:
     virtual KTextEditor::Cursor cursorPosition() const;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
+    virtual KTextEditor::Range textSelection() const;
+    virtual void setTextSelection(const KTextEditor::Range &range);
+
     virtual bool isTextDocument() const;
     virtual KTextEditor::Document* textDocument() const;
 

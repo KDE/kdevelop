@@ -320,17 +320,40 @@ KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
 
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
-    if (cursor.line() < 0)
-        return ;
+    if (!cursor.isValid())
+        return;
 
     KTextEditor::View *view = d->document->activeView();
 
-    KTextEditor::Cursor c = cursor;
-    if (c.column() == 1)
-        c.setColumn(0);
+    // Rodda: Cursor must be accurate here, to the definition of accurate for KTextEditor::Cursor.
+    // ie, starting from 0,0
 
     if (view)
-        view->setCursorPosition(c);
+        view->setCursorPosition(cursor);
+}
+
+KTextEditor::Range TextDocument::textSelection() const
+{
+    KTextEditor::View *view = d->document->activeView();
+
+    if (view && view->selection()) {
+        return view->selectionRange();
+    }
+
+    return PartDocument::textSelection();
+}
+
+void TextDocument::setTextSelection(const KTextEditor::Range &range)
+{
+    if (!range.isValid())
+        return;
+
+    KTextEditor::View *view = d->document->activeView();
+
+    if (view) {
+        view->setCursorPosition(range.start());
+        view->setSelection( range );
+    }
 }
 
 bool TextDocument::close(DocumentSaveMode mode)

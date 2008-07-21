@@ -238,7 +238,7 @@ IDocument* DocumentController::openDocumentFromText( const QString& data )
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
-        const KTextEditor::Cursor& cursor,
+        const KTextEditor::Range& range,
         DocumentActivationParams activationParams)
 {
     UiController *uiController = Core::self()->uiControllerInternal();
@@ -363,9 +363,14 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         }
         d->fileOpenRecent->addUrl( url );
     }
-    if( cursor.isValid() )
+
+    kDebug(0) << range;
+    if( range.isValid() )
     {
-        doc->setCursorPosition( cursor );
+        if (range.isEmpty())
+            doc->setCursorPosition( range.start() );
+        else
+            doc->setTextSelection( range );
     }
 
     // Deferred signals, wait until it's all ready first
@@ -462,9 +467,10 @@ QList<IDocument*> DocumentController::openDocuments() const
     return opened;
 }
 
-void DocumentController::activateDocument( IDocument * document )
+void DocumentController::activateDocument( IDocument * document, const KTextEditor::Range& range )
 {
-    openDocument(document->url());
+    // TODO avoid some code in openDocument?
+    openDocument(document->url(), range);
 }
 
 void DocumentController::slotSaveAllDocuments()

@@ -62,6 +62,7 @@ public:
 
     virtual KTextEditor::Cursor cursorPosition() const;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
+    virtual void setTextSelection(const KTextEditor::Range &range);
 
 private:
     class PartDocumentPrivate * const d;

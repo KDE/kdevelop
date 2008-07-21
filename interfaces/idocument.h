@@ -134,6 +134,20 @@ public:
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor) = 0;
 
     /**
+     * Retrieve the current text selection, if one exists.
+     *
+     * \returns the current text selection
+     */
+    virtual KTextEditor::Range textSelection() const;
+
+    /**
+     * Set the current text selection, if possible.
+     *
+     * \param cursor new cursor position.
+     */
+    virtual void setTextSelection(const KTextEditor::Range &range) = 0;
+
+    /**
      * Performs document activation actions if any.
      * This needs to call notifyActivated()
      */
