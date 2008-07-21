@@ -55,6 +55,19 @@ namespace std {
 namespace KDevelop
 {
 
+IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
+  if(context)
+    m_index = context->ownIndex();
+  else
+    m_index = 0;
+}
+TopDUContext* IndexedTopDUContext::data() const {
+  if(m_index)
+    return DUChain::self()->chainForIndex(m_index);
+  else
+    return 0;
+}
+
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId);
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 

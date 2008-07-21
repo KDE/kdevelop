@@ -58,8 +58,7 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(Core)
 
-// Prealloc = 256 by default, specified in qcontainerfwd.h
-template<class T, int Prealloc>
+template<class T, int Prealloc = 256>
 class KDevVarLengthArray
 {
 public:

@@ -42,6 +42,22 @@ namespace KDevelop
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
 
   typedef KSharedPtr<Problem> ProblemPointer;
+
+///Allows simple indirect access to top-contexts with on-demand loading
+class IndexedTopDUContext {
+  public:
+    IndexedTopDUContext(TopDUContext* context = 0);
+    TopDUContext* data() const;
+    bool operator==(const IndexedTopDUContext& rhs) const {
+      return m_index == rhs.m_index;
+    }
+    bool operator!=(const IndexedTopDUContext& rhs) const {
+      return m_index != rhs.m_index;
+    }
+  private:
+  uint m_index;
+};
+
 /**
  * The top context in a definition-use chain for one source file.
  *

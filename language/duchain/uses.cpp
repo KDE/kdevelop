@@ -19,13 +19,86 @@
 #include "uses.h"
 #include "declarationid.h"
 #include "duchainpointer.h"
+#include "repositories/itemrepository.h"
+#include "topducontext.h"
 #include <QHash>
 #include <QVector>
 
 namespace KDevelop {
 
+DEFINE_LIST_MEMBER_HASH(UsesItem, uses, IndexedTopDUContext);
+  
+class UsesItem {
+  public:
+  UsesItem() {
+    initializeAppendedLists();
+  }
+  UsesItem(const UsesItem& rhs) : declaration(rhs.declaration) {
+    initializeAppendedLists();
+    copyListsFrom(rhs);
+  }
+  
+  ~UsesItem() {
+    freeAppendedLists();
+  }
+  
+  unsigned int hash() const {
+    //We only compare the declaration. This allows us implementing a map, although the item-repository
+    //originally represents a set.
+    return declaration.hash();
+  }
+  
+  unsigned short int itemSize() const {
+    return dynamicSize();
+  }
+  
+  uint classSize() const {
+    return sizeof(UsesItem);
+  }
+  
+  DeclarationId declaration;
+  
+  START_APPENDED_LISTS(UsesItem);
+  APPENDED_LIST_FIRST(UsesItem, IndexedTopDUContext, uses);
+  END_APPENDED_LISTS(UsesItem, uses);
+};
+
+class UsesRequestItem {
+  public:
+  
+  UsesRequestItem(const UsesItem& item) : m_item(item) {
+  }
+  enum {
+    AverageSize = 30 //This should be the approximate average size of an Item
+  };
+
+  unsigned int hash() const {
+    return m_item.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_item.itemSize();
+  }
+
+  void createItem(UsesItem* item) const {
+    item->initializeAppendedLists(false);
+    item->declaration = m_item.declaration;
+    item->copyListsFrom(m_item);
+  }
+  
+  bool equals(const UsesItem* item) const {
+    return m_item.declaration == item->declaration;
+  }
+  
+  const UsesItem& m_item;
+};
+
+
 struct UsesPrivate {
-  QHash<DeclarationId, QList<TopDUContext*> > m_uses;
+  UsesPrivate() : m_uses("Use Map") {
+  }
+  //Maps declaration-ids to Uses
+  ItemRepository<UsesItem, UsesRequestItem> m_uses;
 };
 
 Uses::Uses() : d(new UsesPrivate())
@@ -37,31 +110,72 @@ Uses::~Uses()
   delete d;
 }
 
-///Assigns @param use to the given @param id.
-void Uses::addUse(const DeclarationId& id, TopDUContext* use)
+void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {
-    QList<TopDUContext*>& l(d->m_uses[id]);
-
-    if(!l.contains(use))
-      l.append(use);
-}
-
-void Uses::removeUse(const DeclarationId& id, TopDUContext* use)
-{
-    QList<TopDUContext*>& l(d->m_uses[id]);
-
-    l.removeAll(use);
-}
-
-///Gets the use assigned to @param id, or zero.
-QList<TopDUContext*> Uses::uses(const DeclarationId& id) const
-{
-  QHash<DeclarationId, QList<TopDUContext*> >::const_iterator it = d->m_uses.find(id);
-  if(it != d->m_uses.end()) {
-    return (*it);
-  }else{
-    return QList<TopDUContext*>();
+  UsesItem item;
+  item.declaration = id;
+  item.usesList().append(use);
+  UsesRequestItem request(item);
+  
+  uint index = d->m_uses.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
+    for(int a = 0; a < oldItem->usesSize(); ++a) {
+      if(oldItem->uses()[a] == use)
+        return; //Already there
+      item.usesList().append(oldItem->uses()[a]);
+    }
+    
+    d->m_uses.deleteItem(index);
   }
+
+  //This inserts the changed item
+  d->m_uses.index(request);
+}
+
+void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
+{
+  UsesItem item;
+  item.declaration = id;
+  UsesRequestItem request(item);
+  
+  uint index = d->m_uses.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
+    for(int a = 0; a < oldItem->usesSize(); ++a)
+      if(!(oldItem->uses()[a] == use))
+        item.usesList().append(oldItem->uses()[a]);
+    
+    d->m_uses.deleteItem(index);
+    Q_ASSERT(d->m_uses.findIndex(item) == 0);
+    
+    //This inserts the changed item
+    if(item.usesSize() != 0)
+      d->m_uses.index(request);
+  }
+}
+
+KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) const
+{
+  KDevVarLengthArray<IndexedTopDUContext> ret;
+
+  UsesItem item;
+  item.declaration = id;
+  UsesRequestItem request(item);
+  
+  uint index = d->m_uses.findIndex(item);
+  
+  if(index) {
+    const UsesItem* repositoryItem = d->m_uses.itemFromIndex(index);
+    FOREACH_FUNCTION(IndexedTopDUContext decl, repositoryItem->uses)
+      ret.append(decl);
+  }
+  
+  return ret;
 }
 
 

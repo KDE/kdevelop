@@ -598,11 +598,14 @@ QList<KTextEditor::SmartRange*> Declaration::smartUses() const
       tempUses.insert(range);
   }
 
-  QList<TopDUContext*> useContexts = DUChain::uses()->uses(id());
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  foreach(TopDUContext* context, useContexts) {
-    foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
-      tempUses.insert(range);
+  FOREACH_ARRAY(IndexedTopDUContext indexedContext, useContexts) {
+    TopDUContext* context = indexedContext.data();
+    if(context) {
+      foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
+        tempUses.insert(range);
+    }
   }
 
   return tempUses.toList();
@@ -620,12 +623,15 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
       ranges[range] = true;
   }
 
-  QList<TopDUContext*> useContexts = DUChain::uses()->uses(id());
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  foreach(TopDUContext* context, useContexts) {
-    QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
-    foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
-      ranges[range] = true;
+  FOREACH_ARRAY(IndexedTopDUContext indexedContext, useContexts) {
+    TopDUContext* context = indexedContext.data();
+    if(context) {
+      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
+      foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+        ranges[range] = true;
+    }
   }
 
   QMap<IndexedString, QList<SimpleRange> > ret;

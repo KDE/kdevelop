@@ -23,12 +23,11 @@
 #include "language/languageexport.h"
 #include "language/duchain/declarationid.h"
 
+
 namespace KDevelop {
 
-  class Declaration;
   class DeclarationId;
-  class Use;
-  class TopDUContext;
+  class IndexedTopDUContext;
 
 /**
  * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
@@ -44,14 +43,14 @@ namespace KDevelop {
     /**
      * Adds a top-context to the users-list of the given id
      * */
-    void addUse(const DeclarationId& id, TopDUContext* topContext);
+    void addUse(const DeclarationId& id, const IndexedTopDUContext& use);
     /**
      * Removes the given top-context from the list of uses
      * */
-    void removeUse(const DeclarationId& id, TopDUContext* topContext);
+    void removeUse(const DeclarationId& id, const IndexedTopDUContext& use);
 
-    ///Gets the users assigned to the declaration-id
-    QList<TopDUContext*> uses(const DeclarationId& id) const;
+    ///Gets the top-contexts of all users assigned to the declaration-id
+    KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;
 
     private:
       class UsesPrivate* d;
