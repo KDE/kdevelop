@@ -50,7 +50,8 @@ kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
 kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
-    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KPARTS_LIBS}
     kdevplatformutil
     kdevplatforminterfaces
     kdevplatformvcs

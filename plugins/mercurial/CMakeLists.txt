@@ -21,7 +21,7 @@ set(kdevhg_PART_SRCS
 kde4_add_plugin(kdevhg ${kdevhg_PART_SRCS})
 
 target_link_libraries(kdevhg
-    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
     kdevplatformutil
     kdevplatforminterfaces
     kdevplatformvcs

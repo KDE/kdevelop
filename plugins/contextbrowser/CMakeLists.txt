@@ -19,7 +19,7 @@ set(kdevcontextbrowser_PART_SRCS
 )
 
 kde4_add_plugin(kdevcontextbrowser ${kdevcontextbrowser_PART_SRCS})
-target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage)
+target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kdevcontextbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcontextbrowser)

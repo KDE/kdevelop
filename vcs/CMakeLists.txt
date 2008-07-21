@@ -46,7 +46,8 @@ set(kdevplatformvcs_LIB_SRCS
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
 target_link_libraries(kdevplatformvcs 
-    ${KDE4_KDEUI_LIBS} 
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KPARTS_LIBS}
     kdevplatforminterfaces 
     kdevplatformutil
     kdevplatformproject

@@ -16,7 +16,7 @@ set(kdevexecute_PART_SRCS
 )
 
 kde4_add_plugin(kdevexecute ${kdevexecute_PART_SRCS})
-target_link_libraries(kdevexecute kdevplatforminterfaces kdevplatformutil)
+target_link_libraries(kdevexecute ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformutil)
 
 install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -15,7 +15,7 @@ set(kdevgenericmanager_PART_SRCS
 )
 
 kde4_add_plugin(kdevgenericmanager ${kdevgenericmanager_PART_SRCS})
-target_link_libraries(kdevgenericmanager ${KDE4_KDECORE_LIBS} kdevplatforminterfaces kdevplatformproject )
+target_link_libraries(kdevgenericmanager ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformproject )
 
 install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
@@ -38,7 +38,7 @@ set( genericprojectmanagersettings_cfg_UI
 kde4_add_ui_files( genericprojectmanagersettings_cfg_SRCS ${genericprojectmanagersettings_cfg_UI} )
 kde4_add_kcfg_files( genericprojectmanagersettings_cfg_SRCS genericprojectmanagersettings.kcfgc )
 kde4_add_plugin( kcm_kdev_genericprojectmanagersettings ${genericprojectmanagersettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_genericprojectmanagersettings ${KDE4_KUTILS_LIBS} kdevplatformshell kdevplatformutil)
+target_link_libraries( kcm_kdev_genericprojectmanagersettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformproject kdevplatformshell kdevplatformutil)
 
 install( TARGETS kcm_kdev_genericprojectmanagersettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_genericprojectmanagersettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

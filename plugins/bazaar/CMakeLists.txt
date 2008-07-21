@@ -22,7 +22,7 @@ kde4_add_plugin(kdevbzr ${kdevbzr_PART_SRCS})
 
 
 target_link_libraries(kdevbzr
-    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
     kdevplatformutil
     kdevplatforminterfaces
     kdevplatformvcs
