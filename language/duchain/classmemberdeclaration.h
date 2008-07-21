@@ -79,7 +79,6 @@ public:
 protected:
   ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range);
   
-private:
   DUCHAIN_DECLARE_DATA(ClassMemberDeclaration)
 };
 }

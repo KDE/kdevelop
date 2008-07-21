@@ -27,21 +27,34 @@
 
 namespace KDevelop
 {
-class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationData
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString);
+
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationData, public AbstractFunctionDeclarationData
 {
   public:
     FunctionDeclarationData()
     {
+      initializeAppendedLists();
     }
     FunctionDeclarationData( const FunctionDeclarationData& rhs )
-      :DeclarationData( rhs )
+      :DeclarationData( rhs ), AbstractFunctionDeclarationData(rhs)
     {
+      initializeAppendedLists();
     }
+    ~FunctionDeclarationData()
+    {
+      freeAppendedLists();
+    }
+
+    START_APPENDED_LISTS_BASE(FunctionDeclarationData, DeclarationData);
+    APPENDED_LIST_FIRST(FunctionDeclarationData, IndexedString, m_defaultParameters);
+    END_APPENDED_LISTS(FunctionDeclarationData, m_defaultParameters);
 };
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public Declaration, public AbstractFunctionDeclaration
+typedef MergeAbstractFunctionDeclaration<Declaration, FunctionDeclarationData> FunctionDeclarationBase;
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public FunctionDeclarationBase
 {
 public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
@@ -59,12 +72,18 @@ public:
   
   virtual uint additionalIdentity() const;
   
+  virtual const IndexedString* defaultParameters() const;
+  virtual int defaultParametersSize() const;
+  virtual void addDefaultParameter(const IndexedString& str);
+  virtual void clearDefaultParameters();
+  
   enum {
     Identity = 12
   };
   
   typedef Declaration Base;
 private:
+  
   DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 }

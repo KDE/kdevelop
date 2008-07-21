@@ -475,13 +475,13 @@ protected:
     */
   Declaration( DeclarationData & dd, const SimpleRange& range );
 
+  DUCHAIN_DECLARE_DATA(Declaration)
 private:
   friend class IndexedDeclaration;
   friend class TopDUContextDynamicData;
   DUContext* m_context;
   TopDUContext* m_topContext;
   int m_indexInTopContext;
-  DUCHAIN_DECLARE_DATA(Declaration)
 };
 
 }

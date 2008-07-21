@@ -21,20 +21,28 @@
 
 #include <QtCore/QString>
 #include "language/languageexport.h"
+#include "indexedstring.h"
 
 namespace KDevelop
 {
 
-class AbstractFunctionDeclarationPrivate;
+class AbstractFunctionDeclarationData
+{
+public:
+  AbstractFunctionDeclarationData() : m_isVirtual(false), m_isInline(false), m_isExplicit(false) {
+  }
+  bool m_isVirtual: 1;
+  bool m_isInline: 1;
+  bool m_isExplicit: 1;
+};
 
 /**
  * Provides an interface to declarations which represent functions in a definition-use chain.
+ * Don't inherit from this directly, use MergeAbstractFunctionDeclaration instead.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractFunctionDeclaration
 {
 public:
-  AbstractFunctionDeclaration();
-  AbstractFunctionDeclaration(const AbstractFunctionDeclaration& rhs);
   virtual ~AbstractFunctionDeclaration();
 
   enum FunctionSpecifier {
@@ -56,7 +64,7 @@ public:
   ///Only used for class-member function declarations(see ClassFunctionDeclaration)
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
-
+  
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned list will only contain default-values for those
@@ -64,14 +72,41 @@ public:
    *
    * So the list may be empty or smaller than the list of function-arguments.
    * */
-  const QList<QString>& defaultParameters() const;
+  virtual const IndexedString* defaultParameters() const = 0;
+  virtual int defaultParametersSize() const = 0;
+  virtual void addDefaultParameter(const IndexedString& str) = 0;
+  virtual void clearDefaultParameters()  = 0;
+private:
+  //Must be implemented by sub-classes to provide a pointer to the data
+  virtual const AbstractFunctionDeclarationData* data() const = 0;
+  virtual AbstractFunctionDeclarationData* dynamicData() = 0;
+};
 
-  void addDefaultParameter(const QString& str);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers)
+
+///Use this to merge AbstractFunctionDeclaration into the class hierarchy. Base must be the base-class
+///in the hierarchy, and Data must be the Data class of the following Declaration, and must be based on AbstractFunctionDeclarationData
+///and BaseData.
+template<class Base, class Data>
+class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDeclaration {
+  public:
+  template<class BaseData>
+  MergeAbstractFunctionDeclaration(BaseData& data) : Base(data) {
+  }
+  template<class BaseData, class Arg2>
+  MergeAbstractFunctionDeclaration(BaseData& data, const Arg2& arg2) : Base(data, arg2) {
+  }
+  template<class BaseData, class Arg2, class Arg3>
+  MergeAbstractFunctionDeclaration(BaseData& data, const Arg2& arg2, const Arg3& arg3) : Base(data, arg2, arg3) {
+  }
   
-  void clearDefaultParameters() ;
-
   private:
-    AbstractFunctionDeclarationPrivate* const d;
+  virtual const AbstractFunctionDeclarationData* data() const {
+    return static_cast<const Data*>(Base::d_func());
+  }
+  virtual AbstractFunctionDeclarationData* dynamicData() {
+    return static_cast<Data*>(Base::d_func_dynamic());
+  }
 };
 
 }

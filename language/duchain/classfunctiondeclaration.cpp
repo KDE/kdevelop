@@ -31,8 +31,7 @@ Identifier conversionIdentifier("operator{...cast...}");
 REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs)
-    : ClassMemberDeclaration(*new ClassFunctionDeclarationData( *rhs.d_func() ))
-      , AbstractFunctionDeclaration(rhs) {
+    : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
@@ -42,12 +41,14 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ClassMemberDeclaration::setAbstractType(type);
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data) : ClassMemberDeclaration(data)
+DEFINE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString);
+
+ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data) : ClassFunctionDeclarationBase(data)
 {
 }
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUContext* context)
-  : ClassMemberDeclaration(*new ClassFunctionDeclarationData, range), AbstractFunctionDeclaration()
+  : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
   if( context )
@@ -142,6 +143,26 @@ uint ClassFunctionDeclaration::additionalIdentity() const
     return abstractType()->hash();
   else
     return 0;
+}
+
+const IndexedString* ClassFunctionDeclaration::defaultParameters() const
+{
+  return d_func()->m_defaultParameters();
+}
+
+int ClassFunctionDeclaration::defaultParametersSize() const
+{
+  return d_func()->m_defaultParametersSize();
+}
+
+void ClassFunctionDeclaration::addDefaultParameter(const IndexedString& str)
+{
+  d_func_dynamic()->m_defaultParametersList().append(str);
+}
+
+void ClassFunctionDeclaration::clearDefaultParameters()
+{
+  d_func_dynamic()->m_defaultParametersList().clear();
 }
 
 }

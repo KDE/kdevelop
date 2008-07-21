@@ -28,15 +28,17 @@ namespace KDevelop
 
 REGISTER_DUCHAIN_ITEM(FunctionDeclaration);
 
-FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data) : Declaration(data) {
+DEFINE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString);
+
+FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data) : FunctionDeclarationBase(data) {
 }
 
-FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : Declaration(*new FunctionDeclarationData( *rhs.d_func() )), AbstractFunctionDeclaration(rhs) {
+FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : FunctionDeclarationBase(*new FunctionDeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 FunctionDeclaration::FunctionDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new FunctionDeclarationData, range)
+  : FunctionDeclarationBase(*new FunctionDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
   if( context )
@@ -78,6 +80,26 @@ uint FunctionDeclaration::additionalIdentity() const
     return abstractType()->hash();
   else
     return 0;
+}
+
+const IndexedString* FunctionDeclaration::defaultParameters() const
+{
+  return d_func()->m_defaultParameters();
+}
+
+int FunctionDeclaration::defaultParametersSize() const
+{
+  return d_func()->m_defaultParametersSize();
+}
+
+void FunctionDeclaration::addDefaultParameter(const IndexedString& str)
+{
+  d_func_dynamic()->m_defaultParametersList().append(str);
+}
+
+void FunctionDeclaration::clearDefaultParameters()
+{
+  d_func_dynamic()->m_defaultParametersList().clear();
 }
 
 }

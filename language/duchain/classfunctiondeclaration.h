@@ -37,23 +37,34 @@ struct QtFunctionEnumContainer {
   };
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclarationData : public ClassMemberDeclarationData, public QtFunctionEnumContainer
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString);
+
+class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclarationData : public ClassMemberDeclarationData, public AbstractFunctionDeclarationData, public QtFunctionEnumContainer
 {
 public:
   ClassFunctionDeclarationData() {
+    initializeAppendedLists();
     m_functionType = Normal;
   }
   ClassFunctionDeclarationData( const ClassFunctionDeclarationData& rhs )
-      : ClassMemberDeclarationData( rhs )
+      : ClassMemberDeclarationData( rhs ), AbstractFunctionDeclarationData(rhs)
   {
+    initializeAppendedLists();
     m_functionType = rhs.m_functionType;
   }
+  ~ClassFunctionDeclarationData() {
+    freeAppendedLists();
+  }
   QtFunctionType m_functionType;
+  START_APPENDED_LISTS_BASE(ClassFunctionDeclarationData, ClassMemberDeclarationData);
+  APPENDED_LIST_FIRST(ClassFunctionDeclarationData, IndexedString, m_defaultParameters);
+  END_APPENDED_LISTS(ClassFunctionDeclarationData, m_defaultParameters);
 };
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassMemberDeclaration, public AbstractFunctionDeclaration, public QtFunctionEnumContainer
+typedef MergeAbstractFunctionDeclaration<ClassMemberDeclaration, ClassFunctionDeclarationData> ClassFunctionDeclarationBase;
+class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassFunctionDeclarationBase, public QtFunctionEnumContainer
 {
 public:
   ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
@@ -66,7 +77,6 @@ public:
   bool isConstructor() const;
   bool isDestructor() const;
   bool isConversionFunction() const;
-//  bool isExternalDefinition() const; //Whether this declaration is an external definition of a class-member(Mainly for C++)
 
   bool isFunctionDeclaration() const;
 
@@ -80,6 +90,11 @@ public:
   
   virtual uint additionalIdentity() const;
   
+  virtual const IndexedString* defaultParameters() const;
+  virtual int defaultParametersSize() const;
+  virtual void addDefaultParameter(const IndexedString& str);
+  virtual void clearDefaultParameters();
+  
   enum {
     Identity = 14
   };
@@ -90,7 +105,6 @@ private:
   DUCHAIN_DECLARE_DATA(ClassFunctionDeclaration)
 };
 }
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassFunctionDeclaration::FunctionSpecifiers)
 
 #endif // CLASSFUNCTIONDECLARATION_H
 
