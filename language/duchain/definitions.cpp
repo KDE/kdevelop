@@ -19,16 +19,86 @@
 #include "definitions.h"
 #include "declarationid.h"
 #include "duchainpointer.h"
+#include "appendedlist.h"
+#include "repositories/itemrepository.h"
 #include <QHash>
 #include <QVector>
 
 namespace KDevelop {
 
+DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration);
+  
+class DefinitionsItem {
+  public:
+  DefinitionsItem() {
+    initializeAppendedLists();
+  }
+  DefinitionsItem(const DefinitionsItem& rhs) : declaration(rhs.declaration) {
+    initializeAppendedLists();
+    copyListsFrom(rhs);
+  }
+  
+  ~DefinitionsItem() {
+    freeAppendedLists();
+  }
+  
+  unsigned int hash() const {
+    //We only compare the declaration. This allows us implementing a map, although the item-repository
+    //originally represents a set.
+    return declaration.hash();
+  }
+  
+  unsigned short int itemSize() const {
+    return dynamicSize();
+  }
+  
+  uint classSize() const {
+    return sizeof(DefinitionsItem);
+  }
+  
+  DeclarationId declaration;
+  
+  START_APPENDED_LISTS(DefinitionsItem);
+  APPENDED_LIST_FIRST(DefinitionsItem, IndexedDeclaration, definitions);
+  END_APPENDED_LISTS(DefinitionsItem, definitions);
+};
+
+class DefinitionsRequestItem {
+  public:
+  
+  DefinitionsRequestItem(const DefinitionsItem& item) : m_item(item) {
+  }
+  enum {
+    AverageSize = 30 //This should be the approximate average size of an Item
+  };
+
+  unsigned int hash() const {
+    return m_item.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_item.itemSize();
+  }
+
+  void createItem(DefinitionsItem* item) const {
+    item->initializeAppendedLists(false);
+    item->declaration = m_item.declaration;
+    item->copyListsFrom(m_item);
+  }
+  
+  bool equals(const DefinitionsItem* item) const {
+    return m_item.declaration == item->declaration;
+  }
+  
+  const DefinitionsItem& m_item;
+};
+
+
 struct DefinitionsPrivate {
-  //Maps definitions to declaration-ids
-  QHash<DeclarationId, DeclarationPointer> m_definitions;
+  DefinitionsPrivate() : m_definitions("Definition Map") {
+  }
   //Maps declaration-ids to definitions
-  QHash<DeclarationPointer, DeclarationId> m_declarationIdsForDefinitions;
+  ItemRepository<DefinitionsItem, DefinitionsRequestItem> m_definitions;
 };
 
 Definitions::Definitions() : d(new DefinitionsPrivate())
@@ -40,37 +110,73 @@ Definitions::~Definitions()
   delete d;
 }
 
-///Assigns @param definition to the given @param id.
-void Definitions::setDefinition(const DeclarationId& id, Declaration* definition)
+void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
 {
-  if(!definition)
-    d->m_definitions.remove(id);
-  else {
-    d->m_declarationIdsForDefinitions.insert(DeclarationPointer(definition), id);
-    d->m_definitions.insert(id, DeclarationPointer(definition));
+  DefinitionsItem item;
+  item.declaration = id;
+  item.definitionsList().append(definition);
+  DefinitionsRequestItem request(item);
+  
+  uint index = d->m_definitions.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
+    for(int a = 0; a < oldItem->definitionsSize(); ++a) {
+      if(oldItem->definitions()[a] == definition)
+        return; //Already there
+      item.definitionsList().append(oldItem->definitions()[a]);
+    }
+    
+    d->m_definitions.deleteItem(index);
+  }
+
+  //This inserts the changed item
+  d->m_definitions.index(request);
+}
+
+void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
+{
+  DefinitionsItem item;
+  item.declaration = id;
+  DefinitionsRequestItem request(item);
+  
+  uint index = d->m_definitions.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
+    for(int a = 0; a < oldItem->definitionsSize(); ++a)
+      if(!(oldItem->definitions()[a] == definition))
+        item.definitionsList().append(oldItem->definitions()[a]);
+    
+    d->m_definitions.deleteItem(index);
+    Q_ASSERT(d->m_definitions.findIndex(item) == 0);
+    
+    //This inserts the changed item
+    if(item.definitionsSize() != 0)
+      d->m_definitions.index(request);
   }
 }
 
-///Gets the definition assigned to @param id, or zero.
-Declaration* Definitions::definition(const DeclarationId& id) const
+KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const DeclarationId& id) const
 {
-  QHash<DeclarationId, DeclarationPointer>::const_iterator it = d->m_definitions.find(id);
-  if(it != d->m_definitions.end()) {
-    return (*it).data();
-  }else{
-    return 0;
+  KDevVarLengthArray<IndexedDeclaration> ret;
+
+  DefinitionsItem item;
+  item.declaration = id;
+  DefinitionsRequestItem request(item);
+  
+  uint index = d->m_definitions.findIndex(item);
+  
+  if(index) {
+    const DefinitionsItem* repositoryItem = d->m_definitions.itemFromIndex(index);
+    FOREACH_FUNCTION(IndexedDeclaration decl, repositoryItem->definitions)
+      ret.append(decl);
   }
+  
+  return ret;
 }
-
-Declaration* Definitions::declaration(const Declaration* definition, TopDUContext* context) const
-{
-  QHash<DeclarationPointer, DeclarationId>::const_iterator it = d->m_declarationIdsForDefinitions.find(DeclarationPointer(const_cast<Declaration*>(definition)));
-  if(it == d->m_declarationIdsForDefinitions.end())
-    return 0;
-
-  return (*it).getDeclaration(context);
-}
-
 
 }
 

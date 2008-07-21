@@ -665,6 +665,43 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     return 0;
   }
 
+  ///Returns zero if the item is not in the repository yet
+  unsigned int findIndex(const ItemRequest& request) {
+    
+    ThisLocker lock(&m_mutex);
+    
+    unsigned int hash = request.hash();
+    
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
+    short unsigned int previousBucketNumber = *bucketHashPosition;
+    
+    while(previousBucketNumber) {
+      //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
+      
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[previousBucketNumber];
+      if(!bucketPtr) {
+        initializeBucket(previousBucketNumber);
+        bucketPtr = m_fastBuckets[previousBucketNumber];
+      }
+      
+      unsigned short indexInBucket = bucketPtr->findIndex(request, 0);
+      if(indexInBucket) {
+        //We've found the item, it's already there
+        return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+      } else {
+        //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
+        //Should happen rarely
+        short unsigned int next = bucketPtr->nextBucketForHash(hash);
+        if(next)
+          previousBucketNumber = next;
+        else
+          break;
+      }
+    }
+    
+    return 0;
+  }
+  
   ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
   void deleteItem(unsigned int index) {
     ThisLocker lock(&m_mutex);
@@ -674,7 +711,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
 
     unsigned int hash = itemFromIndex(index)->hash();
     
-    short unsigned int previousBucketNumber = m_firstBucketForHash[hash % bucketHashSize];
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
+    short unsigned int previousBucketNumber = *bucketHashPosition;
 
     Q_ASSERT(previousBucketNumber);
     
@@ -716,12 +754,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     if(previousBucketNumber == 0) {
       //The item is directly in the m_firstBucketForHash hash
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
-      Q_ASSERT(m_firstBucketForHash[hash % bucketHashSize] == bucket);
+      Q_ASSERT(*bucketHashPosition == bucket);
       
       while(!bucketPtr->hasClashingItem(hash, bucketHashSize)) 
       {
         unsigned short next = bucketPtr->nextBucketForHash(hash);
-        m_firstBucketForHash[hash % bucketHashSize] = next;
+        *bucketHashPosition = next;
         
         if(next) {
           bucketPtr = m_fastBuckets[next];

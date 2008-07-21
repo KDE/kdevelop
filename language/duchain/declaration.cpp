@@ -499,7 +499,7 @@ Declaration* Declaration::declaration(TopDUContext* topContext) const
   if(!isDefinition())
     return 0;
   
-  return DUChain::definitions()->declaration(const_cast<Declaration*>(this), topContext ? topContext : this->topContext());
+  return d_func()->m_declaration.getDeclaration(topContext ? topContext : this->topContext());
 }
 
 Declaration* Declaration::definition() const
@@ -508,14 +508,21 @@ Declaration* Declaration::definition() const
   if(isDefinition())
     return 0;
   
-  return DUChain::definitions()->definition(id());
+  KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(id());
+  FOREACH_ARRAY(IndexedDeclaration decl, allDefinitions) {
+    if(decl.data()) ///@todo Find better ways of deciding which definition to use
+      return decl.data();
+  }
+  return 0;
 }
 
 void Declaration::setDefinition(Declaration* definition)
 {
   ENSURE_CAN_WRITE
 
-  DUChain::definitions()->setDefinition(id(), definition);
+  ///@todo At some point, call removeDefinition again
+  DUChain::definitions()->addDefinition(id(), definition);
+  definition->d_func_dynamic()->m_declaration = id();
 }
 
 bool Declaration::inSymbolTable() const

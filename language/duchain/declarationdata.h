@@ -22,6 +22,7 @@
 #include "duchainbase.h"
 
 #include "declaration.h"
+#include "declarationid.h"
 #include "ducontext.h"
 #include "topducontext.h"
 #include "duchainlock.h"
@@ -43,6 +44,10 @@ public:
   IndexedType m_type;
   Identifier m_identifier;
 
+  ///@todo Eventually move this and all the definition/declaration coupling functionality somewhere else
+  //Holds the declaration id for this definition, if this is a definition with separate declaration
+  DeclarationId m_declaration;
+  
   //Index in the comment repository
   uint m_comment;
 

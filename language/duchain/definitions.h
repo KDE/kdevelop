@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include "language/languageexport.h"
+#include <util/kdevvarlengtharray.h>
 
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
@@ -25,6 +26,7 @@
 namespace KDevelop {
 
   class Declaration;
+  class IndexedDeclaration;
   class DeclarationId;
   class TopDUContext;
 
@@ -41,16 +43,13 @@ namespace KDevelop {
     ~Definitions();
     /**
      * Assigns @param definition to the given @param id.
-     *
-     * If @param definition is zero, removes the assignment.
      * */
-    void setDefinition(const DeclarationId& id, Declaration* definition);
+    void addDefinition(const DeclarationId& id, const IndexedDeclaration& definition);
 
-    ///Gets the definition assigned to @param id, or zero.
-    Declaration* definition(const DeclarationId& id) const;
-
-    ///Gets the declaration assigned to the given @param definition in @param context
-    Declaration* declaration(const Declaration* definition, TopDUContext* context) const;
+    void removeDefinition(const DeclarationId& id, const IndexedDeclaration& definition);
+    
+    ///Gets all the known definitions assigned to @param id.
+    KDevVarLengthArray<IndexedDeclaration> definitions(const DeclarationId& id) const;
 
     private:
       class DefinitionsPrivate* d;
