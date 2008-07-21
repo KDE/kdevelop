@@ -1142,7 +1142,8 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
 
   d_func_dynamic()->m_usedDeclarationIdsList().append(id);
 
-  DUChain::uses()->addUse(id, this);
+  if(declaration->topContext() != this)
+    DUChain::uses()->addUse(id, this);
 
   return d_func()->m_usedDeclarationIdsSize()-1;
 }
