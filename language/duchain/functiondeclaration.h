@@ -40,6 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationDa
       :DeclarationData( rhs ), AbstractFunctionDeclarationData(rhs)
     {
       initializeAppendedLists();
+      copyListsFrom(rhs);
     }
     ~FunctionDeclarationData()
     {

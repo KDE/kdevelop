@@ -50,6 +50,7 @@ public:
       : ClassMemberDeclarationData( rhs ), AbstractFunctionDeclarationData(rhs)
   {
     initializeAppendedLists();
+    copyListsFrom(rhs);
     m_functionType = rhs.m_functionType;
   }
   ~ClassFunctionDeclarationData() {
