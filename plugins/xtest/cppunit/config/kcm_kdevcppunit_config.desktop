@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=CppUnit
 Name[el]=Μονάδα Cpp
+Name[sv]=Cpp-enhet
 Comment=CppUnit settings
 Comment[de]=CppUnit-Einstellungen
 Comment[el]=Ρυθμίσεις μονάδας Cpp
@@ -23,5 +24,6 @@ Comment[lv]=CppUnit iestatījumi
 Comment[nds]=CppUnit-Instellen
 Comment[pt]=Configuração do CppUnit
 Comment[pt_BR]=Configuração do CppUnit
+Comment[sv]=Inställningar av Cpp-enhet
 Comment[uk]=Параметри CppUnit
 Comment[zh_TW]=CppUnit 設定

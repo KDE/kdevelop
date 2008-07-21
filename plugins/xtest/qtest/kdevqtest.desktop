@@ -13,6 +13,7 @@ Comment[lv]=QTestLib testu darbinātājs
 Comment[nds]=QTestLib-Testdreger
 Comment[pt]=Execução de testes do QTestLib
 Comment[pt_BR]=Execução de testes do QTestLib
+Comment[sv]=Testkörning för QTestLib
 Comment[uk]=Засіб запуску QTestLib
 Comment[zh_TW]=QTestLib 測試執行者
 
@@ -27,6 +28,7 @@ Name[lv]=QTest darbinātājs
 Name[nds]=QTest-Dreger
 Name[pt]=Execução do QTest
 Name[pt_BR]=Execução do QTest
+Name[sv]=Körning för QTest
 Name[uk]=Засіб запуску QTest
 Name[zh_TW]=Qtest 執行者
 GenericName=Unit test runner
