@@ -142,12 +142,72 @@ typedef Utils::LazySet<rpp::pp_macro, MacroIndexConversion> LazyMacroSet;
 
 class EnvironmentManager;
 class MacroSet;
+typedef QPair<KDevelop::IndexedString, KDevelop::ModificationRevision> StringModificationPair;
+
+DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString);
+DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair);
+
+struct EnvironmentFileData : public KDevelop::DUChainBaseData {
+    EnvironmentFileData() {
+      initializeAppendedLists();
+      m_contentStartLine = 0;
+      m_identityOffset = 0;
+      m_strings = 0;
+      m_includeFiles = 0;
+      m_missingIncludeFiles = 0;
+      m_usedMacros = 0;
+      m_usedMacroNames = 0;
+      m_definedMacros = 0;
+      m_definedMacroNames = 0;
+      m_unDefinedMacroNames = 0;
+    }
+    EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::DUChainBaseData(rhs) {
+      initializeAppendedLists();
+      copyListsFrom(rhs);
+      m_identityOffset = rhs.m_identityOffset;
+      m_url = rhs.m_url;
+      m_modificationTime = rhs.m_modificationTime;
+      m_strings = rhs.m_strings; //String-set
+      m_includeFiles = rhs.m_includeFiles; //String-set
+      m_missingIncludeFiles = rhs.m_missingIncludeFiles; //String-set
+      m_usedMacros = rhs.m_usedMacros; //Macro-set
+      m_usedMacroNames = rhs.m_usedMacroNames; //String-set
+      m_definedMacros = rhs.m_definedMacros; //Macro-set
+      m_definedMacroNames = rhs.m_definedMacroNames; //String-set
+      m_unDefinedMacroNames = rhs.m_unDefinedMacroNames; //String-set
+      m_contentStartLine = rhs.m_contentStartLine;
+    }
+    
+    ~EnvironmentFileData() {
+      freeAppendedLists();
+    }
+    uint m_identityOffset;
+    KDevelop::IndexedString m_url;
+    KDevelop::ModificationRevision m_modificationTime;
+    //Set of all strings that can be affected by macros from outside
+    uint m_strings; //String-set
+    uint m_includeFiles; //String-set
+    uint m_missingIncludeFiles; //String-set
+    uint m_usedMacros; //Macro-set
+    uint m_usedMacroNames; //String-set
+    uint m_definedMacros; //Macro-set
+    uint m_definedMacroNames; //String-set
+    uint m_unDefinedMacroNames; //String-set
+    int m_contentStartLine;
+    
+    START_APPENDED_LISTS_BASE(EnvironmentFileData, KDevelop::DUChainBaseData);
+    APPENDED_LIST_FIRST(EnvironmentFileData, KDevelop::IndexedString, m_includePaths);
+    APPENDED_LIST(EnvironmentFileData, StringModificationPair, m_allModificationTimes, m_includePaths);
+    END_APPENDED_LISTS(EnvironmentFileData, m_allModificationTimes);
+};
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
     EnvironmentFile( const KDevelop::IndexedString& url, EnvironmentManager* manager );
 
+    EnvironmentFile( EnvironmentFileData& data );
+    
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 
     ///If there previously was a macro defined of the same name, it must be given through previousOfSameName, else it can be zero.
@@ -169,7 +229,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     void merge( const EnvironmentFile& file );
 
     bool operator <  ( const EnvironmentFile& rhs ) const {
-      return m_url < rhs.m_url;
+      return url() < rhs.url();
     }
 
     size_t hash() const;
@@ -215,7 +275,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     void clearModificationTimes();
 
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
-    const QList<KDevelop::IndexedString>& includePaths() const;
+    const QList<KDevelop::IndexedString> includePaths() const;
     void setIncludePaths( const QList<KDevelop::IndexedString>& paths );
 
     /**
@@ -233,15 +293,18 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     
     virtual bool needsUpdate() const;
     
+    enum {
+      Identity = 73
+    };
+    
+    typedef EnvironmentFileData Data;
+    
   private:
+    virtual void aboutToSave();
+    
     virtual int type() const;
 
     friend class EnvironmentManager;
-    uint m_identityOffset;
-    QList<KDevelop::IndexedString> m_includePaths;
-    KDevelop::IndexedString m_url;
-    KDevelop::ModificationRevision m_modificationTime;
-    Utils::Set m_strings; //Set of all strings that can be affected by macros from outside
     Cpp::LazyStringSet m_includeFiles; //Set of all files with absolute paths
     Cpp::LazyStringSet m_missingIncludeFiles; //Set of relative file-names of missing includes
     Cpp::LazyMacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
@@ -250,7 +313,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     Cpp::LazyStringSet m_definedMacroNames;
     Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
     QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>  m_allModificationTimes;
-    mutable int m_contentStartLine; //Line-number where the actual content starts. Needs to be kept current when edited
+    
+    DUCHAIN_DECLARE_DATA(EnvironmentFile);
     /*
     Needed data:
     1. Set of all strings that appear in this file(For memory-reasons they should be taken from a global string-repository, because many will be the same)
@@ -263,12 +327,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
 };
 
 typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
-
-struct KDEVCPPDUCHAIN_EXPORT EnvironmentFilePointerCompare {
-  bool operator() ( const EnvironmentFilePointer& lhs, const EnvironmentFilePointer& rhs ) const {
-    return (*lhs) < (*rhs );
-  }
-};
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
   public:

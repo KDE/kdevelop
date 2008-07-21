@@ -22,6 +22,8 @@
 #include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
+#include <arrayhelpers.h>
+#include <duchainregister.h>
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 
@@ -54,6 +56,13 @@ inline bool debugging() {
 
 using namespace Cpp;
 using namespace KDevelop;
+
+namespace Cpp {
+DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString);
+DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair);
+}
+
+REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 
 //Repository that contains the actual macros, and maps them to indices
 MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository");
@@ -199,20 +208,54 @@ bool EnvironmentFile::needsUpdate() const {
   return false;
 }
 
-EnvironmentFile::EnvironmentFile( const IndexedString& fileName, EnvironmentManager* manager ) : m_identityOffset(0), m_url( fileName ), m_includeFiles(&EnvironmentManager::stringSetRepository), m_missingIncludeFiles(&EnvironmentManager::stringSetRepository), m_usedMacros(&EnvironmentManager::macroSetRepository), m_usedMacroNames(&EnvironmentManager::stringSetRepository), m_definedMacros(&EnvironmentManager::macroSetRepository), m_definedMacroNames(&EnvironmentManager::stringSetRepository), m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository),m_contentStartLine(0) {
-  QFileInfo fileInfo( KUrl(fileName.str()).path() ); ///@todo care about remote documents
-  m_modificationTime = fileInfo.lastModified();
-  ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
+EnvironmentFile::EnvironmentFile( const IndexedString& fileName, EnvironmentManager* manager ) : ParsingEnvironmentFile(*new EnvironmentFileData()), m_includeFiles(&EnvironmentManager::stringSetRepository), m_missingIncludeFiles(&EnvironmentManager::stringSetRepository), m_usedMacros(&EnvironmentManager::macroSetRepository), m_usedMacroNames(&EnvironmentManager::stringSetRepository), m_definedMacros(&EnvironmentManager::macroSetRepository), m_definedMacroNames(&EnvironmentManager::stringSetRepository), m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository) {
 
-  addIncludeFile( m_url, m_modificationTime );
+  ifDebug( kDebug(9007) << "created for" << fileName.str() << "modification-time:" << m_modificationTime  );
+  
+  d_func_dynamic()->m_url = fileName;
+  QFileInfo fileInfo( KUrl(fileName.str()).path() );
+  d_func_dynamic()->m_modificationTime = fileInfo.lastModified();
+
+  clearModificationTimes();
+}
+
+EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironmentFile(data) 
+      , m_includeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_includeFiles, &EnvironmentManager::stringSetRepository)) 
+      , m_missingIncludeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_missingIncludeFiles, &EnvironmentManager::stringSetRepository))
+      , m_usedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_usedMacros, &EnvironmentManager::macroSetRepository))
+      , m_usedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_usedMacroNames, &EnvironmentManager::stringSetRepository))
+      , m_definedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_definedMacros, &EnvironmentManager::macroSetRepository))
+      , m_definedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_definedMacroNames, &EnvironmentManager::stringSetRepository))
+      , m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_unDefinedMacroNames, &EnvironmentManager::stringSetRepository))
+{
+  //Copy data from "data" to temporary items
+  FOREACH_FUNCTION(const StringModificationPair& pair, data.m_allModificationTimes)
+    m_allModificationTimes[pair.first] = pair.second;
+}
+
+void EnvironmentFile::aboutToSave() {
+  ParsingEnvironmentFile::aboutToSave();
+  ///@todo Get rid of this. Instead, automatically create LazySet's like done with lists in appendedlist code.
+  //Copy data from temporary items to "data"
+  d_func_dynamic()->m_includeFiles = m_includeFiles.set().setIndex();
+  d_func_dynamic()->m_missingIncludeFiles = m_missingIncludeFiles.set().setIndex();
+  d_func_dynamic()->m_usedMacros = m_usedMacros.set().setIndex();
+  d_func_dynamic()->m_usedMacroNames = m_usedMacroNames.set().setIndex();
+  d_func_dynamic()->m_definedMacros = m_definedMacros.set().setIndex();
+  d_func_dynamic()->m_definedMacroNames = m_definedMacroNames.set().setIndex();
+  d_func_dynamic()->m_unDefinedMacroNames = m_unDefinedMacroNames.set().setIndex();
+  
+  d_func_dynamic()->m_allModificationTimesList().clear();
+  for(QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>::const_iterator it = m_allModificationTimes.begin(); it != m_allModificationTimes.end(); ++it)
+    d_func_dynamic()->m_allModificationTimesList().append( qMakePair(it.key(), it.value()) );
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
-  m_contentStartLine = line;
+  d_func_dynamic()->m_contentStartLine = line;
 }
 
 int EnvironmentFile::contentStartLine() const {
-  return m_contentStartLine;
+  return d_func()->m_contentStartLine;
 }
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
@@ -265,7 +308,7 @@ void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
 // }
 
 Utils::Set EnvironmentFile::strings() const {
-  return m_strings;
+  return Utils::Set(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
 }
 
 
@@ -293,12 +336,17 @@ const LazyMacroSet& EnvironmentFile::usedMacros() const {
   return m_usedMacros;
 }
 
-const QList<IndexedString>& EnvironmentFile::includePaths() const {
-  return m_includePaths;
+const QList<IndexedString> EnvironmentFile::includePaths() const {
+  QList<IndexedString> ret;
+  FOREACH_FUNCTION(IndexedString include, d_func()->m_includePaths)
+    ret << include;
+  return ret;
 }
 
 void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
-  m_includePaths = paths;
+  d_func_dynamic()->m_includePathsList().clear();
+  foreach(IndexedString include, paths)
+    d_func_dynamic()->m_includePathsList().append(include);
 }
 
 ///Should contain a modification-time for each included-file
@@ -308,11 +356,11 @@ const QMap<IndexedString, KDevelop::ModificationRevision>& EnvironmentFile::allM
 
 void EnvironmentFile::clearModificationTimes() {
   m_allModificationTimes.clear();
-  m_allModificationTimes[m_url] = m_modificationTime;
+  m_allModificationTimes[d_func()->m_url] = d_func()->m_modificationTime;
 }
 
 IndexedString EnvironmentFile::url() const {
-  return m_url;
+  return d_func()->m_url;
 }
 
 void EnvironmentFile::addMissingIncludeFile(const IndexedString& file)
@@ -341,21 +389,21 @@ void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevis
   kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
   }
 #endif
-  m_modificationTime = rev;
+  d_func_dynamic()->m_modificationTime = rev;
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
   kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
   }
 #endif
-  m_allModificationTimes[m_url] = rev;
+  m_allModificationTimes[d_func()->m_url] = rev;
 }
 
 KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
-  return m_modificationTime;
+  return d_func()->m_modificationTime;
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
-  m_strings += EnvironmentManager::stringSetRepository.createSet(strings);
+  d_func_dynamic()->m_strings = (this->strings() + EnvironmentManager::stringSetRepository.createSet(strings)).setIndex();
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
@@ -365,7 +413,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.m_strings);
   }
 #endif
-  m_strings += (file.m_strings - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();
+  d_func_dynamic()->m_strings = (strings() + (file.strings() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set()).setIndex();
   ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.  
   //Only add macros to the usedMacros-set that were not defined locally
   m_usedMacroNames += (file.m_usedMacroNames.set() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();
@@ -420,15 +468,15 @@ size_t EnvironmentFile::hash() const {
 }
 
 uint EnvironmentFile::identityOffset() const {
-  return m_identityOffset;
+  return d_func()->m_identityOffset;
 }
 
 void EnvironmentFile::setIdentityOffset(uint offset) {
-  m_identityOffset = offset;
+  d_func_dynamic()->m_identityOffset = offset;
 }
 
 IdentifiedFile EnvironmentFile::identity() const {
-  return IdentifiedFile(m_url, (uint)hash() + m_identityOffset);
+  return IdentifiedFile(d_func()->m_url, (uint)hash() + d_func()->m_identityOffset);
 }
 
 int EnvironmentFile::type() const {

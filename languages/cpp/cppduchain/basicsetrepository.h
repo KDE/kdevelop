@@ -93,6 +93,10 @@ public:
   Set operator -(const Set& rhs) const;
   Set& operator -=(const Set& rhs);
   
+  uint setIndex() const {
+    return m_tree;
+  }
+  
   ///Returns a pointer to the repository this set belongs to. Returns zero when this set is not initialized yet.
   BasicSetRepository* repository() const;
 private:
