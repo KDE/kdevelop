@@ -56,12 +56,12 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
     if( getArgumentContext(dec) )
       parameters = getArgumentContext(dec)->localDeclarations();
     
-    QStringList defaultParams = decl->defaultParameters();
+//     QStringList defaultParams = decl->defaultParameters();
 
     QVector<Declaration*>::const_iterator paramNameIt = parameters.begin();
-    QStringList::const_iterator defaultParamIt = defaultParams.begin();
+    uint defaultParamNum = 0;
 
-    int firstDefaultParam = functionType->arguments().count() - defaultParams.count();
+    int firstDefaultParam = functionType->arguments().count() - decl->defaultParametersSize();
 
     ret = "(";
     bool first = true;
@@ -134,8 +134,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       }
 
       if( num >= firstDefaultParam ) {
-        ret += " = " + *defaultParamIt;
-        ++defaultParamIt;
+        ret += " = " + decl->defaultParameters()[defaultParamNum].str();
+        ++defaultParamNum;
       }
 
       ++num;

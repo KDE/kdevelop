@@ -56,7 +56,7 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   if( !isValid() || !m_topContext )
     return;
   Q_ASSERT(m_funDecl);
-  if( params.parameters.size() + m_funDecl->defaultParameters().size() < m_type->arguments().size() && !partial )
+  if( params.parameters.size() + m_funDecl->defaultParametersSize() < m_type->arguments().size() && !partial )
     return; //Not enough parameters + default-parameters
   if( params.parameters.size() > m_type->arguments().size() )
     return; //Too many parameters

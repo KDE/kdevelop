@@ -378,8 +378,7 @@ class NavigationContext : public KShared {
                 KDevelop::DUContext* argumentContext = Cpp::getArgumentContext(m_declaration.data());
 
                 if(argumentContext) {
-                  QList<QString>::const_iterator defaultIt = function->defaultParameters().begin();
-                  int firstDefaultParam = argumentContext->localDeclarations().count() - function->defaultParameters().count();
+                  int firstDefaultParam = argumentContext->localDeclarations().count() - function->defaultParametersSize();
                   int currentArgNum = 0;
 
                   foreach(Declaration* argument, argumentContext->localDeclarations()) {
@@ -393,7 +392,7 @@ class NavigationContext : public KShared {
                     m_currentText += " " + nameHighlight(Qt::escape(argument->identifier().toString()));
 
                     if( currentArgNum >= firstDefaultParam )
-                      m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ]);
+                      m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
 
                     ++currentArgNum;
                   }

@@ -1124,7 +1124,7 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
         defaultParam += editor()->tokenToString(token);
 
 
-      function->addDefaultParameter(defaultParam);
+      function->addDefaultParameter(IndexedString(defaultParam));
     }
   }
 }
