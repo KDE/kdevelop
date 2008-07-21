@@ -1120,7 +1120,7 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
         nonGlobalIdentifiers << identifier;
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
-      for(int a = d->m_importedContextsSize()-1; a >= 0; ) {
+      for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
         
         DUContext* context = d->m_importedContexts()[a].context.data();
 
