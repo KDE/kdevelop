@@ -30,6 +30,12 @@
 
 namespace Kross { class Action; }
 
+namespace KDevelop {
+    class ProjectExecutableTargetItem;
+    class ProjectLibraryTargetItem;
+    class ProjectTestTargetItem;
+}
+
 class KrossBuildSystemManager : public KDevelop::IBuildSystemManager
 {
 public:
@@ -51,6 +57,14 @@ public:
     KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */, KDevelop::ProjectFolderItem* /*parent*/ );
     KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* );
     KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
+    
+    KDevelop::ProjectFileItem* addFile(const QString& folder, const QString& targetName, const QString& filename);
+    KDevelop::ProjectTargetItem* addTarget(const QString& folder, const QString& targetName);
+    KDevelop::ProjectExecutableTargetItem* addExecutable(const QString& folder, const QString& targetName);
+    KDevelop::ProjectTestTargetItem* addTest(const QString& folder, const QString& targetName);
+    KDevelop::ProjectLibraryTargetItem* addLibrary(const QString& folder, const QString& targetName);
+    KDevelop::ProjectFolderItem* addFolder(const QString& folder);
+    
     bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
     bool removeFolder( KDevelop::ProjectFolderItem* );
     bool removeTarget( KDevelop::ProjectTargetItem* );
@@ -60,24 +74,6 @@ public:
     bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
     QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const;
     Features features() const;
-
-    void addFile(const QString& folder, const QString& targetName, const QString& filename);
-    void addTarget(const QString& folder, const QString& targetName);
-    void addFolder(const QString& folder);
-    /*
-signals:
-    void init(const QVariantList& args);
-    void parse( const KUrl& folder );
-    void importProject(KDevelop::IProject* project);
-
-    void createFolder(const KUrl& folder);
-    void createFile(const KUrl& file);
-    void createTarget(const KUrl& folder, const QString& targetname);
-    void addFileToTarget(const KUrl& folder, const QString& targetname, const KUrl& filename);
-    void rename(const KUrl& from, const KUrl& to); //File or folder
-    void remove(const KUrl& file); //File or folder
-    void removeTarget(const KUrl& folder, const QString& targetname);
-    void removeFileFromTarget(const KUrl& folder, const QString& targetname, const KUrl& filename);*/
 
 private:
     Kross::Action *action;
