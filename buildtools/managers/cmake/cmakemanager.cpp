@@ -417,8 +417,21 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             QStringList dependencies=v.targetDependencies(t);
             if(!dependencies.isEmpty()) //Just to remove verbosity
             {
-                CMakeTargetItem* targetItem = new CMakeTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
-    
+                KDevelop::ProjectTargetItem* targetItem;
+                
+                switch(v.targetType(t))
+                {
+                    case CMakeProjectVisitor::Library:
+                        targetItem = new CMakeLibraryTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
+                        break;
+                    case CMakeProjectVisitor::Executable:
+                        targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
+                        break;
+                    case CMakeProjectVisitor::Test:
+                        targetItem = new CMakeTestTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
+                        break;
+                }
+                
                 foreach( const QString & sFile, dependencies )
                 {
                     if(sFile.isEmpty())

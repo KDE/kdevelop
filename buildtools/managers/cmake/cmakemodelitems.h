@@ -50,7 +50,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
-        virtual ~CMakeFolderItem();
+        virtual ~CMakeFolderItem() {}
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
         Definitions definitions() const { return m_defines; }
@@ -73,13 +73,26 @@ class DUChainAttatched
         KDevelop::Declaration* ctx;
 };
 
-class CMakeTargetItem : public KDevelop::ProjectTargetItem, public DUChainAttatched
+class CMakeExecutableTargetItem : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched
 {
     public:
-        CMakeTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
-            : ProjectTargetItem( project, name, parent), DUChainAttatched(c) {}
+        CMakeExecutableTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+            : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c) {}
 };
 
+class CMakeLibraryTargetItem : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched
+{
+    public:
+        CMakeLibraryTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+            : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c) {}
+};
+
+class CMakeTestTargetItem : public KDevelop::ProjectTestTargetItem, public DUChainAttatched
+{
+    public:
+        CMakeTestTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+            : KDevelop::ProjectTestTargetItem( project, name, parent), DUChainAttatched(c) {}
+};
 /*
 class CMakeFileItem : public KDevelop::ProjectFileItem, public DUChainAttatched
 {

@@ -42,7 +42,3 @@ QStringList CMakeFolderItem::includeDirectories() const
     }
     return urls;
 }
-
-CMakeFolderItem::~CMakeFolderItem()
-{
-}
