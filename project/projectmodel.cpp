@@ -159,9 +159,27 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         QStandardItem* item = child( i );
-        if ( item->type() == Target )
+        if ( item->type() == Target || item->type() == LibraryTarget ||
+             item->type() == ExecutableTarget || item->type() == TestTarget)
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
+            if ( kdevitem )
+                lst.append( kdevitem );
+        }
+    }
+
+    return lst;
+}
+
+QList<ProjectTestTargetItem*> ProjectBaseItem::testList() const
+{
+    QList<ProjectTestTargetItem*> lst;
+    for ( int i = 0; i < rowCount(); ++i )
+    {
+        QStandardItem* item = child( i );
+        if (item->type() == TestTarget)
+        {
+            ProjectTestTargetItem *kdevitem = dynamic_cast<ProjectTestTargetItem*>( item );
             if ( kdevitem )
                 lst.append( kdevitem );
         }
@@ -405,6 +423,33 @@ ProjectTargetItem *ProjectTargetItem::target() const
 void ProjectTargetItem::setIcon()
 {
     QStandardItem::setIcon( KIcon("system-run") );
+}
+
+ProjectExecutableTargetItem::ProjectExecutableTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+    : ProjectTargetItem(project, name, parent)
+{}
+
+int ProjectExecutableTargetItem::type() const
+{
+    return ProjectBaseItem::ExecutableTarget;
+}
+
+ProjectLibraryTargetItem::ProjectLibraryTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+    : ProjectTargetItem(project, name, parent)
+{}
+
+int ProjectLibraryTargetItem::type() const
+{
+    return ProjectBaseItem::LibraryTarget;
+}
+
+ProjectTestTargetItem::ProjectTestTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+    : ProjectExecutableTargetItem(project, name, parent)
+{}
+
+int ProjectTestTargetItem::type() const
+{
+    return ProjectBaseItem::TestTarget;
 }
 
 WorkspaceItem::WorkspaceItem( const QString& name, const QString& metadataFile )

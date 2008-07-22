@@ -1,4 +1,4 @@
-    /* This file is part of KDevelop
+/* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
     Copyright 2007 Aleix Pol <aleixpol@gmail.com>
@@ -39,13 +39,19 @@ class ProjectFolderItem;
 class ProjectBuildFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
+class ProjectExecutableTargetItem;
+class ProjectTestTargetItem;
+class ProjectLibraryTargetItem;
 
 /**
  * Interface that allows a developer to implement the three basic types of
  * items you would see in a multi-project
  * \li Folder
  * \li Project
- * \li Build Target
+ * \li Custom Target
+ * \li Library Target
+ * \li Executable Target
+ * \li Test Executable Target
  * \li File
  */
 class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
@@ -65,6 +71,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         {
             BuildFolder = QStandardItem::UserType   /** item is a buildable folder */,
             Target                                  /** item is a target */,
+            ExecutableTarget                        /** item is an executable target */,
+            LibraryTarget                           /** item is a library target */,
+            TestTarget                              /** item is a test executable target */,
             File                                    /** item is a file */,
             Folder                                  /** item is a folder */
         };
@@ -90,6 +99,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns Returns a list of the targets that have this object as the parent. */
         QList<ProjectTargetItem*> targetList() const;
+        
+        /** @returns Returns a list of the targets that have this object as the parent. */
+        QList<ProjectTestTargetItem*> testList() const;
 
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
@@ -182,6 +194,51 @@ protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:
     Q_DECLARE_PRIVATE(ProjectTargetItem)
+};
+
+/**
+ * Object which represents an executable target in a build system.
+ *
+ * This object contains all properties specific to an executable.
+ */
+class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTargetItem
+{
+    public:
+        ProjectExecutableTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+    
+    ///Reimplemented from QStandardItem
+        virtual int type() const;
+};
+
+
+/**
+ * Object which represents a library target in a build system.
+ *
+ * This object contains all properties specific to a library.
+ */
+class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetItem
+{
+    public:
+        ProjectLibraryTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        
+    ///Reimplemented from QStandardItem
+        virtual int type() const;
+};
+
+
+/**
+ * Object which represents an executable test target in a build system.
+ *
+ * This object contains all properties specific to a test target.
+ */
+class KDEVPLATFORMPROJECT_EXPORT ProjectTestTargetItem: public ProjectExecutableTargetItem
+{
+    public:
+        ProjectTestTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        
+        
+    ///Reimplemented from QStandardItem
+        virtual int type() const;
 };
 
 /**
