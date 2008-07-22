@@ -99,13 +99,13 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns Returns a list of the targets that have this object as the parent. */
         QList<ProjectTargetItem*> targetList() const;
-        
-        /** @returns Returns a list of the targets that have this object as the parent. */
+
+        /** @returns Returns a list of the test targets that have this object as the parent. */
         QList<ProjectTestTargetItem*> testList() const;
 
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
-        
+
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
@@ -205,7 +205,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 {
     public:
         ProjectExecutableTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-    
+
     ///Reimplemented from QStandardItem
         virtual int type() const;
 };
@@ -220,7 +220,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
 {
     public:
         ProjectLibraryTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-        
+
     ///Reimplemented from QStandardItem
         virtual int type() const;
 };
@@ -235,8 +235,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectTestTargetItem: public ProjectExecutable
 {
     public:
         ProjectTestTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-        
-        
+
     ///Reimplemented from QStandardItem
         virtual int type() const;
 };
