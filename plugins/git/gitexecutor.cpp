@@ -165,8 +165,6 @@ DVCSjob* GitExecutor::status(const QString & repository, const KUrl::List & file
 DVCSjob* GitExecutor::log(const KUrl& url)
 {
     QFileInfo info(url.toLocalFile());
-    if (!info.isFile())
-        return false;
 
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, info.absolutePath()) ) {
