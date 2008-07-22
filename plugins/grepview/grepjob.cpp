@@ -21,23 +21,10 @@
 #include <QKeySequence>
 
 #include <kprocess.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktemporaryfile.h>
-#include <kmessagebox.h>
-#include <kaction.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/cursor.h>
-#include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <ioutputview.h>
-#include <iplugincontroller.h>
-#include <iuicontroller.h>
-#include <kparts/mainwindow.h>
 #include <iproject.h>
 #include <projectmodel.h>
 #include <processlinemaker.h>

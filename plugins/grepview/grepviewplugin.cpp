@@ -16,11 +16,8 @@
 #include "grepoutputdelegate.h"
 
 #include <QWhatsThis>
-#include <QList>
-#include <QRegExp>
 #include <QKeySequence>
 
-#include <kprocess.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kactioncollection.h>
@@ -42,7 +39,6 @@
 #include <iproject.h>
 #include <iprojectcontroller.h>
 #include <projectmodel.h>
-#include <processlinemaker.h>
 
 #include "grepjob.h"
 

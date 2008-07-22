@@ -14,9 +14,7 @@
 #ifndef GREPJOB_H
 #define GREPJOB_H
 
-#include <iplugin.h>
 #include <outputjob.h>
-
 #include <QProcess>
 
 namespace KDevelop
