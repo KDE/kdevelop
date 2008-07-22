@@ -76,7 +76,7 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS} -Wall)
 kde4_add_ui_files(kdevteamwork_PART_SRCS ${kdevteamwork_UI} )
 kde4_add_plugin(kdevteamwork ${kdevteamwork_PART_SRCS})
 
-target_link_libraries(kdevteamwork ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext diff2 ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kdevteamwork ${KDE4_KDEUI_LIBS} ${KDE4_KHTML_LIBS} kdevplatforminterfaces network dynamictext diff2 ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KTEXTEDITOR_LIBS})
 
 install(TARGETS kdevteamwork DESTINATION ${PLUGIN_INSTALL_DIR} )
 
