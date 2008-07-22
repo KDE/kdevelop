@@ -27,6 +27,8 @@
 class QWidget;
 class KComponentData;
 namespace KDevelop { class IProject; }
+namespace Sublime { class View; class Area; }
+class ResultsViewFactory;
 
 namespace Veritas
 {
@@ -35,6 +37,7 @@ class RunnerModel;
 class RunnerWindow;
 class TestRunnerToolViewPrivate;
 
+// TODO this ToolView shouldnt be a plugin.
 class VERITAS_EXPORT TestRunnerToolView : public KDevelop::IPlugin
 {
 Q_OBJECT
@@ -45,21 +48,29 @@ public:
     /*! Create a new test runner widget
         Call this in your toolview factory's create() member. */
     QWidget* spawnWindow();
+    QWidget* resultsWidget();
 
 protected:
-    /*!
-     * Reload the test tree.
-     * To be implemented by concrete plugins.
-     */
+    /*! Reload the test tree.
+     * To be implemented by concrete plugins. */
     virtual Test* registerTests() = 0;
     KDevelop::IProject* project() const;
+    virtual QString resultsViewId() = 0;
+
+protected Q_SLOTS:
+    virtual void openVerbose(Test*) = 0;
+    void removeResultsView();
 
 private Q_SLOTS:
     void reload();
     void setSelected(QAction*);
 
 private:
+    void spawnResultsView();
     TestRunnerToolViewPrivate* const d;
+    bool resultsVisible;
+    Sublime::View *m_resultsView;
+    Sublime::Area *m_resultsArea;
 };
 
 }

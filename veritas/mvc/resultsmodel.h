@@ -106,7 +106,7 @@ public: // Operations
     QModelIndex mapFromTestIndex(const QModelIndex& testItemIndex) const;
 
     /*!
-     * Concatenates mapFromTestIndex and itemFromIndex
+     * Concatenates mapToTestIndex and itemFromIndex
      */
     Test* testFromIndex(const QModelIndex& i) const;
 

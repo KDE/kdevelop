@@ -39,10 +39,11 @@ ViewControllerCommon::~ViewControllerCommon()
 void ViewControllerCommon::expandOrCollapse(const QModelIndex& index) const
 {
     bool isExpanded = view()->isExpanded(index);
-    if (isExpanded)
+    if (isExpanded) {
         view()->collapse(index);
-    else
+    } else {
         view()->expand(index);
+    }
 }
 
 QModelIndex ViewControllerCommon::highlightedRow() const

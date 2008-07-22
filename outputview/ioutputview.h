@@ -60,7 +60,8 @@ public:
     {
         BuildView = 0 /**< the standard outputview for building output */,
         RunView =   1 /**< the standard outputview for running apps */,
-        DebugView = 2 /**< the standard outputview for debugging apps */
+        DebugView = 2 /**< the standard outputview for debugging apps */,
+        TestView  = 4 /**< the standard outputview for verbose test output */
     };
 
     virtual ~IOutputView() {}

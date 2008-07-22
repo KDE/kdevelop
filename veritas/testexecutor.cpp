@@ -24,8 +24,6 @@
 #include <QtGlobal>
 #include <KDebug>
 
-#include <iostream>
-
 using Veritas::Test;
 using Veritas::TestExecutor;
 
@@ -86,6 +84,11 @@ void TestExecutor::go()
     traverse(m_root, sc);
     fixLast(sc.m_previous);
     emit fireStarter();
+}
+
+void TestExecutor::stop()
+{
+    cleanup();
 }
 
 void TestExecutor::cleanup()

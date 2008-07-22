@@ -127,10 +127,6 @@ public:
      *  to determine the return value. */
     bool isRunning(unsigned long time = 0) const;
 
-    /*! Returns the results model. If no results model exists one is
-     *  created. */
-    ResultsModel* resultsModel();
-
     bool someChildHasStatus(int status, const QModelIndex& parent) const;
 
     /*! Returns the test item the \a index refers to. */
@@ -238,7 +234,6 @@ private:  // Constants
 private:  // Attributes
     Test* m_rootItem;
     TestExecutor* m_executor;
-    ResultsModel* m_resultsModel;
     QString m_name;
     bool m_isRunning;
     QModelIndex m_startedItemIndex;

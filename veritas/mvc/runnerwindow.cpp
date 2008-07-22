@@ -22,17 +22,22 @@
 #include "veritas/mvc/runnerwindow.h"
 
 #include "ui_runnerwindow.h"
+#include "ui_resultsview.h"
 
 #include "interfaces/iproject.h"
 
 #include "veritas/mvc/resultsmodel.h"
 #include "veritas/mvc/resultsproxymodel.h"
-#include "veritas/mvc/resultsviewcontroller.h"
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/runnerproxymodel.h"
 #include "veritas/mvc/runnerviewcontroller.h"
 #include "veritas/mvc/selectionmanager.h"
 #include "veritas/mvc/stoppingdialog.h"
+#include "veritas/mvc/verbosemanager.h"
+
+#include <ktexteditor/cursor.h>
+#include "interfaces/icore.h"
+#include "interfaces/idocumentcontroller.h"
 
 #include "veritas/utils.h"
 
@@ -53,13 +58,16 @@ static void initVeritasResource()
     Q_INIT_RESOURCE(qxrunner);
 }
 
+using KDevelop::ICore;
+using KDevelop::IDocumentController;
+
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
 using Veritas::RunnerProxyModel;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 using Veritas::RunnerViewController;
-using Veritas::ResultsViewController;
+using Veritas::VerboseManager;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
 {
@@ -70,15 +78,17 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
         : QWidget(parent, flags)
 {
     initVeritasResource();
-    m_ui=new Ui::RunnerWindow;
+    m_ui = new Ui::RunnerWindow;
     m_ui->setupUi(this);
+    m_uiResults = new Ui::ResultsView;
+    m_results = new QWidget;
+    m_uiResults->setupUi(m_results);
     runnerView()->setRootIsDecorated(false);
     runnerView()->setUniformRowHeights(true);
 
     // Controllers for the tree views, it's best to create them at the
     // very beginning.
     m_runnerViewController = new RunnerViewController(this, runnerView());
-    m_resultsViewController = new ResultsViewController(this, resultsView());
 
     connectFocusStuff();
     ui()->progressRun->show();
@@ -91,6 +101,7 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
     m_sema.release();
     runnerView()->setMouseTracking(true);
     m_selection = new SelectionManager(runnerView());
+    m_verbose = new VerboseManager(runnerView());
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
@@ -108,11 +119,20 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 
     connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
             runnerController(), SLOT(expandOrCollapse(const QModelIndex&)));
-    connect(resultsView(), SIGNAL(clicked(const QModelIndex&)),
-            resultsController(), SLOT(expandOrCollapse(const QModelIndex&)));
-    resultsView()->setWordWrap(true);
 
     addProjectMenu();
+
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+                  << i18n("File Name") << i18n("Line Number");
+
+    m_resultsModel = new ResultsModel(resultHeaders, this);
+    m_resultsProxyModel = new ResultsProxyModel(this);
+    m_resultsProxyModel->setSourceModel(m_resultsModel);
+    int filter = Veritas::RunError | Veritas::RunFatal;
+    m_resultsProxyModel->setFilter(filter); // also updates the view
+
+    resultsView()->setModel(m_resultsProxyModel);
 }
 
 // helper for RunnerWindow(...)
@@ -204,6 +224,8 @@ void RunnerWindow::connectActions()
 RunnerWindow::~RunnerWindow()
 {
     // Deleting the model is left to the owner of the model instance.
+    if (m_selection) delete m_selection;
+    if (m_verbose)   delete m_verbose;
 }
 
 // helper for setModel(RunnerModel*)
@@ -223,14 +245,12 @@ void RunnerWindow::stopPreviousModel()
         // As long as the proxy models can't be set from outside they
         // get deleted.
         RunnerProxyModel* m1 = runnerProxyModel();
-        ResultsProxyModel* m2 = resultsProxyModel();
-
         runnerView()->setModel(0);
-        resultsView()->setModel(0);
         runnerView()->reset();
-        resultsView()->reset();
         delete m1;
-        delete m2;
+
+        resultsView()->reset();
+        resultsModel()->clear();
         prevModel->disconnect();
     }
 }
@@ -243,12 +263,6 @@ void RunnerWindow::initProxyModels(RunnerModel* model)
     RunnerProxyModel* runnerProxyModel = new RunnerProxyModel(model);
     runnerProxyModel->setSourceModel(model);
     runnerView()->setModel(runnerProxyModel);
-
-    // Results model is contained in the runner model.
-    ResultsModel* resultsModel = model->resultsModel();
-    ResultsProxyModel* resultsProxyModel = new ResultsProxyModel(model);
-    resultsProxyModel->setSourceModel(resultsModel);
-    resultsView()->setModel(resultsProxyModel);
 }
 
 // helper for setModel(RunnerModel*)
@@ -268,7 +282,7 @@ void RunnerWindow::initVisibleColumns(RunnerModel* model)
         }
     }
     for (int i = 1; i < columnCount; i++) {
-        // hide all runner columns
+        // hide all but the first runner columns
         runnerView()->hideColumn(i);
     }
     for (int i = 0; i < columnCount; i++) {
@@ -302,8 +316,7 @@ void RunnerWindow::connectItemStatistics(RunnerModel* model)
     connect(model, SIGNAL(numExceptionsChanged(int)),
             SLOT(displayNumExceptions(int)));
 
-    // This will fire the signals connected above.
-    model->countItems();
+    model->countItems(); // this fires the signals connected above.
 }
 
 // helper for setModel(RunnerModel*)
@@ -317,7 +330,7 @@ void RunnerWindow::connectProgressIndicators(RunnerModel* model)
     connect(model, SIGNAL(allItemsCompleted()),
             SLOT(displayCompleted()));
     connect(model, SIGNAL(itemCompleted(QModelIndex)),
-            resultsModel(),SLOT(addResult(QModelIndex)));
+            resultsModel(), SLOT(addResult(QModelIndex)));
 }
 
 void RunnerWindow::setModel(RunnerModel* model)
@@ -331,7 +344,6 @@ void RunnerWindow::setModel(RunnerModel* model)
     initProxyModels(model);
     initVisibleColumns(model);
 
-    showResults(true);
     // Very limited user interaction without data.
     if (model->rowCount() < 1) {
         enableItemActions(false);
@@ -344,50 +356,16 @@ void RunnerWindow::setModel(RunnerModel* model)
     connectProgressIndicators(model);
     enableItemActions(true);
     m_ui->actionStop->setDisabled(true);
-    setResultsFilter();
 
-    connect(resultsModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-            resultsController(), SLOT(spanOutputLines(QModelIndex, int, int)));
     connect(m_selection, SIGNAL(selectionChanged()),
             runnerModel(), SLOT(countItems()));
-    connect(resultsProxyModel(), SIGNAL(modelReset()),
-            resultsController(), SLOT(span()));
 
     // set top row higlighted
     runnerView()->setCurrentIndex(runnerProxyModel()->index(0, 0));
+    enableToSource();
+
 }
 
-QTreeView* RunnerWindow::runnerView() const
-{
-    return m_ui->treeRunner;
-}
-
-QTreeView* RunnerWindow::resultsView() const
-{
-    return m_ui->treeResults;
-}
-
-RunnerModel* RunnerWindow::runnerModel() const
-{
-    return runnerController()->runnerModel();
-}
-
-RunnerProxyModel* RunnerWindow::runnerProxyModel() const
-{
-    return runnerController()->runnerProxyModel();
-}
-
-ResultsModel* RunnerWindow::resultsModel() const
-{
-    // The results model is contained in the runner model
-    // (but could also be retrieved from the results view controller).
-    return runnerModel()->resultsModel();
-}
-
-ResultsProxyModel* RunnerWindow::resultsProxyModel() const
-{
-    return resultsController()->resultsProxyModel();
-}
 
 void RunnerWindow::displayProgress(int numItems) const
 {
@@ -454,47 +432,8 @@ void RunnerWindow::displayNumFatals(int numItems) const
 
 void RunnerWindow::displayNumExceptions(int numItems) const
 {
-
     displayStatusNum(ui()->labelNumExceptions,
                      ui()->labelNumExceptionsPic, numItems);
-}
-
-void RunnerWindow::setResultsFilter() const
-{
-    QModelIndex current = selectedResultIndex();
-    int filter = Veritas::RunError | Veritas::RunFatal;
-    resultsProxyModel()->setFilter(filter); // also updates the view
-    highlightResultAgain(current);
-}
-
-// helper for setResultsFilter()
-void RunnerWindow::highlightResultAgain(const QModelIndex& previous) const
-{
-    // Try to highlight same result as was highlighted before.
-    if (!previous.isValid()) {
-        return; // When no result was highlighted before, do nothing
-    }
-    QModelIndex viewIndex;
-    viewIndex = Utils::proxyIndexFromModel(resultsProxyModel(), previous);
-    if (!viewIndex.isValid()) {
-        return; // Previously highlighted result is filtered out now.
-    }
-    enableResultSync(false);
-    resultsView()->setCurrentIndex(viewIndex);
-    enableResultSync(true);
-}
-
-// helper for setResultsFilter()
-QModelIndex RunnerWindow::selectedResultIndex() const
-{
-    // Remember currently highlighted result.
-    QModelIndex resultIndex;
-    QModelIndexList indexes;
-    indexes = resultsView()->selectionModel()->selectedIndexes();
-    if (indexes.count() > 0) {
-        resultIndex = resultsProxyModel()->mapToSource(indexes.first());
-    }
-    return resultIndex;
 }
 
 void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
@@ -515,7 +454,7 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
 
     // At least there should be a current but not necessarily highlighted result
     // in order to see the focus rect when the results view gets the focus.
-    ensureCurrentResult();
+    //ensureCurrentResult();
 
     QModelIndex filterIndex;
     if (resultIndex.isValid() && viewIndex.isValid()) {
@@ -570,8 +509,8 @@ void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
     currentIndex = Utils::proxyIndexFromModel(runnerProxyModel(), testItemIndex);
     runnerView()->setCurrentIndex(currentIndex);
 
-    scrollToHighlightedRows(); // Make the row in every tree view visible 
-                               // and expand corresponding parents.
+    scrollToHighlightedRows(); // Make the row in every tree view visible
+    // and expand corresponding parents.
     enableTestSync(true);      // Enable selection handler again.
 }
 
@@ -653,11 +592,9 @@ void RunnerWindow::runItems()
 {
     // Do not interfere with stopping the items. Could happen because Qt
     // input processing could be faster than executing event handlers.
-    if (!m_sema.tryAcquire()) {
-        return;
-    }
-
+    if (!m_sema.tryAcquire()) return;
     disableControlsBeforeRunning();
+    resultsModel()->clear();
     runnerModel()->runItems();
     m_sema.release();
 }
@@ -681,36 +618,9 @@ void RunnerWindow::stopItems()
     m_sema.release();
 }
 
-void RunnerWindow::showResults(bool show)
-{
-    if (!runnerModel()) {
-        return;
-    }
-
-    resultsProxyModel()->setActive(show);
-
-    // An invisible results view means that the dock widget was closed
-    // and is shown now. In this case the data is retrieved again.
-    bool visible = m_ui->treeResults->isVisible();
-
-    if (show && !visible) {
-        // Show data according to current filtering.
-        resultsProxyModel()->clear();
-        setResultsFilter();
-    }
-
-    if (!show || runnerModel()->isRunning()) {
-        return;
-    }
-
-    QCoreApplication::processEvents();
-    scrollToHighlightedRows();
-}
-
 void RunnerWindow::disableControlsBeforeRunning()
 {
     enableItemActions(false);
-    resultsController()->enableSorting(false);
 
     m_ui->actionStop->setEnabled(true);
     runnerView()->setCursor(QCursor(Qt::BusyCursor));
@@ -768,7 +678,7 @@ void RunnerWindow::enableControlsAfterRunning() const
     resultsView()->setSelectionMode(QAbstractItemView::SingleSelection);
     enableTestSync(true);
     enableResultSync(true);
-    ensureCurrentResult();
+    //ensureCurrentResult();
 
     // Reset color for highlighted rows.
     QPalette palette(runnerView()->palette());
@@ -803,6 +713,33 @@ void RunnerWindow::enableTestSync(bool enable) const
     }
 }
 
+void RunnerWindow::enableToSource() const
+{
+    connect(resultsView()->selectionModel(),
+            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+            SLOT(jumpToSource(const QItemSelection&, const QItemSelection&)));
+}
+
+void RunnerWindow::jumpToSource(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+    QModelIndexList indexes = selected.indexes();
+
+    if (indexes.count() < 1) {
+        return; // Do nothing when no result is selected.
+    }
+
+    // Determine the results model index.
+    QModelIndex resultIndex;
+    resultIndex = Utils::modelIndexFromProxy(resultsProxyModel(), indexes.first());
+    Test* t = resultsModel()->testFromIndex(resultIndex);
+    TestResult* r = t->result();
+
+    KTextEditor::Cursor range(r->line() - 1, 0);
+    IDocumentController* dc = ICore::self()->documentController();
+    dc->openDocument(KUrl(r->file().filePath()), range);
+}
+
 void RunnerWindow::enableResultSync(bool enable) const
 {
     if (enable) {
@@ -815,22 +752,6 @@ void RunnerWindow::enableResultSync(bool enable) const
                    this,
                    SLOT(syncTestWithResult(const QItemSelection&, const QItemSelection&)));
     }
-}
-
-void RunnerWindow::ensureCurrentResult() const
-{
-    // Do nothing if there is a current index or no data at all.
-    if (resultsView()->currentIndex().isValid()) {
-        return;
-    }
-    // Try to make first visible index the current one.
-    QModelIndex currentIndex = resultsView()->indexAt(QPoint(1, 1));
-    if (!currentIndex.isValid()) {
-        return;
-    }
-    // Set current index without highlighting.
-    resultsView()->selectionModel()->setCurrentIndex(currentIndex,
-            QItemSelectionModel::NoUpdate);
 }
 
 void RunnerWindow::displayStatusNum(QLabel* labelForText,
@@ -847,12 +768,44 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
     labelForPic->setVisible(visible);
 }
 
+////////////////// GETTERS /////////////////////////////////////////////////////////////
+
+QTreeView* RunnerWindow::runnerView() const
+{
+    return m_ui->treeRunner;
+}
+
+QTreeView* RunnerWindow::resultsView() const
+{
+    return m_uiResults->treeResults;
+}
+
+RunnerModel* RunnerWindow::runnerModel() const
+{
+    return runnerController()->runnerModel();
+}
+
+RunnerProxyModel* RunnerWindow::runnerProxyModel() const
+{
+    return runnerController()->runnerProxyModel();
+}
+
+ResultsModel* RunnerWindow::resultsModel() const
+{
+    return m_resultsModel;
+}
+
+ResultsProxyModel* RunnerWindow::resultsProxyModel() const
+{
+    return m_resultsProxyModel;
+}
+
 RunnerViewController* RunnerWindow::runnerController() const
 {
     return m_runnerViewController;
 }
 
-ResultsViewController* RunnerWindow::resultsController() const
+VerboseManager* RunnerWindow::verboseManager() const
 {
-    return m_resultsViewController;
+    return m_verbose;
 }

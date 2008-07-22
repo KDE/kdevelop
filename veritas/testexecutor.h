@@ -29,7 +29,7 @@ class Test;
 
 /*! Initiates and starts execution of test executable in a test tree.
  *  Links succeeding tests together in a signal-slot chain triggered 
- *  with the `fireStarter()' signal. */
+ *  with the `fireStarter' signal. */
 class TestExecutor : public QObject
 {
 Q_OBJECT
@@ -37,12 +37,15 @@ public:
     TestExecutor();
 
     /*! The root of the test tree which needs to be executed.
-     *  Clients must set this before `go()'. */
+     *  Clients must set this before invoking go(). */
     void setRoot(Test* root);
 
-    /*! Initialize and start execution of (user) selected tests in the test
-     *  tree with root `root' */
+    /*! Initialize and start execution of user selected tests in the test
+     *  tree */
     void go();
+
+    /*! Soft stop, will not start the next executable in the chain */
+    void stop();
 
 signals:
     /*! triggers first execution */

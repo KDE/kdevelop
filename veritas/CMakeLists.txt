@@ -25,7 +25,6 @@ set(veritas_SRCS
     mvc/proxymodelcommon.cpp
     mvc/resultsmodel.cpp
     mvc/resultsproxymodel.cpp
-    mvc/resultsviewcontroller.cpp
     mvc/runnermodel.cpp
     mvc/runnerproxymodel.cpp
     mvc/runnerviewcontroller.cpp
@@ -34,10 +33,13 @@ set(veritas_SRCS
     mvc/viewcontrollercommon.cpp
     mvc/selectionmanager.cpp
     mvc/selectiontoggle.cpp
+    mvc/verbosemanager.cpp
+    mvc/verbosetoggle.cpp
     ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
     mvc/runnerwindow.ui
+    mvc/resultsview.ui
     mvc/stoppingdialog.ui)
 
 qt4_add_resources(veritas_SRCS
@@ -46,10 +48,14 @@ qt4_add_resources(veritas_SRCS
 kde4_add_library(kdevplatformveritas SHARED ${veritas_SRCS})
 target_link_libraries(kdevplatformveritas
     kdevplatforminterfaces
+    kdevplatformshell
+    sublime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS})
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY})
 qt4_automoc(${veritas_SRCS})
 install(TARGETS kdevplatformveritas ${INSTALL_TARGETS_DEFAULT_ARGS})
 

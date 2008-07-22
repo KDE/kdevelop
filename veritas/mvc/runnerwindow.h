@@ -27,7 +27,7 @@
 #include <QTreeView>
 namespace KDevelop { class IProject; }
 
-namespace Ui { class RunnerWindow; }
+namespace Ui { class RunnerWindow; class ResultsView; }
 
 class QItemSelection;
 class QAction;
@@ -43,6 +43,7 @@ class ResultsProxyModel;
 class RunnerViewController;
 class ResultsViewController;
 class SelectionManager;
+class VerboseManager;
 
 /*!
  * \brief The RunnerWindow class defines the Veritas main window.
@@ -96,6 +97,9 @@ public: // Operations
     const Ui::RunnerWindow* ui() const;
     KSelectAction* projectPopup() const;
 
+    VerboseManager* verboseManager() const;
+    QWidget* resultsWidget() const { return m_results; }
+
 public Q_SLOTS:
 
     void addProjectToPopup(KDevelop::IProject*);
@@ -115,10 +119,6 @@ private Q_SLOTS:
     void displayNumErrors(int numItems) const;
     void displayNumFatals(int numItems) const;
     void displayNumExceptions(int numItems) const;
-
-    /*! Sets the filter in the results model. The filter is determinded
-     * from the enabled filter buttons. */
-    void setResultsFilter() const;
 
     /*! Filter all results which belong to the selected in the 
      * results view. */
@@ -144,9 +144,7 @@ private Q_SLOTS:
      * the StoppingDialog is shown */
     void stopItems();
 
-    /*! Helper method needed to sync the results display with the results
-     * dock widget visibility. Ensures highlighted rows are visible. */
-    void showResults(bool show);
+    void jumpToSource(const QItemSelection& selected, const QItemSelection& deselected);
 
 private: // Operations
 
@@ -162,10 +160,6 @@ private: // Operations
     void connectItemStatistics(RunnerModel* model);
     void initProxyModels(RunnerModel* model);
     void connectProgressIndicators(RunnerModel* model);
-
-    // helpers for setResultsFilter()
-    void highlightResultAgain(const QModelIndex& previous) const;
-    QModelIndex selectedResultIndex() const;
 
     // the rest
 
@@ -188,30 +182,31 @@ private: // Operations
      * otherwise disabled. */
     void enableResultSync(bool enable) const;
 
-    /*! Sets a suitable current index in the results view so the view
-     * has a focus rect and behaves 'normal' when it gets the focus. */
-    void ensureCurrentResult() const;
-
     /*! Sets \a numItems as text in \a labelForText. If \a numItems
      * is 0 the labels are hidden, otherwise made visible. */
     void displayStatusNum(QLabel* labelForText,
                           QLabel* labelForPic, int numItems) const;
 
     RunnerViewController* runnerController() const;
-    ResultsViewController* resultsController() const;
+
+    void enableToSource() const;
 
     // Copy and assignment not supported.
     RunnerWindow(const RunnerWindow&);
     RunnerWindow& operator=(const RunnerWindow&);
 
 private: // Attributes
-    Ui::RunnerWindow *m_ui;             // QtDesigner main object
+    Ui::RunnerWindow *m_ui;            // QtDesigner main object
+    Ui::ResultsView* m_uiResults;      //
+    QWidget* m_results;
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm
     RunnerViewController*  m_runnerViewController; // used to reduce bloat in this class
-    ResultsViewController* m_resultsViewController; // idem
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
+    VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
+    ResultsModel* m_resultsModel;
+    ResultsProxyModel* m_resultsProxyModel;
 };
 
 } // namespace

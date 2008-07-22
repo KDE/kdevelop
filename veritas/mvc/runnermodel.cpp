@@ -20,7 +20,6 @@
  */
 
 #include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/resultsmodel.h"
 
 #include "veritas/test.h"
 #include "veritas/testexecutor.h"
@@ -40,7 +39,6 @@
 #include <KGlobal>
 #include <KLocale>
 
-using Veritas::ResultsModel;
 using Veritas::RunnerModel;
 using Veritas::Test;
 using Veritas::TestExecutor;
@@ -59,7 +57,6 @@ RunnerModel::RunnerModel(QObject* parent)
 
     m_rootItem = 0;
     m_executor = 0;
-    m_resultsModel = 0;
     m_isRunning = false;
     setExpectedResults(Veritas::AllStates);
     //ModelTest* tm = new ModelTest(this);
@@ -68,7 +65,6 @@ RunnerModel::RunnerModel(QObject* parent)
 RunnerModel::~RunnerModel()
 {
     stopItems();
-    delete m_resultsModel;
     delete m_rootItem;
 }
 
@@ -340,7 +336,6 @@ void RunnerModel::runItems()
     if (not rootItem()) return;
     m_isRunning = true;
     clearItem(index(0, 0));  // Remove all results.
-    if (resultsModel()) resultsModel()->clear();
     if (m_executor) delete m_executor;
 
     m_executor = new TestExecutor;
@@ -357,29 +352,13 @@ void RunnerModel::allDone()
 
 bool RunnerModel::stopItems()
 {
-    // TODO
-    return false;
+    if (m_executor) m_executor->stop();
+    return true;
 }
 
 bool RunnerModel::isRunning(unsigned long time) const
 {
     return m_isRunning;
-}
-
-ResultsModel* RunnerModel::resultsModel()
-{
-    if (!m_rootItem) {
-        return 0;
-    }
-    if (!m_resultsModel) {
-        // Create the results model.
-        QStringList resultHeaders;
-        for (int i = 0; i < m_rootItem->columnCount(); i++) {
-            resultHeaders.append(m_rootItem->data(i).toString());
-        }
-        m_resultsModel = new ResultsModel(resultHeaders);
-    }
-    return m_resultsModel;
 }
 
 Test* RunnerModel::rootItem() const
@@ -391,20 +370,13 @@ void RunnerModel::setRootItem(Test* rootItem)
 {
     delete m_rootItem;
     m_rootItem = rootItem;
-
-    delete m_resultsModel;
-    m_resultsModel = 0;
-
-    // Create the results model (anew).
-    if (m_rootItem) resultsModel()->clear();
     initItemConnect(index(0, 0));
 }
 
 void RunnerModel::initItemConnect(QModelIndex current)
 {
     while (current.isValid()) {
-        if (current.child(0, 0).isValid()) {
-            // Go down one level.
+        if (current.child(0, 0).isValid()) { // Go down 
             initItemConnect(current.child(0, 0));
         }
         Test* item = itemFromIndex(current);

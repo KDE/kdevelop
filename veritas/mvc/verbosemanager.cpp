@@ -18,15 +18,16 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "veritas/mvc/selectionmanager.h"
+#include "veritas/mvc/verbosemanager.h"
 
 #include "veritas/test.h"
 #include "veritas/utils.h"
 
 #include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/selectiontoggle.h"
+#include "veritas/mvc/verbosetoggle.h"
 
 #include <KIconEffect>
+#include <KDebug>
 
 #include <QAbstractButton>
 #include <QAbstractItemView>
@@ -37,12 +38,12 @@
 #include <QRect>
 #include <QTimeLine>
 
-using Veritas::SelectionManager;
-using Veritas::SelectionToggle;
+using Veritas::VerboseManager;
+using Veritas::VerboseToggle;
 using Veritas::Test;
 using Veritas::RunnerModel;
 
-SelectionManager::SelectionManager(QAbstractItemView* parent) :
+VerboseManager::VerboseManager(QAbstractItemView* parent) :
     QObject(parent),
     m_view(parent),
     m_toggle(0)
@@ -51,27 +52,28 @@ SelectionManager::SelectionManager(QAbstractItemView* parent) :
             this, SLOT(slotEntered(const QModelIndex&)));
     connect(parent, SIGNAL(viewportEntered()),
             this, SLOT(slotViewportEntered()));
-    m_toggle = new SelectionToggle(m_view->viewport());
+    m_toggle = new VerboseToggle(m_view->viewport());
     m_toggle->setCheckable(true);
     m_toggle->hide();
     connect(m_toggle, SIGNAL(clicked(bool)),
-            this, SLOT(setItemSelected(bool)));
+            this, SLOT(emitOpenVerbose()));
 }
 
-SelectionManager::~SelectionManager()
+VerboseManager::~VerboseManager()
 {}
 
-void SelectionManager::reset()
+void VerboseManager::reset()
 {
     m_toggle->reset();
 }
 
-void SelectionManager::slotEntered(const QModelIndex& index)
+void VerboseManager::slotEntered(const QModelIndex& index)
 {
     m_toggle->hide();
     if (index.isValid() ){
+        Test* t = itemFromIndex(index);
+        if (not t || not t->shouldRun()) return;
         m_toggle->setIndex(index);
-
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
         connect(m_view->selectionModel(),
@@ -80,13 +82,9 @@ void SelectionManager::slotEntered(const QModelIndex& index)
                 SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
 
         const QRect rect = m_view->visualRect(index);
-        Test* t = itemFromIndex(index);
-        if (not t) return;
-        const int x = rect.right() - (t->shouldRun() ? 32 : 16);
+        const int x = rect.right() - 16;
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
-
-        m_toggle->setChecked(itemFromIndex(index)->selected());
         m_toggle->show();
     } else {
         m_toggle->setIndex(QModelIndex());
@@ -99,24 +97,23 @@ void SelectionManager::slotEntered(const QModelIndex& index)
     }
 }
 
-void SelectionManager::slotViewportEntered()
+void VerboseManager::slotViewportEntered()
 {
     m_toggle->hide();
 }
 
-void SelectionManager::setItemSelected(bool selected)
+void VerboseManager::emitOpenVerbose()
 {
     const QModelIndex index = m_toggle->index();
     if (index.isValid()) {
-        itemFromIndex(index)->setSelected(selected);
-        QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-        RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
-        runnerModel->updateView(proxyModel->mapToSource(index));
+        Test* t = itemFromIndex(index);
+        if (t) {
+            emit openVerbose(t);
+        }
     }
-    emit selectionChanged();
 }
 
-void SelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)
+void VerboseManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -124,7 +121,7 @@ void SelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int
     m_toggle->hide();
 }
 
-void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
+void VerboseManager::slotSelectionChanged(const QItemSelection& selected,
                                             const QItemSelection& deselected)
 {
     const QModelIndex index = m_toggle->index();
@@ -139,7 +136,7 @@ void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
     }
 }
 
-Test* SelectionManager::itemFromIndex(const QModelIndex& index) const
+Test* VerboseManager::itemFromIndex(const QModelIndex& index) const
 {
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
     RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
@@ -147,4 +144,4 @@ Test* SelectionManager::itemFromIndex(const QModelIndex& index) const
     return runnerModel->itemFromIndex(runnerIndex);
 }
 
-#include "selectionmanager.moc"
+#include "verbosemanager.moc"

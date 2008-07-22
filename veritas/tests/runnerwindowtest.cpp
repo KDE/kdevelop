@@ -45,7 +45,7 @@ void RunnerWindowTest::init()
     model->fill2();
     window = new RunnerWindow();
     window->setModel(model);
-    window->show();
+    //window->show();
     m_ui = window->ui();
     m_proxy = window->runnerProxyModel();
     m_view = window->runnerView();
@@ -208,7 +208,7 @@ void RunnerWindowTest::newModel()
     RunnerModelStub* model = createRunnerModelStub(false);
     model->fill1();
     window->setModel(model);
-    window->show();
+    //window->show();
 
     // it should now contain 2 top level items without
     // children. since thats what model->fill1() does.
