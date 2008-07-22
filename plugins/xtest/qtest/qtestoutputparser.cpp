@@ -64,8 +64,8 @@ const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 
 QTestOutputParser::QTestOutputParser()
     : m_state(Main),
-      m_result(0),
-      m_buzzy(false)
+      m_buzzy(false),
+      m_result(0)
 {}
 
 QTestOutputParser::~QTestOutputParser()
@@ -119,7 +119,7 @@ void QTestOutputParser::go()
         device()->open(QIODevice::ReadOnly);
     }
     if (!device()->isReadable()) {
-        kWarning() << "Device not readable. Failed to parse test output.";
+        //kWarning() << "Device not readable. Failed to parse test output.";
         m_buzzy = false;
         return;
     }
@@ -157,21 +157,20 @@ bool QTestOutputParser::fixtureFailed(const QString& cmd)
 
 void QTestOutputParser::iterateTestFunctions()
 {
-    // main loop
-    while (!atEnd() && doingOK()) {
+    while (!atEnd()) {                 // main loop
         readNext();
         if (isStartElement_(c_testfunction)) {
             m_cmdName = attributes().value("name").toString();
             kDebug() << m_cmdName;
             m_cmd = m_case->childNamed(m_cmdName);
-            m_result = new TestResult; // hmm leaks I suppose..
+            m_result = new TestResult;
             if (m_cmd) m_cmd->signalStarted();
             m_state = TestFunction;
             processTestFunction();
             if (m_state != Main) return;
         }
     }
-    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+    //kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
 void QTestOutputParser::processTestFunction()
@@ -220,8 +219,9 @@ void QTestOutputParser::setFailure()
 {
     while (!atEnd() && !isEndElement_(c_description)) {
         readNext();
-        if (isCDATA())
+        if (isCDATA()) {
             m_result->setMessage(text().toString());
+        }
     }
 
     if (isEndElement_(c_description)) {

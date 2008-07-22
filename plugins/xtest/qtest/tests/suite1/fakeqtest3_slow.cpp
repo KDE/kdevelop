@@ -19,6 +19,7 @@
  */
 
 #include <QString>
+#include <QFile>
 #include <QTextStream>
 #include <QThread>
 
@@ -31,9 +32,9 @@ public:
 
 int main(int argc, char** argv)
 {
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
-    QTextStream cout(stdout);
+    QFile f(argv[argc-1]);
+    f.open(QIODevice::WriteOnly);
+    QTextStream cout(&f);
     cout << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
             "<TestCase name=\"QTestCaseTest\">\n"
             "<Environment>\n"
@@ -52,5 +53,6 @@ int main(int argc, char** argv)
             "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"
             "</TestFunction>\n"
             "</TestCase>\n";
+    f.close();
     return 0;
 }

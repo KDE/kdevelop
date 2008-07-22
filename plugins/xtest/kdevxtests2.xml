@@ -115,6 +115,8 @@
     <command name="construct" />
     <command name="addCommand" />
     <command name="addCommands" />
+    <command name="demoFailure" />
+    <command name="moreFailures" />
   </case>
   <case name="qtest-it-qtestrunnertest" exe="qtest-it-qtestrunnertest.shell">
     <command name="empty" />

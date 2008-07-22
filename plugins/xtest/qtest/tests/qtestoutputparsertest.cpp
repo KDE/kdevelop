@@ -45,9 +45,6 @@ Q_DECLARE_METATYPE(Veritas::TestState)
 Q_DECLARE_METATYPE(QTest::QTestCase*)
 Q_DECLARE_METATYPE(QModelIndex)
 
-namespace
-{
-
 /*example xml output :
      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
      "<TestCase name=\"TestTest\">"
@@ -66,43 +63,9 @@ namespace
      "</TestFunction>"
      "</TestCase>)"*/
 
-QByteArray testFunctionXml(QByteArray name, QByteArray incident)
-{
-    return QByteArray(
-               "<TestFunction name=\"" + name + "\">\n"
-               + incident +
-               "\n</TestFunction>\n");
-}
+//////////////// HELPER MACROS ///////////////////////////////////////////////
 
-QByteArray incidentXml(QByteArray type, QByteArray file, QByteArray line, QByteArray msg)
-{
-    return QByteArray(
-               "<Incident type=\"" + type + "\" file=\"" + file + "\" line=\"" + line + "\">\n"
-               "<Description><![CDATA[" + msg + "]]></Description>\n"
-               "</Incident>\n");
-}
-
-QByteArray successIncidentXml()
-{
-    return QByteArray("<Incident type=\"pass\" file=\"\" line=\"0\" />\n");
-}
-
-QByteArray initTestCaseXml = testFunctionXml("initTestCase", successIncidentXml());
-QByteArray cleanupTestCaseXml = testFunctionXml("cleanupTestCase", successIncidentXml());
-QByteArray functionXml = testFunctionXml("someCommand", successIncidentXml());
-
-const QByteArray headerXml(
-    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-    "<TestCase name=\"TestTest\">\n"
-    "<Environment>\n"
-    "<QtVersion>4.4.0-rc1</QtVersion>\n"
-    "<QTestVersion>4.4.0-rc1</QTestVersion>\n"
-    "</Environment>\n");
-const QByteArray footerXml("</TestCase>\n");
-
-} // end anonymous namespace
-
-#define XML_HEADER \
+#define QTEST_HEADER_XML \
     "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"\
     "<TestCase name=\"TestTest\">\n"\
     "<Environment>\n"\
@@ -110,27 +73,62 @@ const QByteArray footerXml("</TestCase>\n");
         "<QTestVersion>4.4.0-rc1</QTestVersion>\n"\
     "</Environment>\n"
 
-#define XML_INIT_TESTCASE\
+#define QTEST_INITTESTCASE_XML\
     "<TestFunction name=\"initTestCase\">\n"\
         "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"\
     "</TestFunction>\n"
 
-#define XML_CLEANUP_TESTCASE\
+#define QTEST_CLEANUPTESTCASE_XML\
     "<TestFunction name=\"cleanupTestCase\">\n"\
         "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"\
     "</TestFunction>\n"
 
-#define FAILURE_MSG "some failure msg"
-#define SPAM_MSG1 "some spam msg"
-#define SPAM_MSG2 "some other spam msg"
-#define SPAM_MSG3 "some more spam"
+#define QTEST_FOOTER_XML \
+    "</TestCase>\n"
 
-void QTestOutputParserTest::parse_data()
+#define QTEST_SUCCESSFUNCTION_XML \
+    "<TestFunction name=\"someCommand\">\n" \
+        "<Incident type=\"pass\" file=\"\" line=\"0\" />\n" \
+    "</TestFunction>\n"
+
+#include <QSignalSpy>
+
+//////////////// HELPER CLASSES //////////////////////////////////////////////
+
+namespace
 {
-    setupColumns();
-    addSunnyDayData();
-    addBasicFailureData();
+// sole purpose of this is to get a valid QModelIndex.
+class FakeModel : public QAbstractListModel
+{
+    public:
+        int rowCount(const QModelIndex&) const {
+            return 1;
+        }
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const {
+            Q_UNUSED(index);
+            Q_UNUSED(role);
+            return QVariant("owk");
+        }
+        QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const {
+            Q_UNUSED(parent);
+            QModelIndex i = createIndex(row, column, test);
+            test->setIndex(i);
+            return i;
+        }
+        Test* test;
+};
 }
+
+namespace QTest
+{
+template<> inline char* toString(const TestResult& res)
+{
+    return qstrdup((QString::number(res.state()) + ' ' +
+                    res.message()).toLatin1().constData());
+}
+}
+
+////////////// FIXTURE ///////////////////////////////////////////////////////
 
 void QTestOutputParserTest::initTestCase()
 {
@@ -139,15 +137,113 @@ void QTestOutputParserTest::initTestCase()
 
 void QTestOutputParserTest::init()
 {
-    m_caze = new QTestCase("TestTest", QFileInfo(), 0);
-    m_caze->addChild(new QTestCommand("someCommand", m_caze));
+    m_parser = new QTestOutputParser;
+    m_caze = createTestCase(m_cazeInfo);
 }
 
 void QTestOutputParserTest::cleanup()
 {
     delete m_caze;
+    delete m_parser;
 }
 
+// fixture setup helper
+void QTestOutputParserTest::initParser(QByteArray& xml, QTestCase* caze)
+{
+    QBuffer* buff = new QBuffer(&xml, 0);
+    m_parser->setDevice(buff);
+    m_parser->setCase(caze);
+}
+
+
+
+// creation method
+QTestCase* QTestOutputParserTest::createTestCase(TestInfo& cInfo)
+{
+    QTestCase* caze = new QTestCase("TestTest", QFileInfo(), 0);
+    cInfo.test = caze;
+    cInfo.finished = new QSignalSpy(caze, SIGNAL(finished(QModelIndex)));
+    cInfo.started  = new QSignalSpy(caze, SIGNAL(started(QModelIndex)));
+
+    FakeModel* fm = new FakeModel;
+    fm->test = caze;
+    QModelIndex index = fm->index(0);
+    return caze;
+}
+
+// creation method
+void QTestOutputParserTest::createTestCommand(TestInfo& cInfo, QTestCase* parent, QString name)
+{
+    cInfo.test = new QTestCommand(name, (QTestCase*)parent);
+    parent->addChild(cInfo.test);
+    cInfo.started  = new QSignalSpy(cInfo.test, SIGNAL(started(QModelIndex)));
+    cInfo.finished = new QSignalSpy(cInfo.test, SIGNAL(finished(QModelIndex)));
+
+    FakeModel* fm = new FakeModel;
+    fm->test = cInfo.test;
+    QModelIndex index = fm->index(0);
+}
+
+// fixture setup helper
+void QTestOutputParserTest::setExpectedSuccess(TestInfo& tInfo)
+{
+    setExpectedResult(tInfo, Veritas::RunSuccess, "", 0, "");
+}
+
+// fixture setup helper
+void QTestOutputParserTest::setExpectedFailure(TestInfo& tInfo)
+{
+    setExpectedResult(tInfo, Veritas::RunError, "/path/to/file.cpp",
+                             100, "failure message");
+}
+
+// fixture setup helper
+void QTestOutputParserTest::setExpectedResult(
+    TestInfo& tInfo,
+    Veritas::TestState state,
+    QString filePath,
+    int lineNumber,
+    QString failureMessage)
+{
+    TestResult* res = new TestResult;
+    res->setState(state);
+    res->setFile(filePath);
+    res->setLine(lineNumber);
+    res->setMessage(failureMessage);
+    tInfo.result = res;
+}
+
+/////////////// DATA TEST ///////////////////////////////////////////////////////////
+
+// test command
+void QTestOutputParserTest::parse()
+{
+    // exercise
+    QFETCH(QByteArray, xml);
+    initParser(xml, m_caze);
+
+    QFETCH(Veritas::TestState, state);
+    QFETCH(QFileInfo, file);
+    QFETCH(int, line);
+    QFETCH(QString, message);
+    createTestCommand(m_command1Info, m_caze, "someCommand");
+    setExpectedResult(m_command1Info, state, file.filePath(), line, message);
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    checkResult(m_command1Info);
+}
+
+// test data implementation
+void QTestOutputParserTest::parse_data()
+{
+    setupColumns();
+    addSunnyDayData();
+    addBasicFailureData();
+}
+
+// helper for parse_data
 void QTestOutputParserTest::setupColumns()
 {
     QTest::addColumn<QByteArray>("xml");
@@ -158,19 +254,19 @@ void QTestOutputParserTest::setupColumns()
     QTest::addColumn<QTestCase*>("case");
 }
 
-QByteArray failureIncidentXml()
-{
-    return incidentXml("fail", "/path/to/file.cpp", "100", "some message");
-}
-
 // test data
 void QTestOutputParserTest::addSunnyDayData()
 {
     // first row - sunny day test succes
-    QByteArray input = headerXml + initTestCaseXml
-                       + functionXml
-                       + cleanupTestCaseXml
-                       + footerXml;
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"someCommand\">\n"
+            "<Incident type=\"pass\" file=\"\" line=\"0\" />\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+
     QTest::newRow("sunny day test succes")
     << input << Veritas::RunSuccess
     << QFileInfo("") << 0 << "" << m_caze;
@@ -180,183 +276,147 @@ void QTestOutputParserTest::addSunnyDayData()
 void QTestOutputParserTest::addBasicFailureData()
 {
     // second row - test failure
-    QByteArray input = headerXml
-                       + initTestCaseXml
-                       + testFunctionXml("someCommand", failureIncidentXml())
-                       + cleanupTestCaseXml
-                       + footerXml;
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"someCommand\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[some message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+
     QTest::newRow("basic failure")
     << input << Veritas::RunError
     << QFileInfo("/path/to/file.cpp") << 100
     << "some message" << m_caze;
 }
 
-#include <QSignalSpy>
-
-namespace
-{
-// sole purpose of this is to get a decent QModelIndex ...
-class FakeModel : public QAbstractListModel
-{
-public:
-    int rowCount(const QModelIndex&) const
-    {
-        return 1;
-    }
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
-    {
-        Q_UNUSED(index);
-        Q_UNUSED(role);
-        return QVariant("owk");
-    }
-    QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const
-    {
-        Q_UNUSED(parent);
-        QModelIndex i = createIndex(row, column, test);
-        test->setIndex(i);
-        return i;
-    }
-    Test* test;
-};
-}
-
-// test command
-void QTestOutputParserTest::parse()
-{
-    // exercise
-    QFETCH(QByteArray, xml);
-    QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser;
-    parser.setDevice(&xmlOut);
-    QTestCommand* cmd = m_caze->child(0);
-    QSignalSpy compSpy(cmd, SIGNAL(finished(QModelIndex)));
-    QSignalSpy starSpy(cmd, SIGNAL(started(QModelIndex)));
-    FakeModel fm;
-    fm.test = m_caze->child(0);
-    QModelIndex index = fm.index(0);
-    parser.setCase(m_caze);
-    parser.go();
-
-    // verify
-    KOMPARE(1, starSpy.count());
-    KOMPARE(1, compSpy.count());
-    QModelIndex i1 = compSpy.takeFirst().value(0).value<QModelIndex>();
-    QModelIndex i2 = starSpy.takeFirst().value(0).value<QModelIndex>();
-    KOMPARE(index, i1);
-    KOMPARE(index, i2);
-
-    QFETCH(Veritas::TestState, state);
-    TestResult* result = m_caze->child(0)->result();
-    KOMPARE_MSG(state, result->state(),
-                "Expected " + QString::number(state) +
-                " got " + QString::number(result->state()));
-
-    QFETCH(QFileInfo, file);
-    KOMPARE(file.filePath(), result->file().filePath());
-
-    QFETCH(int, line);
-    KOMPARE(line, result->line());
-
-    QFETCH(QString, message);
-    KOMPARE_MSG(message, result->message(),
-                "Expected " + message + " got " + result->message());
-}
-
-namespace QTest
-{
-template<> inline char* toString(const TestResult& res)
-{
-    return qstrdup((QString::number(res.state()) + ' ' +
-                   res.message()).toLatin1().constData());
-}
-}
+////////////// TEST COMMANDS ///////////////////////////////////////////////////////
 
 // test command
 void QTestOutputParserTest::initFailure()
 {
-    QByteArray xml = headerXml
-                     + testFunctionXml("initTestCase", failureIncidentXml())
-                     + footerXml;
-    QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser;
-    parser.setDevice(&xmlOut);
-    QSignalSpy compSpy(m_caze, SIGNAL(finished(QModelIndex)));
-    QSignalSpy starSpy(m_caze, SIGNAL(started(QModelIndex)));
-    FakeModel fm;
-    fm.test = m_caze;
-    QModelIndex index = fm.index(0);
-    parser.setCase(m_caze);
-    parser.go();
+    QByteArray input =
+        QTEST_HEADER_XML
+        "<TestFunction name=\"initTestCase\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[failure message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_SUCCESSFUNCTION_XML
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+    setExpectedFailure(m_cazeInfo);
 
-    // verify
-    KOMPARE(1, starSpy.count());
-    KOMPARE(1, compSpy.count());
-    QModelIndex i1 = compSpy.takeFirst().value(0).value<QModelIndex>();
-    QModelIndex i2 = starSpy.takeFirst().value(0).value<QModelIndex>();
-    KOMPARE(index, i1);
-    KOMPARE(index, i2);
+    m_parser->go();
 
-    TestResult expected(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
-    TestResult* result = m_caze->result();
-    KOMPARE(expected, *result);
+    assertParsed(m_cazeInfo);
+    checkResult(m_cazeInfo);
 }
 
 // test command
 void QTestOutputParserTest::cleanupFailure()
 {
-    QByteArray xml = headerXml
-                     + initTestCaseXml + functionXml
-                     + testFunctionXml("cleanupTestCase", failureIncidentXml())
-                     + footerXml;
-    QBuffer xmlOut(&xml, 0);
-    QTestOutputParser parser;
-    parser.setDevice(&xmlOut);
-    QSignalSpy compSpy(m_caze, SIGNAL(finished(QModelIndex)));
-    QSignalSpy starSpy(m_caze, SIGNAL(started(QModelIndex)));
-    QTestCommand* cmd = m_caze->child(0);
-    QSignalSpy compSpyCmd(cmd, SIGNAL(finished(QModelIndex)));
-    QSignalSpy starSpyCmd(cmd, SIGNAL(started(QModelIndex)));
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        QTEST_SUCCESSFUNCTION_XML
+        "<TestFunction name=\"cleanupTestCase\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[failure message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
 
-    FakeModel fm;
-    fm.test = m_caze;
-    QModelIndex caseIndex = fm.index(0);
-    FakeModel fm2;
-    fm2.test = m_caze->child(0);
-    QModelIndex cmdIndex = fm2.index(0);
+    setExpectedFailure(m_cazeInfo);
+    createTestCommand(m_command1Info, m_caze, "someCommand");
+    setExpectedSuccess(m_command1Info);
 
-    parser.setCase(m_caze);
-    parser.go();
+    m_parser->go();
 
-    // the testcommand should have been completed successfully
-    assertCompleted(cmd, starSpyCmd, compSpyCmd);
-    TestResult expected(Veritas::RunSuccess, "", 0, QFileInfo(""));
-    assertResult(expected, *cmd->result());
+    assertParsed(m_command1Info);
+    checkResult(m_command1Info);
+    assertParsed(m_cazeInfo);
+    checkResult(m_cazeInfo);
+}
 
-    // the testcase should have failed
-    assertCompleted(m_caze, starSpy, compSpy);
-    TestResult expected2(Veritas::RunError, "some message", 100, QFileInfo("/path/to/file.cpp"));
-    assertResult(expected2, *m_caze->result());
+// command
+void QTestOutputParserTest::doubleFailure()
+{
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"command1\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[failure message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        "<TestFunction name=\"command2\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/another.cpp\" line=\"50\">\n"
+            "<Description><![CDATA[another failure message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+
+    createTestCommand(m_command1Info, m_caze, "command1");
+    setExpectedResult(m_command1Info, Veritas::RunError, "/path/to/file.cpp",
+                              100, "failure message");
+    createTestCommand(m_command2Info, m_caze, "command2");
+    setExpectedResult(m_command2Info, Veritas::RunError, "/path/to/another.cpp",
+                               50, "another failure message");
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    checkResult(m_command1Info);
+    assertParsed(m_command2Info);
+    checkResult(m_command2Info);
+}
+
+/////////////// CUSTOM ASSERTIONS ////////////////////////////////////////////
+
+// custom assertion
+void QTestOutputParserTest::checkResult(TestInfo& testInfo)
+{
+    kDebug() << testInfo.test->name();
+
+    QModelIndex i = testInfo.finished->first().value(0).value<QModelIndex>();
+    Test* test = static_cast<Test*>(i.internalPointer());
+    TestResult* actual = test->result();
+    TestResult* expected = testInfo.result;
+    assertResult(expected, actual);
 }
 
 // helper
-QTestCommand* QTestOutputParserTest::initTestCmd(int i)
+void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
 {
-    QTestCommand *cmd = m_caze->child(i);
-    FakeModel fm;
-    fm.test = cmd;
-    cmd->setIndex(fm.index(0));
-    return cmd;
-}
+    kDebug() << testInfo.test->name();
 
-// helper
-void QTestOutputParserTest::assertCompleted(Test* test, QSignalSpy& started, QSignalSpy& completed)
-{
-    KOMPARE(1, started.count());
-    KOMPARE(1, completed.count());
-    QModelIndex i1 = completed.takeFirst().value(0).value<QModelIndex>();
-    QModelIndex i2 = started.takeFirst().value(0).value<QModelIndex>();
+    QSignalSpy* started = testInfo.started;
+    QSignalSpy* completed = testInfo.finished;
+    Test* test = testInfo.test;
+
+    KOMPARE_MSG(1, started->count(),
+        QString("OutputParser did not emit started signal for ") + test->name());
+    KOMPARE_MSG(1, completed->count(),
+        QString("OutputParser did not emit finished signal for ") + test->name());
+
+    QModelIndex i1 = completed->first().value(0).value<QModelIndex>();
+    QModelIndex i2 = started->first().value(0).value<QModelIndex>();
+
     KOMPARE(test, static_cast<Test*>(i1.internalPointer()));
     KOMPARE(test, static_cast<Test*>(i2.internalPointer()));
+}
+
+void QTestOutputParserTest::assertResult(TestResult* expected, TestResult* actual)
+{
+    assertResult(*expected, *actual);
 }
 
 // helper

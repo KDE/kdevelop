@@ -83,7 +83,7 @@ void QTestRunnerTest::empty()
 
     model->setRootItem(reg_.rootItem());
     m_window->setModel(model);
-    m_window->show();
+    //m_window->show();
     m_window->ui()->actionStart->trigger();
 
     KOMPARE(s->count(), 1);
@@ -179,28 +179,31 @@ void QTestRunnerTest::runTwice()
 void QTestRunnerTest::checkResultItems(QList<QStringList> expected)
 {
     nrofMessagesEquals(expected.size());
-    for (int i = 0; i < expected.size(); i++)
+    for (int i = 0; i < expected.size(); i++) {
         checkResultItem(i, expected.value(i));
+    }
 }
 
 // helper
 void QTestRunnerTest::checkResultItem(int num, const QStringList& item)
 {
-    QAbstractItemModel* results = m_window->ui()->treeResults->model();
-    KOMPARE(item[0], results->data(results->index(num, 0))); // test name
-    //KOMPARE(item[1], results->data(results->index(num, 1))); // status -> "Error"
-    KOMPARE(item[1], results->data(results->index(num, 2))); // failure message
-    KOMPARE(item[2], results->data(results->index(num, 3))); // filename
-    KOMPARE(item[3], results->data(results->index(num, 4))); // line number
+    m_resultModel = m_window->resultsView()->model();
+
+    KOMPARE(item[0], m_resultModel->data(m_resultModel->index(num, 0))); // test name
+    //KOMPARE(item[1], m_resultModel->data(resultsModel->index(num, 1))); // status -> "Error"
+    KOMPARE(item[1], m_resultModel->data(m_resultModel->index(num, 2))); // failure message
+    KOMPARE(item[2], m_resultModel->data(m_resultModel->index(num, 3))); // filename
+    KOMPARE(item[3], m_resultModel->data(m_resultModel->index(num, 4))); // line number
 }
 
 // helper
 void QTestRunnerTest::nrofMessagesEquals(int num)
 {
-    QAbstractItemModel* results = m_window->ui()->treeResults->model();
-    for (int i = 0; i < num; i++)
-        KVERIFY(results->index(i, 0).isValid());
-    KVERIFY(!results->index(num, 0).isValid());
+    m_resultModel = m_window->resultsView()->model();
+    for (int i = 0; i < num; i++) {
+        KVERIFY(m_resultModel->index(i, 0).isValid());
+    }
+    KVERIFY(!m_resultModel->index(num, 0).isValid());
 }
 
 // helper
@@ -212,7 +215,7 @@ void QTestRunnerTest::initNrun(QByteArray& regXml)
     RunnerModel* model = new RunnerModel;
     model->setRootItem(reg.rootItem());
     m_window->setModel(model);
-    m_window->show();
+    //m_window->show();
     m_window->ui()->actionStart->trigger();
     if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
          QFAIL("Timeout while waiting for runner items to complete execution");

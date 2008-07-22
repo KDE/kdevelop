@@ -34,8 +34,12 @@ public:
     explicit CppUnitView(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CppUnitView();
 
+protected slots:
+    virtual void openVerbose(Veritas::Test*) {}
+
 protected:
     Veritas::Test* registerTests();
+    virtual QString resultsViewId() { return "org.kdevelop.CppUnitResultsView";};
 
 private:
     QString fetchExe();

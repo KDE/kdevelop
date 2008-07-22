@@ -24,7 +24,6 @@
 #include <QtTest/QTest>
 
 class QAbstractItemModel;
-namespace Ui { class StatusWidget; }
 namespace Veritas { class RunnerWindow; }
 
 namespace QTest
@@ -54,7 +53,7 @@ private:
 private:
     Veritas::RunnerWindow* m_window;
     QAbstractItemModel* m_runnerItems;
-    QAbstractItemModel* m_resultItems;
+    QAbstractItemModel* m_resultModel;
 };
 
 }

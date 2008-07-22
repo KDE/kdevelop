@@ -1,4 +1,5 @@
 #include <QtTest/QtTest>
+#include <QDebug>
 
 #include "money.h"
 #include "moneytest.h"
@@ -19,6 +20,8 @@ void MoneyTest::negative()
 
 void MoneyTest::zero()
 {
+    qDebug() << "supposed to fail";
+    qDebug() << "more garbage output";
     Money m(0, "USD");
     QCOMPARE(Money::Good, m.state());
     QCOMPARE(0, m.amount());

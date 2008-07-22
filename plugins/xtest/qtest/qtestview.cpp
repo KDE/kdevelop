@@ -35,23 +35,23 @@
 
 #include <kdevplatform/interfaces/context.h>
 #include <kdevplatform/interfaces/contextmenuextension.h>
-
 #include <kdevplatform/interfaces/idocument.h>
 #include <kdevplatform/interfaces/iproject.h>
 #include <kdevplatform/interfaces/iprojectcontroller.h>
 #include <kdevplatform/interfaces/iuicontroller.h>
-
+#include <kdevplatform/outputview/ioutputview.h>
 #include <kdevplatform/project/projectmodel.h>
 #include <kdevplatform/project/interfaces/ibuildsystemmanager.h>
 #include <kdevplatform/project/interfaces/iprojectfilemanager.h>
-
 #include <kdevplatform/shell/core.h>
 #include <kdevplatform/shell/documentcontroller.h>
-
 #include <kdevplatform/veritas/test.h>
 
+#include "qtestcase.h"
 #include "qtestregister.h"
 #include "qtestsettings.h"
+#include "outputview/qtestoutputdelegate.h"
+#include "outputview/qtestoutputjob.h"
 
 K_PLUGIN_FACTORY(QTestViewPluginFactory, registerPlugin<QTestView>();)
 K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
@@ -59,6 +59,7 @@ K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::Context;
+using KDevelop::ICore;
 using KDevelop::IDocument;
 using KDevelop::ProjectFolderItem;
 using KDevelop::IProjectController;
@@ -72,8 +73,9 @@ using KDevelop::ContextMenuExtension;
 using Veritas::Test;
 using Veritas::TestRunnerToolView;
 
-using QTest::Settings;
 using QTest::ISettings;
+using QTest::Settings;
+using QTest::QTestCase;
 using QTest::QTestRegister;
 
 class QTestViewFactory: public KDevelop::IToolViewFactory
@@ -87,7 +89,7 @@ public:
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
-        return Qt::BottomDockWidgetArea;
+        return Qt::LeftDockWidgetArea;
     }
 
     virtual QString id() const {
@@ -99,10 +101,11 @@ private:
 };
 
 QTestView::QTestView(QObject* parent, const QVariantList&)
-        : TestRunnerToolView(QTestViewPluginFactory::componentData(), parent)
+        : TestRunnerToolView(QTestViewPluginFactory::componentData(), parent),
+          m_delegate(new QTestOutputDelegate(this))
 {
     m_factory = new QTestViewFactory(this);
-    core()->uiController()->addToolView("QTest Runner", m_factory);
+    core()->uiController()->addToolView(QString("QTest Runner"), m_factory);
     setXMLFile( "kdevqtest.rc" );
 }
 
@@ -245,6 +248,15 @@ ContextMenuExtension QTestView::contextMenuExtension(Context* context)
     connect(action, SIGNAL(triggered()), this, SLOT(newQTest()));
     cm.addAction(ContextMenuExtension::ExtensionGroup, action);
     return cm;
+}
+
+void QTestView::openVerbose(Test* t)
+{
+    QTestCase* caze = dynamic_cast<QTestCase*>(t);
+    if (not caze) return;
+    kDebug() << "loadVerboseOutput.";
+    QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
+    ICore::self()->runController()->registerJob(job);
 }
 
 #include "qtestview.moc"

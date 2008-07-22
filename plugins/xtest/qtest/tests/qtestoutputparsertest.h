@@ -22,12 +22,21 @@
 #define QXQTEST_QTESTOUTPUTPARSERTEST
 
 #include <QtTest/QtTest>
+#include <testresult.h>
 
 class QSignalSpy;
-namespace QTest { class QTestCase; }
-namespace QTest { class QTestCommand; }
-namespace Veritas { class Test; }
-namespace Veritas { class TestResult; }
+
+namespace QTest
+{
+class QTestCase;
+class QTestCommand;
+class QTestOutputParser;
+}
+
+namespace Veritas
+{
+class Test;
+}
 
 using Veritas::Test;
 using Veritas::TestResult;
@@ -38,7 +47,7 @@ namespace ut {
 
 // TODO this test is far from sufficient.
 //      need to add some slow-updating XML chunks
-//      to test the recover stuff.
+//      to test the recover stuff. maybe with a random test.
 class QTestOutputParserTest : public QObject
 {
     Q_OBJECT
@@ -51,18 +60,48 @@ private slots:
     void parse();
     void initFailure();
     void cleanupFailure();
+    void doubleFailure();
 
 private:
+    struct TestInfo;
+
+    // test data helpers
     void setupColumns();
     void addSunnyDayData();
     void addBasicFailureData();
-    QTestCommand* initTestCmd(int i);
 
-    void assertCompleted(Test*, QSignalSpy&, QSignalSpy&);
+    // custom assertions
+    void assertParsed(TestInfo& testInfo);
     void assertResult(const TestResult& expected, const TestResult& actual);
+    void assertResult(TestResult* expected, TestResult* actual);
+    void checkResult(TestInfo& testInfo);
+
+    // creation methods
+    QTestCase* createTestCase(TestInfo&);
+    void createTestCommand(TestInfo&, QTestCase* parent, QString name);
+
+    // setup helpers
+    void initParser(QByteArray& xml, QTestCase* caze);
+    void setExpectedSuccess(TestInfo& tInfo);
+    void setExpectedFailure(TestInfo& tInfo);
+    void setExpectedResult(TestInfo& tInfo, Veritas::TestState state,
+                           QString filepath, int lineNumber, QString msg);
 
 private:
+    QTestOutputParser* m_parser;
     QTestCase* m_caze;
+
+    struct TestInfo
+    {
+        Veritas::Test* test;
+        QSignalSpy* started;
+        QSignalSpy* finished;
+        TestResult* result;
+    };
+
+    TestInfo m_cazeInfo;
+    TestInfo m_command1Info;
+    TestInfo m_command2Info;
 };
 
 }

@@ -44,6 +44,26 @@ int main(int argc, char** argv)
     return app.exec();
 }
 
+
+#include <KDebug>
+
+class Stuff : public QObject
+{
+Q_OBJECT
+public slots:
+    void showResultsWindow() {
+        QMainWindow *window = new QMainWindow(0);
+        main->resultsWidget()->setParent(window);
+        window->setCentralWidget(main->resultsWidget());
+        window->setParent(main);
+        window->show();
+    }
+private:
+    RunnerWindow* main;
+};
+
+#include "stuff.moc"
+
 void do_useful_stuff(char** argv)
 {
     QFile f(argv[1]);
@@ -55,6 +75,9 @@ void do_useful_stuff(char** argv)
     RunnerWindow* w = new RunnerWindow;
     w->setModel(m);
     w->show();
+    Stuff* s = new Stuff;
+    QObject::connect(w, SIGNAL(openResultsView(bool)),
+            s, SLOT(showResultsWindow()));
 }
 
 QByteArray b("stuff");

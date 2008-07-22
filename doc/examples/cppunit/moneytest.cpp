@@ -39,4 +39,4 @@ Test* MoneyTest::suite()
     return r;
 }
 
-CPPUNIT_XTEST_MAIN( MoneyTest::suite() )
+CPPUNIT_VERITAS_MAIN( MoneyTest::suite() )

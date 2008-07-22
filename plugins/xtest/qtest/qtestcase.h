@@ -22,7 +22,6 @@
 #define QXQTEST_QTESTCASE_H
 
 #include <QString>
-#include <QTimer>
 #include <QFileInfo>
 
 #include <kdevplatform/veritas/test.h>
@@ -31,6 +30,7 @@
 
 class KTemporaryFile;
 class KProcess;
+class QTimer;
 
 namespace QTest
 {
@@ -61,27 +61,38 @@ public:
     void setUpProcSignals();
     void setExecutable(const QFileInfo&);
 
+    QFileInfo textOutFilePath() const;
+    QFileInfo stdErrFilePath() const;
+
 private:
     // preconditions for run()
     inline void assertProcessSet();
     inline void assertOutputParserSet();
 
     // helpers for run()
-    bool createTempOutputFile();
+    void initTempOutputFile();
     void executeProc();
     void initOutputParser();
+    void removeFile(const QString& filePath);
 
-// private slots:
-//     void maybeParse();
-//     void surelyParse();
+private slots:
+    void stopTimer();
+    void morphXmlToText();
 
 private:
-    QFileInfo m_exe;
-    ISettings* m_settings;
-    KTemporaryFile* m_output;
-    KProcess* m_proc;
+    QFileInfo m_exe;           // qtest-exe location
+    ISettings* m_settings;     // Settings wrapper.
+
+    QFile* m_output;           // temp file with qtest xml output.
+    QString m_stdOutFilePath;  // unused.
+    QString m_outputPath;      // path to temp file with xml output
+    QString m_textOutFilePath; // path to temp file with ascii output
+    QString m_stdErrFilePath;  // path to temp file with standard error
+
+    KProcess* m_proc;          // this will execute the qtest-exe.
     QTestOutputParser* m_parser;
     QTimer* m_timer;
+    static int s_count;        // used to get unique temp files.
 };
 
 } // end namespace QTest

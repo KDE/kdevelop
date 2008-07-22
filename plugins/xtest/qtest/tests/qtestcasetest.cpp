@@ -20,6 +20,7 @@
 
 #include "qtestcasetest.h"
 #include <kasserts.h>
+#include <KDebug>
 #include <qtest_kde.h>
 #include <qtestcommand.h>
 

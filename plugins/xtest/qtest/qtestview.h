@@ -27,6 +27,7 @@
 #include <kdevplatform/veritas/testrunnertoolview.h>
 
 class QTestViewFactory;
+class QTestOutputDelegate;
 namespace KDevelop { class ContextMenuExtension;
                      class Context;
                      class ProjectFolderItem; }
@@ -42,6 +43,10 @@ public:
 
 protected:
     Veritas::Test* registerTests();
+    virtual QString resultsViewId() { return "org.kdevelop.QTestResultsView";};
+
+protected slots:
+    virtual void openVerbose(Veritas::Test*);
 
 private slots:
     void newQTest();
@@ -53,6 +58,7 @@ private:
 private:
     QTestViewFactory* m_factory;
     KDevelop::ProjectFolderItem* m_dir;
+    QTestOutputDelegate* m_delegate;
 };
 
 #endif // QTEST_QTESTVIEW_H

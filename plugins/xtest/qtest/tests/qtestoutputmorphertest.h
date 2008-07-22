@@ -18,35 +18,24 @@
  * 02110-1301, USA.
  */
 
-#ifndef CHECK_CHECKVIEW
-#define CHECK_CHECKVIEW
+#ifndef QTEST_QTESTOUTPUTMORPHER
+#define QTEST_QTESTOUTPUTMORPHER
 
-#include <testrunnertoolview.h>
-#include <QVariantList>
+#include <QtTest/QtTest>
 
-class CheckViewFactory;
-namespace Veritas { class Test; }
-
-class CheckView : public Veritas::TestRunnerToolView
+namespace QTest
 {
-    Q_OBJECT
-public:
-    explicit CheckView(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~CheckView();
+namespace ut {
 
-protected slots:
-    virtual void openVerbose(Veritas::Test*) {}
-
-protected:
-    Veritas::Test* registerTests();
-    virtual QString resultsViewId() { return "org.kdevelop.CheckResultsView"; }
-
-private:
-    QString fetchExe();
-
-private:
-    CheckViewFactory* m_factory;
-
+class QTestOutputMorpherTest : public QObject
+{
+Q_OBJECT
+private slots:
+    void parse();
+    void parse_data();
 };
 
-#endif // CHECK_CHECKVIEW
+}
+}
+
+#endif // QTEST_QTESTOUTPUTMORPHERTEST

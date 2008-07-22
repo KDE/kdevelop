@@ -54,8 +54,8 @@ private:
 
 private:
     Veritas::RunnerWindow* m_window;
-    QAbstractItemModel* m_runnerItems;
-    QAbstractItemModel* m_resultItems;
+    QAbstractItemModel* m_runnerModel;
+    QAbstractItemModel* m_resultModel;
 };
 
 } // namespace it

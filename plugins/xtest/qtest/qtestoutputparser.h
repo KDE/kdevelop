@@ -51,7 +51,7 @@ public slots:
     /*! Start parsing the output of a testcase.
      *  Emit signals for each command being started/finished.
      *  This slot is triggered repeatedly as soon as new data is available
-     *  and recovers from previus errors in the XML due to abortion. */
+     *  and recovers from previous errors in the XML due to abortion. */
     void go();
 
 private:

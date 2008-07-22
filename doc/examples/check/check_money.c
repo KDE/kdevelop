@@ -65,4 +65,4 @@ money_suite (void)
   return s;
 }
 
-CHECK_XTEST_MAIN( money_suite() )
+CHECK_VERITAS_MAIN_( money_suite() )

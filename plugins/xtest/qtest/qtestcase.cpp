@@ -22,39 +22,70 @@
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
+#include "qtestoutputmorpher.h"
 #include "config/qtestsettings.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QThread>
+#include <QFile>
+#include <QTextStream>
+#include <QTimer>
+
 #include <KDebug>
 #include <KProcess>
-#include <KTemporaryFile>
 
 using QTest::ISettings;
 using QTest::QTestCase;
 using QTest::QTestSuite;
 using QTest::QTestCommand;
 using QTest::QTestOutputParser;
+using QTest::QTestOutputMorpher;
 
 using Veritas::Test;
 
+int QTestCase::s_count = 0;
+
 QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* parent)
-        : Test(name, parent), m_exe(exe), m_output(0), m_proc(0), m_parser(0)
+        : Test(name, parent),
+          m_exe(exe),
+          m_output(0),
+          m_proc(0),
+          m_parser(0),
+          m_timer(new QTimer(this))
+{}
+
+void QTestCase::removeFile(const QString& filePath)
 {
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
+    if (not filePath.isNull()) {
+        QFile::remove(filePath);
+    }
 }
 
 QTestCase::~QTestCase()
 {
+    removeFile(m_outputPath);
+    removeFile(m_stdOutFilePath);
+    removeFile(m_stdErrFilePath);
+    removeFile(m_textOutFilePath);
+
     if (m_output) delete m_output;
-    if (m_proc)   delete m_proc;
     if (m_parser) delete m_parser;
 }
 
 bool QTestCase::shouldRun() const
 {
     return true;
+}
+
+QFileInfo QTestCase::textOutFilePath() const
+{
+    return QFileInfo(m_textOutFilePath);
+}
+
+QFileInfo QTestCase::stdErrFilePath() const
+{
+    return QFileInfo(m_stdErrFilePath);
 }
 
 QFileInfo QTestCase::executable()
@@ -78,14 +109,17 @@ QTestCommand* QTestCase::child(int i) const
     return static_cast<QTestCommand*>(Test::child(i));
 }
 
-// dependency injection
+void QTestCase::setSettings(ISettings* s)
+{
+    m_settings = s;
+}
+
 void QTestCase::setProcess(KProcess* proc)
 {
     if (m_proc) delete m_proc;
     m_proc = proc;
 }
 
-// dependency injection
 void QTestCase::setOutputParser(QTestOutputParser* p)
 {
     m_parser = p;
@@ -98,7 +132,7 @@ int QTestCase::run()
     assertProcessSet();
     assertOutputParserSet();
 
-    if (not createTempOutputFile()) return -1;
+    initTempOutputFile();
     initProcArguments();
     setUpProcSignals();
     initOutputParser();
@@ -111,42 +145,68 @@ int QTestCase::run()
 void QTestCase::setUpProcSignals()
 {
     m_proc->disconnect();
-    connect(m_proc, SIGNAL(readyRead()), m_parser, SLOT(go()));
+//     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
+//             this, SIGNAL(executionFinished()));
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SIGNAL(executionFinished()));
+            this, SLOT(stopTimer()));
 }
 
-// void QTestCase::maybeParse()
-// {
-//     if (!m_timer->isActive()) {
-//         m_timer->start(100);
-//     }
-// }
+void QTestCase::stopTimer()
+{
+    m_timer->stop();
+    m_timer->setSingleShot(true);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(morphXmlToText()));
+    m_timer->start(100);
+}
 
+void QTestCase::morphXmlToText()
+{
+    QTestOutputMorpher m;
+    QFile in(m_outputPath);
+    in.open(QIODevice::ReadOnly);
+    m.setSource(&in);
+    QFile out(m_textOutFilePath);
+    out.open(QIODevice::WriteOnly);
+    out.write("~~~~~~~~~~~~~~~~~~~~~~~~~~ QTest ~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    m.setTarget(&out);
+    m.xmlToText();
+    emit executionFinished();
+}
 
 // helper for run()
 void QTestCase::initOutputParser()
 {
-    m_parser->setDevice(m_proc);
     m_parser->reset();
     m_parser->setCase(this);
     m_timer->disconnect();
-    connect(m_timer, SIGNAL(timeout()), m_parser, SLOT(go()));
+    m_parser->disconnect();
+    connect(m_timer, SIGNAL(timeout()),
+            m_parser, SLOT(go()));
 }
 
 // helper for run()
-bool QTestCase::createTempOutputFile()
+void QTestCase::initTempOutputFile()
 {
-    bool isOk = true;
-    if (m_output) delete m_output;
-    m_output = new KTemporaryFile;
-    m_output->open();
-    if (!m_output->isOpen()) {
-        kWarning() << "Failed to create temporary file for QTest output.";
-        isOk = false;
-    }
-    m_output->close();
-    return isOk;
+    QFile::remove(m_outputPath);
+    QFile::remove(m_stdOutFilePath);
+    QFile::remove(m_stdErrFilePath);
+    QFile::remove(m_textOutFilePath);
+
+    QString pathPrefix;
+    QTextStream str(&pathPrefix);
+    s_count += 1;
+    str << QDir::tempPath() << QDir::separator() << "kdev-qtest-"
+        << QCoreApplication::applicationPid() << "-" << s_count;
+    m_outputPath = pathPrefix + ".tmp";
+    m_stdOutFilePath = pathPrefix + "-out.tmp";
+    m_stdErrFilePath = pathPrefix + "-err.tmp";
+    m_textOutFilePath = pathPrefix + "-txt.tmp";
+    m_output = new QFile(m_outputPath);
+
+    QFile err(m_stdErrFilePath);
+    err.open(QIODevice::ReadWrite);
+    err.write("~~~~~~~~~~~~~~~~~~~~~~~~~~ StdandardErrror ~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    err.close();
 }
 
 // precondition for run()
@@ -170,8 +230,8 @@ void QTestCase::initProcArguments()
 {
     m_proc->clearProgram();
     QStringList argv;
-    argv << "-xml";
-    //<< QString("-o ") + m_output->fileName();
+    argv << "-xml"
+         << "-o" << m_outputPath;
     if (m_settings && m_settings->printAsserts()) {
         argv << "-v2";
     }
@@ -188,13 +248,12 @@ void QTestCase::executeProc()
     QString dir = QDir::currentPath();
     QDir::setCurrent(executable().dir().absolutePath());
     kDebug() << "Executing " << m_proc->program() << " [ " << executable().filePath() << " ]";
+    //m_proc->setStandardOutputFile(m_stdOutFilePath);
+    m_proc->setStandardErrorFile(m_stdErrFilePath, QIODevice::Append);
     m_proc->start();
     QDir::setCurrent(dir);
-}
-
-void QTestCase::setSettings(ISettings* s)
-{
-    m_settings = s;
+    m_parser->setDevice(m_output);
+    m_timer->start(100); // triggers QTestOutputParser evry 0.05 sec
 }
 
 #include "qtestcase.moc"

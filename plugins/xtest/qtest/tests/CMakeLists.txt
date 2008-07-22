@@ -23,10 +23,13 @@ kdev_add_test(ut-qtestcase "qtestcasetest.cpp")
 kdev_add_test(ut-qtestcommand "qtestcommandtest.cpp")
 kdev_add_test(ut-qtestsuite "qtestsuitetest.cpp")
 kdev_add_test(ut-qtestregister "qtestregistertest.cpp")
+kdev_add_test(ut-qtestoutputmorpher "qtestoutputmorphertest.cpp")
 kdev_add_test(it-qtestrunnertest qtestrunnertest.cpp)
 
 add_subdirectory(suite1)
 
+include_directories(${XtestPlugin_BINARY_DIR}/qtest/tests) # for stuff.moc
+qt4_wrap_cpp(standalonerunner.cpp stuff.moc)
 add_executable(qtestrunner standalonerunner.cpp)
 target_link_libraries(qtestrunner
         ${QT_QTGUI_LIBRARY}

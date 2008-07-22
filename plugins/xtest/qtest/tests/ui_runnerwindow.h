@@ -4,7 +4,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'runnerwindow.ui'
 **
-** Created: Sat Jul 19 10:48:23 2008
+** Created: Mon Jul 21 10:27:16 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -138,11 +138,14 @@ public:
     actionColumns->setIcon(icon7);
     actionResults = new QAction(RunnerWindow);
     actionResults->setObjectName(QString::fromUtf8("actionResults"));
+    QIcon icon8;
+    icon8.addPixmap(QPixmap(QString::fromUtf8(":/icons/info.png")), QIcon::Normal, QIcon::Off);
+    actionResults->setIcon(icon8);
     actionSettings = new QAction(RunnerWindow);
     actionSettings->setObjectName(QString::fromUtf8("actionSettings"));
-    QIcon icon8;
-    icon8.addPixmap(QPixmap(QString::fromUtf8(":/icons/properties.png")), QIcon::Normal, QIcon::Off);
-    actionSettings->setIcon(icon8);
+    QIcon icon9;
+    icon9.addPixmap(QPixmap(QString::fromUtf8(":/icons/properties.png")), QIcon::Normal, QIcon::Off);
+    actionSettings->setIcon(icon9);
     actionToolbars = new QAction(RunnerWindow);
     actionToolbars->setObjectName(QString::fromUtf8("actionToolbars"));
     actionReload = new QAction(RunnerWindow);
@@ -402,6 +405,7 @@ public:
     runnerToolBar->addAction(actionSelectAll);
     runnerToolBar->addAction(actionUnselectAll);
     runnerToolBar->addAction(actionReload);
+    runnerToolBar->addAction(actionResults);
 
     retranslateUi(RunnerWindow);
 

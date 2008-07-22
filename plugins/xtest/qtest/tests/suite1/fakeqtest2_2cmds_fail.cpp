@@ -19,6 +19,7 @@
  */
 
 #include <QString>
+#include <QFile>
 #include <QTextStream>
 
 QString prefix = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
@@ -67,6 +68,12 @@ int main(int argc, char** argv)
         cout << prefix + cmd1 + suffix << endl;
     } else if (QString(argv[2]) == "cmd2") {
         cout << prefix + cmd2 + suffix << endl;
+    } else if (argc == 4) {
+        QFile* f = new QFile(argv[3]);
+        f->open(QIODevice::WriteOnly);
+        QTextStream fout(f);
+        fout << prefix + cmd1 + cmd2 + suffix << endl;
+        f->close();
     }
     return 0;
 }

@@ -185,26 +185,27 @@ void CheckRunnerTest::checkResultItems(QList<QStringList> expected)
 // helper
 void CheckRunnerTest::checkResultItem(int num, const QStringList& item)
 {
-    QAbstractItemModel* results = m_window->ui()->treeResults->model();
-    KOMPARE(item[0], results->data(results->index(num, 0))); // test name
-    //KOMPARE(item[1], results->data(results->index(num, 1))); // status -> "Error"
+    m_resultModel = m_window->resultsView()->model();
+;
+    KOMPARE(item[0], m_resultModel->data(m_resultModel->index(num, 0))); // test name
+    //KOMPARE(item[1], m_resultModel->data(m_resultModel->index(num, 1))); // status -> "Error"
     // commented out since this row is currently hidden
-    KOMPARE(item[1], results->data(results->index(num, 2))); // failure message
-    // KOMPARE(item[2], results->data(results->index(num, 3))); // filename
+    KOMPARE(item[1], m_resultModel->data(m_resultModel->index(num, 2))); // failure message
+    // KOMPARE(item[2], m_resultModel->data(m_resultModel->index(num, 3))); // filename
     // commented out since this is factually a file in the source-tree, for
     // which i can not get the proper location at runtime.
-    KOMPARE(item[3], results->data(results->index(num, 4))); // line number
+    KOMPARE(item[3], m_resultModel->data(m_resultModel->index(num, 4))); // line number
 }
 
 // helper
 void CheckRunnerTest::nrofMessagesEquals(int num)
 {
-    QAbstractItemModel* results = m_window->ui()->treeResults->model();
+    m_resultModel = m_window->resultsView()->model();
     for (int i = 0; i < num; i++) {
-        KVERIFY_MSG(results->index(i, 0).isValid(),
+        KVERIFY_MSG(m_resultModel->index(i, 0).isValid(),
                     QString("Expected ") + QString::number(num) + " items but got " + QString::number(i));
     }
-    KVERIFY(!results->index(num, 0).isValid());
+    KVERIFY(!m_resultModel->index(num, 0).isValid());
 }
 
 // helper
@@ -218,7 +219,7 @@ void CheckRunnerTest::initNrun(const char* exe)
     model->setRootItem(reg.rootItem());
     m_window = new RunnerWindow;
     m_window->setModel(model);
-    m_window->show();
+    //m_window->show();
     m_window->ui()->actionStart->trigger();
 }
 
