@@ -94,6 +94,7 @@ target_link_libraries(kdevsubversion
                     kdevplatformproject
                     kdevplatformoutputview
                     ${KDE4_THREADWEAVER_LIBRARIES}
+                    ${KDE4_KPARTS_LIBRARY}
                     )
 
 install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )
