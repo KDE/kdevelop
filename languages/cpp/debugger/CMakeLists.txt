@@ -83,6 +83,7 @@ target_link_libraries(kdevcppdebugger sublime
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
 )
