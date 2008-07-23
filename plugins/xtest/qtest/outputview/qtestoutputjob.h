@@ -22,8 +22,8 @@
 #ifndef QTEST_QTESTOUTPUTJOB_H
 #define QTEST_QTESTOUTPUTJOB_H
 
-#include <kdevplatform/interfaces/iplugin.h>
-#include <kdevplatform/outputview/outputjob.h>
+#include <interfaces/iplugin.h>
+#include <outputview/outputjob.h>
 
 #include <QFileInfo>
 

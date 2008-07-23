@@ -23,7 +23,7 @@
 
 #include <QXmlStreamReader>
 
-#include <kdevplatform/veritas/testresult.h>
+#include <veritas/testresult.h>
 
 class QIODevice;
 namespace Veritas { class Test; }

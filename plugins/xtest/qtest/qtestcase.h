@@ -24,7 +24,7 @@
 #include <QString>
 #include <QFileInfo>
 
-#include <kdevplatform/veritas/test.h>
+#include <veritas/test.h>
 
 #include "qtestcommand.h"
 

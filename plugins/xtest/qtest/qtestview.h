@@ -24,7 +24,7 @@
 #include <KUrl>
 #include <QVariantList>
 
-#include <kdevplatform/veritas/testrunnertoolview.h>
+#include <veritas/testrunnertoolview.h>
 
 class QTestViewFactory;
 class QTestOutputDelegate;

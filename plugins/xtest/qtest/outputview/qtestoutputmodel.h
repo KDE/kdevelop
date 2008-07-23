@@ -23,7 +23,7 @@
 #define QTEST_QTESTOUTPUTMODEL_H
 
 #include <QStandardItemModel>
-#include <kdevplatform/outputview/ioutputviewmodel.h>
+#include <outputview/ioutputviewmodel.h>
 
 class QModelIndex;
 
