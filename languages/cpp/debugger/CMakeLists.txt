@@ -86,6 +86,7 @@ target_link_libraries(kdevcppdebugger sublime
     ${KDE4_KIO_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4_KPARTS_LIBRARY}
 )
 
 install(TARGETS kdevcppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
