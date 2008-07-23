@@ -33,19 +33,19 @@
 #include <KPluginLoader>
 #include <KSharedConfig>
 
-#include <kdevplatform/interfaces/context.h>
-#include <kdevplatform/interfaces/contextmenuextension.h>
-#include <kdevplatform/interfaces/idocument.h>
-#include <kdevplatform/interfaces/iproject.h>
-#include <kdevplatform/interfaces/iprojectcontroller.h>
-#include <kdevplatform/interfaces/iuicontroller.h>
-#include <kdevplatform/outputview/ioutputview.h>
-#include <kdevplatform/project/projectmodel.h>
-#include <kdevplatform/project/interfaces/ibuildsystemmanager.h>
-#include <kdevplatform/project/interfaces/iprojectfilemanager.h>
-#include <kdevplatform/shell/core.h>
-#include <kdevplatform/shell/documentcontroller.h>
-#include <kdevplatform/veritas/test.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/idocument.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
+#include <outputview/ioutputview.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <shell/core.h>
+#include <shell/documentcontroller.h>
+#include <veritas/test.h>
 
 #include "qtestcase.h"
 #include "qtestregister.h"

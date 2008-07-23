@@ -21,7 +21,7 @@
 #include "qtestoutputparser.h"
 #include "qtestcase.h"
 
-#include <kdevplatform/veritas/test.h>
+#include <veritas/test.h>
 
 #include <QStringRef>
 #include <KDebug>

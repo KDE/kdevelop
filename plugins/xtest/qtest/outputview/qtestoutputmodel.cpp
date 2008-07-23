@@ -23,7 +23,7 @@
 
 #include <QModelIndex>
 #include <KGlobalSettings>
-#include <kdevplatform/interfaces/icore.h>
+#include <interfaces/icore.h>
 
 QTestOutputItem::QTestOutputItem(const QString &text)
         : QStandardItem(), m_text(text)

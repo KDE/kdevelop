@@ -31,7 +31,8 @@
 #include <KDebug>
 #include <QTextStream>
 
-#include <kdevplatform/interfaces/icore.h>
+#include <interfaces/icore.h>
+#include <util/processlinemaker.h>
 
 using namespace KDevelop;
 using QTest::QTestCase;
