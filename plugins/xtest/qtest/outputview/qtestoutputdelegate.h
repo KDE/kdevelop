@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef MYOUTPUTOUTPUTDELEGATE_H
-#define MYOUTPUTOUTPUTDELEGATE_H
+#ifndef QTEST_QTESTOUTPUTDELEGATE_H
+#define QTEST_QTESTOUTPUTDELEGATE_H
 
 #include <QtGui/QItemDelegate>
 #include <kcolorscheme.h>
@@ -36,5 +36,4 @@ private:
     KStatefulBrush passBrush;
 };
 
-#endif
-
+#endif // QTEST_QTESTOUTPUTDELEGATE_H

@@ -27,11 +27,11 @@
 #include "../qtestview.h"
 #include "../qtestcase.h"
 
-#include <KProcess>
 #include <KLocale>
+#include <KDebug>
+#include <QTextStream>
 
 #include <kdevplatform/interfaces/icore.h>
-#include <kdevplatform/util/processlinemaker.h>
 
 using namespace KDevelop;
 using QTest::QTestCase;
@@ -52,40 +52,36 @@ void QTestOutputJob::start()
     setDelegate(delegate());
 
     startOutput();
-    m_cat = new KProcess;
-    QStringList l;
-    l << m_caze->textOutFilePath().absoluteFilePath();
-    l << m_caze->stdErrFilePath().absoluteFilePath();
-    m_cat->setProgram("cat", l);
-    m_cat->setOutputChannelMode(KProcess::SeparateChannels);
-    m_lineMaker = new KDevelop::ProcessLineMaker(m_cat);
-
-    connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-            model(), SLOT(appendOutputs(QStringList)));
-    connect(m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
-            model(), SLOT(appendErrors(QStringList)));
-    connect(m_cat, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(slotFinished()));
-    connect(m_cat, SIGNAL(error(QProcess::ProcessError)),
-            this, SLOT(slotError(QProcess::ProcessError)));
-
-    m_cat->start();
-}
-
-void QTestOutputJob::slotFinished()
-{
-    m_lineMaker->flushBuffers();
+    outputFile(m_caze->textOutFilePath().absoluteFilePath());
+    outputFile(m_caze->stdErrFilePath().absoluteFilePath());
     model()->slotCompleted();
     emitResult();
 }
 
-void QTestOutputJob::slotError(QProcess::ProcessError)
+void QTestOutputJob::outputFile(const QFileInfo& path)
 {
-    m_lineMaker->flushBuffers();
-    model()->slotCompleted();
-    m_cat->kill();
-    setError(UserDefinedError);
-    emitResult();
+    QString path_ = path.absoluteFilePath();
+    QFile f(path_);
+    if (!f.exists()) {
+        kError() << "Test ouput file does not exist [" << path_ << "]";
+        return;
+    }
+    f.open(QIODevice::ReadOnly);
+    if (!f.isOpen()) {
+        kError() << "Failed to open test ouput file for reading [" << path_ << "]";
+        return;
+    }
+    QTextStream stream(&f);
+    QStringList lines;
+    while (!f.atEnd()) {
+        lines.clear();
+        for (int i=0; i<1000 && !f.atEnd(); i++) {
+            QString line = f.readLine();
+            line.chop(1);
+            lines.append(line);
+        }
+        model()->appendOutputs(lines);
+    }
 }
 
 QTestOutputDelegate* QTestOutputJob::delegate() const

@@ -25,13 +25,12 @@
 #include <kdevplatform/interfaces/iplugin.h>
 #include <kdevplatform/outputview/outputjob.h>
 
-#include <QProcess>
+#include <QFileInfo>
 
 namespace KDevelop
 {
 class IOutputView;
 class IProject;
-class ProcessLineMaker;
 }
 
 namespace QTest { class QTestCase; }
@@ -52,14 +51,11 @@ public:
 protected:
     QTestOutputModel* model() const;
 
-private Q_SLOTS:
-    void slotFinished();
-    void slotError(QProcess::ProcessError error);
+private:
+    void outputFile(const QFileInfo& path);
 
 private:
     QTestOutputDelegate* delegate() const;
-    KDevelop::ProcessLineMaker* m_lineMaker;
-    KProcess* m_cat;
     QTest::QTestCase* m_caze;
 };
 
