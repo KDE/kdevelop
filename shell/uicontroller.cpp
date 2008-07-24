@@ -289,6 +289,7 @@ void UiController::addNewToolView(MainWindow *mw)
         list->addItem(item);
     }
 
+    list->setFocus();
     dia->setMainWidget(list);
     if (dia->exec() == QDialog::Accepted && list->currentItem())
     {
