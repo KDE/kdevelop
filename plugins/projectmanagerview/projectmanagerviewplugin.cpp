@@ -166,8 +166,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
-        KDevelop::ProjectFolderItem *prjitem = dynamic_cast<KDevelop::ProjectFolderItem*>(item);
-        if ( !buildItemsAdded && ( item->folder() || item->target() || item->folder() ) )
+        if ( !buildItemsAdded && ( item->folder() || item->target() || item->file() ) )
         {
             KAction* action = new KAction( i18n( "Build items(s)" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
@@ -183,6 +182,8 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             buildItemsAdded = true;
         }
+        
+        KDevelop::ProjectFolderItem *prjitem = item->folder();
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
             KAction* close = new KAction( i18n( "Close project(s)" ), this );
