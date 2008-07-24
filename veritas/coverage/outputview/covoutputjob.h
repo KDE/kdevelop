@@ -1,6 +1,4 @@
 /* KDevelop xUnit plugin
- *    Copyright 1999-2001 Bernd Gehrmann and the KDevelop Team <bernd@kdevelop.org>
- *    Copyright 2008 by Hamish Rodda <rodda@kde.org>
  *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
+
 
 #ifndef VERITAS_COVERAGE_COVOUTPUTJOB_H
 #define VERITAS_COVERAGE_COVOUTPUTJOB_H
