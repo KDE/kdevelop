@@ -27,7 +27,7 @@ target_link_libraries(kdevcoverage
     kdevplatformproject
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDECORE_LIBS})
+    ${KDE4_KDEUI_LIBS})
 install(TARGETS kdevcoverage DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
