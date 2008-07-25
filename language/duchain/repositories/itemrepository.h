@@ -26,6 +26,7 @@
 #include <QList>
 #include <QDir>
 #include <QFile>
+#include <qatomic.h>
 #include <klockfile.h>
 #include <kdebug.h>
 #include "../languageexport.h"
@@ -80,9 +81,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     void unRegisterRepository(AbstractItemRepository* repository);
     ///Returns the path currently set
     QString path() const;
+    
+    ///Returns a custom counter, identified by the given identity, that is persistently stored in the repository directory.
+    ///If the counter didn't exist before, it will be initialized with initialValue
+    QAtomicInt& getCustomCounter(const QString& identity, int initialValue);
   private:
     QString m_path;
     QList<AbstractItemRepository*> m_repositories;
+    QMap<QString, QAtomicInt*> m_customCounters;
     bool m_cleared;
     KLockFile::Ptr m_lock;
 };
@@ -372,9 +378,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         return false;
 
       while(currentIndex) {
-        currentIndex = followerIndex(currentIndex);
         if(itemFromIndex(currentIndex)->hash() % modulo == hashMod)
           return true; //Clash
+        currentIndex = followerIndex(currentIndex);
       }
       return false;
     }

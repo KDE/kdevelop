@@ -26,6 +26,12 @@ DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
   return m_factories[data->classId]->create(data);
 }
 
+DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const {
+  if(m_factories.size() <= data.classId || m_factories[data.classId] == 0)
+    return 0;
+  return m_factories[data.classId]->cloneData(data);
+}
+
 void DUChainItemSystem::callDestructor(DUChainBaseData* data) const {
   if(m_factories.size() <= data->classId || m_factories[data->classId] == 0)
     return;
@@ -45,13 +51,13 @@ size_t DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
 }
 
 
-// void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
-//   if(m_factories.size() <= from.classId || m_factories[from.classId] == 0) {
-//     Q_ASSERT(0); //Shouldn't try to copy an unknown type
-//     return;
-//   }
-//   return m_factories[from.classId]->copy(from, to, constant);
-// }
+void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
+  if(m_factories.size() <= from.classId || m_factories[from.classId] == 0) {
+    Q_ASSERT(0); //Shouldn't try to copy an unknown type
+    return;
+  }
+  return m_factories[from.classId]->copy(from, to, constant);
+}
 
 DUChainItemSystem& DUChainItemSystem::self() {
   static DUChainItemSystem system;

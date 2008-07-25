@@ -19,6 +19,7 @@
 #include "duchainbase.h"
 
 #include <QMutexLocker>
+#include <QThreadStorage>
 
 #include "duchainpointer.h"
 #include "indexedstring.h"
@@ -69,6 +70,11 @@ IndexedString DUChainBase::url() const
 
 DUChainBase::~DUChainBase()
 {
+  if(d_func()->m_dynamic) {
+    //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
+    KDevelop::DUChainItemSystem::self().callDestructor(d_func_dynamic());
+  }
+  
   if (m_ptr)
     m_ptr->m_base = 0;
 }
@@ -90,6 +96,32 @@ const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
   return m_ptr;
 }
 
+void DUChainBase::rebuildDynamicData(DUContext* parent, uint ownIndex)
+{
+}
+
+void DUChainBase::makeDynamic() {
+  if(!d_func()->m_dynamic) {
+    //We don't delete the previous data, because it's embedded in the top-context when it isn't dynamic.
+    d_ptr = DUChainItemSystem::self().cloneData(*d_func());
+    Q_ASSERT(d_func()->m_dynamic);
+  }
+}
+
+QThreadStorage<char*> shouldCreateConstantDataStorage;
+
+bool DUChainBaseData::shouldCreateConstantData() {
+  return shouldCreateConstantDataStorage.hasLocalData();
+}
+
+void DUChainBaseData::setShouldCreateConstantData(bool should) {
+  if(should == shouldCreateConstantData())
+    return;
+  if(should)
+    shouldCreateConstantDataStorage.setLocalData(new char);
+  else
+    shouldCreateConstantDataStorage.setLocalData(0);
+}
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -71,9 +71,10 @@ SymbolTable* SymbolTable::self()
   return &sdSymbolPrivate->m_instance;
 }
 
+  ///@todo We need another locking scheme here, since the symbol-table is manipulated needed while loading top-contexts. and we don't need a write-lock for that
 void SymbolTable::addDeclaration(Declaration* declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  //ENSURE_CHAIN_WRITE_LOCKED
 
   ifDebug( kDebug(9505) << "Adding declaration" << declaration->qualifiedIdentifier().toString() << " with hash " <<  declaration->qualifiedIdentifier().hash(); )
 
@@ -83,7 +84,7 @@ void SymbolTable::addDeclaration(Declaration* declaration)
 
 void SymbolTable::removeDeclaration(Declaration* declaration)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+//   ENSURE_CHAIN_WRITE_LOCKED
 
   QualifiedIdentifier id = declaration->qualifiedIdentifier();
   DeclarationMap::iterator it = sdSymbolPrivate->m_declarations.find(id.hash());
@@ -94,12 +95,12 @@ void SymbolTable::removeDeclaration(Declaration* declaration)
       return;
     }
 
-  kWarning() << "Could not find declaration matching" << id ;
+  kWarning() << "Could not remove declaration matching" << id ;
 }
 
 QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+//   ENSURE_CHAIN_READ_LOCKED
   ifDebug( kDebug(9505) << "Searching declaration " << id.toString() << " with hash " <<  id.hash(); )
 
   QList<Declaration*> ret;
@@ -144,7 +145,7 @@ void SymbolTable::findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*
 
 void SymbolTable::dumpStatistics() const
 {
-  ENSURE_CHAIN_READ_LOCKED
+//   ENSURE_CHAIN_READ_LOCKED
 
   ifDebug( kDebug(9505) << "Definitions" << sdSymbolPrivate->m_declarations.size() << ", Contexts" << sdSymbolPrivate->m_contexts.size(); )
 
@@ -153,7 +154,7 @@ void SymbolTable::dumpStatistics() const
 
 QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) const
 {
-  ENSURE_CHAIN_READ_LOCKED
+//   ENSURE_CHAIN_READ_LOCKED
   ifDebug( kDebug(9505) << "Searching context " << id.toString() << " with hash " <<  id.hash(); )
 
   QList<DUContext*> ret;
@@ -175,7 +176,7 @@ void SymbolTable::findContextsByHash(uint hash, QVarLengthArray<DUContext*>& tar
 
 void SymbolTable::addContext(DUContext * namedContext)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+//   ENSURE_CHAIN_WRITE_LOCKED
   ifDebug( kDebug(9505) << "Adding context " << namedContext->scopeIdentifier(true).toString() << " with hash " <<  namedContext->scopeIdentifier(true).hash(); )
 
   QualifiedIdentifier id(namedContext->scopeIdentifier(true));
@@ -188,7 +189,7 @@ void SymbolTable::addContext(DUContext * namedContext)
 
 void SymbolTable::removeContext(DUContext * namedContext)
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+//   ENSURE_CHAIN_WRITE_LOCKED
 
   QualifiedIdentifier id = namedContext->scopeIdentifier(true);
   ContextMap::iterator it = sdSymbolPrivate->m_contexts.find(id.hash());

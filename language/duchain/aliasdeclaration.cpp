@@ -48,7 +48,7 @@ AliasDeclaration::~AliasDeclaration()
 {
 }
 
-Declaration* AliasDeclaration::clone() const {
+Declaration* AliasDeclaration::clonePrivate() const {
   return new AliasDeclaration(*this);
 }
 

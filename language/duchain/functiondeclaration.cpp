@@ -49,7 +49,7 @@ FunctionDeclaration::~FunctionDeclaration()
 {
 }
 
-Declaration* FunctionDeclaration::clone() const {
+Declaration* FunctionDeclaration::clonePrivate() const {
   return new FunctionDeclaration(*this);
 }
 

@@ -21,6 +21,7 @@
 
 #include <QVector>
 #include <QMutex>
+#include <QByteArray>
 
 namespace KDevelop {
 
@@ -59,7 +60,14 @@ class TopDUContextDynamicData {
   void clearContextIndex(DUContext* ctx);
   
   ///Stores this top-context to disk
-  void store() const;
+  void store();
+  
+  ///Whether this top-context is on disk(Either has been loaded, or has been stored)
+  bool isOnDisk() const;
+  
+  ///Loads the top-context from disk, or returns zero on failure. The top-context will not be registered anywhere, and will have no ParsingEnvironmentFile assigned.
+  ///Also loads all imported contexts. The Declarations/Contexts will be correctly initialized, and put into the symbol tables if needed.
+  static TopDUContext* load(uint topContextIndex);
   
   private:
     TopDUContext* m_topContext;
@@ -73,6 +81,9 @@ class TopDUContextDynamicData {
     //For temporary declarations that will not be stored to disk, like template instantiations
     QVector<Declaration*> m_temporaryDeclarations;
     QVector<DUContext*> m_temporaryContexts;
+    
+    QByteArray m_data;
+    bool m_onDisk;
 };
 }
 

@@ -180,7 +180,7 @@ protected:
 
     if (!encountered) {
 
-      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->createRange(newRange.textRange());
+      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->currentRange() ? LanguageSpecificUseBuilderBase::editor()->createRange(newRange.textRange()) : 0;
       LanguageSpecificUseBuilderBase::editor()->exitCurrentRange();
 
       LanguageSpecificUseBuilderBase::currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());

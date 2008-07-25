@@ -162,19 +162,30 @@ void removeFromVector(QVector<T>& vec, const T& t) {
 
 QMutex importStructureMutex(QMutex::Recursive);
 
+template<class Container>
+bool removeOneImport(Container& container, const DUContext* value) {
+  for(int a = 0; a < container.size(); ++a) {
+    if(container[a].context() == value) {
+      removeFromArray(container, a);
+      return true;
+    }
+  }
+  return false;
+}
+
 //Contains data that is not shared among top-contexts that share their duchain entries
 class TopDUContextLocalPrivate {
 public:
   TopDUContextLocalPrivate (TopDUContext* ctxt, TopDUContext* sharedDataOwner, uint index) :
-    m_ctxt(ctxt), m_sharedDataOwner(sharedDataOwner), m_ownIndex(index)
+    m_ctxt(ctxt), m_sharedDataOwner(sharedDataOwner), m_ownIndex(index), m_inDuChain(false)
   {
     if(sharedDataOwner) {
       Q_ASSERT(!sharedDataOwner->m_local->m_sharedDataOwner);
       sharedDataOwner->m_local->m_dataUsers.insert(m_ctxt);
       
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(dynamic_cast<TopDUContext*>(import.context.data()))
-          dynamic_cast<TopDUContext*>(import.context.data())->m_local->m_directImporters.insert(m_ctxt);
+        if(dynamic_cast<TopDUContext*>(import.context()))
+          dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.insert(m_ctxt);
     }
   }
   
@@ -204,12 +215,33 @@ public:
       }
       
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(dynamic_cast<TopDUContext*>(import.context.data()))
-          dynamic_cast<TopDUContext*>(import.context.data())->m_local->m_directImporters.remove(m_ctxt);
+        if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context()))
+          dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.remove(m_ctxt);
     }
     foreach(const DUContext::Import& import, m_importedContexts)
-      if(dynamic_cast<TopDUContext*>(import.context.data()))
-        dynamic_cast<TopDUContext*>(import.context.data())->m_local->m_directImporters.remove(m_ctxt);
+      if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context()))
+        dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.remove(m_ctxt);
+  }
+  
+  //After loading, should rebuild the links
+  void rebuildDynamicImportStructure() {
+    //Currently we do not store the whole data in TopDUContextLocalPrivate, so we reconstruct it from what was stored by DUContext.
+    ///@todo sharing
+    Q_ASSERT(m_importedContexts.isEmpty());
+    FOREACH_FUNCTION(const DUContext::Import& import, m_ctxt->d_func()->m_importedContexts) {
+      if(DUChain::self()->isInMemory(import.topContextIndex())) {
+        TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+        Q_ASSERT(top);
+        addImportedContextRecursively(top, false, true);
+      }
+    }
+    FOREACH_FUNCTION(IndexedDUContext importer, m_ctxt->d_func()->m_importers) {
+      if(DUChain::self()->isInMemory(importer.topContextIndex())) {
+        TopDUContext* top = dynamic_cast<TopDUContext*>(importer.context());
+        Q_ASSERT(top);
+        top->m_local->addImportedContextRecursively(m_ctxt, false, true);
+      }
+    }
   }
   
   //Index of this top-context within the duchain
@@ -226,6 +258,37 @@ public:
   QList<ProblemPointer> m_problems;
 
   uint m_ownIndex;
+  
+  bool m_inDuChain;
+  
+  
+  void clearImportedContextsRecursively() {
+    QMutexLocker lock(&importStructureMutex);
+  
+    QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
+
+    foreach(DUContext::Import import, m_importedContexts) {
+      TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+      if(top) {
+        top->m_local->m_directImporters.remove(m_ctxt);
+        
+        foreach(TopDUContext* user, m_dataUsers)
+          user->m_local->removeImportedContextRecursively(top, false);
+        
+        removeImportedContextRecursion(top, top, 1, rebuild);
+        
+        QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
+        for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
+          if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == top)
+            removeImportedContextRecursion(top, it.key(), it->first+1, rebuild); //Remove all contexts that are imported through the context
+        }
+      }
+    }
+    
+    m_importedContexts.clear();
+
+    rebuildImportStructureRecursion(rebuild);
+  }
   
   //Adds the context to this and all contexts that import this, and manages m_recursiveImports
   void addImportedContextRecursively(TopDUContext* context, bool temporary, bool local) {
@@ -532,7 +595,7 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
   for(int a = 0; a < d->m_importedContextsSize(); ++a)
-    if(d->m_importedContexts()[a].context.data() == target)
+    if(d->m_importedContexts()[a].context() == target)
       return d->m_importedContexts()[a].position;
   
   return DUContext::importPosition(target);
@@ -544,7 +607,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
     return;
 
   for(QVector<DUContext::Import>::const_iterator parentIt = m_importedContexts.constBegin(); parentIt != m_importedContexts.constEnd(); ++parentIt) {
-    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context.data())); //To avoid detaching, use const iterator
+    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context())); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -560,7 +623,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
   }
   
   for(int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
-  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context.data())); //To avoid detaching, use const iterator
+  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context())); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -576,6 +639,15 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
   }
 }
 
+void TopDUContext::rebuildDynamicImportStructure() {
+  m_local->rebuildDynamicImportStructure();
+}
+
+void TopDUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
+  Q_ASSERT(parent == 0 && ownIndex != 0);
+  m_local->m_ownIndex = ownIndex;
+  DUContext::rebuildDynamicData(parent, 0);
+}
 
 uint TopDUContext::ownIndex() const
 {
@@ -585,10 +657,11 @@ uint TopDUContext::ownIndex() const
 TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this)) {
 }
 
-
 TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
   : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
 {
+  d_func_dynamic()->setClassId(this);
+  
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d_func_dynamic()->setClassId(this);
   d->m_hasUses = false;
@@ -603,13 +676,6 @@ TopDUContext::TopDUContext(TopDUContext* sharedDataOwner, ParsingEnvironmentFile
   m_local->m_file = ParsingEnvironmentFilePointer(file);
 }
 
-IdentifiedFile TopDUContext::identity() const {
-  if( m_local->m_file )
-    return m_local->m_file->identity();
-  else
-    return IdentifiedFile(url());
-}
-
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
   return m_local->m_file;
 }
@@ -618,7 +684,8 @@ TopDUContext::~TopDUContext( )
 {
   if(!m_local->m_sharedDataOwner) {
     d_func_dynamic()->m_deleting = true;
-    clearUsedDeclarationIndices();
+    if(!isOnDisk())
+      clearUsedDeclarationIndices();
   }
 }
 
@@ -1046,12 +1113,14 @@ bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& 
  }
 
 void TopDUContext::clearImportedParentContexts() {
+  m_local->clearImportedContextsRecursively();
+  
   if(!m_local->m_sharedDataOwner)
     DUContext::clearImportedParentContexts();
   else {
     foreach (Import parent, m_local->m_importedContexts)
-      if( parent.context.data() )
-        removeImportedParentContext(parent.context.data());
+      if( parent.context() )
+        removeImportedParentContext(parent.context());
     Q_ASSERT(m_local->m_importedContexts.isEmpty());
   }
   
@@ -1088,12 +1157,12 @@ void TopDUContext::removeImportedParentContexts(const QList<TopDUContext*>& cont
 
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
 bool TopDUContext::inDuChain() const {
-  return d_func()->m_inDuChain;
+  return m_local->m_inDuChain;
 }
 
 /// This flag is only used by DUChain, never change it from outside.
 void TopDUContext::setInDuChain(bool b) {
-  d_func_dynamic()->m_inDuChain = b;
+  m_local->m_inDuChain = b;
 }
 
 TopDUContext::Flags TopDUContext::flags() const {
@@ -1102,6 +1171,10 @@ TopDUContext::Flags TopDUContext::flags() const {
 
 void TopDUContext::setFlags(Flags f) {
   d_func_dynamic()->m_flags = f;
+}
+
+bool TopDUContext::isOnDisk() const {
+  return m_dynamicData->isOnDisk();
 }
 
 void TopDUContext::clearUsedDeclarationIndices() {

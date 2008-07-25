@@ -78,6 +78,10 @@ EditorIntegrator::~ EditorIntegrator()
   delete d;
 }
 
+void EditorIntegrator::insertLoadedDocument(KTextEditor::Document* document) {
+    data()->insertLoadedDocument(document);
+}
+
 void EditorIntegrator::addDocument( KTextEditor::Document * document )
 {
   Q_ASSERT(data()->thread() == document->thread());
@@ -340,7 +344,7 @@ void EditorIntegrator::setCurrentUrl(const IndexedString& url)
 
     d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
     if (d->m_smart && i.revision != -1) {
-      kDebug(9506) << "Using revision" << i.revision;
+//       kDebug(9506) << "Using revision" << i.revision;
       d->m_smart->useRevision(i.revision);
     }
   }

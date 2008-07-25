@@ -115,21 +115,21 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   {
     TopDUContext* topCtx = static_cast<TopDUContext*>(context);
     if( topCtx->parsingEnvironmentFile() ) {
-      IdentifiedFile file( topCtx->parsingEnvironmentFile()->identity() );
+      QString file( topCtx->parsingEnvironmentFile()->url().str() );
 
-      KUrl url = KUrl(file.url().str());
+      KUrl url = KUrl(file);
       if(topCtx->flags() & TopDUContext::ProxyContextFlag)
         url.addPath("_[proxy]_");
       
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
       if( m_hadVersions.contains(url) ) {
         stream << shortLabel(context) << " -> " << m_hadVersions[url] << "[color=blue,label=\"version\"];\n";
-        file = IdentifiedFile( HashedString( KUrl(file.url().str()).fileName() ), file.identity() );
+        file = KUrl(file).fileName();
       } else {
         m_hadVersions[url] = shortLabel(context);
       }
       
-      label = file.toString();
+      label = file;
       
       if( topCtx->importers().count() != 0 )
         label += QString(" imported by %1").arg(topCtx->importers().count());
@@ -152,14 +152,14 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   }
   
   foreach (DUContext::Import parent, context->importedParentContexts()) {
-    if( parent.context.data() ) {
-      stream << dotGraphInternal(parent.context.data(), false, true);
+    if( parent.context() ) {
+      stream << dotGraphInternal(parent.context(), false, true);
       QString label = "imports";
-      if( (!dynamic_cast<TopDUContext*>(parent.context.data()) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context.data()->url() == context->url()) ) {
-        label += " from " + KUrl(parent.context.data()->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
+      if( (!dynamic_cast<TopDUContext*>(parent.context()) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context()->url() == context->url()) ) {
+        label += " from " + KUrl(parent.context()->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
       }
       
-      stream << shortLabel(context) << " -> " << shortLabel(parent.context.data()) << "[style=dotted,label=\"" << label  << "\"];\n";
+      stream << shortLabel(context) << " -> " << shortLabel(parent.context()) << "[style=dotted,label=\"" << label  << "\"];\n";
     }
   }
 

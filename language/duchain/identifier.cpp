@@ -117,6 +117,11 @@ const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
   return identifierRepository.itemFromIndex(emptyConstantIdentifierPrivateIndex);
 }
 
+bool IndexedIdentifier::isEmpty() const {
+  return index == emptyConstantIdentifierPrivateIndex;
+}
+
+
 ///Before something is modified in QualifiedIdentifierPrivate, it must be made sure that it is private to the QualifiedIdentifier it is used in(@see QualifiedIdentifier::prepareWrite)
 template<bool dynamic>
 class QualifiedIdentifierPrivate
@@ -1082,6 +1087,11 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id) {
 bool IndexedIdentifier::operator==(const IndexedIdentifier& rhs) const {
   return index == rhs.index;
 }
+
+bool IndexedIdentifier::operator!=(const IndexedIdentifier& rhs) const {
+  return index != rhs.index;
+}
+
 bool IndexedIdentifier::operator==(const Identifier& id) const {
   return index == id.index();
 }

@@ -24,6 +24,8 @@
 #include <QAbstractItemModel>
 #include <QSet>
 
+#include <duchain/indexedstring.h>
+
 #include "quickopendataprovider.h"
 #include "expandingtree/expandingwidgetmodel.h"
 
@@ -80,7 +82,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     
     virtual QTreeView* treeView() const;
 
-    virtual QSet<KDevelop::HashedString> fileSet() const;
+    virtual QSet<KDevelop::IndexedString> fileSet() const;
 
     ///This value will be added to the height of all created expanding-widgets
     void setExpandingWidgetHeightIncrease(int pixels);

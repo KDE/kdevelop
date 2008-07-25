@@ -117,8 +117,8 @@ public:
       top = updateContext.data();
 
       // If the duchain does not have smart ranges associated, create them now from the preexisting simple ranges
-      //if( top && !top->smartRange() && hasSmartEditor() )
-        //smartenContext(topLevelContext);
+      if( top && !top->smartRange() && m_editor->smart() )
+        smartenContext(top);
 
       if( top && top->smartRange() )
       {
@@ -151,7 +151,7 @@ public:
                                     : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
         top->setSmartRange( m_editor->topRange( EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
         top->setType( DUContext::Global );
-        DUChain::self()->addDocumentChain( IdentifiedFile( url, 0 ), top );
+        DUChain::self()->addDocumentChain( top );
       }
       setEncountered( top );
       setContextOnNode( node, top );
@@ -340,7 +340,7 @@ protected:
       //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
       //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
       // Smart mutex locking is performed by the smart converter.
-      SmartConverter conv(m_editor, 0);
+      SmartConverter conv(m_editor);
       conv.convertDUChain(topLevelContext);
     }
   }

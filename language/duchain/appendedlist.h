@@ -148,15 +148,16 @@ class TemporaryDataManager {
 ///You can call appendedListsDynamic() to find out whether the item is marked as dynamic.
 ///When this item is used, the same rules have to be followed as for a class with appended lists: You have to call
 ///initializeAppendedLists(...) and freeAppendedLists(..)
-///Also, when you use this, you have to implement an size_t classSize() function, that returns the size of the class including derived classes,
-///but not including the dynamic data.
+///Also, when you use this, you have to implement a size_t classSize() function, that returns the size of the class including derived classes,
+///but not including the dynamic data. Optionally you can implement a static bool appendedListDynamicDefault() function, that returns the default-value for the "dynamic" parameter.
+///to initializeAppendedLists.
 #define APPENDED_LISTS_STUB(container) \
 bool m_dynamic : 1;                          \
 unsigned int offsetBehindLastList() const { return 0; } \
 size_t dynamicSize() const { return classSize(); } \
 template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
 template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
-void initializeAppendedLists(bool dynamic) { m_dynamic = dynamic; }  \
+void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { m_dynamic = dynamic; }  \
 void freeAppendedLists() { } \
 bool appendedListsDynamic() const { return m_dynamic; }
 
@@ -205,7 +206,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
-                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); predecessor ## CopyAllFrom(rhs); } \
+                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { predecessor ## CopyAllFrom(rhs); name ## CopyFrom(rhs); } \
                                                void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## InitializeChain(dynamic);  }  \
                                                void name ## FreeChain() { name ## Free(); predecessor ## Free(); }
 
@@ -215,7 +216,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                       template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
                                      /* Copies all the local appended lists(not from base classes) from the given item.*/   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
-                                      void initializeAppendedLists(bool dynamic = true) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
+                                      void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
                                       void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
                                       bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
@@ -261,7 +262,12 @@ class AppendedListItemRequest {
 
   const Type& m_item;
 };
+}
 
+///This function is outside of the namespace, so it can always be found. It's used as default-parameter to initializeAppendedLists(..),
+///and you can for example implement a function called like this in your local class hierarchy to override this default.
+inline bool appendedListDynamicDefault() {
+  return true;
 }
 
 #endif

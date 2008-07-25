@@ -65,8 +65,6 @@ public:
 
   virtual void setAbstractType(AbstractType::Ptr type);
 
-  virtual Declaration* clone() const;
-
   virtual QString toString() const;
 
   virtual bool isFunctionDeclaration() const;
@@ -83,8 +81,9 @@ public:
   };
   
   typedef Declaration Base;
+
 private:
-  
+  virtual Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 }

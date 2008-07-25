@@ -71,8 +71,6 @@ public:
    * */
   virtual Declaration* resolve(const TopDUContext* topContext) const;
 
-  virtual Declaration* clone() const;
-
   virtual DUContext * logicalInternalContext(const TopDUContext* topContext) const;
 
   virtual QString toString() const;
@@ -84,6 +82,7 @@ public:
   typedef Declaration BaseClass;
   
 private:
+  virtual Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(ForwardDeclaration)
 };
 

@@ -31,20 +31,36 @@
 #include "documentrange.h"
 #include "simplecursor.h"
 #include "simplerange.h"
+#include "../duchain/appendedlist.h"
 
 namespace KDevelop
 {
 class HashedString;
 
 ///Contains data that is stored to disk
-class DocumentRangeObjectData
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObjectData
 {
     public:
     DocumentRangeObjectData() {
+      initializeAppendedLists();
+    }
+    ~DocumentRangeObjectData() {
+      freeAppendedLists();
     }
     DocumentRangeObjectData(const DocumentRangeObjectData& rhs);
 
     mutable SimpleRange m_range; //Mutable for synchronization
+    
+    APPENDED_LISTS_STUB(DocumentRangeObjectData);
+    
+    bool isDynamic() const {
+      return m_dynamic;
+    }
+
+    ///Returns whether initialized objects should be created as dynamic objects
+    static bool appendedListDynamicDefault();
+    
+    uint classSize() const;
 };
 
 class DocumentRangeObjectDynamicPrivate;
@@ -176,8 +192,8 @@ protected:
      */
     DocumentRangeObject(DocumentRangeObjectData& dd, const SimpleRange& range = SimpleRange::invalid());
 
-    /// Private data pointer.
-    DocumentRangeObjectData* const d_ptr;
+    /// Data pointer shared across the inheritance hierarchy
+    DocumentRangeObjectData* d_ptr;
 
     /**
      * Reimplementation of KTextEditor::SmartWatcher::rangeDeleted(), to clean up the smart

@@ -66,8 +66,6 @@ public:
    */
   virtual void setAbstractType(AbstractType::Ptr type);
 
-  virtual Declaration* clone() const;
-
   /**
    * Set the declaration that is aliased by this declaration.
    *
@@ -89,6 +87,7 @@ public:
   };
   
 private:
+  virtual Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(AliasDeclaration)
 };
 }

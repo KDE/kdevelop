@@ -41,10 +41,10 @@ namespace KTextEditor {
 namespace KDevelop{
 class DUContext;
 
-KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_childContexts, IndexedDUContext)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_childContexts, LocalIndexedDUContext)
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext)
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import)
-KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, IndexedDeclaration)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, LocalIndexedDeclaration)
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 ///This class contains data that needs to be stored to disk
@@ -55,18 +55,18 @@ public:
   ~DUContextData();
   DUContextData(const DUContextData& rhs);
   DUContext::ContextType m_contextType;
-  QualifiedIdentifier m_scopeIdentifier;
+  IndexedQualifiedIdentifier m_scopeIdentifier;
   IndexedDeclaration m_owner;
   
   START_APPENDED_LISTS_BASE(DUContextData, DUChainBaseData);
   APPENDED_LIST_FIRST(DUContextData, DUContext::Import, m_importedContexts);
-  APPENDED_LIST(DUContextData, IndexedDUContext, m_childContexts, m_importedContexts);
+  APPENDED_LIST(DUContextData, LocalIndexedDUContext, m_childContexts, m_importedContexts);
   
   ///@todo eventually move the importers into some separate structure
   APPENDED_LIST(DUContextData, IndexedDUContext, m_importers, m_childContexts);
 
   ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
-  APPENDED_LIST(DUContextData, IndexedDeclaration, m_localDeclarations, m_importers);
+  APPENDED_LIST(DUContextData, LocalIndexedDeclaration, m_localDeclarations, m_importers);
   /**
    * Vector of all uses in this context
    * Mutable for range synchronization

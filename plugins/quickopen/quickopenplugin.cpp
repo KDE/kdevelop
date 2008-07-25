@@ -563,7 +563,7 @@ void QuickOpenPlugin::quickOpenClass()
   showQuickOpen( Classes );
 }
 
-QSet<KDevelop::HashedString> QuickOpenPlugin::fileSet() const {
+QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const {
   return m_model->fileSet();
 }
 

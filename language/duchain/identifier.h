@@ -52,7 +52,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier {
   IndexedIdentifier(const Identifier& id);
   IndexedIdentifier& operator=(const Identifier& id);
   bool operator==(const IndexedIdentifier& rhs) const;
+  bool operator!=(const IndexedIdentifier& rhs) const;
   bool operator==(const Identifier& id) const;
+  
+  bool isEmpty() const;
   
   Identifier identifier() const;
   operator Identifier() const;

@@ -17,83 +17,10 @@
 */
 
 #include "parsingenvironment.h"
+#include "topducontext.h"
 
 namespace KDevelop
 {
-
-class IdentifiedFilePrivate
-{
-public:
-  IdentifiedFilePrivate() : m_identity(0) {
-  }
-  IndexedString m_url;
-  uint m_identity;
-};
-
-IdentifiedFile::IdentifiedFile()
-  : d(new IdentifiedFilePrivate)
-{
-}
-
-IdentifiedFile::IdentifiedFile( const IndexedString& url , uint identity )
-  : d(new IdentifiedFilePrivate)
-{
-  d->m_url = url;
-  d->m_identity = identity;
-}
-
-IdentifiedFile::IdentifiedFile( const HashedString& url , uint identity )
-  : d(new IdentifiedFilePrivate)
-{
-  d->m_url = IndexedString(url.str());
-  d->m_identity = identity;
-}
-
-IdentifiedFile::IdentifiedFile( const KUrl& url , uint identity )
-  : d(new IdentifiedFilePrivate)
-{
-  d->m_url = IndexedString( url.pathOrUrl() );
-  d->m_identity = identity;
-}
-
-IdentifiedFile::~IdentifiedFile() {
- delete d;
-}
-
-IndexedString IdentifiedFile::url() const {
-  return d->m_url;
-}
-
-QString IdentifiedFile::toString() const {
-  return QString("%1 %2").arg(url().str()).arg(identity());
-}
-
-uint IdentifiedFile::identity() const {
-  return d->m_identity;
-}
-
-bool IdentifiedFile::operator<( const IdentifiedFile& rhs ) const {
-  return d->m_url < rhs.url() || (d->m_url == rhs.url() && d->m_identity < rhs.identity() );
-}
-
-IdentifiedFile::IdentifiedFile(const IdentifiedFile& rhs) : d(new IdentifiedFilePrivate) {
-  d->m_url = rhs.url();
-  d->m_identity = rhs.identity();
-}
-
-IdentifiedFile& IdentifiedFile::operator=( const IdentifiedFile& rhs ) {
-  d->m_url = rhs.url();
-  d->m_identity = rhs.identity();
-  return *this;
-}
-
-bool IdentifiedFile::isEmpty() const {
-  return d->m_url.str().isEmpty();
-}
-
-IdentifiedFile::operator bool() const {
-  return !isEmpty();
-}
 
 ParsingEnvironment::ParsingEnvironment() {
 }
@@ -104,6 +31,9 @@ ParsingEnvironment::~ParsingEnvironment() {
 ParsingEnvironmentFile::ParsingEnvironmentFile() : DUChainBase(SimpleRange::invalid()) {
 }
 
+TopDUContext* ParsingEnvironmentFile::topContext() const {
+  return indexedTopContext().data();
+}
 
 ParsingEnvironmentFile::~ParsingEnvironmentFile() {
 }

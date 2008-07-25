@@ -52,7 +52,7 @@ using namespace KDevelop;
 ///When the context is a proxy-context, returns the assigned content-context.
 TopDUContext* getRealContext(TopDUContext* ctx) {
   if(ctx && ctx->flags() & TopDUContext::ProxyContextFlag && !ctx->importedParentContexts().isEmpty())
-    return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].context.data());
+    return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].context());
   else
     return ctx;
 }
@@ -96,6 +96,7 @@ void DUChainModel::parseJobFinished(KDevelop::ParseJob* job)
 void DUChainModel::documentActivated(KDevelop::IDocument* document)
 {
   if (document) {
+    DUChainReadLocker readLock(DUChain::lock());
     TopDUContext* ptr = DUChain::self()->chainForDocument(document->url());
     TopDUContextPointer chain(ptr);
     if (chain && chain != m_chain)
@@ -310,8 +311,8 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     QVector<DUContext*> importedParentContextsData;
     ///@todo Think whether this can be called for top-contexts, and if it can, care about endless recursion because of loops.
     foreach( DUContext::Import p, context->importedParentContexts() )
-      if( p.context.data() )
-        importedParentContextsData << p.context.data();
+      if( p.context() )
+        importedParentContextsData << p.context();
 
     QVectorIterator<DUContext*> contexts = context->childContexts();
     QVectorIterator<DUContext*> importedParentContexts = importedParentContextsData;
@@ -526,9 +527,9 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       {
         DUChainReadLocker readLock(DUChain::lock());
 
-        QString suffix = (dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()) ?
-                            static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()->identity().toString()
-                            : ctx->localScopeIdentifier().toString();
+        QString suffix = (dynamic_cast<TopDUContext*>(ctx) ?
+                            static_cast<TopDUContext*>(ctx)->url().str()
+                            : ctx->localScopeIdentifier().toString());
         suffix = suffix.replace('/', '_');
         suffix = suffix.replace(':', '.');
         suffix = suffix.replace(' ', '_');

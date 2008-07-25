@@ -87,7 +87,7 @@ public:
 
   virtual void setAbstractType(AbstractType::Ptr type);
 
-  virtual Declaration* clone() const;
+  virtual Declaration* clonePrivate() const;
   
   virtual uint additionalIdentity() const;
   

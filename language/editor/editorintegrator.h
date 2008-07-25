@@ -89,6 +89,10 @@ public:
   EditorIntegrator();
   virtual ~EditorIntegrator();
 
+  ///A hack working around problems while initialization, @see DUChain::documentLoadedPrepare. It used to happen that the document wasn't registered
+  ///to the editor-integrator there, and thus no smart-ranges/highlighting were created. We use this to inject the document.
+  void insertLoadedDocument(KTextEditor::Document* document);
+  
   /**
    * Initialise the editor integrator.
    * Only needs to be called once from the main thread.

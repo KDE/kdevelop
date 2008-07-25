@@ -378,6 +378,8 @@ void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node
         default:
         case DUContext::Class:
           // We only add the definitions, not the contexts
+          foreach (Declaration* declaration, context->localDeclarations())
+            declaration->identifier().isEmpty();
           foreach (Declaration* declaration, context->localDeclarations()) {
             if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
 

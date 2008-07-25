@@ -65,7 +65,7 @@ public:
 
     virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
 
-    virtual QSet<KDevelop::HashedString> fileSet() const;
+    virtual QSet<KDevelop::IndexedString> fileSet() const;
 
 public slots:
     void quickOpen();

@@ -62,29 +62,28 @@ public:
 
   /**
    * Return any chain for the given document
-   * If available, the version accepting HashedString should be used instead of this, for performance reasons.
+   * If available, the version accepting IndexedString should be used instead of this, for performance reasons.
+   * When no fitting chain is in memory, one may be loaded from disk.
    * */
   TopDUContext* chainForDocument(const KUrl& document) const;
-  TopDUContext* chainForDocument(const HashedString& document) const;
+  TopDUContext* chainForDocument(const IndexedString& document) const;
 
   /**
-   * Return all chains for the given document
+   * Return all chains for the given document that are currently in memory.
+   * This does not load any chains from disk.
    * */
   QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
 
   /**
-   * Return all chains for the given document
+   * Return all chains for the given document that are currently in memory.
+   * This does not load any chains from disk.
    * Should be preferred over the KUrl version.
    * */
-  QList<TopDUContext*> chainsForDocument(const HashedString& document) const;
-
-  /**
-   * Find the chain based on file-url and identity-number. If the number is zero, any chain for the given url is returned.
-   * */
-  TopDUContext* chainForDocument(const IdentifiedFile& document) const;
+  QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * When no fitting chain is in memory, one may be loaded from disk.
    * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
    *              Else a context will be searched that exactly matches the given flags.
    * */
@@ -92,14 +91,15 @@ public:
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * When no fitting chain is in memory, one may be loaded from disk.
    * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
    *              Else a context will be searched that exactly matches the given flags.
    *
    * Prefer this over the KUrl version.
    * */
-  TopDUContext* chainForDocument(const HashedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
 
-  ///Returns the top-context that has the given index assigned, or zero if it doesn't exist
+  ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   TopDUContext* chainForIndex(uint index) const;
 
   /// Only used for debugging at the moment
@@ -108,12 +108,7 @@ public:
   /**
    * Registers a new definition-use \a chain for the given \a document.
    */
-  void addDocumentChain(const IdentifiedFile& document, TopDUContext* chain);
-
-  /**
-   * Clears all definition-use chains.
-   */
-  void clear();
+  void addDocumentChain(TopDUContext* chain);
 
   /// Returns the global static instance.
   static DUChain* self();
@@ -152,6 +147,9 @@ public:
   /// Notify that a branch was removed from \a context
   static void branchRemoved(DUContext* context);
 
+  /// Returns whether the top-context with the given index is currently loaded in memory
+  bool isInMemory(uint topContextIndex) const;
+  
   /**
    * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
    * */
@@ -160,15 +158,15 @@ public:
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();
 
-
-
 public Q_SLOTS:
-  void removeDocumentChain(const IdentifiedFile& document);
+  ///Removes the given top-context from the duchain, and deletes it.
+  void removeDocumentChain(TopDUContext* document);
 
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
+  void aboutToQuit();
 private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );

@@ -33,7 +33,7 @@ using namespace KDevelop;
 
 ///@todo Use ILanguageSupport::standardContext(..)
 //May return zero
-KDevelop::TopDUContext* getTopContext(const HashedString& url) {
+KDevelop::TopDUContext* getTopContext(const IndexedString& url) {
   KDevelop::TopDUContext* chosen = 0;
   QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(url);
   foreach( KDevelop::TopDUContext* ctx, contexts )
@@ -93,9 +93,9 @@ void ProjectItemDataProvider::reset() {
   Base::clearFilter();
   QList<DUChainItem> items;
 
-  QSet<HashedString> enabledFiles = m_quickopen->fileSet();
+  QSet<IndexedString> enabledFiles = m_quickopen->fileSet();
 
-  foreach( HashedString u, enabledFiles ) {
+  foreach( IndexedString u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
     TopDUContext* ctx = getTopContext( u );

@@ -70,8 +70,6 @@ public:
   bool isMutable() const;
   void setMutable(bool isMutable);
 
-  virtual Declaration* clone() const;
-
   enum {
     Identity = 9
   };
@@ -80,6 +78,9 @@ protected:
   ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range);
   
   DUCHAIN_DECLARE_DATA(ClassMemberDeclaration)
+private:
+  virtual Declaration* clonePrivate() const;
+    
 };
 }
 

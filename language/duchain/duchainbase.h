@@ -27,14 +27,17 @@
 namespace KDevelop
 {
 
+class DUContext;
 class TopDUContext;
 class DUChainBase;
 class DUChainPointerData;
 class IndexedString;
 
+///Use this to declare the data functions in your DUChainBase based class. @warning Behind this macro, the access will be "public".
 #define DUCHAIN_DECLARE_DATA(Class) \
     inline class Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
-    inline const class Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
+    inline const class Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); } \
+    public: typedef Class ## Data Data;
 
 #define DUCHAIN_D(Class) const Class##Data * const d = d_func()
 #define DUCHAIN_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
@@ -60,7 +63,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectD
       
     uint classSize() const;
 
-    APPENDED_LISTS_STUB(DocumentRangeObjectData);
+  ///Used to decide whether a constructed item should create constant data.
+  ///The default is "false", so dynamic data is created by default.
+  ///This is stored thread-locally.
+  static bool shouldCreateConstantData();
+  static void setShouldCreateConstantData(bool);
 };
 
 /**
@@ -103,8 +110,8 @@ public:
     Identity = 1
   };
   
-  void makeDynamic() {
-  }
+  ///After this was called, the data-pointer is dynamic. It is cloned if needed.
+  void makeDynamic();
   
   DUChainBase( DUChainBaseData& dd );
   
@@ -124,9 +131,13 @@ protected:
     */
   DUChainBase( DUChainBaseData& dd, const SimpleRange& range );
 
+  ///Called after loading to rebuild the dynamic data. If this is a context, this should recursively work on all sub-contexts.
+  virtual void rebuildDynamicData(DUContext* parent, uint ownIndex);
 private:
-  DUCHAIN_DECLARE_DATA(DUChainBase)
+  
   mutable KSharedPtr<DUChainPointerData> m_ptr;
+public:
+  DUCHAIN_DECLARE_DATA(DUChainBase)
 };
 }
 

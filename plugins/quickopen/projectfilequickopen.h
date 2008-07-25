@@ -71,7 +71,7 @@ class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-    virtual QSet<KDevelop::HashedString> files() const;
+    virtual QSet<KDevelop::IndexedString> files() const;
 
   private:
   

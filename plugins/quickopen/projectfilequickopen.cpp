@@ -27,6 +27,7 @@
 #include <duchain/topducontext.h>
 #include <duchain/duchain.h>
 #include <duchain/duchainlock.h>
+#include <duchain/indexedstring.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -138,10 +139,10 @@ uint ProjectFileDataProvider::itemCount() const {
   return Base::filteredItems().count();
 }
 
-QSet<HashedString> ProjectFileDataProvider::files() const {
-  QSet<HashedString> ret;
+QSet<IndexedString> ProjectFileDataProvider::files() const {
+  QSet<IndexedString> ret;
   foreach( const ProjectFile& file, items() ) {
-    ret.insert(file.m_url.url());
+    ret.insert(IndexedString(file.m_url.pathOrUrl()));
   }
   return ret;
 }

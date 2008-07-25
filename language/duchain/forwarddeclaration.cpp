@@ -110,7 +110,7 @@ bool ForwardDeclaration::isForwardDeclaration() const
   return true;
 }
 
-Declaration* ForwardDeclaration::clone() const {
+Declaration* ForwardDeclaration::clonePrivate() const {
   return new ForwardDeclaration(*this);
 }
 

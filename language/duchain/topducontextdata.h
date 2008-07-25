@@ -34,14 +34,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_inDuChain(false), m_url(url), m_currentUsedDeclarationIndex(0)
+    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_currentUsedDeclarationIndex(0)
   {
     initializeAppendedLists();
   }
-  TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false), m_inDuChain(false) {
+  TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false) {
     initializeAppendedLists();
     copyListsFrom(rhs);
     m_hasUses = rhs.m_hasUses;
+    m_flags = rhs.m_flags;
+    m_url = rhs.m_url;
+    m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
   }
   ~TopDUContextData() {
     freeAppendedLists();
@@ -50,8 +53,7 @@ public:
   TopDUContext::Flags m_flags;
 
   bool m_hasUses  : 1;
-  bool m_deleting : 1;
-  bool m_inDuChain : 1;
+  bool m_deleting : 1; ///@todo remove
 
   IndexedString m_url;
 

@@ -42,7 +42,7 @@ public:
 
   IndexedDUContext m_internalContext;
   IndexedType m_type;
-  Identifier m_identifier;
+  IndexedIdentifier m_identifier;
 
   ///@todo Eventually move this and all the definition/declaration coupling functionality somewhere else
   //Holds the declaration id for this definition, if this is a definition with separate declaration

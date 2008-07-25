@@ -56,7 +56,7 @@ NamespaceAliasDeclaration::~NamespaceAliasDeclaration()
 {
 }
 
-Declaration* NamespaceAliasDeclaration::clone() const {
+Declaration* NamespaceAliasDeclaration::clonePrivate() const {
   return new NamespaceAliasDeclaration(*this);
 }
 

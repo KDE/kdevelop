@@ -77,9 +77,47 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     bool operator<(const IndexedDeclaration& rhs) const {
       return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
     }
+    
+    ///Index of the Declaration within the top context
+    uint localIndex() const {
+      return m_declarationIndex;
+    }
 
   private:
   uint m_topContext;
+  uint m_declarationIndex;
+};
+
+///Represents a declaration only by its index within the top-context
+class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
+  public:
+    LocalIndexedDeclaration(Declaration* decl = 0);
+    LocalIndexedDeclaration(uint declarationIndex);
+    //Duchain must be read locked
+    
+    Declaration* data(TopDUContext* top) const;
+    
+    bool operator==(const LocalIndexedDeclaration& rhs) const {
+      return m_declarationIndex == rhs.m_declarationIndex;
+    }
+    uint hash() const {
+      return m_declarationIndex * 23;
+    }
+
+    bool isValid() const {
+      return m_declarationIndex != 0;
+    }
+
+    bool operator<(const LocalIndexedDeclaration& rhs) const {
+      return m_declarationIndex < rhs.m_declarationIndex;
+    }
+    
+    ///Index of the Declaration within the top context
+    uint localIndex() const {
+      return m_declarationIndex;
+    }
+
+  private:
   uint m_declarationIndex;
 };
 
@@ -313,9 +351,9 @@ public:
   /**
    * Access this declaration's \a identifier.
    *
-   * \returns this declaration's identifier, or a null identifier if it has none.
+   * \returns this declaration's identifier.
    */
-  const Identifier& identifier() const;
+  Identifier identifier() const;
 
   /**
    * Determine the global qualified identifier of this declaration.
@@ -418,8 +456,9 @@ public:
 
   /**
    * @see DeclarationId
+   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context
    * */
-  virtual DeclarationId id() const;
+  virtual DeclarationId id(bool forceDirect = false) const;
 
   /**
    * Returns an index that uniquely identifies this declaration within its surrounding top-context. That index can be passed
@@ -444,21 +483,13 @@ public:
   /**
    * Returns a clone of this declaration, with the difference that:
    * - context will be zero
-   * - internalContext will be zero
-   * - definition will be zero
-   * - forwardDeclarations will be zero
-   * - the list of uses will be empty
    *
    * The declaration will not be registered anywhere, so you must care about its deletion.
    *
    * This declaration's text-range will be referenced from the clone, so the clone must not live longer than the original.
    *
-   * Sub-classes should implement this and should copy as much information into the clone as possible without breaking the du-chain.
-   * Sub-classes should also implement a public copy-constructor that can be used for cloning by sub-classes.
-   *
-   * \note You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
    * */
-  virtual Declaration* clone() const;
+  Declaration* clone() const;
 
   enum {
     Identity = 7
@@ -477,7 +508,19 @@ protected:
 
   DUCHAIN_DECLARE_DATA(Declaration)
 private:
+   /**
+   * Sub-classes should implement this and should copy as much information into the clone as possible without breaking the du-chain.
+   * Sub-classes should also implement a public copy-constructor that can be used for cloning by sub-classes.
+   *
+   * \note You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
+    * */
+   virtual Declaration* clonePrivate() const;
+  
+  void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  
+  friend class DUContext;
   friend class IndexedDeclaration;
+  friend class LocalIndexedDeclaration;
   friend class TopDUContextDynamicData;
   DUContext* m_context;
   TopDUContext* m_topContext;

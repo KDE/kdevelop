@@ -55,7 +55,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUC
     setContext( context );
 }
 
-Declaration* ClassFunctionDeclaration::clone() const {
+Declaration* ClassFunctionDeclaration::clonePrivate() const {
   return new ClassFunctionDeclaration(*this);
 }
 

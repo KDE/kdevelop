@@ -49,6 +49,8 @@ public:
   EditorIntegratorStatic();
   virtual ~EditorIntegratorStatic();
 
+  void insertLoadedDocument(KTextEditor::Document* document);
+  
 Q_SIGNALS:
   void documentAboutToBeDeleted(KTextEditor::Document* document);
   void documentAboutToBeReloaded(KTextEditor::Document* document);

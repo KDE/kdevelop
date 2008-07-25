@@ -31,6 +31,7 @@ public:
   NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
       : DeclarationData( rhs )
   {
+    m_importIdentifier = rhs.m_importIdentifier;
   }
   IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };
@@ -50,8 +51,6 @@ public:
   ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
   virtual void setAbstractType(AbstractType::Ptr type);
 
-  virtual Declaration* clone() const;
-
   /**The identifier that was imported.*/
   QualifiedIdentifier importIdentifier() const;
   ///The identifier must be absolute(Resolve it before setting it!) Since it is absolute, it should also be explicitlyGlobal.
@@ -67,6 +66,7 @@ public:
 
   virtual QString toString() const;
 private:
+  virtual Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(NamespaceAliasDeclaration)
 };
 }

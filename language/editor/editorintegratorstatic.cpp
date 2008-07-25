@@ -48,11 +48,15 @@ EditorIntegratorStatic::~EditorIntegratorStatic()
   delete mutex;
 }
 
-void EditorIntegratorStatic::documentLoaded()
+void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
 {
-  KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender());
-  Q_ASSERT(doc);
+  {
+    QMutexLocker lock(mutex);
 
+    if(documents.contains(IndexedString(doc->url().pathOrUrl())))
+      return;
+  }
+  
   DocumentInfo i;
   i.document = doc;
   i.revision = -1;
@@ -76,6 +80,13 @@ void EditorIntegratorStatic::documentLoaded()
 
     documents.insert(IndexedString(doc->url().pathOrUrl()), i);
   }
+}
+
+void EditorIntegratorStatic::documentLoaded()
+{
+  KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender());
+  Q_ASSERT(doc);
+  insertLoadedDocument(doc);
 }
 
 void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)

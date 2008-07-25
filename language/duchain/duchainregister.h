@@ -24,74 +24,41 @@
 namespace KDevelop {
 class DUChainBase;
 class DUChainBaseData;
-/**
- * \short A factory class for type data.
- *
- * This class provides an interface for creating private data
- * structures for classes.
- */
+
+///This class is purely internal and doesn't need to be documented. It brings a "fake" type-info
+///to classes that don't have type-info in the normal C++ way.
+///Never use this directly, use the REGISTER_DUCHAIN_ITEM macro instead.
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
   public:
-  /**
-   * Create a new duchain item for the given \a data.
-   */
   virtual DUChainBase* create(DUChainBaseData* data) const = 0;
-
-  /**
-   * Release the \a data from an item which is being destroyed.
-   */
   virtual void callDestructor(DUChainBaseData* data) const = 0;
-
-
-  /**
-   * Copy data \a from one type \a to another.
-   *
-   * \param from data to copy from
-   * \param to data to copy to
-   * \param constant set to true if \a to is to be a static data type, or false if \a to is to be a dynamic data type.
-   *
-   * \todo David, please check this
-   */
-//   virtual void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const = 0;
-
-  /**
-   * Return the memory size of the given private \a data, including dynamic data.
-   *
-   * \param data data structure
-   * \returns the size in memory of the data.
-   */
+  virtual void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const = 0;
+  virtual DUChainBaseData* cloneData(const DUChainBaseData& data) const = 0;
   virtual uint dynamicSize(const DUChainBaseData& data) const = 0;
 
-  /// Destructor.
   virtual ~DUChainBaseFactory() {
   }
 };
 
-/**
- * Template class to implement factories for each DUChainBase subclass you want
- * to instantiate.
- */
+///Never use this directly, use the REGISTER_DUCHAIN_ITEM macro instead.
 template<class T, class Data>
 class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public DUChainBaseFactory {
   public:
   DUChainBase* create(DUChainBaseData* data) const {
     return new T(*static_cast<Data*>(data));
   }
-/*  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
+  
+  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
     Q_ASSERT(from.classId == T::Identity);
 
-    if((bool)from.m_dynamic == (bool)!constant) {
-      //We have a problem, "from" and "to" should both be either dynamic or constant. We must copy once more.
-      Data* temp = &DUChainBase::copyData<Data>(static_cast<const Data&>(from));
-
-      new (&to) Data(*temp); //Call the copy constructor to initialize the target
-
-      Q_ASSERT((bool)to.m_dynamic == (bool)!constant);
-      delete temp;
-    }else{
-      new (&to) Data(static_cast<const Data&>(from)); //Call the copy constructor to initialize the target
-    }
-  }*/
+    bool previousConstant = DUChainBaseData::shouldCreateConstantData();
+    DUChainBaseData::setShouldCreateConstantData(constant);
+    
+    new (&to) Data(static_cast<const Data&>(from)); //Call the copy constructor to initialize the target
+    
+    DUChainBaseData::setShouldCreateConstantData(previousConstant);
+  }
+  
   void callDestructor(DUChainBaseData* data) const {
     Q_ASSERT(data->classId == T::Identity);
     static_cast<Data*>(data)->~Data();
@@ -101,6 +68,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public DUChainBaseFactory {
     Q_ASSERT(data.classId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
+  
+   DUChainBaseData* cloneData(const DUChainBaseData& data) const {
+     Q_ASSERT(data.classId == T::Identity);
+     return new Data(static_cast<const Data&>(data));
+   }
 };
 
 /**
@@ -144,10 +116,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
      */
     DUChainBase* create(DUChainBaseData* data) const;
 
+    ///Creates a dynamic copy of the given data
+    DUChainBaseData* cloneData(const DUChainBaseData& data) const;
+    
     /**
      * This just calls the correct constructor on the target. The target must be big enough to hold all the data.
+     * If constant is true, it must be as big as dynamicSize(from).
      */
-//     void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const;
+    void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const;
 
     ///Calls the dynamicSize(..) member on the given data, in the most special class. Since we cannot use virtual functions, this is the only way.
     uint dynamicSize(const DUChainBaseData& data) const;

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2007 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,13 +62,15 @@ DeclarationData::DeclarationData()
 DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs)
 {
   m_identifier = rhs.m_identifier;
+  m_declaration = rhs.m_declaration;
   m_type = rhs.m_type;
   m_kind = rhs.m_kind;
   m_isDefinition = rhs.m_isDefinition;
   m_isTypeAlias = rhs.m_isTypeAlias;
-  m_inSymbolTable = false;
+  m_inSymbolTable = rhs.m_inSymbolTable;
   m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
+  m_internalContext = rhs.m_internalContext;
 }
   
 Declaration::Kind Declaration::kind() const {
@@ -135,13 +138,15 @@ Declaration::~Declaration()
 {
   DUCHAIN_D_DYNAMIC(Declaration);
   // Inserted by the builder after construction has finished.
-  if( d->m_internalContext.context() )
-    d->m_internalContext.context()->setOwner(0);
-  
-  if (d->m_inSymbolTable) {
-    SymbolTable::self()->removeDeclaration(this);
-    d->m_inSymbolTable = false;
+  if(!topContext()->isOnDisk()) {
+    if( d->m_internalContext.context() )
+      d->m_internalContext.context()->setOwner(0);
   }
+  
+  if (d->m_inSymbolTable && !d->m_identifier.isEmpty())
+    SymbolTable::self()->removeDeclaration(this);
+  
+  d->m_inSymbolTable = false;
 
   // context is only null in the test cases
   if (context() && !d->m_anonymousInContext) {
@@ -176,10 +181,27 @@ void Declaration::setComment(const QString& str) {
   setComment(str.toUtf8());
 }
 
-const Identifier& Declaration::identifier( ) const
+Identifier Declaration::identifier( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
-  return d_func()->m_identifier;
+  return d_func()->m_identifier.identifier();
+}
+
+LocalIndexedDeclaration::LocalIndexedDeclaration(Declaration* decl) {
+  if(!decl)
+    m_declarationIndex = 0;
+  else
+    m_declarationIndex = decl->m_indexInTopContext;
+}
+
+LocalIndexedDeclaration::LocalIndexedDeclaration(uint declarationIndex) : m_declarationIndex(declarationIndex) {
+}
+
+Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const {
+  if(m_declarationIndex)
+    return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
+  else
+    return 0;
 }
 
 IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex) : m_topContext(topContext), m_declarationIndex(declarationIndex) {
@@ -205,6 +227,18 @@ Declaration* IndexedDeclaration::declaration() const {
     return 0;
   
   return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
+}
+
+void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
+{
+  DUChainBase::rebuildDynamicData(parent, ownIndex);
+  
+  m_context = parent;
+  m_topContext = parent->topContext();
+  m_indexInTopContext = ownIndex;
+  
+  if(d_func()->m_inSymbolTable && !d_func()->m_identifier.isEmpty())
+      SymbolTable::self()->addDeclaration(this);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
@@ -483,10 +517,10 @@ uint Declaration::specialization() const {
   return 0;
 }
 
-DeclarationId Declaration::id() const
+DeclarationId Declaration::id(bool forceDirect) const
 {
   ENSURE_CAN_READ
-  if(inSymbolTable())
+  if(inSymbolTable() && !forceDirect)
     return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
     return DeclarationId(IndexedDeclaration(const_cast<Declaration*>(this)), specialization());
@@ -559,8 +593,14 @@ TopDUContext * Declaration::topContext() const
   return m_topContext;
 }
 
-Declaration* Declaration::clone() const  {
+Declaration* Declaration::clonePrivate() const  {
   return new Declaration(*this);
+}
+
+Declaration* Declaration::clone() const  {
+  Declaration* ret = clonePrivate();
+  ret->d_func_dynamic()->m_inSymbolTable = false;
+  return ret;
 }
 
 bool Declaration::isForwardDeclaration() const

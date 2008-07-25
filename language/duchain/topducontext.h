@@ -30,7 +30,6 @@ namespace KDevelop
 {
   class QualifiedIdentifier;
   class DUChain;
-  class IdentifiedFile; //Defined in parsingenvironment.h
   class ParsingEnvironmentFile;
   class TopDUContextData;
   class TopDUContextLocalPrivate;
@@ -44,15 +43,21 @@ namespace KDevelop
   typedef KSharedPtr<Problem> ProblemPointer;
 
 ///Allows simple indirect access to top-contexts with on-demand loading
-class IndexedTopDUContext {
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
   public:
+    IndexedTopDUContext(uint index) : m_index(index) {
+    }
     IndexedTopDUContext(TopDUContext* context = 0);
+    
     TopDUContext* data() const;
     bool operator==(const IndexedTopDUContext& rhs) const {
       return m_index == rhs.m_index;
     }
     bool operator!=(const IndexedTopDUContext& rhs) const {
       return m_index != rhs.m_index;
+    }
+    uint index() const {
+      return m_index;
     }
   private:
   uint m_index;
@@ -83,7 +88,7 @@ public:
    * (it must not have been created with this constructor).
    * 
    * When creating a context like this, all the data is shared among the context, except:
-   * parsingEnvironmentFile, ownIndex, identity, problems, imports and importers.
+   * parsingEnvironmentFile, ownIndex, problems, imports and importers.
    * 
    * When you change any other attributes(including duchain data etc.), that data is changed within all contexts that also share the data of the
    * given one.
@@ -105,11 +110,6 @@ public:
   IndexedString url() const;
   
   /**
-   * There may be multiple context's for one file, but each of those should have a different identity().
-   *  */
-  IdentifiedFile identity() const;
-
-  /**
    * @see ParsingEnvironmentFile
    * May return zero if no file was set.
    * */
@@ -118,11 +118,14 @@ public:
   /// Returns true if this object is being deleted, otherwise false.
   bool deleting() const;
 
-  /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
+  /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.) can be changed
   bool inDuChain() const;
   /// This flag is only used by DUChain, never change it from outside.
   void setInDuChain(bool);
 
+  /// Whether this top-context has a stored version on disk
+  bool isOnDisk() const;
+  
   /**
    * Returns a list of all problems encountered while parsing this top-context.
    * Does not include the problems of imported contexts.
@@ -278,6 +281,10 @@ protected:
   virtual ~TopDUContext();
 private:
   
+  void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  //Must be called after all imported top-contexts were loaded into the du-chain
+  void rebuildDynamicImportStructure();
+  
   struct AliasChainElement;
   struct FindDeclarationsAcceptor;
   struct FindContextsAcceptor;
@@ -290,12 +297,17 @@ private:
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
   
-  friend class DUChain; //To allow access to setParsingEnvironmentFile
+  //Most of these classes need access to m_dynamicData
+  friend class DUChain;
+  friend class DUChainPrivate;
   friend class TopDUContextLocalPrivate;
+  friend class TopDUContextDynamicData;
   friend class Declaration;
   friend class DUContext;
   friend class IndexedDeclaration;
   friend class IndexedDUContext;
+  friend class LocalIndexedDeclaration;
+  friend class LocalIndexedDUContext;
   
   TopDUContextLocalPrivate* m_local;
   

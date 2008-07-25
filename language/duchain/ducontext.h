@@ -27,6 +27,7 @@
 #include "language/duchain/duchainbase.h"
 #include "language/duchain/types/abstracttype.h"
 #include "duchainpointer.h"
+#include "declarationid.h"
 
 template<class T>
 class QSet;
@@ -73,9 +74,51 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
     bool operator<(const IndexedDUContext& rhs) const {
       return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_contextIndex < rhs.m_contextIndex);
     }
+    
+    //Index within the top-context
+    uint localIndex() const {
+      return m_contextIndex;
+    }
+    
+    uint topContextIndex() const {
+      return m_topContext;
+    }
 
   private:
   uint m_topContext;
+  uint m_contextIndex;
+};
+
+///Represents a DUContext within a TopDUContext, without storing the TopDUContext(It must be given to data())
+class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
+  public:
+    LocalIndexedDUContext(DUContext* decl);
+    LocalIndexedDUContext(uint contextIndex = 0);
+    //Duchain must be read locked
+    
+    DUContext* data(TopDUContext* top) const;
+    
+    bool operator==(const LocalIndexedDUContext& rhs) const {
+      return m_contextIndex == rhs.m_contextIndex;
+    }
+    
+    bool isValid() const {
+      return m_contextIndex != 0;
+    }
+    
+    uint hash() const {
+      return m_contextIndex * 29;
+    }
+
+    bool operator<(const LocalIndexedDUContext& rhs) const {
+      return m_contextIndex < rhs.m_contextIndex;
+    }
+    
+    //Index within the top-context
+    uint localIndex() const {
+      return m_contextIndex;
+    }
+  private:
   uint m_contextIndex;
 };
 
@@ -211,7 +254,7 @@ public:
    * Scope identifier, used to qualify the identifiers occurring in each context.
    * This is the part relative to the parent context.
    */
-  const QualifiedIdentifier& localScopeIdentifier() const;
+  const QualifiedIdentifier localScopeIdentifier() const;
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context
@@ -237,11 +280,23 @@ public:
 
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
-    IndexedDUContext context;
     bool operator==(const Import& rhs) const {
-      return context == rhs.context;
+      return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
     }
+    
+    DUContext* context() const;
+    
+    //Returns the top-context index, if this import is not a specialization import.
+    uint topContextIndex() const {
+      return m_context.topContextIndex();
+    }
+    
     SimpleCursor position;
+    private:
+      //Either we store m_declaration, or m_context. That way we can resolve specialized contexts.
+      ///@todo Compress using union
+    DeclarationId m_declaration;
+    IndexedDUContext m_context;
   };
 
   /**
@@ -648,7 +703,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
+  void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  
+  friend class TopDUContext;
   friend class IndexedDUContext;
+  friend class LocalIndexedDUContext;
   friend class TopDUContextDynamicData;
   void synchronizeUsesFromSmart() const;
   void synchronizeUsesToSmart() const;

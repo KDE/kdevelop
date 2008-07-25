@@ -92,9 +92,11 @@ SmartConverter::~SmartConverter()
 
 void SmartConverter::convertDUChain(DUContext* context) const
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  if(context->inDUChain()) {
+    ENSURE_CHAIN_WRITE_LOCKED
+  }
 
-  d->m_editor->setCurrentUrl( IndexedString(context->url().str()) );
+  d->m_editor->setCurrentUrl( context->url() );
 
   LockedSmartInterface iface  = d->m_editor->smart();
   if (iface && !context->smartRange()) {
@@ -111,7 +113,9 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
 void SmartConverter::deconvertDUChain(DUContext* context) const
 {
-  ENSURE_CHAIN_WRITE_LOCKED
+  if(context->inDUChain()) {
+    ENSURE_CHAIN_WRITE_LOCKED
+  }
 
   d->m_editor->setCurrentUrl( IndexedString(context->url().str()) );
 

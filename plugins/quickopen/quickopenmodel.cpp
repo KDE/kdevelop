@@ -315,11 +315,11 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
   return QuickOpenDataPointer();
 }
 
-QSet<HashedString> QuickOpenModel::fileSet() const {
-  QSet<HashedString> merged;
+QSet<IndexedString> QuickOpenModel::fileSet() const {
+  QSet<IndexedString> merged;
   foreach( const ProviderEntry& provider, m_providers ) {
     if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
-      QSet<HashedString> ifiles = iface->files();
+      QSet<IndexedString> ifiles = iface->files();
       //kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
       merged += ifiles;
     }

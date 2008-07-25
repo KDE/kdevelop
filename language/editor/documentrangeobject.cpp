@@ -31,6 +31,8 @@
 
 #include "editorintegrator.h"
 #include "documentrangeobject_p.h"
+#include "duchain/duchainregister.h"
+#include "duchain/duchainbase.h"
 
 K_GLOBAL_STATIC(QMutex, s_mutex)
 
@@ -38,7 +40,17 @@ using namespace KTextEditor;
 
 namespace KDevelop {
 
+bool DocumentRangeObjectData::appendedListDynamicDefault() {
+  return !DUChainBaseData::shouldCreateConstantData();
+}
+
+uint DocumentRangeObjectData::classSize() const {
+  //classSize isn't needed when the inheriting class is not based on DUChainBase, so we can safely do this
+  return static_cast<const DUChainBaseData*>(this)->classSize();
+}
+
 DocumentRangeObjectData::DocumentRangeObjectData(const DocumentRangeObjectData& rhs) : m_range(rhs.m_range) {
+  initializeAppendedLists();
 }
 
 DocumentRangeObjectDynamicPrivate::DocumentRangeObjectDynamicPrivate() : m_smartRange(0), m_smartMutex(0), m_ownsRange(DocumentRangeObject::DontOwn) {
@@ -97,10 +109,12 @@ DocumentRangeObject::~ DocumentRangeObject( )
             if (dd_ptr->m_ownsRange == DocumentRangeObject::Own)
                 EditorIntegrator::releaseRange(dd_ptr->m_smartRange);
         }
-      delete d_ptr;
       delete dd_ptr;
+      
+      if(d_ptr->m_dynamic)
+        //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
+        delete d_ptr;
     }
-
 }
 
 void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOwning ownsRange)
