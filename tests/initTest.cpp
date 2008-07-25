@@ -34,12 +34,16 @@
 #include <dvcsjob.h>
 #include <gitexecutor.h>
 
-#define GITTEST_DIR1            "kdevGit_testdir"
-#define GITTEST_BASEDIR         "/tmp/kdevGit_testdir/"
-#define GIT_REPO                GITTEST_BASEDIR".git"
-#define GITTEST_BASEDIR2        "/tmp/kdevGit_testdir2/"
-#define GIT_TESTFILE_NAME       "testfile"
-#define GIT_TESTFILE_NAME2      "foo"
+#define GITTEST_DIR1                    "kdevGit_testdir"
+#define GITTEST_BASEDIR_NO_TR_SLASH     "/tmp/kdevGit_testdir"
+#define GITTEST_BASEDIR                 "/tmp/kdevGit_testdir/"
+#define GIT_REPO                        GITTEST_BASEDIR".git"
+#define GITTEST_BASEDIR2                "/tmp/kdevGit_testdir2/"
+
+#define GIT_SRC_DIR                     GITTEST_BASEDIR"src/"
+#define GIT_TESTFILE_NAME               "testfile"
+#define GIT_TESTFILE_NAME2              "foo"
+#define GIT_TESTFILE_NAME3              "bar"
 
 
 void GitInitTest::initTestCase()
@@ -56,6 +60,7 @@ void GitInitTest::initTestCase()
     // Now create the basic directory structure
     QDir tmpdir("/tmp");
     tmpdir.mkdir(GITTEST_BASEDIR);
+    tmpdir.mkdir(GIT_SRC_DIR);
     tmpdir.mkdir(GITTEST_BASEDIR2);
 }
 
@@ -109,6 +114,7 @@ void GitInitTest::addFiles()
     f.flush();
     f.close();
 
+    // /tmp/kdevGit_testdir/ and kdevGit_testdir
     //add always should use relative path to the any directory of the repository, let's check:
     DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_DIR1))));
     QVERIFY( j );
@@ -116,22 +122,51 @@ void GitInitTest::addFiles()
     if (j)
         QVERIFY(j->exec() );
     //Wait the job will be finished
-    while(j->status() == KDevelop::VcsJob::JobRunning) ;
+    while(j->status() == KDevelop::VcsJob::JobRunning) 
+        ;
 
+    // /tmp/kdevGit_testdir/ and testfile
     j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
     QVERIFY( j );
 
     if (j)
         QVERIFY(j->exec() );
-    //Wait the job will be finished
-    while(j->status() == KDevelop::VcsJob::JobRunning) ;
+    while(j->status() == KDevelop::VcsJob::JobRunning) 
+        ;
+
+    //repository path without trailing slash
+    j = m_proxy->add(QString(GITTEST_BASEDIR_NO_TR_SLASH), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
+    QVERIFY( j );
+
+    if (j)
+        QVERIFY(j->exec() );
+    while(j->status() == KDevelop::VcsJob::JobRunning) 
+        ;
+
+    f.setFileName(GIT_SRC_DIR""GIT_TESTFILE_NAME3);
+    if(f.open(QIODevice::WriteOnly)) {
+        QTextStream input( &f );
+        input << "No, foo()! It's bar()!";
+    }
+    f.flush();
+    f.close();
+
+    //repository path without trailing slash and a file in a parent directory
+    // /tmp/repo  and /tmp/repo/src/bar
+    j = m_proxy->add(QString(GITTEST_BASEDIR_NO_TR_SLASH), KUrl::List(QStringList(QString(GIT_SRC_DIR""GIT_TESTFILE_NAME3))));
+    QVERIFY( j );
+
+    if (j)
+        QVERIFY(j->exec() );
+    while(j->status() == KDevelop::VcsJob::JobRunning)
+        ;
 
     //let's use absolute path, because it's used in ContextMenus
     j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_BASEDIR""GIT_TESTFILE_NAME2))));
     if (j)
         QVERIFY(j->exec() );
-    while(j->status() == KDevelop::VcsJob::JobRunning) ;
-
+    while(j->status() == KDevelop::VcsJob::JobRunning) 
+        ;
 }
 
 void GitInitTest::commitFiles()
@@ -164,6 +199,8 @@ void GitInitTest::commitFiles()
         while(jobLs->status() == KDevelop::VcsJob::JobRunning) ;
         QStringList files = jobLs->output().split("\n");
         QVERIFY(files.contains(QString(GIT_TESTFILE_NAME)));
+        QVERIFY(files.contains(QString(GIT_TESTFILE_NAME2)));
+        QVERIFY(files.contains(QString("src/"GIT_TESTFILE_NAME3)));
     }
 
     QString firstCommit;
