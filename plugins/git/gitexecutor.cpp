@@ -117,8 +117,8 @@ DVCSjob* GitExecutor::add(const QString& repository, const KUrl::List &files)
 //TODO: git doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
 DVCSjob* GitExecutor::commit(const QString& repository,
-                         const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
-                         const KUrl::List &args /*= QStringList("")*/)
+                             const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
+                             const KUrl::List &args /*= QStringList("")*/)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
@@ -127,7 +127,8 @@ DVCSjob* GitExecutor::commit(const QString& repository,
 /*        foreach(KUrl arg, args)
             *job<<KUrl::relativeUrl(repository + QDir::separator(), arg);*/
         *job << "-m";
-        *job << KShell::quoteArg( message );
+        //Note: the message is quoted somewhere else, so if we quote here then we have quotes in the commit log
+        *job << message;
         return job;
     }
     if (job) delete job;
