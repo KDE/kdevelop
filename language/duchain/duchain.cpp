@@ -55,7 +55,7 @@
 namespace KDevelop
 {
 //This thing is not actually used, but it's needed for compiling
-DEFINE_LIST_MEMBER_HASH(EnvironmentInformationItem, sizes, uint);
+DEFINE_LIST_MEMBER_HASH(EnvironmentInformationItem, sizes, uint)
 
 ///Represtens the environment-information for exactly one file in the repository, holding all known instances
 class EnvironmentInformationItem {
