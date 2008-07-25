@@ -70,7 +70,7 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
         //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
         QString file;
         if (!QFileInfo(url.path()).isRelative() )
-            file = KUrl::relativeUrl(job->getDirectory(), url);
+            file = KUrl::relativeUrl(job->getDirectory() + "/", url);
         //actually this shouldn't happen (only in Git tests)
         else if (QDir(job->getDirectory()).dirName() == url.path())
             file = ".";
