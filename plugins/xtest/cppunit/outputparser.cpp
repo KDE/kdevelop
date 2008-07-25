@@ -20,7 +20,7 @@
 
 #include "outputparser.h"
 #include "testroot.h"
-#include <test.h>
+#include <veritas/test.h>
 #include "testcase.h"
 #include <QStringRef>
 #include <KDebug>

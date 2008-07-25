@@ -22,7 +22,7 @@
 #define QXCPPUNIT_CPPUNITOUTPUTPARSER
 
 #include <QXmlStreamReader>
-#include <testresult.h>
+#include <veritas/testresult.h>
 
 class QIODevice;
 

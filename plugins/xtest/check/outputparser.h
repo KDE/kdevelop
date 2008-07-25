@@ -22,7 +22,7 @@
 #define VERITAS_CHECK_CHECKOUTPUTPARSER
 
 #include <QXmlStreamReader>
-#include <testresult.h>
+#include <veritas/testresult.h>
 
 class QIODevice;
 namespace Veritas { class Test; }

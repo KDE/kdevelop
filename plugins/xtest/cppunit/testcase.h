@@ -21,7 +21,7 @@
 #ifndef TESTCASE_H
 #define TESTCASE_H
 
-#include <test.h>
+#include <veritas/test.h>
 #include "testcommand.h"
 #include <QtCore/QString>
 

@@ -18,32 +18,24 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCPPUNIT_TESTSUITE_H
-#define QXCPPUNIT_TESTSUITE_H
+#ifndef QTEST_QTESTVIEWDATA_H
+#define QTEST_QTESTVIEWDATA_H
 
-#include <QString>
-#include <QFileInfo>
-#include <KProcess>
-#include <veritas/test.h>
+#include <veritas/testrunnertoolview.h>
 
-#include "testcase.h"
+namespace Veritas { class Test; }
 
-namespace CppUnit
+class QTestViewData : public Veritas::TestViewData
 {
-
-class TestSuite : public Veritas::Test
-{
-Q_OBJECT
 public:
-    TestSuite();
-    TestSuite(const QString&, const QFileInfo& executable, Veritas::Test* parent);
-    virtual ~TestSuite();
-    TestCase* child(int i) const;
-
-private:
-    QFileInfo m_exe;
+    QTestViewData(QObject* parent);
+    virtual ~QTestViewData();
+    Veritas::Test* registerTests();
+    QString fetchBuildRoot();
+    virtual QString resultsViewId();
+    QString fetchRegXML();
+    int m_id;
+    static int id; // used to get unique names.
 };
 
-} // CppUnit
-
-#endif // QXCPPUNIT_TESTSUITE_H
+#endif

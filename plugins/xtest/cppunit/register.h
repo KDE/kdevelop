@@ -25,7 +25,7 @@
 #include <QtCore/QFileInfo>
 #include <QtXml/QXmlStreamReader>
 
-#include <test.h>
+#include <veritas/test.h>
 #include "testcase.h"
 
 class KProcess;

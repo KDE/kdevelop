@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <KProcess>
 
-#include <test.h>
+#include <veritas/test.h>
 
 #include "plugins/xtest/cppunit/testcase.h"
 

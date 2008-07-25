@@ -30,6 +30,7 @@ set(kdevcppunit_SRCS
     testcase.cpp
     testsuite.cpp
     testroot.cpp
+    cppunitviewdata.cpp
     outputparser.cpp)
 
 qt4_add_resources(kdevcppunit_SRCS
@@ -46,7 +47,7 @@ install(TARGETS kdevcppunit ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 #########################################
 
-set(kdevcppunitview_SRCS cppunitview.cpp)
+set(kdevcppunitview_SRCS cppunitplugin.cpp)
 qt4_automoc(${kdevcppunitview_SRCS})
 kde4_add_plugin(kdevcppunitview ${kdevcppunitview_SRCS})
 target_link_libraries(kdevcppunitview

@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "qtestview.h"
+#include "qtestplugin.h"
 
 #include <QFile>
 #include <QInputDialog>
@@ -45,47 +45,53 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <shell/core.h>
 #include <shell/documentcontroller.h>
+#include <sublime/controller.h>
+#include <sublime/area.h>
+#include <sublime/view.h>
+#include <sublime/document.h>
 #include <veritas/test.h>
 
 #include "qtestcase.h"
 #include "qtestregister.h"
 #include "qtestsettings.h"
+#include "qtestviewdata.h"
 #include "outputview/qtestoutputdelegate.h"
 #include "outputview/qtestoutputjob.h"
 
-K_PLUGIN_FACTORY(QTestViewPluginFactory, registerPlugin<QTestView>();)
-K_EXPORT_PLUGIN( QTestViewPluginFactory("kdevqtest"))
+K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
+K_EXPORT_PLUGIN(QTestPluginFactory("kdevqtest"))
 
 using KDevelop::Core;
-using KDevelop::IProject;
 using KDevelop::Context;
 using KDevelop::ICore;
 using KDevelop::IDocument;
-using KDevelop::ProjectFolderItem;
+using KDevelop::IUiController;
+using KDevelop::IPlugin;
+using KDevelop::IProject;
 using KDevelop::IProjectController;
 using KDevelop::DocumentController;
 using KDevelop::ProjectBaseItem;
+using KDevelop::ProjectFolderItem;
 using KDevelop::ProjectItemContext;
 using KDevelop::IBuildSystemManager;
 using KDevelop::IProjectFileManager;
 using KDevelop::ContextMenuExtension;
 
-using Veritas::Test;
-using Veritas::TestRunnerToolView;
+using namespace QTest;
+using namespace Veritas;
+using namespace Sublime;
 
-using QTest::ISettings;
-using QTest::Settings;
-using QTest::QTestCase;
-using QTest::QTestRegister;
-
-class QTestViewFactory: public KDevelop::IToolViewFactory
+class QTestRunnerViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    QTestViewFactory(QTestView *plugin): m_plugin(plugin) {}
+    QTestRunnerViewFactory(QTestPlugin *plugin): m_plugin(plugin) {}
 
-    virtual QWidget* create(QWidget *parent = 0) {
-        Q_UNUSED(parent);
-        return m_plugin->spawnWindow();
+    virtual QWidget* create(QWidget *parent) {
+        kDebug() << "";
+        QTestViewData* d = new QTestViewData(0);
+        QObject::connect(d, SIGNAL(openVerbose(Veritas::Test*)),
+                         m_plugin, SLOT(openVerbose(Veritas::Test*)));
+        return d->runnerWidget();
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
@@ -93,63 +99,113 @@ public:
     }
 
     virtual QString id() const {
-        return "org.kdevelop.QTestView";
+        return "org.kdevelop.QTestPlugin";
+    }
+
+    virtual void viewCreated(Sublime::View* view) {
+        m_plugin->m_tools[view] = QTestViewData::id-1;
+    }
+
+    QList<QAction*> toolBarActions(QWidget* viewWidget) const {
+        return viewWidget->actions();
     }
 
 private:
-    QTestView *m_plugin;
+    QTestPlugin *m_plugin;
 };
 
-QTestView::QTestView(QObject* parent, const QVariantList&)
-        : TestRunnerToolView(QTestViewPluginFactory::componentData(), parent),
-          m_delegate(new QTestOutputDelegate(this))
+
+QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
+        : IPlugin(QTestPluginFactory::componentData(), parent),
+        m_delegate(new QTestOutputDelegate(this)),
+        m_proj(0)
 {
-    m_factory = new QTestViewFactory(this);
+    m_factory = new QTestRunnerViewFactory(this);
     core()->uiController()->addToolView(QString("QTest Runner"), m_factory);
-    setXMLFile( "kdevqtest.rc" );
+    setXMLFile("kdevqtest.rc");
+
+    Sublime::Controller* c = ICore::self()->uiController()->controller();
+    connect(c, SIGNAL(aboutToRemoveToolView(Sublime::View*)),
+            this, SLOT(maybeRemoveResultsView(Sublime::View*)));
+    connect(c, SIGNAL(toolViewMoved(Sublime::View*)),
+            this, SLOT(fixMovedResultsView(Sublime::View*)));
 }
 
-QTestView::~QTestView()
-{}
-
-Test* QTestView::registerTests()
+void QTestPlugin::fixMovedResultsView(Sublime::View* v)
 {
-    kDebug() << "Loading test registration XML: " << fetchRegXML();
-    QFile* testXML = new QFile(fetchRegXML());
-    QTestRegister reg;
-    reg.setSettings(new Settings(project()));
-    reg.setRootDir(fetchBuildRoot());
-    reg.addFromXml(testXML);
-    return reg.rootItem();
-}
-
-QString QTestView::fetchBuildRoot()
-{
-    if (project() == 0)
-        return "";
-    IBuildSystemManager* man = project()->buildSystemManager();
-    ProjectFolderItem* pfi = project()->projectItem();
-    return man->buildDirectory(pfi).pathOrUrl();
-}
-
-QString QTestView::fetchRegXML()
-{
-    if (project() == 0)
-        return "";
-    KSharedConfig::Ptr cfg = project()->projectConfiguration();
-    KConfigGroup group(cfg.data(), "QTest");
-    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
-}
-
-void QTestView::newQTest()
-{
-    if (!project()) {
-        QMessageBox::critical(
-            0, i18n("Failed to comply."),
-            i18n("Select a project in the qtest view."),
-            QMessageBox::Ok);
-        return;
+    maybeRemoveResultsView(v);
+    if (m_tools.contains(v)) {
+        m_tools[v] = QTestViewData::id;
     }
+
+}
+
+class ResultsViewFinder
+{
+public:
+    ResultsViewFinder(const QString& id) : m_id(id), found(false) {}
+    Area::WalkerMode operator()(View *view, Sublime::Position position) {
+        Document* doc = view->document();
+        if (doc->documentSpecifier().startsWith(m_id)) {
+            found = true;
+            m_view = view;
+            return Area::StopWalker;
+        } else {
+            return Area::ContinueWalker;
+        }
+    }
+    QString m_id;
+    bool found;
+    View* m_view;
+};
+
+void removeResultsView(const QString& docId)
+{
+    IUiController* uic = Core::self()->uiController();
+    Sublime::Controller* sc = uic->controller();
+    QList<Area*> as = sc->allAreas();
+    foreach(Area* a, as) {
+        ResultsViewFinder rvf(docId);
+        a->walkToolViews(rvf, Sublime::AllPositions);
+        if (rvf.found) {
+            kDebug() << docId;
+            a->removeToolView(rvf.m_view);
+        }
+    }
+}
+
+void QTestPlugin::maybeRemoveResultsView(Sublime::View* v)
+{
+    kDebug() << v;
+    if (m_tools.contains(v)) {
+        QString docId("org.kdevelop.QTestResultsView");
+        docId += QString::number(m_tools[v]);
+        removeResultsView(docId);
+    }
+}
+
+QTestPlugin::~QTestPlugin()
+{
+    removeAllResultsViews();
+}
+
+void QTestPlugin::removeAllResultsViews()
+{
+    QString docId("org.kdevelop.QTestResultsView");
+    for (int i = 0; i < QTestViewData::id + 1; i++) {
+        removeResultsView(docId);
+    }
+}
+
+void QTestPlugin::newQTest()
+{
+//     if (!project()) {
+//         QMessageBox::critical(
+//             0, i18n("Failed to comply."),
+//             i18n("Select a project in the qtest view."),
+//             QMessageBox::Ok);
+//         return;
+//     }
 
     bool kk;
     QString clz;
@@ -162,7 +218,9 @@ void QTestView::newQTest()
     DocumentController* dc;
     dc = Core::self()->documentControllerInternal();
     IProjectFileManager* pfm;
-    pfm = project()->projectFileManager();
+    if (m_proj) {
+        pfm = m_proj->projectFileManager();
+    }
 
     KUrl hdrUrl = m_dir->url();
     hdrUrl.addPath(clz.toLower() + ".h");
@@ -184,13 +242,13 @@ void QTestView::newQTest()
     << "    void someCmd();"
     << "};"
     << ""
-    << QString() + "#endif // QTEST_"+ clz.toUpper() + "_H_INCLUDED"
+    << QString() + "#endif // QTEST_" + clz.toUpper() + "_H_INCLUDED"
     << "";
     QTextStream out(&hdr);
     out << lns.join("\n");
     hdr.close();
     dc->openDocument(hdrUrl);
-    pfm->addFile(hdrUrl, m_dir);
+    if (m_proj) pfm->addFile(hdrUrl, m_dir);
 
     KUrl srcUrl = m_dir->url();
     srcUrl.addPath(clz.toLower() + ".cpp");
@@ -219,10 +277,10 @@ void QTestView::newQTest()
     out2 << lns.join("\n");
     src.close();
     dc->openDocument(srcUrl);
-    pfm->addFile(srcUrl, m_dir);
+    if (m_proj) pfm->addFile(srcUrl, m_dir);
 }
 
-ContextMenuExtension QTestView::contextMenuExtension(Context* context)
+ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
 {
     ContextMenuExtension cm;
     if (context->type() != Context::ProjectItemContext) {
@@ -243,6 +301,7 @@ ContextMenuExtension QTestView::contextMenuExtension(Context* context)
         return cm;
     }
 
+    m_proj = bl[0]->project();
     m_dir = bl[0]->folder();
     KAction *action = new KAction(i18n("New QTest"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(newQTest()));
@@ -250,7 +309,7 @@ ContextMenuExtension QTestView::contextMenuExtension(Context* context)
     return cm;
 }
 
-void QTestView::openVerbose(Test* t)
+void QTestPlugin::openVerbose(Test* t)
 {
     QTestCase* caze = dynamic_cast<QTestCase*>(t);
     if (not caze) return;
@@ -259,4 +318,4 @@ void QTestView::openVerbose(Test* t)
     ICore::self()->runController()->registerJob(job);
 }
 
-#include "qtestview.moc"
+#include "qtestplugin.moc"

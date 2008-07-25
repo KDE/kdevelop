@@ -24,7 +24,7 @@
 #include <QString>
 #include <QFileInfo>
 
-#include <test.h>
+#include <veritas/test.h>
 #include "testsuite.h"
 
 namespace Check

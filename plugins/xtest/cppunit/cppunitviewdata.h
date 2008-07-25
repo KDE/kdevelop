@@ -18,35 +18,26 @@
  * 02110-1301, USA.
  */
 
-#ifndef CHECK_CHECKVIEW
-#define CHECK_CHECKVIEW
+#ifndef CPPUNIT_CPPUNITVIEWDATA_H
+#define CPPUNIT_CPPUNITVIEWDATA_H
 
-#include <testrunnertoolview.h>
-#include <QVariantList>
+#include <veritas/testrunnertoolview.h>
 
-class CheckViewFactory;
 namespace Veritas { class Test; }
 
-class CheckView : public Veritas::TestRunnerToolView
+class CppUnitViewData : public Veritas::TestViewData
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    explicit CheckView(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~CheckView();
-
-protected slots:
-    virtual void openVerbose(Veritas::Test*) {}
-
-protected:
+    CppUnitViewData(QObject* parent);
+    virtual ~CppUnitViewData();
     Veritas::Test* registerTests();
-    virtual QString resultsViewId() { return "org.kdevelop.CheckResultsView"; }
-
-private:
     QString fetchExe();
+    virtual QString resultsViewId();
 
-private:
-    CheckViewFactory* m_factory;
-
+    int m_id;
+    static int id; // used to get unique names.
 };
 
-#endif // CHECK_CHECKVIEW
+
+#endif

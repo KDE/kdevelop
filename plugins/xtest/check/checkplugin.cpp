@@ -18,7 +18,9 @@
  * 02110-1301, USA.
  */
 
-#include "checkview.h"
+#include "checkplugin.h"
+
+#include <veritas/testrunnertoolview.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -30,7 +32,7 @@
 #include <ibuildsystemmanager.h>
 #include <projectmodel.h>
 #include <core.h>
-#include <test.h>
+#include <veritas/test.h>
 #include "plugins/xtest/cppunit/register.h"
 #include <QFile>
 #include <KDebug>
@@ -38,68 +40,53 @@
 
 #include "testroot.h"
 #include "testsuite.h"
+#include "checkviewdata.h"
 
 using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 
 using Veritas::Test;
-using Veritas::TestRunnerToolView;
+using Veritas::TestViewData;
 
 using Check::TestRoot;
 using Check::TestSuite;
 
-K_PLUGIN_FACTORY(CheckViewPluginFactory, registerPlugin<CheckView>();)
-K_EXPORT_PLUGIN(CheckViewPluginFactory("kdevcheck"))
+K_PLUGIN_FACTORY(CheckPluginFactory, registerPlugin<CheckPlugin>();)
+K_EXPORT_PLUGIN(CheckPluginFactory("kdevcheck"))
 
-class CheckViewFactory: public KDevelop::IToolViewFactory
+
+class CheckRunnerViewFactory: public KDevelop::IToolViewFactory
 {
-public:
-    CheckViewFactory(CheckView *plugin): m_plugin(plugin) {}
+    public:
+        CheckRunnerViewFactory(CheckPlugin *plugin): m_plugin(plugin) {}
 
-    virtual QWidget* create(QWidget *parent = 0) {
-        Q_UNUSED(parent);
-        return m_plugin->spawnWindow();
-    }
+        virtual QWidget* create(QWidget *parent = 0) {
+            CheckViewData* d = new CheckViewData(parent);
+            return d->runnerWidget();
+        }
 
-    virtual Qt::DockWidgetArea defaultPosition() {
-        return Qt::LeftDockWidgetArea;
-    }
+        virtual Qt::DockWidgetArea defaultPosition() {
+            return Qt::LeftDockWidgetArea;
+        }
 
-    virtual QString id() const {
-        return "org.kdevelop.CheckView";
-    }
+        virtual QString id() const {
+            return "org.kdevelop.CheckPlugin";
+        }
 
-private:
-    CheckView *m_plugin;
+    private:
+        CheckPlugin *m_plugin;
 };
 
-CheckView::CheckView(QObject* parent, const QVariantList &)
-        : TestRunnerToolView(CheckViewPluginFactory::componentData(), parent)
+CheckPlugin::CheckPlugin(QObject* parent, const QVariantList &)
+        : IPlugin(CheckPluginFactory::componentData(), parent)
 {
-    m_factory = new CheckViewFactory(this);
+    m_factory = new CheckRunnerViewFactory(this);
     core()->uiController()->addToolView("Check Runner", m_factory);
-    setXMLFile( "kdevcheck.rc" );
+    setXMLFile("kdevcheck.rc");
 }
 
-CheckView::~CheckView()
+CheckPlugin::~CheckPlugin()
 {}
 
-Test* CheckView::registerTests()
-{
-    Register<TestRoot, TestSuite> reg;
-    reg.addFromExe(QFileInfo(fetchExe()));
-    reg.rootItem()->setExecutable(fetchExe());
-    return reg.rootItem();
-}
-
-QString CheckView::fetchExe()
-{
-    if (project() == 0)
-        return "";
-    KSharedConfig::Ptr cfg = project()->projectConfiguration();
-    KConfigGroup group(cfg.data(), "Check");
-    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
-}
-
-#include "checkview.moc"
+#include "checkplugin.moc"

@@ -1,6 +1,5 @@
 add_subdirectory(tests)
 add_subdirectory(config)
-#add_subdirectory(outputview)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
@@ -17,7 +16,6 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVPLATFORM_INCLUDE_DIR}/interfaces # needed for core.h & documentcontroller.h
     ${KDEVPLATFORM_INCLUDE_DIR}/veritas
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces
     )
 
 set(kdevqtest_SRCS
@@ -25,6 +23,7 @@ set(kdevqtest_SRCS
     qtestcase.cpp
     qtestcommand.cpp
     qtestsuite.cpp
+    qtestviewdata.cpp
     qtestregister.cpp
     qtestoutputmorpher.cpp
     config/qtestsettings.cpp
@@ -40,13 +39,14 @@ target_link_libraries(kdevqtest
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_UTIL_LIBRARY}
+    ${KDEVPLATFORM_SUBLIME_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTXML_LIBRARY})
 install(TARGETS kdevqtest ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-set(kdevqtestview_SRCS qtestview.cpp)
+set(kdevqtestview_SRCS qtestplugin.cpp)
 qt4_automoc(${kdevqtestview_SRCS})
 kde4_add_plugin(kdevqtestview ${kdevqtestview_SRCS})
 target_link_libraries(kdevqtestview

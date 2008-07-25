@@ -3,9 +3,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/qtest
         ${XtestPlugin_SOURCE_DIR}  # for kasserts.h
-        ${KDEVPLATFORM_INCLUDE_DIR}
-        ${KDEVPLATFORM_INCLUDE_DIR}/veritas
-        ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
+        ${KDEVPLATFORM_INCLUDE_DIR})
 
 macro(kdev_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )

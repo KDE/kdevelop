@@ -30,6 +30,7 @@ set(kdevcheck_SRCS
     ../cppunit/testcommand.cpp
     outputparser.cpp
     testsuite.cpp
+    checkviewdata.cpp
     testroot.cpp)
 
 qt4_automoc( ${kdevcheck_SRCS} )
@@ -43,7 +44,7 @@ install(TARGETS kdevcheck ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 #########################################
 
-set(kdevcheckview_SRCS checkview.cpp)
+set(kdevcheckview_SRCS checkplugin.cpp)
 qt4_automoc(${kdevcheckview_SRCS})
 kde4_add_plugin(kdevcheckview ${kdevcheckview_SRCS})
 target_link_libraries(kdevcheckview

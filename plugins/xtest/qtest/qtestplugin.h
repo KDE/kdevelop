@@ -22,43 +22,49 @@
 #define QTEST_QTESTVIEW_H
 
 #include <KUrl>
+#include <QMap>
 #include <QVariantList>
 
-#include <veritas/testrunnertoolview.h>
+#include <interfaces/iplugin.h>
 
-class QTestViewFactory;
+class QTestRunnerViewFactory;
 class QTestOutputDelegate;
-namespace KDevelop { class ContextMenuExtension;
-                     class Context;
-                     class ProjectFolderItem; }
 
-class QTestView : public Veritas::TestRunnerToolView
+namespace KDevelop
+{
+class ContextMenuExtension;
+class Context;
+class ProjectFolderItem;
+class IProject;
+}
+
+namespace Sublime { class View; }
+namespace Veritas { class Test; }
+
+class QTestPlugin : public KDevelop::IPlugin
 {
 Q_OBJECT
 
 public:
-    explicit QTestView(QObject* parent, const QVariantList& = QVariantList());
-    virtual ~QTestView();
+    explicit QTestPlugin(QObject* parent, const QVariantList& = QVariantList());
+    virtual ~QTestPlugin();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-
-protected:
-    Veritas::Test* registerTests();
-    virtual QString resultsViewId() { return "org.kdevelop.QTestResultsView";};
-
-protected slots:
-    virtual void openVerbose(Veritas::Test*);
+    QMap<Sublime::View*, int> m_tools;
 
 private slots:
     void newQTest();
+    void openVerbose(Veritas::Test*);
+    void maybeRemoveResultsView(Sublime::View*);
+    void fixMovedResultsView(Sublime::View*);
 
 private:
-    QString fetchBuildRoot();
-    QString fetchRegXML();
+    void removeAllResultsViews();
 
 private:
-    QTestViewFactory* m_factory;
+    QTestRunnerViewFactory* m_factory;
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
+    KDevelop::IProject* m_proj;
 };
 
 #endif // QTEST_QTESTVIEW_H

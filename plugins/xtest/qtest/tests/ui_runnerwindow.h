@@ -4,7 +4,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'runnerwindow.ui'
 **
-** Created: Mon Jul 21 10:27:16 2008
+** Created: Fri Jul 25 00:33:45 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -85,7 +85,6 @@ public:
     QLabel *labelNumInfosPic;
     QLabel *labelNumInfos;
     QSpacerItem *spacer;
-    QTreeView *treeResults;
 
     void setupUi(QWidget *RunnerWindow)
     {
@@ -173,7 +172,7 @@ public:
     sizePolicy.setVerticalStretch(0);
     sizePolicy.setHeightForWidth(runnerFrame->sizePolicy().hasHeightForWidth());
     runnerFrame->setSizePolicy(sizePolicy);
-    runnerFrame->setMinimumSize(QSize(300, 0));
+    runnerFrame->setMinimumSize(QSize(250, 0));
     runnerFrame->setBaseSize(QSize(300, 0));
     runnerFrame->setFrameShape(QFrame::StyledPanel);
     runnerFrame->setFrameShadow(QFrame::Raised);
@@ -382,15 +381,6 @@ public:
     treeRunner->raise();
     frame_3->raise();
     frame_2->raise();
-    treeResults = new QTreeView(splitter);
-    treeResults->setObjectName(QString::fromUtf8("treeResults"));
-    treeResults->setWindowModality(Qt::NonModal);
-    treeResults->setMaximumSize(QSize(16777215, 10000));
-    treeResults->setAlternatingRowColors(true);
-    treeResults->setIndentation(30);
-    treeResults->setRootIsDecorated(false);
-    treeResults->setWordWrap(true);
-    splitter->addWidget(treeResults);
 
     horizontalLayout_3->addWidget(splitter);
 
@@ -405,7 +395,6 @@ public:
     runnerToolBar->addAction(actionSelectAll);
     runnerToolBar->addAction(actionUnselectAll);
     runnerToolBar->addAction(actionReload);
-    runnerToolBar->addAction(actionResults);
 
     retranslateUi(RunnerWindow);
 

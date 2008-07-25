@@ -2,9 +2,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/check
         ${XtestPlugin_SOURCE_DIR}  # for kasserts.h
-        ${KDEVPLATFORM_INCLUDE_DIR}
-        ${KDEVPLATFORM_INCLUDE_DIR}/veritas
-        ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
+        ${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

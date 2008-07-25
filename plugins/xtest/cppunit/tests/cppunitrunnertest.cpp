@@ -22,9 +22,10 @@
 
 #include <kasserts.h>
 #include <qtest_kde.h>
-#include <runnerwindow.h>
-#include <runnermodel.h>
-#include <testresult.h>
+#include <veritas/resultsmodel.h>
+#include <veritas/runnerwindow.h>
+#include <veritas/runnermodel.h>
+#include <veritas/testresult.h>
 #include "register.h"
 #include "plugins/xtest/qtest/tests/ui_runnerwindow.h"
 
@@ -40,6 +41,7 @@
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
+using Veritas::ResultsModel;
 using Veritas::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestRoot;
@@ -49,7 +51,10 @@ Q_DECLARE_METATYPE(QList<QStringList>)
 
 void CppUnitRunnerTest::init()
 {
-    m_window = new RunnerWindow();
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+                  << i18n("File Name") << i18n("Line Number");
+    m_window = new RunnerWindow(new ResultsModel(resultHeaders));
 }
 
 void CppUnitRunnerTest::cleanup()
@@ -204,7 +209,7 @@ void CppUnitRunnerTest::initNrun(const char* exe)
     RunnerModel* model = new RunnerModel;
     model->setRootItem(reg.rootItem());
     model->setExpectedResults(Veritas::RunError);
-    m_window = new RunnerWindow;
+    //m_window = new RunnerWindow;
     m_window->setModel(model);
     //m_window->show();
     m_window->ui()->actionStart->trigger();

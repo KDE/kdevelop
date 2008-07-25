@@ -30,6 +30,9 @@ namespace QTest
 {
 namespace it {
 
+// TODO this test requires too much maintenance + is accessing
+//      private parts of Veritas. Should get rid of it, but first
+//      make sure the removed bits are covered some place else.
 class QTestRunnerTest : public QObject
 {
     Q_OBJECT

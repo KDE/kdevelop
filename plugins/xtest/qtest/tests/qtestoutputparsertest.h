@@ -22,7 +22,7 @@
 #define QXQTEST_QTESTOUTPUTPARSERTEST
 
 #include <QtTest/QtTest>
-#include <testresult.h>
+#include <veritas/testresult.h>
 
 class QSignalSpy;
 

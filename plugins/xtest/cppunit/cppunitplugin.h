@@ -18,32 +18,25 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXCPPUNIT_TESTSUITE_H
-#define QXCPPUNIT_TESTSUITE_H
+#ifndef CPPUNIT_CPPUNITVIEW_H
+#define CPPUNIT_CPPUNITVIEW_H
 
-#include <QString>
-#include <QFileInfo>
-#include <KProcess>
-#include <veritas/test.h>
+#include <interfaces/iplugin.h>
+#include <veritas/testrunnertoolview.h>
+#include <QVariantList>
 
-#include "testcase.h"
+class CppUnitRunnerViewFactory;
+namespace Veritas { class Test; }
 
-namespace CppUnit
+class CppUnitPlugin : public KDevelop::IPlugin
 {
-
-class TestSuite : public Veritas::Test
-{
-Q_OBJECT
+    Q_OBJECT
 public:
-    TestSuite();
-    TestSuite(const QString&, const QFileInfo& executable, Veritas::Test* parent);
-    virtual ~TestSuite();
-    TestCase* child(int i) const;
+    explicit CppUnitPlugin(QObject* parent, const QVariantList & = QVariantList());
+    virtual ~CppUnitPlugin();
 
 private:
-    QFileInfo m_exe;
+    CppUnitRunnerViewFactory* m_factory;
 };
 
-} // CppUnit
-
-#endif // QXCPPUNIT_TESTSUITE_H
+#endif // CPPUNIT_CPPUNITVIEW_H

@@ -21,7 +21,7 @@
 #ifndef TESTCOMMAND_H
 #define TESTCOMMAND_H
 
-#include <test.h>
+#include <veritas/test.h>
 #include <QtCore/QString>
 
 /*!

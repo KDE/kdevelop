@@ -21,19 +21,23 @@
 #include "qtestrunnertest.h"
 #include <kasserts.h>
 #include <qtest_kde.h>
-#include <runnerwindow.h>
+
 #include <KDebug>
 #include <QBuffer>
 #include <QTreeView>
 #include <QModelIndex>
 #include <QAbstractItemModel>
-#include "ui_runnerwindow.h"
 
+#include "ui_runnerwindow.h"
 #include <qtestregister.h>
-#include <runnermodel.h>
+
+#include <veritas/resultsmodel.h>
+#include <veritas/runnermodel.h>
+#include <veritas/runnerwindow.h>
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
+using Veritas::ResultsModel;
 using QTest::QTestRegister;
 using QTest::it::QTestRunnerTest;
 
@@ -59,7 +63,10 @@ QByteArray regXml =
 
 void QTestRunnerTest::init()
 {
-    m_window = new RunnerWindow();
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+                  << i18n("File Name") << i18n("Line Number");
+    m_window = new RunnerWindow(new ResultsModel(resultHeaders));
 }
 
 void QTestRunnerTest::cleanup()
