@@ -28,6 +28,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QAbstractProxyModel>
 #include <QtCore/QDebug>
+#include <QtGui/QMouseEvent>
 
 #include <icore.h>
 #include <kxmlguiwindow.h>
@@ -51,7 +52,7 @@ class ProjectTreeViewPrivate
 };
 
 ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent )
-        : QTreeView( parent ), d( new ProjectTreeViewPrivate ), m_ctxProject( 0 )
+        : QTreeView( parent ), d( new ProjectTreeViewPrivate ), m_ctxProject( 0 ), mouseClickChangesSelection( false )
 {
     d->mplugin = plugin;
     header()->setResizeMode( QHeaderView::ResizeToContents );
@@ -95,6 +96,13 @@ ProjectFolderItem *ProjectTreeView::currentFolderItem() const
     }
 
     return 0;
+}
+
+void ProjectTreeView::mouseReleaseEvent( QMouseEvent* event )
+{
+    mouseClickChangesSelection = ( event->modifiers() & Qt::ControlModifier ) | ( event->modifiers() & Qt::ShiftModifier ); 
+
+    QTreeView::mouseReleaseEvent( event );
 }
 
 ProjectFileItem *ProjectTreeView::currentFileItem() const
@@ -149,6 +157,8 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
+    if( mouseClickChangesSelection )
+        return;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );
     if ( item && item->file() )

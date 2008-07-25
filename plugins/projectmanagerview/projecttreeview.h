@@ -26,7 +26,7 @@
 
 class KUrl;
 class QItemSelectionModel;
-
+class QMouseEvent;
 
 class ProjectManagerViewPlugin;
 namespace KDevelop
@@ -62,9 +62,13 @@ class ProjectTreeView: public QTreeView
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
 
+    protected:
+        virtual void mouseReleaseEvent( QMouseEvent* );
+
     private:
         class ProjectTreeViewPrivate* const d;
         KDevelop::IProject* m_ctxProject;
+        bool mouseClickChangesSelection;
 };
 
 #endif // KDEVPROJECTMANAGER_H
