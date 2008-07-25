@@ -73,5 +73,6 @@ if(TestBuild)
     install(FILES
         mvc/runnerwindow.h
         mvc/runnermodel.h
+        mvc/resultsmodel.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
 endif(TestBuild)

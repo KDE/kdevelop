@@ -74,10 +74,11 @@ const Ui::RunnerWindow* RunnerWindow::ui() const
     return m_ui;
 }
 
-RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
+RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags flags)
         : QWidget(parent, flags)
 {
     initVeritasResource();
+    m_resultsModel = rmodel;
     m_ui = new Ui::RunnerWindow;
     m_ui->setupUi(this);
     m_uiResults = new Ui::ResultsView;
@@ -122,11 +123,6 @@ RunnerWindow::RunnerWindow(QWidget* parent, Qt::WFlags flags)
 
     addProjectMenu();
 
-    QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
-                  << i18n("File Name") << i18n("Line Number");
-
-    m_resultsModel = new ResultsModel(resultHeaders, this);
     m_resultsProxyModel = new ResultsProxyModel(this);
     m_resultsProxyModel->setSourceModel(m_resultsModel);
     int filter = Veritas::RunError | Veritas::RunFatal;
@@ -142,7 +138,7 @@ void RunnerWindow::addProjectMenu()
     m->setToolTip(i18n("Select project"));
     m->setToolBarMode(KSelectAction::MenuMode);
     m->setEditable(true);
-    m_ui->runnerToolBar->addAction(m);
+    //m_ui->runnerToolBar->addAction(m);
     m_projectPopup = m;
 }
 
@@ -154,7 +150,7 @@ void RunnerWindow::addProjectToPopup(IProject* proj)
     v.setValue(proj);
     p->setData(v);
     m_projectPopup->addAction(p);
-    m_ui->runnerToolBar->addAction(m_projectPopup);
+    //m_ui->runnerToolBar->addAction(m_projectPopup);
 }
 
 void RunnerWindow::rmProjectFromPopup(IProject* proj)

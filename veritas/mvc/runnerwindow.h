@@ -25,17 +25,18 @@
 #include <QtGui/QLabel>
 #include <QtCore/QSemaphore>
 #include <QTreeView>
-namespace KDevelop { class IProject; }
+#include <QList>
 
+namespace KDevelop { class IProject; }
 namespace Ui { class RunnerWindow; class ResultsView; }
 
+class QAction;
 class QItemSelection;
 class QAction;
 class KSelectAction;
 
 namespace Veritas
 {
-class StatusWidget;
 class RunnerModel;
 class RunnerProxyModel;
 class ResultsModel;
@@ -43,6 +44,7 @@ class ResultsProxyModel;
 class RunnerViewController;
 class ResultsViewController;
 class SelectionManager;
+class StatusWidget;
 class VerboseManager;
 
 /*!
@@ -70,7 +72,7 @@ class RunnerWindow : public QWidget
 Q_OBJECT
 public: // Operations
 
-    explicit RunnerWindow(QWidget* parent = 0, Qt::WFlags flags = 0);
+    explicit RunnerWindow(ResultsModel*, QWidget* parent = 0, Qt::WFlags flags = 0);
 
     /*!\note
      * Deleting the model provided for the main window is left to

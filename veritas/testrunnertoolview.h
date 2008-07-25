@@ -25,52 +25,46 @@
 #include "veritas/veritasexport.h"
 
 class QWidget;
-class KComponentData;
 namespace KDevelop { class IProject; }
-namespace Sublime { class View; class Area; }
-class ResultsViewFactory;
 
 namespace Veritas
 {
 class Test;
-class RunnerModel;
-class RunnerWindow;
-class TestRunnerToolViewPrivate;
-
-// TODO this ToolView shouldnt be a plugin.
-class VERITAS_EXPORT TestRunnerToolView : public KDevelop::IPlugin
+class TestViewDataPrivate;
+class VERITAS_EXPORT TestViewData : public QObject
 {
 Q_OBJECT
 public:
-    TestRunnerToolView(const KComponentData&, QObject*);
-    virtual ~TestRunnerToolView();
+    TestViewData(QObject*);
+    virtual ~TestViewData();
 
     /*! Create a new test runner widget
         Call this in your toolview factory's create() member. */
-    QWidget* spawnWindow();
+    QWidget* runnerWidget();
+
+    /*! The associated test results widget
+        This shows assertion failures with source location */
     QWidget* resultsWidget();
 
 protected:
     /*! Reload the test tree.
      * To be implemented by concrete plugins. */
     virtual Test* registerTests() = 0;
+
     KDevelop::IProject* project() const;
     virtual QString resultsViewId() = 0;
 
-protected Q_SLOTS:
-    virtual void openVerbose(Test*) = 0;
-    void removeResultsView();
+Q_SIGNALS:
+    void openVerbose(Test*);
 
 private Q_SLOTS:
     void reload();
     void setSelected(QAction*);
+    void removeResultsView();
 
 private:
     void spawnResultsView();
-    TestRunnerToolViewPrivate* const d;
-    bool resultsVisible;
-    Sublime::View *m_resultsView;
-    Sublime::Area *m_resultsArea;
+    TestViewDataPrivate* const d;
 };
 
 }

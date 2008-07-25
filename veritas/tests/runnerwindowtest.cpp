@@ -31,6 +31,7 @@
 
 using Veritas::RunnerWindow;
 using Veritas::Test;
+using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 
 using Veritas::ut::TestStub;
@@ -43,7 +44,10 @@ void RunnerWindowTest::init()
 {
     model = createRunnerModelStub(false);
     model->fill2();
-    window = new RunnerWindow();
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+                  << i18n("File Name") << i18n("Line Number");
+    window = new RunnerWindow(new ResultsModel(resultHeaders));
     window->setModel(model);
     //window->show();
     m_ui = window->ui();

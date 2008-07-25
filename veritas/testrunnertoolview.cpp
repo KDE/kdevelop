@@ -23,6 +23,7 @@
 #include <KAboutData>
 #include <KDebug>
 #include <KSelectAction>
+#include <QDockWidget>
 #include <QWidget>
 
 #include "interfaces/iproject.h"
@@ -35,6 +36,7 @@
 #include "sublime/view.h"
 #include "veritas/test.h"
 #include "veritas/mvc/runnermodel.h"
+#include "veritas/mvc/resultsmodel.h"
 #include "veritas/mvc/runnerwindow.h"
 #include "veritas/mvc/verbosemanager.h"
 #include "ui_runnerwindow.h"
@@ -47,7 +49,7 @@ using Sublime::ToolDocument;
 using Sublime::View;
 
 using KDevelop::Core;
-using KDevelop::IPlugin;
+using KDevelop::ICore;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 using KDevelop::IToolViewFactory;
@@ -57,52 +59,66 @@ using KDevelop::UiController;
 using Veritas::Test;
 using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
+using Veritas::ResultsModel;
 using Veritas::VerboseManager;
-using Veritas::TestRunnerToolView;
+using Veritas::TestViewData;
 
 namespace Veritas
 {
-class TestRunnerToolViewPrivate
+
+class TestViewDataPrivate
 {
-    public:
-        TestRunnerToolViewPrivate() : window(0), selected(0) {}
-        RunnerWindow* window;
-        IProject* selected;
+public:
+    TestViewDataPrivate();
+    RunnerWindow* window;
+    IProject* selectedProject;
+    Sublime::View *resultsView;
+    Sublime::Area *resultsArea;
+    ResultsModel *resultsModel;
 };
+
+TestViewDataPrivate::TestViewDataPrivate()
+        : window(0),
+        selectedProject(0),
+        resultsView(0),
+        resultsArea(0)
+{}
+
+} // namespace
+
+using Veritas::TestViewDataPrivate;
+
+TestViewData::TestViewData(QObject* parent)
+        : QObject(parent),
+        d(new TestViewDataPrivate)
+{
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+    << i18n("File Name") << i18n("Line Number");
+    d->resultsModel = new ResultsModel(resultHeaders, this);
+    d->window = new RunnerWindow(d->resultsModel);
 }
 
-using Veritas::TestRunnerToolViewPrivate;
+TestViewData::~TestViewData()
+{
+    delete d;
+}
 
-QWidget* TestRunnerToolView::resultsWidget()
+QWidget* TestViewData::resultsWidget()
 {
     return d->window->resultsWidget();
 }
 
-TestRunnerToolView::TestRunnerToolView(const KComponentData& about, QObject* parent)
-        : IPlugin(about, parent),
-        d(new TestRunnerToolViewPrivate),
-        resultsVisible(false),
-        m_resultsView(0),
-        m_resultsArea(0)
-{}
-
-TestRunnerToolView::~TestRunnerToolView()
+void TestViewData::removeResultsView()
 {
-    //removeResultsView();
-    delete d;
-}
-
-void TestRunnerToolView::removeResultsView()
-{
-    if (m_resultsView && m_resultsArea) {
-        m_resultsArea->removeToolView(m_resultsView);
+    if (d->resultsView && d->resultsArea) {
+        d->resultsArea->removeToolView(d->resultsView);
     }
 }
 
-QWidget* TestRunnerToolView::spawnWindow()
+QWidget* TestViewData::runnerWidget()
 {
-    d->window = new RunnerWindow;
-    IProjectController* ipc = core()->projectController();
+    IProjectController* ipc = ICore::self()->projectController();
     foreach(IProject* proj, ipc->projects()) {
         d->window->addProjectToPopup(proj);
     }
@@ -116,14 +132,14 @@ QWidget* TestRunnerToolView::spawnWindow()
     connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
-    connect(d->window->verboseManager(), SIGNAL(openVerbose(Test*)),
-            this, SLOT(openVerbose(Test*)));
+    connect(d->window->verboseManager(), SIGNAL(openVerbose(Veritas::Test*)),
+            this, SIGNAL(openVerbose(Veritas::Test*)));
     reload();
     return d->window;
 
 }
 
-void TestRunnerToolView::reload()
+void TestViewData::reload()
 {
     Test* root = registerTests(); // implemented by concrete plugins
     RunnerModel* model = new RunnerModel;
@@ -134,80 +150,94 @@ void TestRunnerToolView::reload()
     spawnResultsView();
 }
 
-IProject* TestRunnerToolView::project() const
+IProject* TestViewData::project() const
 {
-    return d->selected;
+    return d->selectedProject;
 }
 
-void TestRunnerToolView::setSelected(QAction* action)
+void TestViewData::setSelected(QAction* action)
 {
-    d->selected = action->data().value<IProject*>();
+    d->selectedProject = action->data().value<IProject*>();
 }
 
 class ResultsViewFactory: public KDevelop::IToolViewFactory
 {
-    public:
-        ResultsViewFactory(const QString& id, TestRunnerToolView *runner): m_runner(runner), m_id(id) {}
+public:
+    ResultsViewFactory(const QString& id, TestViewData *runner): m_runner(runner), m_id(id) {}
 
-        virtual QWidget* create(QWidget *parent = 0) {
-            Q_UNUSED(parent);
-            return m_runner->resultsWidget(); // TODO this is bad. Currently only a single
-            // resultsWidget is ever created, which means
-            // that multiple resultsviews will segfault kdevelop.
-            // Introducing multiple resultViews requires
-            // changes in RunnerWindow.
-        }
-        virtual Qt::DockWidgetArea defaultPosition() {
-            return Qt::BottomDockWidgetArea;
-        }
-        virtual QString id() const {
-            return m_id;
-        }
+    virtual QWidget* create(QWidget *parent = 0) {
+        Q_UNUSED(parent);
+        return m_runner->resultsWidget();
+        // TODO this is bad. Currently only a single
+        // resultsWidget is ever created, which means
+        // that multiple resultsviews for a particular
+        // runnertoolview will segfault kdevelop.
+        // Introducing multiple resultViews requires
+        // changes in RunnerWindow. Luckily a user
+        // cannot close nor create multiple ones, so
+        // the situation above is impossible.
+    }
+    virtual Qt::DockWidgetArea defaultPosition() {
+        return Qt::BottomDockWidgetArea;
+    }
+    virtual QString id() const {
+        return m_id;
+    }
+    virtual void viewCreated(Sublime::View* view) {
+        QWidget* w = view->widget();
+        if (not w) return;
+        QObject* p = w->parent();
+        if (not p) return;
+        QDockWidget* d = dynamic_cast<QDockWidget*>(p);
+        if (not d) return;
+        d->setFeatures(d->features() & 0xfffe); // no close for you.
+    }
 
-    private:
-        TestRunnerToolView *m_runner;
-        QString m_id;
+private:
+    TestViewData *m_runner;
+    QString m_id;
 };
 
 namespace
 {
 class UiToolViewFactory: public Sublime::ToolFactory
 {
-    public:
-        UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
-        ~UiToolViewFactory() { delete m_factory; }
-        virtual QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) {
-            Q_UNUSED(doc);
-            return m_factory->create(parent);
-        }
-        QList<QAction*> toolBarActions(QWidget* viewWidget) const {
-            return m_factory->toolBarActions(viewWidget);
-        }
-        QString id() const { return m_factory->id(); }
+public:
+    UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
+    ~UiToolViewFactory() { delete m_factory; }
+    virtual QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) {
+        Q_UNUSED(doc);
+        return m_factory->create(parent);
+    }
+    QList<QAction*> toolBarActions(QWidget* viewWidget) const {
+        //return m_factory->toolBarActions(viewWidget);
+        return QList<QAction*>();
+    }
+    QString id() const { return m_factory->id(); }
 
-    private:
-        IToolViewFactory *m_factory;
+private:
+    IToolViewFactory *m_factory;
 };
 }
 
 class ResultsViewFinder
 {
-    public:
-        ResultsViewFinder(const QString& id) : m_id(id), found(false) {}
-        Area::WalkerMode operator()(View *view, Sublime::Position position) {
-            Document* doc = view->document();
-            if (m_id == doc->documentSpecifier()) {
-                found = true;
-                return Area::StopWalker;
-            } else {
-                return Area::ContinueWalker;
-            }
+public:
+    ResultsViewFinder(const QString& id) : m_id(id), found(false) {}
+    Area::WalkerMode operator()(View *view, Sublime::Position position) {
+        Document* doc = view->document();
+        if (m_id == doc->documentSpecifier()) {
+            found = true;
+            return Area::StopWalker;
+        } else {
+            return Area::ContinueWalker;
         }
-        QString m_id;
-        bool found;
+    }
+    QString m_id;
+    bool found;
 };
 
-void TestRunnerToolView::spawnResultsView()
+void TestViewData::spawnResultsView()
 {
     // only allow a single view.
     UiController* uic = Core::self()->uiControllerInternal();
@@ -215,7 +245,7 @@ void TestRunnerToolView::spawnResultsView()
     ResultsViewFinder rvf(this->resultsViewId());
     a->walkToolViews(rvf, Sublime::AllPositions);
     if (rvf.found) {
-        return; // dont add twice.
+        return; // do not add twice.
     }
 
     // these tool views should not show up in the 'Add Tool View' dialog.
@@ -224,14 +254,14 @@ void TestRunnerToolView::spawnResultsView()
 
     // this is bad. might want to make this available in IUiController
     ResultsViewFactory* fac = new ResultsViewFactory(resultsViewId(), this);
-    m_resultsArea = uic->activeArea();
+    d->resultsArea = uic->activeArea();
     ToolDocument *doc = new ToolDocument(QString("Test Results"), uic, new UiToolViewFactory(fac));
-    m_resultsView = doc->createView();
+    d->resultsView = doc->createView();
     Sublime::Position pos = Sublime::dockAreaToPosition(fac->defaultPosition());
-    m_resultsArea->addToolView(m_resultsView, pos);
-    connect(m_resultsView, SIGNAL(raise(Sublime::View*)),
+    d->resultsArea->addToolView(d->resultsView, pos);
+    connect(d->resultsView, SIGNAL(raise(Sublime::View*)),
             uic, SLOT(raiseToolView(Sublime::View*)));
-    fac->viewCreated(m_resultsView);
+    fac->viewCreated(d->resultsView);
 }
 
 #include "testrunnertoolview.moc"
