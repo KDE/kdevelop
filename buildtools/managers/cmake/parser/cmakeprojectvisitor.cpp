@@ -367,8 +367,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                 {
                     m_topctx=new TopDUContext(IndexedString(KUrl(include.first().filePath).pathOrUrl()),
                             SimpleRange(0,0, include.last().endColumn, include.last().endLine));
-                    DUChain::self()->addDocumentChain(
-                        IdentifiedFile(IndexedString(KUrl(include.first().filePath).pathOrUrl())), m_topctx);
+                    DUChain::self()->addDocumentChain(m_topctx);
 
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
                 }
@@ -436,8 +435,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
                 {
                     m_topctx=new TopDUContext(IndexedString(path),
                             SimpleRange(0,0, package.last().endColumn, package.last().endLine));
-                    DUChain::self()->addDocumentChain(
-                        IdentifiedFile(IndexedString(path)), m_topctx);
+                    DUChain::self()->addDocumentChain(m_topctx);
 
                     Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
                     aux->addImportedParentContext(m_topctx);
@@ -1651,15 +1649,14 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
     {
         DUChainWriteLocker lock(DUChain::lock());
         KUrl url(fc[0].filePath);
-        HashedString pathOrUrl(url.pathOrUrl());
+        IndexedString pathOrUrl(url.pathOrUrl());
         m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
         if(m_topctx==0)
         {
             m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
                     SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
 
-            DUChain::self()->addDocumentChain(
-                IdentifiedFile(pathOrUrl), m_topctx);
+            DUChain::self()->addDocumentChain(m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
         }
         else

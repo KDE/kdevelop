@@ -260,7 +260,7 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, Inc
   used.insert(ctx.data());
   
   foreach( DUContext::Import ctx2, ctx->importedParentContexts() ) {
-    TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.context.data()) );
+    TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.context()) );
     allIncludedRecursion( used, ret, d, prefixPath );
   }
 
@@ -426,15 +426,15 @@ QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
   return data.name;
 }
 
-QSet<HashedString> IncludeFileDataProvider::files() const {
-  QSet<HashedString> set;
+QSet<IndexedString> IncludeFileDataProvider::files() const {
+  QSet<IndexedString> set;
   foreach(const Cpp::IncludeItem& item, items()) {
     if( !item.basePath.isEmpty() ) {
       KUrl path = item.basePath;
       path.addPath( item.name );
-      set << path.pathOrUrl();
+      set << IndexedString(path.pathOrUrl());
     }else{
-      set << item.name;
+      set << IndexedString(item.name);
     }
   }
   return set;

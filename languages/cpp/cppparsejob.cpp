@@ -66,7 +66,7 @@ using namespace KDevelop;
 
 bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
   foreach(DUContext::Import listCtx, contexts)
-    if(listCtx.context.data() && listCtx.context.data()->imports(context))
+    if(listCtx.context() && listCtx.context()->imports(context))
       return true;
   return false;
 }
@@ -289,7 +289,7 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 LineContextPair contentFromProxy(LineContextPair ctx) {
     if( ctx.context->flags() & TopDUContext::ProxyContextFlag ) {
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
-        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context.data()), ctx.sourceLine );
+        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context()), ctx.sourceLine );
     }else{
         return ctx;
     }
@@ -337,7 +337,7 @@ void CPPInternalParseJob::run()
           DUChainWriteLocker lock(DUChain::lock());
 
           foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
-            contentContext->removeImportedParentContext(ctx.context.data());
+            contentContext->removeImportedParentContext(ctx.context());
           }
     }
 
@@ -437,6 +437,8 @@ void CPPInternalParseJob::run()
       DeclarationBuilder declarationBuilder(&editor);
       contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, TopDUContextPointer(contentContext), false);
 
+      contentEnvironmentFile->setTopContext(contentContext);
+      
       //If publically visible declarations were added/removed, all following parsed files need to be updated
       if(declarationBuilder.changeWasSignificant()) {
         ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
@@ -481,9 +483,9 @@ void CPPInternalParseJob::run()
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
-              if(ctx.context.data() && !encounteredIncludeUrls.contains(IndexedString(ctx.context.data()->url().str()))) { ///@todo prevent conversion
-                  contentContext->removeImportedParentContext(ctx.context.data());
-                  kDebug( 9007 ) << "removing not encountered import " << ctx.context.data()->url().str();
+              if(ctx.context() && !encounteredIncludeUrls.contains(IndexedString(ctx.context()->url().str()))) { ///@todo prevent conversion
+                  contentContext->removeImportedParentContext(ctx.context());
+                  kDebug( 9007 ) << "removing not encountered import " << ctx.context()->url().str();
               }
           }
       }
@@ -532,13 +534,15 @@ void CPPInternalParseJob::run()
 
         DUChainWriteLocker lock(DUChain::lock());
 
+        proxyEnvironmentFile->setTopContext(proxyContext);
+        
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
         Q_ASSERT(proxyContext->importedParentContexts().count() <= 1);
 
         if(proxyContext->importedParentContexts().isEmpty()) //Failure
           return;
 
-        Q_ASSERT(proxyContext->importedParentContexts()[0].context.data() == contentContext);
+        Q_ASSERT(proxyContext->importedParentContexts()[0].context() == contentContext);
 
         //Add the non-content contexts behind to content-context to the created proxy,
         //By walking the chain of proxy-contexts.

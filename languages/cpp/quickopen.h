@@ -72,7 +72,7 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     ///Returns all scopes supported by this data-provider
     static QStringList scopes();
     
-    virtual QSet<KDevelop::HashedString> files() const;
+    virtual QSet<KDevelop::IndexedString> files() const;
   private slots:
     void documentDestroyed( QObject* obl );
   private:

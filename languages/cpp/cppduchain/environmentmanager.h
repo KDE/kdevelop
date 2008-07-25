@@ -37,6 +37,7 @@
 #include <modificationrevision.h>
 #include <editorintegrator.h>
 #include <iproblem.h>
+#include <topducontext.h>
 
 #include "cppduchainexport.h"
 #include "setrepository.h"
@@ -151,7 +152,6 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     EnvironmentFileData() {
       initializeAppendedLists();
       m_contentStartLine = 0;
-      m_identityOffset = 0;
       m_strings = 0;
       m_includeFiles = 0;
       m_missingIncludeFiles = 0;
@@ -160,11 +160,11 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_definedMacros = 0;
       m_definedMacroNames = 0;
       m_unDefinedMacroNames = 0;
+      m_identityOffset = 0;
     }
     EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::DUChainBaseData(rhs) {
       initializeAppendedLists();
       copyListsFrom(rhs);
-      m_identityOffset = rhs.m_identityOffset;
       m_url = rhs.m_url;
       m_modificationTime = rhs.m_modificationTime;
       m_strings = rhs.m_strings; //String-set
@@ -176,14 +176,17 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_definedMacroNames = rhs.m_definedMacroNames; //String-set
       m_unDefinedMacroNames = rhs.m_unDefinedMacroNames; //String-set
       m_contentStartLine = rhs.m_contentStartLine;
+      m_topContext = rhs.m_topContext;
+      m_identityOffset = rhs.m_identityOffset;
     }
     
     ~EnvironmentFileData() {
       freeAppendedLists();
     }
-    uint m_identityOffset;
     KDevelop::IndexedString m_url;
+    KDevelop::IndexedTopDUContext m_topContext;
     KDevelop::ModificationRevision m_modificationTime;
+    uint m_identityOffset;
     //Set of all strings that can be affected by macros from outside
     uint m_strings; //String-set
     uint m_includeFiles; //String-set
@@ -204,7 +207,7 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    EnvironmentFile( const KDevelop::IndexedString& url, EnvironmentManager* manager );
+    EnvironmentFile( KDevelop::IndexedString url, KDevelop::TopDUContext* topContext );
 
     EnvironmentFile( EnvironmentFileData& data );
     
@@ -234,8 +237,10 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
 
     size_t hash() const;
 
-    virtual KDevelop::IdentifiedFile identity() const;
-
+    void setTopContext(KDevelop::IndexedTopDUContext context);
+    
+    virtual KDevelop::IndexedTopDUContext indexedTopContext() const;
+    
     KDevelop::IndexedString url() const;
 
     void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
@@ -278,17 +283,17 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     const QList<KDevelop::IndexedString> includePaths() const;
     void setIncludePaths( const QList<KDevelop::IndexedString>& paths );
 
-    /**
-     * The identity-value usually only depends on the content of the environment-information. This can be used to separate environments that have the same content.
-     * For example a content-environment from a proxy-environment.
-     * */
-    void setIdentityOffset(uint offset);
-    uint identityOffset() const;
-
     ///Set the first line of actual content, behind includes etc.
     void setContentStartLine(int line);
     int contentStartLine() const;
 
+    /**
+    * The identity-value usually only depends on the content of the environment-information. This can be used to separate environments that have the same content.
+    * For example a content-environment from a proxy-environment.
+    * */
+    void setIdentityOffset(uint offset);
+    uint identityOffset() const;
+    
     virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const;
     
     virtual bool needsUpdate() const;
@@ -296,8 +301,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     enum {
       Identity = 73
     };
-    
-    typedef EnvironmentFileData Data;
     
   private:
     virtual void aboutToSave();
@@ -313,6 +316,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     Cpp::LazyStringSet m_definedMacroNames;
     Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
     QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>  m_allModificationTimes;
+    
+    bool m_modificationTimesChanged;
     
     DUCHAIN_DECLARE_DATA(EnvironmentFile);
     /*

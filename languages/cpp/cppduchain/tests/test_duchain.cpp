@@ -75,7 +75,7 @@ void release(TopDUContext* top)
   //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   
   TopDUContextPointer tp(top);
-  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
   Q_ASSERT(!tp);
 }
     
@@ -163,7 +163,7 @@ void TestDUChain::initTestCase()
   topContext = new TopDUContext(IndexedString(file1.pathOrUrl()), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
   
-  DUChain::self()->addDocumentChain(IdentifiedFile(file1), topContext);
+  DUChain::self()->addDocumentChain(topContext);
 
   typeVoid = AbstractType::Ptr(new CppIntegralType(TypeVoid))->indexed();
   typeInt = AbstractType::Ptr(new CppIntegralType(TypeInt))->indexed();
@@ -480,7 +480,7 @@ void TestDUChain::testDeclareFor()
   QCOMPARE(forCtx->localDeclarations().count(), 1);
   QVERIFY(forCtx->localScopeIdentifier().isEmpty());
 
-  DUContext* forParamCtx = forCtx->importedParentContexts().first().context.data();
+  DUContext* forParamCtx = forCtx->importedParentContexts().first().context();
   QVERIFY(forParamCtx->parentContext());
   QCOMPARE(forParamCtx->importedParentContexts().count(), 0);
   QCOMPARE(forParamCtx->childContexts().count(), 0);
@@ -730,7 +730,7 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(!ctorImplCtx->localScopeIdentifier().isEmpty());
     QVERIFY(ctorImplCtx->owner());
   
-    DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().context.data();
+    DUContext* ctorCtx = ctorImplCtx->importedParentContexts().first().context();
     QVERIFY(ctorCtx->parentContext());
     QCOMPARE(ctorCtx->childContexts().count(), 0);
     QCOMPARE(ctorCtx->localDeclarations().count(), 2);
@@ -1271,10 +1271,10 @@ void TestDUChain::testFunctionDefinition() {
   
   QCOMPARE(top->childContexts()[3]->owner(), top->localDeclarations()[2]);
   QCOMPARE(top->childContexts()[3]->importedParentContexts().count(), 1);
-  QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].context.data(), top->childContexts()[2]);
+  QCOMPARE(top->childContexts()[3]->importedParentContexts()[0].context(), top->childContexts()[2]);
   
   QCOMPARE(top->childContexts()[2]->importedParentContexts().count(), 1);
-  QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].context.data(), top->childContexts()[1]);
+  QCOMPARE(top->childContexts()[2]->importedParentContexts()[0].context(), top->childContexts()[1]);
   
   
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("at")), noDef);
@@ -1806,13 +1806,13 @@ void TestDUChain::testTemplates() {
     QVERIFY(instanceDefClassA->context() == defClassA->context());
     QVERIFY(instanceDefClassA->internalContext()->importedParentContexts().size() == 1);
     QVERIFY(defClassA->internalContext()->importedParentContexts().size() == 1);
-    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context.data()->type(), DUContext::Template);
-    QVERIFY(defClassA->internalContext()->importedParentContexts().front().context.data() != instanceDefClassA->internalContext()->importedParentContexts().front().context.data()); //The template-context has been instantiated
+    QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context()->type(), DUContext::Template);
+    QVERIFY(defClassA->internalContext()->importedParentContexts().front().context() != instanceDefClassA->internalContext()->importedParentContexts().front().context()); //The template-context has been instantiated
 
     //Make sure the first template-parameter has been resolved to class B
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context.data()->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context()->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
     //Make sure the second template-parameter has been resolved to class C
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context.data()->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
+    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context()->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
 
     QualifiedIdentifier ident2(ident);
     ident2.push(Identifier("Template1"));
@@ -2073,7 +2073,7 @@ struct TestContext {
     ++number;
     DUChainWriteLocker lock(DUChain::lock());
     m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), SimpleRange());
-    DUChain::self()->addDocumentChain(IdentifiedFile(IndexedString(QString("/test1/%1").arg(number))), m_context);
+    DUChain::self()->addDocumentChain(m_context);
     Q_ASSERT(IndexedDUContext(m_context).context() == m_context);
   }
 

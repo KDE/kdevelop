@@ -35,6 +35,10 @@ namespace KDevelop {
 class TemplateParameterDeclarationData : public KDevelop::DeclarationData
 {
 public:
+  TemplateParameterDeclarationData() {
+  }
+  TemplateParameterDeclarationData(const TemplateParameterDeclarationData& rhs) : KDevelop::DeclarationData(rhs), m_defaultParameter(rhs.m_defaultParameter) {
+  }
   KDevelop::IndexedQualifiedIdentifier m_defaultParameter;
 };
 
@@ -56,13 +60,12 @@ public:
 
   void setDefaultParameter(const KDevelop::QualifiedIdentifier& str);
 
-  virtual Declaration* clone() const;
-  
   enum {
     Identity = 18
   };
   
 private:
+  virtual Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(TemplateParameterDeclaration)
 };
 

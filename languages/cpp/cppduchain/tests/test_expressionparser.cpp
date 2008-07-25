@@ -352,8 +352,8 @@ void TestExpressionParser::testSmartPointer() {
   QCOMPARE(specialDecl->internalContext()->importedParentContexts().count(), 1); //Only the template-contexts are imported
   QCOMPARE(baseDecl->internalContext()->importedParentContexts().count(), 1);
 
-  DUContext* specialTemplateContext = specialDecl->internalContext()->importedParentContexts().first().context.data();
-  DUContext* baseTemplateContext = baseDecl->internalContext()->importedParentContexts().first().context.data();
+  DUContext* specialTemplateContext = specialDecl->internalContext()->importedParentContexts().first().context();
+  DUContext* baseTemplateContext = baseDecl->internalContext()->importedParentContexts().first().context();
   QVERIFY(specialTemplateContext != baseTemplateContext);
   QCOMPARE(specialTemplateContext->type(), DUContext::Template);
   QCOMPARE(baseTemplateContext->type(), DUContext::Template);
@@ -915,7 +915,7 @@ void TestExpressionParser::release(DUContext* top)
 {
   //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
-    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
   //delete top;
 }
 

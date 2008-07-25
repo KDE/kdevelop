@@ -65,10 +65,10 @@ bool isTemplateDependent(Declaration* decl) {
   while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
     //Check if there is an imported template-context, which has an unresolved template-parameter
     foreach( DUContext::Import importedCtx, ctx->importedParentContexts() ) {
-      if( !importedCtx.context.data() )
+      if( !importedCtx.context() )
         continue;
-      if( importedCtx.context.data()->type() == DUContext::Template ) {
-        foreach( Declaration* paramDecl, importedCtx.context.data()->localDeclarations() ) {
+      if( importedCtx.context()->type() == DUContext::Template ) {
+        foreach( Declaration* paramDecl, importedCtx.context()->localDeclarations() ) {
           CppTemplateParameterType::Ptr templateParamType = paramDecl->abstractType().cast<CppTemplateParameterType>();
           if( templateParamType )
             return true;

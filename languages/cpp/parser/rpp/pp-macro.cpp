@@ -59,13 +59,21 @@ bool pp_macro::operator==(const pp_macro& macro) const {
   if(completeHash() != macro.completeHash())
     return false;
   
-  uint mySize = constantSize(this);
-  uint otherSize = constantSize(&macro);
-  
-  if(mySize != otherSize)
+  if(formalsSize() != macro.formalsSize())
     return false;
   
-  return memcmp(this, &macro, mySize) == 0;
+  if(definitionSize() != macro.definitionSize())
+    return false;
+  
+  if(!pp_macro_direct_data::operator==(macro))
+    return false;
+  
+  if(memcmp(formals(), macro.formals(), sizeof(uint) * formalsSize()) != 0)
+    return false;
+  
+  if(memcmp(definition(), macro.definition(), sizeof(uint) * definitionSize()) != 0)
+    return false;
+  return true;
 }
 
 void pp_dynamic_macro::invalidateHash() {

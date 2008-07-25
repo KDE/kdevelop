@@ -206,7 +206,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
 
   KDevelop::DUContext* templateContext = tempDecl->templateParameterContext();
   if(!templateContext) {
-    kDebug(9007) << "Template function missing template context";
+    //May be just within a template, but without own template parameters
     return declaration;
   }
 
@@ -317,10 +317,13 @@ bool OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType
       {
         DUContext* argumentTemplateDeclarationContext = argumentTemplateDeclaration->templateParameterContext();
         DUContext* parameterTemplateDeclarationContext = parameterTemplateDeclaration->templateParameterContext();
-
-        if( argumentTemplateDeclarationContext->localDeclarations().count() == parameterTemplateDeclarationContext->localDeclarations().count() ) {
-          for( int a = 0; a < argumentTemplateDeclarationContext->localDeclarations().count(); ++a )
-            matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType(), parameterTemplateDeclarationContext->localDeclarations()[a]->abstractType(), instantiatedTypes );
+        if(parameterTemplateDeclarationContext && argumentTemplateDeclarationContext) {
+            if( argumentTemplateDeclarationContext->localDeclarations().count() == parameterTemplateDeclarationContext->localDeclarations().count() ) {
+            for( int a = 0; a < argumentTemplateDeclarationContext->localDeclarations().count(); ++a )
+                matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType(), parameterTemplateDeclarationContext->localDeclarations()[a]->abstractType(), instantiatedTypes );
+            }
+        }else{
+          kDebug() << "missing template argument context";
         }
       }
     }

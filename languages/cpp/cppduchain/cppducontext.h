@@ -48,9 +48,6 @@ While construction:
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
-/** @todo Remove this. It is currently needed because CppDUContext<KDevelop::DUContext> cannot call protected members of KDevelop::DUContext,
- *  which is wrong because KDevelop::DUContext is a base-class of CppDUContext<KDevelop::DUContext>. Find out why this happens and then remove this.
- * */
 #include <duchain/ducontext.h>
 
 #include <QSet>
@@ -175,20 +172,23 @@ template<class BaseContext>
 class CppDUContext : public BaseContext {
   public:
     template<class Data>
-    CppDUContext(Data& data) : BaseContext(data) {
+    CppDUContext(Data& data) : BaseContext(data), m_instantiatedFrom(0) {
     }
 
     ///Parameters will be reached to the base-class
     template<class Param1, class Param2>
     CppDUContext( const Param1& p1, const Param2& p2, bool isInstantiationContext ) : BaseContext(p1, p2, isInstantiationContext), m_instantiatedFrom(0) {
+      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
 
     ///Both parameters will be reached to the base-class. This fits TopDUContext.
     template<class Param1, class Param2, class Param3>
     CppDUContext( const Param1& p1, const Param2& p2, const Param3& p3) : BaseContext(p1, p2, p3), m_instantiatedFrom(0) {
+      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
     template<class Param1, class Param2>
     CppDUContext( const Param1& p1, const Param2& p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
+      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
 
     ///Overridden to take care of templates and other c++ specific things
@@ -381,6 +381,7 @@ class CppDUContext : public BaseContext {
      * */
     void setInstantiatedFrom( CppDUContext<BaseContext>* context, const InstantiationInformation& templateArguments )
     {
+      Q_ASSERT(!dynamic_cast<TopDUContext*>(this));
       if(context->m_instantiatedFrom) {
         
         setInstantiatedFrom(context->m_instantiatedFrom, templateArguments);
@@ -434,7 +435,7 @@ class CppDUContext : public BaseContext {
           
           if(type == DUContext::Helper) {
             if(!BaseContext::importedParentContexts().isEmpty())
-              classContext = BaseContext::importedParentContexts()[0].context.data();
+              classContext = BaseContext::importedParentContexts()[0].context();
           } else {
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
             if(classDeclaration && classDeclaration->internalContext())

@@ -287,7 +287,7 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
   //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
   if(context == standardCtx) {
     //Clear the highlighting of all other contexts for this file
-    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(HashedString(context->url().str()));
+    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(context->url());
 
     foreach(TopDUContext* ctx, contexts) {
       if(ctx == context)
@@ -353,13 +353,13 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
 
   //Merge the colors from the function arguments
   foreach( DUContext::Import imported, context->importedParentContexts() ) {
-    if(!imported.context.data() || (imported.context.data()->type() != DUContext::Other && imported.context.data()->type() != DUContext::Function))
+    if(!imported.context() || (imported.context()->type() != DUContext::Other && imported.context()->type() != DUContext::Function))
       continue;
     //For now it's enough simply copying them, because we only pass on colors within function bodies.
-    if (m_functionColorsForDeclarations.contains(imported.context))
-      colorsForDeclarations = m_functionColorsForDeclarations[imported.context];
-    if (m_functionDeclarationsForColors.contains(imported.context))
-      declarationsForColors = m_functionDeclarationsForColors[imported.context];
+    if (m_functionColorsForDeclarations.contains(imported.context()))
+      colorsForDeclarations = m_functionColorsForDeclarations[imported.context()];
+    if (m_functionDeclarationsForColors.contains(imported.context()))
+      declarationsForColors = m_functionDeclarationsForColors[imported.context()];
   }
 
   QList<Declaration*> takeFreeColors;

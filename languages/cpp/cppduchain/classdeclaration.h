@@ -47,7 +47,7 @@ class ClassDeclarationData : public KDevelop::DeclarationData
 {
 public:
   ClassDeclarationData() {
-    initializeAppendedLists(true);
+    initializeAppendedLists();
   }
   
   ~ClassDeclarationData() {
@@ -55,15 +55,11 @@ public:
   }
   
   ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::DeclarationData(rhs) {
-    initializeAppendedLists(true);
+    initializeAppendedLists();
     copyListsFrom(rhs);
   }
   
-  static size_t classSize() {
-    return sizeof(ClassDeclarationData);
-  }
-  
-  START_APPENDED_LISTS(ClassDeclarationData);
+  START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::DeclarationData);
   APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
   END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
 };
@@ -93,13 +89,12 @@ public:
    * */
   bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
 
-  virtual KDevelop::Declaration* clone() const;
-
   enum {
     Identity = 17
   };
-
+  
 private:
+  virtual KDevelop::Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };
 

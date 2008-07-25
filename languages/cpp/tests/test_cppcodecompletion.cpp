@@ -596,7 +596,7 @@ void TestCppCodeCompletion::release(DUContext* top)
 {
   //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
-    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top)->identity());
+    DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
   //delete top;
 }
 
@@ -742,7 +742,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
 
         QCOMPARE(top->importedParentContexts().count(), 1);
-        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context.data());
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context());
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
@@ -766,7 +766,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
 
         QCOMPARE(top->importedParentContexts().count(), 1);
-        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context.data());
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context());
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);
@@ -793,7 +793,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile->strings().count(), 3u); //meh, m, int
 
         QCOMPARE(top->importedParentContexts().count(), 1);
-        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context.data());
+        TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context());
         QVERIFY(top2);
         Cpp::EnvironmentFile* envFile2 = dynamic_cast<Cpp::EnvironmentFile*>(top2->parsingEnvironmentFile().data());
         QVERIFY(envFile2);

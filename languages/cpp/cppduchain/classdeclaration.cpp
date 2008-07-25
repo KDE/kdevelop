@@ -33,6 +33,7 @@ DEFINE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
 ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
   : Declaration(*new ClassDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   setContext(context);
 }
 
@@ -72,7 +73,7 @@ ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs) : Declaration(*n
   d_func_dynamic()->setClassId(this);
 }
 
-Declaration* ClassDeclaration::clone() const {
+Declaration* ClassDeclaration::clonePrivate() const {
   return new ClassDeclaration(*this);
 }
 

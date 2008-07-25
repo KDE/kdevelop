@@ -115,6 +115,15 @@ namespace Cpp {
   template<class Base>
   class CppDUContext;
   
+  struct TemplateDeclarationData {
+    TemplateDeclarationData() {
+    }
+    TemplateDeclarationData(const TemplateDeclarationData& rhs) : m_parameterContext(rhs.m_parameterContext) {
+    }
+    //The context in which the template-parameters are declared
+    KDevelop::IndexedDUContext m_parameterContext;
+  };
+  
   //Represents the template-part of a template-class'es or template-function's template-part
   class KDEVCPPDUCHAIN_EXPORT TemplateDeclaration {
     public:
@@ -160,14 +169,14 @@ namespace Cpp {
       
       uint specialization() const;
       
-      DeclarationId id() const;
+      DeclarationId id(bool forceDirect) const;
       
       Declaration* specialize(uint specialization, const TopDUContext* topContext);
     
     private:
+      virtual TemplateDeclarationData* dynamicTemplateData() = 0;
+      virtual const TemplateDeclarationData* templateData() const = 0;
 
-      //The context in which the template-parameters are declared
-      KDevelop::DUContextPointer m_parameterContext;
       TemplateDeclaration* m_instantiatedFrom;
       TemplateDeclaration* m_specializedFrom; 
       IndexedInstantiationInformation m_instantiatedWith;
@@ -178,6 +187,21 @@ namespace Cpp {
       InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
       QList<TemplateDeclaration*> m_specializations; ///Explicit specializations
   };
+  
+  
+    template<class Base>
+    class SpecialTemplateDeclarationData : public Base, public TemplateDeclarationData
+    {
+    public:
+    SpecialTemplateDeclarationData() {
+    }
+    
+    ~SpecialTemplateDeclarationData() {
+    }
+    
+    SpecialTemplateDeclarationData(const SpecialTemplateDeclarationData& rhs) : Base(rhs), TemplateDeclarationData(rhs) {
+    }
+    };
 
   /**
    * Use this to merge any type of declaration with a TemplateDeclaration.
@@ -192,20 +216,23 @@ namespace Cpp {
     SpecialTemplateDeclaration(Data& data) : BaseDeclaration(data) {
     }
     ///Copy-constructor for cloning
-    SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(rhs), TemplateDeclaration(rhs) {
+    SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>(*rhs.d_func())), TemplateDeclaration(rhs) {
+      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
     ///Arguments are passed to the base
-    SpecialTemplateDeclaration( const KDevelop::SimpleRange& range, KDevelop::DUContext* context ) : BaseDeclaration(range, context) {
+    SpecialTemplateDeclaration( const KDevelop::SimpleRange& range, KDevelop::DUContext* context ) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>()) {
+      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
+      
+      this->setRange(range);
+      
+      if(context)
+        this->setContext(context);
     }
 
     virtual bool inDUChain() const {
       return instantiatedFrom() || BaseDeclaration::inDUChain();
     }
     
-    virtual KDevelop::Declaration* clone() const {
-      return new SpecialTemplateDeclaration(*this);
-    }
-
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
@@ -217,8 +244,8 @@ namespace Cpp {
       return TemplateDeclaration::specialization();
     }
     
-    virtual DeclarationId id() const {
-      return TemplateDeclaration::id();
+    virtual DeclarationId id(bool forceDirect) const {
+      return TemplateDeclaration::id(forceDirect);
     }
     
     //Is specialized for ForwardDeclaration in templatedeclaration.cpp to actively instantiate template forward declarations
@@ -231,6 +258,20 @@ namespace Cpp {
       Identity = BaseDeclaration::Identity + 50
     };
     
+    private:
+    virtual TemplateDeclarationData* dynamicTemplateData() {
+        return d_func_dynamic();
+    }
+    
+    virtual const TemplateDeclarationData* templateData() const {
+        return d_func();
+    }
+
+    inline SpecialTemplateDeclarationData<typename BaseDeclaration::Data>* d_func_dynamic() { this->makeDynamic(); return reinterpret_cast<SpecialTemplateDeclarationData<typename BaseDeclaration::Data>*>(this->d_ptr); }
+    inline const SpecialTemplateDeclarationData<typename BaseDeclaration::Data>* d_func() const { return reinterpret_cast<const SpecialTemplateDeclarationData<typename BaseDeclaration::Data>*>(this->d_ptr); }
+    virtual KDevelop::Declaration* clonePrivate() const {
+      return new SpecialTemplateDeclaration(*this);
+    }
   };
 
   bool KDEVCPPDUCHAIN_EXPORT isTemplateDeclaration(const KDevelop::Declaration*);

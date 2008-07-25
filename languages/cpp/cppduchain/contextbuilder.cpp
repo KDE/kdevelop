@@ -256,7 +256,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
 
       cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
 
-      DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
+      DUChain::self()->addDocumentChain(topLevelContext);
     }
 
     cppContext->clearImportedParentContexts();
@@ -276,7 +276,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
   setCompilingContexts(true);
 
   if(updateContext && (updateContext->flags() & TopDUContext::ProxyContextFlag)) {
-    kDebug(9007) << "updating a context " << file->identity() << " from a proxy-context to a content-context";
+    kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
     updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
   }
 
@@ -320,7 +320,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       topLevelContext->setSmartRange(editor()->topRange(CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
-      DUChain::self()->addDocumentChain(file->identity(), topLevelContext);
+      DUChain::self()->addDocumentChain(topLevelContext);
     }
 
     setEncountered(topLevelContext);
@@ -330,8 +330,8 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
     if (includes) {
       if(removeOldImports) {
         foreach (DUContext::Import parent, topLevelContext->importedParentContexts())
-          if (!containsContext(*includes, dynamic_cast<TopDUContext*>(parent.context.data())))
-            topLevelContext->removeImportedParentContext(parent.context.data());
+          if (!containsContext(*includes, dynamic_cast<TopDUContext*>(parent.context())))
+            topLevelContext->removeImportedParentContext(parent.context());
       }
 
       QList< QPair<TopDUContext*, SimpleCursor> > realIncluded;

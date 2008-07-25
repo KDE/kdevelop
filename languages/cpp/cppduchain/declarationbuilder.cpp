@@ -35,6 +35,7 @@
 #include <forwarddeclaration.h>
 #include <duchain.h>
 #include <duchainlock.h>
+#include <repositories/itemrepository.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <namespacealiasdeclaration.h>
 #include <language/duchain/aliasdeclaration.h>
@@ -77,9 +78,9 @@ DUContext* getTemplateContext(Declaration* decl) {
   if( !internal )
     return 0;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context.data() )
-      if( ctx.context.data()->type() == DUContext::Template )
-        return ctx.context.data();
+    if( ctx.context() )
+      if( ctx.context()->type() == DUContext::Template )
+        return ctx.context();
   }
   return 0;
 }
@@ -322,7 +323,7 @@ Type hasTemplateContext( const QList<Type>& contexts ) {
 template<class Type>
 Type hasTemplateContext( const QVector<Type>& contexts ) {
   foreach( const Type& context, contexts )
-    if( context.context.data() && context.context.data()->type() == KDevelop::DUContext::Template )
+    if( context.context() && context.context()->type() == KDevelop::DUContext::Template )
       return context;
 
   return Type(0);
@@ -330,7 +331,7 @@ Type hasTemplateContext( const QVector<Type>& contexts ) {
 
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context
 KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
-  return hasTemplateContext( context->importedParentContexts() ).context.data();
+  return hasTemplateContext( context->importedParentContexts() ).context();
 }
 
 template<class T>
@@ -456,7 +457,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       backup.resize(backup.size()-1);
     }
 
-    SmartRange* range = editor()->createRange(newRange.textRange());
+    SmartRange* range = editor()->currentRange() ? editor()->createRange(newRange.textRange()) : 0;
 
     editor()->exitCurrentRange();
 
@@ -521,9 +522,8 @@ Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AS
   
   if(!name) {
     //Unnamed class/struct, use a unique id
-    ///@todo store/load the current unique id from/to disk, and think about it a bit
-    static uint uniqueClassNumber = 1;
-    id = Identifier::unique( ++uniqueClassNumber );
+    static QAtomicInt& uniqueClassNumber( KDevelop::globalItemRepositoryRegistry().getCustomCounter("Unnamed Class Ids", 1) );
+    id = Identifier::unique( uniqueClassNumber.fetchAndAddRelaxed(1) );
   }
   
   Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, id, collapseRange);

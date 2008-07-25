@@ -42,7 +42,7 @@ using namespace KDevelop;
 using namespace Cpp;
 
 #define REGISTER_TEMPLATE_DECLARATION(Declaration) typedef SpecialTemplateDeclaration<Declaration> TheTemplate ## Declaration; \
-REGISTER_DUCHAIN_ITEM_WITH_DATA(TheTemplate ## Declaration, Declaration ## Data);
+REGISTER_DUCHAIN_ITEM_WITH_DATA(TheTemplate ## Declaration, SpecialTemplateDeclarationData<Declaration::Data>);
 
 REGISTER_TEMPLATE_DECLARATION(Declaration)
 REGISTER_TEMPLATE_DECLARATION(ClassDeclaration)
@@ -296,10 +296,10 @@ namespace Cpp {
 //   return true;
 // }
 
-TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
+TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
-TemplateDeclaration::TemplateDeclaration() : m_parameterContext(0), m_instantiatedFrom(0), m_specializedFrom(0) {
+TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
 Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUContext* topContext) {
@@ -394,7 +394,7 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const I
     return;
   }
     
-  Declaration* thisDecl = dynamic_cast<Declaration*>(this);
+//   Declaration* thisDecl = dynamic_cast<Declaration*>(this);
   //Change the identifier so it contains the template-parameters
   
   QMutexLocker l(&instantiationsMutex);
@@ -427,11 +427,11 @@ bool TemplateDeclaration::isInstantiatedFrom(const TemplateDeclaration* other) c
 
 
 void TemplateDeclaration::setTemplateParameterContext(KDevelop::DUContext* context) {
-  m_parameterContext = context;
+  dynamicTemplateData()->m_parameterContext = context;
 }
 
 KDevelop::DUContext* TemplateDeclaration::templateParameterContext() const {
-  return const_cast<KDevelop::DUContext*>(m_parameterContext.data()); ///@todo make data() const; return non-const pointer in duchain-pointer
+  return const_cast<KDevelop::DUContext*>(templateData()->m_parameterContext.data()); ///@todo make data() const; return non-const pointer in duchain-pointer
 }
 
 bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
@@ -445,9 +445,9 @@ DUContext* getTemplateContext(Declaration* decl)
   if( !internal )
     return 0;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context.data() )
-      if( ctx.context.data()->type() == DUContext::Template )
-        return ctx.context.data();
+    if( ctx.context() )
+      if( ctx.context()->type() == DUContext::Template )
+        return ctx.context();
   }
   return 0;
 }
@@ -575,15 +575,15 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     ///Find  the template-parameter context, and recurse into it, so we can replace the template parameters
     foreach( DUContext::Import importedContext,  context->importedParentContexts() )
     {
-      if( !importedContext.context.data())
+      if( !importedContext.context())
         continue;
         ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
-      if( importedContext.context.data()->type() == KDevelop::DUContext::Template || importedContext.context.data()->type() == KDevelop::DUContext::Function )
+      if( importedContext.context()->type() == KDevelop::DUContext::Template || importedContext.context()->type() == KDevelop::DUContext::Function )
       {
-        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, importedContext.context.data(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, importedContext.context(), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
         
-        if( instantiatedDeclaration && importedContext.context.data()->type() == KDevelop::DUContext::Template ) {
+        if( instantiatedDeclaration && importedContext.context()->type() == KDevelop::DUContext::Template ) {
           TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
           if( instantiatedDeclaration )
             tempDecl->setTemplateParameterContext( ctx );
@@ -594,7 +594,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.context.data(), SimpleCursor::invalid(), true );
+        contextCopy->addImportedParentContext( importedContext.context(), SimpleCursor::invalid(), true );
       }
     }
 
@@ -719,14 +719,14 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   return contextCopy;
 }
 
-DeclarationId TemplateDeclaration::id() const
+DeclarationId TemplateDeclaration::id(bool forceDirect) const
 {
   if(m_instantiatedFrom) {
-      DeclarationId ret = m_instantiatedFrom->id();
+      DeclarationId ret = m_instantiatedFrom->id(forceDirect);
       ret.setSpecialization(specialization());
       return ret;
   }else{
-      return dynamic_cast<const Declaration*>(this)->Declaration::id();
+      return dynamic_cast<const Declaration*>(this)->Declaration::id(forceDirect);
   }
 }
 

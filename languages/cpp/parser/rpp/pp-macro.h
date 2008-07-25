@@ -54,6 +54,10 @@ struct KDEVCPPRPP_EXPORT pp_macro_direct_data
   //The valueHash is not necessarily valid
   mutable HashType m_valueHash; //Hash that represents the values of all macros
   
+  bool operator==(const pp_macro_direct_data& rhs) const {
+    return name == rhs.name && file == rhs.file && sourceLine == rhs.sourceLine && defined == rhs.defined && hidden == rhs.hidden && function_like == rhs.function_like && variadics == rhs.variadics;
+  }
+  
   bool isUndef() const  {
     return !defined;
   }

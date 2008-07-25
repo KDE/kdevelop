@@ -115,7 +115,7 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
         DUChainWriteLocker lock(DUChain::lock());
         m_buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
         
-        DUChain::self()->addDocumentChain(IdentifiedFile(HashedString("buildstrap")), m_buildstrapContext);
+        DUChain::self()->addDocumentChain(m_buildstrapContext);
         Q_ASSERT(DUChain::self()->chainForDocument(KUrl("buildstrap")));
     }
     

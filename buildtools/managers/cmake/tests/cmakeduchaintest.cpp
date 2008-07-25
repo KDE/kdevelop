@@ -129,8 +129,6 @@ void CMakeDUChainTest::testDUChainWalk()
             qDebug() << "doesn't exist " << sr.start.column << sr.end.column;
         QVERIFY(found);
     }
-
-    DUChain::self()->clear();
 }
 
 void CMakeDUChainTest::testUses()
@@ -175,8 +173,6 @@ void CMakeDUChainTest::testUses()
 
     QCOMPARE(ctx->range().end.column, 15);
     QCOMPARE(ctx->range().end.line, 2);
-
-    DUChain::self()->clear();
 }
 
 #include "cmakeduchaintest.moc"

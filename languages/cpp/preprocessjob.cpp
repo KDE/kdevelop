@@ -210,7 +210,7 @@ void PreprocessJob::run()
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(HashedString(parentJob()->document().str()), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
 
         if(m_secondEnvironmentFile)
           parentJob()->setUpdatingProxyContext( updating ); //The content-context to be updated will be searched later
@@ -308,7 +308,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
-        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(HashedString(u.str()), m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
+        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
 
         m_currentEnvironment->setIdentityOffsetRestriction(0);
 

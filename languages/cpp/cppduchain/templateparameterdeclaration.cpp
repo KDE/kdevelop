@@ -28,6 +28,7 @@ REGISTER_DUCHAIN_ITEM(TemplateParameterDeclaration);
 TemplateParameterDeclaration::TemplateParameterDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
   : Declaration(*new TemplateParameterDeclarationData, range)
 {
+  d_func_dynamic()->setClassId(this);
   if(context)
     setContext(context);
 }
@@ -47,12 +48,12 @@ void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier
 TemplateParameterDeclaration::TemplateParameterDeclaration(TemplateParameterDeclarationData& data) : Declaration(data) {
 }
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(rhs) {
+TemplateParameterDeclaration::TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs) : Declaration(*new TemplateParameterDeclarationData(*rhs.d_func())) {
   d_func_dynamic()->m_defaultParameter = rhs.d_func()->m_defaultParameter;
   setIsTypeAlias(true);
 }
 
-Declaration* TemplateParameterDeclaration::clone() const {
+Declaration* TemplateParameterDeclaration::clonePrivate() const {
   return new TemplateParameterDeclaration(*this);
 }
 
