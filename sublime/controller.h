@@ -161,6 +161,7 @@ Q_SIGNALS:
     void toolViewAdded(Sublime::View*);
     void aboutToRemoveView(Sublime::View*);
     void viewAdded(Sublime::View*);
+    void toolViewMoved(Sublime::View*);
 
 private:
     void init();

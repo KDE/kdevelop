@@ -128,6 +128,8 @@ void Area::initialize()
             d->controller, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
     connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
             d->controller, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
+    connect(this, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+            d->controller, SIGNAL(toolViewMoved(Sublime::View*)));
 
     /* In theory, ownership is passed to us, so should not bother detecting
     deletion outside.  */
