@@ -55,16 +55,7 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, TopDUContext *pare
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 {
-    QString env;
-    QString start=QString("%1=").arg(varName);
-    foreach(const QString& iEnv, QProcess::systemEnvironment())
-    {
-        if(iEnv.startsWith(start))
-        {
-            env=iEnv;
-            break;
-        }
-    }
+    QString env=QString::fromLatin1(getenv(varName.toLatin1()));
 //     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
     if(!env.isEmpty())
     {
@@ -75,7 +66,7 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
         separator = ':';
 #endif
         kDebug(9042) << "resolving env:" << varName << "=" << env;
-        return env.split('=')[1].split(separator);
+        return env.split(separator);
     }
     else
     {
