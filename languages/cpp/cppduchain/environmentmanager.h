@@ -319,7 +319,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     
     bool m_modificationTimesChanged;
     
-    DUCHAIN_DECLARE_DATA(EnvironmentFile);
+    DUCHAIN_DECLARE_DATA(EnvironmentFile)
     /*
     Needed data:
     1. Set of all strings that appear in this file(For memory-reasons they should be taken from a global string-repository, because many will be the same)
