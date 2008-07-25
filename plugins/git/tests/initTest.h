@@ -43,7 +43,9 @@ class GitInitTest: public QObject
 
     private slots:
         void initTestCase();
-        void testInitAndCommit();
+        void testInit();
+        void testAdd();
+        void testCommit();
         void cleanupTestCase();
 
     private:

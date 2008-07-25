@@ -109,7 +109,16 @@ void GitInitTest::addFiles()
     f.flush();
     f.close();
 
-    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
+    //add always should use relative path to the any directory of the repository, let's check:
+    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_DIR1))));
+    QVERIFY( j );
+
+    if (j)
+        QVERIFY(j->exec() );
+    //Wait the job will be finished
+    while(j->status() == KDevelop::VcsJob::JobRunning) ;
+
+    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
     QVERIFY( j );
 
     if (j)
@@ -216,14 +225,20 @@ void GitInitTest::cloneRepository()
     QVERIFY( QFileInfo(QString(GITTEST_BASEDIR2"kdevGit_testdir/.git/")).exists() );
 }
 
-void GitInitTest::testInitAndCommit()
+void GitInitTest::testInit()
 {
     repoInit();
-    addFiles();
-    commitFiles();
-    cloneRepository();
 }
 
+void GitInitTest::testAdd()
+{
+    addFiles();
+}
+
+void GitInitTest::testCommit()
+{
+    commitFiles();
+}
 
 KDEVTEST_MAIN(GitInitTest)
 

@@ -50,7 +50,6 @@ bool IDVCSexecutor::prepareJob(DVCSjob* job, const QString& repository, enum Req
     job->clear();
 
     //repository is sent by ContextMenu, so we check if it is a file and use it's path
-    //if it's a dir then we use it as a working dir and use "git add ."
     QFileInfo repoInfo = QFileInfo(repository);
     if (repoInfo.isFile())
         job->setDirectory(repoInfo.path());
@@ -67,16 +66,18 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
     foreach(KUrl url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
-        QFileInfo fileInfo = QFileInfo(url.path());
-        QString file = url.path();
-        ///@todo else will work only for relative pathes
-        ///I don't think any ctions required, "." in working dir is ok for us
-        if (fileInfo.isFile() || fileInfo.isDir())
-            file = fileInfo.fileName();
+        //all urls should be relative to the working directory!
+        //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
+        QString file;
+        if (!QFileInfo(url.path()).isRelative() )
+            file = KUrl::relativeUrl(job->getDirectory(), url);
+        //actually this shouldn't happen (only in Git tests)
+        else if (QDir(job->getDirectory()).dirName() == url.path())
+            file = ".";
         else
-            file = QString(".");
-        qDebug() << "url is: " << url <<" url.path() is " << url.path()  << " file is: " << file;
+            file = url.path();
         args << KShell::quoteArg(file);
+        qDebug() << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
     }
 
     *job << args;
