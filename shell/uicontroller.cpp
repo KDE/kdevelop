@@ -295,8 +295,10 @@ void UiController::addNewToolView(MainWindow *mw)
     {
         ViewSelectorItem *current = static_cast<ViewSelectorItem*>(list->currentItem());
         Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
-        mw->area()->addToolView(doc->createView(),
+        Sublime::View *view = doc->createView();
+        mw->area()->addToolView(view,
             Sublime::dockAreaToPosition(current->factory->defaultPosition()));
+        current->factory->viewCreated(view);
     }
     delete dia;
 }
