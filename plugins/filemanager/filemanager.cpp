@@ -59,7 +59,6 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 #else
     dirop->setView( KFile::Simple );
 #endif
-    dirop->setOnlyDoubleClickSelectsFiles(true);
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     l->addWidget(dirop);
 
