@@ -25,7 +25,7 @@ def parse(item):
 
 	s=SolutionReader(solutionfile)
 	
-	print "solution read, solutions: "+str(s.projects().keys())
+	print "solution read, projects: "+str(s.projects().keys())
 	
 	prjs=s.projects().keys()
 	for projectName in prjs:
