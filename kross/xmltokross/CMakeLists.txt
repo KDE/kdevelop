@@ -1,8 +1,6 @@
 
 find_program(CPPTOXML cpptoxml)
 
-message(STATUS sosdkjgskljghslkjfghsldfkjhgsdflkjghs)
-
 # if(CPPTOXML)
     #we create the xmltokross executable
     add_executable(xmltokross main.cpp)
