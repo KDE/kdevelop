@@ -51,9 +51,7 @@ void EditorRevisionTracker::addUrl(const KUrl& url)
   if (d->documents.contains(url))
     return;
 
-  EditorIntegrator editor;
-  editor.setCurrentUrl( IndexedString(url.pathOrUrl()) );
-  if (LockedSmartInterface smart = editor.smart())
+  if (LockedSmartInterface smart = EditorIntegrator::smart(url))
     d->documents.insert(url, smart->currentRevision());
   else
     d->documents.insert(url, -1);
@@ -71,12 +69,9 @@ void EditorRevisionTracker::removeUrl(const KUrl& url)
     return;
 
   int revision = d->documents[url];
-  if (revision != -1) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl( IndexedString(url.pathOrUrl()) );
-    if (LockedSmartInterface smart = editor.smart())
+  if (revision != -1)
+    if (LockedSmartInterface smart = EditorIntegrator::smart(url))
       smart->releaseRevision(revision);
-  }
 
   d->documents.remove(url);
 }
@@ -87,19 +82,45 @@ void EditorRevisionTracker::removeUrls(const KUrl::List& list)
     removeUrl(url);
 }
 
+KTextEditor::Cursor EditorRevisionTracker::translateCursor(const KUrl& url, const KTextEditor::Cursor& cursor) const
+{
+  if (LockedSmartInterface smart = EditorIntegrator::smart(url))
+    return smart->translateFromRevision(KTextEditor::Range(cursor, 0)).start();
+
+  return cursor;
+}
+
+KTextEditor::Range EditorRevisionTracker::translateRange(const KUrl& url, const KTextEditor::Range& range) const
+{
+  if (!d->documents.contains(url) || d->documents[url] == -1)
+    return range;
+
+  if (LockedSmartInterface smart = EditorIntegrator::smart(url)) {
+    smart->useRevision( d->documents[url] );
+    return smart->translateFromRevision( range );
+  }
+
+  return range;
+}
+
 void EditorRevisionTracker::openUrl(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-  if (IDocument* doc = ICore::self()->documentController()->documentForUrl( url )) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl( IndexedString(url.pathOrUrl()) );
-    if (LockedSmartInterface smart = editor.smart()) {
-      KTextEditor::Range translated = editor.translate( smart, SimpleRange(KTextEditor::Range(cursor, 0)) ).textRange();
-      ICore::self()->documentController()->activateDocument( doc, translated );
-      return;
+  if (d->documents.contains(url) && d->documents[url] != -1) {
+    if (IDocument* doc = ICore::self()->documentController()->documentForUrl( url )) {
+      if (LockedSmartInterface smart = EditorIntegrator::smart(url)) {
+        smart->useRevision( d->documents[url] );
+        ICore::self()->documentController()->activateDocument( doc, smart->translateFromRevision( KTextEditor::Range(cursor, 0) ) );
+        return;
+      }
     }
   }
 
   ICore::self()->documentController()->openDocument( url, cursor );
+}
+
+KUrl::List EditorRevisionTracker::urls() const
+{
+  return d->documents.keys();
 }
 
 }

@@ -43,14 +43,13 @@ namespace KDevelop
 
 /**
  * Class to hold a reference to a locked KTextEditor::SmartInterface.
- * Implicitly shared.
+ * Implicitly shared.  To get an instance of this class, see EditorIntegrator::smart()
  *
  * This class is re-entrant, but not thread safe.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT LockedSmartInterface
 {
   public:
-    LockedSmartInterface(KTextEditor::SmartInterface* iface = 0, KTextEditor::Document* doc = 0);
     LockedSmartInterface(const LockedSmartInterface& lock);
     ~LockedSmartInterface();
 
@@ -68,6 +67,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT LockedSmartInterface
     operator bool() const;
 
   private:
+    friend class EditorIntegrator;
+    LockedSmartInterface(KTextEditor::SmartInterface* iface = 0, KTextEditor::Document* doc = 0);
+
     class LockedSmartInterfacePrivate* const d;
 };
 
@@ -92,7 +94,7 @@ public:
   ///A hack working around problems while initialization, @see DUChain::documentLoadedPrepare. It used to happen that the document wasn't registered
   ///to the editor-integrator there, and thus no smart-ranges/highlighting were created. We use this to inject the document.
   void insertLoadedDocument(KTextEditor::Document* document);
-  
+
   /**
    * Initialise the editor integrator.
    * Only needs to be called once from the main thread.
@@ -145,8 +147,11 @@ public:
   /// Associate this editor integrator with the editor which is currently editing the given \a url
   void setCurrentUrl(const IndexedString& url);
 
-  /// Convenience function to return the SmartInterface for the current document.
+  /// Retrieve a locked version of the SmartInterface for the current document, or null if one does not exist / is being deleted etc.
   LockedSmartInterface smart() const;
+
+  /// Retrieve a locked version of the SmartInterface for the current document, or null if one does not exist / is being deleted etc.
+  static LockedSmartInterface smart(const KUrl& url);
 
   /// Top range type enumeration
   enum TopRangeType {

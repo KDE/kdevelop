@@ -116,6 +116,19 @@ LockedSmartInterface EditorIntegrator::smart() const
   return LockedSmartInterface(d->m_smart, d->m_currentDocument);
 }
 
+LockedSmartInterface EditorIntegrator::smart(const KUrl& url)
+{
+  QMutexLocker lock(data()->mutex);
+
+  IndexedString indexedUrl(url.pathOrUrl());
+  if (data()->documents.contains(indexedUrl)) {
+    EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
+    return LockedSmartInterface(dynamic_cast<KTextEditor::SmartInterface*>(i.document), i.document);
+  }
+
+  return LockedSmartInterface();
+}
+
 SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
 {
   LockedSmartInterface iface = smart();

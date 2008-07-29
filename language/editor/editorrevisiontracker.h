@@ -41,11 +41,42 @@ public:
   /// Destructor.
   ~EditorRevisionTracker();
 
+  /// Add a URL to be tracked. \param url url to track.
   void addUrl(const KUrl& url);
+
+  /// Add a list of URLs to be tracked. \param list urls to track.
   void addUrls(const KUrl::List& list);
 
+  /// Stop tracking the given \a url. \param url url to remove from the tracking list.
   void removeUrl(const KUrl& url);
+
+  /// Stop tracking the given url \a list. \param list urls to stop tracking.
   void removeUrls(const KUrl::List& list);
+
+  /// Retrieve the list of tracked urls.
+  KUrl::List urls() const;
+
+  /**
+   * Translate the given \a cursor position to the point in time at which
+   * the \a url was added to the tracker.
+   *
+   * \param url url of the cursor
+   * \param cursor position to translate
+   * \returns the translated cursor, or an unchanged cursor if translation is not
+   *          available.
+   */
+  KTextEditor::Cursor translateCursor(const KUrl& url, const KTextEditor::Cursor& cursor) const;
+
+  /**
+   * Translate the given text \a range to the point in time at which
+   * the \a url was added to the tracker.
+   *
+   * \param url url of the cursor
+   * \param range text range to translate
+   * \returns the translated range, or an unchanged range if translation is not
+   *          available.
+   */
+  KTextEditor::Range translateRange(const KUrl& url, const KTextEditor::Range& range) const;
 
   /**
    * Open the given \a url at the given \a cursor position,
