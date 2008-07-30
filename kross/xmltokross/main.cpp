@@ -21,33 +21,14 @@
 #include <QFile>
 #include <QDebug>
 #include <QStringList>
+#include "cppxmlparse.h"
 
-class XmlToKross
+class KrossWrapper : public XmlToKross
 {
     public:
-        struct method {
-            struct argument { QString name, type, def; };
-            QString funcname;
-            QString returnType;
-            QString access;
-            bool isConst;
-            QList<argument> args;
-        };
-        
-        XmlToKross(QXmlStreamReader& _xml) : xml(_xml){}
+        KrossWrapper(QXmlStreamReader& _xml) : XmlToKross(_xml) {}
         QString output;
         QString handlersHeader;
-        QXmlStreamReader& xml;
-        QStringList definedClasses;
-        QString inNamespace;
-        QStringList includes;
-        QString filename;
-        method currentMethod;
-        QMap <QString, QString> classNamespace;
-        int inclass;
-        
-        void setIncludes(const QStringList& _includes) { includes=_includes; }
-        void setFileName(const QString& fn) { filename=fn; }
         
         void writeDocument()
         {
@@ -98,6 +79,11 @@ class XmlToKross
             output += "\t\tQ_SCRIPTABLE "+type+" get"+name+"() const { return wrapped->"+name+"; }\n";
         }
         
+        void writeNamespace(const QString& name)
+        {
+            output += "using namespace "+name+";\n\n";
+        }
+        
         void createHandler(const QString& classname)
         {
             //TODO: Should improve the memory management. Use harald's script tools.
@@ -109,7 +95,7 @@ class XmlToKross
             handlername[0]=handlername[0].toLower();
             
             handlersHeader += "\tQVariant _"+handlername+"Handler(void* type);\n";
-            handlersHeader += "\tQVariant "+handlername+"Handler("+classNS+classname+"* type) { return _"+handlername+"Handler((void*) type); }\n\n";
+            handlersHeader += "\tQVariant "+handlername+"Handler("+classNS+classname+"* type) { return _"+handlername+"Handler((void*) type); }\n";
             handlersHeader += "\tQVariant "+handlername+"Handler(const "+classNS+classname+"* type) "
                                 "{ return _"+handlername+"Handler((void*) type); }\n\n";
             
@@ -179,94 +165,6 @@ class XmlToKross
             
             output += "); }\n";
         }
-        
-        int start()
-        {
-            inclass=0;
-            while (!xml.atEnd())
-            {
-                QXmlStreamReader::TokenType t=xml.readNext(); 
-                QString str;
-                
-                switch(t)
-                {
-                    case QXmlStreamReader::Invalid:
-                        qDebug() << "invalid token!" << xml.errorString() << endl;
-                        break;
-                    case QXmlStreamReader::StartDocument:
-                        writeDocument();
-                        break;
-                    case QXmlStreamReader::StartElement:
-//                         qDebug() << "Element " << xml.name().toString() << endl;
-                        str=xml.name().toString();
-                        if(str=="Class")
-                        {
-                            writeClass(xml.attributes().value(QString(), "name").toString());
-                            inclass++;
-                        }
-                        else if(str=="Function")
-                        {
-                            QString funcname=xml.attributes().value(QString(), "name").toString();
-                            QString rettype=xml.attributes().value(QString(), "type_name").toString();
-                            bool isConst=xml.attributes().value(QString(), "constant").toString()==QChar('1');
-                            currentMethod=method();
-                            currentMethod.access=xml.attributes().value(QString(), "access").toString();
-                            currentMethod.funcname=funcname;
-                            currentMethod.returnType=rettype;
-                            currentMethod.isConst=isConst;
-                            if(funcname==definedClasses.last() || funcname=='~'+definedClasses.last() )
-                                currentMethod.access="constructor";
-                        }
-                        else if(str=="Argument")
-                        {
-                            method::argument arg;
-                            arg.name=xml.attributes().value(QString(), "name").toString();
-                            arg.type=xml.attributes().value(QString(), "type_name").toString();
-                            arg.def=xml.attributes().value(QString(), "defaultvalue").toString();
-                            QString context=xml.attributes().value(QString(), "context").toString();
-                            if(!arg.def.isEmpty() && arg.type.startsWith(context))
-                                arg.def.prepend(context+"::");
-                            
-                            currentMethod.args.append(arg);
-                        }
-                        else if(str=="Namespace")
-                        {
-                            QString name=xml.attributes().value(QString(), "name").toString();
-                            if(!inNamespace.isEmpty())
-                                inNamespace.append("::");
-                            inNamespace.append(name);
-                            output += "using namespace "+name+";\n\n";
-                        }
-                        else if(str=="Variable" && xml.attributes().value(QString(), "access").toString()=="public")
-                        {
-                            writeVariable(xml.attributes().value(QString(), "name").toString(),
-                                          xml.attributes().value(QString(), "type_name").toString(), xml.attributes().value(QString(), "type_constant").toString()=="1");
-                        }
-                        break;
-                    case QXmlStreamReader::EndDocument:
-                        writeEndDocument();
-                        break;
-                    case QXmlStreamReader::EndElement:
-                        str=xml.name().toString();
-                        if(str=="Class")
-                        {
-                            inclass--;
-                            writeEndClass();
-                        }
-                        else if(str=="Function" && currentMethod.access=="public" && inclass>0)
-                            writeEndFunction(currentMethod);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if (xml.error())
-            {
-                qDebug() << "error!" << xml.errorString();
-                return 2;
-            }
-            return 0;
-        }
 };
 
 int main(int argc, char** argv)
@@ -307,7 +205,7 @@ int main(int argc, char** argv)
     }
     
     QXmlStreamReader xml(&f);
-    XmlToKross p(xml);
+    KrossWrapper p(xml);
     p.setIncludes(includes);
     p.setFileName(filename);
     
