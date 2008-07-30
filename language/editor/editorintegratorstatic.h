@@ -50,8 +50,9 @@ public:
   virtual ~EditorIntegratorStatic();
 
   void insertLoadedDocument(KTextEditor::Document* document);
-  
+
 Q_SIGNALS:
+  void documentLoaded(KTextEditor::Document* document);
   void documentAboutToBeDeleted(KTextEditor::Document* document);
   void documentAboutToBeReloaded(KTextEditor::Document* document);
 

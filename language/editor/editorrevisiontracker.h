@@ -19,6 +19,7 @@
 #ifndef EDITORREVISIONTRACKER_H
 #define EDITORREVISIONTRACKER_H
 
+#include <QObject>
 #include <KUrl>
 #include <KTextEditor/Cursor>
 
@@ -26,17 +27,21 @@
 
 namespace KDevelop {
 
+class IDocument;
+
 /**
  * This class allows for convenient tracking of revisions for a list of
  * urls and their associated revisions at the time this object is created.
  *
  * \author Hamish Rodda \<rodda@kde.org\>
  */
-class KDEVPLATFORMLANGUAGE_EXPORT EditorRevisionTracker
+class KDEVPLATFORMLANGUAGE_EXPORT EditorRevisionTracker : public QObject
 {
+  Q_OBJECT
+
 public:
   /// Constructor.
-  EditorRevisionTracker();
+  EditorRevisionTracker(QObject* parent = 0);
 
   /// Destructor.
   ~EditorRevisionTracker();
@@ -86,7 +91,12 @@ public:
    * \param url url to open or activate
    * \param cursor position to navigate to (after translation, if applicable)
    */
-  void openUrl(const KUrl& url, const KTextEditor::Cursor& cursor);
+  void openUrl(const KUrl& url, const KTextEditor::Cursor& cursor) const;
+
+private Q_SLOTS:
+  void documentLoaded(KTextEditor::Document* document);
+  void documentClosed(KTextEditor::Document* document);
+  void documentUrlChanged(KDevelop::IDocument* document);
 
 private:
   class EditorRevisionTrackerPrivate* const d;

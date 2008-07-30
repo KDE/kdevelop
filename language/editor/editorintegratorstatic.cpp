@@ -56,7 +56,7 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
     if(documents.contains(IndexedString(doc->url().pathOrUrl())))
       return;
   }
-  
+
   DocumentInfo i;
   i.document = doc;
   i.revision = -1;
@@ -80,6 +80,8 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
 
     documents.insert(IndexedString(doc->url().pathOrUrl()), i);
   }
+
+  emit documentLoaded(doc);
 }
 
 void EditorIntegratorStatic::documentLoaded()

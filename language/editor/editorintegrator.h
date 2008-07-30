@@ -86,6 +86,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT LockedSmartInterface
 class KDEVPLATFORMLANGUAGE_EXPORT EditorIntegrator
 {
   friend class EditorIntegratorStatic;
+  friend class EditorRevisionTracker;
 
 public:
   EditorIntegrator();
