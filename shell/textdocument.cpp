@@ -127,7 +127,8 @@ struct TextDocumentPrivate {
 
     void documentUrlChanged(KTextEditor::Document* document)
     {
-        m_textDocument->setUrl(document->url());
+        if (m_textDocument->url() != document->url())
+            m_textDocument->setUrl(document->url());
     }
 
 private:

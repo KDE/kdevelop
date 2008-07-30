@@ -392,7 +392,6 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         d->fileOpenRecent->addUrl( url );
     }
 
-    kDebug(0) << range;
     if( range.isValid() )
     {
         if (range.isEmpty())
