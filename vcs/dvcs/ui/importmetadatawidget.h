@@ -29,8 +29,6 @@
 
 #include "ui_importmetadatawidget.h"
 
-class GitPlugin;
-
 namespace KDevelop
 {
 class VcsMapping;

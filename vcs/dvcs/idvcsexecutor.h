@@ -21,10 +21,10 @@
 #ifndef IDVCS_EXECUTOR_H
 #define IDVCS_EXECUTOR_H
 
-#include<QStringList>
-#include <KUrl>
+#include<QtCore/QStringList>
+#include <KDE/KUrl>
 
-#include "../vcsexport.h"
+#include <vcsexport.h>
 
 class KUrl;
 class DVCSjob;
@@ -81,7 +81,7 @@ public:
     virtual DVCSjob* clone(const KUrl &directory, const KUrl repository) = 0;
     virtual DVCSjob* add(const QString& repository, const KUrl::List &files) = 0;
     virtual DVCSjob* commit(const QString& repository,
-                            const QString& message = "KDevelop didn't provide any message, it may be a bug",
+                            const QString& message = "KDevelop did not provide any message, it may be a bug",
                             const KUrl::List& files = QStringList("-a")) = 0;
     virtual DVCSjob* remove(const QString& repository, const KUrl::List& files) = 0;
     virtual DVCSjob* status(const QString & repo, const KUrl::List & files,
@@ -102,7 +102,13 @@ public:
     ///TODO: should be pure virtual
     virtual void parseOutput(const QString& jobOutput,
                              QList<DVCScommit>& revisions) const;
+    
     virtual DVCSjob* checkout(const QString &repository, const QString &branch);
+    virtual DVCSjob* branch(const QString &repository, const QString &basebranch = QString(), 
+                            const QString &branch = QString(), const QStringList &args = QStringList());
+    //parsers for branch:
+    virtual QString curBranch(const QString &repository);
+    virtual QStringList branches(const QString &repository);
 
 protected:
     enum RequestedOperation {

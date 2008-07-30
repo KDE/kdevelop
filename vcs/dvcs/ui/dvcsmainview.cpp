@@ -26,7 +26,7 @@
 #include <KLocale>
 #include <KDebug>
 
-#include "dvcsplugin.h"
+#include "../dvcsplugin.h"
 #include "dvcsgenericoutputview.h"
 
 DVCSmainView::DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QWidget* parent )
@@ -45,7 +45,7 @@ DVCSmainView::DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QW
 
     // create a default output view
     m_mainview = new DVCSgenericOutputView(m_plugin);
-    tabwidget->addTab( m_mainview, i18n("Git") );
+    tabwidget->addTab( m_mainview, i18n("DVCS") );
 
     // add a close button as corner widget
     m_closeButton = new QToolButton(tabwidget);

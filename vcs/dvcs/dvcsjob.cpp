@@ -35,15 +35,15 @@
 #include <processlinemaker.h>
 #include <iplugin.h>
 
-struct DVCSjob::Private
+struct DVCSjobPrivate
 {
-    Private() : isRunning(false), commMode(KProcess::SeparateChannels), vcsplugin(0)
+    DVCSjobPrivate() : isRunning(false), commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
         childproc = new KProcess;
         lineMaker = new KDevelop::ProcessLineMaker( childproc );
     }
 
-    ~Private() {
+    ~DVCSjobPrivate() {
         if (lineMaker) delete lineMaker;
         if (childproc) delete childproc;
     }
@@ -61,7 +61,7 @@ struct DVCSjob::Private
 };
 
 DVCSjob::DVCSjob(KDevelop::IPlugin* parent)
-    : VcsJob(parent), d(new Private)
+    : VcsJob(parent), d(new DVCSjobPrivate)
 {
     d->vcsplugin = parent;
 }

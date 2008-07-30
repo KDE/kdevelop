@@ -26,7 +26,6 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <QFileInfo>
 #include <QString>
 #include <QDateTime>
 #include <KLocale>

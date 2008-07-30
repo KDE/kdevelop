@@ -63,14 +63,14 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
 {
     QStringList args;
 
-    foreach(KUrl url, urls) {
+    foreach(const KUrl &url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
         //all urls should be relative to the working directory!
         //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
         QString file;
         if (!QFileInfo(url.path()).isRelative() )
-            file = KUrl::relativeUrl(job->getDirectory() + "/", url);
+            file = KUrl::relativeUrl(job->getDirectory() + '/', url);
         //actually this shouldn't happen (only in Git tests)
         else if (QDir(job->getDirectory()).dirName() == url.path())
             file = ".";
@@ -103,5 +103,27 @@ DVCSjob* IDVCSexecutor::checkout(const QString &repository, const QString &branc
 DVCSjob* IDVCSexecutor::log(const KUrl& url)
 {
     Q_UNUSED(url)
-            return empty_cmd();
+    return empty_cmd();
+}
+
+DVCSjob* IDVCSexecutor::branch(const QString &repository, const QString &basebranch, const QString &branch,
+                               const QStringList &args)
+{
+    Q_UNUSED(repository)
+    Q_UNUSED(branch)
+    Q_UNUSED(basebranch)
+    Q_UNUSED(args)
+    return empty_cmd();
+}
+
+QString IDVCSexecutor::curBranch(const QString &repository) 
+{
+    Q_UNUSED(repository)
+    return QString();
+}
+
+QStringList IDVCSexecutor::branches(const QString &repository) 
+{
+    Q_UNUSED(repository)
+    return QStringList();
 }

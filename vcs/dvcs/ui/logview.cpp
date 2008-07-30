@@ -20,8 +20,8 @@
 #include <KDebug>
 #include <KMessageBox>
 
-#include "dvcsplugin.h"
-#include "dvcsjob.h"
+#include "../dvcsplugin.h"
+#include "../dvcsjob.h"
 
 LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, DVCSjob* job, QWidget *parent)
     : QWidget(parent), Ui::LogViewBase(), m_plugin(plugin)
@@ -59,7 +59,7 @@ void LogView::slotJobFinished(KJob* job)
     } else {
         QString html;
 
-        foreach(DVCScommit item, logEntries) {
+        foreach(const DVCScommit &item, logEntries) {
             html += "<b>"+i18n("Commit")+":</b> "+item.commit+"<br>";
             html += "<b>"+i18n("Author")+":</b> "+item.author+"<br>";
             html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";

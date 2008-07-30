@@ -27,11 +27,12 @@
 #ifndef DVCS_JOB_H
 #define DVCS_JOB_H
 
-#include <QStringList>
-#include <KProcess>
+#include <QtCore/QStringList>
+#include <KDE/KProcess>
 
 #include <vcsjob.h>
 
+class DVCSjobPrivate;
 
 /**
  * This class is capable of running our git commands
@@ -92,19 +93,18 @@ public:
     virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
 
-public slots:
+public Q_SLOTS:
     void cancel();
     bool isRunning() const;
 
-private slots:
+private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout(const QStringList&);
     void slotReceivedStderr(const QStringList&);
 
 private:
-    struct Private;
-    Private* d;
+    DVCSjobPrivate* const d;
 };
 
 #endif

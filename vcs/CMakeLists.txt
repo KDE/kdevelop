@@ -9,11 +9,12 @@ set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
-    dvcs/commitdialog.ui
-    dvcs/cvsgenericoutputview.ui
-    dvcs/cvsmainview.ui
-    dvcs/importmetadatawidget.ui
-    dvcs/logview.ui
+    dvcs/ui/commitdialog.ui
+    dvcs/ui/cvsgenericoutputview.ui
+    dvcs/ui/cvsmainview.ui
+    dvcs/ui/importmetadatawidget.ui
+    dvcs/ui/logview.ui
+    dvcs/ui/branchmanager.ui
 )
 
 set(kdevplatformvcs_LIB_SRCS
@@ -33,14 +34,15 @@ set(kdevplatformvcs_LIB_SRCS
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
     dvcs/dvcsjob.cpp
-    dvcs/commitdialog.cpp
     dvcs/dvcsplugin.cpp
-    dvcs/dvcsmainview.cpp
-    dvcs/dvcsgenericoutputview.cpp
-    dvcs/importdialog.cpp
-    dvcs/importmetadatawidget.cpp
-    dvcs/logview.cpp
     dvcs/idvcsexecutor.cpp
+    dvcs/ui/commitdialog.cpp
+    dvcs/ui/dvcsmainview.cpp
+    dvcs/ui/dvcsgenericoutputview.cpp
+    dvcs/ui/importdialog.cpp
+    dvcs/ui/importmetadatawidget.cpp
+    dvcs/ui/logview.cpp
+    dvcs/ui/branchmanager.cpp
 )
 
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})

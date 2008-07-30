@@ -54,21 +54,21 @@
 
 #include "vcsjob.h"
 #include "dvcsjob.h"
-#include "dvcsmainview.h"
-#include "dvcsgenericoutputview.h"
-#include "commitdialog.h"
-#include "importdialog.h"
-#include "importmetadatawidget.h"
-#include "logview.h"
+#include "ui/dvcsmainview.h"
+#include "ui/dvcsgenericoutputview.h"
+#include "ui/commitdialog.h"
+#include "ui/importdialog.h"
+#include "ui/importmetadatawidget.h"
+#include "ui/logview.h"
+#include "ui/branchmanager.h"
 
 using KDevelop::DistributedVersionControlPlugin;
 
 
 //class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
-    :IPlugin(compData, parent)
+    :IPlugin(compData, parent), d(new DistributedVersionControlPluginPrivate())
 {
-    d = new DVCSpluginPrivate();
     d->m_factory = new KDevDVCSViewFactory(this);
 }
 
@@ -294,10 +294,7 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::checkout(const QString &localLocation,
                                                   const QString &repo)
 {
-    Q_UNUSED(localLocation)
-    Q_UNUSED(repo)
-    kDebug(9500) << "Ooops, it's not implemented yet";
-    return d->m_exec->empty_cmd();
+    return d->m_exec->checkout(repo, localLocation);
 }
 
 // End:  KDevelop::IDistributedVersionControl
@@ -369,7 +366,7 @@ KDevelop::ContextMenuExtension
     ContextMenuExtension menuExt;
 
     bool hasVersionControlledEntries = false;
-    foreach(KUrl url, ctxUrlList)
+    foreach(const KUrl &url, ctxUrlList)
     {
         if(isVersionControlled( url ) )
         {
@@ -398,7 +395,7 @@ KDevelop::ContextMenuExtension
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
 
-        action = new KAction(i18n("Checkout"), this);
+        action = new KAction(i18n("Branch Manager"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
 
@@ -494,27 +491,14 @@ void DistributedVersionControlPlugin::ctxRemove()
                 this, SIGNAL( jobFinished(KJob*) ));
         job->start();
     }
-    connect(job, SIGNAL( result(KJob*) ),
-            this, SIGNAL( jobFinished(KJob*) ));
-    job->start();
 }
 
 void DistributedVersionControlPlugin::ctxCheckout()
 {
-    CommitDialog dlg;
-    QString msg;
-    if( dlg.exec() == QDialog::Accepted )
-    {
-        msg = dlg.message();
-    }
- 
-    //Todo: to not forget to move to the checkout()
-    DVCSjob* job = d->m_exec->checkout(d->m_ctxUrlList.first().path(), msg);
-    if (job) {
-        connect(job, SIGNAL(result(KJob*) ),
-                this, SLOT(checkoutFinished(KJob*) ));
-        job->start();
-    }
+    BranchManager *brManager = new BranchManager(d->m_ctxUrlList.first().path(), proxy());
+    connect(brManager, SIGNAL(checkouted(KJob*) ),
+            this, SLOT(checkoutFinished(KJob*) ));
+    brManager->show();
 }
 
 void DistributedVersionControlPlugin::ctxLog()
@@ -555,7 +539,7 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 //     core()->projectController()->closeProject(curProject);
 //     core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
-    emit jobFinished(checkoutJob);
+//     emit jobFinished(_checkoutJob); //couses crash!
 }
 
 //-----------------------------------------------------------------------------------

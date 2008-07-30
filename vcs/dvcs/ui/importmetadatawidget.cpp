@@ -27,8 +27,8 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include <vcs/vcsmapping.h>
-#include <vcs/vcslocation.h>
+#include <vcsmapping.h>
+#include <vcslocation.h>
 
 ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     : KDevelop::VcsImportMetadataWidget(parent), m_ui( new Ui::ImportMetadataWidget )

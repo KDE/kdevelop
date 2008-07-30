@@ -67,7 +67,7 @@ class HgExecutor : public QObject, public KDevelop::IDVCSexecutor
 {
     Q_OBJECT
 public:
-    HgExecutor(KDevelop::IPlugin* parent = 0);
+    explicit HgExecutor(KDevelop::IPlugin* parent = 0);
     ~HgExecutor();
 
     bool isValidDirectory(const KUrl &dirPath);
@@ -77,7 +77,7 @@ public:
     DVCSjob* clone(const KUrl &directory, const KUrl repository);
     DVCSjob* add(const QString& repository, const KUrl::List &files);
     DVCSjob* commit(const QString& repository,
-                    const QString& message = "KDevelop didn't provide any message, it may be a bug",
+                    const QString& message = "KDevelop did not provide any message, it may be a bug",
                     const KUrl::List& files = QStringList());
     DVCSjob* remove(const QString& repository, const KUrl::List& files);
     DVCSjob* status(const QString & repo, const KUrl::List & files,

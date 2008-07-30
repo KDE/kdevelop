@@ -21,11 +21,11 @@
 #ifndef DVCS_PLUGIN_H
 #define DVCS_PLUGIN_H
 
-#include <KUrl>
-#include <KJob>
+#include <KDE/KUrl>
+#include <KDE/KJob>
 #include <kcomponentdata.h>
 
-#include <qobject.h>
+#include <QtCore/QObject>
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <iuicontroller.h>
@@ -36,7 +36,7 @@
 class QString;
 class KDevDVCSViewFactory;
 
-struct DVCSpluginPrivate {
+struct DistributedVersionControlPluginPrivate {
     KDevDVCSViewFactory* m_factory;
     KDevelop::IDVCSexecutor* m_exec;
     KUrl::List m_ctxUrlList;
@@ -119,7 +119,7 @@ public:
     // From KDevelop::IPlugin
     virtual ContextMenuExtension contextMenuExtension(Context*);
 
-public slots:
+public Q_SLOTS:
     //slots for context menu
     void ctxCommit();
     void ctxAdd();
@@ -133,11 +133,11 @@ public slots:
 
     void checkoutFinished(KJob*);
 
-signals:
+Q_SIGNALS:
     /**
      * Some actions like commit, add, remove... will connect the job's
      * result() signal to this signal. Anybody, like for instance the
-     * GitMainView class, that is interested in getting notified about
+     * DVCSMainView class, that is interested in getting notified about
      * jobs that finished can connect to this signal.
      * @see class GitMainView
      */
@@ -156,7 +156,7 @@ protected:
     void setupActions();
 
 protected:
-    DVCSpluginPrivate* d;
+    DistributedVersionControlPluginPrivate* const d;
 };
 
 }

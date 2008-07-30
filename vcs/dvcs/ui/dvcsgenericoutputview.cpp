@@ -23,8 +23,8 @@
 
 #include "dvcsgenericoutputview.h"
 
-#include "dvcsplugin.h"
-#include "dvcsjob.h"
+#include "../dvcsplugin.h"
+#include "../dvcsjob.h"
 
 DVCSgenericOutputView::DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, DVCSjob* job, QWidget* parent)
     : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
