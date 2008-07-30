@@ -222,7 +222,7 @@ void GrepJob::start()
     setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
     setTitle(patternString());
-    setBehaviours( KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose );
+    setBehaviours( KDevelop::IOutputView::AllowUserClose );
 
     GrepOutputModel* grepModel = new GrepOutputModel(plugin());
     grepModel->setRegExp(pattern);

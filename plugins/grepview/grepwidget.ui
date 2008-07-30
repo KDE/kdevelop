@@ -140,7 +140,7 @@
     </widget>
    </item>
    <item row="3" column="1" colspan="4" >
-    <widget class="KUrlComboRequester" name="directoryRequester" >
+    <widget class="KUrlRequester" name="directoryRequester" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
        <horstretch>0</horstretch>
@@ -369,8 +369,8 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KUrlComboRequester</class>
-   <extends>KUrlRequester</extends>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
    <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
