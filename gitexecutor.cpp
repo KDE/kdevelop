@@ -120,6 +120,7 @@ DVCSjob* GitExecutor::commit(const QString& repository,
                              const QString &message, /*= "KDevelop didn't provide any message, it may be a bug"*/
                              const KUrl::List &args /*= QStringList("")*/)
 {
+    Q_UNUSED(args)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
         *job << "git-commit";
@@ -210,6 +211,80 @@ DVCSjob* GitExecutor::checkout(const QString &repository, const QString &branch)
     }
     if (job) delete job;
     return NULL;
+}
+
+DVCSjob* GitExecutor::branch(const QString &repository, const QString &basebranch, const QString &branch,
+                             const QStringList &args)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, repository) ) {
+        *job << "git-branch";
+        //Empty branch has 'something' so it breaks the command
+        if (!args.isEmpty())
+            *job << args.join(" ");
+        if (!branch.isEmpty())
+            *job << branch;
+        if (!basebranch.isEmpty())
+            *job << basebranch;
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+QString GitExecutor::curBranch(const QString &repository)
+{
+    DVCSjob* job = branch(repository);
+    if (job)
+    {
+        kDebug() << "Getting branch list";
+        job->exec();
+        while (job->status() == KDevelop::VcsJob::JobRunning)
+            ;
+    }
+    QString branch;
+    if (job->status() == KDevelop::VcsJob::JobSucceeded)
+        branch = job->output();
+
+    branch = branch.prepend('\n').section("\n*", 1);
+    branch = branch.section('\n', 0, 0).trimmed();
+    kDebug() << "Current branch is: " << branch;
+    return branch;
+}
+
+QStringList GitExecutor::branches(const QString &repository)
+{
+    DVCSjob* job = branch(repository);
+    if (job)
+    {
+        kDebug() << "Getting branch list";
+        job->exec();
+        while (job->status() == KDevelop::VcsJob::JobRunning)
+            ;
+    }
+    QStringList branchListDirty;
+    //     branches<< "master" << "test" << "brrr" << "br2";
+    if (job->status() == KDevelop::VcsJob::JobSucceeded)
+        branchListDirty = job->output().split('\n');
+    else
+        return QStringList();
+
+    QStringList branchList;
+    foreach(QString branch, branchListDirty)
+    {
+        if (branch.contains("*"))
+        {
+            branch = branch.prepend('\n').section("\n*", 1);
+            branch = branch.trimmed();
+        }
+        else
+        {
+            branch = branch.prepend('\n').section("\n", 1);
+            branch = branch.trimmed();
+        }
+        branchList<<branch;
+    }
+    return branchList;
 }
 
 //Actually we can just copy the outpuc without parsing. So it's a kind of draft for future
