@@ -130,6 +130,9 @@ Q_SIGNALS:
      * during documentLoaded(..).*/
     void documentLoadedPrepare( KDevelop::IDocument* document );
 
+    /**Emitted when a document url has changed.*/
+    void documentUrlChanged( KDevelop::IDocument* document );
+
     friend class IDocument;
 };
 

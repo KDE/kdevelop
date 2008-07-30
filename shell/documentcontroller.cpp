@@ -99,6 +99,32 @@ struct DocumentControllerPrivate {
         controller->openDocument(KUrl());
     }
 
+    void changeDocumentUrl(KDevelop::IDocument* document)
+    {
+        QMutableHashIterator<KUrl, IDocument*> it = documents;
+        while (it.hasNext()) {
+            if (it.next().value() == document) {
+                if (documents.contains(document->url())) {
+                    // Weird situation (saving as a file that is aready open)
+                    IDocument* origDoc = documents[document->url()];
+                    if (origDoc->state() & IDocument::Modified) {
+                        // given that the file has been saved, close the saved file as the other instance will become conflicted on disk
+                        document->close();
+                        controller->activateDocument( origDoc );
+                        break;
+                    }
+                    // Otherwise close the original document
+                    origDoc->close();
+                } else {
+                    // Remove the original document
+                    it.remove();
+                }
+
+                documents.insert(document->url(), document);
+                break;
+            }
+        }
+    }
 
     DocumentController* controller;
 
@@ -125,6 +151,8 @@ DocumentController::DocumentController( QObject *parent )
     d = new DocumentControllerPrivate(this);
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
         this, QDBusConnection::ExportScriptableSlots );
+
+    connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
 
     setupActions();
 }

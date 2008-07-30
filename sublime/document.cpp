@@ -89,6 +89,12 @@ QString Document::title() const
     return objectName();
 }
 
+void Document::setTitle(const QString& newTitle)
+{
+    setObjectName(newTitle);
+    emit titleChanged(this);
+}
+
 View *Document::newView(Document *doc)
 {
     emit viewNumberChanged(this);

@@ -99,5 +99,10 @@ KTextEditor::Range IDocument::textSelection() const
     return KTextEditor::Range::invalid();
 }
 
+void IDocument::notifyUrlChanged()
+{
+    emit core()->documentController()->documentUrlChanged(this);
+}
+
 }
 

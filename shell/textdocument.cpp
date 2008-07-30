@@ -125,6 +125,10 @@ struct TextDocumentPrivate {
         Core::self()->uiControllerInternal()->setStatusIcon(m_textDocument, statusIcon);
     }
 
+    void documentUrlChanged(KTextEditor::Document* document)
+    {
+        m_textDocument->setUrl(document->url());
+    }
 
 private:
     TextDocument *m_textDocument;
@@ -145,7 +149,7 @@ TextDocument::TextDocument(const KUrl &url, ICore* core)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
     if (url.url().endsWith("kdevtmp"))
-        setObjectName(i18n("Untitled"));
+        setTitle(i18n("Untitled"));
 }
 
 TextDocument::~TextDocument()
@@ -182,6 +186,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
         connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)),
                  this, SLOT(textChanged(KTextEditor::Document*)));
+        connect(d->document, SIGNAL(documentUrlChanged(KTextEditor::Document*)),
+                 this, SLOT(documentUrlChanged(KTextEditor::Document*)));
 
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)

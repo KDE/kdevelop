@@ -46,6 +46,7 @@ public:
     virtual ~PartDocument();
 
     virtual KUrl url() const;
+    void setUrl(const KUrl& newUrl);
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;

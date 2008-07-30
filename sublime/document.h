@@ -56,6 +56,8 @@ public:
 
     /**@return the document title.*/
     QString title() const;
+    /**Set the document title.*/
+    void setTitle(const QString& newTitle);
 
     /**@return the type of document which can be written to config.*/
     virtual QString documentType() const = 0;
@@ -69,6 +71,8 @@ Q_SIGNALS:
     void viewNumberChanged(Sublime::Document *doc);
     /**Emitted when the document is about to be deleted but is still in valid state.*/
     void aboutToDelete(Sublime::Document *doc);
+    /**Emitted when the document's title is changed.*/
+    void titleChanged(Sublime::Document *doc);
 
 protected:
     /**Creates and returns the new view. Reimplement in subclasses to instantiate

@@ -42,6 +42,7 @@ public:
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     KUrl url() const;
+    void setUrl(const KUrl& newUrl);
 
 private:
     struct UrlDocumentPrivate * const d;

@@ -50,6 +50,12 @@ KUrl UrlDocument::url() const
     return d->url;
 }
 
+void UrlDocument::setUrl(const KUrl& newUrl)
+{
+    d->url = newUrl;
+    setTitle(newUrl.fileName());
+}
+
 QWidget *UrlDocument::createViewWidget(QWidget *parent)
 {
     ///@todo adymo: load file contents here

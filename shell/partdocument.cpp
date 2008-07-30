@@ -185,6 +185,12 @@ KUrl PartDocument::url() const
     return Sublime::UrlDocument::url();
 }
 
+void PartDocument::setUrl(const KUrl& newUrl)
+{
+    Sublime::UrlDocument::setUrl(newUrl);
+    notifyUrlChanged();
+}
+
 }
 
 #include "partdocument.moc"

@@ -28,6 +28,7 @@ class QPaintEvent;
 namespace Sublime {
 
 class View;
+class Document;
 
 /**
 @short Container for the widgets.
@@ -64,6 +65,7 @@ Q_SIGNALS:
 
 private slots:
   void widgetActivated(int idx);
+  void documentTitleChanged(Sublime::Document* doc);
 private:
 
     struct ContainerPrivate * const d;

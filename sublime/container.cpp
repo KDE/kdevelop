@@ -76,13 +76,29 @@ void Container::addWidget(View *view)
     QWidget *w = view->widget(this);
     addTab(w, view->document()->title());
     d->viewForWidget[w] = view;
+    connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+}
+
+void Container::documentTitleChanged(Sublime::Document* doc)
+{
+    QMapIterator<QWidget*, View*> it = d->viewForWidget;
+    while (it.hasNext()) {
+        if (it.next().value()->document() == doc) {
+            int tabIndex = indexOf(it.key());
+            if (tabIndex != -1) {
+                setTabText(tabIndex, doc->title());
+            }
+            break;
+        }
+    }
 }
 
 void Sublime::Container::removeWidget(QWidget *w)
 {
     if (w) {
         removeTab(indexOf(w));
-        d->viewForWidget.remove(w);
+        View* view = d->viewForWidget.take(w);
+        disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
     }
 }
 
