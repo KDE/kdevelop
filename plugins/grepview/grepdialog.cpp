@@ -91,12 +91,13 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    directoryRequester->comboBox()->setEditable( true );
-    directoryRequester->comboBox()->addItems(cg.readPathEntry("LastSearchPaths", QStringList()));
+    //directoryRequester->comboBox()->setEditable( true );
+    //directoryRequester->comboBox()->addItems(cg.readPathEntry("LastSearchPaths", QStringList()));
     directoryRequester->setPath( QDir::homePath() );
     directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
-    directoryRequester->completionObject()->setDir( QDir::homePath() );
-    directoryRequester->completionObject()->setMode(KUrlCompletion::DirCompletion);
+    //directoryRequester->completionObject()->setDir( QDir::homePath() );
+    //directoryRequester->completionObject()->setMode(KUrlCompletion::DirCompletion);
+    //directoryRequester->completionObject()->setCompletionMode(KGlobalSettings::CompletionAuto);
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
@@ -136,7 +137,7 @@ GrepDialog::~GrepDialog()
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
-    cg.writePathEntry("LastSearchPaths", qCombo2StringList(directoryRequester->comboBox()));
+    //cg.writePathEntry("LastSearchPaths", qCombo2StringList(directoryRequester->comboBox()));
     cg.writeEntry("regexp", regexCheck->isChecked());
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
@@ -171,7 +172,7 @@ void GrepDialog::syncButtonClicked( )
         KUrl url = doc->url();
         if ( url.isLocalFile() )
         {
-            directoryRequester->comboBox()->setEditText( url.upUrl().path( KUrl::LeaveTrailingSlash ) );
+            directoryRequester->lineEdit()->setText( url.upUrl().path( KUrl::LeaveTrailingSlash ) );
         }
     }
 }
@@ -189,7 +190,7 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
-    directoryRequester->comboBox()->setEditText(dir);
+    directoryRequester->lineEdit()->setText(dir);
     directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
     directoryRequester->completionObject()->setDir( dir );
 
