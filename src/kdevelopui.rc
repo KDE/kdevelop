@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="56" name="kdevelop" >
+<kpartgui version="57" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1">
     <text context="@title:menu">File</text>
@@ -153,6 +153,9 @@
     <Separator/>
     <Action name="split_horizontal"/>
     <Action name="split_vertical"/>
+    <Separator/>
+    <Action name="fullscreen"/>
+    <Separator/>
     <DefineGroup name="window_operations"/>
     <Separator/>
     <Action name="show_left_dock"/>
