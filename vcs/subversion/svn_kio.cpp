@@ -46,6 +46,7 @@
 #include <subversion-1/svn_utf.h>
 #include <subversion-1/svn_ra.h>
 #include <subversion-1/svn_time.h>
+#include <subversion-1/svn_cmdline.h>
 
 #include <kmimetype.h>
 #include <qfile.h>
@@ -121,6 +122,9 @@ kio_svnProtocol::kio_svnProtocol(const QCString &pool_socket, const QCString &ap
 		m_counter = 0;
 
 		apr_initialize();
+                // Make sure to properly initialize svn client, besides other things, this sets up
+                // NLS support for environments that don't use UTF-8
+                svn_cmdline_init("kdevsvnd",NULL);
 		// CleanUP ctx preventing crash in svn_client_update and other
 		memset(&ctx, 0, sizeof(ctx));
 		pool = svn_pool_create (NULL);
