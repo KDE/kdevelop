@@ -24,7 +24,8 @@
 #include <kurl.h>
 #include <kmimetype.h>
 #include "interfacesexport.h"
-#include <ktexteditor/cursor.h>
+#include <KTextEditor/Cursor>
+#include <KTextEditor/Range>
 
 namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor { class Document; }
