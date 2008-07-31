@@ -39,7 +39,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kstandardaction.h>
 #include <kselectaction.h>
-#include <ktoggleaction.h>
+#include <ktogglefullscreenaction.h>
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
 
@@ -107,7 +107,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
         lastXMLGUIClientView = NULL;
     }
-    
+
     m_statusBar->viewChanged(view);
 
     if (!view)
@@ -115,7 +115,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
     QWidget* viewWidget = view->widget();
     Q_ASSERT(viewWidget);
-    
+
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
@@ -138,7 +138,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     {
         lastXMLGUIClientView = viewWidget;
         m_mainWindow->guiFactory()->addClient(c);
-        connect(viewWidget, SIGNAL(destroyed(QObject*)), 
+        connect(viewWidget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(xmlguiclientDestroyed(QObject*)));
     }
 }
@@ -280,6 +280,11 @@ void MainWindowPrivate::setupActions()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( splitVertical() ) );
     action->setToolTip( i18n( "Split Vertical" ) );
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splitts the current view vertically.</p>" ) );
+
+    action = new KToggleFullScreenAction(m_mainWindow, this);
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_F11 );
+    actionCollection()->addAction( "fullscreen", action );
+    connect(action, SIGNAL(triggered(bool)), SLOT(toggleFullScreen(bool)));
 
     action = actionCollection()->addAction( "file_new" );
     action->setIcon(KIcon("document-new"));

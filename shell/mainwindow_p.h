@@ -78,6 +78,7 @@ public Q_SLOTS:
     void splitHorizontal();
     void splitVertical();
     void split(Qt::Orientation orientation);
+    void toggleFullScreen(bool fullScreen);
 
     void projectOpened();
     void projectClosed();

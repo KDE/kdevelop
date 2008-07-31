@@ -185,6 +185,11 @@ void MainWindowPrivate::split(Qt::Orientation orientation)
     m_mainWindow->activateView(newView);
 }
 
+void MainWindowPrivate::toggleFullScreen(bool fullScreen)
+{
+    KToggleFullScreenAction::setFullScreen( m_mainWindow, fullScreen );
+}
+
 void MainWindowPrivate::fileNew()
 {
     Core::self()->documentControllerInternal()->openDocumentFromText("");
