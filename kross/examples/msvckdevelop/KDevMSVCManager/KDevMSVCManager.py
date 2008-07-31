@@ -35,8 +35,11 @@ def parse(item):
 		lastdash=project.rfind('/')
 		baseurl=project[0:lastdash]
 		
+		print "a"
 		IBuildSystemManager.addFolder(baseurl)
+		print "b"
 		IBuildSystemManager.addTarget(baseurl, projectName)
+		print "c"
 		
 		vc=VCProjManager()
 		vc.titolito(project)

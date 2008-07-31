@@ -29,6 +29,7 @@
 #include "krossdistributedversioncontrol.h"
 
 namespace Kross { class Action; }
+namespace KDevelop { class IDocument; }
 
 class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
 {

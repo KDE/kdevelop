@@ -16,9 +16,9 @@ def createView(parent):
 	print "created"+str(widget)
 	
 	print "opened"+str(ICore.documentController().openDocuments())
-	#for doc in ICore.documentController().openDocuments():
-		#print doc.url()
-		#widget.documentList.addItem(doc.url())
+	for doc in ICore.documentController().openDocuments():
+		print doc.url()
+		widget.addItem(doc.url())
 	
 	#widget["close"].connect("clicked()", closeAll)
 	
@@ -28,9 +28,19 @@ def closeAll():
 	print "clicked"
 	ICore.documentController().closeAllDocuments()
 
-def contextMenuExtension(ctx):
+def trigg():
+	print "I have been triggered"
+
+def contextMenuExtension(ctx, cme):
+	print "ctxmenuuuu"
 	print "xxxxxxxx: "+str(ctx)
 	print "aaaaaaaa: "+str(ctx.type())
+	act=forms.createAction(0)
+	act.text="I am a snake"
+	
+	act.connect("triggered()", trigg)
+	cme.addAction(cme.ExtensionGroup, act)
+	
 	return "potatoes"
 
 print "holaaaaa"

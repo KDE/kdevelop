@@ -22,7 +22,10 @@
 
 #include "krossbuildsystemmanager.h"
 #include "krosstoolviewfactory.h"
+#include "krosscontext.h"
+#include "krosscontextmenuextension.h"
 
+#include <kross/core/manager.h>
 #include <KUrl>
 #include <KProcess>
 #include <KDebug>
@@ -35,6 +38,7 @@
 #include <kpluginloader.h>
 #include <projectmodel.h>
 
+#include <context.h>
 #include <contextmenuextension.h>
 
 K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossPlugin>(); )
@@ -67,6 +71,7 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     m_pluginDir=file;
     file.addPath(name+".py");
 
+    Kross::Manager::self().setStrictTypesEnabled(false);
     action = new Kross::Action(this, file);
     action->setFile(file.toLocalFile());
     
@@ -80,7 +85,12 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
 
 KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Context* context)
 {
-    return distributedMenuExtension(context);
+    KDevelop::ContextMenuExtension cme;
+    QVariant result=action->callFunction("contextMenuExtension", QVariantList() << Handlers::contextHandler(context)
+                                                                                << Handlers::contextMenuExtensionHandler(&cme));
+    kDebug() << "retrieving name" << result.toString() << cme.actions(cme.RunGroup);
+//     return result.toString();
+    return cme;
 }
 
 void KrossPlugin::createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos)

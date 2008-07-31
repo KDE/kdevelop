@@ -26,12 +26,9 @@
 
 #include <vcsjob.h>
 #include <idistributedversioncontrol.h>
-#include <contextmenuextension.h>
 
 namespace Kross { class Action; }
 namespace KDevelop { class Context; }
-
-class DVCSCallbacks;
 
 class KrossDistributedVersionControl : public KDevelop::IDistributedVersionControl
 {
@@ -79,11 +76,9 @@ public:
     KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
 
     void setActionDistributed(Kross::Action* anAction);
-    KDevelop::ContextMenuExtension distributedMenuExtension(KDevelop::Context* context);
 private:
     Kross::Action *action;
     KDevelop::IPlugin* m_plugin;
-    DVCSCallbacks* m_callbacks;
 
     KUrl::List m_ctxUrls;
 };
