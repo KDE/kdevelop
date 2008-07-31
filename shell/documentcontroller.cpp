@@ -390,14 +390,14 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             uiController->activeSublimeWindow()->activateView(partView);
         }
         d->fileOpenRecent->addUrl( url );
-    }
 
-    if( range.isValid() )
-    {
-        if (range.isEmpty())
-            doc->setCursorPosition( range.start() );
-        else
-            doc->setTextSelection( range );
+        if( range.isValid() )
+        {
+            if (range.isEmpty())
+                doc->setCursorPosition( range.start() );
+            else
+                doc->setTextSelection( range );
+        }
     }
 
     // Deferred signals, wait until it's all ready first
