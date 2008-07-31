@@ -55,17 +55,12 @@ public:
 //     IProject* currentProject() const;
 
 public Q_SLOTS:
-    bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
-    bool projectImportingFinished( IProject* );
-    bool closeProject( IProject* );
-    void closeAllProjects();
-    bool configureProject( IProject* );
+    virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
+    virtual bool projectImportingFinished( IProject* );
+    virtual bool closeProject( IProject* );
+    virtual void closeAllProjects();
+    virtual bool configureProject( IProject* );
 //     void changeCurrentProject( ProjectBaseItem* );
-
-Q_SIGNALS:
-    void projectOpened( KDevelop::IProject* );
-    void projectClosing( KDevelop::IProject* );
-    void projectClosed( KDevelop::IProject* );
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
@@ -79,6 +74,13 @@ private:
     void cleanup();
     bool loadProjectPart();
     void initialize();
+
+    // helper methods for closeProject()
+    void unloadUnusedProjectPlugins(IProject* proj);
+    void disableProjectCloseAction();
+    void closeAllOpenedFiles(IProject* proj);
+    void deleteProjectSettingsMenu(IProject* proj);
+    void initializePluginCleanup(IProject* proj);
 
 private:
     Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )

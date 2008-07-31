@@ -301,9 +301,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
                     == KMessageBox::No )
             {
                 return false;
-            } else
-            {
-                closeProject( project );
+            } else {
+                closeProject(project);
             }
         }
     }
@@ -327,7 +326,6 @@ bool ProjectController::openProject( const KUrl &projectFile )
     }
 
     d->m_closeAllProjects->setEnabled(true);
-
     return true;
 }
 
@@ -376,58 +374,9 @@ bool ProjectController::projectImportingFinished( IProject* project )
     return true;
 }
 
-bool ProjectController::closeProject( IProject* proj )
+// helper method for closeProject()
+void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 {
-
-    if( !proj )
-        return false;
-    if( d->m_projects.indexOf( proj ) == -1 )
-        return false;
-//     if ( !d->m_isLoaded )
-//         return false;
-
-    emit projectClosing( proj );
-
-    //The project file is being closed.
-
-    //Now we can save settings for all of the Core objects including this one!!
-//     Core::self()->saveSettings();
-
-    // save the the project to open it automatically on startup if needed
-//     d->m_lastProject = d->m_globalFile;
-
-//     d->m_name = QString();
-//     d->m_localFile.clear();
-//     d->m_globalFile.clear();
-//     d->m_projectsDir.clear();
-
-//     if (d->m_core->uiControllerInternal()->defaultMainWindow())
-//     {
-//         if (MainWindow* mw = d->m_core->uiControllerInternal()->defaultMainWindow()) {
-//             KActionCollection * ac = mw->actionCollection();
-//             QAction * action;
-//
-//             action = ac->action( "project_close" );
-//             if( action )
-//                 action->setEnabled( false );
-//         }
-//     }
-
-    // close all opened files.
-    Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
-    {
-        Core::self()->documentControllerInternal()->closeDocument( fileItem->url() );
-    }
-
-    // delete project setting menu and its dialog.
-    QPointer<QAction> configAction = d->m_configActions.take( proj );
-    delete configAction;
-    if( d->m_cfgDlgs.contains(proj) )
-        delete d->m_cfgDlgs.take(proj);
-
-    // start project manager that is used by this project. If that manager is being used
-    // by other project also, don't unload that manager.
-    // TODO remove all the plugins unique to this project.
     QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );
     d->m_projectPlugins.remove( proj );
 
@@ -451,31 +400,74 @@ bool ProjectController::closeProject( IProject* proj )
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }
     }
+}
 
-    proj->close();
-    proj->deleteLater(); //be safe when deleting
-    d->m_projects.removeAll( proj );
-    if (d->m_recentAction)
-        d->m_recentAction->setCurrentAction( 0 );
-//     d->m_isLoaded = false;
+// helper method for closeProject()
+void ProjectController::disableProjectCloseAction()
+{
+    MainWindow *mw = d->m_core->uiControllerInternal()->defaultMainWindow();
+    if (!mw) return;
+    KActionCollection * ac = mw->actionCollection();
+    QAction *action = ac->action("project_close");
+    if (action) action->setEnabled(false);
+}
 
+// helper method for closeProject()
+void ProjectController::closeAllOpenedFiles(IProject* proj)
+{
+    Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
+    {
+        Core::self()->documentControllerInternal()->closeDocument( fileItem->url() );
+    }
+}
+
+// helper method for closeProject()
+void ProjectController::deleteProjectSettingsMenu(IProject* proj)
+{
+    QPointer<QAction> configAction = d->m_configActions.take(proj);
+    delete configAction;
+    if( d->m_cfgDlgs.contains(proj) )
+    {
+        delete d->m_cfgDlgs.take(proj);
+    }
+}
+
+// helper method for closeProject()
+void ProjectController::initializePluginCleanup(IProject* proj)
+{
     // Unloading (and thus deleting) these plugins is not a good idea just yet
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
-    if( d->m_projects.isEmpty() )
+    connect(proj, SIGNAL(destroyed(QObject*)), this, SLOT(unloadAllProjectPlugins()));
+    if (d->m_closeAllProjects)
     {
-        connect( proj, SIGNAL(destroyed(QObject*) ), this, SLOT(unloadAllProjectPlugins()) );
-
-        if (d->m_closeAllProjects)
-            d->m_closeAllProjects->setEnabled(false);
+        d->m_closeAllProjects->setEnabled(false);
     }
+}
 
-
-    emit projectClosed( proj );
-
-    //FIXME
-    //     PluginController::self() ->changeProfile( m_oldProfileName );
-
+bool ProjectController::closeProject(IProject* proj)
+{
+    if(!proj || d->m_projects.indexOf(proj) == -1)
+    {
+        return false;
+    }
+    emit projectClosing(proj);
+    //Core::self()->saveSettings();     // The project file is being closed.
+                                        // Now we can save settings for all of the Core 
+                                        // objects including this one!!
+    //disableProjectCloseAction();
+    unloadUnusedProjectPlugins(proj);
+    closeAllOpenedFiles(proj);
+    deleteProjectSettingsMenu(proj);
+    proj->close();
+    proj->deleteLater();                //be safe when deleting
+    d->m_projects.removeAll(proj);
+    if (d->m_projects.isEmpty())
+    {
+        initializePluginCleanup(proj);
+    }
+    emit projectClosed(proj);
+    //PluginController::self() ->changeProfile( m_oldProfileName ); //FIXME
     return true;
 }
 

@@ -8,3 +8,7 @@ include_directories(
 set( shelldocumentoperationtest_SRCS shelldocumentoperationtest.cpp )
 kde4_add_unit_test(shell-documentoperationtest ${shelldocumentoperationtest_SRCS})
 target_link_libraries(shell-documentoperationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell )
+
+set( projectcontrollertest_SRCS projectcontrollertest.cpp )
+kde4_add_unit_test(shell-projectcontrollertest ${projectcontrollertest_SRCS})
+target_link_libraries(shell-projectcontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell )
