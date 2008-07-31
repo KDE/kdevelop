@@ -204,6 +204,22 @@ void PluginController::unloadPlugin( const QString & pluginId )
     {
         thePlugin->unload();
         thePlugin->deleteLater();
+        //Remove the plugin from our list of plugins so we create a new
+        //instance when we're asked for it again.
+        //This is important to do right here, not later when the plugin really
+        //vanishes. For example project re-opening might try to reload the plugin
+        //and then would get the "old" pointer which will be deleted in the next
+        //event loop run and thus causing crashes.
+        for ( PluginControllerPrivate::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
+              it != d->loadedPlugins.end(); ++it )
+        {
+            if ( it.value() == thePlugin )
+            {
+                d->loadedPlugins.erase( it );
+                break;
+            }
+        }
+
     }
 }
 
@@ -305,9 +321,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         plugin->registerExtensions();
         info.setPluginEnabled( true );
 
-        connect( plugin, SIGNAL( destroyed( QObject * ) ),
-                 this, SLOT( pluginDestroyed( QObject * ) ) );
-
         kDebug() << "Successfully loaded plugin '" << pluginId << "'";
 
         emit pluginLoaded( plugin );
@@ -342,19 +355,6 @@ IPlugin* PluginController::plugin( const QString& pluginId )
         return d->loadedPlugins[ info ];
     else
         return 0L;
-}
-
-void PluginController::pluginDestroyed( QObject* deletedPlugin )
-{
-    for ( PluginControllerPrivate::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
-          it != d->loadedPlugins.end(); ++it )
-    {
-        if ( it.value() == deletedPlugin )
-        {
-            d->loadedPlugins.erase( it );
-            break;
-        }
-    }
 }
 
 ///@todo plugin load operation should be O(n)
