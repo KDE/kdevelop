@@ -629,9 +629,9 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
 
 QList<KTextEditor::SmartRange*> Declaration::smartUses() const
 {
+  Q_ASSERT(topContext());
   ENSURE_CAN_READ
   QSet<KTextEditor::SmartRange*> tempUses;
-
   //First, search for uses within the own context
   {
     foreach(KTextEditor::SmartRange* range, allSmartUses(topContext(), const_cast<Declaration*>(this)))
