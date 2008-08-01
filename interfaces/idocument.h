@@ -26,7 +26,6 @@
 #include "interfacesexport.h"
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Range>
-#include <ktexteditor/range.h>
 
 namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor { class Document; }
