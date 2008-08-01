@@ -173,19 +173,21 @@ bool MainWindow::queryClose()
 
 void MainWindow::documentActivated( IDocument* document )
 {
-    setCaption(document->url().prettyUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
+    setCaption(document->url().pathOrUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
 }
 
 void MainWindow::documentStateChanged( IDocument* document )
 {
-    setCaption(document->url().prettyUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
+    setCaption(document->url().pathOrUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
 }
 
 void MainWindow::documentClosed( IDocument* document )
 {
     Q_UNUSED(document);
-    if (Core::self()->documentController()->openDocuments().count() == 0)
+    if (Core::self()->documentController()->openDocuments().count() == 0) 
+    {
         setCaption(QString(), false);
+    }
 }
 
 }
