@@ -56,6 +56,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
     duchain/duchainregister.cpp
+    duchain/persistentsymboltable.cpp
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
@@ -164,6 +165,7 @@ install(FILES
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/duchainregister.h
+    duchain/persistentsymboltable.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 
