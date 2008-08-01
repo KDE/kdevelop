@@ -41,13 +41,13 @@ public:
     IProjectController( QObject *parent = 0 );
     virtual ~IProjectController();
 
-    virtual IProject* projectAt( int ) const = 0;
-    virtual int projectCount() const = 0;
-    virtual QList<IProject*> projects() const = 0;
+    Q_SCRIPTABLE virtual IProject* projectAt( int ) const = 0;
+    Q_SCRIPTABLE virtual int projectCount() const = 0;
+    Q_SCRIPTABLE virtual QList<IProject*> projects() const = 0;
 
-    virtual ProjectModel* projectModel() = 0;
-    virtual IProject* findProjectByName( const QString& name ) = 0;
-    virtual IProject* findProjectForUrl( const KUrl& ) const = 0;
+    Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
+    Q_SCRIPTABLE virtual IProject* findProjectByName( const QString& name ) = 0;
+    Q_SCRIPTABLE virtual IProject* findProjectForUrl( const KUrl& ) const = 0;
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() ) = 0;

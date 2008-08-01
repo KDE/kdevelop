@@ -149,32 +149,32 @@ public:
      * The default implementation returns Qt::NoDockWidgetArea.
      * @return the DockWidgetArea for this plugin
      */
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
+    Q_SCRIPTABLE virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     /**
      * Tells @ref MainWindow whether to display this plugin as the central widget when
      * in top-level UI mode. The default implementation returns false.
      * @return true if this plugin should be the central widget, false if it should not.
      */
-    virtual bool isCentralPlugin() const;
+    Q_SCRIPTABLE virtual bool isCentralPlugin() const;
 
     /**
      * Signal the plugin that it should cleanup since it will be unloaded soon.
      */
-    virtual void unload();
+    Q_SCRIPTABLE virtual void unload();
 
     /**
      * Provides access to the global icon loader
      * @return the plugin's icon loader
      */
-    KIconLoader* iconLoader() const;
+    Q_SCRIPTABLE KIconLoader* iconLoader() const;
 
-    ICore *core() const;
+    Q_SCRIPTABLE ICore *core() const;
 
-    void registerExtensions();
-    void unregisterExtensions();
+    Q_SCRIPTABLE void registerExtensions();
+    Q_SCRIPTABLE void unregisterExtensions();
 
-    QStringList extensions() const;
+    Q_SCRIPTABLE QStringList extensions() const;
 
     template<class Extension> Extension* extension()
     {

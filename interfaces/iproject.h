@@ -71,46 +71,52 @@ public:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    virtual IProjectFileManager* projectFileManager() const = 0;
+    Q_SCRIPTABLE virtual IProjectFileManager* projectFileManager() const = 0;
 
     /**
      * Get the build system manager for the project
      *
      * @return the build system manager for the project, if one exists; otherwise null
      */
-    virtual IBuildSystemManager* buildSystemManager() const = 0;
+    Q_SCRIPTABLE virtual IBuildSystemManager* buildSystemManager() const = 0;
 
     /**
      * Get the plugin that manages the project
      * This can be used to get other interfaces like IBuildSystemManager
      */
-    virtual IPlugin* managerPlugin() const = 0;
+    Q_SCRIPTABLE virtual IPlugin* managerPlugin() const = 0;
 
     /**
      * Get the version control plugin for this project
      * This may return 0 if the project is not under version control
      * or version control has been disabled for this project
      */
-    virtual IPlugin* versionControlPlugin() const = 0;
+    Q_SCRIPTABLE virtual IPlugin* versionControlPlugin() const = 0;
 
     /**
      * With this the top-level project item can be retrieved
      */
-    virtual ProjectFolderItem* projectItem() const = 0;
-
+    Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
+    
+    /** Get how much files are there in the project */
+    Q_SCRIPTABLE virtual int fileCount() const = 0;
+    
+    /** Get the item corresponding to the @p pos file */
+    Q_SCRIPTABLE virtual ProjectFileItem* fileAt( int pos) const = 0;
+    
     /** Get a list of all files in the project */
-    virtual int fileCount() const = 0;
-    virtual ProjectFileItem* fileAt( int ) const = 0;
+    Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
 
-    virtual QList<ProjectFileItem*> files() const = 0;
+    /** Get all items corresponding to the @p file url */
+    Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
 
-    virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const = 0;
-
-
-    virtual void reloadModel() = 0;
+    /** Make the model to reload */
+    Q_SCRIPTABLE virtual void reloadModel() = 0;
 //     virtual KUrl projectConfigFile() const = 0;
 //     virtual KUrl projectDefaultsConfigFile() const = 0;
-    virtual KUrl projectFileUrl() const = 0;
+
+    /** Get the url of the project file.*/
+    Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 //     virtual void setLocalFile( const KUrl& ) = 0;
 //     virtual void setGlobalFile( const KUrl& ) = 0;

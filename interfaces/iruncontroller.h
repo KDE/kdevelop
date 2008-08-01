@@ -37,7 +37,7 @@ class IRun;
 class KDEVPLATFORMINTERFACES_EXPORT IRunController : public KJobTrackerInterface
 {
     Q_OBJECT
-
+    Q_ENUMS(State)
 public:
     ///Constructor.
     IRunController(QObject *parent);
@@ -47,7 +47,7 @@ public:
      *
      * \return the serial number for the run job, or -1 if \a run could not be executed.
      */
-    virtual KJob* execute(const IRun& run) = 0;
+    Q_SCRIPTABLE virtual KJob* execute(const IRun& run) = 0;
 
     /**
      * Provide the default run object.
@@ -57,7 +57,7 @@ public:
     /**
      * Interrogate the current managed jobs
      */
-    virtual QList<KJob*> currentJobs() const = 0;
+    Q_SCRIPTABLE virtual QList<KJob*> currentJobs() const = 0;
 
     /**
      * An enumeration of the possible states for the run controller.
