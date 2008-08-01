@@ -2,21 +2,6 @@ project(krosssupport)
 
 add_subdirectory(xmltokross)
 
-include_directories(
-    ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/project
-    ${CMAKE_SOURCE_DIR}/project/interfaces
-    ${CMAKE_SOURCE_DIR}/language
-    ${CMAKE_SOURCE_DIR}/language/duchain
-    ${CMAKE_SOURCE_DIR}/vcs
-    ${CMAKE_SOURCE_DIR}/vcs/interfaces
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/wrappers
-)
-
 find_program(CPPTOXML cpptoxml)
 
 if(CPPTOXML)
@@ -34,21 +19,23 @@ if(CPPTOXML)
     endmacro(kdev_create_kross_iface)
 
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/idocument.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossidocument.cpp idocument.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossidocument.cpp interfaces/idocument.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/iuicontroller.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiuicontroller.cpp iuicontroller.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiuicontroller.cpp interfaces/iuicontroller.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/context.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontext.cpp context.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontext.cpp interfaces/context.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/contextmenuextension.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontextmenuextension.cpp contextmenuextension.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontextmenuextension.cpp interfaces/contextmenuextension.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/projectmodel.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossprojectmodel.cpp projectmodel.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossprojectmodel.cpp project/projectmodel.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcsrevision.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcsrevision.cpp vcsrevision.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcsrevision.cpp vcs/vcsrevision.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcslocation.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcslocation.cpp vcslocation.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcslocation.cpp vcs/vcslocation.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/topducontext.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosstopducontext.cpp topducontext.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosstopducontext.cpp language/duchain/topducontext.h)
+else(CPPTOXML)
+    message(STATUS "Couldn't find cpptoxml, using the pre-generated wrappers")
 endif(CPPTOXML)
 
 set(kdevkrossplugin_SRCS
