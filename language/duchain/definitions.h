@@ -31,9 +31,7 @@ namespace KDevelop {
   class TopDUContext;
 
 /**
- * Global unique mapping of Declaration-Ids to Definitions, protected through DUChainLock.
- *
- * Currently it is only possible to map exactly one Definition to exactly one DeclarationId.
+ * Global mapping of one Declaration-Ids to multiple Definitions, protected through DUChainLock.
  * */
   class KDEVPLATFORMLANGUAGE_EXPORT Definitions {
     public:

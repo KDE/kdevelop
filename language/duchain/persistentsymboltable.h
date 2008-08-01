@@ -20,8 +20,8 @@
 #include "language/languageexport.h"
 #include <util/kdevvarlengtharray.h>
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#ifndef PERSISTENTSYMBOLTABLE_H
+#define PERSISTENTSYMBOLTABLE_H
 
 namespace KDevelop {
 
@@ -32,9 +32,7 @@ namespace KDevelop {
   class QualifiedIdentifier;
 
 /**
- * Global unique mapping of Declaration-Ids to PersistentSymbolTable, protected through DUChainLock.
- *
- * Currently it is only possible to map exactly one Declaration to exactly one DeclarationId.
+ * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
  * */
   class KDEVPLATFORMLANGUAGE_EXPORT PersistentSymbolTable {
     public:
@@ -46,9 +44,15 @@ namespace KDevelop {
     void addDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration);
 
     void removeDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration);
-    
-    KDevVarLengthArray<IndexedDeclaration> declarations(const QualifiedIdentifier& id) const;
 
+    ///Retrieves all the declarations for a given QualifiedIdentifier in an efficient way.
+    ///@param id The QualifiedIdentifier for which the declarations should be retrieved
+    ///@param countTarget A reference that will be filled with the count of retrieved declarations
+    ///@param declarations A reference to a pointer, that will be filled with a pointer to the retrieved declarations.
+    void declarations(const QualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
+
+    static PersistentSymbolTable& self();
+    
     private:
       class PersistentSymbolTablePrivate* d;
   };

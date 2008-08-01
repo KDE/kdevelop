@@ -42,6 +42,7 @@
 #include "indexedstring.h"
 #include "repositories/stringrepository.h"
 #include "duchainregister.h"
+#include "persistentsymboltable.h"
 
 using namespace KTextEditor;
 
@@ -143,8 +144,11 @@ Declaration::~Declaration()
       d->m_internalContext.context()->setOwner(0);
   }
   
-  if (d->m_inSymbolTable && !d->m_identifier.isEmpty())
+  if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
     SymbolTable::self()->removeDeclaration(this);
+    if(!topContext()->isOnDisk())
+      PersistentSymbolTable::self().removeDeclaration(qualifiedIdentifier(), this);
+  }
   
   d->m_inSymbolTable = false;
 
@@ -569,11 +573,15 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
 {
   DUCHAIN_D_DYNAMIC(Declaration);
   if(!d->m_identifier.isEmpty()) {
-    if(!d->m_inSymbolTable && inSymbolTable)
+    if(!d->m_inSymbolTable && inSymbolTable) {
       SymbolTable::self()->addDeclaration(this);
+      PersistentSymbolTable::self().addDeclaration(qualifiedIdentifier(), this);
+    }
   
-    else if(d->m_inSymbolTable && !inSymbolTable)
+    else if(d->m_inSymbolTable && !inSymbolTable) {
       SymbolTable::self()->removeDeclaration(this);
+      PersistentSymbolTable::self().removeDeclaration(qualifiedIdentifier(), this);
+    }
   }
   d->m_inSymbolTable = inSymbolTable;
 }

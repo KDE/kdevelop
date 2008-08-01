@@ -160,7 +160,7 @@ void PersistentSymbolTable::removeDeclaration(const QualifiedIdentifier& id, con
   }
 }
 
-KDevVarLengthArray<IndexedDeclaration> PersistentSymbolTable::declarations(const QualifiedIdentifier& id) const
+void PersistentSymbolTable::declarations(const QualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget ) const
 {
   KDevVarLengthArray<IndexedDeclaration> ret;
 
@@ -172,10 +172,16 @@ KDevVarLengthArray<IndexedDeclaration> PersistentSymbolTable::declarations(const
   
   if(index) {
     const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
-    FOREACH_FUNCTION(IndexedDeclaration decl, repositoryItem->declarations)
-      ret.append(decl);
+    countTarget = repositoryItem->declarationsSize();
+    declarationsTarget = repositoryItem->declarations();
+  }else{
+    countTarget = 0;
+    declarationsTarget = 0;
   }
-  
+}
+
+PersistentSymbolTable& PersistentSymbolTable::self() {
+  static PersistentSymbolTable ret;
   return ret;
 }
 
