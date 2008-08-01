@@ -217,7 +217,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
 }
 
 void ContextBrowserPlugin::changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight ) {
-  if( !view || !decl ) {
+  if( !view || !decl || !decl->context() ) {
     kDebug() << "invalid view/declaration";
     return;
   }
