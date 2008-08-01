@@ -364,7 +364,8 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
                 }
                 else
                 {
-                    m_topctx->clearLocalDeclarations();
+                    m_topctx->deleteLocalDeclarations();
+                    m_topctx->deleteChildContextsRecursively();
                     m_topctx->deleteUses();
                 }
                 aux->addImportedParentContext(m_topctx);
@@ -433,7 +434,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
                 }
                 else
                 {
-                    m_topctx->clearLocalDeclarations();
+                    m_topctx->deleteLocalDeclarations();
+                    m_topctx->deleteChildContextsRecursively();
                     m_topctx->deleteUses();
                 }
             }
@@ -1652,7 +1654,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         }
         else
         {
-            m_topctx->clearLocalDeclarations();
+            m_topctx->deleteLocalDeclarations();
+            m_topctx->deleteChildContextsRecursively();
             m_topctx->deleteUses();
         }
         m_topctx->addImportedParentContext(m_parentCtx);
