@@ -32,8 +32,8 @@
 #include <KShell>
 #include <KDebug>
 
-#include <dvcsjob.h>
-#include <iplugin.h>
+#include <vcs/dvcs/dvcsjob.h>
+#include <interfaces/iplugin.h>
 
 GitExecutor::GitExecutor(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)
