@@ -21,8 +21,8 @@
 #ifndef DUMPCHAIN_H
 #define DUMPCHAIN_H
 
-#include "language/languageexport.h"
-#include <QString>
+#include "../languageexport.h"
+#include <QtCore/QString>
 
 namespace KTextEditor {
   class SmartRange;

@@ -19,7 +19,7 @@
 */
 
 #include "importprojectjob.h"
-#include "interfaces/iprojectfilemanager.h"
+#include <interfaces/iprojectfilemanager.h>
 #include "projectmodel.h"
 
 #include <kglobal.h>

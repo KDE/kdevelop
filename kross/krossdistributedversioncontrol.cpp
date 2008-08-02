@@ -24,13 +24,13 @@
 #include <KLocale>
 #include <QMenu>
 
-#include <iplugin.h>
-#include <krossvcsjob.h>
+#include <interfaces/iplugin.h>
 #include <kross/core/action.h>
-#include <context.h>
-#include <projectmodel.h>
-#include "krossvcsrevision.h"
-#include "krossvcslocation.h"
+#include <interfaces/context.h>
+#include <project/projectmodel.h>
+#include "krossvcsjob.h"
+#include "wrappers/krossvcsrevision.h"
+#include "wrappers/krossvcslocation.h"
 
 using namespace KDevelop;
 

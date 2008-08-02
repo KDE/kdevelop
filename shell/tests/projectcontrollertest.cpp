@@ -22,13 +22,6 @@
 #include <QtGui>
 #define QT_GUI_LIB 1
 #include <QtTest/QtTest>
-#include <qtest_kde.h>
-#include "tests/common/kdevtest.h"
-
-#include "shell/core.h"
-#include "shell/projectcontroller.h"
-#include "shell/project.h"
-#include "tests/common/autotestshell.h"
 
 #include <KUrl>
 #include <KDebug>
@@ -36,6 +29,15 @@
 #include <QDir>
 #include <QKeyEvent>
 #include <QSignalSpy>
+
+#include <qtest_kde.h>
+#include <tests/common/kdevtest.h>
+#include <tests/common/autotestshell.h>
+
+#include "../core.h"
+#include "../projectcontroller.h"
+#include "../project.h"
+
 
 using namespace KDevelop;
 

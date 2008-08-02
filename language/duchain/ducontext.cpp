@@ -17,7 +17,8 @@
 */
 
 #include "ducontext.h"
-#include "ducontextdata.h"
+
+#include <limits>
 
 #include <QMutableLinkedListIterator>
 #include <QSet>
@@ -25,6 +26,9 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
+#include "../editor/editorintegrator.h"
+
+#include "ducontextdata.h"
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -35,9 +39,7 @@
 #include "aliasdeclaration.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
-#include <indexedstring.h>
-#include <editor/editorintegrator.h>
-#include <limits>
+#include "indexedstring.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "arrayhelpers.h"

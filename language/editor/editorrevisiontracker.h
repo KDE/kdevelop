@@ -23,7 +23,7 @@
 #include <KUrl>
 #include <KTextEditor/Cursor>
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 namespace KDevelop {
 

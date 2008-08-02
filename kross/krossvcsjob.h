@@ -24,8 +24,8 @@
 #include <QObject>
 #include <QList>
 
-#include <vcsjob.h>
-#include <idistributedversioncontrol.h>
+#include <vcs/vcsjob.h>
+#include <vcs/interfaces/idistributedversioncontrol.h>
 
 namespace Kross { class Action; }
 

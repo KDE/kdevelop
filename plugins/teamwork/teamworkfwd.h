@@ -14,7 +14,7 @@
 #ifndef TEAMWORKFWD_H
 #define TEAMWORKFWD_H
 
-#include "network/networkfwd.h"
+#include "lib/network/networkfwd.h"
 
 class MessageManager;
 class CollaborationManager;

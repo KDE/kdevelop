@@ -21,8 +21,8 @@
 #ifndef ENUMERATIONTYPE_H
 #define ENUMERATIONTYPE_H
 
-#include "language/duchain/types/integraltype.h"
-#include "language/duchain/types/identifiedtype.h"
+#include "integraltype.h"
+#include "identifiedtype.h"
 
 namespace KDevelop
 {

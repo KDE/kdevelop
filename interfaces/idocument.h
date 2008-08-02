@@ -23,10 +23,10 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include "interfacesexport.h"
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Range>
 
+#include "interfacesexport.h"
 namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor { class Document; }
 namespace Sublime{ class View; }

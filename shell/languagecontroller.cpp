@@ -23,15 +23,15 @@
 
 #include <kmimetype.h>
 
-#include "idocument.h"
-#include "idocumentcontroller.h"
-#include "iplugin.h"
-#include "iplugincontroller.h"
-#include "ilanguagesupport.h"
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iplugincontroller.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include "core.h"
 #include "language.h"
-#include "backgroundparser.h"
 
 namespace KDevelop {
 

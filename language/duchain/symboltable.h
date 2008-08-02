@@ -23,7 +23,7 @@
 #include <QtCore/QMultiMap>
 #include <QtCore/QVarLengthArray>
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 namespace KDevelop
 {

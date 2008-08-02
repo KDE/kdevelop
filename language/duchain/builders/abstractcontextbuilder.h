@@ -32,16 +32,16 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 
-#include "language/editor/editorintegrator.h"
-#include "language/duchain/topducontext.h"
-#include "language/duchain/duchainpointer.h"
-#include "language/duchain/duchainlock.h"
-#include "language/duchain/duchain.h"
-#include "language/duchain/ducontext.h"
-#include "language/duchain/identifier.h"
-#include "language/duchain/indexedstring.h"
-#include "language/duchain/parsingenvironment.h"
-#include "language/duchain/smartconverter.h"
+#include "../../editor/editorintegrator.h"
+#include "../topducontext.h"
+#include "../duchainpointer.h"
+#include "../duchainlock.h"
+#include "../duchain.h"
+#include "../ducontext.h"
+#include "../identifier.h"
+#include "../indexedstring.h"
+#include "../parsingenvironment.h"
+#include "../smartconverter.h"
 
 namespace KDevelop
 {

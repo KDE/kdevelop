@@ -1,17 +1,6 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/language/interfaces
-    ${CMAKE_SOURCE_DIR}/language/duchain
-    ${CMAKE_SOURCE_DIR}/language/duchain/types
-    ${CMAKE_SOURCE_DIR}/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/language/editor
-    ${CMAKE_SOURCE_DIR}/util
-)
-
 set(kdevplatformlanguage_LIB_SRCS
     editor/documentrange.cpp
     editor/documentrangeobject.cpp

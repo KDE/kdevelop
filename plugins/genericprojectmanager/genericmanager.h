@@ -19,8 +19,8 @@
 #ifndef KDEVGENERICMANAGER_H
 #define KDEVGENERICMANAGER_H
 
-#include "iprojectfilemanager.h"
-#include "iplugin.h"
+#include <project/interfaces/iprojectfilemanager.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class QFileInfo;

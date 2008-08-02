@@ -26,8 +26,9 @@ Boston, MA 02110-1301, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 
+#include <project/projectconfigskeleton.h>
+
 #include "environmentwidget.h"
-#include "projectconfigskeleton.h"
 
 namespace KDevelop
 {

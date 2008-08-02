@@ -30,7 +30,8 @@
 #include <QtCore/QStringList>
 #include <KDE/KProcess>
 
-#include <vcsjob.h>
+#include "../vcsexport.h"
+#include "../vcsjob.h"
 
 class DVCSjobPrivate;
 

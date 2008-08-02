@@ -42,17 +42,16 @@
 #include <KAction>
 
 #include <interfaces/iproject.h>
-#include <projectmodel.h>
-#include <iuicontroller.h>
-#include <iruncontroller.h>
-#include <iprojectcontroller.h>
-#include <icore.h>
-#include <context.h>
-#include <vcsmapping.h>
-
+#include <project/projectmodel.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/context.h>
 #include<interfaces/contextmenuextension.h>
 
-#include "vcsjob.h"
+#include "../vcsmapping.h"
+#include "../vcsjob.h"
 #include "dvcsjob.h"
 #include "ui/dvcsmainview.h"
 #include "ui/dvcsgenericoutputview.h"

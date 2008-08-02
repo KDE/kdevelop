@@ -19,17 +19,19 @@
  */
 
 #include "resultsmodeltest.h"
-#include "modelcreation.h"
-#include <kasserts.h>
-#include <resultsmodel.h>
-#include <runnermodel.h>
-#include <test.h>
 
 #include <QIcon>
 #include <QString>
 #include <QStringList>
 #include <qtest_kde.h>
 #include <KDebug>
+
+#include "../test.h"
+#include "../mvc/resultsmodel.h"
+#include "../mvc/runnermodel.h"
+
+#include "kasserts.h"
+#include "modelcreation.h"
 
 using Veritas::ResultsModel;
 using Veritas::RunnerModel;

@@ -21,7 +21,7 @@
 
 #include "cvsjob.h"
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 
 CvsProxy::CvsProxy(KDevelop::IPlugin* parent)
 : QObject(parent), vcsplugin(parent)

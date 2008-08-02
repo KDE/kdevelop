@@ -13,8 +13,8 @@
 
 #include <kgenericfactory.h>
 
-#include <iuicontroller.h>
-#include "icore.h"
+#include <interfaces/iuicontroller.h>
+#include <interfaces/icore.h>
 #include <kservice.h>
 #include "kdevkonsoleview.h"
 

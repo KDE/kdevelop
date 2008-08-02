@@ -27,8 +27,8 @@
 #include "topducontext.h"
 #include "duchainlock.h"
 #include "duchain.h"
-#include "language/languageexport.h"
-#include "language/duchain/types/indexedtype.h"
+#include "../languageexport.h"
+#include "types/indexedtype.h"
 
 namespace KDevelop
 {

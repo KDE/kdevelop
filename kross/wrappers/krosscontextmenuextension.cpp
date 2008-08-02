@@ -4,7 +4,7 @@
 #include <QtCore/QVariant>
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
-#include <contextmenuextension.h>
+#include <interfaces/contextmenuextension.h>
 
 using namespace KDevelop;
 

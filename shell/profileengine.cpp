@@ -25,7 +25,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include "iplugin.h"
+#include <interfaces/iplugin.h>
 #include "plugincontroller.h"
 
 namespace KDevelop

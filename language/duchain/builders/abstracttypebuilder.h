@@ -19,8 +19,8 @@
 #ifndef KDEV_TYPEBUILDER_H
 #define KDEV_TYPEBUILDER_H
 
-#include "language/duchain/types/structuretype.h"
-#include "language/duchain/declaration.h"
+#include "../types/structuretype.h"
+#include "../declaration.h"
 
 namespace KDevelop {
 

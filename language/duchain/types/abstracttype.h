@@ -21,8 +21,8 @@
 #define ABSTRACTTYPE_H
 
 #include <QtCore/QString>
-#include "language/duchain/types/typepointer.h"
-#include "language/languageexport.h"
+#include "typepointer.h"
+#include "../../languageexport.h"
 
 namespace KDevelop
 {

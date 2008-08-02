@@ -11,7 +11,7 @@
 #ifndef __SNIPPETPART_H__
 #define __SNIPPETPART_H__
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class SnippetCompletionModel;

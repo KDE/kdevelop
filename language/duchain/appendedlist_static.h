@@ -19,7 +19,7 @@
 #ifndef APPENDEDLIST_H
 #define APPENDEDLIST_H
 
-#include <QVarLengthArray>
+#include <QtCore/QVarLengthArray>
 
 namespace KDevelop {
 

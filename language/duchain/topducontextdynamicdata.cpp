@@ -16,6 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <kstandarddirs.h>
+#include <typeinfo>
+#include <QFile>
+#include <QByteArray>
+
 #include "topducontextdynamicdata.h"
 #include "declaration.h"
 #include "declarationdata.h"
@@ -25,10 +30,6 @@
 #include "ducontextdata.h"
 #include "duchainregister.h"
 #include "repositories/itemrepository.h"
-#include <kstandarddirs.h>
-#include <typeinfo>
-#include <QFile>
-#include <QByteArray>
 
 using namespace KDevelop;
 

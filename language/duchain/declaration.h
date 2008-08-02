@@ -23,10 +23,10 @@
 #include <QtCore/QList>
 #include <qcontainerfwd.h>
 
-#include "language/editor/documentrangeobject.h"
-#include "language/duchain/identifier.h"
-#include "language/duchain/types/abstracttype.h"
-#include "language/duchain/duchainbase.h"
+#include "../editor/documentrangeobject.h"
+#include "identifier.h"
+#include "types/abstracttype.h"
+#include "duchainbase.h"
 
 class QByteArray;
 

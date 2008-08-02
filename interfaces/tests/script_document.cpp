@@ -23,10 +23,10 @@
 #include <kross/core/action.h>
 #include <kross/core/manager.h>
 
-#include "../../tests/common/autotestshell.h"
+#include <tests/common/autotestshell.h>
 
-#include "idocumentcontroller.h"
-#include "idocument.h"
+#include "../idocumentcontroller.h"
+#include "../idocument.h"
 
 class Script_Document: public QObject
 {

@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "vcslocation.h"
+
 #include <QtCore/QVariant>
 #include <kurl.h>
 

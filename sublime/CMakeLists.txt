@@ -1,5 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR})
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9504 )
 add_subdirectory(examples)
 add_subdirectory(tests)

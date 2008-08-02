@@ -13,7 +13,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "safesignaller.h"
 #include"kdevteamwork.h"
-#include "network/weaksafesharedptr.h"
+#include "lib/network/weaksafesharedptr.h"
 
 QSafeSignaller::~QSafeSignaller() {
   delete m_proxy;

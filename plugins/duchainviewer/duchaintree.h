@@ -24,8 +24,8 @@
 
 #include <QtGui/QTreeView>
 
-#include "duchainbase.h"
-#include "duchainobserver.h"
+#include <language/duchain/duchainbase.h>
+#include <language/duchain/duchainobserver.h>
 
 class DUChainViewPlugin;
 

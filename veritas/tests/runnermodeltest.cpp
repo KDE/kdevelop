@@ -19,16 +19,17 @@
  */
 
 #include "runnermodeltest.h"
-#include "modelcreation.h"
-
-#include <test.h>
 
 #include <QString>
 #include <QStringList>
 #include <QSignalSpy>
 #include <QMap>
 #include <qtest_kde.h>
-#include <kasserts.h>
+
+#include "../test.h"
+
+#include "kasserts.h"
+#include "modelcreation.h"
 
 using Veritas::RunnerModel;
 using Veritas::Test;

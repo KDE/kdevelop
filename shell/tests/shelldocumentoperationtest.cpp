@@ -24,6 +24,7 @@
 
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
+#include <kdebug.h>
 #include <kparts/mainwindow.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -31,9 +32,8 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 
-#include "documentcontroller.h"
-#include "uicontroller.h"
-#include "kdebug.h"
+#include "../documentcontroller.h"
+#include "../uicontroller.h"
 
 void ShellDocumentOperationTest::init()
 {

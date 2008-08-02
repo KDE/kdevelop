@@ -22,7 +22,7 @@
 #define PROJECTITEMADAPTORS_H
 
 #include <KUrl>
-#include "projectmodel.h"
+#include <project/projectmodel.h>
 
 class IProject;
 

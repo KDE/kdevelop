@@ -17,8 +17,8 @@
 #include "collaborationmanager.h"
 #include <QMenu>
 #include <ktexteditor/document.h>
-#include "network/messagesendhelper.h"
-#include "network/messagetypeset.h"
+#include "lib/network/messagesendhelper.h"
+#include "lib/network/messagetypeset.h"
 #include "kdevteamwork_helpers.h"
 #include "safesignaller.h"
 #include <boost/serialization/list.hpp>

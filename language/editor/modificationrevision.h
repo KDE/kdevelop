@@ -20,8 +20,8 @@
 #define MODIFICATIONREVISION_H
 
 #include <QDateTime>
-#include "../languageexport.h"
 #include <kdebug.h>
+#include "../languageexport.h"
 
 class QString;
 

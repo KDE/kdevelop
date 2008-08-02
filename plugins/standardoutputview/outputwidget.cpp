@@ -20,7 +20,6 @@
  */
 
 #include "outputwidget.h"
-#include "ioutputviewmodel.h"
 
 #include "standardoutputview.h"
 #include <QtCore/QSignalMapper>
@@ -39,6 +38,8 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <ktabwidget.h>
+
+#include <outputview/ioutputviewmodel.h>
 
 #include "toolviewdata.h"
 

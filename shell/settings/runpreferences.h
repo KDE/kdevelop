@@ -22,7 +22,7 @@
 #ifndef KDEVRUNPREFERENCES_H
 #define KDEVRUNPREFERENCES_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 
 #include <kurl.h>
 #include <kstandarddirs.h>

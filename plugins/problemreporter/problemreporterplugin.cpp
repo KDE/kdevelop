@@ -30,16 +30,16 @@
 
 #include <KTextEditor/Document>
 
-#include <icore.h>
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
-#include "language/backgroundparser/parsejob.h"
-#include "language/editor/editorintegrator.h"
-#include "interfaces/ilanguagecontroller.h"
-#include "language/backgroundparser/backgroundparser.h"
-#include "language/duchain/duchainlock.h"
-#include "language/duchain/duchain.h"
+#include <language/backgroundparser/parsejob.h>
+#include <language/editor/editorintegrator.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 #include "problemhighlighter.h"
 #include "problemwidget.h"

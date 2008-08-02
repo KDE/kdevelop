@@ -19,11 +19,11 @@
 #ifndef DEFINITIONUSE_H
 #define DEFINITIONUSE_H
 
-#include "language/editor/simplerange.h"
-
-#include "language/languageexport.h"
-
 #include <limits>
+
+#include "../editor/simplerange.h"
+
+#include "../languageexport.h"
 
 namespace KDevelop
 {

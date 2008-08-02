@@ -17,14 +17,17 @@
 */
 
 #include "modificationrevision.h"
+
 #include <QString>
 #include <QFileInfo>
+
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
-#include <editor/editorintegrator.h>
-#include <editor/hashedstring.h>
-#include "indexedstring.h"
 #include <ext/hash_map>
+
+#include "editorintegrator.h"
+#include "hashedstring.h"
+#include "../duchain/indexedstring.h"
 
 const unsigned int cacheModTimeForSeconds = 2;
 

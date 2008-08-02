@@ -30,7 +30,7 @@
 #include <kjob.h>
 #include <kmessagebox.h>
 
-#include <environmentgrouplist.h>
+#include <util/environmentgrouplist.h>
 
 using namespace KDevelop;
 

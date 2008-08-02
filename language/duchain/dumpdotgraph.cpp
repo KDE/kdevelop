@@ -13,12 +13,12 @@
 
 #include "dumpdotgraph.h"
 
-#include <ducontext.h>
-#include <topducontext.h>
-#include <declaration.h>
-#include <duchainpointer.h>
-#include <parsingenvironment.h>
-#include <identifier.h>
+#include "ducontext.h"
+#include "topducontext.h"
+#include "declaration.h"
+#include "duchainpointer.h"
+#include "parsingenvironment.h"
+#include "identifier.h"
 
 namespace KDevelop {
 

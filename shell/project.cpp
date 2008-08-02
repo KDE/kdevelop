@@ -43,16 +43,16 @@
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
-#include "iprojectfilemanager.h"
-#include "ibuildsystemmanager.h"
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iplugincontroller.h>
+#include <project/importprojectjob.h>
+#include <project/projectmodel.h>
 
 #include "core.h"
-#include "iplugin.h"
 #include "mainwindow.h"
 #include "projectcontroller.h"
-#include "importprojectjob.h"
-#include "projectmodel.h"
-#include "iplugincontroller.h"
 #include "uicontroller.h"
 
 namespace KDevelop

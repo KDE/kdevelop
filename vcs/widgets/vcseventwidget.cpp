@@ -27,9 +27,13 @@
 #include <kdebug.h>
 #include <kmenu.h>
 
-#include "ui_vcseventwidget.h"
 
 #include <interfaces/iplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
+
+#include "ui_vcseventwidget.h"
+#include "vcsdiffwidget.h"
 
 #include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
@@ -39,10 +43,7 @@
 
 #include "../models/vcsitemeventmodel.h"
 #include "../models/vcseventmodel.h"
-#include "../../interfaces/icore.h"
-#include "../../interfaces/iruncontroller.h"
 
-#include "vcsdiffwidget.h"
 
 namespace KDevelop
 {

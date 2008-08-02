@@ -32,8 +32,8 @@
 #include <KDebug>
 #include <KLocale>
 
-#include <processlinemaker.h>
-#include <iplugin.h>
+#include <util/processlinemaker.h>
+#include <interfaces/iplugin.h>
 
 struct DVCSjobPrivate
 {

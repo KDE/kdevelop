@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 #include "vcsevent.h"
-#include "vcsrevision.h"
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QDateTime>
 
+#include "vcsrevision.h"
 namespace KDevelop
 {
 

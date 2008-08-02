@@ -31,9 +31,9 @@ Boston, MA 02110-1301, USA.
 #ifndef CODECONTEXT_H
 #define CODECONTEXT_H
 
-#include "interfaces/context.h"
+#include <interfaces/context.h>
 
-#include "language/duchain/duchainpointer.h"
+#include "../duchain/duchainpointer.h"
 
 namespace KDevelop
 {

@@ -38,8 +38,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "editorintegrator.h"
-#include "hashedstring.h"
+#include "../editor/editorintegrator.h"
+#include "../editor/hashedstring.h"
 
 #include "backgroundparser.h"
 #include "parserdependencypolicy.h"

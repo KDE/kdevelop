@@ -21,11 +21,11 @@
 #include "krossbuildsystemmanager.h"
 #include <KDebug>
 
-#include <projectmodel.h>
-#include <iproject.h>
+#include <project/projectmodel.h>
+#include <interfaces/iproject.h>
 #include <kross/core/action.h>
 #include <kross/core/manager.h>
-#include "krossprojectmodel.h"
+#include "wrappers/krossprojectmodel.h"
 
 class ProjectManagerCallbacks : public QObject
 {

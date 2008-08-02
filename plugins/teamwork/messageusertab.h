@@ -19,7 +19,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "autoconstructpointer.h"
 
 #include "ui_kdevteamwork_list.h"
-#include "network/safesharedptr.h"
+#include "lib/network/safesharedptr.h"
 
 class QWidget;
 class QListView;

@@ -18,12 +18,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QList>
 
 #include "teamworkfwd.h"
-#include "network/messagetypeset.h"
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/weaksafesharedptr.h"
 
 #include "filecollaborationmessages.h"
-#include "network/crossmap.h"
+#include "lib/network/crossmap.h"
 #include "safelogger.h"
 
 class VectorTimestamp;

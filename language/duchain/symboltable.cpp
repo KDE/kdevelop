@@ -19,12 +19,12 @@
 #include "symboltable.h"
 
 #include <kglobal.h>
+#include <ext/hash_map>
 
 #include "duchain.h"
 #include "duchainlock.h"
 #include "declaration.h"
 #include "ducontext.h"
-#include <ext/hash_map>
 //#define DEBUG
 
 #ifdef DEBUG

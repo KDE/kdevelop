@@ -22,10 +22,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 #include "kdevteamwork_messages.h"
-#include "network/easymessage.h"
+#include "lib/network/easymessage.h"
 #include "utils.h"
-#include "dynamictext/vectortimestamp.h"
-#include "dynamictext/dynamictexthelpers.h"
+#include "lib/dynamictext/vectortimestamp.h"
+#include "lib/dynamictext/dynamictexthelpers.h"
 #include <list>
 //#include <boost/serialization/extended_type_info.hpp>
 

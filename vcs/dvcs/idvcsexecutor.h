@@ -24,7 +24,7 @@
 #include<QtCore/QStringList>
 #include <KDE/KUrl>
 
-#include <vcsexport.h>
+#include "../vcsexport.h"
 
 class KUrl;
 class DVCSjob;

@@ -20,7 +20,7 @@
 #ifndef STRUCTURETYPE_H
 #define STRUCTURETYPE_H
 
-#include "language/duchain/types/abstracttype.h"
+#include "abstracttype.h"
 
 namespace KDevelop
 {

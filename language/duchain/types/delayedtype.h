@@ -20,8 +20,8 @@
 #ifndef DELAYEDTYPE_H
 #define DELAYEDTYPE_H
 
-#include "language/duchain/types/abstracttype.h"
-#include "language/duchain/identifier.h"
+#include "abstracttype.h"
+#include "../identifier.h"
 
 namespace KDevelop
 {

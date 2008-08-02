@@ -21,7 +21,7 @@
 #ifndef KROSSPROJECTMANAGER_H
 #define KROSSPROJECTMANAGER_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 
 #include <kross/core/action.h>
 

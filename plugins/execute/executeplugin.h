@@ -22,11 +22,11 @@
 #ifndef EXECUTEPLUGIN_H
 #define EXECUTEPLUGIN_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
 
-#include <irunprovider.h>
+#include <interfaces/irunprovider.h>
 namespace KDevelop
 {
 

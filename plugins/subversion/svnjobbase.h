@@ -13,7 +13,7 @@
 
 #include <vcs/vcsjob.h>
 
-#include <kdevsvncpp/context_listener.hpp>
+#include "kdevsvncpp/context_listener.hpp"
 
 extern "C"
 {

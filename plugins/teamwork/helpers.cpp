@@ -12,9 +12,9 @@
  ***************************************************************************/
 
 #include "helpers.h"
-#include "network/networkfwd.h"
-#include "network/sessioninterface.h"
-#include "network/user.h"
+#include "lib/network/networkfwd.h"
+#include "lib/network/sessioninterface.h"
+#include "lib/network/user.h"
 
 Teamwork::UserPointer userFromSession( const Teamwork::SessionPointer& session ) {
   if( !session ) return 0;

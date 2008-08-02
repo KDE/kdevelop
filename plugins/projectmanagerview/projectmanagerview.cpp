@@ -40,16 +40,16 @@
 #include <kfadewidgeteffect.h>
 #include <kcombobox.h>
 
-#include "icore.h"
-#include "iprojectcontroller.h"
-#include "iuicontroller.h"
-#include "idocumentcontroller.h"
-#include "iproject.h"
-#include "ibuildsystemmanager.h"
-#include "iprojectbuilder.h"
-#include "projectmodel.h"
-#include "projectproxymodel.h"
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <project/projectmodel.h>
 
+#include "projectproxymodel.h"
 #include "projectbuildsetwidget.h"
 #include "projectmanagerviewplugin.h"
 #include "projecttreeview.h"

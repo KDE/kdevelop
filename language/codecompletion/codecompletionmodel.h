@@ -29,10 +29,10 @@
 #include <KTextEditor/CodeCompletionModel>
 #include <KSharedPtr>
 
-#include "language/duchain/duchainpointer.h"
-#include "language/codecompletion/codecompletioncontext.h"
-#include "language/codecompletion/codecompletionitem.h"
-#include "language/languageexport.h"
+#include "../duchain/duchainpointer.h"
+#include "../languageexport.h"
+#include "codecompletioncontext.h"
+#include "codecompletionitem.h"
 
 class QIcon;
 class QString;

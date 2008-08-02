@@ -24,7 +24,7 @@
 #include "interfaces/icore.h"
 #include "interfaces/idocumentcontroller.h"
 
-#include "indexedstring.h"
+#include "../duchain/indexedstring.h"
 #include "editorintegrator.h"
 #include "editorintegratorstatic.h"
 

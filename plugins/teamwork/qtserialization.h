@@ -14,7 +14,7 @@
 #ifndef QTSERIALIZATION_H
 #define QTSERIALIZATION_H
 
-#include "network/serialization.h"
+#include "lib/network/serialization.h"
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/binary_object.hpp>

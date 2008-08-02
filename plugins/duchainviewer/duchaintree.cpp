@@ -28,13 +28,13 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
+#include <language/duchain/duchainbase.h>
 
 #include "duchainmodel.h"
 #include "duchainviewplugin.h"
-#include "duchainbase.h"
 
 using namespace KDevelop;
 

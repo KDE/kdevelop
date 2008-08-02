@@ -25,10 +25,10 @@
 #include <kurl.h>
 #include <ksharedptr.h>
 
-#include "network/serialization.h"
-#include "network/safesharedptr.h"
-#include "network/messagetypeset.h"
-#include "network/easymessage.h"
+#include "lib/network/serialization.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/easymessage.h"
 
 #include "kdevteamwork_messages.h"
 #include "utils.h"

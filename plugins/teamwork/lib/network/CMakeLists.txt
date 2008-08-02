@@ -4,11 +4,6 @@
 
 PROJECT(network)
 
-include_directories(
-        ${COMMONCPP2_INCLUDE_DIRS}
-        ${Boost_INCLUDE_DIRS}
-    )
-
 SET(libfiles
 	serverconfig.cpp
 	message.cpp

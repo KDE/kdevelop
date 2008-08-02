@@ -17,8 +17,8 @@
 #include "kdevteamwork_messageshower.h"
 #include "kdevteamwork_helpers.h"
 #include "indocumentreference.h"
-#include "network/teamworkserver.h"
-#include "network/teamworkclient.h"
+#include "lib/network/teamworkserver.h"
+#include "lib/network/teamworkclient.h"
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/string.hpp>
 

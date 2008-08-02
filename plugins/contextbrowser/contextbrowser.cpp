@@ -33,20 +33,20 @@
 #include <KTextEditor/TextHintInterface>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <duchain/duchainlock.h>
-#include <duchain/duchain.h>
-#include <duchain/ducontext.h>
-#include <duchain/declaration.h>
-#include <duchain/use.h>
-#include <duchain/duchainutils.h>
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/ilanguagesupport.h>
-#include <ilanguagecontroller.h>
-#include <backgroundparser/backgroundparser.h>
-#include <backgroundparser/parsejob.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/use.h>
+#include <language/duchain/duchainutils.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
 #include "contextbrowserview.h"
 
 const unsigned int highlightingTimeout = 150;

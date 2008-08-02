@@ -19,8 +19,16 @@
  */
 
 #include "coverageplugin.h"
-#include "outputview/covoutputdelegate.h"
-#include "outputview/covoutputjob.h"
+
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KLocale>
+#include <KPluginFactory>
+#include <KPluginLoader>
+
+#include <outputview/covoutputdelegate.h>
+#include <outputview/covoutputjob.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
@@ -31,12 +39,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectfilemanager.h>
 
-#include <KAction>
-#include <KActionCollection>
-#include <KDebug>
-#include <KLocale>
-#include <KPluginFactory>
-#include <KPluginLoader>
 
 using KDevelop::Context;
 using KDevelop::ContextMenuExtension;

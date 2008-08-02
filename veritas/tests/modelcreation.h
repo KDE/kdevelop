@@ -21,9 +21,9 @@
 #ifndef VERITAS_MODELCREATION_H
 #define VERITAS_MODELCREATION_H
 
-#include <test.h>
-#include <runnermodel.h>
-#include <resultsmodel.h>
+#include "../mvc/runnermodel.h"
+#include "../mvc/resultsmodel.h"
+#include "../test.h"
 #include <KDebug>
 
 namespace Veritas

@@ -38,18 +38,18 @@
 
 #include <kparts/componentfactory.h>
 
-#include "projectmodel.h"
-#include "icore.h"
-#include "iproject.h"
-#include "iprojectfilemanager.h"
-#include "ibuildsystemmanager.h"
-#include "iuicontroller.h"
-#include "iruncontroller.h"
-#include "idocumentcontroller.h"
-#include "iprojectbuilder.h"
-#include "iprojectcontroller.h"
-#include "importprojectjob.h"
-#include "context.h"
+#include <project/projectmodel.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/importprojectjob.h>
+#include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
 #include "projectmanagerview.h"

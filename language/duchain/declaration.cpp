@@ -34,15 +34,15 @@
 #include "forwarddeclaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
-#include "identifiedtype.h"
 #include "ducontextdata.h"
 #include "declarationid.h"
 #include "definitions.h"
 #include "uses.h"
 #include "indexedstring.h"
-#include "repositories/stringrepository.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
+#include "repositories/stringrepository.h"
+#include "types/identifiedtype.h"
 
 using namespace KTextEditor;
 

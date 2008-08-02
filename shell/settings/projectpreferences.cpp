@@ -24,8 +24,8 @@
 #include <kgenericfactory.h>
 
 #include "projectconfig.h"
-#include "core.h"
-#include "projectcontroller.h"
+#include "../core.h"
+#include "../projectcontroller.h"
 
 #include "ui_projectsettings.h"
 

@@ -31,8 +31,8 @@
 #include <KDebug>
 #include <kio/netaccess.h>
 
-#include <dvcsjob.h>
-#include <gitexecutor.h>
+#include <vcs/dvcs/dvcsjob.h>
+#include "../gitexecutor.h"
 
 #define GITTEST_DIR1                    "kdevGit_testdir"
 #define GITTEST_BASEDIR_NO_TR_SLASH     "/tmp/kdevGit_testdir"

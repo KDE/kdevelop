@@ -21,8 +21,8 @@
 #ifndef CONSTANTINTEGRALTYPE_H
 #define CONSTANTINTEGRALTYPE_H
 
-#include <language/duchain/types/integraltype.h>
-#include <language/duchain/types/typesystemdata.h>
+#include "integraltype.h"
+#include "typesystemdata.h"
 
 namespace KDevelop
 {

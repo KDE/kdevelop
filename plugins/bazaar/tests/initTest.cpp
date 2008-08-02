@@ -31,15 +31,13 @@
 #include <KDebug>
 #include <kio/netaccess.h>
 
-#include <iplugincontroller.h>
-#include <iplugin.h>
-#include <plugincontroller.h>
-#include <core.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iplugin.h>
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
-#include <dvcsjob.h>
-#include <bzrexecutor.h>
+#include <vcs/dvcs/dvcsjob.h>
+#include "bzrexecutor.h"
 
 #define BZRTEST_DIR1            "kdevBazaar_testdir"
 #define BZRTEST_BASEDIR         "/tmp/kdevBazaar_testdir/"

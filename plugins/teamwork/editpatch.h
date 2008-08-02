@@ -15,7 +15,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define EDITPATCH_H
 
 #include <QObject>
-#include "network/sharedptr.h"
+#include "lib/network/sharedptr.h"
 #include "ui_kdevteamwork_editpatch.h"
 #include <QPointer>
 #include "safelogger.h"

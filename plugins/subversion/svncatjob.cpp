@@ -29,8 +29,8 @@
 
 #include <vcs/vcsrevision.h>
 
-#include <kdevsvncpp/path.hpp>
-#include <kdevsvncpp/revision.hpp>
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/revision.hpp"
 
 #include "svnclient.h"
 

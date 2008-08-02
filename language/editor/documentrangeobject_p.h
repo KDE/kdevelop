@@ -22,7 +22,7 @@
 #include "documentrangeobject.h"
 #include <ktexteditor/smartrange.h>
 #include "simplerange.h"
-#include "appendedlist.h"
+#include "../duchain/appendedlist.h"
 
 namespace KDevelop
 {

@@ -13,7 +13,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #ifndef VECTORTIMESTAMPEDITOR_H
 #define VECTORTIMESTAMPEDITOR_H
 
-#include "network/sharedptr.h"
+#include "lib/network/sharedptr.h"
 #include <QObject>
 #include "ui_kdevteamwork_vectortimestampwidget.h"
 #include "ui_kdevteamwork_timestampwidget.h"
@@ -22,8 +22,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QDateTime>
 #include <QPointer>
 #include "loglevel.h"
-#include "dynamictext/vectortimestamp.h"
-#include "network/logger.h"
+#include "lib/dynamictext/vectortimestamp.h"
+#include "lib/network/logger.h"
 
 class VectorTimestampEditor;
 class TimestampEditor;

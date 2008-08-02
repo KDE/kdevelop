@@ -17,10 +17,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #ifndef FILECOLLABORATIONMANAGER_H
 #define FILECOLLABORATIONMANAGER_H
 
-#include "network/messagetypeset.h"
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
-#include "network/crossmap.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/weaksafesharedptr.h"
+#include "lib/network/crossmap.h"
 
 #include "filecollaborationmessages.h"
 #include "safelogger.h"

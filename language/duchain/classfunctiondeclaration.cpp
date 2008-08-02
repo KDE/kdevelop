@@ -21,7 +21,7 @@
 #include "classfunctiondeclaration.h"
 
 #include "ducontext.h"
-#include "language/duchain/types/functiontype.h"
+#include "types/functiontype.h"
 #include "duchainregister.h"
 
 namespace KDevelop

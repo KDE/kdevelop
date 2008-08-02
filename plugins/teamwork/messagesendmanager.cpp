@@ -16,9 +16,9 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <idocument.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
 #include <indocumentreference.h>
 
 #include "kdevteamworkplugin.h"

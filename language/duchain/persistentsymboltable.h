@@ -16,9 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QObject>
-#include "language/languageexport.h"
+#include <QtCore/QObject>
 #include <util/kdevvarlengtharray.h>
+#include "../languageexport.h"
 
 #ifndef PERSISTENTSYMBOLTABLE_H
 #define PERSISTENTSYMBOLTABLE_H

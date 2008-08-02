@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "projectconfigskeleton.h"
-#include "iproject.h"
+#include <interfaces/iproject.h>
 
 #include <kdebug.h>
 #include <kio/netaccess.h>

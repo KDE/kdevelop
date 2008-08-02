@@ -36,8 +36,8 @@ extern "C"
 
 #include <iostream>
 
-#include <kdevsvncpp/client.hpp>
-#include <kdevsvncpp/status.hpp>
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/status.hpp"
 
 KDevelop::VcsStatusInfo::State getState( svn::Status st )
 {

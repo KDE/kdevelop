@@ -21,8 +21,8 @@
 
 #include <QtCore/QObject>
 
-#include "language/duchain/duchainobserver.h"
-#include "language/duchain/topducontext.h"
+#include "duchainobserver.h"
+#include "topducontext.h"
 
 class KUrl;
 

@@ -20,8 +20,8 @@
 
 #include "referencetype.h"
 
-#include "indexedstring.h"
-#include "repositories/typerepository.h"
+#include "../indexedstring.h"
+#include "../repositories/typerepository.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"

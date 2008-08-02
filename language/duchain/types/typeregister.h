@@ -19,7 +19,7 @@
 #ifndef TYPEREGISTER_H
 #define TYPEREGISTER_H
 
-#include "language/duchain/types/abstracttype.h"
+#include "abstracttype.h"
 #include "typesystemdata.h"
 
 namespace KDevelop {

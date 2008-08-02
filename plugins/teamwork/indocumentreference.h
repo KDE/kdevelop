@@ -15,7 +15,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include  <QString>
 #include <string>
-#include "network/sharedptr.h"
+#include "lib/network/sharedptr.h"
 #include "sumsearch.h"
 
 class InDocumentReference {

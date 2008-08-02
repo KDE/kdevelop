@@ -23,7 +23,7 @@
 
 #include <QModelIndex>
 #include <KGlobalSettings>
-#include "../interfaces/icore.h"
+#include <interfaces/icore.h>
 
 using Veritas::CovOutputModel;
 using Veritas::CovOutputItem;

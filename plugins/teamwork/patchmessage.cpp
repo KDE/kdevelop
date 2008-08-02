@@ -12,7 +12,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  ***************************************************************************/
 
 #include "patchmessage.h"
-#include "network/serialization.h"
+#include "lib/network/serialization.h"
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>

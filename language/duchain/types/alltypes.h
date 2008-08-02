@@ -19,13 +19,13 @@
 #ifndef ALLTYPES_H
 #define ALLTYPES_H
 
-#include "language/duchain/types/integraltype.h"
-#include "language/duchain/types/functiontype.h"
-#include "language/duchain/types/pointertype.h"
-#include "language/duchain/types/referencetype.h"
-#include "language/duchain/types/structuretype.h"
-#include "language/duchain/types/delayedtype.h"
-#include "language/duchain/types/arraytype.h"
+#include "integraltype.h"
+#include "functiontype.h"
+#include "pointertype.h"
+#include "referencetype.h"
+#include "structuretype.h"
+#include "delayedtype.h"
+#include "arraytype.h"
 
 #endif
 

@@ -29,16 +29,16 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "patchesmanager.h"
 #include <kfiledialog.h>
 #include "kdevteamwork.h"
-#include <idocument.h>
+#include <interfaces/idocument.h>
 //#include "kdevdiffinterface.h"
 #include "kdevteamworkplugin.h"
 #include "collaborationmanager.h"
 #include <QStandardItemModel>
-#include <icore.h>
+#include <interfaces/icore.h>
 #include "serializationutils.h"
 #include "kdevteamwork_user.h"
 #include "messagemanager.h"
-#include "network/messagetypeset.h"
+#include "lib/network/messagetypeset.h"
 #include "kdevteamwork_helpers.h"
 #include "teamworkfoldermanager.h"
 #include <kde_terminal_interface.h>
@@ -46,18 +46,18 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <kparts/factory.h>
 #include <kdialog.h>
 
-#include "libdiff2/komparemodellist.h"
-#include "libdiff2/kompare.h"
+#include "lib/libdiff2/komparemodellist.h"
+#include "lib/libdiff2/kompare.h"
 #include <kmessagebox.h>
 #include <QMetaType>
 #include <QVariant>
-#include "libdiff2/diffsettings.h"
+#include "lib/libdiff2/diffsettings.h"
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/smartinterface.h>
-#include "idocumentcontroller.h"
+#include <interfaces/idocumentcontroller.h>
 
 #include "kdevteamwork_client.h"
 
@@ -1157,7 +1157,7 @@ void EditPatch::updateKompareModel() {
     } catch ( const QString & str ) {
       throw;
     } catch ( ... ) {
-      throw QString( "libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
+      throw QString( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
     }
     m_filesModel->clear();
     m_filesModel->insertColumns( 0, 1 );

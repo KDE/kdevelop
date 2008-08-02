@@ -19,17 +19,17 @@
 #ifndef ITEMREPOSITORY_H
 #define ITEMREPOSITORY_H
 
-#include <QString>
-#include <QVector>
-#include <QByteArray>
-#include <QMutex>
-#include <QList>
-#include <QDir>
-#include <QFile>
-#include <qatomic.h>
+#include <QtCore/QString>
+#include <QtCore/QVector>
+#include <QtCore/QByteArray>
+#include <QtCore/QMutex>
+#include <QtCore/QList>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QAtomicInt>
 #include <klockfile.h>
 #include <kdebug.h>
-#include "../languageexport.h"
+#include "../../languageexport.h"
 
 #define DEBUG_ITEMREPOSITORY_LOADING
 

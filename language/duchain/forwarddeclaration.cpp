@@ -27,8 +27,8 @@
 #include "ducontext.h"
 #include "use.h"
 #include "symboltable.h"
-#include "identifiedtype.h"
 #include "duchainregister.h"
+#include "types/identifiedtype.h"
 
 using namespace KTextEditor;
 

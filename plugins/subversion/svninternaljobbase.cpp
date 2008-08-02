@@ -38,9 +38,9 @@ extern "C" {
 #include <vcs/vcsrevision.h>
 
 #include <svnjobbase.h>
-#include <kdevsvncpp/context.hpp>
-#include <kdevsvncpp/apr.hpp>
-#include <kdevsvncpp/revision.hpp>
+#include "kdevsvncpp/context.hpp"
+#include "kdevsvncpp/apr.hpp"
+#include "kdevsvncpp/revision.hpp"
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),

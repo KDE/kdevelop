@@ -20,7 +20,7 @@
 #include "scriptingmanager.h"
 #include "scripttools.h"
 
-#include "icore.h"
+#include "../icore.h"
 
 #include <kross/core/manager.h>
 

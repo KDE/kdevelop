@@ -26,6 +26,9 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtGui/QApplication>
+#include <QtGui/QAction>
+#include <QtDesigner/QExtensionManager>
+
 #include <kcmdlineargs.h>
 #include <klibloader.h>
 #include <kservice.h>
@@ -41,17 +44,14 @@ Boston, MA 02110-1301, USA.
 #include <kaction.h>
 #include <kxmlguifactory.h>
 #include <kmenu.h>
-#include <QtGui/QAction>
 
 #include <interfaces/contextmenuextension.h>
-#include "iplugin.h"
+#include <interfaces/iplugin.h>
+
 #include "profileengine.h"
 #include "mainwindow.h"
-
 #include "core.h"
-/*#include "partselectwidget.h"*/
 #include "shellextension.h"
-#include <QtDesigner/QExtensionManager>
 
 namespace KDevelop
 {

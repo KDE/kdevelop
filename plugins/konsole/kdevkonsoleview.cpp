@@ -25,8 +25,8 @@
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
 
-#include <icore.h>
-#include <iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 // #include <kdevdocumentcontroller.h>
 
 #include "kdevkonsoleviewplugin.h"

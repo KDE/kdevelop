@@ -31,8 +31,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include "projectmodel.h"
-#include "iproject.h"
+#include <project/projectmodel.h>
 
 QString getRelativeFolder( KDevelop::ProjectBaseItem* item )
 {

@@ -19,11 +19,11 @@
 #ifndef KDEV_DECLARATIONBUILDER_H
 #define KDEV_DECLARATIONBUILDER_H
 
-#include "language/duchain/classfunctiondeclaration.h"
-#include "language/duchain/symboltable.h"
-#include "language/duchain/forwarddeclaration.h"
-#include "language/duchain/types/identifiedtype.h"
-#include "language/duchain/functiondeclaration.h"
+#include "../classfunctiondeclaration.h"
+#include "../symboltable.h"
+#include "../forwarddeclaration.h"
+#include "../types/identifiedtype.h"
+#include "../functiondeclaration.h"
 
 namespace KDevelop
 {

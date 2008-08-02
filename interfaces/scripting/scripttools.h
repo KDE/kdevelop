@@ -21,8 +21,8 @@
 #define SCRIPTTOOLS_H
 
 #include <QtCore/qobject.h>
-#include "idocument.h"
-#include "idocumentcontroller.h"
+#include "../idocument.h"
+#include "../idocumentcontroller.h"
 
 Q_DECLARE_METATYPE(KDevelop::IDocument*)
 Q_DECLARE_METATYPE(KDevelop::IDocumentController*)

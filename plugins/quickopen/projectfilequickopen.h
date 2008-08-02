@@ -20,8 +20,8 @@
 #define PROJECT_FILE_QUICKOPEN
 
 #include <KUrl>
-#include <quickopendataprovider.h>
-#include <quickopenfilter.h>
+#include <language/interfaces/quickopendataprovider.h>
+#include <language/interfaces/quickopenfilter.h>
 
 namespace KDevelop {
   class ICore;

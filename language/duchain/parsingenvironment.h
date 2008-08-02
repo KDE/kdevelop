@@ -20,15 +20,15 @@
 #define PARSINGENVIRONMENT_H
 
 #include <QtCore/QDateTime>
-#include <QString>
+#include <QtCore/QString>
 
 #include <ksharedptr.h>
 #include <kurl.h>
 
 #include "indexedstring.h"
 
-#include "language/editor/hashedstring.h"
-#include "language/languageexport.h"
+#include "../editor/hashedstring.h"
+#include "../languageexport.h"
 #include "duchainbase.h"
 
 namespace KDevelop

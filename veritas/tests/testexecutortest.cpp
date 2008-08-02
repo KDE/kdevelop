@@ -20,15 +20,17 @@
 
 #include "testexecutortest.h"
 
-#include "veritas/test.h"
-#include "veritas/testexecutor.h"
 
 #include <qtest_kde.h>
 #include <KDebug>
-#include <kasserts.h>
 #include <QModelIndex>
 #include <QMetaType>
 #include <QSignalSpy>
+
+#include "kasserts.h"
+
+#include "../test.h"
+#include "../testexecutor.h"
 
 using Veritas::ut::TestExecutorTest;
 using Veritas::Test;

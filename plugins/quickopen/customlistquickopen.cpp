@@ -19,8 +19,8 @@
 
 #include "customlistquickopen.h"
 #include <QIcon>
-#include <idocumentcontroller.h>
-#include <icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
 
 using namespace KDevelop;
 

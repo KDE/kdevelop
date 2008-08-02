@@ -28,13 +28,13 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include "duchain.h"
-#include "duchainlock.h"
+#include "../duchain/duchain.h"
+#include "../duchain/duchainlock.h"
 #include "codecompletionmodel.h"
-#include "declaration.h"
-#include "classfunctiondeclaration.h"
-#include "namespacealiasdeclaration.h"
-#include "duchainutils.h"
+#include "../duchain/declaration.h"
+#include "../duchain/classfunctiondeclaration.h"
+#include "../duchain/namespacealiasdeclaration.h"
+#include "../duchain/duchainutils.h"
 
 
 using namespace KTextEditor;

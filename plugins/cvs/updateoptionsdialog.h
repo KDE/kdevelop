@@ -13,7 +13,7 @@
 
 #include <QDialog>
 
-#include "vcsrevision.h"
+#include <vcs/vcsrevision.h>
 
 #include "ui_updateoptionsdialog.h"
 

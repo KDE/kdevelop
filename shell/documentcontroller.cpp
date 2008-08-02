@@ -36,20 +36,20 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <krecentfilesaction.h>
 #include <ktemporaryfile.h>
+#include <kplugininfo.h>
 #include <ktexteditor/document.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
+#include <interfaces/iplugincontroller.h>
 
 #include "core.h"
 #include "mainwindow.h"
 #include "textdocument.h"
 #include "uicontroller.h"
 #include "partcontroller.h"
-#include "iplugincontroller.h"
 #include "savedialog.h"
 
-#include <kplugininfo.h>
 
 namespace KDevelop
 {

@@ -17,15 +17,6 @@ FIND_PROGRAM(BZR NAMES bzr
 
 if (BZR)
 
-	include_directories( ${KDE4_INCLUDES}
-		${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/util
-        ${CMAKE_SOURCE_DIR}/interfaces
-		${CMAKE_SOURCE_DIR}/vcs
-        ${CMAKE_SOURCE_DIR}/shell
-		${CMAKE_SOURCE_DIR}/plugins/bazaar
-        ${CMAKE_SOURCE_DIR}/vcs/dvcs/
-	)
     set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 	set(bzrInitTest_SRCS initTest.cpp ${CMAKE_SOURCE_DIR}/vcs/dvcs/dvcsjob.cpp ../bzrexecutor.cpp)
     kde4_add_unit_test(kdevbzr-test ${bzrInitTest_SRCS})
@@ -34,7 +25,6 @@ if (BZR)
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
-        kdevplatformshell
 	)
 endif (BZR)
 

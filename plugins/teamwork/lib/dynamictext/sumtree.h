@@ -17,8 +17,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <list>
 #include <vector>
 
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "../network/safesharedptr.h"
+#include "../network/weaksafesharedptr.h"
 
 #include "verify.h"
 #include "dynamictextexport.h"

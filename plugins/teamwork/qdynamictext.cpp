@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "qdynamictext.h"
-#include "network/serialization.h"
+#include "lib/network/serialization.h"
 #include <boost/serialization/export.hpp>
 
 QDynamicText::QDynamicText( const VectorTimestamp& initialState, const std::string& initialText ) : DynamicText( initialState, initialText ) {

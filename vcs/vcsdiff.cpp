@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <vcsdiff.h>
+#include "vcsdiff.h"
 
 #include <QtCore/QString>
 #include <QtCore/QByteArray>

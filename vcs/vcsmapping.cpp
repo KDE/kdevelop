@@ -20,10 +20,10 @@
 
 #include "vcsmapping.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QPair>
+//Needed first as it provides a hash-function for QHash
 #include "vcslocation.h"
 
+#include <QtCore/QPair>
 #include <QtCore/QHash>
 
 

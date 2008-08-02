@@ -17,13 +17,15 @@
 */
 
 #include "persistentsymboltable.h"
+
+#include <QHash>
+#include <QVector>
+
 #include "declarationid.h"
 #include "duchainpointer.h"
 #include "appendedlist.h"
 #include "repositories/itemrepository.h"
 #include "identifier.h"
-#include <QHash>
-#include <QVector>
 
 namespace KDevelop {
 

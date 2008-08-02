@@ -17,17 +17,17 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 //#include <boost/serialization/extended_type_info_typeid.hpp>
 
-#include "network/serialization.h"
-#include "network/messagetypeset.h"
-#include "network/teamworkmessages.h"
-#include "network/forwardsession.h"
+#include "lib/network/serialization.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/teamworkmessages.h"
+#include "lib/network/forwardsession.h"
 
 #include <QString>
 #include <QDateTime>
 #include "utils.h"
 #include <QIcon>
 #include <QVariant>
-#include "network/easymessage.h"
+#include "lib/network/easymessage.h"
 #include <string>
 #include <boost/serialization/level.hpp>
 #include "loglevel.h"

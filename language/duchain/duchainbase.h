@@ -19,9 +19,9 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
-#include "language/editor/documentrangeobject.h"
-#include "language/editor/hashedstring.h"
-#include "language/languageexport.h"
+#include "../editor/documentrangeobject.h"
+#include "../editor/hashedstring.h"
+#include "../languageexport.h"
 #include "appendedlist.h"
 
 namespace KDevelop

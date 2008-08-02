@@ -28,15 +28,15 @@
 #include <QtGui/QAction>
 #include <QtGui/QAbstractItemDelegate>
 
-#include <icore.h>
-#include <iuicontroller.h>
-
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 
 #include <sublime/view.h>
 #include <sublime/area.h>

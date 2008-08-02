@@ -41,14 +41,15 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-#include <State.h>
-#include <ThreadWeaver.h>
-#include <JobCollection.h>
-#include <DebuggingAids.h>
+#include <threadweaver/State.h>
+#include <threadweaver/ThreadWeaver.h>
+#include <threadweaver/JobCollection.h>
+#include <threadweaver/DebuggingAids.h>
 
-#include "ilanguagecontroller.h"
-#include "ilanguage.h"
-#include "ilanguagesupport.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+
+#include "../interfaces/ilanguagesupport.h"
 
 #include "parsejob.h"
 #include "parserdependencypolicy.h"

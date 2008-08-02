@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEREGISTER_H
-#define TYPEREGISTER_H
+#ifndef DUCHAINREGISTER_H
+#define DUCHAINREGISTER_H
 
 #include "duchainbase.h"
 

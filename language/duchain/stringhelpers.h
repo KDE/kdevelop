@@ -19,7 +19,7 @@
 #ifndef __DUCHAIN_STRINGHELPERS_H__
 #define __DUCHAIN_STRINGHELPERS_H__
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 #include <QtCore/QChar>
 

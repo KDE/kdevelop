@@ -23,7 +23,7 @@
 
 #include <QtTest/QtTest>
 #include <QTreeView>
-#include <ui_runnerwindow.h>
+#include "../ui_runnerwindow.h"
 
 namespace Veritas
 {

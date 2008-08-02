@@ -19,9 +19,9 @@
 #ifndef KDEV_TEXTDOCUMENT_H
 #define KDEV_TEXTDOCUMENT_H
 
-#include "partdocument.h"
+#include <sublime/view.h>
 
-#include "sublime/view.h"
+#include "partdocument.h"
 
 #include "shellexport.h"
 

@@ -20,8 +20,8 @@ This header implements a very simple signalling-system that uses the SafeSharedP
 
 #include <QObject>
 #include <ext/hash_set>
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/weaksafesharedptr.h"
 
 struct SignalProxyBase {
   virtual void signal() = 0;

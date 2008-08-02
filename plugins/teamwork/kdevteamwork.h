@@ -25,8 +25,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "teamworkfwd.h"
 #include "loglevel.h"
-#include "network/safesharedptr.h"
-#include "network/messageinterface.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/messageinterface.h"
 #include "autoconstructpointer.h"
 
 using namespace Teamwork;

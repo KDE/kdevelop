@@ -32,8 +32,8 @@
 #include <kicon.h>
 #include <kmenu.h>
 
-#include "projectmodel.h"
-#include "iproject.h"
+#include <project/projectmodel.h>
+#include <interfaces/iproject.h>
 
 #include "projectmanagerviewplugin.h"
 #include "projectmanagerview.h"

@@ -25,9 +25,9 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include "core.h"
+#include "../core.h"
 #include "../mainwindow.h"
-#include "uicontroller.h"
+#include "../uicontroller.h"
 #include "ui_uiconfig.h"
 #include "uiconfig.h"
 

@@ -21,7 +21,7 @@
 
 #include "shellexport.h"
 
-#include <iuicontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <sublime/controller.h>
 
 #include <ksharedconfig.h>

@@ -1,16 +1,5 @@
 add_subdirectory(tests)
 
-include_directories( ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/util
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/project
-    ${CMAKE_SOURCE_DIR}/vcs
-    ${CMAKE_SOURCE_DIR}/vcs/interfaces
-    ${CMAKE_SOURCE_DIR}/vcs/models
-    ${CMAKE_SOURCE_DIR}/vcs/dvcs/
-)
-
-
 ########### next target ###############
 
 set(kdevhg_PART_SRCS

@@ -13,7 +13,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "kdevteamwork_helpers.h"
 #include <QIcon>
 #include <kiconloader.h>
-#include "network/messagetypeset.h"
+#include "lib/network/messagetypeset.h"
 
 IconCache* IconCache::m_instance = 0;
 

@@ -37,18 +37,18 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <ilanguagecontroller.h>
-#include <ilanguagesupport.h>
-#include <ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/idocument.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
-#include <idocument.h>
 
-#include "duchain.h"
-#include "duchainobserver.h"
-#include "duchainlock.h"
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainobserver.h>
+#include <language/duchain/duchainlock.h>
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"

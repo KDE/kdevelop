@@ -19,7 +19,7 @@
 #include <QStringList>
 #include <KProcess>
 
-#include "vcsjob.h"
+#include <vcs/vcsjob.h>
 
 /**
  * This class is capable of running our cvs commands

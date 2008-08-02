@@ -21,7 +21,7 @@
 
 #include <QtCore/QMutex>
 
-#include "language/duchain/ducontext.h"
+#include "ducontext.h"
 
 template< class T >
 class KSharedPtr;

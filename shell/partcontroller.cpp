@@ -43,10 +43,11 @@
 #include <ktexteditor/factory.h>
 #include <ktexteditor/smartinterface.h>
 
+#include <language/editor/editorintegrator.h>
+
 #include "core.h"
 // #include "kdevmainwindow.h"
 // #include "kdevconfig.h"
-#include "editorintegrator.h"
 
 namespace KDevelop
 {

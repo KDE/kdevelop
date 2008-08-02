@@ -24,9 +24,9 @@
 #include <QString>
 #include <QObject>
 
-#include <kdevsvncpp/path.hpp>
-#include <kdevsvncpp/revision.hpp>
-#include <kdevsvncpp/client.hpp>
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/revision.hpp"
+#include "kdevsvncpp/client.hpp"
 
 #include <vcs/vcsevent.h>
 namespace KDevelop

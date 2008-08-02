@@ -16,8 +16,8 @@
 
 //krazy:excludeall=dpointer,inline
 
-#include <QString>
-#include "language/languageexport.h"
+#include <QtCore/QString>
+#include "../languageexport.h"
 
 class QDataStream;
 

@@ -20,10 +20,10 @@
 
 #include "proxymodelcommontest.h"
 
-#include <proxymodelcommon.h>
 #include <QString>
 #include <qtest_kde.h>
 #include <kasserts.h>
+#include "../mvc/proxymodelcommon.h"
 
 using Veritas::ProxyModelCommon;
 using Veritas::ut::ProxyModelCommonTest;

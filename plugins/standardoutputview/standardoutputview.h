@@ -22,8 +22,8 @@
 #ifndef STANDARDOUTPUTVIEW_H
 #define STANDARDOUTPUTVIEW_H
 
-#include "ioutputview.h"
-#include "iplugin.h"
+#include <outputview/ioutputview.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 template <typename T> class QList;

@@ -29,9 +29,9 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include "core.h"
-#include "idocumentcontroller.h"
-#include "idocument.h"
+#include "../core.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
 #include "ccconfig.h"
 

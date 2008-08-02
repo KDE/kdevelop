@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <kdebug.h>
 
-#include "iproject.h"
+#include <interfaces/iproject.h>
 
 namespace KDevelop
 {

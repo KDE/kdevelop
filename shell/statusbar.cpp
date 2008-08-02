@@ -24,13 +24,13 @@
 
 #include <KDebug>
 
-#include <istatus.h>
+#include <interfaces/istatus.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 
-#include "view.h"
+#include <sublime/view.h>
 
 #include "plugincontroller.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser.h"
 #include "core.h"
 
 namespace KDevelop

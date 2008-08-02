@@ -20,7 +20,7 @@
 #ifndef ARRAYTYPE_H
 #define ARRAYTYPE_H
 
-#include "language/duchain/types/abstracttype.h"
+#include "abstracttype.h"
 
 namespace KDevelop
 {

@@ -27,9 +27,9 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "documentwrapper.h"
 #include "kdevteamwork_helpers.h"
 
-#include "dynamictext/verify.h"
-#include "network/messagesendhelper.h"
-#include "network/messagetypeset.h"
+#include "lib/dynamictext/verify.h"
+#include "lib/network/messagesendhelper.h"
+#include "lib/network/messagetypeset.h"
 
 
 

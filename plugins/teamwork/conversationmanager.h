@@ -23,7 +23,7 @@
 #include "teamworkfwd.h"
 #include "indocumentreference.h"
 #include "messagehistorymanager.h"
-#include "network/crossmap.h"
+#include "lib/network/crossmap.h"
 #include "safelogger.h"
 #include "ui_kdevteamwork_internalmessage.h"
 #

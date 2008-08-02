@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "filesynchronizemessage.h"
-#include "dynamictext/dynamictext.h"
+#include "lib/dynamictext/dynamictext.h"
 #include "utils.h"
 #include "qtserialization.h"
 #include <boost/serialization/vector.hpp>

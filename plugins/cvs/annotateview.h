@@ -14,7 +14,7 @@
 #include <QDialog>
 #include <KJob>
 
-#include <vcsannotation.h>
+#include <vcs/vcsannotation.h>
 
 #include "ui_annotateview.h"
 

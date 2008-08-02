@@ -47,7 +47,7 @@ Boston, MA 02110-1301, USA.
 #include <sublime/view.h>
 #include <sublime/document.h>
 
-#include "iplugin.h"
+#include <interfaces/iplugin.h>
 
 #include "core.h"
 #include "partdocument.h"

@@ -27,12 +27,12 @@
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include <icore.h>
-#include <ilanguage.h>
-#include <ilanguagecontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/ilanguagecontroller.h>
 
-#include <duchain.h>
-#include <topducontext.h>
+#include "../duchain/duchain.h"
+#include "../duchain/topducontext.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;

@@ -24,8 +24,8 @@
 #include <QtCore/QList>
 
 #include "typepointer.h"
-#include "language/duchain/identifier.h"
-#include "language/duchain/types/abstracttype.h"
+#include "../identifier.h"
+#include "abstracttype.h"
 
 namespace KDevelop
 {

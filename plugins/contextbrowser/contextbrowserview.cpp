@@ -33,14 +33,14 @@
 
 #include <klocale.h>
 
-#include <duchain/declaration.h>
-#include <duchain/ducontext.h>
-#include <duchain/duchain.h>
-#include <duchain/duchainlock.h>
-#include <duchain/indexedstring.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/indexedstring.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "contextbrowser.h"
 

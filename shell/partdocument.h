@@ -19,7 +19,7 @@
 #ifndef KDEV_PARTDOCUMENT_H
 #define KDEV_PARTDOCUMENT_H
 
-#include <idocument.h>
+#include <interfaces/idocument.h>
 #include <sublime/urldocument.h>
 
 #include "shellexport.h"

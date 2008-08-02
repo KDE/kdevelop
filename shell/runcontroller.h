@@ -22,10 +22,10 @@ Boston, MA 02110-1301, USA.
 
 #include <QPointer>
 
-#include "irun.h"
-#include "irunprovider.h"
-#include "iruncontroller.h"
-#include "outputjob.h"
+#include <interfaces/irun.h>
+#include <interfaces/irunprovider.h>
+#include <interfaces/iruncontroller.h>
+#include <outputview/outputjob.h>
 
 namespace KDevelop
 {

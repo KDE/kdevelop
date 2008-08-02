@@ -19,14 +19,6 @@ Boston, MA 02110-1301, USA.
 
 #include "runcontroller.h"
 
-#include "core.h"
-#include "plugincontroller.h"
-#include "uicontroller.h"
-#include "projectcontroller.h"
-#include "iproject.h"
-#include "mainwindow.h"
-#include "ioutputview.h"
-
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QItemDelegate>
@@ -37,6 +29,14 @@ Boston, MA 02110-1301, USA.
 #include <KMessageBox>
 #include <KLocale>
 #include <KDebug>
+#include <interfaces/iproject.h>
+#include <outputview/ioutputview.h>
+
+#include "core.h"
+#include "plugincontroller.h"
+#include "uicontroller.h"
+#include "projectcontroller.h"
+#include "mainwindow.h"
 
 using namespace KDevelop;
 

@@ -29,8 +29,8 @@
 #include <KJob>
 #include <QStringList>
 
-#include <idvcsexecutor.h>
-#include "vcsrevision.h"
+#include <vcs/dvcs/idvcsexecutor.h>
+#include <vcs/vcsrevision.h>
 
 class DVCSjob;
 

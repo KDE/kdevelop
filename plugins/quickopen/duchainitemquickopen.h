@@ -20,9 +20,9 @@
 #define DUCHAIN_ITEM_QUICKOPEN
 
 #include <KUrl>
-#include <quickopendataprovider.h>
-#include <quickopenfilter.h>
-#include <duchainpointer.h>
+#include <language/interfaces/quickopendataprovider.h>
+#include <language/interfaces/quickopenfilter.h>
+#include <language/duchain/duchainpointer.h>
 
 
 namespace KDevelop {

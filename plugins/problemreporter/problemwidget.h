@@ -27,7 +27,7 @@
 #include <KUrl>
 #include <KTextEditor/Range>
 
-#include <iproblem.h>
+#include <language/interfaces/iproblem.h>
 
 namespace KDevelop {
   class ParseJob;

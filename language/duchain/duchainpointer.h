@@ -19,14 +19,9 @@
 #ifndef DUCHAINPOINTER_H
 #define DUCHAINPOINTER_H
 
-#include <QMetaType>
+#include <QtCore/QMetaType>
 #include <ksharedptr.h>
 #include "../languageexport.h"
-//#include "language/duchain/ducontext.h"
-//#include "language/duchain/topducontext.h"
-//#include "language/duchain/declaration.h"
-//#include "language/duchain/use.h"
-//#include "language/duchain/abstractfunctiondeclaration.h"
 
 //krazy:excludeall=dpointer
 

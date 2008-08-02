@@ -22,7 +22,7 @@
 #define KROSSTOOLVIEWFACTORY_H
 
 #include <kross/core/action.h>
-#include "iuicontroller.h"
+#include <interfaces/iuicontroller.h>
 
 class KrossToolViewFactory: public KDevelop::IToolViewFactory, public QObject
 {

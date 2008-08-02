@@ -25,11 +25,12 @@
 #include <ktextedit.h>
 #include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
+
 #include "../vcsjob.h"
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
-#include "../../interfaces/icore.h"
-#include "../../interfaces/iruncontroller.h"
 
 #include "ui_vcsdiffwidget.h"
 

@@ -20,14 +20,14 @@
 #include <QIcon>
 #include <QTextBrowser>
 #include <klocale.h>
-#include <iprojectcontroller.h>
-#include <idocumentcontroller.h>
-#include <iproject.h>
-#include <icore.h>
-#include <duchain/topducontext.h>
-#include <duchain/duchain.h>
-#include <duchain/duchainlock.h>
-#include <duchain/indexedstring.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/indexedstring.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;

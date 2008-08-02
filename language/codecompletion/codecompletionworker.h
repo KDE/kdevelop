@@ -29,8 +29,8 @@
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Range>
 
-#include "language/languageexport.h"
-#include "language/duchain/duchainpointer.h"
+#include "../languageexport.h"
+#include "../duchain/duchainpointer.h"
 
 class QMutex;
 

@@ -14,7 +14,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #define NOCATCH
 
 #include "dynamictext.h"
-#include "network/serialization.h"
+#include "../network/serialization.h"
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/export.hpp>
 #include <ostream>

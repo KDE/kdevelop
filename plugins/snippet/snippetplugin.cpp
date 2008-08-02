@@ -18,8 +18,8 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <kparts/partmanager.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 
 #include "snippetview.h"
 #include "snippetcompletionmodel.h"

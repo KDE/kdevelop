@@ -25,10 +25,10 @@
 
 #include <KUrl>
 
-#include <JobSequence.h>
+#include <threadweaver/JobSequence.h>
 
-#include "language/duchain/indexedstring.h"
-#include "language/backgroundparser/documentchangetracker.h"
+#include "../duchain/indexedstring.h"
+#include "documentchangetracker.h"
 
 namespace KDevelop
 {

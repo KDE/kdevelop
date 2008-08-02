@@ -20,10 +20,10 @@
  ***************************************************************************/
 
 #include "covoutputdelegate.h"
-#include "covoutputmodel.h"
 #include <QtGui/QPainter>
 #include <QtCore/QModelIndex>
 #include <KDebug>
+#include "covoutputmodel.h"
 
 using Veritas::CovOutputDelegate;
 

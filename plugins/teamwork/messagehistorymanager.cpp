@@ -21,8 +21,8 @@
 #include <klockfile.h>
 #include <kio/netaccess.h>
 
-#include "network/serialization.h"
-#include "network/messageserialization.h"
+#include "lib/network/serialization.h"
+#include "lib/network/messageserialization.h"
 
 #include "kdevteamwork_messages.h"
 #include "kdevteamwork_user.h"

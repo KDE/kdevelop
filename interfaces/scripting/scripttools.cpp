@@ -18,8 +18,6 @@
  ***************************************************************************/
 
 #include "scripttools.h"
-#include "idocument.h"
-#include "idocumentcontroller.h"
 
 namespace KDevelop
 {

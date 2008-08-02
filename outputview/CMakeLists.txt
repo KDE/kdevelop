@@ -1,10 +1,3 @@
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-
- # interfaces
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
 set( outputviewinterfaces_LIB_SRCS

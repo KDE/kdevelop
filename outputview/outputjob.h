@@ -22,12 +22,12 @@ Boston, MA 02110-1301, USA.
 
 #include <QPointer>
 
-#include "interfaces/irun.h"
-#include "interfaces/irunprovider.h"
-#include "interfaces/iruncontroller.h"
+#include <interfaces/irun.h>
+#include <interfaces/irunprovider.h>
+#include <interfaces/iruncontroller.h>
 
-#include "outputview/ioutputview.h"
-#include "outputview/outputviewexport.h"
+#include <outputview/ioutputview.h>
+#include <outputview/outputviewexport.h>
 
 class QStandardItemModel;
 class QItemDelegate;

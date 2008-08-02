@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include "network/crossmap.h"
+#include "lib/network/crossmap.h"
 #include <assert.h>
 #include <iostream>
 #include <list>

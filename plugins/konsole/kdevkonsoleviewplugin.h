@@ -12,7 +12,7 @@
 #ifndef KDEVKONSOLEVIEW_PART_H
 #define KDEVKONSOLEVIEW_PART_H
 
-#include "iplugin.h"
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class KDevKonsoleViewFactory;

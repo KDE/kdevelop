@@ -19,8 +19,8 @@
  */
 
 #include "viewcontrollercommontest.h"
-#include <viewcontrollercommon.h>
-#include <kasserts.h>
+#include "kasserts.h"
+#include "../mvc/viewcontrollercommon.h"
 
 using Veritas::ViewControllerCommon;
 using Veritas::ut::ViewControllerCommonTest;

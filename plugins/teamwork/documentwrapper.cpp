@@ -25,15 +25,15 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <k3process.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/range.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
-#include "dynamictext/dynamictext.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
+#include "lib/dynamictext/dynamictext.h"
 #include "kdevteamwork_helpers.h"
 #include "collaborationmanager.h"
 #include "filecollaborationmessages.h"
-#include "network/basicsession.h"
+#include "lib/network/basicsession.h"
 #include "utils.h"
-#include "dynamictext/verify.h"
+#include "lib/dynamictext/verify.h"
 #include "filesynchronizemessage.h"
 #include "qdynamictext.h"
 #include "vectortimestampeditor.h"
@@ -43,10 +43,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "filecollaborationsession.h"
 #include "patchmessage.h"
 #include "filecollaborationmanager.h"
-#include "network/messagetypeset.h"
-#include "network/messagesendhelper.h"
-#include "iuicontroller.h" /* defines [function] activeMainWindow */
-#include "icore.h" /* defines [function] uiController */
+#include "lib/network/messagetypeset.h"
+#include "lib/network/messagesendhelper.h"
+#include <interfaces/iuicontroller.h> /* defines [function] activeMainWindow */
+#include <interfaces/icore.h> /* defines [function] uiController */
 
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/

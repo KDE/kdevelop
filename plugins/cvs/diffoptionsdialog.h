@@ -14,7 +14,7 @@
 #include <QDialog>
 #include <KUrl>
 
-#include "vcsrevision.h"
+#include <vcs/vcsrevision.h>
 #include "ui_diffoptionsdialog.h"
 
 /**

@@ -17,17 +17,17 @@
 */
 
 #include "projectitemquickopen.h"
-#include <duchain/topducontext.h>
-#include <iproject.h>
-#include <icore.h>
-#include <duchain/duchain.h>
-#include <duchain/duchainlock.h>
-#include <duchain/declaration.h>
-#include <duchain/abstractfunctiondeclaration.h>
-#include "language/duchain/types/structuretype.h"
+#include <language/duchain/topducontext.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/types/structuretype.h>
 #include <project/projectmodel.h>
 #include <klocale.h>
-#include <iquickopen.h>
+#include <language/interfaces/iquickopen.h>
 
 using namespace KDevelop;
 

@@ -14,7 +14,7 @@
 #ifndef COLLABORATIONMANAGER_H
 #define COLLABORATIONMANAGER_H
 
-#include "network/safesharedptr.h"
+#include "lib/network/safesharedptr.h"
 #include "filecollaborationmessages.h"
 #include "kdevteamwork.h"
 #include "utils.h"

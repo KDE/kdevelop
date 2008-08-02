@@ -35,8 +35,8 @@
 #include <kshell.h>
 #include <KDebug>
 
-#include <dvcsjob.h>
-#include <iplugin.h>
+#include <vcs/dvcs/dvcsjob.h>
+#include <interfaces/iplugin.h>
 
 HgExecutor::HgExecutor(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)

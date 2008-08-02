@@ -4,7 +4,7 @@
 #include <QtCore/QVariant>
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
-#include <idocument.h>
+#include <interfaces/idocument.h>
 
 using namespace KDevelop;
 

@@ -4,7 +4,7 @@
 #include <QtCore/QVariant>
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
 using namespace KDevelop;
 

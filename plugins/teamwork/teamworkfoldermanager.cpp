@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "teamworkfoldermanager.h"
-#include <icore.h>
+#include <interfaces/icore.h>
 #include "kdevteamworkplugin.h"
 #include <kio/netaccess.h>
 #include <krandom.h>

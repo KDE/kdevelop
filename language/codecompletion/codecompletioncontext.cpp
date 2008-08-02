@@ -18,7 +18,7 @@
 
 #include "codecompletioncontext.h"
 
-#include "pushvalue.h"
+#include <util/pushvalue.h>
 
 using namespace KDevelop;
 

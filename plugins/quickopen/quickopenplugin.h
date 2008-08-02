@@ -22,11 +22,11 @@
 #ifndef QUICKOPEN_PART_H
 #define QUICKOPEN_PART_H
 
-#include <iplugin.h>
-#include <iquickopen.h>
+#include <interfaces/iplugin.h>
+#include <language/interfaces/iquickopen.h>
 #include <QtCore/QVariant>
 
-#include <quickopendataprovider.h>
+#include <language/interfaces/quickopendataprovider.h>
 #include "ui_quickopen.h"
 
 namespace KDevelop {

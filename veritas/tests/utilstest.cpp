@@ -19,8 +19,8 @@
  */
 
 #include "utilstest.h"
-#include <utils.h>
-#include <kasserts.h>
+#include "kasserts.h"
+#include "../mvc/utils.h"
 
 using Veritas::Utils;
 using Veritas::ut::UtilsTest;

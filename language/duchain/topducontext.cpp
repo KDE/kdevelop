@@ -19,7 +19,14 @@
 
 #include "topducontext.h"
 
+#include <limits>
+#include <ext/hash_map>
+
 #include <QThread>
+
+#include "../editor/hashedstring.h"
+#include "../interfaces/iproblem.h"
+
 #include "symboltable.h"
 #include "declaration.h"
 #include "duchain.h"
@@ -30,12 +37,7 @@
 #include "namespacealiasdeclaration.h"
 #include "aliasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
-#include <hashedstring.h>
-#include <iproblem.h>
-#include <limits>
 #include "uses.h"
-#include <ext/hash_map>
-
 #include "arrayhelpers.h"
 #include "topducontextdata.h"
 #include "duchainregister.h"

@@ -43,19 +43,19 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 
 #include "sublime/area.h"
+#include <interfaces/iplugin.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/projectmodel.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include "core.h"
-#include "iplugin.h"
-#include "iprojectfilemanager.h"
 #include "project.h"
 #include "mainwindow.h"
 #include "shellextension.h"
-#include "projectmodel.h"
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser.h"
 
 namespace KDevelop
 {

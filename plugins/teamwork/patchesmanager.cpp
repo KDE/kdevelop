@@ -27,12 +27,12 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <kprocess.h>
 #include <kdialog.h>
 
-#include <idocumentcontroller.h>
-#include "iplugincontroller.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iplugincontroller.h>
 
-#include "network/sessioninterface.h"
-#include "network/messagetypeset.h"
-#include "network/messagesendhelper.h"
+#include "lib/network/sessioninterface.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/messagesendhelper.h"
 
 #include "kdevteamworkplugin.h"
 #include "kdevteamwork_user.h"

@@ -27,7 +27,7 @@
 #include <ksharedptr.h>
 #include <kdebug.h>
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer

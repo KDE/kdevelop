@@ -17,7 +17,7 @@
 #include <QObject>
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "dynamictext/dynamictext.h"
+#include "lib/dynamictext/dynamictext.h"
 
 class QDynamicText : public QObject, public DynamicText {
     Q_OBJECT

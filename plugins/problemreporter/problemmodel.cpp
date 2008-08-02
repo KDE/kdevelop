@@ -23,9 +23,9 @@
 
 #include <klocale.h>
 
-#include <hashedstring.h>
-#include <duchain.h>
-#include <duchainlock.h>
+#include <language/editor/hashedstring.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 
 #include "problemreporterplugin.h"
 

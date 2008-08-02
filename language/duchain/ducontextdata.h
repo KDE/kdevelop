@@ -21,14 +21,15 @@
 #ifndef ducontext_p_H
 #define ducontext_p_H
 
-#include <QMutex>
-#include <QMultiHash>
-#include <QMap>
+#include <QtCore/QMutex>
+#include <QtCore/QMultiHash>
+#include <QtCore/QMap>
+
+#include "../editor/simplecursor.h"
 
 #include "duchainbase.h"
 #include "ducontext.h"
 #include "duchainpointer.h"
-#include "simplecursor.h"
 #include "declaration.h"
 #include "use.h"
 #include "../languageexport.h"

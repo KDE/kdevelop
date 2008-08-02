@@ -19,7 +19,7 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#include <ilanguage.h>
+#include <interfaces/ilanguage.h>
 
 #include <QtCore/QList>
 

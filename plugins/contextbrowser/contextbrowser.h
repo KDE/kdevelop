@@ -23,16 +23,16 @@
 #ifndef CONTEXTBROWSERPLUGIN_H
 #define CONTEXTBROWSERPLUGIN_H
 
-#include <iplugin.h>
 #include <QtCore/QVariant>
 #include <QSet>
 #include <QMap>
 #include <QList>
-#include <duchain/duchainpointer.h>
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
-#include <simplecursor.h>
-#include <irunprovider.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/irunprovider.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/editor/simplecursor.h>
 
 namespace KDevelop {
   class IDocument;

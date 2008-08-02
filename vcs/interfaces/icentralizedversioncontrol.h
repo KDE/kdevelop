@@ -23,7 +23,7 @@
 #ifndef ICENTRALIZEDVERSIONCONTROL_H
 #define ICENTRALIZEDVERSIONCONTROL_H
 
-#include <vcs/interfaces/ibasicversioncontrol.h>
+#include "ibasicversioncontrol.h"
 
 namespace KDevelop
 {

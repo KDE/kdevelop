@@ -1,15 +1,6 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9511 )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${THREADWEAVER_INCLUDE_DIR}
-    ${CMAKE_SOURCE_DIR}/project
-    ${CMAKE_SOURCE_DIR}/project/interfaces
-    )
-
-
 ########### next target ###############
 
 set(kdevprojectmanagerview_PLUGIN_SRCS

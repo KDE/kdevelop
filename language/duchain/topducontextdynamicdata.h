@@ -19,9 +19,9 @@
 #ifndef TOPDUCONTEXTDYNAMICDATA_H
 #define TOPDUCONTEXTDYNAMICDATA_H
 
-#include <QVector>
-#include <QMutex>
-#include <QByteArray>
+#include <QtCore/QVector>
+#include <QtCore/QMutex>
+#include <QtCore/QByteArray>
 
 namespace KDevelop {
 

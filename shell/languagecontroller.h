@@ -20,7 +20,7 @@
 #ifndef LANGUAGECONTROLLER_H
 #define LANGUAGECONTROLLER_H
 
-#include <ilanguagecontroller.h>
+#include <interfaces/ilanguagecontroller.h>
 
 #include "shellexport.h"
 

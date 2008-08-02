@@ -23,7 +23,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QtGui/QWidget>
 #include "ui_environmentwidget.h"
-#include <environmentgrouplist.h>
 
 class KConfig;
 class QSortFilterProxyModel;

@@ -28,9 +28,9 @@
 
 #include <ThreadWeaver.h>
 
-#include <kdevsvncpp/client.hpp>
-#include <kdevsvncpp/path.hpp>
-#include <kdevsvncpp/targets.hpp>
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/targets.hpp"
 
 SvnInternalRevertJob::SvnInternalRevertJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )

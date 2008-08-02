@@ -3,9 +3,6 @@ find_package(Threads REQUIRED)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9523 )
 include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/plugins/teamwork/lib
     ${COMMONCPP2_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     )

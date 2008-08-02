@@ -21,6 +21,14 @@
 
 #include "duchainutils.h"
 
+#include <kiconloader.h>
+
+#include <interfaces/ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+
+#include "../interfaces/ilanguagesupport.h"
+
 #include "declaration.h"
 #include "classfunctiondeclaration.h"
 #include "ducontext.h"
@@ -29,11 +37,6 @@
 #include "declaration.h"
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
-#include "kiconloader.h"
-#include <ilanguage.h>
-#include <ilanguagesupport.h>
-#include <icore.h>
-#include <ilanguagecontroller.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;

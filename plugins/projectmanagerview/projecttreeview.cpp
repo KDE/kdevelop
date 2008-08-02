@@ -19,10 +19,6 @@
 */
 
 #include "projecttreeview.h"
-#include "projectmanagerviewplugin.h"
-#include "projectmodel.h"
-#include "context.h"
-#include "iplugincontroller.h"
 
 
 #include <QtGui/QHeaderView>
@@ -30,7 +26,6 @@
 #include <QtCore/QDebug>
 #include <QtGui/QMouseEvent>
 
-#include <icore.h>
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
 #include <kaction.h>
@@ -42,6 +37,12 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <project/projectmodel.h>
+#include <interfaces/context.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/icore.h>
+
+#include "projectmanagerviewplugin.h"
 
 using namespace KDevelop;
 

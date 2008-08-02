@@ -18,11 +18,6 @@
  */
 
 #include "covoutputjob.h"
-#include "covoutputmodel.h"
-#include "covoutputdelegate.h"
-
-#include "../lcovinfoparser.h"
-#include "../coveredfile.h"
 
 #include <QDir>
 #include <QTableWidget>
@@ -34,7 +29,12 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <util/processlinemaker.h>
-#include <shell/core.h>
+
+#include "covoutputmodel.h"
+#include "covoutputdelegate.h"
+
+#include "../lcovinfoparser.h"
+#include "../coveredfile.h"
 
 using KDevelop::ICore;
 using KDevelop::IOutputView;

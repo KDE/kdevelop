@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-#include "idocument.h"
+#include <interfaces/idocument.h>
 
 using namespace KDevelop;
 

@@ -27,10 +27,10 @@
 #include <KConfigDialogManager>
 #include <KMessageBox>
 
-#include "core.h"
-#include "ilanguagecontroller.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <util/environmentgrouplist.h>
 
-#include "environmentgrouplist.h"
+#include "../core.h"
 
 #include "runconfig.h"
 

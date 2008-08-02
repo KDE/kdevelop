@@ -28,7 +28,11 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
+#include <language/editor/editorintegrator.h>
+#include <language/backgroundparser/backgroundparser.h>
+
 #include "shellextension.h"
+
 
 #include "mainwindow.h"
 #include "uicontroller.h"
@@ -36,9 +40,7 @@
 #include "projectcontroller.h"
 #include "partcontroller.h"
 #include "languagecontroller.h"
-#include "editorintegrator.h"
 #include "documentcontroller.h"
-#include "backgroundparser.h"
 #include "runcontroller.h"
 
 namespace KDevelop {

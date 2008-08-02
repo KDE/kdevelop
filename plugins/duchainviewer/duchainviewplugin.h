@@ -23,7 +23,7 @@
 #ifndef DUCHAINVIEW_PART_H
 #define DUCHAINVIEW_PART_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class DUChainModel;

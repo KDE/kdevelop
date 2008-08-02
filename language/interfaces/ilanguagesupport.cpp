@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 #include "ilanguagesupport.h"
-#include "duchain.h"
-#include <editor/simplerange.h>
+#include "../duchain/duchain.h"
+#include "../editor/simplerange.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

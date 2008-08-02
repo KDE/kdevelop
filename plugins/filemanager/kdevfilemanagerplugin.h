@@ -19,7 +19,7 @@
 #ifndef KDEVFILEMANAGERPART_H
 #define KDEVFILEMANAGERPART_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class FileManager;

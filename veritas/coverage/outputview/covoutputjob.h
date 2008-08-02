@@ -22,12 +22,12 @@
 #ifndef VERITAS_COVERAGE_COVOUTPUTJOB_H
 #define VERITAS_COVERAGE_COVOUTPUTJOB_H
 
-#include <interfaces/iplugin.h>
-#include <outputview/outputjob.h>
 
 #include <QProcess>
 #include <QString>
 #include <KUrl>
+
+#include <outputview/outputjob.h>
 
 namespace KDevelop
 {

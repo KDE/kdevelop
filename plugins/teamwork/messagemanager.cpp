@@ -17,7 +17,7 @@
 #include "conversationmanager.h"
 #include "guimessagehistory.h"
 #include "messagehistorymanager.h"
-#include "network/messagetypeset.h"
+#include "lib/network/messagetypeset.h"
 #include <kdialog.h>
 #include <QMenu>
 #include "kdevteamwork_messageshower.h"

@@ -20,8 +20,8 @@
 
 #include "offsetutils.h"
 #include "verify.h"
-#include "network/sharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "../network/sharedptr.h"
+#include "../network/weaksafesharedptr.h"
 #include "vectortimestamp.h"
 #include "dynamictextexport.h"
 

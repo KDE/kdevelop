@@ -35,10 +35,10 @@
 #include <kiconloader.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <icore.h>
-#include <iprojectcontroller.h>
-#include <iproject.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iuicontroller.h>
 
 // #include <kplugininfo.h>
 

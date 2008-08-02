@@ -14,8 +14,8 @@
 #include "kdevutils.h"
 #include "teamworkfoldermanager.h"
 #include "kdevteamworkplugin.h"
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/cursor.h>

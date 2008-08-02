@@ -19,8 +19,8 @@
 #ifndef ARRAYHELPERS_H
 #define ARRAYHELPERS_H
 
-#include <QVector>
-#include <QList>
+#include <QtCore/QVector>
+#include <QtCore/QList>
 
 //Foreach macro that also works with QVarLengthArray
 #define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)

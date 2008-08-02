@@ -19,11 +19,13 @@
  */
 
 #include "resultsproxymodeltest.h"
-#include "modelcreation.h"
 
-#include <resultsproxymodel.h>
 #include <qtest_kde.h>
-#include <kasserts.h>
+
+#include "../mvc/resultsproxymodel.h"
+
+#include "kasserts.h"
+#include "modelcreation.h"
 
 using Veritas::ResultsProxyModel;
 using Veritas::ResultsModel;

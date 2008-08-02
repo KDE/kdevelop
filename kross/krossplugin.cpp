@@ -22,8 +22,8 @@
 
 #include "krossbuildsystemmanager.h"
 #include "krosstoolviewfactory.h"
-#include "krosscontext.h"
-#include "krosscontextmenuextension.h"
+#include "wrappers/krosscontext.h"
+#include "wrappers/krosscontextmenuextension.h"
 
 #include <kross/core/manager.h>
 #include <KUrl>
@@ -31,15 +31,15 @@
 #include <KDebug>
 #include <KStandardDirs>
 
-#include <icore.h>
-#include <iproject.h>
-#include <iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iplugincontroller.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
-#include <context.h>
-#include <contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 
 K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossPlugin>(); )
 K_EXPORT_PLUGIN(KrossSupportFactory("kdevkrossmanager"))

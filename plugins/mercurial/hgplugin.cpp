@@ -24,9 +24,9 @@
 #include <KPluginLoader>
 #include <klocalizedstring.h>
 
-#include <icore.h>
+#include <interfaces/icore.h>
 
-#include <dvcsjob.h>
+#include <vcs/dvcs/dvcsjob.h>
 
 #include "hgexecutor.h"
 

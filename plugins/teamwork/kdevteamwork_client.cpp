@@ -19,9 +19,9 @@
 #include "helpers.h"
 
 #include "patchmessage.h"
-#include "network/messagetypeset.h"
-#include "network/teamworkmessages.h"
-#include "network/defines.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/teamworkmessages.h"
+#include "lib/network/defines.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamwork_helpers.h"
 

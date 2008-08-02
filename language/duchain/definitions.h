@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QObject>
-#include "language/languageexport.h"
+#include <QtCore/QObject>
+#include "../languageexport.h"
 #include <util/kdevvarlengtharray.h>
 
 #ifndef DEFINITIONS_H

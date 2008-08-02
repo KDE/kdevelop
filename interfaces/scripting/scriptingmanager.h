@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "interfacesexport.h"
+#include "../interfacesexport.h"
 
 namespace KDevelop
 {

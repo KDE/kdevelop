@@ -17,8 +17,8 @@
 #include <string>
 #include <vector>
 
-#include "network/safesharedptr.h"
-#include "network/logger.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/logger.h"
 
 class LogSuffix;
 

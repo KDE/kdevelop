@@ -33,20 +33,21 @@
 #include <kiconloader.h>
 
 
-#include <declaration.h>
-#include <classfunctiondeclaration.h>
-#include <ducontext.h>
-#include <duchain.h>
-#include <namespacealiasdeclaration.h>
-#include <parsingenvironment.h>
-#include <editorintegrator.h>
-#include <duchainlock.h>
-#include <duchainbase.h>
-#include <topducontext.h>
-#include "codecompletioncontext.h"
-#include <duchainutils.h>
+#include "../duchain/declaration.h"
+#include "../duchain/classfunctiondeclaration.h"
+#include "../duchain/ducontext.h"
+#include "../duchain/duchain.h"
+#include "../duchain/namespacealiasdeclaration.h"
+#include "../duchain/parsingenvironment.h"
+#include "../editor/editorintegrator.h"
+#include "../duchain/duchainlock.h"
+#include "../duchain/duchainbase.h"
+#include "../duchain/topducontext.h"
+#include "../duchain/duchainutils.h"
+#include "../interfaces/quickopendataprovider.h"
+
 #include "codecompletionworker.h"
-#include "quickopendataprovider.h"
+#include "codecompletioncontext.h"
 
 using namespace KTextEditor;
 

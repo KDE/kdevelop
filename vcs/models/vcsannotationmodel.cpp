@@ -20,20 +20,17 @@
 
 #include "vcsannotationmodel.h"
 
-#include "../vcsrevision.h"
 #include "../vcsannotation.h"
+#include "../vcsrevision.h"
 
 #include <QDateTime>
 #include <QtGlobal>
 #include <QBrush>
+#include <QHash>
 
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
-
-
-#include <QHash>
-
 
 namespace KDevelop
 {

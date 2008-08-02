@@ -21,8 +21,8 @@
 #ifndef ENUMERATORTYPE_H
 #define ENUMERATORTYPE_H
 
-#include <language/duchain/types/identifiedtype.h>
-#include <language/duchain/types/constantintegraltype.h>
+#include "identifiedtype.h"
+#include "constantintegraltype.h"
 
 namespace KDevelop
 {

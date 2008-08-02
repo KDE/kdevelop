@@ -19,9 +19,9 @@
 #ifndef APPENDEDLIST_H
 #define APPENDEDLIST_H
 
-#include <QMutex>
-#include <QVector>
-#include <QStack>
+#include <QtCore/QMutex>
+#include <QtCore/QVector>
+#include <QtCore/QStack>
 #include <kglobal.h>
 #include <util/kdevvarlengtharray.h>
 

@@ -44,20 +44,20 @@
 #include <kshortcut.h>
 #include <kdebug.h>
 
-#include <ilanguage.h>
-#include <icore.h>
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
-#include <ilanguagecontroller.h>
-#include <iprojectcontroller.h>
-#include <ilanguagesupport.h>
-#include <hashedstring.h>
-#include <duchain/duchainutils.h>
-#include <duchain/duchainlock.h>
-#include <duchain/duchain.h>
-#include <duchain/types/identifiedtype.h>
-#include <duchain/indexedstring.h>
-#include "language/duchain/types/functiontype.h"
+#include <interfaces/ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <language/editor/hashedstring.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/types/identifiedtype.h>
+#include <language/duchain/indexedstring.h>
+#include <language/duchain/types/functiontype.h>
 
 #include "expandingtree/expandingdelegate.h"
 #include "ui_quickopen.h"

@@ -20,12 +20,12 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include <QVarLengthArray>
+#include <QtCore/QVarLengthArray>
 
-#include "language/editor/documentcursorobject.h"
-#include "language/duchain/identifier.h"
-#include "language/duchain/duchainbase.h"
-#include "language/duchain/types/abstracttype.h"
+#include "../editor/documentcursorobject.h"
+#include "identifier.h"
+#include "duchainbase.h"
+#include "types/abstracttype.h"
 #include "duchainpointer.h"
 #include "declarationid.h"
 

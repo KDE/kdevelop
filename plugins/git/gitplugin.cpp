@@ -25,13 +25,13 @@
 #include <klocalizedstring.h>
 #include <QDebug>
 
-#include <icore.h>
-#include <iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 
-#include "vcsjob.h"
-#include "vcsrevision.h"
-#include <dvcsjob.h>
+#include <vcs/vcsjob.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/dvcs/dvcsjob.h>
 
 #include "gitexecutor.h"
 

@@ -19,9 +19,9 @@
 #ifndef USES_H
 #define USES_H
 
-#include <QObject>
-#include "language/languageexport.h"
-#include "language/duchain/declarationid.h"
+#include <QtCore/QObject>
+#include "../languageexport.h"
+#include "declarationid.h"
 
 
 namespace KDevelop {

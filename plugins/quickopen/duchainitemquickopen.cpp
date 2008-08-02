@@ -20,15 +20,15 @@
 #include <QIcon>
 #include <QTextBrowser>
 #include <klocale.h>
-#include <iprojectcontroller.h>
-#include <idocumentcontroller.h>
-#include <iquickopen.h>
-#include <icore.h>
-#include <duchain/duchain.h>
-#include <duchain/duchainlock.h>
-#include <duchain/declaration.h>
-#include <duchain/indexedstring.h>
-#include "language/duchain/types/functiontype.h"
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <language/interfaces/iquickopen.h>
+#include <interfaces/icore.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/indexedstring.h>
+#include <language/duchain/types/functiontype.h>
 
 using namespace KDevelop;
 

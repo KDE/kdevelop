@@ -24,9 +24,9 @@
 
 #include <QWidget>
 #include <QVector>
-#include <duchainpointer.h>
-#include <simplecursor.h>
-#include <documentcursor.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/editor/simplecursor.h>
+#include <language/editor/documentcursor.h>
 
 class ContextBrowserPlugin;
 class QSplitter;

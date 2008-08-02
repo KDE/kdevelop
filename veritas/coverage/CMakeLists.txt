@@ -3,12 +3,6 @@ add_subdirectory(tests)
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
-include_directories(
-    ${KDE4_INCLUDES}
-    ${kdevplatform_SOURCE_DIR}/interfaces
-    ${kdevplatform_SOURCE_DIR}/outputview
-    ${kdevplatform_BINARY_DIR}/veritas)
-
 ########### next target ###############
 
 set(veritascoverage_SRCS

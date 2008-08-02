@@ -24,9 +24,9 @@
 #include <QObject>
 #include <QList>
 
-#include <iprojectfilemanager.h>
-#include <ibuildsystemmanager.h>
-#include <iplugin.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <interfaces/iplugin.h>
 
 namespace Kross { class Action; }
 

@@ -21,7 +21,7 @@
 #include <klockfile.h>
 #include <kurl.h>
 
-#include "network/user.h"
+#include "lib/network/user.h"
 #include "kdevteamwork_messages.h"
 #include "teamworkfwd.h"
 #include <nvp.h>

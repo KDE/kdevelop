@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-#include "ilanguagesupport.h"
+#include <language/interfaces/ilanguagesupport.h>
 
 namespace KDevelop {
 

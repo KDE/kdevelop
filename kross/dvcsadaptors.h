@@ -22,7 +22,7 @@
 #define DVCSADAPTORS_H
 
 #include <QObject>
-#include <vcsrevision.h>
+#include <vcs/vcsrevision.h>
 
 namespace KDevelop
 {

@@ -23,10 +23,10 @@
 
 #include <KTextEditor/Document>
 
-#include "language/duchain/indexedstring.h"
-#include "language/editor/hashedstring.h"
+#include <language/duchain/indexedstring.h>
+#include <language/editor/hashedstring.h>
 
-#include "editorintegrator.h"
+#include <language/editor/editorintegrator.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

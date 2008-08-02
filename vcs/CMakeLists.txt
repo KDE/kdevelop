@@ -1,10 +1,3 @@
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/util
-    ${CMAKE_SOURCE_DIR}/project
-)
-
 set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
     widgets/vcseventwidget.ui

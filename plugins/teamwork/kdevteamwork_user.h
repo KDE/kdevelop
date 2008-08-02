@@ -19,9 +19,9 @@
 #include <QString>
 #include  <kiconloader.h>
 
-#include "network/networkfwd.h"
+#include "lib/network/networkfwd.h"
 #include "teamworkfwd.h"
-#include "network/user.h"
+#include "lib/network/user.h"
 
 using namespace Teamwork;
 class QIcon;

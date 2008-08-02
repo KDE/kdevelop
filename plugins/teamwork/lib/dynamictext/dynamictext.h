@@ -19,9 +19,9 @@
 
 typedef std::string String;
 
-#include "network/crossmap.h"
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "../network/crossmap.h"
+#include "../network/safesharedptr.h"
+#include "../network/weaksafesharedptr.h"
 #include "vectortimestamp.h"
 #include "offsetutils.h"
 

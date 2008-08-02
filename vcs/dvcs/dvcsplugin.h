@@ -28,8 +28,10 @@
 #include <QtCore/QObject>
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
-#include <iuicontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
+
+#include "../vcsexport.h"
 
 #include "idvcsexecutor.h"
 

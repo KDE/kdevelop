@@ -13,8 +13,8 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "icore.h"
-#include "iruncontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 
 #include "cvsplugin.h"
 #include "cvsproxy.h"

@@ -19,15 +19,17 @@
  */
 
 #include "runnerwindowtest.h"
-#include "modelcreation.h"
 
-#include <runnerproxymodel.h>
-#include <runnerwindow.h>
-#include <runnermodel.h>
-#include <resultsproxymodel.h>
 #include <qtest_kde.h>
 #include <KDebug>
 #include <kasserts.h>
+
+#include "modelcreation.h"
+
+#include "../mvc/runnerproxymodel.h"
+#include "../mvc/runnerwindow.h"
+#include "../mvc/runnermodel.h"
+#include "../mvc/resultsproxymodel.h"
 
 using Veritas::RunnerWindow;
 using Veritas::Test;

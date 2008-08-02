@@ -22,10 +22,10 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 
-#include "core.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser.h"
+#include "../core.h"
 
 #include "bgconfig.h"
 

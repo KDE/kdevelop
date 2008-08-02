@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "collaborationmanager.h"
-#include "network/messagesendhelper.h"
+#include "lib/network/messagesendhelper.h"
 #include <QPersistentModelIndex>
 #include <QMenu>
 #include <QMetaType>

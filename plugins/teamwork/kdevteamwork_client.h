@@ -16,8 +16,8 @@
 
 
 #include "teamworkfwd.h"
-#include "network/safesharedptr.h"
-#include "network/teamworkclient.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/teamworkclient.h"
 #include "kdevteamwork_messages.h"
 #include <list>
 

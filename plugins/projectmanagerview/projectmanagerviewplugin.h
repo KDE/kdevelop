@@ -21,7 +21,7 @@
 #define KDEVPROJECTMANAGERVIEW_PART_H
 
 #include <QtCore/QPointer>
-#include "iplugin.h"
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class KUrl;

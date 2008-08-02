@@ -30,9 +30,9 @@
 
 #include <vector>
 
-#include <kdevsvncpp/client.hpp>
-#include <kdevsvncpp/path.hpp>
-#include <kdevsvncpp/targets.hpp>
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/targets.hpp"
 
 #include <iostream>
 

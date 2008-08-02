@@ -20,9 +20,9 @@
 #define CUSTOM_LIST_QUICKOPEN
 
 #include <KUrl>
-#include <quickopendataprovider.h>
-#include <quickopenfilter.h>
-#include <editor/simplecursor.h>
+#include <language/interfaces/quickopendataprovider.h>
+#include <language/interfaces/quickopenfilter.h>
+#include <language/editor/simplecursor.h>
 
 namespace KDevelop {
   class ICore;

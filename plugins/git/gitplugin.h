@@ -22,7 +22,7 @@
 #define GIT_PLUGIN_H
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
-#include <dvcs/dvcsplugin.h>
+#include <vcs/dvcs/dvcsplugin.h>
 #include <qobject.h>
 
 namespace KDevelop

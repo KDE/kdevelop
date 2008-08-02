@@ -31,8 +31,8 @@
 
 #include "editorintegrator.h"
 #include "documentrangeobject_p.h"
-#include "duchain/duchainregister.h"
-#include "duchain/duchainbase.h"
+#include "../duchain/duchainregister.h"
+#include "../duchain/duchainbase.h"
 
 K_GLOBAL_STATIC(QMutex, s_mutex)
 

@@ -19,11 +19,12 @@
  */
 
 #include "runnerproxymodeltest.h"
-#include "modelcreation.h"
-#include <runnerproxymodel.h>
 #include <qtest_kde.h>
-#include <kasserts.h>
 
+#include "kasserts.h"
+#include "modelcreation.h"
+
+#include "../mvc/runnerproxymodel.h"
 
 using Veritas::RunnerProxyModel;
 using Veritas::ut::createRunnerModelStub;

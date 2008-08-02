@@ -24,7 +24,7 @@
 
 #include <KTextEditor/SmartRangeWatcher>
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 class QMutex;
 

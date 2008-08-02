@@ -14,7 +14,7 @@
 
 #include <KUrl>
 #include <KJob>
-#include "vcsrevision.h"
+#include <vcs/vcsrevision.h>
 
 class CvsJob;
 

@@ -22,9 +22,12 @@
 #ifndef VCSDIFF_H
 #define VCSDIFF_H
 
-#include "vcsexport.h"
+//Needed first as it provides a hash-function for QHash
 #include "vcslocation.h"
+
 #include <QtCore/QHash>
+
+#include "vcsexport.h"
 
 class QString;
 class QByteArray;

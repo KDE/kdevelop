@@ -23,10 +23,10 @@
 #ifndef CLASSBROWSERPART_H
 #define CLASSBROWSERPART_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
-#include "language/duchain/indexedstring.h"
+#include <language/duchain/indexedstring.h>
 
 namespace KTextEditor { class Document; }
 namespace KDevelop { class IDocument; class ParseJob; }

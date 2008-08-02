@@ -12,7 +12,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  ***************************************************************************/
 
 #include "indocumentmessage.h"
-#include "network/messagetypeset.h"
+#include "lib/network/messagetypeset.h"
 #include "kdevteamwork_messageshower.h"
 
 ///@todo move some stuff from conversationmanager.cpp here

@@ -19,7 +19,7 @@
 #ifndef GENERICPROJECTMANAGERPREFERENCES_H
 #define GENERICPROJECTMANAGERPREFERENCES_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 
 class KConfigDialogManager;
 class GenericProjectManagerSettings;

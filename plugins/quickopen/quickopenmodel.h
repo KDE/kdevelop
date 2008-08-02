@@ -24,9 +24,9 @@
 #include <QAbstractItemModel>
 #include <QSet>
 
-#include <duchain/indexedstring.h>
+#include <language/duchain/indexedstring.h>
 
-#include "quickopendataprovider.h"
+#include <language/interfaces/quickopendataprovider.h>
 #include "expandingtree/expandingwidgetmodel.h"
 
 class QuickOpenModel : public ExpandingWidgetModel {

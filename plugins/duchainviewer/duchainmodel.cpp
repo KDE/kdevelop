@@ -26,23 +26,24 @@
 #include <ktemporaryfile.h>
 #include <kprocess.h>
 
-#include "idocument.h"
-#include "icore.h"
-#include "ilanguagecontroller.h"
-#include "backgroundparser/backgroundparser.h"
-#include "backgroundparser/parsejob.h"
+#include <interfaces/idocument.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
 
-#include <hashedstring.h>
+#include <language/editor/hashedstring.h>
+
+#include <language/duchain/dumpdotgraph.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/parsingenvironment.h>
+#include <language/duchain/use.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainpointer.h>
 
 #include "duchainviewplugin.h"
-#include "dumpdotgraph.h"
-#include "topducontext.h"
-#include "declaration.h"
-#include "parsingenvironment.h"
-#include "use.h"
-#include "duchain.h"
-#include "duchainlock.h"
-#include "duchainpointer.h"
 
 //#include "modeltest.h"
 

@@ -19,10 +19,12 @@
  */
 
 #include "testtest.h"
-#include <test.h>
 #include <qtest_kde.h>
-#include <kasserts.h>
 #include <QString>
+
+#include "kasserts.h"
+
+#include "../test.h"
 
 using Veritas::Test;
 using Veritas::ut::TestTest;

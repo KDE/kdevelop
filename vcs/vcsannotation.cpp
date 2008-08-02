@@ -22,8 +22,9 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QHash>
-#include "vcsrevision.h"
 #include <kurl.h>
+
+#include "vcsrevision.h"
 
 namespace KDevelop
 {

@@ -28,7 +28,7 @@
 #include <ktexteditor/document.h>
 #include <klocale.h>
 
-#include "ducontext.h"
+#include "../duchain/ducontext.h"
 #include "codecompletion.h"
 #include "codecompletionitem.h"
 

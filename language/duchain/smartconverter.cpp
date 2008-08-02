@@ -23,8 +23,8 @@
 #include <ktexteditor/document.h>
 #include <KTextEditor/SmartInterface>
 
-#include <editorintegrator.h>
-#include <hashedstring.h>
+#include "../editor/editorintegrator.h"
+#include "../editor/hashedstring.h"
 
 #include "ducontext.h"
 #include "declaration.h"

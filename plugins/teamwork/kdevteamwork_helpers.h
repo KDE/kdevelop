@@ -21,7 +21,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QPair>
 #include <QObject>
 #include <kicontheme.h>
-#include "network/logger.h"
+#include "lib/network/logger.h"
 
 ///This file contains a few classes that I currently don't know where else to put
 

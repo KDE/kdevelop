@@ -3,20 +3,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 add_subdirectory(tests)
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/sublime
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/project
-    ${CMAKE_SOURCE_DIR}/project/interfaces
-    ${CMAKE_SOURCE_DIR}/language
-    ${CMAKE_SOURCE_DIR}/language/editor
-    ${CMAKE_SOURCE_DIR}/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/language/interfaces
-    ${CMAKE_SOURCE_DIR}/outputview
-    ${CMAKE_SOURCE_DIR}/util
-)
-
 set(kdevplatformshell_LIB_SRCS
     mainwindow.cpp
     mainwindow_p.cpp

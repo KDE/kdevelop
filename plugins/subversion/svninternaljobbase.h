@@ -30,7 +30,7 @@ extern "C" {
 #include <svn_wc.h>
 }
 
-#include <kdevsvncpp/context_listener.hpp>
+#include "kdevsvncpp/context_listener.hpp"
 
 namespace KDevelop
 {

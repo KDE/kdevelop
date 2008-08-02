@@ -32,8 +32,8 @@ extern "C" {
 #include <svn_client.h>
 #include <svn_io.h>
 }
-#include <kdevsvncpp/targets.hpp>
-#include <kdevsvncpp/pool.hpp>
+#include "kdevsvncpp/targets.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 #include <kstandarddirs.h>
 

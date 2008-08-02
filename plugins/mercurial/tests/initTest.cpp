@@ -30,8 +30,8 @@
 #include <KUrl>
 #include <kio/netaccess.h>
 
-#include <dvcsjob.h>
-#include <hgexecutor.h>
+#include <vcs/dvcs/dvcsjob.h>
+#include "../hgexecutor.h"
 
 #define HGTEST_DIR1            "kdevHg_testdir"
 #define HGTEST_BASEDIR         "/tmp/kdevHg_testdir/"

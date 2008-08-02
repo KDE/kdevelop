@@ -17,11 +17,11 @@
     Boston, MA 02110-1301, USA.
 */
 #include "genericmanager.h"
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
-#include <icore.h>
-#include <iproject.h>
-#include <iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <kdebug.h>
 #include <kpluginloader.h>

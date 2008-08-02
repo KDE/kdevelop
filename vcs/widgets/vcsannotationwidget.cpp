@@ -24,15 +24,15 @@
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 
-#include "../vcsjob.h"
+#include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
+
+#include "../vcsjob.h"
 #include "../models/vcsannotationmodel.h"
 #include "../vcsannotation.h"
-#include "../../interfaces/icore.h"
-#include "../../interfaces/iruncontroller.h"
-
 #include "ui_vcsannotationwidget.h"
-#include <kdebug.h>
 
 namespace KDevelop
 {

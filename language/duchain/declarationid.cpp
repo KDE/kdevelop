@@ -19,8 +19,8 @@
 #include "declarationid.h"
 #include "ducontext.h"
 #include "topducontext.h"
-#include <editor/simplecursor.h>
-#include <duchain.h>
+#include "../editor/simplecursor.h"
+#include "duchain.h"
 #include "declaration.h"
 #include "symboltable.h"
 #include "arrayhelpers.h"

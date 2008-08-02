@@ -17,14 +17,6 @@ FIND_PROGRAM(GIT NAMES git
 
 if (GIT)
 
-	include_directories( ${KDE4_INCLUDES}
-		${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/util
-        ${CMAKE_SOURCE_DIR}/interfaces
-		${CMAKE_SOURCE_DIR}/vcs
-		${CMAKE_SOURCE_DIR}/plugins/git
-        ${CMAKE_SOURCE_DIR}/vcs/dvcs/
-	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 	set(gitInitTest_SRCS initTest.cpp ../gitexecutor.cpp)
     kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})

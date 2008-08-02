@@ -21,8 +21,7 @@
 #ifndef IDISTRIBUTEDVERSIONCONTROL_H
 #define IDISTRIBUTEDVERSIONCONTROL_H
 
-#include <vcs/interfaces/ibasicversioncontrol.h>
-#include "../vcsexport.h"
+#include "ibasicversioncontrol.h"
 
 namespace KDevelop
 {
@@ -34,7 +33,7 @@ class VcsLocation;
  * This interface has methods to support distributed version control systems
  * like git or svk.
  */
-class KDEVPLATFORMVCS_EXPORT IDistributedVersionControl : public KDevelop::IBasicVersionControl
+class IDistributedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
 

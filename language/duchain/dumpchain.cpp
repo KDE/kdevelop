@@ -26,13 +26,12 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/smartrange.h>
 
-//#include <identifiedtype.h>
-#include <ducontext.h>
-#include <topducontext.h>
-#include <declaration.h>
-#include <duchainpointer.h>
-#include <identifier.h>
-#include <use.h>
+#include "ducontext.h"
+#include "topducontext.h"
+#include "declaration.h"
+#include "duchainpointer.h"
+#include "identifier.h"
+#include "use.h"
 #include "indexedstring.h"
 
 using namespace KDevelop;

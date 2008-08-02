@@ -16,7 +16,7 @@
 #include <QHeaderView>
 #include <KDebug>
 
-#include <vcsannotationmodel.h>
+#include <vcs/models/vcsannotationmodel.h>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"

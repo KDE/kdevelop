@@ -27,7 +27,7 @@
 #include <ktexteditor/range.h>
 #include <ktexteditor/rangefeedback.h>
 
-#include "indexedstring.h"
+#include "../duchain/indexedstring.h"
 #include "documentcursor.h"
 
 namespace KTextEditor

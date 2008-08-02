@@ -29,8 +29,8 @@
 
 #include <ThreadWeaver.h>
 
-#include <kdevsvncpp/client.hpp>
-#include <kdevsvncpp/info.hpp>
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/info.hpp"
 
 SvnInternalInfoJob::SvnInternalInfoJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )

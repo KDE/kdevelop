@@ -4,7 +4,7 @@
 #include <QtCore/QVariant>
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 

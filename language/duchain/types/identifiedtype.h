@@ -21,8 +21,8 @@
 #ifndef IDENTIFIEDTYPE_H
 #define IDENTIFIEDTYPE_H
 
-#include "language/duchain/identifier.h"
-#include "language/duchain/declarationid.h"
+#include "../identifier.h"
+#include "../declarationid.h"
 
 namespace KDevelop
 {

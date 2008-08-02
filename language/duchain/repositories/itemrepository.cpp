@@ -17,12 +17,16 @@
 */
 
 #include "itemrepository.h"
-#include "../duchain.h"
-#include <icore.h>
+
+#include <QDataStream>
+
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <klockfile.h>
-#include <QDataStream>
+
+#include <interfaces/icore.h>
+
+#include "../duchain.h"
 
 namespace KDevelop {
 

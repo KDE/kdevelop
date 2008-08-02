@@ -50,7 +50,7 @@
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcsdiffwidget.h>
 
-#include <kdevsvncpp/apr.hpp>
+#include "kdevsvncpp/apr.hpp"
 
 #include "svncommitjob.h"
 #include "svnstatusjob.h"

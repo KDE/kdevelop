@@ -15,8 +15,6 @@
 #include <KUrl>
 #include <KJob>
 
-#include <iversioncontrol.h>
-
 class CvsProxy;
 
 /**

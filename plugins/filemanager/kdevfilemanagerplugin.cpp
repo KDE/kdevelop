@@ -27,8 +27,8 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 
 #include "filemanager.h"
 

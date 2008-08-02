@@ -4,7 +4,7 @@
 #include <QtCore/QVariant>
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
-#include <vcslocation.h>
+#include <vcs/vcslocation.h>
 
 using namespace KDevelop;
 

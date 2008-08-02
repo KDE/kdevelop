@@ -15,8 +15,8 @@
 #include <KJob>
 
 #include <vcs/interfaces/icentralizedversioncontrol.h>
-#include <vcslocation.h>
-#include <iplugin.h>
+#include <vcs/vcslocation.h>
+#include <interfaces/iplugin.h>
 #include <qobject.h>
 
 class CvsProxy;

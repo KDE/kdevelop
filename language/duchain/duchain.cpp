@@ -28,7 +28,15 @@
 
 #include <KTextEditor/Document>
 
-#include "editorintegrator.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/ilanguagecontroller.h>
+
+#include "../editor/editorintegrator.h"
+#include "../interfaces/ilanguagesupport.h"
+#include "../interfaces/icodehighlighting.h"
+#include "../backgroundparser/backgroundparser.h"
 
 #include "topducontext.h"
 #include "topducontextdynamicdata.h"
@@ -41,13 +49,6 @@
 #include "symboltable.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
-#include "backgroundparser.h"
-#include <idocumentcontroller.h>
-#include <icore.h>
-#include <ilanguage.h>
-#include <ilanguagecontroller.h>
-#include <ilanguagesupport.h>
-#include <icodehighlighting.h>
 #include "duchainutils.h"
 #include "duchainregister.h"
 #include "repositories/itemrepository.h"

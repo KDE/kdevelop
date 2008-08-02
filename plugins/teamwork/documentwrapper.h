@@ -21,10 +21,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <map>
 #include <string>
 
-#include "dynamictext/vectortimestamp.h"
-#include "dynamictext/flexibletextnotifier.h"
-#include "network/safesharedptr.h"
-#include "network/weaksafesharedptr.h"
+#include "lib/dynamictext/vectortimestamp.h"
+#include "lib/dynamictext/flexibletextnotifier.h"
+#include "lib/network/safesharedptr.h"
+#include "lib/network/weaksafesharedptr.h"
 #include "safelogger.h"
 
 #include <autoconstructpointer.h>

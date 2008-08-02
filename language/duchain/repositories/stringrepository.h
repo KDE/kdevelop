@@ -19,8 +19,10 @@
 #ifndef STRINGREPOSITORY_H
 #define STRINGREPOSITORY_H
 
+#include <QtCore/QString>
+
 #include "itemrepository.h"
-#include <QString>
+
 #include "../indexedstring.h"
 
 namespace Repositories {

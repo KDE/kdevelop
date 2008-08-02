@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "conversationmanager.h"
-#include "network/serialization.h"
+#include "lib/network/serialization.h"
 
 #include <boost/archive/polymorphic_xml_oarchive.hpp>
 #include <boost/archive/polymorphic_xml_iarchive.hpp>
@@ -34,10 +34,10 @@
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/attribute.h>
 
-#include "idocumentcontroller.h"
-#include "idocument.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
-#include "network/messageserialization.h"
+#include "lib/network/messageserialization.h"
 
 #include "messagemanager.h"
 #include "kdevteamwork_user.h"

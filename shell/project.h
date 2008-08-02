@@ -27,9 +27,9 @@
 #ifndef KDEVPROJECT_H
 #define KDEVPROJECT_H
 
-#include <iproject.h>
-
 #include <kurl.h>
+
+#include <interfaces/iproject.h>
 
 #include "shellexport.h"
 

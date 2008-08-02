@@ -18,7 +18,7 @@
 */
 
 #include "projectproxymodel.h"
-#include "projectmodel.h"
+#include <project/projectmodel.h>
 #include <KDebug>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)

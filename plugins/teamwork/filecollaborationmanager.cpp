@@ -22,13 +22,13 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
 
-#include "idocumentcontroller.h"
+#include <interfaces/idocumentcontroller.h>
 
-#include "network/messagesendhelper.h"
-#include "network/messagetypeset.h"
-#include "network/sessioninterface.h"
+#include "lib/network/messagesendhelper.h"
+#include "lib/network/messagetypeset.h"
+#include "lib/network/sessioninterface.h"
 
-#include "dynamictext/verify.h"
+#include "lib/dynamictext/verify.h"
 
 #include "teamworkfwd.h"
 #include "patchesmanager.h"

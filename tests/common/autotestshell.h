@@ -20,8 +20,8 @@
 #ifndef AUTOTESTSHELL_H
 #define AUTOTESTSHELL_H
 
-#include <shellextension.h>
-#include <core.h>
+#include <shell/shellextension.h>
+#include <shell/core.h>
 
 /* This is a dummy shell for unit tests. It basically does nothing :)
 

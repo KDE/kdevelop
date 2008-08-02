@@ -9,12 +9,6 @@ if(TestBuild AND NOT WIN32) # expose all symbols
     add_definitions( -fvisibility=default )
 endif(TestBuild AND NOT WIN32)
 
-include_directories(
-    ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/interfaces # needed for shell/core.h
-    ${CMAKE_BINARY_DIR}/veritas/
-    )
-
 ########### next target ###############
 
 set(veritas_SRCS

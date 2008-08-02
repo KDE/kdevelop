@@ -28,9 +28,9 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 K_PLUGIN_FACTORY(KDevDUChainViewFactory, registerPlugin<DUChainViewPlugin>(); )
 K_EXPORT_PLUGIN(KDevDUChainViewFactory("kdevduchainview"))

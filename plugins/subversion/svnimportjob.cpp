@@ -27,8 +27,8 @@
 #include <kdebug.h>
 #include <ThreadWeaver.h>
 
-#include <kdevsvncpp/client.hpp>
-#include <kdevsvncpp/path.hpp>
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
 

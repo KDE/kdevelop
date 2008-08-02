@@ -26,7 +26,7 @@
 
 #include <ktexteditor/codecompletionmodel.h>
 
-#include "language/languageexport.h"
+#include "../languageexport.h"
 
 class KUrl;
 

@@ -21,7 +21,7 @@
 #include <QTreeView>
 
 #include <ktexteditor/codecompletionmodel.h>
-#include <hashedstring.h>
+#include <language/editor/hashedstring.h>
 #include <kdebug.h>
 #include <typeinfo>
 

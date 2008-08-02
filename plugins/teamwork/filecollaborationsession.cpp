@@ -22,18 +22,18 @@ Q_DECLARE_METATYPE( Teamwork::UserPointer )
 #include <QStandardItemModel>
 #include <QModelIndex>
 
-#include "idocumentcontroller.h"
-#include <idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
 #include <krandom.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
 
-#include "network/messagesendhelper.h"
-#include "network/messagetypeset.h"
+#include "lib/network/messagesendhelper.h"
+#include "lib/network/messagetypeset.h"
 
 #include "filecollaborationmanager.h"
-#include "dynamictext/vectortimestamp.h"
+#include "lib/dynamictext/vectortimestamp.h"
 #include "kdevteamwork_user.h"
 #include "kdevteamworkplugin.h"
 #include "documentwrapper.h"

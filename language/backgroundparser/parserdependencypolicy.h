@@ -22,7 +22,7 @@
 #ifndef KDEV_PARSER_DEPENDENCYPOLICY_H
 #define KDEV_PARSER_DEPENDENCYPOLICY_H
 
-#include <DependencyPolicy.h>
+#include <threadweaver/DependencyPolicy.h>
 
 #include <QtCore/QMultiMap>
 
