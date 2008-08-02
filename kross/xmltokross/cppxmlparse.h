@@ -93,7 +93,7 @@ class XmlToKross
                             currentMethod.returnType=rettype;
                             currentMethod.isConst=isConst;
                             currentMethod.isVirtual=isVirtual;
-                            if(funcname==definedClasses.last() || funcname=='~'+definedClasses.last() )
+                            if(!definedClasses.isEmpty() && ( funcname==definedClasses.last() || funcname=='~'+definedClasses.last() ) )
                                 currentMethod.access="constructor";
                         }
                         else if(str=="Argument")
