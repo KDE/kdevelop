@@ -19,8 +19,8 @@
  */
 
 #include "annotationmanagertest.h"
-#include <veritas/coverage/annotationmanager.h>
-#include <veritas/coverage/coveredfile.h>
+#include "../annotationmanager.h"
+#include "../coveredfile.h"
 #include <veritas/tests/kasserts.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>

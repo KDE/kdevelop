@@ -2,8 +2,8 @@
 #include <QtTest/QTest>
 #include <qtest_kde.h>
 #include <veritas/tests/kasserts.h>
-#include <veritas/coverage/lcovinfoparser.h>
-#include <veritas/coverage/coveredfile.h>
+#include "../lcovinfoparser.h"
+#include "../coveredfile.h"
 #include "coveredfilefactory.h"
 
 using Veritas::CoveredFile;
