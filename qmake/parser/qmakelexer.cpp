@@ -139,7 +139,7 @@ int Lexer::nextTokenKind()
                     it++;
                     m_curpos++;
                     QChar* lastit = it;
-                    while( ( it->unicode() != '"' || lastit->unicode() == '\\' && it->unicode() == '"' ) && it->unicode() != '\n' && it->unicode() != '#' && !isCont( it ) && m_curpos < m_contentSize )
+                    while( ( it->unicode() != '"' || ( lastit->unicode() == '\\' && it->unicode() == '"' ) ) && it->unicode() != '\n' && it->unicode() != '#' && !isCont( it ) && m_curpos < m_contentSize )
                     {
                         lastit = it;
                         it++;
@@ -216,7 +216,7 @@ int Lexer::nextTokenKind()
             }else
             {
                 unsigned int parentCount = 0;
-                while( parentCount > 0 || ( it->unicode() != ')' && it->unicode() != ',' ) && m_curpos < m_contentSize )
+                while( parentCount > 0 || ( it->unicode() != ')' && it->unicode() != ',' && m_curpos < m_contentSize ) )
                 {
                     if( it->unicode() == ')' )
                     {
