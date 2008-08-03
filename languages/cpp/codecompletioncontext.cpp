@@ -22,6 +22,7 @@
 #include <klocalizedstring.h>
 #include <ducontext.h>
 #include <duchain.h>
+#include <namespacealiasdeclaration.h>
 #include <classfunctiondeclaration.h>
 #include <duchainlock.h>
 #include "stringhelpers.h"
@@ -693,6 +694,28 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   typedef QPair<Declaration*, int> DeclarationDepthPair;
   
   QList<DeclarationDepthPair> decls = Cpp::hideOverloadedDeclarations( m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext()) );
+  
+  if(m_duContext) {
+    //Collect the Declarations from all "using namespace" imported contexts
+    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, position );
+    QSet<QualifiedIdentifier> ids;
+    foreach(Declaration* importDecl, imports) {
+      NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(importDecl);
+      if(aliasDecl) {
+        ids.insert(aliasDecl->importIdentifier());
+      }else{
+        kDebug() << "Import is not based on NamespaceAliasDeclaration";
+      }
+    }
+    
+    foreach(QualifiedIdentifier id, ids) {
+      QList<DUContext*> importedContexts = m_duContext->findContexts( DUContext::Namespace, id );
+      foreach(DUContext* context, importedContexts)
+        foreach(Declaration* decl, context->localDeclarations())
+          decls << qMakePair(decl, 1200); ///@todo Eventually compute a depth
+    }
+  }
+  
   foreach( const DeclarationDepthPair& decl, decls )
     items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), Ptr(this), decl.second ) );
   
