@@ -161,13 +161,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
-      DataSize = sizeof(unsigned int) * 3 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
+      ///@todo Change these to use sizes instead of counts
+      MaxFreeItemsForHide = 10, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
+      MinFreeItemsForReuse = 100, //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      DataSize = sizeof(unsigned int) * 4 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
     };
     enum {
       CheckStart = 0xff00ff1,
       CheckEnd = 0xfafcfb
     };
-    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_nextBucketHash(0) {
+    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0) {
     }
     ~Bucket() {
       delete[] m_data;
@@ -200,6 +203,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
           file->read((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
           file->read((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
           file->read((char*)&m_largestFreeItem, sizeof(short unsigned int));
+          file->read((char*)&m_freeItemCount, sizeof(unsigned int));
           file->read((char*)&checkEnd, sizeof(unsigned int));
           Q_ASSERT(checkStart == CheckStart);
           Q_ASSERT(checkEnd == CheckEnd);
@@ -224,6 +228,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       file->write((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
       file->write((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
       file->write((char*)&m_largestFreeItem, sizeof(short unsigned int));
+      file->write((char*)&m_freeItemCount, sizeof(unsigned int));
       file->write((char*)&checkEnd, sizeof(unsigned int));
       Q_ASSERT(file->pos() == offset + DataSize);
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
@@ -231,7 +236,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         file->flush();
         file->seek(offset);
         
-        uint available;
+        uint available, freeItemCount;
         short unsigned int largestFree;
         
         char* d = new char[ItemRepositoryBucketSize];
@@ -244,6 +249,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         file->read((char*)m, sizeof(short unsigned int) * m_objectMapSize);
         file->read((char*)h, sizeof(short unsigned int) * NextBucketHashSize);
         file->read((char*)&largestFree, sizeof(short unsigned int));
+        file->read((char*)&freeItemCount, sizeof(unsigned int));
         file->read((char*)&checkEnd, sizeof(unsigned int));
 
         Q_ASSERT(checkStart == CheckStart);
@@ -254,6 +260,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * m_objectMapSize) == 0);
         Q_ASSERT(memcmp(h, m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize) == 0);
         Q_ASSERT(m_largestFreeItem == largestFree);
+        Q_ASSERT(m_freeItemCount == freeItemCount);
         
         Q_ASSERT(file->pos() == offset + DataSize);
         
@@ -323,6 +330,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
           m_largestFreeItem = followerIndex(currentIndex);
         
         insertedAt = currentIndex;
+        --m_freeItemCount;
+        Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
       }else{
         //We have to insert the item
         insertedAt = ItemRepositoryBucketSize - m_available;
@@ -421,8 +430,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(previousIndex)
         //This item is larger than all already registered free items, or there are none.
         setFollowerIndex(previousIndex, index);
+      else
+        m_largestFreeItem = index;
 
       setFollowerIndex(index, currentIndex);
+      
+      ++m_freeItemCount;
+      Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
     }
     
     inline const Item* itemFromIndex(unsigned short index) const {
@@ -463,6 +477,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       m_nextBucketHash[hash % NextBucketHashSize] = bucket;
     }
     
+    uint freeItemCount() const {
+      return m_freeItemCount;
+    }
+    
+    short unsigned int largestFreeItemSize() const {
+      if(m_largestFreeItem)
+        return freeSize(m_largestFreeItem);
+      else
+        return 0;
+    }
+    
   private:
     
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
@@ -490,6 +515,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
     uint m_objectMapSize;
     short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
+    unsigned int m_freeItemCount;
     
     unsigned short* m_nextBucketHash;
 };
@@ -559,15 +585,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 2,
-    BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
+    ItemRepositoryVersion = 3,
+    StaticBucketStartOffset = sizeof(uint) * 8 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
+  
+  inline uint bucketStartOffset() const {
+    return StaticBucketStartOffset + m_storedFreeSpaceBucketsSize* sizeof(uint);
+  }
   
   public:
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_repositoryVersion(repositoryVersion) {
     m_buckets.resize(10);
     m_buckets.fill(0);
+    m_freeSpaceBucketsSize = m_freeSpaceBucketsSize = 0;
     m_fastBuckets = m_buckets.data();
     m_bucketCount = m_buckets.size();
     
@@ -599,9 +630,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
     
+    short unsigned int size = request.itemSize();
+    
+    uint useBucket = m_currentBucket;
+    bool pickedBucketInChain = false; //Whether a bucket was picked for re-use that already is in the hash chain
+    int reOrderFreeSpaceBucketIndex = -1;
+    
     while(previousBucketNumber) {
       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-      
       Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[previousBucketNumber];
       if(!bucketPtr) {
         initializeBucket(previousBucketNumber);
@@ -613,6 +649,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         //We've found the item, it's already there
         return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
       } else {
+        if(!pickedBucketInChain && bucketPtr->largestFreeItemSize() >= size) {
+          //Remember that this bucket has enough space to store the item, if it isn't already stored.
+          //This gives a better structure, and saves us from cyclic follower structures.
+          useBucket = previousBucketNumber;
+          reOrderFreeSpaceBucketIndex = m_freeSpaceBuckets.indexOf(useBucket);
+          pickedBucketInChain = true;
+        }
         //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
         //Should happen rarely
         short unsigned int next = bucketPtr->nextBucketForHash(hash);
@@ -623,10 +666,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       }
     }
     
-    //The item isn't in the repository set, find a new bucket for it
+    if(!pickedBucketInChain && useBucket == m_currentBucket) {
+      //Try finding an existing bucket with deleted space to store the data into
+      for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
+        Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+        if(size <= bucketPtr->largestFreeItemSize()) {
+          //The item fits into the bucket.
+          useBucket = m_freeSpaceBuckets[a];
+          reOrderFreeSpaceBucketIndex = a;
+          break;
+        }
+      }
+    }
     
+    //The item isn't in the repository yet, find a new bucket for it
     while(1) {
-      if(m_currentBucket >= m_bucketCount) {
+      if(useBucket >= m_bucketCount) {
           if(m_bucketCount >= 0xfffe) { //We have reserved the last bucket index 0xffff for special purposes
           //the repository has overflown.
           kWarning() << "Found no room for an item in" << m_repositoryName << "size of the item:" << request.itemSize();
@@ -640,29 +695,37 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           memset(m_fastBuckets + oldBucketCount, 0, (m_bucketCount-oldBucketCount) * sizeof(void*));
         }
       }
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[m_currentBucket];
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[useBucket];
       if(!bucketPtr) {
-        initializeBucket(m_currentBucket);
-        bucketPtr = m_fastBuckets[m_currentBucket];
+        initializeBucket(useBucket);
+        bucketPtr = m_fastBuckets[useBucket];
       }
       unsigned short indexInBucket = bucketPtr->index(request, dynamic);
       
       if(indexInBucket) {
         if(!(*bucketHashPosition))
-          (*bucketHashPosition) = m_currentBucket;
+          (*bucketHashPosition) = useBucket;
         
         ++m_statItemCount;
 
         //Set the follower pointer in the earlier bucket for the hash
-        if(previousBucketNumber && previousBucketNumber != m_currentBucket) {
+        if(!pickedBucketInChain && previousBucketNumber && previousBucketNumber != useBucket) {
           //Should happen rarely
           ++m_statBucketHashClashes;
-          m_buckets[previousBucketNumber]->setNextBucketForHash(request.hash(), m_currentBucket);
+          m_buckets[previousBucketNumber]->setNextBucketForHash(request.hash(), useBucket);
         }
         
-        return (m_currentBucket << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+        if(reOrderFreeSpaceBucketIndex != -1)
+          updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
+        
+        return (useBucket << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
       }else{
+        //This should never happen when we picked a bucket for re-use
+        Q_ASSERT(!pickedBucketInChain);
+        Q_ASSERT(reOrderFreeSpaceBucketIndex == -1);
+        Q_ASSERT(useBucket == m_currentBucket);
         ++m_currentBucket;
+        useBucket = m_currentBucket;
       }
     }
     //We haven't found a bucket that already contains the item, so append it to the current bucket
@@ -754,6 +817,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
     bucketPtr->deleteItem(index, hash);
     
+    if(bucketPtr->freeItemCount() == Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
+      //Add the bucket to the list of buckets from where to re-assign free space
+      //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
+      Q_ASSERT(bucketPtr->largestFreeItemSize());
+      uint insertPos;
+      for(insertPos = 0; insertPos < m_freeSpaceBucketsSize; ++insertPos) {
+        if(bucketForIndex(m_freeSpaceBuckets[insertPos])->largestFreeItemSize() > bucketPtr->largestFreeItemSize())
+          break;
+      }
+      m_freeSpaceBuckets.insert(insertPos, bucket);
+      ++m_freeSpaceBucketsSize;
+    }else if(bucketPtr->freeItemCount() > Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
+      ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
+      //Find position in m_freeSpaceBuckets
+      int index = m_freeSpaceBuckets.indexOf(bucket);
+      Q_ASSERT(index != -1);
+      updateFreeSpaceOrder(index);
+    }
+    
     /**
      * Now check whether the link previousBucketNumber -> bucket is still needed.
      */
@@ -843,6 +925,52 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   }
 
   private:
+  
+  ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeItemSize has been changed for m_freeSpaceBuckets[index].
+  ///If too few space is free within the given bucket, it is removed from m_freeSpaceBuckets.
+  void updateFreeSpaceOrder(int index) {
+
+    Q_ASSERT(index >= 0 && index < m_freeSpaceBuckets.size());
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[index]);
+    
+    unsigned short largestFreeSize = bucketPtr->largestFreeItemSize();
+    
+    if(largestFreeSize == 0 || bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide) {
+      //Remove the item from m_freeSpaceBuckets
+      m_freeSpaceBuckets.remove(index);
+      m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
+    }else{
+      while(1) {
+        int prev = index-1;
+        int next = index+1;
+        if(prev >= 0 && bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeItemSize() > largestFreeSize) {
+          //The predecessor has a bigger largestFreeItemSize, but it should be smallest first. So flip.
+          uint oldPrevValue = m_freeSpaceBuckets[prev];
+          m_freeSpaceBuckets[prev] = m_freeSpaceBuckets[index];
+          m_freeSpaceBuckets[index] = oldPrevValue;
+          index = prev;
+        }else if(next < m_freeSpaceBuckets.size() && bucketForIndex(m_freeSpaceBuckets[next])->largestFreeItemSize() < largestFreeSize) {
+          //The successor has a smaller largestFreeItemSize, but the order is smallest-first, so flip.
+          uint oldNextValue = m_freeSpaceBuckets[next];
+          m_freeSpaceBuckets[next] = m_freeSpaceBuckets[index];
+          m_freeSpaceBuckets[index] = oldNextValue;
+          index = next;
+        }else{
+          break;
+        }
+      }
+    }
+  }
+    
+  Bucket<Item, ItemRequest, DynamicData>* bucketForIndex(short unsigned int index) {
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[index];
+    if(!bucketPtr) {
+      initializeBucket(index);
+      bucketPtr = m_fastBuckets[index];
+    }
+    return bucketPtr;
+  }
+    
   virtual bool open(const QString& path, bool clear) {
     close();
     m_currentOpenPath = path;
@@ -868,6 +996,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
       m_file->write((char*)&m_statItemCount, sizeof(uint));
       
+      m_storedFreeSpaceBucketsSize = m_freeSpaceBucketsSize = 0;
+      m_file->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+      m_freeSpaceBuckets.clear();
+      
       m_buckets.resize(10);
       m_buckets.fill(0);
       uint bucketCount = m_buckets.size();
@@ -880,7 +1012,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&m_currentBucket, sizeof(uint));
       m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
       //We have completely initialized the file now
-      Q_ASSERT(m_file->pos() == BucketStartOffset);
+      Q_ASSERT(m_file->pos() == bucketStartOffset());
     }else{
       //Check that the version is correct
       uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
@@ -897,6 +1029,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         m_file = 0;
         return false;
       }
+      m_file->read((char*)&m_storedFreeSpaceBucketsSize, sizeof(uint));
+      m_freeSpaceBucketsSize = m_storedFreeSpaceBucketsSize;
+      m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
+      m_file->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
+      
       uint bucketCount;
       m_file->read((char*)&bucketCount, sizeof(uint));
       m_buckets.resize(bucketCount);
@@ -905,7 +1042,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
       m_firstBucketForHash = new short unsigned int[bucketHashSize];
       m_file->read((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
-      Q_ASSERT(m_file->pos() == BucketStartOffset);
+      Q_ASSERT(m_file->pos() == bucketStartOffset());
     }
     
     m_fastBuckets = m_buckets.data();
@@ -927,11 +1064,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
       m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
       m_file->write((char*)&m_statItemCount, sizeof(uint));
+      
+      Q_ASSERT(m_freeSpaceBucketsSize == (uint)m_freeSpaceBuckets.size());
+      m_file->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+      m_storedFreeSpaceBucketsSize = m_freeSpaceBucketsSize;
+      m_file->write((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
+      
       uint bucketCount = m_buckets.size();
       m_file->write((char*)&bucketCount, sizeof(uint));
       m_file->write((char*)&m_currentBucket, sizeof(uint));
       m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
-      Q_ASSERT(m_file->pos() == BucketStartOffset);
+      Q_ASSERT(m_file->pos() == bucketStartOffset());
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
         m_file->flush();
@@ -948,6 +1091,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         Q_ASSERT(itemRepositoryVersion == ItemRepositoryVersion);
         Q_ASSERT(statBucketHashClashes == m_statBucketHashClashes);
         Q_ASSERT(statItemCount == m_statItemCount);
+
+/*        m_file->read((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+        m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
+        m_file->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
         
         uint bucketCount, currentBucket;
         m_file->read((char*)&bucketCount, sizeof(uint));
@@ -958,8 +1105,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         short unsigned int* s = new short unsigned int[bucketHashSize];
         m_file->read((char*)s, sizeof(short unsigned int) * bucketHashSize);
         Q_ASSERT(memcmp(s, m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize) == 0);
-        Q_ASSERT(m_file->pos() == BucketStartOffset);
-        delete[] s;
+        Q_ASSERT(m_file->pos() == bucketStartOffset());
+        delete[] s;*/
       }
 #endif
     }
@@ -986,7 +1133,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
       if(m_file)
-        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+        m_fastBuckets[bucketNumber]->initialize(m_file, bucketStartOffset() + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
       else
         m_fastBuckets[bucketNumber]->initialize();
     }
@@ -994,7 +1141,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+      m_fastBuckets[bucketNumber]->store(m_file, bucketStartOffset() + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
     }
   }
 
@@ -1002,6 +1149,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   QString m_repositoryName;
   unsigned int m_size;
   mutable uint m_currentBucket;
+  //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first
+  QVector<uint> m_freeSpaceBuckets;
+  uint m_storedFreeSpaceBucketsSize; //m_freeSpaceBucketsSize as stored in the currently opened file
+  uint m_freeSpaceBucketsSize; //for speedup
   mutable QVector<Bucket<Item, ItemRequest, DynamicData>* > m_buckets;
   mutable Bucket<Item, ItemRequest, DynamicData>** m_fastBuckets; //For faster access
   mutable uint m_bucketCount;
