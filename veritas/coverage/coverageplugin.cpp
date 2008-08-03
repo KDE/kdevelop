@@ -19,6 +19,10 @@
  */
 
 #include "coverageplugin.h"
+#include "covoutputdelegate.h"
+#include "lcovjob.h"
+#include "reportwidget.h"
+#include "reportmodel.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -27,18 +31,26 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 
-#include <outputview/covoutputdelegate.h>
-#include <outputview/covoutputjob.h>
-
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectfilemanager.h>
 
+#include <QAbstractItemView>
+#include <QDir>
+#include <KAction>
+#include <KActionCollection>
+#include <KActionMenu>
+#include <KDebug>
+#include <KProcess>
+#include <KLocale>
+#include <KPluginFactory>
+#include <KPluginLoader>
 
 using KDevelop::Context;
 using KDevelop::ContextMenuExtension;
@@ -49,38 +61,102 @@ using KDevelop::ICore;
 using KDevelop::IBuildSystemManager;
 using KDevelop::IProject;
 using KDevelop::IProjectFileManager;
-
+using KDevelop::IToolViewFactory;
 
 using Veritas::CoveragePlugin;
-using Veritas::CovOutputJob;
+using Veritas::LcovJob;
 using Veritas::CovOutputDelegate;
+using Veritas::ReportWidget;
+using Veritas::ReportModel;
 
 K_PLUGIN_FACTORY(CoveragePluginFactory, registerPlugin<CoveragePlugin>();)
 K_EXPORT_PLUGIN(CoveragePluginFactory("kdevcoverage"))
 
 CoveragePlugin::CoveragePlugin(QObject* parent, const QVariantList&)
         : KDevelop::IPlugin( CoveragePluginFactory::componentData(), parent ),
-          m_delegate(new CovOutputDelegate(this))
+          m_delegate(new CovOutputDelegate(this)),
+          m_ctxMenu(new KActionMenu("Coverage", this))
 {
-    setXMLFile( "kdevcoverage.rc" );
+    setXMLFile("kdevcoverage.rc");
+    initReportAction();
+    initCleanGcdaAction();
+    initBuildFlagsAction();
+}
 
-    KAction *action = actionCollection()->addAction("spawn_coverage");
-    action->setText(i18n("Spawn Coverage Outputview"));
-    action->setShortcut( QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_B) );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(startCovOutputJob()));
+void CoveragePlugin::initReportAction()
+{
+    KAction *report = actionCollection()->addAction("spawn_coverage");
+    report->setText(i18n("Spawn Report"));
+    connect(report, SIGNAL(triggered()), this, SLOT(startLcovJob()));
+    m_ctxMenu->addAction(report);
+}
+
+void CoveragePlugin::initCleanGcdaAction()
+{
+    KAction *clean = actionCollection()->addAction("clean_coverage_data");
+    clean->setText(i18n("Reset Data"));
+    connect(clean, SIGNAL(triggered()), this, SLOT(removeGcdaFiles()));
+    m_ctxMenu->addAction(clean);
+}
+
+void CoveragePlugin::initBuildFlagsAction()
+{
+    KAction *flags = actionCollection()->addAction("insert_gcov_flags");
+    flags->setText(i18n("Insert Build Flags"));
+    connect(flags, SIGNAL(triggered()), this, SLOT(insertGcovFlags()));
+    m_ctxMenu->addAction(flags);
+}
+
+QFileInfoList CoveragePlugin::findGcdaFilesIn(QDir& dir)
+{
+    kDebug() << dir.absolutePath();
+    QFileInfoList gcdaFiles;
+    QDir current(dir);
+    current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
+    QStringList subDirs = current.entryList();
+    foreach(QString subDir, subDirs) {
+        current.cd(subDir);
+        gcdaFiles += findGcdaFilesIn(current);
+        current.cdUp();
+    }
+    current = QDir(dir);
+    current.setNameFilters(QStringList() << "*.gcda");
+    current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks);
+    return current.entryInfoList() + gcdaFiles;
+}
+
+void CoveragePlugin::removeGcdaFiles()
+{
+    if (m_buildRoot.isEmpty()) return;
+    QDir root(m_buildRoot.path());
+    QFileInfoList gcdaFiles = findGcdaFilesIn(root);
+    foreach(QFileInfo f, gcdaFiles) {
+        kDebug() << "Removing " << f.absoluteFilePath();
+        QFile::remove(f.absoluteFilePath());
+    }
+}
+
+void CoveragePlugin::insertGcovFlags()
+{
+    if (m_buildRoot.isEmpty()) return;
+    kDebug() << "TODO";
 }
 
 CoveragePlugin::~CoveragePlugin()
 {}
 
-void CoveragePlugin::startCovOutputJob()
+void CoveragePlugin::startLcovJob()
 {
-    CovOutputJob* job = new CovOutputJob(m_delegate, m_buildRoot);
+    if (m_buildRoot.isEmpty()) return;
+    LcovJob* job = new LcovJob(m_buildRoot, m_delegate);
+    job->setDelegate(m_delegate);
+    job->setProcess(new KProcess);
     ICore::self()->runController()->registerJob(job);
 }
 
 ContextMenuExtension CoveragePlugin::contextMenuExtension(Context* context)
 {
+    m_buildRoot.clear();
     ContextMenuExtension cm;
     if (context->type() != Context::ProjectItemContext) {
         return cm; // NO-OP
@@ -91,16 +167,22 @@ ContextMenuExtension CoveragePlugin::contextMenuExtension(Context* context)
         return cm;
     }
     QList<ProjectBaseItem*> bl = pc->items();
-    if (!bl.count()) {
-        return cm;
+    if (!bl.count() || !bl[0] || !bl[0]->folder() || bl[0]!=bl[0]->project()->projectItem()) {
+        return cm; // only show coverage menu action on project root folder item.
     }
     IProject* proj = bl[0]->project();
     IBuildSystemManager* bm = proj->buildSystemManager();
+    if (!bm) {
+        return cm;
+    }
     m_buildRoot = bm->buildDirectory(bl[0]);
-
-    KAction *action = new KAction(i18n("Coverage Report"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(startCovOutputJob()));
-    cm.addAction(ContextMenuExtension::ExtensionGroup, action);
+    kDebug() << m_buildRoot;
+    if (m_buildRoot.isEmpty() || m_buildRoot == KUrl("/./")) {
+        m_buildRoot.clear();
+        return cm;
+    }
+    
+    cm.addAction(ContextMenuExtension::ExtensionGroup, m_ctxMenu);
     return cm;
 }
 

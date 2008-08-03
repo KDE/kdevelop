@@ -17,3 +17,78 @@
  * 02110-1301, USA.
  */
 
+#include "coveredfile.h"
+
+using Veritas::CoveredFile;
+
+CoveredFile::CoveredFile()
+    : m_nrofLines(0), m_nrofInstrumentedLines(0)
+{}
+
+CoveredFile::~CoveredFile()
+{}
+
+KUrl CoveredFile::url() const
+{
+    return m_sourceLoc;
+}
+
+void CoveredFile::setUrl(const KUrl& url)
+{
+    m_sourceLoc = url;
+}
+
+void CoveredFile::setCallCount(int line, int count)
+{
+    kWarning(m_nrofCalls.contains(line)) << "Overwriting call count for line " << line;
+    m_nrofCalls[line] = count;
+    m_reachableLines << line;
+    m_nrofLines = m_reachableLines.count();
+    if (count != 0) {
+        m_coveredLines << line;
+        m_nrofInstrumentedLines = m_coveredLines.count();
+    }
+}
+
+QSet<int> CoveredFile::coveredLines() const
+{
+    return m_coveredLines;
+}
+
+QSet<int> CoveredFile::reachableLines() const
+{
+    return m_reachableLines;
+}
+
+double CoveredFile::coverage() const
+{
+    if (m_nrofLines == 0) return 0;
+    return 100*(double)m_nrofInstrumentedLines/(double)m_nrofLines;
+}
+
+int CoveredFile::sloc() const
+{
+    //return reachableLines().count();
+    return m_nrofLines;
+}
+
+int CoveredFile::instrumented() const
+{
+    return m_nrofInstrumentedLines;
+}
+
+// void CoveredFile::setSloc(int nrofLines)
+// {
+//     m_nrofLines = nrofLines;
+// }
+// 
+// void CoveredFile::setInstrumented(int nrofLines)
+// {
+//     m_nrofInstrumentedLines = nrofLines;
+// }
+
+QMap<int, int> CoveredFile::callCountMap() const
+{
+    return m_nrofCalls;
+}
+

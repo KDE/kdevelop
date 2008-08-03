@@ -23,14 +23,16 @@
 
 #include <KUrl>
 #include <QVariantList>
+#include <QFileInfo>
 #include <interfaces/iplugin.h>
 
+class KActionMenu;
+class QDir;
 namespace KDevelop
 {
 class ContextMenuExtension;
 class Context;
 }
-
 
 namespace Veritas
 {
@@ -46,11 +48,20 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 private Q_SLOTS:
-    void startCovOutputJob();
+    void startLcovJob();
+    void removeGcdaFiles();
+    void insertGcovFlags();
+
+private:
+    void initReportAction();
+    void initCleanGcdaAction();
+    void initBuildFlagsAction();
+    QFileInfoList findGcdaFilesIn(QDir& dir);
 
 private:
     CovOutputDelegate* m_delegate;
     KUrl m_buildRoot;
+    KActionMenu* m_ctxMenu;
 };
 
 }

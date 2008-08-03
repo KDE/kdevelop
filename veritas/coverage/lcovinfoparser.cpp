@@ -22,14 +22,88 @@
 #include <QFile>
 #include <QTextStream>
 #include <QStringList>
+#include <QStringRef>
 #include "coveredfile.h"
 
 using Veritas::LcovInfoParser;
 using Veritas::CoveredFile;
 
+LcovInfoParser::LcovInfoParser(QObject* parent) : QObject(parent), m_sourceDev(0), m_current(0)
+{}
+
+LcovInfoParser::~LcovInfoParser()
+{}
+
 void LcovInfoParser::setSource(const KUrl& source)
 {
-    m_source = source;
+    m_sourceDev = new QFile(source.pathOrUrl());
+}
+
+void LcovInfoParser::setSource(QIODevice* device)
+{
+    m_sourceDev = device;
+}
+
+namespace
+{
+
+inline bool firstTwoCharsEqual(const char* one, char* two)
+{
+    return not qstrncmp(one, two, 2);
+}
+
+}
+
+void LcovInfoParser::parseLines(const QStringList& lines)
+{
+    foreach(QString l, lines) parseLine(l);
+}
+
+void LcovInfoParser::parseLine(const QString& line)
+{
+    if (line.count() < 3) return;
+    tmp_firstChar = line[0].toAscii();
+    tmp_secondChar = line[1].toAscii();
+    switch(tmp_firstChar) {
+    case 'D': {
+        if (tmp_secondChar != 'A') break;
+        // DA:<line number>,<execution count> for each instrumented line
+        Q_ASSERT(m_current);
+        //l = line.split(":");
+        tmp_f = line.mid(3, -1);
+        tmp_s = tmp_f.split(",");
+        int lineNumber = tmp_s.value(0).toInt();
+        int callCount = tmp_s.value(1).toInt();
+        m_current->setCallCount(lineNumber, callCount);
+        break;
+    } case 'F': { break;
+    } case 'S': {
+        if (tmp_secondChar != 'F') break;
+        // SF:<absolute path to the source file>
+        Q_ASSERT(m_current == 0);
+        m_current = new CoveredFile; // TODO where to these get deleted?
+        m_current->setUrl(KUrl(line.split(":").value(1)));
+        break;
+    } case 'L': {
+        /*if (tmp_secondChar == 'F') {
+            // #   LF:<number of instrumented lines>
+            Q_ASSERT(m_current);
+            m_current->setSloc(line.split(":").value(1).toInt());
+        } else if (tmp_secondChar == 'H') {
+            // #   LH:<number of lines with an execution count> greater than 0
+            Q_ASSERT(m_current);
+            m_current->setInstrumented(line.split(":").value(1).toInt());
+        }*/
+        break;
+    } case 'e': {
+        if (line.startsWith("end_of_record")) {
+            Q_ASSERT(m_current);
+            m_files << m_current;
+            emit parsedCoverageData(m_files.last());
+            m_current = 0;
+        }
+        break;
+    } default: {}}
 }
 
 QList<CoveredFile*> LcovInfoParser::go()
@@ -59,33 +133,30 @@ QList<CoveredFile*> LcovInfoParser::go()
 // LH:5
 // end_of_record
 
-
-    QFile f(m_source.pathOrUrl());
-    f.open(QIODevice::ReadOnly);
-    QTextStream str(&f);
-
-    QList<CoveredFile*> files;
-    CoveredFile* file;
-    while (!str.atEnd()) {
-        QString line = str.readLine();
-        if (line.startsWith("SF")) {
-            file = new CoveredFile;
-            file->m_sourceLoc = KUrl(line.split(":").value(1));
-        } else if (line.startsWith("DA")) {
-            kDebug() << line;
-            QStringList l = line.split(":");
-            QStringList s = l.value(1).split(",");
-            file->m_lines.push_back(s.value(0).toInt());
-            file->m_nrofCalls.push_back(s.value(1).toInt());
-        } else if (line.startsWith("LF")) {
-            file->m_nrofLines = line.split(":").value(1).toInt();
-        } else if (line.startsWith("LH")) {
-            file->m_nrofInstrumentedLines = line.split(":").value(1).toInt();
-        } else if (line.startsWith("end_of_record")) {
-            files.push_back(file);
+    Q_ASSERT(m_sourceDev);
+    if (not m_sourceDev->isOpen()) {
+        m_sourceDev->open(QIODevice::ReadOnly);
+        if (not m_sourceDev->isOpen()) {
+            kError() << "Failed to open lcov info file for reading.";
+            return QList<CoveredFile*>();
         }
     }
-    return files;
+    this->disconnect(this);
+    connect(this, SIGNAL(parsedCoverageDataForFile(CoveredFile*)),
+            this, SLOT(appendCoverageData(CoveredFile*)));
+
+    QTextStream str(m_sourceDev);
+
+    m_files.clear();
+    m_current = 0;
+
+    QString line;
+    while (!str.atEnd()) {
+        line = str.readLine();
+        parseLine(line);
+    }
+
+    return m_files;
 }
 
-
+#include "lcovinfoparser.moc"

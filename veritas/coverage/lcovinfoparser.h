@@ -20,22 +20,46 @@
 #ifndef VERITAS_LCOVINFOPARSER_H
 #define VERITAS_LCOVINFOPARSER_H
 
+#include <QIODevice>
 #include <QList>
+#include <QStringList>
 #include <KUrl>
+#include "coverageexport.h"
 
 namespace Veritas
 {
 
 class CoveredFile;
 
-class LcovInfoParser
+class VERITAS_COVERAGE_EXPORT LcovInfoParser : public QObject
 {
+Q_OBJECT
 public:
+    LcovInfoParser(QObject* parent=0);
+    ~LcovInfoParser();
     void setSource(const KUrl&);
+    void setSource(QIODevice*);
+    void parseLine(const QString& line);
     QList<CoveredFile*> go();
 
+Q_SIGNALS:
+    void parsedCoverageData(CoveredFile*);
+    void finished();
+
+public Q_SLOTS:
+    void parseLines(const QStringList& lines);
+
 private:
-    KUrl m_source;
+    QIODevice* m_sourceDev;
+    CoveredFile* m_current;
+    QList<CoveredFile*> m_files;
+
+    // scratch variables
+    char tmp_firstChar;
+    char tmp_secondChar;
+    QStringList tmp_s;
+    QStringList tmp_l; // temp variables
+    QString tmp_f;
 };
 
 }

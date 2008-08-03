@@ -44,6 +44,7 @@
 #   2004-02-16 / Andreas Krebbel: Added support for .gcno/.gcda files and
 #                gcov versioning
 #   2004-08-09 / Peter Oberparleiter: added configuration file support
+#   2008-07-27 / Manuel Breugelmans: minor adaptions for use in KDevelop4
 #
 
 use strict;
@@ -70,6 +71,8 @@ our $ERROR_GCOV		= 0;
 our $ERROR_SOURCE	= 1;
 
 # Prototypes
+sub processing($);
+sub normalize($);
 sub print_usage(*);
 sub gen_info($);
 sub process_dafile($);
@@ -119,9 +122,9 @@ our $compatibility;	# Compatibility version flag - used to indicate
 our @ignore_errors;	# List of errors to ignore (parameter)
 our @ignore;		# List of errors to ignore (array)
 our $initial;
-
-our $cwd = `pwd`;
-chomp($cwd);
+our $cwd;
+#our $cwd = `pwd`;
+#chomp($cwd);
 
 
 #
@@ -132,14 +135,14 @@ chomp($cwd);
 $SIG{"INT"} = \&int_handler;
 
 # Read configuration file if available
-if (-r $ENV{"HOME"}."/.lcovrc")
-{
-	$config = read_config($ENV{"HOME"}."/.lcovrc");
-}
-elsif (-r "/etc/lcovrc")
-{
-	$config = read_config("/etc/lcovrc");
-}
+# if (-r $ENV{"HOME"}."/.lcovrc")
+# {
+# 	$config = read_config($ENV{"HOME"}."/.lcovrc");
+# }
+# elsif (-r "/etc/lcovrc")
+# {
+# 	$config = read_config("/etc/lcovrc");
+# }
 
 if ($config)
 {
@@ -173,6 +176,7 @@ if (!GetOptions("test-name=s" => \$test_name,
 		"no-compat-libtool" => \$no_compat_libtool,
 		"gcov-tool=s" => \$gcov_tool,
 		"ignore-errors=s" => \@ignore_errors,
+        "wcwd=s" => \$cwd,
 		"initial|i" => \$initial
 		))
 {
@@ -484,7 +488,7 @@ sub gen_info($)
 
 sub process_dafile($)
 {
-	info("Processing %s\n", $_[0]);
+    processing($_[0]);
 
 	my $da_filename;	# Name of data file to process
 	my $da_dir;		# Directory of data file
@@ -568,7 +572,7 @@ sub process_dafile($)
 	# Ignore empty graph file (e.g. source file with no statement)
 	if (-z $bb_filename)
 	{
-		warn("WARNING: empty $bb_filename (skipped)\n");
+		warn("WARNING: empty ".normalize($bb_filename)." (skipped)\n");
 		return;
 	}
 
@@ -650,10 +654,10 @@ sub process_dafile($)
 	{
 		if ($ignore[$ERROR_GCOV])
 		{
-			warn("WARNING: GCOV failed for $da_filename!\n");
+			warn("WARNING: GCOV failed for ".normalize($da_filename)." !\n");
 			return;
 		}
-		die("ERROR: GCOV failed for $da_filename!\n");
+		die("ERROR: GCOV failed for ".normalize($da_filename)."!\n");
 	}
 
 	# Collect data from resulting .gcov files and create .info file
@@ -663,7 +667,7 @@ sub process_dafile($)
 	if (!@gcov_list)
 	{
 		warn("WARNING: gcov did not create any files for ".
-		     "$da_filename!\n");
+		     normalize($da_filename)."!\n");
 	}
 
 	# Check whether we're writing to a single file
@@ -685,7 +689,7 @@ sub process_dafile($)
 	{
 		# Open .info file for output
 		open(INFO_HANDLE, ">$da_filename.info")
-			or die("ERROR: cannot create $da_filename.info!\n");
+			or die("ERROR: cannot create ".normalize($da_filename).".info!\n");
 	}
 
 	# Write test name
@@ -715,10 +719,10 @@ sub process_dafile($)
 			if ($ignore[$ERROR_SOURCE])
 			{
 				warn("WARNING: could not read source file ".
-				     "$source\n");
+				     normalize($source)."\n");
 				next;
 			}
-			die("ERROR: could not read source file $source\n");
+			die("ERROR: could not read source file ".normalize($source)."\n");
 		}
 
 		@matches = match_filename(defined($source) ? $source :
@@ -727,8 +731,8 @@ sub process_dafile($)
 		# Skip files that are not mentioned in the graph file
 		if (!@matches)
 		{
-			warn("WARNING: cannot find an entry for ".$gcov_file.
-			     " in $graph_file_extension file, skipping ".
+			warn("WARNING: cannot find an entry for ".normalize($gcov_file).
+			     " in ".normalize($graph_file_extension)." file, skipping ".
 			     "file!\n");
 			unlink($gcov_file);
 			next;
@@ -742,7 +746,7 @@ sub process_dafile($)
 		# Skip empty files
 		if (!@gcov_content)
 		{
-			warn("WARNING: skipping empty file ".$gcov_file."\n");
+			warn("WARNING: skipping empty file ".normalize($gcov_file)."\n");
 			unlink($gcov_file);
 			next;
 		}
@@ -852,7 +856,7 @@ sub process_dafile($)
 	{
 		foreach (@unprocessed)
 		{
-			warn("WARNING: no data found for $_\n");
+			warn("WARNING: no data found for ".normalize($_)."\n");
 		}
 	}
 
@@ -961,7 +965,7 @@ sub solve_ambiguous_match($$$)
 
 		# Compare file contents
 		open(SOURCE, $filename)
-			or die("ERROR: cannot read $filename!\n");
+			or die("ERROR: cannot read ".normalize($filename)."!\n");
 
 		$no_match = 0;
 		for ($index = 2; <SOURCE>; $index += 3)
@@ -1046,10 +1050,10 @@ sub read_gcov_header($)
 	{
 		if ($ignore_errors[$ERROR_GCOV])
 		{
-			warn("WARNING: cannot read $_[0]!\n");
+			warn("WARNING: cannot read ".normalize($_[0])."!\n");
 			return (undef,undef);
 		}
-		die("ERROR: cannot read $_[0]!\n");
+		die("ERROR: cannot read ".normalize($_[0])."!\n");
 	}
 
 	while (<INPUT>)
@@ -1106,7 +1110,7 @@ sub read_gcov_file($)
 	local *INPUT;
 
 	open(INPUT, $filename)
-		or die("ERROR: cannot read $filename!\n");
+		or die("ERROR: cannot read ".normalize($filename)."!\n");
 
 	if ($gcov_version < $GCOV_VERSION_3_3_0)
 	{
@@ -1251,7 +1255,7 @@ sub read_bb_file($$)
 	local *INPUT;
 
 	open(INPUT, $bb_filename)
-		or die("ERROR: cannot read $bb_filename!\n");
+		or die("ERROR: cannot read ".normalize($bb_filename)."!\n");
 
 	binmode(INPUT);
 
@@ -1267,7 +1271,7 @@ sub read_bb_file($$)
 			# Filename follows
 			$filename = read_string(*INPUT, $minus_one)
 				or die("ERROR: incomplete filename in ".
-				       "$bb_filename!\n");
+				       normalize($bb_filename)."!\n");
 
 			# Make path absolute
 			$filename = solve_relative_path($base_dir, $filename);
@@ -1286,7 +1290,7 @@ sub read_bb_file($$)
 			# Function name follows
 			$function_name = read_string(*INPUT, $minus_two)
 				 or die("ERROR: incomplete function ".
-					"name in $bb_filename!\n");
+					"name in ".normalize($bb_filename)."!\n");
 		}
 		elsif ($value > 0)
 		{
@@ -1300,7 +1304,7 @@ sub read_bb_file($$)
 			{
 				warn("WARNING: unassigned line".
 				     " number in .bb file ".
-				     "$bb_filename\n");
+				     normalize($bb_filename)."\n");
 			}
 			if ($function_name)
 			{
@@ -1318,7 +1322,7 @@ sub read_bb_file($$)
 
 	if (!scalar(keys(%result)))
 	{
-		die("ERROR: no data found in $bb_filename!\n");
+		die("ERROR: no data found in ".normalize($bb_filename)."!\n");
 	}
 	return %result;
 }
@@ -1393,7 +1397,7 @@ sub read_gcno_file($$)
 	local *INPUT;
 
 	open(INPUT, $gcno_filename)
-		or die("ERROR: cannot read $gcno_filename!\n");
+		or die("ERROR: cannot read ".normalize($gcno_filename)."!\n");
 
 	binmode(INPUT);
 	
@@ -1461,7 +1465,7 @@ sub read_gcno_file($$)
 					{
 						warn("WARNING: unassigned line".
 						     " number in .gcno file ".
-						     "$gcno_filename\n");
+						     normalize($gcno_filename)."\n");
 					}
 					next;
 				}
@@ -1494,7 +1498,7 @@ sub read_gcno_file($$)
 
 	if (!scalar(keys(%result)))
 	{
-		die("ERROR: no data found in $gcno_filename!\n");
+		die("ERROR: no data found in ".normalize($gcno_filename)."!\n");
 	}
 	return %result;
 }
@@ -1842,31 +1846,31 @@ sub int_handler()
 
 sub system_no_output($@)
 {
-	my $mode = shift;
-	my $result;
-	local *OLD_STDERR;
-	local *OLD_STDOUT;
+    my $mode = shift;
+    my $result;
+    local *OLD_STDERR;
+    local *OLD_STDOUT;
 
-	# Save old stdout and stderr handles
-	($mode & 1) && open(OLD_STDOUT, ">>&STDOUT");
-	($mode & 2) && open(OLD_STDERR, ">>&STDERR");
+    # Save old stdout and stderr handles
+    ($mode & 1) && open(OLD_STDOUT, ">>&STDOUT");
+    ($mode & 2) && open(OLD_STDERR, ">>&STDERR");
 
-	# Redirect to /dev/null
-	($mode & 1) && open(STDOUT, ">/dev/null");
-	($mode & 2) && open(STDERR, ">/dev/null");
+    # Redirect to /dev/null
+    ($mode & 1) && open(STDOUT, ">/dev/null");
+    ($mode & 2) && open(STDERR, ">/dev/null");
  
-	system(@_);
-	$result = $?;
+    system(@_);
+    $result = $?;
 
-	# Close redirected handles
-	($mode & 1) && close(STDOUT);
-	($mode & 2) && close(STDERR);
+    # Close redirected handles
+    ($mode & 1) && close(STDOUT);
+    ($mode & 2) && close(STDERR);
 
-	# Restore old handles
-	($mode & 1) && open(STDOUT, ">>&OLD_STDOUT");
-	($mode & 2) && open(STDERR, ">>&OLD_STDERR");
+    # Restore old handles
+    ($mode & 1) && open(STDOUT, ">>&OLD_STDOUT");
+    ($mode & 2) && open(STDERR, ">>&OLD_STDERR");
  
-	return $result;
+    return $result;
 }
 
 
@@ -1967,6 +1971,25 @@ sub gen_initial_info($)
 	foreach (@file_list) { process_graphfile($_); }
 }
 
+sub normalize($)
+{
+    my $file_name = $_[0];
+    if ( $file_name =~ /$cwd/ ) {
+        $file_name = substr($file_name, length($cwd));
+    } elsif ( $file_name =~ /substr($cwd, -1)/ ) {
+        # Qt likes to add './', truncate as well when this is not present.
+        $file_name = substr($file_name, length($cwd)-1);
+    }
+    $file_name =~ s/#/\//g;
+    return $file_name;
+}
+
+sub processing($)
+{
+    my $file_name = normalize($_[0]);
+    info("Processing $file_name\n");
+}
+
 sub process_graphfile($)
 {
 	my $graph_filename = $_[0];
@@ -1978,7 +2001,7 @@ sub process_graphfile($)
 	my $filename;
 	local *INFO_HANDLE;
 
-	info("Processing $_[0]\n");
+    processing($_[0]);
 
 	# Get path to data file in absolute and normalized form (begins with /,
 	# contains no more ../ or ./)

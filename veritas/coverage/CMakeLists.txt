@@ -6,21 +6,44 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 ########### next target ###############
 
 set(veritascoverage_SRCS
-    coverageplugin.cpp
     coveredfile.cpp
+    annotationmodel.cpp
     lcovinfoparser.cpp
-    outputview/covoutputjob.cpp
-    outputview/covoutputmodel.cpp
-    outputview/covoutputdelegate.cpp)
-qt4_automoc(${veritascoverage_SRCS})
-kde4_add_plugin(kdevcoverage ${veritascoverage_SRCS})
+    annotationmanager.cpp
+    lcovjob.cpp
+    covoutputmodel.cpp
+    covoutputdelegate.cpp
+    reportwidget.cpp
+    reportmodel.cpp
+    reportproxymodel.cpp
+    drilldownview.cpp
+    tests/viewstub.cpp
+    tests/pluginstub.cpp)
+
+kde4_add_library(kdevveritascoverage SHARED ${veritascoverage_SRCS})
+target_link_libraries(kdevveritascoverage
+    kdevplatforminterfaces
+    kdevplatformshell
+    sublime
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY})
+install(TARGETS kdevveritascoverage ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+qt4_automoc(coverageplugin.cpp)
+kde4_add_plugin(kdevcoverage coverageplugin.cpp)
 target_link_libraries(kdevcoverage
+    kdevveritascoverage
     kdevplatformoutputview
     kdevplatforminterfaces
     kdevplatformutil
     kdevplatformproject
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KDEUI_LIBS})
 install(TARGETS kdevcoverage DESTINATION ${PLUGIN_INSTALL_DIR})
 

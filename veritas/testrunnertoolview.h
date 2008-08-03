@@ -55,7 +55,7 @@ protected:
     virtual QString resultsViewId() = 0;
 
 Q_SIGNALS:
-    void openVerbose(Test*);
+    void openVerbose(Veritas::Test*);
 
 private Q_SLOTS:
     void reload();

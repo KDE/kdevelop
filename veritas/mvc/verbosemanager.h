@@ -58,7 +58,7 @@ public slots:
 
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
-    void openVerbose(Test*);
+    void openVerbose(Veritas::Test*);
 
 private slots:
     void slotEntered(const QModelIndex& index);

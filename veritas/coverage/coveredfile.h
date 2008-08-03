@@ -17,31 +17,52 @@
  * 02110-1301, USA.
  */
 
-
-
 #ifndef VERITAS_COVEREDFILE_H
 #define VERITAS_COVEREDFILE_H
 
+#include "coverageexport.h"
+
 #include <QList>
 #include <KUrl>
+#include <QMap>
 #include <KDebug>
 
 namespace Veritas
 {
 
-class CoveredFile
+class VERITAS_COVERAGE_EXPORT CoveredFile
 {
 public:
-    CoveredFile() : m_nrofLines(0), m_nrofInstrumentedLines(0) {}
-    QList<int> m_lines;
-    QList<int> m_nrofCalls;
+    CoveredFile();
+    virtual ~CoveredFile();
+
+    KUrl url() const;
+    void setUrl(const KUrl& url);
+    void setCallCount(int line, int count);
+    /*! line coverage percentage */
+    double coverage() const;
+    /*! number of source lines of code */
+    int sloc() const;
+    //void setSloc(int nrofLines); // TODO should be removed
+
+    /*! number of visitted lines of code */
+    int instrumented() const;
+    //void setInstrumented(int nrofLines); // TODO should be removed
+
+    QMap<int, int> callCountMap() const;
+    QSet<int> coveredLines() const;
+    QSet<int> reachableLines() const;
+    inline bool isReachable(int line) const { 
+        return m_reachableLines.contains(line);
+    }
+
+private:
+    QMap<int, int> m_nrofCalls; // { line x nrofcalls }
     int m_nrofLines;
     int m_nrofInstrumentedLines;
     KUrl m_sourceLoc;
-    void print() {
-        kDebug() << m_sourceLoc << m_nrofLines << m_nrofInstrumentedLines;
-        kDebug() << m_lines << m_nrofCalls;
-    }
+    QSet<int> m_coveredLines;
+    QSet<int> m_reachableLines;
 };
 
 }

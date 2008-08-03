@@ -1,5 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
+include_directories(${kdevplatform_SOURCE_DIR}/interfaces)
+
 macro(kdev_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )
     kde4_add_unit_test(veritas-${test_EXEC} ${test_SRCS} )
