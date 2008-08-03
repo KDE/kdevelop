@@ -21,7 +21,7 @@
 #ifndef QMAKEBUILDER_H
 #define QMAKEBUILDER_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include "iqmakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>

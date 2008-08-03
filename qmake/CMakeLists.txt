@@ -3,15 +3,11 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 
 find_package(KDevelop-PG-Qt QUIET)
-include_directories(${QMakeManager_SOURCE_DIR} ${QMakeManager_BINARY_DIR} ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder/
+include_directories(
+    ${CMAKE_SOURCE_DIR}/buildtools/builders/qmakebuilder
+    ${QMakeManager_SOURCE_DIR}
+    ${QMakeManager_BINARY_DIR}
 )
-
-include_directories(${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
-    )
 
 add_subdirectory(parser)
 add_subdirectory(duchain)

@@ -15,7 +15,6 @@ if(KDEVPGQT_FOUND)
         "${QMakeManager_SOURCE_DIR}/parser/qmakelexer.h")
 
     include_directories(
-        ${CMAKE_CURRENT_BINARY_DIR}
         ${KDEVPGQT_INCLUDE_DIR} )
 
 else(KDEVPGQT_FOUND)
