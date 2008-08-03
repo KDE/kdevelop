@@ -585,20 +585,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 3,
-    StaticBucketStartOffset = sizeof(uint) * 8 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
+    ItemRepositoryVersion = 4,
+    BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
-  
-  inline uint bucketStartOffset() const {
-    return StaticBucketStartOffset + m_storedFreeSpaceBucketsSize* sizeof(uint);
-  }
   
   public:
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
-  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_repositoryVersion(repositoryVersion) {
+  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
     m_buckets.resize(10);
     m_buckets.fill(0);
-    m_freeSpaceBucketsSize = m_freeSpaceBucketsSize = 0;
+    m_freeSpaceBucketsSize = 0;
     m_fastBuckets = m_buckets.data();
     m_bucketCount = m_buckets.size();
     
@@ -977,13 +973,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     kDebug() << "opening repository" << m_repositoryName << "at" << path;
     QDir dir(path);
     m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
-    if(!m_file->open( QFile::ReadWrite )) {
+    m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + "_dynamic" ));
+    if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite ) ) {
       delete m_file;
       m_file = 0;
+      delete m_dynamicFile;
+      m_dynamicFile = 0;
       return false;
     }
     
     if(clear || m_file->size() == 0) {
+      
       m_file->resize(0);
       m_file->write((char*)&m_repositoryVersion, sizeof(uint));
       uint hashSize = bucketHashSize;
@@ -995,10 +995,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       
       m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
       m_file->write((char*)&m_statItemCount, sizeof(uint));
-      
-      m_storedFreeSpaceBucketsSize = m_freeSpaceBucketsSize = 0;
-      m_file->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
-      m_freeSpaceBuckets.clear();
       
       m_buckets.resize(10);
       m_buckets.fill(0);
@@ -1012,7 +1008,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&m_currentBucket, sizeof(uint));
       m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
       //We have completely initialized the file now
-      Q_ASSERT(m_file->pos() == bucketStartOffset());
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+    
+      m_freeSpaceBucketsSize = 0;
+      m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+      m_freeSpaceBuckets.clear();
     }else{
       //Check that the version is correct
       uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
@@ -1029,10 +1029,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         m_file = 0;
         return false;
       }
-      m_file->read((char*)&m_storedFreeSpaceBucketsSize, sizeof(uint));
-      m_freeSpaceBucketsSize = m_storedFreeSpaceBucketsSize;
-      m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
-      m_file->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
       
       uint bucketCount;
       m_file->read((char*)&bucketCount, sizeof(uint));
@@ -1042,7 +1038,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
       m_firstBucketForHash = new short unsigned int[bucketHashSize];
       m_file->read((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
-      Q_ASSERT(m_file->pos() == bucketStartOffset());
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+    
+      m_dynamicFile->read((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+      m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
+      m_dynamicFile->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
     }
     
     m_fastBuckets = m_buckets.data();
@@ -1056,6 +1056,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     m_currentOpenPath = QString();
     
     if(m_file) {
+      Q_ASSERT(m_dynamicFile);
+      
       m_file->seek(0);
       m_file->write((char*)&m_repositoryVersion, sizeof(uint));
       uint hashSize = bucketHashSize;
@@ -1065,16 +1067,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
       m_file->write((char*)&m_statItemCount, sizeof(uint));
       
-      Q_ASSERT(m_freeSpaceBucketsSize == (uint)m_freeSpaceBuckets.size());
-      m_file->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
-      m_storedFreeSpaceBucketsSize = m_freeSpaceBucketsSize;
-      m_file->write((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
-      
       uint bucketCount = m_buckets.size();
       m_file->write((char*)&bucketCount, sizeof(uint));
       m_file->write((char*)&m_currentBucket, sizeof(uint));
       m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
-      Q_ASSERT(m_file->pos() == bucketStartOffset());
+      Q_ASSERT(m_file->pos() == BucketStartOffset);
+      
+      Q_ASSERT(m_freeSpaceBucketsSize == (uint)m_freeSpaceBuckets.size());
+      m_dynamicFile->seek(0);
+      m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+      m_dynamicFile->write((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
+      
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
         m_file->flush();
@@ -1092,10 +1095,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         Q_ASSERT(statBucketHashClashes == m_statBucketHashClashes);
         Q_ASSERT(statItemCount == m_statItemCount);
 
-/*        m_file->read((char*)&m_freeSpaceBucketsSize, sizeof(uint));
-        m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
-        m_file->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
-        
         uint bucketCount, currentBucket;
         m_file->read((char*)&bucketCount, sizeof(uint));
         Q_ASSERT(bucketCount == (uint)m_buckets.size());
@@ -1105,8 +1104,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         short unsigned int* s = new short unsigned int[bucketHashSize];
         m_file->read((char*)s, sizeof(short unsigned int) * bucketHashSize);
         Q_ASSERT(memcmp(s, m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize) == 0);
-        Q_ASSERT(m_file->pos() == bucketStartOffset());
-        delete[] s;*/
+        Q_ASSERT(m_file->pos() == BucketStartOffset);
+        delete[] s;
       }
 #endif
     }
@@ -1122,6 +1121,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     delete m_file;
     m_file = 0;
     
+    if(m_dynamicFile)
+      m_dynamicFile->close();
+    delete m_dynamicFile;
+    m_dynamicFile = 0;
+    
     delete[] m_firstBucketForHash;
     
     m_buckets.clear();
@@ -1133,7 +1137,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
       if(m_file)
-        m_fastBuckets[bucketNumber]->initialize(m_file, bucketStartOffset() + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
       else
         m_fastBuckets[bucketNumber]->initialize();
     }
@@ -1141,7 +1145,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber]->store(m_file, bucketStartOffset() + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
     }
   }
 
@@ -1151,7 +1155,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   mutable uint m_currentBucket;
   //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first
   QVector<uint> m_freeSpaceBuckets;
-  uint m_storedFreeSpaceBucketsSize; //m_freeSpaceBucketsSize as stored in the currently opened file
   uint m_freeSpaceBucketsSize; //for speedup
   mutable QVector<Bucket<Item, ItemRequest, DynamicData>* > m_buckets;
   mutable Bucket<Item, ItemRequest, DynamicData>** m_fastBuckets; //For faster access
@@ -1162,7 +1165,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   QString m_currentOpenPath;
   ItemRepositoryRegistry* m_registry;
+  //File that contains the buckets
   QFile* m_file;
+  //File that contains more dynamic data, like the list of buckets with deleted items
+  QFile* m_dynamicFile;
   uint m_repositoryVersion;
 };
 
