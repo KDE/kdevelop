@@ -80,6 +80,7 @@
 #include "environmentmanager.h"
 #include "navigationwidget.h"
 #include "cppduchain/cppduchain.h"
+#include "testswitch.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -175,6 +176,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
+    Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
+    ts->connectAction(actionCollection());
+    
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif

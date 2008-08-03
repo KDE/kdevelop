@@ -44,6 +44,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     quickopen.cpp
     completionitem.cpp
     completionhelpers.cpp
+    testswitch.cpp
 )
 
 
