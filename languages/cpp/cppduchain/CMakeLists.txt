@@ -7,8 +7,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9041 )
 add_subdirectory(tests)
 
 include_directories(
-    ${CMAKE_TOP_BUILD_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/languages/cpp
     ${CMAKE_BINARY_DIR}/languages/cpp
 )

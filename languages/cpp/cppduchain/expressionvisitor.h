@@ -20,8 +20,8 @@
 #define EXPRESSIONVISITOR_H
 
 #include <language/duchain/types/abstracttype.h>
-#include <duchain/declaration.h>
-#include <ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
 #include "visitor.h"
 #include "default_visitor.h"
 #include "cppduchainexport.h"

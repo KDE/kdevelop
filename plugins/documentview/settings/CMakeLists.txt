@@ -1,7 +1,4 @@
 
-include_directories(${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/util ${KDEVPLATFORM_INCLUDE_DIR}/widgets
-)
-
 ### Configuration module for general kdevelop settings
 
 set( documentview_config_SRC

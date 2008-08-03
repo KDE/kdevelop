@@ -196,7 +196,7 @@
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
-   <header location="global" >environmentselectionwidget.h</header>
+   <header location="global" >util/environmentselectionwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

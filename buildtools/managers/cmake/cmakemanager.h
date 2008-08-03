@@ -28,9 +28,9 @@
 
 #include <KDirWatch>
 
-#include <ibuildsystemmanager.h>
-#include <ilanguagesupport.h>
-#include <iplugin.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <interfaces/iplugin.h>
 
 #include "cmakelistsparser.h"
 #include "cmakeprojectvisitor.h"

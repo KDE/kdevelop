@@ -9,8 +9,8 @@
  */
 
 #include "projectfilesystemwatcher.h"
-#include <projectmodel.h>
-#include "iprojectfilemanager.h"
+#include <project/projectmodel.h>
+#include <project/interfaces/iprojectfilemanager.h>
 #include <QHash>
 #include <QFileSystemWatcher>
 #include <QDir>

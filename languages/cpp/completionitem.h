@@ -25,9 +25,9 @@
 #include <ksharedptr.h>
 #include <ktexteditor/codecompletionmodel.h>
 
-#include <duchainpointer.h>
-#include <codecompletion/codecompletionitem.h>
-#include "codecompletioncontext.h"
+#include <language/duchain/duchainpointer.h>
+#include <language/codecompletion/codecompletionitem.h>
+#include <codecompletioncontext.h>
 #include "includeitem.h"
 
 namespace Cpp {

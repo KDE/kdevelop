@@ -23,8 +23,8 @@
 #include "completionitem.h"
 #include <QList>
 #include <QVariant>
-#include <duchain/declaration.h>
-#include <duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
 #include <QTextFormat>
 #include <QStringList>
 #include "overloadresolution.h"

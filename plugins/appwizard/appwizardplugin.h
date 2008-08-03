@@ -12,7 +12,7 @@
 #ifndef _APPWIZARDPART_H_
 #define _APPWIZARDPART_H_
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 
 #include <QHash>
 #include <QVariant>

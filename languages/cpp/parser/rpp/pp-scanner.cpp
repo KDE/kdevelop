@@ -21,7 +21,7 @@
 
 #include "pp-scanner.h"
 #include "chartools.h"
-#include <duchain/indexedstring.h>
+#include <language/duchain/indexedstring.h>
 #include <QVarLengthArray>
 
 using namespace rpp;

@@ -21,7 +21,7 @@
 
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
-#include <duchain/duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 #include "cppduchain/typeconversion.h"
 #include "cppduchain/expressionparser.h"
 #include "cppduchain/viablefunctions.h"
@@ -29,7 +29,7 @@
 #include "cppduchain/expressionevaluationresult.h"
 #include "includeitem.h"
 #include "completionitem.h"
-#include "codecompletion/codecompletioncontext.h"
+#include <language/codecompletion/codecompletioncontext.h>
 
 namespace KTextEditor {
   class View;

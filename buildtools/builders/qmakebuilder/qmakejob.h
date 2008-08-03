@@ -22,7 +22,7 @@
 #ifndef QMAKEJOB_H
 #define QMAKEJOB_H
 
-#include <outputjob.h>
+#include <outputview/outputjob.h>
 
 namespace KDevelop{
     class ProjectBaseItem;

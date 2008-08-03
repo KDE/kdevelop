@@ -1,6 +1,3 @@
-include_directories(
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}/project)
 
 set(qtestconfig_SRCS
     qtestconfigwidget.cpp)

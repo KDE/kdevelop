@@ -23,7 +23,7 @@
 #ifndef MAKEJOB_H
 #define MAKEJOB_H
 
-#include <outputjob.h>
+#include <outputview/outputjob.h>
 
 #include <QString>
 

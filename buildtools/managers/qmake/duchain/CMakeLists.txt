@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+include_directories( ${QMakeManager_BINARY_DIR}/parser ${QMakeManager_SOURCE_DIR}/parser )
 
 set(duchain_STAT_SRCS
     contextbuilder.cpp

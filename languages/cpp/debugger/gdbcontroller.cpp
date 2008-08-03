@@ -44,7 +44,7 @@
 #include <kshell.h>
 #include <KConfigGroup>
 
-#include <environmentgrouplist.h>
+#include <util/environmentgrouplist.h>
 
 #include "breakpoint.h"
 #include "gdbcommand.h"

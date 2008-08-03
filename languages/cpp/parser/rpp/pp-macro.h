@@ -26,8 +26,8 @@
 #include <QtCore/QStringList>
 #include <QVector>
 #include <cppparserexport.h>
-#include <indexedstring.h>
-#include <hashedstring.h>
+#include <language/duchain/indexedstring.h>
+#include <language/editor/hashedstring.h>
 
 //Foreach macro that also works with QVarLengthArray
 #define FOREACH_CUSTOM(item, container, size) for(int a = 0, mustDo = 1; a < (int)size; ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)

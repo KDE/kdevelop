@@ -32,7 +32,7 @@
 #include <kmessagebox.h>
 #include <KProcess>
 
-#include <processlinemaker.h>
+#include <util/processlinemaker.h>
 
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"

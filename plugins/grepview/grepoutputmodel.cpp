@@ -16,8 +16,8 @@
 #include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
-#include <icore.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 GrepOutputItem::GrepOutputItem(const QString &fileName, const QString &lineNumber,
                    const QString &text, bool showFilename)

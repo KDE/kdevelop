@@ -25,14 +25,14 @@
 
 #include <QtCore/QStringList>
 
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
-#include <ibuildsystemmanager.h>
-#include <commandexecutor.h>
-#include <iproject.h>
-#include <icore.h>
-#include <iplugincontroller.h>
-#include <ioutputview.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <util/commandexecutor.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <outputview/ioutputview.h>
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QProcess>
 #include <QtGui/QAction>
@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <ksharedconfig.h>
 
-#include <environmentgrouplist.h>
+#include <util/environmentgrouplist.h>
 
 #include "makeoutputdelegate.h"
 #include "makejob.h"

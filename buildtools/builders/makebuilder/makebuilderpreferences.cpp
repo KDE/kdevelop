@@ -24,7 +24,7 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <environmentgrouplist.h>
+#include <util/environmentgrouplist.h>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"

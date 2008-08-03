@@ -32,19 +32,19 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <backgroundparser.h>
-#include <duchain.h>
-#include "duchain/duchainlock.h"
-#include "duchain/topducontext.h"
-#include <editorintegrator.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/topducontext.h>
+#include <language/editor/editorintegrator.h>
+#include <language/interfaces/iproblem.h>
 
-#include "Thread.h"
+#include <threadweaver/Thread.h>
 
-#include <ilanguage.h>
+#include <interfaces/ilanguage.h>
 
 #include "cpplanguagesupport.h"
 #include "cppparsejob.h"
-#include <iproblem.h>
 #include "parser/ast.h"
 #include "parser/parsesession.h"
 #include "parser/rpp/pp-engine.h"

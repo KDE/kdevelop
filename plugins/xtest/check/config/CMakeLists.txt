@@ -1,6 +1,4 @@
-include_directories(
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}/project)
+
 set(checkconfig_SRCS checkconfigwidget.cpp)
 kde4_add_kcfg_files(checkconfig_SRCS checkconfig.kcfgc)
 kde4_add_ui_files(checkconfig_SRCS checkconfigwidget.ui)

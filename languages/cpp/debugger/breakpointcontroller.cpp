@@ -30,9 +30,9 @@
 #include <klocale.h>
 #include <ktexteditor/document.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
 #include "gdbcontroller.h"
 #include "gdbcommand.h"

@@ -20,10 +20,10 @@
 #define EXPRESSIONPARSER_H
 
 #include <ksharedptr.h>
-#include <duchain/duchainpointer.h>
-#include <duchain/duchainlock.h>
-#include <duchain/duchain.h>
-#include <duchain/ducontext.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/ducontext.h>
 #include "visitor.h"
 #include "cppduchainexport.h"
 #include "expressionvisitor.h"

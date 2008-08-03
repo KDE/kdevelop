@@ -15,7 +15,7 @@
 
 #include <QStandardItemModel>
 #include <QRegExp>
-#include <ioutputviewmodel.h>
+#include <outputview/ioutputviewmodel.h>
 
 class QModelIndex;
 

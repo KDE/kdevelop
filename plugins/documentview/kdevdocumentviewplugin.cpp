@@ -33,8 +33,8 @@
 #include <kaboutdata.h>
 #include <kgenericfactory.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 
 K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPlugin>(); )
 K_EXPORT_PLUGIN(KDevDocumentViewFactory("kdevdocumentview"))

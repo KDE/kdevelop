@@ -23,9 +23,9 @@
 #include "typebuilder.h"
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
-#include <declaration.h>
-#include <duchainpointer.h>
-#include <classfunctiondeclaration.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/classfunctiondeclaration.h>
 
 namespace KDevelop
 {

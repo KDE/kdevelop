@@ -27,21 +27,21 @@
 #include "makeoutputmodel.h"
 #include "makebuilder.h"
 
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
-#include <ibuildsystemmanager.h>
-#include <commandexecutor.h>
-#include <iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <util/commandexecutor.h>
+#include <interfaces/iproject.h>
 #include <QtCore/QProcess>
 
 #include <KDebug>
 
-#include <environmentgrouplist.h>
+#include <util/environmentgrouplist.h>
 
 #include <QtCore/QStringList>
 
-#include <icore.h>
-#include <iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 #include <QtCore/QProcess>
 
 #include <kpluginfactory.h>

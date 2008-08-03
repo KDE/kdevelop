@@ -25,23 +25,23 @@
 #include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
-#include <duchain.h>
-#include <topducontext.h>
-#include <duchainlock.h>
-#include <declaration.h>
-#include <use.h>
-#include <smartconverter.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/use.h>
+#include <language/duchain/smartconverter.h>
 #include <util/pushvalue.h>
 
 #include "parsesession.h"
 #include "name_compiler.h"
-#include "dumpchain.h"
+#include <language/duchain/dumpchain.h>
 #include "environmentmanager.h"
 
 #include <climits>
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
-#include "dumpchain.h"
+#include <language/duchain/dumpchain.h>
 #include "rpp/chartools.h"
 #include <language/duchain/dumpchain.h>
 #include "tokens.h"

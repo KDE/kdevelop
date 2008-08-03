@@ -24,16 +24,16 @@
 
 #include <kurl.h>
 
-#include <editor/simplecursor.h>
+#include <language/editor/simplecursor.h>
 
 #include "parser.h"
 #include "control.h"
+#include "dumpchain.h"
 
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/indexedtype.h>
-#include "dumpchain.h"
 
 namespace KDevelop
 {

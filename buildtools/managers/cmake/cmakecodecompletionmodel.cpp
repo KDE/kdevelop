@@ -22,10 +22,10 @@
 #include <QVariant>
 #include <QModelIndex>
 #include <kurl.h>
-#include <duchain.h>
-#include <duchainlock.h>
-#include <ducontext.h>
-#include <declaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
 #include <ktexteditor/document.h>

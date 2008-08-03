@@ -28,7 +28,7 @@
 #include "tokens.h"
 #include "expressionparser.h"
 #include "expressionvisitor.h"
-#include <duchain/duchainlock.h>
+#include <language/duchain/duchainlock.h>
 
 #include <QtCore/qdebug.h>
 

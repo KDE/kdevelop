@@ -2,11 +2,6 @@
 #add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9020 )
 add_subdirectory(tests) 
 
-include_directories(${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/projectmanager/interfaces 
-    ${KDEVPLATFORM_INCLUDE_DIR}/project ${KDEVPLATFORM_INCLUDE_DIR}/util
-    )
-
-
 ########### next target ###############
 
 set(kdevautomakeparser_STAT_SRCS

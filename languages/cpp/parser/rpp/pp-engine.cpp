@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <duchain.h>
+#include <language/duchain/duchain.h>
 
 #include "pp-internal.h"
 #include "preprocessor.h"

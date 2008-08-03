@@ -19,8 +19,8 @@
 #ifndef ICMAKEBUILDER_H
 #define ICMAKEBUILDER_H
 
-#include <iprojectbuilder.h>
-#include <iextension.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <interfaces/iextension.h>
 
 class IProject;
 class ProjectItem;

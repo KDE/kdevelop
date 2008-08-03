@@ -25,18 +25,18 @@
 
 #include <klocale.h>
 
-#include <duchain/declaration.h>
-#include <duchain/ducontext.h>
-#include <duchain/duchainlock.h>
-#include <duchain/functiondeclaration.h>
-#include <duchain/forwarddeclaration.h>
-#include <duchain/namespacealiasdeclaration.h>
-#include <duchain/classfunctiondeclaration.h>
-#include <duchain/classmemberdeclaration.h>
-#include <duchain/topducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/functiondeclaration.h>
+#include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/topducontext.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <rpp/pp-macro.h>
 

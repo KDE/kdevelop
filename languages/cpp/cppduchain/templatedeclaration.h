@@ -22,13 +22,13 @@
 #include <QList>
 #include <QMutex>
 
-#include <duchain/declaration.h>
-#include <duchain/declarationid.h>
-#include <duchain/duchainpointer.h>
-#include <duchain/ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/declarationid.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/ducontext.h>
 #include "expressionparser.h"
 #include "cppduchainexport.h"
-#include <appendedlist.h>
+#include <language/duchain/appendedlist.h>
 #include "expressionevaluationresult.h"
 
 

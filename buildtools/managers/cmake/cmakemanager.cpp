@@ -32,24 +32,24 @@
 #include <KAction>
 #include <kio/job.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <iprojectcontroller.h>
-#include <iproject.h>
-#include <iplugincontroller.h>
-#include <ilanguagecontroller.h>
-#include <contextmenuextension.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/contextmenuextension.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <projectmodel.h>
-#include <parsingenvironment.h>
-#include <context.h>
+#include <project/projectmodel.h>
+#include <language/duchain/parsingenvironment.h>
+#include <interfaces/context.h>
 
-#include <duchain.h>
-#include <dumpchain.h>
-#include <topducontext.h>
-#include <declaration.h>
-#include <duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/dumpchain.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
 #include <language/codecompletion/codecompletion.h>
 
 #include "cmakeconfig.h"

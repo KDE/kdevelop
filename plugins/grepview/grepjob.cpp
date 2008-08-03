@@ -25,9 +25,9 @@
 #include <klocale.h>
 #include <ktemporaryfile.h>
 
-#include <iproject.h>
-#include <projectmodel.h>
-#include <processlinemaker.h>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
+#include <util/processlinemaker.h>
 
 #include "grepviewplugin.h"
 #include "grepoutputdelegate.h"

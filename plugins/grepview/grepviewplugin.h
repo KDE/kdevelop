@@ -12,7 +12,7 @@
 #ifndef _GREPVIEWPART_H_
 #define _GREPVIEWPART_H_
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class GrepDialog;

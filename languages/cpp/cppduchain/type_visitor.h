@@ -21,15 +21,15 @@
 #define TYPE_VISITOR_H
 
 #include "default_visitor.h"
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <cppduchainexport.h>
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QList>
 
-#include <duchain/ducontext.h>
-#include <duchain/duchainpointer.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/duchainpointer.h>
 
 
 class ParseSession;

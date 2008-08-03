@@ -21,11 +21,11 @@
 #include "cmakeduchaintest.h"
 #include "cmakeprojectvisitor.h"
 
-#include <identifier.h>
-#include <declaration.h>
-#include <duchainlock.h>
-#include <duchain.h>
-#include <simplerange.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/editor/simplerange.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/use.h>
 #include <language/duchain/indexedstring.h>

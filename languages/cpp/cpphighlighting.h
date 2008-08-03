@@ -27,11 +27,11 @@
 #include <QHash>
 #include <QModelIndex>
 #include <vector>
-#include <duchain/ducontext.h>
+#include <language/duchain/ducontext.h>
 
 #include <ktexteditor/attribute.h>
 
-#include <icodehighlighting.h>
+#include <language/interfaces/icodehighlighting.h>
 
 namespace KTextEditor { class SmartRange; }
 

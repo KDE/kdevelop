@@ -25,8 +25,8 @@
 
 #include <QtCore/QIODevice>
 
-#include <editor/simplecursor.h>
-#include <indexedstring.h>
+#include <language/editor/simplecursor.h>
+#include <language/duchain/indexedstring.h>
 #include "anchor.h"
 #include "chartools.h"
 

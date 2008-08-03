@@ -25,9 +25,9 @@
 #include <QPointer>
 #include <QVariant>
 
-#include <iplugin.h>
-#include <irunprovider.h>
-#include <istatus.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/irunprovider.h>
+#include <interfaces/istatus.h>
 
 class QTreeView;
 class ValgrindModel;

@@ -18,10 +18,10 @@
 
 #include "viablefunctions.h"
 #include "cppduchain/typeutils.h"
-#include "duchain/ducontext.h"
-#include "duchain/topducontext.h"
-#include "duchain/declaration.h"
-#include "duchain/classfunctiondeclaration.h"
+#include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include "cppduchain/cpptypes.h"
 #include "templatedeclaration.h"
 

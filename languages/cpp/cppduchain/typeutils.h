@@ -21,7 +21,7 @@
 
 #include <QHash>
 #include "cppduchainexport.h"
-#include <duchain/declaration.h>
+#include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
 class CppIntegralType;

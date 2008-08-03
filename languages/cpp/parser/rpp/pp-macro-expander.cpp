@@ -27,8 +27,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <iproblem.h>
-#include <indexedstring.h>
+#include <language/interfaces/iproblem.h>
+#include <language/duchain/indexedstring.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"

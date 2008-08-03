@@ -24,14 +24,14 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include <editor/simplecursor.h>
+#include <language/editor/simplecursor.h>
 
 #include <cppparserexport.h>
 #include <ksharedptr.h>
 #include <kurl.h>
 #include "rpp/anchor.h"
 
-#include <indexedstring.h>
+#include <language/duchain/indexedstring.h>
 
 namespace Cpp {
   class EnvironmentFile;

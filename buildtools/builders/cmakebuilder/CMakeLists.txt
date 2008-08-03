@@ -2,12 +2,6 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/outputview
-    ${KDEVPLATFORM_INCLUDE_DIR}/util
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     )
 
 

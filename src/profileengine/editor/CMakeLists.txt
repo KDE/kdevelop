@@ -1,9 +1,4 @@
 
-include_directories(${KDEVPLATFORM_INCLUDE_DIR} ${KDEVPLATFORM_INCLUDE_DIR}/util
-    ${KDEVPLATFORM_INCLUDE_DIR}/widgets
-    )
-
-
 ########### next target ###############
 
 set(profileeditor_STAT_SRCS

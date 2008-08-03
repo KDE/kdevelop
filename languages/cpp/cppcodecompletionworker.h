@@ -23,7 +23,7 @@
 #ifndef KDEVCPPCODECOMPLETIONWORKER_H
 #define KDEVCPPCODECOMPLETIONWORKER_H
 
-#include <codecompletionworker.h>
+#include <language/codecompletion/codecompletionworker.h>
 
 #include "cppcodecompletionmodel.h"
 

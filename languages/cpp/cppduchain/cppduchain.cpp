@@ -17,12 +17,12 @@
 */
 
 #include "cppduchain.h"
-#include <ducontext.h>
-#include <identifier.h>
-#include <declaration.h>
-#include <duchainlock.h>
-#include <duchain.h>
-#include <duchainpointer.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainpointer.h>
 #include "environmentmanager.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/preprocessor.h"

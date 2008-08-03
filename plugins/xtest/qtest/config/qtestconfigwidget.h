@@ -22,7 +22,7 @@
 #ifndef QTEST_QTESTCONFIGWIDGET_H
 #define QTEST_QTESTCONFIGWIDGET_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 #include <KSharedConfig>
 #include <KUrl>
 #include "ui_qtestconfigwidget.h"

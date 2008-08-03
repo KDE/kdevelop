@@ -14,7 +14,7 @@
 #ifndef CPPPREPROCESSENVIRONMENT_H
 #define CPPPREPROCESSENVIRONMENT_H
 
-#include <duchain/parsingenvironment.h>
+#include <language/duchain/parsingenvironment.h>
 #include "parser/rpp/pp-environment.h"
 #include "environmentmanager.h"
 #include "cppduchainexport.h"

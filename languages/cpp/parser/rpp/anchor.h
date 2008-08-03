@@ -21,7 +21,7 @@
 #ifndef ANCHOR_H
 #define ANCHOR_H
 
-#include <editor/simplecursor.h>
+#include <language/editor/simplecursor.h>
 
 #include <cppparserexport.h>
 

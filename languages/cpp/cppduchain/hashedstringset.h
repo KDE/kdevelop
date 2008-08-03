@@ -24,7 +24,7 @@
 #include <ext/hash_map>
 #include <ext/hash_set>
 #endif
-#include <editor/hashedstring.h>
+#include <language/editor/hashedstring.h>
 #include <string>
 #include "cppduchainexport.h"
 

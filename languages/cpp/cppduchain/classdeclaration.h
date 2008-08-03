@@ -19,8 +19,8 @@
 #ifndef CLASSDECLARATION_H
 #define CLASSDECLARATION_H
 
-#include <declaration.h>
-#include <duchain/declarationdata.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/declarationdata.h>
 #include "cppduchainexport.h"
 #include "cpptypes.h"
 

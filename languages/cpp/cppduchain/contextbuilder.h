@@ -28,9 +28,9 @@
 #include "cppducontext.h"
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
-#include <duchainpointer.h>
-#include <identifier.h>
-#include <ducontext.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/ducontext.h>
 #include <ksharedptr.h>
 #include "cppduchainexport.h"
 #include "cppeditorintegrator.h"

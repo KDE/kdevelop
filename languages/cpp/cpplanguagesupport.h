@@ -22,8 +22,8 @@
 #ifndef KDEVCPPLANGUAGESUPPORT_H
 #define KDEVCPPLANGUAGESUPPORT_H
 
-#include <iplugin.h>
-#include <ilanguagesupport.h>
+#include <interfaces/iplugin.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include "includeitem.h"
 #include "environmentmanager.h"
 #include <QThread>

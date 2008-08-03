@@ -11,7 +11,7 @@
 #ifndef CUSTOMMAKEMODELITEMS_H
 #define CUSTOMMAKEMODELITEMS_H
 
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 namespace KDevelop
 {
 class IProject;

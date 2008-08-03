@@ -26,7 +26,7 @@
 
 #include "pp-location.h"
 #include "chartools.h"
-#include "indexedstring.h"
+#include <language/duchain/indexedstring.h>
 
 using namespace rpp;
 

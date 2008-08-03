@@ -23,13 +23,13 @@
 #include "cmakecondition.h"
 #include "astfactory.h"
 
-#include <simplerange.h>
-#include <topducontext.h>
-#include <duchain.h>
-#include <dumpchain.h>
-#include <duchainlock.h>
-#include <parsingenvironment.h>
-#include <declaration.h>
+#include <language/editor/simplerange.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/dumpchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
+#include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
 

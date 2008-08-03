@@ -20,9 +20,9 @@
 #define NAME_COMPILER_H
 
 #include "default_visitor.h"
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <cppparserexport.h>
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 
 class ParseSession;
 class OperatorAST;

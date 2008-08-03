@@ -18,10 +18,10 @@
 
 #include "overloadresolution.h"
 #include "cppduchain/typeutils.h"
-#include "duchain/ducontext.h"
-#include "duchain/declaration.h"
-#include "duchain/indexedstring.h"
-#include "duchain/classfunctiondeclaration.h"
+#include <language/duchain/ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/indexedstring.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include "cppduchain/cpptypes.h"
 #include "viablefunctions.h"
 #include "templatedeclaration.h"

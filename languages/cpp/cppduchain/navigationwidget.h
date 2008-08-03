@@ -23,9 +23,9 @@
 #include <QPointer>
 #include <KSharedPtr>
 #include <ktextbrowser.h>
-#include <duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 #include "includeitem.h"
-#include <quickopendataprovider.h>
+#include <language/interfaces/quickopendataprovider.h>
 #include "cppduchainexport.h"
 
 class QWidget;

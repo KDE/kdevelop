@@ -21,7 +21,7 @@
 #ifndef MAKEBUILDER_H
 #define MAKEBUILDER_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include "imakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>

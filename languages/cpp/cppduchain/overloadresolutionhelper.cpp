@@ -20,8 +20,8 @@
 
 #include <kdebug.h>
 
-#include <duchain/declaration.h>
-#include <duchain/ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
 #include <language/duchain/types/identifiedtype.h>
 
 #include <cpptypes.h>

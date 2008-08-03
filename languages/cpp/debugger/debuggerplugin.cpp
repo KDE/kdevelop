@@ -53,13 +53,13 @@
 
 #include <sublime/view.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
-#include <iprojectcontroller.h>
-#include <iruncontroller.h>
-#include <iproject.h>
-#include <context.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/context.h>
 #include <util/processlinemaker.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

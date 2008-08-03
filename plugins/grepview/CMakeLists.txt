@@ -1,12 +1,5 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9001 )
-include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/outputview
-    ${KDEVPLATFORM_INCLUDE_DIR}/util
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-)
 
 
 ########### next target ###############

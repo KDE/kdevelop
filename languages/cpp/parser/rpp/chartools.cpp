@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVector>
 #include <QVarLengthArray>
-#include <duchain/indexedstring.h>
+#include <language/duchain/indexedstring.h>
 #include <kdebug.h>
 
 QByteArray stringFromContents(const PreprocessedContents& contents, int offset, int count) {

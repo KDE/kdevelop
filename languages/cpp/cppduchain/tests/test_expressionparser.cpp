@@ -20,14 +20,14 @@
 
 #include <QtTest/QtTest>
 
-#include <duchain.h>
-#include <duchainlock.h>
-#include <topducontext.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/topducontext.h>
 #include "typeutils.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include <declaration.h>
-#include <documentrange.h>
+#include <language/duchain/declaration.h>
+#include <language/editor/documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
@@ -42,7 +42,7 @@
 #include "rpp/preprocessor.h"
 #include "expressionvisitor.h"
 #include "expressionparser.h"
-#include "classfunctiondeclaration.h"
+#include <language/duchain/classfunctiondeclaration.h>
 
 #include <typeinfo>
 

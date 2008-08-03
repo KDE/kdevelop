@@ -25,7 +25,7 @@
 #include "parsesession.h"
 #include "cppduchain.h"
 #include "expressionvisitor.h"
-#include <duchain/duchainlock.h>
+#include <language/duchain/duchainlock.h>
 
 
 

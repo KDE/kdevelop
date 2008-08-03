@@ -1,6 +1,4 @@
-include_directories(
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}/project)
+
 set(cppunitconfig_SRCS cppunitconfigwidget.cpp)
 kde4_add_kcfg_files(cppunitconfig_SRCS cppunitconfig.kcfgc)
 kde4_add_ui_files(cppunitconfig_SRCS cppunitconfigwidget.ui)

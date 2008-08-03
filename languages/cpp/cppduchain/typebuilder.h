@@ -21,7 +21,7 @@
 
 #include "contextbuilder.h"
 #include <language/duchain/builders/abstracttypebuilder.h>
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 #include "cppduchainexport.h"
 
 class CppClassType;

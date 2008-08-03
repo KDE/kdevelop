@@ -26,8 +26,8 @@
 #include <kcombobox.h>
 #include <kplugininfo.h>
 
-#include <iplugincontroller.h>
-#include <iplugin.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iplugin.h>
 
 #include <vcs/vcsmapping.h>
 #include <vcs/widgets/vcsimportmetadatawidget.h>

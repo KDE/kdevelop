@@ -28,12 +28,12 @@
 
 #include "parser.h"
 #include "control.h"
+#include "dumpchain.h"
 
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/types/indexedtype.h>
-#include "dumpchain.h"
-#include <simplecursor.h>
+#include <language/editor/simplecursor.h>
 
 namespace KDevelop
 {

@@ -23,20 +23,20 @@
 #include <qatomic.h>
 #include <kglobal.h>
 
-#include <duchain/declaration.h>
-#include <duchain/declarationdata.h>
-#include <duchain/forwarddeclaration.h>
-#include <duchain/aliasdeclaration.h>
-#include <duchain/functiondeclaration.h>
-#include <duchain/repositories/itemrepository.h>
-#include <duchain/classfunctiondeclaration.h>
-#include <appendedlist.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/declarationdata.h>
+#include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/aliasdeclaration.h>
+#include <language/duchain/functiondeclaration.h>
+#include <language/duchain/repositories/itemrepository.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/appendedlist.h>
 
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 #include "expressionparser.h"
 #include "classdeclaration.h"
-#include <duchainregister.h>
+#include <language/duchain/duchainregister.h>
 
 using namespace KDevelop;
 using namespace Cpp;

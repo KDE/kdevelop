@@ -26,12 +26,12 @@
 #include <kpluginloader.h>
 #include <ksharedconfig.h>
 
-#include <iuicontroller.h>
-#include <iproject.h>
-#include <iprojectcontroller.h>
-#include <ibuildsystemmanager.h>
-#include <projectmodel.h>
-#include <core.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectmodel.h>
+#include <interfaces/icore.h>
 #include <veritas/test.h>
 #include "plugins/xtest/cppunit/register.h"
 #include <QFile>
@@ -42,7 +42,6 @@
 #include "testsuite.h"
 #include "checkviewdata.h"
 
-using KDevelop::Core;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 

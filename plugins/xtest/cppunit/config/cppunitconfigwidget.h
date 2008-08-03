@@ -22,7 +22,7 @@
 #ifndef CPPUNIT_CPPUNITCONFIGWIDGET_H
 #define CPPUNIT_CPPUNITCONFIGWIDGET_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 #include <KSharedConfig>
 #include <KUrl>
 #include "ui_cppunitconfigwidget.h"

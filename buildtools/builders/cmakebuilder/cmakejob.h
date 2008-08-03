@@ -22,7 +22,7 @@
 #ifndef CMAKEJOB_H
 #define CMAKEJOB_H
 
-#include <outputjob.h>
+#include <outputview/outputjob.h>
 
 #include <QString>
 

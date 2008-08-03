@@ -20,12 +20,12 @@
 
 #include "cpptypes.h"
 
-#include <classfunctiondeclaration.h>
-#include <abstractfunctiondeclaration.h>
-#include <indexedstring.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/indexedstring.h>
 #include <language/duchain/types/typeregister.h>
 #include "templateparameterdeclaration.h"
-#include <ducontext.h> //Only for FOREACH_ARRAY
+#include <language/duchain/ducontext.h> //Only for FOREACH_ARRAY
 
 using namespace KDevelop;
 

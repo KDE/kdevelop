@@ -21,8 +21,8 @@
 #include "makeoutputmodel.h"
 #include "outputfilters.h"
 #include "makeitem.h"
-#include "icore.h"
-#include "idocumentcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/cursor.h>
 #include <kdebug.h>
 

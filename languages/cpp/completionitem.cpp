@@ -20,8 +20,8 @@
  */
 
 #include "completionitem.h"
-#include <duchain.h>
-#include <duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <ktexteditor/range.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -29,11 +29,11 @@
 #include <QModelIndex>
 #include "completionhelpers.h"
 #include "cppcodecompletionmodel.h"
-#include <duchain/declaration.h>
-#include <duchain/classfunctiondeclaration.h>
-#include <duchain/namespacealiasdeclaration.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include "navigationwidget.h"
-#include "duchainutils.h"
+#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 

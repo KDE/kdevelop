@@ -26,10 +26,10 @@
 #include <QPair>
 #include <QMap>
 #include <QPointer>
-#include <codecompletion/codecompletionmodel.h>
+#include <language/codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
-#include <duchainpointer.h>
-#include "codecompletioncontext.h"
+#include <language/duchain/duchainpointer.h>
+#include <language/codecompletion/codecompletioncontext.h>
 #include "includeitem.h"
 #include "completionitem.h"
 

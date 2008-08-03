@@ -18,9 +18,9 @@
 
 #include "typeutils.h"
 #include "cppduchain/cpptypes.h"
-#include "duchain/ducontext.h"
-#include "duchain/forwarddeclaration.h"
-#include "duchain/classfunctiondeclaration.h"
+#include <language/duchain/ducontext.h>
+#include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include "classdeclaration.h"
 
 namespace TypeUtils {

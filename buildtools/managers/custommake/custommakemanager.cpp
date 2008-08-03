@@ -11,15 +11,15 @@
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
 #include "custommaketreesynchronizer.h"
-#include <icore.h>
-#include <iproject.h>
-#include <iprojectcontroller.h>
-#include <iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include "imakebuilder.h"
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <projectmodel.h>
-#include <context.h>
+#include <project/projectmodel.h>
+#include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
 #include <QQueue>

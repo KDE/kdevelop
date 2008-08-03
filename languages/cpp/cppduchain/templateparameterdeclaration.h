@@ -19,9 +19,9 @@
 #ifndef TEMPLATEPARAMETERDECLARATION_H
 #define TEMPLATEPARAMETERDECLARATION_H
 
-#include <declaration.h>
-#include <declarationdata.h>
-#include <identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/declarationdata.h>
+#include <language/duchain/identifier.h>
 #include "cppduchainexport.h"
 
 namespace KDevelop {

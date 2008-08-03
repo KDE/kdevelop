@@ -22,8 +22,8 @@
 
 #include <QStandardItem>
 #include <QStandardItemModel>
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
 #include <kurl.h>
 #include <kicon.h>

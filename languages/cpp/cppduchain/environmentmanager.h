@@ -33,11 +33,11 @@
 #include <kurl.h>
 #include <ksharedptr.h>
 
-#include <parsingenvironment.h>
-#include <modificationrevision.h>
-#include <editorintegrator.h>
-#include <iproblem.h>
-#include <topducontext.h>
+#include <language/duchain/parsingenvironment.h>
+#include <language/editor/modificationrevision.h>
+#include <language/editor/editorintegrator.h>
+#include <language/interfaces/iproblem.h>
+#include <language/duchain/topducontext.h>
 
 #include "cppduchainexport.h"
 #include "setrepository.h"

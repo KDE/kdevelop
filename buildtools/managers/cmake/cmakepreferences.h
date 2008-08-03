@@ -22,7 +22,7 @@
 #ifndef CMAKEPREFERENCES_H
 #define CMAKEPREFERENCES_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 #include "cmakecachemodel.h"
 
 #include <KSharedConfig>

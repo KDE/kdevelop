@@ -18,17 +18,17 @@
 
 #include "expressionvisitor.h"
 
-#include <duchainlock.h>
-#include <duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 #include <parsesession.h>
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <typeinfo>
 #include <util/pushvalue.h>
 #include "tokens.h"
 #include "typebuilder.h"
 #include "cpptypes.h"
-#include "dumpchain.h"
+#include <language/duchain/dumpchain.h>
 #include "typeutils.h"
 #include "name_visitor.h"
 #include "type_visitor.h"

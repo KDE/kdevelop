@@ -24,12 +24,12 @@
 
 #include <QHash>
 
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 #include "cmakelistsparser.h"
 #include "cmakeexport.h"
 #include "cmaketypes.h"
 #include "cmakeast.h"
-#include <iproject.h>
+#include <interfaces/iproject.h>
 
 namespace KDevelop {
     class IProject;

@@ -22,7 +22,7 @@
 #ifndef CHECK_CHECKCONFIGWIDGET_H
 #define CHECK_CHECKCONFIGWIDGET_H
 
-#include <projectkcmodule.h>
+#include <project/projectkcmodule.h>
 #include <KSharedConfig>
 #include <KUrl>
 #include "ui_checkconfigwidget.h"

@@ -33,14 +33,14 @@
 
 #include "cppduchain/overloadresolutionhelper.h"
 
-#include <declaration.h>
-#include <ducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
 #include "cpptypes.h"
-#include <duchainlock.h>
-#include <duchainbase.h>
-#include "dumpchain.h"
-#include "codecompletioncontext.h"
-#include <duchainutils.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainbase.h>
+#include <language/duchain/dumpchain.h>
+#include <language/codecompletion/codecompletioncontext.h>
+#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 using namespace TypeUtils;

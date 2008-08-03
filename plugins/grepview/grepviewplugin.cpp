@@ -29,16 +29,16 @@
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/view.h>
 
-#include <icore.h>
-#include <ioutputview.h>
-#include <iplugincontroller.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <outputview/ioutputview.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <kparts/mainwindow.h>
-#include <idocument.h>
-#include <idocumentcontroller.h>
-#include <iproject.h>
-#include <iprojectcontroller.h>
-#include <projectmodel.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
 
 #include "grepjob.h"
 

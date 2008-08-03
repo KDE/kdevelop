@@ -19,7 +19,7 @@
 #ifndef KDEVIDEEXTENSION_H
 #define KDEVIDEEXTENSION_H
 
-#include <shellextension.h>
+#include <shell/shellextension.h>
 
 
 class KDevIDEExtension : public KDevelop::ShellExtension {

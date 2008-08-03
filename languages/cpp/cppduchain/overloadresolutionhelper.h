@@ -24,7 +24,7 @@
 #include <QList>
 #include "overloadresolution.h"
 #include "viablefunctions.h"
-#include <duchain/identifier.h>
+#include <language/duchain/identifier.h>
 
 namespace KDevelop {
   class QualifiedIdentifier;

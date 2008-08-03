@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "stringhelpers.h"
+#include <language/duchain/stringhelpers.h>
 #include <QString>
 #include <QChar>
 #include <QStringList>

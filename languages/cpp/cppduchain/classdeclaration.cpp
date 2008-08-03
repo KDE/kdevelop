@@ -17,10 +17,10 @@
 */
 
 #include "classdeclaration.h"
-#include <duchain/identifier.h>
-#include <duchain/declaration.h>
-#include <appendedlist.h>
-#include "duchainregister.h"
+#include <language/duchain/identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/appendedlist.h>
+#include <language/duchain/duchainregister.h>
 
 
 using namespace KDevelop;

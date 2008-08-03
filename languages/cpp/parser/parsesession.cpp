@@ -23,8 +23,8 @@
 
 #include "lexer.h"
 #include "memorypool.h"
-#include <iproblem.h>
-#include <indexedstring.h>
+#include <language/interfaces/iproblem.h>
+#include <language/duchain/indexedstring.h>
 
 #include <cctype>
 

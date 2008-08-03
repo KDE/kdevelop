@@ -17,9 +17,9 @@
 */
 
 #include "templateparameterdeclaration.h"
-#include <duchain/identifier.h>
-#include <duchain/declaration.h>
-#include <duchainregister.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainregister.h>
 
 using namespace KDevelop;
 

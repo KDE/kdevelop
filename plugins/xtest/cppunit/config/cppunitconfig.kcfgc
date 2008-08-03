@@ -2,4 +2,4 @@ File=cppunitconfig.kcfg
 ClassName=CppUnitConfig
 Singleton=true
 Inherits=KDevelop::ProjectConfigSkeleton
-IncludeFiles=projectconfigskeleton.h
+IncludeFiles=project/projectconfigskeleton.h

@@ -25,11 +25,11 @@
 #include "control.h"
 #include "parsesession.h"
 
-#include <hashedstring.h>
+#include <language/editor/hashedstring.h>
 #include <cstdlib>
 #include <iostream>
 #include "rpp/chartools.h"
-#include <editor/hashedstring.h>
+#include <language/editor/hashedstring.h>
 
 
 #define ADVANCE(tk, descr) \

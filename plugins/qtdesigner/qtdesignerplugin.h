@@ -24,7 +24,7 @@
 
 #include <QHash>
 #include <QtCore/QPointer>
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 class QAction;

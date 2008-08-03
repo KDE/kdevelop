@@ -18,20 +18,20 @@
 
 #include "expressionparser.h"
 
-#include <duchain.h>
+#include <language/duchain/duchain.h>
 #include "cppduchain/usebuilder.h"
 #include "cppduchain/declarationbuilder.h"
 #include "cppduchain/dumpchain.h"
 #include "cppduchain/dumptypes.h"
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 
-#include "ducontext.h"
+#include <language/duchain/ducontext.h>
 #include "ast.h"
 #include "parsesession.h"
 #include "parser.h"
 #include "control.h"
-#include "duchainlock.h"
-#include <identifier.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/identifier.h>
 #include "expressionvisitor.h"
 #include <parser/rpp/chartools.h>
 

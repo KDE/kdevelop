@@ -22,7 +22,7 @@
 #define MAKEOUTPUTMODEL_H
 
 #include <QtGui/QStandardItemModel>
-#include <ioutputviewmodel.h>
+#include <outputview/ioutputviewmodel.h>
 
 class QObject;
 class MakeActionFilter;

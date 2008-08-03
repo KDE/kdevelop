@@ -28,7 +28,7 @@
 #include "util/treemodel.h"
 #include "util/treeitem.h"
 
-#include "idocument.h"
+#include <interfaces/idocument.h>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

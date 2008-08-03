@@ -22,15 +22,15 @@
 
 #define private public
 
-#include <duchain.h>
-#include <duchainlock.h>
-#include <topducontext.h>
-#include <forwarddeclaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/forwarddeclaration.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include <declarationid.h>
-#include <declaration.h>
-#include <dumpdotgraph.h>
+#include <language/duchain/declarationid.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/dumpdotgraph.h>
 #include <typeinfo>
 #include <time.h>
 #include <set>
@@ -39,15 +39,15 @@
 #include <time.h>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
-#include <documentrange.h>
+#include <language/editor/documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
 #include "setrepository.h"
-#include "hashedstring.h"
+#include <language/editor/hashedstring.h>
 #include "typeutils.h"
 #include "templatedeclaration.h"
-#include <indexedstring.h>
+#include <language/duchain/indexedstring.h>
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"
 #include "rpp/preprocessor.h"

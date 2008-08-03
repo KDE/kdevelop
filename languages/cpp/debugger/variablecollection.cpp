@@ -37,9 +37,9 @@
 
 #include "../stringhelpers.h"
 
-#include "icore.h"
-#include "idocumentcontroller.h"
-#include "iuicontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include "sublime/controller.h"
 #include "sublime/view.h"
 

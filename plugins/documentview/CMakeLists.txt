@@ -1,13 +1,6 @@
 
 #add_subdirectory(settings)
 
-include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/util
-)
-
-
 ########### next target ###############
 
 set(kdevdocumentview_PART_SRCS

@@ -12,9 +12,9 @@
 
 #include "grepdialog.h"
 #include "grepviewplugin.h"
-#include <icore.h>
-#include <idocument.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
 #include <kglobal.h>
 
 #include <QDir>

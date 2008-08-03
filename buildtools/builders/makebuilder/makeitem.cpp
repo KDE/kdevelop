@@ -17,8 +17,8 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include "idocumentcontroller.h"
-#include "icore.h"
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
 #include "makebuilder.h"
 #include <ktexteditor/cursor.h>
 #include "makeoutputmodel.h"

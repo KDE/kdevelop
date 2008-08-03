@@ -20,19 +20,19 @@
 
 #include <ktexteditor/smartrange.h>
 
-#include <identifier.h>
-#include <duchain.h>
-#include <forwarddeclaration.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/forwarddeclaration.h>
 #include <templateparameterdeclaration.h>
-#include <duchainlock.h>
+#include <language/duchain/duchainlock.h>
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include <ducontext.h>
+#include <language/duchain/ducontext.h>
 #include "cpptypes.h"
 #include "parsesession.h"
 #include "tokens.h"
 #include "cppduchain.h"
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 #include "declarationbuilder.h"
 #include "expressionparser.h"
 #include "parser/rpp/chartools.h"

@@ -20,25 +20,25 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
-#include <ducontext.h>
-#include <duchain.h>
-#include <namespacealiasdeclaration.h>
-#include <classfunctiondeclaration.h>
-#include <duchainlock.h>
-#include "stringhelpers.h"
+#include <language/duchain/ducontext.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/namespacealiasdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/interfaces/iproblem.h>
+#include <util/pushvalue.h>
 #include "cppduchain/cppduchain.h"
 #include "cppduchain/typeutils.h"
 #include "cppduchain/overloadresolution.h"
 #include "cppduchain/viablefunctions.h"
 #include "cppduchain/environmentmanager.h"
 #include "cpptypes.h"
+#include "stringhelpers.h"
 #include "safetycounter.h"
 #include "templatedeclaration.h"
 #include "cpplanguagesupport.h"
-#include <iproblem.h>
 #include "environmentmanager.h"
 #include "cppduchain/cppduchain.h"
-#include <util/pushvalue.h>
 #include "cppdebughelper.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())

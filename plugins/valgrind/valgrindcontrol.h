@@ -25,7 +25,7 @@
 #include <QProcess>
 #include <QTcpSocket>
 
-#include <irun.h>
+#include <interfaces/irun.h>
 
 class KJob;
 class KProcess;

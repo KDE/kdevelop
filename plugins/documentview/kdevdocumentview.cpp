@@ -35,12 +35,12 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentviewdelegate.h"
 
 #include <interfaces/contextmenuextension.h>
-#include <icore.h>
+#include <interfaces/icore.h>
 //#include <kdevcontext.h>
 //#include <kdevmainwindow.h>
-#include <idocumentcontroller.h>
-#include <iplugincontroller.h>
-#include <context.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/context.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent )
     : QTreeView( parent ),

@@ -12,8 +12,8 @@
  ***************************************************************************/
 
 #include "cpppreprocessenvironment.h"
-#include <hashedstring.h>
-#include <iproblem.h>
+#include <language/editor/hashedstring.h>
+#include <language/interfaces/iproblem.h>
 #include <parser/rpp/macrorepository.h>
 
 CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::stringSetRepository), m_environmentFile(environmentFile) {

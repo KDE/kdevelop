@@ -14,7 +14,7 @@
 #include "macroset.h"
 #include <QDataStream>
 
-#include "hashedstring.h"
+#include <language/editor/hashedstring.h>
 
 using namespace Cpp;
 using namespace KDevelop;

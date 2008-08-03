@@ -35,9 +35,9 @@
 #include <kio/copyjob.h>
 #include <kio/netaccess.h>
 
-#include <icore.h>
-#include <iprojectcontroller.h>
-#include <iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>

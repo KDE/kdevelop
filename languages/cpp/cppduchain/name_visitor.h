@@ -21,10 +21,10 @@
 #define NAME_VISITOR_H
 
 #include "default_visitor.h"
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <cppduchainexport.h>
 #include "cppducontext.h"
-#include <ducontext.h>
+#include <language/duchain/ducontext.h>
 
 class ParseSession;
 class OperatorAST;

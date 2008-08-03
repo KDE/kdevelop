@@ -12,9 +12,9 @@
 #include "projectfilesystemwatcher.h"
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
-#include "iprojectcontroller.h"
-#include "iproject.h"
-#include "icore.h"
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
 #include <kdebug.h>
 #include <QFileInfo>
 #include <QQueue>

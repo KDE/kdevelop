@@ -1,15 +1,5 @@
 
 include_directories(
- ${KDEVPLATFORM_INCLUDE_DIR}
- ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
- ${KDEVPLATFORM_INCLUDE_DIR}/projectmanager/interfaces
- ${KDEVPLATFORM_INCLUDE_DIR}/project
- ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
- ${KDEVPLATFORM_INCLUDE_DIR}/language
- ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
- ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
- ${KDEVPLATFORM_INCLUDE_DIR}/language/editor
- ${KDEVPLATFORM_INCLUDE_DIR}/util
  ${CMAKE_CURRENT_SOURCE_DIR}/parser
  ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
 )

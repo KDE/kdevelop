@@ -28,15 +28,15 @@
 #include <QtCore/QFile>
 
 
-#include <projectmodel.h>
+#include <project/projectmodel.h>
 
-#include <iproject.h>
-#include <icore.h>
-#include <iplugincontroller.h>
-#include <ibuildsystemmanager.h>
-#include <ioutputview.h>
-#include <outputmodel.h>
-#include <commandexecutor.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <outputview/ioutputview.h>
+#include <outputview/outputmodel.h>
+#include <util/commandexecutor.h>
 #include <QtDesigner/QExtensionFactory>
 
 #include <kpluginfactory.h>

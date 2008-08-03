@@ -23,7 +23,7 @@
 
 #include <QMap>
 
-#include <editor/simplecursor.h>
+#include <language/editor/simplecursor.h>
 
 #include <cppparserexport.h>
 #include "anchor.h"

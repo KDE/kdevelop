@@ -23,16 +23,16 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
-#include <parsejob.h>
+#include <language/backgroundparser/parsejob.h>
 
 #include <QStringList>
 
 #include <ksharedptr.h>
 #include <ktexteditor/range.h>
 
-#include <duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 #include <contextbuilder.h>
-#include <indexedstring.h>
+#include <language/duchain/indexedstring.h>
 
 class PreprocessJob;
 class CppLanguageSupport;

@@ -22,11 +22,11 @@
 #ifndef CPP_QUICKOPEN_H
 #define CPP_QUICKOPEN_H
 
-#include <quickopendataprovider.h>
-#include <quickopenfilter.h>
+#include <language/interfaces/quickopendataprovider.h>
+#include <language/interfaces/quickopenfilter.h>
 #include <kurl.h>
-#include <duchainpointer.h>
-#include <indexedstring.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/indexedstring.h>
 #include "includeitem.h"
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {

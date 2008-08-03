@@ -18,7 +18,7 @@
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <indexedstring.h> //Needs to be up here, so qHash(IndexedString) is found
+#include <language/duchain/indexedstring.h> //Needs to be up here, so qHash(IndexedString) is found
 
 #include "pp-environment.h"
 

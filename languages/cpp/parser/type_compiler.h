@@ -20,7 +20,7 @@
 #define TYPE_COMPILER_H
 
 #include "default_visitor.h"
-#include <identifier.h>
+#include <language/duchain/identifier.h>
 #include <cppparserexport.h>
 
 #include <QtCore/QString>

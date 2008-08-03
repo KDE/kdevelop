@@ -48,19 +48,19 @@ While construction:
 #ifndef CPPDUCONTEXT_H
 #define CPPDUCONTEXT_H
 
-#include <duchain/ducontext.h>
+#include <language/duchain/ducontext.h>
 
 #include <QSet>
 #include <QMutex>
 
-#include <duchain/abstractfunctiondeclaration.h>
-#include <duchain/declaration.h>
-#include <duchain/duchainlock.h>
-#include <duchain/duchain.h>
-#include <duchain/topducontext.h>
-#include <duchain/arrayhelpers.h>
-#include <duchain/classfunctiondeclaration.h>
-#include <duchain/namespacealiasdeclaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/arrayhelpers.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"
 #include "cpptypes.h"
 #include "cppduchain.h"

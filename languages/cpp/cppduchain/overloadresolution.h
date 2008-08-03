@@ -19,7 +19,7 @@
 #ifndef OVERLOADRESOLUTION_H
 #define OVERLOADRESOLUTION_H
 
-#include <duchain/duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 #include "typeconversion.h"
 #include <QList>
 #include "cppduchainexport.h"

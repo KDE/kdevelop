@@ -27,17 +27,17 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <idocumentcontroller.h>
-#include <icore.h>
-#include <idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
 #include <ktexteditor/document.h>
 
-#include <duchainlock.h>
+#include <language/duchain/duchainlock.h>
 
 #include "navigationwidget.h"
 #include "cppcodecompletionmodel.h"
 #include "cpplanguagesupport.h"
-#include <arrayhelpers.h>
+#include <language/duchain/arrayhelpers.h>
 
 using namespace KDevelop;
 using namespace Cpp;

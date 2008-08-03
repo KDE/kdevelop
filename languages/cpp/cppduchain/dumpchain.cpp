@@ -27,13 +27,13 @@
 
 #include <language/duchain/types/identifiedtype.h>
 #include "cppeditorintegrator.h"
-#include <ducontext.h>
-#include <topducontext.h>
-#include <declaration.h>
-#include <duchainpointer.h>
-#include <parsingenvironment.h>
-#include <identifier.h>
-#include <use.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/parsingenvironment.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/use.h>
 #include "parser/parsesession.h"
 #include "parser/rpp/chartools.h"
 

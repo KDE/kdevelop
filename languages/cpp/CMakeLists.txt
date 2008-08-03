@@ -1,21 +1,8 @@
 include(CppBuildConfig.cmake)
 
-include_directories(${CMAKE_TOP_BUILD_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${KDE4_INCLUDE_DIR}/threadweaver
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}
+include_directories(
     ${CMAKE_SOURCE_DIR}/languages/cpp/parser
     ${CMAKE_SOURCE_DIR}/languages/cpp/cppduchain
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/language
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/editor
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/backgroundparser
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain/viewer
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/codecompletion
 )
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 ) 

@@ -22,7 +22,7 @@
 #define CMAKECMAKEPROJECTVISITORTEST_H
 
 #include <QtTest/QtTest>
-#include <topducontext.h>
+#include <language/duchain/topducontext.h>
 
 class CMakeProjectVisitorTest : public QObject
 {

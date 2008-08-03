@@ -21,7 +21,7 @@
 
 #include "symbol.h"
 #include "memorypool.h"
-#include <iproblem.h>
+#include <language/interfaces/iproblem.h>
 #include <cppparserexport.h>
 
 #include <QtCore/QHash>

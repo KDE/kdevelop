@@ -28,7 +28,7 @@
 #include <QModelIndex>
 
 #include <ktexteditor/attribute.h>
-#include <icodehighlighting.h>
+#include <language/interfaces/icodehighlighting.h>
 
 namespace KTextEditor
 {

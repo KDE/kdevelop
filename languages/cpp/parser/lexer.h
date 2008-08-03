@@ -23,9 +23,9 @@
 #include <cppparserexport.h>
 #include <QtCore/QString>
 #include <cstdlib>
-#include <indexedstring.h>
+#include <language/duchain/indexedstring.h>
 
-#include <iproblem.h>
+#include <language/interfaces/iproblem.h>
 
 struct NameSymbol;
 class Lexer;

@@ -21,7 +21,7 @@
 #include <QList>
 #include "overloadresolution.h"
 #include "cppduchainexport.h"
-#include <duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 
 
 namespace KDevelop  {

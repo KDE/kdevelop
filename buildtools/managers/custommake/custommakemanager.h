@@ -11,8 +11,8 @@
 #ifndef CUSTOMMAKEMANAGER_H
 #define CUSTOMMAKEMANAGER_H
 
-#include <ibuildsystemmanager.h>
-#include <iplugin.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
 template <typename T> class QList;

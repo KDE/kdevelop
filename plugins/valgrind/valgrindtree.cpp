@@ -24,8 +24,8 @@
 
 #include <KIO/NetAccess>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "valgrindmodel.h"
 

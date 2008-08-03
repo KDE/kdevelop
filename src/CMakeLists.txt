@@ -1,14 +1,6 @@
 add_subdirectory(profiles)
 # add_subdirectory(profileengine)
 
-include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/sublime
-    ${KDEVPLATFORM_INCLUDE_DIR}/shell
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    )
-
-
 ########### next target ###############
 
 set(kdevelop_SRCS

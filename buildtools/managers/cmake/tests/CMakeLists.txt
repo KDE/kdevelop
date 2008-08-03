@@ -2,9 +2,6 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake
     ${CMAKE_SOURCE_DIR}/buildtools/managers/cmake/parser
-    ${KDEVPLATFORM_INCLUDE_DIR}/language
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/language/duchain
     )
 
 set( cmakeparsertest_SRCS cmakeparsertest.cpp )

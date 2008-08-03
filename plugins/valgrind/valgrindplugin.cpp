@@ -46,9 +46,9 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <icore.h>
-#include <iuicontroller.h>
-#include <iruncontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/iruncontroller.h>
 
 #include "valgrindmodel.h"
 #include "valgrindcontrol.h"

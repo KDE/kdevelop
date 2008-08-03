@@ -16,14 +16,14 @@
 #include <kdebug.h>
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
-#include <iproblem.h>
+#include <language/interfaces/iproblem.h>
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/repositories/itemrepository.h>
 #include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
-#include <arrayhelpers.h>
-#include <duchainregister.h>
+#include <language/duchain/arrayhelpers.h>
+#include <language/duchain/duchainregister.h>
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 // #define DEBUG

@@ -21,7 +21,7 @@
 #ifndef CMAKEBUILDER_H
 #define CMAKEBUILDER_H
 
-#include <iplugin.h>
+#include <interfaces/iplugin.h>
 #include "icmakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QVariant>

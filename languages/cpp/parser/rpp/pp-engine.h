@@ -28,7 +28,7 @@
 #include <QtCore/QStack>
 #include <cppparserexport.h>
 
-#include <iproblem.h>
+#include <language/interfaces/iproblem.h>
 
 #include "pp-macro.h"
 #include "pp-macro-expander.h"

@@ -32,19 +32,19 @@
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
 
-#include <forwarddeclaration.h>
-#include <duchain.h>
-#include <duchainlock.h>
-#include <repositories/itemrepository.h>
+#include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/repositories/itemrepository.h>
 #include <language/duchain/types/identifiedtype.h>
-#include <namespacealiasdeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/aliasdeclaration.h>
 #include <util/pushvalue.h>
 
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
-#include "classfunctiondeclaration.h"
-#include "functiondeclaration.h"
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondeclaration.h>
 #include "templateparameterdeclaration.h"
 #include "type_compiler.h"
 #include "tokens.h"

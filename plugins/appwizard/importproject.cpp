@@ -30,8 +30,8 @@
 
 #include <kio/netaccess.h>
 
-#include "icore.h"
-#include "iprojectcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include "appwizardplugin.h"
 

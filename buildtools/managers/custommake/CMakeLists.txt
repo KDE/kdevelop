@@ -2,11 +2,8 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
 # add_subdirectory(tests)
 
-include_directories(${KDEVPLATFORM_INCLUDE_DIR}
+include_directories(
     ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
     )
 
 

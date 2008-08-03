@@ -12,7 +12,7 @@
 #include <QHash>
 // #include <QFileSystemWatcher>
 #include "custommaketreesynchronizer.h"
-#include "iproject.h"
+#include <interfaces/iproject.h>
 #include "custommakemanager.h"
 
 CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, QStandardItem *parent )

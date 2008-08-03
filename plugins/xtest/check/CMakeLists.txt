@@ -15,15 +15,8 @@ if(TestBuild)
 endif(TestBuild)
 
 include_directories(
-    ${KDE4_INCLUDES}
     ${XtestPlugin_SOURCE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/shell
-    ${KDEVPLATFORM_INCLUDE_DIR}/project
-    ${KDEVPLATFORM_INCLUDE_DIR}/project/interfaces
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas/interfaces)
+)
 
 set(kdevcheck_SRCS
     ../cppunit/testcase.cpp

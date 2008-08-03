@@ -29,9 +29,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "Thread.h"
+#include <threadweaver/Thread.h>
 
-#include <ilanguage.h>
+#include <interfaces/ilanguage.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -44,16 +44,16 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "parser/dumptree.h"
-#include <duchain.h>
-#include <duchainpointer.h>
-#include <duchainlock.h>
-#include <dumpdotgraph.h>
-#include <duchain/dumpchain.h>
-#include <parsejob.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/dumpdotgraph.h>
+#include <language/duchain/dumpchain.h>
+#include <language/backgroundparser/parsejob.h>
 #include "cppeditorintegrator.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include <topducontext.h>
+#include <language/duchain/topducontext.h>
 #include "preprocessjob.h"
 #include "environmentmanager.h"
 #include <unistd.h>

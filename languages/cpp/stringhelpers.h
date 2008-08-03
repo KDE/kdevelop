@@ -19,7 +19,7 @@
 #ifndef __STRINGHELPERS_H__
 #define __STRINGHELPERS_H__
 
-#include <duchain/stringhelpers.h>
+#include <language/duchain/stringhelpers.h>
 
 class QString;
 class QChar;

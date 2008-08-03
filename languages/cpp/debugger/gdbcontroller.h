@@ -30,7 +30,7 @@
 
 #include <kprocess.h>
 
-#include <irun.h>
+#include <interfaces/irun.h>
 
 #include "mi/gdbmi.h"
 #include "mi/miparser.h"

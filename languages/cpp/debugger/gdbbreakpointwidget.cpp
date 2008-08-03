@@ -50,9 +50,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <idocument.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 
 /***************************************************************************/
 /***************************************************************************/

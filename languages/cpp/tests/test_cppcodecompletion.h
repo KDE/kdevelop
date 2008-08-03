@@ -25,14 +25,14 @@
 
 #include <kurl.h>
 
-#include <editor/simplecursor.h>
-#include <contextbuilder.h>
+#include <language/editor/simplecursor.h>
+#include <language/duchain/identifier.h>
+#include <language/duchain/dumpchain.h>
 
+#include "contextbuilder.h"
 #include "parser.h"
 #include "control.h"
 
-#include <identifier.h>
-#include <language/duchain/dumpchain.h>
 #include "dumpchain.h"
 #include "rpp/chartools.h"
 

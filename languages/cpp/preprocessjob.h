@@ -25,7 +25,7 @@
 class CPPParseJob;
 
 #include <kurl.h>
-#include <parsejob.h>
+#include <language/backgroundparser/parsejob.h>
 #include <ksharedptr.h>
 
 #include "parser/rpp/preprocessor.h"

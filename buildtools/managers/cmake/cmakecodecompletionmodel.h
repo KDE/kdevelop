@@ -22,7 +22,7 @@
 #define CMAKECODECOMPLETION_H
 
 #include <ktexteditor/codecompletionmodel.h>
-#include <duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 #include <QStringList>
 
 namespace KTextEditor { class Document; class Range; }

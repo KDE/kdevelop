@@ -23,8 +23,8 @@
 #include <QtCore/QHash>
 #include <QtCore/QPointer>
 
-#include <iplugin.h>
-#include <idocumentcontroller.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/idocumentcontroller.h>
 
 class KDevDocumentViewPluginFactory;
 

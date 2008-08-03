@@ -20,8 +20,8 @@
 #include "cppduchain/typeutils.h"
 #include "cppduchain/cpptypes.h"
 #include "overloadresolution.h"
-#include <duchain/ducontext.h>
-#include <duchain/topducontext.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
 #include <typeinfo>
 
 

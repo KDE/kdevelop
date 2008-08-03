@@ -18,8 +18,8 @@
 
 #include "cppducontext.h"
 #include "navigationwidget.h"
-#include <duchainregister.h>
-#include <topducontextdata.h>
+#include <language/duchain/duchainregister.h>
+#include <language/duchain/topducontextdata.h>
 
 namespace Cpp {
 

@@ -41,21 +41,21 @@
 #include <QTimer>
 #include <QDir>
 
-#include <core.h>
-// #include "kdevconfig.h"
-#include <mainwindow.h>
+#include <shell/core.h>
+#include <shell/mainwindow.h>
+#include <shell/projectcontroller.h>
+#include <shell/documentcontroller.h>
+#include <shell/plugincontroller.h>
 // #include "kdevenvironment.h"
+// #include "kdevconfig.h"
 // #include "kdevpartcontroller.h"
 // #include "kdevlanguagecontroller.h"
-#include "splashscreen.h"
-#include <plugincontroller.h>
 // #include "kdevprojectcontroller.h"
 // #include "kdevdocumentcontroller.h"
 // #include "kdevbackgroundparser.h"
 
+#include "splashscreen.h"
 #include "kdevideextension.h"
-#include "projectcontroller.h"
-#include "documentcontroller.h"
 
 int main( int argc, char *argv[] )
 {

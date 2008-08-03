@@ -19,8 +19,8 @@
 #ifndef CPPEDITORINTEGRATOR_H
 #define CPPEDITORINTEGRATOR_H
 
-#include <editorintegrator.h>
-#include <editor/simplerange.h>
+#include <language/editor/editorintegrator.h>
+#include <language/editor/simplerange.h>
 #include "cppduchainexport.h"
 #include "lexer.h"
 

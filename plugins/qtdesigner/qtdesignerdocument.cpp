@@ -52,9 +52,9 @@
 #include <KMessageBox>
 #include <KLocale>
 
-#include <icore.h>
-#include <iuicontroller.h>
-#include <idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>

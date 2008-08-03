@@ -27,9 +27,9 @@
 #include <QtCore/QPair>
 #include <QtCore/QVarLengthArray>
 
-#include <duchain/identifier.h>
+#include <language/duchain/identifier.h>
 #include <language/duchain/types/typesystemdata.h>
-#include <declaration.h>
+#include <language/duchain/declaration.h>
 #include <language/duchain/types/identifiedtype.h>
 #include "cppduchainexport.h"
 #include <language/duchain/types/alltypes.h>

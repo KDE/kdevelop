@@ -19,8 +19,8 @@
 #define EXPRESSIONEVALUATIONRESULT_H
 
 #include "cppduchainexport.h"
-#include <duchain/appendedlist.h>
-#include <declarationid.h>
+#include <language/duchain/appendedlist.h>
+#include <language/duchain/declarationid.h>
 #include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/indexedtype.h>
 

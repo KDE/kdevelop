@@ -24,7 +24,7 @@
 #include <QtCore/QList>
 
 #include <sublime/urldocument.h>
-#include <idocument.h>
+#include <interfaces/idocument.h>
 
 namespace KDevelop
 {

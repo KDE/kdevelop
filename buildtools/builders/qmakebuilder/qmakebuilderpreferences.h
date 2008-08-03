@@ -21,7 +21,7 @@
 #ifndef QMAKEBUILDERPREFERENCES_H
 #define QMAKEBUILDERPREFERENCES_H
 
-#include "projectkcmodule.h"
+#include <project/projectkcmodule.h>
 
 class QWidget;
 class QStringList;

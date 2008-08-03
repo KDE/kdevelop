@@ -12,10 +12,6 @@ endif(TestBuild AND NOT WIN32)
 
 include_directories(
     config
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDEVPLATFORM_INCLUDE_DIR}/interfaces # needed for core.h & documentcontroller.h
-    ${KDEVPLATFORM_INCLUDE_DIR}/veritas
     )
 
 set(kdevqtest_SRCS

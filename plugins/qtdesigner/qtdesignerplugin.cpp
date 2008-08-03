@@ -43,9 +43,9 @@
 #include <kicon.h>
 #include <kactioncollection.h>
 
-#include <icore.h>
-#include <idocumentcontroller.h>
-#include <iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include "qtdesignerdocument.h"
 #include "internals/qdesigner_integration_p.h"
 
