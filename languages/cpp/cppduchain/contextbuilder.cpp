@@ -317,7 +317,7 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       LockedSmartInterface iface = editor()->smart();
       topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), iface.currentDocument() ? SimpleRange(iface.currentDocument()->documentRange()) : SimpleRange(SimpleCursor(0,0), SimpleCursor(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
 
-      topLevelContext->setSmartRange(editor()->topRange(CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
+      topLevelContext->setSmartRange(editor()->topRange(iface, CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
       DUChain::self()->addDocumentChain(topLevelContext);
@@ -396,35 +396,35 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 // KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
 //   setCompilingContexts(true);
 //   setRecompiling(false);
-// 
+//
 //   editor()->setCurrentUrl(url);
-// 
+//
 //   node->ducontext = parent;
-// 
+//
 //   {
 //     //copied out of supportBuild
-// 
+//
 //     openContext(node->ducontext);
-// 
+//
 //     editor()->setCurrentRange(editor()->topRange(EditorIntegrator::DefinitionUseChain));
-// 
+//
 //     visit (node);
-// 
+//
 //     closeContext();
 //   }
-// 
+//
 //   setCompilingContexts(false);
-// 
+//
 //   if( node->ducontext == parent ) {
 //     //The node's du-context should have been replaced!
 //     //Maybe dump the node
 //     kDebug(9007) << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
 //     DUChainWriteLocker lock(DUChain::lock());
 //     delete node->ducontext;
-// 
+//
 //     node->ducontext = 0;
 //   }
-// 
+//
 //   return node->ducontext;
 // }
 
