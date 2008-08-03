@@ -693,7 +693,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   //Normal case: Show all visible declarations
   typedef QPair<Declaration*, int> DeclarationDepthPair;
   
-  QList<DeclarationDepthPair> decls = Cpp::hideOverloadedDeclarations( m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext()) );
+  QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
   
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts
@@ -715,6 +715,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
           decls << qMakePair(decl, 1200); ///@todo Eventually compute a depth
     }
   }
+  
+  decls = Cpp::hideOverloadedDeclarations(decls);
   
   foreach( const DeclarationDepthPair& decl, decls )
     items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), Ptr(this), decl.second ) );

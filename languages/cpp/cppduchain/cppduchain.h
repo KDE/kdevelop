@@ -59,6 +59,7 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
  * Takes and returns a list of declarations together with inheritance-depth.
  * Since in c++ one declaration with a name in one depth overloads deeper
  * declarations, they are hidden here.
+ * This also removes forward-declarations when real declarations with the same identifier are in the list.
  * */
 KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
 

@@ -77,6 +77,7 @@ void minimize(int& i, const int with) {
 QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations ) {
   QHash<Identifier, Declaration*> nearestDeclaration;
   QHash<Declaration*, int> depthHash;
+  QSet<Identifier> hadNonForwardDeclaration; //Set of all non function-declarations that had a declaration that was not a forward-declaration.
 
   typedef QPair<Declaration*, int> Pair;
   foreach(  const Pair& decl, declarations ) {
@@ -91,14 +92,20 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
       if((!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration()) || decl.second < depthHash[*it])
         nearestDeclaration[ decl.first->identifier() ] = decl.first;
     }
+    
+    if(!decl.first->isForwardDeclaration() && !decl.first->isFunctionDeclaration())
+      hadNonForwardDeclaration.insert(decl.first->identifier());
   }
 
   QList< QPair<Declaration*, int> > ret;
     
-  ///Only keep the declarations of each name on the lowest inheritance-level
-  foreach( const Pair& decl, declarations )
-    if( depthHash[nearestDeclaration[decl.first->identifier()]] == decl.second )
-      ret << decl;
+  ///Only keep the declarations of each name on the lowest inheritance-level, or that are not forward-declarations
+  foreach( const Pair& decl, declarations ) {
+    if( depthHash[nearestDeclaration[decl.first->identifier()]] == decl.second ) {
+      if(decl.first->isFunctionDeclaration() || !decl.first->isForwardDeclaration() || !hadNonForwardDeclaration.contains(decl.first->identifier()))
+        ret << decl;
+    }
+  }
 
   return ret;
 }
