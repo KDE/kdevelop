@@ -100,7 +100,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
 
   LockedSmartInterface iface  = d->m_editor->smart();
   if (iface && !context->smartRange()) {
-    context->setSmartRange(d->m_editor->topRange(KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
+    context->setSmartRange(d->m_editor->topRange(iface, KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
     if (context->range().textRange() != iface.currentDocument()->documentRange())
       kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << iface.currentDocument()->documentRange();
     //Q_ASSERT(context->range().textRange() == iface.currentDocument()->documentRange());

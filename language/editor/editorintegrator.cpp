@@ -241,9 +241,8 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartI
   return ret;
 }
 
-SmartRange* EditorIntegrator::topRange( TopRangeType /*type*/)
+SmartRange* EditorIntegrator::topRange(const LockedSmartInterface& iface, TopRangeType /*type*/)
 {
-  LockedSmartInterface iface = smart();
   if(!iface)
       return 0;
 

@@ -170,7 +170,7 @@ public:
    *
    * Opens a range that needs to be closed using exitCurrentRange()
    */
-  KTextEditor::SmartRange* topRange(TopRangeType type);
+  KTextEditor::SmartRange* topRange(const LockedSmartInterface& iface, TopRangeType type);
 
   /**
    * Releases a toplevel \a range.  The range should be deleted by the caller.

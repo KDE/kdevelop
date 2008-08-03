@@ -149,7 +149,7 @@ public:
                                 iface.currentDocument()
                                     ? SimpleRange( iface.currentDocument()->documentRange() )
                                     : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
-        top->setSmartRange( m_editor->topRange( EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
+        top->setSmartRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
         top->setType( DUContext::Global );
         DUChain::self()->addDocumentChain( top );
       }
@@ -362,7 +362,10 @@ protected:
       setContextOnNode( node, parent );
       {
           openContext( contextFromNode( node ) );
-          m_editor->setCurrentRange( m_editor->topRange( EditorIntegrator::DefinitionUseChain ) );
+          {
+            LockedSmartInterface iface = m_editor->smart();
+            m_editor->setCurrentRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ) );
+          }
           startVisiting( node );
           closeContext();
       }
@@ -499,16 +502,16 @@ protected:
       return currentContext();
     }
   }
-  
+
   /**
    * Open a newly created or previously existing context.
    *
    * The open context is put on the context stack, and becomes the new
    * currentContext().
-   * 
+   *
    * \warning When you call this, you also have to open a range! If you want to re-use
    * the range associated to the context, use injectContext
-   * 
+   *
    * \param newContext Context to open.
    */
   virtual void openContext( DUContext* newContext )
@@ -516,7 +519,7 @@ protected:
     m_contextStack.push( newContext );
     m_nextContextStack.push( 0 );
   }
-  
+
   /**
    * This can be used to temporarily change the current context.
    * \param range The range that will be used as new current range, or zero(then the range associated to the context is used)
@@ -525,7 +528,7 @@ protected:
     openContext( ctx );
     m_editor->setCurrentRange( range ? range : ctx->smartRange() );
   }
-  
+
   /**
    * Use this to close the context previously injected with injectContext.
    * */
@@ -549,7 +552,7 @@ protected:
       if(m_compilingContexts)
         currentContext()->cleanIfNotEncountered( m_encountered );
       setEncountered( currentContext() );
-      
+
       m_lastContext = currentContext();
     }
 
@@ -736,7 +739,7 @@ protected:
   }
 
 private:
-  
+
   Identifier m_identifier;
   QualifiedIdentifier m_qIdentifier;
   EditorIntegrator* m_editor;

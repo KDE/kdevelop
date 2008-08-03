@@ -66,7 +66,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         if (problem->finalLocation().document() != hashedUrl || !problem->finalLocation().isValid())
             continue;
 
-        KTextEditor::SmartRange* range = editor.topRange(EditorIntegrator::Highlighting);
+        KTextEditor::SmartRange* range = editor.topRange(iface, EditorIntegrator::Highlighting);
         *range = problem->finalLocation();
         if (range->isEmpty())
             range->smartEnd().advance(1);
