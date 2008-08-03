@@ -95,6 +95,17 @@ void ClassModel::setFilterDocument(KDevelop::IDocument* document)
   }
 }
 
+void ClassModel::searchStringChanged(const QString& string)
+{
+  //TODO improve efficiency
+#if 0
+  if (m_searchString != string) {
+    m_searchString = string;
+    resetModel();
+  }
+#endif
+}
+
 void ClassModel::setFilterByProject(bool filterByProject)
 {
   if (m_filterProject != filterByProject) {
@@ -134,6 +145,12 @@ bool ClassModel::filterObject(DUChainBase* object) const
     m_inProject.insert(url, ret);
     return ret;
   }
+
+  if (!m_searchString.isEmpty())
+    if (Declaration* declaration = dynamic_cast<Declaration*>(object))
+      // TODO regexp?
+      if (!declaration->identifier().toString().contains(m_searchString, Qt::CaseInsensitive))
+        return true;
 
   return false;
 }

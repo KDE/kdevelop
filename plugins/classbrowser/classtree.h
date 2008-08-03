@@ -28,6 +28,7 @@
 #include "language/duchain/duchainobserver.h"
 
 class ClassBrowserPlugin;
+class KLineEdit;
 
 namespace KDevelop {
  class TopDUContext;
@@ -57,6 +58,7 @@ private:
   ClassBrowserPlugin* m_plugin;
 
   class ClassTree* m_tree;
+  KLineEdit* m_searchLine;
   Modes m_currentMode;
 };
 

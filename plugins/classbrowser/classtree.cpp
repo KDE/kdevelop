@@ -30,11 +30,14 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QToolButton>
+#include <QLabel>
 
 #include <klocale.h>
 #include <kicon.h>
 #include <kaction.h>
 #include <KMenu>
+#include <KLineEdit>
+#include <KHBox>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -62,6 +65,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   : QWidget(parent)
   , m_plugin(plugin)
   , m_tree(new ClassTree(this, plugin))
+  , m_searchLine(0)
   , m_currentMode(ModeProject)
 {
   setObjectName("Class Browser Tree");
@@ -101,9 +105,25 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   filterMenu->addAction(action);
   //connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));
 
+  m_searchLine = new KLineEdit(this);
+  m_searchLine->setClearButtonShown( true );
+  connect(m_searchLine, SIGNAL(textChanged(QString)), plugin->model(), SLOT(searchStringChanged(QString)));
+
+  QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
+  searchLabel->setBuddy( m_searchLine );
+
+  QHBoxLayout* layout = new QHBoxLayout();
+  layout->setSpacing( 5 );
+  layout->setMargin( 0 );
+  layout->addWidget(searchLabel);
+  layout->addWidget(m_searchLine);
+
+  setFocusProxy( m_searchLine );
+
   QVBoxLayout* vbox = new QVBoxLayout(this);
   vbox->setMargin(0);
-  vbox->addWidget( m_tree );
+  vbox->addLayout(layout);
+  vbox->addWidget(m_tree);
   setLayout( vbox );
 
   setWhatsThis( i18n( "Code View" ) );

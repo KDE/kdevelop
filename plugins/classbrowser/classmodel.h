@@ -101,6 +101,7 @@ public:
 
 public Q_SLOTS:
   void setFilterDocument(KDevelop::IDocument* document);
+  void searchStringChanged(const QString& string);
 
 public:
   virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -151,6 +152,7 @@ private:
 
   KDevelop::IDocument* m_filterDocument;
   bool m_filterProject;
+  QString m_searchString;
 };
 
 #endif
