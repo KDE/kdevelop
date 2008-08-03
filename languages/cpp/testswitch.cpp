@@ -93,13 +93,11 @@ bool hasQExecInvocation(DUContext* ctx, TopDUContext* top)
 {
     const Use* u = ctx->uses();
     Declaration* d;
-    Identifier qExec;
-    qExec.setIdentifier("qExec");
+    Identifier qExec("qExec");
     for(int i=0; i<ctx->usesCount(); i++, u++) {
         d = top->usedDeclarationForIndex(u->m_declarationIndex);
         if (!d || !d->isFunctionDeclaration()) continue;
-        Identifier id = d->identifier();
-        if (id.nameEquals(qExec)) return true;
+        if (d->identifier() == qExec) return true;
     }
     return false;
 }
@@ -107,8 +105,7 @@ bool hasQExecInvocation(DUContext* ctx, TopDUContext* top)
 /*! find a main() declaration */
 DUContext* findMainContext(TopDUContext* ctx)
 {
-    Identifier main;
-    main.setIdentifier("main");
+    Identifier main("main");
     QList<Declaration*> dcls = ctx->findDeclarations(main);
     Declaration* d = 0;
     foreach(Declaration* d2, dcls) {
@@ -118,7 +115,10 @@ DUContext* findMainContext(TopDUContext* ctx)
         } else {
         }
     }
-    return d->internalContext();
+    if(d)
+      return d->internalContext();
+    else
+      return 0;
 }
 
 /*! return true if ctx contains a QTest main function (expanded QTEST_MAIN macro) */
@@ -167,7 +167,6 @@ void updateClassCount(Declaration* clazz, QMap<Declaration*,int>& classes)
     implementations in context ctx */
 Declaration* dominantClassInCpp(TopDUContext* ctx)
 {
-    // TODO dont count #included classes
     kDebug() << "";
     QMap<Declaration*, int> classes;
     Declaration* clazz = 0;
