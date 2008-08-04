@@ -21,10 +21,12 @@
 #define DECLARATION_H
 
 #include <QtCore/QList>
+#include <QtCore/QMap>
 #include <qcontainerfwd.h>
 
 #include "../editor/documentrangeobject.h"
 #include "identifier.h"
+#include "indexedstring.h"
 #include "types/abstracttype.h"
 #include "duchainbase.h"
 
