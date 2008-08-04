@@ -42,7 +42,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
 
 ///Never use this directly, use the REGISTER_DUCHAIN_ITEM macro instead.
 template<class T, class Data>
-class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public DUChainBaseFactory {
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemFactory : public DUChainBaseFactory {
   public:
   DUChainBase* create(DUChainBaseData* data) const {
     return new T(*static_cast<Data*>(data));
@@ -94,7 +94,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
       }
 
       Q_ASSERT(!m_factories[T::Identity]);
-      m_factories[T::Identity] = new TypeFactory<T, Data>();
+      m_factories[T::Identity] = new DUChainItemFactory<T, Data>();
       m_dataClassSizes[T::Identity] = sizeof(Data);
     }
 
