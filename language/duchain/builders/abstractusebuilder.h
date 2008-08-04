@@ -25,7 +25,7 @@
 #include "../duchain.h"
 #include "../duchainlock.h"
 
-#include <../language/editor/editorintegrator.h>
+#include <language/editor/editorintegrator.h>
 
 namespace KDevelop {
 
