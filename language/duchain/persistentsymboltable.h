@@ -47,7 +47,7 @@ namespace KDevelop {
 
     ///Retrieves all the declarations for a given QualifiedIdentifier in an efficient way.
     ///@param id The QualifiedIdentifier for which the declarations should be retrieved
-    ///@param countTarget A reference that will be filled with the count of retrieved declarations
+    ///@param count A reference that will be filled with the count of retrieved declarations
     ///@param declarations A reference to a pointer, that will be filled with a pointer to the retrieved declarations.
     void declarations(const QualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 

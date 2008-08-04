@@ -67,10 +67,10 @@ public:
   
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
-   * argument of the function, but the returned list will only contain default-values for those
+   * argument of the function, but the returned vector will only contain default-values for those
    * arguments that have one, for performance-reasons.
    *
-   * So the list may be empty or smaller than the list of function-arguments.
+   * So the vector may be empty or smaller than the count of function-arguments.
    * */
   virtual const IndexedString* defaultParameters() const = 0;
   virtual int defaultParametersSize() const = 0;
