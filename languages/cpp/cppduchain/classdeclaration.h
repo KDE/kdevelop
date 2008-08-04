@@ -88,6 +88,8 @@ public:
    * @param baseConversionLevels If nonzero, this will count the distance of the classes.
    * */
   bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
+  
+  QString toString() const;
 
   enum {
     Identity = 17

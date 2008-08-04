@@ -40,6 +40,7 @@
 #include "environmentmanager.h"
 #include "cppduchain/cppduchain.h"
 #include "cppdebughelper.h"
+#include "missingincludecompletionitem.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -92,8 +93,10 @@ QString extractLastLine(const QString& str) {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal)
 {
+  m_followingText = followingText;
+  
   if(depth > 10) {
     kDebug() << "too much recursion";
     m_valid = false;
@@ -151,7 +154,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( endsWithOperator( m_text ) ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
       return;
     }
     m_memberAccessOperation = FunctionCallAccess;
@@ -163,7 +166,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( m_text.endsWith('(') ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
       return;
     }
     m_contextType = FunctionCall;
@@ -237,13 +240,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     QString parentContextText = expressionPrefix.left(parentContextEnd);
 
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
-    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, depth+1, otherArguments );
+    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), depth+1, otherArguments );
   }
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) ) {
     log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
-    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, depth+1 );
+    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), depth+1 );
   }
 
   ///Now care about m_expression. It may still contain keywords like "new "
@@ -355,6 +358,17 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       }
 
       //The result of the expression is stored in m_expressionResult, so we're fine
+      
+      ///Additional step: Check whether we're accessing a declaration that is not available, and eventually allow automatically adding an #include
+      LOCKDUCHAIN;
+      AbstractType::Ptr type = m_expressionResult.type.type();
+      if(type && m_duContext) {
+        DelayedType::Ptr delayed = type.cast<DelayedType>();
+        if(delayed && delayed->kind() == DelayedType::Unresolved)
+          m_storedItems += missingIncludeCompletionItems(m_expression, m_followingText.trimmed() + ": ", m_expressionResult, m_duContext.data());
+      }else{
+        log( "No type for expression" );
+      }
     }
     break;
     case FunctionCallAccess:
@@ -638,12 +652,15 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     }
 
 
+    int argumentHintDepth = 0;
     ///Find all recursive function-calls that should be shown as call-tips
     CodeCompletionContext::Ptr parentContext(this);
     do {
       if (shouldAbort)
         return items;
 
+      ++argumentHintDepth;
+      
       parentContext = parentContext->parentContext();
       if( parentContext ) {
         if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
@@ -655,6 +672,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
             else
               items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = parentContext->functionName();
+          }else if(parentContext->functions().count() == 0) {
+            items += missingIncludeCompletionItems(parentContext->m_expression, QString(), parentContext->m_expressionResult, m_duContext.data(), argumentHintDepth );
           }else{
             int num = 0;
             foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
@@ -667,6 +686,13 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         }
       }
     } while( parentContext );
+    
+  //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
+  if(memberAccessOperation() == StaticMemberChoose && !m_followingText.trimmed().isEmpty()) {
+    QString totalExpression = m_expression + "::" + m_followingText.trimmed();
+    items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
+  }
+  
   return items;
 }
 
@@ -712,7 +738,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
       QList<DUContext*> importedContexts = m_duContext->findContexts( DUContext::Namespace, id );
       foreach(DUContext* context, importedContexts)
         foreach(Declaration* decl, context->localDeclarations())
-          decls << qMakePair(decl, 1200); ///@todo Eventually compute a depth
+          decls << qMakePair(decl, 1200);
     }
   }
   
@@ -752,6 +778,14 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
           }
       }
     }
+  }
+  
+  //Eventually add missing include-completion in cases like NotIncludedClass|
+  if(!m_followingText.trimmed().isEmpty()) {
+    QString totalExpression = m_followingText.trimmed();
+    uint oldItemCount = items.count();
+    items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
+    kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
   }
 }
 

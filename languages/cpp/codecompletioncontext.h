@@ -94,7 +94,7 @@ namespace Cpp {
        * @param knownArgumentExpressions has no effect when firstContext is set
        * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
       ~CodeCompletionContext();
 
       AdditionalContextType additionalContextType() const;
@@ -193,6 +193,7 @@ namespace Cpp {
       ///Should map a position in m_text to a position in the underlying document
       MemberAccessOperation m_memberAccessOperation;
       QString m_expression;
+      QString m_followingText;
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
       ExpressionEvaluationResult m_expressionResult;
 

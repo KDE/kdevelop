@@ -32,6 +32,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     completionitem.cpp
     completionhelpers.cpp
     testswitch.cpp
+    missingincludecompletionitem.cpp
 )
 
 

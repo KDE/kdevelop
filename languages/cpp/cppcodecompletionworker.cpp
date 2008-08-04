@@ -62,7 +62,14 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
   //We will have some caching in TopDUContext until this objects lifetime is over
   TopDUContext::Cache cache(topContext);
   
-  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, contextText ) );
+  KTextEditor::Cursor cursorPosition = view->cursorPosition();
+  QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
+  if(position < cursorPosition)
+    followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
+  
+  kDebug() << "added text:" << followingText;
+  
+  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, contextText, followingText ) );
   if (CppCodeCompletionModel* m = model())
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 

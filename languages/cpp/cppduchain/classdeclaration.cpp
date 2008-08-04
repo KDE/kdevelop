@@ -104,4 +104,8 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
   return false;
 }
 
+QString ClassDeclaration::toString() const {
+  return "class " + identifier().toString();
+}
+
 }
