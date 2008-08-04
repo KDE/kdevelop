@@ -51,7 +51,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObjectData
 
     mutable SimpleRange m_range; //Mutable for synchronization
     
-    APPENDED_LISTS_STUB(DocumentRangeObjectData);
+    APPENDED_LISTS_STUB(DocumentRangeObjectData)
     
     bool isDynamic() const {
       return m_dynamic;
