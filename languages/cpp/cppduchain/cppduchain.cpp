@@ -140,6 +140,11 @@ Declaration* localClassFromCodeContext(DUContext* context)
     if(!context->importers().isEmpty())
       context = context->importers().first();
 
+  if(!context) {
+    kDebug() << "problem";
+    return 0;
+  }
+  
   ///Step 1: Find the function-declaration for the function we are in
   Declaration* functionDeclaration = 0;
 
