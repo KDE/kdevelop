@@ -57,6 +57,10 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     }
   }
   
+  QualifiedIdentifier namespaceScope = context->scopeIdentifier(false);
+  for(int a = 1; a < namespaceScope.count(); ++a)
+    prefixes << namespaceScope.mid(a); //Also search within enclosing namespaces
+  
   QList<KDevelop::CompletionTreeItemPointer> ret;
   
   QualifiedIdentifier identifier;
