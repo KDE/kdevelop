@@ -45,6 +45,7 @@
 #include <QtCore/QProcess>
 
 #include <kpluginfactory.h>
+#include <kshell.h>
 #include <kpluginloader.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -198,7 +199,8 @@ QStringList MakeJob::computeBuildCommand() const
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());
     if( ! extraOptions.isEmpty() )
     {
-        cmdline << extraOptions;
+        foreach(const QString option, KShell::splitArgs( extraOptions ) )
+            cmdline << option;
     }
 
     if( m_overrideTarget.isEmpty() )
