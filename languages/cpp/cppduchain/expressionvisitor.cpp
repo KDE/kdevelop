@@ -22,6 +22,7 @@
 #include <language/duchain/duchain.h>
 #include <parsesession.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <typeinfo>
 #include <util/pushvalue.h>
@@ -607,8 +608,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       ///Step 1: Find the function-declaration for the function we are in
       Declaration* functionDeclaration = 0;
 
-      if( context->owner() && context->owner()->isDefinition() )
-        functionDeclaration = context->owner()->declaration(topContext());
+      if( context->owner() && dynamic_cast<FunctionDefinition*>(context->owner()) )
+        functionDeclaration = static_cast<FunctionDefinition*>(context->owner())->declaration(topContext());
 
       if( !functionDeclaration && context->owner() )
         functionDeclaration = context->owner();

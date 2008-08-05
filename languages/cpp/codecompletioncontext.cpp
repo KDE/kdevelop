@@ -24,6 +24,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/duchain/duchainlock.h>
 #include <language/interfaces/iproblem.h>
 #include <util/pushvalue.h>
@@ -364,8 +365,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       AbstractType::Ptr type = m_expressionResult.type.type();
       if(type && m_duContext) {
         DelayedType::Ptr delayed = type.cast<DelayedType>();
+#ifndef TEST_COMPLETION
         if(delayed && delayed->kind() == DelayedType::Unresolved)
           m_storedItems += missingIncludeCompletionItems(m_expression, m_followingText.trimmed() + ": ", m_expressionResult, m_duContext.data());
+#endif
       }else{
         log( "No type for expression" );
       }
@@ -741,6 +744,14 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
           decls << qMakePair(decl, 1200);
     }
   }
+
+  QList<DeclarationDepthPair> oldDecls = decls;
+  decls.clear();
+
+  //Remove pure function-definitions before doing overload-resolution, so they don't hide their own declarations.
+  foreach( const DeclarationDepthPair& decl, oldDecls )
+    if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration())
+      decls << decl;
   
   decls = Cpp::hideOverloadedDeclarations(decls);
   

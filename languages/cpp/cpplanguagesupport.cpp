@@ -67,6 +67,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/smartconverter.h>
+#include <language/duchain/functiondefinition.h>
 
 #include "preprocessjob.h"
 #include "rpp/preprocessor.h"
@@ -121,8 +122,8 @@ Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor
   QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
   foreach(TopDUContext* ctx, topContexts) {
     Declaration* decl = DUChainUtils::declarationInLine(cursor, ctx);
-    if(decl && decl->definition())
-      return decl->definition();
+    if(decl && FunctionDefinition::definition(decl))
+      return FunctionDefinition::definition(decl);
   }
   return 0;
 }
@@ -279,6 +280,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   return KUrl();
 }
 
+///@todo Make this work again with non-class declarations/definitions
 void CppLanguageSupport::switchDefinitionDeclaration()
 {
   kDebug(9007) << "switching definition/declaration";
@@ -324,8 +326,9 @@ void CppLanguageSupport::switchDefinitionDeclaration()
         kDebug() << "not found definition using declarationInLine";
     }
 
-    if(definition && definition->isDefinition() && definition->declaration()) {
-      Declaration* declaration = definition->declaration();
+    FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
+    if(def && def->declaration()) {
+      Declaration* declaration = def->declaration();
       KTextEditor::Range targetRange = declaration->range().textRange();
       KUrl url(declaration->url().str());
       kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;

@@ -23,13 +23,14 @@
 #include <qcontainerfwd.h>
 
 #include <language/duchain/types/abstracttype.h>
+#include <util/kdevvarlengtharray.h>
 
 #include "cppduchainexport.h"
 
 namespace KDevelop {
   class TopDUContext;
   class ImportTraceItem;
-  typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
+  typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
 }
 
 namespace Cpp {

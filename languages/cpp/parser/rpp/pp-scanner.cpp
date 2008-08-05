@@ -22,7 +22,7 @@
 #include "pp-scanner.h"
 #include "chartools.h"
 #include <language/duchain/indexedstring.h>
-#include <QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 using namespace rpp;
 
@@ -128,7 +128,7 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
 
 uint pp_skip_identifier::operator()(Stream& input)
 {
-  QVarLengthArray<char, 100> identifier;
+  KDevVarLengthArray<char, 100> identifier;
   
   KDevelop::IndexedString::RunningHash hash;
 

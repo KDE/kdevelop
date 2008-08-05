@@ -31,6 +31,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
+#include <language/duchain/functiondefinition.h>
 #include "cpptypes.h"
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -444,12 +445,12 @@ KDevelop::Declaration* CppHighlighting::localClassFromCodeContext(KDevelop::DUCo
   ///Step 1: Find the function-declaration for the function we are in
   Declaration* functionDeclaration = 0;
 
-  if( context->owner() && context->owner()->isDefinition() ) {
+  if( FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(context->owner()) ) {
 
     if(m_contextClasses.contains(context))
       return m_contextClasses[context];
     
-    functionDeclaration = context->owner()->declaration(startContext->topContext());
+    functionDeclaration = def->declaration(startContext->topContext());
   }
 
   if( !functionDeclaration && context->owner() )

@@ -113,7 +113,7 @@ private:
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);
   //Opens a ClassDeclaration
   Cpp::ClassDeclaration* openClassDefinition(NameAST* name, AST* range, bool collapseRange);
-  //Opens either a ClassFunctionDeclaration, or a FunctionDeclaration
+  //Opens either a ClassFunctionDeclaration, a FunctionDeclaration, or a FunctionDefinition
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
   //Opens either a ClassMemberDeclaration, or a Declaration
   Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier(), bool collapseRange = false);

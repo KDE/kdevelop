@@ -28,6 +28,7 @@
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/functiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/duchain/repositories/itemrepository.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/appendedlist.h>
@@ -50,6 +51,7 @@ REGISTER_TEMPLATE_DECLARATION(TemplateParameterDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration)
 REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration)
+REGISTER_TEMPLATE_DECLARATION(FunctionDefinition)
 REGISTER_TEMPLATE_DECLARATION(AliasDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ForwardDeclaration)
 

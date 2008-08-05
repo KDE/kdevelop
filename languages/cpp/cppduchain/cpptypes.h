@@ -25,7 +25,7 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtCore/QPair>
-#include <QtCore/QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 #include <language/duchain/identifier.h>
 #include <language/duchain/types/typesystemdata.h>

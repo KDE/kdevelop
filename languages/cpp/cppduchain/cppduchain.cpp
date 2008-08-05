@@ -23,6 +23,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainpointer.h>
+#include <language/duchain/functiondefinition.h>
 #include "environmentmanager.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/preprocessor.h"
@@ -148,8 +149,8 @@ Declaration* localClassFromCodeContext(DUContext* context)
   ///Step 1: Find the function-declaration for the function we are in
   Declaration* functionDeclaration = 0;
 
-  if( context->owner() && context->owner()->isDefinition() )
-    functionDeclaration = context->owner()->declaration(startContext->topContext());
+  if( context->owner() && dynamic_cast<FunctionDefinition*>(context->owner()) )
+    functionDeclaration = static_cast<FunctionDefinition*>(context->owner())->declaration(startContext->topContext());
 
   if( !functionDeclaration && context->owner() )
     functionDeclaration = context->owner();

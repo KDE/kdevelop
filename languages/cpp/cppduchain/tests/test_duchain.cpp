@@ -26,6 +26,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <language/duchain/declarationid.h>
@@ -1254,18 +1255,21 @@ void TestDUChain::testFunctionDefinition() {
   QCOMPARE(top->localDeclarations()[4]->internalContext()->owner(), top->localDeclarations()[4]);
 
   QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
-  
-  QCOMPARE(top->localDeclarations()[2]->declaration(), top->childContexts()[1]->localDeclarations()[0]);
-  QCOMPARE(top->localDeclarations()[2], top->childContexts()[1]->localDeclarations()[0]->definition());
 
-  QCOMPARE(top->localDeclarations()[3]->declaration(), top->childContexts()[1]->localDeclarations()[1]);
-  QCOMPARE(top->localDeclarations()[3], top->childContexts()[1]->localDeclarations()[1]->definition());
+  QVERIFY(dynamic_cast<FunctionDefinition*>(top->localDeclarations()[2]));
+  QCOMPARE(static_cast<FunctionDefinition*>(top->localDeclarations()[2])->declaration(), top->childContexts()[1]->localDeclarations()[0]);
+  QCOMPARE(top->localDeclarations()[2], FunctionDefinition::definition(top->childContexts()[1]->localDeclarations()[0]));
+
+  QVERIFY(dynamic_cast<FunctionDefinition*>(top->localDeclarations()[3]));
+  QCOMPARE(static_cast<FunctionDefinition*>(top->localDeclarations()[3])->declaration(), top->childContexts()[1]->localDeclarations()[1]);
+  QCOMPARE(top->localDeclarations()[3], FunctionDefinition::definition(top->childContexts()[1]->localDeclarations()[1]));
   QCOMPARE(top->childContexts()[5]->owner(), top->localDeclarations()[3]);
   QVERIFY(!top->childContexts()[5]->localScopeIdentifier().isEmpty());
 
   QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
-  QCOMPARE(top->localDeclarations()[4]->declaration(), top->childContexts()[1]->localDeclarations()[2]);
-  QCOMPARE(top->localDeclarations()[4], top->childContexts()[1]->localDeclarations()[2]->definition());
+  QVERIFY(dynamic_cast<FunctionDefinition*>(top->localDeclarations()[4]));
+  QCOMPARE(static_cast<FunctionDefinition*>(top->localDeclarations()[4])->declaration(), top->childContexts()[1]->localDeclarations()[2]);
+  QCOMPARE(top->localDeclarations()[4], FunctionDefinition::definition(top->childContexts()[1]->localDeclarations()[2]));
 
   QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
   
@@ -1285,6 +1289,13 @@ void TestDUChain::testFunctionDefinition() {
   release(top);
 }
 
+Declaration* declaration(Declaration* decl, TopDUContext* top = 0) {
+  FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl);
+  if(!def)
+    return 0;
+  return def->declaration(top);
+}
+
 void TestDUChain::testFunctionDefinition2() {
   {
     QByteArray text("//ääää\nclass B{B();}; B::B() {} "); //the ääää tests whether the column-numbers are resistant to special characters
@@ -1298,7 +1309,7 @@ void TestDUChain::testFunctionDefinition2() {
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations().count(), 2);
 
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0], declaration(top->localDeclarations()[1], top->topContext()));
 
     QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
     QCOMPARE(top->childContexts()[1]->range().start.column, 20);
@@ -1346,7 +1357,7 @@ void TestDUChain::testFunctionDefinition4() {
   QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
   
   QVERIFY(top->childContexts()[2]->localDeclarations()[0]->isDefinition());
-  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->declaration(), top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]);
+  QCOMPARE(declaration(top->childContexts()[2]->localDeclarations()[0]), top->childContexts()[1]->childContexts()[0]->localDeclarations()[0]);
   //Verify that the function-definition context also imports the correct class context
   QVERIFY(top->childContexts()[2]->localDeclarations()[0]->internalContext()->imports(top->childContexts()[1]->childContexts()[0]));
   release(top);
@@ -1373,14 +1384,14 @@ void TestDUChain::testFunctionDefinition3() {
   QVERIFY(top->localDeclarations()[6]->isDefinition());
   
   kDebug() << top->childContexts()[0]->localDeclarations()[0]->toString();
-  kDebug() << top->localDeclarations()[1]->declaration(top->topContext())->toString();
+  kDebug() << declaration(top->localDeclarations()[1], top->topContext())->toString();
   
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], top->localDeclarations()[1]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1], top->localDeclarations()[2]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[2], top->localDeclarations()[3]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[3], top->localDeclarations()[4]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[4], top->localDeclarations()[5]->declaration(top->topContext()));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[5], top->localDeclarations()[6]->declaration(top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0], declaration(top->localDeclarations()[1], top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[1], declaration(top->localDeclarations()[2], top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[2], declaration(top->localDeclarations()[3], top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[3], declaration(top->localDeclarations()[4], top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[4], declaration(top->localDeclarations()[5], top->topContext()));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[5], declaration(top->localDeclarations()[6], top->topContext()));
 
   release(top);
 }

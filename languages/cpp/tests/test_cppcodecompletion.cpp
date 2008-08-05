@@ -173,7 +173,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, " ) );
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, ", QString() ) );
     Cpp::CodeCompletionContext& c(*cptr);
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
@@ -217,7 +217,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
     DUContextPointer contPtr(context);
-    Cpp::CodeCompletionContext c(contPtr, "{" );
+    Cpp::CodeCompletionContext c(contPtr, "{", QString() );
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );

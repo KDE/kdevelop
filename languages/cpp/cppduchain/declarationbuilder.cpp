@@ -45,6 +45,7 @@
 #include "name_compiler.h"
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include "templateparameterdeclaration.h"
 #include "type_compiler.h"
 #include "tokens.h"
@@ -249,7 +250,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       id.setExplicitlyGlobal(true);
 
       if (id.count() > 1 ||
-          (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
+           (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
         SimpleCursor pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
         // TODO: potentially excessive locking
 
@@ -287,11 +288,13 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
               }else if(cycle == 2){
                 //Accept any match, so just continue
               }
-              if(dec->definition() && wasEncountered(dec->definition()))
+              if(FunctionDefinition::definition(dec) && wasEncountered(FunctionDefinition::definition(dec)))
                 continue; //Do not steal declarations
             }
 
-            dec->setDefinition(currentDeclaration());
+            if(FunctionDefinition* funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration()))
+              funDef->setDeclaration(dec);
+
             found = true;
             break;
           }
@@ -446,7 +449,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
     LockedSmartInterface iface = editor()->smart();
     ///We don't want to move the parent range around if the context is collapsed, so we find a parent range that can hold this range.
-    QVarLengthArray<SmartRange*, 5> backup;
+    KDevVarLengthArray<SmartRange*, 5> backup;
     while(editor()->currentRange() && !editor()->currentRange()->contains(newRange.textRange())) {
       backup.append(editor()->currentRange());
       editor()->exitCurrentRange();
@@ -570,13 +573,24 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
        newId = id.at(a).identifier().str() + ";;" + newId;
 
      localId.setIdentifier(newId);
+     
+     FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
+     DUChainWriteLocker lock(DUChain::lock());
+     ret->setDeclaration(0);
+     return ret;
    }
 
   if(currentContext()->type() == DUContext::Class) {
     ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
     fun->setAccessPolicy(currentAccessPolicy());
     return fun;
-  } else {
+  } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
+    //May be a definition
+     FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
+     DUChainWriteLocker lock(DUChain::lock());
+     ret->setDeclaration(0);
+     return ret;
+  }else{
     return openDeclaration<FunctionDeclaration>(name, rangeNode, localId);
   }
 }

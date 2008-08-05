@@ -14,13 +14,12 @@
 #include "setrepository.h"
 #include <list>
 #include <QString>
-#include <QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 #include <iostream>
 #include <limits>
 #include <language/duchain/repositories/itemrepository.h>
 #include <QMutex>
 #include <QStack>
-#include <QVarLengthArray>
 
 //#define DEBUG
 
@@ -530,7 +529,7 @@ struct Set::Iterator::IteratorPrivate {
     nodeStack = nodeStackData.data();
   }
   
-  QVarLengthArray<const SetNodeData*, nodeStackAlloc> nodeStackData;
+  KDevVarLengthArray<const SetNodeData*, nodeStackAlloc> nodeStackData;
   const SetNodeData** nodeStack;
   int nodeStackSize;
   Index currentIndex;

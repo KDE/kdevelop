@@ -29,6 +29,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/functiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
@@ -156,8 +157,9 @@ class NavigationContext : public KShared {
   public:
     NavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, NavigationContext* previousContext = 0 ) : m_declaration(decl), m_selectedLink(0), m_linkCount(-1), m_previousContext(previousContext), m_topContext(topContext) {
       //Jump from definition to declaration if possible
-      if(m_declaration && m_declaration->isDefinition() && m_declaration->declaration())
-        m_declaration = DeclarationPointer(m_declaration->declaration());
+      FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data());
+      if(definition && definition->declaration())
+        m_declaration = DeclarationPointer(definition->declaration());
     }
     virtual ~NavigationContext() {
     }
@@ -458,8 +460,10 @@ class NavigationContext : public KShared {
           if( m_declaration->context() && m_declaration->context()->owner() )
           {
             Declaration* decl = m_declaration->context()->owner();
-            if(decl->isDefinition() && decl->declaration())
-              decl = decl->declaration();
+
+            FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(decl);
+            if(definition && definition->declaration())
+              decl = definition->declaration();
 
             if(decl->abstractType().cast<CppEnumerationType>())
               m_currentText += labelHighlight(i18n("Enum: "));
@@ -515,7 +519,7 @@ class NavigationContext : public KShared {
         }
 
         if( !shorten ) {
-          if(m_declaration->isDefinition())
+          if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
             m_currentText += labelHighlight(i18n( "Def.: " ));
           else
             m_currentText += labelHighlight(i18n( "Decl.: " ));
@@ -523,14 +527,18 @@ class NavigationContext : public KShared {
           makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
           m_currentText += " ";
           //m_currentText += "<br />";
-          if( m_declaration->definition() ) {
-            m_currentText += labelHighlight(i18n( "Def.: " ));
-            makeLink( QString("%1 :%2").arg( KUrl(m_declaration->definition()->url().str()).fileName() ).arg( m_declaration->definition()->range().textRange().start().line() ), DeclarationPointer(m_declaration->definition()), NavigationAction::JumpToSource );
+          if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
+            if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
+              m_currentText += labelHighlight(i18n( " Def.: " ));
+              makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line() ), DeclarationPointer(definition), NavigationAction::JumpToSource );
+            }
           }
 
-          if( m_declaration->declaration() ) {
-            m_currentText += labelHighlight(i18n( "Decl.: " ));
-            makeLink( QString("%1 :%2").arg( KUrl(m_declaration->declaration()->url().str()).fileName() ).arg( m_declaration->declaration()->range().textRange().start().line() ), DeclarationPointer(m_declaration->declaration()), NavigationAction::JumpToSource );
+          if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
+            if(definition->declaration()) {
+              m_currentText += labelHighlight(i18n( " Decl.: " ));
+              makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line() ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
+            }
           }
 
           QMap<IndexedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
