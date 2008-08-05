@@ -22,6 +22,7 @@
 #include <QCoreApplication>
 #include <QHash>
 #include <QMultiMap>
+#include <QTimer>
 #include <qatomic.h>
 
 #include <kglobal.h>
@@ -160,7 +161,6 @@ public:
     qRegisterMetaType<DUContextPointer>("KDevelop::DUContextPointer");
     qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
-    qRegisterMetaType<UsePointer>("KDevelop::UsePointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
     //qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
     //qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
@@ -168,6 +168,11 @@ public:
 
     notifier = new DUChainObserver();
     instance = new DUChain();
+    
+    m_cleanupTimer = new QTimer(instance);
+    m_cleanupTimer ->setInterval(4000);
+    QObject::connect(m_cleanupTimer, SIGNAL(timeout()), instance, SLOT(cleanup()));
+    m_cleanupTimer->start();
   }
   ~DUChainPrivate() {
     delete instance;
@@ -196,9 +201,11 @@ public:
   QMutex m_chainsMutex;
   
   DUChain* instance;
+  QTimer* m_cleanupTimer;
   DUChainLock lock;
   QMultiMap<IndexedString, TopDUContext*> m_chainsByUrl;
   QHash<uint, TopDUContext*> m_chainsByIndex;
+  QHash<TopDUContext*, uint> m_referenceCounts;
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
@@ -639,6 +646,10 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
     DUChainWriteLocker lock( DUChain::lock() );
     sc.deconvertDUChain( top );
   }
+  
+  TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
+  if(standardContext)
+    refCountDown(standardContext);
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
@@ -665,6 +676,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   if(standardContext) {
+    refCountUp(standardContext);
     if(!standardContext->smartRange()) {
       //May happen during loading
       sc.convertDUChain(standardContext);
@@ -707,6 +719,24 @@ void DUChain::aboutToQuit()
 uint DUChain::newTopContextIndex() {
   static QAtomicInt& currentId( globalItemRepositoryRegistry().getCustomCounter("Top-Context Counter", 1) );
   return currentId.fetchAndAddRelaxed(1);
+}
+
+void DUChain::refCountUp(TopDUContext* top) {
+  if(!sdDUChainPrivate->m_referenceCounts.contains(top))
+    sdDUChainPrivate->m_referenceCounts.insert(top, 1);
+  else
+    ++sdDUChainPrivate->m_referenceCounts[top];
+}
+
+void DUChain::refCountDown(TopDUContext* top) {
+  Q_ASSERT(sdDUChainPrivate->m_referenceCounts.contains(top));
+  --sdDUChainPrivate->m_referenceCounts[top];
+  if(!sdDUChainPrivate->m_referenceCounts[top])
+    sdDUChainPrivate->m_referenceCounts.remove(top);
+}
+
+void DUChain::cleanup() {
+  ///@todo Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
 }
 
 

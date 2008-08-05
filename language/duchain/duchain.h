@@ -105,6 +105,15 @@ public:
   /// Only used for debugging at the moment
   QList<KUrl> documents() const;
 
+  /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
+  /// Do this to prevent KDevelop from unloading a top-context that you plan to use. Don't forget calling unReferenceToContext again,
+  /// else the top-context will stay in memory for ever.
+  void refCountUp(TopDUContext* top);
+
+  /// Decreases the reference-count for the given top-context. When it reaches zero, KDevelop is free to unload it at any time,
+  /// also invalidating all the contained declarations and contexts.
+  void refCountDown(TopDUContext* top);
+  
   /**
    * Registers a new definition-use \a chain for the given \a document.
    */
@@ -167,6 +176,7 @@ private Q_SLOTS:
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void aboutToQuit();
+  void cleanup();
 private:
   void addToEnvironmentManager( TopDUContext * chain );
   void removeFromEnvironmentManager( TopDUContext * chain );

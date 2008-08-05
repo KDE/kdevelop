@@ -32,7 +32,6 @@ class TopDUContext;
 class DUChainBase;
 class Declaration;
 class AbstractFunctionDeclaration;
-class Use;
 
 /**
  * Whenever the du-chain is unlocked and locked again, any du-chain item may have been deleted in between.
@@ -178,7 +177,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
   typedef DUChainPointer<DUContext> DUContextPointer;
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
   typedef DUChainPointer<Declaration> DeclarationPointer;
-  typedef DUChainPointer<Use> UsePointer;
   typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
 }
 
