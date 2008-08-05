@@ -454,10 +454,26 @@ QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, con
   return QVariant();
 }
 
-void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
 
+  KTextEditor::Range word(_word);
+  
   QString newText = includeItem.isDirectory ? includeItem.name + "/" : includeItem.name;
-
+  
+  if(!includeItem.isDirectory) {
+    //Add suffix and newline
+    QString lineText = document->line( word.end().line() ).trimmed();
+    if(lineText.startsWith("#include")) {
+      lineText = lineText.mid(8).trimmed();
+      if(lineText.startsWith('"'))
+        newText += '\"';
+      else if(lineText.startsWith('<'))
+        newText += '>';
+    }
+    
+    word.end().setColumn( document->lineLength(word.end().line()) );
+  }
+  
   document->replaceText(word, newText);
   ///@todo Make this more intelligent, also add a closing '"' or '>'
 }
