@@ -729,7 +729,10 @@ void DUChain::refCountUp(TopDUContext* top) {
 }
 
 void DUChain::refCountDown(TopDUContext* top) {
-  Q_ASSERT(sdDUChainPrivate->m_referenceCounts.contains(top));
+  if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
+    kWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
+    return;
+  }
   --sdDUChainPrivate->m_referenceCounts[top];
   if(!sdDUChainPrivate->m_referenceCounts[top])
     sdDUChainPrivate->m_referenceCounts.remove(top);
