@@ -48,6 +48,9 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
         {
             KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
+            foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
+                view->loaded( doc );
+            }
             QObject::connect( docController, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
                     view, SLOT( activated( KDevelop::IDocument* ) ) );
             QObject::connect( docController, SIGNAL( documentSaved( KDevelop::IDocument* ) ),
@@ -66,7 +69,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
         }
         virtual Qt::DockWidgetArea defaultPosition()
         {
-            return Qt::RightDockWidgetArea;
+            return Qt::LeftDockWidgetArea;
         }
 
         virtual QString id() const
@@ -92,11 +95,6 @@ KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantL
 
 KDevDocumentViewPlugin::~KDevDocumentViewPlugin()
 {
-}
-
-Qt::DockWidgetArea KDevDocumentViewPlugin::dockWidgetAreaHint() const
-{
-    return Qt::LeftDockWidgetArea;
 }
 
 bool KDevDocumentViewPlugin::isCentralPlugin() const

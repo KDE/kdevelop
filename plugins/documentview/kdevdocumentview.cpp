@@ -36,8 +36,6 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/icore.h>
-//#include <kdevcontext.h>
-//#include <kdevmainwindow.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/context.h>
@@ -69,6 +67,20 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    
+    m_save = new QAction(this);
+    m_save->setText( i18n("Save") );
+    m_save->setIcon(KIcon("document-save"));
+    connect(m_save, SIGNAL(triggered()), this, SLOT(saveSelected()));
+
+    QAction* close = new QAction(this);
+    close->setText( i18n("Close") );
+    close->setIcon(KIcon("window-close"));
+    connect(close, SIGNAL(triggered()), this, SLOT(closeSelected()));
+    
+    m_ctxMenu = new KMenu(this);
+    m_ctxMenu->addAction(close);
+    m_ctxMenu->addAction(m_save);
 }
 
 KDevDocumentView::~KDevDocumentView()
@@ -89,15 +101,48 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     {
         m_plugin->core()->documentController() ->openDocument(
             static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) ) ->fileItem() ->url() );
+        return;
 
     }
 
     if ( !index.parent().isValid() )
     {
         setExpanded( index, !isExpanded( index ) );
+        return;
     }
 
     QTreeView::mousePressEvent( event );
+}
+
+template<typename F> void KDevDocumentView::visitSelected(F f)
+{
+    KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
+    foreach(KUrl url, m_selectedDocs) {
+       KDevelop::IDocument* doc = dc->documentForUrl(url);
+       if (doc) f(doc);
+    }    
+}
+
+namespace
+{
+class DocSaver
+{
+public: void operator()(KDevelop::IDocument* doc) { doc->save(); }
+};
+class DocCloser
+{
+public: void operator()(KDevelop::IDocument* doc) { doc->close(); }
+};
+}
+
+void KDevDocumentView::saveSelected()
+{
+    visitSelected(DocSaver());
+}
+
+void KDevDocumentView::closeSelected()
+{
+    visitSelected(DocCloser());
 }
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
@@ -105,21 +150,34 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     QModelIndexList indexes = selectionModel() ->selectedIndexes();
     KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
 
-    KUrl::List list;
+    m_selectedDocs.clear();
     foreach ( QModelIndex index, indexes )
     {
         if ( KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
         {
-            list.append( fileItem->url() );
+            m_selectedDocs << fileItem->url();
         }
     }
+    if (!m_selectedDocs.isEmpty())
+    {
+        m_save->setEnabled( someDocHasChanges() );
+        m_ctxMenu->exec( event->globalPos() );
+    }
+}
 
-    KMenu menu( this );
-    KDevelop::FileContext context( list ); //FIXME change filecontext to documentcontext
-    QList<KDevelop::ContextMenuExtension> extensions = m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-    menu.exec( event->globalPos() );
-
-    QTreeView::contextMenuEvent( event );
+bool KDevDocumentView::someDocHasChanges()
+{
+    KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
+    foreach(KUrl url, m_selectedDocs)
+    {
+        KDevelop::IDocument* doc = dc->documentForUrl(url);
+        if (!doc) continue;
+        if (doc->state() != KDevelop::IDocument::Clean)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void KDevDocumentView::activated( KDevelop::IDocument* document )
@@ -140,7 +198,7 @@ void KDevDocumentView::loaded( KDevelop::IDocument* document )
     {
         mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
-        expand( m_documentModel->indexFromItem( mimeItem ) );
+        setExpanded( m_documentModel->indexFromItem( mimeItem ), false);
     }
 
     if ( !mimeItem->file( document->url() ) )

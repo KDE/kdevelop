@@ -44,8 +44,6 @@ public:
     virtual ~KDevDocumentViewPlugin();
 
     // KDevelop::Plugin methods
-    //virtual QWidget *pluginView() const;
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
     virtual bool isCentralPlugin() const;
 private:
     KDevDocumentViewPluginFactory* factory;

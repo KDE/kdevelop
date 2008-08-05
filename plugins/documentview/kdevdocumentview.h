@@ -22,12 +22,14 @@
 
 #include <QTreeView>
 
+class QAction;
 class KUrl;
 class KDevDocumentViewPlugin;
 class KDevDocumentModel;
 class KDevDocumentViewDelegate;
 class KDevDocumentSelection;
 class KDevFileItem;
+class KMenu;
 namespace KDevelop
 {
     class IDocument;
@@ -48,25 +50,36 @@ public:
 signals:
     void activateURL( const KUrl &url );
 
+public slots:
+    void loaded( KDevelop::IDocument* document );
+    
 private slots:
     void activated( KDevelop::IDocument* document );
     void saved( KDevelop::IDocument* document );
-    void loaded( KDevelop::IDocument* document );
     void closed( KDevelop::IDocument* document );
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
+    
+    void saveSelected();
+    void closeSelected();
 
 protected:
     virtual void mousePressEvent( QMouseEvent * event );
     virtual void contextMenuEvent( QContextMenuEvent * event );
 
 private:
+    template<typename F> void visitSelected(F);
+    bool someDocHasChanges();
+    
+private:
     KDevDocumentViewPlugin *m_plugin;
     KDevDocumentModel *m_documentModel;
     KDevDocumentSelection* m_selectionModel;
     KDevDocumentViewDelegate* m_delegate;
-//     KDevDocumentItem *m_documentItem;
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
+    QList<KUrl> m_selectedDocs; // used for ctx menu
+    KMenu* m_ctxMenu;
+    QAction* m_save;
 };
 
 #endif // KDEVDOCUMENTVIEW_H
