@@ -69,7 +69,7 @@ protected:
 
   ///Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.
-  bool openTypeFromName(NameAST* name, bool needClass = false);
+  bool openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs cv, bool needClass = false);
 
   bool lastTypeWasInstance() const;
 

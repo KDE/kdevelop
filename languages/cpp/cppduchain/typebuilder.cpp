@@ -127,7 +127,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     CppClassType::Ptr klass = currentAbstractType().cast<CppClassType>();
     Q_ASSERT( klass );
 
-    bool openedType = openTypeFromName(node->name, true);
+    bool openedType = openTypeFromName(node->name, Declaration::CVNone, true);
 
     if( openedType ) {
       closeType();
@@ -230,7 +230,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
   if( kind == Token_typename ) {
     //For typename, just find the type and return
-    bool openedType = openTypeFromName(node->name);
+    bool openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
     
     TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
@@ -347,7 +347,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     }
 
   } else if (node->name) {
-    openedType = openTypeFromName(node->name);
+    openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
@@ -356,7 +356,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
-bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
+bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs cv, bool needClass) {
   QualifiedIdentifier id = identifierForNode(name);
 
   bool openedType = false;
@@ -388,7 +388,13 @@ bool TypeBuilder::openTypeFromName(NameAST* name, bool needClass) {
           ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
           //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
           openedType = true;
-          openType(decl->abstractType());
+          
+          AbstractType::Ptr type = decl->abstractType();
+          CppCVType* cvType = dynamic_cast<CppCVType*>(type.unsafeData());
+          if(cvType && cvType->cv() != cv)
+            cvType->setCV(cv); //The type-system automatically copies the type while changing, so we don't create any problems here.
+          
+          openType(type);
           break;
         }
       }
@@ -621,7 +627,7 @@ void TypeBuilder::visitUsing(UsingAST * node)
 {
   TypeBuilderBase::visitUsing(node);
 
-  bool openedType = openTypeFromName(node->name, true);
+  bool openedType = openTypeFromName(node->name, Declaration::CVNone, true);
 
   if( openedType )
     closeType();

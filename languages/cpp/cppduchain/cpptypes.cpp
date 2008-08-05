@@ -539,8 +539,13 @@ void CppClassType::clear() {
 QString CppClassType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
-  if (!id.isEmpty())
-    return id.top().toString();
+  if (!id.isEmpty()) {
+    QString cv = cvString();
+    if(cv.isEmpty())
+      return id.top().toString();
+    else
+      return cvString() + " " + id.top().toString();
+  }
 
   QString type;
   switch (classType()) {

@@ -109,6 +109,7 @@ private slots:
   void testImportStructure();
   void testDeclareSubClass();
   void testDeclarationId();
+  void testConst();
 
   void testCStruct();
   void testCStruct2();
