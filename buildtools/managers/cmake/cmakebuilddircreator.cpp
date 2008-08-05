@@ -26,29 +26,30 @@
 #include "ui_cmakebuilddircreator.h"
 
 CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, Qt::WindowFlags f)
-	: QDialog(parent, f), m_srcFolder(srcDir)
+    : QDialog(parent, f), m_srcFolder(srcDir)
 {
-	m_creatorUi = new Ui::CMakeBuildDirCreator;
-	m_creatorUi->setupUi( this );
-	m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-	m_creatorUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
+    m_creatorUi = new Ui::CMakeBuildDirCreator;
+    m_creatorUi->setupUi( this );
+    m_creatorUi->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    m_creatorUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
 
-	QString cmakeBin=executeProcess("which", QStringList("cmake"));
-	setCMakeBinary(KUrl(cmakeBin));
-
-	connect(m_creatorUi->run, SIGNAL(clicked()), this, SLOT(runBegin()));
-	connect(m_creatorUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
-	connect(m_creatorUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
-	connect(m_creatorUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
-	connect(&m_proc, SIGNAL(readyReadStandardError()), this, SLOT(addOutput()));
-	connect(&m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(addOutput()));
-	connect(&m_proc, SIGNAL(finished ( int , QProcess::ExitStatus )), this, SLOT(cmakeCommandDone ( int , QProcess::ExitStatus )));
-	updated();
+    QString cmakeBin=executeProcess("which", QStringList("cmake"));
+    setCMakeBinary(KUrl(cmakeBin));
+    
+    connect(m_creatorUi->run, SIGNAL(clicked()), this, SLOT(runBegin()));
+    connect(m_creatorUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
+    connect(m_creatorUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
+    connect(m_creatorUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
+    connect(&m_proc, SIGNAL(readyReadStandardError()), this, SLOT(addOutput()));
+    connect(&m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(addOutput()));
+    connect(&m_proc, SIGNAL(finished ( int , QProcess::ExitStatus )), this, SLOT(cmakeCommandDone ( int , QProcess::ExitStatus )));
+    updated();
 }
 
 void CMakeBuildDirCreator::runBegin()
 {
-    if(m_proc.state()==QProcess::NotRunning) {
+    if(m_proc.state()==QProcess::NotRunning)
+    {
         m_creatorUi->cmakeOutput->clear();
         QStringList args;
         kDebug(9042) << "Type of build: " << buildType();
@@ -64,11 +65,11 @@ void CMakeBuildDirCreator::runBegin()
             if(ret==KMessageBox::Continue)
             {
                 bool res=QDir::root().mkpath(d.absolutePath() );
-		if(!res)
-			return;
+                if(!res)
+                    return;
             }
-	    else
-	    	return;
+            else
+                return;
         }
 
         args += m_srcFolder.toLocalFile();
@@ -86,6 +87,8 @@ void CMakeBuildDirCreator::runBegin()
     }
     else
     {
+        m_creatorUi->run->setEnabled(false);
+        m_creatorUi->run->setText(i18n("&Run"));
         m_proc.kill();
         m_creatorUi->status->setText(i18n("CMake process killed"));
     }
@@ -97,10 +100,10 @@ void CMakeBuildDirCreator::runEnd()
 
 void CMakeBuildDirCreator::addOutput()
 {
-	QByteArray output=m_proc.readAllStandardOutput();
-	QString s;
-	s.append(output.trimmed());
-	m_creatorUi->cmakeOutput->appendPlainText(s);
+    QByteArray output=m_proc.readAllStandardOutput();
+    QString s;
+    s.append(output.trimmed());
+    m_creatorUi->cmakeOutput->appendPlainText(s);
     if( m_creatorUi->cmakeOutput->verticalScrollBar()->value() == m_creatorUi->cmakeOutput->verticalScrollBar()->maximum() )
         m_creatorUi->cmakeOutput->verticalScrollBar()->setValue(m_creatorUi->cmakeOutput->verticalScrollBar()->maximum());
 }
@@ -113,7 +116,8 @@ void CMakeBuildDirCreator::cmakeCommandDone(int exitCode, QProcess::ExitStatus e
     m_creatorUi->cmakeOutput->setPlainText(t);*/
 
     bool successful=exitCode==0 && exitStatus==QProcess::NormalExit;
-    if(successful) {
+    if(successful)
+    {
         m_creatorUi->status->setText(i18n("Created successfully"));
     }
     else
@@ -185,6 +189,12 @@ void CMakeBuildDirCreator::updated()
                 correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
             }
         }
+    }
+    else
+    {
+        m_creatorUi->run->setEnabled(false);
+        m_creatorUi->status->setText(i18n("You need to specify a build directory"));
+        return;
     }
 
     kDebug(9042) << "already" << alreadyCreated
