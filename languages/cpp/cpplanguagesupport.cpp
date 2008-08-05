@@ -667,7 +667,9 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
              dirContent.next();
             Cpp::IncludeItem item;
             item.name = dirContent.fileName();
-            if(item.name.startsWith('.')) //This filters out ".", "..", and hidden files
+            if(item.name.startsWith('.') || item.name.endsWith("~")) //This filters out ".", "..", and hidden files, and backups
+              continue;
+            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(dirContent.fileInfo().suffix()))
               continue;
             item.isDirectory = dirContent.fileInfo().isDir();
             item.basePath = searchPath;
