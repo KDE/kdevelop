@@ -24,6 +24,8 @@ kde4_add_library(kdevveritascoverage SHARED ${veritascoverage_SRCS})
 target_link_libraries(kdevveritascoverage
     kdevplatforminterfaces
     kdevplatformshell
+    kdevplatformoutputview
+    kdevplatformutil
     sublime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
