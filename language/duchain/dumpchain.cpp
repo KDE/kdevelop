@@ -33,6 +33,7 @@
 #include "identifier.h"
 #include "use.h"
 #include "indexedstring.h"
+#include "functiondefinition.h"
 
 using namespace KDevelop;
 
@@ -56,9 +57,9 @@ void DumpChain::dump( DUContext * context, bool imported )
       
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
-      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (dec->definition() ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
-      if (dec->definition())
-        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << dec->definition()->range().textRange();
+      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
+      if (FunctionDefinition::definition(dec))
+        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
       QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
       for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
         kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();

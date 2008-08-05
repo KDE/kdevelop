@@ -45,6 +45,7 @@
 #include "language/duchain/types/functiontype.h"
 
 #include "classbrowserplugin.h"
+#include <language/duchain/functiondefinition.h>
 
 //#include "modeltest.h"
 
@@ -400,7 +401,7 @@ void ClassModel::refreshNode(Node* node, KDevelop::DUChainBase* base, QList<Node
           foreach (Declaration* declaration, context->localDeclarations()) {
             if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
 
-              if (!m_filterDocument && declaration->declaration())
+              if (!m_filterDocument && dynamic_cast<FunctionDefinition*>(declaration))
                 // This is a definition, skip it
                 continue;
 
@@ -658,9 +659,12 @@ QVariant ClassModel::data(Node* node, int role)
     switch (role) {
       case Qt::DisplayRole: {
         bool fullScope = false;
-        if(dec->isDefinition() && dec->declaration()) {
-          dec = dec->declaration();
-          fullScope = true;
+        if(dynamic_cast<FunctionDefinition*>(dec)) {
+          Declaration* decl = static_cast<FunctionDefinition*>(dec)->declaration();
+          if(decl) {
+            dec = decl;
+            fullScope = true;
+          }
         }
 
         QString ret;
@@ -697,15 +701,16 @@ Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer)
 
   if (Declaration* declaration = dynamic_cast<Declaration*>(pointer.data())) {
 
-    if(declaration->isDefinition() && declaration->declaration())
-      return declaration->declaration();
+    if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(declaration))
+      if(def->declaration())
+        return def->declaration();
 
     return declaration;
 
   } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
     if (context->owner())
-      if(context->owner()->declaration())
-        return context->owner()->declaration();
+      if(dynamic_cast<FunctionDefinition*>(context->owner()) && static_cast<FunctionDefinition*>(context->owner())->declaration())
+        return static_cast<FunctionDefinition*>(context->owner())->declaration();
       else
         return context->owner();
   }
@@ -721,9 +726,9 @@ Declaration* ClassModel::definitionForObject(const DUChainBasePointer& pointer) 
     return 0L;
 
   if (Declaration* d = dynamic_cast<Declaration*>(pointer.data())) {
-    if(!d->isDefinition()) {
-      if(d->definition())
-        return d->definition();
+    if(!dynamic_cast<FunctionDefinition*>(d)) {
+      if(FunctionDefinition::definition(d))
+        return FunctionDefinition::definition(d);
       else
         return 0L;
     }
@@ -733,8 +738,8 @@ Declaration* ClassModel::definitionForObject(const DUChainBasePointer& pointer) 
       if(context->owner()->isDefinition())
         return context->owner();
       else
-        if(context->owner()->definition())
-          return context->owner()->definition();
+        if(FunctionDefinition::definition(context->owner()))
+          return FunctionDefinition::definition(context->owner());
     }
   }
 

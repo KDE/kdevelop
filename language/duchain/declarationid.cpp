@@ -64,6 +64,43 @@ uint DeclarationId::specialization() const {
   return m_specialization;
 }
 
+KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUContext* top) const
+{
+  KDevVarLengthArray<Declaration*> ret;
+  
+  if(m_direct == false) {
+    //Find the declaration by its qualified identifier and additionalIdentity
+    QualifiedIdentifier id(indirect.m_identifier);
+
+    KDevVarLengthArray<Declaration*> declarations;
+    SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
+    
+    Identifier lastId = id.last();
+    
+    FOREACH_ARRAY(Declaration* decl, declarations) {
+      if(decl->identifier() == lastId) {
+        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (!top || top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+          //Hit
+          ret.append(decl);
+        }
+      }
+    }
+  }else{
+    ret.append(direct.declaration());
+  }
+  
+  if(!ret.isEmpty() && m_specialization) {
+    KDevVarLengthArray<Declaration*> newRet;
+    FOREACH_ARRAY(Declaration* decl, ret) {
+        Declaration* specialized = decl->specialize(m_specialization, top ? top : decl->topContext());
+        if(specialized)
+          newRet.append(specialized);
+    }
+    return newRet;
+  }
+  return ret;
+}
+
 Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
 {
   Declaration* ret = 0;
@@ -72,7 +109,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
-    QVarLengthArray<Declaration*> declarations;
+    KDevVarLengthArray<Declaration*> declarations;
     SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
     
     Identifier lastId = id.last();

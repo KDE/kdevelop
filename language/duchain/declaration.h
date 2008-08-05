@@ -50,7 +50,7 @@ class Declaration;
 struct ImportTraceItem;
 
 
-typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
+typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
 
 
 ///Represents a declaration only by its global indices
@@ -206,41 +206,12 @@ public:
   void setIsTypeAlias(bool typeAlias);
 
   /**
-   * Find the declaration for this definition, if one exists.
-   *
-   * @param topContext the top-context from which to search
-   * \returns the declaration matching this definition, otherwise null if no matching declaration has been found.
-   * */
-  Declaration* declaration(TopDUContext* topContext = 0) const;
-
-  /**
-   * Find the definition for this declaration, if one exists.
-   *
-   * \returns the definition matching this declaration, otherwise null if no matching definition has been found.
-   * */
-  Declaration* definition() const;
-
-  /**
    * Retrieve the declaration which is specialized with the given \a specialization index in the given \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)
    * \param topContext the top context to search in
    * */
   virtual Declaration* specialize(uint specialization, const TopDUContext* topContext);
-
-  /**
-   * Set the definition for this declaration.
-   *
-   * Definitions and declarations are coupled by identity
-   * rather than by their pointer. When you call this, you will
-   * effectively set the definition for ALL declarations that have:
-   * - The same qualifiedIdentifier()
-   * - Are declared within the same file
-   * - Have the same additionalIdentity() value
-   *
-   * \param definition the definition for this declaration.
-   */
-  void setDefinition(Declaration* definition);
 
   /**
    * Retrieve the context that is opened by this declaration, if one exists.

@@ -29,6 +29,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/functiondefinition.h>
 
 using namespace KDevelop;
 
@@ -121,8 +122,8 @@ bool DUChainItemData::execute( QString& /*filterText*/ ) {
     return false;
   Declaration* decl = this->m_item.m_item.data();
 
-  if(m_openDefinition && decl->definition())
-      decl = decl->definition();
+  if(m_openDefinition && FunctionDefinition::definition(decl))
+      decl = FunctionDefinition::definition(decl);
 
   KUrl url = KUrl(decl->url().str());
   KTextEditor::Cursor cursor = decl->range().textRange().start();

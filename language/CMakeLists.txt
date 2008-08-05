@@ -20,6 +20,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/ducontext.cpp
     duchain/topducontext.cpp
     duchain/topducontextdynamicdata.cpp
+    duchain/functiondefinition.cpp
     duchain/declaration.cpp
     duchain/classmemberdeclaration.cpp
     duchain/classfunctiondeclaration.cpp
@@ -133,6 +134,7 @@ install(FILES
     duchain/classmemberdeclaration.h
     duchain/classmemberdeclarationdata.h
     duchain/classfunctiondeclaration.h
+    duchain/functiondefinition.h
     duchain/use.h
     duchain/smartconverter.h
     duchain/forwarddeclaration.h

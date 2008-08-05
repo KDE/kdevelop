@@ -61,6 +61,7 @@ public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
   FunctionDeclaration(const SimpleRange& range, DUContext* context);
   FunctionDeclaration(FunctionDeclarationData& data);
+  FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::SimpleRange&);
   virtual ~FunctionDeclaration();
 
   virtual void setAbstractType(AbstractType::Ptr type);

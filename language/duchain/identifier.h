@@ -22,7 +22,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
-#include <QtCore/QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 #include <ksharedptr.h>
 #include <kdebug.h>

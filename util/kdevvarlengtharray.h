@@ -108,7 +108,7 @@ public:
 
     inline void append(const T &t) {
         const int idx = s++;
-        ///This is currently the difference to QVarLengthArray(which uses s == a), and it prevents a crash.
+        ///This is currently the difference to KDevVarLengthArray(which uses s == a), and it prevents a crash.
         if (s >= a)
             realloc(s, s<<1);
         if (QTypeInfo<T>::isComplex) {

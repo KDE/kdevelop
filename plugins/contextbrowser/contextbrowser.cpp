@@ -44,6 +44,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
@@ -236,9 +237,9 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::View* view, KDevelop::D
   foreach(KTextEditor::SmartRange* range, uses)
     changeHighlight( range, highlight, false, mouseHighlight );
 
-  if( decl->definition() && decl->definition()->smartRange() ) {
-    changeHighlight( decl->definition()->smartRange(), highlight, false, mouseHighlight );
-  }
+  if( FunctionDefinition* def = FunctionDefinition::definition(decl) )
+    if( def->smartRange() )
+      changeHighlight( def->smartRange(), highlight, false, mouseHighlight );
 }
 
 QWidget* masterWidget(QWidget* w) {

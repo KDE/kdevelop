@@ -22,13 +22,13 @@
 #include <QtCore/QVector>
 #include <QtCore/QList>
 
-//Foreach macro that also works with QVarLengthArray
+//Foreach macro that also works with KDevVarLengthArray
 #define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)
 
 namespace KDevelop {
 
 template<class T, int num>
-QList<T> arrayToList(const QVarLengthArray<T, num>& array) {
+QList<T> arrayToList(const KDevVarLengthArray<T, num>& array) {
   QList<T> ret;
   FOREACH_ARRAY(const T& item, array)
     ret << item;
@@ -37,7 +37,7 @@ QList<T> arrayToList(const QVarLengthArray<T, num>& array) {
 }
 
 template<class T, int num>
-QList<T> arrayToVector(const QVarLengthArray<T, num>& array) {
+QList<T> arrayToVector(const KDevVarLengthArray<T, num>& array) {
   QVector<T> ret;
   FOREACH_ARRAY(const T& item, array)
     ret << item;

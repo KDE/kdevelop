@@ -90,7 +90,7 @@ namespace CommonModifiers {
  *  efficiently.  They are classes which can store arbitrary lists immediately after their
  *  private data structures in memory (thus enabling them to be mmapped or memcopied),
  *  or being "dynamic" where you use exactly the same class and same access functions,
- *  but the list data is stored in a temporary QVarLengthArray from a central repository,
+ *  but the list data is stored in a temporary KDevVarLengthArray from a central repository,
  *  until we save it back to the static memory-region again.
  *
  * When creating an own type, you must:

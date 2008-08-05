@@ -83,7 +83,7 @@ class TopDUContext::CacheData {
 };
 
 struct TopDUContext::AliasChainElement {
-  AliasChainElement() { //Creates invalid entries, but we need it fast because it's used to intialize all items in QVarLengthArray
+  AliasChainElement() { //Creates invalid entries, but we need it fast because it's used to intialize all items in KDevVarLengthArray
   }
   AliasChainElement(const AliasChainElement* _prev, Identifier id) : previous(_prev), ownsPrevious(false), identifier(id), hash(0), length(0) {
     if(previous) {
@@ -719,7 +719,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
 
 ///Decides whether the cache contains a valid list of visible declarations for the given hash.
 ///@param hash The hash-value, @param data The cache @param items Will be filled with the cached declarations. Will be left alone if none were found.
-void eventuallyUseCache(uint hash, TopDUContext::CacheData* cache, QVarLengthArray<Declaration*>& items) {
+void eventuallyUseCache(uint hash, TopDUContext::CacheData* cache, KDevVarLengthArray<Declaration*>& items) {
   //Check whether we have all visible global items cached
   TopDUContext::CacheData::HashType::iterator it = cache->visibleDeclarations.find( hash );
   if( it != cache->visibleDeclarations.end() ) {
@@ -749,7 +749,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   }
 
   void operator() (const AliasChainElement& element) {
-    QVarLengthArray<Declaration*> decls;
+    KDevVarLengthArray<Declaration*> decls;
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
@@ -833,7 +833,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
     //Find namespace  aliases
-    QVarLengthArray<Declaration*> aliases;
+    KDevVarLengthArray<Declaration*> aliases;
     QVector<DeclarationPointer>* createVisibleCache = 0;
 
     ///Eventually take a reduced list of declarations from the cache, instead of asking the symbol-store.
@@ -893,7 +893,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         //Create a chain of AliasChainElements that represent the identifier
         uint count = importIdentifier.count();
 
-        QVarLengthArray<AliasChainElement, 5> newChain;
+        KDevVarLengthArray<AliasChainElement, 5> newChain;
         newChain.resize(count);
         for(uint a = 0; a < count; ++a)
           newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
@@ -932,7 +932,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   {
     AliasChainElement importChainItem(backPointer, globalImportIdentifier);
 
-    QVarLengthArray<Declaration*> imports;
+    KDevVarLengthArray<Declaration*> imports;
     QVector<DeclarationPointer>* createVisibleCache = 0;
 
     ///Eventually take a reduced list of declarations from the cache, instead of asking the symbol-store.
@@ -976,7 +976,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         }
 
         int count = importIdentifier.count();
-        QVarLengthArray<AliasChainElement, 5> newChain;
+        KDevVarLengthArray<AliasChainElement, 5> newChain;
         newChain.resize(importIdentifier.count());
 
         for(int a = 0; a < count; ++a)
@@ -1011,7 +1011,7 @@ struct TopDUContext::FindContextsAcceptor {
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
-    QVarLengthArray<DUContext*> decls;
+    KDevVarLengthArray<DUContext*> decls;
 
     SymbolTable::self()->findContextsByHash(element.hash, decls);
     FOREACH_ARRAY(DUContext* ctx, decls) {
@@ -1176,6 +1176,7 @@ void TopDUContext::setFlags(Flags f) {
 }
 
 bool TopDUContext::isOnDisk() const {
+  ///@todo Change this to releasingToDisk, and only enable it while saving a top-context to disk.
   return m_dynamicData->isOnDisk();
 }
 

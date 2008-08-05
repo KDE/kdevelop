@@ -37,6 +37,7 @@
 #include "declaration.h"
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
+#include "functiondefinition.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -283,8 +284,8 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
   if(!topContext)
     topContext = definition->topContext();
 
-  if(definition->isDefinition()) {
-    Declaration* ret = definition->declaration();
+  if(dynamic_cast<FunctionDefinition*>(definition)) {
+    Declaration* ret = static_cast<FunctionDefinition*>(definition)->declaration();
     if(ret)
       return ret;
   }

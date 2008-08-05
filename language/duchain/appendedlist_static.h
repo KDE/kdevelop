@@ -19,7 +19,7 @@
 #ifndef APPENDEDLIST_H
 #define APPENDEDLIST_H
 
-#include <QtCore/QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 namespace KDevelop {
 
@@ -27,7 +27,7 @@ namespace KDevelop {
  * This file contains macros and classes that can be used to conveniently implement classes that store the data of an arbitrary count
  * of additional lists within the same memory block directly behind the class data, in a way that one the whole data can be stored by one copy-operation
  * to another place, like needed in ItemRepository. These macros simplify having two versions of a class: One that has its lists attached in memory,
- * and one version that has them contained as a directly accessible QVarLengthArray. Both versions have their lists accessible through access-functions,
+ * and one version that has them contained as a directly accessible KDevVarLengthArray. Both versions have their lists accessible through access-functions,
  * have a completeSize() function that computes the size of the one-block version, and a copyListsFrom(..) function which can copy the lists from one
  * version to the other. The class that contains these lists must have a boolean template parameter called "dynamic".
  * 
@@ -67,17 +67,17 @@ namespace KDevelop {
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); }
 
   template<bool dynamic, class T> 
-class AppendedList : public QVarLengthArray<T, 10> {
+class AppendedList : public KDevVarLengthArray<T, 10> {
   public: 
     unsigned int dynamicDataSize() const {
       return this->size() * sizeof(T);
     }
     const T* data(char* /*position*/) const {
-      return QVarLengthArray<T, 10>::data();
+      return KDevVarLengthArray<T, 10>::data();
     }
     void copy(T* /*target*/, const T* data, uint size) {
       this->resize(size);
-      memcpy(QVarLengthArray<T, 10>::data(), data, size * sizeof(T));
+      memcpy(KDevVarLengthArray<T, 10>::data(), data, size * sizeof(T));
     }
 };
 

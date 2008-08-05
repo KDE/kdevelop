@@ -112,7 +112,7 @@ QList<Declaration*> SymbolTable::findDeclarations(const QualifiedIdentifier& id)
   return ret;
 }
 
-void SymbolTable::findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*>& target) const
+void SymbolTable::findDeclarationsByHash(uint hash, KDevVarLengthArray<Declaration*>& target) const
 {
   //ENSURE_CHAIN_READ_LOCKED Commented out because this is used in very tight loops with high frequency
   
@@ -166,7 +166,7 @@ QList<DUContext*> SymbolTable::findContexts(const QualifiedIdentifier & id) cons
   return ret;
 }
 
-void SymbolTable::findContextsByHash(uint hash, QVarLengthArray<DUContext*>& target) const
+void SymbolTable::findContextsByHash(uint hash, KDevVarLengthArray<DUContext*>& target) const
 {
   //ENSURE_CHAIN_READ_LOCKED Commented out because this is used in very tight loops with high frequency
   

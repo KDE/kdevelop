@@ -19,6 +19,7 @@
 #include "duchainpointer.h"
 #include "parsingenvironment.h"
 #include "identifier.h"
+#include "functiondefinition.h"
 
 namespace KDevelop {
 
@@ -67,8 +68,8 @@ void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) 
   m_hadObjects[dec] = true;
 
   Declaration* declarationForDefinition = 0;
-  if(dec->isDefinition())
-    declarationForDefinition = dec->declaration(m_topContext);
+  if(dynamic_cast<FunctionDefinition*>(dec))
+    declarationForDefinition = static_cast<FunctionDefinition*>(dec)->declaration(m_topContext);
 
   if(!declarationForDefinition) {
     //Declaration

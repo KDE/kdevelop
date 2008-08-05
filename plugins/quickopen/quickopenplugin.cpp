@@ -66,6 +66,7 @@
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
 #include "customlistquickopen.h"
+#include <language/duchain/functiondefinition.h>
 
 using namespace KDevelop;
 
@@ -679,9 +680,9 @@ void QuickOpenPlugin::quickOpenDefinition()
 
   IndexedString u = decl->url();
   SimpleCursor c = decl->range().start;
-  if(decl->definition()) {
-    u = decl->definition()->url();
-    c = decl->definition()->range().start;
+  if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
+    u = def->url();
+    c = def->range().start;
   }else{
     kDebug() << "Found no definition for declaration";
   }
@@ -793,8 +794,8 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
 
     if(decl) {
       if( filter.accept(decl) ) {
-        if(decl->isDefinition() && decl->declaration())
-          decl = decl->declaration();
+        if(dynamic_cast<FunctionDefinition*>(decl) && static_cast<FunctionDefinition*>(decl)->declaration())
+          decl = static_cast<FunctionDefinition*>(decl)->declaration();
 
         DUChainItem item;
         item.m_item = DeclarationPointer(decl);

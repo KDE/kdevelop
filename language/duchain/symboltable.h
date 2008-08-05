@@ -21,7 +21,7 @@
 
 #include <QtCore/QMultiHash>
 #include <QtCore/QMultiMap>
-#include <QtCore/QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 #include "../languageexport.h"
 
@@ -48,13 +48,13 @@ public:
 
   //Only takes the hash to comparison. The names should be compared later on.
   //The hash-values computed by QualifiedIdentifier are used.
-  void findDeclarationsByHash(uint hash, QVarLengthArray<Declaration*>& target) const;
+  void findDeclarationsByHash(uint hash, KDevVarLengthArray<Declaration*>& target) const;
 
   //Only takes the hash to comparison. The names should be compared later on.
   //The hash-values computed by QualifiedIdentifier are used.
   QList<DUContext*> findContexts(const QualifiedIdentifier& id) const;
   
-  void findContextsByHash(uint hash, QVarLengthArray<DUContext*>& target) const;
+  void findContextsByHash(uint hash, KDevVarLengthArray<DUContext*>& target) const;
 
 private:
   // Named Contexts (classes and namespaces)

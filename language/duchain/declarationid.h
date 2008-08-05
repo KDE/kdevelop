@@ -127,6 +127,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * */
     Declaration* getDeclaration(const TopDUContext* context) const;
 
+    ///Same as getDeclaration(..), but returns all matching declarations if there are multiple. This also returns found forward-declarations.
+    KDevVarLengthArray<Declaration*> getDeclarations(const TopDUContext* context) const;
+    
     /**
      * Set the specialization index (see class documentation).
      *

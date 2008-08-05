@@ -20,7 +20,7 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
-#include <QtCore/QVarLengthArray>
+#include <util/kdevvarlengtharray.h>
 
 #include "../editor/documentcursorobject.h"
 #include "identifier.h"
@@ -134,7 +134,7 @@ struct ImportTraceItem {
   SimpleCursor position;
 };
 
-typedef QVarLengthArray<ImportTraceItem, 40> ImportTrace;
+typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
 
 template<class T>
 class DUChainPointer;
@@ -596,7 +596,7 @@ public:
 struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 
   typedef KSharedPtr<SearchItem> Ptr;
-  typedef QVarLengthArray<Ptr, 256> PtrList; ///@todo find out why this QVarLengthArray crashes when it's resized!
+  typedef KDevVarLengthArray<Ptr, 256> PtrList; ///@todo find out why this KDevVarLengthArray crashes when it's resized!
 
   ///Constructs a representation of the given @param id qualified identifier, starting at its index @param start
   ///@param nextItem is set as next item to the last item in the chain
@@ -647,7 +647,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * @warning position Must be valid!
    * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
-  typedef QVarLengthArray<Declaration*, 40> DeclarationList;
+  typedef KDevVarLengthArray<Declaration*, 40> DeclarationList;
 
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
 
@@ -741,7 +741,7 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int d
 KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
 }
 
-///Operator that allows using << with QVarLengthArray
+///Operator that allows using << with KDevVarLengthArray
 KDEVPLATFORMLANGUAGE_EXPORT KDevelop::DUContext::SearchItem::PtrList& operator<<(KDevelop::DUContext::SearchItem::PtrList& list, const KDevelop::DUContext::SearchItem::Ptr& item);
 
 

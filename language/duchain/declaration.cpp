@@ -36,13 +36,13 @@
 #include "duchainlock.h"
 #include "ducontextdata.h"
 #include "declarationid.h"
-#include "definitions.h"
 #include "uses.h"
 #include "indexedstring.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "repositories/stringrepository.h"
 #include "types/identifiedtype.h"
+#include "functiondefinition.h"
 
 using namespace KTextEditor;
 
@@ -422,7 +422,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
   ENSURE_CAN_READ
 
   if(!isDefinition()) {
-    Declaration* def = definition();
+    Declaration* def = FunctionDefinition::definition(this);
     if( def )
       return def->internalContext();
   }
@@ -528,39 +528,6 @@ DeclarationId Declaration::id(bool forceDirect) const
     return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
     return DeclarationId(IndexedDeclaration(const_cast<Declaration*>(this)), specialization());
-}
-
-Declaration* Declaration::declaration(TopDUContext* topContext) const
-{
-  ENSURE_CAN_READ
-  
-  if(!isDefinition())
-    return 0;
-  
-  return d_func()->m_declaration.getDeclaration(topContext ? topContext : this->topContext());
-}
-
-Declaration* Declaration::definition() const
-{
-  ENSURE_CAN_READ
-  if(isDefinition())
-    return 0;
-  
-  KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(id());
-  FOREACH_ARRAY(IndexedDeclaration decl, allDefinitions) {
-    if(decl.data()) ///@todo Find better ways of deciding which definition to use
-      return decl.data();
-  }
-  return 0;
-}
-
-void Declaration::setDefinition(Declaration* definition)
-{
-  ENSURE_CAN_WRITE
-
-  ///@todo At some point, call removeDefinition again
-  DUChain::definitions()->addDefinition(id(), definition);
-  definition->d_func_dynamic()->m_declaration = id();
 }
 
 bool Declaration::inSymbolTable() const

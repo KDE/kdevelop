@@ -892,7 +892,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 void DUContext::deleteLocalDeclarations()
 {
   ENSURE_CAN_WRITE
-  QVarLengthArray<LocalIndexedDeclaration> declarations;
+  KDevVarLengthArray<LocalIndexedDeclaration> declarations;
   {
     QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
     FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)

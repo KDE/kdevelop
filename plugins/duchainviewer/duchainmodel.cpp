@@ -44,6 +44,7 @@
 #include <language/duchain/duchainpointer.h>
 
 #include "duchainviewplugin.h"
+#include <language/duchain/functiondefinition.h>
 
 //#include "modeltest.h"
 
@@ -239,8 +240,8 @@ QVariant DUChainModel::data(const QModelIndex& index, int role) const
   } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
     switch (role) {
       case Qt::DisplayRole: {
-        if(dec->isDefinition() && dec->declaration(m_chain.data()))
-          return i18n("Definition: %1", dec->declaration(m_chain.data())->identifier().toString());
+        if(dynamic_cast<FunctionDefinition*>(dec) && static_cast<FunctionDefinition*>(dec)->declaration(m_chain.data()))
+          return i18n("Definition: %1", static_cast<FunctionDefinition*>(dec)->declaration(m_chain.data())->identifier().toString());
         else
           return i18n("Declaration: %1", dec->identifier().toString());
       }
@@ -363,9 +364,9 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     }
 
   } else if (Declaration* dec = dynamic_cast<Declaration*>(parent)) {
-    if (!dec->isDefinition() && dec->definition()) {
+    if (!dec->isDefinition() && FunctionDefinition::definition(dec)) {
       list = new QList<DUChainBasePointer*>();
-      list->append(createPointerForObject(dec->definition()));
+      list->append(createPointerForObject(FunctionDefinition::definition(dec)));
     }
 
 //     foreach (Use* use, dec->uses()) {

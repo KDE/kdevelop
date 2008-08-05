@@ -60,7 +60,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
       QString specificDir = baseDir + QString("/%1").arg(a);
       KStandardDirs::makeDir(specificDir);
        lock = new KLockFile(specificDir + "/lock", component);
-       KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag);
+       KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
        if(result == KLockFile::LockOK || result == KLockFile::LockStale) {
           repoPath = specificDir;
           if(result == KLockFile::LockStale)

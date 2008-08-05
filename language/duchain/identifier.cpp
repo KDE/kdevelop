@@ -230,7 +230,7 @@ struct QualifiedIdentifierItemRequest {
   const DynamicQualifiedIdentifierPrivate& m_identifier;
 };
 
-ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> qualifiedIdentifierRepository("Qualified Identifier Repository");
+ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> qualifiedIdentifierRepository("Qualified Identifier Repository", &globalItemRepositoryRegistry(), 2);
 
 uint emptyConstantQualifiedIdentifierPrivateIndex = qualifiedIdentifierRepository.index(DynamicQualifiedIdentifierPrivate());
 

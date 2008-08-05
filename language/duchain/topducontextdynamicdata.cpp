@@ -100,6 +100,12 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
         target.m_declarations << 0;
       else {
         target.m_declarations << dynamic_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(data.constData() + declarationDataOffsets[a])));
+        if(!target.m_declarations.back()) {
+          //When this happens, the declaration has not been registered correctly.
+          //We can stop here, because else we will get crashes later.
+          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(data.constData() + declarationDataOffsets[a]))->classId;
+          Q_ASSERT(0);
+        }
       }
     }
     
