@@ -446,7 +446,18 @@ void CppCVType::clear() {
 
 QString CppCVType::cvString() const
 {
-  return QString("%1%2").arg(isConstant() ? " const " : "").arg(isVolatile() ? " volatile " : "");
+  if(isConstant()) {
+    if(isVolatile()) {
+      return "const volatile ";
+    }else{
+      return "const ";
+    }
+  }else{
+    if(isVolatile())
+      return "volatile ";
+    else
+      return QString();
+  }
 }
 
 QString CppFunctionType::toString() const
@@ -539,13 +550,8 @@ void CppClassType::clear() {
 QString CppClassType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
-  if (!id.isEmpty()) {
-    QString cv = cvString();
-    if(cv.isEmpty())
-      return id.top().toString();
-    else
-      return cvString() + " " + id.top().toString();
-  }
+  if (!id.isEmpty())
+    return cvString() + id.top().toString();
 
   QString type;
   switch (classType()) {

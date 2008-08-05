@@ -384,7 +384,6 @@ bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs
           if(decl->kind() == KDevelop::Declaration::Instance)
             m_lastTypeWasInstance = true;
           
-          ///@todo only functions may have multiple declarations here
           ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
           //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
           openedType = true;
@@ -408,8 +407,10 @@ bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs
   if(delay) {
     //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
    openedType = true;
-   openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
-
+   TypeIdentifier typeId(id);
+   typeId.setIsConstant(cv & KDevelop::Declaration::Const);
+   openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
+   
    ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
    ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
   }
@@ -593,7 +594,7 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
 }
 
 
-void TypeBuilder::openDelayedType(const QualifiedIdentifier& identifier, AST* /*node*/, DelayedType::Kind kind) {
+void TypeBuilder::openDelayedType(const TypeIdentifier& identifier, AST* /*node*/, DelayedType::Kind kind) {
   DelayedType::Ptr type(new DelayedType());
   type->setIdentifier(identifier);
   type->setKind(kind);

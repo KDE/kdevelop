@@ -74,7 +74,7 @@ protected:
   bool lastTypeWasInstance() const;
 
   private:
-  void openDelayedType(const KDevelop::QualifiedIdentifier& identifier, AST* node, DelayedType::Kind kind);
+  void openDelayedType(const KDevelop::TypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 
   CppClassType* openClass(int kind);

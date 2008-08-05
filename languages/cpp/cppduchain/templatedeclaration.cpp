@@ -159,6 +159,11 @@ IndexedInstantiationInformation InstantiationInformation::indexed() const {
 
 AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::TypeIdentifier& id ) {
   AbstractType::Ptr ret = ptr;
+  CppCVType* cvRet = dynamic_cast<CppCVType*>(ret.unsafeData());
+  
+  if(cvRet && cvRet->isConstant() != id.isConstant())
+    cvRet->setCV(id.isConstant() ? Declaration::Const : Declaration::CVNone);
+  
   for( int a = 0; a < id.pointerDepth(); ++a ) {
     Declaration::CVSpec spec = Declaration::CVNone;
     if( id.isConstPointer( a ) )
