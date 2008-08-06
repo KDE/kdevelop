@@ -78,6 +78,9 @@ public:
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
 private:
+    void addToolViewIfWanted(IToolViewFactory* factory,
+                           Sublime::ToolDocument* doc,
+                           Sublime::Area* area);
     void addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area);

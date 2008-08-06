@@ -210,10 +210,11 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 
     /* Until areas are restored, we don't know which views should be really
        added, and which not, so we just record view availability.  */
-    if (d->areasRestored)
-        foreach (Sublime::Area* area, allAreas()) {
-            addToolViewToArea(factory, doc, area);
-        }
+    if (d->areasRestored) {
+         foreach (Sublime::Area* area, allAreas()) {
+             addToolViewToArea(factory, doc, area);
+         }
+    }
 }
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
@@ -482,7 +483,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
         for (i = d->factoryDocuments.begin(),
                  e = d->factoryDocuments.end(); i != e; ++i)
         {
-            addToolViewToArea(i.key(), i.value(), area);
+            addToolViewIfWanted(i.key(), i.value(), area);
         }
     }
 
@@ -524,7 +525,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
             for (i = d->factoryDocuments.begin(),
                      e = d->factoryDocuments.end(); i != e; ++i)
             {
-                addToolViewToArea(i.key(), i.value(), area);
+                addToolViewIfWanted(i.key(), i.value(), area);
             }
         }
 
@@ -541,13 +542,20 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
+void UiController::addToolViewIfWanted(IToolViewFactory* factory,
+                           Sublime::ToolDocument* doc,
+                           Sublime::Area* area)
+{
+    if (area->wantToolView(factory->id()))
+    {
+        addToolViewToArea(factory, doc, area);
+    }
+}
+
 void UiController::addToolViewToArea(IToolViewFactory* factory,
                                      Sublime::ToolDocument* doc,
                                      Sublime::Area* area)
 {
-    if (!area->wantToolView(factory->id()))
-        return;
-
     Sublime::View* view = doc->createView();
     area->addToolView(
         view,
