@@ -10,7 +10,7 @@ if(CPPTOXML)
         get_filename_component(outPath ${output} PATH)
         
         add_custom_command(OUTPUT ${output} ${headerFile}
-                            COMMAND ${CPPTOXML} -C ${CMAKE_CURRENT_SOURCE_DIR}/xmltokross/rppconfig.h -Q ${QT_INCLUDE_DIR} ${interface} |
+                            COMMAND ${CPPTOXML} -C ${CMAKE_CURRENT_SOURCE_DIR}/xmltokross/rppconfig.h -Q/smthwrong/${QT_INCLUDE_DIR} ${interface} |
                                 ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/xmltokross -D${outPath} -F${weFile} -I${includes} > ${output}
                             MAIN_DEPENDENCY ${interface}
                             DEPENDS xmltokross )
