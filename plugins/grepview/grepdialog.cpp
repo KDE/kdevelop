@@ -106,7 +106,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
     filesCombo->addItems(__filepatterns);
-    excludeCombo->addItems(cg.readEntry("exclude_patterns", QStringList() << "/CVS/,/SCCS/,/\\.svn/,/_darcs/" << "") );
+    excludeCombo->addItems(cg.readEntry("exclude_patterns", QStringList() << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/" << "") );
 
     suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
 
