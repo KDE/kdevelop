@@ -471,6 +471,10 @@ void CPPInternalParseJob::run()
         }
       }
 
+      if(contentContext) {
+          DUChainWriteLocker l(DUChain::lock());
+          contentContext->removeImportedParentContexts(importedTemporaryChains);
+      }
 
       ///When simplified environment-matching is enabled, we will accumulate many different
       ///versions of imports into a single top-context. To reduce that a little, we remove all
@@ -479,7 +483,6 @@ void CPPInternalParseJob::run()
           DUChainWriteLocker l(DUChain::lock());
 
           //Remove the temporary chains first, so we don't get warnings from them
-          contentContext->removeImportedParentContexts(importedTemporaryChains);
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
