@@ -145,13 +145,6 @@ public:
     virtual ~IPlugin();
 
     /**
-     * Specifies the DockWidgetArea for this plugin to use when in docked UI mode.
-     * The default implementation returns Qt::NoDockWidgetArea.
-     * @return the DockWidgetArea for this plugin
-     */
-    Q_SCRIPTABLE virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
-
-    /**
      * Tells @ref MainWindow whether to display this plugin as the central widget when
      * in top-level UI mode. The default implementation returns false.
      * @return true if this plugin should be the central widget, false if it should not.

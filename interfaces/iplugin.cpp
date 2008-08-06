@@ -142,11 +142,6 @@ IPlugin::~IPlugin()
     delete d;
 }
 
-Qt::DockWidgetArea IPlugin::dockWidgetAreaHint() const
-{
-    return Qt::NoDockWidgetArea;
-}
-
 bool IPlugin::isCentralPlugin() const
 {
     return false;
