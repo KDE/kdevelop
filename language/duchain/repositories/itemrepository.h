@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include "../../languageexport.h"
 
-#define DEBUG_ITEMREPOSITORY_LOADING
+//#define DEBUG_ITEMREPOSITORY_LOADING
 
 namespace KDevelop {
 
@@ -585,7 +585,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 4,
+    ItemRepositoryVersion = 5,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -625,6 +625,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
     short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
+    short unsigned int previousPreviousBucketNumber = 0;
     
     short unsigned int size = request.itemSize();
     
@@ -655,9 +656,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
         //Should happen rarely
         short unsigned int next = bucketPtr->nextBucketForHash(hash);
-        if(next)
+        if(next) {
+          previousPreviousBucketNumber = previousBucketNumber;
           previousBucketNumber = next;
-        else
+        } else
           break;
       }
     }
@@ -708,7 +710,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         if(!pickedBucketInChain && previousBucketNumber && previousBucketNumber != useBucket) {
           //Should happen rarely
           ++m_statBucketHashClashes;
-          m_buckets[previousBucketNumber]->setNextBucketForHash(request.hash(), useBucket);
+          
+          //If the used bucket already has previousBucketNumber as a follower, insert it instead of previousBucketNumber,
+          //so we don't create a loop
+          bool replacePreviousWithUsed = false;
+          
+          {
+            uint checkBucket = useBucket;
+            while(checkBucket) {
+              if(checkBucket == previousBucketNumber) {
+                replacePreviousWithUsed = true;
+                break;
+              }
+              checkBucket = bucketForIndex(checkBucket)->nextBucketForHash(request.hash());
+            }
+          }
+          
+          if(!replacePreviousWithUsed)
+            m_buckets[previousBucketNumber]->setNextBucketForHash(request.hash(), useBucket);
+          else if(previousPreviousBucketNumber) {
+            bucketForIndex(previousPreviousBucketNumber)->setNextBucketForHash(request.hash(), useBucket);
+          } else {
+            //useBucket needs to be the first bucket in the global bucket hash for this hash-value
+            Q_ASSERT(*bucketHashPosition == previousBucketNumber);
+            *bucketHashPosition = useBucket;
+          }
         }
         
         if(reOrderFreeSpaceBucketIndex != -1)
@@ -858,8 +884,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         }
       }
     }else{
-      if(!bucketPtr->hasClashingItem(hash))
+      if(!bucketPtr->hasClashingItem(hash)) {
         previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
+        Q_ASSERT(bucketPtr->nextBucketForHash(hash) != previousBucketNumber);
+      }
     }
   }
 
