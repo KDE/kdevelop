@@ -22,7 +22,7 @@
 
 #include <QTreeView>
 
-class QAction;
+class KAction;
 class KUrl;
 class KDevDocumentViewPlugin;
 class KDevDocumentModel;
@@ -79,7 +79,7 @@ private:
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
     KMenu* m_ctxMenu;
-    QAction* m_save;
+    KAction* m_save;
 };
 
 #endif // KDEVDOCUMENTVIEW_H

@@ -21,15 +21,16 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentviewplugin.h"
 #include "kdevdocumentmodel.h"
 
-#include <QAction>
 #include <QHeaderView>
 #include <QContextMenuEvent>
 
+#include <kaction.h>
 #include <kurl.h>
 #include <kmenu.h>
 #include <kdebug.h>
-#include <klocale.h>
+//#include <klocale.h>
 #include <kiconloader.h>
+#include <kstandardaction.h>
 
 #include "kdevdocumentselection.h"
 #include "kdevdocumentviewdelegate.h"
@@ -68,15 +69,8 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     
-    m_save = new QAction(this);
-    m_save->setText( i18n("Save") );
-    m_save->setIcon(KIcon("document-save"));
-    connect(m_save, SIGNAL(triggered()), this, SLOT(saveSelected()));
-
-    QAction* close = new QAction(this);
-    close->setText( i18n("Close") );
-    close->setIcon(KIcon("window-close"));
-    connect(close, SIGNAL(triggered()), this, SLOT(closeSelected()));
+    m_save = KStandardAction::save(this, SLOT(saveSelected()), this);
+    KAction* close  = KStandardAction::close(this, SLOT(closeSelected()), this);
     
     m_ctxMenu = new KMenu(this);
     m_ctxMenu->addAction(close);
