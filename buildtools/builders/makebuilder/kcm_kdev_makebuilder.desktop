@@ -13,6 +13,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 Name=Make
 Name[hi]=मेक
 Name[ne]=बनाउनुहोस्
+Name[oc]=Crear
 Name[x-test]=xxMakexx
 Comment=Configure Make settings
 Comment[de]=Make-Einstellungen
