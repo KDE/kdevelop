@@ -138,12 +138,6 @@ QWidget* KDevTeamworkPlugin::pluginView() const
 	return m_window;
 }
 
-Qt::DockWidgetArea KDevTeamworkPlugin::dockWidgetAreaHint() const
-{
-	return Qt::RightDockWidgetArea;
-}
-
-
 void KDevTeamworkPlugin::import( RefreshPolicy /*policy*/ )
 {}
 

@@ -48,7 +48,6 @@ public:
 
     //KDevPlugin methods
     virtual QWidget* pluginView() const;
-    virtual Qt::DockWidgetArea dockWidgetAreaHint() const;
 
     void import( RefreshPolicy policy = Refresh );
 
