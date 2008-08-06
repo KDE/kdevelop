@@ -531,7 +531,7 @@ QString CppTypeAliasType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty())
-    return id.top().toString();
+    return id.toString();
 
   if (type())
     return type()->toString();
@@ -551,7 +551,7 @@ QString CppClassType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty())
-    return cvString() + id.top().toString();
+    return cvString() + id.toString();
 
   QString type;
   switch (classType()) {
