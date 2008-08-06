@@ -21,6 +21,8 @@
 #include <QWidget>
 #include <KTextEdit>
 
+#include <kdebug.h>
+
 namespace Sublime {
 
 // struct UrlDocumentPrivate
@@ -37,7 +39,7 @@ UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
     :Document(url.fileName(), controller), d( new UrlDocumentPrivate() )
 {
     // Deep copy please :)
-    d->url.setUrl(url.url());
+    d->url.setEncodedUrl(url.url().toAscii());
 }
 
 UrlDocument::~UrlDocument()
