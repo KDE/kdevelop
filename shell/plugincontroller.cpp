@@ -101,16 +101,6 @@ PluginController::~PluginController()
         kWarning(9501) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
                        << endl << kBacktrace() << endl;
 
-    // Quick cleanup of the remaining plugins, hope it helps
-    // Note that deleting it.value() causes slotPluginDestroyed to be called, which
-    // removes the plugin from the list of loaded plugins.
-    while ( !d->loadedPlugins.empty() )
-    {
-        PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-        kWarning(9501) << "Deleting stale plugin '" << it.key().pluginName()
-                << "'" << endl;
-        delete it.value();
-    }
     delete d->m_manager;
     delete d;
 }
@@ -147,19 +137,10 @@ void PluginController::cleanup()
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
     // Ask all plugins to unload
-    for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-          it != d->loadedPlugins.end(); /* EMPTY */ )
+    while ( !d->loadedPlugins.isEmpty() )
     {
-        // Plugins could emit their ready for unload signal directly in response to this,
-        // which would invalidate the current iterator. Therefore, we copy the iterator
-        // and increment it beforehand.
-        PluginControllerPrivate::InfoToPluginMap::ConstIterator current( it );
-        ++it;
-
         //Let the plugin do some stuff before unloading
-        IPlugin* plugin = current.value();
-        plugin->unload();
-        delete plugin;
+        unloadPlugin(d->loadedPlugins.begin().value(), Now);
     }
 
     d->cleanupMode = PluginControllerPrivate::CleanupDone;
@@ -202,24 +183,32 @@ void PluginController::unloadPlugin( const QString & pluginId )
 {
     if( IPlugin *thePlugin = plugin( pluginId ) )
     {
-        thePlugin->unload();
-        thePlugin->deleteLater();
-        //Remove the plugin from our list of plugins so we create a new
-        //instance when we're asked for it again.
-        //This is important to do right here, not later when the plugin really
-        //vanishes. For example project re-opening might try to reload the plugin
-        //and then would get the "old" pointer which will be deleted in the next
-        //event loop run and thus causing crashes.
-        for ( PluginControllerPrivate::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
-              it != d->loadedPlugins.end(); ++it )
-        {
-            if ( it.value() == thePlugin )
-            {
-                d->loadedPlugins.erase( it );
-                break;
-            }
-        }
+        unloadPlugin(thePlugin, Later);
+    }
+}
 
+void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
+{
+    plugin->unload();
+    if (deletion == Later)
+        plugin->deleteLater();
+    else
+        delete plugin;
+
+    //Remove the plugin from our list of plugins so we create a new
+    //instance when we're asked for it again.
+    //This is important to do right here, not later when the plugin really
+    //vanishes. For example project re-opening might try to reload the plugin
+    //and then would get the "old" pointer which will be deleted in the next
+    //event loop run and thus causing crashes.
+    for ( PluginControllerPrivate::InfoToPluginMap::Iterator it = d->loadedPlugins.begin();
+            it != d->loadedPlugins.end(); ++it )
+    {
+        if ( it.value() == plugin )
+        {
+            d->loadedPlugins.erase( it );
+            break;
+        }
     }
 }
 
@@ -302,7 +291,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
             kDebug() << "it is a kross plugin!!";
             QStringList interfaces=info.property( "X-KDevelop-Interfaces" ).toStringList();
             plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
-                            QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='KDevKrossManager'" ), 
+                            QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='KDevKrossManager'" ),
                             d->core, QVariantList() << interfaces << info.pluginName(), &str_error );
             kDebug() << "kross plugin:" << plugin;
         }

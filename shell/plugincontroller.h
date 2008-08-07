@@ -91,6 +91,19 @@ public:
      */
     void unloadPlugin( const QString & plugin );
 
+    enum PluginDeletion {
+        Now,
+        Later
+    };
+
+    /**
+     * Directly unload the given \a plugin, either deleting it now or \a later.
+     *
+     * \param plugin plugin to unload
+     * \param later if true, delete the plugin later, if false, delete it now.
+     */
+    void unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
+
     /**
      * Queries for the plugin which supports given extension interface.
      * All already loaded plugins will be queried and the first one to support the extension interface
