@@ -700,7 +700,6 @@ public:
       const ListNode<ExpressionAST*> *it = node->sub_expressions->toFront(), *end = it;
       if( it->element && it->element->kind == AST::Kind_FunctionCall && it->next == end ) {
         ///Special-case: We have a primary expression with a function-call, always treat that as an expression.
-        kDebug(9007) << "accepting special-case";
         return;
       }
     }
