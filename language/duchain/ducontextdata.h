@@ -96,6 +96,9 @@ public:
   //Use DeclarationPointer instead of declaration, so we can locate management-problems
   typedef QMultiHash<Identifier, DeclarationPointer> DeclarationsHash;
   
+  //Whether this context uses m_localDeclarationsHash
+  bool m_hasLocalDeclarationsHash;
+  
   static QMutex m_localDeclarationsMutex;
   ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
@@ -146,6 +149,85 @@ public:
   void addDeclarationToHash(const Identifier& identifer, Declaration* declaration);
   ///Must be called with m_localDeclarationsMutex locked
   void removeDeclarationFromHash(const Identifier& identifer, Declaration* declaration);
+
+  ///Adds all declarations that should be in the hash into the hash
+  void enableLocalDeclarationsHash(DUContext* ctx, const Identifier& currentIdentifier = Identifier(), Declaration* currentDecl = 0);
+  
+  void disableLocalDeclarationsHash();
+
+  bool needsLocalDeclarationsHash();
+  
+  //Iterates through all visible declarations within a given context, including the ones propagated from sub-contexts
+  struct VisibleDeclarationIterator {
+    
+    VisibleDeclarationIterator(DUContextDynamicData* data) {
+      currentPos.append(0);
+      currentData.append(data);
+      toValidPosition();
+    }
+    
+    Declaration* operator*() const {
+      return currentData.back()->m_context->d_func()->m_localDeclarations()[currentPos.back()].data(currentData.back()->m_topContext);
+    }
+    
+    VisibleDeclarationIterator& operator++() {
+      Q_ASSERT(!currentPos.isEmpty());
+      Q_ASSERT(currentPos.size() == currentData.size());
+      ++currentPos.back();
+      toValidPosition();
+      return *this;
+    }
+    
+    operator bool() const {
+      return !currentData.isEmpty();
+    }
+    
+    //Moves the cursor to the next valid position, from an invalid one(currentPos.back() == currentData->declarationCount())
+    void toValidPosition() {
+      const DUContextData* data = currentData.back()->m_context->d_func();
+      if(currentPos.back() == data->m_localDeclarationsSize()) {
+        //Check if we can proceed into a propagating child-context
+        for(int a = 0; a < data->m_childContextsSize(); ++a) {
+          DUContext* child = data->m_childContexts()[a].data(currentData.back()->m_topContext);
+          if(child->d_func()->m_propagateDeclarations) {
+            currentPos.back() = a;
+            currentData.append(child->m_dynamicData);
+            currentPos.append(0);
+            toValidPosition();
+            return;
+          }
+        }
+        upwards:
+        //Check if the parent has a follower child context
+        currentPos.pop_back();
+        currentData.pop_back();
+        while(!currentPos.isEmpty() && currentPos.back() == currentData.back()->m_context->d_func()->m_childContextsSize()) {
+          currentPos.pop_back();
+          currentData.pop_back();
+        }
+        
+        if(!currentPos.isEmpty()) {
+          //We've found a next child that we can iterate into
+          data = currentData.back()->m_context->d_func();
+          for(int a = currentPos.back(); a < data->m_childContextsSize(); ++a) {
+            if(data->m_childContexts()[a].data(currentData.back()->m_topContext)->d_func()->m_propagateDeclarations) {
+              currentPos.back() = a+1;
+              currentData.append(data->m_childContexts()[a].data(currentData.back()->m_topContext)->m_dynamicData);
+              currentPos.append(0);
+              toValidPosition();
+              return;
+            }
+          }
+        }else{
+          return;
+        }
+        goto upwards;
+      }
+    }
+    
+    KDevVarLengthArray<DUContextDynamicData*> currentData; //Current data that is being iterated through, if inHash is false
+    KDevVarLengthArray<int> currentPos; //Current position in the given data. back() is always within the declaration-vector, the other indices are within the child-contexts
+  };
   
   /**
    * Returns true if this context is imported by the given one, on any level.

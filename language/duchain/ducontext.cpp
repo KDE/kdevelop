@@ -91,12 +91,16 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   m_dynamicData->m_context = this;
   
   DUChainBase::rebuildDynamicData(parent, ownIndex);
-  
-  FOREACH_FUNCTION(LocalIndexedDeclaration indexedDecl, d_func()->m_localDeclarations) {
-    Declaration* decl = indexedDecl.data(topContext());
-    Q_ASSERT(decl);
-    decl->rebuildDynamicData(this, indexedDecl.localIndex());
-    m_dynamicData->addDeclarationToHash(decl->identifier(), decl);
+
+  {
+    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+    
+    FOREACH_FUNCTION(LocalIndexedDeclaration indexedDecl, d_func()->m_localDeclarations) {
+      Declaration* decl = indexedDecl.data(topContext());
+      Q_ASSERT(decl);
+      decl->rebuildDynamicData(this, indexedDecl.localIndex());
+      m_dynamicData->addDeclarationToHash(decl->identifier(), decl);
+    }
   }
   
   FOREACH_FUNCTION(LocalIndexedDUContext ctx, d_func()->m_childContexts) {
@@ -104,7 +108,7 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
     Q_ASSERT(child);
     child->rebuildDynamicData(this, ctx.localIndex());
   }
-  
+
   if(d_func()->m_inSymbolTable && d_func()->m_scopeIdentifier.isValid())
       SymbolTable::self()->addContext(this);
 }
@@ -128,7 +132,7 @@ DUContextData::DUContextData(const DUContextData& rhs)  : DUChainBaseData(rhs), 
 }
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
-  : m_context(d), m_topContext(0), m_rangesChanged(true), m_indexInTopContext(0)
+  : m_context(d), m_topContext(0), m_hasLocalDeclarationsHash(false), m_rangesChanged(true), m_indexInTopContext(0)
 {
 }
 
@@ -265,20 +269,72 @@ void DUContext::rangeDeleted(KTextEditor::SmartRange* range)
   }
 }
 
+void DUContextDynamicData::enableLocalDeclarationsHash(DUContext* ctx, const Identifier& currentIdentifier, Declaration* currentDecl)
+{
+  m_hasLocalDeclarationsHash = true;
+  
+  FOREACH_FUNCTION(LocalIndexedDeclaration indexedDecl, ctx->d_func()->m_localDeclarations) {
+    Declaration* decl = indexedDecl.data(m_topContext);
+    Q_ASSERT(decl);
+    if(currentDecl != decl)
+      m_localDeclarationsHash.insert( decl->identifier(), DeclarationPointer(decl) );
+    else
+      m_localDeclarationsHash.insert( currentIdentifier, DeclarationPointer(decl) );
+  }
+  
+  FOREACH_FUNCTION(LocalIndexedDUContext child, ctx->d_func()->m_childContexts) {
+    DUContext* childCtx = child.data(m_topContext);
+    Q_ASSERT(childCtx);
+    if(childCtx->d_func()->m_propagateDeclarations)
+      enableLocalDeclarationsHash(childCtx, currentIdentifier, currentDecl);
+  }
+}
+
+void DUContextDynamicData::disableLocalDeclarationsHash()
+{
+  m_hasLocalDeclarationsHash = false;
+  m_localDeclarationsHash.clear();
+}
+
+bool DUContextDynamicData::needsLocalDeclarationsHash()
+{
+  if(m_context->d_func()->m_localDeclarationsSize() > 15)
+    return true;
+  
+  uint propagatingChildContexts = 0;
+  
+  FOREACH_FUNCTION(LocalIndexedDUContext child, m_context->d_func()->m_childContexts) {
+    DUContext* childCtx = child.data(m_topContext);
+    Q_ASSERT(childCtx);
+    if(childCtx->d_func()->m_propagateDeclarations)
+      ++propagatingChildContexts;
+  }
+  
+  return propagatingChildContexts > 4;
+}
+
 void DUContextDynamicData::addDeclarationToHash(const Identifier& identifier, Declaration* declaration)
 {
-  m_localDeclarationsHash.insert( identifier, DeclarationPointer(declaration) );
+  if(m_hasLocalDeclarationsHash)
+    m_localDeclarationsHash.insert( identifier, DeclarationPointer(declaration) );
 
   if( m_context->d_func()->m_propagateDeclarations && m_parentContext )
     m_parentContext->m_dynamicData->addDeclarationToHash(identifier, declaration);
+
+  if(!m_hasLocalDeclarationsHash && needsLocalDeclarationsHash())
+    enableLocalDeclarationsHash(m_context, identifier, declaration);
 }
 
 void DUContextDynamicData::removeDeclarationFromHash(const Identifier& identifier, Declaration* declaration)
 {
-  m_localDeclarationsHash.remove( identifier, DeclarationPointer(declaration) );
+  if(m_hasLocalDeclarationsHash)
+    m_localDeclarationsHash.remove( identifier, DeclarationPointer(declaration) );
 
   if( m_context->d_func()->m_propagateDeclarations && m_parentContext )
     m_parentContext->m_dynamicData->removeDeclarationFromHash(identifier,  declaration);
+
+  if(m_hasLocalDeclarationsHash && !needsLocalDeclarationsHash())
+      disableLocalDeclarationsHash();
 }
 
 void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
@@ -365,6 +421,13 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   if( !inserted ) {
     m_context->d_func_dynamic()->m_childContextsList().append(indexed);
     context->m_dynamicData->m_parentContext = m_context;
+  }
+
+  if(context->d_func()->m_propagateDeclarations) {
+    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+    disableLocalDeclarationsHash();
+    if(needsLocalDeclarationsHash())
+      enableLocalDeclarationsHash(m_context);
   }
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
@@ -556,20 +619,12 @@ void DUContext::setPropagateDeclarations(bool propagate)
 
   bool oldPropagate = d->m_propagateDeclarations;
 
-  if( oldPropagate && !propagate && m_dynamicData->m_parentContext )
-    foreach(const DeclarationPointer& decl, m_dynamicData->m_localDeclarationsHash)
-      if(decl)
-        m_dynamicData->m_parentContext->m_dynamicData->removeDeclarationFromHash(decl->identifier(), decl.data());
+  m_dynamicData->m_parentContext->m_dynamicData->disableLocalDeclarationsHash();
 
   d->m_propagateDeclarations = propagate;
 
-  if( !oldPropagate && propagate && m_dynamicData->m_parentContext ) {
-    DUContextDynamicData::DeclarationsHash::const_iterator it = m_dynamicData->m_localDeclarationsHash.begin();
-    DUContextDynamicData::DeclarationsHash::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
-    for( ; it != end ; it++ )
-      if(it.value())
-        m_dynamicData->m_parentContext->m_dynamicData->addDeclarationToHash(it.value()->identifier(), it.value().data());
-  }
+  if(m_dynamicData->m_parentContext->m_dynamicData->needsLocalDeclarationsHash())
+    m_dynamicData->m_parentContext->m_dynamicData->enableLocalDeclarationsHash(this);
 }
 
 bool DUContext::isPropagateDeclarations() const
@@ -591,37 +646,69 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
   {
      QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
-    QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
-    QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
+     struct Checker {
+       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const SimpleCursor & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
+       }
 
-    for( ; it != end && it.key() == identifier; ++it ) {
-      Declaration* declaration = (*it).data();
+       Declaration* check(Declaration* declaration) {
+          if( declaration->kind() == Declaration::Alias ) {
+            //Apply alias declarations
+            AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
+            if(alias->aliasedDeclaration().isValid()) {
+              declaration = alias->aliasedDeclaration().declaration();
+            } else {
+              kDebug() << "lost aliased declaration";
+            }
+          }
 
-      if( !declaration ) {
-        //This should never happen, but let's see
-        kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
-        continue;
-      }
+          if( declaration->kind() == Declaration::NamespaceAlias )
+            return 0;
 
-      if( declaration->kind() == Declaration::Alias ) {
-        //Apply alias declarations
-        AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
-        if(alias->aliasedDeclaration().isValid()) {
-          declaration = alias->aliasedDeclaration().declaration();
-        } else {
-          kDebug() << "lost aliased declaration";
+          if((m_flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
+            return 0;
+
+          if (!m_dataType || m_dataType == declaration->abstractType())
+            if (m_ownType == Class || m_ownType == Template || m_position > declaration->range().start || !m_position.isValid()) ///@todo This is C++-specific
+              return declaration;
+          return 0;
+       }
+
+       SearchFlags m_flags;
+       const AbstractType::Ptr& m_dataType;
+       const SimpleCursor& m_position;
+       DUContext::ContextType m_ownType;
+     };
+
+     Checker checker(flags, dataType, position, type());
+     
+     if(!m_dynamicData->m_hasLocalDeclarationsHash) {
+      DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+      while(it) {
+        Declaration* declaration = *it;
+        if(declaration->identifier() == identifier) {
+          Declaration* checked = checker.check(declaration);
+          if(checked)
+              ret.append(checked);
         }
+        ++it;
       }
+     }else{
+      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
+      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
 
-      if( declaration->kind() == Declaration::NamespaceAlias )
-        continue; //Do not include NamespaceAliasDeclarations here, they are handled by DUContext directly.
+      for( ; it != end && it.key() == identifier; ++it ) {
+        Declaration* declaration = (*it).data();
 
-      if((flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
-        continue;
+        if( !declaration ) {
+          //This should never happen, but let's see
+          kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
+          continue;
+        }
 
-      if (!dataType || dataType == declaration->abstractType())
-        if (type() == Class || type() == Template || position > declaration->range().start || !position.isValid()) ///@todo This is C++-specific
-          ret.append(declaration);
+        Declaration* checked = checker.check(declaration);
+        if(checked)
+            ret.append(checked);
+      }
     }
   }
 }
@@ -814,12 +901,21 @@ QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier
   
   QList<Declaration*> ret;
 
-  QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
-  QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
+  if(m_dynamicData->m_hasLocalDeclarationsHash) {
+    QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
+    QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
 
-  for( ; it != end && it.key() == identifier; ++it )
-    ret << (*it).data();
-
+    for( ; it != end && it.key() == identifier; ++it )
+      ret << (*it).data();
+  }else{
+    DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+    while(it) {
+      Declaration* decl = *it;
+      if(decl->identifier() == identifier)
+        ret << decl;
+      ++it;
+    }
+  }
   return ret;
 }
 
@@ -863,9 +959,13 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 
   {
     QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-      foreach (DeclarationPointer decl, m_dynamicData->m_localDeclarationsHash)
-        if ( decl && (!position.isValid() || decl->range().start <= position) )
-          definitions << qMakePair(decl.data(), currentDepth);
+    DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+    while(it) {
+      Declaration* decl = *it;
+      if ( decl && (!position.isValid() || decl->range().start <= position) )
+        definitions << qMakePair(decl, currentDepth);
+      ++it;
+    }
   }
 
   for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
