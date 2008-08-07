@@ -39,6 +39,9 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
 
 ProblemHighlighter::~ProblemHighlighter()
 {
+    if(m_topHLRanges.isEmpty())
+        return;
+    
     KDevelop::EditorIntegrator editor;
     editor.setCurrentUrl(IndexedString(m_document->url().pathOrUrl()));
 
