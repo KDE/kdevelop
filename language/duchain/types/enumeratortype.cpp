@@ -80,7 +80,7 @@ AbstractType::WhichType EnumeratorType::whichType() const
 
 QString EnumeratorType::toString() const
 {
-  return "enum " + IdentifiedType::qualifiedIdentifier().toString();
+  return IdentifiedType::qualifiedIdentifier().toString();
 }
 
 }

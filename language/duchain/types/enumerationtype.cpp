@@ -70,7 +70,7 @@ EnumerationType::EnumerationType()
 
 QString EnumerationType::toString() const
 {
-  return "enum " + qualifiedIdentifier().toString();
+  return qualifiedIdentifier().toString();
 }
 
 uint EnumerationType::hash() const
