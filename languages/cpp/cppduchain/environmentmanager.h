@@ -315,6 +315,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     Cpp::LazyMacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::LazyStringSet m_definedMacroNames;
     Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
+    ///@todo Implement this with a SetRepository that uses reference-counting for the items
     QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>  m_allModificationTimes;
     
     bool m_modificationTimesChanged;
