@@ -151,6 +151,15 @@ Declaration* localClassFromCodeContext(DUContext* context)
 
   if( context->owner() && dynamic_cast<FunctionDefinition*>(context->owner()) )
     functionDeclaration = static_cast<FunctionDefinition*>(context->owner())->declaration(startContext->topContext());
+  else{
+    ///Alternative way of finding the class, needed while building the duchain when the links are incomplete
+    QVector<DUContext::Import> imports = context->importedParentContexts();
+    foreach(const DUContext::Import& import, imports) {
+      DUContext* imp = import.context();
+      if(imp && imp->type() == DUContext::Class && imp->owner())
+        return imp->owner();
+    }
+  }
 
   if( !functionDeclaration && context->owner() )
     functionDeclaration = context->owner();

@@ -94,6 +94,7 @@ private slots:
   void testFunctionDefinition3();
   void testFunctionDefinition4();
   void testFunctionDefinition5();
+  void testFunctionDefinition6();
   void testBaseClasses();
   void testForwardDeclaration();
   void testForwardDeclaration2();

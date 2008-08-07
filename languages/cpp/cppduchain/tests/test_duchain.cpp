@@ -1397,15 +1397,39 @@ void TestDUChain::testFunctionDefinition3() {
 }
 
 void TestDUChain::testFunctionDefinition5() {
-  QByteArray text("class Class {typedef Class ClassDef;void test(ClassDef);}; void Class::test(ClassDef i) {}");
+  QByteArray text("class Class {typedef Class ClassDef;void test(ClassDef);Class();}; void Class::test(ClassDef i) {Class c;}");
   TopDUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().count(), 3);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1); //Used from 1 file
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2); //Used 2 times
-  
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+  release(top);
+}
+
+void TestDUChain::testFunctionDefinition6() {
+  QByteArray text("class Class {Class(); void test();}; void Class::test(Class c) {int i;}");
+  TopDUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("Class"));
+  QCOMPARE(decls.size(), 1);
+  kDebug() << "qualified identifier:" << top->childContexts()[0]->localDeclarations()[0]->qualifiedIdentifier();
+  QVERIFY(!dynamic_cast<FunctionDefinition*>(top->childContexts()[0]->localDeclarations()[0]));
+  QVERIFY(dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]));
+  QVERIFY(static_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0])->isConstructor());
+  kDebug() << top->childContexts()[1]->localDeclarations()[0]->abstractType()->toString();
+  QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[2]), top->localDeclarations()[0]);
+  QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[1]), top->localDeclarations()[0]);
+  QVERIFY(top->childContexts()[1]->importers().contains(top->childContexts()[2]));
+  QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
   release(top);
 }
 

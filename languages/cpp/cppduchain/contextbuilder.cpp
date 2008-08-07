@@ -821,6 +821,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node)
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext)) {
     DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
+    addImportedContexts();
     if(compilingContexts())
       m_importedParentContexts.append(ctx);
   }
