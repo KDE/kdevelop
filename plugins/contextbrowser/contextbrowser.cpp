@@ -207,7 +207,9 @@ KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute() {
   if( !standardAttribute ) {
     standardAttribute = KTextEditor::Attribute::Ptr( new KTextEditor::Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    standardAttribute->setBackground(Qt::red);
+    QColor color(Qt::yellow);
+    color.setRed(90);
+    standardAttribute->setBackground(color);
   }
   return standardAttribute;
 }
@@ -309,12 +311,11 @@ void ContextBrowserPlugin::updateViews()
         if(r.isValid()) {
           //We've got our range. Highlight it and continue.
 
-          m_highlightedRange[view] = iface->newSmartRange( view->document()->documentRange() );
-          ///@todo This is a workaround for a probable bug, the range is not highlighted without a big master-range
-          ///@todo Currently this ihghlighitng does no twork at all!
-          KTextEditor::SmartRange* highlightRange = iface->newSmartRange( r.textRange(), m_highlightedRange[view] );
+          m_highlightedRange[view] = iface->newSmartRange( r.textRange(), m_highlightedRange[view] );//iface->newSmartRange( view->document()->documentRange() );
+          iface->addHighlightToDocument(m_highlightedRange[view]);
+//           KTextEditor::SmartRange* highlightRange = iface->newSmartRange( r.textRange(), m_highlightedRange[view] );
 
-          highlightRange->setAttribute( highlightedSpecialObjectAttribute() );
+          m_highlightedRange[view]->setAttribute( highlightedSpecialObjectAttribute() );
 /*          m_highlightedRange[view]*/
 
           watchRange(m_highlightedRange[view]);
