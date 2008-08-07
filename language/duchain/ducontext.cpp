@@ -624,7 +624,7 @@ void DUContext::setPropagateDeclarations(bool propagate)
   d->m_propagateDeclarations = propagate;
 
   if(m_dynamicData->m_parentContext->m_dynamicData->needsLocalDeclarationsHash())
-    m_dynamicData->m_parentContext->m_dynamicData->enableLocalDeclarationsHash(this);
+    m_dynamicData->m_parentContext->m_dynamicData->enableLocalDeclarationsHash(m_dynamicData->m_parentContext.data());
 }
 
 bool DUContext::isPropagateDeclarations() const
