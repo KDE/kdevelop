@@ -161,6 +161,19 @@ public:
     }
     return false;
     }
+
+    T& back() {
+        return ptr[s-1];
+    }
+
+    const T& back() const {
+        return ptr[s-1];
+    }
+
+    void pop_back() {
+        resize(s-1);
+    }
+
 private:
     void realloc(int size, int alloc);
 
