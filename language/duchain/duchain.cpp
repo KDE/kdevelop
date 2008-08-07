@@ -742,6 +742,9 @@ void DUChain::cleanup() {
   ///@todo Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
 }
 
+void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
+  emit declarationSelected(decl);
+}
 
 }
 

@@ -218,6 +218,14 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
         w->accept();
     }
     break;
+    case CodeCompletionModel::ItemSelected: {
+      DeclarationPointer decl = treeElement.asItem()->declaration();
+      if(decl) {
+        DUChain::self()->emitDeclarationSelected(decl);
+      }
+      break;
+    }
+    
   }
 
   return treeElement.asItem()->data(index, role, this);

@@ -67,6 +67,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void nextContextShortcut();
 
   private slots:
+    void declarationSelectedInUI(DeclarationPointer decl);
+
     void parseJobFinished(KDevelop::ParseJob* job);
     void textDocumentCreated( KDevelop::IDocument* document );
     void documentClosed( KDevelop::IDocument* document );
@@ -103,6 +105,9 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
 
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
+
+    //Used to override the next declaration that will be highlighted
+    DeclarationPointer m_useDeclaration;
 
     KUrl m_mouseHoverDocument;
     SimpleCursor m_mouseHoverCursor;

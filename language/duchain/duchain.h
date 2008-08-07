@@ -166,10 +166,15 @@ public:
 
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();
-
+  
+Q_SIGNALS:
+  ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
+  void declarationSelected(DeclarationPointer decl);
 public Q_SLOTS:
   ///Removes the given top-context from the duchain, and deletes it.
   void removeDocumentChain(TopDUContext* document);
+  ///Emits the declarationSelected signal, so other parties can notice it.
+  void emitDeclarationSelected(DeclarationPointer decl);
 
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);

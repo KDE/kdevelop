@@ -107,6 +107,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   virtual int inheritanceDepth() const;
   ///Should return the argument-hint depth. The completion-items don't need to return it through the data() function.
   virtual int argumentHintDepth() const;
+  
+  ///If this item represents a Declaration, this should return the declaration.
+  ///The default-implementation returns zero.
+  virtual DeclarationPointer declaration() const;
 };
 
 typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;

@@ -119,4 +119,8 @@ int CompletionTreeItem::argumentHintDepth() const
   return 0;
 }
 
+DeclarationPointer CompletionTreeItem::declaration() const {
+  return DeclarationPointer();
+}
+
 }

@@ -93,6 +93,9 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   connect( core()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
+  connect( DUChain::self(), SIGNAL( declarationSelected(DeclarationPointer) ), this, SLOT( declarationSelectedInUI(DeclarationPointer) ) );
+
+
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
@@ -150,7 +153,6 @@ void ContextBrowserPlugin::rangeDeleted( KTextEditor::SmartRange *range ) {
 
 ///@todo this doesn't work, we use TextHintInterface instead atm.
 void ContextBrowserPlugin::mouseEnteredRange( KTextEditor::SmartRange* range, KTextEditor::View* view ) {
-  kDebug() << "entered";
   m_mouseHoverCursor = SimpleCursor(range->start());
   m_mouseHoverDocument = view->document()->url();
   m_updateViews << view;
@@ -164,7 +166,6 @@ void ContextBrowserPlugin::mouseExitedRange( KTextEditor::SmartRange* /*range*/,
 }
 
 void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, QString&) {
-  kDebug() << "textHintRequested";
   m_mouseHoverCursor = SimpleCursor(cursor);
   KTextEditor::View* view = dynamic_cast<KTextEditor::View*>(sender());
   if(!view) {
@@ -274,7 +275,6 @@ void ContextBrowserPlugin::updateViews()
 {
   foreach( KTextEditor::View* view, m_updateViews ) {
     SimpleCursor c = SimpleCursor(view->cursorPosition());
-
     ///First: Check whether there is a special language object
     ///@todo Maybe make this optional, because it can be slow
 
@@ -343,15 +343,18 @@ void ContextBrowserPlugin::updateViews()
     Declaration* foundDeclaration = 0;
 
     if(!foundSpecialObject) {
-      //If we haven't found a special language object, search for a use/declaration and eventually highlight it
-      kDebug() << "searching at cursor" << c.textCursor() << mouseHighlight << "document" << view->document()->url().pathOrUrl();
-      foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
-
+      if(m_useDeclaration) {
+        foundDeclaration = m_useDeclaration.data();
+      }else{
+        //If we haven't found a special language object, search for a use/declaration and eventually highlight it
+//         kDebug() << "searching at cursor" << c.textCursor() << mouseHighlight << "document" << view->document()->url().pathOrUrl();
+        foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), c) );
+      }
       if( foundDeclaration ) {
         m_highlightedDeclarations[view] = foundDeclaration;
         changeHighlight( view, foundDeclaration, true, mouseHighlight );
       }else{
-        kDebug() << "not found declaration";
+//         kDebug() << "not found declaration";
         m_highlightedDeclarations.remove(view);
       }
     }
@@ -391,6 +394,15 @@ void ContextBrowserPlugin::updateViews()
 
   }
   m_updateViews.clear();
+  m_useDeclaration = DeclarationPointer();
+}
+
+void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
+{
+  m_useDeclaration = decl;
+  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())
+    m_updateViews << core()->documentController()->activeDocument()->textDocument()->activeView();
+  m_updateTimer->start(highlightingTimeout);
 }
 
 void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
@@ -427,7 +439,6 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
 
 void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 {
-  kDebug() << "connecting document";
   Q_ASSERT(document->textDocument());
 
   connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
@@ -459,7 +470,6 @@ void ContextBrowserPlugin::viewDestroyed( QObject* obj )
 
 void ContextBrowserPlugin::cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition )
 {
-  kDebug() << "cursorPositionChanged";
   clearMouseHover();
   m_updateViews.insert(view);
   m_updateTimer->start(highlightingTimeout/2);
@@ -467,8 +477,6 @@ void ContextBrowserPlugin::cursorPositionChanged( KTextEditor::View* view, const
 
 void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , KTextEditor::View* v )
 {
-  kDebug() << "connecting view";
-
   disconnect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) ); ///Just to make sure that multiple connections don't happen
   connect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) );
   connect( v, SIGNAL(destroyed( QObject* )), this, SLOT( viewDestroyed( QObject* ) ) );
