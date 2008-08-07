@@ -1864,7 +1864,7 @@ void TestDUChain::testTemplateDefaultParameters() {
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QVERIFY(!memberDecl->type<DelayedType>());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("Template1< S >"));
+  QCOMPARE(memberDecl->abstractType()->toString(), QString("std::Template1< S >"));
   
   release(top);
 }

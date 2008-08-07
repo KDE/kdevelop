@@ -38,6 +38,12 @@
 #include "expressionparser.h"
 #include "classdeclaration.h"
 #include <language/duchain/duchainregister.h>
+#include <name_compiler.h>
+#include <parsesession.h>
+#include <rpp/chartools.h>
+#include <rpp/pp-location.h>
+#include <control.h>
+#include <parser.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -84,9 +90,42 @@ struct AtomicIncrementer {
   Int* c;
 };
 
-QString InstantiationInformation::toString() const {
-    QString ret;
+QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedIdentifier& id) const {
+  QualifiedIdentifier ret;
+  if(id.count() > 1) {
+    ret = id;
+    ret.pop();
     if(previousInstantiationInformation)
+      ret = IndexedInstantiationInformation(previousInstantiationInformation).information().applyToIdentifier(ret);
+  }
+  
+  Identifier lastId(id.last());
+
+  KDevVarLengthArray<TypeIdentifier> oldTemplateIdentifiers;
+  for(int a = 0; a < lastId.templateIdentifiersCount(); ++a)
+    oldTemplateIdentifiers.append(lastId.templateIdentifier(a));
+  lastId.clearTemplateIdentifiers();
+  
+  for(int a = 0; a < templateParametersSize(); ++a) {
+    if(templateParameters()[a].type()) {
+      TypeIdentifier id(templateParameters()[a].type()->toString());
+      id.setIsExpression(true);
+      lastId.appendTemplateIdentifier(id);
+    }else{
+      lastId.appendTemplateIdentifier(oldTemplateIdentifiers.size() > a ? oldTemplateIdentifiers[a] : TypeIdentifier());
+    }
+  }
+  
+  for(int a = templateParametersSize(); a < oldTemplateIdentifiers.size(); ++a)
+    lastId.appendTemplateIdentifier(oldTemplateIdentifiers[a]);
+  
+  ret.push(lastId);
+  return ret;
+}
+
+QString InstantiationInformation::toString(bool local) const {
+    QString ret;
+    if(previousInstantiationInformation && !local)
         ret = IndexedInstantiationInformation(previousInstantiationInformation).information().toString() + "::";
     ret += "<";
     for(int a = 0; a < templateParametersSize(); ++a) {

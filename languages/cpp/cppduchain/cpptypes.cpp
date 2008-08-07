@@ -26,6 +26,7 @@
 #include <language/duchain/types/typeregister.h>
 #include "templateparameterdeclaration.h"
 #include <language/duchain/ducontext.h> //Only for FOREACH_ARRAY
+#include "templatedeclaration.h"
 
 using namespace KDevelop;
 
@@ -444,25 +445,40 @@ void CppCVType::clear() {
 //   cvData()->m_volatile = spec & Declaration::Volatile;
 // }
 
-QString CppCVType::cvString() const
+QString CppCVType::cvString(bool spaceOnLeft) const
 {
-  if(isConstant()) {
-    if(isVolatile()) {
-      return "const volatile ";
+  if(!spaceOnLeft) {
+    if(isConstant()) {
+      if(isVolatile()) {
+        return "const volatile ";
+      }else{
+        return "const ";
+      }
     }else{
-      return "const ";
+      if(isVolatile())
+        return "volatile ";
+      else
+        return QString();
     }
   }else{
-    if(isVolatile())
-      return "volatile ";
-    else
-      return QString();
+    if(isConstant()) {
+      if(isVolatile()) {
+        return " const volatile";
+      }else{
+        return " const";
+      }
+    }else{
+      if(isVolatile())
+        return " volatile";
+      else
+        return QString();
+    }
   }
 }
 
 QString CppFunctionType::toString() const
 {
-  return QString("%1 %2").arg(FunctionType::toString()).arg(cvString());
+  return QString("%1%2").arg(FunctionType::toString()).arg(cvString(true));
 }
 
 CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(createData<CppPointerTypeData>())
@@ -473,7 +489,7 @@ CppPointerType::CppPointerType(Declaration::CVSpecs spec) : CppPointerTypeBase(c
 
 QString CppPointerType::toString() const
 {
-  return QString("%1%2").arg(PointerType::toString()).arg(cvString());
+  return QString("%1%2").arg(PointerType::toString()).arg(cvString(true));
 }
 
 CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceTypeBase(createData<CppReferenceTypeData>())
@@ -484,7 +500,7 @@ CppReferenceType::CppReferenceType(Declaration::CVSpecs spec) : CppReferenceType
 
 QString CppReferenceType::toString() const
 {
-  return QString("%1%2").arg(ReferenceType::toString()).arg(cvString());
+  return QString("%1%2").arg(ReferenceType::toString()).arg(cvString(true));
 }
 
 /*CppArrayType::CppArrayType(Declaration::CVSpecs spec)
@@ -550,8 +566,12 @@ void CppClassType::clear() {
 QString CppClassType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
-  if (!id.isEmpty())
+  if (!id.isEmpty()) {
+    if(declarationId().specialization())
+      return cvString() + Cpp::IndexedInstantiationInformation(declarationId().specialization()).information().applyToIdentifier(id).toString();
+    else
     return cvString() + id.toString();
+  }
 
   QString type;
   switch (classType()) {
@@ -565,7 +585,7 @@ QString CppClassType::toString() const
       type = "union";
       break;
   }
-  return QString("<%1>%2").arg(type).arg(cvString());
+  return QString("<%1>%2").arg(type).arg(cvString(true));
 }
 
 CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerationTypeBase(createData<CppEnumerationTypeData>())
@@ -619,4 +639,3 @@ TypeModifiers& operator|=(TypeModifiers& lhs, const TypeModifiers& rhs) {
 TypeModifiers operator|(const TypeModifiers& lhs, const TypeModifiers& rhs) {
   return (TypeModifiers)((uint)lhs | (uint)rhs);
 }
-

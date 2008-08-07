@@ -62,7 +62,14 @@ namespace Cpp {
       return previousInstantiationInformation || templateParametersSize();
     }
     
-    QString toString() const;
+    ///Applies this instantiation information to the given QualifiedIdentifier.
+    ///The template parameters of the qualified identifier will be marked as expressions, thus the qualified identifier is not "clean".
+    ///Should only be used for displaying.
+    ///This only adds template-parameters in places where none are known yet.
+    QualifiedIdentifier applyToIdentifier(const QualifiedIdentifier& id) const;
+    
+    ///@param local If this is true, only the template-parameters of this scope are printed, but not the parent ones
+    QString toString(bool local = false) const;
     
     ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
     uint previousInstantiationInformation;

@@ -77,7 +77,8 @@ public:
 
   void clear();
 
-  QString cvString() const;
+  ///@param spaceOnLeft If this is true, the space will be added on left instead of on the right side. However it's only added when the cv-info is not empty.
+  QString cvString(bool spaceOnLeft = false) const;
   QString cvMangled() const;
 
   uint cvHash(uint input) const { return input + (cvData()->m_constant ? 7 : 0) + (cvData()->m_volatile ? 3 : 0); }
@@ -497,6 +498,7 @@ struct CppTypeAliasTypeData : public CppTypeAliasTypeBase::Data {
   KDevelop::IndexedType m_type;
 };
 
+///@todo remove
 class KDEVCPPDUCHAIN_EXPORT CppTypeAliasType : public CppTypeAliasTypeBase
 {
 public:
