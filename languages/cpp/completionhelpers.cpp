@@ -37,7 +37,7 @@ using namespace Cpp;
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting )
 {
   ///@todo also highlight the matches of the previous arguments, they are given by ViableFunction
-  Declaration* dec(item.declaration.data());
+  Declaration* dec(item.m_declaration.data());
 
   Cpp::CodeCompletionContext::Function f;
 

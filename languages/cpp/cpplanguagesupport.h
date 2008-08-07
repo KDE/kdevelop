@@ -2,6 +2,7 @@
  * KDevelop C++ Language Support
  *
  * Copyright 2005 Matt Rogers <mattr@kde.org>
+ * Copyright 2007-2008 David Nolden<david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
