@@ -194,7 +194,7 @@ bool CppEnumeratorType::equals(const AbstractType* _rhs) const
 
 QString CppEnumeratorType::toString() const
 {
-  return "enum " + IdentifiedType::qualifiedIdentifier().toString();
+  return IdentifiedType::qualifiedIdentifier().toString();
 }
 
 uint CppEnumeratorType::hash() const
@@ -597,7 +597,7 @@ CppEnumerationType::CppEnumerationType(Declaration::CVSpecs spec) : CppEnumerati
 
 QString CppEnumerationType::toString() const
 {
-  return "enum " + qualifiedIdentifier().toString();
+  return qualifiedIdentifier().toString();
 }
 uint CppEnumerationType::hash() const
 {
