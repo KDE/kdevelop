@@ -46,8 +46,8 @@ EditorRevisionTracker::EditorRevisionTracker(QObject* parent)
   : QObject(parent)
   , d(new EditorRevisionTrackerPrivate)
 {
-  connect(EditorIntegrator::data(), SIGNAL(documentLoaded(KTextEditor::Document*)), this, SLOT(documentLoaded(KTextEditor::Document*)));
-  connect(EditorIntegrator::data(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), this, SLOT(documentClosed(KTextEditor::Document*)));
+  connect(EditorIntegrator::notifier(), SIGNAL(documentLoaded(KTextEditor::Document*)), this, SLOT(documentLoaded(KTextEditor::Document*)));
+  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), this, SLOT(documentClosed(KTextEditor::Document*)));
   connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
 }
 

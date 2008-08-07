@@ -107,6 +107,11 @@ Q_SIGNALS:
     /**Emitted when a document has been saved.*/
     void documentSaved( KDevelop::IDocument* document );
 
+    /**Emitted when a document has been opened.
+    The document may not be loaded from disk/network at this point.
+    Note, no views exist for the document at the time this signal is emitted.*/
+    void documentOpened( KDevelop::IDocument* document );
+
     /**Emitted when a document has been loaded.
     Note, no views exist for the document at the time this signal is emitted.*/
     void documentLoaded( KDevelop::IDocument* document );

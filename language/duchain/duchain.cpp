@@ -65,17 +65,17 @@ class EnvironmentInformationItem {
   EnvironmentInformationItem() {
     initializeAppendedLists(true);
   }
-  
+
   ~EnvironmentInformationItem() {
     freeAppendedLists();
   }
-  
+
   unsigned int hash() const {
     //We only compare the declaration. This allows us implementing a map, although the item-repository
     //originally represents a set.
     return m_file.hash();
   }
-  
+
   unsigned short int itemSize() const {
     uint dataSize = 0;
     FOREACH_FUNCTION(uint size, sizes)
@@ -88,7 +88,7 @@ class EnvironmentInformationItem {
   uint classSize() const {
     return sizeof(*this);
   }
-  
+
   START_APPENDED_LISTS(EnvironmentInformationItem);
   ///Contains a size for each contained data item. The items are stored behind the end of this list.
   APPENDED_LIST_FIRST(EnvironmentInformationItem, uint, sizes);
@@ -97,14 +97,14 @@ class EnvironmentInformationItem {
 
 class EnvironmentInformationRequest {
   public:
-  
+
   ///This constructor should only be used for lookup
   EnvironmentInformationRequest(const IndexedString& file) : m_file(file) {
   }
   ///This is used to actually construct the information in the repository
   EnvironmentInformationRequest(const IndexedString& file, QList<ParsingEnvironmentFilePointer> informations) : m_file(file), m_informations(informations) {
   }
-  
+
   enum {
     AverageSize = 45 //This should be the approximate average size of an Item
   };
@@ -112,13 +112,13 @@ class EnvironmentInformationRequest {
   unsigned int hash() const {
     return m_file.hash();
   }
-  
+
   size_t itemSize() const {
     uint dataSize = 0;
-    
+
     foreach(ParsingEnvironmentFilePointer info, m_informations)
       dataSize += DUChainItemSystem::self().dynamicSize( *info->d_func() );
-    
+
     return sizeof(EnvironmentInformationItem) + sizeof(uint) * m_informations.size() + dataSize;
   }
 
@@ -127,7 +127,7 @@ class EnvironmentInformationRequest {
     item->initializeAppendedLists(false);
     item->sizesData = m_informations.size();
     char* pos = ((char*)item) + sizeof(EnvironmentInformationItem);
-    
+
     //Store the sizes
     foreach(ParsingEnvironmentFilePointer info, m_informations) {
       *(uint*)pos = DUChainItemSystem::self().dynamicSize( *info->d_func() );
@@ -139,11 +139,11 @@ class EnvironmentInformationRequest {
       pos += DUChainItemSystem::self().dynamicSize( *info->d_func() );;
     }
   }
-  
+
   bool equals(const EnvironmentInformationItem* item) const {
     return m_file == item->m_file;
   }
-  
+
   IndexedString m_file;
   QList<ParsingEnvironmentFilePointer> m_informations;
 };
@@ -168,7 +168,7 @@ public:
 
     notifier = new DUChainObserver();
     instance = new DUChain();
-    
+
     m_cleanupTimer = new QTimer(instance);
     m_cleanupTimer ->setInterval(4000);
     QObject::connect(m_cleanupTimer, SIGNAL(timeout()), instance, SLOT(cleanup()));
@@ -177,29 +177,29 @@ public:
   ~DUChainPrivate() {
     delete instance;
   }
-  
+
   void clear() {
     QMutexLocker l(&m_chainsMutex);
-    
+
     //Store all top-contexts to disk
     foreach(TopDUContext* context, m_chainsByIndex.values())
       context->m_dynamicData->store();
-    
+
     foreach (TopDUContext* context, m_chainsByIndex.values())
       instance->removeDocumentChain(context);
-    
+
     //Store all the environment-information to disk
     while(!m_fileEnvironmentInformations.isEmpty())
       unloadInformation(m_fileEnvironmentInformations.begin().key());
-    
+
     Q_ASSERT(m_fileEnvironmentInformations.isEmpty());
     Q_ASSERT(m_chainsByUrl.isEmpty());
     Q_ASSERT(m_chainsByIndex.isEmpty());
   }
-  
+
   ///Must be locked before accessing content of this class
   QMutex m_chainsMutex;
-  
+
   DUChain* instance;
   QTimer* m_cleanupTimer;
   DUChainLock lock;
@@ -209,9 +209,9 @@ public:
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
-  
+
   bool m_destroyed;
-  
+
   void addEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
     loadInformation(url);
     m_fileEnvironmentInformations.insert(url, info);
@@ -221,18 +221,18 @@ public:
     loadInformation(url);
     m_fileEnvironmentInformations.remove(url, info);
   }
-  
+
   QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(IndexedString url) {
     loadInformation(url);
     return m_fileEnvironmentInformations.values(url);
   }
-  
+
   ///Makes sure that the chain with the given index is loaded
   ///@warning m_chainsMutex must NOT be locked when this is called
   void loadChain(uint index, QSet<uint>& loading) {
-    
+
     QMutexLocker l(&m_chainsMutex);
-    
+
     if(!m_chainsByIndex.contains(index)) {
       loading.insert(index);
       TopDUContext* chain = TopDUContextDynamicData::load(index);
@@ -247,13 +247,13 @@ public:
           }
           l.relock();
         }
-        
+
         loadInformation(chain->url());
         for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.lowerBound(chain->url()); it != m_fileEnvironmentInformations.end() && it.key() == chain->url(); ++it) {
           if((*it)->indexedTopContext() == IndexedTopDUContext(index))
             chain->setParsingEnvironmentFile((*it).data());
         }
-        
+
         l.unlock();
         //Also load all the imported chains, so they are in the symbol table and the import-structure is built
         foreach(DUContext::Import import, chain->DUContext::importedParentContexts()) {
@@ -262,7 +262,7 @@ public:
           }
         }
         chain->rebuildDynamicImportStructure();
-        
+
         chain->setInDuChain(true);
         l.relock();
         instance->addDocumentChain(chain);
@@ -270,18 +270,18 @@ public:
       loading.remove(index);
     }
   }
-  
+
 private:
   void loadInformation(IndexedString url) {
     if(m_fileEnvironmentInformations.find(url) != m_fileEnvironmentInformations.end())
       return;
-    
+
     uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
     if(!index) {
       //No information there yet for this file
       return;
     }
-    
+
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(index));
     char* pos = (char*)&item;
     pos += item.dynamicSize();
@@ -292,12 +292,12 @@ private:
       pos += size;
     }
   }
-  
+
   //Stores the information into the repository, and removes it from m_fileEnvironmentInformations
   void unloadInformation(IndexedString url) {
 
     QList<ParsingEnvironmentFilePointer> informations = m_fileEnvironmentInformations.values(url);
-    
+
     //Here we check whether any of the stored items have been changed. If none have been changed(all data is still constant),
     //then we don't need to update.
     bool allInfosConstant = true;
@@ -306,7 +306,7 @@ private:
       if(info->d_func()->isDynamic())
         allInfosConstant = false;
     }
-    
+
     if(allInfosConstant) {
       //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
       //need to save anything.
@@ -315,21 +315,21 @@ private:
         ///@todo Don't do this, instead directly copy data from repository to repository
         info->makeDynamic(); //We have to make everything dynamic, so it survives when we remove the index
       }
-    
+
       uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
       if(index)
         m_environmentInfo.deleteItem(index); //Remove the previous item
-      
+
       Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)) == 0);
-      
+
       //Insert the new item
       m_environmentInfo.index(EnvironmentInformationRequest(url, informations));
       Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
     }
-    
+
     m_fileEnvironmentInformations.remove(url);
   }
-  
+
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
   //Persistent version of m_fileEnvironmentInformations
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
@@ -343,7 +343,7 @@ DUChain::DUChain()
   SymbolTable::self(); //Initialize singleton
 
   connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
-  
+
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
@@ -373,7 +373,7 @@ QList<TopDUContext*> DUChain::allChains() const
 }
 
 void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file ) {
-  
+
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   removeFromEnvironmentManager( context );
@@ -389,7 +389,7 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
 void DUChain::removeDocumentChain( TopDUContext* context )
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  
+
   uint index = context->ownIndex();
 
 //   kDebug(9505) << "duchain: removing document" << context->url().str();
@@ -403,9 +403,9 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 
     if(!context->isOnDisk())
       removeFromEnvironmentManager(context);
-    
+
     context->deleteSelf();
-    
+
     sdDUChainPrivate->m_chainsByIndex.remove(index);
   }
 }
@@ -443,13 +443,13 @@ void DUChain::addDocumentChain( TopDUContext * chain )
   addToEnvironmentManager(chain);
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
-  
+
   branchAdded(chain);
 }
 
 void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  
+
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
@@ -473,7 +473,7 @@ TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
 
 bool DUChain::isInMemory(uint topContextIndex) const {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  
+
   QHash<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(topContextIndex);
   return it != sdDUChainPrivate->m_chainsByIndex.end();
 }
@@ -482,19 +482,19 @@ TopDUContext* DUChain::chainForIndex(uint index) const {
 
   if(sdDUChainPrivate->m_destroyed)
     return 0;
-  
+
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  
+
   QHash<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
   if(it != sdDUChainPrivate->m_chainsByIndex.end())
     return *it;
   else {
-    
+
     l.unlock();
     QSet<uint> loading;
     sdDUChainPrivate->loadChain(index, loading);
     l.relock();
-    
+
     it = sdDUChainPrivate->m_chainsByIndex.find(index);
     if(it != sdDUChainPrivate->m_chainsByIndex.end())
       return *it;
@@ -546,7 +546,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
 QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) const
 {
   QList<TopDUContext*> chains;
-  
+
   if(sdDUChainPrivate->m_destroyed)
     return chains;
 
@@ -567,7 +567,7 @@ TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvi
   return chainForDocument( IndexedString(document.pathOrUrl()), environment, flags );
 }
 TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
-  
+
   if(sdDUChainPrivate->m_destroyed)
     return 0;
 
@@ -646,7 +646,7 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
     DUChainWriteLocker lock( DUChain::lock() );
     sc.deconvertDUChain( top );
   }
-  
+
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   if(standardContext)
     refCountDown(standardContext);
@@ -686,11 +686,11 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
     foreach( KDevelop::ILanguage* language, languages)
       if(language->languageSupport() && language->languageSupport()->codeHighlighting())
         language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
-    
+
     if(!standardContext->smartRange()) {
       kDebug() << "Could not create smart-range for document during startup";
     }
-    
+
     if(!standardContext->smartRange() || standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate())
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
   }else{

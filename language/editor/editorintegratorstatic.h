@@ -62,8 +62,6 @@ public Q_SLOTS:
    */
   void removeDocument(KTextEditor::Document* document);
 
-  void documentLoaded();
-
   void documentUrlChanged(KTextEditor::Document* document);
 
   void reloadDocument(KTextEditor::Document* document);

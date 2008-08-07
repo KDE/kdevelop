@@ -43,8 +43,6 @@
 #include <ktexteditor/factory.h>
 #include <ktexteditor/smartinterface.h>
 
-#include <language/editor/editorintegrator.h>
-
 #include "core.h"
 // #include "kdevmainwindow.h"
 // #include "kdevconfig.h"
@@ -121,7 +119,7 @@ PartController::PartController(Core *core, QWidget *toplevel)
 }
 
 PartController::~PartController()
-{ 
+{
     delete d;
 }
 
@@ -146,10 +144,7 @@ bool PartController::isTextType( KMimeType::Ptr mimeType )
              || mimeType->is( "application/x-zerosize" ) );
 }
 
-KTextEditor::Document* PartController::createTextPart(
-    const KUrl &url,
-    const QString &encoding,
-    bool activate )
+KTextEditor::Document* PartController::createTextPart(const QString &encoding)
 {
     if (!d->m_textEditor)
     {
@@ -161,18 +156,12 @@ KTextEditor::Document* PartController::createTextPart(
         d->m_textEditor = editorFactory->editor();
     }
     KTextEditor::Document* doc = d->m_textEditor->createDocument(this);
-    EditorIntegrator::addDocument( doc );
 
     if ( !encoding.isNull() )
     {
         KParts::OpenUrlArguments args = doc->arguments();
         args.setMimeType( QString( "text/plain;" ) + encoding );
         doc->setArguments( args );
-    }
-
-    if ( activate )
-    {
-        doc->openUrl( url );
     }
 
     return doc;

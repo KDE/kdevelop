@@ -163,6 +163,7 @@ protected:
     void notifyContentChanged();
     void notifyTextDocumentCreated();
     void notifyUrlChanged();
+    void notifyLoaded();
 
 private:
     friend class IDocumentPrivate;

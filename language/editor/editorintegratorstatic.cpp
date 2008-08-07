@@ -73,7 +73,7 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
   }
 
   disconnect(doc, SIGNAL(completed()), this, SLOT(documentLoaded()));
-  disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded()));
+  //disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded()));
 
   {
     QMutexLocker lock(mutex);
@@ -82,13 +82,6 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
   }
 
   emit documentLoaded(doc);
-}
-
-void EditorIntegratorStatic::documentLoaded()
-{
-  KTextEditor::Document* doc = qobject_cast<KTextEditor::Document*>(sender());
-  Q_ASSERT(doc);
-  insertLoadedDocument(doc);
 }
 
 void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)

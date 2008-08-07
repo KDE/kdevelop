@@ -104,5 +104,11 @@ void IDocument::notifyUrlChanged()
     emit core()->documentController()->documentUrlChanged(this);
 }
 
+void IDocument::notifyLoaded()
+{
+    emit core()->documentController()->documentLoadedPrepare(this);
+    emit core()->documentController()->documentLoaded(this);
+}
+
 }
 

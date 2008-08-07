@@ -299,7 +299,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         //still no url
         return 0;
 
-    bool emitLoaded = false;
+    bool emitOpened = false;
 
     //get a part document
     if (!d->documents.contains(url))
@@ -351,7 +351,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             d->documents[url] = new TextDocument(url, Core::self());
         else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());
-        emitLoaded = d->documents.contains(url);
+        emitOpened = d->documents.contains(url);
     }
     IDocument *doc = d->documents[url];
 
@@ -401,9 +401,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     }
 
     // Deferred signals, wait until it's all ready first
-    if( emitLoaded ) {
-        emit documentLoadedPrepare( d->documents[url] );
-        emit documentLoaded( d->documents[url] );
+    if( emitOpened ) {
+        emit documentOpened( d->documents[url] );
     }
 
     if (!activationParams.testFlag(IDocumentController::DoNotActivate))

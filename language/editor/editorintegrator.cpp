@@ -85,14 +85,11 @@ void EditorIntegrator::insertLoadedDocument(KTextEditor::Document* document) {
 void EditorIntegrator::addDocument( KTextEditor::Document * document )
 {
   Q_ASSERT(data()->thread() == document->thread());
-  // Connect to the first text changed signal, it occurs before the completed() signal
-  QObject::connect(document, SIGNAL(textChanged(KTextEditor::Document*)), data(), SLOT(documentLoaded()));
-  // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
-  QObject::connect(document, SIGNAL(completed()), data(), SLOT(documentLoaded()));
-
   QObject::connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(aboutToReload(KTextEditor::Document*)), data(), SLOT(reloadDocument(KTextEditor::Document*)));
   QObject::connect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
+
+  data()->insertLoadedDocument(document);
 }
 
 Document * EditorIntegrator::documentForUrl(const HashedString& url)

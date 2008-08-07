@@ -159,7 +159,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     setWhatsThis( i18n( "Project Manager" ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*) ),
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
 }
 

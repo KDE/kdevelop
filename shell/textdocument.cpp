@@ -38,6 +38,8 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
+#include <language/editor/editorintegrator.h>
+
 #include "core.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
@@ -49,7 +51,8 @@ namespace KDevelop {
 
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
-        :m_textDocument(textDocument)
+        : m_textDocument(textDocument)
+        , m_loaded(false)
     {
         document = 0;
         state = IDocument::Clean;
@@ -131,8 +134,19 @@ struct TextDocumentPrivate {
             m_textDocument->setUrl(document->url());
     }
 
+    void slotDocumentLoaded()
+    {
+        if (m_loaded)
+            return;
+        // Tell the editor integrator first
+        m_loaded = true;
+        EditorIntegrator::addDocument( m_textDocument->textDocument() );
+        m_textDocument->notifyLoaded();
+    }
+
 private:
     TextDocument *m_textDocument;
+    bool m_loaded;
 };
 
 class TextViewPrivate
@@ -174,8 +188,16 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (!d->document)
     {
-        d->document = Core::self()->partManagerInternal()->createTextPart(url(),
-            Core::self()->documentController()->encoding(), !url().isEmpty());
+        d->document = Core::self()->partManagerInternal()->createTextPart(Core::self()->documentController()->encoding());
+
+        // Connect to the first text changed signal, it occurs before the completed() signal
+        connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(slotDocumentLoaded()));
+        // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
+        connect(d->document, SIGNAL(completed()), this, SLOT(slotDocumentLoaded()));
+
+        if (!url().isEmpty())
+            d->document->openUrl( url() );
+
         /* It appears, that by default a part will be deleted the the
            first view containing it is deleted.  Since we do want
            to have several views, disable that behaviour.  */
