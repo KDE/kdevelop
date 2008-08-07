@@ -285,6 +285,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             return QVariant();
           }
           if (dec->abstractType()) {
+            if(CppEnumeratorType::Ptr enumerator = dec->type<CppEnumeratorType>()) {
+              if(dec->context()->owner() && dec->context()->owner()->abstractType()) {
+                return /*"enum " +*/ dec->context()->owner()->abstractType()->toString();
+              }
+            }
             if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
 
