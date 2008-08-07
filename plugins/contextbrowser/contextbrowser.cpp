@@ -110,7 +110,26 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
 {
-  ///@todo unregister from all ranges that were registered earlier! Else we may get a crash within kate while destruction.
+  foreach (KTextEditor::SmartRange* range, m_watchedRanges)
+    range->removeWatcher(this);
+}
+
+void ContextBrowserPlugin::watchRange(KTextEditor::SmartRange* range)
+{
+  if (range->watchers().contains( this ))
+    return;
+
+  range->addWatcher(this);
+  m_watchedRanges.insert(range);
+}
+
+void ContextBrowserPlugin::ignoreRange(KTextEditor::SmartRange* range)
+{
+  if (!range->watchers().contains( this ))
+    return;
+
+  range->removeWatcher(this);
+  m_watchedRanges.remove(range);
 }
 
 void ContextBrowserPlugin::unload()
@@ -120,6 +139,7 @@ void ContextBrowserPlugin::unload()
 
 void ContextBrowserPlugin::rangeDeleted( KTextEditor::SmartRange *range ) {
   m_backups.remove( range );
+  m_watchedRanges.remove(range);
 
   for(QMap<KTextEditor::View*, KTextEditor::SmartRange*>::iterator it = m_highlightedRange.begin(); it != m_highlightedRange.end(); ++it)
     if(*it == range) {
@@ -200,7 +220,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
   if( highlight ) {
     if( !m_backups.contains(range) ) {
       m_backups[range] = range->attribute();
-      range->addWatcher(this);
+      watchRange(range);
     }
 /*    if( declaration )
       attrib = highlightedDeclarationAttribute();
@@ -211,7 +231,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
       attrib = m_backups[range];
       m_backups.remove(range);
     }
-    range->removeWatcher(this);
+    ignoreRange(range);
   }
 
   range->setAttribute(attrib);
@@ -297,7 +317,7 @@ void ContextBrowserPlugin::updateViews()
           highlightRange->setAttribute( highlightedSpecialObjectAttribute() );
 /*          m_highlightedRange[view]*/
 
-          m_highlightedRange[view]->addWatcher( this );
+          watchRange(m_highlightedRange[view]);
 
           foundSpecialObject = true;
           pickedLanguage = language;
@@ -380,10 +400,8 @@ void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
 
 void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUChainBase* base)
 {
-  if(base->smartRange()) {
-    base->smartRange()->removeWatcher(this); //Make sure we're never registered twice
-    base->smartRange()->addWatcher(this);
-  }
+  if(base->smartRange())
+    watchRange(base->smartRange());
 }
 
 void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
@@ -398,10 +416,8 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
 
   for(int a = 0; a < ctx->usesCount(); ++a) {
     KTextEditor::SmartRange* range = ctx->useSmartRange(a);
-    if(range) {
-      range->removeWatcher(this); //Make sure we're never registered twice
-      range->addWatcher(this);
-    }
+    if(range)
+      watchRange(range);
   }
 
   foreach(DUContext* child, ctx->childContexts())

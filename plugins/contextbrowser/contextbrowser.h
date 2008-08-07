@@ -87,6 +87,9 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration, bool mouseHighlight );
     void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight );
 
+    void watchRange(KTextEditor::SmartRange* range);
+    void ignoreRange(KTextEditor::SmartRange* range);
+
     void registerAsRangeWatcher(KDevelop::DUChainBase* base);
     void registerAsRangeWatcher(KDevelop::DUContext* ctx);
 
@@ -95,6 +98,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     QSet<KTextEditor::View*> m_updateViews;
     QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
     QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range
+
+    QSet<KTextEditor::SmartRange*> m_watchedRanges;
 
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
