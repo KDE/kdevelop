@@ -494,12 +494,11 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
       if( !decls.isEmpty() )
       {
-        if( decls.count() > 1 )
-          kDebug(9007) << "Found multiple declarations of specialization-base" << localId.toString() << "for" << declaration->toString();
-
         foreach( Declaration* decl, decls )
-          if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) )
+          if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) ) {
             templateDecl->setSpecializedFrom(baseTemplateDecl);
+            break;
+          }
 
         if( !templateDecl->specializedFrom() )
           kDebug(9007) << "Could not find valid specialization-base" << localId.toString() << "for" << declaration->toString();
@@ -689,8 +688,9 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
     DUChainWriteLocker lock(DUChain::lock());
     enumeratorType->setDeclaration(decl);
     decl->setAbstractType(enumeratorType.cast<AbstractType>());
-  }else{
-    kWarning() << "not assigned enumerator type";
+  }else if(!lastType().cast<DelayedType>()){ //If it's in a template, it may be DelayedType
+    AbstractType::Ptr type = lastType();
+    kWarning() << "not assigned enumerator type:" << typeid(*type.unsafeData()).name() << type->toString();
   }
 }
 
