@@ -136,7 +136,9 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   Utils::Set environmentMacroNames = cppEnvironment->macroNameSet().set();
   
   if( cppEnvironment->identityOffsetRestriction() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
+#ifdef LEXERCACHE_DEBUG
     kDebug( 9007 ) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
+#endif
     return false;
   }
   
