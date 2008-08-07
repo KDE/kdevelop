@@ -51,15 +51,15 @@ signals:
     void activateURL( const KUrl &url );
 
 public slots:
-    void loaded( KDevelop::IDocument* document );
-    
+    void opened( KDevelop::IDocument* document );
+
 private slots:
     void activated( KDevelop::IDocument* document );
     void saved( KDevelop::IDocument* document );
     void closed( KDevelop::IDocument* document );
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
-    
+
     void saveSelected();
     void closeSelected();
 
@@ -70,7 +70,7 @@ protected:
 private:
     template<typename F> void visitSelected(F);
     bool someDocHasChanges();
-    
+
 private:
     KDevDocumentViewPlugin *m_plugin;
     KDevDocumentModel *m_documentModel;

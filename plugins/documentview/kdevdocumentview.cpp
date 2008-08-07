@@ -68,10 +68,10 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-    
+
     m_save = KStandardAction::save(this, SLOT(saveSelected()), this);
     KAction* close  = KStandardAction::close(this, SLOT(closeSelected()), this);
-    
+
     m_ctxMenu = new KMenu(this);
     m_ctxMenu->addAction(close);
     m_ctxMenu->addAction(m_save);
@@ -114,7 +114,7 @@ template<typename F> void KDevDocumentView::visitSelected(F f)
     foreach(KUrl url, m_selectedDocs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
-    }    
+    }
 }
 
 namespace
@@ -184,7 +184,7 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
     kDebug() ;
 }
 
-void KDevDocumentView::loaded( KDevelop::IDocument* document )
+void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
     QString mimeType = document->mimeType() ->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );

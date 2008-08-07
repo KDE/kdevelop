@@ -17,6 +17,8 @@
 #include <QRegExp>
 #include <outputview/ioutputviewmodel.h>
 
+#include <language/editor/editorrevisiontracker.h>
+
 class QModelIndex;
 
 using namespace KDevelop;
@@ -62,6 +64,7 @@ private:
     QString _lastfilename;
     QRegExp m_regExp;
     QString m_pattern;
+    EditorRevisionTracker m_tracker;
 };
 
 #endif

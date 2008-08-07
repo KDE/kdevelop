@@ -49,14 +49,14 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
             KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
             foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
-                view->loaded( doc );
+                view->opened( doc );
             }
             QObject::connect( docController, SIGNAL( documentActivated( KDevelop::IDocument* ) ),
                     view, SLOT( activated( KDevelop::IDocument* ) ) );
             QObject::connect( docController, SIGNAL( documentSaved( KDevelop::IDocument* ) ),
                     view, SLOT( saved( KDevelop::IDocument* ) ) );
-            QObject::connect( docController, SIGNAL( documentLoaded( KDevelop::IDocument* ) ),
-                    view, SLOT( loaded( KDevelop::IDocument* ) ) );
+            QObject::connect( docController, SIGNAL( documentOpened( KDevelop::IDocument* ) ),
+                    view, SLOT( opened( KDevelop::IDocument* ) ) );
             QObject::connect( docController, SIGNAL( documentClosed( KDevelop::IDocument* ) ),
                     view, SLOT( closed( KDevelop::IDocument* ) ) );
             QObject::connect( docController,
