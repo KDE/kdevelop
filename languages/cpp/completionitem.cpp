@@ -49,8 +49,8 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
   if(!useAlternativeText) {
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    if(declaration) {
-      newText = declaration->identifier().toString();
+    if(m_declaration) {
+      newText = m_declaration->identifier().toString();
     } else {
       kDebug() << "Declaration disappeared";
       return;
@@ -61,10 +61,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
   document->replaceText(word, newText);
   
-  if( !useAlternativeText && declaration && dynamic_cast<AbstractFunctionDeclaration*>(declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
+  if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     bool haveArguments = false;
-    if( declaration && declaration->type<CppFunctionType>() && declaration->type<CppFunctionType>()->arguments().count() )
+    if( m_declaration && m_declaration->type<CppFunctionType>() && m_declaration->type<CppFunctionType>()->arguments().count() )
       haveArguments = true;
     //Need to have a paren behind
     QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
@@ -114,7 +114,7 @@ QString nameForDeclaration(Declaration* dec) {
 }
 
 KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompletionItem::completionProperties() const {
-  Declaration* dec = declaration.data();
+  Declaration* dec = m_declaration.data();
   if(!dec)
     return (KTextEditor::CodeCompletionModel::CompletionProperties)0;
   
@@ -196,14 +196,14 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       return QVariant(1);
   };
 
-  if(!declaration) {
+  if(!m_declaration) {
     if(role == Qt::DisplayRole && index.column() == CodeCompletionModel::Name)
       return alternativeText;
     return QVariant();
   }else if(index.column() == CodeCompletionModel::Name && useAlternativeText)
     return alternativeText;
   
-  Declaration* dec = const_cast<Declaration*>( declaration.data() );
+  Declaration* dec = const_cast<Declaration*>( m_declaration.data() );
 
   switch (role) {
     case CodeCompletionModel::BestMatchesCount:
@@ -213,7 +213,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     {
       if( currentMatchContext && currentMatchContext->asItem()) {
         const NormalDeclarationCompletionItem& contextItem(*currentMatchContext->asItem<NormalDeclarationCompletionItem>());
-        if( contextItem.asItem() && contextItem.declaration && contextItem.completionContext && contextItem.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && contextItem.listOffset < contextItem.completionContext->functions().count() )
+        if( contextItem.asItem() && contextItem.m_declaration && contextItem.completionContext && contextItem.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && contextItem.listOffset < contextItem.completionContext->functions().count() )
         {
           Cpp::CodeCompletionContext::Function f( contextItem.completionContext->functions()[contextItem.listOffset] );
 
@@ -287,7 +287,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           if (dec->abstractType()) {
             if(CppEnumeratorType::Ptr enumerator = dec->type<CppEnumeratorType>()) {
               if(dec->context()->owner() && dec->context()->owner()->abstractType()) {
-                return /*"enum " +*/ dec->context()->owner()->abstractType()->toString();
+                if(!dec->context()->owner()->identifier().isEmpty())
+                  return dec->context()->owner()->abstractType()->toString();
+                else
+                  return "enum";
               }
             }
             if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {

@@ -47,14 +47,14 @@ class CppCodeCompletionModel;
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::CompletionTreeItem {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset), useAlternativeText(false) {
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : m_declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset), useAlternativeText(false) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
-  KDevelop::DeclarationPointer declaration;
+  KDevelop::DeclarationPointer m_declaration;
   KSharedPtr<Cpp::CodeCompletionContext> completionContext;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
   int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
@@ -65,6 +65,10 @@ public:
   bool useAlternativeText;
 
   KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
+  
+  virtual KDevelop::DeclarationPointer declaration() const {
+    return m_declaration;
+  }
   
   virtual int inheritanceDepth() const;
   virtual int argumentHintDepth() const;
