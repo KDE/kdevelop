@@ -1133,10 +1133,7 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   if( function ) {
     if( node->expression ) {
       //Fill default-parameters
-      QString defaultParam;
-      for( size_t token = node->expression->start_token; token != node->expression->end_token; ++token )
-        defaultParam += editor()->tokenToString(token);
-
+      QString defaultParam = stringFromSessionTokens( editor()->parseSession(), node->expression->start_token, node->expression->end_token );
 
       function->addDefaultParameter(IndexedString(defaultParam));
     }
