@@ -81,7 +81,8 @@
 #include "environmentmanager.h"
 #include "navigationwidget.h"
 #include "cppduchain/cppduchain.h"
-#include "testswitch.h"
+#include "veritas/testswitch.h"
+#include "veritas/stubcontextaction.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -115,6 +116,11 @@ QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   foreach(const IndexedString& str, stringList)
     ret << KUrl(str.str());
   return ret;
+}
+
+KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
+{
+    return m_stubAction->extension(context);
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
@@ -178,7 +184,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
     Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
+    ts->setStandardMacros(m_standardMacros);
     ts->connectAction(actionCollection());
+
+    m_stubAction = new Veritas::StubContextAction(this);
     
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);

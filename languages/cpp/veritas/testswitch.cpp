@@ -39,35 +39,21 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/use.h>
+#include <language/duchain/duchain.h>
 #include <language/editor/simplecursor.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/persistentsymboltable.h>
 
 // kdevelop includes
 #include "languages/cpp/cppduchain/cppduchain.h"
-#include "languages/cpp/cppparsejob.h"
-#include "languages/cpp/preprocessjob.h"
-#include "languages/cpp/cppduchain/cppduchain.h"
+#include "languages/cpp/cppduchain/environmentmanager.h"
+#include "languages/cpp/cppduchain/cpppreprocessenvironment.h"
 
 using Veritas::TestSwitch;
 using namespace KDevelop;
 
 namespace
 {
-
-TopDUContext* grabDocContextFor(const KUrl& url)
-{
-    ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
-    DUChain* chainStore = DUChain::self();
-    TopDUContext* docCtx = chainStore->chainForDocument(url, env);
-    delete env;
-    if(docCtx && docCtx->flags() & TopDUContext::ProxyContextFlag) {
-        if(!docCtx->importedParentContexts().isEmpty()) {
-            docCtx = dynamic_cast<TopDUContext*>(docCtx->importedParentContexts().first().context());
-        }
-    }
-    return docCtx;
-}
 
 IDocument* activeDocument()
 {
@@ -259,7 +245,7 @@ KUrl findTargetLocation(QualifiedIdentifier target)
 } // end anonymous namespace
 
 TestSwitch::TestSwitch(QObject* parent)
-  : QObject(parent), m_actionConnected(false)
+  : QObject(parent), m_actionConnected(false), m_standardMacros(0)
 {}
 
 TestSwitch::~TestSwitch()
@@ -276,6 +262,29 @@ void TestSwitch::connectAction(KActionCollection* col)
     m_actionConnected = true;
 }
 
+
+void TestSwitch::setStandardMacros(Cpp::LazyMacroSet* macros)
+{
+    m_standardMacros = macros;
+}
+
+TopDUContext* TestSwitch::documentContextFor(const KUrl& url)
+{
+    CppPreprocessEnvironment* env = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
+    if (m_standardMacros) env->merge(*m_standardMacros);
+    DUChain* chainStore = DUChain::self();
+    TopDUContext* docCtx = chainStore->chainForDocument(url, env);
+    delete env;
+    if(docCtx && docCtx->flags() & TopDUContext::ProxyContextFlag) {
+        if(!docCtx->importedParentContexts().isEmpty()) {
+            docCtx = dynamic_cast<TopDUContext*>(docCtx->importedParentContexts().first().context());
+        }
+    }
+    return docCtx;
+}
+ 
+
+
 void TestSwitch::swapTest_UnitUnderTest()
 {
     kDebug() << "Switching between test and unit under test";
@@ -286,7 +295,7 @@ void TestSwitch::swapTest_UnitUnderTest()
     }
 
     DUChainReadLocker lock(DUChain::lock());
-    TopDUContext* docCtx = grabDocContextFor(doc->url());  
+    TopDUContext* docCtx = documentContextFor(doc->url());  
     if (!docCtx) {
         kDebug() << "Failed to get chain for " << doc->url();
         return;
@@ -306,13 +315,12 @@ void TestSwitch::swapTest_UnitUnderTest()
         getTestIdFor(clazz);
     
     KUrl targetUrl = findTargetLocation(target);
-    kDebug() << "target->count() " << target.count();
-    if (targetUrl.isEmpty() && target.count() >= 1) {
+    if (targetUrl.isEmpty() && target.count() > 1) {
         // try without namespaces
         QualifiedIdentifier qid(target.last().toString());
         targetUrl = findTargetLocation(qid);
     }
-    if (targetUrl.isEmpty() && target.count() >= 2) {
+    if (targetUrl.isEmpty() && target.count() > 2) {
         // given foo::baz::Bar try foo::Bar
         QualifiedIdentifier qid(target.first().toString());
         qid += QualifiedIdentifier(target.last().toString());

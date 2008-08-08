@@ -39,6 +39,7 @@ namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer;}
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
+namespace Veritas { class StubContextAction; }
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
 class UIBlockTester : public QObject {
@@ -85,7 +86,7 @@ public:
 
     const KDevelop::ICodeHighlighting *codeHighlighting() const;
     KDevelop::ILanguage *language();
-
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KUrl &url );
 
     /// Get the full path for a file based on a search through the project's
@@ -161,6 +162,8 @@ private:
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;
     UIBlockTester* m_blockTester;
+
+    Veritas::StubContextAction* m_stubAction;
 };
 
 #endif

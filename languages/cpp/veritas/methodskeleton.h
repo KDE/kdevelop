@@ -19,34 +19,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VERITAS_TESTSWITCH_H
-#define VERITAS_TESTSWITCH_H
+#ifndef VERITASCPP_METHODSKELETON_INCLUDED
+#define VERITASCPP_METHODSKELETON_INCLUDED
 
-#include <QtCore/QObject>
-class KActionCollection;
+#include "veritascppexport.h"
+#include <QtCore/QString>
+#include <language/duchain/types/functiontype.h>
 
 namespace Veritas
 {
+enum Access { Public, Protected, Private };
 
-/*! Adds an action which allows for swapping between a test and its unit 
-    under test. Rather simplistic, for now. */
-class TestSwitch : public QObject
+class VERITASCPP_EXPORT MethodSkeleton
 {
-Q_OBJECT
 public:
-    TestSwitch(QObject* parent);
-    virtual ~TestSwitch();
-    /*! Creates and connects the QAction. Invoke this once. */
-    void connectAction(KActionCollection*);
+    MethodSkeleton();
+    virtual ~MethodSkeleton();
+    bool isEmpty() const;
 
-private slots:
-    /*! Connected to the action's triggered() signal */
-    void swapTest_UnitUnderTest();
+    void setFunctionType(KDevelop::FunctionType::Ptr);
+    void setName(const QString&);
+    void setArguments(const QString&);
+    void setReturnType(const QString&);
+    void setBody(const QString&);
+    void setAccess(Access) {}
 
+    QString name() const;
+    QString arguments() const;
+    QString body() const;
+    QString returnType() const;
+      
 private:
-    bool m_actionConnected;
+    bool m_empty;
+    QString m_name;
+    QString m_body;
+    QString m_returnType;
+    QString m_arguments;
 };
 
 }
 
-#endif // VERITAS_TESTSWITCH_H
+#endif // VERITASCPP_METHODSKELETON_INCLUDED
