@@ -530,13 +530,12 @@ void DistributedVersionControlPlugin::ctxStatus()
 void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
     DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
-    core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ))->reloadModel();
-//     KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
-//     KUrl projectFile = curProject->projectFileUrl();
-//     qDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
-//     qDebug() << "Project will be closed and open";
-//     core()->projectController()->closeProject(curProject);
-//     core()->projectController()->openProject(projectFile);
+    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
+    KUrl projectFile = curProject->projectFileUrl();
+    qDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    qDebug() << "Project will be closed and open";
+    core()->projectController()->closeProject(curProject);
+    core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
 //     emit jobFinished(_checkoutJob); //couses crash!
 }
