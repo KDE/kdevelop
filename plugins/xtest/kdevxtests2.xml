@@ -25,6 +25,37 @@
     <command name="testCondition" />
   </case>
 </suite>
+<suite name="veritas-cpp" dir="languages/cpp/veritas/tests">
+    <case name="classskeleton" exe="veritas-ut-classskeleton.shell">
+        <command name="construct" />
+    </case>
+    <case name="methodskeleton" exe="veritas-ut-methodskeleton.shell">
+        <command name="construct" />
+    </case>
+    <case name="constructorskeleton" exe="veritas-ut-constructorskeleton.shell">
+        <command name="instantiate" />
+    </case>
+    <case name="stubcreation" exe="veritas-ut-stubcreation.shell">
+        <command name="appendStubToClassName" />
+        <command name="basicConstructor" />
+        <command name="basicDestructor" />
+        <command name="basicInterface" />
+        <command name="nonVoidReturnType" />
+        <command name="privateMethod" />
+        <command name="nonVirtualMethod" />
+        <command name="signal" />
+    </case>
+    <case name="ktextdocumentstub" exe="veritas-ut-ktextdocumentstub.shell">
+        <command name="text" />
+        <command name="textRange" />
+        <command name="character" />
+        <command name="line" />
+    </case>
+    <case name="classwriter" exe="veritas-ut-classwriter.shell">
+        <command name="noMethods" />
+        <command name="methods" />
+    </case>
+</suite>
 <suite name="duchain" dir="languages/cpp/cppduchain/tests">
   <case name="duchaintest" exe="duchaintest.shell">
     <command name="testIdentifiers" />
