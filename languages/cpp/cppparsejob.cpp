@@ -349,7 +349,7 @@ void CPPInternalParseJob::run()
         DUChainReadLocker lock(DUChain::lock());
         foreach ( LineContextPair context, parentJob()->includedFiles() ) {
             importedContentChains << contentFromProxy(context);
-            encounteredIncludeUrls << IndexedString(context.context->url().str()); ///@todo prevent conversion
+            encounteredIncludeUrls << context.context->url();
         }
     }
 
@@ -404,7 +404,7 @@ void CPPInternalParseJob::run()
       }
 
       CppEditorIntegrator editor(parentJob()->parseSession());
-      editor.setCurrentUrl(parentJob()->document()); ///@todo
+      editor.setCurrentUrl(parentJob()->document());
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
@@ -486,7 +486,7 @@ void CPPInternalParseJob::run()
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
-              if(ctx.context() && !encounteredIncludeUrls.contains(IndexedString(ctx.context()->url().str()))) { ///@todo prevent conversion
+              if(ctx.context() && !encounteredIncludeUrls.contains(ctx.context()->url())) {
                   contentContext->removeImportedParentContext(ctx.context());
                   kDebug( 9007 ) << "removing not encountered import " << ctx.context()->url().str();
               }
@@ -525,7 +525,7 @@ void CPPInternalParseJob::run()
       DUChainWriteLocker l(DUChain::lock());
       ///Add all our imports to the re-used context, just to make sure they are there.
       foreach( const LineContextPair& import, importedContentChains )
-          if(!import.temporary && !contentContext->imports(import.context, SimpleCursor::invalid())) ///@todo we should import anyway, but it's horribel for performance
+          if(!import.temporary)
             contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
     }
 
