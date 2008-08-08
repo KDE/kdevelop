@@ -76,7 +76,7 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
             file = ".";
         else
             file = url.path();
-        args << KShell::quoteArg(file);
+        args << file;
         qDebug() << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
     }
 
@@ -116,14 +116,41 @@ DVCSjob* IDVCSexecutor::branch(const QString &repository, const QString &basebra
     return empty_cmd();
 }
 
+//parsers for branch:
 QString IDVCSexecutor::curBranch(const QString &repository) 
 {
     Q_UNUSED(repository)
     return QString();
 }
 
-QStringList IDVCSexecutor::branches(const QString &repository) 
+QStringList IDVCSexecutor::IDVCSexecutor::branches(const QString &repository) 
 {
     Q_UNUSED(repository)
     return QStringList();
 }
+
+//commit manager helpers:
+QList<KDevelop::VcsStatusInfo> IDVCSexecutor::getModifiedFiles(const QString &directory){
+    Q_UNUSED(directory)
+    return QList<KDevelop::VcsStatusInfo>();
+}
+
+QList<KDevelop::VcsStatusInfo> IDVCSexecutor::getCachedFiles(const QString &directory){
+    Q_UNUSED(directory)
+    return QList<KDevelop::VcsStatusInfo>();
+}
+
+QStringList IDVCSexecutor::getOtherFiles(const QString &directory)
+{
+    Q_UNUSED(directory)
+    return QStringList();
+}
+
+DVCSjob* IDVCSexecutor::reset(const QString &repository, const QStringList &args, const QStringList files)
+{
+    Q_UNUSED(repository)
+    Q_UNUSED(args)
+    Q_UNUSED(files)
+    return empty_cmd();
+}
+

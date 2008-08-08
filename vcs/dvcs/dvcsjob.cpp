@@ -112,7 +112,7 @@ DVCSjob& DVCSjob::operator<<(const char* arg)
 
 DVCSjob& DVCSjob::operator<<(const QStringList& args)
 {
-    d->command.append( args.join(" ") );
+    d->command << args;
     return *this;
 }
 

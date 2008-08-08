@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -21,27 +21,41 @@
 #ifndef COMMITDIALOG_H
 #define COMMITDIALOG_H
 
-#include <QDialog>
-#include <KTextEdit>
-
 #include "ui_commitdialog.h"
 
-/**
- * Allows to enter text which can them be used as
- * parameter for @code cvs commit @endcode
- * @author Robert Gruber <rgruber@users.sourceforge.net>
- */
-class CommitDialog : public QDialog, private Ui::CommitDialogBase
+#include <QtCore/QString>
+#include <QtGui/QColor>
+
+#include <KDE/KDialog>
+
+namespace KDevelop
+{
+    class IDVCSexecutor;
+    class VcsStatusInfo;
+}
+
+class CommitManager : public KDialog, public Ui::CommitDialogBase
 {
     Q_OBJECT
-    public:
-        CommitDialog(QDialog *parent = 0);
-        virtual ~CommitDialog();
+public:
+    CommitManager(const QString &_repo, KDevelop::IDVCSexecutor* executor, QWidget *parent = 0);
+    ~CommitManager();
 
-    /**
-         * @return The text entered by the user
-     */
-        QString message() { return textedit->toPlainText(); }
+    QString commitMessage() const;
+
+private:
+    void setCommitCandidates();
+    void insertRow(const QList<KDevelop::VcsStatusInfo> statuses,
+                   const QString &stType = QString(),
+                   const Qt::CheckState ifChecked = Qt::Unchecked);
+    void insertRow(const QString& state, const QString& file,
+                   const QColor &foregroundColor = Qt::black,
+                   const Qt::CheckState ifChecked = Qt::Unchecked);
+
+    QString repo;
+    KDevelop::IDVCSexecutor* d;
+private slots:
+    void commit();
 };
 
 #endif

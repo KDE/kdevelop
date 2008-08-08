@@ -29,13 +29,13 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
     dvcs/idvcsexecutor.cpp
-    dvcs/ui/commitdialog.cpp
     dvcs/ui/dvcsmainview.cpp
     dvcs/ui/dvcsgenericoutputview.cpp
     dvcs/ui/importdialog.cpp
     dvcs/ui/importmetadatawidget.cpp
     dvcs/ui/logview.cpp
     dvcs/ui/branchmanager.cpp
+    dvcs/ui/commitmanager.cpp
 )
 
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})

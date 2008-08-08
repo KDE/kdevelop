@@ -36,6 +36,8 @@ BranchManager::BranchManager(const QString &_repo, KDevelop::IDVCSexecutor* exec
     : KDialog(parent)
 {
     d = executor;
+
+    //we do the same in prepareJob, so actually it isn't required
     QFileInfo repoInfo = QFileInfo(_repo);
     if (repoInfo.isFile())
         repo = repoInfo.path();

@@ -121,9 +121,6 @@ void GitInitTest::addFiles()
 
     if (j)
         QVERIFY(j->exec() );
-    //Wait the job will be finished
-    while(j->status() == KDevelop::VcsJob::JobRunning) 
-        ;
 
     // /tmp/kdevGit_testdir/ and testfile
     j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
@@ -131,8 +128,6 @@ void GitInitTest::addFiles()
 
     if (j)
         QVERIFY(j->exec() );
-    while(j->status() == KDevelop::VcsJob::JobRunning) 
-        ;
 
     //repository path without trailing slash
     j = m_proxy->add(QString(GITTEST_BASEDIR_NO_TR_SLASH), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
@@ -140,8 +135,6 @@ void GitInitTest::addFiles()
 
     if (j)
         QVERIFY(j->exec() );
-    while(j->status() == KDevelop::VcsJob::JobRunning) 
-        ;
 
     f.setFileName(GIT_SRC_DIR""GIT_TESTFILE_NAME3);
     if(f.open(QIODevice::WriteOnly)) {
@@ -158,15 +151,33 @@ void GitInitTest::addFiles()
 
     if (j)
         QVERIFY(j->exec() );
-    while(j->status() == KDevelop::VcsJob::JobRunning)
-        ;
 
     //let's use absolute path, because it's used in ContextMenus
     j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_BASEDIR""GIT_TESTFILE_NAME2))));
     if (j)
         QVERIFY(j->exec() );
-    while(j->status() == KDevelop::VcsJob::JobRunning) 
-        ;
+
+    //Now let's create several files and try "git add file1 file2 file3"
+    f.setFileName(GITTEST_BASEDIR"file1");
+    if(f.open(QIODevice::WriteOnly)) {
+        QTextStream input( &f );
+        input << "file1";
+    }
+    f.flush();
+    f.close();
+    f.setFileName(GITTEST_BASEDIR"file2");
+    if(f.open(QIODevice::WriteOnly)) {
+        QTextStream input( &f );
+        input << "file2";
+    }
+    f.flush();
+    f.close();
+    QStringList multipleFiles;
+    multipleFiles<<"file1";
+    multipleFiles<<"file2";
+    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(multipleFiles));
+    if (j)
+        QVERIFY(j->exec() );
 }
 
 void GitInitTest::commitFiles()
@@ -196,7 +207,7 @@ void GitInitTest::commitFiles()
     *jobLs<<"git-ls-tree"<<"--name-only"<<"-r"<<"HEAD";
     if (jobLs) {
         QVERIFY(jobLs->exec() );
-        while(jobLs->status() == KDevelop::VcsJob::JobRunning) ;
+
         QStringList files = jobLs->output().split("\n");
         QVERIFY(files.contains(QString(GIT_TESTFILE_NAME)));
         QVERIFY(files.contains(QString(GIT_TESTFILE_NAME2)));

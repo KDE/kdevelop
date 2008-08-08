@@ -55,11 +55,11 @@
 #include "dvcsjob.h"
 #include "ui/dvcsmainview.h"
 #include "ui/dvcsgenericoutputview.h"
-#include "ui/commitdialog.h"
 #include "ui/importdialog.h"
 #include "ui/importmetadatawidget.h"
 #include "ui/logview.h"
 #include "ui/branchmanager.h"
+#include "ui/commitmanager.h"
 
 using KDevelop::DistributedVersionControlPlugin;
 
@@ -164,19 +164,11 @@ KDevelop::VcsJob*
         DistributedVersionControlPlugin::commit(const QString & message, const KUrl::List & localLocations,
                                                 IBasicVersionControl::RecursionMode recursion)
 {
+    //used by appwizard plugin only (and maybe something that opens a project)
     Q_UNUSED(recursion)
     QString msg = message;
-    if( msg.isEmpty() )
-    {
-        CommitDialog dlg;
-        if( dlg.exec() == QDialog::Accepted )
-        {
-            msg = dlg.message();
-        }
-    }
-    QFileInfo info(localLocations[0].toLocalFile() );
 
-    return d->m_exec->commit(info.absolutePath(), msg, localLocations);
+    return d->m_exec->commit(localLocations[0].path(), msg, localLocations);
 }
 
 KDevelop::VcsJob*
@@ -461,13 +453,8 @@ void DistributedVersionControlPlugin::slotInit()
 
 void DistributedVersionControlPlugin::ctxCommit()
 {
-    VcsJob* j = commit("", DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
-    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
-    if (job) {
-        connect(job, SIGNAL(result(KJob*) ),
-                this, SIGNAL(jobFinished(KJob*) ));
-        job->start();
-    }
+    CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().path(), proxy());
+    cmtManager->show();
 }
 
 void DistributedVersionControlPlugin::ctxAdd()
