@@ -34,7 +34,7 @@
 
 using namespace Sublime;
 
-void ControllerTest::testDocumentDeletion()
+void ControllerTest::documentDeletion()
 {
     Controller controller;
     Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
@@ -43,29 +43,46 @@ void ControllerTest::testDocumentDeletion()
     QCOMPARE(controller.documents().count(), 0);
 }
 
-void ControllerTest::testAreaDeletion()
+void ControllerTest::areaDeletion()
 {
-    Controller controller;
-    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
+    Controller* controller = new Controller;
+    Document *doc = new ToolDocument("tool", controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
     //create a view which does not belong to an area
-    doc->createView();
+    View* view1 = doc->createView();
     //create an area and two views in it
-    Area *area = new Area(&controller, "MyArea");
-    QCOMPARE(controller.defaultAreas().count(), 1);
-    area->addView(doc->createView());
-    area->addView(doc->createView());
+    Area *area = new Area(controller, "MyArea");
+    controller->addDefaultArea(area);
+    QCOMPARE(controller->defaultAreas().count(), 1);
+    View* view2 = doc->createView();
+    view2->setObjectName("VIEW2");
+    area->addView(view2);
+    View* view3 = doc->createView();
+    view3->setObjectName("VIEW3");
+    area->addView(view3);
     QCOMPARE(doc->views().count(), 3);
     QCOMPARE(area->views().count(), 2);
 
     delete area;
-    //now we should have only one view remaining view that did not belong to the area
-    //but we still have 3 because deleteLater only queues the deletion
-    QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
-    QCOMPARE(doc->views().count(), 1);
-    QCOMPARE(controller.defaultAreas().count(), 0);
+    view2 = 0; view3= 0;
+
+    QFAIL("\nnow we should have only one view remaining view that did not belong to the area\n"
+    "but we still have 3 because deleteLater only queues the deletion\n"
+    "\n"
+    "^^ Not quite. The Document still holds pointers to it's views so no delete I think.\n"
+    "   Run test with -vs to debug this.\n");
+
+    //QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
+    //QCOMPARE(doc->views().count(), 1);
+    //QCOMPARE(controller->defaultAreas().count(), 0);
+
+    QTest::qWait(100); // wait for deleteLaters
+    kDebug() << "Deleting doc";
+    delete doc;
+    QTest::qWait(100); // wait for deleteLaters
+    kDebug() << "View2 & view3 are destructored at this point (but no earlier).";
 }
 
-void ControllerTest::testNamedAreas()
+void ControllerTest::namedAreas()
 {
     Controller controller;
     Area *area1 = new Area(&controller, "1");

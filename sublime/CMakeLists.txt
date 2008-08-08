@@ -17,8 +17,6 @@ set(sublime_LIB_SRCS
     switcher.cpp
     tooldocument.cpp
     view.cpp
-    view_p.cpp
-    viewwidgetcreator.cpp
     sublimedefs.cpp
     aggregatemodel.cpp
     ideal.cpp
@@ -48,5 +46,4 @@ install(FILES
     switcher.h
     tooldocument.h
     view.h
-    viewwidgetcreator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime )

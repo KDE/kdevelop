@@ -26,9 +26,11 @@
 namespace Sublime {
 class View;
 class Controller;
-class Document;
+class ToolDocument;
 class Area;
 }
+class QDockWidget;
+class QToolBar;
 
 class ToolViewToolBarTest : public QObject
 {
@@ -37,20 +39,23 @@ private slots:
     void init();
     void cleanup();
 
-    void testToolBarExistence();
-    void testToolViewMove();
-public:
-    ToolViewToolBarTest();
-    ~ToolViewToolBarTest();
+    void horizontalTool();
+    void verticalTool();
+    void toolViewMove();
+
+private:
+    QToolBar* fetchToolBarFor(Sublime::View*);
+    void assertGoodBar(QToolBar*, QString actionText);
+
 private:
     Sublime::Controller *controller;
-
     Sublime::Area *area;
-
-    Sublime::Document *tool1;
-    Sublime::Document *tool2;
+    Sublime::ToolDocument *tool1;
+    Sublime::ToolDocument *tool2;
     Sublime::View *viewT11;
     Sublime::View *viewT21;
+    QString actionTextT1;
+    QString actionTextT2;
 };
 
 #endif

@@ -216,7 +216,8 @@ void MainWindowPrivate::clearArea()
     foreach (View *view, area->toolViews())
     {
         // FIXME should we really delete here??
-        idealMainWidget->removeView(view);
+        bool nonDestructive = true;
+        idealMainWidget->removeView(view, nonDestructive);
 
         if (view->hasWidget())
             view->widget()->setParent(0);

@@ -89,7 +89,7 @@ private:
     struct DocumentPrivate *const d;
 
     friend struct DocumentPrivate;
-    friend class ViewWidgetCreator;
+    friend class View;
 };
 
 }

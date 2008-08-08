@@ -24,7 +24,7 @@
 class DocumentTest: public QObject {
     Q_OBJECT
 private slots:
-    void testViewDeletion();
+    void viewDeletion();
 };
 
 #endif

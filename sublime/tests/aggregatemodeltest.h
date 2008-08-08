@@ -26,7 +26,7 @@ class QStandardItemModel;
 class AggregateModelTest: public QObject {
     Q_OBJECT
 private slots:
-    void testModelAggregationInASingleView();
+    void modelAggregationInASingleView();
 
 private:
     QStandardItemModel *newModel();

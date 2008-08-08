@@ -29,7 +29,7 @@
 
 using namespace Sublime;
 
-void AggregateModelTest::testModelAggregationInASingleView()
+void AggregateModelTest::modelAggregationInASingleView()
 {
     AggregateModel *model = new AggregateModel(this);
     model->addModel("First Model", newModel());

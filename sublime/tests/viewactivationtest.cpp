@@ -51,6 +51,13 @@ public:
     }
 };
 
+Q_DECLARE_METATYPE(Sublime::View*)
+
+void ViewActivationTest::initTestCase()
+{
+    qRegisterMetaType<View*>("View*");
+}
+
 void ViewActivationTest::init()
 {
     controller = new Controller(this);
@@ -67,8 +74,10 @@ void ViewActivationTest::init()
     area = new Area(controller, "Area");
 
     view211 = doc1->createView();
+    view211->setObjectName("view211");
     area->addView(view211);
     view212 = doc1->createView();
+    view212->setObjectName("view212");
     area->addView(view212);
     view221 = doc2->createView();
     area->addView(view221, view211, Qt::Vertical);
@@ -91,7 +100,7 @@ void ViewActivationTest::cleanup()
     delete controller;
 }
 
-void ViewActivationTest::testSignalsOnViewCreationAndDeletion()
+void ViewActivationTest::signalsOnViewCreationAndDeletion()
 {
     Controller *controller = new Controller(this);
     ToolDocument *doc1 = new ToolDocument("doc1", controller, new SimpleToolWidgetFactory<QListView>("doc1"));
@@ -118,58 +127,62 @@ void ViewActivationTest::testSignalsOnViewCreationAndDeletion()
     delete controller;
 }
 
-void ViewActivationTest::testViewActivation()
+void ViewActivationTest::viewActivation()
 {
-    MainWindow mw(controller);
+    MainWindow* mw = new MainWindow(controller);
+    controller->addDefaultArea(area); // Q_ASSERT without this.
+    controller->addMainWindow(mw);
 
-    controller->showArea(area, &mw);
+    controller->showArea(area, mw);
     //we should have an active view immediatelly after the area is shown
-    QCOMPARE(mw.activeView(), view211);
+    QCOMPARE(mw->activeView(), view211);
 
     //add some widgets that are not in layout
-    QTextEdit *breaker = new QTextEdit(&mw);
+    QTextEdit *breaker = new QTextEdit(mw);
     breaker->setObjectName("breaker");
-    QTextEdit *toolBreaker = new QTextEdit(&mw);
+    QTextEdit *toolBreaker = new QTextEdit(mw);
     toolBreaker->setObjectName("toolBreaker");
 
-    QDockWidget *dock = new QDockWidget(&mw);
+    QDockWidget *dock = new QDockWidget(mw);
     dock->setWidget(toolBreaker);
-    mw.addDockWidget(Qt::LeftDockWidgetArea, dock);
+    mw->addDockWidget(Qt::LeftDockWidgetArea, dock);
 
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
     qApp->sendEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view212);
+    QString failMsg = QString("\nWas expecting %1 to be active but got %2").
+                      arg(view212->objectName()).arg(mw->activeView()->objectName());;
+    QVERIFY2(mw->activeView() == view212, failMsg.toAscii().data());
 
     //activate toolview and check that both view and toolview are active
     qApp->sendEvent(viewT31->widget(), new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view212);
-    QCOMPARE(mw.activeToolView(), viewT31);
+    QCOMPARE(mw->activeView(), view212);
+    QCOMPARE(mw->activeToolView(), viewT31);
 
     //active another view
     qApp->sendEvent(view241->widget(), new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view241);
-    QCOMPARE(mw.activeToolView(), viewT31);
+    QCOMPARE(mw->activeView(), view241);
+    QCOMPARE(mw->activeToolView(), viewT31);
 
     //focus a widget not in the area
     qApp->sendEvent(breaker, new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view241);
-    QCOMPARE(mw.activeToolView(), viewT31);
+    QCOMPARE(mw->activeView(), view241);
+    QCOMPARE(mw->activeToolView(), viewT31);
 
     //focus a dock not in the area
     qApp->sendEvent(toolBreaker, new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view241);
-    QCOMPARE(mw.activeToolView(), viewT31);
+    QCOMPARE(mw->activeView(), view241);
+    QCOMPARE(mw->activeToolView(), viewT31);
 
     //focus inner widget for view221
-    QListView *inner = mw.findChild<QListView*>("doc2_inner");
+    QListView *inner = mw->findChild<QListView*>("doc2_inner");
     QVERIFY(inner);
     qApp->sendEvent(inner, new QFocusEvent(QEvent::FocusIn));
-    QCOMPARE(mw.activeView(), view221);
-    QCOMPARE(mw.activeToolView(), viewT31);
+    QCOMPARE(mw->activeView(), view221);
+    QCOMPARE(mw->activeToolView(), viewT31);
 }
 
-void ViewActivationTest::testActivationInMultipleMainWindows()
+void ViewActivationTest::activationInMultipleMainWindows()
 {
     MainWindow mw(controller);
     controller->showArea(area, &mw);
@@ -182,7 +195,7 @@ void ViewActivationTest::testActivationInMultipleMainWindows()
     QCOMPARE(mw2.activeView()->document(), doc1);
 }
 
-void ViewActivationTest::testActivationAfterViewRemoval()
+void ViewActivationTest::activationAfterViewRemoval()
 {
     MainWindow mw(controller);
     controller->showArea(area, &mw);
@@ -199,7 +212,7 @@ void ViewActivationTest::testActivationAfterViewRemoval()
     QCOMPARE(mw.activeView(), view221);
 }
 
-void ViewActivationTest::testActivationAfterRemovalSimplestCase()
+void ViewActivationTest::activationAfterRemovalSimplestCase()
 {
     //we don't have split views - just two views in one area index
     MainWindow mw(controller);

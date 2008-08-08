@@ -31,7 +31,7 @@
 
 using namespace Sublime;
 
-void DocumentTest::testViewDeletion()
+void DocumentTest::viewDeletion()
 {
     Controller controller;
     Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));

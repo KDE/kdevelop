@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -27,6 +28,7 @@
 #include <QDockWidget>
 #include <QToolBar>
 
+#include <sublime/ideal.h>
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>
@@ -38,54 +40,41 @@
 
 using namespace Sublime;
 
-class SpecialWidgetToolBar1Factory : public SimpleToolWidgetFactory<QTextEdit> {
+class ToolViewToolBarFactory : public SimpleToolWidgetFactory<QTextEdit> {
 public:
-    SpecialWidgetToolBar1Factory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
+    ToolViewToolBarFactory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     virtual QList<QAction*> toolBarActions( QWidget* ) const
     {
-        QList<QAction*> actions;
-        actions << new QAction( "Go Up", 0 );
-        actions << new QAction( "Go Down", 0 );
-        actions << new QAction( "Go Right", 0 );
-        actions << new QAction( "Go Left", 0 );
-        actions << new QAction( "Run Up", 0 );
-        actions << new QAction( "Run Down", 0 );
-        actions << new QAction( "Run Right", 0 );
-        actions << new QAction( "Run Left", 0 );
-        return actions;
+        QAction* action = new QAction(actionText, 0);
+        return QList<QAction*>() << action;
     }
+    QString actionText;
 };
-
-class SpecialWidgetToolBar2Factory : public SimpleToolWidgetFactory<QTextEdit> {
-public:
-    SpecialWidgetToolBar2Factory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
-    virtual QList<QAction*> toolBarActions( QWidget* ) const
-    {
-        QList<QAction*> actions;
-        actions << new QAction( "Go Up", 0 );
-        actions << new QAction( "Go Down", 0 );
-        actions << new QAction( "Go Right", 0 );
-        actions << new QAction( "Go Left", 0 );
-        actions << new QAction( "Jump Up", 0 );
-        actions << new QAction( "Jump Down", 0 );
-        actions << new QAction( "Jump Right", 0 );
-        actions << new QAction( "Jump Left", 0 );
-        return actions;
-    }
-};
-
 
 void ToolViewToolBarTest::init()
 {
+    // this is starting to become a GeneralFixture
     controller = new Controller(this);
-    tool1 = new ToolDocument( "tool1", controller, new SpecialWidgetToolBar1Factory("tool1") );
-    tool2 = new ToolDocument( "tool2", controller, new SpecialWidgetToolBar2Factory("tool2") );
-
     area = new Area( controller, "Area" );
+    MainWindow* mw = new MainWindow(controller);
+
+    // a horizontal tool with toolbar
+    ToolViewToolBarFactory* factoryT1 = new ToolViewToolBarFactory("tool1factory");
+    actionTextT1 = "Tool1Action";
+    factoryT1->actionText = actionTextT1;
+    tool1 = new ToolDocument( "tool1", controller, factoryT1 );
     viewT11 = tool1->createView();
-    area->addToolView( viewT11, Sublime::Bottom );
+    area->addToolView( viewT11, Sublime::Bottom ); 
+
+    // a vertical tool with toolbar
+    ToolViewToolBarFactory* factoryT2 = new ToolViewToolBarFactory("tool2factory");
+    actionTextT2 = "Tool2Action";
+    factoryT2->actionText = actionTextT2;
+    tool2 = new ToolDocument( "tool2", controller, factoryT2 );
     viewT21 = tool2->createView();
     area->addToolView( viewT21, Sublime::Left );
+
+    controller->showArea(area, mw);
 }
 
 void ToolViewToolBarTest::cleanup()
@@ -93,82 +82,55 @@ void ToolViewToolBarTest::cleanup()
     delete controller;
 }
 
-ToolViewToolBarTest::ToolViewToolBarTest()
+QToolBar* ToolViewToolBarTest::fetchToolBarFor(Sublime::View* view)
 {
+    QWidget* toolWidget = view->widget();
+    const char* loc = "fetchToolBarFor";
+    Q_ASSERT_X(toolWidget, loc, "Tool refuses to create widget (null).");
+    Q_ASSERT(toolWidget->parent());
+    QMainWindow* toolWin = dynamic_cast<QMainWindow*>(toolWidget->parent());
+    Q_ASSERT_X(toolWin, loc, "Tool widget's parent is not a QMainWindow.");
+    QList<QToolBar*> toolBars = toolWin->findChildren<QToolBar*>();
+    int barCount = toolBars.count();
+    char* failMsg = qstrdup(QString("Expected to find a toolbar but found %1").arg(barCount).toLatin1().data());
+    Q_ASSERT_X(barCount == 1, loc, failMsg);
+    return toolBars.at(0);
 }
 
-ToolViewToolBarTest::~ToolViewToolBarTest()
+void ToolViewToolBarTest::assertGoodBar(QToolBar* toolbar, QString actionText)
 {
+    QVERIFY( toolbar );
+    QVERIFY( !toolbar->isFloatable() );
+    QVERIFY( !toolbar->isMovable() );
+    QCOMPARE( toolbar->iconSize(), QSize( 16, 16 ) );
+    QList<QAction*> actions = toolbar->actions();
+    QCOMPARE( actions.count(), 1 );
+    QCOMPARE( actions.at(0)->text(), actionText);
+    QCOMPARE( toolbar->orientation(), Qt::Horizontal );
 }
 
-
-void ToolViewToolBarTest::testToolBarExistence()
+void ToolViewToolBarTest::horizontalTool()
 {
-    MainWindow mw(controller);
-
-    controller->showArea(area, &mw);
-
-    QList<QDockWidget*> dockWidgets = mw.findChildren<QDockWidget*>();
-    foreach( QDockWidget* dock, dockWidgets )
-    {
-        QList<QToolBar*> toolbars = dock->titleBarWidget()->findChildren<QToolBar*>();
-        QCOMPARE( toolbars.count(), 1 );
-        QToolBar* toolbar = toolbars.at(0);
-        QVERIFY( !toolbar->isFloatable() );
-        QVERIFY( !toolbar->isMovable() );
-        QCOMPARE( toolbar->iconSize(), QSize( 16, 16 ) );
-        QList<QAction*> actions = toolbar->actions();
-        QCOMPARE( actions.count(), 8 );
-        QCOMPARE( actions.at(0)->text(), QString( "Go Up" ) );
-        QCOMPARE( actions.at(1)->text(), QString( "Go Down" ) );
-        QCOMPARE( actions.at(2)->text(), QString( "Go Right" ) );
-        QCOMPARE( actions.at(3)->text(), QString( "Go Left" ) );
-        if( actions.at(4)->text().startsWith("Jump") )
-        {
-            QCOMPARE( toolbar->orientation(), Qt::Horizontal );
-            QCOMPARE( actions.at(4)->text(), QString( "Jump Up" ) );
-            QCOMPARE( actions.at(5)->text(), QString( "Jump Down" ) );
-            QCOMPARE( actions.at(6)->text(), QString( "Jump Right" ) );
-            QCOMPARE( actions.at(7)->text(), QString( "Jump Left" ) );
-        } else
-        {
-            QCOMPARE( toolbar->orientation(), Qt::Vertical );
-            QCOMPARE( actions.at(4)->text(), QString( "Run Up" ) );
-            QCOMPARE( actions.at(5)->text(), QString( "Run Down" ) );
-            QCOMPARE( actions.at(6)->text(), QString( "Run Right" ) );
-            QCOMPARE( actions.at(7)->text(), QString( "Run Left" ) );
-        }
-    }
+    // viewT11 was added with Sublime::Bottom, so it should have a horizontal bar
+    QToolBar* bar = fetchToolBarFor(viewT11);
+    assertGoodBar(bar, actionTextT1);
 }
 
-void ToolViewToolBarTest::testToolViewMove()
+void ToolViewToolBarTest::verticalTool()
 {
-    MainWindow mw(controller);
+    // viewT21 was added with Sublime::Left, so it should have a vertical bar
+    QToolBar* bar = fetchToolBarFor(viewT21);
+    assertGoodBar(bar, actionTextT2);    
+}
 
-    controller->showArea(area, &mw);
-
+void ToolViewToolBarTest::toolViewMove()
+{
     area->moveToolView( viewT11, Sublime::Right );
     area->moveToolView( viewT21, Sublime::Bottom );
-
-    QList<QDockWidget*> dockWidgets = mw.findChildren<QDockWidget*>();
-    foreach( QDockWidget* dock, dockWidgets )
-    {
-        QList<QToolBar*> toolbars = dock->titleBarWidget()->findChildren<QToolBar*>();
-        QCOMPARE( toolbars.count(), 1 );
-        QToolBar* toolbar = toolbars.at(0);
-        foreach( QAction* act, toolbar->actions() )
-        {
-            if( act->text().startsWith( "Jump" ) )
-            {
-                QCOMPARE( toolbar->orientation(), Qt::Vertical );
-                break;
-            } else if( act->text().startsWith( "Run" ) )
-            {
-                QCOMPARE( toolbar->orientation(), Qt::Horizontal );
-                break;
-            }
-        }
-    }
+    QToolBar* barT1 = fetchToolBarFor(viewT11);
+    QToolBar* barT2 = fetchToolBarFor(viewT21);
+    assertGoodBar(barT1, actionTextT1);
+    assertGoodBar(barT2, actionTextT2);
 }
 
 KDEVTEST_MAIN(ToolViewToolBarTest)

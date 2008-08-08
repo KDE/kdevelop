@@ -56,7 +56,7 @@ struct AreaStopper {
     QString m_stopAt;
 };
 
-void AreaWalkerTest::testViewWalkerModes()
+void AreaWalkerTest::viewWalkerModes()
 {
     Controller *controller = new Controller(this);
     Document *doc = new UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
@@ -107,7 +107,7 @@ void AreaWalkerTest::testViewWalkerModes()
     delete controller;
 }
 
-void AreaWalkerTest::testToolViewWalkerModes()
+void AreaWalkerTest::toolViewWalkerModes()
 {
     Controller *controller = new Controller(this);
     Document *doc = new UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));

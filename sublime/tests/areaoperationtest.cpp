@@ -52,28 +52,6 @@ struct ViewCounter {
     int count;
 };
 
-struct AreaWidgetChecker {
-    AreaWidgetChecker(): hasWidgets(true) {}
-    Area::WalkerMode operator()(AreaIndex *index)
-    {
-        foreach (View *view, index->views())
-        {
-            if (!view->hasWidget())
-                kDebug(9504) << "view" << view << "has no widget";
-            hasWidgets = hasWidgets && view->hasWidget();
-        }
-        return Area::ContinueWalker;
-    }
-    Area::WalkerMode operator()(View *view, Sublime::Position)
-    {
-        if (!view->hasWidget())
-            kDebug(9504) << "view" << view << "has no widget";
-        hasWidgets = hasWidgets && view->hasWidget();
-        return Area::ContinueWalker;
-    }
-    bool hasWidgets;
-};
-
 void AreaOperationTest::init()
 {
     m_controller = new Controller(this);
@@ -153,7 +131,7 @@ void AreaOperationTest::cleanup()
     m_controller = 0;
 }
 
-void AreaOperationTest::testAreaConstruction()
+void AreaOperationTest::areaConstruction()
 {
     //check if areas has proper object names
     QCOMPARE(m_area1->objectName(), QString("Area 1"));
@@ -195,7 +173,7 @@ toolview2.3.2 [ top ]\n\
 "));
 }
 
-void AreaOperationTest::testMainWindowConstruction()
+void AreaOperationTest::mainWindowConstruction()
 {
     //====== check for m_area1 ======
     MainWindow mw1(m_controller);
@@ -213,8 +191,10 @@ void AreaOperationTest::checkArea1(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (View *dock, mw->toolDocks())
-        QVERIFY(dock->widget() != 0);
+    foreach (View *dock, mw->toolDocks()) {
+        //QVERIFY(dock->widget() != 0);
+        QVERIFY(dock->hasWidget());
+    }
     QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
@@ -240,8 +220,10 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (View *dock, mw->toolDocks())
-        QVERIFY(dock->widget() != 0);
+    foreach (View *dock, mw->toolDocks()) {
+        //QVERIFY(dock->widget() != 0);
+        QVERIFY(dock->hasWidget());
+    }
     QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
@@ -288,7 +270,7 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     QCOMPARE(horizontalSplitterCount, 1);
 }
 
-void AreaOperationTest::testAreaCloning()
+void AreaOperationTest::areaCloning()
 {
     //show m_area1 in MainWindow1
     MainWindow mw1(m_controller);
@@ -310,7 +292,38 @@ void AreaOperationTest::testAreaCloning()
     checkArea1(&mw2);
 }
 
-void AreaOperationTest::testAreaSwitchingInSameMainwindow()
+/*! Functor used by areaSwitchingInSameMainWindow()
+    Walks all Views and checks if they got a widget.
+    hasWidget will be set to false if any View lacks a widget.*/
+struct AreaWidgetChecker {
+    AreaWidgetChecker(): foundViewWithoutWidget(false), failureMessage("") {}
+    Area::WalkerMode operator()(AreaIndex *index)
+    {
+        foreach (View *view, index->views())
+        {
+            if (!view->hasWidget()) {
+                failureMessage += view->objectName() + " has no widget\n";
+                foundViewWithoutWidget = true;
+            }
+        }
+        return Area::ContinueWalker;
+    }
+    Area::WalkerMode operator()(View *view, Sublime::Position)
+    {
+        if (!view->hasWidget()) {
+            foundViewWithoutWidget = true;
+            failureMessage += view->objectName() + " has no widget\n";
+        }
+        return Area::ContinueWalker;
+    }
+    char* message() {
+        return qstrdup(failureMessage.toAscii().data());
+    }
+    bool foundViewWithoutWidget;
+    QString failureMessage;
+};
+
+void AreaOperationTest::areaSwitchingInSameMainwindow()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -319,14 +332,14 @@ void AreaOperationTest::testAreaSwitchingInSameMainwindow()
     m_controller->showArea(m_area2, &mw);
     checkArea2(&mw);
 
-    //check what happened to area1 widgets
+    //check what happened to area1 widgets, they should be intact
     AreaWidgetChecker checker;
     m_area1->walkViews(checker, m_area1->rootIndex());
     m_area1->walkToolViews(checker, Sublime::AllPositions);
-    QVERIFY(checker.hasWidgets);
+    QVERIFY2(!checker.foundViewWithoutWidget, checker.message());
 }
 
-void AreaOperationTest::testSimpleViewAdditionAndDeletion()
+void AreaOperationTest::simpleViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -337,37 +350,37 @@ void AreaOperationTest::testSimpleViewAdditionAndDeletion()
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
 
-    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
-[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n\
-"), 1, 1);
+    checkAreaViewsDisplay(&mw, m_area1,
+        QString("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n"), 
+        1, 1, "Added an url view (view1.5.1)");
 
     //now remove view and check that area is valid
     delete m_area1->removeView(view);
 
-    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
-[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
-"), 1, 1);
+    checkAreaViewsDisplay(&mw, m_area1,
+        QString("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n"), 
+        1, 1, "Removed the url view (view1.5.1)");
 
     //now remove all other views one by one and leave an empty container
     QList<View*> list(m_area1->views());
     foreach (View *view, list)
         delete m_area1->removeView(view);
 
-    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
-[ horizontal splitter ]\n\
-"), 0, 1);
+    checkAreaViewsDisplay(&mw, m_area1,
+        QString("\n[ horizontal splitter ]\n"), 
+        1, 1, "Removed all views. Only horizontal splitter should remain.");
 
     //add a view again and check that mainwindow is correctly reconstructed
     view = doc5->createView();
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
 
-    checkAreaViewsDisplay(&mw, m_area1, QString("\n\
-[ view1.5.1 ]\n\
-"), 1, 1);
+    checkAreaViewsDisplay(&mw, m_area1,
+        QString("\n[ view1.5.1 ]\n"), 
+        1, 1, "Added a single view to previously emptied mainwindow.");
 }
 
-void AreaOperationTest::testComplexViewAdditionAndDeletion()
+void AreaOperationTest::complexViewAdditionAndDeletion()
 {
     Area *area = m_area2;
     MainWindow mw(m_controller);
@@ -445,10 +458,10 @@ void AreaOperationTest::testComplexViewAdditionAndDeletion()
     delete m_area2->removeView(findNamedView(area, "view2.3.1"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ horizontal splitter ]\n\
-"), 0, 1);
+"), 1, 1);
 }
 
-void AreaOperationTest::testToolViewAdditionAndDeletion()
+void AreaOperationTest::toolViewAdditionAndDeletion()
 {
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
@@ -493,7 +506,7 @@ toolview1.2.2 [ bottom ]\n\
 }
 
 void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
-    const QString &printedAreas, int containerCount, int splitterCount)
+    const QString &printedAreas, int containerCount, int splitterCount, QString location)
 {
     //check area
     AreaViewsPrinter viewsPrinter;
@@ -511,7 +524,10 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
     //check containers
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
-    QCOMPARE(containers.count(), containerCount);
+    QString failMsg = QString("\nFailure while checking area contents @ %1\n"
+                              "Expected %2 containers in central splitter but got %3 \n").
+                      arg(location).arg(containerCount).arg(containers.count());
+    QVERIFY2(containers.count() == containerCount, failMsg.toAscii().data());
 
     int widgetCount = 0;
     foreach (Container *c, containers)

@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "view.h"
-#include "view_p.h"
 
 #include <QtGui/QWidget>
 
@@ -27,6 +26,31 @@
 #include "tooldocument.h"
 
 namespace Sublime {
+
+class View;
+class Document;
+
+class ViewPrivate
+{
+public:
+    ViewPrivate(View *v);
+    Document *doc;
+    QWidget *widget;
+    void unsetWidget();
+
+private:
+    View *view;
+};
+
+ViewPrivate::ViewPrivate(View * v)
+    :doc(0), widget(0), view(v)
+{
+}
+
+void ViewPrivate::unsetWidget()
+{
+    widget = 0;
+}
 
 View::View(Document *doc)
     :QObject(doc), d(new ViewPrivate(this))
@@ -58,7 +82,7 @@ QWidget *View::widget(QWidget *parent)
 
 QWidget *View::createWidget(QWidget *parent)
 {
-    return d->createViewWidget(d->doc, parent);
+    return d->doc->createViewWidget(parent);
 }
 
 bool View::hasWidget() const

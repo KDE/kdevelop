@@ -31,14 +31,15 @@ class Area;
 class ViewActivationTest: public QObject {
     Q_OBJECT
 private slots:
+    void initTestCase();
     void init();
     void cleanup();
 
-    void testViewActivation();
-    void testActivationInMultipleMainWindows();
-    void testActivationAfterViewRemoval();
-    void testActivationAfterRemovalSimplestCase();
-    void testSignalsOnViewCreationAndDeletion();
+    void viewActivation();
+    void activationInMultipleMainWindows();
+    void activationAfterViewRemoval();
+    void activationAfterRemovalSimplestCase();
+    void signalsOnViewCreationAndDeletion();
 
 private:
     Sublime::Controller *controller;

@@ -520,9 +520,9 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     }
 
     QList<QAction *> toolBarActions = view->toolBarActions();
-    if (toolBarActions.isEmpty())
+    if (toolBarActions.isEmpty()) {
       dock->setWidget(w);
-    else {
+    } else {
       QMainWindow *toolView = new QMainWindow();
       KToolBar *toolBar = new KToolBar(toolView);
       int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
@@ -530,9 +530,10 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
       toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
       toolBar->setWindowTitle(i18n("%1 Tool Bar", w->windowTitle()));
       toolBar->setFloatable(false);
-      toolBar->setMovable(true);
-      foreach (QAction *action, toolBarActions)
-	toolBar->addAction(action);
+      toolBar->setMovable(false);
+      foreach (QAction *action, toolBarActions) {
+        toolBar->addAction(action);
+      }
       toolView->setCentralWidget(w);
       toolView->addToolBar(toolBar);
       dock->setWidget(toolView);
@@ -605,9 +606,10 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
 
     QWidget *viewParent = view->widget()->parentWidget();
     IdealDockWidget *dock = qobject_cast<IdealDockWidget *>(viewParent);
-    for (; viewParent; viewParent = viewParent->parentWidget()) {
-	if (0 != (dock = qobject_cast<IdealDockWidget *>(viewParent)))
-	    break;
+    if (!dock) { // toolviews with a toolbar live in a QMainWindow which lives in a Dock
+        Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
+        viewParent = viewParent->parentWidget();
+        dock = qobject_cast<IdealDockWidget*>(viewParent);
     }
     Q_ASSERT(dock);
 

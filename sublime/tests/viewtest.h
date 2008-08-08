@@ -24,8 +24,8 @@
 class ViewTest: public QObject {
     Q_OBJECT
 private slots:
-    void testWidgetDeletion();
-    void testViewReimplementation();
+    void widgetDeletion();
+    void viewReimplementation();
 };
 
 #endif

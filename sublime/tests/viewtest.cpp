@@ -32,7 +32,7 @@
 
 using namespace Sublime;
 
-void ViewTest::testWidgetDeletion()
+void ViewTest::widgetDeletion()
 {
     Controller controller;
     Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
@@ -63,7 +63,7 @@ protected:
     virtual View *newView(Document *doc) { return new TestView(doc); }
 };
 
-void ViewTest::testViewReimplementation()
+void ViewTest::viewReimplementation()
 {
     Controller controller;
     Document *doc = new TestDocument(&controller);

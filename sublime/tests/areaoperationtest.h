@@ -34,19 +34,20 @@ private slots:
     void init();
     void cleanup();
 
-    void testAreaConstruction();
-    void testMainWindowConstruction();
-    void testAreaCloning();
-    void testAreaSwitchingInSameMainwindow();
-    void testSimpleViewAdditionAndDeletion();
-    void testComplexViewAdditionAndDeletion();
-    void testToolViewAdditionAndDeletion();
+    void areaConstruction();
+    void mainWindowConstruction();
+    void areaCloning();
+    void areaSwitchingInSameMainwindow();
+    void simpleViewAdditionAndDeletion();
+    void complexViewAdditionAndDeletion();
+    void toolViewAdditionAndDeletion();
 
 private:
     void checkArea1(Sublime::MainWindow *mw);
     void checkArea2(Sublime::MainWindow *mw);
+    /*! @param location short descriptive message printed on failure. */
     void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
-        const QString &areas, int containers, int splitters);
+        const QString &areas, int containers, int splitters, QString location=QString());
 
     Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
 
