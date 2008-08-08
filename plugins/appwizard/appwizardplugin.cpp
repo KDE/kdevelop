@@ -191,32 +191,31 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
                 //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
                 KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
-                job->exec();
-                kDebug(9010) << "Initializing DVCS repository:" << dest.toLocalFile();
-                if (job->status() == KDevelop::VcsJob::JobSucceeded)
+                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    KDevelop::VcsJob* job = iface->add(KUrl::List(dest),
-                            KDevelop::IBasicVersionControl::Recursive);
-                    if (job)
-                    {
-                        job->exec();
-                        if (job->status() != KDevelop::VcsJob::JobSucceeded )
-                        {
-                            KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
-                            KIO::NetAccess::del( dest, 0);
-                            return "";
-                        }
-                    } else
-                    {
-                        KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
-                        KIO::NetAccess::del( dest, 0 );
-                        return "";
-                    }
+                    KMessageBox::error(0, i18n("Could not initialize DVCS repository"));
+                    KIO::NetAccess::del( dest, 0);
+                    tmpdir.unlink();
+                    return "";
                 }
-                else
+                kDebug(9010) << "Initializing DVCS repository:" << dest.toLocalFile();
+
+                job = iface->add(KUrl::List(dest),
+                                 KDevelop::IBasicVersionControl::Recursive);
+                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    KMessageBox::error(0, i18n("Could not init DVCS repository"));
-                    KIO::NetAccess::del( dest, 0 );
+                    KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
+                    KIO::NetAccess::del( dest, 0);
+                    tmpdir.unlink();
+                    return "";
+                }
+                job = iface->commit(QString("Initial commit from KDevelop"), KUrl::List(dest),
+                                    KDevelop::IBasicVersionControl::Recursive);
+                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
+                {
+                    KMessageBox::error(0, i18n("Could not make an initial commit"));
+                    KIO::NetAccess::del( dest, 0);
+                    tmpdir.unlink();
                     return "";
                 }
             }
@@ -233,28 +232,23 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
                 kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
                 kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
+                
                 KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
-                job->exec();
-                if( job->status() == KDevelop::VcsJob::JobSucceeded )
+                if(job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded )
                 {
                     KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
-                    if (job) {
-                        job->exec();
-                        if( job->status() != KDevelop::VcsJob::JobSucceeded )
-                        {
-                            KMessageBox::error(0, i18n("Could not checkout imported project"));
-                            KIO::NetAccess::del( dest, 0 );
-                            tmpdir.unlink();
-                            return "";
-                        }
-                    } else {
+                    if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded )
+                    {
                         KMessageBox::error(0, i18n("Could not checkout imported project"));
+                        KIO::NetAccess::del( dest, 0 );
                         tmpdir.unlink();
                         return "";
                     }
-                }else
+                }
+                else
                 {
                     KMessageBox::error(0, i18n("Could not import project"));
+                    KIO::NetAccess::del( dest, 0 );
                     tmpdir.unlink();
                     return "";
                 }
