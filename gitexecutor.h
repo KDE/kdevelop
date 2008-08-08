@@ -37,6 +37,7 @@ class DVCSjob;
 namespace KDevelop
 {
     class IPlugin;
+    class VcsStatusInfo;
 }
 
 /**
@@ -89,13 +90,28 @@ public:
     DVCSjob* checkout(const QString &repository, const QString &branch);
     DVCSjob* branch(const QString &repository, const QString &basebranch = QString(), const QString &branch = QString(),
                     const QStringList &args = QStringList());
+    DVCSjob* reset(const QString &repository, const QStringList &args, const QStringList files);
+private:
+    //it can be public, but it isn't required now
+    DVCSjob* lsFiles(const QString &repository, const QStringList &args);
+
+public:
     //parsers for branch:
     QString curBranch(const QString &repository);
     QStringList branches(const QString &repository);
 
+    //commit dialog helpers, send to main helper the arg for git-ls-files:
+    QList<KDevelop::VcsStatusInfo> getModifiedFiles(const QString &directory);
+    QList<KDevelop::VcsStatusInfo> getCachedFiles(const QString &directory);
+    QStringList getOtherFiles(const QString &directory);
+
     void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
 
 private:
+    //commit dialog "main" helper
+    QStringList getLsFiles(const QString &directory, const QStringList &args);
+    KDevelop::VcsStatusInfo::State charToState(const char ch);
+
     KDevelop::IPlugin* vcsplugin;
 
 };

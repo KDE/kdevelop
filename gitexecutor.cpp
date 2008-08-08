@@ -35,6 +35,8 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <interfaces/iplugin.h>
 
+using KDevelop::VcsStatusInfo;
+
 GitExecutor::GitExecutor(KDevelop::IPlugin* parent)
     : QObject(parent), vcsplugin(parent)
 {
@@ -221,11 +223,40 @@ DVCSjob* GitExecutor::branch(const QString &repository, const QString &basebranc
         *job << "git-branch";
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
-            *job << args.join(" ");
+            *job << args;
         if (!branch.isEmpty())
             *job << branch;
         if (!basebranch.isEmpty())
             *job << basebranch;
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+DVCSjob* GitExecutor::reset(const QString &repository, const QStringList &args, const QStringList files)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, repository) ) {
+        *job << "git-reset";
+        //Empty branch has 'something' so it breaks the command
+        if (!args.isEmpty())
+            *job << args;
+        addFileList(job, files);
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
+}
+
+DVCSjob* GitExecutor::lsFiles(const QString &repository, const QStringList &args)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, repository) ) {
+        *job << "git-ls-files";
+        //Empty branch has 'something' so it breaks the command
+        if (!args.isEmpty())
+            *job << args;
         return job;
     }
     if (job) delete job;
@@ -239,8 +270,6 @@ QString GitExecutor::curBranch(const QString &repository)
     {
         kDebug() << "Getting branch list";
         job->exec();
-        while (job->status() == KDevelop::VcsJob::JobRunning)
-            ;
     }
     QString branch;
     if (job->status() == KDevelop::VcsJob::JobSucceeded)
@@ -259,11 +288,8 @@ QStringList GitExecutor::branches(const QString &repository)
     {
         kDebug() << "Getting branch list";
         job->exec();
-        while (job->status() == KDevelop::VcsJob::JobRunning)
-            ;
     }
     QStringList branchListDirty;
-    //     branches<< "master" << "test" << "brrr" << "br2";
     if (job->status() == KDevelop::VcsJob::JobSucceeded)
         branchListDirty = job->output().split('\n');
     else
@@ -285,6 +311,76 @@ QStringList GitExecutor::branches(const QString &repository)
         branchList<<branch;
     }
     return branchList;
+}
+
+QStringList GitExecutor::getOtherFiles(const QString &directory)
+{
+    return getLsFiles(directory, QStringList(QString("--others")) );
+}
+
+QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, directory) )
+        *job << "git-diff-files";
+    if (job)
+        job->exec();
+    QStringList output;
+    if (job->status() == KDevelop::VcsJob::JobSucceeded)
+        output = job->output().split('\n');
+    else
+        return QList<VcsStatusInfo>();
+
+    QList<VcsStatusInfo> modifiedFiles;
+    foreach(QString line, output)
+    {
+        QChar stCh = line[97];
+
+        KUrl file(line.section('\t', 1).trimmed());
+
+        VcsStatusInfo status;
+        status.setUrl(file);
+        status.setState(charToState(stCh.toAscii() ) );
+
+        kDebug() << line[97] << " " << file.path();
+
+        modifiedFiles.append(status);
+    }
+
+    return modifiedFiles;
+}
+
+QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
+{
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (prepareJob(job, directory) )
+        *job << "git-diff-index" << "--cached" << "HEAD";
+    if (job)
+        job->exec();
+    QStringList output;
+    if (job->status() == KDevelop::VcsJob::JobSucceeded)
+        output = job->output().split('\n');
+    else
+        return QList<VcsStatusInfo>();
+
+    QList<VcsStatusInfo> cachedFiles;
+
+    foreach(QString line, output)
+    {
+        QChar stCh = line[97];
+
+        KUrl file(line.section('\t', 1).trimmed());
+
+        VcsStatusInfo status;
+        status.setUrl(file);
+        status.setState(charToState(stCh.toAscii() ) );
+
+        kDebug() << line[97] << " " << file.path();
+
+        cachedFiles.append(status);
+    }
+
+    return cachedFiles;
 }
 
 //Actually we can just copy the outpuc without parsing. So it's a kind of draft for future
@@ -317,6 +413,49 @@ void GitExecutor::parseOutput(const QString& jobOutput, QList<DVCScommit>& commi
             item.log += s+'\n';
         }
     }
+}
+
+QStringList GitExecutor::getLsFiles(const QString &directory, const QStringList &args)
+{
+    DVCSjob* job = lsFiles(directory, args);
+    if (job)
+    {
+        job->exec();
+        if (job->status() == KDevelop::VcsJob::JobSucceeded)
+            return job->output().split('\n');
+        else
+            return QStringList();
+    }
+    return QStringList();
+}
+
+KDevelop::VcsStatusInfo::State GitExecutor::charToState(const char ch)
+{
+    switch (ch)
+    {
+        case 'M':
+        {
+            return VcsStatusInfo::ItemModified;
+            break;
+        }
+        case 'A':
+        {
+            return VcsStatusInfo::ItemAdded;
+            break;
+        }
+        case 'D':
+        {
+            return VcsStatusInfo::ItemDeleted;
+            break;
+        }
+        //ToDo: hasConflicts
+        default:
+        {
+            return VcsStatusInfo::ItemUnknown;
+            break;
+        }
+    }
+    return VcsStatusInfo::ItemUnknown;
 }
 
 // #include "gitexetor.moc"
