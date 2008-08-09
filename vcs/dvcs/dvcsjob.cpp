@@ -88,6 +88,11 @@ void DVCSjob::setDirectory(const QString& directory)
     d->directory = directory;
 }
 
+void DVCSjob::setStandardInputFile(const QString &fileName)
+{
+    d->childproc->setStandardInputFile(fileName);
+}
+
 QString DVCSjob::getDirectory()
 {
     return d->directory;

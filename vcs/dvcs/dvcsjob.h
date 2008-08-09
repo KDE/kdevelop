@@ -52,6 +52,7 @@ public:
     void clear();
     void setServer(const QString& server);
     void setDirectory(const QString& directory);
+    void setStandardInputFile(const QString &fileName);
 
     QString getDirectory();
 
