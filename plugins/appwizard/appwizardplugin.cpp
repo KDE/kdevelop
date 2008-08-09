@@ -208,8 +208,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                                     KDevelop::IBasicVersionControl::Recursive);
                 if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    QString errorMsg = i18n("Could not make an initial commit to");
-                    return vcsError(errorMsg, tmpdir, dest);
+                    QString errorMsg = i18n("Could not import project into");
+                    return vcsError(errorMsg + iface->name(), tmpdir, dest);
                 }
             }
             else
