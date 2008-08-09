@@ -175,9 +175,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
-                KMessageBox::error(0, i18n("Could not create new project"));
-                KIO::NetAccess::del( KUrl( unpackDir ), 0 );
-                return "";
+            QString errorMsg = i18n("Could not create new project");
+            return vcsError(errorMsg, tmpdir, KUrl(unpackDir));
         }
 
         if( !info.vcsPluginName.isEmpty() && plugin )
@@ -193,10 +192,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
                 if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    KMessageBox::error(0, i18n("Could not initialize DVCS repository"));
-                    KIO::NetAccess::del( dest, 0);
-                    tmpdir.unlink();
-                    return "";
+                    QString errorMsg = i18n("Could not initialize DVCS repository");
+                    return vcsError(errorMsg, tmpdir, dest);
                 }
                 kDebug(9010) << "Initializing DVCS repository:" << dest.toLocalFile();
 
@@ -204,19 +201,15 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                                  KDevelop::IBasicVersionControl::Recursive);
                 if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    KMessageBox::error(0, i18n("Could not add files to the DVCS repository"));
-                    KIO::NetAccess::del( dest, 0);
-                    tmpdir.unlink();
-                    return "";
+                    QString errorMsg = i18n("Could not add files to the DVCS repository");
+                    return vcsError(errorMsg, tmpdir, dest);
                 }
-                job = iface->commit(QString("Initial commit from KDevelop"), KUrl::List(dest),
+                job = iface->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
                                     KDevelop::IBasicVersionControl::Recursive);
                 if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
                 {
-                    KMessageBox::error(0, i18n("Could not make an initial commit"));
-                    KIO::NetAccess::del( dest, 0);
-                    tmpdir.unlink();
-                    return "";
+                    QString errorMsg = i18n("Could not make an initial commit to");
+                    return vcsError(errorMsg, tmpdir, dest);
                 }
             }
             else
@@ -239,18 +232,14 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
                     if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded )
                     {
-                        KMessageBox::error(0, i18n("Could not checkout imported project"));
-                        KIO::NetAccess::del( dest, 0 );
-                        tmpdir.unlink();
-                        return "";
+                        QString errorMsg = i18n("Could not checkout imported project");
+                        return vcsError(errorMsg, tmpdir, dest);
                     }
                 }
                 else
                 {
-                    KMessageBox::error(0, i18n("Could not import project"));
-                    KIO::NetAccess::del( dest, 0 );
-                    tmpdir.unlink();
-                    return "";
+                    QString errorMsg = i18n("Could not import project");
+                    return vcsError(errorMsg, tmpdir, dest);
                 }
             }
         }
@@ -362,6 +351,12 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
     }
 }
 
+QString AppWizardPlugin::vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest)
+{
+    KMessageBox::error(0, errorMsg);
+    KIO::NetAccess::del(dest, 0);
+    tmpdir.unlink();
+    return "";
+}
 
 #include "appwizardplugin.moc"
-

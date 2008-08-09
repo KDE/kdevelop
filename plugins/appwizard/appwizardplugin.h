@@ -18,8 +18,10 @@
 #include <QVariant>
 
 class ProjectTemplatesModel;
-class KArchiveDirectory;
 class ApplicationInfo;
+class KArchiveDirectory;
+class KTempDir;
+class KUrl;
 
 class AppWizardPlugin: public KDevelop::IPlugin {
     Q_OBJECT
@@ -35,6 +37,7 @@ private:
     QString createProject(const ApplicationInfo& );
     bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
+    QString vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest);
 
     ProjectTemplatesModel *m_templatesModel;
 
