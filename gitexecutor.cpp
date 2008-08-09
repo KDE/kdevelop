@@ -55,22 +55,13 @@ QString GitExecutor::name() const
 //maybe func()const?
 bool GitExecutor::isValidDirectory(const KUrl & dirPath)
 {
-    DVCSjob* job = new DVCSjob(vcsplugin);
+    DVCSjob* job = gitRevParse(dirPath.path(), QStringList(QString("--is-inside-work-tree")));
     if (job)
     {
-        QString path = dirPath.path();
-        QFileInfo fsObject(path);
-        if (fsObject.isFile())
-            path = fsObject.path();
-
-        job->clear();
-        job->setDirectory(path);
-        *job << "git-rev-parse";
-        *job << "--is-inside-work-tree";
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
-            kDebug(9500) << "Dir:" << path << " is is inside work tree of git" ;
+            kDebug(9500) << "Dir:" << dirPath << " is is inside work tree of git" ;
             return true;
         }
     }
@@ -352,9 +343,28 @@ QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
 
 QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
 {
-    DVCSjob* job = new DVCSjob(vcsplugin);
+//     gitRevParse(dirPath.path(), QString("--is-inside-work-tree")
+    DVCSjob* job = gitRevParse(directory, QStringList(QString("--branches")));
+    job->exec();
+    QStringList shaArg;
+    if (job->output().isEmpty())
+    {
+        //there is no branches, which means there is no commit yet
+        //let's create an empty tree to use with git-diff-index
+        DVCSjob* job = new DVCSjob(vcsplugin);
+        if (prepareJob(job, directory) )
+        {
+            *job << "git-mktree";
+            job->setStandardInputFile("/dev/null");
+        }
+        if (job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+            shaArg<<job->output().split('\n');
+    }
+    else
+        shaArg<<"HEAD";
+    job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory) )
-        *job << "git-diff-index" << "--cached" << "HEAD";
+        *job << "git-diff-index" << "--cached" << shaArg;
     if (job)
         job->exec();
     QStringList output;
@@ -427,6 +437,28 @@ QStringList GitExecutor::getLsFiles(const QString &directory, const QStringList 
             return QStringList();
     }
     return QStringList();
+}
+
+DVCSjob* GitExecutor::gitRevParse(const QString &repository, const QStringList &args)
+{
+    //Use prepareJob() here only if you like "dead" recursion and KDevelop crashes
+    DVCSjob* job = new DVCSjob(vcsplugin);
+    if (job)
+    {
+        QString workDir = repository;
+        QFileInfo fsObject(workDir);
+        if (fsObject.isFile())
+            workDir = fsObject.path();
+
+        job->clear();
+        job->setDirectory(workDir);
+        *job << "git-rev-parse";
+        foreach(const QString &arg, args)
+            *job << arg;
+        return job;
+    }
+    if (job) delete job;
+    return NULL;
 }
 
 KDevelop::VcsStatusInfo::State GitExecutor::charToState(const char ch)

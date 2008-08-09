@@ -94,6 +94,7 @@ public:
 private:
     //it can be public, but it isn't required now
     DVCSjob* lsFiles(const QString &repository, const QStringList &args);
+    DVCSjob* gitRevParse(const QString &repository, const QStringList &args);
 
 public:
     //parsers for branch:
