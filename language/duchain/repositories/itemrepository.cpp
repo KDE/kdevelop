@@ -154,9 +154,10 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   
   m_path = path;
   m_cleared = clear;
-  
-  if(clear)
-    KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+  if(clear) {
+      kWarning() << "The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository" << m_path;
+//     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+  }
   
   foreach(AbstractItemRepository* repository, m_repositories) {
     if(!repository->open(path, clear)) {
