@@ -56,6 +56,30 @@ namespace std {
 
 namespace KDevelop
 {
+ReferencedTopDUContext::ReferencedTopDUContext(TopDUContext* context) : m_topContext(context) {
+  if(m_topContext)
+    DUChain::self()->refCountUp(m_topContext);
+}
+
+ReferencedTopDUContext::ReferencedTopDUContext(const ReferencedTopDUContext& rhs) : m_topContext(rhs.m_topContext) {
+  if(m_topContext)
+    DUChain::self()->refCountUp(m_topContext);
+}
+
+ReferencedTopDUContext::~ReferencedTopDUContext() {
+  if(m_topContext)
+    DUChain::self()->refCountDown(m_topContext);
+}
+
+ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUContext& rhs) {
+  if(m_topContext)
+    DUChain::self()->refCountDown(m_topContext);
+  
+  m_topContext = rhs.m_topContext;
+  
+  if(m_topContext)
+    DUChain::self()->refCountUp(m_topContext);
+}
 
 IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
   if(context)
@@ -590,6 +614,13 @@ void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) c
         return;
       }
   }
+}
+
+RecursiveImports TopDUContext::recursiveImports() const
+{
+  ENSURE_CAN_READ
+  QMutexLocker lock(&importStructureMutex);
+  return m_local->m_recursiveImports;
 }
 
 SimpleCursor TopDUContext::importPosition(const DUContext* target) const

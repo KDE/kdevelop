@@ -27,8 +27,10 @@ DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
 }
 
 DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const {
-  if(m_factories.size() <= data.classId || m_factories[data.classId] == 0)
+  if(m_factories.size() <= data.classId || m_factories[data.classId] == 0) {
+    Q_ASSERT(0); //Or we'll crash later
     return 0;
+  }
   return m_factories[data.classId]->cloneData(data);
 }
 

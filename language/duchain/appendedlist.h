@@ -96,6 +96,8 @@ class TemporaryDataManager {
 
       if(!m_freeIndices.isEmpty()) {
         ret = m_freeIndices.pop();
+        if(!m_items[ret])
+          m_items[ret] = new T;
       }else{
         ret = m_items.size();
         m_items.append(new T);
@@ -118,6 +120,14 @@ class TemporaryDataManager {
 
       m_freeIndices.push(index);
 
+      if(m_freeIndices.size() > 100) {
+        //Save some memory
+        for(int a = 0; a < m_freeIndices.size(); ++a) {
+          delete m_items[m_freeIndices[a]];
+          m_items[m_freeIndices[a]] = 0;
+        }
+      }
+      
       if(threadSafe)
         m_mutex.unlock();
     }

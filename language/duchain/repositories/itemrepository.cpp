@@ -23,6 +23,8 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <klockfile.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include <interfaces/icore.h>
 
@@ -44,6 +46,12 @@ QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, in
   return *m_customCounters[identity];
 }
 
+bool processExists(int pid) {
+  ///@todo Find a cross-platform way of doing this!
+  QFileInfo f(QString("/proc/%1").arg(pid));
+  return f.exists();
+}
+
 ///The global item-repository registry that is used by default
 ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
   
@@ -61,7 +69,27 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
       KStandardDirs::makeDir(specificDir);
        lock = new KLockFile(specificDir + "/lock", component);
        KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
-       if(result == KLockFile::LockOK || result == KLockFile::LockStale) {
+
+       bool useDir = false;
+       
+       if(result == KLockFile::LockFail) {
+         int pid;
+         QString hostname, appname;
+         if(lock->getLockInfo(pid, hostname, appname)) {
+           if(!processExists(pid)) {
+             kDebug() << "The process holding" << specificDir << "does not exists any more. Re-using the directory.";
+             QFile::remove(specificDir + "/lock");
+             useDir = true;
+             if(lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) != KLockFile::LockOK) {
+               kWarning() << "Failed to re-establish the lock in" << specificDir;
+               continue;
+             }
+           }
+         }
+       }else{
+         useDir = true;
+       }
+       if(useDir) {
           repoPath = specificDir;
           if(result == KLockFile::LockStale)
             kWarning() << "stale lock detected:" << specificDir + "/lock";
@@ -97,6 +125,18 @@ QString ItemRepositoryRegistry::path() const {
 return m_path;
 }
 
+void ItemRepositoryRegistry::lockForWriting() {
+  //Create is_writing
+  QFile f(m_path + "/is_writing");
+  f.open(QIODevice::WriteOnly);
+  f.close();
+}
+
+void ItemRepositoryRegistry::unlockForWriting() {
+  //Delete is_writing
+  QFile::remove(m_path + "/is_writing");
+}
+
 void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* repository) {
   Q_ASSERT(m_repositories.contains(repository));
   repository->close();
@@ -107,8 +147,17 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   if(m_path == path && m_cleared == clear)
     return true;
   
+  QFileInfo wasWriting(m_path + "/is_writing");
+  if(wasWriting.exists()) {
+    clear = true;
+  }
+  
   m_path = path;
   m_cleared = clear;
+  
+  if(clear)
+    KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+  
   foreach(AbstractItemRepository* repository, m_repositories) {
     if(!repository->open(path, clear)) {
       Q_ASSERT(!clear); //We have a problem if opening a repository fails although it should be cleared
@@ -138,6 +187,11 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   
   m_lock = lock;
   return true;
+}
+
+void ItemRepositoryRegistry::store() {
+  foreach(AbstractItemRepository* repository, m_repositories)
+    repository->store();
 }
 
 void ItemRepositoryRegistry::close() {

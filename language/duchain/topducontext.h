@@ -38,9 +38,52 @@ namespace KDevelop
   class DeclarationChecker;
   class TopDUContext;
 
+  ///Maps an imported top-context to a pair:
+  ///1. The distance to the top-context, and 2. The next step towards the top-context
+  ///in the chain.
+  typedef QHash<const TopDUContext*, QPair<int, const TopDUContext*> > RecursiveImports;
+  
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
 
   typedef KSharedPtr<Problem> ProblemPointer;
+
+///KDevelop can unload unused top-context at any time. To prevent unloading,
+///keep a ReferencedTopDUContext.
+class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
+  public:
+    ReferencedTopDUContext(TopDUContext* context = 0);
+    ReferencedTopDUContext(const ReferencedTopDUContext& rhs);
+    ~ReferencedTopDUContext();
+    
+    ReferencedTopDUContext& operator=(const ReferencedTopDUContext& rhs);
+    
+    TopDUContext* data() const {
+      return m_topContext;
+    }
+    
+    operator TopDUContext*() const {
+      return m_topContext;
+    }
+    
+    bool operator==(const ReferencedTopDUContext& rhs) const {
+      return m_topContext == rhs.m_topContext;
+    }
+    
+    bool operator!=(const ReferencedTopDUContext& rhs) const {
+      return m_topContext != rhs.m_topContext;
+    }
+    
+    TopDUContext* operator->() const {
+      return m_topContext;
+    }
+    
+    uint hash() const {
+      return (uint)(((quint64)m_topContext) * 37);
+    }
+    
+  private:
+  TopDUContext* m_topContext;
+};
 
 ///Allows simple indirect access to top-contexts with on-demand loading
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
@@ -49,7 +92,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     }
     IndexedTopDUContext(TopDUContext* context = 0);
     
+    ///Returns the top-context represented by this indexed top-context. If it wasn't loaded yet, it is loaded.
+    ///To prevent automatic unloading, store it in ReferencedTopDUContext
     TopDUContext* data() const;
+    
     bool operator==(const IndexedTopDUContext& rhs) const {
       return m_index == rhs.m_index;
     }
@@ -244,6 +290,10 @@ public:
   
   virtual SimpleCursor importPosition(const DUContext* target) const;
   
+  ///Returns a set of all recursively imported top-contexts. Each imported top-context is mapped to the distance, and the direct
+  ///import through which the top-context is imported.
+  RecursiveImports recursiveImports() const;
+  
   class CacheData;
 
   /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
@@ -323,6 +373,10 @@ QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration);
   * Returns the smart-ranges of all uses
   * */
 QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration);
+
+inline uint qHash(const ReferencedTopDUContext& ctx) {
+  return ctx.hash();
+}
 
 }
 

@@ -43,6 +43,7 @@
 
 #include "backgroundparser.h"
 #include "parserdependencypolicy.h"
+#include "duchain/topducontext.h"
 
 using namespace KTextEditor;
 
@@ -51,9 +52,8 @@ namespace KDevelop
 
 struct ParseJobPrivate
 {
-    ParseJobPrivate(const KUrl& url)
-        : duContext(0)
-        , document( IndexedString(url.pathOrUrl()) )
+    ParseJobPrivate(const KUrl& url) :
+          document( IndexedString(url.pathOrUrl()) )
         , backgroundParser( 0 )
         , abortMutex(new QMutex)
         , revisionToken(-1)
@@ -67,7 +67,7 @@ struct ParseJobPrivate
         delete abortMutex;
     }
 
-    TopDUContext* duContext;
+    ReferencedTopDUContext duContext;
 
     KDevelop::IndexedString document;
     QString errorMessage;
@@ -101,12 +101,12 @@ bool ParseJob::success() const
     return !d->aborted;
 }
 
-void ParseJob::setDuChain(KDevelop::TopDUContext* duChain)
+void ParseJob::setDuChain(ReferencedTopDUContext duChain)
 {
     d->duContext = duChain;
 }
 
-TopDUContext* ParseJob::duChain() const
+ReferencedTopDUContext ParseJob::duChain() const
 {
     return d->duContext;
 }

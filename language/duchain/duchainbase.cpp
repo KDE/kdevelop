@@ -1,5 +1,6 @@
 /* This  is part of KDevelop
     Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2007/2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -101,9 +102,11 @@ void DUChainBase::rebuildDynamicData(DUContext* parent, uint ownIndex)
 }
 
 void DUChainBase::makeDynamic() {
+  Q_ASSERT(d_ptr);
   if(!d_func()->m_dynamic) {
     //We don't delete the previous data, because it's embedded in the top-context when it isn't dynamic.
     d_ptr = DUChainItemSystem::self().cloneData(*d_func());
+    Q_ASSERT(d_ptr);
     Q_ASSERT(d_func()->m_dynamic);
   }
 }

@@ -22,12 +22,15 @@
 #include <QtCore/QVector>
 #include <QtCore/QMutex>
 #include <QtCore/QByteArray>
+#include <QtCore/QPair>
 
 namespace KDevelop {
 
 class TopDUContext;
 class DUContext;
 class Declaration;
+
+typedef QPair<QByteArray, uint> ArrayWithPosition;
 
 ///This class contains dynamic data of a top-context, and also the repository that contains all the data within this top-context.
 class TopDUContextDynamicData {
@@ -82,7 +85,7 @@ class TopDUContextDynamicData {
     QVector<Declaration*> m_temporaryDeclarations;
     QVector<DUContext*> m_temporaryContexts;
     
-    QByteArray m_data;
+    QList<ArrayWithPosition> m_data;
     bool m_onDisk;
 };
 }

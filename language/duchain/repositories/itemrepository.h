@@ -60,6 +60,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
     ///If this returns false, that indicates that loading failed. In that case, all repositories will be discarded.
     virtual bool open(const QString& path, bool clear) = 0;
     virtual void close() = 0;
+    virtual void store() = 0;
 };
 
 /**
@@ -81,6 +82,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     void unRegisterRepository(AbstractItemRepository* repository);
     ///Returns the path currently set
     QString path() const;
+    ///Should be called on a regular basis: Stores all repositories to disk, and eventually unloads unneeded data to save memory
+    void store();
+    
+    ///Call this to lock the directory for writing. When KDevelop crashes while the directory is locked for writing,
+    ///it will know that the directory content is inconsistent, and discard it while next startup.
+    void lockForWriting();
+    ///Call this when you're ready writing, after lockForWriting has been called
+    void unlockForWriting();
     
     ///Returns a custom counter, identified by the given identity, that is persistently stored in the repository directory.
     ///If the counter didn't exist before, it will be initialized with initialValue
@@ -188,6 +197,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         memset(m_objectMap, 0, m_objectMapSize * sizeof(short unsigned int));
         m_nextBucketHash = new short unsigned int[NextBucketHashSize];
         memset(m_nextBucketHash, 0, NextBucketHashSize * sizeof(short unsigned int));
+        m_changed = true;
+        m_lastUsed = 0;
       }
     }
     void initialize(QFile* file, size_t offset) {
@@ -208,6 +219,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
           Q_ASSERT(checkStart == CheckStart);
           Q_ASSERT(checkEnd == CheckEnd);
           Q_ASSERT(file->pos() == offset + DataSize);
+          m_changed = false;
+          m_lastUsed = 0;
         }
       }
     }
@@ -231,6 +244,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       file->write((char*)&m_freeItemCount, sizeof(unsigned int));
       file->write((char*)&checkEnd, sizeof(unsigned int));
       Q_ASSERT(file->pos() == offset + DataSize);
+      m_changed = false;
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
         file->flush();
@@ -272,6 +286,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
 
     //Tries to find the index this item has in this bucket, or returns zero if the item isn't there yet.
     unsigned short findIndex(const ItemRequest& request, const DynamicData* dynamic) const {
+      m_lastUsed = 0;
+      
       unsigned short localHash = request.hash() % m_objectMapSize;
       unsigned short index = m_objectMap[localHash];
 
@@ -292,6 +308,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     //Tries to get the index within this bucket, or returns zero. Will put the item into the bucket if there is room.
     //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
     unsigned short index(const ItemRequest& request, const DynamicData* dynamic) {
+      m_lastUsed = 0;
+      
       unsigned short localHash = request.hash() % m_objectMapSize;
       unsigned short index = m_objectMap[localHash];
       unsigned short insertedAt = 0;
@@ -303,6 +321,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
 
       if(index && request.equals(itemFromIndex(index)))
         return index; //We have found the item
+
+      m_changed = true;
 
       unsigned int totalSize = request.itemSize() + AdditionalSpacePerItem;
       if(totalSize > m_available) {
@@ -379,6 +399,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     ///@param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
     ///              The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
     bool hasClashingItem(uint hash, uint modulo = NextBucketHashSize) {
+      m_lastUsed = 0;
+      
       uint hashMod = hash % modulo;
       unsigned short localHash = hash % m_objectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];
@@ -395,6 +417,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
     
     void deleteItem(unsigned short index, unsigned int hash) {
+      m_lastUsed = 0;
+      m_changed = true;
 
       unsigned short size = itemFromIndex(index)->itemSize();
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
@@ -440,11 +464,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     }
     
     inline const Item* itemFromIndex(unsigned short index) const {
+      m_lastUsed = 0;
       return (Item*)(m_data+index);
     }
 
     ///When dynamic is nonzero, and apply(..) returns false, the item is freed, and the returned item is invalid.
     inline const Item* itemFromIndex(unsigned short index, const DynamicData* dynamic) const {
+      m_lastUsed = 0;
       Item* ret((Item*)(m_data+index));
       if(dynamic)
         dynamic->apply(m_data + index - AdditionalSpacePerItem);
@@ -457,6 +483,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     
     template<class Visitor>
     bool visitAllItems(Visitor& visitor) const {
+      m_lastUsed = 0;
       for(int a = 0; a < m_objectMapSize; ++a) {
         uint currentIndex = m_objectMap[a];
         while(currentIndex) {
@@ -469,11 +496,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return true;
     }
     
-    unsigned short nextBucketForHash(uint hash) {
+    unsigned short nextBucketForHash(uint hash) const {
+      m_lastUsed = 0;
       return m_nextBucketHash[hash % NextBucketHashSize];
     }
     
     void setNextBucketForHash(unsigned int hash, unsigned short bucket) {
+      m_lastUsed = 0;
+      m_changed = true;
       m_nextBucketHash[hash % NextBucketHashSize] = bucket;
     }
     
@@ -486,6 +516,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         return freeSize(m_largestFreeItem);
       else
         return 0;
+    }
+    
+    void tick() const {
+      ++m_lastUsed;
+    }
+    
+    //How many ticks ago the item was last used
+    int lastUsed() const {
+      return m_lastUsed;
+    }
+    
+    //Whether this bucket was changed since it was last stored
+    bool changed() const {
+      return m_changed;
     }
     
   private:
@@ -518,6 +562,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     unsigned int m_freeItemCount;
     
     unsigned short* m_nextBucketHash;
+    
+    bool m_changed; //Whether this bucket was changed since it was last stored to disk
+    mutable int m_lastUsed; //How many ticks ago this bucket was last accessed
 };
 
 template<bool lock>
@@ -592,6 +639,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   public:
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
+    m_metaDataChanged = true;
     m_buckets.resize(10);
     m_buckets.fill(0);
     m_freeSpaceBucketsSize = 0;
@@ -663,6 +711,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           break;
       }
     }
+    
+    m_metaDataChanged = true; ///@todo Better tracking of whether the data has changed
     
     if(!pickedBucketInChain && useBucket == m_currentBucket) {
       //Try finding an existing bucket with deleted space to store the data into
@@ -796,6 +846,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
   void deleteItem(unsigned int index) {
     ThisLocker lock(&m_mutex);
+    
+    m_metaDataChanged = true;
     
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
@@ -947,12 +999,90 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           return;
     }
   }
+  
+  ///Synchronizes the state on disk to the one in memory, and does some memory-management.
+  ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
+  virtual void store() {
+    ThisLocker lock(&m_mutex);
+    if(m_file) {
+      for(uint a = 0; a < m_bucketCount; ++a) {
+        if(m_fastBuckets[a]) {
+          if(m_fastBuckets[a]->changed()) {
+            storeBucket(a);
+          }
+          const int unloadAfterTicks = 2;
+          if(m_fastBuckets[a]->lastUsed() > unloadAfterTicks) {
+            delete m_fastBuckets[a];
+            m_fastBuckets[a] = 0;
+          }else{
+            m_fastBuckets[a]->tick();
+          }
+        }
+      }
+    
+      if(m_metaDataChanged) {
+        Q_ASSERT(m_dynamicFile);
+        
+        m_file->seek(0);
+        m_file->write((char*)&m_repositoryVersion, sizeof(uint));
+        uint hashSize = bucketHashSize;
+        m_file->write((char*)&hashSize, sizeof(uint));
+        uint itemRepositoryVersion  = ItemRepositoryVersion;
+        m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
+        m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
+        m_file->write((char*)&m_statItemCount, sizeof(uint));
+        
+        uint bucketCount = m_buckets.size();
+        m_file->write((char*)&bucketCount, sizeof(uint));
+        m_file->write((char*)&m_currentBucket, sizeof(uint));
+        m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
+        Q_ASSERT(m_file->pos() == BucketStartOffset);
+        
+        Q_ASSERT(m_freeSpaceBucketsSize == (uint)m_freeSpaceBuckets.size());
+        m_dynamicFile->seek(0);
+        m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
+        m_dynamicFile->write((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
+        
+//   #ifdef DEBUG_ITEMREPOSITORY_LOADING
+//         {
+//           m_file->flush();
+//           m_file->seek(0);
+//           uint storedVersion, hashSize, itemRepositoryVersion, statBucketHashClashes, statItemCount;
+// 
+//           m_file->read((char*)&storedVersion, sizeof(uint));
+//           m_file->read((char*)&hashSize, sizeof(uint));
+//           m_file->read((char*)&itemRepositoryVersion, sizeof(uint));
+//           m_file->read((char*)&statBucketHashClashes, sizeof(uint));
+//           m_file->read((char*)&statItemCount, sizeof(uint));
+//           Q_ASSERT(storedVersion == m_repositoryVersion);
+//           Q_ASSERT(hashSize == bucketHashSize);
+//           Q_ASSERT(itemRepositoryVersion == ItemRepositoryVersion);
+//           Q_ASSERT(statBucketHashClashes == m_statBucketHashClashes);
+//           Q_ASSERT(statItemCount == m_statItemCount);
+// 
+//           uint bucketCount, currentBucket;
+//           m_file->read((char*)&bucketCount, sizeof(uint));
+//           Q_ASSERT(bucketCount == (uint)m_buckets.size());
+//           m_file->read((char*)&currentBucket, sizeof(uint));
+//           Q_ASSERT(currentBucket == m_currentBucket);
+//         
+//           short unsigned int* s = new short unsigned int[bucketHashSize];
+//           m_file->read((char*)s, sizeof(short unsigned int) * bucketHashSize);
+//           Q_ASSERT(memcmp(s, m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize) == 0);
+//           Q_ASSERT(m_file->pos() == BucketStartOffset);
+//           delete[] s;
+//         }
+//   #endif
+      }
+    }
+  }
 
   private:
   
   ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeItemSize has been changed for m_freeSpaceBuckets[index].
   ///If too few space is free within the given bucket, it is removed from m_freeSpaceBuckets.
   void updateFreeSpaceOrder(int index) {
+    m_metaDataChanged = true;
 
     Q_ASSERT(index >= 0 && index < m_freeSpaceBuckets.size());
     Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[index]);
@@ -1010,6 +1140,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       return false;
     }
     
+    m_metaDataChanged = true;
     if(clear || m_file->size() == 0) {
       
       m_file->resize(0);
@@ -1057,6 +1188,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         m_file = 0;
         return false;
       }
+      m_metaDataChanged = false;
       
       uint bucketCount;
       m_file->read((char*)&bucketCount, sizeof(uint));
@@ -1083,67 +1215,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
     m_currentOpenPath = QString();
     
-    if(m_file) {
-      Q_ASSERT(m_dynamicFile);
-      
-      m_file->seek(0);
-      m_file->write((char*)&m_repositoryVersion, sizeof(uint));
-      uint hashSize = bucketHashSize;
-      m_file->write((char*)&hashSize, sizeof(uint));
-      uint itemRepositoryVersion  = ItemRepositoryVersion;
-      m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
-      m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
-      m_file->write((char*)&m_statItemCount, sizeof(uint));
-      
-      uint bucketCount = m_buckets.size();
-      m_file->write((char*)&bucketCount, sizeof(uint));
-      m_file->write((char*)&m_currentBucket, sizeof(uint));
-      m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
-      Q_ASSERT(m_file->pos() == BucketStartOffset);
-      
-      Q_ASSERT(m_freeSpaceBucketsSize == (uint)m_freeSpaceBuckets.size());
-      m_dynamicFile->seek(0);
-      m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
-      m_dynamicFile->write((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
-      
-#ifdef DEBUG_ITEMREPOSITORY_LOADING
-      {
-        m_file->flush();
-        m_file->seek(0);
-        uint storedVersion, hashSize, itemRepositoryVersion, statBucketHashClashes, statItemCount;
-
-        m_file->read((char*)&storedVersion, sizeof(uint));
-        m_file->read((char*)&hashSize, sizeof(uint));
-        m_file->read((char*)&itemRepositoryVersion, sizeof(uint));
-        m_file->read((char*)&statBucketHashClashes, sizeof(uint));
-        m_file->read((char*)&statItemCount, sizeof(uint));
-        Q_ASSERT(storedVersion == m_repositoryVersion);
-        Q_ASSERT(hashSize == bucketHashSize);
-        Q_ASSERT(itemRepositoryVersion == ItemRepositoryVersion);
-        Q_ASSERT(statBucketHashClashes == m_statBucketHashClashes);
-        Q_ASSERT(statItemCount == m_statItemCount);
-
-        uint bucketCount, currentBucket;
-        m_file->read((char*)&bucketCount, sizeof(uint));
-        Q_ASSERT(bucketCount == (uint)m_buckets.size());
-        m_file->read((char*)&currentBucket, sizeof(uint));
-        Q_ASSERT(currentBucket == m_currentBucket);
-      
-        short unsigned int* s = new short unsigned int[bucketHashSize];
-        m_file->read((char*)s, sizeof(short unsigned int) * bucketHashSize);
-        Q_ASSERT(memcmp(s, m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize) == 0);
-        Q_ASSERT(m_file->pos() == BucketStartOffset);
-        delete[] s;
-      }
-#endif
-    }
+    store();
     
-    typedef Bucket<Item, ItemRequest, DynamicData> B;
-    for(int a = 0; a < m_buckets.size(); ++a) {
-      storeBucket(a);
-      delete m_buckets[a];
-    }
-
     if(m_file)
       m_file->close();
     delete m_file;
@@ -1177,6 +1250,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
   }
 
+  bool m_metaDataChanged;
   mutable QMutex m_mutex;
   QString m_repositoryName;
   unsigned int m_size;

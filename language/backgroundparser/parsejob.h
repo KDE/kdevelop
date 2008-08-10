@@ -34,6 +34,7 @@ namespace KDevelop
 {
 class BackgroundParser;
 class TopDUContext;
+class ReferencedTopDUContext;
 
 /**
  * The base class for background parser jobs.
@@ -72,9 +73,9 @@ public:
     KDevelop::IndexedString document() const;
 
     /// Sets the du-context that was created by this parse-job
-    virtual void setDuChain(TopDUContext* duChain);
+    virtual void setDuChain(ReferencedTopDUContext duChain);
     /// Returns the set du-context, or zero of none was set.
-    virtual TopDUContext* duChain() const;
+    virtual ReferencedTopDUContext duChain() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
     virtual void requestAbort();

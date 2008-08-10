@@ -95,6 +95,13 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
   Q_ASSERT(d_ptr);
 }
 
+void DocumentRangeObject::setData(DocumentRangeObjectData* data)
+{
+  Q_ASSERT(data);
+  if(d_ptr->m_dynamic && m_ownsData)
+    delete d_ptr;
+  d_ptr = data;
+}
 
 DocumentRangeObject::~ DocumentRangeObject( )
 {

@@ -148,6 +148,13 @@ class EnvironmentInformationRequest {
   QList<ParsingEnvironmentFilePointer> m_informations;
 };
 
+void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current) {
+  if(contexts.contains(current))
+    return;
+  contexts.insert(current);
+  for(RecursiveImports::const_iterator it = current->recursiveImports().constBegin(); it != current->recursiveImports().constEnd(); ++it)
+    addRecursiveImports(contexts, const_cast<TopDUContext*>(it.key()));
+}
 
 class DUChainPrivate;
 static DUChainPrivate* duChainPrivateSelf = 0;
@@ -156,6 +163,7 @@ class DUChainPrivate
 public:
   DUChainPrivate() : instance(0), m_environmentInfo("Environment Information"), m_chainsMutex(QMutex::Recursive), m_destroyed(false)
   {
+    m_unloadingEnabled = true;
     duChainPrivateSelf = this;
     qRegisterMetaType<DUChainBasePointer>("KDevelop::DUChainBasePointer");
     qRegisterMetaType<DUContextPointer>("KDevelop::DUContextPointer");
@@ -170,11 +178,11 @@ public:
     instance = new DUChain();
 
     m_cleanupTimer = new QTimer(instance);
-    m_cleanupTimer ->setInterval(4000);
+    m_cleanupTimer->setInterval(10000);
     QObject::connect(m_cleanupTimer, SIGNAL(timeout()), instance, SLOT(cleanup()));
-    m_cleanupTimer->start();
   }
   ~DUChainPrivate() {
+    doMoreCleanup(true);
     delete instance;
   }
 
@@ -209,8 +217,12 @@ public:
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
+  
+  ///Used to keep alive the top-context that belong to documents loaded in the editor
+  QSet<ReferencedTopDUContext> m_openDocumentContexts;
 
   bool m_destroyed;
+  bool m_unloadingEnabled; //When this is true, unreferenced top-contexts are unloaded
 
   void addEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
     loadInformation(url);
@@ -270,7 +282,64 @@ public:
       loading.remove(index);
     }
   }
+  
+  
+  ///Stores all environment-information
+  void storeAllInformation() {
+    QMutexLocker l(&m_chainsMutex);
+    QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
+    foreach(IndexedString url, urls)
+      storeInformation(url);
+  }
+  
+  void doCleanup() {
+    m_fileEnvironmentInformations.size();
+    doMoreCleanup();
+  }
+  
+  ///@param force If this is true, no lock timeout is used
+  void doMoreCleanup(bool force = false) {
+    DUChainWriteLocker writeLock(instance->lock(), force ? 0 : 300);
+    if(writeLock.locked()) {
+      
+      globalItemRepositoryRegistry().lockForWriting();
+      
+      storeAllInformation(); //Puts environment-information into a repository
+      
+      QList<TopDUContext*> allLoadedContexts = m_chainsByIndex.values();
+      foreach(TopDUContext* context, allLoadedContexts)
+        context->m_dynamicData->store();
 
+      //Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
+      QSet<TopDUContext*> referenced;
+      foreach(TopDUContext* context, m_referenceCounts.keys())
+        addRecursiveImports(referenced, context);
+      
+      QSet<IndexedString> unloadedNames;
+      
+      foreach(TopDUContext* context, allLoadedContexts) {
+        if(!referenced.contains(context)) {
+          //Unload the context, it's not referenced or imported by a referenced context
+          kDebug() << "unloading a top-context for" << context->url().str();
+          unloadedNames.insert(context->url());
+          
+          instance->removeDocumentChain(context);
+        }
+      }
+      
+      if(m_unloadingEnabled) {
+      foreach(IndexedString unloaded, unloadedNames)
+        if(!m_chainsByUrl.contains(unloaded))
+          //No more top-contexts with the url are loaded, so also unload the environment-info
+          unloadInformation(unloaded);
+      }
+
+      globalItemRepositoryRegistry().store(); //Stores all repositories
+
+      globalItemRepositoryRegistry().unlockForWriting();
+    }
+  }
+  
 private:
   void loadInformation(IndexedString url) {
     if(m_fileEnvironmentInformations.find(url) != m_fileEnvironmentInformations.end())
@@ -293,9 +362,9 @@ private:
     }
   }
 
-  //Stores the information into the repository, and removes it from m_fileEnvironmentInformations
-  void unloadInformation(IndexedString url) {
-
+  ///Stores the environment-information for the given url
+  void storeInformation(IndexedString url) {
+    
     QList<ParsingEnvironmentFilePointer> informations = m_fileEnvironmentInformations.values(url);
 
     //Here we check whether any of the stored items have been changed. If none have been changed(all data is still constant),
@@ -326,6 +395,11 @@ private:
       m_environmentInfo.index(EnvironmentInformationRequest(url, informations));
       Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
     }
+  }
+
+  //Stores the information into the repository, and removes it from m_fileEnvironmentInformations
+  void unloadInformation(IndexedString url) {
+    storeInformation(url);
 
     m_fileEnvironmentInformations.remove(url);
   }
@@ -444,6 +518,13 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 
+  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(chain->url());
+  if(doc) {
+    //Make sure the context stays alive at least as long as the context is open
+    ReferencedTopDUContext ctx(chain);
+    sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
+  }
+  
   branchAdded(chain);
 }
 
@@ -647,9 +728,10 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
     sc.deconvertDUChain( top );
   }
 
-  TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
-  if(standardContext)
-    refCountDown(standardContext);
+  foreach(ReferencedTopDUContext top, sdDUChainPrivate->m_openDocumentContexts) {
+    if(top->url().str() == doc->url().pathOrUrl())
+      sdDUChainPrivate->m_openDocumentContexts.remove(top);
+  }
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
@@ -676,7 +758,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   if(standardContext) {
-    refCountUp(standardContext);
+    sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
     if(!standardContext->smartRange()) {
       //May happen during loading
       sc.convertDUChain(standardContext);
@@ -711,6 +793,7 @@ Definitions* DUChain::definitions()
 void DUChain::aboutToQuit()
 {
   DUChainWriteLocker writeLock(lock());
+  sdDUChainPrivate->doCleanup();
   sdDUChainPrivate->clear();
   sdDUChainPrivate->m_destroyed = true;
 }
@@ -736,10 +819,15 @@ void DUChain::refCountDown(TopDUContext* top) {
   --sdDUChainPrivate->m_referenceCounts[top];
   if(!sdDUChainPrivate->m_referenceCounts[top])
     sdDUChainPrivate->m_referenceCounts.remove(top);
+
+  if(!sdDUChainPrivate->m_cleanupTimer->isActive())
+    sdDUChainPrivate->m_cleanupTimer->start();
 }
 
 void DUChain::cleanup() {
-  ///@todo Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
+  ///@todo Move this into a background thread
+  sdDUChainPrivate->doCleanup();
+  sdDUChainPrivate->m_cleanupTimer->stop();
 }
 
 void DUChain::emitDeclarationSelected(DeclarationPointer decl) {

@@ -35,8 +35,7 @@ using namespace KDevelop;
 
 QMutex KDevelop::TopDUContextDynamicData::m_temporaryDataMutex(QMutex::Recursive);
 
-///@todo Implement all this using mmap
-void saveDUChainItem(QByteArray& data, const DUChainBase& item) {
+void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset) {
   
   if(!item.d_func()->classId) {
     //If this triggers, you have probably created an own DUChainBase based class, but haven't called setClassId(this) in the constructor.
@@ -46,13 +45,18 @@ void saveDUChainItem(QByteArray& data, const DUChainBase& item) {
   
   int size = DUChainItemSystem::self().dynamicSize(*item.d_func());
   
-  uint pos = data.size();
+  if(data.back().first.size() - data.back().second < size)
+      //Create a new data item
+      data.append( qMakePair(QByteArray(size > 10000 ? size : 10000, 0), 0u) );
   
-  data.resize(data.size() + size);
+  uint pos = data.back().second;
+  data.back().second += size;
+  totalDataOffset += size;
   
-  DUChainBaseData& target(*((DUChainBaseData*)(data.constData() + pos)));
+  DUChainBaseData& target(*((DUChainBaseData*)(data.back().first.constData() + pos)));
   DUChainItemSystem::self().copy(*item.d_func(), target, true);
   Q_ASSERT(!target.isDynamic());
+  item.setData(&target);
 }
 
 TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_onDisk(false) {
@@ -87,7 +91,8 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     Q_ASSERT(ret);
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
-    target.m_data = data;
+    target.m_data.clear();
+    target.m_data.append(qMakePair(data, (uint)data.size()));
     
     for(int a = 0; a < contextDataOffsets.size(); ++a) {
       if(!contextDataOffsets[a])
@@ -125,17 +130,52 @@ bool TopDUContextDynamicData::isOnDisk() const {
 }
 
 void TopDUContextDynamicData::store() {
+  if(m_onDisk) {
+    //Check if something has changed. If nothing has changed, don't store to disk.
+    bool someThingChanged = false;
+    if(m_topContext->d_ptr->m_dynamic)
+      someThingChanged = true;
+    
+    for(int a = 0; a < m_contexts.size(); ++a) {
+      if(m_contexts[a] && m_contexts[a]->d_ptr->m_dynamic)
+        someThingChanged = true;
+      
+      if(someThingChanged)
+        break;
+    }
+
+    for(int a = 0; a < m_declarations.size(); ++a) {
+      if(m_declarations[a] && m_declarations[a]->d_ptr->m_dynamic)
+        someThingChanged = true;
+      
+      if(someThingChanged)
+        break;
+    }
+    if(!someThingChanged)
+      return;
+  }
+  
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);
   
   QFile file(baseDir + "/" + QString("%1").arg(m_topContext->ownIndex()));
   if(file.open(QIODevice::WriteOnly)) {
     file.resize(0);
+    QList<ArrayWithPosition> oldDatas = m_data; //Keep the old data alive until everything is stored into a new data structure
     
-    QByteArray data;
+    m_data.clear();
 
+    uint newDataSize = 0;
+    foreach(ArrayWithPosition array, oldDatas)
+        newDataSize += array.second;
+    
+    m_data.append( qMakePair(QByteArray(newDataSize, 0), (uint)0) );
+    
     m_topContext->aboutToSave();
-    saveDUChainItem(data, *m_topContext);
+    
+    uint currentDataOffset = 0;
+    
+    saveDUChainItem(m_data, *m_topContext, currentDataOffset);
 
     QVector<uint> contextDataOffsets;
     QVector<uint> declarationDataOffsets;
@@ -144,14 +184,14 @@ void TopDUContextDynamicData::store() {
       if(!m_contexts[a]) {
         contextDataOffsets << 0;
       } else {
-        contextDataOffsets << data.size();
+        contextDataOffsets << currentDataOffset;
         m_contexts[a]->aboutToSave();
-        saveDUChainItem(data, *m_contexts[a]);
+        saveDUChainItem(m_data, *m_contexts[a], currentDataOffset);
         
         //Normally the m_inSymbolTable property is initialized with false, but we want to preserve it when saving to disk
 //        static_cast<DUContextData*>((DUChainBaseData*)(data.data() + contextDataOffsets.back()))->m_inSymbolTable = m_contexts[a]->d_func()->m_inSymbolTable;
         
-        Q_ASSERT(data.size() == contextDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_contexts[a]->d_func()));
+        //Q_ASSERT(data.size() == contextDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_contexts[a]->d_func()));
       }
     }
     
@@ -159,14 +199,14 @@ void TopDUContextDynamicData::store() {
       if(!m_declarations[a]) {
         declarationDataOffsets << 0;
       } else {
-        declarationDataOffsets << data.size();
+        declarationDataOffsets << currentDataOffset;
         m_declarations[a]->aboutToSave();
-        saveDUChainItem(data, *m_declarations[a]);
+        saveDUChainItem(m_data, *m_declarations[a], currentDataOffset);
         
         //Normally the m_inSymbolTable property is initialized with false, but we want to preserve it when saving to disk
 //        static_cast<DeclarationData*>((DUChainBaseData*)(data.data() + declarationDataOffsets.back()))->m_inSymbolTable = m_declarations[a]->d_func()->m_inSymbolTable;
         
-        Q_ASSERT(data.size() == declarationDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_declarations[a]->d_func()));
+        //Q_ASSERT(data.size() == declarationDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_declarations[a]->d_func()));
       }
     }
     
@@ -178,7 +218,8 @@ void TopDUContextDynamicData::store() {
     file.write((char*)&writeValue, sizeof(uint));
     file.write((char*)declarationDataOffsets.data(), sizeof(uint) * declarationDataOffsets.size());
     
-    file.write(data);
+    foreach(const ArrayWithPosition& pos, m_data)
+      file.write(pos.first.constData(), pos.second);
     
     m_onDisk = true;
     
