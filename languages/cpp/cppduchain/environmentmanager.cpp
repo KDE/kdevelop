@@ -265,6 +265,7 @@ void EnvironmentFile::aboutToSave() {
     d_func_dynamic()->m_allModificationTimesList().clear();
     for(QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>::const_iterator it = m_allModificationTimes.begin(); it != m_allModificationTimes.end(); ++it)
       d_func_dynamic()->m_allModificationTimesList().append( qMakePair(it.key(), it.value()) );
+    m_modificationTimesChanged = false;
   }
 }
 
