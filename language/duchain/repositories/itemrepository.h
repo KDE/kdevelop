@@ -171,8 +171,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
       ///@todo Change these to use sizes instead of counts
-      MaxFreeItemsForHide = 10, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-      MinFreeItemsForReuse = 100, //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      MaxFreeItemsForHide = 4, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
+      MinFreeItemsForReuse = 13, //When this count of free items in one bucket is reached, consider re-assigning them to new requests
       DataSize = sizeof(unsigned int) * 4 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
     };
     enum {
@@ -632,7 +632,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 5,
+    ItemRepositoryVersion = 6,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
