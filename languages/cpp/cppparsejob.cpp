@@ -210,19 +210,19 @@ const CPPParseJob* CPPParseJob::masterJob() const {
         return this;
 }
 
-void CPPParseJob::setUpdatingProxyContext( const TopDUContextPointer& context ) {
+void CPPParseJob::setUpdatingProxyContext( const ReferencedTopDUContext& context ) {
     m_updatingProxyContext = context;
 }
 
-TopDUContextPointer CPPParseJob::updatingProxyContext() const {
+ReferencedTopDUContext CPPParseJob::updatingProxyContext() const {
     return m_updatingProxyContext;
 }
 
-void CPPParseJob::setUpdatingContentContext( const TopDUContextPointer& context ) {
+void CPPParseJob::setUpdatingContentContext( const ReferencedTopDUContext& context ) {
     m_updatingContentContext = context;
 }
 
-TopDUContextPointer CPPParseJob::updatingContentContext() const {
+ReferencedTopDUContext CPPParseJob::updatingContentContext() const {
     return m_updatingContentContext;
 }
 
@@ -235,7 +235,7 @@ CppLanguageSupport * CPPParseJob::cpp() const
         return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->cpp();
 }
 
-void CPPParseJob::addIncludedFile(KDevelop::TopDUContext* duChain, int sourceLine) {
+void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine) {
     m_includedFiles.push_back(LineContextPair(duChain, sourceLine));
 }
 
@@ -313,11 +313,11 @@ void CPPInternalParseJob::run()
 
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
-    TopDUContext* updatingProxyContext = parentJob()->updatingProxyContext().data();
-    TopDUContext* updatingContentContext = parentJob()->updatingContentContext().data();
+    ReferencedTopDUContext updatingProxyContext = parentJob()->updatingProxyContext().data();
+    ReferencedTopDUContext updatingContentContext = parentJob()->updatingContentContext().data();
 
-    TopDUContext* proxyContext = updatingProxyContext; //Proxy-context if simplified environment-matching is enabled, else zero.
-    TopDUContext* contentContext= updatingContentContext;  //The actual context that contains the data.
+    ReferencedTopDUContext proxyContext = updatingProxyContext; //Proxy-context if simplified environment-matching is enabled, else zero.
+    ReferencedTopDUContext contentContext= updatingContentContext;  //The actual context that contains the data.
 
     Cpp::EnvironmentFilePointer proxyEnvironmentFile(parentJob()->proxyEnvironmentFile());
     Cpp::EnvironmentFilePointer contentEnvironmentFile(parentJob()->contentEnvironmentFile());
@@ -342,7 +342,7 @@ void CPPInternalParseJob::run()
     }
 
     QList<LineContextPair> importedContentChains; //All content-chains imported while this parse-run. Also contains the temporary ones.
-    QList<TopDUContext*> importedTemporaryChains; //All imported content-chains that were imported temporarily from parents.
+    QList<ReferencedTopDUContext> importedTemporaryChains; //All imported content-chains that were imported temporarily from parents.
     QSet<KDevelop::IndexedString> encounteredIncludeUrls; //All imported file-urls that were encountered this run.
 
     {
@@ -435,9 +435,9 @@ void CPPInternalParseJob::run()
       }
 
       DeclarationBuilder declarationBuilder(&editor);
-      contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, TopDUContextPointer(contentContext), false);
+      contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
 
-      contentEnvironmentFile->setTopContext(contentContext);
+      contentEnvironmentFile->setTopContext(contentContext.data());
       
       //If publically visible declarations were added/removed, all following parsed files need to be updated
       if(declarationBuilder.changeWasSignificant()) {
@@ -473,7 +473,10 @@ void CPPInternalParseJob::run()
 
       if(contentContext) {
           DUChainWriteLocker l(DUChain::lock());
-          contentContext->removeImportedParentContexts(importedTemporaryChains);
+          QList<TopDUContext*> remove;
+          foreach(ReferencedTopDUContext ctx, importedTemporaryChains)
+              remove << ctx.data();
+          contentContext->removeImportedParentContexts(remove);
       }
 
       ///When simplified environment-matching is enabled, we will accumulate many different
@@ -537,7 +540,7 @@ void CPPInternalParseJob::run()
 
         DUChainWriteLocker lock(DUChain::lock());
 
-        proxyEnvironmentFile->setTopContext(proxyContext);
+        proxyEnvironmentFile->setTopContext(proxyContext.data());
         
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
         Q_ASSERT(proxyContext->importedParentContexts().count() <= 1);

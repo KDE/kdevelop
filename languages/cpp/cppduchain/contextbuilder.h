@@ -64,7 +64,7 @@ namespace Cpp {
 struct KDEVCPPDUCHAIN_EXPORT LineContextPair {
   LineContextPair( KDevelop::TopDUContext* _context, int _sourceLine ) : context(_context), sourceLine(_sourceLine), temporary(false) {
   }
-  KDevelop::TopDUContext* context;
+  ReferencedTopDUContext context;
   int sourceLine;
   bool temporary; //When this flag is set, the import will be added in a special way that is faster
 };
@@ -110,7 +110,7 @@ public:
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    * \param removeOldImports Should old imports that are not in the includes-list be removed?
    */
-  KDevelop::TopDUContext* buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const TopDUContextPointer& updateContext = TopDUContextPointer(), bool removeOldImports = true);
+  KDevelop::ReferencedTopDUContext buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const ReferencedTopDUContext& updateContext = ReferencedTopDUContext(), bool removeOldImports = true);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

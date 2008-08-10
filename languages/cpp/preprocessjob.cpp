@@ -210,7 +210,7 @@ void PreprocessJob::run()
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-        KDevelop::TopDUContextPointer updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        KDevelop::ReferencedTopDUContext updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
 
         if(m_secondEnvironmentFile)
           parentJob()->setUpdatingProxyContext( updating ); //The content-context to be updated will be searched later
@@ -308,14 +308,14 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
-        KDevelop::TopDUContext* content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
+        KDevelop::ReferencedTopDUContext content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
 
         m_currentEnvironment->setIdentityOffsetRestriction(0);
 
         if(content) {
             Q_ASSERT(!(content->flags() & KDevelop::TopDUContext::ProxyContextFlag));
             //We have found a content-context that we can use
-            parentJob()->setUpdatingContentContext(KDevelop::TopDUContextPointer(content));
+            parentJob()->setUpdatingContentContext(content);
 
             Cpp::EnvironmentFilePointer contentEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
 
@@ -389,7 +389,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
         ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile; )
 
-        KDevelop::TopDUContext* includedContext;
+        KDevelop::ReferencedTopDUContext includedContext;
         bool updateNeeded = false;
 
         {

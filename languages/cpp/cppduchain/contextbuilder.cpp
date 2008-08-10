@@ -53,7 +53,7 @@ using namespace Cpp;
 
 bool containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context ) {
   foreach( const LineContextPair& ctx, lineContexts )
-    if( ctx.context == context )
+    if( ctx.context.data() == context )
       return true;
   return false;
 }
@@ -67,7 +67,7 @@ bool importsContext( const QList<LineContextPair>& lineContexts, TopDUContext* c
 
 void removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context ) {
   for( QList<LineContextPair>::iterator it = lineContexts.begin(); it != lineContexts.end(); ++it )
-    if( (*it).context == context ) {
+    if( (*it).context.data() == context ) {
     lineContexts.erase(it);
     return;
     }
@@ -271,7 +271,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
   return topLevelContext;
 }
 
-TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
+ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
 {
   setCompilingContexts(true);
 
@@ -282,10 +282,10 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
 
   editor()->setCurrentUrl(file->url());
 
-  TopDUContext* topLevelContext = 0;
+  ReferencedTopDUContext topLevelContext;
   {
     DUChainWriteLocker lock(DUChain::lock());
-    topLevelContext = updateContext.data();
+    topLevelContext = updateContext;
 
     if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->flags() & TopDUContext::ProxyContextFlag))
       if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure
@@ -338,9 +338,9 @@ TopDUContext* ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& f
       QList< QPair<TopDUContext*, SimpleCursor> > realTemporaryIncluded;
       foreach (LineContextPair included, *includes)
         if(!included.temporary)
-          realIncluded << qMakePair(included.context, SimpleCursor(included.sourceLine, 0));
+          realIncluded << qMakePair(included.context.data(), SimpleCursor(included.sourceLine, 0));
         else
-          realTemporaryIncluded << qMakePair(included.context, SimpleCursor(included.sourceLine, 0));
+          realTemporaryIncluded << qMakePair(included.context.data(), SimpleCursor(included.sourceLine, 0));
 
       topLevelContext->addImportedParentContexts(realIncluded);
       topLevelContext->addImportedParentContexts(realTemporaryIncluded, true);

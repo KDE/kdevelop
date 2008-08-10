@@ -73,7 +73,7 @@ public:
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
 
-    void addIncludedFile(KDevelop::TopDUContext* duChain, int sourceLine);
+    void addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine);
     const IncludeFileList& includedFiles() const;
 
     const QStack<DocumentCursor>& includeStack() const;
@@ -115,12 +115,12 @@ public:
     bool keepDuchain() const;
 
     ///Proxy-context that is being updated, or zero.
-    void setUpdatingProxyContext( const KDevelop::TopDUContextPointer& context );
-    KDevelop::TopDUContextPointer updatingProxyContext() const;
+    void setUpdatingProxyContext( const KDevelop::ReferencedTopDUContext& context );
+    KDevelop::ReferencedTopDUContext updatingProxyContext() const;
 
-    void setUpdatingContentContext( const KDevelop::TopDUContextPointer& context );
+    void setUpdatingContentContext( const KDevelop::ReferencedTopDUContext& context );
     ///If this is set, the updatingContentContext should either be used without modification, or updated if it is outdated.
-    KDevelop::TopDUContextPointer updatingContentContext() const;
+    KDevelop::ReferencedTopDUContext updatingContentContext() const;
 
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
     KUrl includedFromPath() const;
@@ -161,10 +161,10 @@ private:
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
 
-    KDevelop::TopDUContextPointer m_updatingProxyContext;
+    KDevelop::ReferencedTopDUContext m_updatingProxyContext;
     
     //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
-    KDevelop::TopDUContextPointer m_updatingContentContext;
+    KDevelop::ReferencedTopDUContext m_updatingContentContext;
     KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
 
     mutable QList<ProblemPointer> m_preprocessorProblems;

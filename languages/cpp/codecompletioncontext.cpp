@@ -516,7 +516,6 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   return ret;
 }
 
-
 CodeCompletionContext::~CodeCompletionContext() {
 }
 

@@ -104,9 +104,9 @@ DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
   setEditor(editor, false);
 }
 
-TopDUContext* DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const TopDUContextPointer& updateContext, bool removeOldImports)
+ReferencedTopDUContext DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
 {
-  TopDUContext* top = buildContexts(file, node, includes, updateContext, removeOldImports);
+  ReferencedTopDUContext top = buildContexts(file, node, includes, updateContext, removeOldImports);
 
   Q_ASSERT(m_accessPolicyStack.isEmpty());
   Q_ASSERT(m_functionDefinedStack.isEmpty());
