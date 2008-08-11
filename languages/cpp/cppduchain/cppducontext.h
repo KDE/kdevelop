@@ -67,7 +67,8 @@ While construction:
 #include "templatedeclaration.h"
 #include "expressionparser.h"
 #include "cppdebughelper.h"
-
+#define DEBUG;
+#define ifDebug(x) x
 using namespace KDevelop;
 
 namespace Cpp {

@@ -259,9 +259,10 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       DUChain::self()->addDocumentChain(topLevelContext);
     }
 
-    cppContext->clearImportedParentContexts();
-    if(content) {
+    if(content && !cppContext->imports(content.data(), SimpleCursor::invalid())) {
+      cppContext->clearImportedParentContexts();
       cppContext->addImportedParentContext(content.data());
+    } else if(content) {
     } else {
       ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << file->url().str();

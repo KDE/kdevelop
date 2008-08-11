@@ -543,20 +543,32 @@ void CPPInternalParseJob::run()
         proxyEnvironmentFile->setTopContext(proxyContext.data());
         
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
-        Q_ASSERT(proxyContext->importedParentContexts().count() <= 1);
 
         if(proxyContext->importedParentContexts().isEmpty()) //Failure
           return;
 
         Q_ASSERT(proxyContext->importedParentContexts()[0].context() == contentContext);
 
-        //Add the non-content contexts behind to content-context to the created proxy,
-        //By walking the chain of proxy-contexts.
+        //Make sure the imported contextsa re added
         foreach ( LineContextPair context, parentJob()->includedFiles() )
-          proxyContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
+          if(!proxyContext->imports(context.context, SimpleCursor::invalid()))
+            proxyContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
 
+        //Make sure we don't imported any not imported contexts
+        foreach(DUContext::Import import, proxyContext->importedParentContexts()) {
+          TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+          Q_ASSERT(top);
+          bool shouldBeIncluded = false;
+          if(top == contentContext)
+            shouldBeIncluded = true;
+          foreach(LineContextPair ctx, parentJob()->includedFiles())
+            if(ctx.context == contentContext)
+              shouldBeIncluded = true;
+          if(!shouldBeIncluded)
+            proxyContext->removeImportedParentContext(top);
+        }
+          
         proxyContext->clearProblems();
-
 
         //Put the problems into the proxy-context
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
