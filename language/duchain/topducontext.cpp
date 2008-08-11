@@ -79,6 +79,7 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
   
   if(m_topContext)
     DUChain::self()->refCountUp(m_topContext);
+  return *this;
 }
 
 IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
@@ -87,6 +88,14 @@ IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
   else
     m_index = 0;
 }
+
+bool IndexedTopDUContext::isLoaded() const {
+  if(m_index)
+    return DUChain::self()->isInMemory(m_index);
+  else
+    return false;
+}
+
 TopDUContext* IndexedTopDUContext::data() const {
   if(m_index)
     return DUChain::self()->chainForIndex(m_index);

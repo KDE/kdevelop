@@ -96,6 +96,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     ///To prevent automatic unloading, store it in ReferencedTopDUContext
     TopDUContext* data() const;
     
+    ///Returns whether the top-context is currently loaded. If not, it will be loaded when you call data().
+    bool isLoaded() const;
+    
     bool operator==(const IndexedTopDUContext& rhs) const {
       return m_index == rhs.m_index;
     }

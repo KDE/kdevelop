@@ -616,6 +616,8 @@ QList<KTextEditor::SmartRange*> Declaration::smartUses() const
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
   FOREACH_ARRAY(IndexedTopDUContext indexedContext, useContexts) {
+    if(!indexedContext.isLoaded())
+      continue;
     TopDUContext* context = indexedContext.data();
     if(context) {
       foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
