@@ -285,11 +285,18 @@ public:
   
   
   ///Stores all environment-information
+  ///Also makes sure that all information that stays is referenced, so it stays alive.
   void storeAllInformation() {
     QMutexLocker l(&m_chainsMutex);
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
-    foreach(IndexedString url, urls)
+    foreach(IndexedString url, urls) {
       storeInformation(url);
+      
+      //Access the data in the repository, so the bucket isn't unloaded
+      uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
+      Q_ASSERT(index);
+      m_environmentInfo.itemFromIndex(index);
+    }
   }
   
   void doCleanup() {

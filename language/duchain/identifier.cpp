@@ -110,7 +110,16 @@ struct IdentifierItemRequest {
   const DynamicIdentifierPrivate& m_identifier;
 };
 
+struct StaticDisableUnloading {
+  template<class T>
+  StaticDisableUnloading(T& t) {
+    t.setUnloadingEnabled(false);
+  }
+};
+
 ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest> identifierRepository("Identifier Repository");
+///@todo Think about enabling unloading
+StaticDisableUnloading identifierRepositoryDisableUnloading(identifierRepository);
 uint emptyConstantIdentifierPrivateIndex = identifierRepository.index(DynamicIdentifierPrivate());
 
 const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
@@ -231,6 +240,7 @@ struct QualifiedIdentifierItemRequest {
 };
 
 ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> qualifiedIdentifierRepository("Qualified Identifier Repository", &globalItemRepositoryRegistry(), 2);
+StaticDisableUnloading qualifiedIdentifierRepositoryDisableUnloading(qualifiedIdentifierRepository);
 
 uint emptyConstantQualifiedIdentifierPrivateIndex = qualifiedIdentifierRepository.index(DynamicQualifiedIdentifierPrivate());
 

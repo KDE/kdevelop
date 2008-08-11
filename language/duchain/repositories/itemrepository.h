@@ -639,6 +639,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   public:
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
+    m_unloadingEnabled = true;
     m_metaDataChanged = true;
     m_buckets.resize(10);
     m_buckets.fill(0);
@@ -660,6 +661,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_registry->unRegisterRepository(this);
 
     close();
+  }
+  
+  ///Unloading of buckets is enabled by default. Use this to disable it. When unloading is enabled, the data
+  ///gotten from must only itemFromIndex must not be used for a long time.
+  void setUnloadingEnabled(bool enabled) {
+      m_unloadingEnabled = enabled;
   }
 
   ///Returns the index for the given item. If the item is not in the repository yet, it is inserted.
@@ -1010,12 +1017,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           if(m_fastBuckets[a]->changed()) {
             storeBucket(a);
           }
-          const int unloadAfterTicks = 2;
-          if(m_fastBuckets[a]->lastUsed() > unloadAfterTicks) {
-            delete m_fastBuckets[a];
-            m_fastBuckets[a] = 0;
-          }else{
-            m_fastBuckets[a]->tick();
+          if(m_unloadingEnabled) {
+            const int unloadAfterTicks = 2;
+            if(m_fastBuckets[a]->lastUsed() > unloadAfterTicks) {
+                delete m_fastBuckets[a];
+                m_fastBuckets[a] = 0;
+            }else{
+                m_fastBuckets[a]->tick();
+            }
           }
         }
       }
@@ -1272,6 +1281,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   //File that contains more dynamic data, like the list of buckets with deleted items
   QFile* m_dynamicFile;
   uint m_repositoryVersion;
+  bool m_unloadingEnabled;
 };
 
 }
