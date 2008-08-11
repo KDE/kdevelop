@@ -107,8 +107,8 @@ DocumentRangeObject::~ DocumentRangeObject( )
 {
     if(m_ownsData)
     {
-        QMutexLocker l(dd_ptr->m_smartMutex);
         if (dd_ptr->m_smartRange) {
+            QMutexLocker l(dd_ptr->m_smartMutex);
             dd_ptr->m_smartRange->removeWatcher(this);
 
             //If a smart-range is deleted, move it's child-ranges into it's parent.
