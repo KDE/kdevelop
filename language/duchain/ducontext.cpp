@@ -372,7 +372,8 @@ bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 {
   QMutexLocker lock(&m_localDeclarationsMutex);
 
-  removeDeclarationFromHash(declaration->identifier(), declaration);
+  if(!m_topContext->deleting()) //We can save a lot of time by just not caring about the hash while deleting
+    removeDeclarationFromHash(declaration->identifier(), declaration);
 
   if( removeOne(m_context->d_func_dynamic()->m_localDeclarationsList(), LocalIndexedDeclaration(declaration)) ) {
     //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
