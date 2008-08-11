@@ -69,7 +69,8 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);
   
-  QFile file(baseDir + "/" + QString("%1").arg(topContextIndex));
+  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QFile file(fileName);
   if(file.open(QIODevice::ReadOnly)) {
     
     QVector<uint> contextDataOffsets;
@@ -120,7 +121,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     
     return ret;
   }else{
-    kWarning() << "Cannot open top-context for reading";
+    kWarning() << "Cannot open top-context for reading:" << fileName;
     return 0;
   }
 }
