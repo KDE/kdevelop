@@ -20,32 +20,32 @@
 
 namespace KDevelop {
 AbstractType* TypeSystem::create(AbstractTypeData* data) const {
-  if(m_factories.size() <= data->typeClassId || m_factories[data->typeClassId] == 0)
+  if(uint(m_factories.size()) <= data->typeClassId || m_factories[data->typeClassId] == 0)
     return 0;
   return m_factories[data->typeClassId]->create(data);
 }
 
 void TypeSystem::callDestructor(AbstractTypeData* data) const {
-  if(m_factories.size() <= data->typeClassId || m_factories[data->typeClassId] == 0)
+  if(uint(m_factories.size()) <= data->typeClassId || m_factories[data->typeClassId] == 0)
     return;
   return m_factories[data->typeClassId]->callDestructor(data);
 }
 
 uint TypeSystem::dynamicSize(const AbstractTypeData& data) const {
-  if(m_factories.size() <= data.typeClassId || m_factories[data.typeClassId] == 0)
+  if(uint(m_factories.size()) <= data.typeClassId || m_factories[data.typeClassId] == 0)
     return 0;
   return m_factories[data.typeClassId]->dynamicSize(data);
 }
 
 size_t TypeSystem::dataClassSize(const AbstractTypeData& data) const {
-  if(m_dataClassSizes.size() <= data.typeClassId || m_dataClassSizes[data.typeClassId] == 0)
+  if(uint(m_dataClassSizes.size()) <= data.typeClassId || m_dataClassSizes[data.typeClassId] == 0)
     return 0;
   return m_dataClassSizes[data.typeClassId];
 }
 
 
 void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
-  if(m_factories.size() <= from.typeClassId || m_factories[from.typeClassId] == 0) {
+  if(uint(m_factories.size()) <= from.typeClassId || m_factories[from.typeClassId] == 0) {
     Q_ASSERT(0); //Shouldn't try to copy an unknown type
     return;
   }

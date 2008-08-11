@@ -59,7 +59,7 @@ bool FunctionType::equals(const AbstractType* _rhs) const
   if( d->m_returnType != rhs->d_func()->m_returnType )
     return false;
 
-  for(int a = 0; a < d->m_argumentsSize(); ++a)
+  for(unsigned int a = 0; a < d->m_argumentsSize(); ++a)
     if(d->m_arguments()[a] != rhs->d_func()->m_arguments()[a])
       return false;
 
@@ -88,7 +88,7 @@ void FunctionType::removeArgument(AbstractType::Ptr argument)
 
   IndexedType i = argument->indexed();
   uint shift = 0;
-  for(int a = 0; a < d->m_argumentsSize(); ++a) {
+  for(unsigned int a = 0; a < d->m_argumentsSize(); ++a) {
     if(d->m_arguments()[a] == i) {
       ++shift;
     }else if(shift) {
@@ -136,7 +136,7 @@ void FunctionType::accept0 (TypeVisitor *v) const
   {
     acceptType (d->m_returnType.type(), v);
 
-    for (int i = 0; i < d->m_argumentsSize (); ++i)
+    for (unsigned int i = 0; i < d->m_argumentsSize (); ++i)
       acceptType (d->m_arguments()[i].type(), v);
   }
 
@@ -146,7 +146,7 @@ void FunctionType::accept0 (TypeVisitor *v) const
 void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(FunctionType);
-  for (int i = 0; i < d->m_argumentsSize (); ++i)
+  for (unsigned int i = 0; i < d->m_argumentsSize (); ++i)
     d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].type() )->indexed();
   d->m_returnType = exchanger->exchange(d->m_returnType.type())->indexed();
 }

@@ -62,14 +62,6 @@ StructureType::~StructureType()
 {
 }
 
-void StructureType::setClassType(uint type)
-{
-}
-
-uint StructureType::classType() const
-{
-}
-
 bool StructureType::isClosed() const
 {
   return d_func()->m_closed;

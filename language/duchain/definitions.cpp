@@ -122,7 +122,7 @@ void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaratio
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
-    for(int a = 0; a < oldItem->definitionsSize(); ++a) {
+    for(unsigned int a = 0; a < oldItem->definitionsSize(); ++a) {
       if(oldItem->definitions()[a] == definition)
         return; //Already there
       item.definitionsList().append(oldItem->definitions()[a]);
@@ -146,7 +146,7 @@ void Definitions::removeDefinition(const DeclarationId& id, const IndexedDeclara
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const DefinitionsItem* oldItem = d->m_definitions.itemFromIndex(index);
-    for(int a = 0; a < oldItem->definitionsSize(); ++a)
+    for(unsigned int a = 0; a < oldItem->definitionsSize(); ++a)
       if(!(oldItem->definitions()[a] == definition))
         item.definitionsList().append(oldItem->definitions()[a]);
     

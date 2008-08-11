@@ -301,6 +301,7 @@ void BackgroundParser::saveSettings(bool projectIsLoaded)
 
 void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QString text)
 {
+    Q_UNUSED(text)
     d->m_jobProgress[job] = value;
     updateProgressBar();
 }

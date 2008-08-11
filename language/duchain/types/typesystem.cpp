@@ -114,7 +114,9 @@ FunctionTypeData::FunctionTypeData( const FunctionTypeData& rhs )
   copyListsFrom(rhs);
 }
 
-void FunctionTypeData::operator=(const FunctionTypeData& rhs) {
+void FunctionTypeData::operator=(const FunctionTypeData& rhs)
+{
+    Q_UNUSED(rhs)
 }
 
 StructureTypeData::StructureTypeData()

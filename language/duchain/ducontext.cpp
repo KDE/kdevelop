@@ -114,7 +114,7 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
 }
 
 DUContextData::DUContextData()
-  : m_anonymousInParent(false), m_propagateDeclarations(false), m_inSymbolTable(false)
+  : m_inSymbolTable(false), m_anonymousInParent(false), m_propagateDeclarations(false)
 {
   initializeAppendedLists();
 }
@@ -123,7 +123,7 @@ DUContextData::~DUContextData() {
   freeAppendedLists();
 }
 
-DUContextData::DUContextData(const DUContextData& rhs)  : DUChainBaseData(rhs), m_anonymousInParent(rhs.m_anonymousInParent), m_propagateDeclarations(rhs.m_propagateDeclarations), m_inSymbolTable(rhs.m_inSymbolTable) {
+DUContextData::DUContextData(const DUContextData& rhs)  : DUChainBaseData(rhs), m_inSymbolTable(rhs.m_inSymbolTable), m_anonymousInParent(rhs.m_anonymousInParent), m_propagateDeclarations(rhs.m_propagateDeclarations) {
   initializeAppendedLists();
   copyListsFrom(rhs);
   m_scopeIdentifier = rhs.m_scopeIdentifier;
@@ -132,7 +132,7 @@ DUContextData::DUContextData(const DUContextData& rhs)  : DUChainBaseData(rhs), 
 }
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
-  : m_context(d), m_topContext(0), m_hasLocalDeclarationsHash(false), m_rangesChanged(true), m_indexInTopContext(0)
+  : m_topContext(0), m_hasLocalDeclarationsHash(false), m_indexInTopContext(0), m_context(d), m_rangesChanged(true)
 {
 }
 
@@ -209,9 +209,9 @@ void DUContext::synchronizeUsesFromSmart() const
   if(m_dynamicData->m_rangesForUses.isEmpty() || !m_dynamicData->m_rangesChanged)
     return;
 
-  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_usesSize());
+  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
 
-  for(int a = 0; a < d->m_usesSize(); a++)
+  for(unsigned int a = 0; a < d->m_usesSize(); a++)
     if(m_dynamicData->m_rangesForUses[a]) ///@todo somehow signalize the change
       const_cast<Use&>(d->m_uses()[a]).m_range = SimpleRange(*m_dynamicData->m_rangesForUses[a]);
 
@@ -223,7 +223,7 @@ void DUContext::synchronizeUsesToSmart() const
   DUCHAIN_D(DUContext);
   if(m_dynamicData->m_rangesForUses.isEmpty())
     return;
-  Q_ASSERT(m_dynamicData->m_rangesForUses.count() == d->m_usesSize());
+  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
 
   // TODO: file close race? from here
   KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( smartRange()->document() );
@@ -232,7 +232,7 @@ void DUContext::synchronizeUsesToSmart() const
   // TODO: file close race to here
   QMutexLocker l(iface->smartMutex());
 
-  for(int a = 0; a < d->m_usesSize(); a++) {
+  for(unsigned int a = 0; a < d->m_usesSize(); a++) {
     if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
       l.unlock();
       l.relock();
@@ -618,8 +618,6 @@ void DUContext::setPropagateDeclarations(bool propagate)
   DUCHAIN_D_DYNAMIC(DUContext);
   QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
-  bool oldPropagate = d->m_propagateDeclarations;
-
   m_dynamicData->m_parentContext->m_dynamicData->disableLocalDeclarationsHash();
 
   d->m_propagateDeclarations = propagate;
@@ -755,7 +753,6 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
 
         while( !context && import > 0 ) {
           --import;
-          DUContext* context = d->m_importedContexts()[import].context();
         }
 
         if( !context )
@@ -812,7 +809,7 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     return;
   }
 
-  for(int a = 0; a < d->m_importedContextsSize(); ++a) {
+  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a].context() == context) {
       d->m_importedContextsList()[a].position = position;
       return;
@@ -837,7 +834,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  for(int a = 0; a < d->m_importedContextsSize(); ++a) {
+  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a].context() == context) {
       removeFromArray(d->m_importedContextsList(), a);
       break;
@@ -1146,7 +1143,7 @@ SimpleCursor DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  for(int a = 0; a < d->m_importedContextsSize(); ++a)
+  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a].context() == target)
       return d->m_importedContexts()[a].position;
   return SimpleCursor::invalid();
@@ -1321,7 +1318,7 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
 
   if(insertBefore == -1) {
     //Find position where to insert
-    int a = 0;
+    unsigned int a = 0;
     for(; a < d->m_usesSize() && range.start > d->m_uses()[a].m_range.start; ++a) { ///@todo do binary search
     }
     insertBefore = a;
@@ -1329,7 +1326,7 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
 
   insertToArray(d->m_usesList(), Use(range, declarationIndex), insertBefore);
   if(smartRange) {
-    Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d->m_usesSize()-1);
+    Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);
     m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
     smartRange->addWatcher(this);
 //     smartRange->setWantsDirectChanges(true);
@@ -1360,7 +1357,7 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
   if(m_dynamicData->m_rangesForUses.isEmpty())
       m_dynamicData->m_rangesForUses.insert(0, d_func()->m_usesSize(), 0);
 
-  Q_ASSERT(m_dynamicData->m_rangesForUses.size() == d_func()->m_usesSize());
+  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d_func()->m_usesSize());
 
   if(m_dynamicData->m_rangesForUses[useIndex]) {
     EditorIntegrator editor;
@@ -1441,7 +1438,7 @@ int DUContext::findUseAt(const SimpleCursor & position) const
   if (!range().contains(position))
     return -1;
 
-  for(int a = 0; a < d_func()->m_usesSize(); ++a)
+  for(unsigned int a = 0; a < d_func()->m_usesSize(); ++a)
     if (d_func()->m_uses()[a].m_range.contains(position))
       return a;
 

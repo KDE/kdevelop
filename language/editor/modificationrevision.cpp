@@ -29,7 +29,7 @@
 #include "hashedstring.h"
 #include "../duchain/indexedstring.h"
 
-const unsigned int cacheModTimeForSeconds = 2;
+const int cacheModTimeForSeconds = 2;
 
 namespace KDevelop {
 

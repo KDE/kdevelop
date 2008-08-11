@@ -187,7 +187,7 @@ public:
       const DUContextData* data = currentData.back()->m_context->d_func();
       if(currentPos.back() == data->m_localDeclarationsSize()) {
         //Check if we can proceed into a propagating child-context
-        for(int a = 0; a < data->m_childContextsSize(); ++a) {
+        for(unsigned int a = 0; a < data->m_childContextsSize(); ++a) {
           DUContext* child = data->m_childContexts()[a].data(currentData.back()->m_topContext);
           if(child->d_func()->m_propagateDeclarations) {
             currentPos.back() = a;
@@ -209,7 +209,7 @@ public:
         if(!currentPos.isEmpty()) {
           //We've found a next child that we can iterate into
           data = currentData.back()->m_context->d_func();
-          for(int a = currentPos.back(); a < data->m_childContextsSize(); ++a) {
+          for(unsigned int a = currentPos.back(); a < data->m_childContextsSize(); ++a) {
             if(data->m_childContexts()[a].data(currentData.back()->m_topContext)->d_func()->m_propagateDeclarations) {
               currentPos.back() = a+1;
               currentData.append(data->m_childContexts()[a].data(currentData.back()->m_topContext)->m_dynamicData);
@@ -226,7 +226,7 @@ public:
     }
     
     KDevVarLengthArray<DUContextDynamicData*> currentData; //Current data that is being iterated through, if inHash is false
-    KDevVarLengthArray<int> currentPos; //Current position in the given data. back() is always within the declaration-vector, the other indices are within the child-contexts
+    KDevVarLengthArray<unsigned int> currentPos; //Current position in the given data. back() is always within the declaration-vector, the other indices are within the child-contexts
   };
   
   /**

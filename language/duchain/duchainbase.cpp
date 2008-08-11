@@ -99,6 +99,8 @@ const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
 
 void DUChainBase::rebuildDynamicData(DUContext* parent, uint ownIndex)
 {
+    Q_UNUSED(parent)
+    Q_UNUSED(ownIndex)
 }
 
 void DUChainBase::makeDynamic() {

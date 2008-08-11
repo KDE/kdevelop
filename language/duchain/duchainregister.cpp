@@ -21,13 +21,13 @@
 
 namespace KDevelop {
 DUChainBase* DUChainItemSystem::create(DUChainBaseData* data) const {
-  if(m_factories.size() <= data->classId || m_factories[data->classId] == 0)
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
     return 0;
   return m_factories[data->classId]->create(data);
 }
 
 DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const {
-  if(m_factories.size() <= data.classId || m_factories[data.classId] == 0) {
+  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0) {
     Q_ASSERT(0); //Or we'll crash later
     return 0;
   }
@@ -35,26 +35,26 @@ DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const
 }
 
 void DUChainItemSystem::callDestructor(DUChainBaseData* data) const {
-  if(m_factories.size() <= data->classId || m_factories[data->classId] == 0)
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
     return;
   return m_factories[data->classId]->callDestructor(data);
 }
 
 uint DUChainItemSystem::dynamicSize(const DUChainBaseData& data) const {
-  if(m_factories.size() <= data.classId || m_factories[data.classId] == 0)
+  if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0)
     return 0;
   return m_factories[data.classId]->dynamicSize(data);
 }
 
 size_t DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
-  if(m_dataClassSizes.size() <= data.classId || m_dataClassSizes[data.classId] == 0)
+  if(uint(m_dataClassSizes.size()) <= data.classId || m_dataClassSizes[data.classId] == 0)
     return 0;
   return m_dataClassSizes[data.classId];
 }
 
 
 void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
-  if(m_factories.size() <= from.classId || m_factories[from.classId] == 0) {
+  if(uint(m_factories.size()) <= from.classId || m_factories[from.classId] == 0) {
     Q_ASSERT(0); //Shouldn't try to copy an unknown type
     return;
   }

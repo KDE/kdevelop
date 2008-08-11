@@ -123,7 +123,7 @@ void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
-    for(int a = 0; a < oldItem->usesSize(); ++a) {
+    for(unsigned int a = 0; a < oldItem->usesSize(); ++a) {
       if(oldItem->uses()[a] == use)
         return; //Already there
       item.usesList().append(oldItem->uses()[a]);
@@ -147,7 +147,7 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const UsesItem* oldItem = d->m_uses.itemFromIndex(index);
-    for(int a = 0; a < oldItem->usesSize(); ++a)
+    for(unsigned int a = 0; a < oldItem->usesSize(); ++a)
       if(!(oldItem->uses()[a] == use))
         item.usesList().append(oldItem->uses()[a]);
     

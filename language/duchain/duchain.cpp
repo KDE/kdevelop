@@ -161,7 +161,7 @@ static DUChainPrivate* duChainPrivateSelf = 0;
 class DUChainPrivate
 {
 public:
-  DUChainPrivate() : instance(0), m_environmentInfo("Environment Information"), m_chainsMutex(QMutex::Recursive), m_destroyed(false)
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentInfo("Environment Information")
   {
     m_unloadingEnabled = true;
     duChainPrivateSelf = this;
@@ -779,7 +779,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       kDebug() << "Could not create smart-range for document during startup";
     }
 
-    if(!standardContext->smartRange() || standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate())
+    if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()))
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());

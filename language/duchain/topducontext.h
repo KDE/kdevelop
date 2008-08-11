@@ -251,7 +251,7 @@ public:
    * Tries to retrieve the used declaration @param declarationIndex
    * @param context must be the context where the use happened
    * */
-  Declaration* usedDeclarationForIndex(int declarationIndex) const;
+  Declaration* usedDeclarationForIndex(unsigned int declarationIndex) const;
 
   /**
    * You can use this before you rebuild all uses. This does not affect any uses directly,

@@ -45,7 +45,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   
   int size = DUChainItemSystem::self().dynamicSize(*item.d_func());
   
-  if(data.back().first.size() - data.back().second < size)
+  if(data.back().first.size() - int(data.back().second) < size)
       //Create a new data item
       data.append( qMakePair(QByteArray(size > 10000 ? size : 10000, 0), 0u) );
   
@@ -241,14 +241,14 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
 
 Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > m_declarations.size())
+    if(index == 0 || index > uint(m_declarations.size()))
       return 0;
     else
       return m_declarations[index-1];
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     index = 0xffffffff - index;
-    if(index == 0 || index > m_temporaryDeclarations.size())
+    if(index == 0 || index > uint(m_temporaryDeclarations.size()))
       return 0;
     else
       return m_temporaryDeclarations[index-1];
@@ -258,7 +258,7 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
   uint index = decl->m_indexInTopContext;
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > m_declarations.size())
+    if(index == 0 || index > uint(m_declarations.size()))
       return;
     else {
       Q_ASSERT(m_declarations[index-1] == decl);
@@ -267,7 +267,7 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     index = 0xffffffff - index;
-    if(index == 0 || index > m_temporaryDeclarations.size())
+    if(index == 0 || index > uint(m_temporaryDeclarations.size()))
       return;
     else {
       Q_ASSERT(m_temporaryDeclarations[index-1] == decl);
@@ -289,14 +289,14 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
 
 DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > m_contexts.size())
+    if(index == 0 || index > uint(m_contexts.size()))
       return 0;
     else
       return m_contexts[index-1];
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     index = 0xffffffff - index;
-    if(index == 0 || index > m_temporaryContexts.size())
+    if(index == 0 || index > uint(m_temporaryContexts.size()))
       return 0;
     else
       return m_temporaryContexts[index-1];
@@ -306,7 +306,7 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
 void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   uint index = decl->m_dynamicData->m_indexInTopContext;
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > m_contexts.size())
+    if(index == 0 || index > uint(m_contexts.size()))
       return;
     else {
       Q_ASSERT(m_contexts[index-1] == decl);
@@ -315,7 +315,7 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     index = 0xffffffff - index;
-    if(index == 0 || index > m_temporaryContexts.size())
+    if(index == 0 || index > uint(m_temporaryContexts.size()))
       return;
     else {
       Q_ASSERT(m_temporaryContexts[index-1] == decl);

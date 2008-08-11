@@ -54,8 +54,8 @@ Repositories::StringRepository commentRepository("Comment Repository");
 REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData() 
-  : m_isDefinition(false), m_inSymbolTable(false),  
-    m_isTypeAlias(false), m_anonymousInContext(false), m_comment(0)
+  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false),  
+    m_isTypeAlias(false), m_anonymousInContext(false)
 {
   m_kind = Declaration::Instance;
 }

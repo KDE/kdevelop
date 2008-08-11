@@ -62,15 +62,15 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
     if (member->isStatic())
       p |= CodeCompletionModel::Static;
     if (member->isAuto())
-      ;//TODO
+      {}//TODO
     if (member->isFriend())
       p |= CodeCompletionModel::Friend;
     if (member->isRegister())
-      ;//TODO
+      {}//TODO
     if (member->isExtern())
-      ;//TODO
+      {}//TODO
     if (member->isMutable())
-      ;//TODO
+      {}//TODO
   }
 
   if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
@@ -80,7 +80,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
     if (function->isInline())
       p |= CodeCompletionModel::Inline;
     if (function->isExplicit())
-      ;//TODO
+      {}//TODO
   }
 
   if( dec->isTypeAlias() )

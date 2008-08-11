@@ -636,7 +636,7 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  for(int a = 0; a < d->m_importedContextsSize(); ++a)
+  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a].context() == target)
       return d->m_importedContexts()[a].position;
   
@@ -664,7 +664,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
     }
   }
   
-  for(int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
+  for(unsigned int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
   TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context())); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
@@ -1222,15 +1222,15 @@ bool TopDUContext::isOnDisk() const {
 
 void TopDUContext::clearUsedDeclarationIndices() {
   ENSURE_CAN_WRITE
-  for(int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
+  for(unsigned int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
       DUChain::uses()->removeUse(d_func()->m_usedDeclarationIds()[a], this);
 
   d_func_dynamic()->m_usedDeclarationIdsList().clear();
 }
 
-Declaration* TopDUContext::usedDeclarationForIndex(int declarationIndex) const {
+Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex) const {
   ENSURE_CAN_READ
-  if(declarationIndex >= 0 && declarationIndex < d_func()->m_usedDeclarationIdsSize())
+  if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
     return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
   else
     return 0;
@@ -1245,7 +1245,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   DeclarationId id(declaration->id());
 
   int index = -1;
-  for(int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
+  for(unsigned int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
     if(d_func()->m_usedDeclarationIds()[a] == id) {
       index = a;
       break;

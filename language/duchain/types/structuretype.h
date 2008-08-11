@@ -55,9 +55,6 @@ public:
   /// Destructor
   virtual ~StructureType();
 
-  void setClassType(uint type);
-  uint classType() const;
-
   bool isClosed() const;
   void close();
 
