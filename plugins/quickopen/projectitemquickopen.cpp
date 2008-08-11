@@ -28,19 +28,9 @@
 #include <project/projectmodel.h>
 #include <klocale.h>
 #include <language/interfaces/iquickopen.h>
+#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
-
-///@todo Use ILanguageSupport::standardContext(..)
-//May return zero
-KDevelop::TopDUContext* getTopContext(const IndexedString& url) {
-  KDevelop::TopDUContext* chosen = 0;
-  QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(url);
-  foreach( KDevelop::TopDUContext* ctx, contexts )
-    if( !(ctx->flags() & KDevelop::TopDUContext::ProxyContextFlag) )
-      chosen = ctx;
-  return chosen;
-}
 
 void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* decl, ProjectItemDataProvider::ItemTypes itemTypes ) {
   if( ((itemTypes & ProjectItemDataProvider::Classes) && decl->kind() == Declaration::Type && decl->abstractType().cast<StructureType>())
@@ -98,7 +88,7 @@ void ProjectItemDataProvider::reset() {
   foreach( IndexedString u, enabledFiles ) {
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-    TopDUContext* ctx = getTopContext( u );
+    ReferencedTopDUContext ctx = DUChainUtils::standardContextForUrl(u.str());
     if( ctx ) ///@todo Get the project for this file and give it as first parameter
       fillItems( QString(), items, ctx, m_itemTypes );
   }
