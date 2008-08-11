@@ -182,7 +182,6 @@ public:
     QObject::connect(m_cleanupTimer, SIGNAL(timeout()), instance, SLOT(cleanup()));
   }
   ~DUChainPrivate() {
-    doMoreCleanup(true);
     delete instance;
   }
 
