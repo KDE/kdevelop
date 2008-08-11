@@ -178,7 +178,7 @@ public:
     instance = new DUChain();
 
     m_cleanupTimer = new QTimer(instance);
-    m_cleanupTimer->setInterval(10000);
+    m_cleanupTimer->setInterval(60000);
     QObject::connect(m_cleanupTimer, SIGNAL(timeout()), instance, SLOT(cleanup()));
   }
   ~DUChainPrivate() {
