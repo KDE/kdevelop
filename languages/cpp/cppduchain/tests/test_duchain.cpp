@@ -2453,60 +2453,72 @@ void TestDUChain::testTemplateForwardDeclaration2()
 
 void TestDUChain::testConst()
 {
-  QByteArray method("class A{}; const char* a; const char& b; char* const & c; char* const d; const A e; const A* f; A* const g;");
+  {
+    QByteArray method("class A{}; const char* a; const char& b; char* const & c; char* const d; const A e; const A* f; A* const g;");
 
-  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().size(), 8);
-  CppPointerType::Ptr a = top->localDeclarations()[1]->type<CppPointerType>();
-  QVERIFY(a);
-  QVERIFY(!a->isConstant());
-  CppIntegralType::Ptr a2 = a->baseType().cast<CppIntegralType>();
-  QVERIFY(a2);
-  QVERIFY(a2->isConstant());
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().size(), 8);
+    CppPointerType::Ptr a = top->localDeclarations()[1]->type<CppPointerType>();
+    QVERIFY(a);
+    QVERIFY(!a->isConstant());
+    CppIntegralType::Ptr a2 = a->baseType().cast<CppIntegralType>();
+    QVERIFY(a2);
+    QVERIFY(a2->isConstant());
 
-  CppReferenceType::Ptr b = top->localDeclarations()[2]->type<CppReferenceType>();
-  QVERIFY(b);
-  QVERIFY(!b->isConstant());
-  CppIntegralType::Ptr b2 = b->baseType().cast<CppIntegralType>();
-  QVERIFY(b2);
-  QVERIFY(b2->isConstant());
+    CppReferenceType::Ptr b = top->localDeclarations()[2]->type<CppReferenceType>();
+    QVERIFY(b);
+    QVERIFY(!b->isConstant());
+    CppIntegralType::Ptr b2 = b->baseType().cast<CppIntegralType>();
+    QVERIFY(b2);
+    QVERIFY(b2->isConstant());
 
-  CppReferenceType::Ptr c = top->localDeclarations()[3]->type<CppReferenceType>();
-  QVERIFY(c);
-  QVERIFY(!c->isConstant());
-  CppPointerType::Ptr c2 = c->baseType().cast<CppPointerType>();
-  QVERIFY(c2);
-  QVERIFY(c2->isConstant());
-  CppIntegralType::Ptr c3 = c2->baseType().cast<CppIntegralType>();
-  QVERIFY(c3);
-  QVERIFY(!c3->isConstant());
+    CppReferenceType::Ptr c = top->localDeclarations()[3]->type<CppReferenceType>();
+    QVERIFY(c);
+    QVERIFY(!c->isConstant());
+    CppPointerType::Ptr c2 = c->baseType().cast<CppPointerType>();
+    QVERIFY(c2);
+    QVERIFY(c2->isConstant());
+    CppIntegralType::Ptr c3 = c2->baseType().cast<CppIntegralType>();
+    QVERIFY(c3);
+    QVERIFY(!c3->isConstant());
 
-  CppPointerType::Ptr d = top->localDeclarations()[4]->type<CppPointerType>();
-  QVERIFY(d);
-  QVERIFY(d->isConstant());
-  CppIntegralType::Ptr d2 = d->baseType().cast<CppIntegralType>();
-  QVERIFY(d2);
-  QVERIFY(!d2->isConstant());
-  
-  CppClassType::Ptr e = top->localDeclarations()[5]->type<CppClassType>();
-  QVERIFY(e);
-  QVERIFY(e->isConstant());
+    CppPointerType::Ptr d = top->localDeclarations()[4]->type<CppPointerType>();
+    QVERIFY(d);
+    QVERIFY(d->isConstant());
+    CppIntegralType::Ptr d2 = d->baseType().cast<CppIntegralType>();
+    QVERIFY(d2);
+    QVERIFY(!d2->isConstant());
+    
+    CppClassType::Ptr e = top->localDeclarations()[5]->type<CppClassType>();
+    QVERIFY(e);
+    QVERIFY(e->isConstant());
 
-  CppPointerType::Ptr f = top->localDeclarations()[6]->type<CppPointerType>();
-  QVERIFY(f);
-  QVERIFY(!f->isConstant());
-  CppClassType::Ptr f2 = f->baseType().cast<CppClassType>();
-  QVERIFY(f2);
-  QVERIFY(f2->isConstant());
+    CppPointerType::Ptr f = top->localDeclarations()[6]->type<CppPointerType>();
+    QVERIFY(f);
+    QVERIFY(!f->isConstant());
+    CppClassType::Ptr f2 = f->baseType().cast<CppClassType>();
+    QVERIFY(f2);
+    QVERIFY(f2->isConstant());
 
-  CppPointerType::Ptr g = top->localDeclarations()[7]->type<CppPointerType>();
-  QVERIFY(g);
-  QVERIFY(g->isConstant());
-  CppClassType::Ptr g2 = g->baseType().cast<CppClassType>();
-  QVERIFY(g2);
-  QVERIFY(!g2->isConstant());
+    CppPointerType::Ptr g = top->localDeclarations()[7]->type<CppPointerType>();
+    QVERIFY(g);
+    QVERIFY(g->isConstant());
+    CppClassType::Ptr g2 = g->baseType().cast<CppClassType>();
+    QVERIFY(g2);
+    QVERIFY(!g2->isConstant());
+  }
+  {
+    QByteArray method("class A; template<class T> class B; B<const A*> ca;B<A* const> cb;");
+
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().size(), 4);
+    QCOMPARE(top->localDeclarations()[2]->abstractType()->toString().trimmed(), QString("B< const A* >"));
+    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().trimmed(), QString("B< A* const >"));
+  }
 }
 
 void TestDUChain::testDeclarationId()

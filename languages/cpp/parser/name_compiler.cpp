@@ -79,9 +79,10 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
     TypeCompiler tc(session);
     tc.run(node->type_id->type_specifier);
     id = TypeIdentifier(tc.identifier());
-    
+    //node->type_id->type_specifier->cv
     if(node->type_id->declarator && node->type_id->declarator->ptr_ops)
     {
+      id.setIsConstant(parseConstVolatile(session, node->type_id->type_specifier->cv) & Declaration::Const);
       const ListNode<PtrOperatorAST*> *it = node->type_id->declarator->ptr_ops->toFront();
       const ListNode<PtrOperatorAST*> *end = it; ///@todo check ordering, eventually walk the list in reversed order
       do
@@ -91,14 +92,13 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
             if( session->token_stream->token(it->element->op).symbol() == ref) {
               //We're handling a 'reference'
               id.setIsReference(true);
-              if(it->element->cv)
-                id.setIsConstant(parseConstVolatile(session, it->element->cv) & Declaration::Const);
             } else {
               //We're handling a real pointer
               id.setPointerDepth(id.pointerDepth()+1);
 
-              if(it->element->cv)
-                id.setIsConstant(parseConstVolatile(session, it->element->cv) & Declaration::Const);
+              if(it->element->cv) {
+                id.setIsConstPointer(id.pointerDepth()-1, parseConstVolatile(session, it->element->cv) & Declaration::Const);
+              }
             }
           }
           it = it->next;
