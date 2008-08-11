@@ -323,7 +323,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         }
     }
-    kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
+    //kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
     return path.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
@@ -405,12 +405,31 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     if(!haveToFind(pack->name()))
         return 1;
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
-    kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath;
-
-    QString possib=pack->name();
-    if(!possib.endsWith(".cmake"))
-        possib += ".cmake";
-    QString path=findFile("Find"+possib, modulePath);
+    kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
+    
+    QStringList possibs;
+    if(pack->noModule())
+    {
+        QString possib=pack->name();
+        if(!possib.endsWith(".cmake"))
+            possib += ".cmake";
+        possib.prepend("Find");
+        possibs += possib;
+    }
+    else
+    {
+        possibs+=QString("%1Config.cmake").arg(pack->name());
+        possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
+    }
+    
+    QString path;
+    foreach(const QString& possib, possibs)
+    {
+        path=findFile(possib, modulePath);
+        if(!path.isEmpty())
+            break;
+    }
+    
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
@@ -447,6 +466,11 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             kDebug(9032) << "error: find_package. Parsing error." << path;
         }
         m_vars->take("CMAKE_CURRENT_LIST_FILE");
+        
+        if(pack->noModule())
+        {
+            m_vars->insert(QString("%1_CONFIG"), QStringList(path));
+        }
     }
     else if(pack->isRequired())
     {
@@ -454,6 +478,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
     }
     kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
+    
     return 1;
 }
 
