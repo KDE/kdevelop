@@ -131,7 +131,7 @@ bool SvnCommitDialog::keepLocks() const
 void SvnCommitDialog::insertRow( const QString& state, const KUrl& url )
 {
     QStringList strings;
-    strings << "" << state << url.prettyUrl();
+    strings << "" << state << url.pathOrUrl();
     QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
     item->setCheckState(0, Qt::Checked);
 }
