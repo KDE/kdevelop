@@ -80,6 +80,7 @@ class AbstractTypeDataRequest {
 
 struct TypeRepositoryData {
   TypeRepositoryData() : repository("Type Repository") {
+    repository.setUnloadingEnabled(false);
   }
   QMutex mutex;
   ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData, false> repository;
