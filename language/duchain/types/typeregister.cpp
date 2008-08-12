@@ -20,27 +20,27 @@
 
 namespace KDevelop {
 AbstractType* TypeSystem::create(AbstractTypeData* data) const {
-  if(uint(m_factories.size()) <= data->typeClassId || m_factories[data->typeClassId] == 0)
+  if(uint(m_factories.size()) <= data->typeClassId || m_fastFactories[data->typeClassId] == 0)
     return 0;
-  return m_factories[data->typeClassId]->create(data);
+  return m_fastFactories[data->typeClassId]->create(data);
 }
 
 void TypeSystem::callDestructor(AbstractTypeData* data) const {
-  if(uint(m_factories.size()) <= data->typeClassId || m_factories[data->typeClassId] == 0)
+  if(uint(m_factories.size()) <= data->typeClassId || m_fastFactories[data->typeClassId] == 0)
     return;
-  return m_factories[data->typeClassId]->callDestructor(data);
+  return m_fastFactories[data->typeClassId]->callDestructor(data);
 }
 
 uint TypeSystem::dynamicSize(const AbstractTypeData& data) const {
-  if(uint(m_factories.size()) <= data.typeClassId || m_factories[data.typeClassId] == 0)
+  if(uint(m_factories.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
     return 0;
-  return m_factories[data.typeClassId]->dynamicSize(data);
+  return m_fastFactories[data.typeClassId]->dynamicSize(data);
 }
 
 size_t TypeSystem::dataClassSize(const AbstractTypeData& data) const {
-  if(uint(m_dataClassSizes.size()) <= data.typeClassId || m_dataClassSizes[data.typeClassId] == 0)
+  if(uint(m_dataClassSizes.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
     return 0;
-  return m_dataClassSizes[data.typeClassId];
+  return m_fastDataClassSizes[data.typeClassId];
 }
 
 

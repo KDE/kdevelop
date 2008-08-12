@@ -79,8 +79,13 @@ template<class T, class Data>
 class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
   public:
   AbstractType* create(AbstractTypeData* data) const {
-    return new T(*static_cast<typename T::Data*>(data));
+/*    if(!m_reUseTypes.isEmpty()) {
+      return new (m_reUseTypes.pop()) T(*static_cast<typename T::Data*>(data));
+    }else{*/
+      return new T(*static_cast<typename T::Data*>(data));
+//     }
   }
+  
   void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
     Q_ASSERT(from.typeClassId == T::Identity);
 
@@ -105,6 +110,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
     Q_ASSERT(data.typeClassId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
+/*  private:
+    QStack<void*> m_reUseTypes;*/
 };
 
 /**
@@ -124,6 +131,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
       if(m_factories.size() <= T::Identity) {
         m_factories.resize(T::Identity+1);
         m_dataClassSizes.resize(T::Identity+1);
+        
+        m_fastDataClassSizes = m_dataClassSizes.data();
+        m_fastFactories = m_factories.data();
       }
 
       Q_ASSERT(!m_factories[T::Identity]);
@@ -169,7 +179,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
 
   private:
     QVector<AbstractTypeFactory*> m_factories;
+    AbstractTypeFactory** m_fastFactories;
+    
     QVector<size_t> m_dataClassSizes;
+    size_t* m_fastDataClassSizes;
 };
 
 /// Helper class to register an AbstractType subclass.
