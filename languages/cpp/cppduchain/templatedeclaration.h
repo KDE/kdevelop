@@ -26,7 +26,6 @@
 #include <language/duchain/declarationid.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/ducontext.h>
-#include "expressionparser.h"
 #include "cppduchainexport.h"
 #include <language/duchain/appendedlist.h>
 #include "expressionevaluationresult.h"
