@@ -117,8 +117,13 @@ ItemRepositoryRegistry& globalItemRepositoryRegistry() {
 
 void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository) {
   m_repositories << repository;
-  if(!m_path.isEmpty())
-    repository->open(m_path, m_cleared);
+  if(!m_path.isEmpty()) {
+    if(!repository->open(m_path, m_cleared)) {
+        QString path = m_path;
+        close();
+        open(path, true, m_lock);
+    }
+  }
 }
 
 QString ItemRepositoryRegistry::path() const {
