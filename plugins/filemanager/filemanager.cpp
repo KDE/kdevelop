@@ -31,7 +31,6 @@
 #include <kdiroperator.h>
 #include <kfileitem.h>
 #include <klineedit.h>
-#include <kdeversion.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -54,11 +53,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect(urlnav, SIGNAL(urlChanged(const KUrl& )), SLOT(gotoUrl(const KUrl&)));
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
-#if KDE_IS_VERSION(4,1,60)
     dirop->setView( KFile::Tree );
-#else
-    dirop->setView( KFile::Simple );
-#endif
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     l->addWidget(dirop);
 
