@@ -104,14 +104,14 @@ public:
    *
    * \returns the newly created or updated TopDUContext pointer.
    */
-  virtual TopDUContext* build( const IndexedString& url, T* node,
-                              const TopDUContextPointer& updateContext
-                                    = TopDUContextPointer() )
+  virtual ReferencedTopDUContext build( const IndexedString& url, T* node,
+                              ReferencedTopDUContext updateContext
+                                    = ReferencedTopDUContext() )
   {
     m_compilingContexts = true;
     m_editor->setCurrentUrl( url );
 
-    TopDUContext* top = 0;
+    ReferencedTopDUContext top;
     {
       DUChainWriteLocker lock( DUChain::lock() );
       top = updateContext.data();
