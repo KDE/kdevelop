@@ -26,21 +26,6 @@ class QChar;
 class QStringList;
 
 namespace Utils {
-/**
- * Fills all comments  within the given c++ code with the given 'replacement' character
- * */
-QString clearComments( QString str, QChar replacement = ' ' );
-/**
- * Fills all strings within the given c++ code with the given 'replacement' character
- * */
-QString clearStrings( QString str, QChar replacement = ' ' );
-
-/**
- * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.
- * */
-QString reduceWhiteSpace(QString str);
-
-QString stripFinalWhitespace(QString str);
 
 /**
  * Copied from kdevelop-3.4, should be redone

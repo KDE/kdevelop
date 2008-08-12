@@ -128,9 +128,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ifDebug( log( "non-processed text: " + m_text ); )
    preprocessText( line );
 
-   m_text = Utils::clearComments( m_text );
-   m_text = Utils::clearStrings( m_text );
-   m_text = Utils::stripFinalWhitespace( m_text );
+   m_text = clearComments( m_text );
+   m_text = clearStrings( m_text );
+   m_text = stripFinalWhitespace( m_text );
 
   ifDebug( log( "processed text: " + m_text ); )
 
@@ -210,11 +210,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
+  ifDebug( log( "expression: " + m_expression ); )
 
   if(m_expression == "else")
     m_expression = QString();
   
-  QString expressionPrefix = Utils::stripFinalWhitespace( m_text.left(start_expr) );
+  QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
   ifDebug( log( "expressionPrefix: " + expressionPrefix ); )
 
@@ -223,7 +224,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     int newExpressionStart = Utils::expressionAt(expressionPrefix, expressionPrefix.length());
     if(newExpressionStart > 0) {
       QString newExpression = expressionPrefix.mid(newExpressionStart).trimmed();
-      QString newExpressionPrefix = Utils::stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
+      QString newExpressionPrefix = stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
       if(!isKeyword(newExpression)) {
         if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
           kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
@@ -530,8 +531,8 @@ bool CodeCompletionContext::isValidPosition() {
   if( m_text.isEmpty() )
     return true;
   //If we are in a string or comment, we should not complete anything
-  QString markedText = Utils::clearComments(m_text, '$');
-  markedText = Utils::clearStrings(markedText,'$');
+  QString markedText = clearComments(m_text, '$');
+  markedText = clearStrings(markedText,'$');
 
   if( markedText[markedText.length()-1] == '$' ) {
     //We are within a comment or string
