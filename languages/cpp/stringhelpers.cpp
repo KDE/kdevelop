@@ -17,10 +17,10 @@
 */
 
 #include <language/duchain/stringhelpers.h>
+#include <language/duchain/safetycounter.h>
 #include <QString>
 #include <QChar>
 #include <QStringList>
-#include "safetycounter.h"
 
 namespace Utils {
 
@@ -244,75 +244,5 @@ int expressionAt( const QString& text, int index ) {
   return index;
 }
 
-QString reverse( const QString& str ) {
-  QString ret;
-  int len = str.length();
-  for( int a = len-1; a >= 0; --a ) {
-    switch(str[a].toAscii()) {
-    case '(':
-      ret += ')';
-      continue;
-    case '[':
-      ret += ']';
-      continue;
-    case '{':
-      ret += '}';
-      continue;
-    case '<':
-      ret += '>';
-      continue;
-    case ')':
-      ret += '(';
-      continue;
-    case ']':
-      ret += '[';
-      continue;
-    case '}':
-      ret += '{';
-      continue;
-    case '>':
-      ret += '<';
-      continue;
-    default:
-      ret += str[a];
-      continue;
-    }
-  }
-  return ret;
-}
-
-void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
-  //Blank out everything that can confuse the bracket-matching algorithm
-  str.replace("<<", "__");
-  str.replace(">>", "__");
-  str.replace("\\\"", "__");
-  str.replace("->", "__");
-  QString reversed = reverse( str.left(argumentsStart) );
-  //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
-  SafetyCounter s( 1000 );
-
-  int pos = 0;
-  int len = reversed.length();
-  //we are searching for an opening-brace, but the reversion has also reversed the brace
-  while( pos < len && s ) {
-    int lastPos = pos;
-    pos = KDevelop::findCommaOrEnd( reversed, pos )  ;
-    if( pos > lastPos ) {
-      QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
-      if( !arg.isEmpty() )
-        skippedArguments.push_front( arg ); //We are processing the reversed reverseding, so push to front
-    }
-    if( reversed[pos] == ')' )
-      break;
-    else
-      ++pos;
-  }
-
-  if( !s ) {
-    kDebug(9007) << "skipFunctionArguments: Safety-counter triggered";
-  }
-
-  argumentsStart -= pos;
-}
 
 }

@@ -26,6 +26,8 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/stringhelpers.h>
+#include <language/duchain/safetycounter.h>
 #include <language/interfaces/iproblem.h>
 #include <util/pushvalue.h>
 #include "cppduchain/cppduchain.h"
@@ -35,7 +37,6 @@
 #include "cppduchain/environmentmanager.h"
 #include "cpptypes.h"
 #include "stringhelpers.h"
-#include "safetycounter.h"
 #include "templatedeclaration.h"
 #include "cpplanguagesupport.h"
 #include "environmentmanager.h"
@@ -236,7 +237,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     QStringList otherArguments;
     int parentContextEnd = expressionPrefix.length();
     
-    Utils::skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
+    skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
 
