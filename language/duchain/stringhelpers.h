@@ -45,6 +45,13 @@ int KDEVPLATFORMLANGUAGE_EXPORT findClose( const QString& str , int pos );
 int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QChar validEnd = ' ' );
 
 /**
+ * Skips in the string backwards over function-arguments, and stops at the right side of a "("
+ * @param skippedArguments Will contain all skipped arguments
+ * @param argumentsStart Should be set to the position where the seeking should start, will be changed to the right side of a "(" when found. Should be at the right side of a '(', and may be max. str.length()
+ * */
+void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart );
+
+/**
  * Can be used to iterate through different kinds of parameters, for example template-parameters(By giving it "<>:")
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
