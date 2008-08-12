@@ -69,13 +69,13 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         enum ProjectItemType
         {
-            BuildFolder = QStandardItem::UserType   /** item is a buildable folder */,
-            Target                                  /** item is a target */,
-            ExecutableTarget                        /** item is an executable target */,
-            LibraryTarget                           /** item is a library target */,
-            TestTarget                              /** item is a test executable target */,
-            File                                    /** item is a file */,
-            Folder                                  /** item is a folder */
+            BuildFolder = QStandardItem::UserType         /** item is a buildable folder */,
+            Folder = QStandardItem::UserType+1            /** item is a folder */,
+            ExecutableTarget = QStandardItem::UserType+2  /** item is an executable target */,
+            LibraryTarget = QStandardItem::UserType+3     /** item is a library target */,
+            TestTarget = QStandardItem::UserType+4        /** item is a test executable target */,
+            Target = QStandardItem::UserType+5            /** item is a target */,
+            File = QStandardItem::UserType+6              /** item is a file */
         };
 
         /** @returns Returns the project that the item belongs to.  */
