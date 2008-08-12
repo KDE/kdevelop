@@ -801,6 +801,7 @@ Definitions* DUChain::definitions()
 void DUChain::aboutToQuit()
 {
   DUChainWriteLocker writeLock(lock());
+  sdDUChainPrivate->m_openDocumentContexts.clear();
   sdDUChainPrivate->doCleanup();
   sdDUChainPrivate->clear();
   sdDUChainPrivate->m_destroyed = true;
