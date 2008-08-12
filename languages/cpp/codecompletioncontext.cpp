@@ -45,7 +45,8 @@
 #include "missingincludecompletionitem.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
-
+#define DEBUG
+#define ifDebug(x) x
 //Whether the list of argument-hints should contain all overloaded versions of operators.
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
@@ -91,6 +92,11 @@ QString extractLastLine(const QString& str) {
     return str.mid(prevLineEnd+1);
   else
     return str;
+}
+
+bool isKeyword(QString str) {
+  ///@todo Complete this list
+  return str == "new" || str == "return" || str == "else" || str == "throw";
 }
 
 int completionRecursionDepth = 0;
@@ -219,12 +225,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if(newExpressionStart > 0) {
       QString newExpression = expressionPrefix.mid(newExpressionStart).trimmed();
       QString newExpressionPrefix = Utils::stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
-      if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
-        kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
-        m_expression = newExpression;
-        expressionPrefix = newExpressionPrefix;
+      if(!isKeyword(newExpression)) {
+        if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
+          kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
+          m_expression = newExpression;
+          expressionPrefix = newExpressionPrefix;
+        }
       }
-      
     }
   }
 
