@@ -410,16 +410,16 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QStringList possibs;
     if(pack->noModule())
     {
+        possibs+=QString("%1Config.cmake").arg(pack->name());
+        possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
+    }
+    else
+    {
         QString possib=pack->name();
         if(!possib.endsWith(".cmake"))
             possib += ".cmake";
         possib.prepend("Find");
         possibs += possib;
-    }
-    else
-    {
-        possibs+=QString("%1Config.cmake").arg(pack->name());
-        possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
     }
     
     QString path;
