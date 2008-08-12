@@ -17,6 +17,9 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 #include <vcs/vcsjob.h>
 #include <vcs/vcsstatusinfo.h>
@@ -85,16 +88,22 @@ void SvnCommitDialog::setCommitCandidates( const KUrl::List &urls )
 
             kDebug(9510) << "converted info:"  << info.state() << info.url();
             QString state;
+            QString path = info.url().pathOrUrl();
+            KDevelop::IProject* project = m_part->core()->projectController()->findProjectForUrl( info.url() );
+            if( project )
+            {
+                path = project->relativeUrl( info.url() ).pathOrUrl();
+            }
             switch( info.state() )
             {
                 case KDevelop::VcsStatusInfo::ItemAdded:
-                    insertRow( i18nc("file was added to subversion", "Added"), info.url() );
+                    insertRow( i18nc("file was added to subversion", "Added"), path );
                     break;
                 case KDevelop::VcsStatusInfo::ItemDeleted:
-                    insertRow( i18nc("file was deleted to subversion", "Deleted"), info.url() );
+                    insertRow( i18nc("file was deleted to subversion", "Deleted"), path );
                     break;
                 case KDevelop::VcsStatusInfo::ItemModified:
-                    insertRow( i18nc("subversion controlled file was modified", "Modified"), info.url() );
+                    insertRow( i18nc("subversion controlled file was modified", "Modified"), path );
                     break;
                 default:
                     break;
