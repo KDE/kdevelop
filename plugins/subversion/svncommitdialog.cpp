@@ -88,13 +88,13 @@ void SvnCommitDialog::setCommitCandidates( const KUrl::List &urls )
             switch( info.state() )
             {
                 case KDevelop::VcsStatusInfo::ItemAdded:
-                    insertRow( "A", info.url() );
+                    insertRow( i18nc("file was added to subversion", "Added"), info.url() );
                     break;
                 case KDevelop::VcsStatusInfo::ItemDeleted:
-                    insertRow( "D", info.url() );
+                    insertRow( i18nc("file was deleted to subversion", "Deleted"), info.url() );
                     break;
                 case KDevelop::VcsStatusInfo::ItemModified:
-                    insertRow( "M", info.url() );
+                    insertRow( i18nc("subversion controlled file was modified", "Modified"), info.url() );
                     break;
                 default:
                     break;
