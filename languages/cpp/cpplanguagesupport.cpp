@@ -89,7 +89,10 @@
 #include "quickopen.h"
 #include "cppdebughelper.h"
 
-#define LOCKUP_INTERVAL 30
+#define DEBUG_INCLUDE_PATHS 1
+
+//#define DEBUG_UI_LOCKUP
+#define LOCKUP_INTERVAL 300
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
