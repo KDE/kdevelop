@@ -49,7 +49,30 @@ DumpChain::~ DumpChain( )
 
 void DumpChain::dump( DUContext * context, bool imported )
 {
-  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << " " << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+          enum ContextType {
+    Global    /**< A context that declares functions, namespaces or classes */,
+    Namespace /**< A context that declares namespace members */,
+    Class     /**< A context that declares class members */,
+    Function  /**< A context that declares function-arguments */,
+    Template  /**< A context that declares template-parameters */,
+    Enum      /**< A context that contains a list of enumerators */,
+    Helper    /**< A helper context, used for language-specific tweaks */,
+    Other     /**< Represents executable code, like for example within a compound-statement */
+  };
+  QString type;
+  switch(context->type()) {
+    case Global: type = "Global"; break;
+    case Namespace: type = "Namespace"; break;
+    case Class: type = "Class"; break;
+    case Function: type = "Function"; break;
+    case Template: type = "Template"; break;
+    case Enum: type = "Enum"; break;
+    case Helper: type = "Helper"; break;
+    case Other: type = "Other"; break;
+  }
+  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << " " << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+
+      
   if( !context )
     return;
   if (!imported) {
