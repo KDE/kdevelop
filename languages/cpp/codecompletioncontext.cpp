@@ -45,8 +45,7 @@
 #include "missingincludecompletionitem.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
-#define DEBUG
-#define ifDebug(x) x
+
 //Whether the list of argument-hints should contain all overloaded versions of operators.
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
