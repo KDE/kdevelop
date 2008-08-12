@@ -570,7 +570,7 @@ DUContext::~DUContext( )
     top->m_dynamicData->clearContextIndex(this);
 }
 
-const QVector< DUContext * > DUContext::childContexts( ) const
+QVector< DUContext * > DUContext::childContexts( ) const
 {
   ENSURE_CAN_READ
 
@@ -930,7 +930,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor&
   return ret;
 }
 
-const QVector<Declaration*> DUContext::localDeclarations() const
+QVector<Declaration*> DUContext::localDeclarations() const
 {
   ENSURE_CAN_READ
 

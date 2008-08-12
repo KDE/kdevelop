@@ -360,7 +360,7 @@ public:
    * Returns the list of immediate child contexts for this context.
    * Expensive.
    */
-  const QVector<DUContext*> childContexts() const;
+  QVector<DUContext*> childContexts() const;
 
   /**
    * Clears and deletes all child contexts recursively.
@@ -426,7 +426,7 @@ public:
   /**
    * Returns all local declarations
    */
-  const QVector<Declaration*> localDeclarations() const;
+  QVector<Declaration*> localDeclarations() const;
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.

@@ -148,14 +148,6 @@ class EnvironmentInformationRequest {
   QList<ParsingEnvironmentFilePointer> m_informations;
 };
 
-void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current) {
-  if(contexts.contains(current))
-    return;
-  contexts.insert(current);
-  for(RecursiveImports::const_iterator it = current->recursiveImports().constBegin(); it != current->recursiveImports().constEnd(); ++it)
-    addRecursiveImports(contexts, const_cast<TopDUContext*>(it.key()));
-}
-
 class DUChainPrivate;
 static DUChainPrivate* duChainPrivateSelf = 0;
 class DUChainPrivate
@@ -347,6 +339,8 @@ public:
   }
   
 private:
+  void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
+  
   void loadInformation(IndexedString url) {
     if(m_fileEnvironmentInformations.find(url) != m_fileEnvironmentInformations.end())
       return;
@@ -414,6 +408,14 @@ private:
   //Persistent version of m_fileEnvironmentInformations
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
+
+void DUChainPrivate::addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current) {
+  if(contexts.contains(current))
+    return;
+  contexts.insert(current);
+  for(RecursiveImports::const_iterator it = current->recursiveImports().constBegin(); it != current->recursiveImports().constEnd(); ++it)
+    addRecursiveImports(contexts, const_cast<TopDUContext*>(it.key()));
+}
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
