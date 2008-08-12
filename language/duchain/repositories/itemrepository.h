@@ -637,7 +637,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 6,
+    ItemRepositoryVersion = 7,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -904,7 +904,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
     bucketPtr->deleteItem(index, hash);
     
-    if(bucketPtr->freeItemCount() == Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
+    int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
+    
+    if(indexInFree == -1 && bucketPtr->freeItemCount() > Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
       //Add the bucket to the list of buckets from where to re-assign free space
       //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
       Q_ASSERT(bucketPtr->largestFreeItemSize());
@@ -913,14 +915,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         if(bucketForIndex(m_freeSpaceBuckets[insertPos])->largestFreeItemSize() > bucketPtr->largestFreeItemSize())
           break;
       }
+      
       m_freeSpaceBuckets.insert(insertPos, bucket);
       ++m_freeSpaceBucketsSize;
-    }else if(bucketPtr->freeItemCount() > Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
+    }else if(indexInFree != -1) {
       ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
-      //Find position in m_freeSpaceBuckets
-      int index = m_freeSpaceBuckets.indexOf(bucket);
-      Q_ASSERT(index != -1);
-      updateFreeSpaceOrder(index);
+      updateFreeSpaceOrder(indexInFree);
     }
     
     /**
