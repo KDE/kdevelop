@@ -116,9 +116,11 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
   if(index == 0)
     return AbstractType::Ptr();
 
-  QMutexLocker(&data().mutex);
-
-  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(data().repository.itemFromIndex(index))) );
+  TypeRepositoryData& _data(data());
+  _data.mutex.lock();
+  AbstractType::Ptr ret( TypeSystem::self().create(const_cast<AbstractTypeData*>(_data.repository.itemFromIndex(index))) );
+  _data.mutex.unlock();
+  return ret;
 }
 
 }

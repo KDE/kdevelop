@@ -243,6 +243,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       file->write((char*)&m_largestFreeItem, sizeof(short unsigned int));
       file->write((char*)&m_freeItemCount, sizeof(unsigned int));
       file->write((char*)&checkEnd, sizeof(unsigned int));
+
       Q_ASSERT(file->pos() == offset + DataSize);
       m_changed = false;
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
@@ -325,6 +326,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       m_changed = true;
 
       unsigned int totalSize = request.itemSize() + AdditionalSpacePerItem;
+      
+      //If this triggers, your item is too big.
+      Q_ASSERT(totalSize < ItemRepositoryBucketSize);
+      
       if(totalSize > m_available) {
         //Try finding the smallest freed item that can hold the data
         unsigned short currentIndex = m_largestFreeItem;
@@ -803,6 +808,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         Q_ASSERT(!pickedBucketInChain);
         Q_ASSERT(reOrderFreeSpaceBucketIndex == -1);
         Q_ASSERT(useBucket == m_currentBucket);
+
         ++m_currentBucket;
         useBucket = m_currentBucket;
       }
