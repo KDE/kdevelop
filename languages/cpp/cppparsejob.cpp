@@ -366,13 +366,13 @@ void CPPInternalParseJob::run()
               //As above, we work with the content-contexts.
               LineContextPair context = contentFromProxy(topContext);
               DUContextPointer ptr(context.context);
-              if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
-                  if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
+//               if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
+//                   if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
                     importedContentChains << context;
                     importedContentChains.back().temporary = true;
                     importedTemporaryChains << context.context;
-                  }
-              }
+//                   }
+//               }
           }
           if(currentJob->parentPreprocessor())
             currentJob = currentJob->parentPreprocessor()->parentJob();
@@ -489,7 +489,7 @@ void CPPInternalParseJob::run()
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
-              if(ctx.context() && !encounteredIncludeUrls.contains(ctx.context()->url())) {
+              if(ctx.context() && !encounteredIncludeUrls.contains(ctx.context()->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
                   contentContext->removeImportedParentContext(ctx.context());
                   kDebug( 9007 ) << "removing not encountered import " << ctx.context()->url().str();
               }
@@ -551,8 +551,7 @@ void CPPInternalParseJob::run()
 
         //Make sure the imported contextsa re added
         foreach ( LineContextPair context, parentJob()->includedFiles() )
-          if(!proxyContext->imports(context.context, SimpleCursor::invalid()))
-            proxyContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
+          proxyContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
 
         //Make sure we don't imported any not imported contexts
         foreach(DUContext::Import import, proxyContext->importedParentContexts()) {
