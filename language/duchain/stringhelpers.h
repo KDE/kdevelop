@@ -52,6 +52,23 @@ int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QC
 void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart );
 
 /**
+ * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.
+ * */
+QString KDEVPLATFORMLANGUAGE_EXPORT reduceWhiteSpace(QString str);
+
+QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(QString str);
+
+/**
+ * Fills all c++-style comments  within the given code with the given 'replacement' character
+ * */
+QString KDEVPLATFORMLANGUAGE_EXPORT clearComments( QString str, QChar replacement = ' ' );
+/**
+ * Fills all c++-strings within the given code with the given 'replacement' character
+ * */
+QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings( QString str, QChar replacement = ' ' );
+
+
+/**
  * Can be used to iterate through different kinds of parameters, for example template-parameters(By giving it "<>:")
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator

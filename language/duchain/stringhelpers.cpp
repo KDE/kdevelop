@@ -213,6 +213,82 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   argumentsStart -= pos;
 }
 
+QString reduceWhiteSpace(QString str) {
+  str = str.trimmed();
+  QString ret;
+
+  QChar spaceChar = ' ';
+
+  bool hadSpace = false;
+  for( int a = 0; a < str.length(); a++ ) {
+    if( str[a].isSpace() ) {
+      hadSpace = true;
+    } else {
+      if( hadSpace ) {
+        hadSpace = false;
+        ret += spaceChar;
+      }
+      ret += str[a];
+    }
+  }
+
+  return ret;
+}
+
+void fillString( QString& str, int start, int end, QChar replacement ) {
+  for( int a = start; a < end; a++) str[a] = replacement;
+}
+
+QString stripFinalWhitespace(QString str) {
+
+  for( int a = str.length() - 1; a >= 0; --a ) {
+    if( !str[a].isSpace() )
+      return str.left( a+1 );
+    }
+
+  return QString();
+}
+
+QString clearComments( QString str, QChar replacement ) {
+  if( str.isEmpty() ) return "";
+
+  SafetyCounter s( 1000 );
+  int lastPos = 0;
+  int pos;
+  int len = str.length();
+  while( (pos = str.indexOf( "/*", lastPos )) != -1 ) {
+    if( !s ) return str;
+    int i = str.indexOf( "*/", pos );
+    if( i != -1 && i <= len - 2 ) {
+      fillString( str, pos, i+2, replacement );
+      lastPos = i+2;
+      if( lastPos == len ) break;
+    } else {
+      break;
+    }
+  }
+
+  lastPos = 0;
+  while( (pos = str.indexOf( "//", lastPos )) != -1 ) {
+    if( !s ) return str;
+    int i = str.indexOf( "\n", pos );
+    if( i != -1 && i <= len - 1 ) {
+      fillString( str, pos, i+1, replacement );
+      lastPos = i+1;
+    } else {
+      fillString( str, pos, len, replacement );
+      break;
+    }
+  }
+
+  return str;
+}
+
+QString clearStrings( QString str, QChar /*replacement*/ ) {
+  ///@todo implement: Replace all strings with the given replacement-character
+  return str;
+}
+
 ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(new ParamIteratorPrivate)
 {
   d->m_source = source;
