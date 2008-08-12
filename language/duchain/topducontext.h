@@ -293,10 +293,6 @@ public:
   
   virtual SimpleCursor importPosition(const DUContext* target) const;
   
-  ///Returns a set of all recursively imported top-contexts. Each imported top-context is mapped to the distance, and the direct
-  ///import through which the top-context is imported.
-  RecursiveImports recursiveImports() const;
-  
   class CacheData;
 
   /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
@@ -333,6 +329,9 @@ protected:
 
   virtual ~TopDUContext();
 private:
+  ///Returns a set of all recursively imported top-contexts. Each imported top-context is mapped to the distance, and the direct
+  ///import through which the top-context is imported.
+  RecursiveImports recursiveImports() const;
   
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
   //Must be called after all imported top-contexts were loaded into the du-chain
