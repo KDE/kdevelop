@@ -192,11 +192,6 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
 
 void ItemRepositoryRegistry::store() {
   foreach(AbstractItemRepository* repository, m_repositories)
-    repository->store();
-}
-
-void ItemRepositoryRegistry::close() {
-  foreach(AbstractItemRepository* repository, m_repositories)
     repository->close();
   
   //Store all custom counter values
@@ -211,7 +206,11 @@ void ItemRepositoryRegistry::close() {
   }else{
     kWarning() << "Could not open counter file for writing";
   }
-  
+}
+
+void ItemRepositoryRegistry::close() {
+    store();
+    
   m_path = QString();
   m_cleared = false;
 }
