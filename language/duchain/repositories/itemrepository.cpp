@@ -192,8 +192,8 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
 
 void ItemRepositoryRegistry::store() {
   foreach(AbstractItemRepository* repository, m_repositories)
-    repository->close();
-  
+    repository->store();
+
   //Store all custom counter values
   QFile f(m_path + "/Counters");
   if(f.open(QIODevice::WriteOnly)) {
@@ -211,6 +211,9 @@ void ItemRepositoryRegistry::store() {
 void ItemRepositoryRegistry::close() {
     store();
     
+  foreach(AbstractItemRepository* repository, m_repositories)
+    repository->close();
+  
   m_path = QString();
   m_cleared = false;
 }
