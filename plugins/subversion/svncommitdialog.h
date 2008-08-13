@@ -19,6 +19,7 @@ class KDevSvnPlugin;
 namespace KDevelop
 {
     class VcsFileInfo;
+    class IProject;
 }
 
 class SvnCommitDialog : public KDialog
@@ -47,6 +48,7 @@ private:
     void insertRow( const QString& state, const KUrl& url );
 
     KDevSvnPlugin *m_part;
+    KDevelop::IProject* m_project;
     Ui::SvnCommitDialog ui;
 };
 
