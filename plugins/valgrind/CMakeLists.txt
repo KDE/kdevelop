@@ -27,8 +27,6 @@ set(kdevvalgrind_PART_SRCS
     valgrindcontrol.cpp
     valgrindwidget.cpp
     valgrindtree.cpp
-    #massifmodel.cpp
-    #massifgraph.cpp
 #modeltest.cpp
 )
 

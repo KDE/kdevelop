@@ -68,7 +68,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   if( m_isOperator ) {
     ///Search for member operators
     AbstractType::Ptr real( TypeUtils::realType(m_baseType.type, m_context->topContext()) );
-    if( dynamic_cast<KDevelop::StructureType*>( real.unsafeData() ) )
+    if( dynamic_cast<CppClassType*>( real.unsafeData() ) )
     {
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.unsafeData() );
       if( idType && idType->declaration(m_context->topContext()) ) {

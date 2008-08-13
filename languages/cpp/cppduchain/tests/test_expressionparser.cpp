@@ -169,15 +169,15 @@ void TestExpressionParser::testTemplatesSimple() {
 
   Declaration* defClassA = top->localDeclarations()[1];
   QCOMPARE(defClassA->identifier(), Identifier("A"));
-  QVERIFY(defClassA->type<KDevelop::StructureType>());
+  QVERIFY(defClassA->type<CppClassType>());
 
   Declaration* defClassB = top->localDeclarations()[2];
   QCOMPARE(defClassB->identifier(), Identifier("B"));
-  QVERIFY(defClassB->type<KDevelop::StructureType>());
+  QVERIFY(defClassB->type<CppClassType>());
 
   Declaration* defClassC = top->localDeclarations()[3];
   QCOMPARE(defClassC->identifier(), Identifier("C"));
-  QVERIFY(defClassC->type<KDevelop::StructureType>());
+  QVERIFY(defClassC->type<CppClassType>());
 
   DUContext* classA = defClassA->logicalInternalContext(0);
   QVERIFY(classA->parentContext());
@@ -206,11 +206,11 @@ void TestExpressionParser::testTemplates() {
 
   Declaration* defClassA = top->localDeclarations()[0];
   QCOMPARE(defClassA->identifier(), Identifier("A"));
-  QVERIFY(defClassA->type<KDevelop::StructureType>());
+  QVERIFY(defClassA->type<CppClassType>());
 
   Declaration* container = top->localDeclarations()[1];
   QCOMPARE(container->identifier(), Identifier("Container"));
-  QVERIFY(container->type<KDevelop::StructureType>());
+  QVERIFY(container->type<CppClassType>());
 
   Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(container);
   QVERIFY(templateDecl);
@@ -222,7 +222,7 @@ void TestExpressionParser::testTemplates() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("c.member", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.type.type().cast<KDevelop::StructureType>());
+    QVERIFY(result.type.type().cast<CppClassType>());
 
     QVERIFY(result.allDeclarationsSize());
     AbstractType::Ptr t(result.type.type());
@@ -234,7 +234,7 @@ void TestExpressionParser::testTemplates() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("*c", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.type.type().cast<KDevelop::StructureType>());
+    QVERIFY(result.type.type().cast<CppClassType>());
 
     QVERIFY(result.allDeclarationsSize());
     AbstractType::Ptr t(result.type.type());
@@ -258,7 +258,7 @@ void TestExpressionParser::testArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.type.type().cast<KDevelop::StructureType>());
+    QVERIFY(result.type.type().cast<CppClassType>());
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
@@ -278,7 +278,7 @@ void TestExpressionParser::testArray() {
 
     QVERIFY(result.isValid());
     AbstractType::Ptr t(result.type.type());
-    QVERIFY(dynamic_cast<KDevelop::IntegralType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<CppIntegralType*>(t.unsafeData()));
   }
 
   release(top);
@@ -297,7 +297,7 @@ void TestExpressionParser::testDynamicArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("Bla", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.type.type().cast<KDevelop::StructureType>());
+    QVERIFY(result.type.type().cast<CppClassType>());
 
     QCOMPARE(result.toString(), QString("Bla"));
   }
@@ -315,7 +315,7 @@ void TestExpressionParser::testDynamicArray() {
     Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("blaArray[5].val", KDevelop::DUContextPointer(top));
 
     QVERIFY(result.isValid());
-    QVERIFY(result.type.type().cast<KDevelop::IntegralType>());
+    QVERIFY(result.type.type().cast<CppIntegralType>());
   }
 
   release(top);
@@ -438,7 +438,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QCOMPARE(result.type.type()->toString(), QString("Cont*"));
-  QCOMPARE(result.type.type().cast<PointerType>()->baseType()->toString(), QString("Cont"));
+  QCOMPARE(result.type.type().cast<CppPointerType>()->baseType()->toString(), QString("Cont"));
   lock.unlock();
 
   //Test pointer-referencing
@@ -540,7 +540,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("5"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
 
@@ -549,7 +549,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("5.5"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
 
@@ -558,7 +558,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("7"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
 
@@ -567,7 +567,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("3.5"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
 
@@ -576,7 +576,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("3.5"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(!TypeUtils::isNullType(result.type.type()));
 
@@ -585,7 +585,7 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isValid());
   QCOMPARE(result.type.type()->toString(), QString("0"));
   QVERIFY(result.isInstance);
-  QVERIFY(result.type.type().cast<ConstantIntegralType>());
+  QVERIFY(result.type.type().cast<CppConstantIntegralType>());
   lock.unlock();
   QVERIFY(TypeUtils::isNullType(result.type.type()));
 
@@ -656,7 +656,7 @@ void TestExpressionParser::testTypeConversion() {
   Declaration* decl = contContext->localDeclarations()[0];
 
   QCOMPARE(decl->identifier(), Identifier("operator{...cast...}"));
-  KDevelop::FunctionType::Ptr function = decl->abstractType().cast<KDevelop::FunctionType>();
+  CppFunctionType::Ptr function = decl->abstractType().cast<CppFunctionType>();
   QCOMPARE(function->returnType()->toString(), QString("int"));
 
   Declaration* testDecl = c->localDeclarations()[1];
@@ -785,11 +785,11 @@ void TestExpressionParser::testOperators() {
   QVERIFY(plusDec->internalContext());
 
   QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()")));
-  QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<KDevelop::FunctionType>());
+  QVERIFY(findDeclaration(ctx, QualifiedIdentifier("Cont::operator()"))->type<CppFunctionType>());
 
-  KDevelop::StructureType::Ptr cont2 = cont2Dec->type<KDevelop::StructureType>();
-  KDevelop::StructureType::Ptr cont3 = cont3Dec->type<KDevelop::StructureType>();
-  KDevelop::StructureType::Ptr cont = contDec->type<KDevelop::StructureType>();
+  CppClassType::Ptr cont2 = cont2Dec->type<CppClassType>();
+  CppClassType::Ptr cont3 = cont3Dec->type<CppClassType>();
+  CppClassType::Ptr cont = contDec->type<CppClassType>();
   QVERIFY(cont2);
   QVERIFY(cont3);
   QVERIFY(cont);
@@ -854,7 +854,7 @@ void TestExpressionParser::testTemplateFunctions() {
   QCOMPARE(top->localDeclarations().count(), 6);
   Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
   QVERIFY(d);
-  KDevelop::FunctionType::Ptr cppFunction = d->abstractType().cast<KDevelop::FunctionType>();
+  CppFunctionType::Ptr cppFunction = d->abstractType().cast<CppFunctionType>();
   QVERIFY(cppFunction);
   QCOMPARE(cppFunction->arguments().count(), 1);
   QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->indexedType());

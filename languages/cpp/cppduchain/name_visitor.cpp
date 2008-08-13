@@ -68,7 +68,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if (node->tilde)
     tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
-
+  
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
 #if defined(__GNUC__)
@@ -84,7 +84,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
         tmpString += QLatin1String("{...cast...}");
 
       tmp_name = IndexedString(tmpString);
-
+      
       m_typeSpecifier = op_id->type_specifier;
     }
 
@@ -111,14 +111,14 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
         break;
       }
     }
-
+    
     if(!had) //only forward-declarations, register to any.
       m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
   } else if( m_debug )
     kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
 
-
-
+    
+  
   _M_name.push(m_currentIdentifier);
 }
 
@@ -131,7 +131,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
   bool opened = false;
   if( node->expression ) {
     m_visitor->visit( node->expression );
-
+    
     ExpressionEvaluationResult res;
     if( !m_visitor->lastDeclarations().isEmpty() ) {
       LOCKDUCHAIN;
@@ -143,7 +143,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
       res.isInstance = m_visitor->lastInstance().isInstance;
       if(m_visitor->lastInstance().declaration)
         res.instanceDeclaration = m_visitor->lastInstance().declaration->id();
-
+      
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }else if( m_debug ) {
@@ -177,13 +177,11 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
               static IndexedString ptr("*");
               if (!op.isEmpty()) {
                 if (op == ref) {
-                  ReferenceType::Ptr pointer(new ReferenceType());
-                  pointer->setModifiers(parseConstVolatile(m_session, ptrOp->cv));
+                  CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(m_session, ptrOp->cv)));
                   pointer->setBaseType(res.type.type());
                   res.type = pointer->indexed();
                 } else if (op == ptr) {
-                  PointerType::Ptr pointer(new PointerType());
-                  pointer->setModifiers(parseConstVolatile(m_session, ptrOp->cv));
+                  CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(m_session, ptrOp->cv)));
                   pointer->setBaseType(res.type.type());
                   res.type = pointer->indexed();
                 }
@@ -193,8 +191,8 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
           }
         while (it != end);
       }
-
-
+      
+      
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }
@@ -220,7 +218,7 @@ const QualifiedIdentifier& NameASTVisitor::identifier() const
 void NameASTVisitor::run(UnqualifiedNameAST *node)
 {
   m_finalName = node;
-
+  
   m_find.openQualifiedIdentifier(false);
   m_typeSpecifier = 0;
   _M_name.clear();

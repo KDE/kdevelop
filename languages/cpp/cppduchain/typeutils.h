@@ -24,13 +24,14 @@
 #include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
+class CppIntegralType;
+class CppClassType;
+class CppFunctionType;
+
 namespace KDevelop {
   class DUContext;
   class Declaration;
   class ClassFunctionDeclaration;
-  class IntegralType;
-  class StructureType;
-  class FunctionType;
 }
 
 namespace TypeUtils {
@@ -86,17 +87,17 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT bool isNullType( const AbstractType::Ptr& t );
 
   ///Integer-conversion-rank as described in iso c++ 4.13
-  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( const KDevelop::IntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( const CppIntegralType::Ptr& type );
 
   ///Whether the integral type is an integer-type
-  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( const KDevelop::IntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( const CppIntegralType::Ptr& type );
 
   ///Whether the integral type is an floating-point-type
-  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( const KDevelop::IntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( const CppIntegralType::Ptr& type );
 
   KDEVCPPDUCHAIN_EXPORT bool isVoidType( const AbstractType::Ptr& type );
 
-  KDEVCPPDUCHAIN_EXPORT bool isPublicBaseClass( const KDevelop::StructureType::Ptr& c, const KDevelop::StructureType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 );
+  KDEVCPPDUCHAIN_EXPORT bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 );
 
   ///Conversion-rank of "unsigned int"
   KDEVCPPDUCHAIN_EXPORT extern const int unsignedIntConversionRank;
@@ -107,16 +108,16 @@ namespace TypeUtils {
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const KDevelop::StructureType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
   /**
    * Same as above, except that it adds the functions to a list.
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const KDevelop::StructureType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant=false);
   /**
    * Returns all constructors
    * */
-  KDEVCPPDUCHAIN_EXPORT void getConstructors(const KDevelop::StructureType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions);
+  KDEVCPPDUCHAIN_EXPORT void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    **/

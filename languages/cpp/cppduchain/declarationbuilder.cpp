@@ -63,6 +63,16 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
+// void copyCppClass( const CppClassType* from, CppClassType* to )
+// {
+//   to->clear();
+//   to->setClassType(from->classType());
+//   to->setDeclarationId(from->declarationId());
+//   to->setCV(from->cv());
+//
+//   to->close();
+// }
+
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
 DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
@@ -246,7 +256,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
 
-        KDevelop::FunctionType::Ptr currentFunction = lastType().cast<KDevelop::FunctionType>();
+        CppFunctionType::Ptr currentFunction = lastType().cast<CppFunctionType>();
         int functionArgumentCount = 0;
         if(currentFunction)
           functionArgumentCount = currentFunction->arguments().count();
@@ -269,7 +279,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
                 continue;
               }else if(cycle == 1){
                 //Second cycle, match by argument-count
-                KDevelop::FunctionType::Ptr matchFunction = dec->type<KDevelop::FunctionType>();
+                CppFunctionType::Ptr matchFunction = dec->type<CppFunctionType>();
                 if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
                   //We have a match
                 }else{
@@ -665,7 +675,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 
   DeclarationBuilderBase::visitEnumerator(node);
 
-  KDevelop::EnumeratorType::Ptr enumeratorType = lastType().cast<KDevelop::EnumeratorType>();
+  CppEnumeratorType::Ptr enumeratorType = lastType().cast<CppEnumeratorType>();
 
   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
     DUChainWriteLocker lock(DUChain::lock());

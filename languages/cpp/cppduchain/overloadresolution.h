@@ -25,12 +25,12 @@
 #include "cppduchainexport.h"
 #include <language/duchain/identifier.h>
 
+class CppFunctionType;
 class CppTemplateParameterType;
 
 namespace KDevelop {
   class DUContext;
   class Declaration;
-  class FunctionType;
 }
 
 namespace Cpp {

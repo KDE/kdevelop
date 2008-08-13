@@ -49,13 +49,13 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
 
   AbstractFunctionDeclaration* decl = dynamic_cast<AbstractFunctionDeclaration*>(dec);
-  FunctionType::Ptr functionType = dec->type<FunctionType>();
+  CppFunctionType::Ptr functionType = dec->type<CppFunctionType>();
   if (functionType && decl) {
 
     QVector<Declaration*> parameters;
     if( getArgumentContext(dec) )
       parameters = getArgumentContext(dec)->localDeclarations();
-
+    
 //     QStringList defaultParams = decl->defaultParameters();
 
     QVector<Declaration*>::const_iterator paramNameIt = parameters.begin();

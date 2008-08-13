@@ -225,7 +225,7 @@ class NavigationContext : public KShared {
       if( decl->isTypeAlias() )
         kind = "Typedef";
       else if( decl->kind() == Declaration::Type ) {
-        if( decl->type<KDevelop::StructureType>() )
+        if( decl->type<CppClassType>() )
           kind = i18n("Class");
         else
           i18n("Class");
@@ -325,10 +325,11 @@ class NavigationContext : public KShared {
           details << "forward";
 
         AbstractType::Ptr t(m_declaration->abstractType());
-        if( t ) {
-          if( t & AbstractType::ConstModifier )
+        const CppCVType* cvType = dynamic_cast<const CppCVType*>( t.unsafeData() );
+        if( cvType ) {
+          if( cvType->isConstant() )
             details << "constant";
-          if( t & AbstractType::VolatileModifier )
+          if( cvType->isVolatile() )
             details << "volatile";
         }
 
@@ -412,14 +413,14 @@ class NavigationContext : public KShared {
             if( m_declaration->isTypeAlias() )
               m_currentText += importantHighlight("typedef ");
 
-            if(m_declaration->type<EnumeratorType>())
+            if(m_declaration->type<CppEnumeratorType>())
               m_currentText += i18n("enumerator") + " ";
 
             eventuallyMakeTypeLinks( m_declaration->abstractType() );
 
             m_currentText += " " + nameHighlight(Qt::escape(declarationName(m_declaration.data()))) + "<br>";
           }else{
-            KDevelop::StructureType::Ptr klass = m_declaration->abstractType().cast<KDevelop::StructureType>();
+            CppClassType::Ptr klass = m_declaration->abstractType().cast<CppClassType>();
             if( m_declaration->kind() == Declaration::Type && klass ) {
               m_currentText += "class ";
               eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
@@ -435,8 +436,8 @@ class NavigationContext : public KShared {
               m_currentText += " ";
             }
 
-            if(m_declaration->type<EnumerationType>()) {
-              EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
+            if(m_declaration->type<CppEnumerationType>()) {
+              CppEnumerationType::Ptr enumeration = m_declaration->type<CppEnumerationType>();
               m_currentText += i18n("enumeration") + " " + Qt::escape(m_declaration->identifier().toString()) + "<br>";
             }
 
@@ -464,7 +465,7 @@ class NavigationContext : public KShared {
             if(definition && definition->declaration())
               decl = definition->declaration();
 
-            if(decl->abstractType().cast<EnumerationType>())
+            if(decl->abstractType().cast<CppEnumerationType>())
               m_currentText += labelHighlight(i18n("Enum: "));
             else
               m_currentText += labelHighlight(i18n("Container: "));
@@ -602,12 +603,12 @@ class NavigationContext : public KShared {
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
         ///@todo handle const etc. correctly
-        PointerType::Ptr pointer = type.cast<PointerType>();
-        ReferenceType::Ptr ref = type.cast<ReferenceType>();
+        CppPointerType::Ptr pointer = type.cast<CppPointerType>();
+        CppReferenceType::Ptr ref = type.cast<CppReferenceType>();
 
-        if(pointer && pointer->modifiers() & AbstractType::ConstModifier)
+        if(pointer && pointer->cv() & Declaration::Const)
           m_currentText += "const ";
-        if(ref && ref->modifiers() & AbstractType::ConstModifier)
+        if(ref && ref->cv() & Declaration::Const)
           m_currentText += "const ";
 
         if( idType ) {
@@ -655,13 +656,13 @@ class NavigationContext : public KShared {
             while(pointer || ref) {
               if(pointer) {
                 m_currentText += Qt::escape("*");
-                ref = pointer->baseType().cast<ReferenceType>();
-                pointer = pointer->baseType().cast<PointerType>();
+                ref = pointer->baseType().cast<CppReferenceType>();
+                pointer = pointer->baseType().cast<CppPointerType>();
               }
               if(ref) {
                 m_currentText += Qt::escape("&");
-                pointer = ref->baseType().cast<PointerType>();
-                ref = ref->baseType().cast<ReferenceType>();
+                pointer = ref->baseType().cast<CppPointerType>();
+                ref = ref->baseType().cast<CppReferenceType>();
               }
             }
 

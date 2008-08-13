@@ -41,7 +41,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
   bool spaceBetweenParens = true;
   bool spaceBetweenEmptyParens = false;
-
+  
   if( completionContext && completionContext->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
@@ -60,11 +60,11 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 
   document->replaceText(word, newText);
-
+  
   if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     bool haveArguments = false;
-    if( m_declaration && m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->arguments().count() )
+    if( m_declaration && m_declaration->type<CppFunctionType>() && m_declaration->type<CppFunctionType>()->arguments().count() )
       haveArguments = true;
     //Need to have a paren behind
     QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
@@ -94,7 +94,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       //If no arguments, move the cursor behind the closing paren
       if( !haveArguments )
         jumpPos += KTextEditor::Cursor( 0, closingParen.length() );
-
+      
       lock.unlock();
       document->insertText( word.end(), openingParen + closingParen );
       if( document->activeView() )
@@ -117,27 +117,29 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   Declaration* dec = m_declaration.data();
   if(!dec)
     return (KTextEditor::CodeCompletionModel::CompletionProperties)0;
-
+  
   CodeCompletionModel::CompletionProperties p = DUChainUtils::completionProperties(dec);
 
   AbstractType::Ptr type(dec->abstractType());
   if (type) {
-    if (type->modifiers() & AbstractType::ConstModifier)
-      p |= CodeCompletionModel::Const;
-    if (type->modifiers() & AbstractType::VolatileModifier)
-      ;//TODO
+    if (CppCVType* cv = dynamic_cast<CppCVType*>(type.unsafeData())) {
+      if (cv->isConstant())
+        p |= CodeCompletionModel::Const;
+      if (cv->isVolatile())
+        ;//TODO
+      }
 
     switch (dec->abstractType()->whichType()) {
       case AbstractType::TypeIntegral:
-        if (dec->type<EnumerationType>()) {
+        if (dec->type<CppEnumerationType>()) {
           // Remove variable bit set in DUChainUtils
           p &= ~CodeCompletionModel::Variable;
           p |= CodeCompletionModel::Enum;
         }
-        if (dec->type<EnumeratorType>()) {
+        if (dec->type<CppEnumeratorType>()) {
           //Get the properties from the parent, because that may contain information like "private"
           if(dec->context()->owner()) {
-            p = DUChainUtils::completionProperties(dec->context()->owner());
+            p = DUChainUtils::completionProperties(dec->context()->owner()); 
           }
           // Remove variable bit set in DUChainUtils
           p &= 0xffffffff - CodeCompletionModel::Variable;
@@ -145,17 +147,17 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
         }
         break;
       case AbstractType::TypeStructure:
-        if (StructureType::Ptr classType =  dec->type<StructureType>())
+        if (CppClassType::Ptr classType =  dec->type<CppClassType>())
           switch (classType->classType()) {
-            case StructureType::Class:
+            case Class:
               p |= CodeCompletionModel::Class;
               break;
-            case StructureType::Struct:
+            case Struct:
               // Remove class bit set in DUChainUtils
               p &= ~CodeCompletionModel::Class;
               p |= CodeCompletionModel::Struct;
               break;
-            case StructureType::Union:
+            case Union:
               // Remove class bit set in DUChainUtils
               p &= ~CodeCompletionModel::Class;
               p |= CodeCompletionModel::Union;
@@ -176,7 +178,7 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
 }
 
 
-QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {
+QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
@@ -186,7 +188,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   static CompletionTreeItemPointer currentMatchContext;
 
-
+  
   //Stuff that does not require a declaration:
   switch (role) {
     case CodeCompletionModel::SetMatchContext:
@@ -200,7 +202,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     return QVariant();
   }else if(index.column() == CodeCompletionModel::Name && useAlternativeText)
     return alternativeText;
-
+  
   Declaration* dec = const_cast<Declaration*>( m_declaration.data() );
 
   switch (role) {
@@ -215,11 +217,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         {
           Cpp::CodeCompletionContext::Function f( contextItem.completionContext->functions()[contextItem.listOffset] );
 
-          if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->arguments().count() > f.matchedArguments ) {
+          if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<CppFunctionType>() && f.function.declaration()->type<CppFunctionType>()->arguments().count() > f.matchedArguments ) {
             Cpp::TypeConversion conv(model->currentTopContext().data());
 
             ///@todo fill the lvalue-ness correctly
-            int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<FunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
+            int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<CppFunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
             return QVariant(quality);
           }else{
             //kDebug(9007) << "MatchQuality requested with invalid match-context";
@@ -264,26 +266,26 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           if( dec->isTypeAlias() )
             indentation += "typedef ";
 
-          if( dec->kind() == Declaration::Type && !dec->type<FunctionType>() && !dec->isTypeAlias() ) {
-            if (StructureType::Ptr classType =  dec->type<StructureType>())
+          if( dec->kind() == Declaration::Type && !dec->type<CppFunctionType>() && !dec->isTypeAlias() ) {
+            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
               switch (classType->classType()) {
-                case StructureType::Class:
+                case Class:
                   return indentation + "class";
                   break;
-                case StructureType::Struct:
+                case Struct:
                   return indentation + "struct";
                   break;
-                case StructureType::Union:
+                case Union:
                   return indentation + "union";
                   break;
               }
-              if(dec->type<EnumerationType>()) {
+              if(dec->type<CppEnumerationType>()) {
                 return "enum";
-              }
+              }              
             return QVariant();
           }
           if (dec->abstractType()) {
-            if(EnumeratorType::Ptr enumerator = dec->type<EnumeratorType>()) {
+            if(CppEnumeratorType::Ptr enumerator = dec->type<CppEnumeratorType>()) {
               if(dec->context()->owner() && dec->context()->owner()->abstractType()) {
                 if(!dec->context()->owner()->identifier().isEmpty())
                   return dec->context()->owner()->abstractType()->toString();
@@ -291,7 +293,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                   return "enum";
               }
             }
-            if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
+            if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
 
               if (functionType->returnType())
@@ -328,16 +330,15 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           return nameForDeclaration(dec);
 
         case CodeCompletionModel::Arguments:
-          if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
+          if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
             QString ret;
             createArgumentList(*this, ret, 0);
             return ret;
           }
         break;
         case CodeCompletionModel::Postfix:
-          if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
-            // Retrieve const/volatile string
-            return functionType->AbstractType::toString();
+          if (CppFunctionType::Ptr functionType = dec->type<CppFunctionType>()) {
+            return functionType->cvString();
           }
           break;
       }
@@ -372,7 +373,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       ret << 0;
       ret << nameForDeclaration(dec).length();
       ret << QVariant(boldFormat);
-
+      
       return QVariant(ret);
     }
     break;
@@ -419,14 +420,14 @@ int IncludeFileCompletionItem::argumentHintDepth() const
   return 0;
 }
 
-QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const
+QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const
 {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
-
+  
   const Cpp::IncludeItem& item( includeItem );
 
   switch (role) {
@@ -464,9 +465,9 @@ QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, con
 void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
 
   KTextEditor::Range word(_word);
-
+  
   QString newText = includeItem.isDirectory ? includeItem.name + "/" : includeItem.name;
-
+  
   if(!includeItem.isDirectory) {
     //Add suffix and newline
     QString lineText = document->line( word.end().line() ).trimmed();
@@ -477,10 +478,10 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
       else if(lineText.startsWith('<'))
         newText += '>';
     }
-
+    
     word.end().setColumn( document->lineLength(word.end().line()) );
   }
-
+  
   document->replaceText(word, newText);
   ///@todo Make this more intelligent, also add a closing '"' or '>'
 }

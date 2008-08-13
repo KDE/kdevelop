@@ -18,10 +18,9 @@
 
 #include "builtinoperators.h"
 #include "cpptypes.h"
-#include <language/duchain/types/constantintegraltype.h>
+//#include "typerepository.h"
 #include "parser/tokens.h"
 
-using namespace KDevelop;
 
 /** A helper-class for evaluating constant binary expressions under different types(int, float, etc.) */
 template<class Type>
@@ -29,13 +28,13 @@ struct ConstantBinaryExpressionEvaluator {
 
   Type endValue;
 
-  uint type;
-  uint modifier;
+  IntegralTypes type;
+  TypeModifiers modifier;
 
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantBinaryExpressionEvaluator( uint _type, uint _modifier, int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  ConstantBinaryExpressionEvaluator( IntegralTypes _type, TypeModifiers _modifier, int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
     endValue = 0;
 
     type = _type;
@@ -45,149 +44,148 @@ struct ConstantBinaryExpressionEvaluator {
 
     switch( tokenKind ) {
       case '+':
-        endValue = left->ConstantIntegralType::value<Type>() + right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() + right->CppConstantIntegralType::value<Type>();
       break;
       case '-':
-        endValue = left->ConstantIntegralType::value<Type>() - right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() - right->CppConstantIntegralType::value<Type>();
       break;
       case '*':
-        endValue = left->ConstantIntegralType::value<Type>() * right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() * right->CppConstantIntegralType::value<Type>();
       break;
       case '/':
-        endValue = left->ConstantIntegralType::value<Type>() / right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() / right->CppConstantIntegralType::value<Type>();
       break;
       case '=':
-        endValue = right->ConstantIntegralType::value<Type>();
+        endValue = right->CppConstantIntegralType::value<Type>();
       break;
       case '<':
-        endValue = left->ConstantIntegralType::value<Type>() < right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() < right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case '>':
-        endValue = left->ConstantIntegralType::value<Type>() > right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() > right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case Token_assign:
-        endValue = right->ConstantIntegralType::value<Type>();
+        endValue = right->CppConstantIntegralType::value<Type>();
       break;
       case Token_eq:
-        endValue = left->ConstantIntegralType::value<Type>() == right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() == right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case Token_not_eq:
-        endValue = left->ConstantIntegralType::value<Type>() != right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() != right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case Token_leq:
-        endValue = left->ConstantIntegralType::value<Type>() <= right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() <= right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case Token_geq:
-        endValue = left->ConstantIntegralType::value<Type>() >= right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() >= right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
     }
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  void evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
     switch( tokenKind ) {
       case '%':
-        endValue = left->ConstantIntegralType::value<Type>() % right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() % right->CppConstantIntegralType::value<Type>();
       break;
       case '^':
-        endValue = left->ConstantIntegralType::value<Type>() ^ right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() ^ right->CppConstantIntegralType::value<Type>();
       break;
       case '&':
-        endValue = left->ConstantIntegralType::value<Type>() & right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() & right->CppConstantIntegralType::value<Type>();
       break;
       case '|':
-        endValue = left->ConstantIntegralType::value<Type>() | right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() | right->CppConstantIntegralType::value<Type>();
       break;
       case Token_shift:
         ///@todo shift-direction?
-        endValue = left->ConstantIntegralType::value<Type>() << right->ConstantIntegralType::value<Type>();
+        endValue = left->CppConstantIntegralType::value<Type>() << right->CppConstantIntegralType::value<Type>();
       break;
       case Token_and:
-        endValue = left->ConstantIntegralType::value<Type>() && right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() && right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
       case Token_or:
-        endValue = left->ConstantIntegralType::value<Type>() || right->ConstantIntegralType::value<Type>();
-        type = IntegralType::TypeBoolean;
+        endValue = left->CppConstantIntegralType::value<Type>() || right->CppConstantIntegralType::value<Type>();
+        type = TypeBool;
       break;
     }
   }
 
-  AbstractType::Ptr createType() {
-    ConstantIntegralType::Ptr ret( new ConstantIntegralType(type) );
-    ret->setModifiers(ret->modifiers() & modifier);
-    ret->ConstantIntegralType::setValue<Type>( endValue );
-    return AbstractType::Ptr::staticCast(ret);
+  KDevelop::AbstractType::Ptr createType() {
+    KDevelop::AbstractType::Ptr ret( new CppConstantIntegralType(type, modifier) );
+    static_cast<CppConstantIntegralType*>(ret.unsafeData())->CppConstantIntegralType::setValue<Type>( endValue );
+    return ret;
   }
 };
 
 template<>
-void ConstantBinaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+void ConstantBinaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
 }
 
 template<>
-void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left, CppConstantIntegralType* right ) {
 }
 
 
 
-AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType::Ptr right, int tokenKind) {
+KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr left, KDevelop::AbstractType::Ptr right, int tokenKind) {
 
   if(!left || !right)
-    return AbstractType::Ptr();
+    return KDevelop::AbstractType::Ptr();
 
-  IntegralType* leftIntegral = dynamic_cast<IntegralType*>(left.unsafeData());
-  IntegralType* rightIntegral = dynamic_cast<IntegralType*>(right.unsafeData());
-  PointerType* leftPointer = dynamic_cast<PointerType*>(right.unsafeData());
+  CppIntegralType* leftIntegral = dynamic_cast<CppIntegralType*>(left.unsafeData());
+  CppIntegralType* rightIntegral = dynamic_cast<CppIntegralType*>(right.unsafeData());
+  CppPointerType* leftPointer = dynamic_cast<CppPointerType*>(right.unsafeData());
 
-  AbstractType::Ptr ret;
+  KDevelop::AbstractType::Ptr ret;
 
   //Constantly evaluate integral expressions
-  ConstantIntegralType* leftConstantIntegral = dynamic_cast<ConstantIntegralType*>(left.unsafeData());
-  ConstantIntegralType* rightConstantIntegral = dynamic_cast<ConstantIntegralType*>(right.unsafeData());
+  CppConstantIntegralType* leftConstantIntegral = dynamic_cast<CppConstantIntegralType*>(left.unsafeData());
+  CppConstantIntegralType* rightConstantIntegral = dynamic_cast<CppConstantIntegralType*>(right.unsafeData());
 
   if(leftIntegral && rightIntegral) {
     if(tokenKind == '+' || tokenKind == '-' || tokenKind == '*' || tokenKind == '/' || tokenKind == '%' || tokenKind == '^' || tokenKind == '&' || tokenKind == '|' || tokenKind == '~' || tokenKind == Token_shift) {
-      if(moreExpressiveThan(leftIntegral, rightIntegral))
+      if(leftIntegral->moreExpressiveThan(rightIntegral))
         ret = left;
       else
         ret = right;
     }
 
     if(tokenKind == '<' || tokenKind == '>' || tokenKind == Token_eq || tokenKind == Token_not_eq || tokenKind == Token_leq || tokenKind == Token_geq || tokenKind == Token_not_eq || tokenKind == Token_and || tokenKind == Token_or)
-      ret = AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean));
+      ret = KDevelop::AbstractType::Ptr(new CppIntegralType(TypeBool, ModifierNone));
   }
 
   if(leftPointer && rightIntegral && (tokenKind == '+' || tokenKind == '-'))
     ret = left;
 
-  IntegralType* retIntegral = dynamic_cast<IntegralType*>(ret.unsafeData());
+  CppIntegralType* retIntegral = dynamic_cast<CppIntegralType*>(ret.unsafeData());
 
   ///We have determined the resulting type now. If both sides are constant, also evaluate the resulting value.
   if(ret && retIntegral && leftConstantIntegral && rightConstantIntegral) {
-    switch( retIntegral->dataType() ) {
-      case IntegralType::TypeFloat:
+    switch( retIntegral->integralType() ) {
+      case TypeFloat:
       {
-        ConstantBinaryExpressionEvaluator<float> evaluator( retIntegral->dataType(), retIntegral->modifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral );
+        ConstantBinaryExpressionEvaluator<float> evaluator( retIntegral->integralType(), retIntegral->typeModifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral );
         return evaluator.createType();
       }
-      case IntegralType::TypeDouble:
+      case TypeDouble:
       {
-        ConstantBinaryExpressionEvaluator<double> evaluator( retIntegral->dataType(), retIntegral->modifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral );
+        ConstantBinaryExpressionEvaluator<double> evaluator( retIntegral->integralType(), retIntegral->typeModifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral );
         return evaluator.createType();
       }
       default:
-        if( leftConstantIntegral->modifiers() & AbstractType::UnsignedModifier ) {
-          ConstantBinaryExpressionEvaluator<quint64> evaluator( retIntegral->dataType(), retIntegral->modifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral);
+        if( leftConstantIntegral->typeModifiers() & ModifierUnsigned ) {
+          ConstantBinaryExpressionEvaluator<quint64> evaluator( retIntegral->integralType(), retIntegral->typeModifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral);
           return evaluator.createType();
         } else {
-          ConstantBinaryExpressionEvaluator<qint64> evaluator( retIntegral->dataType(), retIntegral->modifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral);
+          ConstantBinaryExpressionEvaluator<qint64> evaluator( retIntegral->integralType(), retIntegral->typeModifiers(), tokenKind, leftConstantIntegral, rightConstantIntegral);
           return evaluator.createType();
         }
         break;
