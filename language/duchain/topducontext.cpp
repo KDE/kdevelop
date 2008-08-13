@@ -1169,6 +1169,8 @@ void TopDUContext::clearImportedParentContexts() {
 }
 
 void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool /*anonymous*/, bool temporary) {
+  if(context == this)
+    return;
   if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
     DUContext::addImportedParentContext(context, position, true, temporary); 
   
