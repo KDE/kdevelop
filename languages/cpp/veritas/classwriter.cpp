@@ -1,7 +1,6 @@
 /*
  * KDevelop xUnit testing support
- *
- * Copyright 2008 Manuel Breugelmans
+ * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,6 +17,7 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "classwriter.h"
 #include "classskeleton.h"
 #include "constructorskeleton.h"
@@ -38,7 +38,7 @@ QString indent() { return INDENT; }
 
 void intro(const ClassSkeleton& source, QTextStream& str)
 {
-    str << "class " << source.name();
+    str << "\nclass " << source.name();
     if (!source.super().isEmpty()) {
         str << " : public " << source.super();
     }

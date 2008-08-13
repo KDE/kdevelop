@@ -54,6 +54,7 @@ private:
     KDevelop::TopDUContext* documentContextFor(const KUrl& url);
     bool m_actionConnected;
     Cpp::LazyMacroSet* m_standardMacros;
+    bool m_buzzySwitching;
 };
 
 }

@@ -20,28 +20,28 @@
  */
 
 
-#ifndef VERITAS_CPP_STUBCONTEXTACTION_INCLUDED
-#define VERITAS_CPP_STUBCONTEXTACTION_INCLUDED
+#ifndef VERITASCPP_UUTCONTEXTACTION_INCLUDED
+#define VERITASCPP_UUTCONTEXTACTION_INCLUDED
 
 #include "veritascppexport.h"
 #include <QObject>
 
 class KAction;
-namespace KDevelop { class Context; class ContextMenuExtension; }
-namespace Cpp { class ClassDeclaration; }
+namespace KDevelop { class Context; class ContextMenuExtension; class Declaration; }
 
 namespace Veritas
 {
+class UUTConstructor;
 
-/*! Provides a context menu action on class declarations which
-    allows for stub code generation. 
-    @see Veritas::StubConstructor */
-class VERITASCPP_EXPORT StubContextAction : public QObject
+/*! Context menu action to create a unit under test skeleton based
+    on it's implementation.
+    @see Veritas::UUTConstructor */
+class VERITASCPP_EXPORT UUTContextAction : public QObject
 {
 Q_OBJECT
 public:
-    StubContextAction(QObject* parent=0);
-    ~StubContextAction();
+    UUTContextAction(QObject* parent=0);
+    ~UUTContextAction();
 
     /*! initialization */
     void setup();
@@ -51,11 +51,12 @@ public:
     void appendTo(KDevelop::ContextMenuExtension& menu, KDevelop::Context* context);
 
 private slots:
-    void constructStub();
+    void createImplementation();
 
 private:
-    Cpp::ClassDeclaration* m_clazz;
-    KAction* m_constructStub;
+    KDevelop::Declaration* m_clazz;
+    KAction* m_createImplementation;
+    UUTConstructor* m_constructor;
 };
 
 }

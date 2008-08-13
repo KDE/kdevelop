@@ -109,7 +109,7 @@ DUContext* findMainContext(TopDUContext* ctx)
 
 /*! return true if ctx contains a QTest main function (expanded QTEST_MAIN macro) */
 bool hasQTestMainFunction(TopDUContext* ctx)
-{    
+{
     DUContext* mainCtx = findMainContext(ctx);
     if (!mainCtx) return false; // no main() present
     return hasQExecInvocation(mainCtx, ctx);
@@ -117,7 +117,7 @@ bool hasQTestMainFunction(TopDUContext* ctx)
 
 Declaration* mostFrequentClass(const QMap<Declaration*, int>& classes)
 {
-    int maxCount = 0;
+    int maxCount = -1;
     Declaration* max = 0;
     QMapIterator<Declaration*, int> it(classes);
     while (it.hasNext()) {
@@ -232,20 +232,58 @@ KUrl findTargetLocation(QualifiedIdentifier target)
     uint count;
     pst.declarations(target, count, matches);
     KUrl url;
-    if (count > 0) {
+/*    if (count > 0) {
         url = KUrl(matches->declaration()->url().str());
-    }
+    }*/
     for(int i=0; i<count; i++, matches++) {
         Declaration* matched = matches->declaration();
+        if (!matched || matched->url().isEmpty()) continue;
         kDebug() << "matched " << matched->toString() << " " << matched->url().str();
+        if (!matched->isForwardDeclaration()) {
+            url = KUrl(matches->declaration()->url().str());
+        }
     }
     return url;
+}
+
+/*! Parse doc string @p comment for @p key and extract it's argument.
+    Return default string if not found. */
+QString extractArgumentFromDocs(const QString& key, const QString& comment)
+{
+    kDebug() << key;
+    int i = comment.indexOf(key);
+    if (i==-1) return QString();
+    QString rest = comment.mid(i + 1 + QString(key).count()); // +1 is for space
+    QStringList spl = rest.split(" ", QString::SkipEmptyParts);
+    rest = spl[0];
+    if (rest.contains("\n") || rest.contains("*")) {
+        return QString();
+    } else {
+      return rest;
+    }
+}
+
+KUrl resolveTargetUrl(QualifiedIdentifier& target)
+{
+    KUrl targetUrl = findTargetLocation(target);
+    if (targetUrl.isEmpty() && target.count() > 1) {
+        // try without namespaces
+        QualifiedIdentifier qid(target.last().toString());
+        targetUrl = findTargetLocation(qid);
+    }
+    if (targetUrl.isEmpty() && target.count() > 2) {
+        // given foo::baz::Bar try foo::Bar
+        QualifiedIdentifier qid(target.first().toString());
+        qid += QualifiedIdentifier(target.last().toString());
+        targetUrl = findTargetLocation(qid);
+    }
+    return targetUrl;
 }
 
 } // end anonymous namespace
 
 TestSwitch::TestSwitch(QObject* parent)
-  : QObject(parent), m_actionConnected(false), m_standardMacros(0)
+  : QObject(parent), m_actionConnected(false), m_standardMacros(0), m_buzzySwitching(false)
 {}
 
 TestSwitch::~TestSwitch()
@@ -283,51 +321,46 @@ TopDUContext* TestSwitch::documentContextFor(const KUrl& url)
     return docCtx;
 }
  
-
+#define STOP_IF(X, MSG) \
+  if (X) { kDebug() << MSG; m_buzzySwitching = false; return; }
 
 void TestSwitch::swapTest_UnitUnderTest()
 {
+    if (m_buzzySwitching) return;
+    m_buzzySwitching = true;
     kDebug() << "Switching between test and unit under test";
     IDocument* doc = activeDocument();
-    if(!doc) {
-        kDebug() << "Can't switch, no active document.";
-        return;
-    }
+    STOP_IF(!doc, "Can't switch, no active document.")
 
     DUChainReadLocker lock(DUChain::lock());
     TopDUContext* docCtx = documentContextFor(doc->url());  
-    if (!docCtx) {
-        kDebug() << "Failed to get chain for " << doc->url();
-        return;
-    }
+    STOP_IF(!docCtx, QString("Failed to get chain for %1").arg(doc->url().path()))
 
     Declaration* clazz = (isHeader(doc->url())) ?
         dominantClassInHeader(docCtx) :
         dominantClassInCpp(docCtx);
-    if (!clazz) {
-        kDebug() << "No dominant class found.";
-        return;
-    }
+    STOP_IF(!clazz, "No dominant class found.")
     kDebug() << "Dominant Class >> " << clazz->toString();
- 
-    QualifiedIdentifier target = (isTest(clazz)) ?
-        getUnitUnderTestIdFor(clazz) :
-        getTestIdFor(clazz);
-    
-    KUrl targetUrl = findTargetLocation(target);
-    if (targetUrl.isEmpty() && target.count() > 1) {
-        // try without namespaces
-        QualifiedIdentifier qid(target.last().toString());
-        targetUrl = findTargetLocation(qid);
+
+    QString dox = clazz->comment(), docTarget;
+    kDebug() << "DOX\n" << dox;
+    if (dox.contains("@unitundertest")) {
+        docTarget = extractArgumentFromDocs("@unitundertest", dox);
+    } else if (dox.contains("@unittest")) {
+        docTarget = extractArgumentFromDocs("@unittest", dox);
     }
-    if (targetUrl.isEmpty() && target.count() > 2) {
-        // given foo::baz::Bar try foo::Bar
-        QualifiedIdentifier qid(target.first().toString());
-        qid += QualifiedIdentifier(target.last().toString());
-        targetUrl = findTargetLocation(qid);
+
+    QualifiedIdentifier target; // the class to load
+    if (!docTarget.isEmpty()) {
+        target = QualifiedIdentifier(docTarget);
+    } else { // resort to naming conventions
+        target = (isTest(clazz)) ?
+            getUnitUnderTestIdFor(clazz) :
+            getTestIdFor(clazz);
     }
+    KUrl targetUrl = resolveTargetUrl(target);
     lock.unlock();
-    
+
     if (!targetUrl.isEmpty()) {
         kDebug() << "Found test/uut in " << targetUrl;
         IDocumentController* dc = ICore::self()->documentController();
@@ -335,6 +368,7 @@ void TestSwitch::swapTest_UnitUnderTest()
     } else {
         kDebug() << "Failed to find switch candidate for " << doc->url();
     }
+    m_buzzySwitching = false;
 }
 
 #include "testswitch.moc"

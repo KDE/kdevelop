@@ -1,7 +1,4 @@
 /*
-* KDevelop xUnit testing support
-* Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
-*
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
 * published by the Free Software Foundation; either version 2 of the
@@ -18,24 +15,10 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef QTEST_METHODSKELETONTEST_H_INCLUDED
-#define QTEST_METHODSKELETONTEST_H_INCLUDED
-
-#include <QtCore/QObject>
-
-namespace Veritas { namespace Test {
-
-/*! A bit redundant */
-class MethodSkeletonTest : public QObject
+/*! @unitundertest SwitchExample */
+class SwitchExampleTest : public QObject
 {
 Q_OBJECT
 private slots:
-    void init();
-    void cleanup();
-
-    void construct();
+    void testFoo();
 };
-
-}}
-
-#endif // QTEST_METHODSKELETONTEST_H_INCLUDED

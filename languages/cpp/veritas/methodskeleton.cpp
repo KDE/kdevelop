@@ -58,6 +58,8 @@ void MethodSkeleton::setReturnType(const QString& rt)
     m_returnType = rt;
 }
 
+#include <KDebug>
+
 void MethodSkeleton::setArguments(const QString& sig)
 {
     m_arguments = sig;
@@ -75,10 +77,14 @@ QString MethodSkeleton::body() const
 
 QString MethodSkeleton::returnType() const
 {
+    if (!isEmpty() && m_returnType.isEmpty()) return "void";
     return m_returnType;
 }
 
 QString MethodSkeleton::arguments() const
 {
+    if (m_arguments.isEmpty()) {
+        return "()";
+    }
     return m_arguments;
 }

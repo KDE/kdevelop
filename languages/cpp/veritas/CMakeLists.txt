@@ -17,6 +17,9 @@ set(veritascppsupport_LIB_SRCS
     stubconstructor.cpp
     classwriter.cpp
     stubcontextaction.cpp
+    uutconstructor.cpp
+    documentaccess.cpp
+    uutcontextaction.cpp
     tests/classdeclarationfactory.cpp
 )
 

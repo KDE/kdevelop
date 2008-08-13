@@ -19,11 +19,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "stubcontextaction.h"
-#include "stubconstructor.h"
+#include "uutcontextaction.h"
+#include "uutconstructor.h"
 #include "classwriter.h"
 #include "includewriter.h"
 #include "classskeleton.h"
+#include "documentaccess.h"
 
 #include <KAction>
 #include <KDebug>
@@ -51,10 +52,10 @@
 
 using Veritas::ClassSkeleton;
 using Veritas::ClassSerializer;
-using Veritas::StubConstructor;
-using Veritas::IncludeSerializer;
 using Veritas::IncludeGuardSerializer;
-using Veritas::StubContextAction;
+using Veritas::UUTConstructor;
+using Veritas::UUTContextAction;
+using Veritas::DocumentAccess;
 using namespace KDevelop;
 using namespace Cpp;
 
@@ -69,76 +70,89 @@ QString activeUrl()
         return "";
     } else {
         QFileInfo fi(doc->url().path()); 
-        return fi.absolutePath() + QDir::separator() + fi.baseName() + "stub." + fi.completeSuffix();
+        return fi.absolutePath() + QDir::separator() + fi.baseName() + "gen." + fi.completeSuffix();
     }
 }
 } // end anonymous namespace
 
-StubContextAction::StubContextAction(QObject* parent)
-  : QObject(parent), m_clazz(0), m_constructStub(0)
+UUTContextAction::UUTContextAction(QObject* parent)
+  : QObject(parent), m_clazz(0), m_createImplementation(0), m_constructor(0)
+{}
+
+void UUTContextAction::setup()
 {
+    Q_ASSERT(m_clazz == 0); Q_ASSERT(m_createImplementation == 0); Q_ASSERT(m_constructor == 0);
+    m_createImplementation = new KAction(this);
+    m_createImplementation->setText(i18n("Generate Unit Under Test"));
+    connect(m_createImplementation, SIGNAL(triggered()),
+            this, SLOT(createImplementation()));
+    DocumentAccess* docAccess = new DocumentAccess(this);
+    m_constructor = new UUTConstructor;
+    m_constructor->setDocumentAccess(docAccess);
+    Q_ASSERT(m_createImplementation && m_constructor);
 }
 
-/*! initialization */
-void StubContextAction::setup()
+void UUTContextAction::createImplementation()
 {
-    Q_ASSERT(m_clazz == 0); Q_ASSERT(m_constructStub == 0);
-    m_constructStub = new KAction(this);
-    m_constructStub->setText(i18n("Generate Stub Class"));
-    connect(m_constructStub, SIGNAL(triggered()), this, SLOT(constructStub()));
-    Q_ASSERT(m_constructStub);
-}
-
-void StubContextAction::constructStub()
-{
-    Q_ASSERT(m_constructStub);
+    Q_ASSERT(m_createImplementation); Q_ASSERT(m_constructor);
     if (!m_clazz) return;
-
+    
     bool owk;
     QString url;
-    QString current = activeUrl();
     url = QInputDialog::getText(
-              0, i18n("Generate Stub"),
+              0, i18n("Generate Unit Under Test"),
               i18n("Save to "), QLineEdit::Normal,
-              current, &owk);
+              activeUrl(), &owk);
     if (!owk || url.isEmpty() || QFile::exists(url)) return;
 
     QFile target(url);
     IncludeGuardSerializer().writeOpen(url, &target);
-    IncludeSerializer().write(current, url, &target);
-    ClassSkeleton cs = StubConstructor().morph(m_clazz);
+    ClassSkeleton cs = m_constructor->morph(m_clazz);
     ClassSerializer().write(cs, &target);
     IncludeGuardSerializer().writeClose(url, &target);
 
     ICore::self()->documentController()->openDocument(KUrl(url));
 }
 
-StubContextAction::~StubContextAction()
-{}
+UUTContextAction::~UUTContextAction()
+{
+    if (m_createImplementation) delete m_createImplementation;
+    if (m_constructor) delete m_constructor;
+}
 
 #define STOP_IF(X) \
-  if (X) { m_clazz = 0; return; }
+if (X) { m_clazz = 0; return; }
 
-void StubContextAction::appendTo(ContextMenuExtension& menu, Context* context)
+#define STOP_IF_(X, MSG) \
+if (X) {\
+    m_clazz = 0;\
+    kDebug() << "Not appending UUT action because " << MSG;\
+    return;\
+}
+
+
+void UUTContextAction::appendTo(ContextMenuExtension& menu, Context* context)
 {
-    KDevelop::ContextMenuExtension cm;
+    Q_ASSERT(m_createImplementation); Q_ASSERT(m_constructor);
     STOP_IF(context->type() != Context::EditorContext)
-
     EditorContext* ec = dynamic_cast<EditorContext*>(context);
     STOP_IF(not ec)
-
+    
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
-    Declaration* dcl = DUChainUtils::itemUnderCursor(ec->url(), sc);
-    STOP_IF(!dcl)
-    STOP_IF(dcl->kind() != Declaration::Type)
+    Declaration* decl = DUChainUtils::itemUnderCursor(ec->url(), sc);
+    STOP_IF_(!decl, "no declaration under cursor.")
+    STOP_IF_(decl->kind() != Declaration::Instance, "Not an instance declaration.");
+    STOP_IF_(!decl->isDefinition(), "Not a definition");
 
-    ClassDeclaration* clazz = dynamic_cast<ClassDeclaration*>(dcl);
-    STOP_IF(not clazz)
+    DelayedType::Ptr type = decl->type<DelayedType>();
+    STOP_IF_(!type, "Not a delayed/unresolved type (null)");
+    STOP_IF_(type->kind() != DelayedType::Unresolved, "Not an unresolved type [but delayed]");
 
-    m_clazz = clazz;
-    menu.addAction(ContextMenuExtension::ExtensionGroup, m_constructStub);
+    m_clazz = decl;
+    menu.addAction(ContextMenuExtension::ExtensionGroup, m_createImplementation);
     Q_ASSERT(m_clazz);
 }
 
-#include "stubcontextaction.moc"
+#include "uutcontextaction.moc"
+

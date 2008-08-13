@@ -18,24 +18,31 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef QTEST_METHODSKELETONTEST_H_INCLUDED
-#define QTEST_METHODSKELETONTEST_H_INCLUDED
+#ifndef QTEST_INCLUDEWRITERTEST_H_INCLUDED
+#define QTEST_INCLUDEWRITERTEST_H_INCLUDED
 
 #include <QtCore/QObject>
+#include <QString>
+#include <QRegExp>
 
 namespace Veritas { namespace Test {
 
-/*! A bit redundant */
-class MethodSkeletonTest : public QObject
+/*! @unitundertest Veritas::IncludeSerializer */
+class IncludeWriterTest : public QObject
 {
 Q_OBJECT
 private slots:
-    void init();
-    void cleanup();
+    void sameDir();
+    void oneDirUp();
+    void oneDirDown();
+    void guards();
 
-    void construct();
+private:
+    QRegExp whiteSpaceRegex(const QString& text);
+    void assertAlike(const QString& expected, const QString& actual);
+    QString construct(const QString included, const QString includer);
 };
 
 }}
 
-#endif // QTEST_METHODSKELETONTEST_H_INCLUDED
+#endif // QTEST_INCLUDEWRITERTEST_H_INCLUDED

@@ -18,24 +18,35 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef QTEST_METHODSKELETONTEST_H_INCLUDED
-#define QTEST_METHODSKELETONTEST_H_INCLUDED
+
+#ifndef QTEST_KTEXTDOCUMENTSTUBTEST_H_INCLUDED
+#define QTEST_KTEXTDOCUMENTSTUBTEST_H_INCLUDED
 
 #include <QtCore/QObject>
+#include <KUrl>
 
 namespace Veritas { namespace Test {
 
-/*! A bit redundant */
-class MethodSkeletonTest : public QObject
+class DocumentAccessStubTest : public QObject
 {
 Q_OBJECT
 private slots:
     void init();
     void cleanup();
 
-    void construct();
+    void text();
+    void textRange();
+    void textRange_data();
+//     void textRangeLines();
+//     void character(); 
+//     void character_data();
+//     void line();
+//     void line_data();
+
+private:
+    KUrl m_someUrl;
 };
 
 }}
 
-#endif // QTEST_METHODSKELETONTEST_H_INCLUDED
+#endif // QTEST_KTEXTDOCUMENTSTUBTEST_H_INCLUDED

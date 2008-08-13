@@ -1,6 +1,5 @@
 /*
  * KDevelop xUnit test support
- *
  * Copyright 2008 Manuel Breugelmans
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,9 +24,12 @@
 #include <QtCore/QObject>
 #include "../classskeleton.h"
 
-namespace Veritas { class StubConstructor; }
 
-namespace Veritas { namespace Test {
+namespace Veritas
+{
+class StubConstructor;
+namespace Test
+{
 
 class DeclarationFactory;
 class StubCreationTest : public QObject
@@ -47,12 +49,12 @@ private slots:
     void signal();
 
 private:
-    inline Veritas::ClassSkeleton createStubClassFrom(const QByteArray&);
+    ClassSkeleton createStubClassFrom(const QByteArray&);
     void kompareMethods(const MethodSkeleton& expected, const MethodSkeleton& actual);
- 
+
 private:
     DeclarationFactory* m_factory;
-    Veritas::StubConstructor* m_constructor;
+    StubConstructor* m_constructor;
 };
 
 }}

@@ -66,7 +66,7 @@ MethodSkeleton fillMethod(ClassFunctionDeclaration* function)
     MethodSkeleton ms;
     FunctionType::Ptr type = function->type<FunctionType>();
     if (!type) { kDebug() << "Erm type == 0"; return ms; }
-    ms.setName(function->identifier().toString());        
+    ms.setName(function->identifier().toString());
     ms.setFunctionType(type);
     return ms;
 }
@@ -104,7 +104,7 @@ ClassSkeleton StubConstructor::morph(ClassDeclaration* clazz)
     cs.addSuper(clazz->identifier().toString());
     ConstructorSkeleton constr; constr.setName(stubName);
     MethodSkeleton destr; destr.setName("~" + stubName);
-    
+
     ClassFunctionDeclaration* function;
     foreach(Declaration* dcl, clazz->internalContext()->localDeclarations()) {
         function = filterMemberFunction(dcl);
@@ -122,3 +122,4 @@ ClassSkeleton StubConstructor::morph(ClassDeclaration* clazz)
     cs.setDestructor(destr);
     return cs;
 }
+

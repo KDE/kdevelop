@@ -32,9 +32,25 @@ namespace Veritas
 {
 class DUCreationHelper;
 
-/*! Constructs a test fake for the virtual methods of a given class.
-    eg input:   class Foo { public: virtual int foo(); };
-       output:  class FooStub { public: int m_foo; virtual int foo() { return m_foo; }; */
+/*!
+Constructs a test fake sub class implementation for a given class.
+
+input:
+@code
+class Foo {
+public:
+    virtual int foo();
+};
+@endcode
+
+=> output:
+@code
+class FooStub {
+public:
+    int m_foo;
+    virtual int foo() { return m_foo; };
+};
+@endcode */
 class VERITASCPP_EXPORT StubConstructor
 {
 public:

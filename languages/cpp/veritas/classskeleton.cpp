@@ -1,6 +1,5 @@
 /*
  * KDevelop xUnit test support
- *
  * Copyright 2008 Manuel Breugelmans
  *
  * This program is free software; you can redistribute it and/or modify

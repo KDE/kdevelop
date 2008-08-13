@@ -1,6 +1,5 @@
 /*
  * KDevelop xUnit test support
- *
  * Copyright 2008 Manuel Breugelmans
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,21 +28,22 @@
 
 namespace Veritas
 {
-  
+
+/*! Lightweight struct which stores C++ Class information */
 class VERITASCPP_EXPORT ClassSkeleton
 {
 public:
     ClassSkeleton();
     virtual ~ClassSkeleton();
-    
+
     bool isEmpty() const;
- 
+
     QString name() const;
     QString super() const;
     ConstructorSkeleton constructor() const;
     MethodSkeleton destructor() const;
     QList<MethodSkeleton> methods() const;
-    
+
     void addSuper(const QString&);
     void setName(const QString&);
     void setConstructor(const ConstructorSkeleton&);
@@ -53,13 +53,13 @@ public:
     int memberCount() const;
     QString member(int i) const;
     void addMember(const QString&);
-    
+
     bool hasMethods() const;
     bool hasMembers() const;
     bool hasConstructor() const;
     bool hasDestructor() const;
     bool hasSomething() const;
-    
+
 private:
     QString m_name;
     QList<MethodSkeleton> m_methods;

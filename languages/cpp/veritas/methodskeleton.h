@@ -43,12 +43,13 @@ public:
     void setReturnType(const QString&);
     void setBody(const QString&);
     void setAccess(Access) {}
+    void setVirtual() {}
 
     QString name() const;
     QString arguments() const;
     QString body() const;
     QString returnType() const;
-      
+
 private:
     bool m_empty;
     QString m_name;
