@@ -232,12 +232,12 @@ public:
 
   ///Makes sure that the chain with the given index is loaded
   ///@warning m_chainsMutex must NOT be locked when this is called
-  void loadChain(uint index, QSet<uint>& loading) {
+  void loadChain(uint index, QSet<uint>& loaded) {
 
     QMutexLocker l(&m_chainsMutex);
 
     if(!m_chainsByIndex.contains(index)) {
-      loading.insert(index);
+      loaded.insert(index);
       TopDUContext* chain = TopDUContextDynamicData::load(index);
       if(chain) {
 //         kDebug() << "url" << chain->url().str();
@@ -260,8 +260,8 @@ public:
         l.unlock();
         //Also load all the imported chains, so they are in the symbol table and the import-structure is built
         foreach(DUContext::Import import, chain->DUContext::importedParentContexts()) {
-          if(!loading.contains(import.topContextIndex())) {
-            loadChain(import.topContextIndex(), loading);
+          if(!loaded.contains(import.topContextIndex())) {
+            loadChain(import.topContextIndex(), loaded);
           }
         }
         chain->rebuildDynamicImportStructure();
@@ -270,7 +270,6 @@ public:
         l.relock();
         instance->addDocumentChain(chain);
       }
-      loading.remove(index);
     }
   }
   
@@ -285,8 +284,11 @@ public:
       
       //Access the data in the repository, so the bucket isn't unloaded
       uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
-      Q_ASSERT(index);
-      m_environmentInfo.itemFromIndex(index);
+      if(index) {
+        m_environmentInfo.itemFromIndex(index);
+      }else{
+        kDebug() << "Did not find stored item for" << url.str() << "count:" << m_fileEnvironmentInformations.values(url);
+      }
     }
   }
   
@@ -367,6 +369,9 @@ private:
     
     QList<ParsingEnvironmentFilePointer> informations = m_fileEnvironmentInformations.values(url);
 
+    if(informations.isEmpty())
+        return;
+    
     //Here we check whether any of the stored items have been changed. If none have been changed(all data is still constant),
     //then we don't need to update.
     bool allInfosConstant = true;
@@ -375,7 +380,7 @@ private:
       if(info->d_func()->isDynamic())
         allInfosConstant = false;
     }
-
+    
     if(allInfosConstant) {
       //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
       //need to save anything.
@@ -393,8 +398,9 @@ private:
 
       //Insert the new item
       m_environmentInfo.index(EnvironmentInformationRequest(url, informations));
-      Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
     }
+    
+    Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
   }
 
   //Stores the information into the repository, and removes it from m_fileEnvironmentInformations
@@ -580,8 +586,8 @@ TopDUContext* DUChain::chainForIndex(uint index) const {
   else {
 
     l.unlock();
-    QSet<uint> loading;
-    sdDUChainPrivate->loadChain(index, loading);
+    QSet<uint> loaded;
+    sdDUChainPrivate->loadChain(index, loaded);
     l.relock();
 
     it = sdDUChainPrivate->m_chainsByIndex.find(index);
