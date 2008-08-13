@@ -68,6 +68,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/smartconverter.h>
 #include <language/duchain/functiondefinition.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "preprocessjob.h"
 #include "rpp/preprocessor.h"
@@ -83,6 +84,7 @@
 #include "cppduchain/cppduchain.h"
 #include "veritas/testswitch.h"
 #include "veritas/stubcontextaction.h"
+#include "veritas/uutcontextaction.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -123,7 +125,10 @@ QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
 
 KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
 {
-    return m_stubAction->extension(context);
+    ContextMenuExtension cm;
+    m_stubAction->appendTo(cm, context);
+    m_uutAction->appendTo(cm, context);
+    return cm;
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
@@ -191,6 +196,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     ts->connectAction(actionCollection());
 
     m_stubAction = new Veritas::StubContextAction(this);
+    m_stubAction->setup();
+    m_uutAction = new Veritas::UUTContextAction(this);
+    m_uutAction->setup();
     
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
