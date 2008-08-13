@@ -254,10 +254,13 @@ void ContextWidget::setContext(KDevelop::DUContext* context, const KDevelop::Sim
         m_context = DUContextPointer(context);
         delete m_navigationWidget;
         m_navigationWidget = 0;
-        if(m_context)
-            m_navigationWidget = m_context->createNavigationWidget();
-        if(m_navigationWidget)
-            m_layout->addWidget(m_navigationWidget);
+        if(isVisible()) {
+        //Only create the navigation-widget if the view is visible, for performance reasons
+            if(m_context)
+                m_navigationWidget = m_context->createNavigationWidget();
+            if(m_navigationWidget)
+                m_layout->addWidget(m_navigationWidget);
+        }
     }
 }
 
@@ -281,10 +284,13 @@ void DeclarationWidget::setDeclaration(Declaration* decl, TopDUContext* topConte
         return;
     
     delete m_navigationWidget;
-    m_navigationWidget = decl->context()->createNavigationWidget(decl, topContext);
-    if(m_navigationWidget)
-        m_layout->addWidget(m_navigationWidget);
-    
+    m_navigationWidget = 0;
+    if(isVisible()) {
+        //Only create the navigation-widget if the view is visible, for performance reasons
+        m_navigationWidget = decl->context()->createNavigationWidget(decl, topContext);
+        if(m_navigationWidget)
+            m_layout->addWidget(m_navigationWidget);
+    }
 }
 
 void DeclarationWidget::setSpecialNavigationWidget(QWidget* widget) {
