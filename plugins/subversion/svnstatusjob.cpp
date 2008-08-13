@@ -114,7 +114,7 @@ void SvnInternalStatusJob::run()
             for( svn::StatusEntries::const_iterator it = se.begin(); it != se.end() ; ++it )
             {
                 KDevelop::VcsStatusInfo info;
-                info.setUrl( url );
+                info.setUrl( KUrl( (*it).path() ) );
                 info.setState( getState( *it ) );
                 emit gotNewStatus( info );
             }
