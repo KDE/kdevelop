@@ -35,7 +35,8 @@ Q_OBJECT
 public:
     QTestCommand(const QString&, QTestCase*);
     virtual ~QTestCommand();
-    QString command(); // dead code
+    QString command(); // dead code for now, but might want it again to allow
+                       // for execution of individual commands (vs full case)
 };
 
 } // end namespace QTest

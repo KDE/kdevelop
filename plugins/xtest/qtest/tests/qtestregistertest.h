@@ -25,9 +25,14 @@
 
 namespace QTest
 {
-class QTestRegister;
+class XmlRegister;
 class QTestSuite;
 class QTestCase;
+}
+
+namespace Veritas
+{
+class Test;
 }
 
 namespace QTest
@@ -49,14 +54,14 @@ private slots:
     void parseMultiCmdXMl();
 
 private: // state
-    QTest::QTestRegister* reg;
+    QTest::XmlRegister* reg;
 
 private: // helpers
     void compareSuites(QTest::QTestSuite* exp,
                        QTest::QTestSuite* actual);
     void compareCase(QTest::QTestCase* expected,
                      QTest::QTestCase* actual);
-    void registerTests(QByteArray& xml);
+    Veritas::Test* registerTests(QByteArray& xml);
 };
 
 }

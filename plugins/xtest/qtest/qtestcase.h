@@ -42,7 +42,7 @@ class QTestCase : public Veritas::Test
 {
 Q_OBJECT
 public:
-    QTestCase(const QString&, const QFileInfo&, QTestSuite*);
+    QTestCase(const QString&, const QFileInfo&, QTestSuite* parent=0);
     virtual ~QTestCase();
 
     QTestCommand* child(int i) const;
@@ -53,10 +53,11 @@ public:
 
     /*! Client classes should instantiate a KProcess.
         QTestCase takes ownership.
-        Sole purpose is to increase testability through DI */
+        Sole purpose is to increase testability. */
     void setProcess(KProcess*);
     void setOutputParser(QTestOutputParser*);
     void setSettings(ISettings*);
+
     void initProcArguments();
     void setUpProcSignals();
     void setExecutable(const QFileInfo&);

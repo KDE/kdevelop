@@ -27,7 +27,7 @@
 #include <KLocale>
 
 #include <runnerwindow.h>
-#include <qtestregister.h>
+#include "../xmlregister.h"
 #include <runnermodel.h>
 
 using namespace Veritas;

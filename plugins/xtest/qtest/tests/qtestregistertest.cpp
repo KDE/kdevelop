@@ -20,10 +20,10 @@
 
 #include "qtestregistertest.h"
 #include <qtest_kde.h>
-#include <qtestregister.h>
-#include <qtestsuite.h>
-#include <qtestcase.h>
-#include <qtestcommand.h>
+#include "../xmlregister.h"
+#include "../qtestsuite.h"
+#include "../qtestcase.h"
+#include "../qtestcommand.h"
 
 #include <kasserts.h>
 
@@ -32,7 +32,7 @@
 #include <QBuffer>
 
 using Veritas::Test;
-using QTest::QTestRegister;
+using QTest::XmlRegister;
 using QTest::QTestSuite;
 using QTest::QTestCase;
 using QTest::QTestCommand;
@@ -78,7 +78,7 @@ QByteArray cmd2 = "<command name=\"cmd12\" />";
 
 void QTestRegisterTest::init()
 {
-    reg = new QTestRegister();
+    reg = new XmlRegister();
 }
 
 void QTestRegisterTest::cleanup()
@@ -96,28 +96,28 @@ void QTestRegisterTest::compareSuites(QTestSuite* exp, QTestSuite* actual)
 void QTestRegisterTest::parseSuiteXml()
 {
     QByteArray xml = headerXml + suite1Xml + footerXml;
-    registerTests(xml);
+    Test* root = registerTests(xml);
 
-    KOMPARE(1, reg->rootItem()->childCount());
-    QTestSuite* expected = new QTestSuite("suite1", QFileInfo("/a/b"), reg->rootItem());
-    QTestSuite* suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(0));
+    KOMPARE(1, root->childCount());
+    QTestSuite* expected = new QTestSuite("suite1", QFileInfo("/a/b"), root);
+    QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     compareSuites(expected, suite);
     KOMPARE(0, suite->childCount());
 }
 void QTestRegisterTest::parseMultiSuitesXml()
 {
     QByteArray xml = headerXml + suite1Xml + suite2Xml + footerXml;
-    registerTests(xml);
+    Test* root = registerTests(xml);
 
-    KOMPARE(2, reg->rootItem()->childCount());
+    KOMPARE(2, root->childCount());
     // suite1
-    QTestSuite exp1("suite1", QFileInfo("/a/b"), reg->rootItem());
-    QTestSuite* suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(0));
+    QTestSuite exp1("suite1", QFileInfo("/a/b"), root);
+    QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     compareSuites(&exp1, suite);
     KOMPARE(0, suite->childCount());
     // suite2
-    QTestSuite exp2("suite2", QFileInfo("/c/d"), reg->rootItem());
-    suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(1));
+    QTestSuite exp2("suite2", QFileInfo("/c/d"), root);
+    suite = qobject_cast<QTestSuite*>(root->child(1));
     compareSuites(&exp2, suite);
     KOMPARE(0, suite->childCount());
 }
@@ -132,9 +132,9 @@ void QTestRegisterTest::compareCase(QTestCase* expected, QTestCase* actual)
 void QTestRegisterTest::parseCaseXml()
 {
     QByteArray xml = headerXml + suiteStart + caze1 + suiteEnd + footerXml;
-    registerTests(xml);
+    Test* root = registerTests(xml);
 
-    QTestSuite* suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(0));
+    QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     KOMPARE(1, suite->childCount());
     QTestCase exp("test1", QFileInfo("t.sh"), suite);
     compareCase(&exp, suite->child(0));
@@ -143,9 +143,9 @@ void QTestRegisterTest::parseCaseXml()
 void QTestRegisterTest::parseMultiCaseXml()
 {
     QByteArray xml = headerXml + suiteStart + caze1 + caze2 + suiteEnd + footerXml;
-    registerTests(xml);
+    Test* root = registerTests(xml);
 
-    QTestSuite* suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(0));
+    QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     KOMPARE(2, suite->childCount());
     // caze1
     QTestCase exp1("test1", QFileInfo("t.sh"), suite);
@@ -155,24 +155,26 @@ void QTestRegisterTest::parseMultiCaseXml()
     compareCase(&exp2, suite->child(1));
 }
 
-void QTestRegisterTest::registerTests(QByteArray& xml)
+Veritas::Test* QTestRegisterTest::registerTests(QByteArray& xml)
 {
     QBuffer buff(&xml);
-    reg->addFromXml(&buff);
+    reg->setSource(&buff);
+    reg->reload();
+    return reg->root();
 }
 
 void QTestRegisterTest::parseCmdXml()
 {
-    KTODO;
+    // TODO parse a single test command
 }
 
 void QTestRegisterTest::parseMultiCmdXMl()
 {
     QByteArray xml = headerXml + suiteStart + cazeStart + cmd1 + cmd2 + cazeEnd + suiteEnd + footerXml;
-    registerTests(xml);
+    Test* root = registerTests(xml);
 
-    KOMPARE(1, reg->rootItem()->childCount());
-    QTestSuite* suite = qobject_cast<QTestSuite*>(reg->rootItem()->child(0));
+    KOMPARE(1, root->childCount());
+    QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     KOMPARE(1, suite->childCount());
     QTestCase* caze = suite->child(0);
     KOMPARE(2, caze->childCount());

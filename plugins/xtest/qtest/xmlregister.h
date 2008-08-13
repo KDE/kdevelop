@@ -26,6 +26,8 @@
 #include <QString>
 #include <QFileInfo>
 
+#include "iregister.h"
+
 class QIODevice;
 
 namespace Veritas { class Test; }
@@ -36,18 +38,20 @@ namespace QTest
 class ISettings;
 class QTestSuite;
 class QTestCase;
+class IRegister;
 
-class QTestRegister : public QXmlStreamReader
+class XmlRegister : public QXmlStreamReader, public IRegister
 {
 public:
-    QTestRegister();
-    virtual ~QTestRegister();
+    XmlRegister();
+    virtual ~XmlRegister();
 
-    void addFromXml(QIODevice*);
-    Veritas::Test* rootItem();
-    void setRootDir(const QString& root);
+    virtual void reload();
+    virtual Veritas::Test* root() const;
 
-    void setSettings(ISettings* s) { m_settings = s; }
+    void setRootDir(const QString&);
+    void setSource(QIODevice*);
+    void setSettings(ISettings*); // TODO this is wrong
 
 private: // helpers
     bool isStartElement_(const QString& elem);

@@ -29,7 +29,7 @@
 #include <QAbstractItemModel>
 
 #include "ui_runnerwindow.h"
-#include <qtestregister.h>
+#include "../xmlregister.h"
 
 #include <veritas/resultsmodel.h>
 #include <veritas/runnermodel.h>
@@ -38,7 +38,7 @@
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
 using Veritas::ResultsModel;
-using QTest::QTestRegister;
+using QTest::XmlRegister;
 using QTest::it::QTestRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
@@ -83,12 +83,13 @@ void QTestRunnerTest::empty()
             "</root>\n";
     QBuffer buff(&reg);
 
-    QTestRegister reg_;
-    reg_.addFromXml(&buff);
+    XmlRegister reg_;
+    reg_.setSource(&buff);
+    reg_.reload();
     RunnerModel* model = new RunnerModel;
     QSignalSpy* s = new QSignalSpy(model, SIGNAL(allItemsCompleted()));
 
-    model->setRootItem(reg_.rootItem());
+    model->setRootItem(reg_.root());
     m_window->setModel(model);
     //m_window->show();
     m_window->ui()->actionStart->trigger();
@@ -217,10 +218,11 @@ void QTestRunnerTest::nrofMessagesEquals(int num)
 void QTestRunnerTest::initNrun(QByteArray& regXml)
 {
     QBuffer buff(&regXml);
-    QTestRegister reg;
-    reg.addFromXml(&buff);
+    XmlRegister reg;
+    reg.setSource(&buff);
+    reg.reload();
     RunnerModel* model = new RunnerModel;
-    model->setRootItem(reg.rootItem());
+    model->setRootItem(reg.root());
     m_window->setModel(model);
     //m_window->show();
     m_window->ui()->actionStart->trigger();

@@ -19,7 +19,8 @@
  */
 
 #include "qtestviewdata.h"
-#include "qtestregister.h"
+#include "xmlregister.h"
+#include "kdevregister.h"
 #include "qtestsuite.h"
 #include "config/qtestsettings.h"
 
@@ -54,15 +55,21 @@ QTestViewData::~QTestViewData() {}
 
 Test* QTestViewData::registerTests()
 {
-    kDebug() << "Loading test registration XML: " << fetchRegXML();
+/*    kDebug() << "Loading test registration XML: " << fetchRegXML();
     QFile* testXML = new QFile(fetchRegXML());
-    QTestRegister reg;
+    XmlRegister reg;
     reg.setSettings(new Settings(project()));
     reg.setRootDir(fetchBuildRoot());
-    reg.addFromXml(testXML);
-    return reg.rootItem();
+    reg.setSource(testXML);
+    reg.reload();*/
+    if (!project()) return 0;
+    KDevRegister reg;
+    reg.setProject(project());
+    reg.reload();
+    return reg.root();
 }
 
+// should be moved to xmlregister
 QString QTestViewData::fetchBuildRoot()
 {
     if (project() == 0) {
@@ -78,6 +85,7 @@ QString QTestViewData::resultsViewId()
     return QString("org.kdevelop.QTestResultsView") + QString::number(m_id);
 }
 
+// should be moved to xmlregister
 QString QTestViewData::fetchRegXML()
 {
     if (project() == 0) {

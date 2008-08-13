@@ -20,8 +20,14 @@ set(kdevqtest_SRCS
     qtestcommand.cpp
     qtestsuite.cpp
     qtestviewdata.cpp
-    qtestregister.cpp
+    iregister.cpp
+    xmlregister.cpp
     qtestoutputmorpher.cpp
+    kdevregister.cpp
+    suitebuilder.cpp
+    documentaccess.cpp
+    executable.cpp
+    casebuilder.cpp
     config/qtestsettings.cpp
     outputview/qtestoutputmodel.cpp
     outputview/qtestoutputdelegate.cpp
@@ -30,6 +36,7 @@ set(kdevqtest_SRCS
 qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})
 target_link_libraries(kdevqtest
+    kdev4cppduchain
     ${KDEVPLATFORM_VERITAS_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
@@ -39,6 +46,7 @@ target_link_libraries(kdevqtest
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
+    ${KDE4_KTEXTEDITOR_LIBS}
     ${QT_QTXML_LIBRARY})
 install(TARGETS kdevqtest ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

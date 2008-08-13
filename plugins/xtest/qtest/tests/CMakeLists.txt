@@ -23,6 +23,8 @@ kdev_add_test(ut-qtestsuite "qtestsuitetest.cpp")
 kdev_add_test(ut-qtestregister "qtestregistertest.cpp")
 kdev_add_test(ut-qtestoutputmorpher "qtestoutputmorphertest.cpp")
 kdev_add_test(it-qtestrunnertest qtestrunnertest.cpp)
+kdev_add_test(ut-suitebuilder suitebuildertest.cpp)
+kdev_add_test(ut-casebuilder casebuildertest.cpp)
 
 add_subdirectory(suite1)
 

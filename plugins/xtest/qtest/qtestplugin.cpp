@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QInputDialog>
 #include <QIODevice>
+#include <QDir>
 #include <QMessageBox>
 
 #include <KAction>
@@ -52,34 +53,21 @@
 #include <veritas/test.h>
 
 #include "qtestcase.h"
-#include "qtestregister.h"
+#include "xmlregister.h"
+#include "kdevregister.h"
 #include "qtestsettings.h"
 #include "qtestviewdata.h"
 #include "outputview/qtestoutputdelegate.h"
 #include "outputview/qtestoutputjob.h"
 
+
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
 K_EXPORT_PLUGIN(QTestPluginFactory("kdevqtest"))
 
-using KDevelop::Core;
-using KDevelop::Context;
-using KDevelop::ICore;
-using KDevelop::IDocument;
-using KDevelop::IUiController;
-using KDevelop::IPlugin;
-using KDevelop::IProject;
-using KDevelop::IProjectController;
-using KDevelop::DocumentController;
-using KDevelop::ProjectBaseItem;
-using KDevelop::ProjectFolderItem;
-using KDevelop::ProjectItemContext;
-using KDevelop::IBuildSystemManager;
-using KDevelop::IProjectFileManager;
-using KDevelop::ContextMenuExtension;
-
+using namespace KDevelop;
 using namespace QTest;
-using namespace Veritas;
 using namespace Sublime;
+using namespace Veritas;
 
 class QTestRunnerViewFactory: public KDevelop::IToolViewFactory
 {
@@ -197,6 +185,7 @@ void QTestPlugin::removeAllResultsViews()
     }
 }
 
+
 void QTestPlugin::newQTest()
 {
 //     if (!project()) {
@@ -278,6 +267,10 @@ void QTestPlugin::newQTest()
     src.close();
     dc->openDocument(srcUrl);
     if (m_proj) pfm->addFile(srcUrl, m_dir);
+
+    KDevRegister* kr = new KDevRegister;
+    kr->setProject(m_proj);
+    kr->reload();
 }
 
 ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)

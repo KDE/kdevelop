@@ -44,6 +44,7 @@ public:
 
 /*!
  * KConfig implementation
+ * TODO should connect to KConfig changed signals
  */
 class Settings : public ISettings
 {
