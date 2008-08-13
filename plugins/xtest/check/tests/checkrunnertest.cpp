@@ -158,27 +158,6 @@ void CheckRunnerTest::multiSuite()
     checkStatusWidget(status);
 }
 
-// command
-void CheckRunnerTest::runTwice()
-{
-    KTODO;
-
-/*    initNrun(regXml);
-    m_window->ui()->actionStart->trigger();
-    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-        QFAIL("Timeout while waiting for runner items to complete execution");
-
-    checkTests(sunnyDayTests());
-
-    QStringList result0;
-    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
-    QList<QStringList> results;
-    results << result0;
-    checkResultItems(results);
-
-    checkStatusWidget(sunnyDayStatus());*/
-}
-
 // helper
 void CheckRunnerTest::checkResultItems(QList<QStringList> expected)
 {
