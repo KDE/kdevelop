@@ -416,7 +416,7 @@ void IdealDockWidget::contextMenuEvent(QContextMenuEvent *event)
 
 IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
-    , m_centralWidgetFocusing(false)
+    , m_centralWidgetFocusing(false), m_switchingDocksShown(false)
 {
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this);
     leftBarWidget->hide();
@@ -464,9 +464,9 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
     ac->addAction("show_top_dock", action);
 
-    action = new KAction(i18n("Hide All Docks"), this);
+    action = new KAction(i18n("Hide/Restore Docks"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
-    connect(action, SIGNAL(triggered(bool)), SLOT(hideAllDocks()));
+    connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
     ac->addAction("hide_all_docks", action);
 
     action = new KAction(i18n("Focus Editor"), this);
@@ -584,10 +584,68 @@ void IdealMainWidget::centralWidgetFocused()
     m_centralWidgetFocusing = false;
 }
 
-void IdealMainWidget::hideAllDocks()
+// helper for toggleDocksShown
+bool IdealMainWidget::allDocksHidden()
 {
-    for (IdealMainLayout::Role role = IdealMainLayout::Left; role <= IdealMainLayout::Top; role = static_cast<IdealMainLayout::Role>(role + 1))
-        actionForRole(role)->setChecked(false);
+    foreach(QAction* shown, m_view_to_action) {
+        if (shown->isChecked()) return false;
+    }
+    return true;
+}
+
+// helper for toggleDocksShown
+bool IdealMainWidget::someDockMaximized()
+{
+    QMapIterator<IdealDockWidget*, Qt::DockWidgetArea> it(docks);
+    while(it.hasNext()) {
+        it.next();
+        if (it.key() && it.key()->isMaximized()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// helper for toggleDocksShown
+void IdealMainWidget::restorePreviouslyShownDocks()
+{
+    kDebug() << "";
+    foreach(View* v, m_previouslyShownDocks) {
+        if (v && m_view_to_action.contains(v)) {
+            m_view_to_action[v]->setChecked(true);
+        }
+    }
+}
+
+// helper for toggleDocksShown
+void IdealMainWidget::hideAllShownDocks()
+{
+    kDebug() << "";
+    m_previouslyShownDocks.clear();
+    QMapIterator<View*, QAction*> it(m_view_to_action);
+    while(it.hasNext()) {
+        it.next();
+        if (it.value() && it.value()->isChecked()) {
+            m_previouslyShownDocks << it.key();
+            it.value()->setChecked(false);
+        }
+    }
+    centralWidgetFocused();
+}
+
+void IdealMainWidget::toggleDocksShown()
+{
+    kDebug() << "";
+    if (m_switchingDocksShown || someDockMaximized()) {
+        return;
+    }
+    m_switchingDocksShown = true;
+    if (allDocksHidden()) {
+        restorePreviouslyShownDocks();
+    } else {
+        hideAllShownDocks();
+    }
+    m_switchingDocksShown = false;
 }
 
 void IdealMainWidget::raiseView(View * view)
@@ -601,7 +659,7 @@ void IdealMainWidget::raiseView(View * view)
 void IdealMainWidget::removeView(View* view, bool nondestructive)
 {
     Q_ASSERT(m_view_to_action.contains(view));
-
+    m_previouslyShownDocks.removeOne(view);
     QAction* action = m_view_to_action.value(view);
 
     QWidget *viewParent = view->widget()->parentWidget();

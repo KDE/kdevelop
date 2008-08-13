@@ -208,13 +208,20 @@ public Q_SLOTS:
     void showRightDock(bool show);
     void showBottomDock(bool show);
     void showTopDock(bool show);
-    void hideAllDocks();
+    void toggleDocksShown();
     void focusEditor();
     void anchorCurrentDock(bool anchor);
     void maximizeCurrentDock(bool maximized);
     void selectNextDock();
     void selectPreviousDock();
     void removeView();
+
+private:
+    // helpers for toggleDocksShown
+    bool allDocksHidden();
+    bool someDockMaximized();
+    void restorePreviouslyShownDocks();
+    void hideAllShownDocks();
 
 private:
     IdealButtonBarWidget *leftBarWidget;
@@ -241,6 +248,10 @@ private:
     QMap<IdealDockWidget*, QAction*> m_dockwidget_to_action;
 
     bool m_centralWidgetFocusing;
+
+    /** Tooldock views that were shown before hideAllDocks activated */
+    QList<View*> m_previouslyShownDocks;
+    bool m_switchingDocksShown;
 };
 
 class IdealSplitterHandle : public QWidget
