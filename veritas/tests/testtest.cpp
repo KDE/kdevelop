@@ -202,4 +202,13 @@ void TestTest::retrieveLeaves()
     KOMPARE("child12", leafs[1]->name());
 }
 
+void TestTest::reparent()
+{
+    Test* test = new Test("foo", 0);
+    KOMPARE(0, test->parent());
+    Test* parent = new Test("parent", 0);
+    test->setParent(parent);
+    KOMPARE(parent, test->parent());
+}
+
 QTEST_KDEMAIN(TestTest, NoGUI)

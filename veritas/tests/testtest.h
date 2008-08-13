@@ -44,6 +44,7 @@ private slots:
     void resetValue();
     void appendChildren();
     void retrieveLeaves();
+    void reparent();
 
 private:
     void assertNrofChildren(TestFake*, int nrof);

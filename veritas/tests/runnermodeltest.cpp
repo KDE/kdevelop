@@ -43,7 +43,6 @@ Q_DECLARE_METATYPE(QModelIndex)
 
 void RunnerModelTest::init()
 {
-    kDebug() << "INIT";
     model = createRunnerModelStub(false);
 }
 

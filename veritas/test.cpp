@@ -92,6 +92,12 @@ QModelIndex Test::index() const
 
 Test* Test::parent() const
 {
+    if (!m_parentItem && QObject::parent()) {
+        Test* parent_ = qobject_cast<Test*>(QObject::parent());
+        if (parent_) {
+            m_parentItem = parent_;
+        }
+    }
     return m_parentItem;
 }
 
