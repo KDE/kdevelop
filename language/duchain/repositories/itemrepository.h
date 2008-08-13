@@ -32,6 +32,8 @@
 #include "../../languageexport.h"
 
 //#define DEBUG_ITEMREPOSITORY_LOADING
+#define ifDebugInfiniteRecursion(x) x
+//#define ifDebugInfiniteRecursion(x)
 
 namespace KDevelop {
 
@@ -206,6 +208,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         initialize();
         if(file->size() >= offset + DataSize) {
           file->seek(offset);
+          Q_ASSERT(file->size() >= offset + DataSize);
           
           uint checkStart, checkEnd;
           file->read((char*)&checkStart, sizeof(unsigned int));
@@ -763,8 +766,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       unsigned short indexInBucket = bucketPtr->index(request, dynamic);
       
       if(indexInBucket) {
-        if(!(*bucketHashPosition))
+        if(!(*bucketHashPosition)) {
+          Q_ASSERT(!previousBucketNumber);
           (*bucketHashPosition) = useBucket;
+        }
         
         ++m_statItemCount;
 
@@ -772,29 +777,41 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         if(!pickedBucketInChain && previousBucketNumber && previousBucketNumber != useBucket) {
           //Should happen rarely
           ++m_statBucketHashClashes;
+
+          ///Debug: Detect infinite recursion
+          ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, previousBucketNumber));)
+
+          //Find the position where the paths of useBucket and *bucketHashPosition intersect, and insert useBucket
+          //there. That way, we don't create loops.
+          QPair<unsigned int, unsigned int> intersect = hashChainIntersection(*bucketHashPosition, useBucket, hash);
           
-          //If the used bucket already has previousBucketNumber as a follower, insert it instead of previousBucketNumber,
-          //so we don't create a loop
-          bool replacePreviousWithUsed = false;
+          Q_ASSERT(m_buckets[previousBucketNumber]->nextBucketForHash(hash) == 0);
           
-          {
-            uint checkBucket = useBucket;
-            while(checkBucket) {
-              if(checkBucket == previousBucketNumber) {
-                replacePreviousWithUsed = true;
-                break;
-              }
-              checkBucket = bucketForIndex(checkBucket)->nextBucketForHash(request.hash());
-            }
-          }
-          
-          if(!replacePreviousWithUsed)
-            m_buckets[previousBucketNumber]->setNextBucketForHash(request.hash(), useBucket);
-          else if(previousPreviousBucketNumber) {
-            bucketForIndex(previousPreviousBucketNumber)->setNextBucketForHash(request.hash(), useBucket);
+          if(!intersect.second) {
+            ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket));)
+            ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(useBucket, hash, previousBucketNumber));)
+            
+            m_buckets[previousBucketNumber]->setNextBucketForHash(hash, useBucket);
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, useBucket));)
+          } else if(intersect.first) {
+            ifDebugInfiniteRecursion(Q_ASSERT(bucketForIndex(intersect.first)->nextBucketForHash(hash) == intersect.second);)
+            ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket));)
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, intersect.second));)
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, intersect.first));)
+            ifDebugInfiniteRecursion(Q_ASSERT(bucketForIndex(intersect.first)->nextBucketForHash(hash) == intersect.second);)
+            
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(useBucket, hash, intersect.second));)
+            ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(useBucket, hash, intersect.first));)
+            
+            bucketForIndex(intersect.first)->setNextBucketForHash(hash, useBucket);
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, useBucket));)
           } else {
-            //useBucket needs to be the first bucket in the global bucket hash for this hash-value
-            Q_ASSERT(*bucketHashPosition == previousBucketNumber);
+            //State: intersect.first == 0 && intersect.second != 0. This means that whole compleet
+            //chain opened by *bucketHashPosition with the hash-value is also following useBucket,
+            //so useBucket can just be inserted at the top
+
+            ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket));)
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(useBucket, hash, *bucketHashPosition));)
             *bucketHashPosition = useBucket;
           }
         }
@@ -950,7 +967,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       }
     }else{
       if(!bucketPtr->hasClashingItem(hash)) {
+        ///Debug: Check for infinite recursion
+        walkBucketLinks(*bucketHashPosition, hash);
+        
         previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
+        
+        ///Debug: Check for infinite recursion
+        Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, bucketPtr->nextBucketForHash(hash)));
+        
         Q_ASSERT(bucketPtr->nextBucketForHash(hash) != previousBucketNumber);
       }
     }
@@ -1131,7 +1155,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
   }
     
-  Bucket<Item, ItemRequest, DynamicData>* bucketForIndex(short unsigned int index) {
+  Bucket<Item, ItemRequest, DynamicData>* bucketForIndex(short unsigned int index) const {
     Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[index];
     if(!bucketPtr) {
       initializeBucket(index);
@@ -1263,6 +1287,36 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     if(m_file && m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
     }
+  }
+  
+  ///Returns whether @param mustFindBucket was found
+  ///If mustFindBucket is zero, the whole chain is just walked. This is good for debugging for infinite recursion.
+  bool walkBucketLinks(uint checkBucket, uint hash, uint mustFindBucket = 0) const {
+    bool found = false;
+    while(checkBucket) {
+      if(checkBucket == mustFindBucket)
+        found = true;
+      
+      checkBucket = bucketForIndex(checkBucket)->nextBucketForHash(hash);
+    }
+    return found || (mustFindBucket == 0);
+  }
+  
+  ///Computes the bucket where the chains opened by the buckets @param mainHead and @param intersectorHead
+  ///with hash @param hash @meat each other.
+  ///@return <predecessor of first shared bucket in mainHead, first shared bucket>
+  QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, uint hash) const {
+    uint previous = 0;
+    uint current = mainHead;
+    while(current) {
+      ///@todo Make this more efficient
+      if(walkBucketLinks(intersectorHead, hash, current))
+        return qMakePair(previous, current);
+      
+      previous = current;
+      current = bucketForIndex(current)->nextBucketForHash(hash);
+    }
+    return qMakePair(0u, 0u);
   }
 
   bool m_metaDataChanged;
