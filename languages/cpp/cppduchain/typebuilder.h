@@ -24,8 +24,10 @@
 #include <language/duchain/declaration.h>
 #include "cppduchainexport.h"
 
-class CppClassType;
-class CppFunctionType;
+namespace KDevelop {
+  class StructureType;
+  class FunctionType;
+}
 
 typedef KDevelop::AbstractTypeBuilder<AST, NameAST, ContextBuilder> TypeBuilderBase;
 
@@ -64,12 +66,12 @@ protected:
   virtual void visitTemplateParameter(TemplateParameterAST *);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
-  
+
   bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
 
   ///Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.
-  bool openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs cv, bool needClass = false);
+  bool openTypeFromName(NameAST* name, uint modifiers, bool needClass = false);
 
   bool lastTypeWasInstance() const;
 
@@ -77,10 +79,10 @@ protected:
   void openDelayedType(const KDevelop::TypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 
-  CppClassType* openClass(int kind);
-  CppFunctionType* openFunction(DeclaratorAST *node);
+  KDevelop::StructureType* openClass(int kind);
+  KDevelop::FunctionType* openFunction(DeclaratorAST *node);
 
-  KDevelop::Declaration::CVSpecs parseConstVolatile(const ListNode<std::size_t>* cv);
+  uint parseConstVolatile(const ListNode<std::size_t>* cv);
 
   int m_currentEnumeratorValue;
 

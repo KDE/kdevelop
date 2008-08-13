@@ -47,9 +47,9 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
   return ret;
 }
 
-Declaration::CVSpecs parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
+uint parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
 {
-  Declaration::CVSpecs ret = Declaration::CVNone;
+  uint ret = AbstractType::NoModifiers;
 
   if (cv) {
     const ListNode<std::size_t> *it = cv->toFront();
@@ -57,9 +57,9 @@ Declaration::CVSpecs parseConstVolatile(ParseSession* session, const ListNode<st
     do {
       int kind = session->token_stream->kind(it->element);
       if (kind == Token_const)
-        ret |= Declaration::Const;
+        ret |= AbstractType::ConstModifier;
       else if (kind == Token_volatile)
-        ret |= Declaration::Volatile;
+        ret |= AbstractType::VolatileModifier;
 
       it = it->next;
     } while (it != end);
@@ -82,7 +82,7 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
     //node->type_id->type_specifier->cv
     if(node->type_id->declarator && node->type_id->declarator->ptr_ops)
     {
-      id.setIsConstant(parseConstVolatile(session, node->type_id->type_specifier->cv) & Declaration::Const);
+      id.setIsConstant(parseConstVolatile(session, node->type_id->type_specifier->cv) & AbstractType::ConstModifier);
       const ListNode<PtrOperatorAST*> *it = node->type_id->declarator->ptr_ops->toFront();
       const ListNode<PtrOperatorAST*> *end = it; ///@todo check ordering, eventually walk the list in reversed order
       do
@@ -97,7 +97,7 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
               id.setPointerDepth(id.pointerDepth()+1);
 
               if(it->element->cv) {
-                id.setIsConstPointer(id.pointerDepth()-1, parseConstVolatile(session, it->element->cv) & Declaration::Const);
+                id.setIsConstPointer(id.pointerDepth()-1, parseConstVolatile(session, it->element->cv) & AbstractType::ConstModifier);
               }
             }
           }
@@ -129,7 +129,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if (node->tilde)
     tmp_name = IndexedString("~" + tmp_name.byteArray());
-  
+
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
 #if defined(__GNUC__)

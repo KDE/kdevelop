@@ -83,7 +83,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
 
   if( indexedType() == base->indexedType() )
     return true;
-  
+
   FOREACH_FUNCTION(const Cpp::BaseClassInstance& b, baseClasses)
   {
     if( baseConversionLevels )
@@ -91,7 +91,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
     //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
     if( b.access != KDevelop::Declaration::Private ) {
       int nextBaseConversion = 0;
-      if( CppClassType::Ptr c = b.baseClass.type().cast<CppClassType>() ) {
+      if( KDevelop::StructureType::Ptr c = b.baseClass.type().cast<KDevelop::StructureType>() ) {
         ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
         if( decl && decl->isPublicBaseClass( base, topContext, &nextBaseConversion ) )
           *baseConversionLevels += nextBaseConversion;

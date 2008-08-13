@@ -33,7 +33,7 @@ class GrepJob : public KDevelop::OutputJob
 {
     Q_OBJECT
 
-public:   
+public:
     enum ErrorTypes {
         TemporaryFileError = UserDefinedError
     };
@@ -42,7 +42,7 @@ public:
 
     QString patternString() const;
     void setPatternString(const QString& patternString);
-    
+
     QString templateString;
     QString filesString;
     QString excludeString;
@@ -53,16 +53,16 @@ public:
     bool recursiveFlag;
     bool noFindErrorsFlag;
     bool caseSensitiveFlag;
-    
+
     KDevelop::IProject *project;
 
     virtual void start();
-    
+
 protected:
     virtual bool doKill();
 
     GrepOutputModel* model() const;
-    
+
 private Q_SLOTS:
     void slotFinished();
     void slotError(QProcess::ProcessError error);
@@ -70,10 +70,10 @@ private Q_SLOTS:
 private:
     static QString escape(const QString &str);
     GrepViewPlugin* plugin() const;
-    
+
     KDevelop::ProcessLineMaker* m_lineMaker;
     QList<KProcess*> m_processes;
-    
+
     QString m_patternString;
 };
 

@@ -29,6 +29,7 @@
 #include "name_compiler.h"
 #include <language/duchain/ducontext.h>
 #include "cpptypes.h"
+#include <language/duchain/types/alltypes.h>
 #include "parsesession.h"
 #include "tokens.h"
 #include "cppduchain.h"
@@ -59,7 +60,7 @@ bool isTemplateDependent(Declaration* decl) {
     return false;
   if( decl->abstractType().cast<CppTemplateParameterType>() )
     return true;
-  
+
   DUContext* ctx = decl->context();
 
   while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
@@ -80,33 +81,33 @@ bool isTemplateDependent(Declaration* decl) {
   return false;
 }
 
-ClassType classTypeFromTokenKind(int kind)
+uint classTypeFromTokenKind(int kind)
 {
   switch(kind)
   {
   case Token_struct:
-    return Struct;
+    return StructureType::Struct;
   case Token_union:
-    return Union;
+    return StructureType::Union;
   default:
-    return Class;
+    return StructureType::Class;
   }
 }
 
-CppClassType* TypeBuilder::openClass(int kind)
+StructureType* TypeBuilder::openClass(int kind)
 {
-  CppClassType* classType = new CppClassType();
+  StructureType* classType = new StructureType();
 
   classType->setClassType( classTypeFromTokenKind(kind) );
-  
+
   return classType;
 }
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
-  CppClassType::Ptr classType = CppClassType::Ptr(openClass(kind));
-  
+  StructureType::Ptr classType = StructureType::Ptr(openClass(kind));
+
   openType(classType);
 
   classTypeOpened( currentAbstractType() ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
@@ -123,11 +124,11 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 {
   if (node->name) {
     DUChainReadLocker lock(DUChain::lock());
-    
-    CppClassType::Ptr klass = currentAbstractType().cast<CppClassType>();
+
+    StructureType::Ptr klass = currentAbstractType().cast<StructureType>();
     Q_ASSERT( klass );
 
-    bool openedType = openTypeFromName(node->name, Declaration::CVNone, true);
+    bool openedType = openTypeFromName(node->name, AbstractType::NoModifiers, true);
 
     if( openedType ) {
       closeType();
@@ -142,23 +143,23 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
   m_currentEnumeratorValue = 0;
-  
-  openType(CppEnumerationType::Ptr(new CppEnumerationType()));
+
+  openType(EnumerationType::Ptr(new EnumerationType()));
 
   TypeBuilderBase::visitEnumSpecifier(node);
-  
+
   closeType();
 }
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
   bool openedType = false;
-  
+
   if(node->expression) {
     Cpp::ExpressionParser parser;
 
     Cpp::ExpressionEvaluationResult res;
-    
+
     bool delay = false;
 
     if(!delay) {
@@ -175,7 +176,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 
       if ( !delay && res.isValid() && res.isInstance ) {
         AbstractType::Ptr resType = res.type.type();
-        if( CppConstantIntegralType::Ptr iType = resType.cast<CppConstantIntegralType>() ) {
+        if( ConstantIntegralType::Ptr iType = resType.cast<ConstantIntegralType>() ) {
           m_currentEnumeratorValue = (int)iType->value<qint64>();
         } else if( DelayedType::Ptr dType = resType.cast<DelayedType>() ) {
           openType(dType.cast<AbstractType>()); ///@todo Make this an enumerator-type that holds the same information
@@ -195,20 +196,20 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       openedType = true;
     }
   }
-  
-//   if (CppEnumerationType::Ptr parent = currentType<CppEnumerationType>()) {
-//     CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
+
+//   if (EnumerationType::Ptr parent = currentType<EnumerationType>()) {
+//     EnumeratorType::Ptr enumerator(new EnumeratorType());
 //     openType(enumerator, node);
 //     ok = true;
 //   }
 
   if(!openedType) {
     openedType = true;
-    CppEnumeratorType::Ptr enumerator(new CppEnumeratorType());
+    EnumeratorType::Ptr enumerator(new EnumeratorType());
     openType(enumerator);
     enumerator->setValue<qint64>(m_currentEnumeratorValue);
   }
-  
+
   TypeBuilderBase::visitEnumerator(node);
 
   closeType();
@@ -231,20 +232,20 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   if( kind == Token_typename ) {
     //For typename, just find the type and return
     bool openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
-    
+
     TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
     if(openedType)
       closeType();
     return;
   }
-  
+
   if (node->name) {
 /*    {
       DUChainReadLocker lock(DUChain::lock());
-      
+
       ///If possible, find another fitting declaration/forward-declaration and re-use it's type
-    
+
       SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
       QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForNode(node->name), pos);
@@ -254,7 +255,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
         return;
       }
     }*/
-    
+
     switch (kind) {
       case Token_class:
       case Token_struct:
@@ -262,7 +263,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
         type = AbstractType::Ptr(openClass(kind));
         break;
       case Token_enum:
-        type = AbstractType::Ptr(new CppEnumerationType());
+        type = AbstractType::Ptr(new EnumerationType());
         break;
       case Token_typename:
         // TODO what goes here...?
@@ -287,8 +288,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   m_lastTypeWasInstance = false;
 
   if (node->integrals) {
-    IntegralTypes type = TypeNone;
-    TypeModifiers modifiers = ModifierNone;
+    uint type = IntegralType::TypeNone;
+    uint modifiers = AbstractType::NoModifiers;
 
     const ListNode<std::size_t> *it = node->integrals->toFront();
     const ListNode<std::size_t> *end = it;
@@ -296,55 +297,55 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
         case Token_char:
-          type = TypeChar;
+          type = IntegralType::TypeChar;
           break;
         case Token_wchar_t:
-          type = TypeWchar_t;
+          type = IntegralType::TypeWchar_t;
           break;
         case Token_bool:
-          type = TypeBool;
+          type = IntegralType::TypeBoolean;
           break;
         case Token_short:
-          modifiers |= ModifierShort;
+          modifiers |= AbstractType::ShortModifier;
           break;
         case Token_int:
-          type = TypeInt;
+          type = IntegralType::TypeInt;
           break;
         case Token_long:
-          if (modifiers & ModifierLong)
-            modifiers |= ModifierLongLong;
+          if (modifiers & AbstractType::LongModifier)
+            modifiers |= AbstractType::LongLongModifier;
           else
-            modifiers |= ModifierLong;
+            modifiers |= AbstractType::LongModifier;
           break;
         case Token_signed:
-          modifiers |= ModifierSigned;
+          modifiers |= AbstractType::SignedModifier;
           break;
         case Token_unsigned:
-          modifiers |= ModifierUnsigned;
+          modifiers |= AbstractType::UnsignedModifier;
           break;
         case Token_float:
-          type = TypeFloat;
+          type = IntegralType::TypeFloat;
           break;
         case Token_double:
-          type = TypeDouble;
+          type = IntegralType::TypeDouble;
           break;
         case Token_void:
-          type = TypeVoid;
+          type = IntegralType::TypeVoid;
           break;
       }
 
       it = it->next;
     } while (it != end);
 
-    if(type == TypeNone)
-      type = TypeInt; //Happens, example: "unsigned short"
-    
-    CppIntegralType::Ptr integral(new CppIntegralType(type, modifiers));
-    integral->setCV(parseConstVolatile(node->cv));
-    if (integral) {
-      openedType = true;
-      openType(integral);
-    }
+    if(type == IntegralType::TypeNone)
+      type = IntegralType::TypeInt; //Happens, example: "unsigned short"
+
+    modifiers |= parseConstVolatile(node->cv);
+
+    IntegralType::Ptr integral(new IntegralType(type));
+    integral->setModifiers(modifiers);
+    openedType = true;
+    openType(integral);
 
   } else if (node->name) {
     openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
@@ -356,19 +357,19 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
-bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs cv, bool needClass) {
+bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {
   QualifiedIdentifier id = identifierForNode(name);
 
   bool openedType = false;
-  
+
   bool delay = false;
 
   if(!delay) {
-    SimpleCursor pos = editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(name->start_token, EditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
     ifDebug( kDebug() << "searching" << id.toString(); )
     ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
-    
+
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
     ifDebug( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
     ifDebugCurrentFile( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
@@ -377,28 +378,27 @@ bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs
 
     if(!delay) {
       foreach( Declaration* decl, dec ) {
-        if( needClass && !decl->abstractType().cast<CppClassType>() )
+        if( needClass && !decl->abstractType().cast<KDevelop::StructureType>() )
           continue;
-        
+
         if (decl->abstractType() ) {
           if(decl->kind() == KDevelop::Declaration::Instance)
             m_lastTypeWasInstance = true;
-          
+
           ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
           //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
           openedType = true;
-          
+
           AbstractType::Ptr type = decl->abstractType();
-          CppCVType* cvType = dynamic_cast<CppCVType*>(type.unsafeData());
-          if(cvType && cvType->cv() != cv)
-            cvType->setCV(cv); //The type-system automatically copies the type while changing, so we don't create any problems here.
-          
+          if(type && type->modifiers() != modifiers)
+            type->setModifiers(modifiers); //The type-system automatically copies the type while changing, so we don't create any problems here.
+
           openType(type);
           break;
         }
       }
     }
-    
+
     if(!openedType)
       delay = true;
   }
@@ -408,15 +408,15 @@ bool TypeBuilder::openTypeFromName(NameAST* name, KDevelop::Declaration::CVSpecs
     //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
    openedType = true;
    TypeIdentifier typeId(id);
-   typeId.setIsConstant(cv & KDevelop::Declaration::Const);
+   typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
-   
+
    ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
    ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
   }
-  
+
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "opened type" << (currentAbstractType() ? currentAbstractType()->toString() : QString("(no type)")); )
-  
+
   return openedType;
 }
 
@@ -442,11 +442,11 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   clearLastType();
-  
+
   m_declarationHasInitDeclarators = (bool)node->init_declarator;
-  
+
   TypeBuilderBase::visitFunctionDeclaration(node);
-  
+
   m_declarationHasInitDeclarators = false;
 }
 
@@ -485,13 +485,15 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     QString op = editor()->tokenToString(node->op);
     if (!op.isEmpty())
       if (op[0] == '&') {
-        CppReferenceType::Ptr pointer(new CppReferenceType(parseConstVolatile(node->cv)));
+        ReferenceType::Ptr pointer(new ReferenceType());
+        pointer->setModifiers(parseConstVolatile(node->cv));
         pointer->setBaseType(lastType());
         openType(pointer);
         typeOpened = true;
 
       } else if (op[0] == '*') {
-        CppPointerType::Ptr pointer(new CppPointerType(parseConstVolatile(node->cv)));
+        PointerType::Ptr pointer(new PointerType());
+        pointer->setModifiers(parseConstVolatile(node->cv));
         pointer->setBaseType(lastType());
         openType(pointer);
         typeOpened = true;
@@ -504,12 +506,12 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     closeType();
 }
 
-CppFunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
+FunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
 {
-  CppFunctionType* functionType = new CppFunctionType();
+  FunctionType* functionType = new FunctionType();
 
   if (node->fun_cv)
-    functionType->setCV(parseConstVolatile(node->fun_cv));
+    functionType->setModifiers(parseConstVolatile(node->fun_cv));
 
   if (lastType())
     functionType->setReturnType(lastType());
@@ -530,7 +532,7 @@ void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {
 
   if (node->parameter_declaration_clause)
     // New function type
-    openType(CppFunctionType::Ptr(openFunction(node)));
+    openType(FunctionType::Ptr(openFunction(node)));
 }
 
 void TypeBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
@@ -546,24 +548,24 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
   Cpp::ExpressionParser parser;
 
   Cpp::ExpressionEvaluationResult res;
-  
+
   {
     DUChainReadLocker lock(DUChain::lock());
     if(expression) {
       expression->ducontext = currentContext();
       res = parser.evaluateType( expression, editor()->parseSession() );
     }
-  
+
     ArrayType::Ptr array(new ArrayType());
     array->setElementType(lastType());
 
-    CppConstantIntegralType::Ptr integral = res.type.type().cast<CppConstantIntegralType>();
+    ConstantIntegralType::Ptr integral = res.type.type().cast<ConstantIntegralType>();
     if( res.isValid() && integral ) {
       array->setDimension(integral->value<qint64>());
     } else {
       array->setDimension(0);
     }
-    
+
     openType(array);
     typeOpened = true;
   }
@@ -572,9 +574,9 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     closeType();
 }
 
-Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
+uint TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
 {
-  Declaration::CVSpecs ret = Declaration::CVNone;
+  uint ret = AbstractType::NoModifiers;
 
   if (cv) {
     const ListNode<std::size_t> *it = cv->toFront();
@@ -582,9 +584,9 @@ Declaration::CVSpecs TypeBuilder::parseConstVolatile(const ListNode<std::size_t>
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       if (kind == Token_const)
-        ret |= Declaration::Const;
+        ret |= AbstractType::ConstModifier;
       else if (kind == Token_volatile)
-        ret |= Declaration::Volatile;
+        ret |= AbstractType::VolatileModifier;
 
       it = it->next;
     } while (it != end);
@@ -607,7 +609,7 @@ void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
   openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
 
   TypeBuilderBase::visitTemplateParameter(ast);
-  
+
   closeType();
 }
 
@@ -617,7 +619,7 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
   TypeBuilderBase::visitParameterDeclaration(node);
 
   if (hasCurrentType()) {
-    if (CppFunctionType::Ptr function = currentType<CppFunctionType>()) {
+    if (FunctionType::Ptr function = currentType<FunctionType>()) {
       function->addArgument(lastType());
     }
     // else may be a template argument
@@ -628,7 +630,7 @@ void TypeBuilder::visitUsing(UsingAST * node)
 {
   TypeBuilderBase::visitUsing(node);
 
-  bool openedType = openTypeFromName(node->name, Declaration::CVNone, true);
+  bool openedType = openTypeFromName(node->name, AbstractType::NoModifiers, true);
 
   if( openedType )
     closeType();

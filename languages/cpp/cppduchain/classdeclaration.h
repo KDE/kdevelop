@@ -36,7 +36,7 @@ namespace Cpp {
 
 struct BaseClassInstance
 {
-  KDevelop::IndexedType baseClass; //May either be CppClassType, or CppDelayedType
+  KDevelop::IndexedType baseClass; //May either be KDevelop::StructureType, or CppDelayedType
   KDevelop::Declaration::AccessPolicy access;
   bool virtualInheritance;
 };

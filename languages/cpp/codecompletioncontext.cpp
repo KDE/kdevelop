@@ -78,7 +78,7 @@ QList<Declaration*> convert( const DeclarationId* decls, uint count, TopDUContex
     if(d)
       ret << d;
   }
-    
+
   return ret;
 }
 
@@ -109,7 +109,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_valid = false;
     return;
   }
-  
+
   {
     //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
     QString lineText = extractLastLine(m_text).trimmed();
@@ -118,7 +118,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       return;
     }
   }
-  
+
   m_valid = isValidPosition();
   if( !m_valid ) {
     log( "position not valid for code-completion" );
@@ -214,7 +214,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   if(m_expression == "else")
     m_expression = QString();
-  
+
   QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
   ifDebug( log( "expressionPrefix: " + expressionPrefix ); )
@@ -243,7 +243,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
     QStringList otherArguments;
     int parentContextEnd = expressionPrefix.length();
-    
+
     skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
@@ -280,7 +280,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ExpressionParser expressionParser/*(false, true)*/;
 
   ifDebug( kDebug(9007) << "expression: " << expr; )
-  
+
   if( !expr.trimmed().isEmpty() ) {
     m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
@@ -320,7 +320,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       LOCKDUCHAIN;
       //Dereference a pointer
       AbstractType::Ptr containerType = m_expressionResult.type.type();
-      CppPointerType::Ptr pnt = TypeUtils::realType(containerType, m_duContext->topContext()).cast<CppPointerType>();
+      PointerType::Ptr pnt = TypeUtils::realType(containerType, m_duContext->topContext()).cast<PointerType>();
       if( !pnt ) {
         AbstractType::Ptr realContainer = TypeUtils::realType(containerType, m_duContext->topContext());
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(realContainer.unsafeData());
@@ -332,8 +332,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
               ///@todo care about const
               foreach(Declaration* decl, operatorDeclarations)
                 m_expressionResult.allDeclarationsList().append(decl->id());
-              
-              CppFunctionType::Ptr function = operatorDeclarations.front()->abstractType().cast<CppFunctionType>();
+
+              KDevelop::FunctionType::Ptr function = operatorDeclarations.front()->abstractType().cast<KDevelop::FunctionType>();
 
               if( function ) {
                 m_expressionResult.type = function->returnType()->indexed();
@@ -398,9 +398,9 @@ void CodeCompletionContext::processFunctionCallAccess() {
   ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. Those take an additional first argument.
 
   LOCKDUCHAIN;
-  
+
   OverloadResolutionHelper helper( m_duContext, TopDUContextPointer(m_duContext->topContext()) );
-  
+
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
     if( !m_expressionResult.isInstance ) {
@@ -410,13 +410,13 @@ void CodeCompletionContext::processFunctionCallAccess() {
     }
 
     helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.type(), m_expressionResult.isLValue()), m_operator);
-    
+
     m_functionName = "operator"+m_operator;
   } else {
     ///Simply take all the declarations that were found by the expression-parser
-    
+
     helper.setFunctions(convert(m_expressionResult.allDeclarations(), m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
-    
+
     if(m_expressionResult.allDeclarationsSize()) {
       Declaration* decl = m_expressionResult.allDeclarations()[0].getDeclaration(m_duContext->topContext());
       if(decl)
@@ -427,9 +427,9 @@ void CodeCompletionContext::processFunctionCallAccess() {
   OverloadResolver::ParameterList knownParameters;
   foreach( ExpressionEvaluationResult result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result.type.type(), result.isLValue() );
-  
+
   helper.setKnownParameters(knownParameters);
-  
+
   m_functions = helper.resolve(true);
 
 //   if( declarations.isEmpty() ) {
@@ -453,7 +453,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   bool local = false;
   if(line.startsWith('"'))
     local = true;
-  
+
   line = line.mid(1);
 
   kDebug(9007) << "extract prefix from " << line;
@@ -462,7 +462,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   u.setFileName(QString());
   QString prefixPath = u.path();
   kDebug(9007) << "extracted prefix " << prefixPath;
-  
+
   LOCKDUCHAIN;
   if(!m_duContext)
     return;
@@ -491,10 +491,10 @@ ExpressionEvaluationResult CodeCompletionContext::memberAccessContainer() const 
 
 QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   QList<DUContext*> ret;
-  
+
   if( memberAccessOperation() == StaticMemberChoose && m_duContext ) {
     //Locate all namespace-instances we will be completing from
-    ret += m_duContext->findContexts(DUContext::Class, QualifiedIdentifier(m_expression)); 
+    ret += m_duContext->findContexts(DUContext::Class, QualifiedIdentifier(m_expression));
     ret += m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(m_expression)); ///@todo respect position
   }
 
@@ -516,11 +516,11 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
             kDebug(9007) << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
           }
         }
-        
+
       }
     }
   }
-  
+
   return ret;
 }
 
@@ -575,9 +575,9 @@ QList<KDevelop::AbstractType::Ptr> CodeCompletionContext::additionalMatchTypes()
 }
 
 void CodeCompletionContext::preprocessText( int line ) {
-  
+
   LOCKDUCHAIN;
-  
+
   if( m_duContext ) {
   m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line );
   }else{
@@ -597,14 +597,14 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort) {
     LOCKDUCHAIN;
-    
+
     QList<CompletionTreeItemPointer> items;
-    
+
     if(!m_duContext)
       return items;
-    
+
     typedef QPair<Declaration*, int> DeclarationDepthPair;
-    
+
     if(!m_storedItems.isEmpty()) {
       items = m_storedItems;
     }else{
@@ -617,10 +617,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             if(had.contains(ctx)) ///@todo why do we need this
               continue;
             had.insert(ctx);
-            
+
             if (shouldAbort)
               return items;
-            
+
             foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
               //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
               if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
@@ -629,12 +629,12 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                 ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
                 if(classMember && classMember->isStatic())
                   continue; //Skip static class members when not doing static access
-                if(decl.first->abstractType().cast<CppEnumeratorType>())
+                if(decl.first->abstractType().cast<KDevelop::EnumeratorType>())
                   continue; //Skip enumerators
               }else{
                 ///@todo what NOT to show on static member choose? Actually we cannot hide all non-static functions, because of function-pointers
               }
-              
+
               if(!decl.first->identifier().isEmpty())
                 items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(this), decl.second ) );
             }
@@ -716,7 +716,7 @@ QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) con
     QList<Declaration*> found = m_duContext->findDeclarations( currentPrefix + decl->identifier() );
     if(found.contains(decl))
       return currentPrefix;
-  
+
     if(currentPrefix.count() >= worstCase.count()) {
       return worstCase;
     }else {
@@ -772,16 +772,16 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
           if(function.function.isValid() && function.function.isViable() && function.function.declaration()) {
             //uint parameterNumber = parent->m_knownArgumentExpressions.size() + function.matchedArguments;
             Declaration* functionDecl = function.function.declaration().data();
-            if(functionDecl->type<CppFunctionType>()->arguments().count() > function.matchedArguments) {
+            if(functionDecl->type<KDevelop::FunctionType>()->arguments().count() > function.matchedArguments) {
               //Eventually pick additional specificly known items for the type
-              AbstractType::Ptr type = functionDecl->type<CppFunctionType>()->arguments()[function.matchedArguments];
+              AbstractType::Ptr type = functionDecl->type<KDevelop::FunctionType>()->arguments()[function.matchedArguments];
               if(type) {
-                if(CppEnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<CppEnumerationType>()) {
+                if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
                   Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
                   if(enumDecl && enumDecl->internalContext()) {
-                    
+
                     QualifiedIdentifier prefix = requiredPrefix(enumDecl);
-                    
+
                     DUContext* enumInternal = enumDecl->internalContext();
                     foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
                       QualifiedIdentifier id = prefix + enumerator->identifier();
