@@ -238,11 +238,6 @@ public:
   QualifiedIdentifier operator+(const Identifier& rhs) const;
   QualifiedIdentifier& operator+=(const Identifier& rhs);
 
-  //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
-  QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
-//   //The returned identifier will have explicitlyGlobal() set to false
-//   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
-
   /**
    * A more complex comparison than operator==(..).
    * It does respect the isExpression() flag, and optionally the explicitlyGlobal flag.
