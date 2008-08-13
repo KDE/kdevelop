@@ -89,4 +89,4 @@ private:
 
 }
 
-#endif VERITAS_CPP_INCLUDEWRITER_H
+#endif // VERITAS_CPP_INCLUDEWRITER_H
