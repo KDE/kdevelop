@@ -93,8 +93,8 @@ void SvnCommitDialog::setCommitCandidates( const KUrl::List &urls )
             if( project )
             {
                 path = project->relativeUrl( info.url() ).pathOrUrl();
-                m_project = project;
             }
+            statusInfos.insert(path, info);
             switch( info.state() )
             {
                 case KDevelop::VcsStatusInfo::ItemAdded:
@@ -105,6 +105,9 @@ void SvnCommitDialog::setCommitCandidates( const KUrl::List &urls )
                     break;
                 case KDevelop::VcsStatusInfo::ItemModified:
                     insertRow( i18nc("subversion controlled file was modified", "Modified"), path );
+                    break;
+                case KDevelop::VcsStatusInfo::ItemUnknown:
+                    insertRow( i18nc("File not known to subversion", "Unknown"), path, Qt::Unchecked );
                     break;
                 default:
                     break;
@@ -119,18 +122,23 @@ void SvnCommitDialog::setCommitCandidates( const KUrl::List &urls )
 KUrl::List SvnCommitDialog::checkedUrls() const
 {
     KUrl::List list;
-
+    KUrl::List addItems;
     QTreeWidgetItemIterator it( ui.files, QTreeWidgetItemIterator::Checked );
     for( ; *it; ++it ){
         KUrl path;
-        if( m_project )
-        {
-            path = m_project->folder();
-            path.addPath( (*it)->text( 2 ) );
-        } else {
-            path = KUrl( (*it)->text( 2 ) );
+        KDevelop::VcsStatusInfo info = statusInfos.value((*it)->text(2));
+        if( info.state() == KDevelop::VcsStatusInfo::ItemUnknown ) {
+            kDebug() << "adding" << info.url() << "to additems";
+            addItems << info.url();
         }
-        list << path;
+        list << info.url();
+    }
+    if( !addItems.isEmpty() ) {
+        kDebug() << "Adding new files" << addItems;
+        KDevelop::VcsJob* job = m_part->add( addItems, KDevelop::IBasicVersionControl::NonRecursive );
+        job->exec();
+    } else {
+        kDebug() << "oops no files to add";
     }
     return list;
 }
@@ -145,12 +153,12 @@ bool SvnCommitDialog::keepLocks() const
     return ui.keepLocksChk->isChecked();
 }
 
-void SvnCommitDialog::insertRow( const QString& state, const KUrl& url )
+void SvnCommitDialog::insertRow( const QString& state, const KUrl& url, Qt::CheckState checkstate )
 {
     QStringList strings;
     strings << "" << state << url.pathOrUrl();
     QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
-    item->setCheckState(0, Qt::Checked);
+    item->setCheckState(0, checkstate);
 }
 
 void SvnCommitDialog::ok()

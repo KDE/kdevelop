@@ -14,6 +14,8 @@
 #include "ui_commitdialog.h"
 
 #include <kdialog.h>
+#include <QtCore/QHash>
+#include <vcs/vcsstatusinfo.h>
 
 class KDevSvnPlugin;
 namespace KDevelop
@@ -45,10 +47,10 @@ private slots:
     void cancel();
 private:
 //     void insertRow( const KDevelop::VcsFileInfo &info );
-    void insertRow( const QString& state, const KUrl& url );
+    void insertRow( const QString& state, const KUrl& url, Qt::CheckState = Qt::Checked );
 
     KDevSvnPlugin *m_part;
-    KDevelop::IProject* m_project;
+    QHash<QString, KDevelop::VcsStatusInfo> statusInfos;
     Ui::SvnCommitDialog ui;
 };
 
