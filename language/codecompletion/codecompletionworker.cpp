@@ -68,11 +68,6 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     text = doc->text(range);
   }
 
-  if( text.isEmpty() ) {
-    kDebug(9007) << "no text for context";
-    return;
-  }
-
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
     text += '\n';
 
