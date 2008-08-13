@@ -43,7 +43,6 @@ private slots:
 
     void empty();
     void sunnyDay();
-    void runTwice();
     void multiSuite();
 
 private:

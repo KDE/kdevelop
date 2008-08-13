@@ -128,12 +128,6 @@ void CppUnitRunnerTest::sunnyDay()
 }
 
 // command
-void CppUnitRunnerTest::runTwice()
-{
-    KTODO;
-}
-
-// command
 void CppUnitRunnerTest::multiSuite()
 {
     initNrun("./multisuite");
