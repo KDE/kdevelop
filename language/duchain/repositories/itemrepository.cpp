@@ -152,7 +152,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   if(m_path == path && m_cleared == clear)
     return true;
   
-  QFileInfo wasWriting(m_path + "/is_writing");
+  QFileInfo wasWriting(path + "/is_writing");
   if(wasWriting.exists()) {
     clear = true;
   }
@@ -160,7 +160,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   m_path = path;
   m_cleared = clear;
   if(clear) {
-      kWarning() << "The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository" << m_path;
+      kWarning() << QString("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository").arg(m_path);
 //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
   }
   
