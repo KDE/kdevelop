@@ -77,6 +77,7 @@ ClassSkeleton UUTCreationTest::classFromImplementation(const QByteArray& text)
     QList<Declaration*> variables =
         m_factory->unresolvedVariablesFromText(text);
     m_document->m_text = QString(text);
+    if (!variables.count()) return ClassSkeleton();
     return m_constructor->morph(variables[0]);
 }
 
@@ -121,18 +122,10 @@ void UUTCreationTest::singleArgument()
 
 void UUTCreationTest::pointerUse()
 {
-    KTODO;
     ClassSkeleton cs = classFromImplementation(
-        "void fun() { Foo f; int i; f.foo(i); } ");
-
+        "void fun() { Foo *f; f->foo(); } ");
     assertNamed("Foo", cs);
-    KOMPARE_(1, cs.methods().count());
-
-    MethodSkeleton ms = cs.methods()[0];
-    assertNamed("foo", ms);
-    KOMPARE_("(int)", ms.arguments());
-    assertReturnsVoid(ms);
-    assertDefaultBody(ms);
+    assertSimpleFooMethod(cs);
 }
 
 void UUTCreationTest::multipleUses()
@@ -242,7 +235,7 @@ void UUTCreationTest::threeParameters()
 void UUTCreationTest::functionUseWithIdenticalName()
 {
     ClassSkeleton cs = classFromImplementation(
-        "void f() {} void fun() { Foo f; f.foo(); } ");
+        "void f() {} void fun() { Foo f; f.foo(); f(); } ");
     assertSimpleFooMethod(cs);
 }
 
@@ -288,8 +281,8 @@ void UUTCreationTest::noSemicolon()
 {
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; f.foo() } ");
-    KTODO;
-
+    assertNamed("Foo", cs);
+    KOMPARE_(0, cs.methods().count());
 }
 
 //////////////////// Custom assertions ///////////////////////////////////////
