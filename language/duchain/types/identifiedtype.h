@@ -144,6 +144,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT MergeIdentifiedType : public Parent, public Id
     virtual const IdentifiedTypeData* idData() const {
       return static_cast<const Data*>(this->d_func());
     }
+
+    virtual bool equals(const KDevelop::AbstractType* rhs) const
+    {
+      if (!Parent::equals(rhs))
+        return false;
+
+      const IdentifiedType* rhsId = dynamic_cast<const IdentifiedType*>(rhs);
+      Q_ASSERT(rhsId);
+
+      return IdentifiedType::equals(static_cast<const IdentifiedType*>(rhsId));
+    }
+
+  private:
+    MergeIdentifiedType(const MergeIdentifiedType& rhs);
 };
 
 }

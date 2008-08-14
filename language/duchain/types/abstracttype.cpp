@@ -103,6 +103,69 @@ IndexedType AbstractType::indexed() const {
   }
 }
 
+bool AbstractType::equals(const AbstractType* rhs) const
+{
+    //kDebug() << this << rhs << modifiers() << rhs->modifiers();
+    return d_func()->typeClassId == rhs->d_func()->typeClassId && modifiers() == rhs->modifiers();
+}
+
+uint AbstractType::hash() const
+{
+  // TODO include other items in the hash
+
+  uint hash = 0;
+
+  if (modifiers() & ShortModifier)
+    hash += 0x1;
+  if (modifiers() & LongModifier)
+    hash += 0x2;
+  if (modifiers() & LongLongModifier)
+    hash += 0x4;
+  if (modifiers() & SignedModifier)
+    hash += 0x8;
+  if (modifiers() & UnsignedModifier)
+    hash += 0x10;
+
+  return (modifiers() & ConstModifier ? 7 : 0) + (modifiers() & VolatileModifier ? 3 : 0) + 83 * hash;
+}
+
+QString AbstractType::toString() const
+{
+  return toString(false);
+}
+
+QString AbstractType::toString(bool spaceOnLeft) const
+{
+  // TODO complete
+  if(!spaceOnLeft) {
+    if(modifiers() & ConstModifier) {
+      if(modifiers() & VolatileModifier) {
+        return "const volatile ";
+      }else{
+        return "const ";
+      }
+    }else{
+      if(modifiers() & VolatileModifier)
+        return "volatile ";
+      else
+        return QString();
+    }
+  }else{
+    if(modifiers() & ConstModifier) {
+      if(modifiers() & VolatileModifier) {
+        return " const volatile";
+      }else{
+        return " const";
+      }
+    }else{
+      if(modifiers() & VolatileModifier)
+        return " volatile";
+      else
+        return QString();
+    }
+  }
+}
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

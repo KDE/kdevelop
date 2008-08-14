@@ -32,7 +32,7 @@ namespace KDevelop
 {
 
 AbstractTypeData::AbstractTypeData()
-  : m_modifiers(CommonModifiers::NoModifiers)
+  : m_modifiers(AbstractType::NoModifiers)
   , inRepository(false)
 {
   initializeAppendedLists(true);
@@ -57,7 +57,6 @@ AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs )
 {
   initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
   typeClassId = rhs.typeClassId;
-  m_modifiers = rhs.m_modifiers;
 }
 
 AbstractTypeData::~AbstractTypeData()
@@ -71,12 +70,12 @@ AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&) {
 }
 
 IntegralTypeData::IntegralTypeData()
-  : m_dataType(CommonIntegralTypes::TypeNone)
+  : m_dataType(IntegralType::TypeNone)
 {
 }
 
 IntegralTypeData::IntegralTypeData( const IntegralTypeData& rhs )
-  : AbstractTypeData(rhs), m_name( rhs.m_name ), m_dataType(CommonIntegralTypes::TypeNone)
+  : AbstractTypeData(rhs), m_dataType(rhs.m_dataType)
 {
 }
 
@@ -120,15 +119,20 @@ void FunctionTypeData::operator=(const FunctionTypeData& rhs)
 }
 
 StructureTypeData::StructureTypeData()
-  : m_classType(CommonClassTypes::Class)
+  : m_classType(StructureType::Class)
   , m_closed(false)
 {
 }
 
 StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
-  : AbstractTypeData( rhs )
+  : MergeIdentifiedType<AbstractType>::Data( rhs )
   , m_classType(rhs.m_classType)
   , m_closed(rhs.m_closed)
+{
+}
+
+ConstantIntegralTypeData::ConstantIntegralTypeData()
+  : m_value(0)
 {
 }
 
@@ -206,7 +210,6 @@ void SimpleTypeVisitor::endVisit (const ArrayType * type) {
 TypeVisitor::~TypeVisitor()
 {
 }
-
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

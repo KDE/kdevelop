@@ -25,7 +25,7 @@
 #include "itemrepository.h"
 
 #define DEBUG_TYPE_REPOSITORY
-//#define ASSERT_ON_PROBLEM
+#define ASSERT_ON_PROBLEM
 
 namespace KDevelop  {
 

@@ -25,6 +25,7 @@
 #include "../indexedstring.h"
 #include "indexedtype.h"
 #include "delayedtype.h"
+#include "identifiedtype.h"
 
 namespace KDevelop {
 
@@ -77,13 +78,13 @@ public:
 
   /// Returns the pure data size of this class(not including anything dynamic).
   uint classSize() const;
-  
+
   /// Returns the complete size of this item in memory, including derived class data and derived class appended list data
   unsigned short itemSize() const;
 
   /// Expensive
   unsigned int hash() const;
-  
+
 private:
   AbstractTypeData& operator=(const AbstractTypeData&);
 };
@@ -96,8 +97,6 @@ public:
   IntegralTypeData();
   /// Copy constructor. \param rhs data to copy
   IntegralTypeData( const IntegralTypeData& rhs );
-  /// Name of the integral type.
-  IndexedString m_name;
   /// Data type
   uint m_dataType;
 };
@@ -152,7 +151,7 @@ public:
 };
 
 /// Private data structure for StructureType
-class KDEVPLATFORMLANGUAGE_EXPORT StructureTypeData : public AbstractTypeData
+class KDEVPLATFORMLANGUAGE_EXPORT StructureTypeData : public MergeIdentifiedType<AbstractType>::Data
 {
 public:
   /// Constructor
@@ -191,6 +190,14 @@ public:
   IndexedTypeIdentifier m_identifier;
   /// Type of delay in resolving the type
   DelayedType::Kind m_kind;
+};
+
+/// Private data structure for ConstantIntegralType
+struct ConstantIntegralTypeData : public IntegralTypeData {
+  /// Constructor
+  ConstantIntegralTypeData();
+  /// Constant integer value
+  qint64 m_value;
 };
 
 }

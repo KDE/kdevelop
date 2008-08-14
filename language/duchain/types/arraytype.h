@@ -73,10 +73,6 @@ public:
    */
   void setElementType(AbstractType::Ptr type);
 
-  bool operator == (const ArrayType &other) const;
-
-  bool operator != (const ArrayType &other) const;
-
   virtual QString toString() const;
 
   virtual uint hash() const;

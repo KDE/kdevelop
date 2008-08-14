@@ -46,11 +46,6 @@ public:
   /// Destructor
   virtual ~PointerType();
 
-  /// Equivalence operator. \param other other pointer type to compare. \returns true if types are equal, otherwise false
-  bool operator != (const PointerType &other) const;
-  /// Not equal operator. \param other other pointer type to compare. \returns false if types are equal, otherwise false
-  bool operator == (const PointerType &other) const;
-
   /**
    * Sets the base type of the pointer, ie. what type of data the pointer points to.
    *

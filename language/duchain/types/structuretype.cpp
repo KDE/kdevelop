@@ -31,10 +31,14 @@ namespace KDevelop
 
 REGISTER_TYPE(StructureType);
 
-StructureType::StructureType(const StructureType& rhs) : AbstractType(copyData<StructureTypeData>(*rhs.d_func())) {
+StructureType::StructureType(const StructureType& rhs)
+  : StructureTypeBase(copyData<StructureTypeData>(*rhs.d_func()))
+{
 }
 
-StructureType::StructureType(StructureTypeData& data) : AbstractType(data) {
+StructureType::StructureType(StructureTypeData& data)
+  : StructureTypeBase(data)
+{
 }
 
 AbstractType* StructureType::clone() const {
@@ -43,23 +47,37 @@ AbstractType* StructureType::clone() const {
 
 bool StructureType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const StructureType*>(_rhs))
-    return false;
-//   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
-//
-//   TYPE_D(StructureType);
+  if( this == _rhs )
+    return true;
 
-  return true;
+  if (!StructureTypeBase::equals(_rhs))
+    return false;
+
+  Q_ASSERT(fastCast<const StructureType*>(_rhs));
+
+  const StructureType* rhs = static_cast<const StructureType*>(_rhs);
+
+  return d_func()->m_classType == rhs->d_func()->m_classType;
 }
 
 StructureType::StructureType()
-  : AbstractType(createData<StructureTypeData>())
+  : StructureTypeBase(createData<StructureTypeData>())
 {
   d_func_dynamic()->setTypeClassId<StructureType>();
 }
 
 StructureType::~StructureType()
 {
+}
+
+void StructureType::setClassType(uint type)
+{
+  d_func_dynamic()->m_classType = type;
+}
+
+uint StructureType::classType() const
+{
+  return d_func()->m_classType;
 }
 
 bool StructureType::isClosed() const
@@ -82,7 +100,29 @@ void StructureType::accept0 (TypeVisitor *v) const
 
 QString StructureType::toString() const
 {
-  return "<structure>";
+  QualifiedIdentifier id = qualifiedIdentifier();
+  if (!id.isEmpty()) {
+    return AbstractType::toString() + id.toString();
+  }
+
+  QString type;
+
+  switch (classType()) {
+    case Class:
+      type = "class";
+      break;
+    case Struct:
+      type = "struct";
+      break;
+    case Union:
+      type = "union";
+      break;
+    case Interface:
+      type = "interface";
+      break;
+  }
+
+  return QString("<%1>").arg(type) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType StructureType::whichType() const
@@ -92,9 +132,7 @@ AbstractType::WhichType StructureType::whichType() const
 
 uint StructureType::hash() const
 {
-  uint hash_value = 101;
-
-  return hash_value;
+  return 19 * (AbstractType::hash() + IdentifiedType::hash() + 101);
 }
 
 }

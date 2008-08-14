@@ -39,8 +39,13 @@ AbstractType* DelayedType::clone() const {
 
 bool DelayedType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const DelayedType*>(_rhs))
+  if( this == _rhs )
+    return true;
+
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const DelayedType*>(_rhs));
 
   const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);
 
@@ -96,7 +101,7 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 
 uint DelayedType::hash() const
 {
-  return 37*(d_func()->m_identifier.identifier().hash() + (uint)d_func()->m_kind);
+  return AbstractType::hash() + 37*(d_func()->m_identifier.identifier().hash() + (uint)d_func()->m_kind);
 }
 
 }

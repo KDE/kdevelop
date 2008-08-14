@@ -60,11 +60,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     IndexedDeclaration(uint topContext, uint declarationIndex);
     //Duchain must be read locked
     Declaration* declaration() const;
-    
+
     Declaration* data() const {
       return declaration();
     }
-    
+
     bool operator==(const IndexedDeclaration& rhs) const {
       return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
@@ -79,7 +79,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     bool operator<(const IndexedDeclaration& rhs) const {
       return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
     }
-    
+
     ///Index of the Declaration within the top context
     uint localIndex() const {
       return m_declarationIndex;
@@ -96,9 +96,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
     LocalIndexedDeclaration(Declaration* decl = 0);
     LocalIndexedDeclaration(uint declarationIndex);
     //Duchain must be read locked
-    
+
     Declaration* data(TopDUContext* top) const;
-    
+
     bool operator==(const LocalIndexedDeclaration& rhs) const {
       return m_declarationIndex == rhs.m_declarationIndex;
     }
@@ -113,7 +113,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
     bool operator<(const LocalIndexedDeclaration& rhs) const {
       return m_declarationIndex < rhs.m_declarationIndex;
     }
-    
+
     ///Index of the Declaration within the top context
     uint localIndex() const {
       return m_declarationIndex;
@@ -139,12 +139,6 @@ public:
     Protected /**< a protected declaration */,
     Private   /**< a private declaration */
   };
-  /// Const and volatile flags
-  enum CVSpec {
-    CVNone = 0     /**< no CV given */,
-    Const = 0x1    /**< a const declaration */,
-    Volatile = 0x2 /**< a volatile declaration */
-  };
   /// Enumeration of the types of declarations
   enum Kind {
     Type     /**< A type is declared, like a class-declaration or function-declaration, or a typedef("class MyClass {};") */,
@@ -152,8 +146,6 @@ public:
     NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */,
     Alias /**<This is an alias-declaration. You can safely cast this object to AliasDeclaration. */
   };
-
-  Q_DECLARE_FLAGS(CVSpecs, CVSpec)
 
   /**
    * Constructor.
@@ -488,9 +480,9 @@ private:
    * \note You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
     * */
    virtual Declaration* clonePrivate() const;
-  
+
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
-  
+
   friend class DUContext;
   friend class IndexedDeclaration;
   friend class LocalIndexedDeclaration;
@@ -501,8 +493,6 @@ private:
 };
 
 }
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Declaration::CVSpecs)
 
 #endif // DECLARATION_H
 

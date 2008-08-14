@@ -26,6 +26,8 @@
 #include "structuretype.h"
 #include "delayedtype.h"
 #include "arraytype.h"
+#include "enumerationtype.h"
+#include "enumeratortype.h"
 
 #endif
 

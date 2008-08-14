@@ -52,54 +52,74 @@ AbstractType* IntegralType::clone() const {
 
 bool IntegralType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const IntegralType*>(_rhs))
+  if( this == _rhs )
+    return true;
+
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const IntegralType*>(_rhs));
+
   const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
 
-  return rhs->d_func()->m_name == d_func()->m_name;
+  return d_func()->m_dataType == rhs->d_func()->m_dataType;
 }
 
-IntegralType::IntegralType(const IndexedString& name)
-  : AbstractType(*new IntegralTypeData)
-{
-  d_func_dynamic()->setTypeClassId<IntegralType>();
-
-  d_func_dynamic()->m_name = name;
-}
-
-IntegralType::IntegralType()
+IntegralType::IntegralType(uint type)
   : AbstractType(createData<IntegralTypeData>())
 {
   d_func_dynamic()->setTypeClassId<IntegralType>();
+  setDataType(type);
 }
 
 IntegralType::~IntegralType()
 {
 }
 
-const IndexedString& IntegralType::name() const
-{
-  return d_func()->m_name;
-}
-
-void IntegralType::setName(const IndexedString& name)
-{
-  d_func_dynamic()->m_name = name;
-}
-
-bool IntegralType::operator == (const IntegralType &other) const
-{
-  return d_func()->m_name == other.d_func()->m_name;
-}
-
-bool IntegralType::operator != (const IntegralType &other) const
-{
-  return d_func()->m_name != other.d_func()->m_name;
-}
-
 QString IntegralType::toString() const
 {
-  return d_func()->m_name.str();
+  TYPE_D(IntegralType);
+
+  QString name;
+
+  switch (d->m_dataType) {
+    case TypeChar:
+      name = "char";
+      break;
+    case TypeWchar_t:
+      name = "wchar_t";
+      break;
+    case TypeBoolean:
+      name = "bool";
+      break;
+    case TypeInt:
+      name = "int";
+      break;
+    case TypeFloat:
+      name = "float";
+      break;
+    case TypeDouble:
+      name = "double";
+      break;
+    case TypeVoid:
+      name = "void";
+      break;
+    default:
+      name = "<unknown>";
+      break;
+  }
+
+  if (modifiers() & UnsignedModifier)
+    name.prepend("unsigned ");
+  else if (modifiers() & SignedModifier)
+    name.prepend("signed ");
+
+  if (modifiers() & ShortModifier)
+    name.prepend("short ");
+  else if (modifiers() & LongModifier)
+    name.prepend("long ");
+
+  return AbstractType::toString() + name;
 }
 
 void IntegralType::accept0(TypeVisitor *v) const
@@ -114,7 +134,7 @@ AbstractType::WhichType IntegralType::whichType() const
 
 uint IntegralType::hash() const
 {
-  return qHash(d_func()->m_name) * 17;
+  return AbstractType::hash() + d_func()->m_dataType * 11;
 }
 
 }

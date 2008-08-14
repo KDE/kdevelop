@@ -36,10 +36,12 @@ void IdentifiedType::clear() {
 
 bool IdentifiedType::equals(const IdentifiedType* rhs) const
 {
+  bool ret = false;
   if( idData()->m_id == rhs->idData()->m_id )
-    return true;
-  else
-    return false;
+    ret = true;
+
+  //kDebug() << this << rhs << true;
+  return ret;
 }
 
 // QualifiedIdentifier IdentifiedType::identifier() const

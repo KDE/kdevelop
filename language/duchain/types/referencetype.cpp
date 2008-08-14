@@ -42,8 +42,14 @@ AbstractType* ReferenceType::clone() const {
 
 bool ReferenceType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const ReferenceType*>(_rhs))
+  if( this == _rhs )
+    return true;
+
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const ReferenceType*>(_rhs));
+
   const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
 
   return d_func()->m_baseType == rhs->d_func()->m_baseType;
@@ -69,16 +75,6 @@ void ReferenceType::setBaseType(AbstractType::Ptr type)
   d_func_dynamic()->m_baseType = type->indexed();
 }
 
-bool ReferenceType::operator == (const ReferenceType &other) const
-{
-  return d_func()->m_baseType == other.d_func()->m_baseType;
-}
-
-bool ReferenceType::operator != (const ReferenceType &other) const
-{
-  return d_func()->m_baseType != other.d_func()->m_baseType;
-}
-
 void ReferenceType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
@@ -94,7 +90,7 @@ void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 
 QString ReferenceType::toString() const
 {
-  return baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&");
+  return (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&")) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
@@ -104,7 +100,7 @@ AbstractType::WhichType ReferenceType::whichType() const
 
 uint ReferenceType::hash() const
 {
-  return (baseType() ? baseType()->hash() : 1) * 29;
+  return AbstractType::hash() + (baseType() ? baseType()->hash() : 1) * 29;
 }
 
 }

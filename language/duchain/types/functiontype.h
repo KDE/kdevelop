@@ -89,12 +89,6 @@ public:
    */
   void removeArgument(AbstractType::Ptr argument);
 
-  /// Equivalence operator. \param other other function type to compare. \returns true if types are equal, otherwise false
-  bool operator == (const FunctionType &other) const;
-
-  /// Not equal operator. \param other other function type to compare. \returns false if types are equal, otherwise false
-  bool operator != (const FunctionType &other) const;
-
   virtual AbstractType* clone() const;
 
   virtual bool equals(const AbstractType* rhs) const;

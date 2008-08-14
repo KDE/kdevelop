@@ -63,13 +63,13 @@ protected:
   TYPE_DECLARE_DATA(EnumeratorType);
 };
 
-/*template<>
+template<>
 inline EnumeratorType* fastCast<EnumeratorType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeEnumerator)
     return 0;
   else
     return static_cast<EnumeratorType*>(from);
-}*/
+}
 
 }
 

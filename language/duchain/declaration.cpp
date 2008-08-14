@@ -73,7 +73,7 @@ DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData
   m_anonymousInContext = rhs.m_anonymousInContext;
   m_internalContext = rhs.m_internalContext;
 }
-  
+
 Declaration::Kind Declaration::kind() const {
   DUCHAIN_D(Declaration);
   return d->m_kind;
@@ -101,7 +101,7 @@ Declaration::Declaration( const SimpleRange& range, DUContext* context )
   m_topContext = 0;
   m_context = 0;
   m_indexInTopContext = 0;
-  
+
   if(context)
     setContext(context);
 }
@@ -112,7 +112,7 @@ uint Declaration::ownIndex() const
   return m_indexInTopContext;
 }
 
-Declaration::Declaration(const Declaration& rhs) 
+Declaration::Declaration(const Declaration& rhs)
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
   m_topContext = 0;
@@ -225,11 +225,11 @@ Declaration* IndexedDeclaration::declaration() const {
   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)
     return 0;
-  
+
   TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
   if(!ctx)
     return 0;
-  
+
   return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }
 
@@ -294,7 +294,7 @@ Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext
 QualifiedIdentifier Declaration::qualifiedIdentifier() const
 {
   ENSURE_CAN_READ
-  
+
   QualifiedIdentifier ret;
   DUContext* ctx = m_context;
   if(ctx)
@@ -306,10 +306,10 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
 // QString Declaration::mangledIdentifier() const
 // {
 //   //GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
-// 
+//
 //   if (abstractType())
 //     return abstractType()->mangled();
-// 
+//
 //   // Error...
 //   return qualifiedIdentifier().mangled();
 // }
@@ -434,7 +434,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
     if( idType && idType->declaration(topContext) && idType->declaration(topContext) != this )
       return idType->declaration(topContext)->logicalInternalContext( topContext );
   }
-  
+
   return internalContext();
 }
 

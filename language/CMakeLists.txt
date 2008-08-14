@@ -60,6 +60,9 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/delayedtype.cpp
     duchain/types/arraytype.cpp
     duchain/types/indexedtype.cpp
+    duchain/types/enumerationtype.cpp
+    duchain/types/constantintegraltype.cpp
+    duchain/types/enumeratortype.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
@@ -176,6 +179,9 @@ install(FILES
     duchain/types/delayedtype.h
     duchain/types/arraytype.h
     duchain/types/indexedtype.h
+    duchain/types/enumerationtype.h
+    duchain/types/constantintegraltype.h
+    duchain/types/enumeratortype.h
     duchain/types/alltypes.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types
 )

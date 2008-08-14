@@ -28,12 +28,22 @@ class IntegralTypeData;
 class IndexedString;
 
 /**
-  * Enumeration of frequently used integral types.
-  * If your language has another integral type not listed here,
-  * you can create custom types staring from TypeLanguageSpecific.
-  */
-namespace CommonIntegralTypes {
-  enum {
+ * \short A type representing inbuilt data types.
+ *
+ * IntegralType is used to represent types which are native to a programming languge,
+ * such as (e.g.) int, float, double, char, bool etc.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
+{
+public:
+  typedef TypePtr<IntegralType> Ptr;
+
+  /**
+   * Enumeration of frequently used integral types.
+   * If your language has another integral type not listed here,
+   * you can create custom types staring from TypeLanguageSpecific.
+   */
+  enum CommonIntegralTypes {
     TypeVoid,
     TypeNone,
     TypeNull,
@@ -47,27 +57,14 @@ namespace CommonIntegralTypes {
     TypeFloat,
     TypeDouble,
     TypeWchar_t,
+    TypeString,
     TypeLanguageSpecific = 200
   };
-}
-
-/**
- * \short A type representing inbuilt data types.
- *
- * IntegralType is used to represent types which are native to a programming languge,
- * such as (e.g.) int, float, double, char, bool etc.
- */
-class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
-{
-public:
-  typedef TypePtr<IntegralType> Ptr;
 
   /// Default constructor
-  IntegralType();
+  IntegralType(uint type = TypeNone);
   /// Copy constructor. \param rhs type to copy
   IntegralType(const IntegralType& rhs);
-  /// Constructor for named integral types. \param name name of this type
-  IntegralType(const IndexedString& name);
   /// Constructor using raw data. \param data internal data.
   IntegralType(IntegralTypeData& data);
   /// Destructor
@@ -86,18 +83,6 @@ public:
    * \param modifiers modifiers of this type.
    */
   void setDataType(uint dataType);
-
-  /// Access the name of this type. \returns the type's name.
-  const IndexedString& name() const;
-
-  /// Set the name of this type.  \param name the type's name.
-  void setName(const IndexedString& name);
-
-  /// Equivalence operator. \param other other integral type to compare. \returns true if types are equal, otherwise false
-  bool operator == (const IntegralType &other) const;
-
-  /// Not equal operator. \param other other integral type to compare. \returns false if types are equal, otherwise false
-  bool operator != (const IntegralType &other) const;
 
   virtual QString toString() const;
 

@@ -52,20 +52,16 @@ AbstractType* EnumeratorType::clone() const
 
 bool EnumeratorType::equals(const AbstractType* _rhs) const
 {
-  const EnumeratorType* rhs = fastCast<const EnumeratorType*>(_rhs);
-  bool ret = false;
+  if( this == _rhs )
+    return true;
 
-  if( !rhs )
-    ret = false;
+  if (!EnumeratorTypeBase::equals(_rhs))
+    return false;
 
-  else if( this == rhs )
-    ret = true;
+  Q_ASSERT(fastCast<const EnumeratorType*>(_rhs));
 
-  else
-    ret = IdentifiedType::equals(rhs) && ConstantIntegralType::equals(rhs);
-
-  kDebug() << this << rhs << _rhs << ret << toString() << _rhs->toString();
-  return ret;
+  // Nothing Enumerator-type specific to compare
+  return true;
 }
 
 uint EnumeratorType::hash() const

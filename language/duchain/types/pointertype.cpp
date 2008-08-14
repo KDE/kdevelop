@@ -43,8 +43,14 @@ AbstractType* PointerType::clone() const {
 
 bool PointerType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const PointerType*>(_rhs))
+  if( this == _rhs )
+    return true;
+
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const PointerType*>(_rhs));
+
   const PointerType* rhs = static_cast<const PointerType*>(_rhs);
 
   return d_func()->m_baseType == rhs->d_func()->m_baseType;
@@ -82,19 +88,9 @@ void PointerType::setBaseType(AbstractType::Ptr type)
   d_func_dynamic()->m_baseType = type->indexed();
 }
 
-bool PointerType::operator == (const PointerType &other) const
-{
-  return d_func()->m_baseType == other.d_func()->m_baseType;
-}
-
-bool PointerType::operator != (const PointerType &other) const
-{
-  return d_func()->m_baseType != other.d_func()->m_baseType;
-}
-
 QString PointerType::toString() const
 {
-  return baseType() ? QString("%1*").arg(baseType()->toString()) : QString("<notype>*");
+  return (baseType() ? QString("%1*").arg(baseType()->toString()) : QString("<notype>*")) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType PointerType::whichType() const
@@ -104,7 +100,7 @@ AbstractType::WhichType PointerType::whichType() const
 
 uint PointerType::hash() const
 {
-  return (baseType() ? baseType()->hash() : 0) * 13;
+  return AbstractType::hash() + (baseType() ? baseType()->hash() : 0) * 13;
 }
 
 }

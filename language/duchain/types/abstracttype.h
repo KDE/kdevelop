@@ -41,42 +41,6 @@ class TypeExchanger;
 #define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
 /**
- * An enumeration of common modifiers for data types.
- * If you have any language-specific modifiers that don't belong here,
- * you can add them at/after LanguageSpecificModifier
- * @warning Think twice what information you store into the type-system.
- *          The type-system should store information that is shared among many declarations,
- *          and attributes of specific Declarations like public/private should be stored in
- *          the Declarations themselves, not in the type-system.
- */
-namespace CommonModifiers {
-  enum {
-    NoModifiers                 = 0,
-    ConstModifier               = 1 << 0,
-    VolatileModifier            = 1 << 1,
-    TransientModifier           = 1 << 2,
-    FinalModifier               = 1 << 3,
-    AbstractModifier            = 1 << 4,
-    NativeModifier              = 1 << 5,
-    SynchronizedModifier        = 1 << 6,
-    StrictFPModifier            = 1 << 7,
-    NewModifier                 = 1 << 8,
-    SealedModifier              = 1 << 9,
-    StaticModifier              = 1 << 10,
-    ReadonlyModifier            = 1 << 11,
-    OverrideModifier            = 1 << 12,
-    UnsafeModifier              = 1 << 13,
-    FixedModifier               = 1 << 14,
-    ShortModifier               = 1 << 15,
-    LongModifier                = 1 << 16,
-    LongLongModifier            = 1 << 17,
-    SignedModifier              = 1 << 18,
-    UnsignedModifier            = 1 << 19,
-    LanguageSpecificModifier    = 1 << 20 //TODO make this support 64 bit values
-  };
-}
-
-/**
  * \brief Base class for all types.
  *
  * The AbstractType class is a base class from which all types derive.  It features:
@@ -112,6 +76,40 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
 {
 public:
   typedef TypePtr<AbstractType> Ptr;
+
+  /**
+   * An enumeration of common modifiers for data types.
+   * If you have any language-specific modifiers that don't belong here,
+   * you can add them at/after LanguageSpecificModifier
+   * @warning Think twice what information you store into the type-system.
+   *          The type-system should store information that is shared among many declarations,
+   *          and attributes of specific Declarations like public/private should be stored in
+   *          the Declarations themselves, not in the type-system.
+   */
+  enum CommonModifiers {
+    NoModifiers                 = 0,
+    ConstModifier               = 1 << 0,
+    VolatileModifier            = 1 << 1,
+    TransientModifier           = 1 << 2,
+    FinalModifier               = 1 << 3,
+    AbstractModifier            = 1 << 4,
+    NativeModifier              = 1 << 5,
+    SynchronizedModifier        = 1 << 6,
+    StrictFPModifier            = 1 << 7,
+    NewModifier                 = 1 << 8,
+    SealedModifier              = 1 << 9,
+    StaticModifier              = 1 << 10,
+    ReadonlyModifier            = 1 << 11,
+    OverrideModifier            = 1 << 12,
+    UnsafeModifier              = 1 << 13,
+    FixedModifier               = 1 << 14,
+    ShortModifier               = 1 << 15,
+    LongModifier                = 1 << 16,
+    LongLongModifier            = 1 << 17,
+    SignedModifier              = 1 << 18,
+    UnsignedModifier            = 1 << 19,
+    LanguageSpecificModifier    = 1 << 20 //TODO make this support 64 bit values
+  };
 
   /// Constructor.
   AbstractType();
@@ -154,7 +152,7 @@ public:
    *
    * \return this type as a string
    */
-  virtual QString toString() const = 0;
+  virtual QString toString() const;
 
   ///Must always be called before anything in the data pointer is changed!
   ///If it's not called beforehand, the type-repository gets corrupted
@@ -162,7 +160,7 @@ public:
 
   ///Should return whether this type's content equals the given one
   ///Since this is used by the type-repository, it must compare ALL members of the data type.
-  virtual bool equals(const AbstractType* rhs) const = 0;
+  virtual bool equals(const AbstractType* rhs) const;
 
   /**
    * Should create a clone of the source-type, with as much data copied as possible without breaking the du-chain.
@@ -174,7 +172,7 @@ public:
    * - When two types match on equals(), it should be same.
    * - When two types don't match on equals(), it should be different with a high probability.
    * */
-  virtual uint hash() const = 0;
+  virtual uint hash() const;
 
   ///This can also be called on zero types, those can then be reconstructed from the zero index
   IndexedType indexed() const;
@@ -188,7 +186,9 @@ public:
     TypeFunction  /**< a function */,
     TypeStructure /**< a structure */,
     TypeArray     /**< an array */,
-    TypeDelayed   /**< a delayed type */
+    TypeDelayed   /**< a delayed type */,
+    TypeEnumeration /**< an enumeration type */,
+    TypeEnumerator /**< an enumerator type */
   };
 
   /**
@@ -247,6 +247,10 @@ protected:
    * \param v visitor which is visiting.
    */
   virtual void accept0 (TypeVisitor *v) const = 0;
+
+  /// toString() function which can provide \a spaceOnLeft rather than on right if desired.
+  QString toString(bool spaceOnLeft) const;
+
   AbstractTypeData* d_ptr;
 
   TYPE_DECLARE_DATA(AbstractType)

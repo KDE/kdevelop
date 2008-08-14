@@ -57,27 +57,22 @@ AbstractType* ConstantIntegralType::clone() const
 
 bool ConstantIntegralType::equals(const AbstractType* _rhs) const
 {
-  const ConstantIntegralType* rhs = fastCast<const ConstantIntegralType*>(_rhs);
+  if( this == _rhs )
+    return true;
 
-  bool ret = false;
+  if (!IntegralType::equals(_rhs))
+    return false;
 
-  if( !rhs )
-    ret = false;
+  Q_ASSERT(fastCast<const ConstantIntegralType*>(_rhs));
 
-  else if( this == rhs )
-    ret = true;
+  const ConstantIntegralType* rhs = static_cast<const ConstantIntegralType*>(_rhs);
 
-  else
-    ret = d_func()->m_value == rhs->d_func()->m_value && IntegralType::equals(rhs);
-
-  kDebug() << this << rhs << _rhs << d_func()->m_value << (rhs ? rhs->d_func()->m_value : -1) << ret;
-
-  return ret;
+  return d_func()->m_value == rhs->d_func()->m_value;
 }
 
 QString ConstantIntegralType::toString() const
 {
-  QString ret = "enum ";
+  QString ret;
 
   switch(dataType()) {
     case TypeNone:

@@ -104,13 +104,13 @@ private:
   void setValueInternal(ValueType value);
 };
 
-/*template<>
+template<>
 inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from) {
   if(!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
     return 0;
   else
     return dynamic_cast<ConstantIntegralType*>(from);
-}*/
+}
 
 }
 

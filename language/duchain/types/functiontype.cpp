@@ -45,8 +45,14 @@ AbstractType* FunctionType::clone() const {
 
 bool FunctionType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const FunctionType*>(_rhs))
+  if( this == _rhs )
+    return true;
+
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const FunctionType*>(_rhs));
+
   const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
 
   TYPE_D(FunctionType);
@@ -117,18 +123,6 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
   return ret;
 }
 
-bool FunctionType::operator == (const FunctionType &other) const
-{
-  TYPE_D(FunctionType);
-  return d->m_returnType == other.d_func()->m_returnType && d->listsEqual(*other.d_func());
-}
-
-bool FunctionType::operator != (const FunctionType &other) const
-{
-  TYPE_D(FunctionType);
-  return d->m_returnType != other.d_func()->m_returnType || !d->listsEqual(*other.d_func());
-}
-
 void FunctionType::accept0 (TypeVisitor *v) const
 {
   TYPE_D(FunctionType);
@@ -146,7 +140,7 @@ void FunctionType::accept0 (TypeVisitor *v) const
 void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(FunctionType);
-  for (unsigned int i = 0; i < d->m_argumentsSize (); ++i)
+  for (uint i = 0; i < d->m_argumentsSize (); ++i)
     d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].type() )->indexed();
   d->m_returnType = exchanger->exchange(d->m_returnType.type())->indexed();
 }
@@ -180,7 +174,7 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
 
 QString FunctionType::toString() const
 {
-  return partToString(SignatureWhole);
+  return partToString(SignatureWhole) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType FunctionType::whichType() const
@@ -190,7 +184,7 @@ AbstractType::WhichType FunctionType::whichType() const
 
 uint FunctionType::hash() const
 {
-  uint hash_value = 0;
+  uint hash_value = AbstractType::hash();
   if(returnType())
     hash_value += returnType()->hash();
 

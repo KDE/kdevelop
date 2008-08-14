@@ -21,19 +21,14 @@
 #define STRUCTURETYPE_H
 
 #include "abstracttype.h"
+#include "identifiedtype.h"
+#include "typesystemdata.h"
 
 namespace KDevelop
 {
 class StructureTypeData;
 
-namespace CommonClassTypes {
-  enum {
-    Class,
-    Struct,
-    Union,
-    Interface
-  };
-}
+typedef MergeIdentifiedType<AbstractType> StructureTypeBase;
 
 /**
  * \short A type representing structure types.
@@ -41,10 +36,17 @@ namespace CommonClassTypes {
  * StructureType represents all structures, including classes,
  * interfaces, etc.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public StructureTypeBase
 {
 public:
   typedef TypePtr<StructureType> Ptr;
+
+  enum ClassTypes {
+    Class,
+    Struct,
+    Union,
+    Interface
+  };
 
   /// Default constructor
   StructureType();
@@ -57,6 +59,11 @@ public:
 
   bool isClosed() const;
   void close();
+  //After clearing, a class-type is open again.
+  //void clear();
+
+  void setClassType(uint type);
+  uint classType() const;
 
   virtual AbstractType* clone() const;
 
@@ -67,6 +74,8 @@ public:
   virtual uint hash() const;
 
   virtual WhichType whichType() const;
+
+  //virtual void exchangeTypes(KDevelop::TypeExchanger*);
 
   enum {
     Identity = 6

@@ -60,12 +60,6 @@ public:
    */
   void setBaseType(AbstractType::Ptr baseType);
 
-  /// Equivalence operator. \param other other reference type to compare. \returns true if types are equal, otherwise false
-  bool operator == (const ReferenceType &other) const;
-
-  /// Not equal operator. \param other other reference type to compare. \returns false if types are equal, otherwise false
-  bool operator != (const ReferenceType &other) const;
-
   virtual QString toString() const;
 
   virtual uint hash() const;

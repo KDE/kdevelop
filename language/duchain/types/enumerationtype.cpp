@@ -45,20 +45,16 @@ AbstractType* EnumerationType::clone() const {
 
 bool EnumerationType::equals(const AbstractType* _rhs) const
 {
-  const EnumerationType* rhs = fastCast<const EnumerationType*>(_rhs);
-  bool ret = false;
-  if( !rhs )
-    ret = false;
+  if( this == _rhs )
+    return true;
 
-  else if( this == rhs )
-    ret = true;
+  if (!EnumerationTypeBase::equals(_rhs))
+    return false;
 
-  else
-    ret = IdentifiedType::equals(rhs) && IntegralType::equals(rhs);
+  Q_ASSERT(fastCast<const EnumerationType*>(_rhs));
 
-  kDebug() << this << rhs << _rhs << ret << toString() << _rhs->toString();
-
-  return ret;
+  // Nothing enumeration type-specific to compare
+  return true;
 }
 
 EnumerationType::EnumerationType()

@@ -24,6 +24,7 @@
 #include "../forwarddeclaration.h"
 #include "../types/identifiedtype.h"
 #include "../functiondeclaration.h"
+#include "../../editor/editorintegrator.h"
 
 namespace KDevelop
 {
@@ -231,10 +232,10 @@ protected:
     m_declarationStack.pop();
   }
 
-  /// Abort a declaration. \todo how does this differ to closeDeclaration()
+  /// Abort a declaration, deleting it.
   void abortDeclaration()
   {
-    m_declarationStack.pop();
+    delete m_declarationStack.pop();
   }
 
 private:

@@ -43,9 +43,13 @@ AbstractType* ArrayType::clone() const {
 
 bool ArrayType::equals(const AbstractType* _rhs) const
 {
-  if( !fastCast<const ArrayType*>(_rhs))
+  if (!AbstractType::equals(_rhs))
     return false;
+
+  Q_ASSERT(fastCast<const ArrayType*>(_rhs));
+
   const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
+
   TYPE_D(ArrayType);
   if( d->m_dimension != rhs->d_func()->m_dimension )
     return false;
@@ -85,18 +89,6 @@ void ArrayType::setElementType(AbstractType::Ptr type)
   d_func_dynamic()->m_elementType = type->indexed();
 }
 
-bool ArrayType::operator == (const ArrayType &other) const
-{
-  TYPE_D(ArrayType);
-  return d->m_elementType == other.d_func()->m_elementType && d->m_dimension == other.d_func()->m_dimension;
-}
-
-bool ArrayType::operator != (const ArrayType &other) const
-{
-  TYPE_D(ArrayType);
-  return d->m_elementType != other.d_func()->m_elementType || d->m_dimension != other.d_func()->m_dimension;
-}
-
 QString ArrayType::toString() const
 {
   return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(d_func()->m_dimension);
@@ -125,7 +117,7 @@ AbstractType::WhichType ArrayType::whichType() const
 
 uint ArrayType::hash() const
 {
-  return (elementType() ? elementType()->hash() : 0) * 47 + 117* dimension();
+  return AbstractType::hash() + (elementType() ? elementType()->hash() : 0) * 47 + 117* dimension();
 }
 
 }
