@@ -49,16 +49,16 @@ public:
   ClassDeclarationData() {
     initializeAppendedLists();
   }
-  
+
   ~ClassDeclarationData() {
     freeAppendedLists();
   }
-  
+
   ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::DeclarationData(rhs) {
     initializeAppendedLists();
     copyListsFrom(rhs);
   }
-  
+
   START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::DeclarationData);
   APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
   END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
@@ -88,13 +88,13 @@ public:
    * @param baseConversionLevels If nonzero, this will count the distance of the classes.
    * */
   bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
-  
+
   QString toString() const;
 
   enum {
     Identity = 17
   };
-  
+
 private:
   virtual KDevelop::Declaration* clonePrivate() const;
   DUCHAIN_DECLARE_DATA(ClassDeclaration)

@@ -32,9 +32,9 @@ namespace KDevelop  {
 ///The here defined class is about finding best viable functions as defined in iso c++ draft 13.3.3
 
 namespace Cpp {
-  
+
   class TemplateDeclaration;
-  
+
   using namespace KDevelop;
 
   class KDEVCPPDUCHAIN_EXPORT ViableFunction {
@@ -79,12 +79,12 @@ namespace Cpp {
 
     ///Returns a list of structures that describe the conversion needed for each parameter of the function
     const QList<ParameterConversion>& parameterConversions() const;
-    
+
     private:
     QList<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     KDevelop::TopDUContextPointer m_topContext;
-    TypePtr<CppFunctionType> m_type;
+    TypePtr<KDevelop::FunctionType> m_type;
     KDevelop::AbstractFunctionDeclaration* m_funDecl;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
   };

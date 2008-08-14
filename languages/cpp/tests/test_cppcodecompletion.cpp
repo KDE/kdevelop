@@ -126,7 +126,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
-  typeInt = AbstractType::Ptr(new CppIntegralType(TypeInt));
+  typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
 
   addInclude( "testFile1.h", testFile1 );
   addInclude( "testFile2.h", testFile2 );
@@ -263,7 +263,7 @@ void TestCppCodeCompletion::testTypeConversion() {
   QVERIFY(n);
 
   {
-    CppFunctionType::Ptr test = findDeclaration( testContext, QualifiedIdentifier("test") )->type<CppFunctionType>();
+    FunctionType::Ptr test = findDeclaration( testContext, QualifiedIdentifier("test") )->type<FunctionType>();
     QVERIFY(test);
 
     Cpp::TypeConversion conv(context->topContext());
@@ -594,7 +594,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 
 void TestCppCodeCompletion::release(DUContext* top)
 {
-  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+  //EditorIntegrator::releaseTopRange(top->textRangePtr());
   if(dynamic_cast<TopDUContext*>(top))
     DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
   //delete top;

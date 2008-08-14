@@ -301,10 +301,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     //If it is a function, match the const qualifier
     for( QList<DeclarationPointer>::const_iterator it = m_lastDeclarations.begin(); it != m_lastDeclarations.end(); ++it ) {
       AbstractType::Ptr t = (*it)->abstractType();
-      CppCVType* functionCVType = dynamic_cast<CppCVType*>( t.unsafeData() );
-      if( functionCVType ) {
-        if( functionCVType->isConstant() == isConst ) {
-          m_lastType = (*it)->abstractType();
+      if( t ) {
+        if( (t->modifiers() & AbstractType::ConstModifier) == isConst ) {
+          m_lastType = t;
           m_lastInstance.declaration = *it;
           break;
         }
@@ -400,10 +399,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     clearLast();
 
-    CppPointerType* pnt = dynamic_cast<CppPointerType*>( base.unsafeData() );
+    PointerType* pnt = dynamic_cast<PointerType*>( base.unsafeData() );
     if( pnt ) {
       if( constant )
-        (*constant) |= pnt->isConstant();
+        (*constant) |= (pnt->modifiers() & AbstractType::ConstModifier);
       m_lastType = pnt->baseType();
       m_lastInstance = Instance(getDeclaration(node, m_lastType));
       return true;
@@ -488,9 +487,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if( identifier == trueIdentifier || identifier == falseIdentifier ) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
-      m_lastType = AbstractType::Ptr(new CppConstantIntegralType(TypeBool, ModifierNone));
+      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
       m_lastInstance = Instance( true );
-      static_cast<CppConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( identifier == trueIdentifier );
+      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( identifier == trueIdentifier );
     } else {
       LOCKDUCHAIN;
 
@@ -557,18 +556,18 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
 
           if( num.endsWith('f') ) {
-            m_lastType = AbstractType::Ptr(new CppConstantIntegralType(TypeFloat, ModifierNone));
-            static_cast<CppConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
+            m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeFloat));
+            static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
           } else {
-            m_lastType = AbstractType::Ptr(new CppConstantIntegralType(TypeDouble, ModifierNone));
-            static_cast<CppConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
+            m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeDouble));
+            static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
           }
         } else {
           qint64 val;
-          TypeModifiers mod = ModifierNone;
+          uint mod = AbstractType::NoModifiers;
 
           if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
-            mod = ModifierUnsigned;
+            mod = AbstractType::UnsignedModifier;
 
           bool ok = false;
           while( !num.isEmpty() && !ok ) {
@@ -576,12 +575,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
             num.truncate(num.length()-1);
           }
 
-          m_lastType = AbstractType::Ptr(new CppConstantIntegralType(TypeInt, mod));
+          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
+          m_lastType->setModifiers(mod);
 
-          if( mod & ModifierUnsigned )
-            static_cast<CppConstantIntegralType*>(m_lastType.unsafeData())->setValue<quint64>(val);
+          if( mod & AbstractType::UnsignedModifier )
+            ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<quint64>(val);
           else
-            static_cast<CppConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>(val);
+            ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<qint64>(val);
         }
         m_lastInstance = Instance(true);
 
@@ -633,10 +633,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       }
 
       ///Step 3: Create a pointer-type for the "this" type and return it
-      CppFunctionType::Ptr cppFunction = functionDeclaration->abstractType().cast<CppFunctionType>();
+      KDevelop::FunctionType::Ptr cppFunction = functionDeclaration->abstractType().cast<KDevelop::FunctionType>();
 
       if( cppFunction ) {
-        CppPointerType::Ptr thisPointer( new CppPointerType( cppFunction->cv() ) );
+        PointerType::Ptr thisPointer( new PointerType() );
+        thisPointer->setModifiers(cppFunction->modifiers() & (AbstractType::ConstModifier | AbstractType::VolatileModifier));
         thisPointer->setBaseType( thisType );
 
         m_lastType = thisPointer.cast<AbstractType>();
@@ -732,16 +733,16 @@ struct ConstantUnaryExpressionEvaluator {
 
   Type endValue;
 
-  IntegralTypes type;
-  TypeModifiers modifier;
+  uint type;
+  uint modifier;
 
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantUnaryExpressionEvaluator( int tokenKind, CppConstantIntegralType* left ) {
+  ConstantUnaryExpressionEvaluator( int tokenKind, ConstantIntegralType* left ) {
     endValue = 0;
-    type = left->integralType();
-    modifier = left->typeModifiers();
+    type = left->dataType();
+    modifier = left->modifiers();
     evaluateSpecialTokens( tokenKind, left );
     switch( tokenKind ) {
       case '+':
@@ -758,7 +759,7 @@ struct ConstantUnaryExpressionEvaluator {
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ) {
+  void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
     switch( tokenKind ) {
       case '~':
         endValue = ~left->value<Type>();
@@ -770,18 +771,19 @@ struct ConstantUnaryExpressionEvaluator {
   }
 
   AbstractType::Ptr createType() {
-    AbstractType::Ptr ret = AbstractType::Ptr(new CppConstantIntegralType(type, modifier));
-    static_cast<CppConstantIntegralType*>(ret.unsafeData())->setValue<Type>( endValue );
+    AbstractType::Ptr ret = AbstractType::Ptr(new ConstantIntegralType(type));
+    ret->setModifiers(modifier);
+    static_cast<ConstantIntegralType*>(ret.unsafeData())->setValue<Type>( endValue );
     return ret;
   }
 };
 
 template<>
-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ){
+void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ){
 }
 
 template<>
-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, CppConstantIntegralType* left ){
+void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ){
 }
 
 void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
@@ -908,7 +910,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
         if( !functions.isEmpty() )
         {
-          CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+          KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
           if( functions.first().function.isViable() && function ) {
             success = true;
             m_lastType = function->returnType();
@@ -992,8 +994,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     clearLast();
 
     if (node->integrals) {
-      IntegralTypes type = TypeNone;
-      TypeModifiers modifiers = ModifierNone;
+      uint type = IntegralType::TypeNone;
+      uint modifiers = AbstractType::NoModifiers;
 
       const ListNode<std::size_t> *it = node->integrals->toFront();
       const ListNode<std::size_t> *end = it;
@@ -1001,52 +1003,53 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         int kind = m_session->token_stream->kind(it->element);
         switch (kind) {
           case Token_char:
-            type = TypeChar;
+            type = IntegralType::TypeChar;
             break;
           case Token_wchar_t:
-            type = TypeWchar_t;
+            type = IntegralType::TypeWchar_t;
             break;
           case Token_bool:
-            type = TypeBool;
+            type = IntegralType::TypeBoolean;
             break;
           case Token_short:
-            modifiers |= ModifierShort;
+            modifiers |= AbstractType::ShortModifier;
             break;
           case Token_int:
-            type = TypeInt;
+            type = IntegralType::TypeInt;
             break;
           case Token_long:
-            if (modifiers & ModifierLong)
-              modifiers |= ModifierLongLong;
+            if (modifiers & AbstractType::LongModifier)
+              modifiers |= AbstractType::LongLongModifier;
             else
-              modifiers |= ModifierLong;
+              modifiers |= AbstractType::LongModifier;
             break;
           case Token_signed:
-            modifiers |= ModifierSigned;
+            modifiers |= AbstractType::SignedModifier;
             break;
           case Token_unsigned:
-            modifiers |= ModifierUnsigned;
+            modifiers |= AbstractType::UnsignedModifier;
             break;
           case Token_float:
-            type = TypeFloat;
+            type = IntegralType::TypeFloat;
             break;
           case Token_double:
-            type = TypeDouble;
+            type = IntegralType::TypeDouble;
             break;
           case Token_void:
-            type = TypeVoid;
+            type = IntegralType::TypeVoid;
             break;
         }
 
         it = it->next;
       } while (it != end);
 
-      if(type == TypeNone)
-        type = TypeInt; //Happens, example: "unsigned short"
+      if(type == IntegralType::TypeNone)
+        type = IntegralType::TypeInt; //Happens, example: "unsigned short"
 
-      CppIntegralType::Ptr integral ( new CppIntegralType(type, modifiers/*, parseConstVolatile(node->cv)*/) );
+      KDevelop::IntegralType::Ptr integral ( new KDevelop::IntegralType(type) );
+      integral->setModifiers(modifiers);
       if (integral)
-        m_lastType = AbstractType::Ptr(integral.unsafeData());
+        m_lastType = AbstractType::Ptr::staticCast(integral);
     } else {
       visitTypeSpecifier(node);
     }
@@ -1145,7 +1148,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     LOCKDUCHAIN;
     ///@todo cv-qualifiers
-    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
+    PointerType::Ptr p( new PointerType() );
     p->setBaseType( m_lastType );
 
     m_lastType = p.cast<AbstractType>();
@@ -1200,7 +1203,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     {
       LOCKDUCHAIN;
       ///@todo cv-qualifiers
-      CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::CVNone) );
+      PointerType::Ptr p( new PointerType() );
       p->setBaseType( m_lastType );
 
       m_lastType = p.cast<AbstractType>();
@@ -1256,7 +1259,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     {
       LOCKDUCHAIN;
-      if( CppConstantIntegralType* condition = dynamic_cast<CppConstantIntegralType*>( conditionType.unsafeData() ) ) {
+      if( ConstantIntegralType* condition = dynamic_cast<ConstantIntegralType*>( conditionType.unsafeData() ) ) {
         ///For constant integral types, the condition could be evaluated, so we choose the correct result.
         if( condition->value<quint64>() == 0 ) {
           ///The right expression is the correct one, so do nothing
@@ -1305,7 +1308,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   }
 
   bool ExpressionVisitor::dereferenceLastPointer(AST* node) {
-    if( CppPointerType::Ptr pt = realLastType().cast<CppPointerType>() )
+    if( PointerType::Ptr pt = realLastType().cast<PointerType>() )
     { ///@todo what about const in pointer?
       //Dereference
       m_lastType = pt->baseType();
@@ -1370,7 +1373,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     {
       bool constant = false;
       AbstractType::Ptr oldType = realLastType(&constant); ///Dereference references
-      CppPointerType::Ptr newPointer(new CppPointerType( constant ? Declaration::Const : Declaration::CVNone ));
+      PointerType::Ptr newPointer(new PointerType());
+      if (constant)
+        newPointer->setModifiers(AbstractType::ConstModifier);
       newPointer->setBaseType( oldType );
       m_lastType = newPointer.cast<AbstractType>();
       //m_lastInstance will be left alone as it was before. A pointer is not identified, and has no declaration.
@@ -1378,29 +1383,29 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     break;
     default:
     {
-      CppIntegralType* integral = dynamic_cast<CppIntegralType*>(m_lastType.unsafeData());
+      KDevelop::IntegralType* integral = dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData());
       if( integral ) {
         //The type of integral types does not change on unary operators
         //Eventually evaluate the value of constant integral types
-        CppConstantIntegralType* constantIntegral = dynamic_cast<CppConstantIntegralType*>(integral);
+        ConstantIntegralType* constantIntegral = dynamic_cast<ConstantIntegralType*>(integral);
 
         if( constantIntegral ) {
 
-          switch( constantIntegral->integralType() ) {
-            case TypeFloat:
+          switch( constantIntegral->dataType() ) {
+            case IntegralType::TypeFloat:
             {
               ConstantUnaryExpressionEvaluator<float> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
               m_lastType = evaluator.createType();
               break;
             }
-            case TypeDouble:
+            case IntegralType::TypeDouble:
             {
               ConstantUnaryExpressionEvaluator<double> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
               m_lastType = evaluator.createType();
               break;
             }
             default:
-              if( constantIntegral->typeModifiers() & ModifierUnsigned ) {
+              if( constantIntegral->modifiers() & AbstractType::UnsignedModifier ) {
                 ConstantUnaryExpressionEvaluator<quint64> evaluator( tokenFromIndex(node->op).kind, constantIntegral );
                 m_lastType = evaluator.createType();
               } else {
@@ -1426,7 +1431,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
           if( !functions.isEmpty() )
           {
-            CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+            KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
             if( functions.first().function.isViable() && function ) {
               m_lastType = function->returnType();
               m_lastInstance = Instance(true);
@@ -1457,7 +1462,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( !m_lastType )
       return;
 
-    CppFunctionType* f = dynamic_cast<CppFunctionType*>( m_lastType.unsafeData() );
+    KDevelop::FunctionType* f = dynamic_cast<KDevelop::FunctionType*>( m_lastType.unsafeData() );
     if( !f ) {
       LOCKDUCHAIN;
       problem(node, QString("cannot get return-type of type %1, it is not a function-type").arg(m_lastType->toString()));
@@ -1593,7 +1598,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = AbstractType::Ptr(constructedType.unsafeData());
       m_lastInstance = Instance(constructedType->declaration(topContext()));
     } else {
-      CppFunctionType::Ptr functionType = chosenFunction->abstractType().cast<CppFunctionType>();
+      KDevelop::FunctionType::Ptr functionType = chosenFunction->abstractType().cast<KDevelop::FunctionType>();
       if( !chosenFunction || !functionType ) {
         problem( node, QString( "could not find a matching function for function-call" ) );
       } else {
@@ -1659,7 +1664,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( !functions.isEmpty() )
     {
-      CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+      KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
 
       if( function ) {
         m_lastType = function->returnType();
@@ -1685,14 +1690,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(node->type_id);
     visit(node->expression);
     LOCKDUCHAIN;
-    m_lastType = AbstractType::Ptr( new CppIntegralType(TypeInt, ModifierNone) );
+    m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeInt) );
     m_lastInstance = Instance(true);
   }
 
   void ExpressionVisitor::visitCondition(ConditionAST* node)  {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    m_lastType = AbstractType::Ptr( new CppIntegralType(TypeBool, ModifierNone) );
+    m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeBoolean) );
     m_lastInstance = Instance(true);
   }
 
@@ -1705,8 +1710,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    CppPointerType::Ptr p( new CppPointerType( KDevelop::Declaration::Const) );
-    p->setBaseType( AbstractType::Ptr( new CppIntegralType(TypeChar, ModifierNone)) );
+    PointerType::Ptr p( new PointerType() );
+    p->setModifiers(AbstractType::ConstModifier);
+    p->setBaseType( AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeChar)) );
 
     m_lastType = p.cast<AbstractType>();
     m_lastInstance = Instance(true);
@@ -1719,7 +1725,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///post-fix increment/decrement like "i++" or "i--"
     ///This does neither change the evaluated value, nor the type(except for overloaded operators)
 
-    if( dynamic_cast<CppIntegralType*>(m_lastType.unsafeData()) ) {
+    if( dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData()) ) {
       ///Leave the type and its value alone
     } else {
       ///It is not an integral type, try finding an overloaded operator and use the return-value
@@ -1732,14 +1738,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
 
         //Overloaded postfix operators have one additional int parameter
-        static AbstractType::Ptr integer = AbstractType::Ptr(new CppConstantIntegralType(TypeInt, ModifierNone));
+        static AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
         helper.setKnownParameters( OverloadResolver::Parameter( integer, false ) );
 
         QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
         if( !functions.isEmpty() )
         {
-          CppFunctionType::Ptr function = functions.first().function.declaration()->type<CppFunctionType>();
+          KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
           if( functions.first().function.isViable() && function ) {
             m_lastType = function->returnType();
             m_lastInstance = Instance(true);

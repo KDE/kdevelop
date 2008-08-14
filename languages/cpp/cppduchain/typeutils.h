@@ -24,10 +24,6 @@
 #include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
-class CppIntegralType;
-class CppClassType;
-class CppFunctionType;
-
 namespace KDevelop {
   class DUContext;
   class Declaration;
@@ -87,13 +83,13 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT bool isNullType( const AbstractType::Ptr& t );
 
   ///Integer-conversion-rank as described in iso c++ 4.13
-  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( const CppIntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT int integerConversionRank( const KDevelop::IntegralType::Ptr& type );
 
   ///Whether the integral type is an integer-type
-  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( const CppIntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT bool isIntegerType( const KDevelop::IntegralType::Ptr& type );
 
   ///Whether the integral type is an floating-point-type
-  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( const CppIntegralType::Ptr& type );
+  KDEVCPPDUCHAIN_EXPORT bool isFloatingPointType( const KDevelop::IntegralType::Ptr& type );
 
   KDEVCPPDUCHAIN_EXPORT bool isVoidType( const AbstractType::Ptr& type );
 
@@ -108,7 +104,7 @@ namespace TypeUtils {
    * @param functions A hash that will map functions to their types
    * @param functionName Name of the functions
    * */
-  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<CppFunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
+  KDEVCPPDUCHAIN_EXPORT void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant=false);
 
   /**
    * Same as above, except that it adds the functions to a list.

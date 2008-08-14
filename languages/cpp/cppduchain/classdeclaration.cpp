@@ -28,7 +28,7 @@ using namespace KDevelop;
 namespace Cpp {
 
 DEFINE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
-  
+
 
 ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
   : Declaration(*new ClassDeclarationData, range)
@@ -83,7 +83,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
 
   if( indexedType() == base->indexedType() )
     return true;
-  
+
   FOREACH_FUNCTION(const Cpp::BaseClassInstance& b, baseClasses)
   {
     if( baseConversionLevels )

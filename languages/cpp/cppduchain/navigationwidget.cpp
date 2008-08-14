@@ -325,11 +325,10 @@ class NavigationContext : public KShared {
           details << "forward";
 
         AbstractType::Ptr t(m_declaration->abstractType());
-        const CppCVType* cvType = dynamic_cast<const CppCVType*>( t.unsafeData() );
-        if( cvType ) {
-          if( cvType->isConstant() )
+        if( t ) {
+          if( t & AbstractType::ConstModifier )
             details << "constant";
-          if( cvType->isVolatile() )
+          if( t & AbstractType::VolatileModifier )
             details << "volatile";
         }
 
@@ -413,7 +412,7 @@ class NavigationContext : public KShared {
             if( m_declaration->isTypeAlias() )
               m_currentText += importantHighlight("typedef ");
 
-            if(m_declaration->type<CppEnumeratorType>())
+            if(m_declaration->type<EnumeratorType>())
               m_currentText += i18n("enumerator") + " ";
 
             eventuallyMakeTypeLinks( m_declaration->abstractType() );
@@ -436,8 +435,8 @@ class NavigationContext : public KShared {
               m_currentText += " ";
             }
 
-            if(m_declaration->type<CppEnumerationType>()) {
-              CppEnumerationType::Ptr enumeration = m_declaration->type<CppEnumerationType>();
+            if(m_declaration->type<EnumerationType>()) {
+              EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
               m_currentText += i18n("enumeration") + " " + Qt::escape(m_declaration->identifier().toString()) + "<br>";
             }
 
@@ -465,7 +464,7 @@ class NavigationContext : public KShared {
             if(definition && definition->declaration())
               decl = definition->declaration();
 
-            if(decl->abstractType().cast<CppEnumerationType>())
+            if(decl->abstractType().cast<EnumerationType>())
               m_currentText += labelHighlight(i18n("Enum: "));
             else
               m_currentText += labelHighlight(i18n("Container: "));
@@ -603,12 +602,12 @@ class NavigationContext : public KShared {
         const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
         ///@todo handle const etc. correctly
-        CppPointerType::Ptr pointer = type.cast<CppPointerType>();
-        CppReferenceType::Ptr ref = type.cast<CppReferenceType>();
+        PointerType::Ptr pointer = type.cast<PointerType>();
+        ReferenceType::Ptr ref = type.cast<ReferenceType>();
 
-        if(pointer && pointer->cv() & Declaration::Const)
+        if(pointer && pointer->modifiers() & AbstractType::ConstModifier)
           m_currentText += "const ";
-        if(ref && ref->cv() & Declaration::Const)
+        if(ref && ref->modifiers() & AbstractType::ConstModifier)
           m_currentText += "const ";
 
         if( idType ) {
@@ -656,13 +655,13 @@ class NavigationContext : public KShared {
             while(pointer || ref) {
               if(pointer) {
                 m_currentText += Qt::escape("*");
-                ref = pointer->baseType().cast<CppReferenceType>();
-                pointer = pointer->baseType().cast<CppPointerType>();
+                ref = pointer->baseType().cast<ReferenceType>();
+                pointer = pointer->baseType().cast<PointerType>();
               }
               if(ref) {
                 m_currentText += Qt::escape("&");
-                pointer = ref->baseType().cast<CppPointerType>();
-                ref = ref->baseType().cast<CppReferenceType>();
+                pointer = ref->baseType().cast<PointerType>();
+                ref = ref->baseType().cast<ReferenceType>();
               }
             }
 
@@ -827,7 +826,7 @@ private:
     //m_currentText += indent + ctx->localScopeIdentifier().toString() + "{<br />";
     QVector<DUContext*> children = ctx->childContexts();
     QVector<Declaration*> declarations = ctx->localDeclarations();
-    
+
     QVector<DUContext*>::const_iterator childIterator = children.begin();
     QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
 

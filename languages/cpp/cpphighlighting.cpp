@@ -68,15 +68,15 @@ uint totalColorInterpolationSteps() {
 
 ///Generates a color from the color wheel. @param step Step-number, one of totalColorInterpolationSteps
 uint interpolate(uint step) {
-  
+
   uint waypoint = 0;
   while(step > interpolationLengths[waypoint]) {
     step -= interpolationLengths[waypoint];
     ++waypoint;
   }
-    
+
   uint nextWaypoint = (waypoint + 1) % totalColorInterpolationStepCount;
-  
+
   return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], (step * 0xff) / interpolationLengths[waypoint]);
 }
 
@@ -167,11 +167,11 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
       case TypeAliasType:
         a->setForeground(QColor(0x00981e)); //Lighter greyish green
         break;
-        
+
       case EnumType:
         a->setForeground(QColor(0x6c101e)); //Dark red
         break;
-        
+
       case EnumeratorType:
         a->setForeground(QColor(0x862a38)); //Greyish red
         break;
@@ -189,11 +189,11 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
       case LocalClassMemberType:
         a->setForeground(QColor(0xae7d00)); //Light orange
         break;
-        
+
       case InheritedClassMemberType:
         a->setForeground(QColor(0x705000)); //Dark orange
         break;
-        
+
       case LocalVariableType:
         // Dark aquamarine
         a->setForeground(QColor(0x0C4D3C));
@@ -277,12 +277,12 @@ ColorMap emptyColorMap() {
 void CppHighlighting::highlightDUChain(TopDUContext* context) const
 {
   kDebug( 9007 ) << "highighting du chain";
-  
+
   DUChainReadLocker lock(DUChain::lock());
 
   m_contextClasses.clear();
   m_useClassCache = true;
-  
+
   TopDUContext* standardCtx = CppLanguageSupport::self()->standardContext(KUrl(context->url().str()), false);
 
   //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
@@ -295,14 +295,14 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
         continue;
       deleteHighlighting(ctx);
     }
-    
+
     //Highlight
     highlightDUChainSimple(static_cast<DUContext*>(context));
 
     m_functionColorsForDeclarations.clear();
     m_functionDeclarationsForColors.clear();
   }
-  
+
   m_useClassCache = false;
   m_contextClasses.clear();
 }
@@ -313,12 +313,12 @@ void CppHighlighting::highlightDUChainSimple(DUContext* context) const
     return;
 
   bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
-  
+
   if( isInFunction && m_localColorization ) {
     highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
     return;
   }
-  
+
 
   foreach (Declaration* dec, context->localDeclarations()) {
     highlightDeclaration(dec, 0);
@@ -364,7 +364,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   }
 
   QList<Declaration*> takeFreeColors;
-  
+
   foreach (Declaration* dec, context->localDeclarations()) {
     //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
     uint colorNum = dec->identifier().hash() % validColorCount;
@@ -376,7 +376,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
 
     colorsForDeclarations[dec] = colorNum;
     declarationsForColors[colorNum] = dec;
-    
+
     highlightDeclaration(dec, colors[colorNum]);
   }
 
@@ -393,7 +393,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
     }
     colorsForDeclarations[dec] = colorNum;
     declarationsForColors[colorNum] = dec;
-    
+
     highlightDeclaration(dec, colors[colorNum]);
   }
 
@@ -434,9 +434,9 @@ KDevelop::Declaration* CppHighlighting::localClassFromCodeContext(KDevelop::DUCo
 
   if(m_contextClasses.contains(context))
     return m_contextClasses[context];
-  
+
   DUContext* startContext = context;
-  
+
   while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
     context = context->parentContext();
@@ -449,7 +449,7 @@ KDevelop::Declaration* CppHighlighting::localClassFromCodeContext(KDevelop::DUCo
 
     if(m_contextClasses.contains(context))
       return m_contextClasses[context];
-    
+
     functionDeclaration = def->declaration(startContext->topContext());
   }
 
@@ -466,7 +466,7 @@ KDevelop::Declaration* CppHighlighting::localClassFromCodeContext(KDevelop::DUCo
 
   if(m_useClassCache)
     m_contextClasses[context] = decl;
-  
+
   return decl;
 }
 
@@ -477,12 +477,12 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
    * 1. Is the item in the local class or an inherited class? If yes, highlight.
    * 2. What kind of item is it? If it's a type/function/enumerator, highlight by type.
    * 3. Else, highlight by scope.
-   * 
+   *
    * */
 
   if(!Cpp::isAccessible(context, dec))
     return ErrorVariableType;
-  
+
   Types type = LocalVariableType;
   if (context) {
     //It is a use.
@@ -497,18 +497,18 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
   }
 
   if (type == LocalVariableType) {
-    if (dec->kind() == Declaration::Type || dec->type<CppFunctionType>() || dec->type<CppEnumeratorType>()) {
+    if (dec->kind() == Declaration::Type || dec->type<KDevelop::FunctionType>() || dec->type<KDevelop::EnumeratorType>()) {
       if (dec->isForwardDeclaration())
         type = ForwardDeclarationType;
-      else if (dec->type<CppFunctionType>())
+      else if (dec->type<KDevelop::FunctionType>())
           type = FunctionType;
       else if(dec->type<CppClassType>())
           type = ClassType;
       else if(dec->type<CppTypeAliasType>())
           type = TypeAliasType;
-      else if(dec->type<CppEnumerationType>())
+      else if(dec->type<EnumerationType>())
         type = EnumType;
-      else if(dec->type<CppEnumeratorType>())
+      else if(dec->type<KDevelop::EnumeratorType>())
         type = EnumeratorType;
     }
   }

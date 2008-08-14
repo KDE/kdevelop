@@ -63,16 +63,6 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
-// void copyCppClass( const CppClassType* from, CppClassType* to )
-// {
-//   to->clear();
-//   to->setClassType(from->classType());
-//   to->setDeclarationId(from->declarationId());
-//   to->setCV(from->cv());
-//
-//   to->close();
-// }
-
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
 DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
@@ -256,7 +246,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
 
-        CppFunctionType::Ptr currentFunction = lastType().cast<CppFunctionType>();
+        FunctionType::Ptr currentFunction = lastType().cast<FunctionType>();
         int functionArgumentCount = 0;
         if(currentFunction)
           functionArgumentCount = currentFunction->arguments().count();
@@ -279,7 +269,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
                 continue;
               }else if(cycle == 1){
                 //Second cycle, match by argument-count
-                CppFunctionType::Ptr matchFunction = dec->type<CppFunctionType>();
+                FunctionType::Ptr matchFunction = dec->type<FunctionType>();
                 if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
                   //We have a match
                 }else{
@@ -521,13 +511,13 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
 Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange) {
   Identifier id;
-  
+
   if(!name) {
     //Unnamed class/struct, use a unique id
     static QAtomicInt& uniqueClassNumber( KDevelop::globalItemRepositoryRegistry().getCustomCounter("Unnamed Class Ids", 1) );
     id = Identifier::unique( uniqueClassNumber.fetchAndAddRelaxed(1) );
   }
-  
+
   Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, id, collapseRange);
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
@@ -572,7 +562,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
        newId = id.at(a).identifier().str() + ";;" + newId;
 
      localId.setIdentifier(newId);
-     
+
      FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
      DUChainWriteLocker lock(DUChain::lock());
      ret->setDeclaration(0);
@@ -675,7 +665,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 
   DeclarationBuilderBase::visitEnumerator(node);
 
-  CppEnumeratorType::Ptr enumeratorType = lastType().cast<CppEnumeratorType>();
+  EnumeratorType::Ptr enumeratorType = lastType().cast<EnumeratorType>();
 
   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(currentDeclaration())) {
     DUChainWriteLocker lock(DUChain::lock());
