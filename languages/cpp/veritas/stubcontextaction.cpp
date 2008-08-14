@@ -117,24 +117,25 @@ StubContextAction::~StubContextAction()
 {}
 
 #define STOP_IF(X) \
-  if (X) { m_clazz = 0; return; }
+  if (X) { m_clazz = 0; return; }\
+  else (void)0
 
 void StubContextAction::appendTo(ContextMenuExtension& menu, Context* context)
 {
     KDevelop::ContextMenuExtension cm;
-    STOP_IF(context->type() != Context::EditorContext)
+    STOP_IF(context->type() != Context::EditorContext);
 
     EditorContext* ec = dynamic_cast<EditorContext*>(context);
-    STOP_IF(not ec)
+    STOP_IF(not ec);
 
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
     Declaration* dcl = DUChainUtils::itemUnderCursor(ec->url(), sc);
-    STOP_IF(!dcl)
-    STOP_IF(dcl->kind() != Declaration::Type)
+    STOP_IF(!dcl);
+    STOP_IF(dcl->kind() != Declaration::Type);
 
     ClassDeclaration* clazz = dynamic_cast<ClassDeclaration*>(dcl);
-    STOP_IF(not clazz)
+    STOP_IF(not clazz);
 
     m_clazz = clazz;
     menu.addAction(ContextMenuExtension::ExtensionGroup, m_constructStub);

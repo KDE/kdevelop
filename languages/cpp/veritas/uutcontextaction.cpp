@@ -121,27 +121,28 @@ UUTContextAction::~UUTContextAction()
 }
 
 #define STOP_IF(X) \
-if (X) { m_clazz = 0; return; }
+if (X) { m_clazz = 0; return; } \
+else (void)(0)
 
 #define STOP_IF_(X, MSG) \
 if (X) {\
     m_clazz = 0;\
     kDebug() << "Not appending UUT action because " << MSG;\
     return;\
-}
+} else (void)(0)
 
 
 void UUTContextAction::appendTo(ContextMenuExtension& menu, Context* context)
 {
     Q_ASSERT(m_createImplementation); Q_ASSERT(m_constructor);
-    STOP_IF(context->type() != Context::EditorContext)
+    STOP_IF(context->type() != Context::EditorContext);
     EditorContext* ec = dynamic_cast<EditorContext*>(context);
-    STOP_IF(not ec)
-    
+    STOP_IF(not ec);
+
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
     Declaration* decl = DUChainUtils::itemUnderCursor(ec->url(), sc);
-    STOP_IF_(!decl, "no declaration under cursor.")
+    STOP_IF_(!decl, "no declaration under cursor.");
     STOP_IF_(decl->kind() != Declaration::Instance, "Not an instance declaration.");
     STOP_IF_(!decl->isDefinition(), "Not a definition");
 
