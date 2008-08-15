@@ -626,7 +626,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   //Expensive
   QList<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix=QualifiedIdentifier()) const;
 
-  void addNext(SearchItem::Ptr other);
+  void addNext(Ptr other);
 
   bool isExplicitlyGlobal;
   Identifier identifier;

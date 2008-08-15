@@ -192,7 +192,7 @@ public:
   QualifiedIdentifier(const QualifiedIdentifier& id);
   QualifiedIdentifier(uint index);
   QualifiedIdentifier();
-  ~QualifiedIdentifier();
+  virtual ~QualifiedIdentifier();
 
   void push(const Identifier& id);
   void push(const QualifiedIdentifier& id);
