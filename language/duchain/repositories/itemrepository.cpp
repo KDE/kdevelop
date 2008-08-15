@@ -188,7 +188,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
         getCustomCounter(counterName, 0) = counterValue;
     }
   }else{
-    kDebug() << "Could not open counter file";
+//     kDebug() << "Could not open counter file";
   }
   
   m_lock = lock;
