@@ -20,7 +20,7 @@
 
 /*!
 This is your everyday test first test command. You have 
-coded the Bar class by intention and now want to generate
+coded the Baz class by intention and now want to generate
 a skeleton implementation.
 
 Steps:

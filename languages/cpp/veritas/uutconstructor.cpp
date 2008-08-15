@@ -266,8 +266,6 @@ QString extractArguments(QString& text, DUContext* ctx)
 
 } // end anonymous namespace
 
-/*! Create a method skeleton from a @param use of @param clazz
-    eg: Foo f; f.bar(); => method Foo::bar() */
 MethodSkeleton UUTConstructor::createMethod(Declaration* clazz, const Use* use, DUContext* ctx)
 {
     KUrl doc(clazz->url().str());

@@ -65,6 +65,8 @@ public:
     virtual void setDocumentAccess(DocumentAccess*);
 
 private:
+    /*! Create a method skeleton from a @param use of @param clazz
+    eg: Foo f; f.bar(); => method Foo::bar() */
     MethodSkeleton createMethod(KDevelop::Declaration* clazz, const KDevelop::Use* use, KDevelop::DUContext*);
     QString enoughText(const KUrl& url, const KDevelop::SimpleCursor&) const;
     void printUseInfo(int useId, const KDevelop::Use* use, KDevelop::DUContext* ctx);
