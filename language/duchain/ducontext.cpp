@@ -1346,8 +1346,10 @@ KTextEditor::SmartRange* DUContext::useSmartRange(int useIndex)
   if(m_dynamicData->m_rangesForUses.isEmpty())
     return 0;
   else{
-    Q_ASSERT(useIndex >= 0 && useIndex < m_dynamicData->m_rangesForUses.size());
-    return m_dynamicData->m_rangesForUses.at(useIndex);
+    if(useIndex >= 0 && useIndex < m_dynamicData->m_rangesForUses.size())
+      return m_dynamicData->m_rangesForUses.at(useIndex);
+    else
+      return 0;
   }
 }
 
