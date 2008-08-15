@@ -1194,7 +1194,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   virtual bool open(const QString& path, bool clear) {
     close();
     m_currentOpenPath = path;
-    kDebug() << "opening repository" << m_repositoryName << "at" << path;
+    //kDebug() << "opening repository" << m_repositoryName << "at" << path;
     QDir dir(path);
     m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
     m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + "_dynamic" ));
