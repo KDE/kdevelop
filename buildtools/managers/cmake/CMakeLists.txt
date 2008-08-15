@@ -1,7 +1,8 @@
 
 include_directories(
- ${CMAKE_CURRENT_SOURCE_DIR}/parser
- ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser
+    ${CMAKE_SOURCE_DIR}/buildtools/builders/cmakebuilder/
 )
 add_subdirectory(tests)
 
@@ -65,7 +66,7 @@ target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings ${KDE4_KIO_LIBS}
-                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} kdev4cmakecommon )
+                       ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_KIO_LIBRARY} kdev4cmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )

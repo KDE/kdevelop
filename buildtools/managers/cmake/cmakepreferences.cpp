@@ -23,13 +23,18 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <KUrl>
+#include <KMessageBox>
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
+
+#include <QFile>
+#include <QHeaderView>
 
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
 #include "cmakebuilddircreator.h"
 #include "cmakeconfig.h"
-#include <KUrl>
-#include <QFile>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
@@ -49,6 +54,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());
     m_prefsUi->cacheList->setItemDelegate(new CMakeCacheDelegate(m_prefsUi->cacheList));
+    m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
@@ -100,6 +106,7 @@ void CMakePreferences::load()
 void CMakePreferences::save()
 {
     kDebug(9042) << "*******saving";
+    Q_ASSERT(m_currentModel);
     QStringList bDirs;
     int count=m_prefsUi->buildDirs->model()->rowCount();
     for(int i=0; i<count; i++)
@@ -164,10 +171,12 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        kDebug(9032) << "Did not exist " << file;
+        KMessageBox::error(this, i18n("The %1 build directory is not valid. It will be removed from the list", newBuildDir.toLocalFile()));
+        removeBuildDir();
         if(m_currentModel)
             m_currentModel->clear();
         m_prefsUi->cacheList->setEnabled(false);
+        emit changed(true);
     }
 }
 
@@ -190,11 +199,8 @@ void CMakePreferences::showInternal(int state)
     bool showAdv=(state==Qt::Unchecked);
     for(int i=0; i<m_currentModel->rowCount(); i++)
     {
-        bool shown=m_currentModel->isInternal(i);
-        if(showAdv && !shown)
-            shown=m_currentModel->isAdvanced(i);
-
-        m_prefsUi->cacheList->setRowHidden(i, shown);
+        bool hidden=m_currentModel->isInternal(i) || (!showAdv && m_currentModel->isAdvanced(i));
+        m_prefsUi->cacheList->setRowHidden(i, hidden);
     }
 }
 
@@ -219,16 +225,17 @@ void CMakePreferences::createBuildDir()
     //TODO: if there is information, use it to initialize the dialog
     if(bdCreator.exec())
     {
-        m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile());
+        m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::AddTrailingSlash));
+        m_prefsUi->removeBuildDir->setEnabled(true);
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
-        m_prefsUi->removeBuildDir->setEnabled(true);
     }
     //TODO: Save it for next runs
 }
 
 void CMakePreferences::removeBuildDir()
 {
+    QString removed=m_prefsUi->buildDirs->currentText();
     int curr=m_prefsUi->buildDirs->currentIndex();
     if(curr>=0)
     {
@@ -236,6 +243,16 @@ void CMakePreferences::removeBuildDir()
     }
     if(m_prefsUi->buildDirs->count()==0)
         m_prefsUi->removeBuildDir->setEnabled(false);
+    
+    int ret=KMessageBox::warningYesNo(this,
+            i18n("The %1 directory is about to be removed in KDevelop's list.\n"
+                 "Do you want KDevelop to remove it in the file system as well?", removed));
+    if(ret==KMessageBox::Yes)
+    {
+        bool correct=KIO::NetAccess::del(KUrl(removed), this);
+        if(!correct)
+            KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
+    }
     emit changed(true);
 }
 
