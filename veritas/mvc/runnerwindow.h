@@ -79,7 +79,9 @@ public: // Operations
      * the owner of the model instance. */
     ~RunnerWindow();
 
-    /*! Sets the RunnerModel which holds the test-tree */
+    /*! Sets the RunnerModel which holds the test-tree
+        @note takes ownership. on succeeding calls the previous model will
+        be deleted */
     void setModel(RunnerModel* model);
 
     /*! Accessors for Runner model & view.

@@ -127,7 +127,7 @@ public:
     }
 
     Test* fetchItem(const QModelIndex& index) {
-        return itemFromIndex(index);
+        return static_cast<Test*>(index.internalPointer());
     }
 
     void decapitate() {

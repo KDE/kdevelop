@@ -139,12 +139,20 @@ void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
     }
 }
 
+namespace
+{
+inline Test* testFromIndex(const QModelIndex& index)
+{
+    return static_cast<Test*>(index.internalPointer());
+}
+}
+
 Test* SelectionManager::itemFromIndex(const QModelIndex& index) const
 {
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
     RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
-    return runnerModel->itemFromIndex(runnerIndex);
+    return testFromIndex(runnerIndex);
 }
 
 #include "selectionmanager.moc"

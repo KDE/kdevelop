@@ -31,6 +31,7 @@ class TestResultPrivate
 public:
     TestResultPrivate(TestState state, const QString& msg, int line, const QFileInfo& file) :
         m_state(state), m_message(msg), m_line(line), m_file(file) {}
+    ~TestResultPrivate() {}
     TestState m_state;
     QString m_message;
     int m_line;

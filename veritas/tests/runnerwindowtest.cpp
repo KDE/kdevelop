@@ -64,7 +64,6 @@ void RunnerWindowTest::cleanup()
 {
     m_ui->actionExit->trigger();
     if (window) delete window;
-    if (model) delete model;
 }
 
 // helper

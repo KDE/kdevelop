@@ -118,12 +118,20 @@ void RunnerViewController::collapse(const QModelIndex& index) const
     }
 }
 
+namespace
+{
+inline Test* testFromIndex(const QModelIndex& index)
+{
+    return static_cast<Test*>(index.internalPointer());
+}
+}
+
 void RunnerViewController::selectAllItems(bool select) const
 {
     QModelIndex i = proxyModel()->index(0,0);
     while (i.isValid()) { // Walk all top level indices
         QModelIndex s = proxyModel()->mapToSource(i);
-        Test* t = runnerModel()->itemFromIndex(s);
+        Test* t = testFromIndex(s);
         t->setSelected(select);
         runnerModel()->updateView(s); // <- emits dataChanged
         i = i.sibling(i.row() + 1, 0);
@@ -174,7 +182,7 @@ bool RunnerViewController::eventFilter(QObject* obj, QEvent* event)
     // Mimick a click of the user.
     QModelIndex testItemIndex;
     testItemIndex = Utils::modelIndexFromProxy(proxyModel(), highlightedRow());
-    Test* item = runnerModel()->itemFromIndex(testItemIndex);
+    Test* item = testFromIndex(testItemIndex);
     bool checked = item->selected();
     item->setSelected(!checked);
 

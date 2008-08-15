@@ -35,9 +35,10 @@ class TestExecutor : public QObject
 Q_OBJECT
 public:
     TestExecutor();
+    virtual ~TestExecutor();
 
-    /*! The root of the test tree which needs to be executed.
-     *  Clients must set this before invoking go(). */
+    /*! The root of the test tree 
+    @note Clients must set this before go(). */
     void setRoot(Test* root);
 
     /*! Initialize and start execution of user selected tests in the test

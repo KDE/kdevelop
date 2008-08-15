@@ -221,7 +221,8 @@ RunnerWindow::~RunnerWindow()
 {
     // Deleting the model is left to the owner of the model instance.
     if (m_selection) delete m_selection;
-    if (m_verbose)   delete m_verbose;
+    if (m_verbose) delete m_verbose;
+    if (runnerModel()) delete runnerModel();
 }
 
 // helper for setModel(RunnerModel*)
@@ -248,6 +249,7 @@ void RunnerWindow::stopPreviousModel()
         resultsView()->reset();
         resultsModel()->clear();
         prevModel->disconnect();
+        delete prevModel;
     }
 }
 

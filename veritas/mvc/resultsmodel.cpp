@@ -57,6 +57,7 @@ bool ResultsModel::hasChildren(const QModelIndex& index) const
 
 QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
+    // need a switch here
     if (!index.isValid()) {
         return QVariant();
     }

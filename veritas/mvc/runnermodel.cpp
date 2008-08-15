@@ -43,6 +43,14 @@ using Veritas::RunnerModel;
 using Veritas::Test;
 using Veritas::TestExecutor;
 
+namespace
+{
+inline Test* testFromIndex(const QModelIndex& index)
+{
+    return static_cast<Test*>(index.internalPointer());
+}
+}
+
 RunnerModel::RunnerModel(QObject* parent)
         : QAbstractItemModel(parent)
 {
@@ -65,7 +73,8 @@ RunnerModel::RunnerModel(QObject* parent)
 RunnerModel::~RunnerModel()
 {
     stopItems();
-    delete m_rootItem;
+    if (m_rootItem) delete m_rootItem;
+    if (m_executor) delete m_executor;
 }
 
 QString RunnerModel::name() const
@@ -83,7 +92,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     if (role == Qt::TextAlignmentRole) {
         return int(Qt::AlignLeft | Qt::AlignTop);
     }
-    Test* item = itemFromIndex(index);
+    Test* item = testFromIndex(index);
     if (role == Qt::DisplayRole) {
         return item->data(index.column());
     }
@@ -132,7 +141,7 @@ bool RunnerModel::someChildHasStatus(int status, const QModelIndex& parent) cons
             currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
         }
     } else {
-        return (status == itemFromIndex(currentIndex)->state());
+        return (status == testFromIndex(currentIndex)->state());
     }
     return false;
 }
@@ -151,8 +160,8 @@ void RunnerModel::updateView(const QModelIndex& index)
     while (bottomRight.child(0, 0).isValid()) {
         bottomRight = bottomRight.child(rowCount(bottomRight) - 1, 0);
     }
-    kDebug() << itemFromIndex(index)->data(0).toString() << " -> "
-             << itemFromIndex(bottomRight)->data(0).toString();
+    kDebug() << testFromIndex(index)->data(0).toString() << " -> "
+             << testFromIndex(bottomRight)->data(0).toString();
     emit dataChanged(index, bottomRight);
 }
 
@@ -186,7 +195,7 @@ QModelIndex RunnerModel::index(int row, int column,
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = itemFromIndex(parent);
+        parentItem = testFromIndex(parent);
     }
     Test* childItem = parentItem->child(row);
     if (childItem) {
@@ -201,7 +210,7 @@ QModelIndex RunnerModel::parent(const QModelIndex& index) const
     if (!index.isValid()) {
         return QModelIndex();
     }
-    Test* childItem = itemFromIndex(index);
+    Test* childItem = testFromIndex(index);
     Test* parentItem = childItem->parent();
     if (parentItem == m_rootItem) {
         return QModelIndex();
@@ -219,7 +228,7 @@ int RunnerModel::rowCount(const QModelIndex& parent) const
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = itemFromIndex(parent);
+        parentItem = testFromIndex(parent);
     }
     return parentItem->childCount();
 }
@@ -230,7 +239,7 @@ int RunnerModel::columnCount(const QModelIndex& parent) const
         return 0;
     }
     if (parent.isValid()) {
-        return itemFromIndex(parent)->columnCount();
+        return testFromIndex(parent)->columnCount();
     }
     return m_rootItem->columnCount();
 }
@@ -254,7 +263,7 @@ void RunnerModel::countItems()
             currentIndex = currentIndex.child(0, 0); // Go down.
             continue;
         }
-        Test* item = itemFromIndex(currentIndex);    // Have an item.
+        Test* item = testFromIndex(currentIndex);    // Have an item.
         numTotal++;
         if (item->selected() && !hasChildren(currentIndex)) {
             m_numSelected++;
@@ -379,7 +388,7 @@ void RunnerModel::initItemConnect(QModelIndex current)
         if (current.child(0, 0).isValid()) { // Go down 
             initItemConnect(current.child(0, 0));
         }
-        Test* item = itemFromIndex(current);
+        Test* item = testFromIndex(current);
         //kDebug() << "Connecting item with runnermodel: " << item->data(0).toString();
         connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
         connect(item, SIGNAL(finished(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
@@ -392,22 +401,14 @@ void RunnerModel::setExpectedResults(int expectedResults)
     m_expectedResults = expectedResults;
 }
 
-Test* RunnerModel::itemFromIndex(const QModelIndex& index) const
-{
-    return static_cast<Test*>(index.internalPointer());
-}
-
 void RunnerModel::clearItem(const QModelIndex& index)
 {
-    if (!index.isValid()) {
-        return;
-    }
     QModelIndex currentIndex = index;
     while (currentIndex.isValid()) {
         if (currentIndex.child(0, 0).isValid()) {
             clearItem(currentIndex.child(0, 0));
         }
-        Test* item = itemFromIndex(currentIndex);
+        Test* item = testFromIndex(currentIndex);
         item->clear();
         QModelIndex lastIndex = this->index(currentIndex.row(),
                                             item->columnCount() - 1);
@@ -418,7 +419,7 @@ void RunnerModel::clearItem(const QModelIndex& index)
 
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
-    Test* item = itemFromIndex(index);
+    Test* item = testFromIndex(index);
     // Update result counters and provide default result type string if not
     // set in the item itself.
     switch (item->state()) {

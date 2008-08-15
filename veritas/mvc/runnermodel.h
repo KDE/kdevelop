@@ -129,9 +129,6 @@ public:
 
     bool someChildHasStatus(int status, const QModelIndex& parent) const;
 
-    /*! Returns the test item the \a index refers to. */
-    Test* itemFromIndex(const QModelIndex& index) const;
-
     void updateView(const QModelIndex& index);
 
     /*! Sets \a rootItem as the root item. */

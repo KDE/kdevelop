@@ -78,6 +78,10 @@ TestExecutor::TestExecutor()
     connect(this, SIGNAL(allDone()), this, SLOT(cleanup()));
 }
 
+TestExecutor::~TestExecutor()
+{
+}
+
 void TestExecutor::go()
 {
     SetupChain sc(this);
