@@ -776,20 +776,13 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
       decl = *declIt;
 
     if(decl) {
-      if(child && child->range().start >= decl->range().start)
+      if(child && child->range().start.line >= decl->range().start.line)
         child = 0;
     }
 
     if(child) {
       if(decl && decl->range().start >= child->range().start)
         decl = 0;
-    }
-
-    if(child) {
-      if( filter.accept(child) )
-        collectItems(items, child, filter);
-      ++childIt;
-      continue;
     }
 
     if(decl) {
@@ -809,6 +802,13 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
       }
 
       ++declIt;
+      continue;
+    }
+
+    if(child) {
+      if( filter.accept(child) )
+        collectItems(items, child, filter);
+      ++childIt;
       continue;
     }
   }
