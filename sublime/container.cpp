@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -31,6 +31,7 @@
 
 #include "view.h"
 #include "document.h"
+#include "containerstyle.h"
 
 namespace Sublime {
 
@@ -48,6 +49,14 @@ Container::Container(QWidget *parent)
     :KTabWidget(parent), d(new ContainerPrivate())
 {
     KAcceleratorManager::setNoAccel(this);
+
+    // Set the widget style to a forwarding proxy style that removes the tabwidget frame,
+    // and draws a tabbar base underneath the tabbar.
+    setStyle(new ContainerStyle(this));
+    // The base will be drawn on the frame instead of on the tabbar, so it extends across
+    // the whole widget.
+    tabBar()->setDrawBase(false);
+
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     setHoverCloseButton(true);
@@ -123,14 +132,6 @@ void Container::paintEvent(QPaintEvent *ev)
 void Container::setTabBarHidden(bool hide)
 {
     KTabWidget::setTabBarHidden(hide);
-    if (hide)
-        setStyleSheet("\
-            QTabWidget::pane {\
-                border: none;\
-            }\
-        ");
-    else
-        setStyleSheet("");
 }
 
 }

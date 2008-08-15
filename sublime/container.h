@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -54,6 +54,8 @@ public:
     virtual void paintEvent(QPaintEvent *ev);
 
     void setTabBarHidden(bool hide);
+
+    using KTabWidget::tabBar;
 
 protected:
     using KTabWidget::addTab;

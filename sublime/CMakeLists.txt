@@ -21,6 +21,7 @@ set(sublime_LIB_SRCS
     aggregatemodel.cpp
     ideal.cpp
     ideallayout.cpp
+    containerstyle.cpp
 )
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
