@@ -23,6 +23,7 @@
 
 #include <QTimer>
 #include <QApplication>
+#include <qalgorithms.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kpluginfactory.h>
@@ -49,6 +50,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
 #include "contextbrowserview.h"
+#include <language/duchain/uses.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -109,6 +111,16 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   nextContext->setText( i18n("&Next Context") );
   nextContext->setShortcut( Qt::META | Qt::Key_Right );
   connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
+
+  QAction* previousUse = actions->addAction("previous_use");
+  previousUse->setText( i18n("&Previous Use") );
+  previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
+  connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
+
+  QAction* nextUse = actions->addAction("next_use");
+  nextUse->setText( i18n("&Next Use") );
+  nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
+  connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 }
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
@@ -400,9 +412,7 @@ void ContextBrowserPlugin::updateViews()
 void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
 {
   m_useDeclaration = decl;
-  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())
-    m_updateViews << core()->documentController()->activeDocument()->textDocument()->activeView();
-  m_updateTimer->start(highlightingTimeout);
+m_updateTimer->start(highlightingTimeout);
 }
 
 void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
@@ -454,11 +464,11 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
     registerAsRangeWatcher( chain );
 }
 
-void ContextBrowserPlugin::documentClosed( KDevelop::IDocument* document )
+void ContextBrowserPlugin::documentClosed( KDevelop::IDocument* /*document*/ )
 {
 }
 
-void ContextBrowserPlugin::documentDestroyed( QObject* obj )
+void ContextBrowserPlugin::documentDestroyed( QObject* /*obj*/ )
 {
 }
 
@@ -468,7 +478,7 @@ void ContextBrowserPlugin::viewDestroyed( QObject* obj )
   m_updateViews.remove(static_cast<KTextEditor::View*>(obj));
 }
 
-void ContextBrowserPlugin::cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition )
+void ContextBrowserPlugin::cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& /*newPosition*/ )
 {
   clearMouseHover();
   m_updateViews.insert(view);
@@ -493,6 +503,125 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , KTextEditor::Vi
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)
 {
   m_views << view;
+}
+
+void ContextBrowserPlugin::previousUseShortcut()
+{
+  switchUse(false);
+}
+
+void ContextBrowserPlugin::nextUseShortcut()
+{
+  switchUse(true);
+}
+
+void ContextBrowserPlugin::switchUse(bool forward)
+{
+  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView()) {
+    KTextEditor::Document* doc = core()->documentController()->activeDocument()->textDocument();
+    KDevelop::SimpleCursor c(doc->activeView()->cursorPosition());
+
+
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    KDevelop::TopDUContext* chosen = DUChainUtils::standardContextForUrl(doc->url());
+
+    if( chosen )
+    {
+      DUContext* ctx = chosen->findContextAt(c);
+
+      //Try finding a declaration under the cursor
+      Declaration* decl = DUChainUtils::itemUnderCursor(doc->url(), c);
+      if(decl) {
+        KDevVarLengthArray<IndexedTopDUContext> usingFiles = DUChain::uses()->uses(decl->id());
+        
+        if(decl->topContext()->indexForUsedDeclaration(decl, false) != std::numeric_limits<int>::max() && usingFiles.indexOf(decl->topContext()) == -1)
+          usingFiles.insert(decl->topContext(), 0);
+        
+        if(decl->range().contains(c) && decl->url() == chosen->url()) {
+            //The cursor is directly on the declaration. Jump to the first or last use.
+            if(!usingFiles.isEmpty()) {
+            TopDUContext* top = (forward ? usingFiles[0] : usingFiles.back()).data();
+            if(top) {
+              QList<SimpleRange> useRanges = allUses(top, decl, true);
+              qSort(useRanges);
+              if(!useRanges.isEmpty()) {
+                SimpleRange selectUse = forward ? useRanges.first() : useRanges.back();
+                lock.unlock();
+                core()->documentController()->openDocument(KUrl(top->url().str()), KTextEditor::Range(selectUse.start.textCursor(), selectUse.start.textCursor()));
+              }
+            }
+          }
+          return;
+        }
+        //Check whether we are within a use
+        QList<SimpleRange> localUses = allUses(chosen, decl, true);
+        qSort(localUses);
+        for(int a = 0; a < localUses.size(); ++a) {
+        if(localUses[a].contains(c)) {
+          int nextUse = (forward ? a+1 : a-1);
+          
+          //Make sure we end up behind the use
+          while(forward && nextUse < localUses.size() && (localUses[nextUse].start <= localUses[a].end || localUses[nextUse]..isEmpty()))
+            ++nextUse;
+          
+          //Make sure we end up before the use
+          while(!forward && nextUse >= 0 && (localUses[nextUse].start >= localUses[a].start || localUses[nextUse].isEmpty()))
+            --nextUse;
+          //Jump to the next use
+            
+          kDebug() << "count of uses:" << localUses.size() << "nextUse" << nextUse;
+          
+          if(nextUse < 0 || nextUse == localUses.size()) {
+            kDebug() << "jumping to next file";
+            //Jump to the first use in the next using top-context
+            int indexInFiles = usingFiles.indexOf(chosen);
+            if(indexInFiles != -1) {
+              
+              int nextFile = (forward ? indexInFiles+1 : indexInFiles-1);
+              kDebug() << "current file" << indexInFiles << "nextFile" << nextFile;
+              
+              if(nextFile < 0 || nextFile >= usingFiles.size()) {
+                //Open the declaration
+                KUrl u(decl->url().str());
+                SimpleRange range = decl->range();
+                range.end = range.start;
+                lock.unlock();
+                core()->documentController()->openDocument(u, range.textRange());
+                return;
+              }else{
+                TopDUContext* nextTop = usingFiles[nextFile].data();
+                
+                KUrl u(nextTop->url().str());
+                
+                QList<SimpleRange> nextTopUses = allUses(nextTop, decl, true);
+                qSort(nextTopUses);
+                
+                if(!nextTopUses.isEmpty()) {
+                  SimpleRange range = forward ? nextTopUses.front() : nextTopUses.back();
+                  range.end = range.start;
+                  lock.unlock();
+                  core()->documentController()->openDocument(u, range.textRange());
+                }
+                return;
+              }
+            }else{
+              kDebug() << "not found own file in use list";
+            }
+          }else{
+              KUrl url(chosen->url().str());
+              SimpleRange range = localUses[nextUse];
+              range.end = range.start;
+              lock.unlock();
+              core()->documentController()->openDocument(url, range.textRange());
+              return;
+          }
+        }
+        }
+      }
+
+      ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
+    }
+  }
 }
 
 void ContextBrowserPlugin::unRegisterToolView(ContextBrowserView* view)

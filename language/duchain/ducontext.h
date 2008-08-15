@@ -733,7 +733,7 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier globalImportIdentifier;
 /**
   * Collects all uses of the given @param declarationIndex
   * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex);
+KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyRanges = false);
 
 /**
   * Collects the smart-ranges of all uses of the given @param declarationIndex

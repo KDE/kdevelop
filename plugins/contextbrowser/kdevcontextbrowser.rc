@@ -10,6 +10,11 @@
     <Action name="next_context"
 	    group="file_operations"/>
 
+    <Action name="previous_use"
+            group="file_operations"/>
+
+    <Action name="next_use"
+            group="file_operations"/>
   </Menu>
 </MenuBar>
 

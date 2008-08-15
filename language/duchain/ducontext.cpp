@@ -1510,15 +1510,16 @@ void DUContext::squeeze()
     child.data(topContext())->squeeze();
 }
 
-QList<SimpleRange> allUses(DUContext* context, int declarationIndex)
+QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
 {
   QList<SimpleRange> ret;
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == declarationIndex)
-      ret << context->uses()[a].m_range;
+      if(!noEmptyUses || !context->uses()[a].m_range.isEmpty())
+        ret << context->uses()[a].m_range;
 
   foreach(DUContext* child, context->childContexts())
-    ret += allUses(child, declarationIndex);
+    ret += allUses(child, declarationIndex, noEmptyUses);
 
   return ret;
 }

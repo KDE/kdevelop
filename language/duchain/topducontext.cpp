@@ -1274,12 +1274,12 @@ QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration*
   return allSmartUses(context, declarationIndex);
 }
 
-QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration) {
+QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges) {
   QList<SimpleRange> ret;
   int declarationIndex = context->indexForUsedDeclaration(declaration, false);
   if(declarationIndex == std::numeric_limits<int>::max())
     return ret;
-  return allUses(context, declarationIndex);
+  return allUses(context, declarationIndex, noEmptyRanges);
 }
 
 ///@todo move this kind of caching into the symbol-table

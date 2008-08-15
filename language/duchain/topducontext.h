@@ -369,12 +369,12 @@ private:
 /**
   * Returns all uses of the given declaration within this top-context and all sub-contexts
   * */
-QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration);
+KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges = false);
 
 /**
   * Returns the smart-ranges of all uses
   * */
-QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration);
+KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration);
 
 inline uint qHash(const ReferencedTopDUContext& ctx) {
   return ctx.hash();

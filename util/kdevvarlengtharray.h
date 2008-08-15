@@ -106,6 +106,14 @@ public:
         return ptr[idx];
     }
 
+    ///Returns the index of the given item in this array, or -1
+    int indexOf(const T& t) const {
+        for(int a = 0; a < s; ++a)
+            if(t == ptr[a])
+                return a;
+        return -1;
+    }
+
     inline void append(const T &t) {
         const int idx = s++;
         ///This is currently the difference to KDevVarLengthArray(which uses s == a), and it prevents a crash.
