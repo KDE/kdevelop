@@ -141,7 +141,7 @@ void ReportWidget::init()
     QFrame* f = new QFrame;
     f->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     l->addWidget(f);
-    
+
     QGridLayout* gl = new QGridLayout;
     f->setLayout(gl);
 
@@ -261,7 +261,7 @@ void ReportWidget::dispatchDoubleClickedSignal(const QModelIndex& index)
         jumpToSource(index); break;
     } default: {
         ILLEGAL_STATE;
-    }}    
+    }}
 }
 
 void ReportWidget::jumpToSource(const QItemSelection& selected, const QItemSelection& deselected)

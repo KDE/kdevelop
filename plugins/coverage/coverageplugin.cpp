@@ -181,7 +181,7 @@ ContextMenuExtension CoveragePlugin::contextMenuExtension(Context* context)
         m_buildRoot.clear();
         return cm;
     }
-    
+
     cm.addAction(ContextMenuExtension::ExtensionGroup, m_ctxMenu);
     return cm;
 }

@@ -26,16 +26,6 @@
 #include <interfaces/icore.h>
 
 using Veritas::CovOutputModel;
-using Veritas::CovOutputItem;
-
-CovOutputItem::CovOutputItem(const QString &text)
-        : QStandardItem(), m_text(text)
-{
-    setText(text);
-}
-
-CovOutputItem::~CovOutputItem()
-{}
 
 CovOutputModel::CovOutputModel(QObject *parent)
         : QStandardItemModel(parent)
@@ -67,18 +57,12 @@ QVariant CovOutputModel::data(const QModelIndex& index, int role) const
 }
 
 void CovOutputModel::activate(const QModelIndex &idx)
-{
-    QStandardItem *stditem = itemFromIndex(idx);
-    CovOutputItem *covoutputitem = dynamic_cast<CovOutputItem*>(stditem);
-    if (!covoutputitem) return;
-}
+{}
 
 void CovOutputModel::appendOutputs(const QStringList &lines)
 {
-    foreach(QString line, lines) {
-        return;
-        appendRow(new QStandardItem(line));
-    }
+    // stdout gets the lcov output, which contains the useful stuff
+    // so do nothing here. stderr gets status messages
 }
 
 void CovOutputModel::appendErrors(const QStringList &lines)
@@ -89,7 +73,8 @@ void CovOutputModel::appendErrors(const QStringList &lines)
 }
 
 void CovOutputModel::slotCompleted()
-{}
+{
+}
 
 void CovOutputModel::slotFailed()
 {

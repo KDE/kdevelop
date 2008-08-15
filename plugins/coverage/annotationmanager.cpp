@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * KDevelop xUnit plugin
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
 #include "annotationmanager.h"
 #include "annotationmodel.h"
 #include "coveredfile.h"
@@ -70,9 +71,8 @@ void AnnotationManager::setCoveredFiles(const QMap<KUrl, CoveredFile*>& files)
 void AnnotationManager::watch(IDocument* doc)
 {
     Q_ASSERT_X(doc, "AnotationManager::watch()", "got null document.");
-    m_docs << doc;
     Q_ASSERT(doc->isTextDocument());
-    kDebug() << doc;
+    m_docs << doc;
 }
 
 void AnnotationManager::fixAnnotation(KTextEditor::Document* doc, KTextEditor::View* view)
@@ -88,7 +88,7 @@ void AnnotationManager::fixAnnotation(KTextEditor::Document* doc, KTextEditor::V
     }
     CoveredFile* f = m_files[url];
     Q_ASSERT(f);
-    AnnotationModel* model = new AnnotationModel(f);
+    AnnotationModel* model = new AnnotationModel(f, view);
     AnnotationViewInterface *anno = qobject_cast<AnnotationViewInterface*>(view);
     Q_ASSERT(anno);
     anno->setAnnotationModel(model);
@@ -115,17 +115,18 @@ void AnnotationManager::addCoverageData(CoveredFile* f)
     QMap<int, int> cc = f->callCountMap();
     QMapIterator<int, int> it(cc);
     if (!m_files.contains(f->url())) {
-        kDebug() << "not contains";
+        kDebug() << "New coverage data for ["
+                 << f->url() << "]";
         CoveredFile* cf = new CoveredFile;
         cf->setUrl(f->url());
         while(it.hasNext()) {
             it.next();
-            kDebug() << it.key() << "->" << it.value();
             cf->setCallCount(it.key(), it.value());
         }
-        m_files[f->url()] = cf;        
+        m_files[f->url()] = cf;
     } else {
-        kDebug() << "contains";
+        kDebug() << "Update coverage data for ["
+                 << f->url() << "]";
         CoveredFile* cf = m_files[f->url()];
         QSet<int> newLines = f->reachableLines() - cf->reachableLines();
         foreach(int line, newLines) {

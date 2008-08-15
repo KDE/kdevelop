@@ -74,6 +74,9 @@ LcovJob::LcovJob(const KUrl& root, QObject* parent)
         : OutputJob(parent), m_lcov(0), m_root(root), m_delegate(0)
 {}
 
+LcovJob::~LcovJob()
+{}
+
 void LcovJob::setProcess(KProcess *proc)
 {
     Q_ASSERT(proc);

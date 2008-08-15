@@ -49,6 +49,7 @@ class VERITAS_COVERAGE_EXPORT LcovJob : public KDevelop::OutputJob
 
 public:
     LcovJob(const KUrl& root, QObject* parent=0);
+    virtual ~LcovJob();
     void setProcess(KProcess *proc); // takes ownership.
     void setDelegate(CovOutputDelegate *delegate);
     virtual void start();

@@ -49,7 +49,9 @@ private slots:
     void notCovered();
     void stopWatching();
     void multiCoverageOneFile();
-    
+
+    // TODO existing view -> open coverage. currently doesnt add annotations [=bug].
+
 private: // helpers
     void initManager(Veritas::CoveredFile* f);
     KTextEditor::View* triggerAnnotationsOnView(KDevelop::IDocument*);

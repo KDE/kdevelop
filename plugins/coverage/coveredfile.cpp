@@ -26,7 +26,8 @@ CoveredFile::CoveredFile()
 {}
 
 CoveredFile::~CoveredFile()
-{}
+{
+}
 
 KUrl CoveredFile::url() const
 {
@@ -40,7 +41,6 @@ void CoveredFile::setUrl(const KUrl& url)
 
 void CoveredFile::setCallCount(int line, int count)
 {
-    kWarning(m_nrofCalls.contains(line)) << "Overwriting call count for line " << line;
     m_nrofCalls[line] = count;
     m_reachableLines << line;
     m_nrofLines = m_reachableLines.count();
@@ -92,3 +92,4 @@ QMap<int, int> CoveredFile::callCountMap() const
     return m_nrofCalls;
 }
 
+#include "coveredfile.moc"

@@ -25,12 +25,13 @@ using Veritas::AnnotationModel;
 using Veritas::CoveredFile;
 
 
-AnnotationModel::AnnotationModel(CoveredFile* file)
+AnnotationModel::AnnotationModel(CoveredFile* file, QObject* parent)
     : m_file(file),
       m_notInstrumented(QBrush(Qt::BDiagPattern)),
       m_noCoverage(QBrush(Qt::red)),
       m_covered(QBrush(Qt::green))
 {
+    setParent(parent);
 }
 
 AnnotationModel::~AnnotationModel()

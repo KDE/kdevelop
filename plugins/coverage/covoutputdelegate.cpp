@@ -33,6 +33,9 @@ CovOutputDelegate::CovOutputDelegate(QObject* parent)
         processBrush(KColorScheme::View, KColorScheme::PositiveText)
 {}
 
+CovOutputDelegate::~CovOutputDelegate()
+{}
+
 void CovOutputDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
                                                  const QModelIndex& index) const
 {

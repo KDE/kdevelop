@@ -30,14 +30,6 @@ class QModelIndex;
 namespace Veritas
 {
 
-class CovOutputItem : public QStandardItem
-{
-public:
-    CovOutputItem(const QString &text);
-    ~CovOutputItem();
-    QString m_text;
-};
-
 class CovOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT

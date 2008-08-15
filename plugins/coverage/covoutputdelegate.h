@@ -33,6 +33,8 @@ class VERITAS_COVERAGE_EXPORT CovOutputDelegate : public QItemDelegate
 {
 public:
     CovOutputDelegate(QObject* parent = 0);
+    virtual ~CovOutputDelegate();
+
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 private:
     KStatefulBrush textBrush;

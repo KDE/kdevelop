@@ -30,8 +30,9 @@
 namespace Veritas
 {
 
-class VERITAS_COVERAGE_EXPORT CoveredFile
+class VERITAS_COVERAGE_EXPORT CoveredFile : public QObject
 {
+Q_OBJECT
 public:
     CoveredFile();
     virtual ~CoveredFile();

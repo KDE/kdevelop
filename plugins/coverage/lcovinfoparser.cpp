@@ -32,7 +32,11 @@ LcovInfoParser::LcovInfoParser(QObject* parent) : QObject(parent), m_sourceDev(0
 {}
 
 LcovInfoParser::~LcovInfoParser()
-{}
+{
+    foreach(CoveredFile* f, m_files) {
+        f->deleteLater();
+    }
+}
 
 void LcovInfoParser::setSource(const KUrl& source)
 {
@@ -81,7 +85,7 @@ void LcovInfoParser::parseLine(const QString& line)
         if (tmp_secondChar != 'F') break;
         // SF:<absolute path to the source file>
         Q_ASSERT(m_current == 0);
-        m_current = new CoveredFile; // TODO where to these get deleted?
+        m_current = new CoveredFile;
         m_current->setUrl(KUrl(line.split(":").value(1)));
         break;
     } case 'L': {

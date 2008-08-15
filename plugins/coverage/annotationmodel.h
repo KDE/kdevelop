@@ -30,7 +30,7 @@ class AnnotationModel : public KTextEditor::AnnotationModel
 {
   Q_OBJECT
   public:
-    AnnotationModel(Veritas::CoveredFile* file);
+    AnnotationModel(Veritas::CoveredFile* file, QObject* parent=0);
     virtual ~AnnotationModel();
     virtual QVariant data(int line, Qt::ItemDataRole role) const;
     void update();
