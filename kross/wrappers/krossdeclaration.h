@@ -10,17 +10,17 @@ namespace KDevelop { class LocalIndexedDeclaration; }
 namespace KDevelop { class Declaration; }
 namespace Handlers
 {
-	QVariant _kDevelopIndexedDeclarationHandler(void* type);
-	QVariant kDevelopIndexedDeclarationHandler(KDevelop::IndexedDeclaration* type) { return _kDevelopIndexedDeclarationHandler((void*) type); }
-	QVariant kDevelopIndexedDeclarationHandler(const KDevelop::IndexedDeclaration* type) { return _kDevelopIndexedDeclarationHandler((void*) type); }
+	QVariant _kDevelopDeclarationHandler(void* type);
+	QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type);
+	QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type);
 
 	QVariant _kDevelopLocalIndexedDeclarationHandler(void* type);
-	QVariant kDevelopLocalIndexedDeclarationHandler(KDevelop::LocalIndexedDeclaration* type) { return _kDevelopLocalIndexedDeclarationHandler((void*) type); }
-	QVariant kDevelopLocalIndexedDeclarationHandler(const KDevelop::LocalIndexedDeclaration* type) { return _kDevelopLocalIndexedDeclarationHandler((void*) type); }
+	QVariant kDevelopLocalIndexedDeclarationHandler(KDevelop::LocalIndexedDeclaration* type);
+	QVariant kDevelopLocalIndexedDeclarationHandler(const KDevelop::LocalIndexedDeclaration* type);
 
-	QVariant _kDevelopDeclarationHandler(void* type);
-	QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type) { return _kDevelopDeclarationHandler((void*) type); }
-	QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type) { return _kDevelopDeclarationHandler((void*) type); }
+	QVariant _kDevelopIndexedDeclarationHandler(void* type);
+	QVariant kDevelopIndexedDeclarationHandler(KDevelop::IndexedDeclaration* type);
+	QVariant kDevelopIndexedDeclarationHandler(const KDevelop::IndexedDeclaration* type);
 
 }
 

@@ -13,8 +13,8 @@ class KrossKDevelopVcsLocation : public QObject, public Kross::WrapperInterface
 		KrossKDevelopVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_ENUMS(KDevelop::VcsLocation::LocationType);
-		Q_FLAGS( KDevelop::VcsLocation::LocalLocation KDevelop::VcsLocation::RepositoryLocation);
+		Q_ENUMS(KDevelop::VcsLocation::LocationType)
+		Q_FLAGS( KDevelop::VcsLocation::LocalLocation KDevelop::VcsLocation::RepositoryLocation)
 
 		Q_SCRIPTABLE KDevelop::VcsLocation operator=(const KDevelop::VcsLocation& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE KUrl localUrl() const { return wrapped->localUrl(); }
@@ -51,6 +51,8 @@ QVariant _kDevelopVcsLocationHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopVcsLocation(t, 0));
 }
 bool b_KDevelopVcsLocation=krossvcslocation_registerHandler("KDevelop::VcsLocation*", _kDevelopVcsLocationHandler);
+QVariant kDevelopVcsLocationHandler(KDevelop::VcsLocation* type){ return _kDevelopVcsLocationHandler(type); }
+QVariant kDevelopVcsLocationHandler(const KDevelop::VcsLocation* type) { return _kDevelopVcsLocationHandler((void*) type); }
 
 }
 #include "krossvcslocation.moc"

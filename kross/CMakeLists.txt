@@ -17,8 +17,8 @@ if(GENERATE_INTERFACES)
         get_filename_component(ifacePath ${interface} PATH)
         
         add_custom_command(OUTPUT ${output} ${headerFile}
-                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross.shell ${interface}
-                                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath} -o ${output} 2> /dev/null
+                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${interface}
+                                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath} -o ${output}
                            MAIN_DEPENDENCY ${interface}
                            DEPENDS xmltokross/duchaintokross )
         set(mocFile ${weFile}.moc)

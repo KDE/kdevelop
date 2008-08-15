@@ -57,14 +57,16 @@ bool krossduchainlock_registerHandler(const QByteArray& name, Kross::MetaTypeHan
 
 namespace Handlers
 {
-QVariant _kDevelopDUChainLockHandler(void* type)
+QVariant _kDevelopDUChainWriteLockerHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::DUChainLock* t=static_cast<KDevelop::DUChainLock*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::DUChainLock*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopDUChainLock(t, 0));
+	KDevelop::DUChainWriteLocker* t=static_cast<KDevelop::DUChainWriteLocker*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::DUChainWriteLocker*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopDUChainWriteLocker(t, 0));
 }
-bool b_KDevelopDUChainLock=krossduchainlock_registerHandler("KDevelop::DUChainLock*", _kDevelopDUChainLockHandler);
+bool b_KDevelopDUChainWriteLocker=krossduchainlock_registerHandler("KDevelop::DUChainWriteLocker*", _kDevelopDUChainWriteLockerHandler);
+QVariant kDevelopDUChainWriteLockerHandler(KDevelop::DUChainWriteLocker* type){ return _kDevelopDUChainWriteLockerHandler(type); }
+QVariant kDevelopDUChainWriteLockerHandler(const KDevelop::DUChainWriteLocker* type) { return _kDevelopDUChainWriteLockerHandler((void*) type); }
 
 QVariant _kDevelopDUChainReadLockerHandler(void* type)
 {
@@ -74,15 +76,19 @@ QVariant _kDevelopDUChainReadLockerHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopDUChainReadLocker(t, 0));
 }
 bool b_KDevelopDUChainReadLocker=krossduchainlock_registerHandler("KDevelop::DUChainReadLocker*", _kDevelopDUChainReadLockerHandler);
+QVariant kDevelopDUChainReadLockerHandler(KDevelop::DUChainReadLocker* type){ return _kDevelopDUChainReadLockerHandler(type); }
+QVariant kDevelopDUChainReadLockerHandler(const KDevelop::DUChainReadLocker* type) { return _kDevelopDUChainReadLockerHandler((void*) type); }
 
-QVariant _kDevelopDUChainWriteLockerHandler(void* type)
+QVariant _kDevelopDUChainLockHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::DUChainWriteLocker* t=static_cast<KDevelop::DUChainWriteLocker*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::DUChainWriteLocker*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopDUChainWriteLocker(t, 0));
+	KDevelop::DUChainLock* t=static_cast<KDevelop::DUChainLock*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::DUChainLock*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopDUChainLock(t, 0));
 }
-bool b_KDevelopDUChainWriteLocker=krossduchainlock_registerHandler("KDevelop::DUChainWriteLocker*", _kDevelopDUChainWriteLockerHandler);
+bool b_KDevelopDUChainLock=krossduchainlock_registerHandler("KDevelop::DUChainLock*", _kDevelopDUChainLockHandler);
+QVariant kDevelopDUChainLockHandler(KDevelop::DUChainLock* type){ return _kDevelopDUChainLockHandler(type); }
+QVariant kDevelopDUChainLockHandler(const KDevelop::DUChainLock* type) { return _kDevelopDUChainLockHandler((void*) type); }
 
 }
 #include "krossduchainlock.moc"

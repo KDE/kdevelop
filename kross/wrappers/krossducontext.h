@@ -13,29 +13,29 @@ namespace KDevelop { class Import; }
 namespace KDevelop { class SearchItem; }
 namespace Handlers
 {
-	QVariant _kDevelopIndexedDUContextHandler(void* type);
-	QVariant kDevelopIndexedDUContextHandler(KDevelop::IndexedDUContext* type) { return _kDevelopIndexedDUContextHandler((void*) type); }
-	QVariant kDevelopIndexedDUContextHandler(const KDevelop::IndexedDUContext* type) { return _kDevelopIndexedDUContextHandler((void*) type); }
-
-	QVariant _kDevelopLocalIndexedDUContextHandler(void* type);
-	QVariant kDevelopLocalIndexedDUContextHandler(KDevelop::LocalIndexedDUContext* type) { return _kDevelopLocalIndexedDUContextHandler((void*) type); }
-	QVariant kDevelopLocalIndexedDUContextHandler(const KDevelop::LocalIndexedDUContext* type) { return _kDevelopLocalIndexedDUContextHandler((void*) type); }
-
-	QVariant _kDevelopImportTraceItemHandler(void* type);
-	QVariant kDevelopImportTraceItemHandler(KDevelop::ImportTraceItem* type) { return _kDevelopImportTraceItemHandler((void*) type); }
-	QVariant kDevelopImportTraceItemHandler(const KDevelop::ImportTraceItem* type) { return _kDevelopImportTraceItemHandler((void*) type); }
-
-	QVariant _kDevelopDUContextHandler(void* type);
-	QVariant kDevelopDUContextHandler(KDevelop::DUContext* type) { return _kDevelopDUContextHandler((void*) type); }
-	QVariant kDevelopDUContextHandler(const KDevelop::DUContext* type) { return _kDevelopDUContextHandler((void*) type); }
+	QVariant _kDevelopDUContextSearchItemHandler(void* type);
+	QVariant kDevelopDUContextSearchItemHandler(KDevelop::DUContext::SearchItem* type);
+	QVariant kDevelopDUContextSearchItemHandler(const KDevelop::DUContext::SearchItem* type);
 
 	QVariant _kDevelopDUContextImportHandler(void* type);
-	QVariant kDevelopDUContextImportHandler(KDevelop::DUContext::Import* type) { return _kDevelopDUContextImportHandler((void*) type); }
-	QVariant kDevelopDUContextImportHandler(const KDevelop::DUContext::Import* type) { return _kDevelopDUContextImportHandler((void*) type); }
+	QVariant kDevelopDUContextImportHandler(KDevelop::DUContext::Import* type);
+	QVariant kDevelopDUContextImportHandler(const KDevelop::DUContext::Import* type);
 
-	QVariant _kDevelopDUContextSearchItemHandler(void* type);
-	QVariant kDevelopDUContextSearchItemHandler(KDevelop::DUContext::SearchItem* type) { return _kDevelopDUContextSearchItemHandler((void*) type); }
-	QVariant kDevelopDUContextSearchItemHandler(const KDevelop::DUContext::SearchItem* type) { return _kDevelopDUContextSearchItemHandler((void*) type); }
+	QVariant _kDevelopDUContextHandler(void* type);
+	QVariant kDevelopDUContextHandler(KDevelop::DUContext* type);
+	QVariant kDevelopDUContextHandler(const KDevelop::DUContext* type);
+
+	QVariant _kDevelopImportTraceItemHandler(void* type);
+	QVariant kDevelopImportTraceItemHandler(KDevelop::ImportTraceItem* type);
+	QVariant kDevelopImportTraceItemHandler(const KDevelop::ImportTraceItem* type);
+
+	QVariant _kDevelopLocalIndexedDUContextHandler(void* type);
+	QVariant kDevelopLocalIndexedDUContextHandler(KDevelop::LocalIndexedDUContext* type);
+	QVariant kDevelopLocalIndexedDUContextHandler(const KDevelop::LocalIndexedDUContext* type);
+
+	QVariant _kDevelopIndexedDUContextHandler(void* type);
+	QVariant kDevelopIndexedDUContextHandler(KDevelop::IndexedDUContext* type);
+	QVariant kDevelopIndexedDUContextHandler(const KDevelop::IndexedDUContext* type);
 
 }
 

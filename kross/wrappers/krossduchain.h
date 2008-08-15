@@ -9,8 +9,8 @@ namespace KDevelop { class DUChain; }
 namespace Handlers
 {
 	QVariant _kDevelopDUChainHandler(void* type);
-	QVariant kDevelopDUChainHandler(KDevelop::DUChain* type) { return _kDevelopDUChainHandler((void*) type); }
-	QVariant kDevelopDUChainHandler(const KDevelop::DUChain* type) { return _kDevelopDUChainHandler((void*) type); }
+	QVariant kDevelopDUChainHandler(KDevelop::DUChain* type);
+	QVariant kDevelopDUChainHandler(const KDevelop::DUChain* type);
 
 }
 

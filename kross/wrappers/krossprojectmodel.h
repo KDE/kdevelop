@@ -17,45 +17,45 @@ namespace KDevelop { class WorkspaceItem; }
 namespace KDevelop { class ProjectModel; }
 namespace Handlers
 {
-	QVariant _kDevelopProjectBaseItemHandler(void* type);
-	QVariant kDevelopProjectBaseItemHandler(KDevelop::ProjectBaseItem* type) { return _kDevelopProjectBaseItemHandler((void*) type); }
-	QVariant kDevelopProjectBaseItemHandler(const KDevelop::ProjectBaseItem* type) { return _kDevelopProjectBaseItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectFolderItemHandler(void* type);
-	QVariant kDevelopProjectFolderItemHandler(KDevelop::ProjectFolderItem* type) { return _kDevelopProjectFolderItemHandler((void*) type); }
-	QVariant kDevelopProjectFolderItemHandler(const KDevelop::ProjectFolderItem* type) { return _kDevelopProjectFolderItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectBuildFolderItemHandler(void* type);
-	QVariant kDevelopProjectBuildFolderItemHandler(KDevelop::ProjectBuildFolderItem* type) { return _kDevelopProjectBuildFolderItemHandler((void*) type); }
-	QVariant kDevelopProjectBuildFolderItemHandler(const KDevelop::ProjectBuildFolderItem* type) { return _kDevelopProjectBuildFolderItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectTargetItemHandler(void* type);
-	QVariant kDevelopProjectTargetItemHandler(KDevelop::ProjectTargetItem* type) { return _kDevelopProjectTargetItemHandler((void*) type); }
-	QVariant kDevelopProjectTargetItemHandler(const KDevelop::ProjectTargetItem* type) { return _kDevelopProjectTargetItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectExecutableTargetItemHandler(void* type);
-	QVariant kDevelopProjectExecutableTargetItemHandler(KDevelop::ProjectExecutableTargetItem* type) { return _kDevelopProjectExecutableTargetItemHandler((void*) type); }
-	QVariant kDevelopProjectExecutableTargetItemHandler(const KDevelop::ProjectExecutableTargetItem* type) { return _kDevelopProjectExecutableTargetItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectLibraryTargetItemHandler(void* type);
-	QVariant kDevelopProjectLibraryTargetItemHandler(KDevelop::ProjectLibraryTargetItem* type) { return _kDevelopProjectLibraryTargetItemHandler((void*) type); }
-	QVariant kDevelopProjectLibraryTargetItemHandler(const KDevelop::ProjectLibraryTargetItem* type) { return _kDevelopProjectLibraryTargetItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectTestTargetItemHandler(void* type);
-	QVariant kDevelopProjectTestTargetItemHandler(KDevelop::ProjectTestTargetItem* type) { return _kDevelopProjectTestTargetItemHandler((void*) type); }
-	QVariant kDevelopProjectTestTargetItemHandler(const KDevelop::ProjectTestTargetItem* type) { return _kDevelopProjectTestTargetItemHandler((void*) type); }
-
-	QVariant _kDevelopProjectFileItemHandler(void* type);
-	QVariant kDevelopProjectFileItemHandler(KDevelop::ProjectFileItem* type) { return _kDevelopProjectFileItemHandler((void*) type); }
-	QVariant kDevelopProjectFileItemHandler(const KDevelop::ProjectFileItem* type) { return _kDevelopProjectFileItemHandler((void*) type); }
+	QVariant _kDevelopProjectModelHandler(void* type);
+	QVariant kDevelopProjectModelHandler(KDevelop::ProjectModel* type);
+	QVariant kDevelopProjectModelHandler(const KDevelop::ProjectModel* type);
 
 	QVariant _kDevelopWorkspaceItemHandler(void* type);
-	QVariant kDevelopWorkspaceItemHandler(KDevelop::WorkspaceItem* type) { return _kDevelopWorkspaceItemHandler((void*) type); }
-	QVariant kDevelopWorkspaceItemHandler(const KDevelop::WorkspaceItem* type) { return _kDevelopWorkspaceItemHandler((void*) type); }
+	QVariant kDevelopWorkspaceItemHandler(KDevelop::WorkspaceItem* type);
+	QVariant kDevelopWorkspaceItemHandler(const KDevelop::WorkspaceItem* type);
 
-	QVariant _kDevelopProjectModelHandler(void* type);
-	QVariant kDevelopProjectModelHandler(KDevelop::ProjectModel* type) { return _kDevelopProjectModelHandler((void*) type); }
-	QVariant kDevelopProjectModelHandler(const KDevelop::ProjectModel* type) { return _kDevelopProjectModelHandler((void*) type); }
+	QVariant _kDevelopProjectFileItemHandler(void* type);
+	QVariant kDevelopProjectFileItemHandler(KDevelop::ProjectFileItem* type);
+	QVariant kDevelopProjectFileItemHandler(const KDevelop::ProjectFileItem* type);
+
+	QVariant _kDevelopProjectTestTargetItemHandler(void* type);
+	QVariant kDevelopProjectTestTargetItemHandler(KDevelop::ProjectTestTargetItem* type);
+	QVariant kDevelopProjectTestTargetItemHandler(const KDevelop::ProjectTestTargetItem* type);
+
+	QVariant _kDevelopProjectLibraryTargetItemHandler(void* type);
+	QVariant kDevelopProjectLibraryTargetItemHandler(KDevelop::ProjectLibraryTargetItem* type);
+	QVariant kDevelopProjectLibraryTargetItemHandler(const KDevelop::ProjectLibraryTargetItem* type);
+
+	QVariant _kDevelopProjectExecutableTargetItemHandler(void* type);
+	QVariant kDevelopProjectExecutableTargetItemHandler(KDevelop::ProjectExecutableTargetItem* type);
+	QVariant kDevelopProjectExecutableTargetItemHandler(const KDevelop::ProjectExecutableTargetItem* type);
+
+	QVariant _kDevelopProjectTargetItemHandler(void* type);
+	QVariant kDevelopProjectTargetItemHandler(KDevelop::ProjectTargetItem* type);
+	QVariant kDevelopProjectTargetItemHandler(const KDevelop::ProjectTargetItem* type);
+
+	QVariant _kDevelopProjectBuildFolderItemHandler(void* type);
+	QVariant kDevelopProjectBuildFolderItemHandler(KDevelop::ProjectBuildFolderItem* type);
+	QVariant kDevelopProjectBuildFolderItemHandler(const KDevelop::ProjectBuildFolderItem* type);
+
+	QVariant _kDevelopProjectFolderItemHandler(void* type);
+	QVariant kDevelopProjectFolderItemHandler(KDevelop::ProjectFolderItem* type);
+	QVariant kDevelopProjectFolderItemHandler(const KDevelop::ProjectFolderItem* type);
+
+	QVariant _kDevelopProjectBaseItemHandler(void* type);
+	QVariant kDevelopProjectBaseItemHandler(KDevelop::ProjectBaseItem* type);
+	QVariant kDevelopProjectBaseItemHandler(const KDevelop::ProjectBaseItem* type);
 
 }
 

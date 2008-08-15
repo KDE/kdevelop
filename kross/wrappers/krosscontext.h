@@ -11,21 +11,21 @@ namespace KDevelop { class FileContext; }
 namespace KDevelop { class ProjectItemContext; }
 namespace Handlers
 {
-	QVariant _kDevelopContextHandler(void* type);
-	QVariant kDevelopContextHandler(KDevelop::Context* type) { return _kDevelopContextHandler((void*) type); }
-	QVariant kDevelopContextHandler(const KDevelop::Context* type) { return _kDevelopContextHandler((void*) type); }
-
-	QVariant _kDevelopEditorContextHandler(void* type);
-	QVariant kDevelopEditorContextHandler(KDevelop::EditorContext* type) { return _kDevelopEditorContextHandler((void*) type); }
-	QVariant kDevelopEditorContextHandler(const KDevelop::EditorContext* type) { return _kDevelopEditorContextHandler((void*) type); }
+	QVariant _kDevelopProjectItemContextHandler(void* type);
+	QVariant kDevelopProjectItemContextHandler(KDevelop::ProjectItemContext* type);
+	QVariant kDevelopProjectItemContextHandler(const KDevelop::ProjectItemContext* type);
 
 	QVariant _kDevelopFileContextHandler(void* type);
-	QVariant kDevelopFileContextHandler(KDevelop::FileContext* type) { return _kDevelopFileContextHandler((void*) type); }
-	QVariant kDevelopFileContextHandler(const KDevelop::FileContext* type) { return _kDevelopFileContextHandler((void*) type); }
+	QVariant kDevelopFileContextHandler(KDevelop::FileContext* type);
+	QVariant kDevelopFileContextHandler(const KDevelop::FileContext* type);
 
-	QVariant _kDevelopProjectItemContextHandler(void* type);
-	QVariant kDevelopProjectItemContextHandler(KDevelop::ProjectItemContext* type) { return _kDevelopProjectItemContextHandler((void*) type); }
-	QVariant kDevelopProjectItemContextHandler(const KDevelop::ProjectItemContext* type) { return _kDevelopProjectItemContextHandler((void*) type); }
+	QVariant _kDevelopEditorContextHandler(void* type);
+	QVariant kDevelopEditorContextHandler(KDevelop::EditorContext* type);
+	QVariant kDevelopEditorContextHandler(const KDevelop::EditorContext* type);
+
+	QVariant _kDevelopContextHandler(void* type);
+	QVariant kDevelopContextHandler(KDevelop::Context* type);
+	QVariant kDevelopContextHandler(const KDevelop::Context* type);
 
 }
 

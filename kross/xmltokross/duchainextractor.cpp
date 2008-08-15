@@ -81,6 +81,7 @@ class KrossWrapper : public DUChainReader
                       "#include <QtCore/QVariant>\n"
                       "#include <kross/core/manager.h>\n"
                       "#include <kross/core/wrapperinterface.h>\n";
+                      "#include \""+filename+"\"\n";
             foreach(const QString & include, includes)
             {
                 output += "#include <"+include+">\n";
@@ -156,12 +157,19 @@ class KrossWrapper : public DUChainReader
         void writeEndEnum(const QStringList& fl)
         {
             QStringList flags=fl;
-            output += "\t\tQ_ENUMS("+flags.takeFirst()+");\n"
+            output += "\t\tQ_ENUMS("+flags.takeFirst()+")\n"
                       "\t\tQ_FLAGS(";
             
             foreach(const QString& flag, flags)
                 output += ' '+flag;
-            output += ");\n\n";
+            output += ")\n\n";
+        }
+        
+        QString handlerName(const QString& classname)
+        {
+            QString handlername=QString(classname).replace("::", QString());
+            handlername[0]=handlername[0].toLower();
+            return handlername;
         }
         
         void createHandler(const QString& _classname)
@@ -171,15 +179,11 @@ class KrossWrapper : public DUChainReader
             
             qDebug() << "creating handler " << classname << classNamespace;
             
-            QString handlername=classname;
-            handlername[0]=handlername[0].toLower();
+            handlersHeader += "\tQVariant _"+handlerName(classname)+"Handler(void* type);\n";
+            handlersHeader += "\tQVariant "+handlerName(classname)+"Handler("+_classname+"* type);\n";
+            handlersHeader += "\tQVariant "+handlerName(classname)+"Handler(const "+_classname+"* type);\n\n";
             
-            handlersHeader += "\tQVariant _"+handlername+"Handler(void* type);\n";
-            handlersHeader += "\tQVariant "+handlername+"Handler("+_classname+"* type) { return _"+handlername+"Handler((void*) type); }\n";
-            handlersHeader += "\tQVariant "+handlername+"Handler(const "+_classname+"* type) "
-                                "{ return _"+handlername+"Handler((void*) type); }\n\n";
-            
-            output += "QVariant _"+handlername+"Handler(void* type)\n"
+            output += "QVariant _"+handlerName(classname)+"Handler(void* type)\n"
             "{\n"
             "\tif(!type) return QVariant();\n"
             "\t"+_classname+"* t=static_cast<"+_classname+"*>(type);\n"
@@ -192,7 +196,7 @@ class KrossWrapper : public DUChainReader
                     output+="\telse ";
                 else
                     output+='\t';
-                output += "if(dynamic_cast<"+item+"*>(t)) return Handlers::_"+handlername+"Handler((void*) type);\n";
+                output += "if(dynamic_cast<"+item+"*>(t)) return _"+handlerName(item)+"Handler(type);\n";
                 first=false;
             }
             if(sons.isEmpty())
@@ -200,9 +204,13 @@ class KrossWrapper : public DUChainReader
             else
                 output+="\telse ";
                 
-            output+="return qVariantFromValue((QObject*) new "+toKrossName(classname)+"(t, 0));\n"
-            "}\n"
-            "bool b_"+classname+"="+filename+"_registerHandler(\""+_classname+"*\", _"+handlername+"Handler);\n\n";
+            output += "return qVariantFromValue((QObject*) new "+toKrossName(classname)+"(t, 0));\n"
+                      "}\n"
+                      "bool b_"+classname+"="+filename+"_registerHandler(\""+_classname+"*\", _"+handlerName(classname)+"Handler);\n";
+            output += "QVariant "+handlerName(classname)+"Handler("+_classname+"* type)"
+                      "{ return _"+handlerName(classname)+"Handler(type); }\n";
+            output += "QVariant "+handlerName(classname)+"Handler(const "+_classname+"* type) "
+                      "{ return _"+handlerName(classname)+"Handler((void*) type); }\n\n";
         }
         
         void createFwd(const QString& classname)
@@ -224,8 +232,14 @@ class KrossWrapper : public DUChainReader
             
             output += "namespace Handlers\n{\n";
             handlersHeader += "namespace Handlers\n{\n";
-            foreach(const QString& aclass, definedClasses)
-                createHandler(aclass);
+            
+            QStringList::const_iterator it=definedClasses.constEnd();
+            do {
+                it--;
+                createHandler(*it);
+            }
+            while(it!=definedClasses.begin());
+            
             output += "}\n";
             handlersHeader += "}\n\n";
             output += "#include \""+filename+".moc\"\n";

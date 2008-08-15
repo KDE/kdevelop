@@ -50,11 +50,11 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		KrossKDevelopDeclaration(KDevelop::Declaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_ENUMS(KDevelop::Declaration::AccessPolicy);
-		Q_FLAGS( KDevelop::Declaration::Public KDevelop::Declaration::Protected KDevelop::Declaration::Private);
+		Q_ENUMS(KDevelop::Declaration::AccessPolicy)
+		Q_FLAGS( KDevelop::Declaration::Public KDevelop::Declaration::Protected KDevelop::Declaration::Private)
 
-		Q_ENUMS(KDevelop::Declaration::Kind);
-		Q_FLAGS( KDevelop::Declaration::Type KDevelop::Declaration::Instance KDevelop::Declaration::NamespaceAlias KDevelop::Declaration::Alias);
+		Q_ENUMS(KDevelop::Declaration::Kind)
+		Q_FLAGS( KDevelop::Declaration::Type KDevelop::Declaration::Instance KDevelop::Declaration::NamespaceAlias KDevelop::Declaration::Alias)
 
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
 		Q_SCRIPTABLE bool isForwardDeclaration() const { return wrapped->isForwardDeclaration(); }
@@ -108,14 +108,16 @@ bool krossdeclaration_registerHandler(const QByteArray& name, Kross::MetaTypeHan
 
 namespace Handlers
 {
-QVariant _kDevelopIndexedDeclarationHandler(void* type)
+QVariant _kDevelopDeclarationHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::IndexedDeclaration* t=static_cast<KDevelop::IndexedDeclaration*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::IndexedDeclaration*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopIndexedDeclaration(t, 0));
+	KDevelop::Declaration* t=static_cast<KDevelop::Declaration*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::Declaration*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopDeclaration(t, 0));
 }
-bool b_KDevelopIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
+bool b_KDevelopDeclaration=krossdeclaration_registerHandler("KDevelop::Declaration*", _kDevelopDeclarationHandler);
+QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type){ return _kDevelopDeclarationHandler(type); }
+QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type) { return _kDevelopDeclarationHandler((void*) type); }
 
 QVariant _kDevelopLocalIndexedDeclarationHandler(void* type)
 {
@@ -125,15 +127,19 @@ QVariant _kDevelopLocalIndexedDeclarationHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopLocalIndexedDeclaration(t, 0));
 }
 bool b_KDevelopLocalIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::LocalIndexedDeclaration*", _kDevelopLocalIndexedDeclarationHandler);
+QVariant kDevelopLocalIndexedDeclarationHandler(KDevelop::LocalIndexedDeclaration* type){ return _kDevelopLocalIndexedDeclarationHandler(type); }
+QVariant kDevelopLocalIndexedDeclarationHandler(const KDevelop::LocalIndexedDeclaration* type) { return _kDevelopLocalIndexedDeclarationHandler((void*) type); }
 
-QVariant _kDevelopDeclarationHandler(void* type)
+QVariant _kDevelopIndexedDeclarationHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::Declaration* t=static_cast<KDevelop::Declaration*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::Declaration*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopDeclaration(t, 0));
+	KDevelop::IndexedDeclaration* t=static_cast<KDevelop::IndexedDeclaration*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::IndexedDeclaration*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopIndexedDeclaration(t, 0));
 }
-bool b_KDevelopDeclaration=krossdeclaration_registerHandler("KDevelop::Declaration*", _kDevelopDeclarationHandler);
+bool b_KDevelopIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
+QVariant kDevelopIndexedDeclarationHandler(KDevelop::IndexedDeclaration* type){ return _kDevelopIndexedDeclarationHandler(type); }
+QVariant kDevelopIndexedDeclarationHandler(const KDevelop::IndexedDeclaration* type) { return _kDevelopIndexedDeclarationHandler((void*) type); }
 
 }
 #include "krossdeclaration.moc"

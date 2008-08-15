@@ -13,8 +13,8 @@ class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterf
 		KrossKDevelopProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_ENUMS(KDevelop::ProjectBaseItem::ProjectItemType);
-		Q_FLAGS( KDevelop::ProjectBaseItem::BuildFolder KDevelop::ProjectBaseItem::Folder KDevelop::ProjectBaseItem::ExecutableTarget KDevelop::ProjectBaseItem::LibraryTarget KDevelop::ProjectBaseItem::TestTarget KDevelop::ProjectBaseItem::Target KDevelop::ProjectBaseItem::File);
+		Q_ENUMS(KDevelop::ProjectBaseItem::ProjectItemType)
+		Q_FLAGS( KDevelop::ProjectBaseItem::BuildFolder KDevelop::ProjectBaseItem::Folder KDevelop::ProjectBaseItem::ExecutableTarget KDevelop::ProjectBaseItem::LibraryTarget KDevelop::ProjectBaseItem::TestTarget KDevelop::ProjectBaseItem::Target KDevelop::ProjectBaseItem::File)
 
 		Q_SCRIPTABLE void add(KDevelop::ProjectBaseItem* x0) { wrapped->add(x0); }
 		Q_SCRIPTABLE KDevelop::IProject* project() const { return wrapped->project(); }
@@ -166,84 +166,16 @@ bool krossprojectmodel_registerHandler(const QByteArray& name, Kross::MetaTypeHa
 
 namespace Handlers
 {
-QVariant _kDevelopProjectBaseItemHandler(void* type)
+QVariant _kDevelopProjectModelHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::ProjectBaseItem* t=static_cast<KDevelop::ProjectBaseItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectBaseItem*>(t));
-	if(dynamic_cast<KDevelop::ProjectFolderItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
-	else if(dynamic_cast<KDevelop::ProjectTargetItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
-	else if(dynamic_cast<KDevelop::ProjectFileItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
-	else return qVariantFromValue((QObject*) new KrossKDevelopProjectBaseItem(t, 0));
+	KDevelop::ProjectModel* t=static_cast<KDevelop::ProjectModel*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectModel*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectModel(t, 0));
 }
-bool b_KDevelopProjectBaseItem=krossprojectmodel_registerHandler("KDevelop::ProjectBaseItem*", _kDevelopProjectBaseItemHandler);
-
-QVariant _kDevelopProjectFolderItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectFolderItem* t=static_cast<KDevelop::ProjectFolderItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectFolderItem*>(t));
-	if(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t)) return Handlers::_kDevelopProjectFolderItemHandler((void*) type);
-	else return qVariantFromValue((QObject*) new KrossKDevelopProjectFolderItem(t, 0));
-}
-bool b_KDevelopProjectFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectFolderItem*", _kDevelopProjectFolderItemHandler);
-
-QVariant _kDevelopProjectBuildFolderItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectBuildFolderItem* t=static_cast<KDevelop::ProjectBuildFolderItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopProjectBuildFolderItem(t, 0));
-}
-bool b_KDevelopProjectBuildFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectBuildFolderItem*", _kDevelopProjectBuildFolderItemHandler);
-
-QVariant _kDevelopProjectTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectTargetItem* t=static_cast<KDevelop::ProjectTargetItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectTargetItem*>(t));
-	if(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)) return Handlers::_kDevelopProjectTargetItemHandler((void*) type);
-	else if(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t)) return Handlers::_kDevelopProjectTargetItemHandler((void*) type);
-	else return qVariantFromValue((QObject*) new KrossKDevelopProjectTargetItem(t, 0));
-}
-bool b_KDevelopProjectTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTargetItem*", _kDevelopProjectTargetItemHandler);
-
-QVariant _kDevelopProjectExecutableTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectExecutableTargetItem* t=static_cast<KDevelop::ProjectExecutableTargetItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t));
-	if(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t)) return Handlers::_kDevelopProjectExecutableTargetItemHandler((void*) type);
-	else return qVariantFromValue((QObject*) new KrossKDevelopProjectExecutableTargetItem(t, 0));
-}
-bool b_KDevelopProjectExecutableTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectExecutableTargetItem*", _kDevelopProjectExecutableTargetItemHandler);
-
-QVariant _kDevelopProjectLibraryTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectLibraryTargetItem* t=static_cast<KDevelop::ProjectLibraryTargetItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopProjectLibraryTargetItem(t, 0));
-}
-bool b_KDevelopProjectLibraryTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectLibraryTargetItem*", _kDevelopProjectLibraryTargetItemHandler);
-
-QVariant _kDevelopProjectTestTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectTestTargetItem* t=static_cast<KDevelop::ProjectTestTargetItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopProjectTestTargetItem(t, 0));
-}
-bool b_KDevelopProjectTestTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTestTargetItem*", _kDevelopProjectTestTargetItemHandler);
-
-QVariant _kDevelopProjectFileItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectFileItem* t=static_cast<KDevelop::ProjectFileItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectFileItem*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopProjectFileItem(t, 0));
-}
-bool b_KDevelopProjectFileItem=krossprojectmodel_registerHandler("KDevelop::ProjectFileItem*", _kDevelopProjectFileItemHandler);
+bool b_KDevelopProjectModel=krossprojectmodel_registerHandler("KDevelop::ProjectModel*", _kDevelopProjectModelHandler);
+QVariant kDevelopProjectModelHandler(KDevelop::ProjectModel* type){ return _kDevelopProjectModelHandler(type); }
+QVariant kDevelopProjectModelHandler(const KDevelop::ProjectModel* type) { return _kDevelopProjectModelHandler((void*) type); }
 
 QVariant _kDevelopWorkspaceItemHandler(void* type)
 {
@@ -253,15 +185,103 @@ QVariant _kDevelopWorkspaceItemHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopWorkspaceItem(t, 0));
 }
 bool b_KDevelopWorkspaceItem=krossprojectmodel_registerHandler("KDevelop::WorkspaceItem*", _kDevelopWorkspaceItemHandler);
+QVariant kDevelopWorkspaceItemHandler(KDevelop::WorkspaceItem* type){ return _kDevelopWorkspaceItemHandler(type); }
+QVariant kDevelopWorkspaceItemHandler(const KDevelop::WorkspaceItem* type) { return _kDevelopWorkspaceItemHandler((void*) type); }
 
-QVariant _kDevelopProjectModelHandler(void* type)
+QVariant _kDevelopProjectFileItemHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::ProjectModel* t=static_cast<KDevelop::ProjectModel*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ProjectModel*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopProjectModel(t, 0));
+	KDevelop::ProjectFileItem* t=static_cast<KDevelop::ProjectFileItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectFileItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectFileItem(t, 0));
 }
-bool b_KDevelopProjectModel=krossprojectmodel_registerHandler("KDevelop::ProjectModel*", _kDevelopProjectModelHandler);
+bool b_KDevelopProjectFileItem=krossprojectmodel_registerHandler("KDevelop::ProjectFileItem*", _kDevelopProjectFileItemHandler);
+QVariant kDevelopProjectFileItemHandler(KDevelop::ProjectFileItem* type){ return _kDevelopProjectFileItemHandler(type); }
+QVariant kDevelopProjectFileItemHandler(const KDevelop::ProjectFileItem* type) { return _kDevelopProjectFileItemHandler((void*) type); }
+
+QVariant _kDevelopProjectTestTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectTestTargetItem* t=static_cast<KDevelop::ProjectTestTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectTestTargetItem(t, 0));
+}
+bool b_KDevelopProjectTestTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTestTargetItem*", _kDevelopProjectTestTargetItemHandler);
+QVariant kDevelopProjectTestTargetItemHandler(KDevelop::ProjectTestTargetItem* type){ return _kDevelopProjectTestTargetItemHandler(type); }
+QVariant kDevelopProjectTestTargetItemHandler(const KDevelop::ProjectTestTargetItem* type) { return _kDevelopProjectTestTargetItemHandler((void*) type); }
+
+QVariant _kDevelopProjectLibraryTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectLibraryTargetItem* t=static_cast<KDevelop::ProjectLibraryTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectLibraryTargetItem(t, 0));
+}
+bool b_KDevelopProjectLibraryTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectLibraryTargetItem*", _kDevelopProjectLibraryTargetItemHandler);
+QVariant kDevelopProjectLibraryTargetItemHandler(KDevelop::ProjectLibraryTargetItem* type){ return _kDevelopProjectLibraryTargetItemHandler(type); }
+QVariant kDevelopProjectLibraryTargetItemHandler(const KDevelop::ProjectLibraryTargetItem* type) { return _kDevelopProjectLibraryTargetItemHandler((void*) type); }
+
+QVariant _kDevelopProjectExecutableTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectExecutableTargetItem* t=static_cast<KDevelop::ProjectExecutableTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t)) return _kDevelopProjectTestTargetItemHandler(type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectExecutableTargetItem(t, 0));
+}
+bool b_KDevelopProjectExecutableTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectExecutableTargetItem*", _kDevelopProjectExecutableTargetItemHandler);
+QVariant kDevelopProjectExecutableTargetItemHandler(KDevelop::ProjectExecutableTargetItem* type){ return _kDevelopProjectExecutableTargetItemHandler(type); }
+QVariant kDevelopProjectExecutableTargetItemHandler(const KDevelop::ProjectExecutableTargetItem* type) { return _kDevelopProjectExecutableTargetItemHandler((void*) type); }
+
+QVariant _kDevelopProjectTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectTargetItem* t=static_cast<KDevelop::ProjectTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectTargetItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)) return _kDevelopProjectExecutableTargetItemHandler(type);
+	else if(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t)) return _kDevelopProjectLibraryTargetItemHandler(type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectTargetItem(t, 0));
+}
+bool b_KDevelopProjectTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTargetItem*", _kDevelopProjectTargetItemHandler);
+QVariant kDevelopProjectTargetItemHandler(KDevelop::ProjectTargetItem* type){ return _kDevelopProjectTargetItemHandler(type); }
+QVariant kDevelopProjectTargetItemHandler(const KDevelop::ProjectTargetItem* type) { return _kDevelopProjectTargetItemHandler((void*) type); }
+
+QVariant _kDevelopProjectBuildFolderItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectBuildFolderItem* t=static_cast<KDevelop::ProjectBuildFolderItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectBuildFolderItem(t, 0));
+}
+bool b_KDevelopProjectBuildFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectBuildFolderItem*", _kDevelopProjectBuildFolderItemHandler);
+QVariant kDevelopProjectBuildFolderItemHandler(KDevelop::ProjectBuildFolderItem* type){ return _kDevelopProjectBuildFolderItemHandler(type); }
+QVariant kDevelopProjectBuildFolderItemHandler(const KDevelop::ProjectBuildFolderItem* type) { return _kDevelopProjectBuildFolderItemHandler((void*) type); }
+
+QVariant _kDevelopProjectFolderItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectFolderItem* t=static_cast<KDevelop::ProjectFolderItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectFolderItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t)) return _kDevelopProjectBuildFolderItemHandler(type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectFolderItem(t, 0));
+}
+bool b_KDevelopProjectFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectFolderItem*", _kDevelopProjectFolderItemHandler);
+QVariant kDevelopProjectFolderItemHandler(KDevelop::ProjectFolderItem* type){ return _kDevelopProjectFolderItemHandler(type); }
+QVariant kDevelopProjectFolderItemHandler(const KDevelop::ProjectFolderItem* type) { return _kDevelopProjectFolderItemHandler((void*) type); }
+
+QVariant _kDevelopProjectBaseItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectBaseItem* t=static_cast<KDevelop::ProjectBaseItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectBaseItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectFolderItem*>(t)) return _kDevelopProjectFolderItemHandler(type);
+	else if(dynamic_cast<KDevelop::ProjectTargetItem*>(t)) return _kDevelopProjectTargetItemHandler(type);
+	else if(dynamic_cast<KDevelop::ProjectFileItem*>(t)) return _kDevelopProjectFileItemHandler(type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectBaseItem(t, 0));
+}
+bool b_KDevelopProjectBaseItem=krossprojectmodel_registerHandler("KDevelop::ProjectBaseItem*", _kDevelopProjectBaseItemHandler);
+QVariant kDevelopProjectBaseItemHandler(KDevelop::ProjectBaseItem* type){ return _kDevelopProjectBaseItemHandler(type); }
+QVariant kDevelopProjectBaseItemHandler(const KDevelop::ProjectBaseItem* type) { return _kDevelopProjectBaseItemHandler((void*) type); }
 
 }
 #include "krossprojectmodel.moc"

@@ -37,6 +37,8 @@ QVariant _kDevelopILanguageHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopILanguage(t, 0));
 }
 bool b_KDevelopILanguage=krossilanguage_registerHandler("KDevelop::ILanguage*", _kDevelopILanguageHandler);
+QVariant kDevelopILanguageHandler(KDevelop::ILanguage* type){ return _kDevelopILanguageHandler(type); }
+QVariant kDevelopILanguageHandler(const KDevelop::ILanguage* type) { return _kDevelopILanguageHandler((void*) type); }
 
 }
 #include "krossilanguage.moc"

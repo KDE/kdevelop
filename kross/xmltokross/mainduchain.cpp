@@ -24,7 +24,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 
-
 #include <KApplication>
 #include <KCmdLineArgs>
 #include <KAboutData>
@@ -53,10 +52,31 @@ protected:
         ConsoleIDEExtension() {}
 };
 
+bool verbose=false;
+void messageOutput(QtMsgType type, const char *msg)
+{
+    switch (type) {
+        case QtDebugMsg:
+//             if(verbose)
+                fprintf(stderr, "%s\n", msg);
+            break;
+        case QtWarningMsg:
+//             if(verbose)
+                fprintf(stderr, "Warning: %s\n", msg);
+            break;
+        case QtCriticalMsg:
+            fprintf(stderr, "Critical: %s\n", msg);
+            break;
+        case QtFatalMsg:
+            fprintf(stderr, "Fatal: %s\n", msg);
+            abort();
+    }
+}
 
 using namespace KDevelop;
 int main(int argc, char** argv)
 {
+    qInstallMsgHandler(messageOutput);
     KAboutData aboutData( "duchaintokross", 0, ki18n( "duchaintokross" ),
                           "33", ki18n("tooo booring"), KAboutData::License_GPL,
                           ki18n( "(c) 2008, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
@@ -69,10 +89,10 @@ int main(int argc, char** argv)
     options.add("F <filename>", ki18n("filename to be used for the .moc and the .h file"), QByteArray());
     options.add("D <directory>", ki18n("directory where to put the .h output"), QByteArray());
     options.add("o <output>", ki18n("directory where to put the code output"), QByteArray());
+    options.add("v", ki18n("Verbose output"), QByteArray());
     KCmdLineArgs::addCmdLineOptions( options );
     
     KApplication app;
-    
     ConsoleIDEExtension::init();
     Core::initialize(Core::NoUi);
     
@@ -93,7 +113,7 @@ int main(int argc, char** argv)
     QString directory(args->getOption("D"));
     QStringList toinclude(args->getOption("i").split(':'));
     QString output(args->getOption("o"));
-    
+    verbose=args->isSet("v");
     args->clear();
     
     DUChainExtractor e;

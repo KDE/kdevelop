@@ -11,21 +11,21 @@ namespace KDevelop { class TopDUContext; }
 namespace KDevelop { class Cache; }
 namespace Handlers
 {
-	QVariant _kDevelopReferencedTopDUContextHandler(void* type);
-	QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type) { return _kDevelopReferencedTopDUContextHandler((void*) type); }
-	QVariant kDevelopReferencedTopDUContextHandler(const KDevelop::ReferencedTopDUContext* type) { return _kDevelopReferencedTopDUContextHandler((void*) type); }
-
-	QVariant _kDevelopIndexedTopDUContextHandler(void* type);
-	QVariant kDevelopIndexedTopDUContextHandler(KDevelop::IndexedTopDUContext* type) { return _kDevelopIndexedTopDUContextHandler((void*) type); }
-	QVariant kDevelopIndexedTopDUContextHandler(const KDevelop::IndexedTopDUContext* type) { return _kDevelopIndexedTopDUContextHandler((void*) type); }
+	QVariant _kDevelopTopDUContextCacheHandler(void* type);
+	QVariant kDevelopTopDUContextCacheHandler(KDevelop::TopDUContext::Cache* type);
+	QVariant kDevelopTopDUContextCacheHandler(const KDevelop::TopDUContext::Cache* type);
 
 	QVariant _kDevelopTopDUContextHandler(void* type);
-	QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type) { return _kDevelopTopDUContextHandler((void*) type); }
-	QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type) { return _kDevelopTopDUContextHandler((void*) type); }
+	QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type);
+	QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type);
 
-	QVariant _kDevelopTopDUContextCacheHandler(void* type);
-	QVariant kDevelopTopDUContextCacheHandler(KDevelop::TopDUContext::Cache* type) { return _kDevelopTopDUContextCacheHandler((void*) type); }
-	QVariant kDevelopTopDUContextCacheHandler(const KDevelop::TopDUContext::Cache* type) { return _kDevelopTopDUContextCacheHandler((void*) type); }
+	QVariant _kDevelopIndexedTopDUContextHandler(void* type);
+	QVariant kDevelopIndexedTopDUContextHandler(KDevelop::IndexedTopDUContext* type);
+	QVariant kDevelopIndexedTopDUContextHandler(const KDevelop::IndexedTopDUContext* type);
+
+	QVariant _kDevelopReferencedTopDUContextHandler(void* type);
+	QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type);
+	QVariant kDevelopReferencedTopDUContextHandler(const KDevelop::ReferencedTopDUContext* type);
 
 }
 

@@ -10,17 +10,17 @@ namespace KDevelop { class DUChainReadLocker; }
 namespace KDevelop { class DUChainWriteLocker; }
 namespace Handlers
 {
-	QVariant _kDevelopDUChainLockHandler(void* type);
-	QVariant kDevelopDUChainLockHandler(KDevelop::DUChainLock* type) { return _kDevelopDUChainLockHandler((void*) type); }
-	QVariant kDevelopDUChainLockHandler(const KDevelop::DUChainLock* type) { return _kDevelopDUChainLockHandler((void*) type); }
+	QVariant _kDevelopDUChainWriteLockerHandler(void* type);
+	QVariant kDevelopDUChainWriteLockerHandler(KDevelop::DUChainWriteLocker* type);
+	QVariant kDevelopDUChainWriteLockerHandler(const KDevelop::DUChainWriteLocker* type);
 
 	QVariant _kDevelopDUChainReadLockerHandler(void* type);
-	QVariant kDevelopDUChainReadLockerHandler(KDevelop::DUChainReadLocker* type) { return _kDevelopDUChainReadLockerHandler((void*) type); }
-	QVariant kDevelopDUChainReadLockerHandler(const KDevelop::DUChainReadLocker* type) { return _kDevelopDUChainReadLockerHandler((void*) type); }
+	QVariant kDevelopDUChainReadLockerHandler(KDevelop::DUChainReadLocker* type);
+	QVariant kDevelopDUChainReadLockerHandler(const KDevelop::DUChainReadLocker* type);
 
-	QVariant _kDevelopDUChainWriteLockerHandler(void* type);
-	QVariant kDevelopDUChainWriteLockerHandler(KDevelop::DUChainWriteLocker* type) { return _kDevelopDUChainWriteLockerHandler((void*) type); }
-	QVariant kDevelopDUChainWriteLockerHandler(const KDevelop::DUChainWriteLocker* type) { return _kDevelopDUChainWriteLockerHandler((void*) type); }
+	QVariant _kDevelopDUChainLockHandler(void* type);
+	QVariant kDevelopDUChainLockHandler(KDevelop::DUChainLock* type);
+	QVariant kDevelopDUChainLockHandler(const KDevelop::DUChainLock* type);
 
 }
 

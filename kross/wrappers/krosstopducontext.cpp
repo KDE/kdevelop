@@ -49,8 +49,8 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_ENUMS(KDevelop::TopDUContext::Flags);
-		Q_FLAGS( KDevelop::TopDUContext::NoFlags KDevelop::TopDUContext::ProxyContextFlag KDevelop::TopDUContext::AnyFlag KDevelop::TopDUContext::UpdatingContext KDevelop::TopDUContext::LastFlag);
+		Q_ENUMS(KDevelop::TopDUContext::Flags)
+		Q_FLAGS( KDevelop::TopDUContext::NoFlags KDevelop::TopDUContext::ProxyContextFlag KDevelop::TopDUContext::AnyFlag KDevelop::TopDUContext::UpdatingContext KDevelop::TopDUContext::LastFlag)
 
 		Q_SCRIPTABLE void deleteSelf() { wrapped->deleteSelf(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* sharedDataOwner() const { return wrapped->sharedDataOwner(); }
@@ -104,23 +104,16 @@ bool krosstopducontext_registerHandler(const QByteArray& name, Kross::MetaTypeHa
 
 namespace Handlers
 {
-QVariant _kDevelopReferencedTopDUContextHandler(void* type)
+QVariant _kDevelopTopDUContextCacheHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::ReferencedTopDUContext* t=static_cast<KDevelop::ReferencedTopDUContext*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::ReferencedTopDUContext*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopReferencedTopDUContext(t, 0));
+	KDevelop::TopDUContext::Cache* t=static_cast<KDevelop::TopDUContext::Cache*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::TopDUContext::Cache*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopTopDUContextCache(t, 0));
 }
-bool b_KDevelopReferencedTopDUContext=krosstopducontext_registerHandler("KDevelop::ReferencedTopDUContext*", _kDevelopReferencedTopDUContextHandler);
-
-QVariant _kDevelopIndexedTopDUContextHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::IndexedTopDUContext* t=static_cast<KDevelop::IndexedTopDUContext*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::IndexedTopDUContext*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopIndexedTopDUContext(t, 0));
-}
-bool b_KDevelopIndexedTopDUContext=krosstopducontext_registerHandler("KDevelop::IndexedTopDUContext*", _kDevelopIndexedTopDUContextHandler);
+bool b_KDevelopTopDUContextCache=krosstopducontext_registerHandler("KDevelop::TopDUContext::Cache*", _kDevelopTopDUContextCacheHandler);
+QVariant kDevelopTopDUContextCacheHandler(KDevelop::TopDUContext::Cache* type){ return _kDevelopTopDUContextCacheHandler(type); }
+QVariant kDevelopTopDUContextCacheHandler(const KDevelop::TopDUContext::Cache* type) { return _kDevelopTopDUContextCacheHandler((void*) type); }
 
 QVariant _kDevelopTopDUContextHandler(void* type)
 {
@@ -130,15 +123,30 @@ QVariant _kDevelopTopDUContextHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopTopDUContext(t, 0));
 }
 bool b_KDevelopTopDUContext=krosstopducontext_registerHandler("KDevelop::TopDUContext*", _kDevelopTopDUContextHandler);
+QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type){ return _kDevelopTopDUContextHandler(type); }
+QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type) { return _kDevelopTopDUContextHandler((void*) type); }
 
-QVariant _kDevelopTopDUContextCacheHandler(void* type)
+QVariant _kDevelopIndexedTopDUContextHandler(void* type)
 {
 	if(!type) return QVariant();
-	KDevelop::TopDUContext::Cache* t=static_cast<KDevelop::TopDUContext::Cache*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::TopDUContext::Cache*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopTopDUContextCache(t, 0));
+	KDevelop::IndexedTopDUContext* t=static_cast<KDevelop::IndexedTopDUContext*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::IndexedTopDUContext*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopIndexedTopDUContext(t, 0));
 }
-bool b_KDevelopTopDUContextCache=krosstopducontext_registerHandler("KDevelop::TopDUContext::Cache*", _kDevelopTopDUContextCacheHandler);
+bool b_KDevelopIndexedTopDUContext=krosstopducontext_registerHandler("KDevelop::IndexedTopDUContext*", _kDevelopIndexedTopDUContextHandler);
+QVariant kDevelopIndexedTopDUContextHandler(KDevelop::IndexedTopDUContext* type){ return _kDevelopIndexedTopDUContextHandler(type); }
+QVariant kDevelopIndexedTopDUContextHandler(const KDevelop::IndexedTopDUContext* type) { return _kDevelopIndexedTopDUContextHandler((void*) type); }
+
+QVariant _kDevelopReferencedTopDUContextHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ReferencedTopDUContext* t=static_cast<KDevelop::ReferencedTopDUContext*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ReferencedTopDUContext*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopReferencedTopDUContext(t, 0));
+}
+bool b_KDevelopReferencedTopDUContext=krosstopducontext_registerHandler("KDevelop::ReferencedTopDUContext*", _kDevelopReferencedTopDUContextHandler);
+QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type){ return _kDevelopReferencedTopDUContextHandler(type); }
+QVariant kDevelopReferencedTopDUContextHandler(const KDevelop::ReferencedTopDUContext* type) { return _kDevelopReferencedTopDUContextHandler((void*) type); }
 
 }
 #include "krosstopducontext.moc"

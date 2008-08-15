@@ -9,8 +9,8 @@ namespace KDevelop { class IDocument; }
 namespace Handlers
 {
 	QVariant _kDevelopIDocumentHandler(void* type);
-	QVariant kDevelopIDocumentHandler(KDevelop::IDocument* type) { return _kDevelopIDocumentHandler((void*) type); }
-	QVariant kDevelopIDocumentHandler(const KDevelop::IDocument* type) { return _kDevelopIDocumentHandler((void*) type); }
+	QVariant kDevelopIDocumentHandler(KDevelop::IDocument* type);
+	QVariant kDevelopIDocumentHandler(const KDevelop::IDocument* type);
 
 }
 

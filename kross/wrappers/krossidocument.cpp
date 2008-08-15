@@ -13,11 +13,11 @@ class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_ENUMS(KDevelop::IDocument::DocumentState);
-		Q_FLAGS( KDevelop::IDocument::Clean KDevelop::IDocument::Modified KDevelop::IDocument::Dirty KDevelop::IDocument::DirtyAndModified);
+		Q_ENUMS(KDevelop::IDocument::DocumentState)
+		Q_FLAGS( KDevelop::IDocument::Clean KDevelop::IDocument::Modified KDevelop::IDocument::Dirty KDevelop::IDocument::DirtyAndModified)
 
-		Q_ENUMS(KDevelop::IDocument::DocumentSaveMode);
-		Q_FLAGS( KDevelop::IDocument::Default KDevelop::IDocument::Silent KDevelop::IDocument::Discard);
+		Q_ENUMS(KDevelop::IDocument::DocumentSaveMode)
+		Q_FLAGS( KDevelop::IDocument::Default KDevelop::IDocument::Silent KDevelop::IDocument::Discard)
 
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KMimeType > mimeType() const { return wrapped->mimeType(); }
@@ -51,6 +51,8 @@ QVariant _kDevelopIDocumentHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopIDocument(t, 0));
 }
 bool b_KDevelopIDocument=krossidocument_registerHandler("KDevelop::IDocument*", _kDevelopIDocumentHandler);
+QVariant kDevelopIDocumentHandler(KDevelop::IDocument* type){ return _kDevelopIDocumentHandler(type); }
+QVariant kDevelopIDocumentHandler(const KDevelop::IDocument* type) { return _kDevelopIDocumentHandler((void*) type); }
 
 }
 #include "krossidocument.moc"

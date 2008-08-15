@@ -55,6 +55,8 @@ QVariant _kDevelopDUChainHandler(void* type)
 	return qVariantFromValue((QObject*) new KrossKDevelopDUChain(t, 0));
 }
 bool b_KDevelopDUChain=krossduchain_registerHandler("KDevelop::DUChain*", _kDevelopDUChainHandler);
+QVariant kDevelopDUChainHandler(KDevelop::DUChain* type){ return _kDevelopDUChainHandler(type); }
+QVariant kDevelopDUChainHandler(const KDevelop::DUChain* type) { return _kDevelopDUChainHandler((void*) type); }
 
 }
 #include "krossduchain.moc"
