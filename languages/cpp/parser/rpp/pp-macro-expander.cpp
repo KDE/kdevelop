@@ -141,7 +141,7 @@ struct EnableMacroExpansion {
 
 IndexedString definedIndex = IndexedString("defined");
 IndexedString lineIndex = IndexedString("__LINE__");
-IndexedString fileIndex = IndexedString("__FILE_");
+IndexedString fileIndex = IndexedString("__FILE__");
 IndexedString dateIndex = IndexedString("__DATE__");
 IndexedString timeIndex= IndexedString("__TIME__");
 
