@@ -15,6 +15,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
+    duchain/codemodel.cpp
     duchain/duchain.cpp
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
@@ -127,6 +128,7 @@ install(FILES
 install(FILES
     duchain/parsingenvironment.h
     duchain/duchain.h
+    duchain/codemodel.h
     duchain/ducontext.h
     duchain/ducontextdata.h
     duchain/arrayhelpers.h

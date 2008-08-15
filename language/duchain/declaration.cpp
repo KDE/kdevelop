@@ -42,7 +42,9 @@
 #include "persistentsymboltable.h"
 #include "repositories/stringrepository.h"
 #include "types/identifiedtype.h"
+#include "types/structuretype.h"
 #include "functiondefinition.h"
+#include "codemodel.h"
 
 using namespace KTextEditor;
 
@@ -146,8 +148,11 @@ Declaration::~Declaration()
   
   if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
     SymbolTable::self()->removeDeclaration(this);
-    if(!topContext()->isOnDisk())
-      PersistentSymbolTable::self().removeDeclaration(qualifiedIdentifier(), this);
+    if(!topContext()->isOnDisk()) {
+      QualifiedIdentifier id = qualifiedIdentifier();
+      PersistentSymbolTable::self().removeDeclaration(id, this);
+      CodeModel::self().removeItem(url(), id);
+    }
   }
   
   d->m_inSymbolTable = false;
@@ -542,12 +547,28 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
   if(!d->m_identifier.isEmpty()) {
     if(!d->m_inSymbolTable && inSymbolTable) {
       SymbolTable::self()->addDeclaration(this);
-      PersistentSymbolTable::self().addDeclaration(qualifiedIdentifier(), this);
+      QualifiedIdentifier id(qualifiedIdentifier());
+      PersistentSymbolTable::self().addDeclaration(id, this);
+      
+      CodeModelItem::Kind kind = CodeModelItem::Unknown;
+      
+      if(this->isFunctionDeclaration())
+        kind = CodeModelItem::Function;
+      
+      if(this->kind() == Type && type<StructureType>())
+        kind = CodeModelItem::Class;
+      
+      if(kind == CodeModelItem::Unknown && this->kind() == Instance)
+        kind = CodeModelItem::Variable;
+        
+      CodeModel::self().addItem(url(), id, kind);
     }
   
     else if(d->m_inSymbolTable && !inSymbolTable) {
       SymbolTable::self()->removeDeclaration(this);
-      PersistentSymbolTable::self().removeDeclaration(qualifiedIdentifier(), this);
+      QualifiedIdentifier id(qualifiedIdentifier());
+      PersistentSymbolTable::self().removeDeclaration(id, this);
+      CodeModel::self().removeItem(url(), id);
     }
   }
   d->m_inSymbolTable = inSymbolTable;

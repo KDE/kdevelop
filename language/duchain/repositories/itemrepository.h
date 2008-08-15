@@ -540,6 +540,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return m_changed;
     }
     
+    void setChanged() {
+      m_changed = true;
+    }
+    
   private:
     
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
@@ -640,7 +644,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 7,
+    ItemRepositoryVersion = 8,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -980,6 +984,29 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
   }
 
+  ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
+  ///or the equals(..) function. That would completely destroy the consistency.
+  ///@param index The index. It must be valid(match an existing item), and nonzero.
+  ///@param dynamic will be applied to the item.
+  Item* dynamicItemFromIndex(unsigned int index, const DynamicData* dynamic = 0) {
+    Q_ASSERT(index);
+    
+    ThisLocker lock(&m_mutex);
+    
+    unsigned short bucket = (index >> 16);
+    Q_ASSERT(bucket); //We don't use zero buckets
+    
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+    Q_ASSERT(bucket < m_bucketCount);
+    if(!bucketPtr) {
+      initializeBucket(bucket);
+      bucketPtr = m_fastBuckets[bucket];
+    }
+    bucketPtr->setChanged();
+    unsigned short indexInBucket = index & 0xffff;
+    return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket, dynamic));
+  }
+  
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   ///@param dynamic will be applied to the item.
   const Item* itemFromIndex(unsigned int index, const DynamicData* dynamic = 0) const {

@@ -1479,8 +1479,10 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   ENSURE_CAN_WRITE
 
   foreach (Declaration* dec, localDeclarations())
-    if (!encountered.contains(dec))
+    if (!encountered.contains(dec)) {
+      dec->setInSymbolTable(false);
       delete dec;
+    }
 
   FOREACH_FUNCTION(LocalIndexedDUContext childContext, d_func()->m_childContexts)
     if (!encountered.contains(childContext.data(topContext())))

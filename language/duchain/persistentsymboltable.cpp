@@ -22,7 +22,6 @@
 #include <QVector>
 
 #include "declarationid.h"
-#include "duchainpointer.h"
 #include "appendedlist.h"
 #include "repositories/itemrepository.h"
 #include "identifier.h"
@@ -164,8 +163,6 @@ void PersistentSymbolTable::removeDeclaration(const QualifiedIdentifier& id, con
 
 void PersistentSymbolTable::declarations(const QualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget ) const
 {
-  KDevVarLengthArray<IndexedDeclaration> ret;
-
   PersistentSymbolTableItem item;
   item.id = id;
   PersistentSymbolTableRequestItem request(item);
