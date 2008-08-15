@@ -72,7 +72,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
 
        bool useDir = false;
        
-       if(result == KLockFile::LockFail) {
+       if(result != KLockFile::LockOK) {
          int pid;
          QString hostname, appname;
          if(lock->getLockInfo(pid, hostname, appname)) {
