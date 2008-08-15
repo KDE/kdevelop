@@ -30,6 +30,7 @@
 #include "cmakeastvisitor.h"
 #include "cmakelistsparser.h"
 #include "cmaketypes.h"
+#include <language/duchain/topducontext.h>
 
 class CMakeFunctionDesc;
 
@@ -43,7 +44,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
         enum TargetType { Library, Executable, Test };
-        explicit CMakeProjectVisitor(const QString& root, KDevelop::TopDUContext* parent);
+        explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
         virtual ~CMakeProjectVisitor() {}
         
         virtual int visit( const CustomCommandAst * );
@@ -134,7 +135,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         {
             const CMakeFileContent* code;
             int line;
-            KDevelop::TopDUContext* context;
+            KDevelop::ReferencedTopDUContext context;
         };
         
         void defineTarget(const QString& id, const QStringList& sources, TargetType t);
@@ -163,8 +164,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         const CacheValues* m_cache;
         Definitions m_defs;
         QStringList m_filesRead;
-        KDevelop::TopDUContext* m_topctx;
-        KDevelop::TopDUContext* m_parentCtx;
+        KDevelop::ReferencedTopDUContext m_topctx;
+        KDevelop::ReferencedTopDUContext m_parentCtx;
 };
 
 #endif

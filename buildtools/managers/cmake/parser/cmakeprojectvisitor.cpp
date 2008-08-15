@@ -48,7 +48,7 @@
 
 using namespace KDevelop;
 
-CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, TopDUContext *parent)
+CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
     : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
 {
 }
@@ -354,7 +354,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             {
                 DUChainWriteLocker lock(DUChain::lock());
                 m_topctx=DUChain::self()->chainForDocument(KUrl(include.first().filePath));
-                if(m_topctx==0)
+                if(!m_topctx)
                 {
                     m_topctx=new TopDUContext(IndexedString(KUrl(include.first().filePath).pathOrUrl()),
                             SimpleRange(0,0, include.last().endColumn, include.last().endLine));
@@ -442,7 +442,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             {
                 DUChainWriteLocker lock(DUChain::lock());
                 m_topctx=DUChain::self()->chainForDocument(KUrl(path));
-                if(m_topctx==0)
+                if(!m_topctx)
                 {
                     m_topctx=new TopDUContext(IndexedString(path),
                             SimpleRange(0,0, package.last().endColumn, package.last().endLine));
@@ -1663,13 +1663,13 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 {
-    if(m_topctx==0)
+    if(!m_topctx)
     {
         DUChainWriteLocker lock(DUChain::lock());
         KUrl url(fc[0].filePath);
         IndexedString pathOrUrl(url.pathOrUrl());
         m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
-        if(m_topctx==0)
+        if(!m_topctx)
         {
             m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
                     SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
@@ -1750,7 +1750,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 
 void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 {
-    if(m_topctx==0)
+    if(!m_topctx)
         return;
     DUChainWriteLocker lock(DUChain::lock());
     foreach(const CMakeFunctionArgument &arg, ast->outputArguments())
@@ -1773,7 +1773,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 
 void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 {
-    if(m_topctx==0)
+    if(!m_topctx)
         return;
     int before=0;
     DUChainWriteLocker lock(DUChain::lock());
