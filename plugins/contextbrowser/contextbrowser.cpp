@@ -561,7 +561,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           int nextUse = (forward ? a+1 : a-1);
           
           //Make sure we end up behind the use
-          while(forward && nextUse < localUses.size() && (localUses[nextUse].start <= localUses[a].end || localUses[nextUse]..isEmpty()))
+          while(forward && nextUse < localUses.size() && (localUses[nextUse].start <= localUses[a].end || localUses[nextUse].isEmpty()))
             ++nextUse;
           
           //Make sure we end up before the use
