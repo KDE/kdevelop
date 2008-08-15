@@ -19,17 +19,31 @@
 */
 
 #include "iregister.h"
+#include "config/qtestsettings.h"
 #include <interfaces/iproject.h>
 #include <Qt>
 
 using KDevelop::IProject;
 using QTest::IRegister;
+using QTest::ISettings;
 
-IRegister::IRegister() : m_project(0)
+IRegister::IRegister() : m_project(0), m_settings(0)
 {}
 
 IRegister::~IRegister()
 {}
+
+void IRegister::setSettings(ISettings* settings)
+{
+    Q_ASSERT(m_settings == 0); Q_ASSERT(settings);
+    m_settings = settings;
+}
+
+ISettings* IRegister::settings() const
+{
+    Q_ASSERT(m_settings);
+    return m_settings;
+}
 
 void IRegister::setProject(IProject* project)
 {

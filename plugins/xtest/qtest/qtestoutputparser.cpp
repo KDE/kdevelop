@@ -163,7 +163,7 @@ void QTestOutputParser::iterateTestFunctions()
             m_cmdName = attributes().value("name").toString();
             kDebug() << m_cmdName;
             m_cmd = m_case->childNamed(m_cmdName);
-            m_result = new TestResult;
+            if (!m_result) m_result = new TestResult;
             if (m_cmd) m_cmd->signalStarted();
             m_state = TestFunction;
             processTestFunction();
@@ -186,11 +186,13 @@ void QTestOutputParser::processTestFunction()
         if (m_cmd) {
             m_cmd->setResult(m_result);
             m_cmd->signalFinished();
+            m_result = 0;
         } else if (fixtureFailed(m_cmdName)) {
             kDebug() << "init/cleanup TestCase failed";
             m_case->signalStarted();
             m_case->setResult(m_result);
             m_case->signalFinished();
+            m_result = 0;
         }
         m_state = Main;
     }

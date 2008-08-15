@@ -92,6 +92,7 @@ void SuiteBuilder::constructCases()
     foreach(KUrl testExe, m_testShellExes) {
         CaseBuilder* cb = createCaseBuilder(testExe);
         QTestCase* caze = cb->construct();
+        delete cb;
         QString suiteName = suiteNameForExe(testExe);
         Q_ASSERT(m_suites.contains(suiteName));
         QTestSuite* suite = m_suites[suiteName];

@@ -32,11 +32,13 @@ CaseBuilder::CaseBuilder()
 {}
 
 CaseBuilder::~CaseBuilder()
-{}
+{
+    if (m_executable) delete m_executable;
+}
 
 void CaseBuilder::setExecutable(Executable* exe)
 {
-    Q_ASSERT(exe);
+    Q_ASSERT(!m_executable); Q_ASSERT(exe);
     m_executable = exe;
 }
 

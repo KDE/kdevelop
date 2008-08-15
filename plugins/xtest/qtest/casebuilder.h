@@ -38,6 +38,9 @@ public:
     CaseBuilder();
     virtual ~CaseBuilder();
 
+    /*! Set the executable which provides the Commands.
+    @note mandatory to call this exactly once
+    @note takes ownership */
     void setExecutable(Executable*);
     virtual QTestCase* construct();
 

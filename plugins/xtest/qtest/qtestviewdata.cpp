@@ -45,13 +45,16 @@ using namespace Veritas;
 using namespace KDevelop;
 using namespace QTest;
 
-QTestViewData::QTestViewData(QObject* parent) : Veritas::TestViewData(parent)
+QTestViewData::QTestViewData(QObject* parent) : Veritas::TestViewData(parent), m_settings(0)
 {
     m_id = QTestViewData::id;
     QTestViewData::id += 1;
 }
 
-QTestViewData::~QTestViewData() {}
+QTestViewData::~QTestViewData()
+{
+    if (m_settings) delete m_settings;
+}
 
 Test* QTestViewData::registerTests()
 {
@@ -63,8 +66,11 @@ Test* QTestViewData::registerTests()
     reg.setSource(testXML);
     reg.reload();*/
     if (!project()) return 0;
+    if (m_settings) delete m_settings;
+    m_settings = new Settings(project());
     KDevRegister reg;
     reg.setProject(project());
+    reg.setSettings(m_settings);
     reg.reload();
     return reg.root();
 }

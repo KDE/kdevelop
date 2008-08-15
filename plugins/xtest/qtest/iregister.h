@@ -26,6 +26,7 @@ namespace Veritas { class Test; }
 
 namespace QTest
 {
+class ISettings;
 
 /*! Collects the test tree structure for a project. */
 class IRegister
@@ -41,14 +42,19 @@ public:
     /*! Fetch the cached root. */
     virtual Veritas::Test* root() const = 0;
 
-    /*! This initializes the register with a project to fetch
-    tests for.
+    /*! Initialize the project to register tests for.
     @note mandatory to invoke this exactly once */
     void setProject(KDevelop::IProject*);
     KDevelop::IProject* project() const;
 
+    /*! Initialize KConfig abstraction
+    @note mandatory to invoke this exactly once */
+    void setSettings(ISettings*);
+    ISettings* settings() const;
+
 private:
     KDevelop::IProject* m_project;
+    ISettings* m_settings;
 };
 }
 

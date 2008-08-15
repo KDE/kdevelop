@@ -129,6 +129,12 @@ QList<ProjectTestTargetItem*> KDevRegister::fetchTestTargets()
     return fetchAllTestTargets(project()->projectItem());
 }
 
+#define STOP_IF(X, MSG) \
+if (X) {\
+    m_root = new Test("");\
+    return; \
+} else void(0)
+
 void KDevRegister::reload()
 {
     Q_ASSERT(project());
@@ -136,31 +142,23 @@ void KDevRegister::reload()
     QList<QString> testNames = namesFromTargets(testTargets);
 
     IBuildSystemManager* bm = project()->buildSystemManager();
-    if (!bm) {
-        kDebug() << "Build system manager zero";
-        return;
-    }
+    STOP_IF(!bm, "Build system manager zero");
 
     KUrl buildRoot = bm->buildDirectory(project()->projectItem());
-    kDebug() << buildRoot;
-    if (buildRoot.isEmpty() || buildRoot == KUrl("/./")) {
-        buildRoot.clear();
-        return;
-    }
+    STOP_IF(buildRoot.isEmpty(), "Root build directory empty");
+    STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
 
     QDir buildDir(buildRoot.path());
     QFileInfoList shells = findTestShellFilesIn(buildDir, testNames);
     foreach(QFileInfo shell, shells) {
         kDebug() << "shell -> " << shell.absoluteFilePath();
     }
-    if (shells.isEmpty()) {
-        kDebug() << "No test shell exes found";
-        return;
-    }
+    STOP_IF(shells.isEmpty(), "No test shell exes found.");
+
     QList<KUrl> shellUrls = fileInfo2KUrl(shells);
     SuiteBuilder sb;
     sb.setTestExecutables(shellUrls);
-    sb.setSettings(new Settings(project()));
+    sb.setSettings(settings());
     sb.start(); // TODO register job with runcontroller & be asynchronous
                 // also move the file finding stuff in here.
     m_root = sb.root();

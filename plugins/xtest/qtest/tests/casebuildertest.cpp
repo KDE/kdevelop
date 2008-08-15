@@ -25,7 +25,6 @@ void CaseBuilderTest::init()
 void CaseBuilderTest::cleanup()
 {
     if (m_builder) delete m_builder;
-    if (m_caseExeStub) delete m_caseExeStub;
 }
 
 // command

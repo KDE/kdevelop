@@ -24,9 +24,11 @@
 #include <veritas/testrunnertoolview.h>
 
 namespace Veritas { class Test; }
+namespace QTest { class ISettings; }
 
 class QTestViewData : public Veritas::TestViewData
 {
+Q_OBJECT
 public:
     QTestViewData(QObject* parent);
     virtual ~QTestViewData();
@@ -36,6 +38,9 @@ public:
     QString fetchRegXML();
     int m_id;
     static int id; // used to get unique names.
+
+private:
+    QTest::ISettings* m_settings;
 };
 
 #endif
