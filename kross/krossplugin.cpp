@@ -83,11 +83,18 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     action->trigger();
 }
 
+KrossPlugin::~KrossPlugin()
+{
+    foreach(KrossToolViewFactory* toolview, m_toolFactories)
+        core()->uiController()->removeToolView(toolview);
+}
+
 KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension cme;
-    QVariant result=action->callFunction("contextMenuExtension", QVariantList() << Handlers::kDevelopContextHandler(context)
-                                                                                << Handlers::kDevelopContextMenuExtensionHandler(&cme));
+    QVariant result=action->callFunction("contextMenuExtension",
+                                         QVariantList() << Handlers::kDevelopContextHandler(context)
+                                                        << Handlers::kDevelopContextMenuExtensionHandler(&cme));
     kDebug() << "retrieving name" << result.toString() << cme.actions(cme.RunGroup);
 //     return result.toString();
     return cme;
@@ -99,6 +106,7 @@ void KrossPlugin::createToolViewFactory(const QString& method, const QString& id
     //KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, pos);
     KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(id, toolFactory);
+    m_toolFactories.append(toolFactory);
 }
 
 

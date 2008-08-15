@@ -30,6 +30,7 @@
 
 namespace Kross { class Action; }
 namespace KDevelop { class IDocument; }
+class KrossToolViewFactory;
 
 class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
 {
@@ -39,7 +40,7 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
     Q_INTERFACES( KDevelop::IDistributedVersionControl )
     public:
         explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
-        virtual ~KrossPlugin() {}
+        virtual ~KrossPlugin();
 
         KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
         
@@ -47,6 +48,7 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
         Q_SCRIPTABLE KUrl pluginDirectory() const { return m_pluginDir; }
         
     private:
+        QList<KrossToolViewFactory*> m_toolFactories;
         Kross::Action* action;
 
         KrossBuildSystemManager* m_script;
