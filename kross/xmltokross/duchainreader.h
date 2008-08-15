@@ -17,27 +17,35 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef CPPXMLPARSE
-#define CPPXMLPARSE
+#ifndef DUCHAINREADER_H
+#define DUCHAINREADER_H
 
 #include "interfacecreator.h"
 #include <QXmlStreamReader>
 #include <QMap>
+#include <language/duchain/types/abstracttype.h>
 
-class XmlToKross : public InterfaceCreator
+namespace KDevelop {
+    class TopDUContext;
+    class Declaration;
+}
+
+class DUChainReader : public InterfaceCreator
 {
     public:
-        XmlToKross(QXmlStreamReader& _xml) : xml(_xml) {}
-        virtual ~XmlToKross() {}
-        QXmlStreamReader& xml;
+        DUChainReader(KDevelop::TopDUContext* top) : m_top(top) {}
+        virtual ~DUChainReader() {}
+        const KDevelop::TopDUContext* m_top;
         QStringList definedClasses;
         QString inNamespace;
         method currentMethod;
         QMap <QString, QString> classNamespace;
+        QMap <QString, QStringList> sonsPerClass;
         QStringList flags;
-        int inclass;
         
         virtual int start();
+        void foundClass(const KDevelop::Declaration* decl);
+        QString printType(const TypePtr<KDevelop::AbstractType>& type);
 };
 
 #endif

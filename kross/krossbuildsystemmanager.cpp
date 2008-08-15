@@ -71,7 +71,7 @@ KDevelop::ProjectFolderItem* KrossBuildSystemManager::import(KDevelop::IProject 
 
 QList<KDevelop::ProjectFolderItem*> KrossBuildSystemManager::parse( KDevelop::ProjectFolderItem* dom )
 {
-    QVariant result=action->callFunction( "parse", QVariantList()<< Handlers::projectFolderItemHandler(dom));
+    QVariant result=action->callFunction( "parse", QVariantList()<< Handlers::kDevelopProjectFolderItemHandler(dom));
     kDebug() << "end of parse";
 
     QList<KDevelop::ProjectFolderItem*> folders;
@@ -90,14 +90,13 @@ KDevelop::IProjectBuilder* KrossBuildSystemManager::builder(KDevelop::ProjectFol
 
 KUrl KrossBuildSystemManager::buildDirectory(KDevelop::ProjectBaseItem* it) const
 {
-    QVariant param=Handlers::projectBaseItemHandler(it);
-    QVariant result=action->callFunction( "buildDirectory", QVariantList()<<param);
+    QVariant result=action->callFunction( "buildDirectory", QVariantList() << Handlers::kDevelopProjectBaseItemHandler(it));
     return result.toUrl();
 }
 KUrl::List KrossBuildSystemManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     qDebug() << "includeeees";
-    QVariant param=Handlers::projectBaseItemHandler(item);
+    QVariant param=Handlers::kDevelopProjectBaseItemHandler(item);
     QVariant result=action->callFunction( "includeDirectories", QVariantList()<<param);
     
     KUrl::List directories;
@@ -110,7 +109,7 @@ KUrl::List KrossBuildSystemManager::includeDirectories(KDevelop::ProjectBaseItem
 
 QHash<QString,QString> KrossBuildSystemManager::defines(KDevelop::ProjectBaseItem *item) const
 {
-    QVariant param=Handlers::projectBaseItemHandler(item);
+    QVariant param=Handlers::kDevelopProjectBaseItemHandler(item);
     QVariant result=action->callFunction( "defines", QVariantList()<<param);
     
     QMap<QString, QVariant> resultDefines= result.toMap();
@@ -128,7 +127,7 @@ QHash<QString,QString> KrossBuildSystemManager::defines(KDevelop::ProjectBaseIte
 
 QHash<QString,QString> KrossBuildSystemManager::environment(KDevelop::ProjectBaseItem *item) const
 {
-    QVariant param=Handlers::projectBaseItemHandler(item);
+    QVariant param=Handlers::kDevelopProjectBaseItemHandler(item);
     QVariant result=action->callFunction( "environment", QVariantList()<<param);
 
     QMap<QString, QVariant> resultEnv= result.toMap();

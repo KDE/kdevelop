@@ -6,21 +6,25 @@
 #include <kross/core/wrapperinterface.h>
 #include <vcs/vcsrevision.h>
 
-using namespace KDevelop;
-
-class KrossVcsRevision : public QObject, public Kross::WrapperInterface
+class KrossKDevelopVcsRevision : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossVcsRevision(KDevelop::VcsRevision* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopVcsRevision(KDevelop::VcsRevision* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE KDevelop::VcsRevision operator=(KDevelop::VcsRevision const& x0) { return wrapped->operator=(x0); }
-		Q_SCRIPTABLE void setRevisionValue(QVariant const& rev, KDevelop::VcsRevision::RevisionType type) { wrapped->setRevisionValue(rev, type); }
-		Q_SCRIPTABLE QVariant revisionValue() const { return wrapped->revisionValue(); }
+		Q_ENUMS(KDevelop::VcsRevision::RevisionType);
+		Q_FLAGS( KDevelop::VcsRevision::Special KDevelop::VcsRevision::GlobalNumber KDevelop::VcsRevision::FileNumber KDevelop::VcsRevision::Date KDevelop::VcsRevision::Invalid KDevelop::VcsRevision::UserType);
+
+		Q_ENUMS(KDevelop::VcsRevision::RevisionSpecialType);
+		Q_FLAGS( KDevelop::VcsRevision::Head KDevelop::VcsRevision::Working KDevelop::VcsRevision::Base KDevelop::VcsRevision::Previous KDevelop::VcsRevision::Start KDevelop::VcsRevision::UserSpecialType);
+
+		Q_SCRIPTABLE KDevelop::VcsRevision operator=(const KDevelop::VcsRevision& x0) { return wrapped->operator=(x0); }
+		Q_SCRIPTABLE void setRevisionValue(const QVariant& x0, KDevelop::VcsRevision::RevisionType x1) { wrapped->setRevisionValue(x0, x1); }
 		Q_SCRIPTABLE KDevelop::VcsRevision::RevisionType revisionType() const { return wrapped->revisionType(); }
+		Q_SCRIPTABLE QVariant revisionValue() const { return wrapped->revisionValue(); }
 		Q_SCRIPTABLE QString prettyValue() const { return wrapped->prettyValue(); }
-		Q_SCRIPTABLE bool operator==(KDevelop::VcsRevision const& x0) const { return wrapped->operator==(x0); }
+		Q_SCRIPTABLE bool operator==(const KDevelop::VcsRevision& x0) const { return wrapped->operator==(x0); }
 	private:
 		KDevelop::VcsRevision* wrapped;
 };
@@ -30,13 +34,14 @@ bool krossvcsrevision_registerHandler(const QByteArray& name, Kross::MetaTypeHan
 
 namespace Handlers
 {
-QVariant _vcsRevisionHandler(void* type)
+QVariant _kDevelopVcsRevisionHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::VcsRevision* t=static_cast<KDevelop::VcsRevision*>(type);
-	return qVariantFromValue((QObject*) new KrossVcsRevision(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::VcsRevision*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopVcsRevision(t, 0));
 }
-bool b_VcsRevision=krossvcsrevision_registerHandler("KDevelop::VcsRevision*", _vcsRevisionHandler);
+bool b_KDevelopVcsRevision=krossvcsrevision_registerHandler("KDevelop::VcsRevision*", _kDevelopVcsRevisionHandler);
 
 }
 #include "krossvcsrevision.moc"

@@ -17,27 +17,44 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef CPPXMLPARSE
-#define CPPXMLPARSE
+#ifndef INTERFACECREATOR_H
+#define INTERFACECREATOR_H
 
-#include "interfacecreator.h"
-#include <QXmlStreamReader>
-#include <QMap>
+#include <QStringList>
+#include <QString>
+#include <QList>
 
-class XmlToKross : public InterfaceCreator
+struct method
+{
+    struct argument { QString name, type, def; };
+    QString funcname;
+    QString returnType;
+    QString access;
+    bool isConst;
+    bool isVirtual;
+    QList<argument> args;
+};
+
+class InterfaceCreator
 {
     public:
-        XmlToKross(QXmlStreamReader& _xml) : xml(_xml) {}
-        virtual ~XmlToKross() {}
-        QXmlStreamReader& xml;
-        QStringList definedClasses;
-        QString inNamespace;
-        method currentMethod;
-        QMap <QString, QString> classNamespace;
-        QStringList flags;
+        QStringList includes;
+        QString filename;
         int inclass;
         
-        virtual int start();
+        void setIncludes(const QStringList& _includes) { includes=_includes; }
+        void setFileName(const QString& fn) { filename=fn; }
+        
+        virtual ~InterfaceCreator() {}
+        virtual void writeDocument()=0;
+        virtual void writeClass(const QString& classname, const QString& baseclass)=0;
+        virtual void writeNamespace(const QString& name)=0;
+        virtual void writeVariable(const QString& name, const QString& type, bool isConst)=0;
+        virtual void writeEndClass()=0;
+        virtual void writeEndDocument()=0;
+        virtual void writeEndFunction(const method& m)=0;
+        virtual void writeEndEnum(const QStringList& flags)=0;
+        virtual int start()=0;
 };
 
 #endif

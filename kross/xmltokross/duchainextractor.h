@@ -17,27 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef CPPXMLPARSE
-#define CPPXMLPARSE
+#ifndef DUCHAINEXTRACTOR_H
+#define DUCHAINEXTRACTOR_H
 
-#include "interfacecreator.h"
-#include <QXmlStreamReader>
-#include <QMap>
+#include <QObject>
+#include <QStringList>
+#include <KUrl>
 
-class XmlToKross : public InterfaceCreator
+namespace KDevelop {
+    class ILanguageSupport;
+    class ParseJob;
+}
+
+class DummyBSM;
+
+class DUChainExtractor : public QObject
 {
+    Q_OBJECT
     public:
-        XmlToKross(QXmlStreamReader& _xml) : xml(_xml) {}
-        virtual ~XmlToKross() {}
-        QXmlStreamReader& xml;
-        QStringList definedClasses;
-        QString inNamespace;
-        method currentMethod;
-        QMap <QString, QString> classNamespace;
-        QStringList flags;
-        int inclass;
+        DUChainExtractor(QObject* parent=0);
+        void start(const KUrl& _input, const KUrl& builddir, const KUrl::List& includes, 
+                   const QString& filename, const QString& directory, const QStringList& toinclude, const QString& output);
+        bool isDone() const { return m_done; }
+    public slots:
+        void parsingFinished(KDevelop::ParseJob* job);
+        void progressUpdated(int minimum, int maximum, int value);
         
-        virtual int start();
+    private:
+        KUrl input;
+        QString m_output;
+        QString m_filename;
+        QString m_directory;
+        QStringList m_toinclude;
+        bool m_done;
+        DummyBSM* m_manager;
 };
 
 #endif

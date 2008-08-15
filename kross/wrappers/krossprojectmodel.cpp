@@ -6,13 +6,82 @@
 #include <kross/core/wrapperinterface.h>
 #include <project/projectmodel.h>
 
-using namespace KDevelop;
-
-class KrossProjectExecutableTargetItem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossProjectExecutableTargetItem(KDevelop::ProjectExecutableTargetItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_ENUMS(KDevelop::ProjectBaseItem::ProjectItemType);
+		Q_FLAGS( KDevelop::ProjectBaseItem::BuildFolder KDevelop::ProjectBaseItem::Folder KDevelop::ProjectBaseItem::ExecutableTarget KDevelop::ProjectBaseItem::LibraryTarget KDevelop::ProjectBaseItem::TestTarget KDevelop::ProjectBaseItem::Target KDevelop::ProjectBaseItem::File);
+
+		Q_SCRIPTABLE void add(KDevelop::ProjectBaseItem* x0) { wrapped->add(x0); }
+		Q_SCRIPTABLE KDevelop::IProject* project() const { return wrapped->project(); }
+		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
+		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
+		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
+		Q_SCRIPTABLE void setParent(QStandardItem* x0) { wrapped->setParent(x0); }
+		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
+		Q_SCRIPTABLE QList< KDevelop::ProjectFolderItem* > folderList() const { return wrapped->folderList(); }
+		Q_SCRIPTABLE QList< KDevelop::ProjectTargetItem* > targetList() const { return wrapped->targetList(); }
+		Q_SCRIPTABLE QList< KDevelop::ProjectTestTargetItem* > testList() const { return wrapped->testList(); }
+		Q_SCRIPTABLE QList< KDevelop::ProjectFileItem* > fileList() const { return wrapped->fileList(); }
+	private:
+		KDevelop::ProjectBaseItem* wrapped;
+};
+
+class KrossKDevelopProjectFolderItem : public KrossKDevelopProjectBaseItem
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectFolderItem(KDevelop::ProjectFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
+		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
+		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
+		Q_SCRIPTABLE bool isProjectRoot() const { return wrapped->isProjectRoot(); }
+		Q_SCRIPTABLE void setProjectRoot(bool x0) { wrapped->setProjectRoot(x0); }
+		Q_SCRIPTABLE bool hasFileOrFolder(const QString& x0) const { return wrapped->hasFileOrFolder(x0); }
+	private:
+		KDevelop::ProjectFolderItem* wrapped;
+};
+
+class KrossKDevelopProjectBuildFolderItem : public KrossKDevelopProjectFolderItem
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectBuildFolderItem(KDevelop::ProjectBuildFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectFolderItem(obj, parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
+	private:
+		KDevelop::ProjectBuildFolderItem* wrapped;
+};
+
+class KrossKDevelopProjectTargetItem : public KrossKDevelopProjectBaseItem
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectTargetItem(KDevelop::ProjectTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
+		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
+	private:
+		KDevelop::ProjectTargetItem* wrapped;
+};
+
+class KrossKDevelopProjectExecutableTargetItem : public KrossKDevelopProjectTargetItem
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectExecutableTargetItem(KDevelop::ProjectExecutableTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -20,11 +89,11 @@ class KrossProjectExecutableTargetItem : public QObject, public Kross::WrapperIn
 		KDevelop::ProjectExecutableTargetItem* wrapped;
 };
 
-class KrossProjectLibraryTargetItem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProjectLibraryTargetItem : public KrossKDevelopProjectTargetItem
 {
 	Q_OBJECT
 	public:
-		KrossProjectLibraryTargetItem(KDevelop::ProjectLibraryTargetItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProjectLibraryTargetItem(KDevelop::ProjectLibraryTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -32,24 +101,11 @@ class KrossProjectLibraryTargetItem : public QObject, public Kross::WrapperInter
 		KDevelop::ProjectLibraryTargetItem* wrapped;
 };
 
-class KrossProjectBuildFolderItem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProjectTestTargetItem : public KrossKDevelopProjectExecutableTargetItem
 {
 	Q_OBJECT
 	public:
-		KrossProjectBuildFolderItem(KDevelop::ProjectBuildFolderItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
-		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-	private:
-		KDevelop::ProjectBuildFolderItem* wrapped;
-};
-
-class KrossProjectTestTargetItem : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossProjectTestTargetItem(KDevelop::ProjectTestTargetItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProjectTestTargetItem(KDevelop::ProjectTestTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectExecutableTargetItem(obj, parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -57,105 +113,52 @@ class KrossProjectTestTargetItem : public QObject, public Kross::WrapperInterfac
 		KDevelop::ProjectTestTargetItem* wrapped;
 };
 
-class KrossProjectFolderItem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProjectFileItem : public KrossKDevelopProjectBaseItem
 {
 	Q_OBJECT
 	public:
-		KrossProjectFolderItem(KDevelop::ProjectFolderItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProjectFileItem(KDevelop::ProjectFileItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE void setUrl(KUrl const& x0) { wrapped->setUrl(x0); }
-		Q_SCRIPTABLE bool isProjectRoot() const { return wrapped->isProjectRoot(); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
-		Q_SCRIPTABLE bool hasFileOrFolder(QString const& name) const { return wrapped->hasFileOrFolder(name); }
-		Q_SCRIPTABLE KUrl const url() const { return wrapped->url(); }
-		Q_SCRIPTABLE void setProjectRoot(bool isRoot) { wrapped->setProjectRoot(isRoot); }
-		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
-	private:
-		KDevelop::ProjectFolderItem* wrapped;
-};
-
-class KrossWorkspaceItem : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossWorkspaceItem(KDevelop::WorkspaceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE KSharedConfig::Ptr metadataConfiguration() const { return wrapped->metadataConfiguration(); }
-		Q_SCRIPTABLE QString name() const { return wrapped->name(); }
-		Q_SCRIPTABLE QString metadataDirectory() const { return wrapped->metadataDirectory(); }
-	private:
-		KDevelop::WorkspaceItem* wrapped;
-};
-
-class KrossProjectTargetItem : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossProjectTargetItem(KDevelop::ProjectTargetItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
-		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-	private:
-		KDevelop::ProjectTargetItem* wrapped;
-};
-
-class KrossProjectFileItem : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossProjectFileItem(KDevelop::ProjectFileItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE void setUrl(KUrl const& x0) { wrapped->setUrl(x0); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
-		Q_SCRIPTABLE KUrl const url() const { return wrapped->url(); }
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
 		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
+		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
+		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 	private:
 		KDevelop::ProjectFileItem* wrapped;
 };
 
-class KrossProjectModel : public QObject, public Kross::WrapperInterface
+class KrossKDevelopWorkspaceItem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossProjectModel(KDevelop::ProjectModel* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopWorkspaceItem(KDevelop::WorkspaceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE void fetchMore(QModelIndex const& parent) { wrapped->fetchMore(parent); }
-		Q_SCRIPTABLE KDevelop::WorkspaceItem* workspace() const { return wrapped->workspace(); }
-		Q_SCRIPTABLE KDevelop::ProjectBaseItem* item(QModelIndex const& index) const { return wrapped->item(index); }
-		Q_SCRIPTABLE void resetModel() { wrapped->resetModel(); }
-		Q_SCRIPTABLE bool canFetchMore(QModelIndex const& parent) const { return wrapped->canFetchMore(parent); }
+		Q_SCRIPTABLE QString name() const { return wrapped->name(); }
+		Q_SCRIPTABLE QString metadataDirectory() const { return wrapped->metadataDirectory(); }
+		Q_SCRIPTABLE KSharedPtr< KSharedConfig > metadataConfiguration() const { return wrapped->metadataConfiguration(); }
 	private:
-		KDevelop::ProjectModel* wrapped;
+		KDevelop::WorkspaceItem* wrapped;
 };
 
-class KrossProjectBaseItem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProjectModel(KDevelop::ProjectModel* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE QList<ProjectFolderItem*> folderList() const { return wrapped->folderList(); }
-		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
-		Q_SCRIPTABLE QList<ProjectFileItem*> fileList() const { return wrapped->fileList(); }
-		Q_SCRIPTABLE void setParent(QStandardItem* parent) { wrapped->setParent(parent); }
-		Q_SCRIPTABLE void add(KDevelop::ProjectBaseItem* item) { wrapped->add(item); }
-		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
-		Q_SCRIPTABLE QList<ProjectTargetItem*> targetList() const { return wrapped->targetList(); }
-		Q_SCRIPTABLE QList<ProjectTestTargetItem*> testList() const { return wrapped->testList(); }
-		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
-		Q_SCRIPTABLE KDevelop::IProject* project() const { return wrapped->project(); }
+		Q_PROPERTY(const QMetaObject  staticMetaObject READ getstaticMetaObject SCRIPTABLE true)
+		Q_SCRIPTABLE const QMetaObject  getstaticMetaObject() const { return wrapped->staticMetaObject; }
+		Q_SCRIPTABLE KDevelop::WorkspaceItem* workspace() const { return wrapped->workspace(); }
+		Q_SCRIPTABLE KDevelop::ProjectBaseItem* item(const QModelIndex& x0) const { return wrapped->item(x0); }
+		Q_SCRIPTABLE void resetModel() { wrapped->resetModel(); }
+		Q_SCRIPTABLE void fetchMore(const QModelIndex& x0) { wrapped->fetchMore(x0); }
+		Q_SCRIPTABLE bool canFetchMore(const QModelIndex& x0) const { return wrapped->canFetchMore(x0); }
 	private:
-		KDevelop::ProjectBaseItem* wrapped;
+		KDevelop::ProjectModel* wrapped;
 };
 
 bool krossprojectmodel_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
@@ -163,85 +166,102 @@ bool krossprojectmodel_registerHandler(const QByteArray& name, Kross::MetaTypeHa
 
 namespace Handlers
 {
-QVariant _projectExecutableTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectExecutableTargetItem* t=static_cast<KDevelop::ProjectExecutableTargetItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectExecutableTargetItem(t, 0));
-}
-bool b_ProjectExecutableTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectExecutableTargetItem*", _projectExecutableTargetItemHandler);
-
-QVariant _projectLibraryTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectLibraryTargetItem* t=static_cast<KDevelop::ProjectLibraryTargetItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectLibraryTargetItem(t, 0));
-}
-bool b_ProjectLibraryTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectLibraryTargetItem*", _projectLibraryTargetItemHandler);
-
-QVariant _projectBuildFolderItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectBuildFolderItem* t=static_cast<KDevelop::ProjectBuildFolderItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectBuildFolderItem(t, 0));
-}
-bool b_ProjectBuildFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectBuildFolderItem*", _projectBuildFolderItemHandler);
-
-QVariant _projectTestTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectTestTargetItem* t=static_cast<KDevelop::ProjectTestTargetItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectTestTargetItem(t, 0));
-}
-bool b_ProjectTestTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTestTargetItem*", _projectTestTargetItemHandler);
-
-QVariant _projectFolderItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectFolderItem* t=static_cast<KDevelop::ProjectFolderItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectFolderItem(t, 0));
-}
-bool b_ProjectFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectFolderItem*", _projectFolderItemHandler);
-
-QVariant _workspaceItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::WorkspaceItem* t=static_cast<KDevelop::WorkspaceItem*>(type);
-	return qVariantFromValue((QObject*) new KrossWorkspaceItem(t, 0));
-}
-bool b_WorkspaceItem=krossprojectmodel_registerHandler("KDevelop::WorkspaceItem*", _workspaceItemHandler);
-
-QVariant _projectTargetItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectTargetItem* t=static_cast<KDevelop::ProjectTargetItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectTargetItem(t, 0));
-}
-bool b_ProjectTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTargetItem*", _projectTargetItemHandler);
-
-QVariant _projectFileItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectFileItem* t=static_cast<KDevelop::ProjectFileItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectFileItem(t, 0));
-}
-bool b_ProjectFileItem=krossprojectmodel_registerHandler("KDevelop::ProjectFileItem*", _projectFileItemHandler);
-
-QVariant _projectModelHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectModel* t=static_cast<KDevelop::ProjectModel*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectModel(t, 0));
-}
-bool b_ProjectModel=krossprojectmodel_registerHandler("KDevelop::ProjectModel*", _projectModelHandler);
-
-QVariant _projectBaseItemHandler(void* type)
+QVariant _kDevelopProjectBaseItemHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::ProjectBaseItem* t=static_cast<KDevelop::ProjectBaseItem*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectBaseItem(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectBaseItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectFolderItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
+	else if(dynamic_cast<KDevelop::ProjectTargetItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
+	else if(dynamic_cast<KDevelop::ProjectFileItem*>(t)) return Handlers::_kDevelopProjectBaseItemHandler((void*) type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectBaseItem(t, 0));
 }
-bool b_ProjectBaseItem=krossprojectmodel_registerHandler("KDevelop::ProjectBaseItem*", _projectBaseItemHandler);
+bool b_KDevelopProjectBaseItem=krossprojectmodel_registerHandler("KDevelop::ProjectBaseItem*", _kDevelopProjectBaseItemHandler);
+
+QVariant _kDevelopProjectFolderItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectFolderItem* t=static_cast<KDevelop::ProjectFolderItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectFolderItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t)) return Handlers::_kDevelopProjectFolderItemHandler((void*) type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectFolderItem(t, 0));
+}
+bool b_KDevelopProjectFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectFolderItem*", _kDevelopProjectFolderItemHandler);
+
+QVariant _kDevelopProjectBuildFolderItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectBuildFolderItem* t=static_cast<KDevelop::ProjectBuildFolderItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectBuildFolderItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectBuildFolderItem(t, 0));
+}
+bool b_KDevelopProjectBuildFolderItem=krossprojectmodel_registerHandler("KDevelop::ProjectBuildFolderItem*", _kDevelopProjectBuildFolderItemHandler);
+
+QVariant _kDevelopProjectTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectTargetItem* t=static_cast<KDevelop::ProjectTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectTargetItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)) return Handlers::_kDevelopProjectTargetItemHandler((void*) type);
+	else if(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t)) return Handlers::_kDevelopProjectTargetItemHandler((void*) type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectTargetItem(t, 0));
+}
+bool b_KDevelopProjectTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTargetItem*", _kDevelopProjectTargetItemHandler);
+
+QVariant _kDevelopProjectExecutableTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectExecutableTargetItem* t=static_cast<KDevelop::ProjectExecutableTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t));
+	if(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t)) return Handlers::_kDevelopProjectExecutableTargetItemHandler((void*) type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopProjectExecutableTargetItem(t, 0));
+}
+bool b_KDevelopProjectExecutableTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectExecutableTargetItem*", _kDevelopProjectExecutableTargetItemHandler);
+
+QVariant _kDevelopProjectLibraryTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectLibraryTargetItem* t=static_cast<KDevelop::ProjectLibraryTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectLibraryTargetItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectLibraryTargetItem(t, 0));
+}
+bool b_KDevelopProjectLibraryTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectLibraryTargetItem*", _kDevelopProjectLibraryTargetItemHandler);
+
+QVariant _kDevelopProjectTestTargetItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectTestTargetItem* t=static_cast<KDevelop::ProjectTestTargetItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectTestTargetItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectTestTargetItem(t, 0));
+}
+bool b_KDevelopProjectTestTargetItem=krossprojectmodel_registerHandler("KDevelop::ProjectTestTargetItem*", _kDevelopProjectTestTargetItemHandler);
+
+QVariant _kDevelopProjectFileItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectFileItem* t=static_cast<KDevelop::ProjectFileItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectFileItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectFileItem(t, 0));
+}
+bool b_KDevelopProjectFileItem=krossprojectmodel_registerHandler("KDevelop::ProjectFileItem*", _kDevelopProjectFileItemHandler);
+
+QVariant _kDevelopWorkspaceItemHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::WorkspaceItem* t=static_cast<KDevelop::WorkspaceItem*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::WorkspaceItem*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopWorkspaceItem(t, 0));
+}
+bool b_KDevelopWorkspaceItem=krossprojectmodel_registerHandler("KDevelop::WorkspaceItem*", _kDevelopWorkspaceItemHandler);
+
+QVariant _kDevelopProjectModelHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectModel* t=static_cast<KDevelop::ProjectModel*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectModel*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectModel(t, 0));
+}
+bool b_KDevelopProjectModel=krossprojectmodel_registerHandler("KDevelop::ProjectModel*", _kDevelopProjectModelHandler);
 
 }
 #include "krossprojectmodel.moc"

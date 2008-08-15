@@ -6,52 +6,51 @@
 #include <kross/core/wrapperinterface.h>
 #include <interfaces/idocument.h>
 
-using namespace KDevelop;
-
-class KrossIDocument : public QObject, public Kross::WrapperInterface
+class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE void setCursorPosition(KTextEditor::Cursor const& cursor) { wrapped->setCursorPosition(cursor); }
-		Q_SCRIPTABLE KTextEditor::Document* textDocument() const { return wrapped->textDocument(); }
-		Q_SCRIPTABLE KTextEditor::Range textSelection() const { return wrapped->textSelection(); }
-		Q_SCRIPTABLE KTextEditor::Cursor cursorPosition() const { return wrapped->cursorPosition(); }
-		Q_SCRIPTABLE void setTextSelection(KTextEditor::Range const& range) { wrapped->setTextSelection(range); }
-		Q_SCRIPTABLE bool close(KDevelop::IDocument::DocumentSaveMode mode=KDevelop::IDocument::Default) { return wrapped->close(mode); }
-		Q_SCRIPTABLE bool isActive() const { return wrapped->isActive(); }
-		Q_SCRIPTABLE void activate(Sublime::View* activeView, KParts::MainWindow* mainWindow) { wrapped->activate(activeView, mainWindow); }
-		Q_SCRIPTABLE KDevelop::IDocument::DocumentState state() const { return wrapped->state(); }
-		Q_SCRIPTABLE KMimeType::Ptr mimeType() const { return wrapped->mimeType(); }
-		Q_SCRIPTABLE KParts::Part* partForView(QWidget* view) const { return wrapped->partForView(view); }
-		Q_SCRIPTABLE bool isTextDocument() const { return wrapped->isTextDocument(); }
-		Q_SCRIPTABLE bool save(KDevelop::IDocument::DocumentSaveMode mode=KDevelop::IDocument::Default) { return wrapped->save(mode); }
+		Q_ENUMS(KDevelop::IDocument::DocumentState);
+		Q_FLAGS( KDevelop::IDocument::Clean KDevelop::IDocument::Modified KDevelop::IDocument::Dirty KDevelop::IDocument::DirtyAndModified);
+
+		Q_ENUMS(KDevelop::IDocument::DocumentSaveMode);
+		Q_FLAGS( KDevelop::IDocument::Default KDevelop::IDocument::Silent KDevelop::IDocument::Discard);
+
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE KSharedPtr< KMimeType > mimeType() const { return wrapped->mimeType(); }
+		Q_SCRIPTABLE KParts::Part* partForView(QWidget* x0) const { return wrapped->partForView(x0); }
+		Q_SCRIPTABLE bool isTextDocument() const { return wrapped->isTextDocument(); }
+		Q_SCRIPTABLE KTextEditor::Document* textDocument() const { return wrapped->textDocument(); }
+		Q_SCRIPTABLE bool save(KDevelop::IDocument::DocumentSaveMode x0=KDevelop::IDocument::Default) { return wrapped->save(x0); }
 		Q_SCRIPTABLE void reload() { wrapped->reload(); }
+		Q_SCRIPTABLE bool close(KDevelop::IDocument::DocumentSaveMode x0=KDevelop::IDocument::Default) { return wrapped->close(x0); }
+		Q_SCRIPTABLE bool isActive() const { return wrapped->isActive(); }
+		Q_SCRIPTABLE KDevelop::IDocument::DocumentState state() const { return wrapped->state(); }
+		Q_SCRIPTABLE KTextEditor::Cursor cursorPosition() const { return wrapped->cursorPosition(); }
+		Q_SCRIPTABLE void setCursorPosition(const KTextEditor::Cursor& x0) { wrapped->setCursorPosition(x0); }
+		Q_SCRIPTABLE KTextEditor::Range textSelection() const { return wrapped->textSelection(); }
+		Q_SCRIPTABLE void setTextSelection(const KTextEditor::Range& x0) { wrapped->setTextSelection(x0); }
+		Q_SCRIPTABLE void activate(Sublime::View* x0, KParts::MainWindow* x1) { wrapped->activate(x0, x1); }
 	private:
 		KDevelop::IDocument* wrapped;
 };
-
-using namespace Sublime;
-
-using namespace KParts;
-
-using namespace KTextEditor;
 
 bool krossidocument_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
 {
-QVariant _iDocumentHandler(void* type)
+QVariant _kDevelopIDocumentHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::IDocument* t=static_cast<KDevelop::IDocument*>(type);
-	return qVariantFromValue((QObject*) new KrossIDocument(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::IDocument*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopIDocument(t, 0));
 }
-bool b_IDocument=krossidocument_registerHandler("KDevelop::IDocument*", _iDocumentHandler);
+bool b_KDevelopIDocument=krossidocument_registerHandler("KDevelop::IDocument*", _kDevelopIDocumentHandler);
 
 }
 #include "krossidocument.moc"

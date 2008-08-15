@@ -43,7 +43,7 @@ class AbstractClassImplementation : public XmlToKross
             output +='\n';
         }
         
-        void writeClass(const QString& classname)
+        void writeClass(const QString& classname, const QString& baseclass)
         {
             classNamespace[classname]=inNamespace;
             definedClasses.append(classname);
@@ -78,6 +78,18 @@ class AbstractClassImplementation : public XmlToKross
         {
             
             output += "#include \""+filename+".moc\"\n";
+        }
+        
+        
+        void writeEndEnum(const QStringList& fl)
+        {
+            QStringList flags=fl;
+            output += "\t\tQ_ENUMS("+flags.takeFirst()+");\n"
+                      "\t\tQ_FLAGS(";
+            
+            foreach(const QString& flag, flags)
+                output += ' '+flag;
+            output += ");\n\n";
         }
         
         void writeEndFunction(const method& m)

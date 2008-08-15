@@ -6,33 +6,34 @@
 #include <kross/core/wrapperinterface.h>
 #include <vcs/vcslocation.h>
 
-using namespace KDevelop;
-
-class KrossVcsLocation : public QObject, public Kross::WrapperInterface
+class KrossKDevelopVcsLocation : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
-		Q_SCRIPTABLE void setRepositoryPath(QString const& x0) { wrapped->setRepositoryPath(x0); }
+		Q_ENUMS(KDevelop::VcsLocation::LocationType);
+		Q_FLAGS( KDevelop::VcsLocation::LocalLocation KDevelop::VcsLocation::RepositoryLocation);
+
+		Q_SCRIPTABLE KDevelop::VcsLocation operator=(const KDevelop::VcsLocation& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE KUrl localUrl() const { return wrapped->localUrl(); }
-		Q_SCRIPTABLE KDevelop::VcsLocation operator=(KDevelop::VcsLocation const& x0) { return wrapped->operator=(x0); }
-		Q_SCRIPTABLE void setLocalUrl(KUrl const& url) { wrapped->setLocalUrl(url); }
-		Q_SCRIPTABLE void setRepositoryModule(QString const& x0) { wrapped->setRepositoryModule(x0); }
-		Q_SCRIPTABLE void setRepositoryServer(QString const& x0) { wrapped->setRepositoryServer(x0); }
-		Q_SCRIPTABLE void setUserData(QVariant const& x0) { wrapped->setUserData(x0); }
-		Q_SCRIPTABLE bool operator==(KDevelop::VcsLocation const& x0) { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE void setRepositoryBranch(QString const& x0) { wrapped->setRepositoryBranch(x0); }
+		Q_SCRIPTABLE QString repositoryServer() const { return wrapped->repositoryServer(); }
+		Q_SCRIPTABLE QString repositoryModule() const { return wrapped->repositoryModule(); }
+		Q_SCRIPTABLE QString repositoryTag() const { return wrapped->repositoryTag(); }
 		Q_SCRIPTABLE QString repositoryBranch() const { return wrapped->repositoryBranch(); }
 		Q_SCRIPTABLE QString repositoryPath() const { return wrapped->repositoryPath(); }
-		Q_SCRIPTABLE QString repositoryServer() const { return wrapped->repositoryServer(); }
-		Q_SCRIPTABLE void setRepositoryTag(QString const& x0) { wrapped->setRepositoryTag(x0); }
-		Q_SCRIPTABLE QString repositoryModule() const { return wrapped->repositoryModule(); }
 		Q_SCRIPTABLE KDevelop::VcsLocation::LocationType type() const { return wrapped->type(); }
-		Q_SCRIPTABLE QString repositoryTag() const { return wrapped->repositoryTag(); }
+		Q_SCRIPTABLE void setLocalUrl(const KUrl& x0) { wrapped->setLocalUrl(x0); }
+		Q_SCRIPTABLE void setRepositoryServer(const QString& x0) { wrapped->setRepositoryServer(x0); }
+		Q_SCRIPTABLE void setRepositoryModule(const QString& x0) { wrapped->setRepositoryModule(x0); }
+		Q_SCRIPTABLE void setRepositoryBranch(const QString& x0) { wrapped->setRepositoryBranch(x0); }
+		Q_SCRIPTABLE void setRepositoryTag(const QString& x0) { wrapped->setRepositoryTag(x0); }
+		Q_SCRIPTABLE void setRepositoryPath(const QString& x0) { wrapped->setRepositoryPath(x0); }
+		Q_SCRIPTABLE void setUserData(const QVariant& x0) { wrapped->setUserData(x0); }
 		Q_SCRIPTABLE QVariant userData() const { return wrapped->userData(); }
+		Q_SCRIPTABLE bool operator==(const KDevelop::VcsLocation& x0) { return wrapped->operator==(x0); }
+		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 	private:
 		KDevelop::VcsLocation* wrapped;
 };
@@ -42,13 +43,14 @@ bool krossvcslocation_registerHandler(const QByteArray& name, Kross::MetaTypeHan
 
 namespace Handlers
 {
-QVariant _vcsLocationHandler(void* type)
+QVariant _kDevelopVcsLocationHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::VcsLocation* t=static_cast<KDevelop::VcsLocation*>(type);
-	return qVariantFromValue((QObject*) new KrossVcsLocation(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::VcsLocation*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopVcsLocation(t, 0));
 }
-bool b_VcsLocation=krossvcslocation_registerHandler("KDevelop::VcsLocation*", _vcsLocationHandler);
+bool b_KDevelopVcsLocation=krossvcslocation_registerHandler("KDevelop::VcsLocation*", _kDevelopVcsLocationHandler);
 
 }
 #include "krossvcslocation.moc"

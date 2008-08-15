@@ -22,8 +22,8 @@
 
 #include "krossbuildsystemmanager.h"
 #include "krosstoolviewfactory.h"
-#include "wrappers/krosscontext.h"
-#include "wrappers/krosscontextmenuextension.h"
+#include "kross/wrappers/krosscontext.h"
+#include "kross/wrappers/krosscontextmenuextension.h"
 
 #include <kross/core/manager.h>
 #include <KUrl>
@@ -86,8 +86,8 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
 KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension cme;
-    QVariant result=action->callFunction("contextMenuExtension", QVariantList() << Handlers::contextHandler(context)
-                                                                                << Handlers::contextMenuExtensionHandler(&cme));
+    QVariant result=action->callFunction("contextMenuExtension", QVariantList() << Handlers::kDevelopContextHandler(context)
+                                                                                << Handlers::kDevelopContextMenuExtensionHandler(&cme));
     kDebug() << "retrieving name" << result.toString() << cme.actions(cme.RunGroup);
 //     return result.toString();
     return cme;

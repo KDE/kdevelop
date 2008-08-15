@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <QXmlStreamReader>
 #include <QFile>
 #include <QDebug>
 #include <QStringList>
@@ -51,7 +50,7 @@ class KrossWrapper : public XmlToKross
             output +='\n';
         }
         
-        void writeClass(const QString& classname)
+        void writeClass(const QString& classname, const QString& baseclass)
         {
             classNamespace[classname]=inNamespace;
             definedClasses.append(classname);
@@ -59,8 +58,8 @@ class KrossWrapper : public XmlToKross
                       "{\n"
                       "\tQ_OBJECT\n"
                       "\tpublic:\n"
-                      "\t\tKross"+classname+"("+(inNamespace.isEmpty() ? QString() : inNamespace+"::")
-                                 +classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}\n"
+                      "\t\tKross"+classname+"("+/*inNamespace.isEmpty() ? QString() : inNamespace+"::"
+                                 +*/classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}\n"
                       "\t\tvoid* wrappedObject() const { return wrapped; }\n\n";
         }
         
@@ -82,6 +81,17 @@ class KrossWrapper : public XmlToKross
         void writeNamespace(const QString& name)
         {
             output += "using namespace "+name+";\n\n";
+        }
+        
+        void writeEndEnum(const QStringList& fl)
+        {
+            QStringList flags=fl;
+            output += "\t\tQ_ENUMS("+(inNamespace.isEmpty() ? QString() : inNamespace+"::")+definedClasses.last()+flags.takeFirst()+");\n"
+                      "\t\tQ_FLAGS(";
+            
+            foreach(const QString& flag, flags)
+                output += ' '+(inNamespace.isEmpty() ? QString() : inNamespace+"::")+definedClasses.last()+flag;
+            output += ");\n\n";
         }
         
         void createHandler(const QString& classname)
@@ -110,10 +120,11 @@ class KrossWrapper : public XmlToKross
         
         void writeEndDocument()
         {
-            output += "bool "+filename+"_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)\n"
-                      "{ Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }\n\n";
-            
             output += "namespace Handlers\n{\n";
+            
+            output += "\tbool "+filename+"_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)\n"
+                      "{ Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }\n\n";
+                      
             handlersHeader += "namespace Handlers\n{\n";
             foreach(const QString& aclass, definedClasses)
                 createHandler(aclass);

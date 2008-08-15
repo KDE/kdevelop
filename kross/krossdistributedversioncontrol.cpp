@@ -119,7 +119,7 @@ KDevelop::VcsJob * KrossDistributedVersionControl::revert(const KUrl::List & fil
 KDevelop::VcsJob * KrossDistributedVersionControl::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev,
                                                             KDevelop::IBasicVersionControl::RecursionMode rec)
 {
-    QVariant revision=Handlers::vcsRevisionHandler(&rev);
+    QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
     
     QVariantList parameters;
     parameters.append(QVariant(localLocations));
@@ -143,7 +143,7 @@ KDevelop::VcsJob * KrossDistributedVersionControl::commit(const QString & msg, c
 KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KUrl::List & files, KDevelop::VcsRevision & rev,
                                                         KDevelop::IBasicVersionControl::RecursionMode mode)
 {
-    QVariant revision=Handlers::vcsRevisionHandler(&rev);
+    QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
     
     return new KrossVcsJob("commit", QVariantList() << files << revision << mode, action, m_plugin, action);
 }
@@ -165,11 +165,11 @@ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KDevelop::VcsLocat
                                                         KDevelop::VcsDiff::Type t,
                                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    QVariant srcrev=Handlers::vcsRevisionHandler(&srcRevision);
-    QVariant dstrev=Handlers::vcsRevisionHandler(&dstRevision);
+    QVariant srcrev=Handlers::kDevelopVcsRevisionHandler(&srcRevision);
+    QVariant dstrev=Handlers::kDevelopVcsRevisionHandler(&dstRevision);
     
-    QVariant srcloc=Handlers::vcsLocationHandler(&localOrRepoLocationSrc);
-    QVariant dstloc=Handlers::vcsLocationHandler(&localOrRepoLocationDst);
+    QVariant srcloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationSrc);
+    QVariant dstloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationDst);
     
     return new KrossVcsJob("repositoryLocation",
                                          QVariantList() << srcloc << dstloc << srcrev << dstrev << QVariant(t) << QVariant(recursion), action, m_plugin, action);
@@ -178,22 +178,22 @@ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KDevelop::VcsLocat
 
 KDevelop::VcsJob * KrossDistributedVersionControl::log(const KUrl & file, const KDevelop::VcsRevision & rev, long unsigned int limit)
 {
-    QVariant revision=Handlers::vcsRevisionHandler(&rev);
+    QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
 
     return new KrossVcsJob("log", QVariantList() << file << revision << qlonglong(limit), action, m_plugin, action);
 }
 
 VcsJob* KrossDistributedVersionControl::log(const KUrl& file, const VcsRevision& rev, const VcsRevision& lim)
 {
-    QVariant revision=Handlers::vcsRevisionHandler(&rev);
-    QVariant limit=Handlers::vcsRevisionHandler(&lim);
+    QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
+    QVariant limit=Handlers::kDevelopVcsRevisionHandler(&lim);
     
     return new KrossVcsJob("log", QVariantList() << file << revision << limit, action, m_plugin, action);
 }
 
 VcsJob* KrossDistributedVersionControl::annotate(const KUrl& file, const VcsRevision& rev)
 {
-    QVariant revision=Handlers::vcsRevisionHandler(&rev);
+    QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
     
     return new KrossVcsJob("annotate", QVariantList() << file << revision, action, m_plugin, action);
 }
@@ -204,11 +204,11 @@ VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLoca
                                               const VcsRevision& dstRevision,
                                               const KUrl& localLocation )
 {
-    QVariant srcrev=Handlers::vcsRevisionHandler(&srcRevision);
-    QVariant dstrev=Handlers::vcsRevisionHandler(&dstRevision);
+    QVariant srcrev=Handlers::kDevelopVcsRevisionHandler(&srcRevision);
+    QVariant dstrev=Handlers::kDevelopVcsRevisionHandler(&dstRevision);
     
-    QVariant srcloc=Handlers::vcsLocationHandler(&localOrRepoLocationSrc);
-    QVariant dstloc=Handlers::vcsLocationHandler(&localOrRepoLocationDst);
+    QVariant srcloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationSrc);
+    QVariant dstloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationDst);
     
     return new KrossVcsJob("merge", QVariantList() << srcloc << dstloc << srcrev << dstrev << localLocation, action, m_plugin, action);
 

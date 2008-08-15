@@ -6,62 +6,63 @@
 #include <kross/core/wrapperinterface.h>
 #include <interfaces/context.h>
 
-using namespace KDevelop;
-
-class KrossFileContext : public QObject, public Kross::WrapperInterface
+class KrossKDevelopContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossFileContext(KDevelop::FileContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopContext(KDevelop::Context* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE KUrl::List urls() const { return wrapped->urls(); }
-		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-	private:
-		KDevelop::FileContext* wrapped;
-};
-
-class KrossProjectItemContext : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossProjectItemContext(KDevelop::ProjectItemContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
+		Q_ENUMS(KDevelop::Context::Type);
+		Q_FLAGS( KDevelop::Context::EditorContext KDevelop::Context::FileContext KDevelop::Context::CodeContext KDevelop::Context::ProjectItemContext);
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-		Q_SCRIPTABLE QList<ProjectBaseItem*> items() const { return wrapped->items(); }
-	private:
-		KDevelop::ProjectItemContext* wrapped;
-};
-
-class KrossContext : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossContext(KDevelop::Context* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-		Q_SCRIPTABLE bool hasType(int type) const { return wrapped->hasType(type); }
+		Q_SCRIPTABLE bool hasType(int x0) const { return wrapped->hasType(x0); }
 	private:
 		KDevelop::Context* wrapped;
 };
 
-class KrossEditorContext : public QObject, public Kross::WrapperInterface
+class KrossKDevelopEditorContext : public KrossKDevelopContext
 {
 	Q_OBJECT
 	public:
-		KrossEditorContext(KDevelop::EditorContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopEditorContext(KDevelop::EditorContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE QString currentLine() const { return wrapped->currentLine(); }
-		Q_SCRIPTABLE KTextEditor::View* view() const { return wrapped->view(); }
-		Q_SCRIPTABLE KTextEditor::Cursor position() const { return wrapped->position(); }
-		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
-		Q_SCRIPTABLE QString currentWord() const { return wrapped->currentWord(); }
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE KTextEditor::Cursor position() const { return wrapped->position(); }
+		Q_SCRIPTABLE QString currentLine() const { return wrapped->currentLine(); }
+		Q_SCRIPTABLE QString currentWord() const { return wrapped->currentWord(); }
+		Q_SCRIPTABLE KTextEditor::View* view() const { return wrapped->view(); }
 	private:
 		KDevelop::EditorContext* wrapped;
+};
+
+class KrossKDevelopFileContext : public KrossKDevelopContext
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopFileContext(KDevelop::FileContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE KUrl::List urls() const { return wrapped->urls(); }
+	private:
+		KDevelop::FileContext* wrapped;
+};
+
+class KrossKDevelopProjectItemContext : public KrossKDevelopContext
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectItemContext(KDevelop::ProjectItemContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE QList< KDevelop::ProjectBaseItem* > items() const { return wrapped->items(); }
+	private:
+		KDevelop::ProjectItemContext* wrapped;
 };
 
 bool krosscontext_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
@@ -69,37 +70,44 @@ bool krosscontext_registerHandler(const QByteArray& name, Kross::MetaTypeHandler
 
 namespace Handlers
 {
-QVariant _fileContextHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::FileContext* t=static_cast<KDevelop::FileContext*>(type);
-	return qVariantFromValue((QObject*) new KrossFileContext(t, 0));
-}
-bool b_FileContext=krosscontext_registerHandler("KDevelop::FileContext*", _fileContextHandler);
-
-QVariant _projectItemContextHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::ProjectItemContext* t=static_cast<KDevelop::ProjectItemContext*>(type);
-	return qVariantFromValue((QObject*) new KrossProjectItemContext(t, 0));
-}
-bool b_ProjectItemContext=krosscontext_registerHandler("KDevelop::ProjectItemContext*", _projectItemContextHandler);
-
-QVariant _contextHandler(void* type)
+QVariant _kDevelopContextHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::Context* t=static_cast<KDevelop::Context*>(type);
-	return qVariantFromValue((QObject*) new KrossContext(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::Context*>(t));
+	if(dynamic_cast<KDevelop::EditorContext*>(t)) return Handlers::_kDevelopContextHandler((void*) type);
+	else if(dynamic_cast<KDevelop::FileContext*>(t)) return Handlers::_kDevelopContextHandler((void*) type);
+	else if(dynamic_cast<KDevelop::ProjectItemContext*>(t)) return Handlers::_kDevelopContextHandler((void*) type);
+	else return qVariantFromValue((QObject*) new KrossKDevelopContext(t, 0));
 }
-bool b_Context=krosscontext_registerHandler("KDevelop::Context*", _contextHandler);
+bool b_KDevelopContext=krosscontext_registerHandler("KDevelop::Context*", _kDevelopContextHandler);
 
-QVariant _editorContextHandler(void* type)
+QVariant _kDevelopEditorContextHandler(void* type)
 {
 	if(!type) return QVariant();
 	KDevelop::EditorContext* t=static_cast<KDevelop::EditorContext*>(type);
-	return qVariantFromValue((QObject*) new KrossEditorContext(t, 0));
+	Q_ASSERT(dynamic_cast<KDevelop::EditorContext*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopEditorContext(t, 0));
 }
-bool b_EditorContext=krosscontext_registerHandler("KDevelop::EditorContext*", _editorContextHandler);
+bool b_KDevelopEditorContext=krosscontext_registerHandler("KDevelop::EditorContext*", _kDevelopEditorContextHandler);
+
+QVariant _kDevelopFileContextHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::FileContext* t=static_cast<KDevelop::FileContext*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::FileContext*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopFileContext(t, 0));
+}
+bool b_KDevelopFileContext=krosscontext_registerHandler("KDevelop::FileContext*", _kDevelopFileContextHandler);
+
+QVariant _kDevelopProjectItemContextHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectItemContext* t=static_cast<KDevelop::ProjectItemContext*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectItemContext*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectItemContext(t, 0));
+}
+bool b_KDevelopProjectItemContext=krosscontext_registerHandler("KDevelop::ProjectItemContext*", _kDevelopProjectItemContextHandler);
 
 }
 #include "krosscontext.moc"
