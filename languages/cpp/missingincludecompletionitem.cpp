@@ -182,8 +182,14 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
   int checkLines = document->lines() < 500 ? document->lines() : 500;
   for(int a = 0; a < checkLines; ++a) {
     QString lineText = document->line(a);
-    if(lineText.trimmed().startsWith("#include"))
-      lastLineWithInclude = a;
+    if(lineText.trimmed().startsWith("#include")) {
+      QString ending = lineText.trimmed();
+      if(!ending.isEmpty())
+        ending = ending.left( ending.length()-1 ).trimmed(); //Remove the last > or "
+      
+      if(!ending.endsWith(".moc"))
+        lastLineWithInclude = a;
+    }
   }
   document->insertLine(lastLineWithInclude+1, insertLine);
 }
