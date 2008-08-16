@@ -112,20 +112,16 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
     }
     VcsJob *job = d->vcsiface->status( urls );
     job->exec();
-    kDebug() << "Job done with status:" << job->status();
     if( job->status() != VcsJob::JobSucceeded )
     {
         kDebug() << "Couldn't get status for urls: " << urls;
     }else
     {
         QVariant varlist = job->fetchResults();
-        kDebug(9510) << "jobs result:" << varlist;
         foreach( QVariant var, varlist.toList() )
         {
-            kDebug(9510) << "converting info:" << var;
             VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
 
-            kDebug(9510) << "converted info:"  << info.state() << info.url();
             QString state;
             QString path = info.url().pathOrUrl();
             IProject* project = ICore::self()->projectController()->findProjectForUrl( info.url() );
@@ -167,17 +163,13 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         KUrl path;
         VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
         if( info.state() == VcsStatusInfo::ItemUnknown ) {
-            kDebug() << "adding" << info.url() << "to additems";
             addItems << info.url();
         }
         list << info.url();
     }
     if( !addItems.isEmpty() ) {
-        kDebug() << "Adding new files" << addItems;
         KDevelop::VcsJob* job = d->vcsiface->add( addItems, IBasicVersionControl::NonRecursive );
         job->exec();
-    } else {
-        kDebug() << "oops no files to add";
     }
     return list;
 }
