@@ -91,7 +91,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     QFileInfoList entries = dir.entryInfoList();
 
     KConfigGroup filtersConfig = item->project()->projectConfiguration()->group("Filters");
-    QStringList includes = filtersConfig.readEntry("Includes", QStringList());
+    QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
     QStringList excludes = filtersConfig.readEntry("Excludes", QStringList());
 
     for ( int i = 0; i < entries.count(); ++i )

@@ -23,6 +23,12 @@
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
 
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/iprojectfilemanager.h>
+
 #include "genericprojectmanagersettings.h"
 #include "ui_genericprojectmanagersettings.h"
 
@@ -54,6 +60,17 @@ void GenericProjectManagerPreferences::save()
 {
     ProjectKCModule<GenericProjectManagerSettings>::save();
     GenericProjectManagerSettings::self()->writeConfig();
+
+    IProject* project = 0;
+    Q_FOREACH (IProject* p, ICore::self()->projectController()->projects()) {
+        if (p->projectFileUrl() == GenericProjectManagerSettings::self()->projectFileUrl()) {
+            project = p;
+            break;
+        }
+    }
+    if (project && project->projectFileManager()) {
+        project->reloadModel();
+    }
 }
 
 void GenericProjectManagerPreferences::load()

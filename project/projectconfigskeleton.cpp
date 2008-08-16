@@ -70,6 +70,16 @@ void ProjectConfigSkeleton::setDeveloperFileUrl( const QString& cfg )
     d->m_developerFileUrl = KUrl(cfg);
 }
 
+KUrl ProjectConfigSkeleton::projectFileUrl() const
+{
+    return d->m_projectFileUrl;
+}
+
+KUrl ProjectConfigSkeleton::developerFileUrl() const
+{
+    return d->m_developerFileUrl;
+}
+
 void ProjectConfigSkeleton::setDefaults()
 {
     kDebug(9503) << "Setting Defaults";

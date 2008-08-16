@@ -4,6 +4,7 @@
   <kcfgfile arg="true"/>
   <group name="Filters">
     <entry name="includes" key="Includes" type="String">
+      <default>*</default>
     </entry>
     <entry name="excludes" key="Excludes" type="String">
     </entry>

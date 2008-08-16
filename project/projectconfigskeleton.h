@@ -50,6 +50,9 @@ public:
     void setDefaults();
     bool useDefaults( bool b );
     void writeConfig();
+
+    KUrl projectFileUrl() const;
+    KUrl developerFileUrl() const;
 private:
     /**
      * There's no way in KDE4 API to find out the file that the config object
