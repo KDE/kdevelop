@@ -27,6 +27,8 @@
 #include <ThreadWeaver.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
+#include <klocale.h>
+
 
 #include <vector>
 
@@ -37,7 +39,6 @@
 #include <iostream>
 
 #include "svninternaljobbase.h"
-#include "svncommitdialog.h"
 #include "kdevsvnplugin.h"
 
 SvnInternalCommitJob::SvnInternalCommitJob( SvnJobBase* parent )

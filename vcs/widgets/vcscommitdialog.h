@@ -11,47 +11,39 @@
 #ifndef SVN_COMMITDIALOG_H
 #define SVN_COMMITDIALOG_H
 
-#include "ui_commitdialog.h"
+#include <KDialog>
+#include <KUrl>
+#include "../vcsexport.h"
 
-#include <kdialog.h>
-#include <QtCore/QHash>
-#include <vcs/vcsstatusinfo.h>
+class QStringList;
 
-class KDevSvnPlugin;
 namespace KDevelop
 {
-    class VcsFileInfo;
-    class IProject;
-}
+class IBasicVersionControl;
 
-class SvnCommitDialog : public KDialog
+class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SvnCommitDialog( KDevSvnPlugin *part, QWidget *parent = 0 );
-    virtual ~SvnCommitDialog();
+    VcsCommitDialog( IBasicVersionControl *iface, QWidget *parent = 0 );
+    virtual ~VcsCommitDialog();
     void setCommitCandidates( const KUrl::List &list );
     void setMessage( const QString& );
-    void setKeepLocks( bool );
     void setRecursive( bool );
     void setOldMessages( const QStringList& );
     KUrl::List checkedUrls() const;
     bool recursive() const;
-    bool keepLocks() const;
     QString message() const;
-signals:
-    void okClicked( SvnCommitDialog* dlg );
-    void cancelClicked( SvnCommitDialog* dlg );
-private slots:
-    void ok();
-    void cancel();
+Q_SIGNALS:
+    void doCommit( KDevelop::VcsCommitDialog* dlg );
+    void cancelCommit( KDevelop::VcsCommitDialog* dlg );
 private:
-//     void insertRow( const KDevelop::VcsFileInfo &info );
-    void insertRow( const QString& state, const KUrl& url, Qt::CheckState = Qt::Checked );
-
-    KDevSvnPlugin *m_part;
-    QHash<QString, KDevelop::VcsStatusInfo> statusInfos;
-    Ui::SvnCommitDialog ui;
+    Q_PRIVATE_SLOT( d, void ok() )
+    Q_PRIVATE_SLOT( d, void cancel() )
+    friend class VcsCommitDialogPrivate;
+    class VcsCommitDialogPrivate* const d;
 };
+
+}
 
 #endif

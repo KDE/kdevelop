@@ -1,5 +1,6 @@
 set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
+    widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
     dvcs/ui/commitdialog.ui
@@ -23,6 +24,7 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcsannotationwidget.cpp
     widgets/vcseventwidget.cpp
     widgets/vcsdiffwidget.cpp
+    widgets/vcscommitdialog.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
@@ -68,6 +70,7 @@ install(FILES
     widgets/vcsannotationwidget.h
     widgets/vcseventwidget.h
     widgets/vcsdiffwidget.h
+    widgets/vcscommitdialog.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
 )
 

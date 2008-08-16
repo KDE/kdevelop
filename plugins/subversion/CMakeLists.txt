@@ -65,7 +65,6 @@ set(kdevsubversion_JOB_SRCS
 set(kdevsubversion_PART_SRCS
     kdevsvnplugin.cpp
     svnssldialog.cpp
-    svncommitdialog.cpp
     svnoutputmodel.cpp
     svnoutputdelegate.cpp
     svnimportmetadatawidget.cpp
@@ -75,7 +74,6 @@ set(kdevsubversion_PART_SRCS
 
 set(kdevsubversion_PART_UI
     ui/ssltrustdialog.ui
-    ui/commitdialog.ui
     ui/importmetadatawidget.ui
     ui/checkoutmetadatawidget.ui
 )

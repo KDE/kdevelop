@@ -27,6 +27,7 @@ class SvnCommitDialog;
 
 namespace KDevelop
 {
+class VcsCommitDialog;
 class ContextMenuExtension;
 }
 
@@ -145,8 +146,8 @@ public Q_SLOTS:
     void ctxImport();
     void ctxCheckout();
 private slots:
-    void doCommit( SvnCommitDialog* );
-    void cancelCommit( SvnCommitDialog* );
+    void doCommit( KDevelop::VcsCommitDialog* );
+    void cancelCommit( KDevelop::VcsCommitDialog* );
 private:
     SvnOutputModel* m_outputmodel;
     SvnOutputDelegate* m_outputdelegate;

@@ -18,6 +18,7 @@
 
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
+#include <kparts/mainwindow.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 #include <kpluginfactory.h>
@@ -49,6 +50,7 @@
 #include <vcs/widgets/vcsannotationwidget.h>
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcsdiffwidget.h>
+#include <vcs/widgets/vcscommitdialog.h>
 
 #include "kdevsvncpp/apr.hpp"
 
@@ -69,7 +71,6 @@
 
 #include "svnoutputdelegate.h"
 #include "svnoutputmodel.h"
-#include "svncommitdialog.h"
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
 
@@ -438,19 +439,19 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 //         action = new QAction(i18n("Blame/Annotate..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
 //         actions << action;
-// 
+//
 //         action = new QAction(i18n("Cat..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxCat()) );
 //         actions << action;
-// 
+//
 //         action = new QAction(i18n("Diff to..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
 //         actions << action;
-// 
+//
 //         action = new QAction(i18n("Information..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
 //         actions << action;
-// 
+//
 //         action = new QAction(i18n("Status..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
 //         actions << action;
@@ -528,17 +529,17 @@ void KDevSvnPlugin::ctxCommit()
 {
     if( !m_ctxUrlList.isEmpty() )
     {
-        SvnCommitDialog* dlg = new SvnCommitDialog( this );
+        KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog( this, core()->uiController()->activeMainWindow() );
         dlg->setCommitCandidates( m_ctxUrlList );
         dlg->setRecursive( true );
-        connect( dlg, SIGNAL( okClicked( SvnCommitDialog* ) ), this, SLOT( doCommit( SvnCommitDialog* ) ) );
-        connect( dlg, SIGNAL( cancelClicked( SvnCommitDialog* ) ), this, SLOT( cancelCommit( SvnCommitDialog* ) ) );
+        connect( dlg, SIGNAL( doCommit( KDevelop::VcsCommitDialog* ) ), this, SLOT( doCommit( KDevelop::VcsCommitDialog* ) ) );
+        connect( dlg, SIGNAL( cancelCommit( KDevelop::VcsCommitDialog* ) ), this, SLOT( cancelCommit( KDevelop::VcsCommitDialog* ) ) );
         dlg->show();
     }
 }
 
 
-void KDevSvnPlugin::doCommit( SvnCommitDialog* dlg )
+void KDevSvnPlugin::doCommit( KDevelop::VcsCommitDialog* dlg )
 {
     KDevelop::IBasicVersionControl::RecursionMode mode;
     if( dlg->recursive() )
@@ -552,7 +553,7 @@ void KDevSvnPlugin::doCommit( SvnCommitDialog* dlg )
     dlg->deleteLater();
 }
 
-void KDevSvnPlugin::cancelCommit( SvnCommitDialog* dlg )
+void KDevSvnPlugin::cancelCommit( KDevelop::VcsCommitDialog* dlg )
 {
     dlg->deleteLater();
 }
