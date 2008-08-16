@@ -282,6 +282,11 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(Declaration);
+
+  bool wasInSymbolTable = d->m_inSymbolTable;
+
+  setInSymbolTable(false);
+
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
@@ -289,6 +294,8 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
+
+  setInSymbolTable(wasInSymbolTable);
 }
 
 Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/)
