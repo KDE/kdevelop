@@ -58,6 +58,7 @@ struct DVCSjobPrivate
     QStringList outputLines;
     KProcess::OutputChannelMode commMode;
     KDevelop::IPlugin* vcsplugin;
+    bool        failed;
 };
 
 DVCSjob::DVCSjob(KDevelop::IPlugin* parent)
@@ -140,7 +141,7 @@ void DVCSjob::start()
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
-    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )), 
+    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
             SLOT(slotProcessError(QProcess::ProcessError)));
 
     connect(d->lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
@@ -176,8 +177,10 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
 
     d->isRunning = false;
 
+    d->failed = true;
     setError( d->childproc->exitCode() );
     setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
+    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
     emitResult(); //KJob
     emit resultsReady(this); //VcsJob
 }
@@ -190,6 +193,7 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     d->isRunning = false;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+        d->failed = true;
         setError( exitCode );
         setErrorText( i18n("Process exited with status %1", exitCode) );
     }
@@ -226,7 +230,7 @@ KDevelop::VcsJob::JobStatus DVCSjob::status() const
     if (d->isRunning)
         return KDevelop::VcsJob::JobRunning;
 
-    if (d->childproc->exitCode() != 0)
+    if (d->failed)
         return KDevelop::VcsJob::JobFailed;
 
     return KDevelop::VcsJob::JobSucceeded;
