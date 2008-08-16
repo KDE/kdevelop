@@ -1,7 +1,7 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
 <title>Python</title>
-<base href="http://epoxy.mrs.umn.edu/doc/python2.2-doc/html"/>
+<base href="http://docs.python.org"/>
 <tocsect1 name="Tutorial" url="tut/tut.html">
 <tocsect2 name="Front Matter" url="tut/node1.html"/>
 <tocsect2 name="Contents" url="tut/node2.html"/>
