@@ -47,7 +47,7 @@ class InterfaceCreator
         
         virtual ~InterfaceCreator() {}
         virtual void writeDocument()=0;
-        virtual void writeClass(const QString& classname, const QString& baseclass)=0;
+        virtual void writeClass(const QString& classname, const QString& baseclass, const QList<QStringList>& enums)=0;
         virtual void writeNamespace(const QString& name)=0;
         virtual void writeVariable(const QString& name, const QString& type, bool isConst)=0;
         virtual void writeEndClass()=0;

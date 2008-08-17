@@ -42,7 +42,7 @@ int XmlToKross::start()
                 if(str=="Class")
                 {
                     inclass++;
-                    if(inclass==1) writeClass(xml.attributes().value(QString(), "name").toString(), QString());
+                    if(inclass==1) writeClass(xml.attributes().value(QString(), "name").toString(), QString(), QList<QStringList>());
                 }
                 else if(str=="Function")
                 {

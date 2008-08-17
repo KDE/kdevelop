@@ -44,7 +44,7 @@ class KrossInterfaceCreator : public DUChainReader
     public:
         KrossInterfaceCreator(TopDUContext* top) : DUChainReader(top) {}
         virtual void writeDocument() { qDebug() << "start doc"; }
-        virtual void writeClass(const QString& classname, const QString& )
+        virtual void writeClass(const QString& classname, const QString& , const QList<QStringList>& enums)
             { qDebug() << "start class" << classname; }
         virtual void writeNamespace(const QString& name) { qDebug() << "start namespace" << name; }
         virtual void writeVariable(const QString& name, const QString& type, bool isConst)
@@ -95,7 +95,7 @@ class KrossWrapper : public DUChainReader
             return "Kross"+QString(name).replace("::", QString());
         }
         
-        void writeClass(const QString& classname, const QString& baseClass)
+        void writeClass(const QString& classname, const QString& baseClass, const QList<QStringList>& enums)
         {
             classNamespace[classname]=inNamespace;
             
@@ -108,16 +108,19 @@ class KrossWrapper : public DUChainReader
                 output += "class " + krossClassname + " : public "+toKrossName(baseClass)+'\n';
             
             output += "{\n"
-                      "\tQ_OBJECT\n"
-                      "\tpublic:\n";
+                      "\tQ_OBJECT\n";
+            foreach(const QStringList& en, enums)
+            {
+                writeEndEnum(en);
+            }
+            output += "\tpublic:\n";
             if(baseClass.isEmpty())
                 output += "\t\t"+krossClassname+'('
-                                 +classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj)"
-                          "{ setObjectName(\""+classname+"\"); }\n";
+                                 +classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj)\t";
             else
-                output += "\t\t"+krossClassname+"("+classname+"* obj, QObject* parent=0) : "+toKrossName(baseClass)+"(obj, parent), wrapped(obj) {}\n";
+                output += "\t\t"+krossClassname+"("+classname+"* obj, QObject* parent=0) : "+toKrossName(baseClass)+"(obj, parent), wrapped(obj)\n";
                 
-            output += "\t\tvoid* wrappedObject() const { return wrapped; }\n\n";
+            output += "\t{ setObjectName(\""+classname+"\"); }\n\t\tvoid* wrappedObject() const { return wrapped; }\n\n";
         }
         
         void writeEndClass()
@@ -157,15 +160,13 @@ class KrossWrapper : public DUChainReader
         
         void writeEndEnum(const QStringList& fl)
         {
-            //TODO: Add it again when it doesn't make everything crash
-            /*
             QStringList flags=fl;
-            output += "\t\tQ_ENUMS("+flags.takeFirst()+")\n";
+            output += "\t\tQ_ENUMS("+flags.takeFirst()+")\n"
                       "\t\tQ_FLAGS(";
             
             foreach(const QString& flag, flags)
                 output += ' '+flag;
-            output += ")\n\n";*/
+            output += ")\n\n";
         }
         
         QString handlerName(const QString& classname)

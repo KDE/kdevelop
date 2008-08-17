@@ -9,8 +9,11 @@
 class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+		Q_ENUMS(KDevelop::ProjectBaseItem::ProjectItemType)
+		Q_FLAGS( KDevelop::ProjectBaseItem::BuildFolder KDevelop::ProjectBaseItem::Folder KDevelop::ProjectBaseItem::ExecutableTarget KDevelop::ProjectBaseItem::LibraryTarget KDevelop::ProjectBaseItem::TestTarget KDevelop::ProjectBaseItem::Target KDevelop::ProjectBaseItem::File)
+
 	public:
-		KrossKDevelopProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ProjectBaseItem"); }
+		KrossKDevelopProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProjectBaseItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE void add(KDevelop::ProjectBaseItem* x0) { wrapped->add(x0); }
@@ -32,7 +35,8 @@ class KrossKDevelopProjectFolderItem : public KrossKDevelopProjectBaseItem
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectFolderItem(KDevelop::ProjectFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectFolderItem(KDevelop::ProjectFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectFolderItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
@@ -51,7 +55,8 @@ class KrossKDevelopProjectBuildFolderItem : public KrossKDevelopProjectFolderIte
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectBuildFolderItem(KDevelop::ProjectBuildFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectFolderItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectBuildFolderItem(KDevelop::ProjectBuildFolderItem* obj, QObject* parent=0) : KrossKDevelopProjectFolderItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectBuildFolderItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -64,7 +69,8 @@ class KrossKDevelopProjectTargetItem : public KrossKDevelopProjectBaseItem
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectTargetItem(KDevelop::ProjectTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectTargetItem(KDevelop::ProjectTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectTargetItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -78,7 +84,8 @@ class KrossKDevelopProjectExecutableTargetItem : public KrossKDevelopProjectTarg
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectExecutableTargetItem(KDevelop::ProjectExecutableTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectExecutableTargetItem(KDevelop::ProjectExecutableTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectExecutableTargetItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -90,7 +97,8 @@ class KrossKDevelopProjectLibraryTargetItem : public KrossKDevelopProjectTargetI
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectLibraryTargetItem(KDevelop::ProjectLibraryTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectLibraryTargetItem(KDevelop::ProjectLibraryTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectTargetItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectLibraryTargetItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -102,7 +110,8 @@ class KrossKDevelopProjectTestTargetItem : public KrossKDevelopProjectExecutable
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectTestTargetItem(KDevelop::ProjectTestTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectExecutableTargetItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectTestTargetItem(KDevelop::ProjectTestTargetItem* obj, QObject* parent=0) : KrossKDevelopProjectExecutableTargetItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectTestTargetItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -114,7 +123,8 @@ class KrossKDevelopProjectFileItem : public KrossKDevelopProjectBaseItem
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectFileItem(KDevelop::ProjectFileItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectFileItem(KDevelop::ProjectFileItem* obj, QObject* parent=0) : KrossKDevelopProjectBaseItem(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectFileItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -130,7 +140,7 @@ class KrossKDevelopWorkspaceItem : public QObject, public Kross::WrapperInterfac
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopWorkspaceItem(KDevelop::WorkspaceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::WorkspaceItem"); }
+		KrossKDevelopWorkspaceItem(KDevelop::WorkspaceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::WorkspaceItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE QString name() const { return wrapped->name(); }
@@ -144,7 +154,7 @@ class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectModel(KDevelop::ProjectModel* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ProjectModel"); }
+		KrossKDevelopProjectModel(KDevelop::ProjectModel* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProjectModel"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_PROPERTY(const QMetaObject  staticMetaObject READ getstaticMetaObject SCRIPTABLE true)

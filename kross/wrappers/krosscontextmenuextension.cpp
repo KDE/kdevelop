@@ -10,7 +10,7 @@ class KrossKDevelopContextMenuExtension : public QObject, public Kross::WrapperI
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopContextMenuExtension(KDevelop::ContextMenuExtension* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ContextMenuExtension"); }
+		KrossKDevelopContextMenuExtension(KDevelop::ContextMenuExtension* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ContextMenuExtension"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_PROPERTY(const QString  FileGroup READ getFileGroup SCRIPTABLE true)

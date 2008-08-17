@@ -87,10 +87,7 @@ void DUChainReader::foundClass(const Declaration* decl)
         inNamespace.resize(lastColons);
     }
     
-    sonsPerClass[baseClass].append(cdecl->abstractType()->toString());
-    definedClasses.append(cdecl->abstractType()->toString());
-    writeClass(cdecl->abstractType()->toString(), baseClass);
-    
+    QList<QStringList> enums;
     foreach(const Declaration* declEnum, decl->internalContext()->localDeclarations())
     {
         const AbstractType::Ptr t = declEnum->abstractType();
@@ -113,11 +110,14 @@ void DUChainReader::foundClass(const Declaration* decl)
                     
                     anEnum += enor->qualifiedIdentifier().toString();
                 }
-                writeEndEnum(anEnum);
+                enums += anEnum;
             }
         }
-        
     }
+    
+    sonsPerClass[baseClass].append(cdecl->abstractType()->toString());
+    definedClasses.append(cdecl->abstractType()->toString());
+    writeClass(cdecl->abstractType()->toString(), baseClass, enums);
     
     //Looking for methods
     DUContext* ctx=decl->internalContext();

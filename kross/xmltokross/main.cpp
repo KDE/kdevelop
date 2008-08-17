@@ -50,7 +50,7 @@ class KrossWrapper : public XmlToKross
             output +='\n';
         }
         
-        void writeClass(const QString& classname, const QString& baseclass)
+        void writeClass(const QString& classname, const QString& baseclass, const QList<QStringList>& enums)
         {
             classNamespace[classname]=inNamespace;
             definedClasses.append(classname);

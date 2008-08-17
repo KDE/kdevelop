@@ -11,7 +11,7 @@ class KrossKDevelopIndexedIdentifier : public QObject, public Kross::WrapperInte
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedIdentifier(KDevelop::IndexedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedIdentifier"); }
+		KrossKDevelopIndexedIdentifier(KDevelop::IndexedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedIdentifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedIdentifier operator=(const KDevelop::Identifier& x0) { return wrapped->operator=(x0); }
@@ -31,7 +31,7 @@ class KrossKDevelopIndexedQualifiedIdentifier : public QObject, public Kross::Wr
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedQualifiedIdentifier(KDevelop::IndexedQualifiedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedQualifiedIdentifier"); }
+		KrossKDevelopIndexedQualifiedIdentifier(KDevelop::IndexedQualifiedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedQualifiedIdentifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedQualifiedIdentifier operator=(const KDevelop::QualifiedIdentifier& x0) { return wrapped->operator=(x0); }
@@ -50,7 +50,7 @@ class KrossKDevelopIndexedTypeIdentifier : public QObject, public Kross::Wrapper
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedTypeIdentifier(KDevelop::IndexedTypeIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedTypeIdentifier"); }
+		KrossKDevelopIndexedTypeIdentifier(KDevelop::IndexedTypeIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedTypeIdentifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedTypeIdentifier operator=(const KDevelop::TypeIdentifier& x0) { return wrapped->operator=(x0); }
@@ -69,7 +69,7 @@ class KrossKDevelopIdentifier : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIdentifier(KDevelop::Identifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::Identifier"); }
+		KrossKDevelopIdentifier(KDevelop::Identifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Identifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::Identifier unique(int x0) { return wrapped->unique(x0); }
@@ -100,7 +100,7 @@ class KrossKDevelopQualifiedIdentifier : public QObject, public Kross::WrapperIn
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopQualifiedIdentifier(KDevelop::QualifiedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::QualifiedIdentifier"); }
+		KrossKDevelopQualifiedIdentifier(KDevelop::QualifiedIdentifier* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::QualifiedIdentifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE void push(const KDevelop::Identifier& x0) { wrapped->push(x0); }
@@ -142,7 +142,8 @@ class KrossKDevelopTypeIdentifier : public KrossKDevelopQualifiedIdentifier
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopTypeIdentifier(KDevelop::TypeIdentifier* obj, QObject* parent=0) : KrossKDevelopQualifiedIdentifier(obj, parent), wrapped(obj) {}
+		KrossKDevelopTypeIdentifier(KDevelop::TypeIdentifier* obj, QObject* parent=0) : KrossKDevelopQualifiedIdentifier(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::TypeIdentifier"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool isReference() const { return wrapped->isReference(); }

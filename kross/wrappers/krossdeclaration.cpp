@@ -12,7 +12,7 @@ class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInt
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedDeclaration(KDevelop::IndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedDeclaration"); }
+		KrossKDevelopIndexedDeclaration(KDevelop::IndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedDeclaration"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::Declaration* declaration() const { return wrapped->declaration(); }
@@ -30,7 +30,7 @@ class KrossKDevelopLocalIndexedDeclaration : public QObject, public Kross::Wrapp
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopLocalIndexedDeclaration(KDevelop::LocalIndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::LocalIndexedDeclaration"); }
+		KrossKDevelopLocalIndexedDeclaration(KDevelop::LocalIndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::LocalIndexedDeclaration"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::Declaration* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
@@ -46,8 +46,14 @@ class KrossKDevelopLocalIndexedDeclaration : public QObject, public Kross::Wrapp
 class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+		Q_ENUMS(KDevelop::Declaration::AccessPolicy)
+		Q_FLAGS( KDevelop::Declaration::Public KDevelop::Declaration::Protected KDevelop::Declaration::Private)
+
+		Q_ENUMS(KDevelop::Declaration::Kind)
+		Q_FLAGS( KDevelop::Declaration::Type KDevelop::Declaration::Instance KDevelop::Declaration::NamespaceAlias KDevelop::Declaration::Alias)
+
 	public:
-		KrossKDevelopDeclaration(KDevelop::Declaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::Declaration"); }
+		KrossKDevelopDeclaration(KDevelop::Declaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Declaration"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }

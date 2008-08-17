@@ -9,8 +9,11 @@
 class KrossKDevelopContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+		Q_ENUMS(KDevelop::Context::Type)
+		Q_FLAGS( KDevelop::Context::EditorContext KDevelop::Context::FileContext KDevelop::Context::CodeContext KDevelop::Context::ProjectItemContext)
+
 	public:
-		KrossKDevelopContext(KDevelop::Context* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::Context"); }
+		KrossKDevelopContext(KDevelop::Context* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Context"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -23,7 +26,8 @@ class KrossKDevelopEditorContext : public KrossKDevelopContext
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopEditorContext(KDevelop::EditorContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
+		KrossKDevelopEditorContext(KDevelop::EditorContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::EditorContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -40,7 +44,8 @@ class KrossKDevelopFileContext : public KrossKDevelopContext
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopFileContext(KDevelop::FileContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
+		KrossKDevelopFileContext(KDevelop::FileContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::FileContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
@@ -53,7 +58,8 @@ class KrossKDevelopProjectItemContext : public KrossKDevelopContext
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProjectItemContext(KDevelop::ProjectItemContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj) {}
+		KrossKDevelopProjectItemContext(KDevelop::ProjectItemContext* obj, QObject* parent=0) : KrossKDevelopContext(obj, parent), wrapped(obj)
+	{ setObjectName("KDevelop::ProjectItemContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }

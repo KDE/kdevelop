@@ -13,7 +13,7 @@ class KrossKDevelopReferencedTopDUContext : public QObject, public Kross::Wrappe
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopReferencedTopDUContext(KDevelop::ReferencedTopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ReferencedTopDUContext"); }
+		KrossKDevelopReferencedTopDUContext(KDevelop::ReferencedTopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ReferencedTopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::ReferencedTopDUContext operator=(const KDevelop::ReferencedTopDUContext& x0) { return wrapped->operator=(x0); }
@@ -30,7 +30,7 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedTopDUContext(KDevelop::IndexedTopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedTopDUContext"); }
+		KrossKDevelopIndexedTopDUContext(KDevelop::IndexedTopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedTopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::TopDUContext* data() const { return wrapped->data(); }
@@ -45,8 +45,11 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+		Q_ENUMS(KDevelop::TopDUContext::Flags)
+		Q_FLAGS( KDevelop::TopDUContext::NoFlags KDevelop::TopDUContext::ProxyContextFlag KDevelop::TopDUContext::AnyFlag KDevelop::TopDUContext::UpdatingContext KDevelop::TopDUContext::LastFlag)
+
 	public:
-		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::TopDUContext"); }
+		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE void deleteSelf() { wrapped->deleteSelf(); }
@@ -89,7 +92,7 @@ class KrossKDevelopTopDUContextCache : public QObject, public Kross::WrapperInte
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopTopDUContextCache(KDevelop::TopDUContext::Cache* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::TopDUContext::Cache"); }
+		KrossKDevelopTopDUContextCache(KDevelop::TopDUContext::Cache* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext::Cache"); }
 		void* wrappedObject() const { return wrapped; }
 
 	private:

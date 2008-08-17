@@ -10,7 +10,7 @@ class KrossKDevelopUse : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopUse(KDevelop::Use* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::Use"); }
+		KrossKDevelopUse(KDevelop::Use* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Use"); }
 		void* wrappedObject() const { return wrapped; }
 
 		typedef KDevelop::SimpleRange KDevelopSimpleRange;

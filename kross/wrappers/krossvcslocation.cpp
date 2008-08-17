@@ -9,8 +9,11 @@
 class KrossKDevelopVcsLocation : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+		Q_ENUMS(KDevelop::VcsLocation::LocationType)
+		Q_FLAGS( KDevelop::VcsLocation::LocalLocation KDevelop::VcsLocation::RepositoryLocation)
+
 	public:
-		KrossKDevelopVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::VcsLocation"); }
+		KrossKDevelopVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::VcsLocation"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::VcsLocation operator=(const KDevelop::VcsLocation& x0) { return wrapped->operator=(x0); }
