@@ -13,10 +13,12 @@ def createView(parent):
 	#return part.view()
 	#widget=forms.createWidgetFromUIFile(parent, urlparse(IPlugin.pluginDirectory()).path+"/example.ui")
 	widget=forms.createListView(parent)
-	print "created"+str(widget)
+	#print "created"+str(widget)
 	
-	print "opened"+str(ICore.documentController().openDocuments())
+	#print "opened"+str(ICore.documentController().openDocuments())+str(len(ICore.documentController().openDocuments()))
 	for doc in ICore.documentController().openDocuments():
+		print "lilili"+str(doc)
+		print "lololo"+doc.objectName
 		print doc.url()
 		widget.addItem(doc.url())
 	

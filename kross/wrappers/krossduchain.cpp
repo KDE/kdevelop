@@ -10,7 +10,7 @@ class KrossKDevelopDUChain : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUChain(KDevelop::DUChain* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUChain(KDevelop::DUChain* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUChain"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_PROPERTY(const QMetaObject  staticMetaObject READ getstaticMetaObject SCRIPTABLE true)

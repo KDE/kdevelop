@@ -10,14 +10,8 @@ class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IDocument"); }
 		void* wrappedObject() const { return wrapped; }
-
-		Q_ENUMS(KDevelop::IDocument::DocumentState)
-		Q_FLAGS( KDevelop::IDocument::Clean KDevelop::IDocument::Modified KDevelop::IDocument::Dirty KDevelop::IDocument::DirtyAndModified)
-
-		Q_ENUMS(KDevelop::IDocument::DocumentSaveMode)
-		Q_FLAGS( KDevelop::IDocument::Default KDevelop::IDocument::Silent KDevelop::IDocument::Discard)
 
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KMimeType > mimeType() const { return wrapped->mimeType(); }

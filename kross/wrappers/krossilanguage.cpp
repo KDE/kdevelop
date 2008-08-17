@@ -10,7 +10,7 @@ class KrossKDevelopILanguage : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopILanguage(KDevelop::ILanguage* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopILanguage(KDevelop::ILanguage* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ILanguage"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE QString name() const { return wrapped->name(); }

@@ -10,7 +10,7 @@ class KrossKDevelopDUChainLock : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUChainLock(KDevelop::DUChainLock* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUChainLock(KDevelop::DUChainLock* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUChainLock"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool lockForRead(unsigned int x0) { return wrapped->lockForRead(x0); }
@@ -28,7 +28,7 @@ class KrossKDevelopDUChainReadLocker : public QObject, public Kross::WrapperInte
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUChainReadLocker(KDevelop::DUChainReadLocker* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUChainReadLocker(KDevelop::DUChainReadLocker* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUChainReadLocker"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool lock() { return wrapped->lock(); }
@@ -42,7 +42,7 @@ class KrossKDevelopDUChainWriteLocker : public QObject, public Kross::WrapperInt
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUChainWriteLocker(KDevelop::DUChainWriteLocker* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUChainWriteLocker(KDevelop::DUChainWriteLocker* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUChainWriteLocker"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool lock() { return wrapped->lock(); }

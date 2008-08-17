@@ -10,7 +10,7 @@ class KrossKDevelopIToolViewFactory : public QObject, public Kross::WrapperInter
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIToolViewFactory(KDevelop::IToolViewFactory* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopIToolViewFactory(KDevelop::IToolViewFactory* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IToolViewFactory"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE QWidget* create(QWidget* x0=0) { return wrapped->create(x0); }
@@ -26,11 +26,8 @@ class KrossKDevelopIUiController : public QObject, public Kross::WrapperInterfac
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIUiController(KDevelop::IUiController* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopIUiController(KDevelop::IUiController* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IUiController"); }
 		void* wrappedObject() const { return wrapped; }
-
-		Q_ENUMS(KDevelop::IUiController::SwitchMode)
-		Q_FLAGS( KDevelop::IUiController::ThisWindow KDevelop::IUiController::NewWindow)
 
 		Q_SCRIPTABLE void switchToArea(const QString& x0, KDevelop::IUiController::SwitchMode x1) { wrapped->switchToArea(x0, x1); }
 		Q_SCRIPTABLE void addToolView(const QString& x0, KDevelop::IToolViewFactory* x1) { wrapped->addToolView(x0, x1); }

@@ -10,14 +10,8 @@ class KrossKDevelopVcsRevision : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopVcsRevision(KDevelop::VcsRevision* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopVcsRevision(KDevelop::VcsRevision* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::VcsRevision"); }
 		void* wrappedObject() const { return wrapped; }
-
-		Q_ENUMS(KDevelop::VcsRevision::RevisionType)
-		Q_FLAGS( KDevelop::VcsRevision::Special KDevelop::VcsRevision::GlobalNumber KDevelop::VcsRevision::FileNumber KDevelop::VcsRevision::Date KDevelop::VcsRevision::Invalid KDevelop::VcsRevision::UserType)
-
-		Q_ENUMS(KDevelop::VcsRevision::RevisionSpecialType)
-		Q_FLAGS( KDevelop::VcsRevision::Head KDevelop::VcsRevision::Working KDevelop::VcsRevision::Base KDevelop::VcsRevision::Previous KDevelop::VcsRevision::Start KDevelop::VcsRevision::UserSpecialType)
 
 		Q_SCRIPTABLE KDevelop::VcsRevision operator=(const KDevelop::VcsRevision& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE void setRevisionValue(const QVariant& x0, KDevelop::VcsRevision::RevisionType x1) { wrapped->setRevisionValue(x0, x1); }

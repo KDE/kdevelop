@@ -10,11 +10,8 @@ class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::Problem"); }
 		void* wrappedObject() const { return wrapped; }
-
-		Q_ENUMS(KDevelop::Problem::Source)
-		Q_FLAGS( KDevelop::Problem::Unknown KDevelop::Problem::Disk KDevelop::Problem::Preprocessor KDevelop::Problem::Lexer KDevelop::Problem::Parser KDevelop::Problem::DUChainBuilder)
 
 		Q_SCRIPTABLE KDevelop::Problem::Source source() const { return wrapped->source(); }
 		Q_SCRIPTABLE void setSource(KDevelop::Problem::Source x0) { wrapped->setSource(x0); }

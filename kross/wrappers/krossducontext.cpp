@@ -10,7 +10,7 @@ class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInter
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopIndexedDUContext(KDevelop::IndexedDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopIndexedDUContext(KDevelop::IndexedDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IndexedDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::DUContext* context() const { return wrapped->context(); }
@@ -29,7 +29,7 @@ class KrossKDevelopLocalIndexedDUContext : public QObject, public Kross::Wrapper
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopLocalIndexedDUContext(KDevelop::LocalIndexedDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopLocalIndexedDUContext(KDevelop::LocalIndexedDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::LocalIndexedDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::DUContext* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
@@ -46,7 +46,7 @@ class KrossKDevelopImportTraceItem : public QObject, public Kross::WrapperInterf
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopImportTraceItem(KDevelop::ImportTraceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopImportTraceItem(KDevelop::ImportTraceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::ImportTraceItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		typedef KDevelop::DUContext KDevelopDUContext;
@@ -64,14 +64,8 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUContext(KDevelop::DUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUContext(KDevelop::DUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUContext"); }
 		void* wrappedObject() const { return wrapped; }
-
-		Q_ENUMS(KDevelop::DUContext::ContextType)
-		Q_FLAGS( KDevelop::DUContext::Global KDevelop::DUContext::Namespace KDevelop::DUContext::Class KDevelop::DUContext::Function KDevelop::DUContext::Template KDevelop::DUContext::Enum KDevelop::DUContext::Helper KDevelop::DUContext::Other)
-
-		Q_ENUMS(KDevelop::DUContext::SearchFlag)
-		Q_FLAGS( KDevelop::DUContext::NoSearchFlags KDevelop::DUContext::InImportedParentContext KDevelop::DUContext::OnlyContainerTypes KDevelop::DUContext::DontSearchInParent KDevelop::DUContext::NoUndefinedTemplateParams KDevelop::DUContext::DirectQualifiedLookup KDevelop::DUContext::NoFiltering KDevelop::DUContext::OnlyFunctions KDevelop::DUContext::NoImportsCheck)
 
 		Q_SCRIPTABLE KDevelop::DUContext::ContextType type() const { return wrapped->type(); }
 		Q_SCRIPTABLE void setType(KDevelop::DUContext::ContextType x0) { wrapped->setType(x0); }
@@ -134,7 +128,7 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUContextImport(KDevelop::DUContext::Import* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUContextImport(KDevelop::DUContext::Import* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUContext::Import"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool operator==(const KDevelop::DUContext::Import& x0) const { return wrapped->operator==(x0); }
@@ -152,7 +146,7 @@ class KrossKDevelopDUContextSearchItem : public QObject, public Kross::WrapperIn
 {
 	Q_OBJECT
 	public:
-		KrossKDevelopDUContextSearchItem(KDevelop::DUContext::SearchItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}
+		KrossKDevelopDUContextSearchItem(KDevelop::DUContext::SearchItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::DUContext::SearchItem"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE bool isEmpty() const { return wrapped->isEmpty(); }

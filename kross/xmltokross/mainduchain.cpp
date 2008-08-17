@@ -57,11 +57,11 @@ void messageOutput(QtMsgType type, const char *msg)
 {
     switch (type) {
         case QtDebugMsg:
-//             if(verbose)
+            if(verbose)
                 fprintf(stderr, "%s\n", msg);
             break;
         case QtWarningMsg:
-//             if(verbose)
+            if(verbose)
                 fprintf(stderr, "Warning: %s\n", msg);
             break;
         case QtCriticalMsg:
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
     options.add("F <filename>", ki18n("filename to be used for the .moc and the .h file"), QByteArray());
     options.add("D <directory>", ki18n("directory where to put the .h output"), QByteArray());
     options.add("o <output>", ki18n("directory where to put the code output"), QByteArray());
-    options.add("v", ki18n("Verbose output"), QByteArray());
+    options.add("verbose", ki18n("Verbose output"), QByteArray());
     KCmdLineArgs::addCmdLineOptions( options );
     
     KApplication app;
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
     QString directory(args->getOption("D"));
     QStringList toinclude(args->getOption("i").split(':'));
     QString output(args->getOption("o"));
-    verbose=args->isSet("v");
+    verbose=args->isSet("verbose");
     args->clear();
     
     DUChainExtractor e;
