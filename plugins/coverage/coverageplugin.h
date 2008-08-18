@@ -38,6 +38,7 @@ namespace Veritas
 {
 class CovOutputDelegate;
 
+/*! Makes coverage context actions available */
 class CoveragePlugin : public KDevelop::IPlugin
 {
 Q_OBJECT

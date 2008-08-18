@@ -30,6 +30,8 @@
 namespace Veritas
 {
 
+/*! Prime value class, holds coverage data for a file. This
+ * includes the covered lines, uncovered ones and callcounts */
 class VERITAS_COVERAGE_EXPORT CoveredFile : public QObject
 {
 Q_OBJECT

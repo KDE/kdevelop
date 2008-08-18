@@ -43,6 +43,8 @@ namespace Veritas
 class CovOutputModel;
 class CovOutputDelegate;
 class LcovInfoParser;
+
+/*! Executes the lcov coverage script in an outputview */
 class VERITAS_COVERAGE_EXPORT LcovJob : public KDevelop::OutputJob
 {
     Q_OBJECT

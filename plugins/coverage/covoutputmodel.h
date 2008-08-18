@@ -30,6 +30,7 @@ class QModelIndex;
 namespace Veritas
 {
 
+/*! Used by the lcovjob */
 class CovOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT

@@ -29,6 +29,7 @@
 namespace Veritas
 {
 
+/*! Colorizes the lcovjob somewhat */
 class VERITAS_COVERAGE_EXPORT CovOutputDelegate : public QItemDelegate
 {
 public:

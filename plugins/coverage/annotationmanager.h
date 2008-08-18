@@ -34,7 +34,8 @@ namespace Veritas
 
 class CoveredFile;
 /*!
- * @test AnnotationManagerTest
+ * Makes sure document views are annotated with coverage info
+ * @unittest AnnotationManagerTest
  */
 class VERITAS_COVERAGE_EXPORT AnnotationManager : public QObject
 {

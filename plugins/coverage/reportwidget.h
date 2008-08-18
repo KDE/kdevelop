@@ -44,6 +44,7 @@ class ReportModel;
 class ReportProxyModel;
 class ReportViewFactory;
 
+/*! Coverage report main widget, as shown in the toolview */
 class ReportWidget : public QWidget
 {
 Q_OBJECT

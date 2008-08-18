@@ -26,6 +26,9 @@
 namespace Veritas {
 
 class CoveredFile;
+
+/*! Places annotations on text-views, which show the covered lines
+ * and their callcount */
 class AnnotationModel : public KTextEditor::AnnotationModel
 {
   Q_OBJECT

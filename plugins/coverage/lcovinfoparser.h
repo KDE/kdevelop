@@ -31,6 +31,8 @@ namespace Veritas
 
 class CoveredFile;
 
+/*! Parses lcov output into CoveredFile* and emits those as soon
+ * as they are read */
 class VERITAS_COVERAGE_EXPORT LcovInfoParser : public QObject
 {
 Q_OBJECT

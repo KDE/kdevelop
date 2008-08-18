@@ -36,6 +36,8 @@ class CoveredFile;
 class ReportDirItem;
 class ReportFileItem;
 class ReportValueItem;
+
+/*! Main model for the coverage report */
 class VERITAS_COVERAGE_EXPORT ReportModel : public QStandardItemModel
 {
 Q_OBJECT

@@ -27,6 +27,7 @@
 namespace Veritas
 {
 
+/*! Coverage report table */
 class DrillDownView: public QTableView
 {
 Q_OBJECT

@@ -25,6 +25,7 @@
 namespace Veritas
 {
 
+/*! Used to filter coverage directories from the model */
 class ReportProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
