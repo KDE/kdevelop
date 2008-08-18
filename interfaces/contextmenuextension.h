@@ -48,7 +48,10 @@ public:
     static const QString DebugGroup;
     /** menu group to contain editing actions */
     static const QString EditGroup;
-    /** menu group to contain version control actions */
+    /** menu group to contain version control actions
+      * Note that this group will automatically be
+      * populated with a few standard VCS actions by the
+      * vcscommon plugin. */
     static const QString VcsGroup;
     /** menu group to contain project actions */
     static const QString ProjectGroup;
