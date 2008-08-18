@@ -28,6 +28,13 @@
 namespace KDevelop
 {
 
+VcsRevision VcsRevision::createSpecialRevision( VcsRevision::RevisionSpecialType _type )
+{
+    VcsRevision rev;
+    rev.setRevisionValue( qVariantFromValue<VcsRevision::RevisionSpecialType>( _type ), VcsRevision::Special );
+    return rev;
+}
+
 class VcsRevisionPrivate
 {
     public:

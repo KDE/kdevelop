@@ -44,10 +44,10 @@ namespace KDevelop
  * <tr><td>Date</td><td>QDateTime</td></tr>
  * <tr><td>Special</td><td>KDevelop::VcsRevision::RevisionSpecialType or int, see explanation below</td></tr>
  * </table>
- * 
+ *
  * The vcs plugins need to register the Revision and RevisionSpecialType with
- * qRegisterMetaType. 
- * 
+ * qRegisterMetaType.
+ *
  * Also Users of this class should set RevisionSpecialType QVariant values via
  * <code>
  * setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( val ), KDevelop::VcsRevision::Special);
@@ -56,8 +56,8 @@ namespace KDevelop
  * <code>
  * setRevisionValue( qVariantFromValue( val ), KDevelop::VcsRevision::Special);
  * </code>
- * 
- * If the latter method is used the QVariant will be an Integer, which might not 
+ *
+ * If the latter method is used the QVariant will be an Integer, which might not
  * be handled by the vcs plugin and is possibly ambiguous with the qlonglong
  * parameters.
  *
@@ -65,7 +65,6 @@ namespace KDevelop
 class KDEVPLATFORMVCS_EXPORT VcsRevision
 {
 public:
-
 
     /**
      * @note Not all VCS's support both FileNumber and GlobalNumber. For those
@@ -130,6 +129,11 @@ public:
     QString prettyValue() const;
 
     bool operator==( const KDevelop::VcsRevision&) const;
+
+    /**
+     * Helper function to create a vcs revision for one of the special types
+     */
+    static VcsRevision createSpecialRevision( VcsRevision::RevisionSpecialType type );
 protected:
     /**
      * Get the keys that make up the internal data of this revision instance
