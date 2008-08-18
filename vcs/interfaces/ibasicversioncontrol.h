@@ -148,7 +148,7 @@ public:
      * recursively
      */
     virtual VcsJob* update( const KUrl::List& localLocations,
-                            const VcsRevision& rev,
+                            const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ),
                             RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
@@ -183,8 +183,8 @@ public:
      * limit is @e advisory and may be ignored.
      */
     virtual VcsJob* log( const KUrl& localLocation,
-                         const VcsRevision& rev,
-                         unsigned long limit ) = 0;
+                         const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ),
+                         unsigned long limit = 0 ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -216,7 +216,7 @@ public:
      * @param rev Revision that should be annotated.
      */
     virtual VcsJob* annotate( const KUrl& localLocation,
-                              const VcsRevision& rev ) = 0;
+                              const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ) ) = 0;
 
     /**
      * merge/integrate the changes between src and dest into the given local file
