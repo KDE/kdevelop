@@ -251,18 +251,20 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   updateProviders();
 
   m_model->restart();
-  m_model->setTreeView( o.list );
-
-  o.list->setModel( m_model );
 
   o.list->setColumnWidth( 0, 20 );
-
-  connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
-  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
 }
 
 void QuickOpenWidgetHandler::run() {
+  o.list->setModel( 0 );
   m_dialog->show();
+  //This is a workaround for a problem in KStyle where the scroll-mode is overwritten with ScrollPerPixel during show()
+  //Usually all this stuff should be done BEFORE show() is called
+  o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+  m_model->setTreeView( o.list );
+  o.list->setModel( m_model );
+  connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
+  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
 }
 
 QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
