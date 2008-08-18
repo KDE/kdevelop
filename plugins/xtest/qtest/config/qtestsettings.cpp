@@ -54,3 +54,11 @@ bool Settings::printSignals() const
     KConfigGroup group(cfg.data(), "QTest");
     return QVariant(group.readEntry("Print Signals")).toBool();
 }
+
+QString Settings::makeBinary() const
+{
+    KSharedConfig::Ptr configPtr = m_project->projectConfiguration();
+    KConfigGroup builderGroup(configPtr, "MakeBuilder");
+    QString makeBin = builderGroup.readEntry("Make Binary", "make");
+    return makeBin;
+}

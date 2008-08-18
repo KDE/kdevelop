@@ -31,7 +31,7 @@ Q_OBJECT
 public:
     CppUnitViewData(QObject* parent);
     virtual ~CppUnitViewData();
-    Veritas::Test* registerTests();
+    void registerTests();
     QString fetchExe();
     virtual QString resultsViewId();
 

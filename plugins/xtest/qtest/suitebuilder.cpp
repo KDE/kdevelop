@@ -24,6 +24,7 @@
 #include "qtestoutputparser.h"
 #include "qtestsuite.h"
 #include "executable.h"
+#include <interfaces/iplugin.h>
 #include "config/qtestsettings.h"
 #include <veritas/test.h>
 #include <KProcess>
@@ -89,6 +90,8 @@ void SuiteBuilder::constructSuites()
 
 void SuiteBuilder::constructCases()
 {
+    int nrofShells = m_testShellExes.count();
+    int count = 1;
     foreach(KUrl testExe, m_testShellExes) {
         CaseBuilder* cb = createCaseBuilder(testExe);
         QTestCase* caze = cb->construct();
@@ -102,6 +105,8 @@ void SuiteBuilder::constructCases()
         caze->setProcess(new KProcess);
         caze->setOutputParser(new QTestOutputParser);
         caze->setSettings(m_settings);
+        emit progress(0, nrofShells, count);
+        count++;
     }
 }
 

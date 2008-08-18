@@ -38,12 +38,12 @@ CppUnitViewData::CppUnitViewData(QObject* parent) : TestViewData(parent)
 
 CppUnitViewData::~CppUnitViewData() {}
 
-Test* CppUnitViewData::registerTests()
+void CppUnitViewData::registerTests()
 {
     Register<TestRoot, TestSuite> reg;
     reg.addFromExe(QFileInfo(fetchExe()));
     reg.rootItem()->setExecutable(fetchExe());
-    return reg.rootItem();
+    emit registerFinished(reg.rootItem());
 }
 
 QString CppUnitViewData::fetchExe()

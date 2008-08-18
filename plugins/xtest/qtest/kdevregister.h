@@ -24,16 +24,23 @@
 #include "qxqtestexport.h"
 #include "iregister.h"
 #include <QList>
+#include <KUrl>
+#include <interfaces/istatus.h>
 
 namespace Veritas { class Test; }
-namespace KDevelop { class ProjectTestTargetItem; }
+namespace KDevelop { class ProjectTestTargetItem; class IRunController; }
+class KJob;
+class SuiteBuilderRunner;
 
 namespace QTest
 {
 
 /*! @unittest QTest::Test::KDevRegisterTest */
-class QXQTEST_EXPORT KDevRegister : public IRegister
+class QXQTEST_EXPORT KDevRegister : public IRegister, public KDevelop::IStatus
 {
+Q_OBJECT
+Q_INTERFACES( KDevelop::IStatus )
+
 public:
     KDevRegister();
     virtual ~KDevRegister();
@@ -41,14 +48,31 @@ public:
     virtual void reload();
     virtual Veritas::Test* root() const;
 
-protected:
-    /*! protected to allow this to be stubbed out in tests
-    @note this is an expensive operation since it involves searching
-    for files. */
-    virtual QList<KDevelop::ProjectTestTargetItem*> fetchTestTargets();
+// IStatus
+    virtual QString statusName() const;
+
+Q_SIGNALS:
+    void clearMessage();
+    void showMessage(const QString&, int timeout=0);
+    void hideProgress();
+    void showProgress(int minimum, int maximum, int value);
+// IStatus
+
+private slots:
+    void buildTests();
+    void fetchTestCommands(KJob*);
+    void suiteBuilderFinished();
+
+private:
+    void registerStatus();
 
 private:
     Veritas::Test* m_root;
+    QList<KDevelop::ProjectTestTargetItem*> m_testTargets;
+    QList<QString> m_testNames;
+    KDevelop::IRunController* m_runController;
+    SuiteBuilderRunner *m_runner;
+    bool m_reloading;
 };
 
 }

@@ -21,6 +21,8 @@
 #ifndef VERITAS_QTEST_IREGISTER_H
 #define VERITAS_QTEST_IREGISTER_H
 
+#include <QtCore/QObject>
+
 namespace KDevelop { class IProject; }
 namespace Veritas { class Test; }
 
@@ -29,8 +31,9 @@ namespace QTest
 class ISettings;
 
 /*! Collects the test tree structure for a project. */
-class IRegister
+class IRegister : public QObject
 {
+Q_OBJECT
 public:
     IRegister();
     virtual ~IRegister();
@@ -51,6 +54,10 @@ public:
     @note mandatory to invoke this exactly once */
     void setSettings(ISettings*);
     ISettings* settings() const;
+
+Q_SIGNALS:
+    /*! Emitted when a reload cycle has completed */
+    void reloadFinished(Veritas::Test* root);
 
 private:
     KDevelop::IProject* m_project;

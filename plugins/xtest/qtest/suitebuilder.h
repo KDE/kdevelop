@@ -21,9 +21,9 @@
 #ifndef VERITAS_QTEST_RESOLVEJOB_H
 #define VERITAS_QTEST_RESOLVEJOB_H
 
-#include <KJob>
 #include <QMap>
 #include <QFileInfoList>
+#include <QObject>
 
 namespace Veritas { class Test; }
 
@@ -39,7 +39,7 @@ QTestCommands for a set of .shell executables. Also orders
 
 @unittest QTest::Test::SuiteBuilder
 */
-class SuiteBuilder : public KJob
+class SuiteBuilder : public QObject
 {
 Q_OBJECT
 public:
@@ -54,6 +54,9 @@ public:
 
     /*! Go */
     virtual void start();
+
+signals:
+    void progress(int min, int max, int value);
 
 protected:
     /*! Lightweight factory method, which allows unit tests to inject

@@ -27,10 +27,11 @@ namespace Veritas { class Test; }
 
 class CheckViewData : public Veritas::TestViewData
 {
+Q_OBJECT
 public:
     CheckViewData(QObject* parent);
     virtual ~CheckViewData();
-    Veritas::Test* registerTests();
+    void registerTests();
     QString fetchExe();
     virtual QString resultsViewId();
     int m_id;

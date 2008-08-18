@@ -76,7 +76,7 @@ public:
 
     virtual QWidget* create(QWidget *parent) {
         kDebug() << "";
-        QTestViewData* d = new QTestViewData(parent);
+        QTestViewData* d = new QTestViewData(0); // TODO find a good parent
         QObject::connect(d, SIGNAL(openVerbose(Veritas::Test*)),
                          m_plugin, SLOT(openVerbose(Veritas::Test*)));
         return d->runnerWidget();

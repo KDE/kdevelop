@@ -156,9 +156,6 @@ void QTestRunnerTest::sunnyDay()
 
     QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
     checkResultItems(results);
-
-    QMap<QString, QString> status;
-    checkStatusWidget(sunnyDayStatus());
 }
 
 // command
@@ -179,8 +176,6 @@ void QTestRunnerTest::runTwice()
     QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
 
     checkResultItems(results);
-
-    checkStatusWidget(sunnyDayStatus());
 }
 
 // helper
@@ -231,24 +226,6 @@ void QTestRunnerTest::initNrun(QByteArray& regXml)
 
     // decomment the line below to inspect the window manually
     //QTest::qWait(5000);
-}
-
-// helper
-void QTestRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
-{
-    const Ui::RunnerWindow* ui = m_window->ui();
-
-    // validate the status widget
-    KOMPARE(labels["total"], ui->labelNumTotal->text());
-    KOMPARE(labels["selected"], ui->labelNumSelected->text());
-    KOMPARE(labels["run"], ui->labelNumRun->text());
-
-    if (labels.contains("success"))
-        KOMPARE(labels["success"], ui->labelNumSuccess->text());
-    if (labels.contains("errors"))
-        KOMPARE(labels["errors"], ui->labelNumErrors->text());
-    if (labels.contains("warnings"))
-        KOMPARE(labels["warnings"], ui->labelNumWarnings->text());
 }
 
 // helper

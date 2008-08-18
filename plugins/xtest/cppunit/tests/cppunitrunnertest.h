@@ -49,7 +49,6 @@ private:
     void initNrun(const char*);
     void checkTests(QStringList items);
     void checkTest(const QVariant& expected, int lvl0, int lvl1 = -1, int lvl2 = -1);
-    void checkStatusWidget(QMap<QString, QString> labels);
     void checkResultItems(QList<QStringList> expected);
     void checkResultItem(int num, const QStringList& item);
     void nrofMessagesEquals(int num);

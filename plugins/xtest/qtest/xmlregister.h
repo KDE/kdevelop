@@ -40,7 +40,7 @@ class QTestSuite;
 class QTestCase;
 class IRegister;
 
-class XmlRegister : public QXmlStreamReader, public IRegister
+class XmlRegister : public IRegister, public QXmlStreamReader
 {
 public:
     XmlRegister();

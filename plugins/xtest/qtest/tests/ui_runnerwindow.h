@@ -4,7 +4,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'runnerwindow.ui'
 **
-** Created: Fri Jul 25 00:33:45 2008
+** Created: Sun Aug 17 17:19:55 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -47,50 +47,31 @@ public:
     QAction *actionSettings;
     QAction *actionToolbars;
     QAction *actionReload;
-    QVBoxLayout *verticalLayout_2;
+    QVBoxLayout *verticalLayout_3;
     QToolBar *runnerToolBar;
     QHBoxLayout *horizontalLayout_3;
     QSplitter *splitter;
     QFrame *runnerFrame;
     QVBoxLayout *verticalLayout;
     QFrame *frame_3;
-    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *horizontalLayout_4;
     QProgressBar *progressRun;
     QTreeView *treeRunner;
-    QFrame *frame_2;
-    QHBoxLayout *horizontalLayout;
+    QFrame *frame_4;
+    QHBoxLayout *horizontalLayout_5;
     QSpacerItem *spacer_2;
-    QLabel *labelNumTotalText;
-    QLabel *labelNumTotal;
-    QLabel *labelNumSelectedText;
-    QLabel *labelNumSelected;
     QLabel *labelNumRunText;
     QLabel *labelNumRun;
-    QHBoxLayout *_18;
-    QLabel *labelNumSuccessPic;
-    QLabel *labelNumSuccess;
-    QHBoxLayout *_14;
-    QLabel *labelNumExceptionsPic;
-    QLabel *labelNumExceptions;
-    QHBoxLayout *_19;
-    QLabel *labelNumFatalsPic;
-    QLabel *labelNumFatals;
-    QHBoxLayout *_17;
-    QLabel *labelNumErrorsPic;
-    QLabel *labelNumErrors;
-    QHBoxLayout *_15;
-    QLabel *labelNumWarningsPic;
-    QLabel *labelNumWarnings;
-    QHBoxLayout *_16;
-    QLabel *labelNumInfosPic;
-    QLabel *labelNumInfos;
+    QLabel *labelElapsedText;
+    QLabel *labelElapsed;
+    QLabel *label;
     QSpacerItem *spacer;
 
     void setupUi(QWidget *RunnerWindow)
     {
     if (RunnerWindow->objectName().isEmpty())
         RunnerWindow->setObjectName(QString::fromUtf8("RunnerWindow"));
-    RunnerWindow->resize(1138, 490);
+    RunnerWindow->resize(789, 540);
     QIcon icon;
     icon.addPixmap(QPixmap(QString::fromUtf8(":/icons/qxrunner_16x16.png")), QIcon::Normal, QIcon::Off);
     RunnerWindow->setWindowIcon(icon);
@@ -149,15 +130,15 @@ public:
     actionToolbars->setObjectName(QString::fromUtf8("actionToolbars"));
     actionReload = new QAction(RunnerWindow);
     actionReload->setObjectName(QString::fromUtf8("actionReload"));
-    verticalLayout_2 = new QVBoxLayout(RunnerWindow);
-    verticalLayout_2->setSpacing(6);
-    verticalLayout_2->setMargin(6);
-    verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+    verticalLayout_3 = new QVBoxLayout(RunnerWindow);
+    verticalLayout_3->setSpacing(6);
+    verticalLayout_3->setMargin(6);
+    verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
     runnerToolBar = new QToolBar(RunnerWindow);
     runnerToolBar->setObjectName(QString::fromUtf8("runnerToolBar"));
     runnerToolBar->setOrientation(Qt::Horizontal);
 
-    verticalLayout_2->addWidget(runnerToolBar);
+    verticalLayout_3->addWidget(runnerToolBar);
 
     horizontalLayout_3 = new QHBoxLayout();
     horizontalLayout_3->setSpacing(6);
@@ -184,10 +165,10 @@ public:
     frame_3->setObjectName(QString::fromUtf8("frame_3"));
     frame_3->setFrameShape(QFrame::NoFrame);
     frame_3->setFrameShadow(QFrame::Plain);
-    horizontalLayout_2 = new QHBoxLayout(frame_3);
-    horizontalLayout_2->setSpacing(6);
-    horizontalLayout_2->setMargin(6);
-    horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+    horizontalLayout_4 = new QHBoxLayout(frame_3);
+    horizontalLayout_4->setSpacing(6);
+    horizontalLayout_4->setMargin(6);
+    horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
     progressRun = new QProgressBar(frame_3);
     progressRun->setObjectName(QString::fromUtf8("progressRun"));
     QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -199,7 +180,7 @@ public:
     progressRun->setValue(0);
     progressRun->setOrientation(Qt::Horizontal);
 
-    horizontalLayout_2->addWidget(progressRun);
+    horizontalLayout_4->addWidget(progressRun);
 
 
     verticalLayout->addWidget(frame_3);
@@ -220,172 +201,61 @@ public:
 
     verticalLayout->addWidget(treeRunner);
 
-    frame_2 = new QFrame(runnerFrame);
-    frame_2->setObjectName(QString::fromUtf8("frame_2"));
-    frame_2->setFrameShape(QFrame::NoFrame);
-    frame_2->setFrameShadow(QFrame::Plain);
-    horizontalLayout = new QHBoxLayout(frame_2);
-    horizontalLayout->setSpacing(6);
-    horizontalLayout->setMargin(6);
-    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-    spacer_2 = new QSpacerItem(6, 12, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    frame_4 = new QFrame(runnerFrame);
+    frame_4->setObjectName(QString::fromUtf8("frame_4"));
+    frame_4->setFrameShape(QFrame::NoFrame);
+    frame_4->setFrameShadow(QFrame::Plain);
+    horizontalLayout_5 = new QHBoxLayout(frame_4);
+    horizontalLayout_5->setSpacing(6);
+    horizontalLayout_5->setMargin(6);
+    horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+    spacer_2 = new QSpacerItem(198, 17, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    horizontalLayout->addItem(spacer_2);
+    horizontalLayout_5->addItem(spacer_2);
 
-    labelNumTotalText = new QLabel(frame_2);
-    labelNumTotalText->setObjectName(QString::fromUtf8("labelNumTotalText"));
-
-    horizontalLayout->addWidget(labelNumTotalText);
-
-    labelNumTotal = new QLabel(frame_2);
-    labelNumTotal->setObjectName(QString::fromUtf8("labelNumTotal"));
-
-    horizontalLayout->addWidget(labelNumTotal);
-
-    labelNumSelectedText = new QLabel(frame_2);
-    labelNumSelectedText->setObjectName(QString::fromUtf8("labelNumSelectedText"));
-
-    horizontalLayout->addWidget(labelNumSelectedText);
-
-    labelNumSelected = new QLabel(frame_2);
-    labelNumSelected->setObjectName(QString::fromUtf8("labelNumSelected"));
-
-    horizontalLayout->addWidget(labelNumSelected);
-
-    labelNumRunText = new QLabel(frame_2);
+    labelNumRunText = new QLabel(frame_4);
     labelNumRunText->setObjectName(QString::fromUtf8("labelNumRunText"));
+    labelNumRunText->setTextFormat(Qt::LogText);
 
-    horizontalLayout->addWidget(labelNumRunText);
+    horizontalLayout_5->addWidget(labelNumRunText);
 
-    labelNumRun = new QLabel(frame_2);
+    labelNumRun = new QLabel(frame_4);
     labelNumRun->setObjectName(QString::fromUtf8("labelNumRun"));
+    labelNumRun->setTextFormat(Qt::LogText);
 
-    horizontalLayout->addWidget(labelNumRun);
+    horizontalLayout_5->addWidget(labelNumRun);
 
-    _18 = new QHBoxLayout();
-    _18->setSpacing(3);
-    _18->setMargin(0);
-    _18->setObjectName(QString::fromUtf8("_18"));
-    labelNumSuccessPic = new QLabel(frame_2);
-    labelNumSuccessPic->setObjectName(QString::fromUtf8("labelNumSuccessPic"));
-    labelNumSuccessPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/success.png")));
+    labelElapsedText = new QLabel(frame_4);
+    labelElapsedText->setObjectName(QString::fromUtf8("labelElapsedText"));
+    labelElapsedText->setTextFormat(Qt::LogText);
 
-    _18->addWidget(labelNumSuccessPic);
+    horizontalLayout_5->addWidget(labelElapsedText);
 
-    labelNumSuccess = new QLabel(frame_2);
-    labelNumSuccess->setObjectName(QString::fromUtf8("labelNumSuccess"));
+    labelElapsed = new QLabel(frame_4);
+    labelElapsed->setObjectName(QString::fromUtf8("labelElapsed"));
+    labelElapsed->setTextFormat(Qt::LogText);
 
-    _18->addWidget(labelNumSuccess);
+    horizontalLayout_5->addWidget(labelElapsed);
 
+    label = new QLabel(frame_4);
+    label->setObjectName(QString::fromUtf8("label"));
+    label->setTextFormat(Qt::LogText);
 
-    horizontalLayout->addLayout(_18);
+    horizontalLayout_5->addWidget(label);
 
-    _14 = new QHBoxLayout();
-    _14->setSpacing(3);
-    _14->setMargin(0);
-    _14->setObjectName(QString::fromUtf8("_14"));
-    labelNumExceptionsPic = new QLabel(frame_2);
-    labelNumExceptionsPic->setObjectName(QString::fromUtf8("labelNumExceptionsPic"));
-    labelNumExceptionsPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/exception.png")));
+    spacer = new QSpacerItem(198, 17, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    _14->addWidget(labelNumExceptionsPic);
-
-    labelNumExceptions = new QLabel(frame_2);
-    labelNumExceptions->setObjectName(QString::fromUtf8("labelNumExceptions"));
-
-    _14->addWidget(labelNumExceptions);
+    horizontalLayout_5->addItem(spacer);
 
 
-    horizontalLayout->addLayout(_14);
-
-    _19 = new QHBoxLayout();
-    _19->setSpacing(3);
-    _19->setMargin(0);
-    _19->setObjectName(QString::fromUtf8("_19"));
-    labelNumFatalsPic = new QLabel(frame_2);
-    labelNumFatalsPic->setObjectName(QString::fromUtf8("labelNumFatalsPic"));
-    labelNumFatalsPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/fatal.png")));
-
-    _19->addWidget(labelNumFatalsPic);
-
-    labelNumFatals = new QLabel(frame_2);
-    labelNumFatals->setObjectName(QString::fromUtf8("labelNumFatals"));
-
-    _19->addWidget(labelNumFatals);
-
-
-    horizontalLayout->addLayout(_19);
-
-    _17 = new QHBoxLayout();
-    _17->setSpacing(3);
-    _17->setMargin(0);
-    _17->setObjectName(QString::fromUtf8("_17"));
-    labelNumErrorsPic = new QLabel(frame_2);
-    labelNumErrorsPic->setObjectName(QString::fromUtf8("labelNumErrorsPic"));
-    labelNumErrorsPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/error.png")));
-
-    _17->addWidget(labelNumErrorsPic);
-
-    labelNumErrors = new QLabel(frame_2);
-    labelNumErrors->setObjectName(QString::fromUtf8("labelNumErrors"));
-
-    _17->addWidget(labelNumErrors);
-
-
-    horizontalLayout->addLayout(_17);
-
-    _15 = new QHBoxLayout();
-    _15->setSpacing(3);
-    _15->setMargin(0);
-    _15->setObjectName(QString::fromUtf8("_15"));
-    labelNumWarningsPic = new QLabel(frame_2);
-    labelNumWarningsPic->setObjectName(QString::fromUtf8("labelNumWarningsPic"));
-    labelNumWarningsPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/warning.png")));
-
-    _15->addWidget(labelNumWarningsPic);
-
-    labelNumWarnings = new QLabel(frame_2);
-    labelNumWarnings->setObjectName(QString::fromUtf8("labelNumWarnings"));
-
-    _15->addWidget(labelNumWarnings);
-
-
-    horizontalLayout->addLayout(_15);
-
-    _16 = new QHBoxLayout();
-    _16->setSpacing(3);
-    _16->setMargin(0);
-    _16->setObjectName(QString::fromUtf8("_16"));
-    labelNumInfosPic = new QLabel(frame_2);
-    labelNumInfosPic->setObjectName(QString::fromUtf8("labelNumInfosPic"));
-    labelNumInfosPic->setPixmap(QPixmap(QString::fromUtf8(":/icons/info.png")));
-
-    _16->addWidget(labelNumInfosPic);
-
-    labelNumInfos = new QLabel(frame_2);
-    labelNumInfos->setObjectName(QString::fromUtf8("labelNumInfos"));
-
-    _16->addWidget(labelNumInfos);
-
-
-    horizontalLayout->addLayout(_16);
-
-    spacer = new QSpacerItem(28, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    horizontalLayout->addItem(spacer);
-
-
-    verticalLayout->addWidget(frame_2);
+    verticalLayout->addWidget(frame_4);
 
     splitter->addWidget(runnerFrame);
-    treeRunner->raise();
-    frame_3->raise();
-    frame_2->raise();
 
     horizontalLayout_3->addWidget(splitter);
 
 
-    verticalLayout_2->addLayout(horizontalLayout_3);
+    verticalLayout_3->addLayout(horizontalLayout_3);
 
 
     runnerToolBar->addAction(actionStart);
@@ -419,54 +289,11 @@ public:
     actionToolbars->setText(tr2i18n("&Toolbars", 0));
     actionReload->setText(tr2i18n("Reload", 0));
     runnerToolBar->setWindowTitle(tr2i18n("Ru&nner Toolbar", 0));
-    labelNumTotalText->setText(tr2i18n("Total:", 0));
-    labelNumTotal->setText(tr2i18n("0", 0));
-    labelNumSelectedText->setText(tr2i18n("Selected:", 0));
-    labelNumSelected->setText(tr2i18n("0", 0));
-    labelNumRunText->setText(tr2i18n("Run:", 0));
+    labelNumRunText->setText(tr2i18n("Ran", 0));
     labelNumRun->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumSuccessPic->setToolTip(tr2i18n("Success", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumSuccessPic->setText(QString());
-    labelNumSuccess->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumExceptionsPic->setToolTip(tr2i18n("Exceptions", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumExceptionsPic->setText(QString());
-    labelNumExceptions->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumFatalsPic->setToolTip(tr2i18n("Fatals", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumFatalsPic->setText(QString());
-    labelNumFatals->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumErrorsPic->setToolTip(tr2i18n("Errors", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumErrorsPic->setText(QString());
-    labelNumErrors->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumWarningsPic->setToolTip(tr2i18n("Warnings", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumWarningsPic->setText(QString());
-    labelNumWarnings->setText(tr2i18n("0", 0));
-
-#ifndef UI_QT_NO_TOOLTIP
-    labelNumInfosPic->setToolTip(tr2i18n("Infos", 0));
-#endif // QT_NO_TOOLTIP
-
-    labelNumInfosPic->setText(QString());
-    labelNumInfos->setText(tr2i18n("0", 0));
+    labelElapsedText->setText(tr2i18n("tests in", 0));
+    labelElapsed->setText(tr2i18n("0.000", 0));
+    label->setText(tr2i18n("seconds", 0));
     } // retranslateUi
 
 };

@@ -45,7 +45,9 @@ using namespace Veritas;
 using namespace KDevelop;
 using namespace QTest;
 
-QTestViewData::QTestViewData(QObject* parent) : Veritas::TestViewData(parent), m_settings(0)
+QTestViewData::QTestViewData(QObject* parent)
+    : Veritas::TestViewData(parent),
+      m_settings(0)
 {
     m_id = QTestViewData::id;
     QTestViewData::id += 1;
@@ -56,7 +58,7 @@ QTestViewData::~QTestViewData()
     if (m_settings) delete m_settings;
 }
 
-Test* QTestViewData::registerTests()
+void QTestViewData::registerTests()
 {
 /*    kDebug() << "Loading test registration XML: " << fetchRegXML();
     QFile* testXML = new QFile(fetchRegXML());
@@ -65,15 +67,22 @@ Test* QTestViewData::registerTests()
     reg.setRootDir(fetchBuildRoot());
     reg.setSource(testXML);
     reg.reload();*/
-    if (!project()) return 0;
+
+    kDebug() << "";
+    if (!project()) {
+        kDebug() << "!project()";
+        return;
+    }
     if (m_settings) delete m_settings;
     m_settings = new Settings(project());
-    KDevRegister reg;
-    reg.setProject(project());
-    reg.setSettings(m_settings);
-    reg.reload();
-    return reg.root();
+    KDevRegister* reg = new KDevRegister(); // TODO destructor this
+    reg->setProject(project());
+    reg->setSettings(m_settings);
+    connect(reg, SIGNAL(reloadFinished(Veritas::Test*)),
+            this, SIGNAL(registerFinished(Veritas::Test*)));
+    reg->reload();
 }
+
 
 // should be moved to xmlregister
 QString QTestViewData::fetchBuildRoot()

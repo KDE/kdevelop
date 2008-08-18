@@ -125,7 +125,6 @@ void CheckRunnerTest::sunnyDay()
     QList<QStringList> results;
     results << result0;
     checkResultItems(results);
-    checkStatusWidget(sunnyDayStatus());
 }
 
 // command
@@ -148,14 +147,6 @@ void CheckRunnerTest::multiSuite()
     QList<QStringList> results;
     checkResultItems(results);
 
-    QMap<QString,QString> status;
-    status["total"] = "2";
-    status["selected"] = "2";
-    status["run"] = "2";
-    status["success"] = ": 2";
-    status["errors"] = ": 0";
-    status["warnings"] = ": 0";
-    checkStatusWidget(status);
 }
 
 // helper
@@ -205,24 +196,6 @@ void CheckRunnerTest::initNrun(const char* exe)
     m_window->setModel(model);
     //m_window->show();
     m_window->ui()->actionStart->trigger();
-}
-
-// helper
-void CheckRunnerTest::checkStatusWidget(QMap<QString, QString> labels)
-{
-    const Ui::RunnerWindow* ui = m_window->ui();
-
-    // validate the status widget
-    KOMPARE(labels["total"], ui->labelNumTotal->text());
-    KOMPARE(labels["selected"], ui->labelNumSelected->text());
-    KOMPARE(labels["run"], ui->labelNumRun->text());
-
-    if (labels.contains("success"))
-        KOMPARE(labels["success"], ui->labelNumSuccess->text());
-    if (labels.contains("errors"))
-        KOMPARE(labels["errors"], ui->labelNumErrors->text());
-    if (labels.contains("warnings"))
-        KOMPARE(labels["warnings"], ui->labelNumWarnings->text());
 }
 
 // helper

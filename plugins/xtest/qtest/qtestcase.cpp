@@ -70,7 +70,6 @@ QTestCase::~QTestCase()
     removeFile(m_textOutFilePath);
 
     if (m_output) delete m_output;
-    if (m_parser) delete m_parser;
 }
 
 bool QTestCase::shouldRun() const
@@ -117,17 +116,22 @@ void QTestCase::setSettings(ISettings* s)
 void QTestCase::setProcess(KProcess* proc)
 {
     if (m_proc) delete m_proc;
+    proc->setParent(this);
     m_proc = proc;
 }
 
 void QTestCase::setOutputParser(QTestOutputParser* p)
 {
+    Q_ASSERT(!m_parser); Q_ASSERT(p);
     m_parser = p;
+    m_parser->setParent(this);
 }
 
 // execute the test and parse result back in.
 int QTestCase::run()
 {
+    Q_ASSERT(m_parser); Q_ASSERT(m_proc);
+
     // preconditions
     assertProcessSet();
     assertOutputParserSet();
@@ -180,8 +184,7 @@ void QTestCase::initOutputParser()
     m_parser->setCase(this);
     m_timer->disconnect();
     m_parser->disconnect();
-    connect(m_timer, SIGNAL(timeout()),
-            m_parser, SLOT(go()));
+    connect(m_timer, SIGNAL(timeout()), m_parser, SLOT(go()));
 }
 
 // helper for run()

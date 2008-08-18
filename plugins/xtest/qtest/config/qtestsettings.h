@@ -21,10 +21,9 @@
 #ifndef VERITAS_QTEST_QTESTSETTINGS
 #define VERITAS_QTEST_QTESTSETTINGS
 
-namespace KDevelop
-{
-class IProject;
-}
+#include <QString>
+
+namespace KDevelop { class IProject; }
 
 namespace QTest
 {
@@ -40,6 +39,7 @@ public:
 
     virtual bool printAsserts() const = 0;
     virtual bool printSignals() const = 0;
+    virtual QString makeBinary() const = 0;
 };
 
 /*!
@@ -51,8 +51,9 @@ class Settings : public ISettings
 public:
     Settings(KDevelop::IProject*);
     virtual ~Settings();
-    bool printAsserts() const;
-    bool printSignals() const;
+    virtual bool printAsserts() const;
+    virtual bool printSignals() const;
+    virtual QString makeBinary() const;
 
 private:
     KDevelop::IProject* m_project;

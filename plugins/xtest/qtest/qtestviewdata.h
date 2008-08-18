@@ -32,7 +32,7 @@ Q_OBJECT
 public:
     QTestViewData(QObject* parent);
     virtual ~QTestViewData();
-    Veritas::Test* registerTests();
+    void registerTests();
     QString fetchBuildRoot();
     virtual QString resultsViewId();
     QString fetchRegXML();

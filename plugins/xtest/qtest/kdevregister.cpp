@@ -19,6 +19,7 @@
 */
 
 #include "kdevregister.h"
+#include <project/interfaces/iprojectbuilder.h>
 #include "documentaccess.h"
 #include "suitebuilder.h"
 #include <veritas/test.h>
@@ -27,9 +28,16 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/irun.h>
+#include <interfaces/iplugin.h>
+
 #include <interfaces/icore.h>
 #include <KDebug>
+#include <QThread>
 #include <QDir>
+#include <QApplication>
+#include <KUrl>
+#include <KLocale>
 
 using QTest::KDevRegister;
 using QTest::DocumentAccess;
@@ -116,52 +124,160 @@ QList<KUrl> fileInfo2KUrl(const QFileInfoList& fileInfos)
 
 } // end anonymous namespace
 
+class SuiteBuilderRunner : public QThread
+{
+public:
+    SuiteBuilderRunner() : m_suiteBuilder(0){}
+    virtual ~SuiteBuilderRunner() {}
+    void run() {
+        Q_ASSERT(m_suiteBuilder);
+        m_suiteBuilder->start();
+        Test* root = m_suiteBuilder->root();
+        root->moveToThread(QApplication::instance()->thread());
+    }
+    SuiteBuilder* m_suiteBuilder;
+};
+
 
 KDevRegister::KDevRegister()
-    : m_root(0)
-{}
+    : m_root(0), m_runner(new SuiteBuilderRunner), m_reloading(false)
+{
+    m_runController = ICore::self()->runController();
+}
 
 KDevRegister::~KDevRegister()
-{}
-
-QList<ProjectTestTargetItem*> KDevRegister::fetchTestTargets()
 {
-    return fetchAllTestTargets(project()->projectItem());
+    if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
+    delete m_runner;
 }
 
 #define STOP_IF(X, MSG) \
 if (X) {\
     m_root = new Test("");\
+    m_reloading = false; \
     return; \
 } else void(0)
 
 void KDevRegister::reload()
 {
     Q_ASSERT(project());
-    QList<ProjectTestTargetItem*> testTargets = fetchTestTargets();
-    QList<QString> testNames = namesFromTargets(testTargets);
+    Q_ASSERT(m_runController);
+    Q_ASSERT(m_runner);
+    if (m_reloading) return;
+    Q_ASSERT(!m_runner->isRunning());
+
+    registerStatus();
+
+    m_reloading = true;
+    m_testTargets = fetchAllTestTargets(project()->projectItem());
+    m_testNames = namesFromTargets(m_testTargets);
+    fetchTestCommands(0);
+}
+
+void KDevRegister::buildTests()
+{
+    kDebug() << "";
+    Q_ASSERT(project());
 
     IBuildSystemManager* bm = project()->buildSystemManager();
     STOP_IF(!bm, "Build system manager zero");
+
+//     This is way too slow with cmake's dependency.
+//     IProjectBuilder* ipb = bm->builder(0);
+//     foreach(ProjectTestTargetItem* test, m_testTargets) {
+//         KJob* make = ipb->build(test);
+//         bool succ = make->exec();
+//         if (!succ) {
+//             m_testNames.removeAll(test->data(Qt::DisplayRole).toString());
+//         }
+//     }
 
     KUrl buildRoot = bm->buildDirectory(project()->projectItem());
     STOP_IF(buildRoot.isEmpty(), "Root build directory empty");
     STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
 
+    // Still way too slow, a full rebuild is actually faster for a project
+    // without modifications.
+    IRun makeRun = KDevelop::ICore::self()->runController()->defaultRun();
+    makeRun.setExecutable(settings()->makeBinary());
+    makeRun.setArguments(m_testNames);
+    makeRun.setWorkingDirectory(buildRoot.path());
+    KJob* make = m_runController->execute(makeRun);
+    connect(make, SIGNAL(finished(KJob*)), this, SLOT(fetchTestCommands(KJob*)));
+}
+
+QString KDevRegister::statusName() const
+{
+    return i18n("xTest");
+}
+
+#include <QApplication>
+#include <QMainWindow>
+#include <QStatusBar>
+
+void KDevRegister::registerStatus()
+{
+    // TODO get rid of this joke. Factually istatus should not be
+    // limitted to plugins + backgroundparser, but exposed for all
+
+    QWidget* mw = QApplication::activeWindow();
+    if (!mw) { kDebug() << "No mw"; return; }
+    QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
+    if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
+    QStatusBar* sb = sbs[0];
+    if (!sb) { kDebug() << "sb zero"; return; }
+    connect(this, SIGNAL(showProgress(int,int,int)),
+            sb, SLOT(showProgress(int,int,int)));
+    connect(this, SIGNAL(hideProgress()),
+            sb, SLOT(hideProgress()));
+}
+
+
+void KDevRegister::fetchTestCommands(KJob*)
+{
+    kDebug() << "";
+    Q_ASSERT(project());
+    Q_ASSERT(m_reloading);
+
+    IBuildSystemManager* bm = project()->buildSystemManager();
+    STOP_IF(!bm, "Build system manager zero");
+
+    KUrl buildRoot = bm->buildDirectory(project()->projectItem());
     QDir buildDir(buildRoot.path());
-    QFileInfoList shells = findTestShellFilesIn(buildDir, testNames);
+    QFileInfoList shells = findTestShellFilesIn(buildDir, m_testNames);
     foreach(QFileInfo shell, shells) {
         kDebug() << "shell -> " << shell.absoluteFilePath();
     }
     STOP_IF(shells.isEmpty(), "No test shell exes found.");
 
     QList<KUrl> shellUrls = fileInfo2KUrl(shells);
-    SuiteBuilder sb;
-    sb.setTestExecutables(shellUrls);
-    sb.setSettings(settings());
-    sb.start(); // TODO register job with runcontroller & be asynchronous
-                // also move the file finding stuff in here.
-    m_root = sb.root();
+    if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
+    SuiteBuilder* sb = new SuiteBuilder;
+    sb->setTestExecutables(shellUrls);
+    sb->setSettings(settings());
+
+    m_runner->m_suiteBuilder = sb;
+    connect(m_runner, SIGNAL(finished()),
+            this, SLOT(suiteBuilderFinished()));
+    connect(m_runner, SIGNAL(finished()),
+            this, SIGNAL(hideProgress()));
+    connect(sb, SIGNAL(progress(int,int,int)),
+            this, SIGNAL(showProgress(int,int,int)), Qt::QueuedConnection);
+
+    m_runner->start();
+}
+
+void KDevRegister::suiteBuilderFinished()
+{
+    kDebug() << "";
+    Q_ASSERT(m_runner);
+    Q_ASSERT(m_reloading);
+    Q_ASSERT(!m_runner->isRunning());
+    Q_ASSERT(m_runner->m_suiteBuilder);
+    m_root = m_runner->m_suiteBuilder->root();
+    kDebug() << m_root;
+    emit reloadFinished(m_root);
+    m_reloading = false;
 }
 
 Test* KDevRegister::root() const

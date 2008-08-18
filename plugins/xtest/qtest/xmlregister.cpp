@@ -106,6 +106,7 @@ void XmlRegister::reload()
         }
     }
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+    emit reloadFinished(root());
 }
 
 void XmlRegister::setRootDir(const QString& root)

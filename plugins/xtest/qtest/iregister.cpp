@@ -56,3 +56,5 @@ IProject* IRegister::project() const
     Q_ASSERT(m_project);
     return m_project;
 }
+
+#include "iregister.moc"
