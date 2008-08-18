@@ -98,7 +98,7 @@ public:
      */
     virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
 
-    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints) = 0;
+    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList()) = 0;
 
      /**
      * Queries for the plugin which supports given extension interface and returns a pointer to the extension interface.

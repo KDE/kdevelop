@@ -116,7 +116,7 @@ public:
     IPlugin *pluginForExtension(const QString &extension, const QString &pluginname = "");
     IPlugin *pluginForExtension(const QString &extension, const QStringList &constraints);
 
-    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints);
+    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList());
 
     static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints);
 
