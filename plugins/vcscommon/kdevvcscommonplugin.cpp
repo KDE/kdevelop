@@ -20,8 +20,11 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kaction.h>
+
+#include <ktexteditor/markinterface.h>
 
 #include <kparts/mainwindow.h>
 
@@ -29,6 +32,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
@@ -38,7 +43,11 @@
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/widgets/vcscommitdialog.h>
+#include <vcs/widgets/vcsannotationwidget.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcsrevision.h>
+#include <vcs/vcsdiff.h>
+#include <vcs/widgets/vcseventwidget.h>
 #include <language/duchain/duchainbase.h>
 #include <language/duchain/indexedstring.h>
 
@@ -51,6 +60,36 @@ KDevVcsCommonPlugin::KDevVcsCommonPlugin( QObject *parent, const QVariantList & 
     KAction* a = new KAction( i18n( "Commit..." ), this );
     connect( a, SIGNAL( triggered() ), this, SLOT( commit() ) );
     m_actions.insert( "commit", a );
+    a = new KAction( i18n( "Add" ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( add() ) );
+    m_actions.insert( "add", a );
+    a = new KAction( i18n( "Remove" ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( remove() ) );
+    m_actions.insert( "remove", a );
+    a = new KAction( i18n( "Update" ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( update() ) );
+    m_actions.insert( "update", a );
+    a = new KAction( i18n( "Compare to Head..." ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( diffToHead() ) );
+    m_actions.insert( "diffToHead", a );
+    a = new KAction( i18n( "Compare to Base..." ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( diffToBase() ) );
+    m_actions.insert( "diffToBase", a );
+    a = new KAction( i18n( "Revert" ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( revert() ) );
+    m_actions.insert( "revert", a );
+    a = new KAction( i18n( "History..." ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( history() ) );
+    m_actions.insert( "history", a );
+    a = new KAction( i18n( "Annotation..." ), this );
+    connect( a, SIGNAL( triggered() ), this, SLOT( annotation() ) );
+    m_actions.insert( "annotation", a );
+    a = new KAction( this );
+    a->setSeparator( true );
+    m_actions.insert( "commitseperator", a);
+    a = new KAction( this );
+    a->setSeparator( true );
+    m_actions.insert( "logseperator", a);
 }
 
 KDevVcsCommonPlugin::~KDevVcsCommonPlugin()
@@ -107,10 +146,10 @@ KUrl KDevVcsCommonPlugin::urlForItem( KDevelop::ProjectBaseItem* item ) const
         url = item->folder()->url();
     else
     {
-        KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() );
-        if( item )
+        KDevelop::ProjectBaseItem* parentitem = dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() );
+        if( parentitem )
         {
-            url = item->folder()->url();
+            url = parentitem->folder()->url();
         }
     }
     return url;
@@ -130,7 +169,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
                 IPlugin* plugin = findVcsPluginForProjectItem( item );
                 if( plugin )
                 {
-                    m_ctxUrls.insert( urlForItem( item ), plugin );
+                    m_ctxUrls[plugin].append( urlForItem( item ) );
                 }
             }
         }
@@ -142,7 +181,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
             KDevelop::IPlugin* plugin = findVcsPluginForUrl( editctx->url() );
             if( plugin )
             {
-                m_ctxUrls.insert( editctx->url(), plugin );
+                m_ctxUrls[plugin].append( editctx->url() );
             }
         }
     }
@@ -155,7 +194,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
                 KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
                 if( plugin )
                 {
-                    m_ctxUrls.insert( url, plugin );
+                    m_ctxUrls[plugin].append( url );
                 }
             }
         }
@@ -168,34 +207,163 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
             KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
             if( plugin )
             {
-                m_ctxUrls.insert( url, plugin );
+                m_ctxUrls[plugin].append( url );
             }
         }
     }
 
-    if( m_ctxUrls.isEmpty() )
+    foreach( const QString& id, m_actions.keys() )
     {
-        foreach( KAction* a, m_actions.values() )
+        if( ( id == "history" || id == "annotation" || id == "diffToHead" || id == "diffToBase" ) )
         {
-            a->setEnabled( false );
+            m_actions[id]->setEnabled( m_ctxUrls.count() == 1 && m_ctxUrls.begin().value().count() == 1 );
+        } else
+        {
+            m_actions[id]->setEnabled( !m_ctxUrls.isEmpty() );
         }
     }
+
     menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("commit") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("update") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("commitseperator") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("add") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("remove") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("revert") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("logseperator") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("diffToBase") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("diffToHead") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("history") );
+    menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("annotation") );
     return menuExt;
+}
+
+#define EXECUTE_VCS_METHOD( method ) \
+foreach( KDevelop::IPlugin* plugin, m_ctxUrls.keys() ) \
+{ \
+    KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>(); \
+    core()->runController()->registerJob( iface-> method ( m_ctxUrls.value(plugin) ) ); \
+}
+
+#define SINGLEURL_SETUP_VARS \
+KDevelop::IPlugin* plugin =  m_ctxUrls.keys().at(0); \
+KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>(); \
+KUrl url = m_ctxUrls.value(plugin).at(0);
+
+
+void KDevVcsCommonPlugin::revert()
+{
+    EXECUTE_VCS_METHOD( revert );
+}
+
+void KDevVcsCommonPlugin::diffToHead()
+{
+    SINGLEURL_SETUP_VARS
+    KDevelop::VcsJob* job = iface->diff( url, url,
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ),
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Head ) );
+
+    connect( job, SIGNAL( finished( KJob* ) ), this, SLOT( diffJobFinished( KJob* ) ) );
+    core()->runController()->registerJob( job );
+}
+
+void KDevVcsCommonPlugin::diffJobFinished( KJob* job )
+{
+    KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>( job );
+    Q_ASSERT(vcsjob);
+    if( vcsjob )
+    {
+        if( vcsjob->status() == KDevelop::VcsJob::JobSucceeded )
+        {
+            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+            QString diff = d.diff();
+            core()->documentController()->openDocumentFromText( diff );
+        } else
+        {
+            KMessageBox::error( core()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Couldn't get difference") );
+        }
+    }
+}
+
+void KDevVcsCommonPlugin::diffToBase()
+{
+    SINGLEURL_SETUP_VARS
+    KDevelop::VcsJob* job = iface->diff( url, url,
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ),
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Base ) );
+
+    connect( job, SIGNAL( finished( KJob* ) ), this, SLOT( diffJobFinished( KJob* ) ) );
+    core()->runController()->registerJob( job );
+}
+
+void KDevVcsCommonPlugin::history()
+{
+    SINGLEURL_SETUP_VARS
+    KDevelop::VcsJob *job = iface->log( url );
+    KDialog* dlg = new KDialog();
+    dlg->setButtons( KDialog::Close );
+    dlg->setCaption( i18n( "%2 History (%1)", url.pathOrUrl(), iface->name() ) );
+    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget( url, job, dlg );
+    dlg->setMainWidget( logWidget );
+    connect( dlg, SIGNAL( closeClicked() ), job, SLOT( deleteLater() ) );
+    dlg->show();
+}
+
+void KDevVcsCommonPlugin::annotation()
+{
+    SINGLEURL_SETUP_VARS
+    KDevelop::IDocument* doc = core()->documentController()->documentForUrl( url );
+    if( !doc )
+        doc = core()->documentController()->openDocument( url );
+
+    if( doc && doc->textDocument() )
+    {
+        KDevelop::VcsJob* job = iface->annotate( url );
+        KTextEditor::MarkInterface* markiface = 0;
+        //qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+        if( markiface )
+        {
+            //@TODO: Work with Kate devs towards a new interface for adding
+            //       annotation information to the KTE's in KDE 4.1
+        }else
+        {
+            KDialog* dlg = new KDialog();
+            dlg->setButtons( KDialog::Close );
+            dlg->setCaption( i18n("Annotation (%1)", url.pathOrUrl() ) );
+            KDevelop::VcsAnnotationWidget* w = new KDevelop::VcsAnnotationWidget( url, job, dlg );
+            dlg->setMainWidget( w );
+            connect( dlg, SIGNAL( closeClicked() ), job, SLOT( deleteLater() ) );
+            dlg->show();
+        }
+    }else
+    {
+        KMessageBox::error( 0, i18n("Cannot execute annotate action because the "
+        "document wasn't found or was not a text "
+        "document:\n%1", url.pathOrUrl() ) );
+    }
+}
+
+void KDevVcsCommonPlugin::update()
+{
+    EXECUTE_VCS_METHOD( update )
+}
+
+void KDevVcsCommonPlugin::remove()
+{
+    EXECUTE_VCS_METHOD( remove )
+}
+
+void KDevVcsCommonPlugin::add()
+{
+    EXECUTE_VCS_METHOD( add )
 }
 
 void KDevVcsCommonPlugin::commit()
 {
     Q_ASSERT( !m_ctxUrls.isEmpty() );
-    QHash<KDevelop::IPlugin*, KUrl::List > urlsPerPlugin;
-    foreach( const KUrl& url , m_ctxUrls.keys() )
-    {
-        urlsPerPlugin[ m_ctxUrls.value(url) ].append( url );
-    }
-    foreach( KDevelop::IPlugin* plugin, urlsPerPlugin.keys() )
+    foreach( KDevelop::IPlugin* plugin, m_ctxUrls.keys() )
     {
         KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog( plugin->extension<KDevelop::IBasicVersionControl>(), core()->uiController()->activeMainWindow() );
-        dlg->setCommitCandidates( urlsPerPlugin.value( plugin ) );
+        dlg->setCommitCandidates( m_ctxUrls.value( plugin ) );
         KConfigGroup vcsGroup( KGlobal::config(), "VcsCommon" );
         dlg->setOldMessages( vcsGroup.readEntry( "OldCommitMessages", QStringList() ) );
         dlg->setRecursive( true );

@@ -81,6 +81,7 @@ QString DistributedVersionControlPlugin::name() const
 bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocation)
 {
     //TODO: some files from repository location can be not version controlled
+    kDebug() << "checking version controlled with executor:" << d->m_exec->name();
     return d->m_exec->isValidDirectory(localLocation);
 }
 
@@ -124,7 +125,7 @@ KDevelop::VcsJob*
 ///Not used in DVCS;
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::copy(const KUrl& localLocationSrc,
-                                              const KUrl& localLocationDstn) 
+                                              const KUrl& localLocationDstn)
 {
     Q_UNUSED(localLocationSrc)
     Q_UNUSED(localLocationDstn)
@@ -134,7 +135,7 @@ KDevelop::VcsJob*
 ///Not used in DVCS;
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::move(const KUrl& localLocationSrc,
-                                              const KUrl& localLocationDst ) 
+                                              const KUrl& localLocationDst )
 {
     Q_UNUSED(localLocationSrc)
     Q_UNUSED(localLocationDst)
@@ -142,7 +143,7 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::revert(const KUrl::List & localLocations, 
+        DistributedVersionControlPlugin::revert(const KUrl::List & localLocations,
                                                 IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(localLocations)
@@ -281,7 +282,7 @@ KDevelop::VcsJob*
     return d->m_exec->empty_cmd();
 }
 
-KDevelop::VcsJob* 
+KDevelop::VcsJob*
         DistributedVersionControlPlugin::checkout(const QString &localLocation,
                                                   const QString &repo)
 {
@@ -297,7 +298,7 @@ KDevelop::IDVCSexecutor* DistributedVersionControlPlugin::proxy()
 }
 
 
-KDevelop::VcsImportMetadataWidget* 
+KDevelop::VcsImportMetadataWidget*
         DistributedVersionControlPlugin::createImportMetadataWidget(QWidget* parent)
 {
     return new ImportMetadataWidget(parent);
@@ -361,6 +362,7 @@ KDevelop::ContextMenuExtension
     {
         if(isVersionControlled( url ) )
         {
+            kDebug() << url << "is version controller";
             hasVersionControlledEntries = true;
             break;
         }
@@ -372,40 +374,40 @@ KDevelop::ContextMenuExtension
     QList<QAction*> actions;
     KAction *action;
     kDebug() << "version controlled?" << hasVersionControlledEntries;
+    QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
-        action = new KAction(i18n("Commit..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-        menuExt.addAction( ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Add"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-        menuExt.addAction( ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Remove"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-        menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+//         action = new KAction(i18n("Commit..."), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Add"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Remove"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
 
         action = new KAction(i18n("Branch Manager"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-        menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+        menu->addAction( action );
 
-        action = new KAction(i18n("Status"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Log View"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//         action = new KAction(i18n("Status"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Log View"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
     }
     else
     {
-        QMenu* menu = new QMenu(name() );
         action = new KAction(i18n("Init..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(slotInit()) );
         menu->addAction(action);
-        menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
+    menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;
 
@@ -441,7 +443,7 @@ void DistributedVersionControlPlugin::slotInit()
 //         KUrl url = urlFocusedDocument();
 //         KUrl::List urls;
 //         urls << url;
-// 
+//
 //         KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
 //         DVCSjob* job = dynamic_cast<DVCSjob*>(j);
 //         if (job) {

@@ -224,63 +224,63 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     QList<QAction*> actions;
     KAction *action;
     kDebug() << "version controlled?" << hasVersionControlledEntries;
+    QMenu* menu = new QMenu("CVS");
     if( hasVersionControlledEntries )
     {
-        action = new KAction(i18n("Commit..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Add"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Remove"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Edit"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//         action = new KAction(i18n("Commit..."), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Add"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Remove"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Edit"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
 
         action = new KAction(i18n("Unedit"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        menu->addAction( action );
 
         action = new KAction(i18n("Show Editors"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        menu->addAction( action );
 
-        action = new KAction(i18n("Update.."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Log View"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Annotate"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Revert"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-
-        action = new KAction(i18n("Diff..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//         action = new KAction(i18n("Update.."), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Log View"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Annotate"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Revert"), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+//
+//         action = new KAction(i18n("Diff..."), this);
+//         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
+//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
     }
     else
     {
-        QMenu* menu = new QMenu("CVS");
         action = new KAction(i18n("Import..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(slotImport()) );
         menu->addAction( action );
         action = new KAction(i18n("Checkout..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(slotCheckout()) );
         menu->addAction( action );
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;
 }
@@ -613,7 +613,7 @@ KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, 
     if (list.size() < 1) {
         return NULL;
     }
-    
+
     KDevelop::VcsLocation srcLocation = list[0];
     KDevelop::VcsLocation destLocation = localLocation.destinationLocation(list[0]);
 
@@ -629,11 +629,11 @@ KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, 
                  << "srv:"<<destLocation.repositoryServer()
                  << "module:"<<destLocation.repositoryModule() << endl;
 
-    CvsJob* job = d->m_proxy->import( srcLocation.localUrl(), 
-				destLocation.repositoryServer(), 
-				destLocation.repositoryModule(), 
-				destLocation.userData().toString(), 
-				destLocation.repositoryTag(), 
+    CvsJob* job = d->m_proxy->import( srcLocation.localUrl(),
+				destLocation.repositoryServer(),
+				destLocation.repositoryModule(),
+				destLocation.userData().toString(),
+				destLocation.repositoryTag(),
 				commitMessage);
     return job;
 }
@@ -644,7 +644,7 @@ KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsMapping & mapping)
     if (list.size() < 1) {
         return NULL;
     }
-    
+
     KDevelop::VcsLocation srcLocation = list[0];
     KDevelop::VcsLocation destLocation = mapping.destinationLocation(list[0]);
 

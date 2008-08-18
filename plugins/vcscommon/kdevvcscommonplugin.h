@@ -16,6 +16,8 @@
 #include <QtCore/QVariant>
 #include <QtCore/QHash>
 
+class KJob;
+
 namespace KDevelop
 {
 class Context;
@@ -36,14 +38,23 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 private slots:
     void commit();
+    void add();
+    void remove();
+    void revert();
+    void history();
+    void annotation();
+    void diffToHead();
+    void diffToBase();
+    void update();
     void executeCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );
+    void diffJobFinished( KJob* job );
 private:
     KDevelop::IPlugin* findVcsPluginForProjectItem( KDevelop::ProjectBaseItem* item ) const;
     KUrl urlForItem( KDevelop::ProjectBaseItem* item ) const;
     KDevelop::IPlugin* findVcsPluginForNonProjectUrl( const KUrl& url ) const;
     KDevelop::IPlugin* findVcsPluginForUrl( const KUrl& url ) const;
-    QHash<KUrl, IPlugin*> m_ctxUrls;
+    QHash<IPlugin*, KUrl::List> m_ctxUrls;
     QHash<QString, KAction*> m_actions;
 };
 
