@@ -19,6 +19,7 @@
 namespace KDevelop
 {
 class Context;
+class VcsCommitDialog;
 class ProjectBaseItem;
 class ContextMenuExtension;
 }
@@ -33,6 +34,10 @@ public:
     virtual ~KDevVcsCommonPlugin();
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+private slots:
+    void commit();
+    void executeCommit( KDevelop::VcsCommitDialog* dlg );
+    void cancelCommit( KDevelop::VcsCommitDialog* dlg );
 private:
     KDevelop::IPlugin* findVcsPluginForProjectItem( KDevelop::ProjectBaseItem* item ) const;
     KUrl urlForItem( KDevelop::ProjectBaseItem* item ) const;
