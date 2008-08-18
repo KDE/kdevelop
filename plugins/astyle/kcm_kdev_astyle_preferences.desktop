@@ -1,0 +1,14 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_astyle_preferences
+X-KDE-FactoryName=kcm_kdev_astyle_preferences
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=kdevplatform
+X-KDE-CfgDlgHierarchy=USERINTERFACE
+Name=AStyle Settings
+
+
