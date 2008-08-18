@@ -488,7 +488,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
-    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << "Project" << "Includes" << "Include Path" << "Includers" );
+    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << "Project" << "Includes" << "Includers" );
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
