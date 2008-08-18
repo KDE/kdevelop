@@ -381,7 +381,7 @@ private:
         allInfosConstant = false;
     }
     
-    if(allInfosConstant) {
+    if(allInfosConstant && m_environmentInfo.findIndex(EnvironmentInformationRequest(url))) {
       //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
       //need to save anything.
     }else{
