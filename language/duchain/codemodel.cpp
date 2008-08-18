@@ -169,6 +169,13 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     
     ifDebug( kDebug() << "deleting list, and creating new with" << item.itemsSize() << "items"; )
     d->m_repository.deleteItem(index);
+  }else{
+    //We're creating a new index
+    CodeModelItem newItem;
+    newItem.referenceCount = 1;
+    newItem.id = id;
+    newItem.kind = kind;
+    item.itemsList().append(newItem);
   }
   Q_ASSERT(!d->m_repository.findIndex(request));
 
@@ -230,6 +237,8 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
 
 void CodeModel::items(const IndexedString& file, uint& count, const CodeModelItem*& items) const
 {
+  ifDebug( kDebug() << "items" << file.str(); )
+
   CodeModelRepositoryItem item;
   item.file = file;
   CodeModelRequestItem request(item);
@@ -238,9 +247,11 @@ void CodeModel::items(const IndexedString& file, uint& count, const CodeModelIte
   
   if(index) {
     const CodeModelRepositoryItem* repositoryItem = d->m_repository.itemFromIndex(index);
+    ifDebug( kDebug() << "found index" << index << repositoryItem->itemsSize(); )
     count = repositoryItem->itemsSize();
     items = repositoryItem->items();
   }else{
+    ifDebug( kDebug() << "found no index"; )
     count = 0;
     items = 0;
   }
