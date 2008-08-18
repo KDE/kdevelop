@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=This plugin integrates common vcs functionality to KDevelop.
+Comment[x-test]=xxThis plugin integrates common vcs functionality to KDevelop.xx
+Name=KDevVcsCommon
+Name[x-test]=xxKDevVcsCommonxx
+GenericName=VcsCommon plugin
+GenericName[x-test]=xxVcsCommon pluginxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevvcscommon
+X-KDE-PluginInfo-Name=kdevvcscommon
+X-KDE-PluginInfo-Author=Andreas Pakulat
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=VCS
