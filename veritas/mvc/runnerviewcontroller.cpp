@@ -136,7 +136,9 @@ void RunnerViewController::selectAllItems(bool select) const
         runnerModel()->updateView(s); // <- emits dataChanged
         i = i.sibling(i.row() + 1, 0);
     }
+    view()->viewport()->update();
     runnerModel()->countItems(); // Update counters.
+    
 }
 
 bool RunnerViewController::eventFilter(QObject* obj, QEvent* event)

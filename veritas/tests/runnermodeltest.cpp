@@ -213,9 +213,6 @@ void RunnerModelTest::setUpResultSpies(QMap<QString, QSignalSpy*>& spies)
 // command
 void RunnerModelTest::updateViewLastItem()
 {
-    // Looks like a QTreeView bug here.
-    // The correct dataChanged() gets emitted but not the
-    // according data()'s. Great.
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model->fill2();
     QSignalSpy* s = new QSignalSpy(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)));

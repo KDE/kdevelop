@@ -82,7 +82,7 @@ void VerboseManager::slotEntered(const QModelIndex& index)
                 SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
 
         const QRect rect = m_view->visualRect(index);
-        const int x = rect.right() - 16;
+        const int x = rect.right() - 32;
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
         m_toggle->show();

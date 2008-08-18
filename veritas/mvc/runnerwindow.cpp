@@ -49,6 +49,9 @@
 #include <KSelectAction>
 #include <KIcon>
 #include <KDebug>
+#include <KColorScheme>
+#include <QBrush>
+#include <QColor>
 
 using KDevelop::IProject;
 Q_DECLARE_METATYPE(KDevelop::IProject*)
@@ -92,6 +95,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_runnerViewController = new RunnerViewController(this, runnerView());
 
     connectFocusStuff();
+    setGreenBar();
+    ui()->progressRun->setTextVisible(false);
     ui()->progressRun->show();
 
     // Disable user interaction while there is no data.
@@ -106,6 +111,14 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
+    QPixmap run = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::Small);
+    m_ui->actionStart->setIcon(run);
+    QPixmap stop = KIconLoader::global()->loadIcon("window-close", KIconLoader::Small);
+    m_ui->actionStop->setIcon(stop);
+    QPixmap select = KIconLoader::global()->loadIcon("list-add", KIconLoader::Small);
+    m_ui->actionSelectAll->setIcon(select);
+    QPixmap deselect = KIconLoader::global()->loadIcon("list-remove", KIconLoader::Small);
+    m_ui->actionUnselectAll->setIcon(deselect);
 
     runnerView()->setStyleSheet(
         "QTreeView::branch{"
@@ -118,6 +131,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
         "border-image: none"
         "}");
 
+    resultsView()->header()->setResizeMode(QHeaderView::Interactive);
+
     connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
             runnerController(), SLOT(expandOrCollapse(const QModelIndex&)));
 
@@ -129,6 +144,10 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_resultsProxyModel->setFilter(filter); // also updates the view
 
     resultsView()->setModel(m_resultsProxyModel);
+
+    const char* whatsthis = "xTest runner. First select a project from the rightmost dropdown box. Next, load the test tree by clicking on the green circular arrow icon. Run your tests with a click on the leftmost green arrow icon.";
+    setWhatsThis( i18n(whatsthis) );
+    resultsView()->setWhatsThis( i18n(whatsthis) );
 }
 
 // helper for RunnerWindow(...)
@@ -150,12 +169,26 @@ void RunnerWindow::addProjectToPopup(IProject* proj)
     v.setValue(proj);
     p->setData(v);
     m_projectPopup->addAction(p);
-    //m_ui->runnerToolBar->addAction(m_projectPopup);
+    m_project2action[proj] = p;
 }
 
 void RunnerWindow::rmProjectFromPopup(IProject* proj)
 {
-    kDebug() << "Adding project to popup " << proj->name() << " TODO";
+    if (m_project2action.contains(proj)) {
+        QAction* p = m_project2action[proj];
+        m_projectPopup->removeAction(p);
+        m_project2action.remove(proj);
+    }
+}
+
+void RunnerWindow::resetProgressBar() const
+{
+    kDebug() << "";
+    ui()->progressRun->setValue(0);
+    ui()->progressRun->update();
+    if (ui()->progressRun->maximum() == 0) {
+        ui()->progressRun->setMaximum(1);
+    }
 }
 
 // helper for RunnerWindow(...)
@@ -205,16 +238,28 @@ void RunnerWindow::connectActions()
     // View commands
     m_ui->actionSelectAll->setShortcut(QKeySequence(tr("Ctrl+A")));
     connect(m_ui->actionSelectAll, SIGNAL(triggered(bool)),
-            runnerController(), SLOT(selectAll()));
+            this, SLOT(selectAll()));
     m_ui->actionUnselectAll->setShortcut(QKeySequence(tr("Ctrl+U")));
     connect(m_ui->actionUnselectAll, SIGNAL(triggered(bool)),
-            runnerController(), SLOT(unselectAll()));
+            this, SLOT(unselectAll()));
     m_ui->actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
     connect(m_ui->actionExpandAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(expandAll()));
     m_ui->actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
     connect(m_ui->actionCollapseAll, SIGNAL(triggered(bool)),
             runnerController(), SLOT(collapseAll()));
+}
+
+void RunnerWindow::unselectAll()
+{
+    runnerController()->unselectAll();
+    resetProgressBar();
+}
+
+void RunnerWindow::selectAll()
+{
+    runnerController()->selectAll();
+    resetProgressBar();
 }
 
 RunnerWindow::~RunnerWindow()
@@ -228,19 +273,10 @@ RunnerWindow::~RunnerWindow()
 // helper for setModel(RunnerModel*)
 void RunnerWindow::stopPreviousModel()
 {
-    // It's not expected to set another model at the moment but if done so then
-    // at least remove the previous model from the views to prevent the runner
-    // from crashing. Deleting a previous model is left to the owner of the model
-    // instance. The fact that a previous model could have a running thread is
-    // taken into account by simply asking the model to stop it without further
-    // verification. A better solution must consider this in a later version.
     RunnerModel* prevModel = runnerModel();
     if (prevModel) {
-        // Hope it stops the thread if it is running.
         prevModel->stopItems();
 
-        // As long as the proxy models can't be set from outside they
-        // get deleted.
         RunnerProxyModel* m1 = runnerProxyModel();
         runnerView()->setModel(0);
         runnerView()->reset();
@@ -377,61 +413,90 @@ void RunnerWindow::displayCompleted() const
 {
     ui()->progressRun->setValue(ui()->progressRun->maximum());
     enableControlsAfterRunning();
+    displayElapsed();
 }
 
 void RunnerWindow::displayNumTotal(int numItems) const
 {
-    ui()->labelNumTotal->setText(QString().setNum(numItems));
 }
 
 void RunnerWindow::displayNumSelected(int numItems) const
 {
-    ui()->labelNumSelected->setText(QString().setNum(numItems));
+    if (numItems == 0) { numItems++;}
     ui()->progressRun->setMaximum(numItems);
 }
 
 void RunnerWindow::displayNumCompleted(int numItems) const
 {
     ui()->labelNumRun->setText(QString().setNum(numItems));
+    displayElapsed();
 }
 
 void RunnerWindow::displayNumSuccess(int numItems) const
 {
-    displayStatusNum(ui()->labelNumSuccess,
-                     ui()->labelNumSuccess, numItems);
-
-    // Num success always visible.
-    ui()->labelNumSuccess->show();
 }
 
 void RunnerWindow::displayNumInfos(int numItems) const
 {
-    displayStatusNum(ui()->labelNumInfos,
-                     ui()->labelNumInfosPic, numItems);
 }
 
 void RunnerWindow::displayNumWarnings(int numItems) const
 {
-    displayStatusNum(ui()->labelNumWarnings,
-                     ui()->labelNumWarningsPic, numItems);
+}
+
+void RunnerWindow::setGreenBar() const
+{
+    QProgressBar* bar = ui()->progressRun;
+/*    KColorScheme ks(QPalette::Base);
+    QString green = ks.background(KColorScheme::PositiveBackground).color().name();*/
+    bar->setStyleSheet(
+        QString("QProgressBar {"
+            "border: 1px solid grey;"
+            "border-radius: 2px;"
+            "text-align: center;"
+        "}"
+        "QProgressBar::chunk {"
+            "background-color: #009700;"
+            "width: 5px;"
+        "}"));
+}
+
+void RunnerWindow::setRedBar() const
+{
+    QProgressBar* bar = ui()->progressRun;
+//     KColorScheme ks(QPalette::Base);
+//     QString red = ks.background(KColorScheme::NegativeBackground).color().name();
+    bar->setStyleSheet(
+        QString("QProgressBar {"
+            "border: 1px solid grey;"
+            "border-radius: 2px;"
+            "text-align: center;"
+        "}"
+        "QProgressBar::chunk {"
+            "background-color: #DF1313;"
+            "width: 5px;"
+        "}"));
 }
 
 void RunnerWindow::displayNumErrors(int numItems) const
 {
-    displayStatusNum(ui()->labelNumErrors,
-                     ui()->labelNumErrorsPic, numItems);
+//    displayStatusNum(ui()->labelNumErrors,
+//                     ui()->labelNumErrorsPic, numItems);
+    if (numItems > 0) setRedBar();
 }
 
 void RunnerWindow::displayNumFatals(int numItems) const
 {
-    displayStatusNum(ui()->labelNumFatals,
-                     ui()->labelNumFatalsPic, numItems);
+//    displayStatusNum(ui()->labelNumFatals,
+//                     ui()->labelNumFatalsPic, numItems);
+    if (numItems > 0) setRedBar();
 }
 
 void RunnerWindow::displayNumExceptions(int numItems) const
 {
-    displayStatusNum(ui()->labelNumExceptions,
-                     ui()->labelNumExceptionsPic, numItems);
+//    displayStatusNum(ui()->labelNumExceptions,
+//                     ui()->labelNumExceptionsPic, numItems);
+    if (numItems > 0) setRedBar();
 }
 
 void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
@@ -549,6 +614,13 @@ void RunnerWindow::ensureFocusRect(const QModelIndex&  index)
     enableResultSync(true);
 }
 
+void RunnerWindow::displayElapsed() const
+{
+    int mili = m_stopWatch.elapsed();
+    QString elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
+    ui()->labelElapsed->setText(elapsed);
+}
+
 void RunnerWindow::scrollToHighlightedRows() const
 {
 
@@ -591,6 +663,11 @@ void RunnerWindow::runItems()
     // Do not interfere with stopping the items. Could happen because Qt
     // input processing could be faster than executing event handlers.
     if (!m_sema.tryAcquire()) return;
+    m_stopWatch.start();
+    setGreenBar();
+    displayNumCompleted(0);
+    ui()->labelElapsed->setText("0.000");
+
     disableControlsBeforeRunning();
     resultsModel()->clear();
     runnerModel()->runItems();
@@ -599,6 +676,7 @@ void RunnerWindow::runItems()
 
 void RunnerWindow::stopItems()
 {
+    kDebug() << "stopItems";
     m_ui->actionStop->setDisabled(true);
     QCoreApplication::processEvents();  // Disable command immediately
 
@@ -607,12 +685,14 @@ void RunnerWindow::stopItems()
     StoppingDialog dlg(this, runnerModel());
     int r = dlg.exec();
     if (r == QDialog::Accepted) {
+        kDebug() << "Accepted";
         enableControlsAfterRunning();
         m_sema.release();
         return;
     }
     // Give a chance for another stop request.
     m_ui->actionStop->setEnabled(true);
+    ui()->progressRun->setValue(ui()->progressRun->maximum());
     m_sema.release();
 }
 

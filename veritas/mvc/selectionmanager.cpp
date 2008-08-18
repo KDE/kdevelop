@@ -82,7 +82,7 @@ void SelectionManager::slotEntered(const QModelIndex& index)
         const QRect rect = m_view->visualRect(index);
         Test* t = itemFromIndex(index);
         if (not t) return;
-        const int x = rect.right() - (t->shouldRun() ? 32 : 16);
+        const int x = rect.right() - 16; //(t->shouldRun() ? 32 : 16);
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
 
@@ -112,6 +112,7 @@ void SelectionManager::setItemSelected(bool selected)
         QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
         RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
         runnerModel->updateView(proxyModel->mapToSource(index));
+        m_view->viewport()->update();
     }
     emit selectionChanged();
 }

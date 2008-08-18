@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1138</width>
-    <height>490</height>
+    <width>789</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,7 +16,7 @@
    <iconset resource="../resources/qxrunner.qrc" >
     <normaloff>:/icons/qxrunner_16x16.png</normaloff>:/icons/qxrunner_16x16.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" >
+  <layout class="QVBoxLayout" name="verticalLayout_3" >
    <item>
     <widget class="QToolBar" name="runnerToolBar" >
      <property name="windowTitle" >
@@ -75,7 +75,7 @@
            <property name="frameShadow" >
             <enum>QFrame::Plain</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_2" >
+           <layout class="QHBoxLayout" name="horizontalLayout_4" >
             <item>
              <widget class="QProgressBar" name="progressRun" >
               <property name="sizePolicy" >
@@ -130,62 +130,34 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame_2" >
+          <widget class="QFrame" name="frame_4" >
            <property name="frameShape" >
             <enum>QFrame::NoFrame</enum>
            </property>
            <property name="frameShadow" >
             <enum>QFrame::Plain</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout" >
+           <layout class="QHBoxLayout" name="horizontalLayout_5" >
             <item>
              <spacer name="spacer_2" >
               <property name="orientation" >
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeType" >
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
               <property name="sizeHint" stdset="0" >
                <size>
-                <width>6</width>
-                <height>12</height>
+                <width>198</width>
+                <height>17</height>
                </size>
               </property>
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="labelNumTotalText" >
-              <property name="text" >
-               <string>Total:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelNumTotal" >
-              <property name="text" >
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelNumSelectedText" >
-              <property name="text" >
-               <string>Selected:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelNumSelected" >
-              <property name="text" >
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QLabel" name="labelNumRunText" >
               <property name="text" >
-               <string>Run:</string>
+               <string>Ran</string>
+              </property>
+              <property name="textFormat" >
+               <enum>Qt::LogText</enum>
               </property>
              </widget>
             </item>
@@ -194,187 +166,40 @@
               <property name="text" >
                <string>0</string>
               </property>
+              <property name="textFormat" >
+               <enum>Qt::LogText</enum>
+              </property>
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="_18" >
-              <property name="spacing" >
-               <number>3</number>
+             <widget class="QLabel" name="labelElapsedText" >
+              <property name="text" >
+               <string>tests in</string>
               </property>
-              <property name="margin" >
-               <number>0</number>
+              <property name="textFormat" >
+               <enum>Qt::LogText</enum>
               </property>
-              <item>
-               <widget class="QLabel" name="labelNumSuccessPic" >
-                <property name="toolTip" >
-                 <string>Success</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/success.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumSuccess" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="_14" >
-              <property name="spacing" >
-               <number>3</number>
+             <widget class="QLabel" name="labelElapsed" >
+              <property name="text" >
+               <string>0.000</string>
               </property>
-              <property name="margin" >
-               <number>0</number>
+              <property name="textFormat" >
+               <enum>Qt::LogText</enum>
               </property>
-              <item>
-               <widget class="QLabel" name="labelNumExceptionsPic" >
-                <property name="toolTip" >
-                 <string>Exceptions</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/exception.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumExceptions" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="_19" >
-              <property name="spacing" >
-               <number>3</number>
+             <widget class="QLabel" name="label" >
+              <property name="text" >
+               <string>seconds</string>
               </property>
-              <property name="margin" >
-               <number>0</number>
+              <property name="textFormat" >
+               <enum>Qt::LogText</enum>
               </property>
-              <item>
-               <widget class="QLabel" name="labelNumFatalsPic" >
-                <property name="toolTip" >
-                 <string>Fatals</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/fatal.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumFatals" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="_17" >
-              <property name="spacing" >
-               <number>3</number>
-              </property>
-              <property name="margin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="labelNumErrorsPic" >
-                <property name="toolTip" >
-                 <string>Errors</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/error.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumErrors" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="_15" >
-              <property name="spacing" >
-               <number>3</number>
-              </property>
-              <property name="margin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="labelNumWarningsPic" >
-                <property name="toolTip" >
-                 <string>Warnings</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/warning.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumWarnings" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="_16" >
-              <property name="spacing" >
-               <number>3</number>
-              </property>
-              <property name="margin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="labelNumInfosPic" >
-                <property name="toolTip" >
-                 <string>Infos</string>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="../resources/qxrunner.qrc" >:/icons/info.png</pixmap>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelNumInfos" >
-                <property name="text" >
-                 <string>0</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             </widget>
             </item>
             <item>
              <spacer name="spacer" >
@@ -383,8 +208,8 @@
               </property>
               <property name="sizeHint" stdset="0" >
                <size>
-                <width>28</width>
-                <height>20</height>
+                <width>198</width>
+                <height>17</height>
                </size>
               </property>
              </spacer>
@@ -393,9 +218,6 @@
           </widget>
          </item>
         </layout>
-        <zorder>treeRunner</zorder>
-        <zorder>frame_3</zorder>
-        <zorder>frame_2</zorder>
        </widget>
       </widget>
      </item>
@@ -435,7 +257,7 @@
      <normaloff>:/icons/uncheckedbox.png</normaloff>:/icons/uncheckedbox.png</iconset>
    </property>
    <property name="text" >
-    <string>&amp;Unselect All</string>
+    <string>&amp;Deselect All</string>
    </property>
   </action>
   <action name="actionAbout" >

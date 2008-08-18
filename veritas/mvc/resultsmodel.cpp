@@ -145,11 +145,9 @@ QModelIndex ResultsModel::mapFromTestIndex(const QModelIndex& testItemIndex) con
 
 void ResultsModel::addResult(const QModelIndex& testItemIndex)
 {
-    kDebug() << "";
     if (!testItemIndex.isValid()) {
         return;
     }
-    kDebug() << static_cast<Test*>(testItemIndex.internalPointer())->name();
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_testItemIndexes.append(QPersistentModelIndex(testItemIndex));
     m_testItemMap[testItemIndex.internalId()] = rowCount() - 1;

@@ -51,16 +51,18 @@ public:
     void operator()(Test* current);
     Test* m_previous;     // previously discovered test-exe
     TestExecutor* m_exec;
+    Test* m_first;
 };
 
 void SetupChain::operator()(Test* current)
 {
-    if (not(current->shouldRun() && current->selected())) {
+    if (!(current->shouldRun() && current->selected())) {
         return;           // only run if is an exe and selected
     }
-    if (not m_previous) { // first test in the chain.
+    if (!m_previous) { // first test in the chain.
         QObject::connect(m_exec, SIGNAL(fireStarter()),
                          current, SLOT(run()));
+        m_first = current;
     } else {              // start current when previous finished.
         kDebug() << "connect " << m_previous->name() 
                  << " -> "     << current->name();
@@ -72,6 +74,7 @@ void SetupChain::operator()(Test* current)
 
 } // end anonymous namespace
 
+
 TestExecutor::TestExecutor()
         : m_root(0)
 {
@@ -79,8 +82,7 @@ TestExecutor::TestExecutor()
 }
 
 TestExecutor::~TestExecutor()
-{
-}
+{}
 
 void TestExecutor::go()
 {

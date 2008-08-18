@@ -72,7 +72,9 @@ RunnerModel::RunnerModel(QObject* parent)
 
 RunnerModel::~RunnerModel()
 {
-    stopItems();
+    kDebug() << "~RunnerModel";
+    //stopItems();
+    if (m_executor) m_executor->stop();
     if (m_rootItem) delete m_rootItem;
     if (m_executor) delete m_executor;
 }
@@ -84,49 +86,31 @@ QString RunnerModel::name() const
 
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
-    // TODO switch
-
-    if (!index.isValid()) {
-        return QVariant();
-    }
-    if (role == Qt::TextAlignmentRole) {
+    if (!index.isValid()) return QVariant();
+    switch(role) {
+    case Qt::TextAlignmentRole : {
         return int(Qt::AlignLeft | Qt::AlignTop);
-    }
-    Test* item = testFromIndex(index);
-    if (role == Qt::DisplayRole) {
-        return item->data(index.column());
-    }
-    if (role == Qt::FontRole && !item->selected()) {
-        //  QFont font;
-        // font.setItalic(true);
-        // return font;
-        return QVariant();
-    }
-
-    // The other roles are supported for the first column only.
-    // There factually is only one column left. TODO rewrite this.
-    if (index.column() != 0) {
-        return QVariant();
-    }
-    if (role == Qt::TextColorRole) {
-        if (!item->selected())
-            return Qt::lightGray;
-        else
-            return Qt::black;
-    }
-    if (role != Qt::DecorationRole) {
-        return QVariant();
-    }
-    if (index.child(0, 0).isValid()) {
-        if (someChildHasStatus(Veritas::RunError, index))
-            return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
-        else if (someChildHasStatus(Veritas::NoResult, index))
-            return QIcon(":/icons/arrow-right-double-grey-16.png");
-        else // evrything ran successfully
-            return KIcon("arrow-right-double");
-    }
-    // Icon corresponding to the item's result code.
-    return Utils::resultIcon(item->state());
+    } case Qt::DisplayRole : {
+        return testFromIndex(index)->data(index.column());
+    } case Qt::TextColorRole : {
+        if (!testFromIndex(index)->selected()) return Qt::lightGray;
+        else return Qt::black;
+    } case Qt::DecorationRole : {
+        if (index.column() != 0) {
+            return QVariant();
+        }
+        if (index.child(0, 0).isValid()) {
+            if (someChildHasStatus(Veritas::RunError, index))
+                return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
+            else if (someChildHasStatus(Veritas::NoResult, index))
+                return QIcon(":/icons/arrow-right-double-grey-16.png");
+            else // evrything ran successfully
+                return KIcon("arrow-right-double");
+        } else {
+            return Utils::resultIcon(testFromIndex(index)->state());
+        }
+    } default: {}}
+    return QVariant();
 }
 
 bool RunnerModel::someChildHasStatus(int status, const QModelIndex& parent) const
@@ -300,7 +284,6 @@ void RunnerModel::countItems()
         }
     }
 
-    emit numTotalChanged(numTotal);
     emit numSelectedChanged(m_numSelected);
     emit numSuccessChanged(m_numSuccess);
     emit numInfosChanged(m_numInfos);
@@ -308,6 +291,7 @@ void RunnerModel::countItems()
     emit numErrorsChanged(m_numErrors);
     emit numFatalsChanged(m_numFatals);
     emit numExceptionsChanged(m_numExceptions);
+    emit numTotalChanged(numTotal);
 }
 
 int RunnerModel::expectedResults() const
@@ -342,7 +326,7 @@ void RunnerModel::runItems()
 {
     if (isRunning()) return; // dont start while buzzy
     initCounters();
-    if (not rootItem()) return;
+    if (!rootItem()) return;
     m_isRunning = true;
     clearItem(index(0, 0));  // Remove all results.
     if (m_executor) delete m_executor;
@@ -350,6 +334,7 @@ void RunnerModel::runItems()
     m_executor = new TestExecutor;
     m_executor->setRoot(rootItem());
     connect(m_executor, SIGNAL(allDone()), this, SLOT(allDone()));
+
     m_executor->go();
 }
 
@@ -362,6 +347,7 @@ void RunnerModel::allDone()
 bool RunnerModel::stopItems()
 {
     if (m_executor) m_executor->stop();
+    allDone();
     return true;
 }
 
@@ -419,6 +405,7 @@ void RunnerModel::clearItem(const QModelIndex& index)
 
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
+    if (!isRunning()) return;
     Test* item = testFromIndex(index);
     // Update result counters and provide default result type string if not
     // set in the item itself.
@@ -456,6 +443,7 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
 void RunnerModel::postItemStarted(QModelIndex index)
 {
+    if (!isRunning()) return;
     emit itemStarted(index);
     m_numStarted++;
     emit numStartedChanged(m_numStarted);

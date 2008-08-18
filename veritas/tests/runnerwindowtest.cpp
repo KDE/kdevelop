@@ -98,11 +98,9 @@ void RunnerWindowTest::selectAll()
     selectSome();
     model->countItems();
     QTest::qWait(100);
-    checkNrofSelectedStatusWidget(2);
     m_ui->actionSelectAll->trigger();
     QTest::qWait(100);
     checkAllItems(&RunnerWindowTest::isSelected);
-    checkNrofSelectedStatusWidget(3);
 }
 
 // helper
@@ -118,13 +116,6 @@ void RunnerWindowTest::unselectAll()
     m_ui->actionUnselectAll->trigger();
     QTest::qWait(100);
     checkAllItems(&RunnerWindowTest::isNotSelected);
-    checkNrofSelectedStatusWidget(0);
-}
-
-// helper
-void RunnerWindowTest::checkNrofSelectedStatusWidget(int num)
-{
-    KOMPARE(QString::number(num), m_ui->labelNumSelected->text());
 }
 
 // helper
@@ -183,18 +174,6 @@ void RunnerWindowTest::startItems()
     QCOMPARE(Veritas::RunSuccess, model->child11->state());
     QCOMPARE(Veritas::RunSuccess, model->child12->state());
     QCOMPARE(Veritas::RunSuccess, model->child21->state());
-
-    // validate the status widget
-    KOMPARE(QString("3"), m_ui->labelNumTotal->text());
-    KOMPARE(QString("3"), m_ui->labelNumSelected->text());
-    KOMPARE(QString("3"), m_ui->labelNumRun->text());
-
-    // TODO append ': ' to the labelNumXText instead
-    KOMPARE(QString(": 3"), m_ui->labelNumSuccess->text());
-    KOMPARE(QString(": 0"), m_ui->labelNumExceptions->text());
-    KOMPARE(QString(": 0"), m_ui->labelNumFatals->text());
-    KOMPARE(QString(": 0"), m_ui->labelNumErrors->text());
-    KOMPARE(QString(": 0"), m_ui->labelNumWarnings->text());
 }
 
 // command
@@ -237,6 +216,7 @@ void RunnerWindowTest::runAllTests()
 {
     // invoke the run action
     m_ui->actionStart->trigger();
+    //window->show();
 
     // de-comment the line below to inspect the window manually
     //QTest::qWait(5000);

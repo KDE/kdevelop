@@ -25,6 +25,7 @@
 #include <QtGui/QIcon>
 #include <QtCore/QPair>
 #include <QtCore/QAbstractItemModel>
+#include <QTime>
 
 namespace Veritas
 {

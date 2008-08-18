@@ -30,7 +30,6 @@ const int Test::s_columnCount = 5;
 
 Test::Test(const QList<QVariant>& data, Test* parent)
     : QObject(parent),
-      m_parentItem(parent),
       m_itemData(data),
       m_state(Veritas::NoResult),
       m_result(new TestResult)
@@ -42,20 +41,20 @@ Test::Test(const QList<QVariant>& data, Test* parent)
     if (!data.empty()) {
         m_name = data.value(0).toString();
     } else {
-        m_name = "";
+        m_name.clear();
     }
     setSelected(true);
 }
 
 Test::Test(const QString& name, Test* parent)
-    : m_parentItem(parent),
+    : QObject(parent),
       m_name(name),
       m_state(Veritas::NoResult),
       m_result(new TestResult)
 {
     // Make sure this item has as many columns as the parent.
     for (int i=0; i < s_columnCount; i++) {
-        m_itemData << "";
+        m_itemData << QString();
     }
     setSelected(true);
 }
@@ -92,13 +91,7 @@ QModelIndex Test::index() const
 
 Test* Test::parent() const
 {
-    if (!m_parentItem && QObject::parent()) {
-        Test* parent_ = qobject_cast<Test*>(QObject::parent());
-        if (parent_) {
-            m_parentItem = parent_;
-        }
-    }
-    return m_parentItem;
+    return qobject_cast<Test*>(QObject::parent());
 }
 
 Test* Test::child(int row) const
@@ -127,8 +120,8 @@ int Test::childCount() const
 
 int Test::row() const
 {
-    if (m_parentItem) {
-        return m_parentItem->m_children.indexOf(const_cast<Test*>(this));
+    if (parent()) {
+        return parent()->m_children.indexOf(const_cast<Test*>(this));
     }
     return 0;
 }

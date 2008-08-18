@@ -77,7 +77,6 @@ private:
     bool isExpanded(TestStub*);
     bool isCollapsed(TestStub*);
 
-    void checkNrofSelectedStatusWidget(int);
     void runAllTests();
     void printModel(const QModelIndex& mi, int);
 

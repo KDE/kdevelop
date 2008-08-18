@@ -26,6 +26,7 @@
 #include <QtCore/QSemaphore>
 #include <QTreeView>
 #include <QList>
+#include <QTime>
 
 namespace KDevelop { class IProject; }
 namespace Ui { class RunnerWindow; class ResultsView; }
@@ -104,6 +105,8 @@ public: // Operations
     VerboseManager* verboseManager() const;
     QWidget* resultsWidget() const { return m_results; }
 
+    void resetProgressBar() const;
+
 public Q_SLOTS:
 
     void addProjectToPopup(KDevelop::IProject*);
@@ -149,6 +152,8 @@ private Q_SLOTS:
     void stopItems();
 
     void jumpToSource(const QItemSelection& selected, const QItemSelection& deselected);
+    void selectAll();
+    void unselectAll();
 
 private: // Operations
 
@@ -198,6 +203,9 @@ private: // Operations
     // Copy and assignment not supported.
     RunnerWindow(const RunnerWindow&);
     RunnerWindow& operator=(const RunnerWindow&);
+    void displayElapsed() const;
+    void setRedBar() const;
+    void setGreenBar() const;
 
 private: // Attributes
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
@@ -209,8 +217,11 @@ private: // Attributes
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
+    QMap<KDevelop::IProject*, QAction*> m_project2action;
+
     ResultsModel* m_resultsModel;
     ResultsProxyModel* m_resultsProxyModel;
+    QTime m_stopWatch;
 };
 
 } // namespace

@@ -49,18 +49,20 @@ public:
 protected:
     /*! Reload the test tree.
      * To be implemented by concrete plugins. */
-    virtual Test* registerTests() = 0;
+    virtual void registerTests() = 0;
 
     KDevelop::IProject* project() const;
     virtual QString resultsViewId() = 0;
 
 Q_SIGNALS:
     void openVerbose(Veritas::Test*);
+    void registerFinished(Veritas::Test* root);
 
 private Q_SLOTS:
     void reload();
     void setSelected(QAction*);
     void removeResultsView();
+    void setupToolView(Veritas::Test*);
 
 private:
     void spawnResultsView();

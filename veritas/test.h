@@ -158,7 +158,6 @@ private: // Operations
     Test& operator=(const Test&);
 
 private: // Attributes
-    mutable Test* m_parentItem;
     QList<QVariant> m_itemData;
     QList<Test*> m_children;
     QMap<QString, Test*> m_childMap;

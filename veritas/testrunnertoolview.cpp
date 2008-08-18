@@ -97,6 +97,21 @@ TestViewData::TestViewData(QObject* parent)
     << i18n("File Name") << i18n("Line Number");
     d->resultsModel = new ResultsModel(resultHeaders, this);
     d->window = new RunnerWindow(d->resultsModel);
+
+    connect(this, SIGNAL(registerFinished(Veritas::Test*)),
+            this, SLOT(setupToolView(Veritas::Test*)));
+}
+
+void TestViewData::setupToolView(Veritas::Test* root)
+{
+    if (!root) { kDebug() << "root null"; return; }
+    RunnerModel* model = new RunnerModel;
+    model->setRootItem(root);
+    model->setExpectedResults(Veritas::RunError);
+    d->window->setModel(model);
+    d->window->runnerView()->setRootIsDecorated(false);
+    d->window->resetProgressBar();
+    spawnResultsView();
 }
 
 TestViewData::~TestViewData()
@@ -129,6 +144,7 @@ QWidget* TestViewData::runnerWidget()
 
     connect(d->window->projectPopup(), SIGNAL(triggered(QAction*)),
             this, SLOT(setSelected(QAction*)));
+
     connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
@@ -139,15 +155,10 @@ QWidget* TestViewData::runnerWidget()
 
 }
 
+/*! TODO rename this a bit. just make reload() pure virtual instead of registerTests */
 void TestViewData::reload()
 {
-    Test* root = registerTests(); // implemented by concrete plugins
-    RunnerModel* model = new RunnerModel;
-    model->setRootItem(qobject_cast<Test*>(root));
-    model->setExpectedResults(Veritas::RunError);
-    d->window->setModel(model);
-    d->window->runnerView()->setRootIsDecorated(false);
-    spawnResultsView();
+    registerTests(); // implemented by concrete plugins
 }
 
 IProject* TestViewData::project() const
@@ -157,6 +168,7 @@ IProject* TestViewData::project() const
 
 void TestViewData::setSelected(QAction* action)
 {
+    kDebug() << action->data().value<IProject*>();
     d->selectedProject = action->data().value<IProject*>();
 }
 
