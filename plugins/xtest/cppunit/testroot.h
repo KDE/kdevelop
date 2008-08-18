@@ -30,6 +30,8 @@
 namespace CppUnit
 {
 
+/*! Prime item in the test tree responsible for calling
+the executable */
 class TestRoot : public Veritas::Test
 {
 Q_OBJECT

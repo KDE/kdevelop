@@ -29,8 +29,10 @@
 namespace QTest
 {
 
-/*! Extra layer of indirection to get around ICore, IDocumentController, IDocument and KT::Document 
-    dependencies in tests. (and put the shiny new stub generator to good use :> ) */
+/*!
+Extra layer of indirection to work around ICore, IDocumentController, IDocument
+and KT::Document dependencies in tests. (and put the shiny new stub generator
+to good use :> ) */
 class QXQTEST_EXPORT DocumentAccess : public QObject
 {
 Q_OBJECT

@@ -33,6 +33,7 @@ namespace CppUnit
 
 class TestRoot;
 
+/*! Parses CppUnit XML output into TestResults */
 class OutputParser : public QXmlStreamReader
 {
 public:

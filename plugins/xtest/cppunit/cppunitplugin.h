@@ -28,6 +28,7 @@
 class CppUnitRunnerViewFactory;
 namespace Veritas { class Test; }
 
+/*! Makes the CppUnit runner available */
 class CppUnitPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT

@@ -25,6 +25,7 @@
 
 namespace Veritas { class Test; }
 
+/*! Assorted check toolview data and operation */
 class CheckViewData : public Veritas::TestViewData
 {
 Q_OBJECT

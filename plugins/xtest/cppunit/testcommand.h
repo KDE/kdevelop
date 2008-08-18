@@ -25,6 +25,8 @@
 #include <QtCore/QString>
 
 /*!
+ * Leaf item in the test tree.
+ *
  * This class removes bad duplication between the Check
  * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.

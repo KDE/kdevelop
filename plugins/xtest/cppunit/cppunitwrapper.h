@@ -18,6 +18,13 @@
  * 02110-1301, USA.
  */
 
+/*!
+Constructs a compatible CppUnit executable from CppUnit::TestSuite(s)
+through main macro's. See CPPUNIT_VERITAS_MAIN.
+This header is intended for users of the runner, not a part of the
+cppunit plugin.
+*/
+
 #ifndef CPPUNIT_WRAPPER_H
 #define CPPUNIT_WRAPPER_H
 

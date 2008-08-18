@@ -32,6 +32,9 @@ class KProcess;
 class QIODevice;
 
 /*!
+ * Retrieves and builds a Test Tree from an external executable's
+ * xml output.
+ *
  * This class removes bad duplication between the Check
  * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.

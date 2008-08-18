@@ -35,7 +35,10 @@ class SuiteBuilderRunner;
 namespace QTest
 {
 
-/*! @unittest QTest::Test::KDevRegisterTest */
+/*!
+Constructs a QTest tree based on KDevelop information retrieved from the
+build system.
+*/
 class QXQTEST_EXPORT KDevRegister : public IRegister, public KDevelop::IStatus
 {
 Q_OBJECT

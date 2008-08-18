@@ -32,7 +32,13 @@ namespace QTest
 {
 class QTestCase;
 
-/*! Recoverable QTest XML-output parser */
+/*!
+Interprets QTestLib executables' XML output. TestResults get reported.
+It is a recoverable XML parser. It will operate on incomplete XML streams
+and resume when data becomes available again.
+
+@unittest QTest::ut::QTestOutputParserTest
+*/
 class QTestOutputParser : public QObject, public QXmlStreamReader
 {
 Q_OBJECT

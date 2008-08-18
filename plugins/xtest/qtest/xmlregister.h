@@ -40,6 +40,8 @@ class QTestSuite;
 class QTestCase;
 class IRegister;
 
+/*! Reads a QTest suite's structure from XML. After parsing the root of the
+generated test tree is available through the 'root()' member function. */
 class XmlRegister : public IRegister, public QXmlStreamReader
 {
 public:

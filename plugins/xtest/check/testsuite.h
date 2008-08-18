@@ -32,6 +32,7 @@
 namespace Check
 {
 
+/*! Test aggregate item in the test tree. Contains TestCases */
 class TestSuite : public Veritas::Test
 {
 Q_OBJECT

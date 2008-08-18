@@ -41,6 +41,7 @@ class IProject;
 namespace Sublime { class View; }
 namespace Veritas { class Test; }
 
+/*! Makes the QTestRunner toolview available */
 class QTestPlugin : public KDevelop::IPlugin
 {
 Q_OBJECT

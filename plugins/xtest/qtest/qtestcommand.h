@@ -29,6 +29,8 @@ namespace QTest
 {
 class QTestCase;
 
+/*! Leaf item in the test tree. It represents a single test function, a
+private slot in the QTestCase. */
 class QTestCommand : public Veritas::Test
 {
 Q_OBJECT

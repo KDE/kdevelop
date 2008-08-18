@@ -26,9 +26,11 @@ namespace QTest
 
 class Executable;
 class QTestCase;
+
 /*!
 Construct a QTestCase and it's children from the output
-of a .shell QTest exe
+of a .shell QTest exe. This is an expensive operation since it
+involves invoking an external executable.
 
 @unittest QTest::Test::CaseBuilderTest
 */

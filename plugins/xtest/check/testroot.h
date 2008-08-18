@@ -30,6 +30,7 @@
 namespace Check
 {
 
+/*! Prime item in the Check Test Tree. Holds the executable */
 class TestRoot : public Veritas::Test
 {
 Q_OBJECT

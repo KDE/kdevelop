@@ -25,6 +25,7 @@
 
 namespace Veritas { class Test; }
 
+/*! Assorted test runner operations and data */
 class CppUnitViewData : public Veritas::TestViewData
 {
 Q_OBJECT

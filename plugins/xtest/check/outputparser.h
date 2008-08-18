@@ -31,6 +31,7 @@ namespace Check
 {
 class TestRoot;
 
+/*! Translates Check XML Output into TestResults */
 class OutputParser : public QXmlStreamReader
 {
 public:

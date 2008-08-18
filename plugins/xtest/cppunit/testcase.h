@@ -26,6 +26,8 @@
 #include <QtCore/QString>
 
 /*!
+ * Item in the test tree that contains TestCommands
+ *
  * This class removes bad duplication between the Check
  * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.

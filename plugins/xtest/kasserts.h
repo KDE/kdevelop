@@ -18,6 +18,8 @@
  * 02110-1301, USA.
  */
 
+/*! Various QTestLib convenience macros and toString printers */
+
 #ifndef QXQTEST_KASSERTS_H
 #define QXQTEST_KASSERTS_H
 

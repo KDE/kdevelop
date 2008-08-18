@@ -18,6 +18,13 @@
  * 02110-1301, USA.
  */
 
+/*!
+Constructs a compatible check executable for check Suite(s)
+through main macro's. See CHECK_VERITAS_MAIN.
+This header is intended for users of the runner, not a part of the
+check plugin.
+*/
+
 #ifndef CHECK_WRAPPER_H
 #define CHECK_WRAPPER_H
 

@@ -31,6 +31,7 @@
 namespace CppUnit
 {
 
+/*! Aggregate item in the test tree */
 class TestSuite : public Veritas::Test
 {
 Q_OBJECT

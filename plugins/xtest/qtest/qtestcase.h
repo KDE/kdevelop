@@ -38,6 +38,11 @@ class QTestSuite;
 class QTestOutputParser;
 class ISettings;
 
+/*!
+QTestLib test class item in the test tree. This will invoke the
+QTestLib executable.
+@unittest QTest::ut::QTestCaseTest
+*/
 class QTestCase : public Veritas::Test
 {
 Q_OBJECT

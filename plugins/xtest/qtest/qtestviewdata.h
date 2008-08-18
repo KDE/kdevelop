@@ -26,6 +26,7 @@
 namespace Veritas { class Test; }
 namespace QTest { class ISettings; }
 
+/*! Assorted qtest runner toolview data and operations */
 class QTestViewData : public Veritas::TestViewData
 {
 Q_OBJECT

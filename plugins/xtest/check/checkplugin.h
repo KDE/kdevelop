@@ -29,6 +29,7 @@ class CheckRunnerViewFactory;
 
 namespace Veritas { class Test; }
 
+/*! Test runner plugin for the Check C unit testing framework */
 class CheckPlugin : public KDevelop::IPlugin
 {
 Q_OBJECT

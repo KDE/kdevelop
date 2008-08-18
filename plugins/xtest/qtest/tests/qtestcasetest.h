@@ -28,6 +28,7 @@ namespace QTest
 {
 namespace ut {
 
+/*! @unitundertest QTest::QTestCase */
 class QTestCaseTest : public QObject
 {
     Q_OBJECT

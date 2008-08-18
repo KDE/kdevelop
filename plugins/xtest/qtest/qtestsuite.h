@@ -28,6 +28,10 @@
 namespace QTest
 {
 
+/*!
+Item in the test runner tree. Aggregates QTestCases.
+@unittest QTest::ut::QTestSuiteTest
+*/
 class QTestSuite : public Veritas::Test
 {
 Q_OBJECT

@@ -34,10 +34,13 @@ class CaseBuilder;
 class QTestSuite;
 class ISettings;
 
-/*! A job which constructs QTestCases and deduces it's child
-QTestCommands for a set of .shell executables. Also orders
+/*!
+Constructs QTestCases and deduces it's child QTestCommands for a set
+of .shell executables. Also orders these testcases into suites based
+on directory information. This is expensive so should not be run
+in the GUI thread.
 
-@unittest QTest::Test::SuiteBuilder
+@unittest QTest::Test::SuiteBuilderTest
 */
 class SuiteBuilder : public QObject
 {
