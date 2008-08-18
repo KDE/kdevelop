@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
