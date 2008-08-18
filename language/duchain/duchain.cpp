@@ -382,6 +382,7 @@ private:
     }
     
     if(allInfosConstant && m_environmentInfo.findIndex(EnvironmentInformationRequest(url))) {
+      ///@todo Find out why sometimes the data is constant although it's not in the repository(might be leaking memory)
       //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
       //need to save anything.
     }else{
