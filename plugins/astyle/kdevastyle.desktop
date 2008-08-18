@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Icon=kdevelop
+Comment=A plugin for formatting of sourcecode according to a specified set of rules
+Name=KDevAStyle
+GenericName=AStyle Plugin
+
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevastyle
+X-KDevelop-Version=6
+X-KDevelop-Properties=CodeEditing
+X-KDE-PluginInfo-Name=kdevastyle
+X-KDE-PluginInfo-Author=Cedric Pasteur, Matthias Hölzer-Klüpfel
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Category=Global
+#X-KDevelop-Interfaces=org.kdevelop.IRunProvider
