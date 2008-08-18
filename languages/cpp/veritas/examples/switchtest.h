@@ -15,6 +15,21 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+/*! Test - Unit Under Test code navigation example
+
+Purpose is to navigate quickly from a test to it's unit.
+
+KDevelop4 will read the switch target from the class'
+documentation string. If this is not present a heuristic
+based on naming conventions will try to resolve a switch
+candidate.
+
+First open both switch.h and switchtest.h in KDevelop4 to make
+sure the symbols are parsed. Next configure the switch shortcut
+in Settings -> Configure Shortcuts -> Switch Test/Unit Under Test.
+Hit this key combination to jump between switch.h and switchtest.h
+*/
+
 /*! @unitundertest SwitchExample */
 class SwitchExampleTest : public QObject
 {
