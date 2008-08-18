@@ -412,7 +412,10 @@ void ContextBrowserPlugin::updateViews()
 void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
 {
   m_useDeclaration = decl;
-m_updateTimer->start(highlightingTimeout);
+  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())
+    m_updateViews << core()->documentController()->activeDocument()->textDocument()->activeView();
+
+  m_updateTimer->start(highlightingTimeout);
 }
 
 void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
