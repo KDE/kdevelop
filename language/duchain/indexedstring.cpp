@@ -14,6 +14,8 @@
 #include "indexedstring.h"
 #include "repositories/stringrepository.h"
 
+#include <kurl.h>
+
 namespace KDevelop {
 //Using a function makes sure that initialization order cannot break anything
 static Repositories::StringRepository& globalStringRepository() {
@@ -40,13 +42,28 @@ IndexedString::IndexedString( char c ) {
   m_index = 0xffff0000 | c;
 }
 
+IndexedString::IndexedString( const KUrl& url ) {
+  QByteArray array(url.pathOrUrl().toUtf8());
+
+  const char* str = array.constData();
+
+  int size = array.size();
+
+  if(!size)
+    m_index = 0;
+  else if(size == 1)
+    m_index = 0xffff0000 | str[0];
+  else
+    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, size), size));
+}
+
 IndexedString::IndexedString( const QString& string ) {
   QByteArray array(string.toUtf8());
-  
+
   const char* str = array.constData();
-  
+
   int size = array.size();
-  
+
   if(!size)
     m_index = 0;
   else if(size == 1)
@@ -73,6 +90,12 @@ IndexedString::IndexedString( const QByteArray& str) {
     m_index = 0xffff0000 | str[0];
   else
     m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
+}
+
+KUrl IndexedString::toUrl() const {
+  KUrl url;
+  url.setUrl( str() );
+  return url;
 }
 
 QString IndexedString::str() const {

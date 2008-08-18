@@ -20,6 +20,7 @@
 #include "../languageexport.h"
 
 class QDataStream;
+class KUrl;
 
 namespace KDevelop {
 class IndexedString;
@@ -42,16 +43,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   explicit IndexedString( const char* str );
 
   explicit IndexedString( char c );
-  
+
   ///When the information is already available, try using the other constructor. This is expensive.
   explicit IndexedString( const QString& str );
 
   ///When the information is already available, try using the other constructor. This is expensive.
   explicit IndexedString( const QByteArray& str );
-  
+
   explicit IndexedString( unsigned int index ) : m_index(index) {
   }
-  
+
+  ///Creates an indexed string from a KUrl, this is expensive.
+  explicit IndexedString( const KUrl& url );
+
+  ///Re-construct a KUrl from this indexed string, the result can be used with the
+  ///KUrl-using constructor. This is expensive.
+  KUrl toUrl() const;
+
   inline unsigned int hash() const {
     return m_index;
   }
@@ -60,17 +68,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   inline unsigned int index() const {
     return m_index;
   }
-  
+
   bool isEmpty() const {
     return m_index == 0;
   }
-  
+
   //This is relatively expensive(needs a mutex lock, hash lookups, and eventual loading), so avoid it when possible.
   int length() const;
 
   ///Convenience function, avoid using it, it's relatively expensive
   QString str() const;
-  
+
   ///Convenience function, avoid using it, it's relatively expensive(les expensive then str() though)
   QByteArray byteArray() const;
 
@@ -81,12 +89,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   bool operator != ( const IndexedString& rhs ) const {
     return m_index != rhs.m_index;
   }
-  
+
   ///Does not compare alphabetically, uses the index  for ordering.
   bool operator < ( const IndexedString& rhs ) const {
     return m_index < rhs.m_index;
   }
-  
+
   //Use this to construct a hash-value on-the-fly
   //To read it, just use the hash member, and when a new string is started, call clear(.
   //This needs very fast performance(per character operation), so it must stay inlined.
@@ -94,7 +102,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
     enum {
       HashInitialValue = 5381
     };
-    
+
     RunningHash() : hash(HashInitialValue) { //We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
     }
     inline void append(const char c) {
