@@ -102,6 +102,11 @@ QString VcsCommitDialog::message() const
     return d->ui.message->toPlainText();
 }
 
+IBasicVersionControl* VcsCommitDialog::versionControlIface()
+{
+    return d->vcsiface;
+}
+
 void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
 {
     kDebug() << "Fetching status for urls:" << urls;

@@ -34,6 +34,7 @@ public:
     KUrl::List checkedUrls() const;
     bool recursive() const;
     QString message() const;
+    IBasicVersionControl* versionControlIface();
 Q_SIGNALS:
     void doCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );
