@@ -29,7 +29,8 @@
 namespace Veritas
 {
 
-/*! Lightweight struct which stores C++ Class information */
+/*! Lightweight struct which stores C++ Class information (simple AST)
+ *  It is intended to be used for code generation. */
 class VERITASCPP_EXPORT ClassSkeleton
 {
 public:

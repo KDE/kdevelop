@@ -29,6 +29,7 @@
 namespace Veritas
 {
 
+/*! Value class which stores a simplified AST for constructors methods */
 class VERITASCPP_EXPORT ConstructorSkeleton : public MethodSkeleton
 {
 public:

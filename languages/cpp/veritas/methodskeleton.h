@@ -30,6 +30,7 @@ namespace Veritas
 {
 enum Access { Public, Protected, Private };
 
+/*! Value class which stores a simplified AST for member functions */
 class VERITASCPP_EXPORT MethodSkeleton
 {
 public:

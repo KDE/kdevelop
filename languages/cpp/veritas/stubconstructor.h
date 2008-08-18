@@ -25,12 +25,10 @@
 #include "veritascppexport.h"
 #include "classskeleton.h"
 
-namespace KDevelop { class IDocument; class SimpleCursor; }
 namespace Cpp { class ClassDeclaration; }
 
 namespace Veritas
 {
-class DUCreationHelper;
 
 /*!
 Constructs a test fake sub class implementation for a given class.

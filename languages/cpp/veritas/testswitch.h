@@ -34,7 +34,7 @@ namespace Veritas
 {
 
 /*! Adds an action which allows for swapping between a test and its unit 
-    under test. Rather simplistic, for now. */
+    under test. */
 class VERITASCPP_EXPORT TestSwitch : public QObject
 {
 Q_OBJECT
