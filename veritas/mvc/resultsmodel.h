@@ -19,12 +19,6 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  resultsmodel.h
- *
- * \brief Declares class ResultsModel.
- */
-
 #ifndef VERITAS_RESULTSMODEL_H
 #define VERITAS_RESULTSMODEL_H
 

@@ -37,6 +37,7 @@ namespace Veritas
  * for one second.
  *
  * @see VerboseManager
+ * @todo extract common code with selectiontoggle
  */
 class VerboseToggle : public QAbstractButton
 {

@@ -44,6 +44,8 @@ enum TestState
 const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunException;
 
 class TestResultPrivate;
+
+/*! Holds state, descriptive message and location of a single Test */
 class VERITAS_EXPORT TestResult
 {
 public:

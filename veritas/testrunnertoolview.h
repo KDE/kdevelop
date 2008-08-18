@@ -31,6 +31,10 @@ namespace Veritas
 {
 class Test;
 class TestViewDataPrivate;
+
+/*! Test runner toolview data and assorted operations. This
+ * is intended to be subclasses by concrete framework runner
+ * implementations, eg QTestViewData, CppUnitViewData etc . */
 class VERITAS_EXPORT TestViewData : public QObject
 {
 Q_OBJECT

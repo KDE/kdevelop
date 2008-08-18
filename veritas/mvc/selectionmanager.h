@@ -40,6 +40,7 @@ class Test;
  *
  * Whenever an item is hovered by the mouse, a toggle button is shown
  * which allows to select/deselect the current item.
+ * @todo move common parts with verbosemanager
  */
 class SelectionManager : public QObject
 {

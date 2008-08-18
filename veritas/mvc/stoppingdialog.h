@@ -44,6 +44,7 @@ class RunnerModel;
  * without the dialog being visible on the screen. If not successful
  * at first attempt the dialog is shown to the user to give a visual
  * hint as well as a chance to interrupt the stopping.
+ * @todo deprecated, remove
  */
 
 class StoppingDialog : public QDialog

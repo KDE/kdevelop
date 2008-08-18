@@ -39,8 +39,8 @@ namespace Veritas
  * must be subclassed.
  *
  * \sa \ref views
+ * @todo cleanup
  */
-
 class ViewControllerCommon : public QObject
 {
 Q_OBJECT
