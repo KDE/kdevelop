@@ -82,6 +82,7 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent* event);
+    bool eventFilter(QObject* obj, QEvent* event);
 
 private:
     friend class ReportViewFactory;

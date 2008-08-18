@@ -58,6 +58,7 @@ private Q_SLOTS:
 private:
     bool isBusy();
     void animateSlide(int moveDirection);
+    int maxWidth() const;
 
 private:
     QTimeLine animation;

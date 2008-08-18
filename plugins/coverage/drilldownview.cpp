@@ -23,6 +23,7 @@
 #include <KDebug>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
+#include <QAbstractScrollArea>
 
 using Veritas::DrillDownView;
 
@@ -40,6 +41,11 @@ DrillDownView::DrillDownView(QWidget *parent)
     verticalHeader()->hide();
     setSortingEnabled(true);
     horizontalHeader()->resizeSection(0, width());
+
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    resizeDirStateColumns();
 }
 
 DrillDownView::~DrillDownView()
@@ -104,13 +110,24 @@ void DrillDownView::resizeFileStateColumns()
     header->resizeSection(1, 75);
     header->resizeSection(2, 75);
     header->resizeSection(3, 75);
-    header->resizeSection(0, (width()-225-20 > 75) ? width()-225-20 : 75);
+    header->resizeSection(0, (maxWidth()-225 > 75) ? maxWidth()-225 : 75);
+}
+
+int DrillDownView::maxWidth() const
+{
+    QScrollBar* vertbar = verticalScrollBar();
+    Q_ASSERT(vertbar);
+    int width = maximumViewportSize().width();
+    if (vertbar->isVisible()) {
+        width = width - vertbar->width();
+    }
+    return width - 5;
 }
 
 void DrillDownView::resizeDirStateColumns()
 {
     horizontalHeader()->resizeSection(1, 20);
-    horizontalHeader()->resizeSection(0, width()-55);
+    horizontalHeader()->resizeSection(0, maxWidth() - 20);
 }
 
 void DrillDownView::slideRight(const QModelIndex& current)

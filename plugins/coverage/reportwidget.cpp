@@ -104,27 +104,27 @@ QString ReportViewFactory::id() const
 }
 
 void ReportViewFactory::viewCreated(Sublime::View* v)
-{
-    // this is not good.
-    QTimer* t = new QTimer;
-    t->setSingleShot(true);
-    if (!v->widget()) return;
-    ReportWidget* w = dynamic_cast<ReportWidget*>(v->widget());
-    if (!w) return;
-    QObject::connect(t, SIGNAL(timeout()),
-            w->table(), SLOT(resizeDirStateColumns()));
-    t->start(50);    
-}
+{}
 
 //////////////////////////////// ReportWidget ///////////////////////////////
 
 void ReportWidget::resizeEvent(QResizeEvent* event)
 {
+    installEventFilter(this);
     switch(m_state) {
     case DirView: { table()->resizeDirStateColumns(); break; }
     case FileView: { table()->resizeFileStateColumns(); break; }
     default: { Q_ASSERT(0); }
     }
+    removeEventFilter(this);
+}
+
+bool ReportWidget::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type()==QEvent::Resize) {
+        return true;
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 DrillDownView* ReportWidget::table() const
@@ -177,12 +177,7 @@ void ReportWidget::init()
     gl->addWidget(m_sloc, 3, FIRST_COL+1);
     gl->addItem(s2, 0, 3, 4, 1);
 
-    QScrollArea* scroll = new QScrollArea;
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scroll->setWidget(table());
-    scroll->setWidgetResizable(true);
-    l->addWidget(scroll);
+    l->addWidget(table());
     setLayout(l);
 
     connect(table()->selectionModel(),

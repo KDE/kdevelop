@@ -26,16 +26,25 @@ using Veritas::CoveredFile;
 
 
 AnnotationModel::AnnotationModel(CoveredFile* file, QObject* parent)
-    : m_file(file),
-      m_notInstrumented(QBrush(Qt::BDiagPattern)),
+    : m_notInstrumented(QBrush(Qt::BDiagPattern)),
       m_noCoverage(QBrush(Qt::red)),
       m_covered(QBrush(Qt::green))
 {
     setParent(parent);
+    m_file = new CoveredFile;
+    m_file->setUrl(file->url());
+    QMap<int, int> cc = file->callCountMap();
+    QMapIterator<int, int> it(cc);
+    while(it.hasNext()) {
+        it.next();
+        m_file->setCallCount(it.key(), it.value());
+    }
 }
 
 AnnotationModel::~AnnotationModel()
-{}
+{
+    delete m_file;
+}
 
 /**
   * data() is used to retrieve the information needed to present the

@@ -48,7 +48,9 @@ AnnotationManager::AnnotationManager(QObject* parent)
 
 AnnotationManager::~AnnotationManager()
 {
-    foreach(CoveredFile* f, m_files) delete f;
+    foreach(CoveredFile* f, m_files) {
+        delete f;
+    }
 }
 
 void AnnotationManager::connectKDocWithTextDoc(KDevelop::IDocument* doc)
