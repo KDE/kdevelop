@@ -364,7 +364,7 @@ void KDevVcsCommonPlugin::commit()
     {
         KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog( plugin->extension<KDevelop::IBasicVersionControl>(), core()->uiController()->activeMainWindow() );
         dlg->setCommitCandidates( m_ctxUrls.value( plugin ) );
-        KConfigGroup vcsGroup( KGlobal::config(), "VcsCommon" );
+        KConfigGroup vcsGroup( KSharedConfig::openConfig( componentData() ), "VcsCommon" );
         dlg->setOldMessages( vcsGroup.readEntry( "OldCommitMessages", QStringList() ) );
         dlg->setRecursive( true );
         connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
@@ -376,7 +376,7 @@ void KDevVcsCommonPlugin::commit()
 void KDevVcsCommonPlugin::executeCommit( KDevelop::VcsCommitDialog* dlg )
 {
     KDevelop::IBasicVersionControl* iface = dlg->versionControlIface();
-    KConfigGroup vcsGroup( KGlobal::config(), "VcsCommon" );
+    KConfigGroup vcsGroup( KSharedConfig::openConfig( componentData() ), "VcsCommon" );
     QStringList oldMessages = vcsGroup.readEntry( "OldCommitMessages", QStringList() );
     oldMessages << dlg->message();
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
