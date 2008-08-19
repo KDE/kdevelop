@@ -93,14 +93,14 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
 
     QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
     QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::Hidden | QDir::System );
-    
+
     entries.removeAll(".");
     entries.removeAll("..");
-    
+
     if( folderitem )
     {
         kDebug(9024) << "Item is a qmakefolder:";
-    
+
         foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
         {
             kDebug(9024) << "adding subproject:" << subproject->absoluteDir();
@@ -125,10 +125,11 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                 }
                 kDebug(9024) << "adding file:" << u;
                 new KDevelop::ProjectFileItem( item->project(), u, target );
+                item->project()->addToFileSet( u );
             }
         }
     }
-    
+
     foreach( QString entry, entries )
     {
         if( item->hasFileOrFolder( entry ) )
@@ -144,7 +145,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
             new KDevelop::ProjectFileItem( folderitem->project(), folderurl, folderitem );
         }
     }
-    
+
 //     kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
 //     new KDevelop::ProjectFileItem( item->project(),
 //                                    KUrl( folderitem->projectFile()->absoluteFile() ),
