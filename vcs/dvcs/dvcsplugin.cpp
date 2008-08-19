@@ -377,9 +377,9 @@ KDevelop::ContextMenuExtension
     QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
-//         action = new KAction(i18n("Commit..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Commit..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
+        menu->addAction(action);
 //
 //         action = new KAction(i18n("Add"), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
