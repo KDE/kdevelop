@@ -22,6 +22,7 @@
 #define CONTEXTMENUEXTENSION_H
 
 #include <QtCore/QString>
+#include <QtCore/QList>
 
 #include "interfacesexport.h"
 

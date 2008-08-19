@@ -30,7 +30,6 @@ ICore::ICore(QObject *parent)
 {
     Q_ASSERT(m_self == 0);
     m_self = this;
-    ScriptingManager::self()->registerCore(this);
 }
 
 ICore::~ICore()

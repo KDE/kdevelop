@@ -37,14 +37,14 @@ public:
 
     /** @return the currently active languages loaded for the currently active file.
     The list is empty if the file's language is unsupported. */
-    virtual QList<ILanguage*>activeLanguages() = 0;
+    Q_SCRIPTABLE virtual QList<ILanguage*>activeLanguages() = 0;
     /** @return the language for given @p name. */
-    virtual ILanguage* language(const QString &name) const = 0;
+    Q_SCRIPTABLE virtual ILanguage* language(const QString &name) const = 0;
     /** @return the languages that support the MIME type of @p url. */
-    virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
+    Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
 
     /** @return the background parser used to parse source files */
-    virtual BackgroundParser *backgroundParser() const = 0;
+    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;
 };
 
 }

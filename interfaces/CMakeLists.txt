@@ -18,9 +18,9 @@ set(kdevplatforminterfaces_LIB_SRCS
     iruncontroller.cpp
     irunprovider.cpp
     contextmenuextension.cpp
-    scripting/scriptdocument.cpp
-    scripting/scripttools.cpp
-    scripting/scriptingmanager.cpp
+    #scripting/scriptdocument.cpp
+    #scripting/scripttools.cpp
+    #scripting/scriptingmanager.cpp
 )
 
 
