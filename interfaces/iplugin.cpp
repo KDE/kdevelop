@@ -142,11 +142,6 @@ IPlugin::~IPlugin()
     delete d;
 }
 
-bool IPlugin::isCentralPlugin() const
-{
-    return false;
-}
-
 void IPlugin::unload()
 {
     ICore::self()->pluginController()->pluginUnloading(this);

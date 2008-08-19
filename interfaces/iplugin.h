@@ -145,13 +145,6 @@ public:
     virtual ~IPlugin();
 
     /**
-     * Tells @ref MainWindow whether to display this plugin as the central widget when
-     * in top-level UI mode. The default implementation returns false.
-     * @return true if this plugin should be the central widget, false if it should not.
-     */
-    Q_SCRIPTABLE virtual bool isCentralPlugin() const;
-
-    /**
      * Signal the plugin that it should cleanup since it will be unloaded soon.
      */
     Q_SCRIPTABLE virtual void unload();
