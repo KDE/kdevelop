@@ -484,14 +484,14 @@ IPlugin* Project::versionControlPlugin() const
 }
 
 
-void Project::addToFileSet( const IndexedString& file )
+void Project::addToFileSet( const KUrl& file )
 {
-    d->fileSet.insert( file );
+    d->fileSet.insert( IndexedString( file ) );
 }
 
-void Project::removeFromFileSet( const IndexedString& file )
+void Project::removeFromFileSet( const KUrl& file )
 {
-    d->fileSet.remove( file );
+    d->fileSet.remove( IndexedString( file ) );
 }
 
 QSet<IndexedString> Project::fileSet() const

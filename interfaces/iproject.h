@@ -121,8 +121,8 @@ public:
     Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 
-    virtual void addToFileSet( const IndexedString& ) = 0;
-    virtual void removeFromFileSet( const IndexedString& ) = 0;
+    virtual void addToFileSet( const KUrl& ) = 0;
+    virtual void removeFromFileSet( const KUrl& ) = 0;
     virtual QSet<IndexedString> fileSet() const = 0;
 
 //     virtual void setLocalFile( const KUrl& ) = 0;
