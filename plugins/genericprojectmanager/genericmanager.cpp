@@ -22,6 +22,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <language/duchain/indexedstring.h>
 
 #include <kdebug.h>
 #include <kpluginloader.h>
@@ -111,7 +112,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
         else if ( fileInfo.isFile() )
         {
              new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
-             item->project()->addToFileSet( KUrl( fileInfo.absoluteFilePath() ) );
+             item->project()->addToFileSet( KDevelop::IndexedString( fileInfo.absoluteFilePath() ) );
         }
     }
 
