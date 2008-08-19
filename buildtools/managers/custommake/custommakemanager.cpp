@@ -197,7 +197,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
             KUrl fileUrl( absFilePath );
             KDevelop::ProjectFileItem *fileItem =
                 new KDevelop::ProjectFileItem( item->project(), fileUrl, item );
-
+            item->project()->addToFileSet( fileUrl );
             if( topItem && fileName == QString("Makefile") )
             {
                 topItem->fsWatcher()->addFile( absFilePath, fileItem );
