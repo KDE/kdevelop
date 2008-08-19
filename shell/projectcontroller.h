@@ -51,7 +51,7 @@ public:
     virtual ProjectModel* projectModel();
     virtual IProject* findProjectByName( const QString& name );
     IProject* findProjectForUrl( const KUrl& ) const;
-
+    void addProject(IProject*);
 //     IProject* currentProject() const;
 
 public Q_SLOTS:

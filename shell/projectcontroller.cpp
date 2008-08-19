@@ -153,7 +153,7 @@ ProjectController::ProjectController( Core* core )
     QString workspaceMetadataFile = KGlobal::dirs()->findResource("data", workspacename+"Workspace/"+workspacename);
     d->workspaceitem = new WorkspaceItem( workspacename, workspaceMetadataFile );
     d->model->insertRow( 0, d->workspaceitem );
-    setupActions();
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
 }
@@ -527,6 +527,12 @@ bool ProjectController::configureProject( IProject* project )
     d->projectConfig( project );
     return true;
 }
+
+void ProjectController::addProject(IProject* project)
+{
+    d->m_projects.append( project );
+}
+
 
 }
 

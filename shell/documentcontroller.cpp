@@ -154,7 +154,7 @@ DocumentController::DocumentController( QObject *parent )
 
     connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
 
-    setupActions();
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
 void KDevelop::DocumentController::initialize()

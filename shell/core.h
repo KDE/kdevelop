@@ -35,9 +35,11 @@ class RunController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
-    static void initialize();
+    enum Setup { Default=0, NoUi=1 };
+    
+    static void initialize(Setup mode=Default);
     static Core *self();
-
+    
     virtual ~Core();
 
     /** @copydoc ICore::uiController() */
@@ -85,6 +87,8 @@ public:
     RunController *runControllerInternal();
 
     void cleanup();
+    
+    Core::Setup setupFlags() const;
 
 private:
     Core(QObject *parent = 0);

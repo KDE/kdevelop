@@ -76,9 +76,16 @@ public:
         a->setDesiredToolViews(desired);
         controller->addDefaultArea(a);
 
-        defaultMainWindow = new MainWindow(controller);
-        controller->addMainWindow(defaultMainWindow);
-        activeSublimeWindow = defaultMainWindow;
+        if(!(Core::self()->setupFlags() & Core::NoUi)) 
+        {
+            defaultMainWindow = new MainWindow(controller);
+            controller->addMainWindow(defaultMainWindow);
+            activeSublimeWindow = defaultMainWindow;
+        }
+        else
+        {
+            activeSublimeWindow = defaultMainWindow = 0;
+        }
     }
 
     void widgetChanged(QWidget*, QWidget* now)

@@ -51,20 +51,22 @@ struct CorePrivate {
     CorePrivate(Core *core): m_core(core), m_cleanedUp(false)
     {
     }
-    void initialize()
+    
+    void initialize(Core::Setup mode)
     {
-	kDebug() << "Creating ui controller";
+        m_mode=mode;
+        kDebug() << "Creating ui controller";
         uiController = new UiController(m_core);
-	kDebug() << "Creating plugin controller";
+        kDebug() << "Creating plugin controller";
         pluginController = new PluginController(m_core);
-        partController = new PartController(m_core, uiController->defaultMainWindow());
+        if(!(mode & Core::NoUi)) partController = new PartController(m_core, uiController->defaultMainWindow());
         projectController = new ProjectController(m_core);
         languageController = new LanguageController(m_core);
         documentController = new DocumentController(m_core);
         runController = new RunController(m_core);
 
-	kDebug() << "initializing ui controller";
-        uiController->initialize();
+        kDebug() << "initializing ui controller";
+        if(!(mode & Core::NoUi)) uiController->initialize();
         languageController->initialize();
         projectController->initialize();
         documentController->initialize();
@@ -78,14 +80,17 @@ struct CorePrivate {
            tool views to a list of available tool view, and then grab
            those tool views when loading an area.  */
 
-	kDebug() << "loading global plugin";
+        kDebug() << "loading global plugin";
         pluginController->loadPlugins( PluginController::Global );
 
-        /* Need to do this after everything else is loaded.  It's too
-           hard to restore position of views, and toolbars, and whatever
-           that are not created yet.  */
-        uiController->loadAllAreas(KGlobal::config());
-        uiController->defaultMainWindow()->show();
+        if(!(mode & Core::NoUi))
+        {
+            /* Need to do this after everything else is loaded.  It's too
+               hard to restore position of views, and toolbars, and whatever
+               that are not created yet.  */
+            uiController->loadAllAreas(KGlobal::config());
+            uiController->defaultMainWindow()->show();
+        }
     }
     ~CorePrivate()
     {
@@ -108,15 +113,16 @@ struct CorePrivate {
 
     Core *m_core;
     bool m_cleanedUp;
+    Core::Setup m_mode;
 };
 
-void Core::initialize()
+void Core::initialize(Setup mode)
 {
     if (m_self)
         return;
 
     m_self = new Core();
-    m_self->d->initialize();
+    m_self->d->initialize(mode);
 }
 
 Core *KDevelop::Core::self()
@@ -135,6 +141,11 @@ Core::~Core()
     kDebug() ;
     //Cleanup already called before mass destruction of GUI
     delete d;
+}
+
+Core::Setup Core::setupFlags() const
+{
+    return d->m_mode;
 }
 
 void Core::cleanup()

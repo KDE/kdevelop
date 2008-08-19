@@ -62,7 +62,7 @@ RunController::RunController(QObject *parent)
     d->state = Idle;
     d->delegate = new QItemDelegate(this);
 
-    setupActions();
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
 KJob* RunController::execute(const IRun & run)
