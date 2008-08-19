@@ -19,26 +19,25 @@
  */
 
 #include "qtestoutputparsertest.h"
-#include <qtestoutputparser.h>
-#include <qtestcase.h>
-#include <qtestcommand.h>
-#include <qtest_kde.h>
-#include <kasserts.h>
+#include "../qtestoutputparser.h"
+#include "../qtestcase.h"
+#include "../qtestcommand.h"
+
+#include "kdevtest.h"
+
 #include <QBuffer>
 #include <QMetaType>
 #include <QFileInfo>
 #include <QVariant>
 #include <QModelIndex>
-#include <KDebug>
 #include <QAbstractListModel>
 
 using QTest::QTestOutputParser;
 using QTest::QTestCase;
 using QTest::QTestCommand;
-using Veritas::Test;
 using Veritas::TestResult;
 
-using QTest::ut::QTestOutputParserTest;
+using QTest::Test::QTestOutputParserTest;
 
 Q_DECLARE_METATYPE(QFileInfo)
 Q_DECLARE_METATYPE(Veritas::TestState)
@@ -115,7 +114,7 @@ class FakeModel : public QAbstractListModel
             test->setIndex(i);
             return i;
         }
-        Test* test;
+        Veritas::Test* test;
 };
 }
 
@@ -381,13 +380,16 @@ void QTestOutputParserTest::doubleFailure()
 
 /////////////// CUSTOM ASSERTIONS ////////////////////////////////////////////
 
+#include <veritas/test.h>
+using Veritas::Test;
+
 // custom assertion
 void QTestOutputParserTest::checkResult(TestInfo& testInfo)
 {
     kDebug() << testInfo.test->name();
 
     QModelIndex i = testInfo.finished->first().value(0).value<QModelIndex>();
-    Test* test = static_cast<Test*>(i.internalPointer());
+    Veritas::Test* test = static_cast<Veritas::Test*>(i.internalPointer());
     TestResult* actual = test->result();
     TestResult* expected = testInfo.result;
     assertResult(expected, actual);
@@ -400,7 +402,7 @@ void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
 
     QSignalSpy* started = testInfo.started;
     QSignalSpy* completed = testInfo.finished;
-    Test* test = testInfo.test;
+    Veritas::Test* test = testInfo.test;
 
     KOMPARE_MSG(1, started->count(),
         QString("OutputParser did not emit started signal for ") + test->name());
@@ -410,8 +412,8 @@ void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
     QModelIndex i1 = completed->first().value(0).value<QModelIndex>();
     QModelIndex i2 = started->first().value(0).value<QModelIndex>();
 
-    KOMPARE(test, static_cast<Test*>(i1.internalPointer()));
-    KOMPARE(test, static_cast<Test*>(i2.internalPointer()));
+    KOMPARE(test, static_cast<Veritas::Test*>(i1.internalPointer()));
+    KOMPARE(test, static_cast<Veritas::Test*>(i2.internalPointer()));
 }
 
 void QTestOutputParserTest::assertResult(TestResult* expected, TestResult* actual)

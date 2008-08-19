@@ -19,14 +19,14 @@
  */
 
 #include "qtestcasetest.h"
-#include <kasserts.h>
-#include <KDebug>
-#include <qtest_kde.h>
-#include <qtestcommand.h>
+#include "../qtestcommand.h"
+#include "../qtestcase.h"
+
+#include "kdevtest.h"
 
 using QTest::QTestCase;
 using QTest::QTestCommand;
-using QTest::ut::QTestCaseTest;
+using QTest::Test::QTestCaseTest;
 
 namespace
 {

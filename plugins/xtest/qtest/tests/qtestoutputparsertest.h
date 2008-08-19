@@ -23,27 +23,15 @@
 
 #include <QtTest/QtTest>
 #include <veritas/testresult.h>
+#include <veritas/test.h>
 
 class QSignalSpy;
 
-namespace QTest
-{
+namespace QTest {
 class QTestCase;
 class QTestCommand;
 class QTestOutputParser;
-}
-
-namespace Veritas
-{
-class Test;
-}
-
-using Veritas::Test;
-using Veritas::TestResult;
-
-namespace QTest
-{
-namespace ut {
+namespace Test {
 
 // TODO this test is far from sufficient.
 //      need to add some slow-updating XML chunks
@@ -73,8 +61,8 @@ private:
 
     // custom assertions
     void assertParsed(TestInfo& testInfo);
-    void assertResult(const TestResult& expected, const TestResult& actual);
-    void assertResult(TestResult* expected, TestResult* actual);
+    void assertResult(const Veritas::TestResult& expected, const Veritas::TestResult& actual);
+    void assertResult(Veritas::TestResult* expected, Veritas::TestResult* actual);
     void checkResult(TestInfo& testInfo);
 
     // creation methods
@@ -97,7 +85,7 @@ private:
         Veritas::Test* test;
         QSignalSpy* started;
         QSignalSpy* finished;
-        TestResult* result;
+        Veritas::TestResult* result;
     };
 
     TestInfo m_cazeInfo;
@@ -105,7 +93,6 @@ private:
     TestInfo m_command2Info;
 };
 
-}
-}
+}}
 
 #endif // QXQTEST_QTESTOUTPUTPARSERTEST

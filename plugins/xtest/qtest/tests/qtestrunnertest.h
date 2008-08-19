@@ -26,9 +26,7 @@
 class QAbstractItemModel;
 namespace Veritas { class RunnerWindow; }
 
-namespace QTest
-{
-namespace it {
+namespace QTest { namespace Test {
 
 // TODO this test requires too much maintenance + is accessing
 //      private parts of Veritas. Should get rid of it, but first
@@ -58,8 +56,7 @@ private:
     QAbstractItemModel* m_resultModel;
 };
 
-}
-}
+}}
 
 
 #endif // QXQTEST_QTESTRUNNERTEST_H

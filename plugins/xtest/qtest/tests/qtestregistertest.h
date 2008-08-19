@@ -23,21 +23,13 @@
 
 #include <QtTest/QtTest>
 
-namespace QTest
-{
+namespace Veritas { class Test; }
+
+namespace QTest {
 class XmlRegister;
 class QTestSuite;
 class QTestCase;
-}
-
-namespace Veritas
-{
-class Test;
-}
-
-namespace QTest
-{
-namespace ut {
+namespace Test {
 
 class QTestRegisterTest : public QObject
 {
@@ -64,7 +56,6 @@ private: // helpers
     Veritas::Test* registerTests(QByteArray& xml);
 };
 
-}
-}
+}}
 
 #endif // QXQTEST_QTESTREGISTERTEST_H

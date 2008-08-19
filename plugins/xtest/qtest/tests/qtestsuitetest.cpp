@@ -26,7 +26,7 @@
 
 using QTest::QTestSuite;
 using QTest::QTestCase;
-using QTest::ut::QTestSuiteTest;
+using QTest::Test::QTestSuiteTest;
 
 namespace
 {

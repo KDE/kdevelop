@@ -23,7 +23,7 @@
 #include <kasserts.h>
 #include <qtest_kde.h>
 
-using QTest::ut::QTestOutputMorpherTest;
+using QTest::Test::QTestOutputMorpherTest;
 using QTest::QTestOutputMorpher;
 
 // data-command. parse_data() member declared under the actual data.

@@ -23,9 +23,7 @@
 
 #include <QtTest/QtTest>
 
-namespace QTest
-{
-namespace ut {
+namespace QTest { namespace Test {
 
 class QTestOutputMorpherTest : public QObject
 {
@@ -35,7 +33,6 @@ private slots:
     void parse_data();
 };
 
-}
-}
+}}
 
 #endif // QTEST_QTESTOUTPUTMORPHERTEST

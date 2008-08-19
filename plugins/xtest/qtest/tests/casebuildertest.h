@@ -24,11 +24,13 @@
 #include <QtCore/QObject>
 #include <QStringList>
 
-namespace QTest { class CaseBuilder; class QTestCase; class QTestCommand; }
 namespace Veritas { class Test; }
 
-namespace QTest { namespace Test
-{
+namespace QTest {
+class CaseBuilder;
+class QTestCase;
+class QTestCommand;
+namespace Test {
 
 class ExecutableStub;
 /*! @unitundertest QTest::CaseBuilder */

@@ -39,7 +39,7 @@ using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
 using Veritas::ResultsModel;
 using QTest::XmlRegister;
-using QTest::it::QTestRunnerTest;
+using QTest::Test::QTestRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
 

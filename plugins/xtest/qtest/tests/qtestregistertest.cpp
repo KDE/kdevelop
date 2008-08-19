@@ -31,12 +31,11 @@
 #include <QFileInfo>
 #include <QBuffer>
 
-using Veritas::Test;
 using QTest::XmlRegister;
 using QTest::QTestSuite;
 using QTest::QTestCase;
 using QTest::QTestCommand;
-using QTest::ut::QTestRegisterTest;
+using QTest::Test::QTestRegisterTest;
 
 // <?xml version="1.0" encoding="ISO-8859-1"?>
 // <root>
@@ -53,7 +52,7 @@ using QTest::ut::QTestRegisterTest;
 
 namespace QTest
 {
-    template<> inline char* toString(const Test& tb)
+    template<> inline char* toString(const Veritas::Test& tb)
     {
         return qstrdup(tb.name().toLatin1().constData());
     }
@@ -96,7 +95,7 @@ void QTestRegisterTest::compareSuites(QTestSuite* exp, QTestSuite* actual)
 void QTestRegisterTest::parseSuiteXml()
 {
     QByteArray xml = headerXml + suite1Xml + footerXml;
-    Test* root = registerTests(xml);
+    Veritas::Test* root = registerTests(xml);
 
     KOMPARE(1, root->childCount());
     QTestSuite* expected = new QTestSuite("suite1", QFileInfo("/a/b"), root);
@@ -107,7 +106,7 @@ void QTestRegisterTest::parseSuiteXml()
 void QTestRegisterTest::parseMultiSuitesXml()
 {
     QByteArray xml = headerXml + suite1Xml + suite2Xml + footerXml;
-    Test* root = registerTests(xml);
+    Veritas::Test* root = registerTests(xml);
 
     KOMPARE(2, root->childCount());
     // suite1
@@ -132,7 +131,7 @@ void QTestRegisterTest::compareCase(QTestCase* expected, QTestCase* actual)
 void QTestRegisterTest::parseCaseXml()
 {
     QByteArray xml = headerXml + suiteStart + caze1 + suiteEnd + footerXml;
-    Test* root = registerTests(xml);
+    Veritas::Test* root = registerTests(xml);
 
     QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     KOMPARE(1, suite->childCount());
@@ -143,7 +142,7 @@ void QTestRegisterTest::parseCaseXml()
 void QTestRegisterTest::parseMultiCaseXml()
 {
     QByteArray xml = headerXml + suiteStart + caze1 + caze2 + suiteEnd + footerXml;
-    Test* root = registerTests(xml);
+    Veritas::Test* root = registerTests(xml);
 
     QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));
     KOMPARE(2, suite->childCount());
@@ -171,7 +170,7 @@ void QTestRegisterTest::parseCmdXml()
 void QTestRegisterTest::parseMultiCmdXMl()
 {
     QByteArray xml = headerXml + suiteStart + cazeStart + cmd1 + cmd2 + cazeEnd + suiteEnd + footerXml;
-    Test* root = registerTests(xml);
+    Veritas::Test* root = registerTests(xml);
 
     KOMPARE(1, root->childCount());
     QTestSuite* suite = qobject_cast<QTestSuite*>(root->child(0));

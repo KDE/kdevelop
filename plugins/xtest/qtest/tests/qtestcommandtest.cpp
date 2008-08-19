@@ -28,7 +28,7 @@
 using QTest::QTestSuite;
 using QTest::QTestCase;
 using QTest::QTestCommand;
-using QTest::ut::QTestCommandTest;
+using QTest::Test::QTestCommandTest;
 
 void QTestCommandTest::construct()
 {

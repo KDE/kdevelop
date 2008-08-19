@@ -25,5 +25,6 @@
 #include <qtest_kde.h>
 #include <QtTest/QTest>
 #include "../../kasserts.h"
+#include <KDebug>
 
 #endif // KDEVELOP_KDEVTEST_H_INCLUDED

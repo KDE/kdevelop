@@ -24,9 +24,7 @@
 #include <QtTest/QtTest>
 #include <qtestsuite.h>
 
-namespace QTest
-{
-namespace ut {
+namespace QTest { namespace Test {
 
 /*! @unitundertest QTest::QTestSuite */
 class QTestSuiteTest : public QObject
@@ -46,7 +44,6 @@ private:
     QTest::QTestSuite* m_suite;
 };
 
-}
-}
+}}
 
 #endif // QXQTEST_QTESTSUITETEST_H

@@ -21,12 +21,12 @@
 #ifndef QXQTEST_QTESTCASETEST_H
 #define QXQTEST_QTESTCASETEST_H
 
-#include <QtTest/QtTest>
-#include <qtestcase.h>
+#include <QObject>
+#include <QFileInfo>
 
-namespace QTest
-{
-namespace ut {
+namespace QTest {
+class QTestCase;
+namespace Test {
 
 /*! @unitundertest QTest::QTestCase */
 class QTestCaseTest : public QObject
@@ -45,7 +45,6 @@ private:
     QTest::QTestCase* m_case;
 };
 
-}
-}
+}}
 
 #endif // QXQTEST_QTESTCASETEST_H

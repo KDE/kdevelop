@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "qtestcase.h"
+//#include "qtestcase.h"
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
