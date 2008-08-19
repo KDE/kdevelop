@@ -20,9 +20,9 @@ class KrossKDevelopIndexedIdentifier : public QObject, public Kross::WrapperInte
 		Q_SCRIPTABLE bool operator==(const KDevelop::Identifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool isEmpty() const { return wrapped->isEmpty(); }
 		Q_SCRIPTABLE KDevelop::Identifier identifier() const { return wrapped->identifier(); }
-		Q_PROPERTY(int  index READ getindex WRITE setindex SCRIPTABLE true)
-		Q_SCRIPTABLE void setindex(const int  val) { wrapped->index=val; }
-		Q_SCRIPTABLE int  getindex() const { return wrapped->index; }
+		Q_PROPERTY(unsigned int  index READ getindex WRITE setindex SCRIPTABLE true)
+		Q_SCRIPTABLE void setindex(const unsigned int  val) { wrapped->index=val; }
+		Q_SCRIPTABLE unsigned int  getindex() const { return wrapped->index; }
 	private:
 		KDevelop::IndexedIdentifier* wrapped;
 };

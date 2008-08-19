@@ -27,7 +27,7 @@
 #ifndef DUMBPROJECT_H
 #define DUMBPROJECT_H
 
-#include <interfaces/iproject.h>
+#include <shell/project.h>
 
 #include <KUrl>
 
@@ -43,7 +43,7 @@ class IBuildSystemManager;
 class ProjectFileItem;
 class PersistentHash;
 
-class DumbProject : public IProject
+class DumbProject : public Project
 {
     Q_OBJECT
 public:
@@ -144,12 +144,6 @@ public Q_SLOTS:
      * @return true if the url @a url is a part of the project.
      */
     bool inProject(const KUrl &url) const;
-
-    /**
-     * The persistent AST storage for this project.
-     */
-//     PersistentHash *persistentHash() const;
-
 
 private:
     class DumbProjectPrivate* const d;

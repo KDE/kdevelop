@@ -54,15 +54,16 @@ QList<const Declaration*> extractTypes(const DUContext* ctx, int ind=1)
 
 QString DUChainReader::printType(const TypePtr<AbstractType>& type)
 {
+    QString ret;
     if(type.cast<DelayedType>())
     {
         TypePtr<DelayedType> del=type.cast<DelayedType>();
-        return del->identifier().toString();
+        ret=del->identifier().toString();
     }
-//     else if(type.cast<CppClassType>())
-//         return type.cast<CppClassType>()->declaration(m_top)->qualifiedIdentifier().toString();
     else
-        return type->toString();
+        ret=type->toString();
+    qDebug() << "yyyyyyyyyy" << type->toString() << ret;
+    return ret;
 }
 
 void DUChainReader::foundClass(const Declaration* decl)

@@ -43,7 +43,12 @@ def contextMenuExtension(ctx, cme):
 	urls=act.url()
 	cme.addAction(cme.ExtensionGroup, act)
 
-print str(ICore.languageController())
-print str(ICore.languageController().language("C++"))
+print str(dir(ICore))+"\n\n"
+print str(dir(ICore.documentController()))+"\n\n"
+print str(dir(ICore.languageController()))+"\n\n"
+print "------ "+ICore.languageController().className()+"\n\n"
+print str(ICore.languageController().documentActivated())+"\n\n"
+print str(ICore.languageController().objectName)+"\n\n"
+print str(dir(ICore.languageController().language("C++")))+"\n\n"
 print str(ICore.languageController().backgroundParser())
 #ICore.languageController().backgroundParser().connect("parseJobFinished(KDevelop::ParseJob* ))", parsingFinished);

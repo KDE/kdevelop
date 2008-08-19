@@ -27,6 +27,7 @@ class KrossKDevelopVcsRevision : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QVariant revisionValue() const { return wrapped->revisionValue(); }
 		Q_SCRIPTABLE QString prettyValue() const { return wrapped->prettyValue(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::VcsRevision& x0) const { return wrapped->operator==(x0); }
+		Q_SCRIPTABLE KDevelop::VcsRevision createSpecialRevision(KDevelop::VcsRevision::RevisionSpecialType x0) { return wrapped->createSpecialRevision(x0); }
 	private:
 		KDevelop::VcsRevision* wrapped;
 };

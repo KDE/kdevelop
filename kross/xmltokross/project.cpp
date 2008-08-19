@@ -135,7 +135,7 @@ public:
 };
 
 DumbProject::DumbProject( QObject *parent )
-        : IProject( parent )
+        : Project( parent )
         , d( new DumbProjectPrivate )
 {
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/Project", this, QDBusConnection::ExportScriptableSlots );
