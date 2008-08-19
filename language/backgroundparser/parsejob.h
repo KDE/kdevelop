@@ -46,10 +46,10 @@ public:
     ParseJob( const KUrl &url, QObject *parent );
     virtual ~ParseJob();
 
-    BackgroundParser* backgroundParser() const;
-    void setBackgroundParser(BackgroundParser* parser);
+    Q_SCRIPTABLE BackgroundParser* backgroundParser() const;
+    Q_SCRIPTABLE void setBackgroundParser(BackgroundParser* parser);
 
-    virtual int priority() const;
+    Q_SCRIPTABLE virtual int priority() const;
 
     /**
      * Determine whether the editor can provide the contents of the document or not.
@@ -58,37 +58,37 @@ public:
      * You can then just call KTextEditor::SmartRange::text() on each of the changedRanges().
      * Or, you can parse the whole document, the text of which is available from contentsFromEditor().
      */
-    bool contentsAvailableFromEditor();
+    Q_SCRIPTABLE bool contentsAvailableFromEditor();
 
     /// Retrieve the contents of the file from the currently open editor.
     /// Ensure it is loaded by calling editorLoaded() first.
     /// The editor integrator seamlessly saves the revision token and applies it
-    QString contentsFromEditor();
+    Q_SCRIPTABLE QString contentsFromEditor();
 
     /// Returns the revision token issued by the document's smart interface,
     /// or -1 if there was a problem.
-    int revisionToken() const;
+    Q_SCRIPTABLE int revisionToken() const;
 
     /// \returns the indexed url of the document to be parsed.
-    KDevelop::IndexedString document() const;
+    Q_SCRIPTABLE KDevelop::IndexedString document() const;
 
     /// Sets the du-context that was created by this parse-job
-    virtual void setDuChain(ReferencedTopDUContext duChain);
+    Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);
     /// Returns the set du-context, or zero of none was set.
-    virtual ReferencedTopDUContext duChain() const;
+    Q_SCRIPTABLE virtual ReferencedTopDUContext duChain() const;
 
     /// Overriden to allow jobs to determine if they've been requested to abort
-    virtual void requestAbort();
+    Q_SCRIPTABLE virtual void requestAbort();
     /// Determine if the job has been requested to abort
-    bool abortRequested() const;
+    Q_SCRIPTABLE bool abortRequested() const;
     /// Sets success to false, causing failed() to be emitted
-    void abortJob();
+    Q_SCRIPTABLE void abortJob();
 
     /// Overridden to convey whether the job succeeded or not.
-    virtual bool success() const;
+    Q_SCRIPTABLE virtual bool success() const;
 
     /// Overridden to set the DependencyPolicy on subjobs.
-    virtual void addJob(Job* job);
+    Q_SCRIPTABLE virtual void addJob(Job* job);
 
     /**
      * Attempt to add \a dependency as a dependency of \a actualDependee, which must
@@ -96,7 +96,7 @@ public:
      * to this job).  If a circular dependency is detected, the dependency will
      * not be added and the method will return false.
      */
-    bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
+    Q_SCRIPTABLE bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%

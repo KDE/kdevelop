@@ -65,7 +65,7 @@ public:
     /**
      * Abort or dequeue all current running jobs with the specified @p parent.
      */
-    void clear(QObject* parent);
+    Q_SCRIPTABLE void clear(QObject* parent);
 
     /**
      * Queries the background parser as to whether there is currently
@@ -75,34 +75,34 @@ public:
      * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
      * function.
      */
-    ParseJob* parseJobForDocument(const KUrl& document) const;
+    Q_SCRIPTABLE ParseJob* parseJobForDocument(const KUrl& document) const;
 
     /**
      * The dependency policy which applies to all jobs (it is applied automatically).
      */
-    ParserDependencyPolicy* dependencyPolicy() const;
+    Q_SCRIPTABLE ParserDependencyPolicy* dependencyPolicy() const;
 
     /**
      * Set how many ThreadWeaver threads the background parser should set up and use.
      */
-    void setThreadCount(int threadCount);
+    Q_SCRIPTABLE void setThreadCount(int threadCount);
 
     /**
      * Set the delay in miliseconds before the background parser starts parsing.
      */
-    void setDelay(int miliseconds);
+    Q_SCRIPTABLE void setDelay(int miliseconds);
 
     /**
      * Inform the background parser that \a document has a given top smart \a range.
      *
      * This will be watched for modifications and background jobs scheduled accordingly.
      */
-    void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
+    Q_SCRIPTABLE void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
 
     /**
      * Remove an associated top \a range from modification watching.
      */
-    void removeManagedTopRange(KTextEditor::SmartRange* range);
+    Q_SCRIPTABLE void removeManagedTopRange(KTextEditor::SmartRange* range);
 
 Q_SIGNALS:
     /** 

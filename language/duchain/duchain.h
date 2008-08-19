@@ -58,28 +58,28 @@ public:
   /**
    * Return a list of all chains available
    */
-  QList<TopDUContext*> allChains() const;
+  Q_SCRIPTABLE QList<TopDUContext*> allChains() const;
 
   /**
    * Return any chain for the given document
    * If available, the version accepting IndexedString should be used instead of this, for performance reasons.
    * When no fitting chain is in memory, one may be loaded from disk.
    * */
-  TopDUContext* chainForDocument(const KUrl& document) const;
-  TopDUContext* chainForDocument(const IndexedString& document) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
    * */
-  QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
+  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
    * Should be preferred over the KUrl version.
    * */
-  QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
+  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -87,7 +87,7 @@ public:
    * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
    *              Else a context will be searched that exactly matches the given flags.
    * */
-  TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -97,24 +97,24 @@ public:
    *
    * Prefer this over the KUrl version.
    * */
-  TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
 
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
-  TopDUContext* chainForIndex(uint index) const;
+  Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;
 
   /// Only used for debugging at the moment
-  QList<KUrl> documents() const;
+  Q_SCRIPTABLE QList<KUrl> documents() const;
 
   /**
    * Registers a new definition-use \a chain for the given \a document.
    */
-  void addDocumentChain(TopDUContext* chain);
+  Q_SCRIPTABLE void addDocumentChain(TopDUContext* chain);
 
   /// Returns the global static instance.
-  static DUChain* self();
+  Q_SCRIPTABLE static DUChain* self();
 
   /// Returns the structure that manages mapping between definitions and declarations
-  static Definitions* definitions();
+  Q_SCRIPTABLE static Definitions* definitions();
 
   /// Returns the structure that manages mapping between declarations, and which top level contexts contain uses of them.
   static Uses* uses();
@@ -129,10 +129,10 @@ public:
    *
    * \threadsafe
    */
-  static DUChainLock* lock();
+  Q_SCRIPTABLE static DUChainLock* lock();
 
   /// Returns the object which emits signals regarding duchain changes
-  static DUChainObserver* notifier();
+  Q_SCRIPTABLE static DUChainObserver* notifier();
 
   // Distribute the notifications
   /*static void contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
@@ -141,19 +141,19 @@ public:
   static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);*/
 
   /// Notify that a branch was added to \a context
-  static void branchAdded(DUContext* context);
+  Q_SCRIPTABLE static void branchAdded(DUContext* context);
   /// Notify that a branch was modified within \a context
-  static void branchModified(DUContext* context);
+  Q_SCRIPTABLE static void branchModified(DUContext* context);
   /// Notify that a branch was removed from \a context
-  static void branchRemoved(DUContext* context);
+  Q_SCRIPTABLE static void branchRemoved(DUContext* context);
 
   /// Returns whether the top-context with the given index is currently loaded in memory
-  bool isInMemory(uint topContextIndex) const;
+  Q_SCRIPTABLE bool isInMemory(uint topContextIndex) const;
   
   /**
    * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
    * */
-  void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
+  Q_SCRIPTABLE void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
 
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();

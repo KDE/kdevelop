@@ -19,7 +19,6 @@
 #ifndef USES_H
 #define USES_H
 
-#include <QtCore/QObject>
 #include "../languageexport.h"
 #include "declarationid.h"
 
