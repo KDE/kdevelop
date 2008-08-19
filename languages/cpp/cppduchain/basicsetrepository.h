@@ -97,6 +97,14 @@ public:
     return m_tree;
   }
   
+    ///Increase the static reference-count of this set by one. The initial reference-count of newly created sets is zero.
+    void staticRef();
+    
+    ///Decrease the static reference-count of this set by one. This set must have a reference-count > 1.
+    ///If this set reaches the reference-count zero, it will be deleted, and all sub-nodes that also reach the reference-count zero
+    ///will be deleted as well. @warning Either protect ALL your sets by using reference-counting, or don't use it at all.
+    void staticUnref();
+  
   ///Returns a pointer to the repository this set belongs to. Returns zero when this set is not initialized yet.
   BasicSetRepository* repository() const;
 private:
@@ -122,7 +130,7 @@ public:
   ///@param doLocking Whether the repository should secured internally for multi-threading. If this is false, you need to secure it yourself
   ///@param dataSize Size of the internal data repository in bytes
   BasicSetRepository(QString name, bool doLocking);
-  ~BasicSetRepository();
+  virtual ~BasicSetRepository();
   typedef unsigned int Index;
 
   /**
@@ -143,6 +151,9 @@ public:
   Set createSet(Index i);
   
   void printStatistics() const;
+  
+  ///Is called when this index is not part of any set any more
+  virtual void itemRemovedFromSets(uint index) const;
   
 private:
   friend class Set;

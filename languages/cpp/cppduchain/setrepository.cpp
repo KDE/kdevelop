@@ -222,8 +222,9 @@ struct SetNodeData {
   //Ptr left, right;
   uint leftNode, rightNode;
   uint m_hash;
+  uint m_refCount;
   
-  SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0) {
+  SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0), m_refCount(0) {
   }
   
   uint hash() const {
@@ -282,7 +283,6 @@ struct SetRepositoryAlgorithms {
 
   QString shortLabel(const SetNodeData& node) const;
 
-  uint applyBounds(uint node, Index lowerBound, Index upperBound);
   uint set_union(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit = 31);
   uint createSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left = 0, const SetNodeData* right = 0);
   uint computeSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left, const SetNodeData* right, uchar splitBit);
@@ -309,11 +309,11 @@ struct SetNodeDataRequest {
   
   //This constructor creates a request that finds or creates a node that equals the given node
   //The m_hash must be up to dat, and the node must be split correctly around its splitPosition
-  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository) {
+  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository), m_created(false) {
     ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
   }
   
-  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository) {
+  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository), m_created(false) {
   
     data.start = splitNode->start;
     data.end = splitNode->end;
@@ -326,6 +326,16 @@ struct SetNodeDataRequest {
     }else{
       data.leftNode = 0;
       data.rightNode = 0;
+    }
+  }
+  
+  ~SetNodeDataRequest() {
+    //Eventually increase the reference-count of direct children
+    if(m_created) {
+      if(data.leftNode)
+        ++repository.dynamicItemFromIndex(data.leftNode)->m_refCount;
+      if(data.rightNode)
+        ++repository.dynamicItemFromIndex(data.rightNode)->m_refCount;
     }
   }
 
@@ -344,6 +354,8 @@ struct SetNodeDataRequest {
   //@param item equals an allocated range with the size of itemSize().
   void createItem(SetNodeData* item) const {
     Q_ASSERT((data.rightNode && data.leftNode) || (!data.rightNode && !data.leftNode));
+    
+    m_created = true;
     
     *item = data;
     Q_ASSERT(item->m_hash);
@@ -386,6 +398,7 @@ struct SetNodeDataRequest {
   const SplitTreeNode* splitNode;
   uint m_hash;
   mutable SetDataRepository& repository;
+  mutable bool m_created;
 };
 
 struct BasicSetRepository::Private {
@@ -1282,5 +1295,51 @@ Set& Set::operator -=(const Set& rhs) {
 BasicSetRepository* Set::repository() const {
   return m_repository;
 }
+
+void Set::staticRef() {
+  if(!m_tree)
+    return;
+    SetNodeData* data = m_repository->d->dataRepository.dynamicItemFromIndex(m_tree);
+    ++data->m_refCount;
+}
+
+///Decrease the static reference-count of this set by one. This set must have a reference-count > 1.
+///If this set reaches the reference-count zero, it will be deleted, and all sub-nodes that also reach the reference-count zero
+///will be deleted as well. @warning Either protect ALL your sets by using reference-counting, or don't use it at all.
+void Set::staticUnref() {
+  if(!m_tree)
+    return;
+  
+    KDevVarLengthArray<uint, 3000> nextNodes;
+    nextNodes.append(m_tree);
+  
+    while(!nextNodes.isEmpty()) {
+      uint current = nextNodes.back();
+      nextNodes.pop_back();
+      
+      SetNodeData* data = m_repository->d->dataRepository.dynamicItemFromIndex(current);
+      Q_ASSERT(data->m_refCount);
+      --data->m_refCount;
+      
+      if(data->rightNode)
+        nextNodes.append(data->rightNode);
+      if(data->leftNode)
+        nextNodes.append(data->leftNode);
+      
+      if(data->m_refCount == 0) {
+        if(!data->leftNode && !data->rightNode) {
+          //Deleting a leaf
+          Q_ASSERT(data->end - data->start == 1);
+          m_repository->itemRemovedFromSets(data->start);
+        }
+
+        m_repository->d->dataRepository.deleteItem(current);
+      }
+    }
+}
+
+void BasicSetRepository::itemRemovedFromSets(uint /*index*/) const {
+}
+
 }
 

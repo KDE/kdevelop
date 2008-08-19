@@ -85,7 +85,7 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
         apply();
       m_temporaryRemoveIndices.insert(m_conversion.toIndex(t));
     }
-
+    
     ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
     Set set() const {
       apply();
