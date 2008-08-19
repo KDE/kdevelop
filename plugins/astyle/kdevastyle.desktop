@@ -4,6 +4,9 @@ Exec=blubb
 Icon=kdevelop
 Comment=A plugin for formatting of sourcecode according to a specified set of rules
 Name=KDevAStyle
+Name[da]=KDevelop en stil
+Name[nds]=KDevelop-Ünnerstütten för Artistic-Style
+Name[sk]=KDev štýl
 GenericName=AStyle Plugin
 
 ServiceTypes=KDevelop/Plugin
