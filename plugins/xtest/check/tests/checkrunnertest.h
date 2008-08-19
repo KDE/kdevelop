@@ -27,9 +27,7 @@ class QAbstractItemModel;
 namespace Ui { class StatusWidget; }
 namespace Veritas { class RunnerWindow; }
 
-namespace Check
-{
-namespace it {
+namespace Check { namespace Test {
 
 // TODO this test requires too much maintenance + is accessing
 //      private parts of Veritas. Should get rid of it, but first
@@ -60,7 +58,6 @@ private:
     QAbstractItemModel* m_resultModel;
 };
 
-} // namespace it
-} // namespace Check
+}}
 
 #endif // VERITAS_CHECK_CHECKRUNNERTEST
