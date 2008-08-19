@@ -179,7 +179,8 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
 
   QString insertLine = "#include " + m_addedInclude;
   int lastLineWithInclude = 0;
-  int checkLines = document->lines() < 500 ? document->lines() : 500;
+  int checkLines = word.start().line() -1;
+  kDebug() << "checkLines " << checkLines;
   for(int a = 0; a < checkLines; ++a) {
     QString lineText = document->line(a);
     if(lineText.trimmed().startsWith("#include")) {

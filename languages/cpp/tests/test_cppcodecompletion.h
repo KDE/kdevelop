@@ -78,6 +78,14 @@ private slots:
   void testMacroExpansionRanges();
   void testPreprocessor();
 
+  // includer completion related commands.
+  // TODO should be refactored into it's own testcase
+  void testSunnyIncludeCompletion();
+  void testIngoreMocInclude();
+  void testIncludedInFrontOfUse();
+  void testMultipleIncludes();
+  void testForwardDeclarationInclude();
+
 public:
   enum DumpArea {
     DumpNone = 0,

@@ -373,7 +373,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       AbstractType::Ptr type = m_expressionResult.type.type();
       if(type && m_duContext) {
         DelayedType::Ptr delayed = type.cast<DelayedType>();
-#ifndef TEST_COMPLETION
+#ifndef TEST_COMPLETION // hmzzz ?? :)
         if(delayed && delayed->kind() == DelayedType::Unresolved)
           m_storedItems += missingIncludeCompletionItems(m_expression, m_followingText.trimmed() + ": ", m_expressionResult, m_duContext.data());
 #endif
