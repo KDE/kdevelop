@@ -297,6 +297,7 @@ void RunnerWindow::initProxyModels(RunnerModel* model)
     RunnerProxyModel* runnerProxyModel = new RunnerProxyModel(model);
     runnerProxyModel->setSourceModel(model);
     runnerView()->setModel(runnerProxyModel);
+    m_stopWatch = QTime();
 }
 
 // helper for setModel(RunnerModel*)
@@ -616,9 +617,13 @@ void RunnerWindow::ensureFocusRect(const QModelIndex&  index)
 
 void RunnerWindow::displayElapsed() const
 {
-    int mili = m_stopWatch.elapsed();
-    QString elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
-    ui()->labelElapsed->setText(elapsed);
+    if (m_stopWatch.isValid()) {
+        int mili = m_stopWatch.elapsed();
+        QString elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
+        ui()->labelElapsed->setText(elapsed);
+    } else {
+        ui()->labelElapsed->setText("0.000");
+    }
 }
 
 void RunnerWindow::scrollToHighlightedRows() const

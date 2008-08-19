@@ -42,14 +42,12 @@ qt4_add_resources(veritas_SRCS
 kde4_add_library(kdevplatformveritas SHARED ${veritas_SRCS})
 target_link_libraries(kdevplatformveritas
     kdevplatforminterfaces
-    kdevplatformshell
     sublime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY})
+    ${KDE4_KTEXTEDITOR_LIBS})
 qt4_automoc(${veritas_SRCS})
 install(TARGETS kdevplatformveritas ${INSTALL_TARGETS_DEFAULT_ARGS})
 

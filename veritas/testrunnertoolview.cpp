@@ -26,13 +26,14 @@
 #include <QDockWidget>
 #include <QWidget>
 
+#include "interfaces/icore.h"
 #include "interfaces/iproject.h"
 #include "interfaces/iprojectcontroller.h"
 #include "interfaces/iuicontroller.h"
-#include "shell/core.h"
-#include "shell/uicontroller.h"
-#include "sublime/tooldocument.h"
 #include "sublime/area.h"
+#include "sublime/controller.h"
+#include "sublime/mainwindow.h"
+#include "sublime/tooldocument.h"
 #include "sublime/view.h"
 #include "veritas/test.h"
 #include "veritas/mvc/runnermodel.h"
@@ -48,13 +49,11 @@ using Sublime::Document;
 using Sublime::ToolDocument;
 using Sublime::View;
 
-using KDevelop::Core;
 using KDevelop::ICore;
 using KDevelop::IProject;
 using KDevelop::IProjectController;
 using KDevelop::IToolViewFactory;
 using KDevelop::IUiController;
-using KDevelop::UiController;
 
 using Veritas::Test;
 using Veritas::RunnerModel;
@@ -111,7 +110,7 @@ void TestViewData::setupToolView(Veritas::Test* root)
     d->window->setModel(model);
     d->window->runnerView()->setRootIsDecorated(false);
     d->window->resetProgressBar();
-    spawnResultsView();
+    if (!d->resultsView) spawnResultsView();
 }
 
 TestViewData::~TestViewData()
@@ -172,6 +171,20 @@ void TestViewData::setSelected(QAction* action)
     d->selectedProject = action->data().value<IProject*>();
 }
 
+namespace {
+class Filter : public QObject
+{
+public:
+    Filter(QObject* parent) : QObject(parent), m_parent(parent) {}
+    virtual ~Filter() {}
+    bool eventFilter(QObject* obj, QEvent* event) {
+        if (event->type() == QEvent::ContextMenu) return true;
+        if (m_parent) return m_parent->eventFilter(obj, event);
+        return false;
+    }
+    QObject* m_parent;
+};}
+
 class ResultsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
@@ -197,12 +210,14 @@ public:
     }
     virtual void viewCreated(Sublime::View* view) {
         QWidget* w = view->widget();
-        if (not w) return;
+        if (!w) return;
         QObject* p = w->parent();
-        if (not p) return;
-        QDockWidget* d = dynamic_cast<QDockWidget*>(p);
-        if (not d) return;
-        d->setFeatures(d->features() & 0xfffe); // no close for you.
+        if (!p) return;
+        QDockWidget* d = qobject_cast<QDockWidget*>(p);
+        if (!d) return;
+        d->setFeatures(d->features() & 0xfffc);
+        Filter* f = new Filter(d);
+        d->installEventFilter(f);
     }
 
 private:
@@ -252,12 +267,15 @@ public:
 void TestViewData::spawnResultsView()
 {
     // only allow a single view.
-    UiController* uic = Core::self()->uiControllerInternal();
-    Area* a = uic->activeArea(); // should iterate over all areas instead
-    ResultsViewFinder rvf(this->resultsViewId());
-    a->walkToolViews(rvf, Sublime::AllPositions);
-    if (rvf.found) {
-        return; // do not add twice.
+    IUiController* uic = ICore::self()->uiController();
+    Sublime::Controller* ctr = uic->controller();
+    foreach(Area* a, ctr->allAreas()) {
+        ResultsViewFinder rvf(this->resultsViewId());
+        a->walkToolViews(rvf, Sublime::AllPositions);
+        if (rvf.found) {
+            kDebug() << "Not adding twice, found a resultsview for this runner.";
+            return;
+        }
     }
 
     // these tool views should not show up in the 'Add Tool View' dialog.
@@ -266,13 +284,20 @@ void TestViewData::spawnResultsView()
 
     // this is bad. might want to make this available in IUiController
     ResultsViewFactory* fac = new ResultsViewFactory(resultsViewId(), this);
-    d->resultsArea = uic->activeArea();
-    ToolDocument *doc = new ToolDocument(QString("Test Results"), uic, new UiToolViewFactory(fac));
+    QList<Sublime::MainWindow*> mws = ctr->mainWindows();
+    if (mws.isEmpty() || !mws[0]) {
+        kDebug() << "No mainwindow not adding results view.";
+        return;
+    }
+
+    Sublime::MainWindow* mw = mws[0]; // just take the first one.
+    d->resultsArea = mw->area();
+    ToolDocument *doc = new ToolDocument(QString("Test Results"), ctr, new UiToolViewFactory(fac));
     d->resultsView = doc->createView();
     Sublime::Position pos = Sublime::dockAreaToPosition(fac->defaultPosition());
     d->resultsArea->addToolView(d->resultsView, pos);
     connect(d->resultsView, SIGNAL(raise(Sublime::View*)),
-            uic, SLOT(raiseToolView(Sublime::View*)));
+            ctr, SLOT(raiseToolView(Sublime::View*)));
     fac->viewCreated(d->resultsView);
 }
 
