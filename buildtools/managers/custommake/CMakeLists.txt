@@ -19,7 +19,7 @@ set(kdevcustommakemanager_PART_SRCS
 
 kde4_add_plugin(kdevcustommakemanager ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries( kdevcustommakemanager
-                    ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY}
+                    ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
 )
 
 install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )

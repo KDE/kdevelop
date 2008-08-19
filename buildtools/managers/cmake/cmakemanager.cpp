@@ -43,6 +43,7 @@
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/indexedstring.h>
 #include <interfaces/context.h>
 
 #include <language/duchain/duchain.h>
@@ -450,7 +451,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     }
 
                     new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                    item->project()->addToFileSet( sourceFile );
+                    item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
                     kDebug(9042) << "..........Adding:" << sourceFile;
                 }
                 m_targets.append(targetItem);

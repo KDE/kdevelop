@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 #include <interfaces/icore.h>
+#include <language/duchain/indexedstring.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include "iqmakebuilder.h"
@@ -125,7 +126,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                 }
                 kDebug(9024) << "adding file:" << u;
                 new KDevelop::ProjectFileItem( item->project(), u, target );
-                item->project()->addToFileSet( u );
+                item->project()->addToFileSet( KDevelop::IndexedString( u ) );
             }
         }
     }

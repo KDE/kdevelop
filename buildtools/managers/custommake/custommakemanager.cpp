@@ -21,6 +21,7 @@
 #include <project/projectmodel.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/duchain/indexedstring.h>
 
 #include <QQueue>
 #include <QDir>
@@ -197,7 +198,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
             KUrl fileUrl( absFilePath );
             KDevelop::ProjectFileItem *fileItem =
                 new KDevelop::ProjectFileItem( item->project(), fileUrl, item );
-            item->project()->addToFileSet( fileUrl );
+            item->project()->addToFileSet( KDevelop::IndexedString( fileUrl ) );
             if( topItem && fileName == QString("Makefile") )
             {
                 topItem->fsWatcher()->addFile( absFilePath, fileItem );
