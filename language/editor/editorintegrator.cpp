@@ -49,7 +49,6 @@ public:
   KTextEditor::SmartInterface* m_smart;
 
   QStack<KTextEditor::SmartRange*> m_currentRangeStack;
-  KTextEditor::Range m_newRangeMarker;
   template<class RangeType>
   SmartRange* createRange( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
 };
@@ -267,26 +266,6 @@ SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTe
 SmartRange* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
 {
   return createRange(Range(start, end));
-}
-
-SmartRange* EditorIntegrator::createRange()
-{
-  return createRange(d->m_newRangeMarker);
-}
-
-void EditorIntegrator::setNewRange(const KTextEditor::SmartRange& range)
-{
-  d->m_newRangeMarker = range;
-}
-
-void EditorIntegrator::setNewEnd( const KTextEditor::Cursor & position )
-{
-  d->m_newRangeMarker.end() = position;
-}
-
-void EditorIntegrator::setNewStart( const KTextEditor::Cursor & position )
-{
-  d->m_newRangeMarker.start() = position;
 }
 
  void EditorIntegrator::setCurrentRange( KTextEditor::SmartRange* range )

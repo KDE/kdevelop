@@ -211,12 +211,6 @@ public:
    */
   SimpleRange translate(const LockedSmartInterface& iface, const SimpleRange& fromRange) const;
 
-
-  // Set defaults for creation of ranges
-  void setNewRange(const KTextEditor::SmartRange& range);
-  void setNewStart(const KTextEditor::Cursor& position);
-  void setNewEnd(const KTextEditor::Cursor& position);
-
   /**
    * Create a text range over \a range as a child range of the current range.
    * The returned range will become the new currentRange(), and will be put upon the range-stack.
