@@ -41,6 +41,7 @@ struct DVCSjobPrivate
     {
         childproc = new KProcess;
         lineMaker = new KDevelop::ProcessLineMaker( childproc );
+        failed = false;
     }
 
     ~DVCSjobPrivate() {
