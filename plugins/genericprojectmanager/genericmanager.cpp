@@ -111,6 +111,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
         else if ( fileInfo.isFile() )
         {
              new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+             item->project()->addToFileSet( KUrl( fileInfo.absoluteFilePath() ) );
         }
     }
 
