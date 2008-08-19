@@ -9,8 +9,16 @@
 class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+	Q_ENUMS(DocumentState)
+	Q_FLAGS(DocumentState Clean Modified Dirty DirtyAndModified)
+
+	Q_ENUMS(DocumentSaveMode)
+	Q_FLAGS(DocumentSaveMode Default Silent Discard)
+
 	public:
-		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj){ setObjectName("KDevelop::IDocument"); }
+		enum KrossDocumentState { Clean=KDevelop::IDocument::Clean, Modified=KDevelop::IDocument::Modified, Dirty=KDevelop::IDocument::Dirty, DirtyAndModified=KDevelop::IDocument::DirtyAndModified };
+		enum KrossDocumentSaveMode { Default=KDevelop::IDocument::Default, Silent=KDevelop::IDocument::Silent, Discard=KDevelop::IDocument::Discard };
+		KrossKDevelopIDocument(KDevelop::IDocument* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IDocument"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }

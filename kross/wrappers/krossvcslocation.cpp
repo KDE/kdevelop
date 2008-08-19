@@ -9,10 +9,11 @@
 class KrossKDevelopVcsLocation : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::VcsLocation::LocationType)
-		Q_FLAGS( KDevelop::VcsLocation::LocalLocation KDevelop::VcsLocation::RepositoryLocation)
+	Q_ENUMS(LocationType)
+	Q_FLAGS(LocationType LocalLocation RepositoryLocation)
 
 	public:
+		enum KrossLocationType { LocalLocation=KDevelop::VcsLocation::LocalLocation, RepositoryLocation=KDevelop::VcsLocation::RepositoryLocation };
 		KrossKDevelopVcsLocation(KDevelop::VcsLocation* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::VcsLocation"); }
 		void* wrappedObject() const { return wrapped; }
 

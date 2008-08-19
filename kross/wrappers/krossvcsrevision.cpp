@@ -9,13 +9,15 @@
 class KrossKDevelopVcsRevision : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::VcsRevision::RevisionType)
-		Q_FLAGS( KDevelop::VcsRevision::Special KDevelop::VcsRevision::GlobalNumber KDevelop::VcsRevision::FileNumber KDevelop::VcsRevision::Date KDevelop::VcsRevision::Invalid KDevelop::VcsRevision::UserType)
+	Q_ENUMS(RevisionType)
+	Q_FLAGS(RevisionType Special GlobalNumber FileNumber Date Invalid UserType)
 
-		Q_ENUMS(KDevelop::VcsRevision::RevisionSpecialType)
-		Q_FLAGS( KDevelop::VcsRevision::Head KDevelop::VcsRevision::Working KDevelop::VcsRevision::Base KDevelop::VcsRevision::Previous KDevelop::VcsRevision::Start KDevelop::VcsRevision::UserSpecialType)
+	Q_ENUMS(RevisionSpecialType)
+	Q_FLAGS(RevisionSpecialType Head Working Base Previous Start UserSpecialType)
 
 	public:
+		enum KrossRevisionType { Special=KDevelop::VcsRevision::Special, GlobalNumber=KDevelop::VcsRevision::GlobalNumber, FileNumber=KDevelop::VcsRevision::FileNumber, Date=KDevelop::VcsRevision::Date, Invalid=KDevelop::VcsRevision::Invalid, UserType=KDevelop::VcsRevision::UserType };
+		enum KrossRevisionSpecialType { Head=KDevelop::VcsRevision::Head, Working=KDevelop::VcsRevision::Working, Base=KDevelop::VcsRevision::Base, Previous=KDevelop::VcsRevision::Previous, Start=KDevelop::VcsRevision::Start, UserSpecialType=KDevelop::VcsRevision::UserSpecialType };
 		KrossKDevelopVcsRevision(KDevelop::VcsRevision* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::VcsRevision"); }
 		void* wrappedObject() const { return wrapped; }
 

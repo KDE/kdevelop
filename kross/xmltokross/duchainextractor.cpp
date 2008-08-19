@@ -44,7 +44,7 @@ class KrossInterfaceCreator : public DUChainReader
     public:
         KrossInterfaceCreator(TopDUContext* top) : DUChainReader(top) {}
         virtual void writeDocument() { qDebug() << "start doc"; }
-        virtual void writeClass(const QString& classname, const QString& , const QList<QStringList>& enums)
+        virtual void writeClass(const QString& classname, const QString& , const QList<QStringList>& )
             { qDebug() << "start class" << classname; }
         virtual void writeNamespace(const QString& name) { qDebug() << "start namespace" << name; }
         virtual void writeVariable(const QString& name, const QString& type, bool isConst)
@@ -109,11 +109,19 @@ class KrossWrapper : public DUChainReader
             
             output += "{\n"
                       "\tQ_OBJECT\n";
+            
             foreach(const QStringList& en, enums)
             {
-                writeEndEnum(en);
+                writeQ_Enum(en);
             }
+            
             output += "\tpublic:\n";
+            
+            foreach(const QStringList& en, enums)
+            {
+                writeEnum(en);
+            }
+            
             if(baseClass.isEmpty())
                 output += "\t\t"+krossClassname+'('
                                  +classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj)\t";
@@ -158,15 +166,41 @@ class KrossWrapper : public DUChainReader
             output += "using namespace "+name+";\n\n";
         }
         
-        void writeEndEnum(const QStringList& fl)
+        void writeEndEnum(const QStringList& ) { Q_ASSERT(false); }
+        
+        void writeEnum(const QStringList &fl)
         {
             QStringList flags=fl;
-            output += "\t\tQ_ENUMS("+flags.takeFirst()+")\n"
-                      "\t\tQ_FLAGS(";
+            QString name=flags.first().right(flags.first().size()-flags.first().lastIndexOf(':')-1);
+            flags.takeFirst();
             
-            foreach(const QString& flag, flags)
-                output += ' '+flag;
-            output += ")\n\n";
+            QStringList enumFlags;
+            
+            foreach(const QString& f, flags)
+            {
+                QString fname=f.right(f.size()-f.lastIndexOf(':')-1);
+                enumFlags += fname+'='+f;
+            }
+            
+            output += QString("\t\tenum Kross%1 { %2 };\n").arg(name).arg(enumFlags.join(", "));
+        }
+        
+        void writeQ_Enum(const QStringList& fl)
+        {
+            QStringList flags=fl;
+            QString name=flags.first().right(flags.first().size()-flags.first().lastIndexOf(':')-1);
+            flags.takeFirst();
+            output += QString("\tQ_ENUMS(%1)\n").arg(name);
+            
+            QStringList qFlags;
+            
+            foreach(const QString& f, flags)
+            {
+                QString fname=f.right(f.size()-f.lastIndexOf(':')-1);
+                qFlags += fname;
+            }
+            
+            output += QString("\tQ_FLAGS(%1 %2)\n\n").arg(name.right(name.size()-name.lastIndexOf(':')-1)).arg(qFlags.join(" "));
         }
         
         QString handlerName(const QString& classname)
@@ -367,7 +401,7 @@ void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)
 
 void DUChainExtractor::progressUpdated(int minimum, int maximum, int value)
 {
-    qDebug() << "progress" << value << "/" << maximum;
+    qDebug() << "progress" << value << "/" << maximum << minimum;
 }
 
 #include "duchainextractor.moc"

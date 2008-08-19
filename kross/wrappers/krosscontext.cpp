@@ -9,10 +9,11 @@
 class KrossKDevelopContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::Context::Type)
-		Q_FLAGS( KDevelop::Context::EditorContext KDevelop::Context::FileContext KDevelop::Context::CodeContext KDevelop::Context::ProjectItemContext)
+	Q_ENUMS(Type)
+	Q_FLAGS(Type EditorContext FileContext CodeContext ProjectItemContext)
 
 	public:
+		enum KrossType { EditorContext=KDevelop::Context::EditorContext, FileContext=KDevelop::Context::FileContext, CodeContext=KDevelop::Context::CodeContext, ProjectItemContext=KDevelop::Context::ProjectItemContext };
 		KrossKDevelopContext(KDevelop::Context* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Context"); }
 		void* wrappedObject() const { return wrapped; }
 

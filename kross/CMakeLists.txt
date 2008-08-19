@@ -60,6 +60,18 @@ if(GENERATE_INTERFACES)
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossduchain.cpp language/duchain/duchain.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/duchainlock.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossduchainlock.cpp language/duchain/duchainlock.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/ibuildsystemmanager.h
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossibuildsystemmanager.cpp project/interfaces/ibuildsystemmanager.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectfilemanager.h
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectfilemanager.cpp project/interfaces/iprojectfilemanager.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectbuilder.h
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectbuilder.cpp project/interfaces/iprojectbuilder.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/irun.h
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossirun.cpp interfaces/irun.h)
+
+
+
+
 else(GENERATE_INTERFACES)
     message(STATUS "The used interfaces will be the ones from svn instead of generating them.")
 endif(GENERATE_INTERFACES)
@@ -86,6 +98,10 @@ set(kdevkrossplugin_SRCS
     wrappers/krossduchain.cpp
     wrappers/krossduchainlock.cpp
     wrappers/krossiproblem.cpp
+    wrappers/krossibuildsystemmanager.cpp
+    wrappers/krossiprojectfilemanager.cpp
+    wrappers/krossiprojectbuilder.cpp
+    wrappers/krossirun.cpp
 )
 
 kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})

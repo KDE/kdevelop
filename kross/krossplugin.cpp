@@ -31,6 +31,7 @@
 #include <KDebug>
 #include <KStandardDirs>
 
+#include <language/duchain/duchain.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iplugincontroller.h>
@@ -76,6 +77,7 @@ KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     action->setFile(file.toLocalFile());
     
     action->addObject(KDevelop::ICore::self(), "ICore");
+    action->addObject(KDevelop::DUChain::self(), "DUChain");
     action->addObject(this, "IPlugin");
     setAction(action); //should add it here and only if it is necessary (when more ifaces)
     setActionDistributed(action); //should add it here and only if it is necessary (when more ifaces)

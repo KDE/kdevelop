@@ -9,10 +9,11 @@
 class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::Problem::Source)
-		Q_FLAGS( KDevelop::Problem::Unknown KDevelop::Problem::Disk KDevelop::Problem::Preprocessor KDevelop::Problem::Lexer KDevelop::Problem::Parser KDevelop::Problem::DUChainBuilder)
+	Q_ENUMS(Source)
+	Q_FLAGS(Source Unknown Disk Preprocessor Lexer Parser DUChainBuilder)
 
 	public:
+		enum KrossSource { Unknown=KDevelop::Problem::Unknown, Disk=KDevelop::Problem::Disk, Preprocessor=KDevelop::Problem::Preprocessor, Lexer=KDevelop::Problem::Lexer, Parser=KDevelop::Problem::Parser, DUChainBuilder=KDevelop::Problem::DUChainBuilder };
 		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Problem"); }
 		void* wrappedObject() const { return wrapped; }
 

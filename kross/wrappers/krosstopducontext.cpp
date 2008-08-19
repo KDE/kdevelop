@@ -45,10 +45,11 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::TopDUContext::Flags)
-		Q_FLAGS( KDevelop::TopDUContext::NoFlags KDevelop::TopDUContext::ProxyContextFlag KDevelop::TopDUContext::AnyFlag KDevelop::TopDUContext::UpdatingContext KDevelop::TopDUContext::LastFlag)
+	Q_ENUMS(Flags)
+	Q_FLAGS(Flags NoFlags ProxyContextFlag AnyFlag UpdatingContext LastFlag)
 
 	public:
+		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, ProxyContextFlag=KDevelop::TopDUContext::ProxyContextFlag, AnyFlag=KDevelop::TopDUContext::AnyFlag, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 

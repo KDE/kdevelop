@@ -9,10 +9,11 @@
 class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::ProjectBaseItem::ProjectItemType)
-		Q_FLAGS( KDevelop::ProjectBaseItem::BuildFolder KDevelop::ProjectBaseItem::Folder KDevelop::ProjectBaseItem::ExecutableTarget KDevelop::ProjectBaseItem::LibraryTarget KDevelop::ProjectBaseItem::TestTarget KDevelop::ProjectBaseItem::Target KDevelop::ProjectBaseItem::File)
+	Q_ENUMS(ProjectItemType)
+	Q_FLAGS(ProjectItemType BuildFolder Folder ExecutableTarget LibraryTarget TestTarget Target File)
 
 	public:
+		enum KrossProjectItemType { BuildFolder=KDevelop::ProjectBaseItem::BuildFolder, Folder=KDevelop::ProjectBaseItem::Folder, ExecutableTarget=KDevelop::ProjectBaseItem::ExecutableTarget, LibraryTarget=KDevelop::ProjectBaseItem::LibraryTarget, TestTarget=KDevelop::ProjectBaseItem::TestTarget, Target=KDevelop::ProjectBaseItem::Target, File=KDevelop::ProjectBaseItem::File };
 		KrossKDevelopProjectBaseItem(KDevelop::ProjectBaseItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProjectBaseItem"); }
 		void* wrappedObject() const { return wrapped; }
 

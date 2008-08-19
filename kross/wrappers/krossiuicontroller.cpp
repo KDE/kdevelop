@@ -25,10 +25,11 @@ class KrossKDevelopIToolViewFactory : public QObject, public Kross::WrapperInter
 class KrossKDevelopIUiController : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::IUiController::SwitchMode)
-		Q_FLAGS( KDevelop::IUiController::ThisWindow KDevelop::IUiController::NewWindow)
+	Q_ENUMS(SwitchMode)
+	Q_FLAGS(SwitchMode ThisWindow NewWindow)
 
 	public:
+		enum KrossSwitchMode { ThisWindow=KDevelop::IUiController::ThisWindow, NewWindow=KDevelop::IUiController::NewWindow };
 		KrossKDevelopIUiController(KDevelop::IUiController* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IUiController"); }
 		void* wrappedObject() const { return wrapped; }
 

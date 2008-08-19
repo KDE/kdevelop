@@ -63,13 +63,15 @@ class KrossKDevelopImportTraceItem : public QObject, public Kross::WrapperInterf
 class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-		Q_ENUMS(KDevelop::DUContext::ContextType)
-		Q_FLAGS( KDevelop::DUContext::Global KDevelop::DUContext::Namespace KDevelop::DUContext::Class KDevelop::DUContext::Function KDevelop::DUContext::Template KDevelop::DUContext::Enum KDevelop::DUContext::Helper KDevelop::DUContext::Other)
+	Q_ENUMS(ContextType)
+	Q_FLAGS(ContextType Global Namespace Class Function Template Enum Helper Other)
 
-		Q_ENUMS(KDevelop::DUContext::SearchFlag)
-		Q_FLAGS( KDevelop::DUContext::NoSearchFlags KDevelop::DUContext::InImportedParentContext KDevelop::DUContext::OnlyContainerTypes KDevelop::DUContext::DontSearchInParent KDevelop::DUContext::NoUndefinedTemplateParams KDevelop::DUContext::DirectQualifiedLookup KDevelop::DUContext::NoFiltering KDevelop::DUContext::OnlyFunctions KDevelop::DUContext::NoImportsCheck)
+	Q_ENUMS(SearchFlag)
+	Q_FLAGS(SearchFlag NoSearchFlags InImportedParentContext OnlyContainerTypes DontSearchInParent NoUndefinedTemplateParams DirectQualifiedLookup NoFiltering OnlyFunctions NoImportsCheck)
 
 	public:
+		enum KrossContextType { Global=KDevelop::DUContext::Global, Namespace=KDevelop::DUContext::Namespace, Class=KDevelop::DUContext::Class, Function=KDevelop::DUContext::Function, Template=KDevelop::DUContext::Template, Enum=KDevelop::DUContext::Enum, Helper=KDevelop::DUContext::Helper, Other=KDevelop::DUContext::Other };
+		enum KrossSearchFlag { NoSearchFlags=KDevelop::DUContext::NoSearchFlags, InImportedParentContext=KDevelop::DUContext::InImportedParentContext, OnlyContainerTypes=KDevelop::DUContext::OnlyContainerTypes, DontSearchInParent=KDevelop::DUContext::DontSearchInParent, NoUndefinedTemplateParams=KDevelop::DUContext::NoUndefinedTemplateParams, DirectQualifiedLookup=KDevelop::DUContext::DirectQualifiedLookup, NoFiltering=KDevelop::DUContext::NoFiltering, OnlyFunctions=KDevelop::DUContext::OnlyFunctions, NoImportsCheck=KDevelop::DUContext::NoImportsCheck };
 		KrossKDevelopDUContext(KDevelop::DUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::DUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
