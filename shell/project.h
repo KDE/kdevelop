@@ -79,6 +79,9 @@ public:
     virtual KUrl projectFileUrl() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
+    virtual void addToFileSet( const IndexedString& );
+    virtual void removeFromFileSet( const IndexedString& );
+    virtual QSet<IndexedString> fileSet() const;
 public Q_SLOTS:
     /**
      * @brief Open a project

@@ -35,7 +35,7 @@
 #include "interfacesexport.h"
 
 template<typename T> class QList;
-
+template<typename T> class QSet;
 
 
 namespace KDevelop
@@ -46,6 +46,7 @@ class IProjectFileManager;
 class IBuildSystemManager;
 class ProjectFileItem;
 class ProjectFolderItem;
+class IndexedString;
 
 /**
  * \brief Object which represents a KDevelop project
@@ -98,13 +99,13 @@ public:
      * With this the top-level project item can be retrieved
      */
     Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
-    
+
     /** Get how much files are there in the project */
     Q_SCRIPTABLE virtual int fileCount() const = 0;
-    
+
     /** Get the item corresponding to the @p pos file */
     Q_SCRIPTABLE virtual ProjectFileItem* fileAt( int pos) const = 0;
-    
+
     /** Get a list of all files in the project */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
 
@@ -119,6 +120,11 @@ public:
     /** Get the url of the project file.*/
     Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
+
+    virtual void addToFileSet( const IndexedString& ) = 0;
+    virtual void removeFromFileSet( const IndexedString& ) = 0;
+    virtual QSet<IndexedString> fileSet() const = 0;
+
 //     virtual void setLocalFile( const KUrl& ) = 0;
 //     virtual void setGlobalFile( const KUrl& ) = 0;
 

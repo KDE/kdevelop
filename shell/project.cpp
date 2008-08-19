@@ -49,6 +49,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/importprojectjob.h>
 #include <project/projectmodel.h>
+#include <language/duchain/indexedstring.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -73,6 +74,7 @@ public:
     QString name;
     KSharedConfig::Ptr m_cfg;
     IProject *project;
+    QSet<KDevelop::IndexedString> fileSet;
 
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
@@ -479,6 +481,22 @@ ProjectFolderItem* Project::projectItem() const
 IPlugin* Project::versionControlPlugin() const
 {
     return d->vcsPlugin;
+}
+
+
+void Project::addToFileSet( const IndexedString& file )
+{
+    d->fileSet.insert( file );
+}
+
+void Project::removeFromFileSet( const IndexedString& file )
+{
+    d->fileSet.remove( file );
+}
+
+QSet<IndexedString> Project::fileSet() const
+{
+    return d->fileSet;
 }
 
 }
