@@ -156,62 +156,6 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define TDD_TODO QFAIL("Test command not implemented yet")
-
-void TestCppCodeCompletion::testSunnyIncludeCompletion()
-{
-    // included.h: class Foo {}
-    // includer.cpp: #include "bar.h"\n\nvoid f() { Foo foo; }
-
-    // invoke completion on 'foo'.
-    // verify that '#include included.h' gets added right after #include "bar.h"
-    TDD_TODO;
-}
-
-void TestCppCodeCompletion::testIngoreMocInclude()
-{
-    // included.h: class Foo {}
-    // includer.cpp: #include "bar.h"\n\nvoidf() { Foo foo; }\n\n#include "includer.moc"
-
-    // invoke completion on 'foo'.
-    // verify that '#include included.h' gets added right after #include "bar.h"
-
-    TDD_TODO;
-}
-
-void TestCppCodeCompletion::testIncludedInFrontOfUse()
-{
-    // included.h: class Foo {}
-    // includer.cpp: void f() { Foo foo; }\n\n#include "bar.h"
-
-    // invoke completion on 'foo'.
-    // verify that '#include included.h' gets added in front of 'void f()'
-
-    TDD_TODO;
-}
-
-void TestCppCodeCompletion::testMultipleIncludes()
-{
-    // included.h: class Foo {}
-    // includer.cpp: #include "bar.h"\n#include "baz.h"\n\nvoid f() { Foo foo; }
-
-    // invoke completion on 'foo'.
-    // verify that '#include included.h' gets added after #include "baz.h"
-
-    TDD_TODO;
-}
-
-void TestCppCodeCompletion::testForwardDeclarationInclude()
-{
-    // included.h: class Foo {}
-    // includer.cpp: #include "bar.h"\nclass Foo;\n\nvoid f() { Foo foo; }
-
-    // invoke completion on 'foo'.
-    // verify that '#include included.h' gets added after #include "bar.h"
-
-    TDD_TODO;
-}
-
 void TestCppCodeCompletion::testCompletionContext() {
   TEST_FILE_PARSE_ONLY
 
