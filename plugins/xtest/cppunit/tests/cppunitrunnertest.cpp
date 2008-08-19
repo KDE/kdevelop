@@ -45,7 +45,7 @@ using Veritas::ResultsModel;
 using Veritas::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestRoot;
-using CppUnit::it::CppUnitRunnerTest;
+using CppUnit::Test::CppUnitRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
 
