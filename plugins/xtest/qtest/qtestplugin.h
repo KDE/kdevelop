@@ -60,6 +60,7 @@ private slots:
 
 private:
     void removeAllResultsViews();
+    void removeResultsView(const QString& docId);
 
 private:
     QTestRunnerViewFactory* m_factory;

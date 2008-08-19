@@ -147,10 +147,11 @@ public:
     View* m_view;
 };
 
-void removeResultsView(const QString& docId)
+void QTestPlugin::removeResultsView(const QString& docId)
 {
     IUiController* uic = Core::self()->uiController();
     Sublime::Controller* sc = uic->controller();
+    sc->disconnect(this);
     QList<Area*> as = sc->allAreas();
     foreach(Area* a, as) {
         ResultsViewFinder rvf(docId);
@@ -160,6 +161,10 @@ void removeResultsView(const QString& docId)
             a->removeToolView(rvf.m_view);
         }
     }
+    connect(sc, SIGNAL(aboutToRemoveToolView(Sublime::View*)),
+             this, SLOT(maybeRemoveResultsView(Sublime::View*)));
+    connect(sc, SIGNAL(toolViewMoved(Sublime::View*)),
+            this, SLOT(fixMovedResultsView(Sublime::View*)));
 }
 
 void QTestPlugin::maybeRemoveResultsView(Sublime::View* v)

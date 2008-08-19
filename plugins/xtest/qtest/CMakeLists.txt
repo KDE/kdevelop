@@ -10,9 +10,7 @@ if(TestBuild AND NOT WIN32)
     add_definitions( -fvisibility=default )
 endif(TestBuild AND NOT WIN32)
 
-include_directories(
-    config
-    )
+include_directories(config)
 
 set(kdevqtest_SRCS
     qtestoutputparser.cpp
@@ -36,7 +34,6 @@ set(kdevqtest_SRCS
 qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})
 target_link_libraries(kdevqtest
-    kdev4cppduchain
     ${KDEVPLATFORM_VERITAS_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
