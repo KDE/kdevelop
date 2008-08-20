@@ -42,11 +42,24 @@ void CaseBuilder::setExecutable(Executable* exe)
     m_executable = exe;
 }
 
+void CaseBuilder::setSuiteName(const QString& suite)
+{
+    m_suite = suite;
+}
+
 QTestCase* CaseBuilder::construct()
 {
     Q_ASSERT(m_executable);
     QFileInfo exeLocation(m_executable->location().path());
-    QTestCase* caze = new QTestCase(m_executable->name(), exeLocation);
+
+    QString cazeName = m_executable->name();
+    if (!m_suite.isEmpty() && cazeName.startsWith(m_suite + "-")) {
+        QStringList spl = cazeName.split("-");
+        Q_ASSERT(spl.count() > 1);
+        cazeName = spl[spl.count()-1];
+    }
+
+    QTestCase* caze = new QTestCase(cazeName, exeLocation);
 
     QStringList exeFunctionOut = m_executable->fetchFunctions();
     foreach(QString line, exeFunctionOut) {

@@ -22,6 +22,7 @@
 #define QTEST_VERITAS_CASEBUILDER_H
 
 #include "qxqtestexport.h"
+#include <QString>
 
 namespace QTest
 {
@@ -47,8 +48,11 @@ public:
     void setExecutable(Executable*);
     virtual QTestCase* construct();
 
+    void setSuiteName(const QString&);
+
 private:
     Executable* m_executable;
+    QString m_suite;
 };
 
 }

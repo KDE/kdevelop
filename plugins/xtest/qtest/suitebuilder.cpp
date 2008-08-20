@@ -93,10 +93,12 @@ void SuiteBuilder::constructCases()
     int nrofShells = m_testShellExes.count();
     int count = 1;
     foreach(KUrl testExe, m_testShellExes) {
+        QString suiteName = suiteNameForExe(testExe);
         CaseBuilder* cb = createCaseBuilder(testExe);
+        cb->setSuiteName(suiteName);
         QTestCase* caze = cb->construct();
         delete cb;
-        QString suiteName = suiteNameForExe(testExe);
+
         Q_ASSERT(m_suites.contains(suiteName));
         QTestSuite* suite = m_suites[suiteName];
         Q_ASSERT(suite);
