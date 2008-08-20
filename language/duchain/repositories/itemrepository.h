@@ -674,7 +674,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   };
   
   enum {
-    ItemRepositoryVersion = 13,
+    ItemRepositoryVersion = 14,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
