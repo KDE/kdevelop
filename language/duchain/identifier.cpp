@@ -110,24 +110,24 @@ struct IdentifierItemRequest {
   const DynamicIdentifierPrivate& m_identifier;
 };
 
-struct StaticDisableUnloading {
-  template<class T>
-  StaticDisableUnloading(T& t) {
-    t.setUnloadingEnabled(false);
-  }
-};
-
-ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest> identifierRepository("Identifier Repository");
+ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest>& identifierRepository() {
+  static ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest> rep("Identifier Repository");
+  rep.setUnloadingEnabled(false);
+  return rep;
+}
 ///@todo Think about enabling unloading
-StaticDisableUnloading identifierRepositoryDisableUnloading(identifierRepository);
-uint emptyConstantIdentifierPrivateIndex = identifierRepository.index(DynamicIdentifierPrivate());
+
+uint emptyConstantIdentifierPrivateIndex() {
+  static uint index = identifierRepository().index(DynamicIdentifierPrivate());
+  return index;
+}
 
 const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
-  return identifierRepository.itemFromIndex(emptyConstantIdentifierPrivateIndex);
+  return identifierRepository().itemFromIndex(emptyConstantIdentifierPrivateIndex());
 }
 
 bool IndexedIdentifier::isEmpty() const {
-  return index == emptyConstantIdentifierPrivateIndex;
+  return index == emptyConstantIdentifierPrivateIndex();
 }
 
 
@@ -239,13 +239,19 @@ struct QualifiedIdentifierItemRequest {
   const DynamicQualifiedIdentifierPrivate& m_identifier;
 };
 
-ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> qualifiedIdentifierRepository("Qualified Identifier Repository", &globalItemRepositoryRegistry(), 2);
-StaticDisableUnloading qualifiedIdentifierRepositoryDisableUnloading(qualifiedIdentifierRepository);
+ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest>& qualifiedidentifierRepository() {
+  static ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> rep("Qualified Identifier Repository", &globalItemRepositoryRegistry(), 2);
+  rep.setUnloadingEnabled(false);
+  return rep;
+}
 
-uint emptyConstantQualifiedIdentifierPrivateIndex = qualifiedIdentifierRepository.index(DynamicQualifiedIdentifierPrivate());
+uint emptyConstantQualifiedIdentifierPrivateIndex() {
+   uint index = qualifiedidentifierRepository().index(DynamicQualifiedIdentifierPrivate());
+   return index;
+}
 
 const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
-  return qualifiedIdentifierRepository.itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex);
+  return qualifiedidentifierRepository().itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex());
 }
 
 uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
@@ -260,7 +266,7 @@ Identifier::Identifier(const Identifier& rhs) {
 
 Identifier::Identifier(uint index) : m_index(index) {
   Q_ASSERT(m_index);
-  cd = identifierRepository.itemFromIndex(index);
+  cd = identifierRepository().itemFromIndex(index);
 }
 
 Identifier::~Identifier() {
@@ -309,7 +315,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
 }
 
 Identifier::Identifier()
-  : m_index(emptyConstantIdentifierPrivateIndex), cd(emptyConstantIdentifierPrivate())
+  : m_index(emptyConstantIdentifierPrivateIndex()), cd(emptyConstantIdentifierPrivate())
 {
 }
 
@@ -464,9 +470,9 @@ uint QualifiedIdentifier::index() const {
 void Identifier::makeConstant() const {
   if(m_index)
     return;
-  m_index = identifierRepository.index( IdentifierItemRequest(*dd) );
+  m_index = identifierRepository().index( IdentifierItemRequest(*dd) );
   delete dd;
-  cd = identifierRepository.itemFromIndex( m_index );
+  cd = identifierRepository().itemFromIndex( m_index );
 }
 
 void Identifier::prepareWrite() {
@@ -484,7 +490,7 @@ void Identifier::prepareWrite() {
   dd->clearHash();
 }
 
-QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedIdentifierRepository.itemFromIndex(index) ) {
+QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedidentifierRepository().itemFromIndex(index) ) {
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const QString& id)
@@ -511,7 +517,7 @@ QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
 }
 
 QualifiedIdentifier::QualifiedIdentifier()
-  : m_index(emptyConstantQualifiedIdentifierPrivateIndex), cd(emptyConstantQualifiedIdentifierPrivate())
+  : m_index(emptyConstantQualifiedIdentifierPrivateIndex()), cd(emptyConstantQualifiedIdentifierPrivate())
 {
 }
 
@@ -949,9 +955,9 @@ const Identifier QualifiedIdentifier::at(int i) const
 void QualifiedIdentifier::makeConstant() const {
   if(m_index)
     return;
-  m_index = qualifiedIdentifierRepository.index( QualifiedIdentifierItemRequest(*dd) );
+  m_index = qualifiedidentifierRepository().index( QualifiedIdentifierItemRequest(*dd) );
   delete dd;
-  cd = qualifiedIdentifierRepository.itemFromIndex( m_index );
+  cd = qualifiedidentifierRepository().itemFromIndex( m_index );
 }
 
 void QualifiedIdentifier::prepareWrite() {
@@ -1084,7 +1090,7 @@ TypeIdentifier::TypeIdentifier(const TypeIdentifier& id) : QualifiedIdentifier()
 TypeIdentifier::TypeIdentifier(const QualifiedIdentifier& id) : QualifiedIdentifier(id) {
 }
 
-IndexedIdentifier::IndexedIdentifier() : index(emptyConstantIdentifierPrivateIndex) {
+IndexedIdentifier::IndexedIdentifier() : index(emptyConstantIdentifierPrivateIndex()) {
 }
 
 IndexedIdentifier::IndexedIdentifier(const Identifier& id) : index(id.index()) {
@@ -1114,11 +1120,11 @@ IndexedIdentifier::operator Identifier() const {
   return Identifier(index);
 }
 
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex) {
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex()) {
 }
 
 bool IndexedQualifiedIdentifier::isValid() const {
-  return index != emptyConstantQualifiedIdentifierPrivateIndex;
+  return index != emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id) : index(id.index()) {
@@ -1143,11 +1149,11 @@ IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
   return QualifiedIdentifier(index);
 }
 
-IndexedTypeIdentifier::IndexedTypeIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex) {
+IndexedTypeIdentifier::IndexedTypeIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex()) {
 }
 
 bool IndexedTypeIdentifier::isValid() const {
-  return index != emptyConstantQualifiedIdentifierPrivateIndex;
+  return index != emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
 IndexedTypeIdentifier::IndexedTypeIdentifier(const TypeIdentifier& id) : index(id.index()) {

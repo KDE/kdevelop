@@ -644,7 +644,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 9,
+    ItemRepositoryVersion = 10,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
