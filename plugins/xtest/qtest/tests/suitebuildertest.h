@@ -37,6 +37,7 @@ private slots:
     void singleSuiteCaseCommand();
     void multiSuitesCasesCommands();
     void identicalSuiteNames();
+    void removeDirPrefix();
 };
 
 }}
