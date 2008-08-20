@@ -754,6 +754,11 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         while( !context && import > 0 ) {
           --import;
         }
+        
+        if(context == this) {
+          kDebug() << "resolved self as import:" << scopeIdentifier(true);
+          continue;
+        }
 
         if( !context )
           break;
@@ -976,6 +981,12 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     }
     if( !context )
       break;
+    
+    if(context == this) {
+      kDebug() << "resolved self as import:" << scopeIdentifier(true);
+      continue;
+    }
+    
 
     if( position.isValid() && import->position.isValid() && position < import->position )
       continue;
@@ -1278,6 +1289,12 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
           --a;
           context = d->m_importedContexts()[a].context();
         }
+        
+        if(context == this) {
+          kDebug() << "resolved self as import:" << scopeIdentifier(true);
+          continue;
+        }
+        
         if( !context )
           break;
 
