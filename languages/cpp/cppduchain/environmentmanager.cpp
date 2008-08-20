@@ -25,6 +25,55 @@
 #include <language/duchain/arrayhelpers.h>
 #include <language/duchain/duchainregister.h>
 
+using namespace KDevelop;
+
+DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
+
+struct IncludePathListItem {
+  
+    IncludePathListItem() {
+      initializeAppendedLists(true);
+    }
+    ~IncludePathListItem() {
+      freeAppendedLists();
+    }
+    
+    void operator=(const IncludePathListItem& rhs) {
+      m_refCount = 0; //We can use this as a kind of initialization, since it's only called by createItem(..)
+      copyListsFrom(rhs);
+    }
+    
+    bool operator==(const IncludePathListItem& rhs) const {
+      return listsEqual(rhs);
+    }
+  
+    uint hash() const {
+      uint ret = 0;
+      for(int a = 0; a < m_includePathsSize(); ++a)
+        ret = (m_includePaths()[a].hash() + ret) * 17;
+      
+      return ret;
+    }
+    
+    uint itemSize() const {
+      return dynamicSize();
+    }
+    
+    uint classSize() const {
+      return sizeof(*this);
+    }
+  
+    uint m_refCount;
+    START_APPENDED_LISTS(IncludePathListItem);
+    APPENDED_LIST_FIRST(IncludePathListItem, KDevelop::IndexedString, m_includePaths);
+    END_APPENDED_LISTS(IncludePathListItem, m_includePaths);
+};
+
+typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
+
+typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData, false> IncludePathsRepository;
+IncludePathsRepository includePathsRepository("include path repository");
+
 struct FileModificationPair {
   KDevelop::IndexedString file;
   KDevelop::ModificationRevision revision;
@@ -125,11 +174,7 @@ inline bool debugging() {
 #define DEBUG_NEEDSUPDATE
 
 using namespace Cpp;
-using namespace KDevelop;
 
-namespace Cpp {
-DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
-}
 
 REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 
@@ -422,15 +467,31 @@ const LazyMacroSet& EnvironmentFile::usedMacros() const {
 
 const QList<IndexedString> EnvironmentFile::includePaths() const {
   QList<IndexedString> ret;
-  FOREACH_FUNCTION(IndexedString include, d_func()->m_includePaths)
-    ret << include;
+  if(d_func()->m_includePaths) {
+    const IncludePathListItem* item = includePathsRepository.itemFromIndex(d_func()->m_includePaths);
+    
+    FOREACH_FUNCTION(IndexedString include, item->m_includePaths)
+      ret << include;
+  }
   return ret;
 }
 
 void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
-  d_func_dynamic()->m_includePathsList().clear();
-  foreach(IndexedString include, paths)
-    d_func_dynamic()->m_includePathsList().append(include);
+  if(d_func()->m_includePaths) {
+    IncludePathListItem* item = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    --item->m_refCount;
+    if(!item->m_refCount)
+      includePathsRepository.deleteItem(d_func()->m_includePaths);
+    d_func_dynamic()->m_includePaths = 0;
+  }
+  if(!paths.isEmpty()) {
+    IncludePathListItem item;
+    foreach(IndexedString include, paths)
+      item.m_includePathsList().append(include);
+    d_func_dynamic()->m_includePaths = includePathsRepository.index(item);
+    IncludePathListItem* gotItem = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    ++gotItem->m_refCount;
+  }
 }
 
 ///Should contain a modification-time for each included-file

@@ -148,7 +148,6 @@ DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedS
 
 struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     EnvironmentFileData() {
-      initializeAppendedLists();
       m_contentStartLine = 0;
       m_strings = 0;
       m_includeFiles = 0;
@@ -160,10 +159,9 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_unDefinedMacroNames = 0;
       m_identityOffset = 0;
       m_allModificationTimes = 0;
+      m_includePaths = 0;
     }
     EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::DUChainBaseData(rhs) {
-      initializeAppendedLists();
-      copyListsFrom(rhs);
       m_url = rhs.m_url;
       m_modificationTime = rhs.m_modificationTime;
       m_strings = rhs.m_strings; //String-set
@@ -178,10 +176,10 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_contentStartLine = rhs.m_contentStartLine;
       m_topContext = rhs.m_topContext;
       m_identityOffset = rhs.m_identityOffset;
+      m_includePaths = rhs.m_includePaths;
     }
     
     ~EnvironmentFileData() {
-      freeAppendedLists();
     }
     KDevelop::IndexedString m_url;
     KDevelop::IndexedTopDUContext m_topContext;
@@ -197,11 +195,8 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     uint m_definedMacroNames; //String-set
     uint m_unDefinedMacroNames; //String-set
     uint m_allModificationTimes;
+    uint m_includePaths; //Index in the internal include-paths repository
     int m_contentStartLine;
-    
-    START_APPENDED_LISTS_BASE(EnvironmentFileData, KDevelop::DUChainBaseData);
-    APPENDED_LIST_FIRST(EnvironmentFileData, KDevelop::IndexedString, m_includePaths);
-    END_APPENDED_LISTS(EnvironmentFileData, m_includePaths);
 };
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
