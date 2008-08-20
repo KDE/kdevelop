@@ -56,7 +56,7 @@ END_TEST
 
 START_TEST( baz_cmd1 )
 {
-    sleep(1);
+    usleep(50000);
 }
 END_TEST
 
