@@ -421,7 +421,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     ///              @param modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
     ///                            This this allows efficiently computing the clashes using the local object map hash.
 
-    bool hasClashingItem(uint hash, uint modulo = NextBucketHashSize) {
+    bool hasClashingItem(uint hash, uint modulo) {
       
       Q_ASSERT(modulo % ObjectMapSize == 0);
       
@@ -435,7 +435,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         return false;
 
       while(currentIndex) {
-        if(itemFromIndex(currentIndex)->hash() % modulo == hashMod)
+        uint currentHash = itemFromIndex(currentIndex)->hash();
+        
+        Q_ASSERT(currentHash % m_objectMapSize == localHash);
+        
+        if(currentHash % modulo == hashMod)
           return true; //Clash
         currentIndex = followerIndex(currentIndex);
       }
@@ -665,11 +669,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   enum {
     //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
+    //Must also be a multiple of Bucket::NextBucketHashSize, for the same reason.(Currently those are same)
     bucketHashSize = (targetBucketHashSize / Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize) * Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize
   };
   
   enum {
-    ItemRepositoryVersion = 12,
+    ItemRepositoryVersion = 13,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -757,7 +762,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
     
     m_metaDataChanged = true; ///@todo Better tracking of whether the data has changed
-    
+
     if(!pickedBucketInChain && useBucket == m_currentBucket) {
       //Try finding an existing bucket with deleted space to store the data into
       for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
@@ -819,6 +824,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           if(!intersect.second) {
             ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket));)
             ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(useBucket, hash, previousBucketNumber));)
+            
+            Q_ASSERT(m_buckets[previousBucketNumber]->nextBucketForHash(hash) == 0);
             
             m_buckets[previousBucketNumber]->setNextBucketForHash(hash, useBucket);
             ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, useBucket));)
@@ -902,7 +909,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     return 0;
   }
   
-  ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
+  ///Deletes the item from the repository.
   void deleteItem(unsigned int index) {
     ThisLocker lock(&m_mutex); 
     
@@ -942,6 +949,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         previousBucketNumber = nextBucket;
     }
     
+    //Make sure the index was reachable through the hashes
+    Q_ASSERT(previousBucketNumber || *bucketHashPosition == bucket);
+    
     Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
     if(!bucketPtr) {
       initializeBucket(bucket);
@@ -976,8 +986,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       //The item is directly in the m_firstBucketForHash hash
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
       Q_ASSERT(*bucketHashPosition == bucket);
-      
-      while(!bucketPtr->hasClashingItem(hash, bucketHashSize)) 
+      return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
+      while(!bucketPtr->hasClashingItem(hash, bucketHashSize))
       {
         unsigned short next = bucketPtr->nextBucketForHash(hash);
         *bucketHashPosition = next;
@@ -998,6 +1008,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       if(!bucketPtr->hasClashingItem(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize)) {
         ///Debug: Check for infinite recursion
         walkBucketLinks(*bucketHashPosition, hash);
+        
+        Q_ASSERT(previousBucketPtr->nextBucketForHash(hash) == bucket);
         
         previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
         
