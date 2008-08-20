@@ -170,7 +170,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   return functionDeclaration->context()->owner();
 }
 
-KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, Declaration* declaration)
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* /*fromContext*/, Declaration* /*declaration*/)
 {
   ///@todo implement
   return true;

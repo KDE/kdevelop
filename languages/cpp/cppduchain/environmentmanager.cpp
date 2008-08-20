@@ -25,6 +25,75 @@
 #include <language/duchain/arrayhelpers.h>
 #include <language/duchain/duchainregister.h>
 
+struct FileModificationPair {
+  KDevelop::IndexedString file;
+  KDevelop::ModificationRevision revision;
+
+  FileModificationPair() {
+  }
+  
+  FileModificationPair(KDevelop::IndexedString _file, KDevelop::ModificationRevision _revision) : file(_file), revision(_revision) {
+  }
+  
+  unsigned int hash() const {
+    return ((file.hash() + revision.modificationTime) * 17 + revision.revision) * 73;
+  }
+  
+  unsigned short int itemSize() const {
+    return sizeof(FileModificationPair);
+  }
+  
+  bool operator==(const FileModificationPair& rhs) const {
+    return file == rhs.file && revision == rhs.revision;
+  }
+};
+
+struct FileModificationPairRequest {
+
+  FileModificationPairRequest(const FileModificationPair& data) : m_data(data) {
+  }
+  
+  const FileModificationPair& m_data;
+  
+  enum {
+    AverageSize = sizeof(FileModificationPair)
+  };
+
+  unsigned int hash() const {
+    return m_data.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_data.itemSize();
+  }
+
+  void createItem(FileModificationPair* item) const {
+    *item = m_data;
+  }
+  
+  bool equals(const FileModificationPair* item) const {
+    return *item == m_data;
+  }
+};
+
+typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, KDevelop::NoDynamicData, false> FileModificationPairRepository;
+
+static FileModificationPairRepository& fileModificationPairRepository() {
+  static FileModificationPairRepository rep("file modification repository");
+  return rep;
+}
+
+struct FileModificationSetRepository : public Utils::BasicSetRepository {
+  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", true) {
+  }
+  virtual void itemRemovedFromSets(uint index) {
+    kDebug() << "item removed from file-modification repository:" << index;
+    fileModificationPairRepository().deleteItem(index);
+  }
+};
+
+FileModificationSetRepository fileModificationSetRepository;
+
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 // #define DEBUG
 // #define ifDebug(X) X
@@ -60,7 +129,6 @@ using namespace KDevelop;
 
 namespace Cpp {
 DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
-DEFINE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair)
 }
 
 REGISTER_DUCHAIN_ITEM(EnvironmentFile);
@@ -196,16 +264,22 @@ bool EnvironmentFile::needsUpdate() const {
     return true;
   }
 
-  for( QMap<IndexedString, ModificationRevision>::const_iterator it = allModificationTimes().begin(); it != allModificationTimes().end(); ++it ) {
-    ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( it.key() );
-    if( revision != *it ) {
+  ///@todo Do caching for complete sets!
+  Utils::Set::Iterator it = m_allModificationTimes.iterator();
+  while(it) {
+    const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
+    ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
+    if( revision != data->revision ) {
 #ifdef DEBUG_NEEDSUPDATE
-  if(debugging()) {
-      kDebug( 9007 ) << "dependency" << it.key().str() << "has changed, stored stamp:" << it.value() << "new time:" << revision ;
-  }
+      if(debugging()) {
+        kDebug( 9007 ) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
+      }
 #endif
+      
       return true;
     }
+
+    ++it;
   }
 
   return false;
@@ -224,7 +298,6 @@ EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) 
   ifDebug( kDebug(9007) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
   
   clearModificationTimes();
-  m_modificationTimesChanged = true;
 }
 
 EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironmentFile(data) 
@@ -235,11 +308,8 @@ EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironme
       , m_definedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_definedMacros, &EnvironmentManager::macroSetRepository))
       , m_definedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_definedMacroNames, &EnvironmentManager::stringSetRepository))
       , m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_unDefinedMacroNames, &EnvironmentManager::stringSetRepository))
+      , m_allModificationTimes(data.m_allModificationTimes, &fileModificationSetRepository)
 {
-  m_modificationTimesChanged = false;
-  //Copy data from "data" to temporary items
-  FOREACH_FUNCTION(const StringModificationPair& pair, data.m_allModificationTimes)
-    m_allModificationTimes[pair.first] = pair.second;
 }
 
 void EnvironmentFile::aboutToSave() {
@@ -260,13 +330,8 @@ void EnvironmentFile::aboutToSave() {
     d_func_dynamic()->m_definedMacroNames = m_definedMacroNames.set().setIndex();
   if(d_func()->m_unDefinedMacroNames != m_unDefinedMacroNames.set().setIndex())
     d_func_dynamic()->m_unDefinedMacroNames = m_unDefinedMacroNames.set().setIndex();
-  
-  if(m_modificationTimesChanged) {
-    d_func_dynamic()->m_allModificationTimesList().clear();
-    for(QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>::const_iterator it = m_allModificationTimes.begin(); it != m_allModificationTimes.end(); ++it)
-      d_func_dynamic()->m_allModificationTimesList().append( qMakePair(it.key(), it.value()) );
-    m_modificationTimesChanged = false;
-  }
+  if(d_func()->m_allModificationTimes != m_allModificationTimes.setIndex())
+    d_func_dynamic()->m_allModificationTimes = m_allModificationTimes.setIndex();
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
@@ -369,14 +434,22 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
 }
 
 ///Should contain a modification-time for each included-file
-const QMap<IndexedString, KDevelop::ModificationRevision>& EnvironmentFile::allModificationTimes() const {
-  return m_allModificationTimes;
+const QMap<IndexedString, KDevelop::ModificationRevision> EnvironmentFile::allModificationTimes() const {
+  QMap<IndexedString, KDevelop::ModificationRevision> ret;
+  Utils::Set::Iterator it = m_allModificationTimes.iterator();
+  while(it) {
+    const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
+    ret[data->file] = data->revision;
+    ++it;
+  }
+  return ret;
 }
 
 void EnvironmentFile::clearModificationTimes() {
-  m_modificationTimesChanged = true;
-  m_allModificationTimes.clear();
-  m_allModificationTimes[d_func()->m_url] = d_func()->m_modificationTime;
+  m_allModificationTimes.staticUnref();
+  
+  m_allModificationTimes = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+  m_allModificationTimes.staticRef();
 }
 
 IndexedString EnvironmentFile::url() const {
@@ -400,12 +473,19 @@ void EnvironmentFile::clearMissingIncludeFiles()
 
 void EnvironmentFile::addIncludeFile( const IndexedString& file, const ModificationRevision& modificationTime ) {
   m_includeFiles.insert(file);
-  m_allModificationTimes[file] = modificationTime;
-  m_modificationTimesChanged = true;
+
+  Utils::Set oldMoficiationTimes = m_allModificationTimes;
+  m_allModificationTimes += fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(file, modificationTime)));
+  m_allModificationTimes.staticRef();
+  oldMoficiationTimes.staticUnref();
 }
 
 void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
-#ifdef LEXERCACHE_DEBUG
+
+  Utils::Set oldMoficiationTimes = m_allModificationTimes;
+  m_allModificationTimes -= fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+  
+  #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
   kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
   }
@@ -416,8 +496,10 @@ void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevis
   kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
   }
 #endif
-  m_allModificationTimes[d_func()->m_url] = rev;
-  m_modificationTimesChanged = true;
+  m_allModificationTimes += fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+
+  m_allModificationTimes.staticRef();
+  oldMoficiationTimes.staticUnref();
 }
 
 KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
@@ -467,10 +549,11 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   m_includeFiles += file.m_includeFiles.set();
   m_missingIncludeFiles += file.m_missingIncludeFiles.set();
   
-  for( QMap<IndexedString, KDevelop::ModificationRevision>::const_iterator it = file.m_allModificationTimes.begin(); it != file.m_allModificationTimes.end(); ++it )
-    m_allModificationTimes[it.key()] = *it;
-
-  m_modificationTimesChanged = true;
+  Utils::Set oldModificationTimes = m_allModificationTimes;
+  
+  m_allModificationTimes += file.m_allModificationTimes;
+  m_allModificationTimes.staticRef();
+  oldModificationTimes.staticUnref();
 
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {

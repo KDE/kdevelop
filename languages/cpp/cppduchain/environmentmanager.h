@@ -143,10 +143,8 @@ typedef Utils::LazySet<rpp::pp_macro, MacroIndexConversion> LazyMacroSet;
 
 class EnvironmentManager;
 class MacroSet;
-typedef QPair<KDevelop::IndexedString, KDevelop::ModificationRevision> StringModificationPair;
 
 DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
-DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_allModificationTimes, StringModificationPair)
 
 struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     EnvironmentFileData() {
@@ -161,6 +159,7 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_definedMacroNames = 0;
       m_unDefinedMacroNames = 0;
       m_identityOffset = 0;
+      m_allModificationTimes = 0;
     }
     EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::DUChainBaseData(rhs) {
       initializeAppendedLists();
@@ -175,6 +174,7 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_definedMacros = rhs.m_definedMacros; //Macro-set
       m_definedMacroNames = rhs.m_definedMacroNames; //String-set
       m_unDefinedMacroNames = rhs.m_unDefinedMacroNames; //String-set
+      m_allModificationTimes = rhs.m_allModificationTimes;
       m_contentStartLine = rhs.m_contentStartLine;
       m_topContext = rhs.m_topContext;
       m_identityOffset = rhs.m_identityOffset;
@@ -196,12 +196,12 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
     uint m_definedMacros; //Macro-set
     uint m_definedMacroNames; //String-set
     uint m_unDefinedMacroNames; //String-set
+    uint m_allModificationTimes;
     int m_contentStartLine;
     
     START_APPENDED_LISTS_BASE(EnvironmentFileData, KDevelop::DUChainBaseData);
     APPENDED_LIST_FIRST(EnvironmentFileData, KDevelop::IndexedString, m_includePaths);
-    APPENDED_LIST(EnvironmentFileData, StringModificationPair, m_allModificationTimes, m_includePaths);
-    END_APPENDED_LISTS(EnvironmentFileData, m_allModificationTimes);
+    END_APPENDED_LISTS(EnvironmentFileData, m_includePaths);
 };
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
@@ -274,7 +274,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     const LazyStringSet& unDefinedMacroNames() const;
   
     ///Should contain a modification-time for each included-file
-    const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>& allModificationTimes() const;
+    ///Relatively expensive, since a conversion has to be done internally.
+    const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision> allModificationTimes() const;
 
     ///Clears the modification times of all dependencies
     void clearModificationTimes();
@@ -315,10 +316,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     Cpp::LazyMacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
     Cpp::LazyStringSet m_definedMacroNames;
     Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
-    ///@todo Implement this with a SetRepository that uses reference-counting for the items
-    QMap<KDevelop::IndexedString, KDevelop::ModificationRevision>  m_allModificationTimes;
-    
-    bool m_modificationTimesChanged;
+
+    Utils::Set  m_allModificationTimes; //Set of indices in the modification-time repository
     
     DUCHAIN_DECLARE_DATA(EnvironmentFile)
     /*

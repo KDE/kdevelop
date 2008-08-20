@@ -153,7 +153,7 @@ public:
   void printStatistics() const;
   
   ///Is called when this index is not part of any set any more
-  virtual void itemRemovedFromSets(uint index) const;
+  virtual void itemRemovedFromSets(uint index);
   
 private:
   friend class Set;

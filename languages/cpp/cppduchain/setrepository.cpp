@@ -34,7 +34,7 @@
 #ifndef DEBUG
 #define CHECK_SPLIT_POSITION(Node)
 #else
-#define CHECK_SPLIT_POSITION(node) Q_ASSERT(!(node).leftNode || (this->leftNode(&node)->end <= splitPositionForRange((node).start, (node).end) && this->rightNode(&node)->start >= splitPositionForRange((node).start, (node).end)))
+#define CHECK_SPLIT_POSITION(node) Q_ASSERT(!(node).leftNode || (getLeftNode(&node)->end <= splitPositionForRange((node).start, (node).end) && getRightNode(&node)->start >= splitPositionForRange((node).start, (node).end)))
 #endif
 
 namespace Utils {
@@ -260,17 +260,17 @@ struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
   }
   
-  inline const SetNodeData* leftNode(const SetNodeData* node) const {
-    return repository.itemFromIndex(node->leftNode);
-  }
+//   inline const SetNodeData* getLeftNode(const SetNodeData* node) const {
+    #define getLeftNode(node) repository.itemFromIndex(node->leftNode)
+//   }
   
-  inline const SetNodeData* rightNode(const SetNodeData* node) const {
-    return repository.itemFromIndex(node->rightNode);
-  }
+//   inline const SetNodeData* getRightNode(const SetNodeData* node) const {
+    #define getRightNode(node) repository.itemFromIndex(node->rightNode)
+//   }
   
-  inline const SetNodeData* nodeFromIndex(uint index) const {
-    return repository.itemFromIndex(index);
-  }
+//   inline const SetNodeData* nodeFromIndex(uint index) const {
+    #define nodeFromIndex(index) repository.itemFromIndex(index)
+//   }
   
   ///Expensive
   Index count(const SetNodeData* node) const;
@@ -358,7 +358,6 @@ struct SetNodeDataRequest {
     m_created = true;
     
     *item = data;
-    Q_ASSERT(item->m_hash);
   
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
     
@@ -376,21 +375,10 @@ struct SetNodeDataRequest {
   
   //Should return whether the here requested item equals the given item
   inline bool equals(const SetNodeData* item) const {
-    Q_ASSERT(item->m_hash);
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
     //Just compare child nodes, since data must be correctly split, this is perfectly ok
     //Since this happens in very tight loops, we don't call an additional function here, but just do the check.
-    if(item->leftNode) {
-      if(!data.leftNode)
-        return false;
-      else
-        return item->leftNode == data.leftNode && item->rightNode == data.rightNode;
-    }else{
-      if(data.leftNode)
-        return false;
-      else
-        return data.start == item->start && data.end == item->end;
-    }
+    return item->leftNode == data.leftNode && item->rightNode == data.rightNode && item->start == data.start && item->end == data.end;
   }
   
   SetNodeData data;
@@ -456,17 +444,17 @@ QString Set::dumpDotGraph() const {
 
 Index SetRepositoryAlgorithms::count(const SetNodeData* node) const {
   if(node->leftNode && node->rightNode)
-    return count(leftNode(node)) + count(rightNode(node));
+    return count(getLeftNode(node)) + count(getRightNode(node));
   else
     return node->end - node->start;
 }
 
 void SetRepositoryAlgorithms::localCheck(const SetNodeData* ifDebug(node) ) {
-  Q_ASSERT(node->start > 0);
+//   Q_ASSERT(node->start > 0);
   Q_ASSERT(node->start < node->end);
   Q_ASSERT((node->leftNode && node->rightNode) || (!node->leftNode && !node->rightNode));
-  Q_ASSERT(!node->leftNode || (leftNode(node)->start == node->start && rightNode(node)->end == node->end));
-  Q_ASSERT(!node->leftNode || (leftNode(node)->end <= rightNode(node)->start));
+  Q_ASSERT(!node->leftNode || (getLeftNode(node)->start == node->start && getRightNode(node)->end == node->end));
+  Q_ASSERT(!node->leftNode || (getLeftNode(node)->end <= getRightNode(node)->start));
 }
 
 void SetRepositoryAlgorithms::check(uint node) {
@@ -479,10 +467,10 @@ void SetRepositoryAlgorithms::check(uint node) {
 void SetRepositoryAlgorithms::check(const SetNodeData* node) {
   localCheck(node);
   if(node->leftNode)
-    check(leftNode(node));
+    check(getLeftNode(node));
   if(node->rightNode)
-    check(rightNode(node));
-  CHECK_SPLIT_POSITION(*node);
+    check(getRightNode(node));
+//  CHECK_SPLIT_POSITION(*node); Re-enable this
 }
 
 QString SetRepositoryAlgorithms::shortLabel(const SetNodeData& node) const {
@@ -676,11 +664,14 @@ uint SetRepositoryAlgorithms::createSetFromNodes(uint leftNode, uint rightNode, 
     set.start = left->start;
     set.end = right->end;
 
+    Q_ASSERT(set.start < set.end);
+    
     set.updateHash(left, right);
     
     uint ret = repository.index(SetNodeDataRequest(&set, repository));
     Q_ASSERT(set.leftNode >= 0x10000);
     Q_ASSERT(set.rightNode >= 0x10000);
+    Q_ASSERT(ret == repository.findIndex(SetNodeDataRequest(&set, repository)));
     ifDebug( check(ret) );
     return ret;
 }
@@ -699,8 +690,8 @@ uint SetRepositoryAlgorithms::computeSetFromNodes(uint leftNode, uint rightNode,
     uint leftLeftNode = left->leftNode;
     uint leftRightNode = left->rightNode;
     
-    const SetNodeData* leftLeft = this->leftNode(left);
-    const SetNodeData* leftRight = this->rightNode(left);
+    const SetNodeData* leftLeft = this->getLeftNode(left);
+    const SetNodeData* leftRight = this->getRightNode(left);
     
     Q_ASSERT(splitPosition >= leftLeft->end && splitPosition <= leftRight->start);
     
@@ -714,8 +705,8 @@ uint SetRepositoryAlgorithms::computeSetFromNodes(uint leftNode, uint rightNode,
     uint rightLeftNode = right->leftNode;
     uint rightRightNode = right->rightNode;
     
-    const SetNodeData* rightLeft = this->leftNode(right);
-    const SetNodeData* rightRight = this->rightNode(right);
+    const SetNodeData* rightLeft = this->getLeftNode(right);
+    const SetNodeData* rightRight = this->getRightNode(right);
     
     Q_ASSERT(splitPosition >= rightLeft->end && splitPosition <= rightRight->start);
     
@@ -864,9 +855,9 @@ bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNode
         leftNextStack.push(lhs+lhs->rightChildOffset);
         lhs = lhs+1;
         }else{
-        rightNextStack.push(rightNode(rhs));
+        rightNextStack.push(getRightNode(rhs));
         Q_ASSERT(rightNextStack.top());
-        rhs = leftNode(rhs);
+        rhs = getLeftNode(rhs);
         if(!rhs)
             return false;
         }
@@ -979,7 +970,7 @@ bool SetRepositoryAlgorithms::set_contains(const SetNodeData* node, Index index)
     if(node->contiguous())
       return true;
 
-    if(index < leftNode(node)->end)
+    if(index < getLeftNode(node)->end)
       node = nodeFromIndex(node->leftNode);
     else
       node = nodeFromIndex(node->rightNode);
@@ -1321,12 +1312,12 @@ void Set::staticUnref() {
       Q_ASSERT(data->m_refCount);
       --data->m_refCount;
       
-      if(data->rightNode)
-        nextNodes.append(data->rightNode);
-      if(data->leftNode)
-        nextNodes.append(data->leftNode);
-      
       if(data->m_refCount == 0) {
+        if(data->rightNode)
+          nextNodes.append(data->rightNode);
+        if(data->leftNode)
+          nextNodes.append(data->leftNode);
+        
         if(!data->leftNode && !data->rightNode) {
           //Deleting a leaf
           Q_ASSERT(data->end - data->start == 1);
@@ -1338,7 +1329,7 @@ void Set::staticUnref() {
     }
 }
 
-void BasicSetRepository::itemRemovedFromSets(uint /*index*/) const {
+void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
 }
 
 }
