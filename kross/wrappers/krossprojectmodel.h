@@ -13,17 +13,12 @@ namespace KDevelop { class ProjectExecutableTargetItem; }
 namespace KDevelop { class ProjectLibraryTargetItem; }
 namespace KDevelop { class ProjectTestTargetItem; }
 namespace KDevelop { class ProjectFileItem; }
-namespace KDevelop { class WorkspaceItem; }
 namespace KDevelop { class ProjectModel; }
 namespace Handlers
 {
 	QVariant _kDevelopProjectModelHandler(void* type);
 	QVariant kDevelopProjectModelHandler(KDevelop::ProjectModel* type);
 	QVariant kDevelopProjectModelHandler(const KDevelop::ProjectModel* type);
-
-	QVariant _kDevelopWorkspaceItemHandler(void* type);
-	QVariant kDevelopWorkspaceItemHandler(KDevelop::WorkspaceItem* type);
-	QVariant kDevelopWorkspaceItemHandler(const KDevelop::WorkspaceItem* type);
 
 	QVariant _kDevelopProjectFileItemHandler(void* type);
 	QVariant kDevelopProjectFileItemHandler(KDevelop::ProjectFileItem* type);

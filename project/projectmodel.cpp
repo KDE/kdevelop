@@ -210,11 +210,6 @@ ProjectModel::ProjectModel( QObject *parent )
 {
 }
 
-WorkspaceItem* ProjectModel::workspace() const
-{
-    return dynamic_cast<WorkspaceItem*>( item(0,0) );
-}
-
 ProjectModel::~ProjectModel()
 {}
 
@@ -452,29 +447,6 @@ int ProjectTestTargetItem::type() const
     return ProjectBaseItem::TestTarget;
 }
 
-WorkspaceItem::WorkspaceItem( const QString& name, const QString& metadataFile )
-    : d( new WorkspaceItemPrivate )
-{
-    setText(name);
-    d->name = name;
-    d->metadataConfig = KSharedConfig::openConfig( metadataFile );
-    d->metadataDir = QFileInfo( metadataFile ).absolutePath();
-}
-
-QString WorkspaceItem::name() const
-{
-    return d->name;
-}
-
-QString WorkspaceItem::metadataDirectory() const
-{
-    return d->metadataDir;
-}
-
-KSharedConfig::Ptr WorkspaceItem::metadataConfiguration() const
-{
-    return d->metadataConfig;
-}
 
 }
 #include "projectmodel.moc"

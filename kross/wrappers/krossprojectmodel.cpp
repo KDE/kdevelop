@@ -137,20 +137,6 @@ class KrossKDevelopProjectFileItem : public KrossKDevelopProjectBaseItem
 		KDevelop::ProjectFileItem* wrapped;
 };
 
-class KrossKDevelopWorkspaceItem : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossKDevelopWorkspaceItem(KDevelop::WorkspaceItem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::WorkspaceItem"); }
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE QString name() const { return wrapped->name(); }
-		Q_SCRIPTABLE QString metadataDirectory() const { return wrapped->metadataDirectory(); }
-		Q_SCRIPTABLE KSharedPtr< KSharedConfig > metadataConfiguration() const { return wrapped->metadataConfiguration(); }
-	private:
-		KDevelop::WorkspaceItem* wrapped;
-};
-
 class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
@@ -160,7 +146,6 @@ class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 
 		Q_PROPERTY(const QMetaObject  staticMetaObject READ getstaticMetaObject SCRIPTABLE true)
 		Q_SCRIPTABLE const QMetaObject  getstaticMetaObject() const { return wrapped->staticMetaObject; }
-		Q_SCRIPTABLE KDevelop::WorkspaceItem* workspace() const { return wrapped->workspace(); }
 		Q_SCRIPTABLE KDevelop::ProjectBaseItem* item(const QModelIndex& x0) const { return wrapped->item(x0); }
 		Q_SCRIPTABLE void resetModel() { wrapped->resetModel(); }
 		Q_SCRIPTABLE void fetchMore(const QModelIndex& x0) { wrapped->fetchMore(x0); }
@@ -184,17 +169,6 @@ QVariant _kDevelopProjectModelHandler(void* type)
 bool b_KDevelopProjectModel=krossprojectmodel_registerHandler("KDevelop::ProjectModel*", _kDevelopProjectModelHandler);
 QVariant kDevelopProjectModelHandler(KDevelop::ProjectModel* type){ return _kDevelopProjectModelHandler(type); }
 QVariant kDevelopProjectModelHandler(const KDevelop::ProjectModel* type) { return _kDevelopProjectModelHandler((void*) type); }
-
-QVariant _kDevelopWorkspaceItemHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::WorkspaceItem* t=static_cast<KDevelop::WorkspaceItem*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::WorkspaceItem*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopWorkspaceItem(t, 0));
-}
-bool b_KDevelopWorkspaceItem=krossprojectmodel_registerHandler("KDevelop::WorkspaceItem*", _kDevelopWorkspaceItemHandler);
-QVariant kDevelopWorkspaceItemHandler(KDevelop::WorkspaceItem* type){ return _kDevelopWorkspaceItemHandler(type); }
-QVariant kDevelopWorkspaceItemHandler(const KDevelop::WorkspaceItem* type) { return _kDevelopWorkspaceItemHandler((void*) type); }
 
 QVariant _kDevelopProjectFileItemHandler(void* type)
 {

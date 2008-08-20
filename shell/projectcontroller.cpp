@@ -75,8 +75,6 @@ public:
     ProjectModel* model;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
 
-    WorkspaceItem* workspaceitem;
-
     QPointer<QAction> m_closeAllProjects;
 
     bool reopenProjectsOnStartup;
@@ -149,10 +147,6 @@ ProjectController::ProjectController( Core* core )
             this, SLOT( projectConfig( QObject* ) ) );
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
-    QString workspacename = KGlobal::config()->group("Workspace").readEntry( "Name", "default" );
-    QString workspaceMetadataFile = KGlobal::dirs()->findResource("data", workspacename+"Workspace/"+workspacename);
-    d->workspaceitem = new WorkspaceItem( workspacename, workspaceMetadataFile );
-    d->model->insertRow( 0, d->workspaceitem );
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
@@ -337,7 +331,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
 
     ProjectFolderItem *topItem = project->projectItem();
-    d->workspaceitem->insertRow( d->workspaceitem->rowCount(), topItem );
+    d->model->insertRow( d->model->rowCount(), topItem );
 
     d->m_projects.append( project );
 
@@ -453,7 +447,7 @@ bool ProjectController::closeProject(IProject* proj)
     }
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
-                                        // Now we can save settings for all of the Core 
+                                        // Now we can save settings for all of the Core
                                         // objects including this one!!
     //disableProjectCloseAction();
     unloadUnusedProjectPlugins(proj);

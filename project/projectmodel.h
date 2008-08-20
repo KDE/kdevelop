@@ -266,18 +266,6 @@ private:
     Q_DECLARE_PRIVATE(ProjectFileItem)
 };
 
-class KDEVPLATFORMPROJECT_EXPORT WorkspaceItem : public QStandardItem
-{
-public:
-    WorkspaceItem( const QString& name, const QString& metadataFile );
-
-    QString name() const;
-    QString metadataDirectory() const;
-    KSharedConfig::Ptr metadataConfiguration() const;
-private:
-    class WorkspaceItemPrivate* const d;
-};
-
 /**
  * Class providing some convenience methods for accessing the project model
  * @TODO: maybe switch to QAbstractItemModel, would make the implementation
@@ -289,8 +277,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
 public:
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
-
-    WorkspaceItem* workspace() const;
 
     using QStandardItemModel::item;
     ProjectBaseItem *item( const QModelIndex &index ) const;
