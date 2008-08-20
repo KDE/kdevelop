@@ -90,29 +90,7 @@ public slots:
      */
     void unselectAll() const;
 
-    /*!
-     * Expands all branches in the view.
-     */
-    void expandAll() const;
-
-    /*!
-     * Collapses all branches in the view.
-     */
-    void collapseAll() const;
-
 private: // Operations
-
-    /*!
-     * Helper method to recursively expand all branches. Starts with
-     * the item referred to by \a index.
-     */
-    void expand(const QModelIndex& index) const;
-
-    /*!
-     * Helper method to recursively collapse all branches. Starts with
-     * the item referred to by \a index.
-     */
-    void collapse(const QModelIndex& index) const;
 
     /*!
      * If \a select is true then all items in the view selected,

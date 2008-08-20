@@ -71,53 +71,6 @@ void RunnerViewController::unselectAll() const
     selectAllItems(false);
 }
 
-void RunnerViewController::expandAll() const
-{
-    expand(runnerProxyModel()->index(0,0));
-}
-
-void RunnerViewController::collapseAll() const
-{
-    collapse(runnerProxyModel()->index(0,0));
-}
-
-void RunnerViewController::expand(const QModelIndex& index) const
-{
-    if (!index.isValid()) {
-        return;
-    }
-    QModelIndex currentIndex = index;
-    // Recursively expand branches.
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            // First proceed the levels down.
-            expand(currentIndex.child(0, 0));
-            // Expand this level.
-            if (!view()->isExpanded(currentIndex)) {
-                view()->expand(currentIndex);
-            }
-        }
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
-}
-
-void RunnerViewController::collapse(const QModelIndex& index) const
-{
-    if (!index.isValid()) {
-        return;
-    }
-    QModelIndex i = index;
-    while (i.isValid()) { // Recursively collapse branches.
-        if (i.child(0, 0).isValid()) {
-            if (view()->isExpanded(i)) {
-                view()->collapse(i); // First collapse this level.
-            }
-            collapse(i.child(0, 0)); // Proceed one level down.
-        }
-        i = i.sibling(i.row() + 1, 0);
-    }
-}
-
 namespace
 {
 inline Test* testFromIndex(const QModelIndex& index)

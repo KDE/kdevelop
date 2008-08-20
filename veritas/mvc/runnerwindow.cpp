@@ -244,10 +244,10 @@ void RunnerWindow::connectActions()
             this, SLOT(unselectAll()));
     m_ui->actionExpandAll->setShortcut(QKeySequence(tr("Ctrl++")));
     connect(m_ui->actionExpandAll, SIGNAL(triggered(bool)),
-            runnerController(), SLOT(expandAll()));
+            runnerView(), SLOT(expandAll()));
     m_ui->actionCollapseAll->setShortcut(QKeySequence(tr("Ctrl+-")));
     connect(m_ui->actionCollapseAll, SIGNAL(triggered(bool)),
-            runnerController(), SLOT(collapseAll()));
+            runnerView(), SLOT(collapseAll()));
 }
 
 void RunnerWindow::unselectAll()
