@@ -155,6 +155,7 @@ KDevRegister::~KDevRegister()
 if (X) {\
     m_root = new Test("");\
     m_reloading = false; \
+    emit reloadFailed(); \
     return; \
 } else void(0)
 

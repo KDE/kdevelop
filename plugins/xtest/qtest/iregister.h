@@ -59,6 +59,9 @@ Q_SIGNALS:
     /*! Emitted when a reload cycle has completed */
     void reloadFinished(Veritas::Test* root);
 
+    /*! Something went wrong */
+    void reloadFailed();
+
 private:
     KDevelop::IProject* m_project;
     ISettings* m_settings;

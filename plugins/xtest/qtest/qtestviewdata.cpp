@@ -47,7 +47,8 @@ using namespace QTest;
 
 QTestViewData::QTestViewData(QObject* parent)
     : Veritas::TestViewData(parent),
-      m_settings(0)
+      m_settings(0),
+      m_lock(false)
 {
     m_id = QTestViewData::id;
     QTestViewData::id += 1;
@@ -73,6 +74,12 @@ void QTestViewData::registerTests()
         kDebug() << "!project()";
         return;
     }
+    if (m_lock) {
+        kDebug() << "currently buzzy";
+        return;
+    }
+    m_lock = true;
+
     if (m_settings) delete m_settings;
     m_settings = new Settings(project());
     KDevRegister* reg = new KDevRegister(); // TODO destructor this
@@ -80,9 +87,17 @@ void QTestViewData::registerTests()
     reg->setSettings(m_settings);
     connect(reg, SIGNAL(reloadFinished(Veritas::Test*)),
             this, SIGNAL(registerFinished(Veritas::Test*)));
+    connect(reg, SIGNAL(reloadFinished(Veritas::Test*)),
+            this, SLOT(resetLock()));
+    connect(reg, SIGNAL(reloadFailed()), this, SLOT(resetLock()));
     reg->reload();
 }
 
+
+void QTestViewData::resetLock()
+{
+    m_lock = false;
+}
 
 // should be moved to xmlregister
 QString QTestViewData::fetchBuildRoot()

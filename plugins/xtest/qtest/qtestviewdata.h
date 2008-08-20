@@ -40,8 +40,12 @@ public:
     int m_id;
     static int id; // used to get unique names.
 
+private slots:
+    void resetLock();
+
 private:
     QTest::ISettings* m_settings;
+    bool m_lock;
 };
 
 #endif
