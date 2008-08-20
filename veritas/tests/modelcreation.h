@@ -28,10 +28,7 @@
 
 namespace Veritas
 {
-namespace ut
-{
 
-using Veritas::Test;
 using Veritas::RunnerModel;
 using Veritas::ResultsModel;
 
@@ -73,7 +70,7 @@ public slots:
 
 public:
     static QList<int> executedItems; // store the index of rows that got executed
-    Veritas::TestState m_state;
+    TestState m_state;
     bool m_shouldRun;
     TestResult* m_result;
 };
@@ -188,6 +185,6 @@ inline ResultsModel* createResultsModelStub()
 }
 
 }
-}
+
 
 #endif // VERITAS_MODELCREATION_H

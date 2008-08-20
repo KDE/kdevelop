@@ -24,14 +24,8 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas
-{
+namespace Veritas {
 class ProxyModelCommon;
-}
-
-namespace Veritas
-{
-namespace ut {
 
 class ProxyModelCommonTest : public QObject
 {
@@ -49,7 +43,6 @@ private:
     Veritas::ProxyModelCommon* proxy;
 };
 
-}
 }
 
 #endif // VERITAS_PROXYMODELCOMMONTEST_H

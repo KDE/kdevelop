@@ -24,16 +24,9 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas
-{
+namespace Veritas {
 class ResultsModel;
 class ResultsProxyModel;
-}
-
-namespace Veritas
-{
-namespace ut {
-
 
 class ResultsProxyModelTest : public QObject
 {
@@ -60,7 +53,6 @@ private:
     Veritas::ResultsProxyModel* proxy;
 };
 
-}
 }
 
 

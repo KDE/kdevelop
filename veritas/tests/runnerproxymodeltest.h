@@ -24,16 +24,9 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas
-{
+namespace Veritas {
 class RunnerModel;
 class RunnerProxyModel;
-}
-
-namespace Veritas
-{
-namespace ut {
-
 
 class RunnerProxyModelTest : public QObject
 {
@@ -55,7 +48,6 @@ private:
     Veritas::RunnerProxyModel* proxy;
 };
 
-}
 }
 
 

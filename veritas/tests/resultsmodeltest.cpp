@@ -36,8 +36,8 @@
 using Veritas::ResultsModel;
 using Veritas::RunnerModel;
 using Veritas::Test;
-using Veritas::ut::RunnerModelStub;
-using Veritas::ut::ResultsModelTest;
+using Veritas::RunnerModelStub;
+using Veritas::ResultsModelTest;
 
 void ResultsModelTest::init()
 {

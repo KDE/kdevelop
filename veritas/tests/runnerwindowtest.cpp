@@ -36,10 +36,10 @@ using Veritas::Test;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 
-using Veritas::ut::TestStub;
-using Veritas::ut::RunnerModelStub;
-using Veritas::ut::createRunnerModelStub;
-using Veritas::it::RunnerWindowTest;
+using Veritas::TestStub;
+using Veritas::RunnerModelStub;
+using Veritas::createRunnerModelStub;
+using Veritas::RunnerWindowTest;
 
 // fixture
 void RunnerWindowTest::init()

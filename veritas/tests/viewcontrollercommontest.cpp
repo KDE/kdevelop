@@ -23,7 +23,7 @@
 #include "../mvc/viewcontrollercommon.h"
 
 using Veritas::ViewControllerCommon;
-using Veritas::ut::ViewControllerCommonTest;
+using Veritas::Test::ViewControllerCommonTest;
 
 void ViewControllerCommonTest::init()
 {

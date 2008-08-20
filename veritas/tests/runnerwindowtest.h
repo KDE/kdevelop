@@ -25,27 +25,14 @@
 #include <QTreeView>
 #include "../ui_runnerwindow.h"
 
-namespace Veritas
-{
+namespace Veritas {
 class RunnerWindow;
 class RunnerModel;
 class RunnerProxyModel;
 class ResultsProxyModel;
-}
 
-namespace Veritas
-{
-namespace ut {
 class RunnerModelStub;
 class TestStub;
-}
-}
-
-using Veritas::ut::TestStub;
-
-namespace Veritas
-{
-namespace it {
 
 class RunnerWindowTest : public QObject
 {
@@ -82,14 +69,13 @@ private:
 
 private:
     Veritas::RunnerWindow* window;
-    Veritas::ut::RunnerModelStub* model;
+    Veritas::RunnerModelStub* model;
     const Ui::RunnerWindow* m_ui;
     Veritas::RunnerProxyModel* m_proxy;
     Veritas::ResultsProxyModel* m_resultsProxy;
     QTreeView* m_view;
 };
 
-}
 }
 
 

@@ -27,8 +27,8 @@
 #include "../mvc/runnerproxymodel.h"
 
 using Veritas::RunnerProxyModel;
-using Veritas::ut::createRunnerModelStub;
-using Veritas::ut::RunnerProxyModelTest;
+using Veritas::createRunnerModelStub;
+using Veritas::RunnerProxyModelTest;
 
 void RunnerProxyModelTest::init()
 {

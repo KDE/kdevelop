@@ -24,10 +24,7 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas
-{
-namespace ut {
-
+namespace Veritas {
 class TestFake;
 
 class TestTest : public QObject
@@ -59,7 +56,6 @@ private:
     TestFake* root;
 };
 
-}
 }
 
 #endif // VERITAS_TESTTEST_H

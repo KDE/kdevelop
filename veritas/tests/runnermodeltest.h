@@ -24,12 +24,8 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas { class RunnerModel; }
-
-namespace Veritas
-{
-namespace ut {
-
+namespace Veritas {
+class RunnerModel;
 class RunnerModelStub;
 
 class RunnerModelTest : public QObject
@@ -62,7 +58,6 @@ private:
     RunnerModelStub* model;
 };
 
-}
 }
 
 

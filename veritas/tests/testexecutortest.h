@@ -26,11 +26,10 @@
 #include <QString>
 
 class QSignalSpy;
-namespace Veritas { class Test; class TestExecutor; }
 
-namespace Veritas
-{
-namespace ut {
+namespace Veritas {
+class Test;
+class TestExecutor;
 
 class TestExecutorTest : public QObject
 {
@@ -58,11 +57,10 @@ private:
     void assertAllDone();
 
 private:
-    Veritas::TestExecutor* m_executor;
+    TestExecutor* m_executor;
     QSignalSpy* m_allDoneSpy;
 };
 
-}
 }
 
 #endif // VERITAS_TESTEXECUTORTEST_H

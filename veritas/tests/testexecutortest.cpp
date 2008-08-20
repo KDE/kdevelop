@@ -32,9 +32,9 @@
 #include "../test.h"
 #include "../testexecutor.h"
 
-using Veritas::ut::TestExecutorTest;
 using Veritas::Test;
 using Veritas::TestExecutor;
+using Veritas::TestExecutorTest;
 
 namespace
 {

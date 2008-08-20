@@ -26,7 +26,7 @@
 #include "../mvc/proxymodelcommon.h"
 
 using Veritas::ProxyModelCommon;
-using Veritas::ut::ProxyModelCommonTest;
+using Veritas::ProxyModelCommonTest;
 
 void ProxyModelCommonTest::init()
 {

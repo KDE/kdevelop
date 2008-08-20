@@ -29,8 +29,8 @@
 
 using Veritas::ResultsProxyModel;
 using Veritas::ResultsModel;
-using Veritas::ut::createResultsModelStub;
-using Veritas::ut::ResultsProxyModelTest;
+using Veritas::createResultsModelStub;
+using Veritas::ResultsProxyModelTest;
 
 void ResultsProxyModelTest::init()
 {

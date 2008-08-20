@@ -26,15 +26,8 @@
 
 class QIcon;
 
-namespace Veritas
-{
+namespace Veritas {
 class ResultsModel;
-}
-
-namespace Veritas
-{
-namespace ut {
-
 class RunnerModelStub;
 
 class ResultsModelTest : public QObject
@@ -63,7 +56,6 @@ private:
     RunnerModelStub* m_runnerModel;
 };
 
-}
 }
 
 

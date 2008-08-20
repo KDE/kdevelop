@@ -24,15 +24,9 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-namespace Veritas
-{
-class ViewControllerCommon;
-}
+namespace Veritas { class ViewControllerCommon; }
 
-namespace Veritas
-{
-namespace ut {
-
+namespace Veritas { namespace Test {
 
 class ViewControllerCommonTest : public QObject
 {
@@ -47,7 +41,6 @@ private:
 
 };
 
-}
-}
+}}
 
 #endif // VERITAS_VIEWCONTROLLERCOMMONTEST_H

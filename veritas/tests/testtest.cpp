@@ -27,11 +27,9 @@
 #include "../test.h"
 
 using Veritas::Test;
-using Veritas::ut::TestTest;
+using Veritas::TestTest;
 
 namespace Veritas
-{
-namespace ut
 {
 // Test is abstract so stub the run method
 class TestFake : public Test
@@ -46,9 +44,8 @@ public slots:
     int run() { return 0; }
 };
 }
-}
 
-using Veritas::ut::TestFake;
+using Veritas::TestFake;
 
 #define TEST_COLUMN_COUNT 5
 
