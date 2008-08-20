@@ -56,7 +56,8 @@ QTestCase* CaseBuilder::construct()
     if (!m_suite.isEmpty() && cazeName.startsWith(m_suite + "-")) {
         QStringList spl = cazeName.split("-");
         Q_ASSERT(spl.count() > 1);
-        cazeName = spl[spl.count()-1];
+        spl.removeFirst();
+        cazeName = spl.join("-");
     }
 
     QTestCase* caze = new QTestCase(cazeName, exeLocation);
