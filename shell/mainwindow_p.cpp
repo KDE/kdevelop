@@ -133,14 +133,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 //             guiFactory()->removeClient(activePart);
     }
 
-    KTextEditor::View* kte_view = dynamic_cast<KTextEditor::View*>(viewWidget);
-    if( kte_view )
-    {
-        m_mainWindow->actionCollection()->action("settings_configure_editors")->setEnabled( true );
-    } else
-    {
-        m_mainWindow->actionCollection()->action("settings_configure_editors")->setEnabled( false );
-    }
+    m_mainWindow->actionCollection()->action("settings_configure_editors")->setEnabled( (qobject_cast<KTextEditor::View*>(viewWidget) != 0 ) );
 
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
