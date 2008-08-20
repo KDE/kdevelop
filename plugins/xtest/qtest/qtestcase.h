@@ -82,7 +82,6 @@ private:
     void removeFile(const QString& filePath);
 
 private slots:
-    void stopTimer();
     void morphXmlToText();
 
 private:

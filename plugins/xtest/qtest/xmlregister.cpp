@@ -106,7 +106,8 @@ void XmlRegister::reload()
         }
     }
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
-    emit reloadFinished(root());
+    kDebug() << "";
+    emit reloadFinished(m_rootItem);
 }
 
 void XmlRegister::setRootDir(const QString& root)
@@ -136,7 +137,7 @@ QTestCase* XmlRegister::instantiateCase(QTestSuite* parent)
     caze->setSettings(m_settings);
     caze->setProcess(new KProcess(caze));
     caze->setOutputParser(new QTestOutputParser);
-    kDebug() << "Instantiated new QTestCase: " << caze->name();
+    kDebug() << caze->name();
     return caze;
 }
 
@@ -154,8 +155,7 @@ void XmlRegister::processCmd(QTestCase* caze)
 {
     QTestCommand* cmd = new QTestCommand(fetchName(), caze);
     caze->addChild(cmd);
-    kDebug() << "  Instantiated new QTestCommand " 
-             << cmd->name() << " " << cmd->command();
+    kDebug() << cmd->name();
 }
 
 QString XmlRegister::fetchName()

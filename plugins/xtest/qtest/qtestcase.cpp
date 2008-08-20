@@ -152,15 +152,7 @@ void QTestCase::setUpProcSignals()
 //     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
 //             this, SIGNAL(executionFinished()));
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(stopTimer()));
-}
-
-void QTestCase::stopTimer()
-{
-    m_timer->stop();
-    m_timer->setSingleShot(true);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(morphXmlToText()));
-    m_timer->start(100);
+           this, SLOT(morphXmlToText()));
 }
 
 void QTestCase::morphXmlToText()
@@ -251,12 +243,15 @@ void QTestCase::executeProc()
     QString dir = QDir::currentPath();
     QDir::setCurrent(executable().dir().absolutePath());
     kDebug() << "Executing " << m_proc->program() << " [ " << executable().filePath() << " ]";
-    //m_proc->setStandardOutputFile(m_stdOutFilePath);
+    ///m_proc->setStandardOutputFile(m_stdOutFilePath);
     m_proc->setStandardErrorFile(m_stdErrFilePath, QIODevice::Append);
+    //m_parser->setDevice(m_proc);
+    //connect(m_proc, SIGNAL(readyRead()), m_parser, SLOT(go()));
     m_proc->start();
     QDir::setCurrent(dir);
+
     m_parser->setDevice(m_output);
-    m_timer->start(100); // triggers QTestOutputParser evry 0.05 sec
+    m_timer->start(50); // triggers QTestOutputParser evry 0.05 sec
 }
 
 #include "qtestcase.moc"
