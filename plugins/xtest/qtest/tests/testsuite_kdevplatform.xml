@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+<suite name="veritas" dir="veritas/tests" >
+<case name="veritas-ut-resultsmodel" exe="veritas-ut-resultsmodel.shell" >
+<command name="default_" />
+<command name="appendResults" />
+<command name="mapIndices" />
+<command name="errorHandling" />
+<command name="testFromIndex" />
+</case>
+<case name="veritas-ut-test" exe="veritas-ut-test.shell" >
+<command name="simpleRoot" />
+<command name="multipleColumns" />
+<command name="accessIllegalColumn" />
+<command name="resetValue" />
+<command name="appendChildren" />
+<command name="retrieveLeaves" />
+<command name="reparent" />
+</case>
+<case name="veritas-ut-runnermodel" exe="veritas-ut-runnermodel.shell" >
+<command name="default_" />
+<command name="appendResults" />
+<command name="changeItems" />
+<command name="flags" />
+<command name="runItems" />
+<command name="errorHandling" />
+<command name="countItems" />
+<command name="updateViewLastItem" />
+</case>
+<case name="veritas-it-runnerwindow" exe="veritas-it-runnerwindow.shell" >
+<command name="startItems" />
+<command name="selectAll" />
+<command name="unselectAll" />
+<command name="expandAll" />
+<command name="collapseAll" />
+<command name="deselectItems" />
+<command name="newModel" />
+<command name="clickRunnerResults" />
+<command name="progressBarMaxedOutAfterRun" />
+</case>
+<case name="veritas-ut-proxymodelcommon" exe="veritas-ut-proxymodelcommon.shell" >
+<command name="active" />
+<command name="defaultEnabled" />
+<command name="enabledColumns" />
+</case>
+<case name="veritas-ut-runnerproxymodel" exe="veritas-ut-runnerproxymodel.shell" >
+<command name="errorHandling" />
+</case>
+<case name="veritas-ut-testexecutor" exe="veritas-ut-testexecutor.shell" >
+<command name="rootOnly" />
+<command name="noneShouldRun" />
+<command name="levelOneAggregate" />
+<command name="levelTwoAggregate" />
+<command name="multipleAggregates" />
+<command name="unbalancedAggregates" />
+<command name="noneSelected" />
+<command name="deselectedTests" />
+<command name="runTwice" />
+</case>
+<case name="veritas-ut-resultsproxymodel" exe="veritas-ut-resultsproxymodel.shell" >
+<command name="default_" />
+<command name="deactivate" />
+<command name="enableColumns" />
+<command name="disableColumn" />
+<command name="filter" />
+</case>
+</suite>
+<suite name="plugins/cvs" dir="plugins/cvs/tests" >
+<case name="kdevcvs-test" exe="kdevcvs-test.shell" >
+<command name="testInitAndImport" />
+</case>
+</suite>
+<suite name="plugins/coverage" dir="plugins/coverage/tests" >
+<case name="veritas-ut-lcovinfoparser" exe="veritas-ut-lcovinfoparser.shell" >
+<command name="singleCoveredFile" />
+<command name="multipleFiles" />
+</case>
+<case name="veritas-ut-reportmodel" exe="veritas-ut-reportmodel.shell" >
+<command name="sortRole" />
+<command name="addSingleCoverageData" />
+<command name="multiCoverageOneFile" />
+<command name="differentSlocSetOneFile" />
+</case>
+<case name="veritas-ut-coveredfile" exe="veritas-ut-coveredfile.shell" >
+<command name="construct" />
+<command name="sunny" />
+<command name="zeroSloc" />
+<command name="callCount" />
+<command name="linesSet" />
+<command name="isReachable" />
+</case>
+<case name="veritas-ut-reportfileitem" exe="veritas-ut-reportfileitem.shell" >
+<command name="construct" />
+<command name="addCoverage" />
+<command name="addMultipleCoverage" />
+</case>
+<case name="veritas-ut-annotationmanager" exe="veritas-ut-annotationmanager.shell" >
+<command name="instantiate" />
+<command name="singleLine" />
+<command name="multipleLines" />
+<command name="multipleViews" />
+<command name="multipleFiles" />
+<command name="notCovered" />
+<command name="stopWatching" />
+<command name="multiCoverageOneFile" />
+</case>
+<case name="veritas-ut-reportitems" exe="veritas-ut-reportitems.shell" >
+<command name="constructDoubleValueItem" />
+<command name="constructIntValueItem" />
+<command name="constructDirItem" />
+<command name="addFileToDirItem" />
+<command name="addMultipleFilesToDir" />
+</case>
+</suite>
+<suite name="interfaces" dir="interfaces/tests" >
+<case name="script_documentcontroller" exe="script_documentcontroller.shell" >
+<command name="openDocument" />
+<command name="documentLoaded" />
+</case>
+<case name="scriptingtest" exe="scriptingtest.shell" >
+<command name="checkGlobalObjects" />
+<command name="helloScript" />
+<command name="checkCore" />
+<command name="checkDocumentController" />
+</case>
+<case name="script_document" exe="script_document.shell" >
+<command name="activeDocument" />
+<command name="save" />
+</case>
+</suite>
+<suite name="shell" dir="shell/tests" >
+<case name="shell-projectcontrollertest" exe="shell-projectcontrollertest.shell" >
+<command name="openProject" />
+<command name="closeProject" />
+<command name="openCloseOpen" />
+<command name="openMultiple" />
+</case>
+<case name="shell-documentoperationtest" exe="shell-documentoperationtest.shell" >
+<command name="testOpenDocumentFromText" />
+<command name="testClosing" />
+<command name="testKateDocumentAndViewCreation" />
+</case>
+</suite>
+<suite name="sublime" dir="sublime/tests" >
+<case name="sublime-controllertest" exe="sublime-controllertest.shell" >
+<command name="documentDeletion" />
+<command name="areaDeletion" />
+<command name="namedAreas" />
+</case>
+<case name="sublime-areawalkertest" exe="sublime-areawalkertest.shell" >
+<command name="viewWalkerModes" />
+<command name="toolViewWalkerModes" />
+</case>
+<case name="sublime-areaoperationtest" exe="sublime-areaoperationtest.shell" >
+<command name="areaConstruction" />
+<command name="mainWindowConstruction" />
+<command name="areaCloning" />
+<command name="areaSwitchingInSameMainwindow" />
+<command name="simpleViewAdditionAndDeletion" />
+<command name="complexViewAdditionAndDeletion" />
+<command name="toolViewAdditionAndDeletion" />
+</case>
+<case name="sublime-aggregatemodeltest" exe="sublime-aggregatemodeltest.shell" >
+<command name="modelAggregationInASingleView" />
+</case>
+<case name="sublime-toolviewtoolbartest" exe="sublime-toolviewtoolbartest.shell" >
+<command name="horizontalTool" />
+<command name="verticalTool" />
+<command name="toolViewMove" />
+</case>
+<case name="sublime-viewactivationtest" exe="sublime-viewactivationtest.shell" >
+<command name="viewActivation" />
+<command name="activationInMultipleMainWindows" />
+<command name="activationAfterViewRemoval" />
+<command name="activationAfterRemovalSimplestCase" />
+<command name="signalsOnViewCreationAndDeletion" />
+</case>
+<case name="sublime-viewtest" exe="sublime-viewtest.shell" >
+<command name="widgetDeletion" />
+<command name="viewReimplementation" />
+</case>
+<case name="sublime-documenttest" exe="sublime-documenttest.shell" >
+<command name="viewDeletion" />
+</case>
+</suite>
+</root>

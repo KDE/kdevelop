@@ -27,7 +27,7 @@ class Sleep : public QThread
 {
 public:
      void run() {}
-     static void waitAbit() { QThread::usleep(250000); } // 0.25 sec
+     static void waitAbit() { QThread::usleep(50000); } // 0.05 sec
 };
 
 int main(int argc, char** argv)

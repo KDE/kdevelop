@@ -18,6 +18,13 @@
  * 02110-1301, USA.
  */
 
+#include "standalonerunner.h"
+#include "../xmlregister.h"
+
+#include <veritas/runnerwindow.h>
+#include <veritas/runnermodel.h>
+#include <veritas/resultsmodel.h>
+
 #include <QFile>
 #include <QMainWindow>
 #include <KApplication>
@@ -25,59 +32,65 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KLocale>
-
-#include <runnerwindow.h>
-#include "../xmlregister.h"
-#include <runnermodel.h>
+#include <KDebug>
+#include <QTimer>
 
 using namespace Veritas;
 using namespace QTest;
 
 void do_stuff(int argc, char** argv);
-void do_useful_stuff(char** argv);
 
 int main(int argc, char** argv)
 {
     do_stuff(argc, argv);
     KApplication app;
-    do_useful_stuff(argv);
+    Boot* b = new Boot;
+    b->regXML = QString(argv[1]);
+    b->rootDir = QString(argv[2]);
+    b->start();
     return app.exec();
 }
 
-
-#include <KDebug>
-
-class Stuff : public QObject
+void Boot::start()
 {
-Q_OBJECT
-public slots:
-    void showResultsWindow() {
-        QMainWindow *window = new QMainWindow(0);
-        main->resultsWidget()->setParent(window);
-        window->setCentralWidget(main->resultsWidget());
-        window->setParent(main);
-        window->show();
-    }
-private:
-    RunnerWindow* main;
-};
+    QTimer* t = new QTimer;
+    t->setSingleShot(true);
+    t->setInterval(100);
+    connect(t, SIGNAL(timeout()), this, SLOT(load()));
+    t->start();
+}
 
-#include "stuff.moc"
-
-void do_useful_stuff(char** argv)
+void Boot::load()
 {
-    QFile f(argv[1]);
-    QTestRegister r;
-    r.setRootDir(argv[2]);
-    r.addFromXml(&f);
+    QFile f(regXML);
+    m_reg = new XmlRegister;
+    m_reg->setRootDir(rootDir);
+    m_reg->setSource(&f);
+    m_reg->reload();
+    connect(m_reg, SIGNAL(reloadFinished(Veritas::Test*)),
+            this, SLOT(showWindow()));
+
+    QTimer* t = new QTimer;
+    t->setSingleShot(true);
+    t->setInterval(250);
+    connect(t, SIGNAL(timeout()), this, SLOT(showWindow()));
+    t->start();
+}
+
+void Boot::showWindow()
+{
+    kDebug() << "";
     RunnerModel* m = new RunnerModel;
-    m->setRootItem(r.rootItem());
-    RunnerWindow* w = new RunnerWindow;
+    m->setRootItem(m_reg->root());
+    QStringList resultHeaders;
+    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+                  << i18n("File Name") << i18n("Line Number");
+    ResultsModel* rm = new ResultsModel(resultHeaders, this);
+    RunnerWindow* w = new RunnerWindow(rm);
     w->setModel(m);
-    w->show();
-    Stuff* s = new Stuff;
-    QObject::connect(w, SIGNAL(openResultsView(bool)),
-            s, SLOT(showResultsWindow()));
+    QMainWindow* mw = new QMainWindow;
+    mw->setCentralWidget(w);
+    mw->show();
 }
 
 QByteArray b("stuff");
@@ -86,18 +99,6 @@ KCmdLineOptions* o;
 
 void do_stuff(int argc, char** argv)
 {
-/*    KAboutData (
-    const QByteArray &appName, 
-    const QByteArray &catalogName, 
-    const KLocalizedString &programName, 
-    const QByteArray &version, 
-    const KLocalizedString &shortDescription=KLocalizedString(), 
-    enum LicenseKey licenseType=License_Unknown, 
-    const KLocalizedString &copyrightStatement=KLocalizedString(), 
-    const KLocalizedString &text=KLocalizedString(), 
-    const QByteArray &homePageAddress=QByteArray(), 
-    const QByteArray &bugsEmailAddress="submit@bugs.kde.org")*/
-
     ad = new KAboutData(b, b, ki18n(b), b, ki18n(b),
                         KAboutData::License_Unknown,
                         ki18n(b), ki18n(b), b, b);
@@ -107,3 +108,5 @@ void do_stuff(int argc, char** argv)
     o->add("+testroot", ki18n("Test root."));
     KCmdLineArgs::addCmdLineOptions(*o);
 }
+
+#include "standalonerunner.moc"

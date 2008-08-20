@@ -2,8 +2,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/qtest
-        ${XtestPlugin_SOURCE_DIR}  # for kasserts.h
-)
+        ${XtestPlugin_SOURCE_DIR})
 
 macro(kdev_add_test test_EXEC test_SRCS)
     qt4_automoc( ${test_SRCS} )
@@ -28,13 +27,12 @@ kdev_add_test(ut-casebuilder casebuildertest.cpp)
 
 add_subdirectory(suite1)
 
-# include_directories(${XtestPlugin_BINARY_DIR}/qtest/tests) # for stuff.moc
-# qt4_wrap_cpp(standalonerunner.cpp stuff.moc)
-# add_executable(qtestrunner standalonerunner.cpp)
-# target_link_libraries(qtestrunner
-#         ${QT_QTGUI_LIBRARY}
-#         ${QT_QTXML_LIBRARY}
-#         ${KDE4_KDECORE_LIBS}
-#         ${KDE4_KDEUI_LIBS}
-#         ${KDEVPLATFORM_VERITAS_LIBRARY}
-#         kdevqtest)
+add_executable(qtestrunner standalonerunner.cpp)
+qt4_automoc(standalonerunner.cpp)
+target_link_libraries(qtestrunner
+        ${QT_QTGUI_LIBRARY}
+        ${QT_QTXML_LIBRARY}
+        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS}
+        ${KDEVPLATFORM_VERITAS_LIBRARY}
+        kdevqtest)
