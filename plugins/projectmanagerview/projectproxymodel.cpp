@@ -20,6 +20,7 @@
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
 #include <KDebug>
+#include <qfileinfo.h>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
@@ -34,18 +35,13 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
 {
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
     if(!iLeft || !iRight) return false;
-    
+
 
     int leftType=iLeft->type(), rightType=iRight->type();
     bool ret;
     if(leftType==rightType)
     {
-        QString strLeft=iLeft->text(), strRight=iRight->text();
-        int extLeft=strLeft.lastIndexOf('.'), extRight=strRight.lastIndexOf('.');
-        if(strLeft.right(strLeft.count()-extLeft)==strRight.right(strRight.count()-extRight))
-            ret = strLeft > strRight;
-        else
-            ret = strLeft.right(strLeft.count()-extLeft)>strRight.right(strRight.count()-extRight);
+        return iLeft->text() > iRight->text();
     }
     else
     {
