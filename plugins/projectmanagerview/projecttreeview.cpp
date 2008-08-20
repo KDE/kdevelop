@@ -68,15 +68,15 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     setIndentation(15);
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    if( style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this) == KGlobalSettings::singleClick() ) 
+    if( style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this) == KGlobalSettings::singleClick() )
     {
         connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
-    } else 
+    } else
     {
-        if( KGlobalSettings::singleClick() ) 
+        if( KGlobalSettings::singleClick() )
         {
             connect( this, SIGNAL( clicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
-        } else 
+        } else
         {
             connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
         }
@@ -114,8 +114,8 @@ ProjectFolderItem *ProjectTreeView::currentFolderItem() const
 
 void ProjectTreeView::mouseReleaseEvent( QMouseEvent* event )
 {
-    mouseClickChangesSelection = ( event->modifiers() & Qt::ControlModifier ) | ( event->modifiers() & Qt::ShiftModifier ); 
-
+    mouseClickChangesSelection = ( event->modifiers() & Qt::ControlModifier ) | ( event->modifiers() & Qt::ShiftModifier );
+    rightButtonClicked = ( event->button() == Qt::RightButton );
     QTreeView::mouseReleaseEvent( event );
 }
 
@@ -171,7 +171,7 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
-    if( mouseClickChangesSelection )
+    if( mouseClickChangesSelection || rightButtonClicked )
         return;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );

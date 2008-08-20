@@ -69,6 +69,7 @@ class ProjectTreeView: public QTreeView
         class ProjectTreeViewPrivate* const d;
         KDevelop::IProject* m_ctxProject;
         bool mouseClickChangesSelection;
+        bool rightButtonClicked;
 };
 
 #endif // KDEVPROJECTMANAGER_H
