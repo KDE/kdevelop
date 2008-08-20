@@ -22,6 +22,17 @@
 #include <KDebug>
 #include <qfileinfo.h>
 
+KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
+{
+    if( type == KDevelop::ProjectBaseItem::Folder || type == KDevelop::ProjectBaseItem::BuildFolder )
+        return KDevelop::ProjectBaseItem::Folder;
+    if( type == KDevelop::ProjectBaseItem::Target || type == KDevelop::ProjectBaseItem::ExecutableTarget
+        || type == KDevelop::ProjectBaseItem::LibraryTarget || type == KDevelop::ProjectBaseItem::TestTarget)
+        return KDevelop::ProjectBaseItem::Target;
+
+    return KDevelop::ProjectBaseItem::File;
+}
+
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
 {}
@@ -36,18 +47,20 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
     if(!iLeft || !iRight) return false;
 
-
-    int leftType=iLeft->type(), rightType=iRight->type();
-    bool ret;
-    if(leftType==rightType)
+    KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(iLeft->type()), rightType=baseType(iRight->type());
+    if( leftType == rightType )
     {
-        return iLeft->text() > iRight->text();
+        return iLeft->text() < iRight->text();
     }
-    else
+    if( leftType == KDevelop::ProjectBaseItem::Folder )
     {
-        ret = leftType > rightType;
+        return true;
     }
-    return ret;
+    if( leftType == KDevelop::ProjectBaseItem::Target && rightType != KDevelop::ProjectBaseItem::Folder )
+    {
+        return true;
+    }
+    return false;
 }
 
 QModelIndex ProjectProxyModel::indexFromItem(QStandardItem* item) const

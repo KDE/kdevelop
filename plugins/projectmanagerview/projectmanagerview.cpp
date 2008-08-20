@@ -150,10 +150,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_modelFilter = new ProjectProxyModel( this );
     d->m_modelFilter->setSourceModel(overviewModel);
     d->m_modelFilter->setDynamicSortFilter(true);
-    d->m_projectOverview->setSortingEnabled(true);
     d->m_projectOverview->setModel( d->m_modelFilter );
-//     d->m_projectOverview->setModel( overviewModel );
-    d->m_projectOverview->setExpanded( d->m_modelFilter->index(0,0,QModelIndex()), true );
+    d->m_projectOverview->setSortingEnabled(true);
+    d->m_projectOverview->sortByColumn( 0, Qt::AscendingOrder );
+//     d->m_projectOverview->setModel( overviewModel );c
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
