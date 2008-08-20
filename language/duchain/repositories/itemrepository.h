@@ -35,6 +35,12 @@
 #define ifDebugInfiniteRecursion(x) x
 //#define ifDebugInfiniteRecursion(x)
 
+///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
+///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
+///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
+///during the call to createItem().
+//#define DEBUG_WRITING_EXTENTS
+
 namespace KDevelop {
 
   /**
@@ -166,15 +172,17 @@ class ExampleRequestItem {
 template<class Item, class ItemRequest, class DynamicData>
 class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   enum {
-    AdditionalSpacePerItem = DynamicData::Size + 2,
-    NextBucketHashSize = 500 //Affects the average count of bucket-chains that need to be walked in ItemRepository::index
+    AdditionalSpacePerItem = DynamicData::Size + 2
   };
   public:
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
       ///@todo Change these to use sizes instead of counts
       MaxFreeItemsForHide = 4, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-      MinFreeItemsForReuse = 13, //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      MinFreeItemsForReuse = 13 //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+    };
+    enum {
+      NextBucketHashSize = ObjectMapSize, //Affects the average count of bucket-chains that need to be walked in ItemRepository::index. Must be a multiple of ObjectMapSize
       DataSize = sizeof(unsigned int) * 4 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
     };
     enum {
@@ -378,22 +386,26 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
       
+#ifdef DEBUG_CREATEITEM_EXTENTS
       char* borderBehind = m_data + insertedAt + (totalSize-AdditionalSpacePerItem);
-      
+
       quint64 oldValueBehind = 0;
       if(m_available >= 8) {
         oldValueBehind = *(quint64*)borderBehind;
         *((quint64*)borderBehind) = 0xfafafafafafafafaLLU;
       }
+#endif
       
       //Last thing we do, because createItem may recursively do even more transformation of the repository
       request.createItem((Item*)(m_data + insertedAt));
       
+#ifdef DEBUG_CREATEITEM_EXTENTS
       if(m_available >= 8) {
         //If this assertion triggers, then the item writes a bigger range than it advertised in 
         Q_ASSERT(*((quint64*)borderBehind) == 0xfafafafafafafafaLLU);
         *((quint64*)borderBehind) = oldValueBehind;
       }
+#endif
       
       Q_ASSERT(itemFromIndex(insertedAt)->hash() == request.hash());
       Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == request.itemSize());
@@ -406,7 +418,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     
     ///@param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
     ///              The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
+    ///              @param modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
+    ///                            This this allows efficiently computing the clashes using the local object map hash.
+
     bool hasClashingItem(uint hash, uint modulo = NextBucketHashSize) {
+      
+      Q_ASSERT(modulo % ObjectMapSize == 0);
+      
       m_lastUsed = 0;
       
       uint hashMod = hash % modulo;
@@ -447,6 +465,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         m_objectMap[localHash] = followerIndex(index);
       else
         setFollowerIndex(previousIndex, followerIndex(index));
+      
+      memset(const_cast<Item*>(itemFromIndex(index)), 0, size); //For debugging, so we notice the data is wrong   
       
       setFreeSize(index, size);
       
@@ -638,13 +658,18 @@ struct ReferenceCounting {
 ///                   That meta-data can be manipulated by giving manipulators to the ItemRepository Member functions. 
 ///                   This can be used to implement reference-counting, @see ReferenceCounting
 ///@param threadSafe Whether class access should be thread-safe
-template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, unsigned int bucketHashSize = 524288>
+template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, unsigned int targetBucketHashSize = 524288>
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
   
   enum {
-    ItemRepositoryVersion = 10,
+    //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
+    bucketHashSize = (targetBucketHashSize / Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize) * Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize
+  };
+  
+  enum {
+    ItemRepositoryVersion = 12,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -879,7 +904,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   
   ///Deletes the item from the repository. It is crucial that the given hash and size are correct.
   void deleteItem(unsigned int index) {
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(&m_mutex); 
     
     m_metaDataChanged = true;
     
@@ -970,7 +995,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         }
       }
     }else{
-      if(!bucketPtr->hasClashingItem(hash)) {
+      if(!bucketPtr->hasClashingItem(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize)) {
         ///Debug: Check for infinite recursion
         walkBucketLinks(*bucketHashPosition, hash);
         

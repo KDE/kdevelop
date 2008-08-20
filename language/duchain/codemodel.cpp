@@ -181,6 +181,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
 
   //This inserts the changed item
   uint newIndex = d->m_repository.index(request);
+  Q_UNUSED(newIndex);
   ifDebug( kDebug() << "new index" << newIndex; )
   
   Q_ASSERT(d->m_repository.findIndex(request));
