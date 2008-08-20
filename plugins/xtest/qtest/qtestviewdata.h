@@ -22,12 +22,13 @@
 #define QTEST_QTESTVIEWDATA_H
 
 #include <veritas/testrunnertoolview.h>
+#include "qxqtestexport.h"
 
 namespace Veritas { class Test; }
 namespace QTest { class ISettings; }
 
 /*! Assorted qtest runner toolview data and operations */
-class QTestViewData : public Veritas::TestViewData
+class QXQTEST_EXPORT QTestViewData : public Veritas::TestViewData
 {
 Q_OBJECT
 public:

@@ -22,6 +22,7 @@
 #define QTEST_QTESTOUPUTMORPHER
 
 #include <QXmlStreamReader>
+#include "qxqtestexport.h"
 
 class QIODevice;
 
@@ -29,7 +30,7 @@ namespace QTest
 {
 
 /*! Translates QTest XML output into plain ascii */
-class QTestOutputMorpher : public QXmlStreamReader
+class QXQTEST_EXPORT QTestOutputMorpher : public QXmlStreamReader
 {
 public:
     QTestOutputMorpher();

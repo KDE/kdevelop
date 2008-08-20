@@ -22,8 +22,8 @@
 #define QXQTEST_QTESTOUTPUTPARSER
 
 #include <QXmlStreamReader>
-
 #include <veritas/testresult.h>
+#include "qxqtestexport.h"
 
 class QIODevice;
 namespace Veritas { class Test; }
@@ -39,7 +39,7 @@ and resume when data becomes available again.
 
 @unittest QTest::ut::QTestOutputParserTest
 */
-class QTestOutputParser : public QObject, public QXmlStreamReader
+class QXQTEST_EXPORT QTestOutputParser : public QObject, public QXmlStreamReader
 {
 Q_OBJECT
 public:

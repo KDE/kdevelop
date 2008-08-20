@@ -24,6 +24,7 @@
 #include <QString>
 #include <QFileInfo>
 #include "qtestcase.h"
+#include "qxqtestexport.h"
 
 namespace QTest
 {
@@ -32,7 +33,7 @@ namespace QTest
 Item in the test runner tree. Aggregates QTestCases.
 @unittest QTest::ut::QTestSuiteTest
 */
-class QTestSuite : public Veritas::Test
+class QXQTEST_EXPORT QTestSuite : public Veritas::Test
 {
 Q_OBJECT
 public:

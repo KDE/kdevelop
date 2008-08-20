@@ -27,6 +27,7 @@
 #include <QFileInfo>
 
 #include "iregister.h"
+#include "qxqtestexport.h"
 
 class QIODevice;
 
@@ -42,7 +43,7 @@ class IRegister;
 
 /*! Reads a QTest suite's structure from XML. After parsing the root of the
 generated test tree is available through the 'root()' member function. */
-class XmlRegister : public IRegister, public QXmlStreamReader
+class QXQTEST_EXPORT XmlRegister : public IRegister, public QXmlStreamReader
 {
 public:
     XmlRegister();

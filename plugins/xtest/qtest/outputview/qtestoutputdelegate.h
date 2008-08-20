@@ -24,8 +24,9 @@
 
 #include <QtGui/QItemDelegate>
 #include <kcolorscheme.h>
+#include "qxqtestexport.h"
 
-class QTestOutputDelegate : public QItemDelegate
+class QXQTEST_EXPORT QTestOutputDelegate : public QItemDelegate
 {
 public:
     QTestOutputDelegate(QObject*);

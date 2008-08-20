@@ -22,13 +22,14 @@
 #define VERITAS_QTEST_QTESTEXE_H
 
 #include <KUrl>
+#include "qxqtestexport.h"
 
 namespace QTest
 {
 
 /*! Wraps a QTest executable. Currently only used to retrieve
 test commands (aka functions) for a given testcase. */
-class Executable
+class QXQTEST_EXPORT Executable
 {
 public:
     Executable();

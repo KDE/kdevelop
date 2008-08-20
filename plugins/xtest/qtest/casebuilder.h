@@ -21,9 +21,10 @@
 #ifndef QTEST_VERITAS_CASEBUILDER_H
 #define QTEST_VERITAS_CASEBUILDER_H
 
+#include "qxqtestexport.h"
+
 namespace QTest
 {
-
 class Executable;
 class QTestCase;
 
@@ -34,7 +35,7 @@ involves invoking an external executable.
 
 @unittest QTest::Test::CaseBuilderTest
 */
-class CaseBuilder
+class QXQTEST_EXPORT CaseBuilder
 {
 public:
     CaseBuilder();

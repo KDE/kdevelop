@@ -24,6 +24,7 @@
 #include <QMap>
 #include <QFileInfoList>
 #include <QObject>
+#include "qxqtestexport.h"
 
 namespace Veritas { class Test; }
 
@@ -42,7 +43,7 @@ in the GUI thread.
 
 @unittest QTest::Test::SuiteBuilderTest
 */
-class SuiteBuilder : public QObject
+class QXQTEST_EXPORT SuiteBuilder : public QObject
 {
 Q_OBJECT
 public:

@@ -25,7 +25,7 @@
 #include <QFileInfo>
 
 #include <veritas/test.h>
-
+#include "qxqtestexport.h"
 #include "qtestcommand.h"
 
 class KTemporaryFile;
@@ -43,7 +43,7 @@ QTestLib test class item in the test tree. This will invoke the
 QTestLib executable.
 @unittest QTest::ut::QTestCaseTest
 */
-class QTestCase : public Veritas::Test
+class QXQTEST_EXPORT QTestCase : public Veritas::Test
 {
 Q_OBJECT
 public:

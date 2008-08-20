@@ -22,6 +22,7 @@
 #define VERITAS_QTEST_IREGISTER_H
 
 #include <QtCore/QObject>
+#include "qxqtestexport.h"
 
 namespace KDevelop { class IProject; }
 namespace Veritas { class Test; }
@@ -31,7 +32,7 @@ namespace QTest
 class ISettings;
 
 /*! Collects the test tree structure for a project. */
-class IRegister : public QObject
+class QXQTEST_EXPORT IRegister : public QObject
 {
 Q_OBJECT
 public:

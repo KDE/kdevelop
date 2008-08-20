@@ -24,6 +24,7 @@
 
 #include <interfaces/iplugin.h>
 #include <outputview/outputjob.h>
+#include "qxqtestexport.h"
 
 #include <QFileInfo>
 
@@ -40,7 +41,7 @@ class QTestOutputModel;
 class QTestOutputDelegate;
 class QTestView;
 
-class QTestOutputJob : public KDevelop::OutputJob
+class QXQTEST_EXPORT QTestOutputJob : public KDevelop::OutputJob
 {
     Q_OBJECT
 
