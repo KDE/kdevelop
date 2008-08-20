@@ -135,6 +135,33 @@ void SuiteBuilderTest::removeDirPrefix()
     KOMPARE_(0, caze->childCount());
 }
 
+void SuiteBuilderTest::keepSecondaryPrefixes()
+{
+    CustomSuiteBuilder* sb = new CustomSuiteBuilder;
+    ExecutableStub* foo = new ExecutableStub;
+    foo->m_name= "dir-more-footest";
+    foo->m_fetchFunctions = QStringList();
+    sb->m_exes = QList<ExecutableStub*>() << foo;
+    sb->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-more-footest.shell"));
+
+    sb->start();
+    Veritas::Test* root = sb->root();
+
+    KVERIFY(root);
+    KOMPARE_(1, root->childCount());
+
+    QTestSuite* foosuite = dynamic_cast<QTestSuite*>(root->child(0));
+    KVERIFY(foosuite);
+    KOMPARE_(root, foosuite->parent());
+    KOMPARE_("dir", foosuite->name());
+    KOMPARE_(1, foosuite->childCount());
+
+    QTestCase* caze = foosuite->child(0);
+    KVERIFY(caze);
+    KOMPARE("more-footest", caze->name());
+    KOMPARE_(0, caze->childCount());
+}
+
 void SuiteBuilderTest::multiSuitesCasesCommands()
 {
     CustomSuiteBuilder* sb = new CustomSuiteBuilder;
