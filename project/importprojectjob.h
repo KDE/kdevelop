@@ -47,7 +47,9 @@ public:
     void start();
 
 private:
-    struct ImportProjectJobPrivate* const d;
+    Q_PRIVATE_SLOT( d, void parseItem() )
+    class ImportProjectJobPrivate* const d;
+    friend class ImportProjectJobPrivate;
 };
 
 }
