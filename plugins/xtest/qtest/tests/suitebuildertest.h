@@ -23,7 +23,16 @@
 
 #include <QtCore/QObject>
 
-namespace QTest { namespace Test {
+namespace Veritas { class Test; }
+
+namespace QTest {
+class QTestSuite;
+class QTestCase;
+class QTestCommand;
+
+namespace Test {
+class CustomSuiteBuilder;
+class ExecutableStub;
 
 /*! @unitundertest QTest::SuiteBuilder */
 class SuiteBuilderTest : public QObject
@@ -39,6 +48,16 @@ private slots:
     void identicalSuiteNames();
     void removeDirPrefix();
     void keepSecondaryPrefixes();
+
+private:
+    QTestSuite* fetchSuite(Veritas::Test* root, int nrofSuite);
+    void verifySuite(QTestSuite* suite, const QString name, int childCount);
+    void verifyCommand(int nrofChild, QTestCase* parent, const QString name);
+    void verifyCaze(QTestCase* caze, const QString name, int childCount);
+
+private:
+    CustomSuiteBuilder* m_builder;
+    ExecutableStub* m_exe;
 };
 
 }}

@@ -64,10 +64,13 @@ private:
 
 void SuiteBuilderTest::init()
 {
+    m_builder = new CustomSuiteBuilder;
+    m_exe = new ExecutableStub;
 }
 
 void SuiteBuilderTest::cleanup()
 {
+    if (m_builder) delete m_builder;
 }
 
 void SuiteBuilderTest::construct()
@@ -80,45 +83,37 @@ void SuiteBuilderTest::construct()
 // TODO clean this mess. move common verification sequences to custom
 // assertion helpers. Extract similar construction stuff as well
 
+// command
 void SuiteBuilderTest::singleSuiteCaseCommand()
 {
-    CustomSuiteBuilder* sb = new CustomSuiteBuilder;
-    ExecutableStub* foo = new ExecutableStub;
-    foo->m_name = "footest";
-    foo->m_fetchFunctions = QStringList() << "foocommand()";
-    sb->m_exes = QList<ExecutableStub*>() << foo; // inject
-    sb->setTestExecutables(QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell"));
+    m_exe->m_name = "footest";
+    m_exe->m_fetchFunctions = QStringList() << "foocommand()";
+    m_builder->m_exes = QList<ExecutableStub*>() << m_exe; // inject
+    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell"));
 
-    sb->start();
-    Veritas::Test* root = sb->root();
+    m_builder->start();
+    Veritas::Test* root = m_builder->root();
 
     KVERIFY(root);
     KOMPARE_(1, root->childCount());
-    QTestSuite* suite = dynamic_cast<QTestSuite*>(root->child(0));
-    KVERIFY(suite);
-    KOMPARE_(root, suite->parent());
-    KOMPARE_("foosuite", suite->name());
-    KOMPARE_(1, suite->childCount());
+
+    QTestSuite* suite = fetchSuite(root, 0);
+    verifySuite(suite, "foosuite", 1);
     QTestCase* caze = suite->child(0);
-    KVERIFY(caze);
-    KOMPARE("footest", caze->name());
-    KOMPARE_(1, caze->childCount());
-    QTestCommand* cmd = caze->child(0);
-    KVERIFY(cmd);
-    KOMPARE("foocommand", cmd->name());
+    verifyCaze(caze, "footest", 1);
+    verifyCommand(0, caze, "foocommand");
 }
 
+// command
 void SuiteBuilderTest::removeDirPrefix()
 {
-    CustomSuiteBuilder* sb = new CustomSuiteBuilder;
-    ExecutableStub* foo = new ExecutableStub;
-    foo->m_name= "dir-footest";
-    foo->m_fetchFunctions = QStringList();
-    sb->m_exes = QList<ExecutableStub*>() << foo;
-    sb->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-footest.shell"));
+    m_exe->m_name= "dir-footest";
+    m_exe->m_fetchFunctions = QStringList();
+    m_builder->m_exes = QList<ExecutableStub*>() << m_exe;
+    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-footest.shell"));
 
-    sb->start();
-    Veritas::Test* root = sb->root();
+    m_builder->start();
+    Veritas::Test* root = m_builder->root();
 
     KVERIFY(root);
     KOMPARE_(1, root->childCount());
@@ -135,92 +130,93 @@ void SuiteBuilderTest::removeDirPrefix()
     KOMPARE_(0, caze->childCount());
 }
 
+// command
 void SuiteBuilderTest::keepSecondaryPrefixes()
 {
-    CustomSuiteBuilder* sb = new CustomSuiteBuilder;
-    ExecutableStub* foo = new ExecutableStub;
-    foo->m_name= "dir-more-footest";
-    foo->m_fetchFunctions = QStringList();
-    sb->m_exes = QList<ExecutableStub*>() << foo;
-    sb->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-more-footest.shell"));
+    m_exe->m_name= "dir-more-footest";
+    m_exe->m_fetchFunctions = QStringList();
+    m_builder->m_exes = QList<ExecutableStub*>() << m_exe;
+    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-more-footest.shell"));
 
-    sb->start();
-    Veritas::Test* root = sb->root();
+    m_builder->start();
+    Veritas::Test* root = m_builder->root();
 
     KVERIFY(root);
     KOMPARE_(1, root->childCount());
 
-    QTestSuite* foosuite = dynamic_cast<QTestSuite*>(root->child(0));
-    KVERIFY(foosuite);
-    KOMPARE_(root, foosuite->parent());
-    KOMPARE_("dir", foosuite->name());
-    KOMPARE_(1, foosuite->childCount());
-
+    QTestSuite* foosuite = fetchSuite(root, 0);
+    verifySuite(foosuite, "dir", 1);
     QTestCase* caze = foosuite->child(0);
-    KVERIFY(caze);
-    KOMPARE("more-footest", caze->name());
-    KOMPARE_(0, caze->childCount());
+    verifyCaze(caze, "more-footest", 0);
 }
 
+// command
 void SuiteBuilderTest::multiSuitesCasesCommands()
 {
-    CustomSuiteBuilder* sb = new CustomSuiteBuilder;
-    ExecutableStub* foo = new ExecutableStub;
-    foo->m_name = "footest";
-    foo->m_fetchFunctions = QStringList() << "foocommand()" << "foocommand2()";
-    ExecutableStub* bar = new ExecutableStub;
-    bar->m_name = "bartest";
-    bar->m_fetchFunctions = QStringList() << "barcommand()";
-    sb->m_exes = QList<ExecutableStub*>() << foo << bar; // inject
-    sb->setTestExecutables(QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell")
+    m_exe->m_name = "footest";
+    m_exe->m_fetchFunctions = QStringList() << "foocommand()" << "foocommand2()";
+
+    ExecutableStub* barExe = new ExecutableStub;
+    barExe->m_name = "bartest";
+    barExe->m_fetchFunctions = QStringList() << "barcommand()";
+    m_builder->m_exes = QList<ExecutableStub*>() << m_exe << barExe; // inject
+    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell")
                                          << KUrl("/path/to/barsuite/bartest.shell"));
 
-    sb->start();
-    Veritas::Test* root = sb->root();
-
+    m_builder->start();
+    Veritas::Test* root = m_builder->root();
     KVERIFY(root);
     KOMPARE_(2, root->childCount());
 
-    QTestSuite* foosuite = dynamic_cast<QTestSuite*>(root->child(0));
-    KVERIFY(foosuite);
-    KOMPARE_(root, foosuite->parent());
-    KOMPARE_("foosuite", foosuite->name());
-    KOMPARE_(1, foosuite->childCount());
-
+    QTestSuite* foosuite = fetchSuite(root, 0);
+    verifySuite(foosuite, "foosuite", 1);
     QTestCase* caze = foosuite->child(0);
-    KVERIFY(caze);
-    KOMPARE("footest", caze->name());
-    KOMPARE_(2, caze->childCount());
+    verifyCaze(caze, "footest", 2);
+    verifyCommand(0, caze, "foocommand");
+    verifyCommand(1, caze, "foocommand2");
 
-    QTestCommand* cmd = caze->child(0);
-    KVERIFY(cmd);
-    KOMPARE("foocommand", cmd->name());
-
-    QTestCommand* cmd2 = caze->child(1);
-    KVERIFY(cmd2);
-    KOMPARE("foocommand2", cmd2->name());
-
-    QTestSuite* barSuite = dynamic_cast<QTestSuite*>(root->child(1));
-    KVERIFY(barSuite);
-    KOMPARE_(root, barSuite->parent());
-    KOMPARE_("barsuite", barSuite->name());
-    KOMPARE_(1, barSuite->childCount());
-
+    QTestSuite* barSuite = fetchSuite(root, 1);
+    verifySuite(barSuite, "barsuite", 1);
     QTestCase* barC = barSuite->child(0);
-    KVERIFY(barC);
-    KOMPARE("bartest", barC->name());
-    KOMPARE(1, barC->childCount());
-
-    QTestCommand* cmd0 = barC->child(0);
-    KVERIFY(cmd0);
-    KOMPARE_("barcommand", cmd0->name());
+    verifyCaze(barC, "bartest", 1);
+    verifyCommand(0, barC, "barcommand");
 }
 
+// command
 void SuiteBuilderTest::identicalSuiteNames()
 {
     // two equally named suites but in a different parent directory
     // this should construct 2 different suites [but currently doesnt]
     QFAIL("Not Implemented, and not supported [yet] either");
+}
+
+/////////////////////// helpers //////////////////////////////////////////////
+
+QTestSuite* SuiteBuilderTest::fetchSuite(Veritas::Test* root, int nrofSuite)
+{
+    return dynamic_cast<QTestSuite*>(root->child(nrofSuite));
+}
+
+void SuiteBuilderTest::verifySuite(QTestSuite* suite, const QString name, int childCount)
+{
+    KVERIFY(suite);
+    KOMPARE(name, suite->name());
+    KOMPARE_(childCount, suite->childCount());
+}
+
+void SuiteBuilderTest::verifyCommand(int nrofChild, QTestCase* parent, const QString name)
+{
+    QTestCommand* cmd = parent->child(nrofChild);
+    KVERIFY(cmd);
+    KOMPARE_(name, cmd->name());
+    KOMPARE(parent, cmd->parent());
+}
+
+void SuiteBuilderTest::verifyCaze(QTestCase* caze, const QString name, int childCount)
+{
+    KVERIFY(caze);
+    KOMPARE(name, caze->name());
+    KOMPARE_(childCount, caze->childCount());
 }
 
 QTEST_MAIN( SuiteBuilderTest )
