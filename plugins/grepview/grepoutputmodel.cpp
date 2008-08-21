@@ -62,7 +62,10 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     KTextEditor::Range range( line, 0, line+1, 0);
 
     // Translate if the file has changed since grepping
+    KTextEditor::Range range2 = range;
     range = m_tracker.translateRange( url, range );
+
+    kDebug() << "range" << range2 << "translated to " << range;
 
     // Try to find the actual text range we found during the grep
     if (IDocument* doc = ICore::self()->documentController()->documentForUrl( url )) {
@@ -80,7 +83,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
                 else
                     addedLines = text.left(index).count('\n');
 
-                range += KTextEditor::Range(KTextEditor::Cursor(addedLines, addedCols), m_regExp.matchedLength());
+                range = KTextEditor::Range(range.start() + KTextEditor::Cursor(addedLines, addedCols), m_regExp.matchedLength());
             }
         }
 
