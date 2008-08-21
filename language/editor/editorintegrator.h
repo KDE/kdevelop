@@ -192,18 +192,18 @@ public:
   /**
    * Create a new persistant cursor from the given \a position.
    */
-  KTextEditor::SmartCursor* createCursor(const KTextEditor::Cursor& position);
+  KTextEditor::SmartCursor* createCursor(const LockedSmartInterface& iface, const KTextEditor::Cursor& position);
 
   /**
    * Create a new persistant cursor from the given \a token on the given \a edge.
    */
-  KTextEditor::SmartCursor* createCursor(std::size_t token, Edge edge);
+  KTextEditor::SmartCursor* createCursor(const LockedSmartInterface& iface, std::size_t token, Edge edge);
 
   /**
    * Apply a possibly dated range to the current smart cursor.  Performs translation on \a fromRange,
-   * then applies it to smartRange.  Takes care of smart locking.
+   * then applies it to smartRange.
    */
-  void adjustRangeTo(const SimpleRange& fromRange);
+  void adjustRangeTo(const LockedSmartInterface& iface, const SimpleRange& fromRange);
 
   /**
    * Translate the given \a range to the current smart revision, and return the result.
@@ -224,7 +224,7 @@ public:
    *
    * \returns the newly created text range, or zero if no smart interface is available for the document.
    */
-  KTextEditor::SmartRange* createRange(const KTextEditor::Range& range, KTextEditor::SmartRange::InsertBehaviors insertBehavior = KTextEditor::SmartRange::DoNotExpand);
+  KTextEditor::SmartRange* createRange(const LockedSmartInterface& iface, const KTextEditor::Range& range, KTextEditor::SmartRange::InsertBehaviors insertBehavior = KTextEditor::SmartRange::DoNotExpand);
 
   /**
    * Create a text range from \a start to \a end as a child range of the current range.
@@ -241,19 +241,7 @@ public:
    * \returns the newly created text range, or zero if no smart interface is available for the document.
    * \overload
    */
-  KTextEditor::SmartRange* createRange(const KTextEditor::Cursor& start, const KTextEditor::Cursor& end);
-
-  /**
-   * Create a text range over the marked range as a child range of the current range.
-   * The returned range will become the new currentRange().
-   *
-   * If the current document is loaded, and it supports creating smart ranges,
-   * this will be a smart range, otherwise it will be a DocumentRange.
-   *
-   * \returns the newly created smart range.
-   * \overload
-   */
-  KTextEditor::SmartRange* createRange();
+  KTextEditor::SmartRange* createRange(const LockedSmartInterface& iface, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end);
 
   enum RangeEdge {
     InnerEdge /**< the inner edge of a range */,
@@ -263,24 +251,24 @@ public:
   /**
    * Returns the most current text range.
    */
-  KTextEditor::SmartRange* currentRange() const;
+  KTextEditor::SmartRange* currentRange(const LockedSmartInterface& iface) const;
 
   /**
    * Sets the current range to \a range. It is put upon the range-stack.
    * Does nothing if the range is zero.
    */
-  void setCurrentRange(KTextEditor::SmartRange* range);
+  void setCurrentRange(const LockedSmartInterface& iface, KTextEditor::SmartRange* range);
 
   /**
    * Count of ranges currently on the stack.
    */
-  int rangeStackSize() const;
+  int rangeStackSize(const LockedSmartInterface& iface) const;
 
   /**
    * Sets the previous range on the stack to be the new current range.
    * Does nothing if the range stack is empty.
    */
-  void exitCurrentRange();
+  void exitCurrentRange(const LockedSmartInterface& iface);
 
   /**
    * Use this to connect to notifications provided by EditorIntegratorStatic.

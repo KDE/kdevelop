@@ -42,25 +42,25 @@ namespace KDevelop
 class SmartConverterPrivate
 {
 public:
-  void convertDUChainInternal(DUContext* context, bool first = false) const
+  void convertDUChainInternal(const LockedSmartInterface& iface, DUContext* context, bool first = false) const
   {
     if (!first)
-      context->setSmartRange(m_editor->createRange(context->range().textRange())->toSmartRange());
+      context->setSmartRange(m_editor->createRange(iface, context->range().textRange())->toSmartRange());
 
     foreach (Declaration* dec, context->localDeclarations()) {
-      dec->setSmartRange(m_editor->createRange(dec->range().textRange())->toSmartRange());
-      m_editor->exitCurrentRange();
+      dec->setSmartRange(m_editor->createRange(iface, dec->range().textRange())->toSmartRange());
+      m_editor->exitCurrentRange(iface);
     }
 
     for(int a = 0; a < context->usesCount(); ++a) {
-      context->setUseSmartRange(a, m_editor->createRange(context->uses()[a].m_range.textRange())->toSmartRange());
-      m_editor->exitCurrentRange();
+      context->setUseSmartRange(a, m_editor->createRange(iface, context->uses()[a].m_range.textRange())->toSmartRange());
+      m_editor->exitCurrentRange(iface);
     }
 
     foreach (DUContext* child, context->childContexts())
-      convertDUChainInternal(child);
+      convertDUChainInternal(iface, child);
 
-    m_editor->exitCurrentRange();
+    m_editor->exitCurrentRange(iface);
   }
 
   void deconvertDUChainInternal(DUContext* context) const
@@ -106,8 +106,8 @@ void SmartConverter::convertDUChain(DUContext* context) const
     //Q_ASSERT(context->range().textRange() == iface.currentDocument()->documentRange());
     Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 
-    d->convertDUChainInternal(context, true);
-    d->m_editor->exitCurrentRange(); //topRange(..) opens a range
+    d->convertDUChainInternal(iface, context, true);
+    d->m_editor->exitCurrentRange(iface); //topRange(..) opens a range
   }
 }
 

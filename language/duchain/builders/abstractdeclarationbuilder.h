@@ -19,6 +19,8 @@
 #ifndef KDEV_DECLARATIONBUILDER_H
 #define KDEV_DECLARATIONBUILDER_H
 
+#include <typeinfo>
+
 #include "../classfunctiondeclaration.h"
 #include "../symboltable.h"
 #include "../forwarddeclaration.h"
@@ -52,6 +54,11 @@ protected:
   /// Clears the current comment.
   inline void clearComment() { m_lastComment.clear(); }
 
+  enum DeclarationFlags {
+    NoFlags    = 0x0,
+    DeclarationIsDefinition = 0x1
+  };
+
   /**
    * Register a new declaration with the definition-use chain.
    * Returns the new declaration created.
@@ -61,7 +68,8 @@ protected:
    * \param isForward whether the new declaration is a forward declaration.
    * \param isDefinition whether the new declaration is also a definition.
    */
-  Declaration* openDeclaration(NameT* name, T* range, bool isFunction = false, bool isForward = false, bool isDefinition = false)
+  template<class DeclarationT>
+  DeclarationT* openDeclaration(NameT* name, T* range, DeclarationFlags flags = NoFlags)
   {
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -72,7 +80,7 @@ protected:
 
     QualifiedIdentifier id = identifierForNode(name);
 
-    return openDeclaration(id, newRange, isFunction, isForward, isDefinition);
+    return openDeclaration<DeclarationT>(id, newRange, flags);
   }
 
   /**
@@ -84,7 +92,8 @@ protected:
    * \param isForward whether the new declaration is a forward declaration.
    * \param isDefinition whether the new declaration is also a definition.
    */
-  Declaration* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false, bool isForward = false, bool isDefinition = false)
+  template<class DeclarationT>
+  DeclarationT* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, DeclarationFlags flags = NoFlags)
   {
     Identifier localId;
 
@@ -92,7 +101,7 @@ protected:
       localId = id.last();
     }
 
-    Declaration* declaration = 0;
+    DeclarationT* declaration = 0;
 
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration
@@ -109,65 +118,29 @@ protected:
 
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
         if (dec->range() == translated &&
-            ((id.isEmpty() && dec->identifier().toString().isEmpty()) || (!id.isEmpty() && localId == dec->identifier())) &&
-            dec->isDefinition() == isDefinition
+            (localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
+            typeid(*dec) == typeid(DeclarationT)
             //&& extraDeclarationComparisons()
           )
         {
-          if(LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class && !dynamic_cast<ClassMemberDeclaration*>(dec))
-            continue;
-          /*if(isNamespaceAlias && !dynamic_cast<NamespaceAliasDeclaration*>(dec)) {
-            continue;
-          } else */if (isForward && !dynamic_cast<ForwardDeclaration*>(dec)) {
-            continue;
-          } else if (isFunction) {
-            if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-              if (!dynamic_cast<ClassFunctionDeclaration*>(dec))
-                continue;
-            } else if (!dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
-              continue;
-            }
-
-          } else if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-            if (!isForward && !dynamic_cast<ClassMemberDeclaration*>(dec)) //Forward-declarations are never based on ClassMemberDeclaration
-              continue;
-          }
-
           // Match
-          declaration = dec;
-
-          // Update access policy if needed
-          // updateAccessPolicy()
+          declaration = dynamic_cast<DeclarationT*>(dec);
           break;
         }
       }
     }
 
     if (!declaration) {
-      if (isForward) {
-        declaration = new ForwardDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
-      } else if (isFunction) {
-        if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassFunctionDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
-        } else {
-          declaration = new FunctionDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
-        }
-      } else if (LanguageSpecificDeclarationBuilderBase::currentContext()->type() == DUContext::Class) {
-          declaration = new ClassMemberDeclaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
-      } else {
-        declaration = new Declaration(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
-      }
+      declaration = new DeclarationT(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
 
-      {
-        LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
-        KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(newRange.textRange());
-        declaration->setSmartRange(range);
-      }
-
-      declaration->setDeclarationIsDefinition(isDefinition);
+      LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
+      KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(iface, newRange.textRange());
+      declaration->setSmartRange(range);
+      if (flags & DeclarationIsDefinition)
+        declaration->setDeclarationIsDefinition(true);
       declaration->setIdentifier(localId);
 
-      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange();
+      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange(iface);
     }
 
     declaration->setComment(m_lastComment);
@@ -180,6 +153,20 @@ protected:
     return declaration;
   }
 
+  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
+  template<class DeclarationT>
+  DeclarationT* openDefinition(NameT* name, T* range)
+  {
+    return openDeclaration<DeclarationT>(name, range, DeclarationIsDefinition);
+  }
+
+  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
+  template<class DeclarationT>
+  DeclarationT* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange)
+  {
+    return openDeclaration<DeclarationT>(id, newRange, DeclarationIsDefinition);
+  }
+
   /// Internal function to open the given \a declaration by pushing it onto the declaration stack.
   /// Provided for subclasses who don't want to use the generic openDeclaration() functions.
   void openDeclarationInternal(Declaration* declaration)
@@ -187,22 +174,10 @@ protected:
     m_declarationStack.push(declaration);
   }
 
-  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
-  Declaration* openDefinition(NameT* name, T* range, bool isFunction = false)
-  {
-    return openDeclaration(name, range, isFunction, false, true);
-  }
-
-  /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
-  Declaration* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange, bool isFunction = false)
-  {
-    return openDeclaration(id, newRange, isFunction, false, true);
-  }
-
   /// Convenience function. Same as openDeclaration(), but creates a forward declaration.
   ForwardDeclaration* openForwardDeclaration(NameT* name, T* range)
   {
-    return static_cast<ForwardDeclaration*>(openDeclaration(name, range, false, true));
+    return openDeclaration<ForwardDeclaration*>(name, range);
   }
 
   /// Set the internal context of a declaration; for example, a class declaration's internal context

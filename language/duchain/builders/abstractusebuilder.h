@@ -135,7 +135,7 @@ protected:
       }
 
       if (contextUpSteps) {
-        LanguageSpecificUseBuilderBase::editor()->setCurrentRange(newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
+        LanguageSpecificUseBuilderBase::editor()->setCurrentRange(iface, newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
         m_finishContext = false;
         openContext(newContext);
         m_finishContext = true;
@@ -181,9 +181,9 @@ protected:
     }
 
     if (!encountered) {
-
-      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->currentRange() ? LanguageSpecificUseBuilderBase::editor()->createRange(newRange.textRange()) : 0;
-      LanguageSpecificUseBuilderBase::editor()->exitCurrentRange();
+      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
+      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->currentRange(iface) ? LanguageSpecificUseBuilderBase::editor()->createRange(iface, newRange.textRange()) : 0;
+      LanguageSpecificUseBuilderBase::editor()->exitCurrentRange(iface);
 
       LanguageSpecificUseBuilderBase::currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());
       ++nextUseIndex();

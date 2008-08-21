@@ -30,6 +30,7 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
+#include <ktexteditor/rangefeedback.h>
 
 #include "documentrangeobject.h"
 #include "hashedstring.h"
@@ -39,18 +40,35 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-class EditorIntegratorPrivate
+class EditorIntegratorPrivate : public KTextEditor::SmartRangeWatcher
 {
 public:
+  ~EditorIntegratorPrivate()
+  {
+    while (!m_currentRangeStack.isEmpty())
+      exitCurrentRange();
+  }
+
   IndexedString m_currentUrl;
 
   /// The following two pointers may only be accessed with the editor integrator static mutex held
   KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartInterface* m_smart;
 
-  QStack<KTextEditor::SmartRange*> m_currentRangeStack;
   template<class RangeType>
   SmartRange* createRange( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior );
+
+  // Integrity protected by the smart lock
+  void enterCurrentRange(KTextEditor::SmartRange* range);
+  void exitCurrentRange();
+  QStack<KTextEditor::SmartRange*> m_currentRangeStack;
+
+protected:
+  /**
+    * Reimplementation of KTextEditor::SmartWatcher::rangeDeleted(), to clean up the smart
+    * range stack when a range is deleted (for example, on file close).
+    */
+  virtual void rangeDeleted(KTextEditor::SmartRange* range);
 };
 
 K_GLOBAL_STATIC( EditorIntegratorStatic, s_data)
@@ -125,14 +143,12 @@ LockedSmartInterface EditorIntegrator::smart(const KUrl& url)
   return LockedSmartInterface();
 }
 
-SmartCursor* EditorIntegrator::createCursor(const KTextEditor::Cursor& position)
+SmartCursor* EditorIntegrator::createCursor(const LockedSmartInterface& iface, const KTextEditor::Cursor& position)
 {
-  LockedSmartInterface iface = smart();
-  if (iface) {
-    return iface->newSmartCursor(position);
-  }else{
-      return 0;
-  }
+  if (!iface)
+    return 0;
+
+  return iface->newSmartCursor(position);
 }
 
 template<>
@@ -233,7 +249,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartI
   }
 
   Q_ASSERT(ret->end() == rangeEnd && ret->start() == rangeStart);
-  m_currentRangeStack << ret;
+  enterCurrentRange(ret);
   return ret;
 }
 
@@ -253,9 +269,8 @@ SmartRange* EditorIntegrator::topRange(const LockedSmartInterface& iface, TopRan
   return d->m_currentRangeStack.top();
 }
 
-SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
+SmartRange* EditorIntegrator::createRange(const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
-  LockedSmartInterface iface = smart();
   if (!iface)
     return 0;
 
@@ -263,20 +278,25 @@ SmartRange* EditorIntegrator::createRange( const KTextEditor::Range & range, KTe
 }
 
 
-SmartRange* EditorIntegrator::createRange( const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
+SmartRange* EditorIntegrator::createRange(const LockedSmartInterface& iface, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end )
 {
-  return createRange(Range(start, end));
+  return createRange(iface, Range(start, end));
 }
 
- void EditorIntegrator::setCurrentRange( KTextEditor::SmartRange* range )
+ void EditorIntegrator::setCurrentRange(const LockedSmartInterface& iface, KTextEditor::SmartRange* range)
 {
+  Q_UNUSED(iface);
+
    if(!range)
      return;
-   d->m_currentRangeStack << range;
+
+   d->enterCurrentRange( range );
  }
 
-SmartRange* EditorIntegrator::currentRange( ) const
+SmartRange* EditorIntegrator::currentRange(const LockedSmartInterface& iface) const
 {
+  Q_UNUSED(iface);
+
   if( !d->m_currentRangeStack.isEmpty() )
     return d->m_currentRangeStack.top();
   else
@@ -347,15 +367,8 @@ void EditorIntegrator::clearCurrentDocument()
 
 void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
 {
-  QMutexLocker lock(data()->mutex);
-
-  if (range->isSmartRange())
-    range->toSmartRange()->removeWatcher(data());
-
   delete range;
-  //kWarning() << "Could not find top range to delete." ;
 }
-
 
 void EditorIntegrator::releaseRange(KTextEditor::SmartRange* range)
 {
@@ -376,16 +389,48 @@ KDevelop::EditorIntegratorStatic * EditorIntegrator::data()
   return s_data;
 }
 
-void EditorIntegrator::exitCurrentRange()
+void EditorIntegrator::exitCurrentRange(const LockedSmartInterface& iface)
 {
+  Q_UNUSED(iface);
+
   if (d->m_currentRangeStack.isEmpty())
     return;
 
-  d->m_currentRangeStack.pop();
+  d->exitCurrentRange();
 }
 
-int EditorIntegrator::rangeStackSize() const
+void EditorIntegratorPrivate::exitCurrentRange()
 {
+  KTextEditor::SmartRange* exited = m_currentRangeStack.pop();
+
+  // Only remove the watcher if the range is no longer in the stack
+  if (!m_currentRangeStack.contains(exited))
+    exited->removeWatcher( this );
+}
+
+void EditorIntegratorPrivate::enterCurrentRange(KTextEditor::SmartRange* range)
+{
+  // Double additions is covered in the text editor library
+  range->addWatcher(this);
+
+  m_currentRangeStack.push(range);
+}
+
+void EditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange* range)
+{
+  // Smart range already locked
+  int index = m_currentRangeStack.indexOf(range);
+
+  // We shouldn't get notifications of a range deletion when the range is not on our stack
+  Q_ASSERT(index != -1);
+  if (index != -1)
+    while (index > m_currentRangeStack.count())
+      exitCurrentRange();
+}
+
+int EditorIntegrator::rangeStackSize(const LockedSmartInterface& iface) const
+{
+    Q_UNUSED(iface);
     return d->m_currentRangeStack.size();
 }
 
@@ -394,14 +439,13 @@ QObject * EditorIntegrator::notifier()
     return data();
 }
 
-void EditorIntegrator::adjustRangeTo(const SimpleRange& fromRange)
+void EditorIntegrator::adjustRangeTo(const LockedSmartInterface& iface, const SimpleRange& fromRange)
 {
-  LockedSmartInterface iface = smart();
   if (!iface)
     return;
 
-  if (currentRange()) {
-    currentRange()->setRange(iface->translateFromRevision(fromRange.textRange()));
+  if (currentRange(iface)) {
+    currentRange(iface)->setRange(iface->translateFromRevision(fromRange.textRange()));
   }
 }
 

@@ -195,7 +195,10 @@ protected:
 
     m_editor->setCurrentUrl(currentContext()->url());
 
-    m_editor->setCurrentRange(currentContext()->smartRange());
+    {
+      LockedSmartInterface iface = m_editor->smart();
+      m_editor->setCurrentRange(iface, currentContext()->smartRange());
+    }
 
     startVisiting(node);
 
@@ -364,7 +367,7 @@ protected:
           openContext( contextFromNode( node ) );
           {
             LockedSmartInterface iface = m_editor->smart();
-            m_editor->setCurrentRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ) );
+            m_editor->setCurrentRange( iface, m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ) );
           }
           startVisiting( node );
           closeContext();
@@ -416,7 +419,10 @@ protected:
     else
     {
       openContext( contextFromNode(rangeNode) );
-      m_editor->setCurrentRange( currentContext()->smartRange() );
+      {
+        LockedSmartInterface iface = editor()->smart();
+        editor()->setCurrentRange(iface, currentContext()->smartRange());
+      }
       return currentContext();
     }
   }
@@ -442,7 +448,10 @@ protected:
 
     } else {
       openContext( contextFromNode(node) );
-      m_editor->setCurrentRange(currentContext()->smartRange());
+      {
+        LockedSmartInterface iface = editor()->smart();
+        editor()->setCurrentRange(iface, currentContext()->smartRange());
+      }
       return currentContext();
     }
   }
@@ -470,7 +479,10 @@ protected:
     {
       //kDebug() << "Opening Context associated with node";
       openContext( contextFromNode(rangeNode) );
-      m_editor->setCurrentRange( currentContext()->smartRange() );
+      {
+        LockedSmartInterface iface = editor()->smart();
+        editor()->setCurrentRange(iface, currentContext()->smartRange());
+      }
       return currentContext();
     }
   }
@@ -498,7 +510,10 @@ protected:
     else
     {
       openContext( contextFromNode(fromRange) );
-      m_editor->setCurrentRange( currentContext()->smartRange() );
+      {
+        LockedSmartInterface iface = editor()->smart();
+        editor()->setCurrentRange(iface, currentContext()->smartRange());
+      }
       return currentContext();
     }
   }
@@ -524,19 +539,19 @@ protected:
    * This can be used to temporarily change the current context.
    * \param range The range that will be used as new current range, or zero(then the range associated to the context is used)
    * */
-  void injectContext( DUContext* ctx, KTextEditor::SmartRange* range = 0 ) {
+  void injectContext( const LockedSmartInterface& iface, DUContext* ctx, KTextEditor::SmartRange* range = 0 ) {
     openContext( ctx );
-    m_editor->setCurrentRange( range ? range : ctx->smartRange() );
+    m_editor->setCurrentRange( iface, range ? range : ctx->smartRange() );
   }
 
   /**
    * Use this to close the context previously injected with injectContext.
    * */
-  void closeInjectedContext() {
+  void closeInjectedContext(const LockedSmartInterface& iface) {
     m_contextStack.pop();
     m_nextContextStack.pop();
     if(m_editor->smart())
-      m_editor->exitCurrentRange();
+      m_editor->exitCurrentRange(iface);
   }
 
   /**
@@ -558,8 +573,8 @@ protected:
 
     m_contextStack.pop();
     m_nextContextStack.pop();
-    if(m_editor->smart())
-      m_editor->exitCurrentRange();
+    if(LockedSmartInterface iface = m_editor->smart())
+      m_editor->exitCurrentRange(iface);
   }
 
   /**
@@ -694,7 +709,7 @@ protected:
             DUChainWriteLocker writeLock( DUChain::lock() );
 
             ret->clearImportedParentContexts();
-            m_editor->setCurrentRange( ret->smartRange() );
+            m_editor->setCurrentRange( iface, ret->smartRange() );
             ++nextContextIndex();
             break;
           }else{
@@ -719,7 +734,7 @@ protected:
         ret = newContext( SimpleRange( range ) );
         {
           LockedSmartInterface iface = m_editor->smart();
-          ret->setSmartRange( m_editor->createRange( range.textRange() ), DocumentRangeObject::Own );
+          ret->setSmartRange( m_editor->createRange( iface, range.textRange() ), DocumentRangeObject::Own );
         }
         ret->setType( type );
 

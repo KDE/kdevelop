@@ -25,7 +25,6 @@
 #include <kurl.h>
 
 #include <ktexteditor/range.h>
-#include <ktexteditor/rangefeedback.h>
 
 #include "../duchain/indexedstring.h"
 #include "documentcursor.h"
@@ -41,7 +40,7 @@ namespace KDevelop
 {
 class EditorIntegrator;
 
-class EditorIntegratorStatic : public QObject, public KTextEditor::SmartRangeWatcher
+class EditorIntegratorStatic : public QObject
 {
   Q_OBJECT
 

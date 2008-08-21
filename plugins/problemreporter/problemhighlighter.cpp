@@ -41,7 +41,7 @@ ProblemHighlighter::~ProblemHighlighter()
 {
     if(m_topHLRanges.isEmpty())
         return;
-    
+
     KDevelop::EditorIntegrator editor;
     editor.setCurrentUrl(IndexedString(m_document->url().pathOrUrl()));
 
@@ -88,7 +88,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         range->addWatcher(this);
         m_topHLRanges.append(range);
 
-        editor.exitCurrentRange();
+        editor.exitCurrentRange(iface);
     }
 }
 
