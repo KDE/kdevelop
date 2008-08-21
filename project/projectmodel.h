@@ -285,6 +285,11 @@ public:
 
     virtual void fetchMore( const QModelIndex &parent );
     virtual bool canFetchMore( const QModelIndex & parent ) const;
+    
+    //These two are needed to workaround a bug in QStandardItemModel, it
+    //doesn't check the given QVariant for validity, which can cause problems
+    virtual bool setData( const QModelIndex&, const QVariant&, int role = Qt::EditRole );
+    virtual bool setHeaderData( int, Qt::Orientation, const QVariant&, int role = Qt::EditRole );
 private:
     class ProjectModelPrivate* const d;
 };

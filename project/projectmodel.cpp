@@ -447,6 +447,23 @@ int ProjectTestTargetItem::type() const
     return ProjectBaseItem::TestTarget;
 }
 
+bool ProjectModel::setHeaderData( int section, Qt::Orientation orient, const QVariant& value, int role )
+{
+    qDebug() << "setHeaderData called with" << value << value.isValid();
+    if( !value.isValid() )
+        return false;
+    qDebug() << "calling standard model implementation";
+    return QStandardItemModel::setHeaderData( section, orient, value, role );
+}
+
+bool ProjectModel::setData( const QModelIndex& idx, const QVariant& value, int role )
+{
+    qDebug() << "setData called with" << value << value.isValid();
+    if( !value.isValid() )
+        return false;
+    qDebug() << "calling standard model implementation";
+    return QStandardItemModel::setData( idx, value, role );
+}
 
 }
 #include "projectmodel.moc"
