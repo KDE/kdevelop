@@ -205,5 +205,16 @@ void CaseBuilderTest::keepSecondaryPrefixes()
     assertNamed("more-footest", caze);
 }
 
+// command
+void CaseBuilderTest::dontRemoveNonMatchinPrefix()
+{
+    initTestExeStub("dir-footest", QStringList());
+    m_builder->setSuiteName("bar");
+    QTestCase* caze = m_builder->construct();
+
+    assertNotNull(caze); CHECK_STOP
+    assertNamed("dir-footest", caze);
+}
+
 QTEST_MAIN( CaseBuilderTest )
 #include "casebuildertest.moc"

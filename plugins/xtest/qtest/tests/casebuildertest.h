@@ -51,6 +51,7 @@ private slots:
 
     void removeDirPrefix();
     void keepSecondaryPrefixes();
+    void dontRemoveNonMatchinPrefix();
 
 private:
     void initTestExeStub(QString name, QStringList functionsOutput);
