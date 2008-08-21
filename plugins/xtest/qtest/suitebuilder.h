@@ -73,13 +73,15 @@ private:
     void constructSuites();
     void constructCases();
     QString suiteNameForExe(const KUrl& testExe);
+    QString suiteNameOneUp(const KUrl& suiteUrl);
+    void addSuiteName(const KUrl& exeUrl);
 
 private:
     QList<KUrl> m_testShellExes;
     Veritas::Test* m_root;
     bool m_hasRun;
-    QMap<QString, QTestSuite*> m_suites; // TODO probably construct a tree of recursive
-                                         // this is borked suites instead
+    QMap<QString, QTestSuite*> m_suites;
+    QMap<KUrl, QString> m_suiteNames;
     bool m_testExesSet;
     ISettings* m_settings;
 };

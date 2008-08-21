@@ -64,7 +64,6 @@ QStringList testDirs(QString("tests,test,Tests").split(","));
 or 2 dirs up if it is a canonical name such as tests, test etc. */
 QString SuiteBuilder::suiteNameForExe(const KUrl& testExe)
 {
-    // broken.
     KUrl dir = testExe.upUrl();
     if (testDirs.contains(dir.fileName())) {
         dir = dir.upUrl();
@@ -72,13 +71,46 @@ QString SuiteBuilder::suiteNameForExe(const KUrl& testExe)
     return dir.fileName();
 }
 
+QString SuiteBuilder::suiteNameOneUp(const KUrl& suiteUrl)
+{
+    KUrl dir = suiteUrl;
+    if (testDirs.contains(dir.fileName())) {
+        dir = dir.upUrl();
+    }
+    KUrl up = dir.upUrl();
+    return up.fileName() + "-" + dir.fileName();
+}
+
+void SuiteBuilder::addSuiteName(const KUrl& exeUrl)
+{
+    KUrl suiteUrl = exeUrl.upUrl();
+    if (m_suiteNames.contains(suiteUrl)) return;
+    QMapIterator<KUrl, QString> it(m_suiteNames);
+    QString suiteName = suiteNameForExe(exeUrl);
+    KUrl collision;
+    while(it.hasNext()) {
+        it.next();
+        if (it.value() == suiteName) { // name collision
+            suiteName = suiteNameOneUp(suiteUrl);
+            collision = it.key();
+            break;
+        }
+    }
+    if (!collision.isEmpty()) {
+        m_suiteNames[collision] = suiteNameOneUp(collision);
+    }
+    m_suiteNames[suiteUrl] = suiteName;
+}
 
 void SuiteBuilder::constructSuites()
 {
     // create a suite per test directory.
     Q_ASSERT(m_root); Q_ASSERT(m_testExesSet);
     foreach(KUrl testExe, m_testShellExes) {
-        QString suiteName = suiteNameForExe(testExe);
+        addSuiteName(testExe);
+    }
+    foreach(KUrl testExe, m_testShellExes) {
+        QString suiteName = m_suiteNames[testExe.upUrl()];
         if (!m_suites.contains(suiteName)) {
             QFileInfo suiteDir(testExe.upUrl().path());
             QTestSuite* suite = new QTestSuite(suiteName, suiteDir, m_root);
@@ -93,7 +125,7 @@ void SuiteBuilder::constructCases()
     int nrofShells = m_testShellExes.count();
     int count = 1;
     foreach(KUrl testExe, m_testShellExes) {
-        QString suiteName = suiteNameForExe(testExe);
+        QString suiteName = m_suiteNames[testExe.upUrl()];
         CaseBuilder* cb = createCaseBuilder(testExe);
         cb->setSuiteName(suiteName);
         QTestCase* caze = cb->construct();
