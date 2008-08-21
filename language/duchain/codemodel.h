@@ -36,9 +36,10 @@ namespace KDevelop {
     }
     enum Kind {
       Unknown = 0,
-      Function,
-      Variable,
-      Class
+      Function = 1,
+      Variable = 2,
+      Class = 4,
+      ForwardDeclaration = 8
     };
     IndexedQualifiedIdentifier id;
     uint referenceCount;
