@@ -47,6 +47,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <project/importprojectjob.h>
 #include <project/projectmodel.h>
 #include <language/duchain/indexedstring.h>
@@ -217,7 +218,7 @@ void Project::reloadModel()
         ws->appendRow(d->topItem);
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
-        importJob->start(); //be asynchronous
+        Core::self()->runController()->registerJob( importJob );
      }
 }
 
