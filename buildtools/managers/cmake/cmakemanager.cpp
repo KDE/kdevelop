@@ -477,6 +477,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         else
         {
             new KDevelop::ProjectFileItem( item->project(), folderurl, item );
+            item->project()->addToFileSet( KDevelop::IndexedString( folderurl ) );
         }
     }
     return folderList;
