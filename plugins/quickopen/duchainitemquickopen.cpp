@@ -107,9 +107,9 @@ QString DUChainItemData::htmlDescription() const {
   QString text;
 
   if( function && function->returnType() )
-    text  = i18n("Return:") + function->partToString(FunctionType::SignatureReturn);
+    text  = i18n("Return:") + " " + function->partToString(FunctionType::SignatureReturn);
 
-  text += " " + i18n("File:") + decl->url().str();
+  text += " " + i18n("File:") + " " + decl->url().str();
 //   TypePtr<FunctionType> function = decl->type<FunctionType>();
 //   if( function )
 //     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
