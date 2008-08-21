@@ -49,6 +49,9 @@ private slots:
     void angleBracketGarbage();
     void garbageInFunctionsOutput();
 
+    void removeDirPrefix();
+    void keepSecondaryPrefixes();
+
 private:
     void initTestExeStub(QString name, QStringList functionsOutput);
     void assertNotNull(QTestCase*);

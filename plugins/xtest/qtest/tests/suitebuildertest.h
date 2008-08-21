@@ -46,8 +46,6 @@ private slots:
     void singleSuiteCaseCommand();
     void multiSuitesCasesCommands();
     void identicalSuiteNames();
-    void removeDirPrefix();
-    void keepSecondaryPrefixes();
 
 private:
     QTestSuite* fetchSuite(Veritas::Test* root, int nrofSuite);

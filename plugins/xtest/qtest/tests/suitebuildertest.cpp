@@ -80,9 +80,6 @@ void SuiteBuilderTest::construct()
     sb->setTestExecutables(shellFiles);
 }
 
-// TODO clean this mess. move common verification sequences to custom
-// assertion helpers. Extract similar construction stuff as well
-
 // command
 void SuiteBuilderTest::singleSuiteCaseCommand()
 {
@@ -102,52 +99,6 @@ void SuiteBuilderTest::singleSuiteCaseCommand()
     QTestCase* caze = suite->child(0);
     verifyCaze(caze, "footest", 1);
     verifyCommand(0, caze, "foocommand");
-}
-
-// command
-void SuiteBuilderTest::removeDirPrefix()
-{
-    m_exe->m_name= "dir-footest";
-    m_exe->m_fetchFunctions = QStringList();
-    m_builder->m_exes = QList<ExecutableStub*>() << m_exe;
-    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-footest.shell"));
-
-    m_builder->start();
-    Veritas::Test* root = m_builder->root();
-
-    KVERIFY(root);
-    KOMPARE_(1, root->childCount());
-
-    QTestSuite* foosuite = dynamic_cast<QTestSuite*>(root->child(0));
-    KVERIFY(foosuite);
-    KOMPARE_(root, foosuite->parent());
-    KOMPARE_("dir", foosuite->name());
-    KOMPARE_(1, foosuite->childCount());
-
-    QTestCase* caze = foosuite->child(0);
-    KVERIFY(caze);
-    KOMPARE("footest", caze->name());
-    KOMPARE_(0, caze->childCount());
-}
-
-// command
-void SuiteBuilderTest::keepSecondaryPrefixes()
-{
-    m_exe->m_name= "dir-more-footest";
-    m_exe->m_fetchFunctions = QStringList();
-    m_builder->m_exes = QList<ExecutableStub*>() << m_exe;
-    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/dir/dir-more-footest.shell"));
-
-    m_builder->start();
-    Veritas::Test* root = m_builder->root();
-
-    KVERIFY(root);
-    KOMPARE_(1, root->childCount());
-
-    QTestSuite* foosuite = fetchSuite(root, 0);
-    verifySuite(foosuite, "dir", 1);
-    QTestCase* caze = foosuite->child(0);
-    verifyCaze(caze, "more-footest", 0);
 }
 
 // command

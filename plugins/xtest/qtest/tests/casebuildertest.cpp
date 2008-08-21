@@ -184,5 +184,26 @@ void CaseBuilderTest::garbageInFunctionsOutput()
     assertChildCommand(1, "testBar", caze); CHECK_STOP
 }
 
+void CaseBuilderTest::removeDirPrefix()
+{
+    initTestExeStub("dir-footest", QStringList());
+    m_builder->setSuiteName("dir");
+    QTestCase* caze = m_builder->construct();
+
+    assertNotNull(caze); CHECK_STOP
+    assertNamed("footest", caze);
+}
+
+// command
+void CaseBuilderTest::keepSecondaryPrefixes()
+{
+    initTestExeStub("dir-more-footest", QStringList());
+    m_builder->setSuiteName("dir");
+    QTestCase* caze = m_builder->construct();
+
+    assertNotNull(caze); CHECK_STOP
+    assertNamed("more-footest", caze);
+}
+
 QTEST_MAIN( CaseBuilderTest )
 #include "casebuildertest.moc"
