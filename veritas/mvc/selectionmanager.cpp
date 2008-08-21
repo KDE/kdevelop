@@ -47,15 +47,36 @@ SelectionManager::SelectionManager(QAbstractItemView* parent) :
     m_view(parent),
     m_toggle(0)
 {
-    connect(parent, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
-    connect(parent, SIGNAL(viewportEntered()),
-            this, SLOT(slotViewportEntered()));
     m_toggle = new SelectionToggle(m_view->viewport());
     m_toggle->setCheckable(true);
     m_toggle->hide();
     connect(m_toggle, SIGNAL(clicked(bool)),
             this, SLOT(setItemSelected(bool)));
+}
+
+void SelectionManager::makeConnections()
+{
+    m_view->disconnect(this);
+    QItemSelectionModel* selectionModel = m_view->selectionModel();
+    if (selectionModel) {
+        selectionModel->disconnect(this);
+    }
+    if (m_view->model()) {
+        m_view->model()->disconnect(this);
+    }
+
+    connect(m_view, SIGNAL(entered(QModelIndex)),
+            this, SLOT(slotEntered(QModelIndex)));
+    connect(m_view, SIGNAL(viewportEntered()),
+            this, SLOT(slotViewportEntered()));
+
+    connect(selectionModel,
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
+
+    connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+                this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+
 }
 
 SelectionManager::~SelectionManager()
@@ -71,18 +92,10 @@ void SelectionManager::slotEntered(const QModelIndex& index)
     m_toggle->hide();
     if (index.isValid() ){
         m_toggle->setIndex(index);
-
-        connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
-        connect(m_view->selectionModel(),
-                SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                this,
-                SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
-
         const QRect rect = m_view->visualRect(index);
         Test* t = itemFromIndex(index);
-        if (not t) return;
-        const int x = rect.right() - 16; //(t->shouldRun() ? 32 : 16);
+        if (!t) return;
+        const int x = rect.right() - 16;
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
 
@@ -92,10 +105,6 @@ void SelectionManager::slotEntered(const QModelIndex& index)
         m_toggle->setIndex(QModelIndex());
         disconnect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                    this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
-        disconnect(m_view->selectionModel(),
-                   SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                   this,
-                   SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
     }
 }
 
@@ -128,16 +137,13 @@ void SelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int
 void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
                                             const QItemSelection& deselected)
 {
-    const QModelIndex index = m_toggle->index();
-    if (index.isValid()) {
-        if (selected.contains(index)) {
-            m_toggle->setChecked(true);
-        }
-
-        if (deselected.contains(index)) {
-            m_toggle->setChecked(false);
-        }
+    Q_UNUSED(deselected);
+    QModelIndexList indexes = selected.indexes();
+    if (indexes.isEmpty()) {
+        m_toggle->hide();
+        return;
     }
+    slotEntered(indexes.first());
 }
 
 namespace
@@ -151,7 +157,6 @@ inline Test* testFromIndex(const QModelIndex& index)
 Test* SelectionManager::itemFromIndex(const QModelIndex& index) const
 {
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-    RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
     return testFromIndex(runnerIndex);
 }

@@ -48,15 +48,37 @@ VerboseManager::VerboseManager(QAbstractItemView* parent) :
     m_view(parent),
     m_toggle(0)
 {
-    connect(parent, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
-    connect(parent, SIGNAL(viewportEntered()),
-            this, SLOT(slotViewportEntered()));
     m_toggle = new VerboseToggle(m_view->viewport());
     m_toggle->setCheckable(true);
     m_toggle->hide();
     connect(m_toggle, SIGNAL(clicked(bool)),
             this, SLOT(emitOpenVerbose()));
+}
+
+void VerboseManager::makeConnections()
+{
+    m_view->disconnect(this);
+    QItemSelectionModel* selectionModel = m_view->selectionModel();
+    if (selectionModel) {
+        selectionModel->disconnect(this);
+    }
+    QAbstractItemModel* model = m_view->model();
+    if (model) model->disconnect(this);
+
+    connect(m_view,
+            SIGNAL(entered(QModelIndex)),
+            SLOT(slotEntered(QModelIndex)));
+    connect(m_view,
+            SIGNAL(viewportEntered()),
+            SLOT(slotViewportEntered()));
+
+    connect(selectionModel,
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
+
+    connect(model,
+            SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            SLOT(slotRowsRemoved(QModelIndex,int,int)));
 }
 
 VerboseManager::~VerboseManager()
@@ -72,29 +94,14 @@ void VerboseManager::slotEntered(const QModelIndex& index)
     m_toggle->hide();
     if (index.isValid() ){
         Test* t = itemFromIndex(index);
-        if (not t || not t->shouldRun()) return;
-        m_toggle->setIndex(index);
-        connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
-        connect(m_view->selectionModel(),
-                SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                this,
-                SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
-
+        if (!t || !t->shouldRun()) return;
         const QRect rect = m_view->visualRect(index);
         const int x = rect.right() - 32;
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
         m_toggle->show();
-    } else {
-        m_toggle->setIndex(QModelIndex());
-        disconnect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                   this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
-        disconnect(m_view->selectionModel(),
-                   SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                   this,
-                   SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
     }
+    m_toggle->setIndex(index);
 }
 
 void VerboseManager::slotViewportEntered()
@@ -122,18 +129,15 @@ void VerboseManager::slotRowsRemoved(const QModelIndex& parent, int start, int e
 }
 
 void VerboseManager::slotSelectionChanged(const QItemSelection& selected,
-                                            const QItemSelection& deselected)
+                                          const QItemSelection& deselected)
 {
-    const QModelIndex index = m_toggle->index();
-    if (index.isValid()) {
-        if (selected.contains(index)) {
-            m_toggle->setChecked(true);
-        }
-
-        if (deselected.contains(index)) {
-            m_toggle->setChecked(false);
-        }
+    Q_UNUSED(deselected);
+    QModelIndexList indexes = selected.indexes();
+    if (indexes.isEmpty()) {
+        m_toggle->hide();
+        return;
     }
+    slotEntered(indexes.first());
 }
 
 namespace
@@ -147,7 +151,6 @@ inline Test* testFromIndex(const QModelIndex& index)
 Test* VerboseManager::itemFromIndex(const QModelIndex& index) const
 {
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-    RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
     return testFromIndex(runnerIndex);
 }

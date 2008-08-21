@@ -35,13 +35,6 @@ namespace Veritas
 class VerboseToggle;
 class Test;
 
-/**
- * @brief Allows to select and deselect items for the single-click mode.
- *
- * Whenever an item is hovered by the mouse, a toggle button is shown
- * which allows to select/deselect the current item.
- * @todo extract common bits with selection manager
- */
 class VerboseManager : public QObject
 {
     Q_OBJECT
@@ -49,6 +42,10 @@ class VerboseManager : public QObject
 public:
     VerboseManager(QAbstractItemView* parent);
     virtual ~VerboseManager();
+
+    /*! Initialize connections with the view
+        @note This must be re-invoked after every setModel() on parent */
+    void makeConnections();
 
 public slots:
     /**

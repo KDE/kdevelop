@@ -49,6 +49,7 @@ class SelectionManager : public QObject
 public:
     SelectionManager(QAbstractItemView* parent);
     virtual ~SelectionManager();
+    void makeConnections();
 
 public slots:
     /**

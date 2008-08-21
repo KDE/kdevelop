@@ -107,7 +107,9 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_sema.release();
     runnerView()->setMouseTracking(true);
     m_selection = new SelectionManager(runnerView());
+    m_selection->makeConnections();
     m_verbose = new VerboseManager(runnerView());
+    m_verbose->makeConnections();
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
@@ -148,6 +150,9 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     const char* whatsthis = "xTest runner. First select a project from the rightmost dropdown box. Next, load the test tree by clicking on the green circular arrow icon. Run your tests with a click on the leftmost green arrow icon.";
     setWhatsThis( i18n(whatsthis) );
     resultsView()->setWhatsThis( i18n(whatsthis) );
+
+    runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
+    runnerView()->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 // helper for RunnerWindow(...)
@@ -398,7 +403,9 @@ void RunnerWindow::setModel(RunnerModel* model)
     // set top row higlighted
     runnerView()->setCurrentIndex(runnerProxyModel()->index(0, 0));
     enableToSource();
-
+    enableTestSync(true);
+    m_verbose->makeConnections();
+    m_selection->makeConnections();
 }
 
 
