@@ -45,6 +45,7 @@
 #include "types/structuretype.h"
 #include "functiondefinition.h"
 #include "codemodel.h"
+#include "functiondefinition.h"
 
 using namespace KTextEditor;
 
@@ -559,14 +560,18 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
       
       CodeModelItem::Kind kind = CodeModelItem::Unknown;
       
-      if(this->isFunctionDeclaration())
+      if(this->isFunctionDeclaration()) {
         kind = CodeModelItem::Function;
+      }
       
       if(this->kind() == Type && type<StructureType>())
         kind = CodeModelItem::Class;
       
       if(kind == CodeModelItem::Unknown && this->kind() == Instance)
         kind = CodeModelItem::Variable;
+      
+      if(isForwardDeclaration())
+        kind = (CodeModelItem::Kind)(kind | CodeModelItem::ForwardDeclaration);
         
       CodeModel::self().addItem(url(), id, kind);
     }
@@ -575,6 +580,7 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
       SymbolTable::self()->removeDeclaration(this);
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().removeDeclaration(id, this);
+      
       CodeModel::self().removeItem(url(), id);
     }
   }
