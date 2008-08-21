@@ -273,6 +273,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     Sublime::Area *area = uiController->activeArea();
 
     KUrl url = inputUrl;
+    if(url.protocol().isEmpty())
+      url.setProtocol("file"); //For some reason KIO::NetAccess::exists returns false when the url doesn't have a protocol
 
     if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
     {
