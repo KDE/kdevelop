@@ -138,7 +138,34 @@ void SuiteBuilderTest::identicalSuiteNames()
 {
     // two equally named suites but in a different parent directory
     // this should construct 2 different suites [but currently doesnt]
-    QFAIL("Not Implemented, and not supported [yet] either");
+
+    m_exe->m_name = "footest";
+    m_exe->m_fetchFunctions = QStringList() << "foocommand()" << "foocommand2()";
+
+    ExecutableStub* barExe = new ExecutableStub;
+    barExe->m_name = "bartest";
+    barExe->m_fetchFunctions = QStringList() << "barcommand()";
+    m_builder->m_exes = QList<ExecutableStub*>() << m_exe << barExe; // inject
+    m_builder->setTestExecutables(QList<KUrl>() << KUrl("/path/to/foo/suite/footest.shell")
+                                                << KUrl("/path/to/bar/suite/bartest.shell"));
+
+    m_builder->start();
+    Veritas::Test* root = m_builder->root();
+    KVERIFY(root);
+    KOMPARE_(2, root->childCount());
+
+    QTestSuite* foosuite = fetchSuite(root, 0);
+    verifySuite(foosuite, "foo-suite", 1);
+    QTestCase* caze = foosuite->child(0);
+    verifyCaze(caze, "footest", 2);
+    verifyCommand(0, caze, "foocommand");
+    verifyCommand(1, caze, "foocommand2");
+
+    QTestSuite* barSuite = fetchSuite(root, 1);
+    verifySuite(barSuite, "bar-suite", 1);
+    QTestCase* barC = barSuite->child(0);
+    verifyCaze(barC, "bartest", 1);
+    verifyCommand(0, barC, "barcommand");
 }
 
 /////////////////////// helpers //////////////////////////////////////////////
