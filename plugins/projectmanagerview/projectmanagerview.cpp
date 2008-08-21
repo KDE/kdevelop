@@ -49,6 +49,7 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 
+#include "tests/common/modeltest.h"
 #include "projectproxymodel.h"
 #include "projectbuildsetwidget.h"
 #include "projectmanagerviewplugin.h"
@@ -150,6 +151,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_modelFilter = new ProjectProxyModel( this );
     d->m_modelFilter->setSourceModel(overviewModel);
     d->m_modelFilter->setDynamicSortFilter(true);
+    ModelTest* test = new ModelTest( overviewModel );
     d->m_projectOverview->setModel( d->m_modelFilter );
     d->m_projectOverview->setSortingEnabled(true);
     d->m_projectOverview->sortByColumn( 0, Qt::AscendingOrder );
