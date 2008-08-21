@@ -435,29 +435,30 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       m_changeWasSignificant = true; //We are adding a declaration that comes into the symbol table, so mark the change significant
 /*    if( recompiling() )
       kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
-    SmartRange* prior = editor()->currentRange();
-
     LockedSmartInterface iface = editor()->smart();
+
+    SmartRange* prior = editor()->currentRange(iface);
+
     ///We don't want to move the parent range around if the context is collapsed, so we find a parent range that can hold this range.
     KDevVarLengthArray<SmartRange*, 5> backup;
-    while(editor()->currentRange() && !editor()->currentRange()->contains(newRange.textRange())) {
-      backup.append(editor()->currentRange());
-      editor()->exitCurrentRange();
+    while(editor()->currentRange(iface) && !editor()->currentRange(iface)->contains(newRange.textRange())) {
+      backup.append(editor()->currentRange(iface));
+      editor()->exitCurrentRange(iface);
     }
 
-    if(prior && !editor()->currentRange()) {
-      editor()->setCurrentRange(backup[backup.count()-1]);
+    if(prior && !editor()->currentRange(iface)) {
+      editor()->setCurrentRange(iface, backup[backup.count()-1]);
       backup.resize(backup.size()-1);
     }
 
-    SmartRange* range = editor()->currentRange() ? editor()->createRange(newRange.textRange()) : 0;
+    SmartRange* range = editor()->currentRange(iface) ? editor()->createRange(iface, newRange.textRange()) : 0;
 
-    editor()->exitCurrentRange();
+    editor()->exitCurrentRange(iface);
 
     for(int a = backup.size()-1; a >= 0; --a)
-      editor()->setCurrentRange(backup[a]);
+      editor()->setCurrentRange(iface, backup[a]);
 
-    Q_ASSERT(editor()->currentRange() == prior);
+    Q_ASSERT(editor()->currentRange(iface) == prior);
 
     declaration = new T(newRange, currentContext());
     declaration->setSmartRange(range);
@@ -993,13 +994,16 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           }
 
           //Just temporarily insert the new context
-          injectContext( globalCtx, currentContext()->smartRange() );
+          LockedSmartInterface iface = editor()->smart();
+          injectContext( iface, globalCtx, currentContext()->smartRange() );
         }
 
         openForwardDeclaration(node->name, node);
 
-        if(forwardDeclarationGlobal)
-          closeInjectedContext();
+        if(forwardDeclarationGlobal) {
+          LockedSmartInterface iface = editor()->smart();
+          closeInjectedContext(iface);
+        }
 
         openedDeclaration = true;
         break;

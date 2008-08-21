@@ -582,7 +582,10 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 
   } else {
     openContext(rangeNode->ducontext);
-    editor()->setCurrentRange(currentContext()->smartRange());
+    {
+      LockedSmartInterface iface = editor()->smart();
+      editor()->setCurrentRange(iface, currentContext()->smartRange());
+    }
     return currentContext();
   }
 }
