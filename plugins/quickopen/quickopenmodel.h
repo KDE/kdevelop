@@ -90,18 +90,20 @@ class QuickOpenModel : public ExpandingWidgetModel {
     void textChanged( const QString& str );
   private slots:
     void destroyed( QObject* obj );
+    void resetTimer();
   
   private:
     virtual bool indexIsItem(const QModelIndex& index) const;
     
     virtual int contextMatchQuality(const QModelIndex & index) const;
 
-    KDevelop::QuickOpenDataPointer getItem( int row ) const;
+    KDevelop::QuickOpenDataPointer getItem( int row, bool noReset = false ) const;
     
     typedef QHash<uint, KDevelop::QuickOpenDataPointer> DataList;
     mutable DataList m_cachedData;
 
     QTreeView* m_treeView;
+    QTimer* m_resetTimer;
 
     struct ProviderEntry {
       ProviderEntry() : enabled(false) {
@@ -117,6 +119,9 @@ class QuickOpenModel : public ExpandingWidgetModel {
     QList<ProviderEntry> m_providers;
     QString m_filterText;
     int m_expandingWidgetHeightIncrease;
+
+    QSet<QString> m_enabledItems;
+    QSet<QString> m_enabledScopes;
 };
 
 #endif

@@ -727,7 +727,7 @@ void QuickOpenPlugin::quickOpenNavigate()
     }else{
       DUChainItem item;
 
-      item.m_item = DeclarationPointer(decl);
+      item.m_item = IndexedDeclaration(decl);
       item.m_text = decl->qualifiedIdentifier().toString();
 
       QList<DUChainItem> items;
@@ -793,7 +793,7 @@ void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFil
           decl = static_cast<FunctionDefinition*>(decl)->declaration();
 
         DUChainItem item;
-        item.m_item = DeclarationPointer(decl);
+        item.m_item = IndexedDeclaration(decl);
         item.m_text = decl->qualifiedIdentifier().toString();
         items << item;
 

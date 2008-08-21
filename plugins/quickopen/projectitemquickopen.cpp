@@ -29,71 +29,200 @@
 #include <klocale.h>
 #include <language/interfaces/iquickopen.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/codemodel.h>
 
 using namespace KDevelop;
 
-void fillItem( const QString& project, QList<DUChainItem>& items, Declaration* decl, ProjectItemDataProvider::ItemTypes itemTypes ) {
-  if( ((itemTypes & ProjectItemDataProvider::Classes) && decl->kind() == Declaration::Type && decl->abstractType().cast<StructureType>())
-      || ((itemTypes & ProjectItemDataProvider::Functions) && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
-    DUChainItem f;
-    f.m_project = project;
-        //TypePtr<FunctionType> function = decl->type<FunctionType>();
-        //if( function )
-      //f.m_text = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn )).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments )
-    f.m_text = decl->qualifiedIdentifier().toString();
-    f.m_item = DeclarationPointer(decl);
-    items << f;
-  }
+ProjectItemDataProvider::ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen ) : m_quickopen(quickopen) {
 }
 
-void fillItems( const QString& project, QList<DUChainItem>& items, DUContext* context, ProjectItemDataProvider::ItemTypes itemTypes ) {
-  QVector<DUContext*> contexts = context->childContexts();
-  QVector<Declaration*> declarations = context->localDeclarations();
+void ProjectItemDataProvider::setFilterText( const QString& text ) {
 
-  QVector<DUContext*>::const_iterator contextIterator = contexts.begin();
-  QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
+  m_addedItems.clear();
 
-  QVector<DUContext*>::const_iterator contextEnd = contexts.end();
-  QVector<Declaration*>::const_iterator declarationEnd = declarations.end();
+  QStringList search(text.split("::", QString::SkipEmptyParts));
+  for(int a = 0; a < search.count(); ++a) {
+    if(search[a].endsWith(":")) //Don't get confused while the :: is being typed
+      search[a] = search[a].left(search[a].length()-1);
+  }
+  bool mustMatchEnd = false;
+  if(!search.isEmpty() && search.back().endsWith("(")) {
+    mustMatchEnd = true;
+    search.back() = search.back().left(search.back().length()-1);
+  }
 
-  while( contextIterator != contextEnd || declarationIterator != declarationEnd ) {
-    if( contextIterator != contextEnd && declarationIterator != declarationEnd ) {
-      //Sort by position
-      if( (*contextIterator)->range().textRange().start() < (*declarationIterator)->range().textRange().start() ) {
-        fillItems( project, items, *contextIterator, itemTypes );
-        ++contextIterator;
-      } else {
-        fillItem( project, items, *declarationIterator, itemTypes );
-        ++declarationIterator;
+  if(text.isEmpty() || search.isEmpty()) {
+    m_filteredItems = m_currentItems;
+    return;
+  }
+
+  foreach(QString str, search)
+    kDebug() << "filtering for" << str;
+
+  if(!text.startsWith(m_currentFilter))
+    m_filteredItems = m_currentItems;
+  m_currentFilter = text;
+
+  QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
+  m_filteredItems.clear();
+
+  for(int a = 0; a < oldFiltered.size(); ++a) {
+    QualifiedIdentifier currentId = oldFiltered[a].m_id;
+
+    bool mismatch = false;
+    for(int b = 0; b < search.count(); ++b) {
+      bool localMatch = false;
+      QString s = search.at(b);
+      
+      for(int q = 0; q < currentId.count(); ++q) {
+//         kDebug() << "substring check" << 
+        if(currentId.at(q).identifier().str().contains(s, Qt::CaseInsensitive)) {
+          localMatch = true;
+          break;
+        }
       }
-    } else if( contextIterator != contextEnd ) {
-      fillItems( project, items, *contextIterator, itemTypes );
-      ++contextIterator;
-    } else if( declarationIterator != declarationEnd ) {
-      fillItem( project, items, *declarationIterator, itemTypes );
-      ++declarationIterator;
+      if(!localMatch) {
+        mismatch = true;
+        break;
+      }else{
+        continue;
+      }
+
+//     uint scopePosition = 0;
+// scopePosition = 0;
+//       for(; scopePosition < (uint)oldFiltered[a].m_id.count(); ++scopePosition) {
+//         QString id = oldFiltered[a].m_id.at(scopePosition).identifier().str();
+//         QString s = search.at(b);
+//         uint lastScopePosition = (uint)(oldFiltered[a].m_id.count()-1);
+//         bool endMatchNow = mustMatchEnd && scopePosition == lastScopePosition && b == search.count()-1;
+//         if((endMatchNow && id.endsWith(s, Qt::CaseInsensitive)) ||
+//            (!endMatchNow && id.contains(s, Qt::CaseInsensitive))) {
+//           localMatch = true;
+//           break;
+//         }
+//       }
+//       ++scopePosition;
+//       if(!localMatch) {
+//         mismatch = true;
+//         break;
+//       }
     }
+    if(!mismatch)
+      m_filteredItems << oldFiltered[a];
   }
 }
 
-ProjectItemDataProvider::ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen ) : DUChainItemDataProvider(quickopen) {
+QList<KDevelop::QuickOpenDataPointer> ProjectItemDataProvider::data( uint start, uint end ) const {
+
+  QList<KDevelop::QuickOpenDataPointer> ret;
+  for(uint a = start; a < end; ++a)
+    ret << data(a);
+  return ret;
+}
+
+KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const {
+
+  //Check whether this position falls into an appended item-list, else apply the offset
+   uint filteredItemOffset = 0;
+   for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {
+     int offsetInAppended = pos - (it.key()+1);
+     if(offsetInAppended >= 0 && offsetInAppended < it.value().count()) {
+       return it.value()[offsetInAppended];
+     }
+     if(it.key() >= pos)
+       break;
+     filteredItemOffset += it.value().count();
+   }
+//     
+//     add += it.value().count();
+
+  uint a = pos - filteredItemOffset;
+  if(a > (uint)m_filteredItems.size())
+    return KDevelop::QuickOpenDataPointer();
+
+  QList<KDevelop::QuickOpenDataPointer> ret;
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    TopDUContext* ctx = DUChainUtils::standardContextForUrl(m_filteredItems[a].m_file.toUrl());
+    if(ctx) {
+      QList<Declaration*> decls = ctx->findDeclarations(m_filteredItems[a].m_id, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
+
+      //Filter out forward-declarations
+      foreach(Declaration* decl, decls)
+        if(decl->isForwardDeclaration() && decls.size() > 1)
+          decls.removeAll(decl);
+
+      foreach(Declaration* decl, decls) {
+        DUChainItem item;
+        item.m_item = decl;
+        item.m_text = decl->toString();
+        //item.m_project =  .. @todo fill
+        ret << QuickOpenDataPointer(new DUChainItemData(item, true));
+      }
+      if(decls.isEmpty()) {
+        DUChainItem item;
+        item.m_text = m_filteredItems[a].m_id.toString();
+        //item.m_project =  .. @todo fill
+        ret << QuickOpenDataPointer(new DUChainItemData(item));
+      }
+    }else{
+      kDebug() << "Could not find standard-context";
+    }
+
+  if(!ret.isEmpty()) {
+    QList<KDevelop::QuickOpenDataPointer> append = ret.mid(1);
+    if(!append.isEmpty()) {
+        QMap<uint, QList<KDevelop::QuickOpenDataPointer> > addMap;
+        for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::iterator it = m_addedItems.begin(); it != m_addedItems.end();) {
+            if(it.key() == pos) //There already is appended data stored, nothing to do
+                return ret.first();
+            else if(it.key() > pos) {
+                addMap[it.key() + append.count()] = it.value();
+                it = m_addedItems.erase(it);
+            }else{
+                ++it;
+            }
+        }
+   
+        m_addedItems.insert(pos, append);
+
+        for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = addMap.begin(); it != addMap.end(); ++it)
+            m_addedItems.insert(it.key(), it.value());
+    }
+    return ret.first();
+  } else
+    return KDevelop::QuickOpenDataPointer();
 }
 
 void ProjectItemDataProvider::reset() {
-  Base::clearFilter();
-  QList<DUChainItem> items;
+  m_usingFiles = m_quickopen->fileSet();
+  m_currentItems.clear();
+  m_addedItems.clear();
 
-  QSet<IndexedString> enabledFiles = m_quickopen->fileSet();
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  foreach( IndexedString u, m_usingFiles ) {
+    uint count;
+    const KDevelop::CodeModelItem* items;
+    CodeModel::self().items( u, count, items );
 
-  foreach( IndexedString u, enabledFiles ) {
-    KDevelop::DUChainReadLocker lock( DUChain::lock() );
-
-    ReferencedTopDUContext ctx = DUChainUtils::standardContextForUrl(u.str());
-    if( ctx ) ///@todo Get the project for this file and give it as first parameter
-      fillItems( QString(), items, ctx, m_itemTypes );
+    for(uint a = 0; a < count; ++a) {
+      if(!items[a].id.isValid() || items[a].kind & CodeModelItem::ForwardDeclaration)
+        continue;
+      
+      if(((m_itemTypes & Classes) && (items[a].kind & CodeModelItem::Class)) ||
+         ((m_itemTypes & Functions) && (items[a].kind & CodeModelItem::Function)))
+        m_currentItems << CodeModelViewItem(u, items[a].id.identifier());
+    }
   }
 
-  setItems(items);
+  m_filteredItems = m_currentItems;
+  m_currentFilter.clear();
+}
+
+uint ProjectItemDataProvider::itemCount() const {
+  uint add = 0;
+  for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it)
+    add += it.value().count();
+  return m_filteredItems.count() + add;
 }
 
 QStringList ProjectItemDataProvider::supportedItemTypes() {

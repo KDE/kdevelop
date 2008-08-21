@@ -22,6 +22,7 @@
 #include <KUrl>
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
+#include <language/duchain/indexedstring.h>
 
 namespace KDevelop {
   class ICore;
@@ -30,9 +31,9 @@ namespace KDevelop {
 struct ProjectFile {
   ProjectFile() {
   }
-  KUrl m_url;
-  KUrl m_projectUrl;
-  QString m_project;
+  KDevelop::IndexedString m_url;
+  KDevelop::IndexedString m_projectUrl;
+  KDevelop::IndexedString m_project;
 };
 
 class ProjectFileData : public KDevelop::QuickOpenDataBase {

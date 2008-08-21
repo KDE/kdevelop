@@ -38,12 +38,13 @@ DUChainItemData::DUChainItemData( const DUChainItem& file, bool openDefinition )
 
 QString DUChainItemData::text() const {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  if(!m_item.m_item)
-    return i18n("Not available any more");
+  Declaration* decl = m_item.m_item.data();
+  if(!decl)
+    return i18n("Not available any more: %1", m_item.m_text);
   QString text;
-  TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  TypePtr<FunctionType> function = decl->type<FunctionType>();
   if( function )
-    text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    text  = QString("%1%2").arg(decl->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   else
     text = m_item.m_text;
 
@@ -53,10 +54,11 @@ QString DUChainItemData::text() const {
 QList<QVariant> DUChainItemData::highlighting() const {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  if(!m_item.m_item)
+  Declaration* decl = m_item.m_item.data();
+  if(!decl)
     return QList<QVariant>();
 
-  TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+  TypePtr<FunctionType> function = decl->type<FunctionType>();
   if(!function)
     return QList<QVariant>();
 
@@ -64,12 +66,12 @@ QList<QVariant> DUChainItemData::highlighting() const {
   boldFormat.setFontWeight(QFont::Bold);
   QTextCharFormat normalFormat;
 
-  int prefixLength = function->partToString( FunctionType::SignatureReturn).length() + 1;
+  int prefixLength = 0;
 
   QString signature = function->partToString( FunctionType::SignatureArguments );
 
   //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
-  QualifiedIdentifier id = m_item.m_item->qualifiedIdentifier();
+  QualifiedIdentifier id = decl->qualifiedIdentifier();
   QString fullId = id.toString();
   QString lastId;
   if(!id.isEmpty())
@@ -96,16 +98,23 @@ QString DUChainItemData::htmlDescription() const {
   if(m_item.m_noHtmlDestription)
       return QString();
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  if(!m_item.m_item)
+  Declaration* decl = m_item.m_item.data();
+  if(!decl)
     return i18n("Not available any more");
 
+  TypePtr<FunctionType> function = decl->type<FunctionType>();
+
   QString text;
-  text = m_item.m_item->url().str();
-//   TypePtr<FunctionType> function = m_item.m_item->type<FunctionType>();
+
+  if( function && function->returnType() )
+    text  = i18n("Return:") + function->partToString(FunctionType::SignatureReturn);
+
+  text += " " + i18n("File:") + decl->url().str();
+//   TypePtr<FunctionType> function = decl->type<FunctionType>();
 //   if( function )
-//     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(m_item.m_item->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+//     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
 //   else
-//     text = m_item.m_item->toString();
+//     text = decl->toString();
 
   QString ret = "<small><small>" + text;
   if(!m_item.m_project.isEmpty()) {
@@ -118,9 +127,9 @@ QString DUChainItemData::htmlDescription() const {
 
 bool DUChainItemData::execute( QString& /*filterText*/ ) {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  if(!m_item.m_item)
+  Declaration* decl = m_item.m_item.data();
+  if(!decl)
     return false;
-  Declaration* decl = this->m_item.m_item.data();
 
   if(m_openDefinition && FunctionDefinition::definition(decl))
       decl = FunctionDefinition::definition(decl);
@@ -147,9 +156,6 @@ bool DUChainItemData::isExpandable() const {
 
 QWidget* DUChainItemData::expandingWidget() const {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-
-  if(!m_item.m_item)
-    return 0;
 
   Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
   if( !decl || !decl->context() )

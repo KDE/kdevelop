@@ -36,17 +36,17 @@ ProjectFileData::ProjectFileData( const ProjectFile& file ) : m_file(file) {
 }
 
 QString ProjectFileData::text() const {
-  KUrl u = m_file.m_projectUrl;
+  KUrl u(m_file.m_projectUrl.toUrl());
   u.adjustPath(KUrl::AddTrailingSlash);
-  return KUrl::relativeUrl( u, m_file.m_url );
+  return KUrl::relativeUrl( u, m_file.m_url.toUrl() );
 }
 
 KUrl ProjectFileData::totalUrl() const {
-  return m_file.m_url;
+  return m_file.m_url.toUrl();
 }
 
 QString ProjectFileData::htmlDescription() const {
-  return "<small><small>" + i18n("Project") + " " + m_file.m_project + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
+  return "<small><small>" + i18n("Project") + " " + m_file.m_project.str() + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
 bool ProjectFileData::execute( QString& /*filterText*/ ) {
@@ -67,7 +67,7 @@ QList<QVariant> ProjectFileData::highlighting() const {
   
   QList<QVariant> ret;
 
-  int fileNameLength = m_file.m_url.fileName().length();
+  int fileNameLength = m_file.m_url.toUrl().fileName().length();
   
   ret << 0;
   ret << txt.length() - fileNameLength;
@@ -94,11 +94,11 @@ QWidget* ProjectFileData::expandingWidget() const {
 
   
   if( chosen )
-    return chosen->createNavigationWidget(0, 0, "<small><small>" + i18n("Project") + " " + m_file.m_project + "<br>" + "</small></small>");
+    return chosen->createNavigationWidget(0, 0, "<small><small>" + i18n("Project") + " " + m_file.m_project.str() + "<br>" + "</small></small>");
   else {
     QTextBrowser* ret = new QTextBrowser();
     ret->resize(400, 100);
-    ret->setText("<small><small>" + i18n("Project") + " " + m_file.m_project + "<br>" + /*i18n("Url") + " " + totalUrl().prettyUrl() + "<br>" +*/ i18n("Not parsed yet") + "</small></small>");
+    ret->setText("<small><small>" + i18n("Project") + " " + m_file.m_project.str() + "<br>" + /*i18n("Url") + " " + totalUrl().prettyUrl() + "<br>" +*/ i18n("Not parsed yet") + "</small></small>");
     return ret;
   }
   
@@ -122,12 +122,14 @@ void ProjectFileDataProvider::reset() {
   QList<ProjectFile> projectFiles;
   
   foreach( IProject* project, ICore::self()->projectController()->projects() ) {
-    QList<ProjectFileItem*> files = project->files();
-    foreach( ProjectFileItem* file, files ) {
+    QSet<IndexedString> allFiles = project->fileSet();
+    IndexedString projectFolder(project->folder().pathOrUrl());
+    IndexedString projectName(project->name());
+    foreach(IndexedString file, allFiles) {
       ProjectFile f;
-      f.m_projectUrl = project->folder();
-      f.m_url = file->url();
-      f.m_project = project->name();
+      f.m_projectUrl = projectFolder;
+      f.m_url = file;
+      f.m_project = projectName;
       projectFiles << f;
     }
   }
@@ -141,9 +143,10 @@ uint ProjectFileDataProvider::itemCount() const {
 
 QSet<IndexedString> ProjectFileDataProvider::files() const {
   QSet<IndexedString> ret;
-  foreach( const ProjectFile& file, items() ) {
-    ret.insert(IndexedString(file.m_url.pathOrUrl()));
-  }
+
+  foreach( IProject* project, ICore::self()->projectController()->projects() )
+    ret += project->fileSet();
+
   return ret;
 }
 
@@ -162,5 +165,5 @@ QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start,
 }
 
 QString ProjectFileDataProvider::itemText( const ProjectFile& data ) const {
-  return data.m_url.url();
+  return data.m_url.str();
 }

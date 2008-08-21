@@ -23,6 +23,7 @@
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/duchainpointer.h>
+#include <language/duchain/declaration.h>
 
 
 namespace KDevelop {
@@ -32,7 +33,7 @@ namespace KDevelop {
 struct DUChainItem {
   DUChainItem() : m_noHtmlDestription(false) {
   }
-  KDevelop::DeclarationPointer m_item;
+  KDevelop::IndexedDeclaration m_item;
   QString m_text;
   QString m_project;
   bool m_noHtmlDestription;

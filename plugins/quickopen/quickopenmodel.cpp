@@ -19,16 +19,22 @@
 #include "quickopenmodel.h"
 
 #include <QTreeView>
+#include <QTimer>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <language/editor/hashedstring.h>
 #include <kdebug.h>
 #include <typeinfo>
 
+#define QUICKOPEN_USE_ITEM_CACHING
+
 using namespace KDevelop;
 
 QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(0), m_expandingWidgetHeightIncrease(0)
 {
+    m_resetTimer = new QTimer(this);
+    m_resetTimer->setSingleShot(true);
+    connect(m_resetTimer, SIGNAL(timeout()), this, SLOT(resetTimer()));
 }
 
 void QuickOpenModel::setExpandingWidgetHeightIncrease(int pixels)
@@ -91,6 +97,8 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
 {
   QSet<QString> items = QSet<QString>::fromList( _items );
   QSet<QString> scopes = QSet<QString>::fromList( _scopes );
+  m_enabledItems = items;
+  m_enabledScopes  = scopes;
   kDebug() << "params " << items << " " << scopes;
 
   //We use 2 iterations here: In the first iteration, all providers that implement QuickOpenFileSetInterface are initialized, then the other ones.
@@ -106,6 +114,8 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
     } else {
       kDebug() << "disabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = false;
+      if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) )
+        (*it).provider->enableData( _items, _scopes ); //The provider may still provide files
     }
   }
 
@@ -135,6 +145,12 @@ void QuickOpenModel::textChanged( const QString& str )
 
   m_cachedData.clear();
   clearExpanding();
+
+  //Get the 100 first items, so the data-providers notice changes without ui-glitches due to resetting
+  for(int  a = 0; a < 50; ++a)
+    getItem(a, true);
+  
+
   reset();
 }
 
@@ -155,9 +171,9 @@ void QuickOpenModel::restart(bool keepFilterText)
     if( !dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) )
       continue;
 
-    ///Always reset providers that implement QuickOpenFileSetInterface, because they may be needed by other providers.
-    //if( provider.enabled && provider.provider )
-    provider.provider->reset();
+    ///Always reset providers that implement QuickOpenFileSetInterface and have some matchign scopes, because they may be needed by other providers.
+    if( m_enabledScopes.isEmpty() || !( m_enabledScopes & provider.scopes ).isEmpty() )
+        provider.provider->reset();
   }
   foreach( const ProviderEntry& provider, m_providers ) {
     if( dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) )
@@ -284,25 +300,44 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
   return ExpandingWidgetModel::data( index, role );
 }
 
-QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
-  ///@todo mix all the models alphabetically here. For now, they are simply ordered.
+void QuickOpenModel::resetTimer() {
+    m_cachedData.clear();
+    uint currentRow = treeView()->currentIndex().row();
+    QAbstractItemModel::reset(); //New items have been inserted
+    treeView()->setCurrentIndex(index(currentRow, 0, QModelIndex())); //Preserve the current index
+}
 
+QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
+  ///@todo mix all the models alphabetically here. For now, they are simply ordered.
+  ///@todo Deal with unexpected item-counts, like for example in the case of overloaded function-declarations
+
+#ifdef QUICKOPEN_USE_ITEM_CACHING
   if( m_cachedData.contains( row ) )
     return m_cachedData[row];
+#endif
 
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
       continue;
-    if( (uint)row < provider.provider->itemCount() )
+    uint itemCount = provider.provider->itemCount();
+    
+    if( (uint)row < itemCount )
     {
       QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
 
+      if(!noReset && provider.provider->itemCount() != itemCount) {
+          kDebug() << "item-count in provider has changed, resetting model";
+          m_resetTimer->start(0);
+      }
+      
       if( items.isEmpty() )
       {
-        kWarning() << "Provider returned no item";
+//         kWarning() << "Provider returned no item";
         return QuickOpenDataPointer();
       } else {
+#ifdef QUICKOPEN_USE_ITEM_CACHING
         m_cachedData[row] = items.first();
+#endif
         return items.first();
       }
     } else {
@@ -310,7 +345,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
     }
   }
 
-  kWarning() << "No item for row " <<  row;
+//   kWarning() << "No item for row " <<  row;
 
   return QuickOpenDataPointer();
 }
@@ -318,10 +353,12 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row ) const {
 QSet<IndexedString> QuickOpenModel::fileSet() const {
   QSet<IndexedString> merged;
   foreach( const ProviderEntry& provider, m_providers ) {
-    if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
-      QSet<IndexedString> ifiles = iface->files();
-      //kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
-      merged += ifiles;
+    if( m_enabledScopes.isEmpty() || !( m_enabledScopes & provider.scopes ).isEmpty() ) {
+        if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
+        QSet<IndexedString> ifiles = iface->files();
+        //kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
+        merged += ifiles;
+        }
     }
   }
   return merged;
