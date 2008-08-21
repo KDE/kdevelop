@@ -360,8 +360,7 @@ void Project::close()
     //the manager plugin will be deleted in the plugin controller, so just set
     //the manager to zero.
 //     d->manager = 0;
-    QList<QStandardItem*> itemList =  d->topItem->model()->takeRow( d->topItem->row() );
-    qDeleteAll( itemList );
+    Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
     if( d->tmp )
     {
