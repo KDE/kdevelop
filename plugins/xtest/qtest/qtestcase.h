@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QFileInfo>
+#include <KUrl>
 
 #include <veritas/test.h>
 #include "qxqtestexport.h"
@@ -67,10 +68,12 @@ public:
     void setUpProcSignals();
     void setExecutable(const QFileInfo&);
 
-    QFileInfo textOutFilePath() const;
-    QFileInfo stdErrFilePath() const;
+    KUrl outFile() const;
+    KUrl errorFile() const;
 
 private:
+    void removeTempFiles();
+
     // preconditions for run()
     inline void assertProcessSet();
     inline void assertOutputParserSet();

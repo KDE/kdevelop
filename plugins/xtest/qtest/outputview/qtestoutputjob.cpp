@@ -46,21 +46,24 @@ void QTestOutputJob::start()
     setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
     setStandardToolView(KDevelop::IOutputView::TestView);
-    //setTitle("");
     setBehaviours(KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose);
     setModel(new QTestOutputModel(delegate()), KDevelop::IOutputView::TakeOwnership);
     setDelegate(delegate());
 
     startOutput();
-    outputFile(m_caze->textOutFilePath().absoluteFilePath());
-    outputFile(m_caze->stdErrFilePath().absoluteFilePath());
+    if (!m_caze->outFile().isEmpty()) {
+        outputFile(m_caze->outFile());
+    }
+    if (!m_caze->errorFile().isEmpty()) {
+        outputFile(m_caze->errorFile());
+    }
     model()->slotCompleted();
     emitResult();
 }
 
-void QTestOutputJob::outputFile(const QFileInfo& path)
+void QTestOutputJob::outputFile(const KUrl& path)
 {
-    QString path_ = path.absoluteFilePath();
+    QString path_ = path.path();
     QFile f(path_);
     if (!f.exists()) {
         kError() << "Test ouput file does not exist [" << path_ << "]";

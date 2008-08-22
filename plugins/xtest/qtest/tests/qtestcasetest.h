@@ -38,6 +38,7 @@ private slots:
     void construct();
     void addCommand();
     void addCommands();
+    void emptyOutputFiles();
 
 private:
     QFileInfo m_exe;

@@ -53,7 +53,7 @@ protected:
     QTestOutputModel* model() const;
 
 private:
-    void outputFile(const QFileInfo& path);
+    void outputFile(const KUrl& path);
 
 private:
     QTestOutputDelegate* delegate() const;

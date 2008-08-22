@@ -79,5 +79,11 @@ void QTestCaseTest::addCommands()
 
 }
 
+void QTestCaseTest::emptyOutputFiles()
+{
+    KVERIFY(m_case->outFile().isEmpty());
+    KVERIFY(m_case->errorFile().isEmpty());
+}
+
 #include "qtestcasetest.moc"
 QTEST_KDEMAIN(QTestCaseTest, NoGUI)

@@ -31,7 +31,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTimer>
-
 #include <KDebug>
 #include <KProcess>
 
@@ -62,13 +61,17 @@ void QTestCase::removeFile(const QString& filePath)
     }
 }
 
-QTestCase::~QTestCase()
+void QTestCase::removeTempFiles()
 {
     removeFile(m_outputPath);
     removeFile(m_stdOutFilePath);
     removeFile(m_stdErrFilePath);
     removeFile(m_textOutFilePath);
+}
 
+QTestCase::~QTestCase()
+{
+    removeTempFiles();
     if (m_output) delete m_output;
 }
 
@@ -77,14 +80,14 @@ bool QTestCase::shouldRun() const
     return true;
 }
 
-QFileInfo QTestCase::textOutFilePath() const
+KUrl QTestCase::outFile() const
 {
-    return QFileInfo(m_textOutFilePath);
+    return KUrl(m_textOutFilePath);
 }
 
-QFileInfo QTestCase::stdErrFilePath() const
+KUrl QTestCase::errorFile() const
 {
-    return QFileInfo(m_stdErrFilePath);
+    return KUrl(m_stdErrFilePath);
 }
 
 QFileInfo QTestCase::executable()
@@ -182,10 +185,7 @@ void QTestCase::initOutputParser()
 // helper for run()
 void QTestCase::initTempOutputFile()
 {
-    QFile::remove(m_outputPath);
-    QFile::remove(m_stdOutFilePath);
-    QFile::remove(m_stdErrFilePath);
-    QFile::remove(m_textOutFilePath);
+    removeTempFiles();
 
     QString pathPrefix;
     QTextStream str(&pathPrefix);
