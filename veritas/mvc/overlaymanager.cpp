@@ -18,126 +18,120 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "veritas/mvc/selectionmanager.h"
+#include "overlaymanager.h"
 
 #include "veritas/test.h"
 #include "veritas/utils.h"
 
-#include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/selectiontoggle.h"
+#include "runnermodel.h"
+#include "overlaytoggle.h"
 
-#include <KIconEffect>
-
+#include <KDebug>
 #include <QAbstractButton>
 #include <QAbstractItemView>
 #include <QAbstractProxyModel>
 #include <QModelIndex>
-#include <QPainter>
-#include <QPaintEvent>
 #include <QRect>
-#include <QTimeLine>
 
-using Veritas::SelectionManager;
-using Veritas::SelectionToggle;
+using Veritas::OverlayManager;
+using Veritas::OverlayButton;
 using Veritas::Test;
 using Veritas::RunnerModel;
 
-SelectionManager::SelectionManager(QAbstractItemView* parent) :
+OverlayManager::OverlayManager(QAbstractItemView* parent) :
     QObject(parent),
     m_view(parent),
     m_toggle(0)
 {
-    m_toggle = new SelectionToggle(m_view->viewport());
-    m_toggle->setCheckable(true);
-    m_toggle->hide();
-    connect(m_toggle, SIGNAL(clicked(bool)),
-            this, SLOT(setItemSelected(bool)));
+    Q_ASSERT(m_view);
 }
 
-void SelectionManager::makeConnections()
+void OverlayManager::setButton(OverlayButton* toggle)
 {
+    Q_ASSERT(toggle);
+    m_toggle = toggle;
+    m_toggle->setCheckable(true);
+    m_toggle->hide();
+}
+
+void OverlayManager::reset()
+{
+    button()->reset();
+}
+
+OverlayButton* OverlayManager::button() const
+{
+    Q_ASSERT(m_toggle);
+    return m_toggle;
+}
+
+void OverlayManager::makeConnections()
+{
+    Q_ASSERT(m_view);
+
     m_view->disconnect(this);
     QItemSelectionModel* selectionModel = m_view->selectionModel();
     if (selectionModel) {
         selectionModel->disconnect(this);
     }
-    if (m_view->model()) {
-        m_view->model()->disconnect(this);
-    }
+    QAbstractItemModel* model = m_view->model();
+    if (model) model->disconnect(this);
 
-    connect(m_view, SIGNAL(entered(QModelIndex)),
-            this, SLOT(slotEntered(QModelIndex)));
-    connect(m_view, SIGNAL(viewportEntered()),
-            this, SLOT(slotViewportEntered()));
+    connect(m_view,
+            SIGNAL(entered(QModelIndex)),
+            SLOT(slotEntered(QModelIndex)));
+    connect(m_view,
+            SIGNAL(viewportEntered()),
+            SLOT(slotViewportEntered()));
 
     connect(selectionModel,
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
 
-    connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
-
+    connect(model,
+            SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            SLOT(slotRowsRemoved(QModelIndex,int,int)));
 }
 
-SelectionManager::~SelectionManager()
+OverlayManager::~OverlayManager()
 {}
 
-void SelectionManager::reset()
+void OverlayManager::slotEntered(const QModelIndex& index)
 {
-    m_toggle->reset();
-}
+    kDebug() << "";
 
-void SelectionManager::slotEntered(const QModelIndex& index)
-{
+    Q_ASSERT(m_toggle);
     m_toggle->hide();
     if (index.isValid() ){
-        m_toggle->setIndex(index);
+        Test* t = index2Test(index);
+        if (!t || !t->shouldRun()) return;
         const QRect rect = m_view->visualRect(index);
-        Test* t = itemFromIndex(index);
-        if (!t) return;
         const int x = rect.right() - m_toggle->offset();
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
-
-        m_toggle->setChecked(itemFromIndex(index)->selected());
         m_toggle->show();
-    } else {
-        m_toggle->setIndex(QModelIndex());
-        disconnect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                   this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
     }
+    m_toggle->setIndex(index);
 }
 
-void SelectionManager::slotViewportEntered()
+void OverlayManager::slotViewportEntered()
 {
+    kDebug() << "";
+    Q_ASSERT(m_toggle);
     m_toggle->hide();
 }
 
-void SelectionManager::setItemSelected(bool selected)
+void OverlayManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)
 {
-    const QModelIndex index = m_toggle->index();
-    if (index.isValid()) {
-        itemFromIndex(index)->setSelected(selected);
-        QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-        RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
-        runnerModel->updateView(proxyModel->mapToSource(index));
-        m_view->viewport()->update();
-    }
-    emit selectionChanged();
-}
-
-void SelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)
-{
-    Q_UNUSED(parent);
-    Q_UNUSED(start);
-    Q_UNUSED(end);
+    Q_UNUSED(parent); Q_UNUSED(start); Q_UNUSED(end);
     m_toggle->hide();
 }
 
-void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
-                                            const QItemSelection& deselected)
+void OverlayManager::slotSelectionChanged(const QItemSelection& selected,
+                                          const QItemSelection& deselected)
 {
-    Q_UNUSED(deselected);
+    kDebug() << "";
+    Q_UNUSED(deselected); Q_ASSERT(m_toggle);
     QModelIndexList indexes = selected.indexes();
     if (indexes.isEmpty()) {
         m_toggle->hide();
@@ -146,19 +140,15 @@ void SelectionManager::slotSelectionChanged(const QItemSelection& selected,
     slotEntered(indexes.first());
 }
 
-namespace
+Test* OverlayManager::index2Test(const QModelIndex& index) const
 {
-inline Test* testFromIndex(const QModelIndex& index)
-{
-    return static_cast<Test*>(index.internalPointer());
-}
-}
-
-Test* SelectionManager::itemFromIndex(const QModelIndex& index) const
-{
+    Q_ASSERT(m_view); Q_ASSERT(m_view->model());
+    kDebug() << index;
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
+    kDebug() << proxyModel;
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
-    return testFromIndex(runnerIndex);
+    kDebug() << runnerIndex;
+    return static_cast<Test*>(runnerIndex.internalPointer());;
 }
 
-#include "selectionmanager.moc"
+#include "overlaymanager.moc"

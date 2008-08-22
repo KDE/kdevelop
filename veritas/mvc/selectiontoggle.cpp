@@ -34,9 +34,10 @@
 #include <KLocale>
 
 using Veritas::SelectionToggle;
+using Veritas::OverlayButton;
 
 SelectionToggle::SelectionToggle(QWidget* parent) :
-    QAbstractButton(parent),
+    OverlayButton(parent),
     m_isHovered(false),
     m_fadingValue(0),
     m_icon(),

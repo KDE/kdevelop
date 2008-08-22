@@ -21,9 +21,9 @@
 #ifndef VERITAS_SELECTIONTOGGLE_H
 #define VERITAS_SELECTIONTOGGLE_H
 
-#include <QAbstractButton>
 #include <QPixmap>
 #include <QModelIndex>
+#include "overlaytoggle.h"
 
 class QTimeLine;
 
@@ -39,7 +39,7 @@ namespace Veritas
  * @see SelectionManager
  * @todo extract common code with verbosetoggle
  */
-class SelectionToggle : public QAbstractButton
+class SelectionToggle : public OverlayButton
 {
     Q_OBJECT
 
@@ -53,7 +53,7 @@ public:
      * visually invisible for at least one second after it is shown again.
      */
     void reset();
-
+    virtual int offset() { return 16; }
     void setIndex(const QModelIndex& index);
     QModelIndex index();
 

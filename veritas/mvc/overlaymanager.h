@@ -18,55 +18,57 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "verbosemanager.h"
+#ifndef VERITAS_OVERLAYMANAGER_H
+#define VERITAS_OVERLAYMANAGER_H
 
-#include "veritas/test.h"
-#include "veritas/utils.h"
+#include <QObject>
+#include "veritas/veritasexport.h"
 
-#include "runnermodel.h"
-#include "verbosetoggle.h"
+class QAbstractItemView;
+class QModelIndex;
+class QAbstractButton;
+class QItemSelection;
 
-#include <KIconEffect>
-#include <KDebug>
-
-#include <QAbstractButton>
-#include <QAbstractItemView>
-#include <QAbstractProxyModel>
-#include <QModelIndex>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRect>
-#include <QTimeLine>
-
-using Veritas::VerboseManager;
-using Veritas::VerboseToggle;
-using Veritas::Test;
-using Veritas::RunnerModel;
-
-VerboseManager::VerboseManager(QAbstractItemView* parent) :
-    OverlayManager(parent)
-{}
-
-VerboseManager::~VerboseManager()
-{}
-
-void VerboseManager::setButton(OverlayButton* toggle)
+namespace Veritas
 {
-    connect(toggle,
-            SIGNAL(clicked(bool)),
-            SLOT(emitOpenVerbose()));
-    OverlayManager::setButton(toggle);
-}
+class Test;
+class OverlayButton;
 
-void VerboseManager::emitOpenVerbose()
+class VERITAS_EXPORT OverlayManager : public QObject
 {
-    const QModelIndex index = button()->index();
-    if (index.isValid()) {
-        Test* t = index2Test(index);
-        if (t) {
-            emit openVerbose(t);
-        }
-    }
-}
+Q_OBJECT
 
-#include "verbosemanager.moc"
+public:
+    OverlayManager(QAbstractItemView* parent);
+    virtual ~OverlayManager();
+
+    /*! Initialize connections with the view
+        @note This must be re-invoked after every setModel() on parent */
+    void makeConnections();
+
+    /*! @note mandatory */
+    void setButton(OverlayButton*);
+
+public slots:
+    void reset();
+
+protected:
+    QAbstractItemView* view() const;
+    Test* index2Test(const QModelIndex&) const;
+    OverlayButton* button() const;
+
+private slots:
+    void slotEntered(const QModelIndex& index);
+    void slotViewportEntered();
+    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
+private:
+    QAbstractItemView* m_view;
+    OverlayButton* m_toggle;
+};
+
+} // namespace Veritas
+
+#endif // VERITAS_SELECTION_MANAGER_H
+

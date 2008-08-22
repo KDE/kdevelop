@@ -23,6 +23,7 @@
 
 #include "veritas/test.h"
 #include <QObject>
+#include "overlaymanager.h"
 
 class QAbstractItemView;
 class QModelIndex;
@@ -35,42 +36,23 @@ namespace Veritas
 class VerboseToggle;
 class Test;
 
-class VerboseManager : public QObject
+/*! TODO should be removed completly */
+class VerboseManager : public OverlayManager
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     VerboseManager(QAbstractItemView* parent);
     virtual ~VerboseManager();
-
-    /*! Initialize connections with the view
-        @note This must be re-invoked after every setModel() on parent */
-    void makeConnections();
-
-public slots:
-    /**
-     * Resets the selection manager so that the toggle button gets
-     * invisible.
-     */
-    void reset();
+    virtual void setButton(OverlayButton*);
 
 signals:
-    /** Is emitted if the selection has been changed by the toggle button. */
+    /** Emitted when the toggle has been clicked. */
     void openVerbose(Veritas::Test*);
 
 private slots:
-    void slotEntered(const QModelIndex& index);
-    void slotViewportEntered();
     void emitOpenVerbose();
-    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
-    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
-private:
-    Test* itemFromIndex(const QModelIndex& index) const;
-
-private:
-    QAbstractItemView* m_view;
-    VerboseToggle* m_toggle;
 };
 
 } // namespace Veritas

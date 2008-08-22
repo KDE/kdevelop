@@ -29,6 +29,8 @@ set(veritas_SRCS
     mvc/selectiontoggle.cpp
     mvc/verbosemanager.cpp
     mvc/verbosetoggle.cpp
+    mvc/overlaymanager.cpp
+    mvc/overlaytoggle.cpp
     ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS

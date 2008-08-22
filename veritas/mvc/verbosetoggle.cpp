@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "veritas/mvc/verbosetoggle.h"
+#include "verbosetoggle.h"
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -34,9 +34,10 @@
 #include <KLocale>
 
 using Veritas::VerboseToggle;
+using Veritas::OverlayButton;
 
 VerboseToggle::VerboseToggle(QWidget* parent) :
-    QAbstractButton(parent),
+    OverlayButton(parent),
     m_isHovered(false),
     m_fadingValue(0),
     m_icon(),

@@ -34,6 +34,7 @@
 #include "veritas/mvc/selectionmanager.h"
 #include "veritas/mvc/stoppingdialog.h"
 #include "veritas/mvc/verbosemanager.h"
+#include "veritas/mvc/verbosetoggle.h"
 
 #include <ktexteditor/cursor.h>
 #include "interfaces/icore.h"
@@ -109,6 +110,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_selection = new SelectionManager(runnerView());
     m_selection->makeConnections();
     m_verbose = new VerboseManager(runnerView());
+    VerboseToggle* verboseToggle = new VerboseToggle(runnerView()->viewport());
+    m_verbose->setButton(verboseToggle);
     m_verbose->makeConnections();
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
