@@ -64,22 +64,6 @@ QSize VerboseToggle::sizeHint() const
     return QSize(16, 16);
 }
 
-void VerboseToggle::reset()
-{
-    m_index = QModelIndex();
-    hide();
-}
-
-void VerboseToggle::setIndex(const QModelIndex& index)
-{
-    m_index = index;
-}
-
-QModelIndex VerboseToggle::index()
-{
-    return m_index;
-}
-
 void VerboseToggle::setVisible(bool visible)
 {
     QAbstractButton::setVisible(visible);

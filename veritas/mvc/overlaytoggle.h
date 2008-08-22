@@ -35,11 +35,17 @@ public:
     OverlayButton(QWidget* parent) : QAbstractButton(parent) {}
     virtual ~OverlayButton() {}
 
-    virtual void reset() = 0;
+    /*! Resets the selection toggle so that it is hidden and stays
+     * visually invisible for at least one second after it is shown again. */
+    virtual void reset();
+
     virtual int offset() = 0;
-    virtual QModelIndex index() = 0;
-    virtual void setIndex(const QModelIndex&) = 0;
+    virtual QModelIndex index();
+    virtual void setIndex(const QModelIndex&);
     virtual bool shouldShow(Test*) = 0;
+
+protected:
+    QModelIndex m_index;
 };
 
 }

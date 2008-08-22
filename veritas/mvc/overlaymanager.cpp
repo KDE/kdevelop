@@ -143,11 +143,8 @@ void OverlayManager::slotSelectionChanged(const QItemSelection& selected,
 Test* OverlayManager::index2Test(const QModelIndex& index) const
 {
     Q_ASSERT(m_view); Q_ASSERT(m_view->model());
-    kDebug() << index;
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-    kDebug() << proxyModel;
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
-    kDebug() << runnerIndex;
     return static_cast<Test*>(runnerIndex.internalPointer());;
 }
 

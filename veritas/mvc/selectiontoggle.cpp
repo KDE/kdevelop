@@ -70,22 +70,6 @@ QSize SelectionToggle::sizeHint() const
     return QSize(16, 16);
 }
 
-void SelectionToggle::reset()
-{
-    m_index = QModelIndex();
-    hide();
-}
-
-void SelectionToggle::setIndex(const QModelIndex& index)
-{
-    m_index = index;
-}
-
-QModelIndex SelectionToggle::index()
-{
-    return m_index;
-}
-
 void SelectionToggle::setVisible(bool visible)
 {
     QAbstractButton::setVisible(visible);

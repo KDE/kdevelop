@@ -48,14 +48,6 @@ public:
     virtual ~VerboseToggle();
     virtual QSize sizeHint() const;
 
-    /**
-     * Resets the selection toggle so that it is hidden and stays
-     * visually invisible for at least one second after it is shown again.
-     */
-    virtual void reset();
-
-    void setIndex(const QModelIndex& index);
-    QModelIndex index();
     virtual bool shouldShow(Test*);
     virtual int offset() { return 32; }
 

@@ -19,4 +19,23 @@
  */
 
 #include "overlaytoggle.h"
+
+using Veritas::OverlayButton;
+
+QModelIndex OverlayButton::index()
+{
+    return m_index;
+}
+
+void OverlayButton::setIndex(const QModelIndex& index)
+{
+    m_index = index;
+}
+
+void OverlayButton::reset()
+{
+    m_index = QModelIndex();
+    hide();
+}
+
 #include "overlaytoggle.moc"
