@@ -36,9 +36,53 @@
 class DVCSjobPrivate;
 
 /**
- * This class is capable of running our git commands
- * Connect to Kjob::result(KJob*) to be notified when the job finished.
- *
+ * This class is capable of running our dvcs commands. 
+ * Most of all DVCSjobs are created in DVCS executors, but executed in DistributedVersionControlPlugin or 
+ * any managers like BranchManager.
+ * @note Connect to Kjob::result(KJob*) to be notified when the job finished.
+ * 
+ * How to create DVCSjob:
+ * @code
+ * DVCSjob* job = new DVCSjob(vcsplugin);
+ * if (job)
+ * {
+ *     job->clear();
+ *     job->setDirectory(workDir);
+ *     *job << "git-rev-parse";
+ *     foreach(const QString &arg, args) // *job << args can be used instead!
+ *     *job << arg;
+ *     return job;
+ * }
+ * if (job) delete job;
+ * return NULL;
+ * @endcode
+ * 
+ * Usage example 1:
+ * @code
+ * VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
+ * DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+ * if (job) {
+ *     connect(job, SIGNAL(result(KJob*) ),
+ *             this, SIGNAL(jobFinished(KJob*) ));
+ *     job->start();
+ * }
+ * @endcode
+ * 
+ * Usage example 2:
+ * @code
+ * DVCSjob *branchJob = d->branch(repo, baseBranch, newBranch);
+ * DVCSjob* job = gitRevParse(dirPath.path(), QStringList(QString("--is-inside-work-tree")));
+ * if (job)
+ * {
+ *     job->exec();
+ *     if (job->status() == KDevelop::VcsJob::JobSucceeded)
+ *         return true;
+ *     else
+ *     //something, mabe even just
+ *         return false
+ * }
+ * @endcode
+ * 
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
@@ -49,17 +93,48 @@ public:
     DVCSjob(KDevelop::IPlugin* parent);
     virtual ~DVCSjob();
 
+    /**
+     * Call this method to clear the job (for example, before setting another job).
+     */
     void clear();
+
+    /**
+     * It's not used in any DVCS plugin.
+     */
     void setServer(const QString& server);
+
+    /**
+     * Sets working directory.
+     * @note In DVCS plugins directory variable is used to get relative pathes.
+     */
     void setDirectory(const QString& directory);
+
+    /**
+     * Sets standart Input file.
+     */
     void setStandardInputFile(const QString &fileName);
 
+    /**
+     * Returns current working directory.
+     */
     QString getDirectory();
 
-    //Note: <<"one two" is not the same as <<"one"<<"two; or job<<"one";job<<"two", becouse space will be quoted
-    //or something else, don't use it!
+    /**
+     * Call this method to set command to execute and its arguments.
+     * @note Don't forget <<"one two"; is not the same as <<"one"<<"two"; Use one word(command, arg) per one QString!
+     */
     DVCSjob& operator<<(const QString& arg);
+
+    /**
+     * Overloaded convinience function.
+     * @see operator<<(const QString& arg).
+     */
     DVCSjob& operator<<(const char* arg);
+
+    /**
+     * Overloaded convinience function.
+     * @see operator<<(const QString& arg).
+     */
     DVCSjob& operator<<(const QStringList& args);
 
     /**
@@ -80,23 +155,44 @@ public:
     void setCommunicationMode(KProcess::OutputChannelMode comm);
 
     /**
-     * @return The command that is executed when calling start()
+     * @return The command that is executed when calling start().
      */
     QString dvcsCommand() const;
 
     /**
-     * @return The whole output of the job
+     * @return The whole output of the job.
      */
     QString output() const;
 
     // Begin:  KDevelop::VcsJob
+
+    /**
+     * Returns execution results stored in QVariant
+     * It simply rerurns output().
+     */
     virtual QVariant fetchResults();
+
+    /**
+     * Returns JobStatus
+     * @see KDevelop::VcsJob::JobStatus
+     */
     virtual KDevelop::VcsJob::JobStatus status() const;
+
+    /**
+     * Returns pointer to IPlugin (which was used to create a job).
+     */
     virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
 
 public Q_SLOTS:
+    /**
+     * Cancel slot.
+     */
     void cancel();
+
+    /**
+     * Returns if the job is running.
+     */
     bool isRunning() const;
 
 private Q_SLOTS:
