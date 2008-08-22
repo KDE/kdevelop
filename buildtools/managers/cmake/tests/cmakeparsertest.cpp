@@ -81,7 +81,7 @@ void CMakeParserTest::testParserWithGoodData()
 //    bool parseError = CMakeListsParser::parseCMakeFile( ast, qPrintable( tempName ) );
 //    delete ast;
 //    QVERIFY( parseError == false );
-
+    tempFile.remove();
 }
 
 void CMakeParserTest::testParserWithGoodData_data()
@@ -108,6 +108,7 @@ void CMakeParserTest::testParserWithBadData()
 //    bool parseError = CMakeListsParser::parseCMakeFile( ast, qPrintable( tempName ) );
 //    delete ast;
 //    QVERIFY( parseError == true );
+    tempFile.remove();
 }
 
 void CMakeParserTest::testParserWithBadData_data()
