@@ -78,8 +78,10 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 
     activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
     addAction(activateOnSelect);
+    activateOnSelect->setChecked( true );
     focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
     addAction(focusOnSelect);
+    focusOnSelect->setChecked( false );
 
 
     connect( data, SIGNAL( outputAdded( int ) ),
