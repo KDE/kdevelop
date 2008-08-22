@@ -94,8 +94,13 @@ void ProjectControllerTest::openProject()
 
 void ProjectControllerTest::closeProject()
 {
-    m_projCtrl->openProject(m_projFileUrl);
+    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    if( !QTest::kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)),20000))
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     IProject* proj = m_projCtrl->findProjectByName(m_projName);
+    QASSERT(proj);
 
     QSignalSpy* spy1 = createClosedSpy();
     QSignalSpy* spy2 = createClosingSpy();
