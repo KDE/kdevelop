@@ -90,10 +90,6 @@ void ProjectControllerTest::openProject()
 
     m_projCtrl->closeProject(proj);
 
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for closed signal");
-    }
 }
 
 void ProjectControllerTest::closeProject()
@@ -105,10 +101,6 @@ void ProjectControllerTest::closeProject()
     QSignalSpy* spy2 = createClosingSpy();
     m_projCtrl->closeProject(proj);
 
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for closed signal");
-    }
 
     QCOMPARE(m_projCtrl->projectCount(), 0);
     assertProjectClosed(proj);
@@ -126,10 +118,6 @@ void ProjectControllerTest::openCloseOpen()
     IProject* proj;
     assertProjectOpened(m_projName, proj);
     QVERIFY(m_projCtrl->closeProject(proj));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for closed signal");
-    }
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
     if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
@@ -272,5 +260,5 @@ QSignalSpy* ProjectControllerTest::createClosingSpy()
     return new QSignalSpy(m_projCtrl, SIGNAL(projectClosing(KDevelop::IProject*)));
 }
 
-KDEVTEST_MAIN( ProjectControllerTest )
+QTEST_KDEMAIN( ProjectControllerTest, GUI )
 #include "projectcontrollertest.moc"
