@@ -93,8 +93,7 @@ IndexedString::IndexedString( const QByteArray& str) {
 }
 
 KUrl IndexedString::toUrl() const {
-  KUrl url;
-  url.setUrl( str() );
+  KUrl url( str() );
   return url;
 }
 
