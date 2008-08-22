@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 MakeOutputModel::MakeOutputModel( QObject* parent )
-    : QStandardItemModel(parent), m_actionFilter(new MakeActionFilter), m_errorFilter(new ErrorFilter)
+    : QStandardItemModel(parent), m_actionFilter(new MakeActionFilter(*this)), m_errorFilter(new ErrorFilter(*this))
 {
 }
 
@@ -56,7 +56,14 @@ void MakeOutputModel::activate( const QModelIndex& index )
     {
         KTextEditor::Cursor range( warn->lineNo, 0);
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
-        docCtrl->openDocument( warn->file, range );
+        KUrl url;
+        if ( !warn->currDir.isEmpty() ) {
+            // if the warning/error file path is relative then make it consider as current
+            // directory the build dir at the moment of the warning/error creation
+            url = KUrl::fromPath( warn->currDir );
+            url.addPath( warn->file );
+        } else url = KUrl::fromPath( warn->file );
+        docCtrl->openDocument( url, range );
     }
 }
 

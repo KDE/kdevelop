@@ -23,6 +23,7 @@
 
 #include <QtGui/QStandardItemModel>
 #include <outputview/ioutputviewmodel.h>
+#include <QString>
 
 class QObject;
 class MakeActionFilter;
@@ -43,9 +44,14 @@ public:
     void activate( const QModelIndex& index );
     QModelIndex nextHighlightIndex( const QModelIndex &current );
     QModelIndex previousHighlightIndex( const QModelIndex &current );
-    MakeActionFilter* actionFilter(); 
+    MakeActionFilter* actionFilter();
     ErrorFilter* errorFilter();
+
+    void setCurrentDirectory(QString const& s) { m_currDir = s; }
+    QString const& getCurrentDirectory() const { return m_currDir; }
+
 private:
+    QString m_currDir; // caches current directory while building
     MakeActionFilter* m_actionFilter;
     ErrorFilter* m_errorFilter;
 };

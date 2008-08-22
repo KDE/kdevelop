@@ -13,6 +13,7 @@
 
 class IOutputViewItem;
 class MakeBuilder;
+class MakeOutputModel;
 class QString;
 // template <typename T1> class QList;
 #include <QList>
@@ -23,23 +24,26 @@ class QStandardItem;
 class ErrorFilter
 {
 public:
-    ErrorFilter( );
-    virtual ~ErrorFilter();
+    explicit ErrorFilter( MakeOutputModel const& model );
+    ~ErrorFilter();
 
-    virtual QStandardItem* processAndCreate( const QString& line );
+    QStandardItem* processAndCreate( const QString& line );
 
 private:
+    MakeOutputModel const& m_model;
     QList<ErrorFormat> m_errList;
 };
 
 class MakeActionFilter
 {
 public:
-    MakeActionFilter();
-    virtual ~MakeActionFilter();
+    explicit MakeActionFilter( MakeOutputModel& model );
+    ~MakeActionFilter();
 
     QStandardItem* processAndCreate( const QString& line );
+
 private:
+    MakeOutputModel& m_model;
     QList<ActionFormat> m_actlist;
 };
 

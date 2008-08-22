@@ -38,6 +38,7 @@ public:
     QString file;
     int lineNo;
     QString errorText;
+    QString currDir; // store current directory if relative path is stored in "file"
 
 protected:
     const MakeBuilder *m_builder;

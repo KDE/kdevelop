@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include "makeoutputmodel.h"
 #include <QFont>
+#include <QFileInfo>
 ////////////////////////////////////////////////////////
 
 class ErrorFormat
@@ -51,7 +52,8 @@ ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text, con
     , compiler( comp )
 {}
 
-ErrorFilter::ErrorFilter( )
+ErrorFilter::ErrorFilter( MakeOutputModel const& model )
+:m_model(model)
 {
     // @todo could get these from emacs compile.el
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
@@ -144,6 +146,10 @@ QStandardItem* ErrorFilter::processAndCreate( const QString& line )
         ret->errorText = text;
         ret->lineNo = lineNum;
         ret->file = file;
+        if (!file.isEmpty() && QFileInfo(file).isRelative())
+        {
+            ret->currDir = m_model.getCurrentDirectory();
+        }
         return ret;
     }
     else
@@ -214,7 +220,8 @@ bool ActionFormat::matches(const QString& line)
     return ( m_expression.indexIn( line ) != -1 );
 }
 
-MakeActionFilter::MakeActionFilter()
+MakeActionFilter::MakeActionFilter( MakeOutputModel& model )
+:m_model(model)
 {
 //     m_actlist << ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)");
 //     m_actlist << ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)");
@@ -246,6 +253,9 @@ MakeActionFilter::MakeActionFilter()
     m_actlist << ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 );
     m_actlist << ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 );
     m_actlist << ActionFormat( i18n("installing"), -1, 1, "-- Installing (.*)" ); //cmake
+
+    // match against Entering directory to update current build dir
+    m_actlist << ActionFormat( "cd", "", "make[^:]*: Entering directory `([^']+)'", 1);
 }
 
 MakeActionFilter::~MakeActionFilter()
@@ -280,9 +290,10 @@ QStandardItem* MakeActionFilter::processAndCreate( const QString& line )
             if( format.action() == i18n("built") )
             {
                 actionItem->setData( MakeOutputModel::MakeBuilt );
+            } else if ( format.action() == "cd" ) {
+                m_model.setCurrentDirectory( format.file() );
             } else
             {
-
                 QFont newfont( actionItem->font() );
                 newfont.setBold( true );
                 actionItem->setFont( newfont );
