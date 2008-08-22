@@ -447,19 +447,6 @@ int ProjectTestTargetItem::type() const
     return ProjectBaseItem::TestTarget;
 }
 
-bool ProjectModel::setHeaderData( int section, Qt::Orientation orient, const QVariant& value, int role )
-{
-    if( !value.isValid() )
-        return false;
-    return QStandardItemModel::setHeaderData( section, orient, value, role );
-}
-
-bool ProjectModel::setData( const QModelIndex& idx, const QVariant& value, int role )
-{
-    if( !value.isValid() )
-        return false;
-    return QStandardItemModel::setData( idx, value, role );
-}
 
 }
 #include "projectmodel.moc"
