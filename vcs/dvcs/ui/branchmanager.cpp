@@ -104,8 +104,6 @@ void BranchManager::createBranch()
     {
         kDebug() << "Adding new branch";
         branchJob->exec();
-        while (branchJob->status() == KDevelop::VcsJob::JobRunning)
-            ;
     }
     QListWidgetItem *item = new QListWidgetItem(newBranch, branchWidget);
     item->setFlags(Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemIsEnabled);
@@ -145,8 +143,6 @@ void BranchManager::renameBranch(QListWidgetItem * item)
     {
         kDebug() << "Renaming " << baseBranch << " to " << newBranch;
         branchJob->exec();
-        while (branchJob->status() == KDevelop::VcsJob::JobRunning)
-            ;
     }
 }
 
@@ -175,8 +171,6 @@ void BranchManager::delBranch()
     {
         kDebug() << "Removing " << baseBranch;
         branchJob->exec();
-        while (branchJob->status() == KDevelop::VcsJob::JobRunning)
-            ;
     }
     branchWidget->model()->removeRow(branchWidget->currentIndex().row());
 }
