@@ -23,6 +23,7 @@
 
 #include "veritas/test.h"
 #include <QObject>
+#include "overlaymanager.h"
 
 class QAbstractItemView;
 class QModelIndex;
@@ -42,39 +43,21 @@ class Test;
  * which allows to select/deselect the current item.
  * @todo move common parts with verbosemanager
  */
-class SelectionManager : public QObject
+class SelectionManager : public OverlayManager
 {
     Q_OBJECT
 
 public:
     SelectionManager(QAbstractItemView* parent);
     virtual ~SelectionManager();
-    void makeConnections();
+    virtual void setButton(OverlayButton*);
 
-public slots:
-    /**
-     * Resets the selection manager so that the toggle button gets
-     * invisible.
-     */
-    void reset();
+private slots:
+    void setItemSelected(bool);
 
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
     void selectionChanged();
-
-private slots:
-    void slotEntered(const QModelIndex& index);
-    void slotViewportEntered();
-    void setItemSelected(bool selected);
-    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
-    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-
-private:
-    Test* itemFromIndex(const QModelIndex& index) const;
-
-private:
-    QAbstractItemView* m_view;
-    SelectionToggle* m_toggle;
 };
 
 } // namespace Veritas

@@ -32,7 +32,9 @@
 #include <KIconLoader>
 #include <KIconEffect>
 #include <KLocale>
+#include "veritas/test.h"
 
+using Veritas::Test;
 using Veritas::VerboseToggle;
 using Veritas::OverlayButton;
 
@@ -110,6 +112,11 @@ void VerboseToggle::enterEvent(QEvent* event)
     m_fadingValue = 255;
     i18nc("@info:tooltip", "Verbose Output");
     update();
+}
+
+bool VerboseToggle::shouldShow(Test* t)
+{
+    return t && t->shouldRun();
 }
 
 void VerboseToggle::leaveEvent(QEvent* event)

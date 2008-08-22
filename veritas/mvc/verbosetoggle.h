@@ -56,7 +56,7 @@ public:
 
     void setIndex(const QModelIndex& index);
     QModelIndex index();
-
+    virtual bool shouldShow(Test*);
     virtual int offset() { return 32; }
 
 public slots:

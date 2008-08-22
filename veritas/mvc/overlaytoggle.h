@@ -6,6 +6,7 @@
 
 namespace Veritas
 {
+class Test;
 class OverlayButton : public QAbstractButton
 {
 Q_OBJECT
@@ -18,6 +19,7 @@ public:
     virtual int offset() = 0;
     virtual QModelIndex index() = 0;
     virtual void setIndex(const QModelIndex&) = 0;
+    virtual bool shouldShow(Test*) = 0;
 };
 
 }

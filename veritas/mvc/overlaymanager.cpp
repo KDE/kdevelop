@@ -104,7 +104,7 @@ void OverlayManager::slotEntered(const QModelIndex& index)
     m_toggle->hide();
     if (index.isValid() ){
         Test* t = index2Test(index);
-        if (!t || !t->shouldRun()) return;
+        if (!m_toggle->shouldShow(t)) return;
         const QRect rect = m_view->visualRect(index);
         const int x = rect.right() - m_toggle->offset();
         const int y = rect.top();
@@ -149,6 +149,12 @@ Test* OverlayManager::index2Test(const QModelIndex& index) const
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
     kDebug() << runnerIndex;
     return static_cast<Test*>(runnerIndex.internalPointer());;
+}
+
+QAbstractItemView* OverlayManager::view() const
+{
+    Q_ASSERT(m_view);
+    return m_view;
 }
 
 #include "overlaymanager.moc"

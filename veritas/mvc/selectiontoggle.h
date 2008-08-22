@@ -29,7 +29,7 @@ class QTimeLine;
 
 namespace Veritas
 {
-
+class Test;
 /**
  * @brief Toggle button for changing the selection of an hovered item.
  *
@@ -56,6 +56,7 @@ public:
     virtual int offset() { return 16; }
     void setIndex(const QModelIndex& index);
     QModelIndex index();
+    bool shouldShow(Test*);
 
 public slots:
     virtual void setVisible(bool visible);

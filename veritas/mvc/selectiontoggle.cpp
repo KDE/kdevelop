@@ -32,9 +32,17 @@
 #include <KIconLoader>
 #include <KIconEffect>
 #include <KLocale>
+#include "veritas/test.h"
 
 using Veritas::SelectionToggle;
 using Veritas::OverlayButton;
+using Veritas::Test;
+
+bool SelectionToggle::shouldShow(Test* t)
+{
+    return t != 0;
+}
+
 
 SelectionToggle::SelectionToggle(QWidget* parent) :
     OverlayButton(parent),

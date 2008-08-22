@@ -35,6 +35,7 @@
 #include "veritas/mvc/stoppingdialog.h"
 #include "veritas/mvc/verbosemanager.h"
 #include "veritas/mvc/verbosetoggle.h"
+#include "veritas/mvc/selectiontoggle.h"
 
 #include <ktexteditor/cursor.h>
 #include "interfaces/icore.h"
@@ -108,6 +109,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_sema.release();
     runnerView()->setMouseTracking(true);
     m_selection = new SelectionManager(runnerView());
+    SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
+    m_selection->setButton(selectionToggle);
     m_selection->makeConnections();
     m_verbose = new VerboseManager(runnerView());
     VerboseToggle* verboseToggle = new VerboseToggle(runnerView()->viewport());
