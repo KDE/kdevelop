@@ -92,7 +92,7 @@ void ProjectControllerTest::openProject()
 
     if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
     {
-        QFAIL("Timeout while waiting for opened signal");
+        QFAIL("Timeout while waiting for closed signal");
     }
 }
 
@@ -107,7 +107,7 @@ void ProjectControllerTest::closeProject()
 
     if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
     {
-        QFAIL("Timeout while waiting for opened signal");
+        QFAIL("Timeout while waiting for closed signal");
     }
 
     QCOMPARE(m_projCtrl->projectCount(), 0);
@@ -128,7 +128,7 @@ void ProjectControllerTest::openCloseOpen()
     QVERIFY(m_projCtrl->closeProject(proj));
     if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
     {
-        QFAIL("Timeout while waiting for opened signal");
+        QFAIL("Timeout while waiting for closed signal");
     }
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
@@ -162,14 +162,14 @@ void ProjectControllerTest::openMultiple()
     KUrl secondCfgUrl = writeProjectConfig(secondProj);
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
     {
         QFAIL("Timeout while waiting for opened signal");
     }
     QVERIFY(m_projCtrl->openProject(secondCfgUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
     {
-        QFAIL("Timeout while waiting for opened signal");
+        QFAIL("Timeout while waiting for closed signal");
     }
  
     QCOMPARE(m_projCtrl->projectCount(), 2);
