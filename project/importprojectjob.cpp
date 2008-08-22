@@ -74,7 +74,7 @@ ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *i
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
     }
     d->m_folder = folderItem;
-    d->m_timer.setInterval(500);
+    d->m_timer.setInterval(200);
     connect( &d->m_timer, SIGNAL(timeout()), this, SLOT(parseItem()) );
 }
 
