@@ -241,8 +241,6 @@ void ProjectControllerTest::assertSpyCaughtProject(QSignalSpy* spy, IProject* pr
 
 void ProjectControllerTest::assertProjectClosed(IProject* proj)
 {
-    qDebug() << proj << m_projCtrl;
-    QString name = proj->name();
     IProject* p = m_projCtrl->findProjectByName(proj->name());
     QVERIFY(p == 0);
     QVERIFY(!m_projCtrl->projects().contains(proj));
