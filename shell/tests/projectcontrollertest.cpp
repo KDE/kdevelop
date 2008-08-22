@@ -100,7 +100,7 @@ void ProjectControllerTest::closeProject()
         QFAIL("Timeout while waiting for opened signal");
     }
     IProject* proj = m_projCtrl->findProjectByName(m_projName);
-    QASSERT(proj);
+    Q_ASSERT(proj);
 
     QSignalSpy* spy1 = createClosedSpy();
     QSignalSpy* spy2 = createClosingSpy();
