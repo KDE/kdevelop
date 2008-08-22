@@ -32,6 +32,7 @@ class ILanguage;
 class BackgroundParser;
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
+    Q_OBJECT
 public:
     ILanguageController(QObject *parent = 0);
 
