@@ -79,13 +79,21 @@ void ProjectControllerTest::openProject()
 {
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     QCOMPARE(m_projCtrl->projectCount(), 1);
     IProject* proj;
     assertProjectOpened(m_projName, proj);
     assertSpyCaughtProject(spy, proj);
 
     m_projCtrl->closeProject(proj);
+
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
 }
 
 void ProjectControllerTest::closeProject()
@@ -97,6 +105,11 @@ void ProjectControllerTest::closeProject()
     QSignalSpy* spy2 = createClosingSpy();
     m_projCtrl->closeProject(proj);
 
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
+
     QCOMPARE(m_projCtrl->projectCount(), 0);
     assertProjectClosed(proj);
     assertSpyCaughtProject(spy1, proj);
@@ -106,11 +119,23 @@ void ProjectControllerTest::closeProject()
 void ProjectControllerTest::openCloseOpen()
 {
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     IProject* proj;
     assertProjectOpened(m_projName, proj);
     QVERIFY(m_projCtrl->closeProject(proj));
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     QCOMPARE(m_projCtrl->projectCount(), 1);
     assertProjectOpened(m_projName, proj);
     assertSpyCaughtProject(spy, proj);
@@ -137,8 +162,16 @@ void ProjectControllerTest::openMultiple()
     KUrl secondCfgUrl = writeProjectConfig(secondProj);
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
     QVERIFY(m_projCtrl->openProject(secondCfgUrl));
-
+    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectClosed(KDevelop::IProject*)), 20000) )
+    {
+        QFAIL("Timeout while waiting for opened signal");
+    }
+ 
     QCOMPARE(m_projCtrl->projectCount(), 2);
     IProject *proj1, *proj2;
     assertProjectOpened(m_projName, proj1);
@@ -215,6 +248,8 @@ void ProjectControllerTest::assertSpyCaughtProject(QSignalSpy* spy, IProject* pr
 
 void ProjectControllerTest::assertProjectClosed(IProject* proj)
 {
+    qDebug() << proj << m_projCtrl;
+    QString name = proj->name();
     IProject* p = m_projCtrl->findProjectByName(proj->name());
     QVERIFY(p == 0);
     QVERIFY(!m_projCtrl->projects().contains(proj));
