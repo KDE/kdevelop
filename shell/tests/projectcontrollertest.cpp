@@ -31,7 +31,7 @@
 #include <QSignalSpy>
 
 #include <qtest_kde.h>
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include <tests/common/autotestshell.h>
 
 #include "../core.h"
@@ -263,5 +263,5 @@ QSignalSpy* ProjectControllerTest::createClosingSpy()
     return new QSignalSpy(m_projCtrl, SIGNAL(projectClosing(KDevelop::IProject*)));
 }
 
-QTEST_KDEMAIN( ProjectControllerTest, GUI )
+QTEST_KDEMAIN( ProjectControllerTest, GUI)
 #include "projectcontrollertest.moc"

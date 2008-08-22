@@ -27,7 +27,7 @@
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 
 using namespace Sublime;
 
@@ -45,5 +45,5 @@ void DocumentTest::viewDeletion()
 }
 
 #include "documenttest.moc"
-KDEVTEST_MAIN(DocumentTest)
+QTEST_KDEMAIN(DocumentTest, GUI)
 

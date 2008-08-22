@@ -71,5 +71,5 @@ void LcovJobTest::basicRun()
     m_job->start();
 }
 
-QTEST_KDEMAIN( LcovJobTest, NoGUI )
+QTEST_KDEMAIN( LcovJobTest, NoGUI)
 #include "lcovjobtest.moc"

@@ -85,5 +85,5 @@ void ReportItemsTest::addMultipleFilesToDir()
     KVERIFY(qAbs(100*((double)dir.instrumented()/dir.sloc()) - dir.coverage()) < 0.1);
 }
 
-QTEST_KDEMAIN( ReportItemsTest, NoGUI )
+QTEST_KDEMAIN( ReportItemsTest, NoGUI)
 #include "reportitemstest.moc"

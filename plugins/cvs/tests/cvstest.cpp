@@ -10,7 +10,7 @@
 
 #include "cvstest.h"
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -118,8 +118,7 @@ void CvsTest::testInitAndImport()
     checkoutTestData();
 }
 
-
-KDEVTEST_MAIN(CvsTest)
+QTEST_KDEMAIN(CvsTest, GUI)
 
 
 #include "cvstest.moc"

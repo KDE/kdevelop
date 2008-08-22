@@ -179,5 +179,5 @@ void ReportModelTest::assertFileAtEquals(const QModelIndex& i, QString name, int
     KVERIFY(qAbs(cov - coverageItem->value()) < 0.1);
 }
 
-QTEST_KDEMAIN( ReportModelTest, NoGUI )
+QTEST_KDEMAIN( ReportModelTest, NoGUI)
 #include "reportmodeltest.moc"

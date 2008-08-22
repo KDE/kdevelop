@@ -28,7 +28,7 @@
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 
 using namespace Sublime;
 
@@ -72,5 +72,5 @@ void ViewTest::viewReimplementation()
 }
 
 #include "viewtest.moc"
-KDEVTEST_MAIN(ViewTest)
+QTEST_KDEMAIN(ViewTest, GUI)
 

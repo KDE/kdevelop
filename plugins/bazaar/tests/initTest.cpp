@@ -24,7 +24,7 @@
 
 #include "initTest.h"
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -208,7 +208,7 @@ void BzrInitTest::testPlugin()
 //     QVERIFY(iface);
 }
 
-KDEVTEST_MAIN(BzrInitTest)
+QTEST_KDEMAIN(BzrInitTest, GUI)
 
 
 #include "initTest.moc"

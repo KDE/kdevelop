@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "shelldocumentoperationtest.h"
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 
 #include <QtTest/QtTest>
 
@@ -131,6 +131,6 @@ void ShellDocumentOperationTest::testKateDocumentAndViewCreation()
     documentController->openDocuments()[0]->close(IDocument::Discard);
 }
 
-KDEVTEST_MAIN(ShellDocumentOperationTest)
+QTEST_KDEMAIN(ShellDocumentOperationTest, GUI)
 
 #include "shelldocumentoperationtest.moc"

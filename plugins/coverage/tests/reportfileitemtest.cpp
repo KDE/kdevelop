@@ -89,5 +89,5 @@ void ReportFileItemTest::addMultipleCoverage()
 }
 
 
-QTEST_KDEMAIN( ReportFileItemTest, NoGUI )
+QTEST_KDEMAIN( ReportFileItemTest, NoGUI)
 #include "reportfileitemtest.moc"

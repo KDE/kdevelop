@@ -35,7 +35,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/tooldocument.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include "kdebug.h"
 
 using namespace Sublime;
@@ -133,5 +133,5 @@ void ToolViewToolBarTest::toolViewMove()
     assertGoodBar(barT2, actionTextT2);
 }
 
-KDEVTEST_MAIN(ToolViewToolBarTest)
+QTEST_KDEMAIN(ToolViewToolBarTest, GUI)
 #include "toolviewtoolbartest.moc"

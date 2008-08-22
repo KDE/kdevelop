@@ -24,7 +24,7 @@
 
 #include "initTest.h"
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -181,6 +181,6 @@ void HgInitTest::testInitAndCommit()
     cloneRepository();
 }
 
-KDEVTEST_MAIN(HgInitTest)
+QTEST_KDEMAIN(HgInitTest, GUI)
 
 #include "initTest.moc"

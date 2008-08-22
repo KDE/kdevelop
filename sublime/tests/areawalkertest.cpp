@@ -28,7 +28,7 @@
 
 #include <kapplication.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include "areaprinter.h"
 
 using namespace Sublime;
@@ -143,6 +143,6 @@ void AreaWalkerTest::toolViewWalkerModes()
     delete controller;
 }
 
-KDEVTEST_MAIN(AreaWalkerTest)
+QTEST_KDEMAIN(AreaWalkerTest, GUI)
 #include "areawalkertest.moc"
 

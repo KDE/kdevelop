@@ -37,7 +37,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include "areaprinter.h"
 
 using namespace Sublime;
@@ -557,6 +557,6 @@ View *AreaOperationTest::findNamedView(Area *area, const QString &name)
     return 0;
 }
 
-KDEVTEST_MAIN(AreaOperationTest)
+QTEST_KDEMAIN(AreaOperationTest, GUI)
 #include "areaoperationtest.moc"
 

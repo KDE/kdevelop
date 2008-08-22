@@ -126,5 +126,5 @@ void LcovInfoParserTest::multipleFiles()
     assertCoveredFilesEqual(expFile2, actualFile2);
 }
 
-QTEST_KDEMAIN( LcovInfoParserTest, NoGUI )
+QTEST_KDEMAIN( LcovInfoParserTest, NoGUI)
 #include "lcovinfoparsertest.moc"

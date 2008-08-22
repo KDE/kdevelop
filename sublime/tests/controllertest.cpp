@@ -30,7 +30,7 @@
 #include <sublime/view.h>
 #include <sublime/area.h>
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 
 using namespace Sublime;
 
@@ -95,5 +95,5 @@ void ControllerTest::namedAreas()
 }
 
 #include "controllertest.moc"
-KDEVTEST_MAIN(ControllerTest)
+QTEST_KDEMAIN(ControllerTest, GUI)
 

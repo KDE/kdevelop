@@ -24,7 +24,7 @@
 
 #include "initTest.h"
 
-#include <tests/common/kdevtest.h>
+#include <qtest_kde.h>
 #include <QtTest/QtTest>
 
 #include <KUrl>
@@ -288,7 +288,7 @@ void GitInitTest::testCommit()
     commitFiles();
 }
 
-KDEVTEST_MAIN(GitInitTest)
+QTEST_KDEMAIN(GitInitTest, GUI)
 
 
 // #include "gittest.moc"

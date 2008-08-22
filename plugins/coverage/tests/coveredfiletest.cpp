@@ -98,5 +98,5 @@ void CoveredFileTest::isReachable()
     KVERIFY(!m_file->isReachable(3));
 }
 
-QTEST_KDEMAIN( CoveredFileTest, NoGUI )
+QTEST_KDEMAIN( CoveredFileTest, NoGUI)
 #include "coveredfiletest.moc"
