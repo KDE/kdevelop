@@ -86,7 +86,7 @@ void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
     }
 }
 
-/*! Locate all '.shell' files in @p dir for which the name is contained in
+/*! Locate all '.shell' test exe files in @p dir for which the name is contained in
 @p testNames. This function recurses down @p dir and its subdirectories.
 Return the found test-shell scripts as a list of  QFileInfo's. */
 QFileInfoList findTestShellFilesIn(QDir& dir, const QStringList& testNames)
@@ -112,6 +112,28 @@ QFileInfoList findTestShellFilesIn(QDir& dir, const QStringList& testNames)
     }
     return testShellFiles;
 }
+
+/*! Locate all test executables in @p dir for which the name is contained in
+@p testNames. This function recurses down @p dir and its subdirectories.
+Return the found test exes as a list of  QFileInfo's. */
+QFileInfoList findTestExecutablesIn(QDir& dir, const QStringList& testNames)
+{
+    kDebug() << dir.absolutePath();
+    QFileInfoList testShellFiles;
+    QDir current(dir);
+    current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
+    QStringList subDirs = current.entryList();
+    foreach(QString subDir, subDirs) {
+        current.cd(subDir);
+        testShellFiles += findTestExecutablesIn(current, testNames);
+        current.cdUp();
+    }
+    current = QDir(dir);
+    current.setNameFilters(testNames);
+    current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks | QDir::Executable);
+    return current.entryInfoList();
+}
+
 
 QList<KUrl> fileInfo2KUrl(const QFileInfoList& fileInfos)
 {
@@ -253,7 +275,10 @@ void KDevRegister::fetchTestCommands(KJob*)
     foreach(QFileInfo shell, shells) {
         kDebug() << "shell -> " << shell.absoluteFilePath();
     }
-    STOP_IF(shells.isEmpty(), "No test shell exes found.");
+    if (shells.isEmpty()) {
+        shells = findTestExecutablesIn(buildDir, m_testNames);
+    }
+    STOP_IF(shells.isEmpty(), "No test exes found.");
 
     QList<KUrl> shellUrls = fileInfo2KUrl(shells);
     if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
