@@ -16,7 +16,7 @@
 */
 
 
-#include <QtTest/QtTest>
+#include <qtest_kde.h>
 #include <QDebug>
 
 #include "money.h"
@@ -45,5 +45,5 @@ void MoneyTest::zero()
     QCOMPARE(0, m.amount());
 }
 
-QTEST_MAIN( MoneyTest )
+QTEST_KDEMAIN( MoneyTest, NoGUI )
 #include "moneytest.moc"
