@@ -99,6 +99,17 @@ protected:
   }
 
   /**
+   * Register a new use for a \a declaration with a \a node.
+   *
+   * \param node Node which encompasses the use.
+   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   */
+  void newUse(T* node, KDevelop::Declaration* declaration)
+  {
+    newUse(editorFindRange(node, node), declaration);
+  }
+
+  /**
    * Register a new use.
    *
    * \param newRange Text range which encompasses the use.
