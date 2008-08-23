@@ -168,16 +168,16 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         d->ctxProjectItemList << item;
         if ( !buildItemsAdded && ( item->folder() || item->target() || item->file() ) )
         {
-            KAction* action = new KAction( i18n( "Build items(s)" ), this );
+            KAction* action = new KAction( i18n( "Build" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-            action = new KAction( i18n( "Install item(s)" ), this );
+            action = new KAction( i18n( "Install" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-            action = new KAction( i18n( "Clean item(s)" ), this );
+            action = new KAction( i18n( "Clean" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-            action = new KAction( i18n( "Add item(s) to buildset" ), this );
+            action = new KAction( i18n( "Add to buildset" ), this );
             connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
             buildItemsAdded = true;
