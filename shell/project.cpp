@@ -203,8 +203,8 @@ const KUrl Project::folder() const
 
 void Project::reloadModel()
 {
-    QStandardItem* ws = d->topItem->parent();
-    ws->removeRow( d->topItem->row() );
+    ProjectModel* model = Core::self()->projectController()->projectModel();
+    model->removeRow( d->topItem->row() );
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
     if( iface )
     {
@@ -215,7 +215,7 @@ void Project::reloadModel()
                                 i18n("Couldn't open project") );
             return;
         }
-        ws->appendRow(d->topItem);
+        model->appendRow(d->topItem);
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         Core::self()->runController()->registerJob( importJob );
