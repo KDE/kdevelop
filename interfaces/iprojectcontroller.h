@@ -68,8 +68,8 @@ public:
     Q_SCRIPTABLE virtual IProject* findProjectByName( const QString& name ) = 0;
 
     /**
-     * Finding an open project for a given file
-     * @param url the url of a file belonging to an open project
+     * Finding an open project for a given file or folder in the project
+     * @param url the url of a file/folder belonging to an open project
      * @returns the first open project containing the url or null if no such
      * project can be found
      */
