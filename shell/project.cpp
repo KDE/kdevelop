@@ -107,11 +107,17 @@ public:
         return files;
     }
 
-    QList<ProjectFileItem*> filesForUrlInternal( const KUrl& url, ProjectFolderItem* folder ) const
+    QList<ProjectBaseItem*> itemsForUrlInternal( const KUrl& url, ProjectFolderItem* folder ) const
     {
-        QList<ProjectFileItem*> files;
+        QList<ProjectBaseItem*> files;
         if( !folder )
             return files;
+
+        if( folder->url().equals( url, KUrl::CompareWithoutTrailingSlash ) )
+        {
+            files << folder;
+        }
+
         // Check top level files
         foreach( ProjectFileItem* file, folder->fileList() )
         {
@@ -135,9 +141,19 @@ public:
 
         foreach( ProjectFolderItem* top, folder->folderList() )
         {
-            files += filesForUrlInternal( url, top );
+            files += itemsForUrlInternal( url, top );
         }
         return files;
+    }
+    QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const
+    {
+        // TODO: This is moderately efficient, but could be much faster with a
+        // QHash<QString, ProjectFolderItem> member. Would it be worth it?
+        KUrl u = topItem->url();
+        if ( u.protocol() != url.protocol() || u.host() != url.host() )
+            return QList<ProjectBaseItem*>();
+    
+        return itemsForUrlInternal( url, topItem );
     }
 
 
@@ -381,7 +397,7 @@ void Project::close()
 
 bool Project::inProject( const KUrl& url ) const
 {
-    return ( !filesForUrl( url ).isEmpty() || url.equals( d->topItem->url(), KUrl::CompareWithoutTrailingSlash ) );
+    return ( !d->itemsForUrl( url ).isEmpty() );
 }
 
 ProjectFileItem* Project::fileAt( int num ) const
@@ -405,15 +421,13 @@ QList<ProjectFileItem *> KDevelop::Project::files() const
 
 QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
 {
-    // TODO: This is moderately efficient, but could be much faster with a
-    // QHash<QString, ProjectFolderItem> member. Would it be worth it?
-
-
-    KUrl u = d->topItem->url();
-    if ( u.protocol() != url.protocol() || u.host() != url.host() )
-        return QList<ProjectFileItem*>();
-
-    return d->filesForUrlInternal( url, d->topItem );
+    QList<ProjectFileItem*> items;
+    foreach(ProjectBaseItem* item,  d->itemsForUrl( url ) )
+    {
+        if( item->type() == ProjectBaseItem::File )
+            items << dynamic_cast<ProjectFileItem*>( item );
+    }
+    return items;
 }
 
 int Project::fileCount() const
