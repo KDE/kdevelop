@@ -156,6 +156,7 @@ if (X) {\
     m_root = new Test("");\
     m_reloading = false; \
     emit reloadFailed(); \
+    kDebug() << MSG; \
     return; \
 } else void(0)
 
@@ -244,6 +245,9 @@ void KDevRegister::fetchTestCommands(KJob*)
     STOP_IF(!bm, "Build system manager zero");
 
     KUrl buildRoot = bm->buildDirectory(project()->projectItem());
+    STOP_IF(buildRoot.isEmpty(), "Root build directory empty");
+    STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
+
     QDir buildDir(buildRoot.path());
     QFileInfoList shells = findTestShellFilesIn(buildDir, m_testNames);
     foreach(QFileInfo shell, shells) {
