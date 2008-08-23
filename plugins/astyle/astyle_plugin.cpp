@@ -97,6 +97,8 @@ AStylePlugin::~AStylePlugin()
 
 void AStylePlugin::beautifySource()
 {
+    m_formatter->loadConfig(KGlobal::config());
+    
     KTextEditor::Document *doc =
         core()->documentController()->activeDocument()->textDocument();
     if(!doc)

@@ -58,8 +58,9 @@ class ASTYLEWRAPPER_EXPORT AStyleFormatter : public astyle::ASFormatter
 //         bool hasExtension(const QString &extension);
         
         bool predefinedStyle(const QString &name);
-        void loadConfig(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
-        void saveConfig(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+        void loadConfig(const KSharedPtr<KSharedConfig> &config);
+        void loadStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+        void saveStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
         
         // indent
         void setTabIndentation(int length, bool forceTabs);

@@ -220,9 +220,9 @@ void AStylePreferences::load()
     }
     
     if(id == STYLE_CUSTOM)
-        m_formatter->loadConfig(KGlobal::config());
+        m_formatter->loadStyle(KGlobal::config());
     else if(id > STYLE_LINUX)
-        m_formatter->loadConfig(KGlobal::config(), s);
+        m_formatter->loadStyle(KGlobal::config(), s);
     else
         m_formatter->predefinedStyle(s);
 //     m_formatter->option("FStyle").toString();
@@ -331,7 +331,7 @@ void AStylePreferences::save()
         g.writeEntry("Custom", ""); // clear it
     } else { 
         g.writeEntry("Style", "");
-        m_formatter->saveConfig(KGlobal::config());
+        m_formatter->saveStyle(KGlobal::config());
     }
     g.sync();
 }
@@ -382,7 +382,7 @@ void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidge
     else {
         btnDelStyle->setEnabled(true);
         btnSaveStyle->setEnabled(false);
-        m_formatter->loadConfig(KGlobal::config(),
+        m_formatter->loadStyle(KGlobal::config(),
             current->data(STYLE_ROLE).toString());
         //not necessary but avoid to reload ten times the editor's text
         m_enableWidgetSignals = false;
@@ -424,7 +424,7 @@ void AStylePreferences::addStyle()
         QListWidgetItem *item = listStyles->currentItem();
         if(item) {
             QString s = item->data(STYLE_ROLE).toString();
-            m_formatter->saveConfig(KGlobal::config(), s);
+            m_formatter->saveStyle(KGlobal::config(), s);
         }
         btnSaveStyle->setEnabled(false);
         emit(changed(true));
@@ -449,7 +449,7 @@ void AStylePreferences::addStyle()
         return;
     
     // save in config file
-    m_formatter->saveConfig(KGlobal::config(), s);
+    m_formatter->saveStyle(KGlobal::config(), s);
     g.writeEntry("Caption" + QString::number(idx), caption);
     //add item in list
     addItemInStyleList(caption, s);

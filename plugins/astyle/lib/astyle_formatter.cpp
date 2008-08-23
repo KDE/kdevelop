@@ -267,8 +267,22 @@ QString AStyleFormatter::indentString()
 // {
 //     return m_searchExtensions.find(extension) != m_searchExtensions.end();
 // }
-        
-void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config, const QString &name)
+  
+void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config)
+{
+    if(!config)
+        return;
+    
+    KConfigGroup group = config->group("AStyle");
+    QString style = group.readEntry("Style", "");
+    
+    if(style.isEmpty())
+        loadStyle(config);
+    else
+        loadStyle(config, style);
+}
+  
+void AStyleFormatter::loadStyle(const KSharedPtr<KSharedConfig> &config, const QString &name)
 {
     if(!config)
         return;
@@ -297,7 +311,7 @@ void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config, const 
     updateFormatter();
 }
 
-void AStyleFormatter::saveConfig(const KSharedPtr<KSharedConfig> &config, const QString &name)
+void AStyleFormatter::saveStyle(const KSharedPtr<KSharedConfig> &config, const QString &name)
 {
     QString options;
     QMap<QString, QVariant>::const_iterator it = m_options.constBegin();
