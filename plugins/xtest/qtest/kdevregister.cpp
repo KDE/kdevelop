@@ -86,54 +86,60 @@ void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
     }
 }
 
-/*! Locate all '.shell' test exe files in @p dir for which the name is contained in
-@p testNames. This function recurses down @p dir and its subdirectories.
-Return the found test-shell scripts as a list of  QFileInfo's. */
-QFileInfoList findTestShellFilesIn(QDir& dir, const QStringList& testNames)
+bool isShellFile(const QFileInfo& file)
 {
-    kDebug() << dir.absolutePath();
-    QFileInfoList testShellFiles;
-    QDir current(dir);
-    current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
-    QStringList subDirs = current.entryList();
-    foreach(QString subDir, subDirs) {
-        current.cd(subDir);
-        testShellFiles += findTestShellFilesIn(current, testNames);
-        current.cdUp();
-    }
-    current = QDir(dir);
-    current.setNameFilters(QStringList() << "*.shell");
-    current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks);
-    QFileInfoList shellFiles = current.entryInfoList();
-    foreach (QFileInfo s, shellFiles) {
-        if (testNames.contains(s.baseName())) {
-            testShellFiles << s;
+    return file.suffix() == "shell";
+}
+
+/*! Remove the corresponding bare executable for each '.shell' */
+void favorShellOverBareExe(QFileInfoList& files)
+{
+    QStringList shellBaseNames;
+    foreach(QFileInfo fi, files) {
+        if (isShellFile(fi)) {
+            shellBaseNames << fi.baseName();
         }
     }
-    return testShellFiles;
+    QFileInfoList duplicates;
+    foreach(QFileInfo fi, files) {
+        if (!isShellFile(fi)) {
+            if (shellBaseNames.contains(fi.baseName())) {
+                duplicates << fi;
+            }
+        }
+    }
+    foreach(QFileInfo dupli, duplicates) {
+        files.removeOne(dupli);
+    }
 }
 
 /*! Locate all test executables in @p dir for which the name is contained in
 @p testNames. This function recurses down @p dir and its subdirectories.
 Return the found test exes as a list of  QFileInfo's. */
-QFileInfoList findTestExecutablesIn(QDir& dir, const QStringList& testNames)
+QFileInfoList findTestExesIn(QDir& dir, const QStringList& testNames)
 {
     kDebug() << dir.absolutePath();
-    QFileInfoList testShellFiles;
+    QFileInfoList testExes;
     QDir current(dir);
     current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
     QStringList subDirs = current.entryList();
     foreach(QString subDir, subDirs) {
+        if (subDir == "CMakeFiles") continue;
         current.cd(subDir);
-        testShellFiles += findTestExecutablesIn(current, testNames);
+        testExes += findTestExesIn(current, testNames);
         current.cdUp();
     }
     current = QDir(dir);
-    current.setNameFilters(testNames);
     current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks | QDir::Executable);
-    return current.entryInfoList();
+    QFileInfoList files = current.entryInfoList();
+    favorShellOverBareExe(files);
+    foreach(QFileInfo fi, files) {
+        if (testNames.contains(fi.baseName())) {
+            testExes << fi;
+        }
+    }
+    return testExes;
 }
-
 
 QList<KUrl> fileInfo2KUrl(const QFileInfoList& fileInfos)
 {
@@ -271,12 +277,9 @@ void KDevRegister::fetchTestCommands(KJob*)
     STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
 
     QDir buildDir(buildRoot.path());
-    QFileInfoList shells = findTestShellFilesIn(buildDir, m_testNames);
+    QFileInfoList shells = findTestExesIn(buildDir, m_testNames);
     foreach(QFileInfo shell, shells) {
         kDebug() << "shell -> " << shell.absoluteFilePath();
-    }
-    if (shells.isEmpty()) {
-        shells = findTestExecutablesIn(buildDir, m_testNames);
     }
     STOP_IF(shells.isEmpty(), "No test exes found.");
 
