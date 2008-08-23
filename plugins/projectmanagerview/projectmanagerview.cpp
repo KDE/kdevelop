@@ -154,6 +154,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     d->m_projectOverview->setModel( d->m_modelFilter );
     d->m_projectOverview->setSortingEnabled(true);
     d->m_projectOverview->sortByColumn( 0, Qt::AscendingOrder );
+    d->m_projectOverview->setSelectionModel( ICore::self()->projectController()->projectSelectionModel() );
 //     d->m_projectOverview->setModel( overviewModel );c
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );

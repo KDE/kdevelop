@@ -73,6 +73,7 @@ public:
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
+    QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
 
     QPointer<QAction> m_closeAllProjects;
@@ -528,14 +529,20 @@ void ProjectController::addProject(IProject* project)
 }
 
 
-}
 
-void KDevelop::ProjectController::closeAllProjects()
+void ProjectController::closeAllProjects()
 {
     foreach (IProject* project, projects())
     {
         closeProject(project);
     }
+}
+
+QItemSelectionModel* ProjectController::projectSelectionModel()
+{
+    return d->selectionModel;
+}
+
 }
 
 #include "projectcontroller.moc"

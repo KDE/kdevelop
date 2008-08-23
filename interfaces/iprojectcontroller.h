@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <kurl.h>
 #include "interfacesexport.h"
 
+class QItemSelectionModel;
 
 namespace KDevelop
 {
@@ -50,6 +51,14 @@ public:
      * @returns the model containing the projects and their items
      */
     Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
+
+    /**
+     * Provides access to the selection model of the project view.
+     * This way its possible to fetch the list of selected items in
+     * the project view and use that to prefill some thing.
+     * @returns the selection model
+     */
+    Q_SCRIPTABLE virtual QItemSelectionModel* projectSelectionModel() = 0;
 
     /**
      * Find an open project using the name of the project

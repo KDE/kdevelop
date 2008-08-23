@@ -49,6 +49,7 @@ public:
     virtual QList<IProject*> projects() const;
 
     virtual ProjectModel* projectModel();
+    virtual QItemSelectionModel* projectSelectionModel();
     virtual IProject* findProjectByName( const QString& name );
     IProject* findProjectForUrl( const KUrl& ) const;
     void addProject(IProject*);
