@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QSet>
 #include <QList>
 #include <QMap>
+#include <QItemSelectionModel>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -148,7 +149,7 @@ ProjectController::ProjectController( Core* core )
             this, SLOT( projectConfig( QObject* ) ) );
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
-    d->selectionModel = new QItemSelectionModel(this);
+    d->selectionModel = new QItemSelectionModel(d->model);
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
