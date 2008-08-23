@@ -148,6 +148,7 @@ ProjectController::ProjectController( Core* core )
             this, SLOT( projectConfig( QObject* ) ) );
 //     d->m_currentProject = 0;
     d->model = new ProjectModel();
+    d->selectionModel = new QItemSelectionModel(this);
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
