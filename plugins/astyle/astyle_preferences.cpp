@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QVBoxLayout>
 #include <QString>
+#include <QInputDialog>
 #include <QListWidgetItem>
 #include <KGenericFactory>
 #include <KTextEdit>
@@ -139,7 +140,7 @@ void AStylePreferences::init()
     }
     
     //setup list of styles
-    addItemInStyleList(i18n("Custom"), QString::null);
+    addItemInStyleList(i18n("Custom"), QString());
     addItemInStyleList("ANSI", "ANSI");
     addItemInStyleList("GNU", "GNU");
     addItemInStyleList("Java", "Java");
@@ -191,10 +192,21 @@ void AStylePreferences::addItemInStyleList(const QString &caption, const QString
 
 void AStylePreferences::load()
 {   
-    m_formatter->loadConfig(KGlobal::config());
-    QString s = m_formatter->option("FStyle").toString();
-    updateWidgets();
-    // style
+    KConfigGroup g = KGlobal::config()->group("AStyle");
+    
+    //create list items for each saved theme
+    QStringList keyList = g.keyList();
+    QStringList::const_iterator it = keyList.constBegin();
+    for(; it != keyList.constEnd(); ++it) {
+        if((*it).startsWith("User")) { // style definition
+            QString caption = g.readEntry("Caption" + (*it).mid(4));
+            addItemInStyleList(caption, *it);
+            kDebug() << "Adding item in list: user" << (*it).mid(4) 
+                << "  " << caption << endl; 
+        }
+    }
+    
+    QString s = g.readEntry("Style");
     int id = 0;
     if(s.isEmpty()) id = STYLE_CUSTOM;
     else if(s == "ANSI") id = STYLE_ANSI;
@@ -202,6 +214,20 @@ void AStylePreferences::load()
     else if(s == "Java") id = STYLE_JAVA;
     else if(s == "K&R") id = STYLE_KR;
     else if(s == "Linux") id = STYLE_LINUX;
+    else { // saved theme "User" + number
+        int number = s.mid(4).toInt();
+        id = number + STYLE_LINUX;
+    }
+    
+    if(id == STYLE_CUSTOM)
+        m_formatter->loadConfig(KGlobal::config());
+    else if(id > STYLE_LINUX)
+        m_formatter->loadConfig(KGlobal::config(), s);
+    else
+        m_formatter->predefinedStyle(s);
+//     m_formatter->option("FStyle").toString();
+    updateWidgets();
+    // style
     listStyles->setCurrentRow(id);
 
     if(id != 0) {
@@ -297,7 +323,17 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
 
 void AStylePreferences::save()
 {
-    m_formatter->saveConfig(KGlobal::config());
+    QListWidgetItem *item = listStyles->currentItem();
+    KConfigGroup g = KGlobal::config()->group("AStyle");
+
+    if(item && !item->data(STYLE_ROLE).toString().isEmpty() && !btnSaveStyle->isEnabled()) { // only save style name
+        g.writeEntry("Style", item->data(STYLE_ROLE).toString());
+        g.writeEntry("Custom", ""); // clear it
+    } else { 
+        g.writeEntry("Style", "");
+        m_formatter->saveConfig(KGlobal::config());
+    }
+    g.sync();
 }
 
 void AStylePreferences::updatePreviewText(bool emitChangedSignal)
@@ -319,8 +355,10 @@ void AStylePreferences::updatePreviewText(bool emitChangedSignal)
     if(emitChangedSignal) {
         // style was modified, so switch to custom style if using predefined style
         int idx = listStyles->currentRow();
-        if(idx < 6) // ie predefined style
-            listStyles->setCurrentRow(0);
+        if(idx < STYLE_LINUX) // ie predefined style
+            listStyles->setCurrentRow(STYLE_CUSTOM);
+        else // custom style was changed, enable the save button
+            btnSaveStyle->setEnabled(true);
         emit(changed(true));
     }
 }
@@ -331,11 +369,11 @@ void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidge
     if(!current)
         return;
 
-    if(idx < 6) {
+    if(idx < STYLE_LINUX) {
         btnDelStyle->setEnabled(false);
         btnSaveStyle->setEnabled(idx == STYLE_CUSTOM);
         m_formatter->predefinedStyle(current->data(STYLE_ROLE).toString());
-        if(idx != 0) {
+        if(idx != STYLE_CUSTOM) {
             m_enableWidgetSignals = false;
             updateWidgets();
             m_enableWidgetSignals = true;
@@ -343,8 +381,13 @@ void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidge
     }
     else {
         btnDelStyle->setEnabled(true);
-        btnSaveStyle->setEnabled(true);
-        /// \todo load custom mode
+        btnSaveStyle->setEnabled(false);
+        m_formatter->loadConfig(KGlobal::config(),
+            current->data(STYLE_ROLE).toString());
+        //not necessary but avoid to reload ten times the editor's text
+        m_enableWidgetSignals = false;
+        updateWidgets();
+        m_enableWidgetSignals = true;
     }
 
     m_document->setText(m_formatter->formatSource(m_fullSample));
@@ -353,12 +396,64 @@ void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidge
 
 void AStylePreferences::deleteCurrentStyle()
 {
-
+    int res = KMessageBox::questionYesNo( this, i18n("Are you sure you"
+        " want to delete this style?", i18n("Delete style")) );
+    if(res == KMessageBox::No)
+        return;
+    
+    // remove from the list
+    QListWidgetItem *item = listStyles->takeItem(listStyles->currentRow());
+    if(!item)
+        return;
+    
+    // remove from config file
+    KConfigGroup g = KGlobal::config()->group("AStyle");
+    QString name = item->data(STYLE_ROLE).toString();
+    g.deleteEntry(name);
+    g.deleteEntry("Caption" + name.mid(4));
+    g.sync();
 }
 
 void AStylePreferences::addStyle()
-{
-
+{   
+    KConfigGroup g = KGlobal::config()->group("AStyle");
+    int currentRow = listStyles->currentRow();
+    
+    // check if we save an already existing style
+    if(currentRow != STYLE_CUSTOM) {
+        QListWidgetItem *item = listStyles->currentItem();
+        if(item) {
+            QString s = item->data(STYLE_ROLE).toString();
+            m_formatter->saveConfig(KGlobal::config(), s);
+        }
+        btnSaveStyle->setEnabled(false);
+        emit(changed(true));
+        return;
+    }
+    
+    // find available number
+    int idx = 1;
+    QString s = "User" + QString::number(idx);
+    while(g.hasKey(s)) {
+        ++idx;
+        s = "User" + QString::number(idx);
+    }
+ 
+    // ask for caption
+    bool ok;
+    QString caption = QInputDialog::getText( this, 
+        i18n("New style"), i18n("Please enter a name for the new style"),
+        QLineEdit::Normal, i18n("Custom Style") + QString::number(idx),
+        &ok);
+    if(!ok) // dialog aborted
+        return;
+    
+    // save in config file
+    m_formatter->saveConfig(KGlobal::config(), s);
+    g.writeEntry("Caption" + QString::number(idx), caption);
+    //add item in list
+    addItemInStyleList(caption, s);
+    listStyles->setCurrentRow(listStyles->count() - 1);
 }
 
 void AStylePreferences::currentTabChanged()

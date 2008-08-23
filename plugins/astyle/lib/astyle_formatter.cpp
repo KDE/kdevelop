@@ -237,45 +237,45 @@ QString AStyleFormatter::indentString()
     return QString(getIndentString().c_str());
 }
 
-QString AStyleFormatter::extensions() const
-{
-    QString values = m_extensions.join("\n");
-    return values.trimmed();
-}
+// QString AStyleFormatter::extensions() const
+// {
+//     QString values = m_extensions.join("\n");
+//     return values.trimmed();
+// }
 
-void AStyleFormatter::setExtensions(QString ext)
-{
-    m_searchExtensions.clear();
-    m_extensions.clear();
-    m_extensions = ext.split( QRegExp("\n") );
-
-    QStringList bits = ext.split( QRegExp("\\s+") );
-    QStringList::const_iterator it = bits.constBegin();
-    for(; it != bits.constEnd(); it++) {
-        QString ending = *it;
-        if(ending.startsWith("*")) {
-            if(ending.length() == 1) // special case.. any file.
-                m_searchExtensions.insert(ending, ending);
-            else
-                m_searchExtensions.insert(ending.mid(1), ending);
-        } else
-            m_searchExtensions.insert(ending, ending);
-    }
-}
-
-bool AStyleFormatter::hasExtension(const QString &extension)
-{
-    return m_searchExtensions.find(extension) != m_searchExtensions.end();
-}
+// void AStyleFormatter::setExtensions(QString ext)
+// {
+//     m_searchExtensions.clear();
+//     m_extensions.clear();
+//     m_extensions = ext.split( QRegExp("\n") );
+// 
+//     QStringList bits = ext.split( QRegExp("\\s+") );
+//     QStringList::const_iterator it = bits.constBegin();
+//     for(; it != bits.constEnd(); it++) {
+//         QString ending = *it;
+//         if(ending.startsWith("*")) {
+//             if(ending.length() == 1) // special case.. any file.
+//                 m_searchExtensions.insert(ending, ending);
+//             else
+//                 m_searchExtensions.insert(ending.mid(1), ending);
+//         } else
+//             m_searchExtensions.insert(ending, ending);
+//     }
+// }
+// 
+// bool AStyleFormatter::hasExtension(const QString &extension)
+// {
+//     return m_searchExtensions.find(extension) != m_searchExtensions.end();
+// }
         
-void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config)
+void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config, const QString &name)
 {
     if(!config)
         return;
 
     KConfigGroup group = config->group("AStyle");
     QString options = group.readEntry(
-    "Options","BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,"
+    name, "BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,"
     "Brackets=Break,BracketsCloseHeaders=0,FStyle=,Fill=Tabs,"
     "FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,"
     "IndentBrackets=0,IndentCases=0,IndentClasses=1,IndentLabels=1,"
@@ -284,35 +284,35 @@ void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config)
     "MinConditional=-1,PadOperators=0,PadParenthesesIn=1,"
     "PadParenthesesOut=1,PadParenthesesUn=1,");
 
-    QString extensions(group.readEntry("Extensions", ASTYLE_DEFAULT_EXTENSIONS));
-    m_extensions = extensions.split(",", QString::SkipEmptyParts);
+//     QString extensions(group.readEntry("Extensions", ASTYLE_DEFAULT_EXTENSIONS));
+//     m_extensions = extensions.split(",", QString::SkipEmptyParts);
 
-    QStringList pairs = options.split( ",", QString::SkipEmptyParts );
+    QStringList pairs = options.split(',', QString::SkipEmptyParts );
     QStringList::Iterator it;
     for ( it = pairs.begin(); it != pairs.end(); ++it ) {
-        QStringList bits = (*it).split("=");
+        QStringList bits = (*it).split('=');
         m_options[bits[0]] = bits[1];
     }
     
     updateFormatter();
 }
 
-void AStyleFormatter::saveConfig(const KSharedPtr<KSharedConfig> &config)
+void AStyleFormatter::saveConfig(const KSharedPtr<KSharedConfig> &config, const QString &name)
 {
     QString options;
     QMap<QString, QVariant>::const_iterator it = m_options.constBegin();
     for(; it != m_options.constEnd(); it++) {
         options += it.key();
-        options += "=";
+        options += '=';
         options += it.value().toString();
-        options += ",";
+        options += ',';
     }
 
     KConfigGroup group = config->group("AStyle");
-    group.writeEntry("Options", options);
-    group.writeEntry("Extensions", m_extensions.join(","));
+    group.writeEntry(name, options);
+//     group.writeEntry("Extensions", m_extensions.join(","));
     group.sync();
-    kDebug() << "save dddddddddddddddddddddd" << group.readEntry("Options") << endl;
+    kDebug() << "Saving config to" << name << " : "<< options << endl;
 }
 
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)

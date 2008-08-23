@@ -41,25 +41,25 @@ class ASTYLEWRAPPER_EXPORT AStyleFormatter : public astyle::ASFormatter
         AStyleFormatter();
         AStyleFormatter(const QMap<QString, QVariant> &options);
         
-        QString formatSource(const QString &text, const QString &indent=QString::null);
+        QString formatSource(const QString &text, const QString &indent=QString());
         
         QVariant option(const QString &name);
         void setOption(const QString &key, const QVariant &value);
         void setOptions(const QMap<QString, QVariant> &options);
         QString indentString();
-        QString extensions() const;
+//         QString extensions() const;
         /**
         * Extensions from the widget passed in.
         * We preserve the order, so common extensions will
         * end up at the top
         * @param ext
         */
-        void setExtensions(QString ext);
-        bool hasExtension(const QString &extension);
+//         void setExtensions(QString ext);
+//         bool hasExtension(const QString &extension);
         
         bool predefinedStyle(const QString &name);
-        void loadConfig(const KSharedPtr<KSharedConfig> &config);
-        void saveConfig(const KSharedPtr<KSharedConfig> &config);
+        void loadConfig(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+        void saveConfig(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
         
         // indent
         void setTabIndentation(int length, bool forceTabs);

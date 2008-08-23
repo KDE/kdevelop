@@ -130,7 +130,7 @@ void AStylePlugin::beautifySource()
         QString output = m_formatter->formatSource(view->selectionText(), indentWith);
         
         //remove the final newline character, unless it should be there
-        if(!original.endsWith( "\n" ))
+        if(!original.endsWith('\n'))
             output.resize(output.length()-1);
         //there was a selection, so only change the part of the text related to it
         view->removeSelectionText();

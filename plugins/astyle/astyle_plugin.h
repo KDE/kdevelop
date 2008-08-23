@@ -53,7 +53,7 @@ class AStylePlugin : public KDevelop::IPlugin
     Q_OBJECT
 
     public:
-        AStylePlugin( QObject *parent, const QVariantList & = QVariantList() );
+        explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
         ~AStylePlugin();
 
         /**

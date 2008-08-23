@@ -541,7 +541,7 @@ There is no unpad operator option.</string>
           <item>
            <widget class="QCheckBox" name="chkKeepStatements" >
             <property name="toolTip" >
-             <string>Don't break lines containing multiple statements into
+             <string>Do not break lines containing multiple statements into
 multiple single-statement lines.</string>
             </property>
             <property name="text" >
@@ -552,7 +552,7 @@ multiple single-statement lines.</string>
           <item>
            <widget class="QCheckBox" name="chkKeepBlocks" >
             <property name="toolTip" >
-             <string>Don't break blocks residing completely on one line.</string>
+             <string>Do not break blocks residing completely on one line.</string>
             </property>
             <property name="text" >
              <string>Keep o&amp;ne-line blocks</string>
