@@ -230,15 +230,15 @@ void CMakeProjectManager::initializeProject(KDevelop::IProject* project, const K
 
 KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
 {
-    CMakeFolderItem* m_rootItem;
+    CMakeFolderItem* m_rootItem=0;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
-    QString folderUrl(cmakeInfoFile.toLocalFile(KUrl::RemoveTrailingSlash));
+    KUrl folderUrl(cmakeInfoFile.toLocalFile(KUrl::RemoveTrailingSlash));
     cmakeInfoFile.addPath("CMakeLists.txt");
 
     kDebug(9042) << "found module path is" << m_modulePathDef;
-
     kDebug(9042) << "file is" << cmakeInfoFile.path();
+    
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
@@ -246,11 +246,12 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     }
     else
     {
+        m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_modulePathPerProject[project]=m_modulePathDef;
         initializeProject(project, cmakeInfoFile.upUrl());
 
-        m_rootItem = new CMakeFolderItem(project, folderUrl, 0 );
+        m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
         m_rootItem->setTopDUContext(0);
 
@@ -334,7 +335,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
         m_watchers[item->project()]->addFile(cmakeListsPath.toLocalFile());
-        QString currentBinDir=KUrl::relativeUrl(folder->project()->projectFileUrl().upUrl(), folder->url());
+        QString currentBinDir=KUrl::relativeUrl(m_realRoot[folder->project()], folder->url());
         vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
         vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
         vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
@@ -611,7 +612,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
         return;
     }
 
-    QString currentBinDir=KUrl::relativeUrl(project->projectFileUrl().upUrl(), url);
+    QString currentBinDir=KUrl::relativeUrl(m_realRoot[project], url);
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
@@ -653,13 +654,13 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     dir.adjustPath(KUrl::RemoveTrailingSlash);
 
     CMakeFolderItem *it=0;
+    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
     if(m_folderPerUrl.contains(dir))
         it=m_folderPerUrl[dir];
-    KUrl projectBaseUrl=it->project()->projectFileUrl().upUrl();
-    projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
-
-    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
+    Q_ASSERT(it);
     KDevelop::IProject* proj=it->project();
+    KUrl projectBaseUrl=m_realRoot[proj];
+    projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
 
     if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
     {
