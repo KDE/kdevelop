@@ -30,10 +30,12 @@
 
 #include "ui_runnerwindow.h"
 #include "../xmlregister.h"
+#include "../qtestcase.h"
 
 #include <veritas/resultsmodel.h>
 #include <veritas/runnermodel.h>
 #include <veritas/runnerwindow.h>
+#include <veritas/test.h>
 
 using Veritas::RunnerWindow;
 using Veritas::RunnerModel;
@@ -61,12 +63,18 @@ QByteArray regXml =
     "</suite>\n"
     "</root>\n";
 
+#define CHECK_STOP \
+    if (m_stop) {\
+        return;\
+    } else void(0)
+
 void QTestRunnerTest::init()
 {
     QStringList resultHeaders;
     resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
                   << i18n("File Name") << i18n("Line Number");
     m_window = new RunnerWindow(new ResultsModel(resultHeaders));
+    m_stop = false;
 }
 
 void QTestRunnerTest::cleanup()
@@ -148,13 +156,13 @@ void QTestRunnerTest::sunnyDay()
 {
     initNrun(regXml);
     checkTests(sunnyDayTests());
+    assertAllFilesClosed();
 
     QStringList result0;
     result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
     results << result0;
 
-    QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
     checkResultItems(results);
 }
 
@@ -163,17 +171,15 @@ void QTestRunnerTest::runTwice()
 {
     initNrun(regXml);
     m_window->ui()->actionStart->trigger();
-    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-         QFAIL("Timeout while waiting for runner items to complete execution");
+    waitForRunToComplete(); CHECK_STOP;
 
     checkTests(sunnyDayTests());
+    assertAllFilesClosed();
 
     QStringList result0;
     result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
     QList<QStringList> results;
     results << result0;
-
-    QTest::qWait(300); // fix this. is a bug in QTestCase/OutputParser. executionFinished() gets emitted when process completed instead of when parsing output of process completed.
 
     checkResultItems(results);
 }
@@ -193,7 +199,6 @@ void QTestRunnerTest::checkResultItem(int num, const QStringList& item)
     m_resultModel = m_window->resultsView()->model();
 
     KOMPARE(item[0], m_resultModel->data(m_resultModel->index(num, 0))); // test name
-    //KOMPARE(item[1], m_resultModel->data(resultsModel->index(num, 1))); // status -> "Error"
     KOMPARE(item[1], m_resultModel->data(m_resultModel->index(num, 2))); // failure message
     KOMPARE(item[2], m_resultModel->data(m_resultModel->index(num, 3))); // filename
     KOMPARE(item[3], m_resultModel->data(m_resultModel->index(num, 4))); // line number
@@ -221,8 +226,7 @@ void QTestRunnerTest::initNrun(QByteArray& regXml)
     m_window->setModel(model);
     //m_window->show();
     m_window->ui()->actionStart->trigger();
-    if (!QTest::kWaitForSignal(m_window->runnerModel(), SIGNAL(allItemsCompleted()), 2000))
-         QFAIL("Timeout while waiting for runner items to complete execution");
+    waitForRunToComplete(); CHECK_STOP;
 
     // decomment the line below to inspect the window manually
     //QTest::qWait(5000);
@@ -253,6 +257,35 @@ void QTestRunnerTest::checkTest(const QVariant& expected, int lvl0, int lvl1, in
         }
     }
     KOMPARE(expected, runner->data(index));
+}
+
+// helper
+void QTestRunnerTest::assertAllFilesClosed()
+{
+    RunnerModel* model = m_window->runnerModel();
+    // QTestCases are on lvl2 in the tree model
+    for(int i=0; i<model->rowCount(); i++) {
+        QModelIndex suite = model->index(i, 0);
+        for (int i=0; i<model->rowCount(suite); i++) {
+            QModelIndex cazeIndex = suite.child(i,0);
+            Veritas::Test* t = static_cast<Veritas::Test*>(cazeIndex.internalPointer());
+            QTestCase* caze = qobject_cast<QTestCase*>(t);
+            KVERIFY_MSG(caze, "Not a QTestCase on lvl2 of the test tree? (cast failed)");
+            KVERIFY(caze->fto_outputFileClosed());
+        }
+    }
+}
+
+//helper
+void QTestRunnerTest::waitForRunToComplete()
+{
+    m_stop = true;
+    bool success = QTest::kWaitForSignal(
+        m_window->runnerModel(),
+        SIGNAL(allItemsCompleted()),
+        2000);
+    QVERIFY2(success, "Timeout while waiting for runner items to complete execution");
+    m_stop = false;
 }
 
 #include "qtestrunnertest.moc"

@@ -49,11 +49,14 @@ private:
     void checkResultItems(QList<QStringList> expected);
     void checkResultItem(int num, const QStringList& item);
     void nrofMessagesEquals(int num);
+    void waitForRunToComplete();
+    void assertAllFilesClosed();
 
 private:
     Veritas::RunnerWindow* m_window;
     QAbstractItemModel* m_runnerItems;
     QAbstractItemModel* m_resultModel;
+    bool m_stop;
 };
 
 }}

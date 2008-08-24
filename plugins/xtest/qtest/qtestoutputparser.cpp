@@ -65,7 +65,8 @@ const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 QTestOutputParser::QTestOutputParser()
     : m_state(Main),
       m_buzzy(false),
-      m_result(0)
+      m_result(0),
+      m_block(false)
 {}
 
 QTestOutputParser::~QTestOutputParser()
@@ -77,6 +78,7 @@ void QTestOutputParser::reset()
     m_result = 0;
     m_buzzy = false;
     m_state = Main;
+    m_block = false;
 }
 
 bool QTestOutputParser::isStartElement_(const QString& elementName)
@@ -107,9 +109,14 @@ void QTestOutputParser::setCase(QTestCase* caze)
     m_case = caze;
 }
 
+void QTestOutputParser::block()
+{
+    m_block = true;
+}
+
 void QTestOutputParser::go()
 {
-    if (m_buzzy) return; // do not disturb.
+    if (m_buzzy || m_block) return; // do not disturb.
     m_buzzy = true;
 
     assertCaseSet();

@@ -53,6 +53,9 @@ public:
      *  Before reusing this object. */
     void reset();
 
+    /*! Stop processing */
+    void block();
+
 signals:
     void done();
 
@@ -89,6 +92,7 @@ private:
     QTestCase* m_case;
     Veritas::Test* m_cmd;
     QString m_cmdName;
+    bool m_block;
 
 private:    // some xml constants
     static const QString c_testfunction;

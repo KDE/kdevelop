@@ -141,8 +141,8 @@ int QTestCase::run()
 
     initTempOutputFile();
     initProcArguments();
-    setUpProcSignals();
     initOutputParser();
+    setUpProcSignals();
     executeProc();
 
     return 1;
@@ -155,13 +155,19 @@ void QTestCase::setUpProcSignals()
 //     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
 //             this, SIGNAL(executionFinished()));
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-           this, SLOT(morphXmlToText()));
+            this, SLOT(morphXmlToText()));
     connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
 }
 
 void QTestCase::closeOutputFile()
 {
-    if (m_output) m_output->close();
+    if (m_timer) {
+        m_timer->stop();
+        m_timer->disconnect();
+    }
+    if (m_output) {
+        m_output->close();
+    }
 }
 
 void QTestCase::morphXmlToText()
@@ -175,9 +181,9 @@ void QTestCase::morphXmlToText()
     out.write("~~~~~~~~~~~~~~~~~~~~~~~~~~ QTest ~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     m.setTarget(&out);
     m.xmlToText();
-    emit executionFinished();
     in.close();
     out.close();
+    emit executionFinished();
 }
 
 // helper for run()
@@ -188,6 +194,12 @@ void QTestCase::initOutputParser()
     m_timer->disconnect();
     m_parser->disconnect();
     connect(m_timer, SIGNAL(timeout()), m_parser, SLOT(go()));
+}
+
+bool QTestCase::fto_outputFileClosed()
+{
+    if (!m_output) return true;
+    return !m_output->isOpen();
 }
 
 // helper for run()

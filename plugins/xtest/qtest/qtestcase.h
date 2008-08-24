@@ -71,6 +71,9 @@ public:
     KUrl outFile() const;
     KUrl errorFile() const;
 
+    /*! For testers only method that returns wheter the output file was closed */
+    bool fto_outputFileClosed();
+
 private:
     void removeTempFiles();
 
