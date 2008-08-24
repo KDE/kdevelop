@@ -70,23 +70,27 @@ GrepViewPlugin::~GrepViewPlugin()
 void GrepViewPlugin::showDialog()
 {
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    QString context;
+    QString pattern;
     if( doc )
     {
         KTextEditor::Range range = doc->textSelection();
         if( range.isValid() )
         {
-            context = doc->textDocument()->text( range );
-        } else
+            kDebug() << "got valid range:" << range;
+            pattern = doc->textDocument()->text( range );
+            kDebug() << "context now:" << pattern;
+        }
+        if( pattern.isEmpty() )
         {
-            context = doc->textWord();
+            kDebug() << "fetching current word";
+            pattern = doc->textWord();
+            kDebug() << "word is:" << pattern;
         }
     }
 
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     // Before anything, this removes line feeds from the
     // beginning and the end.
-    QString pattern = context;
     int len = pattern.length();
     if (len > 0 && pattern[0] == '\n')
     {
