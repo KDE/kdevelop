@@ -259,8 +259,8 @@ void KDevVcsCommonPlugin::diffToHead()
 {
     SINGLEURL_SETUP_VARS
     KDevelop::VcsJob* job = iface->diff( url, url,
-                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ),
-                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Head ) );
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Head ),
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ) );
 
     connect( job, SIGNAL( finished( KJob* ) ), this, SLOT( diffJobFinished( KJob* ) ) );
     core()->runController()->registerJob( job );
@@ -281,6 +281,8 @@ void KDevVcsCommonPlugin::diffJobFinished( KJob* job )
         {
             KMessageBox::error( core()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Couldn't get difference") );
         }
+
+        vcsjob->disconnect( this );
     }
 }
 
@@ -288,8 +290,8 @@ void KDevVcsCommonPlugin::diffToBase()
 {
     SINGLEURL_SETUP_VARS
     KDevelop::VcsJob* job = iface->diff( url, url,
-                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ),
-                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Base ) );
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Base ),
+                                         KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ) );
 
     connect( job, SIGNAL( finished( KJob* ) ), this, SLOT( diffJobFinished( KJob* ) ) );
     core()->runController()->registerJob( job );
