@@ -1,0 +1,3252 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+<suite name="suite_spam" dir="suite_spam" >
+<case name="case_spam_0124" exe="case_spam_0124.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0182" exe="case_spam_0182.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0139" exe="case_spam_0139.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0192" exe="case_spam_0192.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0048" exe="case_spam_0048.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0021" exe="case_spam_0021.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0032" exe="case_spam_0032.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0002" exe="case_spam_0002.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0008" exe="case_spam_0008.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0132" exe="case_spam_0132.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0067" exe="case_spam_0067.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0063" exe="case_spam_0063.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0194" exe="case_spam_0194.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0121" exe="case_spam_0121.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0036" exe="case_spam_0036.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0114" exe="case_spam_0114.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0118" exe="case_spam_0118.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0137" exe="case_spam_0137.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0142" exe="case_spam_0142.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0147" exe="case_spam_0147.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0100" exe="case_spam_0100.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0116" exe="case_spam_0116.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0185" exe="case_spam_0185.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0049" exe="case_spam_0049.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0167" exe="case_spam_0167.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0102" exe="case_spam_0102.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0056" exe="case_spam_0056.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0148" exe="case_spam_0148.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0016" exe="case_spam_0016.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0099" exe="case_spam_0099.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0050" exe="case_spam_0050.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0110" exe="case_spam_0110.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0037" exe="case_spam_0037.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0066" exe="case_spam_0066.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0074" exe="case_spam_0074.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0095" exe="case_spam_0095.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0222" exe="case_spam_0222.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0170" exe="case_spam_0170.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0024" exe="case_spam_0024.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0161" exe="case_spam_0161.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0130" exe="case_spam_0130.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0160" exe="case_spam_0160.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0153" exe="case_spam_0153.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0174" exe="case_spam_0174.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0033" exe="case_spam_0033.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0193" exe="case_spam_0193.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0129" exe="case_spam_0129.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0205" exe="case_spam_0205.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0173" exe="case_spam_0173.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0111" exe="case_spam_0111.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0010" exe="case_spam_0010.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0195" exe="case_spam_0195.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0141" exe="case_spam_0141.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0006" exe="case_spam_0006.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0069" exe="case_spam_0069.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0029" exe="case_spam_0029.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0136" exe="case_spam_0136.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0211" exe="case_spam_0211.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0081" exe="case_spam_0081.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0020" exe="case_spam_0020.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0213" exe="case_spam_0213.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0154" exe="case_spam_0154.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0075" exe="case_spam_0075.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0227" exe="case_spam_0227.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0238" exe="case_spam_0238.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0004" exe="case_spam_0004.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0219" exe="case_spam_0219.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0181" exe="case_spam_0181.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0188" exe="case_spam_0188.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0135" exe="case_spam_0135.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0106" exe="case_spam_0106.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0009" exe="case_spam_0009.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0214" exe="case_spam_0214.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0125" exe="case_spam_0125.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0177" exe="case_spam_0177.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0145" exe="case_spam_0145.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0179" exe="case_spam_0179.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0230" exe="case_spam_0230.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0248" exe="case_spam_0248.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0133" exe="case_spam_0133.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0112" exe="case_spam_0112.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0046" exe="case_spam_0046.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0237" exe="case_spam_0237.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0053" exe="case_spam_0053.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0242" exe="case_spam_0242.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0138" exe="case_spam_0138.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0151" exe="case_spam_0151.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0140" exe="case_spam_0140.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0014" exe="case_spam_0014.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0096" exe="case_spam_0096.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0092" exe="case_spam_0092.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0126" exe="case_spam_0126.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0165" exe="case_spam_0165.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0013" exe="case_spam_0013.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0103" exe="case_spam_0103.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0202" exe="case_spam_0202.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0104" exe="case_spam_0104.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0191" exe="case_spam_0191.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0144" exe="case_spam_0144.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0234" exe="case_spam_0234.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0176" exe="case_spam_0176.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0097" exe="case_spam_0097.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0240" exe="case_spam_0240.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0038" exe="case_spam_0038.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0090" exe="case_spam_0090.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0025" exe="case_spam_0025.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0091" exe="case_spam_0091.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0064" exe="case_spam_0064.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0184" exe="case_spam_0184.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0088" exe="case_spam_0088.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0047" exe="case_spam_0047.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0172" exe="case_spam_0172.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0223" exe="case_spam_0223.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0060" exe="case_spam_0060.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0094" exe="case_spam_0094.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0196" exe="case_spam_0196.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0085" exe="case_spam_0085.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0218" exe="case_spam_0218.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0072" exe="case_spam_0072.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0247" exe="case_spam_0247.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0034" exe="case_spam_0034.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0249" exe="case_spam_0249.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0079" exe="case_spam_0079.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0027" exe="case_spam_0027.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0197" exe="case_spam_0197.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0061" exe="case_spam_0061.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0123" exe="case_spam_0123.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0221" exe="case_spam_0221.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0210" exe="case_spam_0210.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0206" exe="case_spam_0206.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0059" exe="case_spam_0059.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0224" exe="case_spam_0224.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0236" exe="case_spam_0236.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0212" exe="case_spam_0212.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0220" exe="case_spam_0220.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0189" exe="case_spam_0189.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0198" exe="case_spam_0198.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0051" exe="case_spam_0051.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0217" exe="case_spam_0217.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0134" exe="case_spam_0134.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0065" exe="case_spam_0065.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0018" exe="case_spam_0018.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0128" exe="case_spam_0128.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0208" exe="case_spam_0208.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0109" exe="case_spam_0109.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0015" exe="case_spam_0015.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0229" exe="case_spam_0229.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0180" exe="case_spam_0180.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0077" exe="case_spam_0077.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0040" exe="case_spam_0040.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0022" exe="case_spam_0022.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0155" exe="case_spam_0155.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0086" exe="case_spam_0086.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0028" exe="case_spam_0028.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0231" exe="case_spam_0231.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0175" exe="case_spam_0175.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0003" exe="case_spam_0003.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0228" exe="case_spam_0228.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0084" exe="case_spam_0084.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0152" exe="case_spam_0152.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0171" exe="case_spam_0171.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0044" exe="case_spam_0044.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0098" exe="case_spam_0098.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0187" exe="case_spam_0187.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0178" exe="case_spam_0178.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0041" exe="case_spam_0041.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0119" exe="case_spam_0119.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0105" exe="case_spam_0105.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0241" exe="case_spam_0241.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0117" exe="case_spam_0117.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0203" exe="case_spam_0203.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0159" exe="case_spam_0159.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0158" exe="case_spam_0158.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0093" exe="case_spam_0093.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0209" exe="case_spam_0209.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0199" exe="case_spam_0199.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0089" exe="case_spam_0089.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0026" exe="case_spam_0026.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0108" exe="case_spam_0108.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0201" exe="case_spam_0201.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0246" exe="case_spam_0246.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0031" exe="case_spam_0031.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0011" exe="case_spam_0011.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0042" exe="case_spam_0042.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0115" exe="case_spam_0115.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0007" exe="case_spam_0007.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0164" exe="case_spam_0164.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0019" exe="case_spam_0019.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0190" exe="case_spam_0190.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0146" exe="case_spam_0146.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0235" exe="case_spam_0235.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0122" exe="case_spam_0122.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0035" exe="case_spam_0035.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0183" exe="case_spam_0183.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0057" exe="case_spam_0057.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0204" exe="case_spam_0204.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0232" exe="case_spam_0232.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0166" exe="case_spam_0166.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0169" exe="case_spam_0169.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0017" exe="case_spam_0017.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0157" exe="case_spam_0157.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0078" exe="case_spam_0078.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0068" exe="case_spam_0068.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0244" exe="case_spam_0244.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0216" exe="case_spam_0216.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0045" exe="case_spam_0045.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0239" exe="case_spam_0239.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0023" exe="case_spam_0023.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0012" exe="case_spam_0012.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0215" exe="case_spam_0215.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0083" exe="case_spam_0083.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0149" exe="case_spam_0149.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0087" exe="case_spam_0087.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0101" exe="case_spam_0101.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0107" exe="case_spam_0107.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0043" exe="case_spam_0043.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0076" exe="case_spam_0076.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0162" exe="case_spam_0162.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0070" exe="case_spam_0070.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0127" exe="case_spam_0127.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0200" exe="case_spam_0200.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0186" exe="case_spam_0186.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0150" exe="case_spam_0150.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0058" exe="case_spam_0058.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0001" exe="case_spam_0001.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0039" exe="case_spam_0039.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0120" exe="case_spam_0120.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0052" exe="case_spam_0052.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0233" exe="case_spam_0233.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0131" exe="case_spam_0131.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0030" exe="case_spam_0030.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0226" exe="case_spam_0226.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0055" exe="case_spam_0055.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0073" exe="case_spam_0073.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0113" exe="case_spam_0113.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0071" exe="case_spam_0071.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0080" exe="case_spam_0080.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0143" exe="case_spam_0143.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0054" exe="case_spam_0054.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0168" exe="case_spam_0168.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0163" exe="case_spam_0163.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0243" exe="case_spam_0243.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0207" exe="case_spam_0207.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0245" exe="case_spam_0245.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0005" exe="case_spam_0005.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0225" exe="case_spam_0225.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0062" exe="case_spam_0062.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0082" exe="case_spam_0082.shell" >
+<command name="foo" />
+</case>
+<case name="case_spam_0156" exe="case_spam_0156.shell" >
+<command name="foo" />
+</case>
+</suite>
+<suite name="suite_kde_core" dir="suite_kde_core" >
+<case name="case_kde_core_0130" exe="case_kde_core_0130.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0025" exe="case_kde_core_0025.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0155" exe="case_kde_core_0155.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0012" exe="case_kde_core_0012.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0029" exe="case_kde_core_0029.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0058" exe="case_kde_core_0058.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0177" exe="case_kde_core_0177.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0064" exe="case_kde_core_0064.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0199" exe="case_kde_core_0199.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0152" exe="case_kde_core_0152.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0054" exe="case_kde_core_0054.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0223" exe="case_kde_core_0223.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0118" exe="case_kde_core_0118.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0101" exe="case_kde_core_0101.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0065" exe="case_kde_core_0065.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0238" exe="case_kde_core_0238.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0165" exe="case_kde_core_0165.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0011" exe="case_kde_core_0011.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0077" exe="case_kde_core_0077.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0039" exe="case_kde_core_0039.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0107" exe="case_kde_core_0107.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0096" exe="case_kde_core_0096.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0218" exe="case_kde_core_0218.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0106" exe="case_kde_core_0106.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0176" exe="case_kde_core_0176.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0127" exe="case_kde_core_0127.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0164" exe="case_kde_core_0164.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0067" exe="case_kde_core_0067.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0189" exe="case_kde_core_0189.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0220" exe="case_kde_core_0220.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0016" exe="case_kde_core_0016.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0028" exe="case_kde_core_0028.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0169" exe="case_kde_core_0169.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0095" exe="case_kde_core_0095.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0143" exe="case_kde_core_0143.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0200" exe="case_kde_core_0200.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0088" exe="case_kde_core_0088.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0071" exe="case_kde_core_0071.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0196" exe="case_kde_core_0196.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0070" exe="case_kde_core_0070.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0034" exe="case_kde_core_0034.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0122" exe="case_kde_core_0122.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0201" exe="case_kde_core_0201.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0138" exe="case_kde_core_0138.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0190" exe="case_kde_core_0190.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0013" exe="case_kde_core_0013.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0063" exe="case_kde_core_0063.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0179" exe="case_kde_core_0179.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0247" exe="case_kde_core_0247.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0162" exe="case_kde_core_0162.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0243" exe="case_kde_core_0243.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0197" exe="case_kde_core_0197.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0210" exe="case_kde_core_0210.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0204" exe="case_kde_core_0204.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0171" exe="case_kde_core_0171.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0006" exe="case_kde_core_0006.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0049" exe="case_kde_core_0049.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0061" exe="case_kde_core_0061.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0060" exe="case_kde_core_0060.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0007" exe="case_kde_core_0007.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0178" exe="case_kde_core_0178.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0246" exe="case_kde_core_0246.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0053" exe="case_kde_core_0053.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0102" exe="case_kde_core_0102.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0094" exe="case_kde_core_0094.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0147" exe="case_kde_core_0147.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0056" exe="case_kde_core_0056.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0132" exe="case_kde_core_0132.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0068" exe="case_kde_core_0068.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0188" exe="case_kde_core_0188.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0230" exe="case_kde_core_0230.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0194" exe="case_kde_core_0194.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0024" exe="case_kde_core_0024.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0208" exe="case_kde_core_0208.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0113" exe="case_kde_core_0113.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0091" exe="case_kde_core_0091.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0153" exe="case_kde_core_0153.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0032" exe="case_kde_core_0032.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0066" exe="case_kde_core_0066.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0098" exe="case_kde_core_0098.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0073" exe="case_kde_core_0073.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0089" exe="case_kde_core_0089.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0017" exe="case_kde_core_0017.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0057" exe="case_kde_core_0057.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0224" exe="case_kde_core_0224.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0181" exe="case_kde_core_0181.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0030" exe="case_kde_core_0030.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0186" exe="case_kde_core_0186.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0022" exe="case_kde_core_0022.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0187" exe="case_kde_core_0187.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0168" exe="case_kde_core_0168.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0144" exe="case_kde_core_0144.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0156" exe="case_kde_core_0156.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0231" exe="case_kde_core_0231.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0040" exe="case_kde_core_0040.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0052" exe="case_kde_core_0052.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0076" exe="case_kde_core_0076.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0242" exe="case_kde_core_0242.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0136" exe="case_kde_core_0136.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0038" exe="case_kde_core_0038.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0150" exe="case_kde_core_0150.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0110" exe="case_kde_core_0110.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0074" exe="case_kde_core_0074.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0104" exe="case_kde_core_0104.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0075" exe="case_kde_core_0075.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0005" exe="case_kde_core_0005.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0035" exe="case_kde_core_0035.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0158" exe="case_kde_core_0158.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0010" exe="case_kde_core_0010.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0236" exe="case_kde_core_0236.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0161" exe="case_kde_core_0161.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0111" exe="case_kde_core_0111.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0124" exe="case_kde_core_0124.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0002" exe="case_kde_core_0002.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0195" exe="case_kde_core_0195.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0229" exe="case_kde_core_0229.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0248" exe="case_kde_core_0248.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0245" exe="case_kde_core_0245.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0131" exe="case_kde_core_0131.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0090" exe="case_kde_core_0090.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0021" exe="case_kde_core_0021.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0050" exe="case_kde_core_0050.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0239" exe="case_kde_core_0239.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0235" exe="case_kde_core_0235.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0174" exe="case_kde_core_0174.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0003" exe="case_kde_core_0003.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0059" exe="case_kde_core_0059.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0121" exe="case_kde_core_0121.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0134" exe="case_kde_core_0134.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0206" exe="case_kde_core_0206.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0112" exe="case_kde_core_0112.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0146" exe="case_kde_core_0146.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0234" exe="case_kde_core_0234.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0105" exe="case_kde_core_0105.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0081" exe="case_kde_core_0081.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0087" exe="case_kde_core_0087.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0145" exe="case_kde_core_0145.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0217" exe="case_kde_core_0217.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0109" exe="case_kde_core_0109.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0167" exe="case_kde_core_0167.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0237" exe="case_kde_core_0237.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0207" exe="case_kde_core_0207.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0175" exe="case_kde_core_0175.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0244" exe="case_kde_core_0244.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0193" exe="case_kde_core_0193.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0036" exe="case_kde_core_0036.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0211" exe="case_kde_core_0211.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0203" exe="case_kde_core_0203.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0097" exe="case_kde_core_0097.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0020" exe="case_kde_core_0020.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0154" exe="case_kde_core_0154.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0019" exe="case_kde_core_0019.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0151" exe="case_kde_core_0151.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0183" exe="case_kde_core_0183.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0085" exe="case_kde_core_0085.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0055" exe="case_kde_core_0055.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0051" exe="case_kde_core_0051.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0170" exe="case_kde_core_0170.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0103" exe="case_kde_core_0103.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0115" exe="case_kde_core_0115.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0117" exe="case_kde_core_0117.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0180" exe="case_kde_core_0180.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0114" exe="case_kde_core_0114.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0082" exe="case_kde_core_0082.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0004" exe="case_kde_core_0004.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0084" exe="case_kde_core_0084.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0100" exe="case_kde_core_0100.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0149" exe="case_kde_core_0149.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0142" exe="case_kde_core_0142.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0108" exe="case_kde_core_0108.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0166" exe="case_kde_core_0166.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0249" exe="case_kde_core_0249.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0069" exe="case_kde_core_0069.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0093" exe="case_kde_core_0093.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0078" exe="case_kde_core_0078.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0192" exe="case_kde_core_0192.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0216" exe="case_kde_core_0216.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0079" exe="case_kde_core_0079.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0120" exe="case_kde_core_0120.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0191" exe="case_kde_core_0191.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0046" exe="case_kde_core_0046.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0198" exe="case_kde_core_0198.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0141" exe="case_kde_core_0141.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0222" exe="case_kde_core_0222.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0086" exe="case_kde_core_0086.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0185" exe="case_kde_core_0185.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0072" exe="case_kde_core_0072.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0214" exe="case_kde_core_0214.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0232" exe="case_kde_core_0232.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0139" exe="case_kde_core_0139.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0157" exe="case_kde_core_0157.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0228" exe="case_kde_core_0228.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0008" exe="case_kde_core_0008.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0062" exe="case_kde_core_0062.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0018" exe="case_kde_core_0018.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0202" exe="case_kde_core_0202.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0043" exe="case_kde_core_0043.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0140" exe="case_kde_core_0140.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0212" exe="case_kde_core_0212.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0137" exe="case_kde_core_0137.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0128" exe="case_kde_core_0128.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0213" exe="case_kde_core_0213.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0233" exe="case_kde_core_0233.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0172" exe="case_kde_core_0172.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0027" exe="case_kde_core_0027.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0215" exe="case_kde_core_0215.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0148" exe="case_kde_core_0148.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0047" exe="case_kde_core_0047.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0221" exe="case_kde_core_0221.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0045" exe="case_kde_core_0045.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0015" exe="case_kde_core_0015.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0116" exe="case_kde_core_0116.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0041" exe="case_kde_core_0041.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0159" exe="case_kde_core_0159.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0023" exe="case_kde_core_0023.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0163" exe="case_kde_core_0163.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0182" exe="case_kde_core_0182.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0044" exe="case_kde_core_0044.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0241" exe="case_kde_core_0241.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0031" exe="case_kde_core_0031.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0184" exe="case_kde_core_0184.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0225" exe="case_kde_core_0225.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0099" exe="case_kde_core_0099.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0123" exe="case_kde_core_0123.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0205" exe="case_kde_core_0205.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0135" exe="case_kde_core_0135.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0126" exe="case_kde_core_0126.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0209" exe="case_kde_core_0209.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0037" exe="case_kde_core_0037.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0001" exe="case_kde_core_0001.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0160" exe="case_kde_core_0160.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0129" exe="case_kde_core_0129.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0042" exe="case_kde_core_0042.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0226" exe="case_kde_core_0226.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0033" exe="case_kde_core_0033.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0125" exe="case_kde_core_0125.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0009" exe="case_kde_core_0009.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0219" exe="case_kde_core_0219.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0048" exe="case_kde_core_0048.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0026" exe="case_kde_core_0026.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0227" exe="case_kde_core_0227.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0240" exe="case_kde_core_0240.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0092" exe="case_kde_core_0092.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0080" exe="case_kde_core_0080.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0133" exe="case_kde_core_0133.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0083" exe="case_kde_core_0083.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0173" exe="case_kde_core_0173.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0119" exe="case_kde_core_0119.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_core_0014" exe="case_kde_core_0014.shell" >
+<command name="foo" />
+</case>
+</suite>
+<suite name="suite_commands" dir="suite_commands" >
+<case name="case_commands" exe="case_commands.shell" >
+<command name="foo0001" />
+<command name="foo0002" />
+<command name="foo0003" />
+<command name="foo0004" />
+<command name="foo0005" />
+<command name="foo0006" />
+<command name="foo0007" />
+<command name="foo0008" />
+<command name="foo0009" />
+<command name="foo0010" />
+<command name="foo0011" />
+<command name="foo0012" />
+<command name="foo0013" />
+<command name="foo0014" />
+<command name="foo0015" />
+<command name="foo0016" />
+<command name="foo0017" />
+<command name="foo0018" />
+<command name="foo0019" />
+<command name="foo0020" />
+<command name="foo0021" />
+<command name="foo0022" />
+<command name="foo0023" />
+<command name="foo0024" />
+<command name="foo0025" />
+<command name="foo0026" />
+<command name="foo0027" />
+<command name="foo0028" />
+<command name="foo0029" />
+<command name="foo0030" />
+<command name="foo0031" />
+<command name="foo0032" />
+<command name="foo0033" />
+<command name="foo0034" />
+<command name="foo0035" />
+<command name="foo0036" />
+<command name="foo0037" />
+<command name="foo0038" />
+<command name="foo0039" />
+<command name="foo0040" />
+<command name="foo0041" />
+<command name="foo0042" />
+<command name="foo0043" />
+<command name="foo0044" />
+<command name="foo0045" />
+<command name="foo0046" />
+<command name="foo0047" />
+<command name="foo0048" />
+<command name="foo0049" />
+<command name="foo0050" />
+<command name="foo0051" />
+<command name="foo0052" />
+<command name="foo0053" />
+<command name="foo0054" />
+<command name="foo0055" />
+<command name="foo0056" />
+<command name="foo0057" />
+<command name="foo0058" />
+<command name="foo0059" />
+<command name="foo0060" />
+<command name="foo0061" />
+<command name="foo0062" />
+<command name="foo0063" />
+<command name="foo0064" />
+<command name="foo0065" />
+<command name="foo0066" />
+<command name="foo0067" />
+<command name="foo0068" />
+<command name="foo0069" />
+<command name="foo0070" />
+<command name="foo0071" />
+<command name="foo0072" />
+<command name="foo0073" />
+<command name="foo0074" />
+<command name="foo0075" />
+<command name="foo0076" />
+<command name="foo0077" />
+<command name="foo0078" />
+<command name="foo0079" />
+<command name="foo0080" />
+<command name="foo0081" />
+<command name="foo0082" />
+<command name="foo0083" />
+<command name="foo0084" />
+<command name="foo0085" />
+<command name="foo0086" />
+<command name="foo0087" />
+<command name="foo0088" />
+<command name="foo0089" />
+<command name="foo0090" />
+<command name="foo0091" />
+<command name="foo0092" />
+<command name="foo0093" />
+<command name="foo0094" />
+<command name="foo0095" />
+<command name="foo0096" />
+<command name="foo0097" />
+<command name="foo0098" />
+<command name="foo0099" />
+<command name="foo0100" />
+<command name="foo0101" />
+<command name="foo0102" />
+<command name="foo0103" />
+<command name="foo0104" />
+<command name="foo0105" />
+<command name="foo0106" />
+<command name="foo0107" />
+<command name="foo0108" />
+<command name="foo0109" />
+<command name="foo0110" />
+<command name="foo0111" />
+<command name="foo0112" />
+<command name="foo0113" />
+<command name="foo0114" />
+<command name="foo0115" />
+<command name="foo0116" />
+<command name="foo0117" />
+<command name="foo0118" />
+<command name="foo0119" />
+<command name="foo0120" />
+<command name="foo0121" />
+<command name="foo0122" />
+<command name="foo0123" />
+<command name="foo0124" />
+<command name="foo0125" />
+<command name="foo0126" />
+<command name="foo0127" />
+<command name="foo0128" />
+<command name="foo0129" />
+<command name="foo0130" />
+<command name="foo0131" />
+<command name="foo0132" />
+<command name="foo0133" />
+<command name="foo0134" />
+<command name="foo0135" />
+<command name="foo0136" />
+<command name="foo0137" />
+<command name="foo0138" />
+<command name="foo0139" />
+<command name="foo0140" />
+<command name="foo0141" />
+<command name="foo0142" />
+<command name="foo0143" />
+<command name="foo0144" />
+<command name="foo0145" />
+<command name="foo0146" />
+<command name="foo0147" />
+<command name="foo0148" />
+<command name="foo0149" />
+<command name="foo0150" />
+<command name="foo0151" />
+<command name="foo0152" />
+<command name="foo0153" />
+<command name="foo0154" />
+<command name="foo0155" />
+<command name="foo0156" />
+<command name="foo0157" />
+<command name="foo0158" />
+<command name="foo0159" />
+<command name="foo0160" />
+<command name="foo0161" />
+<command name="foo0162" />
+<command name="foo0163" />
+<command name="foo0164" />
+<command name="foo0165" />
+<command name="foo0166" />
+<command name="foo0167" />
+<command name="foo0168" />
+<command name="foo0169" />
+<command name="foo0170" />
+<command name="foo0171" />
+<command name="foo0172" />
+<command name="foo0173" />
+<command name="foo0174" />
+<command name="foo0175" />
+<command name="foo0176" />
+<command name="foo0177" />
+<command name="foo0178" />
+<command name="foo0179" />
+<command name="foo0180" />
+<command name="foo0181" />
+<command name="foo0182" />
+<command name="foo0183" />
+<command name="foo0184" />
+<command name="foo0185" />
+<command name="foo0186" />
+<command name="foo0187" />
+<command name="foo0188" />
+<command name="foo0189" />
+<command name="foo0190" />
+<command name="foo0191" />
+<command name="foo0192" />
+<command name="foo0193" />
+<command name="foo0194" />
+<command name="foo0195" />
+<command name="foo0196" />
+<command name="foo0197" />
+<command name="foo0198" />
+<command name="foo0199" />
+<command name="foo0200" />
+<command name="foo0201" />
+<command name="foo0202" />
+<command name="foo0203" />
+<command name="foo0204" />
+<command name="foo0205" />
+<command name="foo0206" />
+<command name="foo0207" />
+<command name="foo0208" />
+<command name="foo0209" />
+<command name="foo0210" />
+<command name="foo0211" />
+<command name="foo0212" />
+<command name="foo0213" />
+<command name="foo0214" />
+<command name="foo0215" />
+<command name="foo0216" />
+<command name="foo0217" />
+<command name="foo0218" />
+<command name="foo0219" />
+<command name="foo0220" />
+<command name="foo0221" />
+<command name="foo0222" />
+<command name="foo0223" />
+<command name="foo0224" />
+<command name="foo0225" />
+<command name="foo0226" />
+<command name="foo0227" />
+<command name="foo0228" />
+<command name="foo0229" />
+<command name="foo0230" />
+<command name="foo0231" />
+<command name="foo0232" />
+<command name="foo0233" />
+<command name="foo0234" />
+<command name="foo0235" />
+<command name="foo0236" />
+<command name="foo0237" />
+<command name="foo0238" />
+<command name="foo0239" />
+<command name="foo0240" />
+<command name="foo0241" />
+<command name="foo0242" />
+<command name="foo0243" />
+<command name="foo0244" />
+<command name="foo0245" />
+<command name="foo0246" />
+<command name="foo0247" />
+<command name="foo0248" />
+<command name="foo0249" />
+</case>
+</suite>
+<suite name="suite_asserts" dir="suite_asserts" >
+<case name="case_asserts_0007" exe="case_asserts_0007.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0047" exe="case_asserts_0047.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0241" exe="case_asserts_0241.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0089" exe="case_asserts_0089.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0004" exe="case_asserts_0004.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0190" exe="case_asserts_0190.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0224" exe="case_asserts_0224.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0045" exe="case_asserts_0045.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0138" exe="case_asserts_0138.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0205" exe="case_asserts_0205.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0110" exe="case_asserts_0110.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0034" exe="case_asserts_0034.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0218" exe="case_asserts_0218.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0143" exe="case_asserts_0143.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0016" exe="case_asserts_0016.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0220" exe="case_asserts_0220.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0140" exe="case_asserts_0140.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0126" exe="case_asserts_0126.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0090" exe="case_asserts_0090.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0226" exe="case_asserts_0226.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0084" exe="case_asserts_0084.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0153" exe="case_asserts_0153.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0049" exe="case_asserts_0049.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0196" exe="case_asserts_0196.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0179" exe="case_asserts_0179.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0246" exe="case_asserts_0246.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0154" exe="case_asserts_0154.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0231" exe="case_asserts_0231.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0026" exe="case_asserts_0026.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0063" exe="case_asserts_0063.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0017" exe="case_asserts_0017.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0010" exe="case_asserts_0010.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0101" exe="case_asserts_0101.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0067" exe="case_asserts_0067.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0239" exe="case_asserts_0239.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0188" exe="case_asserts_0188.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0115" exe="case_asserts_0115.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0171" exe="case_asserts_0171.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0203" exe="case_asserts_0203.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0168" exe="case_asserts_0168.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0055" exe="case_asserts_0055.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0083" exe="case_asserts_0083.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0048" exe="case_asserts_0048.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0095" exe="case_asserts_0095.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0204" exe="case_asserts_0204.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0158" exe="case_asserts_0158.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0025" exe="case_asserts_0025.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0038" exe="case_asserts_0038.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0086" exe="case_asserts_0086.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0118" exe="case_asserts_0118.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0174" exe="case_asserts_0174.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0162" exe="case_asserts_0162.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0107" exe="case_asserts_0107.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0148" exe="case_asserts_0148.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0213" exe="case_asserts_0213.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0028" exe="case_asserts_0028.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0121" exe="case_asserts_0121.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0247" exe="case_asserts_0247.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0104" exe="case_asserts_0104.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0211" exe="case_asserts_0211.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0093" exe="case_asserts_0093.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0021" exe="case_asserts_0021.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0005" exe="case_asserts_0005.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0080" exe="case_asserts_0080.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0235" exe="case_asserts_0235.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0149" exe="case_asserts_0149.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0191" exe="case_asserts_0191.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0018" exe="case_asserts_0018.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0056" exe="case_asserts_0056.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0062" exe="case_asserts_0062.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0100" exe="case_asserts_0100.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0130" exe="case_asserts_0130.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0192" exe="case_asserts_0192.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0069" exe="case_asserts_0069.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0232" exe="case_asserts_0232.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0227" exe="case_asserts_0227.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0020" exe="case_asserts_0020.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0030" exe="case_asserts_0030.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0106" exe="case_asserts_0106.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0189" exe="case_asserts_0189.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0151" exe="case_asserts_0151.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0186" exe="case_asserts_0186.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0150" exe="case_asserts_0150.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0161" exe="case_asserts_0161.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0219" exe="case_asserts_0219.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0202" exe="case_asserts_0202.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0215" exe="case_asserts_0215.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0172" exe="case_asserts_0172.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0163" exe="case_asserts_0163.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0181" exe="case_asserts_0181.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0131" exe="case_asserts_0131.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0059" exe="case_asserts_0059.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0098" exe="case_asserts_0098.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0042" exe="case_asserts_0042.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0060" exe="case_asserts_0060.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0113" exe="case_asserts_0113.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0012" exe="case_asserts_0012.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0133" exe="case_asserts_0133.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0242" exe="case_asserts_0242.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0225" exe="case_asserts_0225.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0037" exe="case_asserts_0037.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0078" exe="case_asserts_0078.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0039" exe="case_asserts_0039.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0052" exe="case_asserts_0052.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0116" exe="case_asserts_0116.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0141" exe="case_asserts_0141.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0248" exe="case_asserts_0248.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0085" exe="case_asserts_0085.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0182" exe="case_asserts_0182.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0234" exe="case_asserts_0234.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0176" exe="case_asserts_0176.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0238" exe="case_asserts_0238.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0183" exe="case_asserts_0183.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0147" exe="case_asserts_0147.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0173" exe="case_asserts_0173.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0102" exe="case_asserts_0102.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0023" exe="case_asserts_0023.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0233" exe="case_asserts_0233.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0015" exe="case_asserts_0015.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0097" exe="case_asserts_0097.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0146" exe="case_asserts_0146.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0175" exe="case_asserts_0175.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0094" exe="case_asserts_0094.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0169" exe="case_asserts_0169.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0035" exe="case_asserts_0035.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0157" exe="case_asserts_0157.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0199" exe="case_asserts_0199.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0170" exe="case_asserts_0170.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0206" exe="case_asserts_0206.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0152" exe="case_asserts_0152.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0243" exe="case_asserts_0243.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0092" exe="case_asserts_0092.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0050" exe="case_asserts_0050.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0145" exe="case_asserts_0145.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0228" exe="case_asserts_0228.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0167" exe="case_asserts_0167.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0229" exe="case_asserts_0229.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0123" exe="case_asserts_0123.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0194" exe="case_asserts_0194.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0125" exe="case_asserts_0125.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0058" exe="case_asserts_0058.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0217" exe="case_asserts_0217.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0066" exe="case_asserts_0066.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0119" exe="case_asserts_0119.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0076" exe="case_asserts_0076.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0061" exe="case_asserts_0061.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0053" exe="case_asserts_0053.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0024" exe="case_asserts_0024.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0240" exe="case_asserts_0240.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0019" exe="case_asserts_0019.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0184" exe="case_asserts_0184.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0087" exe="case_asserts_0087.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0200" exe="case_asserts_0200.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0081" exe="case_asserts_0081.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0195" exe="case_asserts_0195.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0132" exe="case_asserts_0132.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0096" exe="case_asserts_0096.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0022" exe="case_asserts_0022.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0003" exe="case_asserts_0003.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0230" exe="case_asserts_0230.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0029" exe="case_asserts_0029.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0198" exe="case_asserts_0198.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0103" exe="case_asserts_0103.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0014" exe="case_asserts_0014.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0187" exe="case_asserts_0187.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0072" exe="case_asserts_0072.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0031" exe="case_asserts_0031.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0208" exe="case_asserts_0208.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0036" exe="case_asserts_0036.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0237" exe="case_asserts_0237.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0082" exe="case_asserts_0082.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0180" exe="case_asserts_0180.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0166" exe="case_asserts_0166.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0144" exe="case_asserts_0144.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0214" exe="case_asserts_0214.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0027" exe="case_asserts_0027.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0244" exe="case_asserts_0244.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0142" exe="case_asserts_0142.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0114" exe="case_asserts_0114.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0065" exe="case_asserts_0065.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0105" exe="case_asserts_0105.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0129" exe="case_asserts_0129.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0135" exe="case_asserts_0135.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0124" exe="case_asserts_0124.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0120" exe="case_asserts_0120.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0009" exe="case_asserts_0009.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0134" exe="case_asserts_0134.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0109" exe="case_asserts_0109.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0111" exe="case_asserts_0111.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0011" exe="case_asserts_0011.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0043" exe="case_asserts_0043.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0156" exe="case_asserts_0156.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0006" exe="case_asserts_0006.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0117" exe="case_asserts_0117.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0164" exe="case_asserts_0164.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0185" exe="case_asserts_0185.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0040" exe="case_asserts_0040.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0112" exe="case_asserts_0112.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0193" exe="case_asserts_0193.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0013" exe="case_asserts_0013.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0207" exe="case_asserts_0207.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0077" exe="case_asserts_0077.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0177" exe="case_asserts_0177.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0044" exe="case_asserts_0044.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0245" exe="case_asserts_0245.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0099" exe="case_asserts_0099.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0057" exe="case_asserts_0057.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0249" exe="case_asserts_0249.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0074" exe="case_asserts_0074.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0064" exe="case_asserts_0064.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0139" exe="case_asserts_0139.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0127" exe="case_asserts_0127.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0046" exe="case_asserts_0046.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0201" exe="case_asserts_0201.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0032" exe="case_asserts_0032.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0209" exe="case_asserts_0209.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0212" exe="case_asserts_0212.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0216" exe="case_asserts_0216.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0165" exe="case_asserts_0165.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0236" exe="case_asserts_0236.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0222" exe="case_asserts_0222.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0033" exe="case_asserts_0033.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0137" exe="case_asserts_0137.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0159" exe="case_asserts_0159.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0002" exe="case_asserts_0002.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0128" exe="case_asserts_0128.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0210" exe="case_asserts_0210.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0160" exe="case_asserts_0160.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0122" exe="case_asserts_0122.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0091" exe="case_asserts_0091.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0054" exe="case_asserts_0054.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0073" exe="case_asserts_0073.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0051" exe="case_asserts_0051.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0071" exe="case_asserts_0071.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0223" exe="case_asserts_0223.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0088" exe="case_asserts_0088.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0221" exe="case_asserts_0221.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0178" exe="case_asserts_0178.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0108" exe="case_asserts_0108.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0155" exe="case_asserts_0155.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0070" exe="case_asserts_0070.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0136" exe="case_asserts_0136.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0041" exe="case_asserts_0041.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0079" exe="case_asserts_0079.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0001" exe="case_asserts_0001.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0008" exe="case_asserts_0008.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0197" exe="case_asserts_0197.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0068" exe="case_asserts_0068.shell" >
+<command name="foo" />
+</case>
+<case name="case_asserts_0075" exe="case_asserts_0075.shell" >
+<command name="foo" />
+</case>
+</suite>
+<suite name="suite_kde_gui" dir="suite_kde_gui" >
+<case name="case_kde_gui_0215" exe="case_kde_gui_0215.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0205" exe="case_kde_gui_0205.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0082" exe="case_kde_gui_0082.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0048" exe="case_kde_gui_0048.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0002" exe="case_kde_gui_0002.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0012" exe="case_kde_gui_0012.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0214" exe="case_kde_gui_0214.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0227" exe="case_kde_gui_0227.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0039" exe="case_kde_gui_0039.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0190" exe="case_kde_gui_0190.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0015" exe="case_kde_gui_0015.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0100" exe="case_kde_gui_0100.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0050" exe="case_kde_gui_0050.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0188" exe="case_kde_gui_0188.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0208" exe="case_kde_gui_0208.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0007" exe="case_kde_gui_0007.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0020" exe="case_kde_gui_0020.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0078" exe="case_kde_gui_0078.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0041" exe="case_kde_gui_0041.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0005" exe="case_kde_gui_0005.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0132" exe="case_kde_gui_0132.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0136" exe="case_kde_gui_0136.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0108" exe="case_kde_gui_0108.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0033" exe="case_kde_gui_0033.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0096" exe="case_kde_gui_0096.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0009" exe="case_kde_gui_0009.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0202" exe="case_kde_gui_0202.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0073" exe="case_kde_gui_0073.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0147" exe="case_kde_gui_0147.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0088" exe="case_kde_gui_0088.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0248" exe="case_kde_gui_0248.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0138" exe="case_kde_gui_0138.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0124" exe="case_kde_gui_0124.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0103" exe="case_kde_gui_0103.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0244" exe="case_kde_gui_0244.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0238" exe="case_kde_gui_0238.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0120" exe="case_kde_gui_0120.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0130" exe="case_kde_gui_0130.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0217" exe="case_kde_gui_0217.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0246" exe="case_kde_gui_0246.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0126" exe="case_kde_gui_0126.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0143" exe="case_kde_gui_0143.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0024" exe="case_kde_gui_0024.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0139" exe="case_kde_gui_0139.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0095" exe="case_kde_gui_0095.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0164" exe="case_kde_gui_0164.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0177" exe="case_kde_gui_0177.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0032" exe="case_kde_gui_0032.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0131" exe="case_kde_gui_0131.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0229" exe="case_kde_gui_0229.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0144" exe="case_kde_gui_0144.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0225" exe="case_kde_gui_0225.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0211" exe="case_kde_gui_0211.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0172" exe="case_kde_gui_0172.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0195" exe="case_kde_gui_0195.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0122" exe="case_kde_gui_0122.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0040" exe="case_kde_gui_0040.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0249" exe="case_kde_gui_0249.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0194" exe="case_kde_gui_0194.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0014" exe="case_kde_gui_0014.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0115" exe="case_kde_gui_0115.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0156" exe="case_kde_gui_0156.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0189" exe="case_kde_gui_0189.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0006" exe="case_kde_gui_0006.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0180" exe="case_kde_gui_0180.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0114" exe="case_kde_gui_0114.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0093" exe="case_kde_gui_0093.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0110" exe="case_kde_gui_0110.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0230" exe="case_kde_gui_0230.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0111" exe="case_kde_gui_0111.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0017" exe="case_kde_gui_0017.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0097" exe="case_kde_gui_0097.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0066" exe="case_kde_gui_0066.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0191" exe="case_kde_gui_0191.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0056" exe="case_kde_gui_0056.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0030" exe="case_kde_gui_0030.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0153" exe="case_kde_gui_0153.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0104" exe="case_kde_gui_0104.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0171" exe="case_kde_gui_0171.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0203" exe="case_kde_gui_0203.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0224" exe="case_kde_gui_0224.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0071" exe="case_kde_gui_0071.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0004" exe="case_kde_gui_0004.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0045" exe="case_kde_gui_0045.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0057" exe="case_kde_gui_0057.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0241" exe="case_kde_gui_0241.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0196" exe="case_kde_gui_0196.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0197" exe="case_kde_gui_0197.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0090" exe="case_kde_gui_0090.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0013" exe="case_kde_gui_0013.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0047" exe="case_kde_gui_0047.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0072" exe="case_kde_gui_0072.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0109" exe="case_kde_gui_0109.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0209" exe="case_kde_gui_0209.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0051" exe="case_kde_gui_0051.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0234" exe="case_kde_gui_0234.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0068" exe="case_kde_gui_0068.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0192" exe="case_kde_gui_0192.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0106" exe="case_kde_gui_0106.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0163" exe="case_kde_gui_0163.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0123" exe="case_kde_gui_0123.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0228" exe="case_kde_gui_0228.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0204" exe="case_kde_gui_0204.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0083" exe="case_kde_gui_0083.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0019" exe="case_kde_gui_0019.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0112" exe="case_kde_gui_0112.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0069" exe="case_kde_gui_0069.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0010" exe="case_kde_gui_0010.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0101" exe="case_kde_gui_0101.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0159" exe="case_kde_gui_0159.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0060" exe="case_kde_gui_0060.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0142" exe="case_kde_gui_0142.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0193" exe="case_kde_gui_0193.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0221" exe="case_kde_gui_0221.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0087" exe="case_kde_gui_0087.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0086" exe="case_kde_gui_0086.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0001" exe="case_kde_gui_0001.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0242" exe="case_kde_gui_0242.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0141" exe="case_kde_gui_0141.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0162" exe="case_kde_gui_0162.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0092" exe="case_kde_gui_0092.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0084" exe="case_kde_gui_0084.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0148" exe="case_kde_gui_0148.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0036" exe="case_kde_gui_0036.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0218" exe="case_kde_gui_0218.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0025" exe="case_kde_gui_0025.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0105" exe="case_kde_gui_0105.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0031" exe="case_kde_gui_0031.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0023" exe="case_kde_gui_0023.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0137" exe="case_kde_gui_0137.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0149" exe="case_kde_gui_0149.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0235" exe="case_kde_gui_0235.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0154" exe="case_kde_gui_0154.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0099" exe="case_kde_gui_0099.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0065" exe="case_kde_gui_0065.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0167" exe="case_kde_gui_0167.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0067" exe="case_kde_gui_0067.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0135" exe="case_kde_gui_0135.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0119" exe="case_kde_gui_0119.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0079" exe="case_kde_gui_0079.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0118" exe="case_kde_gui_0118.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0158" exe="case_kde_gui_0158.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0042" exe="case_kde_gui_0042.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0243" exe="case_kde_gui_0243.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0150" exe="case_kde_gui_0150.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0146" exe="case_kde_gui_0146.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0046" exe="case_kde_gui_0046.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0077" exe="case_kde_gui_0077.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0219" exe="case_kde_gui_0219.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0022" exe="case_kde_gui_0022.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0113" exe="case_kde_gui_0113.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0070" exe="case_kde_gui_0070.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0245" exe="case_kde_gui_0245.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0237" exe="case_kde_gui_0237.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0107" exe="case_kde_gui_0107.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0233" exe="case_kde_gui_0233.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0151" exe="case_kde_gui_0151.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0037" exe="case_kde_gui_0037.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0152" exe="case_kde_gui_0152.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0173" exe="case_kde_gui_0173.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0011" exe="case_kde_gui_0011.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0175" exe="case_kde_gui_0175.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0232" exe="case_kde_gui_0232.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0199" exe="case_kde_gui_0199.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0098" exe="case_kde_gui_0098.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0236" exe="case_kde_gui_0236.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0127" exe="case_kde_gui_0127.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0170" exe="case_kde_gui_0170.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0026" exe="case_kde_gui_0026.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0240" exe="case_kde_gui_0240.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0206" exe="case_kde_gui_0206.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0062" exe="case_kde_gui_0062.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0174" exe="case_kde_gui_0174.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0186" exe="case_kde_gui_0186.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0231" exe="case_kde_gui_0231.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0054" exe="case_kde_gui_0054.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0222" exe="case_kde_gui_0222.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0021" exe="case_kde_gui_0021.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0028" exe="case_kde_gui_0028.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0094" exe="case_kde_gui_0094.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0038" exe="case_kde_gui_0038.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0129" exe="case_kde_gui_0129.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0043" exe="case_kde_gui_0043.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0187" exe="case_kde_gui_0187.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0226" exe="case_kde_gui_0226.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0140" exe="case_kde_gui_0140.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0102" exe="case_kde_gui_0102.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0117" exe="case_kde_gui_0117.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0089" exe="case_kde_gui_0089.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0168" exe="case_kde_gui_0168.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0059" exe="case_kde_gui_0059.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0052" exe="case_kde_gui_0052.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0198" exe="case_kde_gui_0198.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0121" exe="case_kde_gui_0121.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0166" exe="case_kde_gui_0166.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0003" exe="case_kde_gui_0003.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0207" exe="case_kde_gui_0207.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0185" exe="case_kde_gui_0185.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0055" exe="case_kde_gui_0055.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0125" exe="case_kde_gui_0125.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0239" exe="case_kde_gui_0239.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0169" exe="case_kde_gui_0169.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0220" exe="case_kde_gui_0220.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0018" exe="case_kde_gui_0018.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0165" exe="case_kde_gui_0165.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0074" exe="case_kde_gui_0074.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0212" exe="case_kde_gui_0212.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0064" exe="case_kde_gui_0064.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0081" exe="case_kde_gui_0081.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0247" exe="case_kde_gui_0247.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0223" exe="case_kde_gui_0223.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0063" exe="case_kde_gui_0063.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0182" exe="case_kde_gui_0182.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0213" exe="case_kde_gui_0213.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0085" exe="case_kde_gui_0085.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0049" exe="case_kde_gui_0049.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0178" exe="case_kde_gui_0178.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0134" exe="case_kde_gui_0134.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0216" exe="case_kde_gui_0216.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0183" exe="case_kde_gui_0183.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0133" exe="case_kde_gui_0133.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0027" exe="case_kde_gui_0027.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0035" exe="case_kde_gui_0035.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0061" exe="case_kde_gui_0061.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0200" exe="case_kde_gui_0200.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0091" exe="case_kde_gui_0091.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0044" exe="case_kde_gui_0044.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0053" exe="case_kde_gui_0053.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0181" exe="case_kde_gui_0181.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0029" exe="case_kde_gui_0029.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0016" exe="case_kde_gui_0016.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0161" exe="case_kde_gui_0161.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0080" exe="case_kde_gui_0080.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0058" exe="case_kde_gui_0058.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0008" exe="case_kde_gui_0008.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0179" exe="case_kde_gui_0179.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0145" exe="case_kde_gui_0145.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0076" exe="case_kde_gui_0076.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0034" exe="case_kde_gui_0034.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0157" exe="case_kde_gui_0157.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0128" exe="case_kde_gui_0128.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0201" exe="case_kde_gui_0201.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0116" exe="case_kde_gui_0116.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0160" exe="case_kde_gui_0160.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0184" exe="case_kde_gui_0184.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0075" exe="case_kde_gui_0075.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0155" exe="case_kde_gui_0155.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0210" exe="case_kde_gui_0210.shell" >
+<command name="foo" />
+</case>
+<case name="case_kde_gui_0176" exe="case_kde_gui_0176.shell" >
+<command name="foo" />
+</case>
+</suite>
+</root>
