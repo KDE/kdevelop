@@ -91,13 +91,9 @@ void ProjectBuildSetWidget::addItems()
 void ProjectBuildSetWidget::removeItems()
 {
     QList<int> rows;
-    foreach( QModelIndex idx, m_ui->itemView->selectionModel()->selectedIndexes() )
+    foreach( QItemSelectionRange range, m_ui->itemView->selectionModel()->selection() )
     {
-        if( !rows.contains( idx.row() ) )
-        {
-            m_view->plugin()->buildSet()->removeRows( idx.row(), 1 );
-            rows << idx.row();
-        }
+        m_view->plugin()->buildSet()->removeRows( range.top(), range.height() );
     }
 }
 
