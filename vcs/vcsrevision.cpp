@@ -25,13 +25,15 @@
 #include <QtCore/QMap>
 #include <QtCore/QDateTime>
 
+#include <kdebug.h>
+
 namespace KDevelop
 {
 
-VcsRevision VcsRevision::createSpecialRevision( VcsRevision::RevisionSpecialType _type )
+VcsRevision VcsRevision::createSpecialRevision( KDevelop::VcsRevision::RevisionSpecialType _type )
 {
     VcsRevision rev;
-    rev.setRevisionValue( qVariantFromValue<VcsRevision::RevisionSpecialType>( _type ), VcsRevision::Special );
+    rev.setRevisionValue( QVariant::fromValue<KDevelop::VcsRevision::RevisionSpecialType>( _type ), VcsRevision::Special );
     return rev;
 }
 
@@ -134,36 +136,36 @@ QString VcsRevision::prettyValue() const
         case GlobalNumber:
         case FileNumber:
             return QString::number( revisionValue().toLongLong() );
-	    break;
+            break;
         case Special:
-	    switch( revisionValue().toInt() )
-	    {
-                case Head:
+            switch( revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>(  ) )
+            {
+                case VcsRevision::Head:
                     return "Head";
                     break;
-                case Base:
+                case VcsRevision::Base:
                     return "Base";
                     break;
-                case Working:
+                case VcsRevision::Working:
                     return "Working";
                     break;
-                case Previous:
+                case VcsRevision::Previous:
                     return "Previous";
                     break;
-                case Start:
+                case VcsRevision::Start:
                     return "Start";
                     break;
-		default:
+                default:
                     return "User";
                     break;
-	    }
-	    break;
+            }
+            break;
         case Date:
             return revisionValue().toDateTime().toString( Qt::LocalDate );
-	    break;
+            break;
         default:
-	    return revisionValue().toString();
-	    break;
+            return revisionValue().toString();
+            break;
     }
 }
 
