@@ -300,10 +300,10 @@ svn::Revision SvnInternalJobBase::createSvnCppRevisionFromVcsRevision( const KDe
     {
         case KDevelop::VcsRevision::Special:
         {
-            if( qVariantCanConvert<KDevelop::VcsRevision::RevisionSpecialType>(value) )
+            if( value.canConvert<KDevelop::VcsRevision::RevisionSpecialType>() )
             {
                 KDevelop::VcsRevision::RevisionSpecialType specialtype =
-                        qVariantValue<KDevelop::VcsRevision::RevisionSpecialType>(value);
+                        value.value<KDevelop::VcsRevision::RevisionSpecialType>();
                 switch( specialtype )
                 {
                     case KDevelop::VcsRevision::Head:
