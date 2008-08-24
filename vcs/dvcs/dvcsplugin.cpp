@@ -520,9 +520,14 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
     DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
     KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
+    if( !curProject )
+    {
+        kDebug() << "couldn't find project for url:" << checkoutJob->getDirectory();
+        return;
+    }
     KUrl projectFile = curProject->projectFileUrl();
-    qDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
-    qDebug() << "Project will be closed and open";
+    kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    kDebug() << "Project will be closed and open";
     core()->projectController()->closeProject(curProject);
     core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
