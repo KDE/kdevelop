@@ -394,6 +394,7 @@ QString TextDocument::textWord() const
 
     if (view) {
         KTextEditor::Cursor start = view->cursorPosition();
+        kDebug() << "got start position from view:" << start.line() << start.column();
         QString linestr = textLine();
         int startPos = qMax( qMin( start.column(), linestr.length() - 1 ), 0 );
         int endPos = startPos;
@@ -403,12 +404,15 @@ QString TextDocument::textWord() const
             --startPos;
         }
 
-        while( endPos >= 0 && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' || linestr[endPos] == '~' ) )
+        while( endPos < linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' || linestr[endPos] == '~' ) )
         {
-            --endPos;
+            ++endPos;
         }
         if( startPos != endPos )
+        {
+            kDebug() << "found word" << startPos << endPos << linestr.mid( startPos+1, endPos - startPos - 1 );
             return linestr.mid( startPos + 1, endPos - startPos - 1 );
+        }
     }
 
     return PartDocument::textWord();
