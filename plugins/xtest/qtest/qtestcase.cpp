@@ -156,6 +156,12 @@ void QTestCase::setUpProcSignals()
 //             this, SIGNAL(executionFinished()));
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
            this, SLOT(morphXmlToText()));
+    connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
+}
+
+void QTestCase::closeOutputFile()
+{
+    if (m_output) m_output->close();
 }
 
 void QTestCase::morphXmlToText()
@@ -170,6 +176,8 @@ void QTestCase::morphXmlToText()
     m.setTarget(&out);
     m.xmlToText();
     emit executionFinished();
+    in.close();
+    out.close();
 }
 
 // helper for run()

@@ -86,6 +86,7 @@ private:
 
 private slots:
     void morphXmlToText();
+    void closeOutputFile();
 
 private:
     QFileInfo m_exe;           // qtest-exe location

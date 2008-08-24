@@ -169,6 +169,9 @@ void QTestOutputParser::iterateTestFunctions()
             processTestFunction();
             if (m_state != Main) return;
         }
+        if (isEndElement_("TestCase")) {
+            emit done();
+        }
     }
     //kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }

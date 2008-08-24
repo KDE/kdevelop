@@ -227,11 +227,13 @@ void QTestOutputParserTest::parse()
     QFETCH(QString, message);
     createTestCommand(m_command1Info, m_caze, "someCommand");
     setExpectedResult(m_command1Info, state, file.filePath(), line, message);
+    QSignalSpy spy(m_parser, SIGNAL(done()));
 
     m_parser->go();
 
     assertParsed(m_command1Info);
     checkResult(m_command1Info);
+    KOMPARE(1, spy.count());
 }
 
 // test data implementation

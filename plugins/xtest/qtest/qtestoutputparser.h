@@ -53,6 +53,9 @@ public:
      *  Before reusing this object. */
     void reset();
 
+signals:
+    void done();
+
 public slots:
     /*! Start parsing the output of a testcase.
      *  Emit signals for each command being started/finished.
