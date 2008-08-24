@@ -149,6 +149,20 @@ public:
     virtual void setTextSelection(const KTextEditor::Range &range) = 0;
 
     /**
+     * Retrieve the current text line, if one exists.
+     *
+     * @returns the current text line
+     */
+    virtual QString textLine() const;
+
+    /**
+     * Retrieve the current text word, if one exists.
+     *
+     * @returns the current text word
+     */
+    virtual QString textWord() const;
+
+    /**
      * Performs document activation actions if any.
      * This needs to call notifyActivated()
      */

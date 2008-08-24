@@ -99,6 +99,16 @@ KTextEditor::Range IDocument::textSelection() const
     return KTextEditor::Range::invalid();
 }
 
+QString IDocument::textLine() const
+{
+    return QString();
+}
+
+QString IDocument::textWord() const
+{
+    return QString();
+}
+
 void IDocument::notifyUrlChanged()
 {
     emit core()->documentController()->documentUrlChanged(this);

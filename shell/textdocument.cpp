@@ -377,6 +377,43 @@ KTextEditor::Range TextDocument::textSelection() const
     return PartDocument::textSelection();
 }
 
+QString TextDocument::textLine() const
+{
+    KTextEditor::View *view = d->document->activeView();
+
+    if (view) {
+        return d->document->line( view->cursorPosition().line() );
+    }
+
+    return PartDocument::textLine();
+}
+
+QString TextDocument::textWord() const
+{
+    KTextEditor::View *view = d->document->activeView();
+
+    if (view) {
+        KTextEditor::Cursor start = view->cursorPosition();
+        QString linestr = textLine();
+        int startPos = qMax( qMin( start.column(), linestr.length() - 1 ), 0 );
+        int endPos = startPos;
+        startPos --;
+        while( startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~' ) )
+        {
+            --startPos;
+        }
+
+        while( endPos >= 0 && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' || linestr[endPos] == '~' ) )
+        {
+            --endPos;
+        }
+        if( startPos != endPos )
+            return linestr.mid( startPos + 1, endPos - startPos - 1 );
+    }
+
+    return PartDocument::textWord();
+}
+
 void TextDocument::setTextSelection(const KTextEditor::Range &range)
 {
     if (!range.isValid())

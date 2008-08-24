@@ -57,6 +57,9 @@ public:
     virtual KTextEditor::Range textSelection() const;
     virtual void setTextSelection(const KTextEditor::Range &range);
 
+    virtual QString textLine() const;
+    virtual QString textWord() const;
+
     virtual bool isTextDocument() const;
     virtual KTextEditor::Document* textDocument() const;
 
