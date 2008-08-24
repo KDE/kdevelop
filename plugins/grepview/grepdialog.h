@@ -46,15 +46,11 @@ public:
     bool noFindErrorsFlag() const;
     bool caseSensitiveFlag() const;
 
-    void showEvent(QShowEvent*);
-
-Q_SIGNALS:
-    void search();
 private Q_SLOTS:
+    void search();
     void templateTypeComboActivated(int);
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
-    void slotHidden();
 
 private:
     GrepViewPlugin * m_plugin;

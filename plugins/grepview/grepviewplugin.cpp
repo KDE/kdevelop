@@ -40,26 +40,19 @@
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 
-#include "grepjob.h"
-
-using namespace KDevelop;
-
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory("kdevgrepview"))
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )
-    , m_projectForActiveFile(0), m_delegate(new GrepOutputDelegate(this))
 {
     setXMLFile("kdevgrepview.rc");
 
-    m_grepdlg = new GrepDialog( this );
-    connect( m_grepdlg, SIGNAL(search()), this, SLOT(searchActivated()) );
 
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find in Fi&les..."));
-    action->setShortcut( QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F) );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotGrep()));
+    action->setShortcut( i18n("Ctrl+Alt+f") );
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("<b>Find in files</b><p>"
             "Opens the 'Find in files' dialog. There you "
@@ -72,23 +65,28 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
 GrepViewPlugin::~GrepViewPlugin()
 {
-    delete m_grepdlg;
 }
 
-void GrepViewPlugin::slotGrep()
+void GrepViewPlugin::showDialog()
 {
-    QString contextString = currentSelectedWord();
-    if( contextString.isEmpty() )
-        contextString = currentWord();
-    showDialogWithPattern( contextString );
+    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+    QString context;
+    if( doc )
+    {
+        KTextEditor::Range range = doc->textSelection();
+        if( range.isValid() )
+        {
+            context = doc->textDocument()->text( range );
+        } else
+        {
+            context = doc->textWord();
+        }
+    }
 
-}
-
-void GrepViewPlugin::showDialogWithPattern(const QString& p)
-{
+    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     // Before anything, this removes line feeds from the
     // beginning and the end.
-    QString pattern = p;
+    QString pattern = context;
     int len = pattern.length();
     if (len > 0 && pattern[0] == '\n')
     {
@@ -97,9 +95,9 @@ void GrepViewPlugin::showDialogWithPattern(const QString& p)
     }
     if (len > 0 && pattern[len-1] == '\n')
         pattern.truncate(len-1);
-    m_grepdlg->setPattern( pattern );
+    dlg->setPattern( pattern );
 
-    m_grepdlg->enableButtonOk( !pattern.isEmpty() );
+    dlg->enableButtonOk( !pattern.isEmpty() );
 
     KUrl currentUrl;
     KDevelop::IDocument *document = core()->documentController()->activeDocument();
@@ -111,90 +109,18 @@ void GrepViewPlugin::showDialogWithPattern(const QString& p)
     {
         KDevelop::IProject *proj =
                 core()->projectController()->findProjectForUrl( currentUrl );
-        if( proj )
+        if( proj && proj->folder().isLocalFile() )
         {
-            m_grepdlg->setEnableProjectBox(! proj->files().isEmpty() );
-            m_projectForActiveFile = proj;
+            dlg->setEnableProjectBox(! proj->files().isEmpty() );
+            dlg->setDirectory( proj->folder().path() );
         }
         else
         {
-            m_grepdlg->setEnableProjectBox(false);
+            dlg->setEnableProjectBox(false);
         }
     }
 
-    m_grepdlg->show();
-}
-
-void GrepViewPlugin::searchActivated()
-{
-    GrepJob* job = new GrepJob(this);
-    
-    job->setPatternString(m_grepdlg->patternString());
-    job->templateString = m_grepdlg->templateString();
-    job->filesString = m_grepdlg->filesString();
-    job->excludeString = m_grepdlg->excludeString();
-    job->directory = m_grepdlg->directory();
-
-    job->useProjectFilesFlag = m_grepdlg->useProjectFilesFlag();
-    job->regexpFlag = m_grepdlg->regexpFlag();
-    job->recursiveFlag = m_grepdlg->recursiveFlag();
-    job->noFindErrorsFlag = m_grepdlg->noFindErrorsFlag();
-    job->caseSensitiveFlag = m_grepdlg->caseSensitiveFlag();
-
-    job->project = m_projectForActiveFile;
-    
-    ICore::self()->runController()->registerJob(job);
-}
-
-// from kdeveditorutil.cpp in kdev3.4, plus porting
-QString GrepViewPlugin::currentWord()
-{
-    KDevelop::IDocument *doc =
-             core()->documentController()->activeDocument();
-
-    if( !doc ) return QString();
-
-    KTextEditor::Document* ktedoc = doc->textDocument();
-
-    if( !ktedoc ) return QString();
-
-    KTextEditor::View *view = ktedoc->activeView();
-    if( !view ) return QString();
-
-    KTextEditor::Cursor cursor = view->cursorPositionVirtual();
-    int line = cursor.line();
-    int col  = cursor.column();
-    QString linestr = ktedoc->line(line);
-
-    int startPos = qMax( qMin( col, linestr.length()-1 ), 0 );
-    int endPos = startPos;
-    while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
-        startPos--;
-    while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
-        endPos++;
-
-    return ( ( startPos == endPos ) ? QString() : linestr.mid( startPos+1, endPos-startPos-1 ) );
-}
-
-QString GrepViewPlugin::currentSelectedWord()
-{
-    KDevelop::IDocument *doc =
-             core()->documentController()->activeDocument();
-
-    if( !doc ) return QString();
-
-    KTextEditor::Document* ktedoc = doc->textDocument();
-
-    if( !ktedoc ) return QString();
-
-    KTextEditor::View *view = ktedoc->activeView();
-    if( !view ) return QString();
-    return view->selectionText();
-}
-
-GrepOutputDelegate* GrepViewPlugin::delegate() const
-{
-    return m_delegate;
+    dlg->show();
 }
 
 #include "grepviewplugin.moc"

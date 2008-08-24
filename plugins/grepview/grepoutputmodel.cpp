@@ -108,10 +108,14 @@ QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex& currentIndex
         ++nextRow;
 
         if (nextRow >= rows)
+        {
             if (currentIndex.row() == -1)
+            {
                 break;
-            else
+            } else {
                 nextRow = 0;
+            }
+        }
     }
 
     return QModelIndex();

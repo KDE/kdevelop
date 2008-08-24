@@ -15,15 +15,6 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
-class GrepDialog;
-
-namespace KDevelop
-{
-    class IProject;
-}
-
-class GrepOutputDelegate;
-
 class GrepViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
@@ -32,21 +23,8 @@ public:
     GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPlugin();
 
-    GrepOutputDelegate* delegate() const;
-
 private Q_SLOTS:
-    void slotGrep();
-    void showDialogWithPattern(const QString& pattern);
-    void searchActivated();
-
-private:
-    QString currentWord();
-    QString currentSelectedWord();
-
-    GrepDialog* m_grepdlg;
-
-    KDevelop::IProject *m_projectForActiveFile;
-    GrepOutputDelegate* m_delegate;
+    void showDialog();
 };
 
 #endif

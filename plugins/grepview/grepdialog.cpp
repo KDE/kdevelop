@@ -11,11 +11,6 @@
 ***************************************************************************/
 
 #include "grepdialog.h"
-#include "grepviewplugin.h"
-#include <interfaces/icore.h>
-#include <interfaces/idocument.h>
-#include <interfaces/idocumentcontroller.h>
-#include <kglobal.h>
 
 #include <QDir>
 #include <QLabel>
@@ -25,6 +20,7 @@
 
 #include <kfiledialog.h>
 #include <kpushbutton.h>
+#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -33,6 +29,14 @@
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlrequester.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
+
+#include "grepviewplugin.h"
+#include "grepjob.h"
 
 QStringList __template_desc = QStringList()
     << "verbatim"
@@ -91,13 +95,8 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    //directoryRequester->comboBox()->setEditable( true );
-    //directoryRequester->comboBox()->addItems(cg.readPathEntry("LastSearchPaths", QStringList()));
     directoryRequester->setPath( QDir::homePath() );
     directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
-    //directoryRequester->completionObject()->setDir( QDir::homePath() );
-    //directoryRequester->completionObject()->setMode(KUrlCompletion::DirCompletion);
-    //directoryRequester->completionObject()->setCompletionMode(KGlobalSettings::CompletionAuto);
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
@@ -110,14 +109,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
 
-    connect(this, SIGNAL(hidden()), this, SLOT(slotHidden()));
-    connect(this, SIGNAL(okClicked()), this, SIGNAL(search()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(search()));
     connect(syncButton, SIGNAL(clicked()), this, SLOT(syncButtonClicked()));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(patternComboEditTextChanged( const QString& )));
     patternComboEditTextChanged( patternCombo->currentText() );
+    patternCombo->setFocus();
 }
 
 // Returns the contents of a QComboBox as a QStringList
@@ -150,17 +149,6 @@ GrepDialog::~GrepDialog()
 void GrepDialog::templateTypeComboActivated(int index)
 {
     templateEdit->setText(__template_str[index]);
-}
-
-void GrepDialog::showEvent(QShowEvent* ev)
-{
-    KDialog::showEvent(ev);
-    patternCombo->setFocus();
-}
-
-void GrepDialog::slotHidden()
-{
-    patternCombo->setFocus();
 }
 
 void GrepDialog::syncButtonClicked( )
@@ -249,6 +237,27 @@ bool GrepDialog::caseSensitiveFlag() const
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
     enableButtonOk( !text.isEmpty() );
+}
+
+void GrepDialog::search()
+{
+
+    GrepJob* job = new GrepJob(this);
+
+    job->setPatternString(patternString());
+    job->templateString = templateString();
+    job->filesString = filesString();
+    job->excludeString = excludeString();
+    job->directory = directory();
+
+    job->useProjectFilesFlag = useProjectFilesFlag();
+    job->regexpFlag = regexpFlag();
+    job->recursiveFlag = recursiveFlag();
+    job->noFindErrorsFlag = noFindErrorsFlag();
+    job->caseSensitiveFlag = caseSensitiveFlag();
+
+    KDevelop::ICore::self()->runController()->registerJob(job);
+    deleteLater();
 }
 
 #include "grepdialog.moc"

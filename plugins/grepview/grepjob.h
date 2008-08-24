@@ -26,7 +26,6 @@ namespace KDevelop
 
 class GrepOutputModel;
 class GrepOutputDelegate;
-class GrepViewPlugin;
 class KProcess;
 
 class GrepJob : public KDevelop::OutputJob
@@ -38,7 +37,7 @@ public:
         TemporaryFileError = UserDefinedError
     };
 
-    GrepJob( GrepViewPlugin *parent );
+    GrepJob( QObject *parent );
 
     QString patternString() const;
     void setPatternString(const QString& patternString);
@@ -69,7 +68,6 @@ private Q_SLOTS:
 
 private:
     static QString escape(const QString &str);
-    GrepViewPlugin* plugin() const;
 
     KDevelop::ProcessLineMaker* m_lineMaker;
     QList<KProcess*> m_processes;

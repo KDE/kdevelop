@@ -26,16 +26,16 @@
 #include <ktemporaryfile.h>
 
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
 #include <project/projectmodel.h>
 #include <util/processlinemaker.h>
 
-#include "grepviewplugin.h"
 #include "grepoutputdelegate.h"
 
-using namespace KDevelop;
 
-GrepJob::GrepJob( GrepViewPlugin* parent )
-    : OutputJob( parent )
+GrepJob::GrepJob( QObject* parent )
+    : KDevelop::OutputJob( parent )
 {
     setCapabilities(Killable);
 }
@@ -63,6 +63,10 @@ void GrepJob::start()
     KTemporaryFile* tempFile = 0;
     if (useProjectFilesFlag)
     {
+        if( !project )
+        {
+            project = KDevelop::ICore::self()->projectController()->findProjectForUrl( directory );
+        }
         if (project)
         {
             tempFile = new KTemporaryFile();
@@ -224,11 +228,11 @@ void GrepJob::start()
     setTitle(patternString());
     setBehaviours( KDevelop::IOutputView::AllowUserClose );
 
-    GrepOutputModel* grepModel = new GrepOutputModel(plugin());
+    GrepOutputModel* grepModel = new GrepOutputModel(this);
     grepModel->setRegExp(pattern);
 
     setModel(grepModel, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(plugin()->delegate());
+    setDelegate(new GrepOutputDelegate(this));
     startOutput();
 
     m_lineMaker = new KDevelop::ProcessLineMaker( xargsProc );
@@ -238,9 +242,9 @@ void GrepJob::start()
         connect( xargsProc, SIGNAL(destroyed(QObject*)), tempFile, SLOT(deleteLater()) );
 
     connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             model(), SLOT(appendOutputs(const QStringList&)) );
+             grepModel, SLOT(appendOutputs(const QStringList&)) );
     connect( m_lineMaker, SIGNAL(receivedStderrLines( const QStringList& )),
-             model(), SLOT(appendErrors(const QStringList&)) );
+             grepModel, SLOT(appendErrors(const QStringList&)) );
     connect( xargsProc, SIGNAL(finished(int, QProcess::ExitStatus)),
              this, SLOT(slotFinished()) );
     connect( xargsProc, SIGNAL(error( QProcess::ProcessError )),
@@ -253,7 +257,7 @@ void GrepJob::start()
         printCmd += _proc->program().join(" ") + " | ";
     }
     printCmd.chop(3); // chop last '|'
-    model()->appendRow( new QStandardItem(printCmd) );
+    grepModel->appendRow( new QStandardItem(printCmd) );
 
     // start processes
     foreach( KProcess *_proc, validProcs )
@@ -320,11 +324,6 @@ void GrepJob::slotError(QProcess::ProcessError error)
     }
 
     emitResult();
-}
-
-GrepViewPlugin* GrepJob::plugin() const
-{
-    return const_cast<GrepViewPlugin*>(static_cast<const GrepViewPlugin*>(parent()));
 }
 
 GrepOutputModel* GrepJob::model() const
