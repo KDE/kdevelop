@@ -107,7 +107,7 @@ void ProxySelectionModel::forwardChangeCurrent( const QModelIndex& current, cons
     if( doingUpdate )
         return;
     doingUpdate = true;
-    selectionModel->setCurrentIndex( current, selectionFlags() );
+    selectionModel->setCurrentIndex( proxyModel->mapToSource( current ), selectionFlags() );
     doingUpdate = false;
 }
 
@@ -116,7 +116,7 @@ void ProxySelectionModel::forwardChangeCurrentColumn( const QModelIndex& current
     if( doingUpdate )
         return;
     doingUpdate = true;
-    selectionModel->setCurrentIndex( current, selectionFlags() );
+    selectionModel->setCurrentIndex( proxyModel->mapToSource( current ), selectionFlags() );
     doingUpdate = false;
 }
 
@@ -125,7 +125,7 @@ void ProxySelectionModel::forwardChangeCurrentRow( const QModelIndex& current, c
     if( doingUpdate )
         return;
     doingUpdate = true;
-    selectionModel->setCurrentIndex( current, selectionFlags() );
+    selectionModel->setCurrentIndex( proxyModel->mapToSource( current ), selectionFlags() );
     doingUpdate = false;
 }
 
@@ -134,8 +134,8 @@ void ProxySelectionModel::forwardChangeSelection( const QItemSelection& selected
     if( doingUpdate )
         return;
     doingUpdate = true;
-    selectionModel->select( selected, QItemSelectionModel::Select );
-    selectionModel->select( deselected, QItemSelectionModel::Deselect );
+    selectionModel->select( proxyModel->mapSelectionToSource( selected ), QItemSelectionModel::Select );
+    selectionModel->select( proxyModel->mapSelectionToSource( deselected ), QItemSelectionModel::Deselect );
     doingUpdate = false;
 }
 
