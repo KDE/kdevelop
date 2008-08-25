@@ -310,14 +310,7 @@ KDevelop::VcsImportMetadataWidget*
 
 const KUrl DistributedVersionControlPlugin::urlFocusedDocument() const
 {
-    KParts::ReadOnlyPart *plugin =
-            dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
-    if ( plugin ) {
-        if (plugin->url().isLocalFile() ) {
-            return plugin->url();
-        }
-    }
-    return KUrl();
+    return d->m_ctxUrlList.first();
 }
 
 KDevelop::ContextMenuExtension
@@ -526,7 +519,7 @@ void DistributedVersionControlPlugin::ctxStatus()
 
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
-    KUrl url = d->m_ctxUrlList.first();
+    KUrl url = urlFocusedDocument();
     kDebug() << "url is: " << url.path();
     CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
 
