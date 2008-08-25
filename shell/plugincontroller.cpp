@@ -190,10 +190,6 @@ void PluginController::unloadPlugin( const QString & pluginId )
 void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
     plugin->unload();
-    if (deletion == Later)
-        plugin->deleteLater();
-    else
-        delete plugin;
 
     //Remove the plugin from our list of plugins so we create a new
     //instance when we're asked for it again.
@@ -210,6 +206,11 @@ void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
             break;
         }
     }
+
+    if (deletion == Later)
+        plugin->deleteLater();
+    else
+        delete plugin;
 }
 
 KUrl::List PluginController::profileResources( const QString &nameFilter )
