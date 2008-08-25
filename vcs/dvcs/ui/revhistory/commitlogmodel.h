@@ -18,41 +18,47 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "bzrplugin.h"
+#ifndef COMMIT_MODEL_H
+#define COMMIT_MODEL_H
 
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <klocalizedstring.h>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QList>
+#include <QtCore/QStringList>
 
-#include <interfaces/icore.h>
+#include "../../idvcsexecutor.h"
 
-#include <vcs/dvcs/dvcsjob.h>
+// namespace KDevelop
+// {
+//     class VcsRevision;
+// }
 
-#include "bzrexecutor.h"
+class QStringList;
 
-K_PLUGIN_FACTORY(KDevBzrFactory, registerPlugin<BzrPlugin>(); )
-K_EXPORT_PLUGIN(KDevBzrFactory("kdevbzr"))
-
-BzrPlugin::BzrPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, KDevBzrFactory::componentData())
+class CommitLogModel : public QAbstractItemModel
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
+    Q_OBJECT
 
-    core()->uiController()->addToolView(i18n("Bazaar"), DistributedVersionControlPlugin::d->m_factory);
+public:
+    CommitLogModel(const QList<DVCScommit> revisions, QObject* parent = 0);
+    ~CommitLogModel() {};
 
-    QString EasterEgg = i18n("It is easier to change the specification to fit the program than vice versa. It means it easier to use git than make a good DVCS from Bzr ;)");
-    Q_UNUSED(EasterEgg)
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex& index) const;
+    QVariant headerData(int s, Qt::Orientation o, int role = Qt::DisplayRole) const;
+    QModelIndex index(int r, int c, const QModelIndex& par = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex& index) const;
+    int rowCount(const QModelIndex& par = QModelIndex()) const;
+    int columnCount(const QModelIndex&) const;
+    int branchCount(const int i)const {return branchCnt;}
+    QList<int>getProperties(const int i)const {return revs[i].getProperties();}
 
-    setXMLFile("kdevbzr.rc");
-    setupActions();
+private:
+    QStringList headerInfo;
+    QList<DVCScommit> revs;
 
-    DistributedVersionControlPlugin::d->m_exec = new BzrExecutor(this);
-}
+    int rowCnt;
+    int branchCnt;
+};
 
-BzrPlugin::~BzrPlugin()
-{
-    delete DistributedVersionControlPlugin::d;
-}
 
-// #include "gitplugin.moc"
+#endif

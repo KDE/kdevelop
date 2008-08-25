@@ -18,41 +18,54 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "bzrplugin.h"
+#ifndef COMMIT_VIEW_H
+#define COMMIT_VIEW_H
 
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <klocalizedstring.h>
+#include <QtGui/QTreeView>
+#include <QtGui/QItemDelegate>
 
-#include <interfaces/icore.h>
+enum ViewColumns {
+    GRAPH_COLUMN = 0,
+    SLOG_COLUMN = 1,
+    AUTHOR_COLUMN = 2,
+    DATE_COLUMN = 3
+};
 
-#include <vcs/dvcs/dvcsjob.h>
-
-#include "bzrexecutor.h"
-
-K_PLUGIN_FACTORY(KDevBzrFactory, registerPlugin<BzrPlugin>(); )
-K_EXPORT_PLUGIN(KDevBzrFactory("kdevbzr"))
-
-BzrPlugin::BzrPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, KDevBzrFactory::componentData())
+class CommitView : public QTreeView
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
+    Q_OBJECT
+public:
+    CommitView(QWidget *parent = 0);
+    ~CommitView() {};
+//     void setLineHeight(int h) { lineHeight = h; }
+    int getLineHeight(const QModelIndex & index) {return rowHeight(index);}
+private:
+//     int lineHeight;
+};
 
-    core()->uiController()->addToolView(i18n("Bazaar"), DistributedVersionControlPlugin::d->m_factory);
+class CommitViewDelegate : public QItemDelegate {
+    Q_OBJECT
+public:
+    CommitViewDelegate(CommitView* _view, QObject* parent);
 
-    QString EasterEgg = i18n("It is easier to change the specification to fit the program than vice versa. It means it easier to use git than make a good DVCS from Bzr ;)");
-    Q_UNUSED(EasterEgg)
+    void paint(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex &i) const;
 
-    setXMLFile("kdevbzr.rc");
-    setupActions();
+private:
+    void paintGraph(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex &i) const;
+    void paintGraphLane(QPainter* p, int type, int x1, int x2, const int height, const QColor& col, const QBrush& back) const;
 
-    DistributedVersionControlPlugin::d->m_exec = new BzrExecutor(this);
-}
+private:
+    CommitView* view;
 
-BzrPlugin::~BzrPlugin()
-{
-    delete DistributedVersionControlPlugin::d;
-}
+};
 
-// #include "gitplugin.moc"
+
+
+
+
+
+
+
+
+
+#endif

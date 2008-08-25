@@ -189,9 +189,8 @@ void BranchManager::checkoutBranch()
     DVCSjob *branchJob = d->checkout(repo, baseBranch);
     if (branchJob)
     {
-        kDebug() << "Checkouting to" << baseBranch;
-        if (branchJob->exec())
-            emit checkouted(branchJob);
+        //we don't run here, because we have to save all unsaved files (reload proj), checkout and then reload again
+        emit checkouted(branchJob);
     }
     close();
 }

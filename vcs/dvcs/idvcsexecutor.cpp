@@ -154,3 +154,8 @@ DVCSjob* IDVCSexecutor::reset(const QString &repository, const QStringList &args
     return empty_cmd();
 }
 
+QList<DVCScommit> IDVCSexecutor::getAllCommits(const QString &repo)
+{
+    Q_UNUSED(repo)
+    return QList<DVCScommit>();
+}

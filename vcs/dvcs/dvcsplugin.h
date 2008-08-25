@@ -50,6 +50,13 @@ namespace KDevelop
 class VcsJob;
 class ContextMenuExtension;
 
+/**
+ * DistributedVersionControlPlugin is a base class for git/hg/bzr plugins. This class implements
+ * KDevelop::IBasicVersionControl, KDevelop::IDistributedVersionControl and KDevelop::IPlugin (contextMenuExtension).
+ * DistributedVersionControlPlugin class uses IDVCSexecutor to get all jobs
+ * from real DVCS plugins like Git. It is based on KDevelop's CVS plugin (also looks like svn plugin is it's relative too).
+ * @note Create only special items in contextMenuExtension, all standart menu items are created in vcscommon plugin!
+ */
 class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
 {
     Q_OBJECT
@@ -115,10 +122,16 @@ public:
                                const QString &repo);
     // End:  KDevelop::IDistributedVersionControl
 
+    /** Returns pointer to IDVCSexecutor used in DistributedVersionControlPlugin */
     IDVCSexecutor* proxy();
+
+    /** Used in KDevelop's appwizardplugin (creates import widget) */
     virtual VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
 
     // From KDevelop::IPlugin
+    /** Creates context menu
+     * @note Create only special items here (like checkout), all standart menu items are created in vcscommon plugin!
+     */
     virtual ContextMenuExtension contextMenuExtension(Context*);
 
 public Q_SLOTS:
@@ -129,10 +142,14 @@ public Q_SLOTS:
     void ctxCheckout();
     void ctxLog();
     void ctxStatus();
+    void ctxRevHistory();
 
     // slots for menu
     void slotInit();
 
+    /**
+     * Updates project state after checkout (simply reloads it now)
+     */
     void checkoutFinished(KJob*);
 
 Q_SIGNALS:

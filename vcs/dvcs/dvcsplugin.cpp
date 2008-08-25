@@ -60,6 +60,8 @@
 #include "ui/logview.h"
 #include "ui/branchmanager.h"
 #include "ui/commitmanager.h"
+#include "ui/revhistory/commitlogmodel.h"
+#include "ui/revhistory/commitView.h"
 
 using KDevelop::DistributedVersionControlPlugin;
 
@@ -68,6 +70,8 @@ using KDevelop::DistributedVersionControlPlugin;
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
     :IPlugin(compData, parent), d(new DistributedVersionControlPluginPrivate())
 {
+    QString EasterEgg = i18n("Horses are forbidden to eat fire hydrants in Marshalltown, Iowa.");
+    Q_UNUSED(EasterEgg)
     d->m_factory = new KDevDVCSViewFactory(this);
 }
 
@@ -393,6 +397,10 @@ KDevelop::ContextMenuExtension
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
         menu->addAction( action );
 
+        action = new KAction(i18n("Revision History"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()) );
+        menu->addAction( action );
+
 //         action = new KAction(i18n("Status"), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
 //         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
@@ -516,20 +524,44 @@ void DistributedVersionControlPlugin::ctxStatus()
     }
 }
 
+void DistributedVersionControlPlugin::ctxRevHistory()
+{
+    KUrl url = d->m_ctxUrlList.first();
+    kDebug() << "url is: " << url.path();
+    CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
+
+    CommitView *revTree = new CommitView;
+    revTree->setModel(model);
+    emit addNewTabToMainView(revTree, i18n("Revision History") );
+}
+
 void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
     DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
+
+    kDebug() << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
     KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
+
     if( !curProject )
     {
         kDebug() << "couldn't find project for url:" << checkoutJob->getDirectory();
         return;
     }
     KUrl projectFile = curProject->projectFileUrl();
+
+    core()->projectController()->closeProject(curProject); //let's ask to save all files!
+
+    if (!checkoutJob->exec())
+        kDebug() << "CHECKOUT PROBLEM!";
+
     kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
     kDebug() << "Project will be closed and open";
-    core()->projectController()->closeProject(curProject);
-    core()->projectController()->openProject(projectFile);
+    if(!core()->projectController()->openProject(projectFile))
+    {
+        KMessageBox::sorry( 0,
+                            i18n( "Could not open project %1.",
+                                  projectFile.path() ) );
+    }
 //  maybe  IProject::reloadModel?
 //     emit jobFinished(_checkoutJob); //couses crash!
 }
