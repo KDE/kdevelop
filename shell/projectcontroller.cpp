@@ -461,7 +461,7 @@ bool ProjectController::closeProject(IProject* proj)
     d->m_projects.removeAll(proj);
     if (d->m_projects.isEmpty())
     {
-        d->m_projectPart = 0; //makes loadProjectPart() to load plugins
+        d->m_projectPart = 0; //make sure we reload the project treeview
         initializePluginCleanup(proj);
     }
     emit projectClosed(proj);
