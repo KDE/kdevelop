@@ -50,7 +50,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     Q_UNUSED(EasterEgg)
 
     setXMLFile("kdevgit.rc");
-    setupActions();
 
     DistributedVersionControlPlugin::d->m_exec = new GitExecutor(this);
 }
