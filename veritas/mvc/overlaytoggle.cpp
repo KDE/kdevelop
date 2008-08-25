@@ -19,6 +19,8 @@
  */
 
 #include "overlaytoggle.h"
+#include <QTimeLine>
+#include <KGlobalSettings>
 
 using Veritas::OverlayButton;
 
@@ -36,6 +38,53 @@ void OverlayButton::reset()
 {
     m_index = QModelIndex();
     hide();
+}
+
+
+void OverlayButton::setVisible(bool visible)
+{
+    QAbstractButton::setVisible(visible);
+
+    stopFading();
+    if (visible) {
+        startFading();
+    }
+
+}
+
+void OverlayButton::setFadingValue(int value)
+{
+    m_fadingValue = value;
+    if (m_fadingValue >= 255) {
+        Q_ASSERT(m_fadingTimeLine != 0);
+        m_fadingTimeLine->stop();
+    }
+    update();
+}
+
+void OverlayButton::startFading()
+{
+    Q_ASSERT(m_fadingTimeLine == 0);
+
+    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+    const int duration = animate ? 600 : 1;
+
+    m_fadingTimeLine = new QTimeLine(duration, this);
+    connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
+            this, SLOT(setFadingValue(int)));
+    m_fadingTimeLine->setFrameRange(0, 255);
+    m_fadingTimeLine->start();
+    m_fadingValue = 0;
+}
+
+void OverlayButton::stopFading()
+{
+    if (m_fadingTimeLine != 0) {
+        m_fadingTimeLine->stop();
+        delete m_fadingTimeLine;
+        m_fadingTimeLine = 0;
+    }
+    m_fadingValue = 0;
 }
 
 #include "overlaytoggle.moc"

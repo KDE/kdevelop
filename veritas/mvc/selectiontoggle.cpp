@@ -47,9 +47,8 @@ bool SelectionToggle::shouldShow(Test* t)
 SelectionToggle::SelectionToggle(QWidget* parent) :
     OverlayButton(parent),
     m_isHovered(false),
-    m_fadingValue(0),
-    m_icon(),
-    m_fadingTimeLine(0)
+    m_icon()
+
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
@@ -70,16 +69,6 @@ QSize SelectionToggle::sizeHint() const
     return QSize(16, 16);
 }
 
-void SelectionToggle::setVisible(bool visible)
-{
-    QAbstractButton::setVisible(visible);
-
-    stopFading();
-    if (visible) {
-        startFading();
-    }
-
-}
 
 bool SelectionToggle::eventFilter(QObject* obj, QEvent* event)
 {
@@ -155,16 +144,6 @@ void SelectionToggle::paintEvent(QPaintEvent* event)
     }
 }
 
-void SelectionToggle::setFadingValue(int value)
-{
-    m_fadingValue = value;
-    if (m_fadingValue >= 255) {
-        Q_ASSERT(m_fadingTimeLine != 0);
-        m_fadingTimeLine->stop();
-    }
-    update();
-}
-
 void SelectionToggle::setIconOverlay(bool checked)
 {
     const char* icon = checked ? "list-remove" : "list-add";
@@ -188,31 +167,6 @@ void SelectionToggle::refreshIcon()
         setChecked(t->selected());
     }
     setIconOverlay(isChecked());
-}
-
-void SelectionToggle::startFading()
-{
-    Q_ASSERT(m_fadingTimeLine == 0);
-
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    const int duration = animate ? 600 : 1;
-
-    m_fadingTimeLine = new QTimeLine(duration, this);
-    connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
-            this, SLOT(setFadingValue(int)));
-    m_fadingTimeLine->setFrameRange(0, 255);
-    m_fadingTimeLine->start();
-    m_fadingValue = 0;
-}
-
-void SelectionToggle::stopFading()
-{
-    if (m_fadingTimeLine != 0) {
-        m_fadingTimeLine->stop();
-        delete m_fadingTimeLine;
-        m_fadingTimeLine = 0;
-    }
-    m_fadingValue = 0;
 }
 
 #include "selectiontoggle.moc"

@@ -50,9 +50,6 @@ public:
     virtual int offset() { return 16; }
     bool shouldShow(Test*);
 
-public slots:
-    virtual void setVisible(bool visible);
-
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event);
     virtual void enterEvent(QEvent* event);
@@ -60,24 +57,12 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
 
 private slots:
-    /**
-     * Sets the alpha value for the fading animation and is
-     * connected with m_fadingTimeLine.
-     */
-    void setFadingValue(int value);
-
     void setIconOverlay(bool checked);
     void refreshIcon();
 
 private:
-    void startFading();
-    void stopFading();
-
-private:
     bool m_isHovered;
-    int m_fadingValue;
     QPixmap m_icon;
-    QTimeLine* m_fadingTimeLine;
 };
 
 }

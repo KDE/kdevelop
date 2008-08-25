@@ -41,9 +41,7 @@ using Veritas::OverlayButton;
 VerboseToggle::VerboseToggle(QWidget* parent) :
     OverlayButton(parent),
     m_isHovered(false),
-    m_fadingValue(0),
-    m_icon(),
-    m_fadingTimeLine(0)
+    m_icon()
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
@@ -62,17 +60,6 @@ VerboseToggle::~VerboseToggle()
 QSize VerboseToggle::sizeHint() const
 {
     return QSize(16, 16);
-}
-
-void VerboseToggle::setVisible(bool visible)
-{
-    QAbstractButton::setVisible(visible);
-
-    stopFading();
-    if (visible) {
-        startFading();
-    }
-
 }
 
 bool VerboseToggle::eventFilter(QObject* obj, QEvent* event)
@@ -153,16 +140,6 @@ void VerboseToggle::paintEvent(QPaintEvent* event)
     }
 }
 
-void VerboseToggle::setFadingValue(int value)
-{
-    m_fadingValue = value;
-    if (m_fadingValue >= 255) {
-        Q_ASSERT(m_fadingTimeLine != 0);
-        m_fadingTimeLine->stop();
-    }
-    update();
-}
-
 void VerboseToggle::setIconOverlay()
 {
     m_icon = KIconLoader::global()->loadIcon(
@@ -177,29 +154,5 @@ void VerboseToggle::refreshIcon()
     setIconOverlay();
 }
 
-void VerboseToggle::startFading()
-{
-    Q_ASSERT(m_fadingTimeLine == 0);
-
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    const int duration = animate ? 600 : 1;
-
-    m_fadingTimeLine = new QTimeLine(duration, this);
-    connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
-            this, SLOT(setFadingValue(int)));
-    m_fadingTimeLine->setFrameRange(0, 255);
-    m_fadingTimeLine->start();
-    m_fadingValue = 0;
-}
-
-void VerboseToggle::stopFading()
-{
-    if (m_fadingTimeLine != 0) {
-        m_fadingTimeLine->stop();
-        delete m_fadingTimeLine;
-        m_fadingTimeLine = 0;
-    }
-    m_fadingValue = 0;
-}
 
 #include "verbosetoggle.moc"

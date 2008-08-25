@@ -24,6 +24,8 @@
 #include <QAbstractButton>
 #include <QModelIndex>
 
+class QTimeLine;
+
 namespace Veritas
 {
 class Test;
@@ -32,7 +34,7 @@ class OverlayButton : public QAbstractButton
 Q_OBJECT
 
 public:
-    OverlayButton(QWidget* parent) : QAbstractButton(parent) {}
+    OverlayButton(QWidget* parent) : QAbstractButton(parent), m_fadingValue(0), m_fadingTimeLine(0) {}
     virtual ~OverlayButton() {}
 
     /*! Resets the selection toggle so that it is hidden and stays
@@ -44,8 +46,23 @@ public:
     virtual void setIndex(const QModelIndex&);
     virtual bool shouldShow(Test*) = 0;
 
+public slots:
+    void setVisible(bool visible);
+
+protected slots:
+    /**
+     * Sets the alpha value for the fading animation and is
+     * connected with m_fadingTimeLine.
+     */
+    void setFadingValue(int value);
+
 protected:
     QModelIndex m_index;
+    int m_fadingValue;
+    QTimeLine* m_fadingTimeLine;
+
+    void startFading();
+    void stopFading();
 };
 
 }
