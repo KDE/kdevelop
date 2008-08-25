@@ -32,13 +32,10 @@ CommitLogModel::CommitLogModel(const QList<DVCScommit> revisions, QObject* paren
     revs = revisions;
     rowCnt = revs.count();
     kDebug() << "revisins count is: " << rowCnt;
-    branchCnt = revs.last().getProperties().count(); //initial commit
+    if (!revs.isEmpty() )
+        branchCnt = revs.last().getProperties().count(); //num of branch (size of properties of initial commit)
     reset(); //to set header
 }
-
-// CommitLogModel::~CommitLogModel()
-// {
-// }
 
 Qt::ItemFlags CommitLogModel::flags(const QModelIndex&) const 
 {

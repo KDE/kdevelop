@@ -42,7 +42,6 @@ HgPlugin::HgPlugin( QObject *parent, const QVariantList & )
     core()->uiController()->addToolView(i18n("Mercurial"), DistributedVersionControlPlugin::d->m_factory);
 
     setXMLFile("kdevhg.rc");
-    setupActions();
 
     DistributedVersionControlPlugin::d->m_exec = new HgExecutor(this);
 }

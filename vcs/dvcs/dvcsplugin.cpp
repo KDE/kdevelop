@@ -377,14 +377,6 @@ KDevelop::ContextMenuExtension
         action = new KAction(i18n("Commit..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
         menu->addAction(action);
-//
-//         action = new KAction(i18n("Add"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Remove"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-//         menuExt.addAction( ContextMenuExtension::VcsGroup, action );
 
         action = new KAction(i18n("Branch Manager"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
@@ -394,13 +386,13 @@ KDevelop::ContextMenuExtension
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()) );
         menu->addAction( action );
 
-//         action = new KAction(i18n("Status"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Log View"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        action = new KAction(i18n("Status"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
+        menu->addAction( action );
+
+        action = new KAction(i18n("Log View"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
+        menu->addAction( action );
     }
     else
     {
@@ -414,23 +406,6 @@ KDevelop::ContextMenuExtension
 
 }
 
-void DistributedVersionControlPlugin::setupActions()
-{
-    KAction *action;
-
-    action = actionCollection()->addAction("dvcs_init");
-    action->setText(i18n("Init Directory..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotInit()));
-
-//     action = actionCollection()->addAction("dvcs_clone");
-//     action->setText(i18n("Clone..."));
-//     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
-
-//     action = actionCollection()->addAction("dvcs_status");
-//     action->setText(i18n("Status..."));
-//     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
-}
-
 void DistributedVersionControlPlugin::slotInit()
 {
     KUrl url = urlFocusedDocument();
@@ -442,21 +417,6 @@ void DistributedVersionControlPlugin::slotInit()
     ImportDialog dlg(this, url);
     dlg.exec();
 }
-
-//     void DistributedVersionControlPlugin::slotStatus()
-//     {
-//         KUrl url = urlFocusedDocument();
-//         KUrl::List urls;
-//         urls << url;
-//
-//         KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
-//         DVCSjob* job = dynamic_cast<DVCSjob*>(j);
-//         if (job) {
-//             GitGenericOutputView* view = new GitGenericOutputView(this, job);
-//             emit addNewTabToMainView( view, i18n("Status") );
-//             job->start();
-//         }
-//     }
 
 void DistributedVersionControlPlugin::ctxCommit()
 {
@@ -525,10 +485,11 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl url = urlFocusedDocument();
     kDebug() << "url is: " << url.path();
-    CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
 
+    CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
     CommitView *revTree = new CommitView;
     revTree->setModel(model);
+
     emit addNewTabToMainView(revTree, i18n("Revision History") );
 }
 

@@ -172,7 +172,6 @@ Q_SIGNALS:
 
 protected:
     const KUrl urlFocusedDocument() const;
-    void setupActions();
 
 protected:
     DistributedVersionControlPluginPrivate* const d;

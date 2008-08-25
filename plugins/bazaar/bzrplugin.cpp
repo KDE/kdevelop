@@ -45,7 +45,6 @@ BzrPlugin::BzrPlugin( QObject *parent, const QVariantList & )
     Q_UNUSED(EasterEgg)
 
     setXMLFile("kdevbzr.rc");
-    setupActions();
 
     DistributedVersionControlPlugin::d->m_exec = new BzrExecutor(this);
 }
