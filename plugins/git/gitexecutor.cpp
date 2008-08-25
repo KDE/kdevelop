@@ -61,11 +61,11 @@ bool GitExecutor::isValidDirectory(const KUrl & dirPath)
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
-            kDebug(9500) << "Dir:" << dirPath << " is inside work tree of git" ;
+            kDebug(9045) << "Dir:" << dirPath << " is inside work tree of git" ;
             return true;
         }
     }
-    kDebug(9500) << "Dir:" << dirPath.path() << " is not inside work tree of git" ;
+    kDebug(9045) << "Dir:" << dirPath.path() << " is not inside work tree of git" ;
     return false;
 }
 
@@ -259,7 +259,7 @@ QString GitExecutor::curBranch(const QString &repository)
     DVCSjob* job = branch(repository);
     if (job)
     {
-        kDebug() << "Getting branch list";
+        kDebug(9045) << "Getting branch list";
         job->exec();
     }
     QString branch;
@@ -268,7 +268,7 @@ QString GitExecutor::curBranch(const QString &repository)
 
     branch = branch.prepend('\n').section("\n*", 1);
     branch = branch.section('\n', 0, 0).trimmed();
-    kDebug() << "Current branch is: " << branch;
+    kDebug(9045) << "Current branch is: " << branch;
     return branch;
 }
 
@@ -277,7 +277,7 @@ QStringList GitExecutor::branches(const QString &repository)
     DVCSjob* job = branch(repository);
     if (job)
     {
-        kDebug() << "Getting branch list";
+        kDebug(9045) << "Getting branch list";
         job->exec();
     }
     QStringList branchListDirty;
@@ -333,7 +333,7 @@ QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
         status.setUrl(file);
         status.setState(charToState(stCh.toAscii() ) );
 
-        kDebug() << line[97] << " " << file.path();
+        kDebug(9045) << line[97] << " " << file.path();
 
         modifiedFiles.append(status);
     }
@@ -386,7 +386,7 @@ QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
         status.setUrl(file);
         status.setState(charToState(stCh.toAscii() ) );
 
-        kDebug() << line[97] << " " << file.path();
+        kDebug(9045) << line[97] << " " << file.path();
 
         cachedFiles.append(status);
     }
@@ -446,16 +446,16 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
     {
         if (commits[i].contains(rx_com))
         {
-            kDebug(9500) << "commit found in " << commits[i];
+            kDebug(9045) << "commit found in " << commits[i];
             item.setCommit(commits[i].section(' ', 1, 1).trimmed());
-//             kDebug(9500) << "commit is: " << commits[i].section(' ', 1);
+//             kDebug(9045) << "commit is: " << commits[i].section(' ', 1);
 
             QStringList parents;
             QString parent = commits[i].section(' ', 2);
             int section = 2;
             while (!parent.isEmpty())
             {
-/*                kDebug() << "Parent is: " << parent;*/
+                /*                kDebug(9045) << "Parent is: " << parent;*/
                 parents.append(parent.trimmed());
                 section++;
                 parent = commits[i].section(' ', section);
@@ -467,10 +467,10 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
                     ++i;
 
             item.setAuthor(commits[i].section("Author: ", 1).trimmed());
-//             kDebug(9500) << "author is: " << commits[i].section("Author: ", 1);
+//             kDebug(9045) << "author is: " << commits[i].section("Author: ", 1);
 
             item.setDate(commits[++i].section("Date:   ", 1).trimmed());
-//             kDebug(9500) << "date is: " << commits[i].section("Date:   ", 1);
+//             kDebug(9045) << "date is: " << commits[i].section("Date:   ", 1);
 
             QString log;
             i++; //next line!
@@ -478,7 +478,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
                 log += commits[i++];
             --i; //while took commit line
             item.setLog(log.trimmed());
-//             kDebug(9500) << "log is: " << log;
+//             kDebug(9045) << "log is: " << log;
 
             //mask is used in CommitViewDelegate to understand what we should draw for each branch
             QList<int> mask;
@@ -486,7 +486,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
             //set mask (properties for each graph column in row)
             for(int i = 0; i < branchesShas.count(); ++i)
             {
-                kDebug()<<"commit: " << item.getCommit();
+                kDebug(9045)<<"commit: " << item.getCommit();
                 if (branchesShas[i].contains(item.getCommit()))
                 {
                     mask.append(item.getType()); //we set type in setParents
@@ -510,7 +510,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
                     else
                         mask.append(DVCScommit::CROSS);
                 }
-                kDebug() << "mask " << i << "is " << mask[i];
+                kDebug(9045) << "mask " << i << "is " << mask[i];
             }
             item.setProperties(mask);
             commitList.append(item);
@@ -555,8 +555,8 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
                             }
                             f_iter->setType(DVCScommit::MERGE);
                             f_iter->setPropetry(i, DVCScommit::MERGE_RIGHT);
-                            kDebug() << parent << " is parent of " << commit;
-                            kDebug() << f_iter->getCommit() << " is merge";
+                            kDebug(9045) << parent << " is parent of " << commit;
+                            kDebug(9045) << f_iter->getCommit() << " is merge";
                             parent_checked = true;
                             break;
                         }
@@ -571,7 +571,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
                 iter->setType(DVCScommit::HEAD);
                 iter->setPropetry(i, DVCScommit::HEAD);
                 heads_checked++;
-                kDebug() << "HEAD found";
+                kDebug(9045) << "HEAD found";
             }
             //some optimization
             if (heads_checked == branchesShas.count() && parent_checked)
@@ -585,7 +585,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
 void GitExecutor::initBranchHash(const QString &repo)
 {
     QStringList branches = GitExecutor::branches(repo);
-    kDebug() << "BRANCHES: " << branches;
+    kDebug(9045) << "BRANCHES: " << branches;
     //Now root branch is the current branch. In future it should be the longest branch
     //other commitLists are got with git-rev-lits branch ^br1 ^ br2
     QString root = GitExecutor::curBranch(repo);
@@ -593,7 +593,7 @@ void GitExecutor::initBranchHash(const QString &repo)
     if (job)
         job->exec();
     QStringList commits = job->output().split('\n');
-//     kDebug() << "\n\n\n commits" << commits << "\n\n\n";
+//     kDebug(9045) << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
     foreach(const QString &branch, branches)
     {
@@ -610,7 +610,7 @@ void GitExecutor::initBranchHash(const QString &repo)
         if (job)
             job->exec();
         QStringList commits = job->output().split('\n');
-//         kDebug() << "\n\n\n commits" << commits << "\n\n\n";
+//         kDebug(9045) << "\n\n\n commits" << commits << "\n\n\n";
         branchesShas.append(commits);
     }
 }
@@ -630,10 +630,10 @@ void GitExecutor::parseOutput(const QString& jobOutput, QList<DVCScommit>& commi
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-        kDebug(9500) << "line:" << s ;
+        kDebug(9045) << "line:" << s ;
 
         if (rx_com.exactMatch(s)) {
-            kDebug(9500) << "MATCH COMMIT";
+            kDebug(9045) << "MATCH COMMIT";
             item.setCommit(s);
             s = lines[++i];
             item.setAuthor(s);

@@ -84,8 +84,6 @@ QString DistributedVersionControlPlugin::name() const
 
 bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocation)
 {
-    //TODO: some files from repository location can be not version controlled
-    kDebug() << "checking version controlled with executor:" << d->m_exec->name();
     return d->m_exec->isValidDirectory(localLocation);
 }
 
@@ -322,20 +320,19 @@ KDevelop::ContextMenuExtension
         ProjectItemContext *itemCtx = dynamic_cast<ProjectItemContext*>(context);
         if( itemCtx )
         {
-            kDebug() << "itemCtx is true";
             QList<ProjectBaseItem *> baseItemList = itemCtx->items();
 
             // now general case
             foreach( ProjectBaseItem* _item, baseItemList )
             {
-                if( _item->folder() ){
+                if( _item->folder() )
+                {
                     ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>(_item);
-                    kDebug() << "folderItem->url() is assigned to ctxUrlList"<<folderItem->url();
                     ctxUrlList << folderItem->url();
                 }
-                else if( _item->file() ){
+                else if( _item->file() )
+                {
                     ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>(_item);
-                    kDebug() << "fileItem->url() is assigned to ctxUrlList"<<fileItem->url();
                     ctxUrlList << fileItem->url();
                 }
             }
@@ -359,7 +356,7 @@ KDevelop::ContextMenuExtension
     {
         if(isVersionControlled( url ) )
         {
-            kDebug() << url << "is version controller";
+            kDebug(9509) << url << "is version controlled";
             hasVersionControlledEntries = true;
             break;
         }
@@ -370,7 +367,6 @@ KDevelop::ContextMenuExtension
     DistributedVersionControlPlugin::d->m_ctxUrlList = ctxUrlList;
     QList<QAction*> actions;
     KAction *action;
-    kDebug() << "version controlled?" << hasVersionControlledEntries;
     QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
@@ -484,7 +480,6 @@ void DistributedVersionControlPlugin::ctxStatus()
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl url = urlFocusedDocument();
-    kDebug() << "url is: " << url.path();
 
     CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
     CommitView *revTree = new CommitView;
@@ -497,12 +492,12 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
     DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
 
-    kDebug() << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
+    kDebug(9509) << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
     KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
 
     if( !curProject )
     {
-        kDebug() << "couldn't find project for url:" << checkoutJob->getDirectory();
+        kDebug(9509) << "couldn't find project for url:" << checkoutJob->getDirectory();
         return;
     }
     KUrl projectFile = curProject->projectFileUrl();
@@ -510,10 +505,10 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
     core()->projectController()->closeProject(curProject); //let's ask to save all files!
 
     if (!checkoutJob->exec())
-        kDebug() << "CHECKOUT PROBLEM!";
+        kDebug(9509) << "CHECKOUT PROBLEM!";
 
-    kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
-    kDebug() << "Project will be closed and open";
+    kDebug(9509) << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    kDebug(9509) << "Project was closed, now it will be opened";
     if(!core()->projectController()->openProject(projectFile))
     {
         KMessageBox::sorry( 0,
