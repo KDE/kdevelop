@@ -84,7 +84,7 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 
     if(!p.waitForFinished())
     {
-        kDebug(9032) << "failed to execute:" << execName;
+        kDebug() << "failed to execute:" << execName;
     }
 
     QByteArray b = p.readAllStandardOutput();
@@ -96,17 +96,15 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 }
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
     Q_ASSERT(i);
-    if( i )
-    {
-        m_builder = i->extension<ICMakeBuilder>();
-    }
+    m_builder = i->extension<ICMakeBuilder>();
+    Q_ASSERT(m_builder);
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
 
@@ -191,7 +189,7 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     QString relative=KUrl::relativeUrl( projectPath, fi->url() );
     path.addPath(relative);
 
-    kDebug(9032) << "Build folder: " << path;
+    kDebug() << "Build folder: " << path;
     return path;
 }
 
@@ -242,7 +240,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     if ( !cmakeInfoFile.isLocalFile() )
     {
         //FIXME turn this into a real warning
-        kWarning(9032) << "error. not a local file. CMake support doesn't handle remote projects" ;
+        kWarning() << "error. not a local file. CMake support doesn't handle remote projects" ;
     }
     else
     {
@@ -271,7 +269,7 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
     if(f.isEmpty())
     {
-        kDebug(9032) << "There is no such file: " << file;
+        kDebug() << "There is no such file: " << file;
         return;
     }
 
@@ -329,7 +327,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
         if(f.isEmpty())
         {
-            kDebug(9032) << "There is no" << cmakeListsPath;
+            kDebug() << "There is no" << cmakeListsPath;
             return folderList;
         }
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
@@ -552,6 +550,7 @@ QHash< QString, QString > CMakeProjectManager::defines(KDevelop::ProjectBaseItem
 
 KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolderItem *) const
 {
+    Q_ASSERT(m_builder);
     return m_builder;
 }
 
@@ -608,7 +607,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
     CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
     if(f.isEmpty())
     {
-        kDebug(9032) << "There is no" << cmakeListsPath;
+        kDebug() << "There is no" << cmakeListsPath;
         return;
     }
 
@@ -758,7 +757,7 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path)
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kDebug(9032) << "error. Could not find the file";
+        kDebug() << "error. Could not find the file";
         return CacheValues();
     }
 

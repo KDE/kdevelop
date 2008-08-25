@@ -47,6 +47,8 @@ K_EXPORT_PLUGIN(CustomMakeSupportFactory("kdevcustommakemanager"))
 class CustomMakeManager::Private
 {
 public:
+    Private() : m_builder(0), m_targetGroup(0), m_targetMenu(0), m_ctxItem(0) {}
+    
     IMakeBuilder *m_builder;
 
     QActionGroup *m_targetGroup;
@@ -69,10 +71,8 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     // TODO use CustomMakeBuilder
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IMakeBuilder" );
     Q_ASSERT(i);
-    if( i )
-    {
-        d->m_builder = i->extension<IMakeBuilder>();
-    }
+    d->m_builder = i->extension<IMakeBuilder>();
+    Q_ASSERT(d->m_builder);
 
     KActionMenu *actionMenu = new KActionMenu( i18n( "Build &Target" ), this );
     actionCollection()->addAction("build_target", actionMenu);
@@ -111,6 +111,7 @@ CustomMakeManager::~CustomMakeManager()
 
 IProjectBuilder* CustomMakeManager::builder(KDevelop::ProjectFolderItem*) const
 {
+    Q_ASSERT(d->m_builder);
     return d->m_builder;
 }
 

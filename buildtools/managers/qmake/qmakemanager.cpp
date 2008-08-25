@@ -57,10 +57,8 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent,
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IQMakeBuilder" );
     Q_ASSERT(i);
-    if( i )
-    {
-       m_builder = i->extension<IQMakeBuilder>();
-    }
+    m_builder = i->extension<IQMakeBuilder>();
+    Q_ASSERT(m_builder);
 }
 
 QMakeProjectManager::~QMakeProjectManager()
@@ -219,6 +217,7 @@ QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::Proje
 
 KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectFolderItem*) const
 {
+    Q_ASSERT(m_builder);
     return m_builder;
 }
 
