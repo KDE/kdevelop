@@ -98,11 +98,10 @@ OverlayManager::~OverlayManager()
 
 void OverlayManager::slotEntered(const QModelIndex& index)
 {
-    kDebug() << "";
-
     Q_ASSERT(m_toggle);
     m_toggle->hide();
-    if (index.isValid() ){
+    m_toggle->setIndex(index);
+    if (index.isValid()) {
         Test* t = index2Test(index);
         if (!m_toggle->shouldShow(t)) return;
         const QRect rect = m_view->visualRect(index);
@@ -111,12 +110,10 @@ void OverlayManager::slotEntered(const QModelIndex& index)
         m_toggle->move(QPoint(x, y));
         m_toggle->show();
     }
-    m_toggle->setIndex(index);
 }
 
 void OverlayManager::slotViewportEntered()
 {
-    kDebug() << "";
     Q_ASSERT(m_toggle);
     m_toggle->hide();
 }
@@ -130,7 +127,6 @@ void OverlayManager::slotRowsRemoved(const QModelIndex& parent, int start, int e
 void OverlayManager::slotSelectionChanged(const QItemSelection& selected,
                                           const QItemSelection& deselected)
 {
-    kDebug() << "";
     Q_UNUSED(deselected); Q_ASSERT(m_toggle);
     QModelIndexList indexes = selected.indexes();
     if (indexes.isEmpty()) {

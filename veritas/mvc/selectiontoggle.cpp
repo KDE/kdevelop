@@ -174,8 +174,19 @@ void SelectionToggle::setIconOverlay(bool checked)
     update();
 }
 
+#include <QAbstractProxyModel>
+
 void SelectionToggle::refreshIcon()
 {
+    if (index().isValid()) {
+        const QAbstractProxyModel* proxyModel = qobject_cast<const QAbstractProxyModel*>(index().model());
+        Q_ASSERT(proxyModel);
+        const QModelIndex runnerIndex = proxyModel->mapToSource(index());
+        Q_ASSERT(runnerIndex.isValid());
+        Test* t = static_cast<Test*>(runnerIndex.internalPointer());
+        Q_ASSERT(t);
+        setChecked(t->selected());
+    }
     setIconOverlay(isChecked());
 }
 

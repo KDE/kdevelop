@@ -87,7 +87,7 @@ void VerboseToggle::enterEvent(QEvent* event)
 {
     QAbstractButton::enterEvent(event);
 
-    // if the mouse cursor is above the selection toggle, display
+    // if the mouse cursor is above the toggle, display
     // it immediately without fading timer
     m_isHovered = true;
     if (m_fadingTimeLine != 0) {

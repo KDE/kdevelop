@@ -37,7 +37,6 @@ class Test;
  * for one second.
  *
  * @see SelectionManager
- * @todo extract common code with verbosetoggle
  */
 class SelectionToggle : public OverlayButton
 {
@@ -79,7 +78,6 @@ private:
     int m_fadingValue;
     QPixmap m_icon;
     QTimeLine* m_fadingTimeLine;
-    QModelIndex m_index;
 };
 
 }
