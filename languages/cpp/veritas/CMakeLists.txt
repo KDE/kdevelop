@@ -30,6 +30,8 @@ set(veritascppsupport_LIB_SRCS
 kde4_add_library(veritascpp SHARED ${veritascppsupport_LIB_SRCS})
 target_link_libraries(veritascpp
     kdev4cppduchain
+    kdev4cppparser
+    kdev4cpprpp
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS})
