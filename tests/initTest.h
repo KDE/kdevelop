@@ -37,7 +37,7 @@ class GitInitTest: public QObject
         void repoInit();
         void addFiles();
         void commitFiles();
-        void cloneRepository();
+//         void cloneRepository();
 //         void importTestData();
 //         void checkoutTestData();
 
@@ -46,6 +46,8 @@ class GitInitTest: public QObject
         void testInit();
         void testAdd();
         void testCommit();
+        void testBranching();
+        void revHistory();
         void cleanupTestCase();
 
     private:

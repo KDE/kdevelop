@@ -95,7 +95,7 @@ private:
     //it can be public, but it isn't required now
     DVCSjob* lsFiles(const QString &repository, const QStringList &args);
     DVCSjob* gitRevParse(const QString &repository, const QStringList &args);
-
+    DVCSjob* gitRevList(const QString &repository, const QStringList &args);
 public:
     //parsers for branch:
     QString curBranch(const QString &repository);
@@ -106,13 +106,20 @@ public:
     QList<KDevelop::VcsStatusInfo> getCachedFiles(const QString &directory);
     QStringList getOtherFiles(const QString &directory);
 
+    //graph helpers
+    QList<DVCScommit> getAllCommits(const QString &repo);
+
+    //used in log
     void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
 
 private:
     //commit dialog "main" helper
     QStringList getLsFiles(const QString &directory, const QStringList &args);
+
+    void initBranchHash(const QString &repo);
     KDevelop::VcsStatusInfo::State charToState(const char ch);
 
+    QList<QStringList> branchesShas;
     KDevelop::IPlugin* vcsplugin;
 
 };
