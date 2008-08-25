@@ -67,7 +67,6 @@ public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
     QMap< IProject*, QPointer<QAction> > m_configActions;
-    IPlugin* m_projectPart;
     QPointer<KRecentFilesAction> m_recentAction;
     KActionMenu *m_projectConfigAction;
     QSignalMapper *m_signalMapper;
@@ -143,7 +142,6 @@ ProjectController::ProjectController( Core* core )
     d->reopenProjectsOnStartup = false;
     d->parseAllProjectSources = false;
     d->m_core = core;
-    d->m_projectPart = 0;
     d->m_signalMapper = new QSignalMapper( this );
     connect( d->m_signalMapper, SIGNAL( mapped( QObject* ) ),
             this, SLOT( projectConfig( QObject* ) ) );
@@ -461,7 +459,6 @@ bool ProjectController::closeProject(IProject* proj)
     d->m_projects.removeAll(proj);
     if (d->m_projects.isEmpty())
     {
-        d->m_projectPart = 0; //make sure we reload the project treeview
         initializePluginCleanup(proj);
     }
     emit projectClosed(proj);
@@ -472,24 +469,6 @@ bool ProjectController::closeProject(IProject* proj)
 bool ProjectController::loadProjectPart()
 {
 
-    if( !d->m_projectPart )
-    {
-        KSharedConfig* config = KGlobal::config().data();
-
-        KConfigGroup group = config->group( "General Options" );
-
-        QString projectManager =
-                group.readEntry( "ManagementView", "KDevProjectManagerView" );
-
-        d->m_projectPart = d->m_core->pluginController()->loadPlugin( projectManager );
-        if ( !d->m_projectPart )
-        {
-            KMessageBox::sorry( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                i18n( "Could not load project management view plugin %1.",
-                                      projectManager ) );
-            return false;
-        }
-    }
     return true;
 }
 
