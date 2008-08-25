@@ -34,7 +34,7 @@ class OverlayButton : public QAbstractButton
 Q_OBJECT
 
 public:
-    OverlayButton(QWidget* parent) : QAbstractButton(parent), m_fadingValue(0), m_fadingTimeLine(0) {}
+    OverlayButton(QWidget* parent);
     virtual ~OverlayButton() {}
 
     /*! Resets the selection toggle so that it is hidden and stays
@@ -57,12 +57,18 @@ protected slots:
     void setFadingValue(int value);
 
 protected:
+    virtual void leaveEvent(QEvent* event);
+    virtual void paintEvent(QPaintEvent* event);
+    void startFading();
+    void stopFading();
+
+protected:
     QModelIndex m_index;
     int m_fadingValue;
     QTimeLine* m_fadingTimeLine;
+    bool m_isHovered;
+    QPixmap m_icon;
 
-    void startFading();
-    void stopFading();
 };
 
 }

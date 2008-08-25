@@ -54,20 +54,10 @@ public:
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event);
     virtual void enterEvent(QEvent* event);
-    virtual void leaveEvent(QEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
 
 private slots:
     void setIconOverlay();
     void refreshIcon();
-
-private:
-    void startFading();
-    void stopFading();
-
-private:
-    bool m_isHovered;
-    QPixmap m_icon;
 };
 
 }

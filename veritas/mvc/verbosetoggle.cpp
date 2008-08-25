@@ -39,9 +39,7 @@ using Veritas::VerboseToggle;
 using Veritas::OverlayButton;
 
 VerboseToggle::VerboseToggle(QWidget* parent) :
-    OverlayButton(parent),
-    m_isHovered(false),
-    m_icon()
+    OverlayButton(parent)
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
@@ -88,56 +86,6 @@ void VerboseToggle::enterEvent(QEvent* event)
 bool VerboseToggle::shouldShow(Test* t)
 {
     return t && t->shouldRun();
-}
-
-void VerboseToggle::leaveEvent(QEvent* event)
-{
-    QAbstractButton::leaveEvent(event);
-    m_isHovered = false;
-    update();
-}
-
-void VerboseToggle::paintEvent(QPaintEvent* event)
-{
-    Q_UNUSED(event);
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-
-    // draw an alpha blended circle as background
-    const QPalette& palette = parentWidget()->palette();
-
-    const QBrush& backgroundBrush = palette.brush(QPalette::Normal, QPalette::Window);
-    QColor background = backgroundBrush.color();
-    background.setAlpha(m_fadingValue / 2);
-    painter.setBrush(background);
-
-    const QBrush& foregroundBrush = palette.brush(QPalette::Normal, QPalette::WindowText);
-    QColor foreground = foregroundBrush.color();
-    foreground.setAlpha(m_fadingValue / 4);
-    painter.setPen(foreground);
-
-    //painter.drawEllipse(0, 0, width(), height());
-
-    // draw the icon overlay
-    if (m_isHovered) {
-        KIconEffect iconEffect;
-        QPixmap activeIcon = iconEffect.apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
-        painter.drawPixmap(0, 0, activeIcon);
-    } else {
-        if (m_fadingValue < 255) {
-            // apply an alpha mask respecting the fading value to the icon
-            QPixmap icon = m_icon;
-            QPixmap alphaMask(icon.width(), icon.height());
-            const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
-            alphaMask.fill(color);
-            icon.setAlphaChannel(alphaMask);
-            painter.drawPixmap(0, 0, icon);
-        } else {
-            // no fading is required
-            painter.drawPixmap(0, 0, m_icon);
-        }
-    }
 }
 
 void VerboseToggle::setIconOverlay()
