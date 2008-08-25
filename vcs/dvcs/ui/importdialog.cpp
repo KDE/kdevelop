@@ -55,48 +55,10 @@ void ImportDialog::accept()
     DVCSjob *job = dynamic_cast<DVCSjob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( jobFinished(KJob*) ));
+                m_plugin, SLOT( jobFinished(KJob*) ));
         job->start();
     }
-}
-
-void ImportDialog::jobFinished(KJob * job)
-{
-    if (job->error()) {
-        KMessageBox::error(this, i18n("Error on initialization"), i18n("Initialization Error"));
-        return;
-    }
-
-    // The job finished, now let's check the output is everything was OK
-    DVCSjob* gitjob = dynamic_cast<DVCSjob*>(job);
-
-    static QRegExp re_file("^[IN]\\s(.*)");
-    bool error = false;
-    QStringList lines = gitjob->output().split('\n');
-    foreach(const QString &line, lines) {
-        if (line.isEmpty()) {
-            // ignore empty lines
-            continue;
-        } else if (re_file.exactMatch(line)) {
-            // line that tell us that a file has been added are OK
-            continue;
-            // this normaly should be the last line
-        } else if (line.contains("No conflicts created by this initialization")) {
-            continue;
-        } else {
-            // any other line must mean that an error occurred
-            kDebug(9500) <<"ERR: "<< line;
-            error = true;
-        }
-    }
-
-    if (error) {
-        KMessageBox::error(this,
-            i18n("Some errors occurred while initializing") + m_url.path(),
-            i18n("Initialization Error"));
-    } else {
-        KDialog::accept();
-    }
+    KDialog::accept();
 }
 
 #include "importdialog.moc"

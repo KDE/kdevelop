@@ -435,6 +435,10 @@ void DistributedVersionControlPlugin::slotInit()
 {
     KUrl url = urlFocusedDocument();
 
+    QFileInfo repoInfo = QFileInfo(url.path());
+    if (repoInfo.isFile())
+        url = repoInfo.path();
+
     ImportDialog dlg(this, url);
     dlg.exec();
 }

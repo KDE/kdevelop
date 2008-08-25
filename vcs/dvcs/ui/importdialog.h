@@ -52,7 +52,6 @@ public:
 
 public slots:
     virtual void accept();
-    void jobFinished(KJob* job);
 
 private:
     KUrl m_url;
