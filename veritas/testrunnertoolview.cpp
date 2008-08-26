@@ -41,6 +41,7 @@
 #include "veritas/mvc/runnerwindow.h"
 #include "veritas/mvc/verbosemanager.h"
 #include "ui_runnerwindow.h"
+#include "selectionstore.h"
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 
@@ -74,13 +75,15 @@ public:
     Sublime::View *resultsView;
     Sublime::Area *resultsArea;
     ResultsModel *resultsModel;
+    Test* previousRoot;
 };
 
 TestViewDataPrivate::TestViewDataPrivate()
         : window(0),
         selectedProject(0),
         resultsView(0),
-        resultsArea(0)
+        resultsArea(0),
+        previousRoot(0)
 {}
 
 } // namespace
@@ -104,6 +107,12 @@ TestViewData::TestViewData(QObject* parent)
 void TestViewData::setupToolView(Veritas::Test* root)
 {
     if (!root) { kDebug() << "root null"; return; }
+    if (d->previousRoot) {
+        SelectionStore ss;
+        ss.saveTree(d->previousRoot);
+        ss.restoreTree(root);
+    }
+    d->previousRoot = root;
     RunnerModel* model = new RunnerModel;
     model->setRootItem(root);
     model->setExpectedResults(Veritas::RunError);
