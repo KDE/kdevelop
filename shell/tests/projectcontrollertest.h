@@ -22,24 +22,19 @@
 
 #include <QtCore/QObject>
 #include <KUrl>
+#include <QDir>
 
 class QSignalSpy;
 namespace KDevelop
 {
-class ICore;
+class Core;
 class IProject;
-class IProjectController;
+class ProjectController;
 }
 
 class ProjectControllerTest : public QObject
 {
 Q_OBJECT
-signals:
-    void proceed();
-
-public slots:
-    void waitForReopenBox();
-
 private slots:
     void initTestCase();
     void init();
@@ -48,11 +43,12 @@ private slots:
     void openProject();
     void closeProject();
     void openCloseOpen();
-    //void reOpen(); way too slow.
     void openMultiple();
+    void reopen();
+    void reopenWhileLoading();
+
 
 private:
-    void clickAcceptOnReopenDialog();
     KUrl writeProjectConfig(const QString& name);
 
     QSignalSpy* createOpenedSpy();
@@ -65,10 +61,11 @@ private:
 
 private:
     KUrl m_projFileUrl;
-    KDevelop::ICore* m_core;
-    KDevelop::IProjectController* m_projCtrl;
+    KDevelop::Core* m_core;
+    KDevelop::ProjectController* m_projCtrl;
     QString m_projName;
     QList<KUrl> m_tmpConfigs;
+    QDir m_scratchDir;
 };
 
 #endif // KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED

@@ -31,17 +31,37 @@
 #include <QSignalSpy>
 
 #include <qtest_kde.h>
-#include <qtest_kde.h>
 #include <tests/common/autotestshell.h>
 
 #include "../core.h"
 #include "../projectcontroller.h"
 #include "../project.h"
 
+using KDevelop::ProjectController;
+using KDevelop::IProjectDialogProvider;
+using KDevelop::IProject;
+using KDevelop::Core;
 
-using namespace KDevelop;
+using QTest::kWaitForSignal;
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
+
+namespace {
+
+class DialogProviderFake : public IProjectDialogProvider
+{
+Q_OBJECT
+public:
+    DialogProviderFake() : m_reopen(true) {}
+    virtual ~DialogProviderFake() {}
+    bool m_reopen;
+
+public slots:
+    virtual KUrl askProjectConfigLocation() { return KUrl(); }
+    virtual bool userWantsReopen() { return m_reopen; }
+};
+
+}
 
 ////////////////////// Fixture ///////////////////////////////////////////////
 
@@ -50,14 +70,17 @@ void ProjectControllerTest::initTestCase()
     AutoTestShell::init();
     Core::initialize();
     qRegisterMetaType<KDevelop::IProject*>();
+    m_core = Core::self();
+    m_scratchDir = QDir(QDir::tempPath());
+    m_scratchDir.mkdir("prjctrltest");
+    m_scratchDir.cd("prjctrltest");
 }
 
 void ProjectControllerTest::init()
 {
     m_projName = "foo";
     m_projFileUrl = writeProjectConfig(m_projName);
-    m_core = ICore::self();
-    m_projCtrl = m_core->projectController();
+    m_projCtrl = m_core->projectControllerInternal();
     m_tmpConfigs << m_projFileUrl;
 }
 
@@ -75,14 +98,17 @@ void ProjectControllerTest::cleanup()
 
 ////////////////////// Commands //////////////////////////////////////////////
 
+#define WAIT_FOR_OPEN_SIGNAL \
+{\
+    bool gotSignal = kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 20000);\
+    QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
+} void(0)
+
 void ProjectControllerTest::openProject()
 {
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for opened signal");
-    }
+    WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
     IProject* proj;
     assertProjectOpened(m_projName, proj);
@@ -95,10 +121,7 @@ void ProjectControllerTest::openProject()
 void ProjectControllerTest::closeProject()
 {
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)),20000))
-    {
-        QFAIL("Timeout while waiting for opened signal");
-    }
+    WAIT_FOR_OPEN_SIGNAL;
     IProject* proj = m_projCtrl->findProjectByName(m_projName);
     Q_ASSERT(proj);
 
@@ -116,38 +139,50 @@ void ProjectControllerTest::closeProject()
 void ProjectControllerTest::openCloseOpen()
 {
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for opened signal");
-    }
+    WAIT_FOR_OPEN_SIGNAL;
     IProject* proj;
     assertProjectOpened(m_projName, proj);
     QVERIFY(m_projCtrl->closeProject(proj));
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for opened signal");
-    }
+    WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
     assertProjectOpened(m_projName, proj);
     assertSpyCaughtProject(spy, proj);
 }
 
-// void ProjectControllerTest::reOpen()
-// {
-//     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-//     clickAcceptOnReopenDialog();
-//     QSignalSpy* spy = createOpenedSpy();
-//     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-//     if (!QTest::kWaitForSignal(this, SIGNAL(proceed()),2000)) {
-//          QFAIL("Timeout while waiting for project to reopen.");
-//     } 
-//     QCOMPARE(m_projCtrl->projectCount(), 1);
-//     IProject* proj;
-//     assertProjectOpened(m_projName, proj);
-//     assertSpyCaughtProject(spy, proj);
-// }
+void ProjectControllerTest::reopen()
+{
+    m_projCtrl->setDialogProvider(new DialogProviderFake);
+    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    WAIT_FOR_OPEN_SIGNAL;
+    QSignalSpy* spy = createOpenedSpy();
+    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    WAIT_FOR_OPEN_SIGNAL;
+    QCOMPARE(m_projCtrl->projectCount(), 1);
+    IProject* proj;
+    assertProjectOpened(m_projName, proj);
+    assertSpyCaughtProject(spy, proj);
+}
+
+void ProjectControllerTest::reopenWhileLoading()
+{
+    // Open the same project again while the first is still
+    // loading. The second open request should be blocked.
+    m_projCtrl->setDialogProvider(new DialogProviderFake);
+    QSignalSpy* spy = createOpenedSpy();
+    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    QVERIFY(!m_projCtrl->openProject(m_projFileUrl));
+    WAIT_FOR_OPEN_SIGNAL;
+    // wait a bit for a second signal, this should timeout
+    QVERIFY2(!kWaitForSignal(m_projCtrl,
+        SIGNAL(projectOpened(KDevelop::IProject*)), 100),
+        "Received 2 projectOpened signals.");
+    QCOMPARE(m_projCtrl->projectCount(), 1);
+    IProject* proj;
+    assertProjectOpened(m_projName, proj);
+    assertSpyCaughtProject(spy, proj);
+}
 
 void ProjectControllerTest::openMultiple()
 {
@@ -155,16 +190,10 @@ void ProjectControllerTest::openMultiple()
     KUrl secondCfgUrl = writeProjectConfig(secondProj);
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for opened signal");
-    }
+    WAIT_FOR_OPEN_SIGNAL;
     QVERIFY(m_projCtrl->openProject(secondCfgUrl));
-    if( !QTest::kWaitForSignal(m_projCtrl,SIGNAL(projectOpened(KDevelop::IProject*)), 20000) )
-    {
-        QFAIL("Timeout while waiting for closed signal");
-    }
- 
+    WAIT_FOR_OPEN_SIGNAL;
+
     QCOMPARE(m_projCtrl->projectCount(), 2);
     IProject *proj1, *proj2;
     assertProjectOpened(m_projName, proj1);
@@ -181,47 +210,16 @@ void ProjectControllerTest::openMultiple()
 
 ////////////////////// Helpers ///////////////////////////////////////////////
 
-void ProjectControllerTest::clickAcceptOnReopenDialog()
-{
-    QTimer* t = new QTimer(this);
-    t->setSingleShot(true);
-    t->setInterval(1);
-    connect(t, SIGNAL(timeout()), this, SLOT(waitForReopenBox()));
-    t->start();
-}
-
 KUrl ProjectControllerTest::writeProjectConfig(const QString& name)
 {
-    KUrl configUrl = KUrl(QDir::tempPath() + "/" + name + ".kdev4");
+    KUrl configUrl = KUrl(m_scratchDir.absolutePath() + "/" + name + ".kdev4");
     QFile f(configUrl.pathOrUrl());
     f.open(QIODevice::WriteOnly);
     QTextStream str(&f);
     str << "[Project]\n"
-        << "Name=" << name << "\n"
-        << "Manager=KDevCMakeManager\n\n";
+        << "Name=" << name << "\n";
     f.close();
     return configUrl;
-}
-
-void ProjectControllerTest::waitForReopenBox()
-{
-    int i=0;
-    for (; i<20; i++) {
-        QTest::qWait(250);
-        QWidget* reopenBox = QApplication::activeModalWidget();
-        if (reopenBox) {
-            for (int j=0; j<10; j++) {
-                QTest::keyClick(reopenBox, Qt::Key_Enter, Qt::NoModifier, 20);
-            }
-            break;
-        }
-    }
-    QVERIFY2(i < 20, "Timeout while waiting for project reopen dialog.");
-    QTimer* t = new QTimer(this);
-    t->setSingleShot(true);
-    t->setInterval(100);
-    connect(t, SIGNAL(timeout()), this, SIGNAL(proceed()));
-    t->start();
 }
 
 ////////////////// Custom assertions /////////////////////////////////////////
@@ -264,4 +262,5 @@ QSignalSpy* ProjectControllerTest::createClosingSpy()
 }
 
 QTEST_KDEMAIN( ProjectControllerTest, GUI)
+#include "moc_projectcontrollertest.cpp"
 #include "projectcontrollertest.moc"

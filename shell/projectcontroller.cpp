@@ -75,8 +75,8 @@ public:
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
-
     QPointer<QAction> m_closeAllProjects;
+    IProjectDialogProvider* dialog;
 
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
@@ -135,6 +135,49 @@ public:
     }
 };
 
+IProjectDialogProvider::IProjectDialogProvider()
+{}
+
+IProjectDialogProvider::~IProjectDialogProvider()
+{}
+
+ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) : d(p)
+{}
+
+ProjectDialogProvider::~ProjectDialogProvider()
+{}
+
+KUrl ProjectDialogProvider::askProjectConfigLocation()
+{
+    Q_ASSERT(d);
+    KSharedConfig * config = KGlobal::config().data();
+    KConfigGroup group = config->group( "General Options" );
+    QString dir = group.readEntry( "DefaultProjectsDirectory",
+                                     QDir::homePath() );
+
+    QString projectFileInfo = ShellExtension::getInstance()->projectFileExtension()
+        + "|" + ShellExtension::getInstance()->projectFileDescription()
+        + "\n";
+    KUrl response = KFileDialog::getOpenUrl( dir, projectFileInfo,
+        d->m_core->uiControllerInternal()->defaultMainWindow(),
+        i18n( "Open Project" ) );
+    return response;
+    }
+
+bool ProjectDialogProvider::userWantsReopen()
+{
+    Q_ASSERT(d);
+    return (KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
+                            i18n( "Reopen the current project?" ) )
+                == KMessageBox::No) ? false : true;
+}
+
+void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
+{
+    Q_ASSERT(d->dialog);
+    delete d->dialog;
+    d->dialog = dialog;
+}
 
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
@@ -151,6 +194,7 @@ ProjectController::ProjectController( Core* core )
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
+    d->dialog = new ProjectDialogProvider(d);
 }
 
 void ProjectController::setupActions()
@@ -202,6 +246,7 @@ void ProjectController::setupActions()
 ProjectController::~ProjectController()
 {
     delete d->model;
+    delete d->dialog;
     delete d;
 }
 
@@ -271,17 +316,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( url.isEmpty() )
     {
-        KSharedConfig * config = KGlobal::config().data();
-        KConfigGroup group = config->group( "General Options" );
-        QString dir = group.readEntry( "DefaultProjectsDirectory",
-                                             QDir::homePath() );
-
-        QString projectFileInfo = ShellExtension::getInstance()->projectFileExtension()
-                + "|" + ShellExtension::getInstance()->projectFileDescription()
-                + "\n";
-        url = KFileDialog::getOpenUrl( dir, projectFileInfo,
-                                       d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                       i18n( "Open Project" ) );
+        url = d->dialog->askProjectConfigLocation();
     }
 
     if ( !url.isValid() )
@@ -291,13 +326,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
     {
         if ( url == project->projectFileUrl() )
         {
-            if ( KMessageBox::questionYesNo( d->m_core->uiControllerInternal()->defaultMainWindow(),
-                                             i18n( "Reopen the current project?" ) )
-                    == KMessageBox::No )
-            {
-                return false;
-            } else {
+            if ( d->dialog->userWantsReopen() )
+            { // close first, then open again by falling through
                 closeProject(project);
+            } else { // abort
+                return false;
             }
         }
     }
@@ -528,5 +561,3 @@ QItemSelectionModel* ProjectController::projectSelectionModel()
 }
 
 #include "projectcontroller.moc"
-
-

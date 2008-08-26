@@ -32,6 +32,19 @@ namespace KDevelop
 
 class IProject;
 class Core;
+class UiController;
+
+class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
+{
+Q_OBJECT
+public:
+    IProjectDialogProvider();
+    virtual ~IProjectDialogProvider();
+
+public slots:
+    virtual KUrl askProjectConfigLocation() = 0;
+    virtual bool userWantsReopen() = 0;
+};
 
 class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
 {
@@ -54,6 +67,8 @@ public:
     IProject* findProjectForUrl( const KUrl& ) const;
     void addProject(IProject*);
 //     IProject* currentProject() const;
+
+    void setDialogProvider(IProjectDialogProvider*);
 
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
@@ -88,6 +103,20 @@ private:
     Q_PRIVATE_SLOT(d, void unloadAllProjectPlugins() )
     class ProjectControllerPrivate* const d;
 };
+
+class ProjectDialogProvider : public IProjectDialogProvider
+{
+Q_OBJECT
+public:
+    ProjectDialogProvider(ProjectControllerPrivate* const p);
+    virtual ~ProjectDialogProvider();
+    ProjectControllerPrivate* const d;
+
+public slots:
+    virtual KUrl askProjectConfigLocation();
+    virtual bool userWantsReopen();
+};
+
 
 }
 #endif
