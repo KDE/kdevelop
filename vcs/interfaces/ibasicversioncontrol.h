@@ -101,14 +101,19 @@ public:
     virtual VcsJob* repositoryLocation( const KUrl& localLocation ) = 0;
 
     /**
-     * adds a local file/dir to the list of versioned files recursive is
-     * only active for directories
+     * adds a local unversioned file or directory to the list of versioned files.
+     * @param recursive is only meaningful for directories
+     * @param localLocations a list of files or directories that should be put under version control
+     * @param recursion wether to add directories and their childs or only directories themselves
+     * @returns a job that executes the addition
      */
     virtual VcsJob* add( const KUrl::List& localLocations,
                          RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
 
     /**
-     * removes a local file/dir from the list of versioned files
+     * removes a local versioned file or directory from the version control system
+     * @param the list of files/directories to remove from the VCS
+     * @returns a job that executes the removal
      */
     virtual VcsJob* remove( const KUrl::List& localLocations ) = 0;
 
