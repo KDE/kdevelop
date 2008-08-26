@@ -57,8 +57,10 @@ protected:
     Test* index2Test(const QModelIndex&) const;
     OverlayButton* button() const;
 
-private slots:
+protected slots:
     void slotEntered(const QModelIndex& index);
+
+private slots:
     void slotViewportEntered();
     void slotRowsRemoved(const QModelIndex& parent, int start, int end);
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

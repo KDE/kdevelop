@@ -57,6 +57,18 @@ void SelectionManager::setButton(OverlayButton* button)
 SelectionManager::~SelectionManager()
 {}
 
+
+void SelectionManager::slotEntered(const QModelIndex& index)
+{
+    if (index.isValid()) {
+        Test* t = index2Test(index);
+        Q_ASSERT(t);
+        button()->setChecked(t->selected());
+    }
+    OverlayManager::slotEntered(index);
+}
+
+
 void SelectionManager::setItemSelected(bool selected)
 {
     const QModelIndex index = button()->index();

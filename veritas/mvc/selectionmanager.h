@@ -52,6 +52,9 @@ public:
     virtual ~SelectionManager();
     virtual void setButton(OverlayButton*);
 
+protected slots:
+    void slotEntered(const QModelIndex&);
+
 private slots:
     void setItemSelected(bool);
 
