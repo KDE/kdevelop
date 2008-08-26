@@ -272,10 +272,6 @@ void QTestPlugin::newQTest()
     src.close();
     dc->openDocument(srcUrl);
     if (m_proj) pfm->addFile(srcUrl, m_dir);
-
-    KDevRegister* kr = new KDevRegister;
-    kr->setProject(m_proj);
-    kr->reload();
 }
 
 ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
