@@ -178,7 +178,8 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
 
     d->isRunning = false;
 
-    d->failed = true;
+//TODO: some DVCS commands can use stderr...
+//     d->failed = true; //Some DVCS (Git) commands like to use stderr
     setError( d->childproc->exitCode() );
     setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
     kDebug(9509) << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
@@ -194,7 +195,8 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     d->isRunning = false;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        d->failed = true;
+        //some dvcs commands use status to show changes. Git-status returns 1 if there are updates
+//         d->failed = true;
         setError( exitCode );
         setErrorText( i18n("Process exited with status %1", exitCode) );
     }
@@ -220,17 +222,12 @@ void DVCSjob::slotReceivedStderr(const QStringList& output)
     kDebug(9509)<<output.join("\n");
 }
 
-QVariant DVCSjob::fetchResults()
-{
-    return output();
-}
-
-
 KDevelop::VcsJob::JobStatus DVCSjob::status() const
 {
     if (d->isRunning)
         return KDevelop::VcsJob::JobRunning;
 
+    //TODO: Actually we don't set d->failed now, see comments for "d->failed = "
     if (d->failed)
         return KDevelop::VcsJob::JobFailed;
 

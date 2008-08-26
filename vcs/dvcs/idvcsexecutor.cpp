@@ -24,11 +24,12 @@
 
 #include "idvcsexecutor.h"
 
-#include <QFileInfo>
-#include <QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+#include <QtCore/QVariant>
 
-#include <KDebug>
-#include <KShell>
+#include <KDE/KDebug>
+#include <KDE/KShell>
 
 #include "dvcsjob.h"
 
@@ -130,23 +131,24 @@ QStringList IDVCSexecutor::IDVCSexecutor::branches(const QString &repository)
 }
 
 //commit manager helpers:
-QList<KDevelop::VcsStatusInfo> IDVCSexecutor::getModifiedFiles(const QString &directory){
+QList<QVariant> IDVCSexecutor::getModifiedFiles(const QString &directory){
     Q_UNUSED(directory)
-    return QList<KDevelop::VcsStatusInfo>();
+    return QList<QVariant>();
 }
 
-QList<KDevelop::VcsStatusInfo> IDVCSexecutor::getCachedFiles(const QString &directory){
-    Q_UNUSED(directory)
-    return QList<KDevelop::VcsStatusInfo>();
-}
-
-QStringList IDVCSexecutor::getOtherFiles(const QString &directory)
+QList<QVariant> IDVCSexecutor::getCachedFiles(const QString &directory)
 {
     Q_UNUSED(directory)
-    return QStringList();
+    return QList<QVariant>();
 }
 
-DVCSjob* IDVCSexecutor::reset(const QString &repository, const QStringList &args, const QStringList files)
+QList<QVariant> IDVCSexecutor::getOtherFiles(const QString &directory)
+{
+    Q_UNUSED(directory)
+    return QList<QVariant>();
+}
+
+DVCSjob* IDVCSexecutor::reset(const QString &repository, const QStringList &args, const KUrl::List &files)
 {
     Q_UNUSED(repository)
     Q_UNUSED(args)

@@ -28,6 +28,7 @@
 #define DVCS_JOB_H
 
 #include <QtCore/QStringList>
+#include <QtCore/QVariant>
 #include <KDE/KProcess>
 
 #include "../vcsexport.h"
@@ -165,12 +166,20 @@ public:
     QString output() const;
 
     // Begin:  KDevelop::VcsJob
+    
+    /** 
+     * Sets executions reults.
+     * In most cases this method is used by IDVCSexecutor
+     * @see fetchResults()
+     */
+    virtual void setResults(const QVariant &res) {results = res;}
 
     /**
-     * Returns execution results stored in QVariant
-     * It simply rerurns output().
+     * Returns execution results stored in QVariant.
+     * Mostly used in vcscommitdialog.
+     * @see setResults(const QVariant &res)
      */
-    virtual QVariant fetchResults();
+    virtual QVariant fetchResults() {return results;}
 
     /**
      * Returns JobStatus
@@ -203,6 +212,7 @@ private Q_SLOTS:
 
 private:
     DVCSjobPrivate* const d;
+    QVariant results;
 };
 
 #endif

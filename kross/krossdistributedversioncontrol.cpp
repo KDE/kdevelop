@@ -239,4 +239,14 @@ VcsJob* KrossDistributedVersionControl::pull(const KDevelop::VcsLocation& localO
     return new KrossVcsJob("pull", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocation, action, m_plugin, action);
 }
 
+VcsJob* KrossDistributedVersionControl::checkout(const KUrl &repo, const QString &branch, const QStringList &args)
+{
+    return new KrossVcsJob("checkout", QVariantList() << repo << branch << args, action, m_plugin, action);
+}
+
+VcsJob* KrossDistributedVersionControl::reset(const KUrl &repository, const QStringList &args, const KUrl::List &files)
+{
+    return new KrossVcsJob("checkout", QVariantList() << repository << args << files, action, m_plugin, action);
+}
+
 #include "krossdistributedversioncontrol.moc"

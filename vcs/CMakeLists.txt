@@ -3,7 +3,6 @@ set(kdevplatformvcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
-    dvcs/ui/commitdialog.ui
     dvcs/ui/cvsgenericoutputview.ui
     dvcs/ui/cvsmainview.ui
     dvcs/ui/importmetadatawidget.ui
@@ -37,7 +36,6 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/ui/importmetadatawidget.cpp
     dvcs/ui/logview.cpp
     dvcs/ui/branchmanager.cpp
-    dvcs/ui/commitmanager.cpp
     dvcs/ui/revhistory/commitView.cpp
     dvcs/ui/revhistory/commitlogmodel.cpp
 )

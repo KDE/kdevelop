@@ -71,7 +71,7 @@ public:
     virtual bool isVersionControlled(const KUrl& localLocation);
     virtual VcsJob* repositoryLocation(const KUrl& localLocation);
     virtual VcsJob* add(const KUrl::List& localLocations,
-                        IBasicVersionControl::RecursionMode recursion);
+                        IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive);
     virtual VcsJob* remove(const KUrl::List& localLocations);
     virtual VcsJob* status(const KUrl::List& localLocations,
                            IBasicVersionControl::RecursionMode recursion);
@@ -86,7 +86,7 @@ public:
                            IBasicVersionControl::RecursionMode recursion);
     virtual VcsJob* commit(const QString& message,
                            const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion);
+                           IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive);
     virtual VcsJob* diff(const VcsLocation& localOrRepoLocationSrc,
                          const VcsLocation& localOrRepoLocationDst,
                          const VcsRevision& srcRevision,
@@ -118,8 +118,10 @@ public:
                          const VcsLocation& localOrRepoLocationDst);
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation);
-    virtual VcsJob* checkout(const QString &localLocation,
-                               const QString &repo);
+    virtual VcsJob* checkout(const KUrl& repo, const QString &branch, 
+                             const QStringList &args);
+    virtual VcsJob* reset(const KUrl& repository, 
+                          const QStringList &args, const KUrl::List& files);
     // End:  KDevelop::IDistributedVersionControl
 
     /** Returns pointer to IDVCSexecutor used in DistributedVersionControlPlugin */

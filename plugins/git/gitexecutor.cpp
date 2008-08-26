@@ -24,13 +24,14 @@
 
 #include "gitexecutor.h"
 
-#include <QFileInfo>
-#include <QDir>
-#include <QString>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 
-#include <KUrl>
-#include <KShell>
-#include <KDebug>
+#include <KDE/KUrl>
+#include <KDE/KShell>
+#include <KDE/KDebug>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <interfaces/iplugin.h>
@@ -225,7 +226,7 @@ DVCSjob* GitExecutor::branch(const QString &repository, const QString &basebranc
     return NULL;
 }
 
-DVCSjob* GitExecutor::reset(const QString &repository, const QStringList &args, const QStringList files)
+DVCSjob* GitExecutor::reset(const QString &repository, const QStringList &args, const KUrl::List& files)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
@@ -282,7 +283,7 @@ QStringList GitExecutor::branches(const QString &repository)
     }
     QStringList branchListDirty;
     if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        branchListDirty = job->output().split('\n');
+        branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
     else
         return QStringList();
 
@@ -304,12 +305,22 @@ QStringList GitExecutor::branches(const QString &repository)
     return branchList;
 }
 
-QStringList GitExecutor::getOtherFiles(const QString &directory)
+QList<QVariant> GitExecutor::getOtherFiles(const QString &directory)
 {
-    return getLsFiles(directory, QStringList(QString("--others")) );
+    QStringList otherFiles = getLsFiles(directory, QStringList(QString("--others")) );
+
+    QList<QVariant> others;
+    foreach(const QString &file, otherFiles)
+    {
+        VcsStatusInfo status;
+        status.setUrl(directory + file);
+        status.setState(VcsStatusInfo::ItemUnknown);
+        others.append(qVariantFromValue<VcsStatusInfo>(status));
+    }
+    return others;
 }
 
-QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
+QList<QVariant> GitExecutor::getModifiedFiles(const QString &directory)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory) )
@@ -318,16 +329,16 @@ QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
         job->exec();
     QStringList output;
     if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        output = job->output().split('\n');
+        output = job->output().split('\n', QString::SkipEmptyParts);
     else
-        return QList<VcsStatusInfo>();
+        return QList<QVariant>();
 
-    QList<VcsStatusInfo> modifiedFiles;
+    QList<QVariant> modifiedFiles;
     foreach(QString line, output)
     {
         QChar stCh = line[97];
 
-        KUrl file(line.section('\t', 1).trimmed());
+        KUrl file(directory + line.section('\t', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
@@ -335,13 +346,13 @@ QList<VcsStatusInfo> GitExecutor::getModifiedFiles(const QString &directory)
 
         kDebug(9045) << line[97] << " " << file.path();
 
-        modifiedFiles.append(status);
+        modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
     }
 
     return modifiedFiles;
 }
 
-QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
+QList<QVariant> GitExecutor::getCachedFiles(const QString &directory)
 {
     DVCSjob* job = gitRevParse(directory, QStringList(QString("--branches")));
     job->exec();
@@ -359,7 +370,7 @@ QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
             job->setStandardInputFile("/dev/null");
         }
         if (job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
-            shaArg<<job->output().split('\n');
+            shaArg<<job->output().split('\n', QString::SkipEmptyParts);
     }
     else
         shaArg<<"HEAD";
@@ -370,25 +381,27 @@ QList<VcsStatusInfo> GitExecutor::getCachedFiles(const QString &directory)
         job->exec();
     QStringList output;
     if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        output = job->output().split('\n');
+        output = job->output().split('\n', QString::SkipEmptyParts);
     else
-        return QList<VcsStatusInfo>();
+        return QList<QVariant>();
 
-    QList<VcsStatusInfo> cachedFiles;
+    QList<QVariant> cachedFiles;
 
     foreach(QString line, output)
     {
         QChar stCh = line[97];
 
-        KUrl file(line.section('\t', 1).trimmed());
+        KUrl file(directory + line.section('\t', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
-        status.setState(charToState(stCh.toAscii() ) );
+        //TODO: use abother charToState or anything else! If order of constants is changed... dangerous!!!
+        status.setState(VcsStatusInfo::State(charToState(stCh.toAscii() ) + 
+                                             VcsStatusInfo::ItemAddedIndex - VcsStatusInfo::ItemAdded) );
 
         kDebug(9045) << line[97] << " " << file.path();
 
-        cachedFiles.append(status);
+        cachedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
     }
 
     return cachedFiles;
@@ -428,7 +441,7 @@ QList<DVCScommit> GitExecutor::getAllCommits(const QString &repo)
     DVCSjob* job = gitRevList(repo, args);
     if (job)
         job->exec();
-    QStringList commits = job->output().split('\n');
+    QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 
     static QRegExp rx_com("commit \\w{40,40}");
 
@@ -592,7 +605,7 @@ void GitExecutor::initBranchHash(const QString &repo)
     DVCSjob* job = gitRevList(repo, QStringList(root));
     if (job)
         job->exec();
-    QStringList commits = job->output().split('\n');
+    QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //     kDebug(9045) << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
     foreach(const QString &branch, branches)
@@ -609,7 +622,7 @@ void GitExecutor::initBranchHash(const QString &repo)
         DVCSjob* job = gitRevList(repo, args);
         if (job)
             job->exec();
-        QStringList commits = job->output().split('\n');
+        QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //         kDebug(9045) << "\n\n\n commits" << commits << "\n\n\n";
         branchesShas.append(commits);
     }
@@ -623,7 +636,7 @@ void GitExecutor::parseOutput(const QString& jobOutput, QList<DVCScommit>& commi
 
     static QRegExp rx_com( "commit \\w{1,40}" );
 
-    QStringList lines = jobOutput.split("\n");
+    QStringList lines = jobOutput.split('\n', QString::SkipEmptyParts);
 
     DVCScommit item;
     QString commitLog;
@@ -657,7 +670,7 @@ QStringList GitExecutor::getLsFiles(const QString &directory, const QStringList 
     {
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
-            return job->output().split('\n');
+            return job->output().split('\n', QString::SkipEmptyParts);
         else
             return QStringList();
     }

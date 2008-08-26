@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
- *                                                                         *
+ *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -10,19 +10,22 @@
 
 #include "vcscommitdialog.h"
 
-#include <ktextedit.h>
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KDE/KTextEdit>
+#include <KDE/KComboBox>
+#include <KDE/KLocale>
+#include <KDE/KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iplugin.h>
 
 #include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
 #include "../vcsstatusinfo.h"
 
 #include <QtCore/QHash>
+#include <QtGui/QColor>
+#include <QtCore/QRegExp>
 
 #include "ui_vcscommitdialog.h"
 
@@ -37,11 +40,14 @@ public:
         : dlg(dialog)
     {}
 
-    void insertRow( const QString& state, const KUrl& url, Qt::CheckState checkstate = Qt::Checked )
+    void insertRow( const QString& state, const KUrl& url,
+                    const QColor &foregroundColor = Qt::black,
+                    Qt::CheckState checkstate = Qt::Checked)
     {
         QStringList strings;
         strings << "" << state << url.pathOrUrl();
         QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
+        item->setForeground(2, foregroundColor);
         item->setCheckState(0, checkstate);
     }
 
@@ -56,15 +62,17 @@ public:
     }
 
     IBasicVersionControl *vcsiface;
+    IPlugin *plugin;
     VcsCommitDialog* dlg;
     QHash<QString, KDevelop::VcsStatusInfo> statusInfos;
     Ui::VcsCommitDialog ui;
 };
 
-VcsCommitDialog::VcsCommitDialog( IBasicVersionControl* iface, QWidget *parent )
+VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
     : KDialog( parent ), d(new VcsCommitDialogPrivate(this))
 {
-    d->vcsiface = iface;
+    d->vcsiface = plugin->extension<KDevelop::IBasicVersionControl>();
+    d->plugin = plugin;
 
     d->ui.setupUi( mainWidget() );
     setButtons( KDialog::Ok | KDialog::Cancel );
@@ -102,9 +110,9 @@ QString VcsCommitDialog::message() const
     return d->ui.message->toPlainText();
 }
 
-IBasicVersionControl* VcsCommitDialog::versionControlIface()
+IPlugin* VcsCommitDialog::pluginToGetVCiface()
 {
-    return d->vcsiface;
+    return d->plugin;
 }
 
 void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
@@ -115,6 +123,8 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
         kDebug() << "oops, no vcsiface";
         return;
     }
+    //DVCS uses some "hack", see DistributedVersionControlPlugin::status
+    //Thus DVCS gets statuses for all files in the repo. But project->relativeUrl() below helps us
     VcsJob *job = d->vcsiface->status( urls );
     job->exec();
     if( job->status() != VcsJob::JobSucceeded )
@@ -138,16 +148,29 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
             switch( info.state() )
             {
                 case VcsStatusInfo::ItemAdded:
-                    d->insertRow( i18nc("file was added to versioncontrolsystem", "Added"), path );
+                    d->insertRow( i18nc("file was added to versioncontrolsystem", "Added"), path, Qt::green );
                     break;
                 case VcsStatusInfo::ItemDeleted:
-                    d->insertRow( i18nc("file was deleted to versioncontrolsystem", "Deleted"), path );
+                    d->insertRow( i18nc("file was deleted from versioncontrolsystem", "Deleted"), path, Qt::red );
                     break;
                 case VcsStatusInfo::ItemModified:
                     d->insertRow( i18nc("version controlled file was modified", "Modified"), path );
                     break;
                 case VcsStatusInfo::ItemUnknown:
-                    d->insertRow( i18nc("File not known to versioncontrolsystem", "Unknown"), path, Qt::Unchecked );
+                    d->insertRow( i18nc("file is not known to versioncontrolsystem", "Unknown"), 
+                                  path, Qt::green, Qt::Unchecked );
+                    break;
+                //DVCS part
+                //TODO: find better names, than "C <something>"
+                //NOTE: KDevVcsCommonPlugin::commit() will require fix!!!
+                case VcsStatusInfo::ItemAddedIndex:
+                    d->insertRow( i18nc("file was added to index", "C Added"), path, Qt::green );
+                    break;
+                case VcsStatusInfo::ItemDeletedIndex:
+                    d->insertRow( i18nc("file was deleted from index", "C Deleted"), path, Qt::red );
+                    break;
+                case VcsStatusInfo::ItemModifiedIndex:
+                    d->insertRow( i18nc("file was modified in index", "C Modified"), path);
                     break;
                 default:
                     break;
@@ -159,6 +182,7 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
         reject();
     }
 }
+
 KUrl::List VcsCommitDialog::checkedUrls() const
 {
     KUrl::List list;
@@ -177,6 +201,29 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         job->exec();
     }
     return list;
+}
+
+void VcsCommitDialog::getDVCSlists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const
+{
+    QTreeWidgetItemIterator it(d->ui.files);
+    for( ; *it; ++it )
+    {
+        bool indexed = (*it)->text(1).contains(QRegExp("C *"));
+        bool deleted = (*it)->text(1).contains(QString("Deleted"));
+        bool unchecked = (*it)->checkState(0) == Qt::Unchecked;
+
+        KUrl path;
+        VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
+        if (indexed && unchecked)
+            resetFiles << info.url();
+        if (!indexed && !unchecked)
+        {
+            if (deleted)
+                rmFiles << info.url();
+            else
+                addFiles << info.url();
+        }
+    }
 }
 
 bool VcsCommitDialog::recursive() const

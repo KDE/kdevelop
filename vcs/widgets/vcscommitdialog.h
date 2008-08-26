@@ -8,11 +8,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_COMMITDIALOG_H
-#define SVN_COMMITDIALOG_H
+#ifndef VCS_COMMITDIALOG_H
+#define VCS_COMMITDIALOG_H
 
-#include <KDialog>
-#include <KUrl>
+#include <KDE/KDialog>
+#include <KDE/KUrl>
 #include "../vcsexport.h"
 
 class QStringList;
@@ -20,21 +20,23 @@ class QStringList;
 namespace KDevelop
 {
 class IBasicVersionControl;
+class IPlugin;
 
 class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public KDialog
 {
     Q_OBJECT
 public:
-    VcsCommitDialog( IBasicVersionControl *iface, QWidget *parent = 0 );
+    VcsCommitDialog( IPlugin *plugin, QWidget *parent = 0 );
     virtual ~VcsCommitDialog();
     void setCommitCandidates( const KUrl::List &list );
     void setMessage( const QString& );
     void setRecursive( bool );
     void setOldMessages( const QStringList& );
     KUrl::List checkedUrls() const;
+    void getDVCSlists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const;
     bool recursive() const;
     QString message() const;
-    IBasicVersionControl* versionControlIface();
+    IPlugin* pluginToGetVCiface();
 Q_SIGNALS:
     void doCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,6 +43,8 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/interfaces/idistributedversioncontrol.h>
+#include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/widgets/vcsannotationwidget.h>
 #include <vcs/vcsjob.h>
@@ -365,7 +368,7 @@ void KDevVcsCommonPlugin::commit()
     Q_ASSERT( !m_ctxUrls.isEmpty() );
     foreach( KDevelop::IPlugin* plugin, m_ctxUrls.keys() )
     {
-        KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog( plugin->extension<KDevelop::IBasicVersionControl>(), core()->uiController()->activeMainWindow() );
+        KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog( plugin, core()->uiController()->activeMainWindow() );
         dlg->setCommitCandidates( m_ctxUrls.value( plugin ) );
         KConfigGroup vcsGroup( KSharedConfig::openConfig( componentData() ), "VcsCommon" );
         dlg->setOldMessages( vcsGroup.readEntry( "OldCommitMessages", QStringList() ) );
@@ -378,12 +381,52 @@ void KDevVcsCommonPlugin::commit()
 
 void KDevVcsCommonPlugin::executeCommit( KDevelop::VcsCommitDialog* dlg )
 {
-    KDevelop::IBasicVersionControl* iface = dlg->versionControlIface();
     KConfigGroup vcsGroup( KSharedConfig::openConfig( componentData() ), "VcsCommon" );
     QStringList oldMessages = vcsGroup.readEntry( "OldCommitMessages", QStringList() );
     oldMessages << dlg->message();
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
-    core()->runController()->registerJob( iface->commit( dlg->message(), dlg->checkedUrls(), dlg->recursive() ? KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive ) );
+
+    KDevelop::IPlugin* plugin = dlg->pluginToGetVCiface();
+
+    if (KDevelop::ICentralizedVersionControl* iface = plugin->extension<KDevelop::ICentralizedVersionControl>())
+    {
+        core()->runController()->registerJob( iface->commit( dlg->message(), dlg->checkedUrls(), 
+             dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive ) );
+    }
+    else if (KDevelop::IDistributedVersionControl* idvcs = plugin->extension<KDevelop::IDistributedVersionControl>())
+    {
+        //if indexed file unchecked then reset
+        KUrl::List resetFiles;
+        KUrl::List addFiles;
+        KUrl::List rmFiles;
+
+        dlg->getDVCSlists(resetFiles, addFiles, rmFiles);
+
+        kDebug() << "filesToReset" << resetFiles;
+        kDebug() << "filesToAdd" << addFiles;
+        kDebug() << "filesToRm" << rmFiles;
+
+        //repo will be extracted from one of the filenames
+        KUrl repo;
+        if (!resetFiles.isEmpty())
+        {
+            repo = resetFiles[0];
+            core()->runController()->registerJob(idvcs->reset(repo, QStringList(QString("--")), resetFiles));
+        }
+        if (!addFiles.isEmpty())
+        {
+            repo = addFiles[0];
+            core()->runController()->registerJob(idvcs->add(addFiles));
+        }
+        if (!rmFiles.isEmpty())
+        {
+            repo = rmFiles[0];
+            core()->runController()->registerJob(idvcs->remove(rmFiles));
+        }
+
+        core()->runController()->registerJob(idvcs->commit(dlg->message(), KUrl::List(repo)));
+    }
+
     dlg->deleteLater();
 }
 

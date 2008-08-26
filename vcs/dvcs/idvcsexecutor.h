@@ -27,6 +27,7 @@
 
 #include "../vcsstatusinfo.h"
 
+class QVariant;
 class KUrl;
 class DVCSjob;
 
@@ -245,14 +246,14 @@ public:
 
     //commit dialog helpers:
     /** Returns the list of modified files (diff between workdir and index). */
-    virtual QList<KDevelop::VcsStatusInfo> getModifiedFiles(const QString &directory);
+    virtual QList<QVariant> getModifiedFiles(const QString &directory);
     /** Returns the list of already cached files (diff between index and HEAD). */
-    virtual QList<KDevelop::VcsStatusInfo> getCachedFiles(const QString &directory);
+    virtual QList<QVariant> getCachedFiles(const QString &directory);
     /** Files are not in the repo, but in the repository location. */
-    virtual QStringList getOtherFiles(const QString &directory);
+    virtual QList<QVariant> getOtherFiles(const QString &directory);
 
     /** Reset */
-    virtual DVCSjob* reset(const QString &repository, const QStringList &args, const QStringList files);
+    virtual DVCSjob* reset(const QString &repository, const QStringList &args, const KUrl::List &files);
 
     /** Returs the list of all commits (in all branches).
      * @see CommitView and CommitViewDelegate to see how this list is used.

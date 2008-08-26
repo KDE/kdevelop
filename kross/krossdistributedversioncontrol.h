@@ -74,6 +74,8 @@ public:
     KDevelop::VcsJob* clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryRoot);
     KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
     KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
+    KDevelop::VcsJob* checkout(const KUrl &repo, const QString &branch, const QStringList &args);
+    KDevelop::VcsJob* reset(const KUrl &repository, const QStringList &args, const KUrl::List &files);
 
     void setActionDistributed(Kross::Action* anAction);
 private:

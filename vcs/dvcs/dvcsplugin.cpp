@@ -59,7 +59,7 @@
 #include "ui/importmetadatawidget.h"
 #include "ui/logview.h"
 #include "ui/branchmanager.h"
-#include "ui/commitmanager.h"
+// #include "ui/commitmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
 
@@ -119,9 +119,19 @@ KDevelop::VcsJob*
 {
     QFileInfo info( localLocations[0].toLocalFile() );
 
-    return d->m_exec->status(info.absolutePath(),
-                              localLocations,
-                              (recursion == IBasicVersionControl::Recursive) ? true:false);
+    //it's a hack!!! See VcsCommitDialog::setCommitCandidates and the usage of DVCSjob/IDVCSexecutor
+    //We need results just in status, so we set them here before execution in VcsCommitDialog::setCommitCandidates
+    QString repo = localLocations[0].toLocalFile();
+    QList<QVariant> statuses;
+
+    statuses << d->m_exec->getCachedFiles(repo)
+             << d->m_exec->getModifiedFiles(repo)
+             << d->m_exec->getOtherFiles(repo);
+    DVCSjob* statJob = d->m_exec->status(info.absolutePath(),
+                                 localLocations,
+                                 (recursion == IBasicVersionControl::Recursive) ? true:false);
+    statJob->setResults(QVariant(statuses));
+    return statJob;
 }
 
 ///Not used in DVCS;
@@ -285,10 +295,18 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::checkout(const QString &localLocation,
-                                                  const QString &repo)
+        DistributedVersionControlPlugin::checkout(const KUrl& repo, const QString &branch, 
+                                                  const QStringList &args)
 {
-    return d->m_exec->checkout(repo, localLocation);
+    Q_UNUSED(args)
+    return d->m_exec->checkout(repo.path(), branch);
+}
+
+KDevelop::VcsJob* 
+        DistributedVersionControlPlugin::reset(const KUrl& repository, 
+                                               const QStringList &args, const KUrl::List& files)
+{
+    return d->m_exec->reset(repository.path(), args, files);
 }
 
 // End:  KDevelop::IDistributedVersionControl
@@ -370,10 +388,6 @@ KDevelop::ContextMenuExtension
     QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
-        action = new KAction(i18n("Commit..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-        menu->addAction(action);
-
         action = new KAction(i18n("Branch Manager"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
         menu->addAction( action );
@@ -416,8 +430,8 @@ void DistributedVersionControlPlugin::slotInit()
 
 void DistributedVersionControlPlugin::ctxCommit()
 {
-    CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().path(), proxy());
-    cmtManager->show();
+//     CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().path(), proxy());
+//     cmtManager->show();
 }
 
 void DistributedVersionControlPlugin::ctxAdd()
