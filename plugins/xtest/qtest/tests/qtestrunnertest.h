@@ -21,16 +21,13 @@
 #ifndef QXQTEST_QTESTRUNNERTEST_H
 #define QXQTEST_QTESTRUNNERTEST_H
 
-#include <QtTest/QTest>
+#include <QObject>
+#include <veritas/testresult.h>
 
-class QAbstractItemModel;
-namespace Veritas { class RunnerWindow; }
+namespace Veritas { class Test; class RunnerTestHelper; }
 
 namespace QTest { namespace Test {
 
-// TODO this test requires too much maintenance + is accessing
-//      private parts of Veritas. Should get rid of it, but first
-//      make sure the removed bits are covered some place else.
 class QTestRunnerTest : public QObject
 {
     Q_OBJECT
@@ -43,20 +40,12 @@ private slots:
     void runTwice();
 
 private:
-    void initNrun(QByteArray&);
-    void checkTests(QStringList items);
-    void checkTest(const QVariant& expected, int lvl0, int lvl1 = -1, int lvl2 = -1);
-    void checkResultItems(QList<QStringList> expected);
-    void checkResultItem(int num, const QStringList& item);
-    void nrofMessagesEquals(int num);
-    void waitForRunToComplete();
-    void assertAllFilesClosed();
+    void assertAllFilesClosed(Veritas::Test*);
+    Veritas::Test* fetchRoot(QByteArray& regXml);
+    void assertTestStatus(QMap<QString, Veritas::TestState>, Veritas::Test* root);
 
 private:
-    Veritas::RunnerWindow* m_window;
-    QAbstractItemModel* m_runnerItems;
-    QAbstractItemModel* m_resultModel;
-    bool m_stop;
+    Veritas::RunnerTestHelper* m_runner;
 };
 
 }}

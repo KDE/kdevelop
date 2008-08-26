@@ -24,28 +24,53 @@
 
 #include <KDebug>
 #include <QBuffer>
-#include <QTreeView>
-#include <QModelIndex>
-#include <QAbstractItemModel>
 
-#include "ui_runnerwindow.h"
 #include "../xmlregister.h"
 #include "../qtestcase.h"
 
-#include <veritas/resultsmodel.h>
-#include <veritas/runnermodel.h>
-#include <veritas/runnerwindow.h>
 #include <veritas/test.h>
+#include <veritas/testresult.h>
 
-using Veritas::RunnerWindow;
-using Veritas::RunnerModel;
-using Veritas::ResultsModel;
-using QTest::XmlRegister;
+#include "runnertesthelper.h"
+
+using Veritas::RunnerTestHelper;
 using QTest::Test::QTestRunnerTest;
 
 Q_DECLARE_METATYPE(QList<QStringList>)
 
-QByteArray regXml =
+void QTestRunnerTest::init()
+{
+    m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+}
+
+void QTestRunnerTest::cleanup()
+{
+    m_runner->cleanupGUI();
+    delete m_runner;
+}
+
+// command
+void QTestRunnerTest::empty()
+{
+    QByteArray reg =
+            "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+            "<root dir=\"\">\n"
+            "</root>\n";
+    Veritas::Test* root = fetchRoot(reg);
+
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    QStringList runnerItems;
+    runnerItems << "0 x";
+    m_runner->verifyTestTree(runnerItems);
+
+    QList<QStringList> results;
+    m_runner->verifyResultItems(results);
+}
+
+QByteArray sunnyDayXml =
     "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
     "<root dir=\"\">\n"
     "<suite name=\"suite1\" dir=\"suite1\">\n"
@@ -63,66 +88,11 @@ QByteArray regXml =
     "</suite>\n"
     "</root>\n";
 
-#define CHECK_STOP \
-    if (m_stop) {\
-        return;\
-    } else void(0)
-
-void QTestRunnerTest::init()
-{
-    QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
-                  << i18n("File Name") << i18n("Line Number");
-    m_window = new RunnerWindow(new ResultsModel(resultHeaders));
-    m_stop = false;
-}
-
-void QTestRunnerTest::cleanup()
-{
-    delete m_window;
-}
-
-// command
-void QTestRunnerTest::empty()
-{
-    QByteArray reg =
-            "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-            "<root dir=\"\">\n"
-            "</root>\n";
-    QBuffer buff(&reg);
-
-    XmlRegister reg_;
-    reg_.setSource(&buff);
-    reg_.reload();
-    RunnerModel* model = new RunnerModel;
-    QSignalSpy* s = new QSignalSpy(model, SIGNAL(allItemsCompleted()));
-
-    model->setRootItem(reg_.root());
-    m_window->setModel(model);
-    //m_window->show();
-    m_window->ui()->actionStart->trigger();
-
-    KOMPARE(s->count(), 1);
-
-    QStringList runnerItems;
-    runnerItems << "0 x";
-    checkTests(runnerItems);
-
-    QList<QStringList> results;
-    checkResultItems(results);
-
-    QMap<QString, QString> status;
-    status["total"] = "0";
-    status["selected"] = "0";
-    status["run"] = "0";
-
-    delete s;
-}
-
 QStringList sunnyDayTests()
 {
     QStringList runnerItems;
-    runnerItems << "0 suite1"
+    runnerItems
+            << "0 suite1"
             << "0 0 fakeqtest1"
             << "0 0 0 cmd1"
             << "0 0 1 cmd2"
@@ -139,153 +109,98 @@ QStringList sunnyDayTests()
     return runnerItems;
 }
 
-QMap<QString,QString> sunnyDayStatus()
+QList<QStringList> sunnyDayResultItems()
 {
-    QMap<QString,QString> status;
-    status["total"] = "5";
-    status["selected"] = "5";
-    status["run"] = "5";
-    status["success"] = ": 4";
-    status["errors"] = ": 1";
-    status["warnings"] = ": 0";
-    return status;
+    QStringList result;
+    result << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
+    return QList<QStringList>() << result;
+}
+
+QMap<QString, Veritas::TestState> sunnyDayTestStates()
+{
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/fakeqtest1/cmd1"] = Veritas::RunSuccess;
+    states["suite1/fakeqtest1/cmd2"] = Veritas::RunSuccess;
+    states["suite1/fakeqtest2/cmd1"] = Veritas::RunSuccess;
+    states["suite1/fakeqtest2/cmd2"] = Veritas::RunError;
+    states["suite1/fakeqtest3/cmd1"] = Veritas::RunSuccess;
+    return states;
 }
 
 // command
 void QTestRunnerTest::sunnyDay()
 {
-    initNrun(regXml);
-    checkTests(sunnyDayTests());
-    assertAllFilesClosed();
+    Veritas::Test* root = fetchRoot(sunnyDayXml);
+    m_runner->setRoot(root);
+    m_runner->runTests();
 
-    QStringList result0;
-    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
-    QList<QStringList> results;
-    results << result0;
-
-    checkResultItems(results);
+    m_runner->verifyTestTree(sunnyDayTests());
+    m_runner->verifyResultItems(sunnyDayResultItems());
+    assertTestStatus(sunnyDayTestStates(), root);
+    assertAllFilesClosed(root);
 }
 
 // command
 void QTestRunnerTest::runTwice()
 {
-    initNrun(regXml);
-    m_window->ui()->actionStart->trigger();
-    waitForRunToComplete(); CHECK_STOP;
+    Veritas::Test* root = fetchRoot(sunnyDayXml);
 
-    checkTests(sunnyDayTests());
-    assertAllFilesClosed();
+    RunnerTestHelper* m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+    m_runner->setRoot(root);
+    m_runner->runTests();
+    m_runner->runTests();
 
-    QStringList result0;
-    result0 << "cmd2" << "failure message" << "fakeqtest2.cpp" << "2";
-    QList<QStringList> results;
-    results << result0;
-
-    checkResultItems(results);
+    m_runner->verifyTestTree(sunnyDayTests());
+    m_runner->verifyResultItems(sunnyDayResultItems());
+    assertAllFilesClosed(root);
 }
 
 // helper
-void QTestRunnerTest::checkResultItems(QList<QStringList> expected)
+Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
 {
-    nrofMessagesEquals(expected.size());
-    for (int i = 0; i < expected.size(); i++) {
-        checkResultItem(i, expected.value(i));
-    }
-}
-
-// helper
-void QTestRunnerTest::checkResultItem(int num, const QStringList& item)
-{
-    m_resultModel = m_window->resultsView()->model();
-
-    KOMPARE(item[0], m_resultModel->data(m_resultModel->index(num, 0))); // test name
-    KOMPARE(item[1], m_resultModel->data(m_resultModel->index(num, 2))); // failure message
-    KOMPARE(item[2], m_resultModel->data(m_resultModel->index(num, 3))); // filename
-    KOMPARE(item[3], m_resultModel->data(m_resultModel->index(num, 4))); // line number
-}
-
-// helper
-void QTestRunnerTest::nrofMessagesEquals(int num)
-{
-    m_resultModel = m_window->resultsView()->model();
-    for (int i = 0; i < num; i++) {
-        KVERIFY(m_resultModel->index(i, 0).isValid());
-    }
-    KVERIFY(!m_resultModel->index(num, 0).isValid());
-}
-
-// helper
-void QTestRunnerTest::initNrun(QByteArray& regXml)
-{
-    QBuffer buff(&regXml);
+    QBuffer buff(&testRegistrationXml);
     XmlRegister reg;
     reg.setSource(&buff);
     reg.reload();
-    RunnerModel* model = new RunnerModel;
-    model->setRootItem(reg.root());
-    m_window->setModel(model);
-    //m_window->show();
-    m_window->ui()->actionStart->trigger();
-    waitForRunToComplete(); CHECK_STOP;
-
-    // decomment the line below to inspect the window manually
-    //QTest::qWait(5000);
+    return reg.root();
 }
 
 // helper
-void QTestRunnerTest::checkTests(QStringList runnerItems)
+void QTestRunnerTest::assertAllFilesClosed(Veritas::Test* root)
 {
-    foreach(QString s, runnerItems) {
-        QStringList spl = s.split(" ");
-        int lvl0 = spl[0].toInt();
-        int lvl1 = (spl.size() > 2) ? spl[1].toInt() : -1;
-        int lvl2 = (spl.size() > 3) ? spl[2].toInt() : -1;
-        QVariant exp = (spl.last() == "x") ? QVariant() : spl.last();
-        checkTest(exp, lvl0, lvl1, lvl2);
-    }
-}
-
-// helper
-void QTestRunnerTest::checkTest(const QVariant& expected, int lvl0, int lvl1, int lvl2)
-{
-    QAbstractItemModel* runner = m_window->ui()->treeRunner->model();
-    QModelIndex index = runner->index(lvl0, 0);
-    if (lvl1 != -1) {
-        index = runner->index(lvl1, 0, index);
-        if (lvl2 != -1) {
-            index = runner->index(lvl2, 0, index);
-        }
-    }
-    KOMPARE(expected, runner->data(index));
-}
-
-// helper
-void QTestRunnerTest::assertAllFilesClosed()
-{
-    RunnerModel* model = m_window->runnerModel();
-    // QTestCases are on lvl2 in the tree model
-    for(int i=0; i<model->rowCount(); i++) {
-        QModelIndex suite = model->index(i, 0);
-        for (int i=0; i<model->rowCount(suite); i++) {
-            QModelIndex cazeIndex = suite.child(i,0);
-            Veritas::Test* t = static_cast<Veritas::Test*>(cazeIndex.internalPointer());
-            QTestCase* caze = qobject_cast<QTestCase*>(t);
+    QTest::qWait(75);
+    // QTestCases are on lvl2 in the test-tree
+    for(int i=0; i<root->childCount(); i++) {
+        Veritas::Test* suite = root->child(i);
+        for (int i=0; i<suite->childCount(); i++) {
+            Veritas::Test* test = suite->child(i);
+            QTestCase* caze = qobject_cast<QTestCase*>(test);
             KVERIFY_MSG(caze, "Not a QTestCase on lvl2 of the test tree? (cast failed)");
-            KVERIFY(caze->fto_outputFileClosed());
+            KVERIFY_MSG(caze->fto_outputFileClosed(), caze->name());
         }
     }
 }
 
-//helper
-void QTestRunnerTest::waitForRunToComplete()
+void QTestRunnerTest::assertTestStatus(QMap<QString, Veritas::TestState> expectedState, Veritas::Test* root)
 {
-    m_stop = true;
-    bool success = QTest::kWaitForSignal(
-        m_window->runnerModel(),
-        SIGNAL(allItemsCompleted()),
-        2000);
-    QVERIFY2(success, "Timeout while waiting for runner items to complete execution");
-    m_stop = false;
+    // QTestCases are on lvl3 in the test-tree
+    for(int i=0; i<root->childCount(); i++) {
+        Veritas::Test* suite = root->child(i);
+        for (int i=0; i<suite->childCount(); i++) {
+            Veritas::Test* caze = suite->child(i);
+            for (int i=0; i<caze->childCount(); i++) {
+                Veritas::Test* cmd = caze->child(i);
+                QString path = suite->name() + "/" + caze->name() + "/" + cmd->name();
+                KVERIFY(expectedState.contains(path));
+                Veritas::TestResult* res = cmd->result();
+                KVERIFY(res);
+                KOMPARE_(expectedState[path], res->state());
+                expectedState.remove(path);
+            }
+        }
+    }
+    KVERIFY(expectedState.isEmpty());
 }
 
 #include "qtestrunnertest.moc"

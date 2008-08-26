@@ -4,7 +4,8 @@ include_directories(
         ${XtestPlugin_SOURCE_DIR}/qtest
         ${XtestPlugin_SOURCE_DIR})
 
-macro(kdev_add_test test_EXEC test_SRCS)
+macro(kdev_add_test test_EXEC)
+    set(test_SRCS ${ARGN})
     qt4_automoc( ${test_SRCS} )
     kde4_add_unit_test(qtest-${test_EXEC} ${test_SRCS})
     target_link_libraries(qtest-${test_EXEC}
@@ -21,7 +22,8 @@ kdev_add_test(ut-qtestcommand "qtestcommandtest.cpp")
 kdev_add_test(ut-qtestsuite "qtestsuitetest.cpp")
 kdev_add_test(ut-qtestregister "qtestregistertest.cpp")
 kdev_add_test(ut-qtestoutputmorpher "qtestoutputmorphertest.cpp")
-kdev_add_test(it-qtestrunnertest qtestrunnertest.cpp)
+set(qtestrunnertest_SRCS qtestrunnertest.cpp runnertesthelper.cpp)
+kdev_add_test(it-qtestrunnertest ${qtestrunnertest_SRCS})
 kdev_add_test(ut-suitebuilder suitebuildertest.cpp)
 kdev_add_test(ut-casebuilder casebuildertest.cpp)
 
