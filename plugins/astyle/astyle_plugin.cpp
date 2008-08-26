@@ -25,12 +25,10 @@
 #include <QLineEdit>
 #include <QRegExp>
 #include <QStringList>
-//#include <QProgressBar>
+#include <QFile>
 
-//#include <kdeversion.h>
 #include <KDebug>
 #include <KDialog>
-//#include <KDevgenericfactory.h>
 #include <KIconLoader>
 #include <KLocale>
 #include <kparts/part.h>
@@ -44,6 +42,8 @@
 #include <KGlobal>
 #include <KAction>
 #include <KActionCollection>
+#include <kio/netaccess.h>
+#include <KMimeType>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -51,6 +51,7 @@
 #include <interfaces/idocument.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <project/projectmodel.h>
 #include "astyle_formatter.h"
 #include "astyle_stringiterator.h"
 #include "astyle_preferences.h"
@@ -73,15 +74,15 @@ AStylePlugin::AStylePlugin( QObject *parent, const QVariantList& )
     /*    "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."*/));
     connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
 
-//     m_formatFileAction = actionCollection()->addAction("tools_astyle");
-//     m_formatFileAction->setText(i18n("Formateee files"));
-//     m_formatFileAction->setToolTip(i18n("Format files"));
-//     m_formatFileAction->setWhatsThis(i18n("<b>Fomat files</b><p>Formatting functionality using <b>astyle</b> library. "
-//         /*"Also available in <b>New Class</b> and <b>Subclassing</b> wizards."*/));
-//     connect(m_formatFileAction, SIGNAL(triggered()), this, SLOT(formatFilesSelect()));
+    m_formatFilesAction = actionCollection()->addAction("tools_astyle");
+    m_formatFilesAction->setText(i18n("Format files"));
+    m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
+    m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library. "
+        /*"Also available in <b>New Class</b> and <b>Subclassing</b> wizards."*/));
+    connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatItem()));
 
     m_formatTextAction->setEnabled(false);
-//     m_formatFileAction->setEnabled(true);
+    m_formatFilesAction->setEnabled(true);
 
 //     m_defaultFormatExtensions = "*.cpp *.h *.hpp,*.c *.h,*.cxx *.hxx,*.c++ *.h++,*.cc *.hh,*.C *.H,*.diff ,*.inl,*.java,*.moc,*.patch,*.tlh,*.xpm";
 //     m_searchExtensions.insert("*", "*");
@@ -197,90 +198,109 @@ void AStylePlugin::activePartChanged ( KParts::Part *part )
 KDevelop::ContextMenuExtension 
 AStylePlugin::contextMenuExtension(KDevelop::Context* context)
 {
-//     QList<QAction*> actionlist;
-//     if(context->hasType(Context::EditorContext))
-//         actionlist << m_formatTextAction;
-//     else if(context->hasType(Context::FileContext))
-//         actionlist << m_formatTextAction;
-//     return qMakePair(i18n("Source formatter"), actionlist);
     ContextMenuExtension ext;
-    ext.addAction(ContextMenuExtension::EditGroup, m_formatTextAction);
+    m_urls.clear();
+    m_prjItems.clear();
+    
+    if(context->hasType(Context::EditorContext))
+        ext.addAction(ContextMenuExtension::EditGroup, m_formatTextAction);
+     else if(context->hasType(Context::FileContext)) {
+        FileContext* filectx = dynamic_cast<FileContext*>(context);
+        m_urls = filectx->urls();
+        ext.addAction(ContextMenuExtension::EditGroup, m_formatFilesAction);
+     } else if(context->hasType(Context::CodeContext)) {
+     } else if(context->hasType(Context::ProjectItemContext)) {
+         ProjectItemContext* prjctx = dynamic_cast<ProjectItemContext*>(context);
+         m_prjItems = prjctx->items();
+         ext.addAction(ContextMenuExtension::ExtensionGroup, m_formatFilesAction);
+     }    
     return ext;
 }
 
-/*void AStylePlugin::contextMenu(QMenu *popup, const Context *context)
+void AStylePlugin::formatItem()
 {
-    if(context->hasType( Context::EditorContext )) {
-        popup->addSeparator();
-        popup->addAction(m_formatTextAction);
+    if(m_prjItems.isEmpty())
+        return;
+    
+    //get a list of all files in this folder recursively
+    QList<ProjectFolderItem*> folders;
+    foreach (ProjectBaseItem *item, m_prjItems) {
+        if(!item)
+            continue;
+        if(item->folder())
+            folders.append(item->folder());
+        else if(item->file())
+            m_urls.append(item->file()->url());
+        else if(item->target()) {
+            foreach (ProjectFileItem *f, item->fileList())
+                 m_urls.append(f->url());
+        }
     }
-    else if ( context->hasType( Context::FileContext )){
-        const FileContext *ctx = static_cast<const FileContext*>(context);
-        m_urls = ctx->urls();
+    
+    while(!folders.isEmpty()) {
+        ProjectFolderItem *item = folders.takeFirst();
+        foreach (ProjectFolderItem *f, item->folderList())
+            folders.append(f);
+        foreach (ProjectTargetItem *f, item->targetList()) {
+            foreach (ProjectFileItem *child, f->fileList())
+                m_urls.append(child->url());  
+        }
+        foreach (ProjectFileItem *f, item->fileList())
+            m_urls.append(f->url());        
+   }
+   
+   formatFiles(m_urls);
+}
 
-        popup->addSeparator();
-        popup->addAction(m_formatFileAction);
+void AStylePlugin::formatFiles(KUrl::List &list)
+{
+    m_formatter->loadConfig(KGlobal::config());
+
+    for(int fileCount = 0; fileCount < list.size(); fileCount++) {
+        // check mimetype
+        KMimeType::Ptr mime = KMimeType::findByUrl(list[fileCount]);
+        kDebug() << "Checking file " << list[fileCount].pathOrUrl() << " of mime type " << mime->name() << endl;
+        if(!mime->is("text/x-chdr") && !mime->is("text/x-c++src"))
+            continue;
+        
+        // if the file was opened in the editor, avoid the 'file was modified' warning
+        IDocumentController *docController = ICore::self()->documentController();
+        IDocument *doc = docController->documentForUrl(list[fileCount]);
+        if(doc) {
+                if(doc->state() == IDocument::Modified)
+                    doc->save();
+        }
+        kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
+        QString tmpFile, output;
+        if(KIO::NetAccess::download(list[fileCount], tmpFile, 0)) {
+            QFile file(tmpFile);
+            // read file
+            if(file.open(QFile::ReadOnly)) {
+                QTextStream is(&file);
+                output = m_formatter->formatSource(is.readAll());
+                file.close();
+            } else
+                KMessageBox::error(0, i18n("Unable to read %1").arg(list[fileCount].prettyUrl()));
+            
+            //write new content
+            if(file.open(QFile::WriteOnly|QIODevice::Truncate)) {
+                QTextStream os(&file);
+                os << output;
+                file.close();
+            } else
+                KMessageBox::error(0, i18n("Unable to write to %1").arg(list[fileCount].prettyUrl()));
+            
+            if(!KIO::NetAccess::upload(tmpFile, list[fileCount], 0))
+                KMessageBox::error(0, KIO::NetAccess::lastErrorString());
+            
+            KIO::NetAccess::removeTempFile(tmpFile);
+        } else
+            KMessageBox::error(0, KIO::NetAccess::lastErrorString());
+        
+        if(doc)
+            doc->reload();
     }
-}*/
-
-// void AStylePlugin::formatFilesSelect()
-// {
-//     KUrl::List list = KFileDialog::getOpenUrls(KUrl(),
-//         /*getProjectExtensions()*/"*", 0, "Select files to format" );
-// 
-//     formatFiles(list);
-// }
-
-// void AStylePlugin::formatFiles(KUrl::List &list)
-// {
-//     KUrl::List::iterator it = list.begin();
-//     while(it != list.end()) {
-//         kDebug ( 9009 ) << "Formatting " << (*it).pathOrUrl() << endl;
-//         ++it;
-//     }
-// 
-//     uint processed = 0;
-//     for(uint fileCount = 0; fileCount < m_urls.size(); fileCount++) {
-//         QString fileName = m_urls[fileCount].pathOrUrl();
-// 
-//         bool found = false;
-//         for ( QMap<QString, QString>::Iterator it = m_searchExtensions.begin();
-//             it != m_searchExtensions.end(); ++it ) {
-//             QRegExp re(it.value(), Qt::CaseSensitive, QRegExp::Wildcard);
-//             if( (re.indexIn(fileName) == 0)
-//                 && ((uint) re.matchedLength() == fileName.length()) ) {
-//                 found = true;
-//                 break;
-//             }
-//         }
-// 
-//         if ( found )
-//         {
-//             QString backup = fileName + "#";
-//             QFile fin ( fileName );
-//             QFile fout ( backup );
-//             if ( fin.open ( QFile::ReadOnly ) ) {
-//                 if ( fout.open ( QFile::WriteOnly ) ) {
-//                     QString fileContents ( fin.readAll() );
-//                     fin.close();
-//                     QTextStream outstream ( &fout );
-//                     outstream << formatSource ( fileContents );
-//                     fout.close();
-//                     QDir().rename ( backup, fileName );
-//                     processed++;
-//                 } else {
-//                     KMessageBox::sorry ( 0, i18n ( "Not able to write %1" ).arg ( backup ) );
-//                 }
-//             } else {
-//                 KMessageBox::sorry(0, i18n ( "Not able to read %1" ).arg ( fileName ) );
-//             }
-//         }
-//     }
-// 
-//     if ( processed != 0 ) {
-//         KMessageBox::information ( 0, i18n ( "Processed %1 files ending with extensions %2" ).arg ( processed ).arg(m_formatter.extensions()) );
-//     }
-// }
+}
 
 
 #include "astyle_plugin.moc"

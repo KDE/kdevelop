@@ -25,7 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include "ui_astyle_preferences.h"
 
-namespace KTextEditor {
+namespace KTextEditor
+{
     class Document;
     class View;
 }
@@ -36,7 +37,7 @@ class AStyleFormatter;
 
 class AStylePreferences : public KCModule, public Ui::AStylePreferences
 {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         AStylePreferences(QWidget *parent, const QVariantList &args);

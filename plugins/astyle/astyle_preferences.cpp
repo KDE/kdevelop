@@ -73,8 +73,8 @@ Boston, MA 02110-1301, USA.
 K_PLUGIN_FACTORY(AStylePreferencesFactory, registerPlugin<AStylePreferences>();)
 K_EXPORT_PLUGIN(AStylePreferencesFactory("kcm_kdev_astyle_preferences"))
 
-AStylePreferences::AStylePreferences(QWidget *parent, const QVariantList &args )
-: KCModule( AStylePreferencesFactory::componentData(), parent, args )
+AStylePreferences::AStylePreferences(QWidget *parent, const QVariantList &args)
+        : KCModule(AStylePreferencesFactory::componentData(), parent, args)
 {
     setupUi(this);
     m_formatter = new AStyleFormatter();
@@ -298,8 +298,10 @@ void AStylePreferences::updateWidgets()
                 cbParenthesisPadding->setCurrentIndex(PADDING_INOUT);
             else
                 cbParenthesisPadding->setCurrentIndex(PADDING_IN);
-        } else
+        } else if(padout)
             cbParenthesisPadding->setCurrentIndex(PADDING_OUT);
+        else
+            cbParenthesisPadding->setCurrentIndex(PADDING_NO);
     } else
         cbParenthesisPadding->setCurrentIndex(PADDING_NOCHANGE);
         
@@ -355,7 +357,7 @@ void AStylePreferences::updatePreviewText(bool emitChangedSignal)
     if(emitChangedSignal) {
         // style was modified, so switch to custom style if using predefined style
         int idx = listStyles->currentRow();
-        if(idx < STYLE_LINUX) // ie predefined style
+        if(idx <= STYLE_LINUX) // ie predefined style
             listStyles->setCurrentRow(STYLE_CUSTOM);
         else // custom style was changed, enable the save button
             btnSaveStyle->setEnabled(true);
@@ -369,7 +371,7 @@ void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidge
     if(!current)
         return;
 
-    if(idx < STYLE_LINUX) {
+    if(idx <= STYLE_LINUX) {
         btnDelStyle->setEnabled(false);
         btnSaveStyle->setEnabled(idx == STYLE_CUSTOM);
         m_formatter->predefinedStyle(current->data(STYLE_ROLE).toString());

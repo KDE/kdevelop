@@ -25,6 +25,7 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 #include <QMap>
 #include <QVariant>
 #include <QString>
+#include <QList>
 #include <KUrl>
 
 #include <interfaces/iplugin.h>
@@ -32,6 +33,7 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 namespace KDevelop {
     class Context;
     class ContextMenuExtension;
+    class ProjectBaseItem;
 }
 class AStyleFormatter;
 
@@ -59,24 +61,24 @@ class AStylePlugin : public KDevelop::IPlugin
         /**
         * Format the selected files with the current style.
         */
-//         void formatFiles(KUrl::List &list);
+        void formatFiles(KUrl::List &list);
 
     private slots:
         void activePartChanged(KParts::Part *part);
         void beautifySource();
-//         void formatFilesSelect();
-       // void contextMenu(QMenu *popup, const KDevelop::Context *context);
+        void formatItem();
         virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     
-    private:
+    protected:
         void replaceSpacesWithTab(QString &input);
 
+    private:
         KAction *m_formatTextAction;
-        KAction *m_formatFileAction;
+        KAction *m_formatFilesAction;
 
-        // the configurable options.
         AStyleFormatter *m_formatter;
         KUrl::List m_urls;
+        QList<KDevelop::ProjectBaseItem*> m_prjItems;
 };
 
 #endif // ASTYLEPLUGIN_H
