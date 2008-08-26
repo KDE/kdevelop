@@ -263,13 +263,17 @@ void AStylePlugin::formatFiles(KUrl::List &list)
         if(!mime->is("text/x-chdr") && !mime->is("text/x-c++src"))
             continue;
         
-        // if the file was opened in the editor, avoid the 'file was modified' warning
+        // if the file is opened in the editor, format the text in the editor without saving it
         IDocumentController *docController = ICore::self()->documentController();
         IDocument *doc = docController->documentForUrl(list[fileCount]);
         if(doc) {
-                if(doc->state() == IDocument::Modified)
-                    doc->save();
+            kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
+            KTextEditor::Cursor cursor = doc->cursorPosition();
+            doc->textDocument()->setText(m_formatter->formatSource(doc->textDocument()->text()));
+            doc->setCursorPosition(cursor);
+            return;
         }
+        
         kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
         QString tmpFile, output;
         if(KIO::NetAccess::download(list[fileCount], tmpFile, 0)) {
@@ -296,9 +300,6 @@ void AStylePlugin::formatFiles(KUrl::List &list)
             KIO::NetAccess::removeTempFile(tmpFile);
         } else
             KMessageBox::error(0, KIO::NetAccess::lastErrorString());
-        
-        if(doc)
-            doc->reload();
     }
 }
 
