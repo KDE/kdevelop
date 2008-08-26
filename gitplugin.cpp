@@ -81,10 +81,10 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob* 
-        GitPlugin::checkout(const QString &localLocation,
+        GitPlugin::checkout(const KUrl &localLocation,
                             const QString &branch)
 {
-    DVCSjob* job = d->m_exec->checkout(localLocation, branch);
+    DVCSjob* job = d->m_exec->checkout(localLocation.path(), branch);
     return job;
 }
 

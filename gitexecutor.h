@@ -90,7 +90,7 @@ public:
     DVCSjob* checkout(const QString &repository, const QString &branch);
     DVCSjob* branch(const QString &repository, const QString &basebranch = QString(), const QString &branch = QString(),
                     const QStringList &args = QStringList());
-    DVCSjob* reset(const QString &repository, const QStringList &args, const QStringList files);
+    DVCSjob* reset(const QString &repository, const QStringList &args, const KUrl::List &files);
 private:
     //it can be public, but it isn't required now
     DVCSjob* lsFiles(const QString &repository, const QStringList &args);
@@ -102,9 +102,9 @@ public:
     QStringList branches(const QString &repository);
 
     //commit dialog helpers, send to main helper the arg for git-ls-files:
-    QList<KDevelop::VcsStatusInfo> getModifiedFiles(const QString &directory);
-    QList<KDevelop::VcsStatusInfo> getCachedFiles(const QString &directory);
-    QStringList getOtherFiles(const QString &directory);
+    QList<QVariant> getModifiedFiles(const QString &directory);
+    QList<QVariant> getCachedFiles(const QString &directory);
+    QList<QVariant> getOtherFiles(const QString &directory);
 
     //graph helpers
     QList<DVCScommit> getAllCommits(const QString &repo);

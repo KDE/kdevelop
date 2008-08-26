@@ -49,7 +49,7 @@ friend class GitExecutor;
 public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
-    
+
     //TODO:Things to be moved to DVCSplugin, but not moved because require executor changes in all implemented DVCS
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
@@ -58,7 +58,7 @@ public:
                           const KDevelop::VcsRevision& rev,
                           const KDevelop::VcsRevision& limit);
     //TODO: use KUrl for location!
-    KDevelop::VcsJob* checkout(const QString &localLocation,
+    KDevelop::VcsJob* checkout(const KUrl &localLocation,
                                const QString &repo);
 
 };
