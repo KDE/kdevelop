@@ -23,6 +23,7 @@
 
 #include <veritas/test.h>
 #include <QtCore/QString>
+#include "qxcppunitexport.h"
 
 /*!
  * Leaf item in the test tree.

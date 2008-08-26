@@ -27,6 +27,7 @@
 
 #include <veritas/test.h>
 #include "testcase.h"
+#include "qxcppunitexport.h"
 
 class KProcess;
 class QIODevice;
@@ -40,7 +41,7 @@ class QIODevice;
  * other frameworks.
  */
 template<typename R, typename S>
-class Register : public QXmlStreamReader
+class QXCPPUNIT_EXPORT Register : public QXmlStreamReader
 {
 public:
     typedef R TestRoot;

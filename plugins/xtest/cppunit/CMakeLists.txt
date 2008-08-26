@@ -8,12 +8,6 @@ add_subdirectory(config)
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
-set(TestBuild on)
-if(TestBuild)
-# expose all symbols
-    add_definitions( -fvisibility=default )
-endif(TestBuild)
-
 include_directories(
     ${XtestPlugin_SOURCE_DIR}
     )

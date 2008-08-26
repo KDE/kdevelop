@@ -25,6 +25,7 @@
 #include <QFileInfo>
 #include <KProcess>
 #include <veritas/test.h>
+#include "qxcppunitexport.h"
 
 #include "testcase.h"
 
@@ -32,7 +33,7 @@ namespace CppUnit
 {
 
 /*! Aggregate item in the test tree */
-class TestSuite : public Veritas::Test
+class QXCPPUNIT_EXPORT TestSuite : public Veritas::Test
 {
 Q_OBJECT
 public:

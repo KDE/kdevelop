@@ -24,6 +24,7 @@
 #include <veritas/test.h>
 #include "testcommand.h"
 #include <QtCore/QString>
+#include "qxcppunitexport.h"
 
 /*!
  * Item in the test tree that contains TestCommands
@@ -32,7 +33,7 @@
  * & CppUnit plugins. It might be completely irrelevant for
  * other frameworks.
  */
-class TestCase : public Veritas::Test
+class QXCPPUNIT_EXPORT TestCase : public Veritas::Test
 {
 Q_OBJECT
 public:

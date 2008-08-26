@@ -26,13 +26,14 @@
 
 #include <veritas/test.h>
 #include "testsuite.h"
+#include "qxcppunitexport.h"
 
 namespace CppUnit
 {
 
 /*! Prime item in the test tree responsible for calling
 the executable */
-class TestRoot : public Veritas::Test
+class QXCPPUNIT_EXPORT TestRoot : public Veritas::Test
 {
 Q_OBJECT
 public:
