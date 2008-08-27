@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 #include <kaction.h>
 #include <kurl.h>
 #include <kmenu.h>
-#include <kdebug.h>
 //#include <klocale.h>
 #include <kiconloader.h>
 #include <kstandardaction.h>
@@ -181,7 +180,6 @@ void KDevDocumentView::activated( KDevelop::IDocument* document )
 
 void KDevDocumentView::saved( KDevelop::IDocument* )
 {
-    kDebug() ;
 }
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
@@ -226,7 +224,6 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )
 {
-    kDebug() ;
 }
 
 void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
