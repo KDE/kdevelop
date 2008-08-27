@@ -77,10 +77,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
  * A smart-pointer similar class that conveniently wraps around DUChainPointerData without
  * too many dynamic casts.
  *
- * It can be used like a normal pointer.
+ * It can be used like a normal pointer.  In order to cast between pointer types, you should
+ * use the staticCast() and dynamicCast() functions as appropriate.
  *
- * Access must be serialized through the du-chain locks
- * */
+ * Access must be serialized by holding the KDevelop::DUChain::lock() as appropriate for the
+ * function(s) being called.
+ **/
 
   template<class Type>
   class DUChainPointer {
@@ -141,7 +143,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
       Q_ASSERT(d);
       return static_cast<Type*>(d->base());
     }
-    
+
     bool operator<(const DUChainPointer<Type>& rhs) const {
       return d.data() < rhs.d.data();
     }

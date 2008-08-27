@@ -1,7 +1,7 @@
 /*!
  * @mainpage Definition-Use Chain and Type System
  *
- * Overview | \ref duchain-design "Design" | \ref Implementing "Implementing"
+ * Overview | \ref duchain-design "Design" | \ref Implementing "Implementing" | \ref Using "Using"
  *
  * The definition-use chain and type system provide a language-neutral
  * representation of source code structure, used to provide language-based
@@ -22,7 +22,7 @@
 
 /** \page duchain-design Definition-Use Chain Design
 
- * @ref index "Overview" | Design | \ref Implementing "Implementing"
+ * @ref index "Overview" | Design | \ref Implementing "Implementing" | \ref Using "Using"
 
 \section overview Overview
 
@@ -159,6 +159,185 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * To provide code completion for your language, you will need to implement the following:
  * \todo complete this section
  */
+
+/**
+ * \page Using Using already created Definition-Use Chains in plugins
+ *
+ * \ref index "Overview" | \ref duchain-design "Design" | \ref Implementing "Implementing" | Using
+ *
+ * \section intro Introduction
+ * This section is designed for developers who want to use definition-use chains, for example to provide
+ * code generation, refactoring, or other advanced language-specific functionality.  First some important
+ * fundamentals of using the duchain classes will be covered.
+ *
+ * \subsection pointers Definition-use chain pointers and references
+ * As the definition-chain is a dynamic entity, safe pointers (DU*Pointer) and indirect references (Indexed*)
+ * are required to reference objects in a thread-safe way, and in a way that allows minimisation of memory use by saving
+ * non-referenced chains to disk.  While you do not hold the KDevelop::DUChain::lock(),
+ * these pointers and references should not be accessed, because the objects they will return may be
+ * modified by other threads.
+ *
+ * The KDevelop::DUChain::lock() is a read-write lock, which means that if you don't intend to
+ * change the chain (which you won't, unless you are a language plugin developer), you only need a read-lock.
+ * This has the advantage of allowing multiple threads to safely read from the chain simultaneously.
+ * The easiest way to acquire this lock is to use KDevelop::DUChainReadLocker:
+ * \code
+ *    KDevelop::TopDUContextPointer topContext;
+ *
+ *    // Retrieve the top context for myUrl (see explanation below)
+ *    topContext = KDevelop::DUChainUtils::standardContextForUrl( myUrl );
+ *
+ *    // Lock the duchain for reading
+ *    KDevelop::DUChainReadLocker readLock( KDevelop::DUChain::lock() );
+ *
+ *    // Check if the top context pointer is valid
+ *    if ( topContext ) {
+ *      ...
+ *    }
+ * \endcode
+ * Before accessing the top context, this code will block until a read-only lock has been acquired.
+ * It is then safe to access const functions of all duchain objects.  The lock will continue to be held
+ * until readLock goes out of scope.
+ *
+ * \note It is safe to recursively acquire a read-lock (or a write-lock), but not safe to request a write lock
+ * once a read lock is held (this may result in a deadlock).
+ * \note You must not attempt to acquire the duchain lock when you already hold the smart lock (this may result in a deadlock).
+ *
+ * In debug builds, if you attempt to access something in the duchain which you do not hold the proper lock
+ * for, you will encounter an assert (usually triggered by the ENSURE_CHAIN_READ_LOCKED or ENSURE_CHAIN_WRITE_LOCKED macros).
+ *
+ * For more information about duchain pointers, see KDevelop::DUChainPointer.
+ *
+ * \section accessing Accessing a definition-use chain
+ * The first step in using a duchain is to retrieve the chain that you are interested in.
+ * Presumably you will know the URL of the file for which you want to retrieve the chain.
+ * Some languages (notably C and C++) can have several different chains for one file depending on
+ * what the definitions of macros were when the files were parsed.  Because of this, the recommended
+ * way to access the duchain for a document is via KDevelop::DUChainUtils.
+ *
+ * \subsection topcontext Accessing top level contexts
+ * \todo include a note on how to request loading of contexts from disk, and requesting parsing of files which
+ *  are not currently in the duchain.
+ *
+ * Top level contexts (TopDUContext) can be retrieved through KDevelop::DUChainUtils::standardContextForUrl().
+ * This is the context which is presented to the user when the file is opened (for highlighting, completion etc.).
+ * In case it is not the context which you are after, all contexts for a file can be retrieved via
+ * KDevelop::DUChain::chainsForDocument().
+ *
+ * \subsection declaration Accessing declarations at a specific location
+ * If you have a url and a cursor location, you can attempt to retrieve the declaration located at that position
+ * with KDevelop::DUChainUtils::itemUnderCursor().
+ *
+ * \section navigating Navigating a definition-use chain
+ * \subsection navigating-duobject All duchain objects
+ * All duchain objects inherit from KDevelop::DUChainBase.  This is in turn a subclass of KDevelop::DocumentRangeObject.
+ * Thus, you can retrieve the text range of every object via KDevelop::DocumentRangeObject::range().  If the document
+ * is currently loaded in a text editor, it will likely have a smart range (KTextEditor::SmartRange), which tracks the position
+ * of the range when the document is changed.  This can be accessed via KDevelop::DocumentRangeObject::smartRange().
+ *
+ * \subsection navigating-contexts Contexts
+ * Now that you have a chain, you'll probably want to be able to navigate around it.  You can iterate contexts
+ * by using KDevelop::DUContext::childContexts().  You can then retrieve from each
+ * context a list of local declarations with KDevelop::DUContext::localDeclarations(), and a list of all
+ * uses in the context with KDevelop::DUContext::uses().
+ *
+ * Imported contexts are usually contexts which have declarations which are visible in the current context.
+ * For example:
+ * \code
+ *   for (int i = 0; i < count(); ++i) {
+ *     kDebug() << i;
+ *   }
+ * \endcode
+ * The code which contains the debug statement will import the for conditions context, which contains the declaration
+ * of i.  Thus, i's declaration is visible to the debug statement.
+ *
+ * Usually, you will not have to worry about these details, as the search functions already take them into account.
+ * If you want to find a declaration for a given identifier in a given context, you can use one of the
+ * KDevelop::DUContext::findDeclarations() or KDevelop::DUContext::findLocalDeclarations() functions.
+ *
+ * \subsection navigating-declarations Declarations
+ * Declarations always occur within a context, which can be accessed through KDevelop::Declaration::parentContext().
+ * Some declarations (eg. namespaces, classes) create a new context which can then contain child declarations, eg.
+ * variables and functions within a class.  For these declarations, the associated context which contains these
+ * child declarations can be accessed through KDevelop::Declaration::internalContext(), if one exists.
+ *
+ * \subsection navigating-uses Uses
+ * Uses are instances where a declaration is referenced in the code.  All uses for a declaration can be calculated
+ * from the duchain, although this can potentially be a time-consuming task. KDevelop::Declaration::uses() will return
+ * all uses for a declaration, and KDevelop::Declaration::smartUses() will return smart ranges which represent all uses
+ * in the currently opened documents.
+ *
+ * \subsection navigating-types Types
+ * Declarations may have a type, which can be retrieved through KDevelop::Declaration::abstractType().  Types can then
+ * be visited using KDevelop::TypeVisitor, or manually with the corresponding calls in the type subclasses.  Types can be
+ * compared for equality using KDevelop::AbstractType::equals().
+ *
+ * \section changes Monitoring chains for changes
+ * KDevelop::DUChain::notifier() provides support for monitoring chains for changes.  It emits three signals, notifying
+ * that a branch of a chain has been added, modified, or removed.  It is up to your code to iterate the chain and react
+ * to any changes that have occurred, if desired.
+ *
+ * \section efficiency DUChain efficiency issues
+ * It was confirmed during the implementation of the DUChain that there is too much information to store the duchain for
+ * an entire project in memory at the same time (KDevPlatform itself was >1Gb).  Subsequently, saving the chains to disk
+ * has been implemented.  Following are some of the ramifications of this design.
+ *
+ * \subsection referenced-topcontexts Top Context Referencing
+ * In order to determine which chains can be unloaded from memory, a referenced pointer was introduced called
+ * KDevelop::ReferencedTopDUContext.  If you are using duchain objects outside of a duchain lock, and you need them to
+ * remain in memory, you should create a KDevelop::ReferencedTopDUContext for the top context of each of the chains you need.
+ * This will ensure it is not unloaded.  However, do not use this excessively or KDevelop will have the same problem
+ * of using large amounts of memory.
+ *
+ * \code
+ *    KDevelop::TopDUContextPointer topContext;
+ *    KDevelop::ReferencedTopDUContext topReferenced
+ *
+ *    topContext = KDevelop::DUChainUtils::standardContextForUrl( myUrl );
+ *    topReferenced =  KDevelop::DUChainUtils::standardContextForUrl( myOtherUrl );
+ *
+ *    // Both of these pointers may be valid here
+ *
+ *    // Sleep
+ *    sleep(10);
+ *
+ *    // Lock the duchain for reading
+ *    KDevelop::DUChainReadLocker readLock( KDevelop::DUChain::lock() );
+ *
+ *    // topContext may not be valid any more, because it may have been saved to disk and unloaded from memory.
+ *    // topReferenced will still be valid if it was valid when it was retrieved (above).
+ * \endcode
+ *
+ * \subsection code-model Code Model
+ * In order to facilitate easy access to top level declarations, a list of top level declarations is available from
+ * KDevelop::CodeModel.  For each parsed file, you can call KDevelop::CodeModel::items() to retrieve a list of declarations
+ * and some basics about their type.  If you need any further information, the chain must be loaded from disk.
+ * \code
+ *   uint count;
+ *   const CodeModelItem* items;
+ *   IndexedString file = \<yourFile\>;
+ *
+ *   // Retrieve the items for the given file
+ *   KDevelop::CodeModel::self().items(file, count, items);
+ *
+ *   for (int i = 0; i < count; ++i) {
+ *     CodeModelItem* thisItem = items++;
+ *
+ *      // Use the item here.
+ *      ...
+ *   }
+ * \endcode
+ *
+ * \section inadequate When the duchain doesn't contain all the information
+ * If you need more information than is available in the duchain, you're most likely looking at using the AST generated by the
+ * language support.  Note that this is obviously not language-independent, so it should be a last resort in cases where
+ * the functionality being supplied is not language-specific.  If the duchain is missing some information that would make
+ * sense to add, please raise it with the KDevelop developers.
+ *
+ * \todo add mechanism to get at the AST
+ * \todo keep the AST in memory for loaded files
+ */
+
 
 // DOXYGEN_REFERENCES = language/editor
 // DOXYGEN_SET_WARN_LOGFILE=language/duchain/doxygen.log

@@ -162,8 +162,6 @@ public:
     qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
-    //qRegisterMetaType<DUChainObserver::Modification>("KDevelop::DUChainObserver::Modification");
-    //qRegisterMetaType<DUChainObserver::Relationship>("KDevelop::DUChainObserver::Relationship");
     qRegisterMetaType<Problem>("KDevelop::Problem");
 
     notifier = new DUChainObserver();
@@ -208,7 +206,7 @@ public:
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
-  
+
   ///Used to keep alive the top-context that belong to documents loaded in the editor
   QSet<ReferencedTopDUContext> m_openDocumentContexts;
 
@@ -272,8 +270,8 @@ public:
       }
     }
   }
-  
-  
+
+
   ///Stores all environment-information
   ///Also makes sure that all information that stays is referenced, so it stays alive.
   void storeAllInformation() {
@@ -281,7 +279,7 @@ public:
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
     foreach(IndexedString url, urls) {
       storeInformation(url);
-      
+
       //Access the data in the repository, so the bucket isn't unloaded
       uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
       if(index) {
@@ -291,21 +289,21 @@ public:
       }
     }
   }
-  
+
   void doCleanup() {
     m_fileEnvironmentInformations.size();
     doMoreCleanup();
   }
-  
+
   ///@param force If this is true, no lock timeout is used
   void doMoreCleanup(bool force = false) {
     DUChainWriteLocker writeLock(instance->lock(), force ? 0 : 300);
     if(writeLock.locked()) {
-      
+
       globalItemRepositoryRegistry().lockForWriting();
-      
+
       storeAllInformation(); //Puts environment-information into a repository
-      
+
       QList<TopDUContext*> allLoadedContexts = m_chainsByIndex.values();
       foreach(TopDUContext* context, allLoadedContexts)
         context->m_dynamicData->store();
@@ -314,19 +312,19 @@ public:
       QSet<TopDUContext*> referenced;
       foreach(TopDUContext* context, m_referenceCounts.keys())
         addRecursiveImports(referenced, context);
-      
+
       QSet<IndexedString> unloadedNames;
-      
+
       foreach(TopDUContext* context, allLoadedContexts) {
         if(!referenced.contains(context)) {
           //Unload the context, it's not referenced or imported by a referenced context
           kDebug() << "unloading a top-context for" << context->url().str();
           unloadedNames.insert(context->url());
-          
+
           instance->removeDocumentChain(context);
         }
       }
-      
+
       if(m_unloadingEnabled) {
       foreach(IndexedString unloaded, unloadedNames)
         if(!m_chainsByUrl.contains(unloaded))
@@ -339,10 +337,10 @@ public:
       globalItemRepositoryRegistry().unlockForWriting();
     }
   }
-  
+
 private:
   void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
-  
+
   void loadInformation(IndexedString url) {
     if(m_fileEnvironmentInformations.find(url) != m_fileEnvironmentInformations.end())
       return;
@@ -366,12 +364,12 @@ private:
 
   ///Stores the environment-information for the given url
   void storeInformation(IndexedString url) {
-    
+
     QList<ParsingEnvironmentFilePointer> informations = m_fileEnvironmentInformations.values(url);
 
     if(informations.isEmpty())
         return;
-    
+
     //Here we check whether any of the stored items have been changed. If none have been changed(all data is still constant),
     //then we don't need to update.
     bool allInfosConstant = true;
@@ -380,7 +378,7 @@ private:
       if(info->d_func()->isDynamic())
         allInfosConstant = false;
     }
-    
+
     if(allInfosConstant && m_environmentInfo.findIndex(EnvironmentInformationRequest(url))) {
       ///@todo Find out why sometimes the data is constant although it's not in the repository(might be leaking memory)
       //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
@@ -400,7 +398,7 @@ private:
       //Insert the new item
       m_environmentInfo.index(EnvironmentInformationRequest(url, informations));
     }
-    
+
     Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
   }
 
@@ -539,7 +537,7 @@ void DUChain::addDocumentChain( TopDUContext * chain )
     ReferencedTopDUContext ctx(chain);
     sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
   }
-  
+
   branchAdded(chain);
 }
 
@@ -636,7 +634,7 @@ TopDUContext* DUChain::chainForDocument(const IndexedString& document) const
 
 QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
 {
-  return chainsForDocument(IndexedString(document.pathOrUrl()));
+  return chainsForDocument(IndexedString(document));
 }
 
 QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) const
@@ -660,7 +658,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
 }
 
 TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
-  return chainForDocument( IndexedString(document.pathOrUrl()), environment, flags );
+  return chainForDocument( IndexedString(document), environment, flags );
 }
 TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
 

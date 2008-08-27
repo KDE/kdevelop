@@ -39,6 +39,9 @@ class SimpleCursor;
 class HashedString;
 class TopDUContext;
 
+/**
+ * A namespace which contains convenience utilities for navigating definition-use chains.
+ */
 namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(Declaration* dec);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
