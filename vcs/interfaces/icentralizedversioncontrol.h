@@ -83,13 +83,6 @@ public:
      * take a mapping of local to repository locations and import that into the repository
      */
     virtual VcsJob* import( const VcsMapping& localLocation, const QString& commitMessage ) = 0;
-
-    /**
-     * Checks out files or dirs from a repository into a local directory
-     * hierarchy. The mapping exactly tells which file in the repository
-     * should go to which local file
-     */
-    virtual VcsJob* checkout( const VcsMapping& mapping ) = 0;
 };
 
 }

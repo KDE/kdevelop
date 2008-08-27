@@ -108,6 +108,7 @@ public:
                           const KUrl& localLocation);
     virtual VcsJob* resolve(const KUrl::List& localLocations,
                             IBasicVersionControl::RecursionMode recursion);
+    virtual VcsJob* checkout(const VcsMapping &mapping);
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::IDistributedVersionControl
@@ -118,8 +119,6 @@ public:
                          const VcsLocation& localOrRepoLocationDst);
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation);
-    virtual VcsJob* checkout(const KUrl& repo, const QString &branch, 
-                             const QStringList &args);
     virtual VcsJob* reset(const KUrl& repository, 
                           const QStringList &args, const KUrl::List& files);
     // End:  KDevelop::IDistributedVersionControl

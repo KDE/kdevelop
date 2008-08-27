@@ -295,11 +295,11 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::checkout(const KUrl& repo, const QString &branch, 
-                                                  const QStringList &args)
+        DistributedVersionControlPlugin::checkout(const VcsMapping &mapping)
 {
-    Q_UNUSED(args)
-    return d->m_exec->checkout(repo.path(), branch);
+    //repo and branch
+    return d->m_exec->checkout(mapping.sourceLocations()[0].localUrl().path(),
+                               mapping.sourceLocations()[1].localUrl().path());
 }
 
 KDevelop::VcsJob* 

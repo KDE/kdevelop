@@ -241,6 +241,13 @@ public:
     virtual VcsJob* resolve( const KUrl::List& localLocations,
                              RecursionMode recursion ) = 0;
 
+    /**
+     * Checks out files or dirs from a repository (in DVCS from any commit) into a local directory
+     * hierarchy. The mapping exactly tells which file in the repository
+     * should go to which local file
+     */
+    virtual VcsJob* checkout( const VcsMapping& mapping ) = 0;
+
 };
 
 }

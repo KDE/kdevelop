@@ -74,15 +74,7 @@ public:
      */
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation) = 0;
-    /**
-     * Checkout and switch to a branch (commit).
-     * 
-     * @param repo DVCS repository.
-     * @param branch Branch or sha string of any commit to checkout.
-     * @param args dvcs-checkout args.
-     */
-    virtual VcsJob* checkout(const KUrl& repo, const QString &branch, 
-                             const QStringList &args) = 0;
+
     /**
      * Reset current HEAD to the specified state.
      * 
@@ -92,16 +84,6 @@ public:
      */
     virtual VcsJob* reset(const KUrl& repository, 
                           const QStringList &args, const KUrl::List& files) = 0;
-
-    /**
-     * List, create, or delete branches.
-     * @param basebranch branch to be deleted/renamed/used as base to create new branch. If it's used to create a new branch
-     * it can contain a sha string of any commit.
-     * @param branch newname of old branch or the name of new branch.
-     * @param args dvcs-branch arguments.
-     */
-/*    virtual VcsJob* branch(const QString &repository, const QString &basebranch = QString(), 
-                           const QString &branch = QString(), const QStringList &args = QStringList()) = 0;*/
 };
 
 }
