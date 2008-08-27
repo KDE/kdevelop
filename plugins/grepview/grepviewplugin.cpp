@@ -105,6 +105,7 @@ void GrepViewPlugin::showDialog()
 
     KUrl currentUrl;
     KDevelop::IDocument *document = core()->documentController()->activeDocument();
+    dlg->setEnableProjectBox(false);
     if( document )
     {
         currentUrl = document->url();
@@ -117,10 +118,6 @@ void GrepViewPlugin::showDialog()
         {
             dlg->setEnableProjectBox(! proj->files().isEmpty() );
             dlg->setDirectory( proj->folder().path() );
-        }
-        else
-        {
-            dlg->setEnableProjectBox(false);
         }
     }
 
