@@ -90,7 +90,7 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectData& dd, const Simp
 }
 
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
-    : d_ptr( useDataFrom.d_ptr ), dd_ptr( useDataFrom.dd_ptr ), m_ownsData(false)
+    : KTextEditor::SmartRangeWatcher(), d_ptr( useDataFrom.d_ptr ), dd_ptr( useDataFrom.dd_ptr ), m_ownsData(false)
 {
   Q_ASSERT(d_ptr);
 }
@@ -117,7 +117,7 @@ DocumentRangeObject::~ DocumentRangeObject( )
                 EditorIntegrator::releaseRange(dd_ptr->m_smartRange);
         }
       delete dd_ptr;
-      
+
       if(d_ptr->m_dynamic)
         //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
         delete d_ptr;

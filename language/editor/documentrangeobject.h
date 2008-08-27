@@ -50,16 +50,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObjectData
     DocumentRangeObjectData(const DocumentRangeObjectData& rhs);
 
     mutable SimpleRange m_range; //Mutable for synchronization
-    
+
     APPENDED_LISTS_STUB(DocumentRangeObjectData)
-    
+
     bool isDynamic() const {
       return m_dynamic;
     }
 
     ///Returns whether initialized objects should be created as dynamic objects
     static bool appendedListDynamicDefault();
-    
+
     uint classSize() const;
 };
 
@@ -68,6 +68,11 @@ class DocumentRangeObjectDynamicPrivate;
  * Base class for any object which has an associated range of text.
  *
  * This allows text without a currently loaded text editor to be represented.
+ *
+ * \todo Silently synchronising from smart ranges to return the range is not a good idea,
+ *       because as soon as the user receives the range, it may be out of date already.
+ *       Better to force them to understand that the smart mutex must be locked and thus
+ *       retrieve a useful range to start with.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentRangeObject : public KTextEditor::SmartRangeWatcher
 {
@@ -170,7 +175,7 @@ public:
 
     ///Sets a new data pointer. The data will be owned by this object if it is dynamic.
     void setData(DocumentRangeObjectData*);
-    
+
 protected:
     /// Static shared mutex protecting internal data.  May be used to protect private data in subclasses. \returns the internal mutex
     static QMutex* mutex();
@@ -207,7 +212,7 @@ protected:
 private:
     void syncFromSmart() const;
     void syncToSmart() const;
-  
+
     class DocumentRangeObjectDynamicPrivate* const dd_ptr;
     bool m_ownsData;
 };

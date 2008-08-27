@@ -72,9 +72,6 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
     }
   }
 
-  disconnect(doc, SIGNAL(completed()), this, SLOT(documentLoaded()));
-  //disconnect(doc, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentLoaded()));
-
   {
     QMutexLocker lock(mutex);
 
