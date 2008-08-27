@@ -5,7 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/languages/cpp/cppduchain
 )
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 ) 
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
@@ -33,6 +33,8 @@ set(kdevcpplanguagesupport_PART_SRCS
     completionitem.cpp
     completionhelpers.cpp
     missingincludecompletionitem.cpp
+
+    codegen/cppnewclass.cpp
 )
 
 
@@ -56,7 +58,7 @@ target_link_libraries(kdevcpplanguagesupport
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDE4_THREADWEAVER_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARY} 
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KHTML_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}

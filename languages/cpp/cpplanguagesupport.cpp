@@ -85,6 +85,7 @@
 #include "veritas/testswitch.h"
 #include "veritas/stubcontextaction.h"
 #include "veritas/uutcontextaction.h"
+#include "codegen/cppnewclass.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -186,10 +187,15 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     KActionCollection* actions = actionCollection();
 
-    QAction* switchDefinitionDeclaration = actions->addAction("switch_definition_declaration");
+    KAction* switchDefinitionDeclaration = actions->addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
+
+    KAction* newClassAction = actions->addAction("code_new_class");
+    newClassAction->setText( i18n("Create &New Class") );
+    newClassAction->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_C );
+    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
 
     Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
     ts->setStandardMacros(m_standardMacros);
@@ -199,7 +205,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_stubAction->setup();
     m_uutAction = new Veritas::UUTContextAction(this);
     m_uutAction->setup();
-    
+
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif
@@ -1033,6 +1039,11 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
   return false;
 }
 
+void CppLanguageSupport::newClassWizard()
+{
+  CppNewClass newClassWizard(qApp->activeWindow());
+  newClassWizard.exec();
+}
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }

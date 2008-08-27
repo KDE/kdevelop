@@ -55,17 +55,17 @@ class UIBlockTester : public QObject {
     };
   friend class UIBlockTesterThread;
 public:
-    
+
   ///@param milliseconds when the ui locks for .. milliseconds, lockup() is called
   UIBlockTester( uint milliseconds );
   ~UIBlockTester();
-        
+
 private slots:
   void timer();
-       
+
 protected:
    virtual void lockup();
- 
+
  private:
      UIBlockTesterThread m_thread;
      QDateTime m_lastTime;
@@ -101,7 +101,7 @@ public:
      * @param addPath This path is added behind each include-path, and the content of the resulting directory used.
      * */
     QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath) const;
-    
+
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
     ///@param problems If this is nonzero, eventual problems will be added to the list
     KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) const;
@@ -112,7 +112,7 @@ public:
 
     ///Thread-safe
     bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths ) const;
-    
+
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.
  * This function helps choosing the right one, by creating a standard parsing-environment,
@@ -127,13 +127,15 @@ public:
  * @warning The du-chain must be locked before calling this.
 * */
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
-  
+
 private slots:
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);
 
     ///UI:
     void switchDefinitionDeclaration();
+
+    void newClassWizard();
 
 private:
 
@@ -142,15 +144,15 @@ private:
     QPair<QPair<QString, KDevelop::SimpleRange>, QString> cursorIdentifier(const KUrl& url, const KDevelop::SimpleCursor& position) const;
 
     QPair<KDevelop::TopDUContextPointer, KDevelop::SimpleRange> importedContextForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
-    
+
     QPair<KDevelop::SimpleRange, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
-    
+
     virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);
 
     virtual QPair<KUrl, KDevelop::SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const KDevelop::SimpleCursor& position);
-    
+
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
-  
+
     ///If @param fast is true, no exhaustive search is done as fallback.
     KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false ) const;
     static CppLanguageSupport* m_self;

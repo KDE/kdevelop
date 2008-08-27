@@ -1,9 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="1">
+<kpartgui name="KDevCppLanguageSupport" version="3">
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>
     <Action name="switch_definition_declaration"/>
+  </Menu>
+  <Menu name="code">
+    <text context="@title:menu">Code</text>
+    <Action name="code_new_class"/>
   </Menu>
 </MenuBar>
 </kpartgui>
