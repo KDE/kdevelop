@@ -40,9 +40,12 @@ class AST;
 namespace Cpp {
 using namespace KDevelop;
 
-/** A type-builder must have been run already over the ast.
+/**
+ * \short A class which visits an expression and determines the type of the expression.
  *
- *  The code is somewhat redundant with UseBuilder. Maybe UseBuilder should be based on this class. However a TypeBuilder must have been run already on the code, so the declarations of uses are located.
+ * \note A type-builder must have been run already over the ast.
+ *
+ * \todo The code is somewhat redundant with UseBuilder. Maybe UseBuilder should be based on this class. However a TypeBuilder must have been run already on the code, so the declarations of uses are located.
 **/
 class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
   public:
