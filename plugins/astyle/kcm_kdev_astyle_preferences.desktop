@@ -10,6 +10,8 @@ X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
 Name=AStyle Settings
+Name[es]=Preferencias AStyle
+Name[et]=AStyle seadistused
 Name[ga]=Socruithe AStyle
 Name[gl]=Configuración de AStyle
 Name[nds]=AStyle-Instellen
@@ -17,5 +19,6 @@ Name[pt]=Configuração do AStyle
 Name[pt_BR]=Configuração do AStyle
 Name[sv]=Inställningar av Astil
 Name[uk]=Параметри AStyle
+Name[zh_TW]=AStyle 設定
 
 
