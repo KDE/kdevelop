@@ -14,6 +14,7 @@
 #include <KDE/KComboBox>
 #include <KDE/KLocale>
 #include <KDE/KDebug>
+#include <KDE/KColorScheme>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -26,7 +27,7 @@
 #include "../vcsstatusinfo.h"
 
 #include <QtCore/QHash>
-#include <QtGui/QColor>
+#include <QtGui/QBrush>
 #include <QtCore/QRegExp>
 
 #include "ui_vcscommitdialog.h"
@@ -43,13 +44,13 @@ public:
     {}
 
     void insertRow( const QString& state, const KUrl& url,
-                    const QColor &foregroundColor = Qt::black,
+                    const KStatefulBrush &foregroundColor = KStatefulBrush(QBrush(Qt::black)),
                     Qt::CheckState checkstate = Qt::Checked)
     {
         QStringList strings;
         strings << "" << state << url.pathOrUrl();
         QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
-        item->setForeground(2, foregroundColor);
+        item->setForeground(2,  foregroundColor.brush(dlg));
         item->setCheckState(0, checkstate);
     }
 
@@ -134,6 +135,10 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
     }else
     {
         QVariant varlist = job->fetchResults();
+
+        KStatefulBrush deletedRed(QBrush(Qt::red));
+        KStatefulBrush newGreen(QBrush(Qt::green));
+
         foreach( QVariant var, varlist.toList() )
         {
             VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
@@ -149,27 +154,27 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
             switch( info.state() )
             {
                 case VcsStatusInfo::ItemAdded:
-                    d->insertRow( i18nc("file was added to versioncontrolsystem", "Added"), path, Qt::green );
+                    d->insertRow( i18nc("file was added to versioncontrolsystem", "Added"), path, newGreen );
                     break;
                 case VcsStatusInfo::ItemDeleted:
-                    d->insertRow( i18nc("file was deleted from versioncontrolsystem", "Deleted"), path, Qt::red );
+                    d->insertRow( i18nc("file was deleted from versioncontrolsystem", "Deleted"), path, deletedRed );
                     break;
                 case VcsStatusInfo::ItemModified:
                     d->insertRow( i18nc("version controlled file was modified", "Modified"), path );
                     break;
                 case VcsStatusInfo::ItemUnknown:
                     d->insertRow( i18nc("file is not known to versioncontrolsystem", "Unknown"), 
-                                  path, Qt::green, Qt::Unchecked );
+                                  path, newGreen, Qt::Unchecked );
                     break;
                 //DVCS part
                 case VcsStatusInfo::ItemAddedIndex:
-                    d->insertRow( i18nc("file was added to index", "C Added"), path, Qt::green );
+                    d->insertRow( i18nc("file was added to index", "Added (in index)"), path, newGreen );
                     break;
                 case VcsStatusInfo::ItemDeletedIndex:
-                    d->insertRow( i18nc("file was deleted from index", "C Deleted"), path, Qt::red );
+                    d->insertRow( i18nc("file was deleted from index", "Deleted (in index)"), path, deletedRed );
                     break;
                 case VcsStatusInfo::ItemModifiedIndex:
-                    d->insertRow( i18nc("file was modified in index", "C Modified"), path);
+                    d->insertRow( i18nc("file was modified in index", "Modified (in index)"), path);
                     break;
                 default:
                     break;
@@ -186,20 +191,21 @@ KUrl::List VcsCommitDialog::checkedUrls() const
 {
     KUrl::List list;
     KUrl::List addItems;
-    QTreeWidgetItemIterator it( d->ui.files, QTreeWidgetItemIterator::Checked );
-    for( ; *it; ++it ){
-        KUrl path;
-        VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
-        if( info.state() == VcsStatusInfo::ItemUnknown ) {
-            addItems << info.url();
-        }
-        list << info.url();
-    }
-    if(addItems.isEmpty() )
-        return list;
 
     if (KDevelop::ICentralizedVersionControl* iface = d->plugin->extension<KDevelop::ICentralizedVersionControl>())
     {
+        QTreeWidgetItemIterator it( d->ui.files, QTreeWidgetItemIterator::Checked );
+        for( ; *it; ++it ){
+            KUrl path;
+            VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
+            if( info.state() == VcsStatusInfo::ItemUnknown ) {
+                addItems << info.url();
+            }
+            list << info.url();
+        }
+        if(addItems.isEmpty() )
+            return list;
+
         KDevelop::VcsJob* job = iface->add( addItems, IBasicVersionControl::NonRecursive );
         job->exec();
     }
@@ -233,6 +239,7 @@ KUrl::List VcsCommitDialog::checkedUrls() const
             repo = rmFiles[0];
             idvcs->remove(rmFiles)->exec();
         }
+        list << repo;
     }
     return list;
 }
@@ -245,6 +252,7 @@ void VcsCommitDialog::getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFi
         VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
 
         bool indexed, deleted, unchecked;
+        indexed = deleted = unchecked = false;
 
             //do not break!
         switch(info.state())

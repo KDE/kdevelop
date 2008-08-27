@@ -239,9 +239,10 @@ VcsJob* KrossDistributedVersionControl::pull(const KDevelop::VcsLocation& localO
     return new KrossVcsJob("pull", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocation, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::checkout(const VcsMapping& mapping)
+VcsJob* KrossDistributedVersionControl::checkout(const KDevelop::VcsMapping& mapping)
 {
-    return new KrossVcsJob("checkout", QVariantList() << mapping, action, m_plugin, action);
+    //TODO empty QVarianList
+    return new KrossVcsJob("checkout", QVariantList(), action, m_plugin, action);
 }
 
 VcsJob* KrossDistributedVersionControl::reset(const KUrl &repository, const QStringList &args, const KUrl::List &files)

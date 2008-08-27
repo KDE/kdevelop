@@ -71,7 +71,7 @@ public:
                            const KDevelop::VcsRevision& dstRevision,
                            const KUrl& localLocation );
     KDevelop::VcsJob* resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion );
-    KDevelop::VcsJob* checkout(const VcsMapping &mapping);
+    KDevelop::VcsJob* checkout(const KDevelop::VcsMapping &mapping);
 
     //DVCS
     KDevelop::VcsJob* init(const KUrl& location);
