@@ -67,17 +67,30 @@ set(kdevplatformlanguage_LIB_SRCS
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
+
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
     interfaces/codecontext.cpp
+
     codecompletion/codecompletion.cpp
     codecompletion/codecompletionworker.cpp
     codecompletion/codecompletionmodel.cpp
     codecompletion/codecompletionitem.cpp
     codecompletion/codecompletioncontext.cpp
+
+    codegen/createclass.cpp
 )
+
+set( kdevplatformlanguage_LIB_UI
+    codegen/ui/newclass.ui
+    codegen/ui/overridevirtuals.ui
+    codegen/ui/licensechooser.ui
+    codegen/ui/outputlocation.ui
+)
+
+kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} )
 
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
@@ -209,4 +222,9 @@ install(FILES
     codecompletion/codecompletionitem.h
     codecompletion/codecompletioncontext.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion
+)
+
+install(FILES
+    codegen/createclass.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen
 )

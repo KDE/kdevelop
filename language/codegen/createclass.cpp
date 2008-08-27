@@ -1,0 +1,322 @@
+/* This file is part of KDevelop
+    Copyright 2008 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "createclass.h"
+
+#include <KListWidget>
+#include <KLineEdit>
+
+#include "ui_newclass.h"
+#include "ui_overridevirtuals.h"
+#include "ui_licensechooser.h"
+#include "ui_outputlocation.h"
+
+using namespace KDevelop;
+
+CreateClass::CreateClass(QWidget* parent)
+    : QWizard(parent)
+    , d(0)
+{
+    setDefaultProperty("KUrlRequester", "url", SIGNAL(textChanged(QString)));
+    setDefaultProperty("KTextEdit", "plainText", SIGNAL(textChanged()));
+}
+
+void CreateClass::setup()
+{
+    setWindowTitle(i18n("Create New Class"));
+
+    if (QWizardPage* page = newIdentifierPage())
+        addPage(page);
+
+    if (QWizardPage* page = newOverridesPage())
+        addPage(page);
+
+    addPage(new LicensePage(this));
+    addPage(new OutputPage(this));
+}
+
+void CreateClass::accept()
+{
+    QWizard::accept();
+
+    generate();
+}
+
+void CreateClass::done ( int r )
+{
+    QWizard::done(r);
+
+    //generate();
+}
+
+ClassIdentifierPage* CreateClass::newIdentifierPage()
+{
+    return new ClassIdentifierPage(this);
+}
+
+OverridesPage* CreateClass::newOverridesPage()
+{
+    return new OverridesPage(this);
+}
+
+class KDevelop::ClassIdentifierPagePrivate
+{
+public:
+    ClassIdentifierPagePrivate()
+        : classid(0)
+    {
+    }
+
+    Ui::NewClassDialog* classid;
+};
+
+ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
+    : QWizardPage(parent)
+    , d(new ClassIdentifierPagePrivate)
+{
+    setTitle(i18n("Class Basics"));
+    setSubTitle( i18n("Identify the class and any classes from which it is to inherit.") );
+
+    d->classid = new Ui::NewClassDialog;
+    d->classid->setupUi(this);
+
+    connect(d->classid->addInheritancePushButton, SIGNAL(pressed()), this, SLOT(addInheritance()));
+    connect(d->classid->removeInheritancePushButton, SIGNAL(pressed()), this, SLOT(removeInheritance()));
+    connect(d->classid->moveUpPushButton, SIGNAL(pressed()), this, SLOT(moveUpInheritance()));
+    connect(d->classid->moveDownPushButton, SIGNAL(pressed()), this, SLOT(moveDownInheritance()));
+
+    registerField("classIdentifier*", d->classid->identifierLineEdit);
+    registerField("classInheritance", this, "inheritance", SIGNAL(inheritanceChanged()));
+}
+
+ClassIdentifierPage::~ClassIdentifierPage()
+{
+    delete d;
+}
+
+KLineEdit* ClassIdentifierPage::identifierLineEdit() const
+{
+    return d->classid->identifierLineEdit;
+}
+
+KLineEdit* ClassIdentifierPage::inheritanceLineEdit() const
+{
+    return d->classid->inheritanceLineEdit;
+}
+
+void ClassIdentifierPage::addInheritance()
+{
+    d->classid->inheritanceList->addItem(d->classid->inheritanceLineEdit->text());
+
+    d->classid->inheritanceLineEdit->clear();
+
+    d->classid->removeInheritancePushButton->setEnabled(true);
+
+    if (d->classid->inheritanceList->count() > 1)
+        checkMoveButtonState();
+
+    emit inheritanceChanged();
+}
+
+void ClassIdentifierPage::removeInheritance()
+{
+    delete d->classid->inheritanceList->takeItem(d->classid->inheritanceList->currentRow());
+
+    if (d->classid->inheritanceList->count() == 0)
+        d->classid->removeInheritancePushButton->setEnabled(false);
+
+    emit inheritanceChanged();
+}
+
+void ClassIdentifierPage::moveUpInheritance()
+{
+    int currentRow = d->classid->inheritanceList->currentRow();
+
+    Q_ASSERT(currentRow > 0);
+    if (currentRow <= 0)
+        return;
+
+    QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
+    d->classid->inheritanceList->insertItem(currentRow - 1, item);
+
+    emit inheritanceChanged();
+}
+
+void ClassIdentifierPage::moveDownInheritance()
+{
+    int currentRow = d->classid->inheritanceList->currentRow();
+
+    Q_ASSERT(currentRow != -1 && currentRow < d->classid->inheritanceList->count() - 1);
+    if (currentRow == -1 || currentRow >= d->classid->inheritanceList->count() - 1)
+        return;
+
+    QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
+    d->classid->inheritanceList->insertItem(currentRow + 1, item);
+
+    emit inheritanceChanged();
+}
+
+void ClassIdentifierPage::checkMoveButtonState()
+{
+    int currentRow = d->classid->inheritanceList->currentRow();
+    d->classid->moveUpPushButton->setEnabled(currentRow > 0);
+    d->classid->moveDownPushButton->setEnabled(currentRow >= 0 && currentRow < d->classid->inheritanceList->count() - 1);
+}
+
+QStringList ClassIdentifierPage::inheritanceList() const
+{
+    QStringList ret;
+    for (int i = 0; i < d->classid->inheritanceList->count(); ++i)
+        ret << d->classid->inheritanceList->item(i)->text();
+    return ret;
+}
+
+class KDevelop::OverridesPagePrivate
+{
+public:
+    OverridesPagePrivate()
+        : overrides(0)
+    {
+    }
+
+    Ui::OverridesDialog* overrides;
+};
+
+OverridesPage::OverridesPage(QWidget* parent)
+    : QWizardPage(parent)
+    , d(new OverridesPagePrivate)
+{
+    setTitle(i18n("Override Methods"));
+    setSubTitle( i18n("Select any methods you would like to override in the new class.") );
+
+    d->overrides = new Ui::OverridesDialog;
+    d->overrides->setupUi(this);
+
+    connect(d->overrides->selectAllPushButton, SIGNAL(pressed()), this, SLOT(selectAll()));
+    connect(d->overrides->deselectAllPushButton, SIGNAL(pressed()), this, SLOT(deselectAll()));
+}
+
+OverridesPage::~OverridesPage()
+{
+    delete d;
+}
+
+QTableWidget* OverridesPage::overrideTable() const
+{
+    return d->overrides->overridesTable;
+}
+
+QWidget* OverridesPage::extraFunctionsContainer() const
+{
+    return d->overrides->extraFunctionWidget;
+}
+
+void OverridesPage::selectAll()
+{
+    for (int i = 0; i < d->overrides->overridesTable->rowCount(); ++i)
+        d->overrides->overridesTable->item(i, 0)->setCheckState(Qt::Checked);
+}
+
+void OverridesPage::deselectAll()
+{
+    for (int i = 0; i < d->overrides->overridesTable->rowCount(); ++i)
+        d->overrides->overridesTable->item(i, 0)->setCheckState(Qt::Unchecked);
+}
+
+class KDevelop::LicensePagePrivate
+{
+public:
+    LicensePagePrivate()
+        : license(0)
+    {
+    }
+
+    Ui::LicenseChooserDialog* license;
+};
+
+static const char* s_lgpl =
+"   This library is free software; you can redistribute it and/or\n"
+"   modify it under the terms of the GNU Library General Public\n"
+"   License version 2 as published by the Free Software Foundation.\n\n"
+"   This library is distributed in the hope that it will be useful,\n"
+"   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+"   Library General Public License for more details.\n\n"
+"   You should have received a copy of the GNU Library General Public License\n"
+"   along with this library; see the file COPYING.LIB.  If not, write to\n"
+"   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
+"   Boston, MA 02110-1301, USA.\n";
+
+LicensePage::LicensePage(QWidget* parent)
+    : QWizardPage(parent)
+    , d(new LicensePagePrivate)
+{
+    setTitle(i18n("License"));
+    setSubTitle( i18n("Choose the license under which to place the new class.") );
+
+    d->license = new Ui::LicenseChooserDialog;
+    d->license->setupUi(this);
+
+    connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
+
+    d->license->licenseTextEdit->setText(s_lgpl);
+
+    registerField("license", d->license->licenseTextEdit);
+}
+
+LicensePage::~LicensePage()
+{
+    delete d;
+}
+
+void LicensePage::licenseComboChanged(int license)
+{
+    //TODO
+}
+
+class KDevelop::OutputPagePrivate
+{
+public:
+    OutputPagePrivate()
+        : output(0)
+    {
+    }
+
+    Ui::OutputLocationDialog* output;
+};
+
+OutputPage::OutputPage(QWidget* parent)
+    : QWizardPage(parent)
+    , d(new OutputPagePrivate)
+{
+    setTitle(i18n("Output"));
+    setSubTitle( i18n("Choose where to save the new class.") );
+
+    d->output = new Ui::OutputLocationDialog;
+    d->output->setupUi(this);
+
+    registerField("headerUrl*", d->output->headerUrl);
+    registerField("implementationUrl*", d->output->implementationUrl);
+}
+
+OutputPage::~OutputPage()
+{
+    delete d;
+}
+
+#include "createclass.moc"

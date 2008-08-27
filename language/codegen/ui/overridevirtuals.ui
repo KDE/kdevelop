@@ -1,0 +1,118 @@
+<ui version="4.0" >
+ <class>OverridesDialog</class>
+ <widget class="QWidget" name="OverridesDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>531</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" >
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Override virtual functions</string>
+     </property>
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout" >
+        <item>
+         <widget class="KPushButton" name="selectAllPushButton" >
+          <property name="text" >
+           <string>Select &amp;All</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="deselectAllPushButton" >
+          <property name="text" >
+           <string>&amp;Deselect All</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>28</width>
+            <height>18</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QWidget" native="1" name="extraFunctionWidget" />
+        </item>
+        <item>
+         <spacer name="verticalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="overridesTable" >
+        <column>
+         <property name="text" >
+          <string>Override</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Slot/Signal</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Access</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Return Type</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Function</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
