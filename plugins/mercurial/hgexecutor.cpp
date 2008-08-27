@@ -71,11 +71,11 @@ bool HgExecutor::isValidDirectory(const KUrl & dirPath)
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
-            kDebug(9045) << "Dir:" << path << " is inside work tree of hg" ;
+            kDebug(9526) << "Dir:" << path << " is inside work tree of hg" ;
             return true;
         }
     }
-    kDebug(9045) << "Dir:" << dirPath.path() << " is not inside work tree of hg" ;
+    kDebug(9526) << "Dir:" << dirPath.path() << " is not inside work tree of hg" ;
     return false;
 }
 

@@ -219,7 +219,7 @@ void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, c
     //we always have parent branch at the right
     case DVCScommit::MERGE:
     {
-        kDebug() << "MERGE!";
+        kDebug(9509) << "MERGE!";
         p->setPen(Qt::NoPen);
         p->setBrush(col);
         p->drawLine(P_CENTER, x1, 0);

@@ -118,11 +118,11 @@ IPlugin* VcsCommitDialog::versionControlPlugin()
 
 void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
 {
-    kDebug() << "Fetching status for urls:" << urls;
+    kDebug(9509) << "Fetching status for urls:" << urls;
     KDevelop::IBasicVersionControl *vcsiface = d->plugin->extension<KDevelop::IBasicVersionControl>();
     if( !vcsiface )
     {
-        kDebug() << "oops, no vcsiface";
+        kDebug(9509) << "oops, no vcsiface";
         return;
     }
     //DVCS uses some "hack", see DistributedVersionControlPlugin::status()
@@ -131,7 +131,7 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
     job->exec();
     if( job->status() != VcsJob::JobSucceeded )
     {
-        kDebug() << "Couldn't get status for urls: " << urls;
+        kDebug(9509) << "Couldn't get status for urls: " << urls;
     }else
     {
         QVariant varlist = job->fetchResults();
@@ -218,9 +218,9 @@ KUrl::List VcsCommitDialog::checkedUrls() const
 
         getDVCSfileLists(resetFiles, addFiles, rmFiles);
 
-        kDebug() << "filesToReset" << resetFiles;
-        kDebug() << "filesToAdd" << addFiles;
-        kDebug() << "filesToRm" << rmFiles;
+        kDebug(9509) << "filesToReset" << resetFiles;
+        kDebug(9509) << "filesToAdd" << addFiles;
+        kDebug(9509) << "filesToRm" << rmFiles;
 
         //repo will be extracted from one of the filenames
         KUrl repo;
