@@ -33,16 +33,16 @@ public:
     void setRecursive( bool );
     void setOldMessages( const QStringList& );
     KUrl::List checkedUrls() const;
-    void getDVCSlists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const;
     bool recursive() const;
     QString message() const;
-    IPlugin* pluginToGetVCiface();
+    IPlugin* versionControlPlugin();
 Q_SIGNALS:
     void doCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );
 private:
     Q_PRIVATE_SLOT( d, void ok() )
     Q_PRIVATE_SLOT( d, void cancel() )
+    void getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const;
     friend class VcsCommitDialogPrivate;
     class VcsCommitDialogPrivate* const d;
 };

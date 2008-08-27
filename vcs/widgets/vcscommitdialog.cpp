@@ -21,6 +21,8 @@
 
 #include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
+#include "../interfaces/idistributedversioncontrol.h"
+#include "../interfaces/icentralizedversioncontrol.h"
 #include "../vcsstatusinfo.h"
 
 #include <QtCore/QHash>
@@ -61,7 +63,6 @@ public:
         emit dlg->cancelCommit(dlg);
     }
 
-    IBasicVersionControl *vcsiface;
     IPlugin *plugin;
     VcsCommitDialog* dlg;
     QHash<QString, KDevelop::VcsStatusInfo> statusInfos;
@@ -71,7 +72,6 @@ public:
 VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
     : KDialog( parent ), d(new VcsCommitDialogPrivate(this))
 {
-    d->vcsiface = plugin->extension<KDevelop::IBasicVersionControl>();
     d->plugin = plugin;
 
     d->ui.setupUi( mainWidget() );
@@ -110,7 +110,7 @@ QString VcsCommitDialog::message() const
     return d->ui.message->toPlainText();
 }
 
-IPlugin* VcsCommitDialog::pluginToGetVCiface()
+IPlugin* VcsCommitDialog::versionControlPlugin()
 {
     return d->plugin;
 }
@@ -118,14 +118,15 @@ IPlugin* VcsCommitDialog::pluginToGetVCiface()
 void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
 {
     kDebug() << "Fetching status for urls:" << urls;
-    if( !d->vcsiface )
+    KDevelop::IBasicVersionControl *vcsiface = d->plugin->extension<KDevelop::IBasicVersionControl>();
+    if( !vcsiface )
     {
         kDebug() << "oops, no vcsiface";
         return;
     }
-    //DVCS uses some "hack", see DistributedVersionControlPlugin::status
+    //DVCS uses some "hack", see DistributedVersionControlPlugin::status()
     //Thus DVCS gets statuses for all files in the repo. But project->relativeUrl() below helps us
-    VcsJob *job = d->vcsiface->status( urls );
+    VcsJob *job = vcsiface->status( urls );
     job->exec();
     if( job->status() != VcsJob::JobSucceeded )
     {
@@ -161,8 +162,6 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
                                   path, Qt::green, Qt::Unchecked );
                     break;
                 //DVCS part
-                //TODO: find better names, than "C <something>"
-                //NOTE: KDevVcsCommonPlugin::commit() will require fix!!!
                 case VcsStatusInfo::ItemAddedIndex:
                     d->insertRow( i18nc("file was added to index", "C Added"), path, Qt::green );
                     break;
@@ -196,24 +195,71 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         }
         list << info.url();
     }
-    if( !addItems.isEmpty() ) {
-        KDevelop::VcsJob* job = d->vcsiface->add( addItems, IBasicVersionControl::NonRecursive );
+    if(addItems.isEmpty() )
+        return list;
+
+    if (KDevelop::ICentralizedVersionControl* iface = d->plugin->extension<KDevelop::ICentralizedVersionControl>())
+    {
+        KDevelop::VcsJob* job = iface->add( addItems, IBasicVersionControl::NonRecursive );
         job->exec();
+    }
+    else if (KDevelop::IDistributedVersionControl* idvcs = d->plugin->extension<KDevelop::IDistributedVersionControl>())
+    {
+        //if indexed file is unchecked then reset
+        KUrl::List resetFiles;
+        KUrl::List addFiles;
+        KUrl::List rmFiles;
+
+        getDVCSfileLists(resetFiles, addFiles, rmFiles);
+
+        kDebug() << "filesToReset" << resetFiles;
+        kDebug() << "filesToAdd" << addFiles;
+        kDebug() << "filesToRm" << rmFiles;
+
+        //repo will be extracted from one of the filenames
+        KUrl repo;
+        if (!resetFiles.isEmpty())
+        {
+            repo = resetFiles[0];
+            idvcs->reset(repo, QStringList(QString("--")), resetFiles)->exec();
+        }
+        if (!addFiles.isEmpty())
+        {
+            repo = addFiles[0];
+            idvcs->add(addFiles)->exec();
+        }
+        if (!rmFiles.isEmpty())
+        {
+            repo = rmFiles[0];
+            idvcs->remove(rmFiles)->exec();
+        }
     }
     return list;
 }
 
-void VcsCommitDialog::getDVCSlists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const
+void VcsCommitDialog::getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const
 {
     QTreeWidgetItemIterator it(d->ui.files);
     for( ; *it; ++it )
     {
-        bool indexed = (*it)->text(1).contains(QRegExp("C *"));
-        bool deleted = (*it)->text(1).contains(QString("Deleted"));
-        bool unchecked = (*it)->checkState(0) == Qt::Unchecked;
+        VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
+
+        bool indexed, deleted, unchecked;
+
+            //do not break!
+        switch(info.state())
+        {
+            case VcsStatusInfo::ItemAddedIndex:
+            case VcsStatusInfo::ItemModifiedIndex:
+            case VcsStatusInfo::ItemDeletedIndex:
+                indexed = true;
+            case VcsStatusInfo::ItemDeleted:
+                deleted = true;
+        }
+
+        unchecked = (*it)->checkState(0) == Qt::Unchecked;
 
         KUrl path;
-        VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
         if (indexed && unchecked)
             resetFiles << info.url();
         if (!indexed && !unchecked)
