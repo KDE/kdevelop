@@ -242,7 +242,7 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
 void GrepDialog::search()
 {
 
-    GrepJob* job = new GrepJob(this);
+    GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
     job->templateString = templateString();
@@ -256,6 +256,7 @@ void GrepDialog::search()
     job->noFindErrorsFlag = noFindErrorsFlag();
     job->caseSensitiveFlag = caseSensitiveFlag();
 
+    kDebug() << "registering job";
     KDevelop::ICore::self()->runController()->registerJob(job);
     deleteLater();
 }

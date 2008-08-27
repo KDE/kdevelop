@@ -37,7 +37,7 @@ public:
         TemporaryFileError = UserDefinedError
     };
 
-    GrepJob( QObject *parent );
+    GrepJob( QObject *parent = 0 );
 
     QString patternString() const;
     void setPatternString(const QString& patternString);

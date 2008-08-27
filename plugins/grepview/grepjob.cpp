@@ -35,7 +35,7 @@
 
 
 GrepJob::GrepJob( QObject* parent )
-    : KDevelop::OutputJob( parent )
+    : KDevelop::OutputJob( parent ), project(0), m_lineMaker(0)
 {
     setCapabilities(Killable);
 }
@@ -63,12 +63,16 @@ void GrepJob::start()
     KTemporaryFile* tempFile = 0;
     if (useProjectFilesFlag)
     {
+        kDebug() << "using project files";
         if( !project )
         {
+            kDebug() << "looking for proejct for dir:" << directory;
             project = KDevelop::ICore::self()->projectController()->findProjectForUrl( directory );
+            kDebug() << "found:" << project;
         }
         if (project)
         {
+            kDebug() << "fetching project files";
             tempFile = new KTemporaryFile();
             tempFile->setSuffix(".grep.tmp");
             //This is ok, the tempfile is deleted when the last process
@@ -81,6 +85,7 @@ void GrepJob::start()
             {
                 projectFiles << _item->url();
             }
+            kDebug() << "got list of files:" << projectFiles;
             if (!projectFiles.isEmpty())
             {
                 QList<QRegExp> regExpList;
@@ -144,6 +149,7 @@ void GrepJob::start()
             for(; it!=filelist.end(); ++it )
                 files << "-o" << "-name" << *it;
         }
+        kDebug() << "files:" << files;
         QStringList findCmd;
         findCmd << directory.path();
         if (!recursiveFlag)
@@ -259,6 +265,7 @@ void GrepJob::start()
     printCmd.chop(3); // chop last '|'
     grepModel->appendRow( new QStandardItem(printCmd) );
 
+    kDebug() << "starting processes";
     // start processes
     foreach( KProcess *_proc, validProcs )
     {
