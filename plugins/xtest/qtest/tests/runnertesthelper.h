@@ -22,6 +22,7 @@
 #define VERITAS_RUNNERTESTHELPER_H
 
 #include <QStringList>
+#include <veritas/testresult.h>
 
 namespace Veritas
 {
@@ -51,6 +52,7 @@ public:
        "1 x" */
     void verifyTestTree(QStringList testTreeContents);
     void verifyResultItems(QList<QStringList> expected);
+    void verifyTestStates(QMap<QString, Veritas::TestState>, Veritas::Test* root);
 
 private slots:
     void triggerRunAction();

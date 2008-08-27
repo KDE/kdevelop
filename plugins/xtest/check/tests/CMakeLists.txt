@@ -6,7 +6,8 @@ include_directories(
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-macro(kdev_add_test test_EXEC test_SRCS)
+macro(kdev_add_test test_EXEC)
+    set(test_SRCS ${ARGN})
     qt4_automoc( ${test_SRCS} )
     kde4_add_unit_test(check-${test_EXEC} ${test_SRCS})
     target_link_libraries(check-${test_EXEC}
@@ -17,7 +18,7 @@ macro(kdev_add_test test_EXEC test_SRCS)
         kdevcheck)
 endmacro(kdev_add_test)
 
-kdev_add_test(it-checkrunnertest checkrunnertest.cpp)
+kdev_add_test(it-checkrunnertest checkrunnertest.cpp ../../qtest/tests/runnertesthelper.cpp)
 
 add_executable(emptysuite fake_emptysuite.cpp)
 target_link_libraries(emptysuite ${QT_QTCORE_LIBRARY} ${CHECK_LIBRARY})

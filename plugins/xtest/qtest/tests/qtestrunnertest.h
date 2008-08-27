@@ -42,7 +42,6 @@ private slots:
 private:
     void assertAllFilesClosed(Veritas::Test*);
     Veritas::Test* fetchRoot(QByteArray& regXml);
-    void assertTestStatus(QMap<QString, Veritas::TestState>, Veritas::Test* root);
 
 private:
     Veritas::RunnerTestHelper* m_runner;

@@ -134,4 +134,25 @@ void RunnerTestHelper::verifyTest(const QVariant& expected, int lvl0, int lvl1, 
     KOMPARE(expected, runner->data(index));
 }
 
+void RunnerTestHelper::verifyTestStates(QMap<QString, Veritas::TestState> expectedState, Veritas::Test* root)
+{
+    // TestCases are on lvl3 in the test-tree. this is kinda weak ... fix it
+    for(int i=0; i<root->childCount(); i++) {
+        Veritas::Test* suite = root->child(i);
+        for (int i=0; i<suite->childCount(); i++) {
+            Veritas::Test* caze = suite->child(i);
+            for (int i=0; i<caze->childCount(); i++) {
+                Veritas::Test* cmd = caze->child(i);
+                QString path = suite->name() + "/" + caze->name() + "/" + cmd->name();
+                KVERIFY_MSG(expectedState.contains(path), QString("No expected test-state provided for %1").arg(path));
+                Veritas::TestResult* res = cmd->result();
+                KVERIFY(res);
+                KOMPARE_(expectedState[path], res->state());
+                expectedState.remove(path);
+            }
+        }
+    }
+    KVERIFY(expectedState.isEmpty());
+}
+
 #include "runnertesthelper.moc"

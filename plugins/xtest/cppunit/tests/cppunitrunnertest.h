@@ -23,18 +23,14 @@
 
 #include <QtTest/QTest>
 
-class QAbstractItemModel;
-namespace Veritas { class RunnerWindow; }
+namespace Veritas { class RunnerTestHelper; class Test; }
 
 namespace CppUnit {
 namespace Test {
 
-// TODO this test requires too much maintenance + is accessing
-//      private parts of Veritas. Should get rid of it, but first
-//      make sure the removed bits are covered some place else.
 class CppUnitRunnerTest : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 private slots:
     void init();
@@ -45,17 +41,10 @@ private slots:
     void multiSuite();
 
 private:
-    void initNrun(const char*);
-    void checkTests(QStringList items);
-    void checkTest(const QVariant& expected, int lvl0, int lvl1 = -1, int lvl2 = -1);
-    void checkResultItems(QList<QStringList> expected);
-    void checkResultItem(int num, const QStringList& item);
-    void nrofMessagesEquals(int num);
+    Veritas::Test* fetchRoot(const char*);
 
 private:
-    Veritas::RunnerWindow* m_window;
-    QAbstractItemModel* m_runnerModel;
-    QAbstractItemModel* m_resultModel;
+    Veritas::RunnerTestHelper* m_runner;
 };
 
 }}

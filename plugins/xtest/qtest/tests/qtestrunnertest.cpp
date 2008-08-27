@@ -136,7 +136,7 @@ void QTestRunnerTest::sunnyDay()
 
     m_runner->verifyTestTree(sunnyDayTests());
     m_runner->verifyResultItems(sunnyDayResultItems());
-    assertTestStatus(sunnyDayTestStates(), root);
+    m_runner->verifyTestStates(sunnyDayTestStates(), root);
     assertAllFilesClosed(root);
 }
 
@@ -180,27 +180,6 @@ void QTestRunnerTest::assertAllFilesClosed(Veritas::Test* root)
             KVERIFY_MSG(caze->fto_outputFileClosed(), caze->name());
         }
     }
-}
-
-void QTestRunnerTest::assertTestStatus(QMap<QString, Veritas::TestState> expectedState, Veritas::Test* root)
-{
-    // QTestCases are on lvl3 in the test-tree
-    for(int i=0; i<root->childCount(); i++) {
-        Veritas::Test* suite = root->child(i);
-        for (int i=0; i<suite->childCount(); i++) {
-            Veritas::Test* caze = suite->child(i);
-            for (int i=0; i<caze->childCount(); i++) {
-                Veritas::Test* cmd = caze->child(i);
-                QString path = suite->name() + "/" + caze->name() + "/" + cmd->name();
-                KVERIFY(expectedState.contains(path));
-                Veritas::TestResult* res = cmd->result();
-                KVERIFY(res);
-                KOMPARE_(expectedState[path], res->state());
-                expectedState.remove(path);
-            }
-        }
-    }
-    KVERIFY(expectedState.isEmpty());
 }
 
 #include "qtestrunnertest.moc"
