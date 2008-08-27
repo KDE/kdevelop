@@ -20,6 +20,7 @@
 
 #include "selectionstore.h"
 #include "test.h"
+#include "utils.h"
 #include <KDebug>
 
 using Veritas::SelectionStore;
@@ -80,28 +81,15 @@ bool SelectionStore::wasDeselected(Test* test)
     return m_deselected.contains(serialize(test));
 }
 
-template <typename V>
-void SelectionStore::traverse(Test* current, V& visit)
-{
-    if (not current) return;
-    int nrof = current->childCount();
-    if (nrof != 0) { // go down
-        for (int i = 0; i < nrof; i++) {
-            traverse(current->child(i), visit);
-        }
-    }
-    visit(current); // functor
-}
-
 void SelectionStore::saveTree(Test* root)
 {
     SaveTest st(this);
-    traverse(root, st);
+    traverseTree(root, st);
 }
 
 void SelectionStore::restoreTree(Test* root)
 {
     RestoreTest rt(this);
-    traverse(root, rt);
+    traverseTree(root, rt);
 }
 

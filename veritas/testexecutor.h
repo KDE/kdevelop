@@ -60,11 +60,6 @@ private slots:
     void cleanup();
 
 private:
-    /*! Recursive function which traverses the tree in a depth first manner.
-     *  Applies the visit functor on each test */
-    template<typename V>
-    void traverse(Test* current, V& visit);
-
     /*! Connects the last test with allDone() */
     void fixLast(Test*);
 

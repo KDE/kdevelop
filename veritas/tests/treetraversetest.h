@@ -18,33 +18,25 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_SELECTIONSTORE_H
-#define VERITAS_SELECTIONSTORE_H
 
-#include <QSet>
+#ifndef QTEST_TREETRAVERSETEST_H_INCLUDED
+#define QTEST_TREETRAVERSETEST_H_INCLUDED
+
+#include <QtCore/QObject>
 
 namespace Veritas
 {
-class Test;
 
-/*! Store select state of a test tree. Used to retrieve this state after reload
-    @unittest Veritas::SelectionStoreTest */
-class SelectionStore
+class TreeTraverseTest : public QObject
 {
-public:
-    void saveState(Test* test);
-    void saveTree(Test* root);
+Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
 
-    bool wasDeselected(Test* test);
-    void restoreTree(Test* root);
-
-private:
-    QString serialize(Test*) const;
-
-private:
-    QSet<QString> m_deselected; // serialized name of deselected tests
+    void simpleTree();
 };
 
 }
 
-#endif // VERITAS_SELECTIONSTORE_H
+#endif // QTEST_TREETRAVERSETEST_H_INCLUDED

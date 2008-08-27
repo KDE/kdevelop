@@ -29,6 +29,8 @@
 #define VERITAS_UTILS_H
 
 #include <QList>
+#include "veritasexport.h"
+#include "test.h"
 
 class QTreeView;
 class QVariant;
@@ -38,7 +40,22 @@ class QAbstractItemModel;
 namespace Veritas
 {
 
-// TODO remove this, seems redundant.
+/*! Recursive function which traverses the tree in a depth first manner.
+ *  Applies the visit functor on each test */
+template <typename V>
+VERITAS_EXPORT void traverseTree(Test* current, V& visit)
+{
+    // depth-first traversal
+    if (!current) return;
+    int nrof = current->childCount();
+    if (nrof != 0) { // go down
+        for (int i = 0; i < nrof; i++) {
+            traverseTree(current->child(i), visit);
+        }
+    }
+    visit(current); // functor
+}
+
 
 /*!
  * \brief The Utils class provides a set of static helper functions.

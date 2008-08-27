@@ -23,6 +23,7 @@
 
 #include <QtGlobal>
 #include <KDebug>
+#include "utils.h"
 
 using Veritas::Test;
 using Veritas::TestExecutor;
@@ -87,7 +88,7 @@ TestExecutor::~TestExecutor()
 void TestExecutor::go()
 {
     SetupChain sc(this);
-    traverse(m_root, sc);
+    traverseTree(m_root, sc);
     fixLast(sc.m_previous);
     emit fireStarter();
 }
@@ -100,7 +101,7 @@ void TestExecutor::stop()
 void TestExecutor::cleanup()
 {
     DisconnectTest dt;
-    traverse(m_root, dt);
+    traverseTree(m_root, dt);
 }
 
 void TestExecutor::fixLast(Test* last)
@@ -111,20 +112,6 @@ void TestExecutor::fixLast(Test* last)
     } else {
         emit allDone(); // nothing to be run.
     }
-}
-
-template <typename V>
-void TestExecutor::traverse(Test* current, V& visit)
-{
-    // depth-first traversal
-    if (not current) return;
-    int nrof = current->childCount();
-    if (nrof != 0) { // go down
-        for (int i = 0; i < nrof; i++) {
-            traverse(current->child(i), visit);
-        }
-    }
-    visit(current); // functor
 }
 
 void TestExecutor::setRoot(Test* root)

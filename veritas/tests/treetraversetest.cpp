@@ -18,33 +18,50 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_SELECTIONSTORE_H
-#define VERITAS_SELECTIONSTORE_H
+#include "treetraversetest.h"
+#include <QtTest/QTest>
 
-#include <QSet>
+#include "../utils.h"
+#include "../test.h"
 
-namespace Veritas
+using Veritas::TreeTraverseTest;
+
+void TreeTraverseTest::init()
 {
-class Test;
+}
 
-/*! Store select state of a test tree. Used to retrieve this state after reload
-    @unittest Veritas::SelectionStoreTest */
-class SelectionStore
+void TreeTraverseTest::cleanup()
+{
+}
+
+namespace {
+
+class Visit
 {
 public:
-    void saveState(Test* test);
-    void saveTree(Test* root);
-
-    bool wasDeselected(Test* test);
-    void restoreTree(Test* root);
-
-private:
-    QString serialize(Test*) const;
-
-private:
-    QSet<QString> m_deselected; // serialized name of deselected tests
+    void operator()(Veritas::Test* t) {
+        visited << t;
+    }
+    QList<Veritas::Test*> visited;
 };
 
 }
 
-#endif // VERITAS_SELECTIONSTORE_H
+void TreeTraverseTest::simpleTree()
+{
+    Test* root = new Test("root", 0);
+    Test* child1 = new Test("child1", root);
+    root->addChild(child1);
+    Test* child2 = new Test("child2", root);
+    root->addChild(child2);
+
+    Visit v;
+    traverseTree(root, v);
+
+    QVERIFY(v.visited.contains(root));
+    QVERIFY(v.visited.contains(child1));
+    QVERIFY(v.visited.contains(child2));
+}
+
+QTEST_MAIN( TreeTraverseTest )
+#include "treetraversetest.moc"
