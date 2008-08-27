@@ -100,10 +100,14 @@ int CompletionTreeElement::rowInParent() const {
 }
 
 void CompletionTreeItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  Q_UNUSED(document)
+  Q_UNUSED(word)
   kDebug(9700) << "doing nothing";
 }
 
 QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {
+  Q_UNUSED(index)
+  Q_UNUSED(model)
   if(role == Qt::DisplayRole)
     return QString("not implemented");
   return QVariant();
