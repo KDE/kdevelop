@@ -32,7 +32,8 @@ set(veritas_SRCS
     mvc/verbosetoggle.cpp
     mvc/overlaymanager.cpp
     mvc/overlaytoggle.cpp
-    ${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
+    tests/runnertesthelper.cpp)
+    #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
     mvc/runnerwindow.ui
@@ -48,6 +49,7 @@ target_link_libraries(kdevplatformveritas
     sublime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS})
@@ -61,12 +63,5 @@ install(FILES
     veritasexport.h
     testresult.h
     testrunnertoolview.h
+    tests/runnertesthelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
-
-if(TestBuild)
-    install(FILES
-        mvc/runnerwindow.h
-        mvc/runnermodel.h
-        mvc/resultsmodel.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
-endif(TestBuild)

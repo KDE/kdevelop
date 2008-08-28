@@ -49,8 +49,26 @@ template<> inline char* toString(const QModelIndex& mi)
 #define KVERIFY(condition) QVERIFY(condition)
 #define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
 #define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
-// this is not quite what we want if expected/actual modifies stuff, and thus is caled twice ...
 #define KTODO QWARN("Test command not implemented yet")
+
+#define KOMPARE_(expected, actual) \
+{ \
+    QString failMsg = \
+        QString("\nExpected: ``%1'' actual ``%2''"). \
+                arg(QTest::toString(expected)). \
+                arg(QTest::toString(actual)); \
+    QVERIFY2(expected == actual, failMsg.toLatin1().data()); \
+}
+
+#define KOMPARE_MSG_(expected, actual, msg) \
+{ \
+    QString failMsg = \
+        QString("\nExpected: ``%1'' actual ``%2''"). \
+                arg(QTest::toString(expected)). \
+                arg(QTest::toString(actual)); \
+    failMsg = QString(QTest::toString(msg)) + "\n" + failMsg; \
+    QVERIFY2(expected == actual, failMsg.toLatin1().data()); \
+}
 
 #define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") +\
         QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
