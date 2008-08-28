@@ -243,13 +243,6 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 }
             }
         }
-        else
-        {
-            //This should never happen, the vcs dialog presented a list of vcs
-            //systems and now the chosen system doesn't exist anymore??
-            tmpdir.unlink();
-            return "";
-        }
         tmpdir.unlink();
     }else
     {
