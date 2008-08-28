@@ -1,7 +1,7 @@
 
 project(KDevVcsCommonPlugin)
 
-add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9525 )
+add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9528 )
 
 
 
