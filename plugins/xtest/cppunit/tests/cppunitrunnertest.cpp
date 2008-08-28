@@ -23,12 +23,11 @@
 #include <kasserts.h>
 #include <qtest_kde.h>
 #include <veritas/testresult.h>
+#include <veritas/runnertesthelper.h>
 #include "register.h"
 
 #include "testroot.h"
 #include "testsuite.h"
-
-#include "plugins/xtest/qtest/tests/runnertesthelper.h"
 
 using Veritas::RunnerTestHelper;
 using CppUnit::Test::CppUnitRunnerTest;

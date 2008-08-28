@@ -23,11 +23,10 @@
 #include <kasserts.h>
 #include <qtest_kde.h>
 #include "plugins/xtest/cppunit/register.h"
-
+#include <veritas/runnertesthelper.h>
 #include "testsuite.h"
 #include "testroot.h"
 
-#include "plugins/xtest/qtest/tests/runnertesthelper.h"
 
 using Veritas::RunnerTestHelper;
 using Check::TestSuite;

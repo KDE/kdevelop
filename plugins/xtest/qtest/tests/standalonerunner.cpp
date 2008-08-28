@@ -21,9 +21,7 @@
 #include "standalonerunner.h"
 #include "../xmlregister.h"
 
-#include <veritas/runnerwindow.h>
-#include <veritas/runnermodel.h>
-#include <veritas/resultsmodel.h>
+#include <veritas/runnertesthelper.h>
 
 #include <QFile>
 #include <QMainWindow>
@@ -80,16 +78,11 @@ void Boot::load()
 void Boot::showWindow()
 {
     kDebug() << "";
-    RunnerModel* m = new RunnerModel;
-    m->setRootItem(m_reg->root());
-    QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
-                  << i18n("File Name") << i18n("Line Number");
-    ResultsModel* rm = new ResultsModel(resultHeaders, this);
-    RunnerWindow* w = new RunnerWindow(rm);
-    w->setModel(m);
+    RunnerTestHelper* runner = new RunnerTestHelper;
+    runner->initializeGUI();
+    runner->setRoot(m_reg->root());
     QMainWindow* mw = new QMainWindow;
-    mw->setCentralWidget(w);
+    mw->setCentralWidget(runner->runnerWidget());
     mw->show();
 }
 

@@ -18,7 +18,7 @@ macro(kdev_qx_add_test test_EXEC)
         kdevcppunit)
 endmacro(kdev_qx_add_test)
 
-kdev_qx_add_test(it-cppunitrunnertest cppunitrunnertest.cpp ../../qtest/tests/runnertesthelper.cpp)
+kdev_qx_add_test(it-cppunitrunnertest cppunitrunnertest.cpp)
 
 add_executable(emptysuite fake_emptysuite.cpp)
 target_link_libraries(emptysuite ${QT_QTCORE_LIBRARY} ${CPPUNIT_LIBRARY})

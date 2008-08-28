@@ -22,7 +22,6 @@
 #define QXQTEST_QTESTRUNNERTEST_H
 
 #include <QObject>
-#include <veritas/testresult.h>
 
 namespace Veritas { class Test; class RunnerTestHelper; }
 
