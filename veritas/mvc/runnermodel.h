@@ -26,6 +26,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QAbstractItemModel>
 #include <QTime>
+#include "../veritasexport.h"
 
 namespace Veritas
 {
@@ -56,7 +57,7 @@ class RunnerModelThread;
  *
  * \sa \ref runner_model_item and \ref implementation_ascpects
  */
-class RunnerModel : public QAbstractItemModel
+class VERITAS_EXPORT RunnerModel : public QAbstractItemModel
 {
 Q_OBJECT
 

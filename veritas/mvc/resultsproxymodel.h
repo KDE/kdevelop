@@ -24,6 +24,7 @@
 
 #include "veritas/mvc/proxymodelcommon.h"
 #include "veritas/testresult.h"
+#include "../veritasexport.h"
 
 #include <QList>
 #include <QSortFilterProxyModel>
@@ -47,7 +48,7 @@ class ResultsModel;
  *
  * \sa \ref views
  */
-class ResultsProxyModel : public QSortFilterProxyModel,
+class VERITAS_EXPORT ResultsProxyModel : public QSortFilterProxyModel,
                           public ProxyModelCommon
 {
     Q_OBJECT

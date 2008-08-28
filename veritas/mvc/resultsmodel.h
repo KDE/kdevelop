@@ -24,6 +24,7 @@
 
 #include <QAbstractListModel>
 #include <QStringList>
+#include "../veritasexport.h"
 
 namespace Veritas
 {
@@ -40,7 +41,7 @@ class Test;
  *
  * \sa \ref results_model and \ref runner_item_index
  */
-class ResultsModel : public QAbstractListModel
+class VERITAS_EXPORT ResultsModel : public QAbstractListModel
 {
 Q_OBJECT
 public: // Operations

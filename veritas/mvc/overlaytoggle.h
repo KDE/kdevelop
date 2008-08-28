@@ -23,6 +23,7 @@
 
 #include <QAbstractButton>
 #include <QModelIndex>
+#include "../veritasexport.h"
 
 class QTimeLine;
 

@@ -23,6 +23,7 @@
 #define VERITAS_RUNNERPROXYMODEL_H
 
 #include "veritas/mvc/proxymodelcommon.h"
+#include "../veritasexport.h"
 
 #include <QSortFilterProxyModel>
 
@@ -36,7 +37,7 @@ namespace Veritas
  * It is currently not used, but will probably be in the near
  * future. Most likely for a regex-test filter box.
  */
-class RunnerProxyModel : public QSortFilterProxyModel
+class VERITAS_EXPORT RunnerProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 

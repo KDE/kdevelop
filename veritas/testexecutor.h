@@ -22,6 +22,7 @@
 #define VERITAS_TESTEXECUTOR_H
 
 #include <QtCore/QObject>
+#include "veritasexport.h"
 
 namespace Veritas
 {
@@ -30,7 +31,7 @@ class Test;
 /*! Initiates and starts execution of test executable in a test tree.
  *  Links succeeding tests together in a signal-slot chain triggered 
  *  with the `fireStarter' signal. */
-class TestExecutor : public QObject
+class VERITAS_EXPORT TestExecutor : public QObject
 {
 Q_OBJECT
 public:

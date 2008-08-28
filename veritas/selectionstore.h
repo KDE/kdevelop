@@ -22,6 +22,7 @@
 #define VERITAS_SELECTIONSTORE_H
 
 #include <QSet>
+#include "veritasexport.h"
 
 namespace Veritas
 {
@@ -29,7 +30,7 @@ class Test;
 
 /*! Store select state of a test tree. Used to retrieve this state after reload
     @unittest Veritas::SelectionStoreTest */
-class SelectionStore
+class VERITAS_EXPORT SelectionStore
 {
 public:
     void saveState(Test* test);

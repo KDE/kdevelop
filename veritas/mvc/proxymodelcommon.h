@@ -23,6 +23,7 @@
 #define PROXYMODELCOMMON_H
 
 #include <QBitArray>
+#include "../veritasexport.h"
 
 namespace Veritas
 {
@@ -39,7 +40,7 @@ namespace Veritas
  * code here should be moved to ResultsProxyModel (which is the only user atm)
  *
  */
-class ProxyModelCommon
+class VERITAS_EXPORT ProxyModelCommon
 {
 public: // Operations
 

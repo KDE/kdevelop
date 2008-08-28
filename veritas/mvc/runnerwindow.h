@@ -27,6 +27,7 @@
 #include <QTreeView>
 #include <QList>
 #include <QTime>
+#include "../veritasexport.h"
 
 namespace KDevelop { class IProject; }
 namespace Ui { class RunnerWindow; class ResultsView; }
@@ -68,7 +69,7 @@ class VerboseManager;
  * \sa \ref main_window
  */
 
-class RunnerWindow : public QWidget
+class VERITAS_EXPORT RunnerWindow : public QWidget
 {
 Q_OBJECT
 public: // Operations

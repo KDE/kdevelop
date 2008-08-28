@@ -29,7 +29,7 @@
 #define VERITAS_RUNNERVIEWCONTROLLER_H
 
 #include "veritas/mvc/viewcontrollercommon.h"
-
+#include "../veritasexport.h"
 #include <QObject>
 
 namespace Veritas
@@ -50,7 +50,7 @@ class RunnerProxyModel;
  *
  * \sa \ref views and \ref selected_item
  */
-class RunnerViewController : public ViewControllerCommon
+class VERITAS_EXPORT RunnerViewController : public ViewControllerCommon
 {
     Q_OBJECT
 
