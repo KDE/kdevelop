@@ -234,7 +234,7 @@ void GrepJob::start()
     setTitle(patternString());
     setBehaviours( KDevelop::IOutputView::AllowUserClose );
 
-    GrepOutputModel* grepModel = new GrepOutputModel(this);
+    GrepOutputModel* grepModel = new GrepOutputModel();
     grepModel->setRegExp(pattern);
 
     setModel(grepModel, KDevelop::IOutputView::TakeOwnership);

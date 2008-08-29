@@ -44,7 +44,7 @@ public:
         Text,
         File
     };
-    explicit GrepOutputModel( QObject *parent );
+    explicit GrepOutputModel( QObject *parent = 0 );
     ~GrepOutputModel();
 
     void setRegExp(const QString& regExp);
