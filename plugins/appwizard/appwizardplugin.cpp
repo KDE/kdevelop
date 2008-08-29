@@ -242,6 +242,12 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                     return vcsError(errorMsg, tmpdir, dest);
                 }
             }
+        } else if( !info.vcsPluginName.isEmpty() )
+        {
+            //This should never happen, the vcs dialog presented a list of vcs
+            //systems and now the chosen system doesn't exist anymore??
+            tmpdir.unlink();
+            return "";
         }
         tmpdir.unlink();
     }else
