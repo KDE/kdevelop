@@ -232,7 +232,7 @@ void GrepJob::start()
     grepModel->setRegExp(pattern);
 
     setModel(grepModel, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(new GrepOutputDelegate(this));
+    setDelegate(new GrepOutputDelegate(), KDevelop::IOutputView::TakeOwnership);
     startOutput();
 
     m_lineMaker = new KDevelop::ProcessLineMaker( xargsProc );
