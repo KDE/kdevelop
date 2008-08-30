@@ -160,10 +160,18 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
+    connect( d->m_projectOverview->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
+             this, SLOT(selectionChanged() ) );
+    selectionChanged();
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
+}
+
+void ProjectManagerView::selectionChanged()
+{
+    d->m_buildView->selectionChanged();
 }
 
 void ProjectManagerView::updateSyncAction()

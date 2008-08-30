@@ -41,6 +41,7 @@ public:
 
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:
+    void selectionChanged();
     void switchDetailView();
     void locateCurrentDocument();
     void updateSyncAction();

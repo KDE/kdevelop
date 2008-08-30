@@ -24,6 +24,7 @@
 #include <QHBoxLayout>
 #include <QTreeView>
 #include <QToolButton>
+#include <QItemSelectionModel>
 #include <QStringListModel>
 #include <QModelIndex>
 #include <QStandardItemModel>
@@ -64,7 +65,15 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              SLOT(showContextMenu(const QPoint&) ) );
+    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
+             this, SLOT(selectionChanged()) );
     layout()->setMargin(0);
+}
+
+void ProjectBuildSetWidget::selectionChanged()
+{
+    m_ui->removeItemButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
+    m_ui->addItemButton->setEnabled( !m_view->selectedItems().isEmpty() );
 }
 
 ProjectBuildSetWidget::~ProjectBuildSetWidget()

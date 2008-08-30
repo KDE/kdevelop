@@ -46,6 +46,8 @@ class ProjectBuildSetWidget : public QWidget
 public:
     ProjectBuildSetWidget( ProjectManagerView* view, QWidget* parent );
     ~ProjectBuildSetWidget();
+public slots:
+    void selectionChanged();
 private slots:
     void addItems();
     void removeItems();
