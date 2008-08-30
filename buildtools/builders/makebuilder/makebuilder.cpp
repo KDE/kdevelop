@@ -124,7 +124,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
 
     MakeJob* job = new MakeJob(this, item, c, overrideTarget);
     m_jobs[item] = job;
-    job->setProperty("ProjectBaseItem", QVariant::fromValue(static_cast<void*>(item)));
+    job->setItem(item);
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     return job;

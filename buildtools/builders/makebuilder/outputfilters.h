@@ -11,50 +11,33 @@
 #ifndef OUTPUTFILTERS_H
 #define OUTPUTFILTERS_H
 
-class IOutputViewItem;
-class MakeBuilder;
-class MakeOutputModel;
-class QString;
-// template <typename T1> class QList;
-#include <QList>
-class ErrorFormat;
-class ActionFormat;
-class QStandardItem;
+#include <QString>
+#include <QRegExp>
 
-class ErrorFilter
+class ActionFormat
 {
-public:
-    explicit ErrorFilter( MakeOutputModel const& model );
-    ~ErrorFilter();
-
-    QStandardItem* processAndCreate( const QString& line );
-
-private:
-    MakeOutputModel const& m_model;
-    QList<ErrorFormat> m_errList;
+    public:
+        static QList<ActionFormat> actionFormats;
+        ActionFormat( const QString&, const QString&, const QString& regExp, int file);
+        ActionFormat( const QString&, int tool, int file, const QString& regExp);
+        QString action;
+        QRegExp expression;
+        QString tool;
+        int toolGroup;
+        int fileGroup;
 };
 
-class MakeActionFilter
+class ErrorFormat
 {
-public:
-    explicit MakeActionFilter( MakeOutputModel& model );
-    ~MakeActionFilter();
-
-    QStandardItem* processAndCreate( const QString& line );
-
-private:
-    MakeOutputModel& m_model;
-    QList<ActionFormat> m_actlist;
-};
-
-/// TODO read regexps from project file (.kdev4)
-class CustomFilter
-{
-public:
-    CustomFilter();
-    virtual ~CustomFilter();
-
-    QStandardItem* processAndCreate( const QString& line );
+    public:
+        static QList<ErrorFormat> errorFormats;
+        ErrorFormat( const QString&, int, int, int );
+        ErrorFormat( const QString&, int, int, int, const QString& );
+        QRegExp expression;
+        int fileGroup;
+        int lineGroup;
+        int textGroup;
+        QString compiler;
 };
 
 #endif

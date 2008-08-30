@@ -35,16 +35,23 @@ MakeOutputDelegate::MakeOutputDelegate( QObject* parent )
 void MakeOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == MakeOutputModel::MakeError )
+    QVariant status = index.data(MakeOutputModel::MakeItemTypeRole);
+    if( status.isValid() )
     {
-        opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
-    }else if( status.isValid() && status.toInt() == MakeOutputModel::MakeWarning )
-    {
-        opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
-    }else if( status.isValid() && status.toInt() == MakeOutputModel::MakeBuilt )
-    {
-        opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );
+        MakeOutputModel::OutputItemType type = status.value<MakeOutputModel::OutputItemType>();
+        kDebug() << "item for" << index << "has type:" << type;
+        if( type == MakeOutputModel::ErrorItem )
+        {
+            opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
+            opt.font.setBold( true );
+        }else if( type == MakeOutputModel::WarningItem )
+        {
+            opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
+        }else if( type == MakeOutputModel::ActionItem )
+        {
+            opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );
+            opt.font.setBold( true );
+        }
     }
     QItemDelegate::paint(painter, opt, index);
 }

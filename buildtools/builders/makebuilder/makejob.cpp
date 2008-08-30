@@ -72,7 +72,7 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
         title = i18n("Make: %1", m_overrideTarget);
     else
         title = i18n("Make: %1", m_item->text());
-    
+
     setTitle(title);
     setObjectName(title);
 }
@@ -104,12 +104,12 @@ void MakeJob::start()
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
-    setModel(new MakeOutputModel(this), IOutputView::TakeOwnership);
+    setModel(new MakeOutputModel(), IOutputView::TakeOwnership);
     setDelegate(m_builder->delegate());
 
     startOutput();
 
-    model()->appendRow( new QStandardItem( cmd.join(" ") ) );
+    model()->addLine( cmd.join(" ") );
 
     m_executor = new KDevelop::CommandExecutor(cmd.first());
     m_executor->setWorkingDirectory(buildDir.toLocalFile() );
@@ -260,53 +260,55 @@ void MakeJob::slotFailed()
         setError(FailedError);
         // FIXME need more detail
         setErrorText(i18n("Job failed"));
-        model()->appendRow( new QStandardItem( i18n("*** Failed ***") ) );
-        
+        model()->addLine( i18n("*** Failed ***") );
+
     } else {
-        model()->appendRow( new QStandardItem( i18n("*** Aborted ***") ) );
+        model()->addLine( i18n("*** Aborted ***") );
     }
     emitResult();
 }
 
 void MakeJob::addStandardError( const QStringList& lines )
 {
-    foreach( QString line, lines)
-    {
-        QStandardItem* item = model()->errorFilter()->processAndCreate(line);
-        if( !item ) 
-            item = new QStandardItem(line);
-        if( !firstError )
-        {
-            firstError = true;
-            KDevelop::IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-            if( i )
-            {
-                KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-                if( view )
-                {
-                    view->scrollOutputTo( outputId(), model()->index( item->row(), item->column(), QModelIndex() ) );
-                }
-            }
-        }
-        model()->appendRow(item);
-    }
+    model()->addLines( lines );
+//     foreach( QString line, lines)
+//     {
+//         QStandardItem* item = model()->errorFilter()->processAndCreate(line);
+//         if( !item )
+//             item = new QStandardItem(line);
+//         if( !firstError )
+//         {
+//             firstError = true;
+//             KDevelop::IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+//             if( i )
+//             {
+//                 KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+//                 if( view )
+//                 {
+//                     view->scrollOutputTo( outputId(), model()->index( item->row(), item->column(), QModelIndex() ) );
+//                 }
+//             }
+//         }
+//         model()->appendRow(item);
+//     }
 }
 
 void MakeJob::addStandardOutput( const QStringList& lines )
 {
-    foreach( QString line, lines)
-    {
-        QStandardItem* item = model()->actionFilter()->processAndCreate(line);
-        if( !item )
-            item = new QStandardItem(line);
-        model()->appendRow(item);
-    }
+    model()->addLines( lines );
+//     foreach( QString line, lines)
+//     {
+//         QStandardItem* item = model()->actionFilter()->processAndCreate(line);
+//         if( !item )
+//             item = new QStandardItem(line);
+//         model()->appendRow(item);
+//     }
 }
 
 
 void MakeJob::slotCompleted()
 {
-    model()->appendRow( new QStandardItem( i18n("*** Finished ***") ) );
+    model()->addLine( i18n("*** Finished ***") );
     emitResult();
 }
 
@@ -320,6 +322,11 @@ bool MakeJob::doKill()
 MakeOutputModel* MakeJob::model() const
 {
     return dynamic_cast<MakeOutputModel*>( OutputJob::model() );
+}
+
+void MakeJob::setItem( ProjectBaseItem* item )
+{
+    m_item = item;
 }
 
 

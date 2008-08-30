@@ -66,6 +66,8 @@ public:
  
     MakeOutputModel* model() const;
 
+    void setItem( KDevelop::ProjectBaseItem* item );
+
 public slots:
     void addStandardError( const QStringList& );
     void addStandardOutput( const QStringList& );   

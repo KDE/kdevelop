@@ -19,145 +19,214 @@
  ***************************************************************************/
 
 #include "makeoutputmodel.h"
-#include "outputfilters.h"
-#include "makeitem.h"
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
+
+#include <QFileInfo>
+
 #include <ktexteditor/cursor.h>
+#include <kurl.h>
 #include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+
+#include "outputfilters.h"
+
+class FilteredItem
+{
+    public:
+        FilteredItem( const QString& line )
+            : originalLine( line ), 
+              type( QVariant::fromValue( MakeOutputModel::StandardItem ) ),
+              shortenedText( line ), isActivatable(false), lineNo(-1) { kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>(); }
+        QString originalLine;
+        QVariant type;
+        QString shortenedText;
+        bool isActivatable;
+        KUrl url;
+        int lineNo;
+};
+
+const int MakeOutputModel::MakeItemTypeRole = Qt::UserRole + 1;
+
 MakeOutputModel::MakeOutputModel( QObject* parent )
-    : QStandardItemModel(parent), m_actionFilter(new MakeActionFilter(*this)), m_errorFilter(new ErrorFilter(*this))
+    : QAbstractListModel(parent)
 {
 }
 
-MakeActionFilter* MakeOutputModel::actionFilter()
+QVariant MakeOutputModel::data( const QModelIndex& idx, int role ) const
 {
-    return m_actionFilter;
+    if( isValidIndex(idx) )
+    {
+        switch( role )
+        {
+            case Qt::DisplayRole:
+                return items.at( idx.row() ).shortenedText;
+                break;
+            case MakeOutputModel::MakeItemTypeRole:
+                return items.at( idx.row() ).type;
+                break;
+            default:
+                break;
+        }
+    }
+    return QVariant();
 }
 
-ErrorFilter* MakeOutputModel::errorFilter()
+int MakeOutputModel::rowCount( const QModelIndex& parent ) const
 {
-    return m_errorFilter;
+    if( !parent.isValid() )
+        return items.count();
+    return 0;
+}
+
+QVariant MakeOutputModel::headerData( int, Qt::Orientation, int ) const
+{
+    return QVariant();
+}
+
+bool MakeOutputModel::isValidIndex( const QModelIndex& idx ) const
+{
+    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
 }
 
 void MakeOutputModel::activate( const QModelIndex& index )
 {
-    if( index.model() != this )
+    if( index.model() != this || !isValidIndex(index) )
     {
         kDebug(9037) << "not my model, returning";
         return;
     }
     kDebug(9037) << "Model activated" << index.row();
 
-    QStandardItem *stditem = itemFromIndex( index );
-    MakeWarningItem *warn = dynamic_cast<MakeWarningItem*>( stditem );
-    if( warn )
+
+    FilteredItem item = items.at( index.row() );
+    if( item.isActivatable )
     {
-        KTextEditor::Cursor range( warn->lineNo, 0);
+        KTextEditor::Cursor range( item.lineNo, 0);
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
-        KUrl url;
-        if ( !warn->currDir.isEmpty() ) {
-            // if the warning/error file path is relative then make it consider as current
-            // directory the build dir at the moment of the warning/error creation
-            url = KUrl::fromPath( warn->currDir );
-            url.addPath( warn->file );
-        } else url = KUrl::fromPath( warn->file );
-        docCtrl->openDocument( url, range );
+        docCtrl->openDocument( item.url, range );
     }
 }
 
 QModelIndex MakeOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
-    int rowCount = this->rowCount();
-
-    bool reachedEnd = false;
-
-    // determine from which index we should start
-    int i=0;
-    if( currentIdx.isValid() )
-        i = currentIdx.row();
-
-    if( i >= rowCount - 1 )
-        i = 0;
-    else
-        i++;
-
-    for( ; i < rowCount; i++ )
+    int startrow = 0;
+    if( isValidIndex(currentIdx) )
     {
-        QStandardItem *stditem = item( i );
-        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
-        if( outItem )
+        startrow = currentIdx.row();
+    }
+    int currow = startrow + 1;
+    int rows = rowCount();
+    while( currow != startrow )
+    {
+        if( currow == rows )
         {
-            // yes. found.
-            QModelIndex modelIndex = outItem->index();
-            return modelIndex;
+            currow = 0;
         }
-
-        if( i >= rowCount - 1 ) // at the last index and couldn't find error yet.
+        if( items.at( currow ).isActivatable )
         {
-            if( reachedEnd )
-            {
-                break; // no matching item
-            }
-            else
-            {
-                reachedEnd = true;
-                i = -1; // search from index 0
-            }
+            return index( currow, 0, QModelIndex() );
         }
+        currow++;
     }
     return QModelIndex();
 }
 
 QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
-    int rowCount = this->rowCount();
 
-    bool reachedFirst = false;
-
-    // determine from which index we should start
-    int i = rowCount -1;
-    if( currentIdx.isValid() )
-        i = currentIdx.row();
-
-    if( ( i > rowCount - 1 ) || ( i == 0 ) )
-        i = rowCount-1; // set to last index
-    else
-        i--;
-
-    for( ; i >= 0; i-- )
+    int startrow = 0;
+    if( isValidIndex(currentIdx) )
     {
-        QStandardItem *stditem = item( i );
-        MakeErrorItem *outItem = dynamic_cast<MakeErrorItem*>( stditem );
-        if( outItem )
+        startrow = rowCount() - 1;
+    }
+    int currow = startrow - 1;
+    while( currow != startrow )
+    {
+        if( currow < 0 )
         {
-            // yes. found.
-            QModelIndex modelIndex = outItem->index();
-            return modelIndex;
+            currow = rowCount() - 1;
         }
-        if( i <= 0 ) // at the last index and couldn't find error yet.
+        if( items.at( currow ).isActivatable )
         {
-            if( reachedFirst )
-            {
-                break; // no matching item
-            }
-            else
-            {
-                reachedFirst = true;
-                i = rowCount; // search from last index
-            }
+            return index( currow, 0, QModelIndex() );
         }
+        currow--;
     }
     return QModelIndex();
 }
 
+KUrl MakeOutputModel::urlForFile( const QString& filename ) const
+{
+    QFileInfo fi(filename);
+    KUrl u;
+    if( u.isLocalFile() && fi.isRelative() )
+    {
+        u = KUrl( currentDir );
+        u.addPath( filename );
+    } else 
+    {
+        u = KUrl( filename );
+    }
+    return u;
+}
 
+void MakeOutputModel::addLines( const QStringList& lines )
+{
+    if( lines.isEmpty() )
+        return;
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + lines.count() - 1 );
+    foreach( const QString& line, lines )
+    {
 
+        FilteredItem item( line );
+        bool matched = false;
+        foreach( const ErrorFormat& errFormat, ErrorFormat::errorFormats )
+        {
+            QRegExp regEx = errFormat.expression;
+            if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) )
+            {
+                kDebug() << "found an error:" << line;
+                item.url = urlForFile( regEx.cap( errFormat.fileGroup ) );
+                item.lineNo = regEx.cap( errFormat.lineGroup ).toInt() - 1;
+                item.shortenedText = regEx.cap( errFormat.textGroup );
+                item.type = QVariant::fromValue( ( regEx.cap(3).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
+                item.isActivatable = true;
+                matched = true;
+                break;
+            }
+        }
+        if( !matched )
+        {
+            foreach( const ActionFormat& actFormat, ActionFormat::actionFormats )
+            {
+                QRegExp regEx = actFormat.expression;
+                if( regEx.indexIn( line ) != -1 )
+                {
+                    kDebug() << "found an action" << line << actFormat.tool << actFormat.toolGroup << actFormat.fileGroup;
+                    item.type = QVariant::fromValue( MakeOutputModel::ActionItem );
+                    if( actFormat.fileGroup != -1 && actFormat.toolGroup != -1 )
+                    {
+                        item.shortenedText = QString( "%1 %2 (%3)").arg( actFormat.action ).arg( regEx.cap( actFormat.fileGroup ) ).arg( regEx.cap( actFormat.toolGroup ) );
+                    }
+                    if( actFormat.action == "cd" )
+                    {
+                        currentDir = regEx.cap( actFormat.fileGroup );
+                    }
+                    matched = true;
+                    break;
+                }
+            }
+        }
+        kDebug() << "adding item:" << item.shortenedText << item.type;
+        items << item;
+    }
+    endInsertRows();
+}
 
-// void MakeOutputModel::searchNextError()
-// {
-// }
-
+void MakeOutputModel::addLine( const QString& l )
+{
+    addLines( QStringList() << l );
+}
 
 #include "makeoutputmodel.moc"

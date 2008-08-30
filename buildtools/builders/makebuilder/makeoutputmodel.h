@@ -21,40 +21,49 @@
 #ifndef MAKEOUTPUTMODEL_H
 #define MAKEOUTPUTMODEL_H
 
-#include <QtGui/QStandardItemModel>
+#include <QtCore/QAbstractListModel>
 #include <outputview/ioutputviewmodel.h>
 #include <QString>
 
-class QObject;
-class MakeActionFilter;
-class ErrorFilter;
+class KUrl;
+class FilteredItem;
 
-class MakeOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
 public:
     enum OutputItemType{
-        MakeError,
-        MakeWarning,
-        MakeBuilt
+        ErrorItem = 0,
+        WarningItem = 1,
+        ActionItem = 2,
+        CustomItem = 3,
+        StandardItem = 4
     };
+
+    static const int MakeItemTypeRole;
+
     explicit MakeOutputModel( QObject* parent = 0 );
 
     // IOutputViewModel interfaces
     void activate( const QModelIndex& index );
     QModelIndex nextHighlightIndex( const QModelIndex &current );
     QModelIndex previousHighlightIndex( const QModelIndex &current );
-    MakeActionFilter* actionFilter();
-    ErrorFilter* errorFilter();
 
-    void setCurrentDirectory(QString const& s) { m_currDir = s; }
-    QString const& getCurrentDirectory() const { return m_currDir; }
+    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
+    int rowCount( const QModelIndex& = QModelIndex() ) const;
+    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
+
+    void addLines( const QStringList& );
+    void addLine( const QString& );
 
 private:
-    QString m_currDir; // caches current directory while building
-    MakeActionFilter* m_actionFilter;
-    ErrorFilter* m_errorFilter;
+    KUrl urlForFile( const QString& ) const;
+    bool isValidIndex( const QModelIndex& ) const;
+    QList<FilteredItem> items;
+    QString currentDir;
 };
+
+Q_DECLARE_METATYPE( MakeOutputModel::OutputItemType )
 
 #endif
 

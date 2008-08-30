@@ -7,7 +7,6 @@ set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
     makeoutputmodel.cpp
     outputfilters.cpp
-    makeitem.cpp
     makeoutputdelegate.cpp
     makejob.cpp
 )
