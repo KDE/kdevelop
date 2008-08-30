@@ -212,7 +212,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     int op = 0;
 
     if( m_size == (int)m_tokens.size() ){
-	m_tokens.resize( m_tokens.size() + 5000 );
+	m_tokens.resize( m_tokens.size() + 5000 + 1 );
     }
 
     readWhiteSpaces( !stopOnNewline );
