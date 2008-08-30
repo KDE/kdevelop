@@ -1,6 +1,8 @@
 # KDE Config File
 [General]
 Name=Qt4 CMake QTest Core application
+Name[uk]=Ключова програма QTest Qt4 CMake
 Category=C++/Qt (cmake)
 Comment=Generate a CMake/Qt4 based application (crossplatform compatible)
+Comment[uk]=Створити програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
