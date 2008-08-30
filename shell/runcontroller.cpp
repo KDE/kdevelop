@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QItemDelegate>
+#include <QPalette>
 
 #include <KSelectAction>
 #include <KActionMenu>
@@ -29,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <KMessageBox>
 #include <KLocale>
 #include <KDebug>
+#include <KColorScheme>
 #include <interfaces/iproject.h>
 #include <outputview/ioutputview.h>
 
@@ -359,20 +361,22 @@ void RunJob::slotOutput(KJob * job, const QString & line, KDevelop::IRunProvider
     if (!model())
         return;
 
-    QStandardItem* item = new QStandardItem(line);
+    int rowCount = model()->rowCount();
+    model()->insertRows( rowCount, 1 );
+    QModelIndex row_idx = model()->index( rowCount, 0, QModelIndex() );
+    model()->setData( row_idx, QVariant( line ) );
 
     switch (type) {
         case IRunProvider::StandardError:
-            item->setForeground(Qt::red);
+            model()->setData( row_idx, QVariant::fromValue<QBrush>( KColorScheme( QPalette::Active ).foreground( KColorScheme::NegativeText ) ), Qt::ForegroundRole );
             break;
         case IRunProvider::RunProvider:
-            item->setForeground(Qt::blue);
+            model()->setData( row_idx, QVariant::fromValue<QBrush>( KColorScheme( QPalette::Active ).foreground( KColorScheme::PositiveText ) ), Qt::ForegroundRole );
             break;
         default:
             break;
     }
 
-    model()->appendRow(item);
 }
 
 void KDevelop::RunJob::slotFinished(KJob * job)

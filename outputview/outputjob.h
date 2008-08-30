@@ -56,8 +56,8 @@ protected:
     void setBehaviours(IOutputView::Behaviours behaviours);
     void setKillJobOnOutputClose(bool killJobOnOutputClose);
 
-    QStandardItemModel* model() const;
-    void setModel(QStandardItemModel* model, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
+    QAbstractItemModel* model() const;
+    void setModel(QAbstractItemModel* model, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
     void setDelegate(QAbstractItemDelegate* delegate, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
 
     int outputId() const;
@@ -74,7 +74,7 @@ private:
     bool m_killJobOnOutputClose;
     bool m_raiseOnCreation;
     int m_outputId;
-    QStandardItemModel* m_outputModel;
+    QAbstractItemModel* m_outputModel;
     IOutputView::Ownership m_modelOwnership;
     QAbstractItemDelegate* m_outputDelegate;
     IOutputView::Ownership m_delegateOwnership;

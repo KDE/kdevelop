@@ -113,7 +113,7 @@ void KDevelop::OutputJob::setKillJobOnOutputClose(bool killJobOnOutputClose)
     m_killJobOnOutputClose = killJobOnOutputClose;
 }
 
-void KDevelop::OutputJob::setModel(QStandardItemModel * model, IOutputView::Ownership takeOwnership)
+void KDevelop::OutputJob::setModel(QAbstractItemModel * model, IOutputView::Ownership takeOwnership)
 {
     m_modelOwnership = takeOwnership;
     m_outputModel = model;
@@ -125,7 +125,7 @@ void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate, IOutputV
     m_outputDelegate = delegate;
 }
 
-QStandardItemModel * KDevelop::OutputJob::model() const
+QAbstractItemModel * KDevelop::OutputJob::model() const
 {
     return m_outputModel;
 }
