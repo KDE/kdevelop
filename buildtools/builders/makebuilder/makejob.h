@@ -26,12 +26,14 @@
 #include <outputview/outputjob.h>
 
 #include <QString>
+#include <QProcess>
 
 namespace KDevelop {
 class ProjectBaseItem;
-class CommandExecutor;
+class ProcessLineMaker;
 }
 
+class KProcess;
 class MakeBuilder;
 class MakeOutputModel;
 
@@ -63,20 +65,19 @@ public:
     KDevelop::ProjectBaseItem* item() const;
     CommandType commandType();
     const QString& customTarget() const;
- 
+
     MakeOutputModel* model() const;
 
     void setItem( KDevelop::ProjectBaseItem* item );
 
 public slots:
-    void addStandardError( const QStringList& );
-    void addStandardOutput( const QStringList& );   
+    void addStandardOutput( const QStringList& );
 protected:
     bool doKill();
 
 private Q_SLOTS:
-    void slotFailed();
-    void slotCompleted();
+    void procError( QProcess::ProcessError error );
+    void procFinished( int code, QProcess::ExitStatus status );
 
 private:
     QStringList computeBuildCommand() const;
@@ -87,7 +88,8 @@ private:
     KDevelop::ProjectBaseItem* m_item;
     CommandType m_command;
     QString m_overrideTarget;
-    KDevelop::CommandExecutor* m_executor;
+    KDevelop::ProcessLineMaker* m_lineMaker;
+    KProcess* m_process;
     bool m_killed;
     bool firstError;
 };

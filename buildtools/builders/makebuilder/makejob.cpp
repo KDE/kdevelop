@@ -22,36 +22,26 @@
 
 #include "makejob.h"
 
-#include <config.h>
-
-#include "makeoutputmodel.h"
-#include "makebuilder.h"
-
-#include <project/projectmodel.h>
-
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <util/commandexecutor.h>
-#include <interfaces/iproject.h>
+#include <QtCore/QStringList>
 #include <QtCore/QProcess>
 
 #include <KDebug>
-
-#include <util/environmentgrouplist.h>
-
-#include <QtCore/QStringList>
+#include <kshell.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kprocess.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <QtCore/QProcess>
+#include <util/environmentgrouplist.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <util/processlinemaker.h>
+#include <interfaces/iproject.h>
 
-#include <kpluginfactory.h>
-#include <kshell.h>
-#include <kpluginloader.h>
-#include <kglobal.h>
-#include <klocale.h>
-
-#include "outputfilters.h"
 #include "makeoutputdelegate.h"
+#include "makeoutputmodel.h"
+#include "makebuilder.h"
 
 using namespace KDevelop;
 
@@ -61,7 +51,8 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
     , m_item(item)
     , m_command(c)
     , m_overrideTarget(overrideTarget)
-    , m_executor(0)
+    , m_lineMaker(0)
+    , m_process(0)
     , m_killed(false)
     , firstError(false)
 {
@@ -109,23 +100,30 @@ void MakeJob::start()
 
     startOutput();
 
-    model()->addLine( cmd.join(" ") );
+    model()->addLine( buildDir.toLocalFile() + ":" + cmd.join(" ") );
 
-    m_executor = new KDevelop::CommandExecutor(cmd.first());
-    m_executor->setWorkingDirectory(buildDir.toLocalFile() );
+    QString command = cmd.first();
     cmd.pop_front();
-    m_executor->setArguments( cmd );
-    m_executor->setEnvironment( environmentVars() );
 
-    connect(m_executor, SIGNAL(receivedStandardOutput(const QStringList&)),
-            SLOT(addStandardOutput(const QStringList&)));
-    connect(m_executor, SIGNAL(receivedStandardError(const QStringList&)),
-            SLOT(addStandardError(const QStringList&)));
-    connect(m_executor, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
-    connect(m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
+    m_process = new KProcess(this);
+    m_process->setOutputChannelMode( KProcess::MergedChannels );
+    m_lineMaker = new ProcessLineMaker( m_process );
+    connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
+             this, SLOT( addStandardOutput( const QStringList& ) ) );
+    connect( m_process, SIGNAL( error( QProcess::ProcessError ) ),
+             this, SLOT( procError( QProcess::ProcessError ) ) );
+    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
+             this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
 
+    Q_FOREACH( QString s, environmentVars().keys() )
+    {
+        m_process->setEnv( s, environmentVars()[s] );
+    }
+
+    m_process->setWorkingDirectory( buildDir.toLocalFile() );
+    m_process->setProgram( command, cmd );
     kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
-    m_executor->start();
+    m_process->start();
 }
 
 KDevelop::ProjectBaseItem * MakeJob::item() const
@@ -254,8 +252,16 @@ QMap<QString, QString> MakeJob::environmentVars() const
     return retMap;
 }
 
-void MakeJob::slotFailed()
+void MakeJob::addStandardOutput( const QStringList& lines )
 {
+    model()->addLines( lines );
+}
+
+void MakeJob::procError( QProcess::ProcessError error )
+{
+    Q_UNUSED(error)
+    m_lineMaker->flushBuffers();
+
     if (!m_killed) {
         setError(FailedError);
         // FIXME need more detail
@@ -267,55 +273,24 @@ void MakeJob::slotFailed()
     }
     emitResult();
 }
-
-void MakeJob::addStandardError( const QStringList& lines )
+void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 {
-    model()->addLines( lines );
-//     foreach( QString line, lines)
-//     {
-//         QStandardItem* item = model()->errorFilter()->processAndCreate(line);
-//         if( !item )
-//             item = new QStandardItem(line);
-//         if( !firstError )
-//         {
-//             firstError = true;
-//             KDevelop::IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-//             if( i )
-//             {
-//                 KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
-//                 if( view )
-//                 {
-//                     view->scrollOutputTo( outputId(), model()->index( item->row(), item->column(), QModelIndex() ) );
-//                 }
-//             }
-//         }
-//         model()->appendRow(item);
-//     }
-}
-
-void MakeJob::addStandardOutput( const QStringList& lines )
-{
-    model()->addLines( lines );
-//     foreach( QString line, lines)
-//     {
-//         QStandardItem* item = model()->actionFilter()->processAndCreate(line);
-//         if( !item )
-//             item = new QStandardItem(line);
-//         model()->appendRow(item);
-//     }
-}
-
-
-void MakeJob::slotCompleted()
-{
-    model()->addLine( i18n("*** Finished ***") );
+    Q_UNUSED(code)
+    m_lineMaker->flushBuffers();
+    if( status != QProcess::NormalExit )
+    {
+        model()->addLine( i18n("*** Aborted ***") );
+    } else
+    {
+        model()->addLine( i18n("*** Finished ***") );
+    }
     emitResult();
 }
 
 bool MakeJob::doKill()
 {
     m_killed = true;
-    m_executor->kill();
+    m_process->kill();
     return true;
 }
 
