@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright 2003-2007 Alexander Dymo  <adymo@kdevelop.org>       *
- *   Copyright 2007 Ralf Habacker  <Ralf.Habacker@freenet.de>       *
- *   Copyright 2006-2007 Matt Rogers  <mattr@kde.org>               *
- *   Copyright 2006-2007 Hamish Rodda <rodda@kde.org>               *
- *   Copyright 2005-2007 Adam Treat <treat@kde.org>                 *
- *   Copyright 2003-2007 Jens Dagerbo <jens.dagerbo@swipnet.se>     *
- *   Copyright 2001-2002 Bernd Gehrmann <bernd@mail.berlios.de>     *
- *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>*
- *   Copyright 2003 Roberto Raggi <roberto@kdevelop.org>            *
+ *   Copyright 2003-2007 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2007 Ralf Habacker  <Ralf.Habacker@freenet.de>              *
+ *   Copyright 2006-2007 Matt Rogers  <mattr@kde.org>                      *
+ *   Copyright 2006-2007 Hamish Rodda <rodda@kde.org>                      *
+ *   Copyright 2005-2007 Adam Treat <treat@kde.org>                        *
+ *   Copyright 2003-2007 Jens Dagerbo <jens.dagerbo@swipnet.se>            *
+ *   Copyright 2001-2002 Bernd Gehrmann <bernd@mail.berlios.de>            *
+ *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>       *
+ *   Copyright 2003 Roberto Raggi <roberto@kdevelop.org>                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -46,16 +46,11 @@
 #include <shell/projectcontroller.h>
 #include <shell/documentcontroller.h>
 #include <shell/plugincontroller.h>
-// #include "kdevenvironment.h"
-// #include "kdevconfig.h"
-// #include "kdevpartcontroller.h"
-// #include "kdevlanguagecontroller.h"
-// #include "kdevprojectcontroller.h"
-// #include "kdevdocumentcontroller.h"
-// #include "kdevbackgroundparser.h"
 
 #include "splashscreen.h"
 #include "kdevideextension.h"
+
+using KDevelop::Core;
 
 int main( int argc, char *argv[] )
 {
@@ -111,16 +106,13 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
 
     KCmdLineArgs::init( argc, argv, &aboutData );
-
     KCmdLineOptions options;
     options.add("profile <profile>", ki18n( "Profile to load" ));
     options.add("project <project>", ki18n( "Project to load" ));
     options.add("+file(s)", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    Q_UNUSED(args)
     KApplication app;
-
     KDevIDEExtension::init();
 
     SplashScreen *splash = 0;
@@ -134,34 +126,23 @@ int main( int argc, char *argv[] )
         splash->repaint();
     }
 
-    using namespace KDevelop;
-
-    //initialize the api object
-    //WARNING! the order is important
     Core::initialize();
-/*    Core::setPartController( new PartController );
-    Core::setDocumentController( new DocumentController );*/
-//     Core::self()->pluginController()->loadPlugins( PluginController::Global );
-//     Core::setLanguageController( new LanguageController );
-//     Core::setProjectController( new ProjectController );
-//     Core::setBackgroundParser( new BackgroundParser );
-//     Core::setEnvironment( new Environment );
+    Core* core = Core::self();
 
     if ( splash )
     {
-        QObject::connect(Core::self()->pluginController(), SIGNAL(loadingPlugin(const QString&)),
-                         splash, SLOT(showMessage(const QString&)));
+        QObject::connect(core->pluginController(), SIGNAL(loadingPlugin(QString)),
+                         splash, SLOT(showMessage(QString)));
         QTimer::singleShot(0, splash, SLOT(deleteLater()));
-
         splash->showMessage( i18n( "Starting GUI" ) );
     }
 
-     bool openProject = false;
+    bool openedProject = false;
     QString projectName = args->getOption("project");
     if ( !projectName.isEmpty() )
     {
-        Core::self()->projectController()->openProject( KUrl(projectName) );
-        openProject = true;
+        core->projectController()->openProject( KUrl(projectName) );
+        openedProject = true;
     }
     else if( args->count() > 0 )
     {
@@ -169,43 +150,44 @@ int main( int argc, char *argv[] )
         QString ext = QFileInfo( url.fileName() ).suffix();
         if( ext == "kdev4" )
         {
-            Core::self()->projectController()->openProject( url );
-            openProject = true;
+            core->projectController()->openProject( url );
+            openedProject = true;
         }
     }
 
-    if( !openProject )
+    if( !openedProject )
     {
         for( int a=0; a<args->count(); ++a )
         {
             QString file = args->arg(a);
-
             //Allow opening specific lines in documents, like mydoc.cpp:10
-            int line = -1;
             int lineNumberOffset = file.lastIndexOf(':');
-            if( lineNumberOffset != -1 ) {
-                bool ok;
-                line = file.mid(lineNumberOffset+1).toInt(&ok);
-                if( !ok )
-                    line = -1;
-                else
+            KTextEditor::Cursor line;
+            if( lineNumberOffset != -1 )
+            {
+                bool isInt;
+                int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
+                if (isInt)
+                {
                     file = file.left(lineNumberOffset);
+                    line = KTextEditor::Cursor(lineNr, 0);
+                }
             }
 
-            if( KUrl::isRelativeUrl(file) ) {
+            if( KUrl::isRelativeUrl(file) )
+            {
                 KUrl u = QDir::currentPath();
                 u.addPath(file);
                 file = u.path();
             }
-            
-            Core::self()->documentController()->openDocument( KUrl( file ), line != -1 ? KTextEditor::Cursor(line, 0) : KTextEditor::Cursor() );
+            core->documentController()->openDocument(KUrl(file), line);
         }
         if( splash && args->count() == 1 )
+        {
             splash->showMessage(args->url(0).pathOrUrl());
+        }
     }
 
-    
-    
     return app.exec();
 }
 
