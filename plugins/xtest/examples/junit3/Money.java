@@ -9,16 +9,16 @@ public class Money {
     private String m_currency;
 
     public Money(int amount, String currency) throws NegativeAmountException {
-	if (amount <= 0) throw new NegativeAmountException();
-	m_amount = amount;
-	m_currency = currency;
+        if (amount <= 0) throw new NegativeAmountException();
+        m_amount = amount;
+        m_currency = currency;
     }
 
     public int amount() {
-	return m_amount;
+        return m_amount;
     }
 
     public String currency() {
-	return m_currency;
+        return m_currency;
     }
 }

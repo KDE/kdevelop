@@ -9,7 +9,7 @@ class Money
 {
 public:
     Money(int amount, std::string currency) :
-	m_amount(amount), m_currency(currency) {}
+        m_amount(amount), m_currency(currency) {}
 
     int amount() const { return m_amount; }
     std::string currency() const { return m_currency; }
