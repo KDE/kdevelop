@@ -27,6 +27,7 @@
 class GrepOutputDelegate : public QItemDelegate
 {
 public:
+    static GrepOutputDelegate* self();
     GrepOutputDelegate(QObject* = 0);
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 private:

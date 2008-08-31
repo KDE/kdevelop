@@ -65,6 +65,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
 GrepViewPlugin::~GrepViewPlugin()
 {
+    GrepOutputDelegate::self()->deleteLater();
 }
 
 void GrepViewPlugin::showDialog()

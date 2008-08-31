@@ -24,6 +24,12 @@
 #include <QtCore/QModelIndex>
 #include <kdebug.h>
 
+GrepOutputDelegate* GrepOutputDelegate::self()
+{
+    static GrepOutputDelegate* delegate = new GrepOutputDelegate(0);
+    return delegate;
+}
+
 GrepOutputDelegate::GrepOutputDelegate( QObject* parent )
     : QItemDelegate(parent), textBrush( KColorScheme::View, KColorScheme::LinkText ),
       fileBrush( KColorScheme::View, KColorScheme::InactiveText )
