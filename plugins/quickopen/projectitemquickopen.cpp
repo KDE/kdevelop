@@ -36,8 +36,25 @@ using namespace KDevelop;
 ProjectItemDataProvider::ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen ) : m_quickopen(quickopen) {
 }
 
-void ProjectItemDataProvider::setFilterText( const QString& text ) {
+struct SubstringCache {
+SubstringCache(QString string = QString()) : substring(string) {
+}
 
+inline bool containedIn(Identifier id) {
+    int index = id.index();
+    QHash<int, bool>::const_iterator it = cache.find(index);
+    if(it != cache.end())
+    return *it;
+    bool result = id.identifier().str().contains( substring, Qt::CaseInsensitive );
+    cache[index] = result;
+    return result;
+}
+QString substring;
+QHash<int, bool> cache;
+};
+
+void ProjectItemDataProvider::setFilterText( const QString& text ) {
+  
   m_addedItems.clear();
 
   QStringList search(text.split("::", QString::SkipEmptyParts));
@@ -55,6 +72,9 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
     m_filteredItems = m_currentItems;
     return;
   }
+  KDevVarLengthArray<SubstringCache, 5> cache;
+  for(int a = 0; a < search.count(); ++a)
+    cache.append(SubstringCache(search.at(a)));
 
   foreach(QString str, search)
     kDebug() << "filtering for" << str;
@@ -72,11 +92,10 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
     bool mismatch = false;
     for(int b = 0; b < search.count(); ++b) {
       bool localMatch = false;
-      QString s = search.at(b);
       
       for(int q = 0; q < currentId.count(); ++q) {
 //         kDebug() << "substring check" << 
-        if(currentId.at(q).identifier().str().contains(s, Qt::CaseInsensitive)) {
+        if(cache[b].containedIn( currentId.at(q) )) {
           localMatch = true;
           break;
         }
