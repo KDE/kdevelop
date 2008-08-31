@@ -66,12 +66,12 @@ void QTestOutputJob::outputFile(const KUrl& path)
     QString path_ = path.path();
     QFile f(path_);
     if (!f.exists()) {
-        kError() << "Test ouput file does not exist [" << path_ << "]";
+        kError() << "Test output file does not exist [" << path_ << "]";
         return;
     }
     f.open(QIODevice::ReadOnly);
     if (!f.isOpen()) {
-        kError() << "Failed to open test ouput file for reading [" << path_ << "]";
+        kError() << "Failed to open test output file for reading [" << path_ << "]";
         return;
     }
     QTextStream stream(&f);

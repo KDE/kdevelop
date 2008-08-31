@@ -123,7 +123,7 @@ QFileInfoList findTestExesIn(QDir& dir, const QStringList& testNames)
     QDir current(dir);
     current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
     QStringList subDirs = current.entryList();
-    foreach(QString subDir, subDirs) {
+    foreach(const QString& subDir, subDirs) {
         if (subDir == "CMakeFiles") continue;
         current.cd(subDir);
         testExes += findTestExesIn(current, testNames);
@@ -202,6 +202,8 @@ void KDevRegister::reload()
     m_testTargets = fetchAllTestTargets(project()->projectItem());
     m_testNames = namesFromTargets(m_testTargets);
     fetchTestCommands(0);
+
+    emit showErrorMessage(QString("FOOBAR"), 10);
 }
 
 void KDevRegister::buildTests()
@@ -241,25 +243,30 @@ QString KDevRegister::statusName() const
     return i18n("xTest");
 }
 
-#include <QApplication>
 #include <QMainWindow>
 #include <QStatusBar>
+
+#include <interfaces/iuicontroller.h>
 
 void KDevRegister::registerStatus()
 {
     // TODO get rid of this joke. Factually istatus should not be
     // limitted to plugins + backgroundparser, but exposed for all
 
-    QWidget* mw = QApplication::activeWindow();
-    if (!mw) { kDebug() << "No mw"; return; }
-    QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
-    if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
-    QStatusBar* sb = sbs[0];
-    if (!sb) { kDebug() << "sb zero"; return; }
-    connect(this, SIGNAL(showProgress(int,int,int)),
-            sb, SLOT(showProgress(int,int,int)));
-    connect(this, SIGNAL(hideProgress()),
-            sb, SLOT(hideProgress()));
+//     QWidget* mw = QApplication::activeWindow();
+//     if (!mw) { kDebug() << "No mw"; return; }
+//     QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
+//     if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
+//     QStatusBar* sb = sbs[0];
+//     if (!sb) { kDebug() << "sb zero"; return; }
+//     connect(this, SIGNAL(showProgress(int,int,int)),
+//             sb, SLOT(showProgress(int,int,int)));
+//     connect(this, SIGNAL(hideProgress()),
+//             sb, SLOT(hideProgress()));
+//     connect(this, SIGNAL(showErrorMessage(QString,int)),
+//             sb, SLOT(showErrorMessage(QString,int)));
+    IUiController* uic = ICore::self()->uiController();
+    uic->registerStatus(this);
 }
 
 

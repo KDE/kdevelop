@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CPPUNIT_CPPUNITVIEW_H
-#define CPPUNIT_CPPUNITVIEW_H
+#ifndef CPPUNIT_CPPUNITPLUGIN_H
+#define CPPUNIT_CPPUNITPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <veritas/testrunnertoolview.h>
@@ -40,4 +40,4 @@ private:
     CppUnitRunnerViewFactory* m_factory;
 };
 
-#endif // CPPUNIT_CPPUNITVIEW_H
+#endif // CPPUNIT_CPPUNITPLUGIN_H

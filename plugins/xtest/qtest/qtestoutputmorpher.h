@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QTEST_QTESTOUPUTMORPHER
-#define QTEST_QTESTOUPUTMORPHER
+#ifndef QTEST_QTESTOUTPUTMORPHER
+#define QTEST_QTESTOUTPUTMORPHER
 
 #include <QXmlStreamReader>
 #include "qxqtestexport.h"
@@ -78,4 +78,4 @@ private:    // some xml constants
 
 }
 
-#endif // QTEST_QTESTOUPUTMORPHER
+#endif // QTEST_QTESTOUTPUTMORPHER

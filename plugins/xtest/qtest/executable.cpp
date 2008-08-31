@@ -58,13 +58,13 @@ QStringList Executable::fetchFunctions()
     proc.waitForFinished(-1);
     // this output is typically minimal, a handful of lines
     QByteArray output = proc.readAllStandardOutput();
-    return QString(output).split("\n");
+    return QString(output).split('\n');
 }
 
 QString Executable::name() const
 {
     ASSERT_SANE_LOCATION
-    return m_location.fileName().split(".")[0];
+    return m_location.fileName().split('.')[0];
 }
 
 KUrl Executable::location() const

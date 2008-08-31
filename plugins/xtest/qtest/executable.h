@@ -18,8 +18,8 @@
 * 02110-1301, USA.
 */
 
-#ifndef VERITAS_QTEST_QTESTEXE_H
-#define VERITAS_QTEST_QTESTEXE_H
+#ifndef VERITAS_QTEST_EXECUTABLE_H
+#define VERITAS_QTEST_EXECUTABLE_H
 
 #include <KUrl>
 #include "qxqtestexport.h"

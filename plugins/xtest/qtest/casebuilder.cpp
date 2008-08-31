@@ -53,8 +53,8 @@ QTestCase* CaseBuilder::construct()
     QFileInfo exeLocation(m_executable->location().path());
 
     QString cazeName = m_executable->name();
-    if (!m_suite.isEmpty() && cazeName.startsWith(m_suite + "-")) {
-        QStringList spl = cazeName.split("-");
+    if (!m_suite.isEmpty() && cazeName.startsWith(m_suite + '-')) {
+        QStringList spl = cazeName.split('-');
         Q_ASSERT(spl.count() > 1);
         spl.removeFirst();
         cazeName = spl.join("-");

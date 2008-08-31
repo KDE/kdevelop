@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CHECK_CHECKVIEW
-#define CHECK_CHECKVIEW
+#ifndef CHECK_CHECKPLUGIN
+#define CHECK_CHECKPLUGIN
 
 #include <veritas/testrunnertoolview.h>
 #include <QVariantList>
@@ -43,4 +43,4 @@ private:
 
 };
 
-#endif // CHECK_CHECKVIEW
+#endif // CHECK_CHECKPLUGIN

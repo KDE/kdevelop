@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_QTESTREGISTER_H
-#define QXQTEST_QTESTREGISTER_H
+#ifndef QXQTEST_XMLREGISTER_H
+#define QXQTEST_XMLREGISTER_H
 
 #include <QXmlStreamReader>
 #include <QList>
@@ -84,4 +84,4 @@ private: // some xml constants
 
 } // end namespace QTest
 
-#endif // QXQTEST_QTESTREGISTER_H
+#endif // QXQTEST_XMLREGISTER_H

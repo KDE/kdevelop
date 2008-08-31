@@ -57,7 +57,7 @@ void SuiteBuilder::initRoot()
 }
 
 namespace {
-QStringList testDirs(QString("tests,test,Tests").split(","));
+QStringList testDirs(QString("tests,test,Tests").split(','));
 }
 
 /*! deduce the suite name for a test exe name. take the directory name
@@ -106,10 +106,10 @@ void SuiteBuilder::constructSuites()
 {
     // create a suite per test directory.
     Q_ASSERT(m_root); Q_ASSERT(m_testExesSet);
-    foreach(KUrl testExe, m_testShellExes) {
+    foreach(const KUrl& testExe, m_testShellExes) {
         addSuiteName(testExe);
     }
-    foreach(KUrl testExe, m_testShellExes) {
+    foreach(const KUrl& testExe, m_testShellExes) {
         QString suiteName = m_suiteNames[testExe.upUrl()];
         if (!m_suites.contains(suiteName)) {
             QFileInfo suiteDir(testExe.upUrl().path());
@@ -124,7 +124,7 @@ void SuiteBuilder::constructCases()
 {
     int nrofShells = m_testShellExes.count();
     int count = 1;
-    foreach(KUrl testExe, m_testShellExes) {
+    foreach(const KUrl& testExe, m_testShellExes) {
         QString suiteName = m_suiteNames[testExe.upUrl()];
         CaseBuilder* cb = createCaseBuilder(testExe);
         cb->setSuiteName(suiteName);

@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef QTEST_QTESTVIEW_H
-#define QTEST_QTESTVIEW_H
+#ifndef QTEST_QTESTPLUGIN_H
+#define QTEST_QTESTPLUGIN_H
 
 #include <KUrl>
 #include <QMap>
@@ -69,4 +69,4 @@ private:
     KDevelop::IProject* m_proj;
 };
 
-#endif // QTEST_QTESTVIEW_H
+#endif // QTEST_QTESTPLUGIN_H

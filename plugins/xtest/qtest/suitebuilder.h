@@ -18,8 +18,8 @@
 * 02110-1301, USA.
 */
 
-#ifndef VERITAS_QTEST_RESOLVEJOB_H
-#define VERITAS_QTEST_RESOLVEJOB_H
+#ifndef VERITAS_QTEST_SUITEBUILDER_H
+#define VERITAS_QTEST_SUITEBUILDER_H
 
 #include <QMap>
 #include <QFileInfoList>
@@ -88,4 +88,4 @@ private:
 
 }
 
-#endif // VERITAS_QTEST_RESOLVEJOB_H
+#endif // VERITAS_QTEST_SUITEBUILDER_H

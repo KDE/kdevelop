@@ -59,6 +59,7 @@ Q_SIGNALS:
     void showMessage(const QString&, int timeout=0);
     void hideProgress();
     void showProgress(int minimum, int maximum, int value);
+    void showErrorMessage(QString, int timeout);
 // IStatus
 
 private slots:
