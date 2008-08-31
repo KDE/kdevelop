@@ -27,12 +27,12 @@ set(veritas_SRCS
     mvc/verbosetoggle.cpp
     mvc/overlaymanager.cpp
     mvc/overlaytoggle.cpp
+    mvc/resultswidget.cpp
     tests/runnertesthelper.cpp)
     #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
     mvc/runnerwindow.ui
-    mvc/resultsview.ui
     mvc/stoppingdialog.ui)
 
 qt4_add_resources(veritas_SRCS

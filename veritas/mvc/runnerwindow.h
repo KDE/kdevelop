@@ -30,7 +30,7 @@
 #include "../veritasexport.h"
 
 namespace KDevelop { class IProject; }
-namespace Ui { class RunnerWindow; class ResultsView; }
+namespace Ui { class RunnerWindow;}
 
 class QAction;
 class QItemSelection;
@@ -48,6 +48,7 @@ class ResultsViewController;
 class SelectionManager;
 class StatusWidget;
 class VerboseManager;
+class ResultsWidget;
 
 /*!
  * \brief The RunnerWindow class defines the Veritas main window.
@@ -104,7 +105,7 @@ public: // Operations
     KSelectAction* projectPopup() const;
 
     VerboseManager* verboseManager() const;
-    QWidget* resultsWidget() const { return m_results; }
+    QWidget* resultsWidget() const;
 
     void resetProgressBar() const;
 
@@ -210,8 +211,7 @@ private: // Operations
 
 private: // Attributes
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
-    Ui::ResultsView* m_uiResults;      //
-    QWidget* m_results;
+    ResultsWidget* m_results;
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm
     RunnerViewController*  m_runnerViewController; // used to reduce bloat in this class

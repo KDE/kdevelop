@@ -22,7 +22,6 @@
 #include "veritas/mvc/runnerwindow.h"
 
 #include "ui_runnerwindow.h"
-#include "ui_resultsview.h"
 
 #include "interfaces/iproject.h"
 
@@ -42,6 +41,7 @@
 #include "interfaces/idocumentcontroller.h"
 
 #include "veritas/utils.h"
+#include "mvc/resultswidget.h"
 
 #include <QMessageBox>
 #include <QCloseEvent>
@@ -86,9 +86,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_resultsModel = rmodel;
     m_ui = new Ui::RunnerWindow;
     m_ui->setupUi(this);
-    m_uiResults = new Ui::ResultsView;
-    m_results = new QWidget;
-    m_uiResults->setupUi(m_results);
+    m_results = new ResultsWidget();
     runnerView()->setRootIsDecorated(false);
     runnerView()->setUniformRowHeights(true);
 
@@ -873,7 +871,13 @@ QTreeView* RunnerWindow::runnerView() const
 
 QTreeView* RunnerWindow::resultsView() const
 {
-    return m_uiResults->treeResults;
+//    return m_results->treeResults;
+    return m_results->tree();
+}
+
+QWidget* RunnerWindow::resultsWidget() const
+{
+    return m_results;
 }
 
 RunnerModel* RunnerWindow::runnerModel() const
