@@ -110,6 +110,8 @@ public:
 
     const Cpp::LazyMacroSet& standardMacros() const;
 
+    const KDevelop::ParsingEnvironment* standardEnvironment() const;
+    
     ///Thread-safe
     bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths ) const;
 
@@ -160,6 +162,8 @@ private:
     CppHighlighting *m_highlights;
     KDevelop::CodeCompletion *m_cc;
     Cpp::LazyMacroSet *m_standardMacros;
+    const KDevelop::ParsingEnvironment *m_standardEnvironment;
+    
     QStringList *m_standardIncludePaths;
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;

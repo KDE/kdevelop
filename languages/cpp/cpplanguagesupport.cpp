@@ -150,7 +150,8 @@ K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport(),
-      m_standardMacros(0)
+      m_standardMacros(0),
+      m_standardEnvironment(0)
 {
     m_self = this;
 
@@ -168,6 +169,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     // Uses gcc commands to retrieve the information.
     CppTools::setupStandardIncludePaths(*m_standardIncludePaths);
     CppTools::setupStandardMacros(*m_standardMacros);
+    
+    m_standardEnvironment = PreprocessJob::createStandardEnvironment();
 
     connect( core()->projectController(),
              SIGNAL( projectOpened( KDevelop::IProject* ) ),
@@ -427,6 +430,10 @@ const Cpp::LazyMacroSet& CppLanguageSupport::standardMacros() const {
     return *m_standardMacros;
 }
 
+const ParsingEnvironment* CppLanguageSupport::standardEnvironment() const {
+  return m_standardEnvironment;
+}
+
 CppLanguageSupport* CppLanguageSupport::self() {
     return m_self;
 }
@@ -496,8 +503,10 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
   if( source.isEmpty() ) {
     foreach( QString path, *m_standardIncludePaths) {
         KUrl u(path);
-        if(!hasPath.contains(u))
+        if(!hasPath.contains(u)) {
           allPaths << KUrl(path);
+          hasPath.insert(u);
+        }
     }
     return allPaths;
   }
@@ -777,9 +786,8 @@ KDevelop::ILanguage *CppLanguageSupport::language()
 TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowProxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());
-  ParsingEnvironment* env = PreprocessJob::createStandardEnvironment();
+  const ParsingEnvironment* env = standardEnvironment();
   KDevelop::TopDUContext* top = KDevelop::DUChain::self()->chainForDocument(url, env);
-  delete env;
 
   if( !top ) {
     //kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
