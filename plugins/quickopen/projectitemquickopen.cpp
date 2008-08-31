@@ -88,15 +88,17 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
 
   for(int a = 0; a < oldFiltered.size(); ++a) {
     QualifiedIdentifier currentId = oldFiltered[a].m_id;
+    int nextMatchPos = 0;
 
     bool mismatch = false;
     for(int b = 0; b < search.count(); ++b) {
       bool localMatch = false;
       
-      for(int q = 0; q < currentId.count(); ++q) {
+      for(int q = nextMatchPos; q < currentId.count(); ++q) {
 //         kDebug() << "substring check" << 
         if(cache[b].containedIn( currentId.at(q) )) {
           localMatch = true;
+          nextMatchPos = q+1;
           break;
         }
       }
