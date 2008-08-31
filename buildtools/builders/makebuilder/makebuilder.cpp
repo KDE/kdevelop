@@ -84,13 +84,17 @@ KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 
 void MakeBuilder::jobFinished(KJob* job)
 {
-    MakeJob* mj = static_cast<MakeJob*>(job);
+    MakeJob* mj = dynamic_cast<MakeJob*>(job);
 
-    if (mj->error()) {
-        MakeJob* mj = static_cast<MakeJob*>(job);
+    if( !mj )
+        return;
+
+    if (mj->error()) 
+    {
         emit failed( mj->item() );
 
-    } else {
+    } else 
+    {
         switch( mj->commandType() )
         {
             case MakeJob::BuildCommand:
@@ -108,7 +112,7 @@ void MakeBuilder::jobFinished(KJob* job)
         }
     }
     
-    m_jobs.remove(static_cast<KDevelop::ProjectBaseItem*>(qvariant_cast<void*>(job->property("ProjectBaseItem"))));
+    m_jobs.remove(mj->item());
 }
 
 KJob* MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
@@ -122,6 +126,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     if (m_jobs.contains(item))
         return m_jobs[item];
 
+    kDebug() << "running new makejob";
     MakeJob* job = new MakeJob(this, item, c, overrideTarget);
     m_jobs[item] = job;
     job->setItem(item);
