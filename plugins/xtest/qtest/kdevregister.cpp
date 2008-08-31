@@ -253,20 +253,20 @@ void KDevRegister::registerStatus()
     // TODO get rid of this joke. Factually istatus should not be
     // limitted to plugins + backgroundparser, but exposed for all
 
-//     QWidget* mw = QApplication::activeWindow();
-//     if (!mw) { kDebug() << "No mw"; return; }
-//     QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
-//     if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
-//     QStatusBar* sb = sbs[0];
-//     if (!sb) { kDebug() << "sb zero"; return; }
-//     connect(this, SIGNAL(showProgress(int,int,int)),
-//             sb, SLOT(showProgress(int,int,int)));
-//     connect(this, SIGNAL(hideProgress()),
-//             sb, SLOT(hideProgress()));
-//     connect(this, SIGNAL(showErrorMessage(QString,int)),
-//             sb, SLOT(showErrorMessage(QString,int)));
-    IUiController* uic = ICore::self()->uiController();
-    uic->registerStatus(this);
+    QWidget* mw = QApplication::activeWindow();
+    if (!mw) { kDebug() << "No mw"; return; }
+    QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
+    if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
+    QStatusBar* sb = sbs[0];
+    if (!sb) { kDebug() << "sb zero"; return; }
+    connect(this, SIGNAL(showProgress(int,int,int)),
+            sb, SLOT(showProgress(int,int,int)));
+    connect(this, SIGNAL(hideProgress()),
+            sb, SLOT(hideProgress()));
+    connect(this, SIGNAL(showErrorMessage(QString,int)),
+            sb, SLOT(showErrorMessage(QString,int)));
+//     IUiController* uic = ICore::self()->uiController();
+//     uic->registerStatus(this);
 }
 
 
