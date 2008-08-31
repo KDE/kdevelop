@@ -49,7 +49,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     if(ctx ) {
         typedef QPair<Declaration*, int> DeclPair;
         foreach(const DeclPair& pair, ctx->allDeclarations( SimpleCursor(range.start()), ctx ))
-            m_declarations.append(DeclarationPointer(pair.first));
+            m_declarations.append(pair.first);
         numRows+=m_declarations.count();
     }
     setRowCount(numRows);
@@ -78,7 +78,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             int pos=index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            return m_declarations[pos]->identifier().toString();
+            return m_declarations[pos].data()->identifier().toString();
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Prefix)
@@ -89,7 +89,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             int pos=index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            FunctionType::Ptr func = m_declarations[pos]->abstractType().cast<FunctionType>();
+            FunctionType::Ptr func = m_declarations[pos].data()->abstractType().cast<FunctionType>();
             if(func)
                 return "Macro";
             else
@@ -104,7 +104,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             DUChainReadLocker lock(DUChain::lock());
             int pos=index.row()-m_commands.count();
-            FunctionType::Ptr func=m_declarations[pos]->abstractType().cast<FunctionType>();
+            FunctionType::Ptr func=m_declarations[pos].data()->abstractType().cast<FunctionType>();
             if(func)
             {
                 QStringList args;
@@ -130,7 +130,10 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
         case VariableMacro: {
             int pos=row-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            FunctionType::Ptr func=m_declarations[pos]->abstractType().cast<FunctionType>();
+            Declaration* decl = m_declarations[pos].data();
+            if(!decl)
+                return;
+            FunctionType::Ptr func=decl->abstractType().cast<FunctionType>();
             if(func)
             {
                 document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');

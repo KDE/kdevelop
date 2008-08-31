@@ -123,7 +123,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
                                     const QStringList& pathSuffixes=QStringList()) const;
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
-        const QMap<QString, KDevelop::Declaration*>& declarationsPerTarget() { return m_declarationsPerTarget; }
+        const QMap<QString, KDevelop::IndexedDeclaration>& declarationsPerTarget() { return m_declarationsPerTarget; }
         QStringList resolveVariable(const QString &exp);
 
         bool hasMacro(const QString& name) const;
@@ -153,7 +153,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList m_includeDirectories;
         QMap<QString, QStringList> m_filesPerTarget;
         QMap<QString, QStringList> m_generatedFiles;
-        QMap<QString, KDevelop::Declaration*> m_declarationsPerTarget;
+        QMap<QString, KDevelop::IndexedDeclaration> m_declarationsPerTarget;
         QMap<QString, TargetType> m_targetsType;
         
         QStack< VisitorState > m_backtrace;

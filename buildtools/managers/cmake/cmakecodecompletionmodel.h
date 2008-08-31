@@ -24,6 +24,7 @@
 #include <ktexteditor/codecompletionmodel.h>
 #include <language/duchain/duchainpointer.h>
 #include <QStringList>
+#include <language/duchain/declaration.h>
 
 namespace KTextEditor { class Document; class Range; }
 
@@ -39,7 +40,7 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
         enum Type { Command, VariableMacro };
         Type indexType(int row) const;
         QStringList m_commands;
-        QList< KDevelop::DeclarationPointer > m_declarations;
+        QList< KDevelop::IndexedDeclaration > m_declarations;
 };
 
 #endif

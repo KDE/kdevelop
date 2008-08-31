@@ -349,7 +349,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
-            TopDUContext *aux=m_topctx;
+            ReferencedTopDUContext aux=m_topctx;
             if(m_topctx)
             {
                 DUChainWriteLocker lock(DUChain::lock());
@@ -438,7 +438,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
-            TopDUContext *aux=m_topctx;
+            ReferencedTopDUContext aux=m_topctx;
             {
                 DUChainWriteLocker lock(DUChain::lock());
                 m_topctx=DUChain::self()->chainForDocument(KUrl(path));
@@ -842,7 +842,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
 
             //Executing
-            TopDUContext *auxctx=m_topctx;
+            ReferencedTopDUContext auxctx=m_topctx;
             m_topctx=0;
             int len = walk(code.code, 1);
             kDebug(9042) << "visited!" << call->name()  <<

@@ -251,7 +251,6 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
-        m_rootItem->setTopDUContext(0);
 
         m_folderPerUrl[folderUrl]=m_rootItem;
         KUrl cachefile=buildDirectory(m_rootItem);
@@ -345,7 +344,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
     #endif
 
-        TopDUContext* curr;
+        ReferencedTopDUContext curr;
         if(dynamic_cast<CMakeFolderItem*>(folder->parent()))
         {
             curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext();
@@ -677,7 +676,6 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
         QStandardItem *parent=it->parent();
         parent->removeRow(it->row());
         CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
-        fi->setTopDUContext( 0 );
         reimport(fi);
         m_folderPerUrl[dir]=fi;
     }
@@ -747,8 +745,18 @@ void CMakeProjectManager::jumpToDeclaration()
     DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItem);
     if(du)
     {
-        Declaration *decl=du->context();
-        ICore::self()->documentController()->openDocument(KUrl(decl->url().str()), decl->range().start.textCursor());
+        KTextEditor::Cursor c;
+        KUrl url;
+        {
+            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            Declaration* decl = du->declaration().data();
+            if(!decl)
+                return;
+            c = decl->range().start.textCursor();
+            url = decl->url().toUrl();
+        }
+        
+        ICore::self()->documentController()->openDocument(url, c);
     }
 }
 

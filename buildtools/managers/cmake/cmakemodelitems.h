@@ -30,6 +30,7 @@
 #include "cmaketypes.h"
 #include "cmakeast.h"
 #include <interfaces/iproject.h>
+#include <language/duchain/topducontext.h>
 
 namespace KDevelop {
     class IProject;
@@ -56,10 +57,10 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         Definitions definitions() const { return m_defines; }
         void setDefinitions(const Definitions& defs) { m_defines=defs; }
         
-        void setTopDUContext(KDevelop::TopDUContext* ctx) { m_topcontext=ctx; }
-        KDevelop::TopDUContext* topDUContext() const { return m_topcontext;}
+        void setTopDUContext(KDevelop::IndexedTopDUContext ctx) { m_topcontext=ctx; }
+        KDevelop::IndexedTopDUContext topDUContext() const { return m_topcontext;}
     private:
-        KDevelop::TopDUContext* m_topcontext;
+        KDevelop::IndexedTopDUContext m_topcontext;
         QStringList m_includeList;
         Definitions m_defines;
 };
@@ -67,30 +68,30 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
 class DUChainAttatched
 {
     public:
-        DUChainAttatched(KDevelop::Declaration* c) : ctx(c) {}
-        KDevelop::Declaration* context() const { return ctx; }
+        DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
+        KDevelop::IndexedDeclaration declaration() const { return decl; }
     private:
-        KDevelop::Declaration* ctx;
+        KDevelop::IndexedDeclaration decl;
 };
 
 class CMakeExecutableTargetItem : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched
 {
     public:
-        CMakeExecutableTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+        CMakeExecutableTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
             : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c) {}
 };
 
 class CMakeLibraryTargetItem : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched
 {
     public:
-        CMakeLibraryTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+        CMakeLibraryTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
             : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c) {}
 };
 
 class CMakeTestTargetItem : public KDevelop::ProjectTestTargetItem, public DUChainAttatched
 {
     public:
-        CMakeTestTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::Declaration *c )
+        CMakeTestTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
             : KDevelop::ProjectTestTargetItem( project, name, parent), DUChainAttatched(c) {}
 };
 /*
