@@ -100,7 +100,7 @@ void MakeJob::start()
 
     startOutput();
 
-    model()->addLine( buildDir.toLocalFile() + ":" + cmd.join(" ") );
+    model()->addLine( buildDir.toLocalFile() + "> " + cmd.join(" ") );
 
     QString command = cmd.first();
     cmd.pop_front();
