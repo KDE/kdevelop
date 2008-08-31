@@ -20,12 +20,20 @@ Boston, MA 02110-1301, USA.
 #ifndef RUNCONTROLLER_H
 #define RUNCONTROLLER_H
 
-#include <QPointer>
+#include <QtCore/QPointer>
+#include <QtGui/QItemDelegate>
+
+#include <kcolorscheme.h>
 
 #include <interfaces/irun.h>
 #include <interfaces/irunprovider.h>
 #include <interfaces/iruncontroller.h>
 #include <outputview/outputjob.h>
+
+class QStyleOptionViewItem;
+class QPainter;
+class QModelIndex;
+class KStatefulBrush;
 
 namespace KDevelop
 {
@@ -72,6 +80,17 @@ private:
 
     class RunControllerPrivate;
     RunControllerPrivate* const d;
+};
+
+class RunDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    RunDelegate( QObject* = 0 );
+    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+private:
+    KStatefulBrush runProviderBrush;
+    KStatefulBrush errorBrush;
 };
 
 class RunJob : public OutputJob

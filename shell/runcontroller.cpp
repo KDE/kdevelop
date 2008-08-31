@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QApplication>
 #include <QStandardItemModel>
-#include <QItemDelegate>
 #include <QPalette>
 
 #include <KSelectAction>
@@ -62,7 +61,7 @@ RunController::RunController(QObject *parent)
     // TODO: need to implement abort all running programs when project closed
 
     d->state = Idle;
-    d->delegate = new QItemDelegate(this);
+    d->delegate = new RunDelegate(this);
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
@@ -174,16 +173,26 @@ IRun KDevelop::RunController::defaultRun() const
     run.setInstrumentor("default");
 
     if (group.readEntry("Compile Before Execution", false))
+    {
         if (group.readEntry("Install Before Execution", false))
+        {
             if (group.readEntry("Super User Install", false))
+            {
                 ;// TODO: sudo make install
-            else
+            } else
+            {
                 ;// TODO: make install
-        else
+            }
+        } else
+        {
             ;// TODO: make
+        }
+    }
 
     if (group.readEntry("Start In Terminal", false))
+    {
         ;// TODO: start in terminal rather than output view
+    }
 
     return run;
 }
@@ -361,22 +370,16 @@ void RunJob::slotOutput(KJob * job, const QString & line, KDevelop::IRunProvider
     if (!model())
         return;
 
-    int rowCount = model()->rowCount();
-    model()->insertRows( rowCount, 1 );
-    QModelIndex row_idx = model()->index( rowCount, 0, QModelIndex() );
-    model()->setData( row_idx, QVariant( line ) );
-
-    switch (type) {
-        case IRunProvider::StandardError:
-            model()->setData( row_idx, QVariant::fromValue<QBrush>( KColorScheme( QPalette::Active ).foreground( KColorScheme::NegativeText ) ), Qt::ForegroundRole );
-            break;
-        case IRunProvider::RunProvider:
-            model()->setData( row_idx, QVariant::fromValue<QBrush>( KColorScheme( QPalette::Active ).foreground( KColorScheme::PositiveText ) ), Qt::ForegroundRole );
-            break;
-        default:
-            break;
+    if( model()->columnCount() == 0 )
+    {
+        model()->insertColumns( 0, 1 );
     }
 
+    int rowCount = model()->rowCount();
+    model()->insertRows( rowCount, 1 );
+    QModelIndex row_idx = model()->index( rowCount, 0 );
+    model()->setData( row_idx, QVariant( line ) );
+    model()->setData( row_idx, QVariant::fromValue(type), Qt::UserRole+1 );
 }
 
 void KDevelop::RunJob::slotFinished(KJob * job)
@@ -396,5 +399,30 @@ QItemDelegate * KDevelop::RunController::delegate() const
 {
     return d->delegate;
 }
+
+RunDelegate::RunDelegate( QObject* parent )
+: QItemDelegate(parent), runProviderBrush( KColorScheme::View, KColorScheme::PositiveText ),
+errorBrush( KColorScheme::View, KColorScheme::NegativeText )
+{
+}
+
+void RunDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyleOptionViewItem opt = option;
+    QVariant status = index.data(Qt::UserRole+1);
+    if( status.isValid() && status.canConvert<KDevelop::IRunProvider::OutputTypes>() )
+    {
+        IRunProvider::OutputTypes type = status.value<KDevelop::IRunProvider::OutputTypes>();
+        if( type == IRunProvider::RunProvider )
+        {
+            opt.palette.setBrush( QPalette::Text, runProviderBrush.brush( option.palette ) );
+        } else if( type == IRunProvider::StandardError )
+        {
+            opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
+        }
+    }
+    QItemDelegate::paint(painter, opt, index);
+}
+
 
 #include "runcontroller.moc"
