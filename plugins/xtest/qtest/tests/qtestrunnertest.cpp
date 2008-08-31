@@ -155,6 +155,53 @@ void QTestRunnerTest::runTwice()
     assertAllFilesClosed(root);
 }
 
+QByteArray singleGreenCommandXml =
+    "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+    "<root dir=\"\">\n"
+    "<suite name=\"suite1\" dir=\"suite1\">\n"
+    "<case name=\"fakeqtest3\" exe=\"fakeqtest3\">\n"
+    "<command name=\"cmd1\" />\n"
+    "</case>\n"
+    "</suite>\n"
+    "</root>\n";
+
+QStringList singleGreenTestTree()
+{
+    QStringList runnerItems;
+    runnerItems
+            << "0 suite1"
+            << "0 0 fakeqtest3"
+            << "0 0 0 cmd1"
+            << "0 0 1 x"
+            << "0 1 x"
+            << "1 x";
+    return runnerItems;
+}
+
+QMap<QString, Veritas::TestState> singleGreenTestStates()
+{
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/fakeqtest3/cmd1"] = Veritas::RunSuccess;
+    return states;
+}
+
+
+void QTestRunnerTest::singleGreenCommand()
+{
+    Veritas::Test* root = fetchRoot(singleGreenCommandXml);
+
+    RunnerTestHelper* m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    m_runner->verifyTestTree(singleGreenTestTree());
+    m_runner->verifyResultItems(QList<QStringList>());
+    m_runner->verifyTestStates(singleGreenTestStates(), root);
+    assertAllFilesClosed(root);
+
+}
+
 // helper
 Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
 {

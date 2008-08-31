@@ -35,6 +35,7 @@ private slots:
     void cleanup();
 
     void empty();
+    void singleGreenCommand();
     void sunnyDay();
     void runTwice();
 
