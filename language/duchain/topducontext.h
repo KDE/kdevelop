@@ -33,6 +33,7 @@ namespace KDevelop
   class ParsingEnvironmentFile;
   class TopDUContextData;
   class TopDUContextLocalPrivate;
+  class IndexedTopDUContext;
 //   class TopDUContextDynamicData;
   class Problem;
   class DeclarationChecker;
@@ -52,6 +53,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
   public:
     ReferencedTopDUContext(TopDUContext* context = 0);
+    ReferencedTopDUContext(IndexedTopDUContext context);
     ReferencedTopDUContext(const ReferencedTopDUContext& rhs);
     ~ReferencedTopDUContext();
     

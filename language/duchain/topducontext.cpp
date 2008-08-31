@@ -61,6 +61,14 @@ ReferencedTopDUContext::ReferencedTopDUContext(TopDUContext* context) : m_topCon
     DUChain::self()->refCountUp(m_topContext);
 }
 
+ReferencedTopDUContext::ReferencedTopDUContext(IndexedTopDUContext context){
+  DUChainReadLocker lock(DUChain::lock());
+  m_topContext = context.data();
+  
+  if(m_topContext)
+    DUChain::self()->refCountUp(m_topContext);
+}
+
 ReferencedTopDUContext::ReferencedTopDUContext(const ReferencedTopDUContext& rhs) : m_topContext(rhs.m_topContext) {
   if(m_topContext)
     DUChain::self()->refCountUp(m_topContext);
@@ -73,7 +81,7 @@ ReferencedTopDUContext::~ReferencedTopDUContext() {
 
 ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUContext& rhs) {
   if(m_topContext == rhs.m_topContext)
-    return;
+    return *this;
   
   if(m_topContext)
     DUChain::self()->refCountDown(m_topContext);
