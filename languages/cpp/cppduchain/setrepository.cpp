@@ -802,6 +802,7 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, const S
     
   }else{
     //We would have stopped earlier of first and second don't intersect
+    ifDebug( uint test = repository.findIndex(SetNodeDataRequest(first, repository)); kDebug() << "found index:" << test; )
     Q_ASSERT(0);
     return 0;
   }
