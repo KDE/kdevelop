@@ -146,12 +146,15 @@ int main( int argc, char *argv[] )
     }
     else if( args->count() > 0 )
     {
-        KUrl url = args->url( 0 );
-        QString ext = QFileInfo( url.fileName() ).suffix();
-        if( ext == "kdev4" )
+        for ( int i=0; i<args->count(); i++)
         {
-            core->projectController()->openProject( url );
-            openedProject = true;
+            KUrl url = args->url( i );
+            QString ext = QFileInfo( url.fileName() ).suffix();
+            if( ext == "kdev4" )
+            {
+                core->projectController()->openProject( url );
+                openedProject = true;
+            }
         }
     }
 
