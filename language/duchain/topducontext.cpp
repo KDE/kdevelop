@@ -72,6 +72,9 @@ ReferencedTopDUContext::~ReferencedTopDUContext() {
 }
 
 ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUContext& rhs) {
+  if(m_topContext == rhs.m_topContext)
+    return;
+  
   if(m_topContext)
     DUChain::self()->refCountDown(m_topContext);
   
