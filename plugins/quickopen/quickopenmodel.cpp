@@ -30,7 +30,7 @@
 
 using namespace KDevelop;
 
-QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(0), m_expandingWidgetHeightIncrease(0)
+QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent ), m_treeView(0), m_expandingWidgetHeightIncrease(0), m_resetBehindRow(0)
 {
     m_resetTimer = new QTimer(this);
     m_resetTimer->setSingleShot(true);
@@ -301,10 +301,19 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 }
 
 void QuickOpenModel::resetTimer() {
-    m_cachedData.clear();
+    
+    //Remove all cached data behind row m_resetBehindRow
+    for(QHash<uint, KDevelop::QuickOpenDataPointer>::iterator it = m_cachedData.begin(); it != m_cachedData.end(); ) {
+        if(it.key() > m_resetBehindRow)
+            it = m_cachedData.erase(it);
+        else
+            ++it;
+    }
+    
     uint currentRow = treeView()->currentIndex().row();
     QAbstractItemModel::reset(); //New items have been inserted
     treeView()->setCurrentIndex(index(currentRow, 0, QModelIndex())); //Preserve the current index
+    m_resetBehindRow = 0;
 }
 
 QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
@@ -315,6 +324,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
   if( m_cachedData.contains( row ) )
     return m_cachedData[row];
 #endif
+  int rowOffset = 0;
 
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
@@ -328,6 +338,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
       if(!noReset && provider.provider->itemCount() != itemCount) {
           kDebug() << "item-count in provider has changed, resetting model";
           m_resetTimer->start(0);
+          m_resetBehindRow = rowOffset + row; //Don't reset everything, only everything behind this position
       }
       
       if( items.isEmpty() )
@@ -342,6 +353,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
       }
     } else {
       row -= provider.provider->itemCount();
+      rowOffset += provider.provider->itemCount();
     }
   }
 

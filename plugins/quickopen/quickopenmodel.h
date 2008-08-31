@@ -119,6 +119,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     QList<ProviderEntry> m_providers;
     QString m_filterText;
     int m_expandingWidgetHeightIncrease;
+    mutable int m_resetBehindRow;
 
     QSet<QString> m_enabledItems;
     QSet<QString> m_enabledScopes;
