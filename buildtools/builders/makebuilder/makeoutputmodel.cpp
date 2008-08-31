@@ -160,7 +160,7 @@ KUrl MakeOutputModel::urlForFile( const QString& filename ) const
 {
     QFileInfo fi(filename);
     KUrl u;
-    if( u.isLocalFile() && fi.isRelative() )
+    if( fi.isRelative() )
     {
         u = KUrl( currentDir );
         u.addPath( filename );
