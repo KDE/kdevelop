@@ -45,5 +45,5 @@ void MoneyTest::zero()
     QCOMPARE(0, m.amount());
 }
 
-QTEST_KDEMAIN( MoneyTest, NoGUI )
+QTEST_KDEMAIN_CORE( MoneyTest )
 #include "moneytest.moc"
