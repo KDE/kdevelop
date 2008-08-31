@@ -37,7 +37,6 @@ private:
     QString createProject(const ApplicationInfo& );
     bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
-    QString vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest);
 
     ProjectTemplatesModel *m_templatesModel;
 

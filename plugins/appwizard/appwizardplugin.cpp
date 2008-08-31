@@ -50,6 +50,14 @@
 #include "projecttemplatesmodel.h"
 #include "importproject.h"
 
+using KDevelop::IBasicVersionControl;
+using KDevelop::ICentralizedVersionControl;
+using KDevelop::IDistributedVersionControl;
+using KDevelop::IPlugin;
+using KDevelop::VcsJob;
+using KDevelop::VcsLocation;
+using KDevelop::VcsMapping;
+
 K_PLUGIN_FACTORY(AppWizardFactory,
     registerPlugin<AppWizardPlugin>();
     KComponentData compData = componentData();
@@ -110,14 +118,110 @@ void AppWizardPlugin::slotImportProject()
     import.exec();
 }
 
+namespace
+{
+
+IDistributedVersionControl* toDVCS(IPlugin* plugin)
+{
+    Q_ASSERT(plugin);
+    return plugin->extension<IDistributedVersionControl>();
+}
+
+ICentralizedVersionControl* toCVCS(IPlugin* plugin)
+{
+    Q_ASSERT(plugin);
+    return plugin->extension<ICentralizedVersionControl>();
+}
+
+/*! Trouble while initializing version control. Show failure message to user. */
+void vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest)
+{
+    KMessageBox::error(0, errorMsg);
+    KIO::NetAccess::del(dest, 0);
+    tmpdir.unlink();
+}
+
+/*! Setup distributed version control for a new project defined by @p info. Use @p scratchArea for temporary files  */
+bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& info, KTempDir& scratchArea)
+{
+    Q_ASSERT(dvcs);
+    kDebug() << "DVCS system is used, just initializing DVCS";
+
+    KUrl dest = info.location;
+    //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
+    VcsJob* job = dvcs->init(dest.toLocalFile());
+    if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
+    {
+        vcsError(i18n("Could not initialize DVCS repository"), scratchArea, dest);
+        return false;
+    }
+    kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
+
+    job = dvcs->add(KUrl::List(dest), IBasicVersionControl::Recursive);
+    if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
+    {
+        vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
+        return false;
+    }
+    job = dvcs->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
+                            IBasicVersionControl::Recursive);
+    if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
+    {
+        vcsError(i18n("Could not import project into") + dvcs->name(), scratchArea, dest);
+        return false;
+    }
+
+    return true; // We'r good
+}
+
+/*! Setup version control for a new project defined by @p info. Use @p scratchArea for temporary files  */
+bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& info, KTempDir& scratchArea)
+{
+    Q_ASSERT(cvcs);
+
+    KUrl dest = info.location;
+    VcsMapping import;
+    VcsLocation srcloc = info.importInformation.sourceLocations().first();
+    import.addMapping( VcsLocation( KUrl( scratchArea.name() ) ),
+                       info.importInformation.destinationLocation( srcloc ),
+                       info.importInformation.mappingFlag( srcloc ) );
+
+    VcsLocation importLoc(KUrl( scratchArea.name()));
+    kDebug() << "Importing" << srcloc.localUrl() << "to"
+             << import.destinationLocation(importLoc).repositoryServer();
+    kDebug() << "Using temp dir" << scratchArea.name()
+             << import.sourceLocations().first().localUrl();
+    VcsLocation checkoutLoc = info.checkoutInformation.sourceLocations().first();
+    kDebug() << "Checking out" << checkoutLoc.repositoryServer()
+             << "to" << info.checkoutInformation.destinationLocation(checkoutLoc).localUrl();
+
+    VcsJob* job = cvcs->import( import, info.importCommitMessage );
+    if(job && job->exec() && job->status() == VcsJob::JobSucceeded )
+    {
+        VcsJob* job = cvcs->checkout( info.checkoutInformation );
+        if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
+        {
+            vcsError(i18n("Could not checkout imported project"), scratchArea, dest);
+            return false;
+        }
+    } else {
+        vcsError(i18n("Could not import project"), scratchArea, dest);
+        return false;
+    }
+
+    return true; // initialization phase complete
+}
+
+} // end anonymous namespace
+
 QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
     QFileInfo templateInfo(info.appTemplate);
     if (!templateInfo.exists())
-        return "";
+        return QString();
 
     QString templateName = templateInfo.baseName();
-    kDebug(9010) << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
+    kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
     QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
     if( templateArchive.isEmpty() )
@@ -125,10 +229,10 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
     }
 
-    kDebug(9010) << "Using archive:" << templateArchive;
+    kDebug() << "Using archive:" << templateArchive;
 
     if (templateArchive.isEmpty())
-        return "";
+        return QString();
 
 
     KUrl dest = info.location;
@@ -176,95 +280,58 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
             QString errorMsg = i18n("Could not create new project");
-            return vcsError(errorMsg, tmpdir, KUrl(unpackDir));
+            vcsError(errorMsg, tmpdir, KUrl(unpackDir));
+            return QString();
         }
 
-        if( !info.vcsPluginName.isEmpty() && plugin )
+        if( !info.vcsPluginName.isEmpty() )
         {
-            //If We use DVCS?
-            if (plugin->extension<KDevelop::IDistributedVersionControl>() )
+            if (!plugin)
             {
-                KDevelop::IDistributedVersionControl* iface =
-                        plugin->extension<KDevelop::IDistributedVersionControl>();
-                kDebug(9010) << "DVCS system is used, just initializing DVCS";
+                // Red Alert, serious program corruption.
+                // This should never happen, the vcs dialog presented a list of vcs
+                // systems and now the chosen system doesn't exist anymore??
+                tmpdir.unlink();
+                return QString();
+            }
 
-                //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
-                KDevelop::VcsJob* job = iface->init(dest.toLocalFile());
-                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
-                {
-                    QString errorMsg = i18n("Could not initialize DVCS repository");
-                    return vcsError(errorMsg, tmpdir, dest);
-                }
-                kDebug(9010) << "Initializing DVCS repository:" << dest.toLocalFile();
-
-                job = iface->add(KUrl::List(dest),
-                                 KDevelop::IBasicVersionControl::Recursive);
-                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
-                {
-                    QString errorMsg = i18n("Could not add files to the DVCS repository");
-                    return vcsError(errorMsg, tmpdir, dest);
-                }
-                job = iface->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
-                                    KDevelop::IBasicVersionControl::Recursive);
-                if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded)
-                {
-                    QString errorMsg = i18n("Could not import project into");
-                    return vcsError(errorMsg + iface->name(), tmpdir, dest);
-                }
+            IDistributedVersionControl* dvcs = toDVCS(plugin);
+            ICentralizedVersionControl* cvcs = toCVCS(plugin);
+            bool success = false;
+            if (dvcs)
+            {
+                success = initializeDVCS(dvcs, info, tmpdir);
+            }
+            else if (cvcs)
+            {
+                success = initializeCVCS(cvcs, info, tmpdir);
             }
             else
             {
-
-                KDevelop::VcsMapping import;
-                KDevelop::VcsLocation srcloc = info.importInformation.sourceLocations().first();
-                import.addMapping( KDevelop::VcsLocation( KUrl( tmpdir.name() ) ),
-                                    info.importInformation.destinationLocation( srcloc ),
-                                    info.importInformation.mappingFlag( srcloc ) );
-
-                KDevelop::ICentralizedVersionControl* iface = plugin->extension<KDevelop::ICentralizedVersionControl>();
-                kDebug(9010) << "importing" << srcloc.localUrl() << "to" << import.destinationLocation(  KDevelop::VcsLocation( KUrl( tmpdir.name()))).repositoryServer();
-                kDebug(9010) << "Using temp dir" << tmpdir.name() << import.sourceLocations().first().localUrl();
-                kDebug(9010) << "Checking out" << info.checkoutInformation.sourceLocations().first().repositoryServer() << "To" << info.checkoutInformation.destinationLocation(info.checkoutInformation.sourceLocations().first()).localUrl();
-                
-                KDevelop::VcsJob* job = iface->import( import, info.importCommitMessage );
-                if(job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded )
-                {
-                    KDevelop::VcsJob* job = iface->checkout( info.checkoutInformation );
-                    if (!job || !job->exec() || job->status() != KDevelop::VcsJob::JobSucceeded )
-                    {
-                        QString errorMsg = i18n("Could not checkout imported project");
-                        return vcsError(errorMsg, tmpdir, dest);
-                    }
-                }
-                else
-                {
-                    QString errorMsg = i18n("Could not import project");
-                    return vcsError(errorMsg, tmpdir, dest);
-                }
+                if (KMessageBox::Continue ==
+                    KMessageBox::warningContinueCancel(0,
+                    "Failed to initialize version control system, "
+                    "plugin is neither VCS nor DVCS."))
+                    success = true;
             }
-        } else if( !info.vcsPluginName.isEmpty() )
-        {
-            //This should never happen, the vcs dialog presented a list of vcs
-            //systems and now the chosen system doesn't exist anymore??
-            tmpdir.unlink();
-            return "";
+            if (!success) return QString();
         }
         tmpdir.unlink();
     }else
     {
-        kDebug(9010) << "failed to open template archive";
-        return "";
+        kDebug() << "failed to open template archive";
+        return QString();
     }
 
-    kDebug(9010) << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
+    kDebug() << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
     return QDir::cleanPath(dest.toLocalFile() + '/' + dest.fileName() + ".kdev4");
 }
 
 bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
-    kDebug(9010) << "unpacking dir:" << dir->name() << "to" << dest;
+    kDebug() << "unpacking dir:" << dir->name() << "to" << dest;
     QStringList entries = dir->entries();
-    kDebug(9010) << "entries:" << entries.join(",");
+    kDebug() << "entries:" << entries.join(",");
 
     //This extra tempdir is needed just for the files files have special names,
     //which may contain macros also files contain content with macros. So the
@@ -309,7 +376,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
-    kDebug(9010) << "copy:" << source << "to" << dest;
+    kDebug() << "copy:" << source << "to" << dest;
     if( KMimeType::isBinaryData(source) ) 
     {
         KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );
@@ -348,14 +415,6 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
             return false;
         }
     }
-}
-
-QString AppWizardPlugin::vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest)
-{
-    KMessageBox::error(0, errorMsg);
-    KIO::NetAccess::del(dest, 0);
-    tmpdir.unlink();
-    return "";
 }
 
 #include "appwizardplugin.moc"
