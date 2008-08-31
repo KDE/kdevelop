@@ -47,7 +47,7 @@ public:
      * Return a list of instrumentors that your plugin supports.
      */
     virtual QStringList instrumentorsProvided() const = 0;
-    
+
     /**
      * Return the name of the instrumentor, translated and suitable for presentation to the user.
      */
@@ -74,5 +74,6 @@ Q_SIGNALS:
 
 KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, IRunProvider, "org.kdevelop.IRunProvider")
 Q_DECLARE_INTERFACE(KDevelop::IRunProvider, "org.kdevelop.IRunProvider")
+Q_DECLARE_METATYPE(KDevelop::IRunProvider::OutputTypes)
 
 #endif

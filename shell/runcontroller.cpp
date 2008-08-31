@@ -41,8 +41,6 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(KDevelop::IRunProvider::OutputTypes);
-
 class RunController::RunControllerPrivate
 {
 public:
