@@ -2,11 +2,17 @@
 [General]
 Name=Qt4 CMake Core application
 Name[gl]=Programa básico de Qt4 con CMake
+Name[pt]=Aplicação de base com CMake para Qt4
+Name[pt_BR]=Aplicação de base com CMake para Qt4
 Name[sv]=Qt4 CMake-kärnprogram
 Name[uk]=Ключова програма Qt4 CMake
+Name[zh_TW]=Qt4 CMake 核心應用程式
 Category=C++/Qt (cmake)
 Comment=Generate a CMake/Qt4 based application (crossplatform compatible)
 Comment[gl]=Xera un programa baseado en QMake/Qt4 (compatíbel con multiplataforma)
+Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas)
+Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas)
 Comment[sv]=Skapar ett QMake- och Qt4-baserat program (som fungerar på flera plattformar)
 Comment[uk]=Створити програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
+Comment[zh_TW]=產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
