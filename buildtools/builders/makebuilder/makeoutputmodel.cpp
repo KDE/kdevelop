@@ -189,7 +189,7 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 kDebug() << "found an error:" << line;
                 item.url = urlForFile( regEx.cap( errFormat.fileGroup ) );
                 item.lineNo = regEx.cap( errFormat.lineGroup ).toInt() - 1;
-                item.shortenedText = regEx.cap( errFormat.textGroup );
+                //item.shortenedText = regEx.cap( errFormat.textGroup );
                 item.type = QVariant::fromValue( ( regEx.cap(3).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
                 item.isActivatable = true;
                 matched = true;
