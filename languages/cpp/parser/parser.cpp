@@ -29,8 +29,6 @@
 #include <cstdlib>
 #include <iostream>
 #include "rpp/chartools.h"
-#include <language/editor/hashedstring.h>
-
 
 #define ADVANCE(tk, descr) \
 { \
