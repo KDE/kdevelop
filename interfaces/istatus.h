@@ -27,6 +27,13 @@ namespace KDevelop {
 
 /**
  * An interface for plugins, languages etc. to provide status updates.
+ * Plugins only have to implement this extension interface, registration
+ * happens automagically.
+ * Regular QObjects can register themselves through IUiController like so:
+ * @code
+ *    Foo* f; // some QObject that implements IStatus
+ *    ICore::self()->uiController()->registerStatus(f);
+ * @endcode
  */
 class KDEVPLATFORMINTERFACES_EXPORT IStatus
 {
