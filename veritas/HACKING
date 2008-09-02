@@ -1,0 +1,47 @@
+Commit and coding guidelines for Veritas.
+
+-- I. Coding Guidelines -------------------------------------------------------
+
+KDELibs guidelines [1] apply with a couple of additions:
+
+(1) methods should be short (max single screen) and focused on doing one 
+    thing well.
+(2) limit nested control structures, ideally a method has less than two levels
+    of indentation.
+(3) intent revealing names for classes and functions
+(4) prefer composition over inheritance
+(5) abbreviated variables are OK in functions
+(6) all Veritas symbols live in the Veritas namespace
+(7) single line 'if' statements are OK
+
+In general, aim for readability.
+
+Code checking with Krazy [2] is encouraged.
+
+[1] http://techbase.kde.org/Policies/Kdelibs_Coding_Style
+[2] http://www.englishbreakfastnetwork.org/krazy/
+
+-- II. Commit Discipline ------------------------------------------------------
+
+Commits are either:
+
+(1) Bug fixes
+(2) New features
+(3) Refactorings
+
+Both bug fixes and new features must be accompanied with unit tests to justify 
+the change and lock progress. In rare cases were unit tests require too
+much effort manual tests are OK. If your change is absolutely positively
+untestable it should go through the kdevelop-devel mailing list for approval.
+Refactorings do not require extra tests.
+
+No change will break any test. Commits that break previously running tests 
+are in for an instant revert. This may sound harsh but try to look at it
+from the other side: much effort has gone into test writing, you don't want
+to be the party pooper.
+
+Tests that expose a bug or show a new feature that isn't fixed/implemented yet
+can be committed. To make them stand out from the regression suite their names 
+shall be be prefixed with 'tdd', which stands for 'test driven development'.
+
+-------------------------------------------------------------------------------
