@@ -19,31 +19,26 @@
  */
 
 #include <QTreeView>
-#include <QVBoxLayout>
 
 #include "resultswidget.h"
 
 using Veritas::ResultsWidget;
 
 ResultsWidget::ResultsWidget(QWidget* parent)
+    : QTreeView(parent)
 {
-    QVBoxLayout* lay = new QVBoxLayout(this);
-    m_items = new QTreeView(this);
-    m_items->setRootIsDecorated(false);
-    m_items->setWordWrap(true);
-    m_items->setIndentation(30);
-    m_items->setAlternatingRowColors(true);
-    lay->addWidget(m_items);
-    setLayout(lay);
+    setRootIsDecorated(false);
+    setWordWrap(true);
+    setIndentation(30);
+    setAlternatingRowColors(true);
 }
 
 ResultsWidget::~ResultsWidget()
 {
 }
 
-QTreeView* ResultsWidget::tree() const
+QTreeView* ResultsWidget::tree()
 {
-    Q_ASSERT(m_items);
-    return m_items;
+    return this;
 }
 

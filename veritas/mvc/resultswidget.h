@@ -21,19 +21,18 @@
 #ifndef VERITAS_RESULTSWIDGET_H
 #define VERITAS_RESULTSWIDGET_H
 
+#include <QTreeView>
+
 namespace Veritas
 {
 
-class ResultsWidget : public QWidget
+class ResultsWidget : public QTreeView
 {
 public:
     ResultsWidget(QWidget* parent=0);
     virtual ~ResultsWidget();
 
-    QTreeView* tree() const;
-
-private:
-    QTreeView* m_items;
+    QTreeView* tree();
 };
 
 }
