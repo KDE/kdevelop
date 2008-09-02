@@ -68,6 +68,14 @@ IndexedString DUChainBase::url() const
     return IndexedString();
 }
 
+void DUChainBase::setData(DocumentRangeObjectData* data)
+{
+  if(d_func()->m_dynamic)
+    //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
+    KDevelop::DUChainItemSystem::self().callDestructor(d_func_dynamic());
+  
+  DocumentRangeObject::setData(data);
+}
 
 DUChainBase::~DUChainBase()
 {

@@ -174,7 +174,8 @@ public:
     KTextEditor::SmartRange* takeRange();
 
     ///Sets a new data pointer. The data will be owned by this object if it is dynamic.
-    void setData(DocumentRangeObjectData*);
+    ///The old data is deleted if it was dynamic.
+    virtual void setData(DocumentRangeObjectData*);
 
 protected:
     /// Static shared mutex protecting internal data.  May be used to protect private data in subclasses. \returns the internal mutex

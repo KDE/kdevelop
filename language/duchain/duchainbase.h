@@ -116,6 +116,8 @@ public:
   
   DUChainBase( DUChainBaseData& dd );
   
+  virtual void setData(DocumentRangeObjectData*);
+  
 protected:
   /**
    * Creates a duchain object that uses the data of the given one, and will not delete it on destruction.
