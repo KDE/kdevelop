@@ -319,13 +319,13 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         if( str_error.isEmpty() && !missingInterfaces.isEmpty() )
         {
-            kWarning(9501) << "Can't load plugin '" << pluginId
+            kWarning() << "Can't load plugin '" << pluginId
                     << "' some of its required dependecies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }
         else
         {
-            kWarning(9501) << "Loading plugin '" << pluginId
+            kWarning() << "Loading plugin '" << pluginId
                 << "' failed, KPluginLoader reported error: '" << endl <<
                 str_error << "'";
         }
