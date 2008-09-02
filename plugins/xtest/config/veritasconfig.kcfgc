@@ -1,0 +1,5 @@
+File=veritasconfig.kcfg
+ClassName=VeritasConfig
+Singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=project/projectconfigskeleton.h
