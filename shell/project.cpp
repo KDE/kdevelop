@@ -338,7 +338,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
         if( !d->topItem )
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                i18n("Couldn't open project") );
+                                i18n("Could not open project") );
             return false;
         }
         d->topItem->setIcon();
