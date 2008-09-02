@@ -35,6 +35,8 @@ class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setCursorPosition(const KTextEditor::Cursor& x0) { wrapped->setCursorPosition(x0); }
 		Q_SCRIPTABLE KTextEditor::Range textSelection() const { return wrapped->textSelection(); }
 		Q_SCRIPTABLE void setTextSelection(const KTextEditor::Range& x0) { wrapped->setTextSelection(x0); }
+		Q_SCRIPTABLE QString textLine() const { return wrapped->textLine(); }
+		Q_SCRIPTABLE QString textWord() const { return wrapped->textWord(); }
 		Q_SCRIPTABLE void activate(Sublime::View* x0, KParts::MainWindow* x1) { wrapped->activate(x0, x1); }
 	private:
 		KDevelop::IDocument* wrapped;

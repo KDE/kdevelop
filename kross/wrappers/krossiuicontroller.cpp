@@ -37,6 +37,7 @@ class KrossKDevelopIUiController : public QObject, public Kross::WrapperInterfac
 		Q_SCRIPTABLE void addToolView(const QString& x0, KDevelop::IToolViewFactory* x1) { wrapped->addToolView(x0, x1); }
 		Q_SCRIPTABLE void removeToolView(KDevelop::IToolViewFactory* x0) { wrapped->removeToolView(x0); }
 		Q_SCRIPTABLE KParts::MainWindow* activeMainWindow() { return wrapped->activeMainWindow(); }
+		Q_SCRIPTABLE void registerStatus(QObject* x0) { wrapped->registerStatus(x0); }
 		Q_SCRIPTABLE Sublime::Controller* controller() { return wrapped->controller(); }
 	private:
 		KDevelop::IUiController* wrapped;
