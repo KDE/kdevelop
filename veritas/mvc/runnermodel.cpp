@@ -324,7 +324,7 @@ void RunnerModel::initCounters()
 
 void RunnerModel::runItems()
 {
-    if (isRunning()) return; // dont start while buzzy
+    if (isRunning()) return; // do not start while buzzy
     initCounters();
     if (!rootItem()) return;
     m_isRunning = true;

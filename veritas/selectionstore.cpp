@@ -69,7 +69,7 @@ QString SelectionStore::serialize(Test* test) const
     QString serialized = test->name();
     Test* parent = test->parent();
     while (parent) {
-        serialized = parent->name() + "/" + serialized;
+        serialized = parent->name() + '/' + serialized;
         parent = parent->parent();
     }
     return serialized;

@@ -36,7 +36,7 @@ namespace Veritas
 class VerboseToggle;
 class Test;
 
-/*! TODO should be removed completly */
+/*! TODO should be removed completely */
 class VerboseManager : public OverlayManager
 {
 Q_OBJECT

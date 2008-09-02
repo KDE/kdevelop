@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_OVERLAYBUTTON_H
-#define VERITAS_OVERLAYBUTTON_H
+#ifndef VERITAS_OVERLAYTOGGLE_H
+#define VERITAS_OVERLAYTOGGLE_H
 
 #include <QAbstractButton>
 #include <QModelIndex>
@@ -74,4 +74,4 @@ protected:
 
 }
 
-#endif // VERITAS_OVERLAYBUTTON_H
+#endif // VERITAS_OVERLAYTOGGLE_H

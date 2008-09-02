@@ -18,9 +18,8 @@
  * 02110-1301, USA.
  */
 
-#include <QTreeView>
-
 #include "resultswidget.h"
+#include <QTreeView>
 
 using Veritas::ResultsWidget;
 

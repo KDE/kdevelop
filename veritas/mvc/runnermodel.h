@@ -68,7 +68,7 @@ public:
      * execution is stopped. */
     ~RunnerModel();
 
-    virtual QString name() const; // TODO dont  think this is used anymore
+    virtual QString name() const; // TODO do not  think this is used anymore
                                   //      find out and remove.
     void setName(const QString& name) { m_name = name;}
 
