@@ -1,7 +1,9 @@
 # KDE Config File
 [General]
 Name=Qt4 CMake QTest Core application
+Name[et]=Qt4 CMake QTest tuumikrakendus
 Name[gl]=Programa básico de Qt4 con CMake e QTest
+Name[nds]=Qt4/CMake-QTest-Karnprogramm
 Name[pt]=Aplicação de base do QTest com CMake para Qt4
 Name[pt_BR]=Aplicação de base do QTest com CMake para Qt4
 Name[sv]=Qt4 CMake Qtest-kärnprogram
@@ -9,7 +11,9 @@ Name[uk]=Ключова програма QTest Qt4 CMake
 Name[zh_TW]=Qt4 CMake QTest 核心應用程式
 Category=C++/Qt (cmake)
 Comment=Generate a CMake/Qt4 based application (crossplatform compatible)
+Comment[et]=Rakenduse loomine CMake/Qt4 põhjal (mitmeplatvormne)
 Comment[gl]=Xera un programa baseado en QMake/Qt4 (compatíbel con multiplataforma)
+Comment[nds]=Stellt en op CMake un Qt4 opbuut Programm op (över Bedriefümgeven weg kompatibel)
 Comment[pt]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas)
 Comment[pt_BR]=Gera uma aplicação baseada no QMake/Qt4 (compatível com várias plataformas)
 Comment[sv]=Skapar ett QMake- och Qt4-baserat program (som fungerar på flera plattformar)
