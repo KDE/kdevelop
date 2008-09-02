@@ -75,6 +75,10 @@ public:
     /** @return active mainwindow or 0 if no such mainwindow is active.*/
     virtual KParts::MainWindow *activeMainWindow() = 0;
 
+    /*! @p status must implement KDevelop::IStatus */
+    virtual void registerStatus(QObject* status) = 0;
+
+
     /**
      * This is meant to be used by IDocument subclasses to initialize the
      * Sublime::Document.

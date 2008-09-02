@@ -77,6 +77,9 @@ public:
     void loadAllAreas(KSharedConfig::Ptr config);
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
+    /*! @p status must implement KDevelop::IStatus */
+    virtual void registerStatus(QObject* status);
+
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,

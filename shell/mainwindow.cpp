@@ -190,6 +190,11 @@ void MainWindow::documentClosed( IDocument* document )
     }
 }
 
+void MainWindow::registerStatus(QObject* status)
+{
+    d->registerStatus(status);
+}
+
 }
 
 #include "mainwindow.moc"

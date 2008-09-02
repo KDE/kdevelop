@@ -55,6 +55,7 @@ public:
 
     void setupActions();
     void setupGui();
+    void registerStatus(QObject*);
 
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );

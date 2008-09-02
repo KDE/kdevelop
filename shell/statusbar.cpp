@@ -21,7 +21,10 @@
 
 #include <QTimer>
 #include <QProgressBar>
+#include <QLabel>
+#include <QSignalMapper>
 
+#include <KColorScheme>
 #include <KDebug>
 
 #include <interfaces/istatus.h>
@@ -40,17 +43,25 @@ StatusBar::StatusBar(QWidget* parent)
     : KStatusBar(parent)
     , m_timer(new QTimer(this))
     , m_currentView(0)
+    , m_errorRemovalMapper(new QSignalMapper(this))
 {
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimeout()));
     connect(Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(pluginLoaded(KDevelop::IPlugin*)));
 
     foreach (IPlugin* plugin, Core::self()->pluginControllerInternal()->allPluginsForExtension("IStatus", QStringList()))
-        registerStatusPlugin(plugin);
+        registerStatus(plugin);
 
-    registerStatusPlugin(Core::self()->languageController()->backgroundParser());
-    
+    registerStatus(Core::self()->languageController()->backgroundParser());
+
     insertPermanentItem(i18n("No View Selected"), 0);
+    connect(m_errorRemovalMapper, SIGNAL(mapped(QWidget*)), SLOT(removeError(QWidget*)));
+}
+
+void StatusBar::removeError(QWidget* w)
+{
+    removeWidget(w);
+    w->deleteLater();
 }
 
 void StatusBar::viewChanged(Sublime::View* view)
@@ -77,15 +88,47 @@ void StatusBar::viewStatusChanged(Sublime::View* view)
 void StatusBar::pluginLoaded(IPlugin* plugin)
 {
     if (qobject_cast<IStatus*>(plugin))
-        registerStatusPlugin(plugin);
+        registerStatus(plugin);
 }
 
-void StatusBar::registerStatusPlugin(QObject* status)
+void StatusBar::registerStatus(QObject* status)
 {
+    Q_ASSERT(qobject_cast<IStatus*>(status));
     connect(status, SIGNAL(clearMessage()), SLOT(clearMessage()));
     connect(status, SIGNAL(showMessage(const QString&, int)), SLOT(showMessage(const QString&, int)));
     connect(status, SIGNAL(hideProgress()), SLOT(hideProgress()));
     connect(status, SIGNAL(showProgress(int, int, int)), SLOT(showProgress(int, int, int)));
+    connect(status, SIGNAL(showErrorMessage(const QString&, int)), SLOT(showErrorMessage(const QString&, int)));
+}
+
+QWidget* errorMessage(QWidget* parent, const QString& text)
+{
+    QLabel* label = new QLabel(parent);
+    KStatefulBrush red(KColorScheme::Window, KColorScheme::NegativeText);
+    QPalette pal = label->palette();
+    pal.setBrush(QPalette::WindowText, red.brush(label));
+    label->setPalette(pal);
+    label->setAlignment(Qt::AlignRight);
+    label->setText(text);
+    return label;
+}
+
+QTimer* StatusBar::errorTimeout(QWidget* error, int timeout)
+{
+    QTimer* timer = new QTimer(error);
+    timer->setSingleShot(true);
+    timer->setInterval(1000*timeout);
+    m_errorRemovalMapper->setMapping(timer, error);
+    connect(timer, SIGNAL(timeout()), m_errorRemovalMapper, SLOT(map()));
+    return timer;
+}
+
+void StatusBar::showErrorMessage(const QString& message, int timeout)
+{
+    QWidget* error = errorMessage(this, message);
+    QTimer* timer = errorTimeout(error, timeout);
+    addWidget(error);
+    timer->start(); // triggers removeError()
 }
 
 void StatusBar::slotTimeout()
@@ -182,7 +225,7 @@ void StatusBar::showProgress(int minimum, int maximum, int value)
         if (bar->minimum() != minimum)
             bar->setMinimum(minimum);
         if (bar->maximum() != maximum)
-            bar->setMinimum(maximum);
+            bar->setMaximum(maximum);
         if (bar->value() != value)
             bar->setValue(value);
 

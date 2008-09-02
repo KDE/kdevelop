@@ -53,6 +53,14 @@ Q_SIGNALS:
     void showMessage(const QString & message, int timeout = 0);
 
     /**
+     * Request an error \a message to be shown for this plugin, with a given \a timeout.
+     *
+     * \param message Message to display
+     * \param timeout Timeout in miliseconds, or pass 0 for no timeout.
+     */
+    void showError(const QString & message, int timeout = 0);
+
+    /**
      * Hide the progress bar.
      */
     void hideProgress();

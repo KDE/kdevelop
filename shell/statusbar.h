@@ -26,7 +26,9 @@
 #include <KStatusBar>
 
 class QProgressBar;
+class QSignalMapper;
 class QTimer;
+class QLabel;
 
 namespace Sublime {
 class View;
@@ -51,7 +53,7 @@ public:
      */
     StatusBar(QWidget* parent);
 
-    void registerStatusPlugin(QObject* status);
+    void registerStatus(QObject* status);
 
     void updateMessage();
 
@@ -64,9 +66,14 @@ private Q_SLOTS:
     void showProgress(int minimum, int maximum, int value);
     void slotTimeout();
     void viewStatusChanged(Sublime::View* view);
+    void showErrorMessage(const QString& message, int timeout);
 
     void pluginLoaded(KDevelop::IPlugin*);
-    
+    void removeError(QWidget*);
+
+private:
+    QTimer* errorTimeout(QWidget* error, int timeout);
+
 private:
     struct Message {
         QString text;
@@ -78,6 +85,7 @@ private:
     QTimer* m_timer;
     QTime m_time;
     Sublime::View* m_currentView;
+    QSignalMapper* m_errorRemovalMapper;
 };
 
 }

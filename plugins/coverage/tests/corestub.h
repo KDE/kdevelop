@@ -108,6 +108,7 @@ public:
     virtual void removeToolView(KDevelop::IToolViewFactory *factory) {}
     virtual KParts::MainWindow *activeMainWindow() { return m_activeMainWindow; }
     virtual Sublime::Controller* controller() { return m_controller; }
+    virtual void registerStatus(QObject*) {}
 
     KParts::MainWindow* m_activeMainWindow;
     Sublime::Controller* m_controller;

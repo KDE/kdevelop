@@ -574,6 +574,15 @@ void UiController::addToolViewToArea(IToolViewFactory* factory,
     factory->viewCreated(view);
 }
 
+void UiController::registerStatus(QObject* status)
+{
+    Sublime::MainWindow* w = activeSublimeWindow();
+    if (!w) return;
+    MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
+    if (!mw) return;
+    mw->registerStatus(status);
+}
+
 }
 
 #include "uicontroller.moc"

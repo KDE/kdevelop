@@ -52,6 +52,9 @@ public:
     //FIXME document this
     virtual void fillContextMenu( KMenu *menu, const Context *context );
 
+    /*! @p status must implement KDevelop::IStatus */
+    void registerStatus(QObject* status);
+
 public Q_SLOTS:
     virtual void setVisible( bool visible );
 

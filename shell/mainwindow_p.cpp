@@ -333,6 +333,11 @@ bool MainWindowPrivate::applicationQuitRequested() const
     return s_quitRequested;
 }
 
+void MainWindowPrivate::registerStatus(QObject* status)
+{
+    m_statusBar->registerStatus(status);
+}
+
 }
 
 #include "mainwindow_actions.cpp"
