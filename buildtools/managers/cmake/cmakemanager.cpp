@@ -175,7 +175,7 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
     KUrl path = group.readEntry("CurrentBuildDir");
-    KUrl projectPath = item->project()->folder();
+    KUrl projectPath = m_realRoot[item->project()];
 
     ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
     for(; !fi && item; )
@@ -244,6 +244,25 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     }
     else
     {
+        KSharedConfig::Ptr cfg = project->projectConfiguration();
+        KConfigGroup group(cfg.data(), "CMake");
+        m_subprojectRoot[project] = folderUrl;
+        
+        if(group.hasKey("ProjectRoot"))
+        {
+            folderUrl=group.readEntry("ProjectRoot");
+        }
+        else
+        {
+            KUrl aux=folderUrl;
+            for(; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
+            {
+                kDebug() << "checking" << aux;
+                folderUrl=aux;
+            }
+            group.writeEntry("ProjectRoot", folderUrl);
+        }
+        
         m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_modulePathPerProject[project]=m_modulePathDef;
@@ -375,21 +394,25 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             folder->setText(v.projectName());
         }
 
-        foreach (const QString& subf, v.subdirectories() )
+        KUrl subroot=m_subprojectRoot[item->project()];
+        foreach (const QString& subf, v.subdirectories())
         {
-            if( entries.contains( subf ) )
-            {
-                entries.removeAll( subf );
-            }
-
-
             KUrl path(folder->url());
             path.addPath(subf);
-
-            CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
-            a->setUrl(path);
-            a->setDefinitions(v.definitions());
-            folderList.append( a );
+            
+            kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
+            if(subroot.isParentOf(path) || path.isParentOf(subroot))
+            {
+                if(entries.contains(subf))
+                {
+                    entries.removeAll(subf);
+                }
+                
+                CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
+                a->setUrl(path);
+                a->setDefinitions(v.definitions());
+                folderList.append( a );
+            }
         }
 
         QString folderUrl= folder->url().toLocalFile(KUrl::RemoveTrailingSlash);

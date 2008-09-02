@@ -3,6 +3,7 @@
 <kcfg>
   <kcfgfile arg="true"/>
   <group name="CMake">
+    <entry name="projectRoot" key="ProjectRoot" type="Url" />
     <entry name="buildDirs" key="BuildDirs" type="PathList" />
     <entry name="currentBuildDir" key="CurrentBuildDir" type="Url" />
     <entry name="currentInstallDir" key="CurrentInstallDir" type="Url" />
