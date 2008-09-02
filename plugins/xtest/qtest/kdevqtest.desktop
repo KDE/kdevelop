@@ -56,6 +56,7 @@ X-KDE-PluginInfo-Name=qtestview
 X-KDE-PluginInfo-Author=Manuel Breugelmans
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Interfaces=org.kdevelop.ITestFramework
 X-KDevelop-Version=6
 X-KDevelop-Category=Global
 X-KDevelop-Properties=GlobalFileManagement

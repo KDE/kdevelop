@@ -23,15 +23,18 @@
 
 #include <interfaces/iplugin.h>
 #include <veritas/testrunnertoolview.h>
+#include "../itestframework.h"
 #include <QVariantList>
 
 class CppUnitRunnerViewFactory;
 namespace Veritas { class Test; }
 
 /*! Makes the CppUnit runner available */
-class CppUnitPlugin : public KDevelop::IPlugin
+class CppUnitPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
 {
-    Q_OBJECT
+Q_OBJECT
+Q_INTERFACES(Veritas::ITestFramework)
+
 public:
     explicit CppUnitPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CppUnitPlugin();

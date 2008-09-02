@@ -80,6 +80,7 @@ class CheckRunnerViewFactory: public KDevelop::IToolViewFactory
 CheckPlugin::CheckPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CheckPluginFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
     m_factory = new CheckRunnerViewFactory(this);
     core()->uiController()->addToolView("Check Runner", m_factory);
     setXMLFile("kdevcheck.rc");

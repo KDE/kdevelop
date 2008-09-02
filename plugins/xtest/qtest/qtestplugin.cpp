@@ -108,6 +108,8 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
         m_delegate(new QTestOutputDelegate(this)),
         m_proj(0)
 {
+    KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
+
     m_factory = new QTestRunnerViewFactory(this);
     core()->uiController()->addToolView(QString("QTest Runner"), m_factory);
     setXMLFile("kdevqtest.rc");

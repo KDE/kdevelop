@@ -24,6 +24,7 @@
 #include <KUrl>
 #include <QMap>
 #include <QVariantList>
+#include "../itestframework.h"
 
 #include <interfaces/iplugin.h>
 
@@ -42,9 +43,10 @@ namespace Sublime { class View; }
 namespace Veritas { class Test; }
 
 /*! Makes the QTestRunner toolview available */
-class QTestPlugin : public KDevelop::IPlugin
+class QTestPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
 {
 Q_OBJECT
+Q_INTERFACES(Veritas::ITestFramework)
 
 public:
     explicit QTestPlugin(QObject* parent, const QVariantList& = QVariantList());

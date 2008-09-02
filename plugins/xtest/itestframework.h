@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,31 +18,20 @@
  * 02110-1301, USA.
  */
 
-#ifndef CHECK_CHECKPLUGIN
-#define CHECK_CHECKPLUGIN
+#ifndef VERITAS_ITESTFRAMEWORK_H
+#define VERITAS_ITESTFRAMEWORK_H
 
-#include <veritas/testrunnertoolview.h>
-#include <QVariantList>
-#include <interfaces/iplugin.h>
-#include "../itestframework.h"
+#include <interfaces/iextension.h>
 
-class CheckRunnerViewFactory;
-
-namespace Veritas { class Test; }
-
-/*! Test runner plugin for the Check C unit testing framework */
-class CheckPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
+namespace Veritas
 {
-Q_OBJECT
-Q_INTERFACES(Veritas::ITestFramework)
 
-public:
-    explicit CheckPlugin(QObject* parent, const QVariantList & = QVariantList());
-    virtual ~CheckPlugin();
+class ITestFramework
+{};
 
-private:
-    CheckRunnerViewFactory* m_factory;
+}
 
-};
+KDEV_DECLARE_EXTENSION_INTERFACE_NS( Veritas, ITestFramework, "org.kdevelop.ITestFramework")
+Q_DECLARE_INTERFACE( Veritas::ITestFramework, "org.kdevelop.ITestFramework")
 
-#endif // CHECK_CHECKPLUGIN
+#endif // VERITAS_ITESTFRAMEWORK_H

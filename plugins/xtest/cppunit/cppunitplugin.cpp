@@ -82,6 +82,7 @@ class CppUnitRunnerViewFactory: public KDevelop::IToolViewFactory
 CppUnitPlugin::CppUnitPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CppUnitPluginFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
     m_factory = new CppUnitRunnerViewFactory(this);
     core()->uiController()->addToolView("CppUnit Runner", m_factory);
     setXMLFile("kdevcppunit.rc");
