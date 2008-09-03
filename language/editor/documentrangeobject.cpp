@@ -118,9 +118,11 @@ DocumentRangeObject::~ DocumentRangeObject( )
         }
       delete dd_ptr;
 
-      if(d_ptr->m_dynamic)
+      if(d_ptr->m_dynamic) {
         //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
+        //The exact destructor is eventually called from within DUChainBase.
         delete d_ptr;
+      }
     }
 }
 
