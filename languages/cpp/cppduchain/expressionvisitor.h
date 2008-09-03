@@ -186,6 +186,7 @@ private:
   inline void clearLast() {
     m_lastInstance = Instance();
     m_lastType = 0;
+    m_lastDeclarations.clear();
   }
 
   ///Returns whether the given type and instance-info are an lvalue

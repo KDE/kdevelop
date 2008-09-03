@@ -1620,46 +1620,67 @@ int value( const AbstractType::Ptr& type ) {
 
 void TestDUChain::testTemplateEnums()
 {
-  QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
-  TopDUContext* top = parse(text, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
+  {
+    QByteArray text("template<int num> struct No {};  No<9> n;");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->localDeclarations().count(), 3);
-  Declaration* ADecl = top->localDeclarations()[0];
-  Declaration* BDecl = top->localDeclarations()[1];
-  Declaration* testDecl = top->localDeclarations()[2];
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QVERIFY(top->localDeclarations()[1]->abstractType());
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< 9 >"));
 
-  TemplateDeclaration* templateTestDecl = dynamic_cast<TemplateDeclaration*>(testDecl);
-  QVERIFY(templateTestDecl);
+    QCOMPARE(top->usesCount(), 1);
+    Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
+    QVERIFY(used);
+    QVERIFY(used->abstractType());
+    QCOMPARE(used->abstractType()->toString(), QString("No< 9 >"));
+    release(top);
+  }
+  {
+    QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
+    TopDUContext* top = parse(text, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
 
-  Declaration* tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::TempVal") );
-  QVERIFY(tempDecl);
-  AbstractType::Ptr t = tempDecl->abstractType();
-  QVERIFY(!DelayedType::Ptr::dynamicCast(t));
-  QVERIFY(ConstantIntegralType::Ptr::dynamicCast(t));
-  QCOMPARE(value(tempDecl->abstractType()), 5);
+    QCOMPARE(top->localDeclarations().count(), 3);
+    Declaration* ADecl = top->localDeclarations()[0];
+    Declaration* BDecl = top->localDeclarations()[1];
+    Declaration* testDecl = top->localDeclarations()[2];
 
-  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Num") );
-  QVERIFY(tempDecl);
-  QCOMPARE(value(tempDecl->abstractType()), 3);
+    TemplateDeclaration* templateTestDecl = dynamic_cast<TemplateDeclaration*>(testDecl);
+    QVERIFY(templateTestDecl);
 
-  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Sum") );
-  QVERIFY(tempDecl->abstractType());
-  QCOMPARE(value(tempDecl->abstractType()), 8);
+    Declaration* tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::TempVal") );
+    QVERIFY(tempDecl);
+    AbstractType::Ptr t = tempDecl->abstractType();
+    QVERIFY(!DelayedType::Ptr::dynamicCast(t));
+    QVERIFY(ConstantIntegralType::Ptr::dynamicCast(t));
+    QCOMPARE(value(tempDecl->abstractType()), 5);
 
-  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::TempVal") );
-  QVERIFY(tempDecl->abstractType());
-  QCOMPARE(value(tempDecl->abstractType()), 7);
+    tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Num") );
+    QVERIFY(tempDecl);
+    QCOMPARE(value(tempDecl->abstractType()), 3);
 
-  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Num") );
-  QVERIFY(tempDecl->abstractType());
-  QCOMPARE(value(tempDecl->abstractType()), 9);
+    tempDecl = findDeclaration( top, QualifiedIdentifier("Test<A, 3>::Sum") );
+    QVERIFY(tempDecl->abstractType());
+    QCOMPARE(value(tempDecl->abstractType()), 8);
 
-  tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Sum") );
-  QVERIFY(tempDecl->abstractType());
-  QCOMPARE(value(tempDecl->abstractType()), 16);
+    tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::TempVal") );
+    QVERIFY(tempDecl->abstractType());
+    QCOMPARE(value(tempDecl->abstractType()), 7);
 
-  release(top);
+    tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Num") );
+    QVERIFY(tempDecl->abstractType());
+    t = tempDecl->abstractType();
+    kDebug() << "id" << typeid(*t).name();
+    kDebug() << "text:" << tempDecl->abstractType()->toString() << tempDecl->toString();
+    QCOMPARE(value(tempDecl->abstractType()), 9);
+
+    tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Sum") );
+    QVERIFY(tempDecl->abstractType());
+    QCOMPARE(value(tempDecl->abstractType()), 16);
+    
+    release(top);
+  }
 }
 
 void TestDUChain::testIntegralTemplates()

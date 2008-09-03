@@ -133,7 +133,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     m_visitor->visit( node->expression );
 
     ExpressionEvaluationResult res;
-    if( !m_visitor->lastDeclarations().isEmpty() ) {
+    if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
       res.type = m_visitor->lastType()->indexed();
       foreach(DeclarationPointer decl, m_visitor->lastDeclarations())
