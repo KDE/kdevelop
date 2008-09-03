@@ -112,6 +112,7 @@ public:
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::IDistributedVersionControl
+    virtual VcsJob* add_dvcs(const KUrl &repository, const KUrl::List& localLocations);
     virtual VcsJob* init(const KUrl& localRepositoryRoot);
     virtual VcsJob* clone(const VcsLocation& localOrRepoLocationSrc,
                           const KUrl& localRepositoryRoot);

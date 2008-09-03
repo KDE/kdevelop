@@ -261,6 +261,12 @@ KDevelop::VcsJob*
 // Begin:  KDevelop::IDistributedVersionControl
 
 KDevelop::VcsJob*
+DistributedVersionControlPlugin::add_dvcs(const KUrl &repository, const KUrl::List& localLocations)
+{
+    return add(localLocations);
+}
+
+KDevelop::VcsJob*
         DistributedVersionControlPlugin::init(const KUrl& localRepositoryRoot)
 {
     Q_UNUSED(localRepositoryRoot)
@@ -388,6 +394,10 @@ KDevelop::ContextMenuExtension
     QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
+        action = new KAction(i18n("Add to index"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+        menu->addAction( action );
+
         action = new KAction(i18n("Branch Manager"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
         menu->addAction( action );

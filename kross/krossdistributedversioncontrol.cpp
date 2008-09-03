@@ -69,11 +69,11 @@ bool KrossDistributedVersionControl::isVersionControlled(const KUrl & url)
     return result.toBool();
 }
 
-KDevelop::VcsJob * KrossDistributedVersionControl::add(const KUrl::List & files, KDevelop::IBasicVersionControl::RecursionMode mode)
+KDevelop::VcsJob * KrossDistributedVersionControl::add(const KUrl::List & files, KDevelop::IBasicVersionControl::RecursionMode mode = IBasicVersionControl::Recursive)
 {
     QVariant param(files);
     QVariant param1(mode==Recursive);
-    
+
     return new KrossVcsJob("add", QVariantList() << param << param1, action, m_plugin, action);
 }
 
@@ -217,6 +217,12 @@ VcsJob* KrossDistributedVersionControl::merge(const VcsLocation& localOrRepoLoca
 VcsJob* KrossDistributedVersionControl::resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     return new KrossVcsJob("resolve", QVariantList() << localLocations << recursion, action, m_plugin, action);
+}
+
+VcsJob* KrossDistributedVersionControl::add_dvcs(const KUrl &repository,
+                                                 const KUrl::List& localLocations)
+{
+    return add(localLocations);
 }
 
 VcsJob* KrossDistributedVersionControl::init(const KUrl& location)
