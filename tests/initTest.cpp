@@ -93,6 +93,12 @@ void GitInitTest::repoInit()
     QVERIFY(m_proxy->isValidDirectory(KUrl(GITTEST_BASEDIR)));
     //and for non-git dir, I hope nobody has /tmp under git
     QVERIFY(!m_proxy->isValidDirectory(KUrl("/tmp")));
+
+    //we have nothing, so ouput should be empty
+    j = m_proxy->gitRevParse(QString(GIT_REPO), QStringList(QString("--branches")));
+    QVERIFY(j->exec());
+    QString out = j->output();
+    QVERIFY(j->output().isEmpty());
 }
 
 void GitInitTest::addFiles()
@@ -115,9 +121,15 @@ void GitInitTest::addFiles()
     f.flush();
     f.close();
 
+    //test git-status exitCode (see DVCSjob::setExitCode). It will be 1, but job should be marked as Succeeded
+    DVCSjob* j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    QVERIFY( j );
+    QVERIFY(!j->exec() );
+    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+
     // /tmp/kdevGit_testdir/ and kdevGit_testdir
     //add always should use relative path to the any directory of the repository, let's check:
-    DVCSjob* j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_DIR1))));
+    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_DIR1))));
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
@@ -141,6 +153,12 @@ void GitInitTest::addFiles()
     }
     f.flush();
     f.close();
+
+    //test git-status exitCode again
+    j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    QVERIFY( j );
+    QVERIFY(j->exec() );
+    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //repository path without trailing slash and a file in a parent directory
     // /tmp/repo  and /tmp/repo/src/bar
@@ -194,6 +212,12 @@ void GitInitTest::commitFiles()
 
     // try to start the job
     QVERIFY( j->exec() );
+    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+
+    //test git-status exitCode one more time.
+    j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    QVERIFY( j );
+    QVERIFY(!j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //since we commited the file to the "pure" repository, .git/refs/heads/master should exist

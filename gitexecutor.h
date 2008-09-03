@@ -91,8 +91,8 @@ public:
     DVCSjob* branch(const QString &repository, const QString &basebranch = QString(), const QString &branch = QString(),
                     const QStringList &args = QStringList());
     DVCSjob* reset(const QString &repository, const QStringList &args, const KUrl::List &files);
-private:
-    //it can be public, but it isn't required now
+
+
     DVCSjob* lsFiles(const QString &repository, const QStringList &args);
     DVCSjob* gitRevParse(const QString &repository, const QStringList &args);
     DVCSjob* gitRevList(const QString &repository, const QStringList &args);
@@ -111,6 +111,9 @@ public:
 
     //used in log
     void parseOutput(const QString& jobOutput, QList<DVCScommit>& commits) const;
+
+private slots:
+    void status_slot(DVCSjob *statusJob);
 
 private:
     //commit dialog "main" helper
