@@ -1621,6 +1621,26 @@ int value( const AbstractType::Ptr& type ) {
 void TestDUChain::testTemplateEnums()
 {
   {
+    QByteArray text("template<int num=5> struct No {};  No<> n;");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QVERIFY(top->localDeclarations()[1]->abstractType());
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< 5 >"));
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
+    
+    
+    QCOMPARE(top->usesCount(), 1);
+    Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
+    QVERIFY(used);
+    QVERIFY(used->abstractType());
+    QCOMPARE(used->abstractType()->toString(), QString("No< 5 >"));
+    release(top);
+  }
+  {
     QByteArray text("template<int num> struct No {};  No<9> n;");
     TopDUContext* top = parse(text, DumpAll);
     DUChainWriteLocker lock(DUChain::lock());

@@ -152,6 +152,10 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->template_arguments)
     {
       visitNodes(this, node->template_arguments);
+    }else if(node->end_token == node->start_token + 3 && node->id == node->start_token && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<')) {
+      ///@todo Represent this nicer in the AST
+      ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
+      m_currentIdentifier.appendTemplateIdentifier( TypeIdentifier() );
     }
 
   _M_name.push(m_currentIdentifier);

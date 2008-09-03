@@ -114,10 +114,20 @@ ReferencedTopDUContext DeclarationBuilder::buildDeclarations(const Cpp::Environm
 // }
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
+  
+  //Backup and zero the parameter declaration, because we will handle it here directly, and don't want a normal one to be created
+  ParameterDeclarationAST* paramAST = ast->parameter_declaration;
+  ast->parameter_declaration = 0;
   DeclarationBuilderBase::visitTemplateParameter(ast);
-  if( ast->type_parameter && ast->type_parameter->name ) {
+  ast->parameter_declaration = paramAST;
+  
+  if( (ast->type_parameter && ast->type_parameter->name) || (ast->parameter_declaration && ast->parameter_declaration->declarator)) {
     ///@todo deal with all the other stuff the AST may contain
-    TemplateParameterDeclaration* decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
+    TemplateParameterDeclaration* decl;
+    if(ast->type_parameter)
+      decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
+    else
+      decl = openDeclaration<TemplateParameterDeclaration>(ast->parameter_declaration->declarator->id, ast);
 
     DUChainWriteLocker lock(DUChain::lock());
     AbstractType::Ptr type = lastType();
@@ -142,25 +152,10 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     }
 
     if( ast->parameter_declaration ) {
-      //Extract default parameters(not tested)
-      QualifiedIdentifier defaultParam;
-      if( ast->parameter_declaration->type_specifier ) {
-        TypeCompiler tc(editor()->parseSession());
-        tc.run(ast->parameter_declaration->type_specifier);
-        defaultParam = tc.identifier();
-      } else {
-        QString str;
-        ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
-        if( ast->parameter_declaration->declarator )
-          str += stringFromSessionTokens( editor()->parseSession(), ast->parameter_declaration->start_token, ast->parameter_declaration->end_token );
-        if( ast->parameter_declaration->expression )
-          str += stringFromSessionTokens( editor()->parseSession(), ast->parameter_declaration->expression->start_token, ast->parameter_declaration->expression->end_token );
-        defaultParam = QualifiedIdentifier(str);
-      }
-
-      decl->setDefaultParameter(defaultParam);
+      if( ast->parameter_declaration->expression )
+        decl->setDefaultParameter( QualifiedIdentifier( stringFromSessionTokens( editor()->parseSession(), ast->parameter_declaration->expression->start_token, ast->parameter_declaration->expression->end_token ) ) );
     }
-    closeDeclaration();
+    closeDeclaration(ast->parameter_declaration);
   } else {
     kDebug(9007) << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing";
   }
