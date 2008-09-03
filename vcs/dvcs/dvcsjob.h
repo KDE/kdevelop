@@ -166,20 +166,29 @@ public:
     QString output() const;
 
     // Begin:  KDevelop::VcsJob
-    
+
     /** 
      * Sets executions reults.
      * In most cases this method is used by IDVCSexecutor
      * @see fetchResults()
      */
-    virtual void setResults(const QVariant &res) {results = res;}
+    virtual void setResults(const QVariant &res);
 
     /**
      * Returns execution results stored in QVariant.
      * Mostly used in vcscommitdialog.
      * @see setResults(const QVariant &res)
      */
-    virtual QVariant fetchResults() {return results;}
+    virtual QVariant fetchResults();
+
+    /**
+     * Sets exit status (d->failed variable).
+     * Since only executors can parse the job to set result, they can connect parsers to readyForParsing(DVCSjob) using
+     * Qt::DirectConnection to set the result. For example git-status can return exit status 1 
+     * if you don't set exit status in your parser then you will have JobFailes in status() result.
+     * @note First result is set in slotProcessExited() or slotProcessError().
+     */
+    virtual void setExitStatus(const bool exitStatus);
 
     /**
      * Returns JobStatus
@@ -203,6 +212,9 @@ public Q_SLOTS:
      * Returns if the job is running.
      */
     bool isRunning() const;
+
+signals:
+    void readyForParsing(DVCSjob *job);
 
 private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );

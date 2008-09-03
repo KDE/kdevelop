@@ -133,6 +133,21 @@ QString DVCSjob::output() const
     return d->outputLines.join("\n");
 }
 
+void DVCSjob::setResults(const QVariant &res) 
+{
+    results = res;
+}
+
+QVariant DVCSjob::fetchResults()
+{
+    return results;
+}
+
+void DVCSjob::setExitStatus(const bool exitStatus)
+{
+    d->failed = exitStatus;
+}
+
 void DVCSjob::start()
 {
     if( !d->directory.isEmpty() ) {
@@ -178,11 +193,13 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
 
     d->isRunning = false;
 
-//TODO: some DVCS commands can use stderr...
-//     d->failed = true; //Some DVCS (Git) commands like to use stderr
+    //NOTE: some DVCS commands can use stderr...
+    d->failed = true;
     setError( d->childproc->exitCode() );
     setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
+
+    emit readyForParsing(this); //let parsers to set status
     emitResult(); //KJob
     emit resultsReady(this); //VcsJob
 }
@@ -195,11 +212,13 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     d->isRunning = false;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        //some dvcs commands use status to show changes. Git-status returns 1 if there are updates
-//         d->failed = true;
+        //NOTE some dvcs commands use status to show changes. Git-status returns 1 if there are updates
+        d->failed = true;
         setError( exitCode );
         setErrorText( i18n("Process exited with status %1", exitCode) );
     }
+
+    emit readyForParsing(this); //let parsers to set status
     emitResult(); //KJob
     emit resultsReady(this); //VcsJob
 }

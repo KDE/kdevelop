@@ -151,11 +151,23 @@ DVCSjob* GitExecutor::status(const QString & repository, const KUrl::List & file
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "status";
-
+        connect(job, SIGNAL(readyForParsing(DVCSjob*)),
+                this, SLOT(status_slot(DVCSjob*)), Qt::DirectConnection);
         return job;
     }
     if (job) delete job;
     return NULL;
+}
+
+void GitExecutor::status_slot(DVCSjob *statusJob)
+{
+    //everything is ok
+    if (statusJob->status() == KDevelop::VcsJob::JobSucceeded)
+        return;
+    //we have problems, if we are in git-repo then git-status just returned 1,
+    //because something was changed (see git-status), then we should set exitStatus to 0.
+    if (isValidDirectory(KUrl(statusJob->getDirectory()) ) )
+        statusJob->setExitStatus(0);
 }
 
 DVCSjob* GitExecutor::log(const KUrl& url)
