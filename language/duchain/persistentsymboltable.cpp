@@ -25,6 +25,7 @@
 #include "appendedlist.h"
 #include "repositories/itemrepository.h"
 #include "identifier.h"
+#include "ducontext.h"
 
 namespace KDevelop {
 
@@ -95,12 +96,80 @@ class PersistentSymbolTableRequestItem {
   const PersistentSymbolTableItem& m_item;
 };
 
+DEFINE_LIST_MEMBER_HASH(PersistentContextTableItem, contexts, IndexedDUContext)
+
+class PersistentContextTableItem {
+  public:
+  PersistentContextTableItem() {
+    initializeAppendedLists();
+  }
+  PersistentContextTableItem(const PersistentContextTableItem& rhs) : id(rhs.id) {
+    initializeAppendedLists();
+    copyListsFrom(rhs);
+  }
+  
+  ~PersistentContextTableItem() {
+    freeAppendedLists();
+  }
+  
+  unsigned int hash() const {
+    //We only compare the context. This allows us implementing a map, although the item-repository
+    //originally represents a set.
+    return id.index;
+  }
+  
+  unsigned short int itemSize() const {
+    return dynamicSize();
+  }
+  
+  uint classSize() const {
+    return sizeof(PersistentContextTableItem);
+  }
+  
+  IndexedQualifiedIdentifier id;
+  
+  START_APPENDED_LISTS(PersistentContextTableItem);
+  APPENDED_LIST_FIRST(PersistentContextTableItem, IndexedDUContext, contexts);
+  END_APPENDED_LISTS(PersistentContextTableItem, contexts);
+};
+
+class PersistentContextTableRequestItem {
+  public:
+  
+  PersistentContextTableRequestItem(const PersistentContextTableItem& item) : m_item(item) {
+  }
+  enum {
+    AverageSize = 30 //This should be the approximate average size of an Item
+  };
+
+  unsigned int hash() const {
+    return m_item.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_item.itemSize();
+  }
+
+  void createItem(PersistentContextTableItem* item) const {
+    item->initializeAppendedLists(false);
+    item->id = m_item.id;
+    item->copyListsFrom(m_item);
+  }
+  
+  bool equals(const PersistentContextTableItem* item) const {
+    return m_item.id == item->id;
+  }
+  
+  const PersistentContextTableItem& m_item;
+};
+
 
 struct PersistentSymbolTablePrivate {
-  PersistentSymbolTablePrivate() : m_declarations("Persistent Symbol Table") {
+  PersistentSymbolTablePrivate() : m_declarations("Persistent Declaration Table"), m_contexts("Persistent Context Table") {
   }
   //Maps declaration-ids to declarations
   ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem> m_declarations;
+  ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem> m_contexts;
 };
 
 PersistentSymbolTable::PersistentSymbolTable() : d(new PersistentSymbolTablePrivate())
@@ -112,7 +181,7 @@ PersistentSymbolTable::~PersistentSymbolTable()
   delete d;
 }
 
-void PersistentSymbolTable::addDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration)
+void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
   PersistentSymbolTableItem item;
   item.id = id;
@@ -137,7 +206,7 @@ void PersistentSymbolTable::addDeclaration(const QualifiedIdentifier& id, const 
   d->m_declarations.index(request);
 }
 
-void PersistentSymbolTable::removeDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration)
+void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
   PersistentSymbolTableItem item;
   item.id = id;
@@ -161,7 +230,7 @@ void PersistentSymbolTable::removeDeclaration(const QualifiedIdentifier& id, con
   }
 }
 
-void PersistentSymbolTable::declarations(const QualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget ) const
+void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget ) const
 {
   PersistentSymbolTableItem item;
   item.id = id;
@@ -176,6 +245,70 @@ void PersistentSymbolTable::declarations(const QualifiedIdentifier& id, uint& co
   }else{
     countTarget = 0;
     declarationsTarget = 0;
+  }
+}
+
+void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context) {
+  PersistentContextTableItem item;
+  item.id = id;
+  item.contextsList().append(context);
+  PersistentContextTableRequestItem request(item);
+  
+  uint index = d->m_contexts.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const PersistentContextTableItem* oldItem = d->m_contexts.itemFromIndex(index);
+    for(uint a = 0; a < oldItem->contextsSize(); ++a) {
+      if(oldItem->contexts()[a] == context)
+        return; //Already there
+      item.contextsList().append(oldItem->contexts()[a]);
+    }
+    
+    d->m_contexts.deleteItem(index);
+  }
+
+  //This inserts the changed item
+  d->m_contexts.index(request);
+}
+
+void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context) {
+  PersistentContextTableItem item;
+  item.id = id;
+  PersistentContextTableRequestItem request(item);
+  
+  uint index = d->m_contexts.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const PersistentContextTableItem* oldItem = d->m_contexts.itemFromIndex(index);
+    for(uint a = 0; a < oldItem->contextsSize(); ++a)
+      if(!(oldItem->contexts()[a] == context))
+        item.contextsList().append(oldItem->contexts()[a]);
+    
+    d->m_contexts.deleteItem(index);
+    Q_ASSERT(d->m_contexts.findIndex(item) == 0);
+    
+    //This inserts the changed item
+    if(item.contextsSize() != 0)
+      d->m_contexts.index(request);
+  }
+}
+
+void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDUContext*& contextsTarget) const {
+  PersistentContextTableItem item;
+  item.id = id;
+  PersistentContextTableRequestItem request(item);
+  
+  uint index = d->m_contexts.findIndex(item);
+  
+  if(index) {
+    const PersistentContextTableItem* repositoryItem = d->m_contexts.itemFromIndex(index);
+    countTarget = repositoryItem->contextsSize();
+    contextsTarget = repositoryItem->contexts();
+  }else{
+    countTarget = 0;
+    contextsTarget = 0;
   }
 }
 

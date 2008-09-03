@@ -334,6 +334,8 @@ private:
   ///Returns a set of all recursively imported top-contexts. Each imported top-context is mapped to the distance, and the direct
   ///import through which the top-context is imported.
   RecursiveImports recursiveImports() const;
+  ///Returns the indices of all recursively imported top-contexts
+  const QSet<uint>& recursiveImportIndices() const;
   
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
   //Must be called after all imported top-contexts were loaded into the du-chain
@@ -362,6 +364,7 @@ private:
   friend class IndexedDUContext;
   friend class LocalIndexedDeclaration;
   friend class LocalIndexedDUContext;
+  friend class DeclarationId;
   
   TopDUContextLocalPrivate* m_local;
   

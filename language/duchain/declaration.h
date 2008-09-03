@@ -84,6 +84,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     uint localIndex() const {
       return m_declarationIndex;
     }
+    
+    uint topContextIndex() const {
+      return m_topContext;
+    }
 
   private:
   uint m_topContext;

@@ -26,9 +26,10 @@ namespace KDevelop {
 
   class Declaration;
   class IndexedDeclaration;
+  class IndexedDUContext;
   class DeclarationId;
   class TopDUContext;
-  class QualifiedIdentifier;
+  class IndexedQualifiedIdentifier;
 
 /**
  * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
@@ -40,16 +41,27 @@ namespace KDevelop {
     /// Destructor.
     ~PersistentSymbolTable();
 
-    void addDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration);
+    void addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
 
-    void removeDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration);
+    void removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
 
-    ///Retrieves all the declarations for a given QualifiedIdentifier in an efficient way.
-    ///@param id The QualifiedIdentifier for which the declarations should be retrieved
+    ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way.
+    ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     ///@param count A reference that will be filled with the count of retrieved declarations
     ///@param declarations A reference to a pointer, that will be filled with a pointer to the retrieved declarations.
-    void declarations(const QualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
+    void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 
+    
+    void addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
+
+    void removeContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
+
+    ///Retrieves all the contexts for a given IndexedQualifiedIdentifier in an efficient way.
+    ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
+    ///@param count A reference that will be filled with the count of retrieved contexts
+    ///@param contexts A reference to a pointer, that will be filled with a pointer to the retrieved contexts.
+    void contexts(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDUContext*& contexts) const;
+    
     static PersistentSymbolTable& self();
     
     private:

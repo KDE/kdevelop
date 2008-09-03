@@ -446,6 +446,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       return false;
     }
     
+    template<class Visitor>
+    bool visitItemsWithHash(Visitor& visitor, uint hash, unsigned short bucketIndex) const {
+      m_lastUsed = 0;
+
+      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short currentIndex = m_objectMap[localHash];
+      
+      while(currentIndex) {
+        if(!visitor(itemFromIndex(currentIndex), (bucketIndex << 16) + currentIndex))
+          return false;
+        
+        currentIndex = followerIndex(currentIndex);
+      }
+      return true;
+    }
+    
+    
     void deleteItem(unsigned short index, unsigned int hash) {
       m_lastUsed = 0;
       m_changed = true;
@@ -674,7 +691,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   };
   
   enum {
-    ItemRepositoryVersion = 15,
+    ItemRepositoryVersion = 16,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -1100,7 +1117,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
           return;
     }
   }
-  
+
+  ///Visits all items that have the given hash-value, plus an arbitrary count of other items with a clashing hash.
+  ///@param visitor Should be an instance of a class that has a bool operator()(const Item*, uint index) member function,
+  ///               that returns whether more items are wanted.
+  template<class Visitor>
+  void visitItemsWithHash(Visitor& visitor, uint hash) const {
+    ThisLocker lock(&m_mutex);
+    
+    short unsigned int bucket = *(m_firstBucketForHash + ((hash * 1234271) % bucketHashSize));
+    
+    while(bucket) {
+      
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+      if(!bucketPtr) {
+        initializeBucket(bucket);
+        bucketPtr = m_fastBuckets[bucket];
+      }
+      
+      if(!bucketPtr->visitItemsWithHash(visitor, hash, bucket))
+        return;
+
+      bucket = bucketPtr->nextBucketForHash(hash);
+    }
+  }
+
   ///Synchronizes the state on disk to the one in memory, and does some memory-management.
   ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
   virtual void store() {

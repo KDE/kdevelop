@@ -246,7 +246,7 @@ ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemReques
 }
 
 uint emptyConstantQualifiedIdentifierPrivateIndex() {
-   uint index = qualifiedidentifierRepository().index(DynamicQualifiedIdentifierPrivate());
+   static uint index = qualifiedidentifierRepository().index(DynamicQualifiedIdentifierPrivate());
    return index;
 }
 
@@ -792,6 +792,25 @@ bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
     }
 
   return true;
+}
+
+struct Visitor {
+  Visitor(KDevVarLengthArray<QualifiedIdentifier>& _target, uint _hash) : target(_target), hash(_hash) {
+  }
+  
+  bool operator()(const ConstantQualifiedIdentifierPrivate* item, uint index) const {
+    if(item->m_hash == hash)
+      target.append(QualifiedIdentifier(index));
+    return true;
+  }
+  KDevVarLengthArray<QualifiedIdentifier>& target;
+  uint hash;
+};
+
+void QualifiedIdentifier::findByHash(HashType hash, KDevVarLengthArray<QualifiedIdentifier>& target)
+{
+  Visitor v(target, hash);
+  qualifiedidentifierRepository().visitItemsWithHash<Visitor>(v, hash);
 }
 
 uint QualifiedIdentifier::hash() const {

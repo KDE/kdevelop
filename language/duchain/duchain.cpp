@@ -47,7 +47,6 @@
 #include "duchainutils.h"
 #include "use.h"
 #include "uses.h"
-#include "symboltable.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
 #include "duchainutils.h"
@@ -206,6 +205,7 @@ public:
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
+  QSet<uint> m_loading;
 
   ///Used to keep alive the top-context that belong to documents loaded in the editor
   QSet<ReferencedTopDUContext> m_openDocumentContexts;
@@ -235,6 +235,8 @@ public:
     QMutexLocker l(&m_chainsMutex);
 
     if(!m_chainsByIndex.contains(index)) {
+      Q_ASSERT(!m_loading.contains(index)); //When this asserts, a chain was requested that is already being loaded. Must not happen.
+      m_loading.insert(index);
       loaded.insert(index);
       TopDUContext* chain = TopDUContextDynamicData::load(index);
       if(chain) {
@@ -268,6 +270,7 @@ public:
         l.relock();
         instance->addDocumentChain(chain);
       }
+      m_loading.remove(index);
     }
   }
 
@@ -427,8 +430,6 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 DUChain::DUChain()
 {
-  SymbolTable::self(); //Initialize singleton
-
   connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));

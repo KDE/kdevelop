@@ -22,7 +22,6 @@
 #include <typeinfo>
 
 #include "../classfunctiondeclaration.h"
-#include "../symboltable.h"
 #include "../forwarddeclaration.h"
 #include "../types/identifiedtype.h"
 #include "../functiondeclaration.h"

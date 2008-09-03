@@ -22,7 +22,7 @@
 #include "../editor/simplecursor.h"
 #include "duchain.h"
 #include "declaration.h"
-#include "symboltable.h"
+#include "persistentsymboltable.h"
 #include "arrayhelpers.h"
 
 namespace KDevelop {
@@ -72,14 +72,20 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
-    KDevVarLengthArray<Declaration*> declarations;
-    SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
+    const IndexedDeclaration* decls;
+    uint declCount = 0;
+    PersistentSymbolTable::self().declarations(id, declCount, decls);
     
-    Identifier lastId = id.last();
-    
-    FOREACH_ARRAY(Declaration* decl, declarations) {
-      if(decl->identifier() == lastId) {
-        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (!top || top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+    for(uint a = 0; a < declCount; ++a) {
+      const IndexedDeclaration& iDecl(decls[a]);
+      
+      //Don't trigger loading of top-contexts from here, it will create a lot of problems
+      if((!top && !DUChain::self()->isInMemory(iDecl.topContextIndex())))
+        continue;
+      
+      if(!top || top->ownIndex() == iDecl.topContextIndex() || top->recursiveImportIndices().contains(iDecl.topContextIndex())) {
+        Declaration* decl = iDecl.data();
+        if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
           //Hit
           ret.append(decl);
         }
@@ -109,14 +115,20 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
-    KDevVarLengthArray<Declaration*> declarations;
-    SymbolTable::self()->findDeclarationsByHash( id.hash(), declarations );
+    const IndexedDeclaration* decls;
+    uint declCount = 0;
+    PersistentSymbolTable::self().declarations(id, declCount, decls);
     
-    Identifier lastId = id.last();
-    
-    FOREACH_ARRAY(Declaration* decl, declarations) {
-      if(decl->identifier() == lastId) {
-        if(indirect.m_additionalIdentity == decl->additionalIdentity() && (!top || top == decl->topContext() || top->imports(decl->topContext(), SimpleCursor::invalid()))) {
+    for(uint a = 0; a < declCount; ++a) {
+      const IndexedDeclaration& iDecl(decls[a]);
+      
+      //Don't trigger loading of top-contexts from here, it will create a lot of problems
+      if((!top && !DUChain::self()->isInMemory(iDecl.topContextIndex())))
+        continue;
+      
+      if(!top || top->ownIndex() == iDecl.topContextIndex() || top->recursiveImportIndices().contains(iDecl.topContextIndex())) {
+        Declaration* decl = iDecl.data();
+        if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
           //Hit
           ret = decl;
           

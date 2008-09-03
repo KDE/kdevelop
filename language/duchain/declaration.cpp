@@ -30,7 +30,6 @@
 #include "topducontext.h"
 #include "topducontextdynamicdata.h"
 #include "use.h"
-#include "symboltable.h"
 #include "forwarddeclaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -142,14 +141,13 @@ Declaration::~Declaration()
 {
   DUCHAIN_D_DYNAMIC(Declaration);
   // Inserted by the builder after construction has finished.
-  if(!topContext()->isOnDisk()) {
+  if(!topContext()->deleting() || !topContext()->isOnDisk()) {
     if( d->m_internalContext.context() )
       d->m_internalContext.context()->setOwner(0);
   }
   
   if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
-    SymbolTable::self()->removeDeclaration(this);
-    if(!topContext()->isOnDisk()) {
+    if(!topContext()->deleting() || !topContext()->isOnDisk()) {
       QualifiedIdentifier id = qualifiedIdentifier();
       PersistentSymbolTable::self().removeDeclaration(id, this);
       CodeModel::self().removeItem(url(), id);
@@ -246,9 +244,6 @@ void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
   m_context = parent;
   m_topContext = parent->topContext();
   m_indexInTopContext = ownIndex;
-  
-  if(d_func()->m_inSymbolTable && !d_func()->m_identifier.isEmpty())
-      SymbolTable::self()->addDeclaration(this);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
@@ -554,7 +549,6 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
   DUCHAIN_D_DYNAMIC(Declaration);
   if(!d->m_identifier.isEmpty()) {
     if(!d->m_inSymbolTable && inSymbolTable) {
-      SymbolTable::self()->addDeclaration(this);
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().addDeclaration(id, this);
       
@@ -577,7 +571,6 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
     }
   
     else if(d->m_inSymbolTable && !inSymbolTable) {
-      SymbolTable::self()->removeDeclaration(this);
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().removeDeclaration(id, this);
       

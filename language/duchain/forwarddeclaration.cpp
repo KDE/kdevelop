@@ -26,7 +26,6 @@
 #include "duchainlock.h"
 #include "ducontext.h"
 #include "use.h"
-#include "symboltable.h"
 #include "duchainregister.h"
 #include "types/identifiedtype.h"
 

@@ -27,7 +27,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/classfunctiondeclaration.cpp
     duchain/use.cpp
     duchain/smartconverter.cpp
-    duchain/symboltable.cpp
     duchain/forwarddeclaration.cpp
     duchain/duchainbase.cpp
     duchain/duchainlock.cpp
@@ -170,7 +169,6 @@ install(FILES
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
     duchain/dumpchain.h
-    duchain/symboltable.h
     duchain/indexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h

@@ -35,7 +35,7 @@
 #include "use.h"
 #include "identifier.h"
 #include "topducontext.h"
-#include "symboltable.h"
+#include "persistentsymboltable.h"
 #include "aliasdeclaration.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
@@ -108,9 +108,6 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
     Q_ASSERT(child);
     child->rebuildDynamicData(this, ctx.localIndex());
   }
-
-  if(d_func()->m_inSymbolTable && d_func()->m_scopeIdentifier.isValid())
-      SymbolTable::self()->addContext(this);
 }
 
 DUContextData::DUContextData()
@@ -539,10 +536,9 @@ DUContext::~DUContext( )
   DUCHAIN_D_DYNAMIC(DUContext);
   TopDUContext* top = topContext();
 
-  setInSymbolTable(false);
-
-  if(!topContext()->isOnDisk())
-  {
+  if(!top->deleting() || !top->isOnDisk()) {
+    PersistentSymbolTable::self().removeContext(scopeIdentifier(true), this);
+    
     if(d->m_owner.declaration())
       d->m_owner.declaration()->setInternalContext(0);
 
@@ -1474,9 +1470,9 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
 {
   if(d_func()->m_scopeIdentifier.isValid()) {
     if(!d_func()->m_inSymbolTable && inSymbolTable)
-      SymbolTable::self()->addContext(this);
+      PersistentSymbolTable::self().addContext(scopeIdentifier(true), this);
     else if(d_func()->m_inSymbolTable && !inSymbolTable)
-      SymbolTable::self()->removeContext(this);
+      PersistentSymbolTable::self().removeContext(scopeIdentifier(true), this);
   }
 
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
@@ -1498,10 +1494,8 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   ENSURE_CAN_WRITE
 
   foreach (Declaration* dec, localDeclarations())
-    if (!encountered.contains(dec)) {
-      dec->setInSymbolTable(false);
+    if (!encountered.contains(dec))
       delete dec;
-    }
 
   FOREACH_FUNCTION(LocalIndexedDUContext childContext, d_func()->m_childContexts)
     if (!encountered.contains(childContext.data(topContext())))

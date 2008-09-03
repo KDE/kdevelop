@@ -287,6 +287,9 @@ public:
   ///The hash does not respect explicitlyGlobal, only the real scope.
   HashType hash() const;
 
+  ///Finds all identifiers in the identifier-repository that have the given hash value
+  static void findByHash(HashType hash, KDevVarLengthArray<QualifiedIdentifier>& target);
+  
 protected:
   bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
 
