@@ -266,7 +266,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_modulePathPerProject[project]=m_modulePathDef;
-        initializeProject(project, cmakeInfoFile.upUrl());
+        initializeProject(project, folderUrl);
 
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
