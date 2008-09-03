@@ -87,6 +87,13 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
 
 
 ///TODO: imlement in HG and Bazaar!
+
+bool IDVCSexecutor::isInRepo(const KUrl &path)
+{
+    Q_UNUSED(path)
+    return true;
+}
+
 void IDVCSexecutor::parseOutput(const QString& jobOutput,
                                 QList<DVCScommit>& revisions) const 
 {

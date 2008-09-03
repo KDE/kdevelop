@@ -52,8 +52,6 @@ QString GitExecutor::name() const
     return QLatin1String("Git");
 }
 
-//TODO: write tests for this method!
-//maybe func()const?
 bool GitExecutor::isValidDirectory(const KUrl & dirPath)
 {
     DVCSjob* job = gitRevParse(dirPath.path(), QStringList(QString("--is-inside-work-tree")));
@@ -68,6 +66,23 @@ bool GitExecutor::isValidDirectory(const KUrl & dirPath)
     }
     kDebug() << "Dir:" << dirPath.path() << " is not inside work tree of git" ;
     return false;
+}
+
+bool GitExecutor::isInRepo(const KUrl &path)
+{
+    QString workDir = path.path();
+    QString filename;
+    QFileInfo fsObject(workDir);
+    if (fsObject.isFile())
+    {
+        workDir = fsObject.path();
+        filename = fsObject.fileName();
+    }
+    else
+        return isValidDirectory(path);
+
+    QStringList otherFiles = getLsFiles(workDir);
+    return otherFiles.contains(filename);
 }
 
 DVCSjob* GitExecutor::init(const KUrl &directory)

@@ -72,6 +72,7 @@ public:
     ~GitExecutor();
 
     bool isValidDirectory(const KUrl &dirPath);
+    bool isInRepo(const KUrl &path);
     QString name() const;
 
     DVCSjob* init(const KUrl & directory);
@@ -117,7 +118,7 @@ private slots:
 
 private:
     //commit dialog "main" helper
-    QStringList getLsFiles(const QString &directory, const QStringList &args);
+    QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
 
     void initBranchHash(const QString &repo);
     KDevelop::VcsStatusInfo::State charToState(const char ch);

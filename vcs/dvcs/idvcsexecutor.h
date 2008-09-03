@@ -187,6 +187,11 @@ public:
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
+    /** This method checks if the path is already in the repo. If the path is directory it returns
+     * isValidDirectory(), else it returns if the file has been already added to the repo.
+     * @see isValidDirectory(const KUrl &dirPath). */
+    virtual bool isInRepo(const KUrl &path);
+
     /** Returns DVCS name, I hope it returs "git" for you */
     virtual QString name() const = 0;
 
