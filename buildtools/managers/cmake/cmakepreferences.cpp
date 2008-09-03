@@ -173,8 +173,12 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        KMessageBox::error(this, i18n("The %1 build directory is not valid. It will be removed from the list", newBuildDir.toLocalFile()));
-        removeBuildDir();
+        if(!newBuildDir.isEmpty())
+        {
+            KMessageBox::error(this, i18n("The %1 build directory is not valid. It will be removed from the list", newBuildDir.toLocalFile()));
+            removeBuildDir();
+        }
+        
         if(m_currentModel)
             m_currentModel->clear();
         m_prefsUi->cacheList->setEnabled(false);
@@ -209,7 +213,7 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(const QString &str)
 {
     updateCache(str);
-    kDebug(9042) << "Emitting changed signal for cmake kcm";
+    kDebug(9042) << "builddir Changed" << str;
     emit changed(true);
 }
 

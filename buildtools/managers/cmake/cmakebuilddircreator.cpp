@@ -152,6 +152,7 @@ QString CMakeBuildDirCreator::buildDirProject(const KUrl& buildDir)
             ret=line.mid(pLine.count());
         }
     }
+    kDebug(9042) << "The source directory for " << buildDir << "is" << ret;
     return ret;
 }
 
@@ -186,7 +187,10 @@ void CMakeBuildDirCreator::updated()
                 QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
 
                 srcDir=buildDirProject(m_creatorUi->buildFolder->url());
-                correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
+                if(!srcDir.isEmpty())
+                    correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
+                else
+                    kWarning(9042) << "maybe you are trying a damaged CMakeCache.txt file";
             }
         }
     }
