@@ -97,12 +97,12 @@ void BranchManager::createBranch()
         return;
     }
 
-    kDebug(9509) << "Creating " << baseBranch << " based on " << newBranch;
+    kDebug() << "Creating " << baseBranch << " based on " << newBranch;
     DVCSjob *branchJob = d->branch(repo, baseBranch, newBranch);
 
     if (branchJob)
     {
-        kDebug(9509) << "Adding new branch";
+        kDebug() << "Adding new branch";
         branchJob->exec();
     }
     QListWidgetItem *item = new QListWidgetItem(newBranch, branchWidget);
@@ -141,7 +141,7 @@ void BranchManager::renameBranch(QListWidgetItem * item)
     DVCSjob *branchJob = d->branch(repo, newBranch, baseBranch, QStringList("-m"));
     if (branchJob)
     {
-        kDebug(9509) << "Renaming " << baseBranch << " to " << newBranch;
+        kDebug() << "Renaming " << baseBranch << " to " << newBranch;
         branchJob->exec();
     }
 }
@@ -169,7 +169,7 @@ void BranchManager::delBranch()
     DVCSjob *branchJob = d->branch(repo, baseBranch, QString(), QStringList("-D"));
     if (branchJob)
     {
-        kDebug(9509) << "Removing " << baseBranch;
+        kDebug() << "Removing " << baseBranch;
         branchJob->exec();
     }
     branchWidget->model()->removeRow(branchWidget->currentIndex().row());
@@ -198,7 +198,7 @@ void BranchManager::checkoutBranch()
 void BranchManager::currentActivatedData(QListWidgetItem * item)
 {
     lastActivated = item->data(Qt::DisplayRole).toString();
-//     kDebug(9509) << "Last activated item data: " << lastActivated;
+//     kDebug() << "Last activated item data: " << lastActivated;
 }
 
 void BranchManager::activateButtons(const QItemSelection &selected, const QItemSelection&)

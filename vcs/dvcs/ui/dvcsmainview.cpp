@@ -65,7 +65,7 @@ DVCSmainView::~DVCSmainView()
 
 void DVCSmainView::slotAddTab(QWidget * tab, const QString& label)
 {
-    kDebug(9509) << "adding tab:" << label;
+    kDebug() << "adding tab:" << label;
 
     int idx = tabwidget->addTab( tab, label );
     tabwidget->setCurrentIndex(idx);

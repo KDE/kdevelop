@@ -136,7 +136,7 @@ QString DVCSjob::output() const
 void DVCSjob::start()
 {
     if( !d->directory.isEmpty() ) {
-        kDebug(9509) << "Working directory:" << d->directory;
+        kDebug() << "Working directory:" << d->directory;
         d->childproc->setWorkingDirectory(d->directory);
     }
 
@@ -150,7 +150,7 @@ void DVCSjob::start()
     connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
             SLOT(slotReceivedStderr(const QStringList&)) );
 
-    kDebug(9509) << "Execute dvcs command:" << dvcsCommand();
+    kDebug() << "Execute dvcs command:" << dvcsCommand();
 
     d->outputLines.clear();
     d->isRunning = true;
@@ -182,7 +182,7 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
 //     d->failed = true; //Some DVCS (Git) commands like to use stderr
     setError( d->childproc->exitCode() );
     setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
-    kDebug(9509) << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
+    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
     emitResult(); //KJob
     emit resultsReady(this); //VcsJob
 }
@@ -209,8 +209,8 @@ void DVCSjob::slotReceivedStdout(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug(9509)<<"received output:";
-    kDebug(9509)<<output.join("\n");
+    kDebug()<<"received output:";
+    kDebug()<<output.join("\n");
 }
 
 void DVCSjob::slotReceivedStderr(const QStringList& output)
@@ -218,8 +218,8 @@ void DVCSjob::slotReceivedStderr(const QStringList& output)
     // accumulate output
     d->outputLines += output;
 
-    kDebug(9509)<<"received error:";
-    kDebug(9509)<<output.join("\n");
+    kDebug()<<"received error:";
+    kDebug()<<output.join("\n");
 }
 
 KDevelop::VcsJob::JobStatus DVCSjob::status() const

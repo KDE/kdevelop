@@ -48,14 +48,14 @@ public:
             return;
         KDevelop::VcsDiff diff = qVariantValue<KDevelop::VcsDiff>( m_job->fetchResults() );
 
-        kDebug(9510) << "diff:" << diff.leftTexts().count();
+        kDebug() << "diff:" << diff.leftTexts().count();
         foreach( KDevelop::VcsLocation l, diff.leftTexts().keys() )
         {
-            kDebug(9510) << "diff:" << l.localUrl() << l.repositoryServer();
+            kDebug() << "diff:" << l.localUrl() << l.repositoryServer();
         }
-        kDebug(9510) << "diff:" << diff.diff();
-        kDebug(9510) << "diff:" << diff.type();
-        kDebug(9510) << "diff:" << diff.contentType();
+        kDebug() << "diff:" << diff.diff();
+        kDebug() << "diff:" << diff.type();
+        kDebug() << "diff:" << diff.contentType();
         m_ui->diffDisplay->setPlainText( diff.diff() );
         m_ui->diffDisplay->setReadOnly( true );
 

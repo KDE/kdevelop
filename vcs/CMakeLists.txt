@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
+
 set(kdevplatformvcs_UIS
     widgets/vcsannotationwidget.ui
     widgets/vcscommitdialog.ui

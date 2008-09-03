@@ -43,7 +43,7 @@ bool IDVCSexecutor::prepareJob(DVCSjob* job, const QString& repository, enum Req
     // directory is not yet under git control
     if (op == NormalOperation &&
         !isValidDirectory(repository)) {
-        kDebug(9509) << repository << " is not a valid repository";
+        kDebug() << repository << " is not a valid repository";
         return false;
     }
 
@@ -78,7 +78,7 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
         else
             file = url.path();
         args << file;
-        kDebug(9509) << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
+        kDebug() << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
     }
 
     *job << args;

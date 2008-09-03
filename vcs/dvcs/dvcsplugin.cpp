@@ -374,7 +374,7 @@ KDevelop::ContextMenuExtension
     {
         if(isVersionControlled( url ) )
         {
-            kDebug(9509) << url << "is version controlled";
+            kDebug() << url << "is version controlled";
             hasVersionControlledEntries = true;
             break;
         }
@@ -506,12 +506,12 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
     DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
 
-    kDebug(9509) << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
+    kDebug() << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
     KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
 
     if( !curProject )
     {
-        kDebug(9509) << "couldn't find project for url:" << checkoutJob->getDirectory();
+        kDebug() << "couldn't find project for url:" << checkoutJob->getDirectory();
         return;
     }
     KUrl projectFile = curProject->projectFileUrl();
@@ -519,10 +519,10 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
     core()->projectController()->closeProject(curProject); //let's ask to save all files!
 
     if (!checkoutJob->exec())
-        kDebug(9509) << "CHECKOUT PROBLEM!";
+        kDebug() << "CHECKOUT PROBLEM!";
 
-    kDebug(9509) << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
-    kDebug(9509) << "Project was closed, now it will be opened";
+    kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    kDebug() << "Project was closed, now it will be opened";
     if(!core()->projectController()->openProject(projectFile))
     {
         KMessageBox::sorry( 0,

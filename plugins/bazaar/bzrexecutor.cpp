@@ -65,11 +65,11 @@ bool BzrExecutor::isValidDirectory(const KUrl & dirPath)
         job->exec();
         if (job->status() == KDevelop::VcsJob::JobSucceeded)
         {
-            kDebug(9527) << "Dir:" << path << " is inside work tree of bzr" ;
+            kDebug() << "Dir:" << path << " is inside work tree of bzr" ;
             return true;
         }
     }
-    kDebug(9527) << "Dir:" << dirPath.path() << " is not inside work tree of bzr" ;
+    kDebug() << "Dir:" << dirPath.path() << " is not inside work tree of bzr" ;
     return false;
 }
 

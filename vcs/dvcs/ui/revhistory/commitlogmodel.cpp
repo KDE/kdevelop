@@ -31,7 +31,7 @@ CommitLogModel::CommitLogModel(const QList<DVCScommit> revisions, QObject* paren
     headerInfo << "Graph" << "Short Log" << "Author" << "Date";
     revs = revisions;
     rowCnt = revs.count();
-    kDebug(9509) << "revisins count is: " << rowCnt;
+    kDebug() << "revisins count is: " << rowCnt;
     if (!revs.isEmpty() )
         branchCnt = revs.last().getProperties().count(); //num of branch (size of properties of initial commit)
     reset(); //to set header

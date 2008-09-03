@@ -73,7 +73,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 {
     m_contextIndex = m_ui->eventView->indexAt( point );
     if( !m_contextIndex.isValid() ){
-        kDebug(9509) << "contextMenu is not in TreeView";
+        kDebug() << "contextMenu is not in TreeView";
         return;
     }
 
