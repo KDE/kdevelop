@@ -26,6 +26,8 @@
 #include <ktemporaryfile.h>
 #include <kprocess.h>
 
+#include <QMap>
+
 #include "interfaces/idocument.h"
 #include "interfaces/icore.h"
 #include "interfaces/ilanguagecontroller.h"
@@ -42,6 +44,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/duchainutils.h"
+#include "language/duchain/codemodel.h"
 #include "language/duchain/types/functiontype.h"
 
 #include "classbrowserplugin.h"
@@ -51,6 +54,60 @@
 
 using namespace KTextEditor;
 using namespace KDevelop;
+
+#ifdef NEW_CLASS_MODEL
+
+class NewClassModel {
+  void initialize(const QSet<IndexedString>& allFiles);
+};
+
+struct ClassModelNode {
+  CodeModelItem::Kind m_kind;
+  ClassModelNode() : m_kind(CodeModelItem::Namespace)  {
+  }
+  QualifiedIdentifier m_scope;
+  QSet<IndexedString> m_relevantFiles;
+
+  QList<ClassModelNode> computeChildren() const;
+};
+
+QList<ClassModelNode> ClassModelNode::computeChildren() const {
+  QMap<Identifier, ClassModelNode> ret;
+
+  foreach(IndexedString file, m_relevantFiles) {
+    int itemCount = 0;
+    const CodeModelItem* items;
+
+    CodeModel::self().items(file, itemCount, items);
+    
+    for(int a = 0; a < itemCount; ++a) {
+      QualifiedIdentifier id(items[a].id.identifier());
+      if(id.beginsWith(m_scope) && id.count() > m_scope.count()) {
+        Identifier nextId = id.at(m_scope.count());
+        
+        ret[nextId].m_relevantFiles.insert(file);
+        
+        if(m_scope.count()+1 == id.count())
+          ///We're representing the item directly, so take its kind
+          ret[nextId].m_kind = items[a].kind;
+      }
+    }
+  }
+
+  QList<ClassModelNode> realRet;
+  for(QMap<Identifier, ClassModelNode>::const_iterator it = ret.begin(); it != ret.end(); ++it) {
+    realRet.append(*it);
+    realRet.m_scope = m_scope + it.key();
+  }
+  ///@todo eventually sort the list here
+  return realRet;
+}
+
+void NewClassModel::initialize(const QSet<IndexedString>& allFiles) {
+  
+}
+
+#endif
 
 ClassModel::ClassModel(ClassBrowserPlugin* parent)
   : QAbstractItemModel(parent)
