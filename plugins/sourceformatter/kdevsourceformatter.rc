@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kdevsourceformatter" version="1">
+<MenuBar>
+ <Menu name="edit">
+  <Text context="@title:menu">Edit</Text>
+   <Action name="edit_beautify" group="edit_formatting"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

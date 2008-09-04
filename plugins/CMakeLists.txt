@@ -15,6 +15,7 @@ add_subdirectory(classbrowser)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(coverage)
+add_subdirectory(sourceformatter)
 
 macro_optional_find_package(Commoncpp)
 #TODO: Improve detection, apparently we use headers that are not part of either
