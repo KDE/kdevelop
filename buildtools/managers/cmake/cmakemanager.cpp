@@ -231,9 +231,9 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     CMakeFolderItem* m_rootItem=0;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
-    KUrl folderUrl(cmakeInfoFile.toLocalFile(KUrl::RemoveTrailingSlash));
     cmakeInfoFile.addPath("CMakeLists.txt");
 
+    KUrl folderUrl=project->folder();
     kDebug(9042) << "found module path is" << m_modulePathDef;
     kDebug(9042) << "file is" << cmakeInfoFile.path();
     
@@ -351,13 +351,17 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
         m_watchers[item->project()]->addFile(cmakeListsPath.toLocalFile());
-        QString currentBinDir=KUrl::relativeUrl(m_realRoot[folder->project()], folder->url());
-        vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
-        vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile()));
+        QString binDir=KUrl::relativePath(m_realRoot[folder->project()].toLocalFile(), folder->url().toLocalFile());
+        if(binDir.startsWith("./"))
+            binDir=binDir.remove(0, 2);
+        QString currentBinDir=vm->value("CMAKE_BINARY_DIR")[0]+binDir;
+        
+        vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(currentBinDir));
+        vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
         vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
 
-        kDebug(9042) << "currentBinDir" << vm->value("CMAKE_CURRENT_BINARY_DIR");
-
+        kDebug(9042) << "currentBinDir" << KUrl(vm->value("CMAKE_BINARY_DIR")[0]) << vm->value("CMAKE_CURRENT_BINARY_DIR");
+        
     #ifdef CMAKEDEBUGVISITOR
         CMakeAstDebugVisitor dv;
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
@@ -415,10 +419,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             }
         }
 
-        QString folderUrl= folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
         QStringList directories;
-        directories += folderUrl;
-        directories += vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir;
+        directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
+        directories += currentBinDir;
 
         foreach(const QString& s, v.includeDirectories())
         {
@@ -429,7 +432,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 path.addPath(s);
                 dir=path.toLocalFile();
             }
-            directories.append(dir);
+            if(!directories.contains(dir))
+                directories.append(dir);
         }
         folder->setIncludeDirectories(directories);
         folder->setDefinitions(v.definitions());
@@ -513,8 +517,12 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
 {
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
-    QString bindir=group.readEntry("CurrentBuildDir", QString());
-    QString instdir=group.readEntry("CurrentBuildDir", QString());
+    
+    KUrl binurl=group.readEntry("CurrentBuildDir");
+    KUrl insturl=group.readEntry("CurrentInstallDir");
+    
+    QString bindir=binurl.toLocalFile(KUrl::AddTrailingSlash);
+    QString instdir=insturl.toLocalFile(KUrl::AddTrailingSlash);
 
     KUrl::List newList;
     foreach(QString s, dirs)
@@ -526,7 +534,7 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         }
         else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
         {
-            s=s.replace("#[install_dir]", bindir);
+            s=s.replace("#[install_dir]", instdir);
         }
 //         kDebug(9042) << "adding " << s;
         newList.append(KUrl(s));
@@ -548,6 +556,7 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     if(!folder)
         return KUrl::List();
 
+    kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
     KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
     kDebug(9042) << "Include directories!" << l;
     return l;
