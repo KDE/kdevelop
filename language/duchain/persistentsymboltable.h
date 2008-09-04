@@ -63,6 +63,9 @@ namespace KDevelop {
     void contexts(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDUContext*& contexts) const;
     
     static PersistentSymbolTable& self();
+
+    //Very expensive: Checks for problems in the symbol table
+    void selfAnalysis();
     
     private:
       class PersistentSymbolTablePrivate* d;

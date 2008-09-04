@@ -573,6 +573,15 @@ bool DUChain::isInMemory(uint topContextIndex) const {
   return it != sdDUChainPrivate->m_chainsByIndex.end();
 }
 
+IndexedString DUChain::urlForIndex(uint index) const {
+  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+  QHash<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
+  if(it != sdDUChainPrivate->m_chainsByIndex.end())
+    return (*it)->url();
+  return TopDUContextDynamicData::loadUrl(index);
+}
+
+
 TopDUContext* DUChain::chainForIndex(uint index) const {
 
   if(sdDUChainPrivate->m_destroyed)

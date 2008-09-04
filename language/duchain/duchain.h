@@ -102,6 +102,9 @@ public:
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;
 
+  ///Returns the url for the given top-context index if available. This does have some cost, so avoid it when possible.
+  Q_SCRIPTABLE IndexedString urlForIndex(uint index) const;
+  
   /// Only used for debugging at the moment
   Q_SCRIPTABLE QList<KUrl> documents() const;
 

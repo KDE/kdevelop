@@ -109,6 +109,13 @@ bool IndexedTopDUContext::isLoaded() const {
     return false;
 }
 
+IndexedString IndexedTopDUContext::url() const {
+  if(m_index)
+    return DUChain::self()->urlForIndex(m_index);
+  else
+    return IndexedString();
+}
+
 TopDUContext* IndexedTopDUContext::data() const {
   if(m_index)
     return DUChain::self()->chainForIndex(m_index);

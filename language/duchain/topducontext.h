@@ -110,6 +110,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     uint index() const {
       return m_index;
     }
+    
+    IndexedString url() const;
   private:
   uint m_index;
 };

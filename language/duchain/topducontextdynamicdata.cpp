@@ -65,6 +65,27 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_t
 TopDUContextDynamicData::~TopDUContextDynamicData() {
 }
 
+IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
+  QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
+  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QFile file(fileName);
+  if(file.open(QIODevice::ReadOnly)) {
+
+    uint readValue;
+    file.read((char*)&readValue, sizeof(uint));
+    file.seek(sizeof(uint)*readValue + file.pos());
+
+    file.read((char*)&readValue, sizeof(uint));
+    file.seek(sizeof(uint)*readValue + file.pos());
+    
+    QByteArray data = file.read(sizeof(TopDUContextData));
+    const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+    return topData->m_url;
+  }
+  
+  return IndexedString();
+}
+
 TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);

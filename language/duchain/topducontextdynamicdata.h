@@ -29,6 +29,7 @@ namespace KDevelop {
 class TopDUContext;
 class DUContext;
 class Declaration;
+class IndexedString;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -71,6 +72,9 @@ class TopDUContextDynamicData {
   ///Loads the top-context from disk, or returns zero on failure. The top-context will not be registered anywhere, and will have no ParsingEnvironmentFile assigned.
   ///Also loads all imported contexts. The Declarations/Contexts will be correctly initialized, and put into the symbol tables if needed.
   static TopDUContext* load(uint topContextIndex);
+
+  ///Loads only the url out of the data stored on disk for the top-context.
+  static IndexedString loadUrl(uint topContextIndex);
   
   private:
     TopDUContext* m_topContext;

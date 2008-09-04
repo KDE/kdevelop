@@ -26,6 +26,7 @@
 #include "repositories/itemrepository.h"
 #include "identifier.h"
 #include "ducontext.h"
+#include "topducontext.h"
 
 namespace KDevelop {
 
@@ -217,7 +218,8 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
-    for(uint a = 0; a < oldItem->declarationsSize(); ++a)
+    uint oldSize = oldItem->declarationsSize();
+    for(uint a = 0; a < oldSize; ++a)
       if(!(oldItem->declarations()[a] == declaration))
         item.declarationsList().append(oldItem->declarations()[a]);
     
@@ -225,8 +227,10 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     Q_ASSERT(d->m_declarations.findIndex(item) == 0);
     
     //This inserts the changed item
-    if(item.declarationsSize() != 0)
-      d->m_declarations.index(request);
+    if(item.declarationsSize() != 0) {
+      uint newIndex = d->m_declarations.index(request);
+      Q_ASSERT(oldSize == d->m_declarations.itemFromIndex(newIndex)->declarationsSize()+1);
+    }
   }
 }
 
@@ -310,6 +314,23 @@ void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint&
     countTarget = 0;
     contextsTarget = 0;
   }
+}
+
+struct Visitor {
+  bool operator() (const PersistentSymbolTableItem* item) {
+    for(int a = 0; a < item->declarationsSize(); ++a) {
+      if(!item->declarations()[a].data()) {
+        kDebug() << "Item in symbol-table is invalid:" << item->id.identifier().toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
+      }
+    }
+    return true;
+  }
+};
+
+void PersistentSymbolTable::selfAnalysis() {
+  Visitor v;
+  kDebug() << d->m_declarations.statistics();
+  d->m_declarations.visitAllItems(v);
 }
 
 PersistentSymbolTable& PersistentSymbolTable::self() {
