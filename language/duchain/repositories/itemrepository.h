@@ -525,6 +525,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         dynamic->apply(m_data + index - AdditionalSpacePerItem);
       return ret;
     }
+    
+    uint available() const {
+      return m_available;
+    }
 
     uint usedMemory() const {
       return ItemRepositoryBucketSize - m_available;
@@ -558,6 +562,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     
     uint freeItemCount() const {
       return m_freeItemCount;
+    }
+    
+    short unsigned int totalFreeItemsSize() const {
+      short unsigned int ret = 0;
+      short unsigned int currentIndex = m_largestFreeItem;
+      while(currentIndex) {
+        ret += freeSize(currentIndex);
+        currentIndex = followerIndex(currentIndex);
+      }
+      return ret;
     }
     
     short unsigned int largestFreeItemSize() const {
@@ -975,6 +989,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       bucketPtr = m_fastBuckets[bucket];
     }
     
+    --m_statItemCount;
+    
     bucketPtr->deleteItem(index, hash);
     
     int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
@@ -1090,6 +1106,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
     ret += QString("loaded buckets: %1 current bucket: %2 used memory: %3").arg(loadedBuckets).arg(m_currentBucket).arg(usedMemory());
     ret += QString("\nbucket hash clashed items: %1 total items: %2").arg(m_statBucketHashClashes).arg(m_statItemCount);
+    uint usedBucketSpace = Bucket<Item, ItemRequest, DynamicData>::DataSize * m_currentBucket;
+    uint freeBucketSpace = 0;
+    for(int a = 1; a < m_currentBucket+1; ++a) {
+      Bucket<Item, ItemRequest, DynamicData>* bucket = bucketForIndex(a);
+      if(bucket) {
+        freeBucketSpace += bucket->totalFreeItemsSize() + bucket->available();
+      }
+    }
+    ret += QString("\nused space for buckets: %1 free space in buckets: %2").arg(usedBucketSpace).arg(freeBucketSpace);
     //If m_statBucketHashClashes is high, the bucket-hash needs to be bigger
     return ret;
   }
@@ -1109,12 +1134,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   ///               that returns whether more items are wanted.
   ///@param onlyInMemory If this is true, only items are visited that are currently in memory.
   template<class Visitor>
-  void visitAllItems(Visitor& visitor, bool /*onlyInMemory*/ = false) const {
+  void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const {
     ThisLocker lock(&m_mutex);
-    for(uint a = 0; a < m_bucketCount; ++a) {
-      if(m_buckets[a])
-        if(!m_buckets[a]->visitAllItems(visitor))
+    for(uint a = 1; a <= m_currentBucket; ++a) {
+      if(!onlyInMemory || m_buckets[a]) {
+        if(bucketForIndex(a) && !bucketForIndex(a)->visitAllItems(visitor))
           return;
+      }
     }
   }
 
