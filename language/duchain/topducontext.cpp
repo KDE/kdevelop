@@ -555,8 +555,12 @@ struct TopDUContext::ContextChecker {
     if (top->m_local->m_ownIndex != context.topContextIndex()) {
 
       // Make sure that this declaration is accessible
-      if (!dontCheckImport && !top->recursiveImportIndices().contains(context.topContextIndex()))
-        return false;
+      {
+        QMutexLocker lock(&importStructureMutex);
+
+        if (!dontCheckImport && !top->recursiveImportIndices().contains(context.topContextIndex()))
+          return false;
+      }
 
       DUContext* ctx = context.data();
       if(!ctx)
@@ -594,7 +598,11 @@ struct TopDUContext::DeclarationChecker {
   bool operator()(IndexedDeclaration dec) const {
 
     if (top->m_local->m_ownIndex != dec.topContextIndex()) {
-      bool visible = top->m_local->m_recursiveImportIndices.contains(dec.topContextIndex());
+      bool visible;
+      {
+        QMutexLocker lock(&importStructureMutex);
+        visible = top->m_local->m_recursiveImportIndices.contains(dec.topContextIndex());
+      }
       if(createVisibleCache && visible)
         createVisibleCache->append(dec);
 
@@ -903,9 +911,6 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
-
-  QMutexLocker lock(&importStructureMutex);
-//   d_func()->needImportStructure();
 
   applyAliases(identifiers, storer, position, false);
 
