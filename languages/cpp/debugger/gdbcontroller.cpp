@@ -603,7 +603,12 @@ bool GDBController::startDebugger()
 {
     kDebug(9012) << "Starting debugger controller";
 
-    Q_ASSERT (!gdb_);
+    if(gdb_) {
+        kWarning() << "gdb_ object still existed";
+        delete gdb_;
+        gdb_ = 0;
+    }
+    
     gdb_ = new GDB();
 
     /** FIXME: connect ttyStdout. It takes QByteArray, so
