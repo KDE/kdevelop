@@ -28,39 +28,31 @@ Boston, MA 02110-1301, USA.
 #include <QStringList>
 
 #include "astyle.h"
-#include "astylewrapper_export.h"
 
 class KSharedConfig;
 template<class T> class KSharedPtr;
 
-class ASTYLEWRAPPER_EXPORT AStyleFormatter : public astyle::ASFormatter
+class AStyleFormatter : public astyle::ASFormatter
 {
     public:
         /** Creates an empty AStyleFormatter with C style by default.
         */
         AStyleFormatter();
-        AStyleFormatter(const QMap<QString, QVariant> &options);
+//         AStyleFormatter(const QMap<QString, QVariant> &options);
         
-        QString formatSource(const QString &text, const QString &indent=QString());
+        QString formatSource(const QString &text);
         
         QVariant option(const QString &name);
         void setOption(const QString &key, const QVariant &value);
-        void setOptions(const QMap<QString, QVariant> &options);
+//         void setOptions(const QMap<QString, QVariant> &options);
         QString indentString();
-//         QString extensions() const;
-        /**
-        * Extensions from the widget passed in.
-        * We preserve the order, so common extensions will
-        * end up at the top
-        * @param ext
-        */
-//         void setExtensions(QString ext);
-//         bool hasExtension(const QString &extension);
-        
+
         bool predefinedStyle(const QString &name);
-        void loadConfig(const KSharedPtr<KSharedConfig> &config);
-        void loadStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
-        void saveStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+        void loadStyle(const QString &content);
+        QString saveStyle();
+//         void loadConfig(const KSharedPtr<KSharedConfig> &config);
+//         void loadStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+//         void saveStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
         
         // indent
         void setTabIndentation(int length, bool forceTabs);
@@ -99,8 +91,6 @@ class ASTYLEWRAPPER_EXPORT AStyleFormatter : public astyle::ASFormatter
     private:
         QString m_indentString;
         QMap<QString, QVariant> m_options;
-        QStringList m_extensions;
-        QMap<QString, QString> m_searchExtensions;
 };
 
 #endif // ASTYLEFORMATTER_H

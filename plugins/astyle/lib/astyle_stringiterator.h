@@ -26,12 +26,8 @@ Boston, MA 02110-1301, USA.
 #include <QTextStream>
 
 #include "astyle.h"
-#include "astylewrapper_export.h"
 
-//#define GLOBALDOC_OPTIONS 1
-//#define PROJECTDOC_OPTIONS 2
-
-class ASTYLEWRAPPER_EXPORT AStyleStringIterator : public astyle::ASSourceIterator
+class AStyleStringIterator : public astyle::ASSourceIterator
 {
     public:
 

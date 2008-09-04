@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartgui name="kdevastyle" version="8">
-<MenuBar>
- <Menu name="edit">
-  <Text context="@title:menu">Edit</Text>
-   <Action name="edit_astyle_reformat" group="edit_formatting"/>
- </Menu>
-</MenuBar>
-</kpartgui>

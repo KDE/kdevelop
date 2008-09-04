@@ -21,43 +21,32 @@ Boston, MA 02110-1301, USA.
 #ifndef ASTYLEPREFERENCES_H
 #define ASTYLEPREFERENCES_H
 
-#include <KCModule>
-
+#include "sourceformatter/interfaces/isourceformatter.h"
 #include "ui_astyle_preferences.h"
 
-namespace KTextEditor
-{
-    class Document;
-    class View;
-}
-class QListWidgetItem;
-
-class AStylePlugin;
+// class AStylePlugin;
 class AStyleFormatter;
 
-class AStylePreferences : public KCModule, public Ui::AStylePreferences
+class AStylePreferences : public SettingsWidget, public Ui::AStylePreferences
 {
         Q_OBJECT
 
     public:
-        AStylePreferences(QWidget *parent, const QVariantList &args);
+        enum Language { CPP, Java, CSharp};
+        
+        AStylePreferences(Language lang=CPP, QWidget *parent=0);
         virtual ~AStylePreferences();
+
+        virtual void load(const QString &name, const QString &content);
+        virtual QString save();
 
     protected:
         void init();
         void updatePreviewText(bool emitChangedSignal = true);
-        void addItemInStyleList(const QString &caption, const QString &name);
         void setItemChecked(int idx, bool checked);
         void updateWidgets();
 
-    public slots:
-        virtual void load();
-        virtual void save();
-
     private slots:
-        void currentStyleChanged(QListWidgetItem *current, QListWidgetItem *previous);
-        void deleteCurrentStyle();
-        void addStyle();
         void currentTabChanged();
         void indentChanged();
         void indentObjectsChanged(QListWidgetItem *item);
@@ -68,15 +57,9 @@ class AStylePreferences : public KCModule, public Ui::AStylePreferences
         void onelinersChanged();
 
     private:
-//         bool m_isGlobalWidget;
-//         QString m_lastExt;
-//         bool m_globalOptions;
-        QString m_bracketSample, m_indentSample, m_formattingSample;
-        QString m_fullSample;
         AStyleFormatter *m_formatter;
-        KTextEditor::View *m_view;
-        KTextEditor::Document *m_document;
-        bool m_enableWidgetSignals;
+        Language m_lang;
+/*        bool m_enableWidgetSignals;*/
 };
 
 #endif // ASTYLEPREFERENCES_H

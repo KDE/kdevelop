@@ -22,63 +22,57 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 #ifndef ASTYLEPLUGIN_H
 #define ASTYLEPLUGIN_H
 
-#include <QMap>
-#include <QVariant>
-#include <QString>
-#include <QList>
-#include <KUrl>
-
 #include <interfaces/iplugin.h>
+#include "sourceformatter/interfaces/isourceformatter.h"
 
-namespace KDevelop {
-    class Context;
-    class ContextMenuExtension;
-    class ProjectBaseItem;
-}
 class AStyleFormatter;
 
-class QMenu;
-class QWidget;
-class QDomElement;
-class KDialog;
-class KAction;
-
-namespace KParts {
-    class Part;
-}
-namespace KTextEditor {
-    class Cursor;
-}
-
-class AStylePlugin : public KDevelop::IPlugin
+class AStylePlugin : public KDevelop::IPlugin, public ISourceFormatter
 {
     Q_OBJECT
+    Q_INTERFACES(ISourceFormatter)
 
     public:
         explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
         ~AStylePlugin();
 
-        /**
-        * Format the selected files with the current style.
+        virtual QString name();
+        virtual QString caption();
+        virtual QString description();
+        
+        /** Formats using the current style.
         */
-        void formatFiles(KUrl::List &list);
+        virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime);
 
-    private slots:
-        void activePartChanged(KParts::Part *part);
-        void beautifySource();
-        void formatItem();
-        virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    
-    protected:
-        void replaceSpacesWithTab(QString &input);
+        /** \return A map of predefined styles (a key and a caption for each type)
+        */
+        virtual QMap<QString, QString> predefinedStyles(const KMimeType::Ptr &mime);
+        /** Load the predefined type of name \arg name, or if the first arg is empty, the style
+        *   defined by the options string \arg content.
+        */
+        virtual void setStyle(const QString &name, const QString &content = QString());
+
+        /** \return The widget to edit a style.
+        */
+        virtual SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime);
+        
+        /** \return The text used in the config dialog to preview the current style.
+        */
+        virtual QString previewText(const KMimeType::Ptr &mime);
+        
+        /** \return The indentation type of the currently selected style.
+        */
+        virtual IndentationType indentationType();
+        /** \return The number of spaces used for indentation if IndentWithSpaces is used,
+        * or the number of spaces per tab if IndentWithTabs is selected.
+        */
+        virtual int indentationLength();
+
+        static QString formattingSample();
+        static QString indentingSample();
 
     private:
-        KAction *m_formatTextAction;
-        KAction *m_formatFilesAction;
-
         AStyleFormatter *m_formatter;
-        KUrl::List m_urls;
-        QList<KDevelop::ProjectBaseItem*> m_prjItems;
 };
 
 #endif // ASTYLEPLUGIN_H

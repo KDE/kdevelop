@@ -29,8 +29,6 @@
 #ifndef ASTYLE_H
 #define ASTYLE_H
 
-#include "astylewrapper_export.h"
-
 #ifdef __VMS
 #define __USE_STD_IOSTREAM 1
 // #include <sstream>
@@ -142,7 +140,7 @@ class ASResource
 		static const string AS_CONST_CAST, AS_DYNAMIC_CAST, AS_REINTERPRET_CAST, AS_STATIC_CAST;
 };
 
-class ASTYLEWRAPPER_EXPORT ASBeautifier : protected ASResource
+class ASBeautifier : protected ASResource
 {
 	public:
 		ASBeautifier();
@@ -291,7 +289,7 @@ class ASTYLEWRAPPER_EXPORT ASBeautifier : protected ASResource
 };
 
 
-class ASTYLEWRAPPER_EXPORT ASEnhancer
+class ASEnhancer
 {
 	public:
 		// functions
@@ -364,7 +362,7 @@ class ASTYLEWRAPPER_EXPORT ASEnhancer
 };
 
 
-class ASTYLEWRAPPER_EXPORT ASFormatter : public ASBeautifier, private ASEnhancer
+class ASFormatter : public ASBeautifier, private ASEnhancer
 {
 	public:
 		ASFormatter();

@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>721</width>
+    <width>328</width>
     <height>475</height>
    </rect>
   </property>
@@ -15,61 +15,12 @@
      <property name="currentIndex" >
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabStyle" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>347</width>
-        <height>436</height>
-       </rect>
-      </property>
-      <attribute name="title" >
-       <string>Style</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4" >
-       <item>
-        <layout class="QGridLayout" name="gridLayout" >
-         <item row="1" column="0" >
-          <widget class="KPushButton" name="btnDelStyle" >
-           <property name="text" >
-            <string>Delete</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" >
-          <widget class="KPushButton" name="btnSaveStyle" >
-           <property name="text" >
-            <string>Save current theme</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="2" >
-          <widget class="KListWidget" name="listStyles" />
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_4" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>243</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabIndentqtion" >
       <property name="geometry" >
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>347</width>
+        <width>312</width>
         <height>436</height>
        </rect>
       </property>
@@ -319,7 +270,7 @@ relative to the previous line.</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>347</width>
+        <width>312</width>
         <height>436</height>
        </rect>
       </property>
@@ -576,27 +527,6 @@ multiple single-statement lines.</string>
      </widget>
     </widget>
    </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout" >
-     <item>
-      <widget class="QLabel" name="lblPreview" >
-       <property name="text" >
-        <string>Preview</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" native="1" name="textEditor" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -609,11 +539,6 @@ multiple single-statement lines.</string>
    <class>KListWidget</class>
    <extends>QListWidget</extends>
    <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>
