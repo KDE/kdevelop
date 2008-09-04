@@ -135,6 +135,7 @@ void SourceFormatterSettings::load()
 
 void SourceFormatterSettings::save()
 {
+    SourceFormatterManager::self()->saveConfig();
 }
 
 void SourceFormatterSettings::currentTabChanged()
@@ -174,7 +175,7 @@ void SourceFormatterSettings::populateStyleList()
     QMap<QString, QString> map = m_currentFormatter->predefinedStyles(m_currentMimeType);
     QMap<QString, QString>::const_iterator it = map.constBegin();
     for (; it != map.constEnd(); ++it)
-        addItemInStyleList(it.key(), it.value());
+        addItemInStyleList(it.value(), it.key());
     m_numberOfPredefinedStyles = map.count();
     
     //load custom styles

@@ -97,6 +97,7 @@ void SourceFormatterPlugin::beautifySource()
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
     SourceFormatterManager *manager = SourceFormatterManager::self();
+    manager->loadConfig();
 	ISourceFormatter *formatter = manager->formatterForMimeType(mime);
 
 	bool has_selection = false;
@@ -238,6 +239,7 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 {
 // 	m_formatter->loadConfig(KGlobal::config());
     SourceFormatterManager *manager = SourceFormatterManager::self();
+    manager->loadConfig();
 	//! \todo IStatus
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {
 		// check mimetype

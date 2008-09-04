@@ -148,6 +148,7 @@ ISourceFormatter* SourceFormatterManager::formatterForMimeType(const KMimeType::
         return 0;
     
     setActiveLanguage(languageNameForMimeType(mime));
+    kDebug() << "About to format file " << mime->name() << m_currentLang << endl;
     return formatterForLanguage(m_languages[mime->name()]);
 }
 
@@ -277,6 +278,7 @@ void SourceFormatterManager::setCurrentStyle(const QString &style)
         kDebug() << "currrent plugin is null for style " << m_currentLang << style << endl;
         return;
     }
+    kDebug() << "style is " << style << endl;
     
     if(m_activeConfigGroup.hasKey(style)) { // custom style
         QString content = m_activeConfigGroup.readEntry(style);
