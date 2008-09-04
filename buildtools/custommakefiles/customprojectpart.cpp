@@ -862,7 +862,7 @@ QString CustomProjectPart::makeEnvironment() const
         environstr += " ";
     }
 
-    KConfigGroup grp( kapp->config(), "MakeOutputWidget" );
+    KConfigGroup grp( kapp->config(), "MakeOutputView" );
     if( grp.readBoolEntry( "ForceCLocale", true ) )
         environstr += "LC_MESSAGES=" + EnvVarTools::quote( "C" )+" "+" "+"LC_CTYPE="+EnvVarTools::quote("C")+" ";
 
