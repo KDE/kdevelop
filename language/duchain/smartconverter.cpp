@@ -99,6 +99,7 @@ void SmartConverter::convertDUChain(DUContext* context) const
   d->m_editor->setCurrentUrl( context->url() );
 
   LockedSmartInterface iface  = d->m_editor->smart();
+  Q_ASSERT(iface);
   if (iface && !context->smartRange()) {
     context->setSmartRange(d->m_editor->topRange(iface, KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
     if (context->range().textRange() != iface.currentDocument()->documentRange())

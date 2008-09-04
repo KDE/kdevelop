@@ -40,7 +40,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-class EditorIntegratorPrivate : public KTextEditor::SmartRangeWatcher
+class EditorIntegratorPrivate
 {
 public:
   ~EditorIntegratorPrivate()
@@ -62,13 +62,6 @@ public:
   void enterCurrentRange(KTextEditor::SmartRange* range);
   void exitCurrentRange();
   QStack<KTextEditor::SmartRange*> m_currentRangeStack;
-
-protected:
-  /**
-    * Reimplementation of KTextEditor::SmartWatcher::rangeDeleted(), to clean up the smart
-    * range stack when a range is deleted (for example, on file close).
-    */
-  virtual void rangeDeleted(KTextEditor::SmartRange* range);
 };
 
 K_GLOBAL_STATIC( EditorIntegratorStatic, s_data)
@@ -83,6 +76,8 @@ EditorIntegrator::EditorIntegrator()
 EditorIntegrator::~ EditorIntegrator()
 {
   {
+    LockedSmartInterface locked(smart());
+    
     QMutexLocker lock(data()->mutex);
 
     if (d->m_currentDocument) {
@@ -363,6 +358,7 @@ void EditorIntegrator::clearCurrentDocument()
   // The editor integrator static mutex is locked, because this is only called with it locked
   d->m_currentDocument = 0;
   d->m_smart = 0;
+  d->m_currentRangeStack.clear();
 }
 
 void EditorIntegrator::releaseTopRange(KTextEditor::SmartRange * range)
@@ -401,31 +397,12 @@ void EditorIntegrator::exitCurrentRange(const LockedSmartInterface& iface)
 
 void EditorIntegratorPrivate::exitCurrentRange()
 {
-  KTextEditor::SmartRange* exited = m_currentRangeStack.pop();
-
-  // Only remove the watcher if the range is no longer in the stack
-  if (!m_currentRangeStack.contains(exited))
-    exited->removeWatcher( this );
+  m_currentRangeStack.pop();
 }
 
 void EditorIntegratorPrivate::enterCurrentRange(KTextEditor::SmartRange* range)
 {
-  // Double additions is covered in the text editor library
-  range->addWatcher(this);
-
   m_currentRangeStack.push(range);
-}
-
-void EditorIntegratorPrivate::rangeDeleted(KTextEditor::SmartRange* range)
-{
-  // Smart range already locked
-  int index = m_currentRangeStack.indexOf(range);
-
-  // We shouldn't get notifications of a range deletion when the range is not on our stack
-  Q_ASSERT(index != -1);
-  if (index != -1)
-    while (index > m_currentRangeStack.count())
-      exitCurrentRange();
 }
 
 int EditorIntegrator::rangeStackSize(const LockedSmartInterface& iface) const
