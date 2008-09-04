@@ -70,9 +70,9 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 void AStyleFormatter::updateFormatter()
 {
     // style
-    QString s = m_options["FStyle"].toString();
-    if(predefinedStyle(s))
-        return;
+//     QString s = m_options["FStyle"].toString();
+//     if(predefinedStyle(s))
+//         return;
 
     // fill
     int wsCount = m_options["FillCount"].toInt();
@@ -104,7 +104,7 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setMinConditionalIndentLength(m_options["MinConditional"].toInt());
 
     // brackets
-    s = m_options["Brackets"].toString();
+    QString s = m_options["Brackets"].toString();
     if(s == "Break")
         AStyleFormatter::setBracketFormatMode(astyle::BREAK_MODE);
     else if(s == "Attach")
@@ -165,7 +165,6 @@ void AStyleFormatter::resetStyle()
 
 bool AStyleFormatter::predefinedStyle( const QString & style )
 {
-//     m_options["FStyle"] = style;
     if (style == "ANSI") {
         resetStyle();
         setBracketIndent(false);
@@ -226,20 +225,6 @@ QString AStyleFormatter::indentString()
 {
     return QString(getIndentString().c_str());
 }
-
-// void AStyleFormatter::loadConfig(const KSharedPtr<KSharedConfig> &config)
-// {
-//     if(!config)
-//         return;
-//     
-//     KConfigGroup group = config->group("AStyle");
-//     QString style = group.readEntry("Style", "");
-//     
-//     if(style.isEmpty())
-//         loadStyle(config);
-//     else
-//         loadStyle(config, style);
-// }
 
 //     name, "BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,"
 //     "Brackets=Break,BracketsCloseHeaders=0,FStyle=,Fill=Tabs,"

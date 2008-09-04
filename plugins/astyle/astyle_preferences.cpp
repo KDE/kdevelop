@@ -117,17 +117,6 @@ void AStylePreferences::load(const QString &name, const QString &content)
 
 QString AStylePreferences::save()
 {
-//     QListWidgetItem *item = listStyles->currentItem();
-//     KConfigGroup g = KGlobal::config()->group("AStyle");
-//     
-//     if(item && !item->data(STYLE_ROLE).toString().isEmpty() && !btnSaveStyle->isEnabled()) { // only save style name
-//         g.writeEntry("Style", item->data(STYLE_ROLE).toString());
-//         g.writeEntry("Custom", ""); // clear it
-//     } else {
-//         g.writeEntry("Style", "");
-//         m_formatter->saveStyle(KGlobal::config());
-//     }
-//     g.sync();
     return m_formatter->saveStyle();
 }
 
@@ -231,99 +220,6 @@ void AStylePreferences::updatePreviewText(bool emitChangedSignal)
     emit previewTextChanged(output);
 }
 
-// void AStylePreferences::currentStyleChanged(QListWidgetItem *current, QListWidgetItem *)
-// {
-//     int idx = listStyles->currentRow();
-//     if(!current)
-//         return;
-// 
-//     if(idx <= STYLE_LINUX) {
-//         btnDelStyle->setEnabled(false);
-//         btnSaveStyle->setEnabled(idx == STYLE_CUSTOM);
-//         m_formatter->predefinedStyle(current->data(STYLE_ROLE).toString());
-//         if(idx != STYLE_CUSTOM) {
-//             m_enableWidgetSignals = false;
-//             updateWidgets();
-//             m_enableWidgetSignals = true;
-//         }
-//     }
-//     else {
-//         btnDelStyle->setEnabled(true);
-//         btnSaveStyle->setEnabled(false);
-//         m_formatter->loadStyle(KGlobal::config(),
-//             current->data(STYLE_ROLE).toString());
-//         //not necessary but avoid to reload ten times the editor's text
-//         m_enableWidgetSignals = false;
-//         updateWidgets();
-//         m_enableWidgetSignals = true;
-//     }
-// 
-//     m_document->setText(m_formatter->formatSource(m_fullSample));
-//     emit(changed(true));
-// }
-// 
-// void AStylePreferences::deleteCurrentStyle()
-// {
-//     int res = KMessageBox::questionYesNo( this, i18n("Are you sure you"
-//         " want to delete this style?", i18n("Delete style")) );
-//     if(res == KMessageBox::No)
-//         return;
-//     
-//     // remove from the list
-//     QListWidgetItem *item = listStyles->takeItem(listStyles->currentRow());
-//     if(!item)
-//         return;
-//     
-//     // remove from config file
-//     KConfigGroup g = KGlobal::config()->group("AStyle");
-//     QString name = item->data(STYLE_ROLE).toString();
-//     g.deleteEntry(name);
-//     g.deleteEntry("Caption" + name.mid(4));
-//     g.sync();
-// }
-// 
-// void AStylePreferences::addStyle()
-// {   
-//     KConfigGroup g = KGlobal::config()->group("AStyle");
-//     int currentRow = listStyles->currentRow();
-//     
-//     // check if we save an already existing style
-//     if(currentRow != STYLE_CUSTOM) {
-//         QListWidgetItem *item = listStyles->currentItem();
-//         if(item) {
-//             QString s = item->data(STYLE_ROLE).toString();
-//             m_formatter->saveStyle(KGlobal::config(), s);
-//         }
-//         btnSaveStyle->setEnabled(false);
-//         emit(changed(true));
-//         return;
-//     }
-//     
-//     // find available number
-//     int idx = 1;
-//     QString s = "User" + QString::number(idx);
-//     while(g.hasKey(s)) {
-//         ++idx;
-//         s = "User" + QString::number(idx);
-//     }
-//  
-//     // ask for caption
-//     bool ok;
-//     QString caption = QInputDialog::getText( this, 
-//         i18n("New style"), i18n("Please enter a name for the new style"),
-//         QLineEdit::Normal, i18n("Custom Style") + QString::number(idx),
-//         &ok);
-//     if(!ok) // dialog aborted
-//         return;
-//     
-//     // save in config file
-//     m_formatter->saveStyle(KGlobal::config(), s);
-//     g.writeEntry("Caption" + QString::number(idx), caption);
-//     //add item in list
-//     addItemInStyleList(caption, s);
-//     listStyles->setCurrentRow(listStyles->count() - 1);
-// }
-
 void AStylePreferences::currentTabChanged()
 {
     updatePreviewText(false);
@@ -342,7 +238,6 @@ void AStylePreferences::indentChanged()
             m_formatter->setSpaceIndentation(inpNuberSpaces->value()); 
             break;
     }
-    
     
     updatePreviewText();
 }

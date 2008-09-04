@@ -85,7 +85,7 @@ QMap<QString, QString> AStylePlugin::predefinedStyles(const KMimeType::Ptr &)
 
 void AStylePlugin::setStyle(const QString &name, const QString &content)
 {
-    if(name.isEmpty())
+    if(!name.isEmpty())
         m_formatter->predefinedStyle(name);
     else
         m_formatter->loadStyle(content);
