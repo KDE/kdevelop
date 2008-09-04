@@ -1621,6 +1621,17 @@ int value( const AbstractType::Ptr& type ) {
 void TestDUChain::testTemplateEnums()
 {
   {
+    QByteArray text("template<bool num> struct No {};  No<true> n;");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QVERIFY(top->localDeclarations()[1]->abstractType());
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< true >"));
+
+    release(top);
+  }
+  {
     QByteArray text("template<int num=5> struct No {};  No<> n;");
     TopDUContext* top = parse(text, DumpAll);
     DUChainWriteLocker lock(DUChain::lock());

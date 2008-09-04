@@ -593,8 +593,21 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     visit( node->expression_statement );
     visit( node->name );
 
+    const Token& token(tokenFromIndex(node->token));
+    
+    IndexedString True("true");
+    IndexedString False("false");
+    
+    if(token.symbol() == True || token.symbol() == False) {
+      ///We have a boolean constant, we need to catch that here
+      LOCKDUCHAIN;
+      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
+      m_lastInstance = Instance( true );
+      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.symbol() == True );
+    }
+    
     //Respect "this" token
-    if( tokenFromIndex(node->token).kind == Token_this ) {
+    if( token.kind == Token_this ) {
       LOCKDUCHAIN;
 
       AbstractType::Ptr thisType;
