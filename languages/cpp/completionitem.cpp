@@ -106,11 +106,13 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 const bool indentByDepth = false;
 
 //The name to be viewed in the name column
-QString nameForDeclaration(Declaration* dec) {
-  if (dec->identifier().toString().isEmpty())
+inline QString nameForDeclaration(Declaration* dec) {
+  QString ret = dec->identifier().toString();
+
+  if (ret.isEmpty())
     return "<unknown>";
   else
-    return dec->identifier().toString();
+    return ret;
 }
 
 KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompletionItem::completionProperties() const {
