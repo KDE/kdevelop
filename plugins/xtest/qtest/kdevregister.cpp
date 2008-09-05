@@ -19,18 +19,14 @@
 */
 
 #include "kdevregister.h"
-#include <project/interfaces/iprojectbuilder.h>
 #include "documentaccess.h"
 #include "suitebuilder.h"
 #include <veritas/test.h>
 #include "config/qtestsettings.h"
 #include <interfaces/iproject.h>
-#include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <interfaces/iruncontroller.h>
+#include <project/projectmodel.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/irun.h>
-#include <interfaces/iplugin.h>
 
 #include <interfaces/icore.h>
 #include <KDebug>
@@ -171,7 +167,6 @@ public:
 KDevRegister::KDevRegister()
     : m_root(0), m_runner(new SuiteBuilderRunner), m_reloading(false)
 {
-    m_runController = ICore::self()->runController();
     IUiController* uic = ICore::self()->uiController();
     uic->registerStatus(this);
 }
@@ -194,7 +189,6 @@ if (X) {\
 void KDevRegister::reload()
 {
     Q_ASSERT(project());
-    Q_ASSERT(m_runController);
     Q_ASSERT(m_runner);
     if (m_reloading) return;
     Q_ASSERT(!m_runner->isRunning());
@@ -203,38 +197,6 @@ void KDevRegister::reload()
     m_testTargets = fetchAllTestTargets(project()->projectItem());
     m_testNames = namesFromTargets(m_testTargets);
     fetchTestCommands(0);
-}
-
-void KDevRegister::buildTests()
-{
-    kDebug() << "";
-    Q_ASSERT(project());
-
-    IBuildSystemManager* bm = project()->buildSystemManager();
-    STOP_IF(!bm, "Build system manager zero");
-
-//     This is way too slow with cmake's dependency.
-//     IProjectBuilder* ipb = bm->builder(0);
-//     foreach(ProjectTestTargetItem* test, m_testTargets) {
-//         KJob* make = ipb->build(test);
-//         bool succ = make->exec();
-//         if (!succ) {
-//             m_testNames.removeAll(test->data(Qt::DisplayRole).toString());
-//         }
-//     }
-
-    KUrl buildRoot = bm->buildDirectory(project()->projectItem());
-    STOP_IF(buildRoot.isEmpty(), "Root build directory empty");
-    STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
-
-    // Still way too slow, a full rebuild is actually faster for a project
-    // without modifications.
-    IRun makeRun = KDevelop::ICore::self()->runController()->defaultRun();
-    makeRun.setExecutable(settings()->makeBinary());
-    makeRun.setArguments(m_testNames);
-    makeRun.setWorkingDirectory(buildRoot.path());
-    KJob* make = m_runController->execute(makeRun);
-    connect(make, SIGNAL(finished(KJob*)), this, SLOT(fetchTestCommands(KJob*)));
 }
 
 QString KDevRegister::statusName() const

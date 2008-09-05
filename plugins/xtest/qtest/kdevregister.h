@@ -63,7 +63,6 @@ Q_SIGNALS:
 // IStatus
 
 private slots:
-    void buildTests();
     void fetchTestCommands(KJob*);
     void suiteBuilderFinished();
 
@@ -71,7 +70,6 @@ private:
     Veritas::Test* m_root;
     QList<KDevelop::ProjectTestTargetItem*> m_testTargets;
     QList<QString> m_testNames;
-    KDevelop::IRunController* m_runController;
     SuiteBuilderRunner *m_runner;
     bool m_reloading;
 };
