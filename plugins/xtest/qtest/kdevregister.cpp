@@ -28,6 +28,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/irun.h>
 #include <interfaces/iplugin.h>
 
@@ -171,6 +172,8 @@ KDevRegister::KDevRegister()
     : m_root(0), m_runner(new SuiteBuilderRunner), m_reloading(false)
 {
     m_runController = ICore::self()->runController();
+    IUiController* uic = ICore::self()->uiController();
+    uic->registerStatus(this);
 }
 
 KDevRegister::~KDevRegister()
@@ -196,14 +199,10 @@ void KDevRegister::reload()
     if (m_reloading) return;
     Q_ASSERT(!m_runner->isRunning());
 
-    registerStatus();
-
     m_reloading = true;
     m_testTargets = fetchAllTestTargets(project()->projectItem());
     m_testNames = namesFromTargets(m_testTargets);
     fetchTestCommands(0);
-
-    emit showErrorMessage(QString("FOOBAR"), 10);
 }
 
 void KDevRegister::buildTests()
@@ -242,33 +241,6 @@ QString KDevRegister::statusName() const
 {
     return i18n("xTest");
 }
-
-#include <QMainWindow>
-#include <QStatusBar>
-
-#include <interfaces/iuicontroller.h>
-
-void KDevRegister::registerStatus()
-{
-    // TODO get rid of this joke. Factually istatus should not be
-    // limitted to plugins + backgroundparser, but exposed for all
-
-    QWidget* mw = QApplication::activeWindow();
-    if (!mw) { kDebug() << "No mw"; return; }
-    QList<QStatusBar*> sbs = mw->findChildren<QStatusBar*>();
-    if (sbs.isEmpty()) { kDebug() << "No statusbar"; return; }
-    QStatusBar* sb = sbs[0];
-    if (!sb) { kDebug() << "sb zero"; return; }
-    connect(this, SIGNAL(showProgress(int,int,int)),
-            sb, SLOT(showProgress(int,int,int)));
-    connect(this, SIGNAL(hideProgress()),
-            sb, SLOT(hideProgress()));
-    connect(this, SIGNAL(showErrorMessage(QString,int)),
-            sb, SLOT(showErrorMessage(QString,int)));
-//     IUiController* uic = ICore::self()->uiController();
-//     uic->registerStatus(this);
-}
-
 
 void KDevRegister::fetchTestCommands(KJob*)
 {

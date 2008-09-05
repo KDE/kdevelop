@@ -68,9 +68,6 @@ private slots:
     void suiteBuilderFinished();
 
 private:
-    void registerStatus();
-
-private:
     Veritas::Test* m_root;
     QList<KDevelop::ProjectTestTargetItem*> m_testTargets;
     QList<QString> m_testNames;
