@@ -56,7 +56,7 @@ Boston, MA 02110-1301, USA.
 #include "isourceformatter.h"
 
 K_PLUGIN_FACTORY(SourceFormatterFactory, registerPlugin<SourceFormatterPlugin>();)
-K_EXPORT_PLUGIN(SourceFormatterFactory("kdevsnippet"))
+K_EXPORT_PLUGIN(SourceFormatterFactory("kdevsourceformatter"))
 
 SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList &)
 		: KDevelop::IPlugin(SourceFormatterFactory::componentData(), parent)
