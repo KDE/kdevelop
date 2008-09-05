@@ -96,8 +96,7 @@ class ContextController : public QObject {
             //Duchain does not need to be locked
             KDevelop::DocumentCursor computePosition() const;
 
-            KDevelop::IndexedDUContext context;
-            //KDevelop::DUContextPointer context;
+            KDevelop::DUContextPointer context;
             KDevelop::DocumentCursor absoluteCursorPosition;
             KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
             QString alternativeString;
