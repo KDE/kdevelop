@@ -523,20 +523,20 @@ class NavigationContext : public KShared {
           else
             m_currentText += labelHighlight(i18n( "Decl.: " ));
 
-          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line() ), m_declaration, NavigationAction::JumpToSource );
+          makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
           m_currentText += " ";
           //m_currentText += "<br />";
           if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
             if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
               m_currentText += labelHighlight(i18n( " Def.: " ));
-              makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line() ), DeclarationPointer(definition), NavigationAction::JumpToSource );
+              makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
             }
           }
 
           if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
             if(definition->declaration()) {
               m_currentText += labelHighlight(i18n( " Decl.: " ));
-              makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line() ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
+              makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
             }
           }
 
@@ -548,7 +548,7 @@ class NavigationContext : public KShared {
               m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
               foreach(const SimpleRange& range, *it) {
                 m_currentText += "  ";
-                makeLink( QString("%1").arg(range.start.line), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+                makeLink( QString("%1").arg(range.start.line+1), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
               }
               m_currentText += "<br/>";
             }
