@@ -93,11 +93,12 @@ class TemporaryDataManager {
         m_mutex.lock();
 
       uint ret;
-
-      if(!m_freeIndices.isEmpty()) {
+      if(!m_freeIndicesWithData.isEmpty()) {
+        ret = m_freeIndicesWithData.pop();
+      }else if(!m_freeIndices.isEmpty()) {
         ret = m_freeIndices.pop();
-        if(!m_items[ret])
-          m_items[ret] = new T;
+        Q_ASSERT(!m_items[ret]);
+        m_items[ret] = new T;
       }else{
         ret = m_items.size();
         m_items.append(new T);
@@ -110,7 +111,7 @@ class TemporaryDataManager {
 
       return ret | DynamicAppendedListMask;
     }
-
+    
     void free(uint index) {
       Q_ASSERT(index & DynamicAppendedListMask);
       index &= DynamicAppendedListRevertMask;
@@ -118,22 +119,32 @@ class TemporaryDataManager {
       if(threadSafe)
         m_mutex.lock();
 
-      m_freeIndices.push(index);
+      freeItem(m_items[index]);
+      
+      m_freeIndicesWithData.push(index);
 
-/*      if(m_freeIndices.size() > 100) {
-        //Save some memory
-        for(int a = 0; a < m_freeIndices.size(); ++a) {
-          delete m_items[m_freeIndices[a]];
-          m_items[m_freeIndices[a]] = 0;
+      //Hold the amount of free indices with data between 100 and 200
+      if(m_freeIndicesWithData.size() > 200) {
+        for(int a = 0; a < 100; ++a) {
+          uint deleteIndexData = m_freeIndicesWithData.pop();
+          delete m_items[deleteIndexData];
+          m_items[deleteIndexData] = 0;
+          m_freeIndices.push(deleteIndexData);
         }
-      }*/
+      }
       
       if(threadSafe)
         m_mutex.unlock();
     }
 
   private:
+    //To save some memory, clear the lists
+    void freeItem(T* item) {
+      item->clear(); ///@todo make this a template specialization that only does this for containers
+    }
+    
     QVector<T*> m_items;
+    QStack<uint> m_freeIndicesWithData;
     QStack<uint> m_freeIndices;
     QMutex m_mutex;
 };
@@ -199,7 +210,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
         memcpy(const_cast<type*>(name()), rhs.name(), name ## Size() * sizeof(type)); \
       } \
       void name ## Initialize(bool dynamic) { if(dynamic) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
-      void name ## Free() { if(appendedListsDynamic()) temporaryHash ## container ## name().free(name ## Data); }  \
+      void name ## Free() { if(appendedListsDynamic()) { temporaryHash ## container ## name().free(name ## Data); } }  \
 
 
 ///@todo Make these things a bit faster(less recursion)
