@@ -48,7 +48,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iprojectcontroller.h>
-#include <project/importprojectjob.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
