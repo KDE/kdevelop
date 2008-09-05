@@ -28,7 +28,7 @@
 #include <interfaces/istatus.h>
 
 namespace Veritas { class Test; }
-namespace KDevelop { class ProjectTestTargetItem; class IRunController; }
+namespace KDevelop { class ProjectTestTargetItem; }
 class KJob;
 class SuiteBuilderRunner;
 

@@ -233,11 +233,11 @@ void KDevRegister::fetchTestCommands(KJob*)
 
     m_runner->m_suiteBuilder = sb;
     connect(m_runner, SIGNAL(finished()),
-            this, SLOT(suiteBuilderFinished()));
+            SLOT(suiteBuilderFinished()));
     connect(m_runner, SIGNAL(finished()),
-            this, SIGNAL(hideProgress()));
+            SIGNAL(hideProgress()));
     connect(sb, SIGNAL(progress(int,int,int)),
-            this, SIGNAL(showProgress(int,int,int)), Qt::QueuedConnection);
+            SIGNAL(showProgress(int,int,int)), Qt::QueuedConnection);
 
     m_runner->start();
 }
@@ -250,7 +250,6 @@ void KDevRegister::suiteBuilderFinished()
     Q_ASSERT(!m_runner->isRunning());
     Q_ASSERT(m_runner->m_suiteBuilder);
     m_root = m_runner->m_suiteBuilder->root();
-    kDebug() << m_root;
     emit reloadFinished(m_root);
     m_reloading = false;
 }
