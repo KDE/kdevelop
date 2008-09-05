@@ -1,5 +1,5 @@
 /*
-  * This file is part of KDevelop
+ * This file is part of KDevelop
  *
  * Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -20,18 +20,15 @@
  */
 
 #include "contextbrowserview.h"
-#include <QTextEdit>
-#include <QSplitter>
-#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
-#include <QCheckBox>
+#include <QToolButton>
 #include <QAction>
 #include <QMenu>
-
-#include <klocale.h>
+#include <KIcon>
+#include <KTextBrowser>
+#include <KLocale>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/ducontext.h>
@@ -48,154 +45,153 @@ const int maxHistoryLength = 30;
 
 using namespace KDevelop;
 
-ContextWidget::ContextWidget() : m_navigationWidget(0), m_nextHistoryIndex(0) {
-    m_layout = new QGridLayout;
-    QHBoxLayout* buttons = new QHBoxLayout;
-    QLabel* label = new QLabel(i18n("Context:"));
-    //m_layout->addWidget(label);
-    m_layout->setAlignment(Qt::AlignTop);
-    
-    m_previousButton = new QPushButton(i18n("Previous"));
-    m_nextButton = new QPushButton(i18n("Next"));
-    
-    m_previousButton->setEnabled(false);
-    m_nextButton->setEnabled(false);
-    buttons->addWidget(label);
-    buttons->addWidget(m_previousButton);
-    buttons->addWidget(m_nextButton);
-    
-    m_layout->addLayout(buttons, 0, 0, 1, 1);
-    
-    m_previousMenu = new QMenu(this);
-    m_previousButton->setMenu(m_previousMenu);
+QToolButton* ContextController::previousButton() const {
+    return m_previousButton;
+}
 
-    m_nextMenu = new QMenu(this);
-    m_nextButton->setMenu(m_nextMenu);
-    
-    setLayout(m_layout);
-    
+QToolButton* ContextController::nextButton() const {
+    return m_nextButton;
+}
+
+ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIndex(0), m_view(view) {
+    m_previousButton = new QToolButton();
+    m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_previousButton->setIcon(KIcon("go-previous"));
+    m_previousButton->setEnabled(false);
+    m_previousMenu = new QMenu();
+    m_previousButton->setMenu(m_previousMenu);
     connect(m_previousButton, SIGNAL(clicked(bool)), this, SLOT(historyPrevious()));
+    connect(m_previousMenu, SIGNAL(aboutToShow()), this, SLOT(previousMenuAboutToShow()));
+
+    m_nextButton = new QToolButton();
+    m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_nextButton->setIcon(KIcon("go-next"));
+    m_nextButton->setEnabled(false);
+    m_nextMenu = new QMenu();
+    m_nextButton->setMenu(m_nextMenu);
     connect(m_nextButton, SIGNAL(clicked(bool)), this, SLOT(historyNext()));
     connect(m_nextMenu, SIGNAL(aboutToShow()), this, SLOT(nextMenuAboutToShow()));
-    connect(m_previousMenu, SIGNAL(aboutToShow()), this, SLOT(previousMenuAboutToShow()));
+
+    m_resetButton = new QToolButton();
+    m_resetButton->setIcon(KIcon("view-refresh"));
+    connect(m_resetButton, SIGNAL(clicked(bool)),this, SLOT(resetHistory()));
 }
 
-void ContextWidget::historyNext() {
+QToolButton* ContextController::resetButton() const {
+    return m_resetButton;
+}
+
+void ContextController::resetHistory() {
+    m_nextHistoryIndex = 0;
+    m_history.clear();
+    updateButtonState();
+}
+
+ContextController::~ContextController() {
+    delete m_nextMenu;
+    delete m_previousMenu;
+}
+
+void ContextController::updateButtonState()
+{
+    m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
+    m_previousButton->setEnabled( m_nextHistoryIndex >= 2 );
+}
+
+void ContextController::historyNext() {
     if(m_nextHistoryIndex >= m_history.size()) {
-        kDebug() << "no forward history entry";
         return;
     }
-    
-    DocumentCursor c = m_history[m_nextHistoryIndex].computePosition();
-    
-    {
-        KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-        setContext(m_history[m_nextHistoryIndex].context.data(), SimpleCursor(c), true);
-    }
-
+    m_view->allowLockedUpdate();
+    openDocument(m_nextHistoryIndex); // opening the document at given position 
+                                      // will update the widget for us
     ++m_nextHistoryIndex;
-    
-    if(c.isValid() && !c.document().str().isEmpty()) {
-        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
-    }else{
-        kDebug() << "invalid cursor";
-    }
-
-    m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
-    m_previousButton->setEnabled( m_nextHistoryIndex > 2 );
+    updateButtonState();
 }
 
-void ContextWidget::historyPrevious() {
+void ContextController::openDocument(int historyIndex) {
+    Q_ASSERT_X(historyIndex >= 0, "openDocument", "negative history index");
+    Q_ASSERT_X(historyIndex < m_history.size(), "openDocument", "history index out of range");
+    DocumentCursor c = m_history[historyIndex].computePosition();
+    if (c.isValid() && !c.document().str().isEmpty()) {
+        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
+    }
+}
+
+void ContextController::historyPrevious() {
     if(m_nextHistoryIndex < 2) {
-        kDebug() << "no back history";
         return;
     }
     --m_nextHistoryIndex;
-    
-    DocumentCursor c = m_history[m_nextHistoryIndex-1].computePosition();
-    
-    {
-        KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-        setContext(m_history[m_nextHistoryIndex-1].context.data(), SimpleCursor(c), true);
-    }
-    
-    if(c.isValid() && !c.document().str().isEmpty()) {
-        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
-    }else{
-        kDebug() << "invalid cursor";
-    }
-
-    m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
-    m_previousButton->setEnabled( m_nextHistoryIndex > 2 );
+    m_view->allowLockedUpdate();
+    openDocument(m_nextHistoryIndex-1); // opening the document at given position 
+                                        // will update the widget for us
+    updateButtonState();
 }
 
-void ContextWidget::nextMenuAboutToShow() {
-    m_nextMenu->clear();
-    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+QString ContextController::actionTextFor(int historyIndex)
+{
+    HistoryEntry& entry = m_history[historyIndex];
+    QString actionText = entry.context ? entry.context->scopeIdentifier(true).toString() : QString();
+    if(actionText.isEmpty())
+        actionText = entry.alternativeString;
+    if(actionText.isEmpty())
+        actionText = "<unnamed>";
+    actionText += " @ ";
+    QString fileName = KUrl(entry.absoluteCursorPosition.document().str()).fileName();
+    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
+    return actionText;
+}
+
+inline QDebug operator<<(QDebug debug, const ContextController::HistoryEntry &he)
+{
+    DocumentCursor c = he.computePosition();
+    debug << "\n\tHistoryEntry " << c.line() << " " << c.document().str();
+    return debug;
+}
+
+void ContextController::nextMenuAboutToShow() {
+    QList<int> indices;
     for(int a = m_nextHistoryIndex; a < m_history.size(); ++a) {
-        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : QString();
-        if(actionText.isEmpty())
-            actionText = m_history[a].alternativeString;
-        if(!actionText.isEmpty())
-            actionText += "   ";
-        
-        actionText += KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
-        
-        QAction* action = new QAction(actionText, m_nextMenu);
-        action->setData(a);
-        m_nextMenu->addAction(action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
+        indices << a;
     }
+    fillHistoryPopup(m_nextMenu, indices);
 }
 
-void ContextWidget::previousMenuAboutToShow() {
-    m_previousMenu->clear();
-    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+void ContextController::previousMenuAboutToShow() {
+    QList<int> indices;
     for(int a = m_nextHistoryIndex-2; a >= 0; --a) {
-        QString actionText = m_history[a].context ? m_history[a].context->scopeIdentifier(true).toString() : QString();
-        if(actionText.isEmpty())
-            actionText = m_history[a].alternativeString;
-        if(!actionText.isEmpty())
-            actionText += "   ";
-        
-        actionText += KUrl(m_history[a].absoluteCursorPosition.document().str()).fileName() + QString(":%1").arg(m_history[a].absoluteCursorPosition.line());
+        indices << a;
+    }
+    fillHistoryPopup(m_previousMenu, indices);
+}
 
-        QAction* action = new QAction(actionText, m_previousMenu);
-        action->setData(a);
-        m_previousMenu->addAction(action);
+void ContextController::fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices) {
+    menu->clear();
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+    foreach(int index, historyIndices) {
+        QAction* action = new QAction(actionTextFor(index), menu);
+        action->setData(index);
+        menu->addAction(action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
     }
 }
 
-
-void ContextWidget::actionTriggered() {
+void ContextController::actionTriggered() {
     QAction* action = qobject_cast<QAction*>(sender());
-    if(action && action->data().type() == QVariant::Int) {
-        int historyPosition = action->data().toInt();
-        if(historyPosition >= 0 && historyPosition < m_history.size()) {
-            m_nextHistoryIndex = historyPosition + 1;
-            
-            DocumentCursor c = m_history[historyPosition].computePosition();
-            
-            {
-                KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-                setContext(m_history[historyPosition].context.data(), SimpleCursor(c), true);
-            }
-            if(c.isValid() && !c.document().str().isEmpty()) {
-                ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
-            }else{
-                kDebug() << "invalid cursor";
-            }
-            
-            m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
-            m_previousButton->setEnabled( m_nextHistoryIndex > 2 );
-        }
-    }else{
-        kDebug() << "error";
+    Q_ASSERT(action); Q_ASSERT(action->data().type() == QVariant::Int);
+    int historyPosition = action->data().toInt();
+    // kDebug() << "history pos" << historyPosition << m_history.size() << m_history;
+    if(historyPosition >= 0 && historyPosition < m_history.size()) {
+        m_nextHistoryIndex = historyPosition + 1;
+        m_view->allowLockedUpdate(); // opening the document at given position 
+                                     // will update the widget for us
+        openDocument(historyPosition);
+        updateButtonState();
     }
 }
 
-ContextWidget::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
+ContextController::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
         //Use a position relative to the context
         setCursorPosition(cursorPosition);
         if(ctx)
@@ -204,7 +200,7 @@ ContextWidget::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevelop::
             alternativeString += i18n("(changed)"); //This is used when the context was deleted in between
 }
 
-DocumentCursor ContextWidget::HistoryEntry::computePosition() {
+DocumentCursor ContextController::HistoryEntry::computePosition() const {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     DocumentCursor ret;
     if(context) {
@@ -216,7 +212,7 @@ DocumentCursor ContextWidget::HistoryEntry::computePosition() {
     return ret;
 }
 
-void ContextWidget::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
+void ContextController::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     if(context) {
         absoluteCursorPosition =  DocumentCursor(context->url().str(), cursorPosition.textCursor());
@@ -225,133 +221,148 @@ void ContextWidget::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor
     }
 }
 
-void ContextWidget::setContext(KDevelop::DUContext* context, const KDevelop::SimpleCursor& cursorPosition, bool noHistory) {
-    
-    //Manage history
-    if(!noHistory) {
-        if(context != m_context.data() && context != 0) {
-            m_history.resize(m_nextHistoryIndex); //Dump forward history
+bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position) {
+    if (m_nextHistoryIndex == 0) return false;
+    Q_ASSERT(m_nextHistoryIndex <= m_history.count());
+    HistoryEntry& he = m_history[m_nextHistoryIndex-1];
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() ); // is this necessary??
+    return (position.line == he.absoluteCursorPosition.line()) && (context->url() == he.context->url());
+}
 
-            
-            m_history.append(HistoryEntry(DUContextPointer(context), cursorPosition));
-            ++m_nextHistoryIndex;
-            
-            m_nextButton->setEnabled(false);
-            m_previousButton->setEnabled(true);
+void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
+{
+    if (context == 0) return;
 
-            if(m_history.size() > (maxHistoryLength + 5)) {
-                m_history = m_history.mid(m_history.size() - maxHistoryLength);
-                m_nextHistoryIndex = m_history.size();
-            }
-        }else if(context == m_context.data()) {
-            //Just update the cursor position in the existing history entry
-            m_history[m_nextHistoryIndex-1].setCursorPosition(cursorPosition);
+    if (isPreviousEntry(context, position)) {
+        kDebug() << "Previous history entry, ignoring";
+        return;
+    } else { // Append new history entry
+        m_history.resize(m_nextHistoryIndex); // discard forward history
+        m_history.append(HistoryEntry(DUContextPointer(context), position));
+        ++m_nextHistoryIndex;
+
+        updateButtonState();
+        if(m_history.size() > (maxHistoryLength + 5)) {
+            m_history = m_history.mid(m_history.size() - maxHistoryLength);
+            m_nextHistoryIndex = m_history.size();
         }
     }
-    
-    //Manage widget
-    if(m_context.data() != context) {
+}
+
+QWidget* ContextController::createWidget(KDevelop::DUContext* context) {
         m_context = DUContextPointer(context);
+        if(m_context) {
+            return m_context->createNavigationWidget();
+        }
+        return 0;
+}
+
+DeclarationController::DeclarationController() {
+}
+
+QWidget* DeclarationController::createWidget(Declaration* decl, TopDUContext* topContext) {
+    m_declaration = DeclarationPointer(decl);
+    return decl->context()->createNavigationWidget(decl, topContext);
+}
+
+
+void ContextBrowserView::resetWidget()
+{
+    if (m_navigationWidget) {
         delete m_navigationWidget;
         m_navigationWidget = 0;
-        if(isVisible()) {
-        //Only create the navigation-widget if the view is visible, for performance reasons
-            if(m_context)
-                m_navigationWidget = m_context->createNavigationWidget();
-            if(m_navigationWidget)
-                m_layout->addWidget(m_navigationWidget);
-        }
     }
 }
 
-DeclarationWidget::DeclarationWidget() : m_navigationWidget(0) {
-    m_layout = new QGridLayout;
-    m_layout->setAlignment(Qt::AlignTop);
-    QHBoxLayout* labelLayout = new QHBoxLayout;
-    labelLayout->addWidget(new QLabel(i18n("Declaration:")));
-    m_lockButton = new QCheckBox(i18n("lock"));
+void ContextBrowserView::updateLockIcon(bool checked) {
+    m_lockButton->setIcon(KIcon(checked ? "document-encrypt" : "document-decrypt"));
+}
+
+ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugin(plugin), m_navigationWidget(new KTextBrowser()) {
+    setWindowIcon( KIcon("applications-development-web") );
+
+    m_declarationCtrl = new DeclarationController();
+    m_contextCtrl = new ContextController(this);
+    
+    QHBoxLayout* buttons = new QHBoxLayout;
+    m_lockButton = new QToolButton();
+    m_lockButton->setCheckable(true);
     m_lockButton->setChecked(false);
-    labelLayout->addWidget(m_lockButton);
-    labelLayout->setAlignment(m_lockButton, Qt::AlignRight);
-    m_layout->addLayout(labelLayout, 0, 0, 1, 1);
+    updateLockIcon(m_lockButton->isChecked());
+    connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
+
+    buttons->addWidget(m_contextCtrl->previousButton());
+    buttons->addWidget(m_contextCtrl->nextButton());
+    buttons->addWidget(m_contextCtrl->resetButton());
+    buttons->addStretch();
+    buttons->addWidget(m_lockButton);
+
+    m_layout = new QVBoxLayout;
+    m_layout->addLayout(buttons);
+    m_layout->addWidget(m_navigationWidget);
+    //m_layout->addStretch();
     setLayout(m_layout);
-}
 
-void DeclarationWidget::setDeclaration(Declaration* decl, TopDUContext* topContext) {
-    m_declaration = DeclarationPointer(decl);
-
-    if(m_lockButton->isChecked())
-        return;
-    
-    delete m_navigationWidget;
-    m_navigationWidget = 0;
-    if(isVisible()) {
-        //Only create the navigation-widget if the view is visible, for performance reasons
-        m_navigationWidget = decl->context()->createNavigationWidget(decl, topContext);
-        if(m_navigationWidget)
-            m_layout->addWidget(m_navigationWidget);
-    }
-}
-
-void DeclarationWidget::setSpecialNavigationWidget(QWidget* widget) {
-    if(m_lockButton->isChecked())
-        return;
-
-    m_declaration = DeclarationPointer();
-    delete m_navigationWidget;
-    
-    m_navigationWidget = widget;
-    if(m_navigationWidget)
-        m_layout->addWidget(m_navigationWidget);
-}
-
-ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugin(plugin) {
-    
-    m_contextWidget = new ContextWidget;
-    m_declarationWidget = new DeclarationWidget;
-    
-    m_splitter = new QSplitter;
-    QGridLayout *layout = new QGridLayout;
-    
-    m_splitter->addWidget(m_contextWidget);
-    m_splitter->addWidget(m_declarationWidget);
-
-    resizeEvent(0);
-    
-    layout->addWidget(m_splitter, 0, 0);
-    setLayout(layout);
-    
     m_plugin->registerToolView(this);
-    
-    connect(plugin, SIGNAL(previousContextShortcut()), m_contextWidget, SLOT(historyPrevious()));
-    connect(plugin, SIGNAL(nextContextShortcut()), m_contextWidget, SLOT(historyNext()));
+    connect(plugin, SIGNAL(previousContextShortcut()), m_contextCtrl, SLOT(historyPrevious()));
+    connect(plugin, SIGNAL(nextContextShortcut()), m_contextCtrl, SLOT(historyNext()));
 }
 
 ContextBrowserView::~ContextBrowserView() {
     m_plugin->unRegisterToolView(this);
 }
 
-void ContextBrowserView::resizeEvent ( QResizeEvent * /*event*/ ) {
-    int total = 0;
-    if(width() > height()) {
-        total = width();
-        m_splitter->setOrientation(Qt::Horizontal);
+bool ContextBrowserView::isLocked() const {
+    bool isLocked;
+    if (m_allowLockedUpdate) {
+        isLocked = false;
     } else {
-        total = height();
-        m_splitter->setOrientation(Qt::Vertical);
+        isLocked = m_lockButton->isChecked();
     }
-    QList<int> sizes;
-    sizes << total/2 << total/2;
-    m_splitter->setSizes( sizes );
+    return isLocked;
 }
 
-DeclarationWidget* ContextBrowserView::declarationWidget() {
-    return m_declarationWidget;
+void ContextBrowserView::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
+{
+    if (!isLocked()) {
+        m_contextCtrl->updateHistory(context, position);
+    }
 }
 
-ContextWidget* ContextBrowserView::contextWidget() {
-    return m_contextWidget;
+void ContextBrowserView::updateMainWidget(QWidget* widget)
+{
+    if (widget) {
+        kDebug() << "";
+        resetWidget();
+        m_navigationWidget = widget;
+        m_layout->insertWidget(1, widget, 1);
+        m_allowLockedUpdate = false;
+    }
 }
 
+void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext) {
+    if (!isLocked() && isVisible()) {  // NO-OP if toolview is hidden, for performance reasons
+        QWidget* w = m_declarationCtrl->createWidget(decl, topContext);
+        updateMainWidget(w);
+    }
+}
+
+void ContextBrowserView::allowLockedUpdate() {
+    m_allowLockedUpdate = true;
+}
+
+void ContextBrowserView::setContext(KDevelop::DUContext* context) {
+    if (!isLocked() && isVisible()) { // NO-OP if toolview is hidden, for performance reasons
+        QWidget* w = m_contextCtrl->createWidget(context);
+        updateMainWidget(w);
+    }
+}
+
+void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
+    if (!isLocked() && isVisible()) {
+        Q_ASSERT(widget);
+        updateMainWidget(widget);
+    }
+}
 
 #include "contextbrowserview.moc"

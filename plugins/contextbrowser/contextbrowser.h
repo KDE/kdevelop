@@ -33,11 +33,14 @@
 #include <interfaces/irunprovider.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
+#include <language/editor/simplerange.h>
 
 namespace KDevelop {
   class IDocument;
+  class ILanguage;
   class ParseJob;
   class DUContext;
+  class TopDUContext;
   class DUChainBase;
 }
 
@@ -99,6 +102,17 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void registerAsRangeWatcher(KDevelop::DUChainBase* base);
     void registerAsRangeWatcher(KDevelop::DUContext* ctx);
 
+    /** helper for updateBrowserView().
+     *  Tries to find a 'specialLanguageObject' (eg macro) in @p view under cursor @c.
+     *  If found returns true and sets @p pickedLanguage to the language this object belongs to */
+    bool findSpecialObject(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*& pickedLanguage);
+    KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KDevelop::SimpleCursor&, bool mouseHighlight);
+    bool showDeclarationView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::Declaration* dcl, KDevelop::DUContext*);
+    bool showSpecialObjectView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*, KDevelop::DUContext*);
+    void showContextView(KTextEditor::View* view, const SimpleCursor& cursor, KDevelop::DUContext*);
+    void updateBrowserWidgetFor(KTextEditor::View* view);
+
+  private:
     QTimer* m_updateTimer;
     QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
     QSet<KTextEditor::View*> m_updateViews;
