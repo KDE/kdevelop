@@ -167,8 +167,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
              SLOT(updateSyncAction()));
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
-
-    switchDetailView(); // hide buildset widget per default
 }
 
 void ProjectManagerView::selectionChanged()
