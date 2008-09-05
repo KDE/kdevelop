@@ -183,6 +183,7 @@ if (X) {\
     m_reloading = false; \
     emit reloadFailed(); \
     kDebug() << MSG; \
+    emit showErrorMessage(MSG, 5); \
     return; \
 } else void(0)
 
