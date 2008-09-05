@@ -24,7 +24,7 @@
 
 #include <QWidget>
 #include <QVector>
-#include <language/duchain/duchainpointer.h>
+#include <language/duchain/topducontext.h>
 #include <language/editor/simplecursor.h>
 #include <language/editor/documentcursor.h>
 
@@ -89,14 +89,14 @@ class ContextController : public QObject {
 
         struct HistoryEntry {
             //Duchain must be locked
-            HistoryEntry(KDevelop::DUContextPointer ctx = KDevelop::DUContextPointer(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
+            HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
             //Duchain must be locked
             void setCursorPosition(const KDevelop::SimpleCursor& cursorPosition);
 
             //Duchain does not need to be locked
             KDevelop::DocumentCursor computePosition() const;
 
-            KDevelop::DUContextPointer context;
+            KDevelop::IndexedDUContext context;
             KDevelop::DocumentCursor absoluteCursorPosition;
             KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
             QString alternativeString;
@@ -118,7 +118,7 @@ class ContextController : public QObject {
         void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
 
     private:
-        KDevelop::DUContextPointer m_context;
+        KDevelop::IndexedDUContext m_context;
         int m_nextHistoryIndex;
         
         QVector<HistoryEntry> m_history;

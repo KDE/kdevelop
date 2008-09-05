@@ -132,7 +132,7 @@ void ContextController::historyPrevious() {
 QString ContextController::actionTextFor(int historyIndex)
 {
     HistoryEntry& entry = m_history[historyIndex];
-    QString actionText = entry.context ? entry.context->scopeIdentifier(true).toString() : QString();
+    QString actionText = entry.context.data() ? entry.context.data()->scopeIdentifier(true).toString() : QString();
     if(actionText.isEmpty())
         actionText = entry.alternativeString;
     if(actionText.isEmpty())
@@ -191,11 +191,11 @@ void ContextController::actionTriggered() {
     }
 }
 
-ContextController::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
+ContextController::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
         //Use a position relative to the context
         setCursorPosition(cursorPosition);
-        if(ctx)
-            alternativeString = ctx->scopeIdentifier(true).toString();;
+        if(ctx.data())
+            alternativeString = ctx.data()->scopeIdentifier(true).toString();;
         if(!alternativeString.isEmpty())
             alternativeString += i18n("(changed)"); //This is used when the context was deleted in between
 }
@@ -203,9 +203,9 @@ ContextController::HistoryEntry::HistoryEntry(DUContextPointer ctx, const KDevel
 DocumentCursor ContextController::HistoryEntry::computePosition() const {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     DocumentCursor ret;
-    if(context) {
-        ret = DocumentCursor(context->url().str(), relativeCursorPosition.textCursor());
-        ret.setLine(ret.line() + context->range().start.line);
+    if(context.data()) {
+        ret = DocumentCursor(context.data()->url().str(), relativeCursorPosition.textCursor());
+        ret.setLine(ret.line() + context.data()->range().start.line);
     }else{
         ret = absoluteCursorPosition;
     }
@@ -214,10 +214,10 @@ DocumentCursor ContextController::HistoryEntry::computePosition() const {
 
 void ContextController::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-    if(context) {
-        absoluteCursorPosition =  DocumentCursor(context->url().str(), cursorPosition.textCursor());
+    if(context.data()) {
+        absoluteCursorPosition =  DocumentCursor(context.data()->url().str(), cursorPosition.textCursor());
         relativeCursorPosition = cursorPosition;
-        relativeCursorPosition.line -= context->range().start.line;
+        relativeCursorPosition.line -= context.data()->range().start.line;
     }
 }
 
@@ -226,8 +226,8 @@ bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDev
     Q_ASSERT(m_nextHistoryIndex <= m_history.count());
     HistoryEntry& he = m_history[m_nextHistoryIndex-1];
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() ); // is this necessary??
-    Q_ASSERT(he.context); Q_ASSERT(context);
-    return (position.line == he.absoluteCursorPosition.line()) && (context->url() == he.context->url());
+    Q_ASSERT(context);
+    return IndexedDUContext(context) == he.context;
 }
 
 void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
@@ -239,7 +239,7 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
         return;
     } else { // Append new history entry
         m_history.resize(m_nextHistoryIndex); // discard forward history
-        m_history.append(HistoryEntry(DUContextPointer(context), position));
+        m_history.append(HistoryEntry(IndexedDUContext(context), position));
         ++m_nextHistoryIndex;
 
         updateButtonState();
@@ -251,9 +251,9 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
 }
 
 QWidget* ContextController::createWidget(KDevelop::DUContext* context) {
-        m_context = DUContextPointer(context);
-        if(m_context) {
-            return m_context->createNavigationWidget();
+        m_context = IndexedDUContext(context);
+        if(m_context.data()) {
+            return m_context.data()->createNavigationWidget();
         }
         return 0;
 }
