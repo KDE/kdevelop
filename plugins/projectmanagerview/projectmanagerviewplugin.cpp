@@ -19,22 +19,11 @@
 */
 #include "projectmanagerviewplugin.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTimer>
 #include <QtCore/QList>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtCore/QSignalMapper>
 
-#include <kservicetypetrader.h>
-#include <kgenericfactory.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kdialog.h>
-#include <kaboutdata.h>
-#include <kplugininfo.h>
 
 #include <kparts/componentfactory.h>
 
