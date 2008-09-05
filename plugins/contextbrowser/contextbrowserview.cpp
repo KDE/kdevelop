@@ -226,6 +226,7 @@ bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDev
     Q_ASSERT(m_nextHistoryIndex <= m_history.count());
     HistoryEntry& he = m_history[m_nextHistoryIndex-1];
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() ); // is this necessary??
+    Q_ASSERT(he.context); Q_ASSERT(context);
     return (position.line == he.absoluteCursorPosition.line()) && (context->url() == he.context->url());
 }
 
