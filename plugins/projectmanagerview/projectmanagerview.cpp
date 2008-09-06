@@ -116,7 +116,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 
     d->m_projectOverview = new ProjectTreeView( plugin, this );
     d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
-    vbox->addWidget( d->m_projectOverview );
+    vbox->addWidget( d->m_projectOverview, 3 );
     connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
 
 //     d->m_filters = new KLineEdit(this);
@@ -125,7 +125,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 //     vbox->addWidget( d->m_filters );
 
     QHBoxLayout* hbox = new QHBoxLayout();
-    vbox->addLayout( hbox );
+    vbox->addLayout( hbox, 0 );
 
     d->m_detailSwitcher = new KComboBox( false, this );
     d->m_detailSwitcher->insertItem( 0, i18n( "Buildset" ) );
@@ -138,7 +138,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     hbox->addWidget( d->hideDetailsButton );
 
     d->m_detailStack = new QStackedWidget( this );
-    vbox->addWidget( d->m_detailStack );
+    vbox->addWidget( d->m_detailStack, 1 );
 
     connect( d->m_detailSwitcher, SIGNAL( activated( int ) ),
              d->m_detailStack, SLOT( setCurrentIndex( int ) ) );
