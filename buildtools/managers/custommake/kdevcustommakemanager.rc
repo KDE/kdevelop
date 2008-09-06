@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevcustommakemanager" library="libkdevcustommakemanager" version="4">
+<gui name="kdevcustommakemanager" library="libkdevcustommakemanager" version="4">
   <MenuBar>
   <Menu name="run">
-   <Text context="@title:menu">Run</Text>
+   <text context="@title:menu">Run</text>
    <Action name="build_target"/>
   </Menu>
 </MenuBar>
-</kpartplugin>
+</gui>

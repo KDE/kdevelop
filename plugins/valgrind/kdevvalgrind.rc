@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="valgrind" library="libvalgrindplugin" version="3">
+<gui name="valgrind" library="libvalgrindplugin" version="3">
 <MenuBar>
  <Menu name="run">
    <text context="@title:menu">Run</text>
@@ -7,4 +7,4 @@
    <Action name="tools_calltree" group="run_operations"/>
  </Menu>
 </MenuBar>
-</kpartplugin>
+</gui>
