@@ -35,6 +35,9 @@
 #define ifDebugInfiniteRecursion(x) x
 //#define ifDebugInfiniteRecursion(x)
 
+// #define ifDebugLostSpace(x) x
+#define ifDebugLostSpace(x)
+
 ///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
 ///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
 ///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
@@ -178,8 +181,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
       ///@todo Change these to use sizes instead of counts
-      MaxFreeItemsForHide = 4, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-      MinFreeItemsForReuse = 13 //When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      MaxFreeItemsForHide = 0, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
+      MinFreeItemsForReuse = 1//When this count of free items in one bucket is reached, consider re-assigning them to new requests
     };
     enum {
       NextBucketHashSize = ObjectMapSize, //Affects the average count of bucket-chains that need to be walked in ItemRepository::index. Must be a multiple of ObjectMapSize
@@ -334,10 +337,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       if(index && request.equals(itemFromIndex(index)))
         return index; //We have found the item
 
+      ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
+
       m_changed = true;
 
       unsigned int totalSize = request.itemSize() + AdditionalSpacePerItem;
-      
       //If this triggers, your item is too big.
       Q_ASSERT(totalSize < ItemRepositoryBucketSize);
       
@@ -345,6 +349,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         //Try finding the smallest freed item that can hold the data
         unsigned short currentIndex = m_largestFreeItem;
         unsigned short previousIndex = 0;
+        
+        unsigned short freeChunkSize = 0;
+        
         while(currentIndex && freeSize(currentIndex) >= (totalSize-AdditionalSpacePerItem)) {
           unsigned short follower = followerIndex(currentIndex);
           if(follower && freeSize(follower) >= (totalSize-AdditionalSpacePerItem)) {
@@ -353,6 +360,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
             currentIndex = follower;
           }else{
             //The item fits into currentIndex, but not into the follower. So use currentIndex
+            freeChunkSize = freeSize(currentIndex) - (totalSize - AdditionalSpacePerItem);
+            
+            //We need 2 bytes to store the free size
+            if(freeChunkSize != 0 && freeChunkSize < AdditionalSpacePerItem+2) {
+              //we can not manage the resulting free chunk as a separate item, so we cannot use this position.
+              //Just pick the biggest free item, because there we can be sure that
+              //either we can manage the split, or we cannot do anything at all in this bucket.
+              
+              freeChunkSize = freeSize(m_largestFreeItem) - (totalSize - AdditionalSpacePerItem);
+              
+              if(freeChunkSize == 0 || freeChunkSize >= AdditionalSpacePerItem+2) {
+                previousIndex = 0;
+                currentIndex = m_largestFreeItem;
+              }else{
+                currentIndex = 0;
+              }
+            }
             break;
           }
         }
@@ -365,8 +389,29 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         else
           m_largestFreeItem = followerIndex(currentIndex);
         
+        --m_freeItemCount; //Took one free item out of the chain
+        
+        ifDebugLostSpace( Q_ASSERT((uint)lostSpace() == (uint)(freeSize(currentIndex) + AdditionalSpacePerItem)); )
+          
+        if(freeChunkSize) {
+          Q_ASSERT(freeChunkSize >= AdditionalSpacePerItem+2);
+          unsigned short freeItemSize = freeChunkSize - AdditionalSpacePerItem;
+          
+          unsigned short freeItemPosition;
+          //Insert the resulting free chunk into the list of free items, so we don't lose it
+          if(isBehindFreeSpace(currentIndex)) {
+            //Create the free item at the beginning of currentIndex, so it can be merged with the free space in front
+            freeItemPosition = currentIndex;
+            currentIndex += freeItemSize + AdditionalSpacePerItem;
+          }else{
+            //Create the free item behind currentIndex
+            freeItemPosition = currentIndex + totalSize;
+          }
+          setFreeSize(freeItemPosition, freeItemSize);
+          insertFreeItem(freeItemPosition);
+        }
+        
         insertedAt = currentIndex;
-        --m_freeItemCount;
         Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
       }else{
         //We have to insert the item
@@ -377,7 +422,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         m_available -= totalSize;
       }
       
+      ifDebugLostSpace( Q_ASSERT(lostSpace() == totalSize); )
+      
       DynamicData::initialize(m_data + insertedAt - AdditionalSpacePerItem);
+      
+      Q_ASSERT(!index || !followerIndex(index));
+      
+      Q_ASSERT(!m_objectMap[localHash] || index);
       
       if(index)
         setFollowerIndex(index, insertedAt);
@@ -385,6 +436,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       
       if(m_objectMap[localHash] == 0)
         m_objectMap[localHash] = insertedAt;
+      
       
 #ifdef DEBUG_CREATEITEM_EXTENTS
       char* borderBehind = m_data + insertedAt + (totalSize-AdditionalSpacePerItem);
@@ -412,7 +464,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       
       if(dynamic)
         itemFromIndex(insertedAt, dynamic);
-      
+
+      ifDebugLostSpace( if(lostSpace()) kDebug() << "lost space:" << lostSpace(); Q_ASSERT(!lostSpace()); )
       return insertedAt;
     }
     
@@ -464,6 +517,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     
     
     void deleteItem(unsigned short index, unsigned int hash) {
+      ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
+
       m_lastUsed = 0;
       m_changed = true;
 
@@ -480,6 +535,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         //If this assertion triggers, the deleted item was not registered under the given hash
         Q_ASSERT(currentIndex);
       }
+      Q_ASSERT(currentIndex == index);
       
       if(!previousIndex)
         //The item was directly in the object map
@@ -491,25 +547,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       
       setFreeSize(index, size);
       
-      //Insert the free item into the chain opened by m_largestFreeItem
-      currentIndex = m_largestFreeItem;
-      previousIndex = 0;
+      //Try merging the created free item to other free items around, else add it into the free list
+      insertFreeItem(index);
       
-      while(currentIndex && *(unsigned short*)(m_data + currentIndex) > size) {
-        previousIndex = currentIndex;
-        currentIndex = followerIndex(currentIndex);
-      }
-      
-      if(previousIndex)
-        //This item is larger than all already registered free items, or there are none.
-        setFollowerIndex(previousIndex, index);
-      else
-        m_largestFreeItem = index;
-
-      setFollowerIndex(index, currentIndex);
-      
-      ++m_freeItemCount;
       Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
+      ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
     }
     
     inline const Item* itemFromIndex(unsigned short index) const {
@@ -537,7 +579,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
     template<class Visitor>
     bool visitAllItems(Visitor& visitor) const {
       m_lastUsed = 0;
-      for(int a = 0; a < m_objectMapSize; ++a) {
+      for(uint a = 0; a < m_objectMapSize; ++a) {
         uint currentIndex = m_objectMap[a];
         while(currentIndex) {
           if(!visitor((const Item*)(m_data+currentIndex)))
@@ -581,6 +623,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
         return 0;
     }
     
+    bool canAllocateItem(short unsigned int size) const {
+      short unsigned int currentIndex = m_largestFreeItem;
+      while(currentIndex) {
+        short unsigned int currentFree = freeSize(currentIndex);
+        if(currentFree < size)
+          return false;
+        if(size == currentFree || currentFree - size >= AdditionalSpacePerItem + 2)
+          return true;
+        currentIndex = followerIndex(currentIndex);
+      }
+      
+      return false;
+    }
+    
     void tick() const {
       ++m_lastUsed;
     }
@@ -599,7 +655,123 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
       m_changed = true;
     }
     
+    //Counts together the space that is neither accessible through m_objectMap nor through the free items
+    uint lostSpace() {
+      uint need = ItemRepositoryBucketSize - m_available;
+      uint found = 0;
+      
+      for(uint a = 0; a < m_objectMapSize; ++a) {
+        uint currentIndex = m_objectMap[a];
+        while(currentIndex) {
+          found += ((const Item*)(m_data+currentIndex))->itemSize() + AdditionalSpacePerItem;
+          
+          currentIndex = followerIndex(currentIndex);
+        }
+      }
+      uint currentIndex = m_largestFreeItem;
+      while(currentIndex) {
+        found += freeSize(currentIndex) + AdditionalSpacePerItem;
+        
+        currentIndex = followerIndex(currentIndex);
+      }
+      return need-found;
+    }
+    
   private:
+    
+    ///Merges the given index item, which must have a freeSize() set, to surrounding free items, and inserts the result.
+    ///The given index itself should not be in the free items chain yet.
+    ///Returns whether the item was inserted somewhere.
+    void insertFreeItem(unsigned short index) {
+      unsigned short currentIndex = m_largestFreeItem;
+      unsigned short previousIndex = 0;
+      
+      while(currentIndex) {
+        
+        //Merge behind index
+        if(currentIndex == index + freeSize(index) + AdditionalSpacePerItem) {
+          
+          //Remove currentIndex from the free chain, since it's merged backwards into index
+          if(previousIndex)
+            setFollowerIndex(previousIndex, followerIndex(currentIndex));
+          else
+            m_largestFreeItem = followerIndex(currentIndex);
+          
+          --m_freeItemCount; //One was removed
+          
+          //currentIndex is directly behind index, touching its space. Merge them.
+          setFreeSize(index, freeSize(index) + AdditionalSpacePerItem + freeSize(currentIndex));
+          
+          //Recurse to do even more merging
+          insertFreeItem(index);
+          return;
+        }
+        
+        //Merge before index
+        if(index == currentIndex + freeSize(currentIndex) + AdditionalSpacePerItem) {
+          
+          //Remove currentIndex from the free chain, since insertFreeItem wants 
+          //it not to be in the chain, and it will be inserted in another place
+          if(previousIndex)
+            setFollowerIndex(previousIndex, followerIndex(currentIndex));
+          else
+            m_largestFreeItem = followerIndex(currentIndex);
+          
+          --m_freeItemCount; //One was removed
+          
+          //index is directly behind currentIndex, touching its space. Merge them.
+          setFreeSize(currentIndex, freeSize(currentIndex) + AdditionalSpacePerItem + freeSize(index));
+          
+          //Recurse to do even more merging
+          insertFreeItem(currentIndex);
+          
+          return;
+        }
+        
+        previousIndex = currentIndex;
+        currentIndex = followerIndex(currentIndex);
+      }
+      
+      insertToFreeChain(index);
+    }
+    
+    ///Only inserts the item in the correct position into the free chain. index must not be in the chain yet.
+    void insertToFreeChain(unsigned short index) {
+      //Insert the free item into the chain opened by m_largestFreeItem
+      unsigned short currentIndex = m_largestFreeItem;
+      unsigned short previousIndex = 0;
+      
+      unsigned short size = freeSize(index);
+      
+      while(currentIndex && *(unsigned short*)(m_data + currentIndex) > size) {
+        Q_ASSERT(currentIndex != index); //must not be in the chain yet
+        previousIndex = currentIndex;
+        currentIndex = followerIndex(currentIndex);
+      }
+      
+      setFollowerIndex(index, currentIndex);
+      
+      if(previousIndex)
+        setFollowerIndex(previousIndex, index);
+      else
+        //This item is larger than all already registered free items, or there are none.
+        m_largestFreeItem = index;
+
+      ++m_freeItemCount;
+    }
+    
+    ///Returns true if the given index is right behind free space, and thus can be merged to the free space.
+    bool isBehindFreeSpace(unsigned short index) const {
+      unsigned short currentIndex = m_largestFreeItem;
+      
+      while(currentIndex) {
+        if(index == currentIndex + freeSize(currentIndex) + AdditionalSpacePerItem)
+          return true;
+        
+        currentIndex = followerIndex(currentIndex);
+      }
+      return false;
+    }
     
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     inline unsigned short followerIndex(unsigned short index) const {
@@ -705,7 +877,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   };
   
   enum {
-    ItemRepositoryVersion = 16,
+    ItemRepositoryVersion = 17,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -774,7 +946,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         //We've found the item, it's already there
         return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
       } else {
-        if(!pickedBucketInChain && bucketPtr->largestFreeItemSize() >= size) {
+        if(!pickedBucketInChain && bucketPtr->canAllocateItem(size)) {
           //Remember that this bucket has enough space to store the item, if it isn't already stored.
           //This gives a better structure, and saves us from cyclic follower structures.
           useBucket = previousBucketNumber;
@@ -798,7 +970,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       //Try finding an existing bucket with deleted space to store the data into
       for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
         Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
-        if(size <= bucketPtr->largestFreeItemSize()) {
+        if(bucketPtr->canAllocateItem(size)) {
           //The item fits into the bucket.
           useBucket = m_freeSpaceBuckets[a];
           reOrderFreeSpaceBucketIndex = a;
@@ -828,6 +1000,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         initializeBucket(useBucket);
         bucketPtr = m_fastBuckets[useBucket];
       }
+      Q_ASSERT(!bucketPtr->findIndex(request, 0));
       unsigned short indexInBucket = bucketPtr->index(request, dynamic);
       
       if(indexInBucket) {
@@ -1108,13 +1281,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     ret += QString("\nbucket hash clashed items: %1 total items: %2").arg(m_statBucketHashClashes).arg(m_statItemCount);
     uint usedBucketSpace = Bucket<Item, ItemRequest, DynamicData>::DataSize * m_currentBucket;
     uint freeBucketSpace = 0;
-    for(int a = 1; a < m_currentBucket+1; ++a) {
+    uint lostSpace = 0; //Should be zero, else something is wrong
+    for(uint a = 1; a < m_currentBucket+1; ++a) {
       Bucket<Item, ItemRequest, DynamicData>* bucket = bucketForIndex(a);
       if(bucket) {
         freeBucketSpace += bucket->totalFreeItemsSize() + bucket->available();
+        lostSpace += bucket->lostSpace();
       }
     }
-    ret += QString("\nused space for buckets: %1 free space in buckets: %2").arg(usedBucketSpace).arg(freeBucketSpace);
+    ret += QString("\nused space for buckets: %1 free space in buckets: %2 lost space: %3").arg(usedBucketSpace).arg(freeBucketSpace).arg(lostSpace);
     //If m_statBucketHashClashes is high, the bucket-hash needs to be bigger
     return ret;
   }
