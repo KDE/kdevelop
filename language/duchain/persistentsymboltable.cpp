@@ -219,17 +219,26 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
     uint oldSize = oldItem->declarationsSize();
+    
+    bool found = false;
+    
     for(uint a = 0; a < oldSize; ++a)
       if(!(oldItem->declarations()[a] == declaration))
         item.declarationsList().append(oldItem->declarations()[a]);
+      else
+        found = true;
     
-    d->m_declarations.deleteItem(index);
-    Q_ASSERT(d->m_declarations.findIndex(item) == 0);
-    
-    //This inserts the changed item
-    if(item.declarationsSize() != 0) {
-      uint newIndex = d->m_declarations.index(request);
-      Q_ASSERT(oldSize == d->m_declarations.itemFromIndex(newIndex)->declarationsSize()+1);
+    if(found) {
+      d->m_declarations.deleteItem(index);
+      Q_ASSERT(d->m_declarations.findIndex(item) == 0);
+      
+      //This inserts the changed item
+      if(item.declarationsSize() != 0) {
+        uint newIndex = d->m_declarations.index(request);
+        Q_ASSERT(oldSize == d->m_declarations.itemFromIndex(newIndex)->declarationsSize()+1);
+      }
+    }else{
+      kDebug() << "tried to remove a declaration from the symbol-table that isn't there" << id.identifier().toString();
     }
   }
 }
