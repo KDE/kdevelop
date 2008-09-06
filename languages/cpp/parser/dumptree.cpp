@@ -91,6 +91,7 @@ static char const * const names[] = {
   "ThrowExpression",
   "TranslationUnit",
   "TryBlockStatement",
+  "CatchStatement",
   "TypeId",
   "TypeIdentification",
   "TypeParameter",

@@ -110,7 +110,7 @@ struct WhileStatementAST;
 struct WinDeclSpecAST;
 
 struct AST
-{
+{///@warning When adding new nodes here, also modify the names[] array in dumptree.cpp
   enum NODE_KIND
     {
       Kind_UNKNOWN = 0,
