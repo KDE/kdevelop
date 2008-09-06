@@ -23,7 +23,9 @@
 #include <QtCore/QVector>
 #include <QtCore/QStack>
 #include <kglobal.h>
+#include <kdebug.h>
 #include <util/kdevvarlengtharray.h>
+#include <iostream>
 
 namespace KDevelop {
 
@@ -64,9 +66,13 @@ class TemporaryDataManager {
     DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
   };
   public:
-    TemporaryDataManager() {
+    TemporaryDataManager(QString id = QString()) : m_id(id) {
     }
     ~TemporaryDataManager() {
+      uint cnt = usedItemCount();
+      if(cnt) //Don't use kDebug, because that may not work during destruction
+        std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
+      
       foreach(T* item, m_items)
         delete item;
     }
@@ -136,6 +142,14 @@ class TemporaryDataManager {
       if(threadSafe)
         m_mutex.unlock();
     }
+    
+    uint usedItemCount() const {
+      uint ret = 0;
+      for(int a = 0; a < m_items.size(); ++a)
+        if(m_items[a])
+          ++ret;
+      return ret - m_freeIndicesWithData.size();
+    }
 
   private:
     //To save some memory, clear the lists
@@ -147,6 +161,7 @@ class TemporaryDataManager {
     QStack<uint> m_freeIndicesWithData;
     QStack<uint> m_freeIndices;
     QMutex m_mutex;
+    QString m_id;
 };
 
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
@@ -155,7 +170,7 @@ class TemporaryDataManager {
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
     typedef TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
-    K_GLOBAL_STATIC(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static) \
+    K_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static, ( #container "::" #member )) \
     temporaryHash ## container ## member ## Type& temporaryHash ## container ## member() { \
         return *temporaryHash ## container ## member ## Static; \
     }
@@ -229,7 +244,7 @@ unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { predecessor ## CopyAllFrom(rhs); name ## CopyFrom(rhs); } \
                                                void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## InitializeChain(dynamic);  }  \
-                                               void name ## FreeChain() { name ## Free(); predecessor ## Free(); }
+                                               void name ## FreeChain() { name ## Free(); predecessor ## FreeChain(); }
 
 #define END_APPENDED_LISTS(container, predecessor) /* Returns the size of the object containing the appended lists, including them */ \
                                       unsigned int completeSize() const { return classSize() + predecessor ## OffsetBehind(); } \

@@ -532,7 +532,7 @@ DUContext::DUContext(DUContext& useDataFrom)
 
 DUContext::~DUContext( )
 {
-  ///@todo Don't delete data if it was shared from another context
+  ///@todo Don't create dynamic versions of the data while destroying!
   DUCHAIN_D_DYNAMIC(DUContext);
   TopDUContext* top = topContext();
 
