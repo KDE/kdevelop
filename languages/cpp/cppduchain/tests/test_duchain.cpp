@@ -54,6 +54,7 @@
 #include "rpp/preprocessor.h"
 #include "classdeclaration.h"
 #include <language/duchain/types/alltypes.h>
+#include <language/duchain/persistentsymboltable.h>
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -2553,6 +2554,7 @@ void TestDUChain::testConst()
     CppClassType::Ptr g2 = g->baseType().cast<CppClassType>();
     QVERIFY(g2);
     QVERIFY(!g2->modifiers() & AbstractType::ConstModifier);
+    release(top);
   }
   {
     QByteArray method("class A; template<class T> class B; B<const A*> ca;B<A* const> cb;");
@@ -2563,6 +2565,7 @@ void TestDUChain::testConst()
     QCOMPARE(top->localDeclarations().size(), 4);
     QCOMPARE(top->localDeclarations()[2]->abstractType()->toString().trimmed(), QString("B< const A* >"));
     QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().trimmed(), QString("B< A* const >"));
+    release(top);
   }
 }
 
@@ -2880,6 +2883,11 @@ void TestDUChain::testStringSets() {
   kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
 #endif
   }
+}
+
+void TestDUChain::testSymbolTableValid() {
+  DUChainReadLocker lock(DUChain::lock());
+  PersistentSymbolTable::self().selfAnalysis();
 }
 
 void TestDUChain::testIndexedStrings() {

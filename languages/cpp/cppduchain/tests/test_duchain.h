@@ -112,6 +112,8 @@ private slots:
   void testDeclarationId();
   void testConst();
 
+  void testSymbolTableValid();
+  
   void testCStruct();
   void testCStruct2();
 
