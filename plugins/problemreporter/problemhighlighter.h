@@ -37,6 +37,8 @@ public:
 private:
     /// Detect and respond to a highlighted range being deleted
     virtual void rangeDeleted(KTextEditor::SmartRange *range);
+    /// Hide the error when the text is changed, it's likely to be different on the next parse
+    virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
 
     void clearHighlights();
 
