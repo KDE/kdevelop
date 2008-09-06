@@ -325,21 +325,67 @@ void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint&
   }
 }
 
+uint qHash(IndexedDeclaration decl) {
+  return decl.hash();
+}
+
 struct Visitor {
   bool operator() (const PersistentSymbolTableItem* item) {
-    for(int a = 0; a < item->declarationsSize(); ++a) {
-      if(!item->declarations()[a].data()) {
-        kDebug() << "Item in symbol-table is invalid:" << item->id.identifier().toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
+    QualifiedIdentifier id(item->id.identifier());
+    if(identifiers.contains(id))
+      kDebug() << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+    
+    ++identifiers[id];
+    
+    for(uint a = 0; a < item->declarationsSize(); ++a) {
+      IndexedDeclaration decl(item->declarations()[a]);
+      if(declarations.contains(decl)) {
+        kDebug() << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString();
+      }else{
+        declarations.insert(decl, id);
+      }
+      if(!decl.data()) {
+        kDebug() << "Item in symbol-table is invalid:" << id.toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
       }
     }
     return true;
   }
+  QHash<QualifiedIdentifier, uint> identifiers;
+  QHash<IndexedDeclaration, QualifiedIdentifier> declarations;
+};
+
+struct ContextVisitor {
+  bool operator() (const PersistentContextTableItem* item) {
+    QualifiedIdentifier id(item->id.identifier());
+    if(identifiers.contains(id))
+      kDebug() << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+    
+    ++identifiers[id];
+    
+    for(uint a = 0; a < item->contextsSize(); ++a) {
+      if(!item->contexts()[a].data()) {
+        kDebug() << "Item in Context-table is invalid:" << id.toString() << item->contexts()[a].localIndex() << IndexedTopDUContext(item->contexts()[a].topContextIndex()).url().str();
+      }
+    }
+    return true;
+  }
+  QHash<QualifiedIdentifier, uint> identifiers;
 };
 
 void PersistentSymbolTable::selfAnalysis() {
-  Visitor v;
-  kDebug() << d->m_declarations.statistics();
-  d->m_declarations.visitAllItems(v);
+  {
+    Visitor v;
+    kDebug() << d->m_declarations.statistics();
+    d->m_declarations.visitAllItems(v);
+    kDebug() << "visited" << v.identifiers.size() << "identifiers";
+  }
+
+  {
+    ContextVisitor v;
+    kDebug() << d->m_contexts.statistics();
+    d->m_contexts.visitAllItems(v);
+    kDebug() << "visited" << v.identifiers.size() << "identifiers";
+  }
 }
 
 PersistentSymbolTable& PersistentSymbolTable::self() {
