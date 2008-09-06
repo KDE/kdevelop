@@ -104,7 +104,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     QualifiedIdentifier id = prefix + identifier;
 //     kDebug() << "trying" << id.toString();
     PersistentSymbolTable::self().declarations( id, declarationCount, declarations );
-    for(int a = 0; a < declarationCount; ++a) {
+    for(uint a = 0; a < declarationCount; ++a) {
       Declaration* decl = declarations[a].declaration();
       if(decl && !decl->isForwardDeclaration()) {
         //We have found a potential declaration. Now find the shortest include path.

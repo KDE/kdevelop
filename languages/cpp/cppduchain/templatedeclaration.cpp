@@ -102,11 +102,11 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
   Identifier lastId(id.last());
 
   KDevVarLengthArray<TypeIdentifier> oldTemplateIdentifiers;
-  for(int a = 0; a < lastId.templateIdentifiersCount(); ++a)
+  for(uint a = 0; a < lastId.templateIdentifiersCount(); ++a)
     oldTemplateIdentifiers.append(lastId.templateIdentifier(a));
   lastId.clearTemplateIdentifiers();
 
-  for(int a = 0; a < templateParametersSize(); ++a) {
+  for(uint a = 0; a < templateParametersSize(); ++a) {
     if(templateParameters()[a].type()) {
       TypeIdentifier id(templateParameters()[a].type()->toString());
       id.setIsExpression(true);

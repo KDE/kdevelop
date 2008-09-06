@@ -53,8 +53,8 @@ rpp::pp_macro* makeConstant(const rpp::pp_dynamic_macro* macro) {
   
   memcpy(currentAddress, macro->formals.constData(), macro->formals.size() * sizeof(uint));
   
-  Q_ASSERT(item->definitionSize() == macro->definition.size());
-  Q_ASSERT(item->formalsSize() == macro->formals.size());
+  Q_ASSERT((uint)item->definitionSize() == (uint)macro->definition.size());
+  Q_ASSERT((uint)item->formalsSize() == (uint)macro->formals.size());
   Q_ASSERT(memcmp(item->formals(), macro->formals.data(), item->formalsSize() * sizeof(uint)) == 0);
   return item;
 }
