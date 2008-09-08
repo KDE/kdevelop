@@ -22,10 +22,7 @@
      <item>
       <widget class="QToolButton" name="addItemButton" >
        <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Add currently selected items from project tree view to buildset.&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Add currently selected items from project tree view to buildset.</string>
        </property>
        <property name="text" >
         <string>...</string>
@@ -35,10 +32,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QToolButton" name="removeItemButton" >
        <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Remove currently selected item from buildset.&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Remove currently selected item from buildset.</string>
        </property>
        <property name="text" >
         <string>...</string>
@@ -49,6 +43,12 @@ p, li { white-space: pre-wrap; }
    </item>
    <item>
     <widget class="QTableView" name="itemView" >
+     <property name="acceptDrops" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>List of items to be built</string>
+     </property>
      <property name="editTriggers" >
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
