@@ -295,9 +295,13 @@ bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& pos
 
       if(m_highlightedRange.contains(view)) { // remove old highlighting
         QMutexLocker lock(iface->smartMutex());
-        Q_ASSERT(m_highlightedRange[view]->document() == view->document());
-        delete m_highlightedRange[view];
-        m_highlightedRange.remove(view);
+        //Q_ASSERT(m_highlightedRange[view]->document() == view->document());
+        if (m_highlightedRange[view]->document() == view->document()) {
+	  delete m_highlightedRange[view];
+          m_highlightedRange.remove(view);
+      	} else {
+          kDebug() << "m_highlightedRange[view]->document() != view->document()";	
+        }
       }
 
       KUrl viewUrl = view->document()->url();
@@ -358,7 +362,11 @@ bool ContextBrowserPlugin::showDeclarationView(View* view, const SimpleCursor& p
 
 bool ContextBrowserPlugin::showSpecialObjectView(View* view, const SimpleCursor& position, ILanguage* pickedLanguage, DUContext* ctx)
 {
-        Q_ASSERT(pickedLanguage != 0); // specialObject was found, pickedLanguage must have been set
+        //Q_ASSERT(pickedLanguage != 0); // specialObject was found, pickedLanguage must have been set
+        if (!pickedLanguage) {
+          kDebug() << "Special's object language turned null.";
+          return false;
+        }
         bool success = false;
         foreach(ContextBrowserView* contextView, m_views) {
           if(masterWidget(contextView) == masterWidget(view)) {
