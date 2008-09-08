@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #ifndef ASTYLEPREFERENCES_H
 #define ASTYLEPREFERENCES_H
 
-#include "sourceformatter/interfaces/isourceformatter.h"
+#include <util/interfaces/isourceformatter.h>
 #include "ui_astyle_preferences.h"
 
 // class AStylePlugin;

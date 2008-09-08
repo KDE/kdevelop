@@ -23,7 +23,7 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 #define ASTYLEPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include "sourceformatter/interfaces/isourceformatter.h"
+#include <util/interfaces/isourceformatter.h>
 
 class AStyleFormatter;
 

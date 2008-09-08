@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QString>
 #include <KDebug>
 
-#include "sourceformatter/interfaces/isourceformatter.h"
+#include <util/interfaces/isourceformatter.h>
 #include "astyle_stringiterator.h" 
 
 AStyleFormatter::AStyleFormatter()
