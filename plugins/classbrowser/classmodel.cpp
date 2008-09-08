@@ -55,24 +55,42 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
+//#define NEW_CLASS_MODEL
+
 #ifdef NEW_CLASS_MODEL
 
 class NewClassModel {
   void initialize(const QSet<IndexedString>& allFiles);
 };
 
-struct ClassModelNode {
-  CodeModelItem::Kind m_kind;
+class ClassModelNode : public KShared {
+public:
+  typedef KSharedPtr<ClassModelNode> Ptr;
+
   ClassModelNode() : m_kind(CodeModelItem::Namespace)  {
   }
+
+  CodeModelItem::Kind kind() const {
+    return m_kind;
+  }
+  
+  QualifiedIdentifier scope() const {
+    return m_scope;
+  }
+
+  QSet<IndexedString> relevantFiles() const {
+    return m_relevantFiles;
+  }
+
+  QMap<Identifier, ClassModelNode::Ptr> computeChildren() const;
+private:
+  CodeModelItem::Kind m_kind;
   QualifiedIdentifier m_scope;
   QSet<IndexedString> m_relevantFiles;
-
-  QList<ClassModelNode> computeChildren() const;
 };
 
-QList<ClassModelNode> ClassModelNode::computeChildren() const {
-  QMap<Identifier, ClassModelNode> ret;
+QMap<Identifier, ClassModelNode::Ptr> ClassModelNode::computeChildren() const {
+  QMap<Identifier, ClassModelNode::Ptr> ret;
 
   foreach(IndexedString file, m_relevantFiles) {
     int itemCount = 0;
@@ -84,23 +102,23 @@ QList<ClassModelNode> ClassModelNode::computeChildren() const {
       QualifiedIdentifier id(items[a].id.identifier());
       if(id.beginsWith(m_scope) && id.count() > m_scope.count()) {
         Identifier nextId = id.at(m_scope.count());
-        
-        ret[nextId].m_relevantFiles.insert(file);
+
+        if(!ret.contains(nextId)) 
+          ret.insert(nextId, Ptr(new ClassModelNode));
+
+        ret[nextId]->m_relevantFiles.insert(file);
         
         if(m_scope.count()+1 == id.count())
           ///We're representing the item directly, so take its kind
-          ret[nextId].m_kind = items[a].kind;
+          ret[nextId]->m_kind = items[a].kind;
       }
     }
   }
 
-  QList<ClassModelNode> realRet;
   for(QMap<Identifier, ClassModelNode>::const_iterator it = ret.begin(); it != ret.end(); ++it) {
-    realRet.append(*it);
-    realRet.m_scope = m_scope + it.key();
+    it->m_scope = m_scope + it.key();
   }
-  ///@todo eventually sort the list here
-  return realRet;
+  return ret;
 }
 
 void NewClassModel::initialize(const QSet<IndexedString>& allFiles) {
