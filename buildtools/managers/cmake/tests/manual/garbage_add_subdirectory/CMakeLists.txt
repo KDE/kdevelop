@@ -1,5 +1,7 @@
 add_subdirectory(foo)
 
+# note: this now ASSERTS out, equal to the tiny_project test.
+#
 # fooling around with the 'add_subdirectory' line above will crash KDevelop
 # This is what I observe:
 #
