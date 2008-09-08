@@ -134,6 +134,7 @@ class KrossKDevelopQualifiedIdentifier : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool beginsWith(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->beginsWith(x0); }
 		Q_SCRIPTABLE int index() const { return wrapped->index(); }
 		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE void findByHash(int x0, KDevVarLengthArray< KDevelop::QualifiedIdentifier, 256 >& x1) { wrapped->findByHash(x0, x1); }
 	private:
 		KDevelop::QualifiedIdentifier* wrapped;
 };

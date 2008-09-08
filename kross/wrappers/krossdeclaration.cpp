@@ -22,6 +22,7 @@ class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInt
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
 	private:
 		KDevelop::IndexedDeclaration* wrapped;
 };

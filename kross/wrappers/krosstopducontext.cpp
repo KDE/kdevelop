@@ -38,6 +38,7 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE int index() const { return wrapped->index(); }
+		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 	private:
 		KDevelop::IndexedTopDUContext* wrapped;
 };
