@@ -30,6 +30,7 @@
 #include <KUrl>
 #include <KProcess>
 #include <KAction>
+#include <KMessageBox>
 #include <kio/job.h>
 
 #include <interfaces/icore.h>
@@ -245,8 +246,9 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     
     if ( !cmakeInfoFile.isLocalFile() )
     {
-        //FIXME turn this into a real warning
-        kWarning() << "error. not a local file. CMake support doesn't handle remote projects" ;
+//         KMessageBox::error( ICore::self()->uiControllerInternal()->defaultMainWindow(),
+//                                 i18n("Not a local file. CMake support doesn't handle remote projects") );
+        kWarning() << "error. not a local file. CMake support doesn't handle remote projects";
     }
     else
     {
@@ -690,11 +692,17 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     KUrl dir(dirty);
     dir=dir.upUrl();
     dir.adjustPath(KUrl::RemoveTrailingSlash);
+    KUrl dir2(dir);
+    dir2.adjustPath(KUrl::AddTrailingSlash);
 
     CMakeFolderItem *it=0;
-    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
     if(m_folderPerUrl.contains(dir))
         it=m_folderPerUrl[dir];
+    else if(m_folderPerUrl.contains(dir2))
+        it=m_folderPerUrl[dir2];
+    else
+        kDebug(9032) << "Couldn't find the item for" << dir << dir2 << m_folderPerUrl;
+    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
     Q_ASSERT(it);
     KDevelop::IProject* proj=it->project();
     KUrl projectBaseUrl=m_realRoot[proj];
