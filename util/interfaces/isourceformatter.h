@@ -24,9 +24,9 @@
 #include <KMimeType>
 
 #include <interfaces/iextension.h>
-#include "sourceformatter_export.h"
+#include "../utilexport.h"
 
-class KDEVSOURCEFORMATTER_EXPORT SettingsWidget : public QWidget
+class KDEVPLATFORMUTIL_EXPORT SettingsWidget : public QWidget
 {
 		Q_OBJECT
 
@@ -48,7 +48,7 @@ class KDEVSOURCEFORMATTER_EXPORT SettingsWidget : public QWidget
  *
  * @author Cédric Pasteur
  */
-class KDEVSOURCEFORMATTER_EXPORT ISourceFormatter
+class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
 {
 	public:
 		virtual ~ISourceFormatter();

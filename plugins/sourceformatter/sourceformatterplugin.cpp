@@ -52,8 +52,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <project/projectmodel.h>
-#include "sourceformattermanager.h"
-#include "isourceformatter.h"
+#include <util/interfaces/isourceformatter.h>
+#include <util/sourceformattermanager.h>
 
 K_PLUGIN_FACTORY(SourceFormatterFactory, registerPlugin<SourceFormatterPlugin>();)
 K_EXPORT_PLUGIN(SourceFormatterFactory("kdevsourceformatter"))

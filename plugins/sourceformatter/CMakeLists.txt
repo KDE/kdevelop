@@ -1,21 +1,6 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9500 )
 
-########### shared lib ################
-
-set(kdevsourceformatterinterface_LIB_SRCS
-    sourceformattermanager.cpp
-    isourceformatter.cpp
-)
-
-kde4_add_library(kdevsourceformatterinterface SHARED ${kdevsourceformatterinterface_LIB_SRCS})
-target_link_libraries(kdevsourceformatterinterface
-    ${KDE4_KDEUI_LIBS}
-    kdevplatforminterfaces kdevplatformlanguage
-    kdevplatformproject)
-
-install(TARGETS kdevsourceformatterinterface DESTINATION ${LIB_INSTALL_DIR})
-
 ########### plugin ###############
 
 set(kdevsourceformatter_SRCS
@@ -57,8 +42,3 @@ install(FILES kdevsourceformatter.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kcm_kdevsourceformattersettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter)
 
-install(FILES
-    isourceformatter.h
-    sourceformatter_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sourceformatter/interfaces
-)

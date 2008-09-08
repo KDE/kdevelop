@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include "isourceformatter.h"
+#include "interfaces/isourceformatter.h"
 
 SourceFormatterManager* SourceFormatterManager::m_instance = 0;
 

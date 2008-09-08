@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <KMimeType>
 #include <KConfigGroup>
 
-#include "sourceformatter_export.h"
+#include "utilexport.h"
 
 class ISourceFormatter;
 namespace KDevelop
@@ -35,7 +35,7 @@ namespace KDevelop
 
 /**
  */
-class KDEVSOURCEFORMATTER_EXPORT SourceFormatterManager : public QObject
+class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 {
 		Q_OBJECT
 

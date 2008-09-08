@@ -33,8 +33,9 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/configinterface.h>
 
 #include <interfaces/iplugin.h>
-#include "isourceformatter.h"
-#include "sourceformattermanager.h"
+#include <util/interfaces/isourceformatter.h>
+#include <util/sourceformattermanager.h>
+
 #include "editstyledialog.h"
 
 #define STYLE_ROLE (Qt::UserRole+1)

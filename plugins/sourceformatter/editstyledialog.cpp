@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/configinterface.h>
 
-#include "isourceformatter.h"
+#include <util/interfaces/isourceformatter.h>
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
                                   const QString &content, QWidget *parent)
