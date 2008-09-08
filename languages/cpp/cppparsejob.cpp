@@ -509,7 +509,6 @@ void CPPInternalParseJob::run()
 
           if ( parentJob()->cpp()->codeHighlighting() )
           {
-              QMutexLocker lock(editor.smart()->smartMutex());
               parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
           }
         }

@@ -27,6 +27,8 @@
 
 #include <kapplication.h>
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/document.h>
 #include <kcolorutils.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
@@ -41,6 +43,8 @@
 
 using namespace KTextEditor;
 using namespace KDevelop;
+
+#define LOCK_SMART(range) KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(range->document()); QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
 QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
@@ -334,14 +338,18 @@ void CppHighlighting::highlightDUChainSimple(DUContext* context) const
 void CppHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
   if (!context->smartRange())
     return;
+  
+  {
+    LOCK_SMART(context->smartRange());
+      
+    foreach (Declaration* dec, context->localDeclarations())
+      if(dec->smartRange())
+        dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
 
-  foreach (Declaration* dec, context->localDeclarations())
-    if(dec->smartRange())
-      dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
-
-  for(int a = 0; a < context->usesCount(); ++a)
-    if(context->useSmartRange(a))
-      context->useSmartRange(a)->setAttribute(KTextEditor::Attribute::Ptr());
+    for(int a = 0; a < context->usesCount(); ++a)
+      if(context->useSmartRange(a))
+        context->useSmartRange(a)->setAttribute(KTextEditor::Attribute::Ptr());
+  }
 
   foreach (DUContext* child, context->childContexts())
     deleteHighlighting(child);
@@ -535,8 +543,10 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
 
 void CppHighlighting::highlightDeclaration(Declaration * declaration, uint color) const
 {
-  if (SmartRange* range = declaration->smartRange())
+  if (SmartRange* range = declaration->smartRange()) {
+    LOCK_SMART(range);
     range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
+  }
 }
 
 void CppHighlighting::highlightUse(DUContext* context, int index, uint color) const
@@ -547,6 +557,7 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
     if (decl)
       type = typeForDeclaration(decl, context);
 
+    LOCK_SMART(range);
     range->setAttribute(attributeForType(type, ReferenceContext, color));
   }
 }
@@ -560,6 +571,7 @@ void CppHighlighting::highlightUses(DUContext* context) const
       if (decl)
         type = typeForDeclaration(decl, context);
 
+    LOCK_SMART(range);
       range->setAttribute(attributeForType(type, ReferenceContext, 0));
     }
   }
