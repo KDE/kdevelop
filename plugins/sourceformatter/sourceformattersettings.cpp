@@ -122,7 +122,11 @@ void SourceFormatterSettings::addItemInStyleList(const QString &caption, const Q
 
 void SourceFormatterSettings::updatePreviewText()
 {
-	m_document->setText(m_currentFormatter->formatSource(m_previewText, m_currentMimeType));
+    if(m_currentFormatter) {
+        m_document->setReadWrite(true);
+        m_document->setText(m_currentFormatter->formatSource(m_previewText, m_currentMimeType));
+        m_document->setReadWrite(false);
+    }
 }
 
 void SourceFormatterSettings::load()
@@ -132,6 +136,7 @@ void SourceFormatterSettings::load()
     cbLanguagesFormatters->setCurrentIndex(0);
     languagesStylesChanged(0);
     languagesFormattersChanged(0);
+    updatePreviewText();
 }
 
 void SourceFormatterSettings::save()
@@ -211,6 +216,7 @@ void SourceFormatterSettings::currentStyleChanged(QListWidgetItem *current, QLis
         btnEditStyle->setEnabled(true);
     }
     changed();
+    updatePreviewText();
 }
 
 void SourceFormatterSettings::styleRenamed(QListWidgetItem *item)

@@ -63,6 +63,7 @@ void EditStyleDialog::init()
 		                              "Please check your KDE installation."));
 
 	m_document = editor->createDocument(this);
+    m_document->setReadWrite(false);
 	//m_document->setHighlightingMode("C++");
 
 	m_view = qobject_cast<KTextEditor::View*>(
@@ -78,11 +79,17 @@ void EditStyleDialog::init()
 		iface->setConfigValue("dynamic-word-wrap", false);
 		iface->setConfigValue("icon-bar", false);
 	}
+
+    if(m_sourceFormatter)
+        updatePreviewText(m_sourceFormatter->previewText(m_mimeType));
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)
 {
-	m_document->setText(m_sourceFormatter->formatSource(text, m_mimeType));
+    m_document->setReadWrite(true);
+    if(m_sourceFormatter)
+        m_document->setText(m_sourceFormatter->formatSource(text, m_mimeType));
+    m_document->setReadWrite(false);
 }
 
 QString EditStyleDialog::content()

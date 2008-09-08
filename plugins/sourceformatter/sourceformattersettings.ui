@@ -15,6 +15,12 @@
   <layout class="QHBoxLayout" name="horizontalLayout_2" >
    <item>
     <widget class="KTabWidget" name="tabWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="currentIndex" >
       <number>0</number>
      </property>
@@ -23,7 +29,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>407</width>
+        <width>366</width>
         <height>444</height>
        </rect>
       </property>
@@ -35,42 +41,72 @@
         <layout class="QGridLayout" name="gridLayout" >
          <item row="0" column="0" >
           <widget class="QLabel" name="label" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text" >
             <string>Type</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="2" >
-          <widget class="KComboBox" name="cbLanguagesStyle" />
-         </item>
          <item row="1" column="0" >
           <widget class="QLabel" name="label_2" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text" >
             <string>Style</string>
            </property>
           </widget>
          </item>
-         <item rowspan="3" row="1" column="1" >
-          <widget class="KListWidget" name="listStyles" />
-         </item>
-         <item row="1" column="2" >
-          <widget class="KPushButton" name="btnNewStyle" >
-           <property name="text" >
-            <string>New style</string>
+         <item row="1" column="1" >
+          <widget class="KListWidget" name="listStyles" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
           </widget>
          </item>
-         <item row="2" column="2" >
-          <widget class="KPushButton" name="btnEditStyle" >
-           <property name="text" >
-            <string>Edit style</string>
-           </property>
-          </widget>
+         <item row="2" column="0" colspan="2" >
+          <layout class="QHBoxLayout" name="horizontalLayout" >
+           <item>
+            <widget class="KPushButton" name="btnNewStyle" >
+             <property name="text" >
+              <string>New</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="btnEditStyle" >
+             <property name="text" >
+              <string>Edit</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="btnDelStyle" >
+             <property name="text" >
+              <string>Delete</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item row="3" column="2" >
-          <widget class="KPushButton" name="btnDelStyle" >
-           <property name="text" >
-            <string>Delete style</string>
+         <item row="0" column="1" >
+          <widget class="KComboBox" name="cbLanguagesStyle" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
           </widget>
          </item>
@@ -116,7 +152,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>407</width>
+        <width>366</width>
         <height>444</height>
        </rect>
       </property>
@@ -213,6 +249,12 @@ p, li { white-space: pre-wrap; }
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
        </property>
       </widget>
      </item>
