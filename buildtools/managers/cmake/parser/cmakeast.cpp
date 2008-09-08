@@ -574,7 +574,7 @@ bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "add_subdirectory" )
         return false;
-    if ( func.arguments.size() < 1 )
+    if ( func.arguments.size() < 1 || func.arguments[0].value.isEmpty())
         return false;
 
     m_sourceDir = func.arguments[0].value;

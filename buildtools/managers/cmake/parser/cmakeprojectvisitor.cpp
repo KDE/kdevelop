@@ -1448,9 +1448,19 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
-        case StringAst::ASCII:
+        case StringAst::ASCII: {
+            QString res;
+            foreach(const QString& ascii, sast->input())
+            {
+                bool ok;
+                res += QChar(ascii.toInt(&ok, 10));
+            }
+            
+            m_vars->insert(sast->outputVariable(), QStringList(res));
+        }   break;
         case StringAst::CONFIGURE:
-            kDebug(9032) << "Error! String feature not supported!";
+            //This is not up to the cmake support
+            kDebug(9032) << "warning! String feature not supported!" << sast->content()[sast->line()].writeBack();
             break;
         case StringAst::TOUPPER:
             m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));

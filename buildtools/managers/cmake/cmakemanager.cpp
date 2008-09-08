@@ -174,6 +174,12 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
+    if(!group.hasKey("CurrentBuildDir"))
+    {
+        kDebug(9032) << "No builddir specified for" << item->project()->name();
+        return KUrl();
+    }
+        
     KUrl path = group.readEntry("CurrentBuildDir");
     KUrl projectPath = m_realRoot[item->project()];
 
@@ -401,6 +407,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         KUrl subroot=m_subprojectRoot[item->project()];
         foreach (const QString& subf, v.subdirectories())
         {
+            if(subf.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
+                continue;
             KUrl path(folder->url());
             path.addPath(subf);
             
