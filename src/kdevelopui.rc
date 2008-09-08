@@ -173,11 +173,6 @@
     <Merge/>
   </Menu>
 
-  <Menu name="help">
-    <text context="@title:menu">Help</text>
-    <Merge/>
-  </Menu>
-
 </MenuBar>
 
 <ToolBar name="mainToolBar" position="Top" noMerge="1">
