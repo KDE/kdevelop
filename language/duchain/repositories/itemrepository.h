@@ -68,14 +68,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
     virtual ~AbstractItemRepository();
     ///@param path is supposed to be a shared directory-name that the item-repository is to be loaded from
     ///@param clear will be true if the old repository should be discarded and a new one started
-    ///If this returns false, that indicates that loading failed. In that case, all repositories will be discarded.
-    virtual bool open(const QString& path, bool clear) = 0;
-    virtual void close() = 0;
+    ///If this returns false, that indicates that opening failed.
+    virtual bool open(const QString& path) = 0;
+    virtual void close(bool doStore = false) = 0;
     virtual void store() = 0;
 };
 
 /**
  * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
+ * Does not automatically store contained repositories on destruction.
+ * For the global standard registry, the storing is triggered from within duchain, so you don't need to care about it.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
   public:
@@ -85,7 +87,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
     ///@param clear Whether a fresh start should be done, and all repositories cleared
     ///If this returns false, loading has failed, and all repositories have been discarded.
+    ///@note Currently the given path must reference a hidden directory, just to make sure we're
+    ///      not accidentally deleting something important
     bool open(const QString& path, bool clear = false, KLockFile::Ptr lock = KLockFile::Ptr());
+    ///@warning The current state is not stored to disk.
     void close();
     ///The registered repository will automatically be opened with the current path, if one is set.
     void registerRepository(AbstractItemRepository* repository);
@@ -106,10 +111,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///If the counter didn't exist before, it will be initialized with initialValue
     QAtomicInt& getCustomCounter(const QString& identity, int initialValue);
   private:
+    void deleteDataDirectory();
     QString m_path;
     QList<AbstractItemRepository*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
-    bool m_cleared;
     KLockFile::Ptr m_lock;
 };
 
@@ -180,7 +185,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
   public:
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
-      ///@todo Change these to use sizes instead of counts
       MaxFreeItemsForHide = 0, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
       MinFreeItemsForReuse = 1//When this count of free items in one bucket is reached, consider re-assigning them to new requests
     };
@@ -877,12 +881,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   };
   
   enum {
-    ItemRepositoryVersion = 17,
+    ItemRepositoryVersion = 18,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
   public:
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
+  ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
+  ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
   ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
     m_unloadingEnabled = true;
     m_metaDataChanged = true;
@@ -904,7 +910,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   ~ItemRepository() {
     if(m_registry)
       m_registry->unRegisterRepository(this);
-
     close();
   }
   
@@ -1348,6 +1353,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   virtual void store() {
     ThisLocker lock(&m_mutex);
     if(m_file) {
+      if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite )) {
+        kWarning() << "cannot re-open repository file for storing";
+        return;
+      }
+      
       for(uint a = 0; a < m_bucketCount; ++a) {
         if(m_fastBuckets[a]) {
           if(m_fastBuckets[a]->changed()) {
@@ -1419,6 +1429,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
 //         }
 //   #endif
       }
+      //To protect us from inconsistency due to crashes. flush() is not enough.
+      m_file->close();
+      m_dynamicFile->close();
     }
   }
 
@@ -1470,7 +1483,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     return bucketPtr;
   }
     
-  virtual bool open(const QString& path, bool clear) {
+  virtual bool open(const QString& path) {
     close();
     m_currentOpenPath = path;
     //kDebug() << "opening repository" << m_repositoryName << "at" << path;
@@ -1486,7 +1499,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     }
     
     m_metaDataChanged = true;
-    if(clear || m_file->size() == 0) {
+    if(m_file->size() == 0) {
       
       m_file->resize(0);
       m_file->write((char*)&m_repositoryVersion, sizeof(uint));
@@ -1531,6 +1544,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         kDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << ItemRepositoryVersion;
         delete m_file;
         m_file = 0;
+        delete m_dynamicFile;
+        m_dynamicFile = 0;
         return false;
       }
       m_metaDataChanged = false;
@@ -1543,24 +1558,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     
       m_firstBucketForHash = new short unsigned int[bucketHashSize];
       m_file->read((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
+      
       Q_ASSERT(m_file->pos() == BucketStartOffset);
-    
+      
       m_dynamicFile->read((char*)&m_freeSpaceBucketsSize, sizeof(uint));
       m_freeSpaceBuckets.resize(m_freeSpaceBucketsSize);
       m_dynamicFile->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
     }
     
+    //To protect us from inconsistency due to crashes. flush() is not enough.
+    m_file->close();
+    m_dynamicFile->close();
+    
     m_fastBuckets = m_buckets.data();
     m_bucketCount = m_buckets.size();
     return true;
   }
-  
-  virtual void close() {
+
+  ///@warning by default, this does not store the current state to disk.
+  virtual void close(bool doStore = false) {
     if(!m_currentOpenPath.isEmpty()) {
     }
     m_currentOpenPath = QString();
     
-    store();
+    if(doStore)
+      store();
     
     if(m_file)
       m_file->close();
@@ -1582,13 +1604,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
     Q_ASSERT(bucketNumber);
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
-      if(m_file)
-        m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
-      else
+      if(m_file) {
+        if(m_file->open( QFile::ReadOnly )) {
+          m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+          m_file->close();
+        }else{
+          kWarning() << "cannot open repository-file for reading";
+        }
+      } else
         m_fastBuckets[bucketNumber]->initialize();
     }
   }
-  
+  //m_file must be opened
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);

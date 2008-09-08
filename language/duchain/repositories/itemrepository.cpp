@@ -35,9 +35,9 @@ namespace KDevelop {
 AbstractItemRepository::~AbstractItemRepository() {
 }
 
-ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr lock) : m_cleared(false) {
+ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr lock) {
   if(!openPath.isEmpty())
-    open(openPath, m_cleared, lock);
+    open(openPath, false, lock);
 }
 
 QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, int initialValue) {
@@ -67,6 +67,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
     for(int a = 0; a < 100; ++a) {
       QString specificDir = baseDir + QString("/%1").arg(a);
       KStandardDirs::makeDir(specificDir);
+      kDebug() << "making" << specificDir;
        lock = new KLockFile(specificDir + "/lock", component);
        KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
 
@@ -118,10 +119,10 @@ ItemRepositoryRegistry& globalItemRepositoryRegistry() {
 void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository) {
   m_repositories << repository;
   if(!m_path.isEmpty()) {
-    if(!repository->open(m_path, m_cleared)) {
-        QString path = m_path;
-        close();
-        open(path, true, m_lock);
+    if(!repository->open(m_path)) {
+      deleteDataDirectory();
+      kError() << "failed to open a repository";
+      abort();
     }
   }
 }
@@ -148,8 +149,46 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
   m_repositories.removeAll(repository);
 }
 
+//Recursive delete, copied from a mailing-list
+//Returns true on success
+bool removeDirectory(const QDir &aDir)
+{
+  bool has_err = false;
+  if (aDir.exists())//QDir::NoDotAndDotDot
+  {
+    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot | 
+    QDir::Dirs | QDir::Files);
+    int count = entries.size();
+    for (int idx = 0; ((idx < count) && !has_err); idx++)
+    {
+      QFileInfo entryInfo = entries[idx];
+      QString path = entryInfo.absoluteFilePath();
+      if (entryInfo.isDir())
+      {
+        has_err = !removeDirectory(QDir(path));
+      }
+      else
+      {
+        QFile file(path);
+        if (!file.remove())
+        has_err = true;
+      }
+    }
+    if (!aDir.rmdir(aDir.absolutePath()))
+      has_err = true;
+  }
+  return !has_err;
+}
+
+void ItemRepositoryRegistry::deleteDataDirectory() {
+  QFileInfo pathInfo(m_path);
+  QDir d(m_path);
+  Q_ASSERT(removeDirectory(d));
+  KStandardDirs::makeDir(m_path);
+}
+
 bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Ptr lock) {
-  if(m_path == path && m_cleared == clear)
+  if(m_path == path && !clear)
     return true;
   
   QFileInfo wasWriting(path + "/is_writing");
@@ -158,17 +197,17 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   }
   
   m_path = path;
-  m_cleared = clear;
   if(clear) {
       kWarning() << QString("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository").arg(m_path);
 //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+      deleteDataDirectory();
   }
   
   foreach(AbstractItemRepository* repository, m_repositories) {
-    if(!repository->open(path, clear)) {
-      Q_ASSERT(!clear); //We have a problem if opening a repository fails although it should be cleared
-      close();
-      open(path, true, m_lock);
+    if(!repository->open(path)) {
+      deleteDataDirectory();
+      kError() << "failed to open a repository";
+      abort();
     }
   }
   
@@ -214,13 +253,11 @@ void ItemRepositoryRegistry::store() {
 }
 
 void ItemRepositoryRegistry::close() {
-    store();
     
   foreach(AbstractItemRepository* repository, m_repositories)
     repository->close();
   
   m_path = QString();
-  m_cleared = false;
 }
 
 ItemRepositoryRegistry::~ItemRepositoryRegistry() {
