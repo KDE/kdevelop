@@ -67,7 +67,7 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
 	m_formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting "
-	                                      "functionality using <b>astyle</b> library. "));
+	        "functionality using <b>astyle</b> library. "));
 	connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
@@ -91,13 +91,13 @@ SourceFormatterPlugin::~SourceFormatterPlugin()
 void SourceFormatterPlugin::beautifySource()
 {
 	KTextEditor::Document *doc =
-	  core()->documentController()->activeDocument()->textDocument();
+	    core()->documentController()->activeDocument()->textDocument();
 	if (!doc)
 		return;
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-    SourceFormatterManager *manager = SourceFormatterManager::self();
-    manager->loadConfig();
+	SourceFormatterManager *manager = SourceFormatterManager::self();
+	manager->loadConfig();
 	ISourceFormatter *formatter = manager->formatterForMimeType(mime);
 
 	bool has_selection = false;
@@ -125,27 +125,27 @@ void SourceFormatterPlugin::beautifySource()
 		indentWith = replaceSpacesWithTab(indentWith, formatter);
 
 		QString output = formatter->formatSource(view->selectionText(), mime);
-        output = addIndentation(output, indentWith);
+		output = addIndentation(output, indentWith);
 
 		//remove the final newline character, unless it should be there
 		if (!original.endsWith('\n'))
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
-        doc->replaceText(view->selectionRange(), output);
+		doc->replaceText(view->selectionRange(), output);
 	} else {
-        KTextEditor::Cursor cursor = view->cursorPosition();
-        doc->setText(formatter->formatSource(doc->text(), mime));
-        view->setCursorPosition(cursor);
+		KTextEditor::Cursor cursor = view->cursorPosition();
+		doc->setText(formatter->formatSource(doc->text(), mime));
+		view->setCursorPosition(cursor);
 	}
 }
 
 QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter)
 {
-    QString output(input);
-    int wsCount = formatter->indentationLength();
-    ISourceFormatter::IndentationType type = formatter->indentationType();
-    
-	if(type == ISourceFormatter::IndentWithTabs) {
+	QString output(input);
+	int wsCount = formatter->indentationLength();
+	ISourceFormatter::IndentationType type = formatter->indentationType();
+
+	if (type == ISourceFormatter::IndentWithTabs) {
 		// tabs and wsCount spaces to be a tab
 		QString replace;
 		for (int i = 0; i < wsCount;i++)
@@ -154,25 +154,25 @@ QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourc
 		output = output.replace(replace, QChar('\t'));
 // 		input = input.remove(' ');
 	} else if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs) {
-			//convert tabs to spaces
-			QString replace;
-			for (int i = 0;i < wsCount;i++)
-				replace += ' ';
+		//convert tabs to spaces
+		QString replace;
+		for (int i = 0;i < wsCount;i++)
+			replace += ' ';
 
-			output = output.replace(QChar('\t'), replace);
+		output = output.replace(QChar('\t'), replace);
 	}
-    return output;
+	return output;
 }
 
 QString SourceFormatterPlugin::addIndentation(QString &input, const QString indentWith)
 {
-    QString output;
-    QTextStream os(&output, QIODevice::WriteOnly);
-    QTextStream is(&input, QIODevice::ReadOnly);
+	QString output;
+	QTextStream os(&output, QIODevice::WriteOnly);
+	QTextStream is(&input, QIODevice::ReadOnly);
 
-    while(!is.atEnd())
-        os << indentWith << is.readLine() << endl;
-    return output;
+	while (!is.atEnd())
+		os << indentWith << is.readLine() << endl;
+	return output;
 }
 
 void SourceFormatterPlugin::activePartChanged(KParts::Part *part)
@@ -182,7 +182,7 @@ void SourceFormatterPlugin::activePartChanged(KParts::Part *part)
 	if (rw_part) {
 		KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(rw_part);
 		if (doc) {
-            KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+			KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 			if (SourceFormatterManager::self()->isMimeTypeSupported(mime))
 				enabled = true;
 		}
@@ -251,8 +251,8 @@ void SourceFormatterPlugin::formatItem()
 void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 {
 // 	m_formatter->loadConfig(KGlobal::config());
-    SourceFormatterManager *manager = SourceFormatterManager::self();
-    manager->loadConfig();
+	SourceFormatterManager *manager = SourceFormatterManager::self();
+	manager->loadConfig();
 	//! \todo IStatus
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {
 		// check mimetype

@@ -30,16 +30,16 @@ Boston, MA 02110-1301, USA.
 #include <util/interfaces/isourceformatter.h>
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-                                  const QString &content, QWidget *parent)
+        const QString &content, QWidget *parent)
 		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime)
 {
 	m_content = new QWidget();
 	m_ui.setupUi(m_content);
 	setMainWidget(m_content);
 
-    m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
-    if(!content.isEmpty())
-        m_settingsWidget->load(QString(), content);
+	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
+	if (!content.isEmpty())
+		m_settingsWidget->load(QString(), content);
 	init();
 }
 
@@ -60,41 +60,41 @@ void EditStyleDialog::init()
 	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
 	if (!editor)
 		KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-		                              "Please check your KDE installation."));
+		        "Please check your KDE installation."));
 
 	m_document = editor->createDocument(this);
-    m_document->setReadWrite(false);
+	m_document->setReadWrite(false);
 	//m_document->setHighlightingMode("C++");
 
 	m_view = qobject_cast<KTextEditor::View*>(
-	           m_document->createView(m_ui.textEditor));
+	            m_document->createView(m_ui.textEditor));
 	QVBoxLayout *layout2 = new QVBoxLayout(m_ui.textEditor);
 	layout2->addWidget(m_view);
 	m_ui.textEditor->setLayout(layout2);
 	m_view->show();
 
 	KTextEditor::ConfigInterface *iface =
-	  qobject_cast<KTextEditor::ConfigInterface*>(m_view);
+	    qobject_cast<KTextEditor::ConfigInterface*>(m_view);
 	if (iface) {
 		iface->setConfigValue("dynamic-word-wrap", false);
 		iface->setConfigValue("icon-bar", false);
 	}
 
-    if(m_sourceFormatter)
-        updatePreviewText(m_sourceFormatter->previewText(m_mimeType));
+	if (m_sourceFormatter)
+		updatePreviewText(m_sourceFormatter->previewText(m_mimeType));
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)
 {
-    m_document->setReadWrite(true);
-    if(m_sourceFormatter)
-        m_document->setText(m_sourceFormatter->formatSource(text, m_mimeType));
-    m_document->setReadWrite(false);
+	m_document->setReadWrite(true);
+	if (m_sourceFormatter)
+		m_document->setText(m_sourceFormatter->formatSource(text, m_mimeType));
+	m_document->setReadWrite(false);
 }
 
 QString EditStyleDialog::content()
 {
-    return m_settingsWidget->save();
+	return m_settingsWidget->save();
 }
 
 #include "editstyledialog.moc"

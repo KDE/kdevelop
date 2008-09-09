@@ -37,11 +37,11 @@ class EditStyleDialog : public KDialog
 		Q_OBJECT
 
 	public:
-        EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-                         const QString &content=QString(), QWidget *parent=0);
+		EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
+		        const QString &content = QString(), QWidget *parent = 0);
 		virtual ~EditStyleDialog();
 
-        QString content();
+		QString content();
 
 	protected:
 		void init();
@@ -56,7 +56,7 @@ class EditStyleDialog : public KDialog
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
 		SettingsWidget *m_settingsWidget;
-        KMimeType::Ptr m_mimeType;
+		KMimeType::Ptr m_mimeType;
 		QWidget *m_content;
 		Ui::EditStyle m_ui;
 };

@@ -19,7 +19,7 @@
 #include "isourceformatter.h"
 
 SettingsWidget::SettingsWidget(QWidget *parent)
-: QWidget(parent)
+		: QWidget(parent)
 {
 }
 

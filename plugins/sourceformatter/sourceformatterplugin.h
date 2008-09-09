@@ -60,8 +60,8 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 		void formatItem();
 
 	protected:
-        QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
-        QString addIndentation(QString &input, const QString indentWith);
+		QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
+		QString addIndentation(QString &input, const QString indentWith);
 
 	protected slots:
 		void activePartChanged(KParts::Part *part);

@@ -31,10 +31,10 @@ class KDEVPLATFORMUTIL_EXPORT SettingsWidget : public QWidget
 		Q_OBJECT
 
 	public:
-        SettingsWidget(QWidget *parent = 0);
+		SettingsWidget(QWidget *parent = 0);
 		virtual ~SettingsWidget();
 
-        virtual void load(const QString &name, const QString &content) = 0;
+		virtual void load(const QString &name, const QString &content) = 0;
 
 		virtual QString save() = 0;
 
@@ -57,8 +57,8 @@ class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
 			NoChange,
 			IndentWithTabs,
 			IndentWithSpaces,
-            IndentWithSpacesAndConvertTabs
-        };
+			IndentWithSpacesAndConvertTabs
+		};
 
 		virtual QString name() = 0;
 		virtual QString caption() = 0;

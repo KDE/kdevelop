@@ -49,7 +49,7 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		void init();
 		void poulateFormattersList();
 		void populateStyleList();
-        void setActiveLanguage(const QString &lang, const QString &plugin);
+		void setActiveLanguage(const QString &lang, const QString &plugin);
 
 	public slots:
 		virtual void load();
@@ -61,8 +61,8 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		void currentTabChanged();
 		void languagesStylesChanged(int idx);
 		void currentStyleChanged(QListWidgetItem *current, QListWidgetItem *previous);
-        void styleRenamed(QListWidgetItem *item);
-        void deleteStyle();
+		void styleRenamed(QListWidgetItem *item);
+		void deleteStyle();
 		void addStyle();
 		void editStyle();
 		void modelineChanged();
@@ -75,9 +75,9 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		KTextEditor::Document *m_document;
 		ISourceFormatter* m_currentFormatter;
 		int m_numberOfPredefinedStyles;
-        KMimeType::Ptr m_currentMimeType;
-        QString m_previewText;
-        QString m_currentLang;
+		KMimeType::Ptr m_currentMimeType;
+		QString m_previewText;
+		QString m_currentLang;
 };
 
 #endif // SOURCEFORMATTERSETTINGS_H
