@@ -39,7 +39,9 @@ class AStylePlugin : public KDevelop::IPlugin, public ISourceFormatter
         virtual QString name();
         virtual QString caption();
         virtual QString description();
-        
+
+        virtual QString highlightModeForMime(const KMimeType::Ptr &mime);
+
         /** Formats using the current style.
         */
         virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime);

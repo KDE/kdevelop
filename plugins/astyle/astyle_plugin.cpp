@@ -59,6 +59,15 @@ QString AStylePlugin::description()
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 
+QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
+{
+    if(mime->is("text/x-java-source"))
+        return "Java";
+    else if(mime->is("text/x-csharp"))
+        return "C#";
+    return "C++";
+}
+
 QString AStylePlugin::formatSource(const QString &text, const KMimeType::Ptr &mime)
 {
     if(mime->is("text/x-java-source"))
