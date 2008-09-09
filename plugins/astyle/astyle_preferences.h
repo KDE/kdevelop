@@ -59,7 +59,7 @@ class AStylePreferences : public SettingsWidget, public Ui::AStylePreferences
     private:
         AStyleFormatter *m_formatter;
         Language m_lang;
-/*        bool m_enableWidgetSignals;*/
+        bool m_enableWidgetSignals;
 };
 
 #endif // ASTYLEPREFERENCES_H

@@ -62,7 +62,7 @@ AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
 {
     setupUi(this);
     m_formatter = new AStyleFormatter();
-//     m_enableWidgetSignals = true;
+    m_enableWidgetSignals = true;
     init();
 }
 
@@ -124,6 +124,8 @@ QString AStylePreferences::save()
 
 void AStylePreferences::updateWidgets()
 {
+    // block signals to avoid writing stuff to m_formatter
+    m_enableWidgetSignals = false;
     //indent
     if(m_formatter->option("Fill").toString() == "Tabs") {
         if(m_formatter->option("FillForce").toBool())
@@ -187,11 +189,13 @@ void AStylePreferences::updateWidgets()
             cbParenthesisPadding->setCurrentIndex(PADDING_NO);
     } else
         cbParenthesisPadding->setCurrentIndex(PADDING_NOCHANGE);
-        
+
     chkPadOperators->setChecked(m_formatter->option("PadOperators").toBool());
     // oneliner
     chkKeepStatements->setChecked(m_formatter->option("KeepStatements").toBool());
     chkKeepBlocks->setChecked(m_formatter->option("KeepBlocks").toBool());
+
+    m_enableWidgetSignals = true; // re enable signals
 }
 
 void AStylePreferences::setItemChecked(int idx, bool checked)
@@ -208,9 +212,6 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
 
 void AStylePreferences::updatePreviewText(bool emitChangedSignal)
 {
-//     if(!m_enableWidgetSignals)
-//         return;
-
     QString text;
     int id = tabWidget->currentIndex();
     if(id == 0)
@@ -229,6 +230,9 @@ void AStylePreferences::currentTabChanged()
 
 void AStylePreferences::indentChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
+    
     switch(cbIndentType->currentIndex()) {
         case INDENT_TABS: 
             m_formatter->setTabIndentation(inpNuberSpaces->value(), false);
@@ -246,6 +250,8 @@ void AStylePreferences::indentChanged()
 
 void AStylePreferences::indentObjectsChanged(QListWidgetItem *item)
 {
+    if(!m_enableWidgetSignals)
+        return;
     if(!item) 
         return;
     
@@ -266,6 +272,8 @@ void AStylePreferences::indentObjectsChanged(QListWidgetItem *item)
 
 void AStylePreferences::minMaxValuesChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
     m_formatter->setMaxInStatementIndentLength(inpMaxStatement->value());
     m_formatter->setMinConditionalIndentLength(inpMinConditional->value());
     
@@ -274,6 +282,8 @@ void AStylePreferences::minMaxValuesChanged()
 
 void AStylePreferences::bracketsChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
     switch(cbBrackets->currentIndex()) {
         case BRACKET_NOCHANGE: m_formatter->setBracketFormatMode(astyle::NONE_MODE); break;
         case BRACKET_ATTACH: m_formatter->setBracketFormatMode(astyle::ATTACH_MODE); break;
@@ -288,6 +298,8 @@ void AStylePreferences::bracketsChanged()
 
 void AStylePreferences::blocksChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
     m_formatter->setBreakBlocksMode(chkBlockBreak->isChecked());
     m_formatter->setBreakClosingHeaderBlocksMode(chkBlockBreakAll->isChecked());
     m_formatter->setBreakElseIfsMode(chkBlockIfElse->isChecked());
@@ -299,6 +311,8 @@ void AStylePreferences::blocksChanged()
 
 void AStylePreferences::paddingChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
     switch(cbParenthesisPadding->currentIndex()) {
         case PADDING_NOCHANGE: 
             m_formatter->setParensUnPaddingMode(false); 
@@ -334,6 +348,8 @@ void AStylePreferences::paddingChanged()
 
 void AStylePreferences::onelinersChanged()
 {
+    if(!m_enableWidgetSignals)
+        return;
     m_formatter->setSingleStatementsMode(!chkKeepStatements->isChecked());
     m_formatter->setBreakOneLineBlocksMode(!chkKeepBlocks->isChecked());
     
