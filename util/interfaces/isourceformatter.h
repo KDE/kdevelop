@@ -56,8 +56,9 @@ class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
 		enum IndentationType {
 			NoChange,
 			IndentWithTabs,
-			IndentWithSpaces
-		};
+			IndentWithSpaces,
+            IndentWithSpacesAndConvertTabs
+        };
 
 		virtual QString name() = 0;
 		virtual QString caption() = 0;
