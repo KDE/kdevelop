@@ -69,11 +69,7 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 
 void AStyleFormatter::updateFormatter()
 {
-    // style
-//     QString s = m_options["FStyle"].toString();
-//     if(predefinedStyle(s))
-//         return;
-
+    kDebug() << "Updating option with: " << ISourceFormatter::optionMapToString(m_options) << endl;
     // fill
     int wsCount = m_options["FillCount"].toInt();
     if(m_options["Fill"].toString() == "Tabs") {

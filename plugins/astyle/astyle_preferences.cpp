@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "astyle_preferences.h"
 
 #include <KIcon>
+#include <KDebug>
 
 #include "astyle_formatter.h"
 #include "astyle_plugin.h"
@@ -113,6 +114,7 @@ void AStylePreferences::load(const QString &name, const QString &content)
         m_formatter->predefinedStyle(name);
 
     updateWidgets();
+    updatePreviewText();
 }
 
 QString AStylePreferences::save()
@@ -121,7 +123,7 @@ QString AStylePreferences::save()
 }
 
 void AStylePreferences::updateWidgets()
-{   
+{
     //indent
     if(m_formatter->option("Fill").toString() == "Tabs") {
         if(m_formatter->option("FillForce").toBool())

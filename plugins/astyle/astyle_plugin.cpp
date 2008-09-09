@@ -112,6 +112,8 @@ ISourceFormatter::IndentationType AStylePlugin::indentationType()
     QString s = m_formatter->option("Fill").toString();
     if(s == "Tabs")
         return ISourceFormatter::IndentWithTabs;
+    else if(m_formatter->option("FillForce").toBool())
+        return ISourceFormatter::IndentWithSpacesAndConvertTabs;
     else
         return ISourceFormatter::IndentWithSpaces;
 }

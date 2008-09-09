@@ -39,7 +39,7 @@ class AStyleFormatter : public astyle::ASFormatter
         */
         AStyleFormatter();
 //         AStyleFormatter(const QMap<QString, QVariant> &options);
-        
+       
         QString formatSource(const QString &text);
         
         QVariant option(const QString &name);
