@@ -109,7 +109,7 @@ Entries which require special treatment are marked with comments starting with '
         <address><email>volker.paul@tiscali.de</email></address>
       </affiliation>
     </author>
-    <!-- TRANS:ROLES_OF_TRANSLATORS -->
+  <!-- TRANS:ROLES_OF_TRANSLATORS -->
   </authorgroup>
 
   <copyright>
@@ -128,9 +128,6 @@ Entries which require special treatment are marked with comments starting with '
     <year>2005</year>
     <holder>Volker Paul</holder>
   </copyright>
-
-  <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-  &underFDL;
 
   <legalnotice>&FDLNotice;</legalnotice>
 
@@ -332,17 +329,17 @@ Entries which require special treatment are marked with comments starting with '
 </biblioentry>
 
 <biblioentry>
-    <title>Programming &perl;</title>
-    <subtitle>The Camel book</subtitle>
-    <edition>3rd Edition</edition>
-    <pubdate>July 2000</pubdate>
-    <authorgroup>
-        <author><firstname>Larry</firstname><surname>Wall</surname></author>
-        <author><firstname>Tom</firstname><surname>Christiansen</surname></author>
-        <author><firstname>Jon</firstname><surname>Orwant</surname></author>
-    </authorgroup>
-    <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-    <isbn>ISBN 0596000278</isbn>
+<title>Programming &perl;</title>
+<subtitle>The Camel book</subtitle>
+<edition>3rd Edition</edition>
+<pubdate>July 2000</pubdate>
+<authorgroup>
+<author><firstname>Larry</firstname><surname>Wall</surname></author>
+<author><firstname>Tom</firstname><surname>Christiansen</surname></author>
+<author><firstname>Jon</firstname><surname>Orwant</surname></author>
+</authorgroup>
+<publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
+<isbn>ISBN 0596000278</isbn>
 </biblioentry>
 
 <biblioentry>
