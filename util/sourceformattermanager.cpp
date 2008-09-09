@@ -269,7 +269,7 @@ void SourceFormatterManager::saveConfig()
 QString SourceFormatterManager::currentStyle()
 {
 //     return m_currentStyles[m_currentLang];
-    return m_activeConfigGroup.parent().readEntry("Plugin", "");
+    return m_activeConfigGroup.readEntry("Style", "");
 }
 
 void SourceFormatterManager::setCurrentStyle(const QString &style)

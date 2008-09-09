@@ -163,12 +163,14 @@ void SourceFormatterSettings::languagesStylesChanged(int idx)
 
     // reload current style
     QString currentStyle = SourceFormatterManager::self()->currentStyle();
+    kDebug() << "Trying to select " << currentStyle << endl;
     int selectedRow = 0;
     for(int i=0; i < listStyles->count(); ++i) {
         QListWidgetItem *item = listStyles->item(i);
         if(item->data(STYLE_ROLE).toString() == currentStyle)
             selectedRow = i;
     }
+    kDebug() << "Selected index is " << selectedRow << endl;
     listStyles->setCurrentRow(selectedRow);
 
     updatePreviewText();

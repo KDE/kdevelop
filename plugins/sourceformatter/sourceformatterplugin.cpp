@@ -104,62 +104,75 @@ void SourceFormatterPlugin::beautifySource()
 	KTextEditor::View *view = doc->views().first();
 	if (view && view->selection())
 		has_selection = true;
-//
-// 	// put the selection back to the same indent level.
-// 	// taking note of the config options.
-// 	if (has_selection) {
-// 		unsigned int indentCount = 0;
-// 		QString indentWith("");
-// 		QString original = view->selectionText();
-//
-// 		for (; indentCount < original.length(); indentCount++) {
-// 			QChar ch = original[indentCount];
-// 			if (!ch.isSpace())
-// 				break;
-//
-// 			if (ch == QChar('\n') || ch == QChar('\r'))
-// 				indentWith = "";
-// 			else
-// 				indentWith += original[indentCount];
-// 		}
-// 		replaceSpacesWithTab(indentWith);
-//
-// 		QString output = formatter->formatSource(view->selectionText(), mime);
-//
-// 		//remove the final newline character, unless it should be there
-// 		if (!original.endsWith('\n'))
-// 			output.resize(output.length() - 1);
-// 		//there was a selection, so only change the part of the text related to it
-// 		view->removeSelectionText();
-// 		doc->insertText(view->cursorPosition(), output);
-// 	} else {
-	KTextEditor::Cursor cursor = view->cursorPosition();
-	doc->setText(formatter->formatSource(doc->text(), mime));
-	view->setCursorPosition(cursor);
-// 	}
+
+	// put the selection back to the same indent level.
+	// taking note of the config options.
+	if (has_selection) {
+		unsigned int indentCount = 0;
+		QString indentWith("");
+		QString original = view->selectionText();
+
+		for (; indentCount < original.length(); indentCount++) {
+			QChar ch = original[indentCount];
+			if (!ch.isSpace())
+				break;
+
+			if (ch == QChar('\n') || ch == QChar('\r'))
+				indentWith = "";
+			else
+				indentWith += original[indentCount];
+		}
+		indentWith = replaceSpacesWithTab(indentWith, formatter);
+
+		QString output = formatter->formatSource(view->selectionText(), mime);
+        output = addIndentation(output, indentWith);
+
+		//remove the final newline character, unless it should be there
+		if (!original.endsWith('\n'))
+			output.resize(output.length() - 1);
+		//there was a selection, so only change the part of the text related to it
+        doc->replaceText(view->selectionRange(), output);
+	} else {
+        KTextEditor::Cursor cursor = view->cursorPosition();
+        doc->setText(formatter->formatSource(doc->text(), mime));
+        view->setCursorPosition(cursor);
+	}
 }
 
-void SourceFormatterPlugin::replaceSpacesWithTab(QString &input)
+QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter)
 {
-// 	int wsCount = m_formatter->option("FillCount").toInt();
-// 	if (m_formatter->option("Fill").toString() == "Tabs") {
-// 		// tabs and wsCount spaces to be a tab
-// 		QString replace;
-// 		for (int i = 0; i < wsCount;i++)
-// 			replace += ' ';
-//
-// 		input = input.replace(replace, QChar('\t'));
+    QString output(input);
+    int wsCount = formatter->indentationLength();
+    ISourceFormatter::IndentationType type = formatter->indentationType();
+    
+	if(type == ISourceFormatter::IndentWithTabs) {
+		// tabs and wsCount spaces to be a tab
+		QString replace;
+		for (int i = 0; i < wsCount;i++)
+			replace += ' ';
+
+		output = output.replace(replace, QChar('\t'));
 // 		input = input.remove(' ');
-// 	} else {
-// 		if (m_formatter->option("FillForce").toBool()) {
-// 			//convert tabs to spaces
-// 			QString replace;
-// 			for (int i = 0;i < wsCount;i++)
-// 				replace += ' ';
-//
-// 			input = input.replace(QChar('\t'), replace);
-// 		}
-// 	}
+	} else if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs) {
+			//convert tabs to spaces
+			QString replace;
+			for (int i = 0;i < wsCount;i++)
+				replace += ' ';
+
+			output = output.replace(QChar('\t'), replace);
+	}
+    return output;
+}
+
+QString SourceFormatterPlugin::addIndentation(QString &input, const QString indentWith)
+{
+    QString output;
+    QTextStream os(&output, QIODevice::WriteOnly);
+    QTextStream is(&input, QIODevice::ReadOnly);
+
+    while(!is.atEnd())
+        os << indentWith << is.readLine() << endl;
+    return output;
 }
 
 void SourceFormatterPlugin::activePartChanged(KParts::Part *part)
