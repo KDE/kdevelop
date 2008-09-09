@@ -11,7 +11,7 @@ kde4_add_plugin(kdevsourceformatter ${kdevsourceformatter_SRCS})
 target_link_libraries(kdevsourceformatter
     ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBS} kdevplatforminterfaces kdevplatformlanguage
-    kdevplatformproject kdevsourceformatterinterface)
+    kdevplatformproject kdevplatformutil)
 
 install(TARGETS kdevsourceformatter DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -32,7 +32,7 @@ kde4_add_plugin(kcm_kdevsourceformattersettings ${kcm_kdevsourceformattersetting
 target_link_libraries(kcm_kdevsourceformattersettings
     ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBS} kdevplatforminterfaces kdevplatformlanguage
-    kdevplatformproject kdevsourceformatterinterface)
+    kdevplatformproject kdevplatformutil)
 
 install(TARGETS kcm_kdevsourceformattersettings DESTINATION ${PLUGIN_INSTALL_DIR})
 
