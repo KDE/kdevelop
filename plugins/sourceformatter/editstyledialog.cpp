@@ -64,7 +64,8 @@ void EditStyleDialog::init()
 
 	m_document = editor->createDocument(this);
 	m_document->setReadWrite(false);
-	//m_document->setHighlightingMode("C++");
+	QString mode = m_sourceFormatter->highlightModeForMime(m_mimeType);
+	m_document->setHighlightingMode(mode);
 
 	m_view = qobject_cast<KTextEditor::View*>(
 	            m_document->createView(m_ui.textEditor));

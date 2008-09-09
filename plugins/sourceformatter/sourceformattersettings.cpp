@@ -333,6 +333,8 @@ void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QStri
 	m_currentFormatter = manager->activeFormatter();
 	m_currentMimeType = KMimeType::mimeType(manager->mimeTypeForLanguage(lang));
 	m_previewText = m_currentFormatter->previewText(m_currentMimeType);
+	QString mode = m_currentFormatter->highlightModeForMime(m_currentMimeType);
+	m_document->setHighlightingMode(mode);
 	m_currentLang = lang;
 }
 

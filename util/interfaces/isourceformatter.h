@@ -64,6 +64,10 @@ class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
 		virtual QString caption() = 0;
 		virtual QString description() = 0;
 
+		/** \return The highlighting mode for Kate corresponding to this mime.
+		*/
+		virtual QString highlightModeForMime(const KMimeType::Ptr &mime) = 0;
+
 		/** Formats using the current style.
 		*/
 		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime) = 0;
