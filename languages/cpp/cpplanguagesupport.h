@@ -30,6 +30,7 @@
 #include <QThread>
 
 class CppHighlighting;
+class CPPParseJob;
 class CppCodeCompletion;
 class AST;
 class TranslationUnitAST;
@@ -105,7 +106,7 @@ public:
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
     ///@param problems If this is nonzero, eventual problems will be added to the list
     KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) const;
-
+    
     static CppLanguageSupport* self();
 
     const Cpp::LazyMacroSet& standardMacros() const;
@@ -130,6 +131,9 @@ public:
 * */
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
 
+public slots:
+    void findIncludePathsForJob(CPPParseJob* job);
+  
 private slots:
     void projectOpened(KDevelop::IProject *project);
     void projectClosing(KDevelop::IProject *project);

@@ -57,6 +57,7 @@
 #include "preprocessjob.h"
 #include "environmentmanager.h"
 #include <unistd.h>
+#include <qwaitcondition.h>
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
@@ -115,11 +116,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
         addJob(m_parseJob = new CPPInternalParseJob(this));
-
-        // Calculate this while still in the main thread
-        // Avoids many issues with race conditions
-        includePaths();
-
     } else {
         m_preprocessJob = 0;
         m_parseJob = 0;
@@ -173,6 +169,14 @@ PreprocessJob* CPPParseJob::parentPreprocessor() const {
     return m_parentPreprocessor;
 }
 
+void CPPParseJob::gotIncludePaths(const KUrl::List& paths) {
+  m_includePathsComputed = true;
+  m_includePathUrls = paths;
+  m_includePaths = convertFromUrls(m_includePathUrls);
+  m_waitForIncludePaths.wakeAll();
+}
+
+
 const KUrl::List& CPPParseJob::includePathUrls() const {
   includePaths();
   return masterJob()->m_includePathUrls;
@@ -181,9 +185,13 @@ const KUrl::List& CPPParseJob::includePathUrls() const {
 const QList<IndexedString>& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
-            m_includePathsComputed = true;
-            m_includePathUrls = cpp()->findIncludePaths(KUrl(document().str()), &m_preprocessorProblems);
-            m_includePaths = convertFromUrls(m_includePathUrls);
+            QMutex m;
+            m.lock();
+            qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
+            ///@todo Make sure this doesn't create problems in corner cases
+            QMetaObject::invokeMethod(cpp(), "findIncludePathsForJob", Qt::QueuedConnection, Q_ARG(CPPParseJob*, const_cast<CPPParseJob*>(this)));
+            //Will be woken once the include-paths are computed
+            m_waitForIncludePaths.wait(&m);
         }
         return m_includePaths;
     } else {
@@ -258,6 +266,10 @@ void CPPParseJob::addPreprocessorProblem(const ProblemPointer problem) {
 
 QList<ProblemPointer> CPPParseJob::preprocessorProblems() const {
   return m_preprocessorProblems;
+}
+
+QList<ProblemPointer>* CPPParseJob::preprocessorProblemsPointer() {
+  return &m_preprocessorProblems;
 }
 
 Cpp::EnvironmentFile* CPPParseJob::contentEnvironmentFile() {

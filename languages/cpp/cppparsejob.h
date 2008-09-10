@@ -19,9 +19,8 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-
-#ifndef PARSEJOB_H
-#define PARSEJOB_H
+#ifndef CPPPARSEJOB_H
+#define CPPPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
 
@@ -33,6 +32,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <contextbuilder.h>
 #include <language/duchain/indexedstring.h>
+#include <qwaitcondition.h>
 
 class PreprocessJob;
 class CppLanguageSupport;
@@ -82,8 +82,8 @@ public:
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
 
-    const QList<IndexedString>& includePaths() const;
-    const KUrl::List& includePathUrls() const;
+    //Feedback from CppLanguageSupport, don't use for other purposes
+    void gotIncludePaths(const KUrl::List& paths);
     
     void requestDependancies();
 
@@ -133,6 +133,8 @@ public:
     void addPreprocessorProblem(const ProblemPointer problem);
     QList<ProblemPointer> preprocessorProblems() const;
 
+    QList<ProblemPointer>* preprocessorProblemsPointer();
+    
     ///Whether every single context encountered needs an update
     bool needUpdateEverything() const;
     ///Set whether every single context encountered needs an update
@@ -151,6 +153,13 @@ public:
     void setLocalProgress(float progress, QString text);
     
 private:
+    friend class PreprocessJob; //So it can access includePaths()
+    //Only use from within the background thread, and make sure no mutexes are locked when calling it
+    const QList<IndexedString>& includePaths() const;
+    //Only use from within the background thread, and make sure no mutexes are locked when calling it
+    const KUrl::List& includePathUrls() const;
+    
+  
     bool m_needUpdateEverything;
     KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
@@ -177,6 +186,7 @@ private:
     QStack<DocumentCursor> m_includeStack;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;
+    mutable QWaitCondition m_waitForIncludePaths;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

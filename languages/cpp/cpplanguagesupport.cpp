@@ -75,10 +75,10 @@
 #include "ast.h"
 #include "parsesession.h"
 #include "cpphighlighting.h"
+#include "cppparsejob.h"
 #include "cppcodecompletionmodel.h"
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
-#include "cppparsejob.h"
 #include "environmentmanager.h"
 #include "navigationwidget.h"
 #include "cppduchain/cppduchain.h"
@@ -94,7 +94,7 @@
 
 #define DEBUG_INCLUDE_PATHS 1
 
-//#define DEBUG_UI_LOCKUP
+// #define DEBUG_UI_LOCKUP
 #define LOCKUP_INTERVAL 300
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
@@ -485,6 +485,13 @@ void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
     Q_UNUSED(project)
     //TODO: Anything to do here?!?!
 }
+
+void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
+{
+  KUrl::List paths = findIncludePaths(KUrl(job->document().str()), job->preprocessorProblemsPointer());
+  job->gotIncludePaths(paths);
+}
+
 
 KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop::ProblemPointer>* problems) const
 {
