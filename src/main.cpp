@@ -58,7 +58,8 @@ int main( int argc, char *argv[] )
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
                           VERSION, ki18n(description), KAboutData::License_GPL,
                           ki18n( "(c) 1999-2007, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
-    aboutData.addAuthor( ki18n("Matt Rogers"), ki18n( "Maintainer" ), "mattr@kde.org");
+    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Maintainer, Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
+    aboutData.addAuthor( ki18n("Matt Rogers"), ki18n( "" ), "mattr@kde.org");
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( ki18n("Amilcar do Carmo Lucas"), ki18n( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
     aboutData.addAuthor( ki18n("Bernd Gehrmann"), ki18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
@@ -76,7 +77,6 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( ki18n("Simon Hausmann"), ki18n( "Help with KParts infrastructure" ), "hausmann@kde.org" );
     aboutData.addAuthor( ki18n("Oliver Kellogg"), ki18n( "Ada support" ), "okellogg@users.sourceforge.net" );
     aboutData.addAuthor( ki18n("Jakob Simon-Gaarde"), ki18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
-    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Falk Brettschneider"), ki18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
     aboutData.addAuthor( ki18n("Mario Scalas"), ki18n( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
     aboutData.addAuthor( ki18n("Jens Dagerbo"), ki18n( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
