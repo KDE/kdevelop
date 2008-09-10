@@ -161,6 +161,7 @@ void QTestCase::setUpProcSignals()
 
 void QTestCase::closeOutputFile()
 {
+    emit executionFinished();
     if (m_timer) {
         m_timer->stop();
         m_timer->disconnect();
@@ -183,7 +184,6 @@ void QTestCase::morphXmlToText()
     m.xmlToText();
     in.close();
     out.close();
-    emit executionFinished();
 }
 
 // helper for run()
