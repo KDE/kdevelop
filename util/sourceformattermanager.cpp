@@ -339,6 +339,7 @@ QString SourceFormatterManager::addModelineForCurrentLang(QString input, const K
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
 
+        QString modeline;
 // kate: indent-mode cstyle; space-indent off; tab-width 4;  ");
 	QString length = QString::number(m_currentPlugins[m_currentLang]->indentationLength());
 	// add indentation style
