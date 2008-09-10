@@ -86,7 +86,6 @@ public Q_SLOTS:
     void configureToolbars();
     void newToolbarConfig();
 
-    void configureNotifications();
     void configureEditors();
     void settingsDialog();
     void stopPopupActivated( int );

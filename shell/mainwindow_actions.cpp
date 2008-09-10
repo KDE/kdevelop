@@ -127,11 +127,6 @@ void MainWindowPrivate::stopMenuAboutToShow()
 void MainWindowPrivate::showMenuBar()
 {}
 
-void MainWindowPrivate::configureNotifications()
-{
-    KNotifyConfigWidget::configure( m_mainWindow, "Notification Configuration Dialog" );
-}
-
 void MainWindowPrivate::settingsDialog()
 {
     Core::self()->uiControllerInternal()->showSettingsDialog();

@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 #include <kstatusbar.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
-#include <knotifyconfigwidget.h>
 
 #include <kparts/part.h>
 #include <ktexteditor/view.h>
@@ -221,13 +220,6 @@ void MainWindowPrivate::setupActions()
     actionCollection()->addAction( "settings_configure_toolbars", action );
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure toolbars." ) ) );
-
-    action = KStandardAction::configureNotifications(
-                 this, SLOT( configureNotifications() ),
-                 actionCollection());
-    actionCollection()->addAction( "settings_configure_notifications",action );
-    action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( action->text() ).arg( i18n( "Lets you configure system notifications." ) ) );
 
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
