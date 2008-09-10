@@ -195,8 +195,8 @@ void KDevRegister::reload()
     Q_ASSERT(!m_runner->isRunning());
 
     m_reloading = true;
-    m_testTargets = fetchAllTestTargets(project()->projectItem());
-    m_testNames = namesFromTargets(m_testTargets);
+    QList<KDevelop::ProjectTestTargetItem*> testTargets = fetchAllTestTargets(project()->projectItem());
+    m_testNames = namesFromTargets(testTargets);
     fetchTestCommands(0);
 }
 

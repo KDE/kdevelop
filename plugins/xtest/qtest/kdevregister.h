@@ -68,7 +68,6 @@ private slots:
 
 private:
     Veritas::Test* m_root;
-    QList<KDevelop::ProjectTestTargetItem*> m_testTargets;
     QList<QString> m_testNames;
     SuiteBuilderRunner *m_runner;
     bool m_reloading;
