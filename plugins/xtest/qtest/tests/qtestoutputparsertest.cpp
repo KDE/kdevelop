@@ -152,6 +152,7 @@ void QTestOutputParserTest::initParser(QByteArray& xml, QTestCase* caze)
     QBuffer* buff = new QBuffer(&xml, 0);
     m_parser->setDevice(buff);
     m_parser->setCase(caze);
+    buff->open(QIODevice::ReadOnly);
 }
 
 

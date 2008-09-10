@@ -38,6 +38,7 @@ private slots:
     void singleGreenCommand();
     void sunnyDay();
     void runTwice();
+    void nonterminatedXMLOutput();
 
 private:
     void assertAllFilesClosed(Veritas::Test*);

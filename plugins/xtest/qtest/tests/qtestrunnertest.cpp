@@ -186,6 +186,7 @@ QMap<QString, Veritas::TestState> singleGreenTestStates()
 }
 
 
+// command
 void QTestRunnerTest::singleGreenCommand()
 {
     Veritas::Test* root = fetchRoot(singleGreenCommandXml);
@@ -200,6 +201,25 @@ void QTestRunnerTest::singleGreenCommand()
     m_runner->verifyTestStates(singleGreenTestStates(), root);
     assertAllFilesClosed(root);
 
+}
+
+void QTestRunnerTest::nonterminatedXMLOutput()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"nonterminated\" exe=\"nonterminatedOutput\">\n"
+            "<command name=\"cmd1\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+
+    RunnerTestHelper* m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+    m_runner->setRoot(root);
+    m_runner->runTests(); // should not timeout
 }
 
 // helper

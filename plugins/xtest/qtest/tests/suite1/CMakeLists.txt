@@ -8,3 +8,7 @@ target_link_libraries(fakeqtest2 ${KDE4_KDECORE_LIBS})
 
 add_executable(fakeqtest3 fakeqtest3_slow.cpp)
 target_link_libraries(fakeqtest3 ${KDE4_KDECORE_LIBS})
+
+add_executable(nonterminatedOutput nonterminatedOutput.cpp)
+target_link_libraries(nonterminatedOutput ${KDE4_KDECORE_LIBS})
+

@@ -105,6 +105,7 @@ private:
     QTestOutputParser* m_parser;
     QTimer* m_timer;
     static int s_count;        // used to get unique temp files.
+    bool m_finished;
 };
 
 } // end namespace QTest

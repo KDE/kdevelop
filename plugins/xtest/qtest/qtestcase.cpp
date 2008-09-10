@@ -140,6 +140,7 @@ int QTestCase::run()
     initProcArguments();
     initOutputParser();
     setUpProcSignals();
+    m_finished = false;
     executeProc();
 
     return 1;
@@ -149,15 +150,15 @@ int QTestCase::run()
 void QTestCase::setUpProcSignals()
 {
     m_proc->disconnect();
-//     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-//             this, SIGNAL(executionFinished()));
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(morphXmlToText()));
+            SLOT(morphXmlToText()));
     connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
 }
 
 void QTestCase::closeOutputFile()
 {
+    if (m_finished) return;
+    m_finished = true;
     emit executionFinished();
     if (m_timer) {
         m_timer->stop();
@@ -181,6 +182,12 @@ void QTestCase::morphXmlToText()
     m.xmlToText();
     in.close();
     out.close();
+    QTimer* t = new QTimer;
+    t->setSingleShot(true);
+    t->setInterval(150);
+    connect(t, SIGNAL(timeout()), SLOT(closeOutputFile()));
+    connect(t, SIGNAL(destroyed(QObject*)), t, SLOT(deleteLater()));
+    t->start();
 }
 
 // helper for run()
