@@ -146,7 +146,7 @@ bool DUContextDynamicData::isThisImportedBy(const DUContext* context) const {
     return true;
 
   FOREACH_FUNCTION( IndexedDUContext ctx, m_context->d_func()->m_importers ) {
-    if( ctx.context() && ctx.context()->m_dynamicData->isThisImportedBy(context) )
+    if( IndexedTopDUContext(ctx.topContextIndex()).isLoaded() && ctx.context() && ctx.context()->m_dynamicData->isThisImportedBy(context) )
       return true;
   }
 
