@@ -59,7 +59,7 @@ int main( int argc, char *argv[] )
                           VERSION, ki18n(description), KAboutData::License_GPL,
                           ki18n( "(c) 1999-2007, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
     aboutData.addAuthor( ki18n("Matt Rogers"), ki18n( "Maintainer" ), "mattr@kde.org");
-    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Co-maintainer, architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( ki18n("Amilcar do Carmo Lucas"), ki18n( "Release coordinator, API documentation, Doxygen and autoproject patches" ), "amilcar@ida.ing.tu-bs.de" );
     aboutData.addAuthor( ki18n("Bernd Gehrmann"), ki18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
     aboutData.addAuthor( ki18n("Caleb Tennis"), ki18n( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
