@@ -90,7 +90,7 @@ void UUTCreationTest::singleUse()
     assertSimpleFooMethod(cs);
 }
 
-void UUTCreationTest::nonVoidReturn()
+void UUTCreationTest::tdd_nonVoidReturn()
 {
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; int i = f.foo(); } ");
@@ -120,7 +120,7 @@ void UUTCreationTest::singleArgument()
     assertDefaultBody(ms);
 }
 
-void UUTCreationTest::pointerUse()
+void UUTCreationTest::tdd_pointerUse()
 {
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo *f; f->foo(); } ");

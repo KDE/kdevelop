@@ -46,9 +46,9 @@ private slots:
     void unresolvedVariable();
     void resolvedVariables();
     void singleUse();
-    void nonVoidReturn();
+    void tdd_nonVoidReturn();
     void singleArgument();
-    void pointerUse();
+    void tdd_pointerUse();
     void multipleUses();
     void useInIfConstruct();
     void spacesBeforeDot();
