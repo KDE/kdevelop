@@ -81,3 +81,4 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 };
 
 #endif // SOURCEFORMATTERSETTINGS_H
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

@@ -62,3 +62,4 @@ class EditStyleDialog : public KDialog
 };
 
 #endif // EDITSTYLEDIALOG_H
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

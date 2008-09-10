@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QVariant>
 #include <QStringList>
+#include <QRegExp>
 #include <KPluginInfo>
 #include <KDebug>
 
@@ -33,7 +34,7 @@ Boston, MA 02110-1301, USA.
 SourceFormatterManager* SourceFormatterManager::m_instance = 0;
 
 SourceFormatterManager::SourceFormatterManager(QObject *parent)
-		: QObject(parent)
+		: QObject(parent), m_modelinesEnabled(false)
 {
 	loadPlugins();
 	m_rootConfigGroup = KGlobal::config()->group("SourceFormatter");
@@ -249,6 +250,8 @@ void SourceFormatterManager::loadConfig()
 	m_currentPlugins.clear();
 	m_currentLang.clear();
 
+	m_modelinesEnabled = m_rootConfigGroup.readEntry("ModelinesEnabled",
+	        QVariant(false)).toBool();
 //     // load current plugins and styles
 //     foreach(QString l, languages()) {
 //         KConfigGroup langGroup = m_configGroup.group(l);
@@ -263,6 +266,7 @@ void SourceFormatterManager::loadConfig()
 
 void SourceFormatterManager::saveConfig()
 {
+	m_rootConfigGroup.writeEntry("ModelinesEnabled", m_modelinesEnabled);
 	m_rootConfigGroup.sync();
 }
 
@@ -315,6 +319,76 @@ QString SourceFormatterManager::nameForNewStyle()
 	}
 
 	return s;
+}
+
+QString SourceFormatterManager::indentationMode(const KMimeType::Ptr &mime)
+{
+	if (mime->is("text/x-c++src") || mime->is("text/x-chdr") ||
+	        mime->is("text/x-c++hdr") || mime->is("text/x-csrc") ||
+	        mime->is("text/x-java") || mime->is("text/x-csharp"))
+		return "cstyle";
+	return "none";
+}
+
+QString SourceFormatterManager::addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime)
+{
+	if (!m_currentPlugins[m_currentLang] || !m_modelinesEnabled)
+		return input;
+
+	QString output;
+	QTextStream os(&output, QIODevice::WriteOnly);
+	QTextStream is(&input, QIODevice::ReadOnly);
+
+// kate: indent-mode cstyle; space-indent off; tab-width 4;  ");
+	QString length = QString::number(m_currentPlugins[m_currentLang]->indentationLength());
+	// add indentation style
+	modeline.append("indent-mode ").append(indentationMode(mime)).append("; ");
+
+	ISourceFormatter::IndentationType type = m_currentPlugins[m_currentLang]->indentationType();
+	if (type == ISourceFormatter::IndentWithTabs) {
+		modeline.append("space-indent off; ");
+		modeline.append("tab-width ").append(length).append("; ");
+	} else {
+		modeline.append("space-indent on; ");
+		modeline.append("indent-width ").append(length).append("; ");
+		if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs)
+			modeline.append("replace-tabs on; ");
+	}
+
+	kDebug() << "created modeline: " << modeline << endl;
+
+	bool modelinefound = false;
+	QRegExp kateModeline("//\\s*kate:(.*)$");
+	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode)");
+	while (!is.atEnd()) {
+		QString line = is.readLine();
+		// replace only the options we care about
+		if (kateModeline.indexIn(line) >= 0) { // match
+			kDebug() << "Found a kate modeline: " << line << endl;
+			modelinefound = true;
+			QString options = kateModeline.cap(1);
+			QStringList optionList = options.split(';', QString::SkipEmptyParts);
+
+			os <<  modeline;
+			foreach(QString s, optionList) {
+				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
+					os << s << ";";
+					kDebug() << "Found unknown option: " << s << endl;
+				}
+			}
+			os << endl;
+		} else
+			os << line << endl;
+	}
+
+	if (!modelinefound)
+		os << modeline << endl;
+	return output;
+}
+
+void SourceFormatterManager::setModelinesEnabled(bool enable)
+{
+	m_modelinesEnabled = enable;
 }
 
 #include "sourceformattermanager.moc"

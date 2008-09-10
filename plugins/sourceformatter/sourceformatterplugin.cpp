@@ -134,7 +134,9 @@ void SourceFormatterPlugin::beautifySource()
 		doc->replaceText(view->selectionRange(), output);
 	} else {
 		KTextEditor::Cursor cursor = view->cursorPosition();
-		doc->setText(formatter->formatSource(doc->text(), mime));
+		QString text = formatter->formatSource(doc->text(), mime);
+		text = manager->addModelineForCurrentLang(text, mime);
+		doc->setText(text);
 		view->setCursorPosition(cursor);
 	}
 }
@@ -164,7 +166,7 @@ QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourc
 	return output;
 }
 
-QString SourceFormatterPlugin::addIndentation(QString &input, const QString indentWith)
+QString SourceFormatterPlugin::addIndentation(QString input, const QString indentWith)
 {
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
@@ -268,7 +270,9 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 		if (doc) {
 			kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
 			KTextEditor::Cursor cursor = doc->cursorPosition();
-			doc->textDocument()->setText(formatter->formatSource(doc->textDocument()->text(), mime));
+			QString text = formatter->formatSource(doc->textDocument()->text(), mime);
+			text = manager->addModelineForCurrentLang(text, mime);
+			doc->textDocument()->setText(text);
 			doc->setCursorPosition(cursor);
 			return;
 		}
@@ -288,7 +292,7 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 			//write new content
 			if (file.open(QFile::WriteOnly | QIODevice::Truncate)) {
 				QTextStream os(&file);
-				os << output;
+				os << manager->addModelineForCurrentLang(output, mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to write to %1").arg(list[fileCount].prettyUrl()));
@@ -303,3 +307,4 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 }
 
 #include "sourceformatterplugin.moc"
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

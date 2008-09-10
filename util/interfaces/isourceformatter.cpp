@@ -57,3 +57,4 @@ QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &optio
 }
 
 
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

@@ -136,11 +136,15 @@ void SourceFormatterSettings::load()
 	cbLanguagesFormatters->setCurrentIndex(0);
 	languagesStylesChanged(0);
 	languagesFormattersChanged(0);
+	//update kate modeline
+	chkKateModelines->setChecked(SourceFormatterManager::self()->modelinesEnabled());
+
 	updatePreviewText();
 }
 
 void SourceFormatterSettings::save()
 {
+	SourceFormatterManager::self()->setModelinesEnabled(chkKateModelines->isChecked());
 	SourceFormatterManager::self()->saveConfig();
 }
 
@@ -283,6 +287,7 @@ void SourceFormatterSettings::editStyle()
 
 void SourceFormatterSettings::modelineChanged()
 {
+	changed();
 }
 
 void SourceFormatterSettings::languagesFormattersChanged(int idx)
@@ -339,3 +344,4 @@ void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QStri
 }
 
 #include "sourceformattersettings.moc"
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

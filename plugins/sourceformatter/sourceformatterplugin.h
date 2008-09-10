@@ -61,7 +61,7 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 
 	protected:
 		QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
-		QString addIndentation(QString &input, const QString indentWith);
+		QString addIndentation(QString input, const QString indentWith);
 
 	protected slots:
 		void activePartChanged(KParts::Part *part);
@@ -76,3 +76,4 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 
 #endif // SOURCEFORMATTERPLUGIN_H
 
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

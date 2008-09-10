@@ -99,3 +99,4 @@ QString EditStyleDialog::content()
 }
 
 #include "editstyledialog.moc"
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

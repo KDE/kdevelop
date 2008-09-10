@@ -104,3 +104,4 @@ KDEV_DECLARE_EXTENSION_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatte
 Q_DECLARE_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatter")
 
 #endif // ISOURCEFORMATTER_H
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 

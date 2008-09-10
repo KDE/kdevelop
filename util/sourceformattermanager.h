@@ -102,6 +102,15 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		void deleteStyle(const QString &name);
 		QString nameForNewStyle();
 
+		/** \return A modeline string (to add at the end or the beginning of a file)
+		* corresponding to the settings of the active language.
+		*/
+		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime);
+		void setModelinesEnabled(bool enable);
+		bool modelinesEnabled() {
+			return m_modelinesEnabled;
+		}
+
 	protected:
 		KDevelop::IPlugin* languageSupportForMimeType(const QString &name);
 		QString languageNameFromLanguageSupport(const QString &mime);
@@ -109,6 +118,8 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 
 		ISourceFormatter* formatterForLanguage(const QString &language);
 		ISourceFormatter* formatterByName(const QString &language, const QString &name);
+
+		QString indentationMode(const KMimeType::Ptr &mime);
 
 	private:
 		static SourceFormatterManager *m_instance;
@@ -120,7 +131,10 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		KConfigGroup m_rootConfigGroup;
 		KConfigGroup m_activeConfigGroup;
 		QString m_currentLang;
+		// config
+		bool m_modelinesEnabled;
 };
 
 #endif // SOURCEFORMATTERMANAGER_H
 
+// kate: indent-mode cstyle; space-indent off; tab-width 4; 
