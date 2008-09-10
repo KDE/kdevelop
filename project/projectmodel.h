@@ -133,6 +133,9 @@ public:
     /** Get the url of this folder */
     const KUrl& url() const;
 
+    /** Get the folder name, equal to url().fileName() but faster (precomputed) */
+    const QString& folderName() const;
+
     /** Set the url of this folder */
     void setUrl( const KUrl& );
 
@@ -256,6 +259,11 @@ public:
 
     /** Get the url of this file. */
     const KUrl& url() const;
+
+    /** Get the file name, equal to url().fileName() but faster (precomputed) */
+    const QString& fileName() const;
+
+    /** Set the url of this file. */
     void setUrl( const KUrl& );
 
     virtual void setIcon();

@@ -49,6 +49,7 @@ class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
 {
 public:
     KUrl m_url;
+    QString m_folderName;
     bool m_isProjectRoot;
 };
 
@@ -61,6 +62,7 @@ class ProjectFileItemPrivate : public ProjectBaseItemPrivate
 {
 public:
     KUrl m_url;
+    QString m_fileName;
 };
 
 class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
@@ -282,11 +284,18 @@ const KUrl& ProjectFolderItem::url( ) const
     return d->m_url;
 }
 
+const QString& ProjectFolderItem::folderName() const
+{
+    Q_D(const ProjectFolderItem);
+    return d->m_folderName;
+}
+
 void ProjectFolderItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectFolderItem);
     d->m_url = url;
-    setText( url.fileName() );
+    d->m_folderName = d->m_url.fileName();
+    setText( d->m_folderName );
 }
 
 void ProjectFolderItem::setIcon()
@@ -300,11 +309,11 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
     {
         QStandardItem* item = child( i );
         if ( ProjectFileItem* file = dynamic_cast<ProjectFileItem*>(item))
-            if (file->url().fileName() == name)
+            if (file->fileName() == name)
                 return true;
 
         if ( ProjectFolderItem* folder = dynamic_cast<ProjectFolderItem*>(item))
-            if (folder->url().fileName() == name)
+            if (folder->folderName() == name)
                 return true;
     }
     return false;
@@ -370,10 +379,17 @@ const KUrl & ProjectFileItem::url( ) const
     return d->m_url;
 }
 
+const QString& ProjectFileItem::fileName() const
+{
+    Q_D(const ProjectFileItem);
+    return d->m_fileName;
+}
+
 void ProjectFileItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectFileItem);
     d->m_url = url;
+    d->m_fileName = d->m_url.fileName();
 }
 
 int ProjectFileItem::type() const
