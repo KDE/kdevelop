@@ -203,9 +203,6 @@ void RunnerWindow::resetProgressBar() const
 // helper for RunnerWindow(...)
 void RunnerWindow::initItemStatistics()
 {
-    // Initial results.
-    displayNumInfos(0);
-    displayNumWarnings(0);
     displayNumErrors(0);
     displayNumFatals(0);
     displayNumExceptions(0);
@@ -347,12 +344,6 @@ void RunnerWindow::connectItemStatistics(RunnerModel* model)
             SLOT(displayNumTotal(int)));
     connect(model, SIGNAL(numSelectedChanged(int)),
             SLOT(displayNumSelected(int)));
-    connect(model, SIGNAL(numSuccessChanged(int)),
-            SLOT(displayNumSuccess(int)));
-    connect(model, SIGNAL(numInfosChanged(int)),
-            SLOT(displayNumInfos(int)));
-    connect(model, SIGNAL(numWarningsChanged(int)),
-            SLOT(displayNumWarnings(int)));
     connect(model, SIGNAL(numErrorsChanged(int)),
             SLOT(displayNumErrors(int)));
     connect(model, SIGNAL(numFatalsChanged(int)),
@@ -444,23 +435,9 @@ void RunnerWindow::displayNumCompleted(int numItems) const
     displayElapsed();
 }
 
-void RunnerWindow::displayNumSuccess(int numItems) const
-{
-}
-
-void RunnerWindow::displayNumInfos(int numItems) const
-{
-}
-
-void RunnerWindow::displayNumWarnings(int numItems) const
-{
-}
-
 void RunnerWindow::setGreenBar() const
 {
     QProgressBar* bar = ui()->progressRun;
-/*    KColorScheme ks(QPalette::Base);
-    QString green = ks.background(KColorScheme::PositiveBackground).color().name();*/
     bar->setStyleSheet(
         QString("QProgressBar {"
             "border: 1px solid grey;"
@@ -476,8 +453,6 @@ void RunnerWindow::setGreenBar() const
 void RunnerWindow::setRedBar() const
 {
     QProgressBar* bar = ui()->progressRun;
-//     KColorScheme ks(QPalette::Base);
-//     QString red = ks.background(KColorScheme::NegativeBackground).color().name();
     bar->setStyleSheet(
         QString("QProgressBar {"
             "border: 1px solid grey;"
@@ -492,22 +467,16 @@ void RunnerWindow::setRedBar() const
 
 void RunnerWindow::displayNumErrors(int numItems) const
 {
-//    displayStatusNum(ui()->labelNumErrors,
-//                     ui()->labelNumErrorsPic, numItems);
     if (numItems > 0) setRedBar();
 }
 
 void RunnerWindow::displayNumFatals(int numItems) const
 {
-//    displayStatusNum(ui()->labelNumFatals,
-//                     ui()->labelNumFatalsPic, numItems);
     if (numItems > 0) setRedBar();
 }
 
 void RunnerWindow::displayNumExceptions(int numItems) const
 {
-//    displayStatusNum(ui()->labelNumExceptions,
-//                     ui()->labelNumExceptionsPic, numItems);
     if (numItems > 0) setRedBar();
 }
 
@@ -692,7 +661,6 @@ void RunnerWindow::runItems()
 
 void RunnerWindow::stopItems()
 {
-    kDebug() << "stopItems";
     m_ui->actionStop->setDisabled(true);
     QCoreApplication::processEvents();  // Disable command immediately
 
@@ -701,7 +669,6 @@ void RunnerWindow::stopItems()
     StoppingDialog dlg(this, runnerModel());
     int r = dlg.exec();
     if (r == QDialog::Accepted) {
-        kDebug() << "Accepted";
         enableControlsAfterRunning();
         m_sema.release();
         return;
@@ -723,37 +690,6 @@ void RunnerWindow::disableControlsBeforeRunning()
     resultsView()->setSelectionMode(QAbstractItemView::NoSelection);
     enableTestSync(false);
     enableResultSync(false);
-
-    // Change color for highlighted rows to orange. If a similar color is
-    // defined for the background then green is used. Determining a color
-    // could be more sophisticated but must suffice for now.
-    QPalette palette(runnerView()->palette());
-
-    // Save current highlighting color for restoring it later.
-    m_highlightBrush = palette.brush(QPalette::Active, QPalette::Highlight);
-
-    // Create kind of orange ('pure' orange is QColor(255, 165, 0, 255)).
-    QBrush orange(QColor(255, 153, 51, 255));
-
-    QBrush newBrush;
-
-    // Look at RGB values of background (base).
-    QBrush baseBrush = palette.brush(QPalette::Active, QPalette::Base);
-
-    bool rOk = (baseBrush.color().red() == 255) || (baseBrush.color().red() < 205);
-    bool gOk = (baseBrush.color().green() > orange.color().green() + 50) ||
-               (baseBrush.color().green() < orange.color().green() - 50);
-    bool bOk = (baseBrush.color().blue() > orange.color().blue() + 50) ||
-               (baseBrush.color().blue() < orange.color().blue() - 50);
-
-    if (rOk && gOk && bOk) {
-        newBrush = orange;
-    } else {
-        newBrush = QBrush(QColor(Qt::green));
-    }
-
-    palette.setBrush(QPalette::Active, QPalette::Highlight, newBrush);
-    runnerView()->setPalette(palette);
 }
 
 void RunnerWindow::enableControlsAfterRunning() const
@@ -772,12 +708,6 @@ void RunnerWindow::enableControlsAfterRunning() const
     resultsView()->setSelectionMode(QAbstractItemView::SingleSelection);
     enableTestSync(true);
     enableResultSync(true);
-    //ensureCurrentResult();
-
-    // Reset color for highlighted rows.
-    QPalette palette(runnerView()->palette());
-    palette.setBrush(QPalette::Active, QPalette::Highlight, m_highlightBrush);
-    runnerView()->setPalette(palette);
 }
 
 void RunnerWindow::enableItemActions(bool enable) const
@@ -797,21 +727,20 @@ void RunnerWindow::enableTestSync(bool enable) const
 {
     if (enable) {
         connect(runnerView()->selectionModel(),
-                SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                SLOT(syncResultWithTest(const QItemSelection&, const QItemSelection&)));
+                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                SLOT(syncResultWithTest(QItemSelection,QItemSelection)));
     } else {
         disconnect(runnerView()->selectionModel(),
-                   SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                   this,
-                   SLOT(syncResultWithTest(const QItemSelection&, const QItemSelection&)));
+                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                this, SLOT(syncResultWithTest(QItemSelection,QItemSelection)));
     }
 }
 
 void RunnerWindow::enableToSource() const
 {
     connect(resultsView()->selectionModel(),
-            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-            SLOT(jumpToSource(const QItemSelection&, const QItemSelection&)));
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(jumpToSource(QItemSelection,QItemSelection)));
 }
 
 void RunnerWindow::jumpToSource(const QItemSelection& selected, const QItemSelection& deselected)
@@ -838,13 +767,12 @@ void RunnerWindow::enableResultSync(bool enable) const
 {
     if (enable) {
         connect(resultsView()->selectionModel(),
-                SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                SLOT(syncTestWithResult(const QItemSelection&, const QItemSelection&)));
+                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                SLOT(syncTestWithResult(QItemSelection,QItemSelection)));
     } else {
         disconnect(resultsView()->selectionModel(),
-                   SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                   this,
-                   SLOT(syncTestWithResult(const QItemSelection&, const QItemSelection&)));
+                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                this, SLOT(syncTestWithResult(QItemSelection,QItemSelection)));
     }
 }
 
@@ -852,12 +780,7 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
                                     QLabel* labelForPic, int numItems) const
 {
     labelForText->setText(": " + QString().setNum(numItems));
-    bool visible;
-    if (numItems > 0) {
-        visible = true;
-    } else {
-        visible = false;
-    }
+    bool visible = (numItems > 0);
     labelForText->setVisible(visible);
     labelForPic->setVisible(visible);
 }
@@ -871,7 +794,6 @@ QTreeView* RunnerWindow::runnerView() const
 
 QTreeView* RunnerWindow::resultsView() const
 {
-//    return m_results->treeResults;
     return m_results->tree();
 }
 

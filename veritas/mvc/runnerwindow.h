@@ -122,9 +122,6 @@ private Q_SLOTS:
     void displayNumTotal(int numItems) const;
     void displayNumSelected(int numItems) const;
     void displayNumCompleted(int numItems) const;
-    void displayNumSuccess(int numItems) const;
-    void displayNumInfos(int numItems) const;
-    void displayNumWarnings(int numItems) const;
     void displayNumErrors(int numItems) const;
     void displayNumFatals(int numItems) const;
     void displayNumExceptions(int numItems) const;
