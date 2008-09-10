@@ -17,6 +17,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     irun.cpp
     iruncontroller.cpp
     irunprovider.cpp
+    isessioncontroller.cpp
+    isession.cpp
     contextmenuextension.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
@@ -45,6 +47,8 @@ install(FILES
     interfacesexport.h
     istatus.h
     irun.h
+    isession.h
+    isessioncontroller.h
     iruncontroller.h
     irunprovider.h
     contextmenuextension.h

@@ -35,6 +35,7 @@
 
 
 #include "mainwindow.h"
+#include "sessioncontroller.h"
 #include "uicontroller.h"
 #include "plugincontroller.h"
 #include "projectcontroller.h"
@@ -51,10 +52,11 @@ struct CorePrivate {
     CorePrivate(Core *core): m_core(core), m_cleanedUp(false)
     {
     }
-    
+
     void initialize(Core::Setup mode)
     {
         m_mode=mode;
+        sessionController = new SessionController(m_core);
         kDebug() << "Creating ui controller";
         uiController = new UiController(m_core);
         kDebug() << "Creating plugin controller";
@@ -66,6 +68,7 @@ struct CorePrivate {
         runController = new RunController(m_core);
 
         kDebug() << "initializing ui controller";
+        sessionController->initialize();
         if(!(mode & Core::NoUi)) uiController->initialize();
         languageController->initialize();
         projectController->initialize();
@@ -101,6 +104,7 @@ struct CorePrivate {
         delete partController;
         delete documentController;
         delete runController;
+        delete sessionController;
     }
 
     QPointer<PluginController> pluginController;
@@ -110,6 +114,7 @@ struct CorePrivate {
     QPointer<PartController> partController;
     QPointer<DocumentController> documentController;
     QPointer<RunController> runController;
+    QPointer<SessionController> sessionController;
 
     Core *m_core;
     bool m_cleanedUp;
@@ -151,6 +156,7 @@ Core::Setup Core::setupFlags() const
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
+        d->sessionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
 
@@ -168,6 +174,11 @@ void Core::cleanup()
 IUiController *Core::uiController()
 {
     return d->uiController;
+}
+
+ISessionController *Core::sessionController()
+{
+    return d->sessionController;
 }
 
 UiController *Core::uiControllerInternal()

@@ -23,6 +23,8 @@ set(kdevplatformshell_LIB_SRCS
     language.cpp
     statusbar.cpp
     runcontroller.cpp
+    sessioncontroller.cpp
+    session.cpp
     savedialog.cpp
 )
 
@@ -47,6 +49,8 @@ install(FILES
     textdocument.h
     documentcontroller.h
     languagecontroller.h
+    session.h
+    sessioncontroller.h
     language.h
     shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell

@@ -36,10 +36,10 @@ class RunController;
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
     enum Setup { Default=0, NoUi=1 };
-    
+
     static void initialize(Setup mode=Default);
     static Core *self();
-    
+
     virtual ~Core();
 
     /** @copydoc ICore::uiController() */
@@ -62,6 +62,9 @@ public:
 
     /** @copydoc ICore::runController() */
     virtual IRunController *runController();
+
+    /** @copydoc ICore::sessionController() */
+    virtual ISessionController *sessionController();
 
     /// The following methods may only be used within the shell.
 
@@ -87,7 +90,7 @@ public:
     RunController *runControllerInternal();
 
     void cleanup();
-    
+
     Core::Setup setupFlags() const;
 
 private:

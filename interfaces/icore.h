@@ -42,6 +42,7 @@ class IPluginController;
 class IProjectController;
 class ILanguageController;
 class IDocumentController;
+class ISessionController;
 class IRunController;
 
 /**
@@ -91,6 +92,8 @@ public:
 
     /** @return run controller */
     Q_SCRIPTABLE virtual KDevelop::IRunController *runController() = 0;
+
+    Q_SCRIPTABLE virtual KDevelop::ISessionController *sessionController() = 0;
 
 protected:
     ICore(QObject *parent = 0);
