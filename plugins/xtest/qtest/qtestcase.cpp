@@ -133,9 +133,6 @@ void QTestCase::setOutputParser(QTestOutputParser* p)
 // execute the test and parse result back in.
 int QTestCase::run()
 {
-    Q_ASSERT(m_parser); Q_ASSERT(m_proc);
-
-    // preconditions
     assertProcessSet();
     assertOutputParserSet();
 
