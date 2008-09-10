@@ -40,7 +40,7 @@ namespace KDevelop {
       Variable = 2,
       Class = 4,
       ForwardDeclaration = 8,
-      Namespace = 16 //Not actually used at the moment in the code-model
+      Namespace = 16
     };
     IndexedQualifiedIdentifier id;
     uint referenceCount;

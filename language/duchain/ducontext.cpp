@@ -43,6 +43,7 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "arrayhelpers.h"
+#include "codemodel.h"
 
 ///It is fine to use one global static mutex here
 
@@ -537,7 +538,12 @@ DUContext::~DUContext( )
   TopDUContext* top = topContext();
 
   if(!top->deleting() || !top->isOnDisk()) {
-    PersistentSymbolTable::self().removeContext(scopeIdentifier(true), this);
+    QualifiedIdentifier id(scopeIdentifier(true));
+    PersistentSymbolTable::self().removeContext(id, this);
+
+    //We put namespaces into the code-model
+    if(d->m_contextType == DUContext::Namespace)
+      CodeModel::self().removeItem(url(), id);
     
     if(d->m_owner.declaration())
       d->m_owner.declaration()->setInternalContext(0);
@@ -1092,7 +1098,12 @@ void DUContext::setType(ContextType type)
 {
   ENSURE_CAN_WRITE
 
+  bool wasInSymbolTable = inSymbolTable();
+  setInSymbolTable(false);
+
   d_func_dynamic()->m_contextType = type;
+
+  setInSymbolTable(wasInSymbolTable);
 
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
@@ -1469,10 +1480,20 @@ bool DUContext::inSymbolTable() const
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
   if(d_func()->m_scopeIdentifier.isValid()) {
-    if(!d_func()->m_inSymbolTable && inSymbolTable)
-      PersistentSymbolTable::self().addContext(scopeIdentifier(true), this);
-    else if(d_func()->m_inSymbolTable && !inSymbolTable)
-      PersistentSymbolTable::self().removeContext(scopeIdentifier(true), this);
+    if(!d_func()->m_inSymbolTable && inSymbolTable) {
+      QualifiedIdentifier id(scopeIdentifier(true));
+      PersistentSymbolTable::self().addContext(id, this);
+
+      if(d_func()->m_contextType == DUContext::Namespace)
+        CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
+      
+    }else if(d_func()->m_inSymbolTable && !inSymbolTable) {
+      QualifiedIdentifier id(scopeIdentifier(true));
+      PersistentSymbolTable::self().removeContext(id, this);
+      
+      if(d_func()->m_contextType == DUContext::Namespace)
+        CodeModel::self().removeItem(url(), id);
+    }
   }
 
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
