@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kparts/partmanager.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/variableinterface.h>
 #include <KApplication>
 #include <KConfig>
 #include <KFileDialog>
@@ -88,10 +89,37 @@ SourceFormatterPlugin::~SourceFormatterPlugin()
 	SourceFormatterManager::self()->deleteLater();
 }
 
+void SourceFormatterPlugin::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
+{
+	KTextEditor::Document *textDoc = doc->textDocument();
+// 	QString oldSpaceIndent;
+// 	QString indentWithTabs;
+// 	if(formatter->indentationType() == ISourceFormatter::IndentWithTabs)
+// 		indentWithTabs = "on";
+// 	else
+// 		indentWithTabs = "off";
+
+// 	KTextEditor::VariableInterface *iface =
+// 		qobject_cast<KTextEditor::VariableInterface*>(textDoc);
+// 	if(iface) {
+// 		oldSpaceIndent = iface->variable("space-indent");
+// 		emit iface->variableChanged(textDoc, "space-indent", indentWithTabs);
+// 	}
+	
+	KTextEditor::Cursor cursor = doc->cursorPosition();
+	QString text = formatter->formatSource(textDoc->text(), mime);
+	text = SourceFormatterManager::self()->addModelineForCurrentLang(text, mime);
+	textDoc->setText(text);
+	doc->setCursorPosition(cursor);
+	
+// 	if(iface)
+// 		iface->variableChanged(textDoc, "space-indent", oldSpaceIndent);
+}
+
 void SourceFormatterPlugin::beautifySource()
 {
-	KTextEditor::Document *doc =
-	    core()->documentController()->activeDocument()->textDocument();
+	KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
+	KDevelop::IDocument *doc = docController->activeDocument();
 	if (!doc)
 		return;
 	// load the appropriate formatter
@@ -101,7 +129,7 @@ void SourceFormatterPlugin::beautifySource()
 	ISourceFormatter *formatter = manager->formatterForMimeType(mime);
 
 	bool has_selection = false;
-	KTextEditor::View *view = doc->views().first();
+	KTextEditor::View *view = doc->textDocument()->views().first();
 	if (view && view->selection())
 		has_selection = true;
 
@@ -131,14 +159,9 @@ void SourceFormatterPlugin::beautifySource()
 		if (!original.endsWith('\n'))
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
-		doc->replaceText(view->selectionRange(), output);
-	} else {
-		KTextEditor::Cursor cursor = view->cursorPosition();
-		QString text = formatter->formatSource(doc->text(), mime);
-		text = manager->addModelineForCurrentLang(text, mime);
-		doc->setText(text);
-		view->setCursorPosition(cursor);
-	}
+		doc->textDocument()->replaceText(view->selectionRange(), output);
+	} else 
+		formatDocument(doc, formatter, mime);
 }
 
 QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter)
@@ -269,11 +292,7 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 		KDevelop::IDocument *doc = docController->documentForUrl(list[fileCount]);
 		if (doc) {
 			kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
-			KTextEditor::Cursor cursor = doc->cursorPosition();
-			QString text = formatter->formatSource(doc->textDocument()->text(), mime);
-			text = manager->addModelineForCurrentLang(text, mime);
-			doc->textDocument()->setText(text);
-			doc->setCursorPosition(cursor);
+			formatDocument(doc, formatter, mime);
 			return;
 		}
 

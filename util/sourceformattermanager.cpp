@@ -339,15 +339,14 @@ QString SourceFormatterManager::addModelineForCurrentLang(QString input, const K
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
 
-        QString modeline;
-// kate: indent-mode cstyle; space-indent off; tab-width 4;  ");
+    QString modeline("// kate: ");
 	QString length = QString::number(m_currentPlugins[m_currentLang]->indentationLength());
 	// add indentation style
 	modeline.append("indent-mode ").append(indentationMode(mime)).append("; ");
 
 	ISourceFormatter::IndentationType type = m_currentPlugins[m_currentLang]->indentationType();
 	if (type == ISourceFormatter::IndentWithTabs) {
-		modeline.append("space-indent off; ");
+		modeline.append("replace-tabs off; ");
 		modeline.append("tab-width ").append(length).append("; ");
 	} else {
 		modeline.append("space-indent on; ");
@@ -359,7 +358,7 @@ QString SourceFormatterManager::addModelineForCurrentLang(QString input, const K
 	kDebug() << "created modeline: " << modeline << endl;
 
 	bool modelinefound = false;
-	QRegExp kateModeline("//\\s*kate:(.*)$");
+	QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
 	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode)");
 	while (!is.atEnd()) {
 		QString line = is.readLine();

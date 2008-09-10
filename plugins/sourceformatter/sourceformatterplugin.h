@@ -30,6 +30,10 @@ namespace KParts
 {
 	class Part;
 }
+namespace KTextEditor
+{
+	class Document;
+}
 
 #include <interfaces/iplugin.h>
 
@@ -37,7 +41,7 @@ class ISourceFormatter;
 namespace KDevelop
 {
 	class IPlugin;
-	class Context;
+	class IDocument;
 	class ContextMenuExtension;
 	class ProjectBaseItem;
 }
@@ -60,6 +64,8 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 		void formatItem();
 
 	protected:
+		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter,
+							 const KMimeType::Ptr &mime);
 		QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
 		QString addIndentation(QString input, const QString indentWith);
 
