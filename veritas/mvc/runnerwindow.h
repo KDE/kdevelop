@@ -23,7 +23,6 @@
 #define VERITAS_RUNNERWINDOW_H
 
 #include <QtGui/QLabel>
-#include <QtCore/QSemaphore>
 #include <QTreeView>
 #include <QList>
 #include <QTime>
@@ -44,7 +43,6 @@ class RunnerProxyModel;
 class ResultsModel;
 class ResultsProxyModel;
 class SelectionManager;
-class StatusWidget;
 class VerboseManager;
 class ResultsWidget;
 
@@ -209,8 +207,6 @@ private: // Operations
 private: // Attributes
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
     ResultsWidget* m_results;
-    QSemaphore m_sema;                 // currently unused, should remove
-    QBrush m_highlightBrush;           // hmm
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project

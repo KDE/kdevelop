@@ -98,7 +98,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     initItemStatistics();
     connectActions();
-    m_sema.release();
     runnerView()->setMouseTracking(true);
     m_selection = new SelectionManager(runnerView());
     SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
@@ -640,9 +639,6 @@ void RunnerWindow::scrollToHighlightedRows() const
 
 void RunnerWindow::runItems()
 {
-    // Do not interfere with stopping the items. Could happen because Qt
-    // input processing could be faster than executing event handlers.
-    if (!m_sema.tryAcquire()) return;
     m_stopWatch.start();
     setGreenBar();
     displayNumCompleted(0);
@@ -651,7 +647,6 @@ void RunnerWindow::runItems()
     disableControlsBeforeRunning();
     resultsModel()->clear();
     runnerModel()->runItems();
-    m_sema.release();
 }
 
 void RunnerWindow::stopItems()
@@ -665,13 +660,11 @@ void RunnerWindow::stopItems()
     int r = dlg.exec();
     if (r == QDialog::Accepted) {
         enableControlsAfterRunning();
-        m_sema.release();
         return;
     }
     // Give a chance for another stop request.
     m_ui->actionStop->setEnabled(true);
     ui()->progressRun->setValue(ui()->progressRun->maximum());
-    m_sema.release();
 }
 
 void RunnerWindow::disableControlsBeforeRunning()
