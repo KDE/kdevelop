@@ -215,9 +215,6 @@ private: // Attributes
     VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
     QMap<KDevelop::IProject*, QAction*> m_project2action;
-
-    ResultsModel* m_resultsModel;
-    ResultsProxyModel* m_resultsProxyModel;
     QTime m_stopWatch;
 };
 

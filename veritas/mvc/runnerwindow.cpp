@@ -82,7 +82,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
         : QWidget(parent, flags)
 {
     initVeritasResource();
-    m_resultsModel = rmodel;
     m_ui = new Ui::RunnerWindow;
     m_ui->setupUi(this);
     m_results = new ResultsWidget();
@@ -139,12 +138,11 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     addProjectMenu();
 
-    m_resultsProxyModel = new ResultsProxyModel(this);
-    m_resultsProxyModel->setSourceModel(m_resultsModel);
+    ResultsProxyModel* rproxy = new ResultsProxyModel(this);
+    rproxy->setSourceModel(rmodel);
     int filter = Veritas::RunError | Veritas::RunFatal;
-    m_resultsProxyModel->setFilter(filter); // also updates the view
-
-    resultsView()->setModel(m_resultsProxyModel);
+    rproxy->setFilter(filter); // also updates the view
+    resultsView()->setModel(rproxy);
 
     const char* whatsthis = "xTest runner. First select a project from the rightmost dropdown box. Next, load the test tree by clicking on the green circular arrow icon. Run your tests with a click on the leftmost green arrow icon.";
     setWhatsThis( i18n(whatsthis) );
@@ -821,12 +819,15 @@ RunnerProxyModel* RunnerWindow::runnerProxyModel() const
 
 ResultsModel* RunnerWindow::resultsModel() const
 {
-    return m_resultsModel;
+    ResultsProxyModel* proxy = resultsProxyModel();
+    return proxy ?
+        qobject_cast<ResultsModel*>(proxy->sourceModel()) :
+        0;
 }
 
 ResultsProxyModel* RunnerWindow::resultsProxyModel() const
 {
-    return m_resultsProxyModel;
+    return qobject_cast<ResultsProxyModel*>(resultsView()->model());
 }
 
 VerboseManager* RunnerWindow::verboseManager() const
