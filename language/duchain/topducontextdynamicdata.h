@@ -77,11 +77,22 @@ class TopDUContextDynamicData {
   static IndexedString loadUrl(uint topContextIndex);
   
   private:
+    struct ItemDataInfo {
+      //parentContext 0 means the global context
+      ItemDataInfo(uint _dataOffset = 0, uint _parentContext = 0) : dataOffset(_dataOffset), parentContext(_parentContext) {
+      }
+      uint dataOffset; //Offset of the data
+      uint parentContext; //Parent context of the data
+    };
+
     TopDUContext* m_topContext;
     //May contain zero contexts if they were deleted
-    QVector<DUContext*> m_contexts;
+    mutable QVector<DUContext*> m_contexts;
     //May contain zero declarations if they were deleted
-    QVector<Declaration*> m_declarations;
+    mutable QVector<Declaration*> m_declarations;
+    
+    QVector<ItemDataInfo> m_contextDataOffsets;
+    QVector<ItemDataInfo> m_declarationDataOffsets;
     
     //Protects m_temporaryDeclarations, must be locked before accessing that vector
     static QMutex m_temporaryDataMutex;

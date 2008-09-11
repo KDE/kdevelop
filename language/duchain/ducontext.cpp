@@ -86,29 +86,13 @@ const Identifier globalImportIdentifier("{...import...}");
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
 
+  Q_ASSERT(!parent || ownIndex);
   m_dynamicData->m_topContext = parent ? parent->topContext() : static_cast<TopDUContext*>(this);
   m_dynamicData->m_indexInTopContext = ownIndex;
   m_dynamicData->m_parentContext = DUContextPointer(parent);
   m_dynamicData->m_context = this;
 
   DUChainBase::rebuildDynamicData(parent, ownIndex);
-
-  {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-
-    FOREACH_FUNCTION(LocalIndexedDeclaration indexedDecl, d_func()->m_localDeclarations) {
-      Declaration* decl = indexedDecl.data(topContext());
-      Q_ASSERT(decl);
-      decl->rebuildDynamicData(this, indexedDecl.localIndex());
-      m_dynamicData->addDeclarationToHash(decl->identifier(), decl);
-    }
-  }
-
-  FOREACH_FUNCTION(LocalIndexedDUContext ctx, d_func()->m_childContexts) {
-    DUContext* child = ctx.data(topContext());
-    Q_ASSERT(child);
-    child->rebuildDynamicData(this, ctx.localIndex());
-  }
 }
 
 DUContextData::DUContextData()
@@ -296,6 +280,11 @@ void DUContextDynamicData::disableLocalDeclarationsHash()
 
 bool DUContextDynamicData::needsLocalDeclarationsHash()
 {
+  //For now disable the hash, until we make sure that all declarations needed for the hash are loaded first
+  //including those in propagating sub-contexts.
+  //Then, also make sure that we create the declaration hash after loading if needed
+  return false;
+  
   if(m_context->d_func()->m_localDeclarationsSize() > 15)
     return true;
 
@@ -488,6 +477,7 @@ DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous
 
   if (parent) {
     m_dynamicData->m_indexInTopContext = parent->topContext()->m_dynamicData->allocateContextIndex(this, parent->isAnonymous() || anonymous);
+    Q_ASSERT(m_dynamicData->m_indexInTopContext);
 
     if( !anonymous )
       parent->m_dynamicData->addChildContext(this);

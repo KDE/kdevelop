@@ -244,6 +244,8 @@ void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
   m_context = parent;
   m_topContext = parent->topContext();
   m_indexInTopContext = ownIndex;
+  
+  parent->m_dynamicData->addDeclarationToHash(d_func()->m_identifier.identifier(), this);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)

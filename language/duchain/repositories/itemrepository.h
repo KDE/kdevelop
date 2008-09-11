@@ -62,6 +62,8 @@ namespace KDevelop {
    * Items must not be larger than the bucket size!
    * */
 
+///Returns a version-number that is used to reset the item-repository after incompatible layout changes
+KDEVPLATFORMLANGUAGE_EXPORT uint staticItemRepositoryVersion();
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
   public:
@@ -881,7 +883,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
   };
   
   enum {
-    ItemRepositoryVersion = 18,
     BucketStartOffset = sizeof(uint) * 7 + sizeof(short unsigned int) * bucketHashSize //Position in the data where the bucket array starts
   };
   
@@ -1382,7 +1383,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
         m_file->write((char*)&m_repositoryVersion, sizeof(uint));
         uint hashSize = bucketHashSize;
         m_file->write((char*)&hashSize, sizeof(uint));
-        uint itemRepositoryVersion  = ItemRepositoryVersion;
+        uint itemRepositoryVersion  = staticItemRepositoryVersion();
         m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
         m_file->write((char*)&m_statBucketHashClashes, sizeof(uint));
         m_file->write((char*)&m_statItemCount, sizeof(uint));
@@ -1505,7 +1506,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->write((char*)&m_repositoryVersion, sizeof(uint));
       uint hashSize = bucketHashSize;
       m_file->write((char*)&hashSize, sizeof(uint));
-      uint itemRepositoryVersion  = ItemRepositoryVersion;
+      uint itemRepositoryVersion  = staticItemRepositoryVersion();
       m_file->write((char*)&itemRepositoryVersion, sizeof(uint));
       
       m_statBucketHashClashes = m_statItemCount = 0;
@@ -1540,8 +1541,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository
       m_file->read((char*)&m_statBucketHashClashes, sizeof(uint));
       m_file->read((char*)&m_statItemCount, sizeof(uint));
       
-      if(storedVersion != m_repositoryVersion || hashSize != bucketHashSize || itemRepositoryVersion != ItemRepositoryVersion) {
-        kDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << ItemRepositoryVersion;
+      if(storedVersion != m_repositoryVersion || hashSize != bucketHashSize || itemRepositoryVersion != staticItemRepositoryVersion()) {
+        kDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << staticItemRepositoryVersion();
         delete m_file;
         m_file = 0;
         delete m_dynamicFile;
