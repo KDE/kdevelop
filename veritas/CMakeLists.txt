@@ -17,10 +17,8 @@ set(veritas_SRCS
     mvc/resultsproxymodel.cpp
     mvc/runnermodel.cpp
     mvc/runnerproxymodel.cpp
-    mvc/runnerviewcontroller.cpp
     mvc/runnerwindow.cpp
     mvc/stoppingdialog.cpp
-    mvc/viewcontrollercommon.cpp
     mvc/selectionmanager.cpp
     mvc/selectiontoggle.cpp
     mvc/verbosemanager.cpp

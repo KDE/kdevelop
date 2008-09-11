@@ -29,7 +29,6 @@
 #include "veritas/mvc/resultsproxymodel.h"
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/runnerproxymodel.h"
-#include "veritas/mvc/runnerviewcontroller.h"
 #include "veritas/mvc/selectionmanager.h"
 #include "veritas/mvc/stoppingdialog.h"
 #include "veritas/mvc/verbosemanager.h"
@@ -54,6 +53,7 @@
 #include <KColorScheme>
 #include <QBrush>
 #include <QColor>
+#include <QHeaderView>
 
 using KDevelop::IProject;
 Q_DECLARE_METATYPE(KDevelop::IProject*)
@@ -71,7 +71,6 @@ using Veritas::RunnerModel;
 using Veritas::RunnerProxyModel;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
-using Veritas::RunnerViewController;
 using Veritas::VerboseManager;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
@@ -89,10 +88,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_results = new ResultsWidget();
     runnerView()->setRootIsDecorated(false);
     runnerView()->setUniformRowHeights(true);
-
-    // Controllers for the tree views, it's best to create them at the
-    // very beginning.
-    m_runnerViewController = new RunnerViewController(this, runnerView());
 
     connectFocusStuff();
     setGreenBar();
@@ -139,8 +134,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     resultsView()->header()->setResizeMode(QHeaderView::Interactive);
 
-    connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
-            runnerController(), SLOT(expandOrCollapse(const QModelIndex&)));
+    connect(runnerView(),  SIGNAL(clicked(QModelIndex)),
+            SLOT(expandOrCollapse(QModelIndex)));
 
     addProjectMenu();
 
@@ -258,14 +253,16 @@ void RunnerWindow::connectActions()
 
 void RunnerWindow::unselectAll()
 {
-    runnerController()->unselectAll();
+    runnerModel()->uncheckAll();
     resetProgressBar();
+    runnerView()->viewport()->update();
 }
 
 void RunnerWindow::selectAll()
 {
-    runnerController()->selectAll();
+    runnerModel()->checkAll();
     resetProgressBar();
+    runnerView()->viewport()->update();
 }
 
 RunnerWindow::~RunnerWindow()
@@ -300,9 +297,9 @@ void RunnerWindow::initProxyModels(RunnerModel* model)
 {
     // Proxy models for the views with the source model as their parent
     // to have the proxies deleted when the model gets deleted.
-    RunnerProxyModel* runnerProxyModel = new RunnerProxyModel(model);
-    runnerProxyModel->setSourceModel(model);
-    runnerView()->setModel(runnerProxyModel);
+    RunnerProxyModel* proxy = new RunnerProxyModel(model);
+    proxy->setSourceModel(model);
+    runnerView()->setModel(proxy);
     m_stopWatch = QTime();
 }
 
@@ -785,6 +782,13 @@ void RunnerWindow::displayStatusNum(QLabel* labelForText,
     labelForPic->setVisible(visible);
 }
 
+void RunnerWindow::expandOrCollapse(const QModelIndex& index) const
+{
+    runnerView()->isExpanded(index) ?
+        runnerView()->collapse(index) :
+        runnerView()->expand(index);
+}
+
 ////////////////// GETTERS /////////////////////////////////////////////////////////////
 
 QTreeView* RunnerWindow::runnerView() const
@@ -804,12 +808,15 @@ QWidget* RunnerWindow::resultsWidget() const
 
 RunnerModel* RunnerWindow::runnerModel() const
 {
-    return runnerController()->runnerModel();
+    RunnerProxyModel* proxy = runnerProxyModel();
+    return proxy ?
+        qobject_cast<RunnerModel*>(proxy->sourceModel()) :
+        0;
 }
 
 RunnerProxyModel* RunnerWindow::runnerProxyModel() const
 {
-    return runnerController()->runnerProxyModel();
+    return qobject_cast<RunnerProxyModel*>(runnerView()->model());
 }
 
 ResultsModel* RunnerWindow::resultsModel() const
@@ -820,11 +827,6 @@ ResultsModel* RunnerWindow::resultsModel() const
 ResultsProxyModel* RunnerWindow::resultsProxyModel() const
 {
     return m_resultsProxyModel;
-}
-
-RunnerViewController* RunnerWindow::runnerController() const
-{
-    return m_runnerViewController;
 }
 
 VerboseManager* RunnerWindow::verboseManager() const

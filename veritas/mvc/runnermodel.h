@@ -141,6 +141,12 @@ public:
      *  Veritas::RunnerResult values. */
     void setExpectedResults(int expectedResults);
 
+    /*! Check all items in the test tree */
+    void checkAll();
+
+    /*! Uncheck all items in the test tree */
+    void uncheckAll();
+
 Q_SIGNALS:
     /*! Emitted when the runner item referred to by
      *  \a index is started. */

@@ -43,8 +43,6 @@ class RunnerModel;
 class RunnerProxyModel;
 class ResultsModel;
 class ResultsProxyModel;
-class RunnerViewController;
-class ResultsViewController;
 class SelectionManager;
 class StatusWidget;
 class VerboseManager;
@@ -154,6 +152,10 @@ private Q_SLOTS:
     void selectAll();
     void unselectAll();
 
+    /*! If test with index @p i is currently expanded then collapse it.
+        Vice versa if it is currently collapsed. */
+    void expandOrCollapse(const QModelIndex& i) const;
+
 private: // Operations
 
     // helpers for RunnerWindow(...) ctor
@@ -195,8 +197,6 @@ private: // Operations
     void displayStatusNum(QLabel* labelForText,
                           QLabel* labelForPic, int numItems) const;
 
-    RunnerViewController* runnerController() const;
-
     void enableToSource() const;
 
     // Copy and assignment not supported.
@@ -211,7 +211,6 @@ private: // Attributes
     ResultsWidget* m_results;
     QSemaphore m_sema;                 // currently unused, should remove
     QBrush m_highlightBrush;           // hmm
-    RunnerViewController*  m_runnerViewController; // used to reduce bloat in this class
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project

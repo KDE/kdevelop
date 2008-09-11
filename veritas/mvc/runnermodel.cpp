@@ -84,6 +84,18 @@ QString RunnerModel::name() const
     return m_name;
 }
 
+
+void RunnerModel::checkAll()
+{
+    if (m_rootItem) m_rootItem->setSelected(true);
+}
+
+void RunnerModel::uncheckAll()
+{
+    if (m_rootItem) m_rootItem->setSelected(false);
+}
+
+
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
