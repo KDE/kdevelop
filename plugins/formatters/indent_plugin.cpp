@@ -49,9 +49,9 @@ QString IndentPlugin::caption()
 
 QString IndentPlugin::description()
 {
-	return i18n("Indent and Format C Program Source.\n"
+	return i18n("<b>Indent and Format C Program Source.<b/>\n"
 		"The `indent' program can be used to make code easier to read."
-		" It can also convert from one style of writing C to another."
+		" It can also convert from one style of writing C to another.\n"
 		"<b>indent</b> understands a substantial amount about the syntax of C,"
 		" but it also attempts to cope with incomplete and misformed syntax.\n"
 		"Home Page: <a href=\"http://www.gnu.org/software/indent/\">"
@@ -66,9 +66,9 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 QString IndentPlugin::formatSource(const QString &text, const KMimeType::Ptr &)
 {
 	KProcess proc;
-	QTextStream ios(&proc, QIODevice::ReadWrite);
+	QTextStream ios(&proc);
 	proc.setProgram("indent", m_options);
-	proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+	proc.setOutputChannelMode(KProcess::MergedChannels);
 
 	proc.start();
 	if(!proc.waitForStarted()) {
@@ -76,16 +76,15 @@ QString IndentPlugin::formatSource(const QString &text, const KMimeType::Ptr &)
 		return text;
 	}
 
-	ios << text;
+	proc.write(text.toLocal8Bit());
+	proc.closeWriteChannel();
 	if(!proc.waitForFinished()) {
 		kDebug() << "Process doesn't finish" << endl;
 		return text;
 	}
-	proc.closeWriteChannel();
 
 	QString output = ios.readAll();
-	kDebug() << "read " << output << endl;
-	return text;
+	return output;
 }
 
 QMap<QString, QString> IndentPlugin::predefinedStyles(const KMimeType::Ptr &)
@@ -113,12 +112,13 @@ void IndentPlugin::setStyle(const QString &name, const QString &content)
 
 SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
-	return new IndentPreferences();
+// 	return new IndentPreferences();
+	return 0;
 }
 
 QString IndentPlugin::previewText(const KMimeType::Ptr &)
 {
-	return "int foo (){puts(\"Hi\");}\n/* The procedure bar is even less interesting.  */"
+	return "int foo (){puts(\"Hi\");}\n/* The procedure bar is even less interesting.  */\n"
 	"char * bar () { puts(\"Hello\");}";
 }
 
@@ -132,7 +132,7 @@ ISourceFormatter::IndentationType IndentPlugin::indentationType()
 
 int IndentPlugin::indentationLength()
 {
-	int idx = m_options.firstIndexOf("^-i\\d+");
+	int idx = m_options.indexOf("^-i\\d+");
 	if(idx < 0)
 		return 2;
 	return m_options[idx].mid(2).toInt();

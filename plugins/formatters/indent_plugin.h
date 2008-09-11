@@ -30,8 +30,8 @@ class IndentPlugin : public KDevelop::IPlugin, public ISourceFormatter
 		Q_INTERFACES(ISourceFormatter)
 
 	public:
-		explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
-		~AStylePlugin();
+		explicit IndentPlugin(QObject *parent, const QVariantList & = QVariantList());
+		~IndentPlugin();
 
 		virtual QString name();
 		virtual QString caption();
