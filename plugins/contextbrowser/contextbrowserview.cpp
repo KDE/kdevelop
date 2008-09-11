@@ -235,7 +235,6 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
     if (context == 0) return;
 
     if (isPreviousEntry(context, position)) {
-        kDebug() << "Previous history entry, ignoring";
         return;
     } else { // Append new history entry
         m_history.resize(m_nextHistoryIndex); // discard forward history
