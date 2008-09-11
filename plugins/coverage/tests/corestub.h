@@ -30,6 +30,7 @@ class IPluginController;
 class IProjectController;
 class IRunController;
 class IUiController;
+class ISessionController;
 }
 
 namespace KParts
@@ -51,6 +52,7 @@ public:
         m_projectController(0),
         m_uiController(0),
         m_runController(0),
+        m_sessionController(0),
         m_partManager(0) {}
 
     virtual ~Core() {}
@@ -75,6 +77,9 @@ public:
     virtual KParts::PartManager *partManager() {
         return m_partManager;
     }
+    virtual KDevelop::ISessionController* sessionController() {
+        return m_sessionController;
+    }
 
     // inject whatever it is you want.
     KDevelop::IDocumentController* m_documentController;
@@ -83,6 +88,7 @@ public:
     KDevelop::IProjectController* m_projectController;
     KDevelop::IUiController* m_uiController;
     KDevelop::IRunController* m_runController;
+    KDevelop::ISessionController* m_sessionController;
     KParts::PartManager* m_partManager;
 };
 
