@@ -34,8 +34,9 @@ namespace KTextEditor
 }
 class ISourceFormatter;
 
-/** Store : current plugins for each language
-            current style for each language+formatter
+/** \short The settings modulefor the Source formatter plugin.
+* It supports predefined and custom styles. A live preview of the style
+* is shown on the right side of the page.s
 */
 class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSettingsUI
 {
@@ -46,9 +47,21 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		virtual ~SourceFormatterSettings();
 
 	protected:
+		/** Create the text editor, connect the signals and initialise the widget.
+		*/
 		void init();
+		/** Populates the formatters combo box with all available formatters
+		* corresponding to the active language.
+		*/
 		void poulateFormattersList();
+		/**Populates the style list with all available style
+		* corresponding to the active language. This include custom styles loaded
+		* from the config file.
+		*/
 		void populateStyleList();
+		/** Sets the active language. Updates SouceFormetterManager.
+		* \p plugin can be empty to keep the default plugin.
+		*/
 		void setActiveLanguage(const QString &lang, const QString &plugin);
 
 	public slots:

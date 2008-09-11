@@ -45,7 +45,10 @@ namespace KDevelop
 	class ContextMenuExtension;
 	class ProjectBaseItem;
 }
-/**
+
+/** \short A plugin to format and beautify source files
+ * It can support any backend using plugins implementing
+ * the \ref ISourceFormatter interface.
  */
 class SourceFormatterPlugin : public KDevelop::IPlugin
 {
@@ -60,13 +63,30 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 		void formatFiles(KUrl::List &list);
 
 	public slots:
+		/** Formats the file in the currently active document, or only
+		* the selected part if a selection exists. In this case, the indentation of
+		* the selection is kept.
+		*/
 		void beautifySource();
+		/** Formats the items in m_prjItems or m_urls.
+		*/
 		void formatItem();
 
 	protected:
+		/** Formats the document corresponding to \arg doc , using \arg formatter.
+		* \arg mime is the mime type of the file. The content of the editor is
+		* modified but the file is not saved.
+		*/
 		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter,
 							 const KMimeType::Ptr &mime);
+		/** Replaces spaces with tabs using the number of spaces per tabs defined
+		* in the \arg formatter or convert tabs to spaces, depending on the config.
+		* \return The modified string
+		*/
 		QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
+		/** Adds the string \arg indentWith at the beginning of each line in \arg input.
+		* \return The modified string
+		*/
 		QString addIndentation(QString input, const QString indentWith);
 
 	protected slots:

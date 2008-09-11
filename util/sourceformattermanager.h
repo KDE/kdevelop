@@ -33,7 +33,7 @@ namespace KDevelop
 	class IPlugin;
 }
 
-/**
+/** \short A singleton class managing all source formatter plugins
  */
 class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 {
@@ -43,29 +43,43 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		SourceFormatterManager(QObject *parent = 0);
 		virtual ~SourceFormatterManager();
 
+		/** \return The instance of this singleton.
+		*/
 		static SourceFormatterManager* self();
 
-		/** \return the active formatter for this language.
+		/** \return the formatter for the active language.
 		*/
 		ISourceFormatter* activeFormatter();
+		/** \return The formatter corresponding to the language
+		* of the document corresponding to the \arg url.
+		*/
 		ISourceFormatter* formatterForUrl(const KUrl &url);
 		/** Loads and returns a source formatter for this mime type.
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.
 		*/
 		ISourceFormatter* formatterForMimeType(const KMimeType::Ptr &mime);
+		/** \return Whether this mime type is supported by any plugin.
+		*/
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
+		/** A ist of all languages (corresponding to a
+		* \ref KDevelop::ILanguageSupport) supported by loaded plugins.
+		*/
 		QStringList languages();
 		/** \return the language name corresponding to the mime type \arg name.
 		*/
 		QString languageNameForMimeType(const KMimeType::Ptr &mime);
+		/** \return All loaded plugins for this \arg lang.
+		*/
 		QList<KDevelop::IPlugin*> pluginListForLanguage(const QString &lang);
 		/** \return One mime type corresponding to the language \arg lang.
 		* It is useful because ISourceFormatter always expects a mime type,
 		* eg in preview text when the text does not correspond to any file.
 		*/
 		QString mimeTypeForLanguage(const QString &lang);
+		/** \return The name of an icon for the language.
+		*/
 		QString iconForLanguage(const QString &lang);
 
 		/** Sets the active language (and optionnaly plugin). If \arg plugin is not given,
@@ -97,9 +111,18 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		*/
 		void setCurrentStyle(const QString &style);
 
+		/** Saves a custom style to the config, in the \ref configGroup()
+		*/
 		void saveStyle(const QString &name, const QString &content);
+		/** Changes the caption of a custom style in the config file.
+		*/
 		void renameStyle(const QString &name, const QString &caption);
+		/** Deletes a style from the config style.
+		*/
 		void deleteStyle(const QString &name);
+		/** \return A name for a new style. It will be "User"+ the lowest
+		* number available.
+		*/
 		QString nameForNewStyle();
 
 		/** \return A modeline string (to add at the end or the beginning of a file)
@@ -112,13 +135,22 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		}
 
 	protected:
+		/** \return the language support plugin corresponding to
+		* a mime type name.
+		*/
 		KDevelop::IPlugin* languageSupportForMimeType(const QString &name);
+		/** \return The name of the language corresponding to this mime type name.
+		*/
 		QString languageNameFromLanguageSupport(const QString &mime);
 		void loadPlugins();
 
 		ISourceFormatter* formatterForLanguage(const QString &language);
+		/** \return the formatter for the currently avtive language named \arg name.
+		*/
 		ISourceFormatter* formatterByName(const QString &language, const QString &name);
-
+		/** \return The name of kate indentation mode for the mime type.
+		* examples are cstyle, python, etc.
+		*/
 		QString indentationMode(const KMimeType::Ptr &mime);
 
 	private:

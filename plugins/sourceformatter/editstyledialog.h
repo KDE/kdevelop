@@ -32,6 +32,8 @@ namespace KTextEditor
 class ISourceFormatter;
 class SettingsWidget;
 
+/** \short A simple dialog to add preview around a \ref SettingsWidget
+*/
 class EditStyleDialog : public KDialog
 {
 		Q_OBJECT
@@ -41,14 +43,14 @@ class EditStyleDialog : public KDialog
 		        const QString &content = QString(), QWidget *parent = 0);
 		virtual ~EditStyleDialog();
 
+		/** \return The string representing the style given by the \ref SettingsWidget.
+		*/
 		QString content();
 
 	protected:
 		void init();
 
 	public slots:
-// 		void load();
-// 		virtual void accept();
 		void updatePreviewText(const QString &text);
 
 	private:
