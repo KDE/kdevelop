@@ -55,7 +55,7 @@ QString AStylePlugin::caption()
 QString AStylePlugin::description()
 {
     return i18n("<b>Artistic Style</b> is a source code indenter, formatter,"
-        " and beautifier for the C, C++, C# and Java programming languages.\n"
+        " and beautifier for the C, C++, C# and Java programming languages.<br />"
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 

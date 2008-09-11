@@ -49,13 +49,23 @@ QString IndentPlugin::caption()
 
 QString IndentPlugin::description()
 {
-	return i18n("<b>Indent and Format C Program Source.<b/>\n"
+	// check if indent is installed
+	KProcess proc;
+	QStringList args;
+	args << "--version";
+	proc.setProgram("indent", args);
+	int res = proc.execute();
+
+	if(res >= 0) //indent was found
+		return i18n("<b>Indent and Format C Program Source.</b><br />"
 		"The `indent' program can be used to make code easier to read."
-		" It can also convert from one style of writing C to another.\n"
+		" It can also convert from one style of writing C to another.<br />"
 		"<b>indent</b> understands a substantial amount about the syntax of C,"
-		" but it also attempts to cope with incomplete and misformed syntax.\n"
+		" but it also attempts to cope with incomplete and misformed syntax.<br />"
 		"Home Page: <a href=\"http://www.gnu.org/software/indent/\">"
 		"http://www.gnu.org/software/indent</a>/");
+	else
+		return ISourceFormatter::missingExecutableMessage("indent");
 }
 
 QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
