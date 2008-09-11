@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
-    <height>483</height>
+    <width>821</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -30,7 +30,7 @@
         <x>0</x>
         <y>0</y>
         <width>366</width>
-        <height>444</height>
+        <height>421</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -153,7 +153,7 @@
         <x>0</x>
         <y>0</y>
         <width>366</width>
-        <height>444</height>
+        <height>421</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -205,6 +205,9 @@ p, li { white-space: pre-wrap; }
 &lt;td>
 &lt;p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;a href="http://astyle.sourceforge.net/">&lt;span style=" text-decoration: underline; color:#0057ae;">http://astyle.sourceforge.net/&lt;/span>&lt;/a>&lt;/p>&lt;/td>&lt;/tr>&lt;/table>
 &lt;p align="justify" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-weight:600;">&lt;/p>&lt;/body>&lt;/html></string>
+           </property>
+           <property name="textFormat" >
+            <enum>Qt::RichText</enum>
            </property>
            <property name="scaledContents" >
             <bool>false</bool>

@@ -295,7 +295,7 @@ void SourceFormatterSettings::languagesFormattersChanged(int idx)
 	if (idx < 0) // no selection
 		return;
 	//update source formatter
-//     setActiveLanguage(cbLanguagesFormatters->currentText(), QString());
+    setActiveLanguage(cbLanguagesFormatters->currentText(), QString());
 
 	poulateFormattersList(); // will call setActiveLanguage
 //     updatePreviewText();
@@ -303,6 +303,7 @@ void SourceFormatterSettings::languagesFormattersChanged(int idx)
 
 void SourceFormatterSettings::poulateFormattersList()
 {
+	cbFormatters->blockSignals(true);
 	cbFormatters->clear();
 
 	SourceFormatterManager *manager = SourceFormatterManager::self();
@@ -312,9 +313,12 @@ void SourceFormatterSettings::poulateFormattersList()
 	foreach(KDevelop::IPlugin *plugin, list) {
 		ISourceFormatter *formatter = plugin->extension<ISourceFormatter>();
 		cbFormatters->addItem(formatter->caption(), formatter->name());
-		if (m_currentFormatter && (formatter->name() == m_currentFormatter->name()))
+		if (m_currentFormatter && (formatter->name() == m_currentFormatter->name())) {
 			rowToSelect = cbFormatters->count() - 1;
+			kDebug() << "Selecting " << rowToSelect << formatter->name() << endl;
+		}
 	}
+	cbFormatters->blockSignals(false);
 	cbFormatters->setCurrentIndex(rowToSelect);
 }
 
@@ -333,6 +337,7 @@ void SourceFormatterSettings::formattersChanged(int idx)
 
 void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QString &plugin)
 {
+	kDebug() << "lang = " << lang << " plugin = " << plugin << endl;
 	SourceFormatterManager *manager = SourceFormatterManager::self();
 	manager->setActiveLanguage(lang, plugin);
 	m_currentFormatter = manager->activeFormatter();
