@@ -2,7 +2,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9000 )
 
 include_directories(lib)
 
-########### next target ###############
+########### astyle ###############
 set(kdevastyle_PART_SRCS
     astyle_plugin.cpp
     astyle_preferences.cpp
@@ -32,6 +32,26 @@ target_link_libraries(kdevastyle
 
 install(TARGETS kdevastyle DESTINATION ${PLUGIN_INSTALL_DIR} )
 
+########### indent ###############
+set(kdevindent_PART_SRCS
+    indent_plugin.cpp
+)
+
+# set(indent_preferences_UI
+#     indent_preferences.ui
+# )
+
+# kde4_add_ui_files(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
+kde4_add_plugin(kdevindent ${kdevindent_PART_SRCS})
+target_link_libraries(kdevindent
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDEVPLATFORM_UTIL_LIBRARY})
+
+install(TARGETS kdevindent DESTINATION ${PLUGIN_INSTALL_DIR} )
+
 ########### install files ###############
 
 install( FILES kdevastyle.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevindent.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+
