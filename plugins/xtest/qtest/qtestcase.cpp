@@ -152,6 +152,8 @@ void QTestCase::setUpProcSignals()
     m_proc->disconnect();
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(morphXmlToText()));
+    connect(m_proc, SIGNAL(error(QProcess::ProcessError)),
+            SLOT(closeOutputFile()));
     connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
 }
 
