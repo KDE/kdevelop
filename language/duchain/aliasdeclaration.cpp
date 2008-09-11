@@ -20,6 +20,7 @@
 
 #include "ducontext.h"
 #include "duchainregister.h"
+#include "types/delayedtype.h"
 
 namespace KDevelop
 {
@@ -61,6 +62,9 @@ QString AliasDeclaration::toString() const {
 
 void AliasDeclaration::setAliasedDeclaration(const IndexedDeclaration& decl) {
   d_func_dynamic()->m_aliasedDeclaration = decl;
+  Declaration* aliased = decl.data();
+  if(aliased)
+    Declaration::setAbstractType(aliased->abstractType());
 }
 
 IndexedDeclaration AliasDeclaration::aliasedDeclaration() const {
@@ -68,9 +72,7 @@ IndexedDeclaration AliasDeclaration::aliasedDeclaration() const {
 }
 
 void AliasDeclaration::setAbstractType(AbstractType::Ptr type) {
-  if(type) {
-    kDebug() << "tried to set type on AliasDeclaration" << type->toString();
-  }
+  Declaration::setAbstractType(type);
 }
 
 }
