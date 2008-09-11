@@ -72,6 +72,7 @@ private slots:
   void testDeclareNamespace();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
+  void testUsingDeclarationInTemplate();
   void testDeclareUsingNamespace2();
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();

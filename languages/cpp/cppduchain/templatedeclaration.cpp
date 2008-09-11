@@ -692,53 +692,39 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
 
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
+        ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
+        if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
+          ///For alias declaration, we resolve the declaration that is aliased instead of a type.
+          ///For this reason, template alias-declarations have a DelayedType assigned
+          DelayedType::Ptr delayed = alias->type<DelayedType>();
+          if(delayed) {
+            QList<Declaration*> declarations = parentContext->findDeclarations(delayed->identifier());
+            if(!declarations.isEmpty())
+              alias->setAliasedDeclaration(declarations.first());
+          }
+        }else{
+          ///Resolve all involved delayed types
+          AbstractType::Ptr t(instantiatedDeclaration->abstractType());
+          IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
 
-/*    if( parentContext->type() == DUContext::Template && templateArguments.previousInstantiationInformation ) {
-        DUContext* fromParent = instantiatedFrom->context();
-        ///This is a template parameter, replace it
-        uint currentArgument = fromParent->localDeclarations().indexOf(instantiatedFrom);
-        IndexedInstantiationInformation parentInfo(templateArguments.previousInstantiationInformation);
-        kDebug() << "instantiating template parameter declaration" << instantiatedFrom -> toString();
+          ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
+          AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
 
-        if( currentArgument < parentInfo.information().templateParametersSize() && parentInfo.information().templateParameters()[currentArgument].result().isValid() )
-        {
-            kDebug() << "with" << parentInfo.information().templateParameters()[currentArgument].result().toString();
-            instantiatedDeclaration->setAbstractType( parentInfo.information().templateParameters()[currentArgument].result().type.type() );
-        } else {
-            kDebug() << "with default";
-            TemplateParameterDeclaration * paramDecl = dynamic_cast<TemplateParameterDeclaration*>(instantiatedFrom);
-            //Apply default-parameters
-            //Use the already available delayed-type resolution to resolve the value/type
-            if( paramDecl && !paramDecl->defaultParameter().isEmpty() ) {
-            DelayedType::Ptr delayed( new DelayedType() );
-            delayed->setIdentifier( paramDecl->defaultParameter() );
-            instantiatedDeclaration->setAbstractType( resolveDelayedTypes( AbstractType::Ptr(delayed.data()), contextCopy, source) );
-            }else{
-            //Parameter missing
+          if( idType && idType->declaration(source) == instantiatedFrom ) {
+            if( changedType == instantiatedDeclaration->abstractType() )
+                changedType = instantiatedDeclaration->abstractType()->clone();
+
+            IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.unsafeData());
+            if( changedIdType ) {
+              DeclarationId base = instantiatedFrom->id();
+              base.setSpecialization(templateArguments.indexed().index());
+              changedIdType->setDeclarationId(base);
             }
-        }
-    }else{*/
-        ///Resolve all involved delayed types
-
-        AbstractType::Ptr t(instantiatedDeclaration->abstractType());
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
-
-        ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
-        AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
-
-        if( idType && idType->declaration(source) == instantiatedFrom ) {
-        if( changedType == instantiatedDeclaration->abstractType() )
-            changedType = instantiatedDeclaration->abstractType()->clone();
-
-        IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.unsafeData());
-        if( changedIdType ) {
-          DeclarationId base = instantiatedFrom->id();
-          base.setSpecialization(templateArguments.indexed().index());
-          changedIdType->setDeclarationId(base);
-        }
+          }
+          
+          instantiatedDeclaration->setAbstractType( changedType );
         }
 
-        instantiatedDeclaration->setAbstractType( changedType );
 //     }
   }
 
@@ -783,7 +769,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
 /*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
     Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
   }*/
-  //kDebug() << dynamic_cast<const Declaration*>(this)->toString() << templateArguments.toString() << templateArguments.viewDebug();
+//   kDebug() << dynamic_cast<const Declaration*>(this)->toString() << templateArguments.toString();
 
   if( m_instantiatedFrom )
     return m_instantiatedFrom->instantiate( templateArguments, source );

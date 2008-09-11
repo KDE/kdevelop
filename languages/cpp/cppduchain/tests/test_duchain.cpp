@@ -1103,6 +1103,31 @@ void TestDUChain::testUsingDeclaration()
   release(top);
 }
 
+void TestDUChain::testUsingDeclarationInTemplate()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<T>::i; };");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  Declaration* basicDecl = findDeclaration(top, QualifiedIdentifier("B::i"));
+  QVERIFY(basicDecl);
+  kDebug() << typeid(*basicDecl).name() << basicDecl->toString();
+  QVERIFY(basicDecl->abstractType());
+  kDebug() << basicDecl->abstractType()->toString();
+
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("B<int>::i"));
+  QVERIFY(decl);
+  QVERIFY(decl->abstractType());
+  QVERIFY(decl->type<IntegralType>());
+
+  release(top);
+}
+
 void TestDUChain::testDeclareUsingNamespace2()
 {
   TEST_FILE_PARSE_ONLY

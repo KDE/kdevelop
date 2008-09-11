@@ -852,7 +852,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
   ///@todo only use the last name component as range
   AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name ? (AST*)node->name : (AST*)node, id.last());
   {
-    DUChainReadLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
     SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
