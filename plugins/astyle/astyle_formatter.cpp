@@ -132,6 +132,8 @@ void AStyleFormatter::updateFormatter()
 
 void AStyleFormatter::resetStyle()
 {
+    setSpaceIndentation(4);
+    setBracketFormatMode(astyle::NONE_MODE);
     setBreakOneLineBlocksMode(true);
     setSingleStatementsMode(true);
     // blocks
