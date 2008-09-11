@@ -138,7 +138,7 @@ TopDUContext* DeclarationFactory::parseText(const QByteArray& text)
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
     session->setContentsAndGenerateLocationTable(
-        pp.processFile("anonymous", rpp::pp::Data, text));
+        pp.processFile("anonymous", text));
 
     Parser parser(&m_control);
     TranslationUnitAST* ast = parser.parse(session);

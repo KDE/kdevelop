@@ -62,76 +62,39 @@ Preprocessor* pp::preprocessor() {
   return m_preprocessor;
 }
 
-PreprocessedContents pp::processFile(const QString& fileName, StringType type, const QByteArray& data)
+PreprocessedContents pp::processFile(const QString& fileName)
 {
-  if ( type == File  )
-  {
     QFile file(fileName);
-    if (file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
     {
-      m_files.push(KDevelop::IndexedString(fileName));
-
-      QByteArray contentsDecoded = file.readAll();
-      PreprocessedContents contents = convertFromByteArray(contentsDecoded);
-
-      Stream is(&contents);
-      PreprocessedContents result;
-      // Guestimate as to how much expansion will occur
-      result.reserve(int(contentsDecoded.length() * 1.2));
-
-      {
-        Stream rs(&result, m_environment->locationTable());
-        operator () (is, rs);
-      }
-
-      result.squeeze();
-      return result;
+        kWarning(9007) << "file '" << fileName << "' not found!" ;
+        return PreprocessedContents();
     }
 
-    kWarning(9007) << "file '" << fileName << "' not found!" ;
-    return PreprocessedContents();
-  }
-  else
-  {
     PreprocessedContents result;
-    // Guestimate as to how much expansion will occur
-    result.reserve(int(data.length() * 1.2));
+    processFileInternal(fileName, file.readAll(), result);
+    return result;
+}
+
+PreprocessedContents pp::processFile(const QString& fileName, const QByteArray& data)
+{
+    PreprocessedContents result;
+    processFileInternal(fileName, data, result);
+    return result;
+}
+
+void pp::processFileInternal(const QString& fileName, const QByteArray& fileContents, PreprocessedContents& result)
+{
     m_files.push(KDevelop::IndexedString(fileName));
-
-    PreprocessedContents contents = convertFromByteArray(data);
-
+    // Guestimate as to how much expansion will occur
+    result.reserve(int(fileContents.length() * 1.2));
+    PreprocessedContents contents = convertFromByteArray(fileContents);
     {
       Stream is(&contents);
       Stream rs(&result, m_environment->locationTable());
       operator () (is, rs);
     }
-
     result.squeeze();
-    return result;
-  }
-
-}
-
-PreprocessedContents pp::processFile(QIODevice* device)
-{
-  Q_ASSERT(device);
-
-  PreprocessedContents result;
-
-  m_files.push(KDevelop::IndexedString("<internal>"));
-
-  {
-    QTextStream input(device);
-    QByteArray contentsDecoded = input.readAll().toUtf8();
-    
-    PreprocessedContents contents = convertFromByteArray(contentsDecoded);
-  
-    Stream is(&contents);
-    Stream rs(&result, m_environment->locationTable());
-    operator () (is, rs);
-  }
-
-  return result;
 }
 
 uint ifDirective = KDevelop::IndexedString("if").index();

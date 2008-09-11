@@ -370,7 +370,7 @@ QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
 
   preprocessor.environment()->enterBlock(fileMacros);
 
-  QByteArray ret = stringFromContents(preprocessor.processFile(url.pathOrUrl(), rpp::pp::Data, sourceToParse.readAll()));
+  QByteArray ret = stringFromContents(preprocessor.processFile(url.pathOrUrl(), sourceToParse.readAll()));
 
   preprocessor.environment()->leaveBlock();
 

@@ -231,7 +231,7 @@ void PreprocessJob::run()
 
     preprocessor.environment()->enterBlock(parentJob()->masterJob()->parseSession()->macros);
 
-    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), rpp::pp::Data, contents);
+    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), contents);
 
     m_currentEnvironment->finish();
     

@@ -176,13 +176,13 @@ public:
 
   Value eval_expression (Stream& input);
 
-  /**
-   * If @param stringType is Data, @param data must be set.
-   * The file-name is needed so macros can be correctly marked.
-   * Currently the file is expected to be utf8-encoded.
-   * */
-  PreprocessedContents processFile(const QString& fileName, StringType stringType, const QByteArray& data = QByteArray());
-  PreprocessedContents processFile(QIODevice* input);
+  /** Read file @p fileName and preprocess
+   *  Currently the file is expected to be utf8-encoded. */
+  PreprocessedContents processFile(const QString& fileName);
+
+  /** Preprocess @p fileName with content @p data. Do not actually open file @p fileName
+   *  Currently the file is expected to be utf8-encoded. */
+  PreprocessedContents processFile(const QString& fileName, const QByteArray& data);
 
   void operator () (Stream& input, Stream& output);
 
@@ -203,7 +203,8 @@ public:
   uint branchingHash() const;
   
 private:
-  
+  void processFileInternal(const QString& fileName, const QByteArray& fileContent, PreprocessedContents& result);
+
   int skipping() const;
   bool test_if_level();
 

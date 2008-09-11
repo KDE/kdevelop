@@ -41,7 +41,7 @@ Preprocessor::~Preprocessor()
 // {
 //     pp proc(this);
 // 
-//     QString ret = QString::fromUtf8(proc.processFile("anonymous", pp::Data, string.toUtf8()));
+//     QString ret = QString::fromUtf8(proc.processFile("anonymous", string.toUtf8()));
 // 
 //     proc.environment()->cleanup();
 // 

@@ -298,7 +298,7 @@ private slots:
   QString preprocess(const QString& contents) {
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
-    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", rpp::pp::Data, contents.toUtf8())));
+    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", contents.toUtf8())));
   }
 
   void testPreprocessor() {

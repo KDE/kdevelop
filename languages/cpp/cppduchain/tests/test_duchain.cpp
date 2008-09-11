@@ -2625,7 +2625,7 @@ void TestDUChain::testFileParse()
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
 
-  QByteArray preprocessed = stringFromContents(pp.processFile("anonymous", rpp::pp::Data, fileData));
+  QByteArray preprocessed = stringFromContents(pp.processFile("anonymous", fileData));
 
   TopDUContext* top = parse(preprocessed, DumpNone);
 
@@ -2929,7 +2929,7 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
 
-  session->setContentsAndGenerateLocationTable(pp.processFile("anonymous", rpp::pp::Data, unit));
+  session->setContentsAndGenerateLocationTable(pp.processFile("anonymous", unit));
 
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);

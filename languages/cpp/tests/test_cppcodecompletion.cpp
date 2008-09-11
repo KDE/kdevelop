@@ -948,7 +948,7 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
 
-    PreprocessedContents contents = preprocessor.processFile("<test>", rpp::pp::Data, text.toUtf8());
+    PreprocessedContents contents = preprocessor.processFile("<test>", text.toUtf8());
     if(targetContents)
       *targetContents = contents;
 
