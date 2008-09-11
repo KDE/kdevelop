@@ -328,6 +328,7 @@ void SourceFormatterSettings::formattersChanged(int idx)
 	QString lang = cbLanguagesFormatters->currentText();
 	QString name = cbFormatters->itemData(idx).toString();
 	setActiveLanguage(lang, name);
+	populateStyleList();
 
 	//update description label
 	lblDescription->setText(m_currentFormatter->description());

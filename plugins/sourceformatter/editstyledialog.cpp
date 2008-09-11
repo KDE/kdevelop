@@ -38,7 +38,7 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::P
 	setMainWidget(m_content);
 
 	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
-	if (!content.isEmpty())
+	if (m_settingsWidget && !content.isEmpty())
 		m_settingsWidget->load(QString(), content);
 	init();
 }
@@ -50,11 +50,13 @@ EditStyleDialog::~EditStyleDialog()
 void EditStyleDialog::init()
 {
 	// add plugin settings widget
-	QVBoxLayout *layout = new QVBoxLayout(m_ui.settingsWidgetParent);
-	layout->addWidget(m_settingsWidget);
-	m_ui.settingsWidgetParent->setLayout(layout);
-	connect(m_settingsWidget, SIGNAL(previewTextChanged(const QString&)),
-	        this, SLOT(updatePreviewText(const QString&)));
+	if(m_settingsWidget) {
+		QVBoxLayout *layout = new QVBoxLayout(m_ui.settingsWidgetParent);
+		layout->addWidget(m_settingsWidget);
+		m_ui.settingsWidgetParent->setLayout(layout);
+		connect(m_settingsWidget, SIGNAL(previewTextChanged(const QString&)),
+			this, SLOT(updatePreviewText(const QString&)));
+	}
 
 	// add texteditor preview
 	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
@@ -95,7 +97,9 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 
 QString EditStyleDialog::content()
 {
-	return m_settingsWidget->save();
+	if(m_settingsWidget)
+		return m_settingsWidget->save();
+	return QString();
 }
 
 #include "editstyledialog.moc"
