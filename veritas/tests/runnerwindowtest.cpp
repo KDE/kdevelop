@@ -79,17 +79,17 @@ void RunnerWindowTest::checkAllItems(checkMemberFun f)
 // helper
 bool RunnerWindowTest::isSelected(TestStub* item)
 {
-    return item->selected();
+    return item->isChecked();
 }
 
 // helper
 void RunnerWindowTest::selectSome()
 {
-    model->item1->setSelected(true);
-    model->child11->setSelected(true);
-    model->child12->setSelected(false);
-    model->item2->setSelected(false);
-    model->child21->setSelected(true);
+    model->item1->check();
+    model->child11->check();
+    model->child12->unCheck();
+    model->item2->unCheck();
+    model->child21->check();
 }
 
 // command
@@ -106,7 +106,7 @@ void RunnerWindowTest::selectAll()
 // helper
 bool RunnerWindowTest::isNotSelected(TestStub* item)
 {
-    return !item->selected();
+    return !item->isChecked();
 }
 
 // command

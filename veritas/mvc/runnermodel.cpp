@@ -87,12 +87,12 @@ QString RunnerModel::name() const
 
 void RunnerModel::checkAll()
 {
-    if (m_rootItem) m_rootItem->setSelected(true);
+    if (m_rootItem) m_rootItem->check();
 }
 
 void RunnerModel::uncheckAll()
 {
-    if (m_rootItem) m_rootItem->setSelected(false);
+    if (m_rootItem) m_rootItem->unCheck();
 }
 
 
@@ -105,7 +105,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     } case Qt::DisplayRole : {
         return testFromIndex(index)->data(index.column());
     } case Qt::TextColorRole : {
-        if (!testFromIndex(index)->selected()) return Qt::lightGray;
+        if (!testFromIndex(index)->isChecked()) return Qt::lightGray;
         else return Qt::black;
     } case Qt::DecorationRole : {
         if (index.column() != 0) {
@@ -261,7 +261,7 @@ void RunnerModel::countItems()
         }
         Test* item = testFromIndex(currentIndex);    // Have an item.
         numTotal++;
-        if (item->selected() && !hasChildren(currentIndex)) {
+        if (item->isChecked() && !hasChildren(currentIndex)) {
             m_numSelected++;
         }
         switch (item->state()) {

@@ -70,7 +70,7 @@ void TestTest::simpleRoot()
     assertNrofChildren(root, 0);
     assertNrofColumns(root, TEST_COLUMN_COUNT);
     assertDefaultResult(root);
-    KVERIFY_MSG(root->selected(), "Not selected. Item should be enabled by default");
+    KVERIFY_MSG(root->isChecked(), "Not selected. Item should be enabled by default");
     KOMPARE_MSG(0, root->row(), "No parent so should surely be the first row");
     KOMPARE(NULL, root->parent());
     KOMPARE("", root->name());

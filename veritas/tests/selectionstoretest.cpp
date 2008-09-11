@@ -42,11 +42,11 @@ void SelectionStoreTest::rootOnly()
 {
     SelectionStore* s = new SelectionStore;
     Test* root = new Test("root", 0);
-    root->setSelected(true);
+    root->check();
     s->saveState(root);
     KVERIFY(!s->wasDeselected(root));
 
-    root->setSelected(false);
+    root->unCheck();
     s->saveState(root);
     KVERIFY(s->wasDeselected(root));
 }
@@ -55,7 +55,7 @@ void SelectionStoreTest::newObject()
 {
     SelectionStore* s = new SelectionStore;
     Test* root = new Test("root", 0);
-    root->setSelected(false);
+    root->unCheck();
     s->saveState(root);
 
     Test* root2 = new Test("root", 0);
@@ -69,9 +69,9 @@ void SelectionStoreTest::saveMultiple()
     Test* test2 = new Test("test2", 0);
     Test* test3 = new Test("test3", 0);
 
-    test1->setSelected(false);
-    test2->setSelected(true);
-    test3->setSelected(false);
+    test1->unCheck();
+    test2->check();
+    test3->unCheck();
 
     s->saveState(test1);
     s->saveState(test2);
@@ -89,8 +89,8 @@ void SelectionStoreTest::testTree()
     Test* child1 = new Test("test2", root);
     Test* child2 = new Test("test3", root);
 
-    child1->setSelected(true);
-    child2->setSelected(false);
+    child1->check();
+    child2->unCheck();
 
     s->saveState(child1);
     s->saveState(child2);
@@ -107,8 +107,8 @@ void SelectionStoreTest::testTreeWithIdenticalNames()
     Test* root2 = new Test("root2", 0);
     Test* child2 = new Test("child", root2);
 
-    child1->setSelected(true);
-    child2->setSelected(false);
+    child1->check();
+    child2->unCheck();
 
     s->saveState(child1);
     s->saveState(child2);
@@ -128,10 +128,10 @@ void SelectionStoreTest::saveRecursive()
     root->addChild(child2);
     child2->addChild(child21);
 
-    root->setSelected(true);
-    child1->setSelected(true);
-    child2->setSelected(false);
-    child21->setSelected(false);
+    root->check();
+    child1->check();
+    child2->unCheck();
+    child21->unCheck();
 
     s->saveTree(root);
 
@@ -158,10 +158,10 @@ void SelectionStoreTest::restoreRecursive()
     Test* child21 = new Test("test21", child2);
     child2->addChild(child21);
 
-    root->setSelected(true);
-    child1->setSelected(true);
-    child2->setSelected(false);
-    child21->setSelected(false);
+    root->check();
+    child1->check();
+    child2->unCheck();
+    child21->unCheck();
 
     s->saveTree(root);
 
@@ -182,12 +182,12 @@ void SelectionStoreTest::restoreRecursive()
 
     s->restoreTree(root);
 
-    KVERIFY(root->selected());
-    KVERIFY(child1->selected());
-    KVERIFY(!child2->selected());
-    KVERIFY(!child21->selected());
-    KVERIFY(!child22->selected());
-    KVERIFY(child3->selected());
+    KVERIFY(root->isChecked());
+    KVERIFY(child1->isChecked());
+    KVERIFY(!child2->isChecked());
+    KVERIFY(!child21->isChecked());
+    KVERIFY(!child22->isChecked());
+    KVERIFY(child3->isChecked());
 }
 
 QTEST_MAIN( SelectionStoreTest )

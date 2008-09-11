@@ -57,7 +57,7 @@ public:
 
 void SetupChain::operator()(Test* current)
 {
-    if (!(current->shouldRun() && current->selected())) {
+    if (!(current->shouldRun() && current->isChecked())) {
         return;           // only run if is an exe and selected
     }
     if (!m_previous) { // first test in the chain.

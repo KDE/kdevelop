@@ -43,7 +43,7 @@ Test::Test(const QList<QVariant>& data, Test* parent)
     } else {
         m_name.clear();
     }
-    setSelected(true);
+    check();
 }
 
 Test::Test(const QString& name, Test* parent)
@@ -56,7 +56,7 @@ Test::Test(const QString& name, Test* parent)
     for (int i=0; i < s_columnCount; i++) {
         m_itemData << QString();
     }
-    setSelected(true);
+    check();
 }
 
 QString Test::name() const
@@ -152,16 +152,24 @@ void Test::setData(int column, const QVariant& value)
     }
 }
 
-bool Test::selected() const
+bool Test::isChecked() const
 {
-    return m_selected;
+    return m_isChecked;
 }
 
-void Test::setSelected(bool select)
+void Test::check()
 {
-    m_selected = select;
+    m_isChecked = true;
     foreach (Test* child, m_children) {
-        child->setSelected(select);
+        child->check();
+    }
+}
+
+void Test::unCheck()
+{
+    m_isChecked = false;
+    foreach (Test* child, m_children) {
+        child->unCheck();
     }
 }
 

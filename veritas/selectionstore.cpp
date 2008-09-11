@@ -47,7 +47,7 @@ public:
         Q_ASSERT(m_store);
         kDebug() << t->name() << m_store->wasDeselected(t);
         if (m_store->wasDeselected(t)) {
-            t->setSelected(false);
+            t->unCheck();
         }
     }
     SelectionStore* m_store;
@@ -58,7 +58,7 @@ public:
 void SelectionStore::saveState(Test* test)
 {
     Q_ASSERT(test);
-    if (!test->selected()) {
+    if (!test->isChecked()) {
         m_deselected << serialize(test);
     }
 }

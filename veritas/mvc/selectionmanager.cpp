@@ -63,7 +63,7 @@ void SelectionManager::slotEntered(const QModelIndex& index)
     if (index.isValid()) {
         Test* t = index2Test(index);
         Q_ASSERT(t);
-        button()->setChecked(t->selected());
+        button()->setChecked(t->isChecked());
     }
     OverlayManager::slotEntered(index);
 }
@@ -73,7 +73,7 @@ void SelectionManager::setItemSelected(bool selected)
 {
     const QModelIndex index = button()->index();
     if (index.isValid()) {
-        index2Test(index)->setSelected(selected);
+        selected ? index2Test(index)->check() : index2Test(index)->unCheck();
         QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(view()->model());
         RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
         runnerModel->updateView(proxyModel->mapToSource(index));

@@ -114,8 +114,11 @@ public: // Operations
     QList<Test*> leafs() const;
 
     /*! Is this item checked by the user in the tree-runnerview? */
-    bool selected() const;
-    void setSelected(bool select);
+    bool isChecked() const;
+    /*! Check this test and all its children */
+    void check();
+    /*! Recursively lift check state */
+    void unCheck();
 
     int columnCount() const;
 
@@ -165,7 +168,7 @@ private: // Attributes
     QString m_name;
     TestState m_state;
     TestResult* m_result;
-    bool m_selected;
+    bool m_isChecked;
     static const int s_columnCount;
 };
 
