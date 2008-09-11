@@ -222,6 +222,44 @@ void QTestRunnerTest::nonterminatedXMLOutput()
     m_runner->runTests(); // should not timeout
 }
 
+void QTestRunnerTest::nonexistantTestExe()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"foobar\" exe=\"foobar_this_exe_does_not_exist\">\n"
+            "<command name=\"cmd1\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+
+    RunnerTestHelper* m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+    m_runner->setRoot(root);
+    m_runner->runTests(); // should not timeout
+}
+
+void QTestRunnerTest::nonexistantTestCommand()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"fakeqtest1\" exe=\"fakeqtest1\">\n"
+            "<command name=\"cmd_foobar_which_does_not_exist\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+
+    RunnerTestHelper* m_runner = new RunnerTestHelper;
+    m_runner->initializeGUI();
+    m_runner->setRoot(root);
+    m_runner->runTests(); // should not timeout
+}
+
 // helper
 Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
 {

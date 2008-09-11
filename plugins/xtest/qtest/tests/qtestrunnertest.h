@@ -39,6 +39,8 @@ private slots:
     void sunnyDay();
     void runTwice();
     void nonterminatedXMLOutput();
+    void nonexistantTestExe();
+    void nonexistantTestCommand();
 
 private:
     void assertAllFilesClosed(Veritas::Test*);
