@@ -72,7 +72,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   setWindowTitle(i18n("Classes"));
   setWindowIcon(KIcon("class"));
 
-  KAction* action = new KAction(i18n( "Scope" ), this);
+  /*KAction* action = new KAction(i18n( "Scope" ), this);
   action->setToolTip(i18n("Select how much of the code model to display."));
   addAction(action);
 
@@ -103,7 +103,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   action = new KAction(i18n("Current Document Language Only"), filterMenu);
   action->setChecked(true);
   filterMenu->addAction(action);
-  //connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));
+  //connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));*/
 
   m_searchLine = new KLineEdit(this);
   m_searchLine->setClearButtonShown( true );
