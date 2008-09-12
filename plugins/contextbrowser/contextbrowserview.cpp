@@ -300,7 +300,7 @@ void ContextController::updateDeclarationListBox(DUContext* context) {
             return true;
         }
         virtual bool accept(DUContext* ctx) {
-        return ctx->type() == DUContext::Global || ctx->type() == DUContext::Namespace;
+        return ctx->type() == DUContext::Global || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Class;
         }
         KComboBox* m_box;
         QList<IndexedDeclaration>& declarations;
@@ -315,6 +315,9 @@ void ContextController::updateDeclarationListBox(DUContext* context) {
 void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
 {
     if (context == 0) return;
+    if(!context->owner())
+        return; //Only add history-entries for contexts that have owners, which in practice should be functions and classes
+                //This keeps the history cleaner
 
     if (!isPreviousEntry(context, position) || context->url() != m_listUrl)
         if(m_currentContextBox->isVisible())
@@ -323,6 +326,14 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
     if (isPreviousEntry(context, position)) {
         return;
     } else { // Append new history entry
+        //To have a more useful history, do not duplicate items in it, so remove old occurences of the same context
+        for(int a = 0; a < m_nextHistoryIndex; ++a) {
+            if(m_history[a].context == IndexedDUContext(context)) {
+                m_history.remove(a);
+                --m_nextHistoryIndex;
+            }
+        }
+
         m_history.resize(m_nextHistoryIndex); // discard forward history
         m_history.append(HistoryEntry(IndexedDUContext(context), position));
         ++m_nextHistoryIndex;
