@@ -258,6 +258,28 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
   }
 }
 
+bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
+  if(index < (0xffffffff/2)) {
+    if(index == 0 || index > uint(m_declarations.size()))
+      return false;
+    return (bool)m_declarations[index-1];
+  }else{
+    return true;
+  }
+}
+
+bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
+  if(index < (0xffffffff/2)) {
+    if(index == 0)
+      return true;
+    if(index > uint(m_contexts.size()))
+      return false;
+    return (bool)m_contexts[index-1];
+  }else{
+    return true;
+  }
+}
+
 Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
   if(index < (0xffffffff/2)) {
     if(index == 0 || index > uint(m_declarations.size()))
@@ -296,6 +318,9 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
     else {
       Q_ASSERT(m_declarations[index-1] == decl);
       m_declarations[index-1] = 0;
+      
+      if(index-1 < m_declarationDataOffsets.size())
+        m_declarationDataOffsets[index-1] = ItemDataInfo();
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
@@ -358,11 +383,15 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
 void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   uint index = decl->m_dynamicData->m_indexInTopContext;
   if(index < (0xffffffff/2)) {
+    
     if(index == 0 || index > uint(m_contexts.size()))
       return;
     else {
       Q_ASSERT(m_contexts[index-1] == decl);
       m_contexts[index-1] = 0;
+      
+      if(index-1 < m_contextDataOffsets.size())
+        m_contextDataOffsets[index-1] = ItemDataInfo();
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);

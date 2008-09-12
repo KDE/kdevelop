@@ -74,7 +74,7 @@ QString ClassFunctionDeclaration::toString() const {
 
   TypePtr<FunctionType> function = type<FunctionType>();
   if(function) {
-    return QString("member-function %1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   } else {
     QString type = abstractType() ? abstractType()->toString() : QString("<notype>");
     kDebug(9505) << "A function has a bad type attached:" << type;

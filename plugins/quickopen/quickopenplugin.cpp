@@ -750,72 +750,6 @@ void QuickOpenPlugin::quickOpenNavigate()
   }
 }
 
-class DUChainItemFilter {
-public:
-  //Both should return whether processing should be continued
-  virtual bool accept(Declaration* decl) = 0;
-  virtual bool accept(DUContext* ctx) = 0;
-  virtual ~DUChainItemFilter() {
-  }
-};
-
-void collectItems( QList<DUChainItem>& items, DUContext* context, DUChainItemFilter& filter ) {
-
-  QVector<DUContext*> children = context->childContexts();
-  QVector<Declaration*> localDeclarations = context->localDeclarations();
-
-  QVector<DUContext*>::const_iterator childIt = children.begin();
-  QVector<Declaration*>::const_iterator declIt = localDeclarations.begin();
-
-  while(childIt != children.end() || declIt != localDeclarations.end()) {
-
-    DUContext* child = 0;
-    if(childIt != children.end())
-      child = *childIt;
-
-    Declaration* decl = 0;
-    if(declIt != localDeclarations.end())
-      decl = *declIt;
-
-    if(decl) {
-      if(child && child->range().start.line >= decl->range().start.line)
-        child = 0;
-    }
-
-    if(child) {
-      if(decl && decl->range().start >= child->range().start)
-        decl = 0;
-    }
-
-    if(decl) {
-      if( filter.accept(decl) ) {
-        if(dynamic_cast<FunctionDefinition*>(decl) && static_cast<FunctionDefinition*>(decl)->declaration())
-          decl = static_cast<FunctionDefinition*>(decl)->declaration();
-
-        DUChainItem item;
-        item.m_item = IndexedDeclaration(decl);
-        item.m_text = decl->qualifiedIdentifier().toString();
-        items << item;
-
-        FunctionType::Ptr functionType = decl->abstractType().cast<FunctionType>();
-
-        if(functionType)
-          item.m_text += functionType->partToString(FunctionType::SignatureArguments);
-      }
-
-      ++declIt;
-      continue;
-    }
-
-    if(child) {
-      if( filter.accept(child) )
-        collectItems(items, child, filter);
-      ++childIt;
-      continue;
-    }
-  }
-}
-
 bool QuickOpenPlugin::freeModel()
 {
   if(m_currentWidgetHandler)
@@ -849,14 +783,22 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   QList<DUChainItem> items;
 
-  class OutlineFilter : public DUChainItemFilter {
+  class OutlineFilter : public DUChainUtils::DUChainItemFilter {
   public:
+    OutlineFilter(QList<DUChainItem>& _items) : items(_items) {
+    }
     virtual bool accept(Declaration* decl) {
       if(decl->range().isEmpty())
         return false;
-      if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class))
+      if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class)) {
+
+        DUChainItem item;
+        item.m_item = IndexedDeclaration(decl);
+        item.m_text = decl->toString();
+        items << item;
+
         return true;
-      else
+      } else
         return false;
     }
     virtual bool accept(DUContext* ctx) {
@@ -865,9 +807,10 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
       else
         return false;
     }
-  } filter;
+    QList<DUChainItem>& items;
+  } filter(items);
 
-  collectItems( items, context, filter );
+  DUChainUtils::collectItems( context, filter );
 
   if(noHtmlDestriptionInOutline) {
     for(int a = 0; a < items.size(); ++a)

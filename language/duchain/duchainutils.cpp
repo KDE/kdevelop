@@ -311,3 +311,51 @@ Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& curso
   return 0;
 }
 
+DUChainUtils::DUChainItemFilter::~DUChainItemFilter() {
+}
+
+void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter ) {
+
+  QVector<DUContext*> children = context->childContexts();
+  QVector<Declaration*> localDeclarations = context->localDeclarations();
+
+  QVector<DUContext*>::const_iterator childIt = children.begin();
+  QVector<Declaration*>::const_iterator declIt = localDeclarations.begin();
+
+  while(childIt != children.end() || declIt != localDeclarations.end()) {
+
+    DUContext* child = 0;
+    if(childIt != children.end())
+      child = *childIt;
+
+    Declaration* decl = 0;
+    if(declIt != localDeclarations.end())
+      decl = *declIt;
+
+    if(decl) {
+      if(child && child->range().start.line >= decl->range().start.line)
+        child = 0;
+    }
+
+    if(child) {
+      if(decl && decl->range().start >= child->range().start)
+        decl = 0;
+    }
+
+    if(decl) {
+      if( filter.accept(decl) ) {
+        //Action is done in the filter
+      }
+
+      ++declIt;
+      continue;
+    }
+
+    if(child) {
+      if( filter.accept(child) )
+        collectItems(child, filter);
+      ++childIt;
+      continue;
+    }
+  }
+}

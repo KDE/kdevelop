@@ -57,6 +57,18 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
   ///Returns the first declaration in the given line. Searches the given context and all sub-contexts.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, KDevelop::DUContext* ctx);
+  
+  class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemFilter {
+    public:
+    virtual bool accept(Declaration* decl) = 0;
+    //Should return whether processing should be deepened into the given context
+    virtual bool accept(DUContext* ctx) = 0;
+    virtual ~DUChainItemFilter();
+  };
+  ///walks a context, all its sub-contexts, and all its declarations in exactly the order they appear in in the file.
+  ///Re-implement DUChainItemFilter to do something with the items.
+  KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
+
 }
 
 }

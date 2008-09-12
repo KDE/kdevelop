@@ -118,6 +118,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
     uint localIndex() const {
       return m_contextIndex;
     }
+    
+    bool isLoaded(TopDUContext* top) const;
   private:
   uint m_contextIndex;
 };

@@ -122,6 +122,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
     uint localIndex() const {
       return m_declarationIndex;
     }
+    
+    bool isLoaded(TopDUContext* top) const;
 
   private:
   uint m_declarationIndex;

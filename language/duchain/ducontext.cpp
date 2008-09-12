@@ -162,6 +162,13 @@ LocalIndexedDUContext::LocalIndexedDUContext(DUContext* ctx) {
   }
 }
 
+bool LocalIndexedDUContext::isLoaded(TopDUContext* top) const {
+  if(!m_contextIndex)
+    return false;
+  else
+    return top->m_dynamicData->isContextForIndexLoaded(m_contextIndex);
+}
+
 DUContext* LocalIndexedDUContext::data(TopDUContext* top) const {
   if(!m_contextIndex)
     return 0;
@@ -1001,9 +1008,8 @@ void DUContext::deleteLocalDeclarations()
   }
 
   FOREACH_ARRAY(LocalIndexedDeclaration decl, declarations)
-    delete decl.data(topContext());
-
-  Q_ASSERT(d_func()->m_localDeclarationsSize() == 0);
+    if(decl.isLoaded(topContext()))
+      delete decl.data(topContext());
 }
 
 void DUContext::deleteChildContextsRecursively()
@@ -1015,9 +1021,8 @@ void DUContext::deleteChildContextsRecursively()
     children << ctx;
 
   foreach(LocalIndexedDUContext ctx, children)
-    delete ctx.data(topContext());
-
-  Q_ASSERT(d->m_childContextsSize() == 0);
+    if(ctx.isLoaded(topContext()))
+      delete ctx.data(topContext());
 }
 
 QVector< Declaration * > DUContext::clearLocalDeclarations( )

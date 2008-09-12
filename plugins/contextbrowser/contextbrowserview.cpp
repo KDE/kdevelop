@@ -29,8 +29,10 @@
 #include <KIcon>
 #include <KTextBrowser>
 #include <KLocale>
+#include <KComboBox>
 
 #include <language/duchain/declaration.h>
+#include <language/duchain/topducontext.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -40,6 +42,8 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include "contextbrowser.h"
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/types/functiontype.h>
 
 const int maxHistoryLength = 30;
 
@@ -75,10 +79,18 @@ ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIn
     m_resetButton = new QToolButton();
     m_resetButton->setIcon(KIcon("view-refresh"));
     connect(m_resetButton, SIGNAL(clicked(bool)),this, SLOT(resetHistory()));
+
+    m_currentContextBox = new KComboBox();
+    m_currentContextBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    connect(m_currentContextBox, SIGNAL(activated(int)), this, SLOT(comboItemActivated(int)));
 }
 
 QToolButton* ContextController::resetButton() const {
     return m_resetButton;
+}
+
+KComboBox* ContextController::currentContextBox() const {
+    return m_currentContextBox;
 }
 
 void ContextController::resetHistory() {
@@ -98,6 +110,29 @@ void ContextController::updateButtonState()
     m_previousButton->setEnabled( m_nextHistoryIndex >= 2 );
 }
 
+void ContextController::comboItemActivated(int index)
+{
+    if(index >= 0 && index < m_listDeclarations.size()) {
+        IndexedString u;
+        SimpleCursor c;
+        {
+            KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+            Declaration* activated = m_listDeclarations[index].data();
+            if(activated) {
+                u = activated->url();
+                c = activated->range().start;
+                if(activated->internalContext() && activated->internalContext()->url() == u) {
+                    c = activated->internalContext()->range().start;
+                    if(c.line+1 >= activated->internalContext()->range().end.line)
+                        c = SimpleCursor(c.line+1, 0); //Move more into the body
+                }
+            }
+        }
+        if(c.isValid())
+            ICore::self()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+    }
+}
+
 void ContextController::historyNext() {
     if(m_nextHistoryIndex >= m_history.size()) {
         return;
@@ -115,6 +150,9 @@ void ContextController::openDocument(int historyIndex) {
     DocumentCursor c = m_history[historyIndex].computePosition();
     if (c.isValid() && !c.document().str().isEmpty()) {
         ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
+
+        KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+        updateDeclarationListBox(m_history[historyIndex].context.data());
     }
 }
 
@@ -230,9 +268,57 @@ bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDev
     return IndexedDUContext(context) == he.context;
 }
 
+void ContextController::updateDeclarationListBox(DUContext* context) {
+    if(!context) {
+        m_listUrl = IndexedString(); ///@todo Compute the context in the document here
+        m_currentContextBox->clear();
+        return;
+    }
+    m_listUrl = context->url();
+
+    class FunctionListFilter : public DUChainUtils::DUChainItemFilter {
+        public:
+        FunctionListFilter(KComboBox* box, QList<IndexedDeclaration>& _declarations) : m_box(box), declarations(_declarations) {
+            box->clear();
+            declarations.clear();
+        }
+        
+        virtual bool accept(Declaration* decl) {
+            if(decl->range().isEmpty())
+                return false;
+            
+            if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class)) {
+                FunctionType::Ptr function = decl->type<FunctionType>();
+                QString text = decl->qualifiedIdentifier().toString();
+                if(function)
+                    text += function->partToString(KDevelop::FunctionType::SignatureArguments);
+
+                m_box->addItem(text);
+                declarations.append(decl);
+            }
+
+            return true;
+        }
+        virtual bool accept(DUContext* ctx) {
+        return ctx->type() == DUContext::Global || ctx->type() == DUContext::Namespace;
+        }
+        KComboBox* m_box;
+        QList<IndexedDeclaration>& declarations;
+    };
+
+    m_currentContextBox->clear();
+    FunctionListFilter f(currentContextBox(), m_listDeclarations);
+    DUChainUtils::collectItems(context->topContext(), f);
+    currentContextBox()->setCurrentIndex(m_listDeclarations.indexOf(context->owner()));
+}
+
 void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
 {
     if (context == 0) return;
+
+    if (!isPreviousEntry(context, position) || context->url() != m_listUrl)
+        if(m_currentContextBox->isVisible())
+            updateDeclarationListBox(context);
 
     if (isPreviousEntry(context, position)) {
         return;
@@ -292,6 +378,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
 
     buttons->addWidget(m_contextCtrl->previousButton());
+    buttons->addWidget(m_contextCtrl->currentContextBox());
     buttons->addWidget(m_contextCtrl->nextButton());
     buttons->addWidget(m_contextCtrl->resetButton());
     buttons->addStretch();

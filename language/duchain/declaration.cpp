@@ -212,6 +212,13 @@ Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const {
     return 0;
 }
 
+bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const {
+  if(m_declarationIndex)
+    return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
+  else
+    return false;
+}
+
 IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex) : m_topContext(topContext), m_declarationIndex(declarationIndex) {
 }
 

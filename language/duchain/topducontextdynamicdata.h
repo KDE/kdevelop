@@ -49,6 +49,8 @@ class TopDUContextDynamicData {
   
   Declaration* getDeclarationForIndex(uint index) const;
   
+  bool isDeclarationForIndexLoaded(uint index) const;
+  
   void clearDeclarationIndex(Declaration* decl);
 
   /**
@@ -60,6 +62,8 @@ class TopDUContextDynamicData {
   uint allocateContextIndex(DUContext* ctx, bool temporary);
   
   DUContext* getContextForIndex(uint index) const;
+  
+  bool isContextForIndexLoaded(uint index) const;
   
   void clearContextIndex(DUContext* ctx);
   

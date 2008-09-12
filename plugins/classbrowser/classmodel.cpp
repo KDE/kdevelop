@@ -55,7 +55,7 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-//#define NEW_CLASS_MODEL
+// #define NEW_CLASS_MODEL
 
 #ifdef NEW_CLASS_MODEL
 
@@ -82,15 +82,14 @@ public:
     return m_relevantFiles;
   }
 
-  QMap<Identifier, ClassModelNode::Ptr> computeChildren() const;
+  void updateChildren(QMap<Identifier, ClassModelNode::Ptr>& children) const;
 private:
   CodeModelItem::Kind m_kind;
   QualifiedIdentifier m_scope;
   QSet<IndexedString> m_relevantFiles;
 };
 
-QMap<Identifier, ClassModelNode::Ptr> ClassModelNode::computeChildren() const {
-  QMap<Identifier, ClassModelNode::Ptr> ret;
+void ClassModelNode::updateChildren(QMap<Identifier, ClassModelNode::Ptr>& children) const {
 
   foreach(IndexedString file, m_relevantFiles) {
     int itemCount = 0;
@@ -100,25 +99,21 @@ QMap<Identifier, ClassModelNode::Ptr> ClassModelNode::computeChildren() const {
     
     for(int a = 0; a < itemCount; ++a) {
       QualifiedIdentifier id(items[a].id.identifier());
-      if(id.beginsWith(m_scope) && id.count() > m_scope.count()) {
+      if(id.beginsWith(m_scope) && id.count() == m_scope.count()+1) {
         Identifier nextId = id.at(m_scope.count());
 
-        if(!ret.contains(nextId)) 
-          ret.insert(nextId, Ptr(new ClassModelNode));
+        if(!children.contains(nextId)) 
+          children.insert(nextId, Ptr(new ClassModelNode));
 
-        ret[nextId]->m_relevantFiles.insert(file);
-        
-        if(m_scope.count()+1 == id.count())
-          ///We're representing the item directly, so take its kind
-          ret[nextId]->m_kind = items[a].kind;
+        children[nextId]->m_relevantFiles.insert(file);
+        children[nextId]->m_kind = items[a].kind;
       }
     }
   }
 
-  for(QMap<Identifier, ClassModelNode>::const_iterator it = ret.begin(); it != ret.end(); ++it) {
+  for(QMap<Identifier, ClassModelNode>::const_iterator it = children.begin(); it != children.end(); ++it) {
     it->m_scope = m_scope + it.key();
   }
-  return ret;
 }
 
 void NewClassModel::initialize(const QSet<IndexedString>& allFiles) {
