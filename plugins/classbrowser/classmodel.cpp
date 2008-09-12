@@ -524,14 +524,13 @@ void ClassModel::refreshNodes(const IndexedString& file, int level, const Qualif
   CodeModel::self().items(file, itemCount, items);
 
   for(uint a = 0; a < itemCount; ++a) {
-    IndexedQualifiedIdentifier id(items[a].id);
-    //kDebug() << "Node" << id.identifier().toString();
-
     // Don't insert unknown or forward declarations into the class browser
     if (items[a].kind == CodeModelItem::Unknown || items[a].kind == CodeModelItem::ForwardDeclaration)
       continue;
 
+    IndexedQualifiedIdentifier id(items[a].id);
     Node* topParent = m_topNode;
+
     switch (items[a].kind) {
       case CodeModelItem::Function:
         if (level == 1)
@@ -570,7 +569,7 @@ void ClassModel::refreshNodes(const IndexedString& file, int level, const Qualif
         //kDebug() << "Sub-identifier " << qi.left(level).toString();
         isSubIdentifier = true;
 
-        n = objectForIdentifier(qi.mid(0,level));
+        n = objectForIdentifier(qi.left(level));
       }
 
       if (!n) {
