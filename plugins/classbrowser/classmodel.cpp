@@ -570,7 +570,7 @@ void ClassModel::refreshNodes(const IndexedString& file, int level, const Qualif
         //kDebug() << "Sub-identifier " << qi.left(level).toString();
         isSubIdentifier = true;
 
-        n = objectForIdentifier(qi.left(level));
+        n = objectForIdentifier(qi.mid(0,level));
       }
 
       if (!n) {
