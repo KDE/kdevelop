@@ -555,7 +555,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
 
      QString newId = id.last().identifier().str();
      for(int a = id.count()-2; a >= 0; --a)
-       newId = id.at(a).identifier().str() + ";;" + newId;
+       newId = id.at(a).identifier().str() + "::" + newId;
 
      localId.setIdentifier(newId);
 
