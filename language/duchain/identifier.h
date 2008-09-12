@@ -54,12 +54,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier {
   bool operator==(const IndexedIdentifier& rhs) const;
   bool operator!=(const IndexedIdentifier& rhs) const;
   bool operator==(const Identifier& id) const;
-  
+
   bool isEmpty() const;
-  
+
   Identifier identifier() const;
   operator Identifier() const;
-  
+
   uint index;
 };
 
@@ -72,12 +72,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
-  
+
   bool isValid() const;
-  
+
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;
-  
+
   uint index;
 };
 
@@ -90,12 +90,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier {
   IndexedTypeIdentifier& operator=(const TypeIdentifier& id);
   bool operator==(const IndexedTypeIdentifier& rhs) const;
   bool operator==(const TypeIdentifier& id) const;
-  
+
   bool isValid() const;
-  
+
   TypeIdentifier identifier() const;
   operator TypeIdentifier() const;
-  
+
   uint index;
 };
 
@@ -158,7 +158,7 @@ public:
   ///Returns a unique index within the global identifier repository for this identifier.
   ///If the identifier isn't in the repository yet, it is added to the repository.
   uint index() const;
-  
+
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -170,7 +170,7 @@ public:
 private:
   void makeConstant() const;
   void prepareWrite();
-  
+
   //Only one of the following pointers is valid at a given time
   mutable uint m_index; //Valid if cd is valid
   union {
@@ -210,6 +210,13 @@ public:
    * @param len If this is -1, the whole following part will be returned.
    * */
   QualifiedIdentifier mid(int pos, int len = -1) const;
+
+  /**
+   * Copy the leftmost \a len number of identifiers.
+   *
+   * @param len The number of identifiers to copy.
+   * */
+  inline QualifiedIdentifier left(int len) const { return mid(0, len); }
 
   bool explicitlyGlobal() const;
   void setExplicitlyGlobal(bool eg);
@@ -252,7 +259,7 @@ public:
    * with @param appendIdentifier appended as an identifier
    * */
   static uint combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier);
-  
+
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
    * */
@@ -273,7 +280,7 @@ public:
   bool beginsWith(const QualifiedIdentifier& other) const;
 
   uint index() const;
-  
+
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
     */
@@ -283,13 +290,13 @@ public:
   }
 
   typedef uint HashType;
-  
+
   ///The hash does not respect explicitlyGlobal, only the real scope.
   HashType hash() const;
 
   ///Finds all identifiers in the identifier-repository that have the given hash value
   static void findByHash(HashType hash, KDevVarLengthArray<QualifiedIdentifier>& target);
-  
+
 protected:
   bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
 
@@ -320,7 +327,7 @@ public:
   TypeIdentifier(uint index);
   bool isReference() const;
   void setIsReference(bool);
-  
+
   bool isConstant() const;
   void setIsConstant(bool);
 
@@ -338,7 +345,7 @@ public:
   bool isSame(const TypeIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
 
   QString toString(bool ignoreExplicitlyGlobal = false) const;
-  
+
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
    * */
