@@ -46,6 +46,7 @@ class ForwardDeclaration;
 class DeclarationData;
 class DeclarationId;
 class Declaration;
+class IndexedTopDUContext;
 
 struct ImportTraceItem;
 
@@ -88,6 +89,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     uint topContextIndex() const {
       return m_topContext;
     }
+    
+    IndexedTopDUContext indexedTopContext() const;
 
   private:
   uint m_topContext;

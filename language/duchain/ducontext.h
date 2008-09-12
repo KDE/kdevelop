@@ -84,6 +84,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
       return m_topContext;
     }
 
+    IndexedTopDUContext indexedTopContext() const;
+
   private:
   uint m_topContext;
   uint m_contextIndex;

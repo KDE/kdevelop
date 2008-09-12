@@ -718,10 +718,11 @@ void ClassModel::getDuObject(Node* node)
   PersistentSymbolTable::self().declarations(node->qualifiedIdentifier(), count, declarations);
 
   for (uint i = 0; i < count; ++i) {
-    // Hrm, multiple declarations for a code model item? just get the first for now
-    if (Declaration* d = declarations[i].declaration()) {
-      node->setDuObject(d);
-      return;
+    if(node->relevantFiles().contains(declarations[i].indexedTopContext().url())) {
+      if(Declaration* d = declarations[i].declaration()) {
+        node->setDuObject(d);
+        return;
+      }
     }
   }
 }

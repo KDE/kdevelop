@@ -232,6 +232,10 @@ IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
   }
 }
 
+IndexedTopDUContext IndexedDeclaration::indexedTopContext() const {
+  return IndexedTopDUContext(m_topContext);
+}
+
 Declaration* IndexedDeclaration::declaration() const {
   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)

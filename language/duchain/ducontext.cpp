@@ -151,6 +151,10 @@ IndexedDUContext::IndexedDUContext(DUContext* ctx) {
   }
 }
 
+IndexedTopDUContext IndexedDUContext::indexedTopContext() const {
+  return IndexedTopDUContext(m_topContext);
+}
+
 LocalIndexedDUContext::LocalIndexedDUContext(uint contextIndex) : m_contextIndex(contextIndex) {
 }
 
