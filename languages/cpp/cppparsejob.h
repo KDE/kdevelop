@@ -186,6 +186,7 @@ private:
     QStack<DocumentCursor> m_includeStack;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;
+    mutable QMutex m_waitForIncludePathsMutex;
     mutable QWaitCondition m_waitForIncludePaths;
 };
 

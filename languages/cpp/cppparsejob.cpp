@@ -173,6 +173,8 @@ void CPPParseJob::gotIncludePaths(const KUrl::List& paths) {
   m_includePathsComputed = true;
   m_includePathUrls = paths;
   m_includePaths = convertFromUrls(m_includePathUrls);
+  m_waitForIncludePathsMutex.lock(); //This makes sure that the parse thread goes into the waiting state first
+  m_waitForIncludePathsMutex.unlock();
   m_waitForIncludePaths.wakeAll();
 }
 
@@ -185,13 +187,13 @@ const KUrl::List& CPPParseJob::includePathUrls() const {
 const QList<IndexedString>& CPPParseJob::includePaths() const {
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
-            QMutex m;
-            m.lock();
+            m_waitForIncludePathsMutex.lock();
             qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
             ///@todo Make sure this doesn't create problems in corner cases
             QMetaObject::invokeMethod(cpp(), "findIncludePathsForJob", Qt::QueuedConnection, Q_ARG(CPPParseJob*, const_cast<CPPParseJob*>(this)));
             //Will be woken once the include-paths are computed
-            m_waitForIncludePaths.wait(&m);
+            m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex);
+            m_waitForIncludePathsMutex.unlock();
         }
         return m_includePaths;
     } else {
@@ -445,6 +447,12 @@ void CPPInternalParseJob::run()
         DUChainWriteLocker l(DUChain::lock());
         contentContext->clearProblems();
       }
+      
+      uint oldItemCount = 0;
+      if(contentContext) {
+        DUChainReadLocker l(DUChain::lock());
+        oldItemCount = contentContext->childContexts().size() + contentContext->localDeclarations().size();
+      }
 
       DeclarationBuilder declarationBuilder(&editor);
       contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
@@ -465,6 +473,13 @@ void CPPInternalParseJob::run()
         DUChainReadLocker l(DUChain::lock());
         Q_ASSERT(!updatingContentContext || updatingContentContext == contentContext);
         Q_ASSERT(contentContext->parsingEnvironmentFile().data() == contentEnvironmentFile.data());
+        
+        if(contentContext->childContexts().size() + contentContext->localDeclarations().size() == 0) {
+          if(oldItemCount != 0) {
+            //To catch some problems
+            kDebug(9007) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
+          }
+        }
       }
 
       {
