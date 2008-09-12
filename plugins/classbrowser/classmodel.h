@@ -32,6 +32,7 @@
 #include "language/duchain/duchainobserver.h"
 #include "language/duchain/identifier.h"
 #include "language/duchain/duchainpointer.h"
+#include "language/duchain/codemodel.h"
 
 class ClassBrowserPlugin;
 
@@ -40,6 +41,7 @@ namespace KDevelop {
  class IDocument;
  class ParseJob;
  class DUContext;
+ class IProject;
 }
 
 class ClassModel : public QAbstractItemModel
@@ -51,15 +53,17 @@ public:
   virtual ~ClassModel();
 
   friend class Node;
-  class Node : public KDevelop::DUChainBasePointer
+  class Node
   {
     public:
+      Node(const KDevelop::Identifier& id, Node* parent);
       Node(KDevelop::DUChainBase* p, Node* parent);
       ~Node();
 
       bool topNode() const { return !m_parent; }
 
       Node* parent() const { return m_parent; }
+      int depth() const { return m_parent ? m_parent->depth() + 1 : 1; }
 
       bool childrenDiscovered() const { return m_childrenDiscovered; }
       bool childrenDiscovering() const { return m_childrenDiscovering; }
@@ -81,18 +85,48 @@ public:
       const QList<KDevelop::DUContextPointer>& namespaceContexts() const { return m_namespaceContexts; }
       void addNamespaceContext(const KDevelop::DUContextPointer& context) { m_namespaceContexts.append(context); }
 
+      void addRelevantFile(const KDevelop::IndexedString& file);
+      const QSet<KDevelop::IndexedString>& relevantFiles() const;
+
+      const KDevelop::Identifier& identifier() const;
+      KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
+
+      KDevelop::CodeModelItem::Kind kind() const;
+      void setKind(KDevelop::CodeModelItem::Kind kind);
+
+      const KDevelop::DUChainBasePointer& duObject() const;
+      void setDuObject(KDevelop::DUChainBase* object);
+
+      bool isSpecialNode() const;
+      void setSpecialNode();
+
     private:
       Node* m_parent;
-      QList<KDevelop::DUContextPointer> m_namespaceContexts;
       QList<Node*> m_children;
       QVector<bool>* m_childrenEncountered;
+
+      // For Code Model derived items
+      KDevelop::CodeModelItem::Kind m_kind;
+      KDevelop::Identifier m_id;
+      QSet<KDevelop::IndexedString> m_relevantFiles;
+
+      // For duchain derived items
+      KDevelop::DUChainBasePointer m_duobject;
+
+      QList<KDevelop::DUContextPointer> m_namespaceContexts;
       bool m_childrenDiscovering : 1;
       bool m_childrenDiscovered : 1;
       bool m_childrenHidden : 1;
+      bool m_specialNode: 1;
   };
 
   Node* objectForIndex(const QModelIndex& index) const;
+  KDevelop::DUChainBasePointer duObjectForIndex(const QModelIndex& index) const;
+
   QModelIndex indexForObject(Node* node) const;
+
+  Node* objectForIdentifier(const KDevelop::QualifiedIdentifier& identifier) const;
+  Node* objectForIdentifier(const KDevelop::IndexedQualifiedIdentifier& identifier) const;
 
   KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
   KDevelop::Declaration* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
@@ -117,6 +151,10 @@ private Q_SLOTS:
   void branchModified(KDevelop::DUContextPointer context);
   void branchRemoved(KDevelop::DUContextPointer context, KDevelop::DUContextPointer parent);
 
+  // Project watching
+  void projectOpened(KDevelop::IProject* project);
+  void projectClosing(KDevelop::IProject* project);
+
 private:
   ClassBrowserPlugin* plugin() const;
 
@@ -124,9 +162,17 @@ private:
 
   static QVariant data(Node* node, int role = Qt::DisplayRole);
 
-  void refreshNode(Node* node, KDevelop::DUChainBase* base = 0, QList<Node*>* resultChildren = 0) const;
+  void initialize();
 
-  Node* topNode() const;
+  void startLoading();
+  void finishLoading();
+
+  // General refresh method
+  void refreshNode(Node* node, KDevelop::DUChainBase* base = 0, QList<Node*>* resultChildren = 0) const;
+  // Code model refresh method, defaults to top level
+  void refreshNodes(const KDevelop::IndexedString& file, int level = 1, const KDevelop::QualifiedIdentifier& from = KDevelop::QualifiedIdentifier()) const;
+  static void getDuObject(Node* node);
+
   Node* discover(Node* node) const;
   KDevelop::DUContext* trueParent(KDevelop::DUContext* parent) const;
   QPair<Node*, KDevelop::DUChainBase*> firstKnownObjectForBranch(KDevelop::DUChainBase* base) const;
@@ -134,6 +180,8 @@ private:
   void branchAddedInternal(KDevelop::DUContext* context);
 
   Node* pointer(KDevelop::DUChainBase* object) const;
+  // Code model item constructor
+  Node* createPointer(const KDevelop::QualifiedIdentifier& id, Node* parent) const;
   Node* createPointer(KDevelop::DUChainBase* object, Node* parent) const;
   Node* createPointer(KDevelop::DUContext* context, Node* parent) const;
 
@@ -145,16 +193,18 @@ private:
   static bool orderItems(ClassModel::Node* p1, ClassModel::Node* p2);
 
   mutable Node* m_topNode;
-  mutable QHash<KDevelop::DUContext*, QList<Node*>* > m_topLists;
+  Node* m_globalFunctions;
+  Node* m_globalVariables;
+  mutable QHash<KDevelop::IndexedQualifiedIdentifier, Node*> m_codeModelObjects;
   mutable QHash<KDevelop::DUChainBase*, Node*> m_knownObjects;
-  mutable QHash<KDevelop::QualifiedIdentifier, Node*> m_namespaces;
-  mutable QMap<KUrl, bool> m_inProject;
 
   KDevelop::IDocument* m_filterDocument;
   bool m_filterProject;
+  bool m_loading;
   QString m_searchString;
 };
 
 #endif
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+

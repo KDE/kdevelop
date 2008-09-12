@@ -199,7 +199,7 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
   QMenu *menu = new QMenu(this);
   QModelIndex index = indexAt(e->pos());
   if (index.isValid()) {
-    Context* c = new CodeContext( *model()->objectForIndex(index) );
+    Context* c = new CodeContext( model()->duObjectForIndex(index) );
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
     ContextMenuExtension::populateMenu(menu, extensions);
   }
@@ -212,10 +212,10 @@ void ClassTree::itemActivated(const QModelIndex& index)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  DUChainBasePointer* base = model()->objectForIndex(index);
-  if (base && base->data()) {
-    KUrl url = KUrl((*base)->url().str());
-    KTextEditor::Range range = (*base)->range().textRange();
+  DUChainBasePointer base = model()->duObjectForIndex(index);
+  if (base) {
+    KUrl url = KUrl(base->url().str());
+    KTextEditor::Range range = base->range().textRange();
 
     readLock.unlock();
 
