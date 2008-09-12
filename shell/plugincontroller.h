@@ -69,7 +69,7 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    KPluginInfo pluginInfo( IPlugin* ) const;
+    KPluginInfo pluginInfo( const IPlugin* ) const;
 
     /**
      * Get a list of currently loaded plugins

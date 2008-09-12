@@ -115,7 +115,7 @@ ProfileEngine& PluginController::engine() const
     return d->engine;
 }
 
-KPluginInfo PluginController::pluginInfo( IPlugin* plugin ) const
+KPluginInfo PluginController::pluginInfo( const IPlugin* plugin ) const
 {
     for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
           it != d->loadedPlugins.end(); ++it )
