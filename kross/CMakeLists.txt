@@ -45,9 +45,9 @@ if(GENERATE_INTERFACES)
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krosstopducontext.cpp
         language/duchain/topducontext.h:language/duchain/parsingenvironment.h:language/interfaces/iproblem.h:language/editor/simplecursor.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/ducontext.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossducontext.cpp language/duchain/ducontext.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossducontext.cpp language/duchain/ducontext.h:language/duchain/topducontext.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/declaration.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossdeclaration.cpp language/duchain/declaration.h:language/duchain/declarationid.h:language/duchain/types/indexedtype.h)
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossdeclaration.cpp language/duchain/declaration.h:language/duchain/declarationid.h:language/duchain/types/indexedtype.h:language/duchain/topducontext.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/iproblem.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiproblem.cpp language/interfaces/iproblem.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/use.h

@@ -5,6 +5,7 @@
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
 #include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
 
 class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInterface
 {
@@ -21,6 +22,7 @@ class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDUContext& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
 	private:
 		KDevelop::IndexedDUContext* wrapped;
 };
@@ -38,6 +40,7 @@ class KrossKDevelopLocalIndexedDUContext : public QObject, public Kross::Wrapper
 		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDUContext& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
 	private:
 		KDevelop::LocalIndexedDUContext* wrapped;
 };

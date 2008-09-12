@@ -7,6 +7,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationid.h>
 #include <language/duchain/types/indexedtype.h>
+#include <language/duchain/topducontext.h>
 
 class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInterface
 {
@@ -23,6 +24,7 @@ class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInt
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
 	private:
 		KDevelop::IndexedDeclaration* wrapped;
 };
@@ -40,6 +42,7 @@ class KrossKDevelopLocalIndexedDeclaration : public QObject, public Kross::Wrapp
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDeclaration& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
 	private:
 		KDevelop::LocalIndexedDeclaration* wrapped;
 };

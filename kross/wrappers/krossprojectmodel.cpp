@@ -43,6 +43,7 @@ class KrossKDevelopProjectFolderItem : public KrossKDevelopProjectBaseItem
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE QString folderName() const { return wrapped->folderName(); }
 		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
 		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 		Q_SCRIPTABLE bool isProjectRoot() const { return wrapped->isProjectRoot(); }
@@ -131,6 +132,7 @@ class KrossKDevelopProjectFileItem : public KrossKDevelopProjectBaseItem
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
 		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
+		Q_SCRIPTABLE QString fileName() const { return wrapped->fileName(); }
 		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
 		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 	private:
