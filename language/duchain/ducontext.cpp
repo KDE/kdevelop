@@ -1007,9 +1007,12 @@ void DUContext::deleteLocalDeclarations()
       declarations.append(decl);
   }
 
+  TopDUContext* top = topContext();
+  //If we are deleting something that is not stored to disk, we need to create + delete the declarations,
+  //so their destructor unregisters from the persistent symbol table and from TopDUContextDynamicData
   FOREACH_ARRAY(LocalIndexedDeclaration decl, declarations)
-    if(decl.isLoaded(topContext()))
-      delete decl.data(topContext());
+    if(decl.isLoaded(top) || !top->deleting() || !top->isOnDisk())
+      delete decl.data(top);
 }
 
 void DUContext::deleteChildContextsRecursively()
@@ -1020,9 +1023,12 @@ void DUContext::deleteChildContextsRecursively()
   FOREACH_FUNCTION(LocalIndexedDUContext ctx, d->m_childContexts)
     children << ctx;
 
+  TopDUContext* top = topContext();
+  //If we are deleting a context that is already stored to disk, we don't need to load not yet loaded child-contexts.
+  //Else we need to, so the declarations are unregistered from symbol-table and from TopDUContextDynamicData in their destructor
   foreach(LocalIndexedDUContext ctx, children)
-    if(ctx.isLoaded(topContext()))
-      delete ctx.data(topContext());
+    if(ctx.isLoaded(top) || !top->deleting() || !top->isOnDisk())
+      delete ctx.data(top);
 }
 
 QVector< Declaration * > DUContext::clearLocalDeclarations( )

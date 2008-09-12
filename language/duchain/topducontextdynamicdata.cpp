@@ -294,7 +294,9 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
           kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(m_data.first().first.constData() + m_declarationDataOffsets[realIndex].dataOffset))->classId;
           Q_ASSERT(0);
         }else{
-          m_declarations[realIndex]->rebuildDynamicData(getContextForIndex(m_declarationDataOffsets[realIndex].parentContext), index);
+          DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
+          Q_ASSERT(context); //If this triggers, the context has been deleted without deleting its contained declarations
+          m_declarations[realIndex]->rebuildDynamicData(context, index);
         }
       }
       
