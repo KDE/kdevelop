@@ -352,9 +352,6 @@ bool ContextBrowserPlugin::showDeclarationView(View* view, const SimpleCursor& p
         bool success = false;
         foreach(ContextBrowserView* contextView, m_views) {
           if(masterWidget(contextView) == masterWidget(view)) {
-              if (foundDeclaration->internalContext()) {
-                ctx = foundDeclaration->internalContext();
-              }
               contextView->updateHistory(ctx, position);
               contextView->setDeclaration(foundDeclaration, ctx->topContext());
               success = true;
