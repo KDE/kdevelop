@@ -39,7 +39,8 @@ private slots:
     void initTestCase();
     void init();
     void cleanup();
-
+    void createSession();
+    void loadSession();
 private:
 
     KDevelop::Core* m_core;

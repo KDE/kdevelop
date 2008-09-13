@@ -30,6 +30,8 @@
 #include "../sessioncontroller.h"
 #include "../session.h"
 
+Q_DECLARE_METATYPE( KDevelop::ISession* )
+
 using KDevelop::SessionController;
 using KDevelop::ISession;
 using KDevelop::Core;
@@ -41,8 +43,9 @@ using QTest::kWaitForSignal;
 void SessionControllerTest::initTestCase()
 {
     AutoTestShell::init();
-    Core::initialize();
+    Core::initialize( KDevelop::Core::NoUi );
     m_core = Core::self();
+    qRegisterMetaType<KDevelop::ISession*>();
 }
 
 void SessionControllerTest::init()
@@ -54,6 +57,28 @@ void SessionControllerTest::cleanup()
 {
 }
 
+void SessionControllerTest::createSession()
+{
+    const QString sessionName = "TestSession";
+    int sessionCount = m_sessionCtrl->sessions().count();
+    ISession* s = m_sessionCtrl->createSession( sessionName );
+    QCOMPARE( sessionName, s->name() );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+}
+
+void SessionControllerTest::loadSession()
+{
+    const QString sessionName = "TestSession2";
+    ISession* s = m_sessionCtrl->createSession( sessionName );
+    QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionLoaded(KDevelop::ISession*)));
+    m_sessionCtrl->loadSession( s );
+
+    QCOMPARE(spy.size(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+
+    ISession* emittedSession = arguments.at(0).value<ISession*>();
+    QCOMPARE(s, emittedSession);
+}
 
 QTEST_KDEMAIN( SessionControllerTest, GUI)
 #include "sessioncontrollertest.moc"
