@@ -3161,9 +3161,9 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         addOutputArgument(func.arguments[2]);
         
         int i=3;
-        m_only = func.arguments[i].value.toUpper()=="@ONLY";
+        if(func.arguments.count()>i) m_only = func.arguments[i].value.toUpper()=="@ONLY";
         if(m_only) i++;
-        m_escapeQuotes = func.arguments[i].value.toUpper()=="ESCAPE_QUOTES";
+        if(func.arguments.count()>i) m_escapeQuotes = func.arguments[i].value.toUpper()=="ESCAPE_QUOTES";
     }
     else if(stringType=="TOUPPER")
     {
