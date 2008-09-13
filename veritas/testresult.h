@@ -28,6 +28,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QFileInfo>
 #include <QtCore/QByteArray>
+#include <KUrl>
 
 namespace Veritas
 {
@@ -50,18 +51,18 @@ class VERITAS_EXPORT TestResult
 {
 public:
     explicit TestResult(TestState state = Veritas::NoResult, const QString& message = "",
-                         int line = 0, const QFileInfo& = QFileInfo());
+                         int line = 0, const KUrl& = KUrl());
     virtual ~TestResult();
 
     TestState state() const;
     QString message() const;
     int line() const;
-    QFileInfo file() const;
+    KUrl file() const;
 
     void setState(TestState);
-    void setMessage(QString);
+    void setMessage(const QString&);
     void setLine(int);
-    void setFile(QFileInfo);
+    void setFile(const KUrl&);
 
     bool operator==(const TestResult&) const;
     void clear();

@@ -197,7 +197,7 @@ void Test::setResult(TestResult* res)
     m_result = res;
     if (res) {
         setData(2, res->message());
-        setData(3, res->file().filePath());
+        setData(3, res->file().pathOrUrl());
         setData(4, res->line());
         setState(res->state());
     }

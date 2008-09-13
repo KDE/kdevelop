@@ -749,7 +749,7 @@ void RunnerWindow::jumpToSource(const QItemSelection& selected, const QItemSelec
 
     KTextEditor::Cursor range(r->line() - 1, 0);
     IDocumentController* dc = ICore::self()->documentController();
-    dc->openDocument(KUrl(r->file().filePath()), range);
+    dc->openDocument(KUrl(r->file().pathOrUrl()), range);
 }
 
 void RunnerWindow::enableResultSync(bool enable) const

@@ -21,6 +21,7 @@
 #include "veritas/testresult.h"
 #include <KDebug>
 
+
 using Veritas::TestResult;
 using Veritas::TestState;
 
@@ -29,19 +30,19 @@ namespace Veritas
 class TestResultPrivate
 {
 public:
-    TestResultPrivate(TestState state, const QString& msg, int line, const QFileInfo& file) :
+    TestResultPrivate(TestState state, const QString& msg, int line, const KUrl& file) :
         m_state(state), m_message(msg), m_line(line), m_file(file) {}
     ~TestResultPrivate() {}
     TestState m_state;
     QString m_message;
     int m_line;
-    QFileInfo m_file;
+    KUrl m_file;
 };
 }
 
 using Veritas::TestResultPrivate;
 
-TestResult::TestResult(TestState state, const QString& message, int line, const QFileInfo& file)
+TestResult::TestResult(TestState state, const QString& message, int line, const KUrl& file)
         : d(new TestResultPrivate(state, message, line, file))
 {}
 
@@ -65,7 +66,7 @@ int TestResult::line() const
     return d->m_line;
 }
 
-QFileInfo TestResult::file() const
+KUrl TestResult::file() const
 {
     return d->m_file;
 }
@@ -75,7 +76,7 @@ void TestResult::setState(TestState state)
     d->m_state = state;
 }
 
-void TestResult::setMessage(QString message)
+void TestResult::setMessage(const QString& message)
 {
     d->m_message = message;
 }
@@ -85,7 +86,7 @@ void TestResult::setLine(int line)
     d->m_line = line;
 }
 
-void TestResult::setFile(QFileInfo file)
+void TestResult::setFile(const KUrl& file)
 {
     d->m_file = file;
 }
@@ -95,7 +96,7 @@ void TestResult::clear()
     d->m_state = Veritas::NoResult;
     d->m_message = "";
     d->m_line = 0;
-    d->m_file = QFileInfo();
+    d->m_file = KUrl();
 }
 
 bool TestResult::operator==(const TestResult& other) const
@@ -120,20 +121,5 @@ void TestResult::log() const
         result = "failed";
         break;
     }
-    kDebug() << result << " " << d->m_message << " " << d->m_file.filePath() << " " << d->m_line;
+    kDebug() << result << " " << d->m_message << " " << d->m_file.pathOrUrl() << " " << d->m_line;
 }
-
-// void TestResult::addOutputLine(const QByteArray& line)
-// {
-//     m_output.append(line);
-// }
-// 
-// int TestResult::outputLineCount() const
-// {
-//     return m_output.count();
-// }
-// 
-// QByteArray TestResult::outputLine(int i) const
-// {
-//     return m_output.value(i);
-// }
