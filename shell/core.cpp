@@ -241,6 +241,11 @@ IRunController *Core::runController()
     return d->runController;
 }
 
+SessionController *Core::sessionControllerInternal()
+{
+    return d->sessionController;
+}
+
 RunController *Core::runControllerInternal()
 {
     return d->runController;

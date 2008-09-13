@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-Copyright 2007 Anreas Pakulat <apaku@gmx.de>
+Copyright 2008 Anreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -21,11 +21,6 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-
-ISession::ISession( QObject *parent )
-        : QObject( parent )
-{
-}
 
 ISession::~ISession()
 {

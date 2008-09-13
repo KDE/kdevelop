@@ -23,8 +23,13 @@ Boston, MA 02110-1301, USA.
 #include "interfacesexport.h"
 #include <QtCore/QObject>
 
+template<typename T> class QList;
+class QString;
+
 namespace KDevelop
 {
+
+class ISession;
 
 class KDEVPLATFORMINTERFACES_EXPORT ISessionController : public QObject
 {
@@ -33,6 +38,17 @@ public:
     ISessionController( QObject *parent = 0 );
     virtual ~ISessionController();
 
+    virtual ISession* activeSession() const = 0;
+    virtual QList<ISession*> sessions() const = 0;
+    virtual ISession* createSession( const QString& name ) = 0;
+
+public Q_SLOTS:
+    virtual void loadSession( ISession* session ) = 0;
+    virtual void deleteSession( ISession* session ) = 0;
+
+Q_SIGNALS:
+    void sessionLoaded( ISession* newSession );
+    void sessionDeleted( ISession* session );
 };
 
 }

@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-Copyright 2007 Anreas Pakulat <apaku@gmx.de>
+Copyright 2008 Anreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -19,15 +19,73 @@ Boston, MA 02110-1301, USA.
 
 #include "session.h"
 
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+
+#include <kurl.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
+#include <interfaces/iplugin.h>
+#include "core.h"
+#include <interfaces/iplugincontroller.h>
+
 namespace KDevelop
 {
 
-Session::Session( QObject *parent )
-        : ISession( parent )
+class SessionPrivate
 {
+public:
+    QString name;
+    KSharedConfig::Ptr config;
+    QString sessionDirectory;
+    KUrl pluginArea( const IPlugin* plugin )
+    {
+        QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
+        QFileInfo fi( sessionDirectory + "/" + name );
+        if( !fi.exists() )
+        {
+            QDir d( sessionDirectory );
+            d.mkdir( name );
+        }
+        kDebug() << fi.absolutePath();
+        return KUrl( fi.absolutePath() );
+    }
+    void initializeSessionDirectory()
+    {
+        sessionDirectory = KStandardDirs::locate( "appdata", name );
+    }
+};
+
+Session::Session( const QString& name )
+        : d( new SessionPrivate )
+{
+    d->name = name;
+    d->initializeSessionDirectory();
 }
 
 Session::~Session()
+{
+    delete d;
+}
+
+
+QString Session::name() const
+{
+    return d->name;
+}
+
+KUrl Session::pluginDataArea( const IPlugin* p )
+{
+    return d->pluginArea( p );
+}
+
+KSharedConfig::Ptr Session::config()
+{
+    return d->config;
+}
+
+void Session::deleteFromDisk()
 {
 }
 

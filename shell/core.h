@@ -32,6 +32,7 @@ class LanguageController;
 class PartController;
 class DocumentController;
 class RunController;
+class SessionController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -88,6 +89,12 @@ public:
 
     /** @return run controller */
     RunController *runControllerInternal();
+
+    /**
+     * @return session controller
+     * @internal
+     */
+    SessionController *sessionControllerInternal();
 
     void cleanup();
 

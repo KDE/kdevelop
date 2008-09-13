@@ -35,6 +35,16 @@ public:
     virtual ~SessionController();
     void initialize();
     void cleanup();
+
+    virtual ISession* activeSession() const;
+    virtual QList<ISession*> sessions() const;
+    virtual ISession* createSession( const QString& name );
+
+public Q_SLOTS:
+    virtual void loadSession( ISession* session );
+    virtual void deleteSession( ISession* session );
+private:
+    class SessionControllerPrivate* const d;
 };
 
 }

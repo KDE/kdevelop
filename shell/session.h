@@ -29,10 +29,17 @@ namespace KDevelop
 
 class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {
-    Q_OBJECT
 public:
-    Session( QObject *parent = 0 );
+    Session( const QString& name );
     virtual ~Session();
+
+    virtual QString name() const;
+    virtual KUrl pluginDataArea( const IPlugin* );
+    virtual KSharedConfig::Ptr config();
+
+    void deleteFromDisk();
+private:
+    class SessionPrivate* const d;
 
 };
 

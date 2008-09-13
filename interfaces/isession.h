@@ -23,16 +23,24 @@ Boston, MA 02110-1301, USA.
 #include "interfacesexport.h"
 #include <QtCore/QObject>
 
+#include <ksharedconfig.h>
+
+class QString;
+class KUrl;
+
 namespace KDevelop
 {
 
-class KDEVPLATFORMINTERFACES_EXPORT ISession : public QObject
+class IPlugin;
+
+class KDEVPLATFORMINTERFACES_EXPORT ISession
 {
-    Q_OBJECT
 public:
-    ISession( QObject *parent = 0 );
     virtual ~ISession();
 
+    virtual QString name() const = 0;
+    virtual KUrl pluginDataArea( const IPlugin* ) = 0;
+    virtual KSharedConfig::Ptr config() = 0;
 };
 
 }
