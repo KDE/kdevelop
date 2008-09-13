@@ -430,7 +430,7 @@ void QTestOutputParserTest::assertResult(const TestResult& expected, const TestR
     KOMPARE_MSG(expected.state(), actual.state(),
                 "Expected " + QString::number(expected.state()) +
                 " got " + QString::number(actual.state()));
-    KOMPARE(expected.file().filePath(), actual.file().filePath());
+    KOMPARE(expected.file(), actual.file());
     KOMPARE(expected.line(), actual.line());
     KOMPARE_MSG(expected.message(), actual.message(),
                 "Expected " + expected.message() + " got " + actual.message());

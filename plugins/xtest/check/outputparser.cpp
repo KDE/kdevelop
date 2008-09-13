@@ -22,7 +22,7 @@
 #include "testsuite.h"
 #include "testroot.h"
 #include "plugins/xtest/cppunit/testcase.h"
-#include <QStringRef>
+#include <KUrl>
 #include <KDebug>
 
 using Check::TestRoot;
@@ -221,7 +221,7 @@ void OutputParser::setFailure(const QString& location, const QString& msg)
 {
     m_result->setState(Veritas::RunError);
     QStringList spl = location.split(':');
-    m_result->setFile(QFileInfo(spl.value(0)));
+    m_result->setFile(KUrl(spl.value(0)));
     m_result->setLine(spl.value(1).toInt());
     m_result->setMessage(msg);
 }

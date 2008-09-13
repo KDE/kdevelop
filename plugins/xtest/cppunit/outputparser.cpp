@@ -22,7 +22,7 @@
 #include "testroot.h"
 #include <veritas/test.h>
 #include "testcase.h"
-#include <QStringRef>
+#include <KUrl>
 #include <KDebug>
 
 using Veritas::Test;
@@ -186,6 +186,6 @@ void OutputParser::setSuccess()
 void OutputParser::setFailure()
 {
     m_result->setState(Veritas::RunError);
-    m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
+    m_result->setFile(KUrl(attributes().value(c_file).toString()));
     m_result->setLine(attributes().value(c_line).toString().toInt());
 }

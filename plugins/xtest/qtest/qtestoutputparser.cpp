@@ -23,7 +23,7 @@
 
 #include <veritas/test.h>
 
-#include <QStringRef>
+#include <KUrl>
 #include <KDebug>
 
 using QTest::QTestCase;
@@ -260,7 +260,7 @@ void QTestOutputParser::fillResult()
         setSuccess();
     } else if (type == c_fail) {
         m_result->setState(Veritas::RunError);
-        m_result->setFile(QFileInfo(attributes().value(c_file).toString()));
+        m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());
         m_state = Failure;
         setFailure();
