@@ -55,6 +55,9 @@ class ContextBrowserView : public QWidget {
           * This is needed to browse while the locked button is checked. */
         void allowLockedUpdate();
 
+        ///Returns the currently locked declaration, or invalid of none is locked atm.
+        KDevelop::IndexedDeclaration lockedDeclaration() const;
+        
     private Q_SLOTS:
         void updateLockIcon(bool); 
 
@@ -144,8 +147,10 @@ class DeclarationController : public QWidget {
         //duchain must be locked
         QWidget* createWidget(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
 
+        KDevelop::IndexedDeclaration declaration();
+        
     private:
-        KDevelop::DeclarationPointer m_declaration;
+        KDevelop::IndexedDeclaration m_declaration;
 };
 
 #endif

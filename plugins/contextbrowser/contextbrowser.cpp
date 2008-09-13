@@ -331,13 +331,14 @@ bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& pos
 Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCursor& position, bool mouseHighlight)
 {
       Declaration* foundDeclaration = 0;
-      if(m_useDeclaration) {
+      if(m_useDeclaration.data()) {
         foundDeclaration = m_useDeclaration.data();
       }else{
         //If we haven't found a special language object, search for a use/declaration and eventually highlight it
         foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), position) );
       }
       if( foundDeclaration ) {
+        m_lastHighlightedDeclaration = IndexedDeclaration(foundDeclaration);
         m_highlightedDeclarations[view] = foundDeclaration;
         changeHighlight( view, foundDeclaration, true, mouseHighlight );
       }else{
@@ -461,12 +462,12 @@ void ContextBrowserPlugin::updateViews()
     updateBrowserWidgetFor(view);
   }
   m_updateViews.clear();
-  m_useDeclaration = DeclarationPointer();
+  m_useDeclaration = IndexedDeclaration();
 }
 
 void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
 {
-  m_useDeclaration = decl;
+  m_useDeclaration = IndexedDeclaration(decl.data());
   if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())
     m_updateViews << core()->documentController()->activeDocument()->textDocument()->activeView();
 
@@ -585,10 +586,22 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
     if( chosen )
     {
-      DUContext* ctx = chosen->findContextAt(c);
-
-      //Try finding a declaration under the cursor
-      Declaration* decl = DUChainUtils::itemUnderCursor(doc->url(), c);
+      Declaration* decl = 0;
+      //If we have a locked declaration, use that for jumping
+      foreach(ContextBrowserView* view, m_views) {
+        decl = view->lockedDeclaration().data(); ///@todo Somehow match the correct context-browser view if there is multiple
+        if(decl)
+          break;
+      }
+      
+      if(!decl) //Try finding a declaration under the cursor
+        decl = DUChainUtils::itemUnderCursor(doc->url(), c);
+      
+      if(!decl) {
+        //Pick the last use we have highlighted
+        decl = m_lastHighlightedDeclaration.data();
+      }
+      
       if(decl) {
         KDevVarLengthArray<IndexedTopDUContext> usingFiles = DUChain::uses()->uses(decl->id());
         
@@ -615,16 +628,45 @@ void ContextBrowserPlugin::switchUse(bool forward)
         QList<SimpleRange> localUses = allUses(chosen, decl, true);
         qSort(localUses);
         for(int a = 0; a < localUses.size(); ++a) {
-        if(localUses[a].contains(c)) {
           int nextUse = (forward ? a+1 : a-1);
+          bool pick = localUses[a].contains(c);
+          
+          if(!pick && forward && a+1 < localUses.size() && localUses[a].end <= c && localUses[a+1].start > c) {
+            //Special case: We aren't on a use, but we are jumping forward, and are behind this and the next use
+            pick = true;
+          }
+          if(!pick && !forward && a-1 >= 0 && c < localUses[a].start && c >= localUses[a-1].end) {
+            //Special case: We aren't on a use, but we are jumping backward, and are in front of this use, but behind the previous one
+            pick = true;
+          }
+          if(!pick && a == 0 && c < localUses[a].start) {
+            if(!forward) {
+              //Will automatically jump to previous file
+            }else{
+              nextUse = 0; //We are before the first use, so jump to it.
+            }
+            pick = true;
+          }
+          if(!pick && a == localUses.size()-1 && c >= localUses[a].end) {
+            if(forward) {
+              //Will automatically jump to next file
+            }else{ //We are behind the last use, but moving backward. So pick the last use.
+              nextUse = a;
+            }
+            pick = true;
+          }
+          
+          if(pick) {
           
           //Make sure we end up behind the use
-          while(forward && nextUse < localUses.size() && (localUses[nextUse].start <= localUses[a].end || localUses[nextUse].isEmpty()))
-            ++nextUse;
+          if(nextUse != a)
+            while(forward && nextUse < localUses.size() && (localUses[nextUse].start <= localUses[a].end || localUses[nextUse].isEmpty()))
+              ++nextUse;
           
           //Make sure we end up before the use
-          while(!forward && nextUse >= 0 && (localUses[nextUse].start >= localUses[a].start || localUses[nextUse].isEmpty()))
-            --nextUse;
+          if(nextUse != a)
+            while(!forward && nextUse >= 0 && (localUses[nextUse].start >= localUses[a].start || localUses[nextUse].isEmpty()))
+              --nextUse;
           //Jump to the next use
             
           kDebug() << "count of uses:" << localUses.size() << "nextUse" << nextUse;
@@ -676,8 +718,6 @@ void ContextBrowserPlugin::switchUse(bool forward)
         }
         }
       }
-
-      ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
     }
   }
 }

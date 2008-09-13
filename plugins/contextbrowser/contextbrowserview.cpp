@@ -357,8 +357,12 @@ QWidget* ContextController::createWidget(KDevelop::DUContext* context) {
 DeclarationController::DeclarationController() {
 }
 
+KDevelop::IndexedDeclaration DeclarationController::declaration() {
+    return m_declaration;
+}
+
 QWidget* DeclarationController::createWidget(Declaration* decl, TopDUContext* topContext) {
-    m_declaration = DeclarationPointer(decl);
+    m_declaration = IndexedDeclaration(decl);
     return decl->context()->createNavigationWidget(decl, topContext);
 }
 
@@ -443,6 +447,13 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
         QWidget* w = m_declarationCtrl->createWidget(decl, topContext);
         updateMainWidget(w);
     }
+}
+
+KDevelop::IndexedDeclaration ContextBrowserView::lockedDeclaration() const {
+    if(m_lockButton->isChecked())
+        return m_declarationCtrl->declaration();
+    else
+        return KDevelop::IndexedDeclaration();
 }
 
 void ContextBrowserView::allowLockedUpdate() {

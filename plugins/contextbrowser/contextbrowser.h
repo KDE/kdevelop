@@ -34,6 +34,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
 #include <language/editor/simplerange.h>
+#include <language/duchain/declaration.h>
 
 namespace KDevelop {
   class IDocument;
@@ -125,7 +126,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     QList<ContextBrowserView*> m_views;
 
     //Used to override the next declaration that will be highlighted
-    DeclarationPointer m_useDeclaration;
+    IndexedDeclaration m_useDeclaration;
+    IndexedDeclaration m_lastHighlightedDeclaration;
 
     KUrl m_mouseHoverDocument;
     SimpleCursor m_mouseHoverCursor;
