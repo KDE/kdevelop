@@ -396,7 +396,6 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_signalMapper->setMapping( qa, project );
     d->m_projectConfigAction->addAction( qa );
 
-    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFileUrl()));
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
