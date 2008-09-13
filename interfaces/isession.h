@@ -33,9 +33,11 @@ namespace KDevelop
 
 class IPlugin;
 
-class KDEVPLATFORMINTERFACES_EXPORT ISession
+class KDEVPLATFORMINTERFACES_EXPORT ISession : public QObject
 {
+    Q_OBJECT
 public:
+    ISession( QObject* parent = 0 );
     virtual ~ISession();
 
     virtual QString name() const = 0;
@@ -44,5 +46,6 @@ public:
 };
 
 }
+
 #endif
 

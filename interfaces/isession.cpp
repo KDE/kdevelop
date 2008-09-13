@@ -22,6 +22,11 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+ISession::ISession( QObject* parent )
+    : QObject(parent)
+{
+}
+
 ISession::~ISession()
 {
 }
