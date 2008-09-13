@@ -47,8 +47,8 @@ public Q_SLOTS:
     virtual void deleteSession( ISession* session ) = 0;
 
 Q_SIGNALS:
-    void sessionLoaded( ISession* newSession );
-    void sessionDeleted( ISession* session );
+    void sessionLoaded( KDevelop::ISession* );
+    void sessionDeleted( KDevelop::ISession* );
 };
 
 }
