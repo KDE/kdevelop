@@ -268,6 +268,7 @@ RunnerWindow::~RunnerWindow()
     if (m_selection) delete m_selection;
     if (m_verbose) delete m_verbose;
     if (runnerModel()) delete runnerModel();
+    delete m_ui;
 }
 
 // helper for setModel(RunnerModel*)

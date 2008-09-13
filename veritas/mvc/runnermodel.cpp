@@ -72,8 +72,6 @@ RunnerModel::RunnerModel(QObject* parent)
 
 RunnerModel::~RunnerModel()
 {
-    kDebug() << "~RunnerModel";
-    //stopItems();
     if (m_executor) m_executor->stop();
     if (m_rootItem) delete m_rootItem;
     if (m_executor) delete m_executor;
