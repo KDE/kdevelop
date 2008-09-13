@@ -79,12 +79,11 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
 {
     QString name;
     type=NoVar;
-    const int count=exp.count();
+    const int length=exp.length();
     bool done=false;
     int prev=-1;
-    before=0; //TODO: remove me
-
-    for(int i=before; i<count && !done; i++)
+    
+    for(int i=before; i<length && !done; i++)
     {
         const QChar& expi=exp[i];
         if(expi=='{')
@@ -109,11 +108,12 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     return name;
 }
 
-QStringList CMakeProjectVisitor::resolveVariable(const QString &exp)
+QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &exp)
 {
     VariableType type;
-    int before=0, after;
-    QString var = variableName(exp, type, before, after);
+    int before=0, after; //FIXME: Unused
+    QStringList ret;
+    QString var = variableName(exp.value, type, before, after);
 
     if(type)
     {
@@ -121,31 +121,39 @@ QStringList CMakeProjectVisitor::resolveVariable(const QString &exp)
         if(type==CMake)
         {
             if(m_vars->contains(var))
-              vars = m_vars->value(var);
+                vars = m_vars->value(var);
             else if(m_cache->contains(var))
-              vars = m_cache->value(var).split(';');
+                vars = m_cache->value(var).split(';');
         }
         else
         {
             vars=envVarDirectories(var);
         }
-        QString pre=exp.left(before), post=exp.right(exp.length()-after-1);
+        QString pre=exp.value.left(before), post=exp.value.right(exp.value.length()-after-1);
         if(vars.isEmpty())
-            return QStringList(pre+post);
-
+            vars += QString();
+        
         vars.first().prepend(pre);
         vars.last().append(post);
         QStringList::iterator it=vars.begin(), itEnd=vars.end();
-        QStringList ret;
 
         for(; it!=itEnd; ++it)
         {
             ret += resolveVariable(*it);
         }
-        return ret;
     }
-    else
-        return QStringList(exp);
+    else if(!type)
+    {
+        ret.append(exp.value);
+    }
+    
+    if(exp.quoted)
+    {
+        QString r=ret.join(";");
+        ret.clear();
+        ret+=r;
+    }
+    return ret;
 }
 
 int CMakeProjectVisitor::notImplemented(const QString &name) const
@@ -262,7 +270,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     else
         values = set->values();
     m_vars->insert(set->variableName(), values);
-    kDebug(9042) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "...";
+    kDebug(9042) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "..." << set->values();
     return 1;
 }
 
@@ -1222,13 +1230,18 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(output, QStringList(QString::number(theList.count())));
             kDebug(9042) << "List length" << m_vars->value(output);
             break;
-        case ListAst::GET:
-            if(list->index().first()>=theList.count())
-                kDebug(9032) << "error! trying to GET an element that doesn't exist!" << list->index().first();
-            else
-                m_vars->insert(output, QStringList(theList[list->index().first()]));
-            kDebug(9042) << "List: Get" << theList << list->output() << m_vars->value(list->output());
-            break;
+        case ListAst::GET: {
+            QStringList indices;
+            foreach(int idx, list->index())
+            {
+                if(idx>=theList.count())
+                    kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
+                else
+                    indices += theList[idx];
+            }
+            m_vars->insert(output, indices);
+            kDebug(9042) << "List: Get" << list->list() << theList << list->output() << m_vars->value(list->output());
+        }   break;
         case ListAst::APPEND:
             theList += list->elements();
             m_vars->insert(list->list(), theList);
@@ -1328,9 +1341,9 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
         {
             foreach(const QString& s, args)
             {
-                m_vars->insertMulti(fea->loopVar(), QStringList(s));
+                m_vars->insert(fea->loopVar(), QStringList(s));
+                kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->take(fea->loopVar());
             }
         }
     }
@@ -1646,7 +1659,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
         variableName(arg.value, t, bef, aft);
         if(t)
         {
-            ret.addArguments(resolveVariable(arg.value));
+            ret.addArguments(resolveVariable(arg));
         }
         else
         {
@@ -1711,7 +1724,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 //         kDebug(9042) <return core()->languageController()->language(name());
 
         Q_ASSERT( *it == fc[line] );
-//         kDebug(9042) <lw< "At line" << line << "/" << fc.count();
+//         kDebug(9042) << "At line" << line << "/" << fc.count();
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         if(!element)
@@ -1724,6 +1737,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
         bool correct = element->parseFunctionInfo(func);
+        kDebug(9042) << "parsed";
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl

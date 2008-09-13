@@ -32,8 +32,8 @@ public:
     virtual ~CMakeProjectVisitorTest() {}
 
 private slots:
-//     void testVariables();
-//     void testVariables_data();
+    void testVariables();
+    void testVariables_data();
 
     void testRun();
     void testRun_data();

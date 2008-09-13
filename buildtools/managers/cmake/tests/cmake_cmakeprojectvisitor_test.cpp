@@ -21,16 +21,10 @@
 #include "cmake_cmakeprojectvisitor_test.h"
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
+#include "cmakelistsparser.h"
+#include <QString>
 
-#include <language/duchain/identifier.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/editor/simplerange.h>
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/dumpchain.h>
-
-QTEST_MAIN( CMakeProjectVisitorTest )
+QTEST_MAIN(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 
@@ -39,29 +33,39 @@ CMakeProjectVisitorTest::CMakeProjectVisitorTest()
     m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
 }
 
-/*void CMakeProjectVisitorTest::testVariables_data()
+void CMakeProjectVisitorTest::testVariables_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<bool>("containsVariable");
-    QTest::addColumn<QString>("result");
+    QTest::addColumn<QStringList>("result");
     
-    QTest::newRow("A variable alone") << "${MY_VAR}" << true << "MY_VAR";
-    QTest::newRow("Contains a variable") << "${MY_VAR}/lol" << true << "MY_VAR";
-    QTest::newRow("Nothing") << "aaaa${aaaa" << false << "";
-    
+    QTest::newRow("A variable alone") << "${MY_VAR}" << true << QStringList("MY_VAR");
+    QTest::newRow("Contains a variable") << "${MY_VAR}/lol" << true << QStringList("MY_VAR");
+    QTest::newRow("Contains a variable") << "${yipiee}#include <${it}>\n" << true << (QStringList("yipiee") << "it");
+    QTest::newRow("Contains a variable") << "${a}${b}\n" << true << (QStringList("a") << "b");
+    QTest::newRow("Nothing") << "aaaa${aaaa" << false << QStringList();
 }
 
 void CMakeProjectVisitorTest::testVariables()
 {
     QFETCH(QString, input);
     QFETCH(bool, containsVariable);
-    QFETCH(QString, result);
+    QFETCH(QStringList, result);
     
-    QHash<QString, QStringList> vars;
-    vars.insert("MY_VAR", QStringList("val"));
-
-    QCOMPARE(CMakeProjectVisitor::resolveVariables(QStringList(input), &vars), result);
-}*/
+    int start=0, end;
+    CMakeProjectVisitor::VariableType type;
+    QStringList name;
+    do
+    {
+        QString aName=CMakeProjectVisitor::variableName(input, type, start, end);
+        start=end;
+        if(type) name += aName;
+    } while(type);
+    
+    qDebug() << "name" << name;
+    QCOMPARE(containsVariable, !name.isEmpty());
+    QCOMPARE(name, result);
+}
 
 typedef QPair<QString, QString> StringPair;
 Q_DECLARE_METATYPE(QList<StringPair>)
@@ -100,6 +104,40 @@ void CMakeProjectVisitorTest::testRun_data()
             "find_library(fff stdio.h /usr/include)\n"
             "find_program(ggg gcc /usr/gcc)\n"
             "#message(STATUS \"ooooo- ${aaa} ${bbb} ${ccc} ${ddd}\")\n" << cacheValues << results;
+            
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${kkk}", "abcdef");
+    QTest::newRow("abc") << "set(a abc)\nset(b def)\nSET(kkk \"${a}${b}\")\n" << cacheValues << results;
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${kkk}", "abcdef");
+    QTest::newRow("defabc") << "set(a abc)\nset(b def)\nSET(kkk \"${kkk}${a}\")\nSET(kkk \"${kkk}${b}\")\n" << cacheValues << results;
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${_INCLUDE_FILES}", "#include <a>\n"
+                                               "#include <b>\n"
+                                               "#include <c>\n");
+    QTest::newRow("foreach") <<
+            "set(_HEADER a b c)\n"
+            "FOREACH (it ${_HEADER})\n"
+            "    SET(_INCLUDE_FILES \"${_INCLUDE_FILES}#include <${it}>\n\")\n"
+            "ENDFOREACH (it)\n" << cacheValues << results;
+            
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${a}", "abc;def");
+    QTest::newRow("semicolons") << "set(a \"abc;def\")\n" << cacheValues << results;
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${b}", "abc");
+    results << StringPair("${c}", "def");
+    QTest::newRow("semicolons1") << "set(a abc;def)\n" 
+                               "LIST(GET a 1 c)\nLIST(GET a 0 b)\n" << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -132,8 +170,10 @@ void CMakeProjectVisitorTest::testRun()
 
     foreach(const StringPair& vp, results)
     {
-//         qDebug() << vp << v.resolveVariable(vp.first).join("");
-        QCOMPARE(v.resolveVariable(vp.first).join(""), vp.second);
+        CMakeFunctionArgument arg;
+        arg.value=vp.first;
+        
+        QCOMPARE(v.resolveVariable(arg).first(), vp.second);
     }
 
 }

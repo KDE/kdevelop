@@ -3154,6 +3154,8 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(stringType=="CONFIGURE")
     {
         m_type=CONFIGURE;
+        if(func.arguments.isEmpty())
+            return false;
         m_input += func.arguments[1].value;
         m_outputVariable=func.arguments[2].value;
         addOutputArgument(func.arguments[2]);
@@ -3200,6 +3202,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="STRIP")
     {
+        m_type=STRIP;
         if(func.arguments.count()!=3)
             return false;
         m_string = func.arguments[1].value;
@@ -3210,7 +3213,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         if(func.arguments.count()>6 || func.arguments.count()<2)
             return false;
-        
+        m_type=RANDOM;
         enum State { ALPHABET, LENGTH, None };
         State s = None;
         m_length=5;

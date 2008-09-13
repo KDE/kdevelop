@@ -42,6 +42,7 @@ namespace KDevelop
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
+    friend class CMakeProjectVisitorTest;
     public:
         enum TargetType { Library, Executable, Test };
         explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
@@ -124,10 +125,12 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         KDevelop::TopDUContext* context() const { return m_topctx; }
         const QMap<QString, KDevelop::IndexedDeclaration>& declarationsPerTarget() { return m_declarationsPerTarget; }
-        QStringList resolveVariable(const QString &exp);
+        QStringList resolveVariable(const CMakeFunctionArgument &exp);
 
         bool hasMacro(const QString& name) const;
         TargetType targetType(const QString& targetName) { return m_targetsType[targetName]; }
+    protected:
+        static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
     private:
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
 
@@ -139,7 +142,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         };
         
         void defineTarget(const QString& id, const QStringList& sources, TargetType t);
-        static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
