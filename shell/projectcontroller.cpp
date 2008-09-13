@@ -77,6 +77,7 @@ public:
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
     QPointer<QAction> m_closeAllProjects;
     IProjectDialogProvider* dialog;
+    QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
 
     bool reopenProjectsOnStartup;
     bool parseAllProjectSources;
@@ -320,7 +321,14 @@ bool ProjectController::openProject( const KUrl &projectFile )
     }
 
     if ( !url.isValid() )
+    {
         return false;
+    }
+    if ( d->m_currentlyOpening.contains(url))
+    {
+        kDebug() << "Already opening " << url << ". Aborting.";
+        return false;
+    }
 
     foreach( IProject* project, d->m_projects )
     {
@@ -353,6 +361,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
         return false;
     }
 
+    d->m_currentlyOpening << url;
     d->m_closeAllProjects->setEnabled(true);
     return true;
 }
@@ -386,6 +395,9 @@ bool ProjectController::projectImportingFinished( IProject* project )
     connect( qa, SIGNAL( triggered() ), d->m_signalMapper, SLOT( map() ) );
     d->m_signalMapper->setMapping( qa, project );
     d->m_projectConfigAction->addAction( qa );
+
+    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFileUrl()));
+    d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
     if (d->parseAllProjectSources) {
