@@ -29,6 +29,7 @@ namespace KDevelop
 
 class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {
+    Q_OBJECT
 public:
     Session( const QString& name );
     virtual ~Session();
