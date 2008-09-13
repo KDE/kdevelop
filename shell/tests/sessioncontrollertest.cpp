@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>                 *
+ *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,10 +18,6 @@
  ***************************************************************************/
 
 #include "sessioncontrollertest.h"
-
-#include <QtGui>
-#define QT_GUI_LIB 1
-#include <QtTest/QtTest>
 
 #include <qtest_kde.h>
 #include <tests/common/autotestshell.h>

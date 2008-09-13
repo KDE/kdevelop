@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>                 *
+ *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -21,10 +21,7 @@
 #define KDEVELOP_SHELL_SESSIONCONTROLLERTEST_INCLUDED
 
 #include <QtCore/QObject>
-#include <KUrl>
-#include <QDir>
 
-class QSignalSpy;
 namespace KDevelop
 {
 class Core;

@@ -19,15 +19,7 @@
 
 #include "projectcontrollertest.h"
 
-#include <QtGui>
-#define QT_GUI_LIB 1
-#include <QtTest/QtTest>
-
-#include <KUrl>
-#include <KDebug>
 #include <QFile>
-#include <QDir>
-#include <QKeyEvent>
 #include <QSignalSpy>
 
 #include <qtest_kde.h>
