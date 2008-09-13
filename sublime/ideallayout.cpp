@@ -770,7 +770,15 @@ int IdealMainLayout::splitterWidth() const
 
 void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
 {
-    m_items[role]->width = thickness;
+    int offset = 0;
+
+    if (QWidgetItem* bar = m_items[role]->buttonBar())
+        if (role == Left || role == Right)
+            offset = bar->geometry().width();
+        else
+            offset = bar->geometry().height();
+
+    m_items[role]->width = thickness - offset;
 
     invalidate();
 
