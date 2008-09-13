@@ -65,7 +65,6 @@ public:
     void setSettings(ISettings*);
 
     void initProcArguments();
-    void setUpProcSignals();
     void setExecutable(const QFileInfo&);
 
     KUrl outFile() const;
@@ -84,7 +83,6 @@ private:
     // helpers for run()
     void initTempOutputFile();
     void executeProc();
-    void initOutputParser();
     void removeFile(const QString& filePath);
 
 private slots:
@@ -106,6 +104,7 @@ private:
     QTimer* m_timer;
     static int s_count;        // used to get unique temp files.
     bool m_finished;
+    QTimer* m_parserTimeout;
 };
 
 } // end namespace QTest

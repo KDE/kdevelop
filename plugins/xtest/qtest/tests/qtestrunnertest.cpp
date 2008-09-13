@@ -27,6 +27,7 @@
 
 #include "../xmlregister.h"
 #include "../qtestcase.h"
+#include "../qtestoutputparser.h"
 
 #include <veritas/test.h>
 #include <veritas/testresult.h>
@@ -39,6 +40,7 @@ Q_DECLARE_METATYPE(QList<QStringList>)
 
 void QTestRunnerTest::init()
 {
+    QTestOutputParser::fto_resetResultMemoryLeakStats();
     m_runner = new RunnerTestHelper;
     m_runner->initializeGUI();
 }
@@ -47,6 +49,11 @@ void QTestRunnerTest::cleanup()
 {
     m_runner->cleanupGUI();
     delete m_runner;
+
+    int nrofLeaks = 0;
+    bool foundLeaks = QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
+    QString errorMsg = QString("QTestOutputParser leaked %1 number of Veritas::TestResult's.").arg(nrofLeaks);
+    KVERIFY_MSG(!foundLeaks, errorMsg);
 }
 
 // command
@@ -143,9 +150,6 @@ void QTestRunnerTest::sunnyDay()
 void QTestRunnerTest::runTwice()
 {
     Veritas::Test* root = fetchRoot(sunnyDayXml);
-
-    RunnerTestHelper* m_runner = new RunnerTestHelper;
-    m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests();
     m_runner->runTests();
@@ -190,9 +194,6 @@ QMap<QString, Veritas::TestState> singleGreenTestStates()
 void QTestRunnerTest::singleGreenCommand()
 {
     Veritas::Test* root = fetchRoot(singleGreenCommandXml);
-
-    RunnerTestHelper* m_runner = new RunnerTestHelper;
-    m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests();
 
@@ -253,9 +254,6 @@ void QTestRunnerTest::nonexistantTestCommand()
         "</suite>\n"
         "</root>\n";
     Veritas::Test* root = fetchRoot(regXML);
-
-    RunnerTestHelper* m_runner = new RunnerTestHelper;
-    m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests(); // should not timeout
 }

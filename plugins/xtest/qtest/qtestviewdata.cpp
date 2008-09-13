@@ -82,14 +82,14 @@ void QTestViewData::registerTests()
 
     if (m_settings) delete m_settings;
     m_settings = new Settings(project());
-    KDevRegister* reg = new KDevRegister(); // TODO destructor this
+    KDevRegister* reg = new KDevRegister();
     reg->setProject(project());
     reg->setSettings(m_settings);
     connect(reg, SIGNAL(reloadFinished(Veritas::Test*)),
-            this, SIGNAL(registerFinished(Veritas::Test*)));
+            SIGNAL(registerFinished(Veritas::Test*)));
     connect(reg, SIGNAL(reloadFinished(Veritas::Test*)),
-            this, SLOT(resetLock()));
-    connect(reg, SIGNAL(reloadFailed()), this, SLOT(resetLock()));
+            SLOT(resetLock()));
+    connect(reg, SIGNAL(reloadFailed()), SLOT(resetLock()));
     reg->reload();
 }
 
@@ -97,6 +97,7 @@ void QTestViewData::registerTests()
 void QTestViewData::resetLock()
 {
     m_lock = false;
+    sender()->deleteLater();
 }
 
 // should be moved to xmlregister

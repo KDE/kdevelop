@@ -57,6 +57,7 @@
 #include "kdevregister.h"
 #include "qtestsettings.h"
 #include "qtestviewdata.h"
+#include "qtestoutputparser.h"
 #include "outputview/qtestoutputdelegate.h"
 #include "outputview/qtestoutputjob.h"
 
@@ -75,11 +76,13 @@ public:
     QTestRunnerViewFactory(QTestPlugin *plugin): m_plugin(plugin) {}
 
     virtual QWidget* create(QWidget *parent) {
-        kDebug() << "";
-        QTestViewData* d = new QTestViewData(0); // TODO find a good parent
+        QTestViewData* d = new QTestViewData(0);
         QObject::connect(d, SIGNAL(openVerbose(Veritas::Test*)),
                          m_plugin, SLOT(openVerbose(Veritas::Test*)));
-        return d->runnerWidget();
+        QWidget* runner = d->runnerWidget();
+        QObject::connect(runner, SIGNAL(destroyed(QObject*)),
+                          d, SLOT(deleteLater()));
+        return runner;
     }
 
     virtual Qt::DockWidgetArea defaultPosition() {
@@ -182,6 +185,10 @@ void QTestPlugin::maybeRemoveResultsView(Sublime::View* v)
 QTestPlugin::~QTestPlugin()
 {
     removeAllResultsViews();
+//    int nrofLeaks =0;
+//    QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
+//    kDebug() << "QTestOutputParser leaked" << nrofLeaks << "Veritas::TestResult's";
+//    QTestOutputParser::fto_resetResultMemoryLeakStats();
 }
 
 void QTestPlugin::removeAllResultsViews()
@@ -195,14 +202,6 @@ void QTestPlugin::removeAllResultsViews()
 
 void QTestPlugin::newQTest()
 {
-//     if (!project()) {
-//         QMessageBox::critical(
-//             0, i18n("Failed to comply."),
-//             i18n("Select a project in the qtest view."),
-//             QMessageBox::Ok);
-//         return;
-//     }
-
     bool kk;
     QString clz;
     clz = QInputDialog::getText(

@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-//#include "qtestcase.h"
+#include "qtestcase.h"
 #include "qtestsuite.h"
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
@@ -34,13 +34,8 @@
 #include <KDebug>
 #include <KProcess>
 
-using QTest::ISettings;
 using QTest::QTestCase;
-using QTest::QTestSuite;
 using QTest::QTestCommand;
-using QTest::QTestOutputParser;
-using QTest::QTestOutputMorpher;
-
 using Veritas::Test;
 
 int QTestCase::s_count = 0;
@@ -51,8 +46,13 @@ QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* pare
           m_output(0),
           m_proc(0),
           m_parser(0),
-          m_timer(new QTimer(this))
-{}
+          m_timer(new QTimer(this)),
+          m_parserTimeout(new QTimer(this))
+{
+    m_parserTimeout->setSingleShot(true);
+    m_parserTimeout->setInterval(150);
+    connect(m_parserTimeout, SIGNAL(timeout()), SLOT(closeOutputFile()));
+}
 
 void QTestCase::removeFile(const QString& filePath)
 {
@@ -73,6 +73,7 @@ QTestCase::~QTestCase()
 {
     removeTempFiles();
     if (m_output) delete m_output;
+    if (m_parser) delete m_parser;
 }
 
 bool QTestCase::shouldRun() const
@@ -121,6 +122,10 @@ void QTestCase::setProcess(KProcess* proc)
     if (m_proc) delete m_proc;
     proc->setParent(this);
     m_proc = proc;
+    connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
+            SLOT(morphXmlToText()));
+    connect(m_proc, SIGNAL(error(QProcess::ProcessError)),
+            SLOT(closeOutputFile()));
 }
 
 void QTestCase::setOutputParser(QTestOutputParser* p)
@@ -128,6 +133,10 @@ void QTestCase::setOutputParser(QTestOutputParser* p)
     Q_ASSERT(!m_parser); Q_ASSERT(p);
     m_parser = p;
     m_parser->setParent(this);
+    m_parser->reset();
+    m_parser->setCase(this);
+    connect(m_timer, SIGNAL(timeout()), m_parser, SLOT(go()));
+    connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
 }
 
 // execute the test and parse result back in.
@@ -138,23 +147,10 @@ int QTestCase::run()
 
     initTempOutputFile();
     initProcArguments();
-    initOutputParser();
-    setUpProcSignals();
     m_finished = false;
     executeProc();
 
     return 1;
-}
-
-// helper for run()
-void QTestCase::setUpProcSignals()
-{
-    m_proc->disconnect();
-    connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(morphXmlToText()));
-    connect(m_proc, SIGNAL(error(QProcess::ProcessError)),
-            SLOT(closeOutputFile()));
-    connect(m_parser, SIGNAL(done()), SLOT(closeOutputFile()));
 }
 
 void QTestCase::closeOutputFile()
@@ -164,7 +160,6 @@ void QTestCase::closeOutputFile()
     emit executionFinished();
     if (m_timer) {
         m_timer->stop();
-        m_timer->disconnect();
     }
     if (m_output) {
         m_output->close();
@@ -184,22 +179,7 @@ void QTestCase::morphXmlToText()
     m.xmlToText();
     in.close();
     out.close();
-    QTimer* t = new QTimer;
-    t->setSingleShot(true);
-    t->setInterval(150);
-    connect(t, SIGNAL(timeout()), SLOT(closeOutputFile()));
-    connect(t, SIGNAL(destroyed(QObject*)), t, SLOT(deleteLater()));
-    t->start();
-}
-
-// helper for run()
-void QTestCase::initOutputParser()
-{
-    m_parser->reset();
-    m_parser->setCase(this);
-    m_timer->disconnect();
-    m_parser->disconnect();
-    connect(m_timer, SIGNAL(timeout()), m_parser, SLOT(go()));
+    m_parserTimeout->start(); // triggers closeOutputFile()
 }
 
 bool QTestCase::fto_outputFileClosed()
@@ -222,6 +202,7 @@ void QTestCase::initTempOutputFile()
     m_stdOutFilePath = pathPrefix + "-out.tmp";
     m_stdErrFilePath = pathPrefix + "-err.tmp";
     m_textOutFilePath = pathPrefix + "-txt.tmp";
+    if (m_output) delete m_output;
     m_output = new QFile(m_outputPath);
 
     QFile err(m_stdErrFilePath);

@@ -56,6 +56,12 @@ public:
     /*! Stop processing */
     void block();
 
+    /*! For testers only. Returns true if the parser leaked 
+     *  Veritas::TestResult objects. The number of lost objects is
+     *  written in @p amountLost */
+    static bool fto_hasResultMemoryLeaks(int& amountLost);
+    static void fto_resetResultMemoryLeakStats();
+
 signals:
     void done();
 
@@ -82,6 +88,10 @@ private:
     inline bool isEndElement_(const QString& elem);
     inline bool fixtureFailed(const QString&);
     inline bool doingOK() const;
+
+    void deleteResult();
+    void newResult();
+    void setResult(Veritas::Test*);
 
 private:
     // remember state to continue parsing

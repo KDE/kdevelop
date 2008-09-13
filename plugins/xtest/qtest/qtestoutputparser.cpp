@@ -62,6 +62,50 @@ const QString QTestOutputParser::c_fail("fail");
 const QString QTestOutputParser::c_initTestCase("initTestCase");
 const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
 
+namespace
+{
+int g_result_constructed = 0;
+int g_result_assigned = 0;
+int g_result_destructed = 0;
+}
+
+bool QTestOutputParser::fto_hasResultMemoryLeaks(int& amountLost)
+{
+    Q_ASSERT(g_result_constructed >= (g_result_assigned + g_result_destructed));
+    amountLost = g_result_constructed - (g_result_assigned + g_result_destructed);
+    return amountLost != 0;
+}
+
+void QTestOutputParser::fto_resetResultMemoryLeakStats()
+{
+    g_result_constructed = g_result_assigned = g_result_destructed = 0;
+}
+
+void QTestOutputParser::deleteResult()
+{
+    if (m_result) {
+        delete m_result;
+        m_result = 0;
+        g_result_destructed++;
+    }
+}
+
+void QTestOutputParser::newResult()
+{
+    if (!m_result) {
+        m_result = new TestResult;
+        g_result_constructed++;
+    }
+}
+
+void QTestOutputParser::setResult(Test* test)
+{
+    Q_ASSERT(m_result);
+    test->setResult(m_result);
+    m_result = 0;
+    g_result_assigned++;
+}
+
 QTestOutputParser::QTestOutputParser()
     : m_state(Main),
       m_buzzy(false),
@@ -70,11 +114,14 @@ QTestOutputParser::QTestOutputParser()
 {}
 
 QTestOutputParser::~QTestOutputParser()
-{}
+{
+    deleteResult();
+}
 
 void QTestOutputParser::reset()
 {
     m_case = 0;
+    deleteResult();
     m_result = 0;
     m_buzzy = false;
     m_state = Main;
@@ -170,7 +217,7 @@ void QTestOutputParser::iterateTestFunctions()
             m_cmdName = attributes().value("name").toString();
             kDebug() << m_cmdName;
             m_cmd = m_case->childNamed(m_cmdName);
-            if (!m_result) m_result = new TestResult;
+            newResult();
             if (m_cmd) m_cmd->signalStarted();
             m_state = TestFunction;
             processTestFunction();
@@ -194,15 +241,13 @@ void QTestOutputParser::processTestFunction()
     }
     if (isEndElement_(c_testfunction)) {
         if (m_cmd) {
-            m_cmd->setResult(m_result);
+            setResult(m_cmd);
             m_cmd->signalFinished();
-            m_result = 0;
         } else if (fixtureFailed(m_cmdName)) {
             kDebug() << "init/cleanup TestCase failed";
             m_case->signalStarted();
-            m_case->setResult(m_result);
+            setResult(m_case);
             m_case->signalFinished();
-            m_result = 0;
         }
         m_state = Main;
     }
