@@ -18,42 +18,55 @@
 
 #include "astchangeset.h"
 
+#include "../ast/astnode.h"
+
 using namespace KDevelop;
 
 AstNodeRef::AstNodeRef(AstChangeSet* set)
     : m_changeSet(set)
-    , m_original(0)
-    , m_originalRef(0)
+    , m_node(0)
+    , m_nodeRef(0)
+    , m_newNode(false)
 {
 }
 
-AstNodeRef::AstNodeRef(AstChangeSet* set, AstNode* original)
+AstNodeRef::AstNodeRef(AstChangeSet* set, AstNode* node, bool newNode)
     : m_changeSet(set)
-    , m_original(original)
-    , m_originalRef(0)
+    , m_node(node)
+    , m_nodeRef(0)
+    , m_newNode(newNode)
 {
 }
 
 AstNodeRef::AstNodeRef(AstChangeSet* set, AstNodeRef* original)
     : m_changeSet(set)
-    , m_original(0)
-    , m_originalRef(original)
+    , m_node(0)
+    , m_nodeRef(original)
+    , m_newNode(false)
 {
 }
 
 AstNodeRef::~AstNodeRef()
 {
     qDeleteAll(m_changes);
+
+    if (m_newNode)
+        delete m_node;
 }
 
-AstNode* AstNodeRef::originalNode() const
+const AstNode* AstNodeRef::node() const
 {
-    return m_original;
+    return m_newNode ? 0 : m_node;
 }
 
-AstNodeRef* AstNodeRef::originalNodeRef() const
+AstNodeRef* AstNodeRef::nodeRef() const
 {
-    return m_originalRef;
+    return m_nodeRef;
+}
+
+AstNode* AstNodeRef::newNode() const
+{
+    return m_newNode ? m_node : 0;
 }
 
 const QList<AstChange*>& AstNodeRef::changes() const
@@ -89,14 +102,14 @@ AstChangeSet::AstChangeSet(const AstNode* topNode)
 
 AstChangeSet::~AstChangeSet()
 {
-    qDeleteAll(m_localNodes);
     qDeleteAll(m_nodeRefs);
 }
 
-AstNode* AstChangeSet::registerNewNode(AstNode* node)
+AstNodeRef* AstChangeSet::registerNewNode(AstNode* node)
 {
-    m_localNodes.append(node);
-    return node;
+    AstNodeRef* newRef = new AstNodeRef(this, node, true);
+    m_nodeRefs.append(newRef);
+    return newRef;
 }
 
 AstNodeRef* AstChangeSet::registerNewRef(AstNodeRef* ref)
@@ -107,7 +120,7 @@ AstNodeRef* AstChangeSet::registerNewRef(AstNodeRef* ref)
 
 AstNodeRef* AstChangeSet::copyNode(AstNode* source)
 {
-    AstNodeRef* newRef = new AstNodeRef(this, source);
+    AstNodeRef* newRef = new AstNodeRef(this, source, false);
     m_nodeRefs.append(newRef);
     return newRef;
 }

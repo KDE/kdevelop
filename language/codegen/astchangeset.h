@@ -36,6 +36,8 @@ class AstNode;
  * for that node.
  *
  * \warning you must not create cyclic references.
+ *
+ * \author Hamish Rodda <rodda@kde.org>
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AstNodeRef
 {
@@ -44,8 +46,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT AstNodeRef
 public:
     virtual ~AstNodeRef();
 
-    virtual AstNode* originalNode() const;
-    virtual AstNodeRef* originalNodeRef() const;
+    virtual const AstNode* node() const;
+    virtual AstNodeRef* nodeRef() const;
+
+    virtual AstNode* newNode() const;
 
     const QList<AstChange*>& changes() const;
 
@@ -55,14 +59,18 @@ public:
     void deleteChange(AstChange* change);
 
 protected:
+    /// Default constructor. \todo is this needed?
     AstNodeRef(AstChangeSet* set);
-    AstNodeRef(AstChangeSet* set, AstNode* original);
+    /// Constructor.  Either takes an existing \a node (\a newNode = false), or a newly created \a node (\a newNode = true)
+    AstNodeRef(AstChangeSet* set, AstNode* node, bool newNode);
+    /// Constructor.  Takes another node reference.
     AstNodeRef(AstChangeSet* set, AstNodeRef* original);
 
 private:
     AstChangeSet* m_changeSet;
-    AstNode* m_original;
-    AstNodeRef* m_originalRef;
+    AstNode* m_node;
+    AstNodeRef* m_nodeRef;
+    bool m_newNode;
 
     QList<AstChange*> m_changes;
 };
@@ -71,6 +79,8 @@ typedef QList<AstNodeRef*> AstNodeList;
 
 /**
  * \short Container class for a change to an AST node.
+ *
+ * \author Hamish Rodda <rodda@kde.org>
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AstChange
 {
@@ -103,6 +113,8 @@ public:
  * \short A set of changes to an AST.
  *
  * This class holds a set of all changes to an AST.
+ *
+ * \author Hamish Rodda <rodda@kde.org>
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AstChangeSet
 {
@@ -127,7 +139,7 @@ public:
      *
      * \returns the new node that has been registered.
      */
-    AstNode* registerNewNode(AstNode* node);
+    AstNodeRef* registerNewNode(AstNode* node);
 
     /**
      * Create a blank reference to a node.
@@ -150,7 +162,6 @@ public:
 
 private:
     const AstNode* m_topNode;
-    QList<AstNode*> m_localNodes;
     QList<AstNodeRef*> m_nodeRefs;
 };
 

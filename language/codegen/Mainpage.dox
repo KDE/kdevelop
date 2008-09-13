@@ -31,7 +31,9 @@
  */
 
 /*!
- * \page Refactoring
+ * \page Refactoring Refactoring and Code Generation
+ *
+ * \ref index "Overview" | Refactoring and Code Generation
  *
  * The process of refactoring involves several logical steps - initial condition checking,
  * user input gathering, final condition checking, generation of change sets, user review
@@ -71,3 +73,73 @@
  * The editor change sets will be optionally presented to the user for review before applying
  * to the code base.
  */
+
+/*!
+ * \page ChangeSets Change Sets
+ *
+ * \ref index "Overview" | \ref Refactoring | Change Sets
+ *
+ * Change sets are generated via two main methods - altering duchains, and/or (when
+ * the duchain is not expressive enough) altering ASTs.  Code which is able to express everything
+ * using only the duchain may be instantly applicable to many languages, such as class generation.
+ * However code which accesses the AST is automatically language-specific, and will require
+ * additional effort to port to other languages.  In general, use the duchain when you can,
+ * and the AST when you must.
+ *
+ * Create a new duchain change set as follows:
+ * \code
+ *   KDevelop::ReferencedTopDUContext top = KDevelop::DUChainUtils::standardContextForUrl( myFile );
+ *
+ *   KDevelop::DUChainChangeSet* change = new KDevelop::DUChainChangeSet( top );
+ * \endcode
+ *
+ * From here, you can alter declarations, contexts, and types.  Some examples:
+ * \code
+ *   // Create a new class definition
+ *   KDevelop::Declaration* dec = new KDevelop::Declaration();
+ *   dec->setIdentifier("MyNewClass");
+ *   dec->setDeclarationIsDefinition();
+ *
+ *   KDevelop::StructureType::Ptr classType(new KDevelop::StructureType);
+ *   classType->setClassType(KDevelop::StructureType::Class);
+ *
+ *   dec->setType(classType);
+ * \endcode
+ *
+ * Make a member variable private and add accessor methods:
+ * \code
+ *   QList<KDevelop::Declaration*> declarations = topContext->findDeclarations("m_myVariable");
+ *
+ *   foreach ( KDevelop::Declaration* d, declarations ) {
+ *     if ( KDevelop::ClassMemberDeclaration* cd = dynamic_cast<KDevelop::ClassMemberDeclaration*>( d ) ) {
+ *       if ( cd->accessPolicy() == KDevelop::Declaration::Public ) {
+ *         KDevelop::DUChainRef* ref = change->modifyObject( cd );
+ *
+ *         // Make the variable private
+ *         ref->setAccessPolicy( KDevelop::Declaration::Private );
+ *
+ *         // Create an accessor function
+ *         KDevelop::Declaration* accessor = new KDevelop::Declaration();
+ *         FunctionType::Ptr accessorType( new KDevelop::FunctionType() );
+ *         accessorType->setReturnType( cd->type() );
+ *         accessorType->setModifiers( KDevelop::AbstractType::ConstModifier );
+ *         declaration->setType( accessorType );
+ *         declaration->setIdentifier("myVariable");
+ *
+ *         // Provide an implementation for the accessor function
+ *         // Would usually be done in a language-specific component of the code generator
+ *         // Details to be worked out
+ *         CompoundStatementAST* ast = ref->createAst<CompoundStatementAST>();
+ *
+ *         // blah
+ *       }
+ *     }
+ *   }
+ *
+ *
+ *
+ */
+
+// DOXYGEN_REFERENCES = language/editor language/duchain
+// DOXYGEN_SET_WARN_LOGFILE=language/codegen/doxygen.log
+// DOXYGEN_SET_RECURSIVE=yes

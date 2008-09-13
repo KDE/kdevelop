@@ -1,6 +1,4 @@
 /*
-   Copyright 2008 Hamish Rodda <rodda@kde.org>
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,34 +14,35 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ASTNODE_H
-#define ASTNODE_H
+#include "codegenerator.h"
 
-#include "../languageexport.h"
+using namespace KDevelop;
 
-namespace KDevelop {
-
-class DUContext;
-
-/**
- * Base class for AST nodes.
- *
- * Provides a DUContext pointer for nodes which open new contexts.
- *
- * \note For performance reasons, this class is meant to be memset(0)
- * before it is used, or allocated on already zeroed memory.
- */
-struct KDEVPLATFORMLANGUAGE_EXPORT AstNode
+class KDevelop::CodeGeneratorPrivate
 {
-    virtual ~AstNode();
-
-    /**
-     * Context opened by this AST
-     * This is usually not filled for all AST nodes, only for those that open a new context.
-     */
-    DUContext* ducontext;
 };
 
+CodeGenerator::CodeGenerator()
+    : d(new CodeGeneratorPrivate)
+{
 }
 
-#endif // ASTNODE_H
+CodeGenerator::~CodeGenerator()
+{
+    delete d;
+}
+
+EditorChangeSet* CodeGenerator::textEdits() const
+{
+    return 0;
+}
+
+void CodeGenerator::generateTextEdit(AstChangeSet* astChange)
+{
+}
+
+void CodeGenerator::generateTextEdit(DUChainChangeSet* astChange)
+{
+}
+
+#include "codegenerator.h"

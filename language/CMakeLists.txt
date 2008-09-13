@@ -84,6 +84,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
     codegen/astchangeset.cpp
     codegen/createclass.cpp
+    codegen/codegenerator.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -233,5 +234,8 @@ install(FILES
 
 install(FILES
     codegen/createclass.h
+    codegen/astchangeset.h
+    codegen/duchainchangeset.h
+    codegen/codegenerator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen
 )
