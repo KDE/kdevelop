@@ -27,6 +27,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+class Session;
+
 class KDEVPLATFORMSHELL_EXPORT SessionController : public ISessionController
 {
     Q_OBJECT
@@ -37,12 +39,15 @@ public:
     void cleanup();
 
     virtual ISession* activeSession() const;
-    virtual QList<ISession*> sessions() const;
-    virtual ISession* createSession( const QString& name );
+    QList<QString> sessions() const;
+    void createSession( const QString& name );
+    void loadDefaultSession();
 
 public Q_SLOTS:
-    virtual void loadSession( ISession* session );
-    virtual void deleteSession( ISession* session );
+    void loadSession( const QString& );
+    void deleteSession( const QString& );
+Q_SIGNALS:
+    void sessionDeleted( const QString& );
 private:
     class SessionControllerPrivate* const d;
 };

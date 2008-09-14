@@ -57,23 +57,43 @@ void SessionControllerTest::createSession()
 {
     const QString sessionName = "TestSession";
     int sessionCount = m_sessionCtrl->sessions().count();
-    ISession* s = m_sessionCtrl->createSession( sessionName );
-    QCOMPARE( sessionName, s->name() );
+    m_sessionCtrl->createSession( sessionName );
+    QVERIFY( m_sessionCtrl->sessions().contains( sessionName )  );
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    m_sessionCtrl->deleteSession( sessionName );
 }
 
 void SessionControllerTest::loadSession()
 {
     const QString sessionName = "TestSession2";
-    ISession* s = m_sessionCtrl->createSession( sessionName );
-    QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionLoaded(KDevelop::ISession*)));
-    m_sessionCtrl->loadSession( s );
+    m_sessionCtrl->createSession( sessionName );
+    QSignalSpy spy(m_sessionCtrl, SIGNAL(activeSessionChanged(KDevelop::ISession*)));
+    m_sessionCtrl->loadSession( sessionName );
 
     QCOMPARE(spy.size(), 1);
     QList<QVariant> arguments = spy.takeFirst();
 
     ISession* emittedSession = arguments.at(0).value<ISession*>();
-    QCOMPARE(s, emittedSession);
+    QCOMPARE(m_sessionCtrl->activeSession(), emittedSession);
+    m_sessionCtrl->deleteSession( sessionName );
+}
+
+
+void SessionControllerTest::deleteSession()
+{
+    const QString sessionName = "TestSession3";
+    int sessionCount = m_sessionCtrl->sessions().count();
+    m_sessionCtrl->createSession( sessionName );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(const QString&)));
+    m_sessionCtrl->deleteSession( sessionName );
+    QCOMPARE( sessionCount, m_sessionCtrl->sessions().count() );
+
+    QCOMPARE(spy.size(), 1);
+    QList<QVariant> arguments = spy.takeFirst();
+
+    QString emittedSession = arguments.at(0).toString();
+    QCOMPARE( sessionName, emittedSession );
 }
 
 QTEST_KDEMAIN( SessionControllerTest, GUI)

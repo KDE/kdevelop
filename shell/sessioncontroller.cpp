@@ -19,6 +19,8 @@ Boston, MA 02110-1301, USA.
 
 #include "sessioncontroller.h"
 
+#include <QtCore/QHash>
+
 #include "session.h"
 
 namespace KDevelop
@@ -27,7 +29,7 @@ namespace KDevelop
 class SessionControllerPrivate
 {
 public:
-    QList<ISession*> availableSessions;
+    QHash<QString,Session*> availableSessions;
     ISession* activeSession;
 };
 
@@ -55,31 +57,50 @@ ISession* SessionController::activeSession() const
     return d->activeSession;
 }
 
-void SessionController::loadSession( ISession* session )
+void SessionController::loadSession( const QString& name )
 {
-    d->activeSession = session;
-    emit sessionLoaded( d->activeSession );
+    Q_ASSERT( d->availableSessions.contains( name ) );
+    d->activeSession = d->availableSessions[name];
+    emit activeSessionChanged( d->activeSession );
 }
 
-QList<ISession*> SessionController::sessions() const
+QList<QString> SessionController::sessions() const
 {
-    return d->availableSessions;
+    return d->availableSessions.keys();
 }
 
-ISession* SessionController::createSession( const QString& name )
+void SessionController::createSession( const QString& name )
 {
+    Q_ASSERT( !d->availableSessions.contains( name ) );
     Session* s = new Session( name );
-    d->availableSessions << s;
-    return s;
+    d->availableSessions.insert(name, s);
 }
 
-void SessionController::deleteSession( ISession* session )
+void SessionController::deleteSession( const QString& name )
 {
-    Session* s = dynamic_cast<Session*>(session);
-    Q_ASSERT(s);
+    Q_ASSERT( d->availableSessions.contains( name ) );
+    Session* s  = d->availableSessions[ name ];
     s->deleteFromDisk();
-    emit sessionDeleted( s );
-    delete s;
+    emit sessionDeleted( name );
+    if( s == d->activeSession ) {
+        loadDefaultSession();
+    }
+    d->availableSessions.remove(name);
+    s->deleteLater();
+}
+
+void SessionController::loadDefaultSession()
+{
+    QString name;
+    if( d->availableSessions.count() == 0 )
+    {
+        name = "default";
+        createSession( name );
+    } else
+    {
+        name = sessions().at(0);
+    }
+    loadSession( name );
 }
 
 }

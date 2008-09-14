@@ -40,7 +40,6 @@ public:
     ISession( QObject* parent = 0 );
     virtual ~ISession();
 
-    virtual QString name() const = 0;
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
 };

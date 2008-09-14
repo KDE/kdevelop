@@ -39,16 +39,8 @@ public:
     virtual ~ISessionController();
 
     virtual ISession* activeSession() const = 0;
-    virtual QList<ISession*> sessions() const = 0;
-    virtual ISession* createSession( const QString& name ) = 0;
-
-public Q_SLOTS:
-    virtual void loadSession( ISession* session ) = 0;
-    virtual void deleteSession( ISession* session ) = 0;
-
 Q_SIGNALS:
-    void sessionLoaded( KDevelop::ISession* );
-    void sessionDeleted( KDevelop::ISession* );
+    void activeSessionChanged( KDevelop::ISession* );
 };
 
 }

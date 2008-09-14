@@ -38,6 +38,7 @@ private slots:
     void cleanup();
     void createSession();
     void loadSession();
+    void deleteSession();
 private:
 
     KDevelop::Core* m_core;
