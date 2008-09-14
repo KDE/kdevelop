@@ -133,30 +133,6 @@ void MainWindowPrivate::settingsDialog()
     Core::self()->uiControllerInternal()->showSettingsDialog();
 }
 
-void MainWindowPrivate::configureEditors()
-{
-    //FIXME Change this so that it is embedded in our config dialog.
-    //apaku: Thats a lot of work, because katepart config pages work on KPageDialog
-    //so we basically need to write our own KPageDialog implementation combining
-    //KCM's and kate's pages.
-    //Perhaps this will require a change to the KTextEditor interface too...
-    KTextEditor::Document * doc =
-        Core::self()->documentController() ->activeDocument() ->textDocument();
-    KTextEditor::Editor *editor = doc ? doc->editor() : 0;
-    if ( !editor )
-    {
-        return ;
-    }
-
-    if ( !editor->configDialogSupported() )
-    {
-        kDebug() << "KTextEditor::configDialogSupported() == false";
-    }
-
-    // show the modal config dialog for this part if it has a ConfigInterface
-    editor->configDialog( m_mainWindow );
-}
-
 void MainWindowPrivate::newWindow()
 {
     Core::self()->uiController()->switchToArea(m_mainWindow->area()->objectName(), UiController::NewWindow);

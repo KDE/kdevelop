@@ -226,10 +226,6 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     view = d->document->createView(parent);
 
-    //Remove the editor config action so we can provide our own
-    delete view->actionCollection()->action( "set_confdlg" );
-    delete view->actionCollection()->action( "editor_options" );
-
     if (view) {
         view->setContextMenu( view->defaultContextMenu() );
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));

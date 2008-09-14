@@ -132,7 +132,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 //             guiFactory()->removeClient(activePart);
     }
 
-    m_mainWindow->actionCollection()->action("options_configure_editors")->setEnabled( (qobject_cast<KTextEditor::View*>(viewWidget) != 0 ) );
 
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
@@ -171,13 +170,6 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
-
-    action = actionCollection()->addAction( "options_configure_editors" );
-    action->setText( i18n( "Configure &Editor..." ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( configureEditors() ) );
-    action->setToolTip( i18n( "Configure editor settings" ) );
-    action->setWhatsThis( i18n( "<b>Configure editor</b><p>Opens editor configuration dialog.</p>" ) );
-    action->setEnabled( false );
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
                                         actionCollection());
