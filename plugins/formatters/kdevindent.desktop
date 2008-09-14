@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Icon=kdevelop
 Comment=A plugin for formatting C files using GNU indent
+Comment[nds]=En Moduul, dat C-Dateien mit "indent" vun GNU formateert
 Comment[pt]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
 Comment[pt_BR]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
 Comment[uk]=Додаток для форматування файлів мовою C за допомогою GNU indent
