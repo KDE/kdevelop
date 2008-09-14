@@ -73,13 +73,14 @@ IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 
     uint readValue;
     file.read((char*)&readValue, sizeof(uint));
-    file.seek(sizeof(uint)*readValue + file.pos());
+    file.seek(sizeof(ItemDataInfo)*readValue + file.pos());
 
     file.read((char*)&readValue, sizeof(uint));
-    file.seek(sizeof(uint)*readValue + file.pos());
+    file.seek(sizeof(ItemDataInfo)*readValue + file.pos());
     
     QByteArray data = file.read(sizeof(TopDUContextData));
     const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+    Q_ASSERT(topData->m_url.isEmpty() || topData->m_url.index() >> 16);
     return topData->m_url;
   }
   
