@@ -61,15 +61,21 @@ public:
 
   ///Restricts the header branching hash of searched contexts to the given number
   ///(Is only stored here, it is used in the environment-manager)
-  ///Set to zero to disable again
   void setIdentityOffsetRestriction(uint value);
 
+  ///Call this to disable a previously enabled identity offset restriction
+  void disableIdentityOffsetRestriction();
+
+  ///Whether an identity-offset restriction is set
+  bool identityOffsetRestrictionEnabled() const;
+  
   ///Returns the header branching hash restriction that has been set through the function above.
-  ///If zero, should be ignored.
+  ///Only use it if identityOffsetRestrictionEnabled() returns true
   uint identityOffsetRestriction() const;
   
 private:
     uint m_identityOffsetRestriction;
+    bool m_identityOffsetRestrictionEnabled;
     bool m_finished;
     Cpp::LazyStringSet m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;

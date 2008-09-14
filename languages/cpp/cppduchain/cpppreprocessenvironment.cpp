@@ -16,7 +16,7 @@
 #include <language/interfaces/iproblem.h>
 #include <parser/rpp/macrorepository.h>
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_macroNameSet(&Cpp::EnvironmentManager::stringSetRepository), m_environmentFile(environmentFile) {
+CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_identityOffsetRestrictionEnabled(false), m_macroNameSet(&Cpp::EnvironmentManager::stringSetRepository), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
     ///NOTE: m_environmentFile may be zero, this must be treated
 }
@@ -126,6 +126,15 @@ const Cpp::LazyStringSet& CppPreprocessEnvironment::macroNameSet() const {
 
 void CppPreprocessEnvironment::setIdentityOffsetRestriction(uint value) {
   m_identityOffsetRestriction = value;
+  m_identityOffsetRestrictionEnabled = true;
+}
+
+void CppPreprocessEnvironment::disableIdentityOffsetRestriction() {
+  m_identityOffsetRestrictionEnabled = false;
+}
+
+bool CppPreprocessEnvironment::identityOffsetRestrictionEnabled() const {
+  return m_identityOffsetRestrictionEnabled;
 }
 
 uint CppPreprocessEnvironment::identityOffsetRestriction() const {

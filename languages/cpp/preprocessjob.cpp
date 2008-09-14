@@ -55,6 +55,8 @@
 
 #include "cppdebughelper.h"
 
+// #define ifDebug(x) x
+
 QString urlsToString(const QList<KUrl>& urlList) {
   QString paths;
   foreach( const KUrl& u, urlList )
@@ -287,7 +289,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
     bool closeStream = false;
     m_headerSectionEnded = true;
 
-    ifDebug( kDebug(9007) << parentJob()->document().str() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section"; )
+    ifDebug( kDebug(9007) << parentJob()->document().str() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section" << "upcoming identity-offset:" << m_pp->branchingHash()*19; )
     
     if( m_secondEnvironmentFile ) {
         m_secondEnvironmentFile->setIdentityOffset(m_pp->branchingHash()*19);
@@ -310,7 +312,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 
         KDevelop::ReferencedTopDUContext content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
 
-        m_currentEnvironment->setIdentityOffsetRestriction(0);
+        m_currentEnvironment->disableIdentityOffsetRestriction();
 
         if(content) {
             Q_ASSERT(!(content->flags() & KDevelop::TopDUContext::ProxyContextFlag));
@@ -318,6 +320,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             parentJob()->setUpdatingContentContext(content);
 
             Cpp::EnvironmentFilePointer contentEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
+            Q_ASSERT(contentEnvironment->identityOffset() == m_secondEnvironmentFile->identityOffset());
 
             ///@todo think whether localPath is needed
             KUrl localPath(parentJob()->document().str());
@@ -330,6 +333,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
                 //Merge the macros etc. into the current environment
                 m_currentEnvironment->merge( m_secondEnvironmentFile.data() );
 
+                ifDebug( kDebug(9007) << "closing data-stream, body does not need to be processed"; )
                 closeStream = true;
                 parentJob()->setKeepDuchain(true); //We truncate all following content, so we don't want to update the du-chain.
                 Q_ASSERT(m_secondEnvironmentFile);
