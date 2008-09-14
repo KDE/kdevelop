@@ -46,7 +46,7 @@ void SessionControllerTest::initTestCase()
 
 void SessionControllerTest::init()
 {
-    m_sessionCtrl = m_core->sessionControllerInternal();
+    m_sessionCtrl = m_core->sessionController();
 }
 
 void SessionControllerTest::cleanup()
@@ -67,14 +67,10 @@ void SessionControllerTest::loadSession()
 {
     const QString sessionName = "TestSession2";
     m_sessionCtrl->createSession( sessionName );
-    QSignalSpy spy(m_sessionCtrl, SIGNAL(activeSessionChanged(KDevelop::ISession*)));
+    ISession* s = m_sessionCtrl->activeSession();
     m_sessionCtrl->loadSession( sessionName );
-
-    QCOMPARE(spy.size(), 1);
-    QList<QVariant> arguments = spy.takeFirst();
-
-    ISession* emittedSession = arguments.at(0).value<ISession*>();
-    QCOMPARE(m_sessionCtrl->activeSession(), emittedSession);
+    QEXPECT_FAIL("", "expecting a changed active session", Continue);
+    QCOMPARE( s, m_sessionCtrl->activeSession()); 
     m_sessionCtrl->deleteSession( sessionName );
 }
 

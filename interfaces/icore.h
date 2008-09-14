@@ -44,6 +44,7 @@ class ILanguageController;
 class IDocumentController;
 class ISessionController;
 class IRunController;
+class ISession;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -93,7 +94,8 @@ public:
     /** @return run controller */
     Q_SCRIPTABLE virtual KDevelop::IRunController *runController() = 0;
 
-    Q_SCRIPTABLE virtual KDevelop::ISessionController *sessionController() = 0;
+    /** @return the active session */
+    Q_SCRIPTABLE virtual KDevelop::ISession *activeSession() = 0;
 
 protected:
     ICore(QObject *parent = 0);

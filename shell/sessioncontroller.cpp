@@ -34,7 +34,7 @@ public:
 };
 
 SessionController::SessionController( QObject *parent )
-        : ISessionController( parent ), d(new SessionControllerPrivate)
+        : QObject( parent ), d(new SessionControllerPrivate)
 {
 }
 
@@ -61,7 +61,6 @@ void SessionController::loadSession( const QString& name )
 {
     Q_ASSERT( d->availableSessions.contains( name ) );
     d->activeSession = d->availableSessions[name];
-    emit activeSessionChanged( d->activeSession );
 }
 
 QList<QString> SessionController::sessions() const

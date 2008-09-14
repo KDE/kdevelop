@@ -176,7 +176,12 @@ IUiController *Core::uiController()
     return d->uiController;
 }
 
-ISessionController *Core::sessionController()
+ISession* Core::activeSession()
+{
+    return sessionController()->activeSession();
+}
+
+SessionController *Core::sessionController()
 {
     return d->sessionController;
 }
@@ -239,11 +244,6 @@ DocumentController *Core::documentControllerInternal()
 IRunController *Core::runController()
 {
     return d->runController;
-}
-
-SessionController *Core::sessionControllerInternal()
-{
-    return d->sessionController;
 }
 
 RunController *Core::runControllerInternal()

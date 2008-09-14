@@ -64,8 +64,8 @@ public:
     /** @copydoc ICore::runController() */
     virtual IRunController *runController();
 
-    /** @copydoc ICore::sessionController() */
-    virtual ISessionController *sessionController();
+    /** @copydoc ICore::activeSession() */
+    virtual ISession *activeSession();
 
     /// The following methods may only be used within the shell.
 
@@ -94,7 +94,7 @@ public:
      * @return session controller
      * @internal
      */
-    SessionController *sessionControllerInternal();
+    SessionController *sessionController();
 
     void cleanup();
 

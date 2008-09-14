@@ -22,14 +22,14 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 #include <QtCore/QObject>
-#include <interfaces/isessioncontroller.h>
 
 namespace KDevelop
 {
 
 class Session;
+class ISession;
 
-class KDEVPLATFORMSHELL_EXPORT SessionController : public ISessionController
+class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject
 {
     Q_OBJECT
 public:
@@ -47,6 +47,7 @@ public Q_SLOTS:
     void loadSession( const QString& );
     void deleteSession( const QString& );
 Q_SIGNALS:
+    void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
 private:
     class SessionControllerPrivate* const d;
