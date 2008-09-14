@@ -168,7 +168,6 @@ void MainWindowPrivate::setupActions()
     QString text = i18n( "Configure %1", app );
     action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
                                       actionCollection());
-    actionCollection()->addAction( "options_configure", action );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
@@ -182,7 +181,6 @@ void MainWindowPrivate::setupActions()
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
                                         actionCollection());
-    actionCollection()->addAction( "options_show_statusbar", action );
     action->setText( i18n( "Show &Statusbar" ) );
     action->setToolTip( i18n( "Show statusbar" ) );
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar.</p>" ) );
@@ -208,16 +206,15 @@ void MainWindowPrivate::setupActions()
     action = KStandardAction::showMenubar(
                  this, SLOT( showMenuBar() ),
                  actionCollection());
-    actionCollection()->addAction( "options_show_menubar", action );
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
-    actionCollection()->addAction( KStandardAction::KeyBindings, m_mainWindow->guiFactory(), SLOT( configureShortcuts() ) );
+    KStandardAction::keyBindings( m_mainWindow->guiFactory(), SLOT(
+                            configureShortcuts() ), actionCollection() );
 
     action = KStandardAction::configureToolbars(
                  this, SLOT( configureToolbars() ),
                  actionCollection() );
-    actionCollection()->addAction( "options_configure_toolbars", action );
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure toolbars." ) ) );
 

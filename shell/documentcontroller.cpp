@@ -192,8 +192,8 @@ void DocumentController::setupActions()
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
 
-    d->fileOpenRecent = KStandardAction::openRecent(this, SLOT(slotOpenDocument(const KUrl&)), this);
-    ac->addAction(d->fileOpenRecent->objectName(), d->fileOpenRecent);
+    d->fileOpenRecent = KStandardAction::openRecent(this,
+                    SLOT(slotOpenDocument(const KUrl&)), ac);
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 

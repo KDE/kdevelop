@@ -230,10 +230,11 @@ void ProjectController::setupActions()
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
 
-    d->m_recentAction =
-        KStandardAction::openRecent( this, SLOT( openProject( const KUrl& ) ),
-                                ac);
+    d->m_recentAction = new KRecentFilesAction( this );
+    connect( d->m_recentAction, SIGNAL(urlSelected(const KUrl&)), SLOT(
+                            openProject( const KUrl& ) ));
     ac->addAction( "project_open_recent", d->m_recentAction );
+    d->m_recentAction->setText( i18n( "Open Recent" ) );
     d->m_recentAction->setToolTip( i18n( "Open recent project" ) );
     d->m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
