@@ -82,7 +82,7 @@ void MainWindowPrivate::projectOpened()
 {
     QString app = i18n( "Project" );
     QString text = i18n( "Configure %1", app );
-    QAction *action = actionCollection() ->action( "settings_configure" );
+    QAction *action = actionCollection() ->action( "options_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
@@ -92,7 +92,7 @@ void MainWindowPrivate::projectClosed()
 {
     QString app = qApp->applicationName();
     QString text = i18n( "Configure %1", app );
-    QAction *action = actionCollection() ->action( "settings_configure" );
+    QAction *action = actionCollection() ->action( "options_configure" );
     action->setToolTip( text );
     action->setWhatsThis( QString( "<b>%1</b><p>%2" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
@@ -109,7 +109,8 @@ void MainWindowPrivate::newToolbarConfig()
 void MainWindowPrivate::toggleStatusbar()
 {
     KToggleAction * action =
-        qobject_cast< KToggleAction*>( actionCollection() ->action( "settings_show_statusbar" ) );
+        qobject_cast< KToggleAction*>( actionCollection() ->action(
+                                "options_show_statusbar" ) );
     m_mainWindow->statusBar()->setHidden( !action->isChecked() );
 }
 
