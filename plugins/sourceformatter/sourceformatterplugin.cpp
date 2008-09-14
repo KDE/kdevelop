@@ -64,7 +64,7 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 {
 	setXMLFile("kdevsourceformatter.rc");
 
-	m_formatTextAction = actionCollection()->addAction("edit_astyle_reformat");
+	m_formatTextAction = actionCollection()->addAction("edit_reformat_source");
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
 	m_formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting "
