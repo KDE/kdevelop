@@ -46,7 +46,6 @@ install(FILES
     istatus.h
     irun.h
     isession.h
-    isessioncontroller.h
     iruncontroller.h
     irunprovider.h
     contextmenuextension.h
