@@ -2,7 +2,7 @@ Current Maintainers:
 
 Matt Rogers <mattr@kde.org> - Lead Maintainer
 Alexander Dymo <adymo@kdevelop.org> - Maintainer
-Amilcar do Carmo Lucas <a.lucas@tu-bs.de> - Maintainer - KDevelop.org
+Amilcar do Carmo Lucas <amilcar@kdevelop.org> - Maintainer - KDevelop.org
 
 Previous Maintainers and their areas of expertise can be found below. It is best
 to contain the KDevelop developers list at kdevelop-devel@kdevelop.org if you have
@@ -76,7 +76,7 @@ DistPart, Bash Shell Support:
   Ian Reinhart Geiser <geiseri@kde.org>
 
 API Documentation, Run Options, code reorganization. Fixes for project templates, autotools and doxygen. 
-  Amilcar Lucas <a.lucas@tu-bs.de>
+  Amilcar Lucas <amilcar@kdevelop.org>
 
 Replace plugin, Bookmarks plugin, FileList plugin, CTags2 plugin, Overall improvements and patches
   Jens Dagerbo  <jens.dagerbo@swipnet.se>
@@ -84,7 +84,7 @@ Replace plugin, Bookmarks plugin, FileList plugin, CTags2 plugin, Overall improv
 SnippetPart, debugger and usability patches
   Robert Gruber <rgruber@users.sourceforge.net>
 
-  
+
 Other software included in the source package:
 
 * KDE 2.0 Development Book

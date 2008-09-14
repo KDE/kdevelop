@@ -1,14 +1,15 @@
 KDevelop IDE and Platform
 ---------------------------
-General information about KDevelop: http://www.kdevelop.org/index.html
+General information about KDevelop: http://www.kdevelop.org/
 List of features: http://www.kdevelop.org/index.html?filename=HEAD/features.html
 List of requirements: http://www.kdevelop.org/index.html?filename=HEAD/requirements.html
 Compiling instructions: http://www.kdevelop.org/index.html?filename=HEAD/branches_compiling.html
+API documentation is available from http://api.kde.org/4.x-api/kdevelop-apidocs/doc/api/html/index.html
 
 
 KDevelop Platform API Documentation
 -------------------------------------
-API documentation is available from http://api.kde.org/4.0-api/kdevelop-apidocs/index.html
+API documentation is available from http://api.kde.org/4.x-api/kdevplatform-apidocs/
 
 To build it by yourself, make sure you have the kdelibs source available
 Run
