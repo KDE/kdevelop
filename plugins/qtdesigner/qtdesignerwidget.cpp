@@ -71,7 +71,7 @@ void QtDesignerWidget::setupActions()
     QDesignerFormWindowManagerInterface* manager = m_document->form()->core()->formWindowManager();
     KActionCollection* ac = actionCollection();
 
-    ac->addAction( "file_save", KStandardAction::save( this, SLOT( save() ), ac) );
+    KStandardAction::save( this, SLOT( save() ), ac);
     ac->addAction( "adjust_size", manager->actionAdjustSize() );
     ac->addAction( "break_layout", manager->actionBreakLayout() );
     ac->addAction( "designer_cut", manager->actionCut() );
