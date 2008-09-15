@@ -86,12 +86,6 @@ RunnerModel::~RunnerModel()
     if (m_executor) delete m_executor;
 }
 
-QString RunnerModel::name() const
-{
-    return m_name;
-}
-
-
 void RunnerModel::checkAll()
 {
     if (m_rootItem) m_rootItem->check();

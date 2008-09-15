@@ -68,10 +68,6 @@ public:
      * execution is stopped. */
     ~RunnerModel();
 
-    virtual QString name() const; // TODO do not  think this is used anymore
-                                  //      find out and remove.
-    void setName(const QString& name) { m_name = name;}
-
     /*! Returns the data stored under the given \a role for the item
      * referred to by \a index. */
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -239,7 +235,6 @@ private:  // Constants
 private:  // Attributes
     Test* m_rootItem;
     TestExecutor* m_executor;
-    QString m_name;
     bool m_isRunning;
     QModelIndex m_startedItemIndex;
     int m_expectedResults;
