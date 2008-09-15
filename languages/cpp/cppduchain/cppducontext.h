@@ -356,6 +356,9 @@ class CppDUContext : public BaseContext {
               }else{
                 copy = templateDecl->instantiate(memberInstantiationInformation, source);
               }
+              if(copy->context() != this)
+                kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
+
               ret.append(copy);
             }
           }
@@ -364,7 +367,7 @@ class CppDUContext : public BaseContext {
     
     virtual void deleteUses() {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
-      foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
+      foreach(CppDUContext<BaseContext>* ctx, m_instatiations.values())
         ctx->deleteUses();
     }
     
@@ -389,9 +392,15 @@ class CppDUContext : public BaseContext {
     {
       Q_ASSERT(!dynamic_cast<TopDUContext*>(this));
       if(context->m_instantiatedFrom) {
-        
         setInstantiatedFrom(context->m_instantiatedFrom, templateArguments);
+        return;
       }
+      
+      if( m_instantiatedFrom ) {
+        Q_ASSERT(m_instantiatedFrom->m_instatiations[m_instantiatedWith] == this);
+        m_instantiatedFrom->m_instatiations.remove( m_instantiatedWith );
+      }
+      
       m_instantiatedWith = templateArguments.indexed();
       //Change the identifier so it contains the template-parameters
       QualifiedIdentifier totalId = this->localScopeIdentifier();
@@ -417,11 +426,8 @@ class CppDUContext : public BaseContext {
       
       this->setLocalScopeIdentifier(totalId);
       
-      
-      if( m_instantiatedFrom )
-        m_instantiatedFrom->m_instatiations.remove( this );
       m_instantiatedFrom = context;
-      m_instantiatedFrom->m_instatiations.insert( this );
+      m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
     }
     
     virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers) const
@@ -489,12 +495,18 @@ class CppDUContext : public BaseContext {
       return !(flags & DUContext::InImportedParentContext) || (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class);
     }
     
-    DUContext* instantiate(InstantiationInformation info, TopDUContext* source) {
+    DUContext* instantiate(InstantiationInformation info, const TopDUContext* source) {
       if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
         return this;
 
       if(m_instantiatedFrom)
         return m_instantiatedFrom->instantiate(info, source);
+      
+      {
+        typename QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* >::const_iterator it = m_instatiations.find(info.indexed());
+        if(it != m_instatiations.end())
+          return *it;
+      }
       
       if(this->owner()) {
         TemplateDeclaration* templ = dynamic_cast<TemplateDeclaration*>(this->owner());
@@ -528,7 +540,7 @@ class CppDUContext : public BaseContext {
       //Delete all the local declarations first, so they also delete their instantiations
       BaseContext::deleteLocalDeclarations();
       //Specializations will be destroyed the same time this is destroyed
-      QSet<CppDUContext<BaseContext>*> instatiations;
+      QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* > instatiations;
       {
         QMutexLocker l(&cppDuContextInstantiationsMutex);
         instatiations = m_instatiations;
@@ -542,25 +554,24 @@ class CppDUContext : public BaseContext {
       if( m_instantiatedFrom )
       {
         //We need to make sure that all declarations from the specialization-base are instantiated, so they are returned.
-        QVector<Declaration*> baseDecls = m_instantiatedFrom->localDeclarations();
-        DUContext::DeclarationList temp;
 
         //This requests all declarations, so they all will be instantiated and instances of them added into this context.
         //DUContext::mergeDeclarationsInternal will then get them.
         
+        DUContext::DeclarationList temp;
         QVector<Declaration*> decls = m_instantiatedFrom->localDeclarations();
 
         foreach( Declaration* baseDecls, decls )
           this->findLocalDeclarationsInternal( baseDecls->identifier(), SimpleCursor::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
       }
 
-      return BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, source, searchInParents, currentDepth);
+      BaseContext::mergeDeclarationsInternal(definitions, position, hadContexts, source, searchInParents, currentDepth);
     }
 
     CppDUContext<BaseContext>* m_instantiatedFrom;
 
     ///Every access to m_instatiations must be serialized through instatiationsMutex, because they may be written without a write-lock
-    QSet<CppDUContext<BaseContext>* > m_instatiations;
+    QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* > m_instatiations;
     IndexedInstantiationInformation m_instantiatedWith;
 };
 

@@ -324,6 +324,10 @@ namespace Cpp {
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
   AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
+
+inline uint qHash(const Cpp::IndexedInstantiationInformation& info) {
+  return info.hash();
+}
 }
 
 #endif

@@ -1798,7 +1798,7 @@ void TestDUChain::testFunctionTemplates() {
 void TestDUChain::testTemplateFunctions() {
   QByteArray method("class A {}; template<class T> T a(T& q) {};");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->localDeclarations().count(), 2);
@@ -1809,7 +1809,27 @@ void TestDUChain::testTemplateFunctions() {
   QCOMPARE(cppFunction->arguments().count(), 1);
   QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
   QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
+  QVERIFY(d->internalContext());
+  QVERIFY(d->internalContext()->type() == DUContext::Other);
+  QCOMPARE(d->internalContext()->importedParentContexts().count(), 1);
+  QCOMPARE(d->internalContext()->importedParentContexts()[0].context()->type(), DUContext::Function);
+  QCOMPARE(d->internalContext()->importedParentContexts()[0].context()->importedParentContexts().count(), 1);
+  QCOMPARE(d->internalContext()->importedParentContexts()[0].context()->importedParentContexts().count(), 1);
+  QCOMPARE(d->internalContext()->importedParentContexts()[0].context()->importedParentContexts()[0].context()->type(), DUContext::Template);
 
+  QList<QPair<Declaration*, int> > visibleDecls = d->internalContext()->allDeclarations(d->internalContext()->range().end, top, false);
+  QCOMPARE(visibleDecls.size(), 2); //Must be q and T
+  QCOMPARE(visibleDecls[0].first->identifier().toString(), QString("q"));
+  QVERIFY(visibleDecls[0].first->abstractType());
+  QCOMPARE(visibleDecls[0].first->abstractType()->toString(), QString("A&"));
+  QVERIFY(visibleDecls[1].first->abstractType());
+  QCOMPARE(visibleDecls[1].first->abstractType()->toString(), QString("A"));
+  
+  Declaration* found = findDeclaration(d->internalContext(), Identifier("q"));
+  QVERIFY(found);
+  QVERIFY(found->abstractType());
+  QCOMPARE(found->abstractType()->toString(), QString("A&"));
+  
   release(top);
 }
 

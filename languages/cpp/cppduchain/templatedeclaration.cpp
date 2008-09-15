@@ -67,10 +67,6 @@ typedef CppDUContext<KDevelop::DUContext> StandardCppDUContext;
 
 namespace Cpp {
   DEFINE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
-
-  uint qHash(const Cpp::IndexedInstantiationInformation& info) {
-    return info.hash();
-  }
 }
 
 struct AtomicIncrementer {
@@ -795,17 +791,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
     //Check whether the instantiation also instantiates the parent context, and if it does, replace surroundingContext with the instantiated version
     CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>*>(surroundingContext);
     if(parent && templateArguments.previousInstantiationInformation && templateArguments.previousInstantiationInformation != parent->instantiatedWith().index()) {
-      ///An instantiation has been requested, where the parent-context is specialized.
-      ///Specialize the parent
-      Declaration* newParentDecl = parent->owner();
-      if(newParentDecl) {
-        TemplateDeclaration* templDec = dynamic_cast<TemplateDeclaration*>(newParentDecl);
-        if(templDec)
-          newParentDecl = templDec->instantiate( IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source );
-      }
-
-      if(newParentDecl && newParentDecl->internalContext())
-        surroundingContext = newParentDecl->internalContext();
+      surroundingContext = parent->instantiate(IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source);
     }
   }
 
