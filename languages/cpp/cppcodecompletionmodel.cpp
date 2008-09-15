@@ -100,7 +100,7 @@ void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, 
 
     DUContextPointer thisContext;
     {
-      thisContext = top->findContextAt(SimpleCursor(range.start()));
+      thisContext = Cpp::applyActiveSpecializations(top->findContextAt(SimpleCursor(range.start())), top);
 
        kDebug(9007) << "context is set to" << thisContext.data();
         if( thisContext ) {
