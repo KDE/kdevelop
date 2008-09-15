@@ -690,15 +690,20 @@ protected:
         {
           DUContext* child = childContexts.at( nextContextIndex() );
 
-          if ( child->range().start > translated.end && child->smartRange() ) {
-#ifdef DEBUG_UPDATE_MATCHING
-              kDebug() << "While searching" << identifier << translated.textRange() << "(from" << range.textRange() << ") stopping because found" << child->localScopeIdentifier() << child->range().textRange();
-#endif
-              break;
-          }
+//           if ( child->range().start > translated.end && child->smartRange() ) {
+// #ifdef DEBUG_UPDATE_MATCHING
+//               kDebug() << "While searching" << identifier << translated.textRange() << "(from" << range.textRange() << ") stopping because found" << child->localScopeIdentifier() << child->range().textRange();
+// #endif
+//               break;
+//           }
 
-          if ( child->type() == type && child->localScopeIdentifier() == identifier && child->range() == translated )
+	  //For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
+          if ( child->type() == type && child->localScopeIdentifier() == identifier && (!identifier.isEmpty() || child->range() == translated) )
           {
+            if(child->range() != translated && child->smartRange()) {
+              kDebug() << "range mismatch while updating context. Range:" << child->range().textRange() << "should be:" << translated.textRange();
+              break;
+            }
             // No need to have the translated range accurate any more
             // Also we can't unlock after the duchain lock is unlocked
             iface.unlock();
@@ -723,6 +728,8 @@ protected:
 
             kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
 #endif
+	  if ( child->range().start > translated.end && child->smartRange() && (nextContextIndex()+1 == childContexts.count() || (childContexts.at(nextContextIndex()+1)->localScopeIdentifier() != identifier || childContexts.at(nextContextIndex()+1)->type() != type)) )
+	    break; //Don't move the nextContextIndex() too far
           }
         }
       }
