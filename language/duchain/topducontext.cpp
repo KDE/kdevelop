@@ -45,8 +45,6 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 
-//#define DEBUG_SEARCH
-
 using namespace KTextEditor;
 
 //Do visibility-caching when more then X items are found.
@@ -160,6 +158,8 @@ struct TopDUContext::AliasChainElement {
     for(int a = 0; a < identifiers.size(); ++a) {
       //Check whether there is an identifier that is equal
       const QualifiedIdentifier& current(identifiers[a]);
+      if(current.explicitlyGlobal())
+        continue; //Skip explicitly global identifiers, since those will not be matched correctly
       const AliasChainElement* checkElement = this;
       bool mismatch = false;
       for(int scope = current.count()-1; scope >= 0; --scope) {
@@ -960,7 +960,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
     if(aliasesCount) {
 #ifdef DEBUG_SEARCH
-      kDebug() << "found" << aliases.count() << "aliases";
+      kDebug() << "found" << aliasesCount << "aliases";
 #endif
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, createVisibleCache);
 
@@ -1067,7 +1067,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
       {
         //We must never break or return from this loop, because else we might be creating a bad cache
 #ifdef DEBUG_SEARCH
-      kDebug() << "found" << imports.size() << "imports";
+      kDebug() << "found" << importsCount << "imports";
 #endif
         if(!check(imports[a]))
           continue;
