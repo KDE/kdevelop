@@ -111,7 +111,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     DUChainBaseData* topData = (DUChainBaseData*)data.constData();
     
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
-    Q_ASSERT(ret);
+    Q_ASSERT(ret); //If this triggers, the top-context type is not registered. Most probably it means that the specific language-support is not loaded.
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
     target.m_data.clear();
