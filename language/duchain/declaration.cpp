@@ -373,12 +373,14 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   else
     m_topContext = 0;
   
-  m_context = context;
   d->m_anonymousInContext = anonymous;
+  m_context = 0;
 
   if (context) {
     if(!m_indexInTopContext)
       allocateOwnIndex();
+    
+    m_context = context;
     
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
