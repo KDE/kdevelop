@@ -343,6 +343,15 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 
 //     m_localDeclarations.append(newDeclaration);
 
+  if(m_indexInTopContext < (0xffffffff/2)) {
+    //If this context is not temporary, added declarations shouldn't be either
+    Q_ASSERT(newDeclaration->ownIndex() < (0xffffffff/2));
+  }
+  if(m_indexInTopContext > (0xffffffff/2)) {
+    //If this context is temporary, added declarations should be as well
+    Q_ASSERT(newDeclaration->ownIndex() > (0xffffffff/2));
+  }
+
   SimpleCursor start = newDeclaration->range().start;
 
   bool inserted = false;
@@ -394,6 +403,15 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   LocalIndexedDUContext indexed(context->m_dynamicData->m_indexInTopContext);
 
+  if(m_indexInTopContext < (0xffffffff/2)) {
+    //If this context is not temporary, added declarations shouldn't be either
+    Q_ASSERT(indexed.localIndex() < (0xffffffff/2));
+  }
+  if(m_indexInTopContext > (0xffffffff/2)) {
+    //If this context is temporary, added declarations should be as well
+    Q_ASSERT(indexed.localIndex() > (0xffffffff/2));
+  }
+  
   bool inserted = false;
 
   int childCount = m_context->d_func()->m_childContextsSize();
