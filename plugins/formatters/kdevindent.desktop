@@ -3,11 +3,14 @@ Type=Service
 Exec=blubb
 Icon=kdevelop
 Comment=A plugin for formatting C files using GNU indent
+Comment[gl]=Unha extensión para formatar os ficheiros en C empregando o GNU indent
 Comment[nds]=En Moduul, dat C-Dateien mit "indent" vun GNU formateert
 Comment[pt]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
 Comment[pt_BR]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
+Comment[sv]=Ett insticksprogram för att formatera C-filer med GNU indent
 Comment[uk]=Додаток для форматування файлів мовою C за допомогою GNU indent
 Name=KDevIndent
+Name[sv]=KDevelop indent
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevindent
