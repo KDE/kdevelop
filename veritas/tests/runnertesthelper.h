@@ -51,7 +51,7 @@ public:
     /*! the test tree root*/
     void setRoot(Test* root);
     /*! run the items in the tree. blocking */
-    void runTests();
+     void runTests();
     /*! compares the actual test tree in the model against a serialized
     version in @p testTreeContents
     eg "0 suite1"
@@ -67,6 +67,9 @@ public:
     /*! only used by standalone runner */
     QWidget* runnerWidget() const;
 
+    /*! show the runner widget, so it can be inspected manually during test execution */
+    void setShowWidget(bool show = true);
+
 private slots:
     void triggerRunAction();
 
@@ -77,6 +80,7 @@ private:
 
 private:
     RunnerWindow* m_window;
+    bool m_show;
 };
 
 } // end namespace Veritas

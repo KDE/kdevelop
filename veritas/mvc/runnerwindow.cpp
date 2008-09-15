@@ -184,7 +184,6 @@ void RunnerWindow::rmProjectFromPopup(IProject* proj)
 
 void RunnerWindow::resetProgressBar() const
 {
-    kDebug() << "";
     ui()->progressRun->setValue(0);
     ui()->progressRun->update();
     if (ui()->progressRun->maximum() == 0) {
@@ -507,7 +506,7 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
 
     if (filterIndex.isValid()) {
         Test* t = static_cast<Test*>(filterIndex.internalPointer());
-        resultsProxyModel()->setTestFilter(t->leafs());
+        resultsProxyModel()->setTestFilter(t);
     }
 
     if (!resultIndex.isValid()) {

@@ -31,7 +31,7 @@ using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 
 ResultsProxyModel::ResultsProxyModel(QObject* parent,  int filter)
-        : QSortFilterProxyModel(parent), m_filter(filter)
+        : QSortFilterProxyModel(parent), m_filter(filter), m_testFilter(0)
 {}
 
 ResultsProxyModel::~ResultsProxyModel()
@@ -63,6 +63,19 @@ void ResultsProxyModel::setFilter(int filter)
     }
 }
 
+namespace
+{
+bool isIndirectParent(Test* parent, Test* child)
+{
+    bool isParent = false;
+    while(child && !isParent) {
+        isParent = (parent == child);
+        child = child->parent();
+    }
+    return isParent;
+}
+}
+
 bool ResultsProxyModel::filterAcceptsRow(int source_row,
         const QModelIndex& source_parent) const
 {
@@ -72,13 +85,10 @@ bool ResultsProxyModel::filterAcceptsRow(int source_row,
     }
     int result = model()->result(source_row);
     if ((result & m_filter) || (result == Veritas::RunException)) {
-        if (m_testFilter.isEmpty()) {
-            return true;
-        }
+        if (!m_testFilter) return true;
         QModelIndex i = model()->index(source_row, 0, source_parent);
         Test* t = model()->testFromIndex(i);
-        bool b = m_testFilter.contains(t);
-        return b;
+        return isIndirectParent(m_testFilter, t);
     }
     return false;
 }
@@ -88,7 +98,7 @@ ResultsModel* ResultsProxyModel::model() const
     return static_cast<ResultsModel*>(sourceModel());
 }
 
-void ResultsProxyModel::setTestFilter(const QList<Test*>& t)
+void ResultsProxyModel::setTestFilter(Test* t)
 {
     m_testFilter = t;
     reset();
@@ -96,6 +106,6 @@ void ResultsProxyModel::setTestFilter(const QList<Test*>& t)
 
 void ResultsProxyModel::resetTestFilter()
 {
-    m_testFilter.clear();
+    m_testFilter = 0;
 }
 

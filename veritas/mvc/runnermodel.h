@@ -129,7 +129,7 @@ public:
      *  to determine the return value. */
     bool isRunning(unsigned long time = 0) const;
 
-    bool someChildHasStatus(int status, const QModelIndex& parent) const;
+    QVariant computeIconFromChildState(Test*) const;
 
     void updateView(const QModelIndex& index);
 

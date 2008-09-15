@@ -49,6 +49,11 @@ inline Test* testFromIndex(const QModelIndex& index)
 {
     return static_cast<Test*>(index.internalPointer());
 }
+
+QVariant g_failIcon;
+QVariant g_notRunIcon;
+QVariant g_successIcon;
+
 }
 
 RunnerModel::RunnerModel(QObject* parent)
@@ -68,6 +73,10 @@ RunnerModel::RunnerModel(QObject* parent)
     m_isRunning = false;
     setExpectedResults(Veritas::AllStates);
     //ModelTest* tm = new ModelTest(this);
+
+    g_failIcon = QIcon(":/icons/arrow-right-double-bordeaux-16.png");
+    g_notRunIcon = QIcon(":/icons/arrow-right-double-grey-16.png");
+    g_successIcon = KIcon("arrow-right-double");
 }
 
 RunnerModel::~RunnerModel()
@@ -93,51 +102,79 @@ void RunnerModel::uncheckAll()
     if (m_rootItem) m_rootItem->unCheck();
 }
 
-
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
     switch(role) {
-    case Qt::TextAlignmentRole : {
+    case Qt::TextAlignmentRole :
         return int(Qt::AlignLeft | Qt::AlignTop);
-    } case Qt::DisplayRole : {
+    case Qt::DisplayRole :
         return testFromIndex(index)->data(index.column());
-    } case Qt::TextColorRole : {
-        if (!testFromIndex(index)->isChecked()) return Qt::lightGray;
-        else return Qt::black;
-    } case Qt::DecorationRole : {
+    case Qt::TextColorRole :
+        return testFromIndex(index)->isChecked() ?
+                Qt::black :
+                Qt::lightGray;
+    case Qt::DecorationRole :
         if (index.column() != 0) {
             return QVariant();
         }
-        if (index.child(0, 0).isValid()) {
-            if (someChildHasStatus(Veritas::RunError, index))
-                return QIcon(":/icons/arrow-right-double-bordeaux-16.png");
-            else if (someChildHasStatus(Veritas::NoResult, index))
-                return QIcon(":/icons/arrow-right-double-grey-16.png");
-            else // evrything ran successfully
-                return KIcon("arrow-right-double");
-        } else {
+        if (index.child(0, 0).isValid()) { // not a leaf test
+            return computeIconFromChildState(testFromIndex(index));
+        } else { // a leaf test
             return Utils::resultIcon(testFromIndex(index)->state());
         }
-    } default: {}}
+    default: {}
+    }
     return QVariant();
 }
 
-bool RunnerModel::someChildHasStatus(int status, const QModelIndex& parent) const
+namespace
 {
-    QModelIndex currentIndex = parent;
-    if (currentIndex.child(0, 0).isValid()) {
-        currentIndex = currentIndex.child(0, 0);
-        while (currentIndex.isValid()) {
-            if (someChildHasStatus(status, currentIndex)) {
-                return true;
+/*! Functor which traverses a sub-tree and determines the root's state.
+ *  If a single test in the sub-tree failed, the root will have a failed state as well.
+ *  If no sub-test failed and some leaf-test has the NoResult state, the root gets that state.
+ *  Else everything succeeded and root gets RunSuccess. */
+class ParentStateResolver
+{
+public:
+    ParentStateResolver() : done(false) { state = Veritas::RunSuccess; }
+    void operator()(Test* current) {
+        if (done) return;
+        switch(current->state()) {
+        case Veritas::RunFatal:
+        case Veritas::RunError:
+            state = Veritas::RunError;
+            done = true;
+            break;
+        case Veritas::NoResult:
+            if (current->childCount()==0) {
+                state = Veritas::NoResult;
             }
-            currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
+            break;
+        default: {}
         }
-    } else {
-        return (status == testFromIndex(currentIndex)->state());
     }
-    return false;
+    bool done;
+    Veritas::TestState state;
+};
+}
+
+QVariant RunnerModel::computeIconFromChildState(Veritas::Test* test) const
+{
+    ParentStateResolver psr;
+    traverseTree(test, psr);
+
+    switch(psr.state) {
+    case Veritas::RunSuccess:
+        return g_successIcon;
+    case Veritas::RunFatal:
+    case Veritas::RunError:
+        return g_failIcon;
+    case Veritas::NoResult:
+        return g_notRunIcon;
+    default: {}
+    }
+    return QVariant();
 }
 
 bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -275,6 +312,7 @@ void RunnerModel::countItems()
         case Veritas::RunException:
             m_numExceptions++;
             break;
+        default: {}
         }
         QModelIndex siblingIndex;
         siblingIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
@@ -443,6 +481,8 @@ void RunnerModel::postItemCompleted(QModelIndex index)
         m_numExceptions++;
         emit numExceptionsChanged(m_numExceptions);
         break;
+
+    default : {}
     }
 
     emit numCompletedChanged(m_numStarted);

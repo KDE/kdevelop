@@ -34,7 +34,7 @@
 using Veritas::RunnerTestHelper;
 
 RunnerTestHelper::RunnerTestHelper()
-    : m_window(0)
+    : m_window(0), m_show(false)
 {}
 
 void RunnerTestHelper::initializeGUI()
@@ -89,6 +89,11 @@ void RunnerTestHelper::triggerRunAction()
     m_window->ui()->actionStart->trigger();
 }
 
+void RunnerTestHelper::setShowWidget(bool show)
+{
+    m_show = show;
+}
+
 void RunnerTestHelper::runTests()
 {
     QTimer* t = new QTimer();
@@ -97,10 +102,11 @@ void RunnerTestHelper::runTests()
     connect(t, SIGNAL(timeout()), this, SLOT(triggerRunAction()));
     t->start();
 
-    // decomment the lines below to inspect to spawn the runner window
-    // during testexecution
-    //m_window->show();
-    //QTest::qWait(5000);
+    if (m_show) {
+        m_window->show();
+        QTest::qWait(5000);
+    }
+
     bool gotSignal = QTest::kWaitForSignal(
         m_window->runnerModel(),
         SIGNAL(allItemsCompleted()),
@@ -133,6 +139,45 @@ void RunnerTestHelper::verifyTest(const QVariant& expected, int lvl0, int lvl1, 
     KOMPARE(expected, runner->data(index));
 }
 
+namespace {
+
+QString stateToString(Veritas::TestState state)
+{
+    QString str;
+    switch(state) {
+    case Veritas::RunSuccess:
+        str = "RunSuccess";
+        break;
+    case Veritas::RunError:
+        str = "RunError";
+        break;
+    case Veritas::RunFatal:
+        str = "RunFatal";
+        break;
+    case Veritas::NoResult:
+        str = "NoResult";
+        break;
+    case Veritas::RunException:
+        str = "RunException";
+        break;
+    }
+    return str;
+}
+
+void verifyTestState(Veritas::Test* test, const QString path, QMap<QString, Veritas::TestState>& expectedStates)
+{
+    KVERIFY_MSG(expectedStates.contains(path), QString("No expected test-state provided for %1").arg(path));
+    Veritas::TestState expected = expectedStates[path];
+    expectedStates.remove(path);
+    Veritas::TestResult* res = test->result();
+    KVERIFY(res);
+    QString failMsg = QString("Wrong teststate for %3. Expected %1 but got %2").arg(stateToString(expected)).arg(stateToString(res->state())).arg(test->name());
+    KOMPARE_MSG(expected, res->state(), failMsg);
+
+}
+
+} // end anonymous namespace
+
 void RunnerTestHelper::verifyTestStates(QMap<QString, Veritas::TestState> expectedState, Veritas::Test* root)
 {
     // TestCases are on lvl3 in the test-tree. this is kinda weak ... fix it
@@ -140,14 +185,14 @@ void RunnerTestHelper::verifyTestStates(QMap<QString, Veritas::TestState> expect
         Veritas::Test* suite = root->child(i);
         for (int i=0; i<suite->childCount(); i++) {
             Veritas::Test* caze = suite->child(i);
+            QString path = suite->name() + "/" + caze->name();
+            if (expectedState.contains(path)) {
+                verifyTestState(caze, path, expectedState);
+            }
             for (int i=0; i<caze->childCount(); i++) {
                 Veritas::Test* cmd = caze->child(i);
                 QString path = suite->name() + "/" + caze->name() + "/" + cmd->name();
-                KVERIFY_MSG(expectedState.contains(path), QString("No expected test-state provided for %1").arg(path));
-                Veritas::TestResult* res = cmd->result();
-                KVERIFY(res);
-                KOMPARE_(expectedState[path], res->state());
-                expectedState.remove(path);
+                verifyTestState(cmd, path, expectedState);
             }
         }
     }

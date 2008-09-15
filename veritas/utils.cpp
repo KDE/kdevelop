@@ -43,33 +43,35 @@ QList<int> Utils::columnSizes(QTreeView* view)
     return sizes;
 }
 
+namespace {
+bool g_init = false;
+QVariant g_failIcon;
+QVariant g_notRunIcon;
+QVariant g_successIcon;
+}
+
+
 QVariant Utils::resultIcon(int result)
 {
+    if (!g_init) {
+        g_failIcon = QIcon(":/icons/arrow-right-bordeaux-16.png");
+        g_notRunIcon = QIcon(":/icons/arrow-right-grey-16.png");
+        g_successIcon = KIcon("arrow-right");
+        g_init = true;
+    }
     switch (result) {
     case Veritas::RunSuccess:
-        return KIcon("arrow-right");
-
-/*    case Veritas::RunInfo:
-        return QIcon(":/icons/info.png");
-
-    case Veritas::RunWarning:
-        return QIcon(":/icons/warning.png");
-*/
-    case Veritas::RunError:
-        return QIcon(":/icons/arrow-right-bordeaux-16.png");
-
-    case Veritas::RunFatal:
-        return QIcon(":/icons/fatal.png");
-
-    case Veritas::RunException:
-        return QIcon(":/icons/exception.png");
-
+        return g_successIcon;
     case Veritas::NoResult:
-        return QIcon(":/icons/arrow-right-grey-16.png");
-
+        return g_notRunIcon;
+    case Veritas::RunError:
+    case Veritas::RunFatal:
+    case Veritas::RunException:
+        return g_failIcon;
     default:
-        return QIcon(":/icons/item.png");
+        Q_ASSERT(0);
     }
+    return QVariant();
 }
 
 QAbstractItemModel* Utils::modelFromProxy(QAbstractItemModel* model)

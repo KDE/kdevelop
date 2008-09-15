@@ -84,7 +84,10 @@ public: // Operations
      * filter are included in the model.
      */
     void setFilter(int filter);
-    void setTestFilter(const QList<Test*>&);
+
+    /*! Only show test-results which are children of @p test or @p test itself.
+     *  Both direct and indirect children are shown. */
+    void setTestFilter(Test* test);
     void resetTestFilter();
 
 protected: // Operations
@@ -111,7 +114,7 @@ private: // Operations
 
 private: // Attributes
     int m_filter;
-    QList<Test*> m_testFilter;
+    Test* m_testFilter;
 };
 
 } // namespace
