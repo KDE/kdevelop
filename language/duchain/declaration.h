@@ -465,6 +465,13 @@ public:
    * */
   Declaration* clone() const;
 
+  /**
+   * Signalized that among multiple possible specializations, this one should be used in the UI from now on.
+   * Currently mainly used in C++ for template support. The default-implementation registers the current specialization
+   * of this declaration to SpecializationStore if it is nonzero.
+   */
+  virtual void activateSpecialization();
+  
   enum {
     Identity = 7
   };

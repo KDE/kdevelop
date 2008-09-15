@@ -45,6 +45,7 @@
 #include "functiondefinition.h"
 #include "codemodel.h"
 #include "functiondefinition.h"
+#include "specializationstore.h"
 
 using namespace KTextEditor;
 
@@ -540,6 +541,15 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
 
 uint Declaration::specialization() const {
   return 0;
+}
+
+void Declaration::activateSpecialization()
+{
+  if(specialization()) {
+    DeclarationId baseId(id());
+    baseId.setSpecialization(0);
+    SpecializationStore::self().set(baseId, specialization());
+  }
 }
 
 DeclarationId Declaration::id(bool forceDirect) const

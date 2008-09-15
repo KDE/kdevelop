@@ -571,7 +571,7 @@ public:
   /**
    * Clear and delete all uses in this context.
    */
-  void deleteUses();
+  virtual void deleteUses();
 
   /**
    * Can be specialized by languages to create a navigation/information-widget.

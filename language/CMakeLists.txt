@@ -17,7 +17,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/documentchangetracker.cpp
 
     ast/astnode.cpp
-
+    duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
     duchain/duchainpointer.cpp
@@ -184,6 +184,7 @@ install(FILES
     duchain/appendedlist.h
     duchain/duchainregister.h
     duchain/persistentsymboltable.h
+    duchain/specializationstore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 

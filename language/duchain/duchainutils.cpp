@@ -38,6 +38,7 @@
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
 #include "functiondefinition.h"
+#include "specializationstore.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
