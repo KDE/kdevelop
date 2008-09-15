@@ -222,6 +222,8 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
 }
 
 DUContext* applyActiveSpecializations(KDevelop::DUContext* context, TopDUContext* source, QList<KDevelop::DUContext*> appendChain) {
+  if(!context)
+  return 0;
   if(Declaration* declaration = context->owner()) {
     uint specialization = SpecializationStore::self().get(declaration->id());
     if(specialization) {
