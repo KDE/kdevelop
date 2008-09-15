@@ -322,7 +322,7 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
       Q_ASSERT(m_declarations[index-1] == decl);
       m_declarations[index-1] = 0;
       
-      if(index-1 < m_declarationDataOffsets.size())
+      if(index-1 < (uint)m_declarationDataOffsets.size())
         m_declarationDataOffsets[index-1] = ItemDataInfo();
     }
   }else{
@@ -393,7 +393,7 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
       Q_ASSERT(m_contexts[index-1] == decl);
       m_contexts[index-1] = 0;
       
-      if(index-1 < m_contextDataOffsets.size())
+      if(index-1 < (uint)m_contextDataOffsets.size())
         m_contextDataOffsets[index-1] = ItemDataInfo();
     }
   }else{
