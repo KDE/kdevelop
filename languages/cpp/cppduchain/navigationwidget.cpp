@@ -548,7 +548,7 @@ class NavigationContext : public KShared {
               m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
               foreach(const SimpleRange& range, *it) {
                 m_currentText += "  ";
-                makeLink( QString("%1").arg(range.start.line+1), QString("%1").arg(qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+                makeLink( QString("%1").arg(range.start.line+1), QString("%1").arg(::qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
               }
               m_currentText += "<br/>";
             }
