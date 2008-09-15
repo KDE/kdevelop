@@ -193,6 +193,24 @@ QByteArray assertFailureOutput =
     "PASS   : FooTest::cleanupTestCase()\n"
     "********* Finished testing of FooTest *********\n";
 
+QByteArray expectedFailureInput =
+    QTEST_XML_HEADER
+    QTEST_XML_INITTESTCASE
+    "<TestFunction name=\"foo\">\n"
+    "<Incident type=\"xfail\" file=\"/path/to/footest.cpp\" line=\"66\">\n"
+    "<Description><![CDATA[expected failure message]]></Description>\n"
+    "</Incident>\n"
+    "</TestFunction>\n"
+    QTEST_XML_CLEANUPTESTCASE
+    QTEST_XML_FOOTER
+QByteArray expectedFailureOutput =
+    "********* Started testing of FooTest *********\n"
+    "PASS   : FooTest::initTestCase()\n"
+    "XFAIL!  : FooTest::foo() expected failure message\n"
+    "   Loc: [/path/to/footest.cpp(66)]\n"
+    "PASS   : FooTest::cleanupTestCase()\n"
+    "********* Finished testing of FooTest *********\n";
+
 void QTestOutputMorpherTest::parse_data()
 {
     QTest::addColumn<QByteArray>("input");
@@ -206,6 +224,7 @@ void QTestOutputMorpherTest::parse_data()
     QTest::newRow("spam_messages") << spamInput << spamOutput;
     QTest::newRow("multiple_commands") << multiCommandsInput << multiCommandsOutput;
     QTest::newRow("assert_failure") << assertFailureInput << assertFailureOutput;
+    QTest::newRow("expected_failure") << expectedFailureInput << expectedFailureOutput;
 }
 
 

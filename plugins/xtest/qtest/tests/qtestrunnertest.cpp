@@ -24,6 +24,7 @@
 
 #include <KDebug>
 #include <QBuffer>
+#include <KLocale>
 
 #include "../xmlregister.h"
 #include "../qtestcase.h"
@@ -223,6 +224,7 @@ void QTestRunnerTest::nonterminatedXMLOutput()
     m_runner->runTests(); // should not timeout
 }
 
+// command
 void QTestRunnerTest::nonexistantTestExe()
 {
     QByteArray regXML =
@@ -240,8 +242,13 @@ void QTestRunnerTest::nonexistantTestExe()
     m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests(); // should not timeout
+
+    QStringList result;
+    result << "foobar" << i18n("Failed to start test executable.") << "foobar_this_exe_does_not_exist" << "0";
+    m_runner->verifyResultItems(QList<QStringList>() << result);
 }
 
+// command
 void QTestRunnerTest::nonexistantTestCommand()
 {
     QByteArray regXML =
@@ -256,6 +263,131 @@ void QTestRunnerTest::nonexistantTestCommand()
     Veritas::Test* root = fetchRoot(regXML);
     m_runner->setRoot(root);
     m_runner->runTests(); // should not timeout
+}
+
+// command
+void QTestRunnerTest::segFault()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"segFault\" exe=\"segFault\">\n"
+            "<command name=\"command\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    QStringList result;
+    result << "segFault" << i18n("Test executable crashed.") << "segFault" << "0";
+    m_runner->verifyResultItems(QList<QStringList>() << result);
+
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/segFault"] = Veritas::RunFatal;
+    states["suite1/segFault/command"] = Veritas::NoResult;
+    m_runner->verifyTestStates(states, root);
+}
+
+QByteArray multipleFailuresSingleCommandXML()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"multipleFailuresSingleCommand\" exe=\"multipleFailuresSingleCommand\">\n"
+            "<command name=\"command\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    return regXML;
+}
+
+QList<QStringList> multipleFailuresSingleCommandResults()
+{
+    QStringList result1, result2;
+    result1 << "command" << "fail1" << "multipleFailuresSingleCommand.cpp" << "13";
+    result2 << "command" << "fail2" << "multipleFailuresSingleCommand.cpp" << "16";
+    return QList<QStringList>() << result1 << result2;
+}
+
+QMap<QString, Veritas::TestState> multipleFailuresSingleCommandTestStates()
+{
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/multipleFailuresSingleCommand/command"] = Veritas::RunError;
+    return states;
+}
+
+// command
+void QTestRunnerTest::tdd_multipleFailuresSingleCommand()
+{
+    QByteArray regXML = multipleFailuresSingleCommandXML();
+    Veritas::Test* root = fetchRoot(regXML);
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    m_runner->verifyResultItems(multipleFailuresSingleCommandResults());
+    m_runner->verifyTestStates(multipleFailuresSingleCommandTestStates(), root);
+}
+
+// command
+void QTestRunnerTest::tdd_expectedFailure()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"expectedFailure\" exe=\"expectedFailure\">\n"
+            "<command name=\"command\" />\n"
+            "<command name=\"commandData\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    QStringList result1, result2, result3, result4;
+    result1 << "command" << "expectedFailure" << "expectedFailure.cpp" << "8";
+    result2 << "commandData(row2)" << "expectedFailureData" << "expectedFailure.cpp" << "15";
+    result3 << "commandData(row3)" << "expectedFailureData" << "expectedFailure.cpp" << "18";
+    result4 << "commandData(row4)" << "fail" << "expectedFailure.cpp" << "16";
+    m_runner->verifyResultItems(QList<QStringList>() << result1 << result2 << result3 << result4);
+
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/expectedFailure/command"] = Veritas::RunSuccess;
+    states["suite1/expectedFailure/commandData"] = Veritas::RunError;
+    m_runner->verifyTestStates(states, root);
+}
+
+// command
+void QTestRunnerTest::tdd_skip()
+{
+    QByteArray regXML =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+        "<root dir=\"\">\n"
+        "<suite name=\"suite1\" dir=\"suite1\">\n"
+            "<case name=\"skip\" exe=\"skip\">\n"
+            "<command name=\"command\" />\n"
+            "<command name=\"commandData\" />\n"
+            "</case>\n"
+        "</suite>\n"
+        "</root>\n";
+    Veritas::Test* root = fetchRoot(regXML);
+    m_runner->setRoot(root);
+    m_runner->runTests();
+
+    QStringList result1, result2;
+    result1 << "command" << "skipCommand" << "skip.cpp" << "8";
+    result2 << "commandData(row1)" << "skipCommandData" << "skip.cpp" << "13";
+    m_runner->verifyResultItems(QList<QStringList>() << result1 << result2);
+
+    QMap<QString, Veritas::TestState> states;
+    states["suite1/skip/command"] = Veritas::RunSuccess;
+    states["suite1/skip/commandData"] = Veritas::RunSuccess;
+    m_runner->verifyTestStates(states, root);
 }
 
 // helper

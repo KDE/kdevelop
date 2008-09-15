@@ -24,12 +24,12 @@
 #include <QString>
 #include <QFileInfo>
 #include <KUrl>
+#include <QProcess>
 
 #include <veritas/test.h>
 #include "qxqtestexport.h"
 #include "qtestcommand.h"
 
-class KTemporaryFile;
 class KProcess;
 class QTimer;
 
@@ -88,6 +88,7 @@ private:
 private slots:
     void morphXmlToText();
     void closeOutputFile();
+    void processError(QProcess::ProcessError);
 
 private:
     QFileInfo m_exe;           // qtest-exe location

@@ -20,13 +20,17 @@
 
 #include "qtestsettings.h"
 #include <interfaces/iproject.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
 
+
 using QTest::Settings;
 using QTest::ISettings;
 using KDevelop::IProject;
+using KDevelop::IBuildSystemManager;
 
 ISettings::ISettings()
 {}
@@ -61,4 +65,20 @@ QString Settings::makeBinary() const
     KConfigGroup builderGroup(configPtr, "MakeBuilder");
     QString makeBin = builderGroup.readEntry("Make Binary", "make");
     return makeBin;
+}
+
+KUrl Settings::cmakeProjectLibraryPath() const
+{
+#ifdef Q_OS_LINUX
+    IBuildSystemManager* bsm = m_project->buildSystemManager();
+    if (!bsm) return KUrl();
+    KUrl buildDir = bsm->buildDirectory(m_project->projectItem());
+    if (buildDir.isEmpty() || buildDir == KUrl("/./")) {
+        return QString();
+    }
+    buildDir.addPath("lib");
+    return buildDir;
+#else
+    return KUrl();
+#endif
 }

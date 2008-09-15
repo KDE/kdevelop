@@ -41,6 +41,10 @@ private slots:
     void nonterminatedXMLOutput();
     void nonexistantTestExe();
     void nonexistantTestCommand();
+    void segFault();
+    void tdd_multipleFailuresSingleCommand();
+    void tdd_expectedFailure();
+    void tdd_skip();
 
 private:
     void assertAllFilesClosed(Veritas::Test*);

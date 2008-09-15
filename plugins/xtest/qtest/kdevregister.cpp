@@ -83,33 +83,6 @@ void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
     }
 }
 
-bool isShellFile(const QFileInfo& file)
-{
-    return file.suffix() == "shell";
-}
-
-/*! Remove the corresponding bare executable for each '.shell' */
-void favorShellOverBareExe(QFileInfoList& files)
-{
-    QStringList shellBaseNames;
-    foreach(QFileInfo fi, files) {
-        if (isShellFile(fi)) {
-            shellBaseNames << fi.baseName();
-        }
-    }
-    QFileInfoList duplicates;
-    foreach(QFileInfo fi, files) {
-        if (!isShellFile(fi)) {
-            if (shellBaseNames.contains(fi.baseName())) {
-                duplicates << fi;
-            }
-        }
-    }
-    foreach(QFileInfo dupli, duplicates) {
-        files.removeOne(dupli);
-    }
-}
-
 /*! Locate all test executables in @p dir for which the name is contained in
 @p testNames. This function recurses down @p dir and its subdirectories.
 Return the found test exes as a list of  QFileInfo's. */
@@ -129,9 +102,8 @@ QFileInfoList findTestExesIn(QDir& dir, const QStringList& testNames)
     current = QDir(dir);
     current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks | QDir::Executable);
     QFileInfoList files = current.entryInfoList();
-    favorShellOverBareExe(files);
     foreach(QFileInfo fi, files) {
-        if (testNames.contains(fi.baseName())) {
+        if (testNames.contains(fi.fileName())) {
             testExes << fi;
         }
     }

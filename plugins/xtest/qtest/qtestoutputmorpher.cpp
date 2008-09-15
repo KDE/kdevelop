@@ -56,6 +56,7 @@ const QString QTestOutputMorpher::c_line("line");
 const QString QTestOutputMorpher::c_pass("pass");
 const QString QTestOutputMorpher::c_message("Message");
 const QString QTestOutputMorpher::c_fail("fail");
+const QString QTestOutputMorpher::c_xfail("xfail");
 const QString QTestOutputMorpher::c_initTestCase("initTestCase");
 const QString QTestOutputMorpher::c_cleanupTestCase("cleanupTestCase");
 const QString QTestOutputMorpher::c_name("name");
@@ -213,7 +214,11 @@ void QTestOutputMorpher::processIncident(const QByteArray& cmdName)
     }
 
     QByteArray line;
-    line.append("FAIL!  : ");
+    if (type == c_fail) {
+        line.append("FAIL!  : ");
+    } else if (type == c_xfail) {
+        line.append("XFAIL!  : ");
+    }
     line.append(m_testCaseName);
     line.append("::");
     line.append(cmdName);

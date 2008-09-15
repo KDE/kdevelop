@@ -24,11 +24,12 @@
 #include "qtestoutputparser.h"
 #include "qtestoutputmorpher.h"
 #include "config/qtestsettings.h"
+#include <veritas/testresult.h>
 
 #include <QCoreApplication>
 #include <QDir>
-#include <QThread>
 #include <QFile>
+#include <KLocale>
 #include <QTextStream>
 #include <QTimer>
 #include <KDebug>
@@ -36,7 +37,9 @@
 
 using QTest::QTestCase;
 using QTest::QTestCommand;
+using QTest::ISettings;
 using Veritas::Test;
+using Veritas::TestResult;
 
 int QTestCase::s_count = 0;
 
@@ -125,7 +128,41 @@ void QTestCase::setProcess(KProcess* proc)
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(morphXmlToText()));
     connect(m_proc, SIGNAL(error(QProcess::ProcessError)),
-            SLOT(closeOutputFile()));
+            SLOT(processError(QProcess::ProcessError)));
+}
+
+void QTestCase::processError(QProcess::ProcessError error)
+{
+    QString message;
+    switch(error) {
+        case QProcess::FailedToStart:
+            message = i18n("Failed to start test executable.");
+            break;
+        case QProcess::Crashed:
+            message = i18n("Test executable crashed.");
+            break;
+        case QProcess::Timedout:
+            message = i18n("Test executable timed out.");
+            break;
+        case QProcess::WriteError:
+            message = i18n("Failed to write to test executable.");
+            break;
+        case QProcess::ReadError:
+            message = i18n("Failed to read from test executable.");
+            break;
+        case QProcess::UnknownError:
+            message = i18n("Unkown error occured.");
+            break;
+    }
+    signalStarted();
+    TestResult* result = new TestResult;
+    result->setMessage(message);
+    result->setState(Veritas::RunFatal);
+    result->setFile(KUrl(m_exe.filePath()));
+    result->setLine(0);
+    setResult(result);
+    signalFinished();
+    closeOutputFile();
 }
 
 void QTestCase::setOutputParser(QTestOutputParser* p)
@@ -227,6 +264,38 @@ void QTestCase::assertOutputParserSet()
                "QTestOutputParser and pass it with setParser().");
 }
 
+namespace
+{
+void setLDLibDir(KProcess* qTestExe, ISettings* settings)
+{
+#ifdef Q_OS_LINUX
+    if (!settings) return;
+    KUrl cmakeLibDir = settings->cmakeProjectLibraryPath();
+    if (cmakeLibDir.isEmpty()) return;
+    QStringList env = QProcess::systemEnvironment();
+    QString currentLDLib;
+    foreach(const QString& str, env) {
+        if (str.startsWith("LD_LIBRARY_PATH")) {
+            QStringList spl = str.split('=');
+            if (spl.size() == 2) currentLDLib = spl[1];
+        }
+    }
+    QString newLDLib = cmakeLibDir.path();
+    if (!currentLDLib.isEmpty()) newLDLib += ":" + currentLDLib;
+    qTestExe->setEnv("LD_LIBRARY_PATH", newLDLib);
+    kDebug() << newLDLib;
+#endif
+}
+
+void setQTestOptions(ISettings* settings, QStringList& argv)
+{
+    if (!settings) return;
+    if (settings->printAsserts()) argv << "-v2";
+    if (settings->printSignals()) argv << "-vs";
+}
+
+}
+
 // helper for run()
 void QTestCase::initProcArguments()
 {
@@ -234,12 +303,8 @@ void QTestCase::initProcArguments()
     QStringList argv;
     argv << "-xml"
          << "-o" << m_outputPath;
-    if (m_settings && m_settings->printAsserts()) {
-        argv << "-v2";
-    }
-    if (m_settings && m_settings->printSignals()) {
-        argv << "-vs";
-    }
+    setQTestOptions(m_settings, argv);
+    setLDLibDir(m_proc, m_settings);
     m_proc->setProgram("./" + executable().fileName(), argv);
     m_proc->setOutputChannelMode(KProcess::SeparateChannels);
 }

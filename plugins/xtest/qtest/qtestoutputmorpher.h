@@ -70,6 +70,7 @@ private:    // some xml constants
     static const QString c_line;
     static const QString c_pass;
     static const QString c_fail;
+    static const QString c_xfail;
     static const QString c_initTestCase;
     static const QString c_cleanupTestCase;
     static const QString c_name;

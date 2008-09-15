@@ -37,7 +37,7 @@ class ISettings;
 
 /*!
 Constructs QTestCases and deduces it's child QTestCommands for a set
-of .shell executables. Also orders these testcases into suites based
+of test executables. Also orders these testcases into suites based
 on directory information. This is expensive so should not be run
 in the GUI thread.
 
@@ -49,7 +49,7 @@ Q_OBJECT
 public:
     SuiteBuilder();
     virtual ~SuiteBuilder();
-    /*! QTest .shell executables */
+    /*! QTest executables */
     void setTestExecutables(const QList<KUrl>&);
     void setSettings(ISettings*);
 

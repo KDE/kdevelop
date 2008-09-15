@@ -22,6 +22,7 @@
 #define VERITAS_QTEST_QTESTSETTINGS
 
 #include <QString>
+#include <KUrl>
 
 namespace KDevelop { class IProject; }
 
@@ -40,6 +41,7 @@ public:
     virtual bool printAsserts() const = 0;
     virtual bool printSignals() const = 0;
     virtual QString makeBinary() const = 0;
+    virtual KUrl cmakeProjectLibraryPath() const = 0;
 };
 
 /*!
@@ -54,6 +56,7 @@ public:
     virtual bool printAsserts() const;
     virtual bool printSignals() const;
     virtual QString makeBinary() const;
+    virtual KUrl cmakeProjectLibraryPath() const;
 
 private:
     KDevelop::IProject* m_project;
