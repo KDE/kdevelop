@@ -390,7 +390,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 #endif
 
     ///@todo maybe order the declarations within ducontext and change here back to walking the indices, because that's easier to debug and faster
-    foreach( Declaration* dec, currentContext()->allLocalDeclarations(localId) ) {
+    QList<Declaration*> decls = currentContext()->allLocalDeclarations(localId);
+    foreach( Declaration* dec, decls ) {
 
       if( wasEncountered(dec) )
         continue;
@@ -415,6 +416,23 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
         // Match
         declaration = dynamic_cast<T*>(dec);
         break;
+      }
+    }
+
+    if(!declaration) {
+      ///Second run of the above, this time ignoring the ranges.
+      foreach( Declaration* dec, decls ) {
+        if( wasEncountered(dec) )
+          continue;
+        
+        if ((localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
+            typeid(*dec) == typeid(T)
+          )
+        {
+          // Match
+          declaration = dynamic_cast<T*>(dec);
+          break;
+        }
       }
     }
   }
