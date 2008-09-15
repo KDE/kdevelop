@@ -374,13 +374,11 @@ void Declaration::setContext(DUContext* context, bool anonymous)
     m_topContext = 0;
   
   d->m_anonymousInContext = anonymous;
-  m_context = 0;
+  m_context = context;
 
   if (context) {
     if(!m_indexInTopContext)
       allocateOwnIndex();
-    
-    m_context = context;
     
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
@@ -410,9 +408,10 @@ void Declaration::clearOwnIndex() {
 
 void Declaration::allocateOwnIndex() {
   
-  if(context() && (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
-    ENSURE_CAN_WRITE
-  }
+  ///@todo Fix multithreading stuff with template instantiation, preferably using some internal mutexes
+//   if(context() && (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
+//     ENSURE_CAN_WRITE
+//   }
 
   Q_ASSERT(m_topContext);
 
