@@ -24,6 +24,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/specializationstore.h>
 #include "environmentmanager.h"
 #include "parser/rpp/pp-engine.h"
 #include "parser/rpp/preprocessor.h"
@@ -32,6 +33,8 @@
 #include "parser/rpp/macrorepository.h"
 #include "cppduchainexport.h"
 #include <parser/rpp/chartools.h>
+#include "templatedeclaration.h"
+#include "cppducontext.h"
 
 
 using namespace Cpp;
@@ -217,5 +220,42 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
   
   return ret;
 }
+
+DUContext* applyActiveSpecializations(KDevelop::DUContext* context, TopDUContext* source, QList<KDevelop::DUContext*> appendChain) {
+  if(Declaration* declaration = context->owner()) {
+    uint specialization = SpecializationStore::self().get(declaration->id());
+    if(specialization) {
+      InstantiationInformation info( IndexedInstantiationInformation(specialization).information() );
+      Declaration* specializedDeclaration = declaration->specialize(specialization, source);
+      DUContext* currentContext = specializedDeclaration->internalContext();
+      if(!currentContext) {
+        kWarning() << "failure: Cannot activate specializations, specialization did not have an internal context:" << specializedDeclaration->toString();
+        return appendChain.isEmpty() ? context : appendChain.back();
+      }
+      Q_ASSERT(currentContext);
+      
+      for(int a = 0; a < appendChain.size(); ++a) {
+        InstantiationInformation nextInfo;
+        nextInfo.previousInstantiationInformation = info.indexed().index();
+        info = nextInfo;
+        CppDUContext<KDevelop::DUContext>* ctx = dynamic_cast<CppDUContext<KDevelop::DUContext>* >(appendChain[a]);
+        Q_ASSERT(ctx);
+        currentContext = ctx->instantiate(info, source);
+      if(!currentContext) {
+        kWarning() << "failure: Cannot activate specializations, specialization did not have an internal context:" << specializedDeclaration->toString();
+        return appendChain.isEmpty() ? context : appendChain.back();
+      }
+      }
+      return currentContext;
+    }
+  }
+  if(context->parentContext()) {
+    appendChain.prepend(context);
+    return applyActiveSpecializations(context->parentContext(), source, appendChain);
+  }
+  
+  return appendChain.isEmpty() ? context : appendChain.back();
+}
+
 }
 

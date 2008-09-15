@@ -26,9 +26,13 @@
 #include <language/duchain/declarationid.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
 #include "cppduchainexport.h"
 #include <language/duchain/appendedlist.h>
 #include "expressionevaluationresult.h"
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 
 namespace KTextEditor {
@@ -271,6 +275,22 @@ namespace Cpp {
     
     virtual const TemplateDeclarationData* templateData() const {
         return d_func();
+    }
+
+    virtual void activateSpecialization()
+    {
+      BaseDeclaration::activateSpecialization();
+      
+      if(specialization()) {
+        //Also register parents
+        DUContext* context = this->context();
+        if(context->owner() && context->owner()->specialization()) {
+          context->owner()->activateSpecialization(); //will also add to the background-parser
+        }else{
+//           context->topContext()->setHasUses(false); //Force re-building of the uses
+//           ICore::self()->languageController()->backgroundParser()->addDocument( KUrl(this->url().str()) );
+        }
+      }
     }
 
     inline SpecialTemplateDeclarationData<typename BaseDeclaration::Data>* d_func_dynamic() { this->makeDynamic(); return reinterpret_cast<SpecialTemplateDeclarationData<typename BaseDeclaration::Data>*>(this->d_ptr); }

@@ -85,6 +85,8 @@ KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* 
  * Gets the argument hint context from a function declaration
  */
 KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getArgumentContext(KDevelop::Declaration* decl);
+
+KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* applyActiveSpecializations(KDevelop::DUContext* context, KDevelop::TopDUContext* source, QList<KDevelop::DUContext*> appendChain = QList<KDevelop::DUContext*>());
 }
 
 #endif

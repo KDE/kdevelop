@@ -362,6 +362,12 @@ class CppDUContext : public BaseContext {
         }
     }
     
+    virtual void deleteUses() {
+      QMutexLocker l(&cppDuContextInstantiationsMutex);
+      foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
+        ctx->deleteUses();
+    }
+    
     virtual bool foundEnough( const DUContext::DeclarationList& decls ) const
     {
       if( decls.isEmpty() )
@@ -411,14 +417,13 @@ class CppDUContext : public BaseContext {
       
       this->setLocalScopeIdentifier(totalId);
       
-      QMutexLocker l(&cppDuContextInstantiationsMutex);
       
       if( m_instantiatedFrom )
         m_instantiatedFrom->m_instatiations.remove( this );
       m_instantiatedFrom = context;
       m_instantiatedFrom->m_instatiations.insert( this );
     }
-
+    
     virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers) const
     {
       BaseContext::applyUpwardsAliases(identifiers);
@@ -482,6 +487,34 @@ class CppDUContext : public BaseContext {
     virtual bool shouldSearchInParent(typename BaseContext::SearchFlags flags) const {
       //If the parent context is a class context, we should even search it from an import
       return !(flags & DUContext::InImportedParentContext) || (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class);
+    }
+    
+    DUContext* instantiate(InstantiationInformation info, TopDUContext* source) {
+      if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
+        return this;
+
+      if(m_instantiatedFrom)
+        return m_instantiatedFrom->instantiate(info, source);
+      
+      if(this->owner()) {
+        TemplateDeclaration* templ = dynamic_cast<TemplateDeclaration*>(this->owner());
+        if(templ) {
+          DUContext* ret = templ->instantiate(info, source)->internalContext();
+          Q_ASSERT(ret);
+          return ret;
+        }
+      }
+      
+      DUContext* surroundingContext = this->parentContext();
+      Q_ASSERT(surroundingContext);
+      {
+        //This context does not have an attached declaration, but it needs to be instantiated.
+        CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>* >(this->parentContext());
+        if(parent)
+          surroundingContext = parent->instantiate(IndexedInstantiationInformation(info.previousInstantiationInformation).information(), source);
+      }
+      
+      return instantiateDeclarationAndContext( surroundingContext, source, this, info, 0, 0 );
     }
     
     virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const;
