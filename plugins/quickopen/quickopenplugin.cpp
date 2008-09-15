@@ -593,6 +593,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
     kDebug() << "Found no declaration for cursor, cannot jump";
     return;
   }
+  decl->activateSpecialization();
 
   IndexedString u = decl->url();
   SimpleCursor c = decl->range().start;
@@ -683,10 +684,12 @@ void QuickOpenPlugin::quickOpenDefinition()
   IndexedString u = decl->url();
   SimpleCursor c = decl->range().start;
   if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
+    def->activateSpecialization();
     u = def->url();
     c = def->range().start;
   }else{
     kDebug() << "Found no definition for declaration";
+    decl->activateSpecialization();
   }
 
   if(u.str().isEmpty()) {
