@@ -92,6 +92,8 @@ void UUTCreationTest::singleUse()
 
 void UUTCreationTest::tdd_nonVoidReturn()
 {
+    TDD_TODO;
+
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; int i = f.foo(); } ");
 
@@ -122,6 +124,8 @@ void UUTCreationTest::singleArgument()
 
 void UUTCreationTest::tdd_pointerUse()
 {
+    TDD_TODO;
+
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo *f; f->foo(); } ");
     assertNamed("Foo", cs);
