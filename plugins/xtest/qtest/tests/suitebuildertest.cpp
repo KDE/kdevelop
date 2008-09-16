@@ -70,14 +70,8 @@ void SuiteBuilderTest::init()
 
 void SuiteBuilderTest::cleanup()
 {
+    if (m_builder->root()) delete m_builder->root();
     if (m_builder) delete m_builder;
-}
-
-void SuiteBuilderTest::construct()
-{
-    SuiteBuilder* sb = new SuiteBuilder;
-    QList<KUrl> shellFiles;
-    sb->setTestExecutables(shellFiles);
 }
 
 // command
@@ -92,7 +86,7 @@ void SuiteBuilderTest::singleSuiteCaseCommand()
     Veritas::Test* root = m_builder->root();
 
     KVERIFY(root);
-    KOMPARE_(1, root->childCount());
+    KOMPARE(1, root->childCount());
 
     QTestSuite* suite = fetchSuite(root, 0);
     verifySuite(suite, "foosuite", 1);
@@ -117,7 +111,7 @@ void SuiteBuilderTest::multiSuitesCasesCommands()
     m_builder->start();
     Veritas::Test* root = m_builder->root();
     KVERIFY(root);
-    KOMPARE_(2, root->childCount());
+    KOMPARE(2, root->childCount());
 
     QTestSuite* foosuite = fetchSuite(root, 0);
     verifySuite(foosuite, "foosuite", 1);
@@ -152,7 +146,7 @@ void SuiteBuilderTest::identicalSuiteNames()
     m_builder->start();
     Veritas::Test* root = m_builder->root();
     KVERIFY(root);
-    KOMPARE_(2, root->childCount());
+    KOMPARE(2, root->childCount());
 
     QTestSuite* foosuite = fetchSuite(root, 0);
     verifySuite(foosuite, "foo-suite", 1);
@@ -179,14 +173,14 @@ void SuiteBuilderTest::verifySuite(QTestSuite* suite, const QString name, int ch
 {
     KVERIFY(suite);
     KOMPARE(name, suite->name());
-    KOMPARE_(childCount, suite->childCount());
+    KOMPARE(childCount, suite->childCount());
 }
 
 void SuiteBuilderTest::verifyCommand(int nrofChild, QTestCase* parent, const QString name)
 {
     QTestCommand* cmd = parent->child(nrofChild);
     KVERIFY(cmd);
-    KOMPARE_(name, cmd->name());
+    KOMPARE(name, cmd->name());
     KOMPARE(parent, cmd->parent());
 }
 
@@ -194,7 +188,7 @@ void SuiteBuilderTest::verifyCaze(QTestCase* caze, const QString name, int child
 {
     KVERIFY(caze);
     KOMPARE(name, caze->name());
-    KOMPARE_(childCount, caze->childCount());
+    KOMPARE(childCount, caze->childCount());
 }
 
 QTEST_MAIN( SuiteBuilderTest )

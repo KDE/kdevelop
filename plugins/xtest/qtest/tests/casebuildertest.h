@@ -67,6 +67,7 @@ private:
     CaseBuilder* m_builder;
     ExecutableStub* m_caseExeStub;
     bool m_stop; // flag to check if we should stop.
+    QTestCase* m_caze;
 };
 
 }}

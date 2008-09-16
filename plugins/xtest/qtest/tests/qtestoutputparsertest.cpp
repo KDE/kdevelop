@@ -134,25 +134,53 @@ void QTestOutputParserTest::initTestCase()
     qRegisterMetaType<QModelIndex>("QModelIndex");
 }
 
+QTestOutputParserTest::TestInfo::TestInfo()
+    : test(0), started(0), finished(0), result(0)
+{}
+
+QTestOutputParserTest::TestInfo::~TestInfo()
+{
+    if (started) delete started;
+    if (finished) delete finished;
+    if (result) delete result;
+}
+
+void QTestOutputParserTest::TestInfo::reset()
+{
+    if (started) delete started;
+    if (finished) delete finished;
+    if (result) delete result;
+    test = 0;
+    started = 0;
+    finished = 0;
+    result = 0;
+}
+
+
 void QTestOutputParserTest::init()
 {
+    m_buffer = 0;
     m_parser = new QTestOutputParser;
     m_caze = createTestCase(m_cazeInfo);
 }
 
 void QTestOutputParserTest::cleanup()
 {
-    delete m_caze;
     delete m_parser;
+    delete m_buffer;
+    delete m_caze;
+    m_cazeInfo.reset();
+    m_command1Info.reset();
+    m_command2Info.reset();
 }
 
 // fixture setup helper
 void QTestOutputParserTest::initParser(QByteArray& xml, QTestCase* caze)
 {
-    QBuffer* buff = new QBuffer(&xml, 0);
-    m_parser->setDevice(buff);
+    m_buffer = new QBuffer(&xml, 0);
+    m_parser->setDevice(m_buffer);
     m_parser->setCase(caze);
-    buff->open(QIODevice::ReadOnly);
+    m_buffer->open(QIODevice::ReadOnly);
 }
 
 
@@ -168,6 +196,7 @@ QTestCase* QTestOutputParserTest::createTestCase(TestInfo& cInfo)
     FakeModel* fm = new FakeModel;
     fm->test = caze;
     QModelIndex index = fm->index(0);
+    delete fm;
     return caze;
 }
 
@@ -182,6 +211,7 @@ void QTestOutputParserTest::createTestCommand(TestInfo& cInfo, QTestCase* parent
     FakeModel* fm = new FakeModel;
     fm->test = cInfo.test;
     QModelIndex index = fm->index(0);
+    delete fm;
 }
 
 // fixture setup helper
@@ -215,7 +245,7 @@ void QTestOutputParserTest::setExpectedResult(
 
 /////////////// DATA TEST ///////////////////////////////////////////////////////////
 
-// test command
+//test command
 void QTestOutputParserTest::parse()
 {
     // exercise
@@ -384,6 +414,8 @@ void QTestOutputParserTest::doubleFailure()
 // test command
 void QTestOutputParserTest::tdd_skipSingle()
 {
+    TDD_TODO;
+
     // QSKIP with the SkipSingle flag
     QByteArray input =
         QTEST_HEADER_XML
@@ -409,6 +441,8 @@ void QTestOutputParserTest::tdd_skipSingle()
 // test command
 void QTestOutputParserTest::tdd_skipAll()
 {
+    TDD_TODO;
+
     // QSKIP with the SkipAll flag. QTestLib refuses to print an <Incident type="pass" /> for those.
     QByteArray input =
         QTEST_HEADER_XML

@@ -53,7 +53,7 @@ public:
     void setTestExecutables(const QList<KUrl>&);
     void setSettings(ISettings*);
 
-    /*! Fetch the result, only to be called after the job completed */
+    /*! Fetch the result. Ownership is passed to the caller. */
     Veritas::Test* root() const;
 
     /*! Go */

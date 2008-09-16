@@ -45,12 +45,15 @@ void QTestCommandTest::cmdString()
     caze->addChild(cmd);
 
     KOMPARE("/a/b/c.sh cmd", cmd->command());
+
+    delete suite;
 }
 
 void QTestCommandTest::cmdStringNoParent()
 {
     QTestCommand* cmd = new QTestCommand("cmd1", 0);
     KOMPARE("", cmd->command());
+    delete cmd;
 }
 
 void QTestCommandTest::cmdStringNoSuite()
@@ -59,6 +62,8 @@ void QTestCommandTest::cmdStringNoSuite()
     QTestCommand* cmd = new QTestCommand("cmd1", caze);
     caze->addChild(cmd);
     KOMPARE("c.sh cmd1", cmd->command());
+
+    delete caze;
 }
 
 

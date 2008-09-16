@@ -42,7 +42,6 @@ private slots:
     void init();
     void cleanup();
 
-    void construct();
     void singleSuiteCaseCommand();
     void multiSuitesCasesCommands();
     void identicalSuiteNames();

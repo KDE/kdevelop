@@ -323,6 +323,8 @@ QMap<QString, Veritas::TestState> multipleFailuresSingleCommandTestStates()
 // command
 void QTestRunnerTest::tdd_multipleFailuresSingleCommand()
 {
+    TDD_TODO;
+
     QByteArray regXML = multipleFailuresSingleCommandXML();
     Veritas::Test* root = fetchRoot(regXML);
     m_runner->setRoot(root);
@@ -335,6 +337,8 @@ void QTestRunnerTest::tdd_multipleFailuresSingleCommand()
 // command
 void QTestRunnerTest::tdd_expectedFailure()
 {
+    TDD_TODO;
+
     QByteArray regXML =
         "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
         "<root dir=\"\">\n"
@@ -365,6 +369,8 @@ void QTestRunnerTest::tdd_expectedFailure()
 // command
 void QTestRunnerTest::tdd_skip()
 {
+    TDD_TODO;
+
     QByteArray regXML =
         "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
         "<root dir=\"\">\n"

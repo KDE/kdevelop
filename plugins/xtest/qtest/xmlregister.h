@@ -50,6 +50,7 @@ public:
     virtual ~XmlRegister();
 
     virtual void reload();
+    /*! Caller should de-allocate this */
     virtual Veritas::Test* root() const;
 
     void setRootDir(const QString&);

@@ -84,6 +84,10 @@ private:
 
     struct TestInfo
     {
+        TestInfo();
+        ~TestInfo();
+        void reset();
+
         Veritas::Test* test;
         QSignalSpy* started;
         QSignalSpy* finished;
@@ -93,6 +97,8 @@ private:
     TestInfo m_cazeInfo;
     TestInfo m_command1Info;
     TestInfo m_command2Info;
+
+    QBuffer* m_buffer;
 };
 
 }}

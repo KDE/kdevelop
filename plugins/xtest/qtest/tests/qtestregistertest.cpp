@@ -82,6 +82,7 @@ void QTestRegisterTest::init()
 
 void QTestRegisterTest::cleanup()
 {
+    if (reg->root()) delete reg->root();
     delete reg;
 }
 

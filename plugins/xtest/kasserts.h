@@ -24,6 +24,7 @@
 #define QXQTEST_KASSERTS_H
 
 #include <QtTest/QtTest>
+#include <KDebug>
 
 namespace QTest
 {
@@ -39,34 +40,45 @@ template<> inline char* toString(const QVariant& va)
 
 } // namespace QTest
 
-#define KVERIFY_MSG(condition,message) QVERIFY2(condition, QTest::toString(message))
 #define KVERIFY(condition) QVERIFY(condition)
-#define KOMPARE_MSG(expected,actual,message) QVERIFY2(expected == actual, QTest::toString(message))
-#define KOMPARE(expected,actual) QVERIFY2(expected == actual, KOMPARE_ERR_MSG(expected, actual))
 
-#define KOMPARE_(expected, actual) \
+#define KVERIFY_MSG(condition,message) \
+{\
+    char* __failMsg__ = QTest::toString(message); \
+    bool __assertion_failed__ = \
+        !QTest::qVerify(condition, #condition, __failMsg__, __FILE__, __LINE__);\
+    delete [] __failMsg__; \
+    if (__assertion_failed__) return; \
+} (void)(0)
+
+#define KOMPARE(expected, actual) \
 { \
-    QString failMsg = \
-        QString("\nExpected: ``%1'' actual ``%2''"). \
-                arg(QTest::toString(expected)). \
-                arg(QTest::toString(actual)); \
-    QVERIFY2(expected == actual, failMsg.toLatin1().data()); \
-}
+    char* __expected__ = QTest::toString(expected); \
+    char* __actual__ = QTest::toString(actual); \
+    QByteArray __failMsg__ = \
+        QByteArray("\nexpected: \'").append(__expected__).append("\' actual \'").\
+            append(__actual__).append("\'"); \
+    delete [] __expected__; \
+    delete [] __actual__; \
+    if (!QTest::qVerify(expected == actual, "KOMPARE", __failMsg__.constData(), __FILE__, __LINE__))\
+        return;\
+} (void)(0)
 
-#define KOMPARE_MSG_(expected, actual, msg) \
+#define KOMPARE_MSG(expected, actual, msg) \
 { \
-    QString failMsg = \
-        QString("\nExpected: ``%1'' actual ``%2''"). \
-                arg(QTest::toString(expected)). \
-                arg(QTest::toString(actual)); \
-    failMsg = QString(QTest::toString(msg)) + "\n" + failMsg; \
-    QVERIFY2(expected == actual, failMsg.toLatin1().data()); \
-}
+    char* __expected__ = QTest::toString(expected); \
+    char* __actual__ = QTest::toString(actual); \
+    char* __fail_msg__ = QTest::toString(msg); \
+    QByteArray __failMsg__ = \
+        QByteArray("\nexpected: \'").append(__expected__).append("\' actual \'").\
+            append(__actual__).append("\'\n").append(__fail_msg__); \
+    delete [] __expected__; \
+    delete [] __actual__; \
+    delete [] __fail_msg__; \
+    if (!QTest::qVerify(expected == actual, "KOMPARE_MSG", __failMsg__.constData(), __FILE__, __LINE__))\
+        return;\
+} (void)(0)
 
-// this is not quite what we want if expected/actual modifies stuff, and thus is caled twice ...
-#define KTODO QWARN("Test command not implemented yet")
-
-#define KOMPARE_ERR_MSG(expected, actual) QString(QString("expected: '") +\
-        QTest::toString(expected) + "' actual: '" + QTest::toString(actual) + "'").toAscii()
+#define TDD_TODO QSKIP("Test command not implemented yet", SkipSingle)
 
 #endif // QXQTEST_KASSERTS_H
