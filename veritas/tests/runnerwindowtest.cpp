@@ -181,7 +181,7 @@ void RunnerWindowTest::deselectItems()
 {
     // select only one of the runner items
     // validate that the other one didn't get executed
-    KTODO;
+    TDD_TODO;
 }
 
 // command
