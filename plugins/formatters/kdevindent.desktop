@@ -9,6 +9,7 @@ Comment[pt]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
 Comment[pt_BR]=Um 'plugin' para formatar ficheiros em C com o 'indent' da GNU
 Comment[sv]=Ett insticksprogram för att formatera C-filer med GNU indent
 Comment[uk]=Додаток для форматування файлів мовою C за допомогою GNU indent
+Comment[zh_TW]=使用 GNU 規則排列 C 語言程式碼的外掛程式
 Name=KDevIndent
 Name[sv]=KDevelop indent
 
