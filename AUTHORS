@@ -1,7 +1,6 @@
 Current Maintainers:
 
-Matt Rogers <mattr@kde.org> - Lead Maintainer
-Alexander Dymo <adymo@kdevelop.org> - Maintainer
+Andreas Pakulat <apaku@gmx.de> - Lead Maintainer
 Amilcar do Carmo Lucas <amilcar@kdevelop.org> - Maintainer - KDevelop.org
 
 Previous Maintainers and their areas of expertise can be found below. It is best
@@ -10,6 +9,11 @@ a question about one of these particular areas.
 
 For a more complete list, please check the About Dialog from the KDevelop Help menu.
 
+Ui Library, Ruby Support
+  Alexander Dymo <adymo@kdevelop.org>
+
+Former Lead Maintainer, CMake and Autotools support
+  Matt Rogers <mattr@kde.org>
 
 Main author, lots of code. :)
   Bernd Gehrmann <bernd@physik.hu-berlin.de>
