@@ -99,14 +99,19 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     initItemStatistics();
     connectActions();
     runnerView()->setMouseTracking(true);
+
+    ResultsProxyModel* rproxy = new ResultsProxyModel(this);
+    rproxy->setSourceModel(rmodel);
+    int filter = Veritas::RunError | Veritas::RunFatal;
+    rproxy->setFilter(filter); // also updates the view
+    resultsView()->setModel(rproxy);
+
     m_selection = new SelectionManager(runnerView());
     SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
     m_selection->setButton(selectionToggle);
-    m_selection->makeConnections();
     m_verbose = new VerboseManager(runnerView());
     VerboseToggle* verboseToggle = new VerboseToggle(runnerView()->viewport());
     m_verbose->setButton(verboseToggle);
-    m_verbose->makeConnections();
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
@@ -136,12 +141,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
             SLOT(expandOrCollapse(QModelIndex)));
 
     addProjectMenu();
-
-    ResultsProxyModel* rproxy = new ResultsProxyModel(this);
-    rproxy->setSourceModel(rmodel);
-    int filter = Veritas::RunError | Veritas::RunFatal;
-    rproxy->setFilter(filter); // also updates the view
-    resultsView()->setModel(rproxy);
 
     const char* whatsthis = "xTest runner. First select a project from the rightmost dropdown box. Next, load the test tree by clicking on the green circular arrow icon. Run your tests with a click on the leftmost green arrow icon.";
     setWhatsThis( i18n(whatsthis) );
