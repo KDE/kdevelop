@@ -246,6 +246,7 @@ public:
         return m_factory->create(parent);
     }
     QList<QAction*> toolBarActions(QWidget* viewWidget) const {
+        Q_UNUSED(viewWidget);
         //return m_factory->toolBarActions(viewWidget);
         return QList<QAction*>();
     }
@@ -261,6 +262,7 @@ class ResultsViewFinder
 public:
     ResultsViewFinder(const QString& id) : m_id(id), found(false) {}
     Area::WalkerMode operator()(View *view, Sublime::Position position) {
+        Q_UNUSED(position);
         Document* doc = view->document();
         if (m_id == doc->documentSpecifier()) {
             found = true;

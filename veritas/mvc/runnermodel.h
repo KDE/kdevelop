@@ -120,10 +120,8 @@ public:
      *  model. Forces attached views to update. */
     void emitItemResults();
 
-    /*! Returns true if runner items are currently being executed in
-     *  the thread, otherwise false. Waits max. \a time millisecons
-     *  to determine the return value. */
-    bool isRunning(unsigned long time = 0) const;
+    /*! Returns true if runner items are currently being executed. */
+    bool isRunning() const;
 
     QVariant computeIconFromChildState(Test*) const;
 

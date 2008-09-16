@@ -119,10 +119,6 @@ public:
         root->addChild(item2);
     }
 
-    QString name() const {
-        return "";
-    }
-
     Test* fetchItem(const QModelIndex& index) {
         return static_cast<Test*>(index.internalPointer());
     }

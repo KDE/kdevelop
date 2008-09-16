@@ -414,6 +414,7 @@ void RunnerWindow::displayCompleted() const
 
 void RunnerWindow::displayNumTotal(int numItems) const
 {
+    Q_UNUSED(numItems);
 }
 
 void RunnerWindow::displayNumSelected(int numItems) const
@@ -681,11 +682,6 @@ void RunnerWindow::disableControlsBeforeRunning()
 
 void RunnerWindow::enableControlsAfterRunning() const
 {
-    // Wait until all items stopped.
-    while (runnerModel()->isRunning(100)) {
-        QCoreApplication::processEvents(); // Prevent GUI from freezing.
-    }
-    QCoreApplication::processEvents();     // Give the GUI a chance to update.
     enableItemActions(true);               // Enable user interaction.
 
     m_ui->actionStop->setDisabled(true);

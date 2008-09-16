@@ -42,6 +42,7 @@ private slots:
     void testTreeWithIdenticalNames();
     void saveRecursive();
     void restoreRecursive();
+    void ignoreRoot();
 };
 
 }

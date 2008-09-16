@@ -393,7 +393,7 @@ bool RunnerModel::stopItems()
     return true;
 }
 
-bool RunnerModel::isRunning(unsigned long time) const
+bool RunnerModel::isRunning() const
 {
     return m_isRunning;
 }

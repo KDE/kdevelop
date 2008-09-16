@@ -90,6 +90,8 @@ void SelectionStore::saveTree(Test* root)
 void SelectionStore::restoreTree(Test* root)
 {
     RestoreTest rt(this);
-    traverseTree(root, rt);
+    for(int i=0; i<root->childCount(); i++) {
+        traverseTree(root->child(i), rt);
+    }
 }
 

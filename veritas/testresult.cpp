@@ -120,6 +120,6 @@ void TestResult::log() const
     case Veritas::RunError:
         result = "failed";
         break;
+    default: {}
     }
-    kDebug() << result << " " << d->m_message << " " << d->m_file.pathOrUrl() << " " << d->m_line;
 }

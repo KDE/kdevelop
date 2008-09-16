@@ -230,5 +230,4 @@ void RunnerModelTest::updateViewLastItem()
     delete s;
 }
 
-
 QTEST_KDEMAIN(RunnerModelTest, GUI)

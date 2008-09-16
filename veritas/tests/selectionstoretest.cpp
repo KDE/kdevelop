@@ -190,5 +190,26 @@ void SelectionStoreTest::restoreRecursive()
     KVERIFY(child3->isChecked());
 }
 
+void SelectionStoreTest::ignoreRoot()
+{
+    // The invisible root of the test-tree should not be saved/restored.
+
+    SelectionStore* s = new SelectionStore;
+    Test* root = new Test("root", 0);
+    root->check();
+    s->saveTree(root);
+
+    Test* root2 = new Test("root", 0);
+    s->restoreTree(root2);
+    KVERIFY(root2->isChecked());
+
+    root->unCheck();
+    s->saveTree(root);
+
+    root2 = new Test("root", 0);
+    s->restoreTree(root2);
+    KVERIFY(root2->isChecked());
+}
+
 QTEST_MAIN( SelectionStoreTest )
 #include "selectionstoretest.moc"
