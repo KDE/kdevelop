@@ -41,9 +41,9 @@ void ConstructorSkeletonTest::instantiate()
     cs.setBody("int i=0;");
     cs.addInitializer("m_i(0)");
     cs.addInitializer("m_j(1)");
-    KOMPARE_("Foo", cs.name());
-    KOMPARE_("int i=0;", cs.body());
-    KOMPARE_(QStringList() << "m_i(0)" << "m_j(1)", cs.initializerList());
+    KOMPARE("Foo", cs.name());
+    KOMPARE("int i=0;", cs.body());
+    KOMPARE(QStringList() << "m_i(0)" << "m_j(1)", cs.initializerList());
 }
 
 QTEST_MAIN( ConstructorSkeletonTest )

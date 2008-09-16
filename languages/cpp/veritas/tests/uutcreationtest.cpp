@@ -56,9 +56,9 @@ void UUTCreationTest::unresolvedVariable()
     ClassSkeleton cs = m_constructor->morph(variables[0]);
 
     KVERIFY(!cs.isEmpty());
-    KOMPARE_("Foo", cs.name());
+    KOMPARE("Foo", cs.name());
     KVERIFY(cs.methods().isEmpty());
-    KOMPARE_(0, cs.memberCount());
+    KOMPARE(0, cs.memberCount());
 }
 
 void UUTCreationTest::resolvedVariables()
@@ -96,11 +96,11 @@ void UUTCreationTest::tdd_nonVoidReturn()
         "void fun() { Foo f; int i = f.foo(); } ");
 
     assertNamed("Foo", cs);
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
 
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("int", ms.returnType());
+    KOMPARE("int", ms.returnType());
     assertNoArguments(ms);
     assertDefaultBody(ms);
 }
@@ -111,11 +111,11 @@ void UUTCreationTest::singleArgument()
         "void fun() { Foo f; int i; f.foo(i); } ");
 
     assertNamed("Foo", cs);
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
 
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("(int)", ms.arguments());
+    KOMPARE("(int)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -134,7 +134,7 @@ void UUTCreationTest::multipleUses()
         "void fun() { Foo f; f.foo(); f.foo1(); } ");
 
     assertNamed("Foo", cs);
-    KOMPARE_(2, cs.methods().count());
+    KOMPARE(2, cs.methods().count());
 
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
@@ -158,7 +158,7 @@ void UUTCreationTest::useInIfConstruct()
 
 void UUTCreationTest::assertSimpleFooMethod(const ClassSkeleton& cs)
 {
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
     assertNoArguments(ms);
@@ -191,7 +191,7 @@ void UUTCreationTest::dataMemberUse()
 {
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; f.m_foo; } ");
-    KOMPARE_(0, cs.methods().count());
+    KOMPARE(0, cs.methods().count());
 }
 
 void UUTCreationTest::multipleParameters()
@@ -199,10 +199,10 @@ void UUTCreationTest::multipleParameters()
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; int i; char c; f.foo(i,c); } ");
 
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("(int, char)", ms.arguments());
+    KOMPARE("(int, char)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -212,9 +212,9 @@ void UUTCreationTest::classParameter()
     ClassSkeleton cs = classFromImplementation(
         "class Bar; void fun() { Foo f; Bar b; f.foo(b); } ");
 
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
     MethodSkeleton ms = cs.methods()[0];
-    KOMPARE_("(Bar)", ms.arguments());
+    KOMPARE("(Bar)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -224,10 +224,10 @@ void UUTCreationTest::threeParameters()
     ClassSkeleton cs = classFromImplementation(
       "void fun() { Foo f; int i; char c; bool b; f.foo(i,c,b); } ");
 
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("(int, char, bool)", ms.arguments());
+    KOMPARE("(int, char, bool)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -251,10 +251,10 @@ void UUTCreationTest::multipleParametersSmearedOverMultipleLines()
         "     c);\n"
         "}\n");
 
-    KOMPARE_(1, cs.methods().count());
+    KOMPARE(1, cs.methods().count());
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("(int, char)", ms.arguments());
+    KOMPARE("(int, char)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -272,7 +272,7 @@ void UUTCreationTest::nestedBraces()
         "}\n");
     MethodSkeleton ms = cs.methods()[0];
     assertNamed("foo", ms);
-    KOMPARE_("(int)", ms.arguments());
+    KOMPARE("(int)", ms.arguments());
     assertReturnsVoid(ms);
     assertDefaultBody(ms);
 }
@@ -282,7 +282,7 @@ void UUTCreationTest::noSemicolon()
     ClassSkeleton cs = classFromImplementation(
         "void fun() { Foo f; f.foo() } ");
     assertNamed("Foo", cs);
-    KOMPARE_(0, cs.methods().count());
+    KOMPARE(0, cs.methods().count());
 }
 
 //////////////////// Custom assertions ///////////////////////////////////////
@@ -290,30 +290,30 @@ void UUTCreationTest::noSemicolon()
 void UUTCreationTest::assertReturnsVoid(const MethodSkeleton& ms)
 {
     QString failMsg = QString("Was expecting void return type but got: %1").arg(ms.returnType());
-    KOMPARE_MSG_("void", ms.returnType(), failMsg);
+    KOMPARE_MSG("void", ms.returnType(), failMsg);
 }
 
 void UUTCreationTest::assertNoArguments(const MethodSkeleton& ms)
 {
     QString failMsg = QString("Was expecting no arguments but got: %1").arg(ms.returnType());
-    KOMPARE_MSG_("()", ms.arguments(), failMsg);
+    KOMPARE_MSG("()", ms.arguments(), failMsg);
 }
 
 void UUTCreationTest::assertNamed(const QString& name, const ClassSkeleton& t)
 {
     QString failMsg = QString("Wrong name. Expected : ``%1'' but got ``%2''").arg(name).arg(t.name());
-    KOMPARE_MSG_(name, t.name(), failMsg);
+    KOMPARE_MSG(name, t.name(), failMsg);
 }
 
 void UUTCreationTest::assertNamed(const QString& name, const MethodSkeleton& t)
 {
     QString failMsg = QString("Wrong name. Expected : ``%1'' but got ``%2''").arg(name).arg(t.name());
-    KOMPARE_MSG_(name, t.name(), failMsg)
+    KOMPARE_MSG(name, t.name(), failMsg);
 }
 
 void UUTCreationTest::assertDefaultBody(const MethodSkeleton& ms)
 {
-    KOMPARE_("// GENERATED", ms.body());
+    KOMPARE("// GENERATED", ms.body());
 }
 
 QTEST_MAIN( UUTCreationTest )

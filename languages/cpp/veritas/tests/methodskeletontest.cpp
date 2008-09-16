@@ -42,10 +42,10 @@ void MethodSkeletonTest::construct()
     ms.setArguments("(int j)");
     ms.setReturnType("int");
     KVERIFY(!ms.isEmpty());
-    KOMPARE_("foo", ms.name());
-    KOMPARE_("int i=0;", ms.body());
-    KOMPARE_("(int j)", ms.arguments());
-    KOMPARE_("int", ms.returnType());
+    KOMPARE("foo", ms.name());
+    KOMPARE("int i=0;", ms.body());
+    KOMPARE("(int j)", ms.arguments());
+    KOMPARE("int", ms.returnType());
 }
 
 QTEST_MAIN( MethodSkeletonTest )

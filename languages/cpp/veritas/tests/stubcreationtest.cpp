@@ -71,8 +71,8 @@ void StubCreationTest::appendStubToClassName()
     KVERIFY(!actual.isEmpty());
     ClassSkeleton expected;
     expected.setName("IFooStub");
-    KOMPARE_("IFoo", actual.super());
-    KOMPARE_(expected.name(), actual.name());
+    KOMPARE("IFoo", actual.super());
+    KOMPARE(expected.name(), actual.name());
 }
 
 void StubCreationTest::basicConstructor()
@@ -83,7 +83,7 @@ void StubCreationTest::basicConstructor()
 
     ConstructorSkeleton cs = actual.constructor();
     KVERIFY(!cs.isEmpty());
-    KOMPARE_("IFooStub", cs.name());
+    KOMPARE("IFooStub", cs.name());
 }
 
 void StubCreationTest::basicDestructor()
@@ -93,7 +93,7 @@ void StubCreationTest::basicDestructor()
       "{ public: IFoo(); virtual ~IFoo(); };\n");
 
     MethodSkeleton d = actual.destructor();
-    KOMPARE_("~IFooStub", d.name());
+    KOMPARE("~IFooStub", d.name());
 }
 
 void StubCreationTest::basicInterface()
@@ -110,9 +110,9 @@ void StubCreationTest::basicInterface()
     ms.setName("foo");
     ms.setReturnType("void");
     ms.setBody("");
-    KOMPARE_("IFooStub", actual.name());
-    KOMPARE_("IFoo", actual.super());
-    KOMPARE_(1, actual.methods().count());
+    KOMPARE("IFooStub", actual.name());
+    KOMPARE("IFoo", actual.super());
+    KOMPARE(1, actual.methods().count());
     kompareMethods(ms, actual.methods()[0]);
 }
 
@@ -130,10 +130,10 @@ void StubCreationTest::nonVoidReturnType()
     ms.setName("foo");
     ms.setReturnType("int");
     ms.setBody("return m_foo;");
-    KOMPARE_("IFooStub", actual.name());
-    KOMPARE_(1, actual.methods().count());
+    KOMPARE("IFooStub", actual.name());
+    KOMPARE(1, actual.methods().count());
     kompareMethods(ms, actual.methods()[0]);
-    KOMPARE_(1, actual.memberCount());
+    KOMPARE(1, actual.memberCount());
     KOMPARE("int m_foo", actual.member(0));
 }
 
@@ -179,10 +179,10 @@ void StubCreationTest::signal()
 
 void StubCreationTest::kompareMethods(const MethodSkeleton& expected, const MethodSkeleton& actual)
 {
-    KOMPARE_(expected.name(), actual.name());
-    KOMPARE_(expected.returnType(), actual.returnType());
-    KOMPARE_(expected.arguments(), actual.arguments());
-    KOMPARE_(expected.body(), actual.body());
+    KOMPARE(expected.name(), actual.name());
+    KOMPARE(expected.returnType(), actual.returnType());
+    KOMPARE(expected.arguments(), actual.arguments());
+    KOMPARE(expected.body(), actual.body());
 }
 
 ClassSkeleton StubCreationTest::createStubClassFrom(const QByteArray& text)

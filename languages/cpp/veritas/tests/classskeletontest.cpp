@@ -40,7 +40,7 @@ void ClassSkeletonTest::construct()
     KVERIFY(sc.name().isEmpty());
     KVERIFY(sc.methods().isEmpty());
     sc.setName("Foo");
-    KOMPARE_("Foo", sc.name());
+    KOMPARE("Foo", sc.name());
     KVERIFY(!sc.isEmpty());
 }
 
