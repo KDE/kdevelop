@@ -50,11 +50,7 @@ const QString XmlRegister::c_exe("exe");
 XmlRegister::XmlRegister()
         : m_root(""), m_settings(0)
 {
-    // Data for column headers is stored in the root item.
-    QList<QVariant> rootData;
-    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
-    << i18n("File Name") << i18n("Line Number");
-    m_rootItem = new Test(rootData);
+    m_rootItem = Test::createRoot();
 }
 
 XmlRegister::~XmlRegister()

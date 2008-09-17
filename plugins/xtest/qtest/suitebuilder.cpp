@@ -50,10 +50,7 @@ SuiteBuilder::SuiteBuilder()
 void SuiteBuilder::initRoot()
 {
     Q_ASSERT(m_root == 0);
-    QList<QVariant> rootData;
-    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
-             << i18n("File Name") << i18n("Line Number");
-    m_root = new Test(rootData);
+    m_root = Test::createRoot();
 }
 
 namespace {

@@ -140,11 +140,7 @@ void Register<R,S>::execute(KProcess* proc)
 template<typename R, typename S>
 void Register<R,S>::addFromXml(QIODevice* dev)
 {
-    // Data for column headers is stored in the root item.
-    QList<QVariant> rootData;
-    rootData << i18n("Test Name") << i18n("Result") << i18n("Message")
-            << i18n("File Name") << i18n("Line Number");
-    m_rootItem = new TestRoot(rootData);
+    m_rootItem = new TestRoot(QList<QVariant>() << "" << "" << "" << "");
 
     Q_ASSERT(dev != 0);
     setDevice(dev);
