@@ -16,7 +16,6 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
 
-    ast/astnode.cpp
     duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
@@ -82,7 +81,6 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/codecompletionitem.cpp
     codecompletion/codecompletioncontext.cpp
 
-    codegen/astchangeset.cpp
     codegen/createclass.cpp
     codegen/codegenerator.cpp
 )
@@ -140,11 +138,6 @@ install(FILES
     backgroundparser/parsejob.h
     backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser
-)
-
-install(FILES
-    ast/astnode.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/ast
 )
 
 install(FILES

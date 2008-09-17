@@ -21,13 +21,10 @@
 
 #include <QVariant>
 
-#include "../languageexport.h"
-
 namespace KDevelop {
 
 class AstChangeSet;
 class AstChange;
-class AstNode;
 
 /**
  * \short A reference to an existing read-only AST node.
@@ -39,32 +36,123 @@ class AstNode;
  *
  * \author Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AstNodeRef
+template <typename AstNode>
+class AstNodeRef
 {
     friend class AstChangeSet;
 
 public:
-    virtual ~AstNodeRef();
+    /// Destructor.
+    virtual ~AstNodeRef()
+    {
+        qDeleteAll(m_changes);
 
-    virtual const AstNode* node() const;
-    virtual AstNodeRef* nodeRef() const;
+        if (m_newNode)
+            delete m_node;
+    }
 
-    virtual AstNode* newNode() const;
+    typedef QList<AstNodeRef*> AstNodeList;
 
-    const QList<AstChange*>& changes() const;
+    /**
+     * \short Container class for a change to an AST node.
+     *
+     * \author Hamish Rodda <rodda@kde.org>
+     */
+    class AstChange
+    {
+    public:
+        enum ChangeTypes {
+            ListInsert,
+            ListRemove,
+            ListClear,
+            ItemReplace,
+            ItemMove
+        };
+
+        AstChange(ChangeTypes t)
+            : type(t)
+            , newNode(0)
+            , listOffset(-1)
+            , newValue(-1)
+        {
+        }
+
+        ChangeTypes type;
+        // The index of the item in the node to be changed
+        int nodeIndex;
+
+        // The new node to occupy this position, if relevant
+        AstNodeRef* newNode;
+        // The list of nodes to occupy this position, if relevant
+        AstNodeList newList;
+        // The position to apply the node(s) in the list, if relevant
+        int listOffset;
+        // The value of the position, if relevant
+        QVariant newValue;
+    };
+
+    virtual const AstNode* node() const
+    {
+        return m_newNode ? 0 : m_node;
+    }
+
+    virtual AstNodeRef* nodeRef() const
+    {
+        return m_nodeRef;
+    }
+
+    virtual AstNode* newNode() const
+    {
+        return m_newNode ? m_node : 0;
+    }
+
+    const QList<AstChange*>& changes() const
+    {
+        return m_changes;
+    }
 
     /// Adds a change to this node reference. Takes ownership of the \a change.
-    AstChange* addChange(AstChange* change);
+    AstChange* newChange(AstChange* change)
+    {
+        m_changes.append(change);
+        return change;
+    }
+
     /// Removes a change from this node reference, and deletes it.
-    void deleteChange(AstChange* change);
+    void deleteChange(AstChange* change)
+    {
+        Q_ASSERT(m_changes.contains(change));
+        m_changes.removeAll(change);
+        delete change;
+    }
 
 protected:
     /// Default constructor. \todo is this needed?
-    AstNodeRef(AstChangeSet* set);
+    AstNodeRef(AstChangeSet* set)
+        : m_changeSet(set)
+        , m_node(0)
+        , m_nodeRef(0)
+        , m_newNode(false)
+    {
+    }
+
     /// Constructor.  Either takes an existing \a node (\a newNode = false), or a newly created \a node (\a newNode = true)
-    AstNodeRef(AstChangeSet* set, AstNode* node, bool newNode);
+    AstNodeRef(AstChangeSet* set, AstNode* node, bool newNode)
+        : m_changeSet(set)
+        , m_node(node)
+        , m_nodeRef(0)
+        , m_newNode(newNode)
+    {
+    }
+
     /// Constructor.  Takes another node reference.
-    AstNodeRef(AstChangeSet* set, AstNodeRef* original);
+    AstNodeRef(AstChangeSet* set, AstNodeRef* original)
+        : m_changeSet(set)
+        , m_node(0)
+        , m_nodeRef(original)
+        , m_newNode(false)
+    {
+    }
 
 private:
     AstChangeSet* m_changeSet;
@@ -75,40 +163,6 @@ private:
     QList<AstChange*> m_changes;
 };
 
-typedef QList<AstNodeRef*> AstNodeList;
-
-/**
- * \short Container class for a change to an AST node.
- *
- * \author Hamish Rodda <rodda@kde.org>
- */
-class KDEVPLATFORMLANGUAGE_EXPORT AstChange
-{
-public:
-    enum ChangeTypes {
-        ListInsert,
-        ListRemove,
-        ListClear,
-        ItemReplace,
-        ItemMove
-    };
-
-    AstChange(ChangeTypes t);
-
-    ChangeTypes type;
-    // The index of the item in the node to be changed
-    int nodeIndex;
-
-    // The new node to occupy this position, if relevant
-    AstNodeRef* newNode;
-    // The list of nodes to occupy this position, if relevant
-    AstNodeList newList;
-    // The position to apply the node(s) in the list, if relevant
-    int listOffset;
-    // The value of the position, if relevant
-    QVariant newValue;
-};
-
 /**
  * \short A set of changes to an AST.
  *
@@ -116,6 +170,7 @@ public:
  *
  * \author Hamish Rodda <rodda@kde.org>
  */
+template <typename AstNode>
 class KDEVPLATFORMLANGUAGE_EXPORT AstChangeSet
 {
 public:
@@ -125,12 +180,18 @@ public:
      * \param topNode the top node of the read-only Ast to modify, or set to null if creating
      *                a new Ast from scratch.
      */
-    AstChangeSet(const AstNode* topNode = 0);
+    AstChangeSet(const AstNode* topNode = 0)
+        : m_topNode(topNode)
+    {
+    }
 
     /**
      * Destructor, deletes all nodes owned by this change set.
      */
-    virtual ~AstChangeSet();
+    virtual ~AstChangeSet()
+    {
+        qDeleteAll(m_nodeRefs);
+    }
 
     /**
      * Register a new node that you have created to insert at some point in this Ast.
@@ -139,7 +200,12 @@ public:
      *
      * \returns the new node that has been registered.
      */
-    AstNodeRef* registerNewNode(AstNode* node);
+    AstNodeRef* registerNewNode(AstNode* node)
+    {
+        AstNodeRef* newRef = new AstNodeRef(this, node, true);
+        m_nodeRefs.append(newRef);
+        return newRef;
+    }
 
     /**
      * Create a blank reference to a node.
@@ -149,7 +215,11 @@ public:
      *
      * \returns the new node reference
      */
-    AstNodeRef* registerNewRef(AstNodeRef* ref);
+    AstNodeRef* registerNewRef(AstNodeRef* ref)
+    {
+        m_nodeRefs.append(ref);
+        return ref;
+    }
 
     /**
     * Copy an existing node (whether from the Ast or from the change set).
@@ -158,7 +228,12 @@ public:
     *
     * \returns a copy of \a source, which you may modify directly.
     */
-    AstNodeRef* copyNode(AstNode* source);
+    AstNodeRef* copyNode(AstNode* source)
+    {
+        AstNodeRef* newRef = new AstNodeRef(this, source, false);
+        m_nodeRefs.append(newRef);
+        return newRef;
+    }
 
 private:
     const AstNode* m_topNode;
