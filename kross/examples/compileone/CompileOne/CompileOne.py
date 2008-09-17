@@ -23,32 +23,32 @@ def parsingFinished(job):
 		#compileFile(urls)
 
 def triggered():
-	pass
-	#ICore.documentController().backgroundParser().addDocument(urls)
+	print "action triggered for"+str(urls)
+	ICore.documentController().backgroundParser().addDocument(urls)
 
 def contextMenuExtension(ctx, cme):
 	global act, urls
 	act=forms.createAction(0)
-	triggered()
 	
 	a=act.connect("triggered()", triggered)
 	print "nanana"+ctx.objectName+str(a)
+	print "papapa"+str(dir(ctx))+"\n\n"
+	
 	if ctx.hasType(1):
 		act.text="I am an editor action"
 	elif ctx.hasType(2):
 		act.text="I am an editor action"
 	else:
-		act.text="I am another kind of action"+act.url()
-	
-	urls=act.url()
+		act.text="I am another kind of action"+ctx.url()
+	urls=ctx.url()
 	cme.addAction(cme.ExtensionGroup, act)
 
 print str(dir(ICore))+"\n\n"
 print str(dir(ICore.documentController()))+"\n\n"
 print str(dir(ICore.languageController()))+"\n\n"
-print "------ "+ICore.languageController().className()+"\n\n"
-print str(ICore.languageController().documentActivated())+"\n\n"
-print str(ICore.languageController().objectName)+"\n\n"
-print str(dir(ICore.languageController().language("C++")))+"\n\n"
+#print "------ "+ICore.languageController().className()+"\n\n"
+#print str(ICore.languageController().documentActivated())+"\n\n"
+#print str(ICore.languageController().objectName)+"\n\n"
+#print str(dir(ICore.languageController().language("C++")))+"\n\n"
 print str(ICore.languageController().backgroundParser())
 #ICore.languageController().backgroundParser().connect("parseJobFinished(KDevelop::ParseJob* ))", parsingFinished);

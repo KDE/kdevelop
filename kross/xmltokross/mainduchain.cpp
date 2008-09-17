@@ -83,8 +83,8 @@ int main(int argc, char** argv)
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
     options.add("+file", ki18n("input .cpp file"), QByteArray());
-    options.add("I <includes>", ki18n("include directories for the parser (colon separed)"), QByteArray());
-    options.add("i <includes>", ki18n("include directories that the generated implementation file will have (colon separed)"), QByteArray());
+    options.add("I <includes>", ki18n("include directories for the parser (colon separated)"), QByteArray());
+    options.add("i <includes>", ki18n("include directories that the generated implementation file will have (colon separated)"), QByteArray());
     options.add("b <builddir>", ki18n("build dir where the Makefile for the input is added"), QByteArray());
     options.add("F <filename>", ki18n("filename to be used for the .moc and the .h file"), QByteArray());
     options.add("D <directory>", ki18n("directory where to put the .h output"), QByteArray());

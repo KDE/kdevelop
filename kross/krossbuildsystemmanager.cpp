@@ -75,7 +75,7 @@ QList<KDevelop::ProjectFolderItem*> KrossBuildSystemManager::parse( KDevelop::Pr
     kDebug() << "end of parse";
 
     QList<KDevelop::ProjectFolderItem*> folders;
-    foreach(const QString afolder, result.toStringList())
+    foreach(const QString& afolder, result.toStringList())
     {
         Q_ASSERT( m_folderPerUrl.contains(KUrl(afolder)) );
         folders.append(m_folderPerUrl[KUrl(afolder)]);

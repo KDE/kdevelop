@@ -30,7 +30,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
     Q_INTERFACES( KDevelop::IBuildSystemManager )
     Q_INTERFACES( KDevelop::IProjectFileManager )
     public:
-        DummyBSM(QObject *parent=0, const QVariantList& args=QVariantList(), const KUrl::List& cf=KUrl::List());
+        explicit DummyBSM(QObject *parent=0, const QVariantList& args=QVariantList(), const KUrl::List& cf=KUrl::List());
         
         QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom ) { return QList<KDevelop::ProjectFolderItem*>(); }
         KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );

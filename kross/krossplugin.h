@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSPROJECTMANAGER_H
-#define KROSSPROJECTMANAGER_H
+#ifndef KROSSPLUGIN_H
+#define KROSSPLUGIN_H
 
 #include <interfaces/iplugin.h>
 

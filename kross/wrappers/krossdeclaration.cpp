@@ -105,6 +105,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void clearOwnIndex() { wrapped->clearOwnIndex(); }
 		Q_SCRIPTABLE void allocateOwnIndex() { wrapped->allocateOwnIndex(); }
 		Q_SCRIPTABLE KDevelop::Declaration* clone() const { return wrapped->clone(); }
+		Q_SCRIPTABLE void activateSpecialization() { wrapped->activateSpecialization(); }
 	private:
 		KDevelop::Declaration* wrapped;
 };

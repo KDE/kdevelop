@@ -58,7 +58,7 @@ class KrossWrapper : public XmlToKross
                       "{\n"
                       "\tQ_OBJECT\n"
                       "\tpublic:\n"
-                      "\t\tKross"+classname+"("+/*inNamespace.isEmpty() ? QString() : inNamespace+"::"
+                      "\t\tKross"+classname+'('+/*inNamespace.isEmpty() ? QString() : inNamespace+"::"
                                  +*/classname+"* obj, QObject* parent=0) : QObject(parent), wrapped(obj) {}\n"
                       "\t\tvoid* wrappedObject() const { return wrapped; }\n\n";
         }
@@ -112,7 +112,7 @@ class KrossWrapper : public XmlToKross
             output += "QVariant _"+handlername+"Handler(void* type)\n"
             "{\n"
             "\tif(!type) return QVariant();\n"
-            "\t"+(classNS.isEmpty() ? QString() : (classNS))+classname+"* t=static_cast<"+classNS+classname+"*>(type);\n"
+            '\t'+(classNS.isEmpty() ? QString() : (classNS))+classname+"* t=static_cast<"+classNS+classname+"*>(type);\n"
             "\treturn qVariantFromValue((QObject*) new Kross"+classname+"(t, 0));\n"
             "}\n"
             "bool b_"+classname+"="+filename+"_registerHandler(\""+classNS+classname+"*\", _"+handlername+"Handler);\n\n";
@@ -167,7 +167,7 @@ class KrossWrapper : public XmlToKross
             
             QString shouldReturn= m.returnType=="void" ? QString() : QString("return ");
             
-            output += " { "+shouldReturn+"wrapped->"+m.funcname+"(";
+            output += " { "+shouldReturn+"wrapped->"+m.funcname+'(';
             foreach(const QString& val, values)
             {
                 output+=val+", ";
