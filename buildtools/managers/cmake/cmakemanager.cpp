@@ -407,6 +407,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         }
 
         KUrl subroot=m_subprojectRoot[item->project()];
+        
         foreach (const QString& subf, v.subdirectories())
         {
             if(subf.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
@@ -428,7 +429,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 folderList.append( a );
             }
         }
-
+        
+//         if(folderList.isEmpty() && path.isParentOf(item->url()))
+//             kDebug() << "poor guess";
+        
         QStringList directories;
         directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
         directories += currentBinDir;
@@ -535,8 +539,9 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
     QString instdir=insturl.toLocalFile(KUrl::AddTrailingSlash);
 
     KUrl::List newList;
-    foreach(QString s, dirs)
+    foreach(const QString& _s, dirs)
     {
+        QString s=_s;
 //         kDebug(9042) << "replace? " << s;
         if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
         {

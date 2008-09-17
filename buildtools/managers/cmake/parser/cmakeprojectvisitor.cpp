@@ -55,7 +55,7 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUCon
 
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 {
-    QString env=QString::fromLatin1(getenv(varName.toLatin1()));
+    QString env=QString::fromLatin1(qgetenv(varName.toLatin1()));
 //     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
     if(!env.isEmpty())
     {
@@ -1014,8 +1014,9 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 {
     kDebug(9042) << "executing... " << exec->commands();
     QList<KProcess*> procs;
-    foreach(QStringList args, exec->commands())
+    foreach(const QStringList& _args, exec->commands())
     {
+        QStringList args(_args);
         KProcess *p=new KProcess(), *prev=0;
         if(!procs.isEmpty())
         {
@@ -1399,8 +1400,9 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     }
                     else
                     {
-                        foreach(QString in, sast->input())
+                        foreach(const QString& _in, sast->input())
                         {
+                            QString in(_in);
                             int idx = rx.indexIn(in);
                             QStringList info = rx.capturedTexts();
                             if(idx<0)
@@ -1429,10 +1431,11 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             break;
         case StringAst::REPLACE: {
             QStringList out;
-            foreach(QString in, sast->input())
+            foreach(const QString& _in, sast->input())
             {
+                QString in(_in);
                 QString aux=in.replace(sast->regex(), sast->replace());
-                out += aux.split(";"); //FIXME: HUGE ugly hack
+                out += aux.split(';'); //FIXME: HUGE ugly hack
             }
             kDebug(9042) << "string REPLACE" << sast->input() << "=>" << out;
             m_vars->insert(sast->outputVariable(), out);

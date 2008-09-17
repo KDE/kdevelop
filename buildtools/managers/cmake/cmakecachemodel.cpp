@@ -100,7 +100,7 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 
                 if(!flag.isEmpty())
                 {
-                    lineItems[0]->setText(lineItems[0]->text()+"-"+flag);
+                    lineItems[0]->setText(lineItems[0]->text()+'-'+flag);
                 }
                 insertRow(currentIdx, lineItems);
                 m_variablePos[name]=currentIdx;
@@ -166,8 +166,8 @@ bool CMakeCacheModel::writeBack(const KUrl & path) const
             continue;
         if(!comm->text().isEmpty())
         {
-            QStringList comments=comm->text().split("\n");
-            foreach(QString commLine, comments)
+            QStringList comments=comm->text().split('\n');
+            foreach(const QString& commLine, comments)
             {
                 out << "//";
                 out << commLine;

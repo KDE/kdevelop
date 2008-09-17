@@ -32,7 +32,7 @@ namespace CMakeParserUtils
         if (versionStringList.isEmpty())
             return versionNumList;
 
-        foreach(QString part, versionStringList)
+        foreach(const QString& part, versionStringList)
         {
             int i = part.toInt(ok);
             if (!*ok)

@@ -1,5 +1,5 @@
-#ifndef CMAKE_DEFINES_H
-#define CMAKE_DEFINES_H
+#ifndef CMAKETYPES_H
+#define CMAKETYPES_H
 
 #include "cmakelistsparser.h"
 #include "variablemap.h"
@@ -15,4 +15,5 @@ struct Macro
 typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> Definitions;
 typedef QHash<QString, QString> CacheValues;
+
 #endif

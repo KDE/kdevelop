@@ -129,11 +129,6 @@ void CMakeProjectVisitorTest::testRun_data()
             
     cacheValues.clear();
     results.clear();
-    results << StringPair("${a}", "abc;def");
-    QTest::newRow("semicolons") << "set(a \"abc;def\")\n" << cacheValues << results;
-    
-    cacheValues.clear();
-    results.clear();
     results << StringPair("${b}", "abc");
     results << StringPair("${c}", "def");
     QTest::newRow("semicolons1") << "set(a abc;def)\n" 

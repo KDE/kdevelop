@@ -72,7 +72,7 @@ void CMakeFunctionDesc::addArguments( const QStringList& args )
     }
     else
     {
-        foreach( QString arg, args )
+        foreach( const QString& arg, args )
         {
             CMakeFunctionArgument cmakeArg( arg );
             arguments.append( cmakeArg );
@@ -83,7 +83,7 @@ void CMakeFunctionDesc::addArguments( const QStringList& args )
 QString CMakeFunctionDesc::writeBack() const
 {
     QString output=name+"( ";
-    foreach(CMakeFunctionArgument arg, arguments)
+    foreach(const CMakeFunctionArgument& arg, arguments)
     {
         QString o = arg.value;
         if(arg.quoted)

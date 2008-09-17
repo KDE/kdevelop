@@ -60,7 +60,7 @@ void CMakeBuildDirCreator::runBegin()
         if( !d.exists() )
         {
             int ret=KMessageBox::warningContinueCancel(0,
-                        i18n("The %1 directory doesn't exist, but is needed before the build directory is created.\n"
+                        i18n("The %1 directory does not exist, but is needed before the build directory is created.\n"
                             "Do you want KDevelop to create it for you?", buildFolder().toLocalFile()));
             if(ret==KMessageBox::Continue)
             {
@@ -292,5 +292,5 @@ void CMakeBuildDirCreator::setAlreadyUsed(const QStringList &used)
     m_alreadyUsed=used;
 }
 
-#include "cmakebuilddircreator.h"
+#include "cmakebuilddircreator.moc"
 
