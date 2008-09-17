@@ -50,8 +50,8 @@ private slots:
     void initFailure();
     void cleanupFailure();
     void doubleFailure();
-    void tdd_skipSingle();
-    void tdd_skipAll();
+    void skipSingle();
+    void skipAll();
 
 private:
     struct TestInfo;

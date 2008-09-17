@@ -57,6 +57,7 @@ const QString QTestOutputParser::c_type("type");
 const QString QTestOutputParser::c_file("file");
 const QString QTestOutputParser::c_line("line");
 const QString QTestOutputParser::c_pass("pass");
+const QString QTestOutputParser::c_skip("skip");
 const QString QTestOutputParser::c_message("Message");
 const QString QTestOutputParser::c_fail("fail");
 const QString QTestOutputParser::c_initTestCase("initTestCase");
@@ -179,10 +180,17 @@ void QTestOutputParser::go()
     }
 
     // recover from previous state by falling through.
+    // this method is triggered repeatedly, since the parser works
+    // incrementally by recovering from previous errors. It remembers
+    // the state it was in and starts where it left off.
     switch (m_state) {
-        case Failure: {
+        case Message: {
+            processMessage();
+            goto TestFunctionLabel;
+        } case Failure: {
             setFailure();
         } case TestFunction: {
+            TestFunctionLabel:
             processTestFunction();
         } case Main: {
             iterateTestFunctions();
@@ -230,10 +238,36 @@ void QTestOutputParser::iterateTestFunctions()
     //kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
+void QTestOutputParser::processMessage()
+{
+    QString type = attributes().value(c_type).toString();
+    if (type == c_skip) {
+        m_result->setFile(KUrl(attributes().value(c_file).toString()));
+        m_result->setLine(attributes().value(c_line).toString().toInt());
+        while (!atEnd() && !isEndElement_(c_description)) {
+            readNext();
+            if (isCDATA()) {
+                m_result->setMessage(text().toString() + " (skipped)");
+            }
+        }
+    } else {
+        m_state = TestFunction;
+    }
+
+    if (isEndElement_(c_description)) {
+        m_state = TestFunction;
+    }
+
+}
+
 void QTestOutputParser::processTestFunction()
 {
     while (!atEnd() && !isEndElement_(c_testfunction)) {
         readNext();
+        if (isStartElement_(c_message)) {
+            m_state = Message;
+            processMessage();
+        }
         if (isStartElement_(c_incident)) {
             fillResult();
             if (m_state != TestFunction) return;

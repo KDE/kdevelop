@@ -80,6 +80,7 @@ private:
      // helpers
     void iterateTestFunctions();
     void processTestFunction();
+    void processMessage();
     void fillResult();
     void setFailure();
     void setSuccess();
@@ -95,7 +96,7 @@ private:
 
 private:
     // remember state to continue parsing
-    enum State { Main = 0, TestFunction = 1, Failure = 2 };
+    enum State { Main = 0, TestFunction = 1, Failure = 2, Message = 3 };
     State m_state;
     bool m_buzzy;
     Veritas::TestResult* m_result;
@@ -114,6 +115,7 @@ private:    // some xml constants
     static const QString c_line;
     static const QString c_pass;
     static const QString c_fail;
+    static const QString c_skip;
     static const QString c_initTestCase;
     static const QString c_cleanupTestCase;
 };

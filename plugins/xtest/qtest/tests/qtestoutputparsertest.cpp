@@ -412,10 +412,8 @@ void QTestOutputParserTest::doubleFailure()
 }
 
 // test command
-void QTestOutputParserTest::tdd_skipSingle()
+void QTestOutputParserTest::skipSingle()
 {
-    TDD_TODO;
-
     // QSKIP with the SkipSingle flag
     QByteArray input =
         QTEST_HEADER_XML
@@ -430,7 +428,7 @@ void QTestOutputParserTest::tdd_skipSingle()
         QTEST_FOOTER_XML;
     initParser(input, m_caze);
     createTestCommand(m_command1Info, m_caze, "command");
-    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "Skipped test (skipCommand)");
+    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "skipCommand (skipped)");
 
     m_parser->go();
 
@@ -439,10 +437,8 @@ void QTestOutputParserTest::tdd_skipSingle()
 }
 
 // test command
-void QTestOutputParserTest::tdd_skipAll()
+void QTestOutputParserTest::skipAll()
 {
-    TDD_TODO;
-
     // QSKIP with the SkipAll flag. QTestLib refuses to print an <Incident type="pass" /> for those.
     QByteArray input =
         QTEST_HEADER_XML
@@ -457,7 +453,7 @@ void QTestOutputParserTest::tdd_skipAll()
     initParser(input, m_caze);
 
     createTestCommand(m_command1Info, m_caze, "command");
-    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "Skipped test (skipCommand)");
+    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "skipCommand (skipped)");
 
     m_parser->go();
 
