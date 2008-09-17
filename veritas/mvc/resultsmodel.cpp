@@ -57,33 +57,26 @@ bool ResultsModel::hasChildren(const QModelIndex& index) const
 
 QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
-    // need a switch here
-    if (!index.isValid()) {
-        return QVariant();
-    }
+    if (!index.isValid()) return QVariant();
 
-    if (role == Qt::CheckStateRole) {
-        // Results have no items with checked state.
+    Test* item = 0;
+    switch (role) {
+    case Qt::CheckStateRole:
         return QVariant();
-    }
-
-    if (role == Qt::TextAlignmentRole) {
+    case Qt::TextAlignmentRole:
         return int(Qt::AlignLeft | Qt::AlignTop);
-    }
-
-    Test* item = itemFromIndex(m_testItemIndexes.at(index.row()));
-
-    if (role == Qt::DisplayRole) {
+    case Qt::DisplayRole:
+        item = itemFromIndex(m_testItemIndexes.at(index.row()));
         return item->data(index.column());
+    case Qt::DecorationRole:
+        if (index.column() == 0) {
+            item = itemFromIndex(m_testItemIndexes.at(index.row()));
+            return Utils::resultIcon(item->state());
+        }
+        break;
+    default: {}
     }
-
-    if (role != Qt::DecorationRole || index.column() != 0) {
-        // First column only has a decoration.
-        return QVariant();
-    }
-
-    // Icon corresponding to the item's result code.
-    return Utils::resultIcon(item->state());
+    return QVariant();
 }
 
 QVariant ResultsModel::headerData(int section, Qt::Orientation orientation,
