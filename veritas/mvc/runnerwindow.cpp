@@ -157,6 +157,7 @@ void RunnerWindow::addProjectMenu()
     m->setToolTip(i18n("Select project"));
     m->setToolBarMode(KSelectAction::MenuMode);
     m->setEditable(true);
+    m_ui->runnerToolBar->addSeparator();
     m_ui->runnerToolBar->addAction(m);
     m_projectPopup = m;
 }

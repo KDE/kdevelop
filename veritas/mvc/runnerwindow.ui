@@ -27,8 +27,6 @@
      </property>
      <addaction name="actionStart" />
      <addaction name="actionStop" />
-     <addaction name="actionCollapseAll" />
-     <addaction name="actionExpandAll" />
      <addaction name="actionSelectAll" />
      <addaction name="actionUnselectAll" />
      <addaction name="actionReload" />
