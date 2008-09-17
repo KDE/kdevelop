@@ -50,6 +50,8 @@
 #include <vcs/widgets/vcseventwidget.h>
 #include <language/duchain/duchainbase.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 K_PLUGIN_FACTORY(KDevVcsCommonFactory, registerPlugin<KDevVcsCommonPlugin>(); )
 K_EXPORT_PLUGIN(KDevVcsCommonFactory("kdevvcscommon"))
@@ -204,11 +206,14 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
         KDevelop::CodeContext* codectx = dynamic_cast<KDevelop::CodeContext*>( context );
         if( codectx )
         {
-            KUrl url = codectx->item()->url().toUrl();
-            KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
-            if( plugin )
-            {
-                m_ctxUrls[plugin].append( url );
+            KDevelop::DUChainReadLocker l(KDevelop::DUChain::lock());
+            if (codectx->item()) {
+                KUrl url = codectx->item()->url().toUrl();
+                KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
+                if( plugin )
+                {
+                    m_ctxUrls[plugin].append( url );
+                }
             }
         }
     }
@@ -384,7 +389,7 @@ void KDevVcsCommonPlugin::executeCommit( KDevelop::VcsCommitDialog* dlg )
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
 
     KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
-    core()->runController()->registerJob( iface->commit( dlg->message(), dlg->checkedUrls(), 
+    core()->runController()->registerJob( iface->commit( dlg->message(), dlg->checkedUrls(),
          dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive ) );
 
     dlg->deleteLater();
